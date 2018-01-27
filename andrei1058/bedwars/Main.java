@@ -66,7 +66,7 @@ public class Main extends JavaPlugin {
         Language.getLanguages().remove(en);
         setupConfig();
         upgrades = new UpgradesManager("upgrades", "plugins/" + this.getName());
-        /* Load version support */
+        /* Load version support 1.8 - 1.12*/
         switch (version) {
             case "v1_8_R1":
                 nms = new v1_8_R1();
