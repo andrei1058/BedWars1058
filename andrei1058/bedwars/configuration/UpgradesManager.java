@@ -78,6 +78,17 @@ public class UpgradesManager {
             yml.set("default.generators.tier3.receive.teamGenerator.emerald.delay", 10);
             yml.set("default.generators.tier3.receive.teamGenerator.emerald.amount", 1);
 
+            /** Maniac Miner Upgrades*/
+            yml.set("default.maniacMiner.tier1.displayItem.material", "GOLD_AXE");
+            yml.set("default.maniacMiner.tier1.displayItem.data", 0);
+            yml.set("default.maniacMiner.tier1.displayItem.amount", 1);
+            yml.set("default.maniacMiner.tier1.displayItem.enchanted", false);
+            yml.set("default.maniacMiner.tier1.currency", "diamond");
+            yml.set("default.maniacMiner.tier1.cost", 4);
+            yml.set("default.maniacMiner.tier1.receive.playerEffect.haste1.effect", "FAST_DIGGING"); //todo asta s-ar putea sa nu fie compatibila cu 1.9+
+            yml.set("default.maniacMiner.tier1.receive.playerEffect.haste1.amplifier", 1);
+            yml.set("default.maniacMiner.tier1.receive.playerEffect.haste1.apply", "members");
+
             yml.set("settings.startValues.solo.ironGeneratorDelay", 2);
             yml.set("settings.startValues.solo.ironGeneratorAmount", 1);
             yml.set("settings.startValues.solo.goldGeneratorDelay", 3);

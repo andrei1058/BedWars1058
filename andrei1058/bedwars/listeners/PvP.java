@@ -16,6 +16,7 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.projectiles.ProjectileSource;
 
 import static com.andrei1058.bedwars.Main.*;
@@ -337,6 +338,44 @@ public class PvP implements Listener {
             } else {
                 if (a.getStatus() == GameState.playing) {
                     for (BedWarsTeam t : a.getTeams()) {
+                        if (e.getPlayer().getLocation().distance(t.getSpawn()) < a.getIslandRadius()) {
+                            //a intrat intr-o baza
+                            //todo verifica daca are upgrade de trap si trimite avertizarea
+                            if (!t.getPotionEffectApplied().contains(e.getPlayer())){
+                                if (t.isMember(e.getPlayer())){
+                                    for (BedWarsTeam.Effect ef : t.getBaseEffects()){
+                                        e.getPlayer().addPotionEffect(new PotionEffect(ef.getPotionEffectType(), ef.getAmplifier(), Integer.MAX_VALUE));
+                                    }
+                                } else {
+                                    for (BedWarsTeam.Effect ef : t.getEnemyBaseEnter()){
+                                        e.getPlayer().addPotionEffect(new PotionEffect(ef.getPotionEffectType(), ef.getAmplifier(), Integer.MAX_VALUE));
+                                    }
+                                }
+                                t.getPotionEffectApplied().add(e.getPlayer());
+                            }
+
+                        } else {
+                            if (t.getPotionEffectApplied().contains(e.getPlayer())){
+                                if (t.isMember(e.getPlayer())){
+                                    for (PotionEffect pef : e.getPlayer().getActivePotionEffects()){
+                                        for (BedWarsTeam.Effect pf : t.getBaseEffects()){
+                                            if (pef.getType() == pf.getPotionEffectType()){
+                                                e.getPlayer().removePotionEffect(pf.getPotionEffectType());
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    for (PotionEffect pef : e.getPlayer().getActivePotionEffects()){
+                                        for (BedWarsTeam.Effect pf : t.getEnemyBaseEnter()){
+                                            if (pef.getType() == pf.getPotionEffectType()){
+                                                e.getPlayer().removePotionEffect(pf.getPotionEffectType());
+                                            }
+                                        }
+                                    }
+                                }
+                                t.getPotionEffectApplied().remove(e.getPlayer());
+                            }
+                        }
                         if (e.getPlayer().getLocation().distance(t.getBed()) < 4) {
                             if (t.isMember(e.getPlayer())) {
                                 if (!t.getBedHolo(e.getPlayer()).isHidden()) {
@@ -348,9 +387,6 @@ public class PvP implements Listener {
                                 if (t.getBedHolo(e.getPlayer()).isHidden()) {
                                     t.getBedHolo(e.getPlayer()).show();
                                 }
-                            }
-                            if (t.getBed().distance(e.getTo()) < 14) {
-                                //todo trap
                             }
                         }
                     }

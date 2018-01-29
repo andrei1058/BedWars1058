@@ -11,6 +11,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +34,10 @@ public class BedWarsTeam {
     private boolean bedDestroyed = false;
     /** slot, tier*/
     private HashMap<Integer, Integer> upgradeTier = new HashMap<>();
+    private List<Effect> teamEffects = new ArrayList<>();
+    private List<Effect> base = new ArrayList<>();
+    private List<Effect> enemyBaseEnter = new ArrayList<>();
+    private List<Player> potionEffectApplied = new ArrayList<>();
 
     public BedWarsTeam(String name, TeamColor color, Location spawn, Location bed, Location shop, Location teamUpgrades, Arena arena) {
         this.name = name;
@@ -156,6 +164,10 @@ public class BedWarsTeam {
     private ItemStack createColorItem(Material material, int amount) {
         ItemStack i = new ItemStack(material, amount, TeamColor.itemColor(color));
         return i;
+    }
+
+    public List<Player> getPotionEffectApplied() {
+        return potionEffectApplied;
     }
 
     public HashMap<Integer, Integer> getUpgradeTier() {
@@ -289,6 +301,34 @@ public class BedWarsTeam {
         this.emeraldGenerator = emeraldGenerator;
     }
 
+
+    public List<Effect> getBaseEffects() {
+        return base;
+    }
+
+    public List<Effect> getTeamEffects() {
+        return teamEffects;
+    }
+
+    public List<Effect> getEnemyBaseEnter() {
+        return enemyBaseEnter;
+    }
+
+    public void addTeamEffect(String name, PotionEffectType pef, int amp){
+        getTeamEffects().add(new BedWarsTeam.Effect(name, pef, amp));
+        for (Player p : getMembers()){
+            p.addPotionEffect(new PotionEffect(pef, amp, Integer.MAX_VALUE));
+        }
+    }
+
+    public void addBaseEffect(String name, PotionEffectType pef, int amp){
+        getBaseEffects().add(new BedWarsTeam.Effect(name, pef, amp));
+    }
+
+    public void addEnemyBaseEnterEffect(String name, PotionEffectType pef, int amp){
+        getBaseEffects().add(new BedWarsTeam.Effect(name, pef, amp));
+    }
+
     private static List<PlayerVault> vaults = new ArrayList<>();
 
     public class PlayerVault {
@@ -339,6 +379,26 @@ public class BedWarsTeam {
 
         public ItemStack getPants() {
             return pants;
+        }
+    }
+
+
+    public class Effect {
+        String name;
+        PotionEffectType potionEffectType;
+        int amplifier;
+        public Effect(String name, PotionEffectType potionEffectType, int amplifier){
+            this.name = name;
+            this.potionEffectType = potionEffectType;
+            this.amplifier = amplifier;
+        }
+
+        public PotionEffectType getPotionEffectType() {
+            return potionEffectType;
+        }
+
+        public int getAmplifier() {
+            return amplifier;
         }
     }
 

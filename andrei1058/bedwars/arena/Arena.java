@@ -39,7 +39,7 @@ public class Arena {
     private GameState status = GameState.waiting;
     private YamlConfiguration yml;
     private ConfigManager cm;
-    private int minPlayers = 2, maxPlayers = 10, countdownS, slot = -1, maxInTeam = 1, countUp = 0, restarting = 12;
+    private int minPlayers = 2, maxPlayers = 10, countdownS, slot = -1, maxInTeam = 1, countUp = 0, restarting = 12, islandRadius = 10;
     public static int upgradeDiamondsCount = 0, upgradeEmeraldsCount = 0;
     private boolean allowSpectate = true;
     private World world;
@@ -77,6 +77,7 @@ public class Arena {
         minPlayers = yml.getInt("minPlayers");
         allowSpectate = yml.getBoolean("allowSpectate");
         countdownS = config.getYml().getInt("startingCountdown");
+        islandRadius = yml.getInt("islandRadius");
         if (config.getYml().get("arenaGroups") != null) {
             if (config.getYml().getStringList("arenaGroups").contains(yml.getString("group"))) {
                 group = yml.getString("group");
@@ -813,6 +814,10 @@ public class Arena {
 
     public List<BlockState> getSigns() {
         return signs;
+    }
+
+    public int getIslandRadius() {
+        return islandRadius;
     }
 
     //SETTER METHODS

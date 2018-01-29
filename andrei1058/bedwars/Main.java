@@ -128,7 +128,6 @@ public class Main extends JavaPlugin {
         Misc.checkLobbyServer();
         loadArenasAndSigns();
         //todo check for party api
-        //todo check for vault support chat and economy
         //todo levels addon
         party = new com.andrei1058.bedwars.support.party.internal.Internal();
         Bukkit.getScheduler().runTaskLater(this, () -> {

@@ -33,7 +33,6 @@ public class ConfigManager {
         }
         yml = YamlConfiguration.loadConfiguration(config);
         if (arena){
-            //todo arena default config here
             yml.addDefault("group", "DEFAULT");
             yml.addDefault("minPlayers", 2);
             //yml.addDefault("maxPlayers", 12);
@@ -42,6 +41,7 @@ public class ConfigManager {
             yml.addDefault("spawnProtection", 5);
             yml.addDefault("shopProtection", 1);
             yml.addDefault("upgradesProtection", 1);
+            yml.addDefault("islandRadius", 10); //based on spawn-point
             yml.options().copyDefaults(true);
             save();
         }
