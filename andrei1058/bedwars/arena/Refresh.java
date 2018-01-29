@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.arena;
 
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -12,7 +13,6 @@ import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
 public class Refresh extends BukkitRunnable {
 
-    //private static List<OreGenerator> temp;
     @Override
     public void run() {
         for (SBoard sb: SBoard.getScoreboards()){
@@ -21,7 +21,6 @@ public class Refresh extends BukkitRunnable {
         for (Arena a: Arena.getArenas()){
             a.refresh();
         }
-        //temp = new ArrayList<>(OreGenerator.getGenerators());
         for (OreGenerator o : OreGenerator.getGenerators()){
             o.spawn();
         }
@@ -44,6 +43,12 @@ public class Refresh extends BukkitRunnable {
                 e.getKey().setAllowFlight(false);
                 e.getKey().setFlying(false);
                 e.getKey().setHealth(20);
+                for (BedWarsTeam.Effect ef : t.getBaseEffects()){
+                    e.getKey().addPotionEffect(new PotionEffect(ef.getPotionEffectType(), Integer.MAX_VALUE, ef.getAmplifier()));
+                }
+                for (BedWarsTeam.Effect ef : t.getTeamEffects()){
+                    e.getKey().addPotionEffect(new PotionEffect(ef.getPotionEffectType(), Integer.MAX_VALUE, ef.getAmplifier()));
+                }
             }
             Arena.respawn.replace(e.getKey(), e.getValue()-1);
         }

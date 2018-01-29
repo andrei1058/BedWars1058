@@ -344,11 +344,11 @@ public class PvP implements Listener {
                             if (!t.getPotionEffectApplied().contains(e.getPlayer())){
                                 if (t.isMember(e.getPlayer())){
                                     for (BedWarsTeam.Effect ef : t.getBaseEffects()){
-                                        e.getPlayer().addPotionEffect(new PotionEffect(ef.getPotionEffectType(), ef.getAmplifier(), Integer.MAX_VALUE));
+                                        e.getPlayer().addPotionEffect(new PotionEffect(ef.getPotionEffectType(), Integer.MAX_VALUE, ef.getAmplifier()));
                                     }
                                 } else {
                                     for (BedWarsTeam.Effect ef : t.getEnemyBaseEnter()){
-                                        e.getPlayer().addPotionEffect(new PotionEffect(ef.getPotionEffectType(), ef.getAmplifier(), Integer.MAX_VALUE));
+                                        e.getPlayer().addPotionEffect(new PotionEffect(ef.getPotionEffectType(),  Integer.MAX_VALUE, ef.getAmplifier()));
                                     }
                                 }
                                 t.getPotionEffectApplied().add(e.getPlayer());

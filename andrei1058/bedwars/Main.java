@@ -3,10 +3,7 @@ package com.andrei1058.bedwars;
 import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.GameAPI;
 import com.andrei1058.bedwars.api.ServerType;
-import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.arena.Misc;
-import com.andrei1058.bedwars.arena.Refresh;
-import com.andrei1058.bedwars.arena.Rotate;
+import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.commands.LeaveCommand;
 import com.andrei1058.bedwars.commands.MainCommand;
 import com.andrei1058.bedwars.configuration.ConfigManager;
@@ -26,15 +23,19 @@ import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.util.*;
 
+import static com.andrei1058.bedwars.configuration.Language.getMsg;
 import static com.andrei1058.bedwars.configuration.Language.setupLang;
 
 public class Main extends JavaPlugin {
@@ -130,6 +131,7 @@ public class Main extends JavaPlugin {
         //todo check for party api
         //todo levels addon
         party = new com.andrei1058.bedwars.support.party.internal.Internal();
+        org.spigotmc.AsyncCatcher.enabled = false;
         Bukkit.getScheduler().runTaskLater(this, () -> {
             if (this.getServer().getPluginManager().getPlugin("Vault") != null) {
                 try {
@@ -163,7 +165,47 @@ public class Main extends JavaPlugin {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        ticks = new Refresh().runTaskTimer(this, 20l, 20l);
+        //ticks = new Refresh().runTaskTimer(this, 20l, 20l);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, ()-> {
+            for (SBoard sb: SBoard.getScoreboards()){
+                sb.refresh();
+            }
+            for (Arena a: Arena.getArenas()){
+                a.refresh();
+            }
+            for (OreGenerator o : OreGenerator.getGenerators()){
+                o.spawn();
+            }
+            for (SBoard sb : SBoard.getScoreboards()){
+                sb.refresh();
+            }
+            for (Map.Entry<Player, Integer> e : Arena.respawn.entrySet()){
+                if (e.getValue() != 0) {
+                    nms.sendTitle(e.getKey(), getMsg(e.getKey(), lang.youDiedTitle).replace("{time}", String.valueOf(e.getValue())), getMsg(e.getKey(), lang.youDiedSubTitle).replace("{time}", String.valueOf(e.getValue())), 0, 30, 0);
+                    e.getKey().sendMessage(getMsg(e.getKey(), lang.respawnChat).replace("{time}", String.valueOf(e.getValue())));
+                }
+                Arena a = Arena.getArenaByPlayer(e.getKey());
+                BedWarsTeam t = a.getTeam(e.getKey());
+                if (e.getValue() == 0){
+                    e.getKey().teleport(t.getSpawn());
+                    t.respawnMember(e.getKey());
+                    Arena.respawn.remove(e.getKey());
+                    e.getKey().removePotionEffect(PotionEffectType.INVISIBILITY);
+                    e.getKey().spigot().setCollidesWithEntities(true);
+                    e.getKey().setAllowFlight(false);
+                    e.getKey().setFlying(false);
+                    e.getKey().setHealth(20);
+                    for (BedWarsTeam.Effect ef : t.getBaseEffects()){
+                        e.getKey().addPotionEffect(new PotionEffect(ef.getPotionEffectType(), Integer.MAX_VALUE, ef.getAmplifier()));
+                    }
+                    for (BedWarsTeam.Effect ef : t.getTeamEffects()){
+                        e.getKey().addPotionEffect(new PotionEffect(ef.getPotionEffectType(), Integer.MAX_VALUE, ef.getAmplifier()));
+                    }
+                }
+                Arena.respawn.replace(e.getKey(), e.getValue()-1);
+            }
+        }, 20L, 20L);
+        //ticks = new Refresh().runTaskTimerAsynchronously(this, 20L, 20L);
         tick = new Rotate().runTaskTimer(this, 120, 1);
         Metrics metrics = new Metrics(this);
         metrics.addCustomChart(new Metrics.SimplePie("default_language", () -> lang.getLangName()));

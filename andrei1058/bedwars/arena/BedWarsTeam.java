@@ -317,7 +317,7 @@ public class BedWarsTeam {
     public void addTeamEffect(String name, PotionEffectType pef, int amp){
         getTeamEffects().add(new BedWarsTeam.Effect(name, pef, amp));
         for (Player p : getMembers()){
-            p.addPotionEffect(new PotionEffect(pef, amp, Integer.MAX_VALUE));
+            p.addPotionEffect(new PotionEffect(pef, Integer.MAX_VALUE, amp));
         }
     }
 
