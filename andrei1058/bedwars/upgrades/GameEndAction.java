@@ -16,7 +16,7 @@ public class GameEndAction extends UpgradeAction {
     }
 
     @Override
-    public void execute(BedWarsTeam bwt) {
+    public void execute(BedWarsTeam bwt, int i) {
 
     }
 

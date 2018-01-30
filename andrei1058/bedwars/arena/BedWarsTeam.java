@@ -51,6 +51,9 @@ public class BedWarsTeam {
     private List<Enchant> armorsEnchantemnts = new ArrayList<>();
     /** Used for show/ hide bed hologram */
     private static HashMap<Player, BedHolo> beds = new HashMap<>();
+    /** Used for it's a trap */
+    private boolean trapActive = false, trapChat = false, trapAction = false, trapTitle = false, trapSubtitle;
+    private List<Integer> trapSlots = new ArrayList<>();
 
     public BedWarsTeam(String name, TeamColor color, Location spawn, Location bed, Location shop, Location teamUpgrades, Arena arena) {
         this.name = name;
@@ -198,7 +201,7 @@ public class BedWarsTeam {
             }
         }
         if (!getArmorsEnchantemnts().isEmpty()){
-            for (ItemStack i : p.getInventory().getContents()){
+            for (ItemStack i : p.getInventory().getArmorContents()){
                 if (i == null) continue;
                 if (nms.isArmor(i)){
                     ItemMeta im = i.getItemMeta();
@@ -336,9 +339,9 @@ public class BedWarsTeam {
 
     /** Used when someone buys a new enchantment with apply == armor */
     public void addArmorEnchantment(Enchantment e, int a){
-        getSwordsEnchantemnts().add(new Enchant(e, a));
+        getArmorsEnchantemnts().add(new Enchant(e, a));
         for (Player p : getMembers()){
-            for (ItemStack i : p.getInventory().getContents()){
+            for (ItemStack i : p.getInventory().getArmorContents()){
                 if (i == null) continue;
                 if (nms.isArmor(i)){
                     ItemMeta im = i.getItemMeta();
@@ -559,5 +562,56 @@ public class BedWarsTeam {
 
     public List<Enchant> getArmorsEnchantemnts() {
         return armorsEnchantemnts;
+    }
+
+    public boolean isTrapActive() {
+        return trapActive;
+    }
+
+    public void setTrapAction(boolean trapAction) {
+        this.trapAction = trapAction;
+    }
+
+    public void enableTrap(int slot) {
+        this.trapActive = true;
+        trapSlots.add(slot);
+    }
+
+    public void disableTrap() {
+        this.trapActive = false;
+        for (Integer i : trapSlots){
+            if (getUpgradeTier().containsKey(i)){
+                getUpgradeTier().remove(i);
+            }
+        }
+        trapSlots.clear();
+    }
+
+    public void setTrapChat(boolean trapChat) {
+        this.trapChat = trapChat;
+    }
+
+    public void setTrapSubtitle(boolean trapSubtitle) {
+        this.trapSubtitle = trapSubtitle;
+    }
+
+    public void setTrapTitle(boolean trapTitle) {
+        this.trapTitle = trapTitle;
+    }
+
+    public boolean isTrapAction() {
+        return trapAction;
+    }
+
+    public boolean isTrapChat() {
+        return trapChat;
+    }
+
+    public boolean isTrapSubtitle() {
+        return trapSubtitle;
+    }
+
+    public boolean isTrapTitle() {
+        return trapTitle;
     }
 }

@@ -369,19 +369,35 @@ public class PvP implements Listener {
                         if (e.getPlayer().getLocation().distance(t.getSpawn()) < a.getIslandRadius()) {
                             //a intrat intr-o baza
                             //todo verifica daca are upgrade de trap si trimite avertizarea
-                            if (!t.getPotionEffectApplied().contains(e.getPlayer())){
                                 if (t.isMember(e.getPlayer())){
-                                    for (BedWarsTeam.Effect ef : t.getBaseEffects()){
-                                        e.getPlayer().addPotionEffect(new PotionEffect(ef.getPotionEffectType(), Integer.MAX_VALUE, ef.getAmplifier()));
+                                    if (!t.getPotionEffectApplied().contains(e.getPlayer())) {
+                                        for (BedWarsTeam.Effect ef : t.getBaseEffects()) {
+                                            e.getPlayer().addPotionEffect(new PotionEffect(ef.getPotionEffectType(), Integer.MAX_VALUE, ef.getAmplifier()));
+                                        }
                                     }
                                 } else {
-                                    for (BedWarsTeam.Effect ef : t.getEnemyBaseEnter()){
-                                        e.getPlayer().addPotionEffect(new PotionEffect(ef.getPotionEffectType(),  Integer.MAX_VALUE, ef.getAmplifier()));
+                                    if (!t.getPotionEffectApplied().contains(e.getPlayer())) {
+                                        for (BedWarsTeam.Effect ef : t.getEnemyBaseEnter()) {
+                                            e.getPlayer().addPotionEffect(new PotionEffect(ef.getPotionEffectType(), Integer.MAX_VALUE, ef.getAmplifier()));
+                                        }
+                                    }
+                                    if (t.isTrapActive()){
+                                        t.disableTrap();
+                                        if (t.isTrapTitle()){
+                                            nms.sendTitle(e.getPlayer(), getMsg(e.getPlayer(), lang.enemyBaseEnterTitle), null, 0, 50, 0);
+                                        }
+                                        if (t.isTrapSubtitle()){
+                                            nms.sendTitle(e.getPlayer(), null, getMsg(e.getPlayer(), lang.enemyBaseEnterSubtitle), 0, 50, 0);
+                                        }
+                                        if (t.isTrapAction()){
+                                            nms.playAction(e.getPlayer(), getMsg(e.getPlayer(), lang.enemyBaseEnterAction));
+                                        }
+                                        if (t.isTrapChat()){
+                                            e.getPlayer().sendMessage(getMsg(e.getPlayer(), lang.enemyBaseEnterChat));
+                                        }
                                     }
                                 }
                                 t.getPotionEffectApplied().add(e.getPlayer());
-                            }
-
                         } else {
                             if (t.getPotionEffectApplied().contains(e.getPlayer())){
                                 if (t.isMember(e.getPlayer())){

@@ -20,7 +20,7 @@ public class GeneratorAction extends UpgradeAction {
     }
 
     @Override
-    public void execute(BedWarsTeam bwt) {
+    public void execute(BedWarsTeam bwt, int i) {
         if (ironAmount > 0){
             bwt.getIronGenerator().setAmount(ironAmount);
         }

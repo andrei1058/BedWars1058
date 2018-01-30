@@ -62,7 +62,7 @@ public class UpgradeTier {
         return i;
     }
 
-    public boolean buy(Player p, BedWarsTeam bwt){
+    public boolean buy(Player p, BedWarsTeam bwt, int slot){
         int money = 0;
         Material currency = null;
         if (getCurrency().equalsIgnoreCase("iron")) {
@@ -126,7 +126,7 @@ public class UpgradeTier {
         }
         p.playSound(p.getLocation(), nms.bought(), 1f, 1f);
         for (UpgradeAction a : actions){
-            a.execute(bwt);
+            a.execute(bwt, slot);
         }
         p.closeInventory();
         //todo mesaj cu bought

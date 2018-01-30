@@ -135,7 +135,11 @@ public class Language {
             loreFooterClick = "upgrades.loreFooter.clickBuy",
             loreFooterUnlocked = "upgrades.loreFooter.unlocked",
             loreFooterLocked = "upgrades.loreFooter.locked",
-            pluralPath = "plural";
+            pluralPath = "plural",
+            enemyBaseEnterTitle = "arena.baseEnter.title",
+            enemyBaseEnterSubtitle = "arena.baseEnter.subtitle",
+            enemyBaseEnterAction = "arena.baseEnter.action",
+            enemyBaseEnterChat = "arena.baseEnter.chat";
     //End of language file strings
 
     public Language(String iso) {
@@ -369,6 +373,12 @@ public class Language {
                 yml.addDefault("upgrades.default.maniacMiner.tier1.lore", Arrays.asList("&7All players on your team", "&7permanently gain Haste I", "", "&7Cost:&b {cost} {currency}", "", "{loreFooter}"));
                 yml.addDefault("upgrades.default.sharpSword.tier1.name", "&eSharpened Swords");
                 yml.addDefault("upgrades.default.sharpSword.tier1.lore", Arrays.asList("&7Your team gets Sharpness I on", "&7all swords!", "", "&7Cost:&b {cost} {currency}","", "{loreFooter}"));
+                yml.addDefault("upgrades.default.reinforced.tier1.name", "&eReinforced Armor");
+                yml.addDefault("upgrades.default.reinforced.tier1.lore", Arrays.asList("&7Your team gets Protection I on", "&7all armor pieces!", "", "&7Cost:&b {cost} {currency}","", "{loreFooter}"));
+                yml.addDefault(enemyBaseEnterAction, "action");
+                yml.addDefault(enemyBaseEnterChat, "chat");
+                yml.addDefault(enemyBaseEnterSubtitle, "subtitle");
+                yml.addDefault(enemyBaseEnterTitle, "title");
                 break;
         }
         lbj.save();

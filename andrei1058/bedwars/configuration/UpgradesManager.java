@@ -97,7 +97,7 @@ public class UpgradesManager {
             yml.set("settings.startValues.solo.goldGeneratorDelay", 3);
             yml.set("settings.startValues.solo.goldGeneratorAmount", 1);
 
-            /** Sharpened Swords Upgrades*/
+            /** Sharpened Swords Upgrade*/
             yml.set("default.sharpSword.slot", 13);
             yml.set("default.sharpSword.tier1.displayItem.material", "IRON_SWORD");
             yml.set("default.sharpSword.tier1.displayItem.data", 0);
@@ -108,6 +108,28 @@ public class UpgradesManager {
             yml.set("default.sharpSword.tier1.receive.itemEnchantment.sharp.enchantment", "DAMAGE_ALL");
             yml.set("default.sharpSword.tier1.receive.itemEnchantment.sharp.amplifier", 1);
             yml.set("default.sharpSword.tier1.receive.itemEnchantment.sharp.apply", "sword"); //sword, bow, armor
+
+            /** Reinforced Armor Upgrade*/
+            yml.set("default.reinforced.slot", 14);
+            yml.set("default.reinforced.tier1.displayItem.material", "IRON_CHESTPLATE");
+            yml.set("default.reinforced.tier1.displayItem.data", 0);
+            yml.set("default.reinforced.tier1.displayItem.amount", 1);
+            yml.set("default.reinforced.tier1.displayItem.enchanted", false);
+            yml.set("default.reinforced.tier1.currency", "diamond");
+            yml.set("default.reinforced.tier1.cost", 2);
+            yml.set("default.reinforced.tier1.receive.itemEnchantment.sharp.enchantment", "PROTECTION_ENVIRONMENTAL");
+            yml.set("default.reinforced.tier1.receive.itemEnchantment.sharp.amplifier", 1);
+            yml.set("default.reinforced.tier1.receive.itemEnchantment.sharp.apply", "armor"); //sword, bow, armor
+
+            /** It's a trap Upgrade*/
+            yml.set("default.trap.slot", 15);
+            yml.set("default.trap.tier1.displayItem.material", "REDSTONE_WIRE");
+            yml.set("default.trap.tier1.displayItem.data", 0);
+            yml.set("default.trap.tier1.displayItem.amount", 1);
+            yml.set("default.trap.tier1.displayItem.enchanted", false);
+            yml.set("default.trap.tier1.currency", "diamond");
+            yml.set("default.trap.tier1.cost", 1);
+            yml.set("default.trap.tier1.receive.enemyBaseEnter.announce", "title, subtitle, action, chat");
         }
         if (yml == null) {
             yml = YamlConfiguration.loadConfiguration(file);
@@ -299,7 +321,7 @@ public class UpgradesManager {
                             break;
                         case "enemybaseenter":
                             if (yml.isSet(tp+"receive."+re+".announce")){
-                                String[] options = yml.getString(tp+"receive."+re+".announce").split(",");
+                                String[] options = yml.getString(tp+"receive."+re+".announce").replace(" ", "").split(",");
                                 EnemyBaseEnterAction enemyBaseEnterAction = null;
                                 if (options.length != 0){
                                     enemyBaseEnterAction = new EnemyBaseEnterAction(re);
@@ -315,7 +337,7 @@ public class UpgradesManager {
                                     } else if (o.equalsIgnoreCase("action")){
                                         enemyBaseEnterAction.setAction(true);
                                     } else {
-                                        logger("o is not an option at: "+tp+"receive."+re+".announce");
+                                        logger(o+" is not an option at: "+tp+"receive."+re+".announce");
                                     }
                                 }
                                 if (enemyBaseEnterAction != null){

@@ -20,13 +20,13 @@ public class EffectAction extends UpgradeAction {
     }
 
     @Override
-    public void execute(BedWarsTeam bwt) {
+    public void execute(BedWarsTeam bwt, int i) {
         if (apply.equalsIgnoreCase("members")){
-            bwt.addTeamEffect(getName(), getPotionEffectType(), getAmplifier());
+            bwt.addTeamEffect(getPotionEffectType(), getAmplifier());
         } else if(apply.equalsIgnoreCase("base")){
-            bwt.addBaseEffect(getName(), getPotionEffectType(), getAmplifier());
+            bwt.addBaseEffect(getPotionEffectType(), getAmplifier());
         } else if (apply.equalsIgnoreCase("enemybaseenter")){
-            bwt.addEnemyBaseEnterEffect(getName(), getPotionEffectType(), getAmplifier());
+            bwt.addEnemyBaseEnterEffect(getPotionEffectType(), getAmplifier());
         }
     }
 

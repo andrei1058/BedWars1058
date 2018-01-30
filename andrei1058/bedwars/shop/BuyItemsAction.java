@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -163,6 +164,7 @@ public class BuyItemsAction extends ContentAction {
                         if (nms.getDamage(si.getItemStack()) >= nms.getDamage(i)) {
                             p.getInventory().remove(i);
                             p.getInventory().addItem(si.getItemStack());
+                            updateEnchantments(p);
                             return;
                         }
                     }
@@ -175,7 +177,50 @@ public class BuyItemsAction extends ContentAction {
             }
 
         }
+        updateEnchantments(p);
         p.updateInventory();
+    }
+
+    private static void updateEnchantments(Player p){
+        if (!Arena.getArenaByPlayer(p).getTeam(p).getBowsEnchantments().isEmpty()){
+            for (ItemStack i : p.getInventory().getContents()){
+                if (i == null) continue;
+                if (i.getType() == Material.BOW){
+                    ItemMeta im = i.getItemMeta();
+                    for (BedWarsTeam.Enchant e : Arena.getArenaByPlayer(p).getTeam(p).getBowsEnchantments()) {
+                        im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
+                    }
+                    i.setItemMeta(im);
+                }
+                p.updateInventory();
+            }
+        }
+        if (!Arena.getArenaByPlayer(p).getTeam(p).getSwordsEnchantemnts().isEmpty()){
+            for (ItemStack i : p.getInventory().getContents()){
+                if (i == null) continue;
+                if (nms.isSword(i)){
+                    ItemMeta im = i.getItemMeta();
+                    for (BedWarsTeam.Enchant e : Arena.getArenaByPlayer(p).getTeam(p).getSwordsEnchantemnts()) {
+                        im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
+                    }
+                    i.setItemMeta(im);
+                }
+                p.updateInventory();
+            }
+        }
+        if (!Arena.getArenaByPlayer(p).getTeam(p).getArmorsEnchantemnts().isEmpty()){
+            for (ItemStack i : p.getInventory().getArmorContents()){
+                if (i == null) continue;
+                if (nms.isArmor(i)){
+                    ItemMeta im = i.getItemMeta();
+                    for (BedWarsTeam.Enchant e : Arena.getArenaByPlayer(p).getTeam(p).getArmorsEnchantemnts()) {
+                        im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
+                    }
+                    i.setItemMeta(im);
+                }
+                p.updateInventory();
+            }
+        }
     }
 
     public CategoryContent getCategoryContent() {

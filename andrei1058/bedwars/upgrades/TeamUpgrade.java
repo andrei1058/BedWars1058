@@ -86,7 +86,7 @@ public class TeamUpgrade {
             tier = bwt.getUpgradeTier().get(getSlot());
         }
         if (getTiers().size()-1 > tier) {
-            if (getTiers().get(tier+1).buy(p, bwt)) {
+            if (getTiers().get(tier+1).buy(p, bwt, getSlot())) {
                 if (tier < getTiers().size()) {
                     if (bwt.getUpgradeTier().containsKey(getSlot())) {
                         bwt.getUpgradeTier().replace(getSlot(), tier + 1);

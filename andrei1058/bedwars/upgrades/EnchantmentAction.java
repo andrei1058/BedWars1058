@@ -20,13 +20,16 @@ public class EnchantmentAction extends UpgradeAction {
     }
 
     @Override
-    public void execute(BedWarsTeam bwt) {
+    public void execute(BedWarsTeam bwt, int i) {
         switch (getApply().toLowerCase()){
             case "bow":
+                bwt.addBowEnchantment(getEnchantment(), getAmplifier());
                 break;
             case "sword":
+                bwt.addSwordEnchantment(getEnchantment(), getAmplifier());
                 break;
             case "armor":
+                bwt.addArmorEnchantment(getEnchantment(), getAmplifier());
                 break;
         }
     }
