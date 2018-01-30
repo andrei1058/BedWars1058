@@ -43,12 +43,6 @@ public class Refresh extends BukkitRunnable {
                 e.getKey().setAllowFlight(false);
                 e.getKey().setFlying(false);
                 e.getKey().setHealth(20);
-                for (BedWarsTeam.Effect ef : t.getBaseEffects()){
-                    e.getKey().addPotionEffect(new PotionEffect(ef.getPotionEffectType(), Integer.MAX_VALUE, ef.getAmplifier()));
-                }
-                for (BedWarsTeam.Effect ef : t.getTeamEffects()){
-                    e.getKey().addPotionEffect(new PotionEffect(ef.getPotionEffectType(), Integer.MAX_VALUE, ef.getAmplifier()));
-                }
             }
             Arena.respawn.replace(e.getKey(), e.getValue()-1);
         }

@@ -51,7 +51,7 @@ public class UpgradeGroup {
         BedWarsTeam team = a.getTeam(p);
 
         for (TeamUpgrade tu : getTeamUpgrades()){
-            inv.setItem(tu.getSlot(), tu.getTiers().get(team.getUpgradeTier().containsKey(tu.getSlot()) ? team.getUpgradeTier().get(tu.getSlot()) : 0).getItemStack(p, "upgrades."+getName()+"."+tu.getName(), tu, team));
+            inv.setItem(tu.getSlot(), tu.getTiers().get(team.getUpgradeTier().containsKey(tu.getSlot()) ? team.getUpgradeTier().get(tu.getSlot()) < tu.getTiers().size()-1 ? team.getUpgradeTier().get(tu.getSlot())+1 : team.getUpgradeTier().get(tu.getSlot()) : 0).getItemStack(p, "upgrades."+getName()+"."+tu.getName(), tu, team));
         }
 
         p.openInventory(inv);

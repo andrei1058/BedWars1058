@@ -27,10 +27,6 @@ public class UpgradeTier {
         this.actions = new ArrayList<>(actions);
         this.cost = cost;
         this.currency = currency;
-        ItemMeta im = itemStack.getItemMeta();
-        im.addEnchant(Enchantment.LURE, 1, true);
-        im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        itemStack.setItemMeta(im);
         this.itemStack = itemStack;
         plugin.debug("loading new UpgradeTier: "+getName());
     }
@@ -140,26 +136,22 @@ public class UpgradeTier {
     public boolean hasEnoughMoney(Player p){
         switch (currency){
             case "vault":
-                return getCost()-plugin.getEconomy().getMoney(p)>=0;
+                return getCost()<=plugin.getEconomy().getMoney(p);
             case "iron":
-                return getCost()-countItemStackAmount(p, Material.IRON_INGOT)>=0;
+                return getCost()<=countItemStackAmount(p, Material.IRON_INGOT);
             case "gold":
-                return getCost()-countItemStackAmount(p, Material.GOLD_INGOT)>=0;
+                return getCost()<=countItemStackAmount(p, Material.GOLD_INGOT);
             case "emerald":
-                return getCost()-countItemStackAmount(p, Material.EMERALD)>=0;
+                return getCost()<=countItemStackAmount(p, Material.EMERALD);
             case "diamond":
-                return getCost()-countItemStackAmount(p, Material.DIAMOND)>=0;
+                return getCost()<=countItemStackAmount(p, Material.DIAMOND);
             default:
                 return false;
         }
     }
 
     public boolean isHighest(BedWarsTeam tm, TeamUpgrade tu){
-        return tu.getTiers().size()-1 == (tm.getUpgradeTier().containsKey(tu.getSlot()) ? tm.getUpgradeTier().get(tu.getSlot()) : 0);
-    }
-
-    public boolean isOne(BedWarsTeam tm, TeamUpgrade tu){
-        return 1 == (tm.getUpgradeTier().containsKey(tu.getSlot()) ? tm.getUpgradeTier().get(tu.getSlot()) : 0);
+        return tu.getTiers().size() == (tm.getUpgradeTier().containsKey(tu.getSlot()) ? tm.getUpgradeTier().get(tu.getSlot())+1 : 0);
     }
 
     private static int countItemStackAmount(Player p, Material m){

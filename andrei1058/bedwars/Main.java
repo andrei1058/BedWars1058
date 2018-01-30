@@ -131,7 +131,6 @@ public class Main extends JavaPlugin {
         //todo check for party api
         //todo levels addon
         party = new com.andrei1058.bedwars.support.party.internal.Internal();
-        org.spigotmc.AsyncCatcher.enabled = false;
         Bukkit.getScheduler().runTaskLater(this, () -> {
             if (this.getServer().getPluginManager().getPlugin("Vault") != null) {
                 try {
@@ -165,47 +164,7 @@ public class Main extends JavaPlugin {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        //ticks = new Refresh().runTaskTimer(this, 20l, 20l);
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, ()-> {
-            for (SBoard sb: SBoard.getScoreboards()){
-                sb.refresh();
-            }
-            for (Arena a: Arena.getArenas()){
-                a.refresh();
-            }
-            for (OreGenerator o : OreGenerator.getGenerators()){
-                o.spawn();
-            }
-            for (SBoard sb : SBoard.getScoreboards()){
-                sb.refresh();
-            }
-            for (Map.Entry<Player, Integer> e : Arena.respawn.entrySet()){
-                if (e.getValue() != 0) {
-                    nms.sendTitle(e.getKey(), getMsg(e.getKey(), lang.youDiedTitle).replace("{time}", String.valueOf(e.getValue())), getMsg(e.getKey(), lang.youDiedSubTitle).replace("{time}", String.valueOf(e.getValue())), 0, 30, 0);
-                    e.getKey().sendMessage(getMsg(e.getKey(), lang.respawnChat).replace("{time}", String.valueOf(e.getValue())));
-                }
-                Arena a = Arena.getArenaByPlayer(e.getKey());
-                BedWarsTeam t = a.getTeam(e.getKey());
-                if (e.getValue() == 0){
-                    e.getKey().teleport(t.getSpawn());
-                    t.respawnMember(e.getKey());
-                    Arena.respawn.remove(e.getKey());
-                    e.getKey().removePotionEffect(PotionEffectType.INVISIBILITY);
-                    e.getKey().spigot().setCollidesWithEntities(true);
-                    e.getKey().setAllowFlight(false);
-                    e.getKey().setFlying(false);
-                    e.getKey().setHealth(20);
-                    for (BedWarsTeam.Effect ef : t.getBaseEffects()){
-                        e.getKey().addPotionEffect(new PotionEffect(ef.getPotionEffectType(), Integer.MAX_VALUE, ef.getAmplifier()));
-                    }
-                    for (BedWarsTeam.Effect ef : t.getTeamEffects()){
-                        e.getKey().addPotionEffect(new PotionEffect(ef.getPotionEffectType(), Integer.MAX_VALUE, ef.getAmplifier()));
-                    }
-                }
-                Arena.respawn.replace(e.getKey(), e.getValue()-1);
-            }
-        }, 20L, 20L);
-        //ticks = new Refresh().runTaskTimerAsynchronously(this, 20L, 20L);
+        ticks = new Refresh().runTaskTimer(this, 20l, 20l);
         tick = new Rotate().runTaskTimer(this, 120, 1);
         Metrics metrics = new Metrics(this);
         metrics.addCustomChart(new Metrics.SimplePie("default_language", () -> lang.getLangName()));

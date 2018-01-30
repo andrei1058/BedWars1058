@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.api.TeamColor;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -34,10 +35,22 @@ public class BedWarsTeam {
     private boolean bedDestroyed = false;
     /** slot, tier*/
     private HashMap<Integer, Integer> upgradeTier = new HashMap<>();
+    /** Potion effects for teammates from the upgrades*/
     private List<Effect> teamEffects = new ArrayList<>();
+    /** Potion effects for teammates on base only */
     private List<Effect> base = new ArrayList<>();
+    /** Potion effects for enemies when they enter in this team's base */
     private List<Effect> enemyBaseEnter = new ArrayList<>();
+    /** Players with potions applied such as when they enter the base and then they leave it will remove the potion effects */
     private List<Player> potionEffectApplied = new ArrayList<>();
+    /** Enchantments for bows */
+    private List<Enchant> bowsEnchantments = new ArrayList<>();
+    /** Enchantments for swords */
+    private List<Enchant> swordsEnchantemnts = new ArrayList<>();
+    /** Enchantments for armors */
+    private List<Enchant> armorsEnchantemnts = new ArrayList<>();
+    /** Used for show/ hide bed hologram */
+    private static HashMap<Player, BedHolo> beds = new HashMap<>();
 
     public BedWarsTeam(String name, TeamColor color, Location spawn, Location bed, Location shop, Location teamUpgrades, Arena arena) {
         this.name = name;
@@ -56,6 +69,7 @@ public class BedWarsTeam {
         return members.size();
     }
 
+    /** Add a new member to the team */
     public void addPlayers(Player... players) {
         for (Player p : players) {
             if (!members.contains(p)) members.add(p);
@@ -73,11 +87,10 @@ public class BedWarsTeam {
             v.setPants(createArmor(Material.LEATHER_LEGGINGS));
             v.setBoots(createArmor(Material.LEATHER_BOOTS));
             sendDefaultInventory(p);
-            //p.setPlayerListName(lang.m(lang.tablistFormat).replace("{TeamColor}", TeamColor.getChatColor(color).toString()).replace("{TeamLetter}", name.substring(0, 1).toUpperCase())
-            //.replace("{TeamName}", name).replace("{PlayerName}", p.getName()).replace("{PlayerHealth}", String.valueOf((int)p.getHealth())));
         }
     }
 
+    /** Gives the start inventory */
     public void sendDefaultInventory(Player p) {
         p.getInventory().clear();
         for (String s : config.getYml().getStringList("startItems")) {
@@ -124,56 +137,13 @@ public class BedWarsTeam {
         sendArmor(p);
     }
 
+    /** Spawn the iron and gold generators */
     public void setGenerators(Location ironGenerator, Location goldGenerator) {
         this.ironGenerator = new OreGenerator(ironGenerator, arena, GeneratorType.IRON);
         this.goldGenerator = new OreGenerator(goldGenerator, arena, GeneratorType.GOLD);
     }
 
-    public boolean isMember(Player p) {
-        return members.contains(p);
-    }
-
-    public boolean isBedDestroyed() {
-        return bedDestroyed;
-    }
-
-    public Location getSpawn() {
-        return spawn;
-    }
-
-    public Location getShop() {
-        return shop;
-    }
-
-    public Location getTeamUpgrades() {
-        return teamUpgrades;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public TeamColor getColor() {
-        return color;
-    }
-
-    public List<Player> getMembers() {
-        return members;
-    }
-
-    private ItemStack createColorItem(Material material, int amount) {
-        ItemStack i = new ItemStack(material, amount, TeamColor.itemColor(color));
-        return i;
-    }
-
-    public List<Player> getPotionEffectApplied() {
-        return potionEffectApplied;
-    }
-
-    public HashMap<Integer, Integer> getUpgradeTier() {
-        return upgradeTier;
-    }
-
+    /** Respawn a member */
     public void respawnMember(Player p) {
         nms.sendTitle(p, getMsg(p, lang.respawnedTitle), null, 0, 20, 0);
         //todo da-i busola
@@ -191,8 +161,58 @@ public class BedWarsTeam {
             sendDefaultInventory(p);
         }
         p.setHealth(20);
+        if (!getBaseEffects().isEmpty()){
+            for (BedWarsTeam.Effect ef : getBaseEffects()){
+                p.addPotionEffect(new PotionEffect(ef.getPotionEffectType(), Integer.MAX_VALUE, ef.getAmplifier()));
+            }
+        }
+        if (!getTeamEffects().isEmpty()) {
+            for (BedWarsTeam.Effect ef : getTeamEffects()) {
+                p.addPotionEffect(new PotionEffect(ef.getPotionEffectType(), Integer.MAX_VALUE, ef.getAmplifier()));
+            }
+        }
+        if (!getBowsEnchantments().isEmpty()){
+            for (ItemStack i : p.getInventory().getContents()){
+                if (i == null) continue;
+                if (i.getType() == Material.BOW){
+                    ItemMeta im = i.getItemMeta();
+                    for (Enchant e : getBowsEnchantments()) {
+                        im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
+                    }
+                    i.setItemMeta(im);
+                }
+                p.updateInventory();
+            }
+        }
+        if (!getSwordsEnchantemnts().isEmpty()){
+            for (ItemStack i : p.getInventory().getContents()){
+                if (i == null) continue;
+                if (nms.isSword(i)){
+                    ItemMeta im = i.getItemMeta();
+                    for (Enchant e : getSwordsEnchantemnts()) {
+                        im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
+                    }
+                    i.setItemMeta(im);
+                }
+                p.updateInventory();
+            }
+        }
+        if (!getArmorsEnchantemnts().isEmpty()){
+            for (ItemStack i : p.getInventory().getContents()){
+                if (i == null) continue;
+                if (nms.isArmor(i)){
+                    ItemMeta im = i.getItemMeta();
+                    for (Enchant e : getArmorsEnchantemnts()) {
+                        im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
+                    }
+                    i.setItemMeta(im);
+                }
+                p.updateInventory();
+            }
+        }
     }
 
+    /** Create a leather armor with team's color */
     private ItemStack createArmor(Material material) {
         ItemStack i = new ItemStack(material);
         LeatherArmorMeta lam = (LeatherArmorMeta) i.getItemMeta();
@@ -202,6 +222,7 @@ public class BedWarsTeam {
         return i;
     }
 
+    /** Equip a player with default armor */
     private void sendArmor(Player p) {
         p.getInventory().setHelmet(createArmor(Material.LEATHER_HELMET));
         p.getInventory().setChestplate(createArmor(Material.LEATHER_CHESTPLATE));
@@ -209,8 +230,7 @@ public class BedWarsTeam {
         p.getInventory().setBoots(createArmor(Material.LEATHER_BOOTS));
     }
 
-    private static HashMap<Player, BedHolo> beds = new HashMap<>();
-
+    /** Creates a hologram on the team bed's per player*/
     public class BedHolo {
         ArmorStand a;
         Player p;
@@ -264,73 +284,75 @@ public class BedWarsTeam {
         }
     }
 
-    public Location getBed() {
-        return bed;
-    }
-
-    public BedHolo getBedHolo(Player p) {
-        return beds.get(p);
-    }
-
-    public void setBedDestroyed(boolean bedDestroyed) {
-        this.bedDestroyed = bedDestroyed;
-        if (bed.getBlock().getType() == Material.AIR && !bedDestroyed) {
-            bed.getBlock().setType(Material.BED_BLOCK);
-        } else if (bedDestroyed && bed.getBlock().getType() == Material.BED_BLOCK) {
-            bed.getBlock().setType(Material.AIR);
-        }
-        for (BedHolo bh : beds.values()){
-            bh.hide();
-            bh.show();
-        }
-    }
-
-    public OreGenerator getIronGenerator() {
-        return ironGenerator;
-    }
-
-    public OreGenerator getGoldGenerator() {
-        return goldGenerator;
-    }
-
-    public OreGenerator getEmeraldGenerator() {
-        return emeraldGenerator;
-    }
-
-    public void setEmeraldGenerator(OreGenerator emeraldGenerator) {
-        this.emeraldGenerator = emeraldGenerator;
-    }
-
-
-    public List<Effect> getBaseEffects() {
-        return base;
-    }
-
-    public List<Effect> getTeamEffects() {
-        return teamEffects;
-    }
-
-    public List<Effect> getEnemyBaseEnter() {
-        return enemyBaseEnter;
-    }
-
-    public void addTeamEffect(String name, PotionEffectType pef, int amp){
-        getTeamEffects().add(new BedWarsTeam.Effect(name, pef, amp));
+    /** Used when someone buys a new potion effect with apply == members */
+    public void addTeamEffect(PotionEffectType pef, int amp){
+        getTeamEffects().add(new BedWarsTeam.Effect(pef, amp));
         for (Player p : getMembers()){
             p.addPotionEffect(new PotionEffect(pef, Integer.MAX_VALUE, amp));
         }
     }
 
-    public void addBaseEffect(String name, PotionEffectType pef, int amp){
-        getBaseEffects().add(new BedWarsTeam.Effect(name, pef, amp));
+    /** Used when someone buys a new potion effect with apply == base */
+    public void addBaseEffect(PotionEffectType pef, int amp){
+        getBaseEffects().add(new BedWarsTeam.Effect(pef, amp));
     }
 
-    public void addEnemyBaseEnterEffect(String name, PotionEffectType pef, int amp){
-        getBaseEffects().add(new BedWarsTeam.Effect(name, pef, amp));
+    /** Used when someone buys a new potion effect with apply == enemyBaseEnter */
+    public void addEnemyBaseEnterEffect(PotionEffectType pef, int amp){
+        getBaseEffects().add(new BedWarsTeam.Effect(pef, amp));
+    }
+
+    /** Used when someone buys a bew enchantment with apply == bow*/
+    public void addBowEnchantment(Enchantment e, int a){
+        getBowsEnchantments().add(new Enchant(e, a));
+        for (Player p : getMembers()){
+            for (ItemStack i : p.getInventory().getContents()){
+                if (i == null) continue;
+                if (i.getType() == Material.BOW){
+                    ItemMeta im = i.getItemMeta();
+                    im.addEnchant(e, a, true);
+                    i.setItemMeta(im);
+                }
+            }
+            p.updateInventory();
+        }
+    }
+
+    /** Used when someone buys a new enchantment with apply == sword */
+    public void addSwordEnchantment(Enchantment e, int a){
+        getSwordsEnchantemnts().add(new Enchant(e, a));
+        for (Player p : getMembers()){
+            for (ItemStack i : p.getInventory().getContents()){
+                if (i == null) continue;
+                if (nms.isSword(i)){
+                    ItemMeta im = i.getItemMeta();
+                    im.addEnchant(e, a, true);
+                    i.setItemMeta(im);
+                }
+            }
+            p.updateInventory();
+        }
+    }
+
+    /** Used when someone buys a new enchantment with apply == armor */
+    public void addArmorEnchantment(Enchantment e, int a){
+        getSwordsEnchantemnts().add(new Enchant(e, a));
+        for (Player p : getMembers()){
+            for (ItemStack i : p.getInventory().getContents()){
+                if (i == null) continue;
+                if (nms.isArmor(i)){
+                    ItemMeta im = i.getItemMeta();
+                    im.addEnchant(e, a, true);
+                    i.setItemMeta(im);
+                }
+            }
+            p.updateInventory();
+        }
     }
 
     private static List<PlayerVault> vaults = new ArrayList<>();
 
+    /** It contains items bought by a player from shop with permanent == true */
     public class PlayerVault {
         Player p;
         ItemStack pants = createArmor(Material.LEATHER_LEGGINGS), boots = createArmor(Material.LEATHER_BOOTS), chestplate = createArmor(Material.LEATHER_CHESTPLATE), helmet = createArmor(Material.LEATHER_HELMET);
@@ -382,13 +404,11 @@ public class BedWarsTeam {
         }
     }
 
-
+    /** Potion effects from the team upgrades shop */
     public class Effect {
-        String name;
         PotionEffectType potionEffectType;
         int amplifier;
-        public Effect(String name, PotionEffectType potionEffectType, int amplifier){
-            this.name = name;
+        public Effect(PotionEffectType potionEffectType, int amplifier){
             this.potionEffectType = potionEffectType;
             this.amplifier = amplifier;
         }
@@ -402,6 +422,26 @@ public class BedWarsTeam {
         }
     }
 
+    /** Enchantments for bows, swords and armors from the team upgrades*/
+    public class Enchant  {
+        Enchantment enchantment;
+        int amplifier;
+
+        public Enchant(Enchantment enchantment, int amplifier){
+            this.enchantment = enchantment;
+            this.amplifier = amplifier;
+        }
+
+        public Enchantment getEnchantment() {
+            return enchantment;
+        }
+
+        public int getAmplifier() {
+            return amplifier;
+        }
+    }
+
+    /** Gets the player's inventory like a keepInventory */
     @Nullable
     @Contract(pure = true)
     public static PlayerVault getVault(Player p) {
@@ -411,5 +451,113 @@ public class BedWarsTeam {
             }
         }
         return null;
+    }
+
+    /** Getter, setter etc.*/
+    public boolean isMember(Player p) {
+        return members.contains(p);
+    }
+
+    public boolean isBedDestroyed() {
+        return bedDestroyed;
+    }
+
+    public Location getSpawn() {
+        return spawn;
+    }
+
+    public Location getShop() {
+        return shop;
+    }
+
+    public Location getTeamUpgrades() {
+        return teamUpgrades;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public TeamColor getColor() {
+        return color;
+    }
+
+    public List<Player> getMembers() {
+        return members;
+    }
+
+    private ItemStack createColorItem(Material material, int amount) {
+        ItemStack i = new ItemStack(material, amount, TeamColor.itemColor(color));
+        return i;
+    }
+
+    public List<Player> getPotionEffectApplied() {
+        return potionEffectApplied;
+    }
+
+    public HashMap<Integer, Integer> getUpgradeTier() {
+        return upgradeTier;
+    }
+
+    public Location getBed() {
+        return bed;
+    }
+
+    public BedHolo getBedHolo(Player p) {
+        return beds.get(p);
+    }
+
+    public void setBedDestroyed(boolean bedDestroyed) {
+        this.bedDestroyed = bedDestroyed;
+        if (bed.getBlock().getType() == Material.AIR && !bedDestroyed) {
+            bed.getBlock().setType(Material.BED_BLOCK);
+        } else if (bedDestroyed && bed.getBlock().getType() == Material.BED_BLOCK) {
+            bed.getBlock().setType(Material.AIR);
+        }
+        for (BedHolo bh : beds.values()){
+            bh.hide();
+            bh.show();
+        }
+    }
+
+    public OreGenerator getIronGenerator() {
+        return ironGenerator;
+    }
+
+    public OreGenerator getGoldGenerator() {
+        return goldGenerator;
+    }
+
+    public OreGenerator getEmeraldGenerator() {
+        return emeraldGenerator;
+    }
+
+    public void setEmeraldGenerator(OreGenerator emeraldGenerator) {
+        this.emeraldGenerator = emeraldGenerator;
+    }
+
+
+    public List<Effect> getBaseEffects() {
+        return base;
+    }
+
+    public List<Effect> getTeamEffects() {
+        return teamEffects;
+    }
+
+    public List<Effect> getEnemyBaseEnter() {
+        return enemyBaseEnter;
+    }
+
+    public List<Enchant> getBowsEnchantments() {
+        return bowsEnchantments;
+    }
+
+    public List<Enchant> getSwordsEnchantemnts() {
+        return swordsEnchantemnts;
+    }
+
+    public List<Enchant> getArmorsEnchantemnts() {
+        return armorsEnchantemnts;
     }
 }

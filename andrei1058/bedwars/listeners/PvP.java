@@ -270,8 +270,36 @@ public class PvP implements Listener {
 
     @EventHandler
     public void pdd(PlayerDeathEvent e) {
-        if (Arena.isInArena(e.getEntity())) {
+        Arena a = Arena.getArenaByPlayer(e.getEntity());
+        if (a != null) {
             e.setDeathMessage(null);
+            /** Remove base potion effects for enemies and members */
+            if (a.isPlayer(e.getEntity())){
+                for (BedWarsTeam t : a.getTeams()) {
+                    if (e.getEntity().getLocation().distance(t.getSpawn()) < a.getIslandRadius()) {
+                        if (t.getPotionEffectApplied().contains(e.getEntity())){
+                            if (t.isMember(e.getEntity())){
+                                for (PotionEffect pef : e.getEntity().getActivePotionEffects()){
+                                    for (BedWarsTeam.Effect pf : t.getBaseEffects()){
+                                        if (pef.getType() == pf.getPotionEffectType()){
+                                            e.getEntity().removePotionEffect(pf.getPotionEffectType());
+                                        }
+                                    }
+                                }
+                            } else {
+                                for (PotionEffect pef : e.getEntity().getActivePotionEffects()){
+                                    for (BedWarsTeam.Effect pf : t.getEnemyBaseEnter()){
+                                        if (pef.getType() == pf.getPotionEffectType()){
+                                            e.getEntity().removePotionEffect(pf.getPotionEffectType());
+                                        }
+                                    }
+                                }
+                            }
+                            t.getPotionEffectApplied().remove(e.getEntity());
+                        }
+                    }
+                }
+            }
         }
     }
 

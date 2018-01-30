@@ -21,10 +21,29 @@ public class EnchantmentAction extends UpgradeAction {
 
     @Override
     public void execute(BedWarsTeam bwt) {
-
+        switch (getApply().toLowerCase()){
+            case "bow":
+                break;
+            case "sword":
+                break;
+            case "armor":
+                break;
+        }
     }
 
     public String getName() {
         return name;
+    }
+
+    public int getAmplifier() {
+        return amplifier;
+    }
+
+    public Enchantment getEnchantment() {
+        return enchantment;
+    }
+
+    public String getApply() {
+        return apply;
     }
 }

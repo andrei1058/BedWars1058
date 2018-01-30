@@ -4,7 +4,9 @@ import com.andrei1058.bedwars.upgrades.*;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 
 import java.io.File;
@@ -94,6 +96,18 @@ public class UpgradesManager {
             yml.set("settings.startValues.solo.ironGeneratorAmount", 1);
             yml.set("settings.startValues.solo.goldGeneratorDelay", 3);
             yml.set("settings.startValues.solo.goldGeneratorAmount", 1);
+
+            /** Sharpened Swords Upgrades*/
+            yml.set("default.sharpSword.slot", 13);
+            yml.set("default.sharpSword.tier1.displayItem.material", "IRON_SWORD");
+            yml.set("default.sharpSword.tier1.displayItem.data", 0);
+            yml.set("default.sharpSword.tier1.displayItem.amount", 1);
+            yml.set("default.sharpSword.tier1.displayItem.enchanted", false);
+            yml.set("default.sharpSword.tier1.currency", "diamond");
+            yml.set("default.sharpSword.tier1.cost", 4);
+            yml.set("default.sharpSword.tier1.receive.itemEnchantment.sharp.enchantment", "DAMAGE_ALL");
+            yml.set("default.sharpSword.tier1.receive.itemEnchantment.sharp.amplifier", 1);
+            yml.set("default.sharpSword.tier1.receive.itemEnchantment.sharp.apply", "sword"); //sword, bow, armor
         }
         if (yml == null) {
             yml = YamlConfiguration.loadConfiguration(file);
@@ -133,9 +147,9 @@ public class UpgradesManager {
             List<UpgradeAction> actions;
             for (String tier : yml.getConfigurationSection(path+"."+tu).getKeys(false)){
                 String tp = path.isEmpty() ? tu+"."+tier+"." : path+"."+tu+"."+tier+".";
+                if (tier.equalsIgnoreCase("slot")) continue;
                 saveIfNotExists("upgrades."+tp+"name", "&cA nice name");
                 saveIfNotExists("upgrades."+tp+"lore", Arrays.asList("&7A nice description here", "", "&7Cost:&b {cost} {currency}", "", "{loreFooter}"));
-                if (tier.equalsIgnoreCase("slot")) continue;
                 if (yml.isSet(tp+"displayItem")){
                     if (yml.isSet(tp+"displayItem.material")){
                         try {
@@ -213,7 +227,7 @@ public class UpgradesManager {
                             break;
                         case "itemenchantment":
                             for (String ie : yml.getConfigurationSection(tp+"receive."+re).getKeys(false)){
-                                if (yml.isSet(tp+"receive."+re+"."+ie+".enchantmentment")){
+                                if (yml.isSet(tp+"receive."+re+"."+ie+".enchantment")){
                                     try {
                                         Enchantment.getByName(yml.getString(tp+"receive."+re+"."+ie+".enchantment"));
                                     } catch (Exception ex){
@@ -221,8 +235,8 @@ public class UpgradesManager {
                                         continue;
                                     }
                                 } else {
-                                    logger("enchantment not set at: "+tp+"receive"+re+"."+ie+".enchantment");
-                                    yml.set(tp+"receive"+re+"."+ie+".enchantment", "DIG_SPEED");
+                                    logger("enchantment not set at: "+tp+"receive."+re+"."+ie+".enchantment");
+                                    yml.set(tp+"receive."+re+"."+ie+".enchantment", "DIG_SPEED");
                                     save();
                                     continue;
                                 }
@@ -337,9 +351,18 @@ public class UpgradesManager {
                     }
                 }
                 if (!actions.isEmpty()){
+                    ItemStack i = new ItemStack(Material.valueOf(yml.getString(tp+"displayItem.material")), yml.isSet(tp+"displayItem.amount") ? yml.getInt(tp+"displayItem.amount") : 1,
+                            (short) (yml.isSet(tp+"displayItem.data") ? yml.getInt(tp+"displayItem.data") : 0));
+                    if (yml.isSet(tp+"displayItem.enchanted")){
+                        if (yml.getBoolean(tp+"displayItem.enchanted")){
+                            ItemMeta im = i.getItemMeta();
+                            im.addEnchant(Enchantment.LURE, 1, true);
+                            im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                            i.setItemMeta(im);
+                        }
+                    }
                     tiers.add(new UpgradeTier(tier, actions, yml.getInt(tp+"cost"), yml.getString(tp+"currency"),
-                            new ItemStack(Material.valueOf(yml.getString(tp+"displayItem.material")), yml.isSet(tp+"displayItem.amount") ? yml.getInt(tp+"displayItem.amount") : 1,
-                                    (short) (yml.isSet(tp+"displayItem.data") ? yml.getInt(tp+"displayItem.data") : 0))));
+                            i));
                 }
             }
             if (!tiers.isEmpty()){

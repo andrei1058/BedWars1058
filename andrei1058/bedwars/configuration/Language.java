@@ -359,15 +359,16 @@ public class Language {
                 yml.addDefault(loreFooterInsuff, "&cYou don't have enough {currency}");
                 yml.addDefault(loreFooterLocked, "&cLOCKED");
                 yml.addDefault(loreFooterUnlocked, "&aUNLOCKED");
-                yml.addDefault("upgrades.default.generators.tier1.name", "&cIron Forge");
+                yml.addDefault("upgrades.default.generators.tier1.name", "&eIron Forge");
                 yml.addDefault("upgrades.default.generators.tier1.lore", Arrays.asList("&7Increases the spawn rate of Iron", "&7and Gold by 50%..", "", "&7Cost:&b {cost} {currency}", "", "{loreFooter}"));
-                yml.addDefault("upgrades.default.generators.tier2.name", "&cGolden Forge");
+                yml.addDefault("upgrades.default.generators.tier2.name", "&eGolden Forge");
                 yml.addDefault("upgrades.default.generators.tier2.lore", Arrays.asList("&7Increases the spawn rate of Iron", "&7and Gold by 100%..", "", "&7Cost:&b {cost} {currency}", "", "{loreFooter}"));
-                yml.addDefault("upgrades.default.generators.tier3.name", "&cEmerald Forge");
+                yml.addDefault("upgrades.default.generators.tier3.name", "&eEmerald Forge");
                 yml.addDefault("upgrades.default.generators.tier3.lore", Arrays.asList("&7Activates the Emerald spawner in", "&7your team's Forge.", "", "&7Cost:&b {cost} {currency}", "", "{loreFooter}"));
                 yml.addDefault("upgrades.default.maniacMiner.tier1.name", "&eManiac Miner");
                 yml.addDefault("upgrades.default.maniacMiner.tier1.lore", Arrays.asList("&7All players on your team", "&7permanently gain Haste I", "", "&7Cost:&b {cost} {currency}", "", "{loreFooter}"));
-
+                yml.addDefault("upgrades.default.sharpSword.tier1.name", "&eSharpened Swords");
+                yml.addDefault("upgrades.default.sharpSword.tier1.lore", Arrays.asList("&7Your team gets Sharpness I on", "&7all swords!", "", "&7Cost:&b {cost} {currency}","", "{loreFooter}"));
                 break;
         }
         lbj.save();

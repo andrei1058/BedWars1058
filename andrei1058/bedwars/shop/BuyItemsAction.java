@@ -105,6 +105,7 @@ public class BuyItemsAction extends ContentAction {
                 }
             }
         }
+        //todo vezi daca e bow, sword sau armor si da-i enchant pe ele daca are cumparat din team upgrades
         p.playSound(p.getLocation(), nms.bought(), 1f, 1f);
         getCategoryContent().getShopCategory().openToPlayer(p);
         p.sendMessage(getMsg(p, youPurchased).replace("{item}", ChatColor.stripColor(getMsg(p, getCategoryContent().getShopCategory().getName().replace("main.", shopPath) + "." + getCategoryContent().getName() + ".name"))));
