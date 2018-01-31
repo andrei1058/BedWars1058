@@ -35,6 +35,11 @@ public class v1_10_R1 implements NMS {
     }
 
     @Override
+    public Sound countdownTick() {
+        return Sound.valueOf("ENTITY_CHICKEN_EGG");
+    }
+
+    @Override
     public void sendTitle(Player p, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
         if (title != null) {
             IChatBaseComponent bc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + title + "\"}");

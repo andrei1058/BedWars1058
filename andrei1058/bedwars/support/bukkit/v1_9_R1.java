@@ -52,6 +52,11 @@ public class v1_9_R1 implements NMS {
     }
 
     @Override
+    public Sound countdownTick() {
+        return Sound.valueOf("ENTITY_CHICKEN_EGG");
+    }
+
+    @Override
     public Sound bought() {
         return Sound.valueOf("BLOCK_ANVIL_HIT");
     }

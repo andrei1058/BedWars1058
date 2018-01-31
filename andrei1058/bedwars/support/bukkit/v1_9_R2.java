@@ -72,6 +72,11 @@ public class v1_9_R2 implements NMS {
     }
 
     @Override
+    public Sound countdownTick() {
+        return Sound.valueOf("ENTITY_CHICKEN_EGG");
+    }
+
+    @Override
     public Sound insufficientMoney() {
         return Sound.valueOf("ENTITY_ENDERMEN_TELEPORT");
     }

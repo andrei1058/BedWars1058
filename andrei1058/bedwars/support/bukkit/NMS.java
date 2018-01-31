@@ -50,5 +50,7 @@ public interface NMS {
 
     Sound bought();
 
+    Sound countdownTick();
+
     void hidePlayer(Player player, List<Player> players);
 }

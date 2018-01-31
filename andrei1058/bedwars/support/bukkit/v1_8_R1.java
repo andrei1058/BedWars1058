@@ -49,6 +49,11 @@ public class v1_8_R1 implements NMS {
     }
 
     @Override
+    public Sound countdownTick() {
+        return Sound.valueOf("CHICKEN_EGG_POP");
+    }
+
+    @Override
     public void registerCommand(String name, Command clasa) {
         ((CraftServer) plugin.getServer()).getCommandMap().register(name, clasa);
     }

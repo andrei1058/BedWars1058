@@ -44,6 +44,11 @@ public class v1_8_R2 implements NMS {
     }
 
     @Override
+    public Sound countdownTick() {
+        return Sound.valueOf("CHICKEN_EGG_POP");
+    }
+
+    @Override
     public void hidePlayer(Player player, List<Player> players) {
         net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy packet = new net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy(player.getEntityId());
         for (Player p : players) {

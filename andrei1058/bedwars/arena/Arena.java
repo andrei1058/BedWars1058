@@ -630,6 +630,7 @@ public class Arena {
                 }
                 if (countdownS % 10 == 0 || countdownS <= 5) {
                     for (Player p : getPlayers()) {
+                        p.playSound(p.getLocation(), nms.countdownTick(), 1f, 1f);
                         if (countdownS >= 10) {
                             nms.sendTitle(p, "§a" + countdownS, null, 0, 20, 0);
                             p.sendMessage(getMsg(p, lang.arenaStartsIn).replace("{time}", String.valueOf(countdownS)));
