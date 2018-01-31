@@ -9,24 +9,25 @@ public class EffectAction extends UpgradeAction {
 
     private String name, apply;
     private PotionEffectType potionEffectType;
-    private int amplifier;
+    private int amplifier, duration;
 
-    public EffectAction(String name, PotionEffectType potionEffectType, int amplifier, String apply){
+    public EffectAction(String name, PotionEffectType potionEffectType, int amplifier, String apply, int duration){
         this.name = name;
         this.potionEffectType = potionEffectType;
         this.amplifier = amplifier;
         this.apply = apply;
+        this.duration = duration;
         plugin.debug("loading new EffectAction: "+getName());
     }
 
     @Override
     public void execute(BedWarsTeam bwt, int i) {
         if (apply.equalsIgnoreCase("members")){
-            bwt.addTeamEffect(getPotionEffectType(), getAmplifier());
+            bwt.addTeamEffect(getPotionEffectType(), getAmplifier(), getDuration());
         } else if(apply.equalsIgnoreCase("base")){
-            bwt.addBaseEffect(getPotionEffectType(), getAmplifier());
+            bwt.addBaseEffect(getPotionEffectType(), getAmplifier(), getDuration());
         } else if (apply.equalsIgnoreCase("enemybaseenter")){
-            bwt.addEnemyBaseEnterEffect(getPotionEffectType(), getAmplifier());
+            bwt.addEnemyBaseEnterEffect(getPotionEffectType(), getAmplifier(), i, getDuration());
         }
     }
 
@@ -40,5 +41,9 @@ public class EffectAction extends UpgradeAction {
 
     public int getAmplifier() {
         return amplifier;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 }

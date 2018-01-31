@@ -366,20 +366,24 @@ public class PvP implements Listener {
             } else {
                 if (a.getStatus() == GameState.playing) {
                     for (BedWarsTeam t : a.getTeams()) {
+                        /** Veridica daca a intrat in baza */
                         if (e.getPlayer().getLocation().distance(t.getSpawn()) < a.getIslandRadius()) {
-                            //a intrat intr-o baza
-                            //todo verifica daca are upgrade de trap si trimite avertizarea
                                 if (t.isMember(e.getPlayer())){
                                     if (!t.getPotionEffectApplied().contains(e.getPlayer())) {
                                         for (BedWarsTeam.Effect ef : t.getBaseEffects()) {
-                                            e.getPlayer().addPotionEffect(new PotionEffect(ef.getPotionEffectType(), Integer.MAX_VALUE, ef.getAmplifier()));
+                                            e.getPlayer().addPotionEffect(new PotionEffect(ef.getPotionEffectType(), ef.getDuration(), ef.getAmplifier()));
                                         }
                                     }
                                 } else {
                                     if (!t.getPotionEffectApplied().contains(e.getPlayer())) {
                                         for (BedWarsTeam.Effect ef : t.getEnemyBaseEnter()) {
-                                            e.getPlayer().addPotionEffect(new PotionEffect(ef.getPotionEffectType(), Integer.MAX_VALUE, ef.getAmplifier()));
+                                            e.getPlayer().addPotionEffect(new PotionEffect(ef.getPotionEffectType(), ef.getDuration(), ef.getAmplifier()));
                                         }
+                                        t.getEnemyBaseEnter().clear();
+                                        for (int i : t.getEnemyBaseEnterSlots()){
+                                            t.getUpgradeTier().remove(i);
+                                        }
+                                        t.getEnemyBaseEnterSlots().clear();
                                     }
                                     if (t.isTrapActive()){
                                         t.disableTrap();
@@ -410,7 +414,7 @@ public class PvP implements Listener {
                                     }
                                 } else {
                                     for (PotionEffect pef : e.getPlayer().getActivePotionEffects()){
-                                        for (BedWarsTeam.Effect pf : t.getEnemyBaseEnter()){
+                                        for (BedWarsTeam.Effect pf : t.getEbseEffectsStatic()){
                                             if (pef.getType() == pf.getPotionEffectType()){
                                                 e.getPlayer().removePotionEffect(pf.getPotionEffectType());
                                             }

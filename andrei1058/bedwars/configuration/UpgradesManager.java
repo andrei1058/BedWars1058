@@ -123,13 +123,45 @@ public class UpgradesManager {
 
             /** It's a trap Upgrade*/
             yml.set("default.trap.slot", 15);
-            yml.set("default.trap.tier1.displayItem.material", "REDSTONE_WIRE");
+            yml.set("default.trap.tier1.displayItem.material", "TRIPWIRE_HOOK");
             yml.set("default.trap.tier1.displayItem.data", 0);
             yml.set("default.trap.tier1.displayItem.amount", 1);
             yml.set("default.trap.tier1.displayItem.enchanted", false);
             yml.set("default.trap.tier1.currency", "diamond");
             yml.set("default.trap.tier1.cost", 1);
             yml.set("default.trap.tier1.receive.enemyBaseEnter.announce", "title, subtitle, action, chat");
+            yml.set("default.trap.tier1.receive.playerEffect.blindness.effect", "BLINDNESS");
+            yml.set("default.trap.tier1.receive.playerEffect.blindness.amplifier", 1);
+            yml.set("default.trap.tier1.receive.playerEffect.blindness.apply", "enemyBaseEnter");
+            yml.set("default.trap.tier1.receive.playerEffect.slowness.effect", "SLOW");
+            yml.set("default.trap.tier1.receive.playerEffect.slowness.amplifier", 0);
+            yml.set("default.trap.tier1.receive.playerEffect.slowness.apply", "enemyBaseEnter");
+
+            /** Mining fatigue trap Upgrade */
+            yml.set("default.miningFatigue.slot", 20);
+            yml.set("default.miningFatigue.tier1.displayItem.material", "IRON_PICKAXE");
+            yml.set("default.miningFatigue.tier1.displayItem.data", 0);
+            yml.set("default.miningFatigue.tier1.displayItem.amount", 1);
+            yml.set("default.miningFatigue.tier1.displayItem.enchanted", false);
+            yml.set("default.miningFatigue.tier1.currency", "diamond");
+            yml.set("default.miningFatigue.tier1.cost", 2);
+            yml.set("default.miningFatigue.tier1.receive.enemyBaseEnter.announce", "title, subtitle");
+            yml.set("default.miningFatigue.tier1.receive.playerEffect.fatigue.effect", "SLOW_DIGGING");
+            yml.set("default.miningFatigue.tier1.receive.playerEffect.fatigue.amplifier", 0);
+            yml.set("default.miningFatigue.tier1.receive.playerEffect.fatigue.apply", "enemyBaseEnter");
+            yml.set("default.miningFatigue.tier1.receive.playerEffect.fatigue.duration", 10);
+
+            /** Health pool Upgrade */
+            yml.set("default.healPool.slot", 21);
+            yml.set("default.healPool.tier1.displayItem.material", "BEACON");
+            yml.set("default.healPool.tier1.displayItem.data", 0);
+            yml.set("default.healPool.tier1.displayItem.amount", 1);
+            yml.set("default.healPool.tier1.displayItem.enchanted", false);
+            yml.set("default.healPool.tier1.currency", "diamond");
+            yml.set("default.healPool.tier1.cost", 1);
+            yml.set("default.healPool.tier1.receive.playerEffect.fatigue.effect", "HEALTH_BOOST");
+            yml.set("default.healPool.tier1.receive.playerEffect.fatigue.amplifier", 0);
+            yml.set("default.healPool.tier1.receive.playerEffect.fatigue.apply", "base");
         }
         if (yml == null) {
             yml = YamlConfiguration.loadConfiguration(file);
@@ -244,7 +276,8 @@ public class UpgradesManager {
                                 }
                                 actions.add(new EffectAction(pe, PotionEffectType.getByName(yml.getString(tp+"receive."+re+"."+pe+".effect")),
                                         yml.isSet(tp+"receive."+re+"."+pe+".amplifier") ? yml.getInt(tp+"receive."+re+"."+pe+".amplifier")
-                                        : 1, yml.getString(tp+"receive."+re+"."+pe+".apply")));
+                                        : 1, yml.getString(tp+"receive."+re+"."+pe+".apply"), yml.isSet(tp+"receive."+re+"."+pe+".duration") ?
+                                yml.getInt(tp+"receive."+re+"."+pe+".duration")*20 : -1));
                             }
                             break;
                         case "itemenchantment":

@@ -139,7 +139,8 @@ public class Language {
             enemyBaseEnterTitle = "arena.baseEnter.title",
             enemyBaseEnterSubtitle = "arena.baseEnter.subtitle",
             enemyBaseEnterAction = "arena.baseEnter.action",
-            enemyBaseEnterChat = "arena.baseEnter.chat";
+            enemyBaseEnterChat = "arena.baseEnter.chat",
+            upgradeBuyMessage = "arena.upgradeBuy";
     //End of language file strings
 
     public Language(String iso) {
@@ -375,10 +376,17 @@ public class Language {
                 yml.addDefault("upgrades.default.sharpSword.tier1.lore", Arrays.asList("&7Your team gets Sharpness I on", "&7all swords!", "", "&7Cost:&b {cost} {currency}","", "{loreFooter}"));
                 yml.addDefault("upgrades.default.reinforced.tier1.name", "&eReinforced Armor");
                 yml.addDefault("upgrades.default.reinforced.tier1.lore", Arrays.asList("&7Your team gets Protection I on", "&7all armor pieces!", "", "&7Cost:&b {cost} {currency}","", "{loreFooter}"));
-                yml.addDefault(enemyBaseEnterAction, "action");
-                yml.addDefault(enemyBaseEnterChat, "chat");
-                yml.addDefault(enemyBaseEnterSubtitle, "subtitle");
-                yml.addDefault(enemyBaseEnterTitle, "title");
+                yml.addDefault("upgrades.default.trap.tier1.name", "&eIt's a trap!");
+                yml.addDefault("upgrades.default.trap.tier1.lore", Arrays.asList("&7The nex enemy to enter your", "&7base will receive Blindness and", "&7Slowness!", "", "&7Cost:&b {cost} {currency}","", "{loreFooter}"));
+                yml.addDefault("upgrades.default.miningFatigue.tier1.name", "&eMiner Fatigue Trap");
+                yml.addDefault("upgrades.default.miningFatigue.tier1.lore", Arrays.asList("&7The nex enemy to enter your", "&7base will receive Mining Fatigue", "&7for 10 seconds!", "", "&7Cost:&b {cost} {currency}","", "{loreFooter}"));
+                yml.addDefault("upgrades.default.healPool.tier1.name", "&eHeal Pool");
+                yml.addDefault("upgrades.default.healPool.tier1.lore", Arrays.asList("&7Creates a Regeneration field", "&7around your base!", "", "&7Cost:&b {cost} {currency}","", "{loreFooter}"));
+                yml.addDefault(enemyBaseEnterAction, "&cTRAP TRIGGERED!");
+                yml.addDefault(enemyBaseEnterChat, "{prefix}&cTRAP TRIGGERED!");
+                yml.addDefault(enemyBaseEnterSubtitle, "&fYour trap has been set off!");
+                yml.addDefault(enemyBaseEnterTitle, "&cTRAP TRIGGERED!");
+                yml.addDefault(upgradeBuyMessage, "&a{player} purchased &6{upgradeName}");
                 break;
         }
         lbj.save();

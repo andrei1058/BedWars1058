@@ -1,12 +1,17 @@
 package com.andrei1058.bedwars.upgrades;
 
 import com.andrei1058.bedwars.arena.BedWarsTeam;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.andrei1058.bedwars.Main.debug;
+import static com.andrei1058.bedwars.Main.lang;
 import static com.andrei1058.bedwars.Main.plugin;
+import static com.andrei1058.bedwars.configuration.Language.getMsg;
+import static com.andrei1058.bedwars.upgrades.UpgradeGroup.getUpgradeGroup;
 
 public class TeamUpgrade {
 
@@ -88,10 +93,21 @@ public class TeamUpgrade {
         if (getTiers().size()-1 > tier) {
             if (getTiers().get(tier+1).buy(p, bwt, getSlot())) {
                 if (tier < getTiers().size()) {
+                    debug("upgrades."+getUpgradeGroup(bwt.getArena().getGroup().toLowerCase())+"."+getName()+"."+getTiers().get(0).getName()+".name");
                     if (bwt.getUpgradeTier().containsKey(getSlot())) {
                         bwt.getUpgradeTier().replace(getSlot(), tier + 1);
+                        for (Player p1 : bwt.getMembers()){
+                            p.sendMessage(getMsg(p1, lang.upgradeBuyMessage).replace("{player}", p.getName()).replace("{upgradeName}",
+                                    ChatColor.stripColor(getMsg(p1,
+                                            "upgrades."+getUpgradeGroup(bwt.getArena().getGroup().toLowerCase()).getName()+"."+getName()+"."+getTiers().get(tier+1).getName()+".name"))));
+                        }
                     } else {
                         bwt.getUpgradeTier().put(getSlot(), 0);
+                        for (Player p1 : bwt.getMembers()){
+                            p.sendMessage(getMsg(p1, lang.upgradeBuyMessage).replace("{player}", p.getName()).replace("{upgradeName}",
+                                    ChatColor.stripColor(getMsg(p1,
+                                            "upgrades."+getUpgradeGroup(bwt.getArena().getGroup().toLowerCase()).getName()+"."+getName()+"."+getTiers().get(0).getName()+".name"))));
+                        }
                     }
                 }
             }

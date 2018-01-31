@@ -54,6 +54,10 @@ public class BedWarsTeam {
     /** Used for it's a trap */
     private boolean trapActive = false, trapChat = false, trapAction = false, trapTitle = false, trapSubtitle;
     private List<Integer> trapSlots = new ArrayList<>();
+    /** One time upgrades with effects slots */
+    private List<Integer> enemyBaseEnterSlots = new ArrayList<>();
+    /** A list with all potions for clear them when someone leaves the island */
+    private List<Effect> ebseEffectsStatic = new ArrayList<>();
 
     public BedWarsTeam(String name, TeamColor color, Location spawn, Location bed, Location shop, Location teamUpgrades, Arena arena) {
         this.name = name;
@@ -166,12 +170,12 @@ public class BedWarsTeam {
         p.setHealth(20);
         if (!getBaseEffects().isEmpty()){
             for (BedWarsTeam.Effect ef : getBaseEffects()){
-                p.addPotionEffect(new PotionEffect(ef.getPotionEffectType(), Integer.MAX_VALUE, ef.getAmplifier()));
+                p.addPotionEffect(new PotionEffect(ef.getPotionEffectType(), ef.getDuration(), ef.getAmplifier()));
             }
         }
         if (!getTeamEffects().isEmpty()) {
             for (BedWarsTeam.Effect ef : getTeamEffects()) {
-                p.addPotionEffect(new PotionEffect(ef.getPotionEffectType(), Integer.MAX_VALUE, ef.getAmplifier()));
+                p.addPotionEffect(new PotionEffect(ef.getPotionEffectType(), ef.getDuration(), ef.getAmplifier()));
             }
         }
         if (!getBowsEnchantments().isEmpty()){
@@ -288,21 +292,32 @@ public class BedWarsTeam {
     }
 
     /** Used when someone buys a new potion effect with apply == members */
-    public void addTeamEffect(PotionEffectType pef, int amp){
-        getTeamEffects().add(new BedWarsTeam.Effect(pef, amp));
+    public void addTeamEffect(PotionEffectType pef, int amp, int duration){
+        getTeamEffects().add(new BedWarsTeam.Effect(pef, amp, duration));
         for (Player p : getMembers()){
             p.addPotionEffect(new PotionEffect(pef, Integer.MAX_VALUE, amp));
         }
     }
 
     /** Used when someone buys a new potion effect with apply == base */
-    public void addBaseEffect(PotionEffectType pef, int amp){
-        getBaseEffects().add(new BedWarsTeam.Effect(pef, amp));
+    public void addBaseEffect(PotionEffectType pef, int amp, int duration){
+        getBaseEffects().add(new BedWarsTeam.Effect(pef, amp, duration));
+        for (Player p : getMembers()){
+            if (p.getLocation().distance(getSpawn()) <= arena.getIslandRadius()){
+                p.addPotionEffect(new PotionEffect(pef, amp, duration));
+            }
+            if (!getPotionEffectApplied().contains(p)){
+                getPotionEffectApplied().add(p);
+            }
+        }
     }
 
     /** Used when someone buys a new potion effect with apply == enemyBaseEnter */
-    public void addEnemyBaseEnterEffect(PotionEffectType pef, int amp){
-        getBaseEffects().add(new BedWarsTeam.Effect(pef, amp));
+    public void addEnemyBaseEnterEffect(PotionEffectType pef, int amp, int slot, int duration){
+        Effect e = new BedWarsTeam.Effect(pef, amp, duration);
+        getEnemyBaseEnter().add(e);
+        getEnemyBaseEnterSlots().add(slot);
+        getEbseEffectsStatic().add(e);
     }
 
     /** Used when someone buys a bew enchantment with apply == bow*/
@@ -411,9 +426,15 @@ public class BedWarsTeam {
     public class Effect {
         PotionEffectType potionEffectType;
         int amplifier;
-        public Effect(PotionEffectType potionEffectType, int amplifier){
+        int duration;
+        public Effect(PotionEffectType potionEffectType, int amplifier, int duration){
             this.potionEffectType = potionEffectType;
             this.amplifier = amplifier;
+            if (duration < 1){
+                this.duration = Integer.MAX_VALUE;
+            } else {
+                this.duration = duration;
+            }
         }
 
         public PotionEffectType getPotionEffectType() {
@@ -422,6 +443,10 @@ public class BedWarsTeam {
 
         public int getAmplifier() {
             return amplifier;
+        }
+
+        public int getDuration() {
+            return duration;
         }
     }
 
@@ -613,5 +638,17 @@ public class BedWarsTeam {
 
     public boolean isTrapTitle() {
         return trapTitle;
+    }
+
+    public List<Integer> getEnemyBaseEnterSlots() {
+        return enemyBaseEnterSlots;
+    }
+
+    public List<Effect> getEbseEffectsStatic() {
+        return ebseEffectsStatic;
+    }
+
+    public Arena getArena() {
+        return arena;
     }
 }
