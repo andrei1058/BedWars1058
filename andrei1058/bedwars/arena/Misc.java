@@ -57,7 +57,7 @@ public class Misc implements PluginMessageListener {
     }
 
     public static String replaceLast(String text, String regex, String replacement) {
-        return text.replaceFirst("(?s)"+regex+"(?!.*?"+regex+")", replacement);
+        return text.replaceFirst("(?s)" + regex + "(?!.*?" + regex + ")", replacement);
     }
 
     public static void checkLobbyServer() {
@@ -74,7 +74,7 @@ public class Misc implements PluginMessageListener {
         }
     }
 
-    public static ItemStack getArenaGUI(Player p){
+    public static ItemStack getArenaGUI(Player p) {
         ItemStack i;
         try {
             i = new ItemStack(Material.valueOf(config.getYml().getString("items.arenaGui.itemStack")),
@@ -105,7 +105,7 @@ public class Misc implements PluginMessageListener {
         return i;
     }
 
-    public static ItemStack createItem(Material material, byte data, String name, List<String> lore){
+    public static ItemStack createItem(Material material, byte data, String name, List<String> lore) {
         ItemStack i = new ItemStack(material, 1, data);
         ItemMeta im = i.getItemMeta();
         im.setDisplayName(name);
@@ -114,31 +114,27 @@ public class Misc implements PluginMessageListener {
         return i;
     }
 
-    public static void checkUpdate(){
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                    try {
-                        HttpURLConnection checkUpdate = (HttpURLConnection)new URL("https://api.spigotmc.org/legacy/update.php?resource=50942").openConnection();
-                        checkUpdate.setDoOutput(true);
-                        String old = plugin.getDescription().getVersion();
-                        String newV = new BufferedReader(new InputStreamReader(checkUpdate.getInputStream())).readLine();
-                        if (!newV.equalsIgnoreCase(old)) {
-                            updateAvailable = true;
-                            newVersion = newV;
-                            plugin.getLogger().info("------------------------------------");
-                            plugin.getLogger().info(" ");
-                            plugin.getLogger().info("There is a nev version available!");
-                            plugin.getLogger().info("Version: "+newVersion);
-                            plugin.getLogger().info(" ");
-                            plugin.getLogger().info("https://www.spigotmc.org/resources/50942/");
-                            plugin.getLogger().info("------------------------------------");
-                        }
-                    }
-                    catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    plugin.spawnNPCs();
-                }
-                , 40);
+    public static void checkUpdate() {
+        try {
+            HttpURLConnection checkUpdate = (HttpURLConnection) new URL("https://api.spigotmc.org/legacy/update.php?resource=50942").openConnection();
+            checkUpdate.setDoOutput(true);
+            String old = plugin.getDescription().getVersion();
+            String newV = new BufferedReader(new InputStreamReader(checkUpdate.getInputStream())).readLine();
+            if (!newV.equalsIgnoreCase(old)) {
+                updateAvailable = true;
+                newVersion = newV;
+                plugin.getLogger().info("------------------------------------");
+                plugin.getLogger().info(" ");
+                plugin.getLogger().info("There is a nev version available!");
+                plugin.getLogger().info("Version: " + newVersion);
+                plugin.getLogger().info(" ");
+                plugin.getLogger().info("https://www.spigotmc.org/resources/50942/");
+                plugin.getLogger().info("------------------------------------");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        plugin.spawnNPCs();
     }
 
     public static boolean isUpdateAvailable() {

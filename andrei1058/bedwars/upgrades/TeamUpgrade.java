@@ -93,7 +93,6 @@ public class TeamUpgrade {
         if (getTiers().size()-1 > tier) {
             if (getTiers().get(tier+1).buy(p, bwt, getSlot())) {
                 if (tier < getTiers().size()) {
-                    debug("upgrades."+getUpgradeGroup(bwt.getArena().getGroup().toLowerCase())+"."+getName()+"."+getTiers().get(0).getName()+".name");
                     if (bwt.getUpgradeTier().containsKey(getSlot())) {
                         bwt.getUpgradeTier().replace(getSlot(), tier + 1);
                         for (Player p1 : bwt.getMembers()){

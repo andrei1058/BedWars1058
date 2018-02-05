@@ -8,4 +8,11 @@ public class BedWars implements GameAPI {
     public ServerType getServerType() {
         return Main.getServerType();
     }
+
+    @Override
+    public int getApiVersion() {
+        return 1;
+    }
+
+
 }
