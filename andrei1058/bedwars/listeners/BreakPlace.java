@@ -118,7 +118,7 @@ public class BreakPlace implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            if (e.getBlock().getType() == Material.BED_BLOCK) {
+            if (e.getBlock().getType() == a.getBedBlock()) {
                 for (BedWarsTeam t : a.getTeams()) {
                     for (int x = e.getBlock().getX() - 2; x < e.getBlock().getX() + 2; x++) {
                         for (int y = e.getBlock().getY() - 2; y < e.getBlock().getY() + 2; y++) {

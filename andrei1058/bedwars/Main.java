@@ -41,9 +41,9 @@ import static com.andrei1058.bedwars.configuration.Language.setupLang;
 public class Main extends JavaPlugin {
 
     private static ServerType serverType = ServerType.MULTIARENA;
-    public static boolean safeMode, lobbyServer = false, debug = false;
+    public static boolean safeMode, lobbyServer = false, debug = true;
     public static HashMap<Entity, String> npcs = new HashMap<>();
-    public static String mainCmd = "bw", link = "https://www.spigotmc.org/resources/bedwars1058-the-most-modern-bedwars-plugin.50942/";
+    public static String mainCmd = "bw", link = "https://www.spigotmc.org/resources/bedwars1058-the-most-modern-bedwars-plugin.50942/", sursa = "spigotmc.org";
     public static ConfigManager config, signs;
     public static ShopManager shop;
     public static UpgradesManager upgrades;

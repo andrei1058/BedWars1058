@@ -7,6 +7,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Map;
 
+import static com.andrei1058.bedwars.Main.debug;
 import static com.andrei1058.bedwars.Main.lang;
 import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;

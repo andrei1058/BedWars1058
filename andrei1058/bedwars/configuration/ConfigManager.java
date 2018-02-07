@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.configuration;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -42,6 +43,7 @@ public class ConfigManager {
             yml.addDefault("shopProtection", 1);
             yml.addDefault("upgradesProtection", 1);
             yml.addDefault("islandRadius", 10); //based on spawn-point
+            yml.addDefault("bedBlock", "BED_BLOCK");
             yml.options().copyDefaults(true);
             save();
         }

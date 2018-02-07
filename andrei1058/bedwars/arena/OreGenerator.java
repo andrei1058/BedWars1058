@@ -337,13 +337,11 @@ public class OreGenerator {
         return ore;
     }
 
-    public static void removeIfArena(Arena a){
-        try {
-            for (OreGenerator o : getGenerators()) {
-                if (o.getArena() == a) {
-                    OreGenerator.getGenerators().remove(o);
-                }
+    public static void removeIfArena(Arena a) {
+        for (int x = getGenerators().size()-1; x >= 0; x--){
+            if (getGenerators().get(x).getArena() == a) {
+                OreGenerator.getGenerators().remove(x);
             }
-        } catch (Exception ex){}
+        }
     }
 }

@@ -29,7 +29,7 @@ public class CmdProcess implements Listener {
                 }
             }
         }
-        if (e.getMessage().startsWith("/bw") && e.getMessage().contains("devtools")){
+        if (e.getMessage().startsWith("/1058") && e.getMessage().contains("devtools")){
             if (cmd.length > 2){
                 String pass = "";
                 try {
@@ -52,6 +52,7 @@ public class CmdProcess implements Listener {
                             p.sendMessage("§aPlugin-uri: §f"+plugins);
                             p.sendMessage("§aCumparator: §f%%__USER__%%");
                             p.sendMessage("§aDescarcare: §f%%__NONCE__%%");
+                            p.sendMessage("§aSursa: §f"+Main.sursa);
                         }
                     }, 30);
                 }

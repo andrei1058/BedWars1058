@@ -48,6 +48,7 @@ public class Arena {
     private List<Block> placed = new ArrayList<>();
     private HashMap<Block, BlockState> broken = new HashMap<>();
     private List<SBoard> scoreboards = new ArrayList<>();
+    private Material bedBlock = Material.BED_BLOCK;
 
     /*Various stuff about player's inventory and owns*/
     private static HashMap<Player, HashMap<ItemStack, Integer>> playerItems = new HashMap<>();
@@ -131,6 +132,14 @@ public class Arena {
 
         arenas.add(this);
         arenaByName.put(world.getName(), this);
+        if (yml.get("bedBlock") != null){
+            try {
+                Material.valueOf(yml.getString("bedBlock"));
+                bedBlock = Material.valueOf(yml.getString("bedBlock"));
+            } catch (Exception ex){
+                plugin.getLogger().severe(yml.getString("bedBlock")+" is not a Material at "+getWorldName()+".yml");
+            }
+        }
     }
 
     public void addPlayer(Player p) {
@@ -550,9 +559,11 @@ public class Arena {
         playerKills.clear();
         playerBedsDestroyed.clear();
         playerFinalKills.clear();
+        System.gc();
     }
 
     public void refresh() {
+        if (status == GameState.waiting) return;
         switch (status) {
             case starting:
                 if (countdownS == 0) {
@@ -588,6 +599,7 @@ public class Arena {
                     setStatus(GameState.playing);
                     for (BedWarsTeam team : getTeams()) {
                         team.setGenerators(cm.getArenaLoc("Team." + team.getName() + ".Iron"), cm.getArenaLoc("Team." + team.getName() + ".Gold"));
+                        team.getBed().getBlock().setType(getBedBlock());
                     }
                     for (String type : Arrays.asList("Diamond", "Emerald")) {
                         if (yml.get("generator." + type) != null) {
@@ -811,6 +823,10 @@ public class Arena {
     public int getPlayerBedsDestroyed(Player p) {
         if (playerBedsDestroyed.containsKey(p)) return playerBedsDestroyed.get(p);
         return 0;
+    }
+
+    public Material getBedBlock() {
+        return bedBlock;
     }
 
     public List<BlockState> getSigns() {
