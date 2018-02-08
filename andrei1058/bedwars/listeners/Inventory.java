@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.listeners;
 
+import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.ArenaGUI;
 import com.andrei1058.bedwars.shop.CategoryContent;
@@ -48,6 +49,10 @@ public class Inventory implements Listener {
         }
         if (Arena.isInArena(p)){
             Arena a = Arena.getArenaByPlayer(p);
+            if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting){
+                e.setCancelled(true);
+                return;
+            }
             if (a.isPlayer(p)){
                 for (ShopCategory sc : ShopCategory.getShopCategories()){
                     if (e.getInventory().getName().equalsIgnoreCase(sc.getDisplayName(p))) {

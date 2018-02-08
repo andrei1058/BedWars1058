@@ -7,9 +7,7 @@ import com.andrei1058.bedwars.configuration.Language;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Sign;
+import org.bukkit.block.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -599,7 +597,29 @@ public class Arena {
                     setStatus(GameState.playing);
                     for (BedWarsTeam team : getTeams()) {
                         team.setGenerators(cm.getArenaLoc("Team." + team.getName() + ".Iron"), cm.getArenaLoc("Team." + team.getName() + ".Gold"));
-                        team.getBed().getBlock().setType(getBedBlock());
+                        team.getBed().getBlock().setType(Material.AIR);
+                        if (getBedBlock() == Material.BED_BLOCK){
+
+                            BlockState baseState = team.getBed().getBlock().getState();
+                            BlockState localBlockState = team.getBed().add(0,0,-1).getBlock().getState();
+
+
+                            (baseState).setType(Material.BED_BLOCK);
+                            localBlockState.setType(Material.BED_BLOCK);
+
+                            (baseState).setRawData((byte) 0x08);
+                            localBlockState.setRawData((byte) 0x00);
+
+                            (baseState).update(true,false);
+                            localBlockState.update(true,false);
+                            for (Entity e : team.getArena().getWorld().getNearbyEntities(team.getBed(), 2 ,2 ,2)){
+                                if (e.getType() == EntityType.DROPPED_ITEM){
+                                    e.remove();
+                                }
+                            }
+                        } else {
+                            team.getBed().getBlock().setType(getBedBlock());
+                        }
                     }
                     for (String type : Arrays.asList("Diamond", "Emerald")) {
                         if (yml.get("generator." + type) != null) {
