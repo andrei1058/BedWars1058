@@ -600,20 +600,35 @@ public class Arena {
                         team.getBed().getBlock().setType(Material.AIR);
                         if (getBedBlock() == Material.BED_BLOCK){
 
-                            BlockState baseState = team.getBed().getBlock().getState();
-                            BlockState localBlockState = team.getBed().add(0,0,-1).getBlock().getState();
+                            /*if (Misc.getDirection(team.getBed()) == BlockFace.WEST || Misc.getDirection(team.getBed()) == BlockFace.EAST){
+                                BlockState baseState = team.getBed().getBlock().getState();
+                                BlockState localBlockState = team.getBed().add(-1, 0, 0).getBlock().getState();
 
 
-                            (baseState).setType(Material.BED_BLOCK);
-                            localBlockState.setType(Material.BED_BLOCK);
+                                baseState.setType(Material.BED_BLOCK);
+                                localBlockState.setType(Material.BED_BLOCK);
 
-                            (baseState).setRawData((byte) 0x08);
-                            localBlockState.setRawData((byte) 0x00);
+                                baseState.setRawData((byte) 0x02);
+                                localBlockState.setRawData((byte) 0x00);
 
-                            (baseState).update(true,false);
-                            localBlockState.update(true,false);
-                            for (Entity e : team.getArena().getWorld().getNearbyEntities(team.getBed(), 2 ,2 ,2)){
-                                if (e.getType() == EntityType.DROPPED_ITEM){
+                                baseState.update(true, false);
+                                localBlockState.update(true, false);
+                            } else {*/
+                                BlockState baseState = team.getBed().getBlock().getState();
+                                BlockState localBlockState = team.getBed().add(0, 0, -1).getBlock().getState();
+
+
+                                baseState.setType(Material.BED_BLOCK);
+                                localBlockState.setType(Material.BED_BLOCK);
+
+                                baseState.setRawData((byte) 0x08);
+                                localBlockState.setRawData((byte) 0x00);
+
+                                baseState.update(true, false);
+                                localBlockState.update(true, false);
+                            //}
+                            for (Entity e : team.getArena().getWorld().getNearbyEntities(team.getBed(), 2, 2, 2)) {
+                                if (e.getType() == EntityType.DROPPED_ITEM) {
                                     e.remove();
                                 }
                             }

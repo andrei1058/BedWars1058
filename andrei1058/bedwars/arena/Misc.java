@@ -6,7 +6,9 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -135,6 +137,34 @@ public class Misc implements PluginMessageListener {
             e.printStackTrace();
         }
         plugin.spawnNPCs();
+    }
+
+    public static BlockFace getDirection(Location loc){
+        int rotation = (int) loc.getYaw();
+        if (rotation < 0) {
+            rotation += 360;
+        }
+        if (0 <= rotation && rotation < 22) {
+            return BlockFace.SOUTH;
+        } else if (22 <= rotation && rotation < 67) {
+            return BlockFace.SOUTH;
+        } else if (67 <= rotation && rotation < 112) {
+            return BlockFace.WEST;
+        } else if (112 <= rotation && rotation < 157) {
+            return BlockFace.NORTH;
+        } else if (157 <= rotation && rotation < 202) {
+            return BlockFace.NORTH;
+        } else if (202 <= rotation && rotation < 247) {
+            return BlockFace.NORTH;
+        } else if (247 <= rotation && rotation < 292) {
+            return BlockFace.EAST;
+        } else if (292 <= rotation && rotation < 337) {
+            return BlockFace.SOUTH;
+        } else if (337 <= rotation && rotation < 360) {
+            return BlockFace.SOUTH;
+        } else {
+            return BlockFace.SOUTH;
+        }
     }
 
     public static boolean isUpdateAvailable() {
