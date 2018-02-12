@@ -86,6 +86,7 @@ public class Misc implements PluginMessageListener {
             i = new ItemStack(Material.BEDROCK);
         }
         ItemMeta im = i.getItemMeta();
+        im.spigot().setUnbreakable(true);
         try {
             im.setLore(getList(p, Language.arenaGuiItemLore));
         } catch (Exception ex) {

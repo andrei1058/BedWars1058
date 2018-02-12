@@ -2,7 +2,6 @@ package com.andrei1058.bedwars.configuration;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -36,13 +35,12 @@ public class ConfigManager {
         if (arena){
             yml.addDefault("group", "DEFAULT");
             yml.addDefault("minPlayers", 2);
-            //yml.addDefault("maxPlayers", 12);
             yml.addDefault("maxInTeam", 1);
             yml.addDefault("allowSpectate", true);
             yml.addDefault("spawnProtection", 5);
             yml.addDefault("shopProtection", 1);
             yml.addDefault("upgradesProtection", 1);
-            yml.addDefault("islandRadius", 10); //based on spawn-point
+            yml.addDefault("islandRadius", 10);
             yml.addDefault("bedBlock", "BED_BLOCK");
             yml.options().copyDefaults(true);
             save();

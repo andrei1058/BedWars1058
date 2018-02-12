@@ -240,6 +240,8 @@ public class Arena {
                 p.hidePlayer(p);
             }
         }
+        p.setAllowFlight(false);
+        p.setFlying(false);
     }
 
     public void addSpectator(Player p, boolean playerBefore) {
@@ -600,7 +602,7 @@ public class Arena {
                         team.getBed().getBlock().setType(Material.AIR);
                         if (getBedBlock() == Material.BED_BLOCK){
 
-                            /*if (Misc.getDirection(team.getBed()) == BlockFace.WEST || Misc.getDirection(team.getBed()) == BlockFace.EAST){
+                            if (Misc.getDirection(team.getBed()) == BlockFace.WEST || Misc.getDirection(team.getBed()) == BlockFace.EAST){
                                 BlockState baseState = team.getBed().getBlock().getState();
                                 BlockState localBlockState = team.getBed().add(-1, 0, 0).getBlock().getState();
 
@@ -608,12 +610,12 @@ public class Arena {
                                 baseState.setType(Material.BED_BLOCK);
                                 localBlockState.setType(Material.BED_BLOCK);
 
-                                baseState.setRawData((byte) 0x02);
-                                localBlockState.setRawData((byte) 0x00);
+                                baseState.setRawData((byte) 0x05);
+                                localBlockState.setRawData((byte) 0x09);
 
                                 baseState.update(true, false);
                                 localBlockState.update(true, false);
-                            } else {*/
+                            } else {
                                 BlockState baseState = team.getBed().getBlock().getState();
                                 BlockState localBlockState = team.getBed().add(0, 0, -1).getBlock().getState();
 
@@ -626,7 +628,7 @@ public class Arena {
 
                                 baseState.update(true, false);
                                 localBlockState.update(true, false);
-                            //}
+                            }
                             for (Entity e : team.getArena().getWorld().getNearbyEntities(team.getBed(), 2, 2, 2)) {
                                 if (e.getType() == EntityType.DROPPED_ITEM) {
                                     e.remove();
@@ -977,7 +979,6 @@ public class Arena {
         playerBedsDestroyed.put(p, 1);
     }
 
-    //
     public static boolean joinRandomFromGroup(Player p, String group) {
         for (Arena a : getArenas()) {
             if (a.getGroup().equalsIgnoreCase(group)) {
@@ -985,9 +986,13 @@ public class Arena {
                     a.addPlayer(p);
                     return true;
                 } else if (a.getStatus() == GameState.starting) {
-                    //if (a.getPlayers().size() >= a.getMaxPlayers() && !isVip(p)) return false;
-                    a.addPlayer(p);
-                    return true;
+                    if (a.getPlayers().size() < a.getMaxPlayers()) {
+                        a.addPlayer(p);
+                        return true;
+                    } else if (a.getPlayers().size() <= a.getMaxPlayers() && a.isVip(p)){
+                        a.addPlayer(p);
+                        return true;
+                    }
                 }
             }
         }

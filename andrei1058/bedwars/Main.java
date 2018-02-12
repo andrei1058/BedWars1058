@@ -114,7 +114,7 @@ public class Main extends JavaPlugin {
         if (!config.getLobbyWorldName().isEmpty()) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getWorld(config.getLobbyWorldName()).getEntities().stream().filter(e -> e.getType() != EntityType.PLAYER).filter(e -> e.getType() != EntityType.PAINTING).filter(e -> e.getType() != EntityType.ITEM_FRAME).forEach(Entity::remove), 30L);
         }
-        registerEvents(new JoinLeave(), new BreakPlace(), new PvP(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new PlayerChat(), new CmdProcess());
+        registerEvents(new JoinLeave(), new BreakPlace(), new PvP(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess());
         if (getServerType() == ServerType.BUNGEE) {
             registerEvents(new Ping());
         }
@@ -172,23 +172,25 @@ public class Main extends JavaPlugin {
         shop = new ShopManager("shop", "plugins/" + this.getName());
         shop.loadShop();
         Misc.checkUpdate();
+        if (config.getBoolean("formatChat")){
+            registerEvents(new PlayerChat());
+        }
     }
 
     public void onDisable() {
-        tick.cancel();
-        ticks.cancel();
+        if (tick != null) {
+            tick.cancel();
+        }
+        if (ticks != null) {
+            ticks.cancel();
+        }
     }
 
     private void setupConfig() {
         YamlConfiguration yml = config.getYml();
 
         yml.options().header(plugin.getDescription().getName() + " by andrei1058. https://www.spigotmc.org/members/39904/\n" +
-                "Documentation here: \n" + //todo add documentation link
-                "\nserverType: MULTIARENA     (Types: BUNGEE, MULTIARENA and SHARED. Shared is a multi-world server with multiple minigames)\n" +
-                "safeMode: true             (Protect your setup from beeing changed by any op)\n" +
-                "storeLink: http://yoursite.com/store   (It is use as click action on \"consider donating\" messages)\n" +
-                "lobbyServer: hub       (Your main lobby for this minigame. If bungee mode.)\n" +
-                "startingCountdown: 40       (When the minimum players amount is reached it will start the countdown)");
+                "Documentation here: https://github.com/andrei1058/BedWars1058/wiki\n");
         yml.addDefault("serverType", "MULTIARENA");
         yml.addDefault("safeMode", false);
         yml.addDefault("language", "en");
@@ -196,8 +198,8 @@ public class Main extends JavaPlugin {
         yml.addDefault("lobbyServer", "hub");
         yml.addDefault("startingCountdown", 40);
         yml.addDefault("globalChat", false);
+        yml.addDefault("formatChat", true);
         yml.addDefault("disableCrafting", true);
-        //yml.addDefault("gameCountdown", 20); //todo It depends on game type which could be countUp instead
 
         yml.addDefault("items.arenaGui.enable", true);
         yml.addDefault("items.arenaGui.itemStack", "STAINED_CLAY");
@@ -215,10 +217,13 @@ public class Main extends JavaPlugin {
         yml.addDefault("arenaGui.settings.showPlaying", false);
         yml.addDefault("arenaGui.waiting.itemStack", "STAINED_CLAY");
         yml.addDefault("arenaGui.waiting.data", 5);
+        yml.addDefault("arenaGui.waiting.enchanted", false);
         yml.addDefault("arenaGui.starting.itemStack", "STAINED_CLAY");
         yml.addDefault("arenaGui.starting.data", 7);
+        yml.addDefault("arenaGui.starting.enchanted", true);
         yml.addDefault("arenaGui.playing.itemStack", "STAINED_CLAY");
         yml.addDefault("arenaGui.playing.data", 4);
+        yml.addDefault("arenaGui.playing.enchanted", false);
         yml.addDefault("generators.diamond.tier1.delay", 30);
         yml.addDefault("generators.diamond.tier1.max", 4);
         yml.addDefault("generators.diamond.tier2.delay", 20);
@@ -255,7 +260,6 @@ public class Main extends JavaPlugin {
         lang = Language.getLang(whatLang);
         safeMode = yml.getBoolean("safeMode");
         new ConfigManager("bukkit", Bukkit.getWorldContainer().getPath(), false).set("ticks-per.autosave", -1);
-        //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "save-off");
         switch (yml.getString("serverType").toUpperCase()) {
             case "BUNGEE":
                 serverType = ServerType.BUNGEE;
@@ -325,7 +329,6 @@ public class Main extends JavaPlugin {
                 Random r = new Random();
                 int x = r.nextInt(files.size());
                 new Arena(files.get(x).getName().replace(".yml", ""));
-                //nms.setProperties("level-name", Arena.getArenas().get(0).getWorldName());
             } else {
                 for (File f : files) {
                     new Arena(f.getName().replace(".yml", ""));

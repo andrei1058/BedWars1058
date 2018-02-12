@@ -4,8 +4,10 @@ import com.andrei1058.bedwars.configuration.Language;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -31,17 +33,35 @@ public class ArenaGUI {
             ItemStack i;
             switch (a.getStatus()) {
                 case waiting:
-                    i = new ItemStack(Material.valueOf(yml.getString("arenaGui.waiting.itemStack")), a.getPlayers().size(), (short) yml.getInt("arenaGui.waiting.data"));
+                    i = new ItemStack(Material.valueOf(yml.getString("arenaGui.waiting.itemStack")), 1, (short) yml.getInt("arenaGui.waiting.data"));
+                    if (yml.getBoolean("arenaGui.waiting.enchanted")){
+                        ItemMeta im = i.getItemMeta();
+                        im.addEnchant(Enchantment.LURE, 1, true);
+                        im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                        i.setItemMeta(im);
+                    }
                     break;
                 case playing:
                     if (!showPlaying) {
                         a.setSlot(-1);
                         continue;
                     }
-                    i = new ItemStack(Material.valueOf(yml.getString("arenaGui.playing.itemStack")), a.getPlayers().size(), (short) yml.getInt("arenaGui.playing.data"));
+                    i = new ItemStack(Material.valueOf(yml.getString("arenaGui.playing.itemStack")), 1, (short) yml.getInt("arenaGui.playing.data"));
+                    if (yml.getBoolean("arenaGui.playing.enchanted")){
+                        ItemMeta im = i.getItemMeta();
+                        im.addEnchant(Enchantment.LURE, 1, true);
+                        im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                        i.setItemMeta(im);
+                    }
                     break;
                 case starting:
-                    i = new ItemStack(Material.valueOf(yml.getString("arenaGui.starting.itemStack")), a.getPlayers().size(), (short) yml.getInt("arenaGui.starting.data"));
+                    i = new ItemStack(Material.valueOf(yml.getString("arenaGui.starting.itemStack")), 1, (short) yml.getInt("arenaGui.starting.data"));
+                    if (yml.getBoolean("arenaGui.playing.enchanted")){
+                        ItemMeta im = i.getItemMeta();
+                        im.addEnchant(Enchantment.LURE, 1, true);
+                        im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                        i.setItemMeta(im);
+                    }
                     break;
                 default:
                     a.setSlot(-1);

@@ -18,11 +18,7 @@ import org.bukkit.entity.Villager;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.Main.npcs;
 import static com.andrei1058.bedwars.Main.plugin;
@@ -202,24 +198,7 @@ public class v1_11_R1 implements NMS {
 
 
     public void registerEntity(String name, int id, Class customClass) {
-        try {
-            ArrayList<Map> dataMap = new ArrayList<>();
-            for (Field f : EntityTypes.class.getDeclaredFields()) {
-                if (!f.getType().getSimpleName().equals(Map.class.getSimpleName())) continue;
-                f.setAccessible(true);
-                dataMap.add((Map)f.get(null));
-            }
-            if (dataMap.get(2).containsKey(id)) {
-                dataMap.get(0).remove(name);
-                dataMap.get(2).remove(id);
-            }
-            Method method = EntityTypes.class.getDeclaredMethod("a", Class.class, String.class, Integer.TYPE);
-            method.setAccessible(true);
-            method.invoke(null, customClass, name, id);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        EntityTypes.b.a(id, new MinecraftKey(name), customClass);
     }
 
     public class VillagerShop extends net.minecraft.server.v1_11_R1.EntityVillager {
