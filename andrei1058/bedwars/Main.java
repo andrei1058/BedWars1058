@@ -13,6 +13,14 @@ import com.andrei1058.bedwars.configuration.UpgradesManager;
 import com.andrei1058.bedwars.listeners.*;
 import com.andrei1058.bedwars.support.Metrics;
 import com.andrei1058.bedwars.support.bukkit.*;
+import com.andrei1058.bedwars.support.bukkit.v1_10_R1.v1_10_R1;
+import com.andrei1058.bedwars.support.bukkit.v1_11_R1.v1_11_R1;
+import com.andrei1058.bedwars.support.bukkit.v1_12_R1.v1_12_R1;
+import com.andrei1058.bedwars.support.bukkit.v1_8_R1.v1_8_R1;
+import com.andrei1058.bedwars.support.bukkit.v1_8_R3.v1_8_R3;
+import com.andrei1058.bedwars.support.bukkit.v1_8_R2.v1_8_R2;
+import com.andrei1058.bedwars.support.bukkit.v1_9_R1.v1_9_R1;
+import com.andrei1058.bedwars.support.bukkit.v1_9_R2.v1_9_R2;
 import com.andrei1058.bedwars.support.lang.Internal;
 import com.andrei1058.bedwars.support.lang.Lang;
 import com.andrei1058.bedwars.support.levels.Level;
@@ -23,19 +31,15 @@ import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.util.*;
 
-import static com.andrei1058.bedwars.configuration.Language.getMsg;
 import static com.andrei1058.bedwars.configuration.Language.setupLang;
 
 public class Main extends JavaPlugin {
@@ -67,7 +71,7 @@ public class Main extends JavaPlugin {
         Language.getLanguages().remove(en);
         setupConfig();
         upgrades = new UpgradesManager("upgrades", "plugins/" + this.getName());
-        /* Load version support 1.8 - 1.12*/
+        /* Load version support 1.8 - 1.12 */
         switch (version) {
             case "v1_8_R1":
                 nms = new v1_8_R1();

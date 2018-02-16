@@ -11,7 +11,7 @@ public class BedWars implements GameAPI {
 
     @Override
     public int getApiVersion() {
-        return 1;
+        return 2;
     }
 
 

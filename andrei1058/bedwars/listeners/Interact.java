@@ -6,6 +6,7 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.ArenaGUI;
 
 import com.andrei1058.bedwars.arena.BedWarsTeam;
+import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.shop.ShopCategory;
 import com.andrei1058.bedwars.upgrades.UpgradeGroup;
 import org.bukkit.Location;
@@ -75,6 +76,27 @@ public class Interact implements Listener {
                                     p.updateInventory();
                                     return;
                                 }
+                            }
+                        }
+                    }
+                    if (shop.getBoolean("utilities.silverfish.enable")){
+                        if (!Misc.isProjectile(Material.valueOf(shop.getYml().getString("utilities.silverfish.material")))) {
+                            if (inHand.getType() == Material.valueOf(shop.getYml().getString("utilities.silverfish.material")) && inHand.getData().getData() == shop.getInt("utilities.silverfish.data")) {
+                                a.getTeam(p).spawnSilverfish(p.getLocation().add(0, 1, 0), p);
+                            }
+                        }
+                    }
+                    if (shop.getBoolean("utilities.ironGolem.enable")){
+                        if (!Misc.isProjectile(Material.valueOf(shop.getYml().getString("utilities.ironGolem.material")))) {
+                            if (inHand.getType() == Material.valueOf(shop.getYml().getString("utilities.ironGolem.material")) && inHand.getData().getData() == shop.getInt("utilities.ironGolem.data")) {
+                                //todo spawneaza golem
+                            }
+                        }
+                    }
+                    if (shop.getBoolean("utilities.bridge.enable")){
+                        if (!Misc.isProjectile(Material.valueOf(shop.getYml().getString("utilities.bridge.material")))) {
+                            if (inHand.getType() == Material.getMaterial(shop.getYml().getString("utilities.bridge.material")) && inHand.getData().getData() == shop.getInt("utilities.bridge.data")) {
+                                //todo spawn bridge
                             }
                         }
                     }

@@ -6,9 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -58,6 +56,8 @@ public class BedWarsTeam {
     private List<Integer> enemyBaseEnterSlots = new ArrayList<>();
     /** A list with all potions for clear them when someone leaves the island */
     private List<Effect> ebseEffectsStatic = new ArrayList<>();
+    /** A list with all utilities mobs*/
+    private List<Entity> entityList = new ArrayList<>();
 
     public BedWarsTeam(String name, TeamColor color, Location spawn, Location bed, Location shop, Location teamUpgrades, Arena arena) {
         this.name = name;
@@ -481,6 +481,11 @@ public class BedWarsTeam {
         return null;
     }
 
+    /** Spawn a silverfish */
+    public void spawnSilverfish(Location loc, Player p){
+        getEntityList().add(nms.spawnSilverfish(loc, getMembers(), getMsg(p, lang.utilitySiverfish).replace("{TeamColor}", String.valueOf(TeamColor.getChatColor(getColor()))).replace("{TeamName}", getName())));
+    }
+
     /** Getter, setter etc.*/
     public boolean isMember(Player p) {
         return members.contains(p);
@@ -650,5 +655,9 @@ public class BedWarsTeam {
 
     public Arena getArena() {
         return arena;
+    }
+
+    public List<Entity> getEntityList() {
+        return entityList;
     }
 }

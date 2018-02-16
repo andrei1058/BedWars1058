@@ -140,7 +140,8 @@ public class Language {
             enemyBaseEnterSubtitle = "arena.baseEnter.subtitle",
             enemyBaseEnterAction = "arena.baseEnter.action",
             enemyBaseEnterChat = "arena.baseEnter.chat",
-            upgradeBuyMessage = "arena.upgradeBuy";
+            upgradeBuyMessage = "arena.upgradeBuy",
+            utilitySiverfish = "utility.silverfish";
     //End of language file strings
 
     public Language(String iso) {
@@ -387,6 +388,7 @@ public class Language {
                 yml.addDefault(enemyBaseEnterSubtitle, "&fYour trap has been set off!");
                 yml.addDefault(enemyBaseEnterTitle, "&cTRAP TRIGGERED!");
                 yml.addDefault(upgradeBuyMessage, "&a{player} purchased &6{upgradeName}");
+                yml.addDefault(utilitySiverfish, "{TeamColor}&l{TeamName} &r{TeamColor}Silverfish");
                 break;
         }
         lbj.save();

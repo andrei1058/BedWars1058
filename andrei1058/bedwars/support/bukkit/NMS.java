@@ -52,5 +52,7 @@ public interface NMS {
 
     Sound countdownTick();
 
+    Entity spawnSilverfish(Location loc, List<Player> exclude, String name);
+
     void hidePlayer(Player player, List<Player> players);
 }

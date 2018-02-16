@@ -175,4 +175,8 @@ public class Misc implements PluginMessageListener {
     public static String getNewVersion() {
         return newVersion;
     }
+
+    public static boolean isProjectile(Material i){
+        return Material.EGG == i || Material.FIREBALL == i || Material.SNOW_BALL == i || Material.ARROW == i;
+    }
 }

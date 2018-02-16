@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.commands;
 
+import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.ArenaGUI;

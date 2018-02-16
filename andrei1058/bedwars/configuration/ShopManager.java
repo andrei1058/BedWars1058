@@ -196,11 +196,52 @@ public class ShopManager {
             yml.options().copyDefaults(true);
         }
         yml.addDefault("main.invSize", 36);
-        yml.addDefault("main.invContents.favourites.enable", true);
-        setMainStuff("main.invContents.favourites", 16, "NETHER_STAR", 0, 1, false);
-        yml.addDefault("main.invContents.recommended.enable", true);
-        setMainStuff("main.invContents.recommended", 26, "BOOK", 0, 1, true);
+        //yml.addDefault("main.invContents.favourites.enable", true);
+        //setMainStuff("main.invContents.favourites", 16, "NETHER_STAR", 0, 1, false);
+        //yml.addDefault("main.invContents.recommended.enable", true);
+        //setMainStuff("main.invContents.recommended", 26, "BOOK", 0, 1, true);
+
+        yml.addDefault("utilities.silverfish.material", "SNOW_BALL");
+        yml.addDefault("utilities.silverfish.data", 0);
+        yml.addDefault("utilities.silverfish.enable", true);
+
+        yml.addDefault("utilities.ironGolem.material", "MONSTER_EGG");
+        yml.addDefault("utilities.ironGolem.data", 0);
+        yml.addDefault("utilities.ironGolem.enable", true);
+
+        yml.addDefault("utilities.bridge.material", "EGG");
+        yml.addDefault("utilities.bridge.data", 0);
+        yml.addDefault("utilities.bridge.enable", true);
+
+        yml.options().copyDefaults(true);
         save();
+        if (yml.getBoolean("utilities.silverfish.enable")){
+            try {
+                Material.valueOf(yml.getString("utilities.silverfish.material"));
+            } catch (Exception ecx){
+                plugin.getLogger().severe("Invalid material at utilities.silverfish.material.. Changing it..");
+                yml.set("utilities.silverfish.material", "SNOW_BALL");
+                save();
+            }
+        }
+        if (yml.getBoolean("utilities.ironGolem.enable")){
+            try {
+                Material.valueOf(yml.getString("utilities.ironGolem.material"));
+            } catch (Exception ecx){
+                plugin.getLogger().severe("Invalid material at utilities.ironGolem.material.. Changing it..");
+                yml.set("utilities.ironGolem.material", "MONSTER_EGG");
+                save();
+            }
+        }
+        if (yml.getBoolean("utilities.bridge.enable")){
+            try {
+                Material.valueOf(yml.getString("utilities.bridge.material"));
+            } catch (Exception ecx){
+                plugin.getLogger().severe("Invalid material at utilities.bridge.material.. Changing it..");
+                yml.set("utilities.bridge.material", "EGG");
+                save();
+            }
+        }
     }
 
     public void setCategoryWithBuy(String name, int slot, String material, int data, int amount, int price, String currency, boolean enchant) {
@@ -468,5 +509,9 @@ public class ShopManager {
 
     public int getInt(String path) {
         return yml.getInt(path);
+    }
+
+    public YamlConfiguration getYml() {
+        return yml;
     }
 }

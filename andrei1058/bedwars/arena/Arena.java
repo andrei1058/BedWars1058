@@ -9,9 +9,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.Contract;
@@ -23,6 +21,7 @@ import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.configuration.Language.getList;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 import static com.andrei1058.bedwars.configuration.Language.getScoreboard;
+import static com.andrei1058.bedwars.listeners.PvP.isOnABase;
 
 public class Arena {
     private static HashMap<String, Arena> arenaByName = new HashMap<>();
@@ -141,6 +140,11 @@ public class Arena {
     }
 
     public void addPlayer(Player p) {
+        /* used for base enter/leave event */
+        if (isOnABase.containsKey(p)){
+            isOnABase.remove(p);
+        }
+        //
         if (getArenaByPlayer(p) != null) {
             p.sendMessage(getMsg(p, Language.youreInGame));
             return;

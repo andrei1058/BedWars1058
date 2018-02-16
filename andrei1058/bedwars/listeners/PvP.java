@@ -6,9 +6,9 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.LastHit;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -18,6 +18,11 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.projectiles.ProjectileSource;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.LastHit.getLastHit;
@@ -98,6 +103,24 @@ public class PvP implements Listener {
                     lh.setTime(System.currentTimeMillis());
                 } else {
                     new LastHit(p, damager, System.currentTimeMillis());
+                }
+            }
+        } else if (e.getEntity() instanceof Silverfish){
+            Player damager;
+            if (e.getDamager() instanceof Player){
+                damager = (Player) e.getDamager();
+            } else if (e.getDamager() instanceof Projectile){
+                Projectile proj = (Projectile) e.getDamager();
+                damager = (Player) proj.getShooter();
+            } else {
+                return;
+            }
+            Arena a = Arena.getArenaByPlayer(damager);
+            if (a != null){
+                if (a.isPlayer(damager)){
+                    if (a.getTeam(damager).getEntityList().contains(e.getEntity())){
+                        e.setCancelled(true);
+                    }
                 }
             }
         }
@@ -214,26 +237,28 @@ public class PvP implements Listener {
                             }
                         }
                     } else if (damageEvent.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
-                        if (t.isBedDestroyed()) {
-                            BedWarsTeam t2 = a.getTeam(killer);
-                            for (Player on : a.getPlayers()) {
-                                on.sendMessage(getMsg(on, lang.playerDieAttackFinalKill).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName())
-                                        .replace("{KillerColor}", TeamColor.getChatColor(t2.getColor()).toString()).replace("{KillerName}", killer.getName()));
-                            }
-                            for (Player on : a.getSpectators()) {
-                                on.sendMessage(getMsg(on, lang.playerDieAttackFinalKill).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName())
-                                        .replace("{KillerColor}", TeamColor.getChatColor(t2.getColor()).toString()).replace("{KillerName}", killer.getName()));
-                            }
+                        if (killer != null) {
+                            if (t.isBedDestroyed()) {
+                                BedWarsTeam t2 = a.getTeam(killer);
+                                for (Player on : a.getPlayers()) {
+                                    on.sendMessage(getMsg(on, lang.playerDieAttackFinalKill).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName())
+                                            .replace("{KillerColor}", TeamColor.getChatColor(t2.getColor()).toString()).replace("{KillerName}", killer.getName()));
+                                }
+                                for (Player on : a.getSpectators()) {
+                                    on.sendMessage(getMsg(on, lang.playerDieAttackFinalKill).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName())
+                                            .replace("{KillerColor}", TeamColor.getChatColor(t2.getColor()).toString()).replace("{KillerName}", killer.getName()));
+                                }
 
-                        } else {
-                            BedWarsTeam t2 = a.getTeam(killer);
-                            for (Player on : a.getPlayers()) {
-                                on.sendMessage(getMsg(on, lang.playerDieAttack).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName())
-                                        .replace("{KillerColor}", TeamColor.getChatColor(t2.getColor()).toString()).replace("{KillerName}", killer.getName()));
-                            }
-                            for (Player on : a.getSpectators()) {
-                                on.sendMessage(getMsg(on, lang.playerDieAttack).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName())
-                                        .replace("{KillerColor}", TeamColor.getChatColor(t2.getColor()).toString()).replace("{KillerName}", killer.getName()));
+                            } else {
+                                BedWarsTeam t2 = a.getTeam(killer);
+                                for (Player on : a.getPlayers()) {
+                                    on.sendMessage(getMsg(on, lang.playerDieAttack).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName())
+                                            .replace("{KillerColor}", TeamColor.getChatColor(t2.getColor()).toString()).replace("{KillerName}", killer.getName()));
+                                }
+                                for (Player on : a.getSpectators()) {
+                                    on.sendMessage(getMsg(on, lang.playerDieAttack).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName())
+                                            .replace("{KillerColor}", TeamColor.getChatColor(t2.getColor()).toString()).replace("{KillerName}", killer.getName()));
+                                }
                             }
                         }
                     }
@@ -348,6 +373,7 @@ public class PvP implements Listener {
         }
     }
 
+    public static HashMap<Player, BedWarsTeam> isOnABase = new HashMap<>();
     @EventHandler
     public void m(PlayerMoveEvent e) {
         if (e.getPlayer().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
@@ -375,6 +401,14 @@ public class PvP implements Listener {
                                         }
                                     }
                                 } else {
+                                    if (isOnABase.containsKey(e.getPlayer())){
+                                        Bukkit.getPluginManager().callEvent(new EnemyBaseLeaveEvent(e.getPlayer(), a.getTeam(e.getPlayer()), isOnABase.get(e.getPlayer())));
+                                        isOnABase.replace(e.getPlayer(), t);
+                                        Bukkit.getPluginManager().callEvent(new EnemyBaseEnterEvent(e.getPlayer(), a.getTeam(e.getPlayer()), t));
+                                    } else {
+                                        isOnABase.put(e.getPlayer(), t);
+                                        Bukkit.getPluginManager().callEvent(new EnemyBaseEnterEvent(e.getPlayer(), a.getTeam(e.getPlayer()), t));
+                                    }
                                     if (!t.getPotionEffectApplied().contains(e.getPlayer())) {
                                         for (BedWarsTeam.Effect ef : t.getEnemyBaseEnter()) {
                                             e.getPlayer().addPotionEffect(new PotionEffect(ef.getPotionEffectType(), ef.getDuration(), ef.getAmplifier()));
@@ -403,6 +437,12 @@ public class PvP implements Listener {
                                 }
                                 t.getPotionEffectApplied().add(e.getPlayer());
                         } else {
+                            if (isOnABase.containsKey(e.getPlayer())){
+                                if (isOnABase.get(e.getPlayer()) == t) {
+                                    isOnABase.remove(e.getPlayer());
+                                    Bukkit.getPluginManager().callEvent(new EnemyBaseLeaveEvent(e.getPlayer(), a.getTeam(e.getPlayer()), t));
+                                }
+                            }
                             if (t.getPotionEffectApplied().contains(e.getPlayer())){
                                 if (t.isMember(e.getPlayer())){
                                     for (PotionEffect pef : e.getPlayer().getActivePotionEffects()){
@@ -440,6 +480,50 @@ public class PvP implements Listener {
                     }
                 }
             }
+        }
+    }
+
+    @EventHandler
+    public void ph(ProjectileHitEvent e){
+        Projectile proj = e.getEntity();
+        if (e.getEntity().getShooter() instanceof Player) {
+            Arena a = Arena.getArenaByPlayer((Player) e.getEntity().getShooter());
+            if (a != null){
+                String utility = "";
+                if (proj instanceof Fireball) {
+                    utility = getUtility(Material.FIREBALL);
+                } else if (proj instanceof Snowball){
+                    utility = getUtility(Material.SNOW_BALL);
+                } else if (proj instanceof Egg){
+                    utility = getUtility(Material.EGG);
+                }
+                if (!utility.isEmpty()){
+                    spawnUtility(utility, e.getEntity().getLocation(), a.getTeam((Player) e.getEntity().getShooter()), (Player) e.getEntity().getShooter());
+                }
+            }
+        }
+    }
+
+    private static String getUtility(Material mat){
+        for (String st : Arrays.asList("silverfish", "ironGolem", "bridge")){
+            if (shop.getBoolean("utilities."+st+".enable")){
+                if (mat == Material.valueOf(shop.getYml().getString("utilities."+st+".material"))){
+                    return st;
+                }
+            }
+        }
+        return "";
+    }
+
+    private static void spawnUtility(String s, Location loc, BedWarsTeam t, Player p){
+        switch (s.toLowerCase()){
+            case "silverfish":
+                t.spawnSilverfish(loc, p);
+                break;
+            case "irongolem":
+                break;
+            case "bridge":
+                break;
         }
     }
 }
