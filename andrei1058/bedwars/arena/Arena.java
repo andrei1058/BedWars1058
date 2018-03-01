@@ -742,7 +742,7 @@ public class Arena {
                                 }
                             }
                             nms.playAction(p, getMsg(p, lang.actionBarTracking).replace("{team}", t.getColor() + t.getName())
-                                    .replace("{distance}", t.getColor().toString() + distance));
+                                    .replace("{distance}", t.getColor().toString() + distance).replace("&", "§"));
                         }
                     }
                 }

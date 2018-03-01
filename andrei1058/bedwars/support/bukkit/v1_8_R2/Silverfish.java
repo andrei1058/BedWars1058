@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.support.bukkit.v1_8_R2;
 
+import com.google.common.collect.Sets;
 import net.minecraft.server.v1_8_R2.*;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R2.CraftWorld;
@@ -14,86 +15,39 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Random;
 
+import static com.andrei1058.bedwars.Main.shop;
+
 public class Silverfish extends EntitySilverfish {
-    private final PathfinderGoalSilverfishWakeOthers a;
 
     public Silverfish(World world, List<Player> exclude) {
         super(world);
+        this.setSize(0.4F, 0.3F);
         try {
             Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
             bField.setAccessible(true);
             Field cField = PathfinderGoalSelector.class.getDeclaredField("c");
             cField.setAccessible(true);
-            bField.set(this.goalSelector, new UnsafeList());
-            bField.set(this.targetSelector, new UnsafeList());
-            cField.set(this.goalSelector, new UnsafeList());
-            cField.set(this.targetSelector, new UnsafeList());
+            bField.set(this.goalSelector, Sets.newLinkedHashSet());
+            bField.set(this.targetSelector, Sets.newLinkedHashSet());
+            cField.set(this.goalSelector, Sets.newLinkedHashSet());
+            cField.set(this.targetSelector, Sets.newLinkedHashSet());
         } catch (IllegalAccessException e1) {
             e1.printStackTrace();
         } catch (NoSuchFieldException e1) {
             e1.printStackTrace();
         }
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
-        this.goalSelector.a(3, this.a = new Silverfish.PathfinderGoalSilverfishWakeOthers(this));
         this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this, EntityHuman.class, 1.0D, false));
         this.goalSelector.a(5, new Silverfish.PathfinderGoalSilverfishHideInBlock(this));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true, new Class[0]));
         this.targetSelector.a(2, new AttackEnemies<>(this, EntityHuman.class, true, exclude));
     }
 
-    @Override
-    protected void a(BlockPosition blockposition, Block block) {
-        this.makeSound("mob.silverfish.step", 0.15F, 1.0F);
-    }
-
-    static class PathfinderGoalSilverfishWakeOthers extends PathfinderGoal {
-        private EntitySilverfish silverfish;
-        private int b;
-
-        public PathfinderGoalSilverfishWakeOthers(EntitySilverfish entitysilverfish) {
-            this.silverfish = entitysilverfish;
-        }
-
-        public void f() {
-            if (this.b == 0) {
-                this.b = 20;
-            }
-
-        }
-
-        public boolean a() {
-            return this.b > 0;
-        }
-
-        public void e() {
-            --this.b;
-            if (this.b <= 0) {
-                World world = this.silverfish.world;
-                Random random = this.silverfish.bc();
-                BlockPosition blockposition = new BlockPosition(this.silverfish);
-
-                for(int i = 0; i <= 5 && i >= -5; i = i <= 0 ? 1 - i : 0 - i) {
-                    for(int j = 0; j <= 10 && j >= -10; j = j <= 0 ? 1 - j : 0 - j) {
-                        for(int k = 0; k <= 10 && k >= -10; k = k <= 0 ? 1 - k : 0 - k) {
-                            BlockPosition blockposition1 = blockposition.a(j, i, k);
-                            IBlockData iblockdata = world.getType(blockposition1);
-                            if (iblockdata.getBlock() == Blocks.MONSTER_EGG && !CraftEventFactory.callEntityChangeBlockEvent(this.silverfish, blockposition1.getX(), blockposition1.getY(), blockposition1.getZ(), Blocks.AIR, 0).isCancelled()) {
-                                if (world.getGameRules().getBoolean("mobGriefing")) {
-                                    world.setAir(blockposition1, true);
-                                } else {
-                                    world.setTypeAndData(blockposition1, (iblockdata.get(BlockMonsterEggs.VARIANT)).d(), 3);
-                                }
-
-                                if (random.nextBoolean()) {
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-        }
+    protected void initAttributes() {
+        super.initAttributes();
+        this.getAttributeInstance(GenericAttributes.maxHealth).setValue(shop.getYml().getDouble("utilities.silverfish.health"));
+        this.getAttributeInstance(GenericAttributes.d).setValue(shop.getYml().getDouble("utilities.silverfish.speed"));
+        this.getAttributeInstance(GenericAttributes.e).setValue(shop.getYml().getDouble("utilities.silverfish.damage"));
     }
 
     static class PathfinderGoalSilverfishHideInBlock extends PathfinderGoalRandomStroll {

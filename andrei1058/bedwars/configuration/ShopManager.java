@@ -204,6 +204,9 @@ public class ShopManager {
         yml.addDefault("utilities.silverfish.material", "SNOW_BALL");
         yml.addDefault("utilities.silverfish.data", 0);
         yml.addDefault("utilities.silverfish.enable", true);
+        yml.addDefault("utilities.silverfish.health", 8.0);
+        yml.addDefault("utilities.silverfish.damage", 4.0);
+        yml.addDefault("utilities.silverfish.speed", 0.25);
 
         yml.addDefault("utilities.ironGolem.material", "MONSTER_EGG");
         yml.addDefault("utilities.ironGolem.data", 0);

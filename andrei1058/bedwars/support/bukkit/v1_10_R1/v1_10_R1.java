@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.support.bukkit.v1_10_R1;
 
 import com.andrei1058.bedwars.support.bukkit.NMS;
+import com.google.common.collect.Sets;
 import net.minecraft.server.v1_10_R1.*;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -227,28 +228,33 @@ public class v1_10_R1 implements NMS {
                 bField.setAccessible(true);
                 Field cField = net.minecraft.server.v1_10_R1.PathfinderGoalSelector.class.getDeclaredField("c");
                 cField.setAccessible(true);
-                bField.set(this.goalSelector, new UnsafeList());
-                bField.set(this.targetSelector, new UnsafeList());
-                cField.set(this.goalSelector, new UnsafeList());
-                cField.set(this.targetSelector, new UnsafeList());
+                bField.set(this.goalSelector, Sets.newLinkedHashSet());
+                bField.set(this.targetSelector, Sets.newLinkedHashSet());
+                cField.set(this.goalSelector, Sets.newLinkedHashSet());
+                cField.set(this.targetSelector, Sets.newLinkedHashSet());
             } catch (Exception bField) {
             }
             this.goalSelector.a(0, new net.minecraft.server.v1_10_R1.PathfinderGoalFloat(this));
             this.goalSelector.a(9, new net.minecraft.server.v1_10_R1.PathfinderGoalInteract(this, net.minecraft.server.v1_10_R1.EntityHuman.class, 3.0f, 1.0f));
             this.goalSelector.a(10, new net.minecraft.server.v1_10_R1.PathfinderGoalLookAtPlayer(this, net.minecraft.server.v1_10_R1.EntityHuman.class, 8.0f));
         }
-
+        @Override
         public void move(double d0, double d1, double d2) {
         }
-
+        @Override
         public void collide(net.minecraft.server.v1_10_R1.Entity entity) {
         }
-
+        @Override
         public boolean damageEntity(net.minecraft.server.v1_10_R1.DamageSource damagesource, float f) {
             return false;
         }
-
+        @Override
         public void g(double d0, double d1, double d2) {
+        }
+        @Override
+        protected void initAttributes() {
+            super.initAttributes();
+            this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.0D);
         }
     }
 

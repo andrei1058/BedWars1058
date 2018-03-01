@@ -251,16 +251,18 @@ public class v1_8_R2 implements NMS {
             this.goalSelector.a(10, new net.minecraft.server.v1_8_R2.PathfinderGoalLookAtPlayer(this, net.minecraft.server.v1_8_R2.EntityHuman.class, 8.0f));
         }
 
+        @Override
         public void move(double d0, double d1, double d2) {
         }
 
+        @Override
         public void collide(net.minecraft.server.v1_8_R2.Entity entity) {
         }
-
+        @Override
         public boolean damageEntity(net.minecraft.server.v1_8_R2.DamageSource damagesource, float f) {
             return false;
         }
-
+        @Override
         public void g(double d0, double d1, double d2) {
         }
     }
