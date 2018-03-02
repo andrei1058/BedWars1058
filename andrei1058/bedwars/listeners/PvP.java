@@ -123,6 +123,26 @@ public class PvP implements Listener {
                     }
                 }
             }
+        } else if (e.getEntity() instanceof IronGolem){
+            Player damager;
+            if (e.getDamager() instanceof Player){
+                damager = (Player) e.getDamager();
+            } else if (e.getDamager() instanceof Projectile){
+                Projectile proj = (Projectile) e.getDamager();
+                damager = (Player) proj.getShooter();
+            } else {
+                return;
+            }
+            Arena a = Arena.getArenaByPlayer(damager);
+            if (a != null){
+                if (a.isPlayer(damager)){
+                    if (nms.isDespawnable(e.getEntity())){
+                        if (a.getTeam(damager) == nms.ownDespawnable(e.getEntity())){
+                            e.setCancelled(true);
+                        }
+                    }
+                }
+            }
         }
         if (getServerType() != ServerType.SHARED) {
             if (e.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName()))
@@ -490,9 +510,7 @@ public class PvP implements Listener {
             Arena a = Arena.getArenaByPlayer((Player) e.getEntity().getShooter());
             if (a != null){
                 String utility = "";
-                if (proj instanceof Fireball) {
-                    utility = getUtility(Material.FIREBALL);
-                } else if (proj instanceof Snowball){
+                if (proj instanceof Snowball){
                     utility = getUtility(Material.SNOW_BALL);
                 } else if (proj instanceof Egg){
                     utility = getUtility(Material.EGG);
@@ -505,7 +523,7 @@ public class PvP implements Listener {
     }
 
     private static String getUtility(Material mat){
-        for (String st : Arrays.asList("silverfish", "ironGolem", "bridge")){
+        for (String st : Arrays.asList("silverfish", "bridge")){
             if (shop.getBoolean("utilities."+st+".enable")){
                 if (mat == Material.valueOf(shop.getYml().getString("utilities."+st+".material"))){
                     return st;
@@ -520,9 +538,8 @@ public class PvP implements Listener {
             case "silverfish":
                 t.spawnSilverfish(loc, p);
                 break;
-            case "irongolem":
-                break;
             case "bridge":
+                //todo add bridge
                 break;
         }
     }

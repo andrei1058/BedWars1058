@@ -1,7 +1,9 @@
 package com.andrei1058.bedwars.support.bukkit.v1_9_R2;
 
+import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.support.bukkit.NMS;
 import net.minecraft.server.v1_9_R2.*;
+import net.minecraft.server.v1_9_R2.Entity;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
@@ -12,10 +14,7 @@ import org.bukkit.craftbukkit.v1_9_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Villager;
+import org.bukkit.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import java.lang.reflect.Field;
@@ -73,6 +72,21 @@ public class v1_9_R2 implements NMS {
     }
 
     @Override
+    public void refreshDespawnables() {
+
+    }
+
+    @Override
+    public boolean isDespawnable(org.bukkit.entity.Entity e) {
+        return false;
+    }
+
+    @Override
+    public BedWarsTeam ownDespawnable(org.bukkit.entity.Entity e) {
+        return null;
+    }
+
+    @Override
     public Sound countdownTick() {
         return Sound.valueOf("ENTITY_CHICKEN_EGG");
     }
@@ -80,6 +94,11 @@ public class v1_9_R2 implements NMS {
     @Override
     public org.bukkit.entity.Entity spawnSilverfish(Location loc, List<Player> exclude, String name) {
         return Silverfish.spawnSilverfish(loc, exclude, name);
+    }
+
+    @Override
+    public void spawnIronGolem(Location loc, BedWarsTeam bedWarsTeam) {
+
     }
 
     @Override

@@ -211,10 +211,13 @@ public class ShopManager {
         yml.addDefault("utilities.ironGolem.material", "MONSTER_EGG");
         yml.addDefault("utilities.ironGolem.data", 0);
         yml.addDefault("utilities.ironGolem.enable", true);
+        yml.addDefault("utilities.ironGolem.health", 100.0);
+        yml.addDefault("utilities.ironGolem.speed", 0.25);
+        yml.addDefault("utilities.ironGolem.despawn", 225);
 
-        yml.addDefault("utilities.bridge.material", "EGG");
+        /*yml.addDefault("utilities.bridge.material", "EGG");
         yml.addDefault("utilities.bridge.data", 0);
-        yml.addDefault("utilities.bridge.enable", true);
+        yml.addDefault("utilities.bridge.enable", true);*/
 
         yml.options().copyDefaults(true);
         save();
@@ -236,7 +239,7 @@ public class ShopManager {
                 save();
             }
         }
-        if (yml.getBoolean("utilities.bridge.enable")){
+       /* if (yml.getBoolean("utilities.bridge.enable")){
             try {
                 Material.valueOf(yml.getString("utilities.bridge.material"));
             } catch (Exception ecx){
@@ -244,7 +247,7 @@ public class ShopManager {
                 yml.set("utilities.bridge.material", "EGG");
                 save();
             }
-        }
+        }*/
     }
 
     public void setCategoryWithBuy(String name, int slot, String material, int data, int amount, int price, String currency, boolean enchant) {

@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.support.bukkit.v1_8_R3;
 
+import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.support.bukkit.NMS;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Location;
@@ -50,6 +51,21 @@ public class v1_8_R3 implements NMS {
     }
 
     @Override
+    public void refreshDespawnables() {
+
+    }
+
+    @Override
+    public boolean isDespawnable(Entity e) {
+        return false;
+    }
+
+    @Override
+    public BedWarsTeam ownDespawnable(Entity e) {
+        return null;
+    }
+
+    @Override
     public Sound countdownTick() {
         return Sound.valueOf("CHICKEN_EGG_POP");
     }
@@ -57,6 +73,11 @@ public class v1_8_R3 implements NMS {
     @Override
     public Entity spawnSilverfish(Location loc, List<Player> exclude, String name) {
         return Silverfish.spawnSilverfish(loc, exclude, name);
+    }
+
+    @Override
+    public void spawnIronGolem(Location loc, BedWarsTeam bedWarsTeam) {
+
     }
 
     @Override
@@ -163,6 +184,7 @@ public class v1_8_R3 implements NMS {
     public void registerEntities() {
         registerEntity("ShopNPC", 120, VillagerShop.class);
         registerEntity("Silverfish2", 60, Silverfish.class);
+        registerEntity("IGolem", 99, IGolem.class);
     }
 
     @Override

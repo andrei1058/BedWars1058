@@ -1,7 +1,6 @@
 package com.andrei1058.bedwars.arena;
 
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -52,5 +51,6 @@ public class Refresh extends BukkitRunnable {
                 Arena.respawn.replace(e.getKey(), e.getValue() - 1);
             }
         }
+        nms.refreshDespawnables();
     }
 }

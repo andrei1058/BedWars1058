@@ -89,7 +89,7 @@ public class Interact implements Listener {
                     if (shop.getBoolean("utilities.ironGolem.enable")){
                         if (!Misc.isProjectile(Material.valueOf(shop.getYml().getString("utilities.ironGolem.material")))) {
                             if (inHand.getType() == Material.valueOf(shop.getYml().getString("utilities.ironGolem.material")) && inHand.getData().getData() == shop.getInt("utilities.ironGolem.data")) {
-                                //todo spawneaza golem
+                                nms.spawnIronGolem(p.getLocation().add(0, 1, 0), a.getTeam(p));
                             }
                         }
                     }

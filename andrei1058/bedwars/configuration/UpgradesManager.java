@@ -171,6 +171,7 @@ public class UpgradesManager {
             yml.addDefault("settings.startValues.default.ironGeneratorAmount", 2);
             yml.addDefault("settings.startValues.default.goldGeneratorDelay", 6);
             yml.addDefault("settings.startValues.default.goldGeneratorAmount", 2);
+            yml.addDefault("settings.stackItems", false);
         } else {
             yml.options().copyDefaults(true);
             yml.addDefault("settings.invSize", 36);

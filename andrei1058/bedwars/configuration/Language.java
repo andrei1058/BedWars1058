@@ -141,7 +141,9 @@ public class Language {
             enemyBaseEnterAction = "arena.baseEnter.action",
             enemyBaseEnterChat = "arena.baseEnter.chat",
             upgradeBuyMessage = "arena.upgradeBuy",
-            utilitySiverfish = "utility.silverfish";
+            utilitySiverfish = "utility.silverfish",
+            iGolemName = "utility.ironGolem",
+            iGolemHealthFormat = "format.igolemHealth";
     //End of language file strings
 
     public Language(String iso) {
@@ -389,6 +391,8 @@ public class Language {
                 yml.addDefault(enemyBaseEnterTitle, "&cTRAP TRIGGERED!");
                 yml.addDefault(upgradeBuyMessage, "&a{player} purchased &6{upgradeName}");
                 yml.addDefault(utilitySiverfish, "{TeamColor}&l{TeamName} &r{TeamColor}Silverfish");
+                yml.addDefault(iGolemName, "{TeamColor}{despawn}s &8[ {TeamColor}{health}&8]");
+                yml.addDefault(iGolemHealthFormat, "▮");
                 break;
         }
         lbj.save();

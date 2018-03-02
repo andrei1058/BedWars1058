@@ -1,8 +1,11 @@
 package com.andrei1058.bedwars.support.bukkit.v1_12_R1;
 
+import com.andrei1058.bedwars.api.TeamColor;
+import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.support.bukkit.NMS;
 import com.google.common.collect.Sets;
 import net.minecraft.server.v1_12_R1.*;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
@@ -12,22 +15,23 @@ import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_12_R1.util.UnsafeList;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Villager;
+import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import static com.andrei1058.bedwars.Main.nms;
-import static com.andrei1058.bedwars.Main.npcs;
-import static com.andrei1058.bedwars.Main.plugin;
+import static com.andrei1058.bedwars.Main.*;
+import static com.andrei1058.bedwars.Main.lang;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
 public class v1_12_R1 implements NMS {
+
+    /** List of despawnable entities aka special shop mobs */
+    private static List<Despawnable> despawnables = new ArrayList();
 
     @Override
     public Sound bedDestroy() {
@@ -73,12 +77,41 @@ public class v1_12_R1 implements NMS {
     }
 
     @Override
+    public void spawnIronGolem(Location loc, BedWarsTeam bedWarsTeam) {
+        new Despawnable(IGolem.spawn(loc, bedWarsTeam), bedWarsTeam, shop.getInt("utilities.ironGolem.despawn"));
+    }
+
+    @Override
     public void hidePlayer(Player player, List<Player> players) {
         net.minecraft.server.v1_12_R1.PacketPlayOutEntityDestroy packet = new net.minecraft.server.v1_12_R1.PacketPlayOutEntityDestroy(player.getEntityId());
         for (Player p : players) {
             if (p == player) continue;
             ((org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
         }
+    }
+
+    @Override
+    public void refreshDespawnables() {
+        for(Iterator<Despawnable> it = despawnables.iterator(); it.hasNext();){
+            Despawnable de = it.next();
+            de.regresh();
+        }
+    }
+
+    @Override
+    public boolean isDespawnable(Entity e) {
+        for (Despawnable d : despawnables){
+            if (d.getE() == ((CraftEntity)e).getHandle()) return true;
+        }
+        return false;
+    }
+
+    @Override
+    public BedWarsTeam ownDespawnable(Entity e) {
+        for (Despawnable d : despawnables){
+            if (d.getE() == ((CraftEntity)e).getHandle()) return d.getTeam();
+        }
+        return null;
     }
 
     @Override
@@ -156,6 +189,7 @@ public class v1_12_R1 implements NMS {
     public void registerEntities() {
         registerEntity("ShopNPC", 120, VillagerShop.class);
         registerEntity("Silverfish2", 60, Silverfish.class);
+        registerEntity("IGolem", 99, IGolem.class);
     }
 
     @Override
@@ -211,9 +245,13 @@ public class v1_12_R1 implements NMS {
         EntityTypes.b.a(id, new MinecraftKey(name), customClass);
     }
 
+    /** Custom villager class */
     public class VillagerShop extends net.minecraft.server.v1_12_R1.EntityVillager {
+
         public VillagerShop(net.minecraft.server.v1_12_R1.World world) {
+
             super(world);
+
             try {
                 Field bField = net.minecraft.server.v1_12_R1.PathfinderGoalSelector.class.getDeclaredField("b");
                 bField.setAccessible(true);
@@ -225,13 +263,16 @@ public class v1_12_R1 implements NMS {
                 cField.set(this.targetSelector, Sets.newLinkedHashSet());
             } catch (Exception bField) {
             }
+
             this.goalSelector.a(0, new net.minecraft.server.v1_12_R1.PathfinderGoalFloat(this));
             this.goalSelector.a(9, new net.minecraft.server.v1_12_R1.PathfinderGoalInteract(this, net.minecraft.server.v1_12_R1.EntityHuman.class, 3.0f, 1.0f));
             this.goalSelector.a(10, new net.minecraft.server.v1_12_R1.PathfinderGoalLookAtPlayer(this, net.minecraft.server.v1_12_R1.EntityHuman.class, 8.0f));
         }
+
         @Override
         public void collide(net.minecraft.server.v1_12_R1.Entity entity) {
         }
+
         @Override
         public boolean damageEntity(net.minecraft.server.v1_12_R1.DamageSource damagesource, float f) {
             return false;
@@ -239,8 +280,10 @@ public class v1_12_R1 implements NMS {
 
         public void g(double d0, double d1, double d2) {
         }
+
         @Override
         public void move(EnumMoveType enummovetype, double d0, double d1, double d2){}
+
         @Override
         protected void initAttributes() {
             super.initAttributes();
@@ -248,6 +291,7 @@ public class v1_12_R1 implements NMS {
         }
     }
 
+    /** Spawn shop npc */
     private Villager spawnVillager(Location loc) {
         net.minecraft.server.v1_12_R1.WorldServer mcWorld = ((CraftWorld) loc.getWorld()).getHandle();
         VillagerShop customEnt = new VillagerShop(mcWorld);
@@ -255,5 +299,43 @@ public class v1_12_R1 implements NMS {
         ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
         mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
         return (Villager) customEnt.getBukkitEntity();
+    }
+
+    private class Despawnable {
+        EntityLiving e;
+        BedWarsTeam team;
+        int despawn = 250;
+        public Despawnable(EntityLiving e, BedWarsTeam team, int despawn){
+            this.e = e;
+            this.team = team;
+            if (despawn != 0){
+                this.despawn = despawn;
+            }
+            despawnables.add(this);
+        }
+
+        public void regresh() {
+            if (!e.isAlive()){
+                despawnables.remove(this);
+                return;
+            }
+            int percentuale = (int) ((e.getHealth()*100)/e.getMaxHealth()/10);
+            e.setCustomName(lang.m(lang.iGolemName).replace("{despawn}", String.valueOf(despawn)).replace("{health}",
+                    StringUtils.repeat(lang.m(lang.iGolemHealthFormat)+" ", percentuale)+StringUtils.repeat("§7"+lang.m(lang.iGolemHealthFormat)+" ", 10-percentuale))
+                    .replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()));
+            despawn--;
+            if (despawn == 0){
+                e.killEntity();
+                despawnables.remove(this);
+            }
+        }
+
+        public EntityLiving getE() {
+            return e;
+        }
+
+        public BedWarsTeam getTeam() {
+            return team;
+        }
     }
 }

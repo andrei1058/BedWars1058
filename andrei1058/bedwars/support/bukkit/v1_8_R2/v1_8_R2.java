@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.support.bukkit.v1_8_R2;
 
+import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.support.bukkit.NMS;
 import net.minecraft.server.v1_8_R2.*;
 import org.bukkit.Location;
@@ -56,12 +57,32 @@ public class v1_8_R2 implements NMS {
     }
 
     @Override
+    public void spawnIronGolem(Location loc, BedWarsTeam bedWarsTeam) {
+
+    }
+
+    @Override
     public void hidePlayer(Player player, List<Player> players) {
         net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy packet = new net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy(player.getEntityId());
         for (Player p : players) {
             if (p == player) continue;
             ((org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
         }
+    }
+
+    @Override
+    public void refreshDespawnables() {
+
+    }
+
+    @Override
+    public boolean isDespawnable(Entity e) {
+        return false;
+    }
+
+    @Override
+    public BedWarsTeam ownDespawnable(Entity e) {
+        return null;
     }
 
     @Override

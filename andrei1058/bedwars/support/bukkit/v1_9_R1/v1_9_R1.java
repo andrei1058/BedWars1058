@@ -1,9 +1,11 @@
 package com.andrei1058.bedwars.support.bukkit.v1_9_R1;
 
 
+import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.support.bukkit.NMS;
 import com.andrei1058.bedwars.support.bukkit.v1_9_R2.Silverfish;
 import net.minecraft.server.v1_9_R1.*;
+import net.minecraft.server.v1_9_R1.Entity;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
@@ -14,10 +16,7 @@ import org.bukkit.craftbukkit.v1_9_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_9_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Villager;
+import org.bukkit.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import java.lang.reflect.Field;
@@ -64,6 +63,11 @@ public class v1_9_R1 implements NMS {
     }
 
     @Override
+    public void spawnIronGolem(Location loc, BedWarsTeam bedWarsTeam) {
+
+    }
+
+    @Override
     public Sound bought() {
         return Sound.valueOf("BLOCK_ANVIL_HIT");
     }
@@ -92,6 +96,21 @@ public class v1_9_R1 implements NMS {
             if (p == player) continue;
             ((org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
         }
+    }
+
+    @Override
+    public void refreshDespawnables() {
+
+    }
+
+    @Override
+    public boolean isDespawnable(org.bukkit.entity.Entity e) {
+        return false;
+    }
+
+    @Override
+    public BedWarsTeam ownDespawnable(org.bukkit.entity.Entity e) {
+        return null;
     }
 
     @Override

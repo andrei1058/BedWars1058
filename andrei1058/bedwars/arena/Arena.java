@@ -45,6 +45,7 @@ public class Arena {
     private List<Block> placed = new ArrayList<>();
     private HashMap<Block, BlockState> broken = new HashMap<>();
     private List<SBoard> scoreboards = new ArrayList<>();
+    /** Bed block */
     private Material bedBlock = Material.BED_BLOCK;
 
     /*Various stuff about player's inventory and owns*/
@@ -719,7 +720,6 @@ public class Arena {
                         }
                     }
                 }
-                countUp++;
                 if (countUp == 1) {
                     for (Player p : getPlayers()) {
                         nms.sendTitle(p, getMsg(p, lang.titleStart), null, 0, 20, 0);
@@ -729,6 +729,7 @@ public class Arena {
                         p.setHealth(18);
                     }
                 }
+                countUp++;
                 int distance = 0;
                 for (BedWarsTeam t : getTeams()) {
                     if (t.getSize() > 1) {

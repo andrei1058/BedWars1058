@@ -29,7 +29,7 @@ public class OreGenerator {
     boolean up = true;
     private List<HoloGram> armorstands = new ArrayList<>();
     private ArmorStand item;
-    public static boolean showDiamoundSb = true;
+    public static boolean showDiamoundSb = true, stack = upgrades.getBoolean("settings.stackItems");
     private static boolean emeraldUpgradeAnnouncerd = false, diamondUpgradeAnnounced = false;
 
     private static List<OreGenerator> generators = new ArrayList<>();
@@ -210,10 +210,12 @@ public class OreGenerator {
             }*/
             for (int temp = amount; temp >= 0; temp--) {
                 ItemStack itemStack = new ItemStack(ore);
-                ItemMeta itemMeta = itemStack.getItemMeta();
-                itemMeta.setDisplayName("custom"+dropID++);
-                itemStack.setItemMeta(itemMeta);
-                location.getWorld().dropItem(location.clone().add(0, 1, 0), itemStack);
+                if (!stack) {
+                    ItemMeta itemMeta = itemStack.getItemMeta();
+                    itemMeta.setDisplayName("custom" + dropID++);
+                    itemStack.setItemMeta(itemMeta);
+                }
+                location.getWorld().dropItem(location.clone(), itemStack);
                 temp--;
             }
             return;
