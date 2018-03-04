@@ -88,16 +88,15 @@ public class BuyItemsAction extends ContentAction {
         } else {
             int costt = cost;
             for (ItemStack i : p.getInventory().getContents()) {
-                if (done) continue;
+                if (done) break;
                 if (i == null) continue;
                 if (i.getType() == null) continue;
                 if (i.getType() == Material.AIR) continue;
                 if (i.getType() == currency) {
-                    if (i.getAmount() <= costt) {
+                    if (i.getAmount() < costt) {
                         costt -= i.getAmount();
-                        p.getInventory().remove(i);
+                        i.setAmount(0);
                         p.updateInventory();
-                        done = true;
                     } else {
                         i.setAmount(i.getAmount() - costt);
                         p.updateInventory();
@@ -106,7 +105,6 @@ public class BuyItemsAction extends ContentAction {
                 }
             }
         }
-        //todo vezi daca e bow, sword sau armor si da-i enchant pe ele daca are cumparat din team upgrades
         p.playSound(p.getLocation(), nms.bought(), 1f, 1f);
         getCategoryContent().getShopCategory().openToPlayer(p);
         p.sendMessage(getMsg(p, youPurchased).replace("{item}", ChatColor.stripColor(getMsg(p, getCategoryContent().getShopCategory().getName().replace("main.", shopPath) + "." + getCategoryContent().getName() + ".name"))));

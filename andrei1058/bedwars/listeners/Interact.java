@@ -83,6 +83,10 @@ public class Interact implements Listener {
                         if (!Misc.isProjectile(Material.valueOf(shop.getYml().getString("utilities.silverfish.material")))) {
                             if (inHand.getType() == Material.valueOf(shop.getYml().getString("utilities.silverfish.material")) && inHand.getData().getData() == shop.getInt("utilities.silverfish.data")) {
                                 a.getTeam(p).spawnSilverfish(p.getLocation().add(0, 1, 0), p);
+                                if (!nms.isProjectile(inHand)){
+                                    inHand.setAmount(inHand.getAmount()-1);
+                                    p.updateInventory();
+                                }
                             }
                         }
                     }
@@ -90,6 +94,10 @@ public class Interact implements Listener {
                         if (!Misc.isProjectile(Material.valueOf(shop.getYml().getString("utilities.ironGolem.material")))) {
                             if (inHand.getType() == Material.valueOf(shop.getYml().getString("utilities.ironGolem.material")) && inHand.getData().getData() == shop.getInt("utilities.ironGolem.data")) {
                                 nms.spawnIronGolem(p.getLocation().add(0, 1, 0), a.getTeam(p));
+                                if (!nms.isProjectile(inHand)){
+                                    inHand.setAmount(inHand.getAmount()-1);
+                                    p.updateInventory();
+                                }
                             }
                         }
                     }
@@ -97,6 +105,10 @@ public class Interact implements Listener {
                         if (!Misc.isProjectile(Material.valueOf(shop.getYml().getString("utilities.bridge.material")))) {
                             if (inHand.getType() == Material.getMaterial(shop.getYml().getString("utilities.bridge.material")) && inHand.getData().getData() == shop.getInt("utilities.bridge.data")) {
                                 //todo spawn bridge
+                                if (!nms.isProjectile(inHand)){
+                                    inHand.setAmount(inHand.getAmount()-1);
+                                    p.updateInventory();
+                                }
                             }
                         }
                     }
@@ -173,29 +185,6 @@ public class Interact implements Listener {
     public void m(PlayerArmorStandManipulateEvent e) {
         if (Arena.isInArena(e.getPlayer())) {
             e.setCancelled(true);
-        }
-    }
-
-    @EventHandler
-    public void d(PlayerDropItemEvent e) {
-        Player p = e.getPlayer();
-        if (e.getPlayer().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
-            e.setCancelled(true);
-        }
-        if (Arena.isInArena(p)) {
-            Arena a = Arena.getArenaByPlayer(p);
-            if (a.isSpectator(p)) {
-                e.setCancelled(true);
-            } else {
-                if (a.getStatus() != GameState.playing){
-                    e.setCancelled(true);
-                } else {
-                    if (e.getItemDrop().getItemStack().getType() == Material.COMPASS) {
-                        e.setCancelled(true);
-                        return;
-                    }
-                }
-            }
         }
     }
 

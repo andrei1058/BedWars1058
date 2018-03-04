@@ -91,10 +91,10 @@ public class v1_8_R1 implements NMS {
     }
     @Override
     public void hidePlayer(Player player, List<Player> players) {
-        net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy packet = new net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy(player.getEntityId());
+        net.minecraft.server.v1_8_R1.PacketPlayOutEntityDestroy packet = new net.minecraft.server.v1_8_R1.PacketPlayOutEntityDestroy(player.getEntityId());
         for (Player p : players) {
             if (p == player) continue;
-            ((org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+            ((org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
         }
     }
 
@@ -111,6 +111,11 @@ public class v1_8_R1 implements NMS {
     @Override
     public BedWarsTeam ownDespawnable(Entity e) {
         return null;
+    }
+
+    @Override
+    public void setCollidable(Player e, boolean b) {
+        e.spigot().setCollidesWithEntities(b);
     }
 
     @Override
@@ -176,6 +181,11 @@ public class v1_8_R1 implements NMS {
     @Override
     public boolean isBow(ItemStack itemStack) {
         return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemBow;
+    }
+
+    @Override
+    public boolean isProjectile(org.bukkit.inventory.ItemStack itemStack){
+        return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof IProjectile;
     }
 
     @Override

@@ -47,6 +47,9 @@ public interface NMS {
     /** Check if item-stack is bow */
     boolean isBow(ItemStack itemStack);
 
+    /** Check if itemstack is Projectile */
+    boolean isProjectile(ItemStack itemStack);
+
     /** Register custom entities */
     void registerEntities();
 
@@ -91,4 +94,7 @@ public interface NMS {
 
     /** Own despawnable */
     BedWarsTeam ownDespawnable(Entity e);
+
+    /** Collide with entities */
+    void setCollidable(Player e, boolean b);
 }

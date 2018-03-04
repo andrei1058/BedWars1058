@@ -211,7 +211,7 @@ public class Arena {
             p.getInventory().setArmorContents(null);
             playerLocation.put(p, p.getLocation());
             p.teleport(cm.getArenaLoc("waiting.Loc"));
-            waitingItems(p);
+            leaveItem(p);
             List<PotionEffect> potions = new ArrayList<>();
             for (PotionEffect ef : p.getActivePotionEffects()) {
                 potions.add(ef);
@@ -253,7 +253,7 @@ public class Arena {
         if (allowSpectate || playerBefore) {
             spectators.add(p);
             players.remove(p);
-            p.spigot().setCollidesWithEntities(false);
+            nms.setCollidable(p, false);
             //nms.hideEntity(players, p);
             p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
             if (!playerBefore) {
@@ -282,9 +282,9 @@ public class Arena {
                 playerExp.put(p, p.getExp());
                 p.setExp(0);
             }
-            p.teleport(cm.getArenaLoc("waiting.Loc"));
             p.setAllowFlight(true);
             p.setFlying(true);
+            p.teleport(cm.getArenaLoc("waiting.Loc"));
 
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 for (Player on : Bukkit.getOnlinePlayers()) {
@@ -297,6 +297,8 @@ public class Arena {
                     }
                 }
             }, 10L);
+
+            leaveItem(p);
         } else {
             //msg spectate not allowed
         }
@@ -434,6 +436,8 @@ public class Arena {
             p.removePotionEffect(pf.getType());
         }
         p.setExp(0);
+        p.setFlying(false);
+        p.setAllowFlight(false);
         if (getServerType() == ServerType.SHARED) {
             p.teleport(playerLocation.get(p));
         } else if (getServerType() == ServerType.MULTIARENA) {
@@ -466,9 +470,7 @@ public class Arena {
             playerEnderchest.remove(p);
         }
         playerLocation.remove(p);
-        p.spigot().setCollidesWithEntities(true);
-        p.setFlying(false);
-        p.setAllowFlight(false);
+        nms.setCollidable(p, true);
         for (SBoard sb : scoreboards) {
             if (sb.getP() == p) {
                 sb.remove();
@@ -1025,7 +1027,7 @@ public class Arena {
         return null;
     }
 
-    public static void waitingItems(Player p) {
+    public static void leaveItem(Player p) {
         if (config.getBoolean("items.leave.enable")) {
             p.getInventory().setItem(config.getInt("items.leave.slot"), Misc.createItem(Material.valueOf(config.getYml().getString("items.leave.itemStack")),
                     (byte) config.getInt("items.leave.data"), getMsg(p, lang.leaveItemName), getList(p, lang.leaveItemLore)));

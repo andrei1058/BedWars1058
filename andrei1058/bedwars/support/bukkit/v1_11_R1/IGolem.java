@@ -1,13 +1,13 @@
-package com.andrei1058.bedwars.support.bukkit.v1_8_R3;
+package com.andrei1058.bedwars.support.bukkit.v1_11_R1;
 
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
-import net.minecraft.server.v1_8_R3.*;
+import com.google.common.collect.Sets;
+import net.minecraft.server.v1_11_R1.*;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
+import org.bukkit.craftbukkit.v1_11_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_11_R1.entity.CraftLivingEntity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import java.lang.reflect.Field;
@@ -24,10 +24,10 @@ public class IGolem extends EntityIronGolem {
             bField.setAccessible(true);
             Field cField = PathfinderGoalSelector.class.getDeclaredField("c");
             cField.setAccessible(true);
-            bField.set(this.goalSelector, new UnsafeList());
-            bField.set(this.targetSelector, new UnsafeList());
-            cField.set(this.goalSelector, new UnsafeList());
-            cField.set(this.targetSelector, new UnsafeList());
+            bField.set(this.goalSelector, Sets.newLinkedHashSet());
+            bField.set(this.targetSelector, Sets.newLinkedHashSet());
+            cField.set(this.goalSelector, Sets.newLinkedHashSet());
+            cField.set(this.targetSelector, Sets.newLinkedHashSet());
         } catch (IllegalAccessException e1) {
             e1.printStackTrace();
         } catch (NoSuchFieldException e1) {

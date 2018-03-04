@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
@@ -216,6 +217,7 @@ public class BreakPlace implements Listener {
         }
         Arena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a != null) {
+            if (a.isSpectator(e.getPlayer()) || a.getStatus() != GameState.playing || Arena.respawn.containsKey(e.getPlayer()))
             e.setCancelled(true);
         }
     }

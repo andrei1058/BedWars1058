@@ -106,16 +106,15 @@ public class UpgradeTier {
         } else {
             int costt = cost;
             for (ItemStack i : p.getInventory().getContents()) {
-                if (done) continue;
+                if (done) break;
                 if (i == null) continue;
                 if (i.getType() == null) continue;
                 if (i.getType() == Material.AIR) continue;
                 if (i.getType() == currency) {
-                    if (i.getAmount() <= costt) {
+                    if (i.getAmount() < costt) {
                         costt -= i.getAmount();
-                        p.getInventory().remove(i);
+                        i.setAmount(0);
                         p.updateInventory();
-                        done = true;
                     } else {
                         i.setAmount(i.getAmount() - costt);
                         p.updateInventory();

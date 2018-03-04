@@ -124,10 +124,10 @@ public class Main extends JavaPlugin {
         }
         switch (version) {
             case "v1_12_R1":
-                registerEvents(new EntityPickUp());
+                registerEvents(new EntityDropPick());
                 break;
             default:
-                registerEvents(new PlayerPickUp());
+                registerEvents(new PlayerDropPick());
                 break;
         }
         Misc.checkLobbyServer();

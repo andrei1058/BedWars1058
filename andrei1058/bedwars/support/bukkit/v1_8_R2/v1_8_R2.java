@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.support.bukkit.v1_8_R2;
 
+import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.support.bukkit.NMS;
 import net.minecraft.server.v1_8_R2.*;
@@ -21,15 +22,17 @@ import org.bukkit.inventory.ItemStack;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static com.andrei1058.bedwars.Main.nms;
-import static com.andrei1058.bedwars.Main.npcs;
-import static com.andrei1058.bedwars.Main.plugin;
+import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
 public class v1_8_R2 implements NMS {
+
+    /** List of despawnable entities aka special shop mobs */
+    private static List<Despawnable> despawnables = new ArrayList();
 
     @Override
     public Sound bedDestroy() {
@@ -58,30 +61,38 @@ public class v1_8_R2 implements NMS {
 
     @Override
     public void spawnIronGolem(Location loc, BedWarsTeam bedWarsTeam) {
-
+        new Despawnable(IGolem.spawn(loc, bedWarsTeam), bedWarsTeam, shop.getInt("utilities.ironGolem.despawn"));
     }
 
     @Override
     public void hidePlayer(Player player, List<Player> players) {
-        net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy packet = new net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy(player.getEntityId());
+        net.minecraft.server.v1_8_R2.PacketPlayOutEntityDestroy packet = new net.minecraft.server.v1_8_R2.PacketPlayOutEntityDestroy(player.getEntityId());
         for (Player p : players) {
             if (p == player) continue;
-            ((org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+            ((org.bukkit.craftbukkit.v1_8_R2.entity.CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
         }
     }
 
     @Override
     public void refreshDespawnables() {
-
+        for(Despawnable d : new ArrayList<>(despawnables)){
+            d.regresh();
+        }
     }
 
     @Override
     public boolean isDespawnable(Entity e) {
+        for (Despawnable d : despawnables){
+            if (d.getE() == ((CraftEntity)e).getHandle()) return true;
+        }
         return false;
     }
 
     @Override
     public BedWarsTeam ownDespawnable(Entity e) {
+        for (Despawnable d : despawnables){
+            if (d.getE() == ((CraftEntity)e).getHandle()) return d.getTeam();
+        }
         return null;
     }
 
@@ -179,6 +190,11 @@ public class v1_8_R2 implements NMS {
     }
 
     @Override
+    public boolean isProjectile(org.bukkit.inventory.ItemStack itemStack){
+        return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof IProjectile;
+    }
+
+    @Override
     public void registerEntities() {
         registerEntity("ShopNPC", 120, VillagerShop.class);
         registerEntity("Silverfish2", 60, Silverfish.class);
@@ -207,6 +223,11 @@ public class v1_8_R2 implements NMS {
                 }
             }
         }
+    }
+
+    @Override
+    public void setCollidable(Player e, boolean b) {
+        e.spigot().setCollidesWithEntities(b);
     }
 
     @Override
@@ -295,5 +316,43 @@ public class v1_8_R2 implements NMS {
         ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
         mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
         return (Villager) customEnt.getBukkitEntity();
+    }
+
+    private class Despawnable {
+        EntityLiving e;
+        BedWarsTeam team;
+        int despawn = 250;
+        public Despawnable(EntityLiving e, BedWarsTeam team, int despawn){
+            this.e = e;
+            this.team = team;
+            if (despawn != 0){
+                this.despawn = despawn;
+            }
+            despawnables.add(this);
+        }
+
+        public void regresh() {
+            if (!e.isAlive()){
+                despawnables.remove(this);
+                return;
+            }
+            int percentuale = (int) ((e.getHealth()*100)/e.getMaxHealth()/10);
+            e.setCustomName(lang.m(lang.iGolemName).replace("{despawn}", String.valueOf(despawn)).replace("{health}",
+                    new String(new char[percentuale]).replace("\0", lang.m(lang.iGolemHealthFormat)+" ")+new String(new char[10-percentuale]).replace("\0", "§7"+lang.m(lang.iGolemHealthFormat))
+            ).replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()));
+            despawn--;
+            if (despawn == 0){
+                e.damageEntity(DamageSource.OUT_OF_WORLD, 9000);
+                despawnables.remove(this);
+            }
+        }
+
+        public EntityLiving getE() {
+            return e;
+        }
+
+        public BedWarsTeam getTeam() {
+            return team;
+        }
     }
 }

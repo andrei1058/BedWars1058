@@ -1,13 +1,13 @@
-package com.andrei1058.bedwars.support.bukkit.v1_8_R3;
+package com.andrei1058.bedwars.support.bukkit.v1_8_R2;
 
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
-import net.minecraft.server.v1_8_R3.*;
+import net.minecraft.server.v1_8_R2.*;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
+import org.bukkit.craftbukkit.v1_8_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_8_R2.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_8_R2.util.UnsafeList;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import java.lang.reflect.Field;
@@ -47,7 +47,7 @@ public class IGolem extends EntityIronGolem {
     protected void initAttributes() {
         super.initAttributes();
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(shop.getYml().getDouble("utilities.ironGolem.health"));
-        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(shop.getYml().getDouble("utilities.ironGolem.speed"));
+        this.getAttributeInstance(GenericAttributes.d).setValue(shop.getYml().getDouble("utilities.ironGolem.speed"));
     }
 
     public static IGolem spawn(Location loc, BedWarsTeam bedWarsTeam) {

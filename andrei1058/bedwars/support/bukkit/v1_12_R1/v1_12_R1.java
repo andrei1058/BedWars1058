@@ -5,7 +5,7 @@ import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.support.bukkit.NMS;
 import com.google.common.collect.Sets;
 import net.minecraft.server.v1_12_R1.*;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
@@ -92,9 +92,8 @@ public class v1_12_R1 implements NMS {
 
     @Override
     public void refreshDespawnables() {
-        for(Iterator<Despawnable> it = despawnables.iterator(); it.hasNext();){
-            Despawnable de = it.next();
-            de.regresh();
+        for(Despawnable d : new ArrayList<>(despawnables)){
+            d.regresh();
         }
     }
 
@@ -166,6 +165,11 @@ public class v1_12_R1 implements NMS {
     }
 
     @Override
+    public void setCollidable(Player e, boolean b) {
+        e.setCollidable(b);
+    }
+
+    @Override
     public boolean isArmor(org.bukkit.inventory.ItemStack itemStack) {
         return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemArmor;
     }
@@ -183,6 +187,11 @@ public class v1_12_R1 implements NMS {
     @Override
     public boolean isBow(org.bukkit.inventory.ItemStack itemStack) {
         return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemBow;
+    }
+
+    @Override
+    public boolean isProjectile(org.bukkit.inventory.ItemStack itemStack){
+        return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof IProjectile;
     }
 
     @Override
@@ -321,11 +330,11 @@ public class v1_12_R1 implements NMS {
             }
             int percentuale = (int) ((e.getHealth()*100)/e.getMaxHealth()/10);
             e.setCustomName(lang.m(lang.iGolemName).replace("{despawn}", String.valueOf(despawn)).replace("{health}",
-                    StringUtils.repeat(lang.m(lang.iGolemHealthFormat)+" ", percentuale)+StringUtils.repeat("§7"+lang.m(lang.iGolemHealthFormat)+" ", 10-percentuale))
-                    .replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()));
+                    new String(new char[percentuale]).replace("\0", lang.m(lang.iGolemHealthFormat)+" ")+new String(new char[10-percentuale]).replace("\0", "§7"+lang.m(lang.iGolemHealthFormat))
+            ).replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()));
             despawn--;
             if (despawn == 0){
-                e.killEntity();
+                e.damageEntity(DamageSource.OUT_OF_WORLD, 9000);
                 despawnables.remove(this);
             }
         }

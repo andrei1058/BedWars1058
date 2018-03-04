@@ -182,8 +182,9 @@ public class ShopManager {
                 setCategoryWithBuy("main.invContents.utility.invContents.bucket", 16, "WATER_BUCKET", 0, 1, 1, "emerald", false);
                 addBuyItem("main.invContents.utility.invContents.bucket.buyItems.item", "WATER_BUCKET", 0, 1, "", false, false);
 
-                setCategoryWithBuy("main.invContents.utility.invContents.egg", 19, "EGG", 0, 1, 4, "emerald", false);
+                /*setCategoryWithBuy("main.invContents.utility.invContents.egg", 19, "EGG", 0, 1, 4, "emerald", false);
                 addBuyItem("main.invContents.utility.invContents.egg.buyItems.item", "EGG", 0, 1, "", false, false);
+                */
 
                 setCategoryWithBuy("main.invContents.utility.invContents.back", 31, "ARROW", 0, 1, 0, "iron", false);
                 set("main.invContents.utility.invContents.back.buyItems", new ArrayList<>());
