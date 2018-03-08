@@ -1,8 +1,6 @@
 package com.andrei1058.bedwars.arena;
 
-import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.configuration.Language;
-import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import org.bukkit.Bukkit;
@@ -14,7 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,54 +24,39 @@ import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.configuration.Language.getList;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
-public class Misc implements PluginMessageListener {
+public class Misc {
 
     private static boolean updateAvailable = false;
     private static String newVersion = "";
 
     public static void moveToLobbyOrKick(Player p) {
-        if (lobbyServer) {
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
             out.writeUTF("Connect");
             out.writeUTF(config.getYml().getString("lobbyServer"));
             p.sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
-        } else {
-            p.kickPlayer(getMsg(p, Language.restartKick));
-        }
-    }
-
-    @Override
-    public void onPluginMessageReceived(String s, Player player, byte[] bytes) {
-        if (!s.equalsIgnoreCase("BungeeCord")) return;
-        ByteArrayDataInput in = ByteStreams.newDataInput(bytes);
-        String subchannel = in.readUTF();
-        if (subchannel.equals("GetServers")) {
-            String[] serverList = in.readUTF().split(", ");
-            for (String server : serverList) {
-                if (server.equalsIgnoreCase(config.getYml().getString("lobbyServer"))) {
-                    lobbyServer = true;
-                }
+        Bukkit.getScheduler().runTaskLater(plugin, ()-> {
+            if (p.isOnline()){
+                p.kickPlayer(getMsg(p, Language.restartKick));
             }
-        }
+        }, 20L);
     }
 
     public static String replaceLast(String text, String regex, String replacement) {
         return text.replaceFirst("(?s)" + regex + "(?!.*?" + regex + ")", replacement);
     }
 
-    public static void checkLobbyServer() {
-        if (Bukkit.getServer().spigot().getConfig().getBoolean("settings.bungeecord")) {
-            plugin.getServer().getMessenger().registerOutgoingPluginChannel(plugin, "BungeeCord");
-            plugin.getServer().getMessenger().registerIncomingPluginChannel(plugin, "BungeeCord", new Misc());
+    /*public static void checkLobbyServer() {
+        if (spigot.getBoolean("settings.bungeecord")) {
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
             out.writeUTF("GetServers");
-            Bukkit.getServer().sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
+            plugin.getServer().sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
+            debug("Requesting bungee servers.");
         } else {
             if (getServerType() == ServerType.BUNGEE) {
                 plugin.getLogger().severe("Please set bungeecord to true in spigot.yml");
             }
         }
-    }
+    }*/
 
     public static ItemStack getArenaGUI(Player p) {
         ItemStack i;
@@ -140,7 +122,7 @@ public class Misc implements PluginMessageListener {
         plugin.spawnNPCs();
     }
 
-    public static BlockFace getDirection(Location loc){
+    public static BlockFace getDirection(Location loc) {
         int rotation = (int) loc.getYaw();
         if (rotation < 0) {
             rotation += 360;
@@ -176,7 +158,7 @@ public class Misc implements PluginMessageListener {
         return newVersion;
     }
 
-    public static boolean isProjectile(Material i){
+    public static boolean isProjectile(Material i) {
         return Material.EGG == i || Material.FIREBALL == i || Material.SNOW_BALL == i || Material.ARROW == i;
     }
 }

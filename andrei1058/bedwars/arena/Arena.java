@@ -282,10 +282,7 @@ public class Arena {
                 playerExp.put(p, p.getExp());
                 p.setExp(0);
             }
-            p.setAllowFlight(true);
-            p.setFlying(true);
             p.teleport(cm.getArenaLoc("waiting.Loc"));
-
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 for (Player on : Bukkit.getOnlinePlayers()) {
                     if (getSpectators().contains(on)) {
@@ -296,6 +293,8 @@ public class Arena {
                         p.showPlayer(on);
                     }
                 }
+                p.setAllowFlight(true);
+                p.setFlying(true);
             }, 10L);
 
             leaveItem(p);
@@ -436,13 +435,13 @@ public class Arena {
             p.removePotionEffect(pf.getType());
         }
         p.setExp(0);
-        p.setFlying(false);
-        p.setAllowFlight(false);
         if (getServerType() == ServerType.SHARED) {
             p.teleport(playerLocation.get(p));
         } else if (getServerType() == ServerType.MULTIARENA) {
             p.teleport(config.getConfigLoc("lobbyLoc"));
         }
+        p.setFlying(false);
+        p.setAllowFlight(false);
         if (playerItems.containsKey(p)) {
             for (Map.Entry<ItemStack, Integer> entry : playerItems.get(p).entrySet()) {
                 p.getInventory().setItem(entry.getValue(), entry.getKey());
@@ -541,7 +540,7 @@ public class Arena {
         for (Entity e : world.getEntities()) {
             if (e.getType() == EntityType.PLAYER) {
                 Player p = (Player) e;
-                p.kickPlayer(getMsg(p, Language.restartKick));
+                Misc.moveToLobbyOrKick(p);
             }
         }
         countUp = 0;
@@ -1010,6 +1009,9 @@ public class Arena {
         p.getInventory().clear();
         if (config.getBoolean("items.arenaGui.enable") && !config.getLobbyWorldName().isEmpty()) {
             p.getInventory().setItem(config.getInt("items.arenaGui.slot"), Misc.getArenaGUI(p));
+        }
+        if (getServerType() == ServerType.MULTIARENA && spigot.getBoolean("settings.bungeecord")){
+            leaveItem(p);
         }
     }
 

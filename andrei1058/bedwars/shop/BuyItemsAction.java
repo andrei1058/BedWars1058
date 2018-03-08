@@ -95,10 +95,10 @@ public class BuyItemsAction extends ContentAction {
                 if (i.getType() == currency) {
                     if (i.getAmount() < costt) {
                         costt -= i.getAmount();
-                        i.setAmount(0);
+                        nms.minusAmount(p, i, i.getAmount());
                         p.updateInventory();
                     } else {
-                        i.setAmount(i.getAmount() - costt);
+                        nms.minusAmount(p, i, costt);
                         p.updateInventory();
                         done = true;
                     }
@@ -179,11 +179,11 @@ public class BuyItemsAction extends ContentAction {
         p.updateInventory();
     }
 
-    private static void updateEnchantments(Player p){
-        if (!Arena.getArenaByPlayer(p).getTeam(p).getBowsEnchantments().isEmpty()){
-            for (ItemStack i : p.getInventory().getContents()){
+    private static void updateEnchantments(Player p) {
+        if (!Arena.getArenaByPlayer(p).getTeam(p).getBowsEnchantments().isEmpty()) {
+            for (ItemStack i : p.getInventory().getContents()) {
                 if (i == null) continue;
-                if (i.getType() == Material.BOW){
+                if (i.getType() == Material.BOW) {
                     ItemMeta im = i.getItemMeta();
                     for (BedWarsTeam.Enchant e : Arena.getArenaByPlayer(p).getTeam(p).getBowsEnchantments()) {
                         im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
@@ -193,10 +193,10 @@ public class BuyItemsAction extends ContentAction {
                 p.updateInventory();
             }
         }
-        if (!Arena.getArenaByPlayer(p).getTeam(p).getSwordsEnchantemnts().isEmpty()){
-            for (ItemStack i : p.getInventory().getContents()){
+        if (!Arena.getArenaByPlayer(p).getTeam(p).getSwordsEnchantemnts().isEmpty()) {
+            for (ItemStack i : p.getInventory().getContents()) {
                 if (i == null) continue;
-                if (nms.isSword(i)){
+                if (nms.isSword(i)) {
                     ItemMeta im = i.getItemMeta();
                     for (BedWarsTeam.Enchant e : Arena.getArenaByPlayer(p).getTeam(p).getSwordsEnchantemnts()) {
                         im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
@@ -206,10 +206,10 @@ public class BuyItemsAction extends ContentAction {
                 p.updateInventory();
             }
         }
-        if (!Arena.getArenaByPlayer(p).getTeam(p).getArmorsEnchantemnts().isEmpty()){
-            for (ItemStack i : p.getInventory().getArmorContents()){
+        if (!Arena.getArenaByPlayer(p).getTeam(p).getArmorsEnchantemnts().isEmpty()) {
+            for (ItemStack i : p.getInventory().getArmorContents()) {
                 if (i == null) continue;
-                if (nms.isArmor(i)){
+                if (nms.isArmor(i)) {
                     ItemMeta im = i.getItemMeta();
                     for (BedWarsTeam.Enchant e : Arena.getArenaByPlayer(p).getTeam(p).getArmorsEnchantemnts()) {
                         im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);

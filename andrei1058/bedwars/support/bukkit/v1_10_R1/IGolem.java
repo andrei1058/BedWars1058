@@ -61,4 +61,10 @@ public class IGolem extends EntityIronGolem {
         mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
         return customEnt;
     }
+
+    @Override
+    protected MinecraftKey J() {
+        return null;
+    }
+
 }

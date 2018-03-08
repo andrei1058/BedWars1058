@@ -61,4 +61,9 @@ public class IGolem extends EntityIronGolem {
         mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
         return customEnt;
     }
+
+    @Override
+    protected void dropDeathLoot(boolean flag, int i) {
+
+    }
 }

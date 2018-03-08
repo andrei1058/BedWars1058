@@ -84,6 +84,11 @@ public class v1_10_R1 implements NMS {
     }
 
     @Override
+    public void minusAmount(Player p, org.bukkit.inventory.ItemStack i, int amount) {
+        i.setAmount(i.getAmount()-amount);
+    }
+
+    @Override
     public void refreshDespawnables() {
         for(Despawnable d : new ArrayList<>(despawnables)){
             d.regresh();
@@ -336,7 +341,7 @@ public class v1_10_R1 implements NMS {
             }
             int percentuale = (int) ((e.getHealth()*100)/e.getMaxHealth()/10);
             e.setCustomName(lang.m(lang.iGolemName).replace("{despawn}", String.valueOf(despawn)).replace("{health}",
-                    new String(new char[percentuale]).replace("\0", lang.m(lang.iGolemHealthFormat)+" ")+new String(new char[10-percentuale]).replace("\0", "§7"+lang.m(lang.iGolemHealthFormat))
+                    new String(new char[percentuale]).replace("\0", lang.m(lang.iGolemHealthFormat))+new String(new char[10-percentuale]).replace("\0", "§7"+lang.m(lang.iGolemHealthFormat))
             ).replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()));
             despawn--;
             if (despawn == 0){

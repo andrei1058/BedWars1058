@@ -126,7 +126,7 @@ public class SBoard {
                 for (Map.Entry<Team, String> e : toRefresh.entrySet()) {
                     setContent(e.getKey(), e.getValue().replace("{on}", String.valueOf(arena.getPlayers().size()))
                             .replace("{max}", String.valueOf(arena.getMaxPlayers()))
-                            .replace("{time}", String.valueOf(arena.getCountdownS()+1)).replace("{date}", date));
+                            .replace("{time}", String.valueOf(arena.getCountdownS())).replace("{date}", date));
                 }
             } else if (arena.getStatus() == GameState.playing) {
                 String kills = String.valueOf(arena.getPlayerKills(getP(), false)), finalKills = String.valueOf(arena.getPlayerKills(getP(), true)),

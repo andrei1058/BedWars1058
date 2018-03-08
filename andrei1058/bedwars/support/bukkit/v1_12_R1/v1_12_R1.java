@@ -5,7 +5,6 @@ import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.support.bukkit.NMS;
 import com.google.common.collect.Sets;
 import net.minecraft.server.v1_12_R1.*;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
@@ -21,7 +20,6 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import static com.andrei1058.bedwars.Main.*;
@@ -152,7 +150,7 @@ public class v1_12_R1 implements NMS {
 
     @Override
     public org.bukkit.inventory.ItemStack getItemInHand(Player p) {
-        return p.getItemInHand();
+        return p.getInventory().getItemInMainHand();
     }
 
     @Override
@@ -167,6 +165,11 @@ public class v1_12_R1 implements NMS {
     @Override
     public void setCollidable(Player e, boolean b) {
         e.setCollidable(b);
+    }
+
+    @Override
+    public void minusAmount(Player p, org.bukkit.inventory.ItemStack i, int amount) {
+        i.setAmount(i.getAmount()-amount);
     }
 
     @Override
@@ -330,7 +333,7 @@ public class v1_12_R1 implements NMS {
             }
             int percentuale = (int) ((e.getHealth()*100)/e.getMaxHealth()/10);
             e.setCustomName(lang.m(lang.iGolemName).replace("{despawn}", String.valueOf(despawn)).replace("{health}",
-                    new String(new char[percentuale]).replace("\0", lang.m(lang.iGolemHealthFormat)+" ")+new String(new char[10-percentuale]).replace("\0", "§7"+lang.m(lang.iGolemHealthFormat))
+                    new String(new char[percentuale]).replace("\0", lang.m(lang.iGolemHealthFormat))+new String(new char[10-percentuale]).replace("\0", "§7"+lang.m(lang.iGolemHealthFormat))
             ).replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()));
             despawn--;
             if (despawn == 0){

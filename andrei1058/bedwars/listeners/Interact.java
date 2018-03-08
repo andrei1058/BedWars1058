@@ -36,16 +36,28 @@ public class Interact implements Listener {
             Block b = e.getClickedBlock();
             if (b == null) return;
             if (b.getType() == Material.AIR) return;
-            if (Arena.isInArena(p)) {
+            Arena a = Arena.getArenaByPlayer(p);
+            if (a != null) {
                 if (b.getType() == Material.BED_BLOCK) {
                     e.setCancelled(true);
                     return;
                 }
+                if (a.isSpectator(p) || Arena.respawn.containsKey(p)){
+                    switch (b.getType()){
+                        case CHEST:
+                        case ENDER_CHEST:
+                        case ANVIL:
+                        case WORKBENCH:
+                        case HOPPER:
+                            e.setCancelled(true);
+                            break;
+                    }
+                }
             }
             if (b.getState() instanceof Sign){
-                for (Arena a : Arena.getArenas()){
-                    if (a.getSigns().contains(b.getState())){
-                        a.addPlayer(p);
+                for (Arena a1 : Arena.getArenas()){
+                    if (a1.getSigns().contains(b.getState())){
+                        a1.addPlayer(p);
                         return;
                     }
                 }
@@ -67,15 +79,7 @@ public class Interact implements Listener {
                             if (i.getType() == null) continue;
                             if (i.getType() == Material.AIR) continue;
                             if (i.getType() == Material.FIREBALL) {
-                                if (i.getAmount() <= 1) {
-                                    p.getInventory().remove(i);
-                                    p.updateInventory();
-                                    return;
-                                } else {
-                                    i.setAmount(i.getAmount() - 1);
-                                    p.updateInventory();
-                                    return;
-                                }
+                                nms.minusAmount(p, inHand, 1);
                             }
                         }
                     }
@@ -84,7 +88,7 @@ public class Interact implements Listener {
                             if (inHand.getType() == Material.valueOf(shop.getYml().getString("utilities.silverfish.material")) && inHand.getData().getData() == shop.getInt("utilities.silverfish.data")) {
                                 a.getTeam(p).spawnSilverfish(p.getLocation().add(0, 1, 0), p);
                                 if (!nms.isProjectile(inHand)){
-                                    inHand.setAmount(inHand.getAmount()-1);
+                                    nms.minusAmount(p, inHand, 1);
                                     p.updateInventory();
                                 }
                             }
@@ -95,8 +99,7 @@ public class Interact implements Listener {
                             if (inHand.getType() == Material.valueOf(shop.getYml().getString("utilities.ironGolem.material")) && inHand.getData().getData() == shop.getInt("utilities.ironGolem.data")) {
                                 nms.spawnIronGolem(p.getLocation().add(0, 1, 0), a.getTeam(p));
                                 if (!nms.isProjectile(inHand)){
-                                    inHand.setAmount(inHand.getAmount()-1);
-                                    p.updateInventory();
+                                    nms.minusAmount(p, inHand, 1);
                                 }
                             }
                         }
@@ -106,8 +109,7 @@ public class Interact implements Listener {
                             if (inHand.getType() == Material.getMaterial(shop.getYml().getString("utilities.bridge.material")) && inHand.getData().getData() == shop.getInt("utilities.bridge.data")) {
                                 //todo spawn bridge
                                 if (!nms.isProjectile(inHand)){
-                                    inHand.setAmount(inHand.getAmount()-1);
-                                    p.updateInventory();
+                                    nms.minusAmount(p, inHand, 1);
                                 }
                             }
                         }

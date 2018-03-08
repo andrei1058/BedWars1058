@@ -284,6 +284,7 @@ public class OreGenerator {
         a.setCanPickupItems(false);
         a.setArms(false);
         a.setBasePlate(false);
+        a.setCollidable(false);
         return a;
     }
 

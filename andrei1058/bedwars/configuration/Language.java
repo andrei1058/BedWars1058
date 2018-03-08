@@ -392,7 +392,7 @@ public class Language {
                 yml.addDefault(upgradeBuyMessage, "&a{player} purchased &6{upgradeName}");
                 yml.addDefault(utilitySiverfish, "{TeamColor}&l{TeamName} &r{TeamColor}Silverfish");
                 yml.addDefault(iGolemName, "{TeamColor}{despawn}s &8[ {TeamColor}{health}&8]");
-                yml.addDefault(iGolemHealthFormat, "▮");
+                yml.addDefault(iGolemHealthFormat, "▮ ");
                 break;
         }
         lbj.save();

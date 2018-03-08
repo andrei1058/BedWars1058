@@ -1,9 +1,10 @@
 package com.andrei1058.bedwars.commands;
 
-import com.andrei1058.bedwars.api.BedWars;
+import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.ArenaGUI;
+import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.configuration.ConfigManager;
 import com.andrei1058.bedwars.configuration.Language;
 import com.google.common.base.Joiner;
@@ -179,7 +180,11 @@ public class MainCommand extends BukkitCommand {
                 case "leave":
                     Arena a = Arena.getArenaByPlayer(p);
                     if (a == null) {
-                        p.sendMessage(getMsg(p, Language.notInArena));
+                        if (getServerType() == ServerType.MULTIARENA && spigot.getBoolean("settings.bungeecord")){
+                            Misc.moveToLobbyOrKick(p);
+                        } else {
+                            p.sendMessage(getMsg(p, Language.notInArena));
+                        }
                     } else {
                         if (a.isPlayer(p)) {
                             a.removePlayer(p);

@@ -119,6 +119,16 @@ public class v1_8_R1 implements NMS {
     }
 
     @Override
+    public void minusAmount(Player p, ItemStack i, int amount) {
+        if (i.getAmount()-amount<= 0){
+            p.getInventory().removeItem(i);
+            return;
+        }
+        i.setAmount(i.getAmount()-amount);
+        p.updateInventory();
+    }
+
+    @Override
     public void playAction(Player p, String text) {
         CraftPlayer cPlayer = (CraftPlayer)p;
         IChatBaseComponent cbc = ChatSerializer.a("{\"text\": \"" + text + "\"}");

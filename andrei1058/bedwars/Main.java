@@ -27,6 +27,8 @@ import com.andrei1058.bedwars.support.levels.Level;
 import com.andrei1058.bedwars.support.levels.NoLevel;
 import com.andrei1058.bedwars.support.party.Party;
 import com.andrei1058.bedwars.support.vault.*;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
@@ -48,7 +50,7 @@ public class Main extends JavaPlugin {
     public static boolean safeMode, lobbyServer = false, debug = true;
     public static HashMap<Entity, String> npcs = new HashMap<>();
     public static String mainCmd = "bw", link = "https://www.spigotmc.org/resources/bedwars1058-the-most-modern-bedwars-plugin.50942/", sursa = "spigotmc.org";
-    public static ConfigManager config, signs;
+    public static ConfigManager config, signs, spigot;
     public static ShopManager shop;
     public static UpgradesManager upgrades;
     public static Language lang;
@@ -62,6 +64,7 @@ public class Main extends JavaPlugin {
     private static Economy economy;
     private static String version = Bukkit.getServer().getClass().getName().split("\\.")[3];
 
+    @Override
     public void onLoad() {
         plugin = this;
         config = new ConfigManager("config", "plugins/" + this.getName(), false);
@@ -105,7 +108,10 @@ public class Main extends JavaPlugin {
 
     }
 
+    @Override
     public void onEnable() {
+        Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+        Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new Bungee());
         Bukkit.getServicesManager().register(GameAPI.class, new BedWars(), this, ServicePriority.Highest);
         nms.registerCommand(mainCmd, new MainCommand(mainCmd));
         if (config.getLobbyWorldName().isEmpty() && serverType != ServerType.BUNGEE) {
@@ -130,7 +136,6 @@ public class Main extends JavaPlugin {
                 registerEvents(new PlayerDropPick());
                 break;
         }
-        Misc.checkLobbyServer();
         loadArenasAndSigns();
         //todo check for party api
         //todo levels addon
@@ -179,6 +184,7 @@ public class Main extends JavaPlugin {
         if (config.getBoolean("formatChat")){
             registerEvents(new PlayerChat());
         }
+        //Misc.checkLobbyServer();
     }
 
     public void onDisable() {
@@ -204,6 +210,7 @@ public class Main extends JavaPlugin {
         yml.addDefault("globalChat", false);
         yml.addDefault("formatChat", true);
         yml.addDefault("disableCrafting", true);
+        yml.addDefault("debug", false);
 
         yml.addDefault("items.arenaGui.enable", true);
         yml.addDefault("items.arenaGui.itemStack", "STAINED_CLAY");
@@ -263,12 +270,14 @@ public class Main extends JavaPlugin {
         }
         lang = Language.getLang(whatLang);
         safeMode = yml.getBoolean("safeMode");
+        debug = yml.getBoolean("debug");
         new ConfigManager("bukkit", Bukkit.getWorldContainer().getPath(), false).set("ticks-per.autosave", -1);
+        spigot = new ConfigManager("spigot", Bukkit.getWorldContainer().getPath(), false);
         switch (yml.getString("serverType").toUpperCase()) {
             case "BUNGEE":
                 serverType = ServerType.BUNGEE;
                 new ConfigManager("bukkit", Bukkit.getWorldContainer().getPath(), false).set("settings.allow-end", false);
-                new ConfigManager("spigot", Bukkit.getWorldContainer().getPath(), false).set("settings.bungeecord", true);
+                spigot.set("settings.bungeecord", true);
                 break;
             case "SHARED":
                 serverType = ServerType.SHARED;

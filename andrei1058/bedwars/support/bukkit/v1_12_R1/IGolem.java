@@ -10,6 +10,7 @@ import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 
 import static com.andrei1058.bedwars.Main.lang;
@@ -57,8 +58,13 @@ public class IGolem extends EntityIronGolem {
         ((CraftLivingEntity)customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
         customEnt.setCustomNameVisible(true);
         customEnt.setCustomName(lang.m(lang.iGolemName).replace("{despawn}", String.valueOf(shop.getInt("utilities.ironGolem.despawn"))).replace("{health}",
-                StringUtils.repeat(lang.m(lang.iGolemHealthFormat)+" ", 10)).replace("{TeamColor}", TeamColor.getChatColor(bedWarsTeam.getColor()).toString()));
+                StringUtils.repeat(lang.m(lang.iGolemHealthFormat), 10)).replace("{TeamColor}", TeamColor.getChatColor(bedWarsTeam.getColor()).toString()));
         mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
         return customEnt;
+    }
+
+    @Override
+    protected MinecraftKey J() {
+        return null;
     }
 }

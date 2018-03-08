@@ -113,10 +113,10 @@ public class UpgradeTier {
                 if (i.getType() == currency) {
                     if (i.getAmount() < costt) {
                         costt -= i.getAmount();
-                        i.setAmount(0);
+                        nms.minusAmount(p, i, i.getAmount());
                         p.updateInventory();
                     } else {
-                        i.setAmount(i.getAmount() - costt);
+                        nms.minusAmount(p, i, costt);
                         p.updateInventory();
                         done = true;
                     }

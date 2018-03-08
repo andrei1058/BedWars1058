@@ -22,7 +22,6 @@ import org.bukkit.inventory.ItemStack;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -231,6 +230,16 @@ public class v1_8_R2 implements NMS {
     }
 
     @Override
+    public void minusAmount(Player p, ItemStack i, int amount) {
+        if (i.getAmount()-amount<= 0){
+            p.getInventory().removeItem(i);
+            return;
+        }
+        i.setAmount(i.getAmount()-amount);
+        p.updateInventory();
+    }
+
+    @Override
     public double getDamage(ItemStack i) {
         net.minecraft.server.v1_8_R2.ItemStack nmsStack = CraftItemStack.asNMSCopy(i);
         NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
@@ -338,7 +347,7 @@ public class v1_8_R2 implements NMS {
             }
             int percentuale = (int) ((e.getHealth()*100)/e.getMaxHealth()/10);
             e.setCustomName(lang.m(lang.iGolemName).replace("{despawn}", String.valueOf(despawn)).replace("{health}",
-                    new String(new char[percentuale]).replace("\0", lang.m(lang.iGolemHealthFormat)+" ")+new String(new char[10-percentuale]).replace("\0", "§7"+lang.m(lang.iGolemHealthFormat))
+                    new String(new char[percentuale]).replace("\0", lang.m(lang.iGolemHealthFormat))+new String(new char[10-percentuale]).replace("\0", "§7"+lang.m(lang.iGolemHealthFormat))
             ).replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()));
             despawn--;
             if (despawn == 0){

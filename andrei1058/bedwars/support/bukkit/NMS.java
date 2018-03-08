@@ -6,7 +6,6 @@ import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -97,4 +96,7 @@ public interface NMS {
 
     /** Collide with entities */
     void setCollidable(Player e, boolean b);
+
+    /** Change item amount */
+    void minusAmount(Player p, ItemStack i, int amount);
 }
