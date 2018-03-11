@@ -44,7 +44,6 @@ public class Arena {
     private List<BedWarsTeam> teams = new ArrayList<>();
     private List<Block> placed = new ArrayList<>();
     private HashMap<Block, BlockState> broken = new HashMap<>();
-    private List<SBoard> scoreboards = new ArrayList<>();
     /** Bed block */
     private Material bedBlock = Material.BED_BLOCK;
 
@@ -188,9 +187,9 @@ public class Arena {
             }
             setArenaByPlayer(p, false);
             if (getStatus() == GameState.waiting) {
-                scoreboards.add(new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + "Waiting", lang.scoreboardDefaultWaiting), this));
+                new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + "Waiting", lang.scoreboardDefaultWaiting), this);
             } else if (getStatus() == GameState.starting) {
-                scoreboards.add(new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + "Starting", lang.scoreboardDefaultStarting), this));
+                new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + "Starting", lang.scoreboardDefaultStarting), this);
             }
             if (players.size() >= minPlayers && status == GameState.waiting) {
                 setStatus(GameState.starting);
@@ -253,7 +252,6 @@ public class Arena {
         if (allowSpectate || playerBefore) {
             spectators.add(p);
             players.remove(p);
-            nms.setCollidable(p, false);
             //nms.hideEntity(players, p);
             p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
             if (!playerBefore) {
@@ -283,6 +281,10 @@ public class Arena {
                 p.setExp(0);
             }
             p.teleport(cm.getArenaLoc("waiting.Loc"));
+            nms.setCollide(p, false);
+            new SBoard(p, this);
+
+            /** Hide spectator  */
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 for (Player on : Bukkit.getOnlinePlayers()) {
                     if (getSpectators().contains(on)) {
@@ -296,8 +298,8 @@ public class Arena {
                 p.setAllowFlight(true);
                 p.setFlying(true);
             }, 10L);
-
             leaveItem(p);
+            p.setGameMode(GameMode.SPECTATOR);
         } else {
             //msg spectate not allowed
         }
@@ -409,7 +411,8 @@ public class Arena {
                 on.sendMessage(getMsg(on, lang.playerLeave).replace("{player}", p.getDisplayName()));
             }
         }
-        for (SBoard sb : scoreboards) {
+        for (Iterator<SBoard> it = SBoard.getScoreboards().iterator(); it.hasNext(); ) {
+            SBoard sb = it.next();
             if (sb.getP() == p) {
                 sb.remove();
             }
@@ -469,8 +472,9 @@ public class Arena {
             playerEnderchest.remove(p);
         }
         playerLocation.remove(p);
-        nms.setCollidable(p, true);
-        for (SBoard sb : scoreboards) {
+        nms.setCollide(p, true);
+        for (Iterator<SBoard> it = SBoard.getScoreboards().iterator(); it.hasNext(); ) {
+            SBoard sb = it.next();
             if (sb.getP() == p) {
                 sb.remove();
             }
@@ -485,6 +489,7 @@ public class Arena {
                 p.hidePlayer(on);
             }
         }
+        p.setGameMode(GameMode.SURVIVAL);
     }
 
     public void disable() {
@@ -902,18 +907,24 @@ public class Arena {
         Bukkit.getPluginManager().callEvent(new GameStateChangeEvent(this, status));
         refreshSigns();
         if (status == GameState.starting) {
-            for (SBoard sb : scoreboards) {
-                sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + "Starting", lang.scoreboardDefaultStarting));
+            for (SBoard sb : SBoard.getScoreboards()) {
+                if (sb.getArena() == this) {
+                    sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + "Starting", lang.scoreboardDefaultStarting));
+                }
             }
         } else if (status == GameState.waiting) {
             countdownS = config.getYml().getInt("startingCountdown");
-            for (SBoard sb : scoreboards) {
-                sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + "Waiting", lang.scoreboardDefaultWaiting));
+            for (SBoard sb : SBoard.getScoreboards()) {
+                if (sb.getArena() == this) {
+                    sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + "Waiting", lang.scoreboardDefaultWaiting));
+                }
             }
         } else if (status == GameState.playing) {
-            for (SBoard sb : scoreboards) {
-                sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + "Playing", lang.scoreboardDefaultPlaying));
-                sb.addHealthSbAndTabStuff();
+            for (SBoard sb : SBoard.getScoreboards()) {
+                if (sb.getArena() == this) {
+                    sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + "Playing", lang.scoreboardDefaultPlaying));
+                    sb.addHealthSbAndTabStuff();
+                }
             }
         }
     }

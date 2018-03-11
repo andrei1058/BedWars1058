@@ -16,6 +16,7 @@ import org.bukkit.craftbukkit.v1_11_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_11_R1.entity.CraftLivingEntity;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.scoreboard.Team;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -83,7 +84,7 @@ public class v1_11_R1 implements NMS {
     }
 
     @Override
-    public void setCollidable(Player e, boolean b) {
+    public void setCollide(Player e, boolean b) {
         e.setCollidable(b);
     }
 
@@ -334,5 +335,10 @@ public class v1_11_R1 implements NMS {
         public BedWarsTeam getTeam() {
             return team;
         }
+    }
+
+    @Override
+    public void teamCollideRule(Team t) {
+        t.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
     }
 }

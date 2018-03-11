@@ -8,6 +8,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scoreboard.Team;
 
 import java.util.List;
 
@@ -95,8 +96,11 @@ public interface NMS {
     BedWarsTeam ownDespawnable(Entity e);
 
     /** Collide with entities */
-    void setCollidable(Player e, boolean b);
+    void setCollide(Player e, boolean b);
 
     /** Change item amount */
     void minusAmount(Player p, ItemStack i, int amount);
+
+    /** Team collision rule 1.9+ **/
+    void teamCollideRule(Team t);
 }

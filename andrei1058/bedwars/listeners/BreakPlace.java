@@ -20,6 +20,7 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -71,7 +72,9 @@ public class BreakPlace implements Listener {
             }
             if (e.getBlock().getType() == Material.TNT){
                 e.setCancelled(true);
-                e.getBlock().getLocation().getWorld().spawn(e.getBlock().getLocation(), TNTPrimed.class).setFuseTicks(45);
+                TNTPrimed tnt = e.getBlock().getLocation().getWorld().spawn(e.getBlock().getLocation(), TNTPrimed.class);
+                tnt.setFuseTicks(45);
+                tnt.setMetadata("source", new FixedMetadataValue(plugin, p.getUniqueId()));
                 for (ItemStack i : p.getInventory().getContents()) {
                     if (i == null) continue;
                     if (i.getType() == null) continue;

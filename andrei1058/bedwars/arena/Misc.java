@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.arena;
 
+import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.configuration.Language;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
@@ -30,12 +31,18 @@ public class Misc {
     private static String newVersion = "";
 
     public static void moveToLobbyOrKick(Player p) {
-            ByteArrayDataOutput out = ByteStreams.newDataOutput();
-            out.writeUTF("Connect");
-            out.writeUTF(config.getYml().getString("lobbyServer"));
-            p.sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
-        Bukkit.getScheduler().runTaskLater(plugin, ()-> {
-            if (p.isOnline()){
+        if (getServerType() != ServerType.BUNGEE) {
+            if (!p.getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
+                p.teleport(config.getConfigLoc("lobbyLoc"));
+                return;
+            }
+        }
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        out.writeUTF("Connect");
+        out.writeUTF(config.getYml().getString("lobbyServer"));
+        p.sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            if (p.isOnline()) {
                 p.kickPlayer(getMsg(p, Language.restartKick));
             }
         }, 20L);

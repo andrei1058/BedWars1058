@@ -11,7 +11,9 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static com.andrei1058.bedwars.Main.lang;
+import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
+import static com.andrei1058.bedwars.configuration.Language.getScoreboard;
 
 public class SBoard {
 
@@ -32,6 +34,20 @@ public class SBoard {
         this.setStrings(content);
         p.setScoreboard(sb);
         scoreboards.add(this);
+    }
+
+    /** Used for spectators */
+    public SBoard(Player p, Arena arena){
+        this.p = p;
+        o = sb.registerNewObjective("Sb", "or");
+        o.setDisplaySlot(DisplaySlot.SIDEBAR);
+        this.arena = arena;
+        this.setStrings(getScoreboard(p, "scoreboard."+ arena.getGroup()+"Playing", lang.scoreboardDefaultPlaying));
+        p.setScoreboard(sb);
+        scoreboards.add(this);
+        Team t = sb.registerNewTeam("spect");
+        t.addEntry(p.getName());
+        nms.teamCollideRule(t);
     }
 
     public void setStrings(List<String> strings) {
@@ -155,6 +171,7 @@ public class SBoard {
             for (BedWarsTeam t : arena.getTeams()) {
                 Team team = sb.registerNewTeam(t.getName());
                 team.setPrefix(TeamColor.getChatColor(t.getColor()) + "§l" + t.getName().substring(0, 1).toUpperCase() + " §r" + TeamColor.getChatColor(t.getColor()));
+                nms.teamCollideRule(team);
                 for (Player p : t.getMembers()) {
                     team.addEntry(p.getName());
                 }
@@ -169,6 +186,10 @@ public class SBoard {
     public void remove() {
         p.setScoreboard(sbm.getNewScoreboard());
         scoreboards.remove(this);
+    }
+
+    public Arena getArena() {
+        return arena;
     }
 
     public static List<SBoard> getScoreboards() {

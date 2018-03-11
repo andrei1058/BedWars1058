@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Iterator;
 import java.util.Map;
 
 import static com.andrei1058.bedwars.Main.debug;
@@ -16,17 +17,20 @@ public class Refresh extends BukkitRunnable {
     @Override
     public void run() {
         if (!SBoard.getScoreboards().isEmpty()) {
-            for (SBoard sb : SBoard.getScoreboards()) {
+            for (Iterator<SBoard> it = SBoard.getScoreboards().iterator(); it.hasNext(); ) {
+                SBoard sb = it.next();
                 sb.refresh();
             }
         }
         if (!Arena.getArenas().isEmpty()) {
-            for (Arena a : Arena.getArenas()) {
+            for (Iterator<Arena> it = Arena.getArenas().iterator(); it.hasNext(); ) {
+                Arena a = it.next();
                 a.refresh();
             }
         }
         if (!OreGenerator.getGenerators().isEmpty()) {
-            for (OreGenerator o : OreGenerator.getGenerators()) {
+            for (Iterator<OreGenerator> it = OreGenerator.getGenerators().iterator(); it.hasNext(); ) {
+                OreGenerator o = it.next();
                 o.spawn();
             }
         }

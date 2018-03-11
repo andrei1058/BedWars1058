@@ -18,6 +18,7 @@ import org.bukkit.entity.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scoreboard.Team;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -225,7 +226,7 @@ public class v1_8_R2 implements NMS {
     }
 
     @Override
-    public void setCollidable(Player e, boolean b) {
+    public void setCollide(Player e, boolean b) {
         e.spigot().setCollidesWithEntities(b);
     }
 
@@ -237,6 +238,11 @@ public class v1_8_R2 implements NMS {
         }
         i.setAmount(i.getAmount()-amount);
         p.updateInventory();
+    }
+
+    @Override
+    public void teamCollideRule(Team t) {
+
     }
 
     @Override

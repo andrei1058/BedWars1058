@@ -62,6 +62,10 @@ public class PvP implements Listener {
         if (e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
             Arena a = Arena.getArenaByPlayer(p);
+            if (a.getSpectators().contains(p)){
+                e.setCancelled(true);
+                return;
+            }
             if (a != null) {
                 if (a.getStatus() != GameState.playing) {
                     e.setCancelled(true);
@@ -217,6 +221,18 @@ public class PvP implements Listener {
                             }
                         }
                     } else if (damageEvent.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION || damageEvent.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
+                        if (e.getEntity().getKiller() != null){
+                            debug("damager isn't null");
+                            if (e.getEntity().getKiller() instanceof TNTPrimed){
+                                TNTPrimed tn = (TNTPrimed) e.getEntity().getKiller();
+                                if (tn != null){
+                                    Player player = (Player) tn.getSource();
+                                    if (player != null){
+                                        killer = player;
+                                    }
+                                }
+                            }
+                        }
                         if (t.isBedDestroyed()) {
                             if (killer == null) {
                                 for (Player on : a.getPlayers()) {

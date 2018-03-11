@@ -17,6 +17,7 @@ import org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity;
 import org.bukkit.entity.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.scoreboard.Team;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -163,13 +164,18 @@ public class v1_12_R1 implements NMS {
     }
 
     @Override
-    public void setCollidable(Player e, boolean b) {
+    public void setCollide(Player e, boolean b) {
         e.setCollidable(b);
     }
 
     @Override
     public void minusAmount(Player p, org.bukkit.inventory.ItemStack i, int amount) {
         i.setAmount(i.getAmount()-amount);
+    }
+
+    @Override
+    public void teamCollideRule(Team t) {
+        t.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
     }
 
     @Override

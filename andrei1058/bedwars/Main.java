@@ -27,8 +27,6 @@ import com.andrei1058.bedwars.support.levels.Level;
 import com.andrei1058.bedwars.support.levels.NoLevel;
 import com.andrei1058.bedwars.support.party.Party;
 import com.andrei1058.bedwars.support.vault.*;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
@@ -134,6 +132,13 @@ public class Main extends JavaPlugin {
                 break;
             default:
                 registerEvents(new PlayerDropPick());
+                break;
+            case "v1_8_R1":
+            case "v1_8_R2":
+            case "v1_8_R3":
+                Bukkit.getScheduler().runTaskLater(this, ()-> {
+                    System.out.println("\u001B[31m[WARN] BedWars1058 is going to abort support for this server version in the future.\nPlease consider upgrading to a newer paper/spigot version.\u001B[0m");
+                }, 40L);
                 break;
         }
         loadArenasAndSigns();

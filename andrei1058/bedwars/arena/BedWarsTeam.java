@@ -88,8 +88,8 @@ public class BedWarsTeam {
     public BedWarsTeam(String name, TeamColor color, Location spawn, Location bed, Location shop, Location teamUpgrades, Arena arena) {
         this.name = name;
         this.color = color;
-        this.spawn = spawn; //todo protect spawn radius
-        this.bed = bed; //todo bed radius mic hide hologram per player, bed radius mare for it's a trap
+        this.spawn = spawn;
+        this.bed = bed;
         this.arena = arena;
         this.shop = shop;
         this.teamUpgrades = teamUpgrades;
@@ -305,7 +305,6 @@ public class BedWarsTeam {
             a.setCanPickupItems(false);
             a.setArms(false);
             a.setBasePlate(false);
-            a.setCollidable(false);
             for (Player p2 : arena.getWorld().getPlayers()) {
                 if (p != p2) {
                     nms.hideEntity(a, p2);

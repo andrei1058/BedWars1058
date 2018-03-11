@@ -11,6 +11,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import java.util.Iterator;
+
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.Arena.isInArena;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
@@ -20,6 +22,20 @@ public class PlayerChat implements Listener {
     @EventHandler
     public void c(AsyncPlayerChatEvent e) {
         Player p = e.getPlayer();
+        if (e.isCancelled()) return;
+        if (getServerType() == ServerType.SHARED){
+            if (Arena.getArenaByPlayer(p) == null){
+                for (Iterator<Arena> it = Arena.getArenas().iterator(); it.hasNext(); ) {
+                    Arena a = it.next();
+                    for (Iterator<Player> it1 = a.getPlayers().iterator(); it1.hasNext(); ) {
+                        Player pl = it1.next();
+                        if (e.getRecipients().contains(pl)){
+                            e.getRecipients().remove(pl);
+                        }
+                    }
+                }
+            }
+        }
         String message;
         if (p.hasPermission("bw.chatcolor") || p.hasPermission("bw.*") || p.hasPermission("bw.vip")){
             message = ChatColor.translateAlternateColorCodes('&', e.getMessage());
