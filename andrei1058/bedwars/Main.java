@@ -16,7 +16,6 @@ import com.andrei1058.bedwars.support.bukkit.*;
 import com.andrei1058.bedwars.support.bukkit.v1_10_R1.v1_10_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_11_R1.v1_11_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_12_R1.v1_12_R1;
-import com.andrei1058.bedwars.support.bukkit.v1_8_R1.v1_8_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_8_R3.v1_8_R3;
 import com.andrei1058.bedwars.support.bukkit.v1_8_R2.v1_8_R2;
 import com.andrei1058.bedwars.support.bukkit.v1_9_R1.v1_9_R1;
@@ -74,9 +73,6 @@ public class Main extends JavaPlugin {
         upgrades = new UpgradesManager("upgrades", "plugins/" + this.getName());
         /* Load version support 1.8 - 1.12 */
         switch (version) {
-            case "v1_8_R1":
-                nms = new v1_8_R1();
-                break;
             case "v1_8_R2":
                 nms = new v1_8_R2();
                 break;
@@ -122,7 +118,7 @@ public class Main extends JavaPlugin {
         if (!config.getLobbyWorldName().isEmpty()) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getWorld(config.getLobbyWorldName()).getEntities().stream().filter(e -> e.getType() != EntityType.PLAYER).filter(e -> e.getType() != EntityType.PAINTING).filter(e -> e.getType() != EntityType.ITEM_FRAME).forEach(Entity::remove), 30L);
         }
-        registerEvents(new JoinLeave(), new BreakPlace(), new PvP(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess());
+        registerEvents(new JoinLeaveTeleport(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess());
         if (getServerType() == ServerType.BUNGEE) {
             registerEvents(new Ping());
         }
@@ -133,9 +129,9 @@ public class Main extends JavaPlugin {
             default:
                 registerEvents(new PlayerDropPick());
                 break;
-            case "v1_8_R1":
             case "v1_8_R2":
             case "v1_8_R3":
+                registerEvents(new PlayerDropPick());
                 Bukkit.getScheduler().runTaskLater(this, ()-> {
                     System.out.println("\u001B[31m[WARN] BedWars1058 is going to abort support for this server version in the future.\nPlease consider upgrading to a newer paper/spigot version.\u001B[0m");
                 }, 40L);

@@ -80,10 +80,6 @@ public class BedWarsTeam {
      * A list with all potions for clear them when someone leaves the island
      */
     private List<Effect> ebseEffectsStatic = new ArrayList<>();
-    /**
-     * A list with all utilities mobs
-     */
-    private List<Entity> entityList = new ArrayList<>();
 
     public BedWarsTeam(String name, TeamColor color, Location spawn, Location bed, Location shop, Location teamUpgrades, Arena arena) {
         this.name = name;
@@ -187,7 +183,6 @@ public class BedWarsTeam {
      */
     public void respawnMember(Player p) {
         nms.sendTitle(p, getMsg(p, lang.respawnedTitle), null, 0, 20, 0);
-        //todo da-i busola
         PlayerVault pv = getVault(p);
         if (pv != null) {
             p.getInventory().setHelmet(pv.getHelmet());
@@ -543,13 +538,6 @@ public class BedWarsTeam {
     }
 
     /**
-     * Spawn a silverfish
-     */
-    public void spawnSilverfish(Location loc, Player p) {
-        getEntityList().add(nms.spawnSilverfish(loc, getMembers(), getMsg(p, lang.utilitySiverfish).replace("{TeamColor}", String.valueOf(TeamColor.getChatColor(getColor()))).replace("{TeamName}", getName())));
-    }
-
-    /**
      * Getter, setter etc.
      */
     public boolean isMember(Player p) {
@@ -720,9 +708,5 @@ public class BedWarsTeam {
 
     public Arena getArena() {
         return arena;
-    }
-
-    public List<Entity> getEntityList() {
-        return entityList;
     }
 }

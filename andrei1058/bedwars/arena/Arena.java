@@ -21,7 +21,7 @@ import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.configuration.Language.getList;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 import static com.andrei1058.bedwars.configuration.Language.getScoreboard;
-import static com.andrei1058.bedwars.listeners.PvP.isOnABase;
+import static com.andrei1058.bedwars.listeners.DamageDeathMove.isOnABase;
 
 public class Arena {
     private static HashMap<String, Arena> arenaByName = new HashMap<>();
@@ -44,7 +44,9 @@ public class Arena {
     private List<BedWarsTeam> teams = new ArrayList<>();
     private List<Block> placed = new ArrayList<>();
     private HashMap<Block, BlockState> broken = new HashMap<>();
-    /** Bed block */
+    /**
+     * Bed block
+     */
     private Material bedBlock = Material.BED_BLOCK;
 
     /*Various stuff about player's inventory and owns*/
@@ -129,19 +131,19 @@ public class Arena {
 
         arenas.add(this);
         arenaByName.put(world.getName(), this);
-        if (yml.get("bedBlock") != null){
+        if (yml.get("bedBlock") != null) {
             try {
                 Material.valueOf(yml.getString("bedBlock"));
                 bedBlock = Material.valueOf(yml.getString("bedBlock"));
-            } catch (Exception ex){
-                plugin.getLogger().severe(yml.getString("bedBlock")+" is not a Material at "+getWorldName()+".yml");
+            } catch (Exception ex) {
+                plugin.getLogger().severe(yml.getString("bedBlock") + " is not a Material at " + getWorldName() + ".yml");
             }
         }
     }
 
     public void addPlayer(Player p) {
         /* used for base enter/leave event */
-        if (isOnABase.containsKey(p)){
+        if (isOnABase.containsKey(p)) {
             isOnABase.remove(p);
         }
         //
@@ -194,6 +196,8 @@ public class Arena {
             if (players.size() >= minPlayers && status == GameState.waiting) {
                 setStatus(GameState.starting);
             }
+            /** save player inventory etc */
+            new PlayerGoods(p, true);
             HashMap<ItemStack, Integer> items = new HashMap<>();
             int x = 0;
             for (ItemStack i : p.getInventory()) {
@@ -255,6 +259,8 @@ public class Arena {
             //nms.hideEntity(players, p);
             p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
             if (!playerBefore) {
+                /** save player inv etc if isn't saved yet*/
+                new PlayerGoods(p, true);
                 setArenaByPlayer(p, true);
                 HashMap<ItemStack, Integer> items = new HashMap<>();
                 int x = 0;
@@ -300,6 +306,13 @@ public class Arena {
             }, 10L);
             leaveItem(p);
             p.setGameMode(GameMode.SPECTATOR);
+
+            /** update generator holograms for spectators */
+            for (OreGenerator o : OreGenerator.getGenerators()){
+                if (o.getArena() == this){
+                    o.updateHolograms();
+                }
+            }
         } else {
             //msg spectate not allowed
         }
@@ -323,7 +336,6 @@ public class Arena {
         for (PotionEffect pf : p.getActivePotionEffects()) {
             p.removePotionEffect(pf.getType());
         }
-        p.setExp(0);
         if (playerItems.containsKey(p)) {
             for (Map.Entry<ItemStack, Integer> entry : playerItems.get(p).entrySet()) {
                 p.getInventory().setItem(entry.getValue(), entry.getKey());
@@ -340,6 +352,12 @@ public class Arena {
                 p.getInventory().setItem(entry.getValue(), entry.getKey());
             }
         }
+
+        /** restore player inventory */
+        if (PlayerGoods.hasGoods(p)){
+            PlayerGoods.getPlayerGoods(p).restore();
+        }
+
         p.updateInventory();
         playerItems.remove(p);
 
@@ -366,6 +384,10 @@ public class Arena {
                 p.getEnderChest().setItem(entry.getValue(), entry.getKey());
             }
             playerEnderchest.remove(p);
+        }
+        if (p.getAllowFlight()) {
+            p.setFlying(false);
+            p.setAllowFlight(false);
         }
         if (respawn.containsKey(p)) {
             respawn.remove(p);
@@ -411,7 +433,7 @@ public class Arena {
                 on.sendMessage(getMsg(on, lang.playerLeave).replace("{player}", p.getDisplayName()));
             }
         }
-        for (Iterator<SBoard> it = SBoard.getScoreboards().iterator(); it.hasNext(); ) {
+        for (Iterator<SBoard> it = new ArrayList<>(SBoard.getScoreboards()).iterator(); it.hasNext(); ) {
             SBoard sb = it.next();
             if (sb.getP() == p) {
                 sb.remove();
@@ -437,7 +459,10 @@ public class Arena {
         for (PotionEffect pf : p.getActivePotionEffects()) {
             p.removePotionEffect(pf.getType());
         }
-        p.setExp(0);
+        /** restore player inventory */
+        if (PlayerGoods.hasGoods(p)){
+            PlayerGoods.getPlayerGoods(p).restore();
+        }
         if (getServerType() == ServerType.SHARED) {
             p.teleport(playerLocation.get(p));
         } else if (getServerType() == ServerType.MULTIARENA) {
@@ -473,7 +498,7 @@ public class Arena {
         }
         playerLocation.remove(p);
         nms.setCollide(p, true);
-        for (Iterator<SBoard> it = SBoard.getScoreboards().iterator(); it.hasNext(); ) {
+        for (Iterator<SBoard> it = new ArrayList<>(SBoard.getScoreboards()).iterator(); it.hasNext(); ) {
             SBoard sb = it.next();
             if (sb.getP() == p) {
                 sb.remove();
@@ -531,14 +556,11 @@ public class Arena {
     private void restart() {
         upgradeDiamondsCount = 0;
         upgradeEmeraldsCount = 0;
-        try {
-            for (Player on : players) {
-                removePlayer(on);
-            }
-            for (Player on : spectators) {
-                removeSpectator(on);
-            }
-        } catch (Exception ex) {
+        for (Player on : new ArrayList<>(players)) {
+            removePlayer(on);
+        }
+        for (Player on : new ArrayList<>(spectators)) {
+            removeSpectator(on);
         }
         players.clear();
         spectators.clear();
@@ -611,9 +633,9 @@ public class Arena {
                     for (BedWarsTeam team : getTeams()) {
                         team.setGenerators(cm.getArenaLoc("Team." + team.getName() + ".Iron"), cm.getArenaLoc("Team." + team.getName() + ".Gold"));
                         team.getBed().getBlock().setType(Material.AIR);
-                        if (getBedBlock() == Material.BED_BLOCK){
+                        if (getBedBlock() == Material.BED_BLOCK) {
 
-                            if (Misc.getDirection(team.getBed()) == BlockFace.WEST || Misc.getDirection(team.getBed()) == BlockFace.EAST){
+                            if (Misc.getDirection(team.getBed()) == BlockFace.WEST || Misc.getDirection(team.getBed()) == BlockFace.EAST) {
                                 BlockState baseState = team.getBed().getBlock().getState();
                                 BlockState localBlockState = team.getBed().add(-1, 0, 0).getBlock().getState();
 
@@ -731,8 +753,7 @@ public class Arena {
                         nms.sendTitle(p, getMsg(p, lang.titleStart), null, 0, 20, 0);
                     }
                     for (Player p : getWorld().getPlayers()) {
-                        p.setHealthScale(20);
-                        p.setHealth(18);
+                        p.setHealth(p.getHealth() - 0.0001);
                     }
                 }
                 countUp++;
@@ -1006,7 +1027,7 @@ public class Arena {
                     if (a.getPlayers().size() < a.getMaxPlayers()) {
                         a.addPlayer(p);
                         return true;
-                    } else if (a.getPlayers().size() <= a.getMaxPlayers() && a.isVip(p)){
+                    } else if (a.getPlayers().size() <= a.getMaxPlayers() && a.isVip(p)) {
                         a.addPlayer(p);
                         return true;
                     }
@@ -1021,7 +1042,7 @@ public class Arena {
         if (config.getBoolean("items.arenaGui.enable") && !config.getLobbyWorldName().isEmpty()) {
             p.getInventory().setItem(config.getInt("items.arenaGui.slot"), Misc.getArenaGUI(p));
         }
-        if (getServerType() == ServerType.MULTIARENA && spigot.getBoolean("settings.bungeecord")){
+        if (getServerType() == ServerType.MULTIARENA && spigot.getBoolean("settings.bungeecord")) {
             leaveItem(p);
         }
     }

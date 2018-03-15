@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.support.bukkit.v1_12_R1;
 
+import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.google.common.collect.Sets;
 import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.Location;
@@ -106,14 +107,13 @@ public class Silverfish extends EntitySilverfish {
         this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(shop.getYml().getDouble("utilities.silverfish.damage"));
     }
 
-    public static CraftEntity spawnSilverfish(Location loc, List<Player> exclude, String name) {
+    public static Silverfish spawn(Location loc, BedWarsTeam team) {
         WorldServer mcWorld = ((CraftWorld)loc.getWorld()).getHandle();
-        Silverfish customEnt = new Silverfish(mcWorld, exclude);
+        Silverfish customEnt = new Silverfish(mcWorld, team.getMembers());
         customEnt.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
         ((CraftLivingEntity)customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
         customEnt.setCustomNameVisible(true);
-        customEnt.setCustomName(name);
         mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
-        return customEnt.getBukkitEntity();
+        return customEnt;
     }
 }

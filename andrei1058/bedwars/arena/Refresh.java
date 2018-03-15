@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -14,23 +15,27 @@ import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
 public class Refresh extends BukkitRunnable {
 
+    private static Iterator<SBoard> sboards;
+    private static Iterator<Arena> arenas;
+    private static Iterator<OreGenerator> ores;
+
     @Override
     public void run() {
         if (!SBoard.getScoreboards().isEmpty()) {
-            for (Iterator<SBoard> it = SBoard.getScoreboards().iterator(); it.hasNext(); ) {
-                SBoard sb = it.next();
+            for (sboards = new ArrayList<>(SBoard.getScoreboards()).iterator(); sboards.hasNext(); ) {
+                SBoard sb = sboards.next();
                 sb.refresh();
             }
         }
         if (!Arena.getArenas().isEmpty()) {
-            for (Iterator<Arena> it = Arena.getArenas().iterator(); it.hasNext(); ) {
-                Arena a = it.next();
+            for (arenas = new ArrayList<>( Arena.getArenas()).iterator(); arenas.hasNext(); ) {
+                Arena a = arenas.next();
                 a.refresh();
             }
         }
         if (!OreGenerator.getGenerators().isEmpty()) {
-            for (Iterator<OreGenerator> it = OreGenerator.getGenerators().iterator(); it.hasNext(); ) {
-                OreGenerator o = it.next();
+            for (ores = new ArrayList<>(OreGenerator.getGenerators()).iterator(); ores.hasNext(); ) {
+                OreGenerator o = ores.next();
                 o.spawn();
             }
         }

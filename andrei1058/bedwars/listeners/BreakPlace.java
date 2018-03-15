@@ -7,6 +7,8 @@ import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.OreGenerator;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -15,6 +17,7 @@ import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -35,7 +38,7 @@ public class BreakPlace implements Listener {
     private static List<Player> buildSession = new ArrayList<>();
 
     @EventHandler
-    public void p(BlockPlaceEvent e) {
+    public void pa(BlockPlaceEvent e) {
         Player p = e.getPlayer();
         if (Arena.isInArena(p)) {
             Arena a = Arena.getArenaByPlayer(p);
@@ -106,7 +109,7 @@ public class BreakPlace implements Listener {
     }
 
     @EventHandler
-    public void p(BlockBreakEvent e) {
+    public void pw(BlockBreakEvent e) {
         Player p = e.getPlayer();
         if (getServerType() != ServerType.SHARED) {
             if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(config.getConfigLoc("lobbyLoc").getWorld().getName())) {
@@ -167,8 +170,9 @@ public class BreakPlace implements Listener {
         }
     }
 
+    /** update game signs */
     @EventHandler
-    public void s(SignChangeEvent e) {
+    public void se(SignChangeEvent e) {
         Player p = e.getPlayer();
         if (e.getLine(0).equalsIgnoreCase("[" + mainCmd + "]")) {
             File dir = new File("plugins/" + plugin.getName() + "/Arenas");
@@ -226,21 +230,20 @@ public class BreakPlace implements Listener {
     }
 
     @EventHandler
-    public void explode(EntityExplodeEvent e) {
+    public void dwa(EntityExplodeEvent e) {
         if (e.blockList().isEmpty()) return;
         Arena a = Arena.getArenaByName(e.blockList().get(0).getWorld().getName());
         if (a != null){
             List<Block> destroyed = e.blockList();
-            Iterator<Block> it = destroyed.iterator();
+            Iterator<Block> it = new ArrayList<>(destroyed).iterator();
             while (it.hasNext()) {
                 Block block = it.next();
                 if (!a.getPlaced().contains(block)){
-                    it.remove();
+                    destroyed.remove(block);
                 }
             }
         }
     }
-
 
     public static boolean isBuildSession(Player p) {
         return buildSession.contains(p);

@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
@@ -15,9 +16,10 @@ import static com.andrei1058.bedwars.Main.config;
 
 public class EntityDropPick implements Listener{
     @EventHandler
-    public void p(PlayerPickupItemEvent e) {
-        Player p = e.getPlayer();
-        if (e.getPlayer().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
+    public void p(EntityPickupItemEvent e) {
+        if (!(e.getEntity() instanceof Player)) return;
+        Player p = (Player) e.getEntity();
+        if (p.getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
             e.setCancelled(true);
         }
         if (Arena.isInArena(p)) {

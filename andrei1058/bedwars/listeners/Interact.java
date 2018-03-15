@@ -73,7 +73,7 @@ public class Interact implements Listener {
                     if (inHand.getType() == Material.FIREBALL){
                         e.setCancelled(true);
                         Fireball fb = p.launchProjectile(Fireball.class);
-                        fb.setIsIncendiary(false);
+                        fb.setIsIncendiary(true);
                         for (ItemStack i : p.getInventory().getContents()) {
                             if (i == null) continue;
                             if (i.getType() == null) continue;
@@ -86,7 +86,7 @@ public class Interact implements Listener {
                     if (shop.getBoolean("utilities.silverfish.enable")){
                         if (!Misc.isProjectile(Material.valueOf(shop.getYml().getString("utilities.silverfish.material")))) {
                             if (inHand.getType() == Material.valueOf(shop.getYml().getString("utilities.silverfish.material")) && inHand.getData().getData() == shop.getInt("utilities.silverfish.data")) {
-                                a.getTeam(p).spawnSilverfish(p.getLocation().add(0, 1, 0), p);
+                                nms.spawnSilverfish(p.getLocation().add(0, 1, 0), a.getTeam(p));
                                 if (!nms.isProjectile(inHand)){
                                     nms.minusAmount(p, inHand, 1);
                                     p.updateInventory();

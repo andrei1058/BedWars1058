@@ -10,10 +10,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import static com.andrei1058.bedwars.Main.*;
 
-public class JoinLeave implements Listener {
+public class JoinLeaveTeleport implements Listener {
 
     @EventHandler
     public void j(PlayerJoinEvent e){
@@ -75,6 +76,18 @@ public class JoinLeave implements Listener {
         Language.getLangByPlayer().remove(p);
         if (getServerType() != ServerType.SHARED){
             e.setQuitMessage(null);
+        }
+    }
+
+    @EventHandler
+    public void lol(PlayerTeleportEvent e){
+        Arena a = Arena.getArenaByPlayer(e.getPlayer());
+        if (a != null){
+            if (a.isSpectator(e.getPlayer())){
+                if (e.getFrom().getWorld() != e.getTo().getWorld()){
+                    e.setCancelled(true);
+                }
+            }
         }
     }
 }

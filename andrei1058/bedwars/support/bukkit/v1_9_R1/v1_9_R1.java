@@ -4,7 +4,6 @@ package com.andrei1058.bedwars.support.bukkit.v1_9_R1;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.support.bukkit.NMS;
-import com.andrei1058.bedwars.support.bukkit.v1_9_R2.Silverfish;
 import net.minecraft.server.v1_9_R1.*;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -31,7 +30,9 @@ import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
 public class v1_9_R1 implements NMS {
 
-    /** List of despawnable entities aka special shop mobs */
+    /**
+     * List of despawnable entities aka special shop mobs
+     */
     private static List<Despawnable> despawnables = new ArrayList();
 
     @Override
@@ -59,14 +60,13 @@ public class v1_9_R1 implements NMS {
         return Sound.valueOf("ENTITY_CHICKEN_EGG");
     }
 
-    @Override
-    public org.bukkit.entity.Entity spawnSilverfish(Location loc, List<Player> exclude, String name) {
-        return Silverfish.spawnSilverfish(loc, exclude, name);
+    public void spawnSilverfish(Location loc, BedWarsTeam bedWarsTeam) {
+        new Despawnable(Silverfish.spawn(loc, bedWarsTeam), bedWarsTeam, shop.getInt("utilities.silverfish.despawn"), lang.utilitySiverfish);
     }
 
     @Override
     public void spawnIronGolem(Location loc, BedWarsTeam bedWarsTeam) {
-        new Despawnable(IGolem.spawn(loc, bedWarsTeam), bedWarsTeam, shop.getInt("utilities.ironGolem.despawn"));
+        new Despawnable(IGolem.spawn(loc, bedWarsTeam), bedWarsTeam, shop.getInt("utilities.ironGolem.despawn"), lang.iGolemName);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class v1_9_R1 implements NMS {
             ((CraftPlayer) p).getHandle().playerConnection.sendPacket(tit);
             ((CraftPlayer) p).getHandle().playerConnection.sendPacket(length);
         }
-        if (subtitle != null){
+        if (subtitle != null) {
             IChatBaseComponent bc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + subtitle + "\"}");
             PacketPlayOutTitle tit = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, bc);
             PacketPlayOutTitle length = new PacketPlayOutTitle(fadeIn, stay, fadeOut);
@@ -91,6 +91,7 @@ public class v1_9_R1 implements NMS {
             ((CraftPlayer) p).getHandle().playerConnection.sendPacket(length);
         }
     }
+
     @Override
     public void hidePlayer(Player player, List<Player> players) {
         net.minecraft.server.v1_9_R1.PacketPlayOutEntityDestroy packet = new net.minecraft.server.v1_9_R1.PacketPlayOutEntityDestroy(player.getEntityId());
@@ -107,35 +108,35 @@ public class v1_9_R1 implements NMS {
 
     @Override
     public void minusAmount(Player p, org.bukkit.inventory.ItemStack i, int amount) {
-        i.setAmount(i.getAmount()-amount);
+        i.setAmount(i.getAmount() - amount);
     }
 
     @Override
     public void refreshDespawnables() {
-        for(Despawnable d : new ArrayList<>(despawnables)){
+        for (Despawnable d : new ArrayList<>(despawnables)) {
             d.regresh();
         }
     }
 
     @Override
     public boolean isDespawnable(org.bukkit.entity.Entity e) {
-        for (Despawnable d : despawnables){
-            if (d.getE() == ((CraftEntity)e).getHandle()) return true;
+        for (Despawnable d : despawnables) {
+            if (d.getE() == ((CraftEntity) e).getHandle()) return true;
         }
         return false;
     }
 
     @Override
     public BedWarsTeam ownDespawnable(org.bukkit.entity.Entity e) {
-        for (Despawnable d : despawnables){
-            if (d.getE() == ((CraftEntity)e).getHandle()) return d.getTeam();
+        for (Despawnable d : despawnables) {
+            if (d.getE() == ((CraftEntity) e).getHandle()) return d.getTeam();
         }
         return null;
     }
 
     @Override
     public void playAction(Player p, String text) {
-        CraftPlayer cPlayer = (CraftPlayer)p;
+        CraftPlayer cPlayer = (CraftPlayer) p;
         IChatBaseComponent cbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + text + "\"}");
         PacketPlayOutChat ppoc = new PacketPlayOutChat(cbc, (byte) 2);
         cPlayer.getHandle().playerConnection.sendPacket(ppoc);
@@ -144,9 +145,9 @@ public class v1_9_R1 implements NMS {
     @Override
     public void spawnNPC(EntityType entity, Location location, String name, String group) {
         org.bukkit.entity.Entity e = location.getWorld().spawnEntity(location, entity);
-        net.minecraft.server.v1_9_R1.Entity en = ((CraftEntity)e).getHandle();
+        net.minecraft.server.v1_9_R1.Entity en = ((CraftEntity) e).getHandle();
         double height = en.getBoundingBox().e - en.getBoundingBox().b;
-        ArmorStand a = createArmorStand(name, location.clone().add(0, height-1, 0));
+        ArmorStand a = createArmorStand(name, location.clone().add(0, height - 1, 0));
         a.setSmall(true);
         NBTTagCompound tag = new NBTTagCompound();
         en.c(tag);
@@ -168,9 +169,9 @@ public class v1_9_R1 implements NMS {
     @Override
     public void hideEntity(org.bukkit.entity.Entity e, Player... players) {
         PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(e.getEntityId());
-        for (Player p : players){
-            if (p == e)continue;
-            ((CraftPlayer)p).getHandle().playerConnection.sendPacket(packet);
+        for (Player p : players) {
+            if (p == e) continue;
+            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
         }
     }
 
@@ -196,7 +197,7 @@ public class v1_9_R1 implements NMS {
     }
 
     @Override
-    public boolean isProjectile(org.bukkit.inventory.ItemStack itemStack){
+    public boolean isProjectile(org.bukkit.inventory.ItemStack itemStack) {
         return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof IProjectile;
     }
 
@@ -209,20 +210,20 @@ public class v1_9_R1 implements NMS {
     @Override
     public void spawnShop(Location loc, String name1, List<Player> players) {
         spawnVillager(loc);
-        for (Player p : players){
+        for (Player p : players) {
             String[] nume = getMsg(p, name1).split(",");
-            if (nume.length  >= 2){
+            if (nume.length >= 2) {
                 ArmorStand a = createArmorStand(nume[0], loc.clone().add(0, 0.4, 0));
                 ArmorStand b = createArmorStand(nume[1], loc);
-                for (Player pl : p.getWorld().getPlayers()){
-                    if (p != pl){
+                for (Player pl : p.getWorld().getPlayers()) {
+                    if (p != pl) {
                         nms.hideEntity(a, pl);
                         nms.hideEntity(b, pl);
                     }
                 }
             } else {
                 ArmorStand a = createArmorStand(nume[0], loc);
-                for (Player pl : p.getWorld().getPlayers()){
+                for (Player pl : p.getWorld().getPlayers()) {
                     if (p != pl) {
                         nms.hideEntity(a, pl);
                     }
@@ -245,7 +246,7 @@ public class v1_9_R1 implements NMS {
         return compound.getDouble("generic.armor");
     }
 
-    private static ArmorStand createArmorStand(String name, Location loc){
+    private static ArmorStand createArmorStand(String name, Location loc) {
         ArmorStand a = loc.getWorld().spawn(loc, ArmorStand.class);
         a.setGravity(false);
         a.setVisible(false);
@@ -261,7 +262,7 @@ public class v1_9_R1 implements NMS {
             for (Field f : EntityTypes.class.getDeclaredFields()) {
                 if (!f.getType().getSimpleName().equals(Map.class.getSimpleName())) continue;
                 f.setAccessible(true);
-                dataMap.add((Map)f.get(null));
+                dataMap.add((Map) f.get(null));
             }
             if (dataMap.get(2).containsKey(id)) {
                 dataMap.get(0).remove(name);
@@ -270,8 +271,7 @@ public class v1_9_R1 implements NMS {
             Method method = EntityTypes.class.getDeclaredMethod("a", Class.class, String.class, Integer.TYPE);
             method.setAccessible(true);
             method.invoke(null, customClass, name, id);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -294,9 +294,11 @@ public class v1_9_R1 implements NMS {
             this.goalSelector.a(9, new net.minecraft.server.v1_9_R1.PathfinderGoalInteract(this, net.minecraft.server.v1_9_R1.EntityHuman.class, 3.0f, 1.0f));
             this.goalSelector.a(10, new net.minecraft.server.v1_9_R1.PathfinderGoalLookAtPlayer(this, net.minecraft.server.v1_9_R1.EntityHuman.class, 8.0f));
         }
+
         @Override
         public void move(double d0, double d1, double d2) {
         }
+
         @Override
         public void collide(net.minecraft.server.v1_9_R1.Entity entity) {
         }
@@ -330,13 +332,17 @@ public class v1_9_R1 implements NMS {
         EntityLiving e;
         BedWarsTeam team;
         int despawn = 250;
-        public Despawnable(EntityLiving e, BedWarsTeam team, int despawn){
+        String namePath;
+
+        public Despawnable(EntityLiving e, BedWarsTeam team, int despawn, String namePath){
             this.e = e;
             this.team = team;
             if (despawn != 0){
                 this.despawn = despawn;
             }
+            this.namePath = namePath;
             despawnables.add(this);
+            setName();
         }
 
         public void regresh() {
@@ -344,15 +350,19 @@ public class v1_9_R1 implements NMS {
                 despawnables.remove(this);
                 return;
             }
-            int percentuale = (int) ((e.getHealth()*100)/e.getMaxHealth()/10);
-            e.setCustomName(lang.m(lang.iGolemName).replace("{despawn}", String.valueOf(despawn)).replace("{health}",
-                    new String(new char[percentuale]).replace("\0", lang.m(lang.iGolemHealthFormat))+new String(new char[10-percentuale]).replace("\0", "§7"+lang.m(lang.iGolemHealthFormat))
-            ).replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()));
+            setName();
             despawn--;
             if (despawn == 0){
                 e.damageEntity(DamageSource.OUT_OF_WORLD, 9000);
                 despawnables.remove(this);
             }
+        }
+
+        private void setName(){
+            int percentuale = (int) ((e.getHealth()*100)/e.getMaxHealth()/10);
+            e.setCustomName(lang.m(namePath).replace("{despawn}", String.valueOf(despawn)).replace("{health}",
+                    new String(new char[percentuale]).replace("\0", lang.m(lang.despawnableHealth))+new String(new char[10-percentuale]).replace("\0", "§7"+lang.m(lang.despawnableHealth))
+            ).replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()).replace("{TeamName}", team.getName()));
         }
 
         public EntityLiving getE() {

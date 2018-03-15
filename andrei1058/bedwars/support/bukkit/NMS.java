@@ -78,7 +78,7 @@ public interface NMS {
     Sound countdownTick();
 
     /** Spawn silverfish for a team */
-    Entity spawnSilverfish(Location loc, List<Player> exclude, String name);
+    void spawnSilverfish(Location loc, BedWarsTeam bedWarsTeam);
 
     /** Spawn a iron-golem for a team*/
     void spawnIronGolem(Location loc, BedWarsTeam bedWarsTeam);

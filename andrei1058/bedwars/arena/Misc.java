@@ -1,6 +1,8 @@
 package com.andrei1058.bedwars.arena;
 
+import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.ServerType;
+import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.configuration.Language;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
@@ -13,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scoreboard.Team;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -167,5 +170,28 @@ public class Misc {
 
     public static boolean isProjectile(Material i) {
         return Material.EGG == i || Material.FIREBALL == i || Material.SNOW_BALL == i || Material.ARROW == i;
+    }
+
+    /** unknown die reason or unknown killer message */
+    public static void unknownReason(BedWarsTeam t, Arena a, Player victim){
+        if (t.isBedDestroyed()) {
+            for (Player on : a.getPlayers()) {
+                on.sendMessage(getMsg(on, lang.unknowReasonDieFinalKill).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString())
+                        .replace("{PlayerName}", victim.getName()));
+            }
+            for (Player on : a.getSpectators()) {
+                on.sendMessage(getMsg(on, lang.unknowReasonDieFinalKill).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString())
+                        .replace("{PlayerName}", victim.getName()));
+            }
+        } else {
+            for (Player on : a.getPlayers()) {
+                on.sendMessage(getMsg(on, lang.unknowReasonDie).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString())
+                        .replace("{PlayerName}", victim.getName()));
+            }
+            for (Player on : a.getSpectators()) {
+                on.sendMessage(getMsg(on, lang.unknowReasonDie).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString())
+                        .replace("{PlayerName}", victim.getName()));
+            }
+        }
     }
 }

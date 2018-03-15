@@ -57,7 +57,7 @@ public class IGolem extends EntityIronGolem {
         ((CraftLivingEntity)customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
         customEnt.setCustomNameVisible(true);
         customEnt.setCustomName(lang.m(lang.iGolemName).replace("{despawn}", String.valueOf(shop.getInt("utilities.ironGolem.despawn"))).replace("{health}",
-                StringUtils.repeat(lang.m(lang.iGolemHealthFormat)+" ", 10)).replace("{TeamColor}", TeamColor.getChatColor(bedWarsTeam.getColor()).toString()));
+                StringUtils.repeat(lang.m(lang.despawnableHealth)+" ", 10)).replace("{TeamColor}", TeamColor.getChatColor(bedWarsTeam.getColor()).toString()));
         mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
         return customEnt;
     }

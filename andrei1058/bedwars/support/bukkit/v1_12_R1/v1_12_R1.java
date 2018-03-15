@@ -70,14 +70,13 @@ public class v1_12_R1 implements NMS {
         return Sound.valueOf("ENTITY_CHICKEN_EGG");
     }
 
-    @Override
-    public org.bukkit.entity.Entity spawnSilverfish(Location loc, List<Player> exclude, String name) {
-        return Silverfish.spawnSilverfish(loc, exclude, name);
+    public void spawnSilverfish(Location loc, BedWarsTeam bedWarsTeam) {
+        new Despawnable(Silverfish.spawn(loc, bedWarsTeam), bedWarsTeam, shop.getInt("utilities.silverfish.despawn"), lang.utilitySiverfish);
     }
 
     @Override
     public void spawnIronGolem(Location loc, BedWarsTeam bedWarsTeam) {
-        new Despawnable(IGolem.spawn(loc, bedWarsTeam), bedWarsTeam, shop.getInt("utilities.ironGolem.despawn"));
+        new Despawnable(IGolem.spawn(loc, bedWarsTeam), bedWarsTeam, shop.getInt("utilities.ironGolem.despawn"), lang.iGolemName);
     }
 
     @Override
@@ -323,13 +322,17 @@ public class v1_12_R1 implements NMS {
         EntityLiving e;
         BedWarsTeam team;
         int despawn = 250;
-        public Despawnable(EntityLiving e, BedWarsTeam team, int despawn){
+        String namePath;
+
+        public Despawnable(EntityLiving e, BedWarsTeam team, int despawn, String namePath){
             this.e = e;
             this.team = team;
             if (despawn != 0){
                 this.despawn = despawn;
             }
+            this.namePath = namePath;
             despawnables.add(this);
+            setName();
         }
 
         public void regresh() {
@@ -337,15 +340,19 @@ public class v1_12_R1 implements NMS {
                 despawnables.remove(this);
                 return;
             }
-            int percentuale = (int) ((e.getHealth()*100)/e.getMaxHealth()/10);
-            e.setCustomName(lang.m(lang.iGolemName).replace("{despawn}", String.valueOf(despawn)).replace("{health}",
-                    new String(new char[percentuale]).replace("\0", lang.m(lang.iGolemHealthFormat))+new String(new char[10-percentuale]).replace("\0", "§7"+lang.m(lang.iGolemHealthFormat))
-            ).replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()));
+            setName();
             despawn--;
             if (despawn == 0){
                 e.damageEntity(DamageSource.OUT_OF_WORLD, 9000);
                 despawnables.remove(this);
             }
+        }
+
+        private void setName(){
+            int percentuale = (int) ((e.getHealth()*100)/e.getMaxHealth()/10);
+            e.setCustomName(lang.m(namePath).replace("{despawn}", String.valueOf(despawn)).replace("{health}",
+                    new String(new char[percentuale]).replace("\0", lang.m(lang.despawnableHealth))+new String(new char[10-percentuale]).replace("\0", "§7"+lang.m(lang.despawnableHealth))
+            ).replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()).replace("{TeamName}", team.getName()));
         }
 
         public EntityLiving getE() {
