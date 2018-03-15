@@ -44,22 +44,17 @@ public class Arena {
     private List<BedWarsTeam> teams = new ArrayList<>();
     private List<Block> placed = new ArrayList<>();
     private HashMap<Block, BlockState> broken = new HashMap<>();
-    /**
-     * Bed block
-     */
+
+    /** bed block*/
     private Material bedBlock = Material.BED_BLOCK;
 
-    /*Various stuff about player's inventory and owns*/
-    private static HashMap<Player, HashMap<ItemStack, Integer>> playerItems = new HashMap<>();
+    /** player location before joining */
     private static HashMap<Player, Location> playerLocation = new HashMap<>();
-    private static HashMap<Player, List<PotionEffect>> playerPotions = new HashMap<>();
-    private static HashMap<Player, Float> playerExp = new HashMap<>();
-    private static HashMap<Player, ItemStack[]> playerArmor = new HashMap<>();
+
+    /** temp stats */
     private static HashMap<String, Integer> playerKills = new HashMap<>();
     private static HashMap<Player, Integer> playerBedsDestroyed = new HashMap<>();
     private static HashMap<String, Integer> playerFinalKills = new HashMap<>();
-    private static HashMap<Player, HashMap<ItemStack, Integer>> playerEnderchest = new HashMap<>();
-    /*End of player's stuff*/
 
     public Arena(String name) {
         cm = new ConfigManager(name, "plugins/" + plugin.getName() + "/Arenas", true);
@@ -196,46 +191,13 @@ public class Arena {
             if (players.size() >= minPlayers && status == GameState.waiting) {
                 setStatus(GameState.starting);
             }
+
             /** save player inventory etc */
             new PlayerGoods(p, true);
-            HashMap<ItemStack, Integer> items = new HashMap<>();
-            int x = 0;
-            for (ItemStack i : p.getInventory()) {
-                if (i != null) {
-                    if (i.getType() != Material.AIR) {
-                        items.put(i, x);
-                    }
-                }
-                x++;
-            }
-            playerItems.put(p, items);
-            playerArmor.put(p, p.getInventory().getArmorContents());
-            p.getInventory().clear();
-            p.getInventory().setArmorContents(null);
             playerLocation.put(p, p.getLocation());
             p.teleport(cm.getArenaLoc("waiting.Loc"));
             leaveItem(p);
-            List<PotionEffect> potions = new ArrayList<>();
-            for (PotionEffect ef : p.getActivePotionEffects()) {
-                potions.add(ef);
-                p.removePotionEffect(ef.getType());
-            }
-            playerPotions.put(p, potions);
-            playerExp.put(p, p.getExp());
-            p.setExp(0);
 
-            HashMap<ItemStack, Integer> items2 = new HashMap<>();
-            int x2 = 0;
-            for (ItemStack i : p.getEnderChest()) {
-                if (i != null) {
-                    if (i.getType() != Material.AIR) {
-                        items2.put(i, x2);
-                    }
-                }
-                x2++;
-            }
-            playerEnderchest.put(p, items2);
-            p.getEnderChest().clear();
         } else if (status == GameState.playing) {
             addSpectator(p, false);
         }
@@ -248,8 +210,6 @@ public class Arena {
                 p.hidePlayer(p);
             }
         }
-        p.setAllowFlight(false);
-        p.setFlying(false);
     }
 
     public void addSpectator(Player p, boolean playerBefore) {
@@ -262,29 +222,7 @@ public class Arena {
                 /** save player inv etc if isn't saved yet*/
                 new PlayerGoods(p, true);
                 setArenaByPlayer(p, true);
-                HashMap<ItemStack, Integer> items = new HashMap<>();
-                int x = 0;
-                for (ItemStack i : p.getInventory()) {
-                    if (i != null) {
-                        if (i.getType() != Material.AIR) {
-                            items.put(i, x);
-                        }
-                    }
-                    x++;
-                }
-                playerItems.put(p, items);
-                playerArmor.put(p, p.getInventory().getArmorContents());
-                p.getInventory().clear();
-                p.getInventory().setArmorContents(null);
                 playerLocation.put(p, p.getLocation());
-                List<PotionEffect> potions = new ArrayList<>();
-                for (PotionEffect ef : p.getActivePotionEffects()) {
-                    potions.add(ef);
-                    p.removePotionEffect(ef.getType());
-                }
-                playerPotions.put(p, potions);
-                playerExp.put(p, p.getExp());
-                p.setExp(0);
             }
             p.teleport(cm.getArenaLoc("waiting.Loc"));
             nms.setCollide(p, false);
@@ -331,45 +269,18 @@ public class Arena {
         }
         players.remove(p);
         removeArenaByPlayer(p);
-        p.getInventory().clear();
-        p.getInventory().setArmorContents(null);
         for (PotionEffect pf : p.getActivePotionEffects()) {
             p.removePotionEffect(pf.getType());
-        }
-        if (playerItems.containsKey(p)) {
-            for (Map.Entry<ItemStack, Integer> entry : playerItems.get(p).entrySet()) {
-                p.getInventory().setItem(entry.getValue(), entry.getKey());
-            }
-            p.updateInventory();
-            playerItems.remove(p);
         }
 
         for (Player on : players) {
             on.sendMessage(getMsg(p, Language.playerLeft).replace("{player}", p.getName()));
-        }
-        if (playerItems.containsKey(p)) {
-            for (Map.Entry<ItemStack, Integer> entry : playerItems.get(p).entrySet()) {
-                p.getInventory().setItem(entry.getValue(), entry.getKey());
-            }
         }
 
         /** restore player inventory */
         if (PlayerGoods.hasGoods(p)){
             PlayerGoods.getPlayerGoods(p).restore();
         }
-
-        p.updateInventory();
-        playerItems.remove(p);
-
-        playerItems.remove(p);
-        p.getInventory().setArmorContents(playerArmor.get(p));
-        playerArmor.remove(0);
-        for (PotionEffect pe : playerPotions.get(p)) {
-            p.addPotionEffect(pe);
-        }
-        playerPotions.remove(p);
-        p.setExp(playerExp.get(p));
-        playerExp.remove(p);
         if (getServerType() == ServerType.SHARED) {
             p.teleport(playerLocation.get(p));
         } else if (getServerType() == ServerType.BUNGEE) {
@@ -378,17 +289,6 @@ public class Arena {
             p.teleport(config.getConfigLoc("lobbyLoc"));
         }
         playerLocation.remove(p);
-        if (playerEnderchest.containsKey(p)) {
-            p.getEnderChest().clear();
-            for (Map.Entry<ItemStack, Integer> entry : playerEnderchest.get(p).entrySet()) {
-                p.getEnderChest().setItem(entry.getValue(), entry.getKey());
-            }
-            playerEnderchest.remove(p);
-        }
-        if (p.getAllowFlight()) {
-            p.setFlying(false);
-            p.setAllowFlight(false);
-        }
         if (respawn.containsKey(p)) {
             respawn.remove(p);
             BedWarsTeam t = this.getTeam(p);
@@ -456,9 +356,6 @@ public class Arena {
         removeArenaByPlayer(p);
         p.getInventory().clear();
         p.getInventory().setArmorContents(null);
-        for (PotionEffect pf : p.getActivePotionEffects()) {
-            p.removePotionEffect(pf.getType());
-        }
         /** restore player inventory */
         if (PlayerGoods.hasGoods(p)){
             PlayerGoods.getPlayerGoods(p).restore();
@@ -468,33 +365,8 @@ public class Arena {
         } else if (getServerType() == ServerType.MULTIARENA) {
             p.teleport(config.getConfigLoc("lobbyLoc"));
         }
-        p.setFlying(false);
-        p.setAllowFlight(false);
-        if (playerItems.containsKey(p)) {
-            for (Map.Entry<ItemStack, Integer> entry : playerItems.get(p).entrySet()) {
-                p.getInventory().setItem(entry.getValue(), entry.getKey());
-            }
-            p.updateInventory();
-            playerItems.remove(p);
-        }
-        playerItems.remove(p);
-        p.getInventory().setArmorContents(playerArmor.get(p));
-        playerArmor.remove(0);
-        for (PotionEffect pe : playerPotions.get(p)) {
-            p.addPotionEffect(pe);
-        }
-        playerPotions.remove(p);
-        p.setExp(playerExp.get(p));
-        playerExp.remove(p);
         if (getServerType() == ServerType.BUNGEE) {
             Misc.moveToLobbyOrKick(p);
-        }
-        if (playerEnderchest.containsKey(p)) {
-            p.getEnderChest().clear();
-            for (Map.Entry<ItemStack, Integer> entry : playerEnderchest.get(p).entrySet()) {
-                p.getEnderChest().setItem(entry.getValue(), entry.getKey());
-            }
-            playerEnderchest.remove(p);
         }
         playerLocation.remove(p);
         nms.setCollide(p, true);
@@ -514,7 +386,6 @@ public class Arena {
                 p.hidePlayer(on);
             }
         }
-        p.setGameMode(GameMode.SURVIVAL);
     }
 
     public void disable() {
