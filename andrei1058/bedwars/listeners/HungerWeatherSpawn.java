@@ -14,7 +14,7 @@ import static com.andrei1058.bedwars.Main.getServerType;
 public class HungerWeatherSpawn implements Listener {
 
     @EventHandler
-    public void e(FoodLevelChangeEvent e) {
+    public void onFoodChange(FoodLevelChangeEvent e) {
         switch (getServerType()) {
             case SHARED:
                 if (Arena.getArenaByPlayer((Player) e.getEntity()) != null) {
@@ -28,7 +28,7 @@ public class HungerWeatherSpawn implements Listener {
     }
 
     @EventHandler
-    public void W(WeatherChangeEvent e) {
+    public void onWeatherChange(WeatherChangeEvent e) {
         if (e.toWeatherState()) {
             switch (getServerType()) {
                 case SHARED:
@@ -44,7 +44,7 @@ public class HungerWeatherSpawn implements Listener {
     }
 
     @EventHandler
-    public void s(CreatureSpawnEvent e){
+    public void onCreatureSpawn(CreatureSpawnEvent e){
         if (e.getSpawnReason() != CreatureSpawnEvent.SpawnReason.CUSTOM) {
             if (getServerType() == ServerType.SHARED) {
                 if (Arena.getArenaByName(e.getEntity().getWorld().getName()) != null){

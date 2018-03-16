@@ -20,7 +20,7 @@ import static com.andrei1058.bedwars.configuration.Language.getMsg;
 public class PlayerChat implements Listener {
 
     @EventHandler
-    public void c(AsyncPlayerChatEvent e) {
+    public void onChat(AsyncPlayerChatEvent e) {
         Player p = e.getPlayer();
         if (e.isCancelled()) return;
         if (getServerType() == ServerType.SHARED){

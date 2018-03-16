@@ -7,7 +7,7 @@ import org.bukkit.event.server.ServerListPingEvent;
 
 public class Ping implements Listener {
     @EventHandler
-    public void p(ServerListPingEvent e){
+    public void onPing(ServerListPingEvent e){
         Arena a = Arena.getArenas().get(0);
         if (a != null){
             e.setMaxPlayers(a.getMaxPlayers());

@@ -17,7 +17,7 @@ import static com.andrei1058.bedwars.Main.*;
 public class JoinLeaveTeleport implements Listener {
 
     @EventHandler
-    public void j(PlayerJoinEvent e){
+    public void onJoin(PlayerJoinEvent e){
         Player p = e.getPlayer();
         if (!lang.getIso().equalsIgnoreCase(getLangSupport().getLang(p))){
             Language.getLangByPlayer().put(p, Language.getLang(getLangSupport().getLang(p)));
@@ -68,7 +68,7 @@ public class JoinLeaveTeleport implements Listener {
     }
 
     @EventHandler
-    public void l(PlayerQuitEvent e){
+    public void onLeave(PlayerQuitEvent e){
         Player p = e.getPlayer();
         if (Arena.getArenaByPlayer(p) != null){
             Arena.getArenaByPlayer(p).removePlayer(p);
@@ -80,7 +80,7 @@ public class JoinLeaveTeleport implements Listener {
     }
 
     @EventHandler
-    public void lol(PlayerTeleportEvent e){
+    public void onTeleport(PlayerTeleportEvent e){
         Arena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a != null){
             if (a.isSpectator(e.getPlayer())){

@@ -16,7 +16,7 @@ import static com.andrei1058.bedwars.Main.config;
 
 public class EntityDropPick implements Listener{
     @EventHandler
-    public void p(EntityPickupItemEvent e) {
+    public void onPickup(EntityPickupItemEvent e) {
         if (!(e.getEntity() instanceof Player)) return;
         Player p = (Player) e.getEntity();
         if (p.getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
@@ -56,7 +56,7 @@ public class EntityDropPick implements Listener{
     }
 
     @EventHandler
-    public void d(PlayerDropItemEvent e) {
+    public void onDrop(PlayerDropItemEvent e) {
         Player p = e.getPlayer();
         if (e.getPlayer().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
             e.setCancelled(true);

@@ -38,7 +38,7 @@ public class BreakPlace implements Listener {
     private static List<Player> buildSession = new ArrayList<>();
 
     @EventHandler
-    public void pa(BlockPlaceEvent e) {
+    public void onBlockPlace(BlockPlaceEvent e) {
         Player p = e.getPlayer();
         if (Arena.isInArena(p)) {
             Arena a = Arena.getArenaByPlayer(p);
@@ -77,7 +77,7 @@ public class BreakPlace implements Listener {
                 e.setCancelled(true);
                 TNTPrimed tnt = e.getBlock().getLocation().getWorld().spawn(e.getBlock().getLocation(), TNTPrimed.class);
                 tnt.setFuseTicks(45);
-                tnt.setMetadata("source", new FixedMetadataValue(plugin, p.getUniqueId()));
+                nms.setSource(tnt, p);
                 for (ItemStack i : p.getInventory().getContents()) {
                     if (i == null) continue;
                     if (i.getType() == null) continue;
@@ -109,7 +109,7 @@ public class BreakPlace implements Listener {
     }
 
     @EventHandler
-    public void pw(BlockBreakEvent e) {
+    public void onBlockBreak(BlockBreakEvent e) {
         Player p = e.getPlayer();
         if (getServerType() != ServerType.SHARED) {
             if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(config.getConfigLoc("lobbyLoc").getWorld().getName())) {
@@ -172,7 +172,7 @@ public class BreakPlace implements Listener {
 
     /** update game signs */
     @EventHandler
-    public void se(SignChangeEvent e) {
+    public void onSignChange(SignChangeEvent e) {
         Player p = e.getPlayer();
         if (e.getLine(0).equalsIgnoreCase("[" + mainCmd + "]")) {
             File dir = new File("plugins/" + plugin.getName() + "/Arenas");
@@ -217,7 +217,7 @@ public class BreakPlace implements Listener {
     }
 
     @EventHandler
-    public void b(PlayerBucketFillEvent e) {
+    public void onBucketFill(PlayerBucketFillEvent e) {
         if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
             e.setCancelled(true);
             return;
@@ -230,7 +230,7 @@ public class BreakPlace implements Listener {
     }
 
     @EventHandler
-    public void dwa(EntityExplodeEvent e) {
+    public void onBlow(EntityExplodeEvent e) {
         if (e.blockList().isEmpty()) return;
         Arena a = Arena.getArenaByName(e.blockList().get(0).getWorld().getName());
         if (a != null){

@@ -21,7 +21,7 @@ import static com.andrei1058.bedwars.Main.config;
 public class Inventory implements Listener {
 
     @EventHandler
-    public void i(InventoryCloseEvent e) {
+    public void onClose(InventoryCloseEvent e) {
         Player p = (Player) e.getPlayer();
         if (ArenaGUI.getRefresh().containsKey(p)) {
             if (e.getInventory().equals(ArenaGUI.getRefresh().get(p))) {
@@ -31,7 +31,7 @@ public class Inventory implements Listener {
     }
 
     @EventHandler
-    public void c(InventoryClickEvent e) {
+    public void onClick(InventoryClickEvent e) {
         Player p = (Player) e.getWhoClicked();
         ItemStack i = e.getCurrentItem();
         if (i == null) return;

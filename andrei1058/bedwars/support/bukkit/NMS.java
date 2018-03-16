@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.support.bukkit;
 
+import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -7,6 +8,7 @@ import org.bukkit.command.Command;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Team;
 
@@ -54,7 +56,7 @@ public interface NMS {
     void registerEntities();
 
     /** Spawn shop NPC*/
-    void spawnShop(Location loc, String name1, List<Player> players);
+    void spawnShop(Location loc, String name1, List<Player> players, Arena arena);
 
     /** Get item-stack damage amount*/
     double getDamage(ItemStack i);
@@ -103,4 +105,7 @@ public interface NMS {
 
     /** Team collision rule 1.9+ **/
     void teamCollideRule(Team t);
+
+    /** Set tnt source */
+    void setSource(TNTPrimed tnt, Player owner);
 }

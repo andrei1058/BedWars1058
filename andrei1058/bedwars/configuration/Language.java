@@ -58,7 +58,7 @@ public class Language {
             generatorTier = "generator.tier",
     //generatorTier2 = "generator.tier2",
     //generatorTier3 = "generator.tier3",
-            generatorDiamond = "generator.diamond",
+    generatorDiamond = "generator.diamond",
             generatorEmerald = "generator.emerald",
             generatorTimer = "generator.timer",
             playerJoin = "arena.join",
@@ -112,8 +112,8 @@ public class Language {
             gameOverTitle = "arena.gameOverTitle",//
             victoryTitle = "arena.victoryTitle",//
             gameEndStats = "arena.gameOverMsg",//
-        //gameOverReward = "arena.gameOverReward",//todo cand o sa fie support pt reward si etc
-            winnerFormatTeam = "arena.winFormat.team",//
+    //gameOverReward = "arena.gameOverReward",//todo cand o sa fie support pt reward si etc
+    winnerFormatTeam = "arena.winFormat.team",//
             winnerFormatSolo = "arena.winFormat.solo",//
             teamWonChat = "arena.teamWonChat",//
             nobody = "meaning.nobody",
@@ -145,7 +145,9 @@ public class Language {
             iGolemName = "despawnable.ironGolem",
             despawnableHealth = "format.despawnableHealth",
             unknowReasonDie = "arena.playerDie.unknown",
-                unknowReasonDieFinalKill = "arena.playerDie.unknownFinalKill";
+            unknowReasonDieFinalKill = "arena.playerDie.unknownFinalKill",
+            playerExplodeByBombNoKiller = "arena.playerDie.bomb2",
+            playerExplodeByBombFinalKillNoKiller = "arena.playerDie.bomb2FinalKill";
     //End of language file strings
 
     public Language(String iso) {
@@ -294,15 +296,15 @@ public class Language {
                 yml.addDefault(soloUpgradesName, "&e&lSOLO,&E&LUPGRADES");
                 yml.addDefault(shopTeamName, "&e&lITEM SHOP");
                 yml.addDefault(shopSoloName, "&e&lITEM SHOP");
-                yml.addDefault(shopPath+"name", "&7Item Shop");
+                yml.addDefault(shopPath + "name", "&7Item Shop");
 
                 lbj.saveShopStuff("invContents.armor", "&aArmor", Arrays.asList("&7Available:", "&7▪ Chainmail Boots", "&7▪ Chainmail Leggings", "&7▪ Iron Boots", "&7▪ Iron Leggings", "&7▪ Diamond Boots", "&7▪ Diamond Leggings", "", "&eClick to browse!"));
                 lbj.saveShopStuff("invContents.melee", "&aMelee", Arrays.asList("&7Available:", "&7▪ Stone Sword", "&7▪ Iron Sword", "&7▪ Diamond Sword", "&7▪ Stick (Knockback I)", "", "&eClick to browse!"));
-                lbj.saveShopStuff("invContents.blocks", "&aBlocks", Arrays.asList("&7Available:", "&7▪ Wool", "&7▪ Hardened Clay", "&7▪ Blast-Proof Glass", "&7▪ End Stone", "&7▪ Ladder", "&7▪ Oak Wood Planks", "&7▪ Obsidian","", "&eClick to browse!"));
+                lbj.saveShopStuff("invContents.blocks", "&aBlocks", Arrays.asList("&7Available:", "&7▪ Wool", "&7▪ Hardened Clay", "&7▪ Blast-Proof Glass", "&7▪ End Stone", "&7▪ Ladder", "&7▪ Oak Wood Planks", "&7▪ Obsidian", "", "&eClick to browse!"));
                 lbj.saveShopStuff("invContents.ranged", "&aRanged", Arrays.asList("&7Available:", "&7▪ Arrow", "&7▪ Bow", "&7▪ Bow (Power I)", "&7▪ Bow (Power I, Punch I)", "", "&eClick to browse!"));
-                lbj.saveShopStuff("invContents.tools", "&aTools", Arrays.asList("&7Available:", "&7▪ Shears", "&7▪ Wooden Pickaxe (Effeciency I)", "&7▪ Wooden Axe (Effeciency I)",  "", "&eClick to browse!"));
-                lbj.saveShopStuff("invContents.potions", "&aPotions", Arrays.asList("&7Available:", "&7▪ Shears", "&7▪ Wooden Pickaxe (Effeciency I)", "&7▪ Wooden Axe (Effeciency I)",  "", "&eClick to browse!"));
-                lbj.saveShopStuff("invContents.utility", "&aUtility", Arrays.asList("&7Available:", "&7▪ Golden Apple", "&7▪ BedBug", "&7▪ Dream Defender", "&7▪ Fireball", "&7▪ TNT", "&7▪ Ender Pearl", "&7▪ Water Bucket", "&7▪ Bridge Egg",  "", "&eClick to browse!"));
+                lbj.saveShopStuff("invContents.tools", "&aTools", Arrays.asList("&7Available:", "&7▪ Shears", "&7▪ Wooden Pickaxe (Effeciency I)", "&7▪ Wooden Axe (Effeciency I)", "", "&eClick to browse!"));
+                lbj.saveShopStuff("invContents.potions", "&aPotions", Arrays.asList("&7Available:", "&7▪ Shears", "&7▪ Wooden Pickaxe (Effeciency I)", "&7▪ Wooden Axe (Effeciency I)", "", "&eClick to browse!"));
+                lbj.saveShopStuff("invContents.utility", "&aUtility", Arrays.asList("&7Available:", "&7▪ Golden Apple", "&7▪ BedBug", "&7▪ Dream Defender", "&7▪ Fireball", "&7▪ TNT", "&7▪ Ender Pearl", "&7▪ Water Bucket", "&7▪ Bridge Egg", "", "&eClick to browse!"));
                 lbj.saveShopStuff("invContents.favourites", "&aFavourites", Arrays.asList("&7Click to view your", "&7favourite items. You can", "&7set a favourite item by", "&7shift clicking on any shop item!"));
                 lbj.saveShopStuff("invContents.recommended", "&aRecommended Items", Arrays.asList("&7Original", "&7Click to view some", "&7recommended items for early", "&7to late game!", "", "&eClick to browse!"));
 
@@ -356,11 +358,11 @@ public class Language {
                 yml.addDefault("meaning.emerald", "Emerald");
                 yml.addDefault("meaning.diamond", "Diamond");
                 yml.addDefault("meaning.vault", "$");
-                yml.addDefault(pluralPath+".iron", "Iron");
-                yml.addDefault(pluralPath+".gold", "Gold");
-                yml.addDefault(pluralPath+".emerald", "Emeralds");
-                yml.addDefault(pluralPath+".diamond", "Diamonds");
-                yml.addDefault(pluralPath+".vault", "Money");
+                yml.addDefault(pluralPath + ".iron", "Iron");
+                yml.addDefault(pluralPath + ".gold", "Gold");
+                yml.addDefault(pluralPath + ".emerald", "Emeralds");
+                yml.addDefault(pluralPath + ".diamond", "Diamonds");
+                yml.addDefault(pluralPath + ".vault", "Money");
                 yml.addDefault(insufficientMoney, "{prefix}&cYou don't have enough {currency}! Need {amount} more!");
                 yml.addDefault(youPurchased, "{prefix}&aYou purchased &6{item}");
                 yml.addDefault(joinCmdUsage, "§a▪ §7Usage: /" + mainCmd + " join §o<arena/group>");
@@ -378,15 +380,15 @@ public class Language {
                 yml.addDefault("upgrades.default.maniacMiner.tier1.name", "&eManiac Miner");
                 yml.addDefault("upgrades.default.maniacMiner.tier1.lore", Arrays.asList("&7All players on your team", "&7permanently gain Haste I", "", "&7Cost:&b {cost} {currency}", "", "{loreFooter}"));
                 yml.addDefault("upgrades.default.sharpSword.tier1.name", "&eSharpened Swords");
-                yml.addDefault("upgrades.default.sharpSword.tier1.lore", Arrays.asList("&7Your team gets Sharpness I on", "&7all swords!", "", "&7Cost:&b {cost} {currency}","", "{loreFooter}"));
+                yml.addDefault("upgrades.default.sharpSword.tier1.lore", Arrays.asList("&7Your team gets Sharpness I on", "&7all swords!", "", "&7Cost:&b {cost} {currency}", "", "{loreFooter}"));
                 yml.addDefault("upgrades.default.reinforced.tier1.name", "&eReinforced Armor");
-                yml.addDefault("upgrades.default.reinforced.tier1.lore", Arrays.asList("&7Your team gets Protection I on", "&7all armor pieces!", "", "&7Cost:&b {cost} {currency}","", "{loreFooter}"));
+                yml.addDefault("upgrades.default.reinforced.tier1.lore", Arrays.asList("&7Your team gets Protection I on", "&7all armor pieces!", "", "&7Cost:&b {cost} {currency}", "", "{loreFooter}"));
                 yml.addDefault("upgrades.default.trap.tier1.name", "&eIt's a trap!");
-                yml.addDefault("upgrades.default.trap.tier1.lore", Arrays.asList("&7The nex enemy to enter your", "&7base will receive Blindness and", "&7Slowness!", "", "&7Cost:&b {cost} {currency}","", "{loreFooter}"));
+                yml.addDefault("upgrades.default.trap.tier1.lore", Arrays.asList("&7The nex enemy to enter your", "&7base will receive Blindness and", "&7Slowness!", "", "&7Cost:&b {cost} {currency}", "", "{loreFooter}"));
                 yml.addDefault("upgrades.default.miningFatigue.tier1.name", "&eMiner Fatigue Trap");
-                yml.addDefault("upgrades.default.miningFatigue.tier1.lore", Arrays.asList("&7The nex enemy to enter your", "&7base will receive Mining Fatigue", "&7for 10 seconds!", "", "&7Cost:&b {cost} {currency}","", "{loreFooter}"));
+                yml.addDefault("upgrades.default.miningFatigue.tier1.lore", Arrays.asList("&7The nex enemy to enter your", "&7base will receive Mining Fatigue", "&7for 10 seconds!", "", "&7Cost:&b {cost} {currency}", "", "{loreFooter}"));
                 yml.addDefault("upgrades.default.healPool.tier1.name", "&eHeal Pool");
-                yml.addDefault("upgrades.default.healPool.tier1.lore", Arrays.asList("&7Creates a Regeneration field", "&7around your base!", "", "&7Cost:&b {cost} {currency}","", "{loreFooter}"));
+                yml.addDefault("upgrades.default.healPool.tier1.lore", Arrays.asList("&7Creates a Regeneration field", "&7around your base!", "", "&7Cost:&b {cost} {currency}", "", "{loreFooter}"));
                 yml.addDefault(enemyBaseEnterAction, "&cTRAP TRIGGERED!");
                 yml.addDefault(enemyBaseEnterChat, "{prefix}&cTRAP TRIGGERED!");
                 yml.addDefault(enemyBaseEnterSubtitle, "&fYour trap has been set off!");
@@ -397,6 +399,8 @@ public class Language {
                 yml.addDefault(despawnableHealth, "▮ ");
                 yml.addDefault(unknowReasonDie, "{PlayerColor}{PlayerName} &7died.");
                 yml.addDefault(unknowReasonDieFinalKill, "{PlayerColor}{PlayerName} &7died. &b&lFINAL KILL!");
+                yml.addDefault(playerExplodeByBombNoKiller, "{PlayerColor}{PlayerName} &7was hit off by a bomb.");
+                yml.addDefault(playerExplodeByBombFinalKillNoKiller, "{PlayerColor}{PlayerName} &7was hit off by a bomb. &b&lFINAL KILL!");
                 break;
         }
         lbj.save();
@@ -404,9 +408,9 @@ public class Language {
         lbj.prefixColor = ChatColor.translateAlternateColorCodes('&', yml.getString(prefix));
     }
 
-    private void saveShopStuff(String path, Object name, Object lore){
-        yml.addDefault(shopPath+path+".name", name);
-        yml.addDefault(shopPath+path+".lore", lore);
+    private void saveShopStuff(String path, Object name, Object lore) {
+        yml.addDefault(shopPath + path + ".name", name);
+        yml.addDefault(shopPath + path + ".lore", lore);
     }
 
     public static List<String> getScoreboard(Player p, String path, String alternative) {
@@ -422,7 +426,7 @@ public class Language {
         return getList(p, alternative);
     }
 
-    public void set(String path, Object value){
+    public void set(String path, Object value) {
         yml.set(path, value);
         save();
     }
@@ -446,14 +450,14 @@ public class Language {
         return lang.m(path);
     }
 
-    public static Language getPlayerLanguage(Player p){
+    public static Language getPlayerLanguage(Player p) {
         if (langByPlayer.containsKey(p)) {
             return langByPlayer.get(p);
         }
         return lang;
     }
 
-    public boolean exists (String path){
+    public boolean exists(String path) {
         if (yml.get(path) == null) return false;
         return true;
     }
@@ -465,9 +469,9 @@ public class Language {
         return lang.l(path);
     }
 
-    public static void saveIfNotExists(String path, Object data){
-        for (Language l : languages){
-            if (l.yml.get(path) == null){
+    public static void saveIfNotExists(String path, Object data) {
+        for (Language l : languages) {
+            if (l.yml.get(path) == null) {
                 l.set(path, data);
             }
         }

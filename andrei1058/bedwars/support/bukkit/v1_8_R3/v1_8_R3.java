@@ -1,9 +1,13 @@
 package com.andrei1058.bedwars.support.bukkit.v1_8_R3;
 
 import com.andrei1058.bedwars.api.TeamColor;
+import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
+import com.andrei1058.bedwars.arena.ShopHolo;
+import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.support.bukkit.NMS;
 import net.minecraft.server.v1_8_R3.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
@@ -12,6 +16,7 @@ import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftTNTPrimed;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
 import org.bukkit.entity.*;
@@ -31,7 +36,9 @@ import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
 public class v1_8_R3 implements NMS {
 
-    /** List of despawnable entities aka special shop mobs */
+    /**
+     * List of despawnable entities aka special shop mobs
+     */
     private static List<Despawnable> despawnables = new ArrayList();
 
     @Override
@@ -55,15 +62,15 @@ public class v1_8_R3 implements NMS {
 
     @Override
     public void refreshDespawnables() {
-        for(Despawnable d : new ArrayList<>(despawnables)){
+        for (Despawnable d : new ArrayList<>(despawnables)) {
             d.regresh();
         }
     }
 
     @Override
     public boolean isDespawnable(Entity e) {
-        for (Despawnable d : despawnables){
-            if (d.getE() == ((CraftEntity)e).getHandle()) return true;
+        for (Despawnable d : despawnables) {
+            if (d.getE() == ((CraftEntity) e).getHandle()) return true;
         }
         return false;
     }
@@ -71,8 +78,8 @@ public class v1_8_R3 implements NMS {
     @Override
     public BedWarsTeam ownDespawnable(Entity e) {
 
-        for (Despawnable d : despawnables){
-            if (d.getE() == ((CraftEntity)e).getHandle()) return d.getTeam();
+        for (Despawnable d : despawnables) {
+            if (d.getE() == ((CraftEntity) e).getHandle()) return d.getTeam();
         }
         return null;
     }
@@ -139,7 +146,7 @@ public class v1_8_R3 implements NMS {
         //e.setCustomName(name);
         net.minecraft.server.v1_8_R3.Entity en = ((CraftEntity) e).getHandle();
         double height = en.getBoundingBox().e - en.getBoundingBox().b;
-        ArmorStand a = createArmorStand(name, location.clone().add(0, height-1, 0));
+        ArmorStand a = createArmorStand(name, location.clone().add(0, height - 1, 0));
         a.setSmall(true);
         NBTTagCompound tag = en.getNBTTag();
         if (tag == null) {
@@ -192,7 +199,7 @@ public class v1_8_R3 implements NMS {
     }
 
     @Override
-    public boolean isProjectile(org.bukkit.inventory.ItemStack itemStack){
+    public boolean isProjectile(org.bukkit.inventory.ItemStack itemStack) {
         return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof IProjectile;
     }
 
@@ -210,11 +217,11 @@ public class v1_8_R3 implements NMS {
 
     @Override
     public void minusAmount(Player p, ItemStack i, int amount) {
-        if (i.getAmount()-amount<= 0){
+        if (i.getAmount() - amount <= 0) {
             p.getInventory().removeItem(i);
             return;
         }
-        i.setAmount(i.getAmount()-amount);
+        i.setAmount(i.getAmount() - amount);
         p.updateInventory();
     }
 
@@ -224,26 +231,17 @@ public class v1_8_R3 implements NMS {
     }
 
     @Override
-    public void spawnShop(Location loc, String name1, List<Player> players) {
+    public void spawnShop(Location loc, String name1, List<Player> players, Arena arena) {
         spawnVillager(loc);
         for (Player p : players) {
             String[] nume = getMsg(p, name1).split(",");
-            if (nume.length >= 2) {
+            if (nume.length == 1) {
+                ArmorStand a = createArmorStand(nume[0], loc);
+                new ShopHolo(Language.getPlayerLanguage(p).getIso(), a, null, loc, arena);
+            } else {
                 ArmorStand a = createArmorStand(nume[0], loc.clone().add(0, 0.4, 0));
                 ArmorStand b = createArmorStand(nume[1], loc);
-                for (Player pl : p.getWorld().getPlayers()) {
-                    if (p != pl) {
-                        nms.hideEntity(a, pl);
-                        nms.hideEntity(b, pl);
-                    }
-                }
-            } else {
-                ArmorStand a = createArmorStand(nume[0], loc);
-                for (Player pl : p.getWorld().getPlayers()) {
-                    if (p != pl) {
-                        nms.hideEntity(a, pl);
-                    }
-                }
+                new ShopHolo(Language.getPlayerLanguage(p).getIso(), a, b, loc, arena);
             }
         }
     }
@@ -292,43 +290,48 @@ public class v1_8_R3 implements NMS {
         }
     }
 
-    public class VillagerShop extends EntityVillager {
-        public VillagerShop(World world) {
-            super(world);
-            try {
-                Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
-                bField.setAccessible(true);
-                Field cField = PathfinderGoalSelector.class.getDeclaredField("c");
-                cField.setAccessible(true);
-                bField.set(this.goalSelector, new UnsafeList());
-                bField.set(this.targetSelector, new UnsafeList());
-                cField.set(this.goalSelector, new UnsafeList());
-                cField.set(this.targetSelector, new UnsafeList());
-            } catch (Exception bField) {
-            }
-            this.goalSelector.a(0, new PathfinderGoalFloat(this));
-            this.goalSelector.a(9, new PathfinderGoalInteract(this, EntityHuman.class, 3.0f, 1.0f));
-            this.goalSelector.a(10, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0f));
+public class VillagerShop extends EntityVillager {
+    public VillagerShop(World world) {
+        super(world);
+        try {
+            Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
+            bField.setAccessible(true);
+            Field cField = PathfinderGoalSelector.class.getDeclaredField("c");
+            cField.setAccessible(true);
+            bField.set(this.goalSelector, new UnsafeList());
+            bField.set(this.targetSelector, new UnsafeList());
+            cField.set(this.goalSelector, new UnsafeList());
+            cField.set(this.targetSelector, new UnsafeList());
+        } catch (Exception bField) {
         }
-        @Override
-        public void move(double d0, double d1, double d2) {
-        }
-        @Override
-        public void collide(net.minecraft.server.v1_8_R3.Entity entity) {
-        }
-        @Override
-        public boolean damageEntity(DamageSource damagesource, float f) {
-            return false;
-        }
-        @Override
-        public void g(double d0, double d1, double d2) {
-        }
-        @Override
-        protected void initAttributes() {
-            super.initAttributes();
-            this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.0D);
-        }
+        this.goalSelector.a(0, new PathfinderGoalFloat(this));
+        this.goalSelector.a(9, new PathfinderGoalInteract(this, EntityHuman.class, 3.0f, 1.0f));
+        this.goalSelector.a(10, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0f));
     }
+
+    @Override
+    public void move(double d0, double d1, double d2) {
+    }
+
+    @Override
+    public void collide(net.minecraft.server.v1_8_R3.Entity entity) {
+    }
+
+    @Override
+    public boolean damageEntity(DamageSource damagesource, float f) {
+        return false;
+    }
+
+    @Override
+    public void g(double d0, double d1, double d2) {
+    }
+
+    @Override
+    protected void initAttributes() {
+        super.initAttributes();
+        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.0D);
+    }
+}
 
     private Villager spawnVillager(Location loc) {
         WorldServer mcWorld = ((CraftWorld) loc.getWorld()).getHandle();
@@ -339,49 +342,63 @@ public class v1_8_R3 implements NMS {
         return (Villager) customEnt.getBukkitEntity();
     }
 
-    private class Despawnable {
-        EntityLiving e;
-        BedWarsTeam team;
-        int despawn = 250;
-        String namePath;
+private class Despawnable {
+    EntityLiving e;
+    BedWarsTeam team;
+    int despawn = 250;
+    String namePath;
 
-        public Despawnable(EntityLiving e, BedWarsTeam team, int despawn, String namePath){
-            this.e = e;
-            this.team = team;
-            if (despawn != 0){
-                this.despawn = despawn;
-            }
-            this.namePath = namePath;
-            despawnables.add(this);
-            setName();
+    public Despawnable(EntityLiving e, BedWarsTeam team, int despawn, String namePath) {
+        this.e = e;
+        this.team = team;
+        if (despawn != 0) {
+            this.despawn = despawn;
         }
+        this.namePath = namePath;
+        despawnables.add(this);
+        setName();
+    }
 
-        public void regresh() {
-            if (!e.isAlive()){
-                despawnables.remove(this);
-                return;
-            }
-            setName();
-            despawn--;
-            if (despawn == 0){
-                e.damageEntity(DamageSource.OUT_OF_WORLD, 9000);
-                despawnables.remove(this);
-            }
+    public void regresh() {
+        if (!e.isAlive()) {
+            despawnables.remove(this);
+            return;
         }
-
-        private void setName(){
-            int percentuale = (int) ((e.getHealth()*100)/e.getMaxHealth()/10);
-            e.setCustomName(lang.m(namePath).replace("{despawn}", String.valueOf(despawn)).replace("{health}",
-                    new String(new char[percentuale]).replace("\0", lang.m(lang.despawnableHealth))+new String(new char[10-percentuale]).replace("\0", "§7"+lang.m(lang.despawnableHealth))
-            ).replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()).replace("{TeamName}", team.getName()));
+        setName();
+        despawn--;
+        if (despawn == 0) {
+            e.damageEntity(DamageSource.OUT_OF_WORLD, 9000);
+            despawnables.remove(this);
         }
+    }
 
-        public EntityLiving getE() {
-            return e;
-        }
+    private void setName() {
+        int percentuale = (int) ((e.getHealth() * 100) / e.getMaxHealth() / 10);
+        e.setCustomName(lang.m(namePath).replace("{despawn}", String.valueOf(despawn)).replace("{health}",
+                new String(new char[percentuale]).replace("\0", lang.m(lang.despawnableHealth)) + new String(new char[10 - percentuale]).replace("\0", "§7" + lang.m(lang.despawnableHealth))
+        ).replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()).replace("{TeamName}", team.getName()));
+    }
 
-        public BedWarsTeam getTeam() {
-            return team;
+    public EntityLiving getE() {
+        return e;
+    }
+
+    public BedWarsTeam getTeam() {
+        return team;
+    }
+
+}
+
+    @Override
+    public void setSource(TNTPrimed tnt, Player owner) {
+        EntityLiving nmsEntityLiving = (((CraftLivingEntity) owner).getHandle());
+        EntityTNTPrimed nmsTNT = (((CraftTNTPrimed) tnt).getHandle());
+        try {
+            Field sourceField = EntityTNTPrimed.class.getDeclaredField("source");
+            sourceField.setAccessible(true);
+            sourceField.set(nmsTNT, nmsEntityLiving);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 }

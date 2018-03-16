@@ -18,7 +18,7 @@ import static com.andrei1058.bedwars.configuration.Language.getMsg;
 public class CmdProcess implements Listener {
 
     @EventHandler
-    public void bwCmdProcess(PlayerCommandPreprocessEvent e){
+    public void onCmd(PlayerCommandPreprocessEvent e){
         Player p = e.getPlayer();
         String[] cmd = e.getMessage().split(" ");
         if (Arena.isInArena(p)){

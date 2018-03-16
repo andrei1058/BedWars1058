@@ -1,16 +1,21 @@
 package com.andrei1058.bedwars.support.bukkit.v1_12_R1;
 
 import com.andrei1058.bedwars.api.TeamColor;
+import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
+import com.andrei1058.bedwars.arena.ShopHolo;
+import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.support.bukkit.NMS;
 import com.google.common.collect.Sets;
 import net.minecraft.server.v1_12_R1.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_12_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftTNTPrimed;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity;
@@ -29,7 +34,9 @@ import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
 public class v1_12_R1 implements NMS {
 
-    /** List of despawnable entities aka special shop mobs */
+    /**
+     * List of despawnable entities aka special shop mobs
+     */
     private static List<Despawnable> despawnables = new ArrayList();
 
     @Override
@@ -56,7 +63,7 @@ public class v1_12_R1 implements NMS {
             ((CraftPlayer) p).getHandle().playerConnection.sendPacket(tit);
             ((CraftPlayer) p).getHandle().playerConnection.sendPacket(length);
         }
-        if (subtitle != null){
+        if (subtitle != null) {
             IChatBaseComponent bc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + subtitle + "\"}");
             PacketPlayOutTitle tit = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, bc);
             PacketPlayOutTitle length = new PacketPlayOutTitle(fadeIn, stay, fadeOut);
@@ -90,23 +97,23 @@ public class v1_12_R1 implements NMS {
 
     @Override
     public void refreshDespawnables() {
-        for(Despawnable d : new ArrayList<>(despawnables)){
+        for (Despawnable d : new ArrayList<>(despawnables)) {
             d.regresh();
         }
     }
 
     @Override
     public boolean isDespawnable(Entity e) {
-        for (Despawnable d : despawnables){
-            if (d.getE() == ((CraftEntity)e).getHandle()) return true;
+        for (Despawnable d : despawnables) {
+            if (d.getE() == ((CraftEntity) e).getHandle()) return true;
         }
         return false;
     }
 
     @Override
     public BedWarsTeam ownDespawnable(Entity e) {
-        for (Despawnable d : despawnables){
-            if (d.getE() == ((CraftEntity)e).getHandle()) return d.getTeam();
+        for (Despawnable d : despawnables) {
+            if (d.getE() == ((CraftEntity) e).getHandle()) return d.getTeam();
         }
         return null;
     }
@@ -123,7 +130,7 @@ public class v1_12_R1 implements NMS {
 
     @Override
     public void playAction(Player p, String text) {
-        CraftPlayer cPlayer = (CraftPlayer)p;
+        CraftPlayer cPlayer = (CraftPlayer) p;
         IChatBaseComponent cbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + text + "\"}");
         PacketPlayOutChat ppoc = new PacketPlayOutChat(cbc, ChatMessageType.GAME_INFO);
         cPlayer.getHandle().playerConnection.sendPacket(ppoc);
@@ -132,9 +139,9 @@ public class v1_12_R1 implements NMS {
     @Override
     public void spawnNPC(EntityType entity, Location location, String name, String group) {
         org.bukkit.entity.Entity e = location.getWorld().spawnEntity(location, entity);
-        net.minecraft.server.v1_12_R1.Entity en = ((CraftEntity)e).getHandle();
+        net.minecraft.server.v1_12_R1.Entity en = ((CraftEntity) e).getHandle();
         double height = en.getBoundingBox().e - en.getBoundingBox().b;
-        ArmorStand a = createArmorStand(name, location.clone().add(0, height-1, 0));
+        ArmorStand a = createArmorStand(name, location.clone().add(0, height - 1, 0));
         a.setSmall(true);
         NBTTagCompound tag = new NBTTagCompound();
         en.c(tag);
@@ -156,9 +163,9 @@ public class v1_12_R1 implements NMS {
     @Override
     public void hideEntity(org.bukkit.entity.Entity e, Player... players) {
         PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(e.getEntityId());
-        for (Player p : players){
-            if (p == e)continue;
-            ((CraftPlayer)p).getHandle().playerConnection.sendPacket(packet);
+        for (Player p : players) {
+            if (p == e) continue;
+            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
         }
     }
 
@@ -169,12 +176,25 @@ public class v1_12_R1 implements NMS {
 
     @Override
     public void minusAmount(Player p, org.bukkit.inventory.ItemStack i, int amount) {
-        i.setAmount(i.getAmount()-amount);
+        i.setAmount(i.getAmount() - amount);
     }
 
     @Override
     public void teamCollideRule(Team t) {
         t.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
+    }
+
+    @Override
+    public void setSource(TNTPrimed tnt, Player owner) {
+        EntityLiving nmsEntityLiving = (((CraftLivingEntity) owner).getHandle());
+        EntityTNTPrimed nmsTNT = (((CraftTNTPrimed) tnt).getHandle());
+        try {
+            Field sourceField = EntityTNTPrimed.class.getDeclaredField("source");
+            sourceField.setAccessible(true);
+            sourceField.set(nmsTNT, nmsEntityLiving);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override
@@ -198,7 +218,7 @@ public class v1_12_R1 implements NMS {
     }
 
     @Override
-    public boolean isProjectile(org.bukkit.inventory.ItemStack itemStack){
+    public boolean isProjectile(org.bukkit.inventory.ItemStack itemStack) {
         return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof IProjectile;
     }
 
@@ -210,26 +230,17 @@ public class v1_12_R1 implements NMS {
     }
 
     @Override
-    public void spawnShop(Location loc, String name1, List<Player> players) {
+    public void spawnShop(Location loc, String name1, List<Player> players, Arena arena) {
         spawnVillager(loc);
-        for (Player p : players){
+        for (Player p : players) {
             String[] nume = getMsg(p, name1).split(",");
-            if (nume.length  >= 2){
+            if (nume.length == 1) {
+                ArmorStand a = createArmorStand(nume[0], loc);
+                new ShopHolo(Language.getPlayerLanguage(p).getIso(), a, null, loc, arena);
+            } else {
                 ArmorStand a = createArmorStand(nume[0], loc.clone().add(0, 0.4, 0));
                 ArmorStand b = createArmorStand(nume[1], loc);
-                for (Player pl : p.getWorld().getPlayers()){
-                    if (p != pl){
-                        nms.hideEntity(a, pl);
-                        nms.hideEntity(b, pl);
-                    }
-                }
-            } else {
-                ArmorStand a = createArmorStand(nume[0], loc);
-                for (Player pl : p.getWorld().getPlayers()){
-                    if (p != pl) {
-                        nms.hideEntity(a, pl);
-                    }
-                }
+                new ShopHolo(Language.getPlayerLanguage(p).getIso(), a, b, loc, arena);
             }
         }
     }
@@ -248,7 +259,7 @@ public class v1_12_R1 implements NMS {
         return compound.getDouble("generic.armor");
     }
 
-    private static ArmorStand createArmorStand(String name, Location loc){
+    private static ArmorStand createArmorStand(String name, Location loc) {
         ArmorStand a = loc.getWorld().spawn(loc, ArmorStand.class);
         a.setGravity(false);
         a.setVisible(false);
@@ -262,7 +273,9 @@ public class v1_12_R1 implements NMS {
         EntityTypes.b.a(id, new MinecraftKey(name), customClass);
     }
 
-    /** Custom villager class */
+    /**
+     * Custom villager class
+     */
     public class VillagerShop extends net.minecraft.server.v1_12_R1.EntityVillager {
 
         public VillagerShop(net.minecraft.server.v1_12_R1.World world) {
@@ -299,7 +312,8 @@ public class v1_12_R1 implements NMS {
         }
 
         @Override
-        public void move(EnumMoveType enummovetype, double d0, double d1, double d2){}
+        public void move(EnumMoveType enummovetype, double d0, double d1, double d2) {
+        }
 
         @Override
         protected void initAttributes() {
@@ -308,7 +322,9 @@ public class v1_12_R1 implements NMS {
         }
     }
 
-    /** Spawn shop npc */
+    /**
+     * Spawn shop npc
+     */
     private Villager spawnVillager(Location loc) {
         net.minecraft.server.v1_12_R1.WorldServer mcWorld = ((CraftWorld) loc.getWorld()).getHandle();
         VillagerShop customEnt = new VillagerShop(mcWorld);
@@ -324,10 +340,10 @@ public class v1_12_R1 implements NMS {
         int despawn = 250;
         String namePath;
 
-        public Despawnable(EntityLiving e, BedWarsTeam team, int despawn, String namePath){
+        public Despawnable(EntityLiving e, BedWarsTeam team, int despawn, String namePath) {
             this.e = e;
             this.team = team;
-            if (despawn != 0){
+            if (despawn != 0) {
                 this.despawn = despawn;
             }
             this.namePath = namePath;
@@ -336,22 +352,22 @@ public class v1_12_R1 implements NMS {
         }
 
         public void regresh() {
-            if (!e.isAlive()){
+            if (!e.isAlive()) {
                 despawnables.remove(this);
                 return;
             }
             setName();
             despawn--;
-            if (despawn == 0){
+            if (despawn == 0) {
                 e.damageEntity(DamageSource.OUT_OF_WORLD, 9000);
                 despawnables.remove(this);
             }
         }
 
-        private void setName(){
-            int percentuale = (int) ((e.getHealth()*100)/e.getMaxHealth()/10);
+        private void setName() {
+            int percentuale = (int) ((e.getHealth() * 100) / e.getMaxHealth() / 10);
             e.setCustomName(lang.m(namePath).replace("{despawn}", String.valueOf(despawn)).replace("{health}",
-                    new String(new char[percentuale]).replace("\0", lang.m(lang.despawnableHealth))+new String(new char[10-percentuale]).replace("\0", "§7"+lang.m(lang.despawnableHealth))
+                    new String(new char[percentuale]).replace("\0", lang.m(lang.despawnableHealth)) + new String(new char[10 - percentuale]).replace("\0", "§7" + lang.m(lang.despawnableHealth))
             ).replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()).replace("{TeamName}", team.getName()));
         }
 

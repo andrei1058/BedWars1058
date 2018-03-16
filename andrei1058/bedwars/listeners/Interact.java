@@ -29,7 +29,7 @@ import static com.andrei1058.bedwars.upgrades.UpgradeGroup.getUpgradeGroup;
 public class Interact implements Listener {
 
     @EventHandler
-    public void i(PlayerInteractEvent e) {
+    public void onInteract(PlayerInteractEvent e) {
         Player p = e.getPlayer();
 
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK){
@@ -127,7 +127,7 @@ public class Interact implements Listener {
     }
 
     @EventHandler
-    public void e(PlayerInteractEntityEvent e) {
+    public void onEntityInteract(PlayerInteractEntityEvent e) {
         if (Main.npcs.containsKey(e.getRightClicked())) {
             Arena.joinRandomFromGroup(e.getPlayer(), Main.npcs.get(e.getRightClicked()));
         } else {
@@ -148,7 +148,7 @@ public class Interact implements Listener {
     }
 
     @EventHandler
-    public void e2(PlayerInteractAtEntityEvent e) {
+    public void onEntityInteract2(PlayerInteractAtEntityEvent e) {
         if (Main.npcs.containsKey(e.getRightClicked())) {
             Arena.joinRandomFromGroup(e.getPlayer(), Main.npcs.get(e.getRightClicked()));
         } else {
@@ -177,21 +177,21 @@ public class Interact implements Listener {
     }
 
     @EventHandler
-    public void bedEnter(PlayerBedEnterEvent e){
+    public void onBedEnter(PlayerBedEnterEvent e){
         if (Arena.getArenaByPlayer(e.getPlayer()) != null){
             e.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void m(PlayerArmorStandManipulateEvent e) {
+    public void onArmorManipulate(PlayerArmorStandManipulateEvent e) {
         if (Arena.isInArena(e.getPlayer())) {
             e.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void prepare(PrepareItemCraftEvent e){
+    public void onCrafting(PrepareItemCraftEvent e){
         if (Arena.isInArena((Player) e.getView().getPlayer())){
             if (config.getBoolean("disableCrafting")){
                 e.getInventory().setResult(new ItemStack(Material.AIR));

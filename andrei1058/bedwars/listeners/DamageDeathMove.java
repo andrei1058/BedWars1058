@@ -32,7 +32,7 @@ import static com.andrei1058.bedwars.configuration.Language.getMsg;
 public class DamageDeathMove implements Listener {
 
     @EventHandler
-    public void p(EntityDamageEvent e) {
+    public void onDamage(EntityDamageEvent e) {
         if (Main.npcs.containsKey(e.getEntity())) {
             e.setCancelled(true);
         }
@@ -59,7 +59,7 @@ public class DamageDeathMove implements Listener {
     }
 
     @EventHandler
-    public void c(EntityDamageByEntityEvent e) {
+    public void onDamageByEntity(EntityDamageByEntityEvent e) {
         if (e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
             Arena a = Arena.getArenaByPlayer(p);
@@ -94,11 +94,18 @@ public class DamageDeathMove implements Listener {
                     } else return;
                 } else if (e.getDamager() instanceof Player) {
                     damager = (Player) e.getDamager();
+                } else if (e.getDamager() instanceof TNTPrimed) {
+                    TNTPrimed tnt = (TNTPrimed) e.getDamager();
+                    if (tnt.getSource() instanceof Player) {
+                        damager = (Player) tnt.getSource();
+                    } else return;
                 } else return;
                 if (a.isSpectator(damager)) return;
                 for (BedWarsTeam t : a.getTeams()) {
                     if (t.isMember(p) && t.isMember(damager)) {
-                        e.setCancelled(true);
+                        if (!(e.getDamager() instanceof TNTPrimed)) {
+                            e.setCancelled(true);
+                        }
                         return;
                     }
                 }
@@ -158,7 +165,7 @@ public class DamageDeathMove implements Listener {
     }
 
     @EventHandler
-    public void ed(PlayerDeathEvent e) {
+    public void onDeath(PlayerDeathEvent e) {
         Player victim = e.getEntity(), killer = e.getEntity().getKiller();
         if (Arena.isInArena(victim)) {
             Arena a = Arena.getArenaByPlayer(victim);
@@ -172,148 +179,77 @@ public class DamageDeathMove implements Listener {
                     return;
                 }
                 EntityDamageEvent damageEvent = e.getEntity().getLastDamageCause();
-                BedWarsTeam t = a.getTeam(victim);
                 ItemStack[] drops = victim.getInventory().getContents();
                 e.getDrops().clear();
 
-                if (killer == null){
-                    if (killer instanceof Projectile){
-                        Entity ee = (Player) ((Projectile) killer).getShooter();
-                        if (ee instanceof Player) killer = (Player) ee;
-                    } else if (killer instanceof TNTPrimed){
-                        debug("primed tnt");
-                    }
-                }
 
-                if (damageEvent.getCause() == EntityDamageEvent.DamageCause.VOID) {
-                    killer = null;
+                BedWarsTeam t = a.getTeam(victim);
+                if (a.isSpectator(victim)) {
+                    victim.spigot().respawn();
+                    return;
+                }
+                if (a.getStatus() != GameState.playing) {
+                    victim.spigot().respawn();
+                    return;
+                }
+                String message = t.isBedDestroyed() ? lang.unknowReasonDieFinalKill : lang.unknowReasonDie;
+                if (damageEvent.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
                     LastHit lh = getLastHit().get(victim);
                     if (lh != null) {
                         if (lh.getTime() >= System.currentTimeMillis() - 15000) {
                             killer = lh.getDamager();
                         }
                     }
-                    if (t.isBedDestroyed()) {
-                        if (killer == null) {
-                            for (Player on : a.getPlayers()) {
-                                on.sendMessage(getMsg(on, lang.playerFallInVoidFinalKill).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName()));
-                            }
-                            for (Player on : a.getSpectators()) {
-                                on.sendMessage(getMsg(on, lang.playerFallInVoidFinalKill).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName()));
-                            }
-                        } else {
-                            BedWarsTeam t2 = a.getTeam(killer);
-                            for (Player on : a.getPlayers()) {
-                                on.sendMessage(getMsg(on, lang.playerKnockedInVoidFinalKill).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName())
-                                        .replace("{KillerColor}", TeamColor.getChatColor(t2.getColor()).toString()).replace("{KillerName}", killer.getName()));
-                            }
-                            for (Player on : a.getSpectators()) {
-                                on.sendMessage(getMsg(on, lang.playerKnockedInVoidFinalKill).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName())
-                                        .replace("{KillerColor}", TeamColor.getChatColor(t2.getColor()).toString()).replace("{KillerName}", killer.getName()));
-                            }
-                        }
+                    if (killer == null) {
+                        message = t.isBedDestroyed() ? lang.playerExplodeByBombFinalKillNoKiller : lang.playerExplodeByBombNoKiller;
                     } else {
-                        if (killer == null) {
-                            for (Player on : a.getPlayers()) {
-                                on.sendMessage(getMsg(on, lang.playerFallInVoid).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName()));
-                            }
-                            for (Player on : a.getSpectators()) {
-                                on.sendMessage(getMsg(on, lang.playerFallInVoid).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName()));
-                            }
+                        if (killer != victim) {
+                            message = t.isBedDestroyed() ? lang.playerExplodeByBombFinalKill : lang.playerExplodeByBomb;
                         } else {
-                            BedWarsTeam t2 = a.getTeam(killer);
-                            for (Player on : a.getPlayers()) {
-                                on.sendMessage(getMsg(on, lang.playerKnockedInVoid).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName())
-                                        .replace("{KillerColor}", TeamColor.getChatColor(t2.getColor()).toString()).replace("{KillerName}", killer.getName()));
-                            }
-                            for (Player on : a.getSpectators()) {
-                                on.sendMessage(getMsg(on, lang.playerKnockedInVoid).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName())
-                                        .replace("{KillerColor}", TeamColor.getChatColor(t2.getColor()).toString()).replace("{KillerName}", killer.getName()));
-                            }
+                            message = t.isBedDestroyed() ? lang.playerExplodeByBombFinalKillNoKiller : lang.playerExplodeByBombNoKiller;
                         }
                     }
-                } else if (damageEvent.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION || damageEvent.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
-                    if (e.getEntity().getKiller() != null) {
-                        debug("damager isn't null");
-                        if (e.getEntity().getKiller() instanceof TNTPrimed) {
-                            TNTPrimed tn = (TNTPrimed) e.getEntity().getKiller();
-                            if (tn != null) {
-                                Player player = (Player) tn.getSource();
-                                if (player != null) {
-                                    killer = player;
-                                }
-                            }
+
+
+                } else if (damageEvent.getCause() == EntityDamageEvent.DamageCause.VOID) {
+                    LastHit lh = getLastHit().get(victim);
+                    if (lh != null) {
+                        if (lh.getTime() >= System.currentTimeMillis() - 15000) {
+                            killer = lh.getDamager();
                         }
                     }
-                    if (t.isBedDestroyed()) {
-                        if (killer == null) {
-                            for (Player on : a.getPlayers()) {
-                                on.sendMessage(getMsg(on, lang.playerExplodeByBombFinalKill).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName()));
-                            }
-                            for (Player on : a.getSpectators()) {
-                                on.sendMessage(getMsg(on, lang.playerExplodeByBombFinalKill).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName()));
-                            }
-                        } else {
-                            BedWarsTeam t2 = a.getTeam(killer);
-                            for (Player on : a.getPlayers()) {
-                                on.sendMessage(getMsg(on, lang.playerExplodeByBombFinalKill).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName())
-                                        .replace("{KillerColor}", TeamColor.getChatColor(t2.getColor()).toString()).replace("{KillerName}", killer.getName()));
-                            }
-                            for (Player on : a.getSpectators()) {
-                                on.sendMessage(getMsg(on, lang.playerExplodeByBombFinalKill).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName())
-                                        .replace("{KillerColor}", TeamColor.getChatColor(t2.getColor()).toString()).replace("{KillerName}", killer.getName()));
-                            }
-                        }
+                    if (killer == null) {
+                        message = t.isBedDestroyed() ? lang.playerFallInVoidFinalKill : lang.playerFallInVoid;
                     } else {
-                        if (killer == null) {
-                            for (Player on : a.getPlayers()) {
-                                on.sendMessage(getMsg(on, lang.playerExplodeByBomb).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName()));
-                            }
-                            for (Player on : a.getSpectators()) {
-                                on.sendMessage(getMsg(on, lang.playerExplodeByBomb).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName()));
-                            }
+                        if (killer != victim) {
+                            message = t.isBedDestroyed() ? lang.playerKnockedInVoidFinalKill : lang.playerKnockedInVoid;
                         } else {
-                            BedWarsTeam t2 = a.getTeam(killer);
-                            for (Player on : a.getPlayers()) {
-                                on.sendMessage(getMsg(on, lang.playerExplodeByBomb).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName())
-                                        .replace("{KillerColor}", TeamColor.getChatColor(t2.getColor()).toString()).replace("{KillerName}", killer.getName()));
-                            }
-                            for (Player on : a.getSpectators()) {
-                                on.sendMessage(getMsg(on, lang.playerExplodeByBomb).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName())
-                                        .replace("{KillerColor}", TeamColor.getChatColor(t2.getColor()).toString()).replace("{KillerName}", killer.getName()));
-                            }
+                            message = t.isBedDestroyed() ? lang.playerFallInVoidFinalKill : lang.playerFallInVoid;
                         }
                     }
                 } else if (damageEvent.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK || damageEvent.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
                     if (killer != null) {
-                        if (t.isBedDestroyed()) {
-                            BedWarsTeam t2 = a.getTeam(killer);
-                            for (Player on : a.getPlayers()) {
-                                on.sendMessage(getMsg(on, lang.playerDieAttackFinalKill).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName())
-                                        .replace("{KillerColor}", TeamColor.getChatColor(t2.getColor()).toString()).replace("{KillerName}", killer.getName()));
-                            }
-                            for (Player on : a.getSpectators()) {
-                                on.sendMessage(getMsg(on, lang.playerDieAttackFinalKill).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName())
-                                        .replace("{KillerColor}", TeamColor.getChatColor(t2.getColor()).toString()).replace("{KillerName}", killer.getName()));
-                            }
-
-                        } else {
-                            BedWarsTeam t2 = a.getTeam(killer);
-                            for (Player on : a.getPlayers()) {
-                                on.sendMessage(getMsg(on, lang.playerDieAttack).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName())
-                                        .replace("{KillerColor}", TeamColor.getChatColor(t2.getColor()).toString()).replace("{KillerName}", killer.getName()));
-                            }
-                            for (Player on : a.getSpectators()) {
-                                on.sendMessage(getMsg(on, lang.playerDieAttack).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName())
-                                        .replace("{KillerColor}", TeamColor.getChatColor(t2.getColor()).toString()).replace("{KillerName}", killer.getName()));
-                            }
-                        }
-                    } else {
-                        unknownReason(t, a, victim);
+                        message = t.isBedDestroyed() ? lang.playerDieAttackFinalKill : lang.playerDieAttack;
                     }
-                } else {
-                    unknownReason(t, a, victim);
                 }
+
+                BedWarsTeam t2 = null;
+                if (killer != null) t2 = a.getTeam(killer);
+
+                for (Player on : a.getPlayers()) {
+                    on.sendMessage(getMsg(on, message).
+                            replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName())
+                            .replace("{KillerColor}", t2 == null ? "" : TeamColor.getChatColor(t2.getColor()).toString())
+                            .replace("{KillerName}", killer == null ? "" : killer.getName()));
+                }
+                for (Player on : a.getSpectators()) {
+                    on.sendMessage(getMsg(on, message).
+                            replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName())
+                            .replace("{KillerColor}", t2 == null ? "" : TeamColor.getChatColor(t2.getColor()).toString())
+                            .replace("{KillerName}", killer == null ? "" : killer.getName()));
+                }
+
+                /** give stats and victim's inventory */
                 if (killer != null) {
                     if (t.isBedDestroyed()) {
                         for (ItemStack i : drops) {
@@ -325,7 +261,6 @@ public class DamageDeathMove implements Listener {
                             }
                         }
                         a.addPlayerKill(killer, true);
-                        //a.addPlayerKill(killer, false);
                         Bukkit.getPluginManager().callEvent(new FinalKillEvent(a.getWorldName(), victim, killer));
                     } else {
                         for (ItemStack i : drops) {
@@ -342,10 +277,11 @@ public class DamageDeathMove implements Listener {
             }
             victim.spigot().respawn();
         }
+
     }
 
     @EventHandler
-    public void pdd(PlayerDeathEvent e) {
+    public void onDeath2(PlayerDeathEvent e) {
         Arena a = Arena.getArenaByPlayer(e.getEntity());
         if (a != null) {
             e.setDeathMessage(null);
@@ -380,7 +316,7 @@ public class DamageDeathMove implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void re(PlayerRespawnEvent e) {
+    public void onRespawn(PlayerRespawnEvent e) {
         Arena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a != null) {
             if (a.isSpectator(e.getPlayer())) {
@@ -420,7 +356,7 @@ public class DamageDeathMove implements Listener {
     public static HashMap<Player, BedWarsTeam> isOnABase = new HashMap<>();
 
     @EventHandler
-    public void m(PlayerMoveEvent e) {
+    public void onMove(PlayerMoveEvent e) {
         if (e.getPlayer().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
             if (e.getTo().getY() < 0) {
                 e.getPlayer().teleport(config.getConfigLoc("lobbyLoc"));
@@ -466,7 +402,7 @@ public class DamageDeathMove implements Listener {
                                 }
                                 if (t.isTrapActive()) {
                                     t.disableTrap();
-                                    for (Player mem : t.getMembers()){
+                                    for (Player mem : t.getMembers()) {
                                         if (t.isTrapTitle()) {
                                             nms.sendTitle(mem, getMsg(mem, lang.enemyBaseEnterTitle), null, 0, 50, 0);
                                         }
@@ -531,7 +467,7 @@ public class DamageDeathMove implements Listener {
     }
 
     @EventHandler
-    public void ph(ProjectileHitEvent e) {
+    public void onProjHit(ProjectileHitEvent e) {
         Projectile proj = e.getEntity();
         if (e.getEntity().getShooter() instanceof Player) {
             Arena a = Arena.getArenaByPlayer((Player) e.getEntity().getShooter());

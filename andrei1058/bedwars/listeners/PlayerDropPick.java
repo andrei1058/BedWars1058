@@ -16,7 +16,7 @@ import static com.andrei1058.bedwars.Main.config;
 
 public class PlayerDropPick implements Listener {
     @EventHandler
-    public void p(PlayerPickupItemEvent e) {
+    public void onPickup(PlayerPickupItemEvent e) {
         Player p = e.getPlayer();
         if (e.getPlayer().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
             e.setCancelled(true);
@@ -55,7 +55,7 @@ public class PlayerDropPick implements Listener {
     }
 
     @EventHandler
-    public void d(PlayerDropItemEvent e) {
+    public void onDrop(PlayerDropItemEvent e) {
         Player p = e.getPlayer();
         if (e.getPlayer().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
             e.setCancelled(true);

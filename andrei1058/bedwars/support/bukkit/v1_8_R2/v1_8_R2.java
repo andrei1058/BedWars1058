@@ -1,15 +1,20 @@
 package com.andrei1058.bedwars.support.bukkit.v1_8_R2;
 
 import com.andrei1058.bedwars.api.TeamColor;
+import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
+import com.andrei1058.bedwars.arena.ShopHolo;
+import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.support.bukkit.NMS;
 import net.minecraft.server.v1_8_R2.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_8_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_8_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_8_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R2.entity.CraftTNTPrimed;
 import org.bukkit.craftbukkit.v1_8_R2.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_8_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R2.entity.CraftLivingEntity;
@@ -200,26 +205,17 @@ public class v1_8_R2 implements NMS {
     }
 
     @Override
-    public void spawnShop(Location loc, String name1, List<Player> players) {
+    public void spawnShop(Location loc, String name1, List<Player> players, Arena arena) {
         spawnVillager(loc);
         for (Player p : players) {
             String[] nume = getMsg(p, name1).split(",");
-            if (nume.length >= 2) {
+            if (nume.length == 1) {
+                ArmorStand a = createArmorStand(nume[0], loc);
+                new ShopHolo(Language.getPlayerLanguage(p).getIso(), a, null, loc, arena);
+            } else {
                 ArmorStand a = createArmorStand(nume[0], loc.clone().add(0, 0.4, 0));
                 ArmorStand b = createArmorStand(nume[1], loc);
-                for (Player pl : p.getWorld().getPlayers()) {
-                    if (p != pl) {
-                        nms.hideEntity(a, pl);
-                        nms.hideEntity(b, pl);
-                    }
-                }
-            } else {
-                ArmorStand a = createArmorStand(nume[0], loc);
-                for (Player pl : p.getWorld().getPlayers()) {
-                    if (p != pl) {
-                        nms.hideEntity(a, pl);
-                    }
-                }
+                new ShopHolo(Language.getPlayerLanguage(p).getIso(), a, b, loc, arena);
             }
         }
     }
@@ -375,6 +371,19 @@ public class v1_8_R2 implements NMS {
 
         public BedWarsTeam getTeam() {
             return team;
+        }
+    }
+
+    @Override
+    public void setSource(TNTPrimed tnt, Player owner) {
+        EntityLiving nmsEntityLiving = (((CraftLivingEntity) owner).getHandle());
+        EntityTNTPrimed nmsTNT = (((CraftTNTPrimed) tnt).getHandle());
+        try {
+            Field sourceField = EntityTNTPrimed.class.getDeclaredField("source");
+            sourceField.setAccessible(true);
+            sourceField.set(nmsTNT, nmsEntityLiving);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 }

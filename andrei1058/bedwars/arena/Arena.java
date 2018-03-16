@@ -216,7 +216,6 @@ public class Arena {
         if (allowSpectate || playerBefore) {
             spectators.add(p);
             players.remove(p);
-            //nms.hideEntity(players, p);
             p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
             if (!playerBefore) {
                 /** save player inv etc if isn't saved yet*/
@@ -427,6 +426,7 @@ public class Arena {
     private void restart() {
         upgradeDiamondsCount = 0;
         upgradeEmeraldsCount = 0;
+        ShopHolo.clearForArena(this);
         for (Player on : new ArrayList<>(players)) {
             removePlayer(on);
         }
@@ -572,11 +572,11 @@ public class Arena {
                             continue;
                         }
                         if (maxInTeam > 1) {
-                            nms.spawnShop(t.getTeamUpgrades(), lang.teamUpgradesName, getPlayers());
-                            nms.spawnShop(t.getShop(), lang.shopTeamName, getPlayers());
+                            nms.spawnShop(t.getTeamUpgrades(), lang.teamUpgradesName, getPlayers(), this);
+                            nms.spawnShop(t.getShop(), lang.shopTeamName, getPlayers(), this);
                         } else {
-                            nms.spawnShop(t.getTeamUpgrades(), lang.soloUpgradesName, getPlayers());
-                            nms.spawnShop(t.getShop(), lang.shopSoloName, getPlayers());
+                            nms.spawnShop(t.getTeamUpgrades(), lang.soloUpgradesName, getPlayers(), this);
+                            nms.spawnShop(t.getShop(), lang.shopSoloName, getPlayers(), this);
                         }
                     }
                     return;
