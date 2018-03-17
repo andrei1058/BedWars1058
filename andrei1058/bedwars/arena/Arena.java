@@ -214,6 +214,7 @@ public class Arena {
 
     public void addSpectator(Player p, boolean playerBefore) {
         if (allowSpectate || playerBefore) {
+            p.teleport(cm.getArenaLoc("waiting.Loc"));
             spectators.add(p);
             players.remove(p);
             p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
@@ -223,7 +224,6 @@ public class Arena {
                 setArenaByPlayer(p, true);
                 playerLocation.put(p, p.getLocation());
             }
-            p.teleport(cm.getArenaLoc("waiting.Loc"));
             nms.setCollide(p, false);
             new SBoard(p, this);
 
@@ -245,9 +245,15 @@ public class Arena {
             p.setGameMode(GameMode.SPECTATOR);
 
             /** update generator holograms for spectators */
+            String iso = Language.getPlayerLanguage(p).getIso();
             for (OreGenerator o : OreGenerator.getGenerators()){
                 if (o.getArena() == this){
-                    o.updateHolograms();
+                    o.updateHolograms(p, iso);
+                }
+            }
+            for (ShopHolo sh : ShopHolo.getShopHolo()){
+                if (sh.getA() == this){
+                    sh.updateForPlayer(p, iso);
                 }
             }
         } else {

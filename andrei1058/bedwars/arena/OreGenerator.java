@@ -73,17 +73,16 @@ public class OreGenerator {
                 for (Player p : arena.getPlayers()) {
                     String iso = Language.getPlayerLanguage(p).getIso();
                     HoloGram h = armorstands.get(iso);
-                    if (h != null){
-                        h.updateForAll();
-                    } else {
-                        armorstands.put(iso, new HoloGram(iso, createArmorStand(getMsg(p, lang.generatorTier).replace("{tier}", getMsg(p, lang.tier1Format)), location.clone().add(0, 3, 0)),
+                    if (h == null){
+                       armorstands.put(iso, new HoloGram(iso, createArmorStand(getMsg(p, lang.generatorTier).replace("{tier}", getMsg(p, lang.tier1Format)), location.clone().add(0, 3, 0)),
                                 createArmorStand(getMsg(p, lang.generatorTimer).replace("{seconds}",
                                         String.valueOf(lastSpawn)), location.clone().add(0, 2.4, 0)),
                                 createArmorStand(getMsg(p, lang.generatorDiamond), location.clone().add(0, 2.7, 0)), arena.getWorld()));
                     }
                 }
-
-
+                for (HoloGram hg : armorstands.values()){
+                    hg.updateForAll();
+                }
 
                 item = createArmorStand(null, location.clone().add(0, 1.5, 0));
                 item.setHelmet(new ItemStack(Material.DIAMOND_BLOCK));
@@ -99,14 +98,15 @@ public class OreGenerator {
                 for (Player p : arena.getPlayers()) {
                     String iso = Language.getPlayerLanguage(p).getIso();
                     HoloGram h = armorstands.get(iso);
-                    if (h != null){
-                        h.updateForAll();
-                    } else {
+                    if (h == null){
                         armorstands.put(iso, new HoloGram(iso, createArmorStand(getMsg(p, lang.generatorTier).replace("{tier}", getMsg(p, lang.tier1Format)), location.clone().add(0, 3, 0)),
                                 createArmorStand(getMsg(p, lang.generatorTimer).replace("{seconds}",
                                         String.valueOf(lastSpawn)), location.clone().add(0, 2.4, 0)),
                                 createArmorStand(getMsg(p, lang.generatorEmerald), location.clone().add(0, 2.7, 0)), arena.getWorld()));
                     }
+                }
+                for (HoloGram hg : armorstands.values()){
+                    hg.updateForAll();
                 }
 
                 item = createArmorStand(null, location.clone().add(0, 1.7, 0));
@@ -280,7 +280,7 @@ public class OreGenerator {
             this.name = name;
             this.iso = iso;
             this.w = w;
-            updateForAll();
+            //updateForAll();
         }
 
         public void updateForAll(){
@@ -288,7 +288,15 @@ public class OreGenerator {
                 if (Language.getPlayerLanguage(p2).getIso().equalsIgnoreCase(iso)) continue;
                 nms.hideEntity(tier, p2);
                 nms.hideEntity(timer, p2);
+                nms.hideEntity(name, p2);
             }
+        }
+
+        public void updateForPlayer(Player p, String lang){
+            if (lang.equalsIgnoreCase(iso)) return;
+            nms.hideEntity(tier, p);
+            nms.hideEntity(timer, p);
+            nms.hideEntity(name, p);
         }
 
         public void setTierName(String name) {
@@ -382,6 +390,13 @@ public class OreGenerator {
     public void updateHolograms(){
         for (HoloGram h : armorstands.values()){
             h.updateForAll();
+        }
+    }
+
+    /** Update holograms for a player */
+    public void updateHolograms(Player p, String iso){
+        for (HoloGram h : armorstands.values()){
+            h.updateForPlayer(p, iso);
         }
     }
 }

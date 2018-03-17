@@ -218,6 +218,7 @@ public class MainCommand extends BukkitCommand {
                     x = true;
                     break;
                 case "gui":
+                    if (Arena.getArenaByPlayer(p) != null) return true;
                     ArenaGUI.openGui(p);
                     break;
             }

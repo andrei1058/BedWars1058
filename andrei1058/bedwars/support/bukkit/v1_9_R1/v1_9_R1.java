@@ -172,12 +172,10 @@ public class v1_9_R1 implements NMS {
     }
 
     @Override
-    public void hideEntity(org.bukkit.entity.Entity e, Player... players) {
+    public void hideEntity(org.bukkit.entity.Entity e, Player p) {
         PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(e.getEntityId());
-        for (Player p : players) {
-            if (p == e) continue;
-            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
-        }
+        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+
     }
 
     @Override
@@ -214,16 +212,22 @@ public class v1_9_R1 implements NMS {
 
     @Override
     public void spawnShop(Location loc, String name1, List<Player> players, Arena arena) {
-        spawnVillager(loc);
+        Location l = loc.clone();
+        spawnVillager(l);
         for (Player p : players) {
             String[] nume = getMsg(p, name1).split(",");
             if (nume.length == 1) {
-                ArmorStand a = createArmorStand(nume[0], loc);
-                new ShopHolo(Language.getPlayerLanguage(p).getIso(), a, null, loc, arena);
+                ArmorStand a = createArmorStand(nume[0], l);
+                new ShopHolo(Language.getPlayerLanguage(p).getIso(), a, null, l, arena);
             } else {
-                ArmorStand a = createArmorStand(nume[0], loc.clone().add(0, 0.4, 0));
-                ArmorStand b = createArmorStand(nume[1], loc);
-                new ShopHolo(Language.getPlayerLanguage(p).getIso(), a, b, loc, arena);
+                ArmorStand a = createArmorStand(nume[0], l.clone().add(0, 0.4, 0));
+                ArmorStand b = createArmorStand(nume[1], l);
+                new ShopHolo(Language.getPlayerLanguage(p).getIso(), a, b, l, arena);
+            }
+        }
+        for (ShopHolo sh : ShopHolo.getShopHolo()){
+            if (sh.getA() == arena){
+                sh.update();
             }
         }
     }

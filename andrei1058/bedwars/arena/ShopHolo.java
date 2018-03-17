@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.configuration.Language;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
@@ -20,22 +21,26 @@ public class ShopHolo {
     private Arena a;
 
     public ShopHolo(String iso, ArmorStand a1, ArmorStand a2, Location l, Arena a) {
+        this.l = l;
         for (ShopHolo sh : getShopHolo()){
             if (sh.l == l && sh.iso.equalsIgnoreCase(iso)){
-                update();
+                if (a1 != null) a1.damage(10000d);
+                if (a2 != null) a2.damage(10000d);
                 return;
             }
         }
         this.a1 = a1;
         this.a2 = a2;
         this.iso = iso;
-        this.l = l;
         this.a = a;
-        update();
+        //update();
         shopHolo.add(this);
     }
 
     public void update(){
+        if (l == null){
+            Bukkit.broadcastMessage("LOCATION IS NULL");
+        }
         for (Player p2 : l.getWorld().getPlayers()) {
             if (Language.getPlayerLanguage(p2).getIso().equalsIgnoreCase(iso)) continue;
             if (a1 != null) {
@@ -47,12 +52,26 @@ public class ShopHolo {
         }
     }
 
+    public void updateForPlayer(Player p, String lang){
+        if (lang.equalsIgnoreCase(iso)) return;
+        if (a1 != null) {
+            nms.hideEntity(a1, p);
+        }
+        if (a2 != null) {
+            nms.hideEntity(a2, p);
+        }
+    }
+
     public static void clearForArena(Arena a){
         for (ShopHolo sh : new ArrayList<>(getShopHolo())){
             if (sh.a == a){
                 shopHolo.remove(sh);
             }
         }
+    }
+
+    public Arena getA() {
+        return a;
     }
 
     public String getIso() {

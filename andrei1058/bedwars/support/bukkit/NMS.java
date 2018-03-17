@@ -35,7 +35,7 @@ public interface NMS {
     ItemStack getItemInHand(Player p);
 
     /** Hide an entity*/
-    void hideEntity(Entity e, Player... players);
+    void hideEntity(Entity e, Player p);
 
     /** Check if item-stack is armor*/
     boolean isArmor(ItemStack itemStack);

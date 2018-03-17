@@ -110,6 +110,8 @@ public class PlayerGoods {
         for (PotionEffect pf : player.getActivePotionEffects()) {
             player.removePotionEffect(pf.getType());
         }
+        player.getInventory().clear();
+        player.getInventory().setArmorContents(null);
         player.setLevel(level);
         player.setExp(exp);
         player.setHealthScale(healthscale);
@@ -129,8 +131,8 @@ public class PlayerGoods {
             }
             potions.clear();
         }
+        player.getEnderChest().clear();
         if (!enderchest.isEmpty()) {
-            player.getEnderChest().clear();
             for (Map.Entry<ItemStack, Integer> entry : enderchest.entrySet()) {
                 player.getEnderChest().setItem(entry.getValue(), entry.getKey());
             }

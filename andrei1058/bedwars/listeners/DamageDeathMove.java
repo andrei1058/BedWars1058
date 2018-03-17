@@ -2,9 +2,8 @@ package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.*;
-import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.arena.BedWarsTeam;
-import com.andrei1058.bedwars.arena.LastHit;
+import com.andrei1058.bedwars.arena.*;
+import com.andrei1058.bedwars.configuration.Language;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -365,6 +364,20 @@ public class DamageDeathMove implements Listener {
         }
         if (Arena.isInArena(e.getPlayer())) {
             Arena a = Arena.getArenaByPlayer(e.getPlayer());
+            if (e.getFrom().getChunk() != e.getTo().getChunk()){
+                //update armorstands hidden by nms
+                String iso = Language.getPlayerLanguage(e.getPlayer()).getIso();
+                for (OreGenerator o : OreGenerator.getGenerators()){
+                    if (o.getArena() == a){
+                        o.updateHolograms(e.getPlayer(), iso);
+                    }
+                }
+                for (ShopHolo sh : ShopHolo.getShopHolo()){
+                    if (sh.getA() == a){
+                        sh.updateForPlayer(e.getPlayer(), iso);
+                    }
+                }
+            }
             if (a.isSpectator(e.getPlayer())) {
                 if (e.getTo().getY() < 0) {
                     e.getPlayer().teleport(a.getCm().getArenaLoc("waiting.Loc"));

@@ -414,16 +414,11 @@ public class Language {
     }
 
     public static List<String> getScoreboard(Player p, String path, String alternative) {
-        if (langByPlayer.containsKey(p)) {
-            if (langByPlayer.get(path) != null) {
-                return langByPlayer.get(p).l(path);
-            }
-        } else {
-            if (lang.yml.get(path) != null) {
-                return lang.l(path);
-            }
+        Language language = getPlayerLanguage(p);
+        if (language.exists(path)){
+            return language.l(path);
         }
-        return getList(p, alternative);
+        return language.l(alternative);
     }
 
     public void set(String path, Object value) {
