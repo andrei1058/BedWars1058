@@ -259,7 +259,7 @@ public class DamageDeathMove implements Listener {
                                 killer.getWorld().dropItemNaturally(a.getTeam(killer).getIronGenerator().getLocation(), i);
                             }
                         }
-                        a.addPlayerKill(killer, true);
+                        a.addPlayerKill(killer, true, victim);
                         Bukkit.getPluginManager().callEvent(new FinalKillEvent(a.getWorldName(), victim, killer));
                     } else {
                         for (ItemStack i : drops) {
@@ -269,7 +269,7 @@ public class DamageDeathMove implements Listener {
                                 killer.getInventory().addItem(i);
                             }
                         }
-                        a.addPlayerKill(killer, false);
+                        a.addPlayerKill(killer, false, victim);
                     }
                     killer.playSound(killer.getLocation(), nms.playerKill(), 1f, 1f);
                 }
@@ -286,6 +286,7 @@ public class DamageDeathMove implements Listener {
             e.setDeathMessage(null);
             /** Remove base potion effects for enemies and members */
             if (a.isPlayer(e.getEntity())) {
+                a.addPlayerDeath(e.getEntity());
                 for (BedWarsTeam t : a.getTeams()) {
                     if (e.getEntity().getLocation().distance(t.getSpawn()) < a.getIslandRadius()) {
                         if (t.getPotionEffectApplied().contains(e.getEntity())) {

@@ -2,14 +2,18 @@ package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
+import org.bukkit.inventory.ItemStack;
 
-import static com.andrei1058.bedwars.Main.getServerType;
+import static com.andrei1058.bedwars.Main.*;
 
 public class HungerWeatherSpawn implements Listener {
 
@@ -44,15 +48,26 @@ public class HungerWeatherSpawn implements Listener {
     }
 
     @EventHandler
-    public void onCreatureSpawn(CreatureSpawnEvent e){
+    public void onCreatureSpawn(CreatureSpawnEvent e) {
         if (e.getSpawnReason() != CreatureSpawnEvent.SpawnReason.CUSTOM) {
             if (getServerType() == ServerType.SHARED) {
-                if (Arena.getArenaByName(e.getEntity().getWorld().getName()) != null){
+                if (Arena.getArenaByName(e.getEntity().getWorld().getName()) != null) {
                     e.setCancelled(true);
                 }
             } else {
                 e.setCancelled(true);
             }
+        }
+    }
+
+    @EventHandler
+    public void onDrink(PlayerItemConsumeEvent e) {
+        /* remove empty bottle */
+        switch (e.getItem().getType()) {
+            case POTION:
+            case GLASS_BOTTLE:
+                nms.minusAmount(e.getPlayer(), nms.getItemInHand(e.getPlayer()), 1);
+                break;
         }
     }
 

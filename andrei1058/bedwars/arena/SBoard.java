@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.TeamColor;
+import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -25,6 +26,7 @@ public class SBoard {
     private Player p;
     private Objective o;
     private Arena arena;
+    private SimpleDateFormat dateFormat;
 
     public SBoard(Player p, List<String> content, Arena arena) {
         this.p = p;
@@ -33,6 +35,7 @@ public class SBoard {
         this.arena = arena;
         this.setStrings(content);
         p.setScoreboard(sb);
+        dateFormat = new SimpleDateFormat(getMsg(p, lang.generatorTimerFormat));
         scoreboards.add(this);
     }
 
@@ -88,7 +91,8 @@ public class SBoard {
                         .replace("{time}", String.valueOf(arena.getCountdownS())).replace("{player}", p.getName())
                                 .replace("{date}", new SimpleDateFormat(getMsg(getP(), lang.dateFormat)).format(new Date(System.currentTimeMillis()))));
             } else if (arena.getStatus() == GameState.playing) {
-                String generatorTime = new SimpleDateFormat(getMsg(getP(), lang.generatorTimerFormat)).format(new Date((OreGenerator.showDiamoundSb ? arena.upgradeDiamondsCount : arena.upgradeEmeraldsCount)*1000));
+                String generatorTime = dateFormat.format((OreGenerator.showDiamoundSb ?
+                        arena.upgradeDiamondsCount : arena.upgradeEmeraldsCount)*1000);
                 for (BedWarsTeam team : arena.getTeams()) {
                     temp = temp.replace("{Team" + team.getName() + "Color}", TeamColor.getChatColor(team.getColor()).toString()).replace("{Team" + team.getName() + "Name}",
                             team.getName()).replace("{Team" + team.getName() + "Status}", String.valueOf(team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getP(), lang.bedDestroyedFormat).replace("{remainingPlayers}",
@@ -146,7 +150,9 @@ public class SBoard {
                 }
             } else if (arena.getStatus() == GameState.playing) {
                 String kills = String.valueOf(arena.getPlayerKills(getP(), false)), finalKills = String.valueOf(arena.getPlayerKills(getP(), true)),
-                beds = String.valueOf(arena.getPlayerBedsDestroyed(getP())), generatorTime = new SimpleDateFormat(getMsg(getP(), lang.generatorTimerFormat)).format(new Date((OreGenerator.showDiamoundSb ? arena.upgradeDiamondsCount : arena.upgradeEmeraldsCount)*1000));
+                        beds = String.valueOf(arena.getPlayerBedsDestroyed(getP())),
+                        generatorTime = dateFormat.format((OreGenerator.showDiamoundSb ?
+                                arena.upgradeDiamondsCount : arena.upgradeEmeraldsCount)*1000);
                 for (Map.Entry<Team, String> e : toRefresh.entrySet()) {
                     String text = e.getValue();
                     for (BedWarsTeam team : arena.getTeams()) {
@@ -194,5 +200,16 @@ public class SBoard {
 
     public static List<SBoard> getScoreboards() {
         return scoreboards;
+    }
+
+    public static String formatGenTimer(int duration) {
+        long seconds = duration;
+        long absSeconds = Math.abs(seconds);
+        String positive = String.format(
+                "%d:%02d:%02d",
+                absSeconds / 3600,
+                (absSeconds % 3600) / 60,
+                absSeconds % 60);
+        return seconds < 0 ? "-" + positive : positive;
     }
 }

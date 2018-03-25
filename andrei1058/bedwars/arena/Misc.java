@@ -1,27 +1,34 @@
 package com.andrei1058.bedwars.arena;
 
-import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.configuration.Language;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scoreboard.Team;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.andrei1058.bedwars.Main.*;
@@ -92,8 +99,40 @@ public class Misc {
         try {
             if (config.getYml().getBoolean("items.arenaGui.enchanted")) {
                 im.addEnchant(Enchantment.LUCK, 1, true);
-                im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             }
+            im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        } catch (Exception ex) {
+        }
+        i.setItemMeta(im);
+        return i;
+    }
+
+    public static ItemStack getStatsItem(Player p) {
+        ItemStack i;
+        try {
+            i = new ItemStack(Material.valueOf(config.getYml().getString("items.stats.itemStack")),
+                    1, (short) config.getYml().getInt("items.stats.data"));
+        } catch (Exception ex) {
+            plugin.getLogger().severe("There was a problem when loading items.stats.itemStack or Data");
+            i = new ItemStack(Material.BEDROCK);
+        }
+        ItemMeta im = i.getItemMeta();
+        im.spigot().setUnbreakable(true);
+        try {
+            im.setLore(getList(p, Language.statsItemLore));
+        } catch (Exception ex) {
+            plugin.getLogger().severe("There was a problem when loading stats lore");
+        }
+        try {
+            im.setDisplayName(getMsg(p, Language.statsItemName));
+        } catch (Exception ex) {
+            plugin.getLogger().severe("There was a problem when loading ststs name");
+        }
+        try {
+            if (config.getYml().getBoolean("items.stats.enchanted")) {
+                im.addEnchant(Enchantment.LUCK, 1, true);
+            }
+            im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         } catch (Exception ex) {
         }
         i.setItemMeta(im);
@@ -120,7 +159,7 @@ public class Misc {
                 newVersion = newV;
                 plugin.getLogger().info("------------------------------------");
                 plugin.getLogger().info(" ");
-                plugin.getLogger().info("There is a nev version available!");
+                plugin.getLogger().info("There is a new version available!");
                 plugin.getLogger().info("Version: " + newVersion);
                 plugin.getLogger().info(" ");
                 plugin.getLogger().info("https://www.spigotmc.org/resources/50942/");
@@ -129,7 +168,6 @@ public class Misc {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        plugin.spawnNPCs();
     }
 
     public static BlockFace getDirection(Location loc) {
@@ -193,5 +231,62 @@ public class Misc {
                         .replace("{PlayerName}", victim.getName()));
             }
         }
+    }
+
+    /** create TextComponent message */
+    public static TextComponent msgHoverClick(String msg, String hover, String click, ClickEvent.Action clickAction){
+        TextComponent tc = new TextComponent(msg);
+        tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hover).create()));
+        tc.setClickEvent(new ClickEvent(clickAction, click));
+        return tc;
+    }
+
+    /** add default stats gui item */
+    public static void addDefaultStatsItem(YamlConfiguration yml, int slot, Material itemstack, int data, String path){
+        yml.addDefault("statsGUI."+path+".itemStack", itemstack.toString());
+        yml.addDefault("statsGUI."+path+".data", data);
+        yml.addDefault("statsGUI."+path+".slot", slot);
+    }
+
+    /** open stats GUI to player */
+    public static void openStatsGUI(Player p){
+
+        /** cache stats */
+        int kills = database.getKills(p), deaths = database.getDeaths(p), looses = database.getLooses(p), wins = database.getWins(p),
+                finalKills = database.getFinalKills(p), finalDeaths = database.getFinalDeaths(p), bedsDestroyed = database.getBedsDestroyed(p), gamesPlayed = database.getGamesPlayed(p);
+        Timestamp firstPlay = database.getFirstPlay(p), lastPlay = database.getLastPlay(p);
+
+        /** cache time format */
+        String timeFormat = getMsg(p, lang.statsDateTimeFormat);
+
+        /** create inventory */
+        Inventory inv = Bukkit.createInventory(null, config.getInt("statsGUI.invSize"), replaceStatsPlaceholders(getMsg(p, lang.statsInvName),
+                kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName()));
+
+        /** add custom items to gui */
+        for (String s : config.getYml().getConfigurationSection("statsGUI").getKeys(false)){
+            /** skip inv size, it isn't a content */
+            if (s.equalsIgnoreCase("invSize")) continue;
+            /** create new itemStack for content */
+            ItemStack i = new ItemStack(Material.valueOf(config.getYml().getString("statsGUI."+s+".itemStack").toUpperCase()), 1, (byte) config.getInt("statsGUI."+s+".data"));
+            ItemMeta im = i.getItemMeta();
+            im.setDisplayName(replaceStatsPlaceholders(getMsg(p, lang.statsGUIpath+"."+s+".name"), kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName()));
+            List<String> lore = new ArrayList<>();
+            for (String string : getList(p, lang.statsGUIpath+"."+s+".lore")){
+                lore.add(replaceStatsPlaceholders(string, kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName()));
+            }
+            im.setLore(lore);
+            i.setItemMeta(im);
+            inv.setItem(config.getInt("statsGUI."+s+".slot"), i);
+        }
+
+        p.openInventory(inv);
+    }
+
+    private static String replaceStatsPlaceholders(String s, int kills, int deaths, int looses, int wins, int finalKills, int finalDeaths, int beds, int games, Timestamp first, Timestamp last, String timeFormat, String player){
+        return s.replace("{kills}", String.valueOf(kills)).replace("{deaths}", String.valueOf(deaths)).replace("{looses}", String.valueOf(looses)).replace("{wins}", String.valueOf(wins))
+                .replace("{finalKills}", String.valueOf(finalKills)).replace("{finalDeaths}", String.valueOf(finalDeaths)).replace("{bedsDestroyed}", String.valueOf(beds))
+                .replace("{gamesPlayed}", String.valueOf(games)).replace("{firstPlay}", String.valueOf(new SimpleDateFormat(timeFormat).format(first)))
+                .replace("{lastPlay}", String.valueOf(new SimpleDateFormat(timeFormat).format(last))).replace("{player}", player);
     }
 }

@@ -122,6 +122,8 @@ public class Interact implements Listener {
                 ArenaGUI.openGui(p);
             } else if (inHand.getItemMeta().getDisplayName().equalsIgnoreCase(getMsg(p, lang.leaveItemName))) {
                 p.performCommand("bw leave");
+            } else if (inHand.getItemMeta().getDisplayName().equalsIgnoreCase(getMsg(p, lang.statsItemName))) {
+                Misc.openStatsGUI(p);
             }
         }
     }

@@ -168,7 +168,8 @@ public class BuyItemsAction extends ContentAction {
                     }
                 }
                 ItemStack i = si.getItemStack();
-                if (si.getItemStack().getType() == Material.WOOL || si.getItemStack().getType() == Material.STAINED_CLAY || si.getItemStack().getType() == Material.STAINED_GLASS || si.getItemStack().getType() == Material.GLASS) {
+                if (si.getItemStack().getType() == Material.WOOL || si.getItemStack().getType() == Material.STAINED_CLAY ||
+                        si.getItemStack().getType() == Material.STAINED_GLASS) {
                     i = new ItemStack(i.getType(), i.getAmount(), TeamColor.itemColor(Arena.getArenaByPlayer(p).getTeam(p).getColor()));
                 }
                 p.getInventory().addItem(i);

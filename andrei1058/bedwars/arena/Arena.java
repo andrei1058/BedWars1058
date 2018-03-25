@@ -15,12 +15,11 @@ import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.Contract;
 
 import java.io.File;
+import java.sql.Timestamp;
 import java.util.*;
 
 import static com.andrei1058.bedwars.Main.*;
-import static com.andrei1058.bedwars.configuration.Language.getList;
-import static com.andrei1058.bedwars.configuration.Language.getMsg;
-import static com.andrei1058.bedwars.configuration.Language.getScoreboard;
+import static com.andrei1058.bedwars.configuration.Language.*;
 import static com.andrei1058.bedwars.listeners.DamageDeathMove.isOnABase;
 
 public class Arena {
@@ -37,7 +36,7 @@ public class Arena {
     private YamlConfiguration yml;
     private ConfigManager cm;
     private int minPlayers = 2, maxPlayers = 10, countdownS, slot = -1, maxInTeam = 1, countUp = 0, restarting = 12, islandRadius = 10;
-    public static int upgradeDiamondsCount = 0, upgradeEmeraldsCount = 0;
+    public int upgradeDiamondsCount = 0, upgradeEmeraldsCount = 0;
     private boolean allowSpectate = true;
     private World world;
     private String group = "DEFAULT";
@@ -45,16 +44,24 @@ public class Arena {
     private List<Block> placed = new ArrayList<>();
     private HashMap<Block, BlockState> broken = new HashMap<>();
 
-    /** bed block*/
+    /**
+     * bed block
+     */
     private Material bedBlock = Material.BED_BLOCK;
 
-    /** player location before joining */
+    /**
+     * player location before joining
+     */
     private static HashMap<Player, Location> playerLocation = new HashMap<>();
 
-    /** temp stats */
-    private static HashMap<String, Integer> playerKills = new HashMap<>();
+    /**
+     * temp stats
+     */
+    private HashMap<Player, Integer> playerKills = new HashMap<>();
     private static HashMap<Player, Integer> playerBedsDestroyed = new HashMap<>();
-    private static HashMap<String, Integer> playerFinalKills = new HashMap<>();
+    private static HashMap<Player, Integer> playerFinalKills = new HashMap<>();
+    private static HashMap<Player, Integer> playerDeaths = new HashMap<>();
+    private static HashMap<Player, Integer> playerFinalKillDeaths = new HashMap<>();
 
     public Arena(String name) {
         cm = new ConfigManager(name, "plugins/" + plugin.getName() + "/Arenas", true);
@@ -134,6 +141,8 @@ public class Arena {
                 plugin.getLogger().severe(yml.getString("bedBlock") + " is not a Material at " + getWorldName() + ".yml");
             }
         }
+        world.getWorldBorder().setCenter(cm.getArenaLoc("waiting.Loc"));
+        world.getWorldBorder().setSize(yml.getInt("worldBorder"));
     }
 
     public void addPlayer(Player p) {
@@ -178,16 +187,12 @@ public class Arena {
                     return;
                 }
             }
+            p.closeInventory();
             players.add(p);
             for (Player on : players) {
                 on.sendMessage(getMsg(on, lang.playerJoin).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
             }
             setArenaByPlayer(p, false);
-            if (getStatus() == GameState.waiting) {
-                new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + "Waiting", lang.scoreboardDefaultWaiting), this);
-            } else if (getStatus() == GameState.starting) {
-                new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + "Starting", lang.scoreboardDefaultStarting), this);
-            }
             if (players.size() >= minPlayers && status == GameState.waiting) {
                 setStatus(GameState.starting);
             }
@@ -196,6 +201,11 @@ public class Arena {
             new PlayerGoods(p, true);
             playerLocation.put(p, p.getLocation());
             p.teleport(cm.getArenaLoc("waiting.Loc"));
+            if (getStatus() == GameState.waiting) {
+                new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + "Waiting", lang.scoreboardDefaultWaiting), this);
+            } else if (getStatus() == GameState.starting) {
+                new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + "Starting", lang.scoreboardDefaultStarting), this);
+            }
             leaveItem(p);
 
         } else if (status == GameState.playing) {
@@ -214,6 +224,7 @@ public class Arena {
 
     public void addSpectator(Player p, boolean playerBefore) {
         if (allowSpectate || playerBefore) {
+            p.closeInventory();
             p.teleport(cm.getArenaLoc("waiting.Loc"));
             spectators.add(p);
             players.remove(p);
@@ -246,13 +257,13 @@ public class Arena {
 
             /** update generator holograms for spectators */
             String iso = Language.getPlayerLanguage(p).getIso();
-            for (OreGenerator o : OreGenerator.getGenerators()){
-                if (o.getArena() == this){
+            for (OreGenerator o : OreGenerator.getGenerators()) {
+                if (o.getArena() == this) {
                     o.updateHolograms(p, iso);
                 }
             }
-            for (ShopHolo sh : ShopHolo.getShopHolo()){
-                if (sh.getA() == this){
+            for (ShopHolo sh : ShopHolo.getShopHolo()) {
+                if (sh.getA() == this) {
                     sh.updateForPlayer(p, iso);
                 }
             }
@@ -283,15 +294,8 @@ public class Arena {
         }
 
         /** restore player inventory */
-        if (PlayerGoods.hasGoods(p)){
+        if (PlayerGoods.hasGoods(p)) {
             PlayerGoods.getPlayerGoods(p).restore();
-        }
-        if (getServerType() == ServerType.SHARED) {
-            p.teleport(playerLocation.get(p));
-        } else if (getServerType() == ServerType.BUNGEE) {
-            Misc.moveToLobbyOrKick(p);
-        } else {
-            p.teleport(config.getConfigLoc("lobbyLoc"));
         }
         playerLocation.remove(p);
         if (respawn.containsKey(p)) {
@@ -307,6 +311,20 @@ public class Arena {
                     }
                 }
             }
+        }
+        if (status == GameState.playing) {
+            int deaths = playerDeaths.containsKey(p) ? playerFinalKills.get(p) : 0;
+            int final_deaths = playerFinalKillDeaths.containsKey(p) ? playerFinalKillDeaths.get(p) : 0;
+            int beds = playerBedsDestroyed.containsKey(p) ? playerBedsDestroyed.get(p) : 0;
+            database.saveStats(p, new Timestamp(System.currentTimeMillis()), 0, this.getPlayerKills(p, false), this.getPlayerKills(p, true),
+                    1, deaths, final_deaths, beds, 1);
+        } else if (status == GameState.restarting) {
+            /** winners */
+            int deaths = playerDeaths.containsKey(p) ? playerFinalKills.get(p) : 0;
+            int final_deaths = playerFinalKillDeaths.containsKey(p) ? playerFinalKillDeaths.get(p) : 0;
+            int beds = playerBedsDestroyed.containsKey(p) ? playerBedsDestroyed.get(p) : 0;
+            database.saveStats(p, new Timestamp(System.currentTimeMillis()), 1, this.getPlayerKills(p, false), this.getPlayerKills(p, true),
+                    0, deaths, final_deaths, beds, 1);
         }
         if (status == GameState.starting && players.size() < minPlayers) {
             setStatus(GameState.waiting);
@@ -338,11 +356,17 @@ public class Arena {
                 on.sendMessage(getMsg(on, lang.playerLeave).replace("{player}", p.getDisplayName()));
             }
         }
-        for (Iterator<SBoard> it = new ArrayList<>(SBoard.getScoreboards()).iterator(); it.hasNext(); ) {
-            SBoard sb = it.next();
+        for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
             if (sb.getP() == p) {
                 sb.remove();
             }
+        }
+        if (getServerType() == ServerType.SHARED) {
+            p.teleport(playerLocation.get(p));
+        } else if (getServerType() == ServerType.BUNGEE) {
+            Misc.moveToLobbyOrKick(p);
+        } else {
+            p.teleport(config.getConfigLoc("lobbyLoc"));
         }
         p.setPlayerListName(p.getName());
         for (Player on : Bukkit.getOnlinePlayers()) {
@@ -362,8 +386,15 @@ public class Arena {
         p.getInventory().clear();
         p.getInventory().setArmorContents(null);
         /** restore player inventory */
-        if (PlayerGoods.hasGoods(p)){
+        if (PlayerGoods.hasGoods(p)) {
             PlayerGoods.getPlayerGoods(p).restore();
+        }
+        playerLocation.remove(p);
+        nms.setCollide(p, true);
+        for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
+            if (sb.getP() == p) {
+                sb.remove();
+            }
         }
         if (getServerType() == ServerType.SHARED) {
             p.teleport(playerLocation.get(p));
@@ -372,14 +403,6 @@ public class Arena {
         }
         if (getServerType() == ServerType.BUNGEE) {
             Misc.moveToLobbyOrKick(p);
-        }
-        playerLocation.remove(p);
-        nms.setCollide(p, true);
-        for (Iterator<SBoard> it = new ArrayList<>(SBoard.getScoreboards()).iterator(); it.hasNext(); ) {
-            SBoard sb = it.next();
-            if (sb.getP() == p) {
-                sb.remove();
-            }
         }
         p.setPlayerListName(p.getName());
         for (Player on : Bukkit.getOnlinePlayers()) {
@@ -469,7 +492,9 @@ public class Arena {
         playerKills.clear();
         playerBedsDestroyed.clear();
         playerFinalKills.clear();
-        System.gc();
+        playerDeaths.clear();
+        playerFinalKillDeaths.clear();
+        //System.gc();
     }
 
     public void refresh() {
@@ -505,6 +530,7 @@ public class Arena {
                         for (String s : Language.getList(p, lang.gameTutorialStrings)) {
                             p.sendMessage(s);
                         }
+                        p.closeInventory();
                     }
                     setStatus(GameState.playing);
                     for (BedWarsTeam team : getTeams()) {
@@ -759,10 +785,10 @@ public class Arena {
 
     public int getPlayerKills(Player p, boolean finalKills) {
         if (finalKills) {
-            if (playerFinalKills.containsKey(p.getName())) return playerFinalKills.get(p.getName());
+            if (playerFinalKills.containsKey(p)) return playerFinalKills.get(p);
             return 0;
         }
-        if (playerKills.containsKey(p.getName())) return playerKills.get(p.getName());
+        if (playerKills.containsKey(p)) return playerKills.get(p);
         return 0;
     }
 
@@ -870,19 +896,20 @@ public class Arena {
         this.slot = slot;
     }
 
-    public void addPlayerKill(Player p, boolean finalKill) {
+    public void addPlayerKill(Player p, boolean finalKill, Player victim) {
         if (p == null) return;
-        if (playerKills.containsKey(p.getName())) {
-            playerKills.replace(p.getName(), playerKills.get(p.getName()) + 1);
+        if (playerKills.containsKey(p)) {
+            playerKills.replace(p, playerKills.get(p) + 1);
         } else {
-            playerKills.put(p.getName(), 1);
+            playerKills.put(p, 1);
         }
         if (finalKill) {
-            if (playerFinalKills.containsKey(p.getName())) {
-                playerFinalKills.replace(p.getName(), playerFinalKills.get(p.getName()) + 1);
+            if (playerFinalKills.containsKey(p)) {
+                playerFinalKills.replace(p, playerFinalKills.get(p) + 1);
             } else {
-                playerFinalKills.put(p.getName(), 1);
+                playerFinalKills.put(p, 1);
             }
+            playerFinalKillDeaths.put(victim, 1);
         }
     }
 
@@ -921,6 +948,9 @@ public class Arena {
         }
         if (getServerType() == ServerType.MULTIARENA && spigot.getBoolean("settings.bungeecord")) {
             leaveItem(p);
+        }
+        if (config.getBoolean("items.stats.enable") && !config.getLobbyWorldName().isEmpty()) {
+            p.getInventory().setItem(config.getInt("items.stats.slot"), Misc.getStatsItem(p));
         }
     }
 
@@ -969,16 +999,16 @@ public class Arena {
                     }
                     int first = 0, second = 0, third = 0;
                     if (!playerKills.isEmpty()) {
-                        for (Map.Entry<String, Integer> e : playerKills.entrySet()) {
+                        for (Map.Entry<Player, Integer> e : playerKills.entrySet()) {
                             if (e.getKey() == null) continue;
                             if (e.getValue() > first) {
-                                firstName = e.getKey();
+                                firstName = e.getKey().getName();
                                 first = e.getValue();
                             } else if (e.getValue() > second) {
-                                secondName = e.getKey();
+                                secondName = e.getKey().getName();
                                 second = e.getValue();
                             } else if (e.getValue() > third) {
-                                thirdName = e.getKey();
+                                thirdName = e.getKey().getName();
                                 third = e.getValue();
                             }
                         }
@@ -1002,6 +1032,14 @@ public class Arena {
             if (players.size() == 0 && getStatus() != GameState.restarting) {
                 setStatus(GameState.restarting);
             }
+        }
+    }
+
+    public void addPlayerDeath(Player p) {
+        if (playerDeaths.containsKey(p)){
+            playerDeaths.replace(p, playerDeaths.get(p)+1);
+        } else {
+            playerDeaths.put(p, 1);
         }
     }
 }

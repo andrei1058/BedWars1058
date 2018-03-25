@@ -33,7 +33,8 @@ public class ShopHolo {
         this.a2 = a2;
         this.iso = iso;
         this.a = a;
-        //update();
+        if (a1 != null) a1.setMarker(true);
+        if (a2 != null) a2.setMarker(true);
         shopHolo.add(this);
     }
 

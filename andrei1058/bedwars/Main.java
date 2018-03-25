@@ -6,10 +6,7 @@ import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.commands.LeaveCommand;
 import com.andrei1058.bedwars.commands.MainCommand;
-import com.andrei1058.bedwars.configuration.ConfigManager;
-import com.andrei1058.bedwars.configuration.Language;
-import com.andrei1058.bedwars.configuration.ShopManager;
-import com.andrei1058.bedwars.configuration.UpgradesManager;
+import com.andrei1058.bedwars.configuration.*;
 import com.andrei1058.bedwars.listeners.*;
 import com.andrei1058.bedwars.support.Metrics;
 import com.andrei1058.bedwars.support.bukkit.*;
@@ -25,6 +22,8 @@ import com.andrei1058.bedwars.support.lang.Lang;
 import com.andrei1058.bedwars.support.levels.Level;
 import com.andrei1058.bedwars.support.levels.NoLevel;
 import com.andrei1058.bedwars.support.party.Party;
+import com.andrei1058.bedwars.support.stats.MySQL;
+import com.andrei1058.bedwars.support.stats.None;
 import com.andrei1058.bedwars.support.vault.*;
 import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -60,6 +59,7 @@ public class Main extends JavaPlugin {
     private static Level level;
     private static Economy economy;
     private static String version = Bukkit.getServer().getClass().getName().split("\\.")[3];
+    public static com.andrei1058.bedwars.support.stats.Database database;
 
     @Override
     public void onLoad() {
@@ -99,7 +99,6 @@ public class Main extends JavaPlugin {
                 this.getLogger().severe("I can't run on your version: " + version);
                 return;
         }
-
     }
 
     @Override
@@ -116,7 +115,11 @@ public class Main extends JavaPlugin {
             Bukkit.createWorld(new WorldCreator(config.getLobbyWorldName()));
         }
         if (!config.getLobbyWorldName().isEmpty()) {
-            Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getWorld(config.getLobbyWorldName()).getEntities().stream().filter(e -> e.getType() != EntityType.PLAYER).filter(e -> e.getType() != EntityType.PAINTING).filter(e -> e.getType() != EntityType.ITEM_FRAME).forEach(Entity::remove), 30L);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getWorld(config.getLobbyWorldName())
+                    .getEntities().stream().filter(e -> e.getType() != EntityType.PLAYER)
+                    .filter(e -> e.getType() != EntityType.PAINTING)
+                    .filter(e -> e.getType() != EntityType.ITEM_FRAME)
+                    .filter(e -> e.getType() != EntityType.ARMOR_STAND).forEach(Entity::remove), 20L);
         }
         registerEvents(new JoinLeaveTeleport(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess());
         if (getServerType() == ServerType.BUNGEE) {
@@ -177,7 +180,8 @@ public class Main extends JavaPlugin {
         ticks = new Refresh().runTaskTimer(this, 20l, 20l);
         tick = new Rotate().runTaskTimer(this, 120, 1);
         Metrics metrics = new Metrics(this);
-        metrics.addCustomChart(new Metrics.SimplePie("default_language", () -> lang.getLangName()));
+        metrics.addCustomChart(new Metrics.SimplePie("server_type", () -> getServerType().toString()));
+        metrics.addCustomChart(new Metrics.SimplePie("default_language", () -> lang.getIso()));
         nms.registerEntities();
         shop = new ShopManager("shop", "plugins/" + this.getName());
         shop.loadShop();
@@ -185,10 +189,20 @@ public class Main extends JavaPlugin {
         if (config.getBoolean("formatChat")){
             registerEvents(new PlayerChat());
         }
-        //Misc.checkLobbyServer();
+        if (config.getBoolean("database.enable")) {
+            database = new MySQL();
+        } else {
+            database = new None();
+        }
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            database.setupGeneralTables();
+            plugin.spawnNPCs();
+        }, 40L);
+        Language.setupCustomStatsMessages();
     }
 
     public void onDisable() {
+        database.close();
         if (tick != null) {
             tick.cancel();
         }
@@ -213,6 +227,14 @@ public class Main extends JavaPlugin {
         yml.addDefault("disableCrafting", true);
         yml.addDefault("debug", false);
 
+        yml.addDefault("database.enable", false);
+        yml.addDefault("database.host", "localhost");
+        yml.addDefault("database.port", 3306);
+        yml.addDefault("database.database", "bedwars1058");
+        yml.addDefault("database.user", "root");
+        yml.addDefault("database.pass", "p4ss");
+        yml.addDefault("database.ssl", false);
+
         yml.addDefault("items.arenaGui.enable", true);
         yml.addDefault("items.arenaGui.itemStack", "STAINED_CLAY");
         yml.addDefault("items.arenaGui.data", 5);
@@ -223,6 +245,11 @@ public class Main extends JavaPlugin {
         yml.addDefault("items.leave.data", 0);
         yml.addDefault("items.leave.enchanted", false);
         yml.addDefault("items.leave.slot", 8);
+        yml.addDefault("items.stats.enable", true);
+        yml.addDefault("items.stats.itemStack", "PAPER");
+        yml.addDefault("items.stats.data", 0);
+        yml.addDefault("items.stats.enchanted", false);
+        yml.addDefault("items.stats.slot", 0);
         yml.addDefault("arenaGui.settings.size", 27);
         yml.addDefault("arenaGui.settings.startSlot", 10);
         yml.addDefault("arenaGui.settings.endSlot", 16);
@@ -236,6 +263,20 @@ public class Main extends JavaPlugin {
         yml.addDefault("arenaGui.playing.itemStack", "STAINED_CLAY");
         yml.addDefault("arenaGui.playing.data", 4);
         yml.addDefault("arenaGui.playing.enchanted", false);
+
+        /** default stats GUI items */
+        yml.addDefault("statsGUI.invSize", 27);
+        Misc.addDefaultStatsItem(yml, 10, Material.DIAMOND, 0, "wins");
+        Misc.addDefaultStatsItem(yml, 11, Material.REDSTONE, 0, "looses");
+        Misc.addDefaultStatsItem(yml, 12, Material.IRON_SWORD, 0, "kills");
+        Misc.addDefaultStatsItem(yml, 13, Material.SKULL_ITEM, 0, "deaths");
+        Misc.addDefaultStatsItem(yml, 14, Material.DIAMOND_SWORD, 0, "finalKills");
+        Misc.addDefaultStatsItem(yml, 15, Material.SKULL_ITEM, 1,  "finalDeaths");
+        Misc.addDefaultStatsItem(yml, 16, Material.BED, 0, "bedsDestroyed");
+        Misc.addDefaultStatsItem(yml, 21, Material.STAINED_GLASS_PANE, 0, "firstPlay");
+        Misc.addDefaultStatsItem(yml, 22, Material.CHEST, 0, "gamesPlayed");
+        Misc.addDefaultStatsItem(yml, 23, Material.STAINED_GLASS_PANE, 0, "lastPlay");
+
         yml.addDefault("generators.diamond.tier1.delay", 30);
         yml.addDefault("generators.diamond.tier1.max", 4);
         yml.addDefault("generators.diamond.tier2.delay", 20);
@@ -312,6 +353,7 @@ public class Main extends JavaPlugin {
                         en.remove();
                     }
                 }
+                Bukkit.getWorld(config.getLobbyWorldName()).save();
                 nms.spawnNPC(EntityType.valueOf(data[6]), l, ChatColor.translateAlternateColorCodes('&', data[7]), data[8]);
             }
         }

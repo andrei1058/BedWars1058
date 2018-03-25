@@ -41,7 +41,8 @@ public class OreGenerator {
     private static List<OreGenerator> rotation = new ArrayList<>();
 
     public OreGenerator(Location location, Arena arena, GeneratorType type) {
-        this.location = location.clone().add(0, 0.5, 0);
+        location = location.clone().add(0, 1.3, 0);
+        this.location = location;
         this.arena = arena;
         if (arena.getMaxInTeam() > 2) {
             upgradeType = "bigTeam";
@@ -84,7 +85,7 @@ public class OreGenerator {
                     hg.updateForAll();
                 }
 
-                item = createArmorStand(null, location.clone().add(0, 1.5, 0));
+                item = createArmorStand(null, location.clone().add(0, 0.5, 0));
                 item.setHelmet(new ItemStack(Material.DIAMOND_BLOCK));
                 rotation.add(this);
                 break;
@@ -109,7 +110,7 @@ public class OreGenerator {
                     hg.updateForAll();
                 }
 
-                item = createArmorStand(null, location.clone().add(0, 1.7, 0));
+                item = createArmorStand(null, location.clone().add(0, 0.5, 0));
                 item.setHelmet(new ItemStack(Material.EMERALD_BLOCK));
                 rotation.add(this);
                 break;
@@ -323,6 +324,7 @@ public class OreGenerator {
         a.setCanPickupItems(false);
         a.setArms(false);
         a.setBasePlate(false);
+        a.setMarker(true);
         return a;
     }
 

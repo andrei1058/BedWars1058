@@ -57,6 +57,7 @@ public class UpgradeGroup {
         p.openInventory(inv);
     }
 
+
     public static List<UpgradeGroup> getUpgradeGroups() {
         return upgradeGroups;
     }

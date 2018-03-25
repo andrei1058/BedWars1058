@@ -16,9 +16,15 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.HashMap;
+
 import static com.andrei1058.bedwars.Main.config;
+import static com.andrei1058.bedwars.Main.lang;
+import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
 public class Inventory implements Listener {
+
+    private static HashMap lookingAtShop = new HashMap();
 
     @EventHandler
     public void onClose(InventoryCloseEvent e) {
@@ -44,25 +50,29 @@ public class Inventory implements Listener {
         }
         if (!i.hasItemMeta()) return;
         if (!i.getItemMeta().hasDisplayName()) return;
-        if (p.getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())){
+        if (p.getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
             e.setCancelled(true);
         }
-        if (Arena.isInArena(p)){
+        if (Arena.isInArena(p)) {
             Arena a = Arena.getArenaByPlayer(p);
-            if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting){
+            if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) {
                 e.setCancelled(true);
                 return;
             }
-            if (a.isPlayer(p)){
-                for (ShopCategory sc : ShopCategory.getShopCategories()){
+            if (a.isSpectator(p)){
+                e.setCancelled(true);
+                return;
+            }
+            if (a.isPlayer(p)) {
+                for (ShopCategory sc : ShopCategory.getShopCategories()) {
                     if (e.getInventory().getName().equalsIgnoreCase(sc.getDisplayName(p))) {
                         e.setCancelled(true);
                         for (CategoryContent cc : sc.getContent()) {
-                            if (cc.getName().equalsIgnoreCase("back")){
+                            if (cc.getName().equalsIgnoreCase("back")) {
                                 sc.getParent().openToPlayer(p);
                                 return;
                             }
-                            if (e.getSlot() == cc.getSlot()){
+                            if (e.getSlot() == cc.getSlot()) {
                                 cc.getContentAction().doStuff(p);
                                 return;
                             }
@@ -70,11 +80,13 @@ public class Inventory implements Listener {
                         break;
                     }
                 }
-                for (TeamUpgrade tu : UpgradeGroup.getUpgradeGroup(a.getGroup()).getTeamUpgrades()){
-                    if (tu.getSlot() == e.getSlot()){
-                        e.setCancelled(true);
-                        tu.doAction(p, a.getTeam(p));
-                        return;
+                if (e.getInventory().getName().equalsIgnoreCase(getMsg(p, "upgrades." + UpgradeGroup.getUpgradeGroup(a.getGroup()).getName() + ".name"))) {
+                    for (TeamUpgrade tu : UpgradeGroup.getUpgradeGroup(a.getGroup()).getTeamUpgrades()) {
+                        if (tu.getSlot() == e.getSlot()) {
+                            e.setCancelled(true);
+                            tu.doAction(p, a.getTeam(p));
+                            return;
+                        }
                     }
                 }
             }
@@ -90,5 +102,9 @@ public class Inventory implements Listener {
                 }
             }
         }
+    }
+
+    public static HashMap getLookingAtShop() {
+        return lookingAtShop;
     }
 }

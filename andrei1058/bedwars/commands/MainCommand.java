@@ -37,7 +37,7 @@ public class MainCommand extends BukkitCommand {
         super(name);
     }
 
-    private static HashMap<Player, Long> delArenaConfirm = new HashMap<>();
+    private static HashMap<Player, Long> delArenaConfirm = new HashMap<>(), statsCooldown = new HashMap<>();
 
     @Override
     public boolean execute(CommandSender s, String st, String[] args) {
@@ -81,70 +81,53 @@ public class MainCommand extends BukkitCommand {
                 }
                 s.sendMessage("§8§l▐ §b" + plugin.getDescription().getName() + " v" + plugin.getDescription().getVersion() + " §7- §c Commands");
                 s.sendMessage("");
-                TextComponent mainLobby, list, setupArena, cloneArena, delArena, enableArena, disableArena, joinNPC, build, arenaGroup;
 
-                if (isConfigSet("lobbyLoc")) {
-                    mainLobby = new TextComponent("§a▪ §7/" + getName() + " setLobby §a§o(set)");
-                } else {
-                    mainLobby = new TextComponent("§a▪ §7/" + getName() + " setLobby");
-                }
-                mainLobby.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§fSet the lobby location :) \n§fType again to replace an old spawn location.").create()));
-                mainLobby.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/" + getName() + " setLobby"));
-                p.spigot().sendMessage(mainLobby);
+                /** bw setLobby */
+                p.spigot().sendMessage(Misc.msgHoverClick(isConfigSet("lobbyLoc") ? "§a▪ §7/" + getName() + " setLobby §a§o(set)" : "§a▪ §7/" + getName() + " setLobby)",
+                        "§fSet the lobby location :) \n§fType again to replace an old spawn location.", "/" + getName() + " setLobby", ClickEvent.Action.RUN_COMMAND));
 
-                if (getArenas().size() == 0) {
-                    list = new TextComponent("§a▪ §7/" + getName() + " list §c§o(0 set)");
-                } else {
-                    list = new TextComponent("§a▪ §7/" + getName() + " list §a§o(" + getArenas().size() + " set)");
-                }
-                list.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§fShow available arenas").create()));
-                list.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + getName() + " list"));
-                p.spigot().sendMessage(list);
 
-                setupArena = new TextComponent("§a▪ §7/" + getName() + " setupArena §o<mapName>");
-                setupArena.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/" + getName() + " setupArena "));
-                setupArena.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§fCreate or edit an arena.\n_ and - will not be displayed in the arena's name.").create()));
-                p.spigot().sendMessage(setupArena);
+                /** bw list */
+                p.spigot().sendMessage(Misc.msgHoverClick("§a▪ §7/" + getName() + " list " + ((getArenas().size() == 0) ? "§c§o(0 set)" : "§c§o("+getArenas().size()+" set)"),
+                        "§fShow available arenas", "/" + getName() + " list", ClickEvent.Action.RUN_COMMAND));
 
-                delArena = new TextComponent("§a▪ §7/" + getName() + " delArena §o<mapName>");
-                delArena.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§fDelete a map and its configuration.").create()));
-                delArena.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/" + getName() + " delArena "));
-                p.spigot().sendMessage(delArena);
 
-                enableArena = new TextComponent("§a▪ §7/" + getName() + " enableArena §o<mapName>");
-                enableArena.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§fEnable an arena.").create()));
-                enableArena.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/" + getName() + " enableArena "));
-                p.spigot().sendMessage(enableArena);
+                /** bw setupArena <mapName> */
+                p.spigot().sendMessage(Misc.msgHoverClick("§a▪ §7/" + getName() + " setupArena §o<mapName>", "§fCreate or edit an arena.\n_ and - will not be displayed in the arena's name.",
+                        "/" + getName() + " setupArena ", ClickEvent.Action.SUGGEST_COMMAND));
 
-                disableArena = new TextComponent("§a▪ §7/" + getName() + " disableArena §o<mapName>");
-                disableArena.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/" + getName() + " disableArena "));
-                disableArena.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§fDisable an arena.\nThis will remove the players from the arena before disabling.").create()));
-                p.spigot().sendMessage(disableArena);
+                /** bw delArena <mapName> */
+                p.spigot().sendMessage(Misc.msgHoverClick("§a▪ §7/" + getName() + " delArena §o<mapName>", "§fDelete a map and its configuration.",
+                        "/" + getName() + " delArena ", ClickEvent.Action.SUGGEST_COMMAND));
 
-                cloneArena = new TextComponent("§a▪ §7/" + getName() + " cloneArena §o<mapName> <newArena>");
-                cloneArena.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§fClone an existing arena.").create()));
-                cloneArena.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/" + getName() + " cloneArena "));
-                p.spigot().sendMessage(cloneArena);
+                /** bw enableArena <mapName> */
+                p.spigot().sendMessage(Misc.msgHoverClick("§a▪ §7/" + getName() + " enableArena §o<mapName>","§fEnable an arena.",
+                        "/" + getName() + " enableArena ", ClickEvent.Action.SUGGEST_COMMAND));
 
-                arenaGroup = new TextComponent("§a▪ §7/" + getName() + " arenaGroup");
-                arenaGroup.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§fCreate/ remove an arenaGroup\n§fAdd/ remove an arena from a group.").create()));
-                arenaGroup.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/" + getName() + " arenaGroup "));
-                p.spigot().sendMessage(arenaGroup);
+                /** bw disableArena <mapName> */
+                p.spigot().sendMessage(Misc.msgHoverClick("/" + getName() + " enableArena ", "§fDisable an arena.\nThis will remove the players from the arena before disabling.",
+                        "/" + getName() + " disableArena ", ClickEvent.Action.SUGGEST_COMMAND));
 
-                if (getNPCs() == 0) {
-                    joinNPC = new TextComponent("§a▪ §7/" + getName() + " npc add/remove");
-                } else {
-                    joinNPC = new TextComponent("§a▪ §7/" + getName() + " npc add/remove §a§o(" + getNPCs() + " added)");
-                }
-                joinNPC.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§fAdd a NPC mob so you can join a free arena by clicking it.\n" +
-                        "If you want to remove a NPC you must be in front of it\nand then type /" + getName() + " NPC").create()));
-                joinNPC.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/" + getName() + " NPC"));
-                p.spigot().sendMessage(joinNPC);
+                /** bw cloneArena mapName */
+                p.spigot().sendMessage(Misc.msgHoverClick("§a▪ §7/" + getName() + " cloneArena §o<mapName> <newArena>", "§fClone an existing arena.",
+                        "/" + getName() + " cloneArena ", ClickEvent.Action.SUGGEST_COMMAND));
 
-                build = new TextComponent("§a▪ §7/" + getName() + " build");
-                build.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/" + getName() + " build"));
-                build.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§fEnable or disable build session so you can break or place blocks.").create()));
-                p.spigot().sendMessage(build);
+                /** bw arenaGroup */
+                p.spigot().sendMessage(Misc.msgHoverClick("§a▪ §7/" + getName() + " arenaGroup", "§fCreate/ remove an arenaGroup\n§fAdd/ remove an arena from a group.",
+                        "/" + getName() + " arenaGroup ", ClickEvent.Action.SUGGEST_COMMAND));
+
+                /** bw npc */
+                p.spigot().sendMessage(Misc.msgHoverClick(getNPCs() == 0 ? "§a▪ §7/" + getName() + " npc add/remove" : "§a▪ §7/" + getName() + " npc add/remove §a§o(" + getNPCs() + " added)",
+                        "§fAdd a NPC mob so you can join a free arena by clicking it.\n If you want to remove a NPC you must be in front of it\nand then type /" + getName() + " NPC",
+                        "/" + getName() + " NPC", ClickEvent.Action.SUGGEST_COMMAND));
+
+                /** bw build */
+                p.spigot().sendMessage(Misc.msgHoverClick("§a▪ §7/" + getName() + " build", "§fEnable or disable build session so you can break or place blocks.",
+                        "/" + getName() + " build", ClickEvent.Action.RUN_COMMAND));
+
+                /** bw reload */
+                p.spigot().sendMessage(Misc.msgHoverClick("§a▪ §7/" + getName() + " reload", "§fRealod messages.", "/"+ getName() + " reload", ClickEvent.Action.RUN_COMMAND));
+
                 p.sendMessage("");
             } else {
                 TextComponent credits = new TextComponent("§8§l▐ §b" + plugin.getName() + " §7v" + plugin.getDescription().getVersion() + " by andrei1058");
@@ -221,6 +204,25 @@ public class MainCommand extends BukkitCommand {
                     if (Arena.getArenaByPlayer(p) != null) return true;
                     ArenaGUI.openGui(p);
                     break;
+                case "stats":
+                    if (statsCooldown.containsKey(p)){
+                        if (System.currentTimeMillis() - 3000 >= statsCooldown.get(p)) {
+                            statsCooldown.replace(p, System.currentTimeMillis());
+                        } else {
+                            //wait 3 seconds
+                            return true;
+                        }
+                    } else {
+                        statsCooldown.put(p, System.currentTimeMillis());
+                    }
+                    int kills = database.getKills(p), deaths = database.getDeaths(p), looses = database.getLooses(p), wins = database.getWins(p),
+                            finalKills = database.getFinalKills(p), finalDeaths = database.getFinalDeaths(p), bedsDestroyed = database.getBedsDestroyed(p), gamesPlayed = database.getGamesPlayed(p);
+                    for (String string : getList(p, lang.playerStatsMessages)){
+                        p.sendMessage(string.replace("{wins}", String.valueOf(wins)).replace("{looses}", String.valueOf(looses)).replace("{kills}", String.valueOf(kills)).
+                        replace("{deaths}", String.valueOf(deaths)).replace("{finalKills}", String.valueOf(finalKills)).replace("{finalDeaths}", String.valueOf(finalDeaths)).
+                        replace("{bedsDestroyed}", String.valueOf(bedsDestroyed)).replace("{gamesPlayed}", String.valueOf(gamesPlayed)).replace("{player}", p.getName()));
+                    }
+                    break;
             }
             if (x) return true;
             if (!p.isOp()){
@@ -234,9 +236,7 @@ public class MainCommand extends BukkitCommand {
             if (args[0].equalsIgnoreCase("setlobby")){
                 if (config.getLobbyWorldName().isEmpty()){
                     p.sendMessage("§a▪ §aAs this is the first time you set the lobby. The server needs a restart.");
-                    Bukkit.getScheduler().runTaskLater(plugin, ()-> {
-                        plugin.getServer().spigot().restart();
-                    }, 40L);
+                    Bukkit.getScheduler().runTaskLater(plugin, ()-> plugin.getServer().spigot().restart(), 40L);
                 }
                 config.saveConfigLoc("lobbyLoc", p.getLocation());
                 p.sendMessage("§a▪ §7Lobby location set!");
@@ -337,7 +337,7 @@ public class MainCommand extends BukkitCommand {
                     break;
                 case "disablearena":
                     if (args.length != 2) {
-                        p.sendMessage("§c▪ §7Usage: §o/" + getName() + " disable <mapName>");
+                        p.sendMessage("§c▪ §7Usage: §o/" + getName() + " disableArena <mapName>");
                         return true;
                     }
                     File wss = new File(Bukkit.getServer().getWorldContainer().getPath() + "/" + args[1]);
@@ -505,10 +505,7 @@ public class MainCommand extends BukkitCommand {
                     break;
                 case "arenagroup":
                     if (args.length < 2) {
-                        p.sendMessage("§a▪ §7/" + getName() + " arenaGroup create §o<groupName>");
-                        p.sendMessage("§a▪ §7/" + getName() + " arenaGroup remove §o<groupName>");
-                        p.sendMessage("§a▪ §7/" + getName() + " arenaGroup §o<groupName> §r§7add §o<arenaName>");
-                        p.sendMessage("§a▪ §7/" + getName() + " arenaGroup §o<groupName> §r§7remove §o<arenaName>");
+                        sendArenaGroupCmdList(p);
                     } else if (args[1].equalsIgnoreCase("create")) {
                         List<String> groups;
                         if (config.getYml().getStringList("arenaGroups") == null) {
@@ -537,38 +534,48 @@ public class MainCommand extends BukkitCommand {
                         groups.remove(args[2]);
                         config.set("arenaGroups", groups);
                         p.sendMessage("§a▪ §7Group deleted!");
-                    } else if (config.getYml().get("arenaGroups") != null) {
-                        if (config.getYml().getStringList("arenaGroups").contains(args[1])) {
-                            if (args.length < 3) {
-                                p.sendMessage("§a▪ §7/" + getName() + " arenaGroup §o" + args[1] + " §r§7add §o<arenaName>");
-                                p.sendMessage("§a▪ §7/" + getName() + " arenaGroup §o" + args[1] + " §r§7remove §o<arenaName>");
-                                return true;
-                            }
-                            File arena = new File("plugins/" + plugin.getName() + "/Arenas/" + args[3] + ".yml");
-                            if (!arena.exists()) {
-                                p.sendMessage("§c▪ §7" + args[3] + " doesn't exist!");
-                                return true;
-                            }
-                            ConfigManager cm = new ConfigManager(args[3], "plugins/" + plugin.getName() + "/Arenas", true);
-                            if (args[2].equalsIgnoreCase("add")) {
-                                cm.set("group", args[1]);
-                                if (Arena.getArenaByName(args[3]) != null){
-                                    Arena.getArenaByName(args[3]).setGroup(args[1]);
+                    } else if (args.length > 2){
+                        if (config.getYml().get("arenaGroups") != null) {
+                            if (config.getYml().getStringList("arenaGroups").contains(args[1])) {
+                                if (args.length < 3) {
+                                    p.sendMessage("§a▪ §7/" + getName() + " arenaGroup §o" + args[1] + " §r§7add §o<arenaName>");
+                                    p.sendMessage("§a▪ §7/" + getName() + " arenaGroup §o" + args[1] + " §r§7remove §o<arenaName>");
+                                    return true;
                                 }
-                                p.sendMessage("§a▪ §7" + args[3] + " was added to the group: " + args[1]);
-                            } else if (args[2].equalsIgnoreCase("remove")) {
-                                p.sendMessage("§a▪ §7" + args[3] + " was removed from the group: " + cm.getYml().getString("group"));
-                                cm.set("group", "DEFAULT");
+                                File arena = new File("plugins/" + plugin.getName() + "/Arenas/" + args[3] + ".yml");
+                                if (!arena.exists()) {
+                                    p.sendMessage("§c▪ §7" + args[3] + " doesn't exist!");
+                                    return true;
+                                }
+                                ConfigManager cm = new ConfigManager(args[3], "plugins/" + plugin.getName() + "/Arenas", true);
+                                if (args[2].equalsIgnoreCase("add")) {
+                                    cm.set("group", args[1]);
+                                    if (Arena.getArenaByName(args[3]) != null) {
+                                        Arena.getArenaByName(args[3]).setGroup(args[1]);
+                                    }
+                                    p.sendMessage("§a▪ §7" + args[3] + " was added to the group: " + args[1]);
+                                } else if (args[2].equalsIgnoreCase("remove")) {
+                                    p.sendMessage("§a▪ §7" + args[3] + " was removed from the group: " + cm.getYml().getString("group"));
+                                    cm.set("group", "DEFAULT");
+                                } else {
+                                    p.sendMessage("§a▪ §7/" + getName() + " arenaGroup §o" + args[1] + " §r§7add §o<arenaName>");
+                                    p.sendMessage("§a▪ §7/" + getName() + " arenaGroup §o" + args[1] + " §r§7remove §o<arenaName>");
+                                }
                             } else {
-                                p.sendMessage("§a▪ §7/" + getName() + " arenaGroup §o" + args[1] + " §r§7add §o<arenaName>");
-                                p.sendMessage("§a▪ §7/" + getName() + " arenaGroup §o" + args[1] + " §r§7remove §o<arenaName>");
+                                p.sendMessage("§a▪ §7There isn't any group called: " + args[1]);
+                                p.sendMessage("§a▪ §7Available groups: " + config.getYml().getStringList("arenaGroups"));
                             }
                         } else {
                             p.sendMessage("§a▪ §7There isn't any group called: " + args[1]);
-                            p.sendMessage("§a▪ §7Available groups: " + config.getYml().getStringList("arenaGroups"));
                         }
                     } else {
-                        p.sendMessage("§a▪ §7There isn't any group called: " + args[1]);
+                        sendArenaGroupCmdList(p);
+                    }
+                    break;
+                case "reload":
+                    for (Language l : Language.getLanguages()){
+                        l.reload();
+                        p.sendMessage("§a▪ §7"+l.getLangName()+" reloaded!");
                     }
                     break;
             }
@@ -913,5 +920,12 @@ public class MainCommand extends BukkitCommand {
 
     private static boolean isArenaSetup(Player p) {
         return (!config.getLobbyWorldName().isEmpty()) && (!config.getLobbyWorldName().equalsIgnoreCase(p.getWorld().getName()));
+    }
+
+    private void sendArenaGroupCmdList(Player p){
+        p.sendMessage("§a▪ §7/" + getName() + " arenaGroup create §o<groupName>");
+        p.sendMessage("§a▪ §7/" + getName() + " arenaGroup remove §o<groupName>");
+        p.sendMessage("§a▪ §7/" + getName() + " arenaGroup §o<groupName> §r§7add §o<arenaName>");
+        p.sendMessage("§a▪ §7/" + getName() + " arenaGroup §o<groupName> §r§7remove §o<arenaName>");
     }
 }

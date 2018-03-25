@@ -1,5 +1,7 @@
 package com.andrei1058.bedwars.configuration;
 
+import com.andrei1058.bedwars.Main;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -45,6 +47,10 @@ public class Language {
             arenaGuiInvName = "arena.guiInv.Name",
             arenaGuiItemName = "arena.guiItem.name",
             arenaGuiItemLore = "arena.guiItem.lore",
+            statsGUIpath = "stats",
+            statsInvName = statsGUIpath + ".invName.name",
+            statsItemName = "player.statsItem.name",
+            statsItemLore = "player.statsItem.lore",
             aGuiArenaName = "arena.guiArena.name",
             aGuiArenaLore = "arena.guiArena.lore",
             langListHeader = "lang.listHeader",
@@ -142,12 +148,14 @@ public class Language {
             enemyBaseEnterChat = "arena.baseEnter.chat",
             upgradeBuyMessage = "arena.upgradeBuy",
             utilitySiverfish = "despawnables.silverfish",
-            iGolemName = "despawnable.ironGolem",
+            iGolemName = "despawnables.ironGolem",
             despawnableHealth = "format.despawnableHealth",
             unknowReasonDie = "arena.playerDie.unknown",
             unknowReasonDieFinalKill = "arena.playerDie.unknownFinalKill",
             playerExplodeByBombNoKiller = "arena.playerDie.bomb2",
-            playerExplodeByBombFinalKillNoKiller = "arena.playerDie.bomb2FinalKill";
+            playerExplodeByBombFinalKillNoKiller = "arena.playerDie.bomb2FinalKill",
+            playerStatsMessages = "player.stats.cmd",
+            statsDateTimeFormat = "format.statsTime";
     //End of language file strings
 
     public Language(String iso) {
@@ -401,6 +409,25 @@ public class Language {
                 yml.addDefault(unknowReasonDieFinalKill, "{PlayerColor}{PlayerName} &7died. &b&lFINAL KILL!");
                 yml.addDefault(playerExplodeByBombNoKiller, "{PlayerColor}{PlayerName} &7was hit off by a bomb.");
                 yml.addDefault(playerExplodeByBombFinalKillNoKiller, "{PlayerColor}{PlayerName} &7was hit off by a bomb. &b&lFINAL KILL!");
+                yml.addDefault(playerStatsMessages, Arrays.asList("", "            &2BedWars Stats &a(&7{player}&a)",
+                        "&8Wins: &f{wins}    &8Looses: &f{looses}    &8Kills: &f{kills}    &8Deaths: &f{deaths}    &8Final Kills: &f{finalKills}",
+                        "&8Final Deaths: &f{finalDeaths}    &8Beds Destroyed: &f{bedsDestroyed}    &8Games Played: &f{gamesPlayed}"));
+                yml.addDefault(statsItemName, "&6Stats");
+                yml.addDefault(statsItemLore, Arrays.asList("&7Rick-click to see your stats!"));
+                yml.addDefault(statsInvName, "{player} Stats");
+
+                /** save default items messages for stats gui */
+                lbj.addDefaultStatsMsg(yml, "wins", "&6Wins", "&f{wins}");
+                lbj.addDefaultStatsMsg(yml, "looses", "&6Looses", "&f{looses}");
+                lbj.addDefaultStatsMsg(yml, "kills", "&6Kills", "&f{kills}");
+                lbj.addDefaultStatsMsg(yml, "deaths", "&6Deaths", "&f{deaths}");
+                lbj.addDefaultStatsMsg(yml, "finalKills", "&6Final Kills", "&f{finalKills}");
+                lbj.addDefaultStatsMsg(yml, "finalDeaths", "&6Final Deaths", "&f{finalDeaths}");
+                lbj.addDefaultStatsMsg(yml, "bedsDestroyed", "&6Beds Destroyed", "&f{bedsDestroyed}");
+                lbj.addDefaultStatsMsg(yml, "firstPlay", "&6First Play", "&f{firstPlay}");
+                lbj.addDefaultStatsMsg(yml, "lastPlay", "&6Last Play", "&f{lastPlay}");
+                lbj.addDefaultStatsMsg(yml, "gamesPlayed", "&6Games Played", "&f{gamesPlayed}");
+                yml.addDefault(statsDateTimeFormat, "yyyy/MM/dd HH:mm");
                 break;
         }
         lbj.save();
@@ -415,7 +442,7 @@ public class Language {
 
     public static List<String> getScoreboard(Player p, String path, String alternative) {
         Language language = getPlayerLanguage(p);
-        if (language.exists(path)){
+        if (language.exists(path)) {
             return language.l(path);
         }
         return language.l(alternative);
@@ -502,11 +529,32 @@ public class Language {
         return lang;
     }
 
+    public void reload() {
+        this.yml = YamlConfiguration.loadConfiguration(config);
+    }
+
     public String getIso() {
         return iso;
     }
 
     public static List<Language> getLanguages() {
         return languages;
+    }
+
+    public static void setupCustomStatsMessages() {
+        for (Language l : getLanguages()) {
+            /** save messages for stats gui items if custom items added */
+            for (String item : Main.config.getYml().getConfigurationSection("statsGUI").getKeys(false)) {
+                if (item.equalsIgnoreCase("invSize")) continue;
+                l.yml.addDefault(statsGUIpath + "." + item + ".name", "Name not set");
+                l.yml.addDefault(statsGUIpath + "." + item + ".lore", Arrays.asList("lore not set"));
+            }
+            l.save();
+        }
+    }
+
+    private void addDefaultStatsMsg(YamlConfiguration yml, String path, String name, String... lore){
+        yml.addDefault(statsGUIpath+"."+path+".name", name);
+        yml.addDefault(statsGUIpath+"."+path+".lore", lore);
     }
 }

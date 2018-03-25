@@ -182,7 +182,24 @@ public class BedWarsTeam {
      * Respawn a member
      */
     public void respawnMember(Player p) {
-        nms.sendTitle(p, getMsg(p, lang.respawnedTitle), null, 0, 20, 0);
+        if (Arena.respawn.containsKey(p)){
+            Arena.respawn.remove(p);
+        }
+        p.teleport(getSpawn());
+        if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+            p.removePotionEffect(PotionEffectType.INVISIBILITY);
+        }
+        nms.setCollide(p, true);
+        p.setAllowFlight(false);
+        p.setFlying(false);
+        p.setHealth(20);
+        for (Player on : arena.getPlayers()){
+            on.showPlayer(p);
+        }
+        for (Player on : arena.getSpectators()){
+            on.showPlayer(p);
+        }
+        nms.sendTitle(p, getMsg(p, lang.respawnedTitle), "", 0, 20, 0);
         PlayerVault pv = getVault(p);
         if (pv != null) {
             p.getInventory().setHelmet(pv.getHelmet());
@@ -285,7 +302,7 @@ public class BedWarsTeam {
         }
 
         public void spawn() {
-            a = (ArmorStand) bed.getWorld().spawnEntity(bed.clone().add(0, -1, 0), EntityType.ARMOR_STAND);
+            a = (ArmorStand) bed.getWorld().spawnEntity(bed.clone().add(0, 0.5, 0), EntityType.ARMOR_STAND);
             a.setGravity(false);
             if (name != null) {
                 if (isBedDestroyed()) {
@@ -300,6 +317,7 @@ public class BedWarsTeam {
             a.setCanPickupItems(false);
             a.setArms(false);
             a.setBasePlate(false);
+            a.setMarker(true);
             for (Player p2 : arena.getWorld().getPlayers()) {
                 if (p != p2) {
                     nms.hideEntity(a, p2);

@@ -86,7 +86,7 @@ public class ShopManager {
                 addBuyItem("main.invContents.blocks.invContents.clay.buyItems.clay", "STAINED_CLAY", 1, 16, "", false, false);
 
                 setCategoryWithBuy("main.invContents.blocks.invContents.glass", 12, "GLASS", 0, 4, 12, "iron", false);
-                addBuyItem("main.invContents.blocks.invContents.glass.buyItems.glass", "GLASS", 0, 4, "", false, false);
+                addBuyItem("main.invContents.blocks.invContents.glass.buyItems.glass", "STAINED_GLASS", 0, 4, "", false, false);
 
                 setCategoryWithBuy("main.invContents.blocks.invContents.stone", 13, "ENDER_STONE", 0, 16, 24, "iron", false);
                 addBuyItem("main.invContents.blocks.invContents.stone.buyItems.stone", "ENDER_STONE", 0, 16, "", false, false);

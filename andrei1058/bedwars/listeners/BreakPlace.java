@@ -21,6 +21,7 @@ import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -111,19 +112,19 @@ public class BreakPlace implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
         Player p = e.getPlayer();
-        if (getServerType() != ServerType.SHARED) {
-            if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(config.getConfigLoc("lobbyLoc").getWorld().getName())) {
-                if (!isBuildSession(p)) {
+         if (getServerType() != ServerType.SHARED) {
+             if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(config.getConfigLoc("lobbyLoc").getWorld().getName())) {
+                 if (!isBuildSession(p)) {
                     e.setCancelled(true);
                     return;
                 }
-            }
+             }
         }
         if (Arena.isInArena(p)) {
             Arena a = Arena.getArenaByPlayer(p);
             if (a.isSpectator(p)) {
                 e.setCancelled(true);
-                return;
+                 return;
             }
             if (e.getBlock().getType() == a.getBedBlock()) {
                 for (BedWarsTeam t : a.getTeams()) {
@@ -227,6 +228,23 @@ public class BreakPlace implements Listener {
             if (a.isSpectator(e.getPlayer()) || a.getStatus() != GameState.playing || Arena.respawn.containsKey(e.getPlayer()))
             e.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    public void onBucketEmpty(PlayerBucketEmptyEvent e){
+        if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
+            e.setCancelled(true);
+            return;
+        }
+        Arena a = Arena.getArenaByPlayer(e.getPlayer());
+        if (a != null) {
+            if (a.isSpectator(e.getPlayer()) || a.getStatus() != GameState.playing || Arena.respawn.containsKey(e.getPlayer()))
+                e.setCancelled(true);
+        }
+        /** Remove empty bucket */
+        Bukkit.getScheduler().runTaskLater(plugin, ()-> {
+            nms.minusAmount(e.getPlayer(), nms.getItemInHand(e.getPlayer()), 1);
+        }, 3L);
     }
 
     @EventHandler
