@@ -257,11 +257,11 @@ public class Misc {
         Timestamp firstPlay = database.getFirstPlay(p), lastPlay = database.getLastPlay(p);
 
         /** cache time format */
-        String timeFormat = getMsg(p, lang.statsDateTimeFormat);
+        String timeFormat = getMsg(p, lang.statsDateTimeFormat), never = getMsg(p, lang.never);
 
         /** create inventory */
         Inventory inv = Bukkit.createInventory(null, config.getInt("statsGUI.invSize"), replaceStatsPlaceholders(getMsg(p, lang.statsInvName),
-                kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName()));
+                kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never));
 
         /** add custom items to gui */
         for (String s : config.getYml().getConfigurationSection("statsGUI").getKeys(false)){
@@ -270,10 +270,11 @@ public class Misc {
             /** create new itemStack for content */
             ItemStack i = new ItemStack(Material.valueOf(config.getYml().getString("statsGUI."+s+".itemStack").toUpperCase()), 1, (byte) config.getInt("statsGUI."+s+".data"));
             ItemMeta im = i.getItemMeta();
-            im.setDisplayName(replaceStatsPlaceholders(getMsg(p, lang.statsGUIpath+"."+s+".name"), kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName()));
+            im.setDisplayName(replaceStatsPlaceholders(getMsg(p, lang.statsGUIpath+"."+s+".name"), kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed,
+                    firstPlay, lastPlay, timeFormat, p.getName(), never));
             List<String> lore = new ArrayList<>();
             for (String string : getList(p, lang.statsGUIpath+"."+s+".lore")){
-                lore.add(replaceStatsPlaceholders(string, kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName()));
+                lore.add(replaceStatsPlaceholders(string, kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never));
             }
             im.setLore(lore);
             i.setItemMeta(im);
@@ -283,10 +284,19 @@ public class Misc {
         p.openInventory(inv);
     }
 
-    private static String replaceStatsPlaceholders(String s, int kills, int deaths, int looses, int wins, int finalKills, int finalDeaths, int beds, int games, Timestamp first, Timestamp last, String timeFormat, String player){
+    public static String replaceStatsPlaceholders(String s, int kills, int deaths, int looses, int wins, int finalKills, int finalDeaths,
+                                                   int beds, int games, Timestamp first, Timestamp last, String timeFormat, String player, String never){
+        String lastS = last == null ? never : String.valueOf(new SimpleDateFormat(timeFormat).format(last)),
+        firstS = first == null ? never : String.valueOf(new SimpleDateFormat(timeFormat).format(first));
         return s.replace("{kills}", String.valueOf(kills)).replace("{deaths}", String.valueOf(deaths)).replace("{looses}", String.valueOf(looses)).replace("{wins}", String.valueOf(wins))
-                .replace("{finalKills}", String.valueOf(finalKills)).replace("{finalDeaths}", String.valueOf(finalDeaths)).replace("{bedsDestroyed}", String.valueOf(beds))
-                .replace("{gamesPlayed}", String.valueOf(games)).replace("{firstPlay}", String.valueOf(new SimpleDateFormat(timeFormat).format(first)))
-                .replace("{lastPlay}", String.valueOf(new SimpleDateFormat(timeFormat).format(last))).replace("{player}", player);
+                .replace("{finalKills}", String.valueOf(finalKills)).replace("{fKills}", String.valueOf(finalKills)).replace("{finalDeaths}",
+                        String.valueOf(finalDeaths)).replace("{bedsDestroyed}", String.valueOf(beds)).replace("{beds}", String.valueOf(beds))
+                .replace("{gamesPlayed}", String.valueOf(games)).replace("{firstPlay}", firstS).replace("{lastPlay}", lastS).replace("{player}", player);
+    }
+
+    public static void giveLobbySb(Player p){
+        if (config.getBoolean("lobbyScoreboard")){
+            new SBoard(p, getList(p, lang.lobbyScoreboard), null);
+        }
     }
 }

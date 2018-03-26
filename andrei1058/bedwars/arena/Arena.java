@@ -313,14 +313,14 @@ public class Arena {
             }
         }
         if (status == GameState.playing) {
-            int deaths = playerDeaths.containsKey(p) ? playerFinalKills.get(p) : 0;
+            int deaths = playerDeaths.containsKey(p) ? playerDeaths.get(p) : 0;
             int final_deaths = playerFinalKillDeaths.containsKey(p) ? playerFinalKillDeaths.get(p) : 0;
             int beds = playerBedsDestroyed.containsKey(p) ? playerBedsDestroyed.get(p) : 0;
             database.saveStats(p, new Timestamp(System.currentTimeMillis()), 0, this.getPlayerKills(p, false), this.getPlayerKills(p, true),
                     1, deaths, final_deaths, beds, 1);
         } else if (status == GameState.restarting) {
             /** winners */
-            int deaths = playerDeaths.containsKey(p) ? playerFinalKills.get(p) : 0;
+            int deaths = playerDeaths.containsKey(p) ? playerDeaths.get(p) : 0;
             int final_deaths = playerFinalKillDeaths.containsKey(p) ? playerFinalKillDeaths.get(p) : 0;
             int beds = playerBedsDestroyed.containsKey(p) ? playerBedsDestroyed.get(p) : 0;
             database.saveStats(p, new Timestamp(System.currentTimeMillis()), 1, this.getPlayerKills(p, false), this.getPlayerKills(p, true),
@@ -378,6 +378,7 @@ public class Arena {
                 on.hidePlayer(p);
             }
         }
+        Misc.giveLobbySb(p);
     }
 
     public void removeSpectator(Player p) {
@@ -414,6 +415,7 @@ public class Arena {
                 p.hidePlayer(on);
             }
         }
+        Misc.giveLobbySb(p);
     }
 
     public void disable() {
@@ -831,20 +833,20 @@ public class Arena {
         Bukkit.getPluginManager().callEvent(new GameStateChangeEvent(this, status));
         refreshSigns();
         if (status == GameState.starting) {
-            for (SBoard sb : SBoard.getScoreboards()) {
+            for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
                 if (sb.getArena() == this) {
                     sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + "Starting", lang.scoreboardDefaultStarting));
                 }
             }
         } else if (status == GameState.waiting) {
             countdownS = config.getYml().getInt("startingCountdown");
-            for (SBoard sb : SBoard.getScoreboards()) {
+            for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
                 if (sb.getArena() == this) {
                     sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + "Waiting", lang.scoreboardDefaultWaiting));
                 }
             }
         } else if (status == GameState.playing) {
-            for (SBoard sb : SBoard.getScoreboards()) {
+            for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
                 if (sb.getArena() == this) {
                     sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + "Playing", lang.scoreboardDefaultPlaying));
                     sb.addHealthSbAndTabStuff();
@@ -1036,8 +1038,8 @@ public class Arena {
     }
 
     public void addPlayerDeath(Player p) {
-        if (playerDeaths.containsKey(p)){
-            playerDeaths.replace(p, playerDeaths.get(p)+1);
+        if (playerDeaths.containsKey(p)) {
+            playerDeaths.replace(p, playerDeaths.get(p) + 1);
         } else {
             playerDeaths.put(p, 1);
         }

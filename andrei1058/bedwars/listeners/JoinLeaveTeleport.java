@@ -3,6 +3,7 @@ package com.andrei1058.bedwars.listeners;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
+import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.configuration.Language;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -13,6 +14,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import static com.andrei1058.bedwars.Main.*;
+import static com.andrei1058.bedwars.configuration.Language.getList;
 
 public class JoinLeaveTeleport implements Listener {
 
@@ -22,19 +24,6 @@ public class JoinLeaveTeleport implements Listener {
         if (!lang.getIso().equalsIgnoreCase(getLangSupport().getLang(p))){
             Language.getLangByPlayer().put(p, Language.getLang(getLangSupport().getLang(p)));
         }
-        if (getServerType() == ServerType.SHARED) return;
-        e.setJoinMessage(null);
-        p.getInventory().setArmorContents(null);
-        if (getServerType() == ServerType.BUNGEE){
-            Arena.getArenas().get(0).addPlayer(p);
-            return;
-        } else {
-            p.teleport(config.getConfigLoc("lobbyLoc"));
-            Arena.sendMultiarenaLobbyItems(p);
-        }
-        p.setHealthScale(20);
-        p.setFoodLevel(20);
-        p.setExp(0);
         Bukkit.getScheduler().runTaskLater(plugin, ()-> {
             for (Player on : Bukkit.getOnlinePlayers()){
                 if (Arena.getArenaByPlayer(on) == null){
@@ -65,6 +54,20 @@ public class JoinLeaveTeleport implements Listener {
                 p.sendMessage("");
             }
         }, 10L);
+        if (getServerType() == ServerType.SHARED) return;
+        e.setJoinMessage(null);
+        p.getInventory().setArmorContents(null);
+        if (getServerType() == ServerType.BUNGEE){
+            Arena.getArenas().get(0).addPlayer(p);
+            return;
+        } else {
+            p.teleport(config.getConfigLoc("lobbyLoc"));
+            Arena.sendMultiarenaLobbyItems(p);
+            Misc.giveLobbySb(p);
+        }
+        p.setHealthScale(20);
+        p.setFoodLevel(20);
+        p.setExp(0);
     }
 
     @EventHandler

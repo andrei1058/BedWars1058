@@ -155,7 +155,9 @@ public class Language {
             playerExplodeByBombNoKiller = "arena.playerDie.bomb2",
             playerExplodeByBombFinalKillNoKiller = "arena.playerDie.bomb2FinalKill",
             playerStatsMessages = "player.stats.cmd",
-            statsDateTimeFormat = "format.statsTime";
+            statsDateTimeFormat = "format.statsTime",
+            never = "meaning.never",
+            lobbyScoreboard = "scoreboard.lobby";
     //End of language file strings
 
     public Language(String iso) {
@@ -428,6 +430,10 @@ public class Language {
                 lbj.addDefaultStatsMsg(yml, "lastPlay", "&6Last Play", "&f{lastPlay}");
                 lbj.addDefaultStatsMsg(yml, "gamesPlayed", "&6Games Played", "&f{gamesPlayed}");
                 yml.addDefault(statsDateTimeFormat, "yyyy/MM/dd HH:mm");
+
+                yml.addDefault(never, "Never");
+                yml.addDefault(lobbyScoreboard, Arrays.asList("&6&lBedWars", "&7{date}", "&fName: &a{player}", "", "&fWins: &a{wins}", "&fLooses: &a{looses}", "&fKills: &a{kills}", "&fDeaths: &a{deaths}"
+                , "&fFinal Kills: &a{fKills}", "&fBeds Destroyed: &a{beds}", "", "&fOnline: &a{on}", "&eandrei1058.com"));
                 break;
         }
         lbj.save();

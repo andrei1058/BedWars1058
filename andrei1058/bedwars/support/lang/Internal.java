@@ -1,9 +1,13 @@
 package com.andrei1058.bedwars.support.lang;
 
 import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.arena.Misc;
+import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.configuration.ConfigManager;
 import com.andrei1058.bedwars.configuration.Language;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
 
 import static com.andrei1058.bedwars.Main.config;
 import static com.andrei1058.bedwars.Main.lang;
@@ -32,7 +36,14 @@ public class Internal implements Lang {
         x.set(p.getName(), iso);
         if (config.getLobbyWorldName().equalsIgnoreCase(p.getWorld().getName())){
             Arena.sendMultiarenaLobbyItems(p);
-            //todo da-i si refresh la scoreboard daca are
+            for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
+                if (sb.getP() == p) {
+                    sb.remove();
+                }
+            }
+            if (p.getScoreboard() != null){
+                Misc.giveLobbySb(p);
+            }
         }
     }
 }

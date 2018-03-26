@@ -8,18 +8,21 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static com.andrei1058.bedwars.Main.database;
 import static com.andrei1058.bedwars.Main.lang;
 import static com.andrei1058.bedwars.Main.nms;
+import static com.andrei1058.bedwars.arena.Misc.replaceStatsPlaceholders;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 import static com.andrei1058.bedwars.configuration.Language.getScoreboard;
 
 public class SBoard {
 
     public static ScoreboardManager sbm = Bukkit.getScoreboardManager();
-    private static List<String> placeholders = Arrays.asList("{on}", "{max}", "{time}", "{generatorName}", "{generatorTimer}", "{kills}", "{finalKills}", "{beds}", "{date}");
+    private List<String> placeholders = Arrays.asList("{on}", "{max}", "{time}", "{generatorName}", "{generatorTimer}", "{date}");
     private static List<SBoard> scoreboards = new ArrayList<>();
     private HashMap<Team, String> toRefresh = new HashMap<>();
     private Scoreboard sb = sbm.getNewScoreboard();
@@ -33,19 +36,32 @@ public class SBoard {
         o = sb.registerNewObjective("Sb", "or");
         o.setDisplaySlot(DisplaySlot.SIDEBAR);
         this.arena = arena;
+        if (this.arena != null) {
+            placeholders = new ArrayList<>(placeholders);
+            this.placeholders.add("{kills}");
+            this.placeholders.add("{finalKills}");
+            this.placeholders.add("{beds}");
+            for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
+                if (sb.getP() == p) {
+                    sb.remove();
+                }
+            }
+        }
         this.setStrings(content);
         p.setScoreboard(sb);
         dateFormat = new SimpleDateFormat(getMsg(p, lang.generatorTimerFormat));
         scoreboards.add(this);
     }
 
-    /** Used for spectators */
-    public SBoard(Player p, Arena arena){
+    /**
+     * Used for spectators
+     */
+    public SBoard(Player p, Arena arena) {
         this.p = p;
         o = sb.registerNewObjective("Sb", "or");
         o.setDisplaySlot(DisplaySlot.SIDEBAR);
         this.arena = arena;
-        this.setStrings(getScoreboard(p, "scoreboard."+ arena.getGroup()+"Playing", lang.scoreboardDefaultPlaying));
+        this.setStrings(getScoreboard(p, "scoreboard." + arena.getGroup() + "Playing", lang.scoreboardDefaultPlaying));
         p.setScoreboard(sb);
         scoreboards.add(this);
         Team t = sb.registerNewTeam("spect");
@@ -75,7 +91,7 @@ public class SBoard {
             }
             if (arena != null) {
                 for (BedWarsTeam teams : arena.getTeams()) {
-                    if (temp.contains("{Team"+teams.getName()+"Status}")){
+                    if (temp.contains("{Team" + teams.getName() + "Status}")) {
                         if (!toRefresh.containsKey(t)) {
                             toRefresh.put(t, temp);
                         }
@@ -83,20 +99,32 @@ public class SBoard {
                 }
             }
             if (arena == null) {
-                setContent(t, temp.replace("{server}", Bukkit.getServer().getMotd()).replace("{on}", String.valueOf(Bukkit.getOnlinePlayers().size()))
-                        .replace("{max}", String.valueOf(Bukkit.getServer().getMaxPlayers())).replace("{player}", p.getName()).replace("{date}", new SimpleDateFormat(getMsg(getP(), lang.dateFormat)).format(new Date(System.currentTimeMillis()))));
+                /** stats */
+                int kills = database.getKills(p), deaths = database.getDeaths(p), looses = database.getLooses(p), wins = database.getWins(p),
+                        finalKills = database.getFinalKills(p), finalDeaths = database.getFinalDeaths(p), bedsDestroyed = database.getBedsDestroyed(p), gamesPlayed = database.getGamesPlayed(p);
+                Timestamp firstPlay = database.getFirstPlay(p), lastPlay = database.getLastPlay(p);
+                /** cache time format */
+                String timeFormat = getMsg(p, lang.statsDateTimeFormat), never = getMsg(p, lang.never);
+
+                temp = temp.replace("{server}", Bukkit.getServer().getMotd()).replace("{on}", String.valueOf(Bukkit.getOnlinePlayers().size()))
+                        .replace("{max}", String.valueOf(Bukkit.getServer().getMaxPlayers())).replace("{date}",
+                                new SimpleDateFormat(getMsg(getP(), lang.dateFormat)).format(new Date(System.currentTimeMillis())));
+
+                setContent(t, replaceStatsPlaceholders(temp,
+                        kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never));
+
             } else if (arena.getStatus() == GameState.waiting || arena.getStatus() == GameState.starting) {
                 setContent(t, temp.replace("{map}", arena.getDisplayName()).replace("{server}", Bukkit.getServer().getMotd())
                         .replace("{on}", String.valueOf(arena.getPlayers().size())).replace("{max}", String.valueOf(arena.getMaxPlayers()))
                         .replace("{time}", String.valueOf(arena.getCountdownS())).replace("{player}", p.getName())
-                                .replace("{date}", new SimpleDateFormat(getMsg(getP(), lang.dateFormat)).format(new Date(System.currentTimeMillis()))));
+                        .replace("{date}", new SimpleDateFormat(getMsg(getP(), lang.dateFormat)).format(new Date(System.currentTimeMillis()))));
             } else if (arena.getStatus() == GameState.playing) {
                 String generatorTime = dateFormat.format((OreGenerator.showDiamoundSb ?
-                        arena.upgradeDiamondsCount : arena.upgradeEmeraldsCount)*1000);
+                        arena.upgradeDiamondsCount : arena.upgradeEmeraldsCount) * 1000);
                 for (BedWarsTeam team : arena.getTeams()) {
                     temp = temp.replace("{Team" + team.getName() + "Color}", TeamColor.getChatColor(team.getColor()).toString()).replace("{Team" + team.getName() + "Name}",
                             team.getName()).replace("{Team" + team.getName() + "Status}", String.valueOf(team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getP(), lang.bedDestroyedFormat).replace("{remainingPlayers}",
-                            String.valueOf(team.getSize())) : getMsg(getP(), lang.teamEliminatedFormat) : getMsg(getP(), lang.teamAliveFormat))+(team.isMember(getP()) ? getMsg(getP(), lang.youScoreboardFormat) : ""));
+                            String.valueOf(team.getSize())) : getMsg(getP(), lang.teamEliminatedFormat) : getMsg(getP(), lang.teamAliveFormat)) + (team.isMember(getP()) ? getMsg(getP(), lang.youScoreboardFormat) : ""));
                 }
                 setContent(t, temp.replace("{map}", arena.getDisplayName()).replace("{server}", Bukkit.getServer().getMotd())
                         .replace("{on}", String.valueOf(arena.getPlayers().size())).replace("{max}", String.valueOf(arena.getMaxPlayers()))
@@ -152,24 +180,24 @@ public class SBoard {
                 String kills = String.valueOf(arena.getPlayerKills(getP(), false)), finalKills = String.valueOf(arena.getPlayerKills(getP(), true)),
                         beds = String.valueOf(arena.getPlayerBedsDestroyed(getP())),
                         generatorTime = dateFormat.format((OreGenerator.showDiamoundSb ?
-                                arena.upgradeDiamondsCount : arena.upgradeEmeraldsCount)*1000);
+                                arena.upgradeDiamondsCount : arena.upgradeEmeraldsCount) * 1000);
                 for (Map.Entry<Team, String> e : toRefresh.entrySet()) {
                     String text = e.getValue();
                     for (BedWarsTeam team : arena.getTeams()) {
                         text = text.replace("{Team" + team.getName() + "Color}", TeamColor.getChatColor(team.getColor()).toString()).replace("{Team" + team.getName() + "Name}",
                                 team.getName()).replace("{Team" + team.getName() + "Status}", String.valueOf(team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getP(), lang.bedDestroyedFormat).replace("{remainingPlayers}",
-                                String.valueOf(team.getSize())) : getMsg(getP(), lang.teamEliminatedFormat) : getMsg(getP(), lang.teamAliveFormat))+(team.isMember(getP()) ? getMsg(getP(), lang.youScoreboardFormat) : ""));
+                                String.valueOf(team.getSize())) : getMsg(getP(), lang.teamEliminatedFormat) : getMsg(getP(), lang.teamAliveFormat)) + (team.isMember(getP()) ? getMsg(getP(), lang.youScoreboardFormat) : ""));
                     }
                     setContent(e.getKey(), text.replace("{on}", String.valueOf(arena.getPlayers().size())).replace("{max}", String.valueOf(arena.getMaxPlayers()))
                             .replace("{date}", date).replace("{kills}", kills).replace("{finalKills}", finalKills).replace("{beds}", beds)
-                    .replace("{generatorName}", getMsg(getP(), OreGenerator.showDiamoundSb ? lang.diamondGeneratorName : lang.emeraldGeneratorName))
-                    .replace("{generatorTimer}", generatorTime));
+                            .replace("{generatorName}", getMsg(getP(), OreGenerator.showDiamoundSb ? lang.diamondGeneratorName : lang.emeraldGeneratorName))
+                            .replace("{generatorTimer}", generatorTime));
                 }
             }
         }
     }
 
-    public void addHealthSbAndTabStuff(){
+    public void addHealthSbAndTabStuff() {
         if (sb.getObjective("my") == null) {
             Objective objective = sb.registerNewObjective("my", "health");
             objective.setDisplaySlot(DisplaySlot.BELOW_NAME);

@@ -226,6 +226,7 @@ public class Main extends JavaPlugin {
         yml.addDefault("formatChat", true);
         yml.addDefault("disableCrafting", true);
         yml.addDefault("debug", false);
+        yml.addDefault("lobbyScoreboard", true);
 
         yml.addDefault("database.enable", false);
         yml.addDefault("database.host", "localhost");
