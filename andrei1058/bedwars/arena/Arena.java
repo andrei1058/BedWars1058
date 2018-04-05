@@ -37,7 +37,7 @@ public class Arena {
     private ConfigManager cm;
     private int minPlayers = 2, maxPlayers = 10, countdownS, slot = -1, maxInTeam = 1, countUp = 0, restarting = 12, islandRadius = 10;
     public int upgradeDiamondsCount = 0, upgradeEmeraldsCount = 0;
-    private boolean allowSpectate = true;
+    public boolean allowSpectate = true, showDiamondSb = true; //todo modify this with play stage
     private World world;
     private String group = "DEFAULT";
     private List<BedWarsTeam> teams = new ArrayList<>();
@@ -1043,5 +1043,9 @@ public class Arena {
         } else {
             playerDeaths.put(p, 1);
         }
+    }
+
+    public static HashMap<Player, Arena> getArenaByPlayer() {
+        return arenaByPlayer;
     }
 }

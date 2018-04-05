@@ -21,6 +21,7 @@ import com.andrei1058.bedwars.support.lang.Internal;
 import com.andrei1058.bedwars.support.lang.Lang;
 import com.andrei1058.bedwars.support.levels.Level;
 import com.andrei1058.bedwars.support.levels.NoLevel;
+import com.andrei1058.bedwars.support.papi.PAPISupport;
 import com.andrei1058.bedwars.support.party.Party;
 import com.andrei1058.bedwars.support.stats.MySQL;
 import com.andrei1058.bedwars.support.stats.None;
@@ -103,17 +104,26 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        /** Setup plugin messaging channel */
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new Bungee());
         Bukkit.getServicesManager().register(GameAPI.class, new BedWars(), this, ServicePriority.Highest);
+
+        /** Register main command */
         nms.registerCommand(mainCmd, new MainCommand(mainCmd));
+
+        /** Check if lobby location is set. Required for non Bungee servers */
         if (config.getLobbyWorldName().isEmpty() && serverType != ServerType.BUNGEE) {
             plugin.getLogger().severe("Lobby location is not set!");
             return;
         }
+
+        /** Load lobby world if not main level */
         if (!config.getLobbyWorldName().equalsIgnoreCase(Bukkit.getServer().getWorlds().get(0).getName())) {
             Bukkit.createWorld(new WorldCreator(config.getLobbyWorldName()));
         }
+
+        /** Remove entities from lobby */
         if (!config.getLobbyWorldName().isEmpty()) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getWorld(config.getLobbyWorldName())
                     .getEntities().stream().filter(e -> e.getType() != EntityType.PLAYER)
@@ -121,10 +131,14 @@ public class Main extends JavaPlugin {
                     .filter(e -> e.getType() != EntityType.ITEM_FRAME)
                     .filter(e -> e.getType() != EntityType.ARMOR_STAND).forEach(Entity::remove), 20L);
         }
+
+        /** Register events */
         registerEvents(new JoinLeaveTeleport(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess());
         if (getServerType() == ServerType.BUNGEE) {
             registerEvents(new Ping());
         }
+
+        /** Load version support */
         switch (version) {
             case "v1_12_R1":
                 registerEvents(new EntityDropPick());
@@ -140,35 +154,19 @@ public class Main extends JavaPlugin {
                 }, 40L);
                 break;
         }
+
+        /** Load join signs */
         loadArenasAndSigns();
+
+        /** Party support */
         //todo check for party api
-        //todo levels addon
         party = new com.andrei1058.bedwars.support.party.internal.Internal();
-        Bukkit.getScheduler().runTaskLater(this, () -> {
-            if (this.getServer().getPluginManager().getPlugin("Vault") != null) {
-                try {
-                    RegisteredServiceProvider rsp = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
-                    WithChat.setChat((net.milkbowl.vault.chat.Chat) rsp.getProvider());
-                    plugin.getLogger().info("Hook into vault chat support!");
-                    chat = new WithChat();
-                } catch (Exception var2_2) {
-                    chat = new NoChat();
-                }
-                try {
-                    RegisteredServiceProvider rsp = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-                    WithEconomy.setEconomy((net.milkbowl.vault.economy.Economy) rsp.getProvider());
-                    plugin.getLogger().info("Hook into vault economy support!");
-                    economy = new WithEconomy();
-                } catch (Exception var2_2) {
-                    economy = new NoEconomy();
-                }
-            } else {
-                chat = new NoChat();
-                economy = new NoEconomy();
-            }
-        }, 15L);
+
+        /** Levels support */
+        //todo levels addon
         level = new NoLevel();
 
+        /** Language support */
         try {
             langSupport = Internal.class.newInstance();
             new ConfigManager("database", "plugins/" + this.getName() + "/Languages", false);
@@ -177,18 +175,27 @@ public class Main extends JavaPlugin {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+
+        /** Register tasks */
         ticks = new Refresh().runTaskTimer(this, 20l, 20l);
         tick = new Rotate().runTaskTimer(this, 120, 1);
+
+        /** Setup bStats metrics */
         Metrics metrics = new Metrics(this);
         metrics.addCustomChart(new Metrics.SimplePie("server_type", () -> getServerType().toString()));
         metrics.addCustomChart(new Metrics.SimplePie("default_language", () -> lang.getIso()));
+
+        /** Register NMS entities */
         nms.registerEntities();
+
+        /** Setup shop */
         shop = new ShopManager("shop", "plugins/" + this.getName());
         shop.loadShop();
+
+        /** Check for updates */
         Misc.checkUpdate();
-        if (config.getBoolean("formatChat")){
-            registerEvents(new PlayerChat());
-        }
+
+        /** Database support */
         if (config.getBoolean("database.enable")) {
             database = new MySQL();
         } else {
@@ -198,11 +205,50 @@ public class Main extends JavaPlugin {
             database.setupGeneralTables();
             plugin.spawnNPCs();
         }, 40L);
+
+        /** Save messages for stats gui items if custom items added, for each language */
         Language.setupCustomStatsMessages();
+
+        /** PlaceholderAPI Support */
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
+            getLogger().info("Hook into PlaceholderAPI support!");
+            new PAPISupport().register();
+        }
+
+        /** Vault support */
+        if (this.getServer().getPluginManager().getPlugin("Vault") != null) {
+            try {
+                RegisteredServiceProvider rsp = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
+                WithChat.setChat((net.milkbowl.vault.chat.Chat) rsp.getProvider());
+                plugin.getLogger().info("Hook into vault chat support!");
+                chat = new WithChat();
+            } catch (Exception var2_2) {
+                chat = new NoChat();
+            }
+            try {
+                RegisteredServiceProvider rsp = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+                WithEconomy.setEconomy((net.milkbowl.vault.economy.Economy) rsp.getProvider());
+                plugin.getLogger().info("Hook into vault economy support!");
+                economy = new WithEconomy();
+            } catch (Exception var2_2) {
+                economy = new NoEconomy();
+            }
+        } else {
+            chat = new NoChat();
+            economy = new NoEconomy();
+        }
+
+        /** Chat support */
+        if (config.getBoolean("formatChat")){
+            registerEvents(new PlayerChat());
+        }
     }
 
     public void onDisable() {
+        /** Close database */
         database.close();
+
+        /** Cancel tasks */
         if (tick != null) {
             tick.cancel();
         }

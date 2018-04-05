@@ -34,8 +34,8 @@ public class OreGenerator {
     private HashMap<String, HoloGram> armorstands = new HashMap<>();
 
     private ArmorStand item;
-    public static boolean showDiamoundSb = true, stack = upgrades.getBoolean("settings.stackItems");
-    private static boolean emeraldUpgradeAnnouncerd = false, diamondUpgradeAnnounced = false;
+    public boolean stack = upgrades.getBoolean("settings.stackItems");
+    private boolean emeraldUpgradeAnnouncerd = false, diamondUpgradeAnnounced = false;
 
     private static List<OreGenerator> generators = new ArrayList<>();
     private static List<OreGenerator> rotation = new ArrayList<>();
@@ -145,7 +145,7 @@ public class OreGenerator {
                        e.setTierName(Language.getLang(e.iso).m(lang.generatorTier).replace("{tier}", Language.getLang(e.iso).m(upgradeStage == 2 ? lang.tier2Format : lang.tier3Format)));
                    }
                    if (upgradeStage == 3){
-                       showDiamoundSb = false;
+                       arena.showDiamondSb = false;
                    }
                    if (!diamondUpgradeAnnounced){
                        for (Player p : arena.getPlayers()){

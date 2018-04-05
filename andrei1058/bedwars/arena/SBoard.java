@@ -2,7 +2,6 @@ package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.TeamColor;
-import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -61,6 +60,7 @@ public class SBoard {
         o = sb.registerNewObjective("Sb", "or");
         o.setDisplaySlot(DisplaySlot.SIDEBAR);
         this.arena = arena;
+        dateFormat = new SimpleDateFormat(getMsg(p, lang.generatorTimerFormat));
         this.setStrings(getScoreboard(p, "scoreboard." + arena.getGroup() + "Playing", lang.scoreboardDefaultPlaying));
         p.setScoreboard(sb);
         scoreboards.add(this);
@@ -119,7 +119,7 @@ public class SBoard {
                         .replace("{time}", String.valueOf(arena.getCountdownS())).replace("{player}", p.getName())
                         .replace("{date}", new SimpleDateFormat(getMsg(getP(), lang.dateFormat)).format(new Date(System.currentTimeMillis()))));
             } else if (arena.getStatus() == GameState.playing) {
-                String generatorTime = dateFormat.format((OreGenerator.showDiamoundSb ?
+                String generatorTime = dateFormat.format((arena.showDiamondSb ?
                         arena.upgradeDiamondsCount : arena.upgradeEmeraldsCount) * 1000);
                 for (BedWarsTeam team : arena.getTeams()) {
                     temp = temp.replace("{Team" + team.getName() + "Color}", TeamColor.getChatColor(team.getColor()).toString()).replace("{Team" + team.getName() + "Name}",
@@ -131,7 +131,7 @@ public class SBoard {
                         .replace("{time}", String.valueOf(arena.getCountdownS())).replace("{player}", p.getName())
                         .replace("{date}", new SimpleDateFormat(getMsg(getP(), lang.dateFormat)).format(new Date(System.currentTimeMillis())))
                         .replace("{kills}", String.valueOf(arena.getPlayerKills(getP(), false))).replace("{finalKills}", String.valueOf(arena.getPlayerKills(getP(), true)))
-                        .replace("{beds}", String.valueOf(arena.getPlayerBedsDestroyed(getP()))).replace("{generatorName}", getMsg(getP(), OreGenerator.showDiamoundSb ? lang.diamondGeneratorName : lang.emeraldGeneratorName))
+                        .replace("{beds}", String.valueOf(arena.getPlayerBedsDestroyed(getP()))).replace("{generatorName}", getMsg(getP(), arena.showDiamondSb ? lang.diamondGeneratorName : lang.emeraldGeneratorName))
                         .replace("{generatorTimer}", generatorTime));
             }
         }
@@ -179,7 +179,7 @@ public class SBoard {
             } else if (arena.getStatus() == GameState.playing) {
                 String kills = String.valueOf(arena.getPlayerKills(getP(), false)), finalKills = String.valueOf(arena.getPlayerKills(getP(), true)),
                         beds = String.valueOf(arena.getPlayerBedsDestroyed(getP())),
-                        generatorTime = dateFormat.format((OreGenerator.showDiamoundSb ?
+                        generatorTime = dateFormat.format((arena.showDiamondSb ?
                                 arena.upgradeDiamondsCount : arena.upgradeEmeraldsCount) * 1000);
                 for (Map.Entry<Team, String> e : toRefresh.entrySet()) {
                     String text = e.getValue();
@@ -190,7 +190,7 @@ public class SBoard {
                     }
                     setContent(e.getKey(), text.replace("{on}", String.valueOf(arena.getPlayers().size())).replace("{max}", String.valueOf(arena.getMaxPlayers()))
                             .replace("{date}", date).replace("{kills}", kills).replace("{finalKills}", finalKills).replace("{beds}", beds)
-                            .replace("{generatorName}", getMsg(getP(), OreGenerator.showDiamoundSb ? lang.diamondGeneratorName : lang.emeraldGeneratorName))
+                            .replace("{generatorName}", getMsg(getP(), arena.showDiamondSb ? lang.diamondGeneratorName : lang.emeraldGeneratorName))
                             .replace("{generatorTimer}", generatorTime));
                 }
             }
