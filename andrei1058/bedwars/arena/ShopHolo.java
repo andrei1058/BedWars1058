@@ -12,7 +12,9 @@ import java.util.List;
 import static com.andrei1058.bedwars.Main.nms;
 
 public class ShopHolo {
-    /** Shop holograms per language <iso, holo></iso,>*/
+    /**
+     * Shop holograms per language <iso, holo></iso,>
+     */
     private static List<ShopHolo> shopHolo = new ArrayList<>();
 
     private String iso;
@@ -22,10 +24,10 @@ public class ShopHolo {
 
     public ShopHolo(String iso, ArmorStand a1, ArmorStand a2, Location l, Arena a) {
         this.l = l;
-        for (ShopHolo sh : getShopHolo()){
-            if (sh.l == l && sh.iso.equalsIgnoreCase(iso)){
-                if (a1 != null) a1.damage(10000d);
-                if (a2 != null) a2.damage(10000d);
+        for (ShopHolo sh : getShopHolo()) {
+            if (sh.l == l && sh.iso.equalsIgnoreCase(iso)) {
+                if (a1 != null) a1.remove();
+                if (a2 != null) a2.remove();
                 return;
             }
         }
@@ -38,8 +40,8 @@ public class ShopHolo {
         shopHolo.add(this);
     }
 
-    public void update(){
-        if (l == null){
+    public void update() {
+        if (l == null) {
             Bukkit.broadcastMessage("LOCATION IS NULL");
         }
         for (Player p2 : l.getWorld().getPlayers()) {
@@ -53,7 +55,7 @@ public class ShopHolo {
         }
     }
 
-    public void updateForPlayer(Player p, String lang){
+    public void updateForPlayer(Player p, String lang) {
         if (lang.equalsIgnoreCase(iso)) return;
         if (a1 != null) {
             nms.hideEntity(a1, p);
@@ -63,9 +65,9 @@ public class ShopHolo {
         }
     }
 
-    public static void clearForArena(Arena a){
-        for (ShopHolo sh : new ArrayList<>(getShopHolo())){
-            if (sh.a == a){
+    public static void clearForArena(Arena a) {
+        for (ShopHolo sh : new ArrayList<>(getShopHolo())) {
+            if (sh.a == a) {
                 shopHolo.remove(sh);
             }
         }

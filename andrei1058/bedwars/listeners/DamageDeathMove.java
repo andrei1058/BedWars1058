@@ -501,6 +501,16 @@ public class DamageDeathMove implements Listener {
         }
     }
 
+    @EventHandler
+    public void onEntityDeath(EntityDeathEvent e){
+        if (Arena.getArenaByName(e.getEntity().getLocation().getWorld().getName()) != null){
+            if (e.getEntityType() == EntityType.IRON_GOLEM || e.getEntityType() == EntityType.SILVERFISH){
+                e.getDrops().clear();
+                e.setDroppedExp(0);
+            }
+        }
+    }
+
     private static String getUtility(Material mat) {
         for (String st : Arrays.asList("silverfish", "bridge")) {
             if (shop.getBoolean("utilities." + st + ".enable")) {
