@@ -35,7 +35,6 @@ public class OreGenerator {
 
     private ArmorStand item;
     public boolean stack = upgrades.getBoolean("settings.stackItems");
-    private boolean emeraldUpgradeAnnouncerd = false, diamondUpgradeAnnounced = false;
 
     private static List<OreGenerator> generators = new ArrayList<>();
     private static List<OreGenerator> rotation = new ArrayList<>();
@@ -147,16 +146,16 @@ public class OreGenerator {
                    if (upgradeStage == 3){
                        arena.showDiamondSb = false;
                    }
-                   if (!diamondUpgradeAnnounced){
+                   if (!arena.diamondUpgradeAnnounced){
                        for (Player p : arena.getPlayers()){
                            p.sendMessage(getMsg(p, lang.generatorUpgradeMsg).replace("{generatorType}", getMsg(p, lang.generatorDiamond)).replace("{tier}", getMsg(p, (upgradeStage == 2 ? lang.tier2Format : lang.tier3Format))));
                        }
                        for (Player p : arena.getSpectators()){
                            p.sendMessage(getMsg(p, lang.generatorUpgradeMsg).replace("{generatorType}", getMsg(p, lang.generatorDiamond)).replace("{tier}", getMsg(p, (upgradeStage == 2 ? lang.tier2Format : lang.tier3Format))));
                        }
-                       diamondUpgradeAnnounced = true;
+                       arena.diamondUpgradeAnnounced = true;
                    }
-                   Bukkit.getScheduler().runTaskLater(plugin, ()-> diamondUpgradeAnnounced = false, 20L);
+                   Bukkit.getScheduler().runTaskLater(plugin, ()-> arena.diamondUpgradeAnnounced = false, 20L);
                } catch (Exception ex){
                    ex.printStackTrace();
                }
@@ -171,15 +170,15 @@ public class OreGenerator {
                 for (HoloGram e : armorstands.values()) {
                     e.setTierName(Language.getLang(e.iso).m(lang.generatorTier).replace("{tier}", Language.getLang(e.iso).m(upgradeStage == 2 ? lang.tier2Format : lang.tier3Format)));
                 }
-                if (!emeraldUpgradeAnnouncerd){
+                if (!arena.emeraldUpgradeAnnouncerd){
                     for (Player p : arena.getPlayers()){
                         p.sendMessage(getMsg(p, lang.generatorUpgradeMsg).replace("{generatorType}", getMsg(p, lang.generatorEmerald)).replace("{tier}", getMsg(p, (upgradeStage == 2 ? lang.tier2Format : lang.tier3Format))));
                     }
                     for (Player p : arena.getSpectators()){
                         p.sendMessage(getMsg(p, lang.generatorUpgradeMsg).replace("{generatorType}", getMsg(p, lang.generatorEmerald)).replace("{tier}", getMsg(p, (upgradeStage == 2 ? lang.tier2Format : lang.tier3Format))));
                     }
-                    emeraldUpgradeAnnouncerd = true;
-                    Bukkit.getScheduler().runTaskLater(plugin, ()-> emeraldUpgradeAnnouncerd = false, 20L);
+                    arena.emeraldUpgradeAnnouncerd = true;
+                    Bukkit.getScheduler().runTaskLater(plugin, ()-> arena.emeraldUpgradeAnnouncerd = false, 20L);
                 }
                 break;
         }

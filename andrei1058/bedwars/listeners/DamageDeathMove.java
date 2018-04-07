@@ -262,11 +262,13 @@ public class DamageDeathMove implements Listener {
                         a.addPlayerKill(killer, true, victim);
                         Bukkit.getPluginManager().callEvent(new FinalKillEvent(a.getWorldName(), victim, killer));
                     } else {
-                        for (ItemStack i : drops) {
-                            if (i == null) continue;
-                            if (i.getType() == Material.AIR) continue;
-                            if (i.getType() == Material.DIAMOND || i.getType() == Material.EMERALD || i.getType() == Material.IRON_INGOT || i.getType() == Material.GOLD_INGOT) {
-                                killer.getInventory().addItem(i);
+                        if (!Arena.respawn.containsKey(killer)) {
+                            for (ItemStack i : drops) {
+                                if (i == null) continue;
+                                if (i.getType() == Material.AIR) continue;
+                                if (i.getType() == Material.DIAMOND || i.getType() == Material.EMERALD || i.getType() == Material.IRON_INGOT || i.getType() == Material.GOLD_INGOT) {
+                                    killer.getInventory().addItem(i);
+                                }
                             }
                         }
                         a.addPlayerKill(killer, false, victim);
@@ -365,16 +367,16 @@ public class DamageDeathMove implements Listener {
         }
         if (Arena.isInArena(e.getPlayer())) {
             Arena a = Arena.getArenaByPlayer(e.getPlayer());
-            if (e.getFrom().getChunk() != e.getTo().getChunk()){
+            if (e.getFrom().getChunk() != e.getTo().getChunk()) {
                 //update armorstands hidden by nms
                 String iso = Language.getPlayerLanguage(e.getPlayer()).getIso();
-                for (OreGenerator o : OreGenerator.getGenerators()){
-                    if (o.getArena() == a){
+                for (OreGenerator o : OreGenerator.getGenerators()) {
+                    if (o.getArena() == a) {
                         o.updateHolograms(e.getPlayer(), iso);
                     }
                 }
-                for (ShopHolo sh : ShopHolo.getShopHolo()){
-                    if (sh.getA() == a){
+                for (ShopHolo sh : ShopHolo.getShopHolo()) {
+                    if (sh.getA() == a) {
                         sh.updateForPlayer(e.getPlayer(), iso);
                     }
                 }

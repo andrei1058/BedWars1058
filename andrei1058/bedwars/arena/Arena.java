@@ -10,7 +10,6 @@ import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.Contract;
 
@@ -37,7 +36,7 @@ public class Arena {
     private ConfigManager cm;
     private int minPlayers = 2, maxPlayers = 10, countdownS, slot = -1, maxInTeam = 1, countUp = 0, restarting = 12, islandRadius = 10;
     public int upgradeDiamondsCount = 0, upgradeEmeraldsCount = 0;
-    public boolean allowSpectate = true, showDiamondSb = true; //todo modify this with play stage
+    public boolean allowSpectate = true, showDiamondSb = true, emeraldUpgradeAnnouncerd = false, diamondUpgradeAnnounced = false; //todo modify this with play stage
     private World world;
     private String group = "DEFAULT";
     private List<BedWarsTeam> teams = new ArrayList<>();
@@ -989,7 +988,6 @@ public class Arena {
                 }
             }
             if (max - eliminated == 1) {
-                setStatus(GameState.restarting);
                 if (winner != null) {
                     String firstName = "", secondName = "", thirdName = "", winners = "";
                     for (Player p : winner.getMembers()) {
