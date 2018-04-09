@@ -30,6 +30,7 @@ import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Monster;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
@@ -126,10 +127,7 @@ public class Main extends JavaPlugin {
         /** Remove entities from lobby */
         if (!config.getLobbyWorldName().isEmpty()) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getWorld(config.getLobbyWorldName())
-                    .getEntities().stream().filter(e -> e.getType() != EntityType.PLAYER)
-                    .filter(e -> e.getType() != EntityType.PAINTING)
-                    .filter(e -> e.getType() != EntityType.ITEM_FRAME)
-                    .filter(e -> e.getType() != EntityType.ARMOR_STAND).forEach(Entity::remove), 20L);
+                    .getEntities().stream().filter(e -> e instanceof Monster).forEach(Entity::remove), 20L);
         }
 
         /** Register events */

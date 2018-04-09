@@ -1028,6 +1028,7 @@ public class Arena {
                         }
                     }
                 }
+                setStatus(GameState.restarting);
             }
             if (players.size() == 0 && getStatus() != GameState.restarting) {
                 setStatus(GameState.restarting);

@@ -342,7 +342,7 @@ public class DamageDeathMove implements Listener {
                         }
                         a.checkWinner();
                     }
-                }, 15L);
+                }, 60L);
             } else {
                 e.setRespawnLocation(a.getCm().getArenaLoc("waiting.Loc"));
                 e.getPlayer().getInventory().clear();

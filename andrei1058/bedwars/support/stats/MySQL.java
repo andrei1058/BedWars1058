@@ -26,15 +26,16 @@ public class MySQL implements Database {
         try {
             connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?user=" + user
                     + "&password=" + pass + "&useSSL=" + ssl);
-            close();
         } catch (SQLException e) {
             e.printStackTrace();
             plugin.getLogger().severe("Can't connect to database: " + database);
+            plugin.getLogger().severe(e.getMessage());
             plugin.database = new None();
             return;
-        } finally {
+        }
+        if (isConnected()) {
             connect();
-            plugin.getLogger().info("Connected to database: "+database);
+            plugin.getLogger().info("Connected to database: " + database);
         }
     }
 
@@ -91,10 +92,10 @@ public class MySQL implements Database {
         }
         if (isPlayerSet(p)) {
             try {
-                PreparedStatement ps = connection.prepareStatement("UPDATE global_stats SET last_play = ?, wins = wins + '"+wins+"', kills = kills + '"+kills+"', " +
-                        "final_kills = final_kills + '"+final_kills+"', looses = looses + '"+looses+"'," +
-                        " deaths = deaths + '"+deaths+"', final_deaths = final_deaths + '"+final_deaths+"', beds_destroyed = beds_destroyed + '"+beds_destroyed+"', " +
-                        "games_played = games_played + '"+games_played+"' WHERE uuid = '"+p.getUniqueId().toString()+"';");
+                PreparedStatement ps = connection.prepareStatement("UPDATE global_stats SET last_play = ?, wins = wins + '" + wins + "', kills = kills + '" + kills + "', " +
+                        "final_kills = final_kills + '" + final_kills + "', looses = looses + '" + looses + "'," +
+                        " deaths = deaths + '" + deaths + "', final_deaths = final_deaths + '" + final_deaths + "', beds_destroyed = beds_destroyed + '" + beds_destroyed + "', " +
+                        "games_played = games_played + '" + games_played + "' WHERE uuid = '" + p.getUniqueId().toString() + "';");
                 ps.setTimestamp(1, last_play);
                 ps.executeUpdate();
             } catch (SQLException e) {
@@ -128,9 +129,9 @@ public class MySQL implements Database {
     public Timestamp getFirstPlay(Player p) {
         if (!isConnected()) connect();
         try {
-            ResultSet rs = connection.createStatement().executeQuery("SELECT first_play FROM global_stats WHERE uuid='"+p.getUniqueId().toString()+"';");
+            ResultSet rs = connection.createStatement().executeQuery("SELECT first_play FROM global_stats WHERE uuid='" + p.getUniqueId().toString() + "';");
             if (rs.next())
-            return rs.getTimestamp("first_play");
+                return rs.getTimestamp("first_play");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -139,10 +140,11 @@ public class MySQL implements Database {
 
     @Override
     public Timestamp getLastPlay(Player p) {
+        if (!isConnected()) connect();
         try {
-            ResultSet rs = connection.createStatement().executeQuery("SELECT last_play FROM global_stats WHERE uuid='"+p.getUniqueId().toString()+"';");
+            ResultSet rs = connection.createStatement().executeQuery("SELECT last_play FROM global_stats WHERE uuid='" + p.getUniqueId().toString() + "';");
             if (rs.next())
-            return rs.getTimestamp("last_play");
+                return rs.getTimestamp("last_play");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -151,10 +153,11 @@ public class MySQL implements Database {
 
     @Override
     public int getKills(Player p) {
+        if (!isConnected()) connect();
         try {
-            ResultSet rs = connection.createStatement().executeQuery("SELECT kills FROM global_stats WHERE uuid='"+p.getUniqueId().toString()+"';");
+            ResultSet rs = connection.createStatement().executeQuery("SELECT kills FROM global_stats WHERE uuid='" + p.getUniqueId().toString() + "';");
             if (rs.next())
-            return rs.getInt("kills");
+                return rs.getInt("kills");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -163,10 +166,11 @@ public class MySQL implements Database {
 
     @Override
     public int getWins(Player p) {
+        if (!isConnected()) connect();
         try {
-            ResultSet rs = connection.createStatement().executeQuery("SELECT wins FROM global_stats WHERE uuid='"+p.getUniqueId().toString()+"';");
+            ResultSet rs = connection.createStatement().executeQuery("SELECT wins FROM global_stats WHERE uuid='" + p.getUniqueId().toString() + "';");
             if (rs.next())
-            return rs.getInt("wins");
+                return rs.getInt("wins");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -175,10 +179,11 @@ public class MySQL implements Database {
 
     @Override
     public int getFinalKills(Player p) {
+        if (!isConnected()) connect();
         try {
-            ResultSet rs = connection.createStatement().executeQuery("SELECT final_kills FROM global_stats WHERE uuid='"+p.getUniqueId().toString()+"';");
+            ResultSet rs = connection.createStatement().executeQuery("SELECT final_kills FROM global_stats WHERE uuid='" + p.getUniqueId().toString() + "';");
             if (rs.next())
-            return rs.getInt("final_kills");
+                return rs.getInt("final_kills");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -187,10 +192,11 @@ public class MySQL implements Database {
 
     @Override
     public int getLooses(Player p) {
+        if (!isConnected()) connect();
         try {
-            ResultSet rs = connection.createStatement().executeQuery("SELECT looses FROM global_stats WHERE uuid='"+p.getUniqueId().toString()+"';");
+            ResultSet rs = connection.createStatement().executeQuery("SELECT looses FROM global_stats WHERE uuid='" + p.getUniqueId().toString() + "';");
             if (rs.next())
-            return rs.getInt("looses");
+                return rs.getInt("looses");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -199,10 +205,11 @@ public class MySQL implements Database {
 
     @Override
     public int getFinalDeaths(Player p) {
+        if (!isConnected()) connect();
         try {
-            ResultSet rs = connection.createStatement().executeQuery("SELECT final_deaths FROM global_stats WHERE uuid='"+p.getUniqueId().toString()+"';");
+            ResultSet rs = connection.createStatement().executeQuery("SELECT final_deaths FROM global_stats WHERE uuid='" + p.getUniqueId().toString() + "';");
             if (rs.next())
-            return rs.getInt("final_deaths");
+                return rs.getInt("final_deaths");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -211,10 +218,11 @@ public class MySQL implements Database {
 
     @Override
     public int getDeaths(Player p) {
+        if (!isConnected()) connect();
         try {
-            ResultSet rs = connection.createStatement().executeQuery("SELECT deaths FROM global_stats WHERE uuid='"+p.getUniqueId().toString()+"';");
+            ResultSet rs = connection.createStatement().executeQuery("SELECT deaths FROM global_stats WHERE uuid='" + p.getUniqueId().toString() + "';");
             if (rs.next())
-            return rs.getInt("deaths");
+                return rs.getInt("deaths");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -223,10 +231,11 @@ public class MySQL implements Database {
 
     @Override
     public int getBedsDestroyed(Player p) {
+        if (!isConnected()) connect();
         try {
-            ResultSet rs = connection.createStatement().executeQuery("SELECT beds_destroyed FROM global_stats WHERE uuid='"+p.getUniqueId().toString()+"';");
+            ResultSet rs = connection.createStatement().executeQuery("SELECT beds_destroyed FROM global_stats WHERE uuid='" + p.getUniqueId().toString() + "';");
             if (rs.next())
-            return rs.getInt("beds_destroyed");
+                return rs.getInt("beds_destroyed");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -235,10 +244,11 @@ public class MySQL implements Database {
 
     @Override
     public int getGamesPlayed(Player p) {
+        if (!isConnected()) connect();
         try {
-            ResultSet rs = connection.createStatement().executeQuery("SELECT games_played FROM global_stats WHERE uuid='"+p.getUniqueId().toString()+"';");
+            ResultSet rs = connection.createStatement().executeQuery("SELECT games_played FROM global_stats WHERE uuid='" + p.getUniqueId().toString() + "';");
             if (rs.next())
-            return rs.getInt("games_played");
+                return rs.getInt("games_played");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -247,10 +257,11 @@ public class MySQL implements Database {
 
     @Override
     public HashMap<UUID, Integer> getTopWins(int x) {
+        if (!isConnected()) connect();
         HashMap<UUID, Integer> result = new HashMap<>();
         try {
             ResultSet rs = connection.createStatement().executeQuery("SELECT wins, uuid FROM global_stats ORDER BY MAX(wins);");
-            while (rs.next()){
+            while (rs.next()) {
                 result.put(UUID.fromString(rs.getString("uuid")), rs.getInt("wins"));
             }
         } catch (SQLException e) {
@@ -261,10 +272,11 @@ public class MySQL implements Database {
 
     @Override
     public HashMap<UUID, Integer> getTopKills(int x) {
+        if (!isConnected()) connect();
         HashMap<UUID, Integer> result = new HashMap<>();
         try {
             ResultSet rs = connection.createStatement().executeQuery("SELECT kills, uuid FROM global_stats ORDER BY MAX(kills);");
-            while (rs.next()){
+            while (rs.next()) {
                 result.put(UUID.fromString(rs.getString("uuid")), rs.getInt("kills"));
             }
         } catch (SQLException e) {
@@ -275,10 +287,11 @@ public class MySQL implements Database {
 
     @Override
     public HashMap<UUID, Integer> getTopFinalKills(int x) {
+        if (!isConnected()) connect();
         HashMap<UUID, Integer> result = new HashMap<>();
         try {
             ResultSet rs = connection.createStatement().executeQuery("SELECT final_kills, uuid FROM global_stats ORDER BY MAX(final_kills);");
-            while (rs.next()){
+            while (rs.next()) {
                 result.put(UUID.fromString(rs.getString("uuid")), rs.getInt("final_kills"));
             }
         } catch (SQLException e) {
@@ -289,10 +302,11 @@ public class MySQL implements Database {
 
     @Override
     public HashMap<UUID, Integer> getTopLooses(int x) {
+        if (!isConnected()) connect();
         HashMap<UUID, Integer> result = new HashMap<>();
         try {
             ResultSet rs = connection.createStatement().executeQuery("SELECT looses, uuid FROM global_stats ORDER BY MAX(looses);");
-            while (rs.next()){
+            while (rs.next()) {
                 result.put(UUID.fromString(rs.getString("uuid")), rs.getInt("looses"));
             }
         } catch (SQLException e) {
@@ -303,10 +317,11 @@ public class MySQL implements Database {
 
     @Override
     public HashMap<UUID, Integer> getTopDeaths(int x) {
+        if (!isConnected()) connect();
         HashMap<UUID, Integer> result = new HashMap<>();
         try {
             ResultSet rs = connection.createStatement().executeQuery("SELECT deaths, uuid FROM global_stats ORDER BY MAX(deaths);");
-            while (rs.next()){
+            while (rs.next()) {
                 result.put(UUID.fromString(rs.getString("uuid")), rs.getInt("deaths"));
             }
         } catch (SQLException e) {
@@ -317,10 +332,11 @@ public class MySQL implements Database {
 
     @Override
     public HashMap<UUID, Integer> getTopFinalDeaths(int x) {
+        if (!isConnected()) connect();
         HashMap<UUID, Integer> result = new HashMap<>();
         try {
             ResultSet rs = connection.createStatement().executeQuery("SELECT final_deaths, uuid FROM global_stats ORDER BY MAX(final_deaths);");
-            while (rs.next()){
+            while (rs.next()) {
                 result.put(UUID.fromString(rs.getString("uuid")), rs.getInt("final_deaths"));
             }
         } catch (SQLException e) {
@@ -331,10 +347,11 @@ public class MySQL implements Database {
 
     @Override
     public HashMap<UUID, Integer> getTopBedsDestroyed(int x) {
+        if (!isConnected()) connect();
         HashMap<UUID, Integer> result = new HashMap<>();
         try {
             ResultSet rs = connection.createStatement().executeQuery("SELECT beds_destroyed, uuid FROM global_stats ORDER BY MAX(beds_destroyed);");
-            while (rs.next()){
+            while (rs.next()) {
                 result.put(UUID.fromString(rs.getString("uuid")), rs.getInt("beds_destroyed"));
             }
         } catch (SQLException e) {
@@ -345,10 +362,11 @@ public class MySQL implements Database {
 
     @Override
     public HashMap<UUID, Integer> getTopGamesPlayed(int x) {
+        if (!isConnected()) connect();
         HashMap<UUID, Integer> result = new HashMap<>();
         try {
             ResultSet rs = connection.createStatement().executeQuery("SELECT games_played, uuid FROM global_stats ORDER BY MAX(games_played);");
-            while (rs.next()){
+            while (rs.next()) {
                 result.put(UUID.fromString(rs.getString("uuid")), rs.getInt("games_played"));
             }
         } catch (SQLException e) {
