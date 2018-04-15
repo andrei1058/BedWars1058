@@ -355,7 +355,7 @@ public class Language {
                 lbj.saveShopStuff("invContents.potions.invContents.back", "&aGo Back", Arrays.asList(""));
 
                 lbj.saveShopStuff("invContents.utility.invContents.apple", "&aGolden Apple", Arrays.asList("&8Items:", "&8▪ &7Golden Apple", "", "&7Cost: &6{cost} {currency}"));
-                lbj.saveShopStuff("invContents.utility.invContents.silverfish", "&aBedbug", Arrays.asList("&8Items:", "&8▪ &7Bedbug", "&7Cost: &f{cost} {currency}", "", "&7Moderately annoying. These", "&7little critters can be thrown to", "&7distract enemies"));
+                lbj.saveShopStuff("invContents.utility.invContents.sball", "&aBedbug", Arrays.asList("&8Items:", "&8▪ &7Bedbug", "&7Cost: &f{cost} {currency}", "", "&7Moderately annoying. These", "&7little critters can be thrown to", "&7distract enemies"));
                 lbj.saveShopStuff("invContents.utility.invContents.monsteregg", "&aDream Defender", Arrays.asList("&8Items:", "&8▪ &7Dream Defender", "&8▪ &7Cost: &f{cost} {currency}", "", "&7Moderately motivated.", "&7Sometimes they help defend your", "&7base"));
                 lbj.saveShopStuff("invContents.utility.invContents.fireball", "&aFireball", Arrays.asList("&8Items:", "&8▪ &7Fireball", "", "&7Cost: &f{cost} {currency}", "", "&7Right-click to launch!"));
                 lbj.saveShopStuff("invContents.utility.invContents.tnt", "&aTNT", Arrays.asList("&8Items:", "&8▪ &7TNT", "&7Cost: &6{cost} {currency}", "", "&7Instantly ignites, appropriate", "&7to explode things!"));

@@ -122,7 +122,7 @@ public class BreakPlace implements Listener {
         }
         if (Arena.isInArena(p)) {
             Arena a = Arena.getArenaByPlayer(p);
-            if (a.isSpectator(p)) {
+            if (!a.isPlayer(p)) {
                 e.setCancelled(true);
                  return;
             }

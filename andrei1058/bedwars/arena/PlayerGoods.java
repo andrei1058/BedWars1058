@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.arena;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.Main.plugin;
 
 /**
@@ -143,6 +145,9 @@ public class PlayerGoods {
         player.setAllowFlight(allowFlight);
         player.setFlying(flying);
         playerGoods.remove(player);
+        for (Player p : Bukkit.getOnlinePlayers()){
+            nms.showPlayer(player, p);
+        }
     }
 
 }

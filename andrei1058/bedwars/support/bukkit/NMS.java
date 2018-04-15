@@ -88,6 +88,12 @@ public interface NMS {
     /** Hide a player */
     void hidePlayer(Player player, List<Player> players);
 
+    /** Hide a player */
+    void hidePlayer(Player victim, Player p);
+
+    /** Show a player */
+    void showPlayer(Player victim, Player p);
+
     /** Refresh iron-golem name */
     void refreshDespawnables();
 
@@ -108,4 +114,13 @@ public interface NMS {
 
     /** Set tnt source */
     void setSource(TNTPrimed tnt, Player owner);
+
+    /** Void damage with cause */
+    void voidKill(Player p);
+
+    /** Hide player armor to a player */
+    void hideArmor(Player p, Player p2);
+
+    /** Show a player armor */
+    void showArmor(Player p, Player p2);
 }

@@ -178,26 +178,31 @@ public class v1_8_R3 implements NMS {
 
     @Override
     public boolean isArmor(ItemStack itemStack) {
+        if (CraftItemStack.asNMSCopy(itemStack).getItem() == null) return false;
         return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemArmor;
     }
 
     @Override
     public boolean isTool(ItemStack itemStack) {
+        if (CraftItemStack.asNMSCopy(itemStack).getItem() == null) return false;
         return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemTool;
     }
 
     @Override
     public boolean isSword(ItemStack itemStack) {
+        if (CraftItemStack.asNMSCopy(itemStack).getItem() == null) return false;
         return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemSword;
     }
 
     @Override
     public boolean isBow(ItemStack itemStack) {
+        if (CraftItemStack.asNMSCopy(itemStack).getItem() == null) return false;
         return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemBow;
     }
 
     @Override
     public boolean isProjectile(org.bukkit.inventory.ItemStack itemStack) {
+        if (CraftItemStack.asNMSCopy(itemStack).getItem() == null) return false;
         return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof IProjectile;
     }
 
@@ -404,5 +409,54 @@ private class Despawnable {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    public void voidKill(Player p) {
+        ((CraftPlayer)p).getHandle().damageEntity(DamageSource.OUT_OF_WORLD, 1000);
+    }
+
+    @Override
+    public void hideArmor(Player p, Player p2) {
+        PacketPlayOutEntityEquipment hand = new PacketPlayOutEntityEquipment(p.getEntityId(), 0, null);
+        PacketPlayOutEntityEquipment helmet = new PacketPlayOutEntityEquipment(p.getEntityId(), 1, null);
+        PacketPlayOutEntityEquipment chest = new PacketPlayOutEntityEquipment(p.getEntityId(), 2, null);
+        PacketPlayOutEntityEquipment pants = new PacketPlayOutEntityEquipment(p.getEntityId(), 3, null);
+        PacketPlayOutEntityEquipment boots = new PacketPlayOutEntityEquipment(p.getEntityId(), 4, null);
+        PlayerConnection pc = ((CraftPlayer)p2).getHandle().playerConnection;
+        pc.sendPacket(hand);
+        pc.sendPacket(helmet);
+        pc.sendPacket(chest);
+        pc.sendPacket(pants);
+        pc.sendPacket(boots);
+    }
+
+    @Override
+    public void hidePlayer(Player victim, Player p) {
+        PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(victim.getEntityId());
+        ((CraftPlayer)p).getHandle().playerConnection.sendPacket(packet);
+    }
+
+    @Override
+    public void showPlayer(Player victim, Player p) {
+        PacketPlayOutNamedEntitySpawn packet = new PacketPlayOutNamedEntitySpawn(((CraftPlayer)victim).getHandle());
+        ((CraftPlayer)p).getHandle().playerConnection.sendPacket(packet);
+    }
+
+    @Override
+    public void showArmor(Player p, Player p2) {
+        PacketPlayOutEntityEquipment hand1 = new PacketPlayOutEntityEquipment(p.getEntityId(), 0, CraftItemStack.asNMSCopy(p.getItemInHand()));
+        PacketPlayOutEntityEquipment helmet = new PacketPlayOutEntityEquipment(p.getEntityId(), 1, CraftItemStack.asNMSCopy(p.getInventory().getHelmet()));
+        PacketPlayOutEntityEquipment chest = new PacketPlayOutEntityEquipment(p.getEntityId(), 2, CraftItemStack.asNMSCopy(p.getInventory().getChestplate()));
+        PacketPlayOutEntityEquipment pants = new PacketPlayOutEntityEquipment(p.getEntityId(), 3, CraftItemStack.asNMSCopy(p.getInventory().getLeggings()));
+        PacketPlayOutEntityEquipment boots = new PacketPlayOutEntityEquipment(p.getEntityId(), 4, CraftItemStack.asNMSCopy(p.getInventory().getBoots()));
+        EntityPlayer pc = ((CraftPlayer)p2).getHandle();
+        if (p != p2){
+            pc.playerConnection.sendPacket(hand1);
+        }
+        pc.playerConnection.sendPacket(helmet);
+        pc.playerConnection.sendPacket(chest);
+        pc.playerConnection.sendPacket(pants);
+        pc.playerConnection.sendPacket(boots);
     }
 }

@@ -43,6 +43,7 @@ public class ConfigManager {
             yml.addDefault("islandRadius", 10);
             yml.addDefault("bedBlock", "BED_BLOCK");
             yml.addDefault("worldBorder", 300);
+            yml.addDefault("voidKill", false);
             yml.options().copyDefaults(true);
             save();
         }

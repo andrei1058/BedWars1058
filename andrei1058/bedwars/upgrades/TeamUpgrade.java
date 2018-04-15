@@ -96,14 +96,14 @@ public class TeamUpgrade {
                     if (bwt.getUpgradeTier().containsKey(getSlot())) {
                         bwt.getUpgradeTier().replace(getSlot(), tier + 1);
                         for (Player p1 : bwt.getMembers()){
-                            p.sendMessage(getMsg(p1, lang.upgradeBuyMessage).replace("{player}", p.getName()).replace("{upgradeName}",
+                            p1.sendMessage(getMsg(p1, lang.upgradeBuyMessage).replace("{player}", p.getName()).replace("{upgradeName}",
                                     ChatColor.stripColor(getMsg(p1,
                                             "upgrades."+getUpgradeGroup(bwt.getArena().getGroup().toLowerCase()).getName()+"."+getName()+"."+getTiers().get(tier+1).getName()+".name"))));
                         }
                     } else {
                         bwt.getUpgradeTier().put(getSlot(), 0);
                         for (Player p1 : bwt.getMembers()){
-                            p.sendMessage(getMsg(p1, lang.upgradeBuyMessage).replace("{player}", p.getName()).replace("{upgradeName}",
+                            p1.sendMessage(getMsg(p1, lang.upgradeBuyMessage).replace("{player}", p.getName()).replace("{upgradeName}",
                                     ChatColor.stripColor(getMsg(p1,
                                             "upgrades."+getUpgradeGroup(bwt.getArena().getGroup().toLowerCase()).getName()+"."+getName()+"."+getTiers().get(0).getName()+".name"))));
                         }

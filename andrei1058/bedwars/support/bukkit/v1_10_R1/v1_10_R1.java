@@ -8,6 +8,7 @@ import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.support.bukkit.NMS;
 import com.google.common.collect.Sets;
 import net.minecraft.server.v1_10_R1.*;
+import net.minecraft.server.v1_10_R1.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -167,26 +168,31 @@ public class v1_10_R1 implements NMS {
 
     @Override
     public boolean isArmor(org.bukkit.inventory.ItemStack itemStack) {
+        if (CraftItemStack.asNMSCopy(itemStack).getItem() == null) return false;
         return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemArmor;
     }
 
     @Override
     public boolean isTool(org.bukkit.inventory.ItemStack itemStack) {
+        if (CraftItemStack.asNMSCopy(itemStack).getItem() == null) return false;
         return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemTool;
     }
 
     @Override
     public boolean isSword(org.bukkit.inventory.ItemStack itemStack) {
+        if (CraftItemStack.asNMSCopy(itemStack).getItem() == null) return false;
         return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemSword;
     }
 
     @Override
     public boolean isBow(org.bukkit.inventory.ItemStack itemStack) {
+        if (CraftItemStack.asNMSCopy(itemStack).getItem() == null) return false;
         return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemBow;
     }
 
     @Override
     public boolean isProjectile(org.bukkit.inventory.ItemStack itemStack){
+        if (CraftItemStack.asNMSCopy(itemStack).getItem() == null) return false;
         return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof IProjectile;
     }
 
@@ -383,5 +389,60 @@ public class v1_10_R1 implements NMS {
     @Override
     public void teamCollideRule(Team t) {
         t.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
+    }
+
+    @Override
+    public void voidKill(Player p) {
+        ((CraftPlayer)p).getHandle().damageEntity(DamageSource.OUT_OF_WORLD, 1000);
+    }
+
+    @Override
+    public void hideArmor(Player p, Player p2) {
+        PacketPlayOutEntityEquipment hand1 = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.MAINHAND, new ItemStack(new Item().getById(0)));
+        PacketPlayOutEntityEquipment hand2 = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.OFFHAND, new ItemStack(new Item().getById(0)));
+        PacketPlayOutEntityEquipment helmet = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.HEAD, new ItemStack(new Item().getById(0)));
+        PacketPlayOutEntityEquipment chest = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.CHEST, new ItemStack(new Item().getById(0)));
+        PacketPlayOutEntityEquipment pants = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.LEGS, new ItemStack(new Item().getById(0)));
+        PacketPlayOutEntityEquipment boots = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.FEET, new ItemStack(new Item().getById(0)));
+        PlayerConnection pc = ((CraftPlayer)p2).getHandle().playerConnection;
+        if (p != p2){
+            pc.sendPacket(hand1);
+            pc.sendPacket(hand2);
+        }
+        pc.sendPacket(helmet);
+        pc.sendPacket(chest);
+        pc.sendPacket(pants);
+        pc.sendPacket(boots);
+    }
+
+    @Override
+    public void hidePlayer(Player victim, Player p) {
+        PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(victim.getEntityId());
+        ((CraftPlayer)p).getHandle().playerConnection.sendPacket(packet);
+    }
+
+    @Override
+    public void showPlayer(Player victim, Player p) {
+        PacketPlayOutNamedEntitySpawn packet = new PacketPlayOutNamedEntitySpawn(((CraftPlayer)victim).getHandle());
+        ((CraftPlayer)p).getHandle().playerConnection.sendPacket(packet);
+    }
+
+    @Override
+    public void showArmor(Player p, Player p2) {
+        PacketPlayOutEntityEquipment hand1 = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.MAINHAND, CraftItemStack.asNMSCopy(p.getInventory().getItemInMainHand()));
+        PacketPlayOutEntityEquipment hand2 = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.OFFHAND, CraftItemStack.asNMSCopy(p.getInventory().getItemInOffHand()));
+        PacketPlayOutEntityEquipment helmet = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(p.getInventory().getHelmet()));
+        PacketPlayOutEntityEquipment chest = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.CHEST, CraftItemStack.asNMSCopy(p.getInventory().getChestplate()));
+        PacketPlayOutEntityEquipment pants = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.LEGS, CraftItemStack.asNMSCopy(p.getInventory().getLeggings()));
+        PacketPlayOutEntityEquipment boots = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.FEET, CraftItemStack.asNMSCopy(p.getInventory().getBoots()));
+        EntityPlayer pc = ((CraftPlayer)p2).getHandle();
+        if (p != p2){
+            pc.playerConnection.sendPacket(hand1);
+            pc.playerConnection.sendPacket(hand2);
+        }
+        pc.playerConnection.sendPacket(helmet);
+        pc.playerConnection.sendPacket(chest);
+        pc.playerConnection.sendPacket(pants);
+        pc.playerConnection.sendPacket(boots);
     }
 }

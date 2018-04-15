@@ -105,20 +105,24 @@ public class BedWarsTeam {
         for (Player p : players) {
             if (!members.contains(p)) members.add(p);
             new BedHolo(p);
-            p.teleport(spawn);
-            PlayerVault v;
-            if (getVault(p) == null) {
-                v = new PlayerVault(p);
-            } else {
-                v = getVault(p);
-                v.invItems.clear();
-            }
-            v.setHelmet(createArmor(Material.LEATHER_HELMET));
-            v.setChestplate(createArmor(Material.LEATHER_CHESTPLATE));
-            v.setPants(createArmor(Material.LEATHER_LEGGINGS));
-            v.setBoots(createArmor(Material.LEATHER_BOOTS));
-            sendDefaultInventory(p);
         }
+    }
+
+    /** first spawn */
+    public void firstSpawn(Player p){
+        p.teleport(spawn);
+        PlayerVault v;
+        if (getVault(p) == null) {
+            v = new PlayerVault(p);
+        } else {
+            v = getVault(p);
+            v.invItems.clear();
+        }
+        v.setHelmet(createArmor(Material.LEATHER_HELMET));
+        v.setChestplate(createArmor(Material.LEATHER_CHESTPLATE));
+        v.setPants(createArmor(Material.LEATHER_LEGGINGS));
+        v.setBoots(createArmor(Material.LEATHER_BOOTS));
+        sendDefaultInventory(p);
     }
 
     /**
@@ -280,7 +284,7 @@ public class BedWarsTeam {
     /**
      * Equip a player with default armor
      */
-    private void sendArmor(Player p) {
+    public void sendArmor(Player p) {
         p.getInventory().setHelmet(createArmor(Material.LEATHER_HELMET));
         p.getInventory().setChestplate(createArmor(Material.LEATHER_CHESTPLATE));
         p.getInventory().setLeggings(createArmor(Material.LEATHER_LEGGINGS));

@@ -612,6 +612,11 @@ public class Arena {
                             nms.spawnShop(t.getShop(), lang.shopSoloName, getPlayers(), this);
                         }
                     }
+                    for (BedWarsTeam bwt : getTeams()){
+                        for (Player p : bwt.getMembers()){
+                            bwt.firstSpawn(p);
+                        }
+                    }
                     return;
                 }
                 if (countdownS % 10 == 0 || countdownS <= 5) {
@@ -653,10 +658,13 @@ public class Arena {
                     }
                 }
                 if (countUp == 1) {
+                    for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
+                        if (sb.getArena() == this) {
+                            sb.addHealthSbAndTabStuff();
+                        }
+                    }
                     for (Player p : getPlayers()) {
                         nms.sendTitle(p, getMsg(p, lang.titleStart), null, 0, 20, 0);
-                    }
-                    for (Player p : getWorld().getPlayers()) {
                         p.setHealth(p.getHealth() - 0.0001);
                     }
                 }
@@ -673,8 +681,8 @@ public class Arena {
                                     distance = (int) p.getLocation().distance(p2.getLocation());
                                 }
                             }
-                            nms.playAction(p, getMsg(p, lang.actionBarTracking).replace("{team}", t.getColor() + t.getName())
-                                    .replace("{distance}", t.getColor().toString() + distance).replace("&", "§"));
+                            nms.playAction(p, getMsg(p, lang.actionBarTracking).replace("{team}", TeamColor.getChatColor(t.getColor()) + t.getName())
+                                    .replace("{distance}", TeamColor.getChatColor(t.getColor()).toString() + distance).replace("&", "§"));
                         }
                     }
                 }

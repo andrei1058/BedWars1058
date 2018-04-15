@@ -12,8 +12,13 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import static com.andrei1058.bedwars.Main.*;
+import static com.andrei1058.bedwars.arena.Refresh.showTime;
 
 public class HungerWeatherSpawn implements Listener {
 
@@ -65,6 +70,21 @@ public class HungerWeatherSpawn implements Listener {
         /* remove empty bottle */
         switch (e.getItem().getType()) {
             case POTION:
+                PotionMeta pm = (PotionMeta) e.getItem().getItemMeta();
+                if (pm.hasCustomEffects()) {
+                    if (pm.hasCustomEffect(PotionEffectType.INVISIBILITY)) {
+                        for (Player p1 : e.getPlayer().getWorld().getPlayers()) {
+                            nms.hideArmor(e.getPlayer(), p1);
+                        }
+                        for (PotionEffect pe : pm.getCustomEffects()) {
+                            showTime.put(e.getPlayer(), pe.getDuration() / 20);
+                        }
+                    }
+                }
+                Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                    nms.minusAmount(e.getPlayer(), new ItemStack(Material.GLASS_BOTTLE), 1);
+                }, 5L);
+                break;
             case GLASS_BOTTLE:
                 nms.minusAmount(e.getPlayer(), nms.getItemInHand(e.getPlayer()), 1);
                 break;

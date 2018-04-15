@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.listeners;
 
+import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
@@ -9,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -89,6 +91,20 @@ public class JoinLeaveTeleport implements Listener {
             if (a.isSpectator(e.getPlayer())){
                 if (e.getFrom().getWorld() != e.getTo().getWorld()){
                     e.setCancelled(true);
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onWorldChange(PlayerChangedWorldEvent e){
+        if (Arena.isInArena(e.getPlayer())){
+            Arena a = Arena.getArenaByPlayer(e.getPlayer());
+            if (a.isPlayer(e.getPlayer())){
+                if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) return;
+                if (!e.getPlayer().getWorld().getName().equalsIgnoreCase(a.getWorldName())) {
+                    a.removePlayer(e.getPlayer());
+                    debug(e.getPlayer().getName() + " was removed from " + a.getDisplayName() + " because he was teleported outside the arena.");
                 }
             }
         }

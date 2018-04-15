@@ -1,17 +1,19 @@
 package com.andrei1058.bedwars.arena;
 
+import com.andrei1058.bedwars.api.BedWars;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
-import static com.andrei1058.bedwars.Main.debug;
 import static com.andrei1058.bedwars.Main.lang;
 import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
 public class Refresh extends BukkitRunnable {
+
+    public static HashMap<Player, Integer> showTime = new HashMap<>();
 
     @Override
     public void run() {
@@ -41,6 +43,16 @@ public class Refresh extends BukkitRunnable {
                 Arena.respawn.remove(e.getKey());
             }
             Arena.respawn.replace(e.getKey(), e.getValue() - 1);
+        }
+        for (Map.Entry<Player, Integer> e : new HashMap<>(showTime).entrySet()){
+            if (e.getValue() <= 0){
+                showTime.remove(e.getKey());
+                for (Player p : e.getKey().getWorld().getPlayers()){
+                   nms.showArmor(e.getKey(), p);
+                }
+            } else {
+                showTime.replace(e.getKey(), e.getValue()-1);
+            }
         }
         nms.refreshDespawnables();
     }

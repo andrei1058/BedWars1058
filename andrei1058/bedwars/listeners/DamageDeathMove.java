@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.ArrayList;
@@ -40,6 +41,9 @@ public class DamageDeathMove implements Listener {
             Arena a = Arena.getArenaByPlayer(p);
             if (a != null) {
                 if (a.isSpectator(p)) {
+                    e.setCancelled(true);
+                }
+                if (a.getStatus() != GameState.playing){
                     e.setCancelled(true);
                 }
                 if (e.getCause() == EntityDamageEvent.DamageCause.FALL) {
@@ -321,17 +325,9 @@ public class DamageDeathMove implements Listener {
     public void onRespawn(PlayerRespawnEvent e) {
         Arena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a != null) {
-            if (a.isSpectator(e.getPlayer())) {
-                e.setRespawnLocation(a.getCm().getArenaLoc("waiting.Loc"));
-                return;
-            }
-            if (a.getStatus() != GameState.playing) {
-                e.setRespawnLocation(a.getCm().getArenaLoc("waiting.Loc"));
-                return;
-            }
+            e.setRespawnLocation(a.getCm().getArenaLoc("waiting.Loc"));
             BedWarsTeam t = a.getTeam(e.getPlayer());
             if (t.isBedDestroyed()) {
-                e.setRespawnLocation(a.getCm().getArenaLoc("waiting.Loc"));
                 a.addSpectator(e.getPlayer(), true);
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
                     t.getMembers().remove(e.getPlayer());
@@ -344,10 +340,9 @@ public class DamageDeathMove implements Listener {
                     }
                 }, 60L);
             } else {
-                e.setRespawnLocation(a.getCm().getArenaLoc("waiting.Loc"));
                 e.getPlayer().getInventory().clear();
                 Bukkit.getScheduler().runTaskLater(plugin, () -> nms.hidePlayer(e.getPlayer(), a.getPlayers()), 5L);
-                e.getPlayer().spigot().setCollidesWithEntities(false);
+                nms.setCollide(e.getPlayer(), false);
                 e.getPlayer().setAllowFlight(true);
                 e.getPlayer().setFlying(true);
                 Arena.respawn.put(e.getPlayer(), 5);
@@ -359,16 +354,10 @@ public class DamageDeathMove implements Listener {
 
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
-        if (e.getPlayer().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
-            if (e.getTo().getY() < 0) {
-                e.getPlayer().teleport(config.getConfigLoc("lobbyLoc"));
-            }
-            return;
-        }
         if (Arena.isInArena(e.getPlayer())) {
             Arena a = Arena.getArenaByPlayer(e.getPlayer());
             if (e.getFrom().getChunk() != e.getTo().getChunk()) {
-                //update armorstands hidden by nms
+                /** update armorstands hidden by nms **/
                 String iso = Language.getPlayerLanguage(e.getPlayer()).getIso();
                 for (OreGenerator o : OreGenerator.getGenerators()) {
                     if (o.getArena() == a) {
@@ -380,6 +369,16 @@ public class DamageDeathMove implements Listener {
                         sh.updateForPlayer(e.getPlayer(), iso);
                     }
                 }
+                /**if (e.getPlayer().hasPotionEffect(PotionEffectType.INVISIBILITY)){
+                    for (Player p : e.getTo().getWorld().getPlayers()){
+                        nms.hidePlayer(e.getPlayer(), p);
+                    }
+                }
+                for (Player p : e.getTo().getWorld().getPlayers()){
+                    if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)){
+                        nms.hidePlayer(p, e.getPlayer());
+                    }
+                }*/
             }
             if (a.isSpectator(e.getPlayer())) {
                 if (e.getTo().getY() < 0) {
@@ -387,6 +386,15 @@ public class DamageDeathMove implements Listener {
                 }
                 return;
             } else {
+                if (e.getPlayer().getLocation().getY() <= 0){
+                    if (a.getStatus() == GameState.playing) {
+                        if (a.getCm().getBoolean("voidKill")) {
+                            nms.voidKill(e.getPlayer());
+                        }
+                    } else {
+                        e.getPlayer().teleport(a.getCm().getArenaLoc("waiting.Loc"));
+                    }
+                }
                 if (a.getStatus() == GameState.playing) {
                     for (BedWarsTeam t : a.getTeams()) {
                         /** Veridica daca a intrat in baza */
@@ -478,6 +486,13 @@ public class DamageDeathMove implements Listener {
                         }
                     }
                 }
+            }
+        } else {
+            if (e.getPlayer().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
+                if (e.getTo().getY() < 0) {
+                    e.getPlayer().teleport(config.getConfigLoc("lobbyLoc"));
+                }
+                return;
             }
         }
     }

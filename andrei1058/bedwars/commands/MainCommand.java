@@ -101,11 +101,11 @@ public class MainCommand extends BukkitCommand {
                         "/" + getName() + " delArena ", ClickEvent.Action.SUGGEST_COMMAND));
 
                 /** bw enableArena <mapName> */
-                p.spigot().sendMessage(Misc.msgHoverClick("§a▪ §7/" + getName() + " enableArena §o<mapName>","§fEnable an arena.",
+                p.spigot().sendMessage(Misc.msgHoverClick("§a▪ §7/" + getName() + " enableArena §o<mapName>","§7Enable an arena.",
                         "/" + getName() + " enableArena ", ClickEvent.Action.SUGGEST_COMMAND));
 
                 /** bw disableArena <mapName> */
-                p.spigot().sendMessage(Misc.msgHoverClick("/" + getName() + " enableArena ", "§fDisable an arena.\nThis will remove the players from the arena before disabling.",
+                p.spigot().sendMessage(Misc.msgHoverClick("§a▪ §7/" + getName() + " disableArena §o<mapName>", "§fDisable an arena.\nThis will remove the players from the arena before disabling.",
                         "/" + getName() + " disableArena ", ClickEvent.Action.SUGGEST_COMMAND));
 
                 /** bw cloneArena mapName */
