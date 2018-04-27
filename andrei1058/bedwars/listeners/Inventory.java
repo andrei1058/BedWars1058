@@ -95,7 +95,7 @@ public class Inventory implements Listener {
             if (e.getClickedInventory().equals(ArenaGUI.getRefresh().get(p))) {
                 for (Arena a : Arena.getArenas()) {
                     if (a.getSlot() == e.getSlot()) {
-                        a.addPlayer(p);
+                        a.addPlayer(p, false);
                         e.setCancelled(true);
                         p.closeInventory();
                     }

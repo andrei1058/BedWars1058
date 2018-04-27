@@ -158,6 +158,13 @@ public class Language {
             statsDateTimeFormat = "format.statsTime",
             never = "meaning.never",
             lobbyScoreboard = "scoreboard.lobby";
+    public static String partyHelpCmds = "party.help", partyInviteUsage = "party.inviteUsage",
+            partyIniteSent = "party.inviteSent", partyPlayerOffline = "party.playerOffline", partyInviteReceived = "party.inviteReceived",
+            partyInviteYourself = "party.invYourself", partyNoInvite = "party.noInvite", partyAlreadyIn = "party.alreadyIn",
+            partyInsuffPerms = "party.noPerm", partyAcceptUsage = "party.acceptUsage", partyJoined = "party.joined",
+            playerCurrentGameStats = "arena.personalStats", partyNotInParty = "party.notIn", partyCantLeaveOwner = "party.cantLeaveOwner",
+            partyLeaved = "party.leaved", partyDisband = "party.disband", partyRemoveUsage = "party.removeUsage", partyRemovedFrom = "party.removed",
+            partyNotInPartyAtRemove = "player.removeNotIn";
     //End of language file strings
 
     public Language(String iso) {
@@ -434,6 +441,31 @@ public class Language {
                 yml.addDefault(never, "Never");
                 yml.addDefault(lobbyScoreboard, Arrays.asList("&6&lBedWars", "&7{date}", "&fName: &a{player}", "", "&fWins: &a{wins}", "&fLooses: &a{looses}", "&fKills: &a{kills}", "&fDeaths: &a{deaths}"
                 , "&fFinal Kills: &a{fKills}", "&fBeds Destroyed: &a{beds}", "", "&fOnline: &a{on}", "&eandrei1058.com"));
+
+                /** party commands */
+                yml.addDefault(partyHelpCmds, Arrays.asList("&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
+                        "&aParty Commands:", "&e/party help &7- &bPrints this help message", "&e/party invite <player> &7- &bInvites the player to your party",
+                        "&e/party leave &7- &bLeaves the current party",
+                        "&e/party remove <player> &7- &bRemove the player from the party",
+                        "&e/party accept <player> &7- &bAccept a party invite", "&e/party disband &7- &bDisbands the party"));
+                yml.addDefault(partyInviteUsage, "{prefix}&eUsage: &7/party invite <player>");
+                yml.addDefault(partyPlayerOffline, "{prefix}&7{player} &eis not online!");
+                yml.addDefault(partyIniteSent, "{prefix}&eInvite sent to &7{player}&6.");
+                yml.addDefault(partyInviteReceived, "{prefix}&b{player} &ehas invited to a party! &o&7(Click to accept)");
+                yml.addDefault(partyInviteYourself, "{prefix}&cYou cannot invite yourself!");
+                yml.addDefault(partyNoInvite, "{prefix}&cThere's no party requests to accept");
+                yml.addDefault(partyAlreadyIn, "{prefix}&eYou're already in a party!");
+                yml.addDefault(partyInsuffPerms, "{prefix}&cOnly the party owner can do this!");
+                yml.addDefault(partyAcceptUsage, "{prefix}&eUsage: &7/party accept <player>");
+                yml.addDefault(partyJoined, "{prefix}&7{player} &ehas joined the party!");
+                yml.addDefault(playerCurrentGameStats, Arrays.asList("&aYou gained &6{coins} &acoins!"));
+                yml.addDefault(partyNotInParty, "{prefix}&cYou're not in a party!");
+                yml.addDefault(partyCantLeaveOwner, "{prefix}&cYou can't leave your own party!\n&eTry using: &b/party disband");
+                yml.addDefault(partyLeaved, "{prefix}&7{player} &ehas leaved the party!");
+                yml.addDefault(partyDisband, "{prefix}&eParty disbanded!");
+                yml.addDefault(partyRemoveUsage, "{prefix}&7Usage: &e/party remove <player>");
+                yml.addDefault(partyRemovedFrom, "{prefix}&7{player} &ewas removed from the party,");
+                yml.addDefault(partyNotInPartyAtRemove, "{prefix}&7{player} &eis not in your party!");
                 break;
         }
         lbj.save();

@@ -60,7 +60,7 @@ public class JoinLeaveTeleport implements Listener {
         e.setJoinMessage(null);
         p.getInventory().setArmorContents(null);
         if (getServerType() == ServerType.BUNGEE){
-            Arena.getArenas().get(0).addPlayer(p);
+            Arena.getArenas().get(0).addPlayer(p, false);
             return;
         } else {
             p.teleport(config.getConfigLoc("lobbyLoc"));

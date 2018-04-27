@@ -197,18 +197,22 @@ public class SBoard {
         }
     }
 
-    public void addHealthSbAndTabStuff() {
+    public void addHealthIcon() {
         if (sb.getObjective("my") == null) {
             Objective objective = sb.registerNewObjective("my", "health");
             objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
             objective.setDisplayName("§c❤");
-            for (BedWarsTeam t : arena.getTeams()) {
-                Team team = sb.registerNewTeam(t.getName());
-                team.setPrefix(TeamColor.getChatColor(t.getColor()) + "§l" + t.getName().substring(0, 1).toUpperCase() + " §r" + TeamColor.getChatColor(t.getColor()));
-                nms.teamCollideRule(team);
-                for (Player p : t.getMembers()) {
-                    team.addEntry(p.getName());
-                }
+        }
+    }
+
+    public void giveTeamColorTag() {
+        for (BedWarsTeam t : arena.getTeams()) {
+            Team team = sb.registerNewTeam(t.getName());
+            team.setPrefix(TeamColor.getChatColor(t.getColor()) + "§l" +
+                    t.getName().substring(0, 1).toUpperCase() + " §r" + TeamColor.getChatColor(t.getColor()));
+            nms.teamCollideRule(team);
+            for (Player p : t.getMembers()) {
+                team.addEntry(p.getName());
             }
         }
     }

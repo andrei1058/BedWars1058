@@ -144,7 +144,7 @@ public class Arena {
         world.getWorldBorder().setSize(yml.getInt("worldBorder"));
     }
 
-    public void addPlayer(Player p) {
+    public void addPlayer(Player p, boolean skipOwnerCheck) {
         /* used for base enter/leave event */
         if (isOnABase.containsKey(p)) {
             isOnABase.remove(p);
@@ -155,13 +155,32 @@ public class Arena {
             return;
         }
         if (getParty().hasParty(p)) {
-            if (!getParty().isOwner(p)) {
-                p.sendMessage(getMsg(p, Language.leaderChoose));
-                return;
-            }
-            if (getParty().partySize(p) > maxInTeam) {
+            if (!skipOwnerCheck) {
+                if (!getParty().isOwner(p)) {
+                    p.sendMessage(getMsg(p, Language.leaderChoose));
+                    return;
+                }
+
+            /*if (getParty().partySize(p) > maxInTeam) {
                 p.sendMessage(getMsg(p, Language.partyTooBig));
                 return;
+            }*/
+                if (getParty().partySize(p) > maxInTeam * getTeams().size() - getPlayers().size()) {
+                    p.sendMessage(getMsg(p, Language.partyTooBig));
+                    return;
+                }
+                for (Player mem : getParty().getMembers(p)) {
+                    if (mem == p) continue;
+                    Arena a = Arena.getArenaByPlayer(mem);
+                    if (a != null) {
+                        if (a.isPlayer(mem)) {
+                            a.removePlayer(mem);
+                        } else if (a.isSpectator(mem)) {
+                            a.removeSpectator(mem);
+                        }
+                    }
+                    addPlayer(mem, true);
+                }
             }
         }
         if (status == GameState.waiting || (status == GameState.starting && countdownS > 2)) {
@@ -192,8 +211,20 @@ public class Arena {
                 on.sendMessage(getMsg(on, lang.playerJoin).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
             }
             setArenaByPlayer(p, false);
-            if (players.size() >= minPlayers && status == GameState.waiting) {
-                setStatus(GameState.starting);
+
+            /** check if you can start the arena */
+            if (status == GameState.waiting) {
+                boolean teams = false;
+                for (Player on : getPlayers()) {
+                    if (getParty().hasParty(on)) {
+                        teams = true;
+                    }
+                }
+                if (maxInTeam < players.size() && teams) {
+                    setStatus(GameState.starting);
+                } else if (players.size() >= minPlayers && !teams) {
+                    setStatus(GameState.starting);
+                }
             }
 
             /** save player inventory etc */
@@ -325,7 +356,13 @@ public class Arena {
             database.saveStats(p, new Timestamp(System.currentTimeMillis()), 1, this.getPlayerKills(p, false), this.getPlayerKills(p, true),
                     0, deaths, final_deaths, beds, 1);
         }
-        if (status == GameState.starting && players.size() < minPlayers) {
+        boolean teamuri = false;
+        for (Player on : getPlayers()) {
+            if (getParty().hasParty(on)) {
+                teamuri = true;
+            }
+        }
+        if (status == GameState.starting && (maxInTeam > players.size() && teamuri || players.size() < minPlayers && !teamuri)) {
             setStatus(GameState.waiting);
             for (Player on : players) {
                 on.sendMessage(getMsg(p, Language.insufficientPlayers));
@@ -509,17 +546,28 @@ public class Arena {
                             owners.add(p);
                         }
                     }
-                    for (Player p2 : owners) {
-                        getParty().getMembers(p2).stream().forEach(p3 -> skip.add(p3));
-                    }
+                    /** check parties first */
                     for (Player p : getPlayers()) {
                         if (owners.contains(p)) {
                             for (BedWarsTeam t : getTeams()) {
                                 if (t.getSize() + getParty().partySize(p) <= maxInTeam) {
-                                    t.addPlayers((Player) getParty().getMembers(p));
+                                    skip.add(p);
+                                    p.closeInventory();
+                                    for (Player mem : getParty().getMembers(p)) {
+                                        if (mem != p) {
+                                            t.addPlayers(mem);
+                                            skip.add(mem);
+                                            mem.closeInventory();
+                                        }
+                                    }
                                 }
                             }
-                        } else if (skip.contains(p)) continue;
+                        }
+                    }
+
+                    /** players without a party */
+                    for (Player p : getPlayers()) {
+                        if (skip.contains(p)) continue;
                         BedWarsTeam addhere = getTeams().get(0);
                         for (BedWarsTeam t : getTeams()) {
                             if (t.getMembers().size() < maxInTeam && t.getMembers().size() < addhere.getMembers().size()) {
@@ -527,13 +575,12 @@ public class Arena {
                             }
                         }
                         addhere.addPlayers(p);
-                        p.setGameMode(GameMode.SURVIVAL);
-                        for (String s : Language.getList(p, lang.gameTutorialStrings)) {
-                            p.sendMessage(s);
-                        }
                         p.closeInventory();
                     }
+
                     setStatus(GameState.playing);
+
+                    /** Spawn bed block */
                     for (BedWarsTeam team : getTeams()) {
                         team.setGenerators(cm.getArenaLoc("Team." + team.getName() + ".Iron"), cm.getArenaLoc("Team." + team.getName() + ".Gold"));
                         team.getBed().getBlock().setType(Material.AIR);
@@ -575,6 +622,8 @@ public class Arena {
                             team.getBed().getBlock().setType(getBedBlock());
                         }
                     }
+
+                    /** Spawn generators */
                     for (String type : Arrays.asList("Diamond", "Emerald")) {
                         if (yml.get("generator." + type) != null) {
                             for (String s : yml.getStringList("generator." + type)) {
@@ -582,6 +631,8 @@ public class Arena {
                             }
                         }
                     }
+
+                    /** Remove lobby */
                     if (!(yml.get("waiting.Pos1") == null && yml.get("waiting.Pos2") == null)) {
                         Location loc1 = cm.getArenaLoc("waiting.Pos1"), loc2 = cm.getArenaLoc("waiting.Pos2");
                         int minX = Math.min(loc1.getBlockX(), loc2.getBlockX()), maxX = Math.max(loc1.getBlockX(), loc2.getBlockX());
@@ -599,6 +650,8 @@ public class Arena {
                             }
                         }
                     }
+
+                    /** Spawn shops */
                     for (BedWarsTeam t : getTeams()) {
                         if (t.getSize() == 0) {
                             t.setBedDestroyed(true);
@@ -612,9 +665,15 @@ public class Arena {
                             nms.spawnShop(t.getShop(), lang.shopSoloName, getPlayers(), this);
                         }
                     }
-                    for (BedWarsTeam bwt : getTeams()){
-                        for (Player p : bwt.getMembers()){
+
+                    /** Ad heart on head */
+                    for (SBoard sb : SBoard.getScoreboards()) {
+                        sb.addHealthIcon();
+                    }
+                    for (BedWarsTeam bwt : getTeams()) {
+                        for (Player p : bwt.getMembers()) {
                             bwt.firstSpawn(p);
+                            p.setHealth(p.getHealth() - 0.0001);
                         }
                     }
                     return;
@@ -658,14 +717,8 @@ public class Arena {
                     }
                 }
                 if (countUp == 1) {
-                    for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
-                        if (sb.getArena() == this) {
-                            sb.addHealthSbAndTabStuff();
-                        }
-                    }
                     for (Player p : getPlayers()) {
                         nms.sendTitle(p, getMsg(p, lang.titleStart), null, 0, 20, 0);
-                        p.setHealth(p.getHealth() - 0.0001);
                     }
                 }
                 countUp++;
@@ -856,7 +909,7 @@ public class Arena {
             for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
                 if (sb.getArena() == this) {
                     sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + "Playing", lang.scoreboardDefaultPlaying));
-                    sb.addHealthSbAndTabStuff();
+                    sb.giveTeamColorTag();
                 }
             }
         }
@@ -934,14 +987,14 @@ public class Arena {
         for (Arena a : getArenas()) {
             if (a.getGroup().equalsIgnoreCase(group)) {
                 if (a.getStatus() == GameState.waiting) {
-                    a.addPlayer(p);
+                    a.addPlayer(p, false);
                     return true;
                 } else if (a.getStatus() == GameState.starting) {
                     if (a.getPlayers().size() < a.getMaxPlayers()) {
-                        a.addPlayer(p);
+                        a.addPlayer(p, false);
                         return true;
                     } else if (a.getPlayers().size() <= a.getMaxPlayers() && a.isVip(p)) {
-                        a.addPlayer(p);
+                        a.addPlayer(p, false);
                         return true;
                     }
                 }
@@ -1022,9 +1075,8 @@ public class Arena {
                         }
                     }
                     for (Player p : world.getPlayers()) {
-                        if (winner.getMembers().contains(p)) {
-                            p.sendMessage(getMsg(p, lang.teamWonChat).replace("{TeamColor}", TeamColor.getChatColor(winner.getColor()).toString()).replace("{TeamName}", winner.getName()));
-                        } else {
+                        p.sendMessage(getMsg(p, lang.teamWonChat).replace("{TeamColor}", TeamColor.getChatColor(winner.getColor()).toString()).replace("{TeamName}", winner.getName()));
+                        if (!winner.getMembers().contains(p)) {
                             nms.sendTitle(p, getMsg(p, lang.gameOverTitle), null, 0, 40, 0);
                         }
                         for (String s : getList(p, lang.gameEndStats)) {

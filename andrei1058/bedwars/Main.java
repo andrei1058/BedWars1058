@@ -159,6 +159,7 @@ public class Main extends JavaPlugin {
         /** Party support */
         //todo check for party api
         party = new com.andrei1058.bedwars.support.party.internal.Internal();
+        getLogger().info("Loading internal Party system. /party");
 
         /** Levels support */
         //todo levels addon
@@ -471,6 +472,9 @@ public class Main extends JavaPlugin {
         Arrays.stream(listeners).forEach(l -> plugin.getServer().getPluginManager().registerEvents(l, this));
         if (!nms.isBukkitCommandRegistered("leave")) {
             nms.registerCommand("leave", new LeaveCommand("leave"));
+        }
+        if (!nms.isBukkitCommandRegistered("party")){
+            nms.registerCommand("party", new com.andrei1058.bedwars.commands.Party("party"));
         }
     }
 

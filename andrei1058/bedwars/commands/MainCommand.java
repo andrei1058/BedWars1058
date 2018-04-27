@@ -154,7 +154,7 @@ public class MainCommand extends BukkitCommand {
                         }
                         return true;
                     } else if (Arena.getArenaByName(args[1]) != null) {
-                        Arena.getArenaByName(args[1]).addPlayer(p);
+                        Arena.getArenaByName(args[1]).addPlayer(p, false);
                         return true;
                     }
                     p.sendMessage(getMsg(p, Language.arenaOrGroupNotFound).replace("{name}", args[1]));

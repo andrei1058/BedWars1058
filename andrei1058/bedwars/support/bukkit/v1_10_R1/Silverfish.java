@@ -89,7 +89,7 @@ public class Silverfish extends EntitySilverfish {
                 BlockPosition blockposition = (new BlockPosition(this.silverfish.locX, this.silverfish.locY + 0.5D, this.silverfish.locZ)).shift(this.b);
                 IBlockData iblockdata = world.getType(blockposition);
                 if (BlockMonsterEggs.i(iblockdata)) {
-                    if (CraftEventFactory.callEntityChangeBlockEvent(this.silverfish, blockposition.getX(), blockposition.getY(), blockposition.getZ(), Blocks.MONSTER_EGG, Block.getId(BlockMonsterEggs.getById(iblockdata.getBlock().toLegacyData(iblockdata)))).isCancelled()) {
+                    if (CraftEventFactory.callEntityChangeBlockEvent(this.silverfish, blockposition, Blocks.MONSTER_EGG, Block.getId(BlockMonsterEggs.getById(iblockdata.getBlock().toLegacyData(iblockdata)))).isCancelled()) {
                         return;
                     }
 

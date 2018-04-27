@@ -57,7 +57,7 @@ public class Interact implements Listener {
             if (b.getState() instanceof Sign){
                 for (Arena a1 : Arena.getArenas()){
                     if (a1.getSigns().contains(b.getState())){
-                        a1.addPlayer(p);
+                        a1.addPlayer(p, false);
                         return;
                     }
                 }
