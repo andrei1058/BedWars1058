@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.BedBreakEvent;
 import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.api.TeamColor;
@@ -141,7 +142,7 @@ public class BreakPlace implements Listener {
                                             e.setCancelled(false);
                                             t.setBedDestroyed(true);
                                             a.addPlayerBedDestroyed(p);
-                                            //todo call destroy bed event
+                                            Bukkit.getPluginManager().callEvent(new BedBreakEvent(e.getPlayer(), a.getTeam(p), t));
                                             for (Player on : a.getWorld().getPlayers()) {
                                                 if (t.isMember(on)) {
                                                     on.sendMessage(getMsg(on, lang.teamBedDestroyTeam).replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getName())
@@ -166,6 +167,7 @@ public class BreakPlace implements Listener {
             if (!a.getPlaced().contains(e.getBlock())) {
                 p.sendMessage(getMsg(p, lang.cantBreak));
                 e.setCancelled(true);
+                return;
             }
             a.getPlaced().remove(e.getBlock());
         }

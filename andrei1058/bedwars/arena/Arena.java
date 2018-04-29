@@ -121,7 +121,10 @@ public class Arena {
             ex.printStackTrace();
             return;
         }
-        Bukkit.getScheduler().runTaskLater(plugin, () -> world.getEntities().stream().filter(e -> e.getType() != EntityType.PLAYER).filter(e -> e.getType() != EntityType.PAINTING).filter(e -> e.getType() != EntityType.ITEM_FRAME).forEach(Entity::remove), 30L);
+        Bukkit.getScheduler().runTaskLater(plugin,
+                () -> world.getEntities().stream().filter(e -> e.getType() != EntityType.PLAYER)
+                        .filter(e -> e.getType() != EntityType.PAINTING).filter(e -> e.getType() != EntityType.ITEM_FRAME)
+                        .forEach(Entity::remove), 30L);
         world.setGameRuleValue("doMobSpawning", "false");
         world.setAutoSave(false);
         for (String team : yml.getConfigurationSection("Team").getKeys(false)) {
