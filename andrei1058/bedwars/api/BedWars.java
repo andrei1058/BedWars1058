@@ -19,7 +19,7 @@ public class BedWars implements GameAPI {
 
     @Override
     public int getApiVersion() {
-        return 4;
+        return 5;
     }
 
     @Override

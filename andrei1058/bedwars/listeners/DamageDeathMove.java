@@ -16,17 +16,13 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.LastHit.getLastHit;
-import static com.andrei1058.bedwars.arena.Misc.unknownReason;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
 public class DamageDeathMove implements Listener {
@@ -278,7 +274,13 @@ public class DamageDeathMove implements Listener {
                         a.addPlayerKill(killer, false, victim);
                     }
                     killer.playSound(killer.getLocation(), nms.playerKill(), 1f, 1f);
+                } else {
+                    if (t.isBedDestroyed()) {
+                        Bukkit.getPluginManager().callEvent(new FinalKillEvent(a.getWorldName(), victim, null));
+                    }
                 }
+                /** call game kill event */
+                Bukkit.getPluginManager().callEvent(new PlayerKillEvent(a, victim, killer));
             }
             victim.spigot().respawn();
         }
