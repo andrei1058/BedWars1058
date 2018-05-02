@@ -86,13 +86,13 @@ public interface NMS {
     void spawnIronGolem(Location loc, BedWarsTeam bedWarsTeam);
 
     /** Hide a player */
-    void hidePlayer(Player player, List<Player> players);
+    void hidePlayer(Player whoToShow, List<Player> players);
 
     /** Hide a player */
-    void hidePlayer(Player victim, Player p);
+    void hidePlayer(Player whoToShow, Player p);
 
     /** Show a player */
-    void showPlayer(Player victim, Player p);
+    void showPlayer(Player whoToShow, Player p);
 
     /** Refresh iron-golem name */
     void refreshDespawnables();

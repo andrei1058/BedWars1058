@@ -198,10 +198,14 @@ public class BedWarsTeam {
         p.setFlying(false);
         p.setHealth(20);
         for (Player on : arena.getPlayers()){
+            if (p == on) continue;
             on.showPlayer(p);
+            nms.showPlayer(p, on);
         }
         for (Player on : arena.getSpectators()){
+            if (p == on) continue;
             on.showPlayer(p);
+            nms.showPlayer(p, on);
         }
         nms.sendTitle(p, getMsg(p, lang.respawnedTitle), "", 0, 20, 0);
         PlayerVault pv = getVault(p);

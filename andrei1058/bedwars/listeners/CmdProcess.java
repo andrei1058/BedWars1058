@@ -12,6 +12,7 @@ import sun.misc.BASE64Encoder;
 
 import java.io.UnsupportedEncodingException;
 
+import static com.andrei1058.bedwars.Main.getParty;
 import static com.andrei1058.bedwars.Main.lang;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
@@ -22,6 +23,11 @@ public class CmdProcess implements Listener {
         Player p = e.getPlayer();
         String[] cmd = e.getMessage().split(" ");
         if (Arena.isInArena(p)){
+            if (cmd[0].equalsIgnoreCase("/party")){
+                p.sendMessage(getMsg(p, lang.notAllowed));
+                e.setCancelled(true);
+                return;
+            }
             for (String cmds : Main.config.l("blockedCmds")){
                 if (cmd[0].equalsIgnoreCase("/"+cmds)){
                     p.sendMessage(getMsg(p, lang.notAllowed));

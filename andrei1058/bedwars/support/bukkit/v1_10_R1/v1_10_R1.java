@@ -417,12 +417,14 @@ public class v1_10_R1 implements NMS {
 
     @Override
     public void hidePlayer(Player victim, Player p) {
+        if (victim == p) return;
         PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(victim.getEntityId());
         ((CraftPlayer)p).getHandle().playerConnection.sendPacket(packet);
     }
 
     @Override
     public void showPlayer(Player victim, Player p) {
+        if (victim == p) return;
         PacketPlayOutNamedEntitySpawn packet = new PacketPlayOutNamedEntitySpawn(((CraftPlayer)victim).getHandle());
         ((CraftPlayer)p).getHandle().playerConnection.sendPacket(packet);
     }

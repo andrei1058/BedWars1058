@@ -73,7 +73,12 @@ public class Main extends JavaPlugin {
         Language.getLanguages().remove(en);
         setupConfig();
         upgrades = new UpgradesManager("upgrades", "plugins/" + this.getName());
-        /* Load version support 1.8 - 1.12 */
+    }
+
+    @Override
+    public void onEnable() {
+        boolean support = true;
+        /** Load version support 1.8 - 1.12 */
         switch (version) {
             case "v1_8_R2":
                 nms = new v1_8_R2();
@@ -97,21 +102,22 @@ public class Main extends JavaPlugin {
                 nms = new v1_12_R1();
                 break;
             default:
-                this.setEnabled(false);
-                this.getLogger().severe("I can't run on your version: " + version);
-                return;
+                support = false;
         }
-    }
 
-    @Override
-    public void onEnable() {
+        if (!support){
+            this.setEnabled(false);
+            this.getLogger().severe("I can't run on your version: " + version);
+            return;
+        }
+
+        /** Register main command */
+        nms.registerCommand(mainCmd, new MainCommand(mainCmd));
+
         /** Setup plugin messaging channel */
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new Bungee());
         Bukkit.getServicesManager().register(GameAPI.class, new BedWars(), this, ServicePriority.Highest);
-
-        /** Register main command */
-        nms.registerCommand(mainCmd, new MainCommand(mainCmd));
 
         /** Check if lobby location is set. Required for non Bungee servers */
         if (config.getLobbyWorldName().isEmpty() && serverType != ServerType.BUNGEE) {

@@ -39,7 +39,7 @@ public class DamageDeathMove implements Listener {
                 if (a.isSpectator(p)) {
                     e.setCancelled(true);
                 }
-                if (a.getStatus() != GameState.playing){
+                if (a.getStatus() != GameState.playing) {
                     e.setCancelled(true);
                 }
                 if (e.getCause() == EntityDamageEvent.DamageCause.FALL) {
@@ -372,15 +372,29 @@ public class DamageDeathMove implements Listener {
                     }
                 }
                 /**if (e.getPlayer().hasPotionEffect(PotionEffectType.INVISIBILITY)){
-                    for (Player p : e.getTo().getWorld().getPlayers()){
+                 for (Player p : e.getTo().getWorld().getPlayers()){
+                 nms.hidePlayer(e.getPlayer(), p);
+                 }
+                 }
+                 for (Player p : e.getTo().getWorld().getPlayers()){
+                 if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)){
+                 nms.hidePlayer(p, e.getPlayer());
+                 }
+                 }*/
+
+                /** Check if respawning */
+                if (Arena.respawn.containsKey(e.getPlayer())) {
+                    for (Player p : a.getPlayers()) {
+                        if (p == e.getPlayer()) continue;
                         nms.hidePlayer(e.getPlayer(), p);
                     }
-                }
-                for (Player p : e.getTo().getWorld().getPlayers()){
-                    if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)){
-                        nms.hidePlayer(p, e.getPlayer());
+                } else {
+                    for (Player p : a.getPlayers()) {
+                        if (Arena.respawn.containsKey(p)) {
+                            nms.hidePlayer(e.getPlayer(), p);
+                        }
                     }
-                }*/
+                }
             }
             if (a.isSpectator(e.getPlayer())) {
                 if (e.getTo().getY() < 0) {
@@ -388,7 +402,7 @@ public class DamageDeathMove implements Listener {
                 }
                 return;
             } else {
-                if (e.getPlayer().getLocation().getY() <= 0){
+                if (e.getPlayer().getLocation().getY() <= 0) {
                     if (a.getStatus() == GameState.playing) {
                         if (a.getCm().getBoolean("voidKill")) {
                             nms.voidKill(e.getPlayer());
@@ -519,9 +533,9 @@ public class DamageDeathMove implements Listener {
     }
 
     @EventHandler
-    public void onEntityDeath(EntityDeathEvent e){
-        if (Arena.getArenaByName(e.getEntity().getLocation().getWorld().getName()) != null){
-            if (e.getEntityType() == EntityType.IRON_GOLEM || e.getEntityType() == EntityType.SILVERFISH){
+    public void onEntityDeath(EntityDeathEvent e) {
+        if (Arena.getArenaByName(e.getEntity().getLocation().getWorld().getName()) != null) {
+            if (e.getEntityType() == EntityType.IRON_GOLEM || e.getEntityType() == EntityType.SILVERFISH) {
                 e.getDrops().clear();
                 e.setDroppedExp(0);
             }

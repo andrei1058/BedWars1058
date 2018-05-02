@@ -36,9 +36,9 @@ public class Refresh extends BukkitRunnable {
                         String.valueOf(e.getValue())), 0, 30, 0);
                 e.getKey().sendMessage(getMsg(e.getKey(), lang.respawnChat).replace("{time}", String.valueOf(e.getValue())));
             }
-            Arena a = Arena.getArenaByPlayer(e.getKey());
-            BedWarsTeam t = a.getTeam(e.getKey());
             if (e.getValue() == 0) {
+                Arena a = Arena.getArenaByPlayer(e.getKey());
+                BedWarsTeam t = a.getTeam(e.getKey());
                 t.respawnMember(e.getKey());
                 Arena.respawn.remove(e.getKey());
             }

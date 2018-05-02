@@ -100,6 +100,7 @@ public class v1_12_R1 implements NMS {
 
     @Override
     public void hidePlayer(Player victim, Player p) {
+        if (victim == p) return;
         net.minecraft.server.v1_12_R1.PacketPlayOutEntityDestroy packet = new net.minecraft.server.v1_12_R1.PacketPlayOutEntityDestroy(victim.getEntityId());
         ((CraftPlayer)p).getHandle().playerConnection.sendPacket(packet);
     }
@@ -443,6 +444,7 @@ public class v1_12_R1 implements NMS {
 
     @Override
     public void showPlayer(Player victim, Player p) {
+        if (victim == p) return;
         PacketPlayOutNamedEntitySpawn packet = new PacketPlayOutNamedEntitySpawn(((CraftPlayer)victim).getHandle());
         ((CraftPlayer)p).getHandle().playerConnection.sendPacket(packet);
     }
