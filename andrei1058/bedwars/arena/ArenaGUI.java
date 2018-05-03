@@ -29,9 +29,10 @@ public class ArenaGUI {
 
     public static void refreshInv(Player p, Inventory inv) {
         int from = start, to = end;
-        for (Arena a : Arena.getArenas()) {
+        List<Arena> arenas = new ArrayList<>(Arena.getArenas());
+        for (int x = 0; x < arenas.size(); x++) {
             ItemStack i;
-            switch (a.getStatus()) {
+            switch (arenas.get(x).getStatus()) {
                 case waiting:
                     i = new ItemStack(Material.valueOf(yml.getString("arenaGui.waiting.itemStack")), 1, (short) yml.getInt("arenaGui.waiting.data"));
                     if (yml.getBoolean("arenaGui.waiting.enchanted")){
@@ -43,7 +44,7 @@ public class ArenaGUI {
                     break;
                 case playing:
                     if (!showPlaying) {
-                        a.setSlot(-1);
+                        arenas.get(x).setSlot(-1);
                         continue;
                     }
                     i = new ItemStack(Material.valueOf(yml.getString("arenaGui.playing.itemStack")), 1, (short) yml.getInt("arenaGui.playing.data"));
@@ -64,24 +65,24 @@ public class ArenaGUI {
                     }
                     break;
                 default:
-                    a.setSlot(-1);
+                    arenas.get(x).setSlot(-1);
                     continue;
             }
             ItemMeta im = i.getItemMeta();
-            im.setDisplayName(getMsg(p, Language.aGuiArenaName).replace("{name}", a.getDisplayName()));
+            im.setDisplayName(getMsg(p, Language.aGuiArenaName).replace("{name}", arenas.get(x).getDisplayName()));
             List<String> lore = new ArrayList<>();
             for (String s : getList(p, Language.aGuiArenaLore)) {
-                if (!(s.contains("{group}") && a.getGroup().equalsIgnoreCase("default"))) {
-                    lore.add(s.replace("{on}", String.valueOf(a.getPlayers().size())).replace("{max}",
-                            String.valueOf(a.getMaxPlayers())).replace("{status}", a.getDisplayStatus())
-                            .replace("{group}", a.getGroup()));
+                if (!(s.contains("{group}") && arenas.get(x).getGroup().equalsIgnoreCase("default"))) {
+                    lore.add(s.replace("{on}", String.valueOf(arenas.get(x).getPlayers().size())).replace("{max}",
+                            String.valueOf(arenas.get(x).getMaxPlayers())).replace("{status}", arenas.get(x).getDisplayStatus())
+                            .replace("{group}", arenas.get(x).getGroup()));
                 }
             }
             im.setLore(lore);
             i.setItemMeta(im);
             if (to > from) {
                 inv.setItem(from, i);
-                a.setSlot(from);
+                arenas.get(x).setSlot(from);
                 from++;
             }
         }

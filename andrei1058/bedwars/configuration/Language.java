@@ -1,7 +1,6 @@
 package com.andrei1058.bedwars.configuration;
 
 import com.andrei1058.bedwars.Main;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -250,13 +249,13 @@ public class Language {
                 yml.addDefault(scoreboardDefaultWaiting, Arrays.asList("&f&lBED WARS", "", "&fMap: &a{map}", "&fPlayer: &a{on}/{max}", "", "&fWaiting...", "", "§fServer: &a{server}", "", "&e  andrei1058.com"));
                 yml.addDefault(cantBreak, "{prefix}&cYou can only break blocks placed by a player!");
                 yml.addDefault(titleStart, "&aGO");
-                yml.addDefault(scoreboardDefaultPlaying, Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{generatorName}", "&a{generatorTimer}", "", "{TeamRedColor}&lR&f {TeamRedName}&f: {TeamRedStatus}",
+                yml.addDefault(scoreboardDefaultPlaying, Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent}", "&a{time}", "", "{TeamRedColor}&lR&f {TeamRedName}&f: {TeamRedStatus}",
                         "{TeamBlueColor}&lB&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}&lG&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}&lY &f{TeamYellowName}&f: {TeamYellowStatus}", "",
                         "&fKills: &a{kills}", "&fFinal Kills: &a{finalKills}", "&fBeds Broken: &a{beds}", "", "&ehttp://andrei1058.com"));
-                yml.addDefault("scoreboard.SoloPlaying", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{generatorName}", "&a{generatorTimer}", "", "{TeamRedColor}&lR&f {TeamRedName}&f: {TeamRedStatus}",
+                yml.addDefault("scoreboard.SoloPlaying", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent}", "&a{time}", "", "{TeamRedColor}&lR&f {TeamRedName}&f: {TeamRedStatus}",
                         "{TeamBlueColor}&lB&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}&lG&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}&lY &f{TeamYellowName}&f: {TeamYellowStatus}",
                         "{TeamAquaColor}&lA&f {TeamAquaName}&f: {TeamAquaStatus}", "{TeamWhiteColor}&lW&f {TeamWhiteName}&f: {TeamWhiteStatus}", "{TeamPinkColor}&lP&f {TeamPinkName}&f: {TeamPinkStatus}", "{TeamGrayColor}&lG&f {TeamGrayName}&f: {TeamGrayStatus}", "", "&ehttp://andrei1058.com"));
-                yml.addDefault("scoreboard.DoublesPlaying", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{generatorName}", "&a{generatorTimer}", "", "{TeamRedColor}&lR&f {TeamRedName}&f: {TeamRedStatus}",
+                yml.addDefault("scoreboard.DoublesPlaying", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent}", "&a{time}", "", "{TeamRedColor}&lR&f {TeamRedName}&f: {TeamRedStatus}",
                         "{TeamBlueColor}&lB&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}&lG&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}&lY &f{TeamYellowName}&f: {TeamYellowStatus}",
                         "{TeamAquaColor}&lA&f {TeamAquaName}&f: {TeamAquaStatus}", "{TeamWhiteColor}&lW&f {TeamWhiteName}&f: {TeamWhiteStatus}", "{TeamPinkColor}&lP&f {TeamPinkName}&f: {TeamPinkStatus}", "{TeamGrayColor}&lG&f {TeamGrayName}&f: {TeamGrayStatus}", "", "&ehttp://andrei1058.com"));
                 yml.addDefault(dateFormat, "dd/MM/yy");
@@ -466,6 +465,19 @@ public class Language {
                 yml.addDefault(partyRemoveUsage, "{prefix}&7Usage: &e/party remove <player>");
                 yml.addDefault(partyRemovedFrom, "{prefix}&7{player} &ewas removed from the party,");
                 yml.addDefault(partyNotInPartyAtRemove, "{prefix}&7{player} &eis not in your party!");
+                yml.addDefault(Messages.NEXT_EVENT_BEDS_DESTROY, "&cBeds Destruction");
+                yml.addDefault(Messages.NEXT_EVENT_DIAMOND_UPGRADE_II, "&fDiamond II");
+                yml.addDefault(Messages.NEXT_EVENT_DIAMOND_UPGRADE_III, "&fDiamond III");
+                yml.addDefault(Messages.NEXT_EVENT_DRAGON_SPAWN, "&fSudden Death");
+                yml.addDefault(Messages.NEXT_EVENT_EMERALD_UPGRADE_II, "&fEmerald II");
+                yml.addDefault(Messages.NEXT_EVENT_EMERALD_UPGRADE_III, "&fEmerald III");
+                yml.addDefault(Messages.NEXT_EVENT_GAME_END, "&4Game End");
+                yml.addDefault(Messages.TITLE_BEDS_DESTROYED, "&cBED DESTROYED!");
+                yml.addDefault(Messages.SUBTITLE_BEDS_DESTROYED, "&fAll beds have been destroyed!");
+                yml.addDefault(Messages.CHAT_BEDS_DESTROYED, "&c&lAll beds have been destroyed!");
+                yml.addDefault(Messages.TITLE_SUDDEN_DEATH, "&cSudden Death");
+                yml.addDefault(Messages.SUBTITLE_SUDDEN_DEATH, "");
+                yml.addDefault(Messages.CHAT_SUDDEN_DEATH, "&cSUDDEN DEATH: &6&b{TeamDragons} {TeamColor}{TeamName} Dragon!");
                 break;
         }
         lbj.save();

@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.api.GeneratorType;
 import com.andrei1058.bedwars.api.GeneratorUpgradeEvent;
+import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Language;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -22,19 +23,20 @@ import static com.andrei1058.bedwars.configuration.Language.getMsg;
 public class OreGenerator {
 
     private Location location;
-    private int delay = 1, upgradeStage = 1, lastSpawn = 1, max = 0, amount = 1;
+    private int delay = 1, upgradeStage = 1, lastSpawn, max = 0, amount = 1;
     private Arena arena;
-    private String upgradeType;
     private ItemStack ore;
     private GeneratorType type;
     private int rotate = 0, dropID = 0;
     boolean up = true;
 
-    /** Generator holograms per language <iso, holo></iso,>*/
-    private HashMap<String, HoloGram> armorstands = new HashMap<>();
+    /**
+     * Generator holograms per language <iso, holo></iso,>
+     */
+    private HashMap<String, HoloGram> armorStands = new HashMap<>();
 
     private ArmorStand item;
-    public boolean stack = upgrades.getBoolean("settings.stackItems");
+    public boolean stack = getGeneratorsCfg().getBoolean(ConfigPath.GENERATOR_STACK_ITEMS);
 
     private static List<OreGenerator> generators = new ArrayList<>();
     private static List<OreGenerator> rotation = new ArrayList<>();
@@ -43,44 +45,40 @@ public class OreGenerator {
         location = location.clone().add(0, 1.3, 0);
         this.location = location;
         this.arena = arena;
-        if (arena.getMaxInTeam() > 2) {
-            upgradeType = "bigTeam";
-        } else {
-            upgradeType = "smallTeam";
-        }
         switch (type) {
             case GOLD:
-                delay = upgrades.getInt(upgrades.getYml().get("settings.startValues."+arena.getGroup().toLowerCase()+".goldGeneratorDelay") == null ? "settings.startValues.default.goldGeneratorDelay" :
-                "settings.startValues."+arena.getGroup().toLowerCase()+".goldGeneratorDelay");
+                delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_DELAY) == null ?
+                        "Default." + ConfigPath.GENERATOR_GOLD_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_DELAY);
                 ore = new ItemStack(Material.GOLD_INGOT);
-                amount = upgrades.getInt(upgrades.getYml().get("settings.startValues."+arena.getGroup().toLowerCase()+".goldGeneratorAmount") == null ? "settings.startValues.default.goldGeneratorAmount" :
-                        "settings.startValues."+arena.getGroup().toLowerCase()+".goldGeneratorAmount");
+                amount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_AMOUNT) == null ?
+                        "Default." + ConfigPath.GENERATOR_GOLD_AMOUNT : arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_AMOUNT);
                 break;
             case IRON:
-                delay = upgrades.getInt(upgrades.getYml().get("settings.startValues."+arena.getGroup().toLowerCase()+".ironGeneratorDelay") == null ? "settings.startValues.default.ironGeneratorDelay" :
-                        "settings.startValues."+arena.getGroup().toLowerCase()+".ironGeneratorDelay");
-                amount = upgrades.getInt(upgrades.getYml().get("settings.startValues."+arena.getGroup().toLowerCase()+".ironGeneratorAmount") == null ? "settings.startValues.default.ironGeneratorAmount" :
-                        "settings.startValues."+arena.getGroup().toLowerCase()+".ironGeneratorAmount");
+                delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_DELAY) == null ?
+                        "Default." + ConfigPath.GENERATOR_IRON_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_DELAY);
+                amount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_AMOUNT) == null ?
+                        "Default." + ConfigPath.GENERATOR_IRON_AMOUNT : arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_AMOUNT);
                 ore = new ItemStack(Material.IRON_INGOT);
                 break;
             case DIAMOND:
-                delay = config.getInt("generators.diamond.tier1.delay");
-                max = config.getInt("generators.diamond.tier1.max");
-                arena.upgradeDiamondsCount = config.getInt("generators.diamond.tier2.start");
+                delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_I_DELAY) == null ?
+                        "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_I_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_I_DELAY);
+                max = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_I_MAX) == null ?
+                        "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_I_MAX : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_I_MAX);
+                arena.upgradeDiamondsCount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_START) == null ?
+                        "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_II_START : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_START);
                 ore = new ItemStack(Material.DIAMOND);
 
-                //todo per lang not per player
-                for (Player p : arena.getPlayers()) {
-                    String iso = Language.getPlayerLanguage(p).getIso();
-                    HoloGram h = armorstands.get(iso);
-                    if (h == null){
-                       armorstands.put(iso, new HoloGram(iso, createArmorStand(getMsg(p, lang.generatorTier).replace("{tier}", getMsg(p, lang.tier1Format)), location.clone().add(0, 3, 0)),
-                                createArmorStand(getMsg(p, lang.generatorTimer).replace("{seconds}",
-                                        String.valueOf(lastSpawn)), location.clone().add(0, 2.4, 0)),
-                                createArmorStand(getMsg(p, lang.generatorDiamond), location.clone().add(0, 2.7, 0)), arena.getWorld()));
+                for (Language lan : Language.getLanguages()) {
+                    String iso = lan.getIso();
+                    HoloGram h = armorStands.get(iso);
+                    if (h == null) {
+                        armorStands.put(iso, new HoloGram(iso, createArmorStand(lan.m(lang.generatorTier).replace("{tier}", lan.m(lang.tier1Format)), location.clone().add(0, 3, 0)),
+                                createArmorStand(lan.m(lang.generatorTimer).replace("{seconds}", String.valueOf(lastSpawn)), location.clone().add(0, 2.4, 0)),
+                                createArmorStand(lan.m(lang.generatorDiamond), location.clone().add(0, 2.7, 0)), arena.getWorld()));
                     }
                 }
-                for (HoloGram hg : armorstands.values()){
+                for (HoloGram hg : armorStands.values()) {
                     hg.updateForAll();
                 }
 
@@ -89,23 +87,24 @@ public class OreGenerator {
                 rotation.add(this);
                 break;
             case EMERALD:
-                delay = config.getInt("generators.emerald.tier1.delay");
-                max = config.getInt("generators.emerald.tier1.max");
-                arena.upgradeEmeraldsCount = config.getInt("generators.emerald.tier2.start");
+                delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_I_DELAY) == null ?
+                        "Default." + ConfigPath.GENERATOR_EMERALD_TIER_I_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_I_DELAY);
+                max = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_I_MAX) == null ?
+                        "Default." + ConfigPath.GENERATOR_EMERALD_TIER_I_MAX : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_I_MAX);
+                arena.upgradeEmeraldsCount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_START) == null ?
+                        "Default." + ConfigPath.GENERATOR_EMERALD_TIER_II_START : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_START);
                 ore = new ItemStack(Material.EMERALD);
 
-                //todo per lang not per player
-                for (Player p : arena.getPlayers()) {
-                    String iso = Language.getPlayerLanguage(p).getIso();
-                    HoloGram h = armorstands.get(iso);
-                    if (h == null){
-                        armorstands.put(iso, new HoloGram(iso, createArmorStand(getMsg(p, lang.generatorTier).replace("{tier}", getMsg(p, lang.tier1Format)), location.clone().add(0, 3, 0)),
-                                createArmorStand(getMsg(p, lang.generatorTimer).replace("{seconds}",
-                                        String.valueOf(lastSpawn)), location.clone().add(0, 2.4, 0)),
-                                createArmorStand(getMsg(p, lang.generatorEmerald), location.clone().add(0, 2.7, 0)), arena.getWorld()));
+                for (Language lan : Language.getLanguages()) {
+                    String iso = lang.getIso();
+                    HoloGram h = armorStands.get(iso);
+                    if (h == null) {
+                        armorStands.put(iso, new HoloGram(iso, createArmorStand(lan.m(lang.generatorTier).replace("{tier}", lan.m(lang.tier1Format)), location.clone().add(0, 3, 0)),
+                                createArmorStand(lan.m(lang.generatorTimer).replace("{seconds}", String.valueOf(lastSpawn)), location.clone().add(0, 2.4, 0)),
+                                createArmorStand(lan.m(lang.generatorEmerald), location.clone().add(0, 2.7, 0)), arena.getWorld()));
                     }
                 }
-                for (HoloGram hg : armorstands.values()){
+                for (HoloGram hg : armorStands.values()) {
                     hg.updateForAll();
                 }
 
@@ -120,65 +119,75 @@ public class OreGenerator {
     }
 
     public void upgrade() {
-        upgradeStage++;
         switch (type) {
-            case GOLD:
-                delay = config.getInt("teamUpgrades." + upgradeType + ".forge." + (upgradeStage - 1) + ".goldDelay");
-                amount = config.getInt("teamUpgrades." + upgradeType + ".forge." + (upgradeStage - 1) + ".goldAmount");
-                ore = new ItemStack(Material.GOLD_INGOT);
-                break;
-            case IRON:
-                delay = config.getInt("teamUpgrades." + upgradeType + ".forge." + (upgradeStage - 1) + ".ironDelay");
-                amount = config.getInt("teamUpgrades." + upgradeType + ".forge." + (upgradeStage - 1) + ".ironAmount");
-                ore = new ItemStack(Material.IRON_INGOT);
-                break;
             case DIAMOND:
-               try {
-                   delay = config.getInt("generators.diamond.tier" + upgradeStage + ".delay");
-                   max = config.getInt("generators.diamond.tier" + upgradeStage + ".max");
-                   ore = new ItemStack(Material.DIAMOND);
-                   if (upgradeStage == 2){
-                       arena.upgradeDiamondsCount = config.getInt("generators.diamond.tier3.start");
-                   }
-                   for (HoloGram e : armorstands.values()) {
-                       e.setTierName(Language.getLang(e.iso).m(lang.generatorTier).replace("{tier}", Language.getLang(e.iso).m(upgradeStage == 2 ? lang.tier2Format : lang.tier3Format)));
-                   }
-                   if (upgradeStage == 3){
-                       arena.showDiamondSb = false;
-                   }
-                   if (!arena.diamondUpgradeAnnounced){
-                       for (Player p : arena.getPlayers()){
-                           p.sendMessage(getMsg(p, lang.generatorUpgradeMsg).replace("{generatorType}", getMsg(p, lang.generatorDiamond)).replace("{tier}", getMsg(p, (upgradeStage == 2 ? lang.tier2Format : lang.tier3Format))));
-                       }
-                       for (Player p : arena.getSpectators()){
-                           p.sendMessage(getMsg(p, lang.generatorUpgradeMsg).replace("{generatorType}", getMsg(p, lang.generatorDiamond)).replace("{tier}", getMsg(p, (upgradeStage == 2 ? lang.tier2Format : lang.tier3Format))));
-                       }
-                       arena.diamondUpgradeAnnounced = true;
-                   }
-                   Bukkit.getScheduler().runTaskLater(plugin, ()-> arena.diamondUpgradeAnnounced = false, 20L);
-               } catch (Exception ex){
-                   ex.printStackTrace();
-               }
+                upgradeStage++;
+                if (arena.diamondTier != upgradeStage) {
+                    for (Player p : arena.getPlayers()) {
+                        p.sendMessage(getMsg(p, lang.generatorUpgradeMsg).replace("{generatorType}",
+                                getMsg(p, lang.generatorDiamond)).replace("{tier}", getMsg(p, (upgradeStage == 2 ? lang.tier2Format : lang.tier3Format))));
+                    }
+                    for (Player p : arena.getSpectators()) {
+                        p.sendMessage(getMsg(p, lang.generatorUpgradeMsg).replace("{generatorType}",
+                                getMsg(p, lang.generatorDiamond)).replace("{tier}", getMsg(p, (upgradeStage == 2 ? lang.tier2Format : lang.tier3Format))));
+                    }
+                }
+                if (upgradeStage == 2) {
+                    delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_DELAY) == null ?
+                            "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_II_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_DELAY);
+                    max = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_MAX) == null ?
+                            "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_II_MAX : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_MAX);
+                    arena.upgradeDiamondsCount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START) == null ?
+                            "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START);
+                    arena.diamondTier = 2;
+                    arena.updateNextEvent();
+                } else if (upgradeStage == 3) {
+                    delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY) == null ?
+                            "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY);
+                    max = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_MAX) == null ?
+                            "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_MAX : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_MAX);
+                    arena.diamondTier = 3;
+                    arena.updateNextEvent();
+                }
+                ore = new ItemStack(Material.DIAMOND);
+                for (HoloGram e : armorStands.values()) {
+                    e.setTierName(Language.getLang(e.iso).m(lang.generatorTier).replace("{tier}", Language.getLang(e.iso)
+                            .m(upgradeStage == 2 ? lang.tier2Format : lang.tier3Format)));
+                }
                 break;
             case EMERALD:
-                delay = config.getInt("generators.emerald.tier" + upgradeStage + ".delay");
-                max = config.getInt("generators.emerald.tier" + upgradeStage + ".max");
-                if (upgradeStage == 2){
-                    arena.upgradeEmeraldsCount = config.getInt("generators.emerald.tier3.start");
+                upgradeStage++;
+                if (arena.emeraldTier != upgradeStage) {
+                    for (Player p : arena.getPlayers()) {
+                        p.sendMessage(getMsg(p, lang.generatorUpgradeMsg).replace("{generatorType}",
+                                getMsg(p, lang.generatorEmerald)).replace("{tier}", getMsg(p, (upgradeStage == 2 ? lang.tier2Format : lang.tier3Format))));
+                    }
+                    for (Player p : arena.getSpectators()) {
+                        p.sendMessage(getMsg(p, lang.generatorUpgradeMsg).replace("{generatorType}",
+                                getMsg(p, lang.generatorEmerald)).replace("{tier}", getMsg(p, (upgradeStage == 2 ? lang.tier2Format : lang.tier3Format))));
+                    }
+                }
+                if (upgradeStage == 2) {
+                    delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_DELAY) == null ?
+                            "Default." + ConfigPath.GENERATOR_EMERALD_TIER_II_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_DELAY);
+                    max = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_MAX) == null ?
+                            "Default." + ConfigPath.GENERATOR_EMERALD_TIER_II_MAX : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_MAX);
+                    arena.upgradeEmeraldsCount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_START) == null ?
+                            "Default." + ConfigPath.GENERATOR_EMERALD_TIER_III_START : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_START);
+                    arena.emeraldTier = 2;
+                    arena.updateNextEvent();
+                } else if (upgradeStage == 3) {
+                    delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_DELAY) == null ?
+                            "Default." + ConfigPath.GENERATOR_EMERALD_TIER_III_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_DELAY);
+                    max = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_MAX) == null ?
+                            "Default." + ConfigPath.GENERATOR_EMERALD_TIER_III_MAX : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_MAX);
+                    arena.emeraldTier = 3;
+                    arena.updateNextEvent();
                 }
                 ore = new ItemStack(Material.EMERALD);
-                for (HoloGram e : armorstands.values()) {
-                    e.setTierName(Language.getLang(e.iso).m(lang.generatorTier).replace("{tier}", Language.getLang(e.iso).m(upgradeStage == 2 ? lang.tier2Format : lang.tier3Format)));
-                }
-                if (!arena.emeraldUpgradeAnnouncerd){
-                    for (Player p : arena.getPlayers()){
-                        p.sendMessage(getMsg(p, lang.generatorUpgradeMsg).replace("{generatorType}", getMsg(p, lang.generatorEmerald)).replace("{tier}", getMsg(p, (upgradeStage == 2 ? lang.tier2Format : lang.tier3Format))));
-                    }
-                    for (Player p : arena.getSpectators()){
-                        p.sendMessage(getMsg(p, lang.generatorUpgradeMsg).replace("{generatorType}", getMsg(p, lang.generatorEmerald)).replace("{tier}", getMsg(p, (upgradeStage == 2 ? lang.tier2Format : lang.tier3Format))));
-                    }
-                    arena.emeraldUpgradeAnnouncerd = true;
-                    Bukkit.getScheduler().runTaskLater(plugin, ()-> arena.emeraldUpgradeAnnouncerd = false, 20L);
+                for (HoloGram e : armorStands.values()) {
+                    e.setTierName(Language.getLang(e.iso).m(lang.generatorTier).replace("{tier}",
+                            Language.getLang(e.iso).m(upgradeStage == 2 ? lang.tier2Format : lang.tier3Format)));
                 }
                 break;
         }
@@ -193,7 +202,7 @@ public class OreGenerator {
                 for (Entity e : location.getWorld().getNearbyEntities(location, 3, 3, 3)) {
                     if (e.getType() == EntityType.DROPPED_ITEM) {
                         Item i = (Item) e;
-                        if (i.getItemStack().getType() == ore.getType()){
+                        if (i.getItemStack().getType() == ore.getType()) {
                             oreCount++;
                         }
                         if (oreCount >= max) return;
@@ -246,7 +255,7 @@ public class OreGenerator {
             return;
         }
         lastSpawn--;
-        for (HoloGram e : armorstands.values()) {
+        for (HoloGram e : armorStands.values()) {
             e.setTimerName(Language.getLang(e.iso).m(lang.generatorTimer).replace("{seconds}", String.valueOf(lastSpawn)));
         }
     }
@@ -283,7 +292,7 @@ public class OreGenerator {
             //updateForAll();
         }
 
-        public void updateForAll(){
+        public void updateForAll() {
             for (Player p2 : w.getPlayers()) {
                 if (Language.getPlayerLanguage(p2).getIso().equalsIgnoreCase(iso)) continue;
                 nms.hideEntity(tier, p2);
@@ -292,7 +301,7 @@ public class OreGenerator {
             }
         }
 
-        public void updateForPlayer(Player p, String lang){
+        public void updateForPlayer(Player p, String lang) {
             if (lang.equalsIgnoreCase(iso)) return;
             nms.hideEntity(tier, p);
             nms.hideEntity(timer, p);
@@ -337,7 +346,7 @@ public class OreGenerator {
             } else if (rotate > 470) {
                 item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate += 4), 0));
                 /*item.teleport(item.getLocation().add(0, 0.005D, 0));*/
-            } else if (rotate > 450){
+            } else if (rotate > 450) {
                 item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate += 7), 0));
                 /*item.teleport(item.getLocation().add(0, 0.001D, 0));*/
             } else {
@@ -351,7 +360,7 @@ public class OreGenerator {
             if (rotate > 120) {
                 item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate -= 8), 0));
                 /*item.teleport(item.getLocation().subtract(0, 0.002D, 0));*/
-            } else if (rotate > 90){
+            } else if (rotate > 90) {
                 item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate -= 7), 0));
                 /*item.teleport(item.getLocation().add(0, 0.001D, 0));*/
             } else if (rotate > 70) {
@@ -380,23 +389,27 @@ public class OreGenerator {
     }
 
     public static void removeIfArena(Arena a) {
-        for (int x = getGenerators().size()-1; x >= 0; x--){
+        for (int x = getGenerators().size() - 1; x >= 0; x--) {
             if (getGenerators().get(x).getArena() == a) {
                 OreGenerator.getGenerators().remove(x);
             }
         }
     }
 
-    /** Important for spectators to hide other lang holograms */
-    public void updateHolograms(){
-        for (HoloGram h : armorstands.values()){
+    /**
+     * Important for spectators to hide other lang holograms
+     */
+    public void updateHolograms() {
+        for (HoloGram h : armorStands.values()) {
             h.updateForAll();
         }
     }
 
-    /** Update holograms for a player */
-    public void updateHolograms(Player p, String iso){
-        for (HoloGram h : armorstands.values()){
+    /**
+     * Update holograms for a player
+     */
+    public void updateHolograms(Player p, String iso) {
+        for (HoloGram h : armorStands.values()) {
             h.updateForPlayer(p, iso);
         }
     }

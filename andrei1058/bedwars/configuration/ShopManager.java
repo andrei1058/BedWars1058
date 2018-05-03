@@ -43,15 +43,15 @@ public class ShopManager {
                 //armor
                 setCategoryWithBuy("main.invContents.armor.invContents.chainmail", 10, "CHAINMAIL_BOOTS", 0, 1, 40, "iron", false);
                 addBuyItem("main.invContents.armor.invContents.chainmail.buyItems.boots", "CHAINMAIL_BOOTS", 0, 1, "", true, true);
-                addBuyItem("main.invContents.armor.invContents.chainmail.buyItems.leggins", "CHAINMAIL_LEGGINGS", 0, 1, "", true, true);
+                addBuyItem("main.invContents.armor.invContents.chainmail.buyItems.leggings", "CHAINMAIL_LEGGINGS", 0, 1, "", true, true);
 
                 setCategoryWithBuy("main.invContents.armor.invContents.iron", 11, "IRON_BOOTS", 0, 1, 12, "gold", false);
                 addBuyItem("main.invContents.armor.invContents.iron.buyItems.boots", "IRON_BOOTS", 0, 1, "", true, true);
-                addBuyItem("main.invContents.armor.invContents.iron.buyItems.leggins", "IRON_LEGGINGS", 0, 1, "", true, true);
+                addBuyItem("main.invContents.armor.invContents.iron.buyItems.leggings", "IRON_LEGGINGS", 0, 1, "", true, true);
 
                 setCategoryWithBuy("main.invContents.armor.invContents.diamond", 12, "DIAMOND_BOOTS", 0, 1, 6, "emerald", false);
                 addBuyItem("main.invContents.armor.invContents.diamond.buyItems.boots", "DIAMOND_BOOTS", 0, 1, "", true, true);
-                addBuyItem("main.invContents.armor.invContents.diamond.buyItems.leggins", "DIAMOND_LEGGINGS", 0, 1, "", true, true);
+                addBuyItem("main.invContents.armor.invContents.diamond.buyItems.leggings", "DIAMOND_LEGGINGS", 0, 1, "", true, true);
 
                 setCategoryWithBuy("main.invContents.armor.invContents.back", 31, "ARROW", 0, 1, 0, "iron", false);
                 set("main.invContents.armor.invContents.back.buyItems", new ArrayList<>());
@@ -98,7 +98,7 @@ public class ShopManager {
                 addBuyItem("main.invContents.blocks.invContents.wood.buyItems.wood", "WOOD", 0, 16, "", false, false);
 
                 setCategoryWithBuy("main.invContents.blocks.invContents.obsidian", 16, "OBSIDIAN", 0, 4, 4, "emerald", false);
-                addBuyItem("main.invContents.blocks.invContents.obsidian.buyItems.obsidian", "OBSIDIAN", 0, 16, "", false, false);
+                addBuyItem("main.invContents.blocks.invContents.obsidian.buyItems.obsidian", "OBSIDIAN", 0, 4, "", false, false);
 
                 setCategoryWithBuy("main.invContents.blocks.invContents.back", 31, "ARROW", 0, 1, 0, "iron", false);
                 set("main.invContents.blocks.invContents.back.buyItems", new ArrayList<>());
@@ -108,7 +108,7 @@ public class ShopManager {
                 yml.addDefault("main.invContents.ranged.invSize", 36);
 
                 setCategoryWithBuy("main.invContents.ranged.invContents.arrow", 10, "ARROW", 0, 8, 2, "gold", false);
-                addBuyItem("main.invContents.ranged.invContents.arrow.buyItems.arrows", "ARROW", 0, 6, "", false, false);
+                addBuyItem("main.invContents.ranged.invContents.arrow.buyItems.arrows", "ARROW", 0, 8, "", false, false);
 
                 setCategoryWithBuy("main.invContents.ranged.invContents.bow", 11, "BOW", 0, 1, 12, "gold", false);
                 addBuyItem("main.invContents.ranged.invContents.bow.buyItems.bow", "BOW", 0, 1, "", false, false);

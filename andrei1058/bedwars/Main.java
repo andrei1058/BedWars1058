@@ -14,7 +14,6 @@ import com.andrei1058.bedwars.support.bukkit.v1_10_R1.v1_10_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_11_R1.v1_11_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_12_R1.v1_12_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_8_R3.v1_8_R3;
-import com.andrei1058.bedwars.support.bukkit.v1_8_R2.v1_8_R2;
 import com.andrei1058.bedwars.support.bukkit.v1_9_R1.v1_9_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_9_R2.v1_9_R2;
 import com.andrei1058.bedwars.support.lang.Internal;
@@ -48,7 +47,7 @@ public class Main extends JavaPlugin {
     public static boolean safeMode, lobbyServer = false, debug = true;
     public static HashMap<Entity, String> npcs = new HashMap<>();
     public static String mainCmd = "bw", link = "https://www.spigotmc.org/resources/bedwars1058-the-most-modern-bedwars-plugin.50942/", sursa = "spigotmc.org";
-    public static ConfigManager config, signs, spigot;
+    public static ConfigManager config, signs, spigot, generators;
     public static ShopManager shop;
     public static UpgradesManager upgrades;
     public static Language lang;
@@ -72,6 +71,8 @@ public class Main extends JavaPlugin {
         setupLang(en);
         Language.getLanguages().remove(en);
         setupConfig();
+        generators = new ConfigManager("generators", "plugins/"+ this.getName(), false);
+        setupGeneratorsCfg();
         upgrades = new UpgradesManager("upgrades", "plugins/" + this.getName());
     }
 
@@ -80,9 +81,6 @@ public class Main extends JavaPlugin {
         boolean support = true;
         /** Load version support 1.8 - 1.12 */
         switch (version) {
-            case "v1_8_R2":
-                nms = new v1_8_R2();
-                break;
             case "v1_8_R3":
                 nms = new v1_8_R3();
                 break;
@@ -153,9 +151,9 @@ public class Main extends JavaPlugin {
             case "v1_8_R2":
             case "v1_8_R3":
                 registerEvents(new PlayerDropPick());
-                Bukkit.getScheduler().runTaskLater(this, ()-> {
+                /**Bukkit.getScheduler().runTaskLater(this, ()-> {
                     System.out.println("\u001B[31m[WARN] BedWars1058 is going to abort support for this server version in the future.\nPlease consider upgrading to a newer paper/spigot version.\u001B[0m");
-                }, 40L);
+                }, 40L);*/
                 break;
         }
 
@@ -273,6 +271,9 @@ public class Main extends JavaPlugin {
         yml.addDefault("storeLink", "https://www.spigotmc.org/resources/authors/39904/");
         yml.addDefault("lobbyServer", "hub");
         yml.addDefault("startingCountdown", 40);
+        yml.addDefault("bedsDestroyCountdown", 360);
+        yml.addDefault("dragonSpawnCountdown", 600);
+        yml.addDefault("gameEndCountdown", 120);
         yml.addDefault("globalChat", false);
         yml.addDefault("formatChat", true);
         yml.addDefault("disableCrafting", true);
@@ -312,7 +313,7 @@ public class Main extends JavaPlugin {
         yml.addDefault("arenaGui.starting.itemStack", "STAINED_CLAY");
         yml.addDefault("arenaGui.starting.data", 7);
         yml.addDefault("arenaGui.starting.enchanted", true);
-        yml.addDefault("arenaGui.playing.itemStack", "STAINED_CLAY");
+        yml.addDefault("arenaGui.playing.itemStack", "STAINED_CAY");
         yml.addDefault("arenaGui.playing.data", 4);
         yml.addDefault("arenaGui.playing.enchanted", false);
 
@@ -329,26 +330,11 @@ public class Main extends JavaPlugin {
         Misc.addDefaultStatsItem(yml, 22, Material.CHEST, 0, "gamesPlayed");
         Misc.addDefaultStatsItem(yml, 23, Material.STAINED_GLASS_PANE, 0, "lastPlay");
 
-        yml.addDefault("generators.diamond.tier1.delay", 30);
-        yml.addDefault("generators.diamond.tier1.max", 4);
-        yml.addDefault("generators.diamond.tier2.delay", 20);
-        yml.addDefault("generators.diamond.tier2.max", 6);
-        yml.addDefault("generators.diamond.tier2.start", 360);
-        yml.addDefault("generators.diamond.tier3.delay", 15);
-        yml.addDefault("generators.diamond.tier3.max", 8);
-        yml.addDefault("generators.diamond.tier3.start", 1080);
-        yml.addDefault("generators.emerald.tier1.delay", 70);
-        yml.addDefault("generators.emerald.tier1.max", 4);
-        yml.addDefault("generators.emerald.tier2.delay", 50);
-        yml.addDefault("generators.emerald.tier2.max", 6);
-        yml.addDefault("generators.emerald.tier2.start", 720);
-        yml.addDefault("generators.emerald.tier3.delay", 30);
-        yml.addDefault("generators.emerald.tier3.max", 8);
-        yml.addDefault("generators.emerald.tier3.start", 1440);
         yml.addDefault("startItems", Arrays.asList("WOOD_SWORD"));
         yml.addDefault("blockedCmds", Arrays.asList("spawn", "tpa", "tpaccept", "warp", "goto", "tp", "tphere", "gamemode", "fly", "kill"));
         yml.options().copyDefaults(true);
         config.save();
+        config.set("generators", null);
 
         String whatLang = "en";
         for (File f : new File("plugins/" + this.getDescription().getName() + "/Languages").listFiles()) {
@@ -426,10 +412,11 @@ public class Main extends JavaPlugin {
         File dir = new File("plugins/" + plugin.getName() + "/Arenas");
         if (dir.exists()) {
             List<File> files = new ArrayList<>();
-            for (File f : dir.listFiles()) {
-                if (f.isFile()) {
-                    if (f.getName().contains(".yml")) {
-                        files.add(f);
+            File[] fls = dir.listFiles();
+            for (int x = 0; x < fls.length; x++) {
+                if (fls[x].isFile()) {
+                    if (fls[x].getName().contains(".yml")) {
+                        files.add(fls[x]);
                     }
                 }
             }
@@ -438,8 +425,8 @@ public class Main extends JavaPlugin {
                 int x = r.nextInt(files.size());
                 new Arena(files.get(x).getName().replace(".yml", ""));
             } else {
-                for (File f : files) {
-                    new Arena(f.getName().replace(".yml", ""));
+                for (int x = 0; x < files.size(); x++){
+                    new Arena(files.get(x).getName().replace(".yml", ""));
                 }
             }
             if (Arena.getArenas().isEmpty()) {
@@ -490,6 +477,37 @@ public class Main extends JavaPlugin {
         }
     }
 
+    private static void setupGeneratorsCfg(){
+        YamlConfiguration yml = generators.getYml();
+
+        yml.options().header(plugin.getDescription().getName() + " by andrei1058." +
+                "\ngenerators.yml Documentation\n");
+        yml.addDefault("Default."+ConfigPath.GENERATOR_IRON_DELAY, 2);
+        yml.addDefault("Default."+ConfigPath.GENERATOR_IRON_AMOUNT, 2);
+        yml.addDefault("Default."+ConfigPath.GENERATOR_GOLD_DELAY, 6);
+        yml.addDefault("Default."+ConfigPath.GENERATOR_GOLD_AMOUNT, 2);
+        yml.addDefault(ConfigPath.GENERATOR_STACK_ITEMS, false);
+
+        yml.addDefault("Default."+ConfigPath.GENERATOR_DIAMOND_TIER_I_DELAY, 30);
+        yml.addDefault("Default."+ConfigPath.GENERATOR_DIAMOND_TIER_I_MAX, 4);
+        yml.addDefault("Default."+ConfigPath.GENERATOR_DIAMOND_TIER_II_DELAY, 20);
+        yml.addDefault("Default."+ConfigPath.GENERATOR_DIAMOND_TIER_II_MAX, 6);
+        yml.addDefault("Default."+ConfigPath.GENERATOR_DIAMOND_TIER_II_START, 360);
+        yml.addDefault("Default."+ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY, 15);
+        yml.addDefault("Default."+ConfigPath.GENERATOR_DIAMOND_TIER_III_MAX, 8);
+        yml.addDefault("Default."+ConfigPath.GENERATOR_DIAMOND_TIER_III_START, 1080);
+        yml.addDefault("Default."+ConfigPath.GENERATOR_EMERALD_TIER_I_DELAY, 70);
+        yml.addDefault("Default."+ConfigPath.GENERATOR_EMERALD_TIER_I_MAX, 4);
+        yml.addDefault("Default."+ConfigPath.GENERATOR_EMERALD_TIER_II_DELAY, 50);
+        yml.addDefault("Default."+ConfigPath.GENERATOR_EMERALD_TIER_II_MAX, 6);
+        yml.addDefault("Default."+ConfigPath.GENERATOR_EMERALD_TIER_II_START, 720);
+        yml.addDefault("Default."+ConfigPath.GENERATOR_EMERALD_TIER_III_DELAY, 30);
+        yml.addDefault("Default."+ConfigPath.GENERATOR_EMERALD_TIER_III_MAX, 8);
+        yml.addDefault("Default."+ConfigPath.GENERATOR_EMERALD_TIER_III_START, 1440);
+        yml.options().copyDefaults(true);
+        generators.save();
+    }
+
     public static ServerType getServerType() {
         return serverType;
     }
@@ -513,4 +531,9 @@ public class Main extends JavaPlugin {
     public static Economy getEconomy() {
         return economy;
     }
+
+    public static ConfigManager getGeneratorsCfg() {
+        return generators;
+    }
+
 }

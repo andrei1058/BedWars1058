@@ -31,6 +31,7 @@ public class BedWarsTeam {
     private String name;
     private Arena arena;
     private boolean bedDestroyed = false;
+    private int dragons = 1;
     /**
      * slot, tier
      */
@@ -734,5 +735,9 @@ public class BedWarsTeam {
 
     public Arena getArena() {
         return arena;
+    }
+
+    public int getDragons() {
+        return dragons;
     }
 }

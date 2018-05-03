@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.TeamColor;
+import com.andrei1058.bedwars.configuration.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -119,8 +120,7 @@ public class SBoard {
                         .replace("{time}", String.valueOf(arena.getCountdownS())).replace("{player}", p.getName())
                         .replace("{date}", new SimpleDateFormat(getMsg(getP(), lang.dateFormat)).format(new Date(System.currentTimeMillis()))));
             } else if (arena.getStatus() == GameState.playing) {
-                String generatorTime = dateFormat.format((arena.showDiamondSb ?
-                        arena.upgradeDiamondsCount : arena.upgradeEmeraldsCount) * 1000);
+                String[] ne = getNextEvent();
                 for (BedWarsTeam team : arena.getTeams()) {
                     temp = temp.replace("{Team" + team.getName() + "Color}", TeamColor.getChatColor(team.getColor()).toString()).replace("{Team" + team.getName() + "Name}",
                             team.getName()).replace("{Team" + team.getName() + "Status}", String.valueOf(team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getP(), lang.bedDestroyedFormat).replace("{remainingPlayers}",
@@ -128,11 +128,10 @@ public class SBoard {
                 }
                 setContent(t, temp.replace("{map}", arena.getDisplayName()).replace("{server}", Bukkit.getServer().getMotd())
                         .replace("{on}", String.valueOf(arena.getPlayers().size())).replace("{max}", String.valueOf(arena.getMaxPlayers()))
-                        .replace("{time}", String.valueOf(arena.getCountdownS())).replace("{player}", p.getName())
-                        .replace("{date}", new SimpleDateFormat(getMsg(getP(), lang.dateFormat)).format(new Date(System.currentTimeMillis())))
+                        .replace("{player}", p.getName()).replace("{date}", new SimpleDateFormat(getMsg(getP(), lang.dateFormat)).format(new Date(System.currentTimeMillis())))
                         .replace("{kills}", String.valueOf(arena.getPlayerKills(getP(), false))).replace("{finalKills}", String.valueOf(arena.getPlayerKills(getP(), true)))
-                        .replace("{beds}", String.valueOf(arena.getPlayerBedsDestroyed(getP()))).replace("{generatorName}", getMsg(getP(), arena.showDiamondSb ? lang.diamondGeneratorName : lang.emeraldGeneratorName))
-                        .replace("{generatorTimer}", generatorTime));
+                        .replace("{beds}", String.valueOf(arena.getPlayerBedsDestroyed(getP()))).replace("{time}", ne[1])
+                        .replace("{nextEvent}", ne[0]));
             }
         }
     }
@@ -178,9 +177,8 @@ public class SBoard {
                 }
             } else if (arena.getStatus() == GameState.playing) {
                 String kills = String.valueOf(arena.getPlayerKills(getP(), false)), finalKills = String.valueOf(arena.getPlayerKills(getP(), true)),
-                        beds = String.valueOf(arena.getPlayerBedsDestroyed(getP())),
-                        generatorTime = dateFormat.format((arena.showDiamondSb ?
-                                arena.upgradeDiamondsCount : arena.upgradeEmeraldsCount) * 1000);
+                        beds = String.valueOf(arena.getPlayerBedsDestroyed(getP()));
+                String[] ne = getNextEvent();
                 for (Map.Entry<Team, String> e : toRefresh.entrySet()) {
                     String text = e.getValue();
                     for (BedWarsTeam team : arena.getTeams()) {
@@ -190,8 +188,8 @@ public class SBoard {
                     }
                     setContent(e.getKey(), text.replace("{on}", String.valueOf(arena.getPlayers().size())).replace("{max}", String.valueOf(arena.getMaxPlayers()))
                             .replace("{date}", date).replace("{kills}", kills).replace("{finalKills}", finalKills).replace("{beds}", beds)
-                            .replace("{generatorName}", getMsg(getP(), arena.showDiamondSb ? lang.diamondGeneratorName : lang.emeraldGeneratorName))
-                            .replace("{generatorTimer}", generatorTime));
+                            .replace("{nextEvent}", ne[0])
+                            .replace("{time}", ne[1]));
                 }
             }
         }
@@ -243,5 +241,42 @@ public class SBoard {
                 (absSeconds % 3600) / 60,
                 absSeconds % 60);
         return seconds < 0 ? "-" + positive : positive;
+    }
+
+    private String[] getNextEvent(){
+        Long time = 0L;
+        String st = "";
+        switch (arena.getNextEvent()){
+            case EMERALD_GENERATOR_TIER_II:
+                st = getMsg(getP(), Messages.NEXT_EVENT_EMERALD_UPGRADE_II);
+                time = (arena.upgradeEmeraldsCount-1)*1000L;
+                break;
+            case EMERALD_GENERATOR_TIER_III:
+                st = getMsg(getP(), Messages.NEXT_EVENT_EMERALD_UPGRADE_III);
+                time = (arena.upgradeEmeraldsCount-1)*1000L;
+                break;
+            case DIAMOND_GENERATOR_TIER_II:
+                st = getMsg(getP(), Messages.NEXT_EVENT_DIAMOND_UPGRADE_II);
+                time = (arena.upgradeDiamondsCount-1)*1000L;
+                break;
+            case DIAMOND_GENERATOR_TIER_III:
+                st = getMsg(getP(), Messages.NEXT_EVENT_DIAMOND_UPGRADE_III);
+                time = (arena.upgradeDiamondsCount-1)*1000L;
+                break;
+            case GAME_END:
+                st = getMsg(getP(), Messages.NEXT_EVENT_GAME_END);
+                time = (arena.getGameEndCountdown()-1)*1000L;
+                break;
+            case BEDS_DESTROY:
+                st = getMsg(getP(), Messages.NEXT_EVENT_BEDS_DESTROY);
+                time = (arena.getBedsDestroyCountdown()-1)*1000L;
+                break;
+            case ENDER_DRAGON:
+                st = getMsg(getP(), Messages.NEXT_EVENT_DRAGON_SPAWN);
+                time = (arena.getDragonCountdown()-1)*1000L;
+                break;
+        }
+
+        return new String[] {st, dateFormat.format((time))};
     }
 }
