@@ -81,6 +81,7 @@ public class BedWarsTeam {
      * A list with all potions for clear them when someone leaves the island
      */
     private List<Effect> ebseEffectsStatic = new ArrayList<>();
+    /** A list with team's dragons  at Sudden Death phase*/
 
     public BedWarsTeam(String name, TeamColor color, Location spawn, Location bed, Location shop, Location teamUpgrades, Arena arena) {
         this.name = name;

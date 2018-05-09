@@ -23,6 +23,7 @@ import org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity;
 import org.bukkit.entity.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
@@ -440,6 +441,13 @@ public class v1_12_R1 implements NMS {
         pc.playerConnection.sendPacket(chest);
         pc.playerConnection.sendPacket(pants);
         pc.playerConnection.sendPacket(boots);
+    }
+
+    @Override
+    public void spawnDragon(Location l, BedWarsTeam bwt) {
+        EnderDragon ed = (EnderDragon) l.getWorld().spawnEntity(l, EntityType.ENDER_DRAGON);
+        ed.setMetadata("DragonTeam", new FixedMetadataValue(plugin, bwt));
+        bwt.getArena().getDragons().add(ed);
     }
 
     @Override

@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.Arena.getArenaByName;
@@ -143,6 +144,9 @@ public class MainCommand extends BukkitCommand {
         } else {
             boolean x = false;
             switch (args[0].toLowerCase()) {
+                case "dragon":
+                    nms.spawnDragon(p.getLocation(), Arena.getArenaByPlayer(p).getTeam(p));
+                    break;
                 case "join":
                     if (args.length < 2) {
                         p.sendMessage(getMsg(p, lang.joinCmdUsage));

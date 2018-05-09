@@ -48,7 +48,7 @@ public class Arena {
     /**
      * Current event, used at scoreboard
      */
-    private NextEvent nextEvent = NextEvent.EMERALD_GENERATOR_TIER_II;
+    private NextEvent nextEvent = NextEvent.DIAMOND_GENERATOR_TIER_II;
     public int diamondTier = 1, emeraldTier = 1;
 
     /**
@@ -72,6 +72,9 @@ public class Arena {
     private static HashMap<Player, Integer> playerFinalKills = new HashMap<>();
     private static HashMap<Player, Integer> playerDeaths = new HashMap<>();
     private static HashMap<Player, Integer> playerFinalKillDeaths = new HashMap<>();
+
+    /** Sudden Death dragon, actually used for 1.9+ */
+    private List<EnderDragon> dragons = new ArrayList<>();
 
     public Arena(String name) {
         cm = new ConfigManager(name, "plugins/" + plugin.getName() + "/Arenas", true);
@@ -234,7 +237,7 @@ public class Arena {
                         teams = true;
                     }
                 }
-                if (maxInTeam < players.size() && teams) {
+                if (minPlayers < players.size() && teams) {
                     setStatus(GameState.starting);
                 } else if (players.size() >= minPlayers && !teams) {
                     setStatus(GameState.starting);
@@ -696,7 +699,7 @@ public class Arena {
                             nms.sendTitle(p, getMsg(p, lang.titleStart), null, 0, 20, 0);
                         }
                     }
-                    updateNextEvent();
+                    setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_II);
                     return;
                 }
                 if (countdownS % 10 == 0 || countdownS <= 5) {
@@ -732,6 +735,7 @@ public class Arena {
                                         }
                                     }
                                 }
+                                updateNextEvent();
                             }
                         }
                         if (upgradeEmeraldsCount > 0) {
@@ -744,6 +748,7 @@ public class Arena {
                                         }
                                     }
                                 }
+                                updateNextEvent();
                             }
                         }
                         break;
@@ -790,6 +795,12 @@ public class Arena {
                                     for (int y= 0; y < 20; y++){
                                         l.clone().subtract(0, y, 0).getBlock().setType(Material.AIR);
                                     }
+                                }
+                            }
+                            for (BedWarsTeam t : getTeams()){
+                                if (t.getMembers().isEmpty()) continue;
+                                for (int x = 0; x < t.getDragons(); x++){
+                                    nms.spawnDragon(cm.getArenaLoc("waiting.Loc").add(0, 10, 0), t);
                                 }
                             }
                         }
@@ -1129,6 +1140,12 @@ public class Arena {
             }
             if (max - eliminated == 1) {
                 if (winner != null) {
+                    if (!winner.getMembers().isEmpty()){
+                        for (Player p : winner.getMembers()){
+                            if (!p.isOnline()) continue;
+                            p.getInventory().clear();
+                        }
+                    }
                     String firstName = "", secondName = "", thirdName = "", winners = "";
                     for (Player p : winner.getMembers()) {
                         nms.sendTitle(p, getMsg(p, lang.victoryTitle), null, 0, 40, 0);
@@ -1184,27 +1201,33 @@ public class Arena {
     }
 
     private void setNextEvent(NextEvent nextEvent) {
+        debug("Emerald count: "+upgradeEmeraldsCount+" Diamond: "+upgradeDiamondsCount);
+        debug("NEXT EVENT FROM "+this.nextEvent+" to "+ nextEvent+" arena "+getDisplayName());
+        for (Player p : getPlayers()){
+            p.getWorld().playSound(p.getLocation(), nms.bedDestroy(), 1f, 1f);
+        }
+        for (Player p : getSpectators()){
+            p.getWorld().playSound(p.getLocation(), nms.bedDestroy(), 1f, 1f);
+        }
         this.nextEvent = nextEvent;
     }
 
     public void updateNextEvent() {
-        if (upgradeDiamondsCount <= upgradeEmeraldsCount && diamondTier < 3){
-            if (diamondTier == 2){
-                if(nextEvent != NextEvent.DIAMOND_GENERATOR_TIER_III) setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_III);
-            } else if (diamondTier == 1){
-                if(nextEvent != NextEvent.DIAMOND_GENERATOR_TIER_II) setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_II);
-            }
-        } else if (upgradeEmeraldsCount <= upgradeDiamondsCount && emeraldTier < 3){
+        if (nextEvent == NextEvent.DIAMOND_GENERATOR_TIER_II){
+            setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_III);
+        } else if (nextEvent == NextEvent.DIAMOND_GENERATOR_TIER_III){
             if (emeraldTier == 1){
-                if(nextEvent != NextEvent.EMERALD_GENERATOR_TIER_II) setNextEvent(NextEvent.EMERALD_GENERATOR_TIER_II);
+                setNextEvent(NextEvent.EMERALD_GENERATOR_TIER_II);
             } else if (emeraldTier == 2){
-                if(nextEvent != NextEvent.EMERALD_GENERATOR_TIER_III) setNextEvent(NextEvent.EMERALD_GENERATOR_TIER_III);
+                setNextEvent(NextEvent.EMERALD_GENERATOR_TIER_III);
+            } else if (emeraldTier == 3){
+                setNextEvent(NextEvent.BEDS_DESTROY);
             }
-        } else if (emeraldTier == 3 && diamondTier == 3 && bedsDestroyCountdown > 0) {
+        } else if (emeraldTier >= 3 && diamondTier >= 3 && bedsDestroyCountdown > 0) {
             setNextEvent(NextEvent.BEDS_DESTROY);
-        } else if (bedsDestroyCountdown <= 0 && dragonCountdown > 0) {
+        } else if (nextEvent == NextEvent.BEDS_DESTROY && dragonCountdown > 0) {
             setNextEvent(NextEvent.ENDER_DRAGON);
-        } else if (dragonCountdown <= 0) {
+        } else if (nextEvent == NextEvent.ENDER_DRAGON && dragonCountdown == 0 && bedsDestroyCountdown == 0) {
             setNextEvent(NextEvent.GAME_END);
         }
         debug(nextEvent.toString());
@@ -1228,5 +1251,9 @@ public class Arena {
 
     public int getGameEndCountdown() {
         return gameEndCountdown;
+    }
+
+    public List<EnderDragon> getDragons() {
+        return dragons;
     }
 }

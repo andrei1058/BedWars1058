@@ -4,7 +4,6 @@ import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
-import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.configuration.Language;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -16,7 +15,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import static com.andrei1058.bedwars.Main.*;
-import static com.andrei1058.bedwars.configuration.Language.getList;
 
 public class JoinLeaveTeleport implements Listener {
 
@@ -27,13 +25,15 @@ public class JoinLeaveTeleport implements Listener {
             Language.getLangByPlayer().put(p, Language.getLang(getLangSupport().getLang(p)));
         }
         Bukkit.getScheduler().runTaskLater(plugin, ()-> {
-            for (Player on : Bukkit.getOnlinePlayers()){
-                if (Arena.getArenaByPlayer(on) == null){
-                    on.showPlayer(p);
-                    p.showPlayer(on);
-                } else {
-                    p.hidePlayer(on);
-                    on.hidePlayer(p);
+            if (plugin.getServerType() != ServerType.BUNGEE){
+                for (Player on : Bukkit.getOnlinePlayers()){
+                    if (Arena.getArenaByPlayer(on) == null){
+                        on.showPlayer(p);
+                        p.showPlayer(on);
+                    } else {
+                        p.hidePlayer(on);
+                        on.hidePlayer(p);
+                    }
                 }
             }
             if (debug) {
@@ -55,7 +55,7 @@ public class JoinLeaveTeleport implements Listener {
                 p.sendMessage("§aDownload ID: §2%%__NONCE__%%");
                 p.sendMessage("");
             }
-        }, 10L);
+        }, 5L);
         if (getServerType() == ServerType.SHARED) return;
         e.setJoinMessage(null);
         p.getInventory().setArmorContents(null);

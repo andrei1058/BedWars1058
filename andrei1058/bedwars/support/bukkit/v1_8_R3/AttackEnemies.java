@@ -73,25 +73,9 @@ public class AttackEnemies<T extends EntityLiving> extends PathfinderGoalTarget 
         };
     }
 
+    @Override
     public boolean a() {
-        if (this.g > 0 && this.e.bc().nextInt(this.g) != 0) {
-            return false;
-        } else {
-            double d0 = this.f();
-            List list = this.e.world.a(this.a, this.e.getBoundingBox().grow(d0, 4.0D, d0), Predicates.and(this.c, IEntitySelector.d));
-            Collections.sort(list, this.b);
-            if (list.isEmpty()) {
-                return false;
-            } else {
-                for (int i = 0; i < list.size(); i++){
-                    if (!excluded.contains(list.get(i))){
-                        this.d = (EntityLiving)list.get(i);
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }
+        return false;
     }
 
     public void c() {

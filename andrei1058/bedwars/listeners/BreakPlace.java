@@ -1,10 +1,7 @@
 package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.BedBreakEvent;
-import com.andrei1058.bedwars.api.GameState;
-import com.andrei1058.bedwars.api.ServerType;
-import com.andrei1058.bedwars.api.TeamColor;
+import com.andrei1058.bedwars.api.*;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.OreGenerator;
@@ -45,6 +42,10 @@ public class BreakPlace implements Listener {
         if (Arena.isInArena(p)) {
             Arena a = Arena.getArenaByPlayer(p);
             if (a.isSpectator(p)) {
+                e.setCancelled(true);
+                return;
+            }
+            if (a.getStatus() != GameState.playing) {
                 e.setCancelled(true);
                 return;
             }
@@ -254,6 +255,7 @@ public class BreakPlace implements Listener {
         if (e.blockList().isEmpty()) return;
         Arena a = Arena.getArenaByName(e.blockList().get(0).getWorld().getName());
         if (a != null){
+            if (a.getNextEvent() == NextEvent.GAME_END && a.getStatus() != GameState.restarting) return;
             List<Block> destroyed = e.blockList();
             Iterator<Block> it = new ArrayList<>(destroyed).iterator();
             while (it.hasNext()) {

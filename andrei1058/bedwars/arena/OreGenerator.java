@@ -140,14 +140,12 @@ public class OreGenerator {
                     arena.upgradeDiamondsCount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START) == null ?
                             "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START);
                     arena.diamondTier = 2;
-                    arena.updateNextEvent();
                 } else if (upgradeStage == 3) {
                     delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY) == null ?
                             "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY);
                     max = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_MAX) == null ?
                             "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_MAX : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_MAX);
                     arena.diamondTier = 3;
-                    arena.updateNextEvent();
                 }
                 ore = new ItemStack(Material.DIAMOND);
                 for (HoloGram e : armorStands.values()) {
@@ -175,14 +173,12 @@ public class OreGenerator {
                     arena.upgradeEmeraldsCount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_START) == null ?
                             "Default." + ConfigPath.GENERATOR_EMERALD_TIER_III_START : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_START);
                     arena.emeraldTier = 2;
-                    arena.updateNextEvent();
                 } else if (upgradeStage == 3) {
                     delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_DELAY) == null ?
                             "Default." + ConfigPath.GENERATOR_EMERALD_TIER_III_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_DELAY);
                     max = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_MAX) == null ?
                             "Default." + ConfigPath.GENERATOR_EMERALD_TIER_III_MAX : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_MAX);
                     arena.emeraldTier = 3;
-                    arena.updateNextEvent();
                 }
                 ore = new ItemStack(Material.EMERALD);
                 for (HoloGram e : armorStands.values()) {

@@ -123,4 +123,7 @@ public interface NMS {
 
     /** Show a player armor */
     void showArmor(Player p, Player p2);
+
+    /** Spawn ender dragon */
+    void spawnDragon(Location l, BedWarsTeam bwt);
 }

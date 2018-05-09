@@ -211,6 +211,7 @@ public class v1_8_R3 implements NMS {
         registerEntity("ShopNPC", 120, VillagerShop.class);
         registerEntity("Silverfish2", 60, Silverfish.class);
         registerEntity("IGolem", 99, IGolem.class);
+        registerEntity("Dragon", 63, Dragon.class);
     }
 
     @Override
@@ -248,8 +249,8 @@ public class v1_8_R3 implements NMS {
                 new ShopHolo(Language.getPlayerLanguage(p).getIso(), a, b, l, arena);
             }
         }
-        for (ShopHolo sh : ShopHolo.getShopHolo()){
-            if (sh.getA() == arena){
+        for (ShopHolo sh : ShopHolo.getShopHolo()) {
+            if (sh.getA() == arena) {
                 sh.update();
             }
         }
@@ -299,48 +300,48 @@ public class v1_8_R3 implements NMS {
         }
     }
 
-public class VillagerShop extends EntityVillager {
-    public VillagerShop(World world) {
-        super(world);
-        try {
-            Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
-            bField.setAccessible(true);
-            Field cField = PathfinderGoalSelector.class.getDeclaredField("c");
-            cField.setAccessible(true);
-            bField.set(this.goalSelector, new UnsafeList());
-            bField.set(this.targetSelector, new UnsafeList());
-            cField.set(this.goalSelector, new UnsafeList());
-            cField.set(this.targetSelector, new UnsafeList());
-        } catch (Exception bField) {
+    public class VillagerShop extends EntityVillager {
+        public VillagerShop(World world) {
+            super(world);
+            try {
+                Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
+                bField.setAccessible(true);
+                Field cField = PathfinderGoalSelector.class.getDeclaredField("c");
+                cField.setAccessible(true);
+                bField.set(this.goalSelector, new UnsafeList());
+                bField.set(this.targetSelector, new UnsafeList());
+                cField.set(this.goalSelector, new UnsafeList());
+                cField.set(this.targetSelector, new UnsafeList());
+            } catch (Exception bField) {
+            }
+            this.goalSelector.a(0, new PathfinderGoalFloat(this));
+            this.goalSelector.a(9, new PathfinderGoalInteract(this, EntityHuman.class, 3.0f, 1.0f));
+            this.goalSelector.a(10, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0f));
         }
-        this.goalSelector.a(0, new PathfinderGoalFloat(this));
-        this.goalSelector.a(9, new PathfinderGoalInteract(this, EntityHuman.class, 3.0f, 1.0f));
-        this.goalSelector.a(10, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0f));
-    }
 
-    @Override
-    public void move(double d0, double d1, double d2) {
-    }
+        @Override
+        public void move(double d0, double d1, double d2) {
+        }
 
-    @Override
-    public void collide(net.minecraft.server.v1_8_R3.Entity entity) {
-    }
+        @Override
+        public void collide(net.minecraft.server.v1_8_R3.Entity entity) {
+        }
 
-    @Override
-    public boolean damageEntity(DamageSource damagesource, float f) {
-        return false;
-    }
+        @Override
+        public boolean damageEntity(DamageSource damagesource, float f) {
+            return false;
+        }
 
-    @Override
-    public void g(double d0, double d1, double d2) {
-    }
+        @Override
+        public void g(double d0, double d1, double d2) {
+        }
 
-    @Override
-    protected void initAttributes() {
-        super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.0D);
+        @Override
+        protected void initAttributes() {
+            super.initAttributes();
+            this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.0D);
+        }
     }
-}
 
     private Villager spawnVillager(Location loc) {
         WorldServer mcWorld = ((CraftWorld) loc.getWorld()).getHandle();
@@ -351,52 +352,52 @@ public class VillagerShop extends EntityVillager {
         return (Villager) customEnt.getBukkitEntity();
     }
 
-private class Despawnable {
-    EntityLiving e;
-    BedWarsTeam team;
-    int despawn = 250;
-    String namePath;
+    private class Despawnable {
+        EntityLiving e;
+        BedWarsTeam team;
+        int despawn = 250;
+        String namePath;
 
-    public Despawnable(EntityLiving e, BedWarsTeam team, int despawn, String namePath) {
-        this.e = e;
-        this.team = team;
-        if (despawn != 0) {
-            this.despawn = despawn;
+        public Despawnable(EntityLiving e, BedWarsTeam team, int despawn, String namePath) {
+            this.e = e;
+            this.team = team;
+            if (despawn != 0) {
+                this.despawn = despawn;
+            }
+            this.namePath = namePath;
+            despawnables.add(this);
+            setName();
         }
-        this.namePath = namePath;
-        despawnables.add(this);
-        setName();
-    }
 
-    public void regresh() {
-        if (!e.isAlive()) {
-            despawnables.remove(this);
-            return;
+        public void regresh() {
+            if (!e.isAlive()) {
+                despawnables.remove(this);
+                return;
+            }
+            setName();
+            despawn--;
+            if (despawn == 0) {
+                e.damageEntity(DamageSource.OUT_OF_WORLD, 9000);
+                despawnables.remove(this);
+            }
         }
-        setName();
-        despawn--;
-        if (despawn == 0) {
-            e.damageEntity(DamageSource.OUT_OF_WORLD, 9000);
-            despawnables.remove(this);
+
+        private void setName() {
+            int percentuale = (int) ((e.getHealth() * 100) / e.getMaxHealth() / 10);
+            e.setCustomName(lang.m(namePath).replace("{despawn}", String.valueOf(despawn)).replace("{health}",
+                    new String(new char[percentuale]).replace("\0", lang.m(lang.despawnableHealth)) + new String(new char[10 - percentuale]).replace("\0", "§7" + lang.m(lang.despawnableHealth))
+            ).replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()).replace("{TeamName}", team.getName()));
         }
-    }
 
-    private void setName() {
-        int percentuale = (int) ((e.getHealth() * 100) / e.getMaxHealth() / 10);
-        e.setCustomName(lang.m(namePath).replace("{despawn}", String.valueOf(despawn)).replace("{health}",
-                new String(new char[percentuale]).replace("\0", lang.m(lang.despawnableHealth)) + new String(new char[10 - percentuale]).replace("\0", "§7" + lang.m(lang.despawnableHealth))
-        ).replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()).replace("{TeamName}", team.getName()));
-    }
+        public EntityLiving getE() {
+            return e;
+        }
 
-    public EntityLiving getE() {
-        return e;
-    }
+        public BedWarsTeam getTeam() {
+            return team;
+        }
 
-    public BedWarsTeam getTeam() {
-        return team;
     }
-
-}
 
     @Override
     public void setSource(TNTPrimed tnt, Player owner) {
@@ -413,17 +414,17 @@ private class Despawnable {
 
     @Override
     public void voidKill(Player p) {
-        ((CraftPlayer)p).getHandle().damageEntity(DamageSource.OUT_OF_WORLD, 1000);
+        ((CraftPlayer) p).getHandle().damageEntity(DamageSource.OUT_OF_WORLD, 1000);
     }
 
     @Override
     public void hideArmor(Player p, Player p2) {
-        PacketPlayOutEntityEquipment hand = new PacketPlayOutEntityEquipment(p.getEntityId(), 0,  CraftItemStack.asNMSCopy(new ItemStack(org.bukkit.Material.AIR)));
+        PacketPlayOutEntityEquipment hand = new PacketPlayOutEntityEquipment(p.getEntityId(), 0, CraftItemStack.asNMSCopy(new ItemStack(org.bukkit.Material.AIR)));
         PacketPlayOutEntityEquipment helmet = new PacketPlayOutEntityEquipment(p.getEntityId(), 1, CraftItemStack.asNMSCopy(new ItemStack(org.bukkit.Material.AIR)));
         PacketPlayOutEntityEquipment chest = new PacketPlayOutEntityEquipment(p.getEntityId(), 2, CraftItemStack.asNMSCopy(new ItemStack(org.bukkit.Material.AIR)));
         PacketPlayOutEntityEquipment pants = new PacketPlayOutEntityEquipment(p.getEntityId(), 3, CraftItemStack.asNMSCopy(new ItemStack(org.bukkit.Material.AIR)));
         PacketPlayOutEntityEquipment boots = new PacketPlayOutEntityEquipment(p.getEntityId(), 4, CraftItemStack.asNMSCopy(new ItemStack(org.bukkit.Material.AIR)));
-        PlayerConnection pc = ((CraftPlayer)p2).getHandle().playerConnection;
+        PlayerConnection pc = ((CraftPlayer) p2).getHandle().playerConnection;
         pc.sendPacket(hand);
         pc.sendPacket(helmet);
         pc.sendPacket(chest);
@@ -435,14 +436,14 @@ private class Despawnable {
     public void hidePlayer(Player victim, Player p) {
         if (victim == p) return;
         PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(victim.getEntityId());
-        ((CraftPlayer)p).getHandle().playerConnection.sendPacket(packet);
+        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
     }
 
     @Override
     public void showPlayer(Player victim, Player p) {
         if (victim == p) return;
-        PacketPlayOutNamedEntitySpawn packet = new PacketPlayOutNamedEntitySpawn(((CraftPlayer)victim).getHandle());
-        ((CraftPlayer)p).getHandle().playerConnection.sendPacket(packet);
+        PacketPlayOutNamedEntitySpawn packet = new PacketPlayOutNamedEntitySpawn(((CraftPlayer) victim).getHandle());
+        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
     }
 
     @Override
@@ -452,13 +453,22 @@ private class Despawnable {
         PacketPlayOutEntityEquipment chest = new PacketPlayOutEntityEquipment(p.getEntityId(), 3, CraftItemStack.asNMSCopy(p.getInventory().getChestplate()));
         PacketPlayOutEntityEquipment pants = new PacketPlayOutEntityEquipment(p.getEntityId(), 2, CraftItemStack.asNMSCopy(p.getInventory().getLeggings()));
         PacketPlayOutEntityEquipment boots = new PacketPlayOutEntityEquipment(p.getEntityId(), 1, CraftItemStack.asNMSCopy(p.getInventory().getBoots()));
-        EntityPlayer pc = ((CraftPlayer)p2).getHandle();
-        if (p != p2){
+        EntityPlayer pc = ((CraftPlayer) p2).getHandle();
+        if (p != p2) {
             pc.playerConnection.sendPacket(hand1);
         }
         pc.playerConnection.sendPacket(helmet);
         pc.playerConnection.sendPacket(chest);
         pc.playerConnection.sendPacket(pants);
         pc.playerConnection.sendPacket(boots);
+    }
+
+    @Override
+    public void spawnDragon(Location l, BedWarsTeam bwt) {
+        WorldServer mcWorld = ((CraftWorld) l.getWorld()).getHandle();
+        Dragon customEnt = new Dragon(mcWorld, bwt);
+        customEnt.setLocation(l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch());
+        ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
+        mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
     }
 }

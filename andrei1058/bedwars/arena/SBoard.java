@@ -22,7 +22,7 @@ import static com.andrei1058.bedwars.configuration.Language.getScoreboard;
 public class SBoard {
 
     public static ScoreboardManager sbm = Bukkit.getScoreboardManager();
-    private List<String> placeholders = Arrays.asList("{on}", "{max}", "{time}", "{generatorName}", "{generatorTimer}", "{date}");
+    private List<String> placeholders = Arrays.asList("{on}", "{max}", "{time}", "{nextEvent}", "{date}");
     private static List<SBoard> scoreboards = new ArrayList<>();
     private HashMap<Team, String> toRefresh = new HashMap<>();
     private Scoreboard sb = sbm.getNewScoreboard();

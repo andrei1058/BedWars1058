@@ -75,8 +75,8 @@ public class Internal implements Party {
                 }
                 p.members.remove(member);
                 if (p.members.isEmpty() || p.members.size() == 1) {
-                    getParites().remove(p);
                     disband(p.owner);
+                    getParites().remove(p);
                 }
                 return;
             }
