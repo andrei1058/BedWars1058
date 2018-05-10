@@ -6,10 +6,10 @@ import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.ShopHolo;
 import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.support.bukkit.NMS;
+import com.andrei1058.bedwars.support.bukkit.v1_12_R1.dragon.EntityEnderDragon;
 import com.google.common.collect.Sets;
 import net.minecraft.server.v1_12_R1.*;
 import net.minecraft.server.v1_12_R1.Item;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
@@ -23,9 +23,6 @@ import org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity;
 import org.bukkit.entity.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 
 import java.lang.reflect.Field;
@@ -241,6 +238,7 @@ public class v1_12_R1 implements NMS {
         registerEntity("ShopNPC", 120, VillagerShop.class);
         registerEntity("Silverfish2", 60, Silverfish.class);
         registerEntity("IGolem", 99, IGolem.class);
+        registerEntity("Dragon", 63, com.andrei1058.bedwars.support.bukkit.v1_12_R1.dragon.EntityEnderDragon.class);
     }
 
     @Override
@@ -443,11 +441,19 @@ public class v1_12_R1 implements NMS {
         pc.playerConnection.sendPacket(boots);
     }
 
-    @Override
+    /*@Override
     public void spawnDragon(Location l, BedWarsTeam bwt) {
         EnderDragon ed = (EnderDragon) l.getWorld().spawnEntity(l, EntityType.ENDER_DRAGON);
         ed.setMetadata("DragonTeam", new FixedMetadataValue(plugin, bwt));
         bwt.getArena().getDragons().add(ed);
+    }*/
+    @Override
+    public void spawnDragon(Location l, BedWarsTeam bwt) {
+        WorldServer mcWorld = ((CraftWorld) l.getWorld()).getHandle();
+        com.andrei1058.bedwars.support.bukkit.v1_12_R1.dragon.EntityEnderDragon customEnt = new EntityEnderDragon(mcWorld, bwt);
+        customEnt.setLocation(l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch());
+        ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
+        mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
     }
 
     @Override
