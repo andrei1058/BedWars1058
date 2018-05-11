@@ -309,7 +309,7 @@ public class EnderDragonBattle {
         a.debug("Found {} end crystals still alive", this.h);
     }
 
-    public void a(net.minecraft.server.v1_12_R1.EntityEnderDragon var1) {
+    public void a(com.andrei1058.bedwars.support.bukkit.v1_12_R1.dragon.EntityEnderDragon var1) {
         if (var1.getUniqueID().equals(this.m)) {
             this.c.setProgress(0.0F);
             this.c.setVisible(false);

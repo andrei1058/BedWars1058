@@ -108,7 +108,7 @@ public class DragonControllerStrafe extends com.andrei1058.bedwars.support.bukki
                 var2 += 12;
             }
 
-            this.d = this.a.a(var1, var2, (PathPoint)null);
+            this.d = this.a.a(var1, var2, null);
             if (this.d != null) {
                 this.d.a();
             }

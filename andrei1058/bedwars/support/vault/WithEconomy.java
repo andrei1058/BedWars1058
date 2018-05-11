@@ -8,7 +8,7 @@ public class WithEconomy implements Economy {
 
     @Override
     public boolean isEconomy() {
-        return false;
+        return true;
     }
 
     @Override

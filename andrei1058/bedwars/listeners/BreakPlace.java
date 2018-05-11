@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.api.*;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.OreGenerator;
+import com.andrei1058.bedwars.configuration.ConfigPath;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -46,6 +47,10 @@ public class BreakPlace implements Listener {
                 return;
             }
             if (a.getStatus() != GameState.playing) {
+                e.setCancelled(true);
+                return;
+            }
+            if (e.getBlockPlaced().getLocation().getBlockY() >= a.getCm().getInt(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y)){
                 e.setCancelled(true);
                 return;
             }
@@ -262,6 +267,10 @@ public class BreakPlace implements Listener {
                 Block block = it.next();
                 if (!a.getPlaced().contains(block)){
                     destroyed.remove(block);
+                } else {
+                    if (block.getType() == Material.GLASS || block.getType() == Material.STAINED_GLASS){
+                        destroyed.remove(block);
+                    }
                 }
             }
         }

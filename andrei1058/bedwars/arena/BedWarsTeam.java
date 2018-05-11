@@ -2,14 +2,21 @@ package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.api.GeneratorType;
 import com.andrei1058.bedwars.api.TeamColor;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Bed;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.material.Colorable;
+import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Contract;
@@ -81,7 +88,13 @@ public class BedWarsTeam {
      * A list with all potions for clear them when someone leaves the island
      */
     private List<Effect> ebseEffectsStatic = new ArrayList<>();
-    /** A list with team's dragons  at Sudden Death phase*/
+
+    /**
+     * A list with team's dragons  at Sudden Death phase
+     */
+
+    /** Player cache, used for loosers stats and rejoin*/
+    private List<Player> membersCache = new ArrayList<>();
 
     public BedWarsTeam(String name, TeamColor color, Location spawn, Location bed, Location shop, Location teamUpgrades, Arena arena) {
         this.name = name;
@@ -106,12 +119,15 @@ public class BedWarsTeam {
     public void addPlayers(Player... players) {
         for (Player p : players) {
             if (!members.contains(p)) members.add(p);
+            if (!membersCache.contains(p)) membersCache.add(p);
             new BedHolo(p);
         }
     }
 
-    /** first spawn */
-    public void firstSpawn(Player p){
+    /**
+     * first spawn
+     */
+    public void firstSpawn(Player p) {
         p.teleport(spawn);
         PlayerVault v;
         if (getVault(p) == null) {
@@ -188,7 +204,7 @@ public class BedWarsTeam {
      * Respawn a member
      */
     public void respawnMember(Player p) {
-        if (Arena.respawn.containsKey(p)){
+        if (Arena.respawn.containsKey(p)) {
             Arena.respawn.remove(p);
         }
         p.teleport(getSpawn());
@@ -199,12 +215,12 @@ public class BedWarsTeam {
         p.setAllowFlight(false);
         p.setFlying(false);
         p.setHealth(20);
-        for (Player on : arena.getPlayers()){
+        for (Player on : arena.getPlayers()) {
             if (p == on) continue;
             on.showPlayer(p);
             nms.showPlayer(p, on);
         }
-        for (Player on : arena.getSpectators()){
+        for (Player on : arena.getSpectators()) {
             if (p == on) continue;
             on.showPlayer(p);
             nms.showPlayer(p, on);
@@ -623,8 +639,48 @@ public class BedWarsTeam {
 
     public void setBedDestroyed(boolean bedDestroyed) {
         this.bedDestroyed = bedDestroyed;
-        if (bed.getBlock().getType() == Material.AIR && !bedDestroyed) {
-            bed.getBlock().setType(Material.BED_BLOCK);
+        if (!bedDestroyed) {
+            if (bed.getBlock().getType() == arena.getBedBlock()) {
+                if (getBed().getBlock().getType() == Material.BED_BLOCK) {
+                    nms.colorBed(this, getBed().getBlock().getState());
+                    for (int x = -1; x < 2; x++) {
+                        for (int z = -1; z < 2; z++) {
+                            Block b = getBed().clone().add(x, 0, z).getBlock();
+                            if (b.getType() != Material.BED_BLOCK) continue;
+                            nms.colorBed(this,b.getState());
+                        }
+                    }
+                }
+            } else {
+                if (arena.getBedBlock() == Material.BED_BLOCK) {
+                    if (Misc.getDirection(getBed()) == BlockFace.WEST || Misc.getDirection(getBed()) == BlockFace.EAST) {
+                        BlockState baseState = getBed().getBlock().getState();
+                        BlockState localBlockState = getBed().clone().add(-1, 0, 0).getBlock().getState();
+                        baseState.setType(Material.BED_BLOCK);
+                        localBlockState.setType(Material.BED_BLOCK);
+                        baseState.setRawData((byte) 0x05);
+                        localBlockState.setRawData((byte) 0x09);
+                        baseState.update(true, false);
+                        localBlockState.update(true, false);
+                        nms.colorBed(this, getBed().getBlock().getState());
+                        nms.colorBed(this, getBed().clone().add(-1, 0, 0).getBlock().getState());
+                    } else {
+                        BlockState baseState = getBed().getBlock().getState();
+                        BlockState localBlockState = getBed().clone().add(0, 0, -1).getBlock().getState();
+                        baseState.setType(Material.BED_BLOCK);
+                        localBlockState.setType(Material.BED_BLOCK);
+                        baseState.setRawData((byte) 0x08);
+                        localBlockState.setRawData((byte) 0x00);
+                        baseState.update(true, false);
+                        localBlockState.update(true, false);
+                        nms.colorBed(this, getBed().getBlock().getState());
+                        nms.colorBed(this, getBed().clone().add(0, 0, -1).getBlock().getState());
+                    }
+                } else {
+                    bed.getBlock().setType(arena.getBedBlock());
+                }
+            }
+
         } else if (bedDestroyed && bed.getBlock().getType() == Material.BED_BLOCK) {
             bed.getBlock().setType(Material.AIR);
         }
@@ -632,6 +688,7 @@ public class BedWarsTeam {
             bh.hide();
             bh.show();
         }
+
     }
 
     public OreGenerator getIronGenerator() {
@@ -740,5 +797,9 @@ public class BedWarsTeam {
 
     public int getDragons() {
         return dragons;
+    }
+
+    public List<Player> getMembersCache() {
+        return membersCache;
     }
 }

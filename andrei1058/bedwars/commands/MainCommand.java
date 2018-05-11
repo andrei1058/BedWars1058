@@ -14,6 +14,7 @@ import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
+import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -144,9 +145,6 @@ public class MainCommand extends BukkitCommand {
         } else {
             boolean x = false;
             switch (args[0].toLowerCase()) {
-                case "dragon":
-                    nms.spawnDragon(p.getLocation(), Arena.getArenaByPlayer(p).getTeam(p));
-                    break;
                 case "join":
                     if (args.length < 2) {
                         p.sendMessage(getMsg(p, lang.joinCmdUsage));
@@ -219,13 +217,7 @@ public class MainCommand extends BukkitCommand {
                     } else {
                         statsCooldown.put(p, System.currentTimeMillis());
                     }
-                    int kills = database.getKills(p), deaths = database.getDeaths(p), looses = database.getLooses(p), wins = database.getWins(p),
-                            finalKills = database.getFinalKills(p), finalDeaths = database.getFinalDeaths(p), bedsDestroyed = database.getBedsDestroyed(p), gamesPlayed = database.getGamesPlayed(p);
-                    for (String string : getList(p, lang.playerStatsMessages)){
-                        p.sendMessage(string.replace("{wins}", String.valueOf(wins)).replace("{looses}", String.valueOf(looses)).replace("{kills}", String.valueOf(kills)).
-                        replace("{deaths}", String.valueOf(deaths)).replace("{finalKills}", String.valueOf(finalKills)).replace("{finalDeaths}", String.valueOf(finalDeaths)).
-                        replace("{bedsDestroyed}", String.valueOf(bedsDestroyed)).replace("{gamesPlayed}", String.valueOf(gamesPlayed)).replace("{player}", p.getName()));
-                    }
+                    Misc.openStatsGUI(p);
                     break;
             }
             if (x) return true;

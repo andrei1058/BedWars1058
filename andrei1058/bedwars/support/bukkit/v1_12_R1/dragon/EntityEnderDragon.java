@@ -9,6 +9,7 @@ import com.andrei1058.bedwars.arena.BedWarsTeam;
 import net.minecraft.server.v1_12_R1.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_12_R1.util.CraftMagicNumbers;
@@ -58,11 +59,6 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         this.bM = 100;
         this.ah = true;
         this.bK = null;
-        /*if (!world.isClientSide && world.worldProvider instanceof WorldProviderTheEnd) {
-            this.bK = ((WorldProviderTheEnd)world.worldProvider).t();
-        } else {
-            this.bK = null;
-        }*/
 
         this.bL = new DragonControllerManager(this);
     }
@@ -249,6 +245,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
                 this.bD.B_();
                 this.bD.setPositionRotation(this.locX - (double)(f12 * 4.5F), this.locY + 2.0D, this.locZ - (double)(f11 * 4.5F), 0.0F, 0.0F);
                 if (!this.world.isClientSide && this.hurtTicks == 0) {
+                    System.out.println("a,b called");
                     this.a(this.world.getEntities(this, this.bC.getBoundingBox().grow(4.0D, 2.0D, 4.0D).d(0.0D, -2.0D, 0.0D)));
                     this.a(this.world.getEntities(this, this.bD.getBoundingBox().grow(4.0D, 2.0D, 4.0D).d(0.0D, -2.0D, 0.0D)));
                     this.b(this.world.getEntities(this, this.bw.getBoundingBox().g(1.0D)));
@@ -355,10 +352,10 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         double d0 = (this.by.getBoundingBox().a + this.by.getBoundingBox().d) / 2.0D;
         double d1 = (this.by.getBoundingBox().c + this.by.getBoundingBox().f) / 2.0D;
         Iterator iterator = list.iterator();
-
         while(iterator.hasNext()) {
             Entity entity = (Entity)iterator.next();
             if (entity instanceof EntityLiving) {
+                Bukkit.broadcastMessage(entity.getName()+" A");
                 double d2 = entity.locX - d0;
                 double d3 = entity.locZ - d1;
                 double d4 = d2 * d2 + d3 * d3;
@@ -376,6 +373,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         for(int i = 0; i < list.size(); ++i) {
             Entity entity = (Entity)list.get(i);
             if (entity instanceof EntityLiving) {
+                Bukkit.broadcastMessage(entity.getName()+" B");
                 entity.damageEntity(DamageSource.mobAttack(this), 10.0F);
                 this.a(this, entity);
             }
@@ -406,9 +404,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
                     IBlockData iblockdata = this.world.getType(blockposition);
                     net.minecraft.server.v1_12_R1.Block block = iblockdata.getBlock();
                     if (iblockdata.getMaterial() != Material.AIR && iblockdata.getMaterial() != Material.FIRE) {
-                        if (!this.world.getGameRules().getBoolean("mobGriefing")) {
-                            flag = true;
-                        } else if (block != Blocks.BARRIER && block != Blocks.OBSIDIAN && block != Blocks.END_STONE && block != Blocks.BEDROCK && block != Blocks.END_PORTAL && block != Blocks.END_PORTAL_FRAME) {
+                        if (block != Blocks.BARRIER && block != Blocks.OBSIDIAN && block != Blocks.END_STONE && block != Blocks.BEDROCK && block != Blocks.END_PORTAL && block != Blocks.END_PORTAL_FRAME) {
                             if (block != Blocks.COMMAND_BLOCK && block != Blocks.dc && block != Blocks.dd && block != Blocks.IRON_BARS && block != Blocks.END_GATEWAY) {
                                 flag1 = true;
                                 destroyedBlocks.add(craftWorld.getBlockAt(k1, l1, i2));
@@ -516,7 +512,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         this.die();
         if (this.bK != null) {
             this.bK.b(this);
-            this.bK.a();
+            this.bK.a(this);
         }
 
     }
@@ -534,7 +530,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
             this.world.addParticle(EnumParticle.EXPLOSION_HUGE, this.locX + (double)f, this.locY + 2.0D + (double)f1, this.locZ + (double)f2, 0.0D, 0.0D, 0.0D, new int[0]);
         }
 
-        boolean flag = this.world.getGameRules().getBoolean("doMobLoot");
+        boolean flag = false;
         short short0 = 500;
         if (this.bK != null && !this.bK.d()) {
             short0 = 12000;
@@ -884,7 +880,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
 
     public void a(DataWatcherObject<?> datawatcherobject) {
         if (PHASE.equals(datawatcherobject) && this.world.isClientSide) {
-            this.bL.setControllerPhase(DragonControllerPhase.getById((Integer)this.getDataWatcher().get(PHASE)));
+            this.bL.setControllerPhase(DragonControllerPhase.getById(this.getDataWatcher().get(PHASE)));
         }
 
         super.a(datawatcherobject);

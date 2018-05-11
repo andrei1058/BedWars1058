@@ -44,6 +44,7 @@ public class ConfigManager {
             yml.addDefault("bedBlock", "BED_BLOCK");
             yml.addDefault("worldBorder", 300);
             yml.addDefault("voidKill", false);
+            yml.addDefault(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y, 100);
             yml.options().copyDefaults(true);
             save();
         }

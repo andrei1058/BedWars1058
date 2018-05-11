@@ -4,6 +4,8 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.block.Bed;
+import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -126,4 +128,7 @@ public interface NMS {
 
     /** Spawn ender dragon */
     void spawnDragon(Location l, BedWarsTeam bwt);
+
+    /** Color a bed 1.12+ */
+    void colorBed(BedWarsTeam bwt, BlockState bed);
 }

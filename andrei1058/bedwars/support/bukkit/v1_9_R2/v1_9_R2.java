@@ -11,6 +11,8 @@ import net.minecraft.server.v1_9_R2.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.block.Bed;
+import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_9_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftLivingEntity;
@@ -452,7 +454,12 @@ public class v1_9_R2 implements NMS {
     public void spawnDragon(Location l, BedWarsTeam bwt) {
         EnderDragon ed = (EnderDragon) l.getWorld().spawnEntity(l, EntityType.ENDER_DRAGON);
         ed.setMetadata("DragonTeam", new FixedMetadataValue(plugin, bwt));
-        bwt.getArena().getDragons().add(ed);
+        ed.setPhase(EnderDragon.Phase.CIRCLING);
+    }
+
+    @Override
+    public void colorBed(BedWarsTeam bwt, BlockState bed) {
+
     }
 
 }

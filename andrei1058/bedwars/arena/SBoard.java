@@ -83,6 +83,8 @@ public class SBoard {
             o.getScore(ChatColor.values()[x - 1].toString()).setScore(score);
             score++;
             String temp = strings.get(x - 1);
+            temp = temp.replace("{generatorUpgrade}", "{nextEvent}")
+            .replace("{generatorTimer}", "{time}");
             for (String ph : placeholders) {
                 if (temp.contains(ph)) {
                     if (!toRefresh.containsKey(t)) {

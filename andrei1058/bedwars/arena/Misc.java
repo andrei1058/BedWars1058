@@ -20,6 +20,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -55,7 +56,7 @@ public class Misc {
             if (p.isOnline()) {
                 p.kickPlayer(getMsg(p, Language.restartKick));
             }
-        }, 20L);
+        }, 120L);
     }
 
     public static String replaceLast(String text, String regex, String replacement) {
@@ -80,6 +81,12 @@ public class Misc {
         try {
             i = new ItemStack(Material.valueOf(config.getYml().getString("items.arenaGui.itemStack")),
                     1, (short) config.getYml().getInt("items.arenaGui.data"));
+            if (Material.valueOf(config.getYml().getString("items.arenaGui.itemStack")) == Material.SKULL_ITEM &&
+                    config.getYml().getInt("items.arenaGui.data") == 3){
+                SkullMeta sm = (SkullMeta) i.getItemMeta();
+                sm.setOwner(p.getName());
+                i.setItemMeta(sm);
+            }
         } catch (Exception ex) {
             plugin.getLogger().severe("There was a problem when loading items.arenaGui.itemStack or Data");
             i = new ItemStack(Material.BEDROCK);
@@ -112,6 +119,12 @@ public class Misc {
         try {
             i = new ItemStack(Material.valueOf(config.getYml().getString("items.stats.itemStack")),
                     1, (short) config.getYml().getInt("items.stats.data"));
+            if (Material.valueOf(config.getYml().getString("items.stats.itemStack")) == Material.SKULL_ITEM &&
+                    config.getYml().getInt("items.stats.data") == 3){
+                SkullMeta sm = (SkullMeta) i.getItemMeta();
+                sm.setOwner(p.getName());
+                i.setItemMeta(sm);
+            }
         } catch (Exception ex) {
             plugin.getLogger().severe("There was a problem when loading items.stats.itemStack or Data");
             i = new ItemStack(Material.BEDROCK);

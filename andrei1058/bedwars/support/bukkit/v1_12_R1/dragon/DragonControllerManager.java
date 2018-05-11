@@ -1,9 +1,8 @@
 package com.andrei1058.bedwars.support.bukkit.v1_12_R1.dragon;
 
-import net.minecraft.server.v1_12_R1.DragonControllerPhase;
-import net.minecraft.server.v1_12_R1.EntityEnderDragon;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bukkit.event.entity.EnderDragonChangePhaseEvent;
 
 public class DragonControllerManager {
     private static final Logger a = LogManager.getLogger();
@@ -13,7 +12,7 @@ public class DragonControllerManager {
 
     public DragonControllerManager(com.andrei1058.bedwars.support.bukkit.v1_12_R1.dragon.EntityEnderDragon entityenderdragon) {
         this.enderDragon = entityenderdragon;
-        this.setControllerPhase(com.andrei1058.bedwars.support.bukkit.v1_12_R1.dragon.DragonControllerPhase.k);
+        this.setControllerPhase(com.andrei1058.bedwars.support.bukkit.v1_12_R1.dragon.DragonControllerPhase.a);
     }
 
     public void setControllerPhase(com.andrei1058.bedwars.support.bukkit.v1_12_R1.dragon.DragonControllerPhase<?> dragoncontrollerphase) {
@@ -22,6 +21,13 @@ public class DragonControllerManager {
                 this.currentDragonController.e();
             }
 
+            /*EnderDragonChangePhaseEvent event = new EnderDragonChangePhaseEvent((CraftEnderDragon)this.enderDragon.getBukkitEntity(), this.currentDragonController == null ? null : CraftEnderDragon.getBukkitPhase(this.currentDragonController.getControllerPhase()), CraftEnderDragon.getBukkitPhase(dragoncontrollerphase));
+            this.enderDragon.world.getServer().getPluginManager().callEvent(event);
+            if (event.isCancelled()) {
+                return;
+            }*/
+
+            dragoncontrollerphase = com.andrei1058.bedwars.support.bukkit.v1_12_R1.dragon.CraftEnderDragon.getMinecraftPhase(CraftEnderDragon.getBukkitPhase(dragoncontrollerphase));
             this.currentDragonController = this.b(dragoncontrollerphase);
             if (!this.enderDragon.world.isClientSide) {
                 this.enderDragon.getDataWatcher().set(EntityEnderDragon.PHASE, dragoncontrollerphase.b());
