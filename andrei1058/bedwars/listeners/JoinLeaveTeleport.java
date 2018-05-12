@@ -5,6 +5,9 @@ import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.configuration.Language;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -71,23 +74,33 @@ public class JoinLeaveTeleport implements Listener {
             }, 5L);
         }
         if (debug) {
-            p.sendMessage("§9This server is running BedWars1058 §av" + plugin.getDescription().getVersion() + "\n§9The latest published version is §c" + Misc.getNewVersion());
+            p.sendMessage("");
+            p.sendMessage("");
+            p.sendMessage("§7§m----------------------------------------\n" +
+                    "§eThis server is running BedWars1058 §cv" + plugin.getDescription().getVersion()
+                    + "\n§eThe latest published version is §a" + Misc.getNewVersion()+
+                    "\n§7§m----------------------------------------");
+            p.sendMessage("");
+            p.sendMessage("");
         }
         if (p.isOp()) {
             if (Misc.isUpdateAvailable()) {
-                p.sendMessage("§a▃▃▃▃▃▃▃▃▃§2[§6BedWars1058§2]§a▃▃▃▃▃▃▃▃▃");
+                p.sendMessage("§8[§f"+plugin.getName()+"§8]§7§m---------------------------");
                 p.sendMessage("");
-                p.sendMessage("§2New version available: §a" + Misc.getNewVersion());
-                p.sendMessage("§cYou're running: §c" + plugin.getDescription().getVersion());
+                TextComponent tc = new TextComponent("§eUpdate available: §6" + Misc.getNewVersion()+" §7§o(click)");
+                tc.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, link));
+                p.spigot().sendMessage(tc);
                 p.sendMessage("");
+                p.sendMessage("§8[§f"+plugin.getName()+"§8]§7§m---------------------------");
             }
         }
         if (p.getName().equalsIgnoreCase("andrei1058") || p.getName().equalsIgnoreCase("andreea1058") || p.getName().equalsIgnoreCase("Dani3l_FTW")) {
-            p.sendMessage("§a▃▃▃▃▃▃▃▃▃§2[§6BedWars1058§2]§a▃▃▃▃▃▃▃▃▃");
+            p.sendMessage("§8[§f"+plugin.getName()+"§8]§7§m---------------------------");
             p.sendMessage("");
-            p.sendMessage("§aUser ID: §2%%__USER__%%");
-            p.sendMessage("§aDownload ID: §2%%__NONCE__%%");
+            p.sendMessage("§7User ID: §f%%__USER__%%");
+            p.sendMessage("§7Download ID: §f%%__NONCE__%%");
             p.sendMessage("");
+            p.sendMessage("§8[§f"+plugin.getName()+"§8]§7§m---------------------------");
         }
         if (getServerType() == ServerType.SHARED) return;
         e.setJoinMessage(null);

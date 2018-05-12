@@ -1,7 +1,6 @@
 package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.ArenaGUI;
 
@@ -73,7 +72,9 @@ public class Interact implements Listener {
                     if (inHand.getType() == Material.FIREBALL){
                         e.setCancelled(true);
                         Fireball fb = p.launchProjectile(Fireball.class);
-                        fb.setIsIncendiary(true);
+                        fb.setIsIncendiary(false);
+                        //fb.setGlowing(true);
+
                         for (ItemStack i : p.getInventory().getContents()) {
                             if (i == null) continue;
                             if (i.getType() == null) continue;

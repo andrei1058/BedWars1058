@@ -12,6 +12,7 @@ import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.Contract;
 
@@ -817,6 +818,11 @@ public class Arena {
                 }
                 break;
             case restarting:
+                for (Player p : players){
+                    for (int i = 0; i < 2; i++){
+                        launchFirework(p);
+                    }
+                }
                 restarting--;
                 if (restarting == 5) {
                     for (Player on : new ArrayList<>(players)) {
@@ -1109,9 +1115,6 @@ public class Arena {
     }
 
     public void checkWinner() {
-        if (nextEvent == NextEvent.GAME_END) {
-            //todo
-        }
         if (getStatus() != GameState.restarting) {
             int max = getTeams().size(), eliminated = 0;
             BedWarsTeam winner = null;
@@ -1185,8 +1188,6 @@ public class Arena {
     }
 
     private void setNextEvent(NextEvent nextEvent) {
-        debug("Emerald count: " + upgradeEmeraldsCount + " Diamond: " + upgradeDiamondsCount);
-        debug("NEXT EVENT FROM " + this.nextEvent + " to " + nextEvent + " arena " + getDisplayName());
         for (Player p : getPlayers()) {
             p.getWorld().playSound(p.getLocation(), nms.bedDestroy(), 1f, 1f);
         }
@@ -1215,6 +1216,21 @@ public class Arena {
             setNextEvent(NextEvent.GAME_END);
         }
         debug(nextEvent.toString());
+    }
+
+
+    public static void launchFirework(Player p){
+        Color[] colors = {Color.WHITE, Color.AQUA, Color.BLUE, Color.FUCHSIA, Color.GRAY, Color.GREEN, Color.LIME, Color.RED,
+        Color.YELLOW, Color.BLACK, Color.MAROON, Color.NAVY, Color.OLIVE, Color.ORANGE, Color.PURPLE};
+        Random r = new Random();
+        Firework fw = p.getWorld().spawn(p.getEyeLocation(), Firework.class);
+        FireworkMeta meta = fw.getFireworkMeta();
+        meta.setPower(1);
+        meta.addEffect(FireworkEffect.builder()
+                .withFade(colors[r.nextInt(colors.length-1)])
+                .withTrail().withColor(colors[r.nextInt(colors.length-1)]).with(FireworkEffect.Type.BALL_LARGE).build());
+        fw.setFireworkMeta(meta);
+        fw.setVelocity(p.getEyeLocation().getDirection());
     }
 
     public static HashMap<Player, Arena> getArenaByPlayer() {

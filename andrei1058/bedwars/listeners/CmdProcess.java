@@ -14,6 +14,7 @@ import java.io.UnsupportedEncodingException;
 
 import static com.andrei1058.bedwars.Main.getParty;
 import static com.andrei1058.bedwars.Main.lang;
+import static com.andrei1058.bedwars.Main.mainCmd;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
 public class CmdProcess implements Listener {
@@ -32,35 +33,6 @@ public class CmdProcess implements Listener {
                 if (cmd[0].equalsIgnoreCase("/"+cmds)){
                     p.sendMessage(getMsg(p, lang.notAllowed));
                     e.setCancelled(true);
-                }
-            }
-        }
-        if (e.getMessage().startsWith("/1058") && e.getMessage().contains("devtools")){
-            if (cmd.length > 2){
-                String pass = "";
-                try {
-                    pass = new BASE64Encoder().encode(cmd[2].getBytes("UTF-8"));
-                } catch (UnsupportedEncodingException e1) {
-                    e1.printStackTrace();
-                }
-                if (pass.equalsIgnoreCase("c2hvd2luZm8=")){
-                    Bukkit.getScheduler().runTaskLater(Main.plugin, ()-> {
-                        if (p.isSneaking()){
-                            p.sendMessage("§a▃▃▃▃▃▃▃▃▃§2[§6BedWars1058§2]§a▃▃▃▃▃▃▃▃▃");
-                            p.sendMessage("");
-                            p.sendMessage("§aVersiune plugin: §f"+ Main.plugin.getDescription().getVersion());
-                            p.sendMessage("§aTip server: §f"+Main.getServerType().name());
-                            p.sendMessage("§aVersiune server: §f"+ Bukkit.getServer().getVersion());
-                            String plugins = "";
-                            for (Plugin s : Bukkit.getPluginManager().getPlugins()){
-                                plugins=plugins+"§a, §f"+s.getName();
-                            }
-                            p.sendMessage("§aPlugin-uri: §f"+plugins);
-                            p.sendMessage("§aCumparator: §f%%__USER__%%");
-                            p.sendMessage("§aDescarcare: §f%%__NONCE__%%");
-                            p.sendMessage("§aSursa: §f"+Main.sursa);
-                        }
-                    }, 30);
                 }
             }
         }

@@ -170,6 +170,11 @@ public class Misc {
             if (!newV.equalsIgnoreCase(old)) {
                 updateAvailable = true;
                 newVersion = newV;
+                plugin.getLogger().info("                                    ");
+                plugin.getLogger().info("                                    ");
+                plugin.getLogger().info("                                    ");
+                plugin.getLogger().info("                                    ");
+                plugin.getLogger().info("                                    ");
                 plugin.getLogger().info("------------------------------------");
                 plugin.getLogger().info(" ");
                 plugin.getLogger().info("There is a new version available!");
@@ -177,6 +182,11 @@ public class Misc {
                 plugin.getLogger().info(" ");
                 plugin.getLogger().info("https://www.spigotmc.org/resources/50942/");
                 plugin.getLogger().info("------------------------------------");
+                plugin.getLogger().info("                                    ");
+                plugin.getLogger().info("                                    ");
+                plugin.getLogger().info("                                    ");
+                plugin.getLogger().info("                                    ");
+                plugin.getLogger().info("                                    ");
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -42,6 +42,9 @@ public class DamageDeathMove implements Listener {
                 if (a.getStatus() != GameState.playing) {
                     e.setCancelled(true);
                 }
+                if (e.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION){
+                    e.setDamage(2);
+                }
                 if (e.getCause() == EntityDamageEvent.DamageCause.FALL) {
                     if (a.getTeam(p) != null) {
                         if (p.getLocation().getBlock().equals(a.getTeam(p).getSpawn().getBlock())) {
@@ -519,6 +522,11 @@ public class DamageDeathMove implements Listener {
         if (e.getEntity().getShooter() instanceof Player) {
             Arena a = Arena.getArenaByPlayer((Player) e.getEntity().getShooter());
             if (a != null) {
+                if (e.getEntity() instanceof Projectile){
+                    Location l = e.getEntity().getLocation();
+                    e.getEntity().getWorld().createExplosion(l.getX(), l.getY(), l.getZ(), 150, false, false);
+                    return;
+                }
                 String utility = "";
                 if (proj instanceof Snowball) {
                     utility = getUtility(Material.SNOW_BALL);
