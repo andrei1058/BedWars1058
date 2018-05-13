@@ -224,6 +224,20 @@ public class MainCommand extends BukkitCommand {
             if (!p.isOp()){
                 return true;
             }
+            if (args[0].equalsIgnoreCase("forcestart")){
+                Arena a = Arena.getArenaByPlayer(p);
+                if (a == null){
+                    p.sendMessage("§c▪ §7You're not playing!");
+                    return true;
+                }
+                if (!a.isPlayer(p)){
+                    p.sendMessage("§c▪ §7You're not playing!");
+                    return true;
+                }
+                a.setCountdownS(5);
+                p.sendMessage("§c▪ §7Countdown shortened!");
+                return true;
+            }
             if (safeMode && p.isOp()){
                 p.sendMessage("§c▪ §7You should disable the safemode in order to use setup commands.");
                 p.sendMessage("§a▪ §7Just type in the console: §o/"+getName()+" disablesafemode");

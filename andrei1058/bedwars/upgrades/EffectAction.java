@@ -17,7 +17,7 @@ public class EffectAction extends UpgradeAction {
         this.amplifier = amplifier;
         this.apply = apply;
         this.duration = duration;
-        plugin.debug("loading new EffectAction: "+getName());
+        plugin.debug("Loading new EffectAction: "+getName());
     }
 
     @Override

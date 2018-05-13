@@ -12,9 +12,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static com.andrei1058.bedwars.Main.database;
-import static com.andrei1058.bedwars.Main.lang;
-import static com.andrei1058.bedwars.Main.nms;
+import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.Misc.replaceStatsPlaceholders;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 import static com.andrei1058.bedwars.configuration.Language.getScoreboard;
@@ -111,7 +109,8 @@ public class SBoard {
 
                 temp = temp.replace("{server}", Bukkit.getServer().getMotd()).replace("{on}", String.valueOf(Bukkit.getOnlinePlayers().size()))
                         .replace("{max}", String.valueOf(Bukkit.getServer().getMaxPlayers())).replace("{date}",
-                                new SimpleDateFormat(getMsg(getP(), lang.dateFormat)).format(new Date(System.currentTimeMillis())));
+                                new SimpleDateFormat(getMsg(getP(), lang.dateFormat)).format(new Date(System.currentTimeMillis())))
+                .replace("{money}", String.valueOf(getEconomy().getMoney(p)));
 
                 setContent(t, replaceStatsPlaceholders(temp,
                         kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never));
@@ -120,7 +119,7 @@ public class SBoard {
                 setContent(t, temp.replace("{map}", arena.getDisplayName()).replace("{server}", Bukkit.getServer().getMotd())
                         .replace("{on}", String.valueOf(arena.getPlayers().size())).replace("{max}", String.valueOf(arena.getMaxPlayers()))
                         .replace("{time}", String.valueOf(arena.getCountdownS())).replace("{player}", p.getName())
-                        .replace("{date}", new SimpleDateFormat(getMsg(getP(), lang.dateFormat)).format(new Date(System.currentTimeMillis()))));
+                        .replace("{money}", String.valueOf(getEconomy().getMoney(p))).replace("{date}", new SimpleDateFormat(getMsg(getP(), lang.dateFormat)).format(new Date(System.currentTimeMillis()))));
             } else if (arena.getStatus() == GameState.playing) {
                 String[] ne = getNextEvent();
                 for (BedWarsTeam team : arena.getTeams()) {
@@ -133,7 +132,7 @@ public class SBoard {
                         .replace("{player}", p.getName()).replace("{date}", new SimpleDateFormat(getMsg(getP(), lang.dateFormat)).format(new Date(System.currentTimeMillis())))
                         .replace("{kills}", String.valueOf(arena.getPlayerKills(getP(), false))).replace("{finalKills}", String.valueOf(arena.getPlayerKills(getP(), true)))
                         .replace("{beds}", String.valueOf(arena.getPlayerBedsDestroyed(getP()))).replace("{time}", ne[1])
-                        .replace("{nextEvent}", ne[0]));
+                        .replace("{nextEvent}", ne[0]).replace("{money}", String.valueOf(getEconomy().getMoney(p))));
             }
         }
     }

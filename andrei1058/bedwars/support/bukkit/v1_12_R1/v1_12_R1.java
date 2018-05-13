@@ -9,6 +9,7 @@ import com.andrei1058.bedwars.support.bukkit.NMS;
 import com.google.common.collect.Sets;
 import net.minecraft.server.v1_12_R1.*;
 import net.minecraft.server.v1_12_R1.Item;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.block.Bed;
@@ -457,6 +458,18 @@ public class v1_12_R1 implements NMS {
             bed.update();
         }
     }
+
+    @Override
+    public void registerTntWhitelist() {
+        try {
+            Field field = Block.class.getDeclaredField("durability");
+            field.setAccessible(true);
+            field.set(Block.getByName("glass"), 300f);
+            field.set(Block.getByName("stained_glass"), 300f);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
     /*@Override
     public void spawnDragon(Location l, BedWarsTeam bwt) {
         WorldServer mcWorld = ((CraftWorld) l.getWorld()).getHandle();
@@ -472,4 +485,5 @@ public class v1_12_R1 implements NMS {
         PacketPlayOutNamedEntitySpawn packet = new PacketPlayOutNamedEntitySpawn(((CraftPlayer) victim).getHandle());
         ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
     }
+
 }

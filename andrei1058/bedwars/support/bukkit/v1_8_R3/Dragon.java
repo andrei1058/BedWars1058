@@ -440,7 +440,9 @@ public class Dragon extends EntityInsentient implements IComplex, IMonster {
                     BlockPosition blockposition = new BlockPosition(k1, l1, i2);
                     net.minecraft.server.v1_8_R3.Block block = this.world.getType(blockposition).getBlock();
                     if (block.getMaterial() != Material.AIR) {
-                        if (block != Blocks.BARRIER && block != Blocks.OBSIDIAN && block != Blocks.END_STONE && block != Blocks.BEDROCK && block != Blocks.COMMAND_BLOCK) {
+                        if (block != Blocks.BARRIER && block != Blocks.OBSIDIAN
+                                && block != Blocks.END_STONE && block != Blocks.BEDROCK && block != Blocks.COMMAND_BLOCK
+                                && block != Blocks.GLASS && block != Blocks.STAINED_GLASS) {
                             flag1 = true;
                             destroyedBlocks.add(craftWorld.getBlockAt(k1, l1, i2));
                         } else {

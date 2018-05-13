@@ -128,6 +128,11 @@ public class JoinLeaveTeleport implements Listener {
         if (getServerType() != ServerType.SHARED) {
             e.setQuitMessage(null);
         }
+        if (getParty().isInternal()){
+            if (getParty().hasParty(p)){
+                getParty().removeFromParty(p);
+            }
+        }
     }
 
     @EventHandler

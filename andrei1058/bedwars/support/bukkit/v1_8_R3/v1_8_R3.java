@@ -6,7 +6,9 @@ import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.ShopHolo;
 import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.support.bukkit.NMS;
+import net.minecraft.server.v1_12_R1.BossBattle;
 import net.minecraft.server.v1_8_R3.*;
+import net.minecraft.server.v1_9_R1.PacketPlayOutBoss;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -25,6 +27,7 @@ import org.bukkit.entity.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scoreboard.Team;
 
 import java.lang.reflect.Field;
@@ -471,11 +474,24 @@ public class v1_8_R3 implements NMS {
         Dragon customEnt = new Dragon(mcWorld, bwt);
         customEnt.setLocation(l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch());
         ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
+        customEnt.getBukkitEntity().setMetadata("DragonTeam", new FixedMetadataValue(plugin, bwt));
         mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
     }
 
     @Override
     public void colorBed(BedWarsTeam bwt, BlockState bed) {
 
+    }
+
+    @Override
+    public void registerTntWhitelist() {
+        try {
+            Field field = Block.class.getDeclaredField("durability");
+            field.setAccessible(true);
+            field.set(Block.getByName("glass"), 300f);
+            field.set(Block.getByName("stained_glass"), 300f);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 }

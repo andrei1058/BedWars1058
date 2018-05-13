@@ -161,6 +161,7 @@ public class Arena {
     }
 
     public void addPlayer(Player p, boolean skipOwnerCheck) {
+        debug("Player added: " + p.getName()+" arena: "+getWorldName());
         /* used for base enter/leave event */
         if (isOnABase.containsKey(p)) {
             isOnABase.remove(p);
@@ -230,15 +231,18 @@ public class Arena {
 
             /** check if you can start the arena */
             if (status == GameState.waiting) {
-                boolean teams = false;
+                int teams = 0, teammates = 0;
                 for (Player on : getPlayers()) {
-                    if (getParty().hasParty(on)) {
-                        teams = true;
+                    if (getParty().isOwner(on)) {
+                        teams++;
+                    }
+                    if (getParty().hasParty(on)){
+                        teammates++;
                     }
                 }
-                if (minPlayers < players.size() && teams) {
+                if (minPlayers <= players.size() && teams > 0 && players.size() != teammates/teams) {
                     setStatus(GameState.starting);
-                } else if (players.size() >= minPlayers && !teams) {
+                } else if (players.size() >= minPlayers && teams == 0) {
                     setStatus(GameState.starting);
                 }
             }
@@ -269,6 +273,7 @@ public class Arena {
     }
 
     public void addSpectator(Player p, boolean playerBefore) {
+        debug("Spectator added: " + p.getName()+" arena: "+getWorldName());
         if (allowSpectate || playerBefore) {
             p.closeInventory();
             p.teleport(cm.getArenaLoc("waiting.Loc"));
@@ -319,6 +324,7 @@ public class Arena {
     }
 
     public void removePlayer(Player p) {
+        debug("Player removed: " + p.getName()+" arena: "+getWorldName());
         if (getStatus() == GameState.playing) {
             for (BedWarsTeam t : getTeams()) {
                 if (t.isMember(p)) {
@@ -335,8 +341,10 @@ public class Arena {
             p.removePotionEffect(pf.getType());
         }
 
-        for (Player on : players) {
-            on.sendMessage(getMsg(p, Language.playerLeft).replace("{player}", p.getName()));
+        if (status != GameState.restarting) {
+            for (Player on : players) {
+                on.sendMessage(getMsg(p, Language.playerLeft).replace("{player}", p.getName()));
+            }
         }
 
         if (getServerType() != ServerType.BUNGEE) {
@@ -425,19 +433,22 @@ public class Arena {
             p.teleport(config.getConfigLoc("lobbyLoc"));
         }
         p.setPlayerListName(p.getName());
-        for (Player on : Bukkit.getOnlinePlayers()) {
-            if (getArenaByPlayer(on) == null) {
-                on.showPlayer(p);
-                p.showPlayer(on);
-            } else {
-                p.hidePlayer(on);
-                on.hidePlayer(p);
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            for (Player on : Bukkit.getOnlinePlayers()) {
+                if (getArenaByPlayer(on) == null) {
+                    on.showPlayer(p);
+                    p.showPlayer(on);
+                } else {
+                    p.hidePlayer(on);
+                    on.hidePlayer(p);
+                }
             }
-        }
-        Misc.giveLobbySb(p);
+            Misc.giveLobbySb(p);
+        }, 5L);
     }
 
     public void removeSpectator(Player p) {
+        debug("Spectator removed: " + p.getName()+" arena: "+getWorldName());
         spectators.remove(p);
         removeArenaByPlayer(p);
         p.getInventory().clear();
@@ -461,8 +472,8 @@ public class Arena {
         if (getServerType() == ServerType.BUNGEE) {
             Misc.moveToLobbyOrKick(p);
         }
-        for (BedWarsTeam bwt : getTeams()){
-            if (bwt.getMembersCache().contains(p)){
+        for (BedWarsTeam bwt : getTeams()) {
+            if (bwt.getMembersCache().contains(p)) {
                 if (status == GameState.playing) {
                     int deaths = playerDeaths.containsKey(p) ? playerDeaths.get(p) : 0;
                     int final_deaths = playerFinalKillDeaths.containsKey(p) ? playerFinalKillDeaths.get(p) : 0;
@@ -481,16 +492,18 @@ public class Arena {
             }
         }
         p.setPlayerListName(p.getName());
-        for (Player on : Bukkit.getOnlinePlayers()) {
-            if (getArenaByPlayer(on) == null) {
-                on.showPlayer(p);
-                p.showPlayer(on);
-            } else {
-                on.hidePlayer(p);
-                p.hidePlayer(on);
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            for (Player on : Bukkit.getOnlinePlayers()) {
+                if (getArenaByPlayer(on) == null) {
+                    on.showPlayer(p);
+                    p.showPlayer(on);
+                } else {
+                    on.hidePlayer(p);
+                    p.hidePlayer(on);
+                }
             }
-        }
-        Misc.giveLobbySb(p);
+            Misc.giveLobbySb(p);
+        }, 5L);
     }
 
     public void disable() {
@@ -818,8 +831,8 @@ public class Arena {
                 }
                 break;
             case restarting:
-                for (Player p : players){
-                    for (int i = 0; i < 2; i++){
+                for (Player p : players) {
+                    for (int i = 0; i < 2; i++) {
                         launchFirework(p);
                     }
                 }
@@ -1219,16 +1232,16 @@ public class Arena {
     }
 
 
-    public static void launchFirework(Player p){
+    public static void launchFirework(Player p) {
         Color[] colors = {Color.WHITE, Color.AQUA, Color.BLUE, Color.FUCHSIA, Color.GRAY, Color.GREEN, Color.LIME, Color.RED,
-        Color.YELLOW, Color.BLACK, Color.MAROON, Color.NAVY, Color.OLIVE, Color.ORANGE, Color.PURPLE};
+                Color.YELLOW, Color.BLACK, Color.MAROON, Color.NAVY, Color.OLIVE, Color.ORANGE, Color.PURPLE};
         Random r = new Random();
         Firework fw = p.getWorld().spawn(p.getEyeLocation(), Firework.class);
         FireworkMeta meta = fw.getFireworkMeta();
         meta.setPower(1);
         meta.addEffect(FireworkEffect.builder()
-                .withFade(colors[r.nextInt(colors.length-1)])
-                .withTrail().withColor(colors[r.nextInt(colors.length-1)]).with(FireworkEffect.Type.BALL_LARGE).build());
+                .withFade(colors[r.nextInt(colors.length - 1)])
+                .withTrail().withColor(colors[r.nextInt(colors.length - 1)]).with(FireworkEffect.Type.BALL_LARGE).build());
         fw.setFireworkMeta(meta);
         fw.setVelocity(p.getEyeLocation().getDirection());
     }
@@ -1251,5 +1264,9 @@ public class Arena {
 
     public int getGameEndCountdown() {
         return gameEndCountdown;
+    }
+
+    public void setCountdownS(int countdownS) {
+        this.countdownS = countdownS;
     }
 }

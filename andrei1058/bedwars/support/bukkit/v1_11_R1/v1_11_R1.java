@@ -439,4 +439,16 @@ public class v1_11_R1 implements NMS {
     public void colorBed(BedWarsTeam bwt, BlockState bed) {
 
     }
+
+    @Override
+    public void registerTntWhitelist() {
+        try {
+            Field field = Block.class.getDeclaredField("durability");
+            field.setAccessible(true);
+            field.set(Block.getByName("glass"), 300f);
+            field.set(Block.getByName("stained_glass"), 300f);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -31,19 +31,24 @@ public class DamageDeathMove implements Listener {
     public void onDamage(EntityDamageEvent e) {
         if (Main.npcs.containsKey(e.getEntity())) {
             e.setCancelled(true);
+            return;
         }
+
         if (e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
             Arena a = Arena.getArenaByPlayer(p);
             if (a != null) {
                 if (a.isSpectator(p)) {
                     e.setCancelled(true);
+                    return;
                 }
                 if (a.getStatus() != GameState.playing) {
                     e.setCancelled(true);
+                    return;
                 }
                 if (e.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION){
-                    e.setDamage(2);
+                    e.setDamage(1);
+                    return;
                 }
                 if (e.getCause() == EntityDamageEvent.DamageCause.FALL) {
                     if (a.getTeam(p) != null) {
@@ -62,6 +67,13 @@ public class DamageDeathMove implements Listener {
 
     @EventHandler
     public void onDamageByEntity(EntityDamageByEntityEvent e) {
+        if (e.getEntity().hasMetadata("DragonTeam")){
+            Arena a = Arena.getArenaByName(e.getEntity().getWorld().getName());
+            if (a != null) {
+                e.setCancelled(true);
+                return;
+            }
+        }
         if (e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
             Arena a = Arena.getArenaByPlayer(p);
@@ -522,7 +534,7 @@ public class DamageDeathMove implements Listener {
         if (e.getEntity().getShooter() instanceof Player) {
             Arena a = Arena.getArenaByPlayer((Player) e.getEntity().getShooter());
             if (a != null) {
-                if (e.getEntity() instanceof Projectile){
+                if (e.getEntity() instanceof Fireball){
                     Location l = e.getEntity().getLocation();
                     e.getEntity().getWorld().createExplosion(l.getX(), l.getY(), l.getZ(), 150, false, false);
                     return;

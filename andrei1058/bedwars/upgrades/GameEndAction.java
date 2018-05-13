@@ -12,7 +12,7 @@ public class GameEndAction extends UpgradeAction {
     public GameEndAction(String name, int bonusDragons){
         this.name = name;
         this.bonusDragons = bonusDragons;
-        plugin.debug("loading new GameEndAction: "+getName());
+        plugin.debug("Loading new GameEndAction: "+getName());
     }
 
     @Override

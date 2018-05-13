@@ -259,17 +259,14 @@ public class BreakPlace implements Listener {
     public void onBlow(EntityExplodeEvent e) {
         if (e.blockList().isEmpty()) return;
         Arena a = Arena.getArenaByName(e.blockList().get(0).getWorld().getName());
-        if (a != null){
-            if (a.getNextEvent() == NextEvent.GAME_END && a.getStatus() != GameState.restarting) return;
-            List<Block> destroyed = e.blockList();
-            Iterator<Block> it = new ArrayList<>(destroyed).iterator();
-            while (it.hasNext()) {
-                Block block = it.next();
-                if (!a.getPlaced().contains(block)){
-                    destroyed.remove(block);
-                } else {
-                    if (block.getType() == Material.GLASS || block.getType() == Material.STAINED_GLASS){
-                        destroyed.remove(block);
+        if (a != null) {
+            if (e.getEntity().hasMetadata("bw1058") || a.getNextEvent() != NextEvent.GAME_END) {
+                List<Block> destroyed = e.blockList();
+                Iterator<Block> it = new ArrayList<>(destroyed).iterator();
+                while (it.hasNext()) {
+                    Block block = it.next();
+                    if (!a.getPlaced().contains(block)) {
+                        e.blockList().remove(block);
                     }
                 }
             }

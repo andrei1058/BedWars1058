@@ -245,6 +245,9 @@ public class Main extends JavaPlugin {
         if (config.getBoolean("formatChat")){
             registerEvents(new PlayerChat());
         }
+
+        /** Protect glass walls from tnt explosion */
+        nms.registerTntWhitelist();
     }
 
     public void onDisable() {

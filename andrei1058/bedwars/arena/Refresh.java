@@ -1,7 +1,5 @@
 package com.andrei1058.bedwars.arena;
 
-import com.andrei1058.bedwars.api.BedWars;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 

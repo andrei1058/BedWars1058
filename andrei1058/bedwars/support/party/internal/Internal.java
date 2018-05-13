@@ -71,7 +71,7 @@ public class Internal implements Party {
                 disband(member);
             } else if (p.members.contains(member)) {
                 for (Player mem : p.members) {
-                    mem.sendMessage(getMsg(mem, Language.partyLeaved).replace("{player}", mem.getName()));
+                    mem.sendMessage(getMsg(mem, Language.partyLeaved).replace("{player}", member.getName()));
                 }
                 p.members.remove(member);
                 if (p.members.isEmpty() || p.members.size() == 1) {

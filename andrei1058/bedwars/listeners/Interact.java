@@ -20,6 +20,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
@@ -72,6 +73,7 @@ public class Interact implements Listener {
                     if (inHand.getType() == Material.FIREBALL){
                         e.setCancelled(true);
                         Fireball fb = p.launchProjectile(Fireball.class);
+                        fb.setMetadata("bw1058", new FixedMetadataValue(plugin, "ceva"));
                         fb.setIsIncendiary(false);
                         //fb.setGlowing(true);
 
