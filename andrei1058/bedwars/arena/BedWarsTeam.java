@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.api.GeneratorType;
 import com.andrei1058.bedwars.api.TeamColor;
+import com.andrei1058.bedwars.configuration.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -225,7 +226,7 @@ public class BedWarsTeam {
             on.showPlayer(p);
             nms.showPlayer(p, on);
         }
-        nms.sendTitle(p, getMsg(p, lang.respawnedTitle), "", 0, 20, 0);
+        nms.sendTitle(p, getMsg(p, Messages.PLAYER_DIE_RESPAWNED_TITLE), "", 0, 20, 0);
         PlayerVault pv = getVault(p);
         if (pv != null) {
             p.getInventory().setHelmet(pv.getHelmet());
@@ -332,9 +333,9 @@ public class BedWarsTeam {
             a.setGravity(false);
             if (name != null) {
                 if (isBedDestroyed()) {
-                    a.setCustomName(getMsg(p, lang.bedHologramDestroyed));
+                    a.setCustomName(getMsg(p, Messages.BED_HOLOGRAM_DESTROYED));
                 } else {
-                    a.setCustomName(getMsg(p, lang.bedHologram));
+                    a.setCustomName(getMsg(p, Messages.BED_HOLOGRAM_DEFEND));
                 }
                 a.setCustomNameVisible(true);
             }

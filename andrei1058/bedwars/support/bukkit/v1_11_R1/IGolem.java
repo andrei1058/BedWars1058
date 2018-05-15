@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.support.bukkit.v1_11_R1;
 
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
+import com.andrei1058.bedwars.configuration.Messages;
 import com.google.common.collect.Sets;
 import net.minecraft.server.v1_11_R1.*;
 import org.apache.commons.lang3.StringUtils;
@@ -56,8 +57,8 @@ public class IGolem extends EntityIronGolem {
         customEnt.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
         ((CraftLivingEntity)customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
         customEnt.setCustomNameVisible(true);
-        customEnt.setCustomName(lang.m(lang.iGolemName).replace("{despawn}", String.valueOf(shop.getInt("utilities.ironGolem.despawn"))).replace("{health}",
-                StringUtils.repeat(lang.m(lang.despawnableHealth)+" ", 10)).replace("{TeamColor}", TeamColor.getChatColor(bedWarsTeam.getColor()).toString()));
+        customEnt.setCustomName(lang.m(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME).replace("{despawn}", String.valueOf(shop.getInt("utilities.ironGolem.despawn"))).replace("{health}",
+                StringUtils.repeat(lang.m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH)+" ", 10)).replace("{TeamColor}", TeamColor.getChatColor(bedWarsTeam.getColor()).toString()));
         mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
         return customEnt;
     }

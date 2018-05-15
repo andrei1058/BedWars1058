@@ -47,7 +47,7 @@ public class SBoard {
         }
         this.setStrings(content);
         p.setScoreboard(sb);
-        dateFormat = new SimpleDateFormat(getMsg(p, lang.generatorTimerFormat));
+        dateFormat = new SimpleDateFormat(getMsg(p, Messages.FORMATTING_SCOREBOARD_NEXEVENT_TIMER));
         scoreboards.add(this);
     }
 
@@ -59,8 +59,8 @@ public class SBoard {
         o = sb.registerNewObjective("Sb", "or");
         o.setDisplaySlot(DisplaySlot.SIDEBAR);
         this.arena = arena;
-        dateFormat = new SimpleDateFormat(getMsg(p, lang.generatorTimerFormat));
-        this.setStrings(getScoreboard(p, "scoreboard." + arena.getGroup() + "Playing", lang.scoreboardDefaultPlaying));
+        dateFormat = new SimpleDateFormat(getMsg(p, Messages.FORMATTING_SCOREBOARD_NEXEVENT_TIMER));
+        this.setStrings(getScoreboard(p, "scoreboard." + arena.getGroup() + "Playing", Messages.SCOREBOARD_DEFAULT_PLAYING));
         p.setScoreboard(sb);
         scoreboards.add(this);
         Team t = sb.registerNewTeam("spect");
@@ -105,11 +105,11 @@ public class SBoard {
                         finalKills = database.getFinalKills(p), finalDeaths = database.getFinalDeaths(p), bedsDestroyed = database.getBedsDestroyed(p), gamesPlayed = database.getGamesPlayed(p);
                 Timestamp firstPlay = database.getFirstPlay(p), lastPlay = database.getLastPlay(p);
                 /** cache time format */
-                String timeFormat = getMsg(p, lang.statsDateTimeFormat), never = getMsg(p, lang.never);
+                String timeFormat = getMsg(p, Messages.FORMATTING_STATS_DATE_FORMAT), never = getMsg(p, Messages.MEANING_NEVER);
 
                 temp = temp.replace("{server}", Bukkit.getServer().getMotd()).replace("{on}", String.valueOf(Bukkit.getOnlinePlayers().size()))
                         .replace("{max}", String.valueOf(Bukkit.getServer().getMaxPlayers())).replace("{date}",
-                                new SimpleDateFormat(getMsg(getP(), lang.dateFormat)).format(new Date(System.currentTimeMillis())))
+                                new SimpleDateFormat(getMsg(getP(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis())))
                 .replace("{money}", String.valueOf(getEconomy().getMoney(p)));
 
                 setContent(t, replaceStatsPlaceholders(temp,
@@ -119,17 +119,17 @@ public class SBoard {
                 setContent(t, temp.replace("{map}", arena.getDisplayName()).replace("{server}", Bukkit.getServer().getMotd())
                         .replace("{on}", String.valueOf(arena.getPlayers().size())).replace("{max}", String.valueOf(arena.getMaxPlayers()))
                         .replace("{time}", String.valueOf(arena.getCountdownS())).replace("{player}", p.getName())
-                        .replace("{money}", String.valueOf(getEconomy().getMoney(p))).replace("{date}", new SimpleDateFormat(getMsg(getP(), lang.dateFormat)).format(new Date(System.currentTimeMillis()))));
+                        .replace("{money}", String.valueOf(getEconomy().getMoney(p))).replace("{date}", new SimpleDateFormat(getMsg(getP(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis()))));
             } else if (arena.getStatus() == GameState.playing) {
                 String[] ne = getNextEvent();
                 for (BedWarsTeam team : arena.getTeams()) {
                     temp = temp.replace("{Team" + team.getName() + "Color}", TeamColor.getChatColor(team.getColor()).toString()).replace("{Team" + team.getName() + "Name}",
-                            team.getName()).replace("{Team" + team.getName() + "Status}", String.valueOf(team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getP(), lang.bedDestroyedFormat).replace("{remainingPlayers}",
-                            String.valueOf(team.getSize())) : getMsg(getP(), lang.teamEliminatedFormat) : getMsg(getP(), lang.teamAliveFormat)) + (team.isMember(getP()) ? getMsg(getP(), lang.youScoreboardFormat) : ""));
+                            team.getName()).replace("{Team" + team.getName() + "Status}", String.valueOf(team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED).replace("{remainingPlayers}",
+                            String.valueOf(team.getSize())) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE)) + (team.isMember(getP()) ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM) : ""));
                 }
                 setContent(t, temp.replace("{map}", arena.getDisplayName()).replace("{server}", Bukkit.getServer().getMotd())
                         .replace("{on}", String.valueOf(arena.getPlayers().size())).replace("{max}", String.valueOf(arena.getMaxPlayers()))
-                        .replace("{player}", p.getName()).replace("{date}", new SimpleDateFormat(getMsg(getP(), lang.dateFormat)).format(new Date(System.currentTimeMillis())))
+                        .replace("{player}", p.getName()).replace("{date}", new SimpleDateFormat(getMsg(getP(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis())))
                         .replace("{kills}", String.valueOf(arena.getPlayerKills(getP(), false))).replace("{finalKills}", String.valueOf(arena.getPlayerKills(getP(), true)))
                         .replace("{beds}", String.valueOf(arena.getPlayerBedsDestroyed(getP()))).replace("{time}", ne[1])
                         .replace("{nextEvent}", ne[0]).replace("{money}", String.valueOf(getEconomy().getMoney(p))));
@@ -163,7 +163,7 @@ public class SBoard {
 
 
     public void refresh() {
-        String date = new SimpleDateFormat(getMsg(getP(), lang.dateFormat)).format(new Date(System.currentTimeMillis()));
+        String date = new SimpleDateFormat(getMsg(getP(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis()));
         if (arena == null) {
             for (Map.Entry<Team, String> e : toRefresh.entrySet()) {
                 setContent(e.getKey(), e.getValue().replace("{on}", String.valueOf(Bukkit.getOnlinePlayers().size()))
@@ -184,8 +184,8 @@ public class SBoard {
                     String text = e.getValue();
                     for (BedWarsTeam team : arena.getTeams()) {
                         text = text.replace("{Team" + team.getName() + "Color}", TeamColor.getChatColor(team.getColor()).toString()).replace("{Team" + team.getName() + "Name}",
-                                team.getName()).replace("{Team" + team.getName() + "Status}", String.valueOf(team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getP(), lang.bedDestroyedFormat).replace("{remainingPlayers}",
-                                String.valueOf(team.getSize())) : getMsg(getP(), lang.teamEliminatedFormat) : getMsg(getP(), lang.teamAliveFormat)) + (team.isMember(getP()) ? getMsg(getP(), lang.youScoreboardFormat) : ""));
+                                team.getName()).replace("{Team" + team.getName() + "Status}", String.valueOf(team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED).replace("{remainingPlayers}",
+                                String.valueOf(team.getSize())) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE)) + (team.isMember(getP()) ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM) : ""));
                     }
                     setContent(e.getKey(), text.replace("{on}", String.valueOf(arena.getPlayers().size())).replace("{max}", String.valueOf(arena.getMaxPlayers()))
                             .replace("{date}", date).replace("{kills}", kills).replace("{finalKills}", finalKills).replace("{beds}", beds)

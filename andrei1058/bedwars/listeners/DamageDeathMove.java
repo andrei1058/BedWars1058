@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.*;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.configuration.Language;
+import com.andrei1058.bedwars.configuration.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -206,7 +207,7 @@ public class DamageDeathMove implements Listener {
                     victim.spigot().respawn();
                     return;
                 }
-                String message = t.isBedDestroyed() ? lang.unknowReasonDieFinalKill : lang.unknowReasonDie;
+                String message = t.isBedDestroyed() ? Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL : Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR;
                 if (damageEvent.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
                     LastHit lh = getLastHit().get(victim);
                     if (lh != null) {
@@ -215,12 +216,12 @@ public class DamageDeathMove implements Listener {
                         }
                     }
                     if (killer == null) {
-                        message = t.isBedDestroyed() ? lang.playerExplodeByBombFinalKillNoKiller : lang.playerExplodeByBombNoKiller;
+                        message = t.isBedDestroyed() ? Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_FINAL_KILL : Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_REGULAR;
                     } else {
                         if (killer != victim) {
-                            message = t.isBedDestroyed() ? lang.playerExplodeByBombFinalKill : lang.playerExplodeByBomb;
+                            message = t.isBedDestroyed() ? Messages.PLAYER_DIE_EXPLOSION_WITH_SOURCE_FINAL_KILL : Messages.PLAYER_DIE_EXPLOSION_WITH_SOURCE_REGULAR_KILL;
                         } else {
-                            message = t.isBedDestroyed() ? lang.playerExplodeByBombFinalKillNoKiller : lang.playerExplodeByBombNoKiller;
+                            message = t.isBedDestroyed() ? Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_FINAL_KILL : Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_REGULAR;
                         }
                     }
 
@@ -233,17 +234,17 @@ public class DamageDeathMove implements Listener {
                         }
                     }
                     if (killer == null) {
-                        message = t.isBedDestroyed() ? lang.playerFallInVoidFinalKill : lang.playerFallInVoid;
+                        message = t.isBedDestroyed() ? Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL : Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL;
                     } else {
                         if (killer != victim) {
-                            message = t.isBedDestroyed() ? lang.playerKnockedInVoidFinalKill : lang.playerKnockedInVoid;
+                            message = t.isBedDestroyed() ? Messages.PLAYER_DIE_KNOCKED_IN_VOID_FINAL_KILL : Messages.PLAYER_DIE_KNOCKED_IN_VOID_REGULAR_KILL;
                         } else {
-                            message = t.isBedDestroyed() ? lang.playerFallInVoidFinalKill : lang.playerFallInVoid;
+                            message = t.isBedDestroyed() ? Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL : Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL;
                         }
                     }
                 } else if (damageEvent.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK || damageEvent.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
                     if (killer != null) {
-                        message = t.isBedDestroyed() ? lang.playerDieAttackFinalKill : lang.playerDieAttack;
+                        message = t.isBedDestroyed() ? Messages.PLAYER_DIE_PVP_FINAL_KILL : Messages.PLAYER_DIE_PVP_REGULAR_KILL;
                     }
                 }
 
@@ -348,10 +349,10 @@ public class DamageDeathMove implements Listener {
                 a.addSpectator(e.getPlayer(), true);
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
                     t.getMembers().remove(e.getPlayer());
-                    e.getPlayer().sendMessage(getMsg(e.getPlayer(), lang.youReEliminated));
+                    e.getPlayer().sendMessage(getMsg(e.getPlayer(), Messages.PLAYER_DIE_ELIMINATED_CHAT));
                     if (t.getMembers().isEmpty()) {
                         for (Player p : a.getWorld().getPlayers()) {
-                            p.sendMessage(getMsg(p, lang.teamEliminatedChat).replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getName()));
+                            p.sendMessage(getMsg(p, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getName()));
                         }
                         a.checkWinner();
                     }
@@ -459,16 +460,16 @@ public class DamageDeathMove implements Listener {
                                     t.disableTrap();
                                     for (Player mem : t.getMembers()) {
                                         if (t.isTrapTitle()) {
-                                            nms.sendTitle(mem, getMsg(mem, lang.enemyBaseEnterTitle), null, 0, 50, 0);
+                                            nms.sendTitle(mem, getMsg(mem, Messages.ARENA_ENEMY_BASE_ENTER_TITLE), null, 0, 50, 0);
                                         }
                                         if (t.isTrapSubtitle()) {
-                                            nms.sendTitle(mem, null, getMsg(mem, lang.enemyBaseEnterSubtitle), 0, 50, 0);
+                                            nms.sendTitle(mem, null, getMsg(mem, Messages.ARENA_ENEMY_BASE_ENTER_SUBTITLE), 0, 50, 0);
                                         }
                                         if (t.isTrapAction()) {
-                                            nms.playAction(mem, getMsg(mem, lang.enemyBaseEnterAction));
+                                            nms.playAction(mem, getMsg(mem, Messages.ARENA_ENEMY_BASE_ENTER_ACTION));
                                         }
                                         if (t.isTrapChat()) {
-                                            mem.sendMessage(getMsg(mem, lang.enemyBaseEnterChat));
+                                            mem.sendMessage(getMsg(mem, Messages.ARENA_ENEMY_BASE_ENTER_CHAT));
                                         }
                                     }
                                 }

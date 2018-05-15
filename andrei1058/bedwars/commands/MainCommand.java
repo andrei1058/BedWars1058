@@ -7,6 +7,7 @@ import com.andrei1058.bedwars.arena.ArenaGUI;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.configuration.ConfigManager;
 import com.andrei1058.bedwars.configuration.Language;
+import com.andrei1058.bedwars.configuration.Messages;
 import com.google.common.base.Joiner;
 import net.md_5.bungee.api.chat.*;
 import org.apache.commons.io.FileUtils;
@@ -137,7 +138,7 @@ public class MainCommand extends BukkitCommand {
                 credits.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§7SafeMode: " + (safeMode ? "§aEnabled" : "§cDisabled") + "\n§7Arenas: " + (Arena.getArenas().size() == 0 ?
                         "§c0" : "§a" + Arena.getArenas().size())).create()));
                 p.spigot().sendMessage(credits);
-                for (String string : getList(p, Language.cmdMain)) {
+                for (String string : getList(p, Messages.COMMAND_MAIN)) {
                     p.sendMessage(string);
                 }
             }
@@ -147,19 +148,19 @@ public class MainCommand extends BukkitCommand {
             switch (args[0].toLowerCase()) {
                 case "join":
                     if (args.length < 2) {
-                        p.sendMessage(getMsg(p, lang.joinCmdUsage));
+                        p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_USAGE));
                         return true;
                     }
                     if (isArenaGroup(args[1])) {
                         if (!Arena.joinRandomFromGroup(p, args[1])) {
-                            p.sendMessage(getMsg(p, Language.noEmptyArena));
+                            p.sendMessage(getMsg(p, Messages.ARENA_JOIN_DENIED_NO_EMPTY_FOUND));
                         }
                         return true;
                     } else if (Arena.getArenaByName(args[1]) != null) {
                         Arena.getArenaByName(args[1]).addPlayer(p, false);
                         return true;
                     }
-                    p.sendMessage(getMsg(p, Language.arenaOrGroupNotFound).replace("{name}", args[1]));
+                    p.sendMessage(getMsg(p, Messages.ARENA_JOIN_DENIED_GROUP_OR_ARENA_NOT_FOUND).replace("{name}", args[1]));
                     x = true;
                     break;
                 case "leave":
@@ -168,7 +169,7 @@ public class MainCommand extends BukkitCommand {
                         if (getServerType() == ServerType.MULTIARENA && spigot.getBoolean("settings.bungeecord")){
                             Misc.moveToLobbyOrKick(p);
                         } else {
-                            p.sendMessage(getMsg(p, Language.notInArena));
+                            p.sendMessage(getMsg(p, Messages.COMMAND_LEAVE_DENIED_NOT_IN_ARENA));
                         }
                     } else {
                         if (a.isPlayer(p)) {
@@ -182,23 +183,23 @@ public class MainCommand extends BukkitCommand {
                 case "lang":
                 case "language":
                     if (args.length == 1) {
-                        p.sendMessage(getMsg(p, Language.langListHeader));
+                        p.sendMessage(getMsg(p, Messages.COMMAND_LANG_LIST_HEADER));
                         for (Language l : Language.getLanguages()) {
-                            p.sendMessage(getMsg(p, Language.langListFormat).replace("{iso}", l.getIso()).replace("{name}", l.getLangName()));
+                            p.sendMessage(getMsg(p, Messages.COMMAND_LANG_LIST_FORMAT).replace("{iso}", l.getIso()).replace("{name}", l.getLangName()));
                         }
-                        p.sendMessage(getMsg(p, Language.langCmdUsage));
+                        p.sendMessage(getMsg(p, Messages.COMMAND_LANG_USAGE));
                         return true;
                     } else if (Language.isLanguageExist(args[1])) {
                         if (Arena.getArenaByPlayer(p) == null) {
                             getLangSupport().setLang(p, args[1]);
                             Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                                p.sendMessage(getMsg(p, Language.langSet));
+                                p.sendMessage(getMsg(p, Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY));
                             }, 10L);
                         } else {
-                            p.sendMessage(getMsg(p, Language.cantLangPlaying));
+                            p.sendMessage(getMsg(p, Messages.COMMAND_LANG_USAGE_DENIED));
                         }
                     } else {
-                        p.sendMessage(getMsg(p, Language.langNotExist));
+                        p.sendMessage(getMsg(p, Messages.COMMAND_LANG_SELECTED_NOT_EXIST));
                     }
                     x = true;
                     break;

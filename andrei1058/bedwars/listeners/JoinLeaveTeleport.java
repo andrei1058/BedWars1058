@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.configuration.Language;
+import com.andrei1058.bedwars.configuration.Messages;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -25,7 +26,7 @@ public class JoinLeaveTeleport implements Listener {
             Arena a = Arena.getArenas().get(0);
             if (a.getStatus() == GameState.waiting || (a.getStatus() == GameState.starting && a.getCountdownS() > 2)) {
                 if (a.getPlayers().size() >= a.getMaxPlayers() && !Arena.isVip(e.getPlayer())) {
-                    e.setKickMessage(getMsg(e.getPlayer(), Language.fullArena));
+                    e.setKickMessage(getMsg(e.getPlayer(), Messages.ARENA_JOIN_DENIED_IS_FULL));
                     e.setResult(PlayerLoginEvent.Result.KICK_FULL);
                     return;
                 } else if (a.getPlayers().size() >= a.getMaxPlayers() && Arena.isVip(e.getPlayer())) {
@@ -34,11 +35,11 @@ public class JoinLeaveTeleport implements Listener {
                         if (!Arena.isVip(on)) {
                             canJoin = true;
                             a.removePlayer(on);
-                            on.kickPlayer(getMsg(on, Language.vipJoinedSlot));
+                            on.kickPlayer(getMsg(on, Messages.ARENA_JOIN_VIP_KICK));
                         }
                     }
                     if (!canJoin) {
-                        e.setKickMessage(getMsg(e.getPlayer(), Language.vipNoJoin));
+                        e.setKickMessage(getMsg(e.getPlayer(), Messages.ARENA_JOIN_DENIED_IS_FULL_VIP_REQUIRED));
                         e.setResult(PlayerLoginEvent.Result.KICK_FULL);
                         return;
                     }

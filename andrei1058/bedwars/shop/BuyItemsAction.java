@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.configuration.Language;
+import com.andrei1058.bedwars.configuration.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -16,8 +17,6 @@ import java.util.List;
 import static com.andrei1058.bedwars.Main.getEconomy;
 import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
-import static com.andrei1058.bedwars.configuration.Language.shopPath;
-import static com.andrei1058.bedwars.configuration.Language.youPurchased;
 
 public class BuyItemsAction extends ContentAction {
 
@@ -79,7 +78,7 @@ public class BuyItemsAction extends ContentAction {
         }
         if (money < getCost()) {
             p.playSound(p.getLocation(), nms.insufficientMoney(), 1f, 1f);
-            p.sendMessage(getMsg(p, Language.insufficientMoney).replace("{currency}", getMsg(p, "meaning." + getCurrency().toLowerCase())).replace("{amount}", String.valueOf(getCost() - money)));
+            p.sendMessage(getMsg(p, Messages.SHOP_INSUFFICIENT_MONEY).replace("{currency}", getMsg(p, "meaning." + getCurrency().toLowerCase())).replace("{amount}", String.valueOf(getCost() - money)));
             return;
         }
         boolean done = false;
@@ -107,7 +106,7 @@ public class BuyItemsAction extends ContentAction {
         }
         p.playSound(p.getLocation(), nms.bought(), 1f, 1f);
         getCategoryContent().getShopCategory().openToPlayer(p);
-        p.sendMessage(getMsg(p, youPurchased).replace("{item}", ChatColor.stripColor(getMsg(p, getCategoryContent().getShopCategory().getName().replace("main.", shopPath) + "." + getCategoryContent().getName() + ".name"))));
+        p.sendMessage(getMsg(p, Messages.SHOP_NEW_PURCHASE).replace("{item}", ChatColor.stripColor(getMsg(p, getCategoryContent().getShopCategory().getName().replace("main.", Messages.SHOP_PATH) + "." + getCategoryContent().getName() + ".name"))));
         BedWarsTeam.PlayerVault pv = BedWarsTeam.getVault(p);
         for (ShopItem si : getItems()) {
             if (si.isPermanent() && pv != null) {

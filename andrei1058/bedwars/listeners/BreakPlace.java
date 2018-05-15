@@ -6,6 +6,7 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.OreGenerator;
 import com.andrei1058.bedwars.configuration.ConfigPath;
+import com.andrei1058.bedwars.configuration.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -58,24 +59,24 @@ public class BreakPlace implements Listener {
                 for (BedWarsTeam t : a.getTeams()) {
                     if (t.getSpawn().distance(e.getBlockPlaced().getLocation()) <= a.getCm().getInt("spawnProtection")) {
                         e.setCancelled(true);
-                        p.sendMessage(getMsg(p, lang.cantPlaceHere));
+                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
                         return;
                     }
                     if (t.getShop().distance(e.getBlockPlaced().getLocation()) <= a.getCm().getInt("shopProtection")) {
                         e.setCancelled(true);
-                        p.sendMessage(getMsg(p, lang.cantPlaceHere));
+                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
                         return;
                     }
                     if (t.getTeamUpgrades().distance(e.getBlockPlaced().getLocation()) <= a.getCm().getInt("upgradesProtection")) {
                         e.setCancelled(true);
-                        p.sendMessage(getMsg(p, lang.cantPlaceHere));
+                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
                         return;
                     }
                 }
                 for (OreGenerator o : OreGenerator.getGenerators()) {
                     if (o.getLocation().distance(e.getBlock().getLocation()) <= 1) {
                         e.setCancelled(true);
-                        p.sendMessage(getMsg(p, lang.cantPlaceHere));
+                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
                         return;
                     }
                 }
@@ -141,7 +142,7 @@ public class BreakPlace implements Listener {
                                 if (t.getBed().getBlockX() == x && t.getBed().getBlockY() == y && t.getBed().getBlockZ() == z) {
                                     if (!t.isBedDestroyed()) {
                                         if (t.isMember(p)) {
-                                            p.sendMessage(getMsg(p, lang.cantDestroyOwnBed));
+                                            p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_OWN_BED));
                                             e.setCancelled(true);
                                             return;
                                         } else {
@@ -151,12 +152,12 @@ public class BreakPlace implements Listener {
                                             Bukkit.getPluginManager().callEvent(new BedBreakEvent(e.getPlayer(), a.getTeam(p), t));
                                             for (Player on : a.getWorld().getPlayers()) {
                                                 if (t.isMember(on)) {
-                                                    on.sendMessage(getMsg(on, lang.teamBedDestroyTeam).replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getName())
+                                                    on.sendMessage(getMsg(on, Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM).replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getName())
                                                             .replace("{PlayerColor}", TeamColor.getChatColor(a.getTeam(p).getColor()).toString()).replace("{PlayerName}", p.getName()));
-                                                    nms.sendTitle(on, getMsg(on, lang.bedDestroyedTitle), getMsg(on, lang.bedDestroyedSub), 0, 25, 0);
+                                                    nms.sendTitle(on, getMsg(on, Messages.INTERACT_BED_DESTROY_TITLE_ANNOUNCEMENT), getMsg(on, Messages.INTERACT_BED_DESTROY_SUBTITLE_ANNOUNCEMENT), 0, 25, 0);
                                                     on.playSound(on.getLocation(), nms.bedDestroy(), 2f, 2f);
                                                 } else {
-                                                    on.sendMessage(getMsg(on, lang.teamBedDestroy).replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getName())
+                                                    on.sendMessage(getMsg(on, Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT).replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getName())
                                                             .replace("{PlayerColor}", TeamColor.getChatColor(a.getTeam(p).getColor()).toString()).replace("{PlayerName}", p.getName()));
                                                     on.playSound(on.getLocation(), nms.bedDestroy(), 1f, 1f);
                                                 }
@@ -171,7 +172,7 @@ public class BreakPlace implements Listener {
                 }
             }
             if (!a.getPlaced().contains(e.getBlock())) {
-                p.sendMessage(getMsg(p, lang.cantBreak));
+                p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
                 e.setCancelled(true);
                 return;
             }

@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.ShopHolo;
 import com.andrei1058.bedwars.configuration.Language;
+import com.andrei1058.bedwars.configuration.Messages;
 import com.andrei1058.bedwars.support.bukkit.NMS;
 import com.google.common.collect.Sets;
 import net.minecraft.server.v1_10_R1.*;
@@ -52,12 +53,12 @@ public class v1_10_R1 implements NMS {
     }
 
     public void spawnSilverfish(Location loc, BedWarsTeam bedWarsTeam) {
-        new Despawnable(Silverfish.spawn(loc, bedWarsTeam), bedWarsTeam, shop.getInt("utilities.silverfish.despawn"), lang.utilitySiverfish);
+        new Despawnable(Silverfish.spawn(loc, bedWarsTeam), bedWarsTeam, shop.getInt("utilities.silverfish.despawn"), Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME);
     }
 
     @Override
     public void spawnIronGolem(Location loc, BedWarsTeam bedWarsTeam) {
-        new Despawnable(IGolem.spawn(loc, bedWarsTeam), bedWarsTeam, shop.getInt("utilities.ironGolem.despawn"), lang.iGolemName);
+        new Despawnable(IGolem.spawn(loc, bedWarsTeam), bedWarsTeam, shop.getInt("utilities.ironGolem.despawn"), Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME);
     }
 
     @Override
@@ -363,7 +364,7 @@ public class v1_10_R1 implements NMS {
         private void setName(){
             int percentuale = (int) ((e.getHealth()*100)/e.getMaxHealth()/10);
             e.setCustomName(lang.m(namePath).replace("{despawn}", String.valueOf(despawn)).replace("{health}",
-                    new String(new char[percentuale]).replace("\0", lang.m(lang.despawnableHealth))+new String(new char[10-percentuale]).replace("\0", "§7"+lang.m(lang.despawnableHealth))
+                    new String(new char[percentuale]).replace("\0", lang.m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH))+new String(new char[10-percentuale]).replace("\0", "§7"+lang.m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH))
             ).replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()).replace("{TeamName}", team.getName()));
         }
 

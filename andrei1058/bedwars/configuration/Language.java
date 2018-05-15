@@ -25,147 +25,6 @@ public class Language {
     private static HashMap<Player, Language> langByPlayer = new HashMap<>();
     private static List<Language> languages = new ArrayList<>();
 
-    //Start of language file string path
-    public static String
-            prefix = "prefix",
-            cmdMain = "cmd.main",
-            youreInGame = "player.alreadyPlaying",
-            vipJoinedSlot = "player.kickedByVip",
-            fullArena = "player.fullArena",
-            vipNoJoin = "player.vipNoJoin",
-            insufficientPlayers = "player.countdownStopped",
-            playerLeft = "player.quit",
-            restartKick = "arena.restartKick",
-            statusWaiting = "status.waiting",
-            statusStarting = "status.starting",
-            statusPlaying = "status.playing",
-            statusRestarting = "status.restarting",
-            arenaOrGroupNotFound = "player.arenaOrGroupNotFound",
-            noEmptyArena = "player.noEmptyArena",
-            notInArena = "player.notInArena",
-            arenaGuiInvName = "arena.guiInv.Name",
-            arenaGuiItemName = "arena.guiItem.name",
-            arenaGuiItemLore = "arena.guiItem.lore",
-            statsGUIpath = "stats",
-            statsInvName = statsGUIpath + ".invName.name",
-            statsItemName = "player.statsItem.name",
-            statsItemLore = "player.statsItem.lore",
-            aGuiArenaName = "arena.guiArena.name",
-            aGuiArenaLore = "arena.guiArena.lore",
-            langListHeader = "lang.listHeader",
-            langListFormat = "lang.listFormat",
-            langCmdUsage = "player.langUsage",
-            langNotExist = "player.langNotExist",
-            langSet = "player.langSet",
-            cantLangPlaying = "lang.cantChange",
-            partyTooBig = "party.tooMuch",
-            leaderChoose = "party.leaderChoose",
-            generatorTier = "generator.tier",
-    //generatorTier2 = "generator.tier2",
-    //generatorTier3 = "generator.tier3",
-    generatorDiamond = "generator.diamond",
-            generatorEmerald = "generator.emerald",
-            generatorTimer = "generator.timer",
-            playerJoin = "arena.join",
-            playerLeave = "arena.leave",
-            arenaStartsIn = "arena.startCountdown",
-            chatLobbyFormat = "chat.lobby",
-            chatWaitingFormat = "chat.waiting",
-            chatGlobalFormat = "chat.global",
-            chatTeamFormat = "chat.team",
-            chatSpectatorFormat = "chat.spectator",
-            meaningShout = "meaning.shout",
-            gameTutorialStrings = "arena.tutorial",
-            leaveItemName = "arena.leaveItm.name",
-            leaveItemLore = "arena.leaveItm.lore",
-            scoreboardDefaultWaiting = "scoreboard.defaultWaiting",
-            scoreboardDefaultStarting = "scoreboard.defaultStarting",
-            scoreboardDefaultPlaying = "scoreboard.defaultPlaying",
-            cantPlaceHere = "player.cantPlace",
-            cantBreak = "player.cantBreak",
-            titleStart = "arena.startTitle",
-            dateFormat = "scoreboardFormat.date",
-            teamEliminatedFormat = "scoreboardFormat.teamEliminated",
-            bedDestroyedFormat = "scoreboardFormat.bedDestroyed",
-            teamAliveFormat = "scoreboardFormat.teamAlive",
-            diamondGeneratorName = "scoreboardFormat.diamondName",
-            emeraldGeneratorName = "scoreboardFormat.emeraldName",
-            generatorTimerFormat = "scoreboardFormat.generatorTimer",
-            youScoreboardFormat = "scoreboardFormat.you",
-            actionBarTracking = "action.tracking",
-            bedHologram = "arena.bedHologram",
-            bedHologramDestroyed = "arena.bedHologramDestroyed",
-            cantDestroyOwnBed = "player.destroyOwnBed",
-            teamEliminatedChat = "arena.teamEliminatedChat",
-            teamBedDestroy = "arena.bedDestructionGlobal",
-            bedDestroyedTitle = "arena.bedDestructionTitle",
-            bedDestroyedSub = "arena.bedDestructionSub",
-            teamBedDestroyTeam = "arena.bedDestructionTeam",
-            playerFallInVoid = "arena.playerDie.void",
-            playerFallInVoidFinalKill = "arena.playerDie.voidFinalKill",
-            playerKnockedInVoid = "arena.playerDie.knockedInVoid",
-            playerKnockedInVoidFinalKill = "arena.playerDie.knockedInVoidFinalKill",
-            playerExplodeByBomb = "arena.playerDie.bomb",
-            playerExplodeByBombFinalKill = "arena.playerDie.bombFinalKill",
-            playerDieAttack = "arena.playerDie.attack",
-            playerDieAttackFinalKill = "arena.playerDie.attackFinalKill",
-            youDiedTitle = "arena.respawnTitle",
-            youDiedSubTitle = "arena.respawnSub",
-            respawnChat = "arena.respawnChat",
-            respawnedTitle = "arena.respawnedTitle",
-            youReEliminated = "arena.playerEliminated",
-            gameOverTitle = "arena.gameOverTitle",//
-            victoryTitle = "arena.victoryTitle",//
-            gameEndStats = "arena.gameOverMsg",//
-    //gameOverReward = "arena.gameOverReward",//todo cand o sa fie support pt reward si etc
-    winnerFormatTeam = "arena.winFormat.team",//
-            winnerFormatSolo = "arena.winFormat.solo",//
-            teamWonChat = "arena.teamWonChat",//
-            nobody = "meaning.nobody",
-            tablistFormat = "format.tablist",
-            tier1Format = "format.tier1",
-            tier2Format = "format.tier2",
-            tier3Format = "format.tier3",
-            generatorUpgradeMsg = "arena.generatorUpgrade",
-            teamUpgradesName = "npc.teamUpgradesName",
-            soloUpgradesName = "npc.soloUpgradesName",
-            shopTeamName = "npc.shopTeamName",
-            shopSoloName = "npc.shopSoloName",
-            shopPath = "shop.",
-            insufficientMoney = "player.insuffMoney",
-            youPurchased = "player.newPurchase",
-            joinCmdUsage = "cmd.joinUsage",
-            notAllowed = "player.permDenied",
-            loreFooterInsuff = "upgrades.loreFooter.insuffMoney",
-            loreFooterClick = "upgrades.loreFooter.clickBuy",
-            loreFooterUnlocked = "upgrades.loreFooter.unlocked",
-            loreFooterLocked = "upgrades.loreFooter.locked",
-            pluralPath = "plural",
-            enemyBaseEnterTitle = "arena.baseEnter.title",
-            enemyBaseEnterSubtitle = "arena.baseEnter.subtitle",
-            enemyBaseEnterAction = "arena.baseEnter.action",
-            enemyBaseEnterChat = "arena.baseEnter.chat",
-            upgradeBuyMessage = "arena.upgradeBuy",
-            utilitySiverfish = "despawnables.silverfish",
-            iGolemName = "despawnables.ironGolem",
-            despawnableHealth = "format.despawnableHealth",
-            unknowReasonDie = "arena.playerDie.unknown",
-            unknowReasonDieFinalKill = "arena.playerDie.unknownFinalKill",
-            playerExplodeByBombNoKiller = "arena.playerDie.bomb2",
-            playerExplodeByBombFinalKillNoKiller = "arena.playerDie.bomb2FinalKill",
-            playerStatsMessages = "player.stats.cmd",
-            statsDateTimeFormat = "format.statsTime",
-            never = "meaning.never",
-            lobbyScoreboard = "scoreboard.lobby";
-    public static String partyHelpCmds = "party.help", partyInviteUsage = "party.inviteUsage",
-            partyIniteSent = "party.inviteSent", partyPlayerOffline = "party.playerOffline", partyInviteReceived = "party.inviteReceived",
-            partyInviteYourself = "party.invYourself", partyNoInvite = "party.noInvite", partyAlreadyIn = "party.alreadyIn",
-            partyInsuffPerms = "party.noPerm", partyAcceptUsage = "party.acceptUsage", partyJoined = "party.joined",
-            playerCurrentGameStats = "arena.personalStats", partyNotInParty = "party.notIn", partyCantLeaveOwner = "party.cantLeaveOwner",
-            partyLeaved = "party.leaved", partyDisband = "party.disband", partyRemoveUsage = "party.removeUsage", partyRemovedFrom = "party.removed",
-            partyNotInPartyAtRemove = "player.removeNotIn";
-    //End of language file strings
-
     public Language(String iso) {
         this.iso = iso;
         File d = new File("plugins/" + plugin.getDescription().getName() + "/Languages");
@@ -188,68 +47,65 @@ public class Language {
     public static void setupLang(Language lbj) {
         YamlConfiguration yml = lbj.yml;
         yml.options().copyDefaults(true);
-        yml.addDefault(prefix, "");
+        yml.addDefault(Messages.PREFIX, "");
         switch (lbj.iso) {
             default:
                 yml.addDefault("name", "English");
-                yml.addDefault(cmdMain, Arrays.asList("", "&2▪ &7/" + mainCmd + " stats", "&2▪ &7/" + mainCmd + " join &o<arena/group>", "&2▪ &7/" + mainCmd + " leave", "&2▪ &7/" + mainCmd + " lang", "&2▪ &7/" + mainCmd + " gui"));
-                yml.addDefault(youreInGame, "{prefix}&cYou're already playing!");
-                yml.addDefault(vipJoinedSlot, "{prefix}&cSorry, but you were kicked out because a donor joined the arena.\n&aPlease consider donating for more features. &7&o(click)");
-                yml.addDefault(fullArena, "{prefix}&cThis arena is full!\n&aPlease consider donating for more features. &7&o(click)");
-                yml.addDefault(vipNoJoin, "{prefix}&cWe apologise but this arena is full.\n&cWe know you're a donor but actually this arena is full of staff or/and donors.");
-                yml.addDefault(insufficientPlayers, "{prefix}§cThere aren't enough players! Countdown stopped!");
-                yml.addDefault(playerLeft, "{prefix}&e{player} left the game!");
-                yml.addDefault(restartKick, "{prefix}&eThe arena you were in is restarting.");
-                yml.addDefault(statusPlaying, "&cPlaying");
-                yml.addDefault(statusRestarting, "&4Restarting");
-                yml.addDefault(statusWaiting, "&2Waiting");
-                yml.addDefault(statusStarting, "&6Starting");
-                yml.addDefault(arenaOrGroupNotFound, "{prefix}&cThere isn't any arena or arena group called: {name}");
-                yml.addDefault(noEmptyArena, "{prefix}&cThere isn't any arena available right now ;(");
-                yml.addDefault(notInArena, "{prefix}&cYou're not in arena!");
-                yml.addDefault(arenaGuiInvName, "&aAvailable arenas");
-                yml.addDefault(aGuiArenaName, "&7➤ {name}");
-                yml.addDefault(aGuiArenaLore, Arrays.asList("", "&7Status: {status}", "&7Players: &f{on}&7/&f{max}", "&7Type: &a{group}"));
-                yml.addDefault(arenaGuiItemName, "&aArenas");
-                yml.addDefault(arenaGuiItemLore, Arrays.asList("&7Choose an arena!"));
-                yml.addDefault(langListHeader, "{prefix} &2Available languages:");
-                yml.addDefault(langListFormat, "&a▪  &7{iso} - &f{name}");
-                yml.addDefault(langCmdUsage, "{prefix}&7Usage: /lang &f&o<iso>");
-                yml.addDefault(langNotExist, "{prefix}&cThis language doesn't exist!");
-                yml.addDefault(langSet, "{prefix}&aLanguage changed!");
-                yml.addDefault(cantLangPlaying, "{prefix}&cYou can't change the language during the game.");
-                yml.addDefault(partyTooBig, "{prefix}&cYour party is too big for joining this arena as a team :(");
-                yml.addDefault(leaderChoose, "{prefix}&cOnly the leader can choose the arena.");
-                yml.addDefault(generatorTier, "&eTier &c{tier}");
-                //yml.addDefault(generatorTier2, "&eTier &cII");
-                //yml.addDefault(generatorTier3, "&eTier &cIII");
-                yml.addDefault(generatorDiamond, "&b&lDiamond");
-                yml.addDefault(generatorEmerald, "&a&lEmerald");
-                yml.addDefault(generatorTimer, "&eSpawns in &c{seconds} &eseconds");
-                yml.addDefault(playerJoin, "{prefix}&7{player} &ehas joined (&b{on}&e/&b{max}&e)!");
-                yml.addDefault(playerLeave, "{prefix}&7{player} &ehas quit!");
-                yml.addDefault(arenaStartsIn, "{prefix}&eThe game starts in &6{time} &eseconds!");
-                yml.addDefault(chatLobbyFormat, "{vPrefix}&7{player}{vSuffix}: {message}");
-                yml.addDefault(chatWaitingFormat, "{vPrefix}&7{player}{vSuffix}: {message}");
-                yml.addDefault(chatGlobalFormat, "{vPrefix}&6[SHOUT] {team} &7{player}&f{vSuffix}: {message}");
-                yml.addDefault(chatTeamFormat, "{vPrefix}&f{level}{team}&7 {player}{vSuffix} {message}");
-                yml.addDefault(chatSpectatorFormat, "{vPrefix}&7[SPECTATOR] {player}{vSuffix}: {message}");
-                yml.addDefault(gameTutorialStrings, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
+                yml.addDefault(Messages.COMMAND_MAIN, Arrays.asList("", "&2▪ &7/" + mainCmd + " stats", "&2▪ &7/" + mainCmd + " join &o<arena/group>", "&2▪ &7/" + mainCmd + " leave", "&2▪ &7/" + mainCmd + " lang", "&2▪ &7/" + mainCmd + " gui"));
+                yml.addDefault(Messages.ARENA_JOIN_VIP_KICK, "{prefix}&cSorry, but you were kicked out because a donor joined the arena.\n&aPlease consider donating for more features. &7&o(click)");
+                yml.addDefault(Messages.ARENA_JOIN_DENIED_IS_FULL, "{prefix}&cThis arena is full!\n&aPlease consider donating for more features. &7&o(click)");
+                yml.addDefault(Messages.ARENA_JOIN_DENIED_IS_FULL_VIP_REQUIRED, "{prefix}&cWe apologise but this arena is full.\n&cWe know you're a donor but actually this arena is full of staff or/and donors.");
+                yml.addDefault(Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS, "{prefix}§cThere aren't enough players! Countdown stopped!");
+                yml.addDefault(Messages.ARENA_LEAVE_PLAYER_LEAVE_MSG, "{prefix}&e{player} left the game!");
+                yml.addDefault(Messages.ARENA_RESTART_PLAYER_KICK, "{prefix}&eThe arena you were in is restarting.");
+                yml.addDefault(Messages.ARENA_STATUS_PLAYING_NAME, "&cPlaying");
+                yml.addDefault(Messages.ARENA_STATUS_RESTARTING_NAME, "&4Restarting");
+                yml.addDefault(Messages.ARENA_STATUS_WAITING_NAME, "&2Waiting");
+                yml.addDefault(Messages.ARENA_STATUS_STARTING_NAME, "&6Starting");
+                yml.addDefault(Messages.ARENA_JOIN_DENIED_GROUP_OR_ARENA_NOT_FOUND, "{prefix}&cThere isn't any arena or arena group called: {name}");
+                yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_EMPTY_FOUND, "{prefix}&cThere isn't any arena available right now ;(");
+                yml.addDefault(Messages.COMMAND_LEAVE_DENIED_NOT_IN_ARENA, "{prefix}&cYou're not in arena!");
+                yml.addDefault(Messages.ARENA_GUI_INV_NAME, "&aAvailable arenas");
+                yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_NAME, "&7➤ {name}");
+                yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_LORE, Arrays.asList("", "&7Status: {status}", "&7Players: &f{on}&7/&f{max}", "&7Type: &a{group}"));
+                yml.addDefault(Messages.ARENA_GUI_ITEM_NAME, "&aArenas");
+                yml.addDefault(Messages.ARENA_GUI_ITEM_LORE, Arrays.asList("&7Choose an arena!"));
+                yml.addDefault(Messages.COMMAND_LANG_LIST_HEADER, "{prefix} &2Available languages:");
+                yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&a▪  &7{iso} - &f{name}");
+                yml.addDefault(Messages.COMMAND_LANG_USAGE, "{prefix}&7Usage: /lang &f&o<iso>");
+                yml.addDefault(Messages.COMMAND_LANG_SELECTED_NOT_EXIST, "{prefix}&cThis language doesn't exist!");
+                yml.addDefault(Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY, "{prefix}&aLanguage changed!");
+                yml.addDefault(Messages.COMMAND_LANG_USAGE_DENIED, "{prefix}&cYou can't change the language during the game.");
+                yml.addDefault(Messages.ARENA_JOIN_DENIED_PARTY_TOO_BIG, "{prefix}&cYour party is too big for joining this arena as a team :(");
+                yml.addDefault(Messages.ARENA_JOIN_DENIED_NOT_PARTY_LEADER, "{prefix}&cOnly the leader can choose the arena.");
+                yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIER, "&eTier &c{tier}");
+                yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND, "&b&lDiamond");
+                yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD, "&a&lEmerald");
+                yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIMER, "&eSpawns in &c{seconds} &eseconds");
+                yml.addDefault(Messages.ARENA_JOIN_PLAYER_JOIN_MSG, "{prefix}&7{player} &ehas joined (&b{on}&e/&b{max}&e)!");
+                yml.addDefault(Messages.ARENA_LEAVE_PLAYER_LEAVE_MSG, "{prefix}&7{player} &ehas quit!");
+                yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN, "{prefix}&eThe game starts in &6{time} &eseconds!");
+                yml.addDefault(Messages.FORMATTING_CHAT_LOBBY, "{vPrefix}&7{player}{vSuffix}: {message}");
+                yml.addDefault(Messages.FORMATTING_CHAT_WAITING, "{vPrefix}&7{player}{vSuffix}: {message}");
+                yml.addDefault(Messages.FORMATTING_CHAT_SHOUT, "{vPrefix}&6[SHOUT] {team} &7{player}&f{vSuffix}: {message}");
+                yml.addDefault(Messages.FORMATTING_CHAT_TEAM, "{vPrefix}&f{level}{team}&7 {player}{vSuffix} {message}");
+                yml.addDefault(Messages.FORMATTING_CHAT_SPECTATOR, "{vPrefix}&7[SPECTATOR] {player}{vSuffix}: {message}");
+                yml.addDefault(Messages.ARENA_STATUS_START_PLAYER_TUTORIAL, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
                         "&f                                   &lBedWars", "",
                         "&e&l    Protect your bed and destroy the enemy beds.",
                         "&e&l      Upgrade yourself and your team by collecting",
                         "&e&l   Iron, Gold, Emerald, and Diamond from generators",
                         "&e&l             to access powerful upgrades.", "",
                         "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
-                yml.addDefault(meaningShout, "shout");
-                yml.addDefault(leaveItemName, "&c&lReturn to lobby");
-                yml.addDefault(leaveItemLore, Arrays.asList("&7Right-click to leave to the lobby!"));
-                yml.addDefault(cantPlaceHere, "{prefix}&cYou can't place blocks here!");
-                yml.addDefault(scoreboardDefaultStarting, Arrays.asList("&f&lBED WARS", "", "&fMap: &a{map}", "&fPlayer: &a{on}/{max}", "", "&fStarting in &a{time}s", "", "§fServer: &a{server}", "", "&e  andrei1058.com"));
-                yml.addDefault(scoreboardDefaultWaiting, Arrays.asList("&f&lBED WARS", "", "&fMap: &a{map}", "&fPlayer: &a{on}/{max}", "", "&fWaiting...", "", "§fServer: &a{server}", "", "&e  andrei1058.com"));
-                yml.addDefault(cantBreak, "{prefix}&cYou can only break blocks placed by a player!");
-                yml.addDefault(titleStart, "&aGO");
-                yml.addDefault(scoreboardDefaultPlaying, Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent}", "&a{time}", "", "{TeamRedColor}&lR&f {TeamRedName}&f: {TeamRedStatus}",
+                yml.addDefault(Messages.MEANING_SHOUT, "shout");
+                yml.addDefault(Messages.ARENA_LEAVE_ITEM_NAME, "&c&lReturn to lobby");
+                yml.addDefault(Messages.ARENA_LEAVE_ITEM_LORE, Arrays.asList("&7Right-click to leave to the lobby!"));
+                yml.addDefault(Messages.INTERACT_CANNOT_PLACE_BLOCK, "{prefix}&cYou can't place blocks here!");
+                yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&lBED WARS", "", "&fMap: &a{map}", "&fPlayer: &a{on}/{max}", "", "&fStarting in &a{time}s", "", "§fServer: &a{server}", "", "&e  andrei1058.com"));
+                yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&lBED WARS", "", "&fMap: &a{map}", "&fPlayer: &a{on}/{max}", "", "&fWaiting...", "", "§fServer: &a{server}", "", "&e  andrei1058.com"));
+                yml.addDefault(Messages.INTERACT_CANNOT_BREAK_BLOCK, "{prefix}&cYou can only break blocks placed by a player!");
+                yml.addDefault(Messages.ARENA_STATUS_START_PLAYER_TITLE, "&aGO");
+                yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent}", "&a{time}", "", "{TeamRedColor}&lR&f {TeamRedName}&f: {TeamRedStatus}",
                         "{TeamBlueColor}&lB&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}&lG&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}&lY &f{TeamYellowName}&f: {TeamYellowStatus}", "",
                         "&fKills: &a{kills}", "&fFinal Kills: &a{finalKills}", "&fBeds Broken: &a{beds}", "", "&ehttp://andrei1058.com"));
                 yml.addDefault("scoreboard.SoloPlaying", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent}", "&a{time}", "", "{TeamRedColor}&lR&f {TeamRedName}&f: {TeamRedStatus}",
@@ -258,39 +114,37 @@ public class Language {
                 yml.addDefault("scoreboard.DoublesPlaying", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent}", "&a{time}", "", "{TeamRedColor}&lR&f {TeamRedName}&f: {TeamRedStatus}",
                         "{TeamBlueColor}&lB&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}&lG&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}&lY &f{TeamYellowName}&f: {TeamYellowStatus}",
                         "{TeamAquaColor}&lA&f {TeamAquaName}&f: {TeamAquaStatus}", "{TeamWhiteColor}&lW&f {TeamWhiteName}&f: {TeamWhiteStatus}", "{TeamPinkColor}&lP&f {TeamPinkName}&f: {TeamPinkStatus}", "{TeamGrayColor}&lG&f {TeamGrayName}&f: {TeamGrayStatus}", "", "&ehttp://andrei1058.com"));
-                yml.addDefault(dateFormat, "dd/MM/yy");
-                yml.addDefault(teamEliminatedFormat, "&c&l✘");
-                yml.addDefault(bedDestroyedFormat, "&a{remainingPlayers}");
-                yml.addDefault(teamAliveFormat, "&a&l✓");
-                yml.addDefault(diamondGeneratorName, "Diamond Upgrade:");
-                yml.addDefault(generatorTimerFormat, "mm:ss");
-                yml.addDefault(emeraldGeneratorName, "Emerald Upgrade:");
-                yml.addDefault(youScoreboardFormat, "&7 (You)");
-                yml.addDefault(actionBarTracking, "&fTracking: {team} &f- Distance: {distance}m");
-                yml.addDefault(bedHologram, "&c&lDefend your bed!");
-                yml.addDefault(cantDestroyOwnBed, "&cYou can't destroy your own bed!");
-                yml.addDefault(teamEliminatedChat, "\n&f&lTEAM ELIMINATED > {TeamColor}{TeamName} Team &chas been eliminated!\n");
-                yml.addDefault(teamBedDestroy, "\n&f&lBED DESTRUCTION > {TeamColor}{TeamName} Bed &7was deep fried by {PlayerColor}{PlayerName}&7!\n");
-                yml.addDefault(bedDestroyedTitle, "&cBED DESTROYED!");
-                yml.addDefault(bedDestroyedSub, "&fYou will no longer respawn!");
-                yml.addDefault(teamBedDestroyTeam, "&f&lBED DESTRUCTION > &7Your bed was iced by {PlayerColor}{PlayerName}&7!");
-                yml.addDefault(playerFallInVoid, "{PlayerColor}{PlayerName} &7fell into the void.");
-                yml.addDefault(playerFallInVoidFinalKill, "{PlayerColor}{PlayerName} &7fell into the void. &b&lFINAL KILL!");
-                yml.addDefault(playerKnockedInVoid, "{PlayerColor}{PlayerName} &7was knocked into the void by {KillerColor}{KillerName}&7.");
-                yml.addDefault(playerKnockedInVoidFinalKill, "{PlayerColor}{PlayerName} &7was knocked into the void by {KillerColor}{KillerName}&7. &b&lFINAL KILL!");
-                yml.addDefault(playerExplodeByBomb, "{PlayerColor}{PlayerName} &7was hit off by a love bomb from {KillerColor}{KillerName}&7.");
-                yml.addDefault(playerExplodeByBombFinalKill, "{PlayerColor}{PlayerName} &7was hit off by a love bomb from {KillerColor}{KillerName}&7. &b&lFINAL KILL!");
-                yml.addDefault(playerDieAttack, "{PlayerColor}{PlayerName} &7was killed by {KillerColor}{KillerName}&7.");
-                yml.addDefault(playerDieAttackFinalKill, "{PlayerColor}{PlayerName} &7was killed by {KillerColor}{KillerName}&7. &b&lFINAL KILL!");
-                yml.addDefault(bedHologramDestroyed, "&c&lYour bed was destroyed!");
-                yml.addDefault(youDiedTitle, "&cYOU DIED!");
-                yml.addDefault(youDiedSubTitle, "&eYou will respawn in &c{time} &eseconds!");
-                yml.addDefault(respawnChat, "{prefix}&eYou will respawn in &c{time} &eseconds!");
-                yml.addDefault(respawnedTitle, "&aRESPAWNED!");
-                yml.addDefault(youReEliminated, "{prefix}&cYou have been eliminated!");
-                yml.addDefault(gameOverTitle, "&c&lGAME OVER!");
-                yml.addDefault(victoryTitle, "&6&lVICTORY!");
-                yml.addDefault(gameEndStats, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
+                yml.addDefault(Messages.FORMATTING_SCOREBOARD_DATE, "dd/MM/yy");
+                yml.addDefault(Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED, "&c&l✘");
+                yml.addDefault(Messages.FORMATTING_SCOREBOARD_BED_DESTROYED, "&a{remainingPlayers}");
+                yml.addDefault(Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE, "&a&l✓");
+                yml.addDefault(Messages.FORMATTING_SCOREBOARD_NEXEVENT_TIMER, "mm:ss");
+                yml.addDefault(Messages.FORMATTING_SCOREBOARD_YOUR_TEAM, "&7 (You)");
+                yml.addDefault(Messages.FORMATTING_ACTION_BAR_TRACKING, "&fTracking: {team} &f- Distance: {distance}m");
+                yml.addDefault(Messages.BED_HOLOGRAM_DEFEND, "&c&lDefend your bed!");
+                yml.addDefault(Messages.INTERACT_CANNOT_BREAK_OWN_BED, "&cYou can't destroy your own bed!");
+                yml.addDefault(Messages.TEAM_ELIMINATED_CHAT, "\n&f&lTEAM ELIMINATED > {TeamColor}{TeamName} Team &chas been eliminated!\n");
+                yml.addDefault(Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT, "\n&f&lBED DESTRUCTION > {TeamColor}{TeamName} Bed &7was deep fried by {PlayerColor}{PlayerName}&7!\n");
+                yml.addDefault(Messages.INTERACT_BED_DESTROY_TITLE_ANNOUNCEMENT, "&cBED DESTROYED!");
+                yml.addDefault(Messages.INTERACT_BED_DESTROY_SUBTITLE_ANNOUNCEMENT, "&fYou will no longer respawn!");
+                yml.addDefault(Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM, "&f&lBED DESTRUCTION > &7Your bed was iced by {PlayerColor}{PlayerName}&7!");
+                yml.addDefault(Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL, "{PlayerColor}{PlayerName} &7fell into the void.");
+                yml.addDefault(Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL, "{PlayerColor}{PlayerName} &7fell into the void. &b&lFINAL KILL!");
+                yml.addDefault(Messages.PLAYER_DIE_KNOCKED_IN_VOID_REGULAR_KILL, "{PlayerColor}{PlayerName} &7was knocked into the void by {KillerColor}{KillerName}&7.");
+                yml.addDefault(Messages.PLAYER_DIE_KNOCKED_IN_VOID_FINAL_KILL, "{PlayerColor}{PlayerName} &7was knocked into the void by {KillerColor}{KillerName}&7. &b&lFINAL KILL!");
+                yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITH_SOURCE_REGULAR_KILL, "{PlayerColor}{PlayerName} &7was hit off by a love bomb from {KillerColor}{KillerName}&7.");
+                yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITH_SOURCE_FINAL_KILL, "{PlayerColor}{PlayerName} &7was hit off by a love bomb from {KillerColor}{KillerName}&7. &b&lFINAL KILL!");
+                yml.addDefault(Messages.PLAYER_DIE_PVP_REGULAR_KILL, "{PlayerColor}{PlayerName} &7was killed by {KillerColor}{KillerName}&7.");
+                yml.addDefault(Messages.PLAYER_DIE_PVP_FINAL_KILL, "{PlayerColor}{PlayerName} &7was killed by {KillerColor}{KillerName}&7. &b&lFINAL KILL!");
+                yml.addDefault(Messages.BED_HOLOGRAM_DESTROYED, "&c&lYour bed was destroyed!");
+                yml.addDefault(Messages.PLAYER_DIE_RESPAWN_TITLE, "&cYOU DIED!");
+                yml.addDefault(Messages.PLAYER_DIE_RESPAWN_SUBTITLE, "&eYou will respawn in &c{time} &eseconds!");
+                yml.addDefault(Messages.PLAYER_DIE_RESPAWN_CHAT, "{prefix}&eYou will respawn in &c{time} &eseconds!");
+                yml.addDefault(Messages.PLAYER_DIE_RESPAWNED_TITLE, "&aRESPAWNED!");
+                yml.addDefault(Messages.PLAYER_DIE_ELIMINATED_CHAT, "{prefix}&cYou have been eliminated!");
+                yml.addDefault(Messages.ARENA_GAME_OVER_PLAYER_TITLE, "&c&lGAME OVER!");
+                yml.addDefault(Messages.ARENA_VICTORY_PLAYER_TITLE, "&6&lVICTORY!");
+                yml.addDefault(Messages.ARENA_GAME_OVER_PLAYER_CHAT, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
                         "&f                                   &lBedWars", "", "{winnerFormat}", "", "",
                         "&e                          &l1st Killer &7- {firstName} - {firstKills}",
                         "&6                          &l2nd Killer &7- {secondName} - {secondKills}",
@@ -299,20 +153,20 @@ public class Language {
                 //yml.addDefault(gameOverReward, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
                 //        "&f                                   &lReward Summary", "", "",
                 //        "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
-                yml.addDefault(teamWonChat, "{prefix}{TeamColor}{TeamName} &ahas won the game!");
-                yml.addDefault(winnerFormatTeam, "      {TeamColor}{TeamName} &7- {members}");
-                yml.addDefault(winnerFormatSolo, "                 {TeamColor}{TeamName} &7- {members}");
-                yml.addDefault(tablistFormat, "{TeamColor}&l{TeamLetter}&r {TeamColor}{PlayerName} &e{PlayerHealth}");//{TeamColor}{TeamName}{TeamHealth}{PlayerName}{PlayerHealth}
-                yml.addDefault(nobody, "Nobody");
-                yml.addDefault(tier1Format, "I");
-                yml.addDefault(tier2Format, "II");
-                yml.addDefault(tier3Format, "III");
-                yml.addDefault(generatorUpgradeMsg, "{prefix}{generatorType} Generators &ehave been upgraded to Tier &c{tier}");
-                yml.addDefault(teamUpgradesName, "&e&lTEAM,&E&LUPGRADES");
-                yml.addDefault(soloUpgradesName, "&e&lSOLO,&E&LUPGRADES");
-                yml.addDefault(shopTeamName, "&e&lITEM SHOP");
-                yml.addDefault(shopSoloName, "&e&lITEM SHOP");
-                yml.addDefault(shopPath + "name", "&7Item Shop");
+                yml.addDefault(Messages.ARENA_TEAM_WON_CHAT, "{prefix}{TeamColor}{TeamName} &ahas won the game!");
+                yml.addDefault(Messages.FORMATTING_TEAM_WINNER_FORMAT, "      {TeamColor}{TeamName} &7- {members}");
+                yml.addDefault(Messages.FORMATTING_SOLO_WINNER_FORMAT, "                 {TeamColor}{TeamName} &7- {members}");
+                //yml.addDefault(tablistFormat, "{TeamColor}&l{TeamLetter}&r {TeamColor}{PlayerName} &e{PlayerHealth}");//{TeamColor}{TeamName}{TeamHealth}{PlayerName}{PlayerHealth}
+                yml.addDefault(Messages.MEANING_NOBODY, "Nobody");
+                yml.addDefault(Messages.FORMATTING_GENERATOR_TIER1, "I");
+                yml.addDefault(Messages.FORMATTING_GENERATOR_TIER2, "II");
+                yml.addDefault(Messages.FORMATTING_GENERATOR_TIER3, "III");
+                yml.addDefault(Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT, "{prefix}{generatorType} Generators &ehave been upgraded to Tier &c{tier}");
+                yml.addDefault(Messages.UPGRADES_TEAM_NPC_NAME, "&e&lTEAM,&E&LUPGRADES");
+                yml.addDefault(Messages.UPGRADES_SOLO_NPC_NAME, "&e&lSOLO,&E&LUPGRADES");
+                yml.addDefault(Messages.SHOP_TEAM_NAME, "&e&lITEM SHOP");
+                yml.addDefault(Messages.SHOP_SOLO_NAME, "&e&lITEM SHOP");
+                yml.addDefault(Messages.SHOP_PATH + "name", "&7Item Shop");
 
                 lbj.saveShopStuff("invContents.armor", "&aArmor", Arrays.asList("&7Available:", "&7▪ Chainmail Boots", "&7▪ Chainmail Leggings", "&7▪ Iron Boots", "&7▪ Iron Leggings", "&7▪ Diamond Boots", "&7▪ Diamond Leggings", "", "&eClick to browse!"));
                 lbj.saveShopStuff("invContents.melee", "&aMelee", Arrays.asList("&7Available:", "&7▪ Stone Sword", "&7▪ Iron Sword", "&7▪ Diamond Sword", "&7▪ Stick (Knockback I)", "", "&eClick to browse!"));
@@ -374,19 +228,19 @@ public class Language {
                 yml.addDefault("meaning.emerald", "Emerald");
                 yml.addDefault("meaning.diamond", "Diamond");
                 yml.addDefault("meaning.vault", "$");
-                yml.addDefault(pluralPath + ".iron", "Iron");
-                yml.addDefault(pluralPath + ".gold", "Gold");
-                yml.addDefault(pluralPath + ".emerald", "Emeralds");
-                yml.addDefault(pluralPath + ".diamond", "Diamonds");
-                yml.addDefault(pluralPath + ".vault", "Money");
-                yml.addDefault(insufficientMoney, "{prefix}&cYou don't have enough {currency}! Need {amount} more!");
-                yml.addDefault(youPurchased, "{prefix}&aYou purchased &6{item}");
-                yml.addDefault(joinCmdUsage, "§a▪ §7Usage: /" + mainCmd + " join §o<arena/group>");
-                yml.addDefault(notAllowed, "{prefix}&cYou can't do this.");
-                yml.addDefault(loreFooterClick, "&aClick to purchase!");
-                yml.addDefault(loreFooterInsuff, "&cYou don't have enough {currency}");
-                yml.addDefault(loreFooterLocked, "&cLOCKED");
-                yml.addDefault(loreFooterUnlocked, "&aUNLOCKED");
+                yml.addDefault(Messages.PLURAL_PATH + ".iron", "Iron");
+                yml.addDefault(Messages.PLURAL_PATH + ".gold", "Gold");
+                yml.addDefault(Messages.PLURAL_PATH + ".emerald", "Emeralds");
+                yml.addDefault(Messages.PLURAL_PATH + ".diamond", "Diamonds");
+                yml.addDefault(Messages.PLURAL_PATH + ".vault", "Money");
+                yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "{prefix}&cYou don't have enough {currency}! Need {amount} more!");
+                yml.addDefault(Messages.SHOP_NEW_PURCHASE, "{prefix}&aYou purchased &6{item}");
+                yml.addDefault(Messages.COMMAND_JOIN_USAGE, "§a▪ §7Usage: /" + mainCmd + " join §o<arena/group>");
+                yml.addDefault(Messages.COMMAND_NOT_ALLOWED_IN_GAME, "{prefix}&cYou can't do this.");
+                yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY, "&aClick to purchase!");
+                yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY, "&cYou don't have enough {currency}");
+                yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_LOCKED, "&cLOCKED");
+                yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_UNLOCKED, "&aUNLOCKED");
                 yml.addDefault("upgrades.default.generators.tier1.name", "&eIron Forge");
                 yml.addDefault("upgrades.default.generators.tier1.lore", Arrays.asList("&7Increases the spawn rate of Iron", "&7and Gold by 50%..", "", "&7Cost:&b {cost} {currency}", "", "{loreFooter}"));
                 yml.addDefault("upgrades.default.generators.tier2.name", "&eGolden Forge");
@@ -405,24 +259,21 @@ public class Language {
                 yml.addDefault("upgrades.default.miningFatigue.tier1.lore", Arrays.asList("&7The nex enemy to enter your", "&7base will receive Mining Fatigue", "&7for 10 seconds!", "", "&7Cost:&b {cost} {currency}", "", "{loreFooter}"));
                 yml.addDefault("upgrades.default.healPool.tier1.name", "&eHeal Pool");
                 yml.addDefault("upgrades.default.healPool.tier1.lore", Arrays.asList("&7Creates a Regeneration field", "&7around your base!", "", "&7Cost:&b {cost} {currency}", "", "{loreFooter}"));
-                yml.addDefault(enemyBaseEnterAction, "&cTRAP TRIGGERED!");
-                yml.addDefault(enemyBaseEnterChat, "{prefix}&cTRAP TRIGGERED!");
-                yml.addDefault(enemyBaseEnterSubtitle, "&fYour trap has been set off!");
-                yml.addDefault(enemyBaseEnterTitle, "&cTRAP TRIGGERED!");
-                yml.addDefault(upgradeBuyMessage, "&a{player} purchased &6{upgradeName}");
-                yml.addDefault(utilitySiverfish, "{TeamColor}&l{TeamName} &r{TeamColor}Silverfish");
-                yml.addDefault(iGolemName, "{TeamColor}{despawn}s &8[ {TeamColor}{health}&8]");
-                yml.addDefault(despawnableHealth, "▮ ");
-                yml.addDefault(unknowReasonDie, "{PlayerColor}{PlayerName} &7died.");
-                yml.addDefault(unknowReasonDieFinalKill, "{PlayerColor}{PlayerName} &7died. &b&lFINAL KILL!");
-                yml.addDefault(playerExplodeByBombNoKiller, "{PlayerColor}{PlayerName} &7was hit off by a bomb.");
-                yml.addDefault(playerExplodeByBombFinalKillNoKiller, "{PlayerColor}{PlayerName} &7was hit off by a bomb. &b&lFINAL KILL!");
-                yml.addDefault(playerStatsMessages, Arrays.asList("", "            &2BedWars Stats &a(&7{player}&a)",
-                        "&8Wins: &f{wins}    &8Looses: &f{looses}    &8Kills: &f{kills}    &8Deaths: &f{deaths}    &8Final Kills: &f{finalKills}",
-                        "&8Final Deaths: &f{finalDeaths}    &8Beds Destroyed: &f{bedsDestroyed}    &8Games Played: &f{gamesPlayed}"));
-                yml.addDefault(statsItemName, "&6Stats");
-                yml.addDefault(statsItemLore, Arrays.asList("&7Rick-click to see your stats!"));
-                yml.addDefault(statsInvName, "{player} Stats");
+                yml.addDefault(Messages.ARENA_ENEMY_BASE_ENTER_ACTION, "&cTRAP TRIGGERED!");
+                yml.addDefault(Messages.ARENA_ENEMY_BASE_ENTER_CHAT, "{prefix}&cTRAP TRIGGERED!");
+                yml.addDefault(Messages.ARENA_ENEMY_BASE_ENTER_SUBTITLE, "&fYour trap has been set off!");
+                yml.addDefault(Messages.ARENA_ENEMY_BASE_ENTER_TITLE, "&cTRAP TRIGGERED!");
+                yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a{player} purchased &6{upgradeName}");
+                yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "{TeamColor}&l{TeamName} &r{TeamColor}Silverfish");
+                yml.addDefault(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME, "{TeamColor}{despawn}s &8[ {TeamColor}{health}&8]");
+                yml.addDefault(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH, "▮ ");
+                yml.addDefault(Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR, "{PlayerColor}{PlayerName} &7died.");
+                yml.addDefault(Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL, "{PlayerColor}{PlayerName} &7died. &b&lFINAL KILL!");
+                yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_REGULAR, "{PlayerColor}{PlayerName} &7was hit off by a bomb.");
+                yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_FINAL_KILL, "{PlayerColor}{PlayerName} &7was hit off by a bomb. &b&lFINAL KILL!");
+                yml.addDefault(Messages.PLAYER_STATS_ITEM_NAME, "&6Stats");
+                yml.addDefault(Messages.PLAYER_STATS_ITEM_LORE, Arrays.asList("&7Rick-click to see your stats!"));
+                yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "{player} Stats");
 
                 /** save default items messages for stats gui */
                 lbj.addDefaultStatsMsg(yml, "wins", "&6Wins", "&f{wins}");
@@ -435,36 +286,35 @@ public class Language {
                 lbj.addDefaultStatsMsg(yml, "firstPlay", "&6First Play", "&f{firstPlay}");
                 lbj.addDefaultStatsMsg(yml, "lastPlay", "&6Last Play", "&f{lastPlay}");
                 lbj.addDefaultStatsMsg(yml, "gamesPlayed", "&6Games Played", "&f{gamesPlayed}");
-                yml.addDefault(statsDateTimeFormat, "yyyy/MM/dd HH:mm");
+                yml.addDefault(Messages.FORMATTING_STATS_DATE_FORMAT, "yyyy/MM/dd HH:mm");
 
-                yml.addDefault(never, "Never");
-                yml.addDefault(lobbyScoreboard, Arrays.asList("&6&lBedWars", "&7{date}", "&fName: &a{player}", "", "&fWins: &a{wins}", "&fLooses: &a{looses}", "&fKills: &a{kills}", "&fDeaths: &a{deaths}"
+                yml.addDefault(Messages.MEANING_NEVER, "Never");
+                yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&7{date}", "&fName: &a{player}", "", "&fWins: &a{wins}", "&fLooses: &a{looses}", "&fKills: &a{kills}", "&fDeaths: &a{deaths}"
                 , "&fFinal Kills: &a{fKills}", "&fBeds Destroyed: &a{beds}", "", "&fOnline: &a{on}", "&eandrei1058.com"));
 
                 /** party commands */
-                yml.addDefault(partyHelpCmds, Arrays.asList("&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
+                yml.addDefault(Messages.COMMAND_PARTY_HELP, Arrays.asList("&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
                         "&aParty Commands:", "&e/party help &7- &bPrints this help message", "&e/party invite <player> &7- &bInvites the player to your party",
                         "&e/party leave &7- &bLeaves the current party",
                         "&e/party remove <player> &7- &bRemove the player from the party",
                         "&e/party accept <player> &7- &bAccept a party invite", "&e/party disband &7- &bDisbands the party"));
-                yml.addDefault(partyInviteUsage, "{prefix}&eUsage: &7/party invite <player>");
-                yml.addDefault(partyPlayerOffline, "{prefix}&7{player} &eis not online!");
-                yml.addDefault(partyIniteSent, "{prefix}&eInvite sent to &7{player}&6.");
-                yml.addDefault(partyInviteReceived, "{prefix}&b{player} &ehas invited to a party! &o&7(Click to accept)");
-                yml.addDefault(partyInviteYourself, "{prefix}&cYou cannot invite yourself!");
-                yml.addDefault(partyNoInvite, "{prefix}&cThere's no party requests to accept");
-                yml.addDefault(partyAlreadyIn, "{prefix}&eYou're already in a party!");
-                yml.addDefault(partyInsuffPerms, "{prefix}&cOnly the party owner can do this!");
-                yml.addDefault(partyAcceptUsage, "{prefix}&eUsage: &7/party accept <player>");
-                yml.addDefault(partyJoined, "{prefix}&7{player} &ehas joined the party!");
-                yml.addDefault(playerCurrentGameStats, Arrays.asList("&aYou gained &6{coins} &acoins!"));
-                yml.addDefault(partyNotInParty, "{prefix}&cYou're not in a party!");
-                yml.addDefault(partyCantLeaveOwner, "{prefix}&cYou can't leave your own party!\n&eTry using: &b/party disband");
-                yml.addDefault(partyLeaved, "{prefix}&7{player} &ehas leaved the party!");
-                yml.addDefault(partyDisband, "{prefix}&eParty disbanded!");
-                yml.addDefault(partyRemoveUsage, "{prefix}&7Usage: &e/party remove <player>");
-                yml.addDefault(partyRemovedFrom, "{prefix}&7{player} &ewas removed from the party,");
-                yml.addDefault(partyNotInPartyAtRemove, "{prefix}&7{player} &eis not in your party!");
+                yml.addDefault(Messages.COMMAND_PARTY_INVITE_USAGE, "{prefix}&eUsage: &7/party invite <player>");
+                yml.addDefault(Messages.COMMAND_PARTY_INVITE_SENT_TARGET_RECEIVE_MSG, "{prefix}&7{player} &eis not online!");
+                yml.addDefault(Messages.COMMAND_PARTY_INVITE_SENT, "{prefix}&eInvite sent to &7{player}&6.");
+                yml.addDefault(Messages.COMMAND_PARTY_INVITE_SENT_TARGET_RECEIVE_MSG, "{prefix}&b{player} &ehas invited to a party! &o&7(Click to accept)");
+                yml.addDefault(Messages.COMMAND_PARTY_INVITE_DENIED_CANNOT_INVITE_YOURSELF, "{prefix}&cYou cannot invite yourself!");
+                yml.addDefault(Messages.COMMAND_PARTY_ACCEPT_DENIED_NO_INVITE, "{prefix}&cThere's no party requests to accept");
+                yml.addDefault(Messages.COMMAND_PARTY_ACCEPT_DENIED_ALREADY_IN_PARTY, "{prefix}&eYou're already in a party!");
+                yml.addDefault(Messages.COMMAND_PARTY_INSUFFICIENT_PERMISSIONS, "{prefix}&cOnly the party owner can do this!");
+                yml.addDefault(Messages.COMMAND_PARTY_ACCEPT_USAGE, "{prefix}&eUsage: &7/party accept <player>");
+                yml.addDefault(Messages.COMMAND_PARTY_ACCEPT_SUCCESS, "{prefix}&7{player} &ehas joined the party!");
+                yml.addDefault(Messages.COMMAND_PARTY_GENERAL_DENIED_NOT_IN_PARTY, "{prefix}&cYou're not in a party!");
+                yml.addDefault(Messages.COMMAND_PARTY_LEAVE_DENIED_IS_OWNER_NEEDS_DISBAND, "{prefix}&cYou can't leave your own party!\n&eTry using: &b/party disband");
+                yml.addDefault(Messages.COMMAND_PARTY_LEAVE_SUCCESS, "{prefix}&7{player} &ehas leaved the party!");
+                yml.addDefault(Messages.COMMAND_PARTY_DISBAND_SUCCESS, "{prefix}&eParty disbanded!");
+                yml.addDefault(Messages.COMMAND_PARTY_REMOVE_USAGE, "{prefix}&7Usage: &e/party remove <player>");
+                yml.addDefault(Messages.COMMAND_PARTY_REMOVE_SUCCESS, "{prefix}&7{player} &ewas removed from the party,");
+                yml.addDefault(Messages.COMMAND_PARTY_REMOVE_DENIED_TARGET_NOT_PARTY_MEMBER, "{prefix}&7{player} &eis not in your party!");
                 yml.addDefault(Messages.NEXT_EVENT_BEDS_DESTROY, "&cBeds Destruction");
                 yml.addDefault(Messages.NEXT_EVENT_DIAMOND_UPGRADE_II, "&fDiamond II");
                 yml.addDefault(Messages.NEXT_EVENT_DIAMOND_UPGRADE_III, "&fDiamond III");
@@ -472,22 +322,22 @@ public class Language {
                 yml.addDefault(Messages.NEXT_EVENT_EMERALD_UPGRADE_II, "&fEmerald II");
                 yml.addDefault(Messages.NEXT_EVENT_EMERALD_UPGRADE_III, "&fEmerald III");
                 yml.addDefault(Messages.NEXT_EVENT_GAME_END, "&4Game End");
-                yml.addDefault(Messages.TITLE_BEDS_DESTROYED, "&cBED DESTROYED!");
-                yml.addDefault(Messages.SUBTITLE_BEDS_DESTROYED, "&fAll beds have been destroyed!");
-                yml.addDefault(Messages.CHAT_BEDS_DESTROYED, "&c&lAll beds have been destroyed!");
-                yml.addDefault(Messages.TITLE_SUDDEN_DEATH, "&cSudden Death");
-                yml.addDefault(Messages.SUBTITLE_SUDDEN_DEATH, "");
-                yml.addDefault(Messages.CHAT_SUDDEN_DEATH, "&cSUDDEN DEATH: &6&b{TeamDragons} {TeamColor}{TeamName} Dragon!");
+                yml.addDefault(Messages.NEXT_EVENT_TITLE_ANNOUNCE_BEDS_DESTROYED, "&cBED DESTROYED!");
+                yml.addDefault(Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_BEDS_DESTROYED, "&fAll beds have been destroyed!");
+                yml.addDefault(Messages.NEXT_EVENT_CHAT_ANNOUNCE_BEDS_DESTROYED, "&c&lAll beds have been destroyed!");
+                yml.addDefault(Messages.NEXT_EVENT_TITLE_ANNOUNCE_SUDDEN_DEATH, "&cSudden Death");
+                yml.addDefault(Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_SUDDEN_DEATH, "");
+                yml.addDefault(Messages.NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH, "&cSUDDEN DEATH: &6&b{TeamDragons} {TeamColor}{TeamName} Dragon!");
                 break;
         }
         lbj.save();
         lbj.langName = lbj.m("name");
-        lbj.prefixColor = ChatColor.translateAlternateColorCodes('&', yml.getString(prefix));
+        lbj.prefixColor = ChatColor.translateAlternateColorCodes('&', yml.getString(Messages.PREFIX));
     }
 
     private void saveShopStuff(String path, Object name, Object lore) {
-        yml.addDefault(shopPath + path + ".name", name);
-        yml.addDefault(shopPath + path + ".lore", lore);
+        yml.addDefault(Messages.SHOP_PATH + path + ".name", name);
+        yml.addDefault(Messages.SHOP_PATH + path + ".lore", lore);
     }
 
     public static List<String> getScoreboard(Player p, String path, String alternative) {
@@ -596,15 +446,15 @@ public class Language {
             /** save messages for stats gui items if custom items added */
             for (String item : Main.config.getYml().getConfigurationSection("statsGUI").getKeys(false)) {
                 if (item.equalsIgnoreCase("invSize")) continue;
-                l.yml.addDefault(statsGUIpath + "." + item + ".name", "Name not set");
-                l.yml.addDefault(statsGUIpath + "." + item + ".lore", Arrays.asList("lore not set"));
+                l.yml.addDefault(Messages.PLAYER_STATS_GUI_PATH + "." + item + ".name", "Name not set");
+                l.yml.addDefault(Messages.PLAYER_STATS_GUI_PATH + "." + item + ".lore", Arrays.asList("lore not set"));
             }
             l.save();
         }
     }
 
     private void addDefaultStatsMsg(YamlConfiguration yml, String path, String name, String... lore){
-        yml.addDefault(statsGUIpath+"."+path+".name", name);
-        yml.addDefault(statsGUIpath+"."+path+".lore", lore);
+        yml.addDefault(Messages.PLAYER_STATS_GUI_PATH+"."+path+".name", name);
+        yml.addDefault(Messages.PLAYER_STATS_GUI_PATH+"."+path+".lore", lore);
     }
 }

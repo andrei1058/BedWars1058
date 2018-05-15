@@ -3,6 +3,7 @@ package com.andrei1058.bedwars.arena;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.configuration.Language;
+import com.andrei1058.bedwars.configuration.Messages;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -54,7 +55,7 @@ public class Misc {
         p.sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (p.isOnline()) {
-                p.kickPlayer(getMsg(p, Language.restartKick));
+                p.kickPlayer(getMsg(p, Messages.ARENA_RESTART_PLAYER_KICK));
             }
         }, 120L);
     }
@@ -94,12 +95,12 @@ public class Misc {
         ItemMeta im = i.getItemMeta();
         im.spigot().setUnbreakable(true);
         try {
-            im.setLore(getList(p, Language.arenaGuiItemLore));
+            im.setLore(getList(p, Messages.ARENA_GUI_ITEM_LORE));
         } catch (Exception ex) {
             plugin.getLogger().severe("There was a problem when loading arena gui's lore");
         }
         try {
-            im.setDisplayName(getMsg(p, Language.arenaGuiItemName));
+            im.setDisplayName(getMsg(p, Messages.ARENA_GUI_ITEM_NAME));
         } catch (Exception ex) {
             plugin.getLogger().severe("There was a problem when loading arena gui's name");
         }
@@ -132,12 +133,12 @@ public class Misc {
         ItemMeta im = i.getItemMeta();
         im.spigot().setUnbreakable(true);
         try {
-            im.setLore(getList(p, Language.statsItemLore));
+            im.setLore(getList(p, Messages.PLAYER_STATS_ITEM_LORE));
         } catch (Exception ex) {
             plugin.getLogger().severe("There was a problem when loading stats lore");
         }
         try {
-            im.setDisplayName(getMsg(p, Language.statsItemName));
+            im.setDisplayName(getMsg(p, Messages.PLAYER_STATS_ITEM_NAME));
         } catch (Exception ex) {
             plugin.getLogger().severe("There was a problem when loading ststs name");
         }
@@ -237,20 +238,20 @@ public class Misc {
     public static void unknownReason(BedWarsTeam t, Arena a, Player victim){
         if (t.isBedDestroyed()) {
             for (Player on : a.getPlayers()) {
-                on.sendMessage(getMsg(on, lang.unknowReasonDieFinalKill).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString())
+                on.sendMessage(getMsg(on, Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString())
                         .replace("{PlayerName}", victim.getName()));
             }
             for (Player on : a.getSpectators()) {
-                on.sendMessage(getMsg(on, lang.unknowReasonDieFinalKill).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString())
+                on.sendMessage(getMsg(on, Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString())
                         .replace("{PlayerName}", victim.getName()));
             }
         } else {
             for (Player on : a.getPlayers()) {
-                on.sendMessage(getMsg(on, lang.unknowReasonDie).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString())
+                on.sendMessage(getMsg(on, Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString())
                         .replace("{PlayerName}", victim.getName()));
             }
             for (Player on : a.getSpectators()) {
-                on.sendMessage(getMsg(on, lang.unknowReasonDie).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString())
+                on.sendMessage(getMsg(on, Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString())
                         .replace("{PlayerName}", victim.getName()));
             }
         }
@@ -280,10 +281,10 @@ public class Misc {
         Timestamp firstPlay = database.getFirstPlay(p), lastPlay = database.getLastPlay(p);
 
         /** cache time format */
-        String timeFormat = getMsg(p, lang.statsDateTimeFormat), never = getMsg(p, lang.never);
+        String timeFormat = getMsg(p, Messages.FORMATTING_STATS_DATE_FORMAT), never = getMsg(p, Messages.MEANING_NEVER);
 
         /** create inventory */
-        Inventory inv = Bukkit.createInventory(null, config.getInt("statsGUI.invSize"), replaceStatsPlaceholders(getMsg(p, lang.statsInvName),
+        Inventory inv = Bukkit.createInventory(null, config.getInt("statsGUI.invSize"), replaceStatsPlaceholders(getMsg(p, Messages.PLAYER_STATS_GUI_INV_NAME),
                 kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never));
 
         /** add custom items to gui */
@@ -293,10 +294,10 @@ public class Misc {
             /** create new itemStack for content */
             ItemStack i = new ItemStack(Material.valueOf(config.getYml().getString("statsGUI."+s+".itemStack").toUpperCase()), 1, (byte) config.getInt("statsGUI."+s+".data"));
             ItemMeta im = i.getItemMeta();
-            im.setDisplayName(replaceStatsPlaceholders(getMsg(p, lang.statsGUIpath+"."+s+".name"), kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed,
+            im.setDisplayName(replaceStatsPlaceholders(getMsg(p, Messages.PLAYER_STATS_GUI_PATH+"."+s+".name"), kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed,
                     firstPlay, lastPlay, timeFormat, p.getName(), never));
             List<String> lore = new ArrayList<>();
-            for (String string : getList(p, lang.statsGUIpath+"."+s+".lore")){
+            for (String string : getList(p, Messages.PLAYER_STATS_GUI_PATH+"."+s+".lore")){
                 lore.add(replaceStatsPlaceholders(string, kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never));
             }
             im.setLore(lore);
@@ -319,7 +320,7 @@ public class Misc {
 
     public static void giveLobbySb(Player p){
         if (config.getBoolean("lobbyScoreboard")){
-            new SBoard(p, getList(p, lang.lobbyScoreboard), null);
+            new SBoard(p, getList(p, Messages.SCOREBOARD_LOBBY), null);
         }
     }
 }

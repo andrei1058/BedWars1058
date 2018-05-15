@@ -168,13 +168,12 @@ public class Arena {
         }
         //
         if (getArenaByPlayer(p) != null) {
-            p.sendMessage(getMsg(p, Language.youreInGame));
             return;
         }
         if (getParty().hasParty(p)) {
             if (!skipOwnerCheck) {
                 if (!getParty().isOwner(p)) {
-                    p.sendMessage(getMsg(p, Language.leaderChoose));
+                    p.sendMessage(getMsg(p, Messages.ARENA_JOIN_DENIED_NOT_PARTY_LEADER));
                     return;
                 }
 
@@ -183,7 +182,7 @@ public class Arena {
                 return;
             }*/
                 if (getParty().partySize(p) > maxInTeam * getTeams().size() - getPlayers().size()) {
-                    p.sendMessage(getMsg(p, Language.partyTooBig));
+                    p.sendMessage(getMsg(p, Messages.ARENA_JOIN_DENIED_PARTY_TOO_BIG));
                     return;
                 }
                 for (Player mem : getParty().getMembers(p)) {
@@ -202,7 +201,7 @@ public class Arena {
         }
         if (status == GameState.waiting || (status == GameState.starting && countdownS > 2)) {
             if (players.size() >= maxPlayers && !isVip(p)) {
-                TextComponent text = new TextComponent(getMsg(p, Language.fullArena));
+                TextComponent text = new TextComponent(getMsg(p, Messages.ARENA_JOIN_DENIED_IS_FULL));
                 text.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, config.getYml().getString("storeLink")));
                 p.spigot().sendMessage(text);
                 return;
@@ -212,20 +211,20 @@ public class Arena {
                     if (!isVip(on)) {
                         canJoin = true;
                         removePlayer(on);
-                        TextComponent vipKick = new TextComponent(getMsg(p, Language.vipJoinedSlot));
+                        TextComponent vipKick = new TextComponent(getMsg(p, Messages.ARENA_JOIN_VIP_KICK));
                         vipKick.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, config.getYml().getString("storeLink")));
                         p.spigot().sendMessage(vipKick);
                     }
                 }
                 if (!canJoin) {
-                    p.sendMessage(getMsg(p, Language.vipNoJoin));
+                    p.sendMessage(getMsg(p, Messages.ARENA_JOIN_DENIED_IS_FULL_VIP_REQUIRED));
                     return;
                 }
             }
             p.closeInventory();
             players.add(p);
             for (Player on : players) {
-                on.sendMessage(getMsg(on, lang.playerJoin).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
+                on.sendMessage(getMsg(on, Messages.ARENA_JOIN_PLAYER_JOIN_MSG).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
             }
             setArenaByPlayer(p, false);
 
@@ -252,9 +251,9 @@ public class Arena {
             playerLocation.put(p, p.getLocation());
             p.teleport(cm.getArenaLoc("waiting.Loc"));
             if (getStatus() == GameState.waiting) {
-                new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + "Waiting", lang.scoreboardDefaultWaiting), this);
+                new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + "Waiting", Messages.SCOREBOARD_DEFAULT_WAITING), this);
             } else if (getStatus() == GameState.starting) {
-                new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + "Starting", lang.scoreboardDefaultStarting), this);
+                new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + "Starting", Messages.SCOREBOARD_DEFAULT_STARTING), this);
             }
             leaveItem(p);
 
@@ -343,7 +342,7 @@ public class Arena {
 
         if (status != GameState.restarting) {
             for (Player on : players) {
-                on.sendMessage(getMsg(p, Language.playerLeft).replace("{player}", p.getName()));
+                on.sendMessage(getMsg(p, Messages.ARENA_LEAVE_PLAYER_LEAVE_MSG).replace("{player}", p.getName()));
             }
         }
 
@@ -361,10 +360,10 @@ public class Arena {
             if (t != null) {
                 if (t.getMembers().isEmpty()) {
                     for (Player p2 : this.getPlayers()) {
-                        p2.sendMessage(getMsg(p2, lang.teamEliminatedChat).replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getName()));
+                        p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getName()));
                     }
                     for (Player p2 : this.getSpectators()) {
-                        p2.sendMessage(getMsg(p2, lang.teamEliminatedChat).replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getName()));
+                        p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getName()));
                     }
                 }
             }
@@ -392,7 +391,7 @@ public class Arena {
         if (status == GameState.starting && (maxInTeam > players.size() && teamuri || players.size() < minPlayers && !teamuri)) {
             setStatus(GameState.waiting);
             for (Player on : players) {
-                on.sendMessage(getMsg(p, Language.insufficientPlayers));
+                on.sendMessage(getMsg(p, Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS));
             }
         } else if (status == GameState.playing && players.size() <= 1) {
             checkWinner();
@@ -416,7 +415,7 @@ public class Arena {
         }
         if (status == GameState.starting || status == GameState.waiting) {
             for (Player on : players) {
-                on.sendMessage(getMsg(on, lang.playerLeave).replace("{player}", p.getDisplayName()));
+                on.sendMessage(getMsg(on, Messages.ARENA_LEAVE_PLAYER_LEAVE_MSG).replace("{player}", p.getDisplayName()));
             }
         }
         for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
@@ -533,7 +532,7 @@ public class Arena {
         for (Entity e : world.getEntities()) {
             if (e.getType() == EntityType.PLAYER) {
                 Player p = (Player) e;
-                p.kickPlayer(getMsg(p, Language.restartKick));
+                p.kickPlayer(getMsg(p, Messages.ARENA_RESTART_PLAYER_KICK));
             }
         }
         Bukkit.unloadWorld(world, false);
@@ -679,11 +678,11 @@ public class Arena {
                             continue;
                         }
                         if (maxInTeam > 1) {
-                            nms.spawnShop(t.getTeamUpgrades(), lang.teamUpgradesName, getPlayers(), this);
-                            nms.spawnShop(t.getShop(), lang.shopTeamName, getPlayers(), this);
+                            nms.spawnShop(t.getTeamUpgrades(), Messages.UPGRADES_TEAM_NPC_NAME, getPlayers(), this);
+                            nms.spawnShop(t.getShop(), Messages.SHOP_TEAM_NAME, getPlayers(), this);
                         } else {
-                            nms.spawnShop(t.getTeamUpgrades(), lang.soloUpgradesName, getPlayers(), this);
-                            nms.spawnShop(t.getShop(), lang.shopSoloName, getPlayers(), this);
+                            nms.spawnShop(t.getTeamUpgrades(), Messages.UPGRADES_SOLO_NPC_NAME, getPlayers(), this);
+                            nms.spawnShop(t.getShop(), Messages.SHOP_SOLO_NAME, getPlayers(), this);
                         }
                     }
 
@@ -695,7 +694,10 @@ public class Arena {
                         for (Player p : bwt.getMembers()) {
                             bwt.firstSpawn(p);
                             p.setHealth(p.getHealth() - 0.0001);
-                            nms.sendTitle(p, getMsg(p, lang.titleStart), null, 0, 20, 0);
+                            nms.sendTitle(p, getMsg(p, Messages.ARENA_STATUS_START_PLAYER_TITLE), null, 0, 20, 0);
+                            for (String tut : getList(p, Messages.ARENA_STATUS_START_PLAYER_TUTORIAL)){
+                                p.sendMessage(tut);
+                            }
                         }
                     }
                     setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_II);
@@ -706,13 +708,13 @@ public class Arena {
                         p.playSound(p.getLocation(), nms.countdownTick(), 1f, 1f);
                         if (countdownS >= 10) {
                             nms.sendTitle(p, "§a" + countdownS, null, 0, 20, 0);
-                            p.sendMessage(getMsg(p, lang.arenaStartsIn).replace("{time}", String.valueOf(countdownS)));
+                            p.sendMessage(getMsg(p, Messages.ARENA_STATUS_START_COUNTDOWN).replace("{time}", String.valueOf(countdownS)));
                         } else if (countdownS > 3) {
                             nms.sendTitle(p, "§e" + countdownS, null, 0, 20, 0);
-                            p.sendMessage(getMsg(p, lang.arenaStartsIn).replace("{time}", "§c" + String.valueOf(countdownS)));
+                            p.sendMessage(getMsg(p, Messages.ARENA_STATUS_START_COUNTDOWN).replace("{time}", "§c" + String.valueOf(countdownS)));
                         } else {
                             nms.sendTitle(p, "§c" + countdownS, null, 0, 20, 0);
-                            p.sendMessage(getMsg(p, lang.arenaStartsIn).replace("{time}", "§c" + String.valueOf(countdownS)));
+                            p.sendMessage(getMsg(p, Messages.ARENA_STATUS_START_COUNTDOWN).replace("{time}", "§c" + String.valueOf(countdownS)));
                         }
                     }
                 }
@@ -755,12 +757,12 @@ public class Arena {
                         bedsDestroyCountdown--;
                         if (bedsDestroyCountdown == 0) {
                             for (Player p : getPlayers()) {
-                                nms.sendTitle(p, getMsg(p, Messages.TITLE_BEDS_DESTROYED), getMsg(p, Messages.SUBTITLE_BEDS_DESTROYED), 0, 30, 0);
-                                p.sendMessage(getMsg(p, Messages.CHAT_BEDS_DESTROYED));
+                                nms.sendTitle(p, getMsg(p, Messages.NEXT_EVENT_TITLE_ANNOUNCE_BEDS_DESTROYED), getMsg(p, Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_BEDS_DESTROYED), 0, 30, 0);
+                                p.sendMessage(getMsg(p, Messages.NEXT_EVENT_CHAT_ANNOUNCE_BEDS_DESTROYED));
                             }
                             for (Player p : getSpectators()) {
-                                nms.sendTitle(p, getMsg(p, Messages.TITLE_BEDS_DESTROYED), getMsg(p, Messages.SUBTITLE_BEDS_DESTROYED), 0, 30, 0);
-                                p.sendMessage(getMsg(p, Messages.CHAT_BEDS_DESTROYED));
+                                nms.sendTitle(p, getMsg(p, Messages.NEXT_EVENT_TITLE_ANNOUNCE_BEDS_DESTROYED), getMsg(p, Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_BEDS_DESTROYED), 0, 30, 0);
+                                p.sendMessage(getMsg(p, Messages.NEXT_EVENT_CHAT_ANNOUNCE_BEDS_DESTROYED));
                             }
                             for (BedWarsTeam t : getTeams()) {
                                 t.setBedDestroyed(true);
@@ -772,18 +774,18 @@ public class Arena {
                         dragonCountdown--;
                         if (dragonCountdown == 0) {
                             for (Player p : getPlayers()) {
-                                nms.sendTitle(p, getMsg(p, Messages.TITLE_SUDDEN_DEATH), getMsg(p, Messages.SUBTITLE_SUDDEN_DEATH), 0, 30, 0);
+                                nms.sendTitle(p, getMsg(p, Messages.NEXT_EVENT_TITLE_ANNOUNCE_SUDDEN_DEATH), getMsg(p, Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_SUDDEN_DEATH), 0, 30, 0);
                                 for (BedWarsTeam t : getTeams()) {
                                     if (t.getMembers().isEmpty()) continue;
-                                    p.sendMessage(getMsg(p, Messages.CHAT_SUDDEN_DEATH).replace("{TeamDragons}", String.valueOf(t.getDragons()))
+                                    p.sendMessage(getMsg(p, Messages.NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH).replace("{TeamDragons}", String.valueOf(t.getDragons()))
                                             .replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getName()));
                                 }
                             }
                             for (Player p : getSpectators()) {
-                                nms.sendTitle(p, getMsg(p, Messages.TITLE_SUDDEN_DEATH), getMsg(p, Messages.SUBTITLE_SUDDEN_DEATH), 0, 30, 0);
+                                nms.sendTitle(p, getMsg(p, Messages.NEXT_EVENT_TITLE_ANNOUNCE_SUDDEN_DEATH), getMsg(p, Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_SUDDEN_DEATH), 0, 30, 0);
                                 for (BedWarsTeam t : getTeams()) {
                                     if (t.getMembers().isEmpty()) continue;
-                                    p.sendMessage(getMsg(p, Messages.CHAT_SUDDEN_DEATH).replace("{TeamDragons}", String.valueOf(t.getDragons()))
+                                    p.sendMessage(getMsg(p, Messages.NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH).replace("{TeamDragons}", String.valueOf(t.getDragons()))
                                             .replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getName()));
                                 }
                             }
@@ -824,7 +826,7 @@ public class Arena {
                                     distance = (int) p.getLocation().distance(p2.getLocation());
                                 }
                             }
-                            nms.playAction(p, getMsg(p, lang.actionBarTracking).replace("{team}", TeamColor.getChatColor(t.getColor()) + t.getName())
+                            nms.playAction(p, getMsg(p, Messages.FORMATTING_ACTION_BAR_TRACKING).replace("{team}", TeamColor.getChatColor(t.getColor()) + t.getName())
                                     .replace("{distance}", TeamColor.getChatColor(t.getColor()).toString() + distance).replace("&", "§"));
                         }
                     }
@@ -880,16 +882,16 @@ public class Arena {
         String s = "";
         switch (status) {
             case waiting:
-                s = getMsg(null, Language.statusWaiting);
+                s = getMsg(null, Messages.ARENA_STATUS_WAITING_NAME);
                 break;
             case starting:
-                s = getMsg(null, Language.statusStarting);
+                s = getMsg(null, Messages.ARENA_STATUS_STARTING_NAME);
                 break;
             case restarting:
-                s = getMsg(null, Language.statusRestarting);
+                s = getMsg(null, Messages.ARENA_STATUS_RESTARTING_NAME);
                 break;
             case playing:
-                s = getMsg(null, Language.statusPlaying);
+                s = getMsg(null, Messages.ARENA_STATUS_PLAYING_NAME);
                 break;
         }
         return s;
@@ -985,20 +987,20 @@ public class Arena {
         if (status == GameState.starting) {
             for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
                 if (sb.getArena() == this) {
-                    sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + "Starting", lang.scoreboardDefaultStarting));
+                    sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + "Starting", Messages.SCOREBOARD_DEFAULT_STARTING));
                 }
             }
         } else if (status == GameState.waiting) {
             countdownS = config.getYml().getInt("startingCountdown");
             for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
                 if (sb.getArena() == this) {
-                    sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + "Waiting", lang.scoreboardDefaultWaiting));
+                    sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + "Waiting", Messages.SCOREBOARD_DEFAULT_WAITING));
                 }
             }
         } else if (status == GameState.playing) {
             for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
                 if (sb.getArena() == this) {
-                    sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + "Playing", lang.scoreboardDefaultPlaying));
+                    sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + "Playing", Messages.SCOREBOARD_DEFAULT_PLAYING));
                     sb.giveTeamColorTag();
                 }
             }
@@ -1123,7 +1125,7 @@ public class Arena {
     public static void leaveItem(Player p) {
         if (config.getBoolean("items.leave.enable")) {
             p.getInventory().setItem(config.getInt("items.leave.slot"), Misc.createItem(Material.valueOf(config.getYml().getString("items.leave.itemStack")),
-                    (byte) config.getInt("items.leave.data"), getMsg(p, lang.leaveItemName), getList(p, lang.leaveItemLore)));
+                    (byte) config.getInt("items.leave.data"), getMsg(p, Messages.ARENA_LEAVE_ITEM_NAME), getList(p, Messages.ARENA_LEAVE_ITEM_LORE)));
         }
     }
 
@@ -1148,7 +1150,7 @@ public class Arena {
                     }
                     String firstName = "", secondName = "", thirdName = "", winners = "";
                     for (Player p : winner.getMembers()) {
-                        nms.sendTitle(p, getMsg(p, lang.victoryTitle), null, 0, 40, 0);
+                        nms.sendTitle(p, getMsg(p, Messages.ARENA_VICTORY_PLAYER_TITLE), null, 0, 40, 0);
                         winners = winners + p.getName() + " ";
                     }
                     if (winners.endsWith(" ")) {
@@ -1171,15 +1173,15 @@ public class Arena {
                         }
                     }
                     for (Player p : world.getPlayers()) {
-                        p.sendMessage(getMsg(p, lang.teamWonChat).replace("{TeamColor}", TeamColor.getChatColor(winner.getColor()).toString()).replace("{TeamName}", winner.getName()));
+                        p.sendMessage(getMsg(p, Messages.ARENA_TEAM_WON_CHAT).replace("{TeamColor}", TeamColor.getChatColor(winner.getColor()).toString()).replace("{TeamName}", winner.getName()));
                         if (!winner.getMembers().contains(p)) {
-                            nms.sendTitle(p, getMsg(p, lang.gameOverTitle), null, 0, 40, 0);
+                            nms.sendTitle(p, getMsg(p, Messages.ARENA_GAME_OVER_PLAYER_TITLE), null, 0, 40, 0);
                         }
-                        for (String s : getList(p, lang.gameEndStats)) {
-                            p.sendMessage(s.replace("{firstName}", firstName.isEmpty() ? getMsg(p, lang.nobody) : firstName).replace("{firstKills}", String.valueOf(first))
-                                    .replace("{secondName}", secondName.isEmpty() ? getMsg(p, lang.nobody) : secondName).replace("{secondKills}", String.valueOf(second))
-                                    .replace("{thirdName}", thirdName.isEmpty() ? getMsg(p, lang.nobody) : thirdName).replace("{thirdKills}", String.valueOf(third))
-                                    .replace("{winnerFormat}", getMaxInTeam() > 1 ? getMsg(p, lang.winnerFormatTeam).replace("{members}", winners) : getMsg(p, lang.winnerFormatSolo).replace("{members}", winners))
+                        for (String s : getList(p, Messages.ARENA_GAME_OVER_PLAYER_CHAT)) {
+                            p.sendMessage(s.replace("{firstName}", firstName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : firstName).replace("{firstKills}", String.valueOf(first))
+                                    .replace("{secondName}", secondName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : secondName).replace("{secondKills}", String.valueOf(second))
+                                    .replace("{thirdName}", thirdName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : thirdName).replace("{thirdKills}", String.valueOf(third))
+                                    .replace("{winnerFormat}", getMaxInTeam() > 1 ? getMsg(p, Messages.FORMATTING_TEAM_WINNER_FORMAT).replace("{members}", winners) : getMsg(p, Messages.FORMATTING_SOLO_WINNER_FORMAT).replace("{members}", winners))
                                     .replace("{TeamColor}", TeamColor.getChatColor(winner.getColor()).toString()).replace("{TeamName}", winner.getName()));
                         }
                     }

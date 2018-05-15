@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.shop;
 
 import com.andrei1058.bedwars.arena.Misc;
+import com.andrei1058.bedwars.configuration.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -44,7 +45,7 @@ public class ShopCategory {
     }
 
     public void openToPlayer(Player p){
-        String path = Misc.replaceLast((getName().replace("main.", shopPath)+".name"), ".invContents", "");
+        String path = Misc.replaceLast((getName().replace("main.", Messages.SHOP_PATH)+".name"), ".invContents", "");
         String name = "§c"+getName()+" name not set :(";
         if (getPlayerLanguage(p).exists(path)){
             name = getMsg(p, path);
@@ -55,8 +56,8 @@ public class ShopCategory {
         for (CategoryContent cc : getContent()){
             ItemStack i = cc.getItemStack().clone();
             ItemMeta im = i.getItemMeta();
-            String ccNameP = getName().replace("main.", shopPath)+"."+cc.getName()+".name";
-            String ccLoreP = getName().replace("main.", shopPath)+"."+cc.getName()+".lore";
+            String ccNameP = getName().replace("main.", Messages.SHOP_PATH)+"."+cc.getName()+".name";
+            String ccLoreP = getName().replace("main.", Messages.SHOP_PATH)+"."+cc.getName()+".lore";
             if (getPlayerLanguage(p).exists(ccNameP)) {
                 im.setDisplayName(getMsg(p, ccNameP));
             } else {
@@ -83,7 +84,7 @@ public class ShopCategory {
     }
 
     public String getDisplayName(Player p){
-        return getMsg(p, Misc.replaceLast((getName().replace("main.", shopPath)+".name"), ".invContents", ""));
+        return getMsg(p, Misc.replaceLast((getName().replace("main.", Messages.SHOP_PATH)+".name"), ".invContents", ""));
     }
 
     public ShopCategory getParent() {

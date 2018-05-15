@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
+import com.andrei1058.bedwars.configuration.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -44,7 +45,7 @@ public class PlayerChat implements Listener {
                 e.getRecipients().clear();
                 e.getRecipients().addAll(p.getWorld().getPlayers());
             }
-            e.setFormat(getMsg(p, lang.chatLobbyFormat).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{vSuffix}", getChatSupport().getSuffix(p))
+            e.setFormat(getMsg(p, Messages.FORMATTING_CHAT_LOBBY).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{vSuffix}", getChatSupport().getSuffix(p))
                     .replace("{player}", p.getName()).replace("{message}", "%2$s").replace("{level}", getLevelSupport().getLevel(p)));
         } else if (isInArena(p)) {
             Arena a = Arena.getArenaByPlayer(p);
@@ -53,7 +54,7 @@ public class PlayerChat implements Listener {
                     e.getRecipients().clear();
                     e.getRecipients().addAll(a.getSpectators());
                 }
-                e.setFormat(getMsg(p, lang.chatSpectatorFormat).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{vSuffix}", getChatSupport().getSuffix(p))
+                e.setFormat(getMsg(p, Messages.FORMATTING_CHAT_SPECTATOR).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{vSuffix}", getChatSupport().getSuffix(p))
                         .replace("{player}", p.getName()).replace("{message}", "%2$s").replace("{level}", getLevelSupport().getLevel(p)));
             } else {
                 if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) {
@@ -61,14 +62,14 @@ public class PlayerChat implements Listener {
                         e.getRecipients().clear();
                         e.getRecipients().addAll(a.getPlayers());
                     }
-                    e.setFormat(getMsg(p, lang.chatWaitingFormat).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{vSuffix}", getChatSupport().getSuffix(p))
+                    e.setFormat(getMsg(p, Messages.FORMATTING_CHAT_WAITING).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{vSuffix}", getChatSupport().getSuffix(p))
                             .replace("{player}", p.getName()).replace("{message}", "%2$s")
                             .replace("{level}", getLevelSupport().getLevel(p)));
                     return;
                 }
                 BedWarsTeam t = a.getTeam(p);
                 String msg = e.getMessage();
-                if (msg.startsWith("!") || msg.startsWith("shout") || msg.startsWith("SHOUT") || msg.startsWith(getMsg(p, lang.meaningShout))) {
+                if (msg.startsWith("!") || msg.startsWith("shout") || msg.startsWith("SHOUT") || msg.startsWith(getMsg(p, Messages.MEANING_SHOUT))) {
                     if (!config.getBoolean("globalChat")) {
                         e.getRecipients().clear();
                         e.getRecipients().addAll(a.getPlayers());
@@ -76,9 +77,9 @@ public class PlayerChat implements Listener {
                     if (msg.startsWith("!")) msg = msg.replaceFirst("!", "");
                     if (msg.startsWith("shout")) msg = msg.replaceFirst("SHOUT", "");
                     if (msg.startsWith("shout")) msg = msg.replaceFirst("shout", "");
-                    if (msg.startsWith(getMsg(p, lang.meaningShout))) msg = msg.replaceFirst(getMsg(p, lang.meaningShout), "");
+                    if (msg.startsWith(getMsg(p, Messages.MEANING_SHOUT))) msg = msg.replaceFirst(getMsg(p, Messages.MEANING_SHOUT), "");
                     e.setMessage(msg);
-                    e.setFormat(getMsg(p, lang.chatGlobalFormat).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{vSuffix}", getChatSupport().getSuffix(p))
+                    e.setFormat(getMsg(p, Messages.FORMATTING_CHAT_SHOUT).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{vSuffix}", getChatSupport().getSuffix(p))
                             .replace("{player}", p.getName()).replace("{message}", "%2$s").replace("{team}", TeamColor.getChatColor(t.getColor()) + "[" + t.getName().toUpperCase() + "]")
                             .replace("{level}", getLevelSupport().getLevel(p)));
                 } else {
@@ -87,7 +88,7 @@ public class PlayerChat implements Listener {
                             e.getRecipients().clear();
                             e.getRecipients().addAll(a.getPlayers());
                         }
-                        e.setFormat(getMsg(p, lang.chatTeamFormat).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{vSuffix}", getChatSupport().getSuffix(p))
+                        e.setFormat(getMsg(p, Messages.FORMATTING_CHAT_TEAM).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{vSuffix}", getChatSupport().getSuffix(p))
                                 .replace("{player}", p.getName()).replace("{message}", "%2$s").replace("{team}", TeamColor.getChatColor(t.getColor()) + "[" + t.getName().toUpperCase() + "]")
                                 .replace("{level}", getLevelSupport().getLevel(p)));
 
@@ -96,7 +97,7 @@ public class PlayerChat implements Listener {
                             e.getRecipients().clear();
                             e.getRecipients().addAll(t.getMembers());
                         }
-                        e.setFormat(getMsg(p, lang.chatTeamFormat).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{vSuffix}", getChatSupport().getSuffix(p))
+                        e.setFormat(getMsg(p, Messages.FORMATTING_CHAT_TEAM).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{vSuffix}", getChatSupport().getSuffix(p))
                                 .replace("{player}", p.getName()).replace("{message}", "%2$s").replace("{team}", TeamColor.getChatColor(t.getColor()) + "[" + t.getName().toUpperCase() + "]")
                                 .replace("{level}", getLevelSupport().getLevel(p)));
 

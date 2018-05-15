@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.configuration.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,13 +26,13 @@ public class CmdProcess implements Listener {
         String[] cmd = e.getMessage().split(" ");
         if (Arena.isInArena(p)){
             if (cmd[0].equalsIgnoreCase("/party")){
-                p.sendMessage(getMsg(p, lang.notAllowed));
+                p.sendMessage(getMsg(p, Messages.COMMAND_NOT_ALLOWED_IN_GAME));
                 e.setCancelled(true);
                 return;
             }
             for (String cmds : Main.config.l("blockedCmds")){
                 if (cmd[0].equalsIgnoreCase("/"+cmds)){
-                    p.sendMessage(getMsg(p, lang.notAllowed));
+                    p.sendMessage(getMsg(p, Messages.COMMAND_NOT_ALLOWED_IN_GAME));
                     e.setCancelled(true);
                 }
             }

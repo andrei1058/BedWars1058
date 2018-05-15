@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.configuration.Language;
+import com.andrei1058.bedwars.configuration.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -69,9 +70,9 @@ public class ArenaGUI {
                     continue;
             }
             ItemMeta im = i.getItemMeta();
-            im.setDisplayName(getMsg(p, Language.aGuiArenaName).replace("{name}", arenas.get(x).getDisplayName()));
+            im.setDisplayName(getMsg(p, Messages.ARENA_GUI_ARENA_CONTENT_NAME).replace("{name}", arenas.get(x).getDisplayName()));
             List<String> lore = new ArrayList<>();
-            for (String s : getList(p, Language.aGuiArenaLore)) {
+            for (String s : getList(p, Messages.ARENA_GUI_ARENA_CONTENT_LORE)) {
                 if (!(s.contains("{group}") && arenas.get(x).getGroup().equalsIgnoreCase("default"))) {
                     lore.add(s.replace("{on}", String.valueOf(arenas.get(x).getPlayers().size())).replace("{max}",
                             String.valueOf(arenas.get(x).getMaxPlayers())).replace("{status}", arenas.get(x).getDisplayStatus())
@@ -92,7 +93,7 @@ public class ArenaGUI {
         int size = config.getYml().getInt("arenaGui.settings.size");
         if (size % 9 != 0) size = 27;
         if (size > 54) size = 54;
-        Inventory inv = Bukkit.createInventory(p, size, getMsg(p, Language.arenaGuiInvName));
+        Inventory inv = Bukkit.createInventory(p, size, getMsg(p, Messages.ARENA_GUI_INV_NAME));
         refreshInv(p, inv);
         refresh.put(p, inv);
         p.openInventory(inv);

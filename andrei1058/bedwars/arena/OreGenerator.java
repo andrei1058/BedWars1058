@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.api.GeneratorType;
 import com.andrei1058.bedwars.api.GeneratorUpgradeEvent;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Language;
+import com.andrei1058.bedwars.configuration.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -73,9 +74,9 @@ public class OreGenerator {
                     String iso = lan.getIso();
                     HoloGram h = armorStands.get(iso);
                     if (h == null) {
-                        armorStands.put(iso, new HoloGram(iso, createArmorStand(lan.m(lang.generatorTier).replace("{tier}", lan.m(lang.tier1Format)), location.clone().add(0, 3, 0)),
-                                createArmorStand(lan.m(lang.generatorTimer).replace("{seconds}", String.valueOf(lastSpawn)), location.clone().add(0, 2.4, 0)),
-                                createArmorStand(lan.m(lang.generatorDiamond), location.clone().add(0, 2.7, 0)), arena.getWorld()));
+                        armorStands.put(iso, new HoloGram(iso, createArmorStand(lan.m(Messages.GENERATOR_HOLOGRAM_TIER).replace("{tier}", lan.m(Messages.FORMATTING_GENERATOR_TIER1)), location.clone().add(0, 3, 0)),
+                                createArmorStand(lan.m(Messages.GENERATOR_HOLOGRAM_TIMER).replace("{seconds}", String.valueOf(lastSpawn)), location.clone().add(0, 2.4, 0)),
+                                createArmorStand(lan.m(Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND), location.clone().add(0, 2.7, 0)), arena.getWorld()));
                     }
                 }
                 for (HoloGram hg : armorStands.values()) {
@@ -99,9 +100,9 @@ public class OreGenerator {
                     String iso = lang.getIso();
                     HoloGram h = armorStands.get(iso);
                     if (h == null) {
-                        armorStands.put(iso, new HoloGram(iso, createArmorStand(lan.m(lang.generatorTier).replace("{tier}", lan.m(lang.tier1Format)), location.clone().add(0, 3, 0)),
-                                createArmorStand(lan.m(lang.generatorTimer).replace("{seconds}", String.valueOf(lastSpawn)), location.clone().add(0, 2.4, 0)),
-                                createArmorStand(lan.m(lang.generatorEmerald), location.clone().add(0, 2.7, 0)), arena.getWorld()));
+                        armorStands.put(iso, new HoloGram(iso, createArmorStand(lan.m(Messages.GENERATOR_HOLOGRAM_TIER).replace("{tier}", lan.m(Messages.FORMATTING_GENERATOR_TIER1)), location.clone().add(0, 3, 0)),
+                                createArmorStand(lan.m(Messages.GENERATOR_HOLOGRAM_TIMER).replace("{seconds}", String.valueOf(lastSpawn)), location.clone().add(0, 2.4, 0)),
+                                createArmorStand(lan.m(Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD), location.clone().add(0, 2.7, 0)), arena.getWorld()));
                     }
                 }
                 for (HoloGram hg : armorStands.values()) {
@@ -124,12 +125,12 @@ public class OreGenerator {
                 upgradeStage++;
                 if (arena.diamondTier != upgradeStage) {
                     for (Player p : arena.getPlayers()) {
-                        p.sendMessage(getMsg(p, lang.generatorUpgradeMsg).replace("{generatorType}",
-                                getMsg(p, lang.generatorDiamond)).replace("{tier}", getMsg(p, (upgradeStage == 2 ? lang.tier2Format : lang.tier3Format))));
+                        p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
+                                getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND)).replace("{tier}", getMsg(p, (upgradeStage == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
                     }
                     for (Player p : arena.getSpectators()) {
-                        p.sendMessage(getMsg(p, lang.generatorUpgradeMsg).replace("{generatorType}",
-                                getMsg(p, lang.generatorDiamond)).replace("{tier}", getMsg(p, (upgradeStage == 2 ? lang.tier2Format : lang.tier3Format))));
+                        p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
+                                getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND)).replace("{tier}", getMsg(p, (upgradeStage == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
                     }
                 }
                 if (upgradeStage == 2) {
@@ -149,20 +150,20 @@ public class OreGenerator {
                 }
                 ore = new ItemStack(Material.DIAMOND);
                 for (HoloGram e : armorStands.values()) {
-                    e.setTierName(Language.getLang(e.iso).m(lang.generatorTier).replace("{tier}", Language.getLang(e.iso)
-                            .m(upgradeStage == 2 ? lang.tier2Format : lang.tier3Format)));
+                    e.setTierName(Language.getLang(e.iso).m(Messages.GENERATOR_HOLOGRAM_TIER).replace("{tier}", Language.getLang(e.iso)
+                            .m(upgradeStage == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3)));
                 }
                 break;
             case EMERALD:
                 upgradeStage++;
                 if (arena.emeraldTier != upgradeStage) {
                     for (Player p : arena.getPlayers()) {
-                        p.sendMessage(getMsg(p, lang.generatorUpgradeMsg).replace("{generatorType}",
-                                getMsg(p, lang.generatorEmerald)).replace("{tier}", getMsg(p, (upgradeStage == 2 ? lang.tier2Format : lang.tier3Format))));
+                        p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
+                                getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD)).replace("{tier}", getMsg(p, (upgradeStage == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
                     }
                     for (Player p : arena.getSpectators()) {
-                        p.sendMessage(getMsg(p, lang.generatorUpgradeMsg).replace("{generatorType}",
-                                getMsg(p, lang.generatorEmerald)).replace("{tier}", getMsg(p, (upgradeStage == 2 ? lang.tier2Format : lang.tier3Format))));
+                        p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
+                                getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD)).replace("{tier}", getMsg(p, (upgradeStage == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
                     }
                 }
                 if (upgradeStage == 2) {
@@ -182,8 +183,8 @@ public class OreGenerator {
                 }
                 ore = new ItemStack(Material.EMERALD);
                 for (HoloGram e : armorStands.values()) {
-                    e.setTierName(Language.getLang(e.iso).m(lang.generatorTier).replace("{tier}",
-                            Language.getLang(e.iso).m(upgradeStage == 2 ? lang.tier2Format : lang.tier3Format)));
+                    e.setTierName(Language.getLang(e.iso).m(Messages.GENERATOR_HOLOGRAM_TIER).replace("{tier}",
+                            Language.getLang(e.iso).m(upgradeStage == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3)));
                 }
                 break;
         }
@@ -252,7 +253,7 @@ public class OreGenerator {
         }
         lastSpawn--;
         for (HoloGram e : armorStands.values()) {
-            e.setTimerName(Language.getLang(e.iso).m(lang.generatorTimer).replace("{seconds}", String.valueOf(lastSpawn)));
+            e.setTimerName(Language.getLang(e.iso).m(Messages.GENERATOR_HOLOGRAM_TIMER).replace("{seconds}", String.valueOf(lastSpawn)));
         }
     }
 

@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.support.papi;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.configuration.Messages;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 
@@ -35,9 +36,9 @@ public class PAPISupport extends PlaceholderExpansion {
     @Override
     public String onPlaceholderRequest(Player p, String s) {
         if (s.equalsIgnoreCase("stats_firstplay")){
-            return String.valueOf(new SimpleDateFormat(getMsg(p, lang.statsDateTimeFormat)).format(database.getFirstPlay(p)));
+            return String.valueOf(new SimpleDateFormat(getMsg(p, Messages.FORMATTING_STATS_DATE_FORMAT)).format(database.getFirstPlay(p)));
         } else if (s.equalsIgnoreCase("stats_lastplay")){
-            return String.valueOf(new SimpleDateFormat(getMsg(p, lang.statsDateTimeFormat)).format(database.getLastPlay(p)));
+            return String.valueOf(new SimpleDateFormat(getMsg(p, Messages.FORMATTING_STATS_DATE_FORMAT)).format(database.getLastPlay(p)));
         } else if (s.equalsIgnoreCase("stats_kills")) {
             return String.valueOf(database.getKills(p));
         } else if (s.equalsIgnoreCase("stats_wins")){

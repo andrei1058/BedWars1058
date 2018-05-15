@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.upgrades;
 
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.configuration.Language;
+import com.andrei1058.bedwars.configuration.Messages;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -42,17 +43,17 @@ public class UpgradeTier {
         for (String s : getList(p, path+"."+getName()+".lore")){
             if (s.contains("{loreFooter}")){
                 if (isHighest(bwt, tu)){
-                    s=s.replace("{loreFooter}", getMsg(p, loreFooterUnlocked));
+                    s=s.replace("{loreFooter}", getMsg(p, Messages.UPGRADES_LORE_REPLACEMENT_UNLOCKED));
                 } else if (hasEnoughMoney(p)){
-                    s=s.replace("{loreFooter}", getMsg(p, loreFooterClick));
+                    s=s.replace("{loreFooter}", getMsg(p, Messages.UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY));
                 } else {
-                    s=s.replace("{loreFooter}", getMsg(p, loreFooterInsuff));
+                    s=s.replace("{loreFooter}", getMsg(p, Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY));
                 }
             }
             if (getCost() == 1){
                 s=s.replace("{cost}", String.valueOf(cost)).replace("{currency}", getMsg(p, "meaning."+getCurrency()));
             } else {
-                s=s.replace("{cost}", String.valueOf(cost)).replace("{currency}", getMsg(p, lang.pluralPath+"."+getCurrency()));
+                s=s.replace("{cost}", String.valueOf(cost)).replace("{currency}", getMsg(p, Messages.PLURAL_PATH+"."+getCurrency()));
             }
             lore.add(s);
         }
@@ -96,7 +97,7 @@ public class UpgradeTier {
         }
         if (money < getCost()) {
             p.playSound(p.getLocation(), nms.insufficientMoney(), 1f, 1f);
-            p.sendMessage(getMsg(p, Language.insufficientMoney).replace("{currency}", getMsg(p, "meaning." + getCurrency().toLowerCase())).replace("{amount}", String.valueOf(getCost() - money)));
+            p.sendMessage(getMsg(p, Messages.SHOP_INSUFFICIENT_MONEY).replace("{currency}", getMsg(p, "meaning." + getCurrency().toLowerCase())).replace("{amount}", String.valueOf(getCost() - money)));
             p.closeInventory();
             return false;
         }

@@ -6,6 +6,7 @@ import com.andrei1058.bedwars.arena.ArenaGUI;
 
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.Misc;
+import com.andrei1058.bedwars.configuration.Messages;
 import com.andrei1058.bedwars.shop.ShopCategory;
 import com.andrei1058.bedwars.upgrades.UpgradeGroup;
 import org.bukkit.Location;
@@ -121,11 +122,11 @@ public class Interact implements Listener {
             }
             if (!inHand.hasItemMeta()) return;
             if (!inHand.getItemMeta().hasDisplayName()) return;
-            if (inHand.getItemMeta().getDisplayName().equalsIgnoreCase(getMsg(p, lang.arenaGuiItemName))) {
+            if (inHand.getItemMeta().getDisplayName().equalsIgnoreCase(getMsg(p, Messages.ARENA_GUI_ITEM_NAME))) {
                 ArenaGUI.openGui(p);
-            } else if (inHand.getItemMeta().getDisplayName().equalsIgnoreCase(getMsg(p, lang.leaveItemName))) {
+            } else if (inHand.getItemMeta().getDisplayName().equalsIgnoreCase(getMsg(p, Messages.ARENA_LEAVE_ITEM_NAME))) {
                 p.performCommand("bw leave");
-            } else if (inHand.getItemMeta().getDisplayName().equalsIgnoreCase(getMsg(p, lang.statsItemName))) {
+            } else if (inHand.getItemMeta().getDisplayName().equalsIgnoreCase(getMsg(p, Messages.PLAYER_STATS_ITEM_NAME))) {
                 Misc.openStatsGUI(p);
             }
         }

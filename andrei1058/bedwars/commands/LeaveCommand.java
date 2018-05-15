@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.configuration.Language;
+import com.andrei1058.bedwars.configuration.Messages;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import org.bukkit.Bukkit;
@@ -30,7 +31,7 @@ public class LeaveCommand extends BukkitCommand {
             if (getServerType() == ServerType.MULTIARENA && spigot.getBoolean("settings.bungeecord")){
                 Misc.moveToLobbyOrKick(p);
             } else {
-                p.sendMessage(getMsg(p, Language.notInArena));
+                p.sendMessage(getMsg(p, Messages.COMMAND_LEAVE_DENIED_NOT_IN_ARENA));
             }
         } else {
             if (a.isPlayer(p)){
