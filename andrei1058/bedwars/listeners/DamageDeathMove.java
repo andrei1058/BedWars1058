@@ -537,7 +537,7 @@ public class DamageDeathMove implements Listener {
             if (a != null) {
                 if (e.getEntity() instanceof Fireball){
                     Location l = e.getEntity().getLocation();
-                    e.getEntity().getWorld().createExplosion(l.getX(), l.getY(), l.getZ(), 150, false, false);
+                    e.getEntity().getWorld().createExplosion(l.getX(), l.getY(), l.getZ(), 6, false, false);
                     return;
                 }
                 String utility = "";
