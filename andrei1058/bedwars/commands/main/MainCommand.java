@@ -51,7 +51,11 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         new Join(this, "join");
         new Leave(this, "leave");
         new com.andrei1058.bedwars.commands.main.subcmds.Language(this, "lang");
-        new com.andrei1058.bedwars.commands.main.subcmds.Language(this, "language");
+
+        /* Trebuie false ca altfel apare in bw help, si este deja bw lang destul */
+        SubCommand duplicated = new com.andrei1058.bedwars.commands.main.subcmds.Language(this, "language");
+        duplicated.showInList(false);
+
         if (getServerType() != ServerType.BUNGEE){
             new CmdGUI(this, "gui");
         }
