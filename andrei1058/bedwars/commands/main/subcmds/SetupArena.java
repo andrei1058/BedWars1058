@@ -44,7 +44,7 @@ public class SetupArena extends SubCommand {
         Player p = (Player) s;
         if (!MainCommand.isLobbySet(p)) return true;
         if (args.length != 1) {
-            p.sendMessage("§c▪ §7Usage: §o/" + getParent().getName() + " setupArena <mapName>");
+            p.sendMessage("§c▪ §7Usage: §o/" + getParent().getName() + " "+getSubCommandName()+" <mapName>");
             return true;
         }
         File worldServer = new File(Bukkit.getServer().getWorldContainer().getPath() + "/" + args[0]);

@@ -62,7 +62,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         new Stats(this, "stats");
         new Forcestart(this, "forcestart");
         new SetLobby(this, "setLobby");
-        new SetupArena(this, "setupArea");
+        new SetupArena(this, "setupArena");
         new com.andrei1058.bedwars.commands.main.subcmds.List(this, "list");
         new DelArena(this, "delArena");
         new EnableArena(this, "enableArena");
