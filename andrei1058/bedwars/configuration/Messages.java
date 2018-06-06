@@ -17,9 +17,6 @@ public class Messages {
     public static String NEXT_EVENT_SUBTITLE_ANNOUNCE_SUDDEN_DEATH = "arena.suddenDeath.subTitle";
     public static String NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH = "arena.suddenDeath.chat";
 
-    /** */
-    public static String PREFIX = "prefix";
-
     /** General commands reply */
     public static String COMMAND_MAIN = "cmd.main";
     public static String COMMAND_LANG_LIST_HEADER = "lang.listHeader";
@@ -49,6 +46,10 @@ public class Messages {
     public static String COMMAND_PARTY_REMOVE_USAGE = "party.removeUsage";
     public static String COMMAND_PARTY_REMOVE_SUCCESS = "party.removed";
     public static String COMMAND_PARTY_REMOVE_DENIED_TARGET_NOT_PARTY_MEMBER = "player.removeNotIn";
+    public static String COMMAND_NOT_FOUND_OR_REQUIRES_SAFEMODE_OFF = "cmd.notFound";
+    public static String COMMAND_FORCESTART_NOT_IN_GAME = "cmd.forcestart.notInGame";
+    public static String COMMAND_FORCESTART_SUCCESS = "cmd.forcestart.success";
+    public static String COMMAND_FORCESTART_NO_PERM = "cmd.forcestart.noPerm";
 
     /** Arena join/ leave related */
     public static String ARENA_JOIN_VIP_KICK = "arena.kickedByVip";
@@ -172,6 +173,7 @@ public class Messages {
     public static String BED_HOLOGRAM_DEFEND = "arena.bedHologram";
     public static String BED_HOLOGRAM_DESTROYED = "arena.bedHologramDestroyed";
     public static String TEAM_ELIMINATED_CHAT = "arena.teamEliminatedChat";
+    public static String PREFIX = "prefix";
 
 
     /** Upgrades/ Shop*/

@@ -47,9 +47,9 @@ public class Language {
     public static void setupLang(Language lbj) {
         YamlConfiguration yml = lbj.yml;
         yml.options().copyDefaults(true);
-        yml.addDefault(Messages.PREFIX, "");
         switch (lbj.iso) {
             default:
+                yml.addDefault(Messages.PREFIX, "");
                 yml.addDefault("name", "English");
                 yml.addDefault(Messages.COMMAND_MAIN, Arrays.asList("", "&2▪ &7/" + mainCmd + " stats", "&2▪ &7/" + mainCmd + " join &o<arena/group>", "&2▪ &7/" + mainCmd + " leave", "&2▪ &7/" + mainCmd + " lang", "&2▪ &7/" + mainCmd + " gui"));
                 yml.addDefault(Messages.ARENA_JOIN_VIP_KICK, "{prefix}&cSorry, but you were kicked out because a donor joined the arena.\n&aPlease consider donating for more features. &7&o(click)");
@@ -328,6 +328,10 @@ public class Language {
                 yml.addDefault(Messages.NEXT_EVENT_TITLE_ANNOUNCE_SUDDEN_DEATH, "&cSudden Death");
                 yml.addDefault(Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_SUDDEN_DEATH, "");
                 yml.addDefault(Messages.NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH, "&cSUDDEN DEATH: &6&b{TeamDragons} {TeamColor}{TeamName} Dragon!");
+                yml.addDefault(Messages.COMMAND_NOT_FOUND_OR_REQUIRES_SAFEMODE_OFF, "{prefix}&cCommand not found or you don't have permission!");
+                yml.addDefault(Messages.COMMAND_FORCESTART_NOT_IN_GAME, "§c▪ §7You're not playing!");
+                yml.addDefault(Messages.COMMAND_FORCESTART_SUCCESS, "§c▪ §7Countdown shortened!");
+                yml.addDefault(Messages.COMMAND_FORCESTART_NO_PERM, "{prefix}&7You can't forcestart the arena.\n§7Please consider donating for VIP features.");
                 break;
         }
         lbj.save();

@@ -5,7 +5,7 @@ import com.andrei1058.bedwars.api.GameAPI;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.commands.LeaveCommand;
-import com.andrei1058.bedwars.commands.MainCommand;
+import com.andrei1058.bedwars.commands.main.MainCommand;
 import com.andrei1058.bedwars.configuration.*;
 import com.andrei1058.bedwars.listeners.*;
 import com.andrei1058.bedwars.support.Metrics;
