@@ -33,8 +33,8 @@ public class ArenaGroup extends SubCommand {
         setPriority(8);
         showInList(true);
         setOpCommand(true);
-        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " " + getSubCommandName(), "§fCreate/ remove an arenaGroup\n§fAdd/ remove an arena from a group.",
-                "/" + getParent().getName() + " " + getSubCommandName(), ClickEvent.Action.SUGGEST_COMMAND));
+        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " " + getSubCommandName()+" §e§o(click for details)", "§fCreate/ remove an arenaGroup\n§fAdd/ remove an arena from a group.",
+                "/" + getParent().getName() + " " + getSubCommandName(), ClickEvent.Action.RUN_COMMAND));
     }
 
     @Override

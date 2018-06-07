@@ -24,7 +24,8 @@ public class Reload extends SubCommand {
         setPriority(10);
         showInList(true);
         setOpCommand(true);
-        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " reload", "§fRealod messages.", "/"+ getParent().getName() + " reload", ClickEvent.Action.RUN_COMMAND));
+        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " "+getSubCommandName()+" §e§o(messages)",
+                "§fRealod messages.\n§cNot recommended!", "/"+ getParent().getName() + " "+getSubCommandName(), ClickEvent.Action.RUN_COMMAND));
     }
 
     @Override

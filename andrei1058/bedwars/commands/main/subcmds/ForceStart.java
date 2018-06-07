@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
-public class Forcestart extends SubCommand {
+public class ForceStart extends SubCommand {
     /**
      * Create a sub-command for a bedWars command
      * Make sure you return true or it will say command not found
@@ -21,11 +21,12 @@ public class Forcestart extends SubCommand {
      * @param name   sub-command name
      * @since 0.6.1 api v6
      */
-    public Forcestart(ParentCommand parent, String name) {
+    public ForceStart(ParentCommand parent, String name) {
         super(parent, name);
         setPriority(15);
         showInList(true);
-        setDisplayInfo(MainCommand.createTC("§6 ▪ §7/"+MainCommand.getInstance().getName()+" "+getSubCommandName()+" §6§o(forcestart an arena)", "/"+getParent().getName()+" "+getSubCommandName(), "§fForcestart an arena."));
+        setDisplayInfo(MainCommand.createTC("§6 ▪ §7/"+MainCommand.getInstance().getName()+" "+getSubCommandName()+" §e§o(an arena)",
+                "/"+getParent().getName()+" "+getSubCommandName(), "§fForcestart an arena.\n§fPermission: §c"+Permissions.PERMISSION_FORCESTART));
     }
 
     @Override

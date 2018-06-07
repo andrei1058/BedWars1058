@@ -27,7 +27,7 @@ public class Build extends SubCommand {
         setOpCommand(true);
         setPriority(9);
         showInList(true);
-        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " "+getSubCommandName(), "§fEnable or disable build session so you can break or place blocks.",
+        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " "+getSubCommandName()+ " §e§o(start/ stop build session)", "§fEnable or disable build session so you can break or place blocks.",
                 "/" + getParent().getName() + " "+getSubCommandName(), ClickEvent.Action.RUN_COMMAND));
     }
 

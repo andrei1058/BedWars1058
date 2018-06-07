@@ -30,7 +30,7 @@ public class Cmds extends SubCommand {
         super(parent, name);
         setPriority(20);
         showInList(true);
-        setDisplayInfo(MainCommand.createTC("§6 ▪ §7/"+MainCommand.getInstance().getName()+" "+getSubCommandName(), "/"+getParent().getName()+" "+getSubCommandName(), "§fView player commands."));
+        setDisplayInfo(MainCommand.createTC("§6 ▪ §7/"+MainCommand.getInstance().getName()+" "+getSubCommandName()+ " §e§o(view player cmds)", "/"+getParent().getName()+" "+getSubCommandName(), "§fView player commands."));
     }
 
     @Override

@@ -25,8 +25,8 @@ public class SetLobby extends SubCommand {
         setPriority(1);
         showInList(true);
         setOpCommand(true);
-        setDisplayInfo(MainCommand.createTC("§6 ▪ §7/"+MainCommand.getInstance().getName()+" "+getSubCommandName(), "/"+getParent().getName()+" "+getSubCommandName(), "§fSet the main lobby.\n" +
-                "This is required but if you are going to use the server in BUNGEE mode\nthe lobby location will not be used.\nType again to replace an old spawn location."));
+        setDisplayInfo(MainCommand.createTC("§6 ▪ §7/"+MainCommand.getInstance().getName()+" "+getSubCommandName(), "/"+getParent().getName()+" "+getSubCommandName()+ (config.getLobbyWorldName().isEmpty() ? "§c§o(not set)" : "§a§o(set)"),
+                "§fSet the main lobby. This is required but\n§fif you are going to use the server in BUNGEE mode\n§fthe lobby location will not be used.\n§eType again to replace the old spawn location."));
     }
 
     @Override

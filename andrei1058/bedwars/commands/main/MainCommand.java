@@ -42,7 +42,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
             new CmdGUI(this, "gui");
         }
         new Stats(this, "stats");
-        new Forcestart(this, "forcestart");
+        new ForceStart(this, "forcestart");
         new SetLobby(this, "setLobby"); //priority 1
         new SetupArena(this, "setupArena"); //priority 2
         new com.andrei1058.bedwars.commands.main.subcmds.List(this, "list"); //priority 3

@@ -30,7 +30,7 @@ public class CloneArena extends SubCommand {
         super(parent, name);
         setPriority(7);
         showInList(true);
-        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " "+getSubCommandName()+" §e<mapName> <newArena>", "§fClone an existing arena.",
+        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " "+getSubCommandName()+" §6<worldName> <newName>", "§fClone an existing arena.",
                 "/" + getParent().getName() + " "+getSubCommandName(), ClickEvent.Action.SUGGEST_COMMAND));
         setOpCommand(true);
     }

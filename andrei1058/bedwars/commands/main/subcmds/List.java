@@ -29,7 +29,7 @@ public class List extends SubCommand {
         setPriority(3);
         showInList(true);
         setOpCommand(true);
-        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + MainCommand.getInstance().getName() + " "+getSubCommandName() + ((getArenas().size() == 0) ? "§c§o(0 set)" : "§a§o("+getArenas().size()+" set)"),
+        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + MainCommand.getInstance().getName() + " "+getSubCommandName() + ((getArenas().size() == 0) ? " §c§o(0 set)" : "§a§o("+getArenas().size()+" set)"),
                 "§fShow available arenas", "/" + MainCommand.getInstance().getName() + " "+getSubCommandName(), ClickEvent.Action.RUN_COMMAND));
     }
 

@@ -24,8 +24,9 @@ public class SafeMode extends SubCommand {
         setPriority(0);
         setOpCommand(true);
         showInList(true);
-        setDisplayInfo(MainCommand.createTC("§6 ▪ §7/"+MainCommand.getInstance().getName()+" safeMode §eenable/ disable", "/"+getParent().getName()+" "+getSubCommandName(), "§fIf enabled the plugin will disable vulnerable commands.\n" +
-                "So your staff won't be able to modify arenas."));
+        setDisplayInfo(MainCommand.createTC("§6 ▪ §7/"+MainCommand.getInstance().getName()+" safeMode §6<enable/ disable>",
+                "/"+getParent().getName()+" "+getSubCommandName(), "§fIf enabled the plugin will disable vulnerable commands.\n" +
+                "§fSo your staff won't be able to modify arenas.\n§fEnabled: §c"+safeMode));
     }
 
     @Override

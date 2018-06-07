@@ -32,7 +32,7 @@ public class SetupArena extends SubCommand {
     public SetupArena(ParentCommand parent, String name) {
         super(parent, name);
         setPriority(2);
-        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + MainCommand.getInstance().getName() + " setupArena §e<mapName>", "§fCreate or edit an arena.\n'_' and '-' will not be displayed in the arena's name.",
+        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + MainCommand.getInstance().getName() + " setupArena §6<worldName>", "§fCreate or edit an arena.\n'_' and '-' will not be displayed in the arena's name.",
                 "/" + MainCommand.getInstance().getName() + " setupArena ", ClickEvent.Action.SUGGEST_COMMAND));
         showInList(true);
         setOpCommand(true);
