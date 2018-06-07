@@ -26,7 +26,7 @@ public class Language extends SubCommand {
     public Language(ParentCommand parent, String name) {
         super(parent, name);
         setPriority(18);
-        showInList(true);
+        showInList(false);
         setDisplayInfo(MainCommand.createTC("§6 ▪ §7/"+MainCommand.getInstance().getName()+" "+getSubCommandName(), "/"+getParent().getName()+" "+getSubCommandName(), "§fChange your language."));
     }
 

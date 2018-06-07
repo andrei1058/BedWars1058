@@ -26,7 +26,7 @@ public interface ParentCommand {
      *
      * @since 0.6.1 - api v6
      */
-    void sendSubCommands(Player p);
+    void sendSubCommandsToOp(Player p);
 
     /**
      * Get available subCommands

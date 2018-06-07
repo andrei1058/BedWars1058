@@ -1,6 +1,5 @@
 package com.andrei1058.bedwars.commands.main.subcmds;
 
-import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;

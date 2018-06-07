@@ -27,7 +27,7 @@ public class Leave extends SubCommand {
     public Leave(ParentCommand parent, String name) {
         super(parent, name);
         setPriority(20);
-        showInList(true);
+        showInList(false);
         setDisplayInfo(MainCommand.createTC("§6 ▪ §7/"+MainCommand.getInstance().getName()+" leave", "/"+getParent().getName()+" "+getSubCommandName(), "§fLeave an arena."));
     }
 

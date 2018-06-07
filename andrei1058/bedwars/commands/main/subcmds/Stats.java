@@ -22,7 +22,7 @@ public class Stats extends SubCommand {
     public Stats(ParentCommand parent, String name) {
         super(parent, name);
         setPriority(16);
-        showInList(true);
+        showInList(false);
         setDisplayInfo(MainCommand.createTC("§6 ▪ §7/"+MainCommand.getInstance().getName()+" "+getSubCommandName(), "/"+getParent().getName()+" "+getSubCommandName(), "§fOpens the stats GUI."));
     }
 

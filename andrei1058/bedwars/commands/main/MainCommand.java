@@ -3,39 +3,26 @@ package com.andrei1058.bedwars.commands.main;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.arena.ArenaGUI;
-import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
 import com.andrei1058.bedwars.commands.main.subcmds.*;
 import com.andrei1058.bedwars.configuration.ConfigManager;
-import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
-import com.google.common.base.Joiner;
 import net.md_5.bungee.api.chat.*;
-import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
-import org.bukkit.entity.EnderDragon;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.Arena.getArenaByName;
 import static com.andrei1058.bedwars.configuration.Language.getList;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
-import static com.andrei1058.bedwars.listeners.BreakPlace.*;
 
 public class MainCommand extends BukkitCommand implements ParentCommand {
 
@@ -47,30 +34,26 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
     public MainCommand(String name) {
         super(name);
         instance = this;
-        new SafeMode(this, "safemode");
+        new SafeMode(this, "safemode"); //priority 0
         new Join(this, "join");
         new Leave(this, "leave");
         new com.andrei1058.bedwars.commands.main.subcmds.Language(this, "lang");
-
-        /* Trebuie false ca altfel apare in bw help, si este deja bw lang destul */
-        SubCommand duplicated = new com.andrei1058.bedwars.commands.main.subcmds.Language(this, "language");
-        duplicated.showInList(false);
-
         if (getServerType() != ServerType.BUNGEE){
             new CmdGUI(this, "gui");
         }
         new Stats(this, "stats");
         new Forcestart(this, "forcestart");
-        new SetLobby(this, "setLobby");
-        new SetupArena(this, "setupArena");
-        new com.andrei1058.bedwars.commands.main.subcmds.List(this, "list");
-        new DelArena(this, "delArena");
-        new EnableArena(this, "enableArena");
-        new DisableArena(this, "disableArena");
-        new CloneArena(this, "cloneArena");
-        new ArenaGroup(this, "arenaGroup");
-        new Build(this, "build");
-        new Reload(this, "reload");
+        new SetLobby(this, "setLobby"); //priority 1
+        new SetupArena(this, "setupArena"); //priority 2
+        new com.andrei1058.bedwars.commands.main.subcmds.List(this, "list"); //priority 3
+        new DelArena(this, "delArena"); //priority 4
+        new EnableArena(this, "enableArena"); //priority 5
+        new DisableArena(this, "disableArena"); //priority 6
+        new CloneArena(this, "cloneArena"); //priority 7
+        new ArenaGroup(this, "arenaGroup"); //priority 8
+        new Build(this, "build"); //priority 9
+        new Reload(this, "reload"); //priority 10
+        new Cmds(this, "cmds"); //priority 20
     }
 
     @Override
@@ -82,7 +65,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
                 s.sendMessage("§8§l▐ §6" + plugin.getDescription().getName() + " v" + plugin.getDescription().getVersion() + " §7- §c General Commands");
                 s.sendMessage("");
                 if (s instanceof Player) {
-                    sendSubCommands((Player) s);
+                    sendSubCommandsToOp((Player) s);
                 } else {
                     s.sendMessage("§f   bw safemode §eenable/ disable");
                 }
@@ -91,13 +74,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
                     s.sendMessage("§f   bw safemode §eenable/ disable");
                     return true;
                 }
-                TextComponent credits = new TextComponent("§8§l▐ §6" + plugin.getName() + " §7v" + plugin.getDescription().getVersion() + " by andrei1058");
-                credits.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, link));
-                credits.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§7Arenas: " + (Arena.getArenas().size() == 0 ? "§c0" : "§a" + Arena.getArenas().size())).create()));
-                ((Player)s).spigot().sendMessage(credits);
-                for (String string : getList((Player) s, Messages.COMMAND_MAIN)) {
-                    s.sendMessage(string);
-                }
+                Bukkit.dispatchCommand(s, "/"+mainCmd+" cmds");
             }
             return true;
         }
@@ -470,7 +447,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
     }
 
     @Override
-    public void sendSubCommands(Player p) {
+    public void sendSubCommandsToOp(Player p) {
         for (int i = 0; i <= 20; i++){
             for (SubCommand sb : getSubCommands()){
                 if (sb.getPriority() == i && sb.isShow()){

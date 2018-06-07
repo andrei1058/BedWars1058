@@ -25,7 +25,7 @@ public class Forcestart extends SubCommand {
         super(parent, name);
         setPriority(15);
         showInList(true);
-        setDisplayInfo(MainCommand.createTC("§6 ▪ §7/"+MainCommand.getInstance().getName()+" "+getSubCommandName(), "/"+getParent().getName()+" "+getSubCommandName(), "§fForcestart an arena."));
+        setDisplayInfo(MainCommand.createTC("§6 ▪ §7/"+MainCommand.getInstance().getName()+" "+getSubCommandName()+" §6§o(forcestart an arena)", "/"+getParent().getName()+" "+getSubCommandName(), "§fForcestart an arena."));
     }
 
     @Override

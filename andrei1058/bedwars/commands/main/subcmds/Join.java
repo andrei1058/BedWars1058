@@ -24,7 +24,7 @@ public class Join extends SubCommand {
     public Join(ParentCommand parent, String name) {
         super(parent, name);
         setPriority(19);
-        showInList(true);
+        showInList(false);
         setDisplayInfo(MainCommand.createTC("§6 ▪ §7/"+MainCommand.getInstance().getName()+" join §e<arena/ groupName>", "/"+getParent().getName()+" "+getSubCommandName(), "§fJoin an arena by name or by group."));
     }
 

@@ -30,7 +30,7 @@ public class ArenaGroup extends SubCommand {
      */
     public ArenaGroup(ParentCommand parent, String name) {
         super(parent, name);
-        setPriority(7);
+        setPriority(8);
         showInList(true);
         setOpCommand(true);
         setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " " + getSubCommandName(), "§fCreate/ remove an arenaGroup\n§fAdd/ remove an arena from a group.",
