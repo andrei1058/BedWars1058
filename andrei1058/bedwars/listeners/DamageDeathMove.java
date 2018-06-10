@@ -1,6 +1,5 @@
 package com.andrei1058.bedwars.listeners;
 
-import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.*;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.configuration.Language;
@@ -30,11 +29,6 @@ public class DamageDeathMove implements Listener {
 
     @EventHandler
     public void onDamage(EntityDamageEvent e) {
-        if (Main.npcs.containsKey(e.getEntity())) {
-            e.setCancelled(true);
-            return;
-        }
-
         if (e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
             Arena a = Arena.getArenaByPlayer(p);

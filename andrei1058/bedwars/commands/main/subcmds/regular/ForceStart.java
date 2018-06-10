@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.commands.main.subcmds;
+package com.andrei1058.bedwars.commands.main.subcmds.regular;
 
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.commands.ParentCommand;
@@ -24,8 +24,8 @@ public class ForceStart extends SubCommand {
     public ForceStart(ParentCommand parent, String name) {
         super(parent, name);
         setPriority(15);
-        showInList(true);
-        setDisplayInfo(MainCommand.createTC("§6 ▪ §7/"+MainCommand.getInstance().getName()+" "+getSubCommandName()+" §e§o(an arena)",
+        showInList(false);
+        setDisplayInfo(MainCommand.createTC("§6 ▪ §7/"+MainCommand.getInstance().getName()+" "+getSubCommandName()+" §8 - §eforce start an arena",
                 "/"+getParent().getName()+" "+getSubCommandName(), "§fForcestart an arena.\n§fPermission: §c"+Permissions.PERMISSION_FORCESTART));
     }
 

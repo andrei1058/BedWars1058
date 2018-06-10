@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.commands.main.subcmds;
+package com.andrei1058.bedwars.commands.main.subcmds.sensitive;
 
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 
-public class DisableArena extends SubCommand {
+public class EnableArena extends SubCommand {
     /**
      * Create a sub-command for a bedWars command
      * Make sure you return true or it will say command not found
@@ -22,13 +22,13 @@ public class DisableArena extends SubCommand {
      * @param name   sub-command name
      * @since 0.6.1 api v6
      */
-    public DisableArena(ParentCommand parent, String name) {
+    public EnableArena(ParentCommand parent, String name) {
         super(parent, name);
-        setPriority(6);
-        showInList(true);
-        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " "+getSubCommandName()+" §6<worldName>", "§fDisable an arena.\nThis will remove the players from the arena before disabling.",
+        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " "+getSubCommandName()+" §6<worldName>","§fEnable an arena.",
                 "/" + getParent().getName() + " "+getSubCommandName(), ClickEvent.Action.SUGGEST_COMMAND));
+        showInList(true);
         setOpCommand(true);
+        setPriority(5);
     }
 
     @Override
@@ -37,21 +37,21 @@ public class DisableArena extends SubCommand {
         Player p = (Player) s;
         if (!MainCommand.isLobbySet(p)) return true;
         if (args.length != 1) {
-            p.sendMessage("§c▪ §7Usage: §o/" + getParent().getName() + " "+getSubCommandName()+" <mapName>");
+            p.sendMessage("§c▪ §7Usage: §o/" + getParent().getName() + " enable <mapName>");
             return true;
         }
-        File wss = new File(Bukkit.getServer().getWorldContainer().getPath() + "/" + args[0]);
-        if (!wss.exists()) {
+        File wss2 = new File(Bukkit.getServer().getWorldContainer().getPath() + "/" + args[0]);
+        if (!wss2.exists()) {
             p.sendMessage("§c▪ §7" + args[0] + " doesn't exist!");
             return true;
         }
-        Arena a = Arena.getArenaByName(args[0]);
-        if (a == null) {
-            p.sendMessage("§c▪ §7This arena is disabled yet!");
+        Arena aa = Arena.getArenaByName(args[0]);
+        if (aa != null) {
+            p.sendMessage("§c▪ §7This arena is already enabled!");
             return true;
         }
-        p.sendMessage("§6 ▪ §7Disabling arena...");
-        a.disable();
+        p.sendMessage("§6 ▪ §7Enabling arena...");
+        new Arena(args[0]);
         return true;
     }
 }

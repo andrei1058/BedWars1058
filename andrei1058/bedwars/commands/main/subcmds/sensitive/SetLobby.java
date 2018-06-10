@@ -1,8 +1,10 @@
-package com.andrei1058.bedwars.commands.main.subcmds;
+package com.andrei1058.bedwars.commands.main.subcmds.sensitive;
 
+import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
 import com.andrei1058.bedwars.commands.main.MainCommand;
+import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -25,8 +27,9 @@ public class SetLobby extends SubCommand {
         setPriority(1);
         showInList(true);
         setOpCommand(true);
-        setDisplayInfo(MainCommand.createTC("§6 ▪ §7/"+MainCommand.getInstance().getName()+" "+getSubCommandName(), "/"+getParent().getName()+" "+getSubCommandName()+ (config.getLobbyWorldName().isEmpty() ? "§c§o(not set)" : "§a§o(set)"),
-                "§fSet the main lobby. This is required but\n§fif you are going to use the server in BUNGEE mode\n§fthe lobby location will not be used.\n§eType again to replace the old spawn location."));
+        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/"+MainCommand.getInstance().getName()+" "+getSubCommandName()+ (config.getLobbyWorldName().isEmpty() ? " §c(not set)" : " §a(set)"),
+                "§aSet the main lobby. §fThis is required but\n§fif you are going to use the server in §eBUNGEE §fmode\n§fthe lobby location will §enot §fbe used.\n§eType again to replace the old spawn location.",
+                "/"+getParent().getName()+" "+getSubCommandName(), ClickEvent.Action.RUN_COMMAND));
     }
 
     @Override

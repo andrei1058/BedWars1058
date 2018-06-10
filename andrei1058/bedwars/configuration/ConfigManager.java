@@ -51,6 +51,10 @@ public class ConfigManager {
         this.name = name;
     }
 
+    public void reload(){
+        yml = YamlConfiguration.loadConfiguration(config);
+    }
+
     public String stringLocationArenaFormat(Location loc){
         return Double.valueOf(loc.getX()) + "," + Double.valueOf(loc.getY()) + "," + Double.valueOf(loc.getZ() )+ "," + Double.valueOf(loc.getYaw()) + "," + Double.valueOf(loc.getPitch());
     }

@@ -3,6 +3,7 @@ package com.andrei1058.bedwars.listeners;
 import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.ArenaGUI;
+import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.shop.CategoryContent;
 import com.andrei1058.bedwars.shop.ShopCategory;
 import com.andrei1058.bedwars.upgrades.TeamUpgrade;
@@ -34,6 +35,13 @@ public class Inventory implements Listener {
                 ArenaGUI.getRefresh().remove(p);
             }
         }
+        if (e.getInventory().getName().equalsIgnoreCase(SetupSession.getInvName())) {
+            SetupSession ss = SetupSession.getSession(p);
+            if (ss != null) {
+                if (ss.getSetupType() == null)
+                    ss.cancel();
+            }
+        }
     }
 
     @EventHandler
@@ -53,13 +61,25 @@ public class Inventory implements Listener {
         if (p.getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
             e.setCancelled(true);
         }
+        /* Check setup gui items */
+        if (SetupSession.isInSetupSession(p) && e.getInventory().getName().equalsIgnoreCase(SetupSession.getInvName())) {
+            SetupSession ss = SetupSession.getSession(p);
+            if (e.getSlot() == SetupSession.getAdvancedSlot()) {
+                ss.setSetupType(SetupSession.SetupType.ADVANCED);
+            } else if (e.getSlot() == SetupSession.getAssistedSlot()) {
+                ss.setSetupType(SetupSession.SetupType.ASSISTED);
+            }
+            ss.startSetup();
+            p.closeInventory();
+        }
+        /**/
         if (Arena.isInArena(p)) {
             Arena a = Arena.getArenaByPlayer(p);
             if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) {
                 e.setCancelled(true);
                 return;
             }
-            if (a.isSpectator(p)){
+            if (a.isSpectator(p)) {
                 e.setCancelled(true);
                 return;
             }

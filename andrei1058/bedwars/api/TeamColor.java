@@ -98,9 +98,46 @@ public enum TeamColor {
         return (byte) i;
     }
 
-    public static Color getColor(TeamColor teamColor){
+    /**
+     * Get the english for byte as color name
+     *
+     * @since api 6
+     */
+    public static String enName(Byte b) {
+        String name = "";
+        switch (b) {
+            case 6:
+                name="Pink";
+                break;
+            case 14:
+                name="Red";
+                break;
+            case 9:
+                name="Aqua";
+                break;
+            case 5:
+                name = "Green";
+                break;
+            case 4:
+                name = "Yellow";
+                break;
+            case 11:
+                name = "Blue";
+                break;
+            case 0:
+                name = "White";
+                break;
+            case 7:
+                name = "Gray";
+                break;
+
+        }
+        return name;
+    }
+
+    public static Color getColor(TeamColor teamColor) {
         Color color = Color.WHITE;
-        switch (teamColor){
+        switch (teamColor) {
             case PINK:
                 color = Color.FUCHSIA;
                 break;
@@ -108,13 +145,13 @@ public enum TeamColor {
                 color = Color.GRAY;
                 break;
             case BLUE:
-                color =Color.BLUE;
+                color = Color.BLUE;
                 break;
             case WHITE:
-                color=Color.WHITE;
+                color = Color.WHITE;
                 break;
             case DARK_GREEN:
-                color =Color.GREEN;
+                color = Color.GREEN;
                 break;
             case AQUA:
                 color = Color.AQUA;
@@ -123,7 +160,7 @@ public enum TeamColor {
                 color = Color.RED;
                 break;
             case GREEN:
-                color =Color.LIME;
+                color = Color.LIME;
                 break;
             case YELLOW:
                 color = Color.YELLOW;

@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.commands.main.subcmds;
+package com.andrei1058.bedwars.commands.main.subcmds.sensitive;
 
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
@@ -25,7 +25,7 @@ public class SafeMode extends SubCommand {
         setOpCommand(true);
         showInList(true);
         setDisplayInfo(MainCommand.createTC("§6 ▪ §7/"+MainCommand.getInstance().getName()+" safeMode §6<enable/ disable>",
-                "/"+getParent().getName()+" "+getSubCommandName(), "§fIf enabled the plugin will disable vulnerable commands.\n" +
+                "/"+getParent().getName()+" "+getSubCommandName(), "§fIf enabled the plugin will disable sensitive commands.\n" +
                 "§fSo your staff won't be able to modify arenas.\n§fEnabled: §c"+safeMode));
     }
 

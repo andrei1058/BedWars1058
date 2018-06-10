@@ -27,8 +27,8 @@ public interface NMS {
     /** Send action-bar message */
     void playAction(Player p, String text);
 
-    /** Spawn a new NPC using NOai*/
-    void spawnNPC(EntityType entity, Location location, String name, String group);
+    /** Unregister bukkit command*/
+    void unregisterCommand(String name);
 
     /** Check if bukkit command is registered*/
     boolean isBukkitCommandRegistered(String command);

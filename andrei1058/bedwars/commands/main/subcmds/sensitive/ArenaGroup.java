@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.commands.main.subcmds;
+package com.andrei1058.bedwars.commands.main.subcmds.sensitive;
 
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
@@ -33,7 +33,7 @@ public class ArenaGroup extends SubCommand {
         setPriority(8);
         showInList(true);
         setOpCommand(true);
-        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " " + getSubCommandName()+" §e§o(click for details)", "§fCreate/ remove an arenaGroup\n§fAdd/ remove an arena from a group.",
+        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " " + getSubCommandName()+" §8- §eclick for details", "§fManage arena groups.",
                 "/" + getParent().getName() + " " + getSubCommandName(), ClickEvent.Action.RUN_COMMAND));
     }
 

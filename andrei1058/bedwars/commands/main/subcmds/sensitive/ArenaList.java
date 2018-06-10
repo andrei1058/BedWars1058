@@ -1,9 +1,10 @@
-package com.andrei1058.bedwars.commands.main.subcmds;
+package com.andrei1058.bedwars.commands.main.subcmds.sensitive;
 
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
 import com.andrei1058.bedwars.commands.main.MainCommand;
+import com.andrei1058.bedwars.configuration.ConfigManager;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import static com.andrei1058.bedwars.Main.plugin;
 import static com.andrei1058.bedwars.arena.Arena.getArenaByName;
 
-public class List extends SubCommand {
+public class ArenaList extends SubCommand {
     /**
      * Create a sub-command for a bedWars command
      * Make sure you return true or it will say command not found
@@ -24,12 +25,12 @@ public class List extends SubCommand {
      * @param name   sub-command name
      * @since 0.6.1 api v6
      */
-    public List(ParentCommand parent, String name) {
+    public ArenaList(ParentCommand parent, String name) {
         super(parent, name);
         setPriority(3);
         showInList(true);
         setOpCommand(true);
-        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + MainCommand.getInstance().getName() + " "+getSubCommandName() + ((getArenas().size() == 0) ? " §c§o(0 set)" : "§a§o("+getArenas().size()+" set)"),
+        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + MainCommand.getInstance().getName() + " "+getSubCommandName() + ((getArenas().size() == 0) ? " §c(0 set)" : " §a("+getArenas().size()+" set)"),
                 "§fShow available arenas", "/" + MainCommand.getInstance().getName() + " "+getSubCommandName(), ClickEvent.Action.RUN_COMMAND));
     }
 
@@ -44,7 +45,16 @@ public class List extends SubCommand {
         p.sendMessage("§6 ▪ §7Available arenas:");
         for (String arena : getArenas()) {
             String status = getArenaByName(arena) == null ? "§cDisabled" : "§aEnabled";
-            p.sendMessage("§6 ▪    §f" + arena + " §7[" + status + "§7]");
+            String group = "Default";
+            ConfigManager cm = new ConfigManager(arena, "plugins/"+plugin.getName()+"/Arenas", true);
+            if (cm.getYml().get("group") != null){
+                group = cm.getYml().getString("group");
+            }
+            int teams = 0;
+            if (cm.getYml().get("Team") != null){
+                teams = cm.getYml().getConfigurationSection("Team").getKeys(true).size();
+            }
+            p.sendMessage("§6 ▪    §f" + arena + " §7[" + status + "§7] [§eGroup: §d"+group+"§7] [*eTeams: §d"+teams+"§7]");
         }
         return true;
     }

@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
+import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -122,6 +123,7 @@ public class JoinLeaveTeleport implements Listener {
     @EventHandler
     public void onLeave(PlayerQuitEvent e) {
         Player p = e.getPlayer();
+        /* Remove from arena */
         if (Arena.getArenaByPlayer(p) != null) {
             Arena.getArenaByPlayer(p).removePlayer(p);
         }
@@ -129,10 +131,15 @@ public class JoinLeaveTeleport implements Listener {
         if (getServerType() != ServerType.SHARED) {
             e.setQuitMessage(null);
         }
+        /* Manage internal parties */
         if (getParty().isInternal()){
             if (getParty().hasParty(p)){
                 getParty().removeFromParty(p);
             }
+        }
+        /* Check if was doing a setup and remove the session */
+        if (SetupSession.isInSetupSession(p)){
+            SetupSession.getSession(p).cancel();
         }
     }
 

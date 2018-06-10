@@ -43,7 +43,7 @@ import static com.andrei1058.bedwars.configuration.Language.getMsg;
 public class v1_8_R3 implements NMS {
 
     /**
-     * List of despawnable entities aka special shop mobs
+     * ArenaList of despawnable entities aka special shop mobs
      */
     private static List<Despawnable> despawnables = new ArrayList();
 
@@ -146,23 +146,10 @@ public class v1_8_R3 implements NMS {
     }
 
     @Override
-    public void spawnNPC(EntityType entity, Location location, String name, String group) {
-        org.bukkit.entity.Entity e = location.getWorld().spawnEntity(location, entity);
-        //e.setCustomNameVisible(true);
-        //e.setCustomName(name);
-        net.minecraft.server.v1_8_R3.Entity en = ((CraftEntity) e).getHandle();
-        double height = en.getBoundingBox().e - en.getBoundingBox().b;
-        ArmorStand a = createArmorStand(name, location.clone().add(0, height - 1, 0));
-        a.setSmall(true);
-        NBTTagCompound tag = en.getNBTTag();
-        if (tag == null) {
-            tag = new NBTTagCompound();
+    public void unregisterCommand(String name) {
+        if (isBukkitCommandRegistered(name)){
+            ((CraftServer) plugin.getServer()).getCommandMap().getCommand(name).unregister(((CraftServer) plugin.getServer()).getCommandMap());
         }
-        en.c(tag);
-        tag.setInt("NoAI", 1);
-        tag.setInt("Silent", 1);
-        en.f(tag);
-        npcs.put(e, group);
     }
 
     @Override

@@ -45,7 +45,6 @@ public class Main extends JavaPlugin {
 
     private static ServerType serverType = ServerType.MULTIARENA;
     public static boolean safeMode, lobbyServer = false, debug = true;
-    public static HashMap<Entity, String> npcs = new HashMap<>();
     public static String mainCmd = "bw", link = "https://www.spigotmc.org/resources/50942/";
     public static ConfigManager config, signs, spigot, generators;
     public static ShopManager shop;
@@ -206,7 +205,7 @@ public class Main extends JavaPlugin {
         }
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             database.setupGeneralTables();
-            plugin.spawnNPCs();
+            plugin.removeOldNPCS();
         }, 40L);
 
         /** Save messages for stats gui items if custom items added, for each language */
@@ -253,14 +252,6 @@ public class Main extends JavaPlugin {
     public void onDisable() {
         /** Close database */
         database.close();
-
-        /** Cancel tasks */
-        if (tick != null) {
-            tick.cancel();
-        }
-        if (ticks != null) {
-            ticks.cancel();
-        }
     }
 
     private void setupConfig() {
@@ -375,7 +366,8 @@ public class Main extends JavaPlugin {
         }
     }
 
-    public static void spawnNPCs() {
+    public static void removeOldNPCS() {
+        /* Remove old NPCs before api v6 version 0.6.1beta */
         if (config.getYml().get("npcLoc") != null) {
             for (String s : config.getYml().getStringList("npcLoc")) {
                 String[] data = s.split(",");
@@ -396,9 +388,9 @@ public class Main extends JavaPlugin {
                     }
                 }
                 Bukkit.getWorld(config.getLobbyWorldName()).save();
-                nms.spawnNPC(EntityType.valueOf(data[6]), l, ChatColor.translateAlternateColorCodes('&', data[7]), data[8]);
             }
         }
+        config.set("npcLoc", null);
     }
 
     private void setupSigns() {
