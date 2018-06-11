@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.andrei1058.bedwars.Main.config;
 import static com.andrei1058.bedwars.Main.plugin;
 
 public class SetupSession {
@@ -96,7 +97,7 @@ public class SetupSession {
      * @return true if started successfully
      */
     public boolean startSetup() {
-        getPlayer().sendMessage("§6 ▪ §7Loading "+getWorldName());
+        getPlayer().sendMessage("§6 ▪ §7Loading " + getWorldName());
         World w = null;
         try {
             w = Bukkit.createWorld(new WorldCreator(getWorldName()));
@@ -124,16 +125,16 @@ public class SetupSession {
         getPlayer().sendMessage("§6 ▪ §7You were teleported to the " + getWorldName() + "'s spawn.");
         started = true;
         getPlayer().getInventory().clear();
-        cm = new ConfigManager(getWorldName(), "plugins/"+plugin.getName()+"/Arenas", true);
-        if (getSetupType() == SetupType.ASSISTED && getCm().getYml().get("waiting.Loc") == null){
+        cm = new ConfigManager(getWorldName(), "plugins/" + plugin.getName() + "/Arenas", true);
+        if (getSetupType() == SetupType.ASSISTED && getCm().getYml().get("waiting.Loc") == null) {
             getPlayer().sendMessage("");
-            getPlayer().sendMessage("§6 ▪ §c"+getWorldName()+" Setup");
+            getPlayer().sendMessage("§6 ▪ §c" + getWorldName() + " Setup");
             getPlayer().sendMessage("");
-            getPlayer().sendMessage("§eHello "+getPlayer().getName()+"!");
+            getPlayer().sendMessage("§eHello " + getPlayer().getName() + "!");
             getPlayer().sendMessage("§fPlease set the waiting spawn.");
             getPlayer().sendMessage("§fIt is the place where players will wait the game to start.");
-            getPlayer().spigot().sendMessage(Misc.msgHoverClick("§9     ▪     §6CLICK HERE TO SET THE WAITING LOBBY    §9 ▪", "§dClick to set the waiting spawn.", "/"+Main.mainCmd+" setWaitingSpawn", ClickEvent.Action.RUN_COMMAND));
-            getPlayer().sendMessage("§eOr type: §7/"+Main.mainCmd+" setWaitingSpawn");
+            getPlayer().spigot().sendMessage(Misc.msgHoverClick("§9     ▪     §6CLICK HERE TO SET THE WAITING LOBBY    §9 ▪", "§dClick to set the waiting spawn.", "/" + Main.mainCmd + " setWaitingSpawn", ClickEvent.Action.RUN_COMMAND));
+            getPlayer().sendMessage("§eOr type: §7/" + Main.mainCmd + " setWaitingSpawn");
         } else {
             Bukkit.dispatchCommand(getPlayer(), Main.mainCmd + " cmds");
         }
@@ -171,6 +172,16 @@ public class SetupSession {
         } else {
             //todo
         }
+    }
+
+    /**
+     * End setup session
+     *
+     * @since api 6
+     */
+    public void done() {
+        getSetupSessions().remove(this);
+        getPlayer().teleport(config.getConfigLoc("lobbyLoc"));
     }
 
     /**

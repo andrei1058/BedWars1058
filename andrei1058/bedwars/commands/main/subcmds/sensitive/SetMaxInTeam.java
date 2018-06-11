@@ -1,17 +1,15 @@
 package com.andrei1058.bedwars.commands.main.subcmds.sensitive;
 
-import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import static com.andrei1058.bedwars.Main.mainCmd;
 
-public class WaitingPos extends SubCommand {
+public class SetMaxInTeam extends SubCommand {
     /**
      * Create a sub-command for a bedWars command
      * Make sure you return true or it will say command not found
@@ -20,10 +18,10 @@ public class WaitingPos extends SubCommand {
      * @param name   sub-command name
      * @since 0.6.1 api v6
      */
-    public WaitingPos(ParentCommand parent, String name) {
+    public SetMaxInTeam(ParentCommand parent, String name) {
         super(parent, name);
-        setArenaSetupCommand(true);
         setOpCommand(true);
+        setArenaSetupCommand(true);
     }
 
     @Override
@@ -36,18 +34,16 @@ public class WaitingPos extends SubCommand {
             return true;
         }
         if (args.length == 0) {
-            p.sendMessage("§c▪ §7Usage: /" + mainCmd + " "+getSubCommandName()+" 1 or 2");
+            p.sendMessage("§c▪ §7Usage: /" + mainCmd + " setMaxInTeam <int>");
         } else {
-            if (args[0].equalsIgnoreCase("1") || args[0].equalsIgnoreCase("2")) {
-                p.sendMessage("§6 ▪ §7Pos " + args[0] + " set!");
-                ss.getCm().saveArenaLoc("waiting.Pos" + args[0], p.getLocation());
-            } else {
-                p.sendMessage("§c▪ §7Usage: /" + mainCmd + " "+getSubCommandName()+" 1 or 2");
+            try {
+                Integer.parseInt(args[0]);
+            } catch (Exception ex) {
+                p.sendMessage("§c▪ §7Usage: /" + mainCmd + " setMaxInTeam <int>");
+                return true;
             }
-        }
-        Bukkit.dispatchCommand(p, Main.mainCmd+" cmds");
-        if (!((ss.getCm().getYml().get("waiting.Pos1") == null && ss.getCm().getYml().get("waiting.Pos2") == null))){
-            s.sendMessage("§6▪ §7Set teams spawn if you didn't!");
+            ss.getCm().set("maxInTeam", Integer.valueOf(args[0]));
+            p.sendMessage("§6 ▪ §7Max in team set!");
         }
         return true;
     }

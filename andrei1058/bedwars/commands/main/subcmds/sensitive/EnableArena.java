@@ -51,7 +51,7 @@ public class EnableArena extends SubCommand {
             return true;
         }
         p.sendMessage("§6 ▪ §7Enabling arena...");
-        new Arena(args[0]);
+        new Arena(args[0], p);
         return true;
     }
 }

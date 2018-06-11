@@ -60,6 +60,15 @@ public class CreateTeam extends SubCommand {
             } else {
                 ss.getCm().set("Team." + args[0] + ".Color", args[1].toUpperCase());
                 p.sendMessage("§6 ▪ §7" + TeamColor.getChatColor(args[1]) + args[0] + " §7created!");
+                if (ss.getSetupType() == SetupSession.SetupType.ASSISTED){
+                    ss.getCm().reload();
+                    int teams = ss.getCm().getYml().getConfigurationSection("Team").getKeys(false).size();
+                    int max = 1;
+                    if (teams == 4){
+                        max = 2;
+                    }
+                    ss.getCm().set("maxInTeam", max);
+                }
             }
         }
         return true;

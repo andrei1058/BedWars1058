@@ -419,10 +419,10 @@ public class Main extends JavaPlugin {
             if (serverType == ServerType.BUNGEE) {
                 Random r = new Random();
                 int x = r.nextInt(files.size());
-                new Arena(files.get(x).getName().replace(".yml", ""));
+                new Arena(files.get(x).getName().replace(".yml", ""), null);
             } else {
                 for (int x = 0; x < files.size(); x++){
-                    new Arena(files.get(x).getName().replace(".yml", ""));
+                    new Arena(files.get(x).getName().replace(".yml", ""), null);
                 }
             }
             if (Arena.getArenas().isEmpty()) {

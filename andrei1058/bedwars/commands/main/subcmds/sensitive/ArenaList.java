@@ -52,9 +52,9 @@ public class ArenaList extends SubCommand {
             }
             int teams = 0;
             if (cm.getYml().get("Team") != null){
-                teams = cm.getYml().getConfigurationSection("Team").getKeys(true).size();
+                teams = cm.getYml().getConfigurationSection("Team").getKeys(false).size();
             }
-            p.sendMessage("§6 ▪    §f" + arena + " §7[" + status + "§7] [§eGroup: §d"+group+"§7] [*eTeams: §d"+teams+"§7]");
+            p.sendMessage("§6 ▪    §f" + arena + " §7[" + status + "§7] [§eGroup: §d"+group+"§7] [§eTeams: §d"+teams+"§7]");
         }
         return true;
     }

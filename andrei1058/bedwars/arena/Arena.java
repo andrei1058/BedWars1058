@@ -75,14 +75,16 @@ public class Arena {
     private static HashMap<Player, Integer> playerDeaths = new HashMap<>();
     private static HashMap<Player, Integer> playerFinalKillDeaths = new HashMap<>();
 
-    public Arena(String name) {
+    public Arena(String name, Player p) {
         cm = new ConfigManager(name, "plugins/" + plugin.getName() + "/Arenas", true);
         yml = cm.getYml();
         if (yml.get("Team") == null) {
+            if (p != null) p.sendMessage("You didn't set any team for arena: " + name);
             plugin.getLogger().severe("You didn't set any team for arena: " + name);
             return;
         }
         if (yml.getConfigurationSection("Team").getKeys(false).size() < 2) {
+            if (p != null) p.sendMessage("§cYou must set at least 2 teams on: " + name);
             plugin.getLogger().severe("You must set at least 2 teams on: " + name);
             return;
         }
@@ -98,31 +100,37 @@ public class Arena {
             }
         }
         if (new File(plugin.getServer().getWorldContainer().getPath() + "/" + name) == null) {
+            if (p != null) p.sendMessage("§cThere isn't any map called " + name);
             plugin.getLogger().severe("There isn't any map called " + name);
             return;
         }
         boolean error = false;
         for (String team : yml.getConfigurationSection("Team").getKeys(false)) {
             if (TeamColor.valueOf(yml.getString("Team." + team + ".Color")) == null) {
+                if (p != null) p.sendMessage("§cInvalid color at team: " + team + " in arena: " + name);
                 plugin.getLogger().severe("Invalid color at team: " + team + " in arena: " + name);
                 error = true;
             }
             for (String stuff : Arrays.asList("Color", "Spawn", "Bed", "Shop", "Upgrade", "Iron", "Gold")) {
                 if (yml.get("Team." + team + "." + stuff) == null) {
+                    if (p != null) p.sendMessage("§c" + stuff + " not set for " + team + " team on: " + name);
                     plugin.getLogger().severe(stuff + " not set for " + team + " team on: " + name);
                     error = true;
                 }
             }
         }
         if (yml.get("generator.Diamond") == null) {
+            if (p != null) p.sendMessage("§cThere isn't set any Diamond generator on: " + name);
             plugin.getLogger().severe("There isn't set any Diamond generator on: " + name);
         } else {
         }
         if (yml.get("generator.Emerald") == null) {
+            if (p != null) p.sendMessage("§cThere isn't set any Emerald generator on: " + name);
             plugin.getLogger().severe("There isn't set any Emerald generator on: " + name);
         } else {
         }
         if (yml.get("waiting.Loc") == null) {
+            if (p != null) p.sendMessage("§cWaiting spawn not set on: " + name);
             plugin.getLogger().severe("Waiting spawn not set on: " + name);
             return;
         }
@@ -130,6 +138,7 @@ public class Arena {
         try {
             world = Bukkit.createWorld(new WorldCreator(name));
         } catch (Exception ex) {
+            if (p != null) p.sendMessage("§cI can't load the map called " + name);
             plugin.getLogger().severe("I can't load the map called " + name);
             ex.printStackTrace();
             return;
@@ -153,6 +162,7 @@ public class Arena {
                 Material.valueOf(yml.getString("bedBlock"));
                 bedBlock = Material.valueOf(yml.getString("bedBlock"));
             } catch (Exception ex) {
+                if (p != null) p.sendMessage("§c"+yml.getString("bedBlock") + " is not a Material at " + getWorldName() + ".yml");
                 plugin.getLogger().severe(yml.getString("bedBlock") + " is not a Material at " + getWorldName() + ".yml");
             }
         }
@@ -161,7 +171,7 @@ public class Arena {
     }
 
     public void addPlayer(Player p, boolean skipOwnerCheck) {
-        debug("Player added: " + p.getName()+" arena: "+getWorldName());
+        debug("Player added: " + p.getName() + " arena: " + getWorldName());
         /* used for base enter/leave event */
         if (isOnABase.containsKey(p)) {
             isOnABase.remove(p);
@@ -235,11 +245,11 @@ public class Arena {
                     if (getParty().isOwner(on)) {
                         teams++;
                     }
-                    if (getParty().hasParty(on)){
+                    if (getParty().hasParty(on)) {
                         teammates++;
                     }
                 }
-                if (minPlayers <= players.size() && teams > 0 && players.size() != teammates/teams) {
+                if (minPlayers <= players.size() && teams > 0 && players.size() != teammates / teams) {
                     setStatus(GameState.starting);
                 } else if (players.size() >= minPlayers && teams == 0) {
                     setStatus(GameState.starting);
@@ -272,7 +282,7 @@ public class Arena {
     }
 
     public void addSpectator(Player p, boolean playerBefore) {
-        debug("Spectator added: " + p.getName()+" arena: "+getWorldName());
+        debug("Spectator added: " + p.getName() + " arena: " + getWorldName());
         if (allowSpectate || playerBefore) {
             p.closeInventory();
             p.teleport(cm.getArenaLoc("waiting.Loc"));
@@ -323,7 +333,7 @@ public class Arena {
     }
 
     public void removePlayer(Player p) {
-        debug("Player removed: " + p.getName()+" arena: "+getWorldName());
+        debug("Player removed: " + p.getName() + " arena: " + getWorldName());
         if (getStatus() == GameState.playing) {
             for (BedWarsTeam t : getTeams()) {
                 if (t.isMember(p)) {
@@ -447,7 +457,7 @@ public class Arena {
     }
 
     public void removeSpectator(Player p) {
-        debug("Spectator removed: " + p.getName()+" arena: "+getWorldName());
+        debug("Spectator removed: " + p.getName() + " arena: " + getWorldName());
         spectators.remove(p);
         removeArenaByPlayer(p);
         p.getInventory().clear();
@@ -695,7 +705,7 @@ public class Arena {
                             bwt.firstSpawn(p);
                             p.setHealth(p.getHealth() - 0.0001);
                             nms.sendTitle(p, getMsg(p, Messages.ARENA_STATUS_START_PLAYER_TITLE), null, 0, 20, 0);
-                            for (String tut : getList(p, Messages.ARENA_STATUS_START_PLAYER_TUTORIAL)){
+                            for (String tut : getList(p, Messages.ARENA_STATUS_START_PLAYER_TUTORIAL)) {
                                 p.sendMessage(tut);
                             }
                         }

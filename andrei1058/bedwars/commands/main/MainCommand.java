@@ -43,7 +43,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
             new CmdGUI(this, "gui");
         }
         new Stats(this, "stats");
-        new ForceStart(this, "forcestart");
+        new ForceStart(this, "forceStart");
         new SetLobby(this, "setLobby"); //priority 1
         new SetupArena(this, "setupArena"); //priority 2
         new ArenaList(this, "arenaList"); //priority 3
@@ -61,6 +61,14 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         new SetWaitingSpawn(this, "setWaitingSpawn");
         new CreateTeam(this, "createTeam");
         new WaitingPos(this, "waitingPos");
+        new RemoveTeam(this, "removeTeam");
+        new SetMaxInTeam(this, "setMaxInTeam");
+        new SetSpawn(this, "setSpawn");
+        new SetBed(this, "setBed");
+        new SetShop(this, "setShop");
+        new SetUpgrade(this, "setUpgrade");
+        new AddGenerator(this, "addGenerator");
+        new Save(this, "save");
     }
 
     @Override
@@ -113,250 +121,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
                 s.sendMessage(getMsg((Player) s, Messages.COMMAND_NOT_FOUND_OR_REQUIRES_SAFEMODE_OFF));
             else s.sendMessage(lang.m(Messages.COMMAND_NOT_FOUND_OR_REQUIRES_SAFEMODE_OFF));
         }
-
-        ////////////////////////
-        Player p = (Player) s;
-        if (commandFound) return true;
-        if (isArenaSetup(p)) {
-            ConfigManager arena = new ConfigManager(p.getWorld().getName(), "plugins/" + plugin.getName() + "/Arenas", true);
-            switch (args[0].toLowerCase()) {
-                case "removeteam":
-                    //bw removeteam name
-                    if (args.length < 2) {
-                        p.sendMessage("§c▪ §7Usage: /" + mainCmd + " removeTeam §o<teamName>");
-                        if (arena.getYml().get("Team") != null) {
-                            p.sendMessage("§6 ▪ §7Available teams: ");
-                            for (String team : arena.getYml().getConfigurationSection("Team").getKeys(false)) {
-                                p.spigot().sendMessage(createTCExecute("§6 ▪ " + TeamColor.getChatColor(team) + team,
-                                        "/" + mainCmd + " removeTeam " + team, "§7Remove " + TeamColor.getChatColor(team) + team));
-                            }
-                        }
-                    } else {
-                        if (arena.getYml().get("Team." + args[1] + ".Color") == null) {
-                            p.sendMessage("§c▪ §7This team doesn't exist!");
-                        } else {
-                            arena.set("Team." + args[1], null);
-                            p.sendMessage("§6 ▪ §7Team removed!");
-                        }
-                    }
-                    break;
-                case "setmaxinteam":
-                    //bw setmaxinteam int
-                    if (args.length < 1) {
-                        p.sendMessage("§c▪ §7Usage: /" + mainCmd + " setMaxInTeam <int>");
-                    } else {
-                        try {
-                            Integer.parseInt(args[1]);
-                        } catch (Exception ex) {
-                            p.sendMessage("§c▪ §7Usage: /" + mainCmd + " setMaxInTeam <int>");
-                            return true;
-                        }
-                        arena.set("maxInTeam", Integer.valueOf(args[1]));
-                        p.sendMessage("§6 ▪ §7Max in team set!");
-                    }
-                    break;
-                case "setspawn":
-                    //bw setSpawn team
-                    if (args.length < 2) {
-                        p.sendMessage("§6 ▪ §7Usage: /" + mainCmd + " setSpawn §o<team>");
-                        if (arena.getYml().get("Team") != null) {
-                            p.sendMessage("§6 ▪ §7Available teams: ");
-                            for (String team : arena.getYml().getConfigurationSection("Team").getKeys(false)) {
-                                p.spigot().sendMessage(createTCExecute("§6 ▪ " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team,
-                                        "/" + mainCmd + " setSpawn " + team, "§7Set spawn for " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team));
-                            }
-                        }
-                    } else {
-                        if (arena.getYml().get("Team." + args[1]) == null) {
-                            p.sendMessage("§c▪ §7This team doesn't exist!");
-                            if (arena.getYml().get("Team") != null) {
-                                p.sendMessage("§6 ▪ §7Available teams: ");
-                                for (String team : arena.getYml().getConfigurationSection("Team").getKeys(false)) {
-                                    p.spigot().sendMessage(createTCExecute("§6 ▪ " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team,
-                                            "/" + mainCmd + " setSpawn " + team, "§7Set spawn for " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team));
-                                }
-                            }
-                        } else {
-                            arena.saveArenaLoc("Team." + args[1] + ".Spawn", p.getLocation());
-                            p.sendMessage("§6 ▪ §7Spawn set for: " + TeamColor.getChatColor(arena.getYml().getString("Team." + args[1] + ".Color")) + args[1]);
-                        }
-                    }
-                    break;
-                case "setbed":
-                    //bw setBed team
-                    if (args.length < 2) {
-                        p.sendMessage("§6 ▪ §7Usage: /" + mainCmd + " setBed §o<team>");
-                        if (arena.getYml().get("Team") != null) {
-                            p.sendMessage("§6 ▪ §7Available teams: ");
-                            for (String team : arena.getYml().getConfigurationSection("Team").getKeys(false)) {
-                                p.spigot().sendMessage(createTCExecute("§6 ▪ " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team,
-                                        "/" + mainCmd + " setBed " + team, "§7Set bed for " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team));
-                            }
-                        }
-                    } else {
-                        if (!(p.getLocation().clone().add(0, -0.5, 0).getBlock().getType() == Material.BED_BLOCK || p.getLocation().clone().add(0, 0.5, 0).getBlock().getType() == Material.BED_BLOCK
-                                || p.getLocation().clone().getBlock().getType() == Material.BED_BLOCK)) {
-                            p.sendMessage("§c▪ §7You must stay on a bed while using this command!");
-                            return true;
-                        }
-                        if (arena.getYml().get("Team." + args[1]) == null) {
-                            p.sendMessage("§c▪ §7This team doesn't exist!");
-                            if (arena.getYml().get("Team") != null) {
-                                p.sendMessage("§6 ▪ §7Available teams: ");
-                                for (String team : arena.getYml().getConfigurationSection("Team").getKeys(false)) {
-                                    p.spigot().sendMessage(createTCExecute("§6 ▪ " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team,
-                                            "/" + mainCmd + " setBed " + team, "§7Set bed for " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team));
-                                }
-                            }
-                        } else {
-                            arena.saveArenaLoc("Team." + args[1] + ".Bed", p.getLocation());
-                            p.sendMessage("§6 ▪ §7Bed set for: " + TeamColor.getChatColor(arena.getYml().getString("Team." + args[1] + ".Color")) + args[1]);
-                        }
-                    }
-                    break;
-                case "setshop":
-                    //bw setShop team
-                    if (args.length < 2) {
-                        p.sendMessage("§6 ▪ §7Usage: /" + mainCmd + " setShop §o<team>");
-                        if (arena.getYml().get("Team") != null) {
-                            p.sendMessage("§6 ▪ §7Available teams: ");
-                            for (String team : arena.getYml().getConfigurationSection("Team").getKeys(false)) {
-                                p.spigot().sendMessage(createTCExecute("§6 ▪ " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team,
-                                        "/" + mainCmd + " setShop " + team, "§7Set shop for " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team));
-                            }
-                        }
-                    } else {
-                        if (arena.getYml().get("Team." + args[1]) == null) {
-                            p.sendMessage("§c▪ §7This team doesn't exist!");
-                            if (arena.getYml().get("Team") != null) {
-                                p.sendMessage("§6 ▪ §7Available teams: ");
-                                for (String team : arena.getYml().getConfigurationSection("Team").getKeys(false)) {
-                                    p.spigot().sendMessage(createTCExecute("§6 ▪ " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team,
-                                            "/" + mainCmd + " setShop " + team, "§7Set shop for " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team));
-                                }
-                            }
-                        } else {
-                            arena.saveArenaLoc("Team." + args[1] + ".Shop", p.getLocation());
-                            p.sendMessage("§6 ▪ §7Shop set for: " + TeamColor.getChatColor(arena.getYml().getString("Team." + args[1] + ".Color")) + args[1]);
-                        }
-                    }
-                    break;
-                case "setupgrade":
-                    if (args.length < 2) {
-                        p.sendMessage("§6 ▪ §7Usage: /" + mainCmd + " setUpgrade §o<team>");
-                        if (arena.getYml().get("Team") != null) {
-                            p.sendMessage("§6 ▪ §7Available teams: ");
-                            for (String team : arena.getYml().getConfigurationSection("Team").getKeys(false)) {
-                                p.spigot().sendMessage(createTCExecute("§6 ▪ " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team,
-                                        "/" + mainCmd + " setUpgrade " + team, "§7Upgrade npc set for " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team));
-                            }
-                        }
-                    } else {
-                        if (arena.getYml().get("Team." + args[1]) == null) {
-                            p.sendMessage("§c▪ §7This team doesn't exist!");
-                            if (arena.getYml().get("Team") != null) {
-                                p.sendMessage("§6 ▪ §7Available teams: ");
-                                for (String team : arena.getYml().getConfigurationSection("Team").getKeys(false)) {
-                                    p.spigot().sendMessage(createTCExecute("§6 ▪ " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team,
-                                            "/" + mainCmd + " setUpgrade " + team, "§7Upgrade npc set for " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team));
-                                }
-                            }
-                        } else {
-                            arena.saveArenaLoc("Team." + args[1] + ".Upgrade", p.getLocation());
-                            p.sendMessage("§6 ▪ §7Upgrade npc set for: " + TeamColor.getChatColor(arena.getYml().getString("Team." + args[1] + ".Color")) + args[1]);
-                        }
-                    }
-                    break;
-                case "addgenerator":
-                    //bw addgenerator <type>
-                    if (args.length < 2) {
-                        p.sendMessage("§c▪ §7Usage: /" + mainCmd + " addGenerator <Diamond/Emerald>");
-                        p.sendMessage("§c▪ §7Usage: /" + mainCmd + " addGenerator <Iron/Gold> <teamName>");
-                    } else {
-                        List<String> types = Arrays.asList("diamond", "emerald", "iron", "gold");
-                        if (types.contains(args[1].toLowerCase())) {
-                            switch (args[1].toLowerCase()) {
-                                case "diamond":
-                                case "emerald":
-                                    ArrayList<String> saved;
-                                    if (arena.getYml().get("generator." + args[1].substring(0, 1).toUpperCase() + args[1].substring(1).toLowerCase()) == null) {
-                                        saved = new ArrayList<>();
-                                    } else {
-                                        saved = (ArrayList<String>) arena.getYml().getStringList("generator." + args[1].substring(0, 1).toUpperCase() + args[1].substring(1).toLowerCase());
-                                    }
-                                    saved.add(arena.stringLocationArenaFormat(p.getLocation()));
-                                    arena.set("generator." + args[1].substring(0, 1).toUpperCase() + args[1].substring(1).toLowerCase(), saved);
-                                    p.sendMessage("§6 ▪ §7" + args[1].substring(0, 1).toUpperCase() + args[1].substring(1).toLowerCase() + " generator saved!");
-                                    break;
-                                case "iron":
-                                case "gold":
-                                    if (args.length >= 3) {
-                                        if (arena.getYml().get("Team." + args[2]) != null) {
-                                            arena.set("Team." + args[2] + "." + args[1].substring(0, 1).toUpperCase() + args[1].substring(1).toLowerCase(), arena.stringLocationArenaFormat(p.getLocation()));
-                                            p.sendMessage("§6 ▪ §7" + args[1] + " set for: " + TeamColor.getChatColor(arena.getYml().getString("Team." + args[2] + ".Color")) + args[2]);
-                                        } else {
-                                            p.sendMessage("§c▪ §7Invalid team!");
-                                            if (arena.getYml().get("Team") != null) {
-                                                p.sendMessage("§6 ▪ §7Available teams: ");
-                                                for (String team : arena.getYml().getConfigurationSection("Team").getKeys(false)) {
-                                                    p.spigot().sendMessage(createTCExecute("§6 ▪ §fIron " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team,
-                                                            "/" + mainCmd + " addGenerator Iron " + team, "§7Set Iron Generator for " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team));
-                                                    p.spigot().sendMessage(createTCExecute("§6 ▪ §6Gold " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team,
-                                                            "/" + mainCmd + " addGenerator Gold  " + team, "§7Set Gold Generator for " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team));
-                                                }
-                                            }
-                                        }
-                                    } else {
-                                        p.sendMessage("§c▪ §7Usage: /" + mainCmd + " addGenerator <Iron/Gold> <teamName>");
-                                        if (arena.getYml().get("Team") != null) {
-                                            p.sendMessage("§6 ▪ §7Available teams: ");
-                                            for (String team : arena.getYml().getConfigurationSection("Team").getKeys(false)) {
-                                                p.spigot().sendMessage(createTCExecute("§6 ▪ §fIron " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team,
-                                                        "/" + mainCmd + " addGenerator Iron " + team, "§7Set Iron Generator for " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team));
-                                                p.spigot().sendMessage(createTCExecute("§6 ▪ §6Gold " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team,
-                                                        "/" + mainCmd + " addGenerator Gold  " + team, "§7Set Gold Generator for " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team));
-                                            }
-                                        }
-                                    }
-                                    break;
-                            }
-                        } else {
-                            p.sendMessage("§c▪ §7Invalid type!");
-                        }
-                    }
-                    break;
-                case "savearena":
-                    Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.unloadWorld(Bukkit.getWorld(p.getWorld().getName()), true), 30L);
-                    p.teleport(config.getConfigLoc("lobbyLoc"));
-                    p.sendMessage("§6 ▪ §7Arena saved!");
-                    break;
-            }
-        }
-        return false;
-
-    }
-
-    public static void sendWorldSetupCommands(Player p, String world) {
-        if (getArenaByName(world) == null) {
-            p.sendMessage("§8§l▐ §b" + world + " §7- §c Commands");
-            p.sendMessage("");
-            p.spigot().sendMessage(createTCExecute("§2▪ §7/" + mainCmd + " setWaitingSpawn", "/" + mainCmd + " setWaitingSpawn", "§fSet the waiting spawn location."));
-            p.spigot().sendMessage(createTC("§2▪ §7/" + mainCmd + " createTeam <name> <color>", "/" + mainCmd + " createTeam ",
-                    "§fCreate a team and assign it a color."));
-            p.spigot().sendMessage(createTC("§2▪ §7/" + mainCmd + " removeTeam <name>", "/" + mainCmd + " removeTeam ",
-                    "§fRemove a team."));
-            p.spigot().sendMessage(createTC("§2▪ §7/" + mainCmd + " setMaxInTeam <int>", "/" + mainCmd + " setMaxInTeam ", "§fSet the max team size."));
-            p.spigot().sendMessage(createTC("§2▪ §7/" + mainCmd + " setSpawn <teamName>", "/" + mainCmd + " setSpawn ", "§fSet the spawn point for a team."));
-            p.spigot().sendMessage(createTC("§2▪ §7/" + mainCmd + " setBed <teamName>", "/" + mainCmd + " setBed ", "§fSet the bed location for a team."));
-            p.spigot().sendMessage(createTC("§2▪ §7/" + mainCmd + " setShop <teamName>", "/" + mainCmd + " setShop", "§fSet the shop location for a team."));
-            p.spigot().sendMessage(createTC("§2▪ §7/" + mainCmd + " setUpgrade <teamName>", "/" + mainCmd + " setUpgrade ", "§fSet the team's upgrade npc location."));
-            p.spigot().sendMessage(createTC("§2▪ §7/" + mainCmd + " addGenerator", "/" + mainCmd + " addGenerator",
-                    "§fSet the generator for a team using:\n§a/" + mainCmd + " addGenerator <Iron/Gold> <teamName>\n" +
-                            "§fAdd a Diamond or Emerald generator using:\n§a/" + mainCmd + " addGenerator <Emerald/Diamond>"));
-            p.spigot().sendMessage(createTC("§2▪ §7/" + mainCmd + " waitingSpawnPos 1/2 §a[optional]", "/" + mainCmd + " waitingSpawnPos ", "§fSet the waiting spawn location pos 1 and 2" +
-                    "\n§fso the plugin will delete it when the game starts.\n§aUse this command to set a waiting spawn §con the same map §aas the arena."));
-            p.spigot().sendMessage(createTC("§2▪ §7/" + mainCmd + " saveArena", "/" + mainCmd + " saveArena", "§fFinish setup and save map."));
-        }
+        return true;
     }
 
     public static boolean isArenaGroup(String var) {
@@ -371,17 +136,6 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         tx.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, suggest));
         tx.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(shot_text).create()));
         return tx;
-    }
-
-    public static TextComponent createTCExecute(String text, String suggest, String shot_text) {
-        TextComponent tx = new TextComponent(text);
-        tx.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, suggest));
-        tx.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(shot_text).create()));
-        return tx;
-    }
-
-    private static boolean isArenaSetup(Player p) {
-        return (!config.getLobbyWorldName().isEmpty()) && (!config.getLobbyWorldName().equalsIgnoreCase(p.getWorld().getName()));
     }
 
     @Override
