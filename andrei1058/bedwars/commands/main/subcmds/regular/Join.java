@@ -36,7 +36,7 @@ public class Join extends SubCommand {
             s.sendMessage(getMsg(p, Messages.COMMAND_JOIN_USAGE));
             return true;
         }
-        if (isArenaGroup(args[1])) {
+        if (isArenaGroup(args[0])) {
             if (!Arena.joinRandomFromGroup(p, args[0])) {
                 s.sendMessage(getMsg(p, Messages.ARENA_JOIN_DENIED_NO_EMPTY_FOUND));
             }

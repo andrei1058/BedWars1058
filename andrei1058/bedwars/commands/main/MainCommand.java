@@ -44,6 +44,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         }
         new Stats(this, "stats");
         new ForceStart(this, "forceStart");
+        new ForceStart(this, "start");
         new SetLobby(this, "setLobby"); //priority 1
         new SetupArena(this, "setupArena"); //priority 2
         new ArenaList(this, "arenaList"); //priority 3

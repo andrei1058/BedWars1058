@@ -555,6 +555,7 @@ public class Arena {
         if (getServerType() == ServerType.BUNGEE) {
             if (gamesBeforeRestart <= 0) {
                 Bukkit.getServer().spigot().restart();
+                return;
             }
             gamesBeforeRestart--;
         }
@@ -578,17 +579,20 @@ public class Arena {
         OreGenerator.removeIfArena(this);
         String name = world.getName();
         Bukkit.unloadWorld(world, false);
-        world = Bukkit.createWorld(new WorldCreator(name));
+        Bukkit.getScheduler().runTaskLater(plugin, ()-> {
+            world = Bukkit.createWorld(new WorldCreator(name));
+            world.setAutoSave(false);
+            this.setStatus(GameState.waiting);
+            for (String team : yml.getConfigurationSection("Team").getKeys(false)) {
+                teams.add(new BedWarsTeam(team, TeamColor.valueOf(yml.getString("Team." + team + ".Color").toUpperCase()),
+                        cm.getArenaLoc("Team." + team + ".Spawn"), cm.getArenaLoc("Team." + team + ".Bed"), cm.getArenaLoc("Team." + team + ".Shop"),
+                        cm.getArenaLoc("Team." + team + ".Upgrade"), this));
+            }
+        }, 100L);
+
         teams.clear();
-        this.setStatus(GameState.waiting);
         countdownS = config.getYml().getInt("startingCountdown");
         restarting = 12;
-        for (String team : yml.getConfigurationSection("Team").getKeys(false)) {
-            teams.add(new BedWarsTeam(team, TeamColor.valueOf(yml.getString("Team." + team + ".Color").toUpperCase()),
-                    cm.getArenaLoc("Team." + team + ".Spawn"), cm.getArenaLoc("Team." + team + ".Bed"), cm.getArenaLoc("Team." + team + ".Shop"),
-                    cm.getArenaLoc("Team." + team + ".Upgrade"), this));
-        }
-        world.setAutoSave(false);
         playerKills.clear();
         playerBedsDestroyed.clear();
         playerFinalKills.clear();
