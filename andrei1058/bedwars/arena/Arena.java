@@ -896,16 +896,16 @@ public class Arena {
         String s = "";
         switch (status) {
             case waiting:
-                s = getMsg(null, Messages.ARENA_STATUS_WAITING_NAME);
+                s = getMsg(null, Messages.ARENA_STATUS_WAITING_NAME).replace("{full}", this.getPlayers().size() == this.getMaxPlayers() ? "FULL" : "");
                 break;
             case starting:
-                s = getMsg(null, Messages.ARENA_STATUS_STARTING_NAME);
+                s = getMsg(null, Messages.ARENA_STATUS_STARTING_NAME).replace("{full}", this.getPlayers().size() == this.getMaxPlayers() ? "FULL" : "");;
                 break;
             case restarting:
-                s = getMsg(null, Messages.ARENA_STATUS_RESTARTING_NAME);
+                s = getMsg(null, Messages.ARENA_STATUS_RESTARTING_NAME).replace("{full}", this.getPlayers().size() == this.getMaxPlayers() ? "FULL" : "");;
                 break;
             case playing:
-                s = getMsg(null, Messages.ARENA_STATUS_PLAYING_NAME);
+                s = getMsg(null, Messages.ARENA_STATUS_PLAYING_NAME).replace("{full}", this.getPlayers().size() == this.getMaxPlayers() ? "FULL" : "");;
                 break;
         }
         return s;

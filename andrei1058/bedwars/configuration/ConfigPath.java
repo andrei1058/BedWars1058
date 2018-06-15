@@ -35,4 +35,5 @@ public class ConfigPath {
     public static final String ARENA_CONFIGURATION_MAX_BUILD_Y = "maxBuildY";
 
     public static final String GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART = "bungeeMode.gamesBeforeRestart";
+    public static final String GENERAL_CONFIGURATION_ALLOW_PARTIES = "allowParties";
 }

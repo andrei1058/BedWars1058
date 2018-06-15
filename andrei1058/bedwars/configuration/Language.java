@@ -60,8 +60,8 @@ public class Language {
                 yml.addDefault(Messages.ARENA_RESTART_PLAYER_KICK, "{prefix}&eThe arena you were in is restarting.");
                 yml.addDefault(Messages.ARENA_STATUS_PLAYING_NAME, "&cPlaying");
                 yml.addDefault(Messages.ARENA_STATUS_RESTARTING_NAME, "&4Restarting");
-                yml.addDefault(Messages.ARENA_STATUS_WAITING_NAME, "&2Waiting");
-                yml.addDefault(Messages.ARENA_STATUS_STARTING_NAME, "&6Starting");
+                yml.addDefault(Messages.ARENA_STATUS_WAITING_NAME, "&2Waiting §c{full}");
+                yml.addDefault(Messages.ARENA_STATUS_STARTING_NAME, "&6Starting §c{full}");
                 yml.addDefault(Messages.ARENA_JOIN_DENIED_GROUP_OR_ARENA_NOT_FOUND, "{prefix}&cThere isn't any arena or arena group called: {name}");
                 yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_EMPTY_FOUND, "{prefix}&cThere isn't any arena available right now ;(");
                 yml.addDefault(Messages.COMMAND_LEAVE_DENIED_NOT_IN_ARENA, "{prefix}&cYou're not in arena!");

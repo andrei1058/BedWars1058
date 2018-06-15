@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.api;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.configuration.Language;
 import org.bukkit.entity.Player;
 
 import java.sql.Timestamp;
@@ -131,6 +132,11 @@ public class BedWars implements GameAPI {
             return Arena.getArenaByPlayer(p).isSpectator(p);
         }
         return false;
+    }
+
+    @Override
+    public String getLangIso(Player p) {
+        return Language.getPlayerLanguage(p).getIso();
     }
 
 

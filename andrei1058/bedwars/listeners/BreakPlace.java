@@ -16,10 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockExplodeEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
@@ -37,6 +34,20 @@ import static com.andrei1058.bedwars.configuration.Language.getMsg;
 public class BreakPlace implements Listener {
 
     private static List<Player> buildSession = new ArrayList<>();
+
+    @EventHandler
+    public void onIceMelt(BlockFadeEvent e){
+        if (e.getBlock().getType() == Material.ICE) {
+            if (Arena.getArenaByName(e.getBlock().getWorld().getName()) != null) e.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onCactus(BlockPhysicsEvent e){
+        if (e.getBlock().getType() == Material.CACTUS) {
+            if (Arena.getArenaByName(e.getBlock().getWorld().getName()) != null) e.setCancelled(true);
+        }
+    }
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {

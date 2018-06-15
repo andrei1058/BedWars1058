@@ -21,6 +21,7 @@ import com.andrei1058.bedwars.support.lang.Lang;
 import com.andrei1058.bedwars.support.levels.Level;
 import com.andrei1058.bedwars.support.levels.NoLevel;
 import com.andrei1058.bedwars.support.papi.PAPISupport;
+import com.andrei1058.bedwars.support.party.NoParty;
 import com.andrei1058.bedwars.support.party.Party;
 import com.andrei1058.bedwars.support.stats.MySQL;
 import com.andrei1058.bedwars.support.stats.None;
@@ -53,8 +54,7 @@ public class Main extends JavaPlugin {
     public static Main plugin;
     public static NMS nms;
     private static Lang langSupport;
-    private static BukkitTask ticks, tick;
-    private static Party party;
+    private static Party party = new NoParty();
     private static Chat chat;
     private static Level level;
     private static Economy economy;
@@ -159,10 +159,12 @@ public class Main extends JavaPlugin {
         /** Load join signs */
         loadArenasAndSigns();
 
-        /** Party support */
-        //todo check for party api
-        party = new com.andrei1058.bedwars.support.party.internal.Internal();
-        getLogger().info("Loading internal Party system. /party");
+        if (config.getYml().getBoolean(ConfigPath.GENERAL_CONFIGURATION_ALLOW_PARTIES)) {
+            /** Party support */
+            //todo check for party api
+            party = new com.andrei1058.bedwars.support.party.internal.Internal();
+            getLogger().info("Loading internal Party system. /party");
+        }
 
         /** Levels support */
         //todo levels addon
@@ -179,8 +181,8 @@ public class Main extends JavaPlugin {
         }
 
         /** Register tasks */
-        ticks = new Refresh().runTaskTimer(this, 20l, 20l);
-        tick = new Rotate().runTaskTimer(this, 120, 1);
+        new Refresh().runTaskTimer(this, 20l, 20l);
+        new Rotate().runTaskTimer(this, 120, 1);
 
         /** Setup bStats metrics */
         Metrics metrics = new Metrics(this);
@@ -273,6 +275,7 @@ public class Main extends JavaPlugin {
         yml.addDefault("disableCrafting", true);
         yml.addDefault("debug", false);
         yml.addDefault("lobbyScoreboard", true);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ALLOW_PARTIES, true);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART, 30);
 
         yml.addDefault("database.enable", false);
