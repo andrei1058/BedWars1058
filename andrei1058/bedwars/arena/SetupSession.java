@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -122,6 +124,7 @@ public class SetupSession {
         getPlayer().setGameMode(GameMode.CREATIVE);
         getPlayer().setAllowFlight(true);
         getPlayer().setFlying(true);
+        getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2));
         getPlayer().sendMessage("§6 ▪ §7You were teleported to the " + getWorldName() + "'s spawn.");
         started = true;
         getPlayer().getInventory().clear();
@@ -182,6 +185,8 @@ public class SetupSession {
     public void done() {
         getSetupSessions().remove(this);
         getPlayer().teleport(config.getConfigLoc("lobbyLoc"));
+        getPlayer().removePotionEffect(PotionEffectType.SPEED);
+        Arena.sendMultiarenaLobbyItems(getPlayer());
     }
 
     /**

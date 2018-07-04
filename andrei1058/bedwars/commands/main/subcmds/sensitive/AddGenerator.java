@@ -7,9 +7,14 @@ import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
 import com.andrei1058.bedwars.configuration.ConfigManager;
 import net.md_5.bungee.api.chat.ClickEvent;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -17,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.andrei1058.bedwars.Main.mainCmd;
+import static com.andrei1058.bedwars.commands.Misc.createArmorStand;
 
 public class AddGenerator extends SubCommand {
     /**
@@ -44,6 +50,36 @@ public class AddGenerator extends SubCommand {
         }
         ConfigManager arena = ss.getCm();
         if (args.length < 1) {
+            String foundTeam = "";
+            double distance = 100;
+            for (String team : ss.getCm().getYml().getConfigurationSection("Team").getKeys(false)) {
+                if (ss.getCm().getYml().get("Team." + team + ".Spawn") == null) continue;
+                double dis = ss.getCm().getArenaLoc("Team." + team + ".Spawn").distance(p.getLocation());
+                if (dis <= ss.getCm().getInt("islandRadius")) {
+                    if (dis < distance) {
+                        distance = dis;
+                        foundTeam = team;
+                    }
+                }
+            }
+            if (!foundTeam.isEmpty()) {
+                arena.set("Team." + foundTeam + ".Iron", arena.stringLocationArenaFormat(p.getLocation()));
+                arena.set("Team." + foundTeam + ".Gold", arena.stringLocationArenaFormat(p.getLocation()));
+                String team = TeamColor.getChatColor(ss.getCm().getYml().getString("Team." + foundTeam + ".Color")) + foundTeam;
+                p.sendMessage("§6▪ §7Generator set for team: " + team);
+                createArmorStand("§7Generator set for " + team, p.getLocation());
+                if (ss.getSetupType() == SetupSession.SetupType.ASSISTED){
+                    Bukkit.dispatchCommand(p, getParent().getName());
+                }
+                return true;
+            }
+            if (p.getLocation().add(0, -1, 0).getBlock().getType() == Material.DIAMOND_BLOCK) {
+                Bukkit.dispatchCommand(p, getParent().getName() + " " + getSubCommandName() + " diamond");
+                return true;
+            } else if (p.getLocation().add(0, -1, 0).getBlock().getType() == Material.EMERALD_BLOCK) {
+                Bukkit.dispatchCommand(p, getParent().getName() + " " + getSubCommandName() + " emerald");
+                return true;
+            }
             p.sendMessage("§c▪ §7Usage: /" + mainCmd + " addGenerator <Diamond/Emerald>");
             if (ss.getSetupType() == SetupSession.SetupType.ADVANCED) {
                 p.sendMessage("§c▪ §7Usage: /" + mainCmd + " addGenerator <Iron/Gold> <teamName>");
@@ -66,6 +102,10 @@ public class AddGenerator extends SubCommand {
                     saved.add(arena.stringLocationArenaFormat(p.getLocation()));
                     arena.set("generator." + args[0].substring(0, 1).toUpperCase() + args[0].substring(1).toLowerCase(), saved);
                     p.sendMessage("§6 ▪ §7" + args[0].substring(0, 1).toUpperCase() + args[0].substring(1).toLowerCase() + " generator saved!");
+                    createArmorStand("§6" + args[0] + " SET", p.getLocation());
+                    if (ss.getSetupType() == SetupSession.SetupType.ASSISTED){
+                        Bukkit.dispatchCommand(p, getParent().getName());
+                    }
                     break;
                 case "iron":
                 case "gold":
@@ -104,7 +144,7 @@ public class AddGenerator extends SubCommand {
                                     p.spigot().sendMessage(Misc.msgHoverClick("§6 ▪ §fIron generator " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team + "§7 (click to set)",
                                             "§7Set Iron Generator for " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team, "/" + mainCmd + " addGenerator Iron " + team, ClickEvent.Action.RUN_COMMAND));
                                     p.spigot().sendMessage(Misc.msgHoverClick("§6 ▪ §6Gold generator " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team + "§7 (click to set)",
-                                            "§7Set Gold Generator for " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color") + team), "/" + mainCmd + " addGenerator Gold  " + team, ClickEvent.Action.RUN_COMMAND));
+                                            "§7Set Gold Generator for " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team, "/" + mainCmd + " addGenerator Gold  " + team, ClickEvent.Action.RUN_COMMAND));
                                 }
                             }
                             return true;
@@ -121,13 +161,16 @@ public class AddGenerator extends SubCommand {
                                 p.spigot().sendMessage(Misc.msgHoverClick("§6 ▪ §fIron generator " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team + "§7 (click to set)",
                                         "§7Set Iron Generator for " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team, "/" + mainCmd + " addGenerator Iron " + team, ClickEvent.Action.RUN_COMMAND));
                                 p.spigot().sendMessage(Misc.msgHoverClick("§6 ▪ §6Gold generator " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team + "§7 (click to set)",
-                                        "§7Set Gold Generator for " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color") + team), "/" + mainCmd + " addGenerator Gold  " + team, ClickEvent.Action.RUN_COMMAND));
+                                        "§7Set Gold Generator for " + TeamColor.getChatColor(arena.getYml().getString("Team." + team + ".Color")) + team, "/" + mainCmd + " addGenerator Gold  " + team, ClickEvent.Action.RUN_COMMAND));
                             }
                         }
                         return true;
                     }
                     arena.set("Team." + foundTeam + "." + args[0].substring(0, 1).toUpperCase() + args[0].substring(1).toLowerCase(), arena.stringLocationArenaFormat(p.getLocation()));
                     p.sendMessage("§6 ▪ §7" + args[0] + " set for: " + TeamColor.getChatColor(arena.getYml().getString("Team." + foundTeam + ".Color")) + foundTeam);
+                    if (ss.getSetupType() == SetupSession.SetupType.ASSISTED){
+                        Bukkit.dispatchCommand(p, getParent().getName());
+                    }
             }
         } else {
             p.sendMessage("§c▪ §7Usage: /" + mainCmd + " addGenerator <Diamond/Emerald>");

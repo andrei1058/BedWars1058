@@ -314,6 +314,7 @@ public class Arena {
             }, 10L);
             leaveItem(p);
             p.setGameMode(GameMode.SPECTATOR);
+            p.sendMessage(getMsg(p, Messages.ARENA_JOIN_SPECTATOR_MSG).replace("{arena}", this.getDisplayName()));
 
             /** update generator holograms for spectators */
             String iso = Language.getPlayerLanguage(p).getIso();
@@ -553,6 +554,8 @@ public class Arena {
 
     private void restart() {
         if (getServerType() == ServerType.BUNGEE) {
+            //todo games before restart dezactivat temporar pentru ca, cauzeaza probleme
+            gamesBeforeRestart = 0;
             if (gamesBeforeRestart <= 0) {
                 Bukkit.getServer().spigot().restart();
                 return;
@@ -616,9 +619,11 @@ public class Arena {
                     for (Player p : getPlayers()) {
                         if (owners.contains(p)) {
                             for (BedWarsTeam t : getTeams()) {
+                                if (skip.contains(p)) continue;
                                 if (t.getSize() + getParty().partySize(p) <= maxInTeam) {
                                     skip.add(p);
                                     p.closeInventory();
+                                    t.addPlayers(p);
                                     for (Player mem : getParty().getMembers(p)) {
                                         if (mem != p) {
                                             t.addPlayers(mem);

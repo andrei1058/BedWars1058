@@ -63,6 +63,7 @@ public class Messages {
     public static String ARENA_JOIN_DENIED_PARTY_TOO_BIG = "party.tooMuch";
     public static String ARENA_JOIN_DENIED_NOT_PARTY_LEADER = "party.leaderChoose";
     public static String ARENA_JOIN_PLAYER_JOIN_MSG = "arena.join";
+    public static String ARENA_JOIN_SPECTATOR_MSG = "arena.spectate";
     public static String ARENA_LEAVE_PLAYER_LEAVE_MSG = "arena.leave";
     public static String ARENA_LEAVE_ITEM_NAME = "arena.leaveItm.name";
     public static String ARENA_LEAVE_ITEM_LORE = "arena.leaveItm.lore";

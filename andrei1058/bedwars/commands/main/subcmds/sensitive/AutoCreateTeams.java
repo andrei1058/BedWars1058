@@ -57,8 +57,8 @@ public class AutoCreateTeams extends SubCommand {
                     s.sendMessage("§6§lWAITING LOBBY REMOVAL:");
                     s.sendMessage("§fIf you'd like the lobby to disappear when the game starts,");
                     s.sendMessage("§fplease use the following commands like a world edit selection.");
-                    s.sendMessage("§c ▪ §7/"+Main.mainCmd+" waitingPos 1");
-                    s.sendMessage("§c ▪ §7/"+Main.mainCmd+" waitingPos 2");
+                    p.spigot().sendMessage(Misc.msgHoverClick("§c ▪ §7/"+Main.mainCmd+" waitingPos 1", "§dSet pos 1", "/"+getParent().getName()+" waitingPos 1", ClickEvent.Action.RUN_COMMAND));
+                    p.spigot().sendMessage(Misc.msgHoverClick("§c ▪ §7/"+Main.mainCmd+" waitingPos 2", "§dSet pos 2", "/"+getParent().getName()+" waitingPos 2", ClickEvent.Action.RUN_COMMAND));
                     s.sendMessage("");
                     s.sendMessage("§7This step is OPTIONAL. If you wan to skip it do §6/"+Main.mainCmd);
                 }

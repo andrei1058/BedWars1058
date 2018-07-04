@@ -69,6 +69,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         new SetShop(this, "setShop");
         new SetUpgrade(this, "setUpgrade");
         new AddGenerator(this, "addGenerator");
+        new SetType(this, "setType");
         new Save(this, "save");
     }
 

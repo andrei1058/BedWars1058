@@ -6,6 +6,10 @@ import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
 import net.md_5.bungee.api.chat.ClickEvent;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -58,13 +62,32 @@ public class SetSpawn extends SubCommand {
                 }
             } else {
                 ss.getCm().saveArenaLoc("Team." + args[0] + ".Spawn", p.getLocation());
-                p.sendMessage("§6 ▪ §7Spawn set for: " + TeamColor.getChatColor(ss.getCm().getYml().getString("Team." + args[0] + ".Color")) + args[0]);
+                String teamm = TeamColor.getChatColor(ss.getCm().getYml().getString("Team." + args[0] + ".Color")) + args[0];
+                p.sendMessage("§6 ▪ §7Spawn set for: " + teamm);
+                com.andrei1058.bedwars.commands.Misc.createArmorStand(teamm+" §6SPAWN SET", p.getLocation());
+                int radius = ss.getCm().getInt("islandRadius");
+                Location l = p.getLocation();
+                for (int x = -radius; x < radius; x++){
+                    for (int y = -radius; y < radius; y++){
+                        for (int z = -radius; z < radius; z++){
+                            Block b = l.clone().add(x, y, z).getBlock();
+                            if (b.getType() == Material.BED_BLOCK){
+                                p.teleport(b.getLocation());
+                                Bukkit.dispatchCommand(p, getParent().getName()+" setBed "+args[0]);
+                                return true;
+                            }
+                        }
+                    }
+                }
                 if (ss.getCm().getYml().get("Team") != null) {
+                    String remainging = "";
                     for (String team : ss.getCm().getYml().getConfigurationSection("Team").getKeys(false)) {
                         if (ss.getCm().getYml().get("Team." + team + ".Spawn") == null) {
-                            p.spigot().sendMessage(Misc.msgHoverClick("§6Set spawn for: " + TeamColor.getChatColor(ss.getCm().getYml().getString("Team." + team + ".Color")) + team + "§7 (click to set)",
-                                    "§7Set spawn for " + TeamColor.getChatColor(ss.getCm().getYml().getString("Team." + team + ".Color")) + team, "/" + mainCmd + " setSpawn " + team, ClickEvent.Action.RUN_COMMAND));
+                            remainging+= TeamColor.getChatColor(ss.getCm().getYml().getString("Team." + team + ".Color"))+team+" ";
                         }
+                    }
+                    if (!remainging.isEmpty()){
+                        p.sendMessage("§6Remaining: "+remainging);
                     }
                 }
             }

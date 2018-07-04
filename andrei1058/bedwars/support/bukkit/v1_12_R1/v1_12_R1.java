@@ -11,6 +11,7 @@ import com.google.common.collect.Sets;
 import net.minecraft.server.v1_12_R1.*;
 import net.minecraft.server.v1_12_R1.Item;
 import org.bukkit.Bukkit;
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.block.Bed;
@@ -480,4 +481,13 @@ public class v1_12_R1 implements NMS {
         ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
     }
 
+    @Override
+    public Effect eggBridge() {
+        return Effect.MOBSPAWNER_FLAMES;
+    }
+
+    @Override
+    public void setBlockTeamColor(org.bukkit.block.Block block, TeamColor teamColor) {
+        block.setData(TeamColor.itemColor(teamColor));
+    }
 }

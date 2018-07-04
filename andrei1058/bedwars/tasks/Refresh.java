@@ -1,12 +1,14 @@
-package com.andrei1058.bedwars.arena;
+package com.andrei1058.bedwars.tasks;
 
+import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.arena.BedWarsTeam;
+import com.andrei1058.bedwars.arena.OreGenerator;
+import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.configuration.Messages;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
-
-import static com.andrei1058.bedwars.Main.lang;
 import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 

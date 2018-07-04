@@ -12,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
@@ -198,6 +199,10 @@ public class DamageDeathMove implements Listener {
                     return;
                 }
                 if (a.getStatus() != GameState.playing) {
+                    victim.spigot().respawn();
+                    return;
+                }
+                if (t == null){
                     victim.spigot().respawn();
                     return;
                 }
@@ -553,6 +558,15 @@ public class DamageDeathMove implements Listener {
             if (e.getEntityType() == EntityType.IRON_GOLEM || e.getEntityType() == EntityType.SILVERFISH) {
                 e.getDrops().clear();
                 e.setDroppedExp(0);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onEat(PlayerItemConsumeEvent e){
+        if (e.getItem().getType() == Material.CAKE_BLOCK){
+            if (Arena.getArenaByName(e.getPlayer().getWorld().getName()) != null){
+                e.setCancelled(true);
             }
         }
     }

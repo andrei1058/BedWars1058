@@ -33,7 +33,9 @@ public class ConfigManager {
         }
         yml = YamlConfiguration.loadConfiguration(config);
         if (arena){
-            yml.addDefault("group", "DEFAULT");
+            yml.options().header(plugin.getName()+" arena configuration file.\n" +
+                    "Documentation here: https://gitlab.com/andrei1058/BedWars1058/wikis/configuration/Arena-Configuration");
+            yml.addDefault("group", "Default");
             yml.addDefault("minPlayers", 2);
             yml.addDefault("maxInTeam", 1);
             yml.addDefault("allowSpectate", true);
@@ -44,6 +46,7 @@ public class ConfigManager {
             yml.addDefault("bedBlock", "BED_BLOCK");
             yml.addDefault("worldBorder", 300);
             yml.addDefault("voidKill", false);
+            //yml.addDefault("disableGeneratorsOnOrphanIslands", false);
             yml.addDefault(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y, 100);
             yml.options().copyDefaults(true);
             save();

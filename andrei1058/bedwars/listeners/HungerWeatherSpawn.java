@@ -13,12 +13,11 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import static com.andrei1058.bedwars.Main.*;
-import static com.andrei1058.bedwars.arena.Refresh.showTime;
+import static com.andrei1058.bedwars.tasks.Refresh.showTime;
 
 public class HungerWeatherSpawn implements Listener {
 

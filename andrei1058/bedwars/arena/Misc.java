@@ -190,7 +190,7 @@ public class Misc {
                 plugin.getLogger().info("                                    ");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            plugin.getLogger().severe("Couldn't check for updates!");
         }
     }
 

@@ -71,7 +71,12 @@ public class SetUpgrade extends SubCommand {
                 }
             } else {
                 ss.getCm().saveArenaLoc("Team." + args[0] + ".Upgrade", p.getLocation());
-                p.sendMessage("§6 ▪ §7Upgrade npc set for: " + TeamColor.getChatColor(ss.getCm().getYml().getString("Team." + args[0] + ".Color")) + args[0]);
+                String teamm = TeamColor.getChatColor(ss.getCm().getYml().getString("Team." + args[0] + ".Color")) + args[0];
+                com.andrei1058.bedwars.commands.Misc.createArmorStand(teamm+" §6UPGRADE SET", p.getLocation());
+                p.sendMessage("§6 ▪ §7Upgrade npc set for: " + teamm);
+                if (ss.getSetupType() == SetupSession.SetupType.ASSISTED){
+                    Bukkit.dispatchCommand(p, getParent().getName());
+                }
             }
         }
         return true;

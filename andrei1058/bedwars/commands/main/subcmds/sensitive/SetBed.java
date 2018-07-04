@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 
 import static com.andrei1058.bedwars.Main.getParty;
 import static com.andrei1058.bedwars.Main.mainCmd;
+import static com.andrei1058.bedwars.commands.Misc.createArmorStand;
 
 public class SetBed extends SubCommand {
     /**
@@ -78,7 +79,12 @@ public class SetBed extends SubCommand {
                 }
             } else {
                 ss.getCm().saveArenaLoc("Team." + args[0] + ".Bed", p.getLocation());
-                p.sendMessage("§6 ▪ §7Bed set for: " + TeamColor.getChatColor(ss.getCm().getYml().getString("Team." + args[0] + ".Color")) + args[0]);
+                String team = TeamColor.getChatColor(ss.getCm().getYml().getString("Team." + args[0] + ".Color")) + args[0];
+                p.sendMessage("§6 ▪ §7Bed set for: " + team);
+                createArmorStand(team+" §6BED SET", p.getLocation().add(0.5, 0, 0.5));
+                if (ss.getSetupType() == SetupSession.SetupType.ASSISTED){
+                    Bukkit.dispatchCommand(p, getParent().getName());
+                }
             }
         }
         return true;

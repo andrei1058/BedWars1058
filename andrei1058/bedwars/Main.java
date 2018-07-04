@@ -26,6 +26,8 @@ import com.andrei1058.bedwars.support.party.Party;
 import com.andrei1058.bedwars.support.stats.MySQL;
 import com.andrei1058.bedwars.support.stats.None;
 import com.andrei1058.bedwars.support.vault.*;
+import com.andrei1058.bedwars.tasks.OneTick;
+import com.andrei1058.bedwars.tasks.Refresh;
 import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
@@ -35,7 +37,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.util.*;
@@ -134,7 +135,7 @@ public class Main extends JavaPlugin {
         }
 
         /** Register events */
-        registerEvents(new JoinLeaveTeleport(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess());
+        registerEvents(new JoinLeaveTeleport(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(), new EggBridge());
         if (getServerType() == ServerType.BUNGEE) {
             registerEvents(new Ping());
         }
@@ -182,7 +183,7 @@ public class Main extends JavaPlugin {
 
         /** Register tasks */
         new Refresh().runTaskTimer(this, 20l, 20l);
-        new Rotate().runTaskTimer(this, 120, 1);
+        new OneTick().runTaskTimer(this, 120, 1);
 
         /** Setup bStats metrics */
         Metrics metrics = new Metrics(this);
