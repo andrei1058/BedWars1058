@@ -3,6 +3,7 @@ package com.andrei1058.bedwars.support.papi;
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.configuration.Messages;
+import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 
@@ -13,6 +14,9 @@ import static com.andrei1058.bedwars.Main.lang;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
 public class PAPISupport extends PlaceholderExpansion {
+
+    private static supp supportPAPI = new noPAPI();
+
     @Override
     public String getIdentifier() {
         return "bw1058";
@@ -61,5 +65,29 @@ public class PAPISupport extends PlaceholderExpansion {
             return String.valueOf(Arena.getArenas().size());
         }
         return null;
+    }
+
+    public interface supp {
+        String replace(Player p, String s);
+    }
+
+    public static class noPAPI implements supp {
+
+        @Override
+        public String replace(Player p, String s) {
+            return s;
+        }
+    }
+
+    public static class withPAPI implements supp {
+
+        @Override
+        public String replace(Player p, String s) {
+            return PlaceholderAPI.setPlaceholders(p, s);
+        }
+    }
+
+    public static supp getSupportPAPI() {
+        return supportPAPI;
     }
 }

@@ -28,8 +28,12 @@ import com.andrei1058.bedwars.support.stats.None;
 import com.andrei1058.bedwars.support.vault.*;
 import com.andrei1058.bedwars.tasks.OneTick;
 import com.andrei1058.bedwars.tasks.Refresh;
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.npc.NPC;
+import net.citizensnpcs.npc.skin.SkinnableEntity;
 import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Monster;
@@ -41,6 +45,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.util.*;
 
+import static com.andrei1058.bedwars.commands.main.subcmds.sensitive.NPC.createArmorStand;
+import static com.andrei1058.bedwars.commands.main.subcmds.sensitive.NPC.isCitizensSupport;
 import static com.andrei1058.bedwars.configuration.Language.setupLang;
 
 public class Main extends JavaPlugin {
@@ -61,6 +67,8 @@ public class Main extends JavaPlugin {
     private static Economy economy;
     private static String version = Bukkit.getServer().getClass().getName().split("\\.")[3];
     public static com.andrei1058.bedwars.support.stats.Database database;
+    public static HashMap<ArmorStand, String[]> npcs_holos = new HashMap<>();
+    public static HashMap<Integer, String> npcs = new HashMap<>();
 
     @Override
     public void onLoad() {
@@ -71,7 +79,7 @@ public class Main extends JavaPlugin {
         setupLang(en);
         Language.getLanguages().remove(en);
         setupConfig();
-        generators = new ConfigManager("generators", "plugins/"+ this.getName(), false);
+        generators = new ConfigManager("generators", "plugins/" + this.getName(), false);
         setupGeneratorsCfg();
         upgrades = new UpgradesManager("upgrades", "plugins/" + this.getName());
     }
@@ -103,10 +111,16 @@ public class Main extends JavaPlugin {
                 support = false;
         }
 
-        if (!support){
+        if (!support) {
             this.setEnabled(false);
             this.getLogger().severe("I can't run on your version: " + version);
             return;
+        }
+
+        /** Citizens support */
+        if (this.getServer().getPluginManager().getPlugin("Citizens") != null) {
+            com.andrei1058.bedwars.commands.main.subcmds.sensitive.NPC.setCitizensSupport(true);
+            getLogger().info("Hook into Citizens support!");
         }
 
         /** Register main command */
@@ -152,8 +166,8 @@ public class Main extends JavaPlugin {
             case "v1_8_R3":
                 registerEvents(new PlayerDropPick());
                 /**Bukkit.getScheduler().runTaskLater(this, ()-> {
-                    System.out.println("\u001B[31m[WARN] BedWars1058 is going to abort support for this server version in the future.\nPlease consider upgrading to a newer paper/spigot version.\u001B[0m");
-                }, 40L);*/
+                 System.out.println("\u001B[31m[WARN] BedWars1058 is going to abort support for this server version in the future.\nPlease consider upgrading to a newer paper/spigot version.\u001B[0m");
+                 }, 40L);*/
                 break;
         }
 
@@ -208,14 +222,15 @@ public class Main extends JavaPlugin {
         }
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             database.setupGeneralTables();
-            plugin.removeOldNPCS();
+            //spawn NPCs
+            plugin.spawnNPCs();
         }, 40L);
 
         /** Save messages for stats gui items if custom items added, for each language */
         Language.setupCustomStatsMessages();
 
         /** PlaceholderAPI Support */
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             getLogger().info("Hook into PlaceholderAPI support!");
             new PAPISupport().register();
         }
@@ -244,12 +259,13 @@ public class Main extends JavaPlugin {
         }
 
         /** Chat support */
-        if (config.getBoolean("formatChat")){
+        if (config.getBoolean("formatChat")) {
             registerEvents(new PlayerChat());
         }
 
         /** Protect glass walls from tnt explosion */
         nms.registerTntWhitelist();
+
     }
 
     public void onDisable() {
@@ -323,7 +339,7 @@ public class Main extends JavaPlugin {
         Misc.addDefaultStatsItem(yml, 12, Material.IRON_SWORD, 0, "kills");
         Misc.addDefaultStatsItem(yml, 13, Material.SKULL_ITEM, 0, "deaths");
         Misc.addDefaultStatsItem(yml, 14, Material.DIAMOND_SWORD, 0, "finalKills");
-        Misc.addDefaultStatsItem(yml, 15, Material.SKULL_ITEM, 1,  "finalDeaths");
+        Misc.addDefaultStatsItem(yml, 15, Material.SKULL_ITEM, 1, "finalDeaths");
         Misc.addDefaultStatsItem(yml, 16, Material.BED, 0, "bedsDestroyed");
         Misc.addDefaultStatsItem(yml, 21, Material.STAINED_GLASS_PANE, 0, "firstPlay");
         Misc.addDefaultStatsItem(yml, 22, Material.CHEST, 0, "gamesPlayed");
@@ -370,33 +386,6 @@ public class Main extends JavaPlugin {
         }
     }
 
-    public static void removeOldNPCS() {
-        /* Remove old NPCs before api v6 version 0.6.1beta */
-        if (config.getYml().get("npcLoc") != null) {
-            for (String s : config.getYml().getStringList("npcLoc")) {
-                String[] data = s.split(",");
-                Location l = new Location(Bukkit.getWorld(data[5]), Double.valueOf(data[0]), Double.valueOf(data[1]), Double.valueOf(data[2]), Float.valueOf(data[3]), Float.valueOf(data[4]));
-                try {
-                    EntityType.valueOf(data[6]);
-                } catch (Exception ex) {
-                    plugin.getLogger().severe("Invalid EntityType at npcLoc: " + data[6]);
-                    continue;
-                }
-                List<Entity> enti = (List<Entity>) l.getWorld().getNearbyEntities(l, 0, 1, 0);
-                for (Entity en : enti) {
-                    if (en.getType() == EntityType.valueOf(data[6])) {
-                        en.remove();
-                    }
-                    if (en.getType() == EntityType.ARMOR_STAND) {
-                        en.remove();
-                    }
-                }
-                Bukkit.getWorld(config.getLobbyWorldName()).save();
-            }
-        }
-        config.set("npcLoc", null);
-    }
-
     private void setupSigns() {
         signs = new ConfigManager("signs", "plugins/" + plugin.getName(), false);
         YamlConfiguration yml = signs.getYml();
@@ -425,7 +414,7 @@ public class Main extends JavaPlugin {
                 int x = r.nextInt(files.size());
                 new Arena(files.get(x).getName().replace(".yml", ""), null);
             } else {
-                for (int x = 0; x < files.size(); x++){
+                for (int x = 0; x < files.size(); x++) {
                     new Arena(files.get(x).getName().replace(".yml", ""), null);
                 }
             }
@@ -466,7 +455,7 @@ public class Main extends JavaPlugin {
         if (!nms.isBukkitCommandRegistered("leave")) {
             nms.registerCommand("leave", new LeaveCommand("leave"));
         }
-        if (!nms.isBukkitCommandRegistered("party")){
+        if (!nms.isBukkitCommandRegistered("party")) {
             nms.registerCommand("party", new com.andrei1058.bedwars.commands.Party("party"));
         }
     }
@@ -477,33 +466,33 @@ public class Main extends JavaPlugin {
         }
     }
 
-    private static void setupGeneratorsCfg(){
+    private static void setupGeneratorsCfg() {
         YamlConfiguration yml = generators.getYml();
 
         yml.options().header(plugin.getDescription().getName() + " by andrei1058." +
                 "\ngenerators.yml Documentation\n");
-        yml.addDefault("Default."+ConfigPath.GENERATOR_IRON_DELAY, 2);
-        yml.addDefault("Default."+ConfigPath.GENERATOR_IRON_AMOUNT, 2);
-        yml.addDefault("Default."+ConfigPath.GENERATOR_GOLD_DELAY, 6);
-        yml.addDefault("Default."+ConfigPath.GENERATOR_GOLD_AMOUNT, 2);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_IRON_DELAY, 2);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_IRON_AMOUNT, 2);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_DELAY, 6);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_AMOUNT, 2);
         yml.addDefault(ConfigPath.GENERATOR_STACK_ITEMS, false);
 
-        yml.addDefault("Default."+ConfigPath.GENERATOR_DIAMOND_TIER_I_DELAY, 30);
-        yml.addDefault("Default."+ConfigPath.GENERATOR_DIAMOND_TIER_I_MAX, 4);
-        yml.addDefault("Default."+ConfigPath.GENERATOR_DIAMOND_TIER_II_DELAY, 20);
-        yml.addDefault("Default."+ConfigPath.GENERATOR_DIAMOND_TIER_II_MAX, 6);
-        yml.addDefault("Default."+ConfigPath.GENERATOR_DIAMOND_TIER_II_START, 360);
-        yml.addDefault("Default."+ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY, 15);
-        yml.addDefault("Default."+ConfigPath.GENERATOR_DIAMOND_TIER_III_MAX, 8);
-        yml.addDefault("Default."+ConfigPath.GENERATOR_DIAMOND_TIER_III_START, 1080);
-        yml.addDefault("Default."+ConfigPath.GENERATOR_EMERALD_TIER_I_DELAY, 70);
-        yml.addDefault("Default."+ConfigPath.GENERATOR_EMERALD_TIER_I_MAX, 4);
-        yml.addDefault("Default."+ConfigPath.GENERATOR_EMERALD_TIER_II_DELAY, 50);
-        yml.addDefault("Default."+ConfigPath.GENERATOR_EMERALD_TIER_II_MAX, 6);
-        yml.addDefault("Default."+ConfigPath.GENERATOR_EMERALD_TIER_II_START, 720);
-        yml.addDefault("Default."+ConfigPath.GENERATOR_EMERALD_TIER_III_DELAY, 30);
-        yml.addDefault("Default."+ConfigPath.GENERATOR_EMERALD_TIER_III_MAX, 8);
-        yml.addDefault("Default."+ConfigPath.GENERATOR_EMERALD_TIER_III_START, 1440);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_DIAMOND_TIER_I_DELAY, 30);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_DIAMOND_TIER_I_MAX, 4);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_DIAMOND_TIER_II_DELAY, 20);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_DIAMOND_TIER_II_MAX, 6);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_DIAMOND_TIER_II_START, 360);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY, 15);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_MAX, 8);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START, 1080);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_EMERALD_TIER_I_DELAY, 70);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_EMERALD_TIER_I_MAX, 4);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_EMERALD_TIER_II_DELAY, 50);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_EMERALD_TIER_II_MAX, 6);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_EMERALD_TIER_II_START, 720);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_EMERALD_TIER_III_DELAY, 30);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_EMERALD_TIER_III_MAX, 8);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_EMERALD_TIER_III_START, 1440);
         yml.options().copyDefaults(true);
         generators.save();
     }
@@ -536,4 +525,108 @@ public class Main extends JavaPlugin {
         return generators;
     }
 
+
+    /**
+     * Spawn an NPC
+     *
+     * @since API v8
+     */
+    public static NPC spawnNPC(Location l, String name, String group, String skin) {
+        NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "");
+        npc.faceLocation(l);
+        npc.spawn(l);
+        ((SkinnableEntity) npc.getEntity()).setSkinName(skin);
+        npc.faceLocation(l);
+        String[] nume = name.split("00");
+        if (nume.length >= 2) {
+            ArmorStand a = createArmorStand(l.clone().add(0, 0.05, 0));
+            a.setMarker(false);
+            a.setCustomNameVisible(true);
+            a.setCustomName(ChatColor.translateAlternateColorCodes('&', nume[0]));
+            npcs.put(npc.getId(), group);
+            ArmorStand a2 = createArmorStand(l.clone().subtract(0, 0.25, 0));
+            a2.setMarker(false);
+            a2.setCustomName(ChatColor.translateAlternateColorCodes('&', nume[1]).replace("{players}", String.valueOf(Arena.getPlayers(group))));
+            a2.setCustomNameVisible(true);
+            npcs_holos.put(a2, (group + "00" + nume[1].replace("&", "§")).split("00"));
+        } else if (nume.length == 1) {
+            npcs.put(npc.getId(), group);
+            ArmorStand a2 = createArmorStand(l.clone().subtract(0, 0.25, 0));
+            a2.setMarker(false);
+            a2.setCustomName(ChatColor.translateAlternateColorCodes('&', nume[0].replace("&", "§")).replace("{players}", String.valueOf(Arena.getPlayers(group))));
+            a2.setCustomNameVisible(true);
+            npcs_holos.put(a2, (group + "00" + nume[0]).split("00"));
+        }
+        npc.faceLocation(l);
+        npc.setName("");
+        return npc;
+    }
+
+    /**
+     * Spawn npcs
+     *
+     * @since API v8
+     */
+    public static void spawnNPCs() {
+        if (!isCitizensSupport()) return;
+        if (Main.config.getYml().get("npcLoc") != null) {
+            for (String s : Main.config.getYml().getStringList("npcLoc")) {
+                String[] data = s.split(",");
+                if (data.length < 10) continue;
+                if (!Misc.isNumber(data[0])) continue;
+                if (!Misc.isNumber(data[1])) continue;
+                if (!Misc.isNumber(data[2])) continue;
+                if (!Misc.isNumber(data[3])) continue;
+                if (!Misc.isNumber(data[4])) continue;
+                if (Misc.isNumber(data[5])) continue;
+                if (Misc.isNumber(data[6])) continue;
+                if (Misc.isNumber(data[7])) continue;
+                if (Misc.isNumber(data[8])) continue;
+                if (!Misc.isNumber(data[9])) continue;
+                Location l = new Location(Bukkit.getWorld(data[5]), Double.valueOf(data[0]), Double.valueOf(data[1]), Double.valueOf(data[2]), Float.valueOf(data[3]),
+                        Float.valueOf(data[4]));
+                String skin = data[6], name = data[7], group = data[8];
+                int id = Integer.valueOf(data[9]);
+                net.citizensnpcs.api.npc.NPC npc = CitizensAPI.getNPCRegistry().getById(id);
+                if (CitizensAPI.getNPCRegistry().getById(id) == null) {
+                    Main.plugin.getLogger().severe("Invalid npc id: " + id);
+                    continue;
+                } else {
+                    if (!npc.isSpawned()) {
+                        npc.spawn(l);
+                    }
+                }
+                npc.faceLocation(l);
+                if (npc.getEntity() instanceof SkinnableEntity) ((SkinnableEntity) npc.getEntity()).setSkinName(skin);
+                npc.setProtected(true);
+                npc.setName("");
+                npc.faceLocation(l);
+                for (Entity e : l.getWorld().getNearbyEntities(l, 1, 3, 1)) {
+                    if (e.getType() == EntityType.ARMOR_STAND) e.remove();
+                }
+                String[] nume = name.split("00");
+                if (nume.length >= 2) {
+                    ArmorStand a = createArmorStand(l.clone().add(0, 0.05, 0));
+                    a.setMarker(false);
+                    a.setCustomNameVisible(true);
+                    a.setCustomName(ChatColor.translateAlternateColorCodes('&', nume[0]));
+                    npcs.put(npc.getId(), group);
+
+                    ArmorStand a2 = createArmorStand(l.clone().subtract(0, 0.25, 0));
+                    a2.setMarker(false);
+                    a2.setCustomName(ChatColor.translateAlternateColorCodes('&', nume[1]).replace("{players}", String.valueOf(Arena.getPlayers(group))));
+                    a2.setCustomNameVisible(true);
+                    Main.npcs_holos.put(a2, (group + "00" + nume[1].replace("&", "§")).split("00"));
+                } else if (nume.length == 1) {
+                    ArmorStand a2 = createArmorStand(l.clone().subtract(0, 0.25, 0));
+                    a2.setMarker(false);
+                    a2.setCustomName(ChatColor.translateAlternateColorCodes('&', nume[0]).replace("{players}", String.valueOf(Arena.getPlayers(group))));
+                    a2.setCustomNameVisible(true);
+                    Main.npcs_holos.put(a2, (group + "00" + nume[0].replace("&", "§")).split("00"));
+                    Main.npcs.put(npc.getId(), group);
+                }
+            }
+
+        }
+    }
 }

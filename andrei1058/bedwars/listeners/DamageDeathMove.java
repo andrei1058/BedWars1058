@@ -341,7 +341,12 @@ public class DamageDeathMove implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onRespawn(PlayerRespawnEvent e) {
         Arena a = Arena.getArenaByPlayer(e.getPlayer());
-        if (a != null) {
+        if (a == null) {
+            SetupSession ss = SetupSession.getSession(e.getPlayer());
+            if (ss != null) {
+                e.setRespawnLocation(e.getPlayer().getWorld().getSpawnLocation());
+            }
+        } else {
             e.setRespawnLocation(a.getCm().getArenaLoc("waiting.Loc"));
             BedWarsTeam t = a.getTeam(e.getPlayer());
             if (t.isBedDestroyed()) {

@@ -71,6 +71,9 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         new AddGenerator(this, "addGenerator");
         new SetType(this, "setType");
         new Save(this, "save");
+        if (NPC.isCitizensSupport()){
+            new NPC(this, "npc");
+        }
     }
 
     @Override

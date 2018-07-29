@@ -21,7 +21,7 @@ public class Language {
 
     private YamlConfiguration yml;
     private File config;
-    private String iso = "en", prefixColor = "", langName = "English";
+    private String iso, prefixColor = "", langName = "English";
     private static HashMap<Player, Language> langByPlayer = new HashMap<>();
     private static List<Language> languages = new ArrayList<>();
 
@@ -272,7 +272,7 @@ public class Language {
                 yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_REGULAR, "{PlayerColor}{PlayerName} &7was hit off by a bomb.");
                 yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_FINAL_KILL, "{PlayerColor}{PlayerName} &7was hit off by a bomb. &b&lFINAL KILL!");
                 yml.addDefault(Messages.PLAYER_STATS_ITEM_NAME, "&6Stats");
-                yml.addDefault(Messages.PLAYER_STATS_ITEM_LORE, Arrays.asList("&7Rick-click to see your stats!"));
+                yml.addDefault(Messages.PLAYER_STATS_ITEM_LORE, Arrays.asList("&7Right-click to see your stats!"));
                 yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "{player} Stats");
 
                 /** save default items messages for stats gui */

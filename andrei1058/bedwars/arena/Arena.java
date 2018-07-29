@@ -162,7 +162,8 @@ public class Arena {
                 Material.valueOf(yml.getString("bedBlock"));
                 bedBlock = Material.valueOf(yml.getString("bedBlock"));
             } catch (Exception ex) {
-                if (p != null) p.sendMessage("§c"+yml.getString("bedBlock") + " is not a Material at " + getWorldName() + ".yml");
+                if (p != null)
+                    p.sendMessage("§c" + yml.getString("bedBlock") + " is not a Material at " + getWorldName() + ".yml");
                 plugin.getLogger().severe(yml.getString("bedBlock") + " is not a Material at " + getWorldName() + ".yml");
             }
         }
@@ -582,7 +583,7 @@ public class Arena {
         OreGenerator.removeIfArena(this);
         String name = world.getName();
         Bukkit.unloadWorld(world, false);
-        Bukkit.getScheduler().runTaskLater(plugin, ()-> {
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
             world = Bukkit.createWorld(new WorldCreator(name));
             world.setAutoSave(false);
             this.setStatus(GameState.waiting);
@@ -904,13 +905,16 @@ public class Arena {
                 s = getMsg(null, Messages.ARENA_STATUS_WAITING_NAME).replace("{full}", this.getPlayers().size() == this.getMaxPlayers() ? "FULL" : "");
                 break;
             case starting:
-                s = getMsg(null, Messages.ARENA_STATUS_STARTING_NAME).replace("{full}", this.getPlayers().size() == this.getMaxPlayers() ? "FULL" : "");;
+                s = getMsg(null, Messages.ARENA_STATUS_STARTING_NAME).replace("{full}", this.getPlayers().size() == this.getMaxPlayers() ? "FULL" : "");
+                ;
                 break;
             case restarting:
-                s = getMsg(null, Messages.ARENA_STATUS_RESTARTING_NAME).replace("{full}", this.getPlayers().size() == this.getMaxPlayers() ? "FULL" : "");;
+                s = getMsg(null, Messages.ARENA_STATUS_RESTARTING_NAME).replace("{full}", this.getPlayers().size() == this.getMaxPlayers() ? "FULL" : "");
+                ;
                 break;
             case playing:
-                s = getMsg(null, Messages.ARENA_STATUS_PLAYING_NAME).replace("{full}", this.getPlayers().size() == this.getMaxPlayers() ? "FULL" : "");;
+                s = getMsg(null, Messages.ARENA_STATUS_PLAYING_NAME).replace("{full}", this.getPlayers().size() == this.getMaxPlayers() ? "FULL" : "");
+                ;
                 break;
         }
         return s;
@@ -1289,5 +1293,18 @@ public class Arena {
 
     public void setCountdownS(int countdownS) {
         this.countdownS = countdownS;
+    }
+
+    /**
+     * Get players count for a group
+     *
+     * @since API v8
+     */
+    public static int getPlayers(String group) {
+        int i = 0;
+        for (Arena a : getArenas()) {
+            if (a.getGroup().equalsIgnoreCase(group)) i += a.getPlayers().size();
+        }
+        return i;
     }
 }

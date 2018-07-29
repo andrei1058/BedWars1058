@@ -323,4 +323,21 @@ public class Misc {
             new SBoard(p, getList(p, Messages.SCOREBOARD_LOBBY), null);
         }
     }
+
+    public static boolean isNumber(String s) {
+        try {
+            Double.parseDouble(s);
+        } catch (Exception e) {
+            try {
+                Integer.parseInt(s);
+            } catch (Exception ex){
+                try {
+                    Long.parseLong(s);
+                } catch (Exception exx){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }

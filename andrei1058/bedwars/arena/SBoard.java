@@ -3,6 +3,7 @@ package com.andrei1058.bedwars.arena;
 import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.support.papi.PAPISupport;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -138,6 +139,7 @@ public class SBoard {
     }
 
     private void setContent(Team t, String s) {
+        s = PAPISupport.getSupportPAPI().replace(getP(), s);
         if (s.length() >= 16) {
             String prefix = s.substring(0, 16);
             String suffix;
