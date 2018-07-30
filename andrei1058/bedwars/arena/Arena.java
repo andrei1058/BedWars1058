@@ -1210,6 +1210,28 @@ public class Arena {
                     }
                 }
                 setStatus(GameState.restarting);
+
+                //Game end event
+                List<UUID> winners = new ArrayList<>(), losers = new ArrayList<>(), aliveWinners = new ArrayList<>();
+                for (Player p : getPlayers()){
+                    aliveWinners.add(p.getUniqueId());
+                }
+                if (winner != null){
+                    for (Player p : winner.getMembersCache()){
+                        winners.add(p.getUniqueId());
+                    }
+                }
+                for (BedWarsTeam bwt : getTeams()){
+                    if (winner != null){
+                        if (bwt == winner) continue;
+                    }
+                    for (Player p : bwt.getMembersCache()){
+                        losers.add(p.getUniqueId());
+                    }
+                }
+                Bukkit.getPluginManager().callEvent(new GameEndEvent(this, winners, losers, winner, aliveWinners));
+                //
+
             }
             if (players.size() == 0 && getStatus() != GameState.restarting) {
                 setStatus(GameState.restarting);
