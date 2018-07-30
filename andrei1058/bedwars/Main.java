@@ -21,6 +21,7 @@ import com.andrei1058.bedwars.support.lang.Lang;
 import com.andrei1058.bedwars.support.levels.Level;
 import com.andrei1058.bedwars.support.levels.NoLevel;
 import com.andrei1058.bedwars.support.papi.PAPISupport;
+import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.support.party.NoParty;
 import com.andrei1058.bedwars.support.party.Party;
 import com.andrei1058.bedwars.support.stats.MySQL;
@@ -233,6 +234,7 @@ public class Main extends JavaPlugin {
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             getLogger().info("Hook into PlaceholderAPI support!");
             new PAPISupport().register();
+            SupportPAPI.setSupportPAPI(new SupportPAPI.withPAPI());
         }
 
         /** Vault support */
