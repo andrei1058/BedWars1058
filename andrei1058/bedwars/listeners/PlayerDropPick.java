@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.api.GameState;
+import com.andrei1058.bedwars.api.GeneratorCollectEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -47,6 +48,10 @@ public class PlayerDropPick implements Listener {
                             //e.getPlayer().getInventory().addItem(new ItemStack(material));
                             ItemMeta itemMeta = new ItemStack(material).getItemMeta();
                             e.getItem().getItemStack().setItemMeta(itemMeta);
+
+                            //Call ore pick up event
+                            Bukkit.getPluginManager().callEvent(new GeneratorCollectEvent(e.getPlayer(), e.getItem().getItemStack()));
+                            //
                         }
                     }
                 }
