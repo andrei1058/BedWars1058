@@ -11,6 +11,7 @@ import com.andrei1058.bedwars.configuration.Messages;
 import com.andrei1058.bedwars.shop.ShopCategory;
 import com.andrei1058.bedwars.upgrades.UpgradeGroup;
 import net.citizensnpcs.api.CitizensAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

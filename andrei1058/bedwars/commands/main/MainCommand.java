@@ -100,7 +100,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
                     return true;
                 }
                 /* Send player commands */
-                Bukkit.dispatchCommand(s, "/" + mainCmd + " cmds");
+                Bukkit.dispatchCommand(s, mainCmd + " cmds");
             }
             return true;
         }

@@ -7,6 +7,7 @@ import com.andrei1058.bedwars.commands.SubCommand;
 import com.google.common.base.Joiner;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.npc.skin.SkinnableEntity;
+import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -37,8 +38,8 @@ public class NPC extends SubCommand {
     private static boolean citizensSupport = false;
 
     //main usage
-    private final String MAIN_USAGE = "§c▪ §7Usage: §o/" + mainCmd + " " + getSubCommandName() + "add/ remove";
-    private final String ADD_USAGE = "§c▪ §bUsage: §o/" + getParent().getName() + " " + getSubCommandName() + " add <skin> <arenaGroup> <displayName00displayName2>";
+    private final String MAIN_USAGE = "§c▪ §7Usage: §e§o/" + mainCmd + " " + getSubCommandName() + " add/ remove";
+    private final String ADD_USAGE = "§c▪ §7Usage: §e§o/" + getParent().getName() + " " + getSubCommandName() + " add <skin> <arenaGroup> <§7firstLine§9\\\\n§7secondLine§e>\n§7You can use §e{players} §7for the players count in this arena group.";
     private final String NO_GROUP = "§c▪ §bThere isn't any group called: §c%name%";
     private final String NPC_SET = "§a§c▪ §bNPC: %name% §bwas set!";
 
@@ -46,7 +47,10 @@ public class NPC extends SubCommand {
         super(parent, name);
         setOpCommand(true);
         showInList(true);
-        setPriority(20);
+        setPriority(12
+        );
+        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " "+getSubCommandName()+ "         §8   - §ecreate a join NPC", "§fCreate a join NPC  \n§fClick for more details.",
+                "/" + getParent().getName() + " "+getSubCommandName(), ClickEvent.Action.RUN_COMMAND));
     }
 
     @Override
@@ -79,9 +83,9 @@ public class NPC extends SubCommand {
                 npcs = new ArrayList<>();
             }
             String name = Joiner.on(" ").join(args).replace(args[0] + " " + args[1] + " " + args[2] + " ", "");
-            net.citizensnpcs.api.npc.NPC npc = spawnNPC(p.getLocation(), name, args[3], args[2]);
-            npcs.add(Main.config.getConfigLoc(p.getLocation()) + "," + args[2] + "," + name + "," + args[3] + "," + npc.getId());
-            p.sendMessage(NPC_SET.replace("%name%", name.replace("00", " ")));
+            net.citizensnpcs.api.npc.NPC npc = spawnNPC(p.getLocation(), name, args[2], args[1]);
+            npcs.add(Main.config.getConfigLoc(p.getLocation()) + "," + args[1] + "," + name + "," + args[2] + "," + npc.getId());
+            p.sendMessage(NPC_SET.replace("%name%", name.replace("&", "§").replace("\\\\n", " ")));
             Main.config.set("npcLoc", npcs);
         } else if (args[1].equalsIgnoreCase("remove")) {
             List<Entity> e = p.getNearbyEntities(1, 1, 1);
@@ -119,7 +123,7 @@ public class NPC extends SubCommand {
                     }
                 }
                 Main.config.set("npcLoc", locations);
-                Main.npcs.remove(entitate);
+                Main.npcs.remove(entitate.getId());
                 entitate.destroy();
                 p.sendMessage("§c▪ §bNpc removed!");
             } else {

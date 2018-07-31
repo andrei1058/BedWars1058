@@ -36,4 +36,5 @@ public class ConfigPath {
 
     public static final String GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART = "bungeeMode.gamesBeforeRestart";
     public static final String GENERAL_CONFIGURATION_ALLOW_PARTIES = "allowParties";
+    public static final String GENERAL_CONFIGURATION_NPC_LOCS = "npcLoc";
 }

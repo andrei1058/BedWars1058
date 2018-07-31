@@ -1,10 +1,12 @@
 package com.andrei1058.bedwars.shop;
 
+import com.andrei1058.bedwars.api.ShopBuyEvent;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -108,6 +110,11 @@ public class BuyItemsAction extends ContentAction {
         getCategoryContent().getShopCategory().openToPlayer(p);
         p.sendMessage(getMsg(p, Messages.SHOP_NEW_PURCHASE).replace("{item}", ChatColor.stripColor(getMsg(p, getCategoryContent().getShopCategory().getName().replace("main.", Messages.SHOP_PATH) + "." + getCategoryContent().getName() + ".name"))));
         BedWarsTeam.PlayerVault pv = BedWarsTeam.getVault(p);
+
+        //Call buy event
+        Bukkit.getPluginManager().callEvent(new ShopBuyEvent(this, p));
+        //
+
         for (ShopItem si : getItems()) {
             if (si.isPermanent() && pv != null) {
                 int slot = 0;
@@ -179,6 +186,9 @@ public class BuyItemsAction extends ContentAction {
         p.updateInventory();
     }
 
+    /**
+     * Update a player enchantments
+     */
     private static void updateEnchantments(Player p) {
         if (!Arena.getArenaByPlayer(p).getTeam(p).getBowsEnchantments().isEmpty()) {
             for (ItemStack i : p.getInventory().getContents()) {

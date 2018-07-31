@@ -33,7 +33,7 @@ public class Cmds extends SubCommand {
      */
     public Cmds(ParentCommand parent, String name) {
         super(parent, name);
-        setPriority(20);
+        setPriority(11);
         showInList(true);
         setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + MainCommand.getInstance().getName() + " " + getSubCommandName() + "         §8 - §e view player cmds", "§fView player commands.", "/" + getParent().getName() + " " + getSubCommandName(), ClickEvent.Action.RUN_COMMAND));
     }
