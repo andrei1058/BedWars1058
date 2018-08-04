@@ -48,6 +48,7 @@ public class ConfigManager {
             yml.addDefault("voidKill", false);
             //yml.addDefault("disableGeneratorsOnOrphanIslands", false);
             yml.addDefault(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y, 100);
+            yml.addDefault(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS, false);
             yml.options().copyDefaults(true);
             save();
         }

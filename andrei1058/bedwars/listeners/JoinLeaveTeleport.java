@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.listeners;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
@@ -35,7 +36,7 @@ public class JoinLeaveTeleport implements Listener {
                     for (Player on : a.getPlayers()) {
                         if (!Arena.isVip(on)) {
                             canJoin = true;
-                            a.removePlayer(on);
+                            a.removePlayer(on, true);
                             on.kickPlayer(getMsg(on, Messages.ARENA_JOIN_VIP_KICK));
                         }
                     }
@@ -124,8 +125,13 @@ public class JoinLeaveTeleport implements Listener {
     public void onLeave(PlayerQuitEvent e) {
         Player p = e.getPlayer();
         /* Remove from arena */
-        if (Arena.getArenaByPlayer(p) != null) {
-            Arena.getArenaByPlayer(p).removePlayer(p);
+        Arena a = Arena.getArenaByPlayer(p);
+        if (a != null) {
+            if (a.isPlayer(p)){
+                a.removePlayer(p, true);
+            } else if (a.isSpectator(p)){
+                a.removeSpectator(p, true);
+            }
         }
         Language.getLangByPlayer().remove(p);
         if (getServerType() != ServerType.SHARED) {
@@ -162,7 +168,7 @@ public class JoinLeaveTeleport implements Listener {
             if (a.isPlayer(e.getPlayer())) {
                 if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) return;
                 if (!e.getPlayer().getWorld().getName().equalsIgnoreCase(a.getWorldName())) {
-                    a.removePlayer(e.getPlayer());
+                    a.removePlayer(e.getPlayer(), Main.getServerType() == ServerType.BUNGEE);
                     debug(e.getPlayer().getName() + " was removed from " + a.getDisplayName() + " because he was teleported outside the arena.");
                 }
             }

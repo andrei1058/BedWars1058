@@ -6,6 +6,7 @@ import com.andrei1058.bedwars.configuration.ConfigManager;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.support.nte.NametagEdit;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -214,9 +215,9 @@ public class Arena {
                     Arena a = Arena.getArenaByPlayer(mem);
                     if (a != null) {
                         if (a.isPlayer(mem)) {
-                            a.removePlayer(mem);
+                            a.removePlayer(mem, false);
                         } else if (a.isSpectator(mem)) {
-                            a.removeSpectator(mem);
+                            a.removeSpectator(mem, false);
                         }
                     }
                     addPlayer(mem, true);
@@ -234,7 +235,7 @@ public class Arena {
                 for (Player on : players) {
                     if (!isVip(on)) {
                         canJoin = true;
-                        removePlayer(on);
+                        removePlayer(on, false);
                         TextComponent vipKick = new TextComponent(getMsg(p, Messages.ARENA_JOIN_VIP_KICK));
                         vipKick.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, config.getYml().getString("storeLink")));
                         p.spigot().sendMessage(vipKick);
@@ -245,6 +246,10 @@ public class Arena {
                     return;
                 }
             }
+
+            /* NametagEdit Support */
+            NametagEdit.saveNametag(p);
+
             p.closeInventory();
             players.add(p);
             updateNPCs(getGroup());
@@ -305,6 +310,10 @@ public class Arena {
     public void addSpectator(Player p, boolean playerBefore) {
         debug("Spectator added: " + p.getName() + " arena: " + getWorldName());
         if (allowSpectate || playerBefore) {
+
+            /* NametagEdit Support */
+            NametagEdit.saveNametag(p);
+
             p.closeInventory();
             p.teleport(cm.getArenaLoc("waiting.Loc"));
             spectators.add(p);
@@ -355,11 +364,23 @@ public class Arena {
     }
 
     /**
-     * Remove a player from arena
+     * Remove a player from the arena
      *
      * @param p Player to be removed
      */
+    @Deprecated
     public void removePlayer(Player p) {
+        removePlayer(p, false);
+    }
+
+    /**
+     * Remove a player from the arena
+     *
+     * @param p          Player to be removed
+     * @param disconnect True if the player was disconnected
+     * @since API 8
+     */
+    public void removePlayer(Player p, boolean disconnect) {
         debug("Player removed: " + p.getName() + " arena: " + getWorldName());
         if (getStatus() == GameState.playing) {
             for (BedWarsTeam t : getTeams()) {
@@ -391,7 +412,6 @@ public class Arena {
             }
         }
 
-        playerLocation.remove(p);
         if (respawn.containsKey(p)) {
             respawn.remove(p);
             BedWarsTeam t = this.getTeam(p);
@@ -470,7 +490,8 @@ public class Arena {
         } else {
             p.teleport(config.getConfigLoc("lobbyLoc"));
         }
-        p.setPlayerListName(p.getName());
+        playerLocation.remove(p);
+
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             for (Player on : Bukkit.getOnlinePlayers()) {
                 if (getArenaByPlayer(on) == null) {
@@ -481,8 +502,11 @@ public class Arena {
                     on.hidePlayer(p);
                 }
             }
-            Misc.giveLobbySb(p);
+            if (!disconnect) Misc.giveLobbySb(p);
         }, 5L);
+
+        /* NametagEdit Support */
+        NametagEdit.restoreNametag(p);
     }
 
     /**
@@ -490,7 +514,19 @@ public class Arena {
      *
      * @param p Player to be removed
      */
+    @Deprecated
     public void removeSpectator(Player p) {
+        removeSpectator(p, false);
+    }
+
+    /**
+     * Remove a spectator from the arena
+     *
+     * @param p          Player to be removed
+     * @param disconnect True if the player was disconnected
+     * @since API 8
+     */
+    public void removeSpectator(Player p, boolean disconnect) {
         debug("Spectator removed: " + p.getName() + " arena: " + getWorldName());
         spectators.remove(p);
         removeArenaByPlayer(p);
@@ -500,8 +536,8 @@ public class Arena {
         if (PlayerGoods.hasGoods(p)) {
             PlayerGoods.getPlayerGoods(p).restore();
         }
-        playerLocation.remove(p);
         nms.setCollide(p, true);
+
         for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
             if (sb.getP() == p) {
                 sb.remove();
@@ -515,6 +551,7 @@ public class Arena {
         if (getServerType() == ServerType.BUNGEE) {
             Misc.moveToLobbyOrKick(p);
         }
+        playerLocation.remove(p);
         for (BedWarsTeam bwt : getTeams()) {
             if (bwt.getMembersCache().contains(p)) {
                 if (status == GameState.playing) {
@@ -534,7 +571,7 @@ public class Arena {
                 return;
             }
         }
-        p.setPlayerListName(p.getName());
+
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             for (Player on : Bukkit.getOnlinePlayers()) {
                 if (getArenaByPlayer(on) == null) {
@@ -545,8 +582,11 @@ public class Arena {
                     p.hidePlayer(on);
                 }
             }
-            Misc.giveLobbySb(p);
+            if (!disconnect) Misc.giveLobbySb(p);
         }, 5L);
+
+        /* NametagEdit Support */
+        NametagEdit.restoreNametag(p);
     }
 
     /**
@@ -560,10 +600,10 @@ public class Arena {
         }
         plugin.getLogger().info("Disabling arena: " + getDisplayName());
         for (Player on : players) {
-            removePlayer(on);
+            removePlayer(on, Main.getServerType() == ServerType.BUNGEE);
         }
         for (Player on : spectators) {
-            removeSpectator(on);
+            removeSpectator(on, Main.getServerType() == ServerType.BUNGEE);
         }
         for (Block b : placed) {
             b.setType(Material.AIR);
@@ -899,10 +939,10 @@ public class Arena {
                 restarting--;
                 if (restarting == 5) {
                     for (Player on : new ArrayList<>(players)) {
-                        removePlayer(on);
+                        removePlayer(on, Main.getServerType() == ServerType.BUNGEE);
                     }
                     for (Player on : new ArrayList<>(spectators)) {
-                        removeSpectator(on);
+                        removeSpectator(on, Main.getServerType() == ServerType.BUNGEE);
                     }
                 }
                 if (restarting == 0) {

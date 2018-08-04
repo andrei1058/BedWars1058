@@ -20,12 +20,14 @@ import com.andrei1058.bedwars.support.lang.Internal;
 import com.andrei1058.bedwars.support.lang.Lang;
 import com.andrei1058.bedwars.support.levels.Level;
 import com.andrei1058.bedwars.support.levels.NoLevel;
+import com.andrei1058.bedwars.support.nte.NametagEdit;
 import com.andrei1058.bedwars.support.papi.PAPISupport;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.support.party.NoParty;
 import com.andrei1058.bedwars.support.party.Party;
 import com.andrei1058.bedwars.support.stats.MySQL;
 import com.andrei1058.bedwars.support.stats.None;
+import com.andrei1058.bedwars.support.stats.SQLite;
 import com.andrei1058.bedwars.support.vault.*;
 import com.andrei1058.bedwars.tasks.OneTick;
 import com.andrei1058.bedwars.tasks.Refresh;
@@ -34,10 +36,7 @@ import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.npc.skin.SkinnableEntity;
 import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Monster;
+import org.bukkit.entity.*;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
@@ -220,7 +219,7 @@ public class Main extends JavaPlugin {
         if (config.getBoolean("database.enable")) {
             database = new MySQL();
         } else {
-            database = new None();
+            database = new SQLite();
         }
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             database.setupGeneralTables();
@@ -261,14 +260,24 @@ public class Main extends JavaPlugin {
             economy = new NoEconomy();
         }
 
-        /** Chat support */
+        /* Chat support */
         if (config.getBoolean("formatChat")) {
             registerEvents(new PlayerChat());
         }
 
-        /** Protect glass walls from tnt explosion */
+        /* Protect glass walls from tnt explosion */
         nms.registerTntWhitelist();
 
+        /* Prevent issues on reload */
+        for (Player p : Bukkit.getOnlinePlayers()){
+            p.kickPlayer("BedWars1058 was RELOADED! (never reload plugins. noob staff)");
+        }
+
+        /* NametagEdit by sgtcaze, Cory support*/
+        /*if (this.getServer().getPluginManager().getPlugin("NametagEdit") != null) {
+            getLogger().info("Hook into NametagEdit support.");
+            NametagEdit.setNteSupport(true);
+        }*/
     }
 
     public void onDisable() {

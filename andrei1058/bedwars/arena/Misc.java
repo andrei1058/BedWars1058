@@ -13,6 +13,8 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.WorldBorder;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -83,7 +85,7 @@ public class Misc {
             i = new ItemStack(Material.valueOf(config.getYml().getString("items.arenaGui.itemStack")),
                     1, (short) config.getYml().getInt("items.arenaGui.data"));
             if (Material.valueOf(config.getYml().getString("items.arenaGui.itemStack")) == Material.SKULL_ITEM &&
-                    config.getYml().getInt("items.arenaGui.data") == 3){
+                    config.getYml().getInt("items.arenaGui.data") == 3) {
                 SkullMeta sm = (SkullMeta) i.getItemMeta();
                 sm.setOwner(p.getName());
                 i.setItemMeta(sm);
@@ -121,7 +123,7 @@ public class Misc {
             i = new ItemStack(Material.valueOf(config.getYml().getString("items.stats.itemStack")),
                     1, (short) config.getYml().getInt("items.stats.data"));
             if (Material.valueOf(config.getYml().getString("items.stats.itemStack")) == Material.SKULL_ITEM &&
-                    config.getYml().getInt("items.stats.data") == 3){
+                    config.getYml().getInt("items.stats.data") == 3) {
                 SkullMeta sm = (SkullMeta) i.getItemMeta();
                 sm.setOwner(p.getName());
                 i.setItemMeta(sm);
@@ -234,8 +236,10 @@ public class Misc {
         return Material.EGG == i || Material.FIREBALL == i || Material.SNOW_BALL == i || Material.ARROW == i;
     }
 
-    /** unknown die reason or unknown killer message */
-    public static void unknownReason(BedWarsTeam t, Arena a, Player victim){
+    /**
+     * unknown die reason or unknown killer message
+     */
+    public static void unknownReason(BedWarsTeam t, Arena a, Player victim) {
         if (t.isBedDestroyed()) {
             for (Player on : a.getPlayers()) {
                 on.sendMessage(getMsg(on, Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString())
@@ -257,23 +261,29 @@ public class Misc {
         }
     }
 
-    /** create TextComponent message */
-    public static TextComponent msgHoverClick(String msg, String hover, String click, ClickEvent.Action clickAction){
+    /**
+     * create TextComponent message
+     */
+    public static TextComponent msgHoverClick(String msg, String hover, String click, ClickEvent.Action clickAction) {
         TextComponent tc = new TextComponent(msg);
         tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hover).create()));
         tc.setClickEvent(new ClickEvent(clickAction, click));
         return tc;
     }
 
-    /** add default stats gui item */
-    public static void addDefaultStatsItem(YamlConfiguration yml, int slot, Material itemstack, int data, String path){
-        yml.addDefault("statsGUI."+path+".itemStack", itemstack.toString());
-        yml.addDefault("statsGUI."+path+".data", data);
-        yml.addDefault("statsGUI."+path+".slot", slot);
+    /**
+     * add default stats gui item
+     */
+    public static void addDefaultStatsItem(YamlConfiguration yml, int slot, Material itemstack, int data, String path) {
+        yml.addDefault("statsGUI." + path + ".itemStack", itemstack.toString());
+        yml.addDefault("statsGUI." + path + ".data", data);
+        yml.addDefault("statsGUI." + path + ".slot", slot);
     }
 
-    /** open stats GUI to player */
-    public static void openStatsGUI(Player p){
+    /**
+     * open stats GUI to player
+     */
+    public static void openStatsGUI(Player p) {
 
         /** cache stats */
         int kills = database.getKills(p), deaths = database.getDeaths(p), looses = database.getLooses(p), wins = database.getWins(p),
@@ -288,38 +298,38 @@ public class Misc {
                 kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never));
 
         /** add custom items to gui */
-        for (String s : config.getYml().getConfigurationSection("statsGUI").getKeys(false)){
+        for (String s : config.getYml().getConfigurationSection("statsGUI").getKeys(false)) {
             /** skip inv size, it isn't a content */
             if (s.equalsIgnoreCase("invSize")) continue;
             /** create new itemStack for content */
-            ItemStack i = new ItemStack(Material.valueOf(config.getYml().getString("statsGUI."+s+".itemStack").toUpperCase()), 1, (byte) config.getInt("statsGUI."+s+".data"));
+            ItemStack i = new ItemStack(Material.valueOf(config.getYml().getString("statsGUI." + s + ".itemStack").toUpperCase()), 1, (byte) config.getInt("statsGUI." + s + ".data"));
             ItemMeta im = i.getItemMeta();
-            im.setDisplayName(replaceStatsPlaceholders(getMsg(p, Messages.PLAYER_STATS_GUI_PATH+"."+s+".name"), kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed,
+            im.setDisplayName(replaceStatsPlaceholders(getMsg(p, Messages.PLAYER_STATS_GUI_PATH + "." + s + ".name"), kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed,
                     firstPlay, lastPlay, timeFormat, p.getName(), never));
             List<String> lore = new ArrayList<>();
-            for (String string : getList(p, Messages.PLAYER_STATS_GUI_PATH+"."+s+".lore")){
+            for (String string : getList(p, Messages.PLAYER_STATS_GUI_PATH + "." + s + ".lore")) {
                 lore.add(replaceStatsPlaceholders(string, kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never));
             }
             im.setLore(lore);
             i.setItemMeta(im);
-            inv.setItem(config.getInt("statsGUI."+s+".slot"), i);
+            inv.setItem(config.getInt("statsGUI." + s + ".slot"), i);
         }
 
         p.openInventory(inv);
     }
 
     public static String replaceStatsPlaceholders(String s, int kills, int deaths, int looses, int wins, int finalKills, int finalDeaths,
-                                                   int beds, int games, Timestamp first, Timestamp last, String timeFormat, String player, String never){
+                                                  int beds, int games, Timestamp first, Timestamp last, String timeFormat, String player, String never) {
         String lastS = last == null ? never : String.valueOf(new SimpleDateFormat(timeFormat).format(last)),
-        firstS = first == null ? never : String.valueOf(new SimpleDateFormat(timeFormat).format(first));
+                firstS = first == null ? never : String.valueOf(new SimpleDateFormat(timeFormat).format(first));
         return s.replace("{kills}", String.valueOf(kills)).replace("{deaths}", String.valueOf(deaths)).replace("{looses}", String.valueOf(looses)).replace("{wins}", String.valueOf(wins))
                 .replace("{finalKills}", String.valueOf(finalKills)).replace("{fKills}", String.valueOf(finalKills)).replace("{finalDeaths}",
                         String.valueOf(finalDeaths)).replace("{bedsDestroyed}", String.valueOf(beds)).replace("{beds}", String.valueOf(beds))
                 .replace("{gamesPlayed}", String.valueOf(games)).replace("{firstPlay}", firstS).replace("{lastPlay}", lastS).replace("{player}", player);
     }
 
-    public static void giveLobbySb(Player p){
-        if (config.getBoolean("lobbyScoreboard")){
+    public static void giveLobbySb(Player p) {
+        if (config.getBoolean("lobbyScoreboard")) {
             new SBoard(p, getList(p, Messages.SCOREBOARD_LOBBY), null);
         }
     }
@@ -330,14 +340,35 @@ public class Misc {
         } catch (Exception e) {
             try {
                 Integer.parseInt(s);
-            } catch (Exception ex){
+            } catch (Exception ex) {
                 try {
                     Long.parseLong(s);
-                } catch (Exception exx){
+                } catch (Exception exx) {
                     return false;
                 }
             }
         }
         return true;
+    }
+
+    /**
+     * Check if a location is outside the World Border
+     * @since API 8
+     */
+    /*public static boolean isOutsideOfBorder(Location l) {
+       // Location loc = b.getLocation();
+        WorldBorder border = l.getWorld().getWorldBorder();
+        double x = l.getX();
+        double z = l.getZ();
+        double size = border.getSize()/2;
+        return ((x > size || (-x) > size) || (z > size || (-z) > size));
+    }*/
+
+    public static boolean isOutsideOfBorder(Location l){
+        WorldBorder border = l.getWorld().getWorldBorder();
+        double radius = border.getSize() / 2;
+        Location location = l, center = border.getCenter();
+
+        return center.distanceSquared(location) >= (radius * radius);
     }
 }

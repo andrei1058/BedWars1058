@@ -1,54 +1,83 @@
 package com.andrei1058.bedwars.support.stats;
 
+import com.andrei1058.bedwars.Main;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.logging.Level;
 
-import static com.andrei1058.bedwars.Main.config;
-import static com.andrei1058.bedwars.Main.plugin;
+public class SQLite implements Database {
 
-public class MySQL implements Database {
+    private static String databaseName = "stats";
+    private static Connection connection;
 
-    private Connection connection;
-    private String host, database, user, pass;
-    int port;
-    boolean ssl;
-
-    public MySQL() {
-        this.host = config.getYml().getString("database.host");
-        this.database = config.getYml().getString("database.database");
-        this.user = config.getYml().getString("database.user");
-        this.pass = config.getYml().getString("database.pass");
-        this.port = config.getYml().getInt("database.port");
-        this.ssl = config.getYml().getBoolean("database.ssl");
-        try {
-            connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?user=" + user
-                    + "&password=" + pass + "&useSSL=" + ssl);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            plugin.getLogger().severe("Can't connect to database: " + database);
-            plugin.getLogger().severe(e.getMessage());
-            plugin.database = new SQLite();
-            return;
-        }
-        if (isConnected()) {
-            connect();
-            plugin.getLogger().info("Connected to database: " + database);
+    public SQLite() {
+        if (connect()) {
+            Main.plugin.getLogger().info("Using SQLite support.");
+        } else {
+            Main.plugin.database = new None();
         }
     }
 
-    public boolean connect() {
+    private boolean connect() {
+        if (!isConnected()) {
+            File dataFolder = new File(Main.plugin.getDataFolder(), databaseName + ".db");
+            if (!dataFolder.exists()) {
+                try {
+                    dataFolder.createNewFile();
+                } catch (IOException e) {
+                    Main.plugin.getLogger().log(Level.SEVERE, "File write error: " + databaseName + ".db");
+                }
+            }
+            try {
+                if (connection != null && !connection.isClosed()) {
+                    return true;
+                }
+                ClassLoader cl = Bukkit.getServer().getClass().getClassLoader();
+                Driver d = (Driver) cl.loadClass("org.sqlite.JDBC").newInstance();
+                DriverManager.registerDriver(d);
+                connection = DriverManager.getConnection("jdbc:sqlite:" + dataFolder);
+                return true;
+            } catch (SQLException ex) {
+                Main.plugin.getLogger().log(Level.SEVERE, "SQLite exception on initialize", ex);
+                return false;
+            } catch (ClassNotFoundException ex) {
+                return false;
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            }
+        }
+        return true;
+    }
+
+    public boolean isConnected() {
+        if (connection == null) return false;
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?autoReconnect=true&user=" + user
-                    + "&password=" + pass + "&useSSL=" + ssl);
-            return true;
+            return !connection.isClosed();
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
+        return false;
     }
+
+    public boolean isPlayerSet(Player p) {
+        if (!isConnected()) connect();
+        try {
+            ResultSet rs = connection.createStatement().executeQuery("SELECT id FROM global_stats WHERE uuid = '" + p.getUniqueId().toString() + "';");
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 
     @Override
     public boolean isStats() {
@@ -57,24 +86,22 @@ public class MySQL implements Database {
 
     @Override
     public void close() {
-        if (!isConnected()) return;
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (isConnected()) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
     public void setupGeneralTables() {
-        if (!isConnected()) {
-            connect();
-        }
+        if (!isConnected()) connect();
         try {
-            connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS global_stats (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
-                    "name VARCHAR(200), uuid VARCHAR(200), first_play TIMESTAMP NULL DEFAULT NULL, " +
-                    "last_play TIMESTAMP NULL DEFAULT NULL, wins INT(200), kills INT(200), " +
-                    "final_kills INT(200), looses INT(200), deaths INT(200), final_deaths INT(200), beds_destroyed INT(200), games_played INT(200));");
+            connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS global_stats (id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "name VARCHAR(200), uuid VARCHAR(200), first_play TIMESTAMP NULL DEFAULT NULL, last_play TIMESTAMP NULL DEFAULT NULL, wins INTEGER(200)," +
+                    " kills INTEGER(200), final_kills INTEGER(200), looses INTEGER(200), deaths INTEGER(200), final_deaths INTEGER(200), beds_destroyed INTEGER(200), games_played INTEGER(200))");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -82,14 +109,12 @@ public class MySQL implements Database {
 
     @Override
     public void setupGroupTable(String group) {
-        //todo for games individual stats
+
     }
 
     @Override
     public void saveStats(Player p, Timestamp last_play, int wins, int kills, int final_kills, int looses, int deaths, int final_deaths, int beds_destroyed, int games_played) {
-        if (!isConnected()) {
-            connect();
-        }
+        if (!isConnected()) connect();
         if (isPlayerSet(p)) {
             try {
                 PreparedStatement ps = connection.prepareStatement("UPDATE global_stats SET last_play = ?, wins = wins + '" + wins + "', kills = kills + '" + kills + "', " +
@@ -101,28 +126,27 @@ public class MySQL implements Database {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            return;
+        } else {
+            try {
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO global_stats VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+                ps.setInt(1, 0);
+                ps.setString(2, p.getName());
+                ps.setString(3, p.getUniqueId().toString());
+                ps.setTimestamp(4, last_play);
+                ps.setTimestamp(5, last_play);
+                ps.setInt(6, wins);
+                ps.setInt(7, kills);
+                ps.setInt(8, final_kills);
+                ps.setInt(9, looses);
+                ps.setInt(10, deaths);
+                ps.setInt(11, final_deaths);
+                ps.setInt(12, beds_destroyed);
+                ps.setInt(13, games_played);
+                ps.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-        try {
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO global_stats VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-            ps.setInt(1, 0);
-            ps.setString(2, p.getName());
-            ps.setString(3, p.getUniqueId().toString());
-            ps.setTimestamp(4, last_play);
-            ps.setTimestamp(5, last_play);
-            ps.setInt(6, wins);
-            ps.setInt(7, kills);
-            ps.setInt(8, final_kills);
-            ps.setInt(9, looses);
-            ps.setInt(10, deaths);
-            ps.setInt(11, final_deaths);
-            ps.setInt(12, beds_destroyed);
-            ps.setInt(13, games_played);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
     }
 
     @Override
@@ -373,21 +397,5 @@ public class MySQL implements Database {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public boolean isPlayerSet(Player p) {
-        if (!isConnected()) connect();
-        try {
-            ResultSet rs = connection.createStatement().executeQuery("SELECT id FROM global_stats WHERE uuid = '" + p.getUniqueId().toString() + "';");
-            return rs.next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-
-    public boolean isConnected() {
-        return connection != null;
     }
 }

@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.api.GeneratorType;
 import com.andrei1058.bedwars.api.TeamColor;
+import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -94,7 +95,9 @@ public class BedWarsTeam {
      * A list with team's dragons  at Sudden Death phase
      */
 
-    /** Player cache, used for loosers stats and rejoin*/
+    /**
+     * Player cache, used for loosers stats and rejoin
+     */
     private List<Player> membersCache = new ArrayList<>();
 
     public BedWarsTeam(String name, TeamColor color, Location spawn, Location bed, Location shop, Location teamUpgrades, Arena arena) {
@@ -638,6 +641,10 @@ public class BedWarsTeam {
         return beds.get(p);
     }
 
+    /**
+     * Destroy the bed for a team.
+     * Since API 8 it will also remove the team's generators if true in config.
+     */
     public void setBedDestroyed(boolean bedDestroyed) {
         this.bedDestroyed = bedDestroyed;
         if (!bedDestroyed) {
@@ -648,7 +655,7 @@ public class BedWarsTeam {
                         for (int z = -1; z < 2; z++) {
                             Block b = getBed().clone().add(x, 0, z).getBlock();
                             if (b.getType() != Material.BED_BLOCK) continue;
-                            nms.colorBed(this,b.getState());
+                            nms.colorBed(this, b.getState());
                         }
                     }
                 }
@@ -682,8 +689,12 @@ public class BedWarsTeam {
                 }
             }
 
-        } else if (bedDestroyed && bed.getBlock().getType() == Material.BED_BLOCK) {
+        } else if (bedDestroyed) {
             bed.getBlock().setType(Material.AIR);
+            if (getArena().getCm().getBoolean(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS)){
+                OreGenerator.getGenerators().remove(getGoldGenerator());
+                OreGenerator.getGenerators().remove(getIronGenerator());
+            }
         }
         for (BedHolo bh : beds.values()) {
             bh.hide();

@@ -32,9 +32,10 @@ public class ConfigPath {
     public static final String GENERATOR_EMERALD_TIER_III_MAX = "emerald.tierIII.max";
     public static final String GENERATOR_EMERALD_TIER_III_START = "emerald.tierIII.start";
 
-    public static final String ARENA_CONFIGURATION_MAX_BUILD_Y = "maxBuildY";
-
     public static final String GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART = "bungeeMode.gamesBeforeRestart";
     public static final String GENERAL_CONFIGURATION_ALLOW_PARTIES = "allowParties";
     public static final String GENERAL_CONFIGURATION_NPC_LOCS = "npcLoc";
+
+    public static final String ARENA_CONFIGURATION_MAX_BUILD_Y = "maxBuildY";
+    public static final String ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS = "emptyTeamGenOff";
 }

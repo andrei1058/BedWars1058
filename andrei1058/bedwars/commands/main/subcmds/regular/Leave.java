@@ -44,9 +44,9 @@ public class Leave extends SubCommand {
             }
         } else {
             if (a.isPlayer(p)) {
-                a.removePlayer(p);
+                a.removePlayer(p, false);
             } else if (a.isSpectator(p)) {
-                a.removeSpectator(p);
+                a.removeSpectator(p, false);
             }
         }
         return true;
