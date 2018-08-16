@@ -17,23 +17,23 @@ public class ConfigManager {
     private File config;
     private String name;
 
-    public ConfigManager(String name, String dir, boolean arena){
+    public ConfigManager(String name, String dir, boolean arena) {
         File d = new File(dir);
-        if (!d.exists()){
+        if (!d.exists()) {
             d.mkdir();
         }
-        config = new File(dir+"/"+name+".yml");
-        if (!config.exists()){
+        config = new File(dir + "/" + name + ".yml");
+        if (!config.exists()) {
             try {
                 config.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            plugin.getLogger().info("Creating "+dir+"/"+name+".yml");
+            plugin.getLogger().info("Creating " + dir + "/" + name + ".yml");
         }
         yml = YamlConfiguration.loadConfiguration(config);
-        if (arena){
-            yml.options().header(plugin.getName()+" arena configuration file.\n" +
+        if (arena) {
+            yml.options().header(plugin.getName() + " arena configuration file.\n" +
                     "Documentation here: https://gitlab.com/andrei1058/BedWars1058/wikis/configuration/Arena-Configuration");
             yml.addDefault("group", "Default");
             yml.addDefault("minPlayers", 2);
@@ -47,60 +47,62 @@ public class ConfigManager {
             yml.addDefault("worldBorder", 300);
             yml.addDefault("voidKill", false);
             //yml.addDefault("disableGeneratorsOnOrphanIslands", false);
-            yml.addDefault(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y, 100);
+            yml.addDefault(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y, 180);
             yml.addDefault(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS, false);
+            yml.addDefault(ConfigPath.ARENA_NORMAL_DEATH_DROPS, false);
             yml.options().copyDefaults(true);
             save();
         }
         this.name = name;
     }
 
-    public void reload(){
+    public void reload() {
         yml = YamlConfiguration.loadConfiguration(config);
     }
 
-    public String stringLocationArenaFormat(Location loc){
-        return Double.valueOf(loc.getX()) + "," + Double.valueOf(loc.getY()) + "," + Double.valueOf(loc.getZ() )+ "," + Double.valueOf(loc.getYaw()) + "," + Double.valueOf(loc.getPitch());
+    public String stringLocationArenaFormat(Location loc) {
+        return Double.valueOf(loc.getX()) + "," + Double.valueOf(loc.getY()) + "," + Double.valueOf(loc.getZ()) + "," + Double.valueOf(loc.getYaw()) + "," + Double.valueOf(loc.getPitch());
     }
 
-    public String stringLocationConfigFormat(Location loc){
-        return Double.valueOf(loc.getX()) + "," + Double.valueOf(loc.getY()) + "," + Double.valueOf(loc.getZ() )+ "," + Double.valueOf(loc.getYaw()) + "," + Double.valueOf(loc.getPitch())+","+loc.getWorld().getName();
+    public String stringLocationConfigFormat(Location loc) {
+        return Double.valueOf(loc.getX()) + "," + Double.valueOf(loc.getY()) + "," + Double.valueOf(loc.getZ()) + "," + Double.valueOf(loc.getYaw()) + "," + Double.valueOf(loc.getPitch()) + "," + loc.getWorld().getName();
     }
 
-    public void saveConfigLoc(String path, Location loc){
-        String data = Double.valueOf(loc.getX()) + "," + Double.valueOf(loc.getY()) + "," + Double.valueOf(loc.getZ() )+ "," + Double.valueOf(loc.getYaw()) + "," + Double.valueOf(loc.getPitch())+","+loc.getWorld().getName();
+    public void saveConfigLoc(String path, Location loc) {
+        String data = Double.valueOf(loc.getX()) + "," + Double.valueOf(loc.getY()) + "," + Double.valueOf(loc.getZ()) + "," + Double.valueOf(loc.getYaw()) + "," + Double.valueOf(loc.getPitch()) + "," + loc.getWorld().getName();
         yml.set(path, data);
         save();
     }
 
-    public void saveArenaLoc(String path, Location loc){
-        String data = Double.valueOf(loc.getX()) + "," + Double.valueOf(loc.getY()) + "," + Double.valueOf(loc.getZ() )+ "," + Double.valueOf(loc.getYaw()) + "," + Double.valueOf(loc.getPitch());
+    public void saveArenaLoc(String path, Location loc) {
+        String data = Double.valueOf(loc.getX()) + "," + Double.valueOf(loc.getY()) + "," + Double.valueOf(loc.getZ()) + "," + Double.valueOf(loc.getYaw()) + "," + Double.valueOf(loc.getPitch());
         yml.set(path, data);
         save();
     }
 
-    public String getConfigLoc(Location loc){
+    public String getConfigLoc(Location loc) {
         return loc.getX() + "," + loc.getY() + "," + loc.getZ() + "," + loc.getYaw() + "," + loc.getPitch() + "," + loc.getWorld().getName();
     }
 
-    public Location getConfigLoc(String path){
+    public Location getConfigLoc(String path) {
         String d = yml.getString(path);
         String[] data = d.replace("[", "").replace("]", "").split(",");
         return new Location(Bukkit.getWorld(data[5]), Double.valueOf(data[0]), Double.valueOf(data[1]), Double.valueOf(data[2]), Float.valueOf(data[3]), Float.valueOf(data[4]));
     }
 
-    public Location getArenaLoc(String path){
+    public Location getArenaLoc(String path) {
         String d = yml.getString(path);
         String[] data = d.replace("[", "").replace("]", "").split(",");
         return new Location(Bukkit.getWorld(name), Double.valueOf(data[0]), Double.valueOf(data[1]), Double.valueOf(data[2]), Float.valueOf(data[3]), Float.valueOf(data[4]));
     }
-    public Location fromArenaStringList(String string){
+
+    public Location fromArenaStringList(String string) {
         String[] data = string.split(",");
         return new Location(Bukkit.getWorld(name), Double.valueOf(data[0]), Double.valueOf(data[1]), Double.valueOf(data[2]), Float.valueOf(data[3]), Float.valueOf(data[4]));
 
     }
 
-    public void set(String path, Object value){
+    public void set(String path, Object value) {
         yml.set(path, value);
         save();
     }
@@ -109,7 +111,7 @@ public class ConfigManager {
         return yml;
     }
 
-    public void save(){
+    public void save() {
         try {
             yml.save(config);
         } catch (IOException e) {
@@ -117,22 +119,30 @@ public class ConfigManager {
         }
     }
 
-    public String getLobbyWorldName(){
+    public String getLobbyWorldName() {
         if (yml.get("lobbyLoc") == null) return "";
         String d = yml.getString("lobbyLoc");
         String[] data = d.replace("[", "").replace("]", "").split(",");
-        return data[data.length-1];
+        return data[data.length - 1];
     }
 
-    public List<String> l(String path){
+    public List<String> l(String path) {
         return yml.getStringList(path).stream().map(s -> s.replace("&", "§")).collect(Collectors.toList());
     }
 
-    public boolean getBoolean(String path){
+    public boolean getBoolean(String path) {
         return yml.getBoolean(path);
     }
 
-    public int getInt(String path){
+    public int getInt(String path) {
         return yml.getInt(path);
+    }
+
+
+    /**
+     * @since 0.6.5beta
+     */
+    public String getString(String path) {
+        return yml.getString(path);
     }
 }

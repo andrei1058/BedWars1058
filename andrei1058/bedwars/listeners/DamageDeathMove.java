@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.api.*;
 import com.andrei1058.bedwars.arena.*;
+import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
 import org.bukkit.Bukkit;
@@ -42,7 +43,7 @@ public class DamageDeathMove implements Listener {
                     e.setCancelled(true);
                     return;
                 }
-                if (e.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION){
+                if (e.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
                     e.setDamage(1);
                     return;
                 }
@@ -63,7 +64,7 @@ public class DamageDeathMove implements Listener {
 
     @EventHandler
     public void onDamageByEntity(EntityDamageByEntityEvent e) {
-        if (e.getEntity().hasMetadata("DragonTeam")){
+        if (e.getEntity().hasMetadata("DragonTeam")) {
             Arena a = Arena.getArenaByName(e.getEntity().getWorld().getName());
             if (a != null) {
                 e.setCancelled(true);
@@ -104,6 +105,10 @@ public class DamageDeathMove implements Listener {
                     } else return;
                 } else if (e.getDamager() instanceof Player) {
                     damager = (Player) e.getDamager();
+                    if (a.respawn.containsKey(damager)) {
+                        e.setCancelled(true);
+                        return;
+                    }
                 } else if (e.getDamager() instanceof TNTPrimed) {
                     TNTPrimed tnt = (TNTPrimed) e.getDamager();
                     if (tnt.getSource() instanceof Player) {
@@ -189,9 +194,11 @@ public class DamageDeathMove implements Listener {
                     return;
                 }
                 EntityDamageEvent damageEvent = e.getEntity().getLastDamageCause();
-                ItemStack[] drops = victim.getInventory().getContents();
-                e.getDrops().clear();
 
+                ItemStack[] drops = victim.getInventory().getContents();
+                if (!a.getCm().getBoolean(ConfigPath.ARENA_NORMAL_DEATH_DROPS)) {
+                    e.getDrops().clear();
+                }
 
                 BedWarsTeam t = a.getTeam(victim);
                 if (a.isSpectator(victim)) {
@@ -202,11 +209,13 @@ public class DamageDeathMove implements Listener {
                     victim.spigot().respawn();
                     return;
                 }
-                if (t == null){
+                if (t == null) {
                     victim.spigot().respawn();
                     return;
                 }
+                //todo
                 String message = t.isBedDestroyed() ? Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL : Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR;
+                PlayerKillEvent.PlayerKillCause cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.UNKNOWN_FINAL_KILL: PlayerKillEvent.PlayerKillCause.UNKNOWN;
                 if (damageEvent.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
                     LastHit lh = getLastHit().get(victim);
                     if (lh != null) {
@@ -223,7 +232,7 @@ public class DamageDeathMove implements Listener {
                             message = t.isBedDestroyed() ? Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_FINAL_KILL : Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_REGULAR;
                         }
                     }
-
+                    cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.EXPLOSION_FINAL_KILL: PlayerKillEvent.PlayerKillCause.EXPLOSION;
 
                 } else if (damageEvent.getCause() == EntityDamageEvent.DamageCause.VOID) {
                     LastHit lh = getLastHit().get(victim);
@@ -241,10 +250,12 @@ public class DamageDeathMove implements Listener {
                             message = t.isBedDestroyed() ? Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL : Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL;
                         }
                     }
+                    cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.VOID_FINAL_KILL: PlayerKillEvent.PlayerKillCause.VOID;
                 } else if (damageEvent.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK || damageEvent.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
                     if (killer != null) {
                         message = t.isBedDestroyed() ? Messages.PLAYER_DIE_PVP_FINAL_KILL : Messages.PLAYER_DIE_PVP_REGULAR_KILL;
                     }
+                    cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.PVP_FINAL_KILL: PlayerKillEvent.PlayerKillCause.PVP;
                 }
 
                 BedWarsTeam t2 = null;
@@ -266,23 +277,27 @@ public class DamageDeathMove implements Listener {
                 /** give stats and victim's inventory */
                 if (killer != null) {
                     if (t.isBedDestroyed()) {
-                        for (ItemStack i : drops) {
-                            if (i == null) continue;
-                            if (i.getType() == Material.AIR) continue;
-                            if (nms.isArmor(i) || nms.isBow(i) || nms.isSword(i) || nms.isTool(i)) continue;
-                            if (a.getTeam(killer) != null) {
-                                killer.getWorld().dropItemNaturally(a.getTeam(killer).getIronGenerator().getLocation(), i);
+                        if (!a.getCm().getBoolean(ConfigPath.ARENA_NORMAL_DEATH_DROPS)) {
+                            for (ItemStack i : drops) {
+                                if (i == null) continue;
+                                if (i.getType() == Material.AIR) continue;
+                                if (nms.isArmor(i) || nms.isBow(i) || nms.isSword(i) || nms.isTool(i)) continue;
+                                if (a.getTeam(killer) != null) {
+                                    killer.getWorld().dropItemNaturally(a.getTeam(killer).getIronGenerator().getLocation(), i);
+                                }
                             }
                         }
                         a.addPlayerKill(killer, true, victim);
                         Bukkit.getPluginManager().callEvent(new FinalKillEvent(a.getWorldName(), victim, killer));
                     } else {
-                        if (!Arena.respawn.containsKey(killer)) {
-                            for (ItemStack i : drops) {
-                                if (i == null) continue;
-                                if (i.getType() == Material.AIR) continue;
-                                if (i.getType() == Material.DIAMOND || i.getType() == Material.EMERALD || i.getType() == Material.IRON_INGOT || i.getType() == Material.GOLD_INGOT) {
-                                    killer.getInventory().addItem(i);
+                        if (!a.getCm().getBoolean(ConfigPath.ARENA_NORMAL_DEATH_DROPS)) {
+                            if (!Arena.respawn.containsKey(killer)) {
+                                for (ItemStack i : drops) {
+                                    if (i == null) continue;
+                                    if (i.getType() == Material.AIR) continue;
+                                    if (i.getType() == Material.DIAMOND || i.getType() == Material.EMERALD || i.getType() == Material.IRON_INGOT || i.getType() == Material.GOLD_INGOT) {
+                                        killer.getInventory().addItem(i);
+                                    }
                                 }
                             }
                         }
@@ -295,7 +310,7 @@ public class DamageDeathMove implements Listener {
                     }
                 }
                 /** call game kill event */
-                Bukkit.getPluginManager().callEvent(new PlayerKillEvent(a, victim, killer));
+                Bukkit.getPluginManager().callEvent(new PlayerKillEvent(a, victim, killer, message, cause));
             }
             victim.spigot().respawn();
         }
@@ -428,7 +443,12 @@ public class DamageDeathMove implements Listener {
                             nms.voidKill(e.getPlayer());
                         }
                     } else {
-                        e.getPlayer().teleport(a.getCm().getArenaLoc("waiting.Loc"));
+                        BedWarsTeam bwt = a.getTeam(e.getPlayer());
+                        if (bwt != null) {
+                            e.getPlayer().teleport(bwt.getSpawn());
+                        } else {
+                            e.getPlayer().teleport(a.getCm().getArenaLoc("waiting.Loc"));
+                        }
                     }
                 }
                 if (a.getStatus() == GameState.playing) {
@@ -539,7 +559,7 @@ public class DamageDeathMove implements Listener {
         if (e.getEntity().getShooter() instanceof Player) {
             Arena a = Arena.getArenaByPlayer((Player) e.getEntity().getShooter());
             if (a != null) {
-                if (e.getEntity() instanceof Fireball){
+                if (e.getEntity() instanceof Fireball) {
                     Location l = e.getEntity().getLocation();
                     e.getEntity().getWorld().createExplosion(l.getX(), l.getY(), l.getZ(), 6, false, false);
                     return;
@@ -568,9 +588,9 @@ public class DamageDeathMove implements Listener {
     }
 
     @EventHandler
-    public void onEat(PlayerItemConsumeEvent e){
-        if (e.getItem().getType() == Material.CAKE_BLOCK){
-            if (Arena.getArenaByName(e.getPlayer().getWorld().getName()) != null){
+    public void onEat(PlayerItemConsumeEvent e) {
+        if (e.getItem().getType() == Material.CAKE_BLOCK) {
+            if (Arena.getArenaByName(e.getPlayer().getWorld().getName()) != null) {
                 e.setCancelled(true);
             }
         }

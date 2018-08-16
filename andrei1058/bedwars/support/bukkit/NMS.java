@@ -3,15 +3,14 @@ package com.andrei1058.bedwars.support.bukkit;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
+import com.andrei1058.bedwars.exceptions.InvalidSoundException;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Sound;
-import org.bukkit.block.Bed;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.inventory.ItemStack;
@@ -107,24 +106,41 @@ public interface NMS {
     Sound bedDestroy();
 
     /**
+     * Set the bed destroy sound
+     */
+    void setBedDestroySound(String sound) throws InvalidSoundException;
+
+    /**
      * Get player-kill sound
      */
     Sound playerKill();
+
+    /** Set the player kill sound */
+    void setPlayerKillsSound(String sound) throws InvalidSoundException;
 
     /**
      * Get insufficient money sound
      */
     Sound insufficientMoney();
 
+    /** Set the insufficient money sound */
+    void setInsuffMoneySound(String sound) throws InvalidSoundException;
+
     /**
      * Get boy success sound
      */
     Sound bought();
 
+    /** Set the bought sound */
+    void setBoughtSound(String sound) throws InvalidSoundException;
+
     /**
      * Get countdown sound
      */
     Sound countdownTick();
+
+    /** Set countdown tick sound */
+    void setCountdownSound(String sound) throws InvalidSoundException;
 
     /**
      * Spawn silverfish for a team

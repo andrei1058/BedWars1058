@@ -323,7 +323,7 @@ public class BedWarsTeam {
     public class BedHolo {
         ArmorStand a;
         Player p;
-        boolean hidden = false;
+        boolean hidden = false, bedDestroyed = false;
 
         public BedHolo(Player p) {
             this.p = p;
@@ -337,6 +337,7 @@ public class BedWarsTeam {
             if (name != null) {
                 if (isBedDestroyed()) {
                     a.setCustomName(getMsg(p, Messages.BED_HOLOGRAM_DESTROYED));
+                    bedDestroyed = true;
                 } else {
                     a.setCustomName(getMsg(p, Messages.BED_HOLOGRAM_DEFEND));
                 }
@@ -356,6 +357,7 @@ public class BedWarsTeam {
         }
 
         public void hide() {
+            if (bedDestroyed) return;
             hidden = true;
             a.remove();
         }

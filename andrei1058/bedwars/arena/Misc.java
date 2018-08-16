@@ -2,8 +2,8 @@ package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.api.TeamColor;
-import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -48,6 +48,14 @@ public class Misc {
         if (getServerType() != ServerType.BUNGEE) {
             if (!p.getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
                 p.teleport(config.getConfigLoc("lobbyLoc"));
+                Arena a = Arena.getArenaByPlayer(p);
+                if (a != null){
+                    if (a.isSpectator(p)){
+                        a.removeSpectator(p, false);
+                    } else {
+                        a.removePlayer(p, false);
+                    }
+                }
                 return;
             }
         }
@@ -294,8 +302,8 @@ public class Misc {
         String timeFormat = getMsg(p, Messages.FORMATTING_STATS_DATE_FORMAT), never = getMsg(p, Messages.MEANING_NEVER);
 
         /** create inventory */
-        Inventory inv = Bukkit.createInventory(null, config.getInt("statsGUI.invSize"), replaceStatsPlaceholders(getMsg(p, Messages.PLAYER_STATS_GUI_INV_NAME),
-                kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never));
+        Inventory inv = Bukkit.createInventory(null, config.getInt("statsGUI.invSize"), replaceStatsPlaceholders(p, getMsg(p, Messages.PLAYER_STATS_GUI_INV_NAME),
+                kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never, true));
 
         /** add custom items to gui */
         for (String s : config.getYml().getConfigurationSection("statsGUI").getKeys(false)) {
@@ -304,11 +312,11 @@ public class Misc {
             /** create new itemStack for content */
             ItemStack i = new ItemStack(Material.valueOf(config.getYml().getString("statsGUI." + s + ".itemStack").toUpperCase()), 1, (byte) config.getInt("statsGUI." + s + ".data"));
             ItemMeta im = i.getItemMeta();
-            im.setDisplayName(replaceStatsPlaceholders(getMsg(p, Messages.PLAYER_STATS_GUI_PATH + "." + s + ".name"), kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed,
-                    firstPlay, lastPlay, timeFormat, p.getName(), never));
+            im.setDisplayName(replaceStatsPlaceholders(p, getMsg(p, Messages.PLAYER_STATS_GUI_PATH + "." + s + ".name"), kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed,
+                    firstPlay, lastPlay, timeFormat, p.getName(), never, true));
             List<String> lore = new ArrayList<>();
             for (String string : getList(p, Messages.PLAYER_STATS_GUI_PATH + "." + s + ".lore")) {
-                lore.add(replaceStatsPlaceholders(string, kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never));
+                lore.add(replaceStatsPlaceholders(p, string, kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never, true));
             }
             im.setLore(lore);
             i.setItemMeta(im);
@@ -318,14 +326,15 @@ public class Misc {
         p.openInventory(inv);
     }
 
-    public static String replaceStatsPlaceholders(String s, int kills, int deaths, int looses, int wins, int finalKills, int finalDeaths,
-                                                  int beds, int games, Timestamp first, Timestamp last, String timeFormat, String player, String never) {
+    public static String replaceStatsPlaceholders(Player pl, String s, int kills, int deaths, int looses, int wins, int finalKills, int finalDeaths,
+                                                  int beds, int games, Timestamp first, Timestamp last, String timeFormat, String player, String never, boolean papiReplacements) {
         String lastS = last == null ? never : String.valueOf(new SimpleDateFormat(timeFormat).format(last)),
                 firstS = first == null ? never : String.valueOf(new SimpleDateFormat(timeFormat).format(first));
-        return s.replace("{kills}", String.valueOf(kills)).replace("{deaths}", String.valueOf(deaths)).replace("{looses}", String.valueOf(looses)).replace("{wins}", String.valueOf(wins))
+        s =  s.replace("{kills}", String.valueOf(kills)).replace("{deaths}", String.valueOf(deaths)).replace("{looses}", String.valueOf(looses)).replace("{wins}", String.valueOf(wins))
                 .replace("{finalKills}", String.valueOf(finalKills)).replace("{fKills}", String.valueOf(finalKills)).replace("{finalDeaths}",
                         String.valueOf(finalDeaths)).replace("{bedsDestroyed}", String.valueOf(beds)).replace("{beds}", String.valueOf(beds))
                 .replace("{gamesPlayed}", String.valueOf(games)).replace("{firstPlay}", firstS).replace("{lastPlay}", lastS).replace("{player}", player);
+        return papiReplacements ? SupportPAPI.getSupportPAPI().replace(pl, s) : s;
     }
 
     public static void giveLobbySb(Player p) {

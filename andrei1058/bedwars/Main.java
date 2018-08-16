@@ -20,13 +20,11 @@ import com.andrei1058.bedwars.support.lang.Internal;
 import com.andrei1058.bedwars.support.lang.Lang;
 import com.andrei1058.bedwars.support.levels.Level;
 import com.andrei1058.bedwars.support.levels.NoLevel;
-import com.andrei1058.bedwars.support.nte.NametagEdit;
 import com.andrei1058.bedwars.support.papi.PAPISupport;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.support.party.NoParty;
 import com.andrei1058.bedwars.support.party.Party;
 import com.andrei1058.bedwars.support.stats.MySQL;
-import com.andrei1058.bedwars.support.stats.None;
 import com.andrei1058.bedwars.support.stats.SQLite;
 import com.andrei1058.bedwars.support.vault.*;
 import com.andrei1058.bedwars.tasks.OneTick;
@@ -269,7 +267,7 @@ public class Main extends JavaPlugin {
         nms.registerTntWhitelist();
 
         /* Prevent issues on reload */
-        for (Player p : Bukkit.getOnlinePlayers()){
+        for (Player p : Bukkit.getOnlinePlayers()) {
             p.kickPlayer("BedWars1058 was RELOADED! (never reload plugins. noob staff)");
         }
 
@@ -278,6 +276,9 @@ public class Main extends JavaPlugin {
             getLogger().info("Hook into NametagEdit support.");
             NametagEdit.setNteSupport(true);
         }*/
+
+        /* Load sounds configuration */
+        new Sounds();
     }
 
     public void onDisable() {
@@ -603,7 +604,7 @@ public class Main extends JavaPlugin {
                 int id = Integer.valueOf(data[9]);
                 net.citizensnpcs.api.npc.NPC npc = CitizensAPI.getNPCRegistry().getById(id);
                 if (CitizensAPI.getNPCRegistry().getById(id) == null) {
-                    Main.plugin.getLogger().severe("Invalid npc id: " + id);
+                    plugin.getLogger().severe("Invalid npc id: " + id);
                     continue;
                 } else {
                     if (!npc.isSpawned()) {
@@ -646,5 +647,15 @@ public class Main extends JavaPlugin {
             }
 
         }
+    }
+
+    /**
+     * Get the server version
+     * Ex: v1_8_R3
+     *
+     * @since v0.6.5beta
+     */
+    public static String getServerVersion() {
+        return version;
     }
 }

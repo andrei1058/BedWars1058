@@ -140,6 +140,7 @@ public class Messages {
     public static String INTERACT_BED_DESTROY_TITLE_ANNOUNCEMENT = "arena.bedDestructionTitle";
     public static String INTERACT_BED_DESTROY_SUBTITLE_ANNOUNCEMENT = "arena.bedDestructionSub";
     public static String INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM = "arena.bedDestructionTeam";
+    public static String INTERACT_CHEST_CANT_OPEN_TEAM_ELIMINATED ="arena.cantOpenChest";
 
     /** PvP related */
     public static String PLAYER_DIE_VOID_FALL_REGULAR_KILL = "arena.playerDie.void";

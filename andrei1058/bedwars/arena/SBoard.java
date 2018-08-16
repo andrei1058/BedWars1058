@@ -114,8 +114,8 @@ public class SBoard {
                                 new SimpleDateFormat(getMsg(getP(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis())))
                 .replace("{money}", String.valueOf(getEconomy().getMoney(p)));
 
-                setContent(t, replaceStatsPlaceholders(temp,
-                        kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never));
+                setContent(t, replaceStatsPlaceholders(getP(), temp,
+                        kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never, false));
 
             } else if (arena.getStatus() == GameState.waiting || arena.getStatus() == GameState.starting) {
                 setContent(t, temp.replace("{map}", arena.getDisplayName()).replace("{server}", Bukkit.getServer().getMotd())

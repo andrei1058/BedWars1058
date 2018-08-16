@@ -61,7 +61,7 @@ public class AttackEnemies<T extends EntityLiving> extends PathfinderGoalTarget 
                         if ((double)t0.g(AttackEnemies.this.e) > d0) {
                             return false;
                         }
-                    }
+                    } else if (t0 instanceof Silverfish) return false;
 
                     return AttackEnemies.this.a(t0, false);
                 }

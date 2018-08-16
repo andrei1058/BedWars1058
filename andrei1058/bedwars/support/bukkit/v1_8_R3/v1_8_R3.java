@@ -6,6 +6,7 @@ import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.ShopHolo;
 import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.exceptions.InvalidSoundException;
 import com.andrei1058.bedwars.support.bukkit.NMS;
 import net.minecraft.server.v1_12_R1.BossBattle;
 import net.minecraft.server.v1_8_R3.*;
@@ -43,6 +44,10 @@ import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
 public class v1_8_R3 implements NMS {
 
+    private Sound bedDestroy = Sound.valueOf("ENDERDRAGON_GROWL"), playerKill = Sound.valueOf("WOLF_HURT"),
+            countDown = Sound.valueOf("CHICKEN_EGG"), bought = Sound.valueOf("NOTE_STICKS"), insuffMoney = Sound.valueOf("ENDERMEN_TELEPORT");
+
+
     /**
      * ArenaList of despawnable entities aka special shop mobs
      */
@@ -50,12 +55,30 @@ public class v1_8_R3 implements NMS {
 
     @Override
     public Sound bedDestroy() {
-        return Sound.valueOf("ENDERDRAGON_GROWL");
+        return bedDestroy;
+    }
+
+    @Override
+    public void setBedDestroySound(String sound) throws InvalidSoundException {
+        try {
+            bedDestroy = Sound.valueOf(sound);
+        } catch (Exception ex){
+            throw new InvalidSoundException(sound);
+        }
     }
 
     @Override
     public Sound playerKill() {
-        return Sound.valueOf("WOLF_HURT");
+        return playerKill;
+    }
+
+    @Override
+    public void setPlayerKillsSound(String sound) throws InvalidSoundException {
+        try {
+            playerKill = Sound.valueOf(sound);
+        } catch (Exception ex){
+            throw new InvalidSoundException(sound);
+        }
     }
 
     @Override
@@ -93,7 +116,16 @@ public class v1_8_R3 implements NMS {
 
     @Override
     public Sound countdownTick() {
-        return Sound.valueOf("CHICKEN_EGG_POP");
+        return countDown;
+    }
+
+    @Override
+    public void setCountdownSound(String sound) throws InvalidSoundException {
+        try {
+            countDown = Sound.valueOf(sound);
+        } catch (Exception ex){
+            throw new InvalidSoundException(sound);
+        }
     }
 
     public void spawnSilverfish(Location loc, BedWarsTeam bedWarsTeam) {
@@ -107,12 +139,30 @@ public class v1_8_R3 implements NMS {
 
     @Override
     public Sound insufficientMoney() {
-        return Sound.valueOf("ENDERMAN_TELEPORT");
+        return insuffMoney;
+    }
+
+    @Override
+    public void setInsuffMoneySound(String sound) throws InvalidSoundException {
+        try {
+            insuffMoney = Sound.valueOf(sound);
+        } catch (Exception ex){
+            throw new InvalidSoundException(sound);
+        }
     }
 
     @Override
     public Sound bought() {
-        return Sound.valueOf("NOTE_STICKS");
+        return bought;
+    }
+
+    @Override
+    public void setBoughtSound(String sound) throws InvalidSoundException {
+        try {
+            bought = Sound.valueOf(sound);
+        } catch (Exception ex){
+            throw new InvalidSoundException(sound);
+        }
     }
 
     @Override

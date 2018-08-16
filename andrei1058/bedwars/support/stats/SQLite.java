@@ -128,20 +128,19 @@ public class SQLite implements Database {
             }
         } else {
             try {
-                PreparedStatement ps = connection.prepareStatement("INSERT INTO global_stats VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-                ps.setInt(1, 0);
-                ps.setString(2, p.getName());
-                ps.setString(3, p.getUniqueId().toString());
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO global_stats VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+                ps.setString(1, p.getName());
+                ps.setString(2, p.getUniqueId().toString());
+                ps.setTimestamp(3, last_play);
                 ps.setTimestamp(4, last_play);
-                ps.setTimestamp(5, last_play);
-                ps.setInt(6, wins);
-                ps.setInt(7, kills);
-                ps.setInt(8, final_kills);
-                ps.setInt(9, looses);
-                ps.setInt(10, deaths);
-                ps.setInt(11, final_deaths);
-                ps.setInt(12, beds_destroyed);
-                ps.setInt(13, games_played);
+                ps.setInt(5, wins);
+                ps.setInt(6, kills);
+                ps.setInt(7, final_kills);
+                ps.setInt(8, looses);
+                ps.setInt(9, deaths);
+                ps.setInt(10, final_deaths);
+                ps.setInt(11, beds_destroyed);
+                ps.setInt(12, games_played);
                 ps.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();

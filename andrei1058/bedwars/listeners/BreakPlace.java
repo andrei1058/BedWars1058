@@ -59,6 +59,10 @@ public class BreakPlace implements Listener {
                 e.setCancelled(true);
                 return;
             }
+            if (a.respawn.containsKey(p)){
+                e.setCancelled(true);
+                return;
+            }
             if (a.getStatus() != GameState.playing) {
                 e.setCancelled(true);
                 return;

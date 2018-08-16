@@ -7,6 +7,7 @@ import com.andrei1058.bedwars.arena.ArenaGUI;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.commands.main.subcmds.sensitive.NPC;
+import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Messages;
 import com.andrei1058.bedwars.shop.ShopCategory;
 import com.andrei1058.bedwars.upgrades.UpgradeGroup;
@@ -42,9 +43,33 @@ public class Interact implements Listener {
             if (b.getType() == Material.AIR) return;
             Arena a = Arena.getArenaByPlayer(p);
             if (a != null) {
+                if (a.respawn.containsKey(e.getPlayer())) {
+                    e.setCancelled(true);
+                    return;
+                }
                 if (b.getType() == Material.BED_BLOCK) {
                     e.setCancelled(true);
                     return;
+                }
+                if (b.getType() == Material.CHEST) {
+                    if (a.isSpectator(p) || Arena.respawn.containsKey(p)) {
+                        e.setCancelled(true);
+                        return;
+                    }
+                    //make it so only team members can open chests while team is alive, and all when is eliminated
+                    BedWarsTeam owner = null;
+                    int isRad = a.getCm().getInt(ConfigPath.ARENA_ISLAND_RADIUS);
+                    for (BedWarsTeam t : a.getTeams()) {
+                        if (t.getSpawn().distance(e.getClickedBlock().getLocation()) <= isRad) {
+                            owner = t;
+                        }
+                    }
+                    if (owner != null) {
+                        if (owner.getMembers().isEmpty()) {
+                            e.setCancelled(true);
+                            p.sendMessage(getMsg(p, Messages.INTERACT_CHEST_CANT_OPEN_TEAM_ELIMINATED));
+                        }
+                    }
                 }
                 if (a.isSpectator(p) || Arena.respawn.containsKey(p)) {
                     switch (b.getType()) {

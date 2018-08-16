@@ -177,6 +177,14 @@ public class Arena {
         }
         world.getWorldBorder().setCenter(cm.getArenaLoc("waiting.Loc"));
         world.getWorldBorder().setSize(yml.getInt("worldBorder"));
+
+        /* Check if lobby removal is set */
+        if (!getCm().getYml().isSet(ConfigPath.ARENA_WAITING_POS1) && getCm().getYml().isSet(ConfigPath.ARENA_WAITING_POS2)) {
+            plugin.getLogger().severe("Lobby Pos1 isn't set! The arena's lobby won't be removed!");
+        }
+        if (getCm().getYml().isSet(ConfigPath.ARENA_WAITING_POS1) && !getCm().getYml().isSet(ConfigPath.ARENA_WAITING_POS2)) {
+            plugin.getLogger().severe("Lobby Pos2 isn't set! The arena's lobby won't be removed!");
+        }
     }
 
     /**
@@ -359,7 +367,7 @@ public class Arena {
                 }
             }
         } else {
-            //msg spectate not allowed
+            //todo msg spectate not allowed
         }
     }
 
@@ -543,15 +551,7 @@ public class Arena {
                 sb.remove();
             }
         }
-        if (getServerType() == ServerType.SHARED) {
-            p.teleport(playerLocation.get(p));
-        } else if (getServerType() == ServerType.MULTIARENA) {
-            p.teleport(config.getConfigLoc("lobbyLoc"));
-        }
-        if (getServerType() == ServerType.BUNGEE) {
-            Misc.moveToLobbyOrKick(p);
-        }
-        playerLocation.remove(p);
+
         for (BedWarsTeam bwt : getTeams()) {
             if (bwt.getMembersCache().contains(p)) {
                 if (status == GameState.playing) {
@@ -568,9 +568,20 @@ public class Arena {
                     database.saveStats(p, new Timestamp(System.currentTimeMillis()), 0, this.getPlayerKills(p, false), this.getPlayerKills(p, true),
                             1, deaths, final_deaths, beds, 1);
                 }
-                return;
+                break;
             }
         }
+
+        if (getServerType() == ServerType.SHARED) {
+            p.teleport(playerLocation.get(p));
+        } else if (getServerType() == ServerType.MULTIARENA) {
+            p.teleport(config.getConfigLoc("lobbyLoc"));
+        }
+        if (getServerType() == ServerType.BUNGEE) {
+            Misc.moveToLobbyOrKick(p);
+            return;
+        }
+        playerLocation.remove(p);
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             for (Player on : Bukkit.getOnlinePlayers()) {
@@ -583,7 +594,7 @@ public class Arena {
                 }
             }
             if (!disconnect) Misc.giveLobbySb(p);
-        }, 5L);
+        }, 10L);
 
         /* NametagEdit Support */
         NametagEdit.restoreNametag(p);
@@ -615,14 +626,14 @@ public class Arena {
             e.getKey().getState().update();
         }
         broken.clear();
-        players.clear();
-        spectators.clear();
         for (Entity e : world.getEntities()) {
             if (e.getType() == EntityType.PLAYER) {
                 Player p = (Player) e;
                 p.kickPlayer(getMsg(p, Messages.ARENA_RESTART_PLAYER_KICK));
             }
         }
+        players.clear();
+        spectators.clear();
         Bukkit.unloadWorld(world, false);
         arenaByName.remove(world.getName());
         arenas.remove(this);
@@ -650,14 +661,16 @@ public class Arena {
         gameEndCountdown = config.getInt("gameEndCountdown");
         nextEvent = NextEvent.EMERALD_GENERATOR_TIER_II;
         ShopHolo.clearForArena(this);
-        players.clear();
-        spectators.clear();
         for (Entity e : world.getEntities()) {
             if (e.getType() == EntityType.PLAYER) {
                 Player p = (Player) e;
                 Misc.moveToLobbyOrKick(p);
+                if (isSpectator(p)) removeSpectator(p);
+                if (isPlayer(p)) removePlayer(p);
             }
         }
+        players.clear();
+        spectators.clear();
         OreGenerator.removeIfArena(this);
         String name = world.getName();
         Bukkit.unloadWorld(world, false);
@@ -751,8 +764,8 @@ public class Arena {
                     }
 
                     /* Remove lobby */
-                    if (!(yml.get("waiting.Pos1") == null && yml.get("waiting.Pos2") == null)) {
-                        Location loc1 = cm.getArenaLoc("waiting.Pos1"), loc2 = cm.getArenaLoc("waiting.Pos2");
+                    if (!(yml.get(ConfigPath.ARENA_WAITING_POS1) == null && yml.get(ConfigPath.ARENA_WAITING_POS2) == null)) {
+                        Location loc1 = cm.getArenaLoc(ConfigPath.ARENA_WAITING_POS1), loc2 = cm.getArenaLoc(ConfigPath.ARENA_WAITING_POS2);
                         int minX = Math.min(loc1.getBlockX(), loc2.getBlockX()), maxX = Math.max(loc1.getBlockX(), loc2.getBlockX());
                         int minY = Math.min(loc1.getBlockY(), loc2.getBlockY()), maxY = Math.max(loc1.getBlockY(), loc2.getBlockY());
                         int minZ = Math.min(loc1.getBlockZ(), loc2.getBlockZ()), maxZ = Math.max(loc1.getBlockZ(), loc2.getBlockZ());
@@ -1256,7 +1269,9 @@ public class Arena {
     }
 
     public static boolean joinRandomFromGroup(Player p, String group) {
-        for (Arena a : getArenas()) {
+        List<Arena> arenas = new ArrayList<>(getArenas());
+        Collections.shuffle(arenas);
+        for (Arena a : arenas) {
             if (a.getGroup().equalsIgnoreCase(group)) {
                 if (a.getStatus() == GameState.waiting) {
                     a.addPlayer(p, false);

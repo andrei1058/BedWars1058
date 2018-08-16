@@ -6,11 +6,11 @@ import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.ShopHolo;
 import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.exceptions.InvalidSoundException;
 import com.andrei1058.bedwars.support.bukkit.NMS;
 import com.google.common.collect.Sets;
 import net.minecraft.server.v1_12_R1.*;
 import net.minecraft.server.v1_12_R1.Item;
-import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -27,7 +27,6 @@ import org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity;
 import org.bukkit.entity.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.material.Colorable;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scoreboard.Team;
 
@@ -41,6 +40,9 @@ import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
 public class v1_12_R1 implements NMS {
 
+    private Sound bedDestroy = Sound.valueOf("ENTITY_ENDERDRAGON_GROWL"), playerKill = Sound.valueOf("ENTITY_WOLF_HURT"),
+    countDown = Sound.valueOf("ENTITY_CHICKEN_EGG"), bought = Sound.valueOf("BLOCK_ANVIL_HIT"), insuffMoney = Sound.valueOf("ENTITY_ENDERMEN_TELEPORT");
+
     /**
      * ArenaList of despawnable entities aka special shop mobs
      */
@@ -48,12 +50,30 @@ public class v1_12_R1 implements NMS {
 
     @Override
     public Sound bedDestroy() {
-        return Sound.valueOf("ENTITY_ENDERDRAGON_GROWL");
+        return bedDestroy;
+    }
+
+    @Override
+    public void setBedDestroySound(String sound) throws InvalidSoundException {
+        try {
+            bedDestroy = Sound.valueOf(sound);
+        } catch (Exception ex){
+            throw new InvalidSoundException(sound);
+        }
     }
 
     @Override
     public Sound playerKill() {
-        return Sound.valueOf("ENTITY_WOLF_HURT");
+        return playerKill;
+    }
+
+    @Override
+    public void setPlayerKillsSound(String sound) throws InvalidSoundException {
+        try {
+            playerKill = Sound.valueOf(sound);
+        } catch (Exception ex){
+            throw new InvalidSoundException(sound);
+        }
     }
 
     @Override
@@ -81,7 +101,16 @@ public class v1_12_R1 implements NMS {
 
     @Override
     public Sound countdownTick() {
-        return Sound.valueOf("ENTITY_CHICKEN_EGG");
+        return countDown;
+    }
+
+    @Override
+    public void setCountdownSound(String sound) throws InvalidSoundException {
+        try {
+            countDown = Sound.valueOf(sound);
+        } catch (Exception ex){
+            throw new InvalidSoundException(sound);
+        }
     }
 
     public void spawnSilverfish(Location loc, BedWarsTeam bedWarsTeam) {
@@ -134,12 +163,30 @@ public class v1_12_R1 implements NMS {
 
     @Override
     public Sound insufficientMoney() {
-        return Sound.valueOf("ENTITY_ENDERMEN_TELEPORT");
+        return insuffMoney;
+    }
+
+    @Override
+    public void setInsuffMoneySound(String sound) throws InvalidSoundException {
+        try {
+            insuffMoney = Sound.valueOf(sound);
+        } catch (Exception ex){
+            throw new InvalidSoundException(sound);
+        }
     }
 
     @Override
     public Sound bought() {
-        return Sound.valueOf("BLOCK_ANVIL_HIT");
+        return bought;
+    }
+
+    @Override
+    public void setBoughtSound(String sound) throws InvalidSoundException {
+        try {
+            bought = Sound.valueOf(sound);
+        } catch (Exception ex){
+            throw new InvalidSoundException(sound);
+        }
     }
 
     @Override

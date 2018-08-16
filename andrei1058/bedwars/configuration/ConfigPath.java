@@ -38,4 +38,15 @@ public class ConfigPath {
 
     public static final String ARENA_CONFIGURATION_MAX_BUILD_Y = "maxBuildY";
     public static final String ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS = "emptyTeamGenOff";
+    public static final String ARENA_ISLAND_RADIUS = "islandRadius";
+    public static final String ARENA_WAITING_POS1 = "waiting.Pos1";
+    public static final String ARENA_WAITING_POS2 = "waiting.Pos2";
+    public static final String ARENA_NORMAL_DEATH_DROPS = "normalDeathDrops";
+
+
+    public static final String SOUNDS_BED_DESTROY = "bedDestroy";
+    public static final String SOUNDS_PLAYER_KILL = "playerKill";
+    public static final String SOUNDS_INSUFF_MONEY = "insuffMoney";
+    public static final String SOUNDS_BOUGHT = "bought";
+    public static final String SOUNDS_COUNTDOWN_TICK = "countdown";
 }

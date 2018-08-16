@@ -23,8 +23,8 @@ public class AttackEnemies<T extends EntityLiving> extends PathfinderGoalTarget 
 
     public AttackEnemies(EntityCreature entitycreature, Class<T> oclass, boolean flag, List<Player> exclude) {
         this(entitycreature, oclass, flag, false);
-        for (Player p : exclude){
-            this.excluded.add(((CraftPlayer)p).getHandle());
+        for (Player p : exclude) {
+            this.excluded.add(((CraftPlayer) p).getHandle());
         }
     }
 
@@ -58,8 +58,10 @@ public class AttackEnemies<T extends EntityLiving> extends PathfinderGoalTarget 
                 return false;
             } else {
                 Collections.sort(list, this.b);
-                for (int x = 0; x < list.size(); x++){
-                    if (!excluded.contains(list.get(x))){
+                for (int x = 0; x < list.size(); x++) {
+                    if (list.get(x) instanceof Silverfish) {
+                        continue;
+                    } else if (!excluded.contains(list.get(x))) {
                         this.d = (T) list.get(x);
                         return true;
                     }
@@ -67,13 +69,13 @@ public class AttackEnemies<T extends EntityLiving> extends PathfinderGoalTarget 
                 return false;
             }
         } else {
-            this.d = (T) this.e.world.a(this.e.locX, this.e.locY + (double)this.e.getHeadHeight(), this.e.locZ, this.i(), this.i(), new Function<EntityHuman, Double>() {
+            this.d = (T) this.e.world.a(this.e.locX, this.e.locY + (double) this.e.getHeadHeight(), this.e.locZ, this.i(), this.i(), new Function<EntityHuman, Double>() {
                 @Nullable
                 public Double a(@Nullable EntityHuman entityhuman) {
                     ItemStack itemstack = entityhuman.getEquipment(EnumItemSlot.HEAD);
                     if (itemstack != null && itemstack.getItem() == Items.SKULL) {
                         int i = itemstack.h();
-                        boolean flag = AttackEnemies.this.e instanceof EntitySkeleton && ((EntitySkeleton)AttackEnemies.this.e).getSkeletonType() == EnumSkeletonType.NORMAL && i == 0;
+                        boolean flag = AttackEnemies.this.e instanceof EntitySkeleton && ((EntitySkeleton) AttackEnemies.this.e).getSkeletonType() == EnumSkeletonType.NORMAL && i == 0;
                         boolean flag1 = AttackEnemies.this.e instanceof EntityZombie && i == 2;
                         boolean flag2 = AttackEnemies.this.e instanceof EntityCreeper && i == 4;
                         if (flag || flag1 || flag2) {

@@ -10,16 +10,59 @@ public class PlayerKillEvent extends Event {
 
     private Arena a;
     private Player victim, killer;
+    private PlayerKillCause cause;
+    private String message;
 
-    /** killer can be null */
-    public PlayerKillEvent(Arena a, Player victim, Player killer){
+    /**
+     * killer can be null
+     */
+    @Deprecated
+    public PlayerKillEvent(Arena a, Player victim, Player killer) {
         this.a = a;
         this.victim = victim;
         this.killer = killer;
+        this.message = "";
+        this.cause = PlayerKillCause.UNKNOWN;
     }
+
+    /**
+     * Killer can be null
+     *
+     * @since API 9
+     */
+    public PlayerKillEvent(Arena a, Player victim, Player killer, String message, PlayerKillCause cause) {
+        this.a = a;
+        this.victim = victim;
+        this.killer = killer;
+        this.message = message;
+        this.cause = cause;
+    }
+
+    public enum PlayerKillCause {UNKNOWN, UNKNOWN_FINAL_KILL, EXPLOSION, EXPLOSION_FINAL_KILL, VOID, VOID_FINAL_KILL, PVP, PVP_FINAL_KILL,}
 
     public Player getKiller() {
         return killer;
+    }
+
+    /**
+     * @since API 9
+     */
+    public String getMessage() {
+        return message;
+    }
+
+    /**
+     * @since API 9
+     */
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    /**
+     * @since API 9
+     */
+    public PlayerKillCause getCause() {
+        return cause;
     }
 
     public Arena getArena() {

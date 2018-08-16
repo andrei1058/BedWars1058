@@ -35,9 +35,9 @@ public class LeaveCommand extends BukkitCommand {
             }
         } else {
             if (a.isPlayer(p)){
-                a.removePlayer(p);
+                a.removePlayer(p, false);
             } else if (a.isSpectator(p)){
-                a.removeSpectator(p);
+                a.removeSpectator(p, false);
             }
         }
         return true;
