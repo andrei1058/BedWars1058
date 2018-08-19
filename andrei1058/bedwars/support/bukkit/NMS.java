@@ -3,6 +3,7 @@ package com.andrei1058.bedwars.support.bukkit;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
+import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.exceptions.InvalidSoundException;
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -115,7 +116,9 @@ public interface NMS {
      */
     Sound playerKill();
 
-    /** Set the player kill sound */
+    /**
+     * Set the player kill sound
+     */
     void setPlayerKillsSound(String sound) throws InvalidSoundException;
 
     /**
@@ -123,7 +126,9 @@ public interface NMS {
      */
     Sound insufficientMoney();
 
-    /** Set the insufficient money sound */
+    /**
+     * Set the insufficient money sound
+     */
     void setInsuffMoneySound(String sound) throws InvalidSoundException;
 
     /**
@@ -131,7 +136,9 @@ public interface NMS {
      */
     Sound bought();
 
-    /** Set the bought sound */
+    /**
+     * Set the bought sound
+     */
     void setBoughtSound(String sound) throws InvalidSoundException;
 
     /**
@@ -139,7 +146,9 @@ public interface NMS {
      */
     Sound countdownTick();
 
-    /** Set countdown tick sound */
+    /**
+     * Set countdown tick sound
+     */
     void setCountdownSound(String sound) throws InvalidSoundException;
 
     /**
@@ -183,19 +192,9 @@ public interface NMS {
     BedWarsTeam ownDespawnable(Entity e);
 
     /**
-     * Collide with entities
-     */
-    void setCollide(Player e, boolean b);
-
-    /**
      * Change item amount
      */
     void minusAmount(Player p, ItemStack i, int amount);
-
-    /**
-     * Team collision rule 1.9+
-     **/
-    void teamCollideRule(Team t);
 
     /**
      * Set tnt source
@@ -246,4 +245,34 @@ public interface NMS {
      * @since API 7
      */
     void setBlockTeamColor(Block block, TeamColor teamColor);
+
+    /**
+     * Disable collisions in 1.9+
+     *
+     * @since API 9
+     */
+    void setCollide(Player p, Arena a, boolean value);
+
+    /**
+     * Add custom data to an ItemStack
+     * Adds a NBTTag to the item with BedWars1058 key
+     *
+     * @since API 9
+     */
+    ItemStack addCustomData(ItemStack i, String data);
+
+    /**
+     * Check if an item has a BedWars1058 NBTTag
+     *
+     * @since API 9
+     */
+    boolean isCustomBedWarsItem(ItemStack i);
+
+    /**
+     * Get the NBTTag from a BedWars1058 item
+     */
+    String getCustomData(ItemStack i);
+
+    /** Set a skull skin */
+    ItemStack setSkullOwner(ItemStack i, Player p);
 }

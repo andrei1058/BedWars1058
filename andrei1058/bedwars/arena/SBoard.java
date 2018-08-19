@@ -65,9 +65,7 @@ public class SBoard {
         this.setStrings(getScoreboard(p, "scoreboard." + arena.getGroup() + "Playing", Messages.SCOREBOARD_DEFAULT_PLAYING));
         p.setScoreboard(sb);
         scoreboards.add(this);
-        Team t = sb.registerNewTeam("spect");
-        t.addEntry(p.getName());
-        nms.teamCollideRule(t);
+        giveTeamColorTag();
     }
 
     public void setStrings(List<String> strings) {
@@ -212,7 +210,6 @@ public class SBoard {
             Team team = sb.registerNewTeam(t.getName());
             team.setPrefix(TeamColor.getChatColor(t.getColor()) + "§l" +
                     t.getName().substring(0, 1).toUpperCase() + " §r" + TeamColor.getChatColor(t.getColor()));
-            nms.teamCollideRule(team);
             for (Player p : t.getMembers()) {
                 team.addEntry(p.getName());
             }
@@ -282,5 +279,23 @@ public class SBoard {
         }
 
         return new String[] {st, dateFormat.format((time))};
+    }
+
+    /**@since API 9 */
+    public void updateSpectators(Player p, boolean value){
+        Team collide;
+        if (sb.getTeam("spectators") == null){
+            collide = sb.registerNewTeam("spectators");
+            collide.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
+            collide.setCanSeeFriendlyInvisibles(true);
+            collide.setPrefix("§7[SPECT] §r");
+        } else {
+            collide = sb.getTeam("spectators");
+        }
+        if (!value){
+            if (!collide.hasEntry(p.getName())) collide.addEntry(p.getName());
+        } else {
+            if (collide.hasEntry(p.getName())) collide.removeEntry(p.getName());
+        }
     }
 }

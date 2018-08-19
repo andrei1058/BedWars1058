@@ -375,11 +375,12 @@ public class DamageDeathMove implements Listener {
                         }
                         a.checkWinner();
                     }
-                }, 60L);
+                }, 40L);
             } else {
+                //respawn session
                 e.getPlayer().getInventory().clear();
                 Bukkit.getScheduler().runTaskLater(plugin, () -> nms.hidePlayer(e.getPlayer(), a.getPlayers()), 5L);
-                nms.setCollide(e.getPlayer(), false);
+                nms.setCollide(e.getPlayer(), a, false);
                 e.getPlayer().setAllowFlight(true);
                 e.getPlayer().setFlying(true);
                 Arena.respawn.put(e.getPlayer(), 5);

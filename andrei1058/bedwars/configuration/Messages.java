@@ -63,10 +63,28 @@ public class Messages {
     public static String ARENA_JOIN_DENIED_PARTY_TOO_BIG = "party.tooMuch";
     public static String ARENA_JOIN_DENIED_NOT_PARTY_LEADER = "party.leaderChoose";
     public static String ARENA_JOIN_PLAYER_JOIN_MSG = "arena.join";
-    public static String ARENA_JOIN_SPECTATOR_MSG = "arena.spectate";
+    public static String ARENA_JOIN_SPECTATOR_MSG = "arena.spectate.spectate-join";
     public static String ARENA_LEAVE_PLAYER_LEAVE_MSG = "arena.leave";
-    public static String ARENA_LEAVE_ITEM_NAME = "arena.leaveItm.name";
-    public static String ARENA_LEAVE_ITEM_LORE = "arena.leaveItm.lore";
+
+    public static String ARENA_LEAVE_ITEM_NAME = "arena.leaveItm.name"; //todo to be removed
+    public static String ARENA_LEAVE_ITEM_LORE = "arena.leaveItm.lore"; //todo to be removed
+
+    /** Spectator related */
+    public static String ARENA_SPECTATOR_TELEPORTER_ITEM_NAME = "spectatorItems.teleporter-item.name";
+    public static String ARENA_SPECTATOR_TELEPORTER_ITEM_LORE = "spectatorItems.teleporter-item.lore";
+    public static String ARENA_SPECTATOR_TELEPORTER_GUI_NAME = "spectatorItems.teleporter-gui.gui-name";
+    //{player} - returns display name, {prefix} - returns the player rank
+    public static String ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME = "spectatorItems.teleporter-gui.head-name";
+    //{health}, {food}
+    public static String ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_LORE = "spectatorItems.teleporter-gui.head-lore";
+
+    public static String ARENA_SPECTATOR_LEAVE_ITEM_NAME = "spectatorItems.leave-item.name";
+    public static String ARENA_SPECTATOR_LEAVE_ITEM_LORE = "spectatorItems.leave-item.lore";
+
+    public static String ARENA_SPECTATOR_FIRST_PERSON_ENTER_TITLE = "arena.spectate.first-person.enter-title";
+    public static String ARENA_SPECTATOR_FIRST_PERSON_ENTER_SUBTITLE = "arena.spectate.first-person.enter-subtitle";
+    public static String ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE = "arena.spectate.first-person.quit-title";
+    public static String ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE = "arena.spectate.first-person.quit-subtitle";
 
 
     /** Arena status/ status change related */

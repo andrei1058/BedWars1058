@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.GameAPI;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.*;
+import com.andrei1058.bedwars.arena.spectator.SpectateListeners;
 import com.andrei1058.bedwars.commands.LeaveCommand;
 import com.andrei1058.bedwars.commands.main.MainCommand;
 import com.andrei1058.bedwars.configuration.*;
@@ -127,7 +128,7 @@ public class Main extends JavaPlugin {
 
         /** Setup plugin messaging channel */
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-        Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new Bungee());
+        //Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new Bungee());
         Bukkit.getServicesManager().register(GameAPI.class, new BedWars(), this, ServicePriority.Highest);
 
         /** Check if lobby location is set. Required for non Bungee servers */
@@ -138,7 +139,7 @@ public class Main extends JavaPlugin {
 
         /** Load lobby world if not main level */
         if (!config.getLobbyWorldName().equalsIgnoreCase(Bukkit.getServer().getWorlds().get(0).getName())) {
-            Bukkit.createWorld(new WorldCreator(config.getLobbyWorldName()));
+            if (getServerType() == ServerType.MULTIARENA) Bukkit.createWorld(new WorldCreator(config.getLobbyWorldName()));
         }
 
         /** Remove entities from lobby */
@@ -148,7 +149,7 @@ public class Main extends JavaPlugin {
         }
 
         /** Register events */
-        registerEvents(new JoinLeaveTeleport(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(), new EggBridge());
+        registerEvents(new JoinLeaveTeleport(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(), new EggBridge(), new SpectateListeners());
         if (getServerType() == ServerType.BUNGEE) {
             registerEvents(new Ping());
         }
@@ -331,6 +332,21 @@ public class Main extends JavaPlugin {
         yml.addDefault("items.stats.data", 0);
         yml.addDefault("items.stats.enchanted", false);
         yml.addDefault("items.stats.slot", 0);
+
+        /* Spectator Items */
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_ENABLED, true);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_MATERIAL, "COMPASS");
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_DATA, 0);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_ENCHANTED, false);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_SLOT, 0);
+
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_ENABLED, true);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_MATERIAL, "BED");
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_DATA, 0);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_ENCHANTED, false);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_SLOT, 8);
+
+
         yml.addDefault("arenaGui.settings.size", 27);
         yml.addDefault("arenaGui.settings.startSlot", 10);
         yml.addDefault("arenaGui.settings.endSlot", 16);

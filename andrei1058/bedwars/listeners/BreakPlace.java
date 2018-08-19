@@ -15,6 +15,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -37,14 +38,14 @@ public class BreakPlace implements Listener {
     private static List<Player> buildSession = new ArrayList<>();
 
     @EventHandler
-    public void onIceMelt(BlockFadeEvent e){
+    public void onIceMelt(BlockFadeEvent e) {
         if (e.getBlock().getType() == Material.ICE) {
             if (Arena.getArenaByName(e.getBlock().getWorld().getName()) != null) e.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onCactus(BlockPhysicsEvent e){
+    public void onCactus(BlockPhysicsEvent e) {
         if (e.getBlock().getType() == Material.CACTUS) {
             if (Arena.getArenaByName(e.getBlock().getWorld().getName()) != null) e.setCancelled(true);
         }
@@ -59,7 +60,7 @@ public class BreakPlace implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            if (a.respawn.containsKey(p)){
+            if (a.respawn.containsKey(p)) {
                 e.setCancelled(true);
                 return;
             }
@@ -67,7 +68,7 @@ public class BreakPlace implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            if (e.getBlockPlaced().getLocation().getBlockY() >= a.getCm().getInt(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y)){
+            if (e.getBlockPlaced().getLocation().getBlockY() >= a.getCm().getInt(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y)) {
                 e.setCancelled(true);
                 return;
             }
@@ -98,7 +99,7 @@ public class BreakPlace implements Listener {
                 }
             } catch (Exception ex) {
             }
-            if (e.getBlock().getType() == Material.TNT){
+            if (e.getBlock().getType() == Material.TNT) {
                 e.setCancelled(true);
                 TNTPrimed tnt = e.getBlock().getLocation().getWorld().spawn(e.getBlock().getLocation(), TNTPrimed.class);
                 tnt.setFuseTicks(45);
@@ -136,19 +137,19 @@ public class BreakPlace implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
         Player p = e.getPlayer();
-         if (getServerType() != ServerType.SHARED) {
-             if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(config.getConfigLoc("lobbyLoc").getWorld().getName())) {
-                 if (!isBuildSession(p)) {
+        if (getServerType() != ServerType.SHARED) {
+            if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(config.getConfigLoc("lobbyLoc").getWorld().getName())) {
+                if (!isBuildSession(p)) {
                     e.setCancelled(true);
                     return;
                 }
-             }
+            }
         }
         if (Arena.isInArena(p)) {
             Arena a = Arena.getArenaByPlayer(p);
             if (!a.isPlayer(p)) {
                 e.setCancelled(true);
-                 return;
+                return;
             }
             if (e.getBlock().getType() == a.getBedBlock()) {
                 for (BedWarsTeam t : a.getTeams()) {
@@ -196,7 +197,9 @@ public class BreakPlace implements Listener {
         }
     }
 
-    /** update game signs */
+    /**
+     * update game signs
+     */
     @EventHandler
     public void onSignChange(SignChangeEvent e) {
         Player p = e.getPlayer();
@@ -251,12 +254,12 @@ public class BreakPlace implements Listener {
         Arena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a != null) {
             if (a.isSpectator(e.getPlayer()) || a.getStatus() != GameState.playing || Arena.respawn.containsKey(e.getPlayer()))
-            e.setCancelled(true);
+                e.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onBucketEmpty(PlayerBucketEmptyEvent e){
+    public void onBucketEmpty(PlayerBucketEmptyEvent e) {
         if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
             e.setCancelled(true);
             return;
@@ -267,7 +270,7 @@ public class BreakPlace implements Listener {
                 e.setCancelled(true);
         }
         /** Remove empty bucket */
-        Bukkit.getScheduler().runTaskLater(plugin, ()-> {
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
             nms.minusAmount(e.getPlayer(), nms.getItemInHand(e.getPlayer()), 1);
         }, 3L);
     }
@@ -287,6 +290,14 @@ public class BreakPlace implements Listener {
                     }
                 }
             }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    public void onBlockCanBuildEvent(BlockCanBuildEvent e) {
+        Arena a = Arena.getArenaByName(e.getBlock().getWorld().getName());
+        if (a != null) {
+            e.setBuildable(true);
         }
     }
 

@@ -215,7 +215,7 @@ public class BedWarsTeam {
         if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
             p.removePotionEffect(PotionEffectType.INVISIBILITY);
         }
-        nms.setCollide(p, true);
+        nms.setCollide(p, arena,true);
         p.setAllowFlight(false);
         p.setFlying(false);
         p.setHealth(20);

@@ -3,6 +3,7 @@ package com.andrei1058.bedwars.support.bukkit.v1_12_R1;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
+import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.arena.ShopHolo;
 import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
@@ -27,6 +28,7 @@ import org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity;
 import org.bukkit.entity.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scoreboard.Team;
 
@@ -41,7 +43,7 @@ import static com.andrei1058.bedwars.configuration.Language.getMsg;
 public class v1_12_R1 implements NMS {
 
     private Sound bedDestroy = Sound.valueOf("ENTITY_ENDERDRAGON_GROWL"), playerKill = Sound.valueOf("ENTITY_WOLF_HURT"),
-    countDown = Sound.valueOf("ENTITY_CHICKEN_EGG"), bought = Sound.valueOf("BLOCK_ANVIL_HIT"), insuffMoney = Sound.valueOf("ENTITY_ENDERMEN_TELEPORT");
+            countDown = Sound.valueOf("ENTITY_CHICKEN_EGG"), bought = Sound.valueOf("BLOCK_ANVIL_HIT"), insuffMoney = Sound.valueOf("ENTITY_ENDERMEN_TELEPORT");
 
     /**
      * ArenaList of despawnable entities aka special shop mobs
@@ -57,7 +59,7 @@ public class v1_12_R1 implements NMS {
     public void setBedDestroySound(String sound) throws InvalidSoundException {
         try {
             bedDestroy = Sound.valueOf(sound);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             throw new InvalidSoundException(sound);
         }
     }
@@ -71,7 +73,7 @@ public class v1_12_R1 implements NMS {
     public void setPlayerKillsSound(String sound) throws InvalidSoundException {
         try {
             playerKill = Sound.valueOf(sound);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             throw new InvalidSoundException(sound);
         }
     }
@@ -84,18 +86,22 @@ public class v1_12_R1 implements NMS {
     @Override
     public void sendTitle(Player p, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
         if (title != null) {
-            IChatBaseComponent bc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + title + "\"}");
-            PacketPlayOutTitle tit = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, bc);
-            PacketPlayOutTitle length = new PacketPlayOutTitle(fadeIn, stay, fadeOut);
-            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(tit);
-            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(length);
+            if (!title.isEmpty()) {
+                IChatBaseComponent bc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + title + "\"}");
+                PacketPlayOutTitle tit = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, bc);
+                PacketPlayOutTitle length = new PacketPlayOutTitle(fadeIn, stay, fadeOut);
+                ((CraftPlayer) p).getHandle().playerConnection.sendPacket(tit);
+                ((CraftPlayer) p).getHandle().playerConnection.sendPacket(length);
+            }
         }
         if (subtitle != null) {
-            IChatBaseComponent bc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + subtitle + "\"}");
-            PacketPlayOutTitle tit = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, bc);
-            PacketPlayOutTitle length = new PacketPlayOutTitle(fadeIn, stay, fadeOut);
-            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(tit);
-            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(length);
+            if (!subtitle.isEmpty()) {
+                IChatBaseComponent bc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + subtitle + "\"}");
+                PacketPlayOutTitle tit = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, bc);
+                PacketPlayOutTitle length = new PacketPlayOutTitle(fadeIn, stay, fadeOut);
+                ((CraftPlayer) p).getHandle().playerConnection.sendPacket(tit);
+                ((CraftPlayer) p).getHandle().playerConnection.sendPacket(length);
+            }
         }
     }
 
@@ -108,7 +114,7 @@ public class v1_12_R1 implements NMS {
     public void setCountdownSound(String sound) throws InvalidSoundException {
         try {
             countDown = Sound.valueOf(sound);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             throw new InvalidSoundException(sound);
         }
     }
@@ -170,7 +176,7 @@ public class v1_12_R1 implements NMS {
     public void setInsuffMoneySound(String sound) throws InvalidSoundException {
         try {
             insuffMoney = Sound.valueOf(sound);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             throw new InvalidSoundException(sound);
         }
     }
@@ -184,7 +190,7 @@ public class v1_12_R1 implements NMS {
     public void setBoughtSound(String sound) throws InvalidSoundException {
         try {
             bought = Sound.valueOf(sound);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             throw new InvalidSoundException(sound);
         }
     }
@@ -215,18 +221,8 @@ public class v1_12_R1 implements NMS {
     }
 
     @Override
-    public void setCollide(Player e, boolean b) {
-        e.setCollidable(b);
-    }
-
-    @Override
     public void minusAmount(Player p, org.bukkit.inventory.ItemStack i, int amount) {
         i.setAmount(i.getAmount() - amount);
-    }
-
-    @Override
-    public void teamCollideRule(Team t) {
-        t.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
     }
 
     @Override
@@ -438,7 +434,7 @@ public class v1_12_R1 implements NMS {
 
     @Override
     public void unregisterCommand(String name) {
-        if (isBukkitCommandRegistered(name)){
+        if (isBukkitCommandRegistered(name)) {
             ((CraftServer) plugin.getServer()).getCommandMap().getCommand(name).unregister(((CraftServer) plugin.getServer()).getCommandMap());
         }
     }
@@ -536,5 +532,54 @@ public class v1_12_R1 implements NMS {
     @Override
     public void setBlockTeamColor(org.bukkit.block.Block block, TeamColor teamColor) {
         block.setData(TeamColor.itemColor(teamColor));
+    }
+
+    @Override
+    public void setCollide(Player p, Arena a, boolean value) {
+        p.setCollidable(value);
+        if (a == null) return;
+        for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
+            if (sb.getArena() == a) {
+                sb.updateSpectators(p, value);
+            }
+        }
+    }
+
+    @Override
+    public org.bukkit.inventory.ItemStack addCustomData(org.bukkit.inventory.ItemStack i, String data) {
+        ItemStack itemStack = CraftItemStack.asNMSCopy(i);
+        NBTTagCompound tag = itemStack.getTag();
+        if (tag == null) {
+            tag = new NBTTagCompound();
+            itemStack.setTag(tag);
+        }
+
+        tag.setString("BedWars1058", data);
+        return CraftItemStack.asBukkitCopy(itemStack);
+    }
+
+    @Override
+    public boolean isCustomBedWarsItem(org.bukkit.inventory.ItemStack i) {
+        ItemStack itemStack = CraftItemStack.asNMSCopy(i);
+        NBTTagCompound tag = itemStack.getTag();
+        if (tag == null) return false;
+        return tag.hasKey("BedWars1058");
+    }
+
+    @Override
+    public String getCustomData(org.bukkit.inventory.ItemStack i) {
+        ItemStack itemStack = CraftItemStack.asNMSCopy(i);
+        NBTTagCompound tag = itemStack.getTag();
+        if (tag == null) return "";
+        return tag.getString("BedWars1058");
+    }
+
+    @Override
+    public org.bukkit.inventory.ItemStack setSkullOwner(org.bukkit.inventory.ItemStack i, Player p) {
+        if (i.getType() != org.bukkit.Material.SKULL_ITEM) return i;
+        SkullMeta sm = (SkullMeta) i.getItemMeta();
+        sm.setOwner(p.getName());
+        i.setItemMeta(sm);
+        return i;
     }
 }

@@ -3,6 +3,7 @@ package com.andrei1058.bedwars.support.bukkit.v1_10_R1;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
+import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.arena.ShopHolo;
 import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
@@ -27,6 +28,7 @@ import org.bukkit.craftbukkit.v1_10_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_10_R1.entity.CraftLivingEntity;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scoreboard.Team;
 
@@ -45,7 +47,9 @@ public class v1_10_R1 implements NMS {
             countDown = Sound.valueOf("ENTITY_CHICKEN_EGG"), bought = Sound.valueOf("BLOCK_ANVIL_HIT"), insuffMoney = Sound.valueOf("ENTITY_ENDERMEN_TELEPORT");
 
 
-    /** ArenaList of despawnable entities aka special shop mobs */
+    /**
+     * ArenaList of despawnable entities aka special shop mobs
+     */
     private static List<Despawnable> despawnables = new ArrayList();
 
     @Override
@@ -62,7 +66,7 @@ public class v1_10_R1 implements NMS {
     public void setCountdownSound(String sound) throws InvalidSoundException {
         try {
             countDown = Sound.valueOf(sound);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             throw new InvalidSoundException(sound);
         }
     }
@@ -79,18 +83,22 @@ public class v1_10_R1 implements NMS {
     @Override
     public void sendTitle(Player p, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
         if (title != null) {
-            IChatBaseComponent bc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + title + "\"}");
-            PacketPlayOutTitle tit = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, bc);
-            PacketPlayOutTitle length = new PacketPlayOutTitle(fadeIn, stay, fadeOut);
-            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(tit);
-            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(length);
+            if (!title.isEmpty()) {
+                IChatBaseComponent bc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + title + "\"}");
+                PacketPlayOutTitle tit = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, bc);
+                PacketPlayOutTitle length = new PacketPlayOutTitle(fadeIn, stay, fadeOut);
+                ((CraftPlayer) p).getHandle().playerConnection.sendPacket(tit);
+                ((CraftPlayer) p).getHandle().playerConnection.sendPacket(length);
+            }
         }
-        if (subtitle != null){
-            IChatBaseComponent bc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + subtitle + "\"}");
-            PacketPlayOutTitle tit = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, bc);
-            PacketPlayOutTitle length = new PacketPlayOutTitle(fadeIn, stay, fadeOut);
-            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(tit);
-            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(length);
+        if (subtitle != null) {
+            if (!subtitle.isEmpty()) {
+                IChatBaseComponent bc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + subtitle + "\"}");
+                PacketPlayOutTitle tit = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, bc);
+                PacketPlayOutTitle length = new PacketPlayOutTitle(fadeIn, stay, fadeOut);
+                ((CraftPlayer) p).getHandle().playerConnection.sendPacket(tit);
+                ((CraftPlayer) p).getHandle().playerConnection.sendPacket(length);
+            }
         }
     }
 
@@ -104,34 +112,29 @@ public class v1_10_R1 implements NMS {
     }
 
     @Override
-    public void setCollide(Player e, boolean b) {
-        e.setCollidable(b);
-    }
-
-    @Override
     public void minusAmount(Player p, org.bukkit.inventory.ItemStack i, int amount) {
-        i.setAmount(i.getAmount()-amount);
+        i.setAmount(i.getAmount() - amount);
     }
 
     @Override
     public void refreshDespawnables() {
-        for(Despawnable d : new ArrayList<>(despawnables)){
+        for (Despawnable d : new ArrayList<>(despawnables)) {
             d.regresh();
         }
     }
 
     @Override
     public boolean isDespawnable(org.bukkit.entity.Entity e) {
-        for (Despawnable d : despawnables){
-            if (d.getE() == ((CraftEntity)e).getHandle()) return true;
+        for (Despawnable d : despawnables) {
+            if (d.getE() == ((CraftEntity) e).getHandle()) return true;
         }
         return false;
     }
 
     @Override
     public BedWarsTeam ownDespawnable(org.bukkit.entity.Entity e) {
-        for (Despawnable d : despawnables){
-            if (d.getE() == ((CraftEntity)e).getHandle()) return d.getTeam();
+        for (Despawnable d : despawnables) {
+            if (d.getE() == ((CraftEntity) e).getHandle()) return d.getTeam();
         }
         return null;
     }
@@ -145,7 +148,7 @@ public class v1_10_R1 implements NMS {
     public void setInsuffMoneySound(String sound) throws InvalidSoundException {
         try {
             insuffMoney = Sound.valueOf(sound);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             throw new InvalidSoundException(sound);
         }
     }
@@ -159,14 +162,14 @@ public class v1_10_R1 implements NMS {
     public void setBoughtSound(String sound) throws InvalidSoundException {
         try {
             bought = Sound.valueOf(sound);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             throw new InvalidSoundException(sound);
         }
     }
 
     @Override
     public void playAction(Player p, String text) {
-        CraftPlayer cPlayer = (CraftPlayer)p;
+        CraftPlayer cPlayer = (CraftPlayer) p;
         IChatBaseComponent cbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + text + "\"}");
         PacketPlayOutChat ppoc = new PacketPlayOutChat(cbc, (byte) 2);
         cPlayer.getHandle().playerConnection.sendPacket(ppoc);
@@ -174,7 +177,7 @@ public class v1_10_R1 implements NMS {
 
     @Override
     public void unregisterCommand(String name) {
-        if (isBukkitCommandRegistered(name)){
+        if (isBukkitCommandRegistered(name)) {
             ((CraftServer) plugin.getServer()).getCommandMap().getCommand(name).unregister(((CraftServer) plugin.getServer()).getCommandMap());
         }
     }
@@ -221,7 +224,7 @@ public class v1_10_R1 implements NMS {
     }
 
     @Override
-    public boolean isProjectile(org.bukkit.inventory.ItemStack itemStack){
+    public boolean isProjectile(org.bukkit.inventory.ItemStack itemStack) {
         if (CraftItemStack.asNMSCopy(itemStack).getItem() == null) return false;
         return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof IProjectile;
     }
@@ -248,8 +251,8 @@ public class v1_10_R1 implements NMS {
                 new ShopHolo(Language.getPlayerLanguage(p).getIso(), a, b, l, arena);
             }
         }
-        for (ShopHolo sh : ShopHolo.getShopHolo()){
-            if (sh.getA() == arena){
+        for (ShopHolo sh : ShopHolo.getShopHolo()) {
+            if (sh.getA() == arena) {
                 sh.update();
             }
         }
@@ -269,7 +272,7 @@ public class v1_10_R1 implements NMS {
         return compound.getDouble("generic.armor");
     }
 
-    private static ArmorStand createArmorStand(String name, Location loc){
+    private static ArmorStand createArmorStand(String name, Location loc) {
         ArmorStand a = loc.getWorld().spawn(loc, ArmorStand.class);
         a.setGravity(false);
         a.setVisible(false);
@@ -285,7 +288,7 @@ public class v1_10_R1 implements NMS {
             for (Field f : EntityTypes.class.getDeclaredFields()) {
                 if (!f.getType().getSimpleName().equals(Map.class.getSimpleName())) continue;
                 f.setAccessible(true);
-                dataMap.add((Map)f.get(null));
+                dataMap.add((Map) f.get(null));
             }
             if (dataMap.get(2).containsKey(id)) {
                 dataMap.get(0).remove(name);
@@ -294,8 +297,7 @@ public class v1_10_R1 implements NMS {
             Method method = EntityTypes.class.getDeclaredMethod("a", Class.class, String.class, Integer.TYPE);
             method.setAccessible(true);
             method.invoke(null, customClass, name, id);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -318,19 +320,24 @@ public class v1_10_R1 implements NMS {
             this.goalSelector.a(9, new net.minecraft.server.v1_10_R1.PathfinderGoalInteract(this, net.minecraft.server.v1_10_R1.EntityHuman.class, 3.0f, 1.0f));
             this.goalSelector.a(10, new net.minecraft.server.v1_10_R1.PathfinderGoalLookAtPlayer(this, net.minecraft.server.v1_10_R1.EntityHuman.class, 8.0f));
         }
+
         @Override
         public void move(double d0, double d1, double d2) {
         }
+
         @Override
         public void collide(net.minecraft.server.v1_10_R1.Entity entity) {
         }
+
         @Override
         public boolean damageEntity(net.minecraft.server.v1_10_R1.DamageSource damagesource, float f) {
             return false;
         }
+
         @Override
         public void g(double d0, double d1, double d2) {
         }
+
         @Override
         protected void initAttributes() {
             super.initAttributes();
@@ -356,7 +363,7 @@ public class v1_10_R1 implements NMS {
     public void setBedDestroySound(String sound) throws InvalidSoundException {
         try {
             bedDestroy = Sound.valueOf(sound);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             throw new InvalidSoundException(sound);
         }
     }
@@ -370,7 +377,7 @@ public class v1_10_R1 implements NMS {
     public void setPlayerKillsSound(String sound) throws InvalidSoundException {
         try {
             playerKill = Sound.valueOf(sound);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             throw new InvalidSoundException(sound);
         }
     }
@@ -381,10 +388,10 @@ public class v1_10_R1 implements NMS {
         int despawn = 250;
         String namePath;
 
-        public Despawnable(EntityLiving e, BedWarsTeam team, int despawn, String namePath){
+        public Despawnable(EntityLiving e, BedWarsTeam team, int despawn, String namePath) {
             this.e = e;
             this.team = team;
-            if (despawn != 0){
+            if (despawn != 0) {
                 this.despawn = despawn;
             }
             this.namePath = namePath;
@@ -393,22 +400,22 @@ public class v1_10_R1 implements NMS {
         }
 
         public void regresh() {
-            if (!e.isAlive()){
+            if (!e.isAlive()) {
                 despawnables.remove(this);
                 return;
             }
             setName();
             despawn--;
-            if (despawn == 0){
+            if (despawn == 0) {
                 e.damageEntity(DamageSource.OUT_OF_WORLD, 9000);
                 despawnables.remove(this);
             }
         }
 
-        private void setName(){
-            int percentuale = (int) ((e.getHealth()*100)/e.getMaxHealth()/10);
+        private void setName() {
+            int percentuale = (int) ((e.getHealth() * 100) / e.getMaxHealth() / 10);
             e.setCustomName(lang.m(namePath).replace("{despawn}", String.valueOf(despawn)).replace("{health}",
-                    new String(new char[percentuale]).replace("\0", lang.m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH))+new String(new char[10-percentuale]).replace("\0", "§7"+lang.m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH))
+                    new String(new char[percentuale]).replace("\0", lang.m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH)) + new String(new char[10 - percentuale]).replace("\0", "§7" + lang.m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH))
             ).replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()).replace("{TeamName}", team.getName()));
         }
 
@@ -435,13 +442,8 @@ public class v1_10_R1 implements NMS {
     }
 
     @Override
-    public void teamCollideRule(Team t) {
-        t.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
-    }
-
-    @Override
     public void voidKill(Player p) {
-        ((CraftPlayer)p).getHandle().damageEntity(DamageSource.OUT_OF_WORLD, 1000);
+        ((CraftPlayer) p).getHandle().damageEntity(DamageSource.OUT_OF_WORLD, 1000);
     }
 
     @Override
@@ -452,8 +454,8 @@ public class v1_10_R1 implements NMS {
         PacketPlayOutEntityEquipment chest = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.CHEST, new ItemStack(new Item().getById(0)));
         PacketPlayOutEntityEquipment pants = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.LEGS, new ItemStack(new Item().getById(0)));
         PacketPlayOutEntityEquipment boots = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.FEET, new ItemStack(new Item().getById(0)));
-        PlayerConnection pc = ((CraftPlayer)p2).getHandle().playerConnection;
-        if (p != p2){
+        PlayerConnection pc = ((CraftPlayer) p2).getHandle().playerConnection;
+        if (p != p2) {
             pc.sendPacket(hand1);
             pc.sendPacket(hand2);
         }
@@ -467,14 +469,14 @@ public class v1_10_R1 implements NMS {
     public void hidePlayer(Player victim, Player p) {
         if (victim == p) return;
         PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(victim.getEntityId());
-        ((CraftPlayer)p).getHandle().playerConnection.sendPacket(packet);
+        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
     }
 
     @Override
     public void showPlayer(Player victim, Player p) {
         if (victim == p) return;
-        PacketPlayOutNamedEntitySpawn packet = new PacketPlayOutNamedEntitySpawn(((CraftPlayer)victim).getHandle());
-        ((CraftPlayer)p).getHandle().playerConnection.sendPacket(packet);
+        PacketPlayOutNamedEntitySpawn packet = new PacketPlayOutNamedEntitySpawn(((CraftPlayer) victim).getHandle());
+        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
     }
 
     @Override
@@ -485,8 +487,8 @@ public class v1_10_R1 implements NMS {
         PacketPlayOutEntityEquipment chest = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.CHEST, CraftItemStack.asNMSCopy(p.getInventory().getChestplate()));
         PacketPlayOutEntityEquipment pants = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.LEGS, CraftItemStack.asNMSCopy(p.getInventory().getLeggings()));
         PacketPlayOutEntityEquipment boots = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.FEET, CraftItemStack.asNMSCopy(p.getInventory().getBoots()));
-        EntityPlayer pc = ((CraftPlayer)p2).getHandle();
-        if (p != p2){
+        EntityPlayer pc = ((CraftPlayer) p2).getHandle();
+        if (p != p2) {
             pc.playerConnection.sendPacket(hand1);
             pc.playerConnection.sendPacket(hand2);
         }
@@ -528,5 +530,54 @@ public class v1_10_R1 implements NMS {
     @Override
     public void setBlockTeamColor(org.bukkit.block.Block block, TeamColor teamColor) {
         block.setData(TeamColor.itemColor(teamColor));
+    }
+
+    @Override
+    public void setCollide(Player p, Arena a, boolean value) {
+        p.setCollidable(value);
+        if (a == null) return;
+        for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
+            if (sb.getArena() == a) {
+                sb.updateSpectators(p, value);
+            }
+        }
+    }
+
+    @Override
+    public org.bukkit.inventory.ItemStack addCustomData(org.bukkit.inventory.ItemStack i, String data) {
+        ItemStack itemStack = CraftItemStack.asNMSCopy(i);
+        NBTTagCompound tag = itemStack.getTag();
+        if (tag == null) {
+            tag = new NBTTagCompound();
+            itemStack.setTag(tag);
+        }
+
+        tag.setString("BedWars1058", data);
+        return CraftItemStack.asBukkitCopy(itemStack);
+    }
+
+    @Override
+    public boolean isCustomBedWarsItem(org.bukkit.inventory.ItemStack i) {
+        ItemStack itemStack = CraftItemStack.asNMSCopy(i);
+        NBTTagCompound tag = itemStack.getTag();
+        if (tag == null) return false;
+        return tag.hasKey("BedWars1058");
+    }
+
+    @Override
+    public String getCustomData(org.bukkit.inventory.ItemStack i) {
+        ItemStack itemStack = CraftItemStack.asNMSCopy(i);
+        NBTTagCompound tag = itemStack.getTag();
+        if (tag == null) return "";
+        return tag.getString("BedWars1058");
+    }
+
+    @Override
+    public org.bukkit.inventory.ItemStack setSkullOwner(org.bukkit.inventory.ItemStack i, Player p) {
+        if (i.getType() != org.bukkit.Material.SKULL_ITEM) return i;
+        SkullMeta sm = (SkullMeta) i.getItemMeta();
+        sm.setOwner(p.getName());
+        i.setItemMeta(sm);
+        return i;
     }
 }

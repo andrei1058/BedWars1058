@@ -1,6 +1,5 @@
 package com.andrei1058.bedwars.arena;
 
-import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

@@ -3,6 +3,7 @@ package com.andrei1058.bedwars.arena;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.exceptions.InvalidMaterialException;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
@@ -17,6 +18,7 @@ import org.bukkit.WorldBorder;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -49,8 +51,8 @@ public class Misc {
             if (!p.getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
                 p.teleport(config.getConfigLoc("lobbyLoc"));
                 Arena a = Arena.getArenaByPlayer(p);
-                if (a != null){
-                    if (a.isSpectator(p)){
+                if (a != null) {
+                    if (a.isSpectator(p)) {
                         a.removeSpectator(p, false);
                     } else {
                         a.removePlayer(p, false);
@@ -169,6 +171,34 @@ public class Misc {
         im.setDisplayName(name);
         im.setLore(lore);
         i.setItemMeta(im);
+        return i;
+    }
+
+    /**
+     * Create an itemStack
+     *
+     * @since API 9
+     */
+    @Nullable
+    public static ItemStack createItemStack(String material, int data, String name, List<String> lore, boolean enchanted, String customData) throws InvalidMaterialException {
+        Material m;
+        try {
+            m = Material.valueOf(material);
+        } catch (Exception e) {
+            throw new InvalidMaterialException(material);
+        }
+        ItemStack i = new ItemStack(m, 1, (short) data);
+        ItemMeta im = i.getItemMeta();
+        im.setDisplayName(name);
+        im.setLore(lore);
+        if (enchanted) {
+            im.addEnchant(Enchantment.LUCK, 1, true);
+            im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        }
+        i.setItemMeta(im);
+        if (!customData.isEmpty()){
+            i = nms.addCustomData(i, customData);
+        }
         return i;
     }
 
@@ -330,7 +360,7 @@ public class Misc {
                                                   int beds, int games, Timestamp first, Timestamp last, String timeFormat, String player, String never, boolean papiReplacements) {
         String lastS = last == null ? never : String.valueOf(new SimpleDateFormat(timeFormat).format(last)),
                 firstS = first == null ? never : String.valueOf(new SimpleDateFormat(timeFormat).format(first));
-        s =  s.replace("{kills}", String.valueOf(kills)).replace("{deaths}", String.valueOf(deaths)).replace("{looses}", String.valueOf(looses)).replace("{wins}", String.valueOf(wins))
+        s = s.replace("{kills}", String.valueOf(kills)).replace("{deaths}", String.valueOf(deaths)).replace("{losses}", String.valueOf(looses)).replace("{looses}", String.valueOf(looses)).replace("{wins}", String.valueOf(wins))
                 .replace("{finalKills}", String.valueOf(finalKills)).replace("{fKills}", String.valueOf(finalKills)).replace("{finalDeaths}",
                         String.valueOf(finalDeaths)).replace("{bedsDestroyed}", String.valueOf(beds)).replace("{beds}", String.valueOf(beds))
                 .replace("{gamesPlayed}", String.valueOf(games)).replace("{firstPlay}", firstS).replace("{lastPlay}", lastS).replace("{player}", player);
@@ -362,18 +392,10 @@ public class Misc {
 
     /**
      * Check if a location is outside the World Border
+     *
      * @since API 8
      */
-    /*public static boolean isOutsideOfBorder(Location l) {
-       // Location loc = b.getLocation();
-        WorldBorder border = l.getWorld().getWorldBorder();
-        double x = l.getX();
-        double z = l.getZ();
-        double size = border.getSize()/2;
-        return ((x > size || (-x) > size) || (z > size || (-z) > size));
-    }*/
-
-    public static boolean isOutsideOfBorder(Location l){
+    public static boolean isOutsideOfBorder(Location l) {
         WorldBorder border = l.getWorld().getWorldBorder();
         double radius = border.getSize() / 2;
         Location location = l, center = border.getCenter();

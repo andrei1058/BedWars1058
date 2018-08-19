@@ -30,6 +30,7 @@ public class OneTick extends BukkitRunnable {
         for (Map.Entry<Egg, TeamColor> e : EggBridge.getBridges().entrySet()) {
             Player pl = (Player) e.getKey().getShooter();
             Location loc = e.getKey().getLocation().clone();
+            loc.getWorld().playEffect(loc, nms.eggBridge(), 5);
             if (e.getKey().isDead()) {
                 //debug("OneTick> EGG is dead! Removed from task.");
                 EggBridge.removeEgg(e.getKey());

@@ -38,6 +38,7 @@ public class Save extends SubCommand {
             s.sendMessage("§c ▪ §7You're not in a setup session!");
             return true;
         }
+        p.getWorld().save();
         Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.unloadWorld(Bukkit.getWorld(p.getWorld().getName()), true), 30L);
         p.sendMessage("§6 ▪ §7Arena changes saved!");
         p.sendMessage("§6 ▪ §7You can now enable it using:");

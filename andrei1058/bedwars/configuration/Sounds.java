@@ -6,6 +6,7 @@ import com.andrei1058.bedwars.exceptions.InvalidSoundException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import static com.andrei1058.bedwars.Main.nms;
+import static com.andrei1058.bedwars.Main.plugin;
 import static com.andrei1058.bedwars.configuration.ConfigPath.*;
 
 public class Sounds {
@@ -37,7 +38,7 @@ public class Sounds {
             nms.setBoughtSound(sounds.getString(SOUNDS_BOUGHT));
             nms.setCountdownSound(sounds.getString(SOUNDS_COUNTDOWN_TICK));
         } catch (InvalidSoundException invalidSound) {
-            invalidSound.printStackTrace();
+            plugin.getLogger().severe(invalidSound.getMessage());
         }
     }
 }

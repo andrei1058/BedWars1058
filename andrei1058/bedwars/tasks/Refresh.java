@@ -30,6 +30,7 @@ public class Refresh extends BukkitRunnable {
             o.spawn();
         }
 
+        /* Respawn session */
         for (Map.Entry<Player, Integer> e : new HashMap<>(Arena.respawn).entrySet()) {
             if (e.getValue() != 0) {
                 nms.sendTitle(e.getKey(), getMsg(e.getKey(), Messages.PLAYER_DIE_RESPAWN_TITLE).replace("{time}",

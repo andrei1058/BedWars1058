@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.*;
+import com.andrei1058.bedwars.arena.spectator.SpectateItems;
 import com.andrei1058.bedwars.configuration.ConfigManager;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Language;
@@ -15,6 +16,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Contract;
 
 import java.io.File;
@@ -323,35 +325,48 @@ public class Arena {
             NametagEdit.saveNametag(p);
 
             p.closeInventory();
-            p.teleport(cm.getArenaLoc("waiting.Loc"));
+            if (!playerBefore) p.teleport(cm.getArenaLoc("waiting.Loc"));
             spectators.add(p);
             players.remove(p);
-            p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+
+            for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
+                if (sb.getP().equals(p)) {
+                    sb.remove();
+                }
+            }
+
             if (!playerBefore) {
                 /* save player inv etc if isn't saved yet*/
                 new PlayerGoods(p, true);
                 setArenaByPlayer(p, true);
                 playerLocation.put(p, p.getLocation());
             }
-            nms.setCollide(p, false);
+
             new SBoard(p, this);
+            nms.setCollide(p, this, false);
 
             /* Hide spectator  */
+            //p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0), true);
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                for (Player on : Bukkit.getOnlinePlayers()) {
-                    if (getSpectators().contains(on)) {
-                        on.showPlayer(p);
-                        p.showPlayer(on);
-                    } else if (getPlayers().contains(on)) {
-                        on.hidePlayer(p);
-                        p.showPlayer(on);
-                    }
+            for (Player on : Bukkit.getOnlinePlayers()) {
+                if (on == p) continue;
+                if (getSpectators().contains(on)) {
+                    on.showPlayer(p);
+                    p.showPlayer(p);
+                } else if (getPlayers().contains(on)) {
+                    on.hidePlayer(p);
+                    p.showPlayer(on);
                 }
-                p.setAllowFlight(true);
-                p.setFlying(true);
+            }
+            p.setAllowFlight(true);
+            p.setFlying(true);
+
+                /* Spectator items */
+                SpectateItems.giveTeleporter(p);
+                SpectateItems.giveLeaveItem(p);
             }, 10L);
-            leaveItem(p);
-            p.setGameMode(GameMode.SPECTATOR);
+
+            p.setGameMode(GameMode.ADVENTURE);
             p.sendMessage(getMsg(p, Messages.ARENA_JOIN_SPECTATOR_MSG).replace("{arena}", this.getDisplayName()));
 
             /* update generator holograms for spectators */
@@ -366,6 +381,7 @@ public class Arena {
                     sh.updateForPlayer(p, iso);
                 }
             }
+            //todo call spectator join event
         } else {
             //todo msg spectate not allowed
         }
@@ -400,9 +416,9 @@ public class Arena {
                 }
             }
         }
-        players.remove(p);
         updateNPCs(getGroup());
         removeArenaByPlayer(p);
+        players.remove(p);
         for (PotionEffect pf : p.getActivePotionEffects()) {
             p.removePotionEffect(pf.getType());
         }
@@ -536,15 +552,15 @@ public class Arena {
      */
     public void removeSpectator(Player p, boolean disconnect) {
         debug("Spectator removed: " + p.getName() + " arena: " + getWorldName());
-        spectators.remove(p);
         removeArenaByPlayer(p);
+        spectators.remove(p);
         p.getInventory().clear();
         p.getInventory().setArmorContents(null);
         /* restore player inventory */
         if (PlayerGoods.hasGoods(p)) {
             PlayerGoods.getPlayerGoods(p).restore();
         }
-        nms.setCollide(p, true);
+        nms.setCollide(p, this, true);
 
         for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
             if (sb.getP() == p) {
@@ -707,6 +723,7 @@ public class Arena {
                             owners.add(p);
                         }
                     }
+                    Collections.shuffle(getTeams());
                     /* check parties first */
                     for (Player p : getPlayers()) {
                         if (owners.contains(p)) {
@@ -1166,7 +1183,7 @@ public class Arena {
 
     private void removeArenaByPlayer(Player p) {
         arenaByPlayer.remove(p, this);
-        Bukkit.getPluginManager().callEvent(new PlayerLeaveArenaEvent(p, isSpectator(p)));
+        Bukkit.getPluginManager().callEvent(new PlayerLeaveArenaEvent(p, this));
         refreshSigns();
     }
 

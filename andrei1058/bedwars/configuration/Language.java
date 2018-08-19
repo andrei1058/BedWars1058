@@ -277,7 +277,7 @@ public class Language {
 
                 /** save default items messages for stats gui */
                 lbj.addDefaultStatsMsg(yml, "wins", "&6Wins", "&f{wins}");
-                lbj.addDefaultStatsMsg(yml, "looses", "&6Looses", "&f{looses}");
+                lbj.addDefaultStatsMsg(yml, "losses", "&6Losses", "&f{losses}");
                 lbj.addDefaultStatsMsg(yml, "kills", "&6Kills", "&f{kills}");
                 lbj.addDefaultStatsMsg(yml, "deaths", "&6Deaths", "&f{deaths}");
                 lbj.addDefaultStatsMsg(yml, "finalKills", "&6Final Kills", "&f{finalKills}");
@@ -289,7 +289,7 @@ public class Language {
                 yml.addDefault(Messages.FORMATTING_STATS_DATE_FORMAT, "yyyy/MM/dd HH:mm");
 
                 yml.addDefault(Messages.MEANING_NEVER, "Never");
-                yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&7{date}", "&fName: &a{player}", "", "&fWins: &a{wins}", "&fLooses: &a{looses}", "&fKills: &a{kills}", "&fDeaths: &a{deaths}"
+                yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&7{date}", "&fName: &a{player}", "", "&fWins: &a{wins}", "&fLosses: &a{losses}", "&fKills: &a{kills}", "&fDeaths: &a{deaths}"
                 , "&fFinal Kills: &a{fKills}", "&fBeds Destroyed: &a{beds}", "", "&fOnline: &a{on}", "&eandrei1058.com"));
 
                 /** party commands */
@@ -334,6 +334,17 @@ public class Language {
                 yml.addDefault(Messages.COMMAND_FORCESTART_NO_PERM, "{prefix}&7You can't forcestart the arena.\n§7Please consider donating for VIP features.");
                 yml.addDefault(Messages.ARENA_JOIN_SPECTATOR_MSG, "{prefix}§6You are now spectating §9{arena}§6.\n{prefix}§eYou can leave the arena at any time doing §c/leave§e.");
                 yml.addDefault(Messages.INTERACT_CHEST_CANT_OPEN_TEAM_ELIMINATED, "&cYou can't open this chest because this team was eliminated!");
+                yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_ITEM_NAME, "&A&LTeleporter");
+                yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_ITEM_LORE, Arrays.asList("&7Right-click to spectate players!"));
+                yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_NAME, "&8Teleporter");
+                yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME, "{prefix}{player}");
+                yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_LORE, Arrays.asList("&7Health: &f{health}%", "&7Food: &f{food}", "", "&7Left-click to spectate"));
+                yml.addDefault(Messages.ARENA_SPECTATOR_LEAVE_ITEM_NAME, "&c&lReturn to lobby");
+                yml.addDefault(Messages.ARENA_SPECTATOR_LEAVE_ITEM_LORE, Arrays.asList("&7Right-click to leave to the lobby!"));
+                yml.addDefault(Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_TITLE, "&aSpectating &7{player}");
+                yml.addDefault(Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_SUBTITLE, "&cSNEAK to exit");
+                yml.addDefault(Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE, "&eExiting Spectator mode");
+                yml.addDefault(Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE, "");
                 break;
         }
         lbj.save();

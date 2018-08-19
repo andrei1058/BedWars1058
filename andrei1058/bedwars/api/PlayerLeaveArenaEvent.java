@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.api;
 
+import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -10,10 +11,18 @@ public class PlayerLeaveArenaEvent extends Event {
 
     private Player player;
     private boolean spectator;
+    private Arena arena;
 
-    public PlayerLeaveArenaEvent(Player p, boolean spectator){
+    @Deprecated
+    public PlayerLeaveArenaEvent(Player p, boolean spectator) {
         this.player = p;
         this.spectator = spectator;
+    }
+
+    public PlayerLeaveArenaEvent(Player p, Arena arena) {
+        this.player = p;
+        this.spectator = arena.isSpectator(p);
+        this.arena = arena;
     }
 
     public HandlerList getHandlers() {
@@ -28,6 +37,16 @@ public class PlayerLeaveArenaEvent extends Event {
         return player;
     }
 
+    /**
+     * Get the arena
+     *
+     * @since API 9
+     */
+    public Arena getArena() {
+        return arena;
+    }
+
+    @Deprecated
     public boolean isSpectator() {
         return spectator;
     }

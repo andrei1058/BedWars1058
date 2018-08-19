@@ -36,6 +36,18 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_ALLOW_PARTIES = "allowParties";
     public static final String GENERAL_CONFIGURATION_NPC_LOCS = "npcLoc";
 
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_MATERIAL = "spectatorItems.teleporter.material";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_DATA = "spectatorItems.teleporter.data";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_ENABLED = "spectatorItems.teleporter.enabled";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_SLOT = "spectatorItems.teleporter.slot";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_ENCHANTED = "spectatorItems.teleporter.enchanted";
+
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_MATERIAL = "spectatorItems.leave.material";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_DATA = "spectatorItems.leave.data";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_ENABLED = "spectatorItems.leave.enabled";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_SLOT = "spectatorItems.leave.slot";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_ENCHANTED = "spectatorItems.leave.enchanted";
+
     public static final String ARENA_CONFIGURATION_MAX_BUILD_Y = "maxBuildY";
     public static final String ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS = "emptyTeamGenOff";
     public static final String ARENA_ISLAND_RADIUS = "islandRadius";
