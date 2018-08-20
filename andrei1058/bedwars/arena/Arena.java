@@ -531,6 +531,16 @@ public class Arena {
 
         /* NametagEdit Support */
         NametagEdit.restoreNametag(p);
+
+        /* Remove also the party */
+        if (getParty().hasParty(p)){
+            if (getParty().isOwner(p)){
+                for (Player pa : new ArrayList<>(getParty().getMembers(p))){
+                    if (pa == p) continue;
+                    removePlayer(pa, Main.getServerType() == ServerType.MULTIARENA);
+                }
+            }
+        }
     }
 
     /**
