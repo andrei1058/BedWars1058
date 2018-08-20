@@ -12,16 +12,41 @@ public class UpgradeBuyEvent extends Event {
     private TeamUpgrade teamUpgrade;
     private Player buyer;
     private UpgradeTier tierBought;
+    private int tierLevel = 1;
 
     /**
      * Triggered when a Team Upgrade is bought
      *
      * @since API v8
      */
+    @Deprecated
     public UpgradeBuyEvent(TeamUpgrade teamUpgrade, Player buyer, UpgradeTier tierBought) {
         this.teamUpgrade = teamUpgrade;
         this.buyer = buyer;
         this.tierBought = tierBought;
+    }
+
+    /**
+     * Called when a Team Upgrade is bought
+     *
+     * @since API 9
+     */
+    public UpgradeBuyEvent(TeamUpgrade teamUpgrade, Player buyer, UpgradeTier tierBought, int tierLevel) {
+        this.teamUpgrade = teamUpgrade;
+        this.buyer = buyer;
+        this.tierBought = tierBought;
+        this.tierLevel = tierLevel;
+    }
+
+
+    /**
+     * Ge the tier level
+     * Ex: Tier 3
+     *
+     * @since API 9
+     */
+    public int getTierLevel() {
+        return tierLevel;
     }
 
     /**
