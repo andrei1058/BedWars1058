@@ -223,6 +223,9 @@ public class BedWarsTeam {
             if (p == on) continue;
             on.showPlayer(p);
             nms.showPlayer(p, on);
+            if (Arena.respawn.containsKey(on)) continue;
+            p.showPlayer(on);
+            nms.showPlayer(on, p);
         }
         for (Player on : arena.getSpectators()) {
             if (p == on) continue;
