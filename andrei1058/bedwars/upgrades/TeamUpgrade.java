@@ -68,6 +68,7 @@ public class TeamUpgrade {
     private List<UpgradeTier> tiers;
     private int slot;
     private String name;
+    private int tierLevel = 1;
 
     public TeamUpgrade(String name, int slot, List<UpgradeTier> tiers) {
         this.name = name;
@@ -114,8 +115,9 @@ public class TeamUpgrade {
                                             "upgrades."+getUpgradeGroup(bwt.getArena().getGroup().toLowerCase()).getName()+"."+getName()+"."+getTiers().get(0).getName()+".name"))));
                         }
                     }
+                    tierLevel++;
                     //Call Team Upgrade Buy Event
-                    Bukkit.getPluginManager().callEvent(new UpgradeBuyEvent(this, p, ut));
+                    Bukkit.getPluginManager().callEvent(new UpgradeBuyEvent(this, p, ut, tierLevel));
                     //
                 }
             }
