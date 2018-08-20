@@ -70,7 +70,7 @@ public class Arena {
     private static HashMap<Player, Location> playerLocation = new HashMap<>();
 
     /**
-     * temp stats
+     * temp storage
      */
     private HashMap<Player, Integer> playerKills = new HashMap<>();
     private static HashMap<Player, Integer> playerBedsDestroyed = new HashMap<>();
@@ -1342,8 +1342,8 @@ public class Arena {
         if (getServerType() == ServerType.MULTIARENA && spigot.getBoolean("settings.bungeecord")) {
             leaveItem(p);
         }
-        if (config.getBoolean("items.stats.enable") && !config.getLobbyWorldName().isEmpty()) {
-            p.getInventory().setItem(config.getInt("items.stats.slot"), Misc.getStatsItem(p));
+        if (config.getBoolean("items.storage.enable") && !config.getLobbyWorldName().isEmpty()) {
+            p.getInventory().setItem(config.getInt("items.storage.slot"), Misc.getStatsItem(p));
         }
     }
 

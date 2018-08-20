@@ -42,7 +42,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         if (getServerType() != ServerType.BUNGEE) {
             new CmdGUI(this, "gui");
         }
-        new Stats(this, "stats");
+        new Stats(this, "storage");
         new ForceStart(this, "forceStart");
         new ForceStart(this, "start");
         new SetLobby(this, "setLobby"); //priority 1

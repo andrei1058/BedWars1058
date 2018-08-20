@@ -100,7 +100,7 @@ public class SBoard {
                 }
             }
             if (arena == null) {
-                /** stats */
+                /** storage */
                 int kills = database.getKills(p), deaths = database.getDeaths(p), looses = database.getLooses(p), wins = database.getWins(p),
                         finalKills = database.getFinalKills(p), finalDeaths = database.getFinalDeaths(p), bedsDestroyed = database.getBedsDestroyed(p), gamesPlayed = database.getGamesPlayed(p);
                 Timestamp firstPlay = database.getFirstPlay(p), lastPlay = database.getLastPlay(p);

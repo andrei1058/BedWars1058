@@ -130,16 +130,16 @@ public class Misc {
     public static ItemStack getStatsItem(Player p) {
         ItemStack i;
         try {
-            i = new ItemStack(Material.valueOf(config.getYml().getString("items.stats.itemStack")),
-                    1, (short) config.getYml().getInt("items.stats.data"));
-            if (Material.valueOf(config.getYml().getString("items.stats.itemStack")) == Material.SKULL_ITEM &&
-                    config.getYml().getInt("items.stats.data") == 3) {
+            i = new ItemStack(Material.valueOf(config.getYml().getString("items.storage.itemStack")),
+                    1, (short) config.getYml().getInt("items.storage.data"));
+            if (Material.valueOf(config.getYml().getString("items.storage.itemStack")) == Material.SKULL_ITEM &&
+                    config.getYml().getInt("items.storage.data") == 3) {
                 SkullMeta sm = (SkullMeta) i.getItemMeta();
                 sm.setOwner(p.getName());
                 i.setItemMeta(sm);
             }
         } catch (Exception ex) {
-            plugin.getLogger().severe("There was a problem when loading items.stats.itemStack or Data");
+            plugin.getLogger().severe("There was a problem when loading items.storage.itemStack or Data");
             i = new ItemStack(Material.BEDROCK);
         }
         ItemMeta im = i.getItemMeta();
@@ -147,7 +147,7 @@ public class Misc {
         try {
             im.setLore(getList(p, Messages.PLAYER_STATS_ITEM_LORE));
         } catch (Exception ex) {
-            plugin.getLogger().severe("There was a problem when loading stats lore");
+            plugin.getLogger().severe("There was a problem when loading storage lore");
         }
         try {
             im.setDisplayName(getMsg(p, Messages.PLAYER_STATS_ITEM_NAME));
@@ -155,7 +155,7 @@ public class Misc {
             plugin.getLogger().severe("There was a problem when loading ststs name");
         }
         try {
-            if (config.getYml().getBoolean("items.stats.enchanted")) {
+            if (config.getYml().getBoolean("items.storage.enchanted")) {
                 im.addEnchant(Enchantment.LUCK, 1, true);
             }
             im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -310,7 +310,7 @@ public class Misc {
     }
 
     /**
-     * add default stats gui item
+     * add default storage gui item
      */
     public static void addDefaultStatsItem(YamlConfiguration yml, int slot, Material itemstack, int data, String path) {
         yml.addDefault("statsGUI." + path + ".itemStack", itemstack.toString());
@@ -319,11 +319,11 @@ public class Misc {
     }
 
     /**
-     * open stats GUI to player
+     * open storage GUI to player
      */
     public static void openStatsGUI(Player p) {
 
-        /** cache stats */
+        /** cache storage */
         int kills = database.getKills(p), deaths = database.getDeaths(p), looses = database.getLooses(p), wins = database.getWins(p),
                 finalKills = database.getFinalKills(p), finalDeaths = database.getFinalDeaths(p), bedsDestroyed = database.getBedsDestroyed(p), gamesPlayed = database.getGamesPlayed(p);
         Timestamp firstPlay = database.getFirstPlay(p), lastPlay = database.getLastPlay(p);

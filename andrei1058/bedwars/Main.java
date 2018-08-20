@@ -19,14 +19,15 @@ import com.andrei1058.bedwars.support.bukkit.v1_9_R1.v1_9_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_9_R2.v1_9_R2;
 import com.andrei1058.bedwars.support.lang.Internal;
 import com.andrei1058.bedwars.support.lang.Lang;
+import com.andrei1058.bedwars.support.leaderheads.LeaderHeadsSupport;
 import com.andrei1058.bedwars.support.levels.Level;
 import com.andrei1058.bedwars.support.levels.NoLevel;
 import com.andrei1058.bedwars.support.papi.PAPISupport;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.support.party.NoParty;
 import com.andrei1058.bedwars.support.party.Party;
-import com.andrei1058.bedwars.support.stats.MySQL;
-import com.andrei1058.bedwars.support.stats.SQLite;
+import com.andrei1058.bedwars.support.storage.MySQL;
+import com.andrei1058.bedwars.support.storage.SQLite;
 import com.andrei1058.bedwars.support.vault.*;
 import com.andrei1058.bedwars.tasks.OneTick;
 import com.andrei1058.bedwars.tasks.Refresh;
@@ -65,7 +66,7 @@ public class Main extends JavaPlugin {
     private static Level level;
     private static Economy economy;
     private static String version = Bukkit.getServer().getClass().getName().split("\\.")[3];
-    public static com.andrei1058.bedwars.support.stats.Database database;
+    public static com.andrei1058.bedwars.support.storage.Database database;
     public static HashMap<ArmorStand, List<String>> npcs_holos = new HashMap<>();
     public static HashMap<Integer, String> npcs = new HashMap<>();
 
@@ -226,7 +227,7 @@ public class Main extends JavaPlugin {
             plugin.spawnNPCs();
         }, 40L);
 
-        /** Save messages for stats gui items if custom items added, for each language */
+        /** Save messages for storage gui items if custom items added, for each language */
         Language.setupCustomStatsMessages();
 
         /** PlaceholderAPI Support */
@@ -280,6 +281,9 @@ public class Main extends JavaPlugin {
 
         /* Load sounds configuration */
         new Sounds();
+
+        /* LeaderHeads Support */
+        LeaderHeadsSupport.initLeaderHeads();
     }
 
     public void onDisable() {
@@ -327,11 +331,11 @@ public class Main extends JavaPlugin {
         yml.addDefault("items.leave.data", 0);
         yml.addDefault("items.leave.enchanted", false);
         yml.addDefault("items.leave.slot", 8);
-        yml.addDefault("items.stats.enable", true);
-        yml.addDefault("items.stats.itemStack", "PAPER");
-        yml.addDefault("items.stats.data", 0);
-        yml.addDefault("items.stats.enchanted", false);
-        yml.addDefault("items.stats.slot", 0);
+        yml.addDefault("items.storage.enable", true);
+        yml.addDefault("items.storage.itemStack", "PAPER");
+        yml.addDefault("items.storage.data", 0);
+        yml.addDefault("items.storage.enchanted", false);
+        yml.addDefault("items.storage.slot", 0);
 
         /* Spectator Items */
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_ENABLED, true);
@@ -361,7 +365,7 @@ public class Main extends JavaPlugin {
         yml.addDefault("arenaGui.playing.data", 4);
         yml.addDefault("arenaGui.playing.enchanted", false);
 
-        /** default stats GUI items */
+        /** default storage GUI items */
         yml.addDefault("statsGUI.invSize", 27);
         Misc.addDefaultStatsItem(yml, 10, Material.DIAMOND, 0, "wins");
         Misc.addDefaultStatsItem(yml, 11, Material.REDSTONE, 0, "looses");

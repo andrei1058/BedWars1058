@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.support.stats;
+package com.andrei1058.bedwars.support.storage;
 
 import org.bukkit.entity.Player;
 
@@ -82,7 +82,7 @@ public class MySQL implements Database {
 
     @Override
     public void setupGroupTable(String group) {
-        //todo for games individual stats
+        //todo for games individual storage
     }
 
     @Override

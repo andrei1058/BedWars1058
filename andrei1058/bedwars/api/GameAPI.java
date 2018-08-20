@@ -34,7 +34,7 @@ public interface GameAPI {
     /* STATS */
 
     /**
-     * Check if stats is enabled.
+     * Check if storage is enabled.
      *
      * @since api v3
      */
@@ -42,7 +42,7 @@ public interface GameAPI {
 
     /**
      * Get player first play date.
-     * Please note that stats are not cached. You get data directly from database.
+     * Please note that storage are not cached. You get data directly from database.
      *
      * @since api v3
      */
@@ -51,7 +51,7 @@ public interface GameAPI {
 
     /**
      * Get player last play date.
-     * Please note that stats are not cached. You get data directly from database.
+     * Please note that storage are not cached. You get data directly from database.
      *
      * @since api v3
      */
@@ -60,7 +60,7 @@ public interface GameAPI {
 
     /**
      * Get player total wins.
-     * Please note that stats are not cached. You get data directly from database.
+     * Please note that storage are not cached. You get data directly from database.
      *
      * @since api v3
      */
@@ -68,7 +68,7 @@ public interface GameAPI {
 
     /**
      * Get player total kills.
-     * Please note that stats are not cached. You get data directly from database.
+     * Please note that storage are not cached. You get data directly from database.
      *
      * @since api v3
      */
@@ -76,7 +76,7 @@ public interface GameAPI {
 
     /**
      * Get player total final kills.
-     * Please note that stats are not cached. You get data directly from database.
+     * Please note that storage are not cached. You get data directly from database.
      *
      * @since api v3
      */
@@ -84,7 +84,7 @@ public interface GameAPI {
 
     /**
      * Get player total looses.
-     * Please note that stats are not cached. You get data directly from database.
+     * Please note that storage are not cached. You get data directly from database.
      *
      * @since api v3
      */
@@ -92,7 +92,7 @@ public interface GameAPI {
 
     /**
      * Get player total deaths.
-     * Please note that stats are not cached. You get data directly from database.
+     * Please note that storage are not cached. You get data directly from database.
      *
      * @since api v3
      */
@@ -100,7 +100,7 @@ public interface GameAPI {
 
     /**
      * Get player total final deaths.
-     * Please note that stats are not cached. You get data directly from database.
+     * Please note that storage are not cached. You get data directly from database.
      *
      * @since api v3
      */
@@ -108,7 +108,7 @@ public interface GameAPI {
 
     /**
      * Get player beds destroyed.
-     * Please note that stats are not cached. You get data directly from database.
+     * Please note that storage are not cached. You get data directly from database.
      *
      * @since api v3
      */
@@ -116,7 +116,7 @@ public interface GameAPI {
 
     /**
      * Get player games played.
-     * Please note that stats are not cached. You get data directly from database.
+     * Please note that storage are not cached. You get data directly from database.
      *
      * @since api v3
      */
@@ -124,7 +124,7 @@ public interface GameAPI {
 
     /**
      * Get top x by wins.
-     * Please note that stats are not cached. You get data directly from database.
+     * Please note that storage are not cached. You get data directly from database.
      * HashMap size can be < x if there aren't enough players on the database.
      *
      * @since api v3
@@ -133,7 +133,7 @@ public interface GameAPI {
 
     /**
      * Get top x by kills.
-     * Please note that stats are not cached. You get data directly from database.
+     * Please note that storage are not cached. You get data directly from database.
      * HashMap size can be < x if there aren't enough players on the database.
      *
      * @since api v3
@@ -142,7 +142,7 @@ public interface GameAPI {
 
     /**
      * Get top x by final kills .
-     * Please note that stats are not cached. You get data directly from database.
+     * Please note that storage are not cached. You get data directly from database.
      * HashMap size can be < x if there aren't enough players on the database.
      *
      * @since api v3
@@ -151,7 +151,7 @@ public interface GameAPI {
 
     /**
      * Get top x by looses.
-     * Please note that stats are not cached. You get data directly from database.
+     * Please note that storage are not cached. You get data directly from database.
      * HashMap size can be < x if there aren't enough players on the database.
      *
      * @since api v3
@@ -160,7 +160,7 @@ public interface GameAPI {
 
     /**
      * Get top x by deaths.
-     * Please note that stats are not cached. You get data directly from database.
+     * Please note that storage are not cached. You get data directly from database.
      * HashMap size can be < x if there aren't enough players on the database.
      *
      * @since api v3
@@ -169,7 +169,7 @@ public interface GameAPI {
 
     /**
      * Get top x by final deaths.
-     * Please note that stats are not cached. You get data directly from database.
+     * Please note that storage are not cached. You get data directly from database.
      * HashMap size can be < x if there aren't enough players on the database.
      *
      * @since api v3
@@ -178,7 +178,7 @@ public interface GameAPI {
 
     /**
      * Get top x by beds destroyed.
-     * Please note that stats are not cached. You get data directly from database.
+     * Please note that storage are not cached. You get data directly from database.
      * HashMap size can be < x if there aren't enough players on the database.
      *
      * @since api v3
@@ -187,7 +187,7 @@ public interface GameAPI {
 
     /**
      * Get top x by games played.
-     * Please note that stats are not cached. You get data directly from database.
+     * Please note that storage are not cached. You get data directly from database.
      * HashMap size can be < x if there aren't enough players on the database.
      *
      * @since api v3

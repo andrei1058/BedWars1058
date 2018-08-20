@@ -104,7 +104,7 @@ public class Messages {
     public static String ARENA_GUI_ARENA_CONTENT_LORE = "arena.guiArena.lore";
 
     /** Stats related */
-    public static String PLAYER_STATS_GUI_PATH = "stats";
+    public static String PLAYER_STATS_GUI_PATH = "storage";
     public static String PLAYER_STATS_GUI_INV_NAME = PLAYER_STATS_GUI_PATH+".invName.name";
     public static String PLAYER_STATS_ITEM_NAME = "player.statsItem.name";
     public static String PLAYER_STATS_ITEM_LORE = "player.statsItem.lore";

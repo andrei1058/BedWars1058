@@ -56,6 +56,7 @@ public interface NMS {
      */
     void hideEntity(Entity e, Player p);
 
+
     /**
      * Check if item-stack is armor
      */

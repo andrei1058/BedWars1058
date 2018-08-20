@@ -274,7 +274,7 @@ public class DamageDeathMove implements Listener {
                             .replace("{KillerName}", killer == null ? "" : killer.getName()));
                 }
 
-                /** give stats and victim's inventory */
+                /** give storage and victim's inventory */
                 if (killer != null) {
                     if (t.isBedDestroyed()) {
                         if (!a.getCm().getBoolean(ConfigPath.ARENA_NORMAL_DEATH_DROPS)) {
