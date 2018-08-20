@@ -187,6 +187,9 @@ public class Arena {
         if (getCm().getYml().isSet(ConfigPath.ARENA_WAITING_POS1) && !getCm().getYml().isSet(ConfigPath.ARENA_WAITING_POS2)) {
             plugin.getLogger().severe("Lobby Pos2 isn't set! The arena's lobby won't be removed!");
         }
+
+        //Call event
+        Bukkit.getPluginManager().callEvent(new ArenaEnableEvent(this));
     }
 
     /**
@@ -663,6 +666,8 @@ public class Arena {
         Bukkit.unloadWorld(world, false);
         arenaByName.remove(world.getName());
         arenas.remove(this);
+        //Call event
+        Bukkit.getPluginManager().callEvent(new ArenaDisableEvent(getWorldName()));
     }
 
     /**
