@@ -14,6 +14,7 @@ import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.EulerAngle;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Contract;
 
 import java.util.*;
@@ -246,7 +247,8 @@ public class OreGenerator {
                     itemMeta.setDisplayName("custom" + dropID++);
                     itemStack.setItemMeta(itemMeta);
                 }
-                location.getWorld().dropItem(location.clone(), itemStack);
+                Item item = location.getWorld().dropItem(new Location(location.getWorld(), location.getBlockX()+0.5, location.getBlockY(), location.getBlockZ()+0.5), itemStack);
+                item.setVelocity(new Vector(0, 0, 0));
                 temp--;
             }
             return;
