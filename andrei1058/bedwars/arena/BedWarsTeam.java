@@ -1,5 +1,7 @@
 package com.andrei1058.bedwars.arena;
 
+import com.andrei1058.bedwars.api.ArenaFirstSpawnEvent;
+import com.andrei1058.bedwars.api.ArenaPlayerRespawnEvent;
 import com.andrei1058.bedwars.api.GeneratorType;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.configuration.ConfigPath;
@@ -145,6 +147,7 @@ public class BedWarsTeam {
         v.setPants(createArmor(Material.LEATHER_LEGGINGS));
         v.setBoots(createArmor(Material.LEATHER_BOOTS));
         sendDefaultInventory(p);
+        Bukkit.getPluginManager().callEvent(new ArenaFirstSpawnEvent(p, getArena(), this, v));
     }
 
     /**
@@ -296,6 +299,7 @@ public class BedWarsTeam {
                 p.updateInventory();
             }
         }
+        Bukkit.getPluginManager().callEvent(new ArenaPlayerRespawnEvent(p, getArena(), this));
     }
 
     /**
@@ -472,6 +476,7 @@ public class BedWarsTeam {
 
     /**
      * It contains items bought by a player from shop with permanent == true
+     * Also it contains the items given before ArenaFirstSpawnEvent like sword and armor
      */
     public class PlayerVault {
         Player p;
