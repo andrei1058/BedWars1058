@@ -10,7 +10,7 @@ public class ShopItem {
     private ItemStack itemStack;
     private boolean permanent, autoequip;
 
-    public ShopItem(ItemStack itemStack, boolean permanent, boolean autoequip){
+    public ShopItem(ItemStack itemStack, boolean permanent, boolean autoequip, String identifier){
         if (nms.isArmor(itemStack) || nms.isSword(itemStack)){
             ItemMeta im = itemStack.getItemMeta();
             im.spigot().setUnbreakable(true);
@@ -19,6 +19,9 @@ public class ShopItem {
         this.itemStack = itemStack;
         this.permanent = permanent;
         this.autoequip = autoequip;
+        if (!identifier.isEmpty()){
+            this.itemStack = nms.addCustomData(this.itemStack, identifier);
+        }
     }
 
     public ItemStack getItemStack() {

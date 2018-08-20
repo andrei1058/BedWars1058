@@ -66,17 +66,16 @@ public class BuyItemsAction extends ContentAction {
                 }
             }
         }
-        int reach = items.size(), match = 0;
         for (ItemStack i : p.getInventory().getArmorContents()) {
+            if (!nms.isCustomBedWarsItem(i)) continue;
             for (ShopItem i2 : items) {
-                if (i2.getItemStack().equals(i)) {
-                    match++;
+                if (nms.isCustomBedWarsItem(i2.getItemStack())) {
+                    if (nms.getCustomData(i).equals(nms.getCustomData(i2.getItemStack()))){
+                        p.sendMessage(getMsg(p, Messages.SHOP_ALREADY_BOUGHT));
+                        return;
+                    }
                 }
             }
-        }
-        if (match == reach) {
-            //todo ai deja armura asta pe tine
-            return;
         }
         if (money < getCost()) {
             p.playSound(p.getLocation(), nms.insufficientMoney(), 1f, 1f);

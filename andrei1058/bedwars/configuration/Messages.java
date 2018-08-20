@@ -212,6 +212,7 @@ public class Messages {
     public static String SHOP_NEW_PURCHASE = "player.newPurchase";
     public static String SHOP_UTILITY_NPC_SILVERFISH_NAME = "despawnables.silverfish";
     public static String SHOP_UTILITY_NPC_IRON_GOLEM_NAME = "despawnables.ironGolem";
+    public static String SHOP_ALREADY_BOUGHT = "player.alreadyBought";
 
     /** Setup messages, those are not paths */
     public static String SETUP_TYPE_GUI_NAME = "§8{arena} Setup - Choose an option";

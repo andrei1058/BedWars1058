@@ -418,7 +418,7 @@ public class ShopManager {
                                 }
                                 itemStack.setItemMeta(imm);
                             }
-                            ShopItem si = new ShopItem(itemStack, yml.get(path2 + "permanent") == null ? false : yml.getBoolean(path2 + "permanent"), yml.get(path2 + "auto-equip") == null ? false : yml.getBoolean(path2 + "auto-equip"));
+                            ShopItem si = new ShopItem(itemStack, yml.get(path2 + "permanent") == null ? false : yml.getBoolean(path2 + "permanent"), yml.get(path2 + "auto-equip") == null ? false : yml.getBoolean(path2 + "auto-equip"), path2);
                             buy.addItem(si);
                         }
                     }
