@@ -8,13 +8,12 @@ import com.andrei1058.bedwars.shop.CategoryContent;
 import com.andrei1058.bedwars.shop.ShopCategory;
 import com.andrei1058.bedwars.upgrades.TeamUpgrade;
 import com.andrei1058.bedwars.upgrades.UpgradeGroup;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
@@ -50,17 +49,43 @@ public class Inventory implements Listener {
         ItemStack i = e.getCurrentItem();
         if (i == null) return;
         if (i.getType() == Material.AIR) return;
-        if (Arena.isInArena(p)) {
+
+        Arena a = Arena.getArenaByPlayer(p);
+        if (a != null) {
+
+            /* Make it so they can't toggle their armor */
             if (e.getSlotType() == InventoryType.SlotType.ARMOR) {
                 e.setCancelled(true);
                 return;
             }
+
+            /* Prevent players from placing items in the shop gui. Issue 26. */
+            if (a.isPlayer(p)) {
+                for (ShopCategory sc : ShopCategory.getShopCategories()) {
+                    if (e.getInventory().getName().equalsIgnoreCase(sc.getDisplayName(p))) {
+                        e.setCancelled(true);
+                        break;
+                    }
+                }
+            }
+            /* Prevent players from placing items in the upgrades gui. Issue 26. */
+            if (e.getInventory().getName().equalsIgnoreCase(getMsg(p, "upgrades." + UpgradeGroup.getUpgradeGroup(a.getGroup()).getName() + ".name"))) {
+                e.setCancelled(true);
+                for (TeamUpgrade tu : UpgradeGroup.getUpgradeGroup(a.getGroup()).getTeamUpgrades()) {
+                    if (tu.getSlot() == e.getSlot()) {
+                        tu.doAction(p, a.getTeam(p));
+                        return;
+                    }
+                }
+            }
         }
+
         if (!i.hasItemMeta()) return;
         if (!i.getItemMeta().hasDisplayName()) return;
         if (p.getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
             e.setCancelled(true);
         }
+
         /* Check setup gui items */
         if (SetupSession.isInSetupSession(p) && e.getInventory().getName().equalsIgnoreCase(SetupSession.getInvName())) {
             SetupSession ss = SetupSession.getSession(p);
@@ -71,10 +96,11 @@ public class Inventory implements Listener {
             }
             ss.startSetup();
             p.closeInventory();
+            return;
         }
-        /**/
-        if (Arena.isInArena(p)) {
-            Arena a = Arena.getArenaByPlayer(p);
+
+        /* Manage shop and upgrades */
+        if (a != null) {
             if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) {
                 e.setCancelled(true);
                 return;
@@ -111,13 +137,15 @@ public class Inventory implements Listener {
                 }
             }
         }
+
         if (ArenaGUI.getRefresh().containsKey(p)) {
             if (e.getClickedInventory().equals(ArenaGUI.getRefresh().get(p))) {
-                for (Arena a : Arena.getArenas()) {
-                    if (a.getSlot() == e.getSlot()) {
-                        a.addPlayer(p, false);
+                for (Arena ar : Arena.getArenas()) {
+                    if (ar.getSlot() == e.getSlot()) {
+                        ar.addPlayer(p, false);
                         e.setCancelled(true);
                         p.closeInventory();
+                        break;
                     }
                 }
             }
