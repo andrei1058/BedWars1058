@@ -42,7 +42,7 @@ public class ConfigManager {
             yml.addDefault("spawnProtection", 5);
             yml.addDefault("shopProtection", 1);
             yml.addDefault("upgradesProtection", 1);
-            yml.addDefault("islandRadius", 20);
+            yml.addDefault("islandRadius", 17);
             yml.addDefault("bedBlock", "BED_BLOCK");
             yml.addDefault("worldBorder", 300);
             yml.addDefault("voidKill", false);
