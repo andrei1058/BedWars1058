@@ -103,7 +103,7 @@ public class Arena {
         minPlayers = yml.getInt("minPlayers");
         allowSpectate = yml.getBoolean("allowSpectate");
         countdownS = config.getYml().getInt("startingCountdown");
-        islandRadius = yml.getInt("islandRadius");
+        islandRadius = yml.getInt(ConfigPath.ARENA_ISLAND_RADIUS);
         if (config.getYml().get("arenaGroups") != null) {
             if (config.getYml().getStringList("arenaGroups").contains(yml.getString("group"))) {
                 group = yml.getString("group");
