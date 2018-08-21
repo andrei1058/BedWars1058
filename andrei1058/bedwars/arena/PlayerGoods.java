@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.arena;
 
+import com.andrei1058.bedwars.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -117,7 +118,12 @@ public class PlayerGoods {
         player.setLevel(level);
         player.setExp(exp);
         player.setHealthScale(healthscale);
-        player.setHealth(health);
+        try {
+            player.setHealth(health);
+        } catch (Exception e){
+            Main.plugin.getLogger().severe("Something went wrong when restoring player health: "+health+". Giving default of: 20");
+            player.setHealth(20);
+        }
         player.setFoodLevel(foodLevel);
 
         if (!items.isEmpty()) {
