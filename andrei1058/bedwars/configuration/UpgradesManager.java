@@ -152,7 +152,7 @@ public class UpgradesManager {
         yml.addDefault("Default.healPool.tier1.displayItem.enchanted", false);
         yml.addDefault("Default.healPool.tier1.currency", "diamond");
         yml.addDefault("Default.healPool.tier1.cost", 1);
-        yml.addDefault("Default.healPool.tier1.receive.playerEffect.fatigue.effect", "HEALTH_BOOST");
+        yml.addDefault("Default.healPool.tier1.receive.playerEffect.fatigue.effect", "REGENERATION");
         yml.addDefault("Default.healPool.tier1.receive.playerEffect.fatigue.amplifier", 0);
         yml.addDefault("Default.healPool.tier1.receive.playerEffect.fatigue.apply", "base");
         if (yml == null) {
