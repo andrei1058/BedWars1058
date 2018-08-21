@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.arena;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.ArenaFirstSpawnEvent;
 import com.andrei1058.bedwars.api.ArenaPlayerRespawnEvent;
 import com.andrei1058.bedwars.api.GeneratorType;
@@ -136,7 +137,6 @@ public class BedWarsTeam {
      */
     public void firstSpawn(Player p) {
         p.teleport(spawn);
-        BaseEnterListener.isOnABase.put(p, this);
         PlayerVault v;
         if (getVault(p) == null) {
             v = new PlayerVault(p);
@@ -255,9 +255,6 @@ public class BedWarsTeam {
         if (!getBaseEffects().isEmpty()) {
             for (BedWarsTeam.Effect ef : getBaseEffects()) {
                 p.addPotionEffect(new PotionEffect(ef.getPotionEffectType(), ef.getDuration(), ef.getAmplifier()));
-            }
-            if (!getPotionEffectApplied().contains(p)) {
-                getPotionEffectApplied().add(p);
             }
         }
         if (!getTeamEffects().isEmpty()) {
@@ -404,11 +401,10 @@ public class BedWarsTeam {
     public void addBaseEffect(PotionEffectType pef, int amp, int duration) {
         getBaseEffects().add(new BedWarsTeam.Effect(pef, amp, duration));
         for (Player p : new ArrayList<>(getMembers())) {
-            if (p.getLocation().distance(getSpawn()) <= arena.getIslandRadius()) {
-                p.addPotionEffect(new PotionEffect(pef, duration, amp));
-            }
-            if (!getPotionEffectApplied().contains(p)) {
-                getPotionEffectApplied().add(p);
+            if (p.getLocation().distance(getBed()) <= getArena().getIslandRadius()) {
+                for (Effect e : getBaseEffects()){
+                    p.addPotionEffect(new PotionEffect(e.getPotionEffectType(), e.getDuration(), e.getAmplifier()));
+                }
             }
         }
     }
@@ -640,14 +636,14 @@ public class BedWarsTeam {
         return i;
     }
 
-    public List<Player> getPotionEffectApplied() {
+    /*public List<Player> getPotionEffectApplied() {
         return potionEffectApplied;
-    }
+    }*/
 
-    public void removePotionEffectApplied(Player p) {
+    /*public void removePotionEffectApplied(Player p) {
         p.sendMessage("removePotionEffectApplied " + p.getName());
         potionEffectApplied.remove(p);
-    }
+    }*/
 
     public HashMap<Integer, Integer> getUpgradeTier() {
         return upgradeTier;

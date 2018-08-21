@@ -16,7 +16,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Contract;
 
 import java.io.File;
@@ -24,8 +23,8 @@ import java.sql.Timestamp;
 import java.util.*;
 
 import static com.andrei1058.bedwars.Main.*;
+import static com.andrei1058.bedwars.arena.upgrades.BaseEnterListener.isOnABase;
 import static com.andrei1058.bedwars.configuration.Language.*;
-import static com.andrei1058.bedwars.listeners.DamageDeathMove.isOnABase;
 
 public class Arena {
     private static HashMap<String, Arena> arenaByName = new HashMap<>();

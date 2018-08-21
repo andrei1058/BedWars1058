@@ -12,6 +12,7 @@ public class EnemyBaseEnterEvent extends Event {
     private Player enemy;
     private BedWarsTeam enemyTeam, team;
 
+    @Deprecated
     public EnemyBaseEnterEvent(Player p, BedWarsTeam pTeam, BedWarsTeam enter) {
         this.enemy = p;
         this.enemyTeam = pTeam;

@@ -181,6 +181,7 @@ public class DamageDeathMove implements Listener {
 
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
+        e.setDeathMessage(null);
         Player victim = e.getEntity(), killer = e.getEntity().getKiller();
         if (Arena.isInArena(victim)) {
             Arena a = Arena.getArenaByPlayer(victim);
@@ -215,7 +216,7 @@ public class DamageDeathMove implements Listener {
                 }
                 //todo
                 String message = t.isBedDestroyed() ? Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL : Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR;
-                PlayerKillEvent.PlayerKillCause cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.UNKNOWN_FINAL_KILL: PlayerKillEvent.PlayerKillCause.UNKNOWN;
+                PlayerKillEvent.PlayerKillCause cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.UNKNOWN_FINAL_KILL : PlayerKillEvent.PlayerKillCause.UNKNOWN;
                 if (damageEvent.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
                     LastHit lh = getLastHit().get(victim);
                     if (lh != null) {
@@ -232,7 +233,7 @@ public class DamageDeathMove implements Listener {
                             message = t.isBedDestroyed() ? Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_FINAL_KILL : Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_REGULAR;
                         }
                     }
-                    cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.EXPLOSION_FINAL_KILL: PlayerKillEvent.PlayerKillCause.EXPLOSION;
+                    cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.EXPLOSION_FINAL_KILL : PlayerKillEvent.PlayerKillCause.EXPLOSION;
 
                 } else if (damageEvent.getCause() == EntityDamageEvent.DamageCause.VOID) {
                     LastHit lh = getLastHit().get(victim);
@@ -250,12 +251,12 @@ public class DamageDeathMove implements Listener {
                             message = t.isBedDestroyed() ? Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL : Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL;
                         }
                     }
-                    cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.VOID_FINAL_KILL: PlayerKillEvent.PlayerKillCause.VOID;
+                    cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.VOID_FINAL_KILL : PlayerKillEvent.PlayerKillCause.VOID;
                 } else if (damageEvent.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK || damageEvent.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
                     if (killer != null) {
                         message = t.isBedDestroyed() ? Messages.PLAYER_DIE_PVP_FINAL_KILL : Messages.PLAYER_DIE_PVP_REGULAR_KILL;
                     }
-                    cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.PVP_FINAL_KILL: PlayerKillEvent.PlayerKillCause.PVP;
+                    cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.PVP_FINAL_KILL : PlayerKillEvent.PlayerKillCause.PVP;
                 }
 
                 BedWarsTeam t2 = null;
@@ -317,42 +318,6 @@ public class DamageDeathMove implements Listener {
 
     }
 
-    @EventHandler
-    public void onDeath2(PlayerDeathEvent e) {
-        Arena a = Arena.getArenaByPlayer(e.getEntity());
-        if (a != null) {
-            e.setDeathMessage(null);
-            /** Remove base potion effects for enemies and members */
-            if (a.isPlayer(e.getEntity())) {
-                a.addPlayerDeath(e.getEntity());
-                for (BedWarsTeam t : a.getTeams()) {
-                    if (e.getEntity().getLocation().distance(t.getSpawn()) < a.getIslandRadius()) {
-                        if (t.getPotionEffectApplied().contains(e.getEntity())) {
-                            if (t.isMember(e.getEntity())) {
-                                for (PotionEffect pef : e.getEntity().getActivePotionEffects()) {
-                                    for (BedWarsTeam.Effect pf : t.getBaseEffects()) {
-                                        if (pef.getType() == pf.getPotionEffectType()) {
-                                            e.getEntity().removePotionEffect(pf.getPotionEffectType());
-                                        }
-                                    }
-                                }
-                            } else {
-                                for (PotionEffect pef : e.getEntity().getActivePotionEffects()) {
-                                    for (BedWarsTeam.Effect pf : t.getEnemyBaseEnter()) {
-                                        if (pef.getType() == pf.getPotionEffectType()) {
-                                            e.getEntity().removePotionEffect(pf.getPotionEffectType());
-                                        }
-                                    }
-                                }
-                            }
-                            t.getPotionEffectApplied().remove(e.getEntity());
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onRespawn(PlayerRespawnEvent e) {
         Arena a = Arena.getArenaByPlayer(e.getPlayer());
@@ -388,13 +353,13 @@ public class DamageDeathMove implements Listener {
         }
     }
 
-    public static HashMap<Player, BedWarsTeam> isOnABase = new HashMap<>();
-
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
         if (Arena.isInArena(e.getPlayer())) {
             Arena a = Arena.getArenaByPlayer(e.getPlayer());
+
             if (e.getFrom().getChunk() != e.getTo().getChunk()) {
+
                 /** update armorstands hidden by nms **/
                 String iso = Language.getPlayerLanguage(e.getPlayer()).getIso();
                 for (OreGenerator o : OreGenerator.getGenerators()) {
@@ -407,16 +372,6 @@ public class DamageDeathMove implements Listener {
                         sh.updateForPlayer(e.getPlayer(), iso);
                     }
                 }
-                /**if (e.getPlayer().hasPotionEffect(PotionEffectType.INVISIBILITY)){
-                 for (Player p : e.getTo().getWorld().getPlayers()){
-                 nms.hidePlayer(e.getPlayer(), p);
-                 }
-                 }
-                 for (Player p : e.getTo().getWorld().getPlayers()){
-                 if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)){
-                 nms.hidePlayer(p, e.getPlayer());
-                 }
-                 }*/
 
                 /** Check if respawning */
                 if (Arena.respawn.containsKey(e.getPlayer())) {
@@ -432,6 +387,7 @@ public class DamageDeathMove implements Listener {
                     }
                 }
             }
+
             if (a.isSpectator(e.getPlayer())) {
                 if (e.getTo().getY() < 0) {
                     e.getPlayer().teleport(a.getCm().getArenaLoc("waiting.Loc"));
@@ -452,82 +408,9 @@ public class DamageDeathMove implements Listener {
                         }
                     }
                 }
+
                 if (a.getStatus() == GameState.playing) {
                     for (BedWarsTeam t : a.getTeams()) {
-                        /** Veridica daca a intrat in baza */
-                        if (e.getPlayer().getLocation().distance(t.getBed()) < a.getIslandRadius()) {
-                            if (t.isMember(e.getPlayer())) {
-                                if (!t.getPotionEffectApplied().contains(e.getPlayer())) {
-                                    for (BedWarsTeam.Effect ef : t.getBaseEffects()) {
-                                        e.getPlayer().addPotionEffect(new PotionEffect(ef.getPotionEffectType(), ef.getDuration(), ef.getAmplifier()));
-                                    }
-                                }
-                            } else {
-                                if (isOnABase.containsKey(e.getPlayer())) {
-                                    Bukkit.getPluginManager().callEvent(new EnemyBaseLeaveEvent(e.getPlayer(), a.getTeam(e.getPlayer()), isOnABase.get(e.getPlayer())));
-                                    isOnABase.replace(e.getPlayer(), t);
-                                    Bukkit.getPluginManager().callEvent(new EnemyBaseEnterEvent(e.getPlayer(), a.getTeam(e.getPlayer()), t));
-                                } else {
-                                    isOnABase.put(e.getPlayer(), t);
-                                    Bukkit.getPluginManager().callEvent(new EnemyBaseEnterEvent(e.getPlayer(), a.getTeam(e.getPlayer()), t));
-                                }
-                                if (!t.getPotionEffectApplied().contains(e.getPlayer())) {
-                                    for (BedWarsTeam.Effect ef : t.getEnemyBaseEnter()) {
-                                        e.getPlayer().addPotionEffect(new PotionEffect(ef.getPotionEffectType(), ef.getDuration(), ef.getAmplifier()));
-                                    }
-                                    t.getEnemyBaseEnter().clear();
-                                    for (int i : t.getEnemyBaseEnterSlots()) {
-                                        t.getUpgradeTier().remove(i);
-                                    }
-                                    t.getEnemyBaseEnterSlots().clear();
-                                }
-                                if (t.isTrapActive()) {
-                                    t.disableTrap();
-                                    for (Player mem : t.getMembers()) {
-                                        if (t.isTrapTitle()) {
-                                            nms.sendTitle(mem, getMsg(mem, Messages.ARENA_ENEMY_BASE_ENTER_TITLE), null, 0, 50, 0);
-                                        }
-                                        if (t.isTrapSubtitle()) {
-                                            nms.sendTitle(mem, null, getMsg(mem, Messages.ARENA_ENEMY_BASE_ENTER_SUBTITLE), 0, 50, 0);
-                                        }
-                                        if (t.isTrapAction()) {
-                                            nms.playAction(mem, getMsg(mem, Messages.ARENA_ENEMY_BASE_ENTER_ACTION));
-                                        }
-                                        if (t.isTrapChat()) {
-                                            mem.sendMessage(getMsg(mem, Messages.ARENA_ENEMY_BASE_ENTER_CHAT));
-                                        }
-                                    }
-                                }
-                            }
-                            t.getPotionEffectApplied().add(e.getPlayer());
-                        } else {
-                            if (isOnABase.containsKey(e.getPlayer())) {
-                                if (isOnABase.get(e.getPlayer()) == t) {
-                                    isOnABase.remove(e.getPlayer());
-                                    Bukkit.getPluginManager().callEvent(new EnemyBaseLeaveEvent(e.getPlayer(), a.getTeam(e.getPlayer()), t));
-                                }
-                            }
-                            if (t.getPotionEffectApplied().contains(e.getPlayer())) {
-                                if (t.isMember(e.getPlayer())) {
-                                    for (PotionEffect pef : e.getPlayer().getActivePotionEffects()) {
-                                        for (BedWarsTeam.Effect pf : t.getBaseEffects()) {
-                                            if (pef.getType() == pf.getPotionEffectType()) {
-                                                e.getPlayer().removePotionEffect(pf.getPotionEffectType());
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    for (PotionEffect pef : e.getPlayer().getActivePotionEffects()) {
-                                        for (BedWarsTeam.Effect pf : t.getEbseEffectsStatic()) {
-                                            if (pef.getType() == pf.getPotionEffectType()) {
-                                                e.getPlayer().removePotionEffect(pf.getPotionEffectType());
-                                            }
-                                        }
-                                    }
-                                }
-                                t.getPotionEffectApplied().remove(e.getPlayer());
-                            }
-                        }
                         if (e.getPlayer().getLocation().distance(t.getBed()) < 4) {
                             if (t.isMember(e.getPlayer())) {
                                 if (!t.getBedHolo(e.getPlayer()).isHidden()) {
