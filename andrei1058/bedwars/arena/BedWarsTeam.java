@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.api.ArenaFirstSpawnEvent;
 import com.andrei1058.bedwars.api.ArenaPlayerRespawnEvent;
 import com.andrei1058.bedwars.api.GeneratorType;
 import com.andrei1058.bedwars.api.TeamColor;
+import com.andrei1058.bedwars.arena.upgrades.BaseEnterListener;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Messages;
 import org.bukkit.Bukkit;
@@ -135,6 +136,7 @@ public class BedWarsTeam {
      */
     public void firstSpawn(Player p) {
         p.teleport(spawn);
+        BaseEnterListener.isOnABase.put(p, this);
         PlayerVault v;
         if (getVault(p) == null) {
             v = new PlayerVault(p);
@@ -218,7 +220,7 @@ public class BedWarsTeam {
         if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
             p.removePotionEffect(PotionEffectType.INVISIBILITY);
         }
-        nms.setCollide(p, arena,true);
+        nms.setCollide(p, arena, true);
         p.setAllowFlight(false);
         p.setFlying(false);
         p.setHealth(20);
@@ -253,6 +255,9 @@ public class BedWarsTeam {
         if (!getBaseEffects().isEmpty()) {
             for (BedWarsTeam.Effect ef : getBaseEffects()) {
                 p.addPotionEffect(new PotionEffect(ef.getPotionEffectType(), ef.getDuration(), ef.getAmplifier()));
+            }
+            if (!getPotionEffectApplied().contains(p)) {
+                getPotionEffectApplied().add(p);
             }
         }
         if (!getTeamEffects().isEmpty()) {
@@ -398,9 +403,9 @@ public class BedWarsTeam {
      */
     public void addBaseEffect(PotionEffectType pef, int amp, int duration) {
         getBaseEffects().add(new BedWarsTeam.Effect(pef, amp, duration));
-        for (Player p : getMembers()) {
+        for (Player p : new ArrayList<>(getMembers())) {
             if (p.getLocation().distance(getSpawn()) <= arena.getIslandRadius()) {
-                p.addPotionEffect(new PotionEffect(pef, amp, duration));
+                p.addPotionEffect(new PotionEffect(pef, duration, amp));
             }
             if (!getPotionEffectApplied().contains(p)) {
                 getPotionEffectApplied().add(p);
@@ -639,6 +644,11 @@ public class BedWarsTeam {
         return potionEffectApplied;
     }
 
+    public void removePotionEffectApplied(Player p) {
+        p.sendMessage("removePotionEffectApplied " + p.getName());
+        potionEffectApplied.remove(p);
+    }
+
     public HashMap<Integer, Integer> getUpgradeTier() {
         return upgradeTier;
     }
@@ -701,7 +711,7 @@ public class BedWarsTeam {
 
         } else if (bedDestroyed) {
             bed.getBlock().setType(Material.AIR);
-            if (getArena().getCm().getBoolean(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS)){
+            if (getArena().getCm().getBoolean(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS)) {
                 OreGenerator.getGenerators().remove(getGoldGenerator());
                 OreGenerator.getGenerators().remove(getIronGenerator());
             }
