@@ -139,9 +139,12 @@ public class DamageDeathMove implements Listener {
             } else if (e.getDamager() instanceof Projectile) {
                 Projectile proj = (Projectile) e.getDamager();
                 damager = (Player) proj.getShooter();
-            } else {
-                return;
-            }
+            } else if (e.getDamager() instanceof TNTPrimed) {
+                TNTPrimed tnt = (TNTPrimed) e.getDamager();
+                if (tnt.getSource() instanceof Player) {
+                    damager = (Player) tnt.getSource();
+                } else return;
+            } else return;
             Arena a = Arena.getArenaByPlayer(damager);
             if (a != null) {
                 if (a.isPlayer(damager)) {
