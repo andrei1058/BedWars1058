@@ -226,7 +226,11 @@ public class Main extends JavaPlugin {
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             database.setupGeneralTables();
             //spawn NPCs
-            plugin.spawnNPCs();
+            try {
+                plugin.spawnNPCs();
+            } catch (Exception e){
+                this.getLogger().severe("Could not spawn Join NPCs. Make sure you have right version of Citizens for your server!");
+            }
         }, 40L);
 
         /** Save messages for storage gui items if custom items added, for each language */
