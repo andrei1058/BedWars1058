@@ -201,7 +201,8 @@ public class SBoard {
         if (sb.getObjective("my") == null) {
             Objective objective = sb.registerNewObjective("my", "health");
             objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
-            objective.setDisplayName("§c❤");
+            char sb = 003;
+            objective.setDisplayName("§c "+sb);
         }
     }
 

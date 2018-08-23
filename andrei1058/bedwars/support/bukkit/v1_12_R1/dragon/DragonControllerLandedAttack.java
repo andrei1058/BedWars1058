@@ -2,10 +2,10 @@ package com.andrei1058.bedwars.support.bukkit.v1_12_R1.dragon;
 
 import net.minecraft.server.v1_12_R1.SoundEffects;
 
-public class DragonControllerLandedAttackù extends AbstractDragonControllerLanded {
+public class DragonControllerLandedAttack extends AbstractDragonControllerLanded {
     private int b;
 
-    public DragonControllerLandedAttackù(EntityEnderDragon var1) {
+    public DragonControllerLandedAttack(EntityEnderDragon var1) {
         super(var1);
     }
 
@@ -24,7 +24,7 @@ public class DragonControllerLandedAttackù extends AbstractDragonControllerLand
         this.b = 0;
     }
 
-    public DragonControllerPhase<DragonControllerLandedAttackù> getControllerPhase() {
+    public DragonControllerPhase<DragonControllerLandedAttack> getControllerPhase() {
         return DragonControllerPhase.h;
     }
 }

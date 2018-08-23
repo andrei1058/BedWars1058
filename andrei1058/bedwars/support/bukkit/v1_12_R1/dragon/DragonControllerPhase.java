@@ -12,7 +12,7 @@ public class DragonControllerPhase<T extends IDragonController> {
     public static final DragonControllerPhase<DragonControllerFly> e = a(DragonControllerFly.class, "Takeoff");
     public static final DragonControllerPhase<DragonControllerLandedFlame> f = a(DragonControllerLandedFlame.class, "SittingFlaming");
     public static final DragonControllerPhase<DragonControllerLandedSearch> g = a(DragonControllerLandedSearch.class, "SittingScanning");
-    public static final DragonControllerPhase<DragonControllerLandedAttackù> h = a(DragonControllerLandedAttackù.class, "SittingAttacking");
+    public static final DragonControllerPhase<DragonControllerLandedAttack> h = a(DragonControllerLandedAttack.class, "SittingAttacking");
     public static final DragonControllerPhase<DragonControllerChange> i = a(DragonControllerChange.class, "ChargingPlayer");
     public static final DragonControllerPhase<DragonControllerDying> j = a(DragonControllerDying.class, "Dying");
     public static final DragonControllerPhase<DragonControllerHover> k = a(DragonControllerHover.class, "Hover");

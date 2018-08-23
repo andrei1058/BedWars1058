@@ -31,6 +31,8 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
     private static List<SubCommand> subCommandList = new ArrayList<>();
     /* MainCommand instance*/
     private static MainCommand instance;
+    /* Dot char */
+    public static char dot = 254;
 
     public MainCommand(String name) {
         super(name);
@@ -87,7 +89,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
                         Bukkit.dispatchCommand(s, getName()+" cmds");
                     } else {
                         s.sendMessage("");
-                        s.sendMessage("§8§l▐ §6" + plugin.getDescription().getName() + " v" + plugin.getDescription().getVersion() + " §7- §c Admin Commands");
+                        s.sendMessage("§8§l"+dot+" §6" + plugin.getDescription().getName() + " v" + plugin.getDescription().getVersion() + " §7- §c Admin Commands");
                         s.sendMessage("");
                         sendSubCommandsToOp((Player) s);
                     }
@@ -187,5 +189,9 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
             return false;
         }
         return true;
+    }
+
+    public static char getDot() {
+        return dot;
     }
 }

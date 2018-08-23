@@ -20,6 +20,7 @@ import org.bukkit.entity.Player;
 import static com.andrei1058.bedwars.Main.link;
 import static com.andrei1058.bedwars.Main.mainCmd;
 import static com.andrei1058.bedwars.Main.plugin;
+import static com.andrei1058.bedwars.commands.main.MainCommand.getDot;
 import static com.andrei1058.bedwars.configuration.Language.getList;
 
 public class Cmds extends SubCommand {
@@ -71,17 +72,17 @@ public class Cmds extends SubCommand {
                     if (ss.getCm().getYml().get("Team." + team + ".Upgrade") == null) {
                         upgradeNotSet += color + "▋";
                     }
-                    if (ss.getCm().getYml().get("Team."+team+".Iron") == null || ss.getCm().getYml().get("Team."+team+".Gold") == null){
+                    if (ss.getCm().getYml().get("Team." + team + ".Iron") == null || ss.getCm().getYml().get("Team." + team + ".Gold") == null) {
                         generatorNotSet += color + "▋";
                     }
                     teams++;
                 }
             }
             int emGen = 0, dmGen = 0;
-            if (ss.getCm().getYml().get("generator.Emerald") != null){
+            if (ss.getCm().getYml().get("generator.Emerald") != null) {
                 emGen = ss.getCm().getYml().getStringList("generator.Emerald").size();
             }
-            if (ss.getCm().getYml().get("generator.Diamond") != null){
+            if (ss.getCm().getYml().get("generator.Diamond") != null) {
                 dmGen = ss.getCm().getYml().getStringList("generator.Diamond").size();
             }
 
@@ -91,11 +92,11 @@ public class Cmds extends SubCommand {
             String setBed = "§9 ▪ §7/" + getParent().getName() + (ss.getSetupType() == SetupSession.SetupType.ASSISTED ? (bedNotSet.isEmpty() ? " §m" : " ") : " ") + "setBed§r " + (bedNotSet.isEmpty() ? "§a(ALL SET)" : "§c(Remaining: " + bedNotSet + "§c)");
             String setShop = "§9 ▪ §7/" + getParent().getName() + (ss.getSetupType() == SetupSession.SetupType.ASSISTED ? (shopNotSet.isEmpty() ? " §m" : " ") : " ") + "setShop§r " + (shopNotSet.isEmpty() ? "§a(ALL SET)" : "§c(Remaining: " + shopNotSet + "§c)");
             String setUpgrade = "§9 ▪ §7/" + getParent().getName() + (ss.getSetupType() == SetupSession.SetupType.ASSISTED ? (upgradeNotSet.isEmpty() ? " §m" : " ") : " ") + "setUpgrade§r " + (upgradeNotSet.isEmpty() ? "§a(ALL SET)" : "§c(Remaining: " + upgradeNotSet + "§c)");
-            String addGenerator = "§9 ▪ §7/" + getParent().getName() + " addGenerator" + (ss.getSetupType() == SetupSession.SetupType.ASSISTED ? (generatorNotSet.isEmpty() ? " " : "§c(Remaining: " + generatorNotSet + "§c) ") : " ")+"§e(§2E"+emGen+" §bD"+dmGen+"§e)";
+            String addGenerator = "§9 ▪ §7/" + getParent().getName() + " addGenerator" + (ss.getSetupType() == SetupSession.SetupType.ASSISTED ? (generatorNotSet.isEmpty() ? " " : "§c(Remaining: " + generatorNotSet + "§c) ") : " ") + "§e(§2E" + emGen + " §bD" + dmGen + "§e)";
 
             if (ss.getSetupType() == SetupSession.SetupType.ASSISTED) {
                 s.sendMessage("");
-                s.sendMessage("§8§l▐ §6" + plugin.getDescription().getName() + " v" + plugin.getDescription().getVersion() + " §7- §c " + ss.getWorldName() + " Commands");
+                s.sendMessage("§8§l" + getDot() + " §6" + plugin.getDescription().getName() + " v" + plugin.getDescription().getVersion() + " §7- §c " + ss.getWorldName() + " Commands");
                 s.sendMessage("§7Use these commands in order.");
                 p.spigot().sendMessage(Misc.msgHoverClick(setWaitingSpawn, "§dSet the place where players have\n§dto wait before the game starts.", "/" + getParent().getName() + " setWaitingSpawn", ClickEvent.Action.RUN_COMMAND));
                 p.spigot().sendMessage(Misc.msgHoverClick(waitingPos, "§dMake it so the waiting lobby will disappear at start.\nSelect it as a world edit region.", "/" + getParent().getName() + " waitingPos ", ClickEvent.Action.SUGGEST_COMMAND));
@@ -110,7 +111,7 @@ public class Cmds extends SubCommand {
                 p.spigot().sendMessage(Misc.msgHoverClick("§9 ▪ §7/" + getParent().getName() + " save", "§dSave arena and go back to lobby", "/" + getParent().getName() + " save", ClickEvent.Action.SUGGEST_COMMAND));
             } else {
                 s.sendMessage("");
-                s.sendMessage("§8§l▐ §6" + plugin.getDescription().getName() + " v" + plugin.getDescription().getVersion() + " §7- §c " + ss.getWorldName() + " Commands");
+                s.sendMessage("§8§l" + getDot() + " §6" + plugin.getDescription().getName() + " v" + plugin.getDescription().getVersion() + " §7- §c " + ss.getWorldName() + " Commands");
                 p.spigot().sendMessage(Misc.msgHoverClick(setWaitingSpawn, "§dSet the place where players have\n§dto wait before the game starts.", "/" + getParent().getName() + " setWaitingSpawn", ClickEvent.Action.SUGGEST_COMMAND));
                 p.spigot().sendMessage(Misc.msgHoverClick(waitingPos, "§dMake it so the waiting lobby will disappear at start.\nSelect it as a world edit region.", "/" + getParent().getName() + " waitingPos ", ClickEvent.Action.SUGGEST_COMMAND));
                 p.spigot().sendMessage(Misc.msgHoverClick("§9 ▪ §7/" + mainCmd + " removeTeam <name>", "§dRemove a team.", "/" + mainCmd + " removeTeam ", ClickEvent.Action.SUGGEST_COMMAND));
@@ -124,7 +125,7 @@ public class Cmds extends SubCommand {
                 p.spigot().sendMessage(Misc.msgHoverClick("§9 ▪ §7/" + getParent().getName() + " save", "§dSave arena and go back to lobby", "/" + getParent().getName() + " save", ClickEvent.Action.SUGGEST_COMMAND));
             }
         } else {
-            TextComponent credits = new TextComponent("§8§l▐ §6" + plugin.getName() + " §7v" + plugin.getDescription().getVersion() + " by andrei1058");
+            TextComponent credits = new TextComponent("§8§l" + getDot() + " §6" + plugin.getName() + " §7v" + plugin.getDescription().getVersion() + " by andrei1058");
             credits.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, link));
             credits.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§7Arenas: " + (Arena.getArenas().size() == 0 ? "§c0" : "§a" + Arena.getArenas().size())).create()));
             ((Player) s).spigot().sendMessage(credits);
