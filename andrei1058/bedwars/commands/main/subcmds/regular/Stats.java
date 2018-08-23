@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.commands.main.subcmds.regular;
 
+import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
@@ -23,7 +24,7 @@ public class Stats extends SubCommand {
         super(parent, name);
         setPriority(16);
         showInList(false);
-        setDisplayInfo(MainCommand.createTC("§6 ▪ §7/"+MainCommand.getInstance().getName()+" "+getSubCommandName(), "/"+getParent().getName()+" "+getSubCommandName(), "§fOpens the storage GUI."));
+        setDisplayInfo(MainCommand.createTC("§6 ▪ §7/"+MainCommand.getInstance().getName()+" "+getSubCommandName(), "/"+getParent().getName()+" "+getSubCommandName(), "§fOpens the stats GUI."));
     }
 
     private static HashMap<Player, Long> statsCoolDown = new HashMap<>();
@@ -32,6 +33,7 @@ public class Stats extends SubCommand {
     public boolean execute(String[] args, CommandSender s) {
         if (s instanceof ConsoleCommandSender) return false;
         Player p = (Player) s;
+        if (Arena.getArenaByPlayer(p) != null) return false;
         if (statsCoolDown.containsKey(p)){
             if (System.currentTimeMillis() - 3000 >= statsCoolDown.get(p)) {
                 statsCoolDown.replace(p, System.currentTimeMillis());

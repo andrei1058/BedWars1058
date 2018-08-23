@@ -51,7 +51,7 @@ public class Language {
             default:
                 yml.addDefault(Messages.PREFIX, "");
                 yml.addDefault("name", "English");
-                yml.addDefault(Messages.COMMAND_MAIN, Arrays.asList("", "&2▪ &7/" + mainCmd + " storage", "&2▪ &7/" + mainCmd + " join &o<arena/group>", "&2▪ &7/" + mainCmd + " leave", "&2▪ &7/" + mainCmd + " lang", "&2▪ &7/" + mainCmd + " gui", "&2▪ &7/" + mainCmd + " forcestart &3(vip)"));
+                yml.addDefault(Messages.COMMAND_MAIN, Arrays.asList("", "&2▪ &7/" + mainCmd + " stats", "&2▪ &7/" + mainCmd + " join &o<arena/group>", "&2▪ &7/" + mainCmd + " leave", "&2▪ &7/" + mainCmd + " lang", "&2▪ &7/" + mainCmd + " gui", "&2▪ &7/" + mainCmd + " forcestart &3(vip)"));
                 yml.addDefault(Messages.ARENA_JOIN_VIP_KICK, "{prefix}&cSorry, but you were kicked out because a donor joined the arena.\n&aPlease consider donating for more features. &7&o(click)");
                 yml.addDefault(Messages.ARENA_JOIN_DENIED_IS_FULL, "{prefix}&cThis arena is full!\n&aPlease consider donating for more features. &7&o(click)");
                 yml.addDefault(Messages.ARENA_JOIN_DENIED_IS_FULL_VIP_REQUIRED, "{prefix}&cWe apologise but this arena is full.\n&cWe know you're a donor but actually this arena is full of staff or/and donors.");
@@ -272,10 +272,10 @@ public class Language {
                 yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_REGULAR, "{PlayerColor}{PlayerName} &7was hit off by a bomb.");
                 yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_FINAL_KILL, "{PlayerColor}{PlayerName} &7was hit off by a bomb. &b&lFINAL KILL!");
                 yml.addDefault(Messages.PLAYER_STATS_ITEM_NAME, "&6Stats");
-                yml.addDefault(Messages.PLAYER_STATS_ITEM_LORE, Arrays.asList("&7Right-click to see your storage!"));
+                yml.addDefault(Messages.PLAYER_STATS_ITEM_LORE, Arrays.asList("&7Right-click to see your stats!"));
                 yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "{player} Stats");
 
-                /** save default items messages for storage gui */
+                /** save default items messages for stats gui */
                 lbj.addDefaultStatsMsg(yml, "wins", "&6Wins", "&f{wins}");
                 lbj.addDefaultStatsMsg(yml, "losses", "&6Losses", "&f{losses}");
                 lbj.addDefaultStatsMsg(yml, "kills", "&6Kills", "&f{kills}");
@@ -461,7 +461,7 @@ public class Language {
 
     public static void setupCustomStatsMessages() {
         for (Language l : getLanguages()) {
-            /** save messages for storage gui items if custom items added */
+            /** save messages for stats gui items if custom items added */
             for (String item : Main.config.getYml().getConfigurationSection("statsGUI").getKeys(false)) {
                 if (item.equalsIgnoreCase("invSize")) continue;
                 l.yml.addDefault(Messages.PLAYER_STATS_GUI_PATH + "." + item + ".name", "Name not set");

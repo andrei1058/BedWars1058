@@ -12,6 +12,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
@@ -27,6 +28,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -295,9 +297,39 @@ public class BreakPlace implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     public void onBlockCanBuildEvent(BlockCanBuildEvent e) {
+        if (e.isBuildable()) return;
         Arena a = Arena.getArenaByName(e.getBlock().getWorld().getName());
         if (a != null) {
-            e.setBuildable(true);
+            boolean bed = false;
+            for (BedWarsTeam t : a.getTeams()) {
+                for (int x = e.getBlock().getX() - 1; x < e.getBlock().getX() + 1; x++) {
+                    for (int z = e.getBlock().getZ() - 1; z < e.getBlock().getZ() + 1; z++) {
+
+                        //Check bed block
+                        if (t.getBed().getBlockX() == x && t.getBed().getBlockY() == e.getBlock().getY() && t.getBed().getBlockZ() == z) {
+                            e.setBuildable(false);
+                            bed = true;
+                            break;
+                        }
+                    }
+                }
+                //Check bed hologram
+                if (t.getBed().getBlockX() == e.getBlock().getX() && t.getBed().getBlockY()+1 == e.getBlock().getY() && t.getBed().getBlockZ() == e.getBlock().getZ()) {
+                    if (!bed) {
+                        e.setBuildable(true);
+                        break;
+                    }
+                }
+            }
+            if (bed) return;
+            List<Object> players = Arrays.asList(e.getBlock().getWorld().getNearbyEntities(e.getBlock().getLocation(), 1, 1, 1).stream().filter(ee -> ee.getType() == EntityType.PLAYER).toArray());
+            for (Object o : players) {
+                Player p = (Player) o;
+                if (a.isSpectator(p)){
+                    if (e.getBlock().getType() == Material.AIR) e.setBuildable(true);
+                    return;
+                }
+            }
         }
     }
 

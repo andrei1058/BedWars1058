@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.support.storage;
+package com.andrei1058.bedwars.support.stats;
 
 import org.bukkit.entity.Player;
 
@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface Database {
 
-    /** Check if storage are stored in sqlite, mysql or something */
+    /** Check if stats are stored in sqlite, mysql or something */
     boolean isStats();
 
     /** Close database connection */
@@ -20,13 +20,13 @@ public interface Database {
     /** Create a new custom table */
     void setupGroupTable(String group);
 
-    /** Save player storage */
+    /** Save player stats */
     void saveStats(Player p, Timestamp last_play, int wins, int kills, int final_kills, int looses, int deaths, int final_deaths, int beds_destroyed, int games_played);
 
-    /** Get player first play from storage */
+    /** Get player first play from stats */
     Timestamp getFirstPlay(Player p);
 
-    /** Get player last play from storage */
+    /** Get player last play from stats */
     Timestamp getLastPlay(Player p);
 
     /** Get player total kills */

@@ -34,6 +34,7 @@ public class Language extends SubCommand {
     public boolean execute(String[] args, CommandSender s) {
         if (s instanceof ConsoleCommandSender) return false;
         Player p = (Player) s;
+        if (Arena.getArenaByPlayer(p) != null) return false;
         if (args.length == 0) {
             p.sendMessage(getMsg(p, Messages.COMMAND_LANG_LIST_HEADER));
             for (com.andrei1058.bedwars.configuration.Language l : com.andrei1058.bedwars.configuration.Language.getLanguages()) {

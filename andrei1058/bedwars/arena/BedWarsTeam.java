@@ -100,7 +100,7 @@ public class BedWarsTeam {
      */
 
     /**
-     * Player cache, used for loosers storage and rejoin
+     * Player cache, used for loosers stats and rejoin
      */
     private List<Player> membersCache = new ArrayList<>();
 

@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.support.storage;
+package com.andrei1058.bedwars.support.stats;
 
 import org.bukkit.entity.Player;
 

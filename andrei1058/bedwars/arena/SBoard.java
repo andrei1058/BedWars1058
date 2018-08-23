@@ -100,7 +100,7 @@ public class SBoard {
                 }
             }
             if (arena == null) {
-                /** storage */
+                /** stats */
                 int kills = database.getKills(p), deaths = database.getDeaths(p), looses = database.getLooses(p), wins = database.getWins(p),
                         finalKills = database.getFinalKills(p), finalDeaths = database.getFinalDeaths(p), bedsDestroyed = database.getBedsDestroyed(p), gamesPlayed = database.getGamesPlayed(p);
                 Timestamp firstPlay = database.getFirstPlay(p), lastPlay = database.getLastPlay(p);
@@ -201,8 +201,7 @@ public class SBoard {
         if (sb.getObjective("my") == null) {
             Objective objective = sb.registerNewObjective("my", "health");
             objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
-            char sb = 003;
-            objective.setDisplayName("§c "+sb);
+            objective.setDisplayName("§c ❤");
         }
     }
 
