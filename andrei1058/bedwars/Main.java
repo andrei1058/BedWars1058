@@ -415,17 +415,17 @@ public class Main extends JavaPlugin {
                 break;
             case "SHARED":
                 serverType = ServerType.SHARED;
-                setupSigns();
+                setupSignsConfiguration();
                 break;
             default:
-                setupSigns();
+                setupSignsConfiguration();
                 config.set("serverType", "MULTIARENA");
                 new ConfigManager("bukkit", Bukkit.getWorldContainer().getPath(), false).set("settings.allow-end", false);
                 break;
         }
     }
 
-    private void setupSigns() {
+    private void setupSignsConfiguration() {
         signs = new ConfigManager("signs", "plugins/" + plugin.getName(), false);
         YamlConfiguration yml = signs.getYml();
         yml.addDefault("format", Arrays.asList("&a[arena]", "", "&2[on]&9/&2[max]", "[status]"));
@@ -464,18 +464,6 @@ public class Main extends JavaPlugin {
                     Bukkit.getServer().spigot().restart();
                     plugin.setEnabled(false);
                     return;
-                }
-            } else {
-                if (getServerType() != ServerType.BUNGEE) {
-                    if (signs.getYml().get("locations") != null) {
-                        for (String st : signs.getYml().getStringList("locations")) {
-                            String[] data = st.split(",");
-                            Arena a = Arena.getArenaByName(data[0]);
-                            if (a != null) {
-                                a.addSign(new Location(Bukkit.getWorld(data[6]), Double.valueOf(data[1]), Double.valueOf(data[2]), Double.valueOf(data[3])));
-                            }
-                        }
-                    }
                 }
             }
         } else {

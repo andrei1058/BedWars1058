@@ -188,12 +188,14 @@ public class Arena {
         }
 
         /* Clear setup armorstands */
-        for (Entity e : world.getEntities()){
-            if (e.getType() == EntityType.ARMOR_STAND){
+        for (Entity e : world.getEntities()) {
+            if (e.getType() == EntityType.ARMOR_STAND) {
                 e.remove();
             }
         }
 
+        /* Register arena signs */
+        registerSigns();
         //Call event
         Bukkit.getPluginManager().callEvent(new ArenaEnableEvent(this));
     }
@@ -357,18 +359,18 @@ public class Arena {
             /* Hide spectator  */
             //p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0), true);
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            for (Player on : Bukkit.getOnlinePlayers()) {
-                if (on == p) continue;
-                if (getSpectators().contains(on)) {
-                    on.showPlayer(p);
-                    p.showPlayer(p);
-                } else if (getPlayers().contains(on)) {
-                    on.hidePlayer(p);
-                    p.showPlayer(on);
+                for (Player on : Bukkit.getOnlinePlayers()) {
+                    if (on == p) continue;
+                    if (getSpectators().contains(on)) {
+                        on.showPlayer(p);
+                        p.showPlayer(p);
+                    } else if (getPlayers().contains(on)) {
+                        on.hidePlayer(p);
+                        p.showPlayer(on);
+                    }
                 }
-            }
-            p.setAllowFlight(true);
-            p.setFlying(true);
+                p.setAllowFlight(true);
+                p.setFlying(true);
 
                 /* Spectator items */
                 SpectateItems.giveTeleporter(p);
@@ -542,9 +544,9 @@ public class Arena {
         NametagEdit.restoreNametag(p);
 
         /* Remove also the party */
-        if (getParty().hasParty(p)){
-            if (getParty().isOwner(p)){
-                for (Player pa : new ArrayList<>(getParty().getMembers(p))){
+        if (getParty().hasParty(p)) {
+            if (getParty().isOwner(p)) {
+                for (Player pa : new ArrayList<>(getParty().getMembers(p))) {
                     if (pa == p) continue;
                     removePlayer(pa, Main.getServerType() == ServerType.MULTIARENA);
                 }
@@ -722,8 +724,8 @@ public class Arena {
                         cm.getArenaLoc("Team." + team + ".Upgrade"), this));
             }
             /* Clear setup armorstands */
-            for (Entity e : world.getEntities()){
-                if (e.getType() == EntityType.ARMOR_STAND){
+            for (Entity e : world.getEntities()) {
+                if (e.getType() == EntityType.ARMOR_STAND) {
                     e.remove();
                 }
             }
@@ -1562,5 +1564,23 @@ public class Arena {
             if (a.getGroup().equalsIgnoreCase(group)) i += a.getPlayers().size();
         }
         return i;
+    }
+
+    /**
+     * Register join-signs for arena
+     *
+     * @since API 10
+     */
+    private void registerSigns() {
+        if (getServerType() != ServerType.BUNGEE) {
+            if (Main.signs.getYml().get("locations") != null) {
+                for (String st : Main.signs.getYml().getStringList("locations")) {
+                    String[] data = st.split(",");
+                    if (data[0].equals(getWorld().getName())) {
+                        addSign(new Location(Bukkit.getWorld(data[6]), Double.valueOf(data[1]), Double.valueOf(data[2]), Double.valueOf(data[3])));
+                    }
+                }
+            }
+        }
     }
 }
