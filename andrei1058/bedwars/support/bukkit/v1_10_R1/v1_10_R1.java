@@ -396,7 +396,7 @@ public class v1_10_R1 implements NMS {
             this.namePath = namePath;
             despawnables.add(this);
             setName();
-            addStringValue((Entity) e, TargetListener.NBTTAG_OWING_TEAM_KEY, team.getName());
+            addStringValue(e.getBukkitEntity(), TargetListener.NBTTAG_OWING_TEAM_KEY, team.getName());
         }
 
         public void regresh() {
