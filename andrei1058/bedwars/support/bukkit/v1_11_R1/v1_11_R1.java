@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.arena.ShopHolo;
+import com.andrei1058.bedwars.arena.despawnables.TargetListener;
 import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
 import com.andrei1058.bedwars.exceptions.InvalidSoundException;
@@ -12,11 +13,9 @@ import com.andrei1058.bedwars.support.bukkit.NMS;
 import com.google.common.collect.Sets;
 import net.minecraft.server.v1_11_R1.*;
 import net.minecraft.server.v1_11_R1.Item;
-import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Sound;
-import org.bukkit.block.Bed;
 import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_11_R1.CraftServer;
@@ -27,10 +26,10 @@ import org.bukkit.craftbukkit.v1_11_R1.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_11_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_11_R1.entity.CraftLivingEntity;
 import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.scoreboard.Team;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -378,6 +377,7 @@ public class v1_11_R1 implements NMS {
             this.namePath = namePath;
             despawnables.add(this);
             setName();
+            addStringValue((Entity) e, TargetListener.NBTTAG_OWING_TEAM_KEY, team.getName());
         }
 
         public void regresh() {
@@ -560,5 +560,33 @@ public class v1_11_R1 implements NMS {
         sm.setOwner(p.getName());
         i.setItemMeta(sm);
         return i;
+    }
+
+    @Override
+    public boolean hasTag(Entity e, String tag) {
+        if (e == null) return false;
+        net.minecraft.server.v1_11_R1.Entity entity = ((CraftEntity)e).getHandle();
+        NBTTagCompound nbt = new NBTTagCompound();
+        entity.f(nbt);
+        return nbt.hasKey(tag);
+    }
+
+    @Override
+    public String getStringValue(Entity e, String entry) {
+        if (e == null) return "";
+        net.minecraft.server.v1_11_R1.Entity entity = ((CraftEntity)e).getHandle();
+        NBTTagCompound nbt = new NBTTagCompound();
+        entity.f(nbt);
+        return nbt.getString(entry);
+    }
+
+    @Override
+    public void addStringValue(Entity e, String entry, String value) {
+        if (e == null) return;
+        net.minecraft.server.v1_11_R1.Entity entity = ((CraftEntity)e).getHandle();
+        NBTTagCompound nbt = new NBTTagCompound();
+        entity.f(nbt);
+        nbt.setString(entry, value);
+        entity.e(nbt);
     }
 }

@@ -3,20 +3,16 @@ package com.andrei1058.bedwars.support.bukkit.v1_8_R3;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
-import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.arena.ShopHolo;
+import com.andrei1058.bedwars.arena.despawnables.TargetListener;
 import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
 import com.andrei1058.bedwars.exceptions.InvalidSoundException;
 import com.andrei1058.bedwars.support.bukkit.NMS;
-import net.minecraft.server.v1_12_R1.BossBattle;
 import net.minecraft.server.v1_8_R3.*;
-import net.minecraft.server.v1_9_R1.PacketPlayOutBoss;
-import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Sound;
-import org.bukkit.block.Bed;
 import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
@@ -33,7 +29,6 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.scoreboard.Team;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -136,7 +131,7 @@ public class v1_8_R3 implements NMS {
 
     @Override
     public void spawnIronGolem(Location loc, BedWarsTeam bedWarsTeam) {
-        new Despawnable(IGolem.spawn(loc, bedWarsTeam), bedWarsTeam, shop.getInt("utilities.ironGolem.despawn"), Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME);
+        Despawnable d = new Despawnable(IGolem.spawn(loc, bedWarsTeam), bedWarsTeam, shop.getInt("utilities.ironGolem.despawn"), Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME);
     }
 
     @Override
@@ -412,6 +407,7 @@ public class v1_8_R3 implements NMS {
             this.namePath = namePath;
             despawnables.add(this);
             setName();
+            addStringValue((Entity) e, TargetListener.NBTTAG_OWING_TEAM_KEY, team.getName());
         }
 
         public void regresh() {
@@ -582,5 +578,29 @@ public class v1_8_R3 implements NMS {
         sm.setOwner(p.getName());
         i.setItemMeta(sm);
         return i;
+    }
+
+    @Override
+    public boolean hasTag(Entity e, String tag) {
+        if (e == null) return false;
+        net.minecraft.server.v1_8_R3.Entity entity = ((CraftEntity)e).getHandle();
+        if (entity.getNBTTag() == null) return false;
+        return entity.getNBTTag().hasKey(tag);
+    }
+
+    @Override
+    public String getStringValue(Entity e, String entry) {
+        if (e == null) return "";
+        net.minecraft.server.v1_8_R3.Entity entity = ((CraftEntity)e).getHandle();
+        if (entity.getNBTTag() == null) return "";
+        return entity.getNBTTag().getString(entry);
+    }
+
+    @Override
+    public void addStringValue(Entity e, String entry, String value) {
+        if (e == null) return;
+        net.minecraft.server.v1_8_R3.Entity entity = ((CraftEntity)e).getHandle();
+        if (entity.getNBTTag() == null) return;
+        entity.getNBTTag().setString(entry, value);
     }
 }

@@ -274,6 +274,24 @@ public interface NMS {
      */
     String getCustomData(ItemStack i);
 
-    /** Set a skull skin */
+    /**
+     * Set a skull skin
+     */
     ItemStack setSkullOwner(ItemStack i, Player p);
+
+
+    /**
+     * Check if an entity has NBTTag
+     */
+    boolean hasTag(Entity e, String tag);
+
+    /**
+     * Get tag value for entry NBTTag
+     */
+    String getStringValue(Entity e, String entry);
+
+    /**
+     * Add a NBTTag to an entity
+     */
+    void addStringValue(Entity e, String entry, String value);
 }
