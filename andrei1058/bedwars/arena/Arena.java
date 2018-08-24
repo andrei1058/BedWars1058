@@ -427,11 +427,10 @@ public class Arena {
             }
         }
 
-        removeArenaByPlayer(p);
-
         Bukkit.getPluginManager().callEvent(new PlayerLeaveArenaEvent(p, this));
         //players.remove must be under call event in order to check if the player is a spectator or not
         players.remove(p);
+        removeArenaByPlayer(p);
 
         for (PotionEffect pf : p.getActivePotionEffects()) {
             p.removePotionEffect(pf.getType());
@@ -576,9 +575,9 @@ public class Arena {
      */
     public void removeSpectator(Player p, boolean disconnect) {
         debug("Spectator removed: " + p.getName() + " arena: " + getWorldName());
-        removeArenaByPlayer(p);
         Bukkit.getPluginManager().callEvent(new PlayerLeaveArenaEvent(p, this));
         spectators.remove(p);
+        removeArenaByPlayer(p);
         p.getInventory().clear();
         p.getInventory().setArmorContents(null);
         /* restore player inventory */
