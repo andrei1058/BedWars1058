@@ -55,6 +55,15 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
+
+        //Prevent player from placing during the removal from the arena
+        Arena arena = Arena.getArenaByName(e.getBlock().getWorld().getName());
+        if (arena != null){
+            if (arena.getStatus() != GameState.playing){
+                e.setCancelled(true);
+                return;
+            }
+        }
         Player p = e.getPlayer();
         if (Arena.isInArena(p)) {
             Arena a = Arena.getArenaByPlayer(p);
