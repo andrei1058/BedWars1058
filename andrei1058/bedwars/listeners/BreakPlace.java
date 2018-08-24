@@ -277,8 +277,38 @@ public class BreakPlace implements Listener {
         }
         Arena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a != null) {
-            if (a.isSpectator(e.getPlayer()) || a.getStatus() != GameState.playing || Arena.respawn.containsKey(e.getPlayer()))
+            if (a.isSpectator(e.getPlayer()) || a.getStatus() != GameState.playing || Arena.respawn.containsKey(e.getPlayer())) {
                 e.setCancelled(true);
+            } else {
+                try {
+                    Player p = e.getPlayer();
+                    for (BedWarsTeam t : a.getTeams()) {
+                        if (t.getSpawn().distance(e.getBlockClicked().getLocation()) <= a.getCm().getInt("spawnProtection")) {
+                            e.setCancelled(true);
+                            p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                            return;
+                        }
+                        if (t.getShop().distance(e.getBlockClicked().getLocation()) <= a.getCm().getInt("shopProtection")) {
+                            e.setCancelled(true);
+                            p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                            return;
+                        }
+                        if (t.getTeamUpgrades().distance(e.getBlockClicked().getLocation()) <= a.getCm().getInt("upgradesProtection")) {
+                            e.setCancelled(true);
+                            p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                            return;
+                        }
+                    }
+                    for (OreGenerator o : OreGenerator.getGenerators()) {
+                        if (o.getLocation().distance(e.getBlockClicked().getLocation()) <= 1) {
+                            e.setCancelled(true);
+                            p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                            return;
+                        }
+                    }
+                } catch (Exception ex) {
+                }
+            }
         }
         /** Remove empty bucket */
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
