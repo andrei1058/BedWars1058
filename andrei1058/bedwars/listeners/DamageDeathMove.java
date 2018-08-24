@@ -499,9 +499,6 @@ public class DamageDeathMove implements Listener {
             case "silverfish":
                 nms.spawnSilverfish(loc, t);
                 break;
-            case "bridge":
-                //todo add bridge
-                break;
         }
     }
 }

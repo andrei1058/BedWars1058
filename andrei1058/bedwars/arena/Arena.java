@@ -13,6 +13,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.potion.PotionEffect;
@@ -1586,5 +1587,18 @@ public class Arena {
                 }
             }
         }
+    }
+
+    /**
+     * Get a team by name
+     *
+     * @since API 10
+     */
+    @Nullable
+    public BedWarsTeam getTeam(String name) {
+        for (BedWarsTeam bwt : getTeams()) {
+            if (bwt.getName().equals(name)) return bwt;
+        }
+        return null;
     }
 }
