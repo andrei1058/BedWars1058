@@ -9,6 +9,8 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import static com.andrei1058.bedwars.Main.config;
@@ -37,6 +39,12 @@ public class Save extends SubCommand {
         if (ss == null) {
             s.sendMessage("§c ▪ §7You're not in a setup session!");
             return true;
+        }
+        /* Clear setup armorstands */
+        for (Entity e : p.getWorld().getEntities()){
+            if (e.getType() == EntityType.ARMOR_STAND){
+                e.remove();
+            }
         }
         p.getWorld().save();
         Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.unloadWorld(Bukkit.getWorld(p.getWorld().getName()), true), 30L);

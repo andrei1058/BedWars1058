@@ -187,6 +187,13 @@ public class Arena {
             plugin.getLogger().severe("Lobby Pos2 isn't set! The arena's lobby won't be removed!");
         }
 
+        /* Clear setup armorstands */
+        for (Entity e : world.getEntities()){
+            if (e.getType() == EntityType.ARMOR_STAND){
+                e.remove();
+            }
+        }
+
         //Call event
         Bukkit.getPluginManager().callEvent(new ArenaEnableEvent(this));
     }
@@ -667,6 +674,7 @@ public class Arena {
         arenas.remove(this);
         //Call event
         Bukkit.getPluginManager().callEvent(new ArenaDisableEvent(getWorldName()));
+        signs.clear();
     }
 
     /**
@@ -712,6 +720,12 @@ public class Arena {
                 teams.add(new BedWarsTeam(team, TeamColor.valueOf(yml.getString("Team." + team + ".Color").toUpperCase()),
                         cm.getArenaLoc("Team." + team + ".Spawn"), cm.getArenaLoc("Team." + team + ".Bed"), cm.getArenaLoc("Team." + team + ".Shop"),
                         cm.getArenaLoc("Team." + team + ".Upgrade"), this));
+            }
+            /* Clear setup armorstands */
+            for (Entity e : world.getEntities()){
+                if (e.getType() == EntityType.ARMOR_STAND){
+                    e.remove();
+                }
             }
         }, 100L);
 
