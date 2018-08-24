@@ -271,27 +271,37 @@ public interface NMS {
 
     /**
      * Get the NBTTag from a BedWars1058 item
+     *
+     * @since API 10
      */
     String getCustomData(ItemStack i);
 
     /**
      * Set a skull skin
+     *
+     * @since API 10
      */
     ItemStack setSkullOwner(ItemStack i, Player p);
 
 
     /**
      * Check if an entity has NBTTag
+     *
+     * @since API 10
      */
     boolean hasTag(Entity e, String tag);
 
     /**
      * Get tag value for entry NBTTag
+     *
+     * @since API 10
      */
     String getStringValue(Entity e, String entry);
 
     /**
      * Add a NBTTag to an entity
+     *
+     * @since API 10
      */
     void addStringValue(Entity e, String entry, String value);
 }
