@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.andrei1058.bedwars.Main.*;
+import static com.andrei1058.bedwars.arena.despawnables.TargetListener.owningTeam;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
 public class v1_11_R1 implements NMS {
@@ -377,7 +378,7 @@ public class v1_11_R1 implements NMS {
             this.namePath = namePath;
             despawnables.add(this);
             setName();
-            addStringValue(e.getBukkitEntity(), TargetListener.NBTTAG_OWING_TEAM_KEY, team.getName());
+            owningTeam.put(e.getUniqueID(), team.getName());
         }
 
         public void regresh() {
@@ -560,33 +561,5 @@ public class v1_11_R1 implements NMS {
         sm.setOwner(p.getName());
         i.setItemMeta(sm);
         return i;
-    }
-
-    @Override
-    public boolean hasTag(Entity e, String tag) {
-        if (e == null) return false;
-        net.minecraft.server.v1_11_R1.Entity entity = ((CraftEntity)e).getHandle();
-        NBTTagCompound nbt = new NBTTagCompound();
-        entity.f(nbt);
-        return nbt.hasKey(tag);
-    }
-
-    @Override
-    public String getStringValue(Entity e, String entry) {
-        if (e == null) return "";
-        net.minecraft.server.v1_11_R1.Entity entity = ((CraftEntity)e).getHandle();
-        NBTTagCompound nbt = new NBTTagCompound();
-        entity.f(nbt);
-        return nbt.getString(entry);
-    }
-
-    @Override
-    public void addStringValue(Entity e, String entry, String value) {
-        if (e == null) return;
-        net.minecraft.server.v1_11_R1.Entity entity = ((CraftEntity)e).getHandle();
-        NBTTagCompound nbt = new NBTTagCompound();
-        entity.f(nbt);
-        nbt.setString(entry, value);
-        entity.e(nbt);
     }
 }
