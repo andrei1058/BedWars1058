@@ -84,7 +84,6 @@ public class Inventory implements Listener {
         if (Main.getServerType() != ServerType.BUNGEE){
             if (e.getWhoClicked().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 e.setCancelled(true);
-                return;
             }
         }
 

@@ -71,6 +71,7 @@ public class Main extends JavaPlugin {
     public static com.andrei1058.bedwars.support.stats.Database database;
     public static HashMap<ArmorStand, List<String>> npcs_holos = new HashMap<>();
     public static HashMap<Integer, String> npcs = new HashMap<>();
+    private static String lobbyWorld = "";
 
     @Override
     public void onLoad() {
@@ -424,6 +425,7 @@ public class Main extends JavaPlugin {
                 new ConfigManager("bukkit", Bukkit.getWorldContainer().getPath(), false).set("settings.allow-end", false);
                 break;
         }
+        lobbyWorld = config.getLobbyWorldName();
     }
 
     private void setupSignsConfiguration() {
@@ -672,5 +674,9 @@ public class Main extends JavaPlugin {
      */
     public static String getServerVersion() {
         return version;
+    }
+
+    public static String getLobbyWorld() {
+        return lobbyWorld;
     }
 }

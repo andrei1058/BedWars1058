@@ -2,16 +2,21 @@ package com.andrei1058.bedwars.arena.despawnables;
 
 import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.arena.BedWarsTeam;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 import static com.andrei1058.bedwars.Main.nms;
 
 public class TargetListener implements Listener {
 
-    public static final String NBTTAG_OWING_TEAM_KEY = "OwningTeam";
+    public static HashMap<UUID, String> owningTeam = new HashMap<>();
 
     @EventHandler
     public void onTarget(EntityTargetLivingEntityEvent e){
@@ -27,8 +32,8 @@ public class TargetListener implements Listener {
             e.setCancelled(true);
             return;
         }
-        if (!nms.hasTag(e.getEntity(), NBTTAG_OWING_TEAM_KEY)) return;
-        if (arena.getTeam(p).getName().equals(nms.getStringValue(e.getEntity(), NBTTAG_OWING_TEAM_KEY))){
+        if (!owningTeam.containsKey(e.getEntity().getUniqueId())) return;
+        if (arena.getTeam(p).getName().equals(owningTeam.get(e.getEntity().getUniqueId()))){
             e.setCancelled(true);
             return;
         }
