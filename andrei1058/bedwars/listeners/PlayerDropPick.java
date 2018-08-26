@@ -1,7 +1,9 @@
 package com.andrei1058.bedwars.listeners;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.GeneratorCollectEvent;
+import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -19,8 +21,11 @@ public class PlayerDropPick implements Listener {
     @EventHandler
     public void onPickup(PlayerPickupItemEvent e) {
         Player p = e.getPlayer();
-        if (e.getPlayer().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
-            e.setCancelled(true);
+        if (Main.getServerType() != ServerType.BUNGEE){
+            if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
+                e.setCancelled(true);
+                return;
+            }
         }
         if (Arena.isInArena(p)) {
             Arena a = Arena.getArenaByPlayer(p);
@@ -62,8 +67,11 @@ public class PlayerDropPick implements Listener {
     @EventHandler
     public void onDrop(PlayerDropItemEvent e) {
         Player p = e.getPlayer();
-        if (e.getPlayer().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
-            e.setCancelled(true);
+        if (Main.getServerType() != ServerType.BUNGEE){
+            if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
+                e.setCancelled(true);
+                return;
+            }
         }
         if (Arena.isInArena(p)) {
             Arena a = Arena.getArenaByPlayer(p);

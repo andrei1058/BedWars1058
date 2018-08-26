@@ -1,6 +1,8 @@
 package com.andrei1058.bedwars.listeners;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
+import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.ArenaGUI;
 import com.andrei1058.bedwars.arena.SetupSession;
@@ -8,7 +10,6 @@ import com.andrei1058.bedwars.shop.CategoryContent;
 import com.andrei1058.bedwars.shop.ShopCategory;
 import com.andrei1058.bedwars.upgrades.TeamUpgrade;
 import com.andrei1058.bedwars.upgrades.UpgradeGroup;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,8 +19,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 
-import static com.andrei1058.bedwars.Main.config;
-import static com.andrei1058.bedwars.Main.lang;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
 public class Inventory implements Listener {
@@ -82,8 +81,11 @@ public class Inventory implements Listener {
 
         if (!i.hasItemMeta()) return;
         if (!i.getItemMeta().hasDisplayName()) return;
-        if (p.getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
-            e.setCancelled(true);
+        if (Main.getServerType() != ServerType.BUNGEE){
+            if (e.getWhoClicked().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
+                e.setCancelled(true);
+                return;
+            }
         }
 
         /* Check setup gui items */

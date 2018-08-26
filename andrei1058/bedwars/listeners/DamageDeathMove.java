@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.listeners;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.*;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.configuration.ConfigPath;
@@ -56,9 +57,11 @@ public class DamageDeathMove implements Listener {
                 }
             }
         }
-        if (getServerType() != ServerType.SHARED) {
-            if (e.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName()))
+        if (Main.getServerType() != ServerType.BUNGEE){
+            if (e.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 e.setCancelled(true);
+                return;
+            }
         }
     }
 
@@ -176,9 +179,11 @@ public class DamageDeathMove implements Listener {
                 }
             }
         }
-        if (getServerType() != ServerType.SHARED) {
-            if (e.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName()))
+        if (Main.getServerType() != ServerType.BUNGEE){
+            if (e.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 e.setCancelled(true);
+                return;
+            }
         }
     }
 

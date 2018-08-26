@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.listeners;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.api.TeamColor;
@@ -42,7 +43,7 @@ public class PlayerChat implements Listener {
         if (p.hasPermission("bw.chatcolor") || p.hasPermission("bw.*") || p.hasPermission("bw.vip")){
             e.setMessage(ChatColor.translateAlternateColorCodes('&', e.getMessage()));
         }
-        if (p.getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName()) && plugin.getServerType() != ServerType.SHARED) {
+        if (p.getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld()) && plugin.getServerType() != ServerType.MULTIARENA) {
             if (!config.getBoolean("globalChat")) {
                 e.getRecipients().clear();
                 e.getRecipients().addAll(p.getWorld().getPlayers());

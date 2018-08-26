@@ -42,7 +42,7 @@ public class BreakPlace implements Listener {
     @EventHandler
     public void onIceMelt(BlockFadeEvent e) {
         if (Main.getServerType() != ServerType.BUNGEE){
-            if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
+            if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 e.setCancelled(true);
                 return;
             }
@@ -142,8 +142,8 @@ public class BreakPlace implements Listener {
             a.getPlaced().add(e.getBlock());
             return;
         }
-        if (!(getServerType() == ServerType.SHARED || getServerType() == ServerType.MULTIARENA)) {
-            if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(config.getConfigLoc("lobbyLoc").getWorld().getName())) {
+        if (Main.getServerType() != ServerType.BUNGEE){
+            if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 if (!isBuildSession(p)) {
                     e.setCancelled(true);
                 }
@@ -154,8 +154,8 @@ public class BreakPlace implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
         Player p = e.getPlayer();
-        if (!(getServerType() == ServerType.SHARED || getServerType() == ServerType.MULTIARENA)) {
-            if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(config.getConfigLoc("lobbyLoc").getWorld().getName())) {
+        if (Main.getServerType() != ServerType.BUNGEE){
+            if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 if (!isBuildSession(p)) {
                     e.setCancelled(true);
                     return;
@@ -264,8 +264,8 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onBucketFill(PlayerBucketFillEvent e) {
-        if (!(getServerType() == ServerType.SHARED || getServerType() == ServerType.MULTIARENA)) {
-            if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(config.getConfigLoc("lobbyLoc").getWorld().getName())) {
+        if (Main.getServerType() != ServerType.BUNGEE){
+            if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 if (!isBuildSession(e.getPlayer())) {
                     e.setCancelled(true);
                 }
@@ -280,8 +280,8 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onBucketEmpty(PlayerBucketEmptyEvent e) {
-        if (!(getServerType() == ServerType.SHARED || getServerType() == ServerType.MULTIARENA)) {
-            if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(config.getConfigLoc("lobbyLoc").getWorld().getName())) {
+        if (Main.getServerType() != ServerType.BUNGEE){
+            if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 if (!isBuildSession(e.getPlayer())) {
                     e.setCancelled(true);
                 }

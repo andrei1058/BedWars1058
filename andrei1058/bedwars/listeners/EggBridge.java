@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.Material;
@@ -33,6 +34,12 @@ public class EggBridge implements Listener {
 
     @EventHandler
     public void onLaunch(ProjectileLaunchEvent e) {
+        if (Main.getServerType() != ServerType.BUNGEE){
+            if (e.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
+                e.setCancelled(true);
+                return;
+            }
+        }
         if (e.getEntity() instanceof Egg) {
             if (e.getEntity().getShooter() instanceof Player) {
                 Player p = (Player) e.getEntity().getShooter();
