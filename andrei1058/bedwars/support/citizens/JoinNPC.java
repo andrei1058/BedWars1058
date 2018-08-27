@@ -91,7 +91,7 @@ public class JoinNPC {
             ArmorStand a = createArmorStand(l.clone().add(0, 0.05, 0));
             a.setMarker(false);
             a.setCustomNameVisible(true);
-            a.setCustomName(ChatColor.translateAlternateColorCodes('&', nume[0]));
+            a.setCustomName(ChatColor.translateAlternateColorCodes('&', nume[0]).replace("{players}", String.valueOf(Arena.getPlayers(group))));
             npcs.put(npc.getId(), group);
             ArmorStand a2 = createArmorStand(l.clone().subtract(0, 0.25, 0));
             a2.setMarker(false);
