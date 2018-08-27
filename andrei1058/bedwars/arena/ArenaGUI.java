@@ -80,7 +80,7 @@ public class ArenaGUI {
             }
             im.setLore(lore);
             i.setItemMeta(im);
-            if (to > from) {
+            if (to >= from) {
                 inv.setItem(from, i);
                 arenas.get(x).setSlot(from);
                 from++;
