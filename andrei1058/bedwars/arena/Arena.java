@@ -7,6 +7,7 @@ import com.andrei1058.bedwars.configuration.ConfigManager;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.support.nte.NametagEdit;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -1213,13 +1214,13 @@ public class Arena {
         arenaByPlayer.put(p, this);
         Bukkit.getPluginManager().callEvent(new PlayerJoinArenaEvent(p, spectator));
         refreshSigns();
-        updateNPCs(getGroup());
+        JoinNPC.updateNPCs(getGroup());
     }
 
     private void removeArenaByPlayer(Player p) {
         arenaByPlayer.remove(p, this);
         refreshSigns();
-        updateNPCs(getGroup());
+        JoinNPC.updateNPCs(getGroup());
     }
 
     public void setStatus(GameState status) {
@@ -1340,23 +1341,6 @@ public class Arena {
             }
         }
         return false;
-    }
-
-    /**
-     * Update the Join NPCs for a group
-     *
-     * @param group arena group
-     * @since API 8
-     */
-    public static void updateNPCs(String group) {
-        String x = String.valueOf(Arena.getPlayers(group));
-        for (Map.Entry<ArmorStand, List<String>> e : npcs_holos.entrySet()) {
-            if (e.getValue().get(0).equalsIgnoreCase(group)) {
-                if (!(e.getKey() == null && e.getKey().isDead())) {
-                    e.getKey().setCustomName(e.getValue().get(1).replace("{players}", x));
-                }
-            }
-        }
     }
 
     public static void sendMultiarenaLobbyItems(Player p) {

@@ -19,6 +19,8 @@ import com.andrei1058.bedwars.support.bukkit.v1_12_R1.v1_12_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_8_R3.v1_8_R3;
 import com.andrei1058.bedwars.support.bukkit.v1_9_R1.v1_9_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_9_R2.v1_9_R2;
+import com.andrei1058.bedwars.support.citizens.CitizensListener;
+import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.support.lang.Internal;
 import com.andrei1058.bedwars.support.lang.Lang;
 import com.andrei1058.bedwars.support.leaderheads.LeaderHeadsSupport;
@@ -33,9 +35,6 @@ import com.andrei1058.bedwars.support.stats.SQLite;
 import com.andrei1058.bedwars.support.vault.*;
 import com.andrei1058.bedwars.tasks.OneTick;
 import com.andrei1058.bedwars.tasks.Refresh;
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.npc.skin.SkinnableEntity;
 import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
@@ -47,8 +46,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.util.*;
 
-import static com.andrei1058.bedwars.commands.main.subcmds.sensitive.NPC.createArmorStand;
-import static com.andrei1058.bedwars.commands.main.subcmds.sensitive.NPC.isCitizensSupport;
 import static com.andrei1058.bedwars.configuration.Language.setupLang;
 
 public class Main extends JavaPlugin {
@@ -69,8 +66,6 @@ public class Main extends JavaPlugin {
     private static Economy economy;
     private static String version = Bukkit.getServer().getClass().getName().split("\\.")[3];
     public static com.andrei1058.bedwars.support.stats.Database database;
-    public static HashMap<ArmorStand, List<String>> npcs_holos = new HashMap<>();
-    public static HashMap<Integer, String> npcs = new HashMap<>();
     private static String lobbyWorld = "";
 
     @Override
@@ -122,7 +117,7 @@ public class Main extends JavaPlugin {
 
         /** Citizens support */
         if (this.getServer().getPluginManager().getPlugin("Citizens") != null) {
-            com.andrei1058.bedwars.commands.main.subcmds.sensitive.NPC.setCitizensSupport(true);
+            JoinNPC.setCitizensSupport(true);
             getLogger().info("Hook into Citizens support. /bw npc");
             registerEvents(new CitizensListener());
         }
@@ -229,9 +224,10 @@ public class Main extends JavaPlugin {
             database.setupGeneralTables();
             //spawn NPCs
             try {
-                plugin.spawnNPCs();
+                JoinNPC.spawnNPCs();
             } catch (Exception e){
                 this.getLogger().severe("Could not spawn Join NPCs. Make sure you have right version of Citizens for your server!");
+                JoinNPC.setCitizensSupport(false);
             }
         }, 40L);
 
@@ -553,117 +549,6 @@ public class Main extends JavaPlugin {
 
     public static ConfigManager getGeneratorsCfg() {
         return generators;
-    }
-
-
-    /**
-     * Spawn an NPC
-     *
-     * @since API v8
-     */
-    public static NPC spawnNPC(Location l, String name, String group, String skin) {
-        NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "");
-        npc.faceLocation(l);
-        npc.spawn(l);
-        ((SkinnableEntity) npc.getEntity()).setSkinName(skin);
-        npc.faceLocation(l);
-        String separator = "\\\\n";
-        String[] nume = name.split(separator);
-        if (nume.length >= 2) {
-            ArmorStand a = createArmorStand(l.clone().add(0, 0.05, 0));
-            a.setMarker(false);
-            a.setCustomNameVisible(true);
-            a.setCustomName(ChatColor.translateAlternateColorCodes('&', nume[0]));
-            npcs.put(npc.getId(), group);
-            ArmorStand a2 = createArmorStand(l.clone().subtract(0, 0.25, 0));
-            a2.setMarker(false);
-            a2.setCustomName(ChatColor.translateAlternateColorCodes('&', nume[1].replace("{players}", String.valueOf(Arena.getPlayers(group)))));
-            a2.setCustomNameVisible(true);
-            npcs_holos.put(a2, Arrays.asList(group, nume[1].replace("&", "§")));
-        } else if (nume.length == 1) {
-            npcs.put(npc.getId(), group);
-            ArmorStand a2 = createArmorStand(l.clone().subtract(0, 0.25, 0));
-            a2.setMarker(false);
-            a2.setCustomName(ChatColor.translateAlternateColorCodes('&', nume[0].replace("&", "§")).replace("{players}", String.valueOf(Arena.getPlayers(group))));
-            a2.setCustomNameVisible(true);
-            npcs_holos.put(a2, Arrays.asList(group, nume[0]));
-        }
-        npc.faceLocation(l);
-        npc.setName("");
-        return npc;
-    }
-
-    /**
-     * Spawn npcs
-     *
-     * @since API v8
-     */
-    public static void spawnNPCs() {
-        if (!isCitizensSupport()) return;
-        if (Main.config.getYml().get("npcLoc") != null) {
-            String separator = "\\\\n";
-            for (String s : Main.config.getYml().getStringList("npcLoc")) {
-                String[] data = s.split(",");
-                if (data.length < 10) continue;
-                if (!Misc.isNumber(data[0])) continue;
-                if (!Misc.isNumber(data[1])) continue;
-                if (!Misc.isNumber(data[2])) continue;
-                if (!Misc.isNumber(data[3])) continue;
-                if (!Misc.isNumber(data[4])) continue;
-                if (Misc.isNumber(data[5])) continue;
-                if (Misc.isNumber(data[6])) continue;
-                if (Misc.isNumber(data[7])) continue;
-                if (Misc.isNumber(data[8])) continue;
-                if (!Misc.isNumber(data[9])) continue;
-                Location l = new Location(Bukkit.getWorld(data[5]), Double.valueOf(data[0]), Double.valueOf(data[1]), Double.valueOf(data[2]), Float.valueOf(data[3]),
-                        Float.valueOf(data[4]));
-                String skin = data[6], name = data[7], group = data[8];
-                int id = Integer.valueOf(data[9]);
-                net.citizensnpcs.api.npc.NPC npc = CitizensAPI.getNPCRegistry().getById(id);
-                if (CitizensAPI.getNPCRegistry().getById(id) == null) {
-                    plugin.getLogger().severe("Invalid npc id: " + id);
-                    continue;
-                } else {
-                    if (!npc.isSpawned()) {
-                        npc.spawn(l);
-                    }
-                }
-                npc.faceLocation(l);
-                if (npc.getEntity() instanceof SkinnableEntity) ((SkinnableEntity) npc.getEntity()).setSkinName(skin);
-                npc.setProtected(true);
-                npc.setName("");
-                npc.faceLocation(l);
-                for (Entity e : l.getWorld().getNearbyEntities(l, 1, 3, 1)) {
-                    if (e.getType() == EntityType.ARMOR_STAND) e.remove();
-                }
-                String[] nume = name.split(separator);
-                String count = String.valueOf(Arena.getPlayers(group));
-                if (nume.length >= 2) {
-                    String name1 = nume[0].replace("{players}", count), name2 = nume[1].replace("{players}", count);
-                    ArmorStand a = createArmorStand(l.clone().add(0, 0.05, 0));
-                    a.setMarker(false);
-                    a.setCustomNameVisible(true);
-                    a.setCustomName(ChatColor.translateAlternateColorCodes('&', name1));
-                    npcs.put(npc.getId(), group);
-                    Main.npcs_holos.put(a, Arrays.asList(group, nume[0].replace("&", "§")));
-
-                    ArmorStand a2 = createArmorStand(l.clone().subtract(0, 0.25, 0));
-                    a2.setMarker(false);
-                    a2.setCustomName(ChatColor.translateAlternateColorCodes('&', name2));
-                    a2.setCustomNameVisible(true);
-                    Main.npcs_holos.put(a2, Arrays.asList(group, nume[1].replace("&", "§")));
-                } else if (nume.length == 1) {
-                    String name1 = nume[0].replace("{players}", count);
-                    ArmorStand a2 = createArmorStand(l.clone().subtract(0, 0.25, 0));
-                    a2.setMarker(false);
-                    a2.setCustomName(ChatColor.translateAlternateColorCodes('&', name1));
-                    a2.setCustomNameVisible(true);
-                    Main.npcs_holos.put(a2, Arrays.asList(group, nume[0].replace("&", "§")));
-                    Main.npcs.put(npc.getId(), group);
-                }
-            }
-
-        }
     }
 
     /**

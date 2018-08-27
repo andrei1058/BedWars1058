@@ -4,12 +4,11 @@ import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
+import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.google.common.base.Joiner;
 import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.npc.skin.SkinnableEntity;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -22,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.andrei1058.bedwars.Main.mainCmd;
-import static com.andrei1058.bedwars.Main.spawnNPC;
 
 public class NPC extends SubCommand {
     /**
@@ -33,9 +31,6 @@ public class NPC extends SubCommand {
      * @param name   sub-command name
      * @since 0.6.1 api v6
      */
-
-    //citizens support
-    private static boolean citizensSupport = false;
 
     //main usage
     private final String MAIN_USAGE = "§c▪ §7Usage: §e§o/" + mainCmd + " " + getSubCommandName() + " add/ remove";
@@ -56,7 +51,7 @@ public class NPC extends SubCommand {
     @Override
     public boolean execute(String[] args, CommandSender s) {
         if (s instanceof ConsoleCommandSender) return false;
-        if (!isCitizensSupport()) return false;
+        if (!JoinNPC.isCitizensSupport()) return false;
         Player p = (Player) s;
         if (args.length < 1) {
             p.sendMessage(MAIN_USAGE);
@@ -83,7 +78,7 @@ public class NPC extends SubCommand {
                 npcs = new ArrayList<>();
             }
             String name = Joiner.on(" ").join(args).replace(args[0] + " " + args[1] + " " + args[2] + " ", "");
-            net.citizensnpcs.api.npc.NPC npc = spawnNPC(p.getLocation(), name, args[2], args[1]);
+            net.citizensnpcs.api.npc.NPC npc = JoinNPC.spawnNPC(p.getLocation(), name, args[2], args[1]);
             npcs.add(Main.config.getConfigLoc(p.getLocation()) + "," + args[1] + "," + name + "," + args[2] + "," + npc.getId());
             p.sendMessage(NPC_SET.replace("%name%", name.replace("&", "§").replace("\\\\n", " ")));
             Main.config.set("npcLoc", npcs);
@@ -100,7 +95,7 @@ public class NPC extends SubCommand {
             net.citizensnpcs.api.npc.NPC entitate = null;
             List<String> locations = Main.config.getYml().getStringList("npcLoc");
             for (Entity en : e) {
-                for (Integer id : Main.npcs.keySet()) {
+                for (Integer id : JoinNPC.npcs.keySet()) {
                     net.citizensnpcs.api.npc.NPC ent = CitizensAPI.getNPCRegistry().getById(id);
                     if (en.equals(ent)) {
                         for (String loc : Main.config.getYml().getStringList("npcLoc")) {
@@ -123,7 +118,7 @@ public class NPC extends SubCommand {
                     }
                 }
                 Main.config.set("npcLoc", locations);
-                Main.npcs.remove(entitate.getId());
+                JoinNPC.npcs.remove(entitate.getId());
                 entitate.destroy();
                 p.sendMessage("§c▪ §bNpc removed!");
             } else {
@@ -135,18 +130,6 @@ public class NPC extends SubCommand {
         return true;
     }
 
-    /**
-     * Check for citizens support
-     *
-     * @since API v8
-     */
-    public static boolean isCitizensSupport() {
-        return citizensSupport;
-    }
-
-    public static void setCitizensSupport(boolean citizensSupport) {
-        NPC.citizensSupport = citizensSupport;
-    }
 
     /**
      * Create an armor-stand hologram

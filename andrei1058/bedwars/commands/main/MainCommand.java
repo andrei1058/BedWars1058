@@ -10,6 +10,7 @@ import com.andrei1058.bedwars.commands.main.subcmds.sensitive.*;
 import com.andrei1058.bedwars.commands.main.subcmds.regular.*;
 import com.andrei1058.bedwars.configuration.ConfigManager;
 import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import net.md_5.bungee.api.chat.*;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
@@ -73,7 +74,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         new AddGenerator(this, "addGenerator");
         new SetType(this, "setType");
         new Save(this, "save");
-        if (NPC.isCitizensSupport()){
+        if (JoinNPC.isCitizensSupport()){
             new NPC(this, "npc");
         }
     }

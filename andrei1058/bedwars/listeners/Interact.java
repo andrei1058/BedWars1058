@@ -10,6 +10,7 @@ import com.andrei1058.bedwars.commands.main.subcmds.sensitive.NPC;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Messages;
 import com.andrei1058.bedwars.shop.ShopCategory;
+import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.upgrades.UpgradeGroup;
 import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Bukkit;
@@ -157,18 +158,6 @@ public class Interact implements Listener {
             } else if (inHand.getItemMeta().getDisplayName().equalsIgnoreCase(getMsg(p, Messages.PLAYER_STATS_ITEM_NAME))) {
                 Misc.openStatsGUI(p);
             }
-        }
-    }
-
-    @EventHandler
-    // Citizens support
-    public void onNPCInteract(PlayerInteractEntityEvent e) {
-        if (!NPC.isCitizensSupport()) return;
-        if (!e.getRightClicked().hasMetadata("NPC")) return;
-        net.citizensnpcs.api.npc.NPC npc = CitizensAPI.getNPCRegistry().getNPC(e.getRightClicked());
-        if (npc == null) return;
-        if (Main.npcs.containsKey(npc.getId())) {
-            Arena.joinRandomFromGroup(e.getPlayer(), Main.npcs.get(npc.getId()));
         }
     }
 
