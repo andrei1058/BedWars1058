@@ -20,7 +20,7 @@ public class CitizensListener implements Listener {
 
     @EventHandler
     public void removeNPC(NPCRemoveEvent e) {
-        List<String> locations = Main.config.getYml().getStringList("npcLoc");
+        List<String> locations = Main.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE);
         boolean removed = false;
         if (JoinNPC.npcs.keySet().contains(e.getNPC().getId())) {
             JoinNPC.npcs.remove(e.getNPC().getId());

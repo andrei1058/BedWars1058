@@ -4,18 +4,21 @@ import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
+import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.google.common.base.Joiner;
 import net.citizensnpcs.api.CitizensAPI;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
+import org.bukkit.util.BlockIterator;
+import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +40,9 @@ public class NPC extends SubCommand {
     private final String ADD_USAGE = "§c▪ §7Usage: §e§o/" + getParent().getName() + " " + getSubCommandName() + " add <skin> <arenaGroup> <§7firstLine§9\\\\n§7secondLine§e>\n§7You can use §e{players} §7for the players count in this arena group.";
     private final String NO_GROUP = "§c▪ §bThere isn't any group called: §c%name%";
     private final String NPC_SET = "§a§c▪ §bNPC: %name% §bwas set!";
+    private final String NO_NPCS = "§c▪ §bThere isn't any NPC nearby.";
+    private final String NO_SET = "§c▪ §bThere isn't any NPC set yet!";
+    private final String NPC_REMOVED = "§c▪ §bThe target NPC was removed!";
 
     public NPC(ParentCommand parent, String name) {
         super(parent, name);
@@ -44,8 +50,8 @@ public class NPC extends SubCommand {
         showInList(true);
         setPriority(12
         );
-        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " "+getSubCommandName()+ "         §8   - §ecreate a join NPC", "§fCreate a join NPC  \n§fClick for more details.",
-                "/" + getParent().getName() + " "+getSubCommandName(), ClickEvent.Action.RUN_COMMAND));
+        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " " + getSubCommandName() + "         §8   - §ecreate a join NPC", "§fCreate a join NPC  \n§fClick for more details.",
+                "/" + getParent().getName() + " " + getSubCommandName(), ClickEvent.Action.RUN_COMMAND));
     }
 
     @Override
@@ -72,58 +78,51 @@ public class NPC extends SubCommand {
                 return true;
             }
             List<String> npcs;
-            if (Main.config.getYml().get("npcLoc") != null) {
-                npcs = Main.config.getYml().getStringList("npcLoc");
+            if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE) != null) {
+                npcs = Main.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE);
             } else {
                 npcs = new ArrayList<>();
             }
             String name = Joiner.on(" ").join(args).replace(args[0] + " " + args[1] + " " + args[2] + " ", "");
-            net.citizensnpcs.api.npc.NPC npc = JoinNPC.spawnNPC(p.getLocation(), name, args[2], args[1]);
+            net.citizensnpcs.api.npc.NPC npc = JoinNPC.spawnNPC(p.getLocation(), name, args[2], args[1], null);
             npcs.add(Main.config.getConfigLoc(p.getLocation()) + "," + args[1] + "," + name + "," + args[2] + "," + npc.getId());
             p.sendMessage(NPC_SET.replace("%name%", name.replace("&", "§").replace("\\\\n", " ")));
-            Main.config.set("npcLoc", npcs);
-        } else if (args[1].equalsIgnoreCase("remove")) {
-            List<Entity> e = p.getNearbyEntities(1, 1, 1);
+            Main.config.set(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE, npcs);
+
+        } else if (args[0].equalsIgnoreCase("remove")) {
+
+            List<Entity> e = p.getNearbyEntities(4, 4, 4);
             if (e.isEmpty()) {
-                p.sendMessage("§c▪ §bThere isn't any entity nearby.");
+                p.sendMessage(NO_NPCS);
                 return true;
             }
-            if (Main.config.getYml().get("npcLoc") == null) {
-                p.sendMessage("§c▪ §bThere isn't any NPC set yet!");
+            if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE) == null) {
+                p.sendMessage(NO_SET);
                 return true;
             }
-            net.citizensnpcs.api.npc.NPC entitate = null;
-            List<String> locations = Main.config.getYml().getStringList("npcLoc");
-            for (Entity en : e) {
-                for (Integer id : JoinNPC.npcs.keySet()) {
-                    net.citizensnpcs.api.npc.NPC ent = CitizensAPI.getNPCRegistry().getById(id);
-                    if (en.equals(ent)) {
-                        for (String loc : Main.config.getYml().getStringList("npcLoc")) {
-                            String[] data = loc.split(",");
-                            Location l = new Location(Bukkit.getWorld(data[5]), Double.valueOf(data[0]),
-                                    Double.valueOf(data[1]), Double.valueOf(data[2]), Float.valueOf(data[3]), Float.valueOf(data[4]));
-                            Location l2 = ent.getEntity().getLocation();
-                            if (l.getBlockX() == l2.getBlockX() && l.getBlockY() == l2.getBlockY() && l.getBlockZ() == l2.getBlockZ()) {
-                                entitate = ent;
-                                locations.remove(loc);
-                            }
-                        }
+            net.citizensnpcs.api.npc.NPC npc = getTarget(p);
+            if (npc == null) {
+                p.sendMessage(NO_NPCS);
+                return true;
+            }
+            List<String> locations = Main.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE);
+            for (Integer id : JoinNPC.npcs.keySet()) {
+                if (id == npc.getId()) {
+                    for (String loc : Main.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE)) {
+                        locations.remove(loc);
+                        break;
                     }
                 }
             }
-            if (entitate != null) {
-                for (Entity e2 : entitate.getEntity().getNearbyEntities(0, 3, 0)) {
-                    if (e2.getType() == EntityType.ARMOR_STAND) {
-                        e2.remove();
-                    }
+            JoinNPC.npcs.remove(npc.getId());
+            for (Entity e2 : npc.getEntity().getNearbyEntities(0, 3, 0)) {
+                if (e2.getType() == EntityType.ARMOR_STAND) {
+                    e2.remove();
                 }
-                Main.config.set("npcLoc", locations);
-                JoinNPC.npcs.remove(entitate.getId());
-                entitate.destroy();
-                p.sendMessage("§c▪ §bNpc removed!");
-            } else {
-                p.sendMessage("§c▪ §bThere isn't any npc nearby.");
             }
+            Main.config.set(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE, locations);
+            npc.destroy();
+            p.sendMessage(NPC_REMOVED);
         } else {
             p.sendMessage(MAIN_USAGE);
         }
@@ -136,12 +135,40 @@ public class NPC extends SubCommand {
      *
      * @since API v8
      */
-    public static ArmorStand createArmorStand(Location loc) {
+    public static ArmorStand createArmorStand(@NotNull Location loc) {
         ArmorStand a = loc.getWorld().spawn(loc, ArmorStand.class);
         a.setGravity(false);
         a.setVisible(false);
         a.setCustomNameVisible(false);
         a.setMarker(true);
         return a;
+    }
+
+    /**
+     * Get target NPC
+     */
+    @Nullable
+    public static net.citizensnpcs.api.npc.NPC getTarget(@NotNull final Player player) {
+
+        BlockIterator iterator = new BlockIterator(player.getWorld(), player.getLocation().toVector(), player.getEyeLocation().getDirection(), 0, 100);
+        while (iterator.hasNext()) {
+            Block item = iterator.next();
+            for (Entity entity : player.getNearbyEntities(100, 100, 100)) {
+                int acc = 2;
+                for (int x = -acc; x < acc; x++) {
+                    for (int z = -acc; z < acc; z++) {
+                        for (int y = -acc; y < acc; y++) {
+                            if (entity.getLocation().getBlock().getRelative(x, y, z).equals(item)) {
+                                if (entity.hasMetadata("NPC")) {
+                                    net.citizensnpcs.api.npc.NPC npc = CitizensAPI.getNPCRegistry().getNPC(entity);
+                                    if (npc != null) return npc;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null;
     }
 }
