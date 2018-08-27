@@ -6,7 +6,7 @@ import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.arena.despawnables.TargetListener;
 import com.andrei1058.bedwars.arena.spectator.SpectateListeners;
-import com.andrei1058.bedwars.arena.upgrades.BaseEnterListener;
+import com.andrei1058.bedwars.arena.upgrades.BaseListener;
 import com.andrei1058.bedwars.commands.LeaveCommand;
 import com.andrei1058.bedwars.commands.main.MainCommand;
 import com.andrei1058.bedwars.configuration.*;
@@ -154,7 +154,7 @@ public class Main extends JavaPlugin {
 
         /** Register events */
         registerEvents(new JoinLeaveTeleport(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(),
-                new EggBridge(), new SpectateListeners(), new BaseEnterListener(), new TargetListener());
+                new EggBridge(), new SpectateListeners(), new BaseListener(), new TargetListener());
         if (getServerType() == ServerType.BUNGEE) {
             registerEvents(new Ping());
         }

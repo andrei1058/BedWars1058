@@ -23,7 +23,7 @@ import java.util.HashMap;
 import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
-public class BaseEnterListener implements Listener {
+public class BaseListener implements Listener {
 
     public static HashMap<Player, BedWarsTeam> isOnABase = new HashMap<>();
 
@@ -60,6 +60,7 @@ public class BaseEnterListener implements Listener {
      * Check the Enter/ Leave events and call them
      */
     private static void checkEvents(Player p, @NotNull Arena a) {
+        if (a.isSpectator(p)) return;
         boolean notOnBase = true;
         for (BedWarsTeam bwt : a.getTeams()) {
             /** BaseEnterEvent */

@@ -24,7 +24,7 @@ import java.sql.Timestamp;
 import java.util.*;
 
 import static com.andrei1058.bedwars.Main.*;
-import static com.andrei1058.bedwars.arena.upgrades.BaseEnterListener.isOnABase;
+import static com.andrei1058.bedwars.arena.upgrades.BaseListener.isOnABase;
 import static com.andrei1058.bedwars.configuration.Language.*;
 
 public class Arena {

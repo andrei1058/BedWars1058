@@ -1,18 +1,15 @@
 package com.andrei1058.bedwars.arena;
 
-import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.ArenaFirstSpawnEvent;
 import com.andrei1058.bedwars.api.ArenaPlayerRespawnEvent;
 import com.andrei1058.bedwars.api.GeneratorType;
 import com.andrei1058.bedwars.api.TeamColor;
-import com.andrei1058.bedwars.arena.upgrades.BaseEnterListener;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Bed;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -21,8 +18,6 @@ import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.material.Colorable;
-import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Contract;
