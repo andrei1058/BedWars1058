@@ -767,10 +767,18 @@ public class Arena {
                                 if (t.getSize() + getParty().partySize(p) <= maxInTeam) {
                                     skip.add(p);
                                     p.closeInventory();
-                                    t.addPlayers(p);
+                                    TeamAssignEvent e = new TeamAssignEvent(p, t, this);
+                                    Bukkit.getPluginManager().callEvent(e);
+                                    if (!e.isCancelled()){
+                                        t.addPlayers(p);
+                                    }
                                     for (Player mem : getParty().getMembers(p)) {
                                         if (mem != p) {
-                                            t.addPlayers(mem);
+                                            TeamAssignEvent ee = new TeamAssignEvent(p, t, this);
+                                            Bukkit.getPluginManager().callEvent(ee);
+                                            if (!e.isCancelled()){
+                                                t.addPlayers(mem);
+                                            }
                                             skip.add(mem);
                                             mem.closeInventory();
                                         }
@@ -789,7 +797,11 @@ public class Arena {
                                 addhere = t;
                             }
                         }
-                        addhere.addPlayers(p);
+                        TeamAssignEvent e = new TeamAssignEvent(p, t, this);
+                        Bukkit.getPluginManager().callEvent(e);
+                        if (!e.isCancelled()){
+                            addhere.addPlayers(p);
+                        }
                         p.closeInventory();
                     }
 

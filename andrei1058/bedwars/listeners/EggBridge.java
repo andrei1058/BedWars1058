@@ -1,9 +1,11 @@
 package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.EggBridgeThrowEvent;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Player;
@@ -46,6 +48,12 @@ public class EggBridge implements Listener {
                 Arena a = Arena.getArenaByPlayer(p);
                 if (a != null) {
                     if (a.isPlayer(p)) {
+                        EggBridgeThrowEvent event = new EggBridgeThrowEvent(p, a);
+                        Bukkit.getPluginManager().callEvent(event);
+                        if (e.isCancelled()){
+                            e.setCancelled(true);
+                            return;
+                        }
                         bridges.put((Egg) e.getEntity(), a.getTeam(p).getColor());
                     }
                 }
