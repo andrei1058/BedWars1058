@@ -1,19 +1,14 @@
 package com.andrei1058.bedwars.listeners;
 
-import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.ArenaGUI;
 
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.Misc;
-import com.andrei1058.bedwars.commands.main.subcmds.sensitive.NPC;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Messages;
 import com.andrei1058.bedwars.shop.ShopCategory;
-import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.upgrades.UpgradeGroup;
-import net.citizensnpcs.api.CitizensAPI;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -140,16 +135,6 @@ public class Interact implements Listener {
                         if (!Misc.isProjectile(Material.valueOf(shop.getYml().getString("utilities.ironGolem.material")))) {
                             if (inHand.getType() == Material.valueOf(shop.getYml().getString("utilities.ironGolem.material")) && inHand.getData().getData() == shop.getInt("utilities.ironGolem.data")) {
                                 nms.spawnIronGolem(p.getLocation().add(0, 1, 0), a.getTeam(p));
-                                if (!nms.isProjectile(inHand)) {
-                                    nms.minusAmount(p, inHand, 1);
-                                }
-                            }
-                        }
-                    }
-                    if (shop.getBoolean("utilities.bridge.enable")) {
-                        if (!Misc.isProjectile(Material.valueOf(shop.getYml().getString("utilities.bridge.material")))) {
-                            if (inHand.getType() == Material.getMaterial(shop.getYml().getString("utilities.bridge.material")) && inHand.getData().getData() == shop.getInt("utilities.bridge.data")) {
-                                //todo spawn bridge
                                 if (!nms.isProjectile(inHand)) {
                                     nms.minusAmount(p, inHand, 1);
                                 }
