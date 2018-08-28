@@ -48,6 +48,7 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_SLOT = "spectatorItems.leave.slot";
     public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_ENCHANTED = "spectatorItems.leave.enchanted";
     public static final String GENERAL_CONFIGURATION_NPC_LOC_STORAGE = "npcLoc";
+    public static final String GENERAL_CONFIGURATION_DEFAULT_ITEMS = "start-items-per-arena";
 
     public static final String ARENA_CONFIGURATION_MAX_BUILD_Y = "maxBuildY";
     public static final String ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS = "emptyTeamGenOff";

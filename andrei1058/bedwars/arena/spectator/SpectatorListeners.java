@@ -4,7 +4,6 @@ import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.*;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.configuration.Messages;
-import com.onarandombox.MultiverseCore.api.Teleporter;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -25,7 +24,7 @@ import java.util.ArrayList;
 import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
-public class SpectateListeners implements Listener {
+public class SpectatorListeners implements Listener {
 
     @EventHandler
     public void onSpectatorItemInteract(PlayerInteractEvent e) {
@@ -45,10 +44,10 @@ public class SpectateListeners implements Listener {
 
         /* Spectator Items */
         switch (nms.getCustomData(i)) {
-            case SpectateItems.NBT_SPECTATOR_TELEPORTER_ITEM:
+            case SpectatorItems.NBT_SPECTATOR_TELEPORTER_ITEM:
                 TeleporterGUI.openGUI(p);
                 break;
-            case SpectateItems.NBT_SPECTATOR_LEAVE_ITEM:
+            case SpectatorItems.NBT_SPECTATOR_LEAVE_ITEM:
                 a.removePlayer(p, Main.getServerType() == ServerType.BUNGEE);
                 break;
         }

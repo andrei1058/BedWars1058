@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import static com.andrei1058.bedwars.configuration.Language.getList;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
-public class SpectateItems {
+public class SpectatorItems {
 
     public static final String NBT_SPECTATOR_TELEPORTER_ITEM = "spectatorTeleportItem";
     public static final String NBT_SPECTATOR_LEAVE_ITEM = "spectatorLeaveItem";

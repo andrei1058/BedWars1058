@@ -5,7 +5,9 @@ import com.andrei1058.bedwars.api.GameAPI;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.arena.despawnables.TargetListener;
-import com.andrei1058.bedwars.arena.spectator.SpectateListeners;
+import com.andrei1058.bedwars.listeners.EntityDropPickListener;
+import com.andrei1058.bedwars.listeners.PlayerDropPickListener;
+import com.andrei1058.bedwars.arena.spectator.SpectatorListeners;
 import com.andrei1058.bedwars.arena.upgrades.BaseListener;
 import com.andrei1058.bedwars.commands.LeaveCommand;
 import com.andrei1058.bedwars.commands.main.MainCommand;
@@ -149,7 +151,7 @@ public class Main extends JavaPlugin {
 
         /** Register events */
         registerEvents(new JoinLeaveTeleport(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(),
-                new EggBridge(), new SpectateListeners(), new BaseListener(), new TargetListener());
+                new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener());
         if (getServerType() == ServerType.BUNGEE) {
             registerEvents(new Ping());
         }
@@ -157,14 +159,14 @@ public class Main extends JavaPlugin {
         /** Load version support */
         switch (version) {
             case "v1_12_R1":
-                registerEvents(new EntityDropPick());
+                registerEvents(new EntityDropPickListener());
                 break;
             default:
-                registerEvents(new PlayerDropPick());
+                registerEvents(new PlayerDropPickListener());
                 break;
             case "v1_8_R2":
             case "v1_8_R3":
-                registerEvents(new PlayerDropPick());
+                registerEvents(new PlayerDropPickListener());
                 /**Bukkit.getScheduler().runTaskLater(this, ()-> {
                  System.out.println("\u001B[31m[WARN] BedWars1058 is going to abort support for this server version in the future.\nPlease consider upgrading to a newer paper/spigot version.\u001B[0m");
                  }, 40L);*/
@@ -382,7 +384,7 @@ public class Main extends JavaPlugin {
         Misc.addDefaultStatsItem(yml, 22, Material.CHEST, 0, "gamesPlayed");
         Misc.addDefaultStatsItem(yml, 23, Material.STAINED_GLASS_PANE, 0, "lastPlay");
 
-        yml.addDefault("startItems", Arrays.asList("WOOD_SWORD"));
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS+".default", Arrays.asList("WOOD_SWORD"));
         yml.addDefault("blockedCmds", Arrays.asList("spawn", "tpa", "tpaccept", "warp", "goto", "tp", "tphere", "gamemode", "fly", "kill"));
         yml.options().copyDefaults(true);
         config.save();

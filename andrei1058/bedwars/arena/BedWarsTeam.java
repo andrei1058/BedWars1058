@@ -6,6 +6,7 @@ import com.andrei1058.bedwars.api.GeneratorType;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.listeners.EntityDropPickListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -40,6 +41,7 @@ public class BedWarsTeam {
     private Arena arena;
     private boolean bedDestroyed = false;
     private int dragons = 1;
+
     /**
      * slot, tier
      */
@@ -152,7 +154,9 @@ public class BedWarsTeam {
      */
     public void sendDefaultInventory(Player p) {
         p.getInventory().clear();
-        for (String s : config.getYml().getStringList("startItems")) {
+        String path = config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + "." + arena.getGroup()) == null ?
+                ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + ".default" : ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + "." + arena.getGroup();
+        for (String s : config.getYml().getStringList(path)) {
             String[] parm = s.split(",");
             if (parm.length != 0) {
                 try {
@@ -397,7 +401,7 @@ public class BedWarsTeam {
         getBaseEffects().add(new BedWarsTeam.Effect(pef, amp, duration));
         for (Player p : new ArrayList<>(getMembers())) {
             if (p.getLocation().distance(getBed()) <= getArena().getIslandRadius()) {
-                for (Effect e : getBaseEffects()){
+                for (Effect e : getBaseEffects()) {
                     p.addPotionEffect(new PotionEffect(e.getPotionEffectType(), e.getDuration(), e.getAmplifier()));
                 }
             }

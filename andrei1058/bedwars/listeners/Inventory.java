@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.ArenaGUI;
+import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.shop.CategoryContent;
 import com.andrei1058.bedwars.shop.ShopCategory;
@@ -38,6 +39,18 @@ public class Inventory implements Listener {
             if (ss != null) {
                 if (ss.getSetupType() == null)
                     ss.cancel();
+            }
+        }
+        BedWarsTeam.PlayerVault pv = BedWarsTeam.getVault(p);
+        if (pv != null) {
+            for (ItemStack i : e.getInventory()) {
+                if (i == null) continue;
+                if (i.getType() == Material.AIR) continue;
+                if (pv.getInvItems().contains(i)) {
+                    e.getInventory().remove(i);
+                    p.getInventory().addItem(i);
+                    return;
+                }
             }
         }
     }
@@ -81,7 +94,7 @@ public class Inventory implements Listener {
 
         if (!i.hasItemMeta()) return;
         if (!i.getItemMeta().hasDisplayName()) return;
-        if (Main.getServerType() != ServerType.BUNGEE){
+        if (Main.getServerType() != ServerType.BUNGEE) {
             if (e.getWhoClicked().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 e.setCancelled(true);
             }
