@@ -50,14 +50,14 @@ public class DelArena extends SubCommand {
         }
         File ws = new File(Bukkit.getServer().getWorldContainer().getPath() + "/" + args[0]);
         if (!ws.exists()) {
-            p.sendMessage("§c▪ §7" + args[0] + " doesn't exist!");
+            p.sendMessage("§c▪ §7" + args[0] + " doesn't exist as a world folder!");
             return true;
         }
         if (getArenaByName(args[0]) != null) {
             p.sendMessage("§c▪ §7Please disable it first!");
             return true;
         }
-        File ac = new File("plugins/" + plugin.getName() + "/Arenas/" + args[0]);
+        File ac = new File("plugins/" + plugin.getName() + "/Arenas/" + args[0]+ ".yml");
         if (!ac.exists()) {
             p.sendMessage("§c▪ §7This arena doesn't exist!");
             return true;
