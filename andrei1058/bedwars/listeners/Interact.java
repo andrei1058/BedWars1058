@@ -49,7 +49,16 @@ public class Interact implements Listener {
                     return;
                 }
                 if (b.getType() == Material.BED_BLOCK) {
-                    e.setCancelled(true);
+                    if (p.isSneaking()){
+                        ItemStack i = nms.getItemInHand(p);
+                        if (i == null){
+                            e.setCancelled(true);
+                        } else if (i.getType() == Material.AIR){
+                            e.setCancelled(true);
+                        }
+                    } else {
+                        e.setCancelled(true);
+                    }
                     return;
                 }
                 if (b.getType() == Material.CHEST) {
