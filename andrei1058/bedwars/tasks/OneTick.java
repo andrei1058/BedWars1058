@@ -1,10 +1,12 @@
 package com.andrei1058.bedwars.tasks;
 
+import com.andrei1058.bedwars.api.EggBridgeBuildEvent;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.OreGenerator;
 import com.andrei1058.bedwars.listeners.EggBridge;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -31,28 +33,18 @@ public class OneTick extends BukkitRunnable {
             Player pl = (Player) e.getKey().getShooter();
             Location loc = e.getKey().getLocation().clone();
             loc.getWorld().playEffect(loc, nms.eggBridge(), 5);
+
             if (e.getKey().isDead()) {
-                //debug("OneTick> EGG is dead! Removed from task.");
                 EggBridge.removeEgg(e.getKey());
                 continue;
             }
+
             Arena a = Arena.getArenaByName(e.getKey().getWorld().getName());
             if (a == null) continue;
-            //debug("OneTick> Egg's arena is not null.");
             if (pl.getLocation().distance(e.getKey().getLocation()) > 27) continue;
-            //debug("OneTick> Distance < 11. OK.");
             if (pl.getLocation().getY()-e.getKey().getLocation().getY() > 9) continue;
-            //debug("OneTick> y < 5. OK.");
+
             if (pl.getLocation().distance(loc) > 4.0D) {
-                /* Block b1 = loc.clone().subtract(0.0D, 1.0D, 0.0D).getBlock();
-                if (!Misc.isOutsideOfBorder(b1.getLocation())) {
-                    if (b1.getType() == Material.AIR) {
-                        b1.setType(Material.WOOL);
-                        nms.setBlockTeamColor(b1, e.getValue());
-                        a.getPlaced().add(b1);
-                        pl.playEffect(b1.getLocation(), nms.eggBridge(), 5);
-                    }
-                }*/
 
                 Block b2 = loc.clone().subtract(0.0D, 2.0D, 0.0D).getBlock();
                 if (!Misc.isOutsideOfBorder(b2.getLocation())) {
@@ -60,6 +52,7 @@ public class OneTick extends BukkitRunnable {
                         b2.setType(Material.WOOL);
                         nms.setBlockTeamColor(b2, e.getValue());
                         a.getPlaced().add(b2);
+                        Bukkit.getPluginManager().callEvent(new EggBridgeBuildEvent(e.getValue(), a, b2));
                     }
                 }
 
@@ -69,6 +62,7 @@ public class OneTick extends BukkitRunnable {
                         b3.setType(Material.WOOL);
                         nms.setBlockTeamColor(b3, e.getValue());
                         a.getPlaced().add(b3);
+                        Bukkit.getPluginManager().callEvent(new EggBridgeBuildEvent(e.getValue(), a, b3));
                     }
                 }
 
@@ -78,17 +72,9 @@ public class OneTick extends BukkitRunnable {
                         b4.setType(Material.WOOL);
                         nms.setBlockTeamColor(b4, e.getValue());
                         a.getPlaced().add(b4);
+                        Bukkit.getPluginManager().callEvent(new EggBridgeBuildEvent(e.getValue(), a, b4));
                     }
                 }
-
-                /*Block b5 = loc.clone().subtract(0.0D, 2.0D, 0.0D).add(1.0D, 0.0D, 0.0D).getBlock();
-                if (!Misc.isOutsideOfBorder(b5.getLocation())) {
-                if (b5.getType() == Material.AIR) {
-                    b5.setType(Material.WOOL);
-                    nms.setBlockTeamColor(b5, e.getValue());
-                    a.getPlaced().add(b5);
-                }
-                }*/
             }
         }
     }
