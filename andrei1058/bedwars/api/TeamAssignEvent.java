@@ -20,6 +20,8 @@ public class TeamAssignEvent extends Event {
      * You can cancel each team assign event in order to manage them yourself
      * but make sure to set BedWarsTeam#setBedDestroyed(false) if non empty teams are marked as eliminated
      * and use BedWarsTeam#firstSpawn(p) to spawn them. But first assign them to a team BedWarsTeam#addPlayers(p)
+     *
+     * @since API 10
      */
     public TeamAssignEvent(Player player, BedWarsTeam team, Arena arena) {
         this.player = player;
@@ -31,6 +33,7 @@ public class TeamAssignEvent extends Event {
      * Get the team
      *
      * @return the team assigned to the player
+     * @since API 10
      */
     public BedWarsTeam getTeam() {
         return team;
@@ -40,6 +43,7 @@ public class TeamAssignEvent extends Event {
      * Get the player
      *
      * @return the target player
+     * @since API 10
      */
     public Player getPlayer() {
         return player;
@@ -49,6 +53,7 @@ public class TeamAssignEvent extends Event {
      * Get the arena
      *
      * @return arena
+     * @since API 10
      */
     public Arena getArena() {
         return arena;
@@ -56,6 +61,8 @@ public class TeamAssignEvent extends Event {
 
     /**
      * Check if the assign was cancelled
+     *
+     * @since API 10
      */
     public boolean isCancelled() {
         return cancelled;
@@ -63,6 +70,8 @@ public class TeamAssignEvent extends Event {
 
     /**
      * Cancel/ Allow the assign event
+     *
+     * @since API 10
      */
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
