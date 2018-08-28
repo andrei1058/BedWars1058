@@ -43,7 +43,6 @@ public class ConfigManager {
             yml.addDefault("shopProtection", 1);
             yml.addDefault("upgradesProtection", 1);
             yml.addDefault("islandRadius", 17);
-            yml.addDefault("bedBlock", "BED_BLOCK");
             yml.addDefault("worldBorder", 300);
             yml.addDefault("voidKill", false);
             //yml.addDefault("disableGeneratorsOnOrphanIslands", false);

@@ -57,10 +57,6 @@ public class Arena {
     private NextEvent nextEvent = NextEvent.DIAMOND_GENERATOR_TIER_II;
     public int diamondTier = 1, emeraldTier = 1;
 
-    /**
-     * bed block
-     */
-    private Material bedBlock = Material.BED_BLOCK;
     private int bedsDestroyCountdown = config.getInt("bedsDestroyCountdown");
     private int dragonCountdown = config.getInt("dragonSpawnCountdown");
     private int gameEndCountdown = config.getInt("gameEndCountdown");
@@ -168,16 +164,6 @@ public class Arena {
 
         arenas.add(this);
         arenaByName.put(world.getName(), this);
-        if (yml.get("bedBlock") != null) {
-            try {
-                Material.valueOf(yml.getString("bedBlock"));
-                bedBlock = Material.valueOf(yml.getString("bedBlock"));
-            } catch (Exception ex) {
-                if (p != null)
-                    p.sendMessage("§c" + yml.getString("bedBlock") + " is not a Material at " + getWorldName() + ".yml");
-                plugin.getLogger().severe(yml.getString("bedBlock") + " is not a Material at " + getWorldName() + ".yml");
-            }
-        }
         world.getWorldBorder().setCenter(cm.getArenaLoc("waiting.Loc"));
         world.getWorldBorder().setSize(yml.getInt("worldBorder"));
 
@@ -797,7 +783,7 @@ public class Arena {
                                 addhere = t;
                             }
                         }
-                        TeamAssignEvent e = new TeamAssignEvent(p, t, this);
+                        TeamAssignEvent e = new TeamAssignEvent(p, addhere, this);
                         Bukkit.getPluginManager().callEvent(e);
                         if (!e.isCancelled()){
                             addhere.addPlayers(p);
@@ -1194,13 +1180,6 @@ public class Arena {
     public int getPlayerBedsDestroyed(Player p) {
         if (playerBedsDestroyed.containsKey(p)) return playerBedsDestroyed.get(p);
         return 0;
-    }
-
-    /**
-     * Get the bed block for this arena
-     */
-    public Material getBedBlock() {
-        return bedBlock;
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.arena;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.ArenaFirstSpawnEvent;
 import com.andrei1058.bedwars.api.ArenaPlayerRespawnEvent;
 import com.andrei1058.bedwars.api.GeneratorType;
@@ -663,48 +664,12 @@ public class BedWarsTeam {
     public void setBedDestroyed(boolean bedDestroyed) {
         this.bedDestroyed = bedDestroyed;
         if (!bedDestroyed) {
-            if (bed.getBlock().getType() == arena.getBedBlock()) {
-                if (getBed().getBlock().getType() == Material.BED_BLOCK) {
-                    nms.colorBed(this, getBed().getBlock().getState());
-                    for (int x = -1; x < 2; x++) {
-                        for (int z = -1; z < 2; z++) {
-                            Block b = getBed().clone().add(x, 0, z).getBlock();
-                            if (b.getType() != Material.BED_BLOCK) continue;
-                            nms.colorBed(this, b.getState());
-                        }
-                    }
-                }
-            } else {
-                if (arena.getBedBlock() == Material.BED_BLOCK) {
-                    if (Misc.getDirection(getBed()) == BlockFace.WEST || Misc.getDirection(getBed()) == BlockFace.EAST) {
-                        BlockState baseState = getBed().getBlock().getState();
-                        BlockState localBlockState = getBed().clone().add(-1, 0, 0).getBlock().getState();
-                        baseState.setType(Material.BED_BLOCK);
-                        localBlockState.setType(Material.BED_BLOCK);
-                        baseState.setRawData((byte) 0x05);
-                        localBlockState.setRawData((byte) 0x09);
-                        baseState.update(true, false);
-                        localBlockState.update(true, false);
-                        nms.colorBed(this, getBed().getBlock().getState());
-                        nms.colorBed(this, getBed().clone().add(-1, 0, 0).getBlock().getState());
-                    } else {
-                        BlockState baseState = getBed().getBlock().getState();
-                        BlockState localBlockState = getBed().clone().add(0, 0, -1).getBlock().getState();
-                        baseState.setType(Material.BED_BLOCK);
-                        localBlockState.setType(Material.BED_BLOCK);
-                        baseState.setRawData((byte) 0x08);
-                        localBlockState.setRawData((byte) 0x00);
-                        baseState.update(true, false);
-                        localBlockState.update(true, false);
-                        nms.colorBed(this, getBed().getBlock().getState());
-                        nms.colorBed(this, getBed().clone().add(0, 0, -1).getBlock().getState());
-                    }
-                } else {
-                    bed.getBlock().setType(arena.getBedBlock());
-                }
+            if (getBed().getBlock().getType() != Material.BED_BLOCK) {
+                Main.plugin.getLogger().severe("Bed not set for team: " + getName() + " in arena: " + getArena().getWorldName());
+                return;
             }
-
-        } else if (bedDestroyed) {
+            nms.colorBed(this);
+        } else {
             bed.getBlock().setType(Material.AIR);
             if (getArena().getCm().getBoolean(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS)) {
                 OreGenerator.getGenerators().remove(getGoldGenerator());

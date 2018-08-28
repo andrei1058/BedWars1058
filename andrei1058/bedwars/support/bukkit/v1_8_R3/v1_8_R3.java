@@ -516,7 +516,7 @@ public class v1_8_R3 implements NMS {
     }
 
     @Override
-    public void colorBed(BedWarsTeam bwt, BlockState bed) {
+    public void colorBed(BedWarsTeam bwt) {
 
     }
 

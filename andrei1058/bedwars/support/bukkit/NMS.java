@@ -225,7 +225,7 @@ public interface NMS {
     /**
      * Color a bed 1.12+
      */
-    void colorBed(BedWarsTeam bwt, BlockState bed);
+    void colorBed(BedWarsTeam bwt);
 
     /**
      * Register tnt whitelist
