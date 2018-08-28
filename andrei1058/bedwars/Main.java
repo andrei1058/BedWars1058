@@ -388,6 +388,9 @@ public class Main extends JavaPlugin {
         yml.addDefault("blockedCmds", Arrays.asList("spawn", "tpa", "tpaccept", "warp", "goto", "tp", "tphere", "gamemode", "fly", "kill"));
         yml.options().copyDefaults(true);
         config.save();
+
+        //remove old config
+        config.set("startItems", null);
         config.set("generators", null);
 
         String whatLang = "en";
