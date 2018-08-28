@@ -13,7 +13,7 @@ public class TeamAssignEvent extends Event {
     private Player player;
     private BedWarsTeam team;
     private Arena arena;
-    private boolean cancelled;
+    private boolean cancelled = false;
 
     /**
      * Called for each player when the waiting countdown == 0
