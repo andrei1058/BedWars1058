@@ -136,6 +136,7 @@ public class SpectateListeners implements Listener {
         Arena a = Arena.getArenaByPlayer(p);
         if (a == null) return;
         if (a.isPlayer(p)) return;
+        e.setCancelled(true);
         Player target = (Player) e.getRightClicked();
         if (a.isPlayer(target)){
             SpectatorFirstPersonEnterEvent event = new SpectatorFirstPersonEnterEvent(p, target, a, getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_TITLE).replace("{player}", target.getDisplayName()), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_SUBTITLE));
@@ -145,6 +146,15 @@ public class SpectateListeners implements Listener {
             p.getInventory().setHeldItemSlot(5);
             p.setSpectatorTarget(target);
         }
+    }
+
+    @EventHandler
+    public void onSpectatorInteract(PlayerInteractEntityEvent e){
+        Player p = e.getPlayer();
+        Arena a = Arena.getArenaByPlayer(p);
+        if (a == null) return;
+        if (a.isPlayer(p)) return;
+        e.setCancelled(true);
     }
 
     @EventHandler
