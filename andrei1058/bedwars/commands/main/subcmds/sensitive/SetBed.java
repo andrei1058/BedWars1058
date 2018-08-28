@@ -63,11 +63,11 @@ public class SetBed extends SubCommand {
                 p.spigot().sendMessage(Misc.msgHoverClick("§9Use §e/"+getParent().getName()+" "+getSubCommandName()+" <teamName>", "§dSet a team bed.", "/"+getParent().getName()+" "+getSubCommandName(), ClickEvent.Action.SUGGEST_COMMAND));
             } else Bukkit.dispatchCommand(s, getParent().getName()+" "+getSubCommandName()+" "+foundTeam);
         } else {
-            /*if (!(p.getLocation().clone().add(0, -0.5, 0).getBlock().getType() == Material.BED_BLOCK || p.getLocation().clone().add(0, 0.5, 0).getBlock().getType() == Material.BED_BLOCK
+            if (!(p.getLocation().clone().add(0, -0.5, 0).getBlock().getType() == Material.BED_BLOCK || p.getLocation().clone().add(0, 0.5, 0).getBlock().getType() == Material.BED_BLOCK
                     || p.getLocation().clone().getBlock().getType() == Material.BED_BLOCK)) {
                 p.sendMessage("§c▪ §7You must stay on a bed while using this command!");
                 return true;
-            }*/
+            }
             if (ss.getCm().getYml().get("Team." + args[0]) == null) {
                 p.sendMessage("§c▪ §7This team doesn't exist!");
                 if (ss.getCm().getYml().get("Team") != null) {
