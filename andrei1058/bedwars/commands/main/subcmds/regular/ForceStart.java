@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.commands.main.subcmds.regular;
 
+import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
@@ -46,6 +47,9 @@ public class ForceStart extends SubCommand {
             p.sendMessage(getMsg(p, Messages.COMMAND_FORCESTART_NO_PERM));
             return true;
         }
+        if (a.getStatus() == GameState.playing) return true;
+        if (a.getStatus() == GameState.restarting) return true;
+        if (a.getCountdownS() < 5) return true;
         a.setCountdownS(5);
         p.sendMessage(getMsg(p, Messages.COMMAND_FORCESTART_SUCCESS));
         return true;
