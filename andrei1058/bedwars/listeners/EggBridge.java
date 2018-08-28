@@ -21,19 +21,6 @@ public class EggBridge implements Listener {
     //Active eggBridges
     private static HashMap<Egg, TeamColor> bridges = new HashMap<>();
 
-    /*@EventHandler
-    public void onThrow(PlayerInteractEvent e) {
-        ItemStack i = Main.plugin.nms.getItemInHand(e.getPlayer());
-        if (i == null) return;
-        if (i.getType() != Material.EGG) return;
-        Arena a = Arena.getArenaByPlayer(e.getPlayer());
-        if (a != null){
-            if (a.isPlayer(e.getPlayer())){
-
-            }
-        }
-    }*/
-
     @EventHandler
     public void onLaunch(ProjectileLaunchEvent e) {
         if (Main.getServerType() != ServerType.BUNGEE){
