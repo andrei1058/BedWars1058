@@ -58,18 +58,21 @@ public class Misc {
                         a.removePlayer(p, false);
                     }
                 }
-                return;
             }
+            return;
         }
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("Connect");
         out.writeUTF(config.getYml().getString("lobbyServer"));
         p.sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            if (p.isOnline()) {
-                p.kickPlayer(getMsg(p, Messages.ARENA_RESTART_PLAYER_KICK));
-            }
-        }, 120L);
+        if (getServerType() == ServerType.BUNGEE) {
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                if (p.isOnline()) {
+                    p.kickPlayer(getMsg(p, Messages.ARENA_RESTART_PLAYER_KICK));
+                }
+            }, 120L);
+        }
+
     }
 
     public static String replaceLast(String text, String regex, String replacement) {
@@ -196,7 +199,7 @@ public class Misc {
             im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
         i.setItemMeta(im);
-        if (!customData.isEmpty()){
+        if (!customData.isEmpty()) {
             i = nms.addCustomData(i, customData);
         }
         return i;

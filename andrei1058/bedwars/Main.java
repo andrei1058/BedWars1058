@@ -32,6 +32,7 @@ import com.andrei1058.bedwars.support.papi.PAPISupport;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.support.party.NoParty;
 import com.andrei1058.bedwars.support.party.Party;
+import com.andrei1058.bedwars.support.party.PartyAndFriends;
 import com.andrei1058.bedwars.support.stats.MySQL;
 import com.andrei1058.bedwars.support.stats.SQLite;
 import com.andrei1058.bedwars.support.vault.*;
@@ -142,7 +143,8 @@ public class Main extends JavaPlugin {
 
         /** Load lobby world if not main level */
         if (!config.getLobbyWorldName().equalsIgnoreCase(Bukkit.getServer().getWorlds().get(0).getName())) {
-            if (getServerType() == ServerType.MULTIARENA) Bukkit.createWorld(new WorldCreator(config.getLobbyWorldName()));
+            if (getServerType() == ServerType.MULTIARENA)
+                Bukkit.createWorld(new WorldCreator(config.getLobbyWorldName()));
         }
 
         /** Remove entities from lobby */
@@ -178,11 +180,15 @@ public class Main extends JavaPlugin {
         /** Load join signs */
         loadArenasAndSigns();
 
+        /** Party support */
         if (config.getYml().getBoolean(ConfigPath.GENERAL_CONFIGURATION_ALLOW_PARTIES)) {
-            /** Party support */
-            //todo check for party api
-            party = new com.andrei1058.bedwars.support.party.internal.Internal();
-            getLogger().info("Loading internal Party system. /party");
+            if (Bukkit.getPluginManager().getPlugin("PartyAndFriends") != null) {
+                getLogger().info("Hook into PartyAndFriends support!");
+                party = new PartyAndFriends();
+            } else {
+                party = new com.andrei1058.bedwars.support.party.Internal();
+                getLogger().info("Loading internal Party system. /party");
+            }
         }
 
         /** Levels support */
@@ -229,7 +235,7 @@ public class Main extends JavaPlugin {
             //spawn NPCs
             try {
                 JoinNPC.spawnNPCs();
-            } catch (Exception e){
+            } catch (Exception e) {
                 this.getLogger().severe("Could not spawn Join NPCs. Make sure you have right version of Citizens for your server!");
                 JoinNPC.setCitizensSupport(false);
             }
@@ -387,7 +393,7 @@ public class Main extends JavaPlugin {
         Misc.addDefaultStatsItem(yml, 22, Material.CHEST, 0, "gamesPlayed");
         Misc.addDefaultStatsItem(yml, 23, Material.STAINED_GLASS_PANE, 0, "lastPlay");
 
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS+".default", Arrays.asList("WOOD_SWORD"));
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + ".default", Arrays.asList("WOOD_SWORD"));
         yml.addDefault("blockedCmds", Arrays.asList("spawn", "tpa", "tpaccept", "warp", "goto", "tp", "tphere", "gamemode", "fly", "kill"));
         yml.options().copyDefaults(true);
         config.save();
@@ -509,8 +515,8 @@ public class Main extends JavaPlugin {
         yml.addDefault("Default." + ConfigPath.GENERATOR_IRON_AMOUNT, 2);
         yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_DELAY, 6);
         yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_AMOUNT, 2);
-        yml.addDefault("Default."+ConfigPath.GENERATOR_IRON_SPAWN_LIMIT, 32);
-        yml.addDefault("Default."+ConfigPath.GENERATOR_GOLD_SPAWN_LIMIT, 7);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_IRON_SPAWN_LIMIT, 32);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_SPAWN_LIMIT, 7);
         yml.addDefault(ConfigPath.GENERATOR_STACK_ITEMS, false);
 
         yml.addDefault("Default." + ConfigPath.GENERATOR_DIAMOND_TIER_I_DELAY, 30);

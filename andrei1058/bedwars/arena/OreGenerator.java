@@ -48,7 +48,11 @@ public class OreGenerator {
 
     public OreGenerator(Location location, Arena arena, @NotNull GeneratorType type, BedWarsTeam bwt) {
         location = location.clone().add(0, 1.3, 0);
-        this.location = location;
+        if (type == GeneratorType.EMERALD || type == GeneratorType.DIAMOND) {
+            this.location = new Location(location.getWorld(), location.getBlockX() + 0.5, location.getBlockY(), location.getBlockZ() + 0.5);
+        } else {
+            this.location = location;
+        }
         this.arena = arena;
         this.bwt = bwt;
         switch (type) {
@@ -231,15 +235,7 @@ public class OreGenerator {
                 return;
             }
             for (Object o : players) {
-                Player p = (Player) o;
-                ItemStack i = new ItemStack(getOre().getType(), amount);
-                GeneratorCollectEvent e = new GeneratorCollectEvent(p, i);
-                Bukkit.getPluginManager().callEvent(e);
-                if (e.isCancelled()) {
-                    dropItem(p.getLocation());
-                } else {
-                    p.getInventory().addItem(i);
-                }
+                dropItem(((Player) o).getLocation());
             }
             return;
         }
@@ -263,7 +259,7 @@ public class OreGenerator {
                 itemMeta.setDisplayName("custom" + dropID++);
                 itemStack.setItemMeta(itemMeta);
             }
-            Item item = location.getWorld().dropItem(new Location(location.getWorld(), location.getBlockX() + 0.5, location.getBlockY(), location.getBlockZ() + 0.5), itemStack);
+            Item item = location.getWorld().dropItem(location, itemStack);
             item.setVelocity(new Vector(0, 0, 0));
             temp--;
         }

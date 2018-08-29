@@ -1,8 +1,6 @@
-package com.andrei1058.bedwars.support.party.internal;
+package com.andrei1058.bedwars.support.party;
 
-import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
-import com.andrei1058.bedwars.support.party.Party;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
