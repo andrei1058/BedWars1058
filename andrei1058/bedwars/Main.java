@@ -509,6 +509,8 @@ public class Main extends JavaPlugin {
         yml.addDefault("Default." + ConfigPath.GENERATOR_IRON_AMOUNT, 2);
         yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_DELAY, 6);
         yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_AMOUNT, 2);
+        yml.addDefault("Default."+ConfigPath.GENERATOR_IRON_SPAWN_LIMIT, 32);
+        yml.addDefault("Default."+ConfigPath.GENERATOR_GOLD_SPAWN_LIMIT, 7);
         yml.addDefault(ConfigPath.GENERATOR_STACK_ITEMS, false);
 
         yml.addDefault("Default." + ConfigPath.GENERATOR_DIAMOND_TIER_I_DELAY, 30);

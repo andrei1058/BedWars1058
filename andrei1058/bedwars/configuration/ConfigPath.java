@@ -6,9 +6,11 @@ public class ConfigPath {
 
     public static final String GENERATOR_IRON_DELAY = "iron.delay";
     public static final String GENERATOR_IRON_AMOUNT = "iron.amount";
+    public static final String GENERATOR_IRON_SPAWN_LIMIT = "iron.spawn-imit";
 
     public static final String GENERATOR_GOLD_DELAY = "gold.delay";
     public static final String GENERATOR_GOLD_AMOUNT = "gold.amount";
+    public static final String GENERATOR_GOLD_SPAWN_LIMIT = "gold.spawn-imit";
 
     public static final String GENERATOR_DIAMOND_TIER_I_DELAY = "diamond.tierI.delay";
     public static final String GENERATOR_DIAMOND_TIER_I_SPAWN_LIMIT = "diamond.tierI.spawn-limit";

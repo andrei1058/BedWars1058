@@ -150,7 +150,7 @@ public class BedWars implements GameAPI {
     @Override
     public void setPlayerAFK(Player player, boolean value) {
         if (value) {
-            if (afkPlayers.containsKey(player)) {
+            if (!afkPlayers.containsKey(player)) {
                 afkPlayers.put(player, Arena.afkCheck.get(player));
                 Bukkit.getPluginManager().callEvent(new PlayerAfkEvent(player, PlayerAfkEvent.AFKType.START));
             }

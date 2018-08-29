@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.listeners;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.ArenaGUI;
 
@@ -32,7 +33,10 @@ public class Interact implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
         Player p = e.getPlayer();
-        Arena.afkCheck.remove(e.getPlayer().getUniqueId());
+        Arena.afkCheck.remove(p.getUniqueId());
+        if (Main.api.isPlayerAFK(e.getPlayer())){
+            Main.api.setPlayerAFK(e.getPlayer(), false);
+        }
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             Block b = e.getClickedBlock();
             if (b == null) return;

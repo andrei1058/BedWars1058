@@ -996,14 +996,17 @@ public class Arena {
                 }
 
                 /* AFK SYSTEM FOR PLAYERS */
-                int current;
+                int current = 0;
                 for (Player p : getPlayers()){
-                    current = afkCheck.get(p.getUniqueId());
-                    current++;
-                    afkCheck.remove(p.getUniqueId());
-                    afkCheck.put(p.getUniqueId(), current);
-                    if (current == 45){
-                        Main.api.setPlayerAFK(p, true);
+                    if (afkCheck.get(p.getUniqueId()) == null){
+                        afkCheck.put(p.getUniqueId(), current);
+                    } else {
+                        current = afkCheck.get(p.getUniqueId());
+                        current++;
+                        afkCheck.replace(p.getUniqueId(), current);
+                        if (current == 45){
+                            Main.api.setPlayerAFK(p, true);
+                        }
                     }
                 }
 
