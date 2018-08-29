@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.arena;
 
+import com.andrei1058.bedwars.api.GeneratorCollectEvent;
 import com.andrei1058.bedwars.api.GeneratorType;
 import com.andrei1058.bedwars.api.GeneratorUpgradeEvent;
 import com.andrei1058.bedwars.configuration.ConfigPath;
@@ -31,6 +32,7 @@ public class OreGenerator {
     private ItemStack ore;
     private GeneratorType type;
     private int rotate = 0, dropID = 0;
+    private BedWarsTeam bwt;
     boolean up = true;
 
     /**
@@ -44,10 +46,11 @@ public class OreGenerator {
     private static List<OreGenerator> generators = new ArrayList<>();
     private static List<OreGenerator> rotation = new ArrayList<>();
 
-    public OreGenerator(Location location, Arena arena, @NotNull GeneratorType type) {
+    public OreGenerator(Location location, Arena arena, @NotNull GeneratorType type, BedWarsTeam bwt) {
         location = location.clone().add(0, 1.3, 0);
         this.location = location;
         this.arena = arena;
+        this.bwt = bwt;
         switch (type) {
             case GOLD:
                 delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_DELAY) == null ?
@@ -209,54 +212,52 @@ public class OreGenerator {
                 }
                 lastSpawn = delay;
             }
-            /*if (ore.getType() == Material.IRON_INGOT || ore.getType() == Material.GOLD_INGOT){
-                if(arena.getMaxInTeam() > 2){
-                    for (int temp = amount; temp >= 0; temp--) {
-                        ItemStack itemStack = new ItemStack(ore);
-                        ItemMeta itemMeta = itemStack.getItemMeta();
-                        itemMeta.setDisplayName("custom"+dropID++);
-                        itemStack.setItemMeta(itemMeta);
-                        location.getWorld().dropItemNaturally(location.clone().add(0, 1, 0), itemStack);
-                        //location.getWorld().dropItem(location.clone().add(0.7, 0, 0), ore);
-                        //location.getWorld().dropItem(location.clone().add(0, 0, 0.7), ore);
-                        temp--;
-                    }
-                }  else {
-                    for (int temp = amount; temp >= 0; temp--) {
-                        ItemStack itemStack = new ItemStack(ore);
-                        ItemMeta itemMeta = itemStack.getItemMeta();
-                        itemMeta.setDisplayName("custom"+dropID++);
-                        itemStack.setItemMeta(itemMeta);
-                        location.getWorld().dropItem(location.clone().add(0, 1, 0), itemStack);
-                        temp--;
-                    }
-                }
-            } else {
-                for (int temp = amount; temp >= 0; temp--) {
-                    ItemStack itemStack = new ItemStack(ore);
-                    ItemMeta itemMeta = itemStack.getItemMeta();
-                    itemMeta.setDisplayName("custom"+dropID++);
-                    itemStack.setItemMeta(itemMeta);
-                    location.getWorld().dropItem(location.clone().add(0, 1, 0), itemStack);
-                    temp--;
-                }
-            }*/
-            for (int temp = amount; temp >= 0; temp--) {
-                ItemStack itemStack = new ItemStack(ore);
-                if (!stack) {
-                    ItemMeta itemMeta = itemStack.getItemMeta();
-                    itemMeta.setDisplayName("custom" + dropID++);
-                    itemStack.setItemMeta(itemMeta);
-                }
-                Item item = location.getWorld().dropItem(new Location(location.getWorld(), location.getBlockX()+0.5, location.getBlockY(), location.getBlockZ()+0.5), itemStack);
-                item.setVelocity(new Vector(0, 0, 0));
-                temp--;
+            if (bwt == null) {
+                dropItem();
+                return;
+            }
+            if (bwt.getMembers().size() == 1) {
+                dropItem();
+                return;
+            }
+            Object[] players = location.getWorld().getNearbyEntities(location, 1, 1, 1).stream().filter(entity -> entity.getType() == EntityType.PLAYER)
+                    .filter(entity -> arena.isPlayer((Player) entity)).filter(entity -> arena.getTeam((Player) entity) == bwt).toArray();
+            if (players.length <= 1){
+                dropItem();
+                return;
+            }
+            for (Object o : players){
+                Player p = (Player) o;
+                ItemStack i = new ItemStack(getOre().getType(), amount);
+                p.getInventory().addItem(i);
+                GeneratorCollectEvent e = new GeneratorCollectEvent(p,i);
+                Bukkit.getPluginManager().callEvent(e);
             }
             return;
         }
         lastSpawn--;
         for (HoloGram e : armorStands.values()) {
             e.setTimerName(Language.getLang(e.iso).m(Messages.GENERATOR_HOLOGRAM_TIMER).replace("{seconds}", String.valueOf(lastSpawn)));
+        }
+    }
+
+    /**
+     * Drop item stack with ID
+     */
+    private void dropItem() {
+        for (int temp = amount; temp >= 0; temp--) {
+            ItemStack itemStack = new ItemStack(ore);
+            if (bwt != null) {
+
+            }
+            if (!stack) {
+                ItemMeta itemMeta = itemStack.getItemMeta();
+                itemMeta.setDisplayName("custom" + dropID++);
+                itemStack.setItemMeta(itemMeta);
+            }
+            Item item = location.getWorld().dropItem(new Location(location.getWorld(), location.getBlockX() + 0.5, location.getBlockY(), location.getBlockZ() + 0.5), itemStack);
+            item.setVelocity(new Vector(0, 0, 0));
+            temp--;
         }
     }
 
