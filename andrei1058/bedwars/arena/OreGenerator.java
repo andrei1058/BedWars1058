@@ -222,16 +222,16 @@ public class OreGenerator {
             }
             Object[] players = location.getWorld().getNearbyEntities(location, 1, 1, 1).stream().filter(entity -> entity.getType() == EntityType.PLAYER)
                     .filter(entity -> arena.isPlayer((Player) entity)).filter(entity -> arena.getTeam((Player) entity) == bwt).toArray();
-            if (players.length <= 1){
+            if (players.length <= 1) {
                 dropItem();
                 return;
             }
-            for (Object o : players){
+            for (Object o : players) {
                 Player p = (Player) o;
                 ItemStack i = new ItemStack(getOre().getType(), amount);
-                p.getInventory().addItem(i);
-                GeneratorCollectEvent e = new GeneratorCollectEvent(p,i);
+                GeneratorCollectEvent e = new GeneratorCollectEvent(p, i);
                 Bukkit.getPluginManager().callEvent(e);
+                if (!e.isCancelled()) p.getInventory().addItem(i);
             }
             return;
         }

@@ -63,7 +63,9 @@ public class EntityDropPickListener implements Listener {
                     e.getItem().getItemStack().setItemMeta(itemMeta);
 
                     //Call ore pick up event
-                    Bukkit.getPluginManager().callEvent(new GeneratorCollectEvent((Player) e.getEntity(), e.getItem().getItemStack()));
+                    GeneratorCollectEvent event = new GeneratorCollectEvent((Player) e.getEntity(), e.getItem().getItemStack());
+                    Bukkit.getPluginManager().callEvent(event);
+                    e.setCancelled(event.isCancelled());
                 }
             }
         }

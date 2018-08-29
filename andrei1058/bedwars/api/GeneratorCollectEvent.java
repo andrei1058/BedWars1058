@@ -1,7 +1,5 @@
 package com.andrei1058.bedwars.api;
 
-import com.andrei1058.bedwars.arena.OreGenerator;
-import com.boydti.fawe.jnbt.anvil.generator.OreGen;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -13,6 +11,7 @@ public class GeneratorCollectEvent extends Event {
 
     private Player player;
     private ItemStack itemStack;
+    private boolean cancelled = false;
 
     /**
      * Triggered when collect from generators
@@ -40,6 +39,22 @@ public class GeneratorCollectEvent extends Event {
      */
     public ItemStack getItemStack() {
         return itemStack;
+    }
+
+    /**
+     * Cancel this event
+     *
+     * @since API 10
+     */
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    /**
+     * @since API 10
+     */
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
     }
 
     @Override
