@@ -205,8 +205,8 @@ public class BedWarsTeam {
      * Spawn the iron and gold generators
      */
     public void setGenerators(Location ironGenerator, Location goldGenerator) {
-        this.ironGenerator = new OreGenerator(ironGenerator, arena, GeneratorType.IRON);
-        this.goldGenerator = new OreGenerator(goldGenerator, arena, GeneratorType.GOLD);
+        this.ironGenerator = new OreGenerator(ironGenerator, arena, GeneratorType.IRON, this);
+        this.goldGenerator = new OreGenerator(goldGenerator, arena, GeneratorType.GOLD, this);
     }
 
     /**
