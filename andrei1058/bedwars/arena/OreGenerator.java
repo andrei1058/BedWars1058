@@ -213,17 +213,17 @@ public class OreGenerator {
                 lastSpawn = delay;
             }
             if (bwt == null) {
-                dropItem();
+                dropItem(location);
                 return;
             }
             if (bwt.getMembers().size() == 1) {
-                dropItem();
+                dropItem(location);
                 return;
             }
             Object[] players = location.getWorld().getNearbyEntities(location, 1, 1, 1).stream().filter(entity -> entity.getType() == EntityType.PLAYER)
                     .filter(entity -> arena.isPlayer((Player) entity)).filter(entity -> arena.getTeam((Player) entity) == bwt).toArray();
             if (players.length <= 1) {
-                dropItem();
+                dropItem(location);
                 return;
             }
             for (Object o : players) {
@@ -231,7 +231,11 @@ public class OreGenerator {
                 ItemStack i = new ItemStack(getOre().getType(), amount);
                 GeneratorCollectEvent e = new GeneratorCollectEvent(p, i);
                 Bukkit.getPluginManager().callEvent(e);
-                if (!e.isCancelled()) p.getInventory().addItem(i);
+                if (e.isCancelled()) {
+                    dropItem(p.getLocation());
+                } else {
+                    p.getInventory().addItem(i);
+                }
             }
             return;
         }
@@ -244,7 +248,7 @@ public class OreGenerator {
     /**
      * Drop item stack with ID
      */
-    private void dropItem() {
+    private void dropItem(Location location) {
         for (int temp = amount; temp >= 0; temp--) {
             ItemStack itemStack = new ItemStack(ore);
             if (bwt != null) {

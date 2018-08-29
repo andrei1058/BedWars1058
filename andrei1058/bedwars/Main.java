@@ -69,6 +69,7 @@ public class Main extends JavaPlugin {
     private static String version = Bukkit.getServer().getClass().getName().split("\\.")[3];
     public static com.andrei1058.bedwars.support.stats.Database database;
     private static String lobbyWorld = "";
+    public static BedWars api;
 
     @Override
     public void onLoad() {
@@ -131,6 +132,7 @@ public class Main extends JavaPlugin {
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         //Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new Bungee());
         Bukkit.getServicesManager().register(GameAPI.class, new BedWars(), this, ServicePriority.Highest);
+        api = (BedWars) this.getServer().getServicesManager().getRegistration(GameAPI.class).getProvider();
 
         /** Check if lobby location is set. Required for non Bungee servers */
         if (config.getLobbyWorldName().isEmpty() && serverType != ServerType.BUNGEE) {
@@ -505,10 +507,8 @@ public class Main extends JavaPlugin {
                 "\ngenerators.yml Documentation: https://gitlab.com/andrei1058/BedWars1058/wikis/generators-configuration\n");
         yml.addDefault("Default." + ConfigPath.GENERATOR_IRON_DELAY, 2);
         yml.addDefault("Default." + ConfigPath.GENERATOR_IRON_AMOUNT, 2);
-        yml.addDefault("Default." + ConfigPath.GENERATOR_IRON_SPAWN_LIMIT, 32);
         yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_DELAY, 6);
         yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_AMOUNT, 2);
-        yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_SPAWN_LIMIT, 7);
         yml.addDefault(ConfigPath.GENERATOR_STACK_ITEMS, false);
 
         yml.addDefault("Default." + ConfigPath.GENERATOR_DIAMOND_TIER_I_DELAY, 30);

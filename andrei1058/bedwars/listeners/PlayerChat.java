@@ -52,6 +52,7 @@ public class PlayerChat implements Listener {
                     .replace("{player}", p.getName()).replace("{level}", getLevelSupport().getLevel(p))).replace("{message}", "%2$s"));
         } else if (isInArena(p)) {
             Arena a = Arena.getArenaByPlayer(p);
+            Arena.afkCheck.remove(e.getPlayer().getUniqueId());
             if (a.isSpectator(p)) {
                 if (!config.getBoolean("globalChat")) {
                     e.getRecipients().clear();

@@ -34,6 +34,7 @@ public class Arena {
     private static ArrayList<Arena> arenas = new ArrayList<>();
     public static HashMap<Player, Integer> respawn = new HashMap<>();
     private static int gamesBeforeRestart = 0;//config.getInt(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART);
+    public static HashMap<UUID, Integer> afkCheck = new HashMap<>();
 
 
     private List<Player> players = new ArrayList<>();
@@ -809,7 +810,7 @@ public class Arena {
                     for (String type : Arrays.asList("Diamond", "Emerald")) {
                         if (yml.get("generator." + type) != null) {
                             for (String s : yml.getStringList("generator." + type)) {
-                                new OreGenerator(cm.fromArenaStringList(s), this, GeneratorType.valueOf(type.toUpperCase()));
+                                new OreGenerator(cm.fromArenaStringList(s), this, GeneratorType.valueOf(type.toUpperCase()), null);
                             }
                         }
                     }
@@ -993,6 +994,19 @@ public class Arena {
                         }
                     }
                 }
+
+                /* AFK SYSTEM FOR PLAYERS */
+                int current;
+                for (Player p : getPlayers()){
+                    current = afkCheck.get(p.getUniqueId());
+                    current++;
+                    afkCheck.remove(p.getUniqueId());
+                    afkCheck.put(p.getUniqueId(), current);
+                    if (current == 45){
+                        Main.api.setPlayerAFK(p, true);
+                    }
+                }
+
                 break;
             case restarting:
                 for (Player p : players) {

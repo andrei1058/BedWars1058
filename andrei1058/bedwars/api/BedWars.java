@@ -3,6 +3,7 @@ package com.andrei1058.bedwars.api;
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.configuration.Language;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.sql.Timestamp;
@@ -120,7 +121,7 @@ public class BedWars implements GameAPI {
 
     @Override
     public boolean isPlaying(Player p) {
-        if (Arena.isInArena(p)){
+        if (Arena.isInArena(p)) {
             return Arena.getArenaByPlayer(p).isPlayer(p);
         }
         return false;
@@ -128,7 +129,7 @@ public class BedWars implements GameAPI {
 
     @Override
     public boolean isSpectating(Player p) {
-        if (Arena.isInArena(p)){
+        if (Arena.isInArena(p)) {
             return Arena.getArenaByPlayer(p).isSpectator(p);
         }
         return false;
@@ -137,6 +138,35 @@ public class BedWars implements GameAPI {
     @Override
     public String getLangIso(Player p) {
         return Language.getPlayerLanguage(p).getIso();
+    }
+
+    private static HashMap<Player, Integer> afkPlayers = new HashMap<>();
+
+    @Override
+    public boolean isPlayerAFK(Player player) {
+        return afkPlayers.containsKey(player);
+    }
+
+    @Override
+    public void setPlayerAFK(Player player, boolean value) {
+        if (value) {
+            if (afkPlayers.containsKey(player)) {
+                afkPlayers.put(player, Arena.afkCheck.get(player));
+                Bukkit.getPluginManager().callEvent(new PlayerAfkEvent(player, PlayerAfkEvent.AFKType.START));
+            }
+        } else {
+            if (afkPlayers.containsKey(player)) {
+                afkPlayers.remove(player);
+                Bukkit.getPluginManager().callEvent(new PlayerAfkEvent(player, PlayerAfkEvent.AFKType.END));
+            }
+            Arena.afkCheck.remove(player);
+        }
+    }
+
+    @Override
+    public Integer getPlayerTimeAFK(Player player) {
+        if (afkPlayers.containsKey(player)) return afkPlayers.get(player);
+        return 0;
     }
 
 

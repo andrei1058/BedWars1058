@@ -433,6 +433,7 @@ public class DamageDeathMove implements Listener {
                             }
                         }
                     }
+                    Arena.afkCheck.remove(e.getPlayer().getUniqueId());
                 }
             }
         } else {

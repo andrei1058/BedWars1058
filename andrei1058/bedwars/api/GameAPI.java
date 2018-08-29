@@ -31,6 +31,27 @@ public interface GameAPI {
      */
     String getLangIso(Player p);
 
+    /**
+     * Check if a player is AFK.
+     *
+     * @since API 10
+     */
+    boolean isPlayerAFK(Player player);
+
+    /**
+     * Set a player afk.
+     *
+     * @since API 10
+     */
+    void setPlayerAFK(Player player, boolean value);
+
+    /**
+     * Get the seconds since the player is AFK
+     *
+     * @since API 10
+     */
+    Integer getPlayerTimeAFK(Player player);
+
     /* STATS */
 
     /**

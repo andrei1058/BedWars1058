@@ -32,7 +32,7 @@ public class Interact implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
         Player p = e.getPlayer();
-
+        Arena.afkCheck.remove(e.getPlayer().getUniqueId());
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             Block b = e.getClickedBlock();
             if (b == null) return;

@@ -110,4 +110,13 @@ public class EntityDropPickListener implements Listener {
             return;
         }
     }
+
+    @EventHandler
+    //Prevent AFK players from picking items
+    public void onCollect(GeneratorCollectEvent e){
+        if (Main.api.isPlayerAFK(e.getPlayer())){
+            e.setCancelled(true);
+            return;
+        }
+    }
 }
