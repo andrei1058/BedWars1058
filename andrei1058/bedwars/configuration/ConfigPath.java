@@ -11,26 +11,30 @@ public class ConfigPath {
     public static final String GENERATOR_GOLD_AMOUNT = "gold.amount";
 
     public static final String GENERATOR_DIAMOND_TIER_I_DELAY = "diamond.tierI.delay";
-    public static final String GENERATOR_DIAMOND_TIER_I_MAX = "diamond.tierI.max";
+    public static final String GENERATOR_DIAMOND_TIER_I_SPAWN_LIMIT = "diamond.tierI.spawn-limit";
 
     public static final String GENERATOR_DIAMOND_TIER_II_DELAY = "diamond.tierII.delay";
-    public static final String GENERATOR_DIAMOND_TIER_II_MAX = "diamond.tierII.max";
+    public static final String GENERATOR_DIAMOND_TIER_II_SPAWN_LIMIT = "diamond.tierII.spawn-limit";
     public static final String GENERATOR_DIAMOND_TIER_II_START = "diamond.tierII.start";
 
     public static final String GENERATOR_DIAMOND_TIER_III_DELAY = "diamond.tierIII.delay";
-    public static final String GENERATOR_DIAMOND_TIER_III_MAX = "diamond.tierIII.max";
+    public static final String GENERATOR_DIAMOND_TIER_III_SPAWN_LIMIT = "diamond.tierIII.spawn-limit";
     public static final String GENERATOR_DIAMOND_TIER_III_START = "diamond.tierIII.start";
 
     public static final String GENERATOR_EMERALD_TIER_I_DELAY = "emerald.tierI.delay";
-    public static final String GENERATOR_EMERALD_TIER_I_MAX = "emerald.tierI.max";
+    public static final String GENERATOR_EMERALD_TIER_I_SPAWN_LIMIT = "emerald.tierI.spawn-limit";
 
     public static final String GENERATOR_EMERALD_TIER_II_DELAY = "emerald.tierII.delay";
-    public static final String GENERATOR_EMERALD_TIER_II_MAX = "emerald.tierII.max";
+    public static final String GENERATOR_EMERALD_TIER_II_SPAWN_LIMIT = "emerald.tierII.spawn-limit";
     public static final String GENERATOR_EMERALD_TIER_II_START = "emerald.tierII.start";
 
     public static final String GENERATOR_EMERALD_TIER_III_DELAY = "emerald.tierIII.delay";
-    public static final String GENERATOR_EMERALD_TIER_III_MAX = "emerald.tierIII.max";
+    public static final String GENERATOR_EMERALD_TIER_III_SPAWN_LIMIT = "emerald.tierIII.spawn-limit";
     public static final String GENERATOR_EMERALD_TIER_III_START = "emerald.tierIII.start";
+
+    /** Replace %r% with receive and %g% with generator */
+    public static final String UPGRADES_TEAM_UPGRADE_RECEIVE_TEAM_GENERATOR_SPAWN_LIMIT = "receive.%r%.%g%.spawn-limit";
+
 
     //public static final String GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART = "bungeeMode.gamesBeforeRestart";
     public static final String GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD = "bungee-settings.restart-cmd";

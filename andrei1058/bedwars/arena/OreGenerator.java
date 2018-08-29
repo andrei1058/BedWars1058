@@ -16,6 +16,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -25,7 +26,7 @@ import static com.andrei1058.bedwars.configuration.Language.getMsg;
 public class OreGenerator {
 
     private Location location;
-    private int delay = 1, upgradeStage = 1, lastSpawn, max = 0, amount = 1;
+    private int delay = 1, upgradeStage = 1, lastSpawn, spawnLimit = 0, amount = 1;
     private Arena arena;
     private ItemStack ore;
     private GeneratorType type;
@@ -43,7 +44,7 @@ public class OreGenerator {
     private static List<OreGenerator> generators = new ArrayList<>();
     private static List<OreGenerator> rotation = new ArrayList<>();
 
-    public OreGenerator(Location location, Arena arena, GeneratorType type) {
+    public OreGenerator(Location location, Arena arena, @NotNull GeneratorType type) {
         location = location.clone().add(0, 1.3, 0);
         this.location = location;
         this.arena = arena;
@@ -65,8 +66,8 @@ public class OreGenerator {
             case DIAMOND:
                 delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_I_DELAY) == null ?
                         "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_I_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_I_DELAY);
-                max = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_I_MAX) == null ?
-                        "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_I_MAX : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_I_MAX);
+                spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_I_SPAWN_LIMIT) == null ?
+                        "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_I_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_I_SPAWN_LIMIT);
                 arena.upgradeDiamondsCount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_START) == null ?
                         "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_II_START : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_START);
                 ore = new ItemStack(Material.DIAMOND);
@@ -91,8 +92,8 @@ public class OreGenerator {
             case EMERALD:
                 delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_I_DELAY) == null ?
                         "Default." + ConfigPath.GENERATOR_EMERALD_TIER_I_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_I_DELAY);
-                max = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_I_MAX) == null ?
-                        "Default." + ConfigPath.GENERATOR_EMERALD_TIER_I_MAX : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_I_MAX);
+                spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_I_SPAWN_LIMIT) == null ?
+                        "Default." + ConfigPath.GENERATOR_EMERALD_TIER_I_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_I_SPAWN_LIMIT);
                 arena.upgradeEmeraldsCount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_START) == null ?
                         "Default." + ConfigPath.GENERATOR_EMERALD_TIER_II_START : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_START);
                 ore = new ItemStack(Material.EMERALD);
@@ -137,16 +138,16 @@ public class OreGenerator {
                 if (upgradeStage == 2) {
                     delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_DELAY) == null ?
                             "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_II_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_DELAY);
-                    max = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_MAX) == null ?
-                            "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_II_MAX : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_MAX);
+                    spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_SPAWN_LIMIT) == null ?
+                            "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_II_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_SPAWN_LIMIT);
                     arena.upgradeDiamondsCount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START) == null ?
                             "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START);
                     arena.diamondTier = 2;
                 } else if (upgradeStage == 3) {
                     delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY) == null ?
                             "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY);
-                    max = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_MAX) == null ?
-                            "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_MAX : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_MAX);
+                    spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_SPAWN_LIMIT) == null ?
+                            "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_SPAWN_LIMIT);
                     arena.diamondTier = 3;
                 }
                 ore = new ItemStack(Material.DIAMOND);
@@ -170,16 +171,16 @@ public class OreGenerator {
                 if (upgradeStage == 2) {
                     delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_DELAY) == null ?
                             "Default." + ConfigPath.GENERATOR_EMERALD_TIER_II_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_DELAY);
-                    max = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_MAX) == null ?
-                            "Default." + ConfigPath.GENERATOR_EMERALD_TIER_II_MAX : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_MAX);
+                    spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_SPAWN_LIMIT) == null ?
+                            "Default." + ConfigPath.GENERATOR_EMERALD_TIER_II_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_SPAWN_LIMIT);
                     arena.upgradeEmeraldsCount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_START) == null ?
                             "Default." + ConfigPath.GENERATOR_EMERALD_TIER_III_START : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_START);
                     arena.emeraldTier = 2;
                 } else if (upgradeStage == 3) {
                     delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_DELAY) == null ?
                             "Default." + ConfigPath.GENERATOR_EMERALD_TIER_III_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_DELAY);
-                    max = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_MAX) == null ?
-                            "Default." + ConfigPath.GENERATOR_EMERALD_TIER_III_MAX : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_MAX);
+                    spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_SPAWN_LIMIT) == null ?
+                            "Default." + ConfigPath.GENERATOR_EMERALD_TIER_III_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_SPAWN_LIMIT);
                     arena.emeraldTier = 3;
                 }
                 ore = new ItemStack(Material.EMERALD);
@@ -195,7 +196,7 @@ public class OreGenerator {
     public void spawn() {
         if (lastSpawn == 0) {
             lastSpawn = delay;
-            if (max != 0) {
+            if (spawnLimit != 0) {
                 int oreCount = 0;
                 for (Entity e : location.getWorld().getNearbyEntities(location, 3, 3, 3)) {
                     if (e.getType() == EntityType.DROPPED_ITEM) {
@@ -203,7 +204,7 @@ public class OreGenerator {
                         if (i.getItemStack().getType() == ore.getType()) {
                             oreCount++;
                         }
-                        if (oreCount >= max) return;
+                        if (oreCount >= spawnLimit) return;
                     }
                 }
                 lastSpawn = delay;

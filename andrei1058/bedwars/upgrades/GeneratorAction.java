@@ -13,6 +13,7 @@ public class GeneratorAction extends UpgradeAction {
 
     private int ironAmount = 0, goldAmount = 0, emeraldAmount = 0;
     private int ironDelay = 0, goldDelay = 0, emeraldDelay = 0;
+    private int ironLimit = 0, goldLimit = 0;
     private String name;
 
     public GeneratorAction(String name){
@@ -61,6 +62,17 @@ public class GeneratorAction extends UpgradeAction {
                 break;
         }
         plugin.debug("loading new GeneratorAction: "+getName());
+    }
+
+    public void setLimit(String generator, int amount){
+        switch (generator.toLowerCase()){
+            case "iron":
+                ironLimit = amount;
+                break;
+            case "gold":
+                goldLimit = amount;
+                break;
+        }
     }
 
     public void setDelay(String generator, int delay) {

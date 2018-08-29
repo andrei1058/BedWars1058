@@ -51,8 +51,10 @@ public class UpgradesManager {
         yml.addDefault("Default.generators.tier1.cost", 4);
         yml.addDefault("Default.generators.tier1.receive.teamGenerator.iron.delay", 2);
         yml.addDefault("Default.generators.tier1.receive.teamGenerator.iron.amount", 2);
+        yml.addDefault("Default.generators.tier1."+ConfigPath.UPGRADES_TEAM_UPGRADE_RECEIVE_TEAM_GENERATOR_SPAWN_LIMIT.replace("%g%", "iron").replace("%r%", "teamGenerator"), 32);
         yml.addDefault("Default.generators.tier1.receive.teamGenerator.gold.delay", 3);
         yml.addDefault("Default.generators.tier1.receive.teamGenerator.gold.amount", 1);
+        yml.addDefault("Default.generators.tier1."+ConfigPath.UPGRADES_TEAM_UPGRADE_RECEIVE_TEAM_GENERATOR_SPAWN_LIMIT.replace("%g%", "gold").replace("%r%", "teamGenerator"), 7);
 
         yml.addDefault("Default.generators.tier2.displayItem.material", "FURNACE");
         yml.addDefault("Default.generators.tier2.displayItem.data", 0);
@@ -62,8 +64,10 @@ public class UpgradesManager {
         yml.addDefault("Default.generators.tier2.cost", 8);
         yml.addDefault("Default.generators.tier2.receive.teamGenerator.iron.delay", 1);
         yml.addDefault("Default.generators.tier2.receive.teamGenerator.iron.amount", 2);
+        yml.addDefault("Default.generators.tier2."+ConfigPath.UPGRADES_TEAM_UPGRADE_RECEIVE_TEAM_GENERATOR_SPAWN_LIMIT.replace("%g%", "iron").replace("%r%", "teamGenerator"), 64);
         yml.addDefault("Default.generators.tier2.receive.teamGenerator.gold.delay", 3);
         yml.addDefault("Default.generators.tier2.receive.teamGenerator.gold.amount", 2);
+        yml.addDefault("Default.generators.tier2."+ConfigPath.UPGRADES_TEAM_UPGRADE_RECEIVE_TEAM_GENERATOR_SPAWN_LIMIT.replace("%g%", "gold").replace("%r%", "teamGenerator"), 14);
 
         yml.addDefault("Default.generators.tier3.displayItem.material", "FURNACE");
         yml.addDefault("Default.generators.tier3.displayItem.data", 0);
@@ -73,8 +77,10 @@ public class UpgradesManager {
         yml.addDefault("Default.generators.tier3.cost", 12);
         yml.addDefault("Default.generators.tier3.receive.teamGenerator.iron.delay", 1);
         yml.addDefault("Default.generators.tier3.receive.teamGenerator.iron.amount", 2);
+        yml.addDefault("Default.generators.tier3."+ConfigPath.UPGRADES_TEAM_UPGRADE_RECEIVE_TEAM_GENERATOR_SPAWN_LIMIT.replace("%g%", "iron").replace("%r%", "teamGenerator"), 128);
         yml.addDefault("Default.generators.tier3.receive.teamGenerator.gold.delay", 2);
         yml.addDefault("Default.generators.tier3.receive.teamGenerator.gold.amount", 2);
+        yml.addDefault("Default.generators.tier3."+ConfigPath.UPGRADES_TEAM_UPGRADE_RECEIVE_TEAM_GENERATOR_SPAWN_LIMIT.replace("%g%", "gold").replace("%r%", "teamGenerator"), 28);
         yml.addDefault("Default.generators.tier3.receive.teamGenerator.emerald.delay", 10);
         yml.addDefault("Default.generators.tier3.receive.teamGenerator.emerald.amount", 1);
 
@@ -301,9 +307,10 @@ public class UpgradesManager {
                             } else {
                                 continue;
                             }
+                            //re = receive, tg = team generator
                             for (String tg : yml.getConfigurationSection(tp + "receive." + re).getKeys(false)) {
                                 if (tg.equalsIgnoreCase("gold") || tg.equalsIgnoreCase("iron") || tg.equalsIgnoreCase("emerald")) {
-                                    int x = 0;
+                                    int x;
                                     if (yml.isSet(tp + "receive." + re + "." + tg + ".delay")) {
                                         try {
                                             x = yml.getInt(tp + "receive." + re + "." + tg + ".delay");
@@ -317,6 +324,9 @@ public class UpgradesManager {
                                         yml.set(tp + "receive." + re + "." + tg + ".delay", 3);
                                         save();
                                         continue;
+                                    }
+                                    if (yml.isSet(tp + ConfigPath.UPGRADES_TEAM_UPGRADE_RECEIVE_TEAM_GENERATOR_SPAWN_LIMIT.replace("%g%", tg).replace("%r%", re))) {
+                                        generatorAction.setLimit(tg, yml.getInt(tp + ConfigPath.UPGRADES_TEAM_UPGRADE_RECEIVE_TEAM_GENERATOR_SPAWN_LIMIT.replace("%g%", tg).replace("%r%", re)));
                                     }
                                     if (yml.isSet(tp + "receive." + re + "." + tg + ".amount")) {
                                         try {
