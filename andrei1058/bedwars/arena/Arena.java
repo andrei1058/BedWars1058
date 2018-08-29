@@ -33,7 +33,7 @@ public class Arena {
     private static HashMap<Player, Arena> arenaByPlayer = new HashMap<>();
     private static ArrayList<Arena> arenas = new ArrayList<>();
     public static HashMap<Player, Integer> respawn = new HashMap<>();
-    private static int gamesBeforeRestart = config.getInt(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART);
+    private static int gamesBeforeRestart = 0;//config.getInt(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART);
 
 
     private List<Player> players = new ArrayList<>();
@@ -678,6 +678,7 @@ public class Arena {
             //todo games before restart dezactivat temporar pentru ca, cauzeaza probleme
             gamesBeforeRestart = 0;
             if (gamesBeforeRestart <= 0) {
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
                 Bukkit.getServer().spigot().restart();
                 return;
             }

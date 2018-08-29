@@ -317,7 +317,8 @@ public class Main extends JavaPlugin {
         yml.addDefault("debug", false);
         yml.addDefault("lobbyScoreboard", true);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ALLOW_PARTIES, true);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART, 30);
+        //yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART, 30);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD, "restart");
 
         yml.addDefault("database.enable", false);
         yml.addDefault("database.host", "localhost");
