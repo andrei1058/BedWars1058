@@ -14,7 +14,7 @@ public class BaseLeaveEvent extends Event {
 
     /**
      * Called when a player leaves a team base.
-     * Called when the distance between the player and a team's bed is > islandRadius
+     * Called when the distance between the player and a team's bed is greater than islandRadius
      *
      * @since API 9
      */

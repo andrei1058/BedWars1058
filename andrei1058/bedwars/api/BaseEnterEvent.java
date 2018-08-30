@@ -14,7 +14,7 @@ public class BaseEnterEvent extends Event {
 
     /**
      * Called when a player enters a team base.
-     * Called when the distance between the player and a team bed is < islandRadius
+     * Called when the distance between the player and a team bed is greater than islandRadius
      *
      * @since API 9
      */

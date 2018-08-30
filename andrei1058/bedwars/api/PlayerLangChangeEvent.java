@@ -27,7 +27,7 @@ public class PlayerLangChangeEvent extends Event {
     /**
      * Check if event is cancelled
      *
-     * @API 10
+     * @since API 10
      */
     public boolean isCancelled() {
         return cancelled;
