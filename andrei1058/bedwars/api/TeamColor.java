@@ -3,6 +3,8 @@ package com.andrei1058.bedwars.api;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 public enum TeamColor {
 
@@ -63,7 +65,9 @@ public enum TeamColor {
         return color;
     }
 
-    public static byte itemColor(TeamColor teamColor) {
+    @Contract(pure = true)
+    @Deprecated
+    public static byte itemColor(@NotNull TeamColor teamColor) {
         int i = 0;
         switch (teamColor) {
             case PINK:

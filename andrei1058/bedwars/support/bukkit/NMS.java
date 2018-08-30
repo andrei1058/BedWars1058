@@ -282,4 +282,11 @@ public interface NMS {
      * @since API 10
      */
     ItemStack setSkullOwner(ItemStack i, Player p);
+
+    /**
+     * Color an item if possible with the team's color
+     *
+     * @since API 10
+     */
+    ItemStack colourItem(ItemStack itemStack, BedWarsTeam bedWarsTeam);
 }

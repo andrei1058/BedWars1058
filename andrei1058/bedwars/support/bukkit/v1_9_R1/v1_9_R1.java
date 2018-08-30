@@ -6,17 +6,16 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.arena.ShopHolo;
-import com.andrei1058.bedwars.arena.despawnables.TargetListener;
 import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
 import com.andrei1058.bedwars.exceptions.InvalidSoundException;
+import com.andrei1058.bedwars.support.bukkit.utils.Misc;
 import com.andrei1058.bedwars.support.bukkit.NMS;
 import net.minecraft.server.v1_9_R1.*;
 import net.minecraft.server.v1_9_R1.Item;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Sound;
-import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_9_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_9_R1.entity.CraftLivingEntity;
@@ -27,7 +26,6 @@ import org.bukkit.craftbukkit.v1_9_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack;
 import org.bukkit.entity.*;
-import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -581,5 +579,11 @@ public class v1_9_R1 implements NMS {
         sm.setOwner(p.getName());
         i.setItemMeta(sm);
         return i;
+    }
+
+    @Override
+    public org.bukkit.inventory.ItemStack colourItem(org.bukkit.inventory.ItemStack itemStack, BedWarsTeam bedWarsTeam) {
+        if (itemStack == null) return null;
+        return new org.bukkit.inventory.ItemStack(itemStack.getType(), itemStack.getAmount(), Misc.getOldItemColor(bedWarsTeam.getColor()));
     }
 }

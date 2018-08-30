@@ -182,8 +182,8 @@ public class Main extends JavaPlugin {
 
         /** Party support */
         if (config.getYml().getBoolean(ConfigPath.GENERAL_CONFIGURATION_ALLOW_PARTIES)) {
-            if (Bukkit.getPluginManager().getPlugin("PartyAndFriends") != null) {
-                getLogger().info("Hook into PartyAndFriends support!");
+            if (Bukkit.getPluginManager().getPlugin("Spigot-Party-API-PAF") != null) {
+                getLogger().info("Hook into Spigot-Party-API-PAF support!");
                 party = new PartyAndFriends();
             } else {
                 party = new com.andrei1058.bedwars.support.party.Internal();

@@ -5,10 +5,10 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.arena.ShopHolo;
-import com.andrei1058.bedwars.arena.despawnables.TargetListener;
 import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
 import com.andrei1058.bedwars.exceptions.InvalidSoundException;
+import com.andrei1058.bedwars.support.bukkit.utils.Misc;
 import com.andrei1058.bedwars.support.bukkit.NMS;
 import com.google.common.collect.Sets;
 import net.minecraft.server.v1_12_R1.*;
@@ -584,5 +584,11 @@ public class v1_12_R1 implements NMS {
         sm.setOwner(p.getName());
         i.setItemMeta(sm);
         return i;
+    }
+
+    @Override
+    public org.bukkit.inventory.ItemStack colourItem(org.bukkit.inventory.ItemStack itemStack, BedWarsTeam bedWarsTeam) {
+        if (itemStack == null) return null;
+        return new org.bukkit.inventory.ItemStack(itemStack.getType(), itemStack.getAmount(), Misc.getOldItemColor(bedWarsTeam.getColor()));
     }
 }
