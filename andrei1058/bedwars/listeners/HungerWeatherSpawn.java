@@ -1,14 +1,17 @@
 package com.andrei1058.bedwars.listeners;
 
+import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
@@ -52,6 +55,7 @@ public class HungerWeatherSpawn implements Listener {
     }
 
     @EventHandler
+    //Used to prevent creature spawn
     public void onCreatureSpawn(CreatureSpawnEvent e) {
         if (e.getSpawnReason() != CreatureSpawnEvent.SpawnReason.CUSTOM) {
             if (getServerType() == ServerType.SHARED) {
@@ -106,4 +110,15 @@ public class HungerWeatherSpawn implements Listener {
             }
         }
     }*/
+
+    @EventHandler
+    //Prevent item spawning, issue #60
+    public void onItemSpawn(ItemSpawnEvent e){
+        Location l = e.getEntity().getLocation();
+        Arena a = Arena.getArenaByName(l.getWorld().getName());
+        if (a == null) return;
+        if (a.getStatus() != GameState.playing){
+            e.setCancelled(true);
+        }
+    }
 }
