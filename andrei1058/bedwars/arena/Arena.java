@@ -1366,6 +1366,7 @@ public class Arena {
     }
 
     @Contract(pure = true)
+    @Deprecated
     public static boolean isInArena(Player p) {
         return arenaByPlayer.containsKey(p);
     }
