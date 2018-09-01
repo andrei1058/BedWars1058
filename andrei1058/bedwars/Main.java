@@ -315,17 +315,18 @@ public class Main extends JavaPlugin {
         yml.addDefault("language", "en");
         yml.addDefault("storeLink", "https://www.spigotmc.org/resources/authors/39904/");
         yml.addDefault("lobbyServer", "hub");
-        yml.addDefault("startingCountdown", 40);
-        yml.addDefault("bedsDestroyCountdown", 360);
-        yml.addDefault("dragonSpawnCountdown", 600);
-        yml.addDefault("gameEndCountdown", 120);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_REGULAR, 40);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_SHORTENED, 10);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BEDS_DESTROY_COUNTDOWN, 360);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DRAGON_SPAWN_COUNTDOWN, 600);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_GAME_END_COUNTDOWN, 120);
         yml.addDefault("globalChat", false);
         yml.addDefault("formatChat", true);
         yml.addDefault("disableCrafting", true);
         yml.addDefault("debug", false);
         yml.addDefault("lobbyScoreboard", true);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ALLOW_PARTIES, true);
-        //yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART, 30);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART, 30);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD, "restart");
 
         yml.addDefault("database.enable", false);
@@ -401,6 +402,9 @@ public class Main extends JavaPlugin {
         //remove old config
         config.set("startItems", null);
         config.set("generators", null);
+        config.set("bedsDestroyCountdown", null);
+        config.set("dragonSpawnCountdown", null);
+        config.set("gameEndCountdown", null);
 
         String whatLang = "en";
         for (File f : new File("plugins/" + this.getDescription().getName() + "/Languages").listFiles()) {

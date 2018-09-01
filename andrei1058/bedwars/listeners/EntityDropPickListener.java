@@ -47,7 +47,7 @@ public class EntityDropPickListener implements Listener {
             return;
         }
 
-        if (Arena.respawn.containsKey(p)) {
+        if (a.getRespawn().containsKey(p)) {
             e.setCancelled(true);
             return;
         }
@@ -108,7 +108,7 @@ public class EntityDropPickListener implements Listener {
             }
         }
 
-        if (Arena.respawn.containsKey(e.getPlayer())) {
+        if (a.getRespawn().containsKey(e.getPlayer())) {
             e.setCancelled(true);
             return;
         }

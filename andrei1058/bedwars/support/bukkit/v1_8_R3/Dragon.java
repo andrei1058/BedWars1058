@@ -384,7 +384,7 @@ public class Dragon extends EntityInsentient implements IComplex, IMonster {
             Player p = (Player) iterator.next();
             if (this.getBedWarsTeam().getMembers().contains(p)) {
                 iterator.remove();
-            } else if (Arena.respawn.containsKey(p)) {
+            } else if (this.getBedWarsTeam().getArena().getRespawn().containsKey(p)) {
                 iterator.remove();
             }
         }

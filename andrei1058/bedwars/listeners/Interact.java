@@ -43,7 +43,7 @@ public class Interact implements Listener {
             if (b.getType() == Material.AIR) return;
             Arena a = Arena.getArenaByPlayer(p);
             if (a != null) {
-                if (a.respawn.containsKey(e.getPlayer())) {
+                if (a.getRespawn().containsKey(e.getPlayer())) {
                     e.setCancelled(true);
                     return;
                 }
@@ -61,7 +61,7 @@ public class Interact implements Listener {
                     return;
                 }
                 if (b.getType() == Material.CHEST) {
-                    if (a.isSpectator(p) || Arena.respawn.containsKey(p)) {
+                    if (a.isSpectator(p) || a.getRespawn().containsKey(p)) {
                         e.setCancelled(true);
                         return;
                     }
@@ -80,7 +80,7 @@ public class Interact implements Listener {
                         }
                     }
                 }
-                if (a.isSpectator(p) || Arena.respawn.containsKey(p)) {
+                if (a.isSpectator(p) || a.getRespawn().containsKey(p)) {
                     switch (b.getType()) {
                         case CHEST:
                         case ENDER_CHEST:
