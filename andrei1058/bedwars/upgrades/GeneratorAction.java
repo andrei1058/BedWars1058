@@ -13,6 +13,7 @@ public class GeneratorAction extends UpgradeAction {
 
     private int ironAmount = 0, goldAmount = 0, emeraldAmount = 0;
     private int ironDelay = 0, goldDelay = 0, emeraldDelay = 0;
+    private int ironLimit = 0, goldLimit = 0;
     private String name;
 
     public GeneratorAction(String name){
@@ -20,7 +21,7 @@ public class GeneratorAction extends UpgradeAction {
     }
 
     @Override
-    public void execute(BedWarsTeam bwt) {
+    public void execute(BedWarsTeam bwt, int i) {
         if (ironAmount > 0){
             bwt.getIronGenerator().setAmount(ironAmount);
         }
@@ -33,8 +34,14 @@ public class GeneratorAction extends UpgradeAction {
         if (goldDelay > 0){
             bwt.getGoldGenerator().setDelay(goldDelay);
         }
+        if (ironLimit > 0){
+            bwt.getIronGenerator().setSpawnLimit(ironLimit);
+        }
+        if (goldLimit > 0){
+            bwt.getGoldGenerator().setSpawnLimit(goldLimit);
+        }
         if (emeraldAmount > 0 && emeraldDelay > 0 && bwt.getEmeraldGenerator() == null){
-            bwt.setEmeraldGenerator(new OreGenerator(bwt.getIronGenerator().getLocation(), Arena.getArenaByPlayer(bwt.getMembers().get(0)), GeneratorType.IRON));
+            bwt.setEmeraldGenerator(new OreGenerator(bwt.getIronGenerator().getLocation(), Arena.getArenaByPlayer(bwt.getMembers().get(0)), GeneratorType.EMERALD, null));
             bwt.getEmeraldGenerator().setDelay(emeraldDelay);
             bwt.getEmeraldGenerator().setAmount(emeraldAmount);
             bwt.getEmeraldGenerator().setOre(new ItemStack(Material.EMERALD));
@@ -61,6 +68,17 @@ public class GeneratorAction extends UpgradeAction {
                 break;
         }
         plugin.debug("loading new GeneratorAction: "+getName());
+    }
+
+    public void setLimit(String generator, int amount){
+        switch (generator.toLowerCase()){
+            case "iron":
+                ironLimit = amount;
+                break;
+            case "gold":
+                goldLimit = amount;
+                break;
+        }
     }
 
     public void setDelay(String generator, int delay) {

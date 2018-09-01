@@ -1,12 +1,19 @@
 package com.andrei1058.bedwars.commands;
 
+import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.configuration.Language;
+import com.andrei1058.bedwars.configuration.Messages;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
 
+import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
 public class LeaveCommand extends BukkitCommand {
@@ -21,12 +28,16 @@ public class LeaveCommand extends BukkitCommand {
         Player p = (Player) s;
         Arena a = Arena.getArenaByPlayer(p);
         if (a == null){
-            p.sendMessage(getMsg(p, Language.notInArena));
+            if (getServerType() == ServerType.MULTIARENA && spigot.getBoolean("settings.bungeecord")){
+                Misc.moveToLobbyOrKick(p);
+            } else {
+                p.sendMessage(getMsg(p, Messages.COMMAND_LEAVE_DENIED_NOT_IN_ARENA));
+            }
         } else {
             if (a.isPlayer(p)){
-                a.removePlayer(p);
+                a.removePlayer(p, false);
             } else if (a.isSpectator(p)){
-                a.removeSpectator(p);
+                a.removeSpectator(p, false);
             }
         }
         return true;

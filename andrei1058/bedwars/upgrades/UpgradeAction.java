@@ -4,5 +4,5 @@ import com.andrei1058.bedwars.arena.BedWarsTeam;
 
 public abstract class UpgradeAction {
 
-    public abstract void execute(BedWarsTeam bwt);
+    public abstract void execute(BedWarsTeam bwt, int slot);
 }

@@ -13,4 +13,18 @@ public interface Party {
     boolean isOwner(Player p);
 
     List<Player> getMembers(Player owner);
+
+    void createParty(Player owner, Player... members);
+
+    void addMember(Player owner, Player member);
+
+    void removeFromParty(Player member);
+
+    void disband(Player owner);
+
+    boolean isMember(Player owner, Player check);
+
+    void removePlayer(Player owner, Player target);
+
+    boolean isInternal();
 }

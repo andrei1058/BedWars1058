@@ -15,8 +15,12 @@ public class EnemyBaseEnterAction extends UpgradeAction {
     }
 
     @Override
-    public void execute(BedWarsTeam bwt) {
-
+    public void execute(BedWarsTeam bwt, int slot) {
+        bwt.enableTrap(slot);
+        bwt.setTrapAction(isAction());
+        bwt.setTrapChat(isChat());
+        bwt.setTrapSubtitle(isSubtitle());
+        bwt.setTrapTitle(isTitle());
     }
 
     public String getName() {

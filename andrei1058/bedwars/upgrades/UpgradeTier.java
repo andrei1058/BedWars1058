@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.upgrades;
 
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.configuration.Language;
+import com.andrei1058.bedwars.configuration.Messages;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -27,10 +28,6 @@ public class UpgradeTier {
         this.actions = new ArrayList<>(actions);
         this.cost = cost;
         this.currency = currency;
-        ItemMeta im = itemStack.getItemMeta();
-        im.addEnchant(Enchantment.LURE, 1, true);
-        im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        itemStack.setItemMeta(im);
         this.itemStack = itemStack;
         plugin.debug("loading new UpgradeTier: "+getName());
     }
@@ -46,17 +43,17 @@ public class UpgradeTier {
         for (String s : getList(p, path+"."+getName()+".lore")){
             if (s.contains("{loreFooter}")){
                 if (isHighest(bwt, tu)){
-                    s=s.replace("{loreFooter}", getMsg(p, loreFooterUnlocked));
+                    s=s.replace("{loreFooter}", getMsg(p, Messages.UPGRADES_LORE_REPLACEMENT_UNLOCKED));
                 } else if (hasEnoughMoney(p)){
-                    s=s.replace("{loreFooter}", getMsg(p, loreFooterClick));
+                    s=s.replace("{loreFooter}", getMsg(p, Messages.UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY));
                 } else {
-                    s=s.replace("{loreFooter}", getMsg(p, loreFooterInsuff));
+                    s=s.replace("{loreFooter}", getMsg(p, Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY));
                 }
             }
             if (getCost() == 1){
                 s=s.replace("{cost}", String.valueOf(cost)).replace("{currency}", getMsg(p, "meaning."+getCurrency()));
             } else {
-                s=s.replace("{cost}", String.valueOf(cost)).replace("{currency}", getMsg(p, lang.pluralPath+"."+getCurrency()));
+                s=s.replace("{cost}", String.valueOf(cost)).replace("{currency}", getMsg(p, Messages.PLURAL_PATH+"."+getCurrency()));
             }
             lore.add(s);
         }
@@ -66,7 +63,7 @@ public class UpgradeTier {
         return i;
     }
 
-    public boolean buy(Player p, BedWarsTeam bwt){
+    public boolean buy(Player p, BedWarsTeam bwt, int slot){
         int money = 0;
         Material currency = null;
         if (getCurrency().equalsIgnoreCase("iron")) {
@@ -100,7 +97,7 @@ public class UpgradeTier {
         }
         if (money < getCost()) {
             p.playSound(p.getLocation(), nms.insufficientMoney(), 1f, 1f);
-            p.sendMessage(getMsg(p, Language.insufficientMoney).replace("{currency}", getMsg(p, "meaning." + getCurrency().toLowerCase())).replace("{amount}", String.valueOf(getCost() - money)));
+            p.sendMessage(getMsg(p, Messages.SHOP_INSUFFICIENT_MONEY).replace("{currency}", getMsg(p, "meaning." + getCurrency().toLowerCase())).replace("{amount}", String.valueOf(getCost() - money)));
             p.closeInventory();
             return false;
         }
@@ -110,18 +107,17 @@ public class UpgradeTier {
         } else {
             int costt = cost;
             for (ItemStack i : p.getInventory().getContents()) {
-                if (done) continue;
+                if (done) break;
                 if (i == null) continue;
                 if (i.getType() == null) continue;
                 if (i.getType() == Material.AIR) continue;
                 if (i.getType() == currency) {
-                    if (i.getAmount() <= costt) {
+                    if (i.getAmount() < costt) {
                         costt -= i.getAmount();
-                        p.getInventory().remove(i);
+                        nms.minusAmount(p, i, i.getAmount());
                         p.updateInventory();
-                        done = true;
                     } else {
-                        i.setAmount(i.getAmount() - costt);
+                        nms.minusAmount(p, i, costt);
                         p.updateInventory();
                         done = true;
                     }
@@ -130,7 +126,7 @@ public class UpgradeTier {
         }
         p.playSound(p.getLocation(), nms.bought(), 1f, 1f);
         for (UpgradeAction a : actions){
-            a.execute(bwt);
+            a.execute(bwt, slot);
         }
         p.closeInventory();
         //todo mesaj cu bought
@@ -140,26 +136,22 @@ public class UpgradeTier {
     public boolean hasEnoughMoney(Player p){
         switch (currency){
             case "vault":
-                return getCost()-plugin.getEconomy().getMoney(p)>=0;
+                return getCost()<=plugin.getEconomy().getMoney(p);
             case "iron":
-                return getCost()-countItemStackAmount(p, Material.IRON_INGOT)>=0;
+                return getCost()<=countItemStackAmount(p, Material.IRON_INGOT);
             case "gold":
-                return getCost()-countItemStackAmount(p, Material.GOLD_INGOT)>=0;
+                return getCost()<=countItemStackAmount(p, Material.GOLD_INGOT);
             case "emerald":
-                return getCost()-countItemStackAmount(p, Material.EMERALD)>=0;
+                return getCost()<=countItemStackAmount(p, Material.EMERALD);
             case "diamond":
-                return getCost()-countItemStackAmount(p, Material.DIAMOND)>=0;
+                return getCost()<=countItemStackAmount(p, Material.DIAMOND);
             default:
                 return false;
         }
     }
 
     public boolean isHighest(BedWarsTeam tm, TeamUpgrade tu){
-        return tu.getTiers().size()-1 == (tm.getUpgradeTier().containsKey(tu.getSlot()) ? tm.getUpgradeTier().get(tu.getSlot()) : 0);
-    }
-
-    public boolean isOne(BedWarsTeam tm, TeamUpgrade tu){
-        return 1 == (tm.getUpgradeTier().containsKey(tu.getSlot()) ? tm.getUpgradeTier().get(tu.getSlot()) : 0);
+        return tu.getTiers().size() == (tm.getUpgradeTier().containsKey(tu.getSlot()) ? tm.getUpgradeTier().get(tu.getSlot())+1 : 0);
     }
 
     private static int countItemStackAmount(Player p, Material m){

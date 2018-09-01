@@ -13,7 +13,7 @@ public class FinalKillEvent extends Event {
 
     public FinalKillEvent(String arenaName, Player killed, Player killer){
        this.arenaName = arenaName;
-       this.killed = killer;
+       this.killer = killer;
        this.killed = killed;
     }
 

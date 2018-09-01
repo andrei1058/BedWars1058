@@ -1,13 +1,17 @@
 package com.andrei1058.bedwars.shop;
 
+import com.andrei1058.bedwars.api.ShopBuyEvent;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.configuration.Language;
+import com.andrei1058.bedwars.configuration.Messages;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +19,6 @@ import java.util.List;
 import static com.andrei1058.bedwars.Main.getEconomy;
 import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
-import static com.andrei1058.bedwars.configuration.Language.shopPath;
-import static com.andrei1058.bedwars.configuration.Language.youPurchased;
 
 public class BuyItemsAction extends ContentAction {
 
@@ -64,21 +66,20 @@ public class BuyItemsAction extends ContentAction {
                 }
             }
         }
-        int reach = items.size(), match = 0;
         for (ItemStack i : p.getInventory().getArmorContents()) {
+            if (!nms.isCustomBedWarsItem(i)) continue;
             for (ShopItem i2 : items) {
-                if (i2.getItemStack().equals(i)) {
-                    match++;
+                if (nms.isCustomBedWarsItem(i2.getItemStack())) {
+                    if (nms.getCustomData(i).equals(nms.getCustomData(i2.getItemStack()))){
+                        p.sendMessage(getMsg(p, Messages.SHOP_ALREADY_BOUGHT));
+                        return;
+                    }
                 }
             }
         }
-        if (match == reach) {
-            //todo ai deja armura asta pe tine
-            return;
-        }
         if (money < getCost()) {
             p.playSound(p.getLocation(), nms.insufficientMoney(), 1f, 1f);
-            p.sendMessage(getMsg(p, Language.insufficientMoney).replace("{currency}", getMsg(p, "meaning." + getCurrency().toLowerCase())).replace("{amount}", String.valueOf(getCost() - money)));
+            p.sendMessage(getMsg(p, Messages.SHOP_INSUFFICIENT_MONEY).replace("{currency}", getMsg(p, "meaning." + getCurrency().toLowerCase())).replace("{amount}", String.valueOf(getCost() - money)));
             return;
         }
         boolean done = false;
@@ -87,18 +88,17 @@ public class BuyItemsAction extends ContentAction {
         } else {
             int costt = cost;
             for (ItemStack i : p.getInventory().getContents()) {
-                if (done) continue;
+                if (done) break;
                 if (i == null) continue;
                 if (i.getType() == null) continue;
                 if (i.getType() == Material.AIR) continue;
                 if (i.getType() == currency) {
-                    if (i.getAmount() <= costt) {
+                    if (i.getAmount() < costt) {
                         costt -= i.getAmount();
-                        p.getInventory().remove(i);
+                        nms.minusAmount(p, i, i.getAmount());
                         p.updateInventory();
-                        done = true;
                     } else {
-                        i.setAmount(i.getAmount() - costt);
+                        nms.minusAmount(p, i, costt);
                         p.updateInventory();
                         done = true;
                     }
@@ -107,8 +107,13 @@ public class BuyItemsAction extends ContentAction {
         }
         p.playSound(p.getLocation(), nms.bought(), 1f, 1f);
         getCategoryContent().getShopCategory().openToPlayer(p);
-        p.sendMessage(getMsg(p, youPurchased).replace("{item}", ChatColor.stripColor(getMsg(p, getCategoryContent().getShopCategory().getName().replace("main.", shopPath) + "." + getCategoryContent().getName() + ".name"))));
+        p.sendMessage(getMsg(p, Messages.SHOP_NEW_PURCHASE).replace("{item}", ChatColor.stripColor(getMsg(p, getCategoryContent().getShopCategory().getName().replace("main.", Messages.SHOP_PATH) + "." + getCategoryContent().getName() + ".name"))));
         BedWarsTeam.PlayerVault pv = BedWarsTeam.getVault(p);
+
+        //Call buy event
+        Bukkit.getPluginManager().callEvent(new ShopBuyEvent(this, p));
+        //
+
         for (ShopItem si : getItems()) {
             if (si.isPermanent() && pv != null) {
                 int slot = 0;
@@ -162,19 +167,67 @@ public class BuyItemsAction extends ContentAction {
                         if (nms.getDamage(si.getItemStack()) >= nms.getDamage(i)) {
                             p.getInventory().remove(i);
                             p.getInventory().addItem(si.getItemStack());
+                            updateEnchantments(p);
                             return;
                         }
                     }
                 }
                 ItemStack i = si.getItemStack();
-                if (si.getItemStack().getType() == Material.WOOL || si.getItemStack().getType() == Material.STAINED_CLAY || si.getItemStack().getType() == Material.STAINED_GLASS || si.getItemStack().getType() == Material.GLASS) {
+                if (si.getItemStack().getType() == Material.WOOL || si.getItemStack().getType() == Material.STAINED_CLAY ||
+                        si.getItemStack().getType() == Material.STAINED_GLASS) {
                     i = new ItemStack(i.getType(), i.getAmount(), TeamColor.itemColor(Arena.getArenaByPlayer(p).getTeam(p).getColor()));
                 }
                 p.getInventory().addItem(i);
             }
 
         }
+        updateEnchantments(p);
         p.updateInventory();
+    }
+
+    /**
+     * Update a player enchantments
+     */
+    private static void updateEnchantments(Player p) {
+        if (!Arena.getArenaByPlayer(p).getTeam(p).getBowsEnchantments().isEmpty()) {
+            for (ItemStack i : p.getInventory().getContents()) {
+                if (i == null) continue;
+                if (i.getType() == Material.BOW) {
+                    ItemMeta im = i.getItemMeta();
+                    for (BedWarsTeam.Enchant e : Arena.getArenaByPlayer(p).getTeam(p).getBowsEnchantments()) {
+                        im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
+                    }
+                    i.setItemMeta(im);
+                }
+                p.updateInventory();
+            }
+        }
+        if (!Arena.getArenaByPlayer(p).getTeam(p).getSwordsEnchantemnts().isEmpty()) {
+            for (ItemStack i : p.getInventory().getContents()) {
+                if (i == null) continue;
+                if (nms.isSword(i)) {
+                    ItemMeta im = i.getItemMeta();
+                    for (BedWarsTeam.Enchant e : Arena.getArenaByPlayer(p).getTeam(p).getSwordsEnchantemnts()) {
+                        im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
+                    }
+                    i.setItemMeta(im);
+                }
+                p.updateInventory();
+            }
+        }
+        if (!Arena.getArenaByPlayer(p).getTeam(p).getArmorsEnchantemnts().isEmpty()) {
+            for (ItemStack i : p.getInventory().getArmorContents()) {
+                if (i == null) continue;
+                if (nms.isArmor(i)) {
+                    ItemMeta im = i.getItemMeta();
+                    for (BedWarsTeam.Enchant e : Arena.getArenaByPlayer(p).getTeam(p).getArmorsEnchantemnts()) {
+                        im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
+                    }
+                    i.setItemMeta(im);
+                }
+                p.updateInventory();
+            }
+        }
     }
 
     public CategoryContent getCategoryContent() {
