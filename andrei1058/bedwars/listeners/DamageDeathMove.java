@@ -427,6 +427,7 @@ public class DamageDeathMove implements Listener {
                             }
                         } else {
                             if (t.isMember(e.getPlayer())) {
+                                if (t.getBedHolo(e.getPlayer()) == null) continue;
                                 if (t.getBedHolo(e.getPlayer()).isHidden()) {
                                     t.getBedHolo(e.getPlayer()).show();
                                 }

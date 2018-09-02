@@ -577,6 +577,8 @@ public class Arena {
                 }
             }
         }
+        p.setFlying(false);
+        p.setAllowFlight(false);
     }
 
     /**
@@ -661,6 +663,8 @@ public class Arena {
 
         /* NameTagEdit Support */
         NametagEdit.restoreNametag(p);
+        p.setFlying(false);
+        p.setAllowFlight(false);
     }
 
     /**

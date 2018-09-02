@@ -70,6 +70,11 @@ public class GameStartingTask extends BukkitRunnable {
         if (countdown == 0) {
             cancel();
 
+            //Enable diamond/ emerald generators
+            for (OreGenerator og : getArena().getOreGenerators()) {
+                if (og.getBwt() == null) og.enable();
+            }
+
             //Check who is having parties
             List<Player> skip = new ArrayList<>(), owners = new ArrayList<>();
             for (Player p : getArena().getPlayers()) {
@@ -146,11 +151,6 @@ public class GameStartingTask extends BukkitRunnable {
                 }
                 team.getIronGenerator().enable();
                 team.getGoldGenerator().enable();
-            }
-
-            //Enable diamond/ emerald generators
-            for (OreGenerator og : getArena().getOreGenerators()) {
-                if (og.getBwt() == null) og.enable();
             }
 
             //Lobby removal
