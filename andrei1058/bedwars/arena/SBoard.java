@@ -116,10 +116,13 @@ public class SBoard {
                         kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never, false));
 
             } else if (arena.getStatus() == GameState.waiting || arena.getStatus() == GameState.starting) {
-                if (getArena().getStartingTask() == null) continue;
+                String time = "0";
+                if (getArena().getStartingTask() != null) {
+                    time = String.valueOf(getArena().getStartingTask().getCountdown());
+                }
                 setContent(t, temp.replace("{map}", arena.getDisplayName()).replace("{server}", Bukkit.getServer().getMotd())
                         .replace("{on}", String.valueOf(arena.getPlayers().size())).replace("{max}", String.valueOf(arena.getMaxPlayers()))
-                        .replace("{time}", String.valueOf(arena.getStartingTask().getCountdown())).replace("{player}", p.getName())
+                        .replace("{time}", time).replace("{player}", p.getName())
                         .replace("{money}", String.valueOf(getEconomy().getMoney(p))).replace("{date}", new SimpleDateFormat(getMsg(getP(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis()))));
             } else if (arena.getStatus() == GameState.playing) {
                 String[] ne = getNextEvent();
@@ -173,12 +176,17 @@ public class SBoard {
             }
         } else {
             if (arena.getStatus() == GameState.waiting || arena.getStatus() == GameState.starting) {
+                String time = "0";
+                if (getArena().getStartingTask() != null) {
+                    time = String.valueOf(getArena().getStartingTask().getCountdown());
+                }
                 for (Map.Entry<Team, String> e : toRefresh.entrySet()) {
                     setContent(e.getKey(), e.getValue().replace("{on}", String.valueOf(arena.getPlayers().size()))
                             .replace("{max}", String.valueOf(arena.getMaxPlayers()))
-                            .replace("{time}", String.valueOf(arena.getStartingTask().getCountdown())).replace("{date}", date));
+                            .replace("{time}", time).replace("{date}", date));
                 }
             } else if (arena.getStatus() == GameState.playing) {
+                if (getArena().getPlayingTask() == null) return;
                 String kills = String.valueOf(arena.getPlayerKills(getP(), false)), finalKills = String.valueOf(arena.getPlayerKills(getP(), true)),
                         beds = String.valueOf(arena.getPlayerBedsDestroyed(getP()));
                 String[] ne = getNextEvent();
