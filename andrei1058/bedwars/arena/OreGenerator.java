@@ -323,6 +323,12 @@ public class OreGenerator {
         public void setTimerName(String name) {
             timer.setCustomName(name);
         }
+
+        public void destroy(){
+            timer.remove();
+            tier.remove();
+            name.remove();
+        }
     }
 
     private static ArmorStand createArmorStand(String name, Location l) {
@@ -396,8 +402,19 @@ public class OreGenerator {
     public static void removeIfArena(Arena a) {
         for (int x = getGenerators().size() - 1; x >= 0; x--) {
             if (getGenerators().get(x).getArena() == a) {
-                OreGenerator.getGenerators().remove(x);
+                OreGenerator.getGenerators().get(x).destroy();
             }
+        }
+    }
+
+    public void destroy(){
+        for (HoloGram a : armorStands.values()){
+            a.destroy();
+        }
+        generators.remove(this);
+        rotation.remove(this);
+        if (item != null){
+            item.remove();
         }
     }
 
