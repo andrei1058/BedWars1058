@@ -394,17 +394,21 @@ public class Main extends JavaPlugin {
         Misc.addDefaultStatsItem(yml, 22, Material.CHEST, 0, "gamesPlayed");
         Misc.addDefaultStatsItem(yml, 23, Material.STAINED_GLASS_PANE, 0, "lastPlay");
 
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + ".default", Arrays.asList("WOOD_SWORD"));
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + ".Default", Arrays.asList("WOOD_SWORD"));
         yml.addDefault("blockedCmds", Arrays.asList("spawn", "tpa", "tpaccept", "warp", "goto", "tp", "tphere", "gamemode", "fly", "kill"));
         yml.options().copyDefaults(true);
         config.save();
 
         //remove old config
+        if (config.getYml().get("npcLoc") != null){
+            config.set(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE, config.getYml().getString("npcLoc"));
+        }
         config.set("startItems", null);
         config.set("generators", null);
         config.set("bedsDestroyCountdown", null);
         config.set("dragonSpawnCountdown", null);
         config.set("gameEndCountdown", null);
+        config.set("npcLoc", null);
 
         String whatLang = "en";
         for (File f : new File("plugins/" + this.getDescription().getName() + "/Languages").listFiles()) {
