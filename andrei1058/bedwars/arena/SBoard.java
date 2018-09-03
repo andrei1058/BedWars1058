@@ -148,12 +148,12 @@ public class SBoard {
             String suffix;
             if (prefix.endsWith("&") || prefix.endsWith("§")) {
                 prefix = prefix.substring(0, prefix.length() - 1);
-                suffix = s.substring(prefix.length(), s.length());
+                suffix = s.substring(prefix.length());
             } else if (prefix.substring(0, 15).endsWith("&") || prefix.substring(0, 15).endsWith("§")) {
                 prefix = prefix.substring(0, prefix.length() - 2);
-                suffix = s.substring(prefix.length(), s.length());
+                suffix = s.substring(prefix.length());
             } else {
-                suffix = ChatColor.getLastColors(prefix) + s.substring(prefix.length(), s.length());
+                suffix = ChatColor.getLastColors(prefix) + s.substring(prefix.length());
             }
             if (suffix.length() > 16) {
                 suffix = suffix.substring(0, 16);
