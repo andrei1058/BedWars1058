@@ -259,31 +259,31 @@ public class SBoard {
         switch (arena.getNextEvent()){
             case EMERALD_GENERATOR_TIER_II:
                 st = getMsg(getP(), Messages.NEXT_EVENT_EMERALD_UPGRADE_II);
-                time = (arena.upgradeEmeraldsCount-1)*1000L;
+                time = (arena.upgradeEmeraldsCount)*1000L;
                 break;
             case EMERALD_GENERATOR_TIER_III:
                 st = getMsg(getP(), Messages.NEXT_EVENT_EMERALD_UPGRADE_III);
-                time = (arena.upgradeEmeraldsCount-1)*1000L;
+                time = (arena.upgradeEmeraldsCount)*1000L;
                 break;
             case DIAMOND_GENERATOR_TIER_II:
                 st = getMsg(getP(), Messages.NEXT_EVENT_DIAMOND_UPGRADE_II);
-                time = (arena.upgradeDiamondsCount-1)*1000L;
+                time = (arena.upgradeDiamondsCount)*1000L;
                 break;
             case DIAMOND_GENERATOR_TIER_III:
                 st = getMsg(getP(), Messages.NEXT_EVENT_DIAMOND_UPGRADE_III);
-                time = (arena.upgradeDiamondsCount-1)*1000L;
+                time = (arena.upgradeDiamondsCount)*1000L;
                 break;
             case GAME_END:
                 st = getMsg(getP(), Messages.NEXT_EVENT_GAME_END);
-                time = (arena.getPlayingTask().getGameEndCountdown()-1)*1000L;
+                time = (arena.getPlayingTask().getGameEndCountdown())*1000L;
                 break;
             case BEDS_DESTROY:
                 st = getMsg(getP(), Messages.NEXT_EVENT_BEDS_DESTROY);
-                time = (arena.getPlayingTask().getBedsDestroyCountdown()-1)*1000L;
+                time = (arena.getPlayingTask().getBedsDestroyCountdown())*1000L;
                 break;
             case ENDER_DRAGON:
                 st = getMsg(getP(), Messages.NEXT_EVENT_DRAGON_SPAWN);
-                time = (arena.getPlayingTask().getDragonSpawnCountdown()-1)*1000L;
+                time = (arena.getPlayingTask().getDragonSpawnCountdown())*1000L;
                 break;
         }
 
