@@ -421,6 +421,7 @@ public class DamageDeathMove implements Listener {
                     for (BedWarsTeam t : a.getTeams()) {
                         if (e.getPlayer().getLocation().distance(t.getBed()) < 4) {
                             if (t.isMember(e.getPlayer())) {
+                                if (t.getBedHolo(e.getPlayer()) == null) continue;
                                 if (!t.getBedHolo(e.getPlayer()).isHidden()) {
                                     t.getBedHolo(e.getPlayer()).hide();
                                 }
