@@ -143,11 +143,11 @@ public class GameStartingTask extends BukkitRunnable {
                 }
                 nms.colorBed(team);
                 if (getArena().getMaxInTeam() > 1) {
-                    nms.spawnShop(team.getTeamUpgrades().clone(), Messages.UPGRADES_TEAM_NPC_NAME, getArena().getPlayers(), getArena());
-                    nms.spawnShop(team.getShop().clone(), Messages.SHOP_TEAM_NAME, getArena().getPlayers(), getArena());
+                    nms.spawnShop(getArena().getCm().getArenaLoc("Team."+team.getName()+".Upgrade"), Messages.UPGRADES_TEAM_NPC_NAME, getArena().getPlayers(), getArena());
+                    nms.spawnShop(getArena().getCm().getArenaLoc("Team."+team.getName()+".Shop"), Messages.SHOP_TEAM_NAME, getArena().getPlayers(), getArena());
                 } else {
-                    nms.spawnShop(team.getTeamUpgrades().clone(), Messages.UPGRADES_SOLO_NPC_NAME, getArena().getPlayers(), getArena());
-                    nms.spawnShop(team.getShop().clone(), Messages.SHOP_SOLO_NAME, getArena().getPlayers(), getArena());
+                    nms.spawnShop(getArena().getCm().getArenaLoc("Team."+team.getName()+".Upgrade"), Messages.UPGRADES_SOLO_NPC_NAME, getArena().getPlayers(), getArena());
+                    nms.spawnShop(getArena().getCm().getArenaLoc("Team."+team.getName()+".Shop"), Messages.SHOP_SOLO_NAME, getArena().getPlayers(), getArena());
                 }
                 team.getIronGenerator().enable();
                 team.getGoldGenerator().enable();
