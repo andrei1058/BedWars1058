@@ -116,9 +116,13 @@ public class SBoard {
                         kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never, false));
 
             } else if (arena.getStatus() == GameState.waiting || arena.getStatus() == GameState.starting) {
+                String time = "0";
+                if (getArena().getStartingTask() != null) {
+                    time = String.valueOf(getArena().getStartingTask().getCountdown());
+                }
                 setContent(t, temp.replace("{map}", arena.getDisplayName()).replace("{server}", Bukkit.getServer().getMotd())
                         .replace("{on}", String.valueOf(arena.getPlayers().size())).replace("{max}", String.valueOf(arena.getMaxPlayers()))
-                        .replace("{time}", String.valueOf(arena.getCountdownS())).replace("{player}", p.getName())
+                        .replace("{time}", time).replace("{player}", p.getName())
                         .replace("{money}", String.valueOf(getEconomy().getMoney(p))).replace("{date}", new SimpleDateFormat(getMsg(getP(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis()))));
             } else if (arena.getStatus() == GameState.playing) {
                 String[] ne = getNextEvent();
@@ -144,12 +148,12 @@ public class SBoard {
             String suffix;
             if (prefix.endsWith("&") || prefix.endsWith("§")) {
                 prefix = prefix.substring(0, prefix.length() - 1);
-                suffix = s.substring(prefix.length(), s.length());
+                suffix = s.substring(prefix.length());
             } else if (prefix.substring(0, 15).endsWith("&") || prefix.substring(0, 15).endsWith("§")) {
                 prefix = prefix.substring(0, prefix.length() - 2);
-                suffix = s.substring(prefix.length(), s.length());
+                suffix = s.substring(prefix.length());
             } else {
-                suffix = ChatColor.getLastColors(prefix) + s.substring(prefix.length(), s.length());
+                suffix = ChatColor.getLastColors(prefix) + s.substring(prefix.length());
             }
             if (suffix.length() > 16) {
                 suffix = suffix.substring(0, 16);
@@ -172,12 +176,17 @@ public class SBoard {
             }
         } else {
             if (arena.getStatus() == GameState.waiting || arena.getStatus() == GameState.starting) {
+                String time = "0";
+                if (getArena().getStartingTask() != null) {
+                    time = String.valueOf(getArena().getStartingTask().getCountdown());
+                }
                 for (Map.Entry<Team, String> e : toRefresh.entrySet()) {
                     setContent(e.getKey(), e.getValue().replace("{on}", String.valueOf(arena.getPlayers().size()))
                             .replace("{max}", String.valueOf(arena.getMaxPlayers()))
-                            .replace("{time}", String.valueOf(arena.getCountdownS())).replace("{date}", date));
+                            .replace("{time}", time).replace("{date}", date));
                 }
             } else if (arena.getStatus() == GameState.playing) {
+                if (getArena().getPlayingTask() == null) return;
                 String kills = String.valueOf(arena.getPlayerKills(getP(), false)), finalKills = String.valueOf(arena.getPlayerKills(getP(), true)),
                         beds = String.valueOf(arena.getPlayerBedsDestroyed(getP()));
                 String[] ne = getNextEvent();
@@ -250,31 +259,31 @@ public class SBoard {
         switch (arena.getNextEvent()){
             case EMERALD_GENERATOR_TIER_II:
                 st = getMsg(getP(), Messages.NEXT_EVENT_EMERALD_UPGRADE_II);
-                time = (arena.upgradeEmeraldsCount-1)*1000L;
+                time = (arena.upgradeEmeraldsCount)*1000L;
                 break;
             case EMERALD_GENERATOR_TIER_III:
                 st = getMsg(getP(), Messages.NEXT_EVENT_EMERALD_UPGRADE_III);
-                time = (arena.upgradeEmeraldsCount-1)*1000L;
+                time = (arena.upgradeEmeraldsCount)*1000L;
                 break;
             case DIAMOND_GENERATOR_TIER_II:
                 st = getMsg(getP(), Messages.NEXT_EVENT_DIAMOND_UPGRADE_II);
-                time = (arena.upgradeDiamondsCount-1)*1000L;
+                time = (arena.upgradeDiamondsCount)*1000L;
                 break;
             case DIAMOND_GENERATOR_TIER_III:
                 st = getMsg(getP(), Messages.NEXT_EVENT_DIAMOND_UPGRADE_III);
-                time = (arena.upgradeDiamondsCount-1)*1000L;
+                time = (arena.upgradeDiamondsCount)*1000L;
                 break;
             case GAME_END:
                 st = getMsg(getP(), Messages.NEXT_EVENT_GAME_END);
-                time = (arena.getGameEndCountdown()-1)*1000L;
+                time = (arena.getPlayingTask().getGameEndCountdown())*1000L;
                 break;
             case BEDS_DESTROY:
                 st = getMsg(getP(), Messages.NEXT_EVENT_BEDS_DESTROY);
-                time = (arena.getBedsDestroyCountdown()-1)*1000L;
+                time = (arena.getPlayingTask().getBedsDestroyCountdown())*1000L;
                 break;
             case ENDER_DRAGON:
                 st = getMsg(getP(), Messages.NEXT_EVENT_DRAGON_SPAWN);
-                time = (arena.getDragonCountdown()-1)*1000L;
+                time = (arena.getPlayingTask().getDragonSpawnCountdown())*1000L;
                 break;
         }
 

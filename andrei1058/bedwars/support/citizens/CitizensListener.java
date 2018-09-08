@@ -42,7 +42,7 @@ public class CitizensListener implements Listener {
                 e2.remove();
             }
         }
-        if (removed) Main.config.set(ConfigPath.GENERAL_CONFIGURATION_NPC_LOCS, locations);
+        if (removed) Main.config.set(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE, locations);
     }
 
     @EventHandler
