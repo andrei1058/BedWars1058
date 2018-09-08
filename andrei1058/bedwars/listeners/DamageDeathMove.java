@@ -96,7 +96,7 @@ public class DamageDeathMove implements Listener {
                         return;
                     }
                 }
-                if (a.respawn.containsKey(p)) {
+                if (a.getRespawn().containsKey(p)) {
                     e.setCancelled(true);
                     return;
                 }
@@ -108,7 +108,7 @@ public class DamageDeathMove implements Listener {
                     } else return;
                 } else if (e.getDamager() instanceof Player) {
                     damager = (Player) e.getDamager();
-                    if (a.respawn.containsKey(damager)) {
+                    if (a.getRespawn().containsKey(damager)) {
                         e.setCancelled(true);
                         return;
                     }
@@ -300,7 +300,7 @@ public class DamageDeathMove implements Listener {
                         Bukkit.getPluginManager().callEvent(new FinalKillEvent(a.getWorldName(), victim, killer));
                     } else {
                         if (!a.getCm().getBoolean(ConfigPath.ARENA_NORMAL_DEATH_DROPS)) {
-                            if (!Arena.respawn.containsKey(killer)) {
+                            if (!a.getRespawn().containsKey(killer)) {
                                 for (ItemStack i : drops) {
                                     if (i == null) continue;
                                     if (i.getType() == Material.AIR) continue;
@@ -356,7 +356,7 @@ public class DamageDeathMove implements Listener {
                 nms.setCollide(e.getPlayer(), a, false);
                 e.getPlayer().setAllowFlight(true);
                 e.getPlayer().setFlying(true);
-                Arena.respawn.put(e.getPlayer(), 5);
+                a.getRespawn().put(e.getPlayer(), 5);
             }
         }
     }
@@ -382,14 +382,14 @@ public class DamageDeathMove implements Listener {
                 }
 
                 /** Check if respawning */
-                if (Arena.respawn.containsKey(e.getPlayer())) {
+                if (a.getRespawn().containsKey(e.getPlayer())) {
                     for (Player p : a.getPlayers()) {
                         if (p == e.getPlayer()) continue;
                         nms.hidePlayer(e.getPlayer(), p);
                     }
                 } else {
                     for (Player p : a.getPlayers()) {
-                        if (Arena.respawn.containsKey(p)) {
+                        if (a.getRespawn().containsKey(p)) {
                             nms.hidePlayer(e.getPlayer(), p);
                         }
                     }
@@ -421,12 +421,14 @@ public class DamageDeathMove implements Listener {
                     for (BedWarsTeam t : a.getTeams()) {
                         if (e.getPlayer().getLocation().distance(t.getBed()) < 4) {
                             if (t.isMember(e.getPlayer())) {
+                                if (t.getBedHolo(e.getPlayer()) == null) continue;
                                 if (!t.getBedHolo(e.getPlayer()).isHidden()) {
                                     t.getBedHolo(e.getPlayer()).hide();
                                 }
                             }
                         } else {
                             if (t.isMember(e.getPlayer())) {
+                                if (t.getBedHolo(e.getPlayer()) == null) continue;
                                 if (t.getBedHolo(e.getPlayer()).isHidden()) {
                                     t.getBedHolo(e.getPlayer()).show();
                                 }

@@ -2,7 +2,7 @@ package com.andrei1058.bedwars.configuration;
 
 public class ConfigPath {
 
-    public static final String GENERATOR_STACK_ITEMS = "stackItems";
+    public static final String GENERATOR_STACK_ITEMS = "stack-items";
 
     public static final String GENERATOR_IRON_DELAY = "iron.delay";
     public static final String GENERATOR_IRON_AMOUNT = "iron.amount";
@@ -38,36 +38,42 @@ public class ConfigPath {
     public static final String UPGRADES_TEAM_UPGRADE_RECEIVE_TEAM_GENERATOR_SPAWN_LIMIT = "receive.%r%.%g%.spawn-limit";
 
 
-    //public static final String GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART = "bungeeMode.gamesBeforeRestart";
+    public static final String GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART = "bungee-settings.games-before-restart";
     public static final String GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD = "bungee-settings.restart-cmd";
-    public static final String GENERAL_CONFIGURATION_ALLOW_PARTIES = "allowParties";
-    public static final String GENERAL_CONFIGURATION_NPC_LOCS = "npcLoc";
+    public static final String GENERAL_CONFIGURATION_ALLOW_PARTIES = "allow-parties";
 
-    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_MATERIAL = "spectatorItems.teleporter.material";
-    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_DATA = "spectatorItems.teleporter.data";
-    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_ENABLED = "spectatorItems.teleporter.enabled";
-    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_SLOT = "spectatorItems.teleporter.slot";
-    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_ENCHANTED = "spectatorItems.teleporter.enchanted";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_MATERIAL = "spectator-items.teleporter.material";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_DATA = "spectator-items.teleporter.data";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_ENABLED = "spectator-items.teleporter.enabled";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_SLOT = "spectator-items.teleporter.slot";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_ENCHANTED = "spectator-items.teleporter.enchanted";
 
-    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_MATERIAL = "spectatorItems.leave.material";
-    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_DATA = "spectatorItems.leave.data";
-    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_ENABLED = "spectatorItems.leave.enabled";
-    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_SLOT = "spectatorItems.leave.slot";
-    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_ENCHANTED = "spectatorItems.leave.enchanted";
-    public static final String GENERAL_CONFIGURATION_NPC_LOC_STORAGE = "npcLoc";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_MATERIAL = "spectator-items.leave.material";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_DATA = "spectator-items.leave.data";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_ENABLED = "spectator-items.leave.enabled";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_SLOT = "spectator-items.leave.slot";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_ENCHANTED = "spectator-items.leave.enchanted";
+
+    public static final String GENERAL_CONFIGURATION_START_COUNTDOWN_REGULAR = "countdowns.game-start-regular";
+    public static final String GENERAL_CONFIGURATION_START_COUNTDOWN_SHORTENED = "countdowns.game-start-shortened";
+    public static final String GENERAL_CONFIGURATION_BEDS_DESTROY_COUNTDOWN = "countdowns.next-event-beds-destroy";
+    public static final String GENERAL_CONFIGURATION_DRAGON_SPAWN_COUNTDOWN = "countdowns.next-event-dragon-spawn";
+    public static final String GENERAL_CONFIGURATION_GAME_END_COUNTDOWN = "countdowns.next-event-game-end";
+
+    public static final String GENERAL_CONFIGURATION_NPC_LOC_STORAGE = "join-npc-locations";
     public static final String GENERAL_CONFIGURATION_DEFAULT_ITEMS = "start-items-per-arena";
 
-    public static final String ARENA_CONFIGURATION_MAX_BUILD_Y = "maxBuildY";
-    public static final String ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS = "emptyTeamGenOff";
-    public static final String ARENA_ISLAND_RADIUS = "islandRadius";
+    public static final String ARENA_CONFIGURATION_MAX_BUILD_Y = "max-build-y";
+    public static final String ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS = "disable-generator-for-empty-teams";
+    public static final String ARENA_ISLAND_RADIUS = "island-radius";
     public static final String ARENA_WAITING_POS1 = "waiting.Pos1";
     public static final String ARENA_WAITING_POS2 = "waiting.Pos2";
-    public static final String ARENA_NORMAL_DEATH_DROPS = "normalDeathDrops";
+    public static final String ARENA_NORMAL_DEATH_DROPS = "vanilla-death-drops";
 
 
-    public static final String SOUNDS_BED_DESTROY = "bedDestroy";
-    public static final String SOUNDS_PLAYER_KILL = "playerKill";
-    public static final String SOUNDS_INSUFF_MONEY = "insuffMoney";
+    public static final String SOUNDS_BED_DESTROY = "bed-destroy";
+    public static final String SOUNDS_PLAYER_KILL = "player-kill";
+    public static final String SOUNDS_INSUFF_MONEY = "insufficient-money";
     public static final String SOUNDS_BOUGHT = "bought";
     public static final String SOUNDS_COUNTDOWN_TICK = "countdown";
 }

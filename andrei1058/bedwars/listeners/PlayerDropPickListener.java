@@ -44,7 +44,7 @@ public class PlayerDropPickListener implements Listener {
             return;
         }
 
-        if (Arena.respawn.containsKey(e.getPlayer())) {
+        if (a.getRespawn().containsKey(e.getPlayer())) {
             e.setCancelled(true);
             return;
         }
@@ -105,7 +105,7 @@ public class PlayerDropPickListener implements Listener {
             }
         }
 
-        if (Arena.respawn.containsKey(e.getPlayer())) {
+        if (a.getRespawn().containsKey(e.getPlayer())) {
             e.setCancelled(true);
             return;
         }

@@ -27,7 +27,7 @@ public class JoinLeaveTeleport implements Listener {
     public void onLogin(PlayerLoginEvent e) {
         if (getServerType() == ServerType.BUNGEE) {
             Arena a = Arena.getArenas().get(0);
-            if (a.getStatus() == GameState.waiting || (a.getStatus() == GameState.starting && a.getCountdownS() > 2)) {
+            if (a.getStatus() == GameState.waiting || (a.getStatus() == GameState.starting && a.getStartingTask().getCountdown() > 2)) {
                 if (a.getPlayers().size() >= a.getMaxPlayers() && !Arena.isVip(e.getPlayer())) {
                     e.setKickMessage(getMsg(e.getPlayer(), Messages.ARENA_JOIN_DENIED_IS_FULL));
                     e.setResult(PlayerLoginEvent.Result.KICK_FULL);
