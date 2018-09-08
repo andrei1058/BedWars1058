@@ -58,10 +58,17 @@ public class Misc {
                     } else {
                         a.removePlayer(p, false);
                     }
+                } else {
+                    forceKick(p);
                 }
             }
             return;
         }
+        forceKick(p);
+    }
+
+
+    public static void forceKick(Player p){
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("Connect");
         out.writeUTF(config.getYml().getString("lobbyServer"));
@@ -73,7 +80,6 @@ public class Misc {
                 }
             }, 120L);
         }
-
     }
 
     /**
