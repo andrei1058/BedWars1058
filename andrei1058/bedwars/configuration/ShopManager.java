@@ -123,7 +123,7 @@ public class ShopManager {
                 set("main.invContents.ranged.invContents.back.buyItems", new ArrayList<>());
 
                 //tools
-                setMainStuff("main.invContents.tools", 20, "STONE_PICKAXE", 0, 1, false);
+                setMainStuff("main.invContents.tools", 15, "STONE_PICKAXE", 0, 1, false);
                 yml.addDefault("main.invContents.tools.invSize", 36);
 
                 setCategoryWithBuy("main.invContents.tools.invContents.shears", 10, "SHEARS", 0, 1, 30, "iron", false);
@@ -158,7 +158,7 @@ public class ShopManager {
                 set("main.invContents.potions.invContents.back.buyItems", new ArrayList<>());
 
                 //utility
-                setMainStuff("main.invContents.utility", 22, "TNT", 0, 1, false);
+                setMainStuff("main.invContents.utility", 23, "TNT", 0, 1, false);
                 yml.addDefault("main.invContents.utility.invSize", 36);
 
                 setCategoryWithBuy("main.invContents.utility.invContents.apple", 10, "GOLDEN_APPLE", 0, 1, 3, "gold", false);
@@ -182,12 +182,8 @@ public class ShopManager {
                 setCategoryWithBuy("main.invContents.utility.invContents.bucket", 16, "WATER_BUCKET", 0, 1, 1, "emerald", false);
                 addBuyItem("main.invContents.utility.invContents.bucket.buyItems.item", "WATER_BUCKET", 0, 1, "", false, false);
 
-                setCategoryWithBuy("main.invContents.utility.invContents.eggBridge", 17, "EGG", 0, 1, 1, "emerald", false);
+                setCategoryWithBuy("main.invContents.utility.invContents.eggBridge", 22, "EGG", 0, 1, 1, "emerald", false);
                 addBuyItem("main.invContents.utility.invContents.eggBridge.buyItems.item", "EGG", 0, 1, "", false, false);
-
-                /*setCategoryWithBuy("main.invContents.utility.invContents.egg", 19, "EGG", 0, 1, 4, "emerald", false);
-                addBuyItem("main.invContents.utility.invContents.egg.buyItems.item", "EGG", 0, 1, "", false, false);
-                */
 
                 setCategoryWithBuy("main.invContents.utility.invContents.back", 31, "ARROW", 0, 1, 0, "iron", false);
                 set("main.invContents.utility.invContents.back.buyItems", new ArrayList<>());

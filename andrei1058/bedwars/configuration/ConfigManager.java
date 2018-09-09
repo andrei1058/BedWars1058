@@ -16,14 +16,17 @@ public class ConfigManager {
     private YamlConfiguration yml;
     private File config;
     private String name;
+    private boolean firstTime = false;
 
     public ConfigManager(String name, String dir, boolean arena) {
         File d = new File(dir);
         if (!d.exists()) {
             d.mkdir();
+            firstTime = true;
         }
         config = new File(dir + "/" + name + ".yml");
         if (!config.exists()) {
+            firstTime = true;
             try {
                 config.createNewFile();
             } catch (IOException e) {
@@ -143,5 +146,9 @@ public class ConfigManager {
      */
     public String getString(String path) {
         return yml.getString(path);
+    }
+
+    public boolean isFirstTime() {
+        return firstTime;
     }
 }

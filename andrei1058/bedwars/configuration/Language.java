@@ -173,55 +173,55 @@ public class Language {
                 lbj.saveShopStuff("invContents.blocks", "&aBlocks", Arrays.asList("&7Available:", "&7▪ Wool", "&7▪ Hardened Clay", "&7▪ Blast-Proof Glass", "&7▪ End Stone", "&7▪ Ladder", "&7▪ Oak Wood Planks", "&7▪ Obsidian", "", "&eClick to browse!"));
                 lbj.saveShopStuff("invContents.ranged", "&aRanged", Arrays.asList("&7Available:", "&7▪ Arrow", "&7▪ Bow", "&7▪ Bow (Power I)", "&7▪ Bow (Power I, Punch I)", "", "&eClick to browse!"));
                 lbj.saveShopStuff("invContents.tools", "&aTools", Arrays.asList("&7Available:", "&7▪ Shears", "&7▪ Wooden Pickaxe (Effeciency I)", "&7▪ Wooden Axe (Effeciency I)", "", "&eClick to browse!"));
-                lbj.saveShopStuff("invContents.potions", "&aPotions", Arrays.asList("&7Available:", "&7▪ Shears", "&7▪ Wooden Pickaxe (Effeciency I)", "&7▪ Wooden Axe (Effeciency I)", "", "&eClick to browse!"));
+                lbj.saveShopStuff("invContents.potions", "&aPotions", Arrays.asList("&7Available:", "&7▪ Speed II Potion", "&7▪ Jump V Potion", "&7▪ Invisibility Potion", "", "&eClick to browse!"));
                 lbj.saveShopStuff("invContents.utility", "&aUtility", Arrays.asList("&7Available:", "&7▪ Golden Apple", "&7▪ BedBug", "&7▪ Dream Defender", "&7▪ Fireball", "&7▪ TNT", "&7▪ Ender Pearl", "&7▪ Water Bucket", "&7▪ Bridge Egg", "", "&eClick to browse!"));
                 lbj.saveShopStuff("invContents.favourites", "&aFavourites", Arrays.asList("&7Click to view your", "&7favourite items. You can", "&7set a favourite item by", "&7shift clicking on any shop item!"));
                 lbj.saveShopStuff("invContents.recommended", "&aRecommended Items", Arrays.asList("&7Original", "&7Click to view some", "&7recommended items for early", "&7to late game!", "", "&eClick to browse!"));
 
-                lbj.saveShopStuff("invContents.armor.invContents.chainmail", "&aPermanent Chainmail Armor", Arrays.asList("&8Items:", "&8▪ &7Permanent Chainmail Armor", "&8▪ &7Chainmail Leggings", "", "&7Cost: &f{cost} {currency}", "&8&oYou will not lose this on death!"));
-                lbj.saveShopStuff("invContents.armor.invContents.iron", "&aPermanent Iron Armor", Arrays.asList("&8Items:", "&8▪ &7Permanent Iron Armor", "&8▪ &7Iron Leggings", "", "&6Cost: &f{cost} {currency}", "&8&oYou will not lose this on death!"));
-                lbj.saveShopStuff("invContents.armor.invContents.diamond", "&aPermanent Diamond Armor", Arrays.asList("&8Items:", "&8▪ &7Permanent Diamond Armor", "&8▪ &7Diamond Leggings", "", "&6Cost: &f{cost} {currency}", "&8&oYou will not lose this on death!"));
+                lbj.saveShopStuff("invContents.armor.invContents.chainmail", "&aPermanent Chainmail Armor", Arrays.asList("&8Items:", "&8▪ &7Permanent Chainmail Armor", "&8▪ &7Chainmail Leggings", "", "&8Cost: &f{cost} {currency}", "&8&oYou will not lose this on death!"));
+                lbj.saveShopStuff("invContents.armor.invContents.iron", "&aPermanent Iron Armor", Arrays.asList("&8Items:", "&8▪ &7Permanent Iron Armor", "&8▪ &7Iron Leggings", "", "&8Cost: &6{cost} {currency}", "&8&oYou will not lose this on death!"));
+                lbj.saveShopStuff("invContents.armor.invContents.diamond", "&aPermanent Diamond Armor", Arrays.asList("&8Items:", "&8▪ &7Permanent Diamond Armor", "&8▪ &7Diamond Leggings", "", "&8Cost: &2{cost} {currency}", "&8&oYou will not lose this on death!"));
                 lbj.saveShopStuff("invContents.armor.invContents.back", "&aGo Back", Arrays.asList(""));
 
-                lbj.saveShopStuff("invContents.melee.invContents.stone", "&aStone Sword", Arrays.asList("&8Items:", "&8▪ &7Stone Sword", "", "&7Cost: &f{cost} {currency}"));
-                lbj.saveShopStuff("invContents.melee.invContents.iron", "&aIron Sword", Arrays.asList("&8Items:", "&8▪ &7Iron Sword", "&7Cost: &6{cost} {currency}"));
-                lbj.saveShopStuff("invContents.melee.invContents.diamond", "&aDiamond Sword", Arrays.asList("&8Items:", "&8▪ &7Diamond Sword", "&8▪ &7Cost: &2{cost} {currency}"));
-                lbj.saveShopStuff("invContents.melee.invContents.stick", "&aStick (Knockback I)", Arrays.asList("&8Items:", "&8▪ &7Stick (Knockback I)", "", "&7Cost: &f{cost} {currency}"));
+                lbj.saveShopStuff("invContents.melee.invContents.stone", "&aStone Sword", Arrays.asList("&8Items:", "&8▪ &7Stone Sword", "", "&8Cost: &f{cost} {currency}"));
+                lbj.saveShopStuff("invContents.melee.invContents.iron", "&aIron Sword", Arrays.asList("&8Items:", "&8▪ &7Iron Sword", "&8Cost: &6{cost} {currency}"));
+                lbj.saveShopStuff("invContents.melee.invContents.diamond", "&aDiamond Sword", Arrays.asList("&8Items:", "&8▪ &7Diamond Sword", "", "&8Cost: &2{cost} {currency}"));
+                lbj.saveShopStuff("invContents.melee.invContents.stick", "&aStick (Knockback I)", Arrays.asList("&8Items:", "&8▪ &7Stick (Knockback I)", "", "&8Cost: &6{cost} {currency}"));
                 lbj.saveShopStuff("invContents.melee.invContents.back", "&aGo Back", Arrays.asList(""));
 
-                lbj.saveShopStuff("invContents.blocks.invContents.wool", "&aWool", Arrays.asList("&8Items:", "&8▪ &7Wool", "", "&7Cost: &f{cost} {currency}", "", "&eClick to purchase!"));
-                lbj.saveShopStuff("invContents.blocks.invContents.clay", "&aHardened Clay", Arrays.asList("&8Items:", "&8▪ &7Hardened Clay", "&7Cost: &f{cost} {currency}", "", "&eClick to purchase!"));
-                lbj.saveShopStuff("invContents.blocks.invContents.glass", "&aBlast-Proof Glass", Arrays.asList("&8Items:", "&8▪ &7Blast-Proof Glass", "&8▪ &7Cost: &f{cost} {currency}", "", "&7Immune to explosions", "", "&eClick to purchase!"));
-                lbj.saveShopStuff("invContents.blocks.invContents.stone", "&aEnd Stone", Arrays.asList("&8Items:", "&8▪ &7End Stone", "", "&7Cost: &f{cost} {currency}", "", "&eClick to purchase!"));
-                lbj.saveShopStuff("invContents.blocks.invContents.ladder", "&aLadder", Arrays.asList("&8Items:", "&8▪ &7Ladder", "", "&7Cost: &f{cost} {currency}", "", "&eClick to purchase!"));
-                lbj.saveShopStuff("invContents.blocks.invContents.wood", "&aOak Wood Planks", Arrays.asList("&8Items:", "&8▪ &7Oak Wood Planks", "", "&7Cost: &6{cost} {currency}", "", "&eClick to purchase!"));
-                lbj.saveShopStuff("invContents.blocks.invContents.obsidian", "&cObsidian", Arrays.asList("&8Items:", "&8▪ &7Obsidian", "", "&7Cost: &2{cost} {currency}", "", "&eClick to purchase!"));
+                lbj.saveShopStuff("invContents.blocks.invContents.wool", "&aWool", Arrays.asList("&8Items:", "&8▪ &7Wool", "", "&8Cost: &f{cost} {currency}", "", "&eClick to purchase!"));
+                lbj.saveShopStuff("invContents.blocks.invContents.clay", "&aHardened Clay", Arrays.asList("&8Items:", "&8▪ &7Hardened Clay", "", "&8Cost: &f{cost} {currency}", "", "&eClick to purchase!"));
+                lbj.saveShopStuff("invContents.blocks.invContents.glass", "&aBlast-Proof Glass", Arrays.asList("&8Items:", "&8▪ &7Blast-Proof Glass", "", "&8Cost: &f{cost} {currency}", "", "&7Immune to explosions", "", "&eClick to purchase!"));
+                lbj.saveShopStuff("invContents.blocks.invContents.stone", "&aEnd Stone", Arrays.asList("&8Items:", "&8▪ &7End Stone", "", "&8Cost: &f{cost} {currency}", "", "&eClick to purchase!"));
+                lbj.saveShopStuff("invContents.blocks.invContents.ladder", "&aLadder", Arrays.asList("&8Items:", "&8▪ &7Ladder", "", "&8Cost: &f{cost} {currency}", "", "&eClick to purchase!"));
+                lbj.saveShopStuff("invContents.blocks.invContents.wood", "&aOak Wood Planks", Arrays.asList("&8Items:", "&8▪ &7Oak Wood Planks", "", "&8Cost: &6{cost} {currency}", "", "&eClick to purchase!"));
+                lbj.saveShopStuff("invContents.blocks.invContents.obsidian", "&cObsidian", Arrays.asList("&8Items:", "&8▪ &7Obsidian", "", "&8Cost: &2{cost} {currency}", "", "&eClick to purchase!"));
                 lbj.saveShopStuff("invContents.blocks.invContents.back", "&aGo Back", Arrays.asList(""));
 
-                lbj.saveShopStuff("invContents.ranged.invContents.arrow", "&aArrow", Arrays.asList("&8Items:", "&8▪ &7Arrow", "", "&7Cost: &6{cost} {currency}"));
-                lbj.saveShopStuff("invContents.ranged.invContents.bow", "&aBow", Arrays.asList("&8Items:", "&8▪ &7Bow", "&7Cost: &6{cost} {currency}"));
-                lbj.saveShopStuff("invContents.ranged.invContents.bow2", "&aBow (Power I)", Arrays.asList("&8Items:", "&8▪ &7Bow (Power I)", "&8▪ &7Cost: &6{cost} {currency}"));
-                lbj.saveShopStuff("invContents.ranged.invContents.bow3", "&aBow (Power I, Punch I)", Arrays.asList("&8Items:", "&8▪ &7Bow (Power I, Punch I)", "", "&7Cost: &2{cost} {currency}"));
+                lbj.saveShopStuff("invContents.ranged.invContents.arrow", "&aArrow", Arrays.asList("&8Items:", "&8▪ &7Arrow", "", "&8Cost: &6{cost} {currency}"));
+                lbj.saveShopStuff("invContents.ranged.invContents.bow", "&aBow", Arrays.asList("&8Items:", "&8▪ &7Bow", "", "&8Cost: &6{cost} {currency}"));
+                lbj.saveShopStuff("invContents.ranged.invContents.bow2", "&aBow (Power I)", Arrays.asList("&8Items:", "&8▪ &7Bow (Power I)", "", "&8Cost: &6{cost} {currency}"));
+                lbj.saveShopStuff("invContents.ranged.invContents.bow3", "&aBow (Power I, Punch I)", Arrays.asList("&8Items:", "&8▪ &7Bow (Power I, Punch I)", "", "&8Cost: &2{cost} {currency}"));
                 lbj.saveShopStuff("invContents.ranged.invContents.back", "&aGo Back", Arrays.asList(""));
 
-                lbj.saveShopStuff("invContents.tools.invContents.shears", "&aPermanent Shears", Arrays.asList("&8Items:", "&8▪ &7Permanent Shears", "", "&7Cost: &f{cost} {currency}"));
-                lbj.saveShopStuff("invContents.tools.invContents.pick", "&aWooden Pickaxe", Arrays.asList("&8Items:", "&8▪ &7Bow", "&7Cost: &f{cost} {currency}"));
-                lbj.saveShopStuff("invContents.tools.invContents.axe", "&aWooden Axe", Arrays.asList("&8Items:", "&8▪ &7Wooden Axe", "&8▪ &7Cost: &f{cost} {currency}"));
+                lbj.saveShopStuff("invContents.tools.invContents.shears", "&aPermanent Shears", Arrays.asList("&8Items:", "&8▪ &7Permanent Shears", "", "&8Cost: &f{cost} {currency}"));
+                lbj.saveShopStuff("invContents.tools.invContents.pick", "&aWooden Pickaxe", Arrays.asList("&8Items:", "&8▪ &7Wooden Pickaxe", "", "&8Cost: &f{cost} {currency}"));
+                lbj.saveShopStuff("invContents.tools.invContents.axe", "&aWooden Axe", Arrays.asList("&8Items:", "&8▪ &7Wooden Axe", "", "&8Cost: &f{cost} {currency}"));
                 lbj.saveShopStuff("invContents.tools.invContents.back", "&aGo Back", Arrays.asList(""));
 
-                lbj.saveShopStuff("invContents.potions.invContents.potion1", "&aSpeed II Potion", Arrays.asList("&8Items:", "&8▪ &7Speed II potion", "", "&7Cost: &2{cost} {currency}"));
-                lbj.saveShopStuff("invContents.potions.invContents.potion2", "&aJump V Potion", Arrays.asList("&8Items:", "&8▪ &7Jump V Potion", "&7Cost: &2{cost} {currency}"));
-                lbj.saveShopStuff("invContents.potions.invContents.potion3", "&aInvisibility Potion", Arrays.asList("&8Items:", "&8▪ &7Invisibility Potion", "&8▪ &7Cost: &w{cost} {currency}"));
+                lbj.saveShopStuff("invContents.potions.invContents.potion1", "&aSpeed II Potion", Arrays.asList("&8Items:", "&8▪ &7Speed II potion", "", "&8Cost: &2{cost} {currency}"));
+                lbj.saveShopStuff("invContents.potions.invContents.potion2", "&aJump V Potion", Arrays.asList("&8Items:", "&8▪ &7Jump V Potion", "", "&8Cost: &2{cost} {currency}"));
+                lbj.saveShopStuff("invContents.potions.invContents.potion3", "&aInvisibility Potion", Arrays.asList("&8Items:", "&8▪ &7Invisibility Potion", "", "&8Cost: &2{cost} {currency}"));
                 lbj.saveShopStuff("invContents.potions.invContents.back", "&aGo Back", Arrays.asList(""));
 
-                lbj.saveShopStuff("invContents.utility.invContents.apple", "&aGolden Apple", Arrays.asList("&8Items:", "&8▪ &7Golden Apple", "", "&7Cost: &6{cost} {currency}"));
-                lbj.saveShopStuff("invContents.utility.invContents.sball", "&aBedbug", Arrays.asList("&8Items:", "&8▪ &7Bedbug", "&7Cost: &f{cost} {currency}", "", "&7Moderately annoying. These", "&7little critters can be thrown to", "&7distract enemies"));
-                lbj.saveShopStuff("invContents.utility.invContents.monsteregg", "&aDream Defender", Arrays.asList("&8Items:", "&8▪ &7Dream Defender", "&8▪ &7Cost: &f{cost} {currency}", "", "&7Moderately motivated.", "&7Sometimes they help defend your", "&7base"));
-                lbj.saveShopStuff("invContents.utility.invContents.fireball", "&aFireball", Arrays.asList("&8Items:", "&8▪ &7Fireball", "", "&7Cost: &f{cost} {currency}", "", "&7Right-click to launch!"));
-                lbj.saveShopStuff("invContents.utility.invContents.tnt", "&aTNT", Arrays.asList("&8Items:", "&8▪ &7TNT", "&7Cost: &6{cost} {currency}", "", "&7Instantly ignites, appropriate", "&7to explode things!"));
-                lbj.saveShopStuff("invContents.utility.invContents.enderpearl", "&aEnder Pearl", Arrays.asList("&8Items:", "&8▪ &7Ender Pearl", "&8▪ &7Cost: &2{cost} {currency}", "", "&7Pretty useful for invading", "&7enemies bases."));
-                lbj.saveShopStuff("invContents.utility.invContents.bucket", "&aWater Bucket", Arrays.asList("&8Items:", "&8▪ &7Water Bucket", "", "&7Cost: &2{cost} {currency}"));
-                /*lbj.saveShopStuff("invContents.utility.invContents.egg", "&aBridge Egg", Arrays.asList("&8Items:", "&8▪ &7Bridge Egg", "&7Cost: &2{cost} {currency}", "&7This egg creates a bridge in", "&7its trail after being thrown."));*/
+                lbj.saveShopStuff("invContents.utility.invContents.apple", "&aGolden Apple", Arrays.asList("&8Items:", "&8▪ &7Golden Apple", "", "&8Cost: &6{cost} {currency}"));
+                lbj.saveShopStuff("invContents.utility.invContents.sball", "&aBedbug", Arrays.asList("&8Items:", "&8▪ &7Bedbug", "", "&8Cost: &f{cost} {currency}", "", "&7Moderately annoying. These", "&7little critters can be thrown to", "&7distract enemies"));
+                lbj.saveShopStuff("invContents.utility.invContents.monsteregg", "&aDream Defender", Arrays.asList("&8Items:", "&8▪ &7Dream Defender", "", "&8Cost: &f{cost} {currency}", "", "&7Moderately motivated.", "&7Sometimes they help defend your", "&7base"));
+                lbj.saveShopStuff("invContents.utility.invContents.fireball", "&aFireball", Arrays.asList("&8Items:", "&8▪ &7Fireball", "", "&8Cost: &f{cost} {currency}", "", "&7Right-click to launch!"));
+                lbj.saveShopStuff("invContents.utility.invContents.tnt", "&aTNT", Arrays.asList("&8Items:", "&8▪ &7TNT", "", "&8Cost: &6{cost} {currency}", "", "&7Instantly ignites, appropriate", "&7to explode things!"));
+                lbj.saveShopStuff("invContents.utility.invContents.enderpearl", "&aEnder Pearl", Arrays.asList("&8Items:", "", "&8Ender Pearl", "&8▪ &7Cost: &2{cost} {currency}", "", "&7Pretty useful for invading", "&7enemies bases."));
+                lbj.saveShopStuff("invContents.utility.invContents.bucket", "&aWater Bucket", Arrays.asList("&8Items:", "&8▪ &7Water Bucket", "", "&8Cost: &2{cost} {currency}"));
+                lbj.saveShopStuff("invContents.utility.invContents.eggBridge", "&aBridge Egg", Arrays.asList("&8Items:", "&8▪ &7Bridge Egg", "", "&8Cost: &2{cost} {currency}", "&7This egg creates a bridge in", "&7its trail after being thrown."));
                 lbj.saveShopStuff("invContents.utility.invContents.back", "&aGo Back", Arrays.asList(""));
                 yml.addDefault("meaning.iron", "Iron");
                 yml.addDefault("meaning.gold", "Gold");
@@ -236,7 +236,7 @@ public class Language {
                 yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "{prefix}&cYou don't have enough {currency}! Need {amount} more!");
                 yml.addDefault(Messages.SHOP_NEW_PURCHASE, "{prefix}&aYou purchased &6{item}");
                 yml.addDefault(Messages.COMMAND_JOIN_USAGE, "§a▪ §7Usage: /" + mainCmd + " join §o<arena/group>");
-                yml.addDefault(Messages.COMMAND_NOT_ALLOWED_IN_GAME, "{prefix}&cYou can't do this.");
+                yml.addDefault(Messages.COMMAND_NOT_ALLOWED_IN_GAME, "{prefix}&cYou can't do this during the game.");
                 yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY, "&aClick to purchase!");
                 yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY, "&cYou don't have enough {currency}");
                 yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_LOCKED, "&cLOCKED");
@@ -347,6 +347,7 @@ public class Language {
                 yml.addDefault(Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE, "");
                 yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "{prefix}&cYou've already bought that!");
                 yml.addDefault(Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE, "{prefix}&7{player} &eis offline!");
+                yml.addDefault(Messages.ARENA_JOIN_SPECTATOR_DENIED_MSG, "&cSpectators are not allowed in this arena!");
                 break;
         }
         lbj.save();

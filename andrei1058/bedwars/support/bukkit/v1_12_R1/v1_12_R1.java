@@ -493,10 +493,14 @@ public class v1_12_R1 implements NMS {
 
     @Override
     public void colorBed(BedWarsTeam bwt) {
-        BlockState bed = bwt.getBed().getBlock().getState();
-        if (bed instanceof Bed) {
-            ((Bed) bed).setColor(TeamColor.getDyeColor(bwt.getColor().toString()));
-            bed.update();
+        for (int x = -1; x <= 1; x++){
+            for (int z = -1; z <= 1; z++){
+                BlockState bed = bwt.getBed().clone().add(x, 0, z).getBlock().getState();
+                if (bed instanceof Bed) {
+                    ((Bed) bed).setColor(TeamColor.getDyeColor(bwt.getColor().toString()));
+                    bed.update();
+                }
+            }
         }
     }
 

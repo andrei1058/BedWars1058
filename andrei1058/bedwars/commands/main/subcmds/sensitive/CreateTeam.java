@@ -30,7 +30,7 @@ public class CreateTeam extends SubCommand {
         if (s instanceof ConsoleCommandSender) return false;
         Player p = (Player) s;
         SetupSession ss = SetupSession.getSession(p);
-        if (ss == null){
+        if (ss == null) {
             s.sendMessage("§c ▪ §7You're not in a setup session!");
             return true;
         }
@@ -58,13 +58,17 @@ public class CreateTeam extends SubCommand {
                 colors = colors.substring(0, colors.length() - 2) + "§7.";
                 p.sendMessage("§6 ▪ §7Available colors: " + colors);
             } else {
+                if (ss.getCm().getYml().get("Team." + args[0] + ".Color") != null) {
+                    p.sendMessage("§c▪ §7" + args[0] + " team already exists!");
+                    return true;
+                }
                 ss.getCm().set("Team." + args[0] + ".Color", args[1].toUpperCase());
                 p.sendMessage("§6 ▪ §7" + TeamColor.getChatColor(args[1]) + args[0] + " §7created!");
-                if (ss.getSetupType() == SetupSession.SetupType.ASSISTED){
+                if (ss.getSetupType() == SetupSession.SetupType.ASSISTED) {
                     ss.getCm().reload();
                     int teams = ss.getCm().getYml().getConfigurationSection("Team").getKeys(false).size();
                     int max = 1;
-                    if (teams == 4){
+                    if (teams == 4) {
                         max = 2;
                     }
                     ss.getCm().set("maxInTeam", max);

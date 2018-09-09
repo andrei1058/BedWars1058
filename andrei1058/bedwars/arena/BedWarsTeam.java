@@ -59,10 +59,7 @@ public class BedWarsTeam {
      * Potion effects for enemies when they enter in this team's base
      */
     private List<Effect> enemyBaseEnter = new ArrayList<>();
-    /**
-     * Players with potions applied such as when they enter the base and then they leave it will remove the potion effects
-     */
-    private List<Player> potionEffectApplied = new ArrayList<>();
+
     /**
      * Enchantments for bows
      */
@@ -82,7 +79,7 @@ public class BedWarsTeam {
     /**
      * Used for it's a trap
      */
-    private boolean trapActive = false, trapChat = false, trapAction = false, trapTitle = false, trapSubtitle;
+    private boolean trapActive = false, trapChat = false, trapAction = false, trapTitle = false, trapSubtitle = false;
     private List<Integer> trapSlots = new ArrayList<>();
     /**
      * One time upgrades with effects slots
@@ -110,9 +107,32 @@ public class BedWarsTeam {
         this.arena = arena;
         this.shop = shop;
         this.teamUpgrades = teamUpgrades;
-        if (bed.getBlock().getType() != Material.BED_BLOCK) {
-            bed.getBlock().setType(Material.BED_BLOCK);
-        }
+    }
+
+    /**
+     * Used when the arena restarts
+     */
+    public void restore() {
+        ebseEffectsStatic.clear();
+        enemyBaseEnterSlots.clear();
+        trapSlots.clear();
+        trapActive = false;
+        trapChat = false;
+        trapAction = false;
+        trapTitle = false;
+        trapSubtitle = false;
+        beds.clear();
+        armorsEnchantemnts.clear();
+        swordsEnchantemnts.clear();
+        bowsEnchantments.clear();
+        enemyBaseEnter.clear();
+        base.clear();
+        teamEffects.clear();
+        upgradeTier.clear();
+        dragons = 1;
+        bedDestroyed = false;
+        members.clear();
+        membersCache.clear();
     }
 
     public int getSize() {
@@ -126,7 +146,7 @@ public class BedWarsTeam {
         for (Player p : players) {
             if (!members.contains(p)) members.add(p);
             if (!membersCache.contains(p)) membersCache.add(p);
-            new BedHolo(p);
+            new BedHolo(p, getArena());
         }
     }
 
@@ -207,14 +227,16 @@ public class BedWarsTeam {
     public void setGenerators(Location ironGenerator, Location goldGenerator) {
         this.ironGenerator = new OreGenerator(ironGenerator, arena, GeneratorType.IRON, this);
         this.goldGenerator = new OreGenerator(goldGenerator, arena, GeneratorType.GOLD, this);
+        getArena().getOreGenerators().add(this.ironGenerator);
+        getArena().getOreGenerators().add(this.goldGenerator);
     }
 
     /**
      * Respawn a member
      */
     public void respawnMember(Player p) {
-        if (Arena.respawn.containsKey(p)) {
-            Arena.respawn.remove(p);
+        if (getArena().getRespawn().containsKey(p)) {
+            getArena().getRespawn().remove(p);
         }
         p.teleport(getSpawn());
         if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
@@ -228,7 +250,7 @@ public class BedWarsTeam {
             if (p == on) continue;
             on.showPlayer(p);
             nms.showPlayer(p, on);
-            if (Arena.respawn.containsKey(on)) continue;
+            if (getArena().getRespawn().containsKey(on)) continue;
             p.showPlayer(on);
             nms.showPlayer(on, p);
         }
@@ -330,12 +352,14 @@ public class BedWarsTeam {
      * Creates a hologram on the team bed's per player
      */
     public class BedHolo {
-        ArmorStand a;
-        Player p;
-        boolean hidden = false, bedDestroyed = false;
+        private ArmorStand a;
+        private Player p;
+        private Arena arena;
+        private boolean hidden = false, bedDestroyed = false;
 
-        public BedHolo(Player p) {
+        public BedHolo(Player p, Arena arena) {
             this.p = p;
+            this.arena = arena;
             spawn();
             beds.put(p, this);
         }
@@ -373,11 +397,16 @@ public class BedWarsTeam {
 
         public void destroy() {
             a.remove();
+            beds.remove(this);
         }
 
         public void show() {
             hidden = false;
             spawn();
+        }
+
+        public Arena getArena() {
+            return arena;
         }
 
         public boolean isHidden() {
@@ -672,8 +701,8 @@ public class BedWarsTeam {
         } else {
             bed.getBlock().setType(Material.AIR);
             if (getArena().getCm().getBoolean(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS)) {
-                OreGenerator.getGenerators().remove(getGoldGenerator());
-                OreGenerator.getGenerators().remove(getIronGenerator());
+                getGoldGenerator().disable();
+                getIronGenerator().disable();
             }
         }
         for (BedHolo bh : beds.values()) {
@@ -793,5 +822,10 @@ public class BedWarsTeam {
 
     public List<Player> getMembersCache() {
         return membersCache;
+    }
+
+    @Contract(pure = true)
+    public static HashMap<Player, BedHolo> getBeds() {
+        return beds;
     }
 }

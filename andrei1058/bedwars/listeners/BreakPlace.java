@@ -77,7 +77,7 @@ public class BreakPlace implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            if (a.respawn.containsKey(p)) {
+            if (a.getRespawn().containsKey(p)) {
                 e.setCancelled(true);
                 return;
             }
@@ -273,7 +273,7 @@ public class BreakPlace implements Listener {
         }
         Arena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a != null) {
-            if (a.isSpectator(e.getPlayer()) || a.getStatus() != GameState.playing || Arena.respawn.containsKey(e.getPlayer()))
+            if (a.isSpectator(e.getPlayer()) || a.getStatus() != GameState.playing || a.getRespawn().containsKey(e.getPlayer()))
                 e.setCancelled(true);
         }
     }
@@ -289,7 +289,7 @@ public class BreakPlace implements Listener {
         }
         Arena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a != null) {
-            if (a.isSpectator(e.getPlayer()) || a.getStatus() != GameState.playing || Arena.respawn.containsKey(e.getPlayer())) {
+            if (a.isSpectator(e.getPlayer()) || a.getStatus() != GameState.playing || a.getRespawn().containsKey(e.getPlayer())) {
                 e.setCancelled(true);
             } else {
                 try {
