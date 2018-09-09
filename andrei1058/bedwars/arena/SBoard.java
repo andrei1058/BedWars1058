@@ -207,6 +207,10 @@ public class SBoard {
     }
 
     public void addHealthIcon() {
+        if (getArena() == null) return;
+        if (getArena().getSpectators() == null) return;
+        if (getP() == null) return;
+        if (getArena().getSpectators().contains(getP())) return;
         if (sb.getObjective("my") == null) {
             Objective objective = sb.registerNewObjective("my", "health");
             objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
@@ -301,10 +305,12 @@ public class SBoard {
         } else {
             collide = sb.getTeam("spectators");
         }
-        if (!value){
-            if (!collide.hasEntry(p.getName())) collide.addEntry(p.getName());
-        } else {
-            if (collide.hasEntry(p.getName())) collide.removeEntry(p.getName());
+        for (Player spect : getArena().getSpectators()){
+            if (!value){
+                if (!collide.hasEntry(spect.getName())) collide.addEntry(spect.getName());
+            } else {
+                if (collide.hasEntry(spect.getName())) collide.removeEntry(spect.getName());
+            }
         }
     }
 }

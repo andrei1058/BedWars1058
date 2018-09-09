@@ -39,7 +39,7 @@ public class UpgradeGroup {
         for (UpgradeGroup ug : upgradeGroups){
             if (ug.getName().equalsIgnoreCase(search)){
                 return ug;
-            } else if (ug.getName().equalsIgnoreCase("default")){
+            } else if (ug.getName().equalsIgnoreCase("Default")){
                 def = ug;
             }
         }

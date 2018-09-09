@@ -9,15 +9,19 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.ArrayList;
 
@@ -201,6 +205,37 @@ public class SpectatorListeners implements Listener {
                 Bukkit.getPluginManager().callEvent(event);
                 nms.sendTitle(p, event.getTitle(), event.getSubtitle(), 0, 30, 0);
             }
+        }
+    }
+
+    @EventHandler
+    /* Disable hits from spectators */
+    public void onDamageByEntity(EntityDamageByEntityEvent e) {
+        if (e.isCancelled()) return;
+        Arena a = Arena.getArenaByName(e.getEntity().getWorld().getName());
+        if (a == null) return;
+        Player damager = null;
+        if (e.getDamager() instanceof Projectile) {
+            ProjectileSource shooter = ((Projectile) e.getDamager()).getShooter();
+            if (shooter instanceof Player) {
+                damager = (Player) shooter;
+            }
+        } else if (e.getDamager() instanceof Player) {
+            damager = (Player) e.getDamager();
+            if (a.getRespawn().containsKey(damager)) {
+                e.setCancelled(true);
+                return;
+            }
+        } else if (e.getDamager() instanceof TNTPrimed) {
+            TNTPrimed tnt = (TNTPrimed) e.getDamager();
+            if (tnt.getSource() instanceof Player) {
+                damager = (Player) tnt.getSource();
+            }
+        }
+        if (damager == null) return;
+        if (a.isSpectator(damager)){
+            e.setCancelled(true);
+            return;
         }
     }
 }

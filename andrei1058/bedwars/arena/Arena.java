@@ -185,6 +185,10 @@ public class Arena {
 
         //Create teams
         for (String team : yml.getConfigurationSection("Team").getKeys(false)) {
+            if (getTeam(team) != null) {
+                Main.plugin.getLogger().severe("A team with name: " + team + " was already loaded for arena: " + getWorldName());
+                continue;
+            }
             BedWarsTeam bwt = new BedWarsTeam(team, TeamColor.valueOf(yml.getString("Team." + team + ".Color").toUpperCase()), cm.getArenaLoc("Team." + team + ".Spawn"),
                     cm.getArenaLoc("Team." + team + ".Bed"), cm.getArenaLoc("Team." + team + ".Shop"), cm.getArenaLoc("Team." + team + ".Upgrade"), this);
             teams.add(bwt);
@@ -249,6 +253,7 @@ public class Arena {
                 }
                 for (Player mem : getParty().getMembers(p)) {
                     if (mem == p) continue;
+                    //todo tell them why they were removed
                     Arena a = Arena.getArenaByPlayer(mem);
                     if (a != null) {
                         if (a.isPlayer(mem)) {
@@ -269,13 +274,14 @@ public class Arena {
                 return;
             } else if (players.size() >= maxPlayers && isVip(p)) {
                 boolean canJoin = false;
-                for (Player on : players) {
+                for (Player on : new ArrayList<>(players)) {
                     if (!isVip(on)) {
                         canJoin = true;
                         removePlayer(on, false);
                         TextComponent vipKick = new TextComponent(getMsg(p, Messages.ARENA_JOIN_VIP_KICK));
                         vipKick.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, config.getYml().getString("storeLink")));
                         p.spigot().sendMessage(vipKick);
+                        break;
                     }
                 }
                 if (!canJoin) {
@@ -380,6 +386,7 @@ public class Arena {
 
             /* Hide spectator  */
             //p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0), true);
+            p.setGameMode(GameMode.ADVENTURE);
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 for (Player on : Bukkit.getOnlinePlayers()) {
                     if (on == p) continue;
@@ -397,9 +404,8 @@ public class Arena {
                 /* Spectator items */
                 SpectatorItems.giveTeleporter(p);
                 SpectatorItems.giveLeaveItem(p);
-            }, 10L);
+            }, 15L);
 
-            p.setGameMode(GameMode.ADVENTURE);
             p.sendMessage(getMsg(p, Messages.ARENA_JOIN_SPECTATOR_MSG).replace("{arena}", this.getDisplayName()));
 
             /* update generator holograms for spectators */
@@ -414,9 +420,9 @@ public class Arena {
                     sh.updateForPlayer(p, iso);
                 }
             }
-            //todo call spectator join event
+            Bukkit.getPluginManager().callEvent(new PlayerJoinArenaEvent(p, true));
         } else {
-            //todo msg spectate not allowed
+            p.sendMessage(getMsg(p, Messages.ARENA_JOIN_SPECTATOR_DENIED_MSG));
         }
     }
 

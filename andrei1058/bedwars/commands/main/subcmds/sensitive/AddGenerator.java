@@ -52,6 +52,10 @@ public class AddGenerator extends SubCommand {
         if (args.length < 1) {
             String foundTeam = "";
             double distance = 100;
+            if (ss.getCm().getYml().getConfigurationSection("Team") == null){
+                p.sendMessage("§c ▪ §7Please create teams first!");
+                return true;
+            }
             for (String team : ss.getCm().getYml().getConfigurationSection("Team").getKeys(false)) {
                 if (ss.getCm().getYml().get("Team." + team + ".Spawn") == null) continue;
                 double dis = ss.getCm().getArenaLoc("Team." + team + ".Spawn").distance(p.getLocation());

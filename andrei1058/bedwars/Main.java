@@ -383,19 +383,21 @@ public class Main extends JavaPlugin {
 
         /** default stats GUI items */
         yml.addDefault("statsGUI.invSize", 27);
-        Misc.addDefaultStatsItem(yml, 10, Material.DIAMOND, 0, "wins");
-        Misc.addDefaultStatsItem(yml, 11, Material.REDSTONE, 0, "looses");
-        Misc.addDefaultStatsItem(yml, 12, Material.IRON_SWORD, 0, "kills");
-        Misc.addDefaultStatsItem(yml, 13, Material.SKULL_ITEM, 0, "deaths");
-        Misc.addDefaultStatsItem(yml, 14, Material.DIAMOND_SWORD, 0, "finalKills");
-        Misc.addDefaultStatsItem(yml, 15, Material.SKULL_ITEM, 1, "finalDeaths");
-        Misc.addDefaultStatsItem(yml, 16, Material.BED, 0, "bedsDestroyed");
-        Misc.addDefaultStatsItem(yml, 21, Material.STAINED_GLASS_PANE, 0, "firstPlay");
-        Misc.addDefaultStatsItem(yml, 22, Material.CHEST, 0, "gamesPlayed");
-        Misc.addDefaultStatsItem(yml, 23, Material.STAINED_GLASS_PANE, 0, "lastPlay");
+        if (config.isFirstTime()) {
+            Misc.addDefaultStatsItem(yml, 10, Material.DIAMOND, 0, "wins");
+            Misc.addDefaultStatsItem(yml, 11, Material.REDSTONE, 0, "looses");
+            Misc.addDefaultStatsItem(yml, 12, Material.IRON_SWORD, 0, "kills");
+            Misc.addDefaultStatsItem(yml, 13, Material.SKULL_ITEM, 0, "deaths");
+            Misc.addDefaultStatsItem(yml, 14, Material.DIAMOND_SWORD, 0, "finalKills");
+            Misc.addDefaultStatsItem(yml, 15, Material.SKULL_ITEM, 1, "finalDeaths");
+            Misc.addDefaultStatsItem(yml, 16, Material.BED, 0, "bedsDestroyed");
+            Misc.addDefaultStatsItem(yml, 21, Material.STAINED_GLASS_PANE, 0, "firstPlay");
+            Misc.addDefaultStatsItem(yml, 22, Material.CHEST, 0, "gamesPlayed");
+            Misc.addDefaultStatsItem(yml, 23, Material.STAINED_GLASS_PANE, 0, "lastPlay");
+        }
 
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + ".Default", Arrays.asList("WOOD_SWORD"));
-        yml.addDefault("blockedCmds", Arrays.asList("spawn", "tpa", "tpaccept", "warp", "goto", "tp", "tphere", "gamemode", "fly", "kill"));
+        yml.addDefault(ConfigPath.CENERAL_CONFIGURATION_ALLOWED_COMMANDS, Arrays.asList("shout", "bw", "leave"));
         yml.options().copyDefaults(true);
         config.save();
 
@@ -409,6 +411,7 @@ public class Main extends JavaPlugin {
         config.set("dragonSpawnCountdown", null);
         config.set("gameEndCountdown", null);
         config.set("npcLoc", null);
+        config.set("blockedCmds", null);
 
         String whatLang = "en";
         for (File f : new File("plugins/" + this.getDescription().getName() + "/Languages").listFiles()) {

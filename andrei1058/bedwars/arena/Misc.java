@@ -58,9 +58,9 @@ public class Misc {
                     } else {
                         a.removePlayer(p, false);
                     }
-                } else {
-                    forceKick(p);
                 }
+            } else {
+                forceKick(p);
             }
             return;
         }

@@ -63,6 +63,8 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_NPC_LOC_STORAGE = "join-npc-locations";
     public static final String GENERAL_CONFIGURATION_DEFAULT_ITEMS = "start-items-per-arena";
 
+    public static final String CENERAL_CONFIGURATION_ALLOWED_COMMANDS = "allowed-commands";
+
     public static final String ARENA_CONFIGURATION_MAX_BUILD_Y = "max-build-y";
     public static final String ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS = "disable-generator-for-empty-teams";
     public static final String ARENA_ISLAND_RADIUS = "island-radius";
