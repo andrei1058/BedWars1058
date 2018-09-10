@@ -66,6 +66,9 @@ public class ConfigPath {
     public static final String CENERAL_CONFIGURATION_ALLOWED_COMMANDS = "allowed-commands";
 
     public static final String ARENA_CONFIGURATION_MAX_BUILD_Y = "max-build-y";
+    public static final String ARENA_SPAWN_PROTECTION = "spawn-protection";
+    public static final String ARENA_SHOP_PROTECTION = "shop-protection";
+    public static final String ARENA_UPGRADES_PROTECTION = "upgrades-protection";
     public static final String ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS = "disable-generator-for-empty-teams";
     public static final String ARENA_ISLAND_RADIUS = "island-radius";
     public static final String ARENA_WAITING_POS1 = "waiting.Pos1";

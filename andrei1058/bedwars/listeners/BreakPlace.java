@@ -91,17 +91,17 @@ public class BreakPlace implements Listener {
             }
             try {
                 for (BedWarsTeam t : a.getTeams()) {
-                    if (t.getSpawn().distance(e.getBlockPlaced().getLocation()) <= a.getCm().getInt("spawnProtection")) {
+                    if (t.getSpawn().distance(e.getBlockPlaced().getLocation()) <= a.getCm().getInt(ConfigPath.ARENA_SPAWN_PROTECTION)) {
                         e.setCancelled(true);
                         p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
                         return;
                     }
-                    if (t.getShop().distance(e.getBlockPlaced().getLocation()) <= a.getCm().getInt("shopProtection")) {
+                    if (t.getShop().distance(e.getBlockPlaced().getLocation()) <= a.getCm().getInt(ConfigPath.ARENA_SHOP_PROTECTION)) {
                         e.setCancelled(true);
                         p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
                         return;
                     }
-                    if (t.getTeamUpgrades().distance(e.getBlockPlaced().getLocation()) <= a.getCm().getInt("upgradesProtection")) {
+                    if (t.getTeamUpgrades().distance(e.getBlockPlaced().getLocation()) <= a.getCm().getInt(ConfigPath.ARENA_UPGRADES_PROTECTION)) {
                         e.setCancelled(true);
                         p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
                         return;

@@ -42,9 +42,9 @@ public class ConfigManager {
             yml.addDefault("minPlayers", 2);
             yml.addDefault("maxInTeam", 1);
             yml.addDefault("allowSpectate", true);
-            yml.addDefault("spawnProtection", 5);
-            yml.addDefault("shopProtection", 1);
-            yml.addDefault("upgradesProtection", 1);
+            yml.addDefault(ConfigPath.ARENA_SPAWN_PROTECTION, 5);
+            yml.addDefault(ConfigPath.ARENA_SHOP_PROTECTION, 1);
+            yml.addDefault(ConfigPath.ARENA_UPGRADES_PROTECTION, 1);
             yml.addDefault("islandRadius", 17);
             yml.addDefault("worldBorder", 300);
             yml.addDefault("voidKill", false);
@@ -54,6 +54,20 @@ public class ConfigManager {
             yml.addDefault(ConfigPath.ARENA_NORMAL_DEATH_DROPS, false);
             yml.options().copyDefaults(true);
             save();
+
+            //convert old configuration
+            if (yml.get("spawnProtection") != null){
+                set(ConfigPath.ARENA_SPAWN_PROTECTION, yml.getInt("spawnProtection"));
+                set("spawnProtection", null);
+            }
+            if (yml.get("shopProtection") != null){
+                set(ConfigPath.ARENA_SHOP_PROTECTION, yml.getInt("shopProtection"));
+                set("shopProtection", null);
+            }
+            if (yml.get("upgradesProtection") != null){
+                set(ConfigPath.ARENA_UPGRADES_PROTECTION, yml.getInt("upgradesProtection"));
+                set("upgradesProtection", null);
+            }
         }
         this.name = name;
     }
