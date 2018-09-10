@@ -45,7 +45,7 @@ public class ConfigManager {
             yml.addDefault(ConfigPath.ARENA_SPAWN_PROTECTION, 5);
             yml.addDefault(ConfigPath.ARENA_SHOP_PROTECTION, 1);
             yml.addDefault(ConfigPath.ARENA_UPGRADES_PROTECTION, 1);
-            yml.addDefault("islandRadius", 17);
+            yml.addDefault(ConfigPath.ARENA_ISLAND_RADIUS, 17);
             yml.addDefault("worldBorder", 300);
             yml.addDefault("voidKill", false);
             //yml.addDefault("disableGeneratorsOnOrphanIslands", false);
@@ -67,6 +67,9 @@ public class ConfigManager {
             if (yml.get("upgradesProtection") != null){
                 set(ConfigPath.ARENA_UPGRADES_PROTECTION, yml.getInt("upgradesProtection"));
                 set("upgradesProtection", null);
+            }
+            if (yml.get("islandRadius") != null){
+                set(ConfigPath.ARENA_ISLAND_RADIUS, yml.getInt("islandRadius"));
             }
         }
         this.name = name;

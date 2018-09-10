@@ -6,6 +6,7 @@ import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
 import com.andrei1058.bedwars.configuration.ConfigManager;
+import com.andrei1058.bedwars.configuration.ConfigPath;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -59,7 +60,7 @@ public class AddGenerator extends SubCommand {
             for (String team : ss.getCm().getYml().getConfigurationSection("Team").getKeys(false)) {
                 if (ss.getCm().getYml().get("Team." + team + ".Spawn") == null) continue;
                 double dis = ss.getCm().getArenaLoc("Team." + team + ".Spawn").distance(p.getLocation());
-                if (dis <= ss.getCm().getInt("islandRadius")) {
+                if (dis <= ss.getCm().getInt(ConfigPath.ARENA_ISLAND_RADIUS)) {
                     if (dis < distance) {
                         distance = dis;
                         foundTeam = team;
@@ -119,7 +120,7 @@ public class AddGenerator extends SubCommand {
                         for (String team : ss.getCm().getYml().getConfigurationSection("Team").getKeys(false)) {
                             if (ss.getCm().getYml().get("Team." + team + ".Spawn") == null) continue;
                             double dis = ss.getCm().getArenaLoc("Team." + team + ".Spawn").distance(p.getLocation());
-                            if (dis <= ss.getCm().getInt("islandRadius")) {
+                            if (dis <= ss.getCm().getInt(ConfigPath.ARENA_ISLAND_RADIUS)) {
                                 if (dis < distance) {
                                     distance = dis;
                                     foundTeam = team;
