@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
+import com.andrei1058.bedwars.configuration.ConfigPath;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -65,7 +66,7 @@ public class SetSpawn extends SubCommand {
                 String teamm = TeamColor.getChatColor(ss.getCm().getYml().getString("Team." + args[0] + ".Color")) + args[0];
                 p.sendMessage("§6 ▪ §7Spawn set for: " + teamm);
                 com.andrei1058.bedwars.commands.Misc.createArmorStand(teamm+" §6SPAWN SET", p.getLocation());
-                int radius = ss.getCm().getInt("islandRadius");
+                int radius = ss.getCm().getInt(ConfigPath.ARENA_ISLAND_RADIUS);
                 Location l = p.getLocation();
                 for (int x = -radius; x < radius; x++){
                     for (int y = -radius; y < radius; y++){
