@@ -69,7 +69,7 @@ public class Misc {
     }
 
 
-    public static void forceKick(Player p){
+    public static void forceKick(Player p) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("Connect");
         out.writeUTF(config.getYml().getString("lobbyServer"));
@@ -117,84 +117,24 @@ public class Misc {
         }
     }*/
 
-    public static ItemStack getArenaGUI(Player p) {
-        ItemStack i;
-        try {
-            i = new ItemStack(Material.valueOf(config.getYml().getString("items.arenaGui.itemStack")),
-                    1, (short) config.getYml().getInt("items.arenaGui.data"));
-            if (Material.valueOf(config.getYml().getString("items.arenaGui.itemStack")) == Material.SKULL_ITEM &&
-                    config.getYml().getInt("items.arenaGui.data") == 3) {
-                SkullMeta sm = (SkullMeta) i.getItemMeta();
-                sm.setOwner(p.getName());
-                i.setItemMeta(sm);
-            }
-        } catch (Exception ex) {
-            plugin.getLogger().severe("There was a problem when loading items.arenaGui.itemStack or Data");
-            i = new ItemStack(Material.BEDROCK);
-        }
-        ItemMeta im = i.getItemMeta();
-        im.spigot().setUnbreakable(true);
-        try {
-            im.setLore(getList(p, Messages.ARENA_GUI_ITEM_LORE));
-        } catch (Exception ex) {
-            plugin.getLogger().severe("There was a problem when loading arena gui's lore");
-        }
-        try {
-            im.setDisplayName(getMsg(p, Messages.ARENA_GUI_ITEM_NAME));
-        } catch (Exception ex) {
-            plugin.getLogger().severe("There was a problem when loading arena gui's name");
-        }
-        try {
-            if (config.getYml().getBoolean("items.arenaGui.enchanted")) {
-                im.addEnchant(Enchantment.LUCK, 1, true);
-            }
-            im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        } catch (Exception ex) {
-        }
-        i.setItemMeta(im);
-        return i;
-    }
-
-    public static ItemStack getStatsItem(Player p) {
-        ItemStack i;
-        try {
-            i = new ItemStack(Material.valueOf(config.getYml().getString("items.stats.itemStack")),
-                    1, (short) config.getYml().getInt("items.stats.data"));
-            if (Material.valueOf(config.getYml().getString("items.stats.itemStack")) == Material.SKULL_ITEM &&
-                    config.getYml().getInt("items.stats.data") == 3) {
-                SkullMeta sm = (SkullMeta) i.getItemMeta();
-                sm.setOwner(p.getName());
-                i.setItemMeta(sm);
-            }
-        } catch (Exception ex) {
-            plugin.getLogger().severe("There was a problem when loading items.stats.itemStack or Data");
-            i = new ItemStack(Material.BEDROCK);
-        }
-        ItemMeta im = i.getItemMeta();
-        im.spigot().setUnbreakable(true);
-        try {
-            im.setLore(getList(p, Messages.PLAYER_STATS_ITEM_LORE));
-        } catch (Exception ex) {
-            plugin.getLogger().severe("There was a problem when loading stats lore");
-        }
-        try {
-            im.setDisplayName(getMsg(p, Messages.PLAYER_STATS_ITEM_NAME));
-        } catch (Exception ex) {
-            plugin.getLogger().severe("There was a problem when loading ststs name");
-        }
-        try {
-            if (config.getYml().getBoolean("items.stats.enchanted")) {
-                im.addEnchant(Enchantment.LUCK, 1, true);
-            }
-            im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        } catch (Exception ex) {
-        }
-        i.setItemMeta(im);
-        return i;
-    }
-
-    public static ItemStack createItem(Material material, byte data, String name, List<String> lore) {
+    /**
+     * Create an item stack
+     *
+     * @param material item material
+     * @param data     item data
+     * @param name     item name
+     * @param lore     item lore
+     * @param owner    in case of skull, can be null, don't worry
+     */
+    public static ItemStack createItem(Material material, byte data, String name, List<String> lore, Player owner) {
         ItemStack i = new ItemStack(material, 1, data);
+        if (owner != null) {
+            if (material == Material.SKULL_ITEM && data == 3) {
+                SkullMeta sm = (SkullMeta) i.getItemMeta();
+                sm.setOwner(owner.getName());
+                i.setItemMeta(sm);
+            }
+        }
         ItemMeta im = i.getItemMeta();
         im.setDisplayName(name);
         im.setLore(lore);
@@ -431,8 +371,10 @@ public class Misc {
         return center.distanceSquared(location) >= (radius * radius);
     }
 
-    /** Check if location is on a protected region */
-    public static boolean isBuildProtected(Location l, Arena a){
+    /**
+     * Check if location is on a protected region
+     */
+    public static boolean isBuildProtected(Location l, Arena a) {
         for (BedWarsTeam t : a.getTeams()) {
             if (t.getSpawn().distance(l) <= a.getCm().getInt(ConfigPath.ARENA_SPAWN_PROTECTION)) {
                 return true;

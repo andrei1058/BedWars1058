@@ -20,6 +20,7 @@ import org.bukkit.block.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
 import org.bukkit.entity.*;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -327,8 +328,6 @@ public class Arena {
             } else if (getStatus() == GameState.starting) {
                 new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + "Starting", Messages.SCOREBOARD_DEFAULT_STARTING), this);
             }
-            leaveItem(p);
-
         } else if (status == GameState.playing) {
             addSpectator(p, false);
         }
@@ -1076,14 +1075,29 @@ public class Arena {
 
     public static void sendMultiarenaLobbyItems(@NotNull Player p) {
         p.getInventory().clear();
-        if (config.getBoolean("items.arenaGui.enable") && !config.getLobbyWorldName().isEmpty()) {
-            p.getInventory().setItem(config.getInt("items.arenaGui.slot"), Misc.getArenaGUI(p));
+        if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_SELECTOR_ENABLED) && !config.getLobbyWorldName().isEmpty()) {
+
+            ItemStack i = Misc.createItem(Material.valueOf(config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_SELECTOR_MATERIAL)),
+                    (byte) config.getInt(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_SELECTOR_DATA),
+                    getMsg(p, Messages.ARENA_GUI_ITEM_NAME), getList(p, Messages.ARENA_GUI_ITEM_LORE), p);
+
+            p.getInventory().setItem(config.getInt(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_SELECTOR_SLOT), i);
         }
-        if (getServerType() == ServerType.MULTIARENA && spigot.getBoolean("settings.bungeecord")) {
-            leaveItem(p);
+        if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_LEAVE_ENABLED)&& !config.getLobbyWorldName().isEmpty()) {
+
+            ItemStack i = Misc.createItem(Material.valueOf(config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_LEAVE_MATERIAL)),
+                    (byte) config.getInt(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_LEAVE_DATA),
+                    getMsg(p, Messages.ARENA_LEAVE_ITEM_NAME), getList(p, Messages.ARENA_LEAVE_ITEM_LORE), p);
+
+            p.getInventory().setItem(config.getInt(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_LEAVE_SLOT), i);
         }
-        if (config.getBoolean("items.stats.enable") && !config.getLobbyWorldName().isEmpty()) {
-            p.getInventory().setItem(config.getInt("items.stats.slot"), Misc.getStatsItem(p));
+        if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_STATS_ENABLED) && !config.getLobbyWorldName().isEmpty()) {
+
+            ItemStack i = Misc.createItem(Material.valueOf(config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_STATS_MATERIAL)),
+                    (byte) config.getInt(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_STATS_DATA),
+                    getMsg(p, Messages.PLAYER_STATS_ITEM_NAME), getList(p, Messages.PLAYER_STATS_ITEM_LORE), p);
+
+            p.getInventory().setItem(config.getInt(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_STATS_SLOT), i);
         }
     }
 
@@ -1100,13 +1114,6 @@ public class Arena {
             }
         }
         return null;
-    }
-
-    public static void leaveItem(Player p) {
-        if (config.getBoolean("items.leave.enable")) {
-            p.getInventory().setItem(config.getInt("items.leave.slot"), Misc.createItem(Material.valueOf(config.getYml().getString("items.leave.itemStack")),
-                    (byte) config.getInt("items.leave.data"), getMsg(p, Messages.ARENA_LEAVE_ITEM_NAME), getList(p, Messages.ARENA_LEAVE_ITEM_LORE)));
-        }
     }
 
     public void checkWinner() {

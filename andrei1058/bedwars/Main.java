@@ -334,24 +334,26 @@ public class Main extends JavaPlugin {
         yml.addDefault("database.port", 3306);
         yml.addDefault("database.database", "bedwars1058");
         yml.addDefault("database.user", "root");
-        yml.addDefault("database.pass", "p4ss");
+        yml.addDefault("database.pass", "cheez");
         yml.addDefault("database.ssl", false);
 
-        yml.addDefault("items.arenaGui.enable", true);
-        yml.addDefault("items.arenaGui.itemStack", "STAINED_CLAY");
-        yml.addDefault("items.arenaGui.data", 5);
-        yml.addDefault("items.arenaGui.enchanted", true);
-        yml.addDefault("items.arenaGui.slot", 4);
-        yml.addDefault("items.leave.enable", true);
-        yml.addDefault("items.leave.itemStack", "BED");
-        yml.addDefault("items.leave.data", 0);
-        yml.addDefault("items.leave.enchanted", false);
-        yml.addDefault("items.leave.slot", 8);
-        yml.addDefault("items.stats.enable", true);
-        yml.addDefault("items.stats.itemStack", "PAPER");
-        yml.addDefault("items.stats.data", 0);
-        yml.addDefault("items.stats.enchanted", false);
-        yml.addDefault("items.stats.slot", 0);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_LEAVE_ENABLED, true);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_LEAVE_MATERIAL, "BED");
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_LEAVE_DATA, 0);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_LEAVE_ENCHANTED, false);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_LEAVE_SLOT, 8);
+
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_SELECTOR_ENABLED, true);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_SELECTOR_MATERIAL, "STAINED_CLAY");
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_SELECTOR_DATA, 5);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_SELECTOR_ENCHANTED, true);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_SELECTOR_SLOT, 4);
+
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_STATS_ENABLED, true);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_STATS_MATERIAL, "SKULL_ITEM");
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_STATS_DATA, 3);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_STATS_ENCHANTED, false);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_STATS_SLOT, 0);
 
         /* Spectator Items */
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_ENABLED, true);
