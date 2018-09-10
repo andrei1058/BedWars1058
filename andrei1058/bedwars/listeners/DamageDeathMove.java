@@ -322,6 +322,7 @@ public class DamageDeathMove implements Listener {
                 Bukkit.getPluginManager().callEvent(new PlayerKillEvent(a, victim, killer, message, cause));
             }
             victim.spigot().respawn();
+            a.addPlayerDeath(victim);
         }
 
     }
