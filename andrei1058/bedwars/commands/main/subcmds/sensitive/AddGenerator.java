@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.andrei1058.bedwars.Main.mainCmd;
+import static com.andrei1058.bedwars.commands.Misc.autoSetGen;
 import static com.andrei1058.bedwars.commands.Misc.createArmorStand;
 import static com.andrei1058.bedwars.commands.Misc.removeArmorStand;
 
@@ -105,6 +106,13 @@ public class AddGenerator extends SubCommand {
             switch (args[0].toLowerCase()) {
                 case "diamond":
                 case "emerald":
+                    List<Location> locations = ss.getCm().getLocations("generator." + args[0].substring(0, 1).toUpperCase() + args[0].substring(1).toLowerCase());
+                    for (Location l : locations){
+                        if (ss.getCm().compareArenaLoc(l, p.getLocation())){
+                            p.sendMessage("§6 ▪ §cThis generator was already set!");
+                            return true;
+                        }
+                    }
                     ArrayList<String> saved;
                     if (arena.getYml().get("generator." + args[0].substring(0, 1).toUpperCase() + args[0].substring(1).toLowerCase()) == null) {
                         saved = new ArrayList<>();
@@ -116,6 +124,8 @@ public class AddGenerator extends SubCommand {
                     p.sendMessage("§6 ▪ §7" + args[0].substring(0, 1).toUpperCase() + args[0].substring(1).toLowerCase() + " generator saved!");
                     createArmorStand("§6" + args[0] + " SET", p.getLocation());
                     if (ss.getSetupType() == SetupSession.SetupType.ASSISTED) {
+                        //autoSetGen(p, getParent().getName()+" "+getSubCommandName()+" ", ss, args[0].equalsIgnoreCase("diamond") ?
+                        //        Material.DIAMOND_BLOCK : Material.EMERALD_BLOCK);
                         Bukkit.dispatchCommand(p, getParent().getName());
                     }
                     break;
