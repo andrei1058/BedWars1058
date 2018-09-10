@@ -13,6 +13,8 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import static com.andrei1058.bedwars.Main.mainCmd;
+import static com.andrei1058.bedwars.commands.Misc.createArmorStand;
+import static com.andrei1058.bedwars.commands.Misc.removeArmorStand;
 
 public class SetUpgrade extends SubCommand {
     /**
@@ -71,9 +73,12 @@ public class SetUpgrade extends SubCommand {
                     }
                 }
             } else {
-                ss.getCm().saveArenaLoc("Team." + args[0] + ".Upgrade", p.getLocation());
                 String teamm = TeamColor.getChatColor(ss.getCm().getYml().getString("Team." + args[0] + ".Color")) + args[0];
-                com.andrei1058.bedwars.commands.Misc.createArmorStand(teamm+" §6UPGRADE SET", p.getLocation());
+                if (ss.getCm().getArenaLoc("Team." + args[0] + ".Upgrade") != null) {
+                    removeArmorStand("UPGRADE SET", ss.getCm().getArenaLoc("Team." + args[0] + ".Upgrade"));
+                }
+                createArmorStand(teamm+" §6UPGRADE SET", p.getLocation());
+                ss.getCm().saveArenaLoc("Team." + args[0] + ".Upgrade", p.getLocation());
                 p.sendMessage("§6 ▪ §7Upgrade npc set for: " + teamm);
                 if (ss.getSetupType() == SetupSession.SetupType.ASSISTED){
                     Bukkit.dispatchCommand(p, getParent().getName());

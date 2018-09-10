@@ -24,6 +24,7 @@ import java.util.List;
 
 import static com.andrei1058.bedwars.Main.mainCmd;
 import static com.andrei1058.bedwars.commands.Misc.createArmorStand;
+import static com.andrei1058.bedwars.commands.Misc.removeArmorStand;
 
 public class AddGenerator extends SubCommand {
     /**
@@ -53,7 +54,7 @@ public class AddGenerator extends SubCommand {
         if (args.length < 1) {
             String foundTeam = "";
             double distance = 100;
-            if (ss.getCm().getYml().getConfigurationSection("Team") == null){
+            if (ss.getCm().getYml().getConfigurationSection("Team") == null) {
                 p.sendMessage("§c ▪ §7Please create teams first!");
                 return true;
             }
@@ -68,12 +69,18 @@ public class AddGenerator extends SubCommand {
                 }
             }
             if (!foundTeam.isEmpty()) {
+                if (ss.getCm().getArenaLoc("Team." + foundTeam + ".Iron") != null) {
+                    removeArmorStand("Generator", ss.getCm().getArenaLoc("Team." + foundTeam + ".Iron"));
+                }
+                if (ss.getCm().getArenaLoc("Team." + foundTeam + ".Gold") != null) {
+                    removeArmorStand("Generator", ss.getCm().getArenaLoc("Team." + foundTeam + ".Gold"));
+                }
                 arena.set("Team." + foundTeam + ".Iron", arena.stringLocationArenaFormat(p.getLocation()));
                 arena.set("Team." + foundTeam + ".Gold", arena.stringLocationArenaFormat(p.getLocation()));
                 String team = TeamColor.getChatColor(ss.getCm().getYml().getString("Team." + foundTeam + ".Color")) + foundTeam;
                 p.sendMessage("§6▪ §7Generator set for team: " + team);
                 createArmorStand("§7Generator set for " + team, p.getLocation());
-                if (ss.getSetupType() == SetupSession.SetupType.ASSISTED){
+                if (ss.getSetupType() == SetupSession.SetupType.ASSISTED) {
                     Bukkit.dispatchCommand(p, getParent().getName());
                 }
                 return true;
@@ -108,7 +115,7 @@ public class AddGenerator extends SubCommand {
                     arena.set("generator." + args[0].substring(0, 1).toUpperCase() + args[0].substring(1).toLowerCase(), saved);
                     p.sendMessage("§6 ▪ §7" + args[0].substring(0, 1).toUpperCase() + args[0].substring(1).toLowerCase() + " generator saved!");
                     createArmorStand("§6" + args[0] + " SET", p.getLocation());
-                    if (ss.getSetupType() == SetupSession.SetupType.ASSISTED){
+                    if (ss.getSetupType() == SetupSession.SetupType.ASSISTED) {
                         Bukkit.dispatchCommand(p, getParent().getName());
                     }
                     break;
@@ -173,7 +180,7 @@ public class AddGenerator extends SubCommand {
                     }
                     arena.set("Team." + foundTeam + "." + args[0].substring(0, 1).toUpperCase() + args[0].substring(1).toLowerCase(), arena.stringLocationArenaFormat(p.getLocation()));
                     p.sendMessage("§6 ▪ §7" + args[0] + " set for: " + TeamColor.getChatColor(arena.getYml().getString("Team." + foundTeam + ".Color")) + foundTeam);
-                    if (ss.getSetupType() == SetupSession.SetupType.ASSISTED){
+                    if (ss.getSetupType() == SetupSession.SetupType.ASSISTED) {
                         Bukkit.dispatchCommand(p, getParent().getName());
                     }
             }
