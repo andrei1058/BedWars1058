@@ -88,8 +88,11 @@ public class AutoCreateTeams extends SubCommand {
                                         }
                                     }
                                     if (count >= 5) {
-                                        if (!TeamColor.enName(b.getData()).isEmpty())
-                                            found.add(b.getData());
+                                        if (!TeamColor.enName(b.getData()).isEmpty()) {
+                                            if (ss.getCm().getYml().get("Team."+TeamColor.enName(b.getData())) == null) {
+                                                found.add(b.getData());
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -98,11 +101,12 @@ public class AutoCreateTeams extends SubCommand {
                 }
             }
             if (found.isEmpty()) {
-                p.sendMessage("§6 ▪ §7No teams found.\n§6 ▪ §7Manually create teams with: §6/" + Main.mainCmd + " createTeam");
+                p.sendMessage("§6 ▪ §7No new teams were found.\n§6 ▪ §7Manually create teams with: §6/" + Main.mainCmd + " createTeam");
             } else {
                 if (timeOut.containsKey(p)) {
-                    p.sendMessage("§c ▪ §7Time out.");
-                    timeOut.remove(p, System.currentTimeMillis() + 16000);
+                    p.sendMessage("§c ▪ §7Time out. Type again to search for teams.");
+                    timeOut.remove(p);
+                    return true;
                 } else {
                     timeOut.put(p, System.currentTimeMillis() + 16000);
                 }
@@ -111,9 +115,10 @@ public class AutoCreateTeams extends SubCommand {
                 } else {
                     teamsFound.put(p, found);
                 }
-                p.sendMessage("§6§lTEAMS FOUND:");
+                p.sendMessage("§6§lNEW TEAMS FOUND:");
                 for (Byte tf : found) {
-                    p.sendMessage("§f ▪ " + TeamColor.getChatColor(TeamColor.enName(tf)) + TeamColor.enName(tf));
+                    String name = TeamColor.enName(tf);
+                    p.sendMessage("§f ▪ " + TeamColor.getChatColor(name) + name);
                 }
                 p.spigot().sendMessage(Misc.msgHoverClick("§6 ▪ §7§lClick here to create found teams.", "§fClick to create found teams!", "/" + getParent().getName() + " " + getSubCommandName(), ClickEvent.Action.RUN_COMMAND));
             }
