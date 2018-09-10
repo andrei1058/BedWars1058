@@ -8,7 +8,9 @@ import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.google.common.base.Joiner;
 import net.citizensnpcs.api.CitizensAPI;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -21,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.andrei1058.bedwars.Main.mainCmd;
@@ -36,8 +39,9 @@ public class NPC extends SubCommand {
      */
 
     //main usage
-    private final String MAIN_USAGE = "§c▪ §7Usage: §e§o/" + mainCmd + " " + getSubCommandName() + " add/ remove";
-    private final String ADD_USAGE = "§c▪ §7Usage: §e§o/" + getParent().getName() + " " + getSubCommandName() + " add <skin> <arenaGroup> <§7firstLine§9\\\\n§7secondLine§e>\n§7You can use §e{players} §7for the players count in this arena group.";
+    private final List<BaseComponent> MAIN_USAGE = Arrays.asList(Misc.msgHoverClick("§f\n§c▪ §7Usage: §e/" + mainCmd + " " + getSubCommandName() + " add", "§fUse this command to create a join NPC.\n§fClick to see the syntax.", "/"+getParent().getName()+" "+getSubCommandName()+" add", ClickEvent.Action.RUN_COMMAND),
+            Misc.msgHoverClick("§c▪ §7Usage: §e/" + mainCmd + " " + getSubCommandName() + " remove", "§fStay in front of a NPC in order to remove it.", "/"+getParent().getName()+" "+getSubCommandName()+" remove", ClickEvent.Action.SUGGEST_COMMAND));
+    private final List<BaseComponent> ADD_USAGE = Arrays.asList(Misc.msgHoverClick("f\n§c▪ §7Usage: §e§o/" + getParent().getName() + " " + getSubCommandName() + " add <skin> <arenaGroup> <§7line1§9\\n§7line2§e>\n§7You can use §e{players} §7for the players count in this arena §7group.", "Click to use.", "/"+getParent().getName()+" "+getSubCommandName()+" add", ClickEvent.Action.SUGGEST_COMMAND));
     private final String NO_GROUP = "§c▪ §bThere isn't any group called: §c%name%";
     private final String NPC_SET = "§a§c▪ §bNPC: %name% §bwas set!";
     private final String NO_NPCS = "§c▪ §bThere isn't any NPC nearby.";
@@ -60,12 +64,16 @@ public class NPC extends SubCommand {
         if (!JoinNPC.isCitizensSupport()) return false;
         Player p = (Player) s;
         if (args.length < 1) {
-            p.sendMessage(MAIN_USAGE);
+            for (BaseComponent bc : MAIN_USAGE){
+                p.spigot().sendMessage(bc);
+            }
             return true;
         }
         if (args[0].equalsIgnoreCase("add")) {
             if (args.length < 4) {
-                p.sendMessage(ADD_USAGE);
+                for (BaseComponent bc : ADD_USAGE){
+                    p.spigot().sendMessage(bc);
+                }
                 return true;
             }
             if (Main.config.getYml().get("arenaGroups") == null) {
@@ -124,7 +132,9 @@ public class NPC extends SubCommand {
             npc.destroy();
             p.sendMessage(NPC_REMOVED);
         } else {
-            p.sendMessage(MAIN_USAGE);
+            for (BaseComponent bc : MAIN_USAGE){
+                p.spigot().sendMessage(bc);
+            }
         }
         return true;
     }
