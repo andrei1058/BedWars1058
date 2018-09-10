@@ -223,12 +223,14 @@ public class v1_8_R3 implements NMS {
 
     @Override
     public boolean isArmor(ItemStack itemStack) {
+        if (CraftItemStack.asNMSCopy(itemStack) == null) return false;
         if (CraftItemStack.asNMSCopy(itemStack).getItem() == null) return false;
         return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemArmor;
     }
 
     @Override
     public boolean isTool(ItemStack itemStack) {
+        if (CraftItemStack.asNMSCopy(itemStack) == null) return false;
         if (CraftItemStack.asNMSCopy(itemStack).getItem() == null) return false;
         return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemTool;
     }
@@ -241,12 +243,14 @@ public class v1_8_R3 implements NMS {
 
     @Override
     public boolean isBow(ItemStack itemStack) {
+        if (CraftItemStack.asNMSCopy(itemStack) == null) return false;
         if (CraftItemStack.asNMSCopy(itemStack).getItem() == null) return false;
         return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemBow;
     }
 
     @Override
     public boolean isProjectile(org.bukkit.inventory.ItemStack itemStack) {
+        if (CraftItemStack.asNMSCopy(itemStack) == null) return false;
         if (CraftItemStack.asNMSCopy(itemStack).getItem() == null) return false;
         return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof IProjectile;
     }
