@@ -27,7 +27,7 @@ public class DisableArena extends SubCommand {
         setPriority(6);
         showInList(true);
         setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " "+getSubCommandName()+" §6<worldName>", "§fDisable an arena.\nThis will remove the players \n§ffrom the arena before disabling.",
-                "/" + getParent().getName() + " "+getSubCommandName(), ClickEvent.Action.SUGGEST_COMMAND));
+                "/" + getParent().getName() + " "+getSubCommandName()+" ", ClickEvent.Action.SUGGEST_COMMAND));
         setOpCommand(true);
     }
 
