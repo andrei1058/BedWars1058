@@ -47,7 +47,7 @@ public class OneTick extends BukkitRunnable {
             if (pl.getLocation().distance(loc) > 4.0D) {
 
                 Block b2 = loc.clone().subtract(0.0D, 2.0D, 0.0D).getBlock();
-                if (!Misc.isOutsideOfBorder(b2.getLocation())) {
+                if (!Misc.isBuildProtected(b2.getLocation(), a)) {
                     if (b2.getType() == Material.AIR) {
                         b2.setType(Material.WOOL);
                         nms.setBlockTeamColor(b2, e.getValue());
@@ -57,7 +57,7 @@ public class OneTick extends BukkitRunnable {
                 }
 
                 Block b3 = loc.clone().subtract(1.0D, 2.0D, 0.0D).getBlock();
-                if (!Misc.isOutsideOfBorder(b3.getLocation())) {
+                if (!Misc.isBuildProtected(b3.getLocation(), a)) {
                     if (b3.getType() == Material.AIR) {
                         b3.setType(Material.WOOL);
                         nms.setBlockTeamColor(b3, e.getValue());
@@ -67,7 +67,7 @@ public class OneTick extends BukkitRunnable {
                 }
 
                 Block b4 = loc.clone().subtract(0.0D, 2.0D, 1.0D).getBlock();
-                if (!Misc.isOutsideOfBorder(b4.getLocation())) {
+                if (!Misc.isBuildProtected(b4.getLocation(), a)) {
                     if (b4.getType() == Material.AIR) {
                         b4.setType(Material.WOOL);
                         nms.setBlockTeamColor(b4, e.getValue());

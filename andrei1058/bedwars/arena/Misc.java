@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.api.TeamColor;
+import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Messages;
 import com.andrei1058.bedwars.exceptions.InvalidMaterialException;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
@@ -428,5 +429,26 @@ public class Misc {
         Location location = l, center = border.getCenter();
 
         return center.distanceSquared(location) >= (radius * radius);
+    }
+
+    /** Check if location is on a protected region */
+    public static boolean isBuildProtected(Location l, Arena a){
+        for (BedWarsTeam t : a.getTeams()) {
+            if (t.getSpawn().distance(l) <= a.getCm().getInt(ConfigPath.ARENA_SPAWN_PROTECTION)) {
+                return true;
+            }
+            if (t.getShop().distance(l) <= a.getCm().getInt(ConfigPath.ARENA_SHOP_PROTECTION)) {
+                return true;
+            }
+            if (t.getTeamUpgrades().distance(l) <= a.getCm().getInt(ConfigPath.ARENA_UPGRADES_PROTECTION)) {
+                return true;
+            }
+        }
+        for (OreGenerator o : OreGenerator.getGenerators()) {
+            if (o.getLocation().distance(l) <= 1) {
+                return true;
+            }
+        }
+        return isOutsideOfBorder(l);
     }
 }
