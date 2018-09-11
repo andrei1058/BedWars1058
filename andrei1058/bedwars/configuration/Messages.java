@@ -67,12 +67,7 @@ public class Messages {
     public static String ARENA_JOIN_SPECTATOR_DENIED_MSG = "arena.spectate.spectate-denied";
     public static String ARENA_LEAVE_PLAYER_LEAVE_MSG = "arena.leave";
 
-    public static String ARENA_LEAVE_ITEM_NAME = "arena.leaveItm.name"; //todo to be removed
-    public static String ARENA_LEAVE_ITEM_LORE = "arena.leaveItm.lore"; //todo to be removed
-
     /** Spectator related */
-    public static String ARENA_SPECTATOR_TELEPORTER_ITEM_NAME = "spectatorItems.teleporter-item.name";
-    public static String ARENA_SPECTATOR_TELEPORTER_ITEM_LORE = "spectatorItems.teleporter-item.lore";
     public static String ARENA_SPECTATOR_TELEPORTER_GUI_NAME = "spectatorItems.teleporter-gui.gui-name";
     //{player} - returns display name, {prefix} - returns the player rank
     public static String ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME = "spectatorItems.teleporter-gui.head-name";
@@ -99,16 +94,12 @@ public class Messages {
 
     /** Arena GUI related */
     public static String ARENA_GUI_INV_NAME = "arena.guiInv.Name";
-    //public static String ARENA_GUI_ITEM_NAME = "arena.guiItem.name";
-    //public static String ARENA_GUI_ITEM_LORE = "arena.guiItem.lore";
     public static String ARENA_GUI_ARENA_CONTENT_NAME = "arena.guiArena.name";
     public static String ARENA_GUI_ARENA_CONTENT_LORE = "arena.guiArena.lore";
 
     /** Stats related */
     public static String PLAYER_STATS_GUI_PATH = "stats";
     public static String PLAYER_STATS_GUI_INV_NAME = PLAYER_STATS_GUI_PATH+".invName.name";
-    public static String PLAYER_STATS_ITEM_NAME = "player.statsItem.name";
-    public static String PLAYER_STATS_ITEM_LORE = "player.statsItem.lore";
 
     /** Arena generators related */
     public static String GENERATOR_HOLOGRAM_TIER = "generator.tier";
@@ -214,9 +205,6 @@ public class Messages {
     public static String SHOP_UTILITY_NPC_SILVERFISH_NAME = "despawnables.silverfish";
     public static String SHOP_UTILITY_NPC_IRON_GOLEM_NAME = "despawnables.ironGolem";
     public static String SHOP_ALREADY_BOUGHT = "player.alreadyBought";
-
-    /** Setup messages, those are not paths */
-    public static String SETUP_TYPE_GUI_NAME = "§8{arena} Setup - Choose an option";
 
     /* MultiArena Lobby Item Messages */
     public static final String GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME = ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH+".%path%.name";
