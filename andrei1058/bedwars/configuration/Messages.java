@@ -99,8 +99,8 @@ public class Messages {
 
     /** Arena GUI related */
     public static String ARENA_GUI_INV_NAME = "arena.guiInv.Name";
-    public static String ARENA_GUI_ITEM_NAME = "arena.guiItem.name";
-    public static String ARENA_GUI_ITEM_LORE = "arena.guiItem.lore";
+    //public static String ARENA_GUI_ITEM_NAME = "arena.guiItem.name";
+    //public static String ARENA_GUI_ITEM_LORE = "arena.guiItem.lore";
     public static String ARENA_GUI_ARENA_CONTENT_NAME = "arena.guiArena.name";
     public static String ARENA_GUI_ARENA_CONTENT_LORE = "arena.guiArena.lore";
 
@@ -217,4 +217,16 @@ public class Messages {
 
     /** Setup messages, those are not paths */
     public static String SETUP_TYPE_GUI_NAME = "§8{arena} Setup - Choose an option";
+
+    /* MultiArena Lobby Item Messages */
+    public static final String GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME = ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH+".%path%.name";
+    public static final String GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE = ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH+".%path%.lore";
+
+    /* Spectator Items Messages */
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME = ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH+".%path%.name";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE = ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH+".%path%.lore";
+
+    /* Arena waiting Items Messages */
+    public static final String GENERAL_CONFIGURATION_WAITING_ITEMS_NAME = ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH+".%path%.name";
+    public static final String GENERAL_CONFIGURATION_WAITING_ITEMS_LORE = ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH+".%path%.lore";
 }
