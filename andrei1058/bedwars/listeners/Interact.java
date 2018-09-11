@@ -34,7 +34,6 @@ public class Interact implements Listener {
     @EventHandler
     /* Handle custom items with commands on them */
     public void onItemCommand(PlayerInteractEvent e){
-        if (e.isCancelled()) return;
         Player p = e.getPlayer();
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR){
             ItemStack i = Main.nms.getItemInHand(p);
@@ -42,6 +41,7 @@ public class Interact implements Listener {
             String[] customData = nms.getCustomData(i).split("_");
             if (customData.length >= 2){
                 if (customData[0].equals("RUNCOMMAND")){
+                    e.setCancelled(true);
                     Bukkit.dispatchCommand(p, customData[1]);
                 }
             }
