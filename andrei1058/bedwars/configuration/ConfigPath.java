@@ -75,7 +75,7 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_GAME_END_COUNTDOWN = "countdowns.next-event-game-end";
 
     public static final String GENERAL_CONFIGURATION_NPC_LOC_STORAGE = "join-npc-locations";
-    public static final String GENERAL_CONFIGURATION_DEFAULT_ITEMS = "start-items-per-arena";
+    public static final String GENERAL_CONFIGURATION_DEFAULT_ITEMS = "start-items-per-group";
 
     public static final String CENERAL_CONFIGURATION_ALLOWED_COMMANDS = "allowed-commands";
 
