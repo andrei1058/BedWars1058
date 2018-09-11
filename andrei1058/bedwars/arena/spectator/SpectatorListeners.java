@@ -1,6 +1,5 @@
 package com.andrei1058.bedwars.arena.spectator;
 
-import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.*;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.configuration.Messages;
@@ -13,7 +12,6 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
@@ -43,18 +41,6 @@ public class SpectatorListeners implements Listener {
 
         /* Disable spectator interact */
         e.setCancelled(true);
-
-        if (!(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)) return;
-
-        /* Spectator Items */
-        switch (nms.getCustomData(i)) {
-            case SpectatorItems.NBT_SPECTATOR_TELEPORTER_ITEM:
-                TeleporterGUI.openGUI(p);
-                break;
-            case SpectatorItems.NBT_SPECTATOR_LEAVE_ITEM:
-                a.removePlayer(p, Main.getServerType() == ServerType.BUNGEE);
-                break;
-        }
     }
 
     @EventHandler
