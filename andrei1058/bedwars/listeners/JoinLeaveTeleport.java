@@ -9,12 +9,10 @@ import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
 import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
 
@@ -115,7 +113,7 @@ public class JoinLeaveTeleport implements Listener {
         } else {
             p.teleport(config.getConfigLoc("lobbyLoc"));
             Misc.giveLobbySb(p);
-            Arena.sendMultiarenaLobbyItems(p);
+            Arena.sendLobbyCommandItems(p);
         }
         p.setHealthScale(20);
         p.setFoodLevel(20);

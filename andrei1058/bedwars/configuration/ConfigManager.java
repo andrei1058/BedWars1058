@@ -6,6 +6,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -121,6 +122,17 @@ public class ConfigManager {
 
     }
 
+    public List<Location> getLocations(String path){
+        List<Location> l = new ArrayList<>();
+        for (String s : yml.getStringList(path)){
+            Location loc = fromArenaStringList(s);
+            if (loc != null){
+                l.add(loc);
+            }
+        }
+        return l;
+    }
+
     public void set(String path, Object value) {
         yml.set(path, value);
         save();
@@ -167,5 +179,55 @@ public class ConfigManager {
 
     public boolean isFirstTime() {
         return firstTime;
+    }
+
+    /** Return true if same */
+    public boolean compareArenaLoc(Location l1, Location l2){
+        return l1.getBlockX() == l2.getBlockX() && l1.getBlockZ() == l2.getBlockZ() && l1.getBlockY() == l2.getBlockY();
+    }
+
+    /** Add Multi Arena Lobby Command Item To Config.
+     * This won't create the item back if you delete it.
+      */
+    public void saveLobbyCommandItem(String name, String cmd, boolean enchanted, String material, int data, int slot){
+        if (isFirstTime()){
+            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_COMMAND.replace("%path%", name), cmd);
+            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", name), material);
+            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_DATA.replace("%path%", name), data);
+            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_ENCHANTED.replace("%path%", name), enchanted);
+            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_SLOT.replace("%path%", name), slot);
+            yml.options().copyDefaults(true);
+            save();
+        }
+    }
+
+    /** Add Pre Game Command Item To Config.
+     * This won't create the item back if you delete it.
+     */
+    public void savePreGameCommandItem(String name, String cmd, boolean enchanted, String material, int data, int slot){
+        if (isFirstTime()){
+            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_COMMAND.replace("%path%", name), cmd);
+            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_MATERIAL.replace("%path%", name), material);
+            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_DATA.replace("%path%", name), data);
+            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_ENCHANTED.replace("%path%", name), enchanted);
+            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_SLOT.replace("%path%", name), slot);
+            yml.options().copyDefaults(true);
+            save();
+        }
+    }
+
+    /** Add Spectator Command Item To Config.
+     * This won't create the item back if you delete it.
+     */
+    public void saveSpectatorCommandItem(String name, String cmd, boolean enchanted, String material, int data, int slot){
+        if (isFirstTime()){
+            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_COMMAND.replace("%path%", name), cmd);
+            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_MATERIAL.replace("%path%", name), material);
+            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_DATA.replace("%path%", name), data);
+            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_ENCHANTED.replace("%path%", name), enchanted);
+            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_SLOT.replace("%path%", name), slot);
+            yml.options().copyDefaults(true);
+            save();
+        }
     }
 }

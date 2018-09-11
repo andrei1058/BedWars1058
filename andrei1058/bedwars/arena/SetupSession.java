@@ -189,7 +189,7 @@ public class SetupSession {
         getSetupSessions().remove(this);
         getPlayer().teleport(config.getConfigLoc("lobbyLoc"));
         getPlayer().removePotionEffect(PotionEffectType.SPEED);
-        Arena.sendMultiarenaLobbyItems(getPlayer());
+        Arena.sendLobbyCommandItems(getPlayer());
     }
 
     /**

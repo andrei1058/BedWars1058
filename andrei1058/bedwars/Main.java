@@ -337,37 +337,18 @@ public class Main extends JavaPlugin {
         yml.addDefault("database.pass", "cheez");
         yml.addDefault("database.ssl", false);
 
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_LEAVE_ENABLED, true);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_LEAVE_MATERIAL, "BED");
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_LEAVE_DATA, 0);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_LEAVE_ENCHANTED, false);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_LEAVE_SLOT, 8);
+        /* Multi-Arena Lobby Command Items */
+        config.saveLobbyCommandItem("stats", "bw stats", false, "SKULL_ITEM", 3, 0);
+        config.saveLobbyCommandItem("arena-selector", "bw gui", true, "STAINED_CLAY", 5, 4);
+        config.saveLobbyCommandItem("leave", "bw leave", false, "BED", 0, 8);
 
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_SELECTOR_ENABLED, true);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_SELECTOR_MATERIAL, "STAINED_CLAY");
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_SELECTOR_DATA, 5);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_SELECTOR_ENCHANTED, true);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_SELECTOR_SLOT, 4);
+        /* Pre Game Command Items */
+        config.savePreGameCommandItem("stats", "bw stats", false, "SKULL_ITEM", 3, 0);
+        config.savePreGameCommandItem("leave", "bw leave", false, "BED", 0, 8);
 
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_STATS_ENABLED, true);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_STATS_MATERIAL, "SKULL_ITEM");
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_STATS_DATA, 3);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_STATS_ENCHANTED, false);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEM_STATS_SLOT, 0);
-
-        /* Spectator Items */
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_ENABLED, true);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_MATERIAL, "COMPASS");
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_DATA, 0);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_ENCHANTED, false);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_SLOT, 0);
-
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_ENABLED, true);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_MATERIAL, "BED");
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_DATA, 0);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_ENCHANTED, false);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_SLOT, 8);
-
+        /* Spectator Command Items */
+        config.saveSpectatorCommandItem("teleporter", "bw teleporter", false, "SKULL_ITEM", 3, 0);
+        config.saveSpectatorCommandItem("leave", "bw leave", false, "BED", 0, 8);
 
         yml.addDefault("arenaGui.settings.size", 27);
         yml.addDefault("arenaGui.settings.startSlot", 10);
@@ -404,7 +385,7 @@ public class Main extends JavaPlugin {
         config.save();
 
         //remove old config
-        if (config.getYml().get("npcLoc") != null){
+        if (config.getYml().get("npcLoc") != null) {
             config.set(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE, config.getYml().getString("npcLoc"));
         }
         config.set("startItems", null);

@@ -126,7 +126,7 @@ public class Misc {
      * @param lore     item lore
      * @param owner    in case of skull, can be null, don't worry
      */
-    public static ItemStack createItem(Material material, byte data, String name, List<String> lore, Player owner) {
+    public static ItemStack createItem(Material material, byte data, boolean enchanted, String name, List<String> lore, Player owner, String metaKey, String metaData) {
         ItemStack i = new ItemStack(material, 1, data);
         if (owner != null) {
             if (material == Material.SKULL_ITEM && data == 3) {
@@ -138,7 +138,14 @@ public class Misc {
         ItemMeta im = i.getItemMeta();
         im.setDisplayName(name);
         im.setLore(lore);
+        if (enchanted) {
+            im.addEnchant(Enchantment.LUCK, 1, true);
+            im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        }
         i.setItemMeta(im);
+        if (!(metaData.isEmpty() || metaKey.isEmpty())){
+            i = nms.addCustomData(i, metaKey+"_"+metaData);
+        }
         return i;
     }
 
