@@ -152,9 +152,19 @@ public class JoinLeaveTeleport implements Listener {
     public void onTeleport(PlayerTeleportEvent e) {
         Arena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a != null) {
-            if (a.isSpectator(e.getPlayer())) {
-                if (e.getFrom().getWorld() != e.getTo().getWorld()) {
-                    e.setCancelled(true);
+            Arena a1 = Arena.getArenaByName(e.getTo().getWorld().getName());
+            Arena a2 = Arena.getArenaByPlayer(e.getPlayer());
+            if (a1 != null) {
+                if (a2 != null) {
+                    if (a1 != a2) {
+                        if (a2.isSpectator(e.getPlayer())) a2.removeSpectator(e.getPlayer(), false);
+                        if (a2.isPlayer(e.getPlayer())) a2.removePlayer(e.getPlayer(), false);
+                        e.getPlayer().sendMessage("PlayerTeleportEvent something went wrong. You were removed from the arena because you were teleported outside the arena somehow.");
+                    }
+                }
+                if (!(a1.isSpectator(e.getPlayer()) || a1.isPlayer(e.getPlayer()))) {
+                    a1.addSpectator(e.getPlayer(), false, e.getTo());
+                    if (!e.getPlayer().isFlying()) e.getPlayer().setFlying(true);
                 }
             }
         }
