@@ -339,7 +339,7 @@ public class DamageDeathMove implements Listener {
             e.setRespawnLocation(a.getCm().getArenaLoc("waiting.Loc"));
             BedWarsTeam t = a.getTeam(e.getPlayer());
             if (t.isBedDestroyed()) {
-                a.addSpectator(e.getPlayer(), true);
+                a.addSpectator(e.getPlayer(), true, null);
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
                     t.getMembers().remove(e.getPlayer());
                     e.getPlayer().sendMessage(getMsg(e.getPlayer(), Messages.PLAYER_DIE_ELIMINATED_CHAT));
