@@ -327,7 +327,7 @@ public class DamageDeathMove implements Listener {
 
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onRespawn(PlayerRespawnEvent e) {
         Arena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a == null) {
