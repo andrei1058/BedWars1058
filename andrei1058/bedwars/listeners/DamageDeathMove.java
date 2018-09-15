@@ -57,7 +57,7 @@ public class DamageDeathMove implements Listener {
                 }
             }
         }
-        if (Main.getServerType() != ServerType.BUNGEE){
+        if (Main.getServerType() != ServerType.BUNGEE) {
             if (e.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 e.setCancelled(true);
                 return;
@@ -179,7 +179,7 @@ public class DamageDeathMove implements Listener {
                 }
             }
         }
-        if (Main.getServerType() != ServerType.BUNGEE){
+        if (Main.getServerType() != ServerType.BUNGEE) {
             if (e.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 e.setCancelled(true);
                 return;
@@ -358,6 +358,17 @@ public class DamageDeathMove implements Listener {
                 e.getPlayer().setAllowFlight(true);
                 e.getPlayer().setFlying(true);
                 a.getRespawn().put(e.getPlayer(), 5);
+                for (SBoard sb : SBoard.getScoreboards()) {
+                    if (sb.getArena() == a) {
+                        sb.giveTeamColorTag();
+                    }
+                }
+            }
+            for (SBoard sb : SBoard.getScoreboards()) {
+                if (sb.getArena() == a) {
+                    sb.giveTeamColorTag();
+                    sb.updateSpectators(e.getPlayer(), false);
+                }
             }
         }
     }
@@ -438,7 +449,7 @@ public class DamageDeathMove implements Listener {
                     }
                     if (e.getFrom() != e.getTo()) {
                         Arena.afkCheck.remove(e.getPlayer());
-                        if (Main.api.isPlayerAFK(e.getPlayer())){
+                        if (Main.api.isPlayerAFK(e.getPlayer())) {
                             Main.api.setPlayerAFK(e.getPlayer(), false);
                         }
                     }

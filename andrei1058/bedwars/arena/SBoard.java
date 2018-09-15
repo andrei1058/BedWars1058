@@ -220,7 +220,12 @@ public class SBoard {
 
     public void giveTeamColorTag() {
         for (BedWarsTeam t : arena.getTeams()) {
-            Team team = sb.registerNewTeam(t.getName());
+            Team team;
+            if (sb.getTeam(t.getName()) == null){
+                team = sb.registerNewTeam(t.getName());
+            } else {
+                team = sb.getTeam(t.getName());
+            }
             team.setPrefix(TeamColor.getChatColor(t.getColor()) + "§l" +
                     t.getName().substring(0, 1).toUpperCase() + " §r" + TeamColor.getChatColor(t.getColor()));
             for (Player p : t.getMembers()) {

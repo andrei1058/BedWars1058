@@ -64,45 +64,42 @@ public class JoinLeaveTeleport implements Listener {
         if (plugin.getServerType() != ServerType.BUNGEE) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 for (Player on : Bukkit.getOnlinePlayers()) {
-                    if (Arena.getArenaByPlayer(on) == null) {
-                        on.showPlayer(p);
-                        p.showPlayer(on);
-                    } else {
+                    if (Arena.getArenaByPlayer(on) != null) {
                         p.hidePlayer(on);
                         on.hidePlayer(p);
                     }
                 }
 
-            }, 5L);
+            }, 14L);
         }
         if (debug) {
             p.sendMessage("");
             p.sendMessage("");
             p.sendMessage("§7§m----------------------------------------\n" +
                     "§eThis server is running BedWars1058 §cv" + plugin.getDescription().getVersion()
-                    + "\n§eThe latest published version is §a" + Misc.getNewVersion()+
+                    + "\n§eThe latest published version is §a" + Misc.getNewVersion() +
                     "\n§7§m----------------------------------------");
             p.sendMessage("");
             p.sendMessage("");
         }
         if (p.isOp()) {
             if (Misc.isUpdateAvailable()) {
-                p.sendMessage("§8[§f"+plugin.getName()+"§8]§7§m---------------------------");
+                p.sendMessage("§8[§f" + plugin.getName() + "§8]§7§m---------------------------");
                 p.sendMessage("");
-                TextComponent tc = new TextComponent("§eUpdate available: §6" + Misc.getNewVersion()+" §7§o(click)");
+                TextComponent tc = new TextComponent("§eUpdate available: §6" + Misc.getNewVersion() + " §7§o(click)");
                 tc.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, link));
                 p.spigot().sendMessage(tc);
                 p.sendMessage("");
-                p.sendMessage("§8[§f"+plugin.getName()+"§8]§7§m---------------------------");
+                p.sendMessage("§8[§f" + plugin.getName() + "§8]§7§m---------------------------");
             }
         }
         if (p.getName().equalsIgnoreCase("andrei1058") || p.getName().equalsIgnoreCase("andreea1058") || p.getName().equalsIgnoreCase("Dani3l_FTW")) {
-            p.sendMessage("§8[§f"+plugin.getName()+"§8]§7§m---------------------------");
+            p.sendMessage("§8[§f" + plugin.getName() + "§8]§7§m---------------------------");
             p.sendMessage("");
             p.sendMessage("§7User ID: §f%%__USER__%%");
             p.sendMessage("§7Download ID: §f%%__NONCE__%%");
             p.sendMessage("");
-            p.sendMessage("§8[§f"+plugin.getName()+"§8]§7§m---------------------------");
+            p.sendMessage("§8[§f" + plugin.getName() + "§8]§7§m---------------------------");
         }
         if (getServerType() == ServerType.SHARED) return;
         e.setJoinMessage(null);
@@ -126,9 +123,9 @@ public class JoinLeaveTeleport implements Listener {
         /* Remove from arena */
         Arena a = Arena.getArenaByPlayer(p);
         if (a != null) {
-            if (a.isPlayer(p)){
+            if (a.isPlayer(p)) {
                 a.removePlayer(p, true);
-            } else if (a.isSpectator(p)){
+            } else if (a.isSpectator(p)) {
                 a.removeSpectator(p, true);
             }
         }
@@ -137,13 +134,13 @@ public class JoinLeaveTeleport implements Listener {
             e.setQuitMessage(null);
         }
         /* Manage internal parties */
-        if (getParty().isInternal()){
-            if (getParty().hasParty(p)){
+        if (getParty().isInternal()) {
+            if (getParty().hasParty(p)) {
                 getParty().removeFromParty(p);
             }
         }
         /* Check if was doing a setup and remove the session */
-        if (SetupSession.isInSetupSession(p)){
+        if (SetupSession.isInSetupSession(p)) {
             SetupSession.getSession(p).cancel();
         }
     }
