@@ -339,7 +339,7 @@ public class Main extends JavaPlugin {
 
         /* Multi-Arena Lobby Command Items */
         config.saveLobbyCommandItem("stats", "bw stats", false, "SKULL_ITEM", 3, 0);
-        config.saveLobbyCommandItem("arena-selector", "bw gui", true, "CLOCK", 5, 4);
+        config.saveLobbyCommandItem("arena-selector", "bw gui", true, "CHEST", 5, 4);
         config.saveLobbyCommandItem("leave", "bw leave", false, "BED", 0, 8);
 
         /* Pre Game Command Items */
