@@ -29,7 +29,7 @@ public class SetType extends SubCommand {
         setArenaSetupCommand(true);
     }
 
-    private static List<String> available = Arrays.asList("solo", "duals", "3v3v3v3", "4v4v4v4");
+    private static List<String> available = Arrays.asList("Solo", "Duals", "3v3v3v3", "4v4v4v4");
 
     @Override
     public boolean execute(String[] args, CommandSender s) {
@@ -43,17 +43,17 @@ public class SetType extends SubCommand {
         if (args.length == 0){
            sendUsage(p);
         } else {
-            if (!available.contains(args[0].toLowerCase())){
+            if (!available.contains(args[0])){
                 sendUsage(p);
                 return true;
             }
             List groups = Main.plugin.config.getYml().getStringList("arenaGroups");
-            String input = args[0].substring(0, 1).toUpperCase()+args[0].substring(1, args[0].length()).toLowerCase();
+            String input = args[0].substring(0, 1).toUpperCase()+args[0].substring(1).toLowerCase();
             if (!groups.contains(input)){
                 groups.add(input);
                 Main.config.set("arenaGroups", groups);
                 int maxInTeam = 1;
-                if (input.equalsIgnoreCase("duals")){
+                if (input.equalsIgnoreCase("Duals")){
                     maxInTeam = 2;
                 } else if (input.equalsIgnoreCase("3v3v3v3")){
                     maxInTeam = 3;
