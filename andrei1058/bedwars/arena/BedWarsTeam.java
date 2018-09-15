@@ -176,7 +176,7 @@ public class BedWarsTeam {
     public void sendDefaultInventory(Player p) {
         p.getInventory().clear();
         String path = config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + "." + arena.getGroup()) == null ?
-                ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + ".default" : ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + "." + arena.getGroup();
+                ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + ".Default" : ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + "." + arena.getGroup();
         for (String s : config.getYml().getStringList(path)) {
             String[] parm = s.split(",");
             if (parm.length != 0) {
