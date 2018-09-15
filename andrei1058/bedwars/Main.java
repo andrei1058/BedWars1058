@@ -368,7 +368,7 @@ public class Main extends JavaPlugin {
         yml.addDefault("statsGUI.invSize", 27);
         if (config.isFirstTime()) {
             Misc.addDefaultStatsItem(yml, 10, Material.DIAMOND, 0, "wins");
-            Misc.addDefaultStatsItem(yml, 11, Material.REDSTONE, 0, "looses");
+            Misc.addDefaultStatsItem(yml, 11, Material.REDSTONE, 0, "losses");
             Misc.addDefaultStatsItem(yml, 12, Material.IRON_SWORD, 0, "kills");
             Misc.addDefaultStatsItem(yml, 13, Material.SKULL_ITEM, 0, "deaths");
             Misc.addDefaultStatsItem(yml, 14, Material.DIAMOND_SWORD, 0, "finalKills");
