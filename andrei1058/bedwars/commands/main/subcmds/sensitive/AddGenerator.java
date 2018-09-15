@@ -70,10 +70,10 @@ public class AddGenerator extends SubCommand {
                 }
             }
             if (!foundTeam.isEmpty()) {
-                if (ss.getCm().getArenaLoc("Team." + foundTeam + ".Iron") != null) {
+                if (ss.getCm().getYml().get("Team." + foundTeam + ".Iron") != null) {
                     removeArmorStand("Generator", ss.getCm().getArenaLoc("Team." + foundTeam + ".Iron"));
                 }
-                if (ss.getCm().getArenaLoc("Team." + foundTeam + ".Gold") != null) {
+                if (ss.getCm().getYml().get("Team." + foundTeam + ".Gold") != null) {
                     removeArmorStand("Generator", ss.getCm().getArenaLoc("Team." + foundTeam + ".Gold"));
                 }
                 arena.set("Team." + foundTeam + ".Iron", arena.stringLocationArenaFormat(p.getLocation()));
