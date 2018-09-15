@@ -365,7 +365,7 @@ public class BedWarsTeam {
         }
 
         public void spawn() {
-            a = (ArmorStand) bed.getWorld().spawnEntity(bed.clone().add(0, 0.5, 0), EntityType.ARMOR_STAND);
+            a = (ArmorStand) bed.getWorld().spawnEntity(bed.getBlock().getLocation().add(+0.5, 1, +0.5), EntityType.ARMOR_STAND);
             a.setGravity(false);
             if (name != null) {
                 if (isBedDestroyed()) {
