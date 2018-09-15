@@ -75,7 +75,7 @@ public class SetShop extends SubCommand {
                 }
             } else {
                 String teamm = TeamColor.getChatColor(ss.getCm().getYml().getString("Team." + args[0] + ".Color")) + args[0];
-                if (ss.getCm().getArenaLoc("Team." + args[0] + ".Shop") != null) {
+                if (ss.getCm().getYml().get("Team." + args[0] + ".Shop") != null) {
                     removeArmorStand("SHOP SET", ss.getCm().getArenaLoc("Team." + args[0] + ".Shop"));
                 }
                 createArmorStand(teamm + " §6SHOP SET", p.getLocation());

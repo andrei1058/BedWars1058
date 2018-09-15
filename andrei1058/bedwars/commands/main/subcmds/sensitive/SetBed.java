@@ -82,7 +82,7 @@ public class SetBed extends SubCommand {
                 }
             } else {
                 String team = TeamColor.getChatColor(ss.getCm().getYml().getString("Team." + args[0] + ".Color")) + args[0];
-                if (ss.getCm().getArenaLoc("Team." + args[0] + ".Bed") != null) {
+                if (ss.getCm().getYml().get("Team." + args[0] + ".Bed") != null) {
                     removeArmorStand("BED SET", ss.getCm().getArenaLoc("Team." + args[0] + ".Bed"));
                 }
                 createArmorStand(team + " §6BED SET", p.getLocation().add(0.5, 0, 0.5));

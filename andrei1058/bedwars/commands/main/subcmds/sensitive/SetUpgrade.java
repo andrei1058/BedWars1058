@@ -74,7 +74,7 @@ public class SetUpgrade extends SubCommand {
                 }
             } else {
                 String teamm = TeamColor.getChatColor(ss.getCm().getYml().getString("Team." + args[0] + ".Color")) + args[0];
-                if (ss.getCm().getArenaLoc("Team." + args[0] + ".Upgrade") != null) {
+                if (ss.getCm().getYml().get("Team." + args[0] + ".Upgrade") != null) {
                     removeArmorStand("UPGRADE SET", ss.getCm().getArenaLoc("Team." + args[0] + ".Upgrade"));
                 }
                 createArmorStand(teamm+" §6UPGRADE SET", p.getLocation());
