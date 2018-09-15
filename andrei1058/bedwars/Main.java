@@ -339,7 +339,7 @@ public class Main extends JavaPlugin {
 
         /* Multi-Arena Lobby Command Items */
         config.saveLobbyCommandItem("stats", "bw stats", false, "SKULL_ITEM", 3, 0);
-        config.saveLobbyCommandItem("arena-selector", "bw gui", true, "STAINED_CLAY", 5, 4);
+        config.saveLobbyCommandItem("arena-selector", "bw gui", true, "CLOCK", 5, 4);
         config.saveLobbyCommandItem("leave", "bw leave", false, "BED", 0, 8);
 
         /* Pre Game Command Items */
@@ -354,13 +354,13 @@ public class Main extends JavaPlugin {
         yml.addDefault("arenaGui.settings.startSlot", 10);
         yml.addDefault("arenaGui.settings.endSlot", 16);
         yml.addDefault("arenaGui.settings.showPlaying", false);
-        yml.addDefault("arenaGui.waiting.itemStack", "STAINED_CLAY");
+        yml.addDefault("arenaGui.waiting.itemStack", "STAINED_GLASS_PANE");
         yml.addDefault("arenaGui.waiting.data", 5);
         yml.addDefault("arenaGui.waiting.enchanted", false);
-        yml.addDefault("arenaGui.starting.itemStack", "STAINED_CLAY");
+        yml.addDefault("arenaGui.starting.itemStack", "STAINED_GLASS_PANE");
         yml.addDefault("arenaGui.starting.data", 7);
         yml.addDefault("arenaGui.starting.enchanted", true);
-        yml.addDefault("arenaGui.playing.itemStack", "STAINED_CAY");
+        yml.addDefault("arenaGui.playing.itemStack", "STAINED_GLASS_PANE");
         yml.addDefault("arenaGui.playing.data", 4);
         yml.addDefault("arenaGui.playing.enchanted", false);
 
