@@ -1324,12 +1324,12 @@ public class Arena {
                 setNextEvent(NextEvent.EMERALD_GENERATOR_TIER_II);
             } else if (emeraldTier == 2) {
                 setNextEvent(NextEvent.EMERALD_GENERATOR_TIER_III);
-            } else if (emeraldTier == 3) {
+            } else {
                 setNextEvent(NextEvent.BEDS_DESTROY);
             }
-        } else if (emeraldTier >= 3 && diamondTier >= 3 && (playingTask != null && playingTask.getBedsDestroyCountdown() > 0)) {
+        } else if (emeraldTier >= 3 && diamondTier >= 3 && (playingTask != null && playingTask.getBedsDestroyCountdown() >= 0)) {
             setNextEvent(NextEvent.BEDS_DESTROY);
-        } else if (nextEvent == NextEvent.BEDS_DESTROY && (playingTask != null && playingTask.getDragonSpawnCountdown() > 0)) {
+        } else if (nextEvent == NextEvent.BEDS_DESTROY && (playingTask != null && playingTask.getDragonSpawnCountdown() >= 0)) {
             setNextEvent(NextEvent.ENDER_DRAGON);
         } else if (nextEvent == NextEvent.ENDER_DRAGON && (playingTask != null && playingTask.getBedsDestroyCountdown() == 0) && (playingTask != null && playingTask.getDragonSpawnCountdown() == 0)) {
             setNextEvent(NextEvent.GAME_END);
