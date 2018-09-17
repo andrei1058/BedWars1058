@@ -289,4 +289,6 @@ public interface NMS {
      * @since API 10
      */
     ItemStack colourItem(ItemStack itemStack, BedWarsTeam bedWarsTeam);
+
+    void teamCollideRule(Team team);
 }

@@ -304,8 +304,7 @@ public class SBoard {
         Team collide;
         if (sb.getTeam("spectators") == null){
             collide = sb.registerNewTeam("spectators");
-            collide.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
-            collide.setCanSeeFriendlyInvisibles(true);
+            nms.teamCollideRule(collide);
             collide.setPrefix("§7[SPECT] §r");
         } else {
             collide = sb.getTeam("spectators");

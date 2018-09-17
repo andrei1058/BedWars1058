@@ -28,6 +28,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.scoreboard.Team;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -588,5 +589,10 @@ public class v1_8_R3 implements NMS {
     public ItemStack colourItem(ItemStack itemStack, BedWarsTeam bedWarsTeam) {
         if (itemStack == null) return null;
         return new ItemStack(itemStack.getType(), itemStack.getAmount(), Misc.getOldItemColor(bedWarsTeam.getColor()));
+    }
+
+    @Override
+    public void teamCollideRule(Team team) {
+
     }
 }

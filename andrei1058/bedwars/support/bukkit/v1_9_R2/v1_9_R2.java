@@ -28,6 +28,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.scoreboard.Team;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -585,5 +586,11 @@ public class v1_9_R2 implements NMS {
     public org.bukkit.inventory.ItemStack colourItem(org.bukkit.inventory.ItemStack itemStack, BedWarsTeam bedWarsTeam) {
         if (itemStack == null) return null;
         return new org.bukkit.inventory.ItemStack(itemStack.getType(), itemStack.getAmount(), Misc.getOldItemColor(bedWarsTeam.getColor()));
+    }
+
+    @Override
+    public void teamCollideRule(Team team) {
+        team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
+        team.setCanSeeFriendlyInvisibles(true);
     }
 }
