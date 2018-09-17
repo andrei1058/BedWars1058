@@ -49,7 +49,8 @@ public class ForceStart extends SubCommand {
         }
         if (a.getStatus() == GameState.playing) return true;
         if (a.getStatus() == GameState.restarting) return true;
-        if (a.getStartingTask() != null && a.getStartingTask().getCountdown() < 5) return true;
+        if (a.getStartingTask() == null) return true;
+        if (a.getStartingTask().getCountdown() < 5) return true;
         a.getStartingTask().setCountdown(5);
         p.sendMessage(getMsg(p, Messages.COMMAND_FORCESTART_SUCCESS));
         return true;
