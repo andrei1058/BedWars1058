@@ -88,6 +88,7 @@ public class ConfigPath {
     public static final String ARENA_WAITING_POS1 = "waiting.Pos1";
     public static final String ARENA_WAITING_POS2 = "waiting.Pos2";
     public static final String ARENA_NORMAL_DEATH_DROPS = "vanilla-death-drops";
+    public static final String ARENA_USE_BED_HOLO = "use-bed-hologram";
 
 
     public static final String SOUNDS_BED_DESTROY = "bed-destroy";

@@ -53,6 +53,7 @@ public class ConfigManager {
             yml.addDefault(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y, 180);
             yml.addDefault(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS, false);
             yml.addDefault(ConfigPath.ARENA_NORMAL_DEATH_DROPS, false);
+            yml.addDefault(ConfigPath.ARENA_USE_BED_HOLO, true);
             yml.options().copyDefaults(true);
             save();
 
