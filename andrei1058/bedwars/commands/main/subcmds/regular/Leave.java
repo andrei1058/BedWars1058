@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.commands.main.subcmds.regular;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
@@ -35,13 +36,13 @@ public class Leave extends SubCommand {
     public boolean execute(String[] args, CommandSender s) {
         if (s instanceof ConsoleCommandSender) return false;
         Player p = (Player) s;
+        if (Main.getServerType() == ServerType.BUNGEE){
+            Misc.forceKick(p);
+            return true;
+        }
         Arena a = Arena.getArenaByPlayer(p);
         if (a == null) {
-            if (getServerType() == ServerType.MULTIARENA && spigot.getBoolean("settings.bungeecord")){
-                Misc.moveToLobbyOrKick(p);
-            } else {
-                p.sendMessage(getMsg(p, Messages.COMMAND_LEAVE_DENIED_NOT_IN_ARENA));
-            }
+            Misc.forceKick(p);
         } else {
             if (a.isPlayer(p)) {
                 a.removePlayer(p, false);

@@ -315,11 +315,6 @@ public class Main extends JavaPlugin {
         yml.addDefault("language", "en");
         yml.addDefault("storeLink", "https://www.spigotmc.org/resources/authors/39904/");
         yml.addDefault("lobbyServer", "hub");
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_REGULAR, 40);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_SHORTENED, 10);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BEDS_DESTROY_COUNTDOWN, 360);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DRAGON_SPAWN_COUNTDOWN, 600);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_GAME_END_COUNTDOWN, 120);
         yml.addDefault("globalChat", false);
         yml.addDefault("formatChat", true);
         yml.addDefault("disableCrafting", true);
@@ -328,56 +323,44 @@ public class Main extends JavaPlugin {
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ALLOW_PARTIES, true);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART, 30);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD, "restart");
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_REGULAR, 40);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_SHORTENED, 10);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BEDS_DESTROY_COUNTDOWN, 360);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DRAGON_SPAWN_COUNTDOWN, 600);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_GAME_END_COUNTDOWN, 120);
 
         yml.addDefault("database.enable", false);
         yml.addDefault("database.host", "localhost");
         yml.addDefault("database.port", 3306);
         yml.addDefault("database.database", "bedwars1058");
         yml.addDefault("database.user", "root");
-        yml.addDefault("database.pass", "p4ss");
+        yml.addDefault("database.pass", "cheez");
         yml.addDefault("database.ssl", false);
 
-        yml.addDefault("items.arenaGui.enable", true);
-        yml.addDefault("items.arenaGui.itemStack", "STAINED_CLAY");
-        yml.addDefault("items.arenaGui.data", 5);
-        yml.addDefault("items.arenaGui.enchanted", true);
-        yml.addDefault("items.arenaGui.slot", 4);
-        yml.addDefault("items.leave.enable", true);
-        yml.addDefault("items.leave.itemStack", "BED");
-        yml.addDefault("items.leave.data", 0);
-        yml.addDefault("items.leave.enchanted", false);
-        yml.addDefault("items.leave.slot", 8);
-        yml.addDefault("items.stats.enable", true);
-        yml.addDefault("items.stats.itemStack", "PAPER");
-        yml.addDefault("items.stats.data", 0);
-        yml.addDefault("items.stats.enchanted", false);
-        yml.addDefault("items.stats.slot", 0);
+        /* Multi-Arena Lobby Command Items */
+        config.saveLobbyCommandItem("stats", "bw stats", false, "SKULL_ITEM", 3, 0);
+        config.saveLobbyCommandItem("arena-selector", "bw gui", true, "CHEST", 5, 4);
+        config.saveLobbyCommandItem("leave", "bw leave", false, "BED", 0, 8);
 
-        /* Spectator Items */
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_ENABLED, true);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_MATERIAL, "COMPASS");
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_DATA, 0);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_ENCHANTED, false);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_SLOT, 0);
+        /* Pre Game Command Items */
+        config.savePreGameCommandItem("stats", "bw stats", false, "SKULL_ITEM", 3, 0);
+        config.savePreGameCommandItem("leave", "bw leave", false, "BED", 0, 8);
 
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_ENABLED, true);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_MATERIAL, "BED");
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_DATA, 0);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_ENCHANTED, false);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_SLOT, 8);
-
+        /* Spectator Command Items */
+        config.saveSpectatorCommandItem("teleporter", "bw teleporter", false, "SKULL_ITEM", 3, 0);
+        config.saveSpectatorCommandItem("leave", "bw leave", false, "BED", 0, 8);
 
         yml.addDefault("arenaGui.settings.size", 27);
         yml.addDefault("arenaGui.settings.startSlot", 10);
         yml.addDefault("arenaGui.settings.endSlot", 16);
         yml.addDefault("arenaGui.settings.showPlaying", false);
-        yml.addDefault("arenaGui.waiting.itemStack", "STAINED_CLAY");
+        yml.addDefault("arenaGui.waiting.itemStack", "STAINED_GLASS_PANE");
         yml.addDefault("arenaGui.waiting.data", 5);
         yml.addDefault("arenaGui.waiting.enchanted", false);
-        yml.addDefault("arenaGui.starting.itemStack", "STAINED_CLAY");
+        yml.addDefault("arenaGui.starting.itemStack", "STAINED_GLASS_PANE");
         yml.addDefault("arenaGui.starting.data", 7);
         yml.addDefault("arenaGui.starting.enchanted", true);
-        yml.addDefault("arenaGui.playing.itemStack", "STAINED_CAY");
+        yml.addDefault("arenaGui.playing.itemStack", "STAINED_GLASS_PANE");
         yml.addDefault("arenaGui.playing.data", 4);
         yml.addDefault("arenaGui.playing.enchanted", false);
 
@@ -385,7 +368,7 @@ public class Main extends JavaPlugin {
         yml.addDefault("statsGUI.invSize", 27);
         if (config.isFirstTime()) {
             Misc.addDefaultStatsItem(yml, 10, Material.DIAMOND, 0, "wins");
-            Misc.addDefaultStatsItem(yml, 11, Material.REDSTONE, 0, "looses");
+            Misc.addDefaultStatsItem(yml, 11, Material.REDSTONE, 0, "losses");
             Misc.addDefaultStatsItem(yml, 12, Material.IRON_SWORD, 0, "kills");
             Misc.addDefaultStatsItem(yml, 13, Material.SKULL_ITEM, 0, "deaths");
             Misc.addDefaultStatsItem(yml, 14, Material.DIAMOND_SWORD, 0, "finalKills");
@@ -402,7 +385,7 @@ public class Main extends JavaPlugin {
         config.save();
 
         //remove old config
-        if (config.getYml().get("npcLoc") != null){
+        if (config.getYml().get("npcLoc") != null) {
             config.set(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE, config.getYml().getString("npcLoc"));
         }
         config.set("startItems", null);

@@ -9,12 +9,10 @@ import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
 import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
 
@@ -66,45 +64,42 @@ public class JoinLeaveTeleport implements Listener {
         if (plugin.getServerType() != ServerType.BUNGEE) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 for (Player on : Bukkit.getOnlinePlayers()) {
-                    if (Arena.getArenaByPlayer(on) == null) {
-                        on.showPlayer(p);
-                        p.showPlayer(on);
-                    } else {
+                    if (Arena.getArenaByPlayer(on) != null) {
                         p.hidePlayer(on);
                         on.hidePlayer(p);
                     }
                 }
 
-            }, 5L);
+            }, 14L);
         }
         if (debug) {
             p.sendMessage("");
             p.sendMessage("");
             p.sendMessage("§7§m----------------------------------------\n" +
                     "§eThis server is running BedWars1058 §cv" + plugin.getDescription().getVersion()
-                    + "\n§eThe latest published version is §a" + Misc.getNewVersion()+
+                    + "\n§eThe latest published version is §a" + Misc.getNewVersion() +
                     "\n§7§m----------------------------------------");
             p.sendMessage("");
             p.sendMessage("");
         }
         if (p.isOp()) {
             if (Misc.isUpdateAvailable()) {
-                p.sendMessage("§8[§f"+plugin.getName()+"§8]§7§m---------------------------");
+                p.sendMessage("§8[§f" + plugin.getName() + "§8]§7§m---------------------------");
                 p.sendMessage("");
-                TextComponent tc = new TextComponent("§eUpdate available: §6" + Misc.getNewVersion()+" §7§o(click)");
+                TextComponent tc = new TextComponent("§eUpdate available: §6" + Misc.getNewVersion() + " §7§o(click)");
                 tc.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, link));
                 p.spigot().sendMessage(tc);
                 p.sendMessage("");
-                p.sendMessage("§8[§f"+plugin.getName()+"§8]§7§m---------------------------");
+                p.sendMessage("§8[§f" + plugin.getName() + "§8]§7§m---------------------------");
             }
         }
         if (p.getName().equalsIgnoreCase("andrei1058") || p.getName().equalsIgnoreCase("andreea1058") || p.getName().equalsIgnoreCase("Dani3l_FTW")) {
-            p.sendMessage("§8[§f"+plugin.getName()+"§8]§7§m---------------------------");
+            p.sendMessage("§8[§f" + plugin.getName() + "§8]§7§m---------------------------");
             p.sendMessage("");
             p.sendMessage("§7User ID: §f%%__USER__%%");
             p.sendMessage("§7Download ID: §f%%__NONCE__%%");
             p.sendMessage("");
-            p.sendMessage("§8[§f"+plugin.getName()+"§8]§7§m---------------------------");
+            p.sendMessage("§8[§f" + plugin.getName() + "§8]§7§m---------------------------");
         }
         if (getServerType() == ServerType.SHARED) return;
         e.setJoinMessage(null);
@@ -115,7 +110,7 @@ public class JoinLeaveTeleport implements Listener {
         } else {
             p.teleport(config.getConfigLoc("lobbyLoc"));
             Misc.giveLobbySb(p);
-            Arena.sendMultiarenaLobbyItems(p);
+            Arena.sendLobbyCommandItems(p);
         }
         p.setHealthScale(20);
         p.setFoodLevel(20);
@@ -128,9 +123,9 @@ public class JoinLeaveTeleport implements Listener {
         /* Remove from arena */
         Arena a = Arena.getArenaByPlayer(p);
         if (a != null) {
-            if (a.isPlayer(p)){
+            if (a.isPlayer(p)) {
                 a.removePlayer(p, true);
-            } else if (a.isSpectator(p)){
+            } else if (a.isSpectator(p)) {
                 a.removeSpectator(p, true);
             }
         }
@@ -139,13 +134,13 @@ public class JoinLeaveTeleport implements Listener {
             e.setQuitMessage(null);
         }
         /* Manage internal parties */
-        if (getParty().isInternal()){
-            if (getParty().hasParty(p)){
+        if (getParty().isInternal()) {
+            if (getParty().hasParty(p)) {
                 getParty().removeFromParty(p);
             }
         }
         /* Check if was doing a setup and remove the session */
-        if (SetupSession.isInSetupSession(p)){
+        if (SetupSession.isInSetupSession(p)) {
             SetupSession.getSession(p).cancel();
         }
     }
@@ -154,9 +149,19 @@ public class JoinLeaveTeleport implements Listener {
     public void onTeleport(PlayerTeleportEvent e) {
         Arena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a != null) {
-            if (a.isSpectator(e.getPlayer())) {
-                if (e.getFrom().getWorld() != e.getTo().getWorld()) {
-                    e.setCancelled(true);
+            Arena a1 = Arena.getArenaByName(e.getTo().getWorld().getName());
+            Arena a2 = Arena.getArenaByPlayer(e.getPlayer());
+            if (a1 != null) {
+                if (a2 != null) {
+                    if (a1 != a2) {
+                        if (a2.isSpectator(e.getPlayer())) a2.removeSpectator(e.getPlayer(), false);
+                        if (a2.isPlayer(e.getPlayer())) a2.removePlayer(e.getPlayer(), false);
+                        e.getPlayer().sendMessage("PlayerTeleportEvent something went wrong. You were removed from the arena because you were teleported outside the arena somehow.");
+                    }
+                }
+                if (!(a1.isSpectator(e.getPlayer()) || a1.isPlayer(e.getPlayer()))) {
+                    a1.addSpectator(e.getPlayer(), false, e.getTo());
+                    if (!e.getPlayer().isFlying()) e.getPlayer().setFlying(true);
                 }
             }
         }

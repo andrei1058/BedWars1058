@@ -42,17 +42,31 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD = "bungee-settings.restart-cmd";
     public static final String GENERAL_CONFIGURATION_ALLOW_PARTIES = "allow-parties";
 
-    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_MATERIAL = "spectator-items.teleporter.material";
-    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_DATA = "spectator-items.teleporter.data";
-    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_ENABLED = "spectator-items.teleporter.enabled";
-    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_SLOT = "spectator-items.teleporter.slot";
-    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_TELEPORTER_ENCHANTED = "spectator-items.teleporter.enchanted";
+    public static final String GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH = "lobby-items";
+    /* Replace %path% with name */
+    public static final String GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL = GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH+".%path%.material";
+    public static final String GENERAL_CONFIGURATION_LOBBY_ITEMS_DATA = GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH+".%path%.data";
+    public static final String GENERAL_CONFIGURATION_LOBBY_ITEMS_SLOT = GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH+".%path%.slot";
+    public static final String GENERAL_CONFIGURATION_LOBBY_ITEMS_ENCHANTED = GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH+".%path%.enchanted";
+    public static final String GENERAL_CONFIGURATION_LOBBY_ITEMS_COMMAND = GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH+".%path%.command";
 
-    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_MATERIAL = "spectator-items.leave.material";
-    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_DATA = "spectator-items.leave.data";
-    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_ENABLED = "spectator-items.leave.enabled";
-    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_SLOT = "spectator-items.leave.slot";
-    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEM_LEAVE_ENCHANTED = "spectator-items.leave.enchanted";
+    //todo
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH = "spectator-items";
+    /* Replace %path% with name */
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEMS_MATERIAL = GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH+".%path%.material";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEMS_DATA = GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH+".%path%.data";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEMS_SLOT = GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH+".%path%.slot";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEMS_ENCHANTED = GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH+".%path%.enchanted";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEMS_COMMAND = GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH+".%path%.command";
+
+    //todo
+    public static final String GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH = "pre-game-items";
+    /* Replace %path% with name */
+    public static final String GENERAL_CONFIGURATION_PRE_GAME_ITEMS_MATERIAL = GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH+".%path%.material";
+    public static final String GENERAL_CONFIGURATION_PRE_GAME_ITEMS_DATA = GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH+".%path%.data";
+    public static final String GENERAL_CONFIGURATION_PRE_GAME_ITEMS_SLOT = GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH+".%path%.slot";
+    public static final String GENERAL_CONFIGURATION_PRE_GAME_ITEMS_ENCHANTED = GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH+".%path%.enchanted";
+    public static final String GENERAL_CONFIGURATION_PRE_GAME_ITEMS_COMMAND = GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH+".%path%.command";
 
     public static final String GENERAL_CONFIGURATION_START_COUNTDOWN_REGULAR = "countdowns.game-start-regular";
     public static final String GENERAL_CONFIGURATION_START_COUNTDOWN_SHORTENED = "countdowns.game-start-shortened";
@@ -61,16 +75,20 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_GAME_END_COUNTDOWN = "countdowns.next-event-game-end";
 
     public static final String GENERAL_CONFIGURATION_NPC_LOC_STORAGE = "join-npc-locations";
-    public static final String GENERAL_CONFIGURATION_DEFAULT_ITEMS = "start-items-per-arena";
+    public static final String GENERAL_CONFIGURATION_DEFAULT_ITEMS = "start-items-per-group";
 
     public static final String CENERAL_CONFIGURATION_ALLOWED_COMMANDS = "allowed-commands";
 
     public static final String ARENA_CONFIGURATION_MAX_BUILD_Y = "max-build-y";
+    public static final String ARENA_SPAWN_PROTECTION = "spawn-protection";
+    public static final String ARENA_SHOP_PROTECTION = "shop-protection";
+    public static final String ARENA_UPGRADES_PROTECTION = "upgrades-protection";
     public static final String ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS = "disable-generator-for-empty-teams";
     public static final String ARENA_ISLAND_RADIUS = "island-radius";
     public static final String ARENA_WAITING_POS1 = "waiting.Pos1";
     public static final String ARENA_WAITING_POS2 = "waiting.Pos2";
     public static final String ARENA_NORMAL_DEATH_DROPS = "vanilla-death-drops";
+    public static final String ARENA_USE_BED_HOLO = "use-bed-hologram";
 
 
     public static final String SOUNDS_BED_DESTROY = "bed-destroy";

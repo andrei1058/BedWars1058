@@ -44,7 +44,7 @@ public class Internal implements Lang {
 
         x.set(p.getName(), iso);
         if (config.getLobbyWorldName().equalsIgnoreCase(p.getWorld().getName())){
-            Arena.sendMultiarenaLobbyItems(p);
+            Arena.sendLobbyCommandItems(p);
             for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
                 if (sb.getP() == p) {
                     sb.remove();

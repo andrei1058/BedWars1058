@@ -57,7 +57,7 @@ public class DamageDeathMove implements Listener {
                 }
             }
         }
-        if (Main.getServerType() != ServerType.BUNGEE){
+        if (Main.getServerType() != ServerType.BUNGEE) {
             if (e.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 e.setCancelled(true);
                 return;
@@ -179,7 +179,7 @@ public class DamageDeathMove implements Listener {
                 }
             }
         }
-        if (Main.getServerType() != ServerType.BUNGEE){
+        if (Main.getServerType() != ServerType.BUNGEE) {
             if (e.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 e.setCancelled(true);
                 return;
@@ -322,11 +322,12 @@ public class DamageDeathMove implements Listener {
                 Bukkit.getPluginManager().callEvent(new PlayerKillEvent(a, victim, killer, message, cause));
             }
             victim.spigot().respawn();
+            a.addPlayerDeath(victim);
         }
 
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onRespawn(PlayerRespawnEvent e) {
         Arena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a == null) {
@@ -338,7 +339,7 @@ public class DamageDeathMove implements Listener {
             e.setRespawnLocation(a.getCm().getArenaLoc("waiting.Loc"));
             BedWarsTeam t = a.getTeam(e.getPlayer());
             if (t.isBedDestroyed()) {
-                a.addSpectator(e.getPlayer(), true);
+                a.addSpectator(e.getPlayer(), true, null);
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
                     t.getMembers().remove(e.getPlayer());
                     e.getPlayer().sendMessage(getMsg(e.getPlayer(), Messages.PLAYER_DIE_ELIMINATED_CHAT));
@@ -357,6 +358,17 @@ public class DamageDeathMove implements Listener {
                 e.getPlayer().setAllowFlight(true);
                 e.getPlayer().setFlying(true);
                 a.getRespawn().put(e.getPlayer(), 5);
+                for (SBoard sb : SBoard.getScoreboards()) {
+                    if (sb.getArena() == a) {
+                        sb.giveTeamColorTag();
+                    }
+                }
+            }
+            for (SBoard sb : SBoard.getScoreboards()) {
+                if (sb.getArena() == a) {
+                    sb.giveTeamColorTag();
+                    sb.updateSpectators(e.getPlayer(), false);
+                }
             }
         }
     }
@@ -437,7 +449,7 @@ public class DamageDeathMove implements Listener {
                     }
                     if (e.getFrom() != e.getTo()) {
                         Arena.afkCheck.remove(e.getPlayer());
-                        if (Main.api.isPlayerAFK(e.getPlayer())){
+                        if (Main.api.isPlayerAFK(e.getPlayer())) {
                             Main.api.setPlayerAFK(e.getPlayer(), false);
                         }
                     }

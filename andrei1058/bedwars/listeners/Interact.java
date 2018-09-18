@@ -10,6 +10,7 @@ import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Messages;
 import com.andrei1058.bedwars.shop.ShopCategory;
 import com.andrei1058.bedwars.upgrades.UpgradeGroup;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -29,6 +30,23 @@ import static com.andrei1058.bedwars.configuration.Language.getMsg;
 import static com.andrei1058.bedwars.upgrades.UpgradeGroup.getUpgradeGroup;
 
 public class Interact implements Listener {
+
+    @EventHandler
+    /* Handle custom items with commands on them */
+    public void onItemCommand(PlayerInteractEvent e){
+        Player p = e.getPlayer();
+        if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR){
+            ItemStack i = Main.nms.getItemInHand(p);
+            if (!nms.isCustomBedWarsItem(i)) return;
+            String[] customData = nms.getCustomData(i).split("_");
+            if (customData.length >= 2){
+                if (customData[0].equals("RUNCOMMAND")){
+                    e.setCancelled(true);
+                    Bukkit.dispatchCommand(p, customData[1]);
+                }
+            }
+        }
+    }
 
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
@@ -146,15 +164,6 @@ public class Interact implements Listener {
                         }
                     }
                 }
-            }
-            if (!inHand.hasItemMeta()) return;
-            if (!inHand.getItemMeta().hasDisplayName()) return;
-            if (inHand.getItemMeta().getDisplayName().equalsIgnoreCase(getMsg(p, Messages.ARENA_GUI_ITEM_NAME))) {
-                ArenaGUI.openGui(p);
-            } else if (inHand.getItemMeta().getDisplayName().equalsIgnoreCase(getMsg(p, Messages.ARENA_LEAVE_ITEM_NAME))) {
-                p.performCommand("bw leave");
-            } else if (inHand.getItemMeta().getDisplayName().equalsIgnoreCase(getMsg(p, Messages.PLAYER_STATS_ITEM_NAME))) {
-                Misc.openStatsGUI(p);
             }
         }
     }

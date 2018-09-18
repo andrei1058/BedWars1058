@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
+import com.andrei1058.bedwars.configuration.ConfigPath;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -12,6 +13,8 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import static com.andrei1058.bedwars.Main.mainCmd;
+import static com.andrei1058.bedwars.commands.Misc.createArmorStand;
+import static com.andrei1058.bedwars.commands.Misc.removeArmorStand;
 
 public class SetShop extends SubCommand {
     /**
@@ -33,32 +36,33 @@ public class SetShop extends SubCommand {
         if (s instanceof ConsoleCommandSender) return false;
         Player p = (Player) s;
         SetupSession ss = SetupSession.getSession(p);
-        if (ss == null){
+        if (ss == null) {
             s.sendMessage("§c ▪ §7You're not in a setup session!");
             return true;
         }
         if (args.length == 0) {
-            String foundTeam = ""; double distance = 100;
+            String foundTeam = "";
+            double distance = 100;
             for (String team : ss.getCm().getYml().getConfigurationSection("Team").getKeys(false)) {
-                if (ss.getCm().getYml().get("Team."+team+".Spawn") == null) continue;
-                double dis = ss.getCm().getArenaLoc("Team."+team+".Spawn").distance(p.getLocation());
-                if (dis <= ss.getCm().getInt("islandRadius")){
-                    if (dis < distance){
+                if (ss.getCm().getYml().get("Team." + team + ".Spawn") == null) continue;
+                double dis = ss.getCm().getArenaLoc("Team." + team + ".Spawn").distance(p.getLocation());
+                if (dis <= ss.getCm().getInt(ConfigPath.ARENA_ISLAND_RADIUS)) {
+                    if (dis < distance) {
                         distance = dis;
                         foundTeam = team;
                     }
                 }
             }
-            if (foundTeam.isEmpty()){
+            if (foundTeam.isEmpty()) {
                 p.sendMessage("");
                 p.sendMessage("§6§lSHOP SETUP:");
                 p.sendMessage("§7There isn't any team nearby :(");
                 p.sendMessage("§dMake sure you set the team's spawn first!");
-                p.spigot().sendMessage(Misc.msgHoverClick("§6 ▪ §7/"+getParent().getName()+" setSpawn <teamName> ",
-                        "§dSet a team spawn.", "/"+getParent().getName()+" "+getSubCommandName()+" ", ClickEvent.Action.SUGGEST_COMMAND));
+                p.spigot().sendMessage(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " setSpawn <teamName> ",
+                        "§dSet a team spawn.", "/" + getParent().getName() + " " + getSubCommandName() + " ", ClickEvent.Action.SUGGEST_COMMAND));
                 p.sendMessage("§9Or if you set the spawn and the team wasn't found automatically");
-                p.spigot().sendMessage(Misc.msgHoverClick("§9Use §e/"+getParent().getName()+" "+getSubCommandName()+" <teamName>", "§dSet a team shop.", "/"+getParent().getName()+" "+getSubCommandName(), ClickEvent.Action.SUGGEST_COMMAND));
-            } else Bukkit.dispatchCommand(s, getParent().getName()+" "+getSubCommandName()+" "+foundTeam);
+                p.spigot().sendMessage(Misc.msgHoverClick("§9Use §e/" + getParent().getName() + " " + getSubCommandName() + " <teamName>", "§dSet a team shop.", "/" + getParent().getName() + " " + getSubCommandName(), ClickEvent.Action.SUGGEST_COMMAND));
+            } else Bukkit.dispatchCommand(s, getParent().getName() + " " + getSubCommandName() + " " + foundTeam);
         } else {
             if (ss.getCm().getYml().get("Team." + args[0]) == null) {
                 p.sendMessage("§c▪ §7This team doesn't exist!");
@@ -70,11 +74,14 @@ public class SetShop extends SubCommand {
                     }
                 }
             } else {
-                ss.getCm().saveArenaLoc("Team." + args[0] + ".Shop", p.getLocation());
                 String teamm = TeamColor.getChatColor(ss.getCm().getYml().getString("Team." + args[0] + ".Color")) + args[0];
-                com.andrei1058.bedwars.commands.Misc.createArmorStand(teamm+" §6SHOP SET", p.getLocation());
+                if (ss.getCm().getYml().get("Team." + args[0] + ".Shop") != null) {
+                    removeArmorStand("SHOP SET", ss.getCm().getArenaLoc("Team." + args[0] + ".Shop"));
+                }
+                createArmorStand(teamm + " §6SHOP SET", p.getLocation());
+                ss.getCm().saveArenaLoc("Team." + args[0] + ".Shop", p.getLocation());
                 p.sendMessage("§6 ▪ §7Shop set for: " + teamm);
-                if (ss.getSetupType() == SetupSession.SetupType.ASSISTED){
+                if (ss.getSetupType() == SetupSession.SetupType.ASSISTED) {
                     Bukkit.dispatchCommand(p, getParent().getName());
                 }
             }

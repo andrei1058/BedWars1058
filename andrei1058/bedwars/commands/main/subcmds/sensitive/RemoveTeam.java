@@ -11,6 +11,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import static com.andrei1058.bedwars.Main.mainCmd;
+import static com.andrei1058.bedwars.commands.Misc.removeArmorStand;
 
 public class RemoveTeam extends SubCommand {
     /**
@@ -49,6 +50,15 @@ public class RemoveTeam extends SubCommand {
             if (ss.getCm().getYml().get("Team." + args[0] + ".Color") == null) {
                 p.sendMessage("§c▪ §7This team doesn't exist!");
             } else {
+                if (ss.getCm().getArenaLoc("Team." + args[0] + ".Iron") != null) {
+                    removeArmorStand("Generator", ss.getCm().getArenaLoc("Team." + args[0] + ".Iron"));
+                }
+                if (ss.getCm().getArenaLoc("Team." + args[0] + ".Gold") != null) {
+                    removeArmorStand("Generator", ss.getCm().getArenaLoc("Team." + args[0] + ".Gold"));
+                }
+                if (ss.getCm().getArenaLoc("Team." + args[0] + ".Bed") != null) {
+                    removeArmorStand("Generator", ss.getCm().getArenaLoc("Team." + args[0] + ".Bed"));
+                }
                 ss.getCm().set("Team." + args[0], null);
                 p.sendMessage("§6 ▪ §7Team removed!");
             }

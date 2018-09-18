@@ -65,11 +65,9 @@ public class Language {
                 yml.addDefault(Messages.ARENA_JOIN_DENIED_GROUP_OR_ARENA_NOT_FOUND, "{prefix}&cThere isn't any arena or arena group called: {name}");
                 yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_EMPTY_FOUND, "{prefix}&cThere isn't any arena available right now ;(");
                 yml.addDefault(Messages.COMMAND_LEAVE_DENIED_NOT_IN_ARENA, "{prefix}&cYou're not in arena!");
-                yml.addDefault(Messages.ARENA_GUI_INV_NAME, "&aAvailable arenas");
+                yml.addDefault(Messages.ARENA_GUI_INV_NAME, "&8Click to Join");
                 yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_NAME, "&7➤ {name}");
                 yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_LORE, Arrays.asList("", "&7Status: {status}", "&7Players: &f{on}&7/&f{max}", "&7Type: &a{group}"));
-                yml.addDefault(Messages.ARENA_GUI_ITEM_NAME, "&aArenas");
-                yml.addDefault(Messages.ARENA_GUI_ITEM_LORE, Arrays.asList("&7Choose an arena!"));
                 yml.addDefault(Messages.COMMAND_LANG_LIST_HEADER, "{prefix} &2Available languages:");
                 yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&a▪  &7{iso} - &f{name}");
                 yml.addDefault(Messages.COMMAND_LANG_USAGE, "{prefix}&7Usage: /lang &f&o<iso>");
@@ -98,8 +96,6 @@ public class Language {
                         "&e&l             to access powerful upgrades.", "",
                         "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
                 yml.addDefault(Messages.MEANING_SHOUT, "shout");
-                yml.addDefault(Messages.ARENA_LEAVE_ITEM_NAME, "&c&lReturn to lobby");
-                yml.addDefault(Messages.ARENA_LEAVE_ITEM_LORE, Arrays.asList("&7Right-click to leave to the lobby!"));
                 yml.addDefault(Messages.INTERACT_CANNOT_PLACE_BLOCK, "{prefix}&cYou can't place blocks here!");
                 yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&lBED WARS", "", "&fMap: &a{map}", "&fPlayer: &a{on}/{max}", "", "&fStarting in &a{time}s", "", "§fServer: &a{server}", "", "&e  andrei1058.com"));
                 yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&lBED WARS", "", "&fMap: &a{map}", "&fPlayer: &a{on}/{max}", "", "&fWaiting...", "", "§fServer: &a{server}", "", "&e  andrei1058.com"));
@@ -271,8 +267,6 @@ public class Language {
                 yml.addDefault(Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL, "{PlayerColor}{PlayerName} &7died. &b&lFINAL KILL!");
                 yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_REGULAR, "{PlayerColor}{PlayerName} &7was hit off by a bomb.");
                 yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_FINAL_KILL, "{PlayerColor}{PlayerName} &7was hit off by a bomb. &b&lFINAL KILL!");
-                yml.addDefault(Messages.PLAYER_STATS_ITEM_NAME, "&6Stats");
-                yml.addDefault(Messages.PLAYER_STATS_ITEM_LORE, Arrays.asList("&7Right-click to see your stats!"));
                 yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "{player} Stats");
 
                 /** save default items messages for stats gui */
@@ -290,7 +284,7 @@ public class Language {
 
                 yml.addDefault(Messages.MEANING_NEVER, "Never");
                 yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&7{date}", "&fName: &a{player}", "", "&fWins: &a{wins}", "&fLosses: &a{losses}", "&fKills: &a{kills}", "&fDeaths: &a{deaths}"
-                , "&fFinal Kills: &a{fKills}", "&fBeds Destroyed: &a{beds}", "", "&fOnline: &a{on}", "&eandrei1058.com"));
+                        , "&fFinal Kills: &a{fKills}", "&fBeds Destroyed: &a{beds}", "", "&fOnline: &a{on}", "&eandrei1058.com"));
 
                 /** party commands */
                 yml.addDefault(Messages.COMMAND_PARTY_HELP, Arrays.asList("&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
@@ -334,8 +328,6 @@ public class Language {
                 yml.addDefault(Messages.COMMAND_FORCESTART_NO_PERM, "{prefix}&7You can't forcestart the arena.\n§7Please consider donating for VIP features.");
                 yml.addDefault(Messages.ARENA_JOIN_SPECTATOR_MSG, "{prefix}§6You are now spectating §9{arena}§6.\n{prefix}§eYou can leave the arena at any time doing §c/leave§e.");
                 yml.addDefault(Messages.INTERACT_CHEST_CANT_OPEN_TEAM_ELIMINATED, "&cYou can't open this chest because this team was eliminated!");
-                yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_ITEM_NAME, "&A&LTeleporter");
-                yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_ITEM_LORE, Arrays.asList("&7Right-click to spectate players!"));
                 yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_NAME, "&8Teleporter");
                 yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME, "{prefix}{player}");
                 yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_LORE, Arrays.asList("&7Health: &f{health}%", "&7Food: &f{food}", "", "&7Left-click to spectate"));
@@ -348,8 +340,41 @@ public class Language {
                 yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "{prefix}&cYou've already bought that!");
                 yml.addDefault(Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE, "{prefix}&7{player} &eis offline!");
                 yml.addDefault(Messages.ARENA_JOIN_SPECTATOR_DENIED_MSG, "&cSpectators are not allowed in this arena!");
+
+                /* Lobby Command Items */
+                if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH+".stats") != null) {
+                    yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "stats"), "&eStats");
+                    yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "stats"), Arrays.asList("&fRight-click to see your stats!"));
+                }
+                if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH+".arena-selector") != null) {
+                    yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "arena-selector"), "&eArena Selector");
+                    yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "arena-selector"), Arrays.asList("&fRight-click to choose an arena!"));
+                }
+                if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH+".leave") != null) {
+                    yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "leave"), "&eBack to Hub");
+                    yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "leave"), Arrays.asList("&fRight-click to leave BedWars!"));
+                }
+                /* Pre Game Command Items */
+                if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH+".stats") != null) {
+                    yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", "stats"), "&eStats");
+                    yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", "stats"), Arrays.asList("&fRight-click to see your stats!"));
+                }
+                if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH+".leave") != null) {
+                    yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", "leave"), "&eBack to Lobby");
+                    yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", "leave"), Arrays.asList("&fRight-click to leave the arena!"));
+                }
+                /* Spectator Command Items */
+                if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH+".teleporter") != null) {
+                    yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", "teleporter"), "&eTeleporter");
+                    yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", "teleporter"), Arrays.asList("&fRight-click to spectate a player!"));
+                }
+                if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH+".leave") != null) {
+                    yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", "leave"), "&eBack to Lobby");
+                    yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", "leave"), Arrays.asList("&fRight-click to leave the arena!"));
+                }
                 break;
         }
+
         lbj.save();
         lbj.langName = lbj.m("name");
         lbj.prefixColor = ChatColor.translateAlternateColorCodes('&', yml.getString(Messages.PREFIX));
@@ -473,8 +498,41 @@ public class Language {
         }
     }
 
-    private void addDefaultStatsMsg(YamlConfiguration yml, String path, String name, String... lore){
-        yml.addDefault(Messages.PLAYER_STATS_GUI_PATH+"."+path+".name", name);
-        yml.addDefault(Messages.PLAYER_STATS_GUI_PATH+"."+path+".lore", lore);
+    private void addDefaultStatsMsg(YamlConfiguration yml, String path, String name, String... lore) {
+        yml.addDefault(Messages.PLAYER_STATS_GUI_PATH + "." + path + ".name", name);
+        yml.addDefault(Messages.PLAYER_STATS_GUI_PATH + "." + path + ".lore", lore);
+    }
+
+    /**
+     * Create missing name/ lore for items: multi arena lobby, watiting, spectating
+     */
+    public static void addDefaultMessagesCommandItems(Language language) {
+        YamlConfiguration yml = language.yml;
+        if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH) != null) {
+            for (String item : Main.config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH).getKeys(false)) {
+                String p1 = Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", item);
+                String p2 = Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", item);
+                yml.addDefault(p1, "&cName not set at: &f" + p1);
+                yml.addDefault(p2, Arrays.asList("&cLore not set at:", " &f" + p2));
+            }
+        }
+        if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH) != null) {
+            for (String item : Main.config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH).getKeys(false)) {
+                String p1 = Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", item);
+                String p2 = Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", item);
+                yml.addDefault(p1, "&cName not set at: &f" + p1);
+                yml.addDefault(p2, Arrays.asList("&cLore not set at:", " &f" + p2));
+            }
+        }
+        if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH) != null) {
+            for (String item : Main.config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH).getKeys(false)) {
+                String p1 = Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", item);
+                String p2 = Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", item);
+                yml.addDefault(p1, "&cName not set at: &f" + p1);
+                yml.addDefault(p2, Arrays.asList("&cLore not set at:", " &f" + p2));
+            }
+        }
+        yml.options().copyDefaults(true);
+        language.save();
     }
 }

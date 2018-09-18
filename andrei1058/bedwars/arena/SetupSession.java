@@ -32,6 +32,9 @@ public class SetupSession {
     private SetupType setupType;
     private ConfigManager cm;
     public boolean started = false;
+    public boolean autoCreatedEmerald = false;
+    public boolean autoCreatedDiamond = false;
+    public List<Location> skipAutoCreateGen = new ArrayList<>();
 
     public SetupSession(Player player, String worldName) {
         this.player = player;
@@ -186,7 +189,7 @@ public class SetupSession {
         getSetupSessions().remove(this);
         getPlayer().teleport(config.getConfigLoc("lobbyLoc"));
         getPlayer().removePotionEffect(PotionEffectType.SPEED);
-        Arena.sendMultiarenaLobbyItems(getPlayer());
+        Arena.sendLobbyCommandItems(getPlayer());
     }
 
     /**
@@ -228,5 +231,29 @@ public class SetupSession {
      */
     public ConfigManager getCm() {
         return cm;
+    }
+
+    public List<Location> getSkipAutoCreateGen() {
+        return new ArrayList<>(skipAutoCreateGen);
+    }
+
+    public void addSkipAutoCreateGen(Location location) {
+        skipAutoCreateGen.add(location);
+    }
+
+    public void setAutoCreatedEmerald(boolean autoCreatedEmerald) {
+        this.autoCreatedEmerald = autoCreatedEmerald;
+    }
+
+    public boolean isAutoCreatedEmerald() {
+        return autoCreatedEmerald;
+    }
+
+    public void setAutoCreatedDiamond(boolean autoCreatedDiamond) {
+        this.autoCreatedDiamond = autoCreatedDiamond;
+    }
+
+    public boolean isAutoCreatedDiamond() {
+        return autoCreatedDiamond;
     }
 }

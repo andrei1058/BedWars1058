@@ -42,6 +42,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         new Join(this, "join");
         new Leave(this, "leave");
         new Language(this, "lang");
+        new Teleporter(this, "teleporter");
         if (getServerType() != ServerType.BUNGEE) {
             new CmdGUI(this, "gui");
         }

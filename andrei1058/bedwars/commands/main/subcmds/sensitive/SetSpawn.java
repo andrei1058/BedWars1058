@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
+import com.andrei1058.bedwars.configuration.ConfigPath;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -15,6 +16,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import static com.andrei1058.bedwars.Main.mainCmd;
+import static com.andrei1058.bedwars.commands.Misc.removeArmorStand;
 
 public class SetSpawn extends SubCommand {
     /**
@@ -61,11 +63,14 @@ public class SetSpawn extends SubCommand {
                     }
                 }
             } else {
+                if (ss.getCm().getYml().get("Team." + args[0] + ".Spawn") != null) {
+                    removeArmorStand("SPAWN SET", ss.getCm().getArenaLoc("Team." + args[0] + ".Spawn"));
+                }
                 ss.getCm().saveArenaLoc("Team." + args[0] + ".Spawn", p.getLocation());
                 String teamm = TeamColor.getChatColor(ss.getCm().getYml().getString("Team." + args[0] + ".Color")) + args[0];
                 p.sendMessage("§6 ▪ §7Spawn set for: " + teamm);
                 com.andrei1058.bedwars.commands.Misc.createArmorStand(teamm+" §6SPAWN SET", p.getLocation());
-                int radius = ss.getCm().getInt("islandRadius");
+                int radius = ss.getCm().getInt(ConfigPath.ARENA_ISLAND_RADIUS);
                 Location l = p.getLocation();
                 for (int x = -radius; x < radius; x++){
                     for (int y = -radius; y < radius; y++){

@@ -25,7 +25,7 @@ public class EnableArena extends SubCommand {
     public EnableArena(ParentCommand parent, String name) {
         super(parent, name);
         setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " "+getSubCommandName()+" §6<worldName>","§fEnable an arena.",
-                "/" + getParent().getName() + " "+getSubCommandName(), ClickEvent.Action.SUGGEST_COMMAND));
+                "/" + getParent().getName() + " "+getSubCommandName()+ " ", ClickEvent.Action.SUGGEST_COMMAND));
         showInList(true);
         setOpCommand(true);
         setPriority(5);

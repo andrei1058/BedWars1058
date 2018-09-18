@@ -6,6 +6,7 @@ import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
 import com.andrei1058.bedwars.configuration.ConfigManager;
+import com.andrei1058.bedwars.configuration.ConfigPath;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -22,7 +23,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.andrei1058.bedwars.Main.mainCmd;
+import static com.andrei1058.bedwars.commands.Misc.autoSetGen;
 import static com.andrei1058.bedwars.commands.Misc.createArmorStand;
+import static com.andrei1058.bedwars.commands.Misc.removeArmorStand;
 
 public class AddGenerator extends SubCommand {
     /**
@@ -52,14 +55,14 @@ public class AddGenerator extends SubCommand {
         if (args.length < 1) {
             String foundTeam = "";
             double distance = 100;
-            if (ss.getCm().getYml().getConfigurationSection("Team") == null){
+            if (ss.getCm().getYml().getConfigurationSection("Team") == null) {
                 p.sendMessage("§c ▪ §7Please create teams first!");
                 return true;
             }
             for (String team : ss.getCm().getYml().getConfigurationSection("Team").getKeys(false)) {
                 if (ss.getCm().getYml().get("Team." + team + ".Spawn") == null) continue;
                 double dis = ss.getCm().getArenaLoc("Team." + team + ".Spawn").distance(p.getLocation());
-                if (dis <= ss.getCm().getInt("islandRadius")) {
+                if (dis <= ss.getCm().getInt(ConfigPath.ARENA_ISLAND_RADIUS)) {
                     if (dis < distance) {
                         distance = dis;
                         foundTeam = team;
@@ -67,12 +70,18 @@ public class AddGenerator extends SubCommand {
                 }
             }
             if (!foundTeam.isEmpty()) {
+                if (ss.getCm().getYml().get("Team." + foundTeam + ".Iron") != null) {
+                    removeArmorStand("Generator", ss.getCm().getArenaLoc("Team." + foundTeam + ".Iron"));
+                }
+                if (ss.getCm().getYml().get("Team." + foundTeam + ".Gold") != null) {
+                    removeArmorStand("Generator", ss.getCm().getArenaLoc("Team." + foundTeam + ".Gold"));
+                }
                 arena.set("Team." + foundTeam + ".Iron", arena.stringLocationArenaFormat(p.getLocation()));
                 arena.set("Team." + foundTeam + ".Gold", arena.stringLocationArenaFormat(p.getLocation()));
                 String team = TeamColor.getChatColor(ss.getCm().getYml().getString("Team." + foundTeam + ".Color")) + foundTeam;
                 p.sendMessage("§6▪ §7Generator set for team: " + team);
                 createArmorStand("§7Generator set for " + team, p.getLocation());
-                if (ss.getSetupType() == SetupSession.SetupType.ASSISTED){
+                if (ss.getSetupType() == SetupSession.SetupType.ASSISTED) {
                     Bukkit.dispatchCommand(p, getParent().getName());
                 }
                 return true;
@@ -97,6 +106,13 @@ public class AddGenerator extends SubCommand {
             switch (args[0].toLowerCase()) {
                 case "diamond":
                 case "emerald":
+                    List<Location> locations = ss.getCm().getLocations("generator." + args[0].substring(0, 1).toUpperCase() + args[0].substring(1).toLowerCase());
+                    for (Location l : locations){
+                        if (ss.getCm().compareArenaLoc(l, p.getLocation())){
+                            p.sendMessage("§6 ▪ §cThis generator was already set!");
+                            return true;
+                        }
+                    }
                     ArrayList<String> saved;
                     if (arena.getYml().get("generator." + args[0].substring(0, 1).toUpperCase() + args[0].substring(1).toLowerCase()) == null) {
                         saved = new ArrayList<>();
@@ -107,7 +123,9 @@ public class AddGenerator extends SubCommand {
                     arena.set("generator." + args[0].substring(0, 1).toUpperCase() + args[0].substring(1).toLowerCase(), saved);
                     p.sendMessage("§6 ▪ §7" + args[0].substring(0, 1).toUpperCase() + args[0].substring(1).toLowerCase() + " generator saved!");
                     createArmorStand("§6" + args[0] + " SET", p.getLocation());
-                    if (ss.getSetupType() == SetupSession.SetupType.ASSISTED){
+                    if (ss.getSetupType() == SetupSession.SetupType.ASSISTED) {
+                        //autoSetGen(p, getParent().getName()+" "+getSubCommandName()+" ", ss, args[0].equalsIgnoreCase("diamond") ?
+                        //        Material.DIAMOND_BLOCK : Material.EMERALD_BLOCK);
                         Bukkit.dispatchCommand(p, getParent().getName());
                     }
                     break;
@@ -119,7 +137,7 @@ public class AddGenerator extends SubCommand {
                         for (String team : ss.getCm().getYml().getConfigurationSection("Team").getKeys(false)) {
                             if (ss.getCm().getYml().get("Team." + team + ".Spawn") == null) continue;
                             double dis = ss.getCm().getArenaLoc("Team." + team + ".Spawn").distance(p.getLocation());
-                            if (dis <= ss.getCm().getInt("islandRadius")) {
+                            if (dis <= ss.getCm().getInt(ConfigPath.ARENA_ISLAND_RADIUS)) {
                                 if (dis < distance) {
                                     distance = dis;
                                     foundTeam = team;
@@ -172,7 +190,7 @@ public class AddGenerator extends SubCommand {
                     }
                     arena.set("Team." + foundTeam + "." + args[0].substring(0, 1).toUpperCase() + args[0].substring(1).toLowerCase(), arena.stringLocationArenaFormat(p.getLocation()));
                     p.sendMessage("§6 ▪ §7" + args[0] + " set for: " + TeamColor.getChatColor(arena.getYml().getString("Team." + foundTeam + ".Color")) + foundTeam);
-                    if (ss.getSetupType() == SetupSession.SetupType.ASSISTED){
+                    if (ss.getSetupType() == SetupSession.SetupType.ASSISTED) {
                         Bukkit.dispatchCommand(p, getParent().getName());
                     }
             }
