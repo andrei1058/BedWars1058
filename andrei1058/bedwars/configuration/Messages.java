@@ -66,6 +66,7 @@ public class Messages {
     public static String ARENA_JOIN_SPECTATOR_MSG = "arena.spectate.spectate-join";
     public static String ARENA_JOIN_SPECTATOR_DENIED_MSG = "arena.spectate.spectate-denied";
     public static String ARENA_LEAVE_PLAYER_LEAVE_MSG = "arena.leave";
+    public static String ARENA_LEAVE_PARTY_DISBANDED = "partyDisbandOnLeave";
 
     /** Spectator related */
     public static String ARENA_SPECTATOR_TELEPORTER_GUI_NAME = "spectatorItems.teleporter-gui.gui-name";
