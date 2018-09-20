@@ -670,7 +670,7 @@ public class Arena {
                     p.hidePlayer(on);
                 }
             }
-            //temp disabled to test the restore scoreboard playergoods... if (!disconnect) Misc.giveLobbySb(p);
+            if (!disconnect) Misc.giveLobbySb(p);
         }, 10L);
 
         /* Remove also the party */

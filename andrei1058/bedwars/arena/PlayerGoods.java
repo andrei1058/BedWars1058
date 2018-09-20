@@ -32,7 +32,7 @@ public class PlayerGoods {
     private static HashMap<ItemStack, Integer> enderchest = new HashMap<>();
     private GameMode gamemode;
     private boolean allowFlight, flying;
-    private Scoreboard scoreboard;
+    private String displayName, tabName;
 
     protected PlayerGoods(Player p, boolean prepare) {
         if (hasGoods(p)) {
@@ -72,7 +72,8 @@ public class PlayerGoods {
         this.gamemode = p.getGameMode();
         this.allowFlight = p.getAllowFlight();
         this.flying = p.isFlying();
-        this.scoreboard = p.getScoreboard();
+        this.tabName = p.getPlayerListName();
+        this.displayName = p.getDisplayName();
 
         /** prepare for arena */
         if (prepare) {
@@ -157,9 +158,9 @@ public class PlayerGoods {
         for (Player p : Bukkit.getOnlinePlayers()){
             nms.showPlayer(player, p);
         }
-        if (scoreboard != null){
-            player.setScoreboard(scoreboard);
-        }
+
+        player.setDisplayName(displayName);
+        player.setPlayerListName(tabName);
     }
 
 }
