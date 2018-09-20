@@ -28,15 +28,13 @@ public class PlayerChat implements Listener {
         if (e.isCancelled()) return;
         if (getServerType() == ServerType.SHARED){
             if (Arena.getArenaByPlayer(p) == null){
-                for (Iterator<Arena> it = Arena.getArenas().iterator(); it.hasNext(); ) {
-                    Arena a = it.next();
-                    for (Iterator<Player> it1 = a.getPlayers().iterator(); it1.hasNext(); ) {
-                        Player pl = it1.next();
-                        if (e.getRecipients().contains(pl)){
+                for (Iterator<Player> on = e.getRecipients().iterator(); on.hasNext(); ) {
+                    Player pl = on.next();
+                        if (Arena.getArenaByPlayer(pl) != null){
                             e.getRecipients().remove(pl);
                         }
-                    }
                 }
+                return;
             }
         }
         if (p.hasPermission("bw.chatcolor") || p.hasPermission("bw.*") || p.hasPermission("bw.vip")){
