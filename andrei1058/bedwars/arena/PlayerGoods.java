@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +32,7 @@ public class PlayerGoods {
     private static HashMap<ItemStack, Integer> enderchest = new HashMap<>();
     private GameMode gamemode;
     private boolean allowFlight, flying;
+    private Scoreboard scoreboard;
 
     protected PlayerGoods(Player p, boolean prepare) {
         if (hasGoods(p)) {
@@ -70,6 +72,7 @@ public class PlayerGoods {
         this.gamemode = p.getGameMode();
         this.allowFlight = p.getAllowFlight();
         this.flying = p.isFlying();
+        this.scoreboard = p.getScoreboard();
 
         /** prepare for arena */
         if (prepare) {
@@ -153,6 +156,9 @@ public class PlayerGoods {
         playerGoods.remove(player);
         for (Player p : Bukkit.getOnlinePlayers()){
             nms.showPlayer(player, p);
+        }
+        if (scoreboard != null){
+            player.setScoreboard(scoreboard);
         }
     }
 

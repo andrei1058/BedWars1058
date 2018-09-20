@@ -670,8 +670,20 @@ public class Arena {
                     p.hidePlayer(on);
                 }
             }
-            if (!disconnect) Misc.giveLobbySb(p);
+            //temp disabled to test the restore scoreboard playergoods... if (!disconnect) Misc.giveLobbySb(p);
         }, 10L);
+
+        /* Remove also the party */
+        if (getParty().hasParty(p)) {
+            if (getParty().isOwner(p)) {
+                if (status != GameState.restarting) {
+                    getParty().disband(p);
+                    for (Player mem : getParty().getMembers(p)){
+                        mem.sendMessage(getMsg(mem, Messages.ARENA_LEAVE_PARTY_DISBANDED));
+                    }
+                }
+            }
+        }
 
         /* NameTagEdit Support */
         NametagEdit.restoreNametag(p);
