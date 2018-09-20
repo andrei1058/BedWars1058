@@ -581,9 +581,11 @@ public class Arena {
         /* Remove also the party */
         if (getParty().hasParty(p)) {
             if (getParty().isOwner(p)) {
-                for (Player pa : new ArrayList<>(getParty().getMembers(p))) {
-                    if (pa == p) continue;
-                    removePlayer(pa, Main.getServerType() == ServerType.MULTIARENA);
+                if (status != GameState.restarting) {
+                    getParty().disband(p);
+                    for (Player mem : getParty().getMembers(p)){
+                        mem.sendMessage(getMsg(mem, Messages.ARENA_LEAVE_PARTY_DISBANDED));
+                    }
                 }
             }
         }
