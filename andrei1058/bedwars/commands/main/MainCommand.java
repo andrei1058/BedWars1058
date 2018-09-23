@@ -1,14 +1,12 @@
 package com.andrei1058.bedwars.commands.main;
 
 import com.andrei1058.bedwars.api.ServerType;
-import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
 import com.andrei1058.bedwars.commands.main.subcmds.both.Cmds;
 import com.andrei1058.bedwars.commands.main.subcmds.sensitive.*;
 import com.andrei1058.bedwars.commands.main.subcmds.regular.*;
-import com.andrei1058.bedwars.configuration.ConfigManager;
 import com.andrei1058.bedwars.configuration.Messages;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import net.md_5.bungee.api.chat.*;
@@ -23,7 +21,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.andrei1058.bedwars.Main.*;
-import static com.andrei1058.bedwars.arena.Arena.getArenaByName;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
 public class MainCommand extends BukkitCommand implements ParentCommand {
@@ -127,8 +124,8 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
 
         if (!commandFound) {
             if (s instanceof Player)
-                s.sendMessage(getMsg((Player) s, Messages.COMMAND_NOT_FOUND_OR_REQUIRES_SAFEMODE_OFF));
-            else s.sendMessage(lang.m(Messages.COMMAND_NOT_FOUND_OR_REQUIRES_SAFEMODE_OFF));
+                s.sendMessage(getMsg((Player) s, Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
+            else s.sendMessage(lang.m(Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
         }
         return true;
     }
