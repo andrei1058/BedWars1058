@@ -251,7 +251,6 @@ public class Arena {
                 }
                 for (Player mem : getParty().getMembers(p)) {
                     if (mem == p) continue;
-                    //todo tell them why they were removed
                     Arena a = Arena.getArenaByPlayer(mem);
                     if (a != null) {
                         if (a.isPlayer(mem)) {

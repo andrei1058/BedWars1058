@@ -175,8 +175,6 @@ public class SetupSession {
         if (!isStarted()) {
             getSetupSessions().remove(this);
             player.sendMessage("§6 ▪ §7" + getWorldName() + " setup cancelled!");
-        } else {
-            //todo
         }
     }
 

@@ -43,8 +43,11 @@ import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
 public class v1_13_R2 implements NMS {
 
-    private Sound bedDestroy = Sound.valueOf("ENTITY_ENDERDRAGON_GROWL"), playerKill = Sound.valueOf("ENTITY_WOLF_HURT"),
-            countDown = Sound.valueOf("ENTITY_CHICKEN_EGG"), bought = Sound.valueOf("BLOCK_ANVIL_HIT"), insuffMoney = Sound.valueOf("ENTITY_ENDERMEN_TELEPORT");
+    private Sound bedDestroy = Sound.valueOf("ENTITY_ENDER_DRAGON_GROWL"),
+            playerKill = Sound.valueOf("ENTITY_WOLF_HURT"),
+            countDown = Sound.valueOf("ENTITY_CHICKEN_EGG"),
+            bought = Sound.valueOf("BLOCK_ANVIL_HIT"),
+            insuffMoney = Sound.valueOf("ENTITY_ENDERMEN_TELEPORT");
 
     /**
      * ArenaList of despawnable entities aka special shop mobs
