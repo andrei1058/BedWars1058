@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
+import org.bukkit.scoreboard.Scoreboard;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
@@ -184,7 +185,10 @@ public class JoinLeaveTeleport implements Listener {
         if (Main.getServerType() == ServerType.SHARED) {
             if (Main.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
                 if (e.getFrom().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
-                    e.getPlayer().setScoreboard(SBoard.sbm.getNewScoreboard());
+                    for (SBoard sBoard : SBoard.getScoreboards()) {
+                        if (sBoard.getP() == e.getPlayer())
+                            if (sBoard.getArena() == null) sBoard.remove();
+                    }
                 } else {
                     Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
                         if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
