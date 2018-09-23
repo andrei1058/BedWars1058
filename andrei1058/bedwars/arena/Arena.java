@@ -1070,28 +1070,6 @@ public class Arena {
         playerBedsDestroyed.put(p, 1);
     }
 
-    public static boolean joinRandomFromGroup(Player p, String group) {
-        List<Arena> arenas = new ArrayList<>(getArenas());
-        Collections.shuffle(arenas);
-        for (Arena a : arenas) {
-            if (a.getGroup().equalsIgnoreCase(group)) {
-                if (a.getStatus() == GameState.waiting) {
-                    a.addPlayer(p, false);
-                    return true;
-                } else if (a.getStatus() == GameState.starting) {
-                    if (a.getPlayers().size() < a.getMaxPlayers()) {
-                        a.addPlayer(p, false);
-                        return true;
-                    } else if (a.getPlayers().size() <= a.getMaxPlayers() && a.isVip(p)) {
-                        a.addPlayer(p, false);
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
     /**
      * This will give the lobby items to the player.
      * Not used in serverType BUNGEE.
@@ -1481,5 +1459,38 @@ public class Arena {
         if (arena == null) return false;
         arena.addPlayer(p, false);
         return true;
+    }
+
+    /**
+     * Add a player to the most filled arena from a group.
+     */
+    public static boolean joinRandomFromGroup(Player p, String group) {
+        List<Arena> arenas = new ArrayList<>(getArenas());
+        Collections.shuffle(arenas);
+
+        Arena arena = null;
+        int players = 0;
+        int amount = getParty().hasParty(p) ? getParty().getMembers(p).size() : 1;
+
+        for (Arena a : arenas) {
+            if (!a.getGroup().equalsIgnoreCase(group)) continue;
+            if (a.getStatus() == GameState.playing) continue;
+            if (a.getStatus() == GameState.restarting) continue;
+            int diff = a.getMaxPlayers() - a.getPlayers().size();
+
+            if (diff == amount) {
+                a.addPlayer(p, false);
+            } else if (diff > amount) {
+                if (players < diff) {
+                    players = diff;
+                    arena = a;
+
+
+                }
+            }
+        }
+        if (arena == null) return false;
+        arena.addPlayer(p, false);
+        return false;
     }
 }
