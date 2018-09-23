@@ -25,7 +25,7 @@ public class GameRestartingTask extends BukkitRunnable {
     private Arena arena;
     private int restarting = 15;
 
-    public GameRestartingTask(Arena arena){
+    public GameRestartingTask(Arena arena) {
         this.arena = arena;
         this.runTaskTimer(Main.plugin, 0, 20L);
     }
@@ -57,7 +57,7 @@ public class GameRestartingTask extends BukkitRunnable {
             for (Player on : new ArrayList<>(getArena().getSpectators())) {
                 getArena().removeSpectator(on, Main.getServerType() == ServerType.BUNGEE);
             }
-        } else if (restarting == 6){
+        } else if (restarting == 6) {
             if (getServerType() == ServerType.BUNGEE) {
                 if (Arena.getGamesBeforeRestart() <= 0) {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
@@ -65,7 +65,7 @@ public class GameRestartingTask extends BukkitRunnable {
                     Arena.setGamesBeforeRestart(Main.config.getInt(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART));
                     return;
                 }
-                Arena.setGamesBeforeRestart(Arena.getGamesBeforeRestart()-1);
+                Arena.setGamesBeforeRestart(Arena.getGamesBeforeRestart() - 1);
             } else {
                 ShopHolo.clearForArena(getArena());
                 for (Entity e : getArena().getWorld().getEntities()) {
@@ -79,28 +79,31 @@ public class GameRestartingTask extends BukkitRunnable {
                 for (OreGenerator eg : getArena().getOreGenerators()) {
                     eg.disable();
                 }
-                for (BedWarsTeam.BedHolo bh : BedWarsTeam.getBeds().values()){
-                    if (bh.getArena() == getArena()){
+                for (BedWarsTeam.BedHolo bh : BedWarsTeam.getBeds().values()) {
+                    if (bh.getArena() == getArena()) {
                         bh.destroy();
                     }
                 }
                 Bukkit.unloadWorld(getArena().getWorld(), false);
             }
-        } else if (restarting == 3){
-            World world = Bukkit.createWorld(new WorldCreator(getArena().getWorldName()));
+        } else if (restarting == 3) {
+            /*World world = Bukkit.createWorld(new WorldCreator(getArena().getWorldName()));
             world.setAutoSave(false);
-            getArena().setWorld(world);
+            getArena().setWorld(world);*/
 
             /* CLEAR HOLOGRAMS FROM MAP */
-            for (Entity e : world.getEntities()) {
+            /*for (Entity e : world.getEntities()) {
                 if (e.getType() == EntityType.ARMOR_STAND) {
-                    if (!((ArmorStand)e).isVisible()) e.remove();
+                    if (!((ArmorStand) e).isVisible()) e.remove();
                 }
-            }
+            }*/
+            getArena().disable();
         }
         if (restarting == 0) {
-            getArena().restart();
+            String name = getArena().getWorldName();
+            new Arena(name, null);
             cancel();
+            arena = null;
         }
     }
 
