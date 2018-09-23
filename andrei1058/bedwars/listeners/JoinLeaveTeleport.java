@@ -20,6 +20,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
 import org.bukkit.scoreboard.Scoreboard;
 
+import java.util.ArrayList;
+
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
@@ -185,7 +187,7 @@ public class JoinLeaveTeleport implements Listener {
         if (Main.getServerType() == ServerType.SHARED) {
             if (Main.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
                 if (e.getFrom().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
-                    for (SBoard sBoard : SBoard.getScoreboards()) {
+                    for (SBoard sBoard : new ArrayList<>(SBoard.getScoreboards())) {
                         if (sBoard.getP() == e.getPlayer())
                             if (sBoard.getArena() == null) sBoard.remove();
                     }
