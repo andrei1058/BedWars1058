@@ -104,7 +104,16 @@ public class JoinLeaveTeleport implements Listener {
             p.sendMessage("");
             p.sendMessage("§8[§f" + plugin.getName() + "§8]§7§m---------------------------");
         }
-        if (getServerType() == ServerType.SHARED) return;
+        if (Main.getServerType() == ServerType.SHARED) {
+            if (Main.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
+                Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+                    if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
+                        Misc.giveLobbySb(e.getPlayer());
+                    }
+                }, 20L);
+            }
+            return;
+        }
         e.setJoinMessage(null);
         p.getInventory().setArmorContents(null);
         if (getServerType() == ServerType.BUNGEE) {
