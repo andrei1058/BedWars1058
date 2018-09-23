@@ -319,7 +319,7 @@ public class Main extends JavaPlugin {
         YamlConfiguration yml = config.getYml();
 
         yml.options().header(plugin.getDescription().getName() + " by andrei1058. https://www.spigotmc.org/members/39904/\n" +
-                "Documentation here: https://github.com/andrei1058/BedWars1058/wiki\n");
+                "Documentation here: https://gitlab.com/andrei1058/BedWars1058/wikis/home\n");
         yml.addDefault("serverType", "MULTIARENA");
         yml.addDefault("safeMode", false);
         yml.addDefault("language", "en");
