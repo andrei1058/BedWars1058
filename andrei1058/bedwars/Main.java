@@ -329,7 +329,7 @@ public class Main extends JavaPlugin {
         yml.addDefault("formatChat", true);
         yml.addDefault("disableCrafting", true);
         yml.addDefault("debug", false);
-        yml.addDefault("lobbyScoreboard", true);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD, true);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ALLOW_PARTIES, true);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART, 30);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD, "restart");
@@ -406,6 +406,7 @@ public class Main extends JavaPlugin {
         config.set("gameEndCountdown", null);
         config.set("npcLoc", null);
         config.set("blockedCmds", null);
+        config.set("lobbyScoreboard", null);
 
         String whatLang = "en";
         for (File f : new File("plugins/" + this.getDescription().getName() + "/Languages").listFiles()) {

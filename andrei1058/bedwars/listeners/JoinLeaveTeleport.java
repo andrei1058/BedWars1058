@@ -5,12 +5,15 @@ import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
+import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.arena.SetupSession;
+import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -169,6 +172,19 @@ public class JoinLeaveTeleport implements Listener {
 
     @EventHandler
     public void onWorldChange(PlayerChangedWorldEvent e) {
+        if (Main.getServerType() == ServerType.SHARED) {
+            if (Main.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
+                if (e.getFrom().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
+                    e.getPlayer().setScoreboard(SBoard.sbm.getNewScoreboard());
+                } else {
+                    Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+                        if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
+                            Misc.giveLobbySb(e.getPlayer());
+                        }
+                    }, 20L);
+                }
+            }
+        }
         if (Arena.isInArena(e.getPlayer())) {
             Arena a = Arena.getArenaByPlayer(e.getPlayer());
             if (a.isPlayer(e.getPlayer())) {

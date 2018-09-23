@@ -80,6 +80,7 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_DEFAULT_ITEMS = "start-items-per-group";
 
     public static final String CENERAL_CONFIGURATION_ALLOWED_COMMANDS = "allowed-commands";
+    public static final String GENERAL_CONFIGURATION_LOBBY_SCOREBOARD = "lobby-scoreboard";
 
     public static final String ARENA_CONFIGURATION_MAX_BUILD_Y = "max-build-y";
     public static final String ARENA_SPAWN_PROTECTION = "spawn-protection";

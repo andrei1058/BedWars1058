@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.arena;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.configuration.Messages;
@@ -48,9 +49,11 @@ public class SBoard {
             }
         }
         this.setStrings(content);
-        p.setScoreboard(sb);
+        Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+            p.setScoreboard(sb);
+            scoreboards.add(this);
+        }, 10L);
         dateFormat = new SimpleDateFormat(getMsg(p, Messages.FORMATTING_SCOREBOARD_NEXEVENT_TIMER));
-        scoreboards.add(this);
     }
 
     /**
@@ -63,9 +66,11 @@ public class SBoard {
         this.arena = arena;
         dateFormat = new SimpleDateFormat(getMsg(p, Messages.FORMATTING_SCOREBOARD_NEXEVENT_TIMER));
         this.setStrings(getScoreboard(p, "scoreboard." + arena.getGroup() + "Playing", Messages.SCOREBOARD_DEFAULT_PLAYING));
-        p.setScoreboard(sb);
-        scoreboards.add(this);
-        giveTeamColorTag();
+        Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+            p.setScoreboard(sb);
+            scoreboards.add(this);
+            giveTeamColorTag();
+        }, 10L);
     }
 
     public void setStrings(List<String> strings) {
@@ -82,7 +87,7 @@ public class SBoard {
             score++;
             String temp = strings.get(x - 1);
             temp = temp.replace("{generatorUpgrade}", "{nextEvent}")
-            .replace("{generatorTimer}", "{time}");
+                    .replace("{generatorTimer}", "{time}");
             for (String ph : placeholders) {
                 if (temp.contains(ph)) {
                     if (!toRefresh.containsKey(t)) {
@@ -110,7 +115,7 @@ public class SBoard {
                 temp = temp.replace("{server}", Bukkit.getServer().getMotd()).replace("{on}", String.valueOf(Bukkit.getOnlinePlayers().size()))
                         .replace("{max}", String.valueOf(Bukkit.getServer().getMaxPlayers())).replace("{date}",
                                 new SimpleDateFormat(getMsg(getP(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis())))
-                .replace("{money}", String.valueOf(getEconomy().getMoney(p)));
+                        .replace("{money}", String.valueOf(getEconomy().getMoney(p)));
 
                 setContent(t, replaceStatsPlaceholders(getP(), temp,
                         kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never, false));
@@ -221,7 +226,7 @@ public class SBoard {
     public void giveTeamColorTag() {
         for (BedWarsTeam t : arena.getTeams()) {
             Team team;
-            if (sb.getTeam(t.getName()) == null){
+            if (sb.getTeam(t.getName()) == null) {
                 team = sb.registerNewTeam(t.getName());
             } else {
                 team = sb.getTeam(t.getName());
@@ -262,55 +267,57 @@ public class SBoard {
         return seconds < 0 ? "-" + positive : positive;
     }
 
-    private String[] getNextEvent(){
+    private String[] getNextEvent() {
         Long time = 0L;
         String st = "";
-        switch (arena.getNextEvent()){
+        switch (arena.getNextEvent()) {
             case EMERALD_GENERATOR_TIER_II:
                 st = getMsg(getP(), Messages.NEXT_EVENT_EMERALD_UPGRADE_II);
-                time = (arena.upgradeEmeraldsCount)*1000L;
+                time = (arena.upgradeEmeraldsCount) * 1000L;
                 break;
             case EMERALD_GENERATOR_TIER_III:
                 st = getMsg(getP(), Messages.NEXT_EVENT_EMERALD_UPGRADE_III);
-                time = (arena.upgradeEmeraldsCount)*1000L;
+                time = (arena.upgradeEmeraldsCount) * 1000L;
                 break;
             case DIAMOND_GENERATOR_TIER_II:
                 st = getMsg(getP(), Messages.NEXT_EVENT_DIAMOND_UPGRADE_II);
-                time = (arena.upgradeDiamondsCount)*1000L;
+                time = (arena.upgradeDiamondsCount) * 1000L;
                 break;
             case DIAMOND_GENERATOR_TIER_III:
                 st = getMsg(getP(), Messages.NEXT_EVENT_DIAMOND_UPGRADE_III);
-                time = (arena.upgradeDiamondsCount)*1000L;
+                time = (arena.upgradeDiamondsCount) * 1000L;
                 break;
             case GAME_END:
                 st = getMsg(getP(), Messages.NEXT_EVENT_GAME_END);
-                time = (arena.getPlayingTask().getGameEndCountdown())*1000L;
+                time = (arena.getPlayingTask().getGameEndCountdown()) * 1000L;
                 break;
             case BEDS_DESTROY:
                 st = getMsg(getP(), Messages.NEXT_EVENT_BEDS_DESTROY);
-                time = (arena.getPlayingTask().getBedsDestroyCountdown())*1000L;
+                time = (arena.getPlayingTask().getBedsDestroyCountdown()) * 1000L;
                 break;
             case ENDER_DRAGON:
                 st = getMsg(getP(), Messages.NEXT_EVENT_DRAGON_SPAWN);
-                time = (arena.getPlayingTask().getDragonSpawnCountdown())*1000L;
+                time = (arena.getPlayingTask().getDragonSpawnCountdown()) * 1000L;
                 break;
         }
 
-        return new String[] {st, dateFormat.format((time))};
+        return new String[]{st, dateFormat.format((time))};
     }
 
-    /**@since API 9 */
-    public void updateSpectators(Player p, boolean value){
+    /**
+     * @since API 9
+     */
+    public void updateSpectators(Player p, boolean value) {
         Team collide;
-        if (sb.getTeam("spectators") == null){
+        if (sb.getTeam("spectators") == null) {
             collide = sb.registerNewTeam("spectators");
             nms.teamCollideRule(collide);
             collide.setPrefix("§7[SPECT] §r");
         } else {
             collide = sb.getTeam("spectators");
         }
-        for (Player spect : getArena().getSpectators()){
-            if (!value){
+        for (Player spect : getArena().getSpectators()) {
+            if (!value) {
                 if (!collide.hasEntry(spect.getName())) collide.addEntry(spect.getName());
             } else {
                 if (collide.hasEntry(spect.getName())) collide.removeEntry(spect.getName());

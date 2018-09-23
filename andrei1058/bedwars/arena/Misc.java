@@ -143,8 +143,8 @@ public class Misc {
             im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
         i.setItemMeta(im);
-        if (!(metaData.isEmpty() || metaKey.isEmpty())){
-            i = nms.addCustomData(i, metaKey+"_"+metaData);
+        if (!(metaData.isEmpty() || metaKey.isEmpty())) {
+            i = nms.addCustomData(i, metaKey + "_" + metaData);
         }
         return i;
     }
@@ -343,7 +343,7 @@ public class Misc {
     }
 
     public static void giveLobbySb(Player p) {
-        if (config.getBoolean("lobbyScoreboard")) {
+        if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
             new SBoard(p, getList(p, Messages.SCOREBOARD_LOBBY), null);
         }
     }
