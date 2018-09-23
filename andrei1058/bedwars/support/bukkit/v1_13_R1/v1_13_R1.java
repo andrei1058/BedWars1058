@@ -47,7 +47,7 @@ public class v1_13_R1 implements NMS {
             playerKill = Sound.valueOf("ENTITY_WOLF_HURT"),
             countDown = Sound.valueOf("ENTITY_CHICKEN_EGG"),
             bought = Sound.valueOf("BLOCK_ANVIL_HIT"),
-            insuffMoney = Sound.valueOf("ENTITY_ENDERMEN_TELEPORT");
+            insuffMoney = Sound.valueOf("ENTITY_ENDERMAN_TELEPORT");
 
     /**
      * ArenaList of despawnable entities aka special shop mobs
