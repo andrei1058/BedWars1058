@@ -583,7 +583,7 @@ public class Arena {
             if (getParty().isOwner(p)) {
                 if (status != GameState.restarting) {
                     getParty().disband(p);
-                    for (Player mem : getParty().getMembers(p)){
+                    for (Player mem : getParty().getMembers(p)) {
                         mem.sendMessage(getMsg(mem, Messages.ARENA_LEAVE_PARTY_DISBANDED));
                     }
                 }
@@ -678,7 +678,7 @@ public class Arena {
             if (getParty().isOwner(p)) {
                 if (status != GameState.restarting) {
                     getParty().disband(p);
-                    for (Player mem : getParty().getMembers(p)){
+                    for (Player mem : getParty().getMembers(p)) {
                         mem.sendMessage(getMsg(mem, Messages.ARENA_LEAVE_PARTY_DISBANDED));
                     }
                 }
@@ -1454,5 +1454,32 @@ public class Arena {
         for (OreGenerator og : getOreGenerators()) {
             og.getLocation().setWorld(world);
         }
+    }
+
+    /**
+     * Add a player to the most filled arena.
+     * Check if is the party owner first.
+     */
+    public static boolean joinRandomArena(Player p) {
+        int amount = getParty().hasParty(p) ? getParty().getMembers(p).size() : 1;
+        int players = 0;
+        Arena arena = null;
+        for (Arena a : getArenas()) {
+            if (a.getStatus() == GameState.playing) continue;
+            if (a.getStatus() == GameState.restarting) continue;
+            if (a.getMaxPlayers() == a.getPlayers().size()) continue;
+            int diff = a.getMaxPlayers() - a.getPlayers().size();
+            if (diff == amount) {
+                a.addPlayer(p, false);
+            } else if (diff > amount) {
+                if (players < diff) {
+                    players = diff;
+                    arena = a;
+                }
+            }
+        }
+        if (arena == null) return false;
+        arena.addPlayer(p, false);
+        return true;
     }
 }

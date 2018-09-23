@@ -25,7 +25,8 @@ public class Join extends SubCommand {
         super(parent, name);
         setPriority(19);
         showInList(false);
-        setDisplayInfo(MainCommand.createTC("§6 ▪ §7/"+MainCommand.getInstance().getName()+" join §e<arena/ groupName>", "/"+getParent().getName()+" "+getSubCommandName(), "§fJoin an arena by name or by group."));
+        setDisplayInfo(MainCommand.createTC("§6 ▪ §7/"+MainCommand.getInstance().getName()+" join §e<random/ arena/ groupName>",
+                "/"+getParent().getName()+" "+getSubCommandName(), "§fJoin an arena by name or by group.\n§f/bw join random - join random arena."));
     }
 
     @Override
@@ -34,6 +35,12 @@ public class Join extends SubCommand {
         Player p = (Player) s;
         if (args.length < 1) {
             s.sendMessage(getMsg(p, Messages.COMMAND_JOIN_USAGE));
+            return true;
+        }
+        if (args[0].equalsIgnoreCase("random")){
+            if (!Arena.joinRandomArena(p)){
+                s.sendMessage(getMsg(p, Messages.ARENA_JOIN_DENIED_NO_EMPTY_FOUND));
+            }
             return true;
         }
         if (isArenaGroup(args[0])) {
