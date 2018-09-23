@@ -219,4 +219,9 @@ public class Messages {
     /* Arena waiting Items Messages */
     public static final String GENERAL_CONFIGURATION_WAITING_ITEMS_NAME = ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH+".%path%.name";
     public static final String GENERAL_CONFIGURATION_WAITING_ITEMS_LORE = ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH+".%path%.lore";
+
+
+    public static String PLACEHOLDER_PLAYER_TEAM_TEAM = "placeholders.player-team.team";
+    public static String PLACEHOLDER_PLAYER_TEAM_SHOUT = "placeholders.player-team.shout";
+    public static String PLACEHOLDER_PLAYER_TEAM_SPECTATOR = "placeholders.player-team.spectator";
 }

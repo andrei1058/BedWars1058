@@ -32,7 +32,7 @@ public class ShoutCommand extends BukkitCommand {
             return true;
         }
         if (p.hasPermission(Permissions.PERMISSION_SHOUT_COMMAND) || p.hasPermission(Permissions.PERMISSION_ALL)) {
-            if (isShoutCooldown(p)){
+            if (isShoutCooldown(p)) {
                 p.sendMessage(Language.getMsg(p, Messages.COMMAND_COOLDOWN).replace("{seconds}", String.valueOf(getShoutCooldown(p))));
                 return true;
             }
@@ -54,10 +54,15 @@ public class ShoutCommand extends BukkitCommand {
 
     public static boolean isShoutCooldown(Player player) {
         if (!shoutCooldown.containsKey(player.getUniqueId())) return false;
-        return shoutCooldown.get(player.getUniqueId()) + Main.config.getInt(ConfigPath.GENERAL_CONFIGURATION_SHOUT_COOLDOWN)*1000 > System.currentTimeMillis();
+        return shoutCooldown.get(player.getUniqueId()) + Main.config.getInt(ConfigPath.GENERAL_CONFIGURATION_SHOUT_COOLDOWN) * 1000 > System.currentTimeMillis();
     }
 
-    public static double getShoutCooldown(Player p){
-        return shoutCooldown.get(p.getUniqueId())-System.currentTimeMillis()+Main.config.getInt(ConfigPath.GENERAL_CONFIGURATION_SHOUT_COOLDOWN)*1000;
+    public static double getShoutCooldown(Player p) {
+        return shoutCooldown.get(p.getUniqueId()) - System.currentTimeMillis() + Main.config.getInt(ConfigPath.GENERAL_CONFIGURATION_SHOUT_COOLDOWN) * 1000;
+    }
+
+    public static boolean isShout(Player p) {
+        if (!shoutCooldown.containsKey(p.getUniqueId())) return false;
+        return shoutCooldown.get(p.getUniqueId()) + 300 > System.currentTimeMillis();
     }
 }
