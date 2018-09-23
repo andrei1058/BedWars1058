@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.support.bukkit.v1_9_R2;
+package com.andrei1058.bedwars.support.bukkit.v1_13_R2;
 
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
@@ -8,43 +8,43 @@ import com.andrei1058.bedwars.arena.ShopHolo;
 import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
 import com.andrei1058.bedwars.exceptions.InvalidSoundException;
-import com.andrei1058.bedwars.support.bukkit.utils.Misc;
 import com.andrei1058.bedwars.support.bukkit.NMS;
-import net.minecraft.server.v1_9_R2.*;
-import net.minecraft.server.v1_9_R2.Item;
+import com.andrei1058.bedwars.support.bukkit.utils.Misc;
+import com.google.common.collect.Sets;
+import net.minecraft.server.v1_13_R2.*;
+import net.minecraft.server.v1_13_R2.Item;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.block.Bed;
+import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
-import org.bukkit.craftbukkit.v1_9_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_9_R2.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_9_R2.entity.CraftTNTPrimed;
-import org.bukkit.craftbukkit.v1_9_R2.util.UnsafeList;
-import org.bukkit.craftbukkit.v1_9_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_9_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftTNTPrimed;
+import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scoreboard.Team;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.despawnables.TargetListener.owningTeam;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
-public class v1_9_R2 implements NMS {
+public class v1_13_R2 implements NMS {
 
     private Sound bedDestroy = Sound.valueOf("ENTITY_ENDERDRAGON_GROWL"), playerKill = Sound.valueOf("ENTITY_WOLF_HURT"),
             countDown = Sound.valueOf("ENTITY_CHICKEN_EGG"), bought = Sound.valueOf("BLOCK_ANVIL_HIT"), insuffMoney = Sound.valueOf("ENTITY_ENDERMEN_TELEPORT");
-
 
     /**
      * ArenaList of despawnable entities aka special shop mobs
@@ -107,17 +107,42 @@ public class v1_9_R2 implements NMS {
     }
 
     @Override
+    public Sound countdownTick() {
+        return countDown;
+    }
+
+    @Override
+    public void setCountdownSound(String sound) throws InvalidSoundException {
+        try {
+            countDown = Sound.valueOf(sound);
+        } catch (Exception ex) {
+            throw new InvalidSoundException(sound);
+        }
+    }
+
+    public void spawnSilverfish(Location loc, BedWarsTeam bedWarsTeam) {
+        new Despawnable(Silverfish.spawn(loc, bedWarsTeam), bedWarsTeam, shop.getInt("utilities.silverfish.despawn"), Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME);
+    }
+
+    @Override
+    public void spawnIronGolem(Location loc, BedWarsTeam bedWarsTeam) {
+        new Despawnable(IGolem.spawn(loc, bedWarsTeam), bedWarsTeam, shop.getInt("utilities.ironGolem.despawn"), Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME);
+    }
+
+    @Override
     public void hidePlayer(Player player, List<Player> players) {
-        net.minecraft.server.v1_9_R2.PacketPlayOutEntityDestroy packet = new net.minecraft.server.v1_9_R2.PacketPlayOutEntityDestroy(player.getEntityId());
+        PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(player.getEntityId());
         for (Player p : players) {
             if (p == player) continue;
-            ((org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
         }
     }
 
     @Override
-    public void minusAmount(Player p, org.bukkit.inventory.ItemStack i, int amount) {
-        i.setAmount(i.getAmount() - amount);
+    public void hidePlayer(Player victim, Player p) {
+        if (victim == p) return;
+        PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(victim.getEntityId());
+        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
     }
 
     @Override
@@ -128,7 +153,7 @@ public class v1_9_R2 implements NMS {
     }
 
     @Override
-    public boolean isDespawnable(org.bukkit.entity.Entity e) {
+    public boolean isDespawnable(Entity e) {
         for (Despawnable d : despawnables) {
             if (d.getE() == ((CraftEntity) e).getHandle()) return true;
         }
@@ -136,30 +161,11 @@ public class v1_9_R2 implements NMS {
     }
 
     @Override
-    public BedWarsTeam ownDespawnable(org.bukkit.entity.Entity e) {
+    public BedWarsTeam ownDespawnable(Entity e) {
         for (Despawnable d : despawnables) {
             if (d.getE() == ((CraftEntity) e).getHandle()) return d.getTeam();
         }
         return null;
-    }
-
-    @Override
-    public Sound countdownTick() {
-        return countDown;
-    }
-
-    @Override
-    public void setCountdownSound(String sound) throws InvalidSoundException {
-
-    }
-
-    public void spawnSilverfish(Location loc, BedWarsTeam bedWarsTeam) {
-        new Despawnable(Silverfish.spawn(loc, bedWarsTeam), bedWarsTeam, shop.getInt("utilities.silverfish.despawn"), Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME);
-    }
-
-    @Override
-    public void spawnIronGolem(Location loc, BedWarsTeam bedWarsTeam) {
-        new Despawnable(IGolem.spawn(loc, bedWarsTeam), bedWarsTeam, shop.getInt("utilities.ironGolem.despawn"), Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME);
     }
 
     @Override
@@ -194,15 +200,8 @@ public class v1_9_R2 implements NMS {
     public void playAction(Player p, String text) {
         CraftPlayer cPlayer = (CraftPlayer) p;
         IChatBaseComponent cbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + text + "\"}");
-        PacketPlayOutChat ppoc = new PacketPlayOutChat(cbc, (byte) 2);
+        PacketPlayOutChat ppoc = new PacketPlayOutChat(cbc, ChatMessageType.GAME_INFO);
         cPlayer.getHandle().playerConnection.sendPacket(ppoc);
-    }
-
-    @Override
-    public void unregisterCommand(String name) {
-        if (isBukkitCommandRegistered(name)) {
-            ((org.bukkit.craftbukkit.v1_8_R3.CraftServer) plugin.getServer()).getCommandMap().getCommand(name).unregister(((org.bukkit.craftbukkit.v1_8_R3.CraftServer) plugin.getServer()).getCommandMap());
-        }
     }
 
     @Override
@@ -210,17 +209,34 @@ public class v1_9_R2 implements NMS {
         return ((CraftServer) plugin.getServer()).getCommandMap().getCommand(name) != null;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public org.bukkit.inventory.ItemStack getItemInHand(Player p) {
-        return p.getItemInHand();
+        return p.getInventory().getItemInMainHand();
     }
 
     @Override
-    public void hideEntity(org.bukkit.entity.Entity e, Player p) {
+    public void hideEntity(Entity e, Player p) {
         PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(e.getEntityId());
         ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
 
+    }
+
+    @Override
+    public void minusAmount(Player p, org.bukkit.inventory.ItemStack i, int amount) {
+        i.setAmount(i.getAmount() - amount);
+    }
+
+    @Override
+    public void setSource(TNTPrimed tnt, Player owner) {
+        EntityLiving nmsEntityLiving = (((CraftLivingEntity) owner).getHandle());
+        EntityTNTPrimed nmsTNT = (((CraftTNTPrimed) tnt).getHandle());
+        try {
+            Field sourceField = EntityTNTPrimed.class.getDeclaredField("source");
+            sourceField.setAccessible(true);
+            sourceField.set(nmsTNT, nmsEntityLiving);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override
@@ -289,14 +305,14 @@ public class v1_9_R2 implements NMS {
 
     @Override
     public double getDamage(org.bukkit.inventory.ItemStack i) {
-        net.minecraft.server.v1_9_R2.ItemStack nmsStack = CraftItemStack.asNMSCopy(i);
+        ItemStack nmsStack = CraftItemStack.asNMSCopy(i);
         NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
         return compound.getDouble("generic.attackDamage");
     }
 
     @Override
     public double getProtection(org.bukkit.inventory.ItemStack i) {
-        net.minecraft.server.v1_9_R2.ItemStack nmsStack = CraftItemStack.asNMSCopy(i);
+        ItemStack nmsStack = CraftItemStack.asNMSCopy(i);
         NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
         return compound.getDouble("generic.armor");
     }
@@ -312,59 +328,49 @@ public class v1_9_R2 implements NMS {
 
 
     public void registerEntity(String name, int id, Class customClass) {
-        try {
-            ArrayList<Map> dataMap = new ArrayList<>();
-            for (Field f : EntityTypes.class.getDeclaredFields()) {
-                if (!f.getType().getSimpleName().equals(Map.class.getSimpleName())) continue;
-                f.setAccessible(true);
-                dataMap.add((Map) f.get(null));
-            }
-            if (dataMap.get(2).containsKey(id)) {
-                dataMap.get(0).remove(name);
-                dataMap.get(2).remove(id);
-            }
-            Method method = EntityTypes.class.getDeclaredMethod("a", Class.class, String.class, Integer.TYPE);
-            method.setAccessible(true);
-            method.invoke(null, customClass, name, id);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        EntityTypes.a(name, EntityTypes.a.a(customClass));
     }
 
-    public class VillagerShop extends net.minecraft.server.v1_9_R2.EntityVillager {
-        public VillagerShop(net.minecraft.server.v1_9_R2.World world) {
+    /**
+     * Custom villager class
+     */
+    public class VillagerShop extends EntityVillager {
+
+        public VillagerShop(World world) {
+
             super(world);
+
             try {
-                Field bField = net.minecraft.server.v1_9_R2.PathfinderGoalSelector.class.getDeclaredField("b");
+                Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
                 bField.setAccessible(true);
-                Field cField = net.minecraft.server.v1_9_R2.PathfinderGoalSelector.class.getDeclaredField("c");
+                Field cField = PathfinderGoalSelector.class.getDeclaredField("c");
                 cField.setAccessible(true);
-                bField.set(this.goalSelector, new UnsafeList());
-                bField.set(this.targetSelector, new UnsafeList());
-                cField.set(this.goalSelector, new UnsafeList());
-                cField.set(this.targetSelector, new UnsafeList());
+                bField.set(this.goalSelector, Sets.newLinkedHashSet());
+                bField.set(this.targetSelector, Sets.newLinkedHashSet());
+                cField.set(this.goalSelector, Sets.newLinkedHashSet());
+                cField.set(this.targetSelector, Sets.newLinkedHashSet());
             } catch (Exception bField) {
             }
-            this.goalSelector.a(0, new net.minecraft.server.v1_9_R2.PathfinderGoalFloat(this));
-            this.goalSelector.a(9, new net.minecraft.server.v1_9_R2.PathfinderGoalInteract(this, net.minecraft.server.v1_9_R2.EntityHuman.class, 3.0f, 1.0f));
-            this.goalSelector.a(10, new net.minecraft.server.v1_9_R2.PathfinderGoalLookAtPlayer(this, net.minecraft.server.v1_9_R2.EntityHuman.class, 8.0f));
+
+            this.goalSelector.a(0, new PathfinderGoalFloat(this));
+            this.goalSelector.a(9, new PathfinderGoalInteract(this, EntityHuman.class, 3.0f, 1.0f));
+            this.goalSelector.a(10, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0f));
         }
 
         @Override
-        public void move(double d0, double d1, double d2) {
+        public void collide(net.minecraft.server.v1_13_R2.Entity entity) {
         }
 
         @Override
-        public void collide(net.minecraft.server.v1_9_R2.Entity entity) {
-        }
-
-        @Override
-        public boolean damageEntity(net.minecraft.server.v1_9_R2.DamageSource damagesource, float f) {
+        public boolean damageEntity(DamageSource damagesource, float f) {
             return false;
         }
 
-        @Override
         public void g(double d0, double d1, double d2) {
+        }
+
+        @Override
+        public void move(EnumMoveType enummovetype, double d0, double d1, double d2) {
         }
 
         @Override
@@ -374,8 +380,11 @@ public class v1_9_R2 implements NMS {
         }
     }
 
+    /**
+     * Spawn shop npc
+     */
     private Villager spawnVillager(Location loc) {
-        net.minecraft.server.v1_9_R2.WorldServer mcWorld = ((CraftWorld) loc.getWorld()).getHandle();
+        WorldServer mcWorld = ((CraftWorld) loc.getWorld()).getHandle();
         VillagerShop customEnt = new VillagerShop(mcWorld);
         customEnt.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
         ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
@@ -416,9 +425,9 @@ public class v1_9_R2 implements NMS {
 
         private void setName() {
             int percentuale = (int) ((e.getHealth() * 100) / e.getMaxHealth() / 10);
-            e.setCustomName(lang.m(namePath).replace("{despawn}", String.valueOf(despawn)).replace("{health}",
+            e.setCustomName(IChatBaseComponent.ChatSerializer.b(lang.m(namePath).replace("{despawn}", String.valueOf(despawn)).replace("{health}",
                     new String(new char[percentuale]).replace("\0", lang.m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH)) + new String(new char[10 - percentuale]).replace("\0", "§7" + lang.m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH))
-            ).replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()).replace("{TeamName}", team.getName()));
+            ).replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()).replace("{TeamName}", team.getName())));
         }
 
         public EntityLiving getE() {
@@ -431,15 +440,9 @@ public class v1_9_R2 implements NMS {
     }
 
     @Override
-    public void setSource(TNTPrimed tnt, Player owner) {
-        EntityLiving nmsEntityLiving = (((CraftLivingEntity) owner).getHandle());
-        EntityTNTPrimed nmsTNT = (((CraftTNTPrimed) tnt).getHandle());
-        try {
-            Field sourceField = EntityTNTPrimed.class.getDeclaredField("source");
-            sourceField.setAccessible(true);
-            sourceField.set(nmsTNT, nmsEntityLiving);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+    public void unregisterCommand(String name) {
+        if (isBukkitCommandRegistered(name)) {
+            ((CraftServer) plugin.getServer()).getCommandMap().getCommand(name).unregister(((CraftServer) plugin.getServer()).getCommandMap());
         }
     }
 
@@ -450,35 +453,21 @@ public class v1_9_R2 implements NMS {
 
     @Override
     public void hideArmor(Player p, Player p2) {
-        PacketPlayOutEntityEquipment hand1 = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.MAINHAND, new ItemStack(new Item().getById(0)));
-        PacketPlayOutEntityEquipment hand2 = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.OFFHAND, new ItemStack(new Item().getById(0)));
-        PacketPlayOutEntityEquipment helmet = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.HEAD, new ItemStack(new Item().getById(0)));
-        PacketPlayOutEntityEquipment chest = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.CHEST, new ItemStack(new Item().getById(0)));
-        PacketPlayOutEntityEquipment pants = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.LEGS, new ItemStack(new Item().getById(0)));
-        PacketPlayOutEntityEquipment boots = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.FEET, new ItemStack(new Item().getById(0)));
-        PlayerConnection pc = ((CraftPlayer) p2).getHandle().playerConnection;
+        PacketPlayOutEntityEquipment hand1 = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.MAINHAND, new ItemStack(new Item(new Item.Info()).getById(0)));
+        PacketPlayOutEntityEquipment hand2 = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.OFFHAND, new ItemStack(new Item(new Item.Info()).getById(0)));
+        PacketPlayOutEntityEquipment helmet = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.HEAD, new ItemStack(new Item(new Item.Info()).getById(0)));
+        PacketPlayOutEntityEquipment chest = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.CHEST, new ItemStack(new Item(new Item.Info()).getById(0)));
+        PacketPlayOutEntityEquipment pants = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.LEGS, new ItemStack(new Item(new Item.Info()).getById(0)));
+        PacketPlayOutEntityEquipment boots = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.FEET, new ItemStack(new Item(new Item.Info()).getById(0)));
+        EntityPlayer pc = ((CraftPlayer) p2).getHandle();
         if (p != p2) {
-            pc.sendPacket(hand1);
-            pc.sendPacket(hand2);
+            pc.playerConnection.sendPacket(hand1);
+            pc.playerConnection.sendPacket(hand2);
         }
-        pc.sendPacket(helmet);
-        pc.sendPacket(chest);
-        pc.sendPacket(pants);
-        pc.sendPacket(boots);
-    }
-
-    @Override
-    public void hidePlayer(Player victim, Player p) {
-        if (victim == p) return;
-        PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(victim.getEntityId());
-        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
-    }
-
-    @Override
-    public void showPlayer(Player victim, Player p) {
-        if (victim == p) return;
-        PacketPlayOutNamedEntitySpawn packet = new PacketPlayOutNamedEntitySpawn(((CraftPlayer) victim).getHandle());
-        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+        pc.playerConnection.sendPacket(helmet);
+        pc.playerConnection.sendPacket(chest);
+        pc.playerConnection.sendPacket(pants);
+        pc.playerConnection.sendPacket(boots);
     }
 
     @Override
@@ -503,13 +492,21 @@ public class v1_9_R2 implements NMS {
     @Override
     public void spawnDragon(Location l, BedWarsTeam bwt) {
         EnderDragon ed = (EnderDragon) l.getWorld().spawnEntity(l, EntityType.ENDER_DRAGON);
-        ed.setMetadata("DragonTeam", new FixedMetadataValue(plugin, bwt));
         ed.setPhase(EnderDragon.Phase.CIRCLING);
+        ed.setMetadata("DragonTeam", new FixedMetadataValue(plugin, bwt));
     }
 
     @Override
     public void colorBed(BedWarsTeam bwt) {
-
+        for (int x = -1; x <= 1; x++) {
+            for (int z = -1; z <= 1; z++) {
+                BlockState bed = bwt.getBed().clone().add(x, 0, z).getBlock().getState();
+                if (bed instanceof Bed) {
+                    ((Bed) bed).setColor(TeamColor.getDyeColor(bwt.getColor().toString()));
+                    bed.update();
+                }
+            }
+        }
     }
 
     @Override
@@ -517,11 +514,26 @@ public class v1_9_R2 implements NMS {
         try {
             Field field = Block.class.getDeclaredField("durability");
             field.setAccessible(true);
-            field.set(Block.getByName("glass"), 300f);
-            field.set(Block.getByName("stained_glass"), 300f);
+            field.set(Block.REGISTRY_ID.fromId(20), 300f);
+            field.set(Block.REGISTRY_ID.fromId(95), 300f);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+    /*@Override
+    public void spawnDragon(Location l, BedWarsTeam bwt) {
+        WorldServer mcWorld = ((CraftWorld) l.getWorld()).getHandle();
+        com.andrei1058.bedwars.support.bukkit.v1_13_R2.dragon.EntityEnderDragon customEnt = new EntityEnderDragon(mcWorld, bwt);
+        customEnt.setLocation(l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch());
+        ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
+        mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
+    }*/
+
+    @Override
+    public void showPlayer(Player victim, Player p) {
+        if (victim == p) return;
+        PacketPlayOutNamedEntitySpawn packet = new PacketPlayOutNamedEntitySpawn(((CraftPlayer) victim).getHandle());
+        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
     }
 
     @Override
@@ -529,8 +541,8 @@ public class v1_9_R2 implements NMS {
         return Effect.MOBSPAWNER_FLAMES;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
+    @SuppressWarnings("deprecation")
     public void setBlockTeamColor(org.bukkit.block.Block block, TeamColor teamColor) {
         block.setData(TeamColor.itemColor(teamColor));
     }

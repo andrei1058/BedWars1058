@@ -211,6 +211,7 @@ public class v1_8_R3 implements NMS {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ItemStack getItemInHand(Player p) {
         return p.getItemInHand();
     }
@@ -265,6 +266,7 @@ public class v1_8_R3 implements NMS {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void setCollide(Player p, Arena a, boolean value) {
         p.spigot().setCollidesWithEntities(value);
     }
@@ -493,6 +495,7 @@ public class v1_8_R3 implements NMS {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void showArmor(Player p, Player p2) {
         PacketPlayOutEntityEquipment hand1 = new PacketPlayOutEntityEquipment(p.getEntityId(), 0, CraftItemStack.asNMSCopy(p.getItemInHand()));
         PacketPlayOutEntityEquipment helmet = new PacketPlayOutEntityEquipment(p.getEntityId(), 4, CraftItemStack.asNMSCopy(p.getInventory().getHelmet()));
@@ -542,6 +545,7 @@ public class v1_8_R3 implements NMS {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void setBlockTeamColor(org.bukkit.block.Block block, TeamColor teamColor) {
         block.setData(TeamColor.itemColor(teamColor));
     }

@@ -185,6 +185,7 @@ public class v1_11_R1 implements NMS {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public org.bukkit.inventory.ItemStack getItemInHand(Player p) {
         return p.getItemInHand();
     }
@@ -525,6 +526,7 @@ public class v1_11_R1 implements NMS {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void setBlockTeamColor(org.bukkit.block.Block block, TeamColor teamColor) {
         block.setData(TeamColor.itemColor(teamColor));
     }

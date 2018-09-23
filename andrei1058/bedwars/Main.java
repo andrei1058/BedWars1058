@@ -19,6 +19,8 @@ import com.andrei1058.bedwars.support.bukkit.*;
 import com.andrei1058.bedwars.support.bukkit.v1_10_R1.v1_10_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_11_R1.v1_11_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_12_R1.v1_12_R1;
+import com.andrei1058.bedwars.support.bukkit.v1_13_R1.v1_13_R1;
+import com.andrei1058.bedwars.support.bukkit.v1_13_R2.v1_13_R2;
 import com.andrei1058.bedwars.support.bukkit.v1_8_R3.v1_8_R3;
 import com.andrei1058.bedwars.support.bukkit.v1_9_R1.v1_9_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_9_R2.v1_9_R2;
@@ -110,6 +112,12 @@ public class Main extends JavaPlugin {
             case "v1_12_R1":
                 nms = new v1_12_R1();
                 break;
+            case "v1_13_R1":
+                nms = new v1_13_R1();
+                break;
+            case "v1_13_R2":
+                nms = new v1_13_R2();
+                break;
             default:
                 support = false;
         }
@@ -164,6 +172,8 @@ public class Main extends JavaPlugin {
 
         /** Load version support */
         switch (version) {
+            case "v1_13_R2":
+            case "v1_13_R1":
             case "v1_12_R1":
                 registerEvents(new EntityDropPickListener());
                 break;

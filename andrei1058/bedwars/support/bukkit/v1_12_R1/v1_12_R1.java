@@ -524,7 +524,7 @@ public class v1_12_R1 implements NMS {
     /*@Override
     public void spawnDragon(Location l, BedWarsTeam bwt) {
         WorldServer mcWorld = ((CraftWorld) l.getWorld()).getHandle();
-        com.andrei1058.bedwars.support.bukkit.v1_12_R1.dragon.EntityEnderDragon customEnt = new EntityEnderDragon(mcWorld, bwt);
+        com.andrei1058.bedwars.support.bukkit.v1_13_R2.dragon.EntityEnderDragon customEnt = new EntityEnderDragon(mcWorld, bwt);
         customEnt.setLocation(l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch());
         ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
         mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
@@ -543,6 +543,7 @@ public class v1_12_R1 implements NMS {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void setBlockTeamColor(org.bukkit.block.Block block, TeamColor teamColor) {
         block.setData(TeamColor.itemColor(teamColor));
     }
