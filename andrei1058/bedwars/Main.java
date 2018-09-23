@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.api.GameAPI;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.arena.despawnables.TargetListener;
+import com.andrei1058.bedwars.commands.ShoutCommand;
 import com.andrei1058.bedwars.listeners.EntityDropPickListener;
 import com.andrei1058.bedwars.listeners.PlayerDropPickListener;
 import com.andrei1058.bedwars.arena.spectator.SpectatorListeners;
@@ -126,8 +127,9 @@ public class Main extends JavaPlugin {
             registerEvents(new CitizensListener());
         }
 
-        /** Register main command */
+        /** Register commands */
         nms.registerCommand(mainCmd, new MainCommand(mainCmd));
+        nms.registerCommand("shout", new ShoutCommand("shout"));
 
         /** Setup plugin messaging channel */
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
@@ -168,12 +170,20 @@ public class Main extends JavaPlugin {
             default:
                 registerEvents(new PlayerDropPickListener());
                 break;
-            case "v1_8_R2":
             case "v1_8_R3":
                 registerEvents(new PlayerDropPickListener());
-                /**Bukkit.getScheduler().runTaskLater(this, ()-> {
-                 System.out.println("\u001B[31m[WARN] BedWars1058 is going to abort support for this server version in the future.\nPlease consider upgrading to a newer paper/spigot version.\u001B[0m");
-                 }, 40L);*/
+                break;
+        }
+
+        /** Deprecated versions */
+        switch (version) {
+            case "v1_8_R3":
+            case "v1_9_R1":
+            case "v1_9_R2":
+            case "v1_10_R1":
+            case "v1_11_R1":
+                Bukkit.getScheduler().runTaskLater(this,
+                        () -> System.out.println("\u001B[31m[WARN] BedWars1058 is going to abort support for this server version in the future.\nPlease consider upgrading to a newer paper/spigot version.\u001B[0m"), 40L);
                 break;
         }
 
@@ -328,6 +338,7 @@ public class Main extends JavaPlugin {
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BEDS_DESTROY_COUNTDOWN, 360);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DRAGON_SPAWN_COUNTDOWN, 600);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_GAME_END_COUNTDOWN, 120);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SHOUT_COOLDOWN, 30);
 
         yml.addDefault("database.enable", false);
         yml.addDefault("database.host", "localhost");

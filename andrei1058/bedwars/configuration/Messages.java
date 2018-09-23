@@ -46,10 +46,11 @@ public class Messages {
     public static String COMMAND_PARTY_REMOVE_USAGE = "party.removeUsage";
     public static String COMMAND_PARTY_REMOVE_SUCCESS = "party.removed";
     public static String COMMAND_PARTY_REMOVE_DENIED_TARGET_NOT_PARTY_MEMBER = "player.removeNotIn";
-    public static String COMMAND_NOT_FOUND_OR_REQUIRES_SAFEMODE_OFF = "cmd.notFound";
+    public static String COMMAND_NOT_FOUND_OR_INSUFF_PERMS = "cmd.notFound";
     public static String COMMAND_FORCESTART_NOT_IN_GAME = "cmd.forcestart.notInGame";
     public static String COMMAND_FORCESTART_SUCCESS = "cmd.forcestart.success";
     public static String COMMAND_FORCESTART_NO_PERM = "cmd.forcestart.noPerm";
+    public static String COMMAND_COOLDOWN = "cmd.cooldown";
 
     /** Arena join/ leave related */
     public static String ARENA_JOIN_VIP_KICK = "arena.kickedByVip";
