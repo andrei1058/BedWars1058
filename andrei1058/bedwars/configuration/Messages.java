@@ -175,10 +175,13 @@ public class Messages {
     public static String PLAYER_DIE_SHOOT_REGULAR = "arena.playerDie.shoot";
     public static String PLAYER_DIE_SHOOT_FINAL_KILL = "arena.playerDie.shootFinalKill";
     public static String PLAYER_DIE_DEBUG_REGULAR = "arena.playerDie.bedbug";
-    public static String PLAYER_DIE_DEBUG_FINAL_KILL = "arena.playerDie.debugFinalKill";
+    public static String PLAYER_DIE_DEBUG_FINAL_KILL = "arena.playerDie.bedbugFinalKill";
     public static String PLAYER_DIE_IRON_GOLEM_REGULAR = "arena.playerDie.ironGolem";
     public static String PLAYER_DIE_IRON_GOLEM_FINAL_KILL = "arena.playerDie.ironGolemFinalKill";
-
+    public static String PLAYER_DIE_REWARD_DIAMOND = "arena.playerDie.diamondReward";
+    public static String PLAYER_DIE_REWARD_IRON = "arena.playerDie.ironReward";
+    public static String PLAYER_DIE_REWARD_GOLD = "arena.playerDie.goldReward";
+    public static String PLAYER_DIE_REWARD_EMERALD = "arena.playerDie.emeraldReward";
 
     /** Misc */
     public static String ARENA_GAME_OVER_PLAYER_TITLE = "arena.gameOverTitle";
