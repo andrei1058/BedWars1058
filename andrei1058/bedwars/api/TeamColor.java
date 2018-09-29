@@ -3,6 +3,7 @@ package com.andrei1058.bedwars.api;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
+import org.bukkit.Material;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -171,5 +172,37 @@ public enum TeamColor {
                 break;
         }
         return color;
+    }
+
+    /** For 1.13+ */
+    public static Material getBedBlock(TeamColor teamColor){
+        String color = "RED_BED";
+        switch (teamColor) {
+            case PINK:
+                color = "PINK_BED";
+                break;
+            case GRAY:
+                color = "GRAY_BED";
+                break;
+            case BLUE:
+                color = "BLUE_BED";
+                break;
+            case WHITE:
+                color = "WHITE_BED";
+                break;
+            case DARK_GREEN:
+                color = "GREEN_BED";
+                break;
+            case AQUA:
+                color = "LIGHT_BLUE_BED";
+                break;
+            case GREEN:
+                color = "LIME_BED";
+                break;
+            case YELLOW:
+                color = "YELLOW_BED";
+                break;
+        }
+        return Material.valueOf(color);
     }
 }
