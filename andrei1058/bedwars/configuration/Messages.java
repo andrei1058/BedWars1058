@@ -172,6 +172,12 @@ public class Messages {
     public static String PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL = "arena.playerDie.unknownFinalKill";
     public static String PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_REGULAR = "arena.playerDie.bomb2";
     public static String PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_FINAL_KILL = "arena.playerDie.bomb2FinalKill";
+    public static String PLAYER_DIE_SHOOT_REGULAR = "arena.playerDie.shoot";
+    public static String PLAYER_DIE_SHOOT_FINAL_KILL = "arena.playerDie.shootFinalKill";
+    public static String PLAYER_DIE_DEBUG_REGULAR = "arena.playerDie.debug";
+    public static String PLAYER_DIE_DEBUG_FINAL_KILL = "arena.playerDie.debugFinalKill";
+    public static String PLAYER_DIE_IRON_GOLEM_REGULAR = "arena.playerDie.ironGolem";
+    public static String PLAYER_DIE_IRON_GOLEM_FINAL_KILL = "arena.playerDie.ironGolemFinalKill";
 
 
     /** Misc */

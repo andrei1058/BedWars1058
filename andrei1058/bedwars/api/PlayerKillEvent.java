@@ -38,7 +38,40 @@ public class PlayerKillEvent extends Event {
         this.cause = cause;
     }
 
-    public enum PlayerKillCause {UNKNOWN, UNKNOWN_FINAL_KILL, EXPLOSION, EXPLOSION_FINAL_KILL, VOID, VOID_FINAL_KILL, PVP, PVP_FINAL_KILL,}
+    public enum PlayerKillCause {
+        UNKNOWN,
+        UNKNOWN_FINAL_KILL,
+        EXPLOSION,
+        EXPLOSION_FINAL_KILL,
+        VOID,
+        VOID_FINAL_KILL,
+        PVP,
+        PVP_FINAL_KILL,
+        /**
+         * @since API 11
+         */
+        PLAYER_SHOOT,
+        /**
+         * @since API 11
+         */
+        PLAYER_SHOOT_FINAL_KILL,
+        /**
+         * @since API 11
+         */
+        SILVERFISH,
+        /**
+         * @since API 11
+         */
+        SILVERFISH_FINAL_KILL,
+        /**
+         * @since API 11
+         */
+        IRON_GOLEM,
+        /**
+         * @since API 11
+         */
+        IRON_GOLEM_FINAL_KILL
+    }
 
     public Player getKiller() {
         return killer;
