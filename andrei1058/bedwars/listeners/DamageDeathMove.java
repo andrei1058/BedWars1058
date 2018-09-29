@@ -100,7 +100,7 @@ public class DamageDeathMove implements Listener {
                     e.setCancelled(true);
                     return;
                 }
-                Player damager;
+                Player damager = null;
                 if (e.getDamager() instanceof Projectile) {
                     ProjectileSource shooter = ((Projectile) e.getDamager()).getShooter();
                     if (shooter instanceof Player) {
@@ -117,8 +117,26 @@ public class DamageDeathMove implements Listener {
                     if (tnt.getSource() instanceof Player) {
                         damager = (Player) tnt.getSource();
                     } else return;
-                } else return;
-                if (a.isSpectator(damager)) return;
+                }
+                if (damager != null) {
+                    if (a.isSpectator(damager)) return;
+                    if (getLastHit().containsKey(p)) {
+                        LastHit lh = getLastHit().get(p);
+                        lh.setDamager(damager);
+                        lh.setTime(System.currentTimeMillis());
+                    } else {
+                        new LastHit(p, damager, System.currentTimeMillis());
+                    }
+                }
+                if ((e.getDamager() instanceof Silverfish) || (e.getDamager() instanceof IronGolem)) {
+                    if (getLastHit().containsKey(p)) {
+                        LastHit lh = getLastHit().get(p);
+                        lh.setDamager(e.getDamager());
+                        lh.setTime(System.currentTimeMillis());
+                    } else {
+                        new LastHit(p, e.getDamager(), System.currentTimeMillis());
+                    }
+                }
                 for (BedWarsTeam t : a.getTeams()) {
                     if (t.isMember(p) && t.isMember(damager)) {
                         if (!(e.getDamager() instanceof TNTPrimed)) {
@@ -126,13 +144,6 @@ public class DamageDeathMove implements Listener {
                         }
                         return;
                     }
-                }
-                if (getLastHit().containsKey(p)) {
-                    LastHit lh = getLastHit().get(p);
-                    lh.setDamager(damager);
-                    lh.setTime(System.currentTimeMillis());
-                } else {
-                    new LastHit(p, damager, System.currentTimeMillis());
                 }
             }
         } else if (e.getEntity() instanceof Silverfish) {
@@ -225,7 +236,7 @@ public class DamageDeathMove implements Listener {
                     LastHit lh = getLastHit().get(victim);
                     if (lh != null) {
                         if (lh.getTime() >= System.currentTimeMillis() - 15000) {
-                            killer = lh.getDamager();
+                            if (lh.getDamager() instanceof Player) killer = (Player) lh.getDamager();
                         }
                     }
                     if (killer == null) {
@@ -243,7 +254,7 @@ public class DamageDeathMove implements Listener {
                     LastHit lh = getLastHit().get(victim);
                     if (lh != null) {
                         if (lh.getTime() >= System.currentTimeMillis() - 15000) {
-                            killer = lh.getDamager();
+                            if (lh.getDamager() instanceof Player) killer = (Player) lh.getDamager();
                         }
                     }
                     if (killer == null) {
@@ -257,33 +268,35 @@ public class DamageDeathMove implements Listener {
                     }
                     cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.VOID_FINAL_KILL : PlayerKillEvent.PlayerKillCause.VOID;
                 } else if (damageEvent.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
-                    if (killer != null) {
-                        if ((killer instanceof Silverfish)){
-                            if (nms.isDespawnable(killer)) {
-                                t2 = nms.ownDespawnable(killer);
-                                message = t.isBedDestroyed() ? Messages.PLAYER_DIE_DEBUG_FINAL_KILL : Messages.PLAYER_DIE_DEBUG_REGULAR;
-                                cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.SILVERFISH_FINAL_KILL : PlayerKillEvent.PlayerKillCause.SILVERFISH;
+                    if (killer == null) {
+                        LastHit lh = getLastHit().get(victim);
+                        if (lh != null) {
+                            if (lh.getTime() >= System.currentTimeMillis() - 15000) {
+                                if ((lh.getDamager() instanceof Silverfish)) {
+                                    if (nms.isDespawnable(lh.getDamager())) {
+                                        t2 = nms.ownDespawnable(lh.getDamager());
+                                        message = t.isBedDestroyed() ? Messages.PLAYER_DIE_DEBUG_FINAL_KILL : Messages.PLAYER_DIE_DEBUG_REGULAR;
+                                        cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.SILVERFISH_FINAL_KILL : PlayerKillEvent.PlayerKillCause.SILVERFISH;
+                                    }
+                                    killer = null;
+                                } else if (lh.getDamager() instanceof IronGolem) {
+                                    if (nms.isDespawnable(lh.getDamager())) {
+                                        t2 = nms.ownDespawnable(lh.getDamager());
+                                        message = t.isBedDestroyed() ? Messages.PLAYER_DIE_IRON_GOLEM_FINAL_KILL : Messages.PLAYER_DIE_IRON_GOLEM_REGULAR;
+                                        cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.IRON_GOLEM_FINAL_KILL : PlayerKillEvent.PlayerKillCause.IRON_GOLEM;
+                                    }
+                                    killer = null;
+                                }
                             }
-                            killer = null;
-                        } else if (killer instanceof IronGolem){
-                            if (nms.isDespawnable(killer)) {
-                                t2 = nms.ownDespawnable(killer);
-                                message = t.isBedDestroyed() ? Messages.PLAYER_DIE_IRON_GOLEM_FINAL_KILL : Messages.PLAYER_DIE_IRON_GOLEM_REGULAR;
-                                cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.IRON_GOLEM_FINAL_KILL : PlayerKillEvent.PlayerKillCause.IRON_GOLEM;
-                            }
-                            killer = null;
-                        } else {
-                            message = t.isBedDestroyed() ? Messages.PLAYER_DIE_PVP_FINAL_KILL : Messages.PLAYER_DIE_PVP_REGULAR_KILL;
-                            cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.PVP_FINAL_KILL : PlayerKillEvent.PlayerKillCause.PVP;
                         }
+                    } else {
+                        message = t.isBedDestroyed() ? Messages.PLAYER_DIE_PVP_FINAL_KILL : Messages.PLAYER_DIE_PVP_REGULAR_KILL;
+                        cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.PVP_FINAL_KILL : PlayerKillEvent.PlayerKillCause.PVP;
                     }
                 } else if (damageEvent.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
                     if (killer != null) {
-                        if (((Projectile) killer).getShooter() instanceof Player) {
-                            killer = (Player) ((Projectile) killer).getShooter();
-                            message = t.isBedDestroyed() ? Messages.PLAYER_DIE_SHOOT_FINAL_KILL : Messages.PLAYER_DIE_SHOOT_REGULAR;
-                            cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.PLAYER_SHOOT_FINAL_KILL : PlayerKillEvent.PlayerKillCause.PLAYER_SHOOT;
-                        }
+                        message = t.isBedDestroyed() ? Messages.PLAYER_DIE_SHOOT_FINAL_KILL : Messages.PLAYER_DIE_SHOOT_REGULAR;
+                        cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.PLAYER_SHOOT_FINAL_KILL : PlayerKillEvent.PlayerKillCause.PLAYER_SHOOT;
                     }
                 }
 

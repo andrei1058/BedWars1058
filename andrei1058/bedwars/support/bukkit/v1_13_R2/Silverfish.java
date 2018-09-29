@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -18,7 +19,7 @@ import static com.andrei1058.bedwars.Main.shop;
 
 public class Silverfish extends EntitySilverfish {
 
-    public Silverfish(World world, List<Player> exclude) {
+    public Silverfish(World world) {
         super(world);
         try {
             Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
@@ -37,7 +38,7 @@ public class Silverfish extends EntitySilverfish {
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
         this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this,1.0D, false));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true, new Class[0]));
-        this.targetSelector.a(2, new AttackEnemies(this, EntityHuman.class, true, exclude));
+        this.targetSelector.a(2, new AttackEnemies(this, EntityHuman.class, true, new ArrayList<>()));
         this.goalSelector.a(5, new PathfinderGoalSilverfishHideInBlock(this));
     }
 
@@ -106,7 +107,7 @@ public class Silverfish extends EntitySilverfish {
 
     public static Silverfish spawn(Location loc, BedWarsTeam team) {
         WorldServer mcWorld = ((CraftWorld)loc.getWorld()).getHandle();
-        Silverfish customEnt = new Silverfish(mcWorld, team.getMembers());
+        Silverfish customEnt = new Silverfish(mcWorld);
         customEnt.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
         ((CraftLivingEntity)customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
         customEnt.setCustomNameVisible(true);

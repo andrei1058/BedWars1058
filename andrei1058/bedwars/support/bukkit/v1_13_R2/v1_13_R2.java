@@ -11,8 +11,10 @@ import com.andrei1058.bedwars.exceptions.InvalidSoundException;
 import com.andrei1058.bedwars.support.bukkit.NMS;
 import com.andrei1058.bedwars.support.bukkit.utils.Misc;
 import com.google.common.collect.Sets;
+import com.mojang.datafixers.types.Type;
 import net.minecraft.server.v1_13_R2.*;
 import net.minecraft.server.v1_13_R2.Item;
+import org.bukkit.DyeColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -36,6 +38,7 @@ import org.bukkit.scoreboard.Team;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.despawnables.TargetListener.owningTeam;
@@ -279,9 +282,13 @@ public class v1_13_R2 implements NMS {
 
     @Override
     public void registerEntities() {
-        registerEntity("ShopNPC", 120, VillagerShop.class);
-        registerEntity("Silverfish2", 60, Silverfish.class);
-        registerEntity("IGolem", 99, IGolem.class);
+        Map<Object, Type<?>> types = (Map<Object, Type<?>>) DataConverterRegistry.a().getSchema(15190).findChoiceType(DataConverterTypes.n).types();
+        types.put("minecraft:bwvillager", types.get("minecraft:villager"));
+        EntityTypes.a("bwvillager", EntityTypes.a.a(VillagerShop.class, VillagerShop::new));
+        types.put("minecraft:bwsilverfish", types.get("minecraft:silverfish"));
+        EntityTypes.a("bwsilverfish", EntityTypes.a.a(Silverfish.class, Silverfish::new));
+        types.put("minecraft:bwgolem", types.get("minecraft:iron_golem"));
+        EntityTypes.a("bwgolem", EntityTypes.a.a(IGolem.class, IGolem::new));
     }
 
     @Override
@@ -505,7 +512,7 @@ public class v1_13_R2 implements NMS {
             for (int z = -1; z <= 1; z++) {
                 BlockState bed = bwt.getBed().clone().add(x, 0, z).getBlock().getState();
                 if (bed instanceof Bed) {
-                    ((Bed) bed).setColor(TeamColor.getDyeColor(bwt.getColor().toString()));
+                    bed.setType(TeamColor.getBedBlock(bwt.getColor()));
                     bed.update();
                 }
             }
@@ -514,23 +521,15 @@ public class v1_13_R2 implements NMS {
 
     @Override
     public void registerTntWhitelist() {
-        try {
+        /*try {
             Field field = Block.class.getDeclaredField("durability");
             field.setAccessible(true);
             field.set(Block.REGISTRY_ID.fromId(20), 300f);
             field.set(Block.REGISTRY_ID.fromId(95), 300f);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
-        }
+        }*/
     }
-    /*@Override
-    public void spawnDragon(Location l, BedWarsTeam bwt) {
-        WorldServer mcWorld = ((CraftWorld) l.getWorld()).getHandle();
-        com.andrei1058.bedwars.support.bukkit.v1_13_R2.dragon.EntityEnderDragon customEnt = new EntityEnderDragon(mcWorld, bwt);
-        customEnt.setLocation(l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch());
-        ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
-        mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
-    }*/
 
     @Override
     public void showPlayer(Player victim, Player p) {

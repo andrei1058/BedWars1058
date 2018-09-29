@@ -1,16 +1,19 @@
 package com.andrei1058.bedwars.arena;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 
 public class LastHit {
 
-    private Player victim, damager;
+    private Player victim;
+    private Entity damager;
     private long time;
     private static HashMap<Player, LastHit> lastHit = new HashMap<>();
 
-    public LastHit (Player victim, Player damager, long time){
+    public LastHit (Player victim, Entity damager, long time){
         this.victim = victim;
         this.damager = damager;
         this.time = time;
@@ -21,11 +24,11 @@ public class LastHit {
         this.time = time;
     }
 
-    public void setDamager(Player damager) {
+    public void setDamager(Entity damager) {
         this.damager = damager;
     }
 
-    public Player getDamager() {
+    public Entity getDamager() {
         return damager;
     }
 
