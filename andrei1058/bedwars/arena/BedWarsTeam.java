@@ -37,7 +37,7 @@ public class BedWarsTeam {
     private List<Player> members = new ArrayList<>();
     private TeamColor color;
     private Location spawn, bed, shop, teamUpgrades;
-    private com.andrei1058.bedwars.arena.OreGenerator ironGenerator, goldGenerator, emeraldGenerator;
+    private com.andrei1058.bedwars.arena.OreGenerator ironGenerator = null, goldGenerator = null, emeraldGenerator = null;
     private String name;
     private Arena arena;
     private boolean bedDestroyed = false;
