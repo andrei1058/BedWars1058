@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.api;
+package com.andrei1058.bedwars.api.events;
 
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
@@ -6,13 +6,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class ArenaPlayerRespawnEvent extends Event {
+public class ArenaFirstSpawnEvent extends Event {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
     private Player player;
     private Arena arena;
     private BedWarsTeam team;
+    private BedWarsTeam.PlayerVault playerVault;
 
     /**
      * Called when a member is respawned on his island
@@ -21,10 +22,11 @@ public class ArenaPlayerRespawnEvent extends Event {
      *
      * @since API 9
      */
-    public ArenaPlayerRespawnEvent(Player player, Arena arena, BedWarsTeam team) {
+    public ArenaFirstSpawnEvent(Player player, Arena arena, BedWarsTeam team, BedWarsTeam.PlayerVault playerVault) {
         this.player = player;
         this.arena = arena;
         this.team = team;
+        this.playerVault = playerVault;
     }
 
     /**
@@ -52,6 +54,15 @@ public class ArenaPlayerRespawnEvent extends Event {
      */
     public Player getPlayer() {
         return player;
+    }
+
+    /** Get the PlayerVault
+     * It contains the permanet items given to the player at the first spawn and
+     * also there can be added permanent items bought from the shop.
+     *
+     * @since API9*/
+    public BedWarsTeam.PlayerVault getPlayerVault() {
+        return playerVault;
     }
 
     public HandlerList getHandlers() {

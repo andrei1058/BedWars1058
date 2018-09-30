@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.api;
+package com.andrei1058.bedwars.api.events;
 
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.event.Event;

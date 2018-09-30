@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.api;
+package com.andrei1058.bedwars.api.events;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

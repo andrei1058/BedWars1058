@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.api;
+package com.andrei1058.bedwars.api.events;
 
 import com.andrei1058.bedwars.configuration.Language;
 import org.bukkit.entity.Player;

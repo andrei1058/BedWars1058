@@ -1,5 +1,6 @@
-package com.andrei1058.bedwars.api;
+package com.andrei1058.bedwars.api.events;
 
+import com.andrei1058.bedwars.api.GeneratorType;
 import org.bukkit.Location;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

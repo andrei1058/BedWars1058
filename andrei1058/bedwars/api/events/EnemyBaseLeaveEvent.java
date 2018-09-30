@@ -1,19 +1,18 @@
-package com.andrei1058.bedwars.api;
+package com.andrei1058.bedwars.api.events;
 
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class EnemyBaseEnterEvent extends Event {
+public class EnemyBaseLeaveEvent extends Event {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
     private Player enemy;
     private BedWarsTeam enemyTeam, team;
 
-    @Deprecated
-    public EnemyBaseEnterEvent(Player p, BedWarsTeam pTeam, BedWarsTeam enter) {
+    public EnemyBaseLeaveEvent(Player p, BedWarsTeam pTeam, BedWarsTeam enter) {
         this.enemy = p;
         this.enemyTeam = pTeam;
         this.team = enter;

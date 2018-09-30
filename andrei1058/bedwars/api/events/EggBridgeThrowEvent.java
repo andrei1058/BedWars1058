@@ -1,67 +1,63 @@
-package com.andrei1058.bedwars.api;
+package com.andrei1058.bedwars.api.events;
 
+import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Contract;
 
-public class GeneratorCollectEvent extends Event {
+public class EggBridgeThrowEvent extends Event {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
     private Player player;
-    private ItemStack itemStack;
+    private Arena arena;
     private boolean cancelled = false;
 
     /**
-     * Triggered when collect from generators
+     * Called when a player throw an egg bridge and it starts building
      *
-     * @since API 8
+     * @since API 10
      */
-    public GeneratorCollectEvent(Player player, ItemStack itemStack) {
+    public EggBridgeThrowEvent(Player player, Arena arena) {
         this.player = player;
-        this.itemStack = itemStack;
+        this.arena = arena;
     }
 
     /**
-     * Get the player
+     * Get player
      *
-     * @since API v8
+     * @since API 10
      */
     public Player getPlayer() {
         return player;
     }
 
     /**
-     * Get the itemStack involved
-     *
-     * @since API v8
-     */
-    public ItemStack getItemStack() {
-        return itemStack;
-    }
-
-    /**
-     * Cancel this event
+     * Get arena
      *
      * @since API 10
      */
+    public Arena getArena() {
+        return arena;
+    }
+
+    /** Check if event is cancelled
+     *
+     * @since API 10*/
     public boolean isCancelled() {
         return cancelled;
     }
 
-    /**
-     * @since API 10
-     */
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
     }
 
-    @Override
     public HandlerList getHandlers() {
         return HANDLERS;
     }
 
+    @Contract(pure = true)
     public static HandlerList getHandlerList() {
         return HANDLERS;
     }
