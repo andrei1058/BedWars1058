@@ -14,6 +14,7 @@ import com.andrei1058.bedwars.commands.LeaveCommand;
 import com.andrei1058.bedwars.commands.main.MainCommand;
 import com.andrei1058.bedwars.configuration.*;
 import com.andrei1058.bedwars.listeners.*;
+import com.andrei1058.bedwars.listeners.arenaselector.ArenaSelectorListener;
 import com.andrei1058.bedwars.support.Metrics;
 import com.andrei1058.bedwars.support.bukkit.*;
 import com.andrei1058.bedwars.support.bukkit.v1_10_R1.v1_10_R1;
@@ -165,7 +166,7 @@ public class Main extends JavaPlugin {
 
         /** Register events */
         registerEvents(new JoinLeaveTeleport(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(),
-                new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener());
+                new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener(), new ArenaSelectorListener());
         if (getServerType() == ServerType.BUNGEE) {
             registerEvents(new Ping());
         }

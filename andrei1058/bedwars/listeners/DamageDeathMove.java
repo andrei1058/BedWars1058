@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.*;
+import com.andrei1058.bedwars.api.events.PlayerKillEvent;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Language;
@@ -18,11 +19,9 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.Arrays;
-import java.util.HashMap;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.LastHit.getLastHit;
@@ -231,7 +230,7 @@ public class DamageDeathMove implements Listener {
                     return;
                 }
                 String message = t.isBedDestroyed() ? Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL : Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR;
-                PlayerKillEvent.PlayerKillCause cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.UNKNOWN_FINAL_KILL : PlayerKillEvent.PlayerKillCause.UNKNOWN;
+                com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause cause = t.isBedDestroyed() ? com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause.UNKNOWN_FINAL_KILL : com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause.UNKNOWN;
                 if (damageEvent.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
                     LastHit lh = getLastHit().get(victim);
                     if (lh != null) {
@@ -248,7 +247,7 @@ public class DamageDeathMove implements Listener {
                             message = t.isBedDestroyed() ? Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_FINAL_KILL : Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_REGULAR;
                         }
                     }
-                    cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.EXPLOSION_FINAL_KILL : PlayerKillEvent.PlayerKillCause.EXPLOSION;
+                    cause = t.isBedDestroyed() ? com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause.EXPLOSION_FINAL_KILL : com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause.EXPLOSION;
 
                 } else if (damageEvent.getCause() == EntityDamageEvent.DamageCause.VOID) {
                     LastHit lh = getLastHit().get(victim);
@@ -266,7 +265,7 @@ public class DamageDeathMove implements Listener {
                             message = t.isBedDestroyed() ? Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL : Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL;
                         }
                     }
-                    cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.VOID_FINAL_KILL : PlayerKillEvent.PlayerKillCause.VOID;
+                    cause = t.isBedDestroyed() ? com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause.VOID_FINAL_KILL : com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause.VOID;
                 } else if (damageEvent.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
                     if (killer == null) {
                         LastHit lh = getLastHit().get(victim);
@@ -276,14 +275,14 @@ public class DamageDeathMove implements Listener {
                                     if (nms.isDespawnable(lh.getDamager())) {
                                         t2 = nms.ownDespawnable(lh.getDamager());
                                         message = t.isBedDestroyed() ? Messages.PLAYER_DIE_DEBUG_FINAL_KILL : Messages.PLAYER_DIE_DEBUG_REGULAR;
-                                        cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.SILVERFISH_FINAL_KILL : PlayerKillEvent.PlayerKillCause.SILVERFISH;
+                                        cause = t.isBedDestroyed() ? com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause.SILVERFISH_FINAL_KILL : com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause.SILVERFISH;
                                     }
                                     killer = null;
                                 } else if (lh.getDamager() instanceof IronGolem) {
                                     if (nms.isDespawnable(lh.getDamager())) {
                                         t2 = nms.ownDespawnable(lh.getDamager());
                                         message = t.isBedDestroyed() ? Messages.PLAYER_DIE_IRON_GOLEM_FINAL_KILL : Messages.PLAYER_DIE_IRON_GOLEM_REGULAR;
-                                        cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.IRON_GOLEM_FINAL_KILL : PlayerKillEvent.PlayerKillCause.IRON_GOLEM;
+                                        cause = t.isBedDestroyed() ? com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause.IRON_GOLEM_FINAL_KILL : com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause.IRON_GOLEM;
                                     }
                                     killer = null;
                                 }
@@ -291,12 +290,12 @@ public class DamageDeathMove implements Listener {
                         }
                     } else {
                         message = t.isBedDestroyed() ? Messages.PLAYER_DIE_PVP_FINAL_KILL : Messages.PLAYER_DIE_PVP_REGULAR_KILL;
-                        cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.PVP_FINAL_KILL : PlayerKillEvent.PlayerKillCause.PVP;
+                        cause = t.isBedDestroyed() ? com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause.PVP_FINAL_KILL : com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause.PVP;
                     }
                 } else if (damageEvent.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
                     if (killer != null) {
                         message = t.isBedDestroyed() ? Messages.PLAYER_DIE_SHOOT_FINAL_KILL : Messages.PLAYER_DIE_SHOOT_REGULAR;
-                        cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.PLAYER_SHOOT_FINAL_KILL : PlayerKillEvent.PlayerKillCause.PLAYER_SHOOT;
+                        cause = t.isBedDestroyed() ? com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause.PLAYER_SHOOT_FINAL_KILL : com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause.PLAYER_SHOOT;
                     }
                 }
 
@@ -331,7 +330,7 @@ public class DamageDeathMove implements Listener {
                             }
                         }
                         a.addPlayerKill(killer, true, victim);
-                        Bukkit.getPluginManager().callEvent(new FinalKillEvent(a.getWorldName(), victim, killer));
+                        Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.FinalKillEvent(a.getWorldName(), victim, killer));
                     } else {
                         if (!a.getCm().getBoolean(ConfigPath.ARENA_NORMAL_DEATH_DROPS)) {
                             if (!a.getRespawn().containsKey(killer)) {
@@ -370,7 +369,7 @@ public class DamageDeathMove implements Listener {
                     killer.playSound(killer.getLocation(), nms.playerKill(), 1f, 1f);
                 } else {
                     if (t.isBedDestroyed()) {
-                        Bukkit.getPluginManager().callEvent(new FinalKillEvent(a.getWorldName(), victim, null));
+                        Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.FinalKillEvent(a.getWorldName(), victim, null));
                     }
                 }
                 /** call game kill event */

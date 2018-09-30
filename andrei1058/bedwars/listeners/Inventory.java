@@ -4,7 +4,6 @@ import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.arena.ArenaGUI;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.shop.CategoryContent;
@@ -29,11 +28,6 @@ public class Inventory implements Listener {
     @EventHandler
     public void onClose(InventoryCloseEvent e) {
         Player p = (Player) e.getPlayer();
-        if (ArenaGUI.getRefresh().containsKey(p)) {
-            if (e.getInventory().equals(ArenaGUI.getRefresh().get(p))) {
-                ArenaGUI.getRefresh().remove(p);
-            }
-        }
         if (e.getInventory().getName().equalsIgnoreCase(SetupSession.getInvName())) {
             SetupSession ss = SetupSession.getSession(p);
             if (ss != null) {
@@ -147,19 +141,6 @@ public class Inventory implements Listener {
                             tu.doAction(p, a.getTeam(p));
                             return;
                         }
-                    }
-                }
-            }
-        }
-
-        if (ArenaGUI.getRefresh().containsKey(p)) {
-            if (e.getClickedInventory().equals(ArenaGUI.getRefresh().get(p))) {
-                for (Arena ar : Arena.getArenas()) {
-                    if (ar.getSlot() == e.getSlot()) {
-                        ar.addPlayer(p, false);
-                        e.setCancelled(true);
-                        p.closeInventory();
-                        break;
                     }
                 }
             }

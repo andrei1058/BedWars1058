@@ -2,7 +2,7 @@ package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
-import com.andrei1058.bedwars.api.GeneratorCollectEvent;
+import com.andrei1058.bedwars.api.events.GeneratorCollectEvent;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;

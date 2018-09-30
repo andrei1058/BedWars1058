@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.tasks;
 
-import com.andrei1058.bedwars.api.EggBridgeBuildEvent;
+import com.andrei1058.bedwars.api.events.EggBridgeBuildEvent;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;

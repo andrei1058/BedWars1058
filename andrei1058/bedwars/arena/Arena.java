@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.*;
+import com.andrei1058.bedwars.api.events.PlayerLeaveArenaEvent;
 import com.andrei1058.bedwars.configuration.ConfigManager;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Language;
@@ -220,7 +221,7 @@ public class Arena {
         /* Register arena signs */
         registerSigns();
         //Call event
-        Bukkit.getPluginManager().callEvent(new ArenaEnableEvent(this));
+        Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.ArenaEnableEvent(this));
     }
 
     /**
@@ -423,7 +424,7 @@ public class Arena {
                     sh.updateForPlayer(p, iso);
                 }
             }
-            Bukkit.getPluginManager().callEvent(new PlayerJoinArenaEvent(p, true));
+            Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.PlayerJoinArenaEvent(p, true));
         } else {
             p.sendMessage(getMsg(p, Messages.ARENA_JOIN_SPECTATOR_DENIED_MSG));
         }
@@ -459,7 +460,7 @@ public class Arena {
             }
         }
 
-        Bukkit.getPluginManager().callEvent(new PlayerLeaveArenaEvent(p, this));
+        Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.PlayerLeaveArenaEvent(p, this));
         //players.remove must be under call event in order to check if the player is a spectator or not
         players.remove(p);
         removeArenaByPlayer(p);
@@ -725,7 +726,7 @@ public class Arena {
         arenaByName.remove(world.getName());
         arenas.remove(this);
         //Call event
-        Bukkit.getPluginManager().callEvent(new ArenaDisableEvent(getWorldName()));
+        Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.ArenaDisableEvent(getWorldName()));
         signs.clear();
     }
 
@@ -936,7 +937,7 @@ public class Arena {
 
     private void setArenaByPlayer(Player p, boolean spectator) {
         arenaByPlayer.put(p, this);
-        Bukkit.getPluginManager().callEvent(new PlayerJoinArenaEvent(p, spectator));
+        Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.PlayerJoinArenaEvent(p, spectator));
         refreshSigns();
         JoinNPC.updateNPCs(getGroup());
     }
@@ -949,7 +950,7 @@ public class Arena {
 
     public void setStatus(GameState status) {
         this.status = status;
-        Bukkit.getPluginManager().callEvent(new GameStateChangeEvent(this, status));
+        Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.GameStateChangeEvent(this, status));
         refreshSigns();
 
         //Stop active tasks to prevent issues
@@ -1279,7 +1280,7 @@ public class Arena {
                         losers.add(p.getUniqueId());
                     }
                 }
-                Bukkit.getPluginManager().callEvent(new GameEndEvent(this, winners, losers, winner, aliveWinners));
+                Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.GameEndEvent(this, winners, losers, winner, aliveWinners));
                 //
 
             }

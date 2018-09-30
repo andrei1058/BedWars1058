@@ -1,8 +1,7 @@
 package com.andrei1058.bedwars.arena;
 
-import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GeneratorType;
-import com.andrei1058.bedwars.api.GeneratorUpgradeEvent;
+import com.andrei1058.bedwars.api.events.GeneratorUpgradeEvent;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
@@ -10,7 +9,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
-import org.bukkit.World;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;

@@ -1,10 +1,9 @@
 package com.andrei1058.bedwars.shop;
 
-import com.andrei1058.bedwars.api.ShopBuyEvent;
+import com.andrei1058.bedwars.api.events.ShopBuyEvent;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
-import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

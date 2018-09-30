@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.support.lang;
 
-import com.andrei1058.bedwars.api.PlayerLangChangeEvent;
+import com.andrei1058.bedwars.api.events.PlayerLangChangeEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SBoard;
