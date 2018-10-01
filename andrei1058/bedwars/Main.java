@@ -491,14 +491,15 @@ public class Main extends JavaPlugin {
                     new Arena(file.getName().replace(".yml", ""), null);
                 }
             }
-            if (Arena.getArenas().isEmpty()) {
+            //todo test if you can do the setup in BUNGEE mode
+            /*if (Arena.getArenas().isEmpty()) {
                 if (getServerType() == ServerType.BUNGEE) {
                     plugin.getLogger().severe("Please set the server type to MULTIARENA and do the setup.");
                     config.set("serverType", "MULTIARENA");
                     Bukkit.getServer().spigot().restart();
                     plugin.setEnabled(false);
                 }
-            }
+            }*/
         } else {
             if (getServerType() == ServerType.BUNGEE) {
                 plugin.getLogger().severe("Please set the server type to MULTIARENA and do the setup.");

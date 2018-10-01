@@ -30,6 +30,7 @@ public class JoinLeaveTeleport implements Listener {
     @EventHandler
     public void onLogin(PlayerLoginEvent e) {
         if (getServerType() == ServerType.BUNGEE) {
+            if (Arena.getArenas().isEmpty()) return;
             Arena a = Arena.getArenas().get(0);
             if (a.getStatus() == GameState.waiting || (a.getStatus() == GameState.starting && a.getStartingTask().getCountdown() > 2)) {
                 if (a.getPlayers().size() >= a.getMaxPlayers() && !Arena.isVip(e.getPlayer())) {
@@ -107,6 +108,7 @@ public class JoinLeaveTeleport implements Listener {
             p.sendMessage("");
             p.sendMessage("§8[§f" + plugin.getName() + "§8]§7§m---------------------------");
         }
+        if (Arena.getArenas().isEmpty()) return;
         if (Main.getServerType() == ServerType.SHARED) {
             if (Main.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
                 Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {

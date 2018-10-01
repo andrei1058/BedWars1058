@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.commands.main;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.ParentCommand;
@@ -45,7 +46,9 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         new Stats(this, "stats");
         new ForceStart(this, "forceStart");
         new ForceStart(this, "start");
-        new SetLobby(this, "setLobby"); //priority 1
+        if (Main.getServerType() != ServerType.BUNGEE) {
+            new SetLobby(this, "setLobby"); //priority 1
+        }
         new SetupArena(this, "setupArena"); //priority 2
         new ArenaList(this, "arenaList"); //priority 3
         new DelArena(this, "delArena"); //priority 4
@@ -71,7 +74,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         new AddGenerator(this, "addGenerator");
         new SetType(this, "setType");
         new Save(this, "save");
-        if (JoinNPC.isCitizensSupport()){
+        if (JoinNPC.isCitizensSupport() && Main.getServerType() != ServerType.BUNGEE){
             new NPC(this, "npc");
         }
     }
@@ -180,6 +183,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
      * Check if lobby location is set, else send a error message to the player
      */
     public static boolean isLobbySet(Player p) {
+        if (Main.getServerType() == ServerType.BUNGEE) return true;
         if (config.getLobbyWorldName().isEmpty()) {
             if (p != null) {
                 p.sendMessage("§c▪ §7You have to set the lobby location first!");
