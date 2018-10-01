@@ -79,21 +79,9 @@ public class Main extends JavaPlugin {
     @Override
     public void onLoad() {
         plugin = this;
-        config = new ConfigManager("config", "plugins/" + this.getName(), false);
 
-        Language en = new Language("en");
-        setupLang(en);
-        Language.getLanguages().remove(en);
-        setupConfig();
-        generators = new ConfigManager("generators", "plugins/" + this.getName(), false);
-        setupGeneratorsCfg();
-        upgrades = new UpgradesManager("upgrades", "plugins/" + this.getName());
-    }
-
-    @Override
-    public void onEnable() {
-        boolean support = true;
         /* Load version support 1.8 - 1.12 */
+        boolean support = true;
         switch (version) {
             case "v1_8_R3":
                 nms = new v1_8_R3();
@@ -128,6 +116,20 @@ public class Main extends JavaPlugin {
             this.getLogger().severe("I can't run on your version: " + version);
             return;
         }
+
+        config = new ConfigManager("config", "plugins/" + this.getName(), false);
+
+        Language en = new Language("en");
+        setupLang(en);
+        Language.getLanguages().remove(en);
+        setupConfig();
+        generators = new ConfigManager("generators", "plugins/" + this.getName(), false);
+        setupGeneratorsCfg();
+        upgrades = new UpgradesManager("upgrades", "plugins/" + this.getName());
+    }
+
+    @Override
+    public void onEnable() {
 
         /* Citizens support */
         if (this.getServer().getPluginManager().getPlugin("Citizens") != null) {
@@ -565,7 +567,7 @@ public class Main extends JavaPlugin {
             case "v1_12_R1":
                 return v12;
             case "v1_13_R1":
-            case "v_13_R2":
+            case "v1_13_R2":
                 return v13;
         }
         return v18;

@@ -59,7 +59,7 @@ public class ShopManager {
                 set("main.invContents.armor.invContents.back.buyItems", new ArrayList<>());
 
                 //melee
-                setMainStuff("main.invContents.melee", 12, "GOLD_SWORD", 0, 1, false);
+                setMainStuff("main.invContents.melee", 12, Main.getForCurrentVersion("GOLD_SWORD", "GOLD_SWORD", "GOLDEN_SWORD"), 0, 1, false);
                 yml.addDefault("main.invContents.melee.invSize", 36);
 
                 setCategoryWithBuy("main.invContents.melee.invContents.stone", 10, "STONE_SWORD", 0, 1, 10, "iron", false);
@@ -386,7 +386,7 @@ public class ShopManager {
                                 }
                                 itemStack.setItemMeta(imm);
                             }
-                            if (yml.get(path2 + "potionEffect") != null && (i.getType() == Material.POTATO_ITEM || i.getType() == Material.POTION)) {
+                            if (yml.get(path2 + "potionEffect") != null && (/*i.getType() == Material.POTATO_ITEM ||*/ i.getType() == Material.POTION)) {
                                 PotionMeta imm = (PotionMeta) itemStack.getItemMeta();
                                 String[] enchant = yml.getString(path2 + "potionEffect").split(",");
                                 for (String enc : enchant) {
