@@ -359,17 +359,17 @@ public class Main extends JavaPlugin {
         yml.addDefault("database.ssl", false);
 
         /* Multi-Arena Lobby Command Items */
-        config.saveLobbyCommandItem("stats", "bw stats", false, "SKULL_ITEM", 3, 0);
+        config.saveLobbyCommandItem("stats", "bw stats", false, getForCurrentVersion("SKULL_ITEM", "SKULL_ITEM", "PLAYER_HEAD"), 3, 0);
         config.saveLobbyCommandItem("arena-selector", "bw gui", true, "CHEST", 5, 4);
-        config.saveLobbyCommandItem("leave", "bw leave", false, "BED", 0, 8);
+        config.saveLobbyCommandItem("leave", "bw leave", false, getForCurrentVersion("BED", "BED", "RED_BED"), 0, 8);
 
         /* Pre Game Command Items */
-        config.savePreGameCommandItem("stats", "bw stats", false, "SKULL_ITEM", 3, 0);
-        config.savePreGameCommandItem("leave", "bw leave", false, "BED", 0, 8);
+        config.savePreGameCommandItem("stats", "bw stats", false, getForCurrentVersion("SKULL_ITEM", "SKULL_ITEM", "PLAYER_HEAD"), 3, 0);
+        config.savePreGameCommandItem("leave", "bw leave", false, getForCurrentVersion("BED", "BED", "RED_BED"), 0, 8);
 
         /* Spectator Command Items */
-        config.saveSpectatorCommandItem("teleporter", "bw teleporter", false, "SKULL_ITEM", 3, 0);
-        config.saveSpectatorCommandItem("leave", "bw leave", false, "BED", 0, 8);
+        config.saveSpectatorCommandItem("teleporter", "bw teleporter", false, getForCurrentVersion("SKULL_ITEM", "SKULL_ITEM", "PLAYER_HEAD"), 3, 0);
+        config.saveSpectatorCommandItem("leave", "bw leave", false, getForCurrentVersion("BED", "BED", "RED_BED"), 0, 8);
 
         yml.addDefault("arenaGui.settings.size", 27);
         yml.addDefault("arenaGui.settings.showPlaying", true);
@@ -395,14 +395,14 @@ public class Main extends JavaPlugin {
             Misc.addDefaultStatsItem(yml, 12, Material.IRON_SWORD, 0, "kills");
             Misc.addDefaultStatsItem(yml, 13, Material.SKULL_ITEM, 0, "deaths");
             Misc.addDefaultStatsItem(yml, 14, Material.DIAMOND_SWORD, 0, "finalKills");
-            Misc.addDefaultStatsItem(yml, 15, Material.SKULL_ITEM, 1, "finalDeaths");
-            Misc.addDefaultStatsItem(yml, 16, Material.BED, 0, "bedsDestroyed");
-            Misc.addDefaultStatsItem(yml, 21, Material.STAINED_GLASS_PANE, 0, "firstPlay");
+            Misc.addDefaultStatsItem(yml, 15, Material.valueOf(getForCurrentVersion("SKULL_ITEM", "SKULL_ITEM", "SKELETON_SKULL")), 1, "finalDeaths");
+            Misc.addDefaultStatsItem(yml, 16, Material.valueOf(getForCurrentVersion("BED", "BED", "RED_BED")), 0, "bedsDestroyed");
+            Misc.addDefaultStatsItem(yml, 21, Material.valueOf(getForCurrentVersion("STAINED_GLASS_PANE", "STAINED_GLASS_PANE", "BLACK_STAINED_GLASS_PANE")), 0, "firstPlay");
             Misc.addDefaultStatsItem(yml, 22, Material.CHEST, 0, "gamesPlayed");
-            Misc.addDefaultStatsItem(yml, 23, Material.STAINED_GLASS_PANE, 0, "lastPlay");
+            Misc.addDefaultStatsItem(yml, 23, Material.valueOf(getForCurrentVersion("STAINED_GLASS_PANE", "STAINED_GLASS_PANE", "BLACK_STAINED_GLASS_PANE")), 0, "lastPlay");
         }
 
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + ".Default", Collections.singletonList("WOOD_SWORD"));
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + ".Default", Collections.singletonList(getForCurrentVersion("WOOD_SWORD", "WOOD_SWORD", "WOODEN_SWORD")));
         yml.addDefault(ConfigPath.CENERAL_CONFIGURATION_ALLOWED_COMMANDS, Arrays.asList("shout", "bw", "leave"));
         yml.options().copyDefaults(true);
         config.save();
@@ -560,7 +560,7 @@ public class Main extends JavaPlugin {
     }
 
 
-    private static String getForCurrentVersion(String v18, String v12, String v13){
+    public static String getForCurrentVersion(String v18, String v12, String v13){
         switch (getServerVersion()){
             case "v1_12_R1":
                 return v12;

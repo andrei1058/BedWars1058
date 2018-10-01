@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.configuration;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.shop.*;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -18,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.Main.plugin;
 
 public class ShopManager {
@@ -76,26 +78,26 @@ public class ShopManager {
                 set("main.invContents.melee.invContents.back.buyItems", new ArrayList<>());
 
                 //blocks
-                setMainStuff("main.invContents.blocks", 13, "STAINED_CLAY", 1, 1, false);
+                setMainStuff("main.invContents.blocks", 13, Main.getForCurrentVersion("STAINED_CLAY", "STAINED_CLAY", "ORANGE_TERRACOTTA"), 1, 1, false);
                 yml.addDefault("main.invContents.blocks.invSize", 36);
 
-                setCategoryWithBuy("main.invContents.blocks.invContents.wool", 10, "WOOL", 0, 16, 4, "iron", false);
-                addBuyItem("main.invContents.blocks.invContents.wool.buyItems.wool", "WOOL", 0, 16, "", false, false);
+                setCategoryWithBuy("main.invContents.blocks.invContents.wool", 10, Main.getForCurrentVersion("WOOL", "WOOL", "WHITE_WOOL"), 0, 16, 4, "iron", false);
+                addBuyItem("main.invContents.blocks.invContents.wool.buyItems.wool", Main.getForCurrentVersion("WOOL", "WOOL", "WHITE_WOOL"), 0, 16, "", false, false);
 
-                setCategoryWithBuy("main.invContents.blocks.invContents.clay", 11, "STAINED_CLAY", 1, 16, 12, "iron", false);
-                addBuyItem("main.invContents.blocks.invContents.clay.buyItems.clay", "STAINED_CLAY", 1, 16, "", false, false);
+                setCategoryWithBuy("main.invContents.blocks.invContents.clay", 11, Main.getForCurrentVersion("STAINED_CLAY", "STAINED_CLAY", "ORANGE_TERRACOTTA"), 1, 16, 12, "iron", false);
+                addBuyItem("main.invContents.blocks.invContents.clay.buyItems.clay", Main.getForCurrentVersion("STAINED_CLAY", "STAINED_CLAY", "ORANGE_TERRACOTTA"), 1, 16, "", false, false);
 
                 setCategoryWithBuy("main.invContents.blocks.invContents.glass", 12, "GLASS", 0, 4, 12, "iron", false);
-                addBuyItem("main.invContents.blocks.invContents.glass.buyItems.glass", "STAINED_GLASS", 0, 4, "", false, false);
+                addBuyItem("main.invContents.blocks.invContents.glass.buyItems.glass", "GLASS", 0, 4, "", false, false);
 
-                setCategoryWithBuy("main.invContents.blocks.invContents.stone", 13, "ENDER_STONE", 0, 16, 24, "iron", false);
-                addBuyItem("main.invContents.blocks.invContents.stone.buyItems.stone", "ENDER_STONE", 0, 16, "", false, false);
+                setCategoryWithBuy("main.invContents.blocks.invContents.stone", 13, Main.getForCurrentVersion("ENDER_STONE", "ENDER_STONE", "END_STONE"), 0, 16, 24, "iron", false);
+                addBuyItem("main.invContents.blocks.invContents.stone.buyItems.stone", Main.getForCurrentVersion("ENDER_STONE", "ENDER_STONE", "END_STONE"), 0, 16, "", false, false);
 
                 setCategoryWithBuy("main.invContents.blocks.invContents.ladder", 14, "LADDER", 0, 16, 4, "iron", false);
                 addBuyItem("main.invContents.blocks.invContents.ladder.buyItems.ladder", "LADDER", 0, 16, "", false, false);
 
-                setCategoryWithBuy("main.invContents.blocks.invContents.wood", 15, "WOOD", 0, 16, 4, "gold", false);
-                addBuyItem("main.invContents.blocks.invContents.wood.buyItems.wood", "WOOD", 0, 16, "", false, false);
+                setCategoryWithBuy("main.invContents.blocks.invContents.wood", 15, Main.getForCurrentVersion("WOOD", "WOOD", "OAK_WOOD"), 0, 16, 4, "gold", false);
+                addBuyItem("main.invContents.blocks.invContents.wood.buyItems.wood", Main.getForCurrentVersion("WOOD", "WOOD", "OAK_WOOD"), 0, 16, "", false, false);
 
                 setCategoryWithBuy("main.invContents.blocks.invContents.obsidian", 16, "OBSIDIAN", 0, 4, 4, "emerald", false);
                 addBuyItem("main.invContents.blocks.invContents.obsidian.buyItems.obsidian", "OBSIDIAN", 0, 4, "", false, false);
@@ -129,17 +131,17 @@ public class ShopManager {
                 setCategoryWithBuy("main.invContents.tools.invContents.shears", 10, "SHEARS", 0, 1, 30, "iron", false);
                 addBuyItem("main.invContents.tools.invContents.shears.buyItems.shears", "SHEARS", 0, 1, "", false, false);
 
-                setCategoryWithBuy("main.invContents.tools.invContents.pick", 11, "WOOD_PICKAXE", 0, 1, 10, "iron", false);
-                addBuyItem("main.invContents.tools.invContents.pick.buyItems.pick", "WOOD_PICKAXE", 0, 1, "DIG_SPEED 1", false, false);
+                setCategoryWithBuy("main.invContents.tools.invContents.pick", 11, Main.getForCurrentVersion("WOOD_PICKAXE", "WOOD_PICKAXE", "WOODEN_PICKAXE"), 0, 1, 10, "iron", false);
+                addBuyItem("main.invContents.tools.invContents.pick.buyItems.pick", Main.getForCurrentVersion("WOOD_PICKAXE", "WOOD_PICKAXE", "WOODEN_PICKAXE"), 0, 1, "DIG_SPEED 1", false, false);
 
-                setCategoryWithBuy("main.invContents.tools.invContents.axe", 12, "WOOD_AXE", 0, 1, 10, "iron", false);
-                addBuyItem("main.invContents.tools.invContents.axe.buyItems.axe", "WOOD_AXE", 0, 1, "DIG_SPEED 1", false, false);
+                setCategoryWithBuy("main.invContents.tools.invContents.axe", 12, Main.getForCurrentVersion("WOOD_AXE", "WOOD_AXE", "WOODEN_AXE"), 0, 1, 10, "iron", false);
+                addBuyItem("main.invContents.tools.invContents.axe.buyItems.axe", Main.getForCurrentVersion("WOOD_AXE", "WOOD_AXE", "WOODEN_AXE"), 0, 1, "DIG_SPEED 1", false, false);
 
                 setCategoryWithBuy("main.invContents.tools.invContents.back", 31, "ARROW", 0, 1, 0, "iron", false);
                 set("main.invContents.tools.invContents.back.buyItems", new ArrayList<>());
 
                 //potions
-                setMainStuff("main.invContents.potions", 21, "BREWING_STAND_ITEM", 0, 1, false);
+                setMainStuff("main.invContents.potions", 21, Main.getForCurrentVersion("BREWING_STAND_ITEM", "BREWING_STAND_ITEM", "BREWING_STAND"), 0, 1, false);
                 yml.addDefault("main.invContents.potions.invSize", 36);
 
                 setCategoryWithBuy("main.invContents.potions.invContents.potion1", 10, "POTION", 0, 1, 1, "emerald", false);
@@ -164,14 +166,14 @@ public class ShopManager {
                 setCategoryWithBuy("main.invContents.utility.invContents.apple", 10, "GOLDEN_APPLE", 0, 1, 3, "gold", false);
                 addBuyItem("main.invContents.utility.invContents.apple.buyItems.item", "GOLDEN_APPLE", 0, 1, "", false, false);
 
-                setCategoryWithBuy("main.invContents.utility.invContents.sball", 11, "SNOW_BALL", 0, 1, 50, "iron", false);
-                addBuyItem("main.invContents.utility.invContents.sball.buyItems.item", "SNOW_BALL", 0, 1, "", false, false);
+                setCategoryWithBuy("main.invContents.utility.invContents.sball", 11, Main.getForCurrentVersion("SNOW_BALL", "SNOW_BALL", "SNOWBALL"), 0, 1, 50, "iron", false);
+                addBuyItem("main.invContents.utility.invContents.sball.buyItems.item", Main.getForCurrentVersion("SNOW_BALL", "SNOW_BALL", "SNOWBALL"), 0, 1, "", false, false);
 
-                setCategoryWithBuy("main.invContents.utility.invContents.monsteregg", 12, "MONSTER_EGG", 0, 1, 120, "iron", false);
-                addBuyItem("main.invContents.utility.invContents.monsteregg.buyItems.item", "MONSTER_EGG", 0, 1, "", false, false);
+                setCategoryWithBuy("main.invContents.utility.invContents.monsteregg", 12, Main.getForCurrentVersion("MONSTER_EGG", "MONSTER_EGG", "HORSE_SPAWN_EGG"), 0, 1, 120, "iron", false);
+                addBuyItem("main.invContents.utility.invContents.monsteregg.buyItems.item", Main.getForCurrentVersion("MONSTER_EGG", "MONSTER_EGG", "HORSE_SPAWN_EGG"), 0, 1, "", false, false);
 
-                setCategoryWithBuy("main.invContents.utility.invContents.fireball", 13, "FIREBALL", 0, 1, 50, "iron", false);
-                addBuyItem("main.invContents.utility.invContents.fireball.buyItems.item", "FIREBALL", 0, 1, "", false, false);
+                setCategoryWithBuy("main.invContents.utility.invContents.fireball", 13, Main.getForCurrentVersion("FIREBALL", "FIREBALL", "FIRE_CHARGE"), 0, 1, 50, "iron", false);
+                addBuyItem("main.invContents.utility.invContents.fireball.buyItems.item", Main.getForCurrentVersion("FIREBALL", "FIREBALL", "FIRE_CHARGE"), 0, 1, "", false, false);
 
                 setCategoryWithBuy("main.invContents.utility.invContents.tnt", 14, "TNT", 0, 1, 8, "gold", false);
                 addBuyItem("main.invContents.utility.invContents.tnt.buyItems.item", "TNT", 0, 1, "", false, false);
@@ -201,14 +203,14 @@ public class ShopManager {
         //yml.addDefault("main.invContents.recommended.enable", true);
         //setMainStuff("main.invContents.recommended", 26, "BOOK", 0, 1, true);
 
-        yml.addDefault("utilities.silverfish.material", "SNOW_BALL");
+        yml.addDefault("utilities.silverfish.material", Main.getForCurrentVersion("SNOW_BALL", "SNOW_BALL", "SNOWBALL"));
         yml.addDefault("utilities.silverfish.data", 0);
         yml.addDefault("utilities.silverfish.enable", true);
         yml.addDefault("utilities.silverfish.health", 8.0);
         yml.addDefault("utilities.silverfish.damage", 4.0);
         yml.addDefault("utilities.silverfish.speed", 0.25);
 
-        yml.addDefault("utilities.ironGolem.material", "MONSTER_EGG");
+        yml.addDefault("utilities.ironGolem.material", Main.getForCurrentVersion("MONSTER_EGG", "MONSTER_EGG", "HORSE_SPAWN_EGG"));
         yml.addDefault("utilities.ironGolem.data", 0);
         yml.addDefault("utilities.ironGolem.enable", true);
         yml.addDefault("utilities.ironGolem.health", 100.0);
@@ -221,19 +223,19 @@ public class ShopManager {
 
         yml.options().copyDefaults(true);
         save();
-        if (yml.getBoolean("utilities.silverfish.enable")){
+        if (yml.getBoolean("utilities.silverfish.enable")) {
             try {
                 Material.valueOf(yml.getString("utilities.silverfish.material"));
-            } catch (Exception ecx){
+            } catch (Exception ecx) {
                 plugin.getLogger().severe("Invalid material at utilities.silverfish.material.. Changing it..");
                 yml.set("utilities.silverfish.material", "SNOW_BALL");
                 save();
             }
         }
-        if (yml.getBoolean("utilities.ironGolem.enable")){
+        if (yml.getBoolean("utilities.ironGolem.enable")) {
             try {
                 Material.valueOf(yml.getString("utilities.ironGolem.material"));
-            } catch (Exception ecx){
+            } catch (Exception ecx) {
                 plugin.getLogger().severe("Invalid material at utilities.ironGolem.material.. Changing it..");
                 yml.set("utilities.ironGolem.material", "MONSTER_EGG");
                 save();
@@ -294,7 +296,7 @@ public class ShopManager {
         for (String category : yml.getConfigurationSection(path).getKeys(false)) {
             if (category.equalsIgnoreCase("invSize")) continue;
             if (path.equalsIgnoreCase("main.invContents") && (category.equalsIgnoreCase("recommended") || category.equalsIgnoreCase("favourites")))
-                continue; //todo de facut
+                continue; //todo shop recommended
             if ((yml.get(path + "." + category + ".buyItems") != null && yml.get(path + "." + category + ".invContents") != null) ||
                     (yml.get(path + "." + category + ".buyItems") == null && yml.get(path + "." + category + ".invContents") == null)) {
                 plugin.getLogger().severe("Could not understand if category or buyItems: " + path + "." + category);
@@ -321,7 +323,7 @@ public class ShopManager {
                     }
                     ItemStack i;
                     try {
-                        i = new ItemStack(Material.valueOf(yml.getString(path + "." + category + ".material")), yml.getInt(path + "." + category + ".amount"), (byte) yml.getInt(path + "." + category + ".data"));
+                        i = nms.createItemStack(yml.getString(path + "." + category + ".material"), yml.getInt(path + "." + category + ".amount"), (byte) yml.getInt(path + "." + category + ".data"));
                     } catch (Exception ex) {
                         plugin.getLogger().severe("There was an error while loading ItemStack for: " + path + "." + category);
                         continue;
@@ -359,7 +361,7 @@ public class ShopManager {
                                 plugin.getLogger().severe("Invalid material at: " + path2);
                                 continue;
                             }
-                            ItemStack itemStack = new ItemStack(Material.valueOf(yml.getString(path2 + "material")), yml.getInt(path2 + "amount", (byte) yml.getInt(path2 + "data")));
+                            ItemStack itemStack = nms.createItemStack(yml.getString(path2 + "material"), yml.getInt(path2 + "amount"), (byte) yml.getInt(path2 + "data"));
                             if (yml.get(path2 + "enchantments") != null) {
                                 ItemMeta imm = itemStack.getItemMeta();
                                 String[] enchant = yml.getString(path2 + "enchantments").split(",");
@@ -410,7 +412,7 @@ public class ShopManager {
                                             continue;
                                         }
                                     }
-                                    imm.addCustomEffect(new PotionEffect(PotionEffectType.getByName(stuff[0]), duration*20, amplifier), false);
+                                    imm.addCustomEffect(new PotionEffect(PotionEffectType.getByName(stuff[0]), duration * 20, amplifier), false);
                                 }
                                 itemStack.setItemMeta(imm);
                             }
@@ -441,7 +443,7 @@ public class ShopManager {
                     }
                     ItemStack i;
                     try {
-                        i = new ItemStack(Material.valueOf(yml.getString(path + "." + category + ".material")), yml.getInt(path + "." + category + ".amount"), (byte) yml.getInt(path + "." + category + ".data"));
+                        i = nms.createItemStack(yml.getString(path + "." + category + ".material"), yml.getInt(path + "." + category + ".amount"), (byte) yml.getInt(path + "." + category + ".data"));
                     } catch (Exception ex) {
                         plugin.getLogger().severe("There was an error while loading ItemStack for: " + path + "." + category);
                         continue;
