@@ -58,7 +58,7 @@ import static com.andrei1058.bedwars.configuration.Language.setupLang;
 public class Main extends JavaPlugin {
 
     private static ServerType serverType = ServerType.MULTIARENA;
-    public static boolean safeMode, lobbyServer = false, debug = true;
+    public static boolean safeMode = false, lobbyServer = false, debug = true;
     public static String mainCmd = "bw", link = "https://www.spigotmc.org/resources/50942/";
     public static ConfigManager config, signs, spigot, generators;
     public static ShopManager shop;
@@ -166,9 +166,11 @@ public class Main extends JavaPlugin {
 
         /** Register events */
         registerEvents(new JoinLeaveTeleport(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(),
-                new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener(), new ArenaSelectorListener());
+                new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener());
         if (getServerType() == ServerType.BUNGEE) {
             registerEvents(new Ping());
+        } else if (getServerType() == ServerType.MULTIARENA || getServerType() == ServerType.SHARED){
+            registerEvents(new ArenaSelectorListener());
         }
 
         /** Load version support */
@@ -194,7 +196,7 @@ public class Main extends JavaPlugin {
             case "v1_10_R1":
             case "v1_11_R1":
                 Bukkit.getScheduler().runTaskLater(this,
-                        () -> System.out.println("\u001B[31m[WARN] BedWars1058 is going to abort support for this server version in the future.\nPlease consider upgrading to a newer paper/spigot version.\u001B[0m"), 40L);
+                        () -> System.out.println("\u001B[31m[WARN] BedWars1058 may drop support for this server version in the future.\nPlease consider upgrading to a newer paper/spigot version.\u001B[0m"), 40L);
                 break;
         }
 
@@ -332,7 +334,6 @@ public class Main extends JavaPlugin {
         yml.options().header(plugin.getDescription().getName() + " by andrei1058. https://www.spigotmc.org/members/39904/\n" +
                 "Documentation here: https://gitlab.com/andrei1058/BedWars1058/wikis/home\n");
         yml.addDefault("serverType", "MULTIARENA");
-        yml.addDefault("safeMode", false);
         yml.addDefault("language", "en");
         yml.addDefault("storeLink", "https://www.spigotmc.org/resources/authors/39904/");
         yml.addDefault("lobbyServer", "hub");
@@ -432,7 +433,6 @@ public class Main extends JavaPlugin {
             }
         }
         lang = Language.getLang(whatLang);
-        safeMode = yml.getBoolean("safeMode");
         debug = yml.getBoolean("debug");
         new ConfigManager("bukkit", Bukkit.getWorldContainer().getPath(), false).set("ticks-per.autosave", -1);
         spigot = new ConfigManager("spigot", Bukkit.getWorldContainer().getPath(), false);

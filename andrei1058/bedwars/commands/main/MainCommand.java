@@ -35,7 +35,6 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
     public MainCommand(String name) {
         super(name);
         instance = this;
-        new SafeMode(this, "safemode"); //priority 0
         new Join(this, "join");
         new Leave(this, "leave");
         new Language(this, "lang");
