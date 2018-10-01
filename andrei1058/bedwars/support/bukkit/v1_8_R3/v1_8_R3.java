@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.support.bukkit.v1_8_R3;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
@@ -593,6 +594,18 @@ public class v1_8_R3 implements NMS {
     public ItemStack colourItem(ItemStack itemStack, BedWarsTeam bedWarsTeam) {
         if (itemStack == null) return null;
         return new ItemStack(itemStack.getType(), itemStack.getAmount(), Misc.getOldItemColor(bedWarsTeam.getColor()));
+    }
+
+    @Override
+    public org.bukkit.inventory.ItemStack createItemStack(String material, int amount, short data) {
+        org.bukkit.inventory.ItemStack i;
+        try {
+            i = new org.bukkit.inventory.ItemStack(org.bukkit.Material.valueOf(material), amount, data);
+        } catch (Exception ex) {
+            Main.plugin.getLogger().severe(material + " is not a valid " + com.andrei1058.bedwars.Main.getServerVersion() + " material!");
+            i = new org.bukkit.inventory.ItemStack(org.bukkit.Material.BEDROCK);
+        }
+        return i;
     }
 
     @Override

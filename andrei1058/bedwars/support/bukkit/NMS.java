@@ -7,6 +7,7 @@ import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.exceptions.InvalidSoundException;
 import org.bukkit.Effect;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -289,6 +290,8 @@ public interface NMS {
      * @since API 10
      */
     ItemStack colourItem(ItemStack itemStack, BedWarsTeam bedWarsTeam);
+
+    ItemStack createItemStack(String material, int amount, short data);
 
     void teamCollideRule(Team team);
 }
