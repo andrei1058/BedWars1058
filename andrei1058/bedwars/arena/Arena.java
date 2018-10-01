@@ -47,7 +47,7 @@ public class Arena {
     private GameState status = GameState.waiting;
     private YamlConfiguration yml;
     private ConfigManager cm;
-    private int minPlayers = 2, maxPlayers = 10, slot = -1, maxInTeam = 1, islandRadius = 10;
+    private int minPlayers = 2, maxPlayers = 10, maxInTeam = 1, islandRadius = 10;
     public int upgradeDiamondsCount = 0, upgradeEmeraldsCount = 0;
     public boolean allowSpectate = true;
     private World world;
@@ -59,7 +59,7 @@ public class Arena {
      * Current event, used at scoreboard
      */
     private NextEvent nextEvent = NextEvent.DIAMOND_GENERATOR_TIER_II;
-    public int diamondTier = 1, emeraldTier = 1;
+    int diamondTier = 1, emeraldTier = 1;
 
     /**
      * Players in respawn session
@@ -124,14 +124,16 @@ public class Arena {
                 group = yml.getString("group");
             }
         }
-        if (new File(plugin.getServer().getWorldContainer().getPath() + "/" + name) == null) {
+        File folder = new File(plugin.getServer().getWorldContainer().getPath() + "/" + name);
+        if (!folder.exists()) {
             if (p != null) p.sendMessage("§cThere isn't any map called " + name);
             plugin.getLogger().severe("There isn't any map called " + name);
             return;
         }
         boolean error = false;
         for (String team : yml.getConfigurationSection("Team").getKeys(false)) {
-            if (TeamColor.valueOf(yml.getString("Team." + team + ".Color")) == null) {
+            TeamColor color = TeamColor.valueOf(yml.getString("Team." + team + ".Color"));
+            if (color == null) {
                 if (p != null) p.sendMessage("§cInvalid color at team: " + team + " in arena: " + name);
                 plugin.getLogger().severe("Invalid color at team: " + team + " in arena: " + name);
                 error = true;
@@ -147,12 +149,10 @@ public class Arena {
         if (yml.get("generator.Diamond") == null) {
             if (p != null) p.sendMessage("§cThere isn't set any Diamond generator on: " + name);
             plugin.getLogger().severe("There isn't set any Diamond generator on: " + name);
-        } else {
         }
         if (yml.get("generator.Emerald") == null) {
             if (p != null) p.sendMessage("§cThere isn't set any Emerald generator on: " + name);
             plugin.getLogger().severe("There isn't set any Emerald generator on: " + name);
-        } else {
         }
         if (yml.get("waiting.Loc") == null) {
             if (p != null) p.sendMessage("§cWaiting spawn not set on: " + name);
@@ -233,9 +233,7 @@ public class Arena {
     public void addPlayer(Player p, boolean skipOwnerCheck) {
         debug("Player added: " + p.getName() + " arena: " + getWorldName());
         /* used for base enter/leave event */
-        if (isOnABase.containsKey(p)) {
-            isOnABase.remove(p);
-        }
+        isOnABase.remove(p);
         //
         if (getArenaByPlayer(p) != null) {
             return;
@@ -497,16 +495,16 @@ public class Arena {
             }
         }
         if (status == GameState.playing) {
-            int deaths = playerDeaths.containsKey(p) ? playerDeaths.get(p) : 0;
-            int final_deaths = playerFinalKillDeaths.containsKey(p) ? playerFinalKillDeaths.get(p) : 0;
-            int beds = playerBedsDestroyed.containsKey(p) ? playerBedsDestroyed.get(p) : 0;
+            int deaths = playerDeaths.getOrDefault(p, 0);
+            int final_deaths = playerFinalKillDeaths.getOrDefault(p, 0);
+            int beds = playerBedsDestroyed.getOrDefault(p, 0);
             database.saveStats(p, new Timestamp(System.currentTimeMillis()), 0, this.getPlayerKills(p, false), this.getPlayerKills(p, true),
                     1, deaths, final_deaths, beds, 1);
         } else if (status == GameState.restarting) {
             /* winners */
-            int deaths = playerDeaths.containsKey(p) ? playerDeaths.get(p) : 0;
-            int final_deaths = playerFinalKillDeaths.containsKey(p) ? playerFinalKillDeaths.get(p) : 0;
-            int beds = playerBedsDestroyed.containsKey(p) ? playerBedsDestroyed.get(p) : 0;
+            int deaths = playerDeaths.getOrDefault(p, 0);
+            int final_deaths = playerFinalKillDeaths.getOrDefault(p, 0);
+            int beds = playerBedsDestroyed.getOrDefault(p, 0);
             database.saveStats(p, new Timestamp(System.currentTimeMillis()), 1, this.getPlayerKills(p, false), this.getPlayerKills(p, true),
                     0, deaths, final_deaths, beds, 1);
         }
@@ -530,9 +528,7 @@ public class Arena {
                 if (t == null) continue;
                 if (t.getSize() != 0) {
                     alive_teams++;
-                    if (t.getMembers().contains(p)) {
-                        t.getMembers().remove(p);
-                    }
+                    t.getMembers().remove(p);
                 }
             }
             if (alive_teams == 1) {
@@ -632,16 +628,16 @@ public class Arena {
         for (BedWarsTeam bwt : getTeams()) {
             if (bwt.getMembersCache().contains(p)) {
                 if (status == GameState.playing) {
-                    int deaths = playerDeaths.containsKey(p) ? playerDeaths.get(p) : 0;
-                    int final_deaths = playerFinalKillDeaths.containsKey(p) ? playerFinalKillDeaths.get(p) : 0;
-                    int beds = playerBedsDestroyed.containsKey(p) ? playerBedsDestroyed.get(p) : 0;
+                    int deaths = playerDeaths.getOrDefault(p, 0);
+                    int final_deaths = playerFinalKillDeaths.getOrDefault(p, 0);
+                    int beds = playerBedsDestroyed.getOrDefault(p, 0);
                     database.saveStats(p, new Timestamp(System.currentTimeMillis()), 0, this.getPlayerKills(p, false), this.getPlayerKills(p, true),
                             1, deaths, final_deaths, beds, 1);
                 } else if (status == GameState.restarting) {
-                    /** looser */
-                    int deaths = playerDeaths.containsKey(p) ? playerDeaths.get(p) : 0;
-                    int final_deaths = playerFinalKillDeaths.containsKey(p) ? playerFinalKillDeaths.get(p) : 0;
-                    int beds = playerBedsDestroyed.containsKey(p) ? playerBedsDestroyed.get(p) : 0;
+                    /* looser */
+                    int deaths = playerDeaths.getOrDefault(p, 0);
+                    int final_deaths = playerFinalKillDeaths.getOrDefault(p, 0);
+                    int beds = playerBedsDestroyed.getOrDefault(p, 0);
                     database.saveStats(p, new Timestamp(System.currentTimeMillis()), 0, this.getPlayerKills(p, false), this.getPlayerKills(p, true),
                             1, deaths, final_deaths, beds, 1);
                 }
@@ -812,15 +808,12 @@ public class Arena {
                 break;
             case starting:
                 s = getMsg(null, Messages.ARENA_STATUS_STARTING_NAME).replace("{full}", this.getPlayers().size() == this.getMaxPlayers() ? "FULL" : "");
-                ;
                 break;
             case restarting:
                 s = getMsg(null, Messages.ARENA_STATUS_RESTARTING_NAME).replace("{full}", this.getPlayers().size() == this.getMaxPlayers() ? "FULL" : "");
-                ;
                 break;
             case playing:
                 s = getMsg(null, Messages.ARENA_STATUS_PLAYING_NAME).replace("{full}", this.getPlayers().size() == this.getMaxPlayers() ? "FULL" : "");
-                ;
                 break;
         }
         return s;
@@ -857,13 +850,6 @@ public class Arena {
     }
 
     /**
-     * Get the current slot for the arena in the ARENA SELECTOR
-     */
-    public int getSlot() {
-        return slot;
-    }
-
-    /**
      * Get the arena's world name.
      */
     public String getWorldName() {
@@ -897,7 +883,7 @@ public class Arena {
      * @param p          Target player
      * @param finalKills True if you want to get the Final Kills. False for regular kills.
      */
-    public int getPlayerKills(Player p, boolean finalKills) {
+    int getPlayerKills(Player p, boolean finalKills) {
         if (finalKills) {
             if (playerFinalKills.containsKey(p)) return playerFinalKills.get(p);
             return 0;
@@ -911,7 +897,7 @@ public class Arena {
      *
      * @param p Target player
      */
-    public int getPlayerBedsDestroyed(Player p) {
+    int getPlayerBedsDestroyed(Player p) {
         if (playerBedsDestroyed.containsKey(p)) return playerBedsDestroyed.get(p);
         return 0;
     }
@@ -1041,10 +1027,6 @@ public class Arena {
         return spectators;
     }
 
-    public void setSlot(int slot) {
-        this.slot = slot;
-    }
-
     public void addPlayerKill(Player p, boolean finalKill, Player victim) {
         if (p == null) return;
         if (playerKills.containsKey(p)) {
@@ -1114,7 +1096,7 @@ public class Arena {
      * This will give the pre-game command Items.
      * This will clear the inventory first.
      */
-    public void sendPreGameCommandItems(@NotNull Player p) {
+    private void sendPreGameCommandItems(@NotNull Player p) {
         if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH) == null) return;
         p.getInventory().clear();
 
@@ -1153,7 +1135,7 @@ public class Arena {
      * This will give the spectator command Items.
      * This will clear the inventory first.
      */
-    public void sendSpectatorCommandItems(@NotNull Player p) {
+    private void sendSpectatorCommandItems(@NotNull Player p) {
         if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH) == null) return;
         p.getInventory().clear();
 
@@ -1222,13 +1204,16 @@ public class Arena {
                             p.getInventory().clear();
                         }
                     }
-                    String firstName = "", secondName = "", thirdName = "", winners = "";
+                    String firstName = "";
+                    String secondName = "";
+                    String thirdName = "";
+                    StringBuilder winners = new StringBuilder();
                     for (Player p : winner.getMembers()) {
                         nms.sendTitle(p, getMsg(p, Messages.ARENA_VICTORY_PLAYER_TITLE), null, 0, 40, 0);
-                        winners = winners + p.getName() + " ";
+                        winners.append(p.getName()).append(" ");
                     }
-                    if (winners.endsWith(" ")) {
-                        winners = winners.substring(0, winners.length() - 1);
+                    if (winners.toString().endsWith(" ")) {
+                        winners = new StringBuilder(winners.substring(0, winners.length() - 1));
                     }
                     int first = 0, second = 0, third = 0;
                     if (!playerKills.isEmpty()) {
@@ -1255,7 +1240,7 @@ public class Arena {
                             p.sendMessage(s.replace("{firstName}", firstName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : firstName).replace("{firstKills}", String.valueOf(first))
                                     .replace("{secondName}", secondName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : secondName).replace("{secondKills}", String.valueOf(second))
                                     .replace("{thirdName}", thirdName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : thirdName).replace("{thirdKills}", String.valueOf(third))
-                                    .replace("{winnerFormat}", getMaxInTeam() > 1 ? getMsg(p, Messages.FORMATTING_TEAM_WINNER_FORMAT).replace("{members}", winners) : getMsg(p, Messages.FORMATTING_SOLO_WINNER_FORMAT).replace("{members}", winners))
+                                    .replace("{winnerFormat}", getMaxInTeam() > 1 ? getMsg(p, Messages.FORMATTING_TEAM_WINNER_FORMAT).replace("{members}", winners.toString()) : getMsg(p, Messages.FORMATTING_SOLO_WINNER_FORMAT).replace("{members}", winners.toString()))
                                     .replace("{TeamColor}", TeamColor.getChatColor(winner.getColor()).toString()).replace("{TeamName}", winner.getName()));
                         }
                     }
@@ -1400,7 +1385,7 @@ public class Arena {
         return startingTask;
     }
 
-    public GamePlayingTask getPlayingTask() {
+    GamePlayingTask getPlayingTask() {
         return playingTask;
     }
 

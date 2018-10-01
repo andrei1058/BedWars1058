@@ -1,6 +1,9 @@
 package com.andrei1058.bedwars.arena;
 
+import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.listeners.arenaselector.ArenaSelectorListener;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -16,26 +19,53 @@ import java.util.HashMap;
 import java.util.List;
 
 import static com.andrei1058.bedwars.Main.config;
+import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.configuration.Language.getList;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
 public class ArenaGUI {
 
     private static HashMap<Player, Inventory> refresh = new HashMap<>();
-    private static int start = config.getYml().getInt("arenaGui.settings.startSlot"),
-            end = config.getYml().getInt("arenaGui.settings.endSlot");
     private static boolean showPlaying = config.getYml().getBoolean("arenaGui.settings.showPlaying");
     private static YamlConfiguration yml = config.getYml();
 
     public static void refreshInv(Player p, Inventory inv) {
-        int from = start, to = end;
-        List<Arena> arenas = new ArrayList<>(Arena.getArenas());
-        for (int x = 0; x < arenas.size(); x++) {
+
+        List<Arena> arenas = new ArrayList<>();
+
+        for (GameState gs : new GameState[]{GameState.starting, GameState.waiting, GameState.playing}) {
+            if (gs == GameState.playing && !showPlaying) break;
+            for (Arena a : new ArrayList<>(Arena.getArenas())) {
+                Arena per = arenas.isEmpty() ? null : arenas.get(arenas.size() - 1);
+                if (a.getStatus() == gs) arenas.add(a);
+                if (per != null) {
+                    if (a.getPlayers().size() > per.getPlayers().size()) {
+                        arenas.remove(per);
+                        arenas.add(a);
+                        arenas.add(per);
+                    }
+                }
+            }
+        }
+
+        int arenaKey = 0;
+        for (String useSlot : config.getString("arenaGui.settings.useSlots").split(",")) {
+            int slot;
+            try {
+                slot = Integer.parseInt(useSlot);
+            } catch (Exception e) {
+                continue;
+            }
             ItemStack i;
-            switch (arenas.get(x).getStatus()) {
+            if (arenaKey >= arenas.size()){
+                inv.setItem(slot, new ItemStack(Material.AIR));
+                continue;
+            }
+
+            switch (arenas.get(arenaKey).getStatus()) {
                 case waiting:
-                    i = new ItemStack(Material.valueOf(yml.getString("arenaGui.waiting.itemStack")), 1, (short) yml.getInt("arenaGui.waiting.data"));
-                    if (yml.getBoolean("arenaGui.waiting.enchanted")){
+                    i = nms.createItemStack(yml.getString("arenaGui.waiting.itemStack"), 1, (short) yml.getInt("arenaGui.waiting.data"));
+                    if (yml.getBoolean("arenaGui.waiting.enchanted")) {
                         ItemMeta im = i.getItemMeta();
                         im.addEnchant(Enchantment.LURE, 1, true);
                         im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -43,12 +73,8 @@ public class ArenaGUI {
                     }
                     break;
                 case playing:
-                    if (!showPlaying) {
-                        arenas.get(x).setSlot(-1);
-                        continue;
-                    }
-                    i = new ItemStack(Material.valueOf(yml.getString("arenaGui.playing.itemStack")), 1, (short) yml.getInt("arenaGui.playing.data"));
-                    if (yml.getBoolean("arenaGui.playing.enchanted")){
+                    i = nms.createItemStack(yml.getString("arenaGui.playing.itemStack"), 1, (short) yml.getInt("arenaGui.playing.data"));
+                    if (yml.getBoolean("arenaGui.playing.enchanted")) {
                         ItemMeta im = i.getItemMeta();
                         im.addEnchant(Enchantment.LURE, 1, true);
                         im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -56,8 +82,8 @@ public class ArenaGUI {
                     }
                     break;
                 case starting:
-                    i = new ItemStack(Material.valueOf(yml.getString("arenaGui.starting.itemStack")), 1, (short) yml.getInt("arenaGui.starting.data"));
-                    if (yml.getBoolean("arenaGui.playing.enchanted")){
+                    i = nms.createItemStack(yml.getString("arenaGui.starting.itemStack"), 1, (short) yml.getInt("arenaGui.starting.data"));
+                    if (yml.getBoolean("arenaGui.playing.enchanted")) {
                         ItemMeta im = i.getItemMeta();
                         im.addEnchant(Enchantment.LURE, 1, true);
                         im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -65,26 +91,23 @@ public class ArenaGUI {
                     }
                     break;
                 default:
-                    arenas.get(x).setSlot(-1);
                     continue;
             }
             ItemMeta im = i.getItemMeta();
-            im.setDisplayName(getMsg(p, Messages.ARENA_GUI_ARENA_CONTENT_NAME).replace("{name}", arenas.get(x).getDisplayName()));
+            im.setDisplayName(getMsg(p, Messages.ARENA_GUI_ARENA_CONTENT_NAME).replace("{name}", arenas.get(arenaKey).getDisplayName()));
             List<String> lore = new ArrayList<>();
             for (String s : getList(p, Messages.ARENA_GUI_ARENA_CONTENT_LORE)) {
-                if (!(s.contains("{group}") && arenas.get(x).getGroup().equalsIgnoreCase("default"))) {
-                    lore.add(s.replace("{on}", String.valueOf(arenas.get(x).getPlayers().size())).replace("{max}",
-                            String.valueOf(arenas.get(x).getMaxPlayers())).replace("{status}", arenas.get(x).getDisplayStatus())
-                            .replace("{group}", arenas.get(x).getGroup()));
+                if (!(s.contains("{group}") && arenas.get(arenaKey).getGroup().equalsIgnoreCase("default"))) {
+                    lore.add(s.replace("{on}", String.valueOf(arenas.get(arenaKey).getPlayers().size())).replace("{max}",
+                            String.valueOf(arenas.get(arenaKey).getMaxPlayers())).replace("{status}", arenas.get(arenaKey).getDisplayStatus())
+                            .replace("{group}", arenas.get(arenaKey).getGroup()));
                 }
             }
             im.setLore(lore);
             i.setItemMeta(im);
-            if (to >= from) {
-                inv.setItem(from, i);
-                arenas.get(x).setSlot(from);
-                from++;
-            }
+            i = Main.nms.addCustomData(i, ArenaSelectorListener.ARENA_SELECTOR_GUI_IDENTIFIER + arenas.get(arenaKey).getWorldName());
+            inv.setItem(slot, i);
+            arenaKey++;
         }
     }
 
@@ -93,6 +116,12 @@ public class ArenaGUI {
         if (size % 9 != 0) size = 27;
         if (size > 54) size = 54;
         Inventory inv = Bukkit.createInventory(p, size, getMsg(p, Messages.ARENA_GUI_INV_NAME));
+        ItemStack i = nms.createItemStack(Main.config.getString("arenaGui.skippedSlot.itemStack"), 1, (byte) Main.config.getInt("arenaGui.skippedSlot.data"));
+
+        for (int x = 0; x < inv.getSize(); x++) {
+            inv.setItem(x, i);
+        }
+
         refreshInv(p, inv);
         refresh.put(p, inv);
         p.openInventory(inv);

@@ -7,10 +7,7 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.andrei1058.bedwars.Main.lang;
@@ -28,9 +25,7 @@ public class Language {
     public Language(String iso) {
         this.iso = iso;
         File d = new File("plugins/" + plugin.getDescription().getName() + "/Languages");
-        if (!d.exists()) {
-            d.mkdir();
-        }
+        if (!d.exists()) d.mkdir();
         config = new File(d.toPath() + "/messages_" + iso + ".yml");
         if (!config.exists()) {
             try {
@@ -66,8 +61,8 @@ public class Language {
                 yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_EMPTY_FOUND, "{prefix}&cThere isn't any arena available right now ;(");
                 yml.addDefault(Messages.COMMAND_LEAVE_DENIED_NOT_IN_ARENA, "{prefix}&cYou're not in arena!");
                 yml.addDefault(Messages.ARENA_GUI_INV_NAME, "&8Click to Join");
-                yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_NAME, "&7➤ {name}");
-                yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_LORE, Arrays.asList("", "&7Status: {status}", "&7Players: &f{on}&7/&f{max}", "&7Type: &a{group}"));
+                yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_NAME, "&a&l{name}");
+                yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_LORE, Arrays.asList("", "&7Status: {status}", "&7Players: &f{on}&7/&f{max}", "&7Type: &a{group}", "", "&eLeft-Click to join.", "&eRight-Click to spectate."));
                 yml.addDefault(Messages.COMMAND_LANG_LIST_HEADER, "{prefix} &2Available languages:");
                 yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&a▪  &7{iso} - &f{name}");
                 yml.addDefault(Messages.COMMAND_LANG_USAGE, "{prefix}&7Usage: /lang &f&o<iso>");
@@ -177,13 +172,13 @@ public class Language {
                 lbj.saveShopStuff("invContents.armor.invContents.chainmail", "&aPermanent Chainmail Armor", Arrays.asList("&8Items:", "&8▪ &7Permanent Chainmail Armor", "&8▪ &7Chainmail Leggings", "", "&8Cost: &f{cost} {currency}", "&8&oYou will not lose this on death!"));
                 lbj.saveShopStuff("invContents.armor.invContents.iron", "&aPermanent Iron Armor", Arrays.asList("&8Items:", "&8▪ &7Permanent Iron Armor", "&8▪ &7Iron Leggings", "", "&8Cost: &6{cost} {currency}", "&8&oYou will not lose this on death!"));
                 lbj.saveShopStuff("invContents.armor.invContents.diamond", "&aPermanent Diamond Armor", Arrays.asList("&8Items:", "&8▪ &7Permanent Diamond Armor", "&8▪ &7Diamond Leggings", "", "&8Cost: &2{cost} {currency}", "&8&oYou will not lose this on death!"));
-                lbj.saveShopStuff("invContents.armor.invContents.back", "&aGo Back", Arrays.asList(""));
+                lbj.saveShopStuff("invContents.armor.invContents.back", "&aGo Back", Collections.singletonList(""));
 
                 lbj.saveShopStuff("invContents.melee.invContents.stone", "&aStone Sword", Arrays.asList("&8Items:", "&8▪ &7Stone Sword", "", "&8Cost: &f{cost} {currency}"));
                 lbj.saveShopStuff("invContents.melee.invContents.iron", "&aIron Sword", Arrays.asList("&8Items:", "&8▪ &7Iron Sword", "&8Cost: &6{cost} {currency}"));
                 lbj.saveShopStuff("invContents.melee.invContents.diamond", "&aDiamond Sword", Arrays.asList("&8Items:", "&8▪ &7Diamond Sword", "", "&8Cost: &2{cost} {currency}"));
                 lbj.saveShopStuff("invContents.melee.invContents.stick", "&aStick (Knockback I)", Arrays.asList("&8Items:", "&8▪ &7Stick (Knockback I)", "", "&8Cost: &6{cost} {currency}"));
-                lbj.saveShopStuff("invContents.melee.invContents.back", "&aGo Back", Arrays.asList(""));
+                lbj.saveShopStuff("invContents.melee.invContents.back", "&aGo Back", Collections.singletonList(""));
 
                 lbj.saveShopStuff("invContents.blocks.invContents.wool", "&aWool", Arrays.asList("&8Items:", "&8▪ &7Wool", "", "&8Cost: &f{cost} {currency}", "", "&eClick to purchase!"));
                 lbj.saveShopStuff("invContents.blocks.invContents.clay", "&aHardened Clay", Arrays.asList("&8Items:", "&8▪ &7Hardened Clay", "", "&8Cost: &f{cost} {currency}", "", "&eClick to purchase!"));
@@ -198,17 +193,17 @@ public class Language {
                 lbj.saveShopStuff("invContents.ranged.invContents.bow", "&aBow", Arrays.asList("&8Items:", "&8▪ &7Bow", "", "&8Cost: &6{cost} {currency}"));
                 lbj.saveShopStuff("invContents.ranged.invContents.bow2", "&aBow (Power I)", Arrays.asList("&8Items:", "&8▪ &7Bow (Power I)", "", "&8Cost: &6{cost} {currency}"));
                 lbj.saveShopStuff("invContents.ranged.invContents.bow3", "&aBow (Power I, Punch I)", Arrays.asList("&8Items:", "&8▪ &7Bow (Power I, Punch I)", "", "&8Cost: &2{cost} {currency}"));
-                lbj.saveShopStuff("invContents.ranged.invContents.back", "&aGo Back", Arrays.asList(""));
+                lbj.saveShopStuff("invContents.ranged.invContents.back", "&aGo Back", Collections.singletonList(""));
 
                 lbj.saveShopStuff("invContents.tools.invContents.shears", "&aPermanent Shears", Arrays.asList("&8Items:", "&8▪ &7Permanent Shears", "", "&8Cost: &f{cost} {currency}"));
                 lbj.saveShopStuff("invContents.tools.invContents.pick", "&aWooden Pickaxe", Arrays.asList("&8Items:", "&8▪ &7Wooden Pickaxe", "", "&8Cost: &f{cost} {currency}"));
                 lbj.saveShopStuff("invContents.tools.invContents.axe", "&aWooden Axe", Arrays.asList("&8Items:", "&8▪ &7Wooden Axe", "", "&8Cost: &f{cost} {currency}"));
-                lbj.saveShopStuff("invContents.tools.invContents.back", "&aGo Back", Arrays.asList(""));
+                lbj.saveShopStuff("invContents.tools.invContents.back", "&aGo Back", Collections.singletonList(""));
 
                 lbj.saveShopStuff("invContents.potions.invContents.potion1", "&aSpeed II Potion", Arrays.asList("&8Items:", "&8▪ &7Speed II potion", "", "&8Cost: &2{cost} {currency}"));
                 lbj.saveShopStuff("invContents.potions.invContents.potion2", "&aJump V Potion", Arrays.asList("&8Items:", "&8▪ &7Jump V Potion", "", "&8Cost: &2{cost} {currency}"));
                 lbj.saveShopStuff("invContents.potions.invContents.potion3", "&aInvisibility Potion", Arrays.asList("&8Items:", "&8▪ &7Invisibility Potion", "", "&8Cost: &2{cost} {currency}"));
-                lbj.saveShopStuff("invContents.potions.invContents.back", "&aGo Back", Arrays.asList(""));
+                lbj.saveShopStuff("invContents.potions.invContents.back", "&aGo Back", Collections.singletonList(""));
 
                 lbj.saveShopStuff("invContents.utility.invContents.apple", "&aGolden Apple", Arrays.asList("&8Items:", "&8▪ &7Golden Apple", "", "&8Cost: &6{cost} {currency}"));
                 lbj.saveShopStuff("invContents.utility.invContents.sball", "&aBedbug", Arrays.asList("&8Items:", "&8▪ &7Bedbug", "", "&8Cost: &f{cost} {currency}", "", "&7Moderately annoying. These", "&7little critters can be thrown to", "&7distract enemies"));
@@ -218,7 +213,7 @@ public class Language {
                 lbj.saveShopStuff("invContents.utility.invContents.enderpearl", "&aEnder Pearl", Arrays.asList("&8Items:", "", "&8Ender Pearl", "&8▪ &7Cost: &2{cost} {currency}", "", "&7Pretty useful for invading", "&7enemies bases."));
                 lbj.saveShopStuff("invContents.utility.invContents.bucket", "&aWater Bucket", Arrays.asList("&8Items:", "&8▪ &7Water Bucket", "", "&8Cost: &2{cost} {currency}"));
                 lbj.saveShopStuff("invContents.utility.invContents.eggBridge", "&aBridge Egg", Arrays.asList("&8Items:", "&8▪ &7Bridge Egg", "", "&8Cost: &2{cost} {currency}", "&7This egg creates a bridge in", "&7its trail after being thrown."));
-                lbj.saveShopStuff("invContents.utility.invContents.back", "&aGo Back", Arrays.asList(""));
+                lbj.saveShopStuff("invContents.utility.invContents.back", "&aGo Back", Collections.singletonList(""));
                 yml.addDefault("meaning.iron", "Iron");
                 yml.addDefault("meaning.gold", "Gold");
                 yml.addDefault("meaning.emerald", "Emerald");
@@ -280,7 +275,7 @@ public class Language {
                 yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_FINAL_KILL, "{PlayerColor}{PlayerName} &7was hit off by a bomb. &b&lFINAL KILL!");
                 yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "{player} Stats");
 
-                /** save default items messages for stats gui */
+                /* save default items messages for stats gui */
                 lbj.addDefaultStatsMsg(yml, "wins", "&6Wins", "&f{wins}");
                 lbj.addDefaultStatsMsg(yml, "losses", "&6Losses", "&f{losses}");
                 lbj.addDefaultStatsMsg(yml, "kills", "&6Kills", "&f{kills}");
@@ -297,7 +292,7 @@ public class Language {
                 yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&7{date}", "&fName: &a{player}", "", "&fWins: &a{wins}", "&fLosses: &a{losses}", "&fKills: &a{kills}", "&fDeaths: &a{deaths}"
                         , "&fFinal Kills: &a{fKills}", "&fBeds Destroyed: &a{beds}", "", "&fOnline: &a{on}", "&eandrei1058.com"));
 
-                /** party commands */
+                /* party commands */
                 yml.addDefault(Messages.COMMAND_PARTY_HELP, Arrays.asList("&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
                         "&aParty Commands:", "&e/party help &7- &bPrints this help message", "&e/party invite <player> &7- &bInvites the player to your party",
                         "&e/party leave &7- &bLeaves the current party",
@@ -343,7 +338,7 @@ public class Language {
                 yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME, "{prefix}{player}");
                 yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_LORE, Arrays.asList("&7Health: &f{health}%", "&7Food: &f{food}", "", "&7Left-click to spectate"));
                 yml.addDefault(Messages.ARENA_SPECTATOR_LEAVE_ITEM_NAME, "&c&lReturn to lobby");
-                yml.addDefault(Messages.ARENA_SPECTATOR_LEAVE_ITEM_LORE, Arrays.asList("&7Right-click to leave to the lobby!"));
+                yml.addDefault(Messages.ARENA_SPECTATOR_LEAVE_ITEM_LORE, Collections.singletonList("&7Right-click to leave to the lobby!"));
                 yml.addDefault(Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_TITLE, "&aSpectating &7{player}");
                 yml.addDefault(Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_SUBTITLE, "&cSNEAK to exit");
                 yml.addDefault(Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE, "&eExiting Spectator mode");
@@ -356,38 +351,40 @@ public class Language {
                 /* Lobby Command Items */
                 if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH+".stats") != null) {
                     yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "stats"), "&eStats");
-                    yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "stats"), Arrays.asList("&fRight-click to see your stats!"));
+                    yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "stats"), Collections.singletonList("&fRight-click to see your stats!"));
                 }
                 if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH+".arena-selector") != null) {
                     yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "arena-selector"), "&eArena Selector");
-                    yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "arena-selector"), Arrays.asList("&fRight-click to choose an arena!"));
+                    yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "arena-selector"), Collections.singletonList("&fRight-click to choose an arena!"));
                 }
                 if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH+".leave") != null) {
                     yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "leave"), "&eBack to Hub");
-                    yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "leave"), Arrays.asList("&fRight-click to leave BedWars!"));
+                    yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "leave"), Collections.singletonList("&fRight-click to leave BedWars!"));
                 }
                 /* Pre Game Command Items */
                 if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH+".stats") != null) {
                     yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", "stats"), "&eStats");
-                    yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", "stats"), Arrays.asList("&fRight-click to see your stats!"));
+                    yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", "stats"), Collections.singletonList("&fRight-click to see your stats!"));
                 }
                 if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH+".leave") != null) {
                     yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", "leave"), "&eBack to Lobby");
-                    yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", "leave"), Arrays.asList("&fRight-click to leave the arena!"));
+                    yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", "leave"), Collections.singletonList("&fRight-click to leave the arena!"));
                 }
                 /* Spectator Command Items */
                 if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH+".teleporter") != null) {
                     yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", "teleporter"), "&eTeleporter");
-                    yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", "teleporter"), Arrays.asList("&fRight-click to spectate a player!"));
+                    yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", "teleporter"), Collections.singletonList("&fRight-click to spectate a player!"));
                 }
                 if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH+".leave") != null) {
                     yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", "leave"), "&eBack to Lobby");
-                    yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", "leave"), Arrays.asList("&fRight-click to leave the arena!"));
+                    yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", "leave"), Collections.singletonList("&fRight-click to leave the arena!"));
                 }
                 yml.addDefault(Messages.COMMAND_COOLDOWN, "&cYou can't do that yet! Wait {seconds} more seconds!");
                 yml.addDefault(Messages.PLACEHOLDER_PLAYER_TEAM_TEAM, "{TeamColor}[{TeamName}]");
                 yml.addDefault(Messages.PLACEHOLDER_PLAYER_TEAM_SHOUT, "&6[SHOUT]");
                 yml.addDefault(Messages.PLACEHOLDER_PLAYER_TEAM_SPECTATOR, "&7[SPECTATOR]");
+                yml.addDefault(Messages.ARENA_JOIN_DENIED_SELECTOR, "{prefix}&cSorry but you can't join this arena at this moment. Use Right-Click to spectate!");
+                yml.addDefault(Messages.ARENA_SPECTATE_DENIED_SELECTOR, "{prefix}&cSorry but you can't spectate this arena at this moment. Use Left-Click to join!");
                 break;
         }
 
@@ -441,8 +438,7 @@ public class Language {
     }
 
     public boolean exists(String path) {
-        if (yml.get(path) == null) return false;
-        return true;
+        return yml.get(path) != null;
     }
 
     public static List<String> getList(Player p, String path) {
@@ -452,7 +448,7 @@ public class Language {
         return lang.l(path);
     }
 
-    public static void saveIfNotExists(String path, Object data) {
+    static void saveIfNotExists(String path, Object data) {
         for (Language l : languages) {
             if (l.yml.get(path) == null) {
                 l.set(path, data);
@@ -504,11 +500,11 @@ public class Language {
 
     public static void setupCustomStatsMessages() {
         for (Language l : getLanguages()) {
-            /** save messages for stats gui items if custom items added */
+            /* save messages for stats gui items if custom items added */
             for (String item : Main.config.getYml().getConfigurationSection("statsGUI").getKeys(false)) {
                 if (item.equalsIgnoreCase("invSize")) continue;
                 l.yml.addDefault(Messages.PLAYER_STATS_GUI_PATH + "." + item + ".name", "Name not set");
-                l.yml.addDefault(Messages.PLAYER_STATS_GUI_PATH + "." + item + ".lore", Arrays.asList("lore not set"));
+                l.yml.addDefault(Messages.PLAYER_STATS_GUI_PATH + "." + item + ".lore", Collections.singletonList("lore not set"));
             }
             l.save();
         }
