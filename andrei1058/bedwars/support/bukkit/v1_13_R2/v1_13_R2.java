@@ -10,12 +10,10 @@ import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
 import com.andrei1058.bedwars.exceptions.InvalidSoundException;
 import com.andrei1058.bedwars.support.bukkit.NMS;
-import com.andrei1058.bedwars.support.bukkit.utils.Misc;
 import com.google.common.collect.Sets;
 import com.mojang.datafixers.types.Type;
 import net.minecraft.server.v1_13_R2.*;
 import net.minecraft.server.v1_13_R2.Item;
-import org.bukkit.DyeColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -82,6 +80,7 @@ public class v1_13_R2 implements NMS {
         try {
             playerKill = Sound.valueOf(sound);
         } catch (Exception ex) {
+            ex.printStackTrace();
             throw new InvalidSoundException(sound);
         }
     }
@@ -337,11 +336,6 @@ public class v1_13_R2 implements NMS {
         return a;
     }
 
-
-    public void registerEntity(String name, int id, Class customClass) {
-        EntityTypes.a(name, EntityTypes.a.a(customClass));
-    }
-
     /**
      * Custom villager class
      */
@@ -436,9 +430,9 @@ public class v1_13_R2 implements NMS {
 
         private void setName() {
             int percentuale = (int) ((e.getHealth() * 100) / e.getMaxHealth() / 10);
-            e.setCustomName(IChatBaseComponent.ChatSerializer.b(lang.m(namePath).replace("{despawn}", String.valueOf(despawn)).replace("{health}",
+            (e.getBukkitEntity()).setCustomName(lang.m(namePath).replace("{despawn}", String.valueOf(despawn)).replace("{health}",
                     new String(new char[percentuale]).replace("\0", lang.m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH)) + new String(new char[10 - percentuale]).replace("\0", "§7" + lang.m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH))
-            ).replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()).replace("{TeamName}", team.getName())));
+            ).replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()).replace("{TeamName}", team.getName()));
         }
 
         public EntityLiving getE() {
@@ -602,7 +596,17 @@ public class v1_13_R2 implements NMS {
     @Override
     public org.bukkit.inventory.ItemStack colourItem(org.bukkit.inventory.ItemStack itemStack, BedWarsTeam bedWarsTeam) {
         if (itemStack == null) return null;
-        return new org.bukkit.inventory.ItemStack(itemStack.getType(), itemStack.getAmount(), Misc.getOldItemColor(bedWarsTeam.getColor()));
+        String type = itemStack.getType().toString();
+        if (type.contains("_BED")) {
+            return new org.bukkit.inventory.ItemStack(TeamColor.getBedBlock(bedWarsTeam.getColor()), itemStack.getAmount());
+        } else if (type.contains("STAINED_GLASS") || type.equals("GLASS")){
+            return new org.bukkit.inventory.ItemStack(TeamColor.getGlass(bedWarsTeam.getColor()), itemStack.getAmount());
+        } else if (type.contains("_TERRACOTTA")){
+            return new org.bukkit.inventory.ItemStack(TeamColor.getGlazedTerracotta(bedWarsTeam.getColor()), itemStack.getAmount());
+        } else if (type.contains("_WOOL")){
+            return new org.bukkit.inventory.ItemStack(TeamColor.getWool(bedWarsTeam.getColor()), itemStack.getAmount());
+        }
+        return itemStack;
     }
 
     @Override
@@ -621,5 +625,30 @@ public class v1_13_R2 implements NMS {
     public void teamCollideRule(Team team) {
         team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
         team.setCanSeeFriendlyInvisibles(true);
+    }
+
+    @Override
+    public boolean isPlayerHead(String material, int data) {
+        return material.equals("PLAYER_HEAD");
+    }
+
+    @Override
+    public org.bukkit.Material materialFireball() {
+        return org.bukkit.Material.valueOf("FIRE_CHARGE");
+    }
+
+    @Override
+    public org.bukkit.Material materialSnowball() {
+        return org.bukkit.Material.valueOf("SNOWBALL");
+    }
+
+    @Override
+    public boolean isBed(org.bukkit.Material material) {
+        return material.toString().contains("_BED");
+    }
+
+    @Override
+    public boolean itemStackDataCompare(org.bukkit.inventory.ItemStack i, short data) {
+        return true;
     }
 }

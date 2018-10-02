@@ -47,7 +47,7 @@ public class EntityDropPickListener implements Listener {
             e.setCancelled(true);
             return;
         }
-        if (e.getItem().getItemStack().getType() == Material.BED) {
+        if (Main.nms.isBed(e.getItem().getItemStack().getType())) {
             e.setCancelled(true);
             e.getItem().remove();
             return;

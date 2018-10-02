@@ -129,7 +129,7 @@ public class Misc {
     public static ItemStack createItem(Material material, byte data, boolean enchanted, String name, List<String> lore, Player owner, String metaKey, String metaData) {
         ItemStack i = new ItemStack(material, 1, data);
         if (owner != null) {
-            if (material == Material.SKULL_ITEM && data == 3) {
+            if (nms.isPlayerHead(material.toString(), data)) {
                 SkullMeta sm = (SkullMeta) i.getItemMeta();
                 sm.setOwner(owner.getName());
                 i.setItemMeta(sm);
@@ -246,7 +246,7 @@ public class Misc {
     }
 
     public static boolean isProjectile(Material i) {
-        return Material.EGG == i || Material.FIREBALL == i || Material.SNOW_BALL == i || Material.ARROW == i;
+        return Material.EGG == i || nms.materialFireball() == i || nms.materialSnowball() == i || Material.ARROW == i;
     }
 
     /**

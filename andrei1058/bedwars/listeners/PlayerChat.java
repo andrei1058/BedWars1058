@@ -50,7 +50,7 @@ public class PlayerChat implements Listener {
             }
             e.setFormat(SupportPAPI.getSupportPAPI().replace(e.getPlayer(), getMsg(p, Messages.FORMATTING_CHAT_LOBBY).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{vSuffix}", getChatSupport().getSuffix(p))
                     .replace("{player}", p.getName()).replace("{level}", getLevelSupport().getLevel(p))).replace("{message}", "%2$s"));
-        } else if (isInArena(p)) {
+        } else if (Arena.getArenaByPlayer(p) != null) {
             Arena a = Arena.getArenaByPlayer(p);
             Arena.afkCheck.remove(p.getUniqueId());
             if (Main.api.isPlayerAFK(e.getPlayer())) {

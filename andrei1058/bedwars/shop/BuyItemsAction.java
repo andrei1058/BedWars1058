@@ -69,7 +69,7 @@ public class BuyItemsAction extends ContentAction {
             if (!nms.isCustomBedWarsItem(i)) continue;
             for (ShopItem i2 : items) {
                 if (nms.isCustomBedWarsItem(i2.getItemStack())) {
-                    if (nms.getCustomData(i).equals(nms.getCustomData(i2.getItemStack()))){
+                    if (nms.getCustomData(i).equals(nms.getCustomData(i2.getItemStack()))) {
                         p.sendMessage(getMsg(p, Messages.SHOP_ALREADY_BOUGHT));
                         return;
                     }
@@ -172,10 +172,7 @@ public class BuyItemsAction extends ContentAction {
                     }
                 }
                 ItemStack i = si.getItemStack();
-                if (si.getItemStack().getType() == Material.WOOL || si.getItemStack().getType() == Material.STAINED_CLAY ||
-                        si.getItemStack().getType() == Material.STAINED_GLASS) {
-                    i = new ItemStack(i.getType(), i.getAmount(), TeamColor.itemColor(Arena.getArenaByPlayer(p).getTeam(p).getColor()));
-                }
+                i = nms.colourItem(i, Arena.getArenaByPlayer(p).getTeam(p));
                 p.getInventory().addItem(i);
             }
 

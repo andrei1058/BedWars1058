@@ -294,4 +294,40 @@ public interface NMS {
     ItemStack createItemStack(String material, int amount, short data);
 
     void teamCollideRule(Team team);
+
+    /**
+     * Check if is a player head
+     *
+     * @since API 11
+     */
+    boolean isPlayerHead(String material, int data);
+
+    /**
+     * Get fireball material
+     *
+     * @since API 11
+     */
+    Material materialFireball();
+
+    /**
+     * Get snowball material
+     *
+     * @since API 11
+     */
+    Material materialSnowball();
+
+    /**
+     * Check if bed
+     *
+     * @since API 11
+     */
+    boolean isBed(Material material);
+
+    /**
+     * Item Data compare
+     * This will always return true on versions >= 1.13
+     *
+     * @since API 11
+     */
+    boolean itemStackDataCompare(ItemStack i, short data);
 }

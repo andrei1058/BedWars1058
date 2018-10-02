@@ -61,9 +61,10 @@ public class SpectatorListeners implements Listener {
         Player p = (Player) e.getWhoClicked();
         Arena a = Arena.getArenaByPlayer(p);
         if (a == null) return;
+        if (!a.isSpectator(p)) return;
 
         /* Teleporter heads */
-        if (i.getType() == Material.SKULL_ITEM) {
+        if (nms.isPlayerHead(i.getType().toString(), 3) && nms.itemStackDataCompare(i, (short) 3)) {
             if (nms.isCustomBedWarsItem(i)) {
                 e.setCancelled(true);
 

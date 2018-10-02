@@ -9,7 +9,6 @@ import com.andrei1058.bedwars.arena.ShopHolo;
 import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
 import com.andrei1058.bedwars.exceptions.InvalidSoundException;
-import com.andrei1058.bedwars.support.bukkit.utils.Misc;
 import com.andrei1058.bedwars.support.bukkit.NMS;
 import com.google.common.collect.Sets;
 import net.minecraft.server.v1_11_R1.*;
@@ -570,10 +569,19 @@ public class v1_11_R1 implements NMS {
         return i;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public org.bukkit.inventory.ItemStack colourItem(org.bukkit.inventory.ItemStack itemStack, BedWarsTeam bedWarsTeam) {
         if (itemStack == null) return null;
-        return new org.bukkit.inventory.ItemStack(itemStack.getType(), itemStack.getAmount(), Misc.getOldItemColor(bedWarsTeam.getColor()));
+        switch (itemStack.getType().toString()) {
+            default:
+                return itemStack;
+            case "WOOL":
+            case "STAINED_CLAY":
+            case "STAINED_GLASS":
+            case "GLASS":
+                return new org.bukkit.inventory.ItemStack(itemStack.getType(), itemStack.getAmount(),TeamColor.itemColor(bedWarsTeam.getColor()));
+        }
     }
 
     @Override
@@ -592,5 +600,31 @@ public class v1_11_R1 implements NMS {
     public void teamCollideRule(Team team) {
         team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
         team.setCanSeeFriendlyInvisibles(true);
+    }
+
+    @Override
+    public boolean isPlayerHead(String material, int data) {
+        return material.equals("SKULL_ITEM") && data == 3;
+    }
+
+    @Override
+    public org.bukkit.Material materialFireball() {
+        return org.bukkit.Material.valueOf("FIREBALL");
+    }
+
+    @Override
+    public org.bukkit.Material materialSnowball() {
+        return org.bukkit.Material.valueOf("SNOW_BALL");
+    }
+
+    @Override
+    public boolean isBed(org.bukkit.Material material) {
+        return material == org.bukkit.Material.valueOf("BED_BLOCK") || material == org.bukkit.Material.valueOf("BED");
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean itemStackDataCompare(org.bukkit.inventory.ItemStack i, short data) {
+        return i.getData().getData() == data;
     }
 }

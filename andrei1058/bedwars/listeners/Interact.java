@@ -33,14 +33,14 @@ public class Interact implements Listener {
 
     @EventHandler
     /* Handle custom items with commands on them */
-    public void onItemCommand(PlayerInteractEvent e){
+    public void onItemCommand(PlayerInteractEvent e) {
         Player p = e.getPlayer();
-        if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR){
+        if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
             ItemStack i = Main.nms.getItemInHand(p);
             if (!nms.isCustomBedWarsItem(i)) return;
             String[] customData = nms.getCustomData(i).split("_");
-            if (customData.length >= 2){
-                if (customData[0].equals("RUNCOMMAND")){
+            if (customData.length >= 2) {
+                if (customData[0].equals("RUNCOMMAND")) {
                     e.setCancelled(true);
                     Bukkit.dispatchCommand(p, customData[1]);
                 }
@@ -52,7 +52,7 @@ public class Interact implements Listener {
     public void onInteract(PlayerInteractEvent e) {
         Player p = e.getPlayer();
         Arena.afkCheck.remove(p.getUniqueId());
-        if (Main.api.isPlayerAFK(e.getPlayer())){
+        if (Main.api.isPlayerAFK(e.getPlayer())) {
             Main.api.setPlayerAFK(e.getPlayer(), false);
         }
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
@@ -65,12 +65,12 @@ public class Interact implements Listener {
                     e.setCancelled(true);
                     return;
                 }
-                if (b.getType() == Material.BED_BLOCK) {
-                    if (p.isSneaking()){
+                if (nms.isBed(b.getType())) {
+                    if (p.isSneaking()) {
                         ItemStack i = nms.getItemInHand(p);
-                        if (i == null){
+                        if (i == null) {
                             e.setCancelled(true);
-                        } else if (i.getType() == Material.AIR){
+                        } else if (i.getType() == Material.AIR) {
                             e.setCancelled(true);
                         }
                     } else {
@@ -126,7 +126,7 @@ public class Interact implements Listener {
             Arena a = Arena.getArenaByPlayer(p);
             if (a != null) {
                 if (a.isPlayer(p)) {
-                    if (inHand.getType() == Material.FIREBALL) {
+                    if (inHand.getType() == nms.materialFireball()) {
                         e.setCancelled(true);
                         Fireball fb = p.launchProjectile(Fireball.class);
                         fb.setMetadata("bw1058", new FixedMetadataValue(plugin, "ceva"));
@@ -137,14 +137,14 @@ public class Interact implements Listener {
                             if (i == null) continue;
                             if (i.getType() == null) continue;
                             if (i.getType() == Material.AIR) continue;
-                            if (i.getType() == Material.FIREBALL) {
+                            if (i.getType() == nms.materialFireball()) {
                                 nms.minusAmount(p, inHand, 1);
                             }
                         }
                     }
                     if (shop.getBoolean("utilities.silverfish.enable")) {
                         if (!Misc.isProjectile(Material.valueOf(shop.getYml().getString("utilities.silverfish.material")))) {
-                            if (inHand.getType() == Material.valueOf(shop.getYml().getString("utilities.silverfish.material")) && inHand.getData().getData() == shop.getInt("utilities.silverfish.data")) {
+                            if (inHand.getType() == Material.valueOf(shop.getYml().getString("utilities.silverfish.material")) && nms.itemStackDataCompare(inHand, (short) shop.getInt("utilities.silverfish.data"))) {
                                 nms.spawnSilverfish(p.getLocation().add(0, 1, 0), a.getTeam(p));
                                 if (!nms.isProjectile(inHand)) {
                                     nms.minusAmount(p, inHand, 1);
@@ -155,7 +155,7 @@ public class Interact implements Listener {
                     }
                     if (shop.getBoolean("utilities.ironGolem.enable")) {
                         if (!Misc.isProjectile(Material.valueOf(shop.getYml().getString("utilities.ironGolem.material")))) {
-                            if (inHand.getType() == Material.valueOf(shop.getYml().getString("utilities.ironGolem.material")) && inHand.getData().getData() == shop.getInt("utilities.ironGolem.data")) {
+                            if (inHand.getType() == Material.valueOf(shop.getYml().getString("utilities.ironGolem.material")) && nms.itemStackDataCompare(inHand, (short) shop.getInt("utilities.ironGolem.data"))) {
                                 nms.spawnIronGolem(p.getLocation().add(0, 1, 0), a.getTeam(p));
                                 if (!nms.isProjectile(inHand)) {
                                     nms.minusAmount(p, inHand, 1);
@@ -170,42 +170,39 @@ public class Interact implements Listener {
 
     @EventHandler
     public void onEntityInteract(PlayerInteractEntityEvent e) {
-        if (Arena.isInArena(e.getPlayer())) {
-            Arena a = Arena.getArenaByPlayer(e.getPlayer());
-            Location l = e.getRightClicked().getLocation();
-            for (BedWarsTeam t : a.getTeams()) {
-                Location l2 = t.getShop(), l3 = t.getTeamUpgrades();
-                if (l.getBlockX() == l2.getBlockX() && l.getBlockY() == l2.getBlockY() && l.getBlockZ() == l2.getBlockZ()) {
-                    e.setCancelled(true);
-                } else if (l.getBlockX() == l3.getBlockX() && l.getBlockY() == l3.getBlockY() && l.getBlockZ() == l3.getBlockZ()) {
-                    e.setCancelled(true);
-                }
+        Arena a = Arena.getArenaByPlayer(e.getPlayer());
+        if (a == null) return;
+        Location l = e.getRightClicked().getLocation();
+        for (BedWarsTeam t : a.getTeams()) {
+            Location l2 = t.getShop(), l3 = t.getTeamUpgrades();
+            if (l.getBlockX() == l2.getBlockX() && l.getBlockY() == l2.getBlockY() && l.getBlockZ() == l2.getBlockZ()) {
+                e.setCancelled(true);
+            } else if (l.getBlockX() == l3.getBlockX() && l.getBlockY() == l3.getBlockY() && l.getBlockZ() == l3.getBlockZ()) {
+                e.setCancelled(true);
             }
-
         }
     }
 
     @EventHandler
     public void onEntityInteract2(PlayerInteractAtEntityEvent e) {
-        if (Arena.isInArena(e.getPlayer())) {
-            Arena a = Arena.getArenaByPlayer(e.getPlayer());
-            Location l = e.getRightClicked().getLocation();
-            for (BedWarsTeam t : a.getTeams()) {
-                Location l2 = t.getShop(), l3 = t.getTeamUpgrades();
-                if (l.getBlockX() == l2.getBlockX() && l.getBlockY() == l2.getBlockY() && l.getBlockZ() == l2.getBlockZ()) {
-                    e.setCancelled(true);
-                    if (a.isPlayer(e.getPlayer())) {
-                        ShopCategory.getByName("main.invContents").openToPlayer(e.getPlayer());
-                    }
-                } else if (l.getBlockX() == l3.getBlockX() && l.getBlockY() == l3.getBlockY() && l.getBlockZ() == l3.getBlockZ()) {
-                    if (a.isPlayer(e.getPlayer())) {
-                        UpgradeGroup ug = getUpgradeGroup(a.getGroup());
-                        if (ug != null) {
-                            ug.openToPlayer(e.getPlayer(), a);
-                        }
-                    }
-                    e.setCancelled(true);
+        Arena a = Arena.getArenaByPlayer(e.getPlayer());
+        if (a == null) return;
+        Location l = e.getRightClicked().getLocation();
+        for (BedWarsTeam t : a.getTeams()) {
+            Location l2 = t.getShop(), l3 = t.getTeamUpgrades();
+            if (l.getBlockX() == l2.getBlockX() && l.getBlockY() == l2.getBlockY() && l.getBlockZ() == l2.getBlockZ()) {
+                e.setCancelled(true);
+                if (a.isPlayer(e.getPlayer())) {
+                    ShopCategory.getByName("main.invContents").openToPlayer(e.getPlayer());
                 }
+            } else if (l.getBlockX() == l3.getBlockX() && l.getBlockY() == l3.getBlockY() && l.getBlockZ() == l3.getBlockZ()) {
+                if (a.isPlayer(e.getPlayer())) {
+                    UpgradeGroup ug = getUpgradeGroup(a.getGroup());
+                    if (ug != null) {
+                        ug.openToPlayer(e.getPlayer(), a);
+                    }
+                }
+                e.setCancelled(true);
             }
         }
     }
@@ -219,14 +216,14 @@ public class Interact implements Listener {
 
     @EventHandler
     public void onArmorManipulate(PlayerArmorStandManipulateEvent e) {
-        if (Arena.isInArena(e.getPlayer())) {
+        if (Arena.getArenaByPlayer(e.getPlayer()) != null) {
             e.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onCrafting(PrepareItemCraftEvent e) {
-        if (Arena.isInArena((Player) e.getView().getPlayer())) {
+        if (Arena.getArenaByPlayer((Player) e.getView().getPlayer()) != null) {
             if (config.getBoolean("disableCrafting")) {
                 e.getInventory().setResult(new ItemStack(Material.AIR));
             }

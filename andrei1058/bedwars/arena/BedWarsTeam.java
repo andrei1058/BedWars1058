@@ -660,11 +660,6 @@ public class BedWarsTeam {
         return members;
     }
 
-    private ItemStack createColorItem(Material material, int amount) {
-        ItemStack i = new ItemStack(material, amount, TeamColor.itemColor(color));
-        return i;
-    }
-
     /*public List<Player> getPotionEffectApplied() {
         return potionEffectApplied;
     }*/

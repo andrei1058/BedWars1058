@@ -115,6 +115,8 @@ public class Main extends JavaPlugin {
             this.setEnabled(false);
             this.getLogger().severe("I can't run on your version: " + version);
             return;
+        } else {
+            this.getLogger().severe("Loading support for paper/ spigot " + version + ".");
         }
 
         config = new ConfigManager("config", "plugins/" + this.getName(), false);

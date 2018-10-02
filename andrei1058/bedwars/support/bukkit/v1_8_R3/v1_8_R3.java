@@ -8,7 +8,6 @@ import com.andrei1058.bedwars.arena.ShopHolo;
 import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
 import com.andrei1058.bedwars.exceptions.InvalidSoundException;
-import com.andrei1058.bedwars.support.bukkit.utils.Misc;
 import com.andrei1058.bedwars.support.bukkit.NMS;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Effect;
@@ -590,10 +589,19 @@ public class v1_8_R3 implements NMS {
         return i;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public ItemStack colourItem(ItemStack itemStack, BedWarsTeam bedWarsTeam) {
         if (itemStack == null) return null;
-        return new ItemStack(itemStack.getType(), itemStack.getAmount(), Misc.getOldItemColor(bedWarsTeam.getColor()));
+        switch (itemStack.getType().toString()) {
+            default:
+                return itemStack;
+            case "WOOL":
+            case "STAINED_CLAY":
+            case "STAINED_GLASS":
+            case "GLASS":
+                return new ItemStack(itemStack.getType(), itemStack.getAmount(),TeamColor.itemColor(bedWarsTeam.getColor()));
+        }
     }
 
     @Override
@@ -611,5 +619,31 @@ public class v1_8_R3 implements NMS {
     @Override
     public void teamCollideRule(Team team) {
 
+    }
+
+    @Override
+    public boolean isPlayerHead(String material, int data) {
+        return material.equals("SKULL_ITEM") && data == 3;
+    }
+
+    @Override
+    public org.bukkit.Material materialFireball() {
+        return org.bukkit.Material.valueOf("FIREBALL");
+    }
+
+    @Override
+    public org.bukkit.Material materialSnowball() {
+        return org.bukkit.Material.valueOf("SNOW_BALL");
+    }
+
+    @Override
+    public boolean isBed(org.bukkit.Material material) {
+        return material == org.bukkit.Material.valueOf("BED_BLOCK") || material == org.bukkit.Material.valueOf("BED");
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean itemStackDataCompare(ItemStack i, short data) {
+        return i.getData().getData() == data;
     }
 }

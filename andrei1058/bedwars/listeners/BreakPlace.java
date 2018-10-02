@@ -69,8 +69,8 @@ public class BreakPlace implements Listener {
             }
         }
         Player p = e.getPlayer();
-        if (Arena.isInArena(p)) {
-            Arena a = Arena.getArenaByPlayer(p);
+        Arena a = Arena.getArenaByPlayer(p);
+        if (a != null) {
             if (a.isSpectator(p)) {
                 e.setCancelled(true);
                 return;
@@ -160,13 +160,13 @@ public class BreakPlace implements Listener {
                 }
             }
         }
-        if (Arena.isInArena(p)) {
-            Arena a = Arena.getArenaByPlayer(p);
+        Arena a = Arena.getArenaByPlayer(p);
+        if (a != null) {
             if (!a.isPlayer(p)) {
                 e.setCancelled(true);
                 return;
             }
-            if (e.getBlock().getType() == Material.BED_BLOCK) {
+            if (nms.isBed(e.getBlock().getType())) {
                 for (BedWarsTeam t : a.getTeams()) {
                     for (int x = e.getBlock().getX() - 2; x < e.getBlock().getX() + 2; x++) {
                         for (int y = e.getBlock().getY() - 2; y < e.getBlock().getY() + 2; y++) {
