@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.commands.main.subcmds.sensitive;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
@@ -66,8 +67,8 @@ public class SetBed extends SubCommand {
                 p.spigot().sendMessage(Misc.msgHoverClick("§9Use §e/" + getParent().getName() + " " + getSubCommandName() + " <teamName>", "§dSet a team bed.", "/" + getParent().getName() + " " + getSubCommandName(), ClickEvent.Action.SUGGEST_COMMAND));
             } else Bukkit.dispatchCommand(s, getParent().getName() + " " + getSubCommandName() + " " + foundTeam);
         } else {
-            if (!(p.getLocation().clone().add(0, -0.5, 0).getBlock().getType() == Material.BED_BLOCK || p.getLocation().clone().add(0, 0.5, 0).getBlock().getType() == Material.BED_BLOCK
-                    || p.getLocation().clone().getBlock().getType() == Material.BED_BLOCK)) {
+            if (!(Main.nms.isBed(p.getLocation().clone().add(0, -0.5, 0).getBlock().getType()) ||  Main.nms.isBed(p.getLocation().clone().add(0, 0.5, 0).getBlock().getType())
+                    || Main.nms.isBed(p.getLocation().clone().getBlock().getType()))) {
                 p.sendMessage("§c▪ §7You must stay on a bed while using this command!");
                 return true;
             }
