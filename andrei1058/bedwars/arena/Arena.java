@@ -1423,7 +1423,8 @@ public class Arena {
      * Check if is the party owner first.
      */
     public static boolean joinRandomArena(Player p) {
-        int amount = getParty().hasParty(p) ? getParty().getMembers(p).size() : 1;
+        boolean party = getParty().hasParty(p);
+        int amount = party ? getParty().getMembers(p).size() : 1;
         int players = 0;
         Arena arena = null;
         for (Arena a : getArenas()) {
@@ -1431,7 +1432,7 @@ public class Arena {
             if (a.getStatus() == GameState.restarting) continue;
             if (a.getMaxPlayers() == a.getPlayers().size()) continue;
             int diff = a.getMaxPlayers() - a.getPlayers().size();
-            if (diff == amount) {
+            if (diff == amount && party) {
                 a.addPlayer(p, false);
             } else if (diff > amount) {
                 if (players < diff) {
@@ -1454,7 +1455,8 @@ public class Arena {
 
         Arena arena = null;
         int players = 0;
-        int amount = getParty().hasParty(p) ? getParty().getMembers(p).size() : 1;
+        boolean party = getParty().hasParty(p);
+        int amount = party ? getParty().getMembers(p).size() : 1;
 
         for (Arena a : arenas) {
             if (!a.getGroup().equalsIgnoreCase(group)) continue;
@@ -1462,7 +1464,7 @@ public class Arena {
             if (a.getStatus() == GameState.restarting) continue;
             int diff = a.getMaxPlayers() - a.getPlayers().size();
 
-            if (diff == amount) {
+            if (diff == amount && party) {
                 a.addPlayer(p, false);
             } else if (diff > amount) {
                 if (players < diff) {
