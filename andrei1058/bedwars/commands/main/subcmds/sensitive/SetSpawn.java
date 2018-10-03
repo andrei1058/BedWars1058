@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.commands.main.subcmds.sensitive;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
@@ -76,7 +77,7 @@ public class SetSpawn extends SubCommand {
                     for (int y = -radius; y < radius; y++){
                         for (int z = -radius; z < radius; z++){
                             Block b = l.clone().add(x, y, z).getBlock();
-                            if (b.getType() == Material.BED_BLOCK){
+                            if (Main.nms.isBed(b.getType())){
                                 p.teleport(b.getLocation());
                                 Bukkit.dispatchCommand(p, getParent().getName()+" setBed "+args[0]);
                                 return true;
