@@ -108,6 +108,42 @@ public enum TeamColor {
     }
 
     /**
+     * Get the english for material as color name
+     *
+     * @since API 11
+     */
+    public static String enName(String material) {
+        String name = "";
+        switch (material) {
+            case "PINK_WOOL":
+                name = "Pink";
+                break;
+            case "RED":
+                name = "Red";
+                break;
+            case "GRAY_WOOL":
+                name = "Gray";
+                break;
+            case "BLUE_WOOL":
+                name = "Blue";
+                break;
+            case "WHITE_WOOL":
+                name = "White";
+                break;
+            case "LIGHT_BLUE_WOOL":
+                name = "Aqua";
+                break;
+            case "LIME_WOOL":
+                name = "Green";
+                break;
+            case "YELLOW_WOOL":
+                name = "Yellow";
+                break;
+        }
+        return name;
+    }
+
+    /**
      * Get the english for byte as color name
      *
      * @since api 6
