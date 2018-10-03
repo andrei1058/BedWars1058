@@ -330,4 +330,12 @@ public interface NMS {
      * @since API 11
      */
     boolean itemStackDataCompare(ItemStack i, short data);
+
+    /**
+     * Set block data
+     * For versions before 1.13
+     *
+     * @since API 11
+     */
+    void setBlockData(Block block, byte data);
 }

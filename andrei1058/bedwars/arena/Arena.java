@@ -7,6 +7,7 @@ import com.andrei1058.bedwars.configuration.ConfigManager;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.support.nte.NametagEdit;
 import com.andrei1058.bedwars.tasks.GamePlayingTask;
@@ -1004,9 +1005,10 @@ public class Arena {
     }
 
     public void addSign(Location loc) {
-        if (loc.getBlock().getType() == Material.SIGN || loc.getBlock().getType() == Material.SIGN_POST || loc.getBlock().getType() == Material.WALL_SIGN) {
+        if (loc.getBlock().getType() == Material.SIGN || loc.getBlock().getType() == Material.WALL_SIGN) {
             signs.add(loc.getBlock().getState());
             refreshSigns();
+            BlockStatusListener.updateBlock(this);
         }
     }
 
@@ -1479,4 +1481,5 @@ public class Arena {
         arena.addPlayer(p, false);
         return true;
     }
+
 }

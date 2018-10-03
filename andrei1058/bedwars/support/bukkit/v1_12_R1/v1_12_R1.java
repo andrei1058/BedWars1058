@@ -655,4 +655,10 @@ public class v1_12_R1 implements NMS {
     public boolean itemStackDataCompare(org.bukkit.inventory.ItemStack i, short data) {
         return i.getData().getData() == data;
     }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void setBlockData(org.bukkit.block.Block block, byte data) {
+        block.setData(data, true);
+    }
 }

@@ -18,6 +18,7 @@ import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.block.Bed;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_13_R1.CraftServer;
@@ -649,5 +650,10 @@ public class v1_13_R1 implements NMS {
     @Override
     public boolean itemStackDataCompare(org.bukkit.inventory.ItemStack i, short data) {
         return true;
+    }
+
+    @Override
+    public void setBlockData(Block block, byte data) {
+
     }
 }

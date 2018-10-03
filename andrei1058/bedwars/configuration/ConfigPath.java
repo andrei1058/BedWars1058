@@ -99,4 +99,11 @@ public class ConfigPath {
     public static final String SOUNDS_INSUFF_MONEY = "insufficient-money";
     public static final String SOUNDS_BOUGHT = "bought";
     public static final String SOUNDS_COUNTDOWN_TICK = "countdown";
+
+    public static final String SIGNS_STATUS_BLOCK_WAITING_MATERIAL = "status-block.waiting.material";
+    public static final String SIGNS_STATUS_BLOCK_WAITING_DATA = "status-block.waiting.data";
+    public static final String SIGNS_STATUS_BLOCK_STARTING_MATERIAL = "status-block.starting.material";
+    public static final String SIGNS_STATUS_BLOCK_STARTING_DATA = "status-block.starting.data";
+    public static final String SIGNS_STATUS_BLOCK_PLAYING_MATERIAL = "status-block.playing.material";
+    public static final String SIGNS_STATUS_BLOCK_PLAYING_DATA = "status-block.playing.data";
 }

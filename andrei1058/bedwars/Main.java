@@ -15,6 +15,7 @@ import com.andrei1058.bedwars.commands.main.MainCommand;
 import com.andrei1058.bedwars.configuration.*;
 import com.andrei1058.bedwars.listeners.*;
 import com.andrei1058.bedwars.listeners.arenaselector.ArenaSelectorListener;
+import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
 import com.andrei1058.bedwars.support.Metrics;
 import com.andrei1058.bedwars.support.bukkit.*;
 import com.andrei1058.bedwars.support.bukkit.v1_10_R1.v1_10_R1;
@@ -175,7 +176,7 @@ public class Main extends JavaPlugin {
         if (getServerType() == ServerType.BUNGEE) {
             registerEvents(new Ping());
         } else if (getServerType() == ServerType.MULTIARENA || getServerType() == ServerType.SHARED){
-            registerEvents(new ArenaSelectorListener());
+            registerEvents(new ArenaSelectorListener(), new BlockStatusListener());
         }
 
         /* Load version support */
@@ -471,6 +472,12 @@ public class Main extends JavaPlugin {
         signs = new ConfigManager("signs", "plugins/" + plugin.getName(), false);
         YamlConfiguration yml = signs.getYml();
         yml.addDefault("format", Arrays.asList("&a[arena]", "", "&2[on]&9/&2[max]", "[status]"));
+        yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_WAITING_MATERIAL, getForCurrentVersion("STAINED_CLAY", "STAINED_CLAY", "GREEN_CONCRETE"));
+        yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_WAITING_DATA, 5);
+        yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_STARTING_MATERIAL, getForCurrentVersion("STAINED_CLAY", "STAINED_CLAY", "YELLOW_CONCRETE"));
+        yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_STARTING_DATA, 4);
+        yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_PLAYING_MATERIAL, getForCurrentVersion("STAINED_CLAY", "STAINED_CLAY", "RED_CONCRETE"));
+        yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_PLAYING_DATA, 14);
         yml.options().copyDefaults(true);
         signs.save();
         if (yml.getStringList("format").size() < 4) {
