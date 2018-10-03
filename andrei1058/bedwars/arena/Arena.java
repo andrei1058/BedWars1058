@@ -1423,16 +1423,15 @@ public class Arena {
      * Check if is the party owner first.
      */
     public static boolean joinRandomArena(Player p) {
-        boolean party = getParty().hasParty(p);
-        int amount = party ? getParty().getMembers(p).size() : 1;
-        int players = 0;
+        int amount = getParty().hasParty(p) ? getParty().getMembers(p).size() : 1;
+        int players = 1000;
         Arena arena = null;
         for (Arena a : getArenas()) {
             if (a.getStatus() == GameState.playing) continue;
             if (a.getStatus() == GameState.restarting) continue;
             if (a.getMaxPlayers() == a.getPlayers().size()) continue;
             int diff = a.getMaxPlayers() - a.getPlayers().size();
-            if (diff == amount && party) {
+            if (diff == amount) {
                 a.addPlayer(p, false);
             } else if (diff > amount) {
                 if (players < diff) {
@@ -1454,7 +1453,7 @@ public class Arena {
         Collections.shuffle(arenas);
 
         Arena arena = null;
-        int players = 0;
+        int players = 1000;
         boolean party = getParty().hasParty(p);
         int amount = party ? getParty().getMembers(p).size() : 1;
 
