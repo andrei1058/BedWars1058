@@ -36,7 +36,7 @@ import com.andrei1058.bedwars.support.papi.PAPISupport;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.support.party.NoParty;
 import com.andrei1058.bedwars.support.party.Party;
-import com.andrei1058.bedwars.support.party.PartyAndFriends;
+import com.andrei1058.bedwars.support.party.Parties;
 import com.andrei1058.bedwars.support.stats.MySQL;
 import com.andrei1058.bedwars.support.stats.SQLite;
 import com.andrei1058.bedwars.support.vault.*;
@@ -209,13 +209,16 @@ public class Main extends JavaPlugin {
 
         /* Party support */
         if (config.getYml().getBoolean(ConfigPath.GENERAL_CONFIGURATION_ALLOW_PARTIES)) {
-            if (Bukkit.getPluginManager().getPlugin("Spigot-Party-API-PAF") != null) {
-                getLogger().info("Hook into Spigot-Party-API-PAF support!");
-                party = new PartyAndFriends();
-            } else {
-                party = new com.andrei1058.bedwars.support.party.Internal();
-                getLogger().info("Loading internal Party system. /party");
+            if (Bukkit.getPluginManager().getPlugin("Parties") != null) {
+                if (getServer().getPluginManager().getPlugin("Parties").isEnabled()) {
+                    getLogger().info("Hook into Parties (by AlessioDP) support!");
+                    party = new Parties();
+                }
             }
+        }
+        if (party == null){
+            party = new com.andrei1058.bedwars.support.party.Internal();
+            getLogger().info("Loading internal Party system. /party");
         }
 
         /* Levels support */
