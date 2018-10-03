@@ -451,6 +451,9 @@ public class Arena {
             for (BedWarsTeam t : getTeams()) {
                 if (t.isMember(p)) {
                     t.getMembers().remove(p);
+                    if (t.getMembers().isEmpty()){
+                        t.setBedDestroyed(true);
+                    }
                     if (t.getBedHolo(p) != null) {
                         t.getBedHolo(p).destroy();
                     }
