@@ -129,6 +129,9 @@ public class Main extends JavaPlugin {
         Language en = new Language("en");
         setupLang(en);
         Language.getLanguages().remove(en);
+        Language ro = new Language("ro");
+        setupLang(ro);
+        Language.getLanguages().remove(ro);
         setupConfig();
         generators = new ConfigManager("generators", "plugins/" + this.getName(), false);
         setupGeneratorsCfg();

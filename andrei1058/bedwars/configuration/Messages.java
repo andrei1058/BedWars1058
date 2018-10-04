@@ -27,7 +27,7 @@ public class Messages {
     public static String COMMAND_LANG_USAGE_DENIED = "lang.cantChange";
     public static String COMMAND_JOIN_USAGE = "cmd.joinUsage";
     public static String COMMAND_NOT_ALLOWED_IN_GAME = "player.permDenied";
-    static String COMMAND_LEAVE_DENIED_NOT_IN_ARENA = "player.notInArena";
+    public static String COMMAND_LEAVE_DENIED_NOT_IN_ARENA = "player.notInArena";
     public static String COMMAND_PARTY_HELP = "party.help";
     public static String COMMAND_PARTY_INVITE_USAGE = "party.inviteUsage";
     public static String COMMAND_PARTY_INVITE_SENT = "party.inviteSent";
@@ -37,7 +37,7 @@ public class Messages {
     public static String COMMAND_PARTY_ACCEPT_DENIED_NO_INVITE = "party.noInvite";
     public static String COMMAND_PARTY_ACCEPT_DENIED_ALREADY_IN_PARTY = "party.alreadyIn";
     public static String COMMAND_PARTY_INSUFFICIENT_PERMISSIONS = "party.noPerm";
-    static String COMMAND_PARTY_ACCEPT_USAGE = "party.acceptUsage";
+    public static String COMMAND_PARTY_ACCEPT_USAGE = "party.acceptUsage";
     public static String COMMAND_PARTY_ACCEPT_SUCCESS = "party.joined";
     public static String COMMAND_PARTY_GENERAL_DENIED_NOT_IN_PARTY = "party.notIn";
     public static String COMMAND_PARTY_LEAVE_DENIED_IS_OWNER_NEEDS_DISBAND = "party.cantLeaveOwner";
@@ -78,8 +78,8 @@ public class Messages {
     //{health}, {food}
     public static String ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_LORE = "spectatorItems.teleporter-gui.head-lore";
 
-    static String ARENA_SPECTATOR_LEAVE_ITEM_NAME = "spectatorItems.leave-item.name";
-    static String ARENA_SPECTATOR_LEAVE_ITEM_LORE = "spectatorItems.leave-item.lore";
+    public static String ARENA_SPECTATOR_LEAVE_ITEM_NAME = "spectatorItems.leave-item.name";
+    public static String ARENA_SPECTATOR_LEAVE_ITEM_LORE = "spectatorItems.leave-item.lore";
 
     public static String ARENA_SPECTATOR_FIRST_PERSON_ENTER_TITLE = "arena.spectate.first-person.enter-title";
     public static String ARENA_SPECTATOR_FIRST_PERSON_ENTER_SUBTITLE = "arena.spectate.first-person.enter-subtitle";
@@ -198,7 +198,7 @@ public class Messages {
     public static String BED_HOLOGRAM_DEFEND = "arena.bedHologram";
     public static String BED_HOLOGRAM_DESTROYED = "arena.bedHologramDestroyed";
     public static String TEAM_ELIMINATED_CHAT = "arena.teamEliminatedChat";
-    static String PREFIX = "prefix";
+    public static String PREFIX = "prefix";
 
 
     /** Upgrades/ Shop*/
@@ -207,7 +207,7 @@ public class Messages {
     public static String UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY = "upgrades.loreFooter.insuffMoney";
     public static String UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY = "upgrades.loreFooter.clickBuy";
     public static String UPGRADES_LORE_REPLACEMENT_UNLOCKED = "upgrades.loreFooter.unlocked";
-    static String UPGRADES_LORE_REPLACEMENT_LOCKED = "upgrades.loreFooter.locked";
+    public static String UPGRADES_LORE_REPLACEMENT_LOCKED = "upgrades.loreFooter.locked";
     public static String UPGRADES_UPGRADE_BOUGHT_CHAT = "arena.upgradeBuy";
 
     public static String SHOP_TEAM_NAME = "npc.shopTeamName";
