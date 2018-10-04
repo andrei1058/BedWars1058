@@ -216,7 +216,7 @@ public class AutoCreateTeams extends SubCommand {
     /**
      * Check if server version is 1.13 or higher
      */
-    private boolean is13Higher() {
+    public static boolean is13Higher() {
         switch (Main.getServerVersion()) {
             case "v1_8_R3":
             case "v1_9_R1":

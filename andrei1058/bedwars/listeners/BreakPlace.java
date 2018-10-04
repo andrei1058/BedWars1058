@@ -6,6 +6,7 @@ import com.andrei1058.bedwars.api.events.BedBreakEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.OreGenerator;
+import com.andrei1058.bedwars.commands.main.subcmds.sensitive.setup.AutoCreateTeams;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Messages;
 import org.bukkit.Bukkit;
@@ -39,7 +40,7 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onIceMelt(BlockFadeEvent e) {
-        if (Main.getServerType() != ServerType.BUNGEE){
+        if (Main.getServerType() != ServerType.BUNGEE) {
             if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 e.setCancelled(true);
                 return;
@@ -62,8 +63,8 @@ public class BreakPlace implements Listener {
 
         //Prevent player from placing during the removal from the arena
         Arena arena = Arena.getArenaByName(e.getBlock().getWorld().getName());
-        if (arena != null){
-            if (arena.getStatus() != GameState.playing){
+        if (arena != null) {
+            if (arena.getStatus() != GameState.playing) {
                 e.setCancelled(true);
                 return;
             }
@@ -140,7 +141,7 @@ public class BreakPlace implements Listener {
             a.getPlaced().add(e.getBlock());
             return;
         }
-        if (Main.getServerType() != ServerType.BUNGEE){
+        if (Main.getServerType() != ServerType.BUNGEE) {
             if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 if (!isBuildSession(p)) {
                     e.setCancelled(true);
@@ -152,7 +153,7 @@ public class BreakPlace implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
         Player p = e.getPlayer();
-        if (Main.getServerType() != ServerType.BUNGEE){
+        if (Main.getServerType() != ServerType.BUNGEE) {
             if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 if (!isBuildSession(p)) {
                     e.setCancelled(true);
@@ -262,7 +263,7 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onBucketFill(PlayerBucketFillEvent e) {
-        if (Main.getServerType() != ServerType.BUNGEE){
+        if (Main.getServerType() != ServerType.BUNGEE) {
             if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 if (!isBuildSession(e.getPlayer())) {
                     e.setCancelled(true);
@@ -278,7 +279,7 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onBucketEmpty(PlayerBucketEmptyEvent e) {
-        if (Main.getServerType() != ServerType.BUNGEE){
+        if (Main.getServerType() != ServerType.BUNGEE) {
             if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 if (!isBuildSession(e.getPlayer())) {
                     e.setCancelled(true);
@@ -338,6 +339,8 @@ public class BreakPlace implements Listener {
                     Block block = it.next();
                     if (!a.getPlaced().contains(block)) {
                         e.blockList().remove(block);
+                    } else if (AutoCreateTeams.is13Higher()) {
+                        if (block.getType().toString().contains("_GLASS")) e.blockList().remove(block);
                     }
                 }
             }
@@ -363,7 +366,7 @@ public class BreakPlace implements Listener {
                     }
                 }
                 //Check bed hologram
-                if (t.getBed().getBlockX() == e.getBlock().getX() && t.getBed().getBlockY()+1 == e.getBlock().getY() && t.getBed().getBlockZ() == e.getBlock().getZ()) {
+                if (t.getBed().getBlockX() == e.getBlock().getX() && t.getBed().getBlockY() + 1 == e.getBlock().getY() && t.getBed().getBlockZ() == e.getBlock().getZ()) {
                     if (!bed) {
                         e.setBuildable(true);
                         break;
@@ -374,7 +377,7 @@ public class BreakPlace implements Listener {
             List<Object> players = Arrays.asList(e.getBlock().getWorld().getNearbyEntities(e.getBlock().getLocation(), 1, 1, 1).stream().filter(ee -> ee.getType() == EntityType.PLAYER).toArray());
             for (Object o : players) {
                 Player p = (Player) o;
-                if (a.isSpectator(p)){
+                if (a.isSpectator(p)) {
                     if (e.getBlock().getType() == Material.AIR) e.setBuildable(true);
                     return;
                 }
