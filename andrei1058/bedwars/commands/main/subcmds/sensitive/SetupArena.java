@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
 import com.andrei1058.bedwars.commands.main.MainCommand;
+import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -17,6 +18,11 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import static com.andrei1058.bedwars.Main.plugin;
 import static com.andrei1058.bedwars.arena.Arena.getArenaByName;
 
 public class SetupArena extends SubCommand {
@@ -34,7 +40,7 @@ public class SetupArena extends SubCommand {
         setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + MainCommand.getInstance().getName() + " setupArena §6<worldName>", "§fCreate or edit an arena.\n'_' and '-' will not be displayed in the arena's name.",
                 "/" + MainCommand.getInstance().getName() + " setupArena ", ClickEvent.Action.SUGGEST_COMMAND));
         showInList(true);
-        setOpCommand(true);
+        setPermission(Permissions.PERMISSION_SETUP_ARENA);
     }
 
     @Override
@@ -61,5 +67,23 @@ public class SetupArena extends SubCommand {
         }
         new SetupSession(p, args[0]);
         return true;
+    }
+
+    @Override
+    public List<String> getTabComplete() {
+        List<String> tab = new ArrayList<>();
+        File dir = new File("");
+        if (dir.exists()) {
+            File[] fls = dir.listFiles();
+            for (File fl : Objects.requireNonNull(fls)) {
+                if (fl.isDirectory()) {
+                    File dat = new File(fl.getName()+"/level.dat");
+                    if (dat.exists()) {
+                        tab.add(fl.getName());
+                    }
+                }
+            }
+        }
+        return tab;
     }
 }

@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.andrei1058.bedwars.Main.plugin;
 import static com.andrei1058.bedwars.arena.Arena.getArenaByName;
@@ -29,7 +30,6 @@ public class ArenaList extends SubCommand {
         super(parent, name);
         setPriority(3);
         showInList(true);
-        setOpCommand(true);
         setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + MainCommand.getInstance().getName() + " "+getSubCommandName() + ((getArenas().size() == 0) ? " §c(0 set)" : " §a("+getArenas().size()+" set)"),
                 "§fShow available arenas", "/" + MainCommand.getInstance().getName() + " "+getSubCommandName(), ClickEvent.Action.RUN_COMMAND));
     }
@@ -57,6 +57,11 @@ public class ArenaList extends SubCommand {
             p.sendMessage("§6 ▪    §f" + arena + " §7[" + status + "§7] [§eGroup: §d"+group+"§7] [§eTeams: §d"+teams+"§7]");
         }
         return true;
+    }
+
+    @Override
+    public List<String> getTabComplete() {
+        return null;
     }
 
     private java.util.List<String> getArenas() {

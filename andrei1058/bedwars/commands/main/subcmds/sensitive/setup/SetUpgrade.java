@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.commands.main.subcmds.sensitive;
+package com.andrei1058.bedwars.commands.main.subcmds.sensitive.setup;
 
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Misc;
@@ -6,11 +6,14 @@ import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
 import com.andrei1058.bedwars.configuration.ConfigPath;
+import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 import static com.andrei1058.bedwars.Main.mainCmd;
 import static com.andrei1058.bedwars.commands.Misc.createArmorStand;
@@ -27,8 +30,8 @@ public class SetUpgrade extends SubCommand {
      */
     public SetUpgrade(ParentCommand parent, String name) {
         super(parent, name);
-        setOpCommand(true);
         setArenaSetupCommand(true);
+        setPermission(Permissions.PERMISSION_SETUP_ARENA);
     }
 
     @Override
@@ -86,5 +89,10 @@ public class SetUpgrade extends SubCommand {
             }
         }
         return true;
+    }
+
+    @Override
+    public List<String> getTabComplete() {
+        return null;
     }
 }

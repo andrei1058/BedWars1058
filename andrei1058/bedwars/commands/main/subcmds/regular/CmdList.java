@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.commands.main.subcmds.both;
+package com.andrei1058.bedwars.commands.main.subcmds.regular;
 
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
@@ -17,13 +17,15 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 import static com.andrei1058.bedwars.Main.link;
 import static com.andrei1058.bedwars.Main.mainCmd;
 import static com.andrei1058.bedwars.Main.plugin;
 import static com.andrei1058.bedwars.commands.main.MainCommand.getDot;
 import static com.andrei1058.bedwars.configuration.Language.getList;
 
-public class Cmds extends SubCommand {
+public class CmdList extends SubCommand {
     /**
      * Create a sub-command for a bedWars command
      * Make sure you return true or it will say command not found
@@ -32,7 +34,7 @@ public class Cmds extends SubCommand {
      * @param name   sub-command name
      * @since 0.6.1 api v6
      */
-    public Cmds(ParentCommand parent, String name) {
+    public CmdList(ParentCommand parent, String name) {
         super(parent, name);
         setPriority(11);
         showInList(true);
@@ -134,5 +136,10 @@ public class Cmds extends SubCommand {
             }
         }
         return true;
+    }
+
+    @Override
+    public List<String> getTabComplete() {
+        return null;
     }
 }

@@ -6,6 +6,8 @@ import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
 import com.andrei1058.bedwars.commands.main.MainCommand;
 import com.andrei1058.bedwars.configuration.ConfigManager;
+import com.andrei1058.bedwars.configuration.ConfigPath;
+import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -14,6 +16,7 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.andrei1058.bedwars.Main.config;
@@ -32,7 +35,7 @@ public class ArenaGroup extends SubCommand {
         super(parent, name);
         setPriority(8);
         showInList(true);
-        setOpCommand(true);
+        setPermission(Permissions.PERMISSION_ARENA_GROUP);
         setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " " + getSubCommandName()+" §8- §eclick for details", "§fManage arena groups.",
                 "/" + getParent().getName() + " " + getSubCommandName(), ClickEvent.Action.RUN_COMMAND));
     }
@@ -46,38 +49,38 @@ public class ArenaGroup extends SubCommand {
             sendArenaGroupCmdList(p);
         } else if (args[0].equalsIgnoreCase("create")) {
             java.util.List<String> groups;
-            if (config.getYml().getStringList("arenaGroups") == null) {
+            if (config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS) == null) {
                 groups = new ArrayList<>();
             } else {
-                groups = config.getYml().getStringList("arenaGroups");
+                groups = config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS);
             }
             if (groups.contains(args[1])) {
                 p.sendMessage("§c▪ §7This group already exists!");
                 return true;
             }
             groups.add(args[1]);
-            config.set("arenaGroups", groups);
+            config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS, groups);
             p.sendMessage("§6 ▪ §7Group created!");
         } else if (args[0].equalsIgnoreCase("remove")) {
             List<String> groups;
-            if (config.getYml().getStringList("arenaGroups") == null) {
+            if (config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS) == null) {
                 groups = new ArrayList<>();
             } else {
-                groups = config.getYml().getStringList("arenaGroups");
+                groups = config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS);
             }
             if (!groups.contains(args[1])) {
                 p.sendMessage("§c▪ §7This group doesn't exist!");
                 return true;
             }
             groups.remove(args[1]);
-            config.set("arenaGroups", groups);
+            config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS, groups);
             p.sendMessage("§6 ▪ §7Group deleted!");
         } else if (args[0].equalsIgnoreCase("list")) {
             List<String> groups;
-            if (config.getYml().getStringList("arenaGroups") == null) {
+            if (config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS) == null) {
                 groups = new ArrayList<>();
             } else {
-                groups = config.getYml().getStringList("arenaGroups");
+                groups = config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS);
             }
             p.sendMessage("§7Available arena groups:");
             p.sendMessage("§6 ▪ §fDefault");
@@ -89,8 +92,8 @@ public class ArenaGroup extends SubCommand {
                 sendArenaGroupCmdList(p);
                 return true;
             }
-            if (config.getYml().get("arenaGroups") != null) {
-                if (config.getYml().getStringList("arenaGroups").contains(args[2])) {
+            if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS) != null) {
+                if (config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS).contains(args[2])) {
                     File arena = new File("plugins/" + plugin.getName() + "/Arenas/" + args[1] + ".yml");
                     if (!arena.exists()) {
                         p.sendMessage("§c▪ §7Arena " + args[1] + " doesn't exist!");
@@ -114,6 +117,11 @@ public class ArenaGroup extends SubCommand {
             sendArenaGroupCmdList(p);
         }
         return true;
+    }
+
+    @Override
+    public List<String> getTabComplete() {
+        return Arrays.asList("create", "remove", "list", "set");
     }
 
     private void sendArenaGroupCmdList(Player p) {

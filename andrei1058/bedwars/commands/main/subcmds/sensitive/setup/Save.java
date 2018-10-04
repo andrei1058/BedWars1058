@@ -1,10 +1,11 @@
-package com.andrei1058.bedwars.commands.main.subcmds.sensitive;
+package com.andrei1058.bedwars.commands.main.subcmds.sensitive.setup;
 
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
 import com.andrei1058.bedwars.configuration.ConfigManager;
+import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -12,6 +13,8 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 import static com.andrei1058.bedwars.Main.config;
 import static com.andrei1058.bedwars.Main.plugin;
@@ -27,8 +30,8 @@ public class Save extends SubCommand {
      */
     public Save(ParentCommand parent, String name) {
         super(parent, name);
-        setOpCommand(true);
         setArenaSetupCommand(true);
+        setPermission(Permissions.PERMISSION_SETUP_ARENA);
     }
 
     @Override
@@ -53,5 +56,10 @@ public class Save extends SubCommand {
         p.spigot().sendMessage(Misc.msgHoverClick("§6/" + getParent().getName() + " enableArena " + ss.getWorldName() + "§7 (click to enable)", "§dEnable this arena.", "/" + getParent().getName() + " enableArena " + ss.getWorldName(), ClickEvent.Action.RUN_COMMAND));
         ss.done();
         return true;
+    }
+
+    @Override
+    public List<String> getTabComplete() {
+        return null;
     }
 }

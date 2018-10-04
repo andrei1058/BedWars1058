@@ -124,7 +124,7 @@ public class JoinNPC {
     }
 
     /**
-     * Spawn all the Join-NPCs
+     * Spawn all the CmdJoin-NPCs
      */
     public static void spawnNPCs() {
         if (!isCitizensSupport()) return;
@@ -158,7 +158,7 @@ public class JoinNPC {
     }
 
     /**
-     * Update Join NPCs for a group
+     * Update CmdJoin NPCs for a group
      *
      * @param group arena group
      */

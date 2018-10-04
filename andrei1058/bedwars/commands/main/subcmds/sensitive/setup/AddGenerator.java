@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.commands.main.subcmds.sensitive;
+package com.andrei1058.bedwars.commands.main.subcmds.sensitive.setup;
 
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Misc;
@@ -7,15 +7,13 @@ import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
 import com.andrei1058.bedwars.configuration.ConfigManager;
 import com.andrei1058.bedwars.configuration.ConfigPath;
+import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -23,7 +21,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.andrei1058.bedwars.Main.mainCmd;
-import static com.andrei1058.bedwars.commands.Misc.autoSetGen;
 import static com.andrei1058.bedwars.commands.Misc.createArmorStand;
 import static com.andrei1058.bedwars.commands.Misc.removeArmorStand;
 
@@ -39,7 +36,7 @@ public class AddGenerator extends SubCommand {
     public AddGenerator(ParentCommand parent, String name) {
         super(parent, name);
         setArenaSetupCommand(true);
-        setOpCommand(true);
+        setPermission(Permissions.PERMISSION_SETUP_ARENA);
     }
 
     @Override
@@ -203,5 +200,10 @@ public class AddGenerator extends SubCommand {
             }
         }
         return true;
+    }
+
+    @Override
+    public List<String> getTabComplete() {
+        return Arrays.asList("Diamond", "Emerald", "Iron", "Gold");
     }
 }

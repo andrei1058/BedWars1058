@@ -4,10 +4,13 @@ import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
 import com.andrei1058.bedwars.commands.main.MainCommand;
+import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 import static com.andrei1058.bedwars.listeners.BreakPlace.addBuildSession;
 import static com.andrei1058.bedwars.listeners.BreakPlace.isBuildSession;
@@ -24,9 +27,9 @@ public class Build extends SubCommand {
      */
     public Build(ParentCommand parent, String name) {
         super(parent, name);
-        setOpCommand(true);
         setPriority(9);
         showInList(true);
+        setPermission(Permissions.PERMISSION_BUILD);
         setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " "+getSubCommandName()+ "         §8 - §ebuild permission", "§fEnable or disable build session \n§fso you can break or place blocks.",
                 "/" + getParent().getName() + " "+getSubCommandName(), ClickEvent.Action.RUN_COMMAND));
     }
@@ -44,5 +47,10 @@ public class Build extends SubCommand {
             addBuildSession(p);
         }
         return true;
+    }
+
+    @Override
+    public List<String> getTabComplete() {
+        return null;
     }
 }

@@ -60,7 +60,7 @@ public class Language {
                 yml.addDefault(Messages.ARENA_JOIN_DENIED_GROUP_OR_ARENA_NOT_FOUND, "{prefix}&cThere isn't any arena or arena group called: {name}");
                 yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_EMPTY_FOUND, "{prefix}&cThere isn't any arena available right now ;(");
                 yml.addDefault(Messages.COMMAND_LEAVE_DENIED_NOT_IN_ARENA, "{prefix}&cYou're not in arena!");
-                yml.addDefault(Messages.ARENA_GUI_INV_NAME, "&8Click to Join");
+                yml.addDefault(Messages.ARENA_GUI_INV_NAME, "&8Click to CmdJoin");
                 yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_NAME, "&a&l{name}");
                 yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_LORE, Arrays.asList("", "&7Status: {status}", "&7Players: &f{on}&7/&f{max}", "&7Type: &a{group}", "", "&eLeft-Click to join.", "&eRight-Click to spectate."));
                 yml.addDefault(Messages.COMMAND_LANG_LIST_HEADER, "{prefix} &2Available languages:");

@@ -5,10 +5,13 @@ import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
 import com.andrei1058.bedwars.commands.main.MainCommand;
 import com.andrei1058.bedwars.configuration.Language;
+import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 public class Reload extends SubCommand {
     /**
@@ -23,7 +26,7 @@ public class Reload extends SubCommand {
         super(parent, name);
         setPriority(10);
         showInList(true);
-        setOpCommand(true);
+        setPermission(Permissions.PERMISSION_RELOAD);
         setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " "+getSubCommandName()+"       §8 - §ereload messages",
                 "§fRealod messages.\n§cNot recommended!", "/"+ getParent().getName() + " "+getSubCommandName(), ClickEvent.Action.RUN_COMMAND));
     }
@@ -38,5 +41,10 @@ public class Reload extends SubCommand {
             p.sendMessage("§6 ▪ §7"+l.getLangName()+" reloaded!");
         }
         return true;
+    }
+
+    @Override
+    public List<String> getTabComplete() {
+        return null;
     }
 }

@@ -1,11 +1,15 @@
-package com.andrei1058.bedwars.commands.main.subcmds.sensitive;
+package com.andrei1058.bedwars.commands.main.subcmds.sensitive.setup;
 
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
+import com.andrei1058.bedwars.configuration.Permissions;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static com.andrei1058.bedwars.Main.mainCmd;
 
@@ -20,8 +24,8 @@ public class SetMaxInTeam extends SubCommand {
      */
     public SetMaxInTeam(ParentCommand parent, String name) {
         super(parent, name);
-        setOpCommand(true);
         setArenaSetupCommand(true);
+        setPermission(Permissions.PERMISSION_SETUP_ARENA);
     }
 
     @Override
@@ -46,5 +50,10 @@ public class SetMaxInTeam extends SubCommand {
             p.sendMessage("§6 ▪ §7Max in team set!");
         }
         return true;
+    }
+
+    @Override
+    public List<String> getTabComplete() {
+        return Arrays.asList("1", "2", "4");
     }
 }

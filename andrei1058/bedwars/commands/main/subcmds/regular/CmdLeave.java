@@ -12,11 +12,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 import static com.andrei1058.bedwars.Main.getServerType;
 import static com.andrei1058.bedwars.Main.spigot;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
-public class Leave extends SubCommand {
+public class CmdLeave extends SubCommand {
     /**
      * Create a sub-command for a bedWars command
      * Make sure you return true or it will say command not found
@@ -25,7 +27,7 @@ public class Leave extends SubCommand {
      * @param name   sub-command name
      * @since 0.6.1 api v6
      */
-    public Leave(ParentCommand parent, String name) {
+    public CmdLeave(ParentCommand parent, String name) {
         super(parent, name);
         setPriority(20);
         showInList(false);
@@ -51,5 +53,10 @@ public class Leave extends SubCommand {
             }
         }
         return true;
+    }
+
+    @Override
+    public List<String> getTabComplete() {
+        return null;
     }
 }

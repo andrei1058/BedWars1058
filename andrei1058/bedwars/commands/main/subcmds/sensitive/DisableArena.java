@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
 import com.andrei1058.bedwars.commands.main.MainCommand;
+import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -12,6 +13,8 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DisableArena extends SubCommand {
     /**
@@ -28,7 +31,7 @@ public class DisableArena extends SubCommand {
         showInList(true);
         setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " "+getSubCommandName()+" §6<worldName>", "§fDisable an arena.\nThis will remove the players \n§ffrom the arena before disabling.",
                 "/" + getParent().getName() + " "+getSubCommandName()+" ", ClickEvent.Action.SUGGEST_COMMAND));
-        setOpCommand(true);
+        setPermission(Permissions.PERMISSION_ARENA_DISABLE);
     }
 
     @Override
@@ -53,5 +56,14 @@ public class DisableArena extends SubCommand {
         p.sendMessage("§6 ▪ §7Disabling arena...");
         a.disable();
         return true;
+    }
+
+    @Override
+    public List<String> getTabComplete() {
+        List<String> tab = new ArrayList<>();
+        for (Arena a : Arena.getArenas()){
+            tab.add(a.getWorldName());
+        }
+        return tab;
     }
 }

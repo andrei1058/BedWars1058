@@ -5,9 +5,22 @@ import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
-import com.andrei1058.bedwars.commands.main.subcmds.both.Cmds;
+import com.andrei1058.bedwars.commands.main.subcmds.regular.CmdList;
 import com.andrei1058.bedwars.commands.main.subcmds.sensitive.*;
 import com.andrei1058.bedwars.commands.main.subcmds.regular.*;
+import com.andrei1058.bedwars.commands.main.subcmds.sensitive.setup.AddGenerator;
+import com.andrei1058.bedwars.commands.main.subcmds.sensitive.setup.AutoCreateTeams;
+import com.andrei1058.bedwars.commands.main.subcmds.sensitive.setup.CreateTeam;
+import com.andrei1058.bedwars.commands.main.subcmds.sensitive.setup.RemoveTeam;
+import com.andrei1058.bedwars.commands.main.subcmds.sensitive.setup.Save;
+import com.andrei1058.bedwars.commands.main.subcmds.sensitive.setup.SetBed;
+import com.andrei1058.bedwars.commands.main.subcmds.sensitive.setup.SetMaxInTeam;
+import com.andrei1058.bedwars.commands.main.subcmds.sensitive.setup.SetShop;
+import com.andrei1058.bedwars.commands.main.subcmds.sensitive.setup.SetSpawn;
+import com.andrei1058.bedwars.commands.main.subcmds.sensitive.setup.SetType;
+import com.andrei1058.bedwars.commands.main.subcmds.sensitive.setup.SetUpgrade;
+import com.andrei1058.bedwars.commands.main.subcmds.sensitive.setup.SetWaitingSpawn;
+import com.andrei1058.bedwars.commands.main.subcmds.sensitive.setup.WaitingPos;
 import com.andrei1058.bedwars.configuration.Messages;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import net.md_5.bungee.api.chat.*;
@@ -36,16 +49,16 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
     public MainCommand(String name) {
         super(name);
         instance = this;
-        new Join(this, "join");
-        new Leave(this, "leave");
-        new Language(this, "lang");
-        new Teleporter(this, "teleporter");
+        new CmdJoin(this, "join");
+        new CmdLeave(this, "leave");
+        new CmdLang(this, "lang");
+        new CmdTeleporter(this, "teleporter");
         if (getServerType() != ServerType.BUNGEE) {
             new CmdGUI(this, "gui");
         }
-        new Stats(this, "stats");
-        new ForceStart(this, "forceStart");
-        new ForceStart(this, "start");
+        new CmdStats(this, "stats");
+        new CmdStart(this, "forceStart");
+        new CmdStart(this, "start");
         if (Main.getServerType() != ServerType.BUNGEE) {
             new SetLobby(this, "setLobby"); //priority 1
         }
@@ -58,7 +71,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         new ArenaGroup(this, "arenaGroup"); //priority 8
         new Build(this, "build"); //priority 9
         new Reload(this, "reload"); //priority 10
-        new Cmds(this, "cmds"); //priority 20
+        new CmdList(this, "cmds"); //priority 20
 
         /* Arena setup commands (in world) */
         new AutoCreateTeams(this, "autoCreateTeams");
@@ -74,7 +87,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         new AddGenerator(this, "addGenerator");
         new SetType(this, "setType");
         new Save(this, "save");
-        if (JoinNPC.isCitizensSupport() && Main.getServerType() != ServerType.BUNGEE){
+        if (JoinNPC.isCitizensSupport() && Main.getServerType() != ServerType.BUNGEE) {
             new NPC(this, "npc");
         }
     }
@@ -86,11 +99,11 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
             /* Set op commands*/
             if (s.isOp() && !safeMode) {
                 if (s instanceof Player) {
-                    if (SetupSession.isInSetupSession((Player) s)){
-                        Bukkit.dispatchCommand(s, getName()+" cmds");
+                    if (SetupSession.isInSetupSession((Player) s)) {
+                        Bukkit.dispatchCommand(s, getName() + " cmds");
                     } else {
                         s.sendMessage("");
-                        s.sendMessage("§8§l"+dot+" §6" + plugin.getDescription().getName() + " v" + plugin.getDescription().getVersion() + " §7- §c Admin Commands");
+                        s.sendMessage("§8§l" + dot + " §6" + plugin.getDescription().getName() + " v" + plugin.getDescription().getVersion() + " §7- §c Admin Commands");
                         s.sendMessage("");
                         sendSubCommandsToOp((Player) s);
                     }
@@ -107,17 +120,12 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
             }
             return true;
         }
+
         boolean commandFound = false;
         for (SubCommand sb : getSubCommands()) {
             if (sb.getSubCommandName().equalsIgnoreCase(args[0])) {
-                if (sb.isOpCommand() && !sb.isArenaSetupCommand()) {
-                    if (s.isOp()) {
-                        commandFound = sb.execute(Arrays.copyOfRange(args, 1, args.length), s);
-                    }
-                } else if (sb.isArenaSetupCommand()) {
-                    if (s.isOp()) {
-                        commandFound = sb.execute(Arrays.copyOfRange(args, 1, args.length), s);
-                    }
+                if (sb.hasPermission(s)) {
+                    commandFound = sb.execute(Arrays.copyOfRange(args, 1, args.length), s);
                 } else {
                     commandFound = sb.execute(Arrays.copyOfRange(args, 1, args.length), s);
                 }
@@ -125,9 +133,11 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         }
 
         if (!commandFound) {
-            if (s instanceof Player)
+            if (s instanceof Player) {
                 s.sendMessage(getMsg((Player) s, Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
-            else s.sendMessage(lang.m(Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
+            } else {
+                s.sendMessage(lang.m(Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
+            }
         }
         return true;
     }
@@ -168,6 +178,23 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
     }
 
     @Override
+    public List<String> tabComplete(CommandSender s, String alias, String[] args, Location location) throws IllegalArgumentException {
+        if (args.length == 1) {
+            List<String> sub = new ArrayList<>();
+            for (SubCommand sb : getSubCommands()) {
+                if (sb.canSee(s)) sub.add(sb.getSubCommandName());
+            }
+            return sub;
+        } else if (args.length == 2) {
+            if (isSubCommand(args[0])) {
+                return getSubCommand(args[0]).getTabComplete();
+            }
+        }
+        return null;
+    }
+
+
+    @Override
     public List<SubCommand> getSubCommands() {
         return subCommandList;
     }
@@ -193,6 +220,36 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         return true;
     }
 
+    /**
+     * Check if is a sub-cmd
+     */
+    public boolean isSubCommand(String name) {
+        for (SubCommand sc : getSubCommands()) {
+            if (sc.getSubCommandName().equalsIgnoreCase(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Get sub-command by name
+     */
+    public SubCommand getSubCommand(String name) {
+        for (SubCommand sc : getSubCommands()) {
+            if (sc.getSubCommandName().equalsIgnoreCase(name)) {
+                return sc;
+            }
+        }
+        return null;
+    }
+
+    /** Get sub-command by name */
+
+
+    /**
+     * Get a dot symbol
+     */
     public static char getDot() {
         return dot;
     }

@@ -4,11 +4,14 @@ import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
 import com.andrei1058.bedwars.commands.main.MainCommand;
+import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 import static com.andrei1058.bedwars.Main.config;
 import static com.andrei1058.bedwars.Main.plugin;
@@ -26,7 +29,7 @@ public class SetLobby extends SubCommand {
         super(parent, name);
         setPriority(1);
         showInList(true);
-        setOpCommand(true);
+        setPermission(Permissions.PERMISSION_SETUP_ARENA);
         setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/"+MainCommand.getInstance().getName()+" "+getSubCommandName()+ (config.getLobbyWorldName().isEmpty() ? " §c(not set)" : " §a(set)"),
                 "§aSet the main lobby. §fThis is required but\n§fif you are going to use the server in §eBUNGEE §fmode\n§fthe lobby location will §enot §fbe used.\n§eType again to replace the old spawn location.",
                 "/"+getParent().getName()+" "+getSubCommandName(), ClickEvent.Action.RUN_COMMAND));
@@ -43,5 +46,10 @@ public class SetLobby extends SubCommand {
         config.saveConfigLoc("lobbyLoc", p.getLocation());
         p.sendMessage("§6 ▪ §7Lobby location set!");
         return true;
+    }
+
+    @Override
+    public List<String> getTabComplete() {
+        return null;
     }
 }

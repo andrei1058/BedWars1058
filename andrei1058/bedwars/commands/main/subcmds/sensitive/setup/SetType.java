@@ -1,10 +1,11 @@
-package com.andrei1058.bedwars.commands.main.subcmds.sensitive;
+package com.andrei1058.bedwars.commands.main.subcmds.sensitive.setup;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
+import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -25,8 +26,8 @@ public class SetType extends SubCommand {
      */
     public SetType(ParentCommand parent, String name) {
         super(parent, name);
-        setOpCommand(true);
         setArenaSetupCommand(true);
+        setPermission(Permissions.PERMISSION_SETUP_ARENA);
     }
 
     private static List<String> available = Arrays.asList("Solo", "Duals", "3v3v3v3", "4v4v4v4");
@@ -69,6 +70,11 @@ public class SetType extends SubCommand {
             }
         }
         return true;
+    }
+
+    @Override
+    public List<String> getTabComplete() {
+        return available;
     }
 
     private void sendUsage(Player p){

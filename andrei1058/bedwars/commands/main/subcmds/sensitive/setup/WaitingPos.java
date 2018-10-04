@@ -1,15 +1,19 @@
-package com.andrei1058.bedwars.commands.main.subcmds.sensitive;
+package com.andrei1058.bedwars.commands.main.subcmds.sensitive.setup;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
+import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static com.andrei1058.bedwars.Main.mainCmd;
 
@@ -25,7 +29,7 @@ public class WaitingPos extends SubCommand {
     public WaitingPos(ParentCommand parent, String name) {
         super(parent, name);
         setArenaSetupCommand(true);
-        setOpCommand(true);
+        setPermission(Permissions.PERMISSION_SETUP_ARENA);
     }
 
     @Override
@@ -60,5 +64,10 @@ public class WaitingPos extends SubCommand {
             s.sendMessage("§6 ▪ §7Set teams spawn if you didn't!");
         }
         return true;
+    }
+
+    @Override
+    public List<String> getTabComplete() {
+        return Arrays.asList("1", "2");
     }
 }

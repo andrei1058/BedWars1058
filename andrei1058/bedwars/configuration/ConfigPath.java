@@ -74,6 +74,8 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_DRAGON_SPAWN_COUNTDOWN = "countdowns.next-event-dragon-spawn";
     public static final String GENERAL_CONFIGURATION_GAME_END_COUNTDOWN = "countdowns.next-event-game-end";
 
+    public static final String GENERAL_CONFIGURATION_ARENA_GROUPS = "arenaGroups";
+
     public static final String GENERAL_CONFIGURATION_SHOUT_COOLDOWN = "shout-cmd-cooldown";
 
     public static final String GENERAL_CONFIGURATION_NPC_LOC_STORAGE = "join-npc-locations";

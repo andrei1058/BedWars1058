@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
 import com.andrei1058.bedwars.commands.main.MainCommand;
+import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -12,6 +13,11 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import static com.andrei1058.bedwars.Main.plugin;
 
 public class EnableArena extends SubCommand {
     /**
@@ -27,8 +33,8 @@ public class EnableArena extends SubCommand {
         setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " "+getSubCommandName()+" §6<worldName>","§fEnable an arena.",
                 "/" + getParent().getName() + " "+getSubCommandName()+ " ", ClickEvent.Action.SUGGEST_COMMAND));
         showInList(true);
-        setOpCommand(true);
         setPriority(5);
+        setPermission(Permissions.PERMISSION_ARENA_ENABLE);
     }
 
     @Override
@@ -53,5 +59,22 @@ public class EnableArena extends SubCommand {
         p.sendMessage("§6 ▪ §7Enabling arena...");
         new Arena(args[0], p);
         return true;
+    }
+
+    @Override
+    public List<String> getTabComplete() {
+        List<String> tab = new ArrayList<>();
+        File dir = new File("plugins/" + plugin.getName() + "/Arenas");
+        if (dir.exists()) {
+            File[] fls = dir.listFiles();
+            for (File fl : Objects.requireNonNull(fls)) {
+                if (fl.isFile()) {
+                    if (fl.getName().contains(".yml")) {
+                        tab.add(fl.getName().replace(".yml", ""));
+                    }
+                }
+            }
+        }
+        return tab;
     }
 }

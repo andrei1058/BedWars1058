@@ -1,7 +1,13 @@
 package com.andrei1058.bedwars.commands;
 
+import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.arena.SetupSession;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
+
+import java.util.List;
 
 public abstract class SubCommand {
 
@@ -17,8 +23,8 @@ public abstract class SubCommand {
     private TextComponent displayInfo;
     /* True if this is an arena setup SubCommand*/
     private boolean arenaSetupCommand = false;
-    /* True if it is a command for ops */
-    private boolean opCommand = false;
+    /* Sub command permission */
+    private String permission = "";
 
     /**
      * Create a sub-command for a bedWars command
@@ -126,26 +132,45 @@ public abstract class SubCommand {
         return arenaSetupCommand;
     }
 
-    /**
-     * True if it is a command for ops
-     *
-     * @since 0.6.1 - api v6
-     */
+    @Deprecated
     public void setOpCommand(boolean opCommand) {
-        this.opCommand = opCommand;
     }
 
     /**
-     * True if it is a command for ops
-     *
-     * @since 0.6.1 - api v6
+     * Check if is displayed on the list
      */
-    public boolean isOpCommand() {
-        return opCommand;
-    }
-
-    /**Check if is displayed on the list */
     public boolean isShow() {
         return show;
     }
+
+    /**
+     * Set permission for sub-command
+     */
+    public void setPermission(String permission) {
+        this.permission = permission;
+    }
+
+    /**
+     * Check if player has permission to use the command
+     */
+    public boolean hasPermission(CommandSender p) {
+        return permission.isEmpty() || p.hasPermission(Main.mainCmd + ".*") || p.hasPermission(permission);
+    }
+
+    /**
+     * Check if a sender can see/ use the sub cmd
+     */
+    public boolean canSee(CommandSender s) {
+        if (s instanceof ConsoleCommandSender) return false;
+        Player p = (Player) s;
+        if (isArenaSetupCommand() && SetupSession.isInSetupSession(p)) return true;
+        if (!isArenaSetupCommand() && SetupSession.isInSetupSession(p)) return false;
+        if (!isArenaSetupCommand() && hasPermission(p)) return true;
+        return false;
+    }
+
+    /**
+     * Manage sub-command tab complete
+     */
+    public abstract List<String> getTabComplete();
 }

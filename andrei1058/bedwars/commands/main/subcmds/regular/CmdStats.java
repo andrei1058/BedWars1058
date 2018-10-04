@@ -11,8 +11,9 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
+import java.util.List;
 
-public class Stats extends SubCommand {
+public class CmdStats extends SubCommand {
     /**
      * Create a sub-command for a bedWars command
      * Make sure you return true or it will say command not found
@@ -21,7 +22,7 @@ public class Stats extends SubCommand {
      * @param name   sub-command name
      * @since 0.6.1 api v6
      */
-    public Stats(ParentCommand parent, String name) {
+    public CmdStats(ParentCommand parent, String name) {
         super(parent, name);
         setPriority(16);
         showInList(false);
@@ -54,5 +55,10 @@ public class Stats extends SubCommand {
         }
         Misc.openStatsGUI(p);
         return true;
+    }
+
+    @Override
+    public List<String> getTabComplete() {
+        return null;
     }
 }

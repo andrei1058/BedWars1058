@@ -6,6 +6,7 @@ import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.arena.despawnables.TargetListener;
 import com.andrei1058.bedwars.commands.ShoutCommand;
+import com.andrei1058.bedwars.commands.SubCommand;
 import com.andrei1058.bedwars.listeners.EntityDropPickListener;
 import com.andrei1058.bedwars.listeners.PlayerDropPickListener;
 import com.andrei1058.bedwars.arena.spectator.SpectatorListeners;
@@ -44,6 +45,8 @@ import com.andrei1058.bedwars.support.vault.*;
 import com.andrei1058.bedwars.tasks.OneTick;
 import com.andrei1058.bedwars.tasks.Refresh;
 import org.bukkit.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.Listener;
@@ -118,7 +121,7 @@ public class Main extends JavaPlugin {
             this.getLogger().severe("I can't run on your version: " + version);
             return;
         } else {
-            this.getLogger().severe("Loading support for paper/ spigot " + version + ".");
+            this.getLogger().info("Loading support for paper/ spigot " + version + ".");
         }
 
         config = new ConfigManager("config", "plugins/" + this.getName(), false);
@@ -266,7 +269,7 @@ public class Main extends JavaPlugin {
             try {
                 JoinNPC.spawnNPCs();
             } catch (Exception e) {
-                this.getLogger().severe("Could not spawn Join NPCs. Make sure you have right version of Citizens for your server!");
+                this.getLogger().severe("Could not spawn CmdJoin NPCs. Make sure you have right version of Citizens for your server!");
                 JoinNPC.setCitizensSupport(false);
             }
         }, 40L);
@@ -328,6 +331,7 @@ public class Main extends JavaPlugin {
 
         /* LeaderHeads Support */
         LeaderHeadsSupport.initLeaderHeads();
+
     }
 
     public void onDisable() {

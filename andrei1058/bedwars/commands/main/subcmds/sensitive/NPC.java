@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
 import com.andrei1058.bedwars.configuration.ConfigPath;
+import com.andrei1058.bedwars.configuration.Permissions;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.google.common.base.Joiner;
 import net.citizensnpcs.api.CitizensAPI;
@@ -50,10 +51,9 @@ public class NPC extends SubCommand {
 
     public NPC(ParentCommand parent, String name) {
         super(parent, name);
-        setOpCommand(true);
         showInList(true);
-        setPriority(12
-        );
+        setPriority(12);
+        setPermission(Permissions.PERMISSION_NPC);
         setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " " + getSubCommandName() + "         §8   - §ecreate a join NPC", "§fCreate a join NPC  \n§fClick for more details.",
                 "/" + getParent().getName() + " " + getSubCommandName(), ClickEvent.Action.RUN_COMMAND));
     }
@@ -137,6 +137,11 @@ public class NPC extends SubCommand {
             }
         }
         return true;
+    }
+
+    @Override
+    public List<String> getTabComplete() {
+        return Arrays.asList("remove", "add");
     }
 
 

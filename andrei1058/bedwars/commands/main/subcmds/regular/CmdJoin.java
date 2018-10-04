@@ -1,18 +1,23 @@
 package com.andrei1058.bedwars.commands.main.subcmds.regular;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
 import com.andrei1058.bedwars.commands.main.MainCommand;
+import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Messages;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.andrei1058.bedwars.commands.main.MainCommand.isArenaGroup;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
-public class Join extends SubCommand {
+public class CmdJoin extends SubCommand {
     /**
      * Create a sub-command for a bedWars command
      * Make sure you return true or it will say command not found
@@ -21,7 +26,7 @@ public class Join extends SubCommand {
      * @param name   sub-command name
      * @since 0.6.1 api v6
      */
-    public Join(ParentCommand parent, String name) {
+    public CmdJoin(ParentCommand parent, String name) {
         super(parent, name);
         setPriority(19);
         showInList(false);
@@ -54,5 +59,17 @@ public class Join extends SubCommand {
         }
         s.sendMessage(getMsg(p, Messages.ARENA_JOIN_DENIED_GROUP_OR_ARENA_NOT_FOUND).replace("{name}", args[0]));
         return true;
+    }
+
+    @Override
+    public List<String> getTabComplete() {
+        List<String> tab = new ArrayList<>();
+        for (String group : Main.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS)){
+            tab.add(group);
+        }
+        for (Arena arena : Arena.getArenas()){
+            tab.add(arena.getWorldName());
+        }
+        return tab;
     }
 }

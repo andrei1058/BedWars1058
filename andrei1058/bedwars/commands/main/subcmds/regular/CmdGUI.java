@@ -9,6 +9,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class CmdGUI extends SubCommand {
     /**
      * Create a sub-command for a bedWars command
@@ -32,5 +34,10 @@ public class CmdGUI extends SubCommand {
         if (Arena.getArenaByPlayer(p) != null) return false;
         ArenaGUI.openGui(p);
         return true;
+    }
+
+    @Override
+    public List<String> getTabComplete() {
+        return null;
     }
 }

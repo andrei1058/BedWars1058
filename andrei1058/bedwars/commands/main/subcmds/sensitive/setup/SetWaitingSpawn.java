@@ -1,13 +1,17 @@
-package com.andrei1058.bedwars.commands.main.subcmds.sensitive;
+package com.andrei1058.bedwars.commands.main.subcmds.sensitive.setup;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.ParentCommand;
 import com.andrei1058.bedwars.commands.SubCommand;
+import com.andrei1058.bedwars.configuration.Permissions;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class SetWaitingSpawn extends SubCommand {
     /**
@@ -20,8 +24,8 @@ public class SetWaitingSpawn extends SubCommand {
      */
     public SetWaitingSpawn(ParentCommand parent, String name) {
         super(parent, name);
-        setOpCommand(true);
         setArenaSetupCommand(true);
+        setPermission(Permissions.PERMISSION_SETUP_ARENA);
     }
 
     @Override
@@ -41,5 +45,10 @@ public class SetWaitingSpawn extends SubCommand {
             ss.sendCommands();
         }
         return true;
+    }
+
+    @Override
+    public List<String> getTabComplete() {
+        return null;
     }
 }
