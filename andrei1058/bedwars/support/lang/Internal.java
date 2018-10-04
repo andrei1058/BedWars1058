@@ -37,9 +37,9 @@ public class Internal implements Lang {
         if (e.isCancelled()) return;
 
         if (Language.getLangByPlayer().containsKey(p)){
-            Language.getLangByPlayer().replace(p, lang);
+            Language.getLangByPlayer().replace(p, newLang);
         } else {
-            Language.getLangByPlayer().put(p, lang);
+            Language.getLangByPlayer().put(p, newLang);
         }
 
         x.set(p.getName(), iso);
