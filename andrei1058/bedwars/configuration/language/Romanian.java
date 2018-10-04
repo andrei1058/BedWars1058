@@ -15,7 +15,7 @@ public class Romanian {
 
     public Romanian(Language lbj, YamlConfiguration yml){
         yml.addDefault(Messages.PREFIX, "");
-        yml.addDefault("name", "English");
+        yml.addDefault("name", "Romana");
         yml.addDefault(Messages.COMMAND_MAIN, Arrays.asList("", "&2▪ &7/" + mainCmd + " stats", "&2▪ &7/" + mainCmd + " join &o<arena/group>", "&2▪ &7/" + mainCmd + " leave", "&2▪ &7/" + mainCmd + " lang", "&2▪ &7/" + mainCmd + " gui", "&2▪ &7/" + mainCmd + " start &3(vip)"));
         yml.addDefault(Messages.ARENA_JOIN_VIP_KICK, "{prefix}&cNe pare rau, dar locul tau a fost rezervat unui donator.\n&aAi putea lua in considerare donarea pentru mai multe facilitati. &7&o(click)");
         yml.addDefault(Messages.ARENA_JOIN_DENIED_IS_FULL, "{prefix}&cArena este plina!\n&aAi putea lua in considerare donarea pentru mai multe facilitati. &7&o(click)");
