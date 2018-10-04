@@ -126,15 +126,15 @@ public class BuyItemsAction extends ContentAction {
                 }
                 if (nms.isArmor(si.getItemStack())) {
                     Material M = si.getItemStack().getType();
-                    if (M == Material.LEATHER_HELMET || M == Material.CHAINMAIL_HELMET || M == Material.DIAMOND_HELMET || M == Material.GOLD_HELMET || M == Material.IRON_HELMET) {
+                    if (M == Material.LEATHER_HELMET || M == Material.CHAINMAIL_HELMET || M == Material.DIAMOND_HELMET || M == nms.materialGoldenHelmet() || M == Material.IRON_HELMET) {
                         if (nms.getProtection(si.getItemStack()) >= nms.getProtection(pv.getHelmet())) {
                             pv.setHelmet(si.getItemStack());
                         }
-                    } else if (M == Material.LEATHER_CHESTPLATE || M == Material.CHAINMAIL_CHESTPLATE || M == Material.GOLD_CHESTPLATE || M == Material.DIAMOND_CHESTPLATE || M == Material.IRON_CHESTPLATE) {
+                    } else if (M == Material.LEATHER_CHESTPLATE || M == Material.CHAINMAIL_CHESTPLATE || M == nms.materialGoldenChestPlate() || M == Material.DIAMOND_CHESTPLATE || M == Material.IRON_CHESTPLATE) {
                         if (nms.getProtection(si.getItemStack()) >= nms.getProtection(pv.getChestplate())) {
                             pv.setChestplate(si.getItemStack());
                         }
-                    } else if (M == Material.LEATHER_LEGGINGS || M == Material.CHAINMAIL_LEGGINGS || M == Material.DIAMOND_LEGGINGS || M == Material.GOLD_LEGGINGS || M == Material.IRON_LEGGINGS) {
+                    } else if (M == Material.LEATHER_LEGGINGS || M == Material.CHAINMAIL_LEGGINGS || M == Material.DIAMOND_LEGGINGS || M == nms.materialGoldenLeggings() || M == Material.IRON_LEGGINGS) {
                         if (nms.getProtection(si.getItemStack()) >= nms.getProtection(pv.getPants())) {
                             pv.setPants(si.getItemStack());
                         }
@@ -148,11 +148,11 @@ public class BuyItemsAction extends ContentAction {
             }
             if (si.isAutoequip() && nms.isArmor(si.getItemStack())) {
                 Material M = si.getItemStack().getType();
-                if (M == Material.LEATHER_HELMET || M == Material.CHAINMAIL_HELMET || M == Material.DIAMOND_HELMET || M == Material.GOLD_HELMET || M == Material.IRON_HELMET) {
+                if (M == Material.LEATHER_HELMET || M == Material.CHAINMAIL_HELMET || M == Material.DIAMOND_HELMET || M == nms.materialGoldenHelmet() || M == Material.IRON_HELMET) {
                     p.getInventory().setHelmet(si.getItemStack());
-                } else if (M == Material.LEATHER_CHESTPLATE || M == Material.CHAINMAIL_CHESTPLATE || M == Material.GOLD_CHESTPLATE || M == Material.DIAMOND_CHESTPLATE || M == Material.IRON_CHESTPLATE) {
+                } else if (M == Material.LEATHER_CHESTPLATE || M == Material.CHAINMAIL_CHESTPLATE || M == nms.materialGoldenChestPlate() || M == Material.DIAMOND_CHESTPLATE || M == Material.IRON_CHESTPLATE) {
                     p.getInventory().setChestplate(si.getItemStack());
-                } else if (M == Material.LEATHER_LEGGINGS || M == Material.CHAINMAIL_LEGGINGS || M == Material.DIAMOND_LEGGINGS || M == Material.GOLD_LEGGINGS || M == Material.IRON_LEGGINGS) {
+                } else if (M == Material.LEATHER_LEGGINGS || M == Material.CHAINMAIL_LEGGINGS || M == Material.DIAMOND_LEGGINGS || M == nms.materialGoldenLeggings() || M == Material.IRON_LEGGINGS) {
                     p.getInventory().setLeggings(si.getItemStack());
                 } else {
                     p.getInventory().setBoots(si.getItemStack());

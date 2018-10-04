@@ -317,6 +317,21 @@ public interface NMS {
     Material materialSnowball();
 
     /**
+     * Get gold  helmet material
+     */
+    Material materialGoldenHelmet();
+
+    /**
+     * Get gold chest plate
+     */
+    Material materialGoldenChestPlate();
+
+    /**
+     * Get gold leggings
+     */
+    Material materialGoldenLeggings();
+
+    /**
      * Check if bed
      *
      * @since API 11

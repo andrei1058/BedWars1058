@@ -644,6 +644,21 @@ public class v1_13_R2 implements NMS {
     }
 
     @Override
+    public org.bukkit.Material materialGoldenHelmet() {
+        return org.bukkit.Material.valueOf("GOLDEN_HELMET");
+    }
+
+    @Override
+    public org.bukkit.Material materialGoldenChestPlate() {
+        return org.bukkit.Material.valueOf("GOLDEN_CHESTPLATE");
+    }
+
+    @Override
+    public org.bukkit.Material materialGoldenLeggings() {
+        return org.bukkit.Material.valueOf("GOLDEN_LEGGINGS");
+    }
+
+    @Override
     public boolean isBed(org.bukkit.Material material) {
         return material.toString().contains("_BED");
     }
