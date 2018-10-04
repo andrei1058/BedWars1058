@@ -63,7 +63,7 @@ public class Messages {
     public static String ARENA_JOIN_DENIED_NO_EMPTY_FOUND = "player.noEmptyArena";
     public static String ARENA_JOIN_DENIED_PARTY_TOO_BIG = "party.tooMuch";
     public static String ARENA_JOIN_DENIED_NOT_PARTY_LEADER = "party.leaderChoose";
-    public static String ARENA_JOIN_PLAYER_JOIN_MSG = "arena.join.denied-regular";
+    public static String ARENA_JOIN_PLAYER_JOIN_MSG = "arena.join.allowed-regular";
     public static String ARENA_JOIN_DENIED_SELECTOR = "arena.join.denied-arena-selector";
     public static String ARENA_SPECTATE_DENIED_SELECTOR = "arena.spectate.denied-arena-selector";
     public static String ARENA_JOIN_SPECTATOR_MSG = "arena.spectate.spectate-join";

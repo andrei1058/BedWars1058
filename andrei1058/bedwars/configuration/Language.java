@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.configuration;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.configuration.language.English;
+import com.andrei1058.bedwars.configuration.language.Italian;
 import com.andrei1058.bedwars.configuration.language.Romanian;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -50,6 +51,9 @@ public class Language {
                 break;
             case "ro":
                 new Romanian(lbj, yml);
+                break;
+            case "it":
+                new Italian(lbj, yml);
                 break;
         }
 
