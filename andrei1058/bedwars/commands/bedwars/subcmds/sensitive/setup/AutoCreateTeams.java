@@ -40,6 +40,7 @@ public class AutoCreateTeams extends SubCommand {
     private static HashMap<Player, List<Byte>> teamsFoundOld = new HashMap<>();
     private static HashMap<Player, List<String>> teamsFound13 = new HashMap<>();
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean execute(String[] args, CommandSender s) {
         if (s instanceof ConsoleCommandSender) return false;
@@ -149,7 +150,6 @@ public class AutoCreateTeams extends SubCommand {
                             for (int z = -150; z < 150; z++) {
                                 Block b = new Location(w, x, y, z).getBlock();
                                 if (b.getType() == Material.WOOL) {
-                                    //noinspection deprecation
                                     if (!found.contains(b.getData())) {
                                         int count = 0;
                                         for (int x1 = -2; x1 < 2; x1++) {
@@ -157,7 +157,6 @@ public class AutoCreateTeams extends SubCommand {
                                                 for (int z1 = -2; z1 < 2; z1++) {
                                                     Block b2 = new Location(w, x, y, z).getBlock();
                                                     if (b2.getType() == b.getType()) {
-                                                        //noinspection deprecation
                                                         if (b.getData() == b2.getData()) {
                                                             count++;
                                                         }
@@ -166,11 +165,8 @@ public class AutoCreateTeams extends SubCommand {
                                             }
                                         }
                                         if (count >= 5) {
-                                            //noinspection deprecation
                                             if (!TeamColor.enName(b.getData()).isEmpty()) {
-                                                //noinspection deprecation
                                                 if (ss.getCm().getYml().get("Team." + TeamColor.enName(b.getData())) == null) {
-                                                    //noinspection deprecation
                                                     found.add(b.getData());
                                                 }
                                             }
