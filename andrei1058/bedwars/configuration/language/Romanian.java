@@ -351,7 +351,7 @@ public class Romanian {
         yml.addDefault(Messages.ARENA_JOIN_DENIED_SELECTOR, "{prefix}&cNe pare rau dar nu poti intra chiar acum. Foloseste Click-Dreapta pentru a urmari!");
         yml.addDefault(Messages.ARENA_SPECTATE_DENIED_SELECTOR, "{prefix}&cNe pare rau dar nu poti urmari arena chiar acum. Foloseste Click-Dreapta pentru a juca!");
 
-        yml.addDefault(Messages.REJOIN_NO_ARENA, "{prefix]&Nu ai o arena pe care sa te reintorci!");
+        yml.addDefault(Messages.REJOIN_NO_ARENA, "{prefix}&cNu ai o arena pe care sa te reintorci!");
         yml.addDefault(Messages.REJOIN_DENIED, "{prefix}&cNu mai poti face asta. Jocul s-a terminat sau patul a fost distrus.");
         yml.addDefault(Messages.REJOIN_ALLOWED, "{prefix}&eIntri pe arena &a{arena}&e!");
     }
