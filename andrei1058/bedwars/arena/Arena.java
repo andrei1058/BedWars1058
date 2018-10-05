@@ -341,7 +341,7 @@ public class Arena {
                 p.showPlayer(on);
             } else {
                 on.hidePlayer(p);
-                p.hidePlayer(p);
+                p.hidePlayer(on);
             }
         }
         if (getPlayers().size() == getMaxInTeam() * getTeams().size()) {
@@ -404,7 +404,7 @@ public class Arena {
                     if (on == p) continue;
                     if (getSpectators().contains(on)) {
                         on.showPlayer(p);
-                        p.showPlayer(p);
+                        p.showPlayer(on);
                     } else if (getPlayers().contains(on)) {
                         on.hidePlayer(p);
                         p.showPlayer(on);
@@ -460,9 +460,6 @@ public class Arena {
             for (BedWarsTeam t : getTeams()) {
                 if (t.isMember(p)) {
                     t.getMembers().remove(p);
-                    if (t.getMembers().isEmpty()) {
-                        t.setBedDestroyed(true);
-                    }
                     if (t.getBedHolo(p) != null) {
                         t.getBedHolo(p).destroy();
                     }
@@ -557,7 +554,7 @@ public class Arena {
                 Bukkit.getScheduler().runTaskLater(Main.plugin, () -> setStatus(GameState.restarting), 10L);
             } else {
                 //ReJoin feature
-                if (status == GameState.playing) new ReJoin(p, this);
+                new ReJoin(p, this);
             }
         }
         if (status == GameState.starting || status == GameState.waiting) {
@@ -742,19 +739,38 @@ public class Arena {
         if (reJoin.getArena() != this) return false;
         if (!reJoin.canReJoin()) return false;
 
-        reJoin.getPlayer().teleport(getCm().getArenaLoc("waiting.Loc"));
+        if (reJoin.getTask() != null) {
+            reJoin.getTask().destroy();
+        }
+
+        for (Player on : Bukkit.getOnlinePlayers()) {
+            if (getPlayers().contains(on)) {
+                on.showPlayer(reJoin.getPlayer());
+                reJoin.getPlayer().showPlayer(on);
+            } else {
+                on.hidePlayer(reJoin.getPlayer());
+                reJoin.getPlayer().hidePlayer(on);
+            }
+        }
+
+        reJoin.getPlayer().closeInventory();
         players.add(reJoin.getPlayer());
+        for (Player on : players) {
+            on.sendMessage(getMsg(on, Messages.ARENA_JOIN_PLAYER_JOIN_MSG).replace("{player}", reJoin.getPlayer().getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
+        }
+        for (Player on : spectators) {
+            on.sendMessage(getMsg(on, Messages.ARENA_JOIN_PLAYER_JOIN_MSG).replace("{player}", reJoin.getPlayer().getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
+        }
+        setArenaByPlayer(reJoin.getPlayer(), false);
+        /* save player inventory etc */
+        new PlayerGoods(reJoin.getPlayer(), true);
+        playerLocation.put(reJoin.getPlayer(), reJoin.getPlayer().getLocation());
+
+        reJoin.getPlayer().teleport(getCm().getArenaLoc("waiting.Loc"));
         reJoin.getPlayer().getInventory().clear();
         reJoin.getBwt().reJoin(reJoin.getPlayer());
 
         new SBoard(reJoin.getPlayer(), getScoreboard(reJoin.getPlayer(), "scoreboard." + getGroup() + "Playing", Messages.SCOREBOARD_DEFAULT_PLAYING), this);
-
-        for (SBoard sb : SBoard.getScoreboards()) {
-            if (sb.getArena() == this) {
-                sb.giveTeamColorTag();
-                sb.updateSpectators(reJoin.getPlayer(), false);
-            }
-        }
         return true;
     }
 

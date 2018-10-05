@@ -176,11 +176,7 @@ public class BedWarsTeam {
         p.setAllowFlight(true);
         p.setFlying(true);
         arena.getRespawn().put(p, 5);
-        for (SBoard sb : SBoard.getScoreboards()) {
-            if (sb.getArena() == arena) {
-                sb.giveTeamColorTag();
-            }
-        }
+
     }
 
     /**

@@ -1,6 +1,8 @@
 package com.andrei1058.bedwars.arena;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
+import com.andrei1058.bedwars.tasks.ReJoinTask;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ public class ReJoin {
     private Player player;
     private Arena arena;
     private BedWarsTeam bwt;
+    private ReJoinTask task = null;
 
     private int kills = 0, finalKills = 0, deaths = 0, finalDeaths = 0, beds = 0;
 
@@ -22,11 +25,16 @@ public class ReJoin {
     public ReJoin(Player player, Arena arena) {
         if (exists(player)) getPlayer(player).destroy();
         this.bwt = arena.getTeam(player);
-        if (bwt == null) return;
+        for (BedWarsTeam t : arena.getTeams()) {
+            if (t.getMembersCache().contains(player)) bwt = t;
+        }
         if (bwt.isBedDestroyed()) return;
         this.player = player;
         this.arena = arena;
+        reJoinList.add(this);
+        Main.debug("Created ReJoin for " + player.getName() + " at " + arena.getWorldName());
         storeStatsDiff(arena.getPlayerKills(player, false), arena.getPlayerKills(player, true), arena.getPlayerDeaths(player, false), arena.getPlayerDeaths(player, true), arena.getPlayerBedsDestroyed(player));
+        if (bwt.getMembers().isEmpty()) task = new ReJoinTask(arena, bwt);
     }
 
     /**
@@ -140,5 +148,9 @@ public class ReJoin {
 
     public int getBeds() {
         return beds;
+    }
+
+    public ReJoinTask getTask() {
+        return task;
     }
 }

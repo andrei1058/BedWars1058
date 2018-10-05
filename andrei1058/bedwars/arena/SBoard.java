@@ -37,6 +37,7 @@ public class SBoard {
         o = sb.registerNewObjective("Sb", "or");
         o.setDisplaySlot(DisplaySlot.SIDEBAR);
         this.arena = arena;
+        dateFormat = new SimpleDateFormat(getMsg(p, Messages.FORMATTING_SCOREBOARD_NEXEVENT_TIMER));
         if (this.arena != null) {
             placeholders = new ArrayList<>(placeholders);
             this.placeholders.add("{kills}");
@@ -53,7 +54,14 @@ public class SBoard {
             p.setScoreboard(sb);
             scoreboards.add(this);
         }, 10L);
-        dateFormat = new SimpleDateFormat(getMsg(p, Messages.FORMATTING_SCOREBOARD_NEXEVENT_TIMER));
+
+        if (arena != null){
+            if (arena.getStatus() == GameState.playing){
+                addHealthIcon();
+                giveTeamColorTag();
+                p.damage(02);
+            }
+        }
     }
 
     /**
