@@ -3,8 +3,8 @@ package com.andrei1058.bedwars.support.citizens;
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
-import com.andrei1058.bedwars.commands.SubCommand;
-import com.andrei1058.bedwars.commands.main.MainCommand;
+import com.andrei1058.bedwars.api.command.SubCommand;
+import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
@@ -15,12 +15,11 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
 import org.bukkit.entity.*;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-import static com.andrei1058.bedwars.commands.main.subcmds.sensitive.NPC.createArmorStand;
+import static com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.NPC.createArmorStand;
 
 public class JoinNPC {
     private static boolean citizensSupport = false;
@@ -55,7 +54,7 @@ public class JoinNPC {
                     }
                 }
                 if (!registered) {
-                    new com.andrei1058.bedwars.commands.main.subcmds.sensitive.NPC(bw, "npc");
+                    new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.NPC(bw, "npc");
                 }
             }
         } else {

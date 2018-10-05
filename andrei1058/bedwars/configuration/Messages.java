@@ -235,4 +235,8 @@ public class Messages {
     public static String PLACEHOLDER_PLAYER_TEAM_TEAM = "placeholders.player-team.team";
     public static String PLACEHOLDER_PLAYER_TEAM_SHOUT = "placeholders.player-team.shout";
     public static String PLACEHOLDER_PLAYER_TEAM_SPECTATOR = "placeholders.player-team.spectator";
+
+    public static String REJOIN_NO_ARENA = "rejoin-no-arena";
+    public static String REJOIN_DENIED = "rejoin-denied";
+    public static String REJOIN_ALLOWED = "rejoin-allowed";
 }

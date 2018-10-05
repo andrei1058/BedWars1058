@@ -13,6 +13,7 @@ import com.andrei1058.bedwars.support.nte.NametagEdit;
 import com.andrei1058.bedwars.tasks.GamePlayingTask;
 import com.andrei1058.bedwars.tasks.GameRestartingTask;
 import com.andrei1058.bedwars.tasks.GameStartingTask;
+import com.andrei1058.bedwars.tasks.ReJoinTask;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -81,10 +82,10 @@ public class Arena {
      * temp stats
      */
     private HashMap<Player, Integer> playerKills = new HashMap<>();
-    private static HashMap<Player, Integer> playerBedsDestroyed = new HashMap<>();
-    private static HashMap<Player, Integer> playerFinalKills = new HashMap<>();
-    private static HashMap<Player, Integer> playerDeaths = new HashMap<>();
-    private static HashMap<Player, Integer> playerFinalKillDeaths = new HashMap<>();
+    private HashMap<Player, Integer> playerBedsDestroyed = new HashMap<>();
+    private HashMap<Player, Integer> playerFinalKills = new HashMap<>();
+    private HashMap<Player, Integer> playerDeaths = new HashMap<>();
+    private HashMap<Player, Integer> playerFinalKillDeaths = new HashMap<>();
 
 
     /* ARENA TASKS */
@@ -263,6 +264,7 @@ public class Arena {
                 }
             }
         }
+
         if (status == GameState.waiting || (status == GameState.starting && (startingTask != null && startingTask.getCountdown() > 1))) {
             if (players.size() >= maxPlayers && !isVip(p)) {
                 TextComponent text = new TextComponent(getMsg(p, Messages.ARENA_JOIN_DENIED_IS_FULL));
@@ -286,6 +288,9 @@ public class Arena {
                     return;
                 }
             }
+
+            //Remove from ReJoin
+            if (ReJoin.exists(p)) ReJoin.getPlayer(p).destroy();
 
             /* NametagEdit Support */
             NametagEdit.saveNametag(p);
@@ -357,6 +362,9 @@ public class Arena {
     public void addSpectator(Player p, boolean playerBefore, Location staffTeleport) {
         debug("Spectator added: " + p.getName() + " arena: " + getWorldName());
         if (allowSpectate || playerBefore) {
+
+            //Remove from ReJoin
+            if (ReJoin.exists(p)) ReJoin.getPlayer(p).destroy();
 
             /* NametagEdit Support */
             NametagEdit.saveNametag(p);
@@ -452,7 +460,7 @@ public class Arena {
             for (BedWarsTeam t : getTeams()) {
                 if (t.isMember(p)) {
                     t.getMembers().remove(p);
-                    if (t.getMembers().isEmpty()){
+                    if (t.getMembers().isEmpty()) {
                         t.setBedDestroyed(true);
                     }
                     if (t.getBedHolo(p) != null) {
@@ -499,18 +507,28 @@ public class Arena {
             }
         }
         if (status == GameState.playing) {
-            int deaths = playerDeaths.getOrDefault(p, 0);
-            int final_deaths = playerFinalKillDeaths.getOrDefault(p, 0);
-            int beds = playerBedsDestroyed.getOrDefault(p, 0);
-            database.saveStats(p, new Timestamp(System.currentTimeMillis()), 0, this.getPlayerKills(p, false), this.getPlayerKills(p, true),
-                    1, deaths, final_deaths, beds, 1);
+            /* losers */
+            ReJoin re = ReJoin.getPlayer(p);
+
+            int deaths = re == null ? getPlayerDeaths(p, false) : getPlayerDeaths(p, false) - re.getDeaths();
+            int final_deaths = re == null ? getPlayerDeaths(p, true) : getPlayerDeaths(p, true) - re.getFinalDeaths();
+            int beds = re == null ? getPlayerBedsDestroyed(p) : getPlayerBedsDestroyed(p) - re.getBeds();
+            int kills = re == null ? getPlayerKills(p, false) : getPlayerKills(p, false) - re.getKills();
+            int final_kills = re == null ? getPlayerKills(p, true) : getPlayerKills(p, true) - re.getFinalKills();
+
+            database.saveStats(p, new Timestamp(System.currentTimeMillis()), 0, kills, final_kills, ReJoin.exists(p) ? 0 : 1, deaths, final_deaths, beds, ReJoin.exists(p) ? 0 : 1);
+
         } else if (status == GameState.restarting) {
             /* winners */
-            int deaths = playerDeaths.getOrDefault(p, 0);
-            int final_deaths = playerFinalKillDeaths.getOrDefault(p, 0);
-            int beds = playerBedsDestroyed.getOrDefault(p, 0);
-            database.saveStats(p, new Timestamp(System.currentTimeMillis()), 1, this.getPlayerKills(p, false), this.getPlayerKills(p, true),
-                    0, deaths, final_deaths, beds, 1);
+            ReJoin re = ReJoin.getPlayer(p);
+
+            int deaths = re == null ? getPlayerDeaths(p, false) : getPlayerDeaths(p, false) - re.getDeaths();
+            int final_deaths = re == null ? getPlayerDeaths(p, true) : getPlayerDeaths(p, true) - re.getFinalDeaths();
+            int beds = re == null ? getPlayerBedsDestroyed(p) : getPlayerBedsDestroyed(p) - re.getBeds();
+            int kills = re == null ? getPlayerKills(p, false) : getPlayerKills(p, false) - re.getKills();
+            int final_kills = re == null ? getPlayerKills(p, true) : getPlayerKills(p, true) - re.getFinalKills();
+
+            database.saveStats(p, new Timestamp(System.currentTimeMillis()), 1, kills, final_kills, ReJoin.exists(p) ? 0 : -1, deaths, final_deaths, beds, ReJoin.exists(p) ? 0 : 1);
         }
         boolean teamuri = false;
         for (Player on : getPlayers()) {
@@ -523,9 +541,6 @@ public class Arena {
             for (Player on : players) {
                 on.sendMessage(getMsg(p, Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS));
             }
-        } else if (status == GameState.playing && players.size() <= 1) {
-            checkWinner();
-            setStatus(GameState.restarting);
         } else if (status == GameState.playing) {
             int alive_teams = 0;
             for (BedWarsTeam t : getTeams()) {
@@ -537,9 +552,12 @@ public class Arena {
             }
             if (alive_teams == 1) {
                 checkWinner();
-                setStatus(GameState.restarting);
+                Bukkit.getScheduler().runTaskLater(Main.plugin, () -> setStatus(GameState.restarting), 10L);
             } else if (alive_teams == 0) {
-                setStatus(GameState.restarting);
+                Bukkit.getScheduler().runTaskLater(Main.plugin, () -> setStatus(GameState.restarting), 10L);
+            } else {
+                //ReJoin feature
+                if (status == GameState.playing) new ReJoin(p, this);
             }
         }
         if (status == GameState.starting || status == GameState.waiting) {
@@ -591,6 +609,15 @@ public class Arena {
         }
         p.setFlying(false);
         p.setAllowFlight(false);
+
+        //Remove from ReJoin if game ended
+        if (status == GameState.restarting) {
+            if (ReJoin.exists(p)) {
+                if (ReJoin.getPlayer(p).getArena() == this) {
+                    ReJoin.getPlayer(p).destroy();
+                }
+            }
+        }
     }
 
     /**
@@ -632,18 +659,28 @@ public class Arena {
         for (BedWarsTeam bwt : getTeams()) {
             if (bwt.getMembersCache().contains(p)) {
                 if (status == GameState.playing) {
-                    int deaths = playerDeaths.getOrDefault(p, 0);
-                    int final_deaths = playerFinalKillDeaths.getOrDefault(p, 0);
-                    int beds = playerBedsDestroyed.getOrDefault(p, 0);
-                    database.saveStats(p, new Timestamp(System.currentTimeMillis()), 0, this.getPlayerKills(p, false), this.getPlayerKills(p, true),
-                            1, deaths, final_deaths, beds, 1);
+                    /* loser */
+                    ReJoin re = ReJoin.getPlayer(p);
+
+                    int deaths = re == null ? getPlayerDeaths(p, false) : getPlayerDeaths(p, false) - re.getDeaths();
+                    int final_deaths = re == null ? getPlayerDeaths(p, true) : getPlayerDeaths(p, true) - re.getFinalDeaths();
+                    int beds = re == null ? getPlayerBedsDestroyed(p) : getPlayerBedsDestroyed(p) - re.getBeds();
+                    int kills = re == null ? getPlayerKills(p, false) : getPlayerKills(p, false) - re.getKills();
+                    int final_kills = re == null ? getPlayerKills(p, true) : getPlayerKills(p, true) - re.getFinalKills();
+
+                    database.saveStats(p, new Timestamp(System.currentTimeMillis()), 0, kills, final_kills, ReJoin.exists(p) ? 0 : 1, deaths, final_deaths, beds, ReJoin.exists(p) ? 0 : 1);
+
                 } else if (status == GameState.restarting) {
-                    /* looser */
-                    int deaths = playerDeaths.getOrDefault(p, 0);
-                    int final_deaths = playerFinalKillDeaths.getOrDefault(p, 0);
-                    int beds = playerBedsDestroyed.getOrDefault(p, 0);
-                    database.saveStats(p, new Timestamp(System.currentTimeMillis()), 0, this.getPlayerKills(p, false), this.getPlayerKills(p, true),
-                            1, deaths, final_deaths, beds, 1);
+                    /* loser */
+                    ReJoin re = ReJoin.getPlayer(p);
+
+                    int deaths = re == null ? getPlayerDeaths(p, false) : getPlayerDeaths(p, false) - re.getDeaths();
+                    int final_deaths = re == null ? getPlayerDeaths(p, true) : getPlayerDeaths(p, true) - re.getFinalDeaths();
+                    int beds = re == null ? getPlayerBedsDestroyed(p) : getPlayerBedsDestroyed(p) - re.getBeds();
+                    int kills = re == null ? getPlayerKills(p, false) : getPlayerKills(p, false) - re.getKills();
+                    int final_kills = re == null ? getPlayerKills(p, true) : getPlayerKills(p, true) - re.getFinalKills();
+
+                    database.saveStats(p, new Timestamp(System.currentTimeMillis()), 0, kills, final_kills, ReJoin.exists(p) ? 0 : 1, deaths, final_deaths, beds, ReJoin.exists(p) ? 0 : 1);
                 }
                 break;
             }
@@ -689,6 +726,36 @@ public class Arena {
         NametagEdit.restoreNametag(p);
         p.setFlying(false);
         p.setAllowFlight(false);
+
+        //Remove from ReJoin if game ended
+        if (ReJoin.exists(p)) {
+            if (ReJoin.getPlayer(p).getArena() == this) {
+                ReJoin.getPlayer(p).destroy();
+            }
+        }
+    }
+
+    /**
+     * Rejoin an arena
+     */
+    public boolean reJoin(ReJoin reJoin) {
+        if (reJoin.getArena() != this) return false;
+        if (!reJoin.canReJoin()) return false;
+
+        reJoin.getPlayer().teleport(getCm().getArenaLoc("waiting.Loc"));
+        players.add(reJoin.getPlayer());
+        reJoin.getPlayer().getInventory().clear();
+        reJoin.getBwt().reJoin(reJoin.getPlayer());
+
+        new SBoard(reJoin.getPlayer(), getScoreboard(reJoin.getPlayer(), "scoreboard." + getGroup() + "Playing", Messages.SCOREBOARD_DEFAULT_PLAYING), this);
+
+        for (SBoard sb : SBoard.getScoreboards()) {
+            if (sb.getArena() == this) {
+                sb.giveTeamColorTag();
+                sb.updateSpectators(reJoin.getPlayer(), false);
+            }
+        }
+        return true;
     }
 
     /**
@@ -728,6 +795,13 @@ public class Arena {
         //Call event
         Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.ArenaDisableEvent(getWorldName()));
         signs.clear();
+
+        for (ReJoinTask rjt : ReJoinTask.getReJoinTasks()) {
+            if (rjt.getArena() == this) {
+                rjt.destroy();
+            }
+        }
+
     }
 
     /**
@@ -755,6 +829,11 @@ public class Arena {
             bwt.restore();
         }
         setStatus(GameState.waiting);
+        for (ReJoinTask rjt : ReJoinTask.getReJoinTasks()) {
+            if (rjt.getArena() == this) {
+                rjt.destroy();
+            }
+        }
     }
 
     //GETTER METHODS
@@ -1482,4 +1561,11 @@ public class Arena {
         return true;
     }
 
+    /**
+     * Get player deaths
+     */
+    public int getPlayerDeaths(Player p, boolean finalDeaths) {
+        if (finalDeaths) return playerFinalKillDeaths.getOrDefault(p, 0);
+        return playerDeaths.getOrDefault(p, 0);
+    }
 }

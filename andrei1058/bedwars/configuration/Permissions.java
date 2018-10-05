@@ -17,4 +17,5 @@ public class Permissions {
     public static final String PERMISSION_ARENA_DISABLE = Main.mainCmd+".disable";
     public static final String PERMISSION_NPC = Main.mainCmd+".npc";
     public static final String PERMISSION_RELOAD = Main.mainCmd+".reload";
+    public static final String PERMISSION_REJOIN = Main.mainCmd+".rejoin";
 }

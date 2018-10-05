@@ -167,6 +167,23 @@ public class BedWarsTeam {
     }
 
     /**
+     * Rejoin a team
+     */
+    public void reJoin(Player p) {
+        members.add(p);
+        Bukkit.getScheduler().runTaskLater(plugin, () -> nms.hidePlayer(p, arena.getPlayers()), 5L);
+        nms.setCollide(p, arena, false);
+        p.setAllowFlight(true);
+        p.setFlying(true);
+        arena.getRespawn().put(p, 5);
+        for (SBoard sb : SBoard.getScoreboards()) {
+            if (sb.getArena() == arena) {
+                sb.giveTeamColorTag();
+            }
+        }
+    }
+
+    /**
      * Gives the start inventory
      */
     public void sendDefaultInventory(Player p) {

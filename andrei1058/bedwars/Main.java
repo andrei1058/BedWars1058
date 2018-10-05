@@ -5,14 +5,15 @@ import com.andrei1058.bedwars.api.GameAPI;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.arena.despawnables.TargetListener;
-import com.andrei1058.bedwars.commands.ShoutCommand;
-import com.andrei1058.bedwars.commands.SubCommand;
+import com.andrei1058.bedwars.commands.party.PartyCommand;
+import com.andrei1058.bedwars.commands.rejoin.RejoinCommand;
+import com.andrei1058.bedwars.commands.shout.ShoutCommand;
 import com.andrei1058.bedwars.listeners.EntityDropPickListener;
 import com.andrei1058.bedwars.listeners.PlayerDropPickListener;
 import com.andrei1058.bedwars.arena.spectator.SpectatorListeners;
 import com.andrei1058.bedwars.arena.upgrades.BaseListener;
-import com.andrei1058.bedwars.commands.LeaveCommand;
-import com.andrei1058.bedwars.commands.main.MainCommand;
+import com.andrei1058.bedwars.commands.leave.LeaveCommand;
+import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.configuration.*;
 import com.andrei1058.bedwars.listeners.*;
 import com.andrei1058.bedwars.listeners.arenaselector.ArenaSelectorListener;
@@ -45,8 +46,6 @@ import com.andrei1058.bedwars.support.vault.*;
 import com.andrei1058.bedwars.tasks.OneTick;
 import com.andrei1058.bedwars.tasks.Refresh;
 import org.bukkit.*;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.Listener;
@@ -56,7 +55,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.*;
-import java.util.concurrent.Callable;
 
 import static com.andrei1058.bedwars.configuration.Language.setupLang;
 
@@ -154,6 +152,7 @@ public class Main extends JavaPlugin {
         /* Register commands */
         nms.registerCommand(mainCmd, new MainCommand(mainCmd));
         nms.registerCommand("shout", new ShoutCommand("shout"));
+        nms.registerCommand("rejoin", new RejoinCommand("rejoin"));
 
         /* Setup plugin messaging channel */
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
@@ -360,6 +359,7 @@ public class Main extends JavaPlugin {
         yml.addDefault("debug", false);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD, true);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ALLOW_PARTIES, true);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_REJOIN_TIME, 60*5);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART, 30);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD, "restart");
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_REGULAR, 40);
@@ -541,7 +541,7 @@ public class Main extends JavaPlugin {
             nms.registerCommand("leave", new LeaveCommand("leave"));
         }
         if (!nms.isBukkitCommandRegistered("party")) {
-            nms.registerCommand("party", new com.andrei1058.bedwars.commands.Party("party"));
+            nms.registerCommand("party", new PartyCommand("party"));
         }
     }
 

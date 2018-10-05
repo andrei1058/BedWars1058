@@ -75,6 +75,7 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_GAME_END_COUNTDOWN = "countdowns.next-event-game-end";
 
     public static final String GENERAL_CONFIGURATION_ARENA_GROUPS = "arenaGroups";
+    public static final String GENERAL_CONFIGURATION_REJOIN_TIME = "rejoin-time";
 
     public static final String GENERAL_CONFIGURATION_SHOUT_COOLDOWN = "shout-cmd-cooldown";
 

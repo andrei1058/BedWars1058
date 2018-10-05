@@ -6,7 +6,7 @@ import com.andrei1058.bedwars.api.events.BedBreakEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.OreGenerator;
-import com.andrei1058.bedwars.commands.main.subcmds.sensitive.setup.AutoCreateTeams;
+import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.AutoCreateTeams;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Messages;
 import org.bukkit.Bukkit;
