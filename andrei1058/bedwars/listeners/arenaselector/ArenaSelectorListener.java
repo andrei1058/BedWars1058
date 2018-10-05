@@ -37,7 +37,7 @@ public class ArenaSelectorListener implements Listener {
         if (a == null) return;
 
         if (e.getClick() == ClickType.LEFT){
-            if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.playing){
+            if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting){
                 a.addPlayer(p, false);
             } else {
                 p.sendMessage(Language.getMsg(p, Messages.ARENA_JOIN_DENIED_SELECTOR));
