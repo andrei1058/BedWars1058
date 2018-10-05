@@ -476,12 +476,6 @@ public class Arena {
             p.removePotionEffect(pf.getType());
         }
 
-        if (status != GameState.restarting) {
-            for (Player on : players) {
-                on.sendMessage(getMsg(p, Messages.ARENA_LEAVE_PLAYER_LEAVE_MSG).replace("{player}", p.getName()));
-            }
-        }
-
         if (getServerType() != ServerType.BUNGEE) {
             /* restore player inventory */
             if (PlayerGoods.hasGoods(p)) {
@@ -525,7 +519,7 @@ public class Arena {
             int kills = re == null ? getPlayerKills(p, false) : getPlayerKills(p, false) - re.getKills();
             int final_kills = re == null ? getPlayerKills(p, true) : getPlayerKills(p, true) - re.getFinalKills();
 
-            database.saveStats(p, new Timestamp(System.currentTimeMillis()), 1, kills, final_kills, ReJoin.exists(p) ? 0 : -1, deaths, final_deaths, beds, ReJoin.exists(p) ? 0 : 1);
+            database.saveStats(p, new Timestamp(System.currentTimeMillis()), 1, kills, final_kills, ReJoin.exists(p) ? -1 : 0, deaths, final_deaths, beds, ReJoin.exists(p) ? 0 : 1);
         }
         boolean teamuri = false;
         for (Player on : getPlayers()) {
@@ -536,7 +530,7 @@ public class Arena {
         if (status == GameState.starting && (maxInTeam > players.size() && teamuri || players.size() < minPlayers && !teamuri)) {
             setStatus(GameState.waiting);
             for (Player on : players) {
-                on.sendMessage(getMsg(p, Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS));
+                on.sendMessage(getMsg(on, Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS));
             }
         } else if (status == GameState.playing) {
             int alive_teams = 0;
