@@ -412,7 +412,7 @@ public class Main extends JavaPlugin {
             Misc.addDefaultStatsItem(yml, 10, Material.DIAMOND, 0, "wins");
             Misc.addDefaultStatsItem(yml, 11, Material.REDSTONE, 0, "losses");
             Misc.addDefaultStatsItem(yml, 12, Material.IRON_SWORD, 0, "kills");
-            Misc.addDefaultStatsItem(yml, 13, Material.SKULL_ITEM, 0, "deaths");
+            Misc.addDefaultStatsItem(yml, 13, Material.valueOf(getForCurrentVersion("SKULL_ITEM", "SKULL_ITEM", "SKELETON_SKULL")), 0, "deaths");
             Misc.addDefaultStatsItem(yml, 14, Material.DIAMOND_SWORD, 0, "finalKills");
             Misc.addDefaultStatsItem(yml, 15, Material.valueOf(getForCurrentVersion("SKULL_ITEM", "SKULL_ITEM", "SKELETON_SKULL")), 1, "finalDeaths");
             Misc.addDefaultStatsItem(yml, 16, Material.valueOf(getForCurrentVersion("BED", "BED", "RED_BED")), 0, "bedsDestroyed");
