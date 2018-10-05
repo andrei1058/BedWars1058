@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.commands;
+package com.andrei1058.bedwars.api.command;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.SetupSession;

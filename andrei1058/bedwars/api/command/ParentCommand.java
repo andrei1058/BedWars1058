@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.commands;
+package com.andrei1058.bedwars.api.command;
 
 import org.bukkit.entity.Player;
 
@@ -9,36 +9,37 @@ public interface ParentCommand {
     /**
      * Check if a parent command has the target sub-command
      *
-     * @since 0.6.1 - api v6
+     * @since api 11
      */
-    boolean hasSubCommand(SubCommand subCommand);
+    boolean hasSubCommand(String name);
 
     /**
      * Add a subCommand
      *
-     * @since 0.6.1 - api v6
+     * @since api 11
      */
     void addSubCommand(SubCommand subCommand);
 
     /**
      * Send sub-commands list to a player
      * This includes subCommands with showInList true only
+     * He can see only commands which he have permission
      *
-     * @since 0.6.1 - api v6
+     * @since api 11
      */
-    void sendSubCommandsToOp(Player p);
+    void sendSubCommands(Player p);
 
     /**
      * Get available subCommands
      *
-     * @since 0.6.1 - api v6
+     * @since api 11
      */
     List<SubCommand> getSubCommands();
 
     /**
      * Get parent name
      *
-     * @since 0.6.1 - api v6
+     * @since api 11
      */
     String getName();
 }
