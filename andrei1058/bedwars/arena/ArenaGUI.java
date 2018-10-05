@@ -14,9 +14,8 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.andrei1058.bedwars.Main.config;
 import static com.andrei1058.bedwars.Main.nms;
@@ -31,22 +30,35 @@ public class ArenaGUI {
 
     public static void refreshInv(Player p, Inventory inv) {
 
-        List<Arena> arenas = new ArrayList<>();
-
-        for (GameState gs : new GameState[]{GameState.starting, GameState.waiting, GameState.playing}) {
-            if (gs == GameState.playing && !showPlaying) break;
-            for (Arena a : new ArrayList<>(Arena.getArenas())) {
-                Arena per = arenas.isEmpty() ? null : arenas.get(arenas.size() - 1);
-                if (a.getStatus() == gs) arenas.add(a);
-                if (per != null) {
-                    if (a.getPlayers().size() > per.getPlayers().size()) {
-                        arenas.remove(per);
-                        arenas.add(a);
-                        arenas.add(per);
-                    }
+        List<Arena> arenas = Arena.getArenas().stream().filter(a -> a.getStatus() != GameState.restarting).sorted((a1, a2) -> {
+            if (a1.getStatus() == GameState.starting && a2.getStatus() == GameState.starting) {
+                if (a1.getPlayers().size() > a2.getPlayers().size()) {
+                    return -1;
                 }
-            }
-        }
+                if (a1.getPlayers().size() == a2.getPlayers().size()) {
+                    return 0;
+                } else return 1;
+            } else if (a1.getStatus() == GameState.starting && a2.getStatus() != GameState.starting) {
+                return -1;
+            } else if (a2.getStatus() == GameState.starting && a1.getStatus() != GameState.starting) {
+                return 1;
+            } else if (a1.getStatus() == GameState.waiting && a2.getStatus() == GameState.waiting) {
+                if (a1.getPlayers().size() > a2.getPlayers().size()) {
+                    return -1;
+                }
+                if (a1.getPlayers().size() == a2.getPlayers().size()) {
+                    return 0;
+                } else return 1;
+            } else if (a1.getStatus() == GameState.waiting && a2.getStatus() != GameState.waiting) {
+                return -1;
+            } else if (a2.getStatus() == GameState.waiting && a1.getStatus() != GameState.waiting) {
+                return 1;
+            } else if (a1.getStatus() == GameState.playing && a2.getStatus() == GameState.playing) {
+                return 0;
+            } else if (a1.getStatus() == GameState.playing && a2.getStatus() != GameState.playing) {
+                return -1;
+            } else return 1;
+        }).collect(Collectors.toList());
 
         int arenaKey = 0;
         for (String useSlot : config.getString("arenaGui.settings.useSlots").split(",")) {
@@ -57,8 +69,8 @@ public class ArenaGUI {
                 continue;
             }
             ItemStack i;
-            if (arenaKey >= arenas.size()){
-                inv.setItem(slot, new ItemStack(Material.AIR));
+            inv.setItem(slot, new ItemStack(Material.AIR));
+            if (arenaKey >= arenas.size()) {
                 continue;
             }
 
@@ -73,6 +85,7 @@ public class ArenaGUI {
                     }
                     break;
                 case playing:
+                    if (!showPlaying) continue;
                     i = nms.createItemStack(yml.getString("arenaGui.playing.itemStack"), 1, (short) yml.getInt("arenaGui.playing.data"));
                     if (yml.getBoolean("arenaGui.playing.enchanted")) {
                         ItemMeta im = i.getItemMeta();
