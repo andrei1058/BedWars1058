@@ -3,6 +3,7 @@ package com.andrei1058.bedwars.arena;
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.*;
 import com.andrei1058.bedwars.api.events.PlayerLeaveArenaEvent;
+import com.andrei1058.bedwars.api.events.PlayerReJoinEvent;
 import com.andrei1058.bedwars.configuration.ConfigManager;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Language;
@@ -728,6 +729,8 @@ public class Arena {
 
     /**
      * Rejoin an arena
+     *
+     * @since API 11
      */
     public boolean reJoin(ReJoin reJoin) {
         if (reJoin.getArena() != this) return false;
@@ -765,6 +768,8 @@ public class Arena {
         reJoin.getBwt().reJoin(reJoin.getPlayer());
 
         new SBoard(reJoin.getPlayer(), getScoreboard(reJoin.getPlayer(), "scoreboard." + getGroup() + "Playing", Messages.SCOREBOARD_DEFAULT_PLAYING), this);
+
+        Bukkit.getPluginManager().callEvent(new PlayerReJoinEvent(reJoin.getPlayer(), this));
         return true;
     }
 
