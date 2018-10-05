@@ -1,8 +1,10 @@
 package com.andrei1058.bedwars.api;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.events.PlayerAfkEvent;
 import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.configuration.Language;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -134,6 +136,11 @@ public class BedWars implements GameAPI {
             return Arena.getArenaByPlayer(p).isSpectator(p);
         }
         return false;
+    }
+
+    @Override
+    public ParentCommand getBedWarsCommand() {
+        return MainCommand.getInstance();
     }
 
     @Override
