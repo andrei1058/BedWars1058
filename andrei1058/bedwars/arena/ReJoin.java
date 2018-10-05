@@ -7,10 +7,11 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class ReJoin {
 
-    private Player player;
+    private UUID player;
     private Arena arena;
     private BedWarsTeam bwt;
     private ReJoinTask task = null;
@@ -22,17 +23,14 @@ public class ReJoin {
     /**
      * Make rejoin possible for a player
      */
-    public ReJoin(Player player, Arena arena) {
+    public ReJoin(Player player, Arena arena, BedWarsTeam bwt) {
         if (exists(player)) getPlayer(player).destroy();
-        this.bwt = arena.getTeam(player);
-        for (BedWarsTeam t : arena.getTeams()) {
-            if (t.getMembersCache().contains(player)) bwt = t;
-        }
-        if (bwt.isBedDestroyed()) return;
-        this.player = player;
+        this.bwt = bwt;
+        if (this.bwt.isBedDestroyed()) return;
+        this.player = player.getUniqueId();
         this.arena = arena;
         reJoinList.add(this);
-        Main.debug("Created ReJoin for " + player.getName() + " at " + arena.getWorldName());
+        Main.debug("Created ReJoin for " + player.getName() + " " + player.getUniqueId() + " at " + arena.getWorldName());
         storeStatsDiff(arena.getPlayerKills(player, false), arena.getPlayerKills(player, true), arena.getPlayerDeaths(player, false), arena.getPlayerDeaths(player, true), arena.getPlayerBedsDestroyed(player));
         if (bwt.getMembers().isEmpty()) task = new ReJoinTask(arena, bwt);
     }
@@ -40,9 +38,11 @@ public class ReJoin {
     /**
      * Check if a player has stored data
      */
-    public static boolean exists(Player player) {
+    public static boolean exists(Player pl) {
+        Main.debug("ReJoin exists check " + pl.getUniqueId());
         for (ReJoin rj : new ArrayList<>(reJoinList)) {
-            if (rj.player == player) {
+            Main.debug("ReJoin exists check list scroll: " + rj.getPl().toString());
+            if (rj.getPl().toString().equalsIgnoreCase(pl.getUniqueId().toString())) {
                 return true;
             }
         }
@@ -53,8 +53,9 @@ public class ReJoin {
      * Get a player ReJoin
      */
     public static ReJoin getPlayer(Player player) {
+        Main.debug("ReJoin getPlayer " + player.getUniqueId());
         for (ReJoin rj : new ArrayList<>(reJoinList)) {
-            if (rj.player == player) {
+            if (rj.getPl().toString().equalsIgnoreCase(player.getUniqueId().toString())) {
                 return rj;
             }
         }
@@ -65,19 +66,24 @@ public class ReJoin {
      * Check if can reJoin
      */
     public boolean canReJoin() {
+        Main.debug("ReJoin canReJoin  check.");
         if (arena == null) {
+            Main.debug("ReJoin canReJoin arena is null " + player.toString());
             destroy();
             return false;
         }
         if (arena.getStatus() == GameState.restarting) {
+            Main.debug("ReJoin canReJoin status is restarting " + player.toString());
             destroy();
             return false;
         }
         if (bwt == null) {
+            Main.debug("ReJoin canReJoin bwt is null " + player.toString());
             destroy();
             return false;
         }
         if (bwt.isBedDestroyed()) {
+            Main.debug("ReJoin canReJoin bed is destroyed " + player.toString());
             destroy();
             return false;
         }
@@ -95,13 +101,14 @@ public class ReJoin {
      * Destroy data and rejoin possibility
      */
     public void destroy() {
+        Main.debug("ReJoin destroy for " + player.toString());
         reJoinList.remove(this);
     }
 
     /**
      * Get Player
      */
-    public Player getPlayer() {
+    public UUID getPlayer() {
         return player;
     }
 
@@ -152,5 +159,9 @@ public class ReJoin {
 
     public ReJoinTask getTask() {
         return task;
+    }
+
+    public UUID getPl(){
+        return player;
     }
 }

@@ -549,7 +549,7 @@ public class Arena {
                 Bukkit.getScheduler().runTaskLater(Main.plugin, () -> setStatus(GameState.restarting), 10L);
             } else {
                 //ReJoin feature
-                new ReJoin(p, this);
+                new ReJoin(p, this, getPlayerTeam(p.getName()));
             }
         }
         if (status == GameState.starting || status == GameState.waiting) {
@@ -740,36 +740,38 @@ public class Arena {
             reJoin.getTask().destroy();
         }
 
+        Player p = Bukkit.getPlayer(reJoin.getPlayer());
+
         for (Player on : Bukkit.getOnlinePlayers()) {
             if (getPlayers().contains(on)) {
-                on.showPlayer(reJoin.getPlayer());
-                reJoin.getPlayer().showPlayer(on);
+                on.showPlayer(p);
+                p.showPlayer(on);
             } else {
-                on.hidePlayer(reJoin.getPlayer());
-                reJoin.getPlayer().hidePlayer(on);
+                on.hidePlayer(p);
+                p.hidePlayer(on);
             }
         }
 
-        reJoin.getPlayer().closeInventory();
-        players.add(reJoin.getPlayer());
+        p.closeInventory();
+        players.add(p);
         for (Player on : players) {
-            on.sendMessage(getMsg(on, Messages.ARENA_JOIN_PLAYER_JOIN_MSG).replace("{player}", reJoin.getPlayer().getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
+            on.sendMessage(getMsg(on, Messages.ARENA_JOIN_PLAYER_JOIN_MSG).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
         }
         for (Player on : spectators) {
-            on.sendMessage(getMsg(on, Messages.ARENA_JOIN_PLAYER_JOIN_MSG).replace("{player}", reJoin.getPlayer().getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
+            on.sendMessage(getMsg(on, Messages.ARENA_JOIN_PLAYER_JOIN_MSG).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
         }
-        setArenaByPlayer(reJoin.getPlayer(), false);
+        setArenaByPlayer(p, false);
         /* save player inventory etc */
-        new PlayerGoods(reJoin.getPlayer(), true);
-        playerLocation.put(reJoin.getPlayer(), reJoin.getPlayer().getLocation());
+        new PlayerGoods(p, true);
+        playerLocation.put(p, p.getLocation());
 
-        reJoin.getPlayer().teleport(getCm().getArenaLoc("waiting.Loc"));
-        reJoin.getPlayer().getInventory().clear();
-        reJoin.getBwt().reJoin(reJoin.getPlayer());
+        p.teleport(getCm().getArenaLoc("waiting.Loc"));
+        p.getInventory().clear();
+        reJoin.getBwt().reJoin(p);
 
-        new SBoard(reJoin.getPlayer(), getScoreboard(reJoin.getPlayer(), "scoreboard." + getGroup() + "Playing", Messages.SCOREBOARD_DEFAULT_PLAYING), this);
+        new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + "Playing", Messages.SCOREBOARD_DEFAULT_PLAYING), this);
 
-        Bukkit.getPluginManager().callEvent(new PlayerReJoinEvent(reJoin.getPlayer(), this));
+        Bukkit.getPluginManager().callEvent(new PlayerReJoinEvent(p, this));
         return true;
     }
 
@@ -1278,6 +1280,15 @@ public class Arena {
         for (BedWarsTeam t : getTeams()) {
             if (t.isMember(p)) {
                 return t;
+            }
+        }
+        return null;
+    }
+
+    public BedWarsTeam getPlayerTeam(String playerCache){
+        for (BedWarsTeam t : getTeams()) {
+            for (Player p : t.getMembersCache()){
+                if (p.getName().equals(playerCache)) return t;
             }
         }
         return null;

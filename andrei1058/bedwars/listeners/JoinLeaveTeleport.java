@@ -123,6 +123,7 @@ public class JoinLeaveTeleport implements Listener {
                 if (!ReJoin.getPlayer(p).canReJoin()) return;
                 p.sendMessage(Language.getMsg(p, Messages.REJOIN_ALLOWED).replace("{arena}", ReJoin.getPlayer(p).getArena().getDisplayName()));
                 ReJoin.getPlayer(p).reJoin();
+                return;
             }
         }
 
