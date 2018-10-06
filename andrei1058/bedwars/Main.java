@@ -151,8 +151,16 @@ public class Main extends JavaPlugin {
 
         /* Register commands */
         nms.registerCommand(mainCmd, new MainCommand(mainCmd));
-        nms.registerCommand("shout", new ShoutCommand("shout"));
+        if (!nms.isBukkitCommandRegistered("shout")) {
+            nms.registerCommand("shout", new ShoutCommand("shout"));
+        }
         nms.registerCommand("rejoin", new RejoinCommand("rejoin"));
+        if (!(nms.isBukkitCommandRegistered("leave") && getServerType() == ServerType.BUNGEE)) {
+            nms.registerCommand("leave", new LeaveCommand("leave"));
+        }
+        if (!(nms.isBukkitCommandRegistered("party") && getServerType() == ServerType.BUNGEE)) {
+            nms.registerCommand("party", new PartyCommand("party"));
+        }
 
         /* Setup plugin messaging channel */
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
@@ -341,7 +349,9 @@ public class Main extends JavaPlugin {
 
     public void onDisable() {
         /* Close database */
-        database.close();
+        try {
+            database.close();
+        } catch (Exception ex){}
     }
 
     private void setupConfig() {
@@ -525,24 +535,18 @@ public class Main extends JavaPlugin {
                     plugin.setEnabled(false);
                 }
             }*/
-        } else {
+        } /*else {
             if (getServerType() == ServerType.BUNGEE) {
                 plugin.getLogger().severe("Please set the server type to MULTIARENA and do the setup.");
                 config.set("serverType", "MULTIARENA");
                 Bukkit.getServer().spigot().restart();
                 plugin.setEnabled(false);
             }
-        }
+        }*/
     }
 
     private void registerEvents(Listener... listeners) {
         Arrays.stream(listeners).forEach(l -> plugin.getServer().getPluginManager().registerEvents(l, this));
-        if (!nms.isBukkitCommandRegistered("leave")) {
-            nms.registerCommand("leave", new LeaveCommand("leave"));
-        }
-        if (!nms.isBukkitCommandRegistered("party")) {
-            nms.registerCommand("party", new PartyCommand("party"));
-        }
     }
 
     public static void debug(String message) {
