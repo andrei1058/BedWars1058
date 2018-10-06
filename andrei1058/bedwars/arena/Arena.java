@@ -31,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.sql.Timestamp;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.upgrades.BaseListener.isOnABase;
@@ -1533,26 +1534,47 @@ public class Arena {
      * Check if is the party owner first.
      */
     public static boolean joinRandomArena(Player p) {
-        int requiredSlots = getParty().hasParty(p) ? getParty().getMembers(p).size() : 1;
-        int free = 0;
-        Arena arena = null;
-        for (Arena a : getArenas()) {
-            if (a.getStatus() == GameState.playing) continue;
-            if (a.getStatus() == GameState.restarting) continue;
-            if (a.getMaxPlayers() == a.getPlayers().size()) continue;
-            int freeSlots = a.getMaxPlayers() - a.getPlayers().size();
-            if (freeSlots == requiredSlots) {
-                a.addPlayer(p, false);
-                return true;
-            } else if (freeSlots > requiredSlots) {
-                if (free < freeSlots) {
-                    free = freeSlots;
-                    arena = a;
+        List<Arena> arenas = new ArrayList<>( Arena.getArenas()).stream().filter(a -> a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting).sorted((a1, a2) -> {
+            if (a1.getStatus() == GameState.starting && a2.getStatus() == GameState.starting) {
+                if (a1.getPlayers().size() > a2.getPlayers().size()) {
+                    return -1;
                 }
+                if (a1.getPlayers().size() == a2.getPlayers().size()) {
+                    return 0;
+                } else return 1;
+            } else if (a1.getStatus() == GameState.starting && a2.getStatus() != GameState.starting) {
+                return -1;
+            } else if (a2.getStatus() == GameState.starting && a1.getStatus() != GameState.starting) {
+                return 1;
+            } else if (a1.getStatus() == GameState.waiting && a2.getStatus() == GameState.waiting) {
+                if (a1.getPlayers().size() > a2.getPlayers().size()) {
+                    return -1;
+                }
+                if (a1.getPlayers().size() == a2.getPlayers().size()) {
+                    return 0;
+                } else return 1;
+            } else if (a1.getStatus() == GameState.waiting && a2.getStatus() != GameState.waiting) {
+                return -1;
+            } else if (a2.getStatus() == GameState.waiting && a1.getStatus() != GameState.waiting) {
+                return 1;
+            } else if (a1.getStatus() == GameState.playing && a2.getStatus() == GameState.playing) {
+                return 0;
+            } else if (a1.getStatus() == GameState.playing && a2.getStatus() != GameState.playing) {
+                return -1;
+            } else return 1;
+        }).collect(Collectors.toList());
+
+        int amount = getParty().hasParty(p) ? getParty().getMembers(p).size() : 1;
+
+        for (Arena a : arenas) {
+
+            if (a.getPlayers().size() == a.getMaxPlayers()) continue;
+
+            if (a.getMaxPlayers()-a.getPlayers().size()>=amount){
+                a.addPlayer(p, false);
+                break;
             }
         }
-        if (arena == null) return false;
-        arena.addPlayer(p, false);
         return true;
     }
 
@@ -1560,30 +1582,50 @@ public class Arena {
      * Add a player to the most filled arena from a group.
      */
     public static boolean joinRandomFromGroup(Player p, String group) {
-        List<Arena> arenas = new ArrayList<>(getArenas());
 
-        Arena arena = null;
-        int players = 0;
+        List<Arena> arenas = new ArrayList<>( Arena.getArenas()).stream().filter(a -> a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting).sorted((a1, a2) -> {
+            if (a1.getStatus() == GameState.starting && a2.getStatus() == GameState.starting) {
+                if (a1.getPlayers().size() > a2.getPlayers().size()) {
+                    return -1;
+                }
+                if (a1.getPlayers().size() == a2.getPlayers().size()) {
+                    return 0;
+                } else return 1;
+            } else if (a1.getStatus() == GameState.starting && a2.getStatus() != GameState.starting) {
+                return -1;
+            } else if (a2.getStatus() == GameState.starting && a1.getStatus() != GameState.starting) {
+                return 1;
+            } else if (a1.getStatus() == GameState.waiting && a2.getStatus() == GameState.waiting) {
+                if (a1.getPlayers().size() > a2.getPlayers().size()) {
+                    return -1;
+                }
+                if (a1.getPlayers().size() == a2.getPlayers().size()) {
+                    return 0;
+                } else return 1;
+            } else if (a1.getStatus() == GameState.waiting && a2.getStatus() != GameState.waiting) {
+                return -1;
+            } else if (a2.getStatus() == GameState.waiting && a1.getStatus() != GameState.waiting) {
+                return 1;
+            } else if (a1.getStatus() == GameState.playing && a2.getStatus() == GameState.playing) {
+                return 0;
+            } else if (a1.getStatus() == GameState.playing && a2.getStatus() != GameState.playing) {
+                return -1;
+            } else return 1;
+        }).collect(Collectors.toList());
+
         int amount = getParty().hasParty(p) ? getParty().getMembers(p).size() : 1;
 
         for (Arena a : arenas) {
-            if (!a.getGroup().equalsIgnoreCase(group)) continue;
-            if (a.getStatus() == GameState.playing) continue;
-            if (a.getStatus() == GameState.restarting) continue;
-            int diff = a.getMaxPlayers() - a.getPlayers().size();
+            if (!a.getGroup().equals(group)) continue;
 
-            if (diff == amount) {
+            if (a.getPlayers().size() == a.getMaxPlayers()) continue;
+
+            if (a.getMaxPlayers()-a.getPlayers().size()>=amount){
                 a.addPlayer(p, false);
-                return true;
-            } else if (diff > amount) {
-                if (players < diff) {
-                    players = diff;
-                    arena = a;
-                }
+                break;
             }
         }
-        if (arena == null) return false;
-        arena.addPlayer(p, false);
+
         return true;
     }
 
