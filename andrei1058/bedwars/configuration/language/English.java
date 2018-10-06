@@ -139,9 +139,9 @@ public class English {
         //lbj.saveShopStuff("invContents.favourites", "&aFavourites", Arrays.asList("&7Click to view your", "&7favourite items. You can", "&7set a favourite item by", "&7shift clicking on any shop item!"));
         //lbj.saveShopStuff("invContents.recommended", "&aRecommended Items", Arrays.asList("&7Original", "&7Click to view some", "&7recommended items for early", "&7to late game!", "", "&eClick to browse!"));
 
-        lbj.saveShopStuff("invContents.armor.invContents.chainmail", "&aPermanent Chainmail Armor", Arrays.asList("&8Items:", "&8▪ &7Permanent Chainmail Armor", "&8▪ &7Chainmail Leggings", "", "&8Cost: &f{cost} {currency}", "&8&oYou will not lose this on death!"));
-        lbj.saveShopStuff("invContents.armor.invContents.iron", "&aPermanent Iron Armor", Arrays.asList("&8Items:", "&8▪ &7Permanent Iron Armor", "&8▪ &7Iron Leggings", "", "&8Cost: &6{cost} {currency}", "&8&oYou will not lose this on death!"));
-        lbj.saveShopStuff("invContents.armor.invContents.diamond", "&aPermanent Diamond Armor", Arrays.asList("&8Items:", "&8▪ &7Permanent Diamond Armor", "&8▪ &7Diamond Leggings", "", "&8Cost: &2{cost} {currency}", "&8&oYou will not lose this on death!"));
+        lbj.saveShopStuff("invContents.armor.invContents.chainmail", "&aPermanent Chainmail Armor", Arrays.asList("&8Items:", "&8▪ &7Chainmail Boots", "&8▪ &7Chainmail Leggings", "", "&8Cost: &f{cost} {currency}", "&8&oYou will not lose this on death!"));
+        lbj.saveShopStuff("invContents.armor.invContents.iron", "&aPermanent Iron Armor", Arrays.asList("&8Items:", "&8▪ &7Iron Boots", "&8▪ &7Iron Leggings", "", "&8Cost: &6{cost} {currency}", "&8&oYou will not lose this on death!"));
+        lbj.saveShopStuff("invContents.armor.invContents.diamond", "&aPermanent Diamond Armor", Arrays.asList("&8Items:", "&8▪ &7Diamond Boots", "&8▪ &7Diamond Leggings", "", "&8Cost: &2{cost} {currency}", "&8&oYou will not lose this on death!"));
         lbj.saveShopStuff("invContents.armor.invContents.back", "&aGo Back", Collections.singletonList(""));
 
         lbj.saveShopStuff("invContents.melee.invContents.stone", "&aStone Sword", Arrays.asList("&8Items:", "&8▪ &7Stone Sword", "", "&8Cost: &f{cost} {currency}"));
