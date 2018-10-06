@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.api.command.ParentCommand;
@@ -43,7 +44,7 @@ public class SetupArena extends SubCommand {
         Player p = (Player) s;
         if (!MainCommand.isLobbySet(p)) return true;
         if (args.length != 1) {
-            p.sendMessage("§c▪ §7Usage: §o/" + getParent().getName() + " "+getSubCommandName()+" <mapName>");
+            p.sendMessage("§c▪ §7Usage: §o/" + getParent().getName() + " " + getSubCommandName() + " <mapName>");
             return true;
         }
         File worldServer = new File(Bukkit.getServer().getWorldContainer().getPath() + "/" + args[0]);
@@ -55,7 +56,7 @@ public class SetupArena extends SubCommand {
             p.sendMessage("§c▪ §7Please disable it first!");
             return true;
         }
-        if (SetupSession.isInSetupSession(p)){
+        if (SetupSession.isInSetupSession(p)) {
             p.sendMessage("§c ▪ §7You're already in a setup session!");
             return true;
         }
@@ -66,12 +67,12 @@ public class SetupArena extends SubCommand {
     @Override
     public List<String> getTabComplete() {
         List<String> tab = new ArrayList<>();
-        File dir = new File("");
+        File dir = Bukkit.getWorldContainer();
         if (dir.exists()) {
             File[] fls = dir.listFiles();
             for (File fl : Objects.requireNonNull(fls)) {
                 if (fl.isDirectory()) {
-                    File dat = new File(fl.getName()+"/level.dat");
+                    File dat = new File(fl.getName() + "/level.dat");
                     if (dat.exists()) {
                         tab.add(fl.getName());
                     }
