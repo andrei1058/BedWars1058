@@ -140,50 +140,50 @@ public class Italian {
         //lbj.saveShopStuff("invContents.favourites", "&aFavourites", Arrays.asList("&7Click to view your", "&7favourite items. You can", "&7set a favourite item by", "&7shift clicking on any shop item!"));
         //lbj.saveShopStuff("invContents.recommended", "&aRecommended Items", Arrays.asList("&7Original", "&7Click to view some", "&7recommended items for early", "&7to late game!", "", "&eClicca per sfogliare!"));
 
-        lbj.saveShopStuff("invContents.armor.invContents.chainmail", "&aArmatura di maglia permanente", Arrays.asList("&8Oggetti:", "&8▪ &7Stivali di maglia", "&8▪ &7Gambiera di maglia", "", "&7Costoo: &f{cost} {currency}", "&8&oNon la perderai quando muori!"));
-        lbj.saveShopStuff("invContents.armor.invContents.iron", "&aArmatura di ferro permanente", Arrays.asList("&8Oggetti:", "&8▪ &7Permanent Iron Armor", "&8▪ &7Iron Leggings", "", "&7Costoo: &6{cost} {currency}", "&8&oNon la perderai quando muori!"));
-        lbj.saveShopStuff("invContents.armor.invContents.diamond", "&aPermanent Diamond Armor", Arrays.asList("&8Oggetti:", "&8▪ &7Permanent Diamond Armor", "&8▪ &7Diamond Leggings", "", "&7Costoo: &2{cost} {currency}", "&8&oNon la perderai quando muori!"));
+        lbj.saveShopStuff("invContents.armor.invContents.chainmail", "&aArmatura di maglia permanente", Arrays.asList("&8Oggetti:", "&8▪ &7Stivali di maglia", "&8▪ &7Gambiera di maglia", "", "&7Costo: &f{cost} {currency}", "&8&oNon la perderai quando muori!"));
+        lbj.saveShopStuff("invContents.armor.invContents.iron", "&aArmatura di ferro permanente", Arrays.asList("&8Oggetti:", "&8▪ &7Iron Boots", "&8▪ &7Iron Leggings", "", "&7Costo: &6{cost} {currency}", "&8&oNon la perderai quando muori!"));
+        lbj.saveShopStuff("invContents.armor.invContents.diamond", "&aPermanent Diamond Armor", Arrays.asList("&8Oggetti:", "&8▪ &7Diamond Boots", "&8▪ &7Diamond Leggings", "", "&7Costo: &2{cost} {currency}", "&8&oNon la perderai quando muori!"));
         lbj.saveShopStuff("invContents.armor.invContents.back", "&aTorna indietro", Collections.singletonList(""));
 
-        lbj.saveShopStuff("invContents.melee.invContents.stone", "&aSpada di pietra", Arrays.asList("&8Oggetti:", "&8▪ &7Spada di pietra", "", "&7Costoo: &f{cost} {currency}"));
-        lbj.saveShopStuff("invContents.melee.invContents.iron", "&aSpada di ferro", Arrays.asList("&8Oggetti:", "&8▪ &7Spada di ferro", "&7Costoo: &6{cost} {currency}"));
-        lbj.saveShopStuff("invContents.melee.invContents.diamond", "&aSpada di diamante", Arrays.asList("&8Oggetti:", "&8▪ &7Spada di diamante", "", "&7Costoo: &2{cost} {currency}"));
-        lbj.saveShopStuff("invContents.melee.invContents.stick", "&aBastone (Contraccolpo I)", Arrays.asList("&8Oggetti:", "&8▪ &7Bastone (Contraccolpo I)", "", "&7Costoo: &6{cost} {currency}"));
+        lbj.saveShopStuff("invContents.melee.invContents.stone", "&aSpada di pietra", Arrays.asList("&8Oggetti:", "&8▪ &7Spada di pietra", "", "&7Costo: &f{cost} {currency}"));
+        lbj.saveShopStuff("invContents.melee.invContents.iron", "&aSpada di ferro", Arrays.asList("&8Oggetti:", "&8▪ &7Spada di ferro", "&7Costo: &6{cost} {currency}"));
+        lbj.saveShopStuff("invContents.melee.invContents.diamond", "&aSpada di diamante", Arrays.asList("&8Oggetti:", "&8▪ &7Spada di diamante", "", "&7Costo: &2{cost} {currency}"));
+        lbj.saveShopStuff("invContents.melee.invContents.stick", "&aBastone (Contraccolpo I)", Arrays.asList("&8Oggetti:", "&8▪ &7Bastone (Contraccolpo I)", "", "&7Costo: &6{cost} {currency}"));
         lbj.saveShopStuff("invContents.melee.invContents.back", "&aTorna indietro", Collections.singletonList(""));
 
-        lbj.saveShopStuff("invContents.blocks.invContents.wool", "&aLana", Arrays.asList("&8Oggetti:", "&8▪ &7Lana", "", "&7Costoo: &f{cost} {currency}", "", "&eClick to purchase!"));
-        lbj.saveShopStuff("invContents.blocks.invContents.clay", "&aArgilla indurita", Arrays.asList("&8Oggetti:", "&8▪ &aArgilla indurita", "", "&7Costoo: &f{cost} {currency}", "", "&eClick to purchase!"));
-        lbj.saveShopStuff("invContents.blocks.invContents.glass", "&aVetro anti esplosione", Arrays.asList("&8Oggetti:", "&8▪ &7Vetro anti esplosione", "", "&7Costoo: &f{cost} {currency}", "", "&7Immune to explosions", "", "&eClick to purchase!"));
-        lbj.saveShopStuff("invContents.blocks.invContents.stone", "&aPietra dell'End", Arrays.asList("&8Oggetti:", "&8▪ &7Pietra dell'End", "", "&7Costoo: &f{cost} {currency}", "", "&eClick to purchase!"));
-        lbj.saveShopStuff("invContents.blocks.invContents.ladder", "&aScala", Arrays.asList("&8Oggetti:", "&8▪ &7Scala", "", "&7Costoo: &f{cost} {currency}", "", "&eClick to purchase!"));
-        lbj.saveShopStuff("invContents.blocks.invContents.wood", "&aAssi di quercia", Arrays.asList("&8Oggetti:", "&8▪ &7Assi di quercia", "", "&7Costoo: &6{cost} {currency}", "", "&eClick to purchase!"));
-        lbj.saveShopStuff("invContents.blocks.invContents.obsidian", "&cOssidiana", Arrays.asList("&8Oggetti:", "&8▪ &7Ossidiana", "", "&7Costoo: &2{cost} {currency}", "", "&eClick to purchase!"));
+        lbj.saveShopStuff("invContents.blocks.invContents.wool", "&aLana", Arrays.asList("&8Oggetti:", "&8▪ &7Lana", "", "&7Costo: &f{cost} {currency}", "", "&eClick to purchase!"));
+        lbj.saveShopStuff("invContents.blocks.invContents.clay", "&aArgilla indurita", Arrays.asList("&8Oggetti:", "&8▪ &aArgilla indurita", "", "&7Costo: &f{cost} {currency}", "", "&eClick to purchase!"));
+        lbj.saveShopStuff("invContents.blocks.invContents.glass", "&aVetro anti esplosione", Arrays.asList("&8Oggetti:", "&8▪ &7Vetro anti esplosione", "", "&7Costo: &f{cost} {currency}", "", "&7Immune to explosions", "", "&eClick to purchase!"));
+        lbj.saveShopStuff("invContents.blocks.invContents.stone", "&aPietra dell'End", Arrays.asList("&8Oggetti:", "&8▪ &7Pietra dell'End", "", "&7Costo: &f{cost} {currency}", "", "&eClick to purchase!"));
+        lbj.saveShopStuff("invContents.blocks.invContents.ladder", "&aScala", Arrays.asList("&8Oggetti:", "&8▪ &7Scala", "", "&7Costo: &f{cost} {currency}", "", "&eClick to purchase!"));
+        lbj.saveShopStuff("invContents.blocks.invContents.wood", "&aAssi di quercia", Arrays.asList("&8Oggetti:", "&8▪ &7Assi di quercia", "", "&7Costo: &6{cost} {currency}", "", "&eClick to purchase!"));
+        lbj.saveShopStuff("invContents.blocks.invContents.obsidian", "&cOssidiana", Arrays.asList("&8Oggetti:", "&8▪ &7Ossidiana", "", "&7Costo: &2{cost} {currency}", "", "&eClick to purchase!"));
         lbj.saveShopStuff("invContents.blocks.invContents.back", "&aTorna indietro", Arrays.asList(""));
 
-        lbj.saveShopStuff("invContents.ranged.invContents.arrow", "&aFrecce", Arrays.asList("&8Oggetti:", "&8▪ &7Frecce", "", "&7Costoo: &6{cost} {currency}"));
-        lbj.saveShopStuff("invContents.ranged.invContents.bow", "&aArco", Arrays.asList("&8Oggetti:", "&8▪ &7Arco", "", "&7Costoo: &6{cost} {currency}"));
-        lbj.saveShopStuff("invContents.ranged.invContents.bow2", "&aArco (Potenza I)", Arrays.asList("&8Oggetti:", "&8▪ &7Arco (Potenza I)", "", "&7Costoo: &6{cost} {currency}"));
-        lbj.saveShopStuff("invContents.ranged.invContents.bow3", "&aArco (Potenza I, Contraccolpo I)", Arrays.asList("&8Oggetti:", "&8▪ &7Arco (Potenza I, Contraccolpo I)", "", "&7Costoo: &2{cost} {currency}"));
+        lbj.saveShopStuff("invContents.ranged.invContents.arrow", "&aFrecce", Arrays.asList("&8Oggetti:", "&8▪ &7Frecce", "", "&7Costo: &6{cost} {currency}"));
+        lbj.saveShopStuff("invContents.ranged.invContents.bow", "&aArco", Arrays.asList("&8Oggetti:", "&8▪ &7Arco", "", "&7Costo: &6{cost} {currency}"));
+        lbj.saveShopStuff("invContents.ranged.invContents.bow2", "&aArco (Potenza I)", Arrays.asList("&8Oggetti:", "&8▪ &7Arco (Potenza I)", "", "&7Costo: &6{cost} {currency}"));
+        lbj.saveShopStuff("invContents.ranged.invContents.bow3", "&aArco (Potenza I, Contraccolpo I)", Arrays.asList("&8Oggetti:", "&8▪ &7Arco (Potenza I, Contraccolpo I)", "", "&7Costo: &2{cost} {currency}"));
         lbj.saveShopStuff("invContents.ranged.invContents.back", "&aTorna indietro", Collections.singletonList(""));
 
-        lbj.saveShopStuff("invContents.tools.invContents.shears", "&aCesoie permanenti", Arrays.asList("&8Oggetti:", "&8▪ &7Cesoie permanenti", "", "&7Costoo: &f{cost} {currency}"));
-        lbj.saveShopStuff("invContents.tools.invContents.pick", "&aPiccone di legno", Arrays.asList("&8Oggetti:", "&8▪ &7Piccone di legno", "", "&7Costoo: &f{cost} {currency}"));
-        lbj.saveShopStuff("invContents.tools.invContents.axe", "&aAscia di legno", Arrays.asList("&8Oggetti:", "&8▪ &7Ascia di legno", "", "&7Costoo: &f{cost} {currency}"));
+        lbj.saveShopStuff("invContents.tools.invContents.shears", "&aCesoie permanenti", Arrays.asList("&8Oggetti:", "&8▪ &7Cesoie permanenti", "", "&7Costo: &f{cost} {currency}"));
+        lbj.saveShopStuff("invContents.tools.invContents.pick", "&aPiccone di legno", Arrays.asList("&8Oggetti:", "&8▪ &7Piccone di legno", "", "&7Costo: &f{cost} {currency}"));
+        lbj.saveShopStuff("invContents.tools.invContents.axe", "&aAscia di legno", Arrays.asList("&8Oggetti:", "&8▪ &7Ascia di legno", "", "&7Costo: &f{cost} {currency}"));
         lbj.saveShopStuff("invContents.tools.invContents.back", "&aTorna indietro", Collections.singletonList(""));
 
-        lbj.saveShopStuff("invContents.potions.invContents.potion1", "&aPozione di rapidità II", Arrays.asList("&8Oggetti:", "&8▪ &7Pozione di rapidità II", "", "&7Costoo: &2{cost} {currency}"));
-        lbj.saveShopStuff("invContents.potions.invContents.potion2", "&aPozione di salto V", Arrays.asList("&8Oggetti:", "&8▪ &7Pozione di salto V", "", "&7Costoo: &2{cost} {currency}"));
-        lbj.saveShopStuff("invContents.potions.invContents.potion3", "&aPozione di invisibilità", Arrays.asList("&8Oggetti:", "&8▪ &7Pozione di invisibilità", "", "&7Costoo: &2{cost} {currency}"));
+        lbj.saveShopStuff("invContents.potions.invContents.potion1", "&aPozione di rapidità II", Arrays.asList("&8Oggetti:", "&8▪ &7Pozione di rapidità II", "", "&7Costo: &2{cost} {currency}"));
+        lbj.saveShopStuff("invContents.potions.invContents.potion2", "&aPozione di salto V", Arrays.asList("&8Oggetti:", "&8▪ &7Pozione di salto V", "", "&7Costo: &2{cost} {currency}"));
+        lbj.saveShopStuff("invContents.potions.invContents.potion3", "&aPozione di invisibilità", Arrays.asList("&8Oggetti:", "&8▪ &7Pozione di invisibilità", "", "&7Costo: &2{cost} {currency}"));
         lbj.saveShopStuff("invContents.potions.invContents.back", "&aTorna indietro", Collections.singletonList(""));
 
-        lbj.saveShopStuff("invContents.utility.invContents.apple", "&aMela d'oro", Arrays.asList("&8Oggetti:", "&8▪ &7Mela d'oro", "", "&7Costoo: &6{cost} {currency}"));
-        lbj.saveShopStuff("invContents.utility.invContents.sball", "&aBedbug", Arrays.asList("&8Oggetti:", "&8▪ &7Bedbug", "", "&7Costoo: &f{cost} {currency}", "", "&7Moderately annoying. These", "&7little critters can be thrown to", "&7distract enemies"));
-        lbj.saveShopStuff("invContents.utility.invContents.monsteregg", "&aDream Defender", Arrays.asList("&8Oggetti:", "&8▪ &7Dream Defender", "", "&7Costoo: &f{cost} {currency}", "", "&7Moderately motivated.", "&7Sometimes they help defend your", "&7base"));
-        lbj.saveShopStuff("invContents.utility.invContents.fireball", "&aFireball", Arrays.asList("&8Oggetti:", "&8▪ &7Fireball", "", "&7Costoo: &f{cost} {currency}", "", "&7Right-click to launch!"));
-        lbj.saveShopStuff("invContents.utility.invContents.tnt", "&aTNT", Arrays.asList("&8Oggetti:", "&8▪ &7TNT", "", "&7Costoo: &6{cost} {currency}", "", "&7Instantly ignites, appropriate", "&7to explode things!"));
+        lbj.saveShopStuff("invContents.utility.invContents.apple", "&aMela d'oro", Arrays.asList("&8Oggetti:", "&8▪ &7Mela d'oro", "", "&7Costo: &6{cost} {currency}"));
+        lbj.saveShopStuff("invContents.utility.invContents.sball", "&aBedbug", Arrays.asList("&8Oggetti:", "&8▪ &7Bedbug", "", "&7Costo: &f{cost} {currency}", "", "&7Moderately annoying. These", "&7little critters can be thrown to", "&7distract enemies"));
+        lbj.saveShopStuff("invContents.utility.invContents.monsteregg", "&aDream Defender", Arrays.asList("&8Oggetti:", "&8▪ &7Dream Defender", "", "&7Costo: &f{cost} {currency}", "", "&7Moderately motivated.", "&7Sometimes they help defend your", "&7base"));
+        lbj.saveShopStuff("invContents.utility.invContents.fireball", "&aFireball", Arrays.asList("&8Oggetti:", "&8▪ &7Fireball", "", "&7Costo: &f{cost} {currency}", "", "&7Right-click to launch!"));
+        lbj.saveShopStuff("invContents.utility.invContents.tnt", "&aTNT", Arrays.asList("&8Oggetti:", "&8▪ &7TNT", "", "&7Costo: &6{cost} {currency}", "", "&7Instantly ignites, appropriate", "&7to explode things!"));
         lbj.saveShopStuff("invContents.utility.invContents.enderpearl", "&aEnder Pearl", Arrays.asList("&8Oggetti:", "", "&8Ender Pearl", "&8▪ &7Costo: &2{cost} {currency}", "", "&7Pretty useful for invading", "&7enemies bases."));
-        lbj.saveShopStuff("invContents.utility.invContents.bucket", "&aSecchio d'acqua", Arrays.asList("&8Oggetti:", "&8▪ &7Secchio d'acqua", "", "&7Costoo: &2{cost} {currency}"));
-        lbj.saveShopStuff("invContents.utility.invContents.eggBridge", "&aBridge Egg", Arrays.asList("&8Oggetti:", "&8▪ &7Bridge Egg", "", "&7Costoo: &2{cost} {currency}", "&7This egg creates a bridge in", "&7its trail after being thrown."));
+        lbj.saveShopStuff("invContents.utility.invContents.bucket", "&aSecchio d'acqua", Arrays.asList("&8Oggetti:", "&8▪ &7Secchio d'acqua", "", "&7Costo: &2{cost} {currency}"));
+        lbj.saveShopStuff("invContents.utility.invContents.eggBridge", "&aBridge Egg", Arrays.asList("&8Oggetti:", "&8▪ &7Bridge Egg", "", "&7Costo: &2{cost} {currency}", "&7This egg creates a bridge in", "&7its trail after being thrown."));
         lbj.saveShopStuff("invContents.utility.invContents.back", "&aTorna indietro", Collections.singletonList(""));
         yml.addDefault("meaning.iron", "Ferro");
         yml.addDefault("meaning.gold", "Oro");
