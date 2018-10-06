@@ -134,9 +134,9 @@ public class Romanian {
         //lbj.saveShopStuff("invContents.favourites", "&aFavourites", Arrays.asList("&7Click to view your", "&7favourite Obiecte. You can", "&7set a favourite item by", "&7shift clicking on any shop item!"));
         //lbj.saveShopStuff("invContents.recommended", "&aRecommended Obiecte", Arrays.asList("&7Original", "&7Click to view some", "&7recommended Obiecte for early", "&7to late game!", "", "&eClick pentru a rasfoi!"));
 
-        lbj.saveShopStuff("invContents.armor.invContents.chainmail", "&aArmura Permanenta De Zale", Arrays.asList("&8Obiecte:", "&8▪ &7Armura Permanenta De Zale", "&8▪ &7Pantaloni De Zale", "", "&8Pret: &f{cost} {currency}", "&8&oNu vei pierde asta cand vei muri!"));
-        lbj.saveShopStuff("invContents.armor.invContents.iron", "&aArmura Permanenta De Fier", Arrays.asList("&8Obiecte:", "&8▪ &7Armura Permanenta De Fier", "&8▪ &7Pantaloni De Fier", "", "&8Pret: &6{cost} {currency}", "&8&oNu vei pierde asta cand vei muri!"));
-        lbj.saveShopStuff("invContents.armor.invContents.diamond", "&aArmura Permanenta De Diamant", Arrays.asList("&8Obiecte:", "&8▪ &7Armura Permanenta De Diamant", "&8▪ &7Pantaloni De Diamant", "", "&8Pret: &2{cost} {currency}", "&8&oNu vei pierde asta cand vei muri!"));
+        lbj.saveShopStuff("invContents.armor.invContents.chainmail", "&aArmura Permanenta De Zale", Arrays.asList("&8Obiecte:", "&8▪ &7Cizme De Zale", "&8▪ &7Pantaloni De Zale", "", "&8Pret: &f{cost} {currency}", "&8&oNu vei pierde asta cand vei muri!"));
+        lbj.saveShopStuff("invContents.armor.invContents.iron", "&aArmura Permanenta De Fier", Arrays.asList("&8Obiecte:", "&8▪ &7Cizme De Fier", "&8▪ &7Pantaloni De Fier", "", "&8Pret: &6{cost} {currency}", "&8&oNu vei pierde asta cand vei muri!"));
+        lbj.saveShopStuff("invContents.armor.invContents.diamond", "&aArmura Permanenta De Diamant", Arrays.asList("&8Obiecte:", "&8▪ &7Cizme De Diamant", "&8▪ &7Pantaloni De Diamant", "", "&8Pret: &2{cost} {currency}", "&8&oNu vei pierde asta cand vei muri!"));
         lbj.saveShopStuff("invContents.armor.invContents.back", "&aInapoi", Collections.singletonList(""));
 
         lbj.saveShopStuff("invContents.melee.invContents.stone", "&aSabie De Piatra", Arrays.asList("&8Obiecte:", "&8▪ &7Sabie De Piatra", "", "&8Pret: &f{cost} {currency}"));
