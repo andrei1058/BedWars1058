@@ -30,7 +30,7 @@ public class ArenaGUI {
 
     public static void refreshInv(Player p, Inventory inv) {
 
-        List<Arena> arenas = Arena.getArenas().stream().filter(a -> a.getStatus() != GameState.restarting).sorted((a1, a2) -> {
+        List<Arena> arenas = new ArrayList<>(Arena.getArenas()).stream().filter(a -> a.getStatus() != GameState.restarting).sorted((a1, a2) -> {
             if (a1.getStatus() == GameState.starting && a2.getStatus() == GameState.starting) {
                 if (a1.getPlayers().size() > a2.getPlayers().size()) {
                     return -1;
