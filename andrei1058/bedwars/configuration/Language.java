@@ -59,6 +59,9 @@ public class Language {
             case "es":
                 new Spanish(lbj, yml);
                 break;
+            case "ru":
+                new Russian(lbj, yml);
+                break;
         }
 
         lbj.save();
