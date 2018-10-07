@@ -1,10 +1,7 @@
 package com.andrei1058.bedwars.configuration;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.configuration.language.English;
-import com.andrei1058.bedwars.configuration.language.Italian;
-import com.andrei1058.bedwars.configuration.language.Polish;
-import com.andrei1058.bedwars.configuration.language.Romanian;
+import com.andrei1058.bedwars.configuration.language.*;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -58,6 +55,9 @@ public class Language {
                 break;
             case "pl":
                 new Polish(lbj, yml);
+                break;
+            case "es":
+                new Spanish(lbj, yml);
                 break;
         }
 
