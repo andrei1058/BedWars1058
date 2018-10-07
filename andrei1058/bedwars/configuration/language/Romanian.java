@@ -32,7 +32,7 @@ public class Romanian {
         yml.addDefault(Messages.COMMAND_LEAVE_DENIED_NOT_IN_ARENA, "{prefix}&cNu esti intr-o arena!");
         yml.addDefault(Messages.ARENA_GUI_INV_NAME, "&8Click pentru a intra");
         yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_NAME, "&a&l{name}");
-        yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_LORE, Arrays.asList("", "&7Status: {status}", "&7Jucatori: &f{on}&7/&f{max}", "&7Tip: &a{group}", "", "&eClick-Stanga pentru a intra.", "&eClick-Dreapta pentru a vizona."));
+        yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_LORE, Arrays.asList("", "&7Status: {status}", "&7Jucatori: &f{on}&7/&f{max}", "&7Tip: &a{group}", "", "&aClick-Stanga pentru a intra.", "&eClick-Dreapta pentru a vizona."));
         yml.addDefault(Messages.COMMAND_LANG_LIST_HEADER, "{prefix} &2Limbi disponibile:");
         yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&a▪  &7{iso} - &f{name}");
         yml.addDefault(Messages.COMMAND_LANG_USAGE, "{prefix}&7Foloseste: /lang &f&o<iso>");
