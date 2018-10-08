@@ -18,17 +18,17 @@ public class Russian {
         yml.addDefault("name", "Pусский");
         yml.addDefault(Messages.COMMAND_MAIN, Arrays.asList("", "&2▪ &7/" + mainCmd + " stats", "&2▪ &7/" + mainCmd + " join &o<arena/group>", "&2▪ &7/" + mainCmd + " leave", "&2▪ &7/" + mainCmd + " lang", "&2▪ &7/" + mainCmd + " gui", "&2▪ &7/" + mainCmd + " start &3(vip)"));
         yml.addDefault(Messages.ARENA_JOIN_VIP_KICK, "{prefix}&cИзвините, но вас выгнали, потому что к арене присоединился донатер.\n&aЧтобы иметь больше возможностей - купите донат. &7&o(жми)");
-        yml.addDefault(Messages.ARENA_JOIN_DENIED_IS_FULL, "{prefix}&cЭта арена полная!\n&aЧтобы иметь больше возможностей - купите донат. &7&o(жми)");
-        yml.addDefault(Messages.ARENA_JOIN_DENIED_IS_FULL_VIP_REQUIRED, "{prefix}&cПриносим извинения, но эта арена полная.\n&cМы знаем, что вы являетесь донатером, но на самом деле эта арена полна сотрудников и/или донатеров.");
+        yml.addDefault(Messages.COMMAND_JOIN_DENIED_IS_FULL, "{prefix}&cЭта арена полная!\n&aЧтобы иметь больше возможностей - купите донат. &7&o(жми)");
+        yml.addDefault(Messages.COMMAND_JOIN_DENIED_IS_FULL_OF_VIPS, "{prefix}&cПриносим извинения, но эта арена полная.\n&cМы знаем, что вы являетесь донатером, но на самом деле эта арена полна сотрудников и/или донатеров.");
         yml.addDefault(Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS, "{prefix}§cНедостаточно игроков! Обратный отсчет остановился!");
-        yml.addDefault(Messages.ARENA_LEAVE_PLAYER_LEAVE_MSG, "{prefix}&e{player} вышел из игры!");
+        yml.addDefault(Messages.COMMAND_LEAVE_MSG, "{prefix}&e{player} вышел из игры!");
         yml.addDefault(Messages.ARENA_RESTART_PLAYER_KICK, "{prefix}&eАрена, в которой вы были, перезапускается.");
         yml.addDefault(Messages.ARENA_STATUS_PLAYING_NAME, "&cИдет Игра");
         yml.addDefault(Messages.ARENA_STATUS_RESTARTING_NAME, "&4Перезапуск");
         yml.addDefault(Messages.ARENA_STATUS_WAITING_NAME, "&2Ожидание §c{full}");
         yml.addDefault(Messages.ARENA_STATUS_STARTING_NAME, "&6Начало §c{full}");
-        yml.addDefault(Messages.ARENA_JOIN_DENIED_GROUP_OR_ARENA_NOT_FOUND, "{prefix}&cНе существует какой-либо арены или арены: {name}");
-        yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_EMPTY_FOUND, "{prefix}&cСейчас нет какой-либо арены ;(");
+        yml.addDefault(Messages.COMMAND_JOIN_GROUP_OR_ARENA_NOT_FOUND, "{prefix}&cНе существует какой-либо арены или арены: {name}");
+        yml.addDefault(Messages.COMMAND_JOIN_NO_EMPTY_FOUND, "{prefix}&cСейчас нет какой-либо арены ;(");
         yml.addDefault(Messages.COMMAND_LEAVE_DENIED_NOT_IN_ARENA, "{prefix}&cТы не на арене!");
         yml.addDefault(Messages.ARENA_GUI_INV_NAME, "&8Доступные арены");
         yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_NAME, "&a&l{name}");
@@ -39,14 +39,14 @@ public class Russian {
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_NOT_EXIST, "{prefix}&cЭтот язык не существует!");
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY, "{prefix}&aЯзык сменен!");
         yml.addDefault(Messages.COMMAND_LANG_USAGE_DENIED, "{prefix}&cВы не можете изменить язык во время игры.");
-        yml.addDefault(Messages.ARENA_JOIN_DENIED_PARTY_TOO_BIG, "{prefix}&cВаша партия слишком велика для того, чтобы присоединиться к этой арене как команде :(");
-        yml.addDefault(Messages.ARENA_JOIN_DENIED_NOT_PARTY_LEADER, "{prefix}&cТолько лидер может выбрать арену.");
+        yml.addDefault(Messages.COMMAND_JOIN_DENIED_PARTY_TOO_BIG, "{prefix}&cВаша партия слишком велика для того, чтобы присоединиться к этой арене как команде :(");
+        yml.addDefault(Messages.COMMAND_JOIN_DENIED_NOT_PARTY_LEADER, "{prefix}&cТолько лидер может выбрать арену.");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIER, "&eУровень &c{tier}");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND, "&b&lАлмаз");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD, "&a&lЭмеральд");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIMER, "&eСпавн через &c{seconds} &eсекунд");
-        yml.addDefault(Messages.ARENA_JOIN_PLAYER_JOIN_MSG, "{prefix}&7{player} &eвошел в игру (&b{on}&e/&b{max}&e)!");
-        yml.addDefault(Messages.ARENA_LEAVE_PLAYER_LEAVE_MSG, "{prefix}&7{player} &eвышел из игры!");
+        yml.addDefault(Messages.COMMAND_JOIN_PLAYER_JOIN_MSG, "{prefix}&7{player} &eвошел в игру (&b{on}&e/&b{max}&e)!");
+        yml.addDefault(Messages.COMMAND_LEAVE_MSG, "{prefix}&7{player} &eвышел из игры!");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN, "{prefix}&eИгра начнется через &6{time} &eсекунд!");
         yml.addDefault(Messages.FORMATTING_CHAT_LOBBY, "{vPrefix}&7{player}{vSuffix}: {message}");
         yml.addDefault(Messages.FORMATTING_CHAT_WAITING, "{vPrefix}&7{player}{vSuffix}: {message}");
@@ -103,9 +103,9 @@ public class Russian {
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_CHAT, "{prefix}&eВы возродитесь через &c{time} &eсекунд!");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWNED_TITLE, "&aВОЗРОЖДЕН!");
         yml.addDefault(Messages.PLAYER_DIE_ELIMINATED_CHAT, "{prefix}&cВы были устранены!");
-        yml.addDefault(Messages.ARENA_GAME_OVER_PLAYER_TITLE, "&c&lИГРА ОКОНЧЕНА!");
-        yml.addDefault(Messages.ARENA_VICTORY_PLAYER_TITLE, "&6&lПОБЕДА!");
-        yml.addDefault(Messages.ARENA_GAME_OVER_PLAYER_CHAT, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
+        yml.addDefault(Messages.GAME_END_GAME_OVER_PLAYER_TITLE, "&c&lИГРА ОКОНЧЕНА!");
+        yml.addDefault(Messages.GAME_END_VICTORY_PLAYER_TITLE, "&6&lПОБЕДА!");
+        yml.addDefault(Messages.GAME_END_TOP_PLAYER_CHAT, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
                 "&f                                   &lBedWars", "", "{winnerFormat}", "", "",
                 "&e                          &l1-1 Убийца &7- {firstName} - {firstKills}",
                 "&6                          &l2-й Убийца &7- {secondName} - {secondKills}",
@@ -114,7 +114,7 @@ public class Russian {
         //yml.addDefault(gameOverReward, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
         //        "&f                                   &lReward Summary", "", "",
         //        "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
-        yml.addDefault(Messages.ARENA_TEAM_WON_CHAT, "{prefix}{TeamColor}{TeamName} &aвыиграл игру!");
+        yml.addDefault(Messages.GAME_END_TEAM_WON_CHAT, "{prefix}{TeamColor}{TeamName} &aвыиграл игру!");
         yml.addDefault(Messages.FORMATTING_TEAM_WINNER_FORMAT, "      {TeamColor}{TeamName} &7- {members}");
         yml.addDefault(Messages.FORMATTING_SOLO_WINNER_FORMAT, "                 {TeamColor}{TeamName} &7- {members}");
         //yml.addDefault(tablistFormat, "{TeamColor}&l{TeamLetter}&r {TeamColor}{PlayerName} &e{PlayerHealth}");//{TeamColor}{TeamName}{TeamHealth}{PlayerName}{PlayerHealth}
@@ -123,10 +123,10 @@ public class Russian {
         yml.addDefault(Messages.FORMATTING_GENERATOR_TIER2, "II");
         yml.addDefault(Messages.FORMATTING_GENERATOR_TIER3, "III");
         yml.addDefault(Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT, "{prefix}{generatorType} Генератор &eбыл обновлен до уровня &c{tier}");
-        yml.addDefault(Messages.UPGRADES_TEAM_NPC_NAME, "&e&lКОМАНДНЫЕ,&E&LУЛУЧШЕНИЯ");
-        yml.addDefault(Messages.UPGRADES_SOLO_NPC_NAME, "&e&lСОЛО,&E&LУЛУЧШЕНИЯ");
-        yml.addDefault(Messages.SHOP_TEAM_NAME, "&e&lМАГАЗИН");
-        yml.addDefault(Messages.SHOP_SOLO_NAME, "&e&lМАГАЗИН");
+        yml.addDefault(Messages.NPC_NAME_TEAM_UPGRADES, "&e&lКОМАНДНЫЕ,&E&LУЛУЧШЕНИЯ");
+        yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&e&lСОЛО,&E&LУЛУЧШЕНИЯ");
+        yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&e&lМАГАЗИН");
+        yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&e&lМАГАЗИН");
         yml.addDefault(Messages.SHOP_PATH + "name", "&7МАГАЗИН");
 
         lbj.saveShopStuff("invContents.armor", "&aБроня", Arrays.asList("&7Доступные:", "&7▪ Кольчужные сапоги", "&7▪ Кольчужные поножи", "&7▪ Железные сапоги", "&7▪ Железные поножи", "&7▪ Алмазные сапоги", "&7▪ Алмазные поножи", "", "&eНажмите, чтобы просмотреть!"));
@@ -184,16 +184,18 @@ public class Russian {
         lbj.saveShopStuff("invContents.utility.invContents.bucket", "&aWater Bucket", Arrays.asList("&8Предметы:", "&8▪ &7Water Bucket", "", "&8Цена: &2{cost} {currency}"));
         lbj.saveShopStuff("invContents.utility.invContents.eggBridge", "&aBridge Egg", Arrays.asList("&8Предметы:", "&8▪ &7Bridge Egg", "", "&8Цена: &2{cost} {currency}", "&7This egg creates a bridge in", "&7its trail after being thrown."));
         lbj.saveShopStuff("invContents.utility.invContents.back", "&aОбратно", Collections.singletonList(""));
-        yml.addDefault("meaning.iron", "Железо");
-        yml.addDefault("meaning.gold", "Золото");
-        yml.addDefault("meaning.emerald", "Эмеральд");
-        yml.addDefault("meaning.diamond", "Алмаз");
-        yml.addDefault("meaning.vault", "$");
-        yml.addDefault(Messages.PLURAL_PATH + ".iron", "Железо");
-        yml.addDefault(Messages.PLURAL_PATH + ".gold", "Золото");
-        yml.addDefault(Messages.PLURAL_PATH + ".emerald", "Эмеральд");
-        yml.addDefault(Messages.PLURAL_PATH + ".diamond", "Алмаз");
-        yml.addDefault(Messages.PLURAL_PATH + ".vault", "Денег");
+
+        yml.addDefault(Messages.MEANING_IRON_SINGULAR, "Железо");
+        yml.addDefault(Messages.MEANING_IRON_PLURAL, "Железо");
+        yml.addDefault(Messages.MEANING_GOLD_SINGULAR, "Золото");
+        yml.addDefault(Messages.MEANING_GOLD_PLURAL, "Золото");
+        yml.addDefault(Messages.MEANING_EMERALD_SINGULAR, "Эмеральд");
+        yml.addDefault(Messages.MEANING_EMERALD_PLURAL, "Эмеральд");
+        yml.addDefault(Messages.MEANING_DIAMOND_SINGULAR, "Алмаз");
+        yml.addDefault(Messages.MEANING_DIAMOND_PLURAL, "Алмаз");
+        yml.addDefault(Messages.MEANING_VAULT_SINGULAR, "$");
+        yml.addDefault(Messages.MEANING_VAULT_PLURAL, "$");
+
         yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "{prefix}&cУ вас недостаточно {currency}! Требуется {amount}!");
         yml.addDefault(Messages.SHOP_NEW_PURCHASE, "{prefix}&aВы купили &6{item}");
         yml.addDefault(Messages.COMMAND_JOIN_USAGE, "§a▪ §7Используйте: /" + mainCmd + " join §o<arena/group>");
@@ -220,10 +222,10 @@ public class Russian {
         yml.addDefault("upgrades.Default.miningFatigue.tier1.lore", Arrays.asList("&7Враг, пытающийся зайти на вашу базу", "&7В течении 10 секунд получит", "&7усталость!", "", "&7Цена:&b {cost} {currency}", "", "{loreFooter}"));
         yml.addDefault("upgrades.Default.healPool.tier1.name", "&eИсцеляющий бассейн");
         yml.addDefault("upgrades.Default.healPool.tier1.lore", Arrays.asList("&7Создает поле регенирации", "&7вокруг вашей базы!", "", "&7Цена:&b {cost} {currency}", "", "{loreFooter}"));
-        yml.addDefault(Messages.ARENA_ENEMY_BASE_ENTER_ACTION, "&cВ ЛОВУШКУ ПОПАЛИСЬ!");
-        yml.addDefault(Messages.ARENA_ENEMY_BASE_ENTER_CHAT, "{prefix}&cВ ЛОВУШКУ ПОПАЛИСЬ!");
-        yml.addDefault(Messages.ARENA_ENEMY_BASE_ENTER_SUBTITLE, "&fВаша ловушка была выключена!");
-        yml.addDefault(Messages.ARENA_ENEMY_BASE_ENTER_TITLE, "&cВ ЛОВУШКУ ПОПАЛИСЬ!");
+        yml.addDefault(Messages.TRAP_ENEMY_BASE_ENTER_ACTION, "&cВ ЛОВУШКУ ПОПАЛИСЬ!");
+        yml.addDefault(Messages.TRAP_ENEMY_BASE_ENTER_CHAT, "{prefix}&cВ ЛОВУШКУ ПОПАЛИСЬ!");
+        yml.addDefault(Messages.TRAP_ENEMY_BASE_ENTER_SUBTITLE, "&fВаша ловушка была выключена!");
+        yml.addDefault(Messages.TRAP_ENEMY_BASE_ENTER_TITLE, "&cВ ЛОВУШКУ ПОПАЛИСЬ!");
         yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a{player} купил улучшение &6{upgradeName}");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "{TeamColor}&l{TeamName} &r{TeamColor}Silverfish");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME, "{TeamColor}{despawn}s &8[ {TeamColor}{health}&8]");
@@ -250,12 +252,12 @@ public class Russian {
         lbj.addDefaultStatsMsg(yml, "losses", "&6Проигрышей", "&f{losses}");
         lbj.addDefaultStatsMsg(yml, "kills", "&6Убийств", "&f{kills}");
         lbj.addDefaultStatsMsg(yml, "deaths", "&6Смертей", "&f{deaths}");
-        lbj.addDefaultStatsMsg(yml, "finalKills", "&6Финальных убийств", "&f{finalKills}");
-        lbj.addDefaultStatsMsg(yml, "finalDeaths", "&6Финальных смертей", "&f{finalDeaths}");
-        lbj.addDefaultStatsMsg(yml, "bedsDestroyed", "&6Кроватей уничтожено", "&f{bedsDestroyed}");
-        lbj.addDefaultStatsMsg(yml, "firstPlay", "&6Первая игра", "&f{firstPlay}");
-        lbj.addDefaultStatsMsg(yml, "lastPlay", "&6Последняя игра", "&f{lastPlay}");
-        lbj.addDefaultStatsMsg(yml, "gamesPlayed", "&6Игр сыграно", "&f{gamesPlayed}");
+        lbj.addDefaultStatsMsg(yml, "final-kills", "&6Финальных убийств", "&f{finalKills}");
+        lbj.addDefaultStatsMsg(yml, "final-deaths", "&6Финальных смертей", "&f{finalDeaths}");
+        lbj.addDefaultStatsMsg(yml, "beds-destroyed", "&6Кроватей уничтожено", "&f{bedsDestroyed}");
+        lbj.addDefaultStatsMsg(yml, "first-play", "&6Первая игра", "&f{firstPlay}");
+        lbj.addDefaultStatsMsg(yml, "last-play", "&6Последняя игра", "&f{lastPlay}");
+        lbj.addDefaultStatsMsg(yml, "games-played", "&6Игр сыграно", "&f{gamesPlayed}");
         yml.addDefault(Messages.FORMATTING_STATS_DATE_FORMAT, "yyyy/MM/dd HH:mm");
 
         yml.addDefault(Messages.MEANING_NEVER, "Никогда");
@@ -302,7 +304,7 @@ public class Russian {
         yml.addDefault(Messages.COMMAND_FORCESTART_NOT_IN_GAME, "§c▪ §7Вы не играете!");
         yml.addDefault(Messages.COMMAND_FORCESTART_SUCCESS, "§c▪ §7Обратный отсчет сокращен!");
         yml.addDefault(Messages.COMMAND_FORCESTART_NO_PERM, "{prefix}&7Вы не можете сократить время старта.\n§7Подумайте о том, чтобы купить донат.");
-        yml.addDefault(Messages.ARENA_JOIN_SPECTATOR_MSG, "{prefix}§6You are now spectating §9{arena}§6.\n{prefix}§eYou can leave the arena at any time doing §c/leave§e.");
+        yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_MSG, "{prefix}§6You are now spectating §9{arena}§6.\n{prefix}§eYou can leave the arena at any time doing §c/leave§e.");
         yml.addDefault(Messages.INTERACT_CHEST_CANT_OPEN_TEAM_ELIMINATED, "&cYou can't open this chest because this team was eliminated!");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_NAME, "&8Teleporter");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME, "{prefix}{player}");
@@ -315,7 +317,7 @@ public class Russian {
         yml.addDefault(Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE, "");
         yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "{prefix}&cYou've already bought that!");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE, "{prefix}&7{player} &eis offline!");
-        yml.addDefault(Messages.ARENA_JOIN_SPECTATOR_DENIED_MSG, "&cSpectators are not allowed in this arena!");
+        yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG, "&cSpectators are not allowed in this arena!");
         yml.addDefault(Messages.ARENA_LEAVE_PARTY_DISBANDED, "{prefix}§cThe party owner has left and the party was disbanded!");
 
         /* Lobby Command Items */
@@ -350,9 +352,9 @@ public class Russian {
             yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", "leave"), Collections.singletonList("&fЩелкните правой кнопкой мыши, чтобы вернуться в лобби!"));
         }
         yml.addDefault(Messages.COMMAND_COOLDOWN, "&cYou can't do that yet! Wait {seconds} more seconds!");
-        yml.addDefault(Messages.PLACEHOLDER_PLAYER_TEAM_TEAM, "{TeamColor}[{TeamName}]");
-        yml.addDefault(Messages.PLACEHOLDER_PLAYER_TEAM_SHOUT, "&6[SHOUT]");
-        yml.addDefault(Messages.PLACEHOLDER_PLAYER_TEAM_SPECTATOR, "&7[SPECTATOR]");
+        yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_TEAM, "{TeamColor}[{TeamName}]");
+        yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_SHOUT, "&6[SHOUT]");
+        yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_SPECTATOR, "&7[SPECTATOR]");
         yml.addDefault(Messages.ARENA_JOIN_DENIED_SELECTOR, "{prefix}&cSorry but you can't join this arena at this moment. Use Right-Click to spectate!");
         yml.addDefault(Messages.ARENA_SPECTATE_DENIED_SELECTOR, "{prefix}&cSorry but you can't spectate this arena at this moment. Use Left-Click to join!");
 

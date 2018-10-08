@@ -245,11 +245,11 @@ public class Arena {
         if (getParty().hasParty(p)) {
             if (!skipOwnerCheck) {
                 if (!getParty().isOwner(p)) {
-                    p.sendMessage(getMsg(p, Messages.ARENA_JOIN_DENIED_NOT_PARTY_LEADER));
+                    p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_DENIED_NOT_PARTY_LEADER));
                     return;
                 }
                 if (getParty().partySize(p) > maxInTeam * getTeams().size() - getPlayers().size()) {
-                    p.sendMessage(getMsg(p, Messages.ARENA_JOIN_DENIED_PARTY_TOO_BIG));
+                    p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_DENIED_PARTY_TOO_BIG));
                     return;
                 }
                 for (Player mem : getParty().getMembers(p)) {
@@ -269,7 +269,7 @@ public class Arena {
 
         if (status == GameState.waiting || (status == GameState.starting && (startingTask != null && startingTask.getCountdown() > 1))) {
             if (players.size() >= maxPlayers && !isVip(p)) {
-                TextComponent text = new TextComponent(getMsg(p, Messages.ARENA_JOIN_DENIED_IS_FULL));
+                TextComponent text = new TextComponent(getMsg(p, Messages.COMMAND_JOIN_DENIED_IS_FULL));
                 text.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, config.getYml().getString("storeLink")));
                 p.spigot().sendMessage(text);
                 return;
@@ -286,7 +286,7 @@ public class Arena {
                     }
                 }
                 if (!canJoin) {
-                    p.sendMessage(getMsg(p, Messages.ARENA_JOIN_DENIED_IS_FULL_VIP_REQUIRED));
+                    p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_DENIED_IS_FULL_OF_VIPS));
                     return;
                 }
             }
@@ -300,7 +300,7 @@ public class Arena {
             p.closeInventory();
             players.add(p);
             for (Player on : players) {
-                on.sendMessage(getMsg(on, Messages.ARENA_JOIN_PLAYER_JOIN_MSG).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
+                on.sendMessage(getMsg(on, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
             }
             setArenaByPlayer(p, false);
 
@@ -419,7 +419,7 @@ public class Arena {
                 sendSpectatorCommandItems(p);
             }, 15L);
 
-            p.sendMessage(getMsg(p, Messages.ARENA_JOIN_SPECTATOR_MSG).replace("{arena}", this.getDisplayName()));
+            p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_MSG).replace("{arena}", this.getDisplayName()));
 
             /* update generator holograms for spectators */
             String iso = Language.getPlayerLanguage(p).getIso();
@@ -435,7 +435,7 @@ public class Arena {
             }
             Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.PlayerJoinArenaEvent(p, true));
         } else {
-            p.sendMessage(getMsg(p, Messages.ARENA_JOIN_SPECTATOR_DENIED_MSG));
+            p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG));
         }
     }
 
@@ -555,7 +555,7 @@ public class Arena {
         }
         if (status == GameState.starting || status == GameState.waiting) {
             for (Player on : players) {
-                on.sendMessage(getMsg(on, Messages.ARENA_LEAVE_PLAYER_LEAVE_MSG).replace("{player}", p.getDisplayName()));
+                on.sendMessage(getMsg(on, Messages.COMMAND_LEAVE_MSG).replace("{player}", p.getDisplayName()));
             }
         }
         for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
@@ -756,10 +756,10 @@ public class Arena {
         p.closeInventory();
         players.add(p);
         for (Player on : players) {
-            on.sendMessage(getMsg(on, Messages.ARENA_JOIN_PLAYER_JOIN_MSG).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
+            on.sendMessage(getMsg(on, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
         }
         for (Player on : spectators) {
-            on.sendMessage(getMsg(on, Messages.ARENA_JOIN_PLAYER_JOIN_MSG).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
+            on.sendMessage(getMsg(on, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
         }
         setArenaByPlayer(p, false);
         /* save player inventory etc */
@@ -1319,7 +1319,7 @@ public class Arena {
                     String thirdName = "";
                     StringBuilder winners = new StringBuilder();
                     for (Player p : winner.getMembers()) {
-                        nms.sendTitle(p, getMsg(p, Messages.ARENA_VICTORY_PLAYER_TITLE), null, 0, 40, 0);
+                        nms.sendTitle(p, getMsg(p, Messages.GAME_END_VICTORY_PLAYER_TITLE), null, 0, 40, 0);
                         winners.append(p.getName()).append(" ");
                     }
                     if (winners.toString().endsWith(" ")) {
@@ -1342,11 +1342,11 @@ public class Arena {
                         }
                     }
                     for (Player p : world.getPlayers()) {
-                        p.sendMessage(getMsg(p, Messages.ARENA_TEAM_WON_CHAT).replace("{TeamColor}", TeamColor.getChatColor(winner.getColor()).toString()).replace("{TeamName}", winner.getName()));
+                        p.sendMessage(getMsg(p, Messages.GAME_END_TEAM_WON_CHAT).replace("{TeamColor}", TeamColor.getChatColor(winner.getColor()).toString()).replace("{TeamName}", winner.getName()));
                         if (!winner.getMembers().contains(p)) {
-                            nms.sendTitle(p, getMsg(p, Messages.ARENA_GAME_OVER_PLAYER_TITLE), null, 0, 40, 0);
+                            nms.sendTitle(p, getMsg(p, Messages.GAME_END_GAME_OVER_PLAYER_TITLE), null, 0, 40, 0);
                         }
-                        for (String s : getList(p, Messages.ARENA_GAME_OVER_PLAYER_CHAT)) {
+                        for (String s : getList(p, Messages.GAME_END_TOP_PLAYER_CHAT)) {
                             p.sendMessage(s.replace("{firstName}", firstName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : firstName).replace("{firstKills}", String.valueOf(first))
                                     .replace("{secondName}", secondName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : secondName).replace("{secondKills}", String.valueOf(second))
                                     .replace("{thirdName}", thirdName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : thirdName).replace("{thirdKills}", String.valueOf(third))

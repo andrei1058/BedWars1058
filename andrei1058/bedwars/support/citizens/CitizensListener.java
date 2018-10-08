@@ -5,7 +5,6 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Messages;
-import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.event.NPCRemoveEvent;
 import org.bukkit.entity.Entity;
@@ -57,7 +56,7 @@ public class CitizensListener implements Listener {
         if (npc == null) return;
         if (JoinNPC.npcs.containsKey(npc.getId())) {
             if (!Arena.joinRandomFromGroup(e.getPlayer(), JoinNPC.npcs.get(npc.getId()))) {
-                e.getPlayer().sendMessage(getMsg(e.getPlayer(), Messages.ARENA_JOIN_DENIED_NO_EMPTY_FOUND));
+                e.getPlayer().sendMessage(getMsg(e.getPlayer(), Messages.COMMAND_JOIN_NO_EMPTY_FOUND));
             }
         }
     }

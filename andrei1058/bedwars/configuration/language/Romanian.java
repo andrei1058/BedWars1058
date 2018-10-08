@@ -18,17 +18,17 @@ public class Romanian {
         yml.addDefault("name", "Romana");
         yml.addDefault(Messages.COMMAND_MAIN, Arrays.asList("", "&2▪ &7/" + mainCmd + " stats", "&2▪ &7/" + mainCmd + " join &o<arena/group>", "&2▪ &7/" + mainCmd + " leave", "&2▪ &7/" + mainCmd + " lang", "&2▪ &7/" + mainCmd + " gui", "&2▪ &7/" + mainCmd + " start &3(vip)"));
         yml.addDefault(Messages.ARENA_JOIN_VIP_KICK, "{prefix}&cNe pare rau, dar locul tau a fost rezervat unui donator.\n&aAi putea lua in considerare donarea pentru mai multe facilitati. &7&o(click)");
-        yml.addDefault(Messages.ARENA_JOIN_DENIED_IS_FULL, "{prefix}&cArena este plina!\n&aAi putea lua in considerare donarea pentru mai multe facilitati. &7&o(click)");
-        yml.addDefault(Messages.ARENA_JOIN_DENIED_IS_FULL_VIP_REQUIRED, "{prefix}&cNe pare rau dar arena este plina.\n&cStim ca esti donator dar arena este deja plina cu persoane care au prioritate.");
+        yml.addDefault(Messages.COMMAND_JOIN_DENIED_IS_FULL, "{prefix}&cArena este plina!\n&aAi putea lua in considerare donarea pentru mai multe facilitati. &7&o(click)");
+        yml.addDefault(Messages.COMMAND_JOIN_DENIED_IS_FULL_OF_VIPS, "{prefix}&cNe pare rau dar arena este plina.\n&cStim ca esti donator dar arena este deja plina cu persoane care au prioritate.");
         yml.addDefault(Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS, "{prefix}§cNu sunt destui jucatori! Numaratoarea a fost oprita!");
-        yml.addDefault(Messages.ARENA_LEAVE_PLAYER_LEAVE_MSG, "{prefix}&e{player} a iesit din joc!");
+        yml.addDefault(Messages.COMMAND_LEAVE_MSG, "{prefix}&e{player} a iesit din joc!");
         yml.addDefault(Messages.ARENA_RESTART_PLAYER_KICK, "{prefix}&eArena in care te aflai se reporneste.");
         yml.addDefault(Messages.ARENA_STATUS_PLAYING_NAME, "&cIn joc");
         yml.addDefault(Messages.ARENA_STATUS_RESTARTING_NAME, "&4Se reporneste");
         yml.addDefault(Messages.ARENA_STATUS_WAITING_NAME, "&2In Asteptare §c{full}");
         yml.addDefault(Messages.ARENA_STATUS_STARTING_NAME, "&6Porneste §c{full}");
-        yml.addDefault(Messages.ARENA_JOIN_DENIED_GROUP_OR_ARENA_NOT_FOUND, "{prefix}&cNu exista arene sau grupuri cu numele: {name}");
-        yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_EMPTY_FOUND, "{prefix}&cNu sunt arene disponibile momentan ;(");
+        yml.addDefault(Messages.COMMAND_JOIN_GROUP_OR_ARENA_NOT_FOUND, "{prefix}&cNu exista arene sau grupuri cu numele: {name}");
+        yml.addDefault(Messages.COMMAND_JOIN_NO_EMPTY_FOUND, "{prefix}&cNu sunt arene disponibile momentan ;(");
         yml.addDefault(Messages.COMMAND_LEAVE_DENIED_NOT_IN_ARENA, "{prefix}&cNu esti intr-o arena!");
         yml.addDefault(Messages.ARENA_GUI_INV_NAME, "&8Click pentru a intra");
         yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_NAME, "&a&l{name}");
@@ -39,14 +39,14 @@ public class Romanian {
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_NOT_EXIST, "{prefix}&cAceasta limba nu exista!");
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY, "{prefix}&aLimba a fost schimbata!");
         yml.addDefault(Messages.COMMAND_LANG_USAGE_DENIED, "{prefix}&cNu poti schimba limba in timpul meciului.");
-        yml.addDefault(Messages.ARENA_JOIN_DENIED_PARTY_TOO_BIG, "{prefix}&cParty-ul este prea mare pentru a intra ca un singur team :(");
-        yml.addDefault(Messages.ARENA_JOIN_DENIED_NOT_PARTY_LEADER, "{prefix}&cDoar leader-ul poate alege arena.");
+        yml.addDefault(Messages.COMMAND_JOIN_DENIED_PARTY_TOO_BIG, "{prefix}&cParty-ul este prea mare pentru a intra ca un singur team :(");
+        yml.addDefault(Messages.COMMAND_JOIN_DENIED_NOT_PARTY_LEADER, "{prefix}&cDoar leader-ul poate alege arena.");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIER, "&eTier &c{tier}");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND, "&b&lDiamant");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD, "&a&lEmerald");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIMER, "&eSe spawneaza in &c{seconds} &esecunde");
-        yml.addDefault(Messages.ARENA_JOIN_PLAYER_JOIN_MSG, "{prefix}&7{player} &ea intrat (&b{on}&e/&b{max}&e)!");
-        yml.addDefault(Messages.ARENA_LEAVE_PLAYER_LEAVE_MSG, "{prefix}&7{player} &ea iesit!");
+        yml.addDefault(Messages.COMMAND_JOIN_PLAYER_JOIN_MSG, "{prefix}&7{player} &ea intrat (&b{on}&e/&b{max}&e)!");
+        yml.addDefault(Messages.COMMAND_LEAVE_MSG, "{prefix}&7{player} &ea iesit!");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN, "{prefix}&eJocul incepe in &6{time} &esecunde!");
         yml.addDefault(Messages.FORMATTING_CHAT_LOBBY, "{vPrefix}&7{player}{vSuffix}: {message}");
         yml.addDefault(Messages.FORMATTING_CHAT_WAITING, "{vPrefix}&7{player}{vSuffix}: {message}");
@@ -102,15 +102,15 @@ public class Romanian {
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_CHAT, "{prefix}&eTe vei respawna in &c{time} &esecunde!");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWNED_TITLE, "&aRESPAWNAT!");
         yml.addDefault(Messages.PLAYER_DIE_ELIMINATED_CHAT, "{prefix}&cAi fost eliminat!");
-        yml.addDefault(Messages.ARENA_GAME_OVER_PLAYER_TITLE, "&c&lJOC TERMINAT!");
-        yml.addDefault(Messages.ARENA_VICTORY_PLAYER_TITLE, "&6&lVICTORIE!");
-        yml.addDefault(Messages.ARENA_GAME_OVER_PLAYER_CHAT, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
+        yml.addDefault(Messages.GAME_END_GAME_OVER_PLAYER_TITLE, "&c&lJOC TERMINAT!");
+        yml.addDefault(Messages.GAME_END_VICTORY_PLAYER_TITLE, "&6&lVICTORIE!");
+        yml.addDefault(Messages.GAME_END_TOP_PLAYER_CHAT, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
                 "&f                                   &lBedWars", "", "{winnerFormat}", "", "",
                 "&e                      &lPrimul Ucigas &7- {firstName} - {firstKills}",
                 "&6                      &lAl 2-lea Ucigas &7- {secondName} - {secondKills}",
                 "&c                      &lAl 3-lea Ucigas &7- {thirdName} - {thirdKills}", "",
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬")); //todo disponibile {firstDeaths} {firstBeds} {firstName} {firstKills}
-        yml.addDefault(Messages.ARENA_TEAM_WON_CHAT, "{prefix}{TeamColor}Echipa {TeamName} &aa castigat!");
+        yml.addDefault(Messages.GAME_END_TEAM_WON_CHAT, "{prefix}{TeamColor}Echipa {TeamName} &aa castigat!");
         yml.addDefault(Messages.FORMATTING_TEAM_WINNER_FORMAT, "      {TeamColor}{TeamName} &7- {members}");
         yml.addDefault(Messages.FORMATTING_SOLO_WINNER_FORMAT, "                 {TeamColor}{TeamName} &7- {members}");
         yml.addDefault(Messages.MEANING_NOBODY, "Nimeni");
@@ -118,10 +118,10 @@ public class Romanian {
         yml.addDefault(Messages.FORMATTING_GENERATOR_TIER2, "II");
         yml.addDefault(Messages.FORMATTING_GENERATOR_TIER3, "III");
         yml.addDefault(Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT, "{prefix}&eGeneratoarele de {generatorType} &eau fost upgradate la nivelul &c{tier}");
-        yml.addDefault(Messages.UPGRADES_TEAM_NPC_NAME, "&e&lTEAM,&E&LUPGRADES");
-        yml.addDefault(Messages.UPGRADES_SOLO_NPC_NAME, "&e&lSOLO,&E&LUPGRADES");
-        yml.addDefault(Messages.SHOP_TEAM_NAME, "&e&lMAGAZIN");
-        yml.addDefault(Messages.SHOP_SOLO_NAME, "&e&lMAGAZINP");
+        yml.addDefault(Messages.NPC_NAME_TEAM_UPGRADES, "&e&lTEAM,&E&LUPGRADES");
+        yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&e&lSOLO,&E&LUPGRADES");
+        yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&e&lMAGAZIN");
+        yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&e&lMAGAZINP");
         yml.addDefault(Messages.SHOP_PATH + "name", "&7Magazin Obiecte");
 
         lbj.saveShopStuff("invContents.armor", "&aArmura", Arrays.asList("&7Disponibil:", "&7▪ Cizme De Zale", "&7▪ Pantaloni De Zale", "&7▪ Cizme De Fier", "&7▪ Pantaloni De Fier", "&7▪ Cizme De Diamant", "&7▪ Pantaloni De Diamant", "", "&eClick pentru a rasfoi!"));
@@ -179,16 +179,18 @@ public class Romanian {
         lbj.saveShopStuff("invContents.utility.invContents.bucket", "&aGaleata Cu Apa", Arrays.asList("&8Obiecte:", "&8▪ &7Galeata Cu Apa", "", "&8Pret: &2{cost} {currency}"));
         lbj.saveShopStuff("invContents.utility.invContents.eggBridge", "&aCreator De Pod", Arrays.asList("&8Obiecte:", "&8▪ &7Creator De Pod", "", "&8Pret: &2{cost} {currency}", "&7Acest ou creeaza un pod", "&7in directia in care este lansat."));
         lbj.saveShopStuff("invContents.utility.invContents.back", "&aInapoi", Collections.singletonList(""));
-        yml.addDefault("meaning.iron", "Fier");
-        yml.addDefault("meaning.gold", "Aur");
-        yml.addDefault("meaning.emerald", "Emerald");
-        yml.addDefault("meaning.diamond", "Diamant");
-        yml.addDefault("meaning.vault", "$");
-        yml.addDefault(Messages.PLURAL_PATH + ".iron", "Fier");
-        yml.addDefault(Messages.PLURAL_PATH + ".gold", "Aur");
-        yml.addDefault(Messages.PLURAL_PATH + ".emerald", "Emeralde");
-        yml.addDefault(Messages.PLURAL_PATH + ".diamond", "Diamante");
-        yml.addDefault(Messages.PLURAL_PATH + ".vault", "Bani");
+
+        yml.addDefault(Messages.MEANING_IRON_SINGULAR, "Fier");
+        yml.addDefault(Messages.MEANING_IRON_PLURAL, "Fier");
+        yml.addDefault(Messages.MEANING_GOLD_SINGULAR, "Aur");
+        yml.addDefault(Messages.MEANING_GOLD_PLURAL, "Aur");
+        yml.addDefault(Messages.MEANING_EMERALD_SINGULAR, "Emerald");
+        yml.addDefault(Messages.MEANING_EMERALD_PLURAL, "Emeralde");
+        yml.addDefault(Messages.MEANING_DIAMOND_SINGULAR, "Diamant");
+        yml.addDefault(Messages.MEANING_DIAMOND_PLURAL, "Diamante");
+        yml.addDefault(Messages.MEANING_VAULT_SINGULAR, "$");
+        yml.addDefault(Messages.MEANING_VAULT_PLURAL, "$");
+
         yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "{prefix}&cNu ai destul(e) {currency}! Mai ai nevoie de {amount}!");
         yml.addDefault(Messages.SHOP_NEW_PURCHASE, "{prefix}&aAi cumparat &6{item}");
         yml.addDefault(Messages.COMMAND_JOIN_USAGE, "§a▪ §7Folosire: /" + mainCmd + " join §o<arena/group>");
@@ -215,10 +217,10 @@ public class Romanian {
         yml.addDefault("upgrades.Default.miningFatigue.tier1.lore", Arrays.asList("&7Urmatorul inamic care va intra in", "&7baza ta va primi efectul de Oboseala", "&7pentru 10 secunde!", "", "&7Pret:&b {cost} {currency}", "", "{loreFooter}"));
         yml.addDefault("upgrades.Default.healPool.tier1.name", "&eHeal Pool");
         yml.addDefault("upgrades.Default.healPool.tier1.lore", Arrays.asList("&7Creeaza un camp de Regenerare", "&7a vietii in baza ta!", "", "&7Pret:&b {cost} {currency}", "", "{loreFooter}"));
-        yml.addDefault(Messages.ARENA_ENEMY_BASE_ENTER_ACTION, "&cCAPCANA ACTIVATA!");
-        yml.addDefault(Messages.ARENA_ENEMY_BASE_ENTER_CHAT, "{prefix}&cCAPCANA ACTIVATA!");
-        yml.addDefault(Messages.ARENA_ENEMY_BASE_ENTER_SUBTITLE, "&fCapcana dvs. a fost pornita!");
-        yml.addDefault(Messages.ARENA_ENEMY_BASE_ENTER_TITLE, "&cCAPCANA ACTIVATA!");
+        yml.addDefault(Messages.TRAP_ENEMY_BASE_ENTER_ACTION, "&cCAPCANA ACTIVATA!");
+        yml.addDefault(Messages.TRAP_ENEMY_BASE_ENTER_CHAT, "{prefix}&cCAPCANA ACTIVATA!");
+        yml.addDefault(Messages.TRAP_ENEMY_BASE_ENTER_SUBTITLE, "&fCapcana dvs. a fost pornita!");
+        yml.addDefault(Messages.TRAP_ENEMY_BASE_ENTER_TITLE, "&cCAPCANA ACTIVATA!");
         yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a{player} a cumparat &6{upgradeName}");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "{TeamColor}&lSobolan {TeamName}");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME, "{TeamColor}{despawn} &8[ {TeamColor}{health}&8]");
@@ -245,12 +247,12 @@ public class Romanian {
         lbj.addDefaultStatsMsg(yml, "losses", "&6Pierderi", "&f{losses}");
         lbj.addDefaultStatsMsg(yml, "kills", "&6Ucideri", "&f{kills}");
         lbj.addDefaultStatsMsg(yml, "deaths", "&6Decese", "&f{deaths}");
-        lbj.addDefaultStatsMsg(yml, "finalKills", "&6Ucideri Finale", "&f{finalKills}");
-        lbj.addDefaultStatsMsg(yml, "finalDeaths", "&6Decese Finale", "&f{finalDeaths}");
-        lbj.addDefaultStatsMsg(yml, "bedsDestroyed", "&6Paturi Distruse", "&f{bedsDestroyed}");
-        lbj.addDefaultStatsMsg(yml, "firstPlay", "&6Primul Meci", "&f{firstPlay}");
-        lbj.addDefaultStatsMsg(yml, "lastPlay", "&6Ultimul Meci", "&f{lastPlay}");
-        lbj.addDefaultStatsMsg(yml, "gamesPlayed", "&6Partide Jucate", "&f{gamesPlayed}");
+        lbj.addDefaultStatsMsg(yml, "final-kills", "&6Ucideri Finale", "&f{finalKills}");
+        lbj.addDefaultStatsMsg(yml, "final-deaths", "&6Decese Finale", "&f{finalDeaths}");
+        lbj.addDefaultStatsMsg(yml, "beds-destroyed", "&6Paturi Distruse", "&f{bedsDestroyed}");
+        lbj.addDefaultStatsMsg(yml, "first-play", "&6Primul Meci", "&f{firstPlay}");
+        lbj.addDefaultStatsMsg(yml, "last-play", "&6Ultimul Meci", "&f{lastPlay}");
+        lbj.addDefaultStatsMsg(yml, "games-played", "&6Partide Jucate", "&f{gamesPlayed}");
         yml.addDefault(Messages.FORMATTING_STATS_DATE_FORMAT, "yyyy/MM/dd HH:mm");
 
         yml.addDefault(Messages.MEANING_NEVER, "Niciodata");
@@ -297,7 +299,7 @@ public class Romanian {
         yml.addDefault(Messages.COMMAND_FORCESTART_NOT_IN_GAME, "§c▪ §7Nu esti in joc!");
         yml.addDefault(Messages.COMMAND_FORCESTART_SUCCESS, "§c▪ §7Numaratoarea a fost redusa!");
         yml.addDefault(Messages.COMMAND_FORCESTART_NO_PERM, "{prefix}&7Nu poti forta arena sa inceapa.\n§7Ai putea lua in considerare donarea pentru mai multe facilitati.");
-        yml.addDefault(Messages.ARENA_JOIN_SPECTATOR_MSG, "{prefix}§6Acum urmaresti meciul din §9{arena}§6.\n{prefix}§ePoti parasi arena folosind §c/leave§e.");
+        yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_MSG, "{prefix}§6Acum urmaresti meciul din §9{arena}§6.\n{prefix}§ePoti parasi arena folosind §c/leave§e.");
         yml.addDefault(Messages.INTERACT_CHEST_CANT_OPEN_TEAM_ELIMINATED, "&cNu poti deschide acest cufar pentru ca echipa a fost eliminata!");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_NAME, "&8Teleportor");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME, "{prefix}{player}");
@@ -310,7 +312,7 @@ public class Romanian {
         yml.addDefault(Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE, "");
         yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "{prefix}&cAi cumparat deja asta!");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE, "{prefix}&7{player} &eeste offline!");
-        yml.addDefault(Messages.ARENA_JOIN_SPECTATOR_DENIED_MSG, "&cSpectatorii nu sunt permisi in aceasta arena!");
+        yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG, "&cSpectatorii nu sunt permisi in aceasta arena!");
         yml.addDefault(Messages.ARENA_LEAVE_PARTY_DISBANDED, "{prefix}§cParty-ul a fost sters pentru ca detinatorul a iesit!");
 
         /* Lobby Command Obiecte */
@@ -345,9 +347,9 @@ public class Romanian {
             yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", "leave"), Arrays.asList("&fClick-dreapta pentru a", "&fparasi arena!"));
         }
         yml.addDefault(Messages.COMMAND_COOLDOWN, "&cNu poti face asta inca! Mai asteapta {seconds} secunde!");
-        yml.addDefault(Messages.PLACEHOLDER_PLAYER_TEAM_TEAM, "{TeamColor}[{TeamName}]");
-        yml.addDefault(Messages.PLACEHOLDER_PLAYER_TEAM_SHOUT, "&6[STRIGAT]");
-        yml.addDefault(Messages.PLACEHOLDER_PLAYER_TEAM_SPECTATOR, "&7[SPECTATOR]");
+        yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_TEAM, "{TeamColor}[{TeamName}]");
+        yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_SHOUT, "&6[STRIGAT]");
+        yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_SPECTATOR, "&7[SPECTATOR]");
         yml.addDefault(Messages.ARENA_JOIN_DENIED_SELECTOR, "{prefix}&cNe pare rau dar nu poti intra chiar acum. Foloseste Click-Dreapta pentru a urmari!");
         yml.addDefault(Messages.ARENA_SPECTATE_DENIED_SELECTOR, "{prefix}&cNe pare rau dar nu poti urmari arena chiar acum. Foloseste Click-Dreapta pentru a juca!");
 

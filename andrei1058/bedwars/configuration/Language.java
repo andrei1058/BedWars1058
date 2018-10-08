@@ -177,18 +177,18 @@ public class Language {
     public static void setupCustomStatsMessages() {
         for (Language l : getLanguages()) {
             /* save messages for stats gui items if custom items added */
-            for (String item : Main.config.getYml().getConfigurationSection("statsGUI").getKeys(false)) {
-                if (item.equalsIgnoreCase("invSize")) continue;
-                l.yml.addDefault(Messages.PLAYER_STATS_GUI_PATH + "." + item + ".name", "Name not set");
-                l.yml.addDefault(Messages.PLAYER_STATS_GUI_PATH + "." + item + ".lore", Collections.singletonList("lore not set"));
+            for (String item : Main.config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_STATS_PATH).getKeys(false)) {
+                if (ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE.contains(item)) continue;
+                l.yml.addDefault(Messages.PLAYER_STATS_GUI_PATH + "-" + item + "-name", "Name not set");
+                l.yml.addDefault(Messages.PLAYER_STATS_GUI_PATH + "-" + item + "-lore", Collections.singletonList("lore not set"));
             }
             l.save();
         }
     }
 
     public void addDefaultStatsMsg(YamlConfiguration yml, String path, String name, String... lore) {
-        yml.addDefault(Messages.PLAYER_STATS_GUI_PATH + "." + path + ".name", name);
-        yml.addDefault(Messages.PLAYER_STATS_GUI_PATH + "." + path + ".lore", lore);
+        yml.addDefault(Messages.PLAYER_STATS_GUI_PATH + "-" + path + "-name", name);
+        yml.addDefault(Messages.PLAYER_STATS_GUI_PATH + "-" + path + "-lore", lore);
     }
 
     /**

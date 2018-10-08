@@ -11,12 +11,10 @@ import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
-import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
 
@@ -32,7 +30,7 @@ public class JoinLeaveTeleport implements Listener {
             Arena a = Arena.getArenas().get(0);
             if (a.getStatus() == GameState.waiting || (a.getStatus() == GameState.starting && a.getStartingTask().getCountdown() > 2)) {
                 if (a.getPlayers().size() >= a.getMaxPlayers() && !Arena.isVip(e.getPlayer())) {
-                    e.setKickMessage(getMsg(e.getPlayer(), Messages.ARENA_JOIN_DENIED_IS_FULL));
+                    e.setKickMessage(getMsg(e.getPlayer(), Messages.COMMAND_JOIN_DENIED_IS_FULL));
                     e.setResult(PlayerLoginEvent.Result.KICK_FULL);
                     return;
                 } else if (a.getPlayers().size() >= a.getMaxPlayers() && Arena.isVip(e.getPlayer())) {
@@ -46,7 +44,7 @@ public class JoinLeaveTeleport implements Listener {
                         }
                     }
                     if (!canJoin) {
-                        e.setKickMessage(getMsg(e.getPlayer(), Messages.ARENA_JOIN_DENIED_IS_FULL_VIP_REQUIRED));
+                        e.setKickMessage(getMsg(e.getPlayer(), Messages.COMMAND_JOIN_DENIED_IS_FULL_OF_VIPS));
                         e.setResult(PlayerLoginEvent.Result.KICK_FULL);
                         return;
                     }

@@ -250,31 +250,6 @@ public class Misc {
     }
 
     /**
-     * unknown die reason or unknown killer message
-     */
-    public static void unknownReason(BedWarsTeam t, Arena a, Player victim) {
-        if (t.isBedDestroyed()) {
-            for (Player on : a.getPlayers()) {
-                on.sendMessage(getMsg(on, Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString())
-                        .replace("{PlayerName}", victim.getName()));
-            }
-            for (Player on : a.getSpectators()) {
-                on.sendMessage(getMsg(on, Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString())
-                        .replace("{PlayerName}", victim.getName()));
-            }
-        } else {
-            for (Player on : a.getPlayers()) {
-                on.sendMessage(getMsg(on, Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString())
-                        .replace("{PlayerName}", victim.getName()));
-            }
-            for (Player on : a.getSpectators()) {
-                on.sendMessage(getMsg(on, Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString())
-                        .replace("{PlayerName}", victim.getName()));
-            }
-        }
-    }
-
-    /**
      * create TextComponent message
      */
     public static TextComponent msgHoverClick(String msg, String hover, String click, ClickEvent.Action clickAction) {
@@ -288,9 +263,9 @@ public class Misc {
      * add default stats gui item
      */
     public static void addDefaultStatsItem(YamlConfiguration yml, int slot, Material itemstack, int data, String path) {
-        yml.addDefault("statsGUI." + path + ".itemStack", itemstack.toString());
-        yml.addDefault("statsGUI." + path + ".data", data);
-        yml.addDefault("statsGUI." + path + ".slot", slot);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_MATERIAL.replace("%path%", path), itemstack.toString());
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_DATA.replace("%path%", path), data);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_SLOT.replace("%path%", path), slot);
     }
 
     /**
@@ -307,25 +282,25 @@ public class Misc {
         String timeFormat = getMsg(p, Messages.FORMATTING_STATS_DATE_FORMAT), never = getMsg(p, Messages.MEANING_NEVER);
 
         /** create inventory */
-        Inventory inv = Bukkit.createInventory(null, config.getInt("statsGUI.invSize"), replaceStatsPlaceholders(p, getMsg(p, Messages.PLAYER_STATS_GUI_INV_NAME),
+        Inventory inv = Bukkit.createInventory(null, config.getInt(ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE), replaceStatsPlaceholders(p, getMsg(p, Messages.PLAYER_STATS_GUI_INV_NAME),
                 kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never, true));
 
         /** add custom items to gui */
-        for (String s : config.getYml().getConfigurationSection("statsGUI").getKeys(false)) {
+        for (String s : config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_STATS_PATH).getKeys(false)) {
             /** skip inv size, it isn't a content */
-            if (s.equalsIgnoreCase("invSize")) continue;
+            if (ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE.contains(s)) continue;
             /** create new itemStack for content */
-            ItemStack i = new ItemStack(Material.valueOf(config.getYml().getString("statsGUI." + s + ".itemStack").toUpperCase()), 1, (byte) config.getInt("statsGUI." + s + ".data"));
+            ItemStack i = nms.createItemStack(config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_MATERIAL.replace("%path%", s)).toUpperCase(), 1, (short) config.getInt(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_DATA.replace("%path%", s)));
             ItemMeta im = i.getItemMeta();
-            im.setDisplayName(replaceStatsPlaceholders(p, getMsg(p, Messages.PLAYER_STATS_GUI_PATH + "." + s + ".name"), kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed,
+            im.setDisplayName(replaceStatsPlaceholders(p, getMsg(p, Messages.PLAYER_STATS_GUI_PATH + "-" + s + "-name"), kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed,
                     firstPlay, lastPlay, timeFormat, p.getName(), never, true));
             List<String> lore = new ArrayList<>();
-            for (String string : getList(p, Messages.PLAYER_STATS_GUI_PATH + "." + s + ".lore")) {
+            for (String string : getList(p, Messages.PLAYER_STATS_GUI_PATH + "-" + s + "-lore")) {
                 lore.add(replaceStatsPlaceholders(p, string, kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never, true));
             }
             im.setLore(lore);
             i.setItemMeta(im);
-            inv.setItem(config.getInt("statsGUI." + s + ".slot"), i);
+            inv.setItem(config.getInt(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_SLOT.replace("%path%", s)), i);
         }
 
         p.openInventory(inv);

@@ -112,16 +112,16 @@ public class BaseListener implements Listener {
                 team.disableTrap();
                 for (Player mem : team.getMembers()) {
                     if (team.isTrapTitle()) {
-                        nms.sendTitle(mem, getMsg(mem, Messages.ARENA_ENEMY_BASE_ENTER_TITLE), null, 0, 50, 0);
+                        nms.sendTitle(mem, getMsg(mem, Messages.TRAP_ENEMY_BASE_ENTER_TITLE), null, 0, 50, 0);
                     }
                     if (team.isTrapSubtitle()) {
-                        nms.sendTitle(mem, null, getMsg(mem, Messages.ARENA_ENEMY_BASE_ENTER_SUBTITLE), 0, 50, 0);
+                        nms.sendTitle(mem, null, getMsg(mem, Messages.TRAP_ENEMY_BASE_ENTER_SUBTITLE), 0, 50, 0);
                     }
                     if (team.isTrapAction()) {
-                        nms.playAction(mem, getMsg(mem, Messages.ARENA_ENEMY_BASE_ENTER_ACTION));
+                        nms.playAction(mem, getMsg(mem, Messages.TRAP_ENEMY_BASE_ENTER_ACTION));
                     }
                     if (team.isTrapChat()) {
-                        mem.sendMessage(getMsg(mem, Messages.ARENA_ENEMY_BASE_ENTER_CHAT));
+                        mem.sendMessage(getMsg(mem, Messages.TRAP_ENEMY_BASE_ENTER_CHAT));
                     }
                 }
             }

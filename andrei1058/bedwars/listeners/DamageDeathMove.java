@@ -342,19 +342,19 @@ public class DamageDeathMove implements Listener {
                                     switch (i.getType()) {
                                         case DIAMOND:
                                             msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_DIAMOND).replace("{meaning}", amount == 1 ?
-                                                    getMsg(killer, "meaning.diamond") : getMsg(killer, Messages.PLURAL_PATH + ".diamond"));
+                                                    getMsg(killer, Messages.MEANING_DIAMOND_SINGULAR) : getMsg(killer, Messages.MEANING_DIAMOND_PLURAL));
                                             break;
                                         case EMERALD:
                                             msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_EMERALD).replace("{meaning}", amount == 1 ?
-                                                    getMsg(killer, "meaning.emerald") : getMsg(killer, Messages.PLURAL_PATH + ".emerald"));
+                                                    getMsg(killer, Messages.MEANING_EMERALD_SINGULAR) : getMsg(killer, Messages.MEANING_EMERALD_PLURAL));
                                             break;
                                         case IRON_INGOT:
                                             msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_IRON).replace("{meaning}", amount == 1 ?
-                                                    getMsg(killer, "meaning.iron") : getMsg(killer, Messages.PLURAL_PATH + ".iron"));
+                                                    getMsg(killer, Messages.MEANING_IRON_SINGULAR) : getMsg(killer, Messages.MEANING_IRON_PLURAL));
                                             break;
                                         case GOLD_INGOT:
                                             msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_GOLD).replace("{meaning}", amount == 1 ?
-                                                    getMsg(killer, "meaning.gold") : getMsg(killer, Messages.PLURAL_PATH + ".gold"));
+                                                    getMsg(killer, Messages.MEANING_GOLD_SINGULAR) : getMsg(killer, Messages.MEANING_GOLD_PLURAL));
                                             break;
                                     }
                                     killer.sendMessage(msg.replace("{amount}", String.valueOf(amount)));

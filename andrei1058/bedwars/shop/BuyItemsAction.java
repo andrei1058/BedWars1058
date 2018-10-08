@@ -78,7 +78,7 @@ public class BuyItemsAction extends ContentAction {
         }
         if (money < getCost()) {
             p.playSound(p.getLocation(), nms.insufficientMoney(), 1f, 1f);
-            p.sendMessage(getMsg(p, Messages.SHOP_INSUFFICIENT_MONEY).replace("{currency}", getMsg(p, "meaning." + getCurrency().toLowerCase())).replace("{amount}", String.valueOf(getCost() - money)));
+            p.sendMessage(getMsg(p, Messages.SHOP_INSUFFICIENT_MONEY).replace("{currency}", getMsg(p, getCurrencyMsg())).replace("{amount}", String.valueOf(getCost() - money)));
             return;
         }
         boolean done = false;
@@ -245,5 +245,29 @@ public class BuyItemsAction extends ContentAction {
 
     public List<ShopItem> getItems() {
         return items;
+    }
+
+    public String getCurrencyMsg() {
+        String c = "";
+
+        switch (currency) {
+            case "iron":
+                c = getCost() == 1 ? Messages.MEANING_IRON_SINGULAR : Messages.MEANING_IRON_PLURAL;
+                break;
+            case "gold":
+                c = getCost() == 1 ? Messages.MEANING_GOLD_SINGULAR : Messages.MEANING_GOLD_PLURAL;
+                break;
+            case "emerald":
+                c = getCost() == 1 ? Messages.MEANING_EMERALD_SINGULAR : Messages.MEANING_EMERALD_PLURAL;
+                break;
+            case "diamond":
+                c = getCost() == 1 ? Messages.MEANING_DIAMOND_SINGULAR : Messages.MEANING_DIAMOND_PLURAL;
+                break;
+            case "vault":
+                c = getCost() == 1 ? Messages.MEANING_VAULT_SINGULAR : Messages.MEANING_VAULT_PLURAL;
+                break;
+        }
+
+        return c;
     }
 }

@@ -422,6 +422,7 @@ public class Dragon extends EntityInsentient implements IComplex, IMonster {
         return (float) MathHelper.g(d0);
     }
 
+    @SuppressWarnings("deprecation")
     private boolean b(AxisAlignedBB axisalignedbb) {
         int i = MathHelper.floor(axisalignedbb.a);
         int j = MathHelper.floor(axisalignedbb.b);

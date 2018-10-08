@@ -206,7 +206,7 @@ public class Main extends JavaPlugin {
                 new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener());
         if (getServerType() == ServerType.BUNGEE) {
             registerEvents(new Ping());
-        } else if (getServerType() == ServerType.MULTIARENA || getServerType() == ServerType.SHARED){
+        } else if (getServerType() == ServerType.MULTIARENA || getServerType() == ServerType.SHARED) {
             registerEvents(new ArenaSelectorListener(), new BlockStatusListener());
         }
 
@@ -249,7 +249,7 @@ public class Main extends JavaPlugin {
                 }
             }
         }
-        if (party == null){
+        if (party == null) {
             party = new com.andrei1058.bedwars.support.party.Internal();
             getLogger().info("Loading internal Party system. /party");
         }
@@ -366,7 +366,8 @@ public class Main extends JavaPlugin {
         /* Close database */
         try {
             database.close();
-        } catch (Exception ex){}
+        } catch (Exception ex) {
+        }
     }
 
     private void setupConfig() {
@@ -384,7 +385,7 @@ public class Main extends JavaPlugin {
         yml.addDefault("debug", false);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD, true);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ALLOW_PARTIES, true);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_REJOIN_TIME, 60*5);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_REJOIN_TIME, 60 * 5);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART, 30);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD, "restart");
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_REGULAR, 40);
@@ -432,18 +433,18 @@ public class Main extends JavaPlugin {
         yml.addDefault("arenaGui.skippedSlot.enchanted", false);
 
         /* default stats GUI items */
-        yml.addDefault("statsGUI.invSize", 27);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE, 27);
         if (config.isFirstTime()) {
             Misc.addDefaultStatsItem(yml, 10, Material.DIAMOND, 0, "wins");
             Misc.addDefaultStatsItem(yml, 11, Material.REDSTONE, 0, "losses");
             Misc.addDefaultStatsItem(yml, 12, Material.IRON_SWORD, 0, "kills");
             Misc.addDefaultStatsItem(yml, 13, Material.valueOf(getForCurrentVersion("SKULL_ITEM", "SKULL_ITEM", "SKELETON_SKULL")), 0, "deaths");
-            Misc.addDefaultStatsItem(yml, 14, Material.DIAMOND_SWORD, 0, "finalKills");
-            Misc.addDefaultStatsItem(yml, 15, Material.valueOf(getForCurrentVersion("SKULL_ITEM", "SKULL_ITEM", "SKELETON_SKULL")), 1, "finalDeaths");
-            Misc.addDefaultStatsItem(yml, 16, Material.valueOf(getForCurrentVersion("BED", "BED", "RED_BED")), 0, "bedsDestroyed");
-            Misc.addDefaultStatsItem(yml, 21, Material.valueOf(getForCurrentVersion("STAINED_GLASS_PANE", "STAINED_GLASS_PANE", "BLACK_STAINED_GLASS_PANE")), 0, "firstPlay");
-            Misc.addDefaultStatsItem(yml, 22, Material.CHEST, 0, "gamesPlayed");
-            Misc.addDefaultStatsItem(yml, 23, Material.valueOf(getForCurrentVersion("STAINED_GLASS_PANE", "STAINED_GLASS_PANE", "BLACK_STAINED_GLASS_PANE")), 0, "lastPlay");
+            Misc.addDefaultStatsItem(yml, 14, Material.DIAMOND_SWORD, 0, "final-kills");
+            Misc.addDefaultStatsItem(yml, 15, Material.valueOf(getForCurrentVersion("SKULL_ITEM", "SKULL_ITEM", "SKELETON_SKULL")), 1, "final-deaths");
+            Misc.addDefaultStatsItem(yml, 16, Material.valueOf(getForCurrentVersion("BED", "BED", "RED_BED")), 0, "beds-destroyed");
+            Misc.addDefaultStatsItem(yml, 21, Material.valueOf(getForCurrentVersion("STAINED_GLASS_PANE", "STAINED_GLASS_PANE", "BLACK_STAINED_GLASS_PANE")), 0, "first-play");
+            Misc.addDefaultStatsItem(yml, 22, Material.CHEST, 0, "games-played");
+            Misc.addDefaultStatsItem(yml, 23, Material.valueOf(getForCurrentVersion("STAINED_GLASS_PANE", "STAINED_GLASS_PANE", "BLACK_STAINED_GLASS_PANE")), 0, "last-play");
         }
 
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + ".Default", Collections.singletonList(getForCurrentVersion("WOOD_SWORD", "WOOD_SWORD", "WOODEN_SWORD")));
@@ -452,9 +453,49 @@ public class Main extends JavaPlugin {
         config.save();
 
         //remove old config
+        //Convert old configuration
+
         if (config.getYml().get("npcLoc") != null) {
             config.set(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE, config.getYml().getString("npcLoc"));
         }
+        if (config.getYml().get("statsGUI.invSize") != null) {
+            config.set(ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE, config.getInt("statsGUI.invSize"));
+        }
+        if (config.getYml().get("statsGUI") != null) {
+            for (String stats_path : config.getYml().getConfigurationSection("statsGUI").getKeys(false)) {
+                String new_path = stats_path;
+                switch (stats_path){
+                    case "gamesPlayed":
+                        new_path = "games-played";
+                        break;
+                    case "lastPlay":
+                        new_path = "last-play";
+                        break;
+                    case "firstPlay":
+                        new_path = "first-play";
+                        break;
+                    case "bedsDestroyed":
+                        new_path = "beds-destroyed";
+                        break;
+                    case "finalDeaths":
+                        new_path = "final-deaths";
+                        break;
+                    case "finalKills":
+                        new_path = "final-kills";
+                        break;
+                }
+                if (config.getYml().get("statsGUI." + stats_path + ".itemStack") != null) {
+                    config.set(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_MATERIAL.replace("%path%", new_path), config.getYml().getString("statsGUI." + stats_path + ".itemStack"));
+                }
+                if (config.getYml().get("statsGUI." + stats_path + ".data") != null) {
+                    config.set(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_DATA.replace("%path%", new_path), config.getYml().getInt("statsGUI." + stats_path + ".data"));
+                }
+                if (config.getYml().get("statsGUI." + stats_path + ".slot") != null) {
+                    config.set(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_SLOT.replace("%path%", new_path), config.getYml().getInt("statsGUI." + stats_path + ".slot"));
+                }
+            }
+        }
+        config.set("statsGUI", null);
         config.set("startItems", null);
         config.set("generators", null);
         config.set("bedsDestroyCountdown", null);
@@ -467,6 +508,8 @@ public class Main extends JavaPlugin {
         config.set("arenaGui.settings.endSlot", null);
         config.set("items", null);
         config.set("start-items-per-arena", null);
+
+        //Finished old configuration conversion
 
         String whatLang = "en";
         for (File f : Objects.requireNonNull(new File("plugins/" + this.getDescription().getName() + "/Languages").listFiles())) {
@@ -604,8 +647,8 @@ public class Main extends JavaPlugin {
     }
 
 
-    public static String getForCurrentVersion(String v18, String v12, String v13){
-        switch (getServerVersion()){
+    public static String getForCurrentVersion(String v18, String v12, String v13) {
+        switch (getServerVersion()) {
             case "v1_12_R1":
                 return v12;
             case "v1_13_R1":

@@ -42,20 +42,20 @@ public class CmdJoin extends SubCommand {
         }
         if (args[0].equalsIgnoreCase("random")){
             if (!Arena.joinRandomArena(p)){
-                s.sendMessage(getMsg(p, Messages.ARENA_JOIN_DENIED_NO_EMPTY_FOUND));
+                s.sendMessage(getMsg(p, Messages.COMMAND_JOIN_NO_EMPTY_FOUND));
             }
             return true;
         }
         if (com.andrei1058.bedwars.commands.bedwars.MainCommand.isArenaGroup(args[0])) {
             if (!Arena.joinRandomFromGroup(p, args[0])) {
-                s.sendMessage(getMsg(p, Messages.ARENA_JOIN_DENIED_NO_EMPTY_FOUND));
+                s.sendMessage(getMsg(p, Messages.COMMAND_JOIN_NO_EMPTY_FOUND));
             }
             return true;
         } else if (Arena.getArenaByName(args[0]) != null) {
             Arena.getArenaByName(args[0]).addPlayer(p, false);
             return true;
         }
-        s.sendMessage(getMsg(p, Messages.ARENA_JOIN_DENIED_GROUP_OR_ARENA_NOT_FOUND).replace("{name}", args[0]));
+        s.sendMessage(getMsg(p, Messages.COMMAND_JOIN_GROUP_OR_ARENA_NOT_FOUND).replace("{name}", args[0]));
         return true;
     }
 

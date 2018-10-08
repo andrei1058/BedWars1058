@@ -83,18 +83,18 @@ public class PAPISupport extends PlaceholderExpansion {
                 Arena a = Arena.getArenaByPlayer(p);
                 if (a != null) {
                     if (ShoutCommand.isShout(p)) {
-                        replay += Language.getMsg(p, Messages.PLACEHOLDER_PLAYER_TEAM_SHOUT);
+                        replay += Language.getMsg(p, Messages.FORMAT_PAPI_PLAYER_TEAM_SHOUT);
                     }
                     if (a.isPlayer(p)) {
                         if (a.getStatus() == GameState.playing) {
                             BedWarsTeam bwt = a.getTeam(p);
                             if (bwt != null) {
-                                replay += Language.getMsg(p, Messages.PLACEHOLDER_PLAYER_TEAM_TEAM).replace("{TeamName}",
+                                replay += Language.getMsg(p, Messages.FORMAT_PAPI_PLAYER_TEAM_TEAM).replace("{TeamName}",
                                         bwt.getName().replace("{TeamColor}", String.valueOf(TeamColor.getChatColor(bwt.getColor()))));
                             }
                         }
                     } else {
-                        replay += Language.getMsg(p, Messages.PLACEHOLDER_PLAYER_TEAM_SPECTATOR);
+                        replay += Language.getMsg(p, Messages.FORMAT_PAPI_PLAYER_TEAM_SPECTATOR);
                     }
                 }
                 break;
