@@ -91,6 +91,14 @@ public class ConfigPath {
     public static final String CENERAL_CONFIGURATION_ALLOWED_COMMANDS = "allowed-commands";
     public static final String GENERAL_CONFIGURATION_LOBBY_SCOREBOARD = "lobby-scoreboard";
 
+    public static final String GENERAL_CONFIGURATION_ARENA_SELECTOR_PATH = "arena-gui";
+    public static final String GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SIZE = GENERAL_CONFIGURATION_ARENA_SELECTOR_PATH + ".settings.inv-size";
+    public static final String GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SHOW_PLAYING = GENERAL_CONFIGURATION_ARENA_SELECTOR_PATH + ".settings.show-playing";
+    public static final String GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_USE_SLOTS = GENERAL_CONFIGURATION_ARENA_SELECTOR_PATH + ".settings.use-slots";
+    public static final String GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL = GENERAL_CONFIGURATION_ARENA_SELECTOR_PATH + ".%path%.material";
+    public static final String GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA = GENERAL_CONFIGURATION_ARENA_SELECTOR_PATH + ".%path%.data";
+    public static final String GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_ENCHANTED = GENERAL_CONFIGURATION_ARENA_SELECTOR_PATH + ".%path%.enchanted";
+
 
     public static final String ARENA_CONFIGURATION_MAX_BUILD_Y = "max-build-y";
     public static final String ARENA_SPAWN_PROTECTION = "spawn-protection";

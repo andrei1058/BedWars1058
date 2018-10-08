@@ -416,21 +416,21 @@ public class Main extends JavaPlugin {
         config.saveSpectatorCommandItem("teleporter", "bw teleporter", false, getForCurrentVersion("SKULL_ITEM", "SKULL_ITEM", "PLAYER_HEAD"), 3, 0);
         config.saveSpectatorCommandItem("leave", "bw leave", false, getForCurrentVersion("BED", "BED", "RED_BED"), 0, 8);
 
-        yml.addDefault("arenaGui.settings.size", 27);
-        yml.addDefault("arenaGui.settings.showPlaying", true);
-        yml.addDefault("arenaGui.settings.useSlots", "10,11,12,13,14,15,16");
-        yml.addDefault("arenaGui.waiting.itemStack", getForCurrentVersion("STAINED_GLASS_PANE", "CONCRETE", "LIME_CONCRETE"));
-        yml.addDefault("arenaGui.waiting.data", 5);
-        yml.addDefault("arenaGui.waiting.enchanted", false);
-        yml.addDefault("arenaGui.starting.itemStack", getForCurrentVersion("STAINED_GLASS_PANE", "CONCRETE", "YELLOW_CONCRETE"));
-        yml.addDefault("arenaGui.starting.data", 4);
-        yml.addDefault("arenaGui.starting.enchanted", true);
-        yml.addDefault("arenaGui.playing.itemStack", getForCurrentVersion("STAINED_GLASS_PANE", "CONCRETE", "RED_CONCRETE"));
-        yml.addDefault("arenaGui.playing.data", 14);
-        yml.addDefault("arenaGui.playing.enchanted", false);
-        yml.addDefault("arenaGui.skippedSlot.itemStack", getForCurrentVersion("STAINED_GLASS_PANE", "STAINED_GLASS_PANE", "BLACK_STAINED_GLASS_PANE"));
-        yml.addDefault("arenaGui.skippedSlot.data", 15);
-        yml.addDefault("arenaGui.skippedSlot.enchanted", false);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SIZE, 27);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SHOW_PLAYING, true);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_USE_SLOTS, "10,11,12,13,14,15,16");
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", "waiting"), getForCurrentVersion("STAINED_GLASS_PANE", "CONCRETE", "LIME_CONCRETE"));
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA.replace("%path%", "waiting"), 5);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_ENCHANTED.replace("%path%", "waiting"), false);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", "starting"), getForCurrentVersion("STAINED_GLASS_PANE", "CONCRETE", "YELLOW_CONCRETE"));
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA.replace("%path%", "starting"), 4);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_ENCHANTED.replace("%path%", "starting"), true);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", "playing"), getForCurrentVersion("STAINED_GLASS_PANE", "CONCRETE", "RED_CONCRETE"));
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA.replace("%path%", "playing"), 14);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_ENCHANTED.replace("%path%", "playing"), false);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", "skipped-slot"), getForCurrentVersion("STAINED_GLASS_PANE", "STAINED_GLASS_PANE", "BLACK_STAINED_GLASS_PANE"));
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA.replace("%path%", "skipped-slot"), 15);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_ENCHANTED.replace("%path%", "skipped-slot"), false);
 
         /* default stats GUI items */
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE, 27);
@@ -454,6 +454,38 @@ public class Main extends JavaPlugin {
 
         //remove old config
         //Convert old configuration
+
+        if (yml.get("arenaGui.settings.showPlaying") != null){
+            config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SHOW_PLAYING, yml.getBoolean("arenaGui.settings.showPlaying"));
+        }
+        if (yml.get("arenaGui.settings.size") != null){
+            config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SIZE, yml.getInt("arenaGui.settings.size"));
+        }
+        if (yml.get("arenaGui.settings.useSlots") != null){
+            config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_USE_SLOTS, yml.getString("arenaGui.settings.useSlots"));
+        }
+        if (config.getYml().get("arenaGui") != null) {
+            for (String path : config.getYml().getConfigurationSection("arenaGui").getKeys(false)) {
+                if (path.equalsIgnoreCase("settings")) continue;
+                String new_path = path;
+                switch (path){
+                    case "skippedSlot":
+                        new_path = "skipped-slot";
+                        break;
+                }
+                if (config.getYml().get("arenaGui." + path + ".itemStack") != null) {
+                    config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", new_path), config.getYml().getString("arenaGui." + path + ".itemStack"));
+                }
+                if (config.getYml().get("arenaGui." + path + ".data") != null) {
+                    config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA.replace("%path%", new_path), config.getYml().getInt("arenaGui." + path + ".data"));
+                }
+                if (config.getYml().get("arenaGui." + path + ".enchanted") != null) {
+                    config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_ENCHANTED.replace("%path%", new_path), config.getYml().getBoolean("arenaGui." + path + ".enchanted"));
+                }
+            }
+        }
+
+        config.set("arenaGui", null);
 
         if (config.getYml().get("npcLoc") != null) {
             config.set(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE, config.getYml().getString("npcLoc"));
@@ -495,6 +527,7 @@ public class Main extends JavaPlugin {
                 }
             }
         }
+
         config.set("statsGUI", null);
         config.set("startItems", null);
         config.set("generators", null);
@@ -508,6 +541,7 @@ public class Main extends JavaPlugin {
         config.set("arenaGui.settings.endSlot", null);
         config.set("items", null);
         config.set("start-items-per-arena", null);
+        config.set("safeMode", null);
 
         //Finished old configuration conversion
 

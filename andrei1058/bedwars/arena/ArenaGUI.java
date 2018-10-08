@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
+import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Messages;
 import com.andrei1058.bedwars.listeners.arenaselector.ArenaSelectorListener;
 import org.bukkit.Bukkit;
@@ -25,7 +26,6 @@ import static com.andrei1058.bedwars.configuration.Language.getMsg;
 public class ArenaGUI {
 
     private static HashMap<Player, Inventory> refresh = new HashMap<>();
-    private static boolean showPlaying = config.getYml().getBoolean("arenaGui.settings.showPlaying");
     private static YamlConfiguration yml = config.getYml();
 
     public static void refreshInv(Player p, Inventory inv) {
@@ -61,7 +61,7 @@ public class ArenaGUI {
         }).collect(Collectors.toList());
 
         int arenaKey = 0;
-        for (String useSlot : config.getString("arenaGui.settings.useSlots").split(",")) {
+        for (String useSlot : config.getString(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_USE_SLOTS).split(",")) {
             int slot;
             try {
                 slot = Integer.parseInt(useSlot);
@@ -85,7 +85,7 @@ public class ArenaGUI {
                     }
                     break;
                 case playing:
-                    if (!showPlaying) continue;
+                    if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SHOW_PLAYING)) continue;
                     i = nms.createItemStack(yml.getString("arenaGui.playing.itemStack"), 1, (short) yml.getInt("arenaGui.playing.data"));
                     if (yml.getBoolean("arenaGui.playing.enchanted")) {
                         ItemMeta im = i.getItemMeta();
@@ -125,7 +125,7 @@ public class ArenaGUI {
     }
 
     public static void openGui(Player p) {
-        int size = config.getYml().getInt("arenaGui.settings.size");
+        int size = config.getYml().getInt(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SIZE);
         if (size % 9 != 0) size = 27;
         if (size > 54) size = 54;
         Inventory inv = Bukkit.createInventory(p, size, getMsg(p, Messages.ARENA_GUI_INV_NAME));
