@@ -16,7 +16,7 @@ public class Spanish {
     public Spanish(Language lbj, YamlConfiguration yml){
         yml.options().header("Translation by JuliCarles#1783");
         yml.addDefault(Messages.PREFIX, "");
-        yml.addDefault("name", "English");
+        yml.addDefault("name", "Espanol");
         yml.addDefault(Messages.COMMAND_MAIN, Arrays.asList("", "&2▪ &7/" + mainCmd + " stats", "&2▪ &7/" + mainCmd + " join &o<arena/grupo>", "&2▪ &7/" + mainCmd + " leave", "&2▪ &7/" + mainCmd + " lang", "&2▪ &7/" + mainCmd + " gui", "&2▪ &7/" + mainCmd + " start &3(vip)"));
         yml.addDefault(Messages.ARENA_JOIN_VIP_KICK, "{prefix}&cHas sido expulsado ya que un VIP se unio a la partida.\n&aConsidera donar a nuestro servidor. &7&o(click)");
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_IS_FULL, "{prefix}&cThis arena is full!\n&aPlease consider donating for more features. &7&o(click)");
@@ -136,7 +136,7 @@ public class Spanish {
         lbj.saveShopStuff("invContents.ranged", "&aArqueria", Arrays.asList("&7Disponible:", "&7▪ Flecha", "&7▪ Arco", "&7▪ Arco (Poder I)", "&7▪ Arco (Poder I, Empuje I)", "", "&eClick para buscar!"));
         lbj.saveShopStuff("invContents.tools", "&aHerramientas", Arrays.asList("&7Disponible:", "&7▪ Tijeras permanentes", "&7▪ Pico de Madera (Effeciencia I)", "&7▪ Hacha de Madera (Eficiencia I)", "", "&eClick para buscar!"));
         lbj.saveShopStuff("invContents.potions", "&aPociones", Arrays.asList("&7Disponible:", "&7▪ Velocidad II", "&7▪ Salto V", "&7▪ Invisibilidad", "", "&eClick para buscar!"));
-        lbj.saveShopStuff("invContents.utility", "&aUtilidades", Arrays.asList("&7Disponible:", "&7▪ Manzana Dorada", "&7▪ BedBug", "&7▪ Dream Defender", "&7▪ Bola de Fuego", "&7▪ TNT", "&7▪ Ender Pearl", "&7▪ Cubo de Agua", "&7▪ Bridge Egg", "", "&eClick para buscar!"));
+        lbj.saveShopStuff("invContents.utility", "&aUtilidades", Arrays.asList("&7Disponible:", "&7▪ Manzana Dorada", "&7▪ BedBug", "&7▪ Defensor de sueños", "&7▪ Bola de Fuego", "&7▪ TNT", "&7▪ Ender Pearl", "&7▪ Cubo de Agua", "&7▪ Bridge Egg", "", "&eClick para buscar!"));
         //lbj.saveShopStuff("invContents.favourites", "&aFavourites", Arrays.asList("&7Click to view your", "&7favourite items. You can", "&7set a favourite item by", "&7shift clicking on any shop item!"));
         //lbj.saveShopStuff("invContents.recommended", "&aRecommended Items", Arrays.asList("&7Original", "&7Click to view some", "&7recommended items for early", "&7to late game!", "", "&eClick para buscar!"));
 
@@ -153,7 +153,7 @@ public class Spanish {
 
         lbj.saveShopStuff("invContents.blocks.invContents.wool", "&aLana", Arrays.asList("&8Objetos:", "&8▪ &7Lana", "", "&8Precio: &f{cost} {currency}", "", "&eClick para comprar!"));
         lbj.saveShopStuff("invContents.blocks.invContents.clay", "&aArcilla", Arrays.asList("&8Objetos:", "&8▪ &7Arcilla", "", "&8Precio: &f{cost} {currency}", "", "&eClick para comprar!"));
-        lbj.saveShopStuff("invContents.blocks.invContents.glass", "&aVidrio a prueba de explosiones", Arrays.asList("&8Objetos:", "&8▪ &7Vidrio a prueba de explosiones", "", "&8Precio: &f{cost} {currency}", "", "&7Immune to explosions", "", "&eClick para comprar!"));
+        lbj.saveShopStuff("invContents.blocks.invContents.glass", "&aVidrio a prueba de explosiones", Arrays.asList("&8Objetos:", "&8▪ &7Vidrio a prueba de explosiones", "", "&8Precio: &f{cost} {currency}", "", "&7Inmune a explosiones", "", "&eClick para comprar!"));
         lbj.saveShopStuff("invContents.blocks.invContents.stone", "&aPiedra del End", Arrays.asList("&8Objetos:", "&8▪ &7Piedra del End", "", "&8Precio: &f{cost} {currency}", "", "&eClick para comprar!"));
         lbj.saveShopStuff("invContents.blocks.invContents.ladder", "&aEscalera", Arrays.asList("&8Objetos:", "&8▪ &7Escalera", "", "&8Precio: &f{cost} {currency}", "", "&eClick para comprar!"));
         lbj.saveShopStuff("invContents.blocks.invContents.wood", "&aMadera", Arrays.asList("&8Objetos:", "&8▪ &7Madera", "", "&8Precio: &6{cost} {currency}", "", "&eClick para comprar!"));
@@ -166,9 +166,9 @@ public class Spanish {
         lbj.saveShopStuff("invContents.ranged.invContents.bow3", "&aArco (Poder I, Empuje I)", Arrays.asList("&8Objetos:", "&8▪ &7Arco (Poder I, Empuje I)", "", "&8Precio: &2{cost} {currency}"));
         lbj.saveShopStuff("invContents.ranged.invContents.back", "&aIr Atrás", Collections.singletonList(""));
 
-        lbj.saveShopStuff("invContents.tools.invContents.shears", "&aPermanent Tijeras permanentes", Arrays.asList("&8Objetos:", "&8▪ &7Permanent Tijeras permanentes", "", "&8Precio: &f{cost} {currency}"));
-        lbj.saveShopStuff("invContents.tools.invContents.pick", "&aWooden Pickaxe", Arrays.asList("&8Objetos:", "&8▪ &7Wooden Pickaxe", "", "&8Precio: &f{cost} {currency}"));
-        lbj.saveShopStuff("invContents.tools.invContents.axe", "&aWooden Axe", Arrays.asList("&8Objetos:", "&8▪ &7Wooden Axe", "", "&8Precio: &f{cost} {currency}"));
+        lbj.saveShopStuff("invContents.tools.invContents.shears", "&aTijeras permanentes", Arrays.asList("&8Objetos:", "&8▪ &7Tijeras permanentes", "", "&8Precio: &f{cost} {currency}"));
+        lbj.saveShopStuff("invContents.tools.invContents.pick", "&aPico de Madera", Arrays.asList("&8Objetos:", "&8▪ &7Pico de Madera", "", "&8Precio: &f{cost} {currency}"));
+        lbj.saveShopStuff("invContents.tools.invContents.axe", "&aHacha de Madera", Arrays.asList("&8Objetos:", "&8▪ &7Hacha de Madera", "", "&8Precio: &f{cost} {currency}"));
         lbj.saveShopStuff("invContents.tools.invContents.back", "&aIr Atrás", Collections.singletonList(""));
 
         lbj.saveShopStuff("invContents.potions.invContents.potion1", "&aVelocidad II", Arrays.asList("&8Objetos:", "&8▪ &7Velocidad II", "", "&8Precio: &2{cost} {currency}"));
@@ -178,7 +178,7 @@ public class Spanish {
 
         lbj.saveShopStuff("invContents.utility.invContents.apple", "&aManzana Dorada", Arrays.asList("&8Objetos:", "&8▪ &7Manzana Dorada", "", "&8Precio: &6{cost} {currency}"));
         lbj.saveShopStuff("invContents.utility.invContents.sball", "&aBedbug", Arrays.asList("&8Objetos:", "&8▪ &7Bedbug", "", "&8Precio: &f{cost} {currency}", "", "&7Moderadamente molestos. Estos", "&7pequeños bichos pueden ser lanzados", "&7para distraer enemigos."));
-        lbj.saveShopStuff("invContents.utility.invContents.monsteregg", "&aDream Defender", Arrays.asList("&8Objetos:", "&8▪ &7Dream Defender", "", "&8Precio: &f{cost} {currency}", "", "&7Moderadamente motivado.", "&7Algunas veces defendera", "&7tú base."));
+        lbj.saveShopStuff("invContents.utility.invContents.monsteregg", "&aDefensor de sueños", Arrays.asList("&8Objetos:", "&8▪ &7Defensor de sueños", "", "&8Precio: &f{cost} {currency}", "", "&7Moderadamente motivado.", "&7Algunas veces defendera", "&7tú base."));
         lbj.saveShopStuff("invContents.utility.invContents.fireball", "&aBola de Fuego", Arrays.asList("&8Objetos:", "&8▪ &7Bola de Fuego", "", "&8Precio: &f{cost} {currency}", "", "&7Click-Derecho para lanzar!"));
         lbj.saveShopStuff("invContents.utility.invContents.tnt", "&aTNT", Arrays.asList("&8Objetos:", "&8▪ &7TNT", "", "&8Precio: &6{cost} {currency}", "", "&7Enciende automáticamente, util", "&7para explotar cosas!"));
         lbj.saveShopStuff("invContents.utility.invContents.enderpearl", "&aEnder Pearl", Arrays.asList("&8Objetos:", "", "&8Ender Pearl", "&8▪ &8Precio: &2{cost} {currency}", "", "&7Útil para evadir o atacar", "&7bases enemigas."));
@@ -231,8 +231,8 @@ public class Spanish {
         yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "{TeamColor}&l{TeamName} &r{TeamColor}Silverfish");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME, "{TeamColor}{despawn}s &8[ {TeamColor}{health}&8]");
         yml.addDefault(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH, "▮ ");
-        yml.addDefault(Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR, "{PlayerColor}{PlayerName} &7murio.");
-        yml.addDefault(Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL, "{PlayerColor}{PlayerName} &7murio. &b&lMUERTE FINAL!");
+        yml.addDefault(Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR, "{PlayerColor}{PlayerName} &7murió.");
+        yml.addDefault(Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL, "{PlayerColor}{PlayerName} &7murió. &b&lMUERTE FINAL!");
         yml.addDefault(Messages.PLAYER_DIE_SHOOT_REGULAR, "{PlayerColor}{PlayerName} &7ha sido disparado por {KillerColor}{KillerName}&7!");
         yml.addDefault(Messages.PLAYER_DIE_SHOOT_FINAL_KILL, "{PlayerColor}{PlayerName} &7ha sido disparado por {KillerColor}{KillerName}&7! &b&lMUERTE FINAL!");
         yml.addDefault(Messages.PLAYER_DIE_DEBUG_REGULAR, "{PlayerColor}{PlayerName} &7&7fue asesinado por la BedBug de {KillerColor}{KillerTeamName}&7.");
@@ -291,7 +291,7 @@ public class Spanish {
         yml.addDefault(Messages.NEXT_EVENT_BEDS_DESTROY, "&cBOOM Camas");
         yml.addDefault(Messages.NEXT_EVENT_DIAMOND_UPGRADE_II, "&fDiamante II");
         yml.addDefault(Messages.NEXT_EVENT_DIAMOND_UPGRADE_III, "&fDiamante III");
-        yml.addDefault(Messages.NEXT_EVENT_DRAGON_SPAWN, "&fMuerte Subita");
+        yml.addDefault(Messages.NEXT_EVENT_DRAGON_SPAWN, "&fMuerte Súbita");
         yml.addDefault(Messages.NEXT_EVENT_EMERALD_UPGRADE_II, "&fEsmeralda II");
         yml.addDefault(Messages.NEXT_EVENT_EMERALD_UPGRADE_III, "&fEsmeralda III");
         yml.addDefault(Messages.NEXT_EVENT_GAME_END, "&4Fin del Juego");
@@ -300,7 +300,7 @@ public class Spanish {
         yml.addDefault(Messages.NEXT_EVENT_CHAT_ANNOUNCE_BEDS_DESTROYED, "&c&Todas las camas fueron destruidas!");
         yml.addDefault(Messages.NEXT_EVENT_TITLE_ANNOUNCE_SUDDEN_DEATH, "&cMuerte súbita");
         yml.addDefault(Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_SUDDEN_DEATH, "");
-        yml.addDefault(Messages.NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH, "&cMUERTE SUBITA: &6&b{TeamDragons} {TeamColor}{TeamName} Dragon!");
+        yml.addDefault(Messages.NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH, "&cMUERTE SÚBITA: &6&b{TeamDragons} {TeamColor}{TeamName} Dragon!");
         yml.addDefault(Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS, "{prefix}&cComando no encontrado o permisos insuficientes!");
         yml.addDefault(Messages.COMMAND_FORCESTART_NOT_IN_GAME, "§c▪ §7No estas jugando!");
         yml.addDefault(Messages.COMMAND_FORCESTART_SUCCESS, "§c▪ §7Cuenta regresiva comenzada!");
@@ -324,33 +324,33 @@ public class Spanish {
         /* Lobby Command Items */
         if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH + ".stats") != null) {
             yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "stats"), "&lEstadistícas");
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "stats"), Collections.singletonList("&fClick-Derecho para ver tus estadisticas!"));
+            yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "stats"), Arrays.asList("&7Utiliza este objeto para", "&7ver tus estadísticas."));
         }
         if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH + ".arena-selector") != null) {
             yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "arena-selector"), "&eJugar");
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "arena-selector"), Collections.singletonList("&fClick-Derecho para jugar una partida!"));
+            yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "arena-selector"), Arrays.asList("&7Utiliza este objeto para", "&7seleccionar tu arena y jugar"));
         }
         if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH + ".leave") != null) {
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "leave"), "&eRegresar al Lobby");
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "leave"), Collections.singletonList("&fClick-Derecho para volver al lobby!"));
+            yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "leave"), "&c&lSalir");
+            yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "leave"), Arrays.asList("&7Utiliza este objeto para", "&7regresar al lobby."));
         }
         /* Pre Game Command Items */
         if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH + ".stats") != null) {
             yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", "stats"), "&lEstadistícas");
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", "stats"), Collections.singletonList("&fClick-Derecho para ver tus estadisticas!"));
+            yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", "stats"), Arrays.asList("&7Utiliza este objeto para", "&7ver tus estadísticas."));
         }
         if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH + ".leave") != null) {
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", "leave"), "&eRegresar al Lobby");
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", "leave"), Collections.singletonList("&fClick-Derecho para volver al lobby!"));
+            yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", "leave"), "&c&lSalir");
+            yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", "leave"), Arrays.asList("&7Utiliza este objeto para", "&7regresar al lobby."));
         }
         /* Spectator Command Items */
         if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH + ".teleporter") != null) {
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", "teleporter"), "&eTeleporter");
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", "teleporter"), Collections.singletonList("&fClick-Derecho para transportarte a un jugador!"));
+            yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", "teleporter"), "&eTeletransportarse");
+            yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", "teleporter"), Arrays.asList("&7Utiliza este objeto para", "&7transportarte a usuarios."));
         }
         if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH + ".leave") != null) {
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", "leave"), "&eRegresar al Lobby");
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", "leave"), Collections.singletonList("&fClick-Derecho para volver al lobby!"));
+            yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", "leave"), "&c&lSalir");
+            yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", "leave"), Arrays.asList("&7Utiliza este objeto para", "&7regresar al lobby."));
         }
         Language.addDefaultMessagesCommandItems(lbj);
 
