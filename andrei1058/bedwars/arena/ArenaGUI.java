@@ -74,38 +74,31 @@ public class ArenaGUI {
                 continue;
             }
 
+            String status;
             switch (arenas.get(arenaKey).getStatus()) {
                 case waiting:
-                    i = nms.createItemStack(yml.getString("arenaGui.waiting.itemStack"), 1, (short) yml.getInt("arenaGui.waiting.data"));
-                    if (yml.getBoolean("arenaGui.waiting.enchanted")) {
-                        ItemMeta im = i.getItemMeta();
-                        im.addEnchant(Enchantment.LURE, 1, true);
-                        im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                        i.setItemMeta(im);
-                    }
+                    status = "waiting";
                     break;
                 case playing:
-                    if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SHOW_PLAYING)) continue;
-                    i = nms.createItemStack(yml.getString("arenaGui.playing.itemStack"), 1, (short) yml.getInt("arenaGui.playing.data"));
-                    if (yml.getBoolean("arenaGui.playing.enchanted")) {
-                        ItemMeta im = i.getItemMeta();
-                        im.addEnchant(Enchantment.LURE, 1, true);
-                        im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                        i.setItemMeta(im);
-                    }
+                    status = "playing";
                     break;
                 case starting:
-                    i = nms.createItemStack(yml.getString("arenaGui.starting.itemStack"), 1, (short) yml.getInt("arenaGui.starting.data"));
-                    if (yml.getBoolean("arenaGui.playing.enchanted")) {
-                        ItemMeta im = i.getItemMeta();
-                        im.addEnchant(Enchantment.LURE, 1, true);
-                        im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                        i.setItemMeta(im);
-                    }
+                    status = "starting";
                     break;
                 default:
                     continue;
             }
+
+            i = nms.createItemStack(yml.getString(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", status)),
+                    1, (short) yml.getInt(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA.replace("%path%", status)));
+            if (yml.getBoolean(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_ENCHANTED.replace("%path%", status))) {
+                ItemMeta im = i.getItemMeta();
+                im.addEnchant(Enchantment.LURE, 1, true);
+                im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                i.setItemMeta(im);
+            }
+
+
             ItemMeta im = i.getItemMeta();
             im.setDisplayName(getMsg(p, Messages.ARENA_GUI_ARENA_CONTENT_NAME).replace("{name}", arenas.get(arenaKey).getDisplayName()));
             List<String> lore = new ArrayList<>();
@@ -129,7 +122,8 @@ public class ArenaGUI {
         if (size % 9 != 0) size = 27;
         if (size > 54) size = 54;
         Inventory inv = Bukkit.createInventory(p, size, getMsg(p, Messages.ARENA_GUI_INV_NAME));
-        ItemStack i = nms.createItemStack(Main.config.getString("arenaGui.skippedSlot.itemStack"), 1, (byte) Main.config.getInt("arenaGui.skippedSlot.data"));
+        ItemStack i = nms.createItemStack(Main.config.getString(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", "skipped-slot")),
+                1, (byte) Main.config.getInt(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA.replace("%path%", "skipped-slot")));
 
         for (int x = 0; x < inv.getSize(); x++) {
             inv.setItem(x, i);
