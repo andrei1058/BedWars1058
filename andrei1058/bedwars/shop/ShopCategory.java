@@ -67,7 +67,7 @@ public class ShopCategory {
             List<String> lore = new ArrayList<>();
             if (getPlayerLanguage(p).exists(ccLoreP)){
                 for (String s : getList(p, ccLoreP)){
-                    lore.add(s.replace("{cost}", String.valueOf(cc.getContentAction().getCost())).replace("{currency}", getMsg(p, "meaning."+cc.getContentAction().getCurrency().toLowerCase())));
+                    lore.add(s.replace("{cost}", String.valueOf(cc.getContentAction().getCost())).replace("{currency}", getCurrencyMsg(cc.getContentAction().getCurrency(), cc.getContentAction().getCost())));
                 }
             } else {
                 getPlayerLanguage(p).set(ccLoreP, new ArrayList<>());
@@ -77,6 +77,30 @@ public class ShopCategory {
             inv.setItem(cc.getSlot(), i);
         }
         p.openInventory(inv);
+    }
+
+    public String getCurrencyMsg(String currency, int cost) {
+        String c = "";
+
+        switch (currency) {
+            case "iron":
+                c = cost == 1 ? Messages.MEANING_IRON_SINGULAR : Messages.MEANING_IRON_PLURAL;
+                break;
+            case "gold":
+                c = cost == 1 ? Messages.MEANING_GOLD_SINGULAR : Messages.MEANING_GOLD_PLURAL;
+                break;
+            case "emerald":
+                c = cost == 1 ? Messages.MEANING_EMERALD_SINGULAR : Messages.MEANING_EMERALD_PLURAL;
+                break;
+            case "diamond":
+                c = cost == 1 ? Messages.MEANING_DIAMOND_SINGULAR : Messages.MEANING_DIAMOND_PLURAL;
+                break;
+            case "vault":
+                c = cost == 1 ? Messages.MEANING_VAULT_SINGULAR : Messages.MEANING_VAULT_PLURAL;
+                break;
+        }
+
+        return c;
     }
 
     public static List<ShopCategory> getShopCategories() {

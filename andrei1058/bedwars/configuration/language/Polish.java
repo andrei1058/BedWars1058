@@ -128,7 +128,7 @@ public class Polish {
         yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&e&lSOLO &E&LULEPSZENIA");
         yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&e&lSKLEP Z PRZEDMIOTAMI");
         yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&e&lSKLEP Z PRZEDMIOTAMI");
-        yml.addDefault(Messages.SHOP_PATH + "name", "&7Sklep z przedmiotami");
+        yml.addDefault(Messages.SHOP_PATH + ".name", "&7Sklep z przedmiotami");
 
         lbj.saveShopStuff("invContents.armor", "&aZbroja", Arrays.asList("&8Dostepne:", "&7▪ Buty z kolczugi", "&7▪ Spodnie z kolczugi", "&7▪ Zelazne buty", "&7▪ Zelazne spodnie", "&7▪ Diamentowe buty", "&7▪ Diamentowe spodnie", "", "&eKliknij aby przegladac!"));
         lbj.saveShopStuff("invContents.melee", "&aMiecze", Arrays.asList("&8Dostepne:", "&7▪ Kamienny miecz", "&7▪ Zelazny miecz", "&7▪ Diamentowy miecz", "&7▪ Patyk (Odrzut I)", "", "&eKliknij aby przegladac!"));

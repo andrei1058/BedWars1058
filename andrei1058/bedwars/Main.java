@@ -618,7 +618,6 @@ public class Main extends JavaPlugin {
                     new Arena(file.getName().replace(".yml", ""), null);
                 }
             }
-            //todo test if you can do the setup in BUNGEE mode
             /*if (Arena.getArenas().isEmpty()) {
                 if (getServerType() == ServerType.BUNGEE) {
                     plugin.getLogger().severe("Please set the server type to MULTIARENA and do the setup.");

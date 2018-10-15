@@ -234,7 +234,7 @@ public class Messages {
     public static String SHOP_ALREADY_BOUGHT = "shop-already-bought";
     public static String SHOP_UTILITY_NPC_SILVERFISH_NAME = "shop-utility-silverfish";
     public static String SHOP_UTILITY_NPC_IRON_GOLEM_NAME = "shop-utility-iron-golem";
-    public static String SHOP_PATH = "shop.";
+    public static String SHOP_PATH = "shop";
 
     /* MultiArena Lobby Item Messages */
     public static final String GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME = ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH+"-%path%-name";

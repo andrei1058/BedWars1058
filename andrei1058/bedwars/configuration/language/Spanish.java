@@ -128,7 +128,7 @@ public class Spanish {
         yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&e&lMEJORAS,&b&lSOLO");
         yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&b&lTIENDA,&e&lCLICK DERECHO");
         yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&b&lTIENDA,&e&lCLICK DERECHO");
-        yml.addDefault(Messages.SHOP_PATH + "name", "&7Tienda");
+        yml.addDefault(Messages.SHOP_PATH + ".name", "&7Tienda");
 
         lbj.saveShopStuff("invContents.armor", "&aArmadura", Arrays.asList("&7Disponible:", "&7▪ Botas de Malla", "&7▪ Pantalones de Malla", "&7▪ Botas de Hierro", "&7▪ Pantalones de Hierro", "&7▪ Botas de Diamante", "&7▪ Pantalones de Diamante", "", "&eClick para buscar!"));
         lbj.saveShopStuff("invContents.melee", "&aMelee", Arrays.asList("&7Disponible:", "&7▪ Espada de Piedra", "&7▪ Espada de Hierro", "&7▪ Espada de Diamante", "&7▪ Palo (Knockback I)", "", "&eClick para buscar!"));

@@ -128,7 +128,7 @@ public class Italian {
         yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&e&lSOLO,&E&LUPGRADES");
         yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&e&lITEM SHOP");
         yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&e&lITEM SHOP");
-        yml.addDefault(Messages.SHOP_PATH + "name", "&7Negozio di oggetti");
+        yml.addDefault(Messages.SHOP_PATH + ".name", "&7Negozio di oggetti");
 
         lbj.saveShopStuff("invContents.armor", "&aArmatura", Arrays.asList("&7Contiene:", "&7▪ Stivali di maglia", "&7▪ Gambiera di maglia", "&7▪ Stivali di ferro", "&7▪ Gambiera di ferro", "&7▪ Stivali di diamante", "&7▪ Gambiera di diamante", "", "&eClicca per sfogliare!"));
         lbj.saveShopStuff("invContents.melee", "&aSpade", Arrays.asList("&7Contiene:", "&7▪ Spada di pietra", "&7▪ Spada di ferro", "&7▪ Spada di diamante", "&7▪ Bastone (Contraccolpo I)", "", "&eClicca per sfogliare!"));

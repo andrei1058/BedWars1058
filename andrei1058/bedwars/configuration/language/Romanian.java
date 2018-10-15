@@ -122,7 +122,7 @@ public class Romanian {
         yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&e&lSOLO,&E&LUPGRADES");
         yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&e&lMAGAZIN");
         yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&e&lMAGAZINP");
-        yml.addDefault(Messages.SHOP_PATH + "name", "&7Magazin Obiecte");
+        yml.addDefault(Messages.SHOP_PATH + ".name", "&7Magazin Obiecte");
 
         lbj.saveShopStuff("invContents.armor", "&aArmura", Arrays.asList("&7Disponibil:", "&7▪ Cizme De Zale", "&7▪ Pantaloni De Zale", "&7▪ Cizme De Fier", "&7▪ Pantaloni De Fier", "&7▪ Cizme De Diamant", "&7▪ Pantaloni De Diamant", "", "&eClick pentru a rasfoi!"));
         lbj.saveShopStuff("invContents.melee", "&aArmament", Arrays.asList("&7Disponibil:", "&7▪ Sabie De Piatra", "&7▪ Sabie De Fier", "&7▪ Sabie De Diamant", "&7▪ Baston (Impingere I)", "", "&eClick pentru a rasfoi!"));

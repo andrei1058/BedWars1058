@@ -127,7 +127,7 @@ public class Russian {
         yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&e&lСОЛО,&E&LУЛУЧШЕНИЯ");
         yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&e&lМАГАЗИН");
         yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&e&lМАГАЗИН");
-        yml.addDefault(Messages.SHOP_PATH + "name", "&7МАГАЗИН");
+        yml.addDefault(Messages.SHOP_PATH + ".name", "&7МАГАЗИН");
 
         lbj.saveShopStuff("invContents.armor", "&aБроня", Arrays.asList("&7Доступные:", "&7▪ Кольчужные сапоги", "&7▪ Кольчужные поножи", "&7▪ Железные сапоги", "&7▪ Железные поножи", "&7▪ Алмазные сапоги", "&7▪ Алмазные поножи", "", "&eНажмите, чтобы просмотреть!"));
         lbj.saveShopStuff("invContents.melee", "&aОружие", Arrays.asList("&7Доступные:", "&7▪ Каменный меч", "&7▪ Железный меч", "&7▪ Алмазный меч", "&7▪ Палка (Отталкивание I)", "", "&eНажмите, чтобы просмотреть!"));
