@@ -100,7 +100,7 @@ public class Misc {
         fw.setVelocity(p.getEyeLocation().getDirection());
     }
 
-    public static String replaceLast(String text, String regex, String replacement) {
+    public static String replaceFirst(String text, String regex, String replacement) {
         return text.replaceFirst("(?s)" + regex + "(?!.*?" + regex + ")", replacement);
     }
 

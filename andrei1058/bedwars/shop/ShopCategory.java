@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.shop;
 
 import com.andrei1058.bedwars.arena.Misc;
+import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -45,7 +46,7 @@ public class ShopCategory {
     }
 
     public void openToPlayer(Player p){
-        String path = Misc.replaceLast((getName().replace("main.", Messages.SHOP_PATH)+".name"), ".invContents", "");
+        String path = Misc.replaceFirst((getName().replace("main.", Messages.SHOP_PATH)+".name"), ".invContents", "");
         String name = "§c"+getName()+" name not set :(";
         if (getPlayerLanguage(p).exists(path)){
             name = getMsg(p, path);
@@ -67,7 +68,8 @@ public class ShopCategory {
             List<String> lore = new ArrayList<>();
             if (getPlayerLanguage(p).exists(ccLoreP)){
                 for (String s : getList(p, ccLoreP)){
-                    lore.add(s.replace("{cost}", String.valueOf(cc.getContentAction().getCost())).replace("{currency}", getCurrencyMsg(cc.getContentAction().getCurrency(), cc.getContentAction().getCost())));
+                    lore.add(s.replace("{cost}", String.valueOf(cc.getContentAction().getCost())).replace("{currency}",
+                            getCurrencyMsg(p, cc.getContentAction().getCurrency(), cc.getContentAction().getCost())));
                 }
             } else {
                 getPlayerLanguage(p).set(ccLoreP, new ArrayList<>());
@@ -79,7 +81,7 @@ public class ShopCategory {
         p.openInventory(inv);
     }
 
-    public String getCurrencyMsg(String currency, int cost) {
+    public String getCurrencyMsg(Player p, String currency, int cost) {
         String c = "";
 
         switch (currency) {
@@ -100,7 +102,7 @@ public class ShopCategory {
                 break;
         }
 
-        return c;
+        return Language.getMsg(p, c);
     }
 
     public static List<ShopCategory> getShopCategories() {
@@ -108,7 +110,7 @@ public class ShopCategory {
     }
 
     public String getDisplayName(Player p){
-        return getMsg(p, Misc.replaceLast((getName().replace("main.", Messages.SHOP_PATH)+".name"), ".invContents", ""));
+        return getMsg(p, Misc.replaceFirst((getName().replace("main.", Messages.SHOP_PATH)+".name"), ".invContents", ""));
     }
 
     public ShopCategory getParent() {

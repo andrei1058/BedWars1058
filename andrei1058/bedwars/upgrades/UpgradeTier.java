@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.upgrades;
 
 import com.andrei1058.bedwars.arena.BedWarsTeam;
+import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -48,7 +49,7 @@ public class UpgradeTier {
                 }
             }
 
-            s = s.replace("{cost}", String.valueOf(cost)).replace("{currency}", getCurrencyMsg());
+            s = s.replace("{cost}", String.valueOf(cost)).replace("{currency}", getCurrencyMsg(p, getCurrency(), getCost()));
 
             lore.add(s);
         }
@@ -92,7 +93,7 @@ public class UpgradeTier {
         }
         if (money < getCost()) {
             p.playSound(p.getLocation(), nms.insufficientMoney(), 1f, 1f);
-            p.sendMessage(getMsg(p, Messages.SHOP_INSUFFICIENT_MONEY).replace("{currency}", getMsg(p, getCurrencyMsg())).replace("{amount}", String.valueOf(getCost() - money)));
+            p.sendMessage(getMsg(p, Messages.SHOP_INSUFFICIENT_MONEY).replace("{currency}", getMsg(p, getCurrencyMsg(p, getCurrency(), getCost()))).replace("{amount}", String.valueOf(getCost() - money)));
             p.closeInventory();
             return false;
         }
@@ -164,28 +165,28 @@ public class UpgradeTier {
         return currency.toLowerCase();
     }
 
-    public String getCurrencyMsg() {
+    public String getCurrencyMsg(Player p, String currency, int cost) {
         String c = "";
 
         switch (currency) {
             case "iron":
-                c = getCost() == 1 ? Messages.MEANING_IRON_SINGULAR : Messages.MEANING_IRON_PLURAL;
+                c = cost == 1 ? Messages.MEANING_IRON_SINGULAR : Messages.MEANING_IRON_PLURAL;
                 break;
             case "gold":
-                c = getCost() == 1 ? Messages.MEANING_GOLD_SINGULAR : Messages.MEANING_GOLD_PLURAL;
+                c = cost == 1 ? Messages.MEANING_GOLD_SINGULAR : Messages.MEANING_GOLD_PLURAL;
                 break;
             case "emerald":
-                c = getCost() == 1 ? Messages.MEANING_EMERALD_SINGULAR : Messages.MEANING_EMERALD_PLURAL;
+                c = cost == 1 ? Messages.MEANING_EMERALD_SINGULAR : Messages.MEANING_EMERALD_PLURAL;
                 break;
             case "diamond":
-                c = getCost() == 1 ? Messages.MEANING_DIAMOND_SINGULAR : Messages.MEANING_DIAMOND_PLURAL;
+                c = cost == 1 ? Messages.MEANING_DIAMOND_SINGULAR : Messages.MEANING_DIAMOND_PLURAL;
                 break;
             case "vault":
-                c = getCost() == 1 ? Messages.MEANING_VAULT_SINGULAR : Messages.MEANING_VAULT_PLURAL;
+                c = cost == 1 ? Messages.MEANING_VAULT_SINGULAR : Messages.MEANING_VAULT_PLURAL;
                 break;
         }
 
-        return c;
+        return Language.getMsg(p, c);
     }
 
     public int getCost() {
