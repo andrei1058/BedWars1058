@@ -31,38 +31,34 @@ public class ShoutCommand extends BukkitCommand {
             p.sendMessage(Language.getMsg(p, Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
             return true;
         }
-        if (p.hasPermission(Permissions.PERMISSION_SHOUT_COMMAND) || p.hasPermission(Permissions.PERMISSION_ALL)) {
-            if (isShoutCooldown(p)) {
-                p.sendMessage(Language.getMsg(p, Messages.COMMAND_COOLDOWN).replace("{seconds}", String.valueOf(getShoutCooldown(p))));
-                return true;
-            }
-            updateShout(p);
-            p.chat(st.replace("//", "!"));
-        } else {
-            p.sendMessage(Language.getMsg(p, Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
+        StringBuilder sb = new StringBuilder();
+        for (String ar : args) {
+            sb.append(ar + " ");
         }
+
+        p.chat("!" + sb.toString());
         return false;
     }
 
     public static void updateShout(Player player) {
         if (shoutCooldown.containsKey(player.getUniqueId())) {
-            shoutCooldown.replace(player.getUniqueId(), System.currentTimeMillis());
+            shoutCooldown.replace(player.getUniqueId(), System.currentTimeMillis() + (Main.config.getInt(ConfigPath.GENERAL_CONFIGURATION_SHOUT_COOLDOWN) * 1000));
         } else {
-            shoutCooldown.put(player.getUniqueId(), System.currentTimeMillis());
+            shoutCooldown.put(player.getUniqueId(), System.currentTimeMillis() + (Main.config.getInt(ConfigPath.GENERAL_CONFIGURATION_SHOUT_COOLDOWN) * 1000));
         }
     }
 
     public static boolean isShoutCooldown(Player player) {
         if (!shoutCooldown.containsKey(player.getUniqueId())) return false;
-        return shoutCooldown.get(player.getUniqueId()) + Main.config.getInt(ConfigPath.GENERAL_CONFIGURATION_SHOUT_COOLDOWN) * 1000 > System.currentTimeMillis();
+        return shoutCooldown.get(player.getUniqueId()) > System.currentTimeMillis();
     }
 
     public static double getShoutCooldown(Player p) {
-        return shoutCooldown.get(p.getUniqueId()) - System.currentTimeMillis() + Main.config.getInt(ConfigPath.GENERAL_CONFIGURATION_SHOUT_COOLDOWN) * 1000;
+        return (shoutCooldown.get(p.getUniqueId()) - System.currentTimeMillis()) / 1000;
     }
 
     public static boolean isShout(Player p) {
         if (!shoutCooldown.containsKey(p.getUniqueId())) return false;
-        return shoutCooldown.get(p.getUniqueId()) + 300 > System.currentTimeMillis();
+        return shoutCooldown.get(p.getUniqueId()) + 1000 > System.currentTimeMillis();
     }
 }
