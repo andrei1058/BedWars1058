@@ -70,8 +70,8 @@ public class Language {
     }
 
     public void saveShopStuff(String path, Object name, Object lore) {
-        yml.addDefault(Messages.SHOP_PATH + path + ".name", name);
-        yml.addDefault(Messages.SHOP_PATH + path + ".lore", lore);
+        yml.addDefault(Messages.SHOP_PATH+ "." + path + ".name", name);
+        yml.addDefault(Messages.SHOP_PATH + "." + path + ".lore", lore);
     }
 
     public static List<String> getScoreboard(Player p, String path, String alternative) {
