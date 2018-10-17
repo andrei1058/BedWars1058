@@ -106,7 +106,7 @@ public class BuyItemsAction extends ContentAction {
         }
         p.playSound(p.getLocation(), nms.bought(), 1f, 1f);
         getCategoryContent().getShopCategory().openToPlayer(p);
-        p.sendMessage(getMsg(p, Messages.SHOP_NEW_PURCHASE).replace("{item}", ChatColor.stripColor(getMsg(p, getCategoryContent().getShopCategory().getName().replace("main.", Messages.SHOP_PATH) + "." + getCategoryContent().getName() + ".name"))));
+        p.sendMessage(getMsg(p, Messages.SHOP_NEW_PURCHASE).replace("{item}", ChatColor.stripColor(getMsg(p, getCategoryContent().getShopCategory().getName().replace("main.", Messages.SHOP_PATH + ".") + "." + getCategoryContent().getName() + ".name"))));
         BedWarsTeam.PlayerVault pv = BedWarsTeam.getVault(p);
 
         //Call buy event
