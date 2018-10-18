@@ -268,7 +268,10 @@ public class Main extends JavaPlugin {
 
         /* Register tasks */
         new Refresh().runTaskTimer(this, 20L, 20L);
-        new OneTick().runTaskTimer(this, 120, 1);
+
+        if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_ROTATE_GEN)) {
+            new OneTick().runTaskTimer(this, 120, 1);
+        }
 
         /* Setup bStats metrics */
         Metrics metrics = new Metrics(this);
@@ -402,6 +405,8 @@ public class Main extends JavaPlugin {
         yml.addDefault("database.user", "root");
         yml.addDefault("database.pass", "cheez");
         yml.addDefault("database.ssl", false);
+
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_ROTATE_GEN, true);
 
         /* Multi-Arena Lobby Command Items */
         config.saveLobbyCommandItem("stats", "bw stats", false, getForCurrentVersion("SKULL_ITEM", "SKULL_ITEM", "PLAYER_HEAD"), 3, 0);

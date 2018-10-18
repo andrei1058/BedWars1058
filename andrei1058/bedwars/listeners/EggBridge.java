@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.api.events.EggBridgeThrowEvent;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.tasks.EggBridgeTask;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Player;
@@ -18,7 +19,7 @@ import java.util.HashMap;
 public class EggBridge implements Listener {
 
     //Active eggBridges
-    private static HashMap<Egg, TeamColor> bridges = new HashMap<>();
+    private static HashMap<Egg, EggBridgeTask> bridges = new HashMap<>();
 
     @EventHandler
     public void onLaunch(ProjectileLaunchEvent e) {
@@ -40,7 +41,7 @@ public class EggBridge implements Listener {
                             e.setCancelled(true);
                             return;
                         }
-                        bridges.put((Egg) e.getEntity(), a.getTeam(p).getColor());
+                        bridges.put((Egg) e.getEntity(), new EggBridgeTask(p, e.getEntity(), a.getTeam(p).getColor()));
                     }
                 }
             }
@@ -61,16 +62,22 @@ public class EggBridge implements Listener {
      */
     public static void removeEgg(Egg e) {
         if (bridges.containsKey(e)) {
+            if (bridges.get(e) != null){
+                if (!bridges.get(e).isCancelled()){
+                    bridges.get(e).cancel();
+                }
+            }
             bridges.remove(e);
         }
     }
 
     /**
-     * Get active egg bridges
+     * Get active egg bridges.
+     * Modified  in api 11
      *
-     * @since API 7
+     * @since API 11
      */
-    public static HashMap<Egg, TeamColor> getBridges() {
+    public static HashMap<Egg, EggBridgeTask> getBridges() {
         return new HashMap<>(bridges);
     }
 }

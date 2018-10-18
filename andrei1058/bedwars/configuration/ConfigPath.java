@@ -124,4 +124,7 @@ public class ConfigPath {
     public static final String SIGNS_STATUS_BLOCK_STARTING_DATA = "status-block.starting.data";
     public static final String SIGNS_STATUS_BLOCK_PLAYING_MATERIAL = "status-block.playing.material";
     public static final String SIGNS_STATUS_BLOCK_PLAYING_DATA = "status-block.playing.data";
+
+    public static final String GENERAL_CONFIGURATION_PERFORMANCE_PATH = "performance-settings";
+    public static final String GENERAL_CONFIGURATION_PERFORMANCE_ROTATE_GEN = GENERAL_CONFIGURATION_PERFORMANCE_PATH + ".rotate-generators";
 }
