@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.tasks;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.api.events.EggBridgeBuildEvent;
 import com.andrei1058.bedwars.arena.Arena;
@@ -30,6 +31,7 @@ public class EggBridgeTask extends BukkitRunnable {
         this.projectile = projectile;
         this.teamColor = teamColor;
         this.player = player;
+        this.runTaskTimer(Main.plugin, 0 ,1);
     }
 
     public TeamColor getTeamColor() {

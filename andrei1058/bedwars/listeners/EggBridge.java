@@ -23,7 +23,7 @@ public class EggBridge implements Listener {
 
     @EventHandler
     public void onLaunch(ProjectileLaunchEvent e) {
-        if (Main.getServerType() != ServerType.BUNGEE){
+        if (Main.getServerType() != ServerType.BUNGEE) {
             if (e.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 e.setCancelled(true);
                 return;
@@ -37,7 +37,7 @@ public class EggBridge implements Listener {
                     if (a.isPlayer(p)) {
                         EggBridgeThrowEvent event = new EggBridgeThrowEvent(p, a);
                         Bukkit.getPluginManager().callEvent(event);
-                        if (e.isCancelled()){
+                        if (e.isCancelled()) {
                             e.setCancelled(true);
                             return;
                         }
@@ -62,10 +62,8 @@ public class EggBridge implements Listener {
      */
     public static void removeEgg(Egg e) {
         if (bridges.containsKey(e)) {
-            if (bridges.get(e) != null){
-                if (!bridges.get(e).isCancelled()){
-                    bridges.get(e).cancel();
-                }
+            if (bridges.get(e) != null) {
+                bridges.get(e).cancel();
             }
             bridges.remove(e);
         }
