@@ -41,6 +41,22 @@ public class PAPISupport extends PlaceholderExpansion {
     @Override
     public String onPlaceholderRequest(Player p, String s) {
 
+        if (s.contains("arena_status_")){
+            Arena a = Arena.getArenaByName(s.replace("arena_status_", ""));
+            if (a == null){
+                return "NULL";
+            }
+            return a.getDisplayStatus(Main.lang);
+        }
+
+        if (s.contains("arena_count_")){
+            Arena a = Arena.getArenaByName(s.replace("arena_status_", ""));
+            if (a == null){
+                return "0";
+            }
+            return String.valueOf(a.getPlayers().size());
+        }
+
         String replay = "";
         switch (s) {
             case "stats_firstplay":
