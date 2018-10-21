@@ -186,6 +186,7 @@ public class Italian {
         lbj.saveShopStuff("invContents.utility.invContents.eggBridge", "&aBridge Egg", Arrays.asList("&8Oggetti:", "&8▪ &7Bridge Egg", "", "&7Costo: &2{cost} {currency}", "&7This egg creates a bridge in", "&7its trail after being thrown."));
         lbj.saveShopStuff("invContents.utility.invContents.back", "&aTorna indietro", Collections.singletonList(""));
 
+        yml.addDefault(Messages.MEANING_FULL, "Pieno");
         yml.addDefault(Messages.MEANING_IRON_SINGULAR, "Ferro");
         yml.addDefault(Messages.MEANING_IRON_PLURAL, "Ferro");
         yml.addDefault(Messages.MEANING_GOLD_SINGULAR, "Oro");

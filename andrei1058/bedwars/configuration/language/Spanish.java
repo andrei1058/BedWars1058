@@ -186,6 +186,7 @@ public class Spanish {
         lbj.saveShopStuff("invContents.utility.invContents.eggBridge", "&aBridge Egg", Arrays.asList("&8Objetos:", "&8▪ &7Bridge Egg", "", "&8Precio: &2{cost} {currency}", "&7Este huevo creara un puente", "&7en la direccion al cual lo lanzes."));
         lbj.saveShopStuff("invContents.utility.invContents.back", "&aIr Atrás", Collections.singletonList(""));
 
+        yml.addDefault(Messages.MEANING_FULL, "Full");
         yml.addDefault(Messages.MEANING_IRON_SINGULAR, "Hierro");
         yml.addDefault(Messages.MEANING_IRON_PLURAL, "Hierros");
         yml.addDefault(Messages.MEANING_GOLD_SINGULAR, "Oro");

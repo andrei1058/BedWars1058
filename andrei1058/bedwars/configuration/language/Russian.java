@@ -185,6 +185,7 @@ public class Russian {
         lbj.saveShopStuff("invContents.utility.invContents.eggBridge", "&aBridge Egg", Arrays.asList("&8Предметы:", "&8▪ &7Bridge Egg", "", "&8Цена: &2{cost} {currency}", "&7This egg creates a bridge in", "&7its trail after being thrown."));
         lbj.saveShopStuff("invContents.utility.invContents.back", "&aОбратно", Collections.singletonList(""));
 
+        yml.addDefault(Messages.MEANING_FULL, "Full");
         yml.addDefault(Messages.MEANING_IRON_SINGULAR, "Железо");
         yml.addDefault(Messages.MEANING_IRON_PLURAL, "Железо");
         yml.addDefault(Messages.MEANING_GOLD_SINGULAR, "Золото");

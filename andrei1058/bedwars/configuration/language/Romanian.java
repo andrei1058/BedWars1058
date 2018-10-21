@@ -180,6 +180,7 @@ public class Romanian {
         lbj.saveShopStuff("invContents.utility.invContents.eggBridge", "&aCreator De Pod", Arrays.asList("&8Obiecte:", "&8▪ &7Creator De Pod", "", "&8Pret: &2{cost} {currency}", "&7Acest ou creeaza un pod", "&7in directia in care este lansat."));
         lbj.saveShopStuff("invContents.utility.invContents.back", "&aInapoi", Collections.singletonList(""));
 
+        yml.addDefault(Messages.MEANING_FULL, "Plin");
         yml.addDefault(Messages.MEANING_IRON_SINGULAR, "Fier");
         yml.addDefault(Messages.MEANING_IRON_PLURAL, "Fier");
         yml.addDefault(Messages.MEANING_GOLD_SINGULAR, "Aur");

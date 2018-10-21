@@ -903,23 +903,23 @@ public class Arena {
      * Get the display status for an arena.
      * A message that can be used on signs etc.
      */
-    public String getDisplayStatus() {
+    public String getDisplayStatus(Language lang) {
         String s = "";
         switch (status) {
             case waiting:
-                s = getMsg(null, Messages.ARENA_STATUS_WAITING_NAME).replace("{full}", this.getPlayers().size() == this.getMaxPlayers() ? "FULL" : "");
+                s = lang.m(Messages.ARENA_STATUS_WAITING_NAME);
                 break;
             case starting:
-                s = getMsg(null, Messages.ARENA_STATUS_STARTING_NAME).replace("{full}", this.getPlayers().size() == this.getMaxPlayers() ? "FULL" : "");
+                s = lang.m(Messages.ARENA_STATUS_STARTING_NAME);
                 break;
             case restarting:
-                s = getMsg(null, Messages.ARENA_STATUS_RESTARTING_NAME).replace("{full}", this.getPlayers().size() == this.getMaxPlayers() ? "FULL" : "");
+                s = lang.m(Messages.ARENA_STATUS_RESTARTING_NAME);
                 break;
             case playing:
-                s = getMsg(null, Messages.ARENA_STATUS_PLAYING_NAME).replace("{full}", this.getPlayers().size() == this.getMaxPlayers() ? "FULL" : "");
+                s = lang.m(Messages.ARENA_STATUS_PLAYING_NAME);
                 break;
         }
-        return s;
+        return s.replace("{full}", this.getPlayers().size() == this.getMaxPlayers() ? lang.m(Messages.MEANING_FULL) : "");
     }
 
     /**
@@ -1042,9 +1042,9 @@ public class Arena {
         Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.GameStateChangeEvent(this, status));
         refreshSigns();
 
-        if (getServerType() == ServerType.BUNGEE){
+        if (getServerType() == ServerType.BUNGEE) {
             String path = Messages.ARENA_STATUS_RESTARTING_NAME;
-            switch (status){
+            switch (status) {
                 case starting:
                     path = Messages.ARENA_STATUS_STARTING_NAME;
                     break;
@@ -1136,7 +1136,7 @@ public class Arena {
             Sign s = (Sign) b;
             int line = 0;
             for (String string : Main.signs.l("format")) {
-                s.setLine(line, string.replace("[on]", String.valueOf(getPlayers().size())).replace("[max]", String.valueOf(getMaxPlayers())).replace("[arena]", getDisplayName()).replace("[status]", getDisplayStatus()));
+                s.setLine(line, string.replace("[on]", String.valueOf(getPlayers().size())).replace("[max]", String.valueOf(getMaxPlayers())).replace("[arena]", getDisplayName()).replace("[status]", getDisplayStatus(Main.lang)));
                 line++;
             }
             b.update(true);
@@ -1304,9 +1304,9 @@ public class Arena {
         return null;
     }
 
-    public BedWarsTeam getPlayerTeam(String playerCache){
+    public BedWarsTeam getPlayerTeam(String playerCache) {
         for (BedWarsTeam t : getTeams()) {
-            for (Player p : t.getMembersCache()){
+            for (Player p : t.getMembersCache()) {
                 if (p.getName().equals(playerCache)) return t;
             }
         }
@@ -1552,7 +1552,7 @@ public class Arena {
      * Check if is the party owner first.
      */
     public static boolean joinRandomArena(Player p) {
-        List<Arena> arenas = new ArrayList<>( Arena.getArenas()).stream().filter(a -> a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting).sorted((a1, a2) -> {
+        List<Arena> arenas = new ArrayList<>(Arena.getArenas()).stream().filter(a -> a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting).sorted((a1, a2) -> {
             if (a1.getStatus() == GameState.starting && a2.getStatus() == GameState.starting) {
                 if (a1.getPlayers().size() > a2.getPlayers().size()) {
                     return -1;
@@ -1588,7 +1588,7 @@ public class Arena {
 
             if (a.getPlayers().size() == a.getMaxPlayers()) continue;
 
-            if (a.getMaxPlayers()-a.getPlayers().size()>=amount){
+            if (a.getMaxPlayers() - a.getPlayers().size() >= amount) {
                 a.addPlayer(p, false);
                 break;
             }
@@ -1601,7 +1601,7 @@ public class Arena {
      */
     public static boolean joinRandomFromGroup(Player p, String group) {
 
-        List<Arena> arenas = new ArrayList<>( Arena.getArenas()).stream().filter(a -> a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting).sorted((a1, a2) -> {
+        List<Arena> arenas = new ArrayList<>(Arena.getArenas()).stream().filter(a -> a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting).sorted((a1, a2) -> {
             if (a1.getStatus() == GameState.starting && a2.getStatus() == GameState.starting) {
                 if (a1.getPlayers().size() > a2.getPlayers().size()) {
                     return -1;
@@ -1638,7 +1638,7 @@ public class Arena {
 
             if (a.getPlayers().size() == a.getMaxPlayers()) continue;
 
-            if (a.getMaxPlayers()-a.getPlayers().size()>=amount){
+            if (a.getMaxPlayers() - a.getPlayers().size() >= amount) {
                 a.addPlayer(p, false);
                 break;
             }

@@ -140,6 +140,7 @@ public class Messages {
 
 
     /** Meaning/ Translations */
+    public static String MEANING_FULL = "meaning-full";
     public static String MEANING_SHOUT = "meaning-shout";
     public static String MEANING_NEVER = "meaning-never";
     public static String MEANING_NOBODY = "meaning-nobody";

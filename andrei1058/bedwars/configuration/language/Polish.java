@@ -185,6 +185,7 @@ public class Polish {
         lbj.saveShopStuff("invContents.utility.invContents.bucket", "&aWiadro wody", Arrays.asList("&8Przedmioty:", "&8▪ &7Wiadro wody", "", "&7Koszt: &2{cost} {currency}"));
         lbj.saveShopStuff("invContents.utility.invContents.eggBridge", "&aJajko-most", Arrays.asList("&8Przedmioty:", "&8▪ &7Jajko-most", "", "&7Koszt: &2{cost} {currency}", "&7Bardzo uzyteczne jezeli chcesz", "&7szybko sie gdzies dostac."));
         lbj.saveShopStuff("invContents.utility.invContents.back", "&aPowrot", Collections.singletonList(""));
+        yml.addDefault(Messages.MEANING_FULL, "Full");
         yml.addDefault(Messages.MEANING_IRON_SINGULAR, "Zelaza");
         yml.addDefault(Messages.MEANING_IRON_PLURAL, "Zelaza");
         yml.addDefault(Messages.MEANING_GOLD_SINGULAR, "Zlota");

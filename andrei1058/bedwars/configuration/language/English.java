@@ -123,6 +123,7 @@ public class English {
         yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_TEAM, "{TeamColor}[{TeamName}]");
         yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_SHOUT, "&6[SHOUT]");
         yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_SPECTATOR, "&7[SPECTATOR]");
+        yml.addDefault(Messages.MEANING_FULL, "Full");
         yml.addDefault(Messages.MEANING_SHOUT, "shout");
         yml.addDefault(Messages.MEANING_NOBODY, "Nobody");
         yml.addDefault(Messages.MEANING_NEVER, "Never");
