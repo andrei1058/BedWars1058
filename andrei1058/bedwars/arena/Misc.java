@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.arena;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.configuration.ConfigPath;
@@ -28,15 +29,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Random;
 
 import static com.andrei1058.bedwars.Main.*;
@@ -374,6 +374,31 @@ public class Misc {
             }
         }
         return isOutsideOfBorder(l);
+    }
+
+    /**
+     * Change the server MOTD in properties file
+     */
+    public static void updateMOTD(String motd) {
+        Properties p = new Properties();
+        OutputStream i = null;
+        try {
+            i = new FileOutputStream(Main.plugin.getServer().getWorldContainer().getPath() + "/server.properties");
+            p.setProperty("motd", motd);
+            p.store(i, null);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (i != null) {
+                try {
+                    i.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
 }

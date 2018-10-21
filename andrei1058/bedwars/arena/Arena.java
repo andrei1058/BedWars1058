@@ -226,6 +226,8 @@ public class Arena {
         registerSigns();
         //Call event
         Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.ArenaEnableEvent(this));
+
+        setStatus(GameState.waiting);
     }
 
     /**
@@ -1039,6 +1041,22 @@ public class Arena {
         this.status = status;
         Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.GameStateChangeEvent(this, status));
         refreshSigns();
+
+        if (getServerType() == ServerType.BUNGEE){
+            String path = Messages.ARENA_STATUS_RESTARTING_NAME;
+            switch (status){
+                case starting:
+                    path = Messages.ARENA_STATUS_STARTING_NAME;
+                    break;
+                case playing:
+                    path = Messages.ARENA_STATUS_PLAYING_NAME;
+                    break;
+                case waiting:
+                    path = Messages.ARENA_STATUS_WAITING_NAME;
+                    break;
+            }
+            Misc.updateMOTD(Main.lang.m(path));
+        }
 
         //Stop active tasks to prevent issues
         BukkitScheduler bs = Bukkit.getScheduler();
