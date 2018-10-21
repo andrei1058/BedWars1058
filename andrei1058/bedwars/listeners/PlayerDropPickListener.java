@@ -36,7 +36,7 @@ public class PlayerDropPickListener implements Listener {
             return;
         }
 
-        if (a.getStatus() == GameState.restarting || a.getStatus() == GameState.waiting) {
+        if (a.getStatus() != GameState.playing) {
             e.setCancelled(true);
             return;
         }

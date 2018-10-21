@@ -38,7 +38,7 @@ public class EntityDropPickListener implements Listener {
             e.setCancelled(true);
             return;
         }
-        if (a.getStatus() == GameState.restarting || a.getStatus() == GameState.waiting) {
+        if (a.getStatus() != GameState.playing) {
             e.setCancelled(true);
             return;
         }
