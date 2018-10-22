@@ -171,10 +171,6 @@ public class UpgradeTier {
     public String getCurrencyMsg(Player p) {
         String c = "";
 
-        Bukkit.broadcastMessage("DEBUG MESSAGE CURRENCY: " + currency);
-        Bukkit.broadcastMessage("DEBUG MESSAGE COST: " + cost);
-        Bukkit.broadcastMessage("DEBUG MESSAGE PLAYER: " + p.getName());
-
         switch (currency.toLowerCase()) {
             case "iron":
                 c = cost == 1 ? Messages.MEANING_IRON_SINGULAR : Messages.MEANING_IRON_PLURAL;
