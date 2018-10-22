@@ -3,6 +3,7 @@ package com.andrei1058.bedwars.upgrades;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -49,7 +50,7 @@ public class UpgradeTier {
                 }
             }
 
-            s = s.replace("{cost}", String.valueOf(cost)).replace("{currency}", getCurrencyMsg(p, getCurrency(), getCost()));
+            s = s.replace("{cost}", String.valueOf(cost)).replace("{currency}", getCurrencyMsg(p));
 
             lore.add(s);
         }
@@ -93,7 +94,9 @@ public class UpgradeTier {
         }
         if (money < getCost()) {
             p.playSound(p.getLocation(), nms.insufficientMoney(), 1f, 1f);
-            p.sendMessage(getMsg(p, Messages.SHOP_INSUFFICIENT_MONEY).replace("{currency}", getMsg(p, getCurrencyMsg(p, getCurrency(), getCost()))).replace("{amount}", String.valueOf(getCost() - money)));
+            p.sendMessage(getMsg(p, Messages.SHOP_INSUFFICIENT_MONEY)
+                    .replace("{currency}", getCurrencyMsg(p))
+                    .replace("{amount}", String.valueOf(getCost() - money)));
             p.closeInventory();
             return false;
         }
@@ -129,7 +132,7 @@ public class UpgradeTier {
     }
 
     public boolean hasEnoughMoney(Player p) {
-        switch (currency) {
+        switch (currency.toLowerCase()) {
             case "vault":
                 return getCost() <= plugin.getEconomy().getMoney(p);
             case "iron":
@@ -165,10 +168,14 @@ public class UpgradeTier {
         return currency.toLowerCase();
     }
 
-    public String getCurrencyMsg(Player p, String currency, int cost) {
+    public String getCurrencyMsg(Player p) {
         String c = "";
 
-        switch (currency) {
+        Bukkit.broadcastMessage("DEBUG MESSAGE CURRENCY: " + currency);
+        Bukkit.broadcastMessage("DEBUG MESSAGE COST: " + cost);
+        Bukkit.broadcastMessage("DEBUG MESSAGE PLAYER: " + p.getName());
+
+        switch (currency.toLowerCase()) {
             case "iron":
                 c = cost == 1 ? Messages.MEANING_IRON_SINGULAR : Messages.MEANING_IRON_PLURAL;
                 break;

@@ -100,17 +100,11 @@ public class Language {
     }
 
     public static String getMsg(Player p, String path) {
-        if (langByPlayer.containsKey(p)) {
-            return langByPlayer.get(p).m(path);
-        }
-        return lang.m(path);
+        return langByPlayer.getOrDefault(p, lang).m(path);
     }
 
     public static Language getPlayerLanguage(Player p) {
-        if (langByPlayer.containsKey(p)) {
-            return langByPlayer.get(p);
-        }
-        return lang;
+        return langByPlayer.getOrDefault(p, lang);
     }
 
     public boolean exists(String path) {
@@ -118,10 +112,7 @@ public class Language {
     }
 
     public static List<String> getList(Player p, String path) {
-        if (langByPlayer.containsKey(p)) {
-            return langByPlayer.get(p).l(path);
-        }
-        return lang.l(path);
+        return langByPlayer.getOrDefault(p, lang).l(path);
     }
 
     static void saveIfNotExists(String path, Object data) {
