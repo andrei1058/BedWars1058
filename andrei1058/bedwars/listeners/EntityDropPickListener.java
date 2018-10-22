@@ -14,6 +14,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerPickupArrowEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -105,6 +106,17 @@ public class EntityDropPickListener implements Listener {
         }
 
         if (a.getRespawn().containsKey(e.getPlayer())) {
+            e.setCancelled(true);
+            return;
+        }
+    }
+
+    @EventHandler
+    public void onArrowPick(PlayerPickupArrowEvent e){
+        Arena a = Arena.getArenaByPlayer(e.getPlayer());
+        if (a == null) return;
+
+        if (!a.isPlayer(e.getPlayer())) {
             e.setCancelled(true);
             return;
         }
