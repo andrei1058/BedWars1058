@@ -33,6 +33,12 @@ public class SBoard {
     private SimpleDateFormat dateFormat;
 
     public SBoard(Player p, List<String> content, Arena arena) {
+        for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
+            if (sb.getP() == p) {
+                sb.remove();
+            }
+        }
+
         this.p = p;
         o = sb.registerNewObjective("Sb", "or");
         o.setDisplaySlot(DisplaySlot.SIDEBAR);
@@ -43,11 +49,6 @@ public class SBoard {
             this.placeholders.add("{kills}");
             this.placeholders.add("{finalKills}");
             this.placeholders.add("{beds}");
-            for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
-                if (sb.getP() == p) {
-                    sb.remove();
-                }
-            }
         }
         this.setStrings(content);
         Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {

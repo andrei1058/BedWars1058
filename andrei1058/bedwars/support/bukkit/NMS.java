@@ -353,4 +353,5 @@ public interface NMS {
      * @since API 11
      */
     void setBlockData(Block block, byte data);
+
 }

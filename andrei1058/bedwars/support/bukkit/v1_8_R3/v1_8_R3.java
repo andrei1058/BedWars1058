@@ -600,7 +600,7 @@ public class v1_8_R3 implements NMS {
             case "STAINED_CLAY":
             case "STAINED_GLASS":
             case "GLASS":
-                return new ItemStack(itemStack.getType(), itemStack.getAmount(),TeamColor.itemColor(bedWarsTeam.getColor()));
+                return new ItemStack(itemStack.getType(), itemStack.getAmount(), TeamColor.itemColor(bedWarsTeam.getColor()));
         }
     }
 

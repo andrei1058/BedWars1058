@@ -648,4 +648,5 @@ public class v1_11_R1 implements NMS {
     public void setBlockData(org.bukkit.block.Block block, byte data) {
         block.setData(data, true);
     }
+
 }
