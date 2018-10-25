@@ -317,14 +317,14 @@ public class BreakPlace implements Listener {
                             return;
                         }
                     }
+                    /** Remove empty bucket */
+                    Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                        nms.minusAmount(e.getPlayer(), nms.getItemInHand(e.getPlayer()), 1);
+                    }, 3L);
                 } catch (Exception ex) {
                 }
             }
         }
-        /** Remove empty bucket */
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            nms.minusAmount(e.getPlayer(), nms.getItemInHand(e.getPlayer()), 1);
-        }, 3L);
     }
 
     @EventHandler
