@@ -7,6 +7,7 @@ import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.exceptions.InvalidSoundException;
 import org.bukkit.Effect;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -290,5 +291,67 @@ public interface NMS {
      */
     ItemStack colourItem(ItemStack itemStack, BedWarsTeam bedWarsTeam);
 
+    ItemStack createItemStack(String material, int amount, short data);
+
     void teamCollideRule(Team team);
+
+    /**
+     * Check if is a player head
+     *
+     * @since API 11
+     */
+    boolean isPlayerHead(String material, int data);
+
+    /**
+     * Get fireball material
+     *
+     * @since API 11
+     */
+    Material materialFireball();
+
+    /**
+     * Get snowball material
+     *
+     * @since API 11
+     */
+    Material materialSnowball();
+
+    /**
+     * Get gold  helmet material
+     */
+    Material materialGoldenHelmet();
+
+    /**
+     * Get gold chest plate
+     */
+    Material materialGoldenChestPlate();
+
+    /**
+     * Get gold leggings
+     */
+    Material materialGoldenLeggings();
+
+    /**
+     * Check if bed
+     *
+     * @since API 11
+     */
+    boolean isBed(Material material);
+
+    /**
+     * Item Data compare
+     * This will always return true on versions >= 1.13
+     *
+     * @since API 11
+     */
+    boolean itemStackDataCompare(ItemStack i, short data);
+
+    /**
+     * Set block data
+     * For versions before 1.13
+     *
+     * @since API 11
+     */
+    void setBlockData(Block block, byte data);
+
 }

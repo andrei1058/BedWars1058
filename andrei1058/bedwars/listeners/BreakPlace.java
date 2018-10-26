@@ -2,13 +2,14 @@ package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.*;
+import com.andrei1058.bedwars.api.events.BedBreakEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.OreGenerator;
+import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.AutoCreateTeams;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Messages;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -22,9 +23,7 @@ import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
-import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -41,7 +40,7 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onIceMelt(BlockFadeEvent e) {
-        if (Main.getServerType() != ServerType.BUNGEE){
+        if (Main.getServerType() != ServerType.BUNGEE) {
             if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 e.setCancelled(true);
                 return;
@@ -64,15 +63,15 @@ public class BreakPlace implements Listener {
 
         //Prevent player from placing during the removal from the arena
         Arena arena = Arena.getArenaByName(e.getBlock().getWorld().getName());
-        if (arena != null){
-            if (arena.getStatus() != GameState.playing){
+        if (arena != null) {
+            if (arena.getStatus() != GameState.playing) {
                 e.setCancelled(true);
                 return;
             }
         }
         Player p = e.getPlayer();
-        if (Arena.isInArena(p)) {
-            Arena a = Arena.getArenaByPlayer(p);
+        Arena a = Arena.getArenaByPlayer(p);
+        if (a != null) {
             if (a.isSpectator(p)) {
                 e.setCancelled(true);
                 return;
@@ -142,7 +141,7 @@ public class BreakPlace implements Listener {
             a.getPlaced().add(e.getBlock());
             return;
         }
-        if (Main.getServerType() != ServerType.BUNGEE){
+        if (Main.getServerType() != ServerType.BUNGEE) {
             if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 if (!isBuildSession(p)) {
                     e.setCancelled(true);
@@ -154,7 +153,7 @@ public class BreakPlace implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
         Player p = e.getPlayer();
-        if (Main.getServerType() != ServerType.BUNGEE){
+        if (Main.getServerType() != ServerType.BUNGEE) {
             if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 if (!isBuildSession(p)) {
                     e.setCancelled(true);
@@ -162,13 +161,13 @@ public class BreakPlace implements Listener {
                 }
             }
         }
-        if (Arena.isInArena(p)) {
-            Arena a = Arena.getArenaByPlayer(p);
+        Arena a = Arena.getArenaByPlayer(p);
+        if (a != null) {
             if (!a.isPlayer(p)) {
                 e.setCancelled(true);
                 return;
             }
-            if (e.getBlock().getType() == Material.BED_BLOCK) {
+            if (nms.isBed(e.getBlock().getType())) {
                 for (BedWarsTeam t : a.getTeams()) {
                     for (int x = e.getBlock().getX() - 2; x < e.getBlock().getX() + 2; x++) {
                         for (int y = e.getBlock().getY() - 2; y < e.getBlock().getY() + 2; y++) {
@@ -251,7 +250,7 @@ public class BreakPlace implements Listener {
                     int line = 0;
                     for (String string : Main.signs.l("format")) {
                         e.setLine(line, string.replace("[on]", String.valueOf(a.getPlayers().size())).replace("[max]",
-                                String.valueOf(a.getMaxPlayers())).replace("[arena]", a.getDisplayName()).replace("[status]", a.getDisplayStatus()));
+                                String.valueOf(a.getMaxPlayers())).replace("[arena]", a.getDisplayName()).replace("[status]", a.getDisplayStatus(Main.lang)));
                         line++;
                     }
                     b.update(true);
@@ -264,7 +263,7 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onBucketFill(PlayerBucketFillEvent e) {
-        if (Main.getServerType() != ServerType.BUNGEE){
+        if (Main.getServerType() != ServerType.BUNGEE) {
             if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 if (!isBuildSession(e.getPlayer())) {
                     e.setCancelled(true);
@@ -280,7 +279,7 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onBucketEmpty(PlayerBucketEmptyEvent e) {
-        if (Main.getServerType() != ServerType.BUNGEE){
+        if (Main.getServerType() != ServerType.BUNGEE) {
             if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 if (!isBuildSession(e.getPlayer())) {
                     e.setCancelled(true);
@@ -318,14 +317,14 @@ public class BreakPlace implements Listener {
                             return;
                         }
                     }
+                    /** Remove empty bucket */
+                    Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                        nms.minusAmount(e.getPlayer(), nms.getItemInHand(e.getPlayer()), 1);
+                    }, 3L);
                 } catch (Exception ex) {
                 }
             }
         }
-        /** Remove empty bucket */
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            nms.minusAmount(e.getPlayer(), nms.getItemInHand(e.getPlayer()), 1);
-        }, 3L);
     }
 
     @EventHandler
@@ -340,6 +339,8 @@ public class BreakPlace implements Listener {
                     Block block = it.next();
                     if (!a.getPlaced().contains(block)) {
                         e.blockList().remove(block);
+                    } else if (AutoCreateTeams.is13Higher()) {
+                        if (block.getType().toString().contains("_GLASS")) e.blockList().remove(block);
                     }
                 }
             }
@@ -365,7 +366,7 @@ public class BreakPlace implements Listener {
                     }
                 }
                 //Check bed hologram
-                if (t.getBed().getBlockX() == e.getBlock().getX() && t.getBed().getBlockY()+1 == e.getBlock().getY() && t.getBed().getBlockZ() == e.getBlock().getZ()) {
+                if (t.getBed().getBlockX() == e.getBlock().getX() && t.getBed().getBlockY() + 1 == e.getBlock().getY() && t.getBed().getBlockZ() == e.getBlock().getZ()) {
                     if (!bed) {
                         e.setBuildable(true);
                         break;
@@ -376,7 +377,7 @@ public class BreakPlace implements Listener {
             List<Object> players = Arrays.asList(e.getBlock().getWorld().getNearbyEntities(e.getBlock().getLocation(), 1, 1, 1).stream().filter(ee -> ee.getType() == EntityType.PLAYER).toArray());
             for (Object o : players) {
                 Player p = (Player) o;
-                if (a.isSpectator(p)){
+                if (a.isSpectator(p)) {
                     if (e.getBlock().getType() == Material.AIR) e.setBuildable(true);
                     return;
                 }

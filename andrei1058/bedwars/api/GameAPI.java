@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.api;
 
+import com.andrei1058.bedwars.api.command.ParentCommand;
 import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
 import org.bukkit.entity.Player;
 
@@ -231,4 +232,13 @@ public interface GameAPI {
      * @since api v1
      */
     boolean isSpectating(Player p);
+
+    /* COMMANDS RELATED */
+
+    /**
+     * Get bedWars main command
+     *
+     * @since API 11
+     */
+    ParentCommand getBedWarsCommand();
 }

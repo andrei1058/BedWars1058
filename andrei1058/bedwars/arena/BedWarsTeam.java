@@ -1,20 +1,16 @@
 package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.ArenaFirstSpawnEvent;
-import com.andrei1058.bedwars.api.ArenaPlayerRespawnEvent;
+import com.andrei1058.bedwars.api.events.ArenaFirstSpawnEvent;
+import com.andrei1058.bedwars.api.events.ArenaPlayerRespawnEvent;
 import com.andrei1058.bedwars.api.GeneratorType;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Messages;
-import com.andrei1058.bedwars.listeners.EntityDropPickListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
@@ -37,7 +33,7 @@ public class BedWarsTeam {
     private List<Player> members = new ArrayList<>();
     private TeamColor color;
     private Location spawn, bed, shop, teamUpgrades;
-    private com.andrei1058.bedwars.arena.OreGenerator ironGenerator, goldGenerator, emeraldGenerator;
+    private com.andrei1058.bedwars.arena.OreGenerator ironGenerator = null, goldGenerator = null, emeraldGenerator = null;
     private String name;
     private Arena arena;
     private boolean bedDestroyed = false;
@@ -168,6 +164,19 @@ public class BedWarsTeam {
         v.setBoots(createArmor(Material.LEATHER_BOOTS));
         sendDefaultInventory(p);
         Bukkit.getPluginManager().callEvent(new ArenaFirstSpawnEvent(p, getArena(), this, v));
+    }
+
+    /**
+     * Rejoin a team
+     */
+    public void reJoin(Player p) {
+        members.add(p);
+        Bukkit.getScheduler().runTaskLater(plugin, () -> nms.hidePlayer(p, arena.getPlayers()), 5L);
+        nms.setCollide(p, arena, false);
+        p.setAllowFlight(true);
+        p.setFlying(true);
+        arena.getRespawn().put(p, 5);
+
     }
 
     /**
@@ -662,11 +671,6 @@ public class BedWarsTeam {
 
     public List<Player> getMembers() {
         return members;
-    }
-
-    private ItemStack createColorItem(Material material, int amount) {
-        ItemStack i = new ItemStack(material, amount, TeamColor.itemColor(color));
-        return i;
     }
 
     /*public List<Player> getPotionEffectApplied() {

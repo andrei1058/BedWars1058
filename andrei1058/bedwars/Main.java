@@ -5,19 +5,26 @@ import com.andrei1058.bedwars.api.GameAPI;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.arena.despawnables.TargetListener;
+import com.andrei1058.bedwars.commands.party.PartyCommand;
+import com.andrei1058.bedwars.commands.rejoin.RejoinCommand;
+import com.andrei1058.bedwars.commands.shout.ShoutCommand;
 import com.andrei1058.bedwars.listeners.EntityDropPickListener;
 import com.andrei1058.bedwars.listeners.PlayerDropPickListener;
 import com.andrei1058.bedwars.arena.spectator.SpectatorListeners;
 import com.andrei1058.bedwars.arena.upgrades.BaseListener;
-import com.andrei1058.bedwars.commands.LeaveCommand;
-import com.andrei1058.bedwars.commands.main.MainCommand;
+import com.andrei1058.bedwars.commands.leave.LeaveCommand;
+import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.configuration.*;
 import com.andrei1058.bedwars.listeners.*;
+import com.andrei1058.bedwars.listeners.arenaselector.ArenaSelectorListener;
+import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
 import com.andrei1058.bedwars.support.Metrics;
 import com.andrei1058.bedwars.support.bukkit.*;
 import com.andrei1058.bedwars.support.bukkit.v1_10_R1.v1_10_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_11_R1.v1_11_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_12_R1.v1_12_R1;
+import com.andrei1058.bedwars.support.bukkit.v1_13_R1.v1_13_R1;
+import com.andrei1058.bedwars.support.bukkit.v1_13_R2.v1_13_R2;
 import com.andrei1058.bedwars.support.bukkit.v1_8_R3.v1_8_R3;
 import com.andrei1058.bedwars.support.bukkit.v1_9_R1.v1_9_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_9_R2.v1_9_R2;
@@ -32,7 +39,7 @@ import com.andrei1058.bedwars.support.papi.PAPISupport;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.support.party.NoParty;
 import com.andrei1058.bedwars.support.party.Party;
-import com.andrei1058.bedwars.support.party.PartyAndFriends;
+import com.andrei1058.bedwars.support.party.Parties;
 import com.andrei1058.bedwars.support.stats.MySQL;
 import com.andrei1058.bedwars.support.stats.SQLite;
 import com.andrei1058.bedwars.support.vault.*;
@@ -54,7 +61,7 @@ import static com.andrei1058.bedwars.configuration.Language.setupLang;
 public class Main extends JavaPlugin {
 
     private static ServerType serverType = ServerType.MULTIARENA;
-    public static boolean safeMode, lobbyServer = false, debug = true;
+    public static boolean safeMode = false, lobbyServer = false, debug = true;
     public static String mainCmd = "bw", link = "https://www.spigotmc.org/resources/50942/";
     public static ConfigManager config, signs, spigot, generators;
     public static ShopManager shop;
@@ -75,21 +82,9 @@ public class Main extends JavaPlugin {
     @Override
     public void onLoad() {
         plugin = this;
-        config = new ConfigManager("config", "plugins/" + this.getName(), false);
 
-        Language en = new Language("en");
-        setupLang(en);
-        Language.getLanguages().remove(en);
-        setupConfig();
-        generators = new ConfigManager("generators", "plugins/" + this.getName(), false);
-        setupGeneratorsCfg();
-        upgrades = new UpgradesManager("upgrades", "plugins/" + this.getName());
-    }
-
-    @Override
-    public void onEnable() {
+        /* Load version support 1.8 - 1.12 */
         boolean support = true;
-        /** Load version support 1.8 - 1.12 */
         switch (version) {
             case "v1_8_R3":
                 nms = new v1_8_R3();
@@ -109,6 +104,12 @@ public class Main extends JavaPlugin {
             case "v1_12_R1":
                 nms = new v1_12_R1();
                 break;
+            case "v1_13_R1":
+                nms = new v1_13_R1();
+                break;
+            case "v1_13_R2":
+                nms = new v1_13_R2();
+                break;
             default:
                 support = false;
         }
@@ -117,114 +118,177 @@ public class Main extends JavaPlugin {
             this.setEnabled(false);
             this.getLogger().severe("I can't run on your version: " + version);
             return;
+        } else {
+            this.getLogger().info("Loading support for paper/ spigot " + version + ".");
         }
 
-        /** Citizens support */
+        config = new ConfigManager("config", "plugins/" + this.getName(), false);
+
+        Language en = new Language("en");
+        setupLang(en);
+        Language.getLanguages().remove(en);
+
+        Language ro = new Language("ro");
+        setupLang(ro);
+        Language.getLanguages().remove(ro);
+
+        Language it = new Language("it");
+        setupLang(it);
+        Language.getLanguages().remove(it);
+
+        Language pl = new Language("pl");
+        setupLang(pl);
+        Language.getLanguages().remove(pl);
+
+        Language es = new Language("es");
+        setupLang(es);
+        Language.getLanguages().remove(es);
+
+        Language ru = new Language("ru");
+        setupLang(ru);
+        Language.getLanguages().remove(ru);
+
+        setupConfig();
+        generators = new ConfigManager("generators", "plugins/" + this.getName(), false);
+        setupGeneratorsCfg();
+        upgrades = new UpgradesManager("upgrades", "plugins/" + this.getName());
+    }
+
+    @Override
+    public void onEnable() {
+
+        /* Citizens support */
         if (this.getServer().getPluginManager().getPlugin("Citizens") != null) {
             JoinNPC.setCitizensSupport(true);
             getLogger().info("Hook into Citizens support. /bw npc");
             registerEvents(new CitizensListener());
         }
 
-        /** Register main command */
+        /* Register commands */
         nms.registerCommand(mainCmd, new MainCommand(mainCmd));
+        if (!nms.isBukkitCommandRegistered("shout")) {
+            nms.registerCommand("shout", new ShoutCommand("shout"));
+        }
+        nms.registerCommand("rejoin", new RejoinCommand("rejoin"));
+        if (!(nms.isBukkitCommandRegistered("leave") && getServerType() == ServerType.BUNGEE)) {
+            nms.registerCommand("leave", new LeaveCommand("leave"));
+        }
+        if (!(nms.isBukkitCommandRegistered("party") && getServerType() == ServerType.BUNGEE)) {
+            nms.registerCommand("party", new PartyCommand("party"));
+        }
 
-        /** Setup plugin messaging channel */
+        /* Setup plugin messaging channel */
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         //Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new Bungee());
         Bukkit.getServicesManager().register(GameAPI.class, new BedWars(), this, ServicePriority.Highest);
         api = (BedWars) this.getServer().getServicesManager().getRegistration(GameAPI.class).getProvider();
 
-        /** Check if lobby location is set. Required for non Bungee servers */
+        /* Check if lobby location is set. Required for non Bungee servers */
         if (config.getLobbyWorldName().isEmpty() && serverType != ServerType.BUNGEE) {
             plugin.getLogger().severe("Lobby location is not set!");
             return;
         }
 
-        /** Load lobby world if not main level */
+        /* Load lobby world if not main level */
         if (!config.getLobbyWorldName().equalsIgnoreCase(Bukkit.getServer().getWorlds().get(0).getName())) {
             if (getServerType() == ServerType.MULTIARENA)
                 Bukkit.createWorld(new WorldCreator(config.getLobbyWorldName()));
         }
 
-        /** Remove entities from lobby */
+        /* Remove entities from lobby */
         if (!config.getLobbyWorldName().isEmpty()) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getWorld(config.getLobbyWorldName())
                     .getEntities().stream().filter(e -> e instanceof Monster).forEach(Entity::remove), 20L);
         }
 
-        /** Register events */
+        /* Register events */
         registerEvents(new JoinLeaveTeleport(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(),
                 new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener());
         if (getServerType() == ServerType.BUNGEE) {
             registerEvents(new Ping());
+        } else if (getServerType() == ServerType.MULTIARENA || getServerType() == ServerType.SHARED) {
+            registerEvents(new ArenaSelectorListener(), new BlockStatusListener());
         }
 
-        /** Load version support */
+        /* Load version support */
         switch (version) {
+            case "v1_13_R2":
+            case "v1_13_R1":
             case "v1_12_R1":
                 registerEvents(new EntityDropPickListener());
                 break;
             default:
                 registerEvents(new PlayerDropPickListener());
                 break;
-            case "v1_8_R2":
             case "v1_8_R3":
                 registerEvents(new PlayerDropPickListener());
-                /**Bukkit.getScheduler().runTaskLater(this, ()-> {
-                 System.out.println("\u001B[31m[WARN] BedWars1058 is going to abort support for this server version in the future.\nPlease consider upgrading to a newer paper/spigot version.\u001B[0m");
-                 }, 40L);*/
                 break;
         }
 
-        /** Load join signs */
-        loadArenasAndSigns();
-
-        /** Party support */
-        if (config.getYml().getBoolean(ConfigPath.GENERAL_CONFIGURATION_ALLOW_PARTIES)) {
-            if (Bukkit.getPluginManager().getPlugin("Spigot-Party-API-PAF") != null) {
-                getLogger().info("Hook into Spigot-Party-API-PAF support!");
-                party = new PartyAndFriends();
-            } else {
-                party = new com.andrei1058.bedwars.support.party.Internal();
-                getLogger().info("Loading internal Party system. /party");
-            }
+        /* Deprecated versions */
+        switch (version) {
+            case "v1_8_R3":
+            case "v1_9_R1":
+            case "v1_9_R2":
+            case "v1_10_R1":
+            case "v1_11_R1":
+                Bukkit.getScheduler().runTaskLater(this,
+                        () -> System.out.println("\u001B[31m[WARN] BedWars1058 may drop support for this server version in the future.\nPlease consider upgrading to a newer paper/spigot version.\u001B[0m"), 40L);
+                break;
         }
 
-        /** Levels support */
+        /* Load join signs */
+        loadArenasAndSigns();
+
+        /* Party support */
+        if (config.getYml().getBoolean(ConfigPath.GENERAL_CONFIGURATION_ALLOW_PARTIES)) {
+            if (Bukkit.getPluginManager().getPlugin("Parties") != null) {
+                if (getServer().getPluginManager().getPlugin("Parties").isEnabled()) {
+                    getLogger().info("Hook into Parties (by AlessioDP) support!");
+                    party = new Parties();
+                }
+            }
+        }
+        if (party == null) {
+            party = new com.andrei1058.bedwars.support.party.Internal();
+            getLogger().info("Loading internal Party system. /party");
+        }
+
+        /* Levels support */
         //todo levels addon
         level = new NoLevel();
 
-        /** Language support */
+        /* Language support */
         try {
             langSupport = Internal.class.newInstance();
             new ConfigManager("database", "plugins/" + this.getName() + "/Languages", false);
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
 
-        /** Register tasks */
-        new Refresh().runTaskTimer(this, 20l, 20l);
-        new OneTick().runTaskTimer(this, 120, 1);
+        /* Register tasks */
+        new Refresh().runTaskTimer(this, 20L, 20L);
 
-        /** Setup bStats metrics */
+        if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_ROTATE_GEN)) {
+            new OneTick().runTaskTimer(this, 120, 1);
+        }
+
+        /* Setup bStats metrics */
         Metrics metrics = new Metrics(this);
         metrics.addCustomChart(new Metrics.SimplePie("server_type", () -> getServerType().toString()));
         metrics.addCustomChart(new Metrics.SimplePie("default_language", () -> lang.getIso()));
 
-        /** Register NMS entities */
+        /* Register NMS entities */
         nms.registerEntities();
 
-        /** Setup shop */
+        /* Setup shop */
         shop = new ShopManager("shop", "plugins/" + this.getName());
         shop.loadShop();
 
-        /** Check for updates */
+        /* Check for updates */
         Misc.checkUpdate();
 
-        /** Database support */
+        /* Database support */
         if (config.getBoolean("database.enable")) {
             database = new MySQL();
         } else {
@@ -236,22 +300,22 @@ public class Main extends JavaPlugin {
             try {
                 JoinNPC.spawnNPCs();
             } catch (Exception e) {
-                this.getLogger().severe("Could not spawn Join NPCs. Make sure you have right version of Citizens for your server!");
+                this.getLogger().severe("Could not spawn CmdJoin NPCs. Make sure you have right version of Citizens for your server!");
                 JoinNPC.setCitizensSupport(false);
             }
         }, 40L);
 
-        /** Save messages for stats gui items if custom items added, for each language */
+        /* Save messages for stats gui items if custom items added, for each language */
         Language.setupCustomStatsMessages();
 
-        /** PlaceholderAPI Support */
+        /* PlaceholderAPI Support */
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             getLogger().info("Hook into PlaceholderAPI support!");
             new PAPISupport().register();
             SupportPAPI.setSupportPAPI(new SupportPAPI.withPAPI());
         }
 
-        /** Vault support */
+        /* Vault support */
         if (this.getServer().getPluginManager().getPlugin("Vault") != null) {
             try {
                 RegisteredServiceProvider rsp = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
@@ -298,20 +362,23 @@ public class Main extends JavaPlugin {
 
         /* LeaderHeads Support */
         LeaderHeadsSupport.initLeaderHeads();
+
     }
 
     public void onDisable() {
-        /** Close database */
-        database.close();
+        /* Close database */
+        try {
+            database.close();
+        } catch (Exception ex) {
+        }
     }
 
     private void setupConfig() {
         YamlConfiguration yml = config.getYml();
 
         yml.options().header(plugin.getDescription().getName() + " by andrei1058. https://www.spigotmc.org/members/39904/\n" +
-                "Documentation here: https://github.com/andrei1058/BedWars1058/wiki\n");
+                "Documentation here: https://gitlab.com/andrei1058/BedWars1058/wikis/home\n");
         yml.addDefault("serverType", "MULTIARENA");
-        yml.addDefault("safeMode", false);
         yml.addDefault("language", "en");
         yml.addDefault("storeLink", "https://www.spigotmc.org/resources/authors/39904/");
         yml.addDefault("lobbyServer", "hub");
@@ -319,8 +386,9 @@ public class Main extends JavaPlugin {
         yml.addDefault("formatChat", true);
         yml.addDefault("disableCrafting", true);
         yml.addDefault("debug", false);
-        yml.addDefault("lobbyScoreboard", true);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD, true);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ALLOW_PARTIES, true);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_REJOIN_TIME, 60 * 5);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART, 30);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD, "restart");
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_REGULAR, 40);
@@ -328,6 +396,7 @@ public class Main extends JavaPlugin {
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BEDS_DESTROY_COUNTDOWN, 360);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DRAGON_SPAWN_COUNTDOWN, 600);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_GAME_END_COUNTDOWN, 120);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SHOUT_COOLDOWN, 30);
 
         yml.addDefault("database.enable", false);
         yml.addDefault("database.host", "localhost");
@@ -337,57 +406,134 @@ public class Main extends JavaPlugin {
         yml.addDefault("database.pass", "cheez");
         yml.addDefault("database.ssl", false);
 
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_ROTATE_GEN, true);
+
         /* Multi-Arena Lobby Command Items */
-        config.saveLobbyCommandItem("stats", "bw stats", false, "SKULL_ITEM", 3, 0);
+        config.saveLobbyCommandItem("stats", "bw stats", false, getForCurrentVersion("SKULL_ITEM", "SKULL_ITEM", "PLAYER_HEAD"), 3, 0);
         config.saveLobbyCommandItem("arena-selector", "bw gui", true, "CHEST", 5, 4);
-        config.saveLobbyCommandItem("leave", "bw leave", false, "BED", 0, 8);
+        config.saveLobbyCommandItem("leave", "bw leave", false, getForCurrentVersion("BED", "BED", "RED_BED"), 0, 8);
 
         /* Pre Game Command Items */
-        config.savePreGameCommandItem("stats", "bw stats", false, "SKULL_ITEM", 3, 0);
-        config.savePreGameCommandItem("leave", "bw leave", false, "BED", 0, 8);
+        config.savePreGameCommandItem("stats", "bw stats", false, getForCurrentVersion("SKULL_ITEM", "SKULL_ITEM", "PLAYER_HEAD"), 3, 0);
+        config.savePreGameCommandItem("leave", "bw leave", false, getForCurrentVersion("BED", "BED", "RED_BED"), 0, 8);
 
         /* Spectator Command Items */
-        config.saveSpectatorCommandItem("teleporter", "bw teleporter", false, "SKULL_ITEM", 3, 0);
-        config.saveSpectatorCommandItem("leave", "bw leave", false, "BED", 0, 8);
+        config.saveSpectatorCommandItem("teleporter", "bw teleporter", false, getForCurrentVersion("SKULL_ITEM", "SKULL_ITEM", "PLAYER_HEAD"), 3, 0);
+        config.saveSpectatorCommandItem("leave", "bw leave", false, getForCurrentVersion("BED", "BED", "RED_BED"), 0, 8);
 
-        yml.addDefault("arenaGui.settings.size", 27);
-        yml.addDefault("arenaGui.settings.startSlot", 10);
-        yml.addDefault("arenaGui.settings.endSlot", 16);
-        yml.addDefault("arenaGui.settings.showPlaying", false);
-        yml.addDefault("arenaGui.waiting.itemStack", "STAINED_GLASS_PANE");
-        yml.addDefault("arenaGui.waiting.data", 5);
-        yml.addDefault("arenaGui.waiting.enchanted", false);
-        yml.addDefault("arenaGui.starting.itemStack", "STAINED_GLASS_PANE");
-        yml.addDefault("arenaGui.starting.data", 7);
-        yml.addDefault("arenaGui.starting.enchanted", true);
-        yml.addDefault("arenaGui.playing.itemStack", "STAINED_GLASS_PANE");
-        yml.addDefault("arenaGui.playing.data", 4);
-        yml.addDefault("arenaGui.playing.enchanted", false);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SIZE, 27);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SHOW_PLAYING, true);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_USE_SLOTS, "10,11,12,13,14,15,16");
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", "waiting"), getForCurrentVersion("STAINED_GLASS_PANE", "CONCRETE", "LIME_CONCRETE"));
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA.replace("%path%", "waiting"), 5);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_ENCHANTED.replace("%path%", "waiting"), false);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", "starting"), getForCurrentVersion("STAINED_GLASS_PANE", "CONCRETE", "YELLOW_CONCRETE"));
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA.replace("%path%", "starting"), 4);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_ENCHANTED.replace("%path%", "starting"), true);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", "playing"), getForCurrentVersion("STAINED_GLASS_PANE", "CONCRETE", "RED_CONCRETE"));
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA.replace("%path%", "playing"), 14);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_ENCHANTED.replace("%path%", "playing"), false);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", "skipped-slot"), getForCurrentVersion("STAINED_GLASS_PANE", "STAINED_GLASS_PANE", "BLACK_STAINED_GLASS_PANE"));
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA.replace("%path%", "skipped-slot"), 15);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_ENCHANTED.replace("%path%", "skipped-slot"), false);
 
-        /** default stats GUI items */
-        yml.addDefault("statsGUI.invSize", 27);
+        /* default stats GUI items */
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE, 27);
         if (config.isFirstTime()) {
             Misc.addDefaultStatsItem(yml, 10, Material.DIAMOND, 0, "wins");
             Misc.addDefaultStatsItem(yml, 11, Material.REDSTONE, 0, "losses");
             Misc.addDefaultStatsItem(yml, 12, Material.IRON_SWORD, 0, "kills");
-            Misc.addDefaultStatsItem(yml, 13, Material.SKULL_ITEM, 0, "deaths");
-            Misc.addDefaultStatsItem(yml, 14, Material.DIAMOND_SWORD, 0, "finalKills");
-            Misc.addDefaultStatsItem(yml, 15, Material.SKULL_ITEM, 1, "finalDeaths");
-            Misc.addDefaultStatsItem(yml, 16, Material.BED, 0, "bedsDestroyed");
-            Misc.addDefaultStatsItem(yml, 21, Material.STAINED_GLASS_PANE, 0, "firstPlay");
-            Misc.addDefaultStatsItem(yml, 22, Material.CHEST, 0, "gamesPlayed");
-            Misc.addDefaultStatsItem(yml, 23, Material.STAINED_GLASS_PANE, 0, "lastPlay");
+            Misc.addDefaultStatsItem(yml, 13, Material.valueOf(getForCurrentVersion("SKULL_ITEM", "SKULL_ITEM", "SKELETON_SKULL")), 0, "deaths");
+            Misc.addDefaultStatsItem(yml, 14, Material.DIAMOND_SWORD, 0, "final-kills");
+            Misc.addDefaultStatsItem(yml, 15, Material.valueOf(getForCurrentVersion("SKULL_ITEM", "SKULL_ITEM", "SKELETON_SKULL")), 1, "final-deaths");
+            Misc.addDefaultStatsItem(yml, 16, Material.valueOf(getForCurrentVersion("BED", "BED", "RED_BED")), 0, "beds-destroyed");
+            Misc.addDefaultStatsItem(yml, 21, Material.valueOf(getForCurrentVersion("STAINED_GLASS_PANE", "STAINED_GLASS_PANE", "BLACK_STAINED_GLASS_PANE")), 0, "first-play");
+            Misc.addDefaultStatsItem(yml, 22, Material.CHEST, 0, "games-played");
+            Misc.addDefaultStatsItem(yml, 23, Material.valueOf(getForCurrentVersion("STAINED_GLASS_PANE", "STAINED_GLASS_PANE", "BLACK_STAINED_GLASS_PANE")), 0, "last-play");
         }
 
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + ".Default", Arrays.asList("WOOD_SWORD"));
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + ".Default", Collections.singletonList(getForCurrentVersion("WOOD_SWORD", "WOOD_SWORD", "WOODEN_SWORD")));
         yml.addDefault(ConfigPath.CENERAL_CONFIGURATION_ALLOWED_COMMANDS, Arrays.asList("shout", "bw", "leave"));
         yml.options().copyDefaults(true);
         config.save();
 
         //remove old config
+        //Convert old configuration
+
+        if (yml.get("arenaGui.settings.showPlaying") != null){
+            config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SHOW_PLAYING, yml.getBoolean("arenaGui.settings.showPlaying"));
+        }
+        if (yml.get("arenaGui.settings.size") != null){
+            config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SIZE, yml.getInt("arenaGui.settings.size"));
+        }
+        if (yml.get("arenaGui.settings.useSlots") != null){
+            config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_USE_SLOTS, yml.getString("arenaGui.settings.useSlots"));
+        }
+        if (config.getYml().get("arenaGui") != null) {
+            for (String path : config.getYml().getConfigurationSection("arenaGui").getKeys(false)) {
+                if (path.equalsIgnoreCase("settings")) continue;
+                String new_path = path;
+                switch (path){
+                    case "skippedSlot":
+                        new_path = "skipped-slot";
+                        break;
+                }
+                if (config.getYml().get("arenaGui." + path + ".itemStack") != null) {
+                    config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", new_path), config.getYml().getString("arenaGui." + path + ".itemStack"));
+                }
+                if (config.getYml().get("arenaGui." + path + ".data") != null) {
+                    config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA.replace("%path%", new_path), config.getYml().getInt("arenaGui." + path + ".data"));
+                }
+                if (config.getYml().get("arenaGui." + path + ".enchanted") != null) {
+                    config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_ENCHANTED.replace("%path%", new_path), config.getYml().getBoolean("arenaGui." + path + ".enchanted"));
+                }
+            }
+        }
+
+        config.set("arenaGui", null);
+
         if (config.getYml().get("npcLoc") != null) {
             config.set(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE, config.getYml().getString("npcLoc"));
         }
+        if (config.getYml().get("statsGUI.invSize") != null) {
+            config.set(ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE, config.getInt("statsGUI.invSize"));
+        }
+        if (config.getYml().get("statsGUI") != null) {
+            for (String stats_path : config.getYml().getConfigurationSection("statsGUI").getKeys(false)) {
+                String new_path = stats_path;
+                switch (stats_path){
+                    case "gamesPlayed":
+                        new_path = "games-played";
+                        break;
+                    case "lastPlay":
+                        new_path = "last-play";
+                        break;
+                    case "firstPlay":
+                        new_path = "first-play";
+                        break;
+                    case "bedsDestroyed":
+                        new_path = "beds-destroyed";
+                        break;
+                    case "finalDeaths":
+                        new_path = "final-deaths";
+                        break;
+                    case "finalKills":
+                        new_path = "final-kills";
+                        break;
+                }
+                if (config.getYml().get("statsGUI." + stats_path + ".itemStack") != null) {
+                    config.set(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_MATERIAL.replace("%path%", new_path), config.getYml().getString("statsGUI." + stats_path + ".itemStack"));
+                }
+                if (config.getYml().get("statsGUI." + stats_path + ".data") != null) {
+                    config.set(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_DATA.replace("%path%", new_path), config.getYml().getInt("statsGUI." + stats_path + ".data"));
+                }
+                if (config.getYml().get("statsGUI." + stats_path + ".slot") != null) {
+                    config.set(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_SLOT.replace("%path%", new_path), config.getYml().getInt("statsGUI." + stats_path + ".slot"));
+                }
+            }
+        }
+
+        config.set("statsGUI", null);
         config.set("startItems", null);
         config.set("generators", null);
         config.set("bedsDestroyCountdown", null);
@@ -395,9 +541,17 @@ public class Main extends JavaPlugin {
         config.set("gameEndCountdown", null);
         config.set("npcLoc", null);
         config.set("blockedCmds", null);
+        config.set("lobbyScoreboard", null);
+        config.set("arenaGui.settings.startSlot", null);
+        config.set("arenaGui.settings.endSlot", null);
+        config.set("items", null);
+        config.set("start-items-per-arena", null);
+        config.set("safeMode", null);
+
+        //Finished old configuration conversion
 
         String whatLang = "en";
-        for (File f : new File("plugins/" + this.getDescription().getName() + "/Languages").listFiles()) {
+        for (File f : Objects.requireNonNull(new File("plugins/" + this.getDescription().getName() + "/Languages").listFiles())) {
             if (f.isFile()) {
                 if (f.getName().contains("messages_") && f.getName().contains(".yml")) {
                     String lang = f.getName().replace("messages_", "").replace(".yml", "");
@@ -409,7 +563,6 @@ public class Main extends JavaPlugin {
             }
         }
         lang = Language.getLang(whatLang);
-        safeMode = yml.getBoolean("safeMode");
         debug = yml.getBoolean("debug");
         new ConfigManager("bukkit", Bukkit.getWorldContainer().getPath(), false).set("ticks-per.autosave", -1);
         spigot = new ConfigManager("spigot", Bukkit.getWorldContainer().getPath(), false);
@@ -436,6 +589,12 @@ public class Main extends JavaPlugin {
         signs = new ConfigManager("signs", "plugins/" + plugin.getName(), false);
         YamlConfiguration yml = signs.getYml();
         yml.addDefault("format", Arrays.asList("&a[arena]", "", "&2[on]&9/&2[max]", "[status]"));
+        yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_WAITING_MATERIAL, getForCurrentVersion("STAINED_CLAY", "STAINED_CLAY", "GREEN_CONCRETE"));
+        yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_WAITING_DATA, 5);
+        yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_STARTING_MATERIAL, getForCurrentVersion("STAINED_CLAY", "STAINED_CLAY", "YELLOW_CONCRETE"));
+        yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_STARTING_DATA, 4);
+        yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_PLAYING_MATERIAL, getForCurrentVersion("STAINED_CLAY", "STAINED_CLAY", "RED_CONCRETE"));
+        yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_PLAYING_DATA, 14);
         yml.options().copyDefaults(true);
         signs.save();
         if (yml.getStringList("format").size() < 4) {
@@ -448,10 +607,10 @@ public class Main extends JavaPlugin {
         if (dir.exists()) {
             List<File> files = new ArrayList<>();
             File[] fls = dir.listFiles();
-            for (int x = 0; x < fls.length; x++) {
-                if (fls[x].isFile()) {
-                    if (fls[x].getName().contains(".yml")) {
-                        files.add(fls[x]);
+            for (File fl : Objects.requireNonNull(fls)) {
+                if (fl.isFile()) {
+                    if (fl.getName().contains(".yml")) {
+                        files.add(fl);
                     }
                 }
             }
@@ -460,38 +619,30 @@ public class Main extends JavaPlugin {
                 int x = r.nextInt(files.size());
                 new Arena(files.get(x).getName().replace(".yml", ""), null);
             } else {
-                for (int x = 0; x < files.size(); x++) {
-                    new Arena(files.get(x).getName().replace(".yml", ""), null);
+                for (File file : files) {
+                    new Arena(file.getName().replace(".yml", ""), null);
                 }
             }
-            if (Arena.getArenas().isEmpty()) {
+            /*if (Arena.getArenas().isEmpty()) {
                 if (getServerType() == ServerType.BUNGEE) {
                     plugin.getLogger().severe("Please set the server type to MULTIARENA and do the setup.");
                     config.set("serverType", "MULTIARENA");
                     Bukkit.getServer().spigot().restart();
                     plugin.setEnabled(false);
-                    return;
                 }
-            }
-        } else {
+            }*/
+        } /*else {
             if (getServerType() == ServerType.BUNGEE) {
                 plugin.getLogger().severe("Please set the server type to MULTIARENA and do the setup.");
                 config.set("serverType", "MULTIARENA");
                 Bukkit.getServer().spigot().restart();
                 plugin.setEnabled(false);
-                return;
             }
-        }
+        }*/
     }
 
     private void registerEvents(Listener... listeners) {
         Arrays.stream(listeners).forEach(l -> plugin.getServer().getPluginManager().registerEvents(l, this));
-        if (!nms.isBukkitCommandRegistered("leave")) {
-            nms.registerCommand("leave", new LeaveCommand("leave"));
-        }
-        if (!nms.isBukkitCommandRegistered("party")) {
-            nms.registerCommand("party", new com.andrei1058.bedwars.commands.Party("party"));
-        }
     }
 
     public static void debug(String message) {
@@ -531,6 +682,18 @@ public class Main extends JavaPlugin {
         yml.addDefault("Default." + ConfigPath.GENERATOR_EMERALD_TIER_III_START, 1440);
         yml.options().copyDefaults(true);
         generators.save();
+    }
+
+
+    public static String getForCurrentVersion(String v18, String v12, String v13) {
+        switch (getServerVersion()) {
+            case "v1_12_R1":
+                return v12;
+            case "v1_13_R1":
+            case "v1_13_R2":
+                return v13;
+        }
+        return v18;
     }
 
     public static ServerType getServerType() {

@@ -32,7 +32,7 @@ public class Sounds {
 
     public static void loadSounds() {
         try {
-            nms.setBedDestroySound((sounds.getString(SOUNDS_BED_DESTROY)));
+            nms.setBedDestroySound(sounds.getString(SOUNDS_BED_DESTROY));
             nms.setPlayerKillsSound(sounds.getString(SOUNDS_PLAYER_KILL));
             nms.setInsuffMoneySound(sounds.getString(SOUNDS_INSUFF_MONEY));
             nms.setBoughtSound(sounds.getString(SOUNDS_BOUGHT));

@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.arena;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.configuration.ConfigPath;
@@ -28,15 +29,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Random;
 
 import static com.andrei1058.bedwars.Main.*;
@@ -100,7 +100,7 @@ public class Misc {
         fw.setVelocity(p.getEyeLocation().getDirection());
     }
 
-    public static String replaceLast(String text, String regex, String replacement) {
+    public static String replaceFirst(String text, String regex, String replacement) {
         return text.replaceFirst("(?s)" + regex + "(?!.*?" + regex + ")", replacement);
     }
 
@@ -129,7 +129,7 @@ public class Misc {
     public static ItemStack createItem(Material material, byte data, boolean enchanted, String name, List<String> lore, Player owner, String metaKey, String metaData) {
         ItemStack i = new ItemStack(material, 1, data);
         if (owner != null) {
-            if (material == Material.SKULL_ITEM && data == 3) {
+            if (nms.isPlayerHead(material.toString(), data)) {
                 SkullMeta sm = (SkullMeta) i.getItemMeta();
                 sm.setOwner(owner.getName());
                 i.setItemMeta(sm);
@@ -143,8 +143,8 @@ public class Misc {
             im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
         i.setItemMeta(im);
-        if (!(metaData.isEmpty() || metaKey.isEmpty())){
-            i = nms.addCustomData(i, metaKey+"_"+metaData);
+        if (!(metaData.isEmpty() || metaKey.isEmpty())) {
+            i = nms.addCustomData(i, metaKey + "_" + metaData);
         }
         return i;
     }
@@ -246,32 +246,7 @@ public class Misc {
     }
 
     public static boolean isProjectile(Material i) {
-        return Material.EGG == i || Material.FIREBALL == i || Material.SNOW_BALL == i || Material.ARROW == i;
-    }
-
-    /**
-     * unknown die reason or unknown killer message
-     */
-    public static void unknownReason(BedWarsTeam t, Arena a, Player victim) {
-        if (t.isBedDestroyed()) {
-            for (Player on : a.getPlayers()) {
-                on.sendMessage(getMsg(on, Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString())
-                        .replace("{PlayerName}", victim.getName()));
-            }
-            for (Player on : a.getSpectators()) {
-                on.sendMessage(getMsg(on, Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString())
-                        .replace("{PlayerName}", victim.getName()));
-            }
-        } else {
-            for (Player on : a.getPlayers()) {
-                on.sendMessage(getMsg(on, Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString())
-                        .replace("{PlayerName}", victim.getName()));
-            }
-            for (Player on : a.getSpectators()) {
-                on.sendMessage(getMsg(on, Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR).replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString())
-                        .replace("{PlayerName}", victim.getName()));
-            }
-        }
+        return Material.EGG == i || nms.materialFireball() == i || nms.materialSnowball() == i || Material.ARROW == i;
     }
 
     /**
@@ -288,9 +263,9 @@ public class Misc {
      * add default stats gui item
      */
     public static void addDefaultStatsItem(YamlConfiguration yml, int slot, Material itemstack, int data, String path) {
-        yml.addDefault("statsGUI." + path + ".itemStack", itemstack.toString());
-        yml.addDefault("statsGUI." + path + ".data", data);
-        yml.addDefault("statsGUI." + path + ".slot", slot);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_MATERIAL.replace("%path%", path), itemstack.toString());
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_DATA.replace("%path%", path), data);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_SLOT.replace("%path%", path), slot);
     }
 
     /**
@@ -307,25 +282,25 @@ public class Misc {
         String timeFormat = getMsg(p, Messages.FORMATTING_STATS_DATE_FORMAT), never = getMsg(p, Messages.MEANING_NEVER);
 
         /** create inventory */
-        Inventory inv = Bukkit.createInventory(null, config.getInt("statsGUI.invSize"), replaceStatsPlaceholders(p, getMsg(p, Messages.PLAYER_STATS_GUI_INV_NAME),
+        Inventory inv = Bukkit.createInventory(null, config.getInt(ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE), replaceStatsPlaceholders(p, getMsg(p, Messages.PLAYER_STATS_GUI_INV_NAME),
                 kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never, true));
 
         /** add custom items to gui */
-        for (String s : config.getYml().getConfigurationSection("statsGUI").getKeys(false)) {
+        for (String s : config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_STATS_PATH).getKeys(false)) {
             /** skip inv size, it isn't a content */
-            if (s.equalsIgnoreCase("invSize")) continue;
+            if (ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE.contains(s)) continue;
             /** create new itemStack for content */
-            ItemStack i = new ItemStack(Material.valueOf(config.getYml().getString("statsGUI." + s + ".itemStack").toUpperCase()), 1, (byte) config.getInt("statsGUI." + s + ".data"));
+            ItemStack i = nms.createItemStack(config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_MATERIAL.replace("%path%", s)).toUpperCase(), 1, (short) config.getInt(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_DATA.replace("%path%", s)));
             ItemMeta im = i.getItemMeta();
-            im.setDisplayName(replaceStatsPlaceholders(p, getMsg(p, Messages.PLAYER_STATS_GUI_PATH + "." + s + ".name"), kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed,
+            im.setDisplayName(replaceStatsPlaceholders(p, getMsg(p, Messages.PLAYER_STATS_GUI_PATH + "-" + s + "-name"), kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed,
                     firstPlay, lastPlay, timeFormat, p.getName(), never, true));
             List<String> lore = new ArrayList<>();
-            for (String string : getList(p, Messages.PLAYER_STATS_GUI_PATH + "." + s + ".lore")) {
+            for (String string : getList(p, Messages.PLAYER_STATS_GUI_PATH + "-" + s + "-lore")) {
                 lore.add(replaceStatsPlaceholders(p, string, kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never, true));
             }
             im.setLore(lore);
             i.setItemMeta(im);
-            inv.setItem(config.getInt("statsGUI." + s + ".slot"), i);
+            inv.setItem(config.getInt(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_SLOT.replace("%path%", s)), i);
         }
 
         p.openInventory(inv);
@@ -343,7 +318,7 @@ public class Misc {
     }
 
     public static void giveLobbySb(Player p) {
-        if (config.getBoolean("lobbyScoreboard")) {
+        if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
             new SBoard(p, getList(p, Messages.SCOREBOARD_LOBBY), null);
         }
     }
@@ -400,4 +375,30 @@ public class Misc {
         }
         return isOutsideOfBorder(l);
     }
+
+    /**
+     * Change the server MOTD in properties file
+     */
+    public static void updateMOTD(String motd) {
+        Properties p = new Properties();
+        OutputStream i = null;
+        try {
+            i = new FileOutputStream(Main.plugin.getServer().getWorldContainer().getPath() + "/server.properties");
+            p.setProperty("motd", motd);
+            p.store(i, null);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (i != null) {
+                try {
+                    i.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 }

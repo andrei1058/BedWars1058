@@ -1,10 +1,9 @@
 package com.andrei1058.bedwars.shop;
 
-import com.andrei1058.bedwars.api.ShopBuyEvent;
+import com.andrei1058.bedwars.api.events.ShopBuyEvent;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
-import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -70,7 +69,7 @@ public class BuyItemsAction extends ContentAction {
             if (!nms.isCustomBedWarsItem(i)) continue;
             for (ShopItem i2 : items) {
                 if (nms.isCustomBedWarsItem(i2.getItemStack())) {
-                    if (nms.getCustomData(i).equals(nms.getCustomData(i2.getItemStack()))){
+                    if (nms.getCustomData(i).equals(nms.getCustomData(i2.getItemStack()))) {
                         p.sendMessage(getMsg(p, Messages.SHOP_ALREADY_BOUGHT));
                         return;
                     }
@@ -79,7 +78,7 @@ public class BuyItemsAction extends ContentAction {
         }
         if (money < getCost()) {
             p.playSound(p.getLocation(), nms.insufficientMoney(), 1f, 1f);
-            p.sendMessage(getMsg(p, Messages.SHOP_INSUFFICIENT_MONEY).replace("{currency}", getMsg(p, "meaning." + getCurrency().toLowerCase())).replace("{amount}", String.valueOf(getCost() - money)));
+            p.sendMessage(getMsg(p, Messages.SHOP_INSUFFICIENT_MONEY).replace("{currency}", getMsg(p, getCurrencyMsg())).replace("{amount}", String.valueOf(getCost() - money)));
             return;
         }
         boolean done = false;
@@ -107,7 +106,7 @@ public class BuyItemsAction extends ContentAction {
         }
         p.playSound(p.getLocation(), nms.bought(), 1f, 1f);
         getCategoryContent().getShopCategory().openToPlayer(p);
-        p.sendMessage(getMsg(p, Messages.SHOP_NEW_PURCHASE).replace("{item}", ChatColor.stripColor(getMsg(p, getCategoryContent().getShopCategory().getName().replace("main.", Messages.SHOP_PATH) + "." + getCategoryContent().getName() + ".name"))));
+        p.sendMessage(getMsg(p, Messages.SHOP_NEW_PURCHASE).replace("{item}", ChatColor.stripColor(getMsg(p, getCategoryContent().getShopCategory().getName().replace("main.", Messages.SHOP_PATH + ".") + "." + getCategoryContent().getName() + ".name"))));
         BedWarsTeam.PlayerVault pv = BedWarsTeam.getVault(p);
 
         //Call buy event
@@ -127,15 +126,15 @@ public class BuyItemsAction extends ContentAction {
                 }
                 if (nms.isArmor(si.getItemStack())) {
                     Material M = si.getItemStack().getType();
-                    if (M == Material.LEATHER_HELMET || M == Material.CHAINMAIL_HELMET || M == Material.DIAMOND_HELMET || M == Material.GOLD_HELMET || M == Material.IRON_HELMET) {
+                    if (M == Material.LEATHER_HELMET || M == Material.CHAINMAIL_HELMET || M == Material.DIAMOND_HELMET || M == nms.materialGoldenHelmet() || M == Material.IRON_HELMET) {
                         if (nms.getProtection(si.getItemStack()) >= nms.getProtection(pv.getHelmet())) {
                             pv.setHelmet(si.getItemStack());
                         }
-                    } else if (M == Material.LEATHER_CHESTPLATE || M == Material.CHAINMAIL_CHESTPLATE || M == Material.GOLD_CHESTPLATE || M == Material.DIAMOND_CHESTPLATE || M == Material.IRON_CHESTPLATE) {
+                    } else if (M == Material.LEATHER_CHESTPLATE || M == Material.CHAINMAIL_CHESTPLATE || M == nms.materialGoldenChestPlate() || M == Material.DIAMOND_CHESTPLATE || M == Material.IRON_CHESTPLATE) {
                         if (nms.getProtection(si.getItemStack()) >= nms.getProtection(pv.getChestplate())) {
                             pv.setChestplate(si.getItemStack());
                         }
-                    } else if (M == Material.LEATHER_LEGGINGS || M == Material.CHAINMAIL_LEGGINGS || M == Material.DIAMOND_LEGGINGS || M == Material.GOLD_LEGGINGS || M == Material.IRON_LEGGINGS) {
+                    } else if (M == Material.LEATHER_LEGGINGS || M == Material.CHAINMAIL_LEGGINGS || M == Material.DIAMOND_LEGGINGS || M == nms.materialGoldenLeggings() || M == Material.IRON_LEGGINGS) {
                         if (nms.getProtection(si.getItemStack()) >= nms.getProtection(pv.getPants())) {
                             pv.setPants(si.getItemStack());
                         }
@@ -149,11 +148,11 @@ public class BuyItemsAction extends ContentAction {
             }
             if (si.isAutoequip() && nms.isArmor(si.getItemStack())) {
                 Material M = si.getItemStack().getType();
-                if (M == Material.LEATHER_HELMET || M == Material.CHAINMAIL_HELMET || M == Material.DIAMOND_HELMET || M == Material.GOLD_HELMET || M == Material.IRON_HELMET) {
+                if (M == Material.LEATHER_HELMET || M == Material.CHAINMAIL_HELMET || M == Material.DIAMOND_HELMET || M == nms.materialGoldenHelmet() || M == Material.IRON_HELMET) {
                     p.getInventory().setHelmet(si.getItemStack());
-                } else if (M == Material.LEATHER_CHESTPLATE || M == Material.CHAINMAIL_CHESTPLATE || M == Material.GOLD_CHESTPLATE || M == Material.DIAMOND_CHESTPLATE || M == Material.IRON_CHESTPLATE) {
+                } else if (M == Material.LEATHER_CHESTPLATE || M == Material.CHAINMAIL_CHESTPLATE || M == nms.materialGoldenChestPlate() || M == Material.DIAMOND_CHESTPLATE || M == Material.IRON_CHESTPLATE) {
                     p.getInventory().setChestplate(si.getItemStack());
-                } else if (M == Material.LEATHER_LEGGINGS || M == Material.CHAINMAIL_LEGGINGS || M == Material.DIAMOND_LEGGINGS || M == Material.GOLD_LEGGINGS || M == Material.IRON_LEGGINGS) {
+                } else if (M == Material.LEATHER_LEGGINGS || M == Material.CHAINMAIL_LEGGINGS || M == Material.DIAMOND_LEGGINGS || M == nms.materialGoldenLeggings() || M == Material.IRON_LEGGINGS) {
                     p.getInventory().setLeggings(si.getItemStack());
                 } else {
                     p.getInventory().setBoots(si.getItemStack());
@@ -173,10 +172,7 @@ public class BuyItemsAction extends ContentAction {
                     }
                 }
                 ItemStack i = si.getItemStack();
-                if (si.getItemStack().getType() == Material.WOOL || si.getItemStack().getType() == Material.STAINED_CLAY ||
-                        si.getItemStack().getType() == Material.STAINED_GLASS) {
-                    i = new ItemStack(i.getType(), i.getAmount(), TeamColor.itemColor(Arena.getArenaByPlayer(p).getTeam(p).getColor()));
-                }
+                i = nms.colourItem(i, Arena.getArenaByPlayer(p).getTeam(p));
                 p.getInventory().addItem(i);
             }
 
@@ -249,5 +245,29 @@ public class BuyItemsAction extends ContentAction {
 
     public List<ShopItem> getItems() {
         return items;
+    }
+
+    public String getCurrencyMsg() {
+        String c = "";
+
+        switch (currency) {
+            case "iron":
+                c = getCost() == 1 ? Messages.MEANING_IRON_SINGULAR : Messages.MEANING_IRON_PLURAL;
+                break;
+            case "gold":
+                c = getCost() == 1 ? Messages.MEANING_GOLD_SINGULAR : Messages.MEANING_GOLD_PLURAL;
+                break;
+            case "emerald":
+                c = getCost() == 1 ? Messages.MEANING_EMERALD_SINGULAR : Messages.MEANING_EMERALD_PLURAL;
+                break;
+            case "diamond":
+                c = getCost() == 1 ? Messages.MEANING_DIAMOND_SINGULAR : Messages.MEANING_DIAMOND_PLURAL;
+                break;
+            case "vault":
+                c = getCost() == 1 ? Messages.MEANING_VAULT_SINGULAR : Messages.MEANING_VAULT_PLURAL;
+                break;
+        }
+
+        return c;
     }
 }

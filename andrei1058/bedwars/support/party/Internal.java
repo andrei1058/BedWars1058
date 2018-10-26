@@ -151,9 +151,5 @@ public class Internal implements Party {
         void addMember(Player p) {
             members.add(p);
         }
-
-        void removeMember(Player p) {
-            members.remove(p);
-        }
     }
 }

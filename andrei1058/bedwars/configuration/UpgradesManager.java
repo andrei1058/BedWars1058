@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.configuration;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.upgrades.*;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -16,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.Main.plugin;
 import static com.andrei1058.bedwars.configuration.Language.saveIfNotExists;
 
@@ -86,7 +88,7 @@ public class UpgradesManager {
 
         /** Maniac Miner Upgrades*/
         yml.addDefault("Default.maniacMiner.slot", 12);
-        yml.addDefault("Default.maniacMiner.tier1.displayItem.material", "GOLD_AXE");
+        yml.addDefault("Default.maniacMiner.tier1.displayItem.material", Main.getForCurrentVersion("GOLD_AXE", "GOLD_AXE", "GOLDEN_AXE"));
         yml.addDefault("Default.maniacMiner.tier1.displayItem.data", 0);
         yml.addDefault("Default.maniacMiner.tier1.displayItem.amount", 1);
         yml.addDefault("Default.maniacMiner.tier1.displayItem.enchanted", false);
@@ -404,7 +406,7 @@ public class UpgradesManager {
                     }
                 }
                 if (!actions.isEmpty()) {
-                    ItemStack i = new ItemStack(Material.valueOf(yml.getString(tp + "displayItem.material")), yml.isSet(tp + "displayItem.amount") ? yml.getInt(tp + "displayItem.amount") : 1,
+                    ItemStack i = nms.createItemStack(yml.getString(tp + "displayItem.material"), yml.isSet(tp + "displayItem.amount") ? yml.getInt(tp + "displayItem.amount") : 1,
                             (short) (yml.isSet(tp + "displayItem.data") ? yml.getInt(tp + "displayItem.data") : 0));
                     if (yml.isSet(tp + "displayItem.enchanted")) {
                         if (yml.getBoolean(tp + "displayItem.enchanted")) {

@@ -1,8 +1,7 @@
 package com.andrei1058.bedwars.arena;
 
-import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GeneratorType;
-import com.andrei1058.bedwars.api.GeneratorUpgradeEvent;
+import com.andrei1058.bedwars.api.events.GeneratorUpgradeEvent;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
@@ -10,7 +9,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
-import org.bukkit.World;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -291,15 +289,15 @@ public class OreGenerator {
                 up = false;
             }
             if (rotate > 500) {
-                item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate += 3), 0));
+                item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate += 1), 0));
             } else if (rotate > 470) {
-                item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate += 4), 0));
+                item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate += 2), 0));
                 /*item.teleport(item.getLocation().add(0, 0.005D, 0));*/
             } else if (rotate > 450) {
-                item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate += 7), 0));
+                item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate += 3), 0));
                 /*item.teleport(item.getLocation().add(0, 0.001D, 0));*/
             } else {
-                item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate += 8), 0));
+                item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate += 4), 0));
                 /*item.teleport(item.getLocation().add(0, 0.002D, 0));*/
             }
         } else {
@@ -307,16 +305,16 @@ public class OreGenerator {
                 up = true;
             }
             if (rotate > 120) {
-                item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate -= 8), 0));
+                item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate -= 4), 0));
                 /*item.teleport(item.getLocation().subtract(0, 0.002D, 0));*/
             } else if (rotate > 90) {
-                item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate -= 7), 0));
+                item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate -= 3), 0));
                 /*item.teleport(item.getLocation().add(0, 0.001D, 0));*/
             } else if (rotate > 70) {
-                item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate -= 4), 0));
+                item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate -= 2), 0));
                 /*item.teleport(item.getLocation().add(0, 0.005D, 0));*/
             } else {
-                item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate -= 3), 0));
+                item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate -= 1), 0));
             }
         }
     }

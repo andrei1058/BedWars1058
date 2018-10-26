@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.OreGenerator;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import static com.andrei1058.bedwars.Main.plugin;
@@ -41,9 +42,10 @@ public class GeneratorAction extends UpgradeAction {
             bwt.getGoldGenerator().setSpawnLimit(goldLimit);
         }
         if (emeraldAmount > 0 && emeraldDelay > 0 && bwt.getEmeraldGenerator() == null){
-            bwt.setEmeraldGenerator(new OreGenerator(bwt.getIronGenerator().getLocation(), Arena.getArenaByPlayer(bwt.getMembers().get(0)), GeneratorType.EMERALD, null));
+            bwt.setEmeraldGenerator(new OreGenerator(bwt.getIronGenerator().getLocation(), bwt.getArena(), GeneratorType.IRON, bwt));
             bwt.getEmeraldGenerator().setDelay(emeraldDelay);
             bwt.getEmeraldGenerator().setAmount(emeraldAmount);
+            bwt.getEmeraldGenerator().enable();
             bwt.getEmeraldGenerator().setOre(new ItemStack(Material.EMERALD));
         } else {
             if (emeraldDelay > 0){

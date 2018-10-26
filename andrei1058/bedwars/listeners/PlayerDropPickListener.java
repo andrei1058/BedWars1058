@@ -2,21 +2,18 @@ package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
-import com.andrei1058.bedwars.api.GeneratorCollectEvent;
+import com.andrei1058.bedwars.api.events.GeneratorCollectEvent;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import static com.andrei1058.bedwars.Main.config;
 
 public class PlayerDropPickListener implements Listener {
 
@@ -39,7 +36,7 @@ public class PlayerDropPickListener implements Listener {
             return;
         }
 
-        if (a.getStatus() == GameState.restarting || a.getStatus() == GameState.waiting) {
+        if (a.getStatus() != GameState.playing) {
             e.setCancelled(true);
             return;
         }

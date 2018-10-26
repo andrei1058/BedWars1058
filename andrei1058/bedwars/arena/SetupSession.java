@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.configuration.ConfigManager;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.*;
@@ -175,8 +176,6 @@ public class SetupSession {
         if (!isStarted()) {
             getSetupSessions().remove(this);
             player.sendMessage("§6 ▪ §7" + getWorldName() + " setup cancelled!");
-        } else {
-            //todo
         }
     }
 
@@ -187,9 +186,9 @@ public class SetupSession {
      */
     public void done() {
         getSetupSessions().remove(this);
-        getPlayer().teleport(config.getConfigLoc("lobbyLoc"));
+        if (Main.getServerType() != ServerType.BUNGEE) getPlayer().teleport(config.getConfigLoc("lobbyLoc"));
         getPlayer().removePotionEffect(PotionEffectType.SPEED);
-        Arena.sendLobbyCommandItems(getPlayer());
+        if (Main.getServerType() == ServerType.MULTIARENA) Arena.sendLobbyCommandItems(getPlayer());
     }
 
     /**

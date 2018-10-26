@@ -3,21 +3,19 @@ package com.andrei1058.bedwars.tasks;
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.NextEvent;
-import com.andrei1058.bedwars.api.TeamAssignEvent;
+import com.andrei1058.bedwars.api.events.TeamAssignEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.OreGenerator;
 import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Messages;
-import com.boydti.fawe.jnbt.anvil.generator.OreGen;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -143,11 +141,11 @@ public class GameStartingTask extends BukkitRunnable {
                 }
                 nms.colorBed(team);
                 if (getArena().getMaxInTeam() > 1) {
-                    nms.spawnShop(getArena().getCm().getArenaLoc("Team."+team.getName()+".Upgrade"), Messages.UPGRADES_TEAM_NPC_NAME, getArena().getPlayers(), getArena());
-                    nms.spawnShop(getArena().getCm().getArenaLoc("Team."+team.getName()+".Shop"), Messages.SHOP_TEAM_NAME, getArena().getPlayers(), getArena());
+                    nms.spawnShop(getArena().getCm().getArenaLoc("Team."+team.getName()+".Upgrade"), Messages.NPC_NAME_TEAM_UPGRADES, getArena().getPlayers(), getArena());
+                    nms.spawnShop(getArena().getCm().getArenaLoc("Team."+team.getName()+".Shop"), Messages.NPC_NAME_TEAM_SHOP, getArena().getPlayers(), getArena());
                 } else {
-                    nms.spawnShop(getArena().getCm().getArenaLoc("Team."+team.getName()+".Upgrade"), Messages.UPGRADES_SOLO_NPC_NAME, getArena().getPlayers(), getArena());
-                    nms.spawnShop(getArena().getCm().getArenaLoc("Team."+team.getName()+".Shop"), Messages.SHOP_SOLO_NAME, getArena().getPlayers(), getArena());
+                    nms.spawnShop(getArena().getCm().getArenaLoc("Team."+team.getName()+".Upgrade"), Messages.NPC_NAME_SOLO_UPGRADES, getArena().getPlayers(), getArena());
+                    nms.spawnShop(getArena().getCm().getArenaLoc("Team."+team.getName()+".Shop"), Messages.NPC_NAME_SOLO_SHOP, getArena().getPlayers(), getArena());
                 }
                 team.getIronGenerator().enable();
                 team.getGoldGenerator().enable();

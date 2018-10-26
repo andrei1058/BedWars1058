@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.shop;
 
 import com.andrei1058.bedwars.arena.Misc;
+import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -22,13 +23,13 @@ public class ShopCategory {
     private String name;
     private ShopCategory parent;
 
-    public ShopCategory(int invSize, String name){
+    public ShopCategory(int invSize, String name) {
         this.invSize = invSize;
         this.name = name;
         shopCategories.add(this);
     }
 
-    public void addContent(CategoryContent content){
+    public void addContent(CategoryContent content) {
         this.content.add(content);
     }
 
@@ -44,30 +45,32 @@ public class ShopCategory {
         return name;
     }
 
-    public void openToPlayer(Player p){
-        String path = Misc.replaceLast((getName().replace("main.", Messages.SHOP_PATH)+".name"), ".invContents", "");
-        String name = "§c"+getName()+" name not set :(";
-        if (getPlayerLanguage(p).exists(path)){
+    public void openToPlayer(Player p) {
+        String path = Misc.replaceFirst((getName().replace("main.", Messages.SHOP_PATH + ".") + ".name"), ".invContents", "");
+        if (getName().equals("main")) path = Messages.SHOP_PATH + ".name";
+        String name = "§cName not set :(";
+        if (getPlayerLanguage(p).exists(path)) {
             name = getMsg(p, path);
         } else {
             getPlayerLanguage(p).set(path, name);
         }
         Inventory inv = Bukkit.createInventory(p, invSize, name);
-        for (CategoryContent cc : getContent()){
+        for (CategoryContent cc : getContent()) {
             ItemStack i = cc.getItemStack().clone();
             ItemMeta im = i.getItemMeta();
-            String ccNameP = getName().replace("main.", Messages.SHOP_PATH)+"."+cc.getName()+".name";
-            String ccLoreP = getName().replace("main.", Messages.SHOP_PATH)+"."+cc.getName()+".lore";
+            String ccNameP = getName().replace("main.", Messages.SHOP_PATH + ".") + "." + cc.getName() + ".name";
+            String ccLoreP = getName().replace("main.", Messages.SHOP_PATH + ".") + "." + cc.getName() + ".lore";
             if (getPlayerLanguage(p).exists(ccNameP)) {
                 im.setDisplayName(getMsg(p, ccNameP));
             } else {
-                im.setDisplayName("&cName not set");
-                getPlayerLanguage(p).set(ccNameP, "Not set");
+                im.setDisplayName("§7Name not set");
+                getPlayerLanguage(p).set(ccNameP, "§7Name not set");
             }
             List<String> lore = new ArrayList<>();
-            if (getPlayerLanguage(p).exists(ccLoreP)){
-                for (String s : getList(p, ccLoreP)){
-                    lore.add(s.replace("{cost}", String.valueOf(cc.getContentAction().getCost())).replace("{currency}", getMsg(p, "meaning."+cc.getContentAction().getCurrency().toLowerCase())));
+            if (getPlayerLanguage(p).exists(ccLoreP)) {
+                for (String s : getList(p, ccLoreP)) {
+                    lore.add(s.replace("{cost}", String.valueOf(cc.getContentAction().getCost())).replace("{currency}",
+                            getCurrencyMsg(p, cc.getContentAction().getCurrency(), cc.getContentAction().getCost())));
                 }
             } else {
                 getPlayerLanguage(p).set(ccLoreP, new ArrayList<>());
@@ -79,12 +82,36 @@ public class ShopCategory {
         p.openInventory(inv);
     }
 
+    public String getCurrencyMsg(Player p, String currency, int cost) {
+        String c = "";
+
+        switch (currency) {
+            case "iron":
+                c = cost == 1 ? Messages.MEANING_IRON_SINGULAR : Messages.MEANING_IRON_PLURAL;
+                break;
+            case "gold":
+                c = cost == 1 ? Messages.MEANING_GOLD_SINGULAR : Messages.MEANING_GOLD_PLURAL;
+                break;
+            case "emerald":
+                c = cost == 1 ? Messages.MEANING_EMERALD_SINGULAR : Messages.MEANING_EMERALD_PLURAL;
+                break;
+            case "diamond":
+                c = cost == 1 ? Messages.MEANING_DIAMOND_SINGULAR : Messages.MEANING_DIAMOND_PLURAL;
+                break;
+            case "vault":
+                c = cost == 1 ? Messages.MEANING_VAULT_SINGULAR : Messages.MEANING_VAULT_PLURAL;
+                break;
+        }
+
+        return Language.getMsg(p, c);
+    }
+
     public static List<ShopCategory> getShopCategories() {
         return shopCategories;
     }
 
-    public String getDisplayName(Player p){
-        return getMsg(p, Misc.replaceLast((getName().replace("main.", Messages.SHOP_PATH)+".name"), ".invContents", ""));
+    public String getDisplayName(Player p) {
+        return getMsg(p, Misc.replaceFirst((getName().replace("main.", Messages.SHOP_PATH + ".") + ".name"), ".invContents", ""));
     }
 
     public ShopCategory getParent() {
@@ -95,9 +122,9 @@ public class ShopCategory {
         this.parent = parent;
     }
 
-    public static ShopCategory getByName(String name){
-        for (ShopCategory sc : shopCategories){
-            if (sc.getName().equalsIgnoreCase(name)){
+    public static ShopCategory getByName(String name) {
+        for (ShopCategory sc : shopCategories) {
+            if (sc.getName().equalsIgnoreCase(name)) {
                 return sc;
             }
         }

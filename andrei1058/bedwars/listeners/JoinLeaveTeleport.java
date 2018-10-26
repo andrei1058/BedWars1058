@@ -3,11 +3,11 @@ package com.andrei1058.bedwars.listeners;
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.ServerType;
-import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.arena.Misc;
-import com.andrei1058.bedwars.arena.SetupSession;
+import com.andrei1058.bedwars.arena.*;
+import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -15,6 +15,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
+
+import java.util.ArrayList;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
@@ -24,10 +26,11 @@ public class JoinLeaveTeleport implements Listener {
     @EventHandler
     public void onLogin(PlayerLoginEvent e) {
         if (getServerType() == ServerType.BUNGEE) {
+            if (Arena.getArenas().isEmpty()) return;
             Arena a = Arena.getArenas().get(0);
             if (a.getStatus() == GameState.waiting || (a.getStatus() == GameState.starting && a.getStartingTask().getCountdown() > 2)) {
                 if (a.getPlayers().size() >= a.getMaxPlayers() && !Arena.isVip(e.getPlayer())) {
-                    e.setKickMessage(getMsg(e.getPlayer(), Messages.ARENA_JOIN_DENIED_IS_FULL));
+                    e.setKickMessage(getMsg(e.getPlayer(), Messages.COMMAND_JOIN_DENIED_IS_FULL));
                     e.setResult(PlayerLoginEvent.Result.KICK_FULL);
                     return;
                 } else if (a.getPlayers().size() >= a.getMaxPlayers() && Arena.isVip(e.getPlayer())) {
@@ -37,18 +40,25 @@ public class JoinLeaveTeleport implements Listener {
                             canJoin = true;
                             a.removePlayer(on, true);
                             on.kickPlayer(getMsg(on, Messages.ARENA_JOIN_VIP_KICK));
+                            break;
                         }
                     }
                     if (!canJoin) {
-                        e.setKickMessage(getMsg(e.getPlayer(), Messages.ARENA_JOIN_DENIED_IS_FULL_VIP_REQUIRED));
+                        e.setKickMessage(getMsg(e.getPlayer(), Messages.COMMAND_JOIN_DENIED_IS_FULL_OF_VIPS));
                         e.setResult(PlayerLoginEvent.Result.KICK_FULL);
                         return;
                     }
                 }
             } else if (a.getStatus() == GameState.playing) {
                 if (!a.allowSpectate) {
+                    if (e.getPlayer().hasPermission(Permissions.PERMISSION_REJOIN)) {
+                        if (ReJoin.exists(e.getPlayer())) {
+                            if (ReJoin.getPlayer(e.getPlayer()).canReJoin()) return;
+                        }
+                    }
                     e.setResult(PlayerLoginEvent.Result.KICK_FULL);
                 }
+
             } else {
                 e.setResult(PlayerLoginEvent.Result.KICK_FULL);
             }
@@ -101,8 +111,30 @@ public class JoinLeaveTeleport implements Listener {
             p.sendMessage("");
             p.sendMessage("§8[§f" + plugin.getName() + "§8]§7§m---------------------------");
         }
-        if (getServerType() == ServerType.SHARED) return;
-        e.setJoinMessage(null);
+        if (Arena.getArenas().isEmpty()) return;
+
+        if (getServerType() != ServerType.SHARED) {
+            e.setJoinMessage(null);
+
+            //ReJoin system
+            if (ReJoin.exists(p)) {
+                if (!ReJoin.getPlayer(p).canReJoin()) return;
+                p.sendMessage(Language.getMsg(p, Messages.REJOIN_ALLOWED).replace("{arena}", ReJoin.getPlayer(p).getArena().getDisplayName()));
+                ReJoin.getPlayer(p).reJoin();
+                return;
+            }
+        }
+
+        if (Main.getServerType() == ServerType.SHARED) {
+            if (Main.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
+                Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+                    if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
+                        Misc.giveLobbySb(e.getPlayer());
+                    }
+                }, 20L);
+            }
+            return;
+        }
         p.getInventory().setArmorContents(null);
         if (getServerType() == ServerType.BUNGEE) {
             Arena.getArenas().get(0).addPlayer(p, false);
@@ -169,6 +201,22 @@ public class JoinLeaveTeleport implements Listener {
 
     @EventHandler
     public void onWorldChange(PlayerChangedWorldEvent e) {
+        if (Main.getServerType() == ServerType.SHARED) {
+            if (Main.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
+                if (e.getFrom().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
+                    for (SBoard sBoard : new ArrayList<>(SBoard.getScoreboards())) {
+                        if (sBoard.getP() == e.getPlayer())
+                            if (sBoard.getArena() == null) sBoard.remove();
+                    }
+                } else {
+                    Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+                        if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
+                            Misc.giveLobbySb(e.getPlayer());
+                        }
+                    }, 20L);
+                }
+            }
+        }
         if (Arena.isInArena(e.getPlayer())) {
             Arena a = Arena.getArenaByPlayer(e.getPlayer());
             if (a.isPlayer(e.getPlayer())) {
