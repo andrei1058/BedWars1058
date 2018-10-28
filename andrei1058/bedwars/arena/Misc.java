@@ -388,7 +388,7 @@ public class Misc {
 
         try {
 
-            in = new FileInputStream("config.properties");
+            in = new FileInputStream(Main.plugin.getServer().getWorldContainer().getPath() + "/server.properties");
             p.load(in);
 
         } catch (IOException ex) {
