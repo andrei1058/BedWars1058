@@ -671,4 +671,9 @@ public class v1_13_R1 implements NMS {
     public void setBlockData(Block block, byte data) {
 
     }
+
+    @Override
+    public org.bukkit.Material woolMaterial() {
+        return org.bukkit.Material.valueOf("WHITE_WOOL");
+    }
 }

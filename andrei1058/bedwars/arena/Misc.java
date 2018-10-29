@@ -319,7 +319,9 @@ public class Misc {
 
     public static void giveLobbySb(Player p) {
         if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
-            new SBoard(p, getList(p, Messages.SCOREBOARD_LOBBY), null);
+            Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+                new SBoard(p, getList(p, Messages.SCOREBOARD_LOBBY), null);
+            }, 15L);
         }
     }
 
@@ -381,19 +383,37 @@ public class Misc {
      */
     public static void updateMOTD(String motd) {
         Properties p = new Properties();
-        OutputStream i = null;
+        OutputStream out = null;
+        InputStream in = null;
+
         try {
-            i = new FileOutputStream(Main.plugin.getServer().getWorldContainer().getPath() + "/server.properties");
-            p.setProperty("motd", motd);
-            p.store(i, null);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+
+            in = new FileInputStream(Main.plugin.getServer().getWorldContainer().getPath() + "/server.properties");
+            p.load(in);
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
         } finally {
-            if (i != null) {
+            if (in != null) {
                 try {
-                    i.close();
+                    in.close();
+                    try {
+                        out = new FileOutputStream(Main.plugin.getServer().getWorldContainer().getPath() + "/server.properties");
+                        p.setProperty("motd", motd);
+                        p.store(out, null);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        if (out != null) {
+                            try {
+                                out.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

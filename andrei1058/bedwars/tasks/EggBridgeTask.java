@@ -75,7 +75,7 @@ public class EggBridgeTask extends BukkitRunnable {
             Block b2 = loc.clone().subtract(0.0D, 2.0D, 0.0D).getBlock();
             if (!Misc.isBuildProtected(b2.getLocation(), getArena())) {
                 if (b2.getType() == Material.AIR) {
-                    b2.setType(Material.WOOL);
+                    b2.setType(nms.woolMaterial());
                     nms.setBlockTeamColor(b2, getTeamColor());
                     getArena().getPlaced().add(b2);
                     Bukkit.getPluginManager().callEvent(new EggBridgeBuildEvent(getTeamColor(), getArena(), b2));
@@ -85,7 +85,7 @@ public class EggBridgeTask extends BukkitRunnable {
             Block b3 = loc.clone().subtract(1.0D, 2.0D, 0.0D).getBlock();
             if (!Misc.isBuildProtected(b3.getLocation(), getArena())) {
                 if (b3.getType() == Material.AIR) {
-                    b3.setType(Material.WOOL);
+                    b3.setType(nms.woolMaterial());
                     nms.setBlockTeamColor(b3, getTeamColor());
                     getArena().getPlaced().add(b3);
                     Bukkit.getPluginManager().callEvent(new EggBridgeBuildEvent(getTeamColor(), getArena(), b3));
@@ -95,7 +95,7 @@ public class EggBridgeTask extends BukkitRunnable {
             Block b4 = loc.clone().subtract(0.0D, 2.0D, 1.0D).getBlock();
             if (!Misc.isBuildProtected(b4.getLocation(), getArena())) {
                 if (b4.getType() == Material.AIR) {
-                    b4.setType(Material.WOOL);
+                    b4.setType(nms.woolMaterial());
                     nms.setBlockTeamColor(b4, getTeamColor());
                     getArena().getPlaced().add(b4);
                     Bukkit.getPluginManager().callEvent(new EggBridgeBuildEvent(getTeamColor(), getArena(), b4));

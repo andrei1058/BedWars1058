@@ -354,4 +354,9 @@ public interface NMS {
      */
     void setBlockData(Block block, byte data);
 
+
+    /**
+     * Wool material
+     */
+    Material woolMaterial();
 }
