@@ -348,76 +348,76 @@ public class ShopManager {
                     sc.addContent(cc);
                     if (!yml.getString(path + "." + category + ".buyItems").equalsIgnoreCase("[]")) {
                         for (String s : yml.getConfigurationSection(path + "." + category + ".buyItems").getKeys(false)) {
-                            String path2 = path + "." + category + ".buyItems." + s + ".";
-                            for (String s2 : Arrays.asList("material", "data", "amount")) {
-                                if (yml.get(path2 + s2) == null) {
-                                    plugin.getLogger().severe(path2 + s2 + " not set.");
-                                    return;
-                                }
-                            }
-                            try {
-                                Material.valueOf(yml.getString(path2 + "material"));
-                            } catch (Exception exx) {
-                                plugin.getLogger().severe("Invalid material at: " + path2);
-                                continue;
-                            }
-                            ItemStack itemStack = nms.createItemStack(yml.getString(path2 + "material"), yml.getInt(path2 + "amount"), (byte) yml.getInt(path2 + "data"));
-                            if (yml.get(path2 + "enchantments") != null) {
-                                ItemMeta imm = itemStack.getItemMeta();
-                                String[] enchant = yml.getString(path2 + "enchantments").split(",");
-                                for (String enc : enchant) {
-                                    String[] stuff = enc.split(" ");
-                                    try {
-                                        Enchantment.getByName(stuff[0]);
-                                    } catch (Exception eccc) {
-                                        plugin.getLogger().severe("Invalid enchantment " + stuff[0] + " at: " + path2 + "enchantments");
-                                        continue;
+                            for (String tier : yml.getConfigurationSection(path + "." + category + ".buyItems." + s).getKeys(false)){
+                                String path2 = path + "." + category + ".buyItems." + tier + "." + s + ".";
+                                for (String s2 : Arrays.asList("material", "data", "amount")) {
+                                    if (yml.get(path2 + s2) == null) {
+                                        plugin.getLogger().severe(path2 + s2 + " not set.");
+                                        return;
                                     }
-                                    int ieee = 1;
-                                    if (stuff.length >= 2) {
+                                }
+                                try {
+                                    Material.valueOf(yml.getString(path2 + "material"));
+                                } catch (Exception exx) {
+                                    plugin.getLogger().severe("Invalid material at: " + path2);
+                                    continue;
+                                }
+                                ItemStack itemStack = nms.createItemStack(yml.getString(path2 + "material"), yml.getInt(path2 + "amount"), (byte) yml.getInt(path2 + "data"));
+                                if (yml.get(path2 + "enchantments") != null) {
+                                    ItemMeta imm = itemStack.getItemMeta();
+                                    String[] enchant = yml.getString(path2 + "enchantments").split(",");
+                                    for (String enc : enchant) {
+                                        String[] stuff = enc.split(" ");
                                         try {
-                                            ieee = Integer.parseInt(stuff[1]);
-                                        } catch (Exception exx) {
-                                            plugin.getLogger().severe("Invalid int " + stuff[1] + " at: " + path2 + "enchantments");
+                                            Enchantment.getByName(stuff[0]);
+                                        } catch (Exception eccc) {
+                                            plugin.getLogger().severe("Invalid enchantment " + stuff[0] + " at: " + path2 + "enchantments");
                                             continue;
                                         }
+                                        int ieee = 1;
+                                        if (stuff.length >= 2) {
+                                            try {
+                                                ieee = Integer.parseInt(stuff[1]);
+                                            } catch (Exception exx) {
+                                                plugin.getLogger().severe("Invalid int " + stuff[1] + " at: " + path2 + "enchantments");
+                                                continue;
+                                            }
+                                        }
+                                        imm.addEnchant(Enchantment.getByName(stuff[0]), ieee, true);
                                     }
-                                    imm.addEnchant(Enchantment.getByName(stuff[0]), ieee, true);
+                                    itemStack.setItemMeta(imm);
                                 }
-                                itemStack.setItemMeta(imm);
-                            }
-                            if (yml.get(path2 + "potionEffect") != null && (/*i.getType() == Material.POTATO_ITEM ||*/ i.getType() == Material.POTION)) {
-                                PotionMeta imm = (PotionMeta) itemStack.getItemMeta();
-                                String[] enchant = yml.getString(path2 + "potionEffect").split(",");
-                                for (String enc : enchant) {
-                                    String[] stuff = enc.split(" ");
-                                    try {
-                                        PotionEffectType.getByName(stuff[0]);
-                                    } catch (Exception eccc) {
-                                        plugin.getLogger().severe("Invalid potion effect " + stuff[0] + " at: " + path2 + "potionEffect");
-                                        continue;
-                                    }
-                                    int duration = 50, amplifier = 1;
-                                    if (stuff.length >= 3) {
+                                if (yml.get(path2 + "potionEffect") != null && (/*i.getType() == Material.POTATO_ITEM ||*/ i.getType() == Material.POTION)) {
+                                    PotionMeta imm = (PotionMeta) itemStack.getItemMeta();
+                                    String[] enchant = yml.getString(path2 + "potionEffect").split(",");
+                                    for (String enc : enchant) {
+                                        String[] stuff = enc.split(" ");
                                         try {
-                                            duration = Integer.parseInt(stuff[1]);
-                                        } catch (Exception exx) {
-                                            plugin.getLogger().severe("Invalid int (duration) " + stuff[1] + " at: " + path2 + "potionEffect");
+                                            PotionEffectType.getByName(stuff[0]);
+                                        } catch (Exception eccc) {
+                                            plugin.getLogger().severe("Invalid potion effect " + stuff[0] + " at: " + path2 + "potionEffect");
                                             continue;
                                         }
-                                        try {
-                                            amplifier = Integer.parseInt(stuff[2]);
-                                        } catch (Exception exx) {
-                                            plugin.getLogger().severe("Invalid int (amplifier) " + stuff[2] + " at: " + path2 + "potionEffect");
-                                            continue;
+                                        int duration = 50, amplifier = 1;
+                                        if (stuff.length >= 3) {
+                                            try {
+                                                duration = Integer.parseInt(stuff[1]);
+                                            } catch (Exception exx) {
+                                                plugin.getLogger().severe("Invalid int (duration) " + stuff[1] + " at: " + path2 + "potionEffect");
+                                                continue;
+                                            }
+                                            try {
+                                                amplifier = Integer.parseInt(stuff[2]);
+                                            } catch (Exception exx) {
+                                                plugin.getLogger().severe("Invalid int (amplifier) " + stuff[2] + " at: " + path2 + "potionEffect");
+                                                continue;
+                                            }
                                         }
+                                        imm.addCustomEffect(new PotionEffect(PotionEffectType.getByName(stuff[0]), duration * 20, amplifier), false);
                                     }
-                                    imm.addCustomEffect(new PotionEffect(PotionEffectType.getByName(stuff[0]), duration * 20, amplifier), false);
+                                    itemStack.setItemMeta(imm);
                                 }
-                                itemStack.setItemMeta(imm);
                             }
-                            ShopItem si = new ShopItem(itemStack, yml.get(path2 + "permanent") == null ? false : yml.getBoolean(path2 + "permanent"), yml.get(path2 + "auto-equip") == null ? false : yml.getBoolean(path2 + "auto-equip"), path2);
-                            buy.addItem(si);
                         }
                     }
                 } else {

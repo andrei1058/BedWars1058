@@ -2,8 +2,7 @@ package com.andrei1058.bedwars.support.bukkit.v1_8_R3;
 
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
-import com.andrei1058.bedwars.configuration.Messages;
-import com.google.common.base.Predicate;
+import com.andrei1058.bedwars.configuration.language.Messages;
 import net.minecraft.server.v1_8_R3.*;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Location;
@@ -13,8 +12,6 @@ import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.andrei1058.bedwars.Main.lang;
 import static com.andrei1058.bedwars.Main.shop;

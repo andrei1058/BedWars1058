@@ -2,7 +2,7 @@ package com.andrei1058.bedwars.upgrades;
 
 import com.andrei1058.bedwars.api.events.UpgradeBuyEvent;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
-import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.configuration.language.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

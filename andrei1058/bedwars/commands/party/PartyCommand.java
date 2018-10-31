@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.commands.party;
 
-import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.configuration.language.Messages;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 
 import static com.andrei1058.bedwars.Main.getParty;
-import static com.andrei1058.bedwars.Main.lang;
 import static com.andrei1058.bedwars.configuration.Language.getList;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 

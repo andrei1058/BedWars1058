@@ -6,7 +6,7 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.ShopHolo;
 import com.andrei1058.bedwars.configuration.Language;
-import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.configuration.language.Messages;
 import com.andrei1058.bedwars.exceptions.InvalidSoundException;
 import com.andrei1058.bedwars.support.bukkit.NMS;
 import net.minecraft.server.v1_8_R3.*;
@@ -671,5 +671,34 @@ public class v1_8_R3 implements NMS {
     @Override
     public org.bukkit.Material woolMaterial() {
         return org.bukkit.Material.valueOf("WOOL");
+    }
+
+    @Override
+    public org.bukkit.inventory.ItemStack addUpgradeTracker(org.bukkit.inventory.ItemStack itemStack, String path, String tier) {
+        net.minecraft.server.v1_8_R3.ItemStack i = CraftItemStack.asNMSCopy(itemStack);
+        NBTTagCompound tag = i.getTag();
+        if (tag == null) {
+            tag = new NBTTagCompound();
+            i.setTag(tag);
+        }
+
+        tag.setString("bw-shop-upgrade", path);
+        tag.setString("bw-shop-tier", tier);
+        return CraftItemStack.asBukkitCopy(i);
+    }
+
+    @Override
+    public boolean isShopUpgradable(org.bukkit.inventory.ItemStack itemStack) {
+        net.minecraft.server.v1_8_R3.ItemStack i = CraftItemStack.asNMSCopy(itemStack);
+        NBTTagCompound tag = i.getTag();
+        return tag != null && tag.hasKey("bw-shop-upgrade");
+    }
+
+    @Override
+    public String[] getUpgradeTracker(org.bukkit.inventory.ItemStack itemStack) {
+        net.minecraft.server.v1_8_R3.ItemStack i = CraftItemStack.asNMSCopy(itemStack);
+        NBTTagCompound tag = i.getTag();
+        if (i == null) return null;
+        return new String[]{tag.getString("bw-shop-upgrade"), tag.getString("bw-shop-tier")};
     }
 }

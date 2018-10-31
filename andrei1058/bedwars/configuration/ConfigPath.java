@@ -127,4 +127,44 @@ public class ConfigPath {
 
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_PATH = "performance-settings";
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_ROTATE_GEN = GENERAL_CONFIGURATION_PERFORMANCE_PATH + ".rotate-generators";
+
+    //todo add to configuration
+    public static final String SHOP_SETTINGS_PATH = "shop-settings";
+
+    public static final String SHOP_SETTINGS_QUICK_BUY_CATEGORY_PATH = SHOP_SETTINGS_PATH + ".quick-buy-category";
+    public static final String SHOP_SETTINGS_QUICK_BUY_BUTTON_MATERIAL = SHOP_SETTINGS_QUICK_BUY_CATEGORY_PATH + ".material";
+    public static final String SHOP_SETTINGS_QUICK_BUY_BUTTON_AMOUNT = SHOP_SETTINGS_QUICK_BUY_CATEGORY_PATH + ".amount";
+    public static final String SHOP_SETTINGS_QUICK_BUY_BUTTON_DATA = SHOP_SETTINGS_QUICK_BUY_CATEGORY_PATH + ".data";
+    public static final String SHOP_SETTINGS_QUICK_BUY_BUTTON_ENCHANTED = SHOP_SETTINGS_QUICK_BUY_CATEGORY_PATH + ".enchanted";
+
+    public static final String SHOP_SETTINGS_SEPARATOR_REGULAR_PATH = SHOP_SETTINGS_PATH + ".regular-separator-item";
+    public static final String SHOP_SETTINGS_SEPARATOR_REGULAR_MATERIAL = SHOP_SETTINGS_SEPARATOR_REGULAR_PATH + ".material";
+    public static final String SHOP_SETTINGS_SEPARATOR_REGULAR_AMOUNT = SHOP_SETTINGS_SEPARATOR_REGULAR_PATH + ".amount";
+    public static final String SHOP_SETTINGS_SEPARATOR_REGULAR_DATA = SHOP_SETTINGS_SEPARATOR_REGULAR_PATH + ".data";
+    public static final String SHOP_SETTINGS_SEPARATOR_REGULAR_ENCHANTED = SHOP_SETTINGS_SEPARATOR_REGULAR_PATH + ".enchanted";
+
+    public static final String SHOP_SETTINGS_SEPARATOR_SELECTED_PATH = SHOP_SETTINGS_PATH + ".selected-separator-item";
+    public static final String SHOP_SETTINGS_SEPARATOR_SELECTED_MATERIAL = SHOP_SETTINGS_SEPARATOR_SELECTED_PATH + ".material";
+    public static final String SHOP_SETTINGS_SEPARATOR_SELECTED_AMOUNT = SHOP_SETTINGS_SEPARATOR_SELECTED_PATH + ".amount";
+    public static final String SHOP_SETTINGS_SEPARATOR_SELECTED_DATA = SHOP_SETTINGS_SEPARATOR_SELECTED_PATH + ".data";
+    public static final String SHOP_SETTINGS_SEPARATOR_SELECTED_ENCHANTED = SHOP_SETTINGS_SEPARATOR_SELECTED_PATH + ".enchanted";
+
+    public static final String SHOP_CATEGORY_ITEM_MATERIAL = ".category-item.material";
+    public static final String SHOP_CATEGORY_ITEM_DATA = ".category-item.data";
+    public static final String SHOP_CATEGORY_ITEM_AMOUNT = ".category-item.amount";
+    public static final String SHOP_CATEGORY_ITEM_ENCHANTED = ".category-item.enchanted";
+
+    public static final String SHOP_CONTENT_TIER_SETTINGS_COST = ".tier-settings.cost";
+    public static final String SHOP_CONTENT_TIER_SETTINGS_CURRENCY = "tier-settings.currency";
+
+    public static final String SHOP_CONTENT_TIER_ITEM_MATERIAL = ".tier-item.material";
+    public static final String SHOP_CONTENT_TIER_ITEM_DATA = ".tier-item.data";
+    public static final String SHOP_CONTENT_TIER_ITEM_AMOUNT = ".tier-item.amount";
+    public static final String SHOP_CONTENT_TIER_ITEM_ENCHANTED = ".tier-item.enchanted";
+
+    public static final String SHOP_CATEGORY_SLOT = "category-slot";
+    public static final String SHOP_CONTENT_BUY_ITEMS_PATH = "buy-items";
+    public static final String SHOP_CATEGORY_CONTENT_CONTENT_SLOT = "content-slot";
+    public static final String SHOP_CATEGORY_CONTENT_CONTENT_TIERS = "content-tiers";
+    public static final String SHOP_CATEGORY_CONTENT_PATH = ".category-content";
 }

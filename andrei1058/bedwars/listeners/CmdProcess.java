@@ -3,7 +3,7 @@ package com.andrei1058.bedwars.listeners;
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.configuration.ConfigPath;
-import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.configuration.language.Messages;
 import com.andrei1058.bedwars.configuration.Permissions;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

@@ -3,7 +3,6 @@ package com.andrei1058.bedwars.configuration.language;
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Language;
-import com.andrei1058.bedwars.configuration.Messages;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.Arrays;

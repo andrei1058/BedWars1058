@@ -363,6 +363,9 @@ public class Main extends JavaPlugin {
         /* LeaderHeads Support */
         LeaderHeadsSupport.initLeaderHeads();
 
+        /* Initialize shop */
+        new com.andrei1058.bedwars.configuration.shop.ShopManager();
+
     }
 
     public void onDisable() {
