@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.shop2.quickbuy;
+package com.andrei1058.bedwars.shop.quickbuy;
 
 import com.andrei1058.bedwars.configuration.Language;
 import org.bukkit.entity.Player;

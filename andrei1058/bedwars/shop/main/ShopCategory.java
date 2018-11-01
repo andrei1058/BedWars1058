@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.shop2.main;
+package com.andrei1058.bedwars.shop.main;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.configuration.ConfigPath;
@@ -36,6 +36,19 @@ public class ShopCategory {
             Main.plugin.getLogger().severe("Category slot not set at: " + path);
             return;
         }
+        slot = yml.getInt(path + ConfigPath.SHOP_CATEGORY_SLOT);
+
+        if (slot < 1 || slot > 7) {
+            Main.plugin.getLogger().severe("Slot must be n > 1 and n < 8 at: " + path);
+            return;
+        }
+
+        for (ShopCategory sc : ShopManager.shop.getCategoryList()){
+            if (sc.getSlot() == slot){
+                Main.plugin.getLogger().severe("Slot is already in use at: " + path);
+                return;
+            }
+        }
 
         itemStack = Main.nms.createItemStack(yml.getString(path + ConfigPath.SHOP_CATEGORY_ITEM_MATERIAL),
                 yml.get(path + ConfigPath.SHOP_CATEGORY_ITEM_AMOUNT) == null ? 1 : yml.getInt(path + ConfigPath.SHOP_CATEGORY_ITEM_AMOUNT),
@@ -51,11 +64,10 @@ public class ShopCategory {
         itemNamePath = Messages.SHOP_CATEGORY_ITEM_NAME.replace("%category%", path);
         itemLorePath = Messages.SHOP_CATEGORY_ITEM_LORE.replace("%category%", path);
         invNamePath = Messages.SHOP_CATEGORY_INVENTORY_NAME.replace("%category%", path);
-        slot = yml.getInt(path + ConfigPath.SHOP_CATEGORY_SLOT);
 
         CategoryContent cc;
-        for (String s : yml.getConfigurationSection(path + ConfigPath.SHOP_CATEGORY_CONTENT_PATH).getKeys(false)) {
-            cc = new CategoryContent(path + "." + s, s, yml);
+        for (String s : yml.getConfigurationSection(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_PATH).getKeys(false)) {
+            cc = new CategoryContent(path + ConfigPath.SHOP_CATEGORY_CONTENT_PATH + "." + s, s, path, yml);
             if (cc.isLoaded()) {
                 categoryContentList.add(cc);
                 Main.debug("Adding CategoryContent: " + s + " to Shop Category: " + path);
@@ -75,10 +87,6 @@ public class ShopCategory {
         im.setLore(Language.getList(player, itemLorePath));
         i.setItemMeta(im);
         return i;
-    }
-
-    public void addCategoryContent(CategoryContent cc) {
-
     }
 
     /**

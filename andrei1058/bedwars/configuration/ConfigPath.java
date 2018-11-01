@@ -128,8 +128,8 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_PATH = "performance-settings";
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_ROTATE_GEN = GENERAL_CONFIGURATION_PERFORMANCE_PATH + ".rotate-generators";
 
-    //todo add to configuration
     public static final String SHOP_SETTINGS_PATH = "shop-settings";
+    public static final String SHOP_SPECIALS_PATH = "shop-specials";
 
     public static final String SHOP_SETTINGS_QUICK_BUY_CATEGORY_PATH = SHOP_SETTINGS_PATH + ".quick-buy-category";
     public static final String SHOP_SETTINGS_QUICK_BUY_BUTTON_MATERIAL = SHOP_SETTINGS_QUICK_BUY_CATEGORY_PATH + ".material";
@@ -149,22 +149,35 @@ public class ConfigPath {
     public static final String SHOP_SETTINGS_SEPARATOR_SELECTED_DATA = SHOP_SETTINGS_SEPARATOR_SELECTED_PATH + ".data";
     public static final String SHOP_SETTINGS_SEPARATOR_SELECTED_ENCHANTED = SHOP_SETTINGS_SEPARATOR_SELECTED_PATH + ".enchanted";
 
+    public static final String SHOP_SETTINGS_QUICK_BUY_EMPTY_PATH = SHOP_SETTINGS_PATH + ".quick-buy-empty-item";
+    public static final String SHOP_SETTINGS_QUICK_BUY_EMPTY_MATERIAL = SHOP_SETTINGS_QUICK_BUY_EMPTY_PATH + ".material";
+    public static final String SHOP_SETTINGS_QUICK_BUY_EMPTY_AMOUNT = SHOP_SETTINGS_QUICK_BUY_EMPTY_PATH + ".amount";
+    public static final String SHOP_SETTINGS_QUICK_BUY_EMPTY_DATA = SHOP_SETTINGS_QUICK_BUY_EMPTY_PATH + ".data";
+    public static final String SHOP_SETTINGS_QUICK_BUY_EMPTY_ENCHANTED = SHOP_SETTINGS_QUICK_BUY_EMPTY_PATH + ".enchanted";
+
     public static final String SHOP_CATEGORY_ITEM_MATERIAL = ".category-item.material";
     public static final String SHOP_CATEGORY_ITEM_DATA = ".category-item.data";
     public static final String SHOP_CATEGORY_ITEM_AMOUNT = ".category-item.amount";
     public static final String SHOP_CATEGORY_ITEM_ENCHANTED = ".category-item.enchanted";
 
     public static final String SHOP_CONTENT_TIER_SETTINGS_COST = ".tier-settings.cost";
-    public static final String SHOP_CONTENT_TIER_SETTINGS_CURRENCY = "tier-settings.currency";
+    public static final String SHOP_CONTENT_TIER_SETTINGS_CURRENCY = ".tier-settings.currency";
 
     public static final String SHOP_CONTENT_TIER_ITEM_MATERIAL = ".tier-item.material";
     public static final String SHOP_CONTENT_TIER_ITEM_DATA = ".tier-item.data";
     public static final String SHOP_CONTENT_TIER_ITEM_AMOUNT = ".tier-item.amount";
     public static final String SHOP_CONTENT_TIER_ITEM_ENCHANTED = ".tier-item.enchanted";
 
-    public static final String SHOP_CATEGORY_SLOT = "category-slot";
+    public static final String SHOP_CATEGORY_SLOT = ".category-slot";
     public static final String SHOP_CONTENT_BUY_ITEMS_PATH = "buy-items";
     public static final String SHOP_CATEGORY_CONTENT_CONTENT_SLOT = "content-slot";
     public static final String SHOP_CATEGORY_CONTENT_CONTENT_TIERS = "content-tiers";
     public static final String SHOP_CATEGORY_CONTENT_PATH = ".category-content";
+
+    public static final String SHOP_PATH_CATEGORY_BLOCKS = "blocks-category";
+    public static final String SHOP_PATH_CATEGORY_MELEE = "melee-category";
+    public static final String SHOP_PATH_CATEGORY_ARMOR = "armor-category";
+    public static final String SHOP_PATH_CATEGORY_TOOLS = "tools-category";
+    public static final String SHOP_PATH_CATEGORY_RANGED = "ranged-category";
+    public static final String SHOP_PATH_CATEGORY_POTIONS = "potions-category";
 }

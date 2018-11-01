@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.shop2.main;
+package com.andrei1058.bedwars.shop.main;
 
 import com.andrei1058.bedwars.configuration.Language;
 import org.bukkit.entity.Player;

@@ -1,8 +1,8 @@
-package com.andrei1058.bedwars.shop2.main;
+package com.andrei1058.bedwars.shop.main;
 
 import com.andrei1058.bedwars.api.events.ShopOpenEvent;
 import com.andrei1058.bedwars.configuration.Language;
-import com.andrei1058.bedwars.shop2.quickbuy.PlayerQuickBuyCache;
+import com.andrei1058.bedwars.shop.quickbuy.PlayerQuickBuyCache;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;

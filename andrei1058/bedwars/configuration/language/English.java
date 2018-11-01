@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import static com.andrei1058.bedwars.Main.mainCmd;
+import static com.andrei1058.bedwars.configuration.Language.addCategoryMessages;
+import static com.andrei1058.bedwars.configuration.Language.addContentMessages;
 
 public class English {
 
@@ -270,14 +272,32 @@ public class English {
         yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&7{date}", "&fName: &a{player}", "", "&fWins: &a{wins}", "&fLosses: &a{losses}", "&fKills: &a{kills}", "&fDeaths: &a{deaths}"
                 , "&fFinal Kills: &a{fKills}", "&fBeds Destroyed: &a{beds}", "", "&fOnline: &a{on}", "&eandrei1058.com"));
 
-        yml.addDefault(Messages.SHOP_PATH + ".name", "&7Item Shop");
+        //
+        yml.addDefault(Messages.SHOP_INDEX_NAME, "&8Quick Buy");
         yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "{prefix}&cYou don't have enough {currency}! Need {amount} more!");
         yml.addDefault(Messages.SHOP_NEW_PURCHASE, "{prefix}&aYou purchased &6{item}");
         yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "{prefix}&cYou've already bought that!");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "{TeamColor}&l{TeamName} &r{TeamColor}Silverfish");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME, "{TeamColor}{despawn}s &8[ {TeamColor}{health}&8]");
+        yml.addDefault(Messages.SHOP_SEPARATOR_NAME, "&8⇧ Categories");
+        yml.addDefault(Messages.SHOP_SEPARATOR_LORE, Collections.singleton("&8⇩ Items"));
+        yml.addDefault(Messages.SHOP_QUICK_BUY_NAME, "&bQuick Buy");
+        yml.addDefault(Messages.SHOP_QUICK_BUY_LORE, Collections.singleton(""));
+        yml.addDefault(Messages.SHOP_QUICK_EMPTY_NAME, "&4Empty slot!");
+        yml.addDefault(Messages.SHOP_QUICK_EMPTY_LORE, Arrays.asList("&7This is a Quick Buy Slot!", "&bSneak Click &7any item in", "&7the shop to add it here."));
 
-        lbj.saveShopStuff("invContents.armor", "&aArmor", Arrays.asList("&7Available:", "&7▪ Chainmail Boots", "&7▪ Chainmail Leggings", "&7▪ Iron Boots", "&7▪ Iron Leggings", "&7▪ Diamond Boots", "&7▪ Diamond Leggings", "", "&eClick to browse!"));
+
+        addCategoryMessages(yml, "blocks-category", "&8Blocks", "&aBlocks", Collections.singletonList("&eClick to view!"));
+        addContentMessages(yml, "wool", "blocks-category", "Wool", Arrays.asList("&7Cost: &f{cost} {currency}", "", "&7Great for bridging across", "&7islands. Turns into your team's",
+                "&7color.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "clay", "blocks-category", "Hardened Clay", Arrays.asList("&7Cost: &f{cost} {currency}", "", "&7Basic block to defend your bed.","", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "glass", "blocks-category", "Blast-Proof Glass", Arrays.asList("&7Cost: &f{cost} {currency}", "", "&7Immune to explosions.","", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "stone", "blocks-category", "End Stone", Arrays.asList("&7Cost: &f{cost} {currency}", "", "&7Solid block to defend your bed.","", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "ladder", "blocks-category", "Ladder", Arrays.asList("&7Cost: &f{cost} {currency}", "", "&7Useful to save cats stuck in", "&7trees.","", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "obsidian", "blocks-category", "Obsidian", Arrays.asList("&7Cost: &f{cost} {currency}", "", "&7Extreme protection for your bed.","", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "ladder", "blocks-category", "Ladder", Arrays.asList("&7Cost: &f{cost} {currency}", "", "&7Useful to save cats stuck in", "&7trees.","", "{quick_buy}", "{buy_status}"));
+
+        /*lbj.saveShopStuff("invContents.armor", "&aArmor", Arrays.asList("&7Available:", "&7▪ Chainmail Boots", "&7▪ Chainmail Leggings", "&7▪ Iron Boots", "&7▪ Iron Leggings", "&7▪ Diamond Boots", "&7▪ Diamond Leggings", "", "&eClick to browse!"));
         lbj.saveShopStuff("invContents.melee", "&aMelee", Arrays.asList("&7Available:", "&7▪ Stone Sword", "&7▪ Iron Sword", "&7▪ Diamond Sword", "&7▪ Stick (Knockback I)", "", "&eClick to browse!"));
         lbj.saveShopStuff("invContents.blocks", "&aBlocks", Arrays.asList("&7Available:", "&7▪ Wool", "&7▪ Hardened Clay", "&7▪ Blast-Proof Glass", "&7▪ End Stone", "&7▪ Ladder", "&7▪ Oak Wood Planks", "&7▪ Obsidian", "", "&eClick to browse!"));
         lbj.saveShopStuff("invContents.ranged", "&aRanged", Arrays.asList("&7Available:", "&7▪ Arrow", "&7▪ Bow", "&7▪ Bow (Power I)", "&7▪ Bow (Power I, Punch I)", "", "&eClick to browse!"));
@@ -329,7 +349,7 @@ public class English {
         lbj.saveShopStuff("invContents.utility.invContents.enderpearl", "&aEnder Pearl", Arrays.asList("&8Items:", "", "&8Ender Pearl", "&8▪ &7Cost: &2{cost} {currency}", "", "&7Pretty useful for invading", "&7enemies bases."));
         lbj.saveShopStuff("invContents.utility.invContents.bucket", "&aWater Bucket", Arrays.asList("&8Items:", "&8▪ &7Water Bucket", "", "&8Cost: &2{cost} {currency}"));
         lbj.saveShopStuff("invContents.utility.invContents.eggBridge", "&aBridge Egg", Arrays.asList("&8Items:", "&8▪ &7Bridge Egg", "", "&8Cost: &2{cost} {currency}", "&7This egg creates a bridge in", "&7its trail after being thrown."));
-        lbj.saveShopStuff("invContents.utility.invContents.back", "&aGo Back", Collections.singletonList(""));
+        lbj.saveShopStuff("invContents.utility.invContents.back", "&aGo Back", Collections.singletonList(""));*/
 
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY, "&aClick to purchase!");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY, "&cYou don't have enough {currency}");

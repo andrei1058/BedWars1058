@@ -4,9 +4,9 @@ import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.configuration.ConfigManager;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.language.Messages;
-import com.andrei1058.bedwars.shop2.main.QuickBuyButton;
-import com.andrei1058.bedwars.shop2.main.ShopCategory;
-import com.andrei1058.bedwars.shop2.main.ShopIndex;
+import com.andrei1058.bedwars.shop.main.QuickBuyButton;
+import com.andrei1058.bedwars.shop.main.ShopCategory;
+import com.andrei1058.bedwars.shop.main.ShopIndex;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -21,8 +21,14 @@ public class ShopManager {
     private YamlConfiguration yml;
 
     public ShopManager() {
-        this.configManager = new ConfigManager("shop2", "plugins/" + Main.plugin.getDescription().getName(), false);
+        this.configManager = new ConfigManager("shop", "plugins/" + Main.plugin.getDescription().getName(), false);
         this.yml = configManager.getYml();
+        if (yml.get("main") != null){
+            configManager.setFirstTime(true);
+        }
+        for (String path : yml.getConfigurationSection("").getKeys(false)){
+            configManager.set(path, null);
+        }
         saveDefaults();
         loadShop();
     }
@@ -30,7 +36,74 @@ public class ShopManager {
     private void saveDefaults() {
         yml.options().header("Shop with quick buy and tiers");
 
-        yml.addDefault("", "");
+        //quick buy
+        yml.addDefault(ConfigPath.SHOP_SETTINGS_QUICK_BUY_BUTTON_MATERIAL, Main.getForCurrentVersion("NETHER_STAR", "NETHER_STAR", "NETHER_STAR"));
+        yml.addDefault(ConfigPath.SHOP_SETTINGS_QUICK_BUY_BUTTON_AMOUNT, 1);
+        yml.addDefault(ConfigPath.SHOP_SETTINGS_QUICK_BUY_BUTTON_DATA, 0);
+        yml.addDefault(ConfigPath.SHOP_SETTINGS_QUICK_BUY_BUTTON_ENCHANTED, false);
+
+        yml.addDefault(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_MATERIAL, Main.getForCurrentVersion("STAINED_GLASS_PANE", "STAINED_GLASS_PANE", "red_STAINED_GLASS_PANE"));
+        yml.addDefault(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_AMOUNT, 1);
+        yml.addDefault(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_DATA, 4);
+        yml.addDefault(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_ENCHANTED, false);
+
+        //separator
+        yml.addDefault(ConfigPath.SHOP_SETTINGS_SEPARATOR_REGULAR_MATERIAL, Main.getForCurrentVersion("STAINED_GLASS_PANE", "STAINED_GLASS_PANE", "GRAY_STAINED_GLASS_PANE"));
+        yml.addDefault(ConfigPath.SHOP_SETTINGS_SEPARATOR_REGULAR_AMOUNT, 1);
+        yml.addDefault(ConfigPath.SHOP_SETTINGS_SEPARATOR_REGULAR_DATA, 7);
+        yml.addDefault(ConfigPath.SHOP_SETTINGS_SEPARATOR_REGULAR_ENCHANTED, false);
+
+        yml.addDefault(ConfigPath.SHOP_SETTINGS_SEPARATOR_SELECTED_MATERIAL, Main.getForCurrentVersion("STAINED_GLASS_PANE", "STAINED_GLASS_PANE", "GREEN_STAINED_GLASS_PANE"));
+        yml.addDefault(ConfigPath.SHOP_SETTINGS_SEPARATOR_SELECTED_AMOUNT, 1);
+        yml.addDefault(ConfigPath.SHOP_SETTINGS_SEPARATOR_SELECTED_DATA, 13);
+        yml.addDefault(ConfigPath.SHOP_SETTINGS_SEPARATOR_SELECTED_ENCHANTED, false);
+
+        //save default shop categories if the file was just generated
+        //so the user can remove categories or add new ones
+        if (configManager.isFirstTime()) {
+            //BLOCKS CATEGORY
+            addDefaultShopCategory(ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, 1, Main.getForCurrentVersion("STAINED_CLAY", "STAINED_CLAY", "ORANGE_TERRACOTTA"), 1, 1, false);
+
+            adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "wool", 19, "tier1",
+                    Main.getForCurrentVersion("WOOL", "WOOL", "WHITE_WOOL"), 0, 16, false, 4, "iron");
+            addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "wool", "tier1", "wool", Main.getForCurrentVersion("WOOL", "WOOL", "WHITE_WOOL"),
+                    0, 16, "", "", "", false, false);
+
+            adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "clay", 20, "tier1",
+                    Main.getForCurrentVersion("STAINED_CLAY", "STAINED_CLAY", "ORANGE_TERRACOTTA"), 1, 16, false, 12, "iron");
+            addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "clay", "tier1", "clay", Main.getForCurrentVersion("STAINED_CLAY", "STAINED_CLAY", "ORANGE_TERRACOTTA"),
+                    1, 16, "", "", "", false, false);
+
+            adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "glass", 21, "tier1",
+                    Main.getForCurrentVersion("GLASS", "GLASS", "GLASS"), 0, 4, false, 12, "iron");
+            addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "glass", "tier1", "glass", Main.getForCurrentVersion("GLASS", "GLASS", "GLASS"),
+                    0, 4, "", "", "", false, false);
+
+            adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "stone", 22, "tier1",
+                    Main.getForCurrentVersion("ENDER_STONE", "ENDER_STONE", "END_STONE"), 0, 16, false, 24, "iron");
+            addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "stone", "tier1", "stone", Main.getForCurrentVersion("ENDER_STONE", "ENDER_STONE", "END_STONE"),
+                    0, 16, "", "", "", false, false);
+
+            adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "ladder", 23, "tier1",
+                    Main.getForCurrentVersion("LADDER", "LADDER", "LADDER"), 0, 16, false, 4, "iron");
+            addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "ladder", "tier1", "ladder", Main.getForCurrentVersion("LADDER", "LADDER", "LADDER"),
+                    0, 16, "", "", "", false, false);
+
+            adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "wood", 24, "tier1",
+                    Main.getForCurrentVersion("WOOD", "WOOD", "OAK_WOOD"), 0, 16, false, 4, "gold");
+            addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "wood", "tier1", "wood", Main.getForCurrentVersion("WOOD", "WOOD", "OAK_WOOD"),
+                    0, 16, "", "", "", false, false);
+
+            adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "obsidian", 25, "tier1",
+                    Main.getForCurrentVersion("OBSIDIAN", "OBSIDIAN", "OBSIDIAN"), 0, 4, false, 4, "emerald");
+            addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "obsidian", "tier1", "obsidian", Main.getForCurrentVersion("OBSIDIAN", "OBSIDIAN", "OBSIDIAN"),
+                    0, 4, "", "", "", false, false);
+            //
+
+            //MELEE CATEGORY
+
+        }
+
 
         yml.options().copyDefaults(true);
         configManager.save();
@@ -59,10 +132,11 @@ public class ShopManager {
         ShopCategory sc;
         for (String s : yml.getConfigurationSection("").getKeys(false)) {
             if (s.equalsIgnoreCase(ConfigPath.SHOP_SETTINGS_PATH)) continue;
+            if (s.equalsIgnoreCase(ConfigPath.SHOP_SPECIALS_PATH)) continue;
             sc = new ShopCategory(s, yml);
             if (sc.isLoaded()) {
                 shop.addShopCategory(sc);
-                Main.debug("Adding shop category: " + s + " to the main shop.");
+                Main.debug("Loading shop category: " + s);
             }
         }
     }
@@ -84,5 +158,60 @@ public class ShopManager {
         hideItemStuff(im);
         i.setItemMeta(im);
         return i;
+    }
+
+    /**
+     * Initialize a shop category to config
+     */
+    private void addDefaultShopCategory(String path, int slot, String material, int data, int amount, boolean enchant) {
+        yml.addDefault(path + ConfigPath.SHOP_CATEGORY_SLOT, slot);
+        yml.addDefault(path + ConfigPath.SHOP_CATEGORY_ITEM_MATERIAL, material);
+        yml.addDefault(path + ConfigPath.SHOP_CATEGORY_ITEM_DATA, data);
+        yml.addDefault(path + ConfigPath.SHOP_CATEGORY_ITEM_AMOUNT, amount);
+        yml.addDefault(path + ConfigPath.SHOP_CATEGORY_ITEM_ENCHANTED, enchant);
+    }
+
+    /**
+     * Create a tier for a shop content
+     */
+    public void adCategoryContentTier(String path, String contentName, int contentSlot, String tierName, String tierMaterial, int tierData, int amount, boolean enchant, int tierCost, String tierCurrency) {
+        path += ConfigPath.SHOP_CATEGORY_CONTENT_PATH + "." + contentName + ".";
+        yml.addDefault(path + ConfigPath.SHOP_CATEGORY_CONTENT_CONTENT_SLOT, contentSlot);
+        path += ConfigPath.SHOP_CATEGORY_CONTENT_CONTENT_TIERS + "." + tierName;
+        yml.addDefault(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_MATERIAL, tierMaterial);
+        yml.addDefault(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_DATA, tierData);
+        yml.addDefault(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_AMOUNT, amount);
+        yml.addDefault(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_ENCHANTED, enchant);
+        yml.addDefault(path + ConfigPath.SHOP_CONTENT_TIER_SETTINGS_COST, tierCost);
+        yml.addDefault(path + ConfigPath.SHOP_CONTENT_TIER_SETTINGS_CURRENCY, tierCurrency);
+    }
+
+    /**
+     * Add buy items to a content tier
+     */
+    public void addBuyItem(String path, String contentName, String tierName, String item, String material, int data, int amount, String enchant, String potion, String itemName, boolean autoEquip, boolean permanent) {
+        path += ConfigPath.SHOP_CATEGORY_CONTENT_PATH + "." + contentName + "." + ConfigPath.SHOP_CATEGORY_CONTENT_CONTENT_TIERS + "." + tierName + "." + ConfigPath.SHOP_CONTENT_BUY_ITEMS_PATH + "." + item + ".";
+        yml.addDefault(path + "material", material);
+        yml.addDefault(path + "data", data);
+        yml.addDefault(path + "amount", amount);
+        if (!enchant.isEmpty()) {
+            yml.addDefault(path + "enchants", enchant);
+        }
+        if (!potion.isEmpty()) {
+            yml.addDefault(path + "potion", potion);
+        }
+        if (autoEquip) {
+            yml.addDefault(path + "auto-equip", true);
+        }
+        if (permanent) {
+            yml.addDefault(path + "permanent", true);
+        }
+        if (!itemName.isEmpty()) {
+            yml.addDefault(path + "name", itemName);
+        }
+    }
+
+    public YamlConfiguration getYml() {
+        return yml;
     }
 }

@@ -64,6 +64,7 @@ public class Main extends JavaPlugin {
     public static boolean safeMode = false, lobbyServer = false, debug = true;
     public static String mainCmd = "bw", link = "https://www.spigotmc.org/resources/50942/";
     public static ConfigManager config, signs, spigot, generators;
+    public static com.andrei1058.bedwars.configuration.shop.ShopManager shop2;
     public static ShopManager shop;
     public static UpgradesManager upgrades;
     public static Language lang;
@@ -281,10 +282,6 @@ public class Main extends JavaPlugin {
         /* Register NMS entities */
         nms.registerEntities();
 
-        /* Setup shop */
-        shop = new ShopManager("shop", "plugins/" + this.getName());
-        shop.loadShop();
-
         /* Check for updates */
         Misc.checkUpdate();
 
@@ -364,8 +361,11 @@ public class Main extends JavaPlugin {
         LeaderHeadsSupport.initLeaderHeads();
 
         /* Initialize shop */
-        new com.andrei1058.bedwars.configuration.shop.ShopManager();
-
+        shop2 = new com.andrei1058.bedwars.configuration.shop.ShopManager();
+        //This must stay after the shop initializing
+        for (Language l : Language.getLanguages()) {
+            l.setupUnSetCategories();
+        }
     }
 
     public void onDisable() {
@@ -463,20 +463,20 @@ public class Main extends JavaPlugin {
         //remove old config
         //Convert old configuration
 
-        if (yml.get("arenaGui.settings.showPlaying") != null){
+        if (yml.get("arenaGui.settings.showPlaying") != null) {
             config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SHOW_PLAYING, yml.getBoolean("arenaGui.settings.showPlaying"));
         }
-        if (yml.get("arenaGui.settings.size") != null){
+        if (yml.get("arenaGui.settings.size") != null) {
             config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SIZE, yml.getInt("arenaGui.settings.size"));
         }
-        if (yml.get("arenaGui.settings.useSlots") != null){
+        if (yml.get("arenaGui.settings.useSlots") != null) {
             config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_USE_SLOTS, yml.getString("arenaGui.settings.useSlots"));
         }
         if (config.getYml().get("arenaGui") != null) {
             for (String path : config.getYml().getConfigurationSection("arenaGui").getKeys(false)) {
                 if (path.equalsIgnoreCase("settings")) continue;
                 String new_path = path;
-                switch (path){
+                switch (path) {
                     case "skippedSlot":
                         new_path = "skipped-slot";
                         break;
@@ -504,7 +504,7 @@ public class Main extends JavaPlugin {
         if (config.getYml().get("statsGUI") != null) {
             for (String stats_path : config.getYml().getConfigurationSection("statsGUI").getKeys(false)) {
                 String new_path = stats_path;
-                switch (stats_path){
+                switch (stats_path) {
                     case "gamesPlayed":
                         new_path = "games-played";
                         break;

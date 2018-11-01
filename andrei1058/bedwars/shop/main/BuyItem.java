@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.shop2.main;
+package com.andrei1058.bedwars.shop.main;
 
 import com.andrei1058.bedwars.Main;
 import org.bukkit.ChatColor;
@@ -29,7 +29,7 @@ public class BuyItem {
         this.upgradeIdentifier = upgradeIdentifier;
 
         if (yml.get(path + ".material") == null) {
-            Main.plugin.getLogger().severe("Material not set at " + path);
+            Main.plugin.getLogger().severe("BuyItem: Material not set at " + path);
             return;
         }
 
@@ -50,8 +50,8 @@ public class BuyItem {
                 String[] stuff = enc.split(" ");
                 try {
                     Enchantment.getByName(stuff[0]);
-                } catch (Exception eccc) {
-                    plugin.getLogger().severe("Invalid enchants " + stuff[0] + " at: " + path + ".enchants");
+                } catch (Exception ex) {
+                    plugin.getLogger().severe("BuyItem: Invalid enchants " + stuff[0] + " at: " + path + ".enchants");
                     continue;
                 }
                 int ieee = 1;
@@ -59,7 +59,7 @@ public class BuyItem {
                     try {
                         ieee = Integer.parseInt(stuff[1]);
                     } catch (Exception exx) {
-                        plugin.getLogger().severe("Invalid int " + stuff[1] + " at: " + path + ".enchants");
+                        plugin.getLogger().severe("BuyItem: Invalid int " + stuff[1] + " at: " + path + ".enchants");
                         continue;
                     }
                 }
@@ -76,7 +76,7 @@ public class BuyItem {
                 try {
                     PotionEffectType.getByName(stuff[0]);
                 } catch (Exception ex) {
-                    plugin.getLogger().severe("Invalid potion effect " + stuff[0] + " at: " + path + ".potion");
+                    plugin.getLogger().severe("BuyItem: Invalid potion effect " + stuff[0] + " at: " + path + ".potion");
                     continue;
                 }
                 int duration = 50, amplifier = 1;
@@ -84,13 +84,13 @@ public class BuyItem {
                     try {
                         duration = Integer.parseInt(stuff[1]);
                     } catch (Exception exx) {
-                        plugin.getLogger().severe("Invalid int (duration) " + stuff[1] + " at: " + path + ".potion");
+                        plugin.getLogger().severe("BuyItem: Invalid int (duration) " + stuff[1] + " at: " + path + ".potion");
                         continue;
                     }
                     try {
                         amplifier = Integer.parseInt(stuff[2]);
                     } catch (Exception exx) {
-                        plugin.getLogger().severe("Invalid int (amplifier) " + stuff[2] + " at: " + path + ".potion");
+                        plugin.getLogger().severe("BuyItem: Invalid int (amplifier) " + stuff[2] + " at: " + path + ".potion");
                         continue;
                     }
                 }

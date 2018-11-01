@@ -70,7 +70,7 @@ public class Language {
     }
 
     public void saveShopStuff(String path, Object name, Object lore) {
-        yml.addDefault(com.andrei1058.bedwars.configuration.language.Messages.SHOP_PATH+ "." + path + ".name", name);
+        yml.addDefault(com.andrei1058.bedwars.configuration.language.Messages.SHOP_PATH + "." + path + ".name", name);
         yml.addDefault(com.andrei1058.bedwars.configuration.language.Messages.SHOP_PATH + "." + path + ".lore", lore);
     }
 
@@ -213,5 +213,49 @@ public class Language {
         }
         yml.options().copyDefaults(true);
         language.save();
+    }
+
+    /**
+     * Create messages paths for new shop categories
+     */
+    public void setupUnSetCategories() {
+        for (String s : Main.shop2.getYml().getConfigurationSection("").getKeys(false)) {
+            if (s.equalsIgnoreCase(ConfigPath.SHOP_SETTINGS_PATH)) continue;
+            if (s.equalsIgnoreCase(ConfigPath.SHOP_SPECIALS_PATH)) continue;
+            if (!exists(Messages.SHOP_CATEGORY_INVENTORY_NAME.replace("%category%", s))) {
+                set(Messages.SHOP_CATEGORY_INVENTORY_NAME.replace("%category%", s), "&8Name not set");
+            }
+            if (!exists(Messages.SHOP_CATEGORY_ITEM_NAME.replace("%category%", s))) {
+                set(Messages.SHOP_CATEGORY_ITEM_NAME.replace("%category%", s), "&8Name not set");
+            }
+            if (!exists(Messages.SHOP_CATEGORY_ITEM_LORE.replace("%category%", s))) {
+                set(Messages.SHOP_CATEGORY_ITEM_LORE.replace("%category%", s), Collections.singleton("&8Lore not set"));
+            }
+            for (String c : Main.shop2.getYml().getConfigurationSection(s + ConfigPath.SHOP_CATEGORY_CONTENT_PATH).getKeys(false)) {
+                if (!exists(Messages.SHOP_PATH + Messages.SHOP_CONTENT_TIER_ITEM_NAME.replace("%category%", s).replace("%content%", c))) {
+                    set(Messages.SHOP_PATH + Messages.SHOP_CONTENT_TIER_ITEM_NAME.replace("%category%", s).replace("%content%", c), "&8Name not set");
+                }
+                if (!exists(Messages.SHOP_PATH + Messages.SHOP_CONTENT_TIER_ITEM_LORE.replace("%category%", s).replace("%content%", c))) {
+                    set(Messages.SHOP_PATH + Messages.SHOP_CONTENT_TIER_ITEM_LORE.replace("%category%", s).replace("%content%", c), Collections.singleton("&8Lore not set"));
+                }
+            }
+        }
+    }
+
+    /**
+     * Add required messages for a shop category to the given yml
+     */
+    public static void addCategoryMessages(YamlConfiguration yml, String categoryName, String invName, String itemName, List<String> itemLore) {
+        yml.addDefault(Messages.SHOP_PATH + Messages.SHOP_CATEGORY_INVENTORY_NAME.replace("%category%", categoryName), invName);
+        yml.addDefault(Messages.SHOP_PATH + Messages.SHOP_CATEGORY_ITEM_NAME.replace("%category%", categoryName), itemName);
+        yml.addDefault(Messages.SHOP_PATH + Messages.SHOP_CATEGORY_ITEM_LORE.replace("%category%", categoryName), itemLore);
+    }
+
+    /**
+     * Add required messages for a shop category to the given yml
+     */
+    public static void addContentMessages(YamlConfiguration yml, String contentName, String categoryName, String itemName, List<String> itemLore) {
+        yml.addDefault(Messages.SHOP_PATH + Messages.SHOP_CONTENT_TIER_ITEM_NAME.replace("%category%", categoryName).replace("%content%", contentName), itemName);
+        yml.addDefault(Messages.SHOP_PATH + Messages.SHOP_CONTENT_TIER_ITEM_LORE.replace("%category%", categoryName).replace("%content%", contentName), itemLore);
     }
 }

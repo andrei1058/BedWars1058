@@ -1,6 +1,6 @@
-package com.andrei1058.bedwars.shop2.quickbuy;
+package com.andrei1058.bedwars.shop.quickbuy;
 
-import com.andrei1058.bedwars.shop2.main.CategoryContent;
+import com.andrei1058.bedwars.shop.main.CategoryContent;
 import org.bukkit.inventory.ItemStack;
 
 public class QuickBuyElement {

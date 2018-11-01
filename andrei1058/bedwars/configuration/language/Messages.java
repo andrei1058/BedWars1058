@@ -239,19 +239,21 @@ public class Messages {
     public static String SHOP_UTILITY_NPC_SILVERFISH_NAME = "shop-utility-silverfish";
     public static String SHOP_UTILITY_NPC_IRON_GOLEM_NAME = "shop-utility-iron-golem";
 
-    //TODO TO ADD TO MESSAGES FILE
+
     public static final String SHOP_PATH = "shop-items-messages";
     public static final String SHOP_INDEX_NAME = SHOP_PATH + ".inventory-name";
-    public static final String SHOP_SEPARATOR_NAME = SHOP_PATH + ".separator-item.name";
-    public static final String SHOP_SEPARATOR_LORE = SHOP_PATH + ".separator-item.lore";
-    public static final String SHOP_QUICK_BUY_NAME = SHOP_PATH + ".quick-buy-item.name";
-    public static final String SHOP_QUICK_BUY_LORE = SHOP_PATH + ".quick-buy-item.lore";
+    public static final String SHOP_SEPARATOR_NAME = SHOP_PATH + ".separator-item-name";
+    public static final String SHOP_SEPARATOR_LORE = SHOP_PATH + ".separator-item-lore";
+    public static final String SHOP_QUICK_BUY_NAME = SHOP_PATH + ".quick-buy-item-name";
+    public static final String SHOP_QUICK_BUY_LORE = SHOP_PATH + ".quick-buy-item-lore";
+    public static final String SHOP_QUICK_EMPTY_NAME = SHOP_PATH + ".quick-buy-empty-item-name";
+    public static final String SHOP_QUICK_EMPTY_LORE = SHOP_PATH + ".quick-buy-empty-item-lore";
 
     public static final String SHOP_CATEGORY_INVENTORY_NAME = SHOP_PATH + ".%category%.inventory-name";
     public static final String SHOP_CATEGORY_ITEM_NAME = SHOP_PATH + ".%category%.category-item-name";
     public static final String SHOP_CATEGORY_ITEM_LORE = SHOP_PATH + ".%category%.category-item-lore";
-    public static final String SHOP_CONTENT_TIER_ITEM_NAME = ".%category%.content-item.%content%-%tier%.name";
-    public static final String SHOP_CONTENT_TIER_ITEM_LORE = ".%category%.content-item.%content%-%tier%.lore";
+    public static final String SHOP_CONTENT_TIER_ITEM_NAME = ".%category%.content-item-%content%-name";
+    public static final String SHOP_CONTENT_TIER_ITEM_LORE = ".%category%.content-item-%content%-lore";
 
     //
 

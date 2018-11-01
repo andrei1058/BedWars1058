@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.shop2.main;
+package com.andrei1058.bedwars.shop.main;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.configuration.ConfigPath;
@@ -17,17 +17,17 @@ public class ContentTier {
 
     private int value, price;
     private ItemStack itemStack;
-    private String itemNamePath, itemLorePath, currency = "";
+    private String currency = "";
     private List<BuyItem> buyItemsList = new ArrayList<>();
     private boolean loaded = false;
 
     /**
      * Create a content tier for a category content
      */
-    public ContentTier(String path, String tierName, String contentName, YamlConfiguration yml) {
+    public ContentTier(String path, String tierName, String contentName, String categoryName, YamlConfiguration yml) {
         Main.debug("Loading " + path);
 
-        if (yml.get(path + ".tier-item.material") == null) {
+        if (yml.get(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_MATERIAL) == null) {
             Main.plugin.getLogger().severe("tier-item material not set at " + path);
             return;
         }
@@ -65,23 +65,6 @@ public class ContentTier {
             return;
         }
 
-        itemNamePath = Messages.SHOP_CONTENT_TIER_ITEM_NAME.replace("%category%", path.split(".")[0]).replace("%tier%", tierName).replace("%content%", contentName);
-        if (!Main.lang.exists(itemNamePath)) {
-            for (Language lang : Language.getLanguages()) {
-                if (!lang.exists(itemNamePath)) {
-                    lang.set(itemNamePath, "&cName not set");
-                }
-            }
-        }
-        itemLorePath = Messages.SHOP_CONTENT_TIER_ITEM_LORE.replace("%category%", path.split(".")[0]).replace("%tier%", tierName).replace("%content%", contentName);
-        if (!Main.lang.exists(itemLorePath)) {
-            for (Language lang : Language.getLanguages()) {
-                if (!lang.exists(itemLorePath)) {
-                    lang.set(itemLorePath, "&cLore not set");
-                }
-            }
-        }
-
         itemStack = Main.nms.createItemStack(yml.getString(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_MATERIAL),
                 yml.get(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_AMOUNT) == null ? 1 : yml.getInt(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_AMOUNT),
                 (short) (yml.get(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_DATA) == null ? 0 : yml.getInt(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_DATA)));
@@ -95,7 +78,7 @@ public class ContentTier {
 
         BuyItem bi;
         for (String s : yml.getConfigurationSection(path + "." + ConfigPath.SHOP_CONTENT_BUY_ITEMS_PATH).getKeys(false)) {
-            bi = new BuyItem(path + "." + s, yml, path.replace("." + tierName, ""), getValue());
+            bi = new BuyItem(path + "." + ConfigPath.SHOP_CONTENT_BUY_ITEMS_PATH + "." + s, yml, path.replace("." + tierName, ""), getValue());
             if (bi.isLoaded()) buyItemsList.add(bi);
         }
 
@@ -119,11 +102,7 @@ public class ContentTier {
     /**
      * Get item stack with name and lore in player's language
      */
-    public ItemStack getItemStack(Player player) {
-        ItemStack i = itemStack.clone();
-        ItemMeta im = i.getItemMeta();
-        im.setDisplayName(Language.getMsg(player, itemNamePath));
-        im.setLore(Language.getList(player, itemLorePath));
+    public ItemStack getItemStack() {
         return itemStack;
     }
 

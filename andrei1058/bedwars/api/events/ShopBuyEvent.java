@@ -1,8 +1,8 @@
 package com.andrei1058.bedwars.api.events;
 
 import com.andrei1058.bedwars.shop.BuyItemsAction;
-import com.andrei1058.bedwars.shop2.main.CategoryContent;
-import com.andrei1058.bedwars.shop2.main.ShopCategory;
+import com.andrei1058.bedwars.shop.main.CategoryContent;
+import com.andrei1058.bedwars.shop.main.ShopCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
