@@ -2,13 +2,9 @@ package com.andrei1058.bedwars.shop.main;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.configuration.ConfigPath;
-import com.andrei1058.bedwars.configuration.Language;
-import com.andrei1058.bedwars.configuration.language.Messages;
-import com.andrei1058.bedwars.configuration.shop.ShopManager;
+import com.andrei1058.bedwars.shop.ShopManager;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +20,8 @@ public class ContentTier {
     /**
      * Create a content tier for a category content
      */
-    public ContentTier(String path, String tierName, String contentName, String categoryName, YamlConfiguration yml) {
-        Main.debug("Loading " + path);
+    public ContentTier(String path, String tierName, String identifier, YamlConfiguration yml) {
+        Main.debug("Loading content tier" + path);
 
         if (yml.get(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_MATERIAL) == null) {
             Main.plugin.getLogger().severe("tier-item material not set at " + path);
@@ -78,7 +74,7 @@ public class ContentTier {
 
         BuyItem bi;
         for (String s : yml.getConfigurationSection(path + "." + ConfigPath.SHOP_CONTENT_BUY_ITEMS_PATH).getKeys(false)) {
-            bi = new BuyItem(path + "." + ConfigPath.SHOP_CONTENT_BUY_ITEMS_PATH + "." + s, yml, path.replace("." + tierName, ""), getValue());
+            bi = new BuyItem(path + "." + ConfigPath.SHOP_CONTENT_BUY_ITEMS_PATH + "." + s, yml, identifier);
             if (bi.isLoaded()) buyItemsList.add(bi);
         }
 
@@ -118,5 +114,12 @@ public class ContentTier {
      */
     public boolean isLoaded() {
         return loaded;
+    }
+
+    /**
+     * Get items
+     */
+    public List<BuyItem> getBuyItemsList() {
+        return buyItemsList;
     }
 }

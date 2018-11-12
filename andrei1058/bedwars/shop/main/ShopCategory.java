@@ -4,14 +4,18 @@ import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.language.Messages;
-import com.andrei1058.bedwars.configuration.shop.ShopManager;
+import com.andrei1058.bedwars.shop.ShopManager;
+import com.andrei1058.bedwars.shop.ShopCache;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class ShopCategory {
 
@@ -20,6 +24,7 @@ public class ShopCategory {
     private String itemNamePath, itemLorePath, invNamePath;
     private boolean loaded = false;
     private List<CategoryContent> categoryContentList = new ArrayList<>();
+    public static List<UUID> categoryViewers = new ArrayList<>();
 
     /**
      * Load a shop category from the given path
@@ -77,6 +82,32 @@ public class ShopCategory {
         loaded = true;
     }
 
+    public void open(Player player, ShopIndex index, ShopCache shopCache){
+        if (player.getOpenInventory().getTopInventory() == null) return;
+        ShopIndex.indexViewers.remove(player.getUniqueId());
+
+        Inventory inv = Bukkit.createInventory(null, index.getInvSize(), Language.getMsg(player, invNamePath));
+
+        inv.setItem(index.getQuickBuyButton().getSlot(), index.getQuickBuyButton().getItemStack(player));
+
+        for (ShopCategory sc : index.getCategoryList()) {
+            inv.setItem(sc.getSlot(), sc.getItemStack(player));
+        }
+
+        index.addSeparator(player, inv);
+
+        inv.setItem(getSlot() + 9, index.getSelectedItem(player));
+
+        for (CategoryContent cc : getCategoryContentList()) {
+            inv.setItem(cc.getSlot(), cc.getItemStack(player, shopCache));
+        }
+
+        player.openInventory(inv);
+        if (!categoryViewers.contains(player.getUniqueId())){
+            categoryViewers.add(player.getUniqueId());
+        }
+    }
+
     /**
      * Get the category preview item in player's language
      */
@@ -101,5 +132,9 @@ public class ShopCategory {
      */
     public int getSlot() {
         return slot;
+    }
+
+    public List<CategoryContent> getCategoryContentList() {
+        return categoryContentList;
     }
 }

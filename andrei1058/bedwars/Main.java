@@ -18,6 +18,7 @@ import com.andrei1058.bedwars.configuration.*;
 import com.andrei1058.bedwars.listeners.*;
 import com.andrei1058.bedwars.listeners.arenaselector.ArenaSelectorListener;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
+import com.andrei1058.bedwars.shop.listeners.InventoryListener;
 import com.andrei1058.bedwars.support.Metrics;
 import com.andrei1058.bedwars.support.bukkit.*;
 import com.andrei1058.bedwars.support.bukkit.v1_10_R1.v1_10_R1;
@@ -64,7 +65,7 @@ public class Main extends JavaPlugin {
     public static boolean safeMode = false, lobbyServer = false, debug = true;
     public static String mainCmd = "bw", link = "https://www.spigotmc.org/resources/50942/";
     public static ConfigManager config, signs, spigot, generators;
-    public static com.andrei1058.bedwars.configuration.shop.ShopManager shop2;
+    public static com.andrei1058.bedwars.shop.ShopManager shop2;
     public static ShopManager shop;
     public static UpgradesManager upgrades;
     public static Language lang;
@@ -361,7 +362,7 @@ public class Main extends JavaPlugin {
         LeaderHeadsSupport.initLeaderHeads();
 
         /* Initialize shop */
-        shop2 = new com.andrei1058.bedwars.configuration.shop.ShopManager();
+        shop2 = new com.andrei1058.bedwars.shop.ShopManager();
         //This must stay after the shop initializing
         for (Language l : Language.getLanguages()) {
             l.setupUnSetCategories();

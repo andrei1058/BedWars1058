@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.shop.quickbuy;
 
 import com.andrei1058.bedwars.configuration.Language;
+import com.andrei1058.bedwars.shop.ShopCache;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -8,6 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class PlayerQuickBuyCache {
 
@@ -15,6 +17,8 @@ public class PlayerQuickBuyCache {
     private String emptyItemNamePath, emptyItemLorePath;
     private ItemStack emptyItem;
     private Player player;
+
+    private static List<PlayerQuickBuyCache> quickBuyCaches = new ArrayList<>();
 
     public PlayerQuickBuyCache(Player player, ItemStack emptyItem, String emptyItemNamePath, String emptyItemLorePath) {
         this.player = player;
@@ -28,10 +32,10 @@ public class PlayerQuickBuyCache {
      * Add the player's preferences to the given inventory.
      * This will also add the red empty item.
      */
-    public void addInInventory(Inventory inv) {
+    public void addInInventory(Inventory inv, ShopCache shopCache) {
 
         for (QuickBuyElement qbe : elements) {
-            inv.setItem(qbe.getSlot(), qbe.getCategoryContent().getItemStack(player));
+            inv.setItem(qbe.getSlot(), qbe.getCategoryContent().getItemStack(player, shopCache));
         }
 
         if (elements.size() == 21) return;
@@ -47,7 +51,7 @@ public class PlayerQuickBuyCache {
                 inv.setItem(x, i);
             }
         }
-        for (int x = 37; x < 43; x++) {
+        for (int x = 37; x < 44; x++) {
             if (inv.getItem(x) == null) {
                 inv.setItem(x, i);
             }
@@ -61,5 +65,15 @@ public class PlayerQuickBuyCache {
         im.setLore(Language.getList(player, emptyItemLorePath));
         i.setItemMeta(im);
         return i;
+    }
+
+    /**
+     * Get a Player Quick buy cache
+     */
+    public static PlayerQuickBuyCache getQyickBuyCache(UUID uuid) {
+        for (PlayerQuickBuyCache pqbc : new ArrayList<>(quickBuyCaches)) {
+            if (pqbc.player.getUniqueId() == uuid) return pqbc;
+        }
+        return null;
     }
 }

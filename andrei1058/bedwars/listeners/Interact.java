@@ -7,8 +7,7 @@ import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.language.Messages;
-import com.andrei1058.bedwars.configuration.shop.ShopManager;
-import com.andrei1058.bedwars.shop.ShopCategory;
+import com.andrei1058.bedwars.shop.ShopManager;
 import com.andrei1058.bedwars.shop.quickbuy.PlayerQuickBuyCache;
 import com.andrei1058.bedwars.upgrades.UpgradeGroup;
 import org.bukkit.Bukkit;
@@ -194,7 +193,8 @@ public class Interact implements Listener {
             if (l.getBlockX() == l2.getBlockX() && l.getBlockY() == l2.getBlockY() && l.getBlockZ() == l2.getBlockZ()) {
                 e.setCancelled(true);
                 if (a.isPlayer(e.getPlayer())) {
-                    ShopManager.shop.open(e.getPlayer(), new PlayerQuickBuyCache(e.getPlayer(), new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 4), Messages.SHOP_QUICK_EMPTY_NAME, Messages.SHOP_QUICK_EMPTY_LORE),true);
+                    ShopManager.shop.open(e.getPlayer(), new PlayerQuickBuyCache(e.getPlayer(),
+                            new ItemStack(Material.valueOf("RED_STAINED_GLASS_PANE"), 1), Messages.SHOP_QUICK_EMPTY_NAME, Messages.SHOP_QUICK_EMPTY_LORE),true);
                 }
             } else if (l.getBlockX() == l3.getBlockX() && l.getBlockY() == l3.getBlockY() && l.getBlockZ() == l3.getBlockZ()) {
                 if (a.isPlayer(e.getPlayer())) {

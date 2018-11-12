@@ -12,7 +12,6 @@ public class ShopBuyEvent extends Event {
     private static final HandlerList HANDLERS = new HandlerList();
 
     private Player buyer;
-    private ShopCategory shopCategory;
     private CategoryContent categoryContent;
 
     /**
@@ -30,8 +29,7 @@ public class ShopBuyEvent extends Event {
      *
      * @since API 12
      */
-    public ShopBuyEvent(Player buyer, ShopCategory shopCategory, CategoryContent categoryContent) {
-        this.shopCategory = shopCategory;
+    public ShopBuyEvent(Player buyer, CategoryContent categoryContent) {
         this.categoryContent = categoryContent;
         this.buyer = buyer;
     }
@@ -66,15 +64,6 @@ public class ShopBuyEvent extends Event {
      */
     public CategoryContent getCategoryContent() {
         return categoryContent;
-    }
-
-    /**
-     * Get the shop category where the player bought from
-     *
-     * @since API 12
-     */
-    public ShopCategory getShopCategory() {
-        return shopCategory;
     }
 
     @Override

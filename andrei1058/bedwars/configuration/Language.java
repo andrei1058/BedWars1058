@@ -246,16 +246,16 @@ public class Language {
      * Add required messages for a shop category to the given yml
      */
     public static void addCategoryMessages(YamlConfiguration yml, String categoryName, String invName, String itemName, List<String> itemLore) {
-        yml.addDefault(Messages.SHOP_PATH + Messages.SHOP_CATEGORY_INVENTORY_NAME.replace("%category%", categoryName), invName);
-        yml.addDefault(Messages.SHOP_PATH + Messages.SHOP_CATEGORY_ITEM_NAME.replace("%category%", categoryName), itemName);
-        yml.addDefault(Messages.SHOP_PATH + Messages.SHOP_CATEGORY_ITEM_LORE.replace("%category%", categoryName), itemLore);
+        yml.addDefault(Messages.SHOP_CATEGORY_INVENTORY_NAME.replace("%category%", categoryName), invName);
+        yml.addDefault(Messages.SHOP_CATEGORY_ITEM_NAME.replace("%category%", categoryName), itemName);
+        yml.addDefault(Messages.SHOP_CATEGORY_ITEM_LORE.replace("%category%", categoryName), itemLore);
     }
 
     /**
      * Add required messages for a shop category to the given yml
      */
     public static void addContentMessages(YamlConfiguration yml, String contentName, String categoryName, String itemName, List<String> itemLore) {
-        yml.addDefault(Messages.SHOP_PATH + Messages.SHOP_CONTENT_TIER_ITEM_NAME.replace("%category%", categoryName).replace("%content%", contentName), itemName);
-        yml.addDefault(Messages.SHOP_PATH + Messages.SHOP_CONTENT_TIER_ITEM_LORE.replace("%category%", categoryName).replace("%content%", contentName), itemLore);
+        yml.addDefault(Messages.SHOP_CONTENT_TIER_ITEM_NAME.replace("%category%", categoryName).replace("%content%", contentName), itemName);
+        yml.addDefault(Messages.SHOP_CONTENT_TIER_ITEM_LORE.replace("%category%", categoryName).replace("%content%", contentName), itemLore);
     }
 }

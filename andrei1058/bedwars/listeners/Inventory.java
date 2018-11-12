@@ -65,15 +65,6 @@ public class Inventory implements Listener {
                 return;
             }
 
-            /* Prevent players from placing items in the shop gui. Issue 26. */
-            if (a.isPlayer(p)) {
-                for (ShopCategory sc : ShopCategory.getShopCategories()) {
-                    if (e.getInventory().getName().equalsIgnoreCase(sc.getDisplayName(p))) {
-                        e.setCancelled(true);
-                        break;
-                    }
-                }
-            }
             /* Prevent players from placing items in the upgrades gui. Issue 26. */
             if (e.getInventory().getName().equalsIgnoreCase(getMsg(p, "upgrades." + UpgradeGroup.getUpgradeGroup(a.getGroup()).getName() + ".name"))) {
                 e.setCancelled(true);
@@ -109,31 +100,16 @@ public class Inventory implements Listener {
 
         /* Manage shop and upgrades */
         if (a != null) {
-            if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) {
-                e.setCancelled(true);
-                return;
-            }
+            //todo atentie, asta poate cauza probleme, faptul ca nu va mai bloca toate click-urile
+            //if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) {
+            //    e.setCancelled(true);
+            //    return;
+            //}
             if (a.isSpectator(p)) {
                 e.setCancelled(true);
                 return;
             }
             if (a.isPlayer(p)) {
-                for (ShopCategory sc : ShopCategory.getShopCategories()) {
-                    if (e.getInventory().getName().equalsIgnoreCase(sc.getDisplayName(p))) {
-                        e.setCancelled(true);
-                        for (CategoryContent cc : sc.getContent()) {
-                            if (cc.getName().equalsIgnoreCase("back")) {
-                                sc.getParent().openToPlayer(p);
-                                return;
-                            }
-                            if (e.getSlot() == cc.getSlot()) {
-                                cc.getContentAction().doStuff(p);
-                                return;
-                            }
-                        }
-                        break;
-                    }
-                }
                 if (e.getInventory().getName().equalsIgnoreCase(getMsg(p, "upgrades." + UpgradeGroup.getUpgradeGroup(a.getGroup()).getName() + ".name"))) {
                     for (TeamUpgrade tu : UpgradeGroup.getUpgradeGroup(a.getGroup()).getTeamUpgrades()) {
                         if (tu.getSlot() == e.getSlot()) {
@@ -145,9 +121,5 @@ public class Inventory implements Listener {
                 }
             }
         }
-    }
-
-    public static HashMap getLookingAtShop() {
-        return lookingAtShop;
     }
 }

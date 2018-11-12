@@ -679,31 +679,22 @@ public class v1_13_R2 implements NMS {
     }
 
     @Override
-    public org.bukkit.inventory.ItemStack addUpgradeTracker(org.bukkit.inventory.ItemStack itemStack, String path, String tier) {
+    public String getShopUpgradeIdentifier(org.bukkit.inventory.ItemStack itemStack) {
+        ItemStack i = CraftItemStack.asNMSCopy(itemStack);
+        NBTTagCompound tag = i.getTag();
+        return tag == null ? "null" : tag.hasKey("tierIdentifier") ? tag.getString("tierIdentifier") : "null";
+    }
+
+    @Override
+    public org.bukkit.inventory.ItemStack setShopUpgradeIdentifier(org.bukkit.inventory.ItemStack itemStack, String identifier) {
         ItemStack i = CraftItemStack.asNMSCopy(itemStack);
         NBTTagCompound tag = i.getTag();
         if (tag == null) {
             tag = new NBTTagCompound();
             i.setTag(tag);
         }
-
-        tag.setString("bw-shop-upgrade", path);
-        tag.setString("bw-shop-tier", tier);
+        tag.setString("tierIdentifier", identifier);
+        Main.debug(tag.getString("tierIdentifier"));
         return CraftItemStack.asBukkitCopy(i);
-    }
-
-    @Override
-    public boolean isShopUpgradable(org.bukkit.inventory.ItemStack itemStack) {
-        ItemStack i = CraftItemStack.asNMSCopy(itemStack);
-        NBTTagCompound tag = i.getTag();
-        return tag != null && tag.hasKey("bw-shop-upgrade");
-    }
-
-    @Override
-    public String[] getUpgradeTracker(org.bukkit.inventory.ItemStack itemStack) {
-        ItemStack i = CraftItemStack.asNMSCopy(itemStack);
-        NBTTagCompound tag = i.getTag();
-        if (i == null) return null;
-        return new String[]{tag.getString("bw-shop-upgrade"), tag.getString("bw-shop-tier")};
     }
 }

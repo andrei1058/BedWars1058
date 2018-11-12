@@ -1,7 +1,9 @@
 package com.andrei1058.bedwars.shop.main;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.events.ShopOpenEvent;
 import com.andrei1058.bedwars.configuration.Language;
+import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.shop.quickbuy.PlayerQuickBuyCache;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -11,6 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class ShopIndex {
 
@@ -19,6 +22,8 @@ public class ShopIndex {
     private List<ShopCategory> categoryList = new ArrayList<>();
     private QuickBuyButton quickBuyButton;
     public ItemStack separatorSelected, separatorStandard;
+
+    public static List<UUID> indexViewers = new ArrayList<>();
 
 
     /**
@@ -49,10 +54,16 @@ public class ShopIndex {
      */
     public void open(Player player, PlayerQuickBuyCache quickBuyCache, boolean callEvent) {
 
+        if (quickBuyCache == null) return;
+
         if (callEvent) {
             ShopOpenEvent event = new ShopOpenEvent(player);
             Bukkit.getPluginManager().callEvent(event);
             if (event.isCancelled()) return;
+        }
+
+        if (!indexViewers.contains(player.getUniqueId())){
+            indexViewers.add(player.getUniqueId());
         }
 
         Inventory inv = Bukkit.createInventory(null, invSize, Language.getMsg(player, getNamePath()));
@@ -67,7 +78,7 @@ public class ShopIndex {
 
         inv.setItem(getQuickBuyButton().getSlot() + 9, getSelectedItem(player));
 
-        quickBuyCache.addInInventory(inv);
+        quickBuyCache.addInInventory(inv, ShopCache.getShopCache(player));
 
         player.openInventory(inv);
     }
@@ -83,7 +94,7 @@ public class ShopIndex {
         im.setLore(Language.getList(player, separatorLorePath));
         i.setItemMeta(im);
 
-        for (int x = 8; x < 18; x++) {
+        for (int x = 9; x < 18; x++) {
             inv.setItem(x, i);
         }
     }
@@ -105,6 +116,7 @@ public class ShopIndex {
      */
     public void addShopCategory(ShopCategory sc) {
         categoryList.add(sc);
+        Main.debug("Adding shop category: " + sc + " at slot " + sc.getSlot());
     }
 
     /**

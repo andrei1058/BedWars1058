@@ -361,20 +361,13 @@ public interface NMS {
     Material woolMaterial();
 
     /**
-     * Shop upgrade
+     * Get an ItemStack identifier
      */
-    ItemStack addUpgradeTracker(ItemStack itemStack, String path, String tier);
+    String getShopUpgradeIdentifier(ItemStack itemStack);
 
     /**
-     * Check if is shop upgrade item
+     *Set an upgrade identifier
      */
-    boolean isShopUpgradable(ItemStack itemStack);
-
-    /**
-     * Get shop upgrade data
-     * 0 is the identifier path
-     * 1 is the tier int value
-     */
-    String[] getUpgradeTracker(ItemStack itemStack);
+    ItemStack setShopUpgradeIdentifier(ItemStack itemStack, String identifier);
 
 }

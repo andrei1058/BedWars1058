@@ -280,11 +280,13 @@ public class English {
         yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "{TeamColor}&l{TeamName} &r{TeamColor}Silverfish");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME, "{TeamColor}{despawn}s &8[ {TeamColor}{health}&8]");
         yml.addDefault(Messages.SHOP_SEPARATOR_NAME, "&8⇧ Categories");
-        yml.addDefault(Messages.SHOP_SEPARATOR_LORE, Collections.singleton("&8⇩ Items"));
+        yml.addDefault(Messages.SHOP_SEPARATOR_LORE, Arrays.asList("&8⇩ Items"));
         yml.addDefault(Messages.SHOP_QUICK_BUY_NAME, "&bQuick Buy");
-        yml.addDefault(Messages.SHOP_QUICK_BUY_LORE, Collections.singleton(""));
-        yml.addDefault(Messages.SHOP_QUICK_EMPTY_NAME, "&4Empty slot!");
+        yml.addDefault(Messages.SHOP_QUICK_BUY_LORE, Arrays.asList(""));
+        yml.addDefault(Messages.SHOP_QUICK_EMPTY_NAME, "&cEmpty slot!");
         yml.addDefault(Messages.SHOP_QUICK_EMPTY_LORE, Arrays.asList("&7This is a Quick Buy Slot!", "&bSneak Click &7any item in", "&7the shop to add it here."));
+        yml.addDefault(Messages.SHOP_CAN_BUY_COLOR, "&a");
+        yml.addDefault(Messages.SHOP_CANT_BUY_COLOR, "&c");
 
 
         addCategoryMessages(yml, "blocks-category", "&8Blocks", "&aBlocks", Collections.singletonList("&eClick to view!"));

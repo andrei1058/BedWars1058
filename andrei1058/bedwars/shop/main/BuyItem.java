@@ -1,16 +1,21 @@
 package com.andrei1058.bedwars.shop.main;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.arena.BedWarsTeam;
+import com.andrei1058.bedwars.configuration.ConfigPath;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.Main.plugin;
 
 public class BuyItem {
@@ -24,7 +29,7 @@ public class BuyItem {
     /**
      * Create a shop item
      */
-    public BuyItem(String path, YamlConfiguration yml, String upgradeIdentifier, int tier) {
+    public BuyItem(String path, YamlConfiguration yml, String upgradeIdentifier) {
         Main.debug("Loading BuyItems: " + path);
         this.upgradeIdentifier = upgradeIdentifier;
 
@@ -33,7 +38,7 @@ public class BuyItem {
             return;
         }
 
-        itemStack = Main.nms.createItemStack(yml.getString(path + ".material"),
+        itemStack = nms.createItemStack(yml.getString(path + ".material"),
                 yml.get(path + ".amount") == null ? 1 : yml.getInt(path + ".amount"),
                 (short) (yml.get(path + ".data") == null ? 1 : yml.getInt(path + ".data")));
 
@@ -99,13 +104,11 @@ public class BuyItem {
             itemStack.setItemMeta(imm);
         }
 
-        itemStack = Main.nms.addUpgradeTracker(itemStack, upgradeIdentifier, String.valueOf(tier));
-
         if (yml.get(path + ".auto-equip") != null) {
             autoEquip = yml.getBoolean(path + ".auto-equip");
         }
-        if (yml.get(path + ".permanent") != null) {
-            permanent = yml.getBoolean(path + ".permanent");
+        if (yml.get(upgradeIdentifier + "." + ConfigPath.SHOP_CATEGORY_CONTENT_IS_PERMANENT) != null) {
+            permanent = yml.getBoolean(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_IS_PERMANENT);
         }
 
         loaded = true;
@@ -117,6 +120,63 @@ public class BuyItem {
     public boolean isLoaded() {
         return loaded;
     }
+
+    /**
+     * Give to a player
+     */
+    public void give(Player player) {
+
+        Arena arena = Arena.getArenaByPlayer(player);
+        if (arena == null) return;
+
+        ItemStack i = itemStack.clone();
+
+        if (autoEquip && nms.isArmor(itemStack)) {
+            Material m = i.getType();
+
+            ItemMeta im = i.getItemMeta();
+            for (BedWarsTeam.Enchant e : arena.getTeam(player).getArmorsEnchantemnts()) {
+                im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
+            }
+            i.setItemMeta(im);
+
+            if (m == Material.LEATHER_HELMET || m == Material.CHAINMAIL_HELMET || m == Material.DIAMOND_HELMET || m == nms.materialGoldenHelmet() || m == Material.IRON_HELMET) {
+                if (permanent) i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
+                player.getInventory().setHelmet(i);
+            } else if (m == Material.LEATHER_CHESTPLATE || m == Material.CHAINMAIL_CHESTPLATE || m == nms.materialGoldenChestPlate() || m == Material.DIAMOND_CHESTPLATE || m == Material.IRON_CHESTPLATE) {
+                if (permanent) i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
+                player.getInventory().setChestplate(i);
+            } else if (m == Material.LEATHER_LEGGINGS || m == Material.CHAINMAIL_LEGGINGS || m == Material.DIAMOND_LEGGINGS || m == nms.materialGoldenLeggings() || m == Material.IRON_LEGGINGS) {
+                if (permanent) i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
+                player.getInventory().setLeggings(i);
+            } else {
+                if (permanent) i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
+                player.getInventory().setBoots(i);
+            }
+        } else {
+
+            i = nms.colourItem(i, arena.getTeam(player));
+
+            if (i.getType() == Material.BOW) {
+                ItemMeta im = i.getItemMeta();
+                for (BedWarsTeam.Enchant e : arena.getTeam(player).getBowsEnchantments()) {
+                    im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
+                }
+                i.setItemMeta(im);
+            } else if (nms.isSword(i)) {
+                ItemMeta im = i.getItemMeta();
+                for (BedWarsTeam.Enchant e : arena.getTeam(player).getSwordsEnchantemnts()) {
+                    im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
+                }
+                i.setItemMeta(im);
+            }
+
+            if (permanent) i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
+            player.getInventory().addItem(i);
+        }
+        player.updateInventory();
+    }
+
 
     /**
      * Get upgrade identifier.
