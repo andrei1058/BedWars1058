@@ -121,4 +121,13 @@ public class None implements Database {
     public HashMap<UUID, Integer> getTopGamesPlayed(int x) {
         return new HashMap<>();
     }
+
+    @Override
+    public void setQuickBuySlot(UUID uuid, String shopPath, int slot) {
+    }
+
+    @Override
+    public String getQuickBuySlots(UUID uuid, int slot) {
+        return "";
+    }
 }

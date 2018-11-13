@@ -694,7 +694,6 @@ public class v1_13_R2 implements NMS {
             i.setTag(tag);
         }
         tag.setString("tierIdentifier", identifier);
-        Main.debug(tag.getString("tierIdentifier"));
         return CraftItemStack.asBukkitCopy(i);
     }
 }

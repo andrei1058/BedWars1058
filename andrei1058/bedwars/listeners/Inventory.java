@@ -23,8 +23,6 @@ import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
 public class Inventory implements Listener {
 
-    private static HashMap lookingAtShop = new HashMap();
-
     @EventHandler
     public void onClose(InventoryCloseEvent e) {
         Player p = (Player) e.getPlayer();
@@ -33,18 +31,6 @@ public class Inventory implements Listener {
             if (ss != null) {
                 if (ss.getSetupType() == null)
                     ss.cancel();
-            }
-        }
-        BedWarsTeam.PlayerVault pv = BedWarsTeam.getVault(p);
-        if (pv != null) {
-            for (ItemStack i : e.getInventory()) {
-                if (i == null) continue;
-                if (i.getType() == Material.AIR) continue;
-                if (pv.getInvItems().contains(i)) {
-                    e.getInventory().remove(i);
-                    p.getInventory().addItem(i);
-                    return;
-                }
             }
         }
     }

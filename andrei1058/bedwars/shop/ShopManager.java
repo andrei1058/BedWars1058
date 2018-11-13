@@ -4,8 +4,7 @@ import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.configuration.ConfigManager;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.language.Messages;
-import com.andrei1058.bedwars.shop.listeners.InventoryListener;
-import com.andrei1058.bedwars.shop.listeners.ShopCacheListener;
+import com.andrei1058.bedwars.shop.listeners.*;
 import com.andrei1058.bedwars.shop.main.QuickBuyButton;
 import com.andrei1058.bedwars.shop.main.ShopCategory;
 import com.andrei1058.bedwars.shop.main.ShopIndex;
@@ -222,5 +221,8 @@ public class ShopManager {
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new InventoryListener(), Main.plugin);
         pm.registerEvents(new ShopCacheListener(), Main.plugin);
+        pm.registerEvents(new QuickBuyListener(), Main.plugin);
+        pm.registerEvents(new ShopOpenListener(), Main.plugin);
+        pm.registerEvents(new PlayerDropListener(), Main.plugin);
     }
 }

@@ -92,12 +92,20 @@ public class ShopCache {
             for (ItemStack i : player.getInventory().getContents()) {
                 if (i == null) continue;
                 if (i.getType() == Material.AIR) continue;
-                Main.debug("Upgrade: " + Main.nms.getShopUpgradeIdentifier(i) + " vs " + cc.getIdentifier());
                 if (Main.nms.getShopUpgradeIdentifier(i).equals(cc.getIdentifier())) {
                     player.getInventory().remove(i);
                 }
             }
+            updateItem();
             player.updateInventory();
+        }
+
+        public void updateItem(){
+            if (player.getOpenInventory() != null){
+                if (player.getOpenInventory().getTopInventory() != null){
+                    player.getOpenInventory().getTopInventory().setItem(cc.getSlot(), cc.getItemStack(player,  cache));
+                }
+            }
         }
     }
 
@@ -128,7 +136,8 @@ public class ShopCache {
     public void upgradeCachedItem(CategoryContent cc) {
         CachedItem ci = getCachedItem(cc.getIdentifier());
         if (ci == null) {
-            new CachedItem(cc);
+            ci = new CachedItem(cc);
+            ci.updateItem();
         } else {
             if (cc.getContentTiers().size() > ci.getTier()) {
                 Main.debug("Cached item upgrade for " + cc.getIdentifier() + " player " + player.getName());

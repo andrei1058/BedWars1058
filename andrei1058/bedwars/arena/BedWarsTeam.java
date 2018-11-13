@@ -7,6 +7,7 @@ import com.andrei1058.bedwars.api.GeneratorType;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.language.Messages;
+import com.andrei1058.bedwars.shop.ShopCache;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -19,7 +20,6 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -151,19 +151,8 @@ public class BedWarsTeam {
      */
     public void firstSpawn(Player p) {
         p.teleport(spawn);
-        PlayerVault v;
-        if (getVault(p) == null) {
-            v = new PlayerVault(p);
-        } else {
-            v = getVault(p);
-            v.invItems.clear();
-        }
-        v.setHelmet(createArmor(Material.LEATHER_HELMET));
-        v.setChestplate(createArmor(Material.LEATHER_CHESTPLATE));
-        v.setPants(createArmor(Material.LEATHER_LEGGINGS));
-        v.setBoots(createArmor(Material.LEATHER_BOOTS));
         sendDefaultInventory(p);
-        Bukkit.getPluginManager().callEvent(new ArenaFirstSpawnEvent(p, getArena(), this, v));
+        Bukkit.getPluginManager().callEvent(new ArenaFirstSpawnEvent(p, getArena(), this));
     }
 
     /**
@@ -217,11 +206,20 @@ public class BedWarsTeam {
                     }
                     im.spigot().setUnbreakable(true);
                     i.setItemMeta(im);
-                    p.getInventory().addItem(i);
-                    if (nms.isSword(i)) {
-                        if (getVault(p) != null) {
-                            getVault(p).addInvItem(i);
+
+                    boolean hasSword = false;
+                    if (Main.nms.isSword(i)) {
+                        for (ItemStack item : p.getInventory().getContents()) {
+                            if (item == null) continue;
+                            if (item.getType() == Material.AIR) continue;
+                            if (Main.nms.isSword(item)) {
+                                hasSword = true;
+                                break;
+                            }
                         }
+                    }
+                    if (!hasSword) {
+                        p.getInventory().addItem(i);
                     }
                 } catch (Exception ex) {
                 }
@@ -269,19 +267,11 @@ public class BedWarsTeam {
             nms.showPlayer(p, on);
         }
         nms.sendTitle(p, getMsg(p, Messages.PLAYER_DIE_RESPAWNED_TITLE), "", 0, 20, 0);
-        PlayerVault pv = getVault(p);
-        if (pv != null) {
-            p.getInventory().setHelmet(pv.getHelmet());
-            p.getInventory().setChestplate(pv.getChestplate());
-            p.getInventory().setLeggings(pv.getPants());
-            p.getInventory().setBoots(pv.getBoots());
-            for (ItemStack i : pv.getInvItems()) {
-                p.getInventory().addItem(i);
-            }
-        } else {
-            sendArmor(p);
-            sendDefaultInventory(p);
+        ShopCache sc = ShopCache.getShopCache(p);
+        if (sc != null){
+            sc.managePermanentsAndDowngradables();
         }
+        sendDefaultInventory(p);
         p.setHealth(20);
         if (!getBaseEffects().isEmpty()) {
             for (BedWarsTeam.Effect ef : getBaseEffects()) {
@@ -351,10 +341,12 @@ public class BedWarsTeam {
      * Equip a player with default armor
      */
     public void sendArmor(Player p) {
-        p.getInventory().setHelmet(createArmor(Material.LEATHER_HELMET));
-        p.getInventory().setChestplate(createArmor(Material.LEATHER_CHESTPLATE));
-        p.getInventory().setLeggings(createArmor(Material.LEATHER_LEGGINGS));
-        p.getInventory().setBoots(createArmor(Material.LEATHER_BOOTS));
+        if (p.getInventory().getHelmet() == null) p.getInventory().setHelmet(createArmor(Material.LEATHER_HELMET));
+        if (p.getInventory().getChestplate() == null)
+            p.getInventory().setChestplate(createArmor(Material.LEATHER_CHESTPLATE));
+        if (p.getInventory().getLeggings() == null)
+            p.getInventory().setLeggings(createArmor(Material.LEATHER_LEGGINGS));
+        if (p.getInventory().getBoots() == null) p.getInventory().setBoots(createArmor(Material.LEATHER_BOOTS));
     }
 
     /**
@@ -515,62 +507,6 @@ public class BedWarsTeam {
         }
     }
 
-    private static List<PlayerVault> vaults = new ArrayList<>();
-
-    /**
-     * It contains items bought by a player from shop with permanent == true
-     * Also it contains the items given before ArenaFirstSpawnEvent like sword and armor
-     */
-    public class PlayerVault {
-        Player p;
-        ItemStack pants = createArmor(Material.LEATHER_LEGGINGS), boots = createArmor(Material.LEATHER_BOOTS), chestplate = createArmor(Material.LEATHER_CHESTPLATE), helmet = createArmor(Material.LEATHER_HELMET);
-        List<ItemStack> invItems = new ArrayList<>();
-
-        public PlayerVault(Player p) {
-            this.p = p;
-            vaults.add(this);
-        }
-
-        public void addInvItem(ItemStack i) {
-            invItems.add(i);
-        }
-
-        public void setPants(ItemStack pants) {
-            this.pants = pants;
-        }
-
-        public void setBoots(ItemStack boots) {
-            this.boots = boots;
-        }
-
-        public List<ItemStack> getInvItems() {
-            return invItems;
-        }
-
-        public void setChestplate(ItemStack chestplate) {
-            this.chestplate = chestplate;
-        }
-
-        public void setHelmet(ItemStack helmet) {
-            this.helmet = helmet;
-        }
-
-        public ItemStack getHelmet() {
-            return helmet;
-        }
-
-        public ItemStack getChestplate() {
-            return chestplate;
-        }
-
-        public ItemStack getBoots() {
-            return boots;
-        }
-
-        public ItemStack getPants() {
-            return pants;
-        }
-    }
 
     /**
      * Potion effects from the team upgrades shop
@@ -622,20 +558,6 @@ public class BedWarsTeam {
         public int getAmplifier() {
             return amplifier;
         }
-    }
-
-    /**
-     * Gets the player's inventory like a keepInventory
-     */
-    @Nullable
-    @Contract(pure = true)
-    public static PlayerVault getVault(Player p) {
-        for (PlayerVault v : vaults) {
-            if (v.p == p) {
-                return v;
-            }
-        }
-        return null;
     }
 
     /**

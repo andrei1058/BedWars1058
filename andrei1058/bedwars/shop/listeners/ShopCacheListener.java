@@ -7,13 +7,14 @@ import com.andrei1058.bedwars.api.events.PlayerJoinArenaEvent;
 import com.andrei1058.bedwars.api.events.PlayerLeaveArenaEvent;
 import com.andrei1058.bedwars.shop.ShopCache;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class ShopCacheListener implements Listener {
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onArenaJoin(PlayerJoinArenaEvent e) {
         if (e.isSpectator()) return;
         if (ShopCache.getShopCache(e.getPlayer()) != null) {
@@ -22,7 +23,7 @@ public class ShopCacheListener implements Listener {
         new ShopCache(e.getPlayer());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onArenaLeave(PlayerLeaveArenaEvent e) {
         //don't remove immediately in case of /rejoin
         if (e.getArena().getStatus() == GameState.playing) return;

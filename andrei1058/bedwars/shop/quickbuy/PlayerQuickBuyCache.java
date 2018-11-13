@@ -1,7 +1,12 @@
 package com.andrei1058.bedwars.shop.quickbuy;
 
+import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Language;
+import com.andrei1058.bedwars.configuration.language.Messages;
 import com.andrei1058.bedwars.shop.ShopCache;
+import com.andrei1058.bedwars.shop.ShopManager;
+import com.andrei1058.bedwars.shop.main.CategoryContent;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -17,14 +22,23 @@ public class PlayerQuickBuyCache {
     private String emptyItemNamePath, emptyItemLorePath;
     private ItemStack emptyItem;
     private Player player;
+    private QuickBuyTask task;
 
+    public static int[] quickSlots = new int[]{19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43};
     private static List<PlayerQuickBuyCache> quickBuyCaches = new ArrayList<>();
 
-    public PlayerQuickBuyCache(Player player, ItemStack emptyItem, String emptyItemNamePath, String emptyItemLorePath) {
+    public PlayerQuickBuyCache(Player player) {
         this.player = player;
-        this.emptyItem = emptyItem;
-        this.emptyItemNamePath = emptyItemNamePath;
-        this.emptyItemLorePath = emptyItemLorePath;
+        this.emptyItem = Main.nms.createItemStack(Main.shop2.getYml().getString(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_MATERIAL),
+                Main.shop2.getYml().getInt(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_AMOUNT),
+                (short) Main.shop2.getYml().getInt(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_DATA));
+        if (Main.shop2.getYml().getBoolean(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_ENCHANTED)) {
+            this.emptyItem = ShopManager.enchantItem(emptyItem);
+        }
+        this.emptyItemNamePath = Messages.SHOP_QUICK_EMPTY_NAME;
+        this.emptyItemLorePath = Messages.SHOP_QUICK_EMPTY_LORE;
+        task = new QuickBuyTask(player.getUniqueId());
+        quickBuyCaches.add(this);
     }
 
 
@@ -41,12 +55,12 @@ public class PlayerQuickBuyCache {
         if (elements.size() == 21) return;
 
         ItemStack i = getEmptyItem(player);
-        for (int x = 19; x < 26; x++) {
+        for (int x : quickSlots) {
             if (inv.getItem(x) == null) {
                 inv.setItem(x, i);
             }
         }
-        for (int x = 28; x < 35; x++) {
+        /*for (int x = 28; x < 35; x++) {
             if (inv.getItem(x) == null) {
                 inv.setItem(x, i);
             }
@@ -55,7 +69,27 @@ public class PlayerQuickBuyCache {
             if (inv.getItem(x) == null) {
                 inv.setItem(x, i);
             }
+        }*/
+    }
+
+    public void destroy() {
+        elements.clear();
+        if (task != null) {
+            task.cancel();
         }
+        quickBuyCaches.remove(this);
+    }
+
+    public void setElement(int slot, CategoryContent cc) {
+        for (QuickBuyElement q : new ArrayList<>(elements)) {
+            if (q.getSlot() == slot) {
+                elements.remove(q);
+            }
+        }
+        addQuickElement(new QuickBuyElement(cc.getIdentifier(), slot));
+        Main.database.setQuickBuySlot(player.getUniqueId(), cc.getIdentifier(), slot);
+        Main.debug("Adding new quick buy element for " + player.getName() + " " + cc.getIdentifier());
+        //todo success msg
     }
 
     private ItemStack getEmptyItem(Player player) {
@@ -70,10 +104,21 @@ public class PlayerQuickBuyCache {
     /**
      * Get a Player Quick buy cache
      */
-    public static PlayerQuickBuyCache getQyickBuyCache(UUID uuid) {
+    public static PlayerQuickBuyCache getQuickBuyCache(UUID uuid) {
         for (PlayerQuickBuyCache pqbc : new ArrayList<>(quickBuyCaches)) {
             if (pqbc.player.getUniqueId() == uuid) return pqbc;
         }
         return null;
+    }
+
+    public List<QuickBuyElement> getElements() {
+        return elements;
+    }
+
+    /**
+     * Add a quick buy element
+     */
+    public void addQuickElement(QuickBuyElement e) {
+        this.elements.add(e);
     }
 }

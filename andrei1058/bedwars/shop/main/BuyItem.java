@@ -108,7 +108,8 @@ public class BuyItem {
             autoEquip = yml.getBoolean(path + ".auto-equip");
         }
         if (yml.get(upgradeIdentifier + "." + ConfigPath.SHOP_CATEGORY_CONTENT_IS_PERMANENT) != null) {
-            permanent = yml.getBoolean(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_IS_PERMANENT);
+            permanent = yml.getBoolean(upgradeIdentifier + "." + ConfigPath.SHOP_CATEGORY_CONTENT_IS_PERMANENT);
+
         }
 
         loaded = true;
@@ -171,6 +172,7 @@ public class BuyItem {
                 i.setItemMeta(im);
             }
 
+            Main.debug("Is permanent: " + permanent);
             if (permanent) i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
             player.getInventory().addItem(i);
         }

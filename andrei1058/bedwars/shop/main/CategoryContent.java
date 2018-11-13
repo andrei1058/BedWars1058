@@ -167,7 +167,11 @@ public class CategoryContent {
         if (shopCache.getContentTier(identifier) == contentTiers.size()) {
             i = contentTiers.get(contentTiers.size() - 1).getItemStack().clone();
         } else {
-            i = contentTiers.get(shopCache.getContentTier(identifier) - 1).getItemStack().clone();
+            if (shopCache.hasCachedItem(this)){
+                i = contentTiers.get(shopCache.getContentTier(identifier)).getItemStack().clone();
+            } else {
+                i = contentTiers.get(shopCache.getContentTier(identifier) - 1).getItemStack().clone();
+            }
         }
 
         ItemMeta im = i.getItemMeta();

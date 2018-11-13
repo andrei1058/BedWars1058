@@ -62,10 +62,6 @@ public class ShopIndex {
             if (event.isCancelled()) return;
         }
 
-        if (!indexViewers.contains(player.getUniqueId())){
-            indexViewers.add(player.getUniqueId());
-        }
-
         Inventory inv = Bukkit.createInventory(null, invSize, Language.getMsg(player, getNamePath()));
 
         inv.setItem(getQuickBuyButton().getSlot(), getQuickBuyButton().getItemStack(player));
@@ -81,6 +77,9 @@ public class ShopIndex {
         quickBuyCache.addInInventory(inv, ShopCache.getShopCache(player));
 
         player.openInventory(inv);
+        if (!indexViewers.contains(player.getUniqueId())){
+            indexViewers.add(player.getUniqueId());
+        }
     }
 
 
@@ -145,5 +144,9 @@ public class ShopIndex {
      */
     public QuickBuyButton getQuickBuyButton() {
         return quickBuyButton;
+    }
+
+    public static List<UUID> getIndexViewers() {
+        return new ArrayList<>(indexViewers);
     }
 }

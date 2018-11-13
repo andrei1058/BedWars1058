@@ -142,7 +142,8 @@ public class Interact implements Listener {
                             }
                         }
                     }
-                    if (shop.getBoolean("utilities.silverfish.enable")) {
+                    //todo add new compatibility for shop specials
+                    /*if (shop.getBoolean("utilities.silverfish.enable")) {
                         if (!Misc.isProjectile(Material.valueOf(shop.getYml().getString("utilities.silverfish.material")))) {
                             if (inHand.getType() == Material.valueOf(shop.getYml().getString("utilities.silverfish.material")) && nms.itemStackDataCompare(inHand, (short) shop.getInt("utilities.silverfish.data"))) {
                                 nms.spawnSilverfish(p.getLocation().add(0, 1, 0), a.getTeam(p));
@@ -162,7 +163,7 @@ public class Interact implements Listener {
                                 }
                             }
                         }
-                    }
+                    }*/
                 }
             }
         }
@@ -189,14 +190,8 @@ public class Interact implements Listener {
         if (a == null) return;
         Location l = e.getRightClicked().getLocation();
         for (BedWarsTeam t : a.getTeams()) {
-            Location l2 = t.getShop(), l3 = t.getTeamUpgrades();
-            if (l.getBlockX() == l2.getBlockX() && l.getBlockY() == l2.getBlockY() && l.getBlockZ() == l2.getBlockZ()) {
-                e.setCancelled(true);
-                if (a.isPlayer(e.getPlayer())) {
-                    ShopManager.shop.open(e.getPlayer(), new PlayerQuickBuyCache(e.getPlayer(),
-                            new ItemStack(Material.valueOf("RED_STAINED_GLASS_PANE"), 1), Messages.SHOP_QUICK_EMPTY_NAME, Messages.SHOP_QUICK_EMPTY_LORE),true);
-                }
-            } else if (l.getBlockX() == l3.getBlockX() && l.getBlockY() == l3.getBlockY() && l.getBlockZ() == l3.getBlockZ()) {
+            Location l3 = t.getTeamUpgrades();
+            if (l.getBlockX() == l3.getBlockX() && l.getBlockY() == l3.getBlockY() && l.getBlockZ() == l3.getBlockZ()) {
                 if (a.isPlayer(e.getPlayer())) {
                     UpgradeGroup ug = getUpgradeGroup(a.getGroup());
                     if (ug != null) {

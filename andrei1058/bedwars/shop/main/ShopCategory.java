@@ -137,4 +137,18 @@ public class ShopCategory {
     public List<CategoryContent> getCategoryContentList() {
         return categoryContentList;
     }
+
+    /**Get a category content by identifier*/
+    public static CategoryContent getCategoryContent(String identifier, ShopIndex shopIndex){
+        for (ShopCategory sc : shopIndex.getCategoryList()){
+            for (CategoryContent cc : sc.getCategoryContentList()){
+                if (cc.getIdentifier().equals(identifier)) return cc;
+            }
+        }
+        return null;
+    }
+
+    public static List<UUID> getCategoryViewers() {
+        return new ArrayList<>(categoryViewers);
+    }
 }
