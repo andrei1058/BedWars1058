@@ -1,8 +1,6 @@
 package com.andrei1058.bedwars.api.events;
 
-import com.andrei1058.bedwars.shop.BuyItemsAction;
 import com.andrei1058.bedwars.shop.main.CategoryContent;
-import com.andrei1058.bedwars.shop.main.ShopCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -15,16 +13,6 @@ public class ShopBuyEvent extends Event {
     private CategoryContent categoryContent;
 
     /**
-     * Triggered when someone buys from the shop
-     *
-     * @since API v8
-     */
-    @Deprecated
-    public ShopBuyEvent(BuyItemsAction buyItemsAction, Player buyer) {
-        this.buyer = buyer;
-    }
-
-    /**
      * Triggered when a player buys from the shop
      *
      * @since API 12
@@ -32,20 +20,6 @@ public class ShopBuyEvent extends Event {
     public ShopBuyEvent(Player buyer, CategoryContent categoryContent) {
         this.categoryContent = categoryContent;
         this.buyer = buyer;
-    }
-
-
-    /**
-     * Get some stuff about purchase
-     * DEPRECATED
-     * RETURNS NULL
-     *
-     * @return NULL
-     * @since API v8
-     */
-    @Deprecated
-    public BuyItemsAction getBuyItemsAction() {
-        return null;
     }
 
     /**

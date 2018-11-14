@@ -219,7 +219,7 @@ public class Language {
      * Create messages paths for new shop categories
      */
     public void setupUnSetCategories() {
-        for (String s : Main.shop2.getYml().getConfigurationSection("").getKeys(false)) {
+        for (String s : Main.shop.getYml().getConfigurationSection("").getKeys(false)) {
             if (s.equalsIgnoreCase(ConfigPath.SHOP_SETTINGS_PATH)) continue;
             if (s.equalsIgnoreCase(ConfigPath.SHOP_SPECIALS_PATH)) continue;
             if (!exists(Messages.SHOP_CATEGORY_INVENTORY_NAME.replace("%category%", s))) {
@@ -231,7 +231,7 @@ public class Language {
             if (!exists(Messages.SHOP_CATEGORY_ITEM_LORE.replace("%category%", s))) {
                 set(Messages.SHOP_CATEGORY_ITEM_LORE.replace("%category%", s), Collections.singleton("&8Lore not set"));
             }
-            for (String c : Main.shop2.getYml().getConfigurationSection(s + ConfigPath.SHOP_CATEGORY_CONTENT_PATH).getKeys(false)) {
+            for (String c : Main.shop.getYml().getConfigurationSection(s + ConfigPath.SHOP_CATEGORY_CONTENT_PATH).getKeys(false)) {
                 if (!exists(Messages.SHOP_PATH + Messages.SHOP_CONTENT_TIER_ITEM_NAME.replace("%category%", s).replace("%content%", c))) {
                     set(Messages.SHOP_PATH + Messages.SHOP_CONTENT_TIER_ITEM_NAME.replace("%category%", s).replace("%content%", c), "&8Name not set");
                 }

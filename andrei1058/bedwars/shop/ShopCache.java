@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.shop;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.shop.main.CategoryContent;
+import com.andrei1058.bedwars.shop.quickbuy.PlayerQuickBuyCache;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -14,17 +15,27 @@ public class ShopCache {
     private Player player;
     private List<CachedItem> cachedItems = new ArrayList<>();
     private ShopCache cache;
+    private int selectedCategory;
 
     private static List<ShopCache> shopCaches = new ArrayList<>();
 
     public ShopCache(Player player) {
         this.player = player;
         this.cache = this;
-        shopCaches.add(this);
+        this.selectedCategory = ShopManager.getShop().getQuickBuyButton().getSlot();
+        this.shopCaches.add(this);
     }
 
     public Player getPlayer() {
         return player;
+    }
+
+    public void setSelectedCategory(int slot){
+        this.selectedCategory = slot;
+    }
+
+    public int getSelectedCategory() {
+        return selectedCategory;
     }
 
     public int getContentTier(String identifier) {
@@ -51,6 +62,7 @@ public class ShopCache {
      * Used to give items on player respawn
      */
     public void managePermanentsAndDowngradables() {
+        Main.debug("Restore permanents on death for: " + player.getName());
         for (CachedItem ci : cachedItems) {
             ci.manageDeath();
         }

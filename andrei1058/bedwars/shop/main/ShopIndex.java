@@ -73,6 +73,7 @@ public class ShopIndex {
         addSeparator(player, inv);
 
         inv.setItem(getQuickBuyButton().getSlot() + 9, getSelectedItem(player));
+        ShopCache.getShopCache(player).setSelectedCategory(getQuickBuyButton().getSlot());
 
         quickBuyCache.addInInventory(inv, ShopCache.getShopCache(player));
 

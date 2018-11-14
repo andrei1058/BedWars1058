@@ -29,10 +29,10 @@ public class PlayerQuickBuyCache {
 
     public PlayerQuickBuyCache(Player player) {
         this.player = player;
-        this.emptyItem = Main.nms.createItemStack(Main.shop2.getYml().getString(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_MATERIAL),
-                Main.shop2.getYml().getInt(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_AMOUNT),
-                (short) Main.shop2.getYml().getInt(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_DATA));
-        if (Main.shop2.getYml().getBoolean(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_ENCHANTED)) {
+        this.emptyItem = Main.nms.createItemStack(Main.shop.getYml().getString(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_MATERIAL),
+                Main.shop.getYml().getInt(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_AMOUNT),
+                (short) Main.shop.getYml().getInt(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_DATA));
+        if (Main.shop.getYml().getBoolean(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_ENCHANTED)) {
             this.emptyItem = ShopManager.enchantItem(emptyItem);
         }
         this.emptyItemNamePath = Messages.SHOP_QUICK_EMPTY_NAME;

@@ -6,6 +6,7 @@ import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.language.Messages;
 import com.andrei1058.bedwars.shop.ShopManager;
 import com.andrei1058.bedwars.shop.ShopCache;
+import com.andrei1058.bedwars.shop.quickbuy.PlayerQuickBuyCache;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -97,6 +98,8 @@ public class ShopCategory {
         index.addSeparator(player, inv);
 
         inv.setItem(getSlot() + 9, index.getSelectedItem(player));
+
+        shopCache.setSelectedCategory(getSlot());
 
         for (CategoryContent cc : getCategoryContentList()) {
             inv.setItem(cc.getSlot(), cc.getItemStack(player, shopCache));

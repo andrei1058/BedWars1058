@@ -1,13 +1,9 @@
 package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.SetupSession;
-import com.andrei1058.bedwars.shop.CategoryContent;
-import com.andrei1058.bedwars.shop.ShopCategory;
 import com.andrei1058.bedwars.upgrades.TeamUpgrade;
 import com.andrei1058.bedwars.upgrades.UpgradeGroup;
 import org.bukkit.Material;
@@ -16,8 +12,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.HashMap;
 
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 

@@ -1,6 +1,5 @@
 package com.andrei1058.bedwars.shop.listeners;
 
-import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.shop.ShopManager;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.shop.main.CategoryContent;
@@ -21,16 +20,18 @@ public class InventoryListener implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e){
         if (e.isCancelled()) return;
+        ShopCache shopCache = ShopCache.getShopCache((Player) e.getWhoClicked());
+        PlayerQuickBuyCache cache = PlayerQuickBuyCache.getQuickBuyCache(e.getWhoClicked().getUniqueId());
+        if (cache == null) return;
+        if (shopCache == null) return;
         if (ShopIndex.getIndexViewers().contains(e.getWhoClicked().getUniqueId())) {
             e.setCancelled(true);
             for (ShopCategory sc : ShopManager.getShop().getCategoryList()) {
                 if (e.getSlot() == sc.getSlot()) {
-                    sc.open((Player) e.getWhoClicked(), ShopManager.getShop(), ShopCache.getShopCache((Player) e.getWhoClicked()));
+                    sc.open((Player) e.getWhoClicked(), ShopManager.getShop(), shopCache);
                     return;
                 }
             }
-            PlayerQuickBuyCache cache = PlayerQuickBuyCache.getQuickBuyCache(e.getWhoClicked().getUniqueId());
-            if (cache == null) return;
             for (QuickBuyElement element : cache.getElements()){
                 if (element.getSlot() == e.getSlot()){
                     element.getCategoryContent().execute((Player) e.getWhoClicked(), ShopCache.getShopCache((Player) e.getWhoClicked()));
@@ -39,13 +40,16 @@ public class InventoryListener implements Listener {
             }
         } else if (ShopCategory.getCategoryViewers().contains(e.getWhoClicked().getUniqueId())) {
             e.setCancelled(true);
-            PlayerQuickBuyCache cache = PlayerQuickBuyCache.getQuickBuyCache(e.getWhoClicked().getUniqueId());
-            if (cache == null) return;
             for (ShopCategory sc : ShopManager.getShop().getCategoryList()) {
                 if (ShopManager.getShop().getQuickBuyButton().getSlot() == e.getSlot()){
                     ShopManager.getShop().open((Player) e.getWhoClicked(), cache, false);
                     return;
                 }
+                if (e.getSlot() == sc.getSlot()) {
+                    sc.open((Player) e.getWhoClicked(), ShopManager.getShop(), shopCache);
+                    return;
+                }
+                if (sc.getSlot() != shopCache.getSelectedCategory()) continue;
                 for (CategoryContent cc : sc.getCategoryContentList()) {
                     if (cc.getSlot() == e.getSlot()) {
                         if (e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY){
@@ -68,10 +72,7 @@ public class InventoryListener implements Listener {
             if (!add) return;
             CategoryContent cc = QuickBuyAdd.getQuickBuyAdds().get(e.getWhoClicked().getUniqueId());
             if (cc != null){
-                PlayerQuickBuyCache cache = PlayerQuickBuyCache.getQuickBuyCache(e.getWhoClicked().getUniqueId());
-                if (cache != null){
-                    cache.setElement(e.getSlot(), cc);
-                }
+                cache.setElement(e.getSlot(), cc);
             }
             e.getWhoClicked().closeInventory();
         }

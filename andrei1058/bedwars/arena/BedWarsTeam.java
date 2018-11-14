@@ -151,7 +151,7 @@ public class BedWarsTeam {
      */
     public void firstSpawn(Player p) {
         p.teleport(spawn);
-        sendDefaultInventory(p);
+        sendDefaultInventory(p, true);
         Bukkit.getPluginManager().callEvent(new ArenaFirstSpawnEvent(p, getArena(), this));
     }
 
@@ -171,8 +171,8 @@ public class BedWarsTeam {
     /**
      * Gives the start inventory
      */
-    public void sendDefaultInventory(Player p) {
-        p.getInventory().clear();
+    public void sendDefaultInventory(Player p, boolean clean) {
+        if (clean) p.getInventory().clear();
         String path = config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + "." + arena.getGroup()) == null ?
                 ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + ".Default" : ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + "." + arena.getGroup();
         for (String s : config.getYml().getStringList(path)) {
@@ -271,7 +271,7 @@ public class BedWarsTeam {
         if (sc != null){
             sc.managePermanentsAndDowngradables();
         }
-        sendDefaultInventory(p);
+        sendDefaultInventory(p, false);
         p.setHealth(20);
         if (!getBaseEffects().isEmpty()) {
             for (BedWarsTeam.Effect ef : getBaseEffects()) {

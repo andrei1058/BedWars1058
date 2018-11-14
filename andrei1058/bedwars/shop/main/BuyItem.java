@@ -172,7 +172,6 @@ public class BuyItem {
                 i.setItemMeta(im);
             }
 
-            Main.debug("Is permanent: " + permanent);
             if (permanent) i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
             player.getInventory().addItem(i);
         }
