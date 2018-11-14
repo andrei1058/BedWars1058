@@ -59,6 +59,15 @@ public class ShopManager {
         yml.addDefault(ConfigPath.SHOP_SETTINGS_SEPARATOR_SELECTED_DATA, 13);
         yml.addDefault(ConfigPath.SHOP_SETTINGS_SEPARATOR_SELECTED_ENCHANTED, false);
 
+        //specials
+        yml.addDefault(ConfigPath.SHOP_SPECIAL_SILVERFISH_ENABLE, true);
+        yml.addDefault(ConfigPath.SHOP_SPECIAL_SILVERFISH_MATERIAL, Main.getForCurrentVersion("SNOW_BALL", "SNOW_BALL", "SNOWBALL"));
+        yml.addDefault(ConfigPath.SHOP_SPECIAL_SILVERFISH_DATA, 0);
+
+        yml.addDefault(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_ENABLE, true);
+        yml.addDefault(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_MATERIAL, Main.getForCurrentVersion("MONSTER_EGG", "MONSTER_EGG", "MONSTER_EGG"));
+        yml.addDefault(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_DATA, 0);
+
         //save default shop categories if the file was just generated
         //so the user can remove categories or add new ones
         if (configManager.isFirstTime()) {
@@ -224,5 +233,6 @@ public class ShopManager {
         pm.registerEvents(new QuickBuyListener(), Main.plugin);
         pm.registerEvents(new ShopOpenListener(), Main.plugin);
         pm.registerEvents(new PlayerDropListener(), Main.plugin);
+        pm.registerEvents(new SpecialsListener(), Main.plugin);
     }
 }

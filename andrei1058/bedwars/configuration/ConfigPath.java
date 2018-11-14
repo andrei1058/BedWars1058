@@ -131,6 +131,14 @@ public class ConfigPath {
     public static final String SHOP_SETTINGS_PATH = "shop-settings";
     public static final String SHOP_SPECIALS_PATH = "shop-specials";
 
+    public static final String SHOP_SPECIAL_SILVERFISH_ENABLE = SHOP_SPECIALS_PATH + ".silverfish.enable";
+    public static final String SHOP_SPECIAL_SILVERFISH_MATERIAL = SHOP_SPECIALS_PATH + ".silverfish.material";
+    public static final String SHOP_SPECIAL_SILVERFISH_DATA = SHOP_SPECIALS_PATH + ".silverfish.data";
+
+    public static final String SHOP_SPECIAL_IRON_GOLEM_ENABLE = SHOP_SPECIALS_PATH + ".iron-golem.enable";
+    public static final String SHOP_SPECIAL_IRON_GOLEM_MATERIAL = SHOP_SPECIALS_PATH + ".iron-golem.material";
+    public static final String SHOP_SPECIAL_IRON_GOLEM_DATA = SHOP_SPECIALS_PATH + ".iron-golem.data";
+
     public static final String SHOP_SETTINGS_QUICK_BUY_CATEGORY_PATH = SHOP_SETTINGS_PATH + ".quick-buy-category";
     public static final String SHOP_SETTINGS_QUICK_BUY_BUTTON_MATERIAL = SHOP_SETTINGS_QUICK_BUY_CATEGORY_PATH + ".material";
     public static final String SHOP_SETTINGS_QUICK_BUY_BUTTON_AMOUNT = SHOP_SETTINGS_QUICK_BUY_CATEGORY_PATH + ".amount";

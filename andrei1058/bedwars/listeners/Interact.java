@@ -4,11 +4,8 @@ import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Arena;
 
 import com.andrei1058.bedwars.arena.BedWarsTeam;
-import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.language.Messages;
-import com.andrei1058.bedwars.shop.ShopManager;
-import com.andrei1058.bedwars.shop.quickbuy.PlayerQuickBuyCache;
 import com.andrei1058.bedwars.upgrades.UpgradeGroup;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -142,28 +139,6 @@ public class Interact implements Listener {
                             }
                         }
                     }
-                    //todo add new compatibility for shop specials
-                    /*if (shop.getBoolean("utilities.silverfish.enable")) {
-                        if (!Misc.isProjectile(Material.valueOf(shop.getYml().getString("utilities.silverfish.material")))) {
-                            if (inHand.getType() == Material.valueOf(shop.getYml().getString("utilities.silverfish.material")) && nms.itemStackDataCompare(inHand, (short) shop.getInt("utilities.silverfish.data"))) {
-                                nms.spawnSilverfish(p.getLocation().add(0, 1, 0), a.getTeam(p));
-                                if (!nms.isProjectile(inHand)) {
-                                    nms.minusAmount(p, inHand, 1);
-                                    p.updateInventory();
-                                }
-                            }
-                        }
-                    }
-                    if (shop.getBoolean("utilities.ironGolem.enable")) {
-                        if (!Misc.isProjectile(Material.valueOf(shop.getYml().getString("utilities.ironGolem.material")))) {
-                            if (inHand.getType() == Material.valueOf(shop.getYml().getString("utilities.ironGolem.material")) && nms.itemStackDataCompare(inHand, (short) shop.getInt("utilities.ironGolem.data"))) {
-                                nms.spawnIronGolem(p.getLocation().add(0, 1, 0), a.getTeam(p));
-                                if (!nms.isProjectile(inHand)) {
-                                    nms.minusAmount(p, inHand, 1);
-                                }
-                            }
-                        }
-                    }*/
                 }
             }
         }
