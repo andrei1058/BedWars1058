@@ -397,6 +397,7 @@ public class MySQL implements Database {
         }
     }
 
+
     @Override
     public String getQuickBuySlots(UUID p, int slot) {
         String result = "";
@@ -408,6 +409,18 @@ public class MySQL implements Database {
             ex.printStackTrace();
         }
         return result;
+    }
+
+    @Override
+    public boolean hasQuickBuy(UUID uuid) {
+        if (!isConnected()) connect();
+        try {
+            ResultSet rs = connection.prepareStatement("SELECT id FROM quick_buy WHERE uuid = '" + uuid.toString() + "';").executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public boolean isPlayerSet(Player p) {

@@ -86,10 +86,14 @@ public class PlayerQuickBuyCache {
                 elements.remove(q);
             }
         }
-        addQuickElement(new QuickBuyElement(cc.getIdentifier(), slot));
-        Main.database.setQuickBuySlot(player.getUniqueId(), cc.getIdentifier(), slot);
-        Main.debug("Adding new quick buy element for " + player.getName() + " " + cc.getIdentifier());
-        //todo success msg
+        String element;
+        if (cc == null){
+            element = " ";
+        } else {
+            addQuickElement(new QuickBuyElement(cc.getIdentifier(), slot));
+            element = cc.getIdentifier();
+        }
+        Main.database.setQuickBuySlot(player.getUniqueId(), element, slot);
     }
 
     private ItemStack getEmptyItem(Player player) {
@@ -99,6 +103,16 @@ public class PlayerQuickBuyCache {
         im.setLore(Language.getList(player, emptyItemLorePath));
         i.setItemMeta(im);
         return i;
+    }
+
+    /**
+     * Check if as category content at quick buy
+     */
+    public boolean hasCategoryContent(CategoryContent cc) {
+        for (QuickBuyElement q : getElements()) {
+            if (q.getCategoryContent() == cc) return true;
+        }
+        return false;
     }
 
     /**

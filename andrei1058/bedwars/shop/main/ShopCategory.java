@@ -67,6 +67,8 @@ public class ShopCategory {
             }
         }
 
+        itemStack.setItemMeta(ShopManager.hideItemStuff(itemStack.getItemMeta()));
+
         itemNamePath = Messages.SHOP_CATEGORY_ITEM_NAME.replace("%category%", path);
         itemLorePath = Messages.SHOP_CATEGORY_ITEM_LORE.replace("%category%", path);
         invNamePath = Messages.SHOP_CATEGORY_INVENTORY_NAME.replace("%category%", path);

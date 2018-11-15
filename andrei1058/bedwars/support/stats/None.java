@@ -130,4 +130,9 @@ public class None implements Database {
     public String getQuickBuySlots(UUID uuid, int slot) {
         return "";
     }
+
+    @Override
+    public boolean hasQuickBuy(UUID uuid) {
+        return false;
+    }
 }

@@ -428,4 +428,16 @@ public class SQLite implements Database {
         }
         return result;
     }
+
+    @Override
+    public boolean hasQuickBuy(UUID uuid) {
+        if (!isConnected()) connect();
+        try {
+            ResultSet rs = connection.prepareStatement("SELECT id FROM quick_buy WHERE uuid = '" + uuid.toString() + "';").executeQuery();
+            return rs.next();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
 }

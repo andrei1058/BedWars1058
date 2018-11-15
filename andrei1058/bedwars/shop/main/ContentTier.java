@@ -72,6 +72,8 @@ public class ContentTier {
             }
         }
 
+        itemStack.setItemMeta(ShopManager.hideItemStuff(itemStack.getItemMeta()));
+
         BuyItem bi;
         for (String s : yml.getConfigurationSection(path + "." + ConfigPath.SHOP_CONTENT_BUY_ITEMS_PATH).getKeys(false)) {
             bi = new BuyItem(path + "." + ConfigPath.SHOP_CONTENT_BUY_ITEMS_PATH + "." + s, yml, identifier);

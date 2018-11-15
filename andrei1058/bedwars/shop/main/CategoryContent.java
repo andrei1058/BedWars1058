@@ -6,6 +6,10 @@ import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Language;
 import com.andrei1058.bedwars.configuration.language.Messages;
 import com.andrei1058.bedwars.shop.ShopCache;
+import com.andrei1058.bedwars.shop.ShopManager;
+import com.andrei1058.bedwars.shop.quickbuy.PlayerQuickBuyCache;
+import com.andrei1058.bedwars.shop.quickbuy.QuickBuyAdd;
+import com.andrei1058.bedwars.shop.quickbuy.QuickBuyElement;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -70,7 +74,8 @@ public class CategoryContent {
         ContentTier ctt;
         for (String s : yml.getConfigurationSection(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_CONTENT_TIERS).getKeys(false)) {
             ctt = new ContentTier(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_CONTENT_TIERS + "." + s, s, path, yml);
-            /*if (ctt.isLoaded())*/ contentTiers.add(ctt);
+            /*if (ctt.isLoaded())*/
+            contentTiers.add(ctt);
         }
 
         itemNamePath = Messages.SHOP_CONTENT_TIER_ITEM_NAME.replace("%category%", categoryName).replace("%content%", contentName);
@@ -104,7 +109,7 @@ public class CategoryContent {
         if (shopCache.getContentTier(getIdentifier()) == contentTiers.size()) {
             if (isPermanent() && shopCache.hasCachedItem(this)) {
                 player.sendMessage(getMsg(player, Messages.SHOP_ALREADY_BOUGHT));
-                //todo play cant buy sound
+                player.playSound(player.getLocation(), nms.playerKill(), 1f, 1f);
                 return;
             }
             //current tier
@@ -119,7 +124,7 @@ public class CategoryContent {
         if (money < ct.getPrice()) {
             player.sendMessage(getMsg(player, Messages.SHOP_INSUFFICIENT_MONEY).replace("{currency}", getMsg(player, getCurrencyMsgPath(ct))).
                     replace("{amount}", String.valueOf(ct.getPrice() - money)));
-            //todo play cant buy sound
+            player.playSound(player.getLocation(), nms.playerKill(), 1f, 1f);
             return;
         }
 
@@ -137,7 +142,7 @@ public class CategoryContent {
         player.playSound(player.getLocation(), nms.bought(), 1f, 1f);
 
         //send purchase msg
-        player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", ChatColor.stripColor(getMsg(player, itemNamePath))));
+        player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", ChatColor.stripColor(getMsg(player, itemNamePath))).replace("{color}", "").replace("{tier}", ""));
 
         //call shop buy event
         Bukkit.getPluginManager().callEvent(new ShopBuyEvent(player, this));
@@ -163,22 +168,72 @@ public class CategoryContent {
      * Get content preview item in player's language
      */
     public ItemStack getItemStack(Player player, ShopCache shopCache) {
-        ItemStack i;
+        ContentTier ct;
         if (shopCache.getContentTier(identifier) == contentTiers.size()) {
-            i = contentTiers.get(contentTiers.size() - 1).getItemStack().clone();
+            ct = contentTiers.get(contentTiers.size() - 1);
         } else {
-            if (shopCache.hasCachedItem(this)){
-                i = contentTiers.get(shopCache.getContentTier(identifier)).getItemStack().clone();
+            if (shopCache.hasCachedItem(this)) {
+                ct = contentTiers.get(shopCache.getContentTier(identifier));
             } else {
-                i = contentTiers.get(shopCache.getContentTier(identifier) - 1).getItemStack().clone();
+                ct = contentTiers.get(shopCache.getContentTier(identifier) - 1);
             }
         }
 
-        ItemMeta im = i.getItemMeta();
-        im.setDisplayName(getMsg(player, itemNamePath));//todo replace tier placeholders n shit
-        im.setLore(Language.getList(player, itemLorePath));
+        ItemStack i = ct.getItemStack();
+        ItemMeta im = i.getItemMeta().clone();
+
+        boolean canAfford = calculateMoney(player, ct.getCurrency()) >= ct.getPrice();
+        boolean hasQuick = hasQuick(PlayerQuickBuyCache.getQuickBuyCache(player.getUniqueId()));
+
+        String color = getMsg(player, canAfford ? Messages.SHOP_CAN_BUY_COLOR : Messages.SHOP_CANT_BUY_COLOR);
+        String translatedCurrency = getMsg(player, getCurrencyMsgPath(ct));
+        ChatColor cColor = getCurrencyColor(ct.getCurrency());
+
+        String tier = getRomanNumber(shopCache.getContentTier(this.getIdentifier()));
+        String buyStatus;
+        if (!canAfford){
+            buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CANT_AFFORD).replace("{currency}", translatedCurrency);
+        } else {
+            if (isPermanent() && getContentTiers().size() == ct.getValue()){
+                buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_MAXED);
+            } else {
+                buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CAN_BUY);
+            }
+        }
+
+        im.setDisplayName(getMsg(player, itemNamePath).replace("{color}", color).replace("{tier}", tier));
+
+        List<String> lore = new ArrayList<>();
+        for (String s : Language.getList(player, itemLorePath)) {
+            if (s.contains("{quick_buy}")) {
+                if (hasQuick) {
+                    if (ShopIndex.getIndexViewers().contains(player.getUniqueId())) {
+                        s = getMsg(player, Messages.SHOP_LORE_QUICK_REMOVE);
+                    } else {
+                        continue;
+                    }
+                } else {
+                    s = getMsg(player, Messages.SHOP_LORE_QUICK_ADD);
+                }
+            }
+            s = s.replace("{tier}", tier).replace("{color}", color).replace("{cost}", cColor + String.valueOf(ct.getPrice()))
+                    .replace("{currency}", cColor + translatedCurrency).replace("{buy_status}", buyStatus);
+            lore.add(s);
+        }
+
+        im.setLore(lore);
         i.setItemMeta(im);
         return i;
+    }
+
+    /**
+     * Check if a player has this cc to quick buy
+     */
+    public boolean hasQuick(PlayerQuickBuyCache c) {
+        for (QuickBuyElement q : c.getElements()) {
+            if (q.getCategoryContent() == this) return true;
+        }
+        return false;
     }
 
     /**
@@ -220,6 +275,22 @@ public class CategoryContent {
         return material;
     }
 
+    public static ChatColor getCurrencyColor(String currency) {
+        ChatColor c = ChatColor.DARK_GREEN;
+        switch (currency.toLowerCase()) {
+            case "diamond":
+                c = ChatColor.AQUA;
+                break;
+            case "gold":
+                c = ChatColor.GOLD;
+                break;
+            case "iron":
+                c = ChatColor.WHITE;
+                break;
+        }
+        return c;
+    }
+
     /**
      * Cet currency path
      */
@@ -245,6 +316,49 @@ public class CategoryContent {
         }
 
         return c;
+    }
+
+    /**
+     * Get the roman number for an integer
+     */
+    public static String getRomanNumber(int n) {
+        String s;
+        switch (n) {
+            default:
+                s = String.valueOf(n);
+                break;
+            case 1:
+                s = "I";
+                break;
+            case 2:
+                s = "II";
+                break;
+            case 3:
+                s = "III";
+                break;
+            case 4:
+                s = "IV";
+                break;
+            case 5:
+                s = "V";
+                break;
+            case 6:
+                s = "VI";
+                break;
+            case 7:
+                s = "VII";
+                break;
+            case 8:
+                s = "VIII";
+                break;
+            case 9:
+                s = "IX";
+                break;
+            case 10:
+                s = "X";
+                break;
+        }
+        return s;
     }
 
 

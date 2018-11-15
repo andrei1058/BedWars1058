@@ -222,6 +222,7 @@ public class Language {
         for (String s : Main.shop.getYml().getConfigurationSection("").getKeys(false)) {
             if (s.equalsIgnoreCase(ConfigPath.SHOP_SETTINGS_PATH)) continue;
             if (s.equalsIgnoreCase(ConfigPath.SHOP_SPECIALS_PATH)) continue;
+            if (s.equals(ConfigPath.SHOP_QUICK_DEFAULTS_PATH)) continue;
             if (!exists(Messages.SHOP_CATEGORY_INVENTORY_NAME.replace("%category%", s))) {
                 set(Messages.SHOP_CATEGORY_INVENTORY_NAME.replace("%category%", s), "&8Name not set");
             }

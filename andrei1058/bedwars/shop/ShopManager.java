@@ -67,14 +67,45 @@ public class ShopManager {
         yml.addDefault(ConfigPath.SHOP_SPECIAL_SILVERFISH_HEALTH, 8.0);
         yml.addDefault(ConfigPath.SHOP_SPECIAL_SILVERFISH_DAMAGE, 4.0);
         yml.addDefault(ConfigPath.SHOP_SPECIAL_SILVERFISH_SPEED, 0.25);
-        yml.addDefault(ConfigPath.SHOP_SPECIAL_SILVERFISH_DESPAWN, 225);
+        yml.addDefault(ConfigPath.SHOP_SPECIAL_SILVERFISH_DESPAWN, 15);
 
         yml.addDefault(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_ENABLE, true);
         yml.addDefault(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_MATERIAL, Main.getForCurrentVersion("MONSTER_EGG", "MONSTER_EGG", "HORSE_SPAWN_EGG"));
         yml.addDefault(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_DATA, 0);
         yml.addDefault(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_HEALTH, 100.0);
-        yml.addDefault(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_DESPAWN, 225);
+        yml.addDefault(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_DESPAWN, 240);
         yml.addDefault(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_SPEED, 0.25);
+
+        if (configManager.isFirstTime()) {
+            //quick buy defaults
+            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element1.path", "blocks-category.category-content.wool");
+            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element1.slot", 19);
+            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element2.path", "melee-category.category-content.stone-sword");
+            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element2.slot", 20);
+            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element3.path", "armor-category.category-content.chainmail");
+            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element3.slot", 21);
+            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element4.path", "ranged-category.category-content.bow1");
+            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element4.slot", 23);
+            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element5.path", "potions-category.category-content.speed-potion");
+            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element5.slot", 24);
+            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element6.path", "utility-category.category-content.tnt");
+            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element6.slot", 25);
+
+            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element7.path", "blocks-category.category-content.wood");
+            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element7.slot", 28);
+            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element8.path", "melee-category.category-content.iron-sword");
+            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element8.slot", 29);
+            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element9.path", "armor-category.category-content.iron-armor");
+            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element9.slot", 30);
+            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element10.path", "tools-category.category-content.shears");
+            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element10.slot", 31);
+            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element11.path", "ranged-category.category-content.arrow");
+            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element11.slot", 32);
+            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element12.path", "potions-category.category-content.jump-potion");
+            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element12.slot", 33);
+            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element13.path", "utility-category.category-content.water-bucket");
+            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element13.slot", 34);
+        }
 
         //save default shop categories if the file was just generated
         //so the user can remove categories or add new ones
@@ -169,7 +200,7 @@ public class ShopManager {
             addDefaultShopCategory(ConfigPath.SHOP_PATH_CATEGORY_TOOLS, 4, Main.getForCurrentVersion("STONE_PICKAXE", "STONE_PICKAXE", "STONE_PICKAXE"), 0, 1, false);
 
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "shears", 19, "tier1",
-                    Main.getForCurrentVersion("SHEARS", "SHEARS", "SHEARS"), 0, 1, false, 20, "iron", false, false);
+                    Main.getForCurrentVersion("SHEARS", "SHEARS", "SHEARS"), 0, 1, false, 20, "iron", true, false);
             addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "shears", "tier1", "shears", Main.getForCurrentVersion("SHEARS", "SHEARS", "SHEARS"),
                     0, 1, "", "", "", false);
 
@@ -181,15 +212,15 @@ public class ShopManager {
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "pickaxe", 20, "tier2",
                     Main.getForCurrentVersion("IRON_PICKAXE", "IRON_PICKAXE", "IRON_PICKAXE"), 0, 1, true, 10, "iron", true, true);
             addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "pickaxe", "tier2", "iron-pickaxe", Main.getForCurrentVersion("IRON_PICKAXE", "IRON_PICKAXE", "IRON_PICKAXE"),
-                    0, 1,"DIG_SPEED 2", "", "", false);
+                    0, 1, "DIG_SPEED 2", "", "", false);
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "pickaxe", 20, "tier3",
                     Main.getForCurrentVersion("GOLD_PICKAXE", "GOLD_PICKAXE", "GOLDEN_PICKAXE"), 0, 1, true, 3, "gold", true, true);
             addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "pickaxe", "tier3", "gold-pickaxe", Main.getForCurrentVersion("GOLD_PICKAXE", "GOLD_PICKAXE", "GOLDEN_PICKAXE"),
-                    0, 1,"DIG_SPEED 3, DAMAGE_ALL 2", "", "", false);
+                    0, 1, "DIG_SPEED 3, DAMAGE_ALL 2", "", "", false);
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "pickaxe", 20, "tier4",
                     Main.getForCurrentVersion("DIAMOND_PICKAXE", "DIAMOND_PICKAXE", "DIAMOND_PICKAXE"), 0, 1, true, 6, "gold", true, true);
             addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "pickaxe", "tier4", "diamond-pickaxe", Main.getForCurrentVersion("DIAMOND_PICKAXE", "DIAMOND_PICKAXE", "DIAMOND_PICKAXE"),
-                    0, 1,"DIG_SPEED 3", "", "", false);
+                    0, 1, "DIG_SPEED 3", "", "", false);
 
             //axe
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "axe", 21, "tier1",
@@ -199,15 +230,15 @@ public class ShopManager {
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "axe", 21, "tier2",
                     Main.getForCurrentVersion("IRON_AXE", "IRON_AXE", "IRON_AXE"), 0, 1, true, 10, "iron", true, true);
             addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "axe", "tier2", "iron-axe", Main.getForCurrentVersion("IRON_AXE", "IRON_AXE", "IRON_AXE"),
-                    0, 1,"DIG_SPEED 1", "", "", false);
+                    0, 1, "DIG_SPEED 1", "", "", false);
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "axe", 21, "tier3",
                     Main.getForCurrentVersion("GOLD_AXE", "GOLD_AXE", "GOLDEN_AXE"), 0, 1, true, 3, "gold", true, true);
             addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "axe", "tier3", "gold-axe", Main.getForCurrentVersion("GOLD_AXE", "GOLD_AXE", "GOLDEN_AXE"),
-                    0, 1,"DIG_SPEED 2", "", "", false);
+                    0, 1, "DIG_SPEED 2", "", "", false);
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "axe", 21, "tier4",
                     Main.getForCurrentVersion("DIAMOND_AXE", "DIAMOND_AXE", "DIAMOND_AXE"), 0, 1, true, 6, "gold", true, true);
             addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "axe", "tier4", "diamond-axe", Main.getForCurrentVersion("DIAMOND_AXE", "DIAMOND_AXE", "DIAMOND_AXE"),
-                    0, 1,"DIG_SPEED 3", "", "", false);
+                    0, 1, "DIG_SPEED 3", "", "", false);
 
             //RANGED CATEGORY
             addDefaultShopCategory(ConfigPath.SHOP_PATH_CATEGORY_RANGED, 5, Main.getForCurrentVersion("BOW", "BOW", "BOW"), 0, 1, false);
@@ -235,12 +266,12 @@ public class ShopManager {
             //POTIONS CATEGORY
             addDefaultShopCategory(ConfigPath.SHOP_PATH_CATEGORY_POTIONS, 6, Main.getForCurrentVersion("BREWING_STAND_ITEM", "BREWING_STAND_ITEM", "BREWING_STAND"), 0, 1, false);
 
-            adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "jump-potion", 19, "tier1",
+            adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "jump-potion", 20, "tier1",
                     Main.getForCurrentVersion("POTION", "POTION", "POTION"), 0, 1, false, 1, "emerald", false, false);
             addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "jump-potion", "tier1", "jump", Main.getForCurrentVersion("POTION", "POTION", "POTION"),
                     0, 1, "", "JUMP 45 5", "", false);
 
-            adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "speed-potion", 20, "tier1",
+            adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "speed-potion", 19, "tier1",
                     Main.getForCurrentVersion("POTION", "POTION", "POTION"), 0, 1, false, 1, "emerald", false, false);
             addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "speed-potion", "tier1", "speed", Main.getForCurrentVersion("POTION", "POTION", "POTION"),
                     0, 1, "", "SPEED 45 2", "", false);
@@ -342,6 +373,7 @@ public class ShopManager {
 
         for (String s : yml.getConfigurationSection("").getKeys(false)) {
             if (s.equalsIgnoreCase(ConfigPath.SHOP_SETTINGS_PATH)) continue;
+            if (s.equals(ConfigPath.SHOP_QUICK_DEFAULTS_PATH)) continue;
             if (s.equalsIgnoreCase(ConfigPath.SHOP_SPECIALS_PATH)) continue;
             shop.addShopCategory(new ShopCategory(s, yml));
         }
@@ -350,8 +382,9 @@ public class ShopManager {
     /**
      * Hide an item details
      */
-    private static void hideItemStuff(ItemMeta im) {
+    public static ItemMeta hideItemStuff(ItemMeta im) {
         im.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_PLACED_ON);
+        return im;
     }
 
     /**
@@ -361,8 +394,7 @@ public class ShopManager {
         ItemStack i = new ItemStack(itemStack);
         ItemMeta im = i.getItemMeta();
         im.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
-        hideItemStuff(im);
-        i.setItemMeta(im);
+        i.setItemMeta(hideItemStuff(im));
         return i;
     }
 

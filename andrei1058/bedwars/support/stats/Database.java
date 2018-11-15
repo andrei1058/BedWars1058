@@ -135,4 +135,7 @@ public interface Database {
      * Get quick buy slot value
      */
     public String getQuickBuySlots(UUID uuid, int slot);
+
+    /** Check if has quick buy*/
+    boolean hasQuickBuy(UUID uuid);
 }
