@@ -543,7 +543,13 @@ public class v1_13_R2 implements NMS {
     @Override
     @SuppressWarnings("deprecation")
     public void setBlockTeamColor(org.bukkit.block.Block block, TeamColor teamColor) {
-        block.setData(TeamColor.itemColor(teamColor));
+        if (block.getType().toString().contains("STAINED_GLASS") || block.getType().toString().equals("GLASS")){
+            block.setType(TeamColor.getGlass(teamColor));
+        } else if (block.getType().toString().contains("_TERRACOTTA")){
+            block.setType(TeamColor.getGlazedTerracotta(teamColor));
+        } else if (block.getType().toString().contains("_WOOL")){
+            block.setType(TeamColor.getWool(teamColor));
+        }
     }
 
     @Override
