@@ -2,7 +2,8 @@ package com.andrei1058.bedwars.support.bukkit.v1_13_R1;
 
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
-import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.configuration.ConfigPath;
+import com.andrei1058.bedwars.configuration.language.Messages;
 import com.google.common.collect.Sets;
 import net.minecraft.server.v1_13_R1.*;
 import org.apache.commons.lang3.StringUtils;
@@ -46,8 +47,8 @@ public class IGolem extends EntityIronGolem {
     @Override
     protected void initAttributes() {
         super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.maxHealth).setValue(shop.getYml().getDouble("utilities.ironGolem.health"));
-        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(shop.getYml().getDouble("utilities.ironGolem.speed"));
+        this.getAttributeInstance(GenericAttributes.maxHealth).setValue(shop.getYml().getDouble(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_HEALTH));
+        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(shop.getYml().getDouble(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_SPEED));
     }
 
     public static IGolem spawn(Location loc, BedWarsTeam bedWarsTeam) {
@@ -57,7 +58,7 @@ public class IGolem extends EntityIronGolem {
         ((CraftLivingEntity)customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
         customEnt.setCustomNameVisible(true);
         (customEnt.getBukkitEntity()).setCustomName(lang.m(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME)
-                .replace("{despawn}", String.valueOf(shop.getInt("utilities.ironGolem.despawn"))).replace("{health}",
+                .replace("{despawn}", String.valueOf(shop.getYml().getInt(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_DESPAWN))).replace("{health}",
                 StringUtils.repeat(lang.m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH), 10)).replace("{TeamColor}",
                         TeamColor.getChatColor(bedWarsTeam.getColor()).toString()));
         mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);

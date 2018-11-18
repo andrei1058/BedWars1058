@@ -1,4 +1,6 @@
-package com.andrei1058.bedwars.configuration;
+package com.andrei1058.bedwars.configuration.language;
+
+import com.andrei1058.bedwars.configuration.ConfigPath;
 
 public class Messages {
 
@@ -230,12 +232,32 @@ public class Messages {
     public static String UPGRADES_LORE_REPLACEMENT_LOCKED = "upgrades-lore-locked";
     public static String UPGRADES_UPGRADE_BOUGHT_CHAT = "upgrades-new-purchase";
 
-    public static String SHOP_INSUFFICIENT_MONEY = "shop-insuff-money";
     public static String SHOP_NEW_PURCHASE = "shop-new-purchase";
-    public static String SHOP_ALREADY_BOUGHT = "shop-already-bought";
     public static String SHOP_UTILITY_NPC_SILVERFISH_NAME = "shop-utility-silverfish";
     public static String SHOP_UTILITY_NPC_IRON_GOLEM_NAME = "shop-utility-iron-golem";
-    public static String SHOP_PATH = "shop";
+    public static String SHOP_INSUFFICIENT_MONEY = "shop-insuff-money";
+    public static String SHOP_ALREADY_BOUGHT = "shop-already-bought";
+    public static final String SHOP_PATH = "shop-items-messages";
+    public static final String SHOP_LORE_STATUS_CANT_AFFORD = "shop-lore-status-cant-afford";
+    public static final String SHOP_LORE_STATUS_CAN_BUY = "shop-lore-status-can-buy";
+    public static final String SHOP_LORE_STATUS_MAXED  = "shop-lore-status-tier-maxed";
+    public static final String SHOP_LORE_QUICK_ADD  = "shop-lore-quick-add";
+    public static final String SHOP_LORE_QUICK_REMOVE  = "shop-lore-quick-remove";
+    public static final String SHOP_INDEX_NAME = SHOP_PATH + ".inventory-name";
+    public static final String SHOP_SEPARATOR_NAME = SHOP_PATH + ".separator-item-name";
+    public static final String SHOP_SEPARATOR_LORE = SHOP_PATH + ".separator-item-lore";
+    public static final String SHOP_QUICK_BUY_NAME = SHOP_PATH + ".quick-buy-item-name";
+    public static final String SHOP_QUICK_BUY_LORE = SHOP_PATH + ".quick-buy-item-lore";
+    public static final String SHOP_QUICK_EMPTY_NAME = SHOP_PATH + ".quick-buy-empty-item-name";
+    public static final String SHOP_QUICK_EMPTY_LORE = SHOP_PATH + ".quick-buy-empty-item-lore";
+
+    public static final String SHOP_CATEGORY_INVENTORY_NAME = SHOP_PATH + ".%category%.inventory-name";
+    public static final String SHOP_CATEGORY_ITEM_NAME = SHOP_PATH + ".%category%.category-item-name";
+    public static final String SHOP_CATEGORY_ITEM_LORE = SHOP_PATH + ".%category%.category-item-lore";
+    public static final String SHOP_CONTENT_TIER_ITEM_NAME = ".%category%.content-item-%content%-name";
+    public static final String SHOP_CONTENT_TIER_ITEM_LORE = ".%category%.content-item-%content%-lore";
+    public static final String SHOP_CAN_BUY_COLOR = SHOP_PATH+ ".can-buy-color";
+    public static final String SHOP_CANT_BUY_COLOR = SHOP_PATH+ ".cant-buy-color";
 
     /* MultiArena Lobby Item Messages */
     public static final String GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME = ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH+"-%path%-name";

@@ -4,7 +4,7 @@ import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Language;
-import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.configuration.language.Messages;
 import com.andrei1058.bedwars.listeners.arenaselector.ArenaSelectorListener;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

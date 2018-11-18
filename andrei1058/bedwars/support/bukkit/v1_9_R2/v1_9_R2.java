@@ -6,8 +6,9 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.arena.ShopHolo;
+import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Language;
-import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.configuration.language.Messages;
 import com.andrei1058.bedwars.exceptions.InvalidSoundException;
 import com.andrei1058.bedwars.support.bukkit.NMS;
 import net.minecraft.server.v1_9_R2.*;
@@ -154,12 +155,12 @@ public class v1_9_R2 implements NMS {
     }
 
     public void spawnSilverfish(Location loc, BedWarsTeam bedWarsTeam) {
-        new Despawnable(Silverfish.spawn(loc, bedWarsTeam), bedWarsTeam, shop.getInt("utilities.silverfish.despawn"), Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME);
+        new Despawnable(Silverfish.spawn(loc, bedWarsTeam), bedWarsTeam, shop.getYml().getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_DESPAWN), Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME);
     }
 
     @Override
     public void spawnIronGolem(Location loc, BedWarsTeam bedWarsTeam) {
-        new Despawnable(IGolem.spawn(loc, bedWarsTeam), bedWarsTeam, shop.getInt("utilities.ironGolem.despawn"), Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME);
+        new Despawnable(IGolem.spawn(loc, bedWarsTeam), bedWarsTeam, shop.getYml().getInt(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_DESPAWN), Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME);
     }
 
     @Override
@@ -667,6 +668,25 @@ public class v1_9_R2 implements NMS {
     @Override
     public org.bukkit.Material woolMaterial() {
         return org.bukkit.Material.valueOf("WOOL");
+    }
+
+    @Override
+    public String getShopUpgradeIdentifier(org.bukkit.inventory.ItemStack itemStack) {
+        ItemStack i = CraftItemStack.asNMSCopy(itemStack);
+        NBTTagCompound tag = i.getTag();
+        return tag == null ? "" : tag.hasKey("tierIdentifier") ? tag.getString("tierIdentifier") : "";
+    }
+
+    @Override
+    public org.bukkit.inventory.ItemStack setShopUpgradeIdentifier(org.bukkit.inventory.ItemStack itemStack, String identifier) {
+        ItemStack i = CraftItemStack.asNMSCopy(itemStack);
+        NBTTagCompound tag = i.getTag();
+        if (tag == null) {
+            tag = new NBTTagCompound();
+            i.setTag(tag);
+        }
+        tag.setString("tierIdentifier", identifier);
+        return CraftItemStack.asBukkitCopy(i);
     }
 
 }

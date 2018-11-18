@@ -4,7 +4,7 @@ import com.andrei1058.bedwars.api.GeneratorType;
 import com.andrei1058.bedwars.api.events.GeneratorUpgradeEvent;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Language;
-import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.configuration.language.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;

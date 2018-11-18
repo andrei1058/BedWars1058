@@ -2,7 +2,7 @@ package com.andrei1058.bedwars.commands.rejoin;
 
 import com.andrei1058.bedwars.arena.ReJoin;
 import com.andrei1058.bedwars.configuration.Language;
-import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.configuration.language.Messages;
 import com.andrei1058.bedwars.configuration.Permissions;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;

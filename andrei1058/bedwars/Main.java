@@ -18,6 +18,7 @@ import com.andrei1058.bedwars.configuration.*;
 import com.andrei1058.bedwars.listeners.*;
 import com.andrei1058.bedwars.listeners.arenaselector.ArenaSelectorListener;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
+import com.andrei1058.bedwars.shop.ShopManager;
 import com.andrei1058.bedwars.support.Metrics;
 import com.andrei1058.bedwars.support.bukkit.*;
 import com.andrei1058.bedwars.support.bukkit.v1_10_R1.v1_10_R1;
@@ -70,7 +71,7 @@ public class Main extends JavaPlugin {
     public static Main plugin;
     public static NMS nms;
     private static Lang langSupport;
-    private static Party party = new NoParty();
+    private static Party party = null;
     private static Chat chat;
     private static Level level;
     private static Economy economy;
@@ -281,10 +282,6 @@ public class Main extends JavaPlugin {
         /* Register NMS entities */
         nms.registerEntities();
 
-        /* Setup shop */
-        shop = new ShopManager("shop", "plugins/" + this.getName());
-        shop.loadShop();
-
         /* Check for updates */
         Misc.checkUpdate();
 
@@ -363,6 +360,12 @@ public class Main extends JavaPlugin {
         /* LeaderHeads Support */
         LeaderHeadsSupport.initLeaderHeads();
 
+        /* Initialize shop */
+        shop = new ShopManager();
+        //This must stay after the shop initializing
+        for (Language l : Language.getLanguages()) {
+            l.setupUnSetCategories();
+        }
     }
 
     public void onDisable() {
@@ -460,20 +463,20 @@ public class Main extends JavaPlugin {
         //remove old config
         //Convert old configuration
 
-        if (yml.get("arenaGui.settings.showPlaying") != null){
+        if (yml.get("arenaGui.settings.showPlaying") != null) {
             config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SHOW_PLAYING, yml.getBoolean("arenaGui.settings.showPlaying"));
         }
-        if (yml.get("arenaGui.settings.size") != null){
+        if (yml.get("arenaGui.settings.size") != null) {
             config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SIZE, yml.getInt("arenaGui.settings.size"));
         }
-        if (yml.get("arenaGui.settings.useSlots") != null){
+        if (yml.get("arenaGui.settings.useSlots") != null) {
             config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_USE_SLOTS, yml.getString("arenaGui.settings.useSlots"));
         }
         if (config.getYml().get("arenaGui") != null) {
             for (String path : config.getYml().getConfigurationSection("arenaGui").getKeys(false)) {
                 if (path.equalsIgnoreCase("settings")) continue;
                 String new_path = path;
-                switch (path){
+                switch (path) {
                     case "skippedSlot":
                         new_path = "skipped-slot";
                         break;
@@ -501,7 +504,7 @@ public class Main extends JavaPlugin {
         if (config.getYml().get("statsGUI") != null) {
             for (String stats_path : config.getYml().getConfigurationSection("statsGUI").getKeys(false)) {
                 String new_path = stats_path;
-                switch (stats_path){
+                switch (stats_path) {
                     case "gamesPlayed":
                         new_path = "games-played";
                         break;

@@ -2,8 +2,7 @@ package com.andrei1058.bedwars.upgrades;
 
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.configuration.Language;
-import com.andrei1058.bedwars.configuration.Messages;
-import org.bukkit.Bukkit;
+import com.andrei1058.bedwars.configuration.language.Messages;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

@@ -12,7 +12,7 @@ import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.AutoCreat
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.CreateTeam;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.SetShop;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.SetWaitingSpawn;
-import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.configuration.language.Messages;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import net.md_5.bungee.api.chat.*;
 import org.bukkit.*;

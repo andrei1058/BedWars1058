@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.commands.party;
 
-import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.configuration.language.Messages;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -10,9 +10,9 @@ import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import static com.andrei1058.bedwars.Main.getParty;
-import static com.andrei1058.bedwars.Main.lang;
 import static com.andrei1058.bedwars.configuration.Language.getList;
 import static com.andrei1058.bedwars.configuration.Language.getMsg;
 
@@ -22,7 +22,7 @@ public class PartyCommand extends BukkitCommand {
         super(name);
     }
     //owner, target
-    private static HashMap<Player, Player> partySessionRequest = new HashMap<>();
+    private static HashMap<UUID, UUID> partySessionRequest = new HashMap<>();
 
     @Override
     public boolean execute(CommandSender s, String c, String[] args) {
@@ -53,10 +53,10 @@ public class PartyCommand extends BukkitCommand {
                             TextComponent tc = new TextComponent(getMsg(p, Messages.COMMAND_PARTY_INVITE_SENT_TARGET_RECEIVE_MSG).replace("{player}", p.getName()));
                             tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party accept "+p.getName()));
                             Bukkit.getPlayer(args[1]).spigot().sendMessage(tc);
-                            if (partySessionRequest.containsKey(p)){
-                                partySessionRequest.replace(p, Bukkit.getPlayer(args[1]));
+                            if (partySessionRequest.containsKey(p.getUniqueId())){
+                                partySessionRequest.replace(p.getUniqueId(), Bukkit.getPlayer(args[1]).getUniqueId());
                             } else {
-                                partySessionRequest.put(p, Bukkit.getPlayer(args[1]));
+                                partySessionRequest.put(p.getUniqueId(), Bukkit.getPlayer(args[1]).getUniqueId());
                             }
                         } else {
                             p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE).replace("{player}", args[1]));
@@ -75,8 +75,14 @@ public class PartyCommand extends BukkitCommand {
                         p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE).replace("{player}", args[1]));
                         return true;
                     }
-                    if (partySessionRequest.get(Bukkit.getPlayer(args[1])) != null && partySessionRequest.get(Bukkit.getPlayer(args[1])).equals(p)){
-                        partySessionRequest.remove(Bukkit.getPlayer(args[1]));
+                    if (!partySessionRequest.containsKey(Bukkit.getPlayer(args[1]).getUniqueId())){
+                        p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_DENIED_NO_INVITE));
+                        return true;
+                    }
+                    Bukkit.broadcastMessage(partySessionRequest.get(Bukkit.getPlayer(args[1]).getUniqueId()).toString());
+                    Bukkit.broadcastMessage(p.getUniqueId().toString());
+                    if (partySessionRequest.get(Bukkit.getPlayer(args[1]).getUniqueId()).toString().equalsIgnoreCase(p.getUniqueId().toString())){
+                        partySessionRequest.remove(Bukkit.getPlayer(args[1]).getUniqueId());
                         if (getParty().hasParty(Bukkit.getPlayer(args[1]))){
                             getParty().addMember(Bukkit.getPlayer(args[1]), p);
                             for (Player on : getParty().getMembers(Bukkit.getPlayer(args[1]))){

@@ -7,7 +7,7 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.OreGenerator;
 import com.andrei1058.bedwars.configuration.ConfigPath;
-import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.configuration.language.Messages;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

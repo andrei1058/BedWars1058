@@ -359,4 +359,15 @@ public interface NMS {
      * Wool material
      */
     Material woolMaterial();
+
+    /**
+     * Get an ItemStack identifier
+     */
+    String getShopUpgradeIdentifier(ItemStack itemStack);
+
+    /**
+     *Set an upgrade identifier
+     */
+    ItemStack setShopUpgradeIdentifier(ItemStack itemStack, String identifier);
+
 }

@@ -5,7 +5,7 @@ import com.andrei1058.bedwars.api.events.BaseLeaveEvent;
 import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
-import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.configuration.language.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

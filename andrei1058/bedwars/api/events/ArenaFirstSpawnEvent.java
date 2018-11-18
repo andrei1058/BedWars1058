@@ -13,7 +13,6 @@ public class ArenaFirstSpawnEvent extends Event {
     private Player player;
     private Arena arena;
     private BedWarsTeam team;
-    private BedWarsTeam.PlayerVault playerVault;
 
     /**
      * Called when a member is respawned on his island
@@ -22,11 +21,10 @@ public class ArenaFirstSpawnEvent extends Event {
      *
      * @since API 9
      */
-    public ArenaFirstSpawnEvent(Player player, Arena arena, BedWarsTeam team, BedWarsTeam.PlayerVault playerVault) {
+    public ArenaFirstSpawnEvent(Player player, Arena arena, BedWarsTeam team) {
         this.player = player;
         this.arena = arena;
         this.team = team;
-        this.playerVault = playerVault;
     }
 
     /**
@@ -54,15 +52,6 @@ public class ArenaFirstSpawnEvent extends Event {
      */
     public Player getPlayer() {
         return player;
-    }
-
-    /** Get the PlayerVault
-     * It contains the permanet items given to the player at the first spawn and
-     * also there can be added permanent items bought from the shop.
-     *
-     * @since API9*/
-    public BedWarsTeam.PlayerVault getPlayerVault() {
-        return playerVault;
     }
 
     public HandlerList getHandlers() {

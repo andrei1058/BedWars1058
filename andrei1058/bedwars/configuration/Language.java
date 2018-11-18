@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.configuration;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.configuration.language.*;
+import com.andrei1058.bedwars.configuration.language.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -12,7 +13,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.andrei1058.bedwars.Main.lang;
-import static com.andrei1058.bedwars.Main.mainCmd;
 import static com.andrei1058.bedwars.Main.plugin;
 
 public class Language {
@@ -66,12 +66,12 @@ public class Language {
 
         lbj.save();
         lbj.langName = lbj.m("name");
-        lbj.prefixColor = ChatColor.translateAlternateColorCodes('&', yml.getString(Messages.PREFIX));
+        lbj.prefixColor = ChatColor.translateAlternateColorCodes('&', yml.getString(com.andrei1058.bedwars.configuration.language.Messages.PREFIX));
     }
 
     public void saveShopStuff(String path, Object name, Object lore) {
-        yml.addDefault(Messages.SHOP_PATH+ "." + path + ".name", name);
-        yml.addDefault(Messages.SHOP_PATH + "." + path + ".lore", lore);
+        yml.addDefault(com.andrei1058.bedwars.configuration.language.Messages.SHOP_PATH + "." + path + ".name", name);
+        yml.addDefault(com.andrei1058.bedwars.configuration.language.Messages.SHOP_PATH + "." + path + ".lore", lore);
     }
 
     public static List<String> getScoreboard(Player p, String path, String alternative) {
@@ -170,16 +170,16 @@ public class Language {
             /* save messages for stats gui items if custom items added */
             for (String item : Main.config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_STATS_PATH).getKeys(false)) {
                 if (ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE.contains(item)) continue;
-                l.yml.addDefault(Messages.PLAYER_STATS_GUI_PATH + "-" + item + "-name", "Name not set");
-                l.yml.addDefault(Messages.PLAYER_STATS_GUI_PATH + "-" + item + "-lore", Collections.singletonList("lore not set"));
+                l.yml.addDefault(com.andrei1058.bedwars.configuration.language.Messages.PLAYER_STATS_GUI_PATH + "-" + item + "-name", "Name not set");
+                l.yml.addDefault(com.andrei1058.bedwars.configuration.language.Messages.PLAYER_STATS_GUI_PATH + "-" + item + "-lore", Collections.singletonList("lore not set"));
             }
             l.save();
         }
     }
 
     public void addDefaultStatsMsg(YamlConfiguration yml, String path, String name, String... lore) {
-        yml.addDefault(Messages.PLAYER_STATS_GUI_PATH + "-" + path + "-name", name);
-        yml.addDefault(Messages.PLAYER_STATS_GUI_PATH + "-" + path + "-lore", lore);
+        yml.addDefault(com.andrei1058.bedwars.configuration.language.Messages.PLAYER_STATS_GUI_PATH + "-" + path + "-name", name);
+        yml.addDefault(com.andrei1058.bedwars.configuration.language.Messages.PLAYER_STATS_GUI_PATH + "-" + path + "-lore", lore);
     }
 
     /**
@@ -189,23 +189,23 @@ public class Language {
         YamlConfiguration yml = language.yml;
         if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH) != null) {
             for (String item : Main.config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH).getKeys(false)) {
-                String p1 = Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", item);
-                String p2 = Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", item);
+                String p1 = com.andrei1058.bedwars.configuration.language.Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", item);
+                String p2 = com.andrei1058.bedwars.configuration.language.Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", item);
                 yml.addDefault(p1, "&cName not set at: &f" + p1);
                 yml.addDefault(p2, Arrays.asList("&cLore not set at:", " &f" + p2));
             }
         }
         if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH) != null) {
             for (String item : Main.config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH).getKeys(false)) {
-                String p1 = Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", item);
-                String p2 = Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", item);
+                String p1 = com.andrei1058.bedwars.configuration.language.Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", item);
+                String p2 = com.andrei1058.bedwars.configuration.language.Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", item);
                 yml.addDefault(p1, "&cName not set at: &f" + p1);
                 yml.addDefault(p2, Arrays.asList("&cLore not set at:", " &f" + p2));
             }
         }
         if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH) != null) {
             for (String item : Main.config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH).getKeys(false)) {
-                String p1 = Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", item);
+                String p1 = com.andrei1058.bedwars.configuration.language.Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", item);
                 String p2 = Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", item);
                 yml.addDefault(p1, "&cName not set at: &f" + p1);
                 yml.addDefault(p2, Arrays.asList("&cLore not set at:", " &f" + p2));
@@ -213,5 +213,50 @@ public class Language {
         }
         yml.options().copyDefaults(true);
         language.save();
+    }
+
+    /**
+     * Create messages paths for new shop categories
+     */
+    public void setupUnSetCategories() {
+        for (String s : Main.shop.getYml().getConfigurationSection("").getKeys(false)) {
+            if (s.equalsIgnoreCase(ConfigPath.SHOP_SETTINGS_PATH)) continue;
+            if (s.equalsIgnoreCase(ConfigPath.SHOP_SPECIALS_PATH)) continue;
+            if (s.equals(ConfigPath.SHOP_QUICK_DEFAULTS_PATH)) continue;
+            if (!exists(Messages.SHOP_CATEGORY_INVENTORY_NAME.replace("%category%", s))) {
+                set(Messages.SHOP_CATEGORY_INVENTORY_NAME.replace("%category%", s), "&8Name not set");
+            }
+            if (!exists(Messages.SHOP_CATEGORY_ITEM_NAME.replace("%category%", s))) {
+                set(Messages.SHOP_CATEGORY_ITEM_NAME.replace("%category%", s), "&8Name not set");
+            }
+            if (!exists(Messages.SHOP_CATEGORY_ITEM_LORE.replace("%category%", s))) {
+                set(Messages.SHOP_CATEGORY_ITEM_LORE.replace("%category%", s), Collections.singleton("&8Lore not set"));
+            }
+            for (String c : Main.shop.getYml().getConfigurationSection(s + ConfigPath.SHOP_CATEGORY_CONTENT_PATH).getKeys(false)) {
+                if (!exists(Messages.SHOP_PATH + Messages.SHOP_CONTENT_TIER_ITEM_NAME.replace("%category%", s).replace("%content%", c))) {
+                    set(Messages.SHOP_PATH + Messages.SHOP_CONTENT_TIER_ITEM_NAME.replace("%category%", s).replace("%content%", c), "&8Name not set");
+                }
+                if (!exists(Messages.SHOP_PATH + Messages.SHOP_CONTENT_TIER_ITEM_LORE.replace("%category%", s).replace("%content%", c))) {
+                    set(Messages.SHOP_PATH + Messages.SHOP_CONTENT_TIER_ITEM_LORE.replace("%category%", s).replace("%content%", c), Collections.singleton("&8Lore not set"));
+                }
+            }
+        }
+    }
+
+    /**
+     * Add required messages for a shop category to the given yml
+     */
+    public static void addCategoryMessages(YamlConfiguration yml, String categoryName, String invName, String itemName, List<String> itemLore) {
+        yml.addDefault(Messages.SHOP_CATEGORY_INVENTORY_NAME.replace("%category%", categoryName), invName);
+        yml.addDefault(Messages.SHOP_CATEGORY_ITEM_NAME.replace("%category%", categoryName), itemName);
+        yml.addDefault(Messages.SHOP_CATEGORY_ITEM_LORE.replace("%category%", categoryName), itemLore);
+    }
+
+    /**
+     * Add required messages for a shop category to the given yml
+     */
+    public static void addContentMessages(YamlConfiguration yml, String contentName, String categoryName, String itemName, List<String> itemLore) {
+        yml.addDefault(Messages.SHOP_CONTENT_TIER_ITEM_NAME.replace("%category%", categoryName).replace("%content%", contentName), itemName);
+        yml.addDefault(Messages.SHOP_CONTENT_TIER_ITEM_LORE.replace("%category%", categoryName).replace("%content%", contentName), itemLore);
     }
 }

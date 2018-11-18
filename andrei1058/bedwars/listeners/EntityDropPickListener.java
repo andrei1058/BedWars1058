@@ -95,14 +95,6 @@ public class EntityDropPickListener implements Listener {
                 e.setCancelled(true);
                 return;
             }
-
-            //Prevent from dropping permanent items
-            BedWarsTeam.PlayerVault pv = BedWarsTeam.getVault(e.getPlayer());
-            if (pv == null) return;
-            if (pv.getInvItems().contains(i)){
-                e.setCancelled(true);
-                return;
-            }
         }
 
         if (a.getRespawn().containsKey(e.getPlayer())) {

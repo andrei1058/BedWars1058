@@ -2,13 +2,10 @@ package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.arena.ArenaGUI;
 
 import com.andrei1058.bedwars.arena.BedWarsTeam;
-import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.configuration.ConfigPath;
-import com.andrei1058.bedwars.configuration.Messages;
-import com.andrei1058.bedwars.shop.ShopCategory;
+import com.andrei1058.bedwars.configuration.language.Messages;
 import com.andrei1058.bedwars.upgrades.UpgradeGroup;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -142,27 +139,6 @@ public class Interact implements Listener {
                             }
                         }
                     }
-                    if (shop.getBoolean("utilities.silverfish.enable")) {
-                        if (!Misc.isProjectile(Material.valueOf(shop.getYml().getString("utilities.silverfish.material")))) {
-                            if (inHand.getType() == Material.valueOf(shop.getYml().getString("utilities.silverfish.material")) && nms.itemStackDataCompare(inHand, (short) shop.getInt("utilities.silverfish.data"))) {
-                                nms.spawnSilverfish(p.getLocation().add(0, 1, 0), a.getTeam(p));
-                                if (!nms.isProjectile(inHand)) {
-                                    nms.minusAmount(p, inHand, 1);
-                                    p.updateInventory();
-                                }
-                            }
-                        }
-                    }
-                    if (shop.getBoolean("utilities.ironGolem.enable")) {
-                        if (!Misc.isProjectile(Material.valueOf(shop.getYml().getString("utilities.ironGolem.material")))) {
-                            if (inHand.getType() == Material.valueOf(shop.getYml().getString("utilities.ironGolem.material")) && nms.itemStackDataCompare(inHand, (short) shop.getInt("utilities.ironGolem.data"))) {
-                                nms.spawnIronGolem(p.getLocation().add(0, 1, 0), a.getTeam(p));
-                                if (!nms.isProjectile(inHand)) {
-                                    nms.minusAmount(p, inHand, 1);
-                                }
-                            }
-                        }
-                    }
                 }
             }
         }
@@ -189,13 +165,8 @@ public class Interact implements Listener {
         if (a == null) return;
         Location l = e.getRightClicked().getLocation();
         for (BedWarsTeam t : a.getTeams()) {
-            Location l2 = t.getShop(), l3 = t.getTeamUpgrades();
-            if (l.getBlockX() == l2.getBlockX() && l.getBlockY() == l2.getBlockY() && l.getBlockZ() == l2.getBlockZ()) {
-                e.setCancelled(true);
-                if (a.isPlayer(e.getPlayer())) {
-                    ShopCategory.getByName("main.invContents").openToPlayer(e.getPlayer());
-                }
-            } else if (l.getBlockX() == l3.getBlockX() && l.getBlockY() == l3.getBlockY() && l.getBlockZ() == l3.getBlockZ()) {
+            Location l3 = t.getTeamUpgrades();
+            if (l.getBlockX() == l3.getBlockX() && l.getBlockY() == l3.getBlockY() && l.getBlockZ() == l3.getBlockZ()) {
                 if (a.isPlayer(e.getPlayer())) {
                     UpgradeGroup ug = getUpgradeGroup(a.getGroup());
                     if (ug != null) {
