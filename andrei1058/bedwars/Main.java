@@ -71,7 +71,7 @@ public class Main extends JavaPlugin {
     public static Main plugin;
     public static NMS nms;
     private static Lang langSupport;
-    private static Party party = new NoParty();
+    private static Party party = null;
     private static Chat chat;
     private static Level level;
     private static Economy economy;

@@ -595,10 +595,10 @@ public class Arena {
         if (getParty().hasParty(p)) {
             if (getParty().isOwner(p)) {
                 if (status != GameState.restarting) {
-                    getParty().disband(p);
-                    for (Player mem : getParty().getMembers(p)) {
+                    for (Player mem : new ArrayList<>(getParty().getMembers(p))) {
                         mem.sendMessage(getMsg(mem, Messages.ARENA_LEAVE_PARTY_DISBANDED));
                     }
+                    getParty().disband(p);
                 }
             }
         }
@@ -709,10 +709,10 @@ public class Arena {
         if (getParty().hasParty(p)) {
             if (getParty().isOwner(p)) {
                 if (status != GameState.restarting) {
-                    getParty().disband(p);
-                    for (Player mem : getParty().getMembers(p)) {
+                    for (Player mem : new ArrayList<>(getParty().getMembers(p))) {
                         mem.sendMessage(getMsg(mem, Messages.ARENA_LEAVE_PARTY_DISBANDED));
                     }
+                    getParty().disband(p);
                 }
             }
         }
