@@ -10,7 +10,6 @@ import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
-import com.andrei1058.bedwars.support.nte.NametagEdit;
 import com.andrei1058.bedwars.tasks.GamePlayingTask;
 import com.andrei1058.bedwars.tasks.GameRestartingTask;
 import com.andrei1058.bedwars.tasks.GameStartingTask;
@@ -296,9 +295,6 @@ public class Arena {
             //Remove from ReJoin
             if (ReJoin.exists(p)) ReJoin.getPlayer(p).destroy();
 
-            /* NametagEdit Support */
-            NametagEdit.saveNametag(p);
-
             p.closeInventory();
             players.add(p);
             for (Player on : players) {
@@ -369,9 +365,6 @@ public class Arena {
 
             //Remove from ReJoin
             if (ReJoin.exists(p)) ReJoin.getPlayer(p).destroy();
-
-            /* NametagEdit Support */
-            NametagEdit.saveNametag(p);
 
             p.closeInventory();
             if (!playerBefore) {
@@ -588,9 +581,6 @@ public class Arena {
             if (!disconnect) Misc.giveLobbySb(p);
         }, 5L);
 
-        /* NametagEdit Support */
-        NametagEdit.restoreNametag(p);
-
         /* Remove also the party */
         if (getParty().hasParty(p)) {
             if (getParty().isOwner(p)) {
@@ -717,8 +707,6 @@ public class Arena {
             }
         }
 
-        /* NameTagEdit Support */
-        NametagEdit.restoreNametag(p);
         p.setFlying(false);
         p.setAllowFlight(false);
 

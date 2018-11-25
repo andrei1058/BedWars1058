@@ -98,6 +98,20 @@ public class Misc {
         fw.setVelocity(p.getEyeLocation().getDirection());
     }
 
+
+    public static void launchFirework(@NotNull Location l) {
+        Color[] colors = {Color.WHITE, Color.AQUA, Color.BLUE, Color.FUCHSIA, Color.GRAY, Color.GREEN, Color.LIME, Color.RED,
+                Color.YELLOW, Color.BLACK, Color.MAROON, Color.NAVY, Color.OLIVE, Color.ORANGE, Color.PURPLE};
+        Random r = new Random();
+        Firework fw = l.getWorld().spawn(l, Firework.class);
+        FireworkMeta meta = fw.getFireworkMeta();
+        meta.setPower(1);
+        meta.addEffect(FireworkEffect.builder()
+                .withFade(colors[r.nextInt(colors.length - 1)])
+                .withTrail().withColor(colors[r.nextInt(colors.length - 1)]).with(FireworkEffect.Type.BALL_LARGE).build());
+        fw.setFireworkMeta(meta);
+    }
+
     public static String replaceFirst(String text, String regex, String replacement) {
         return text.replaceFirst("(?s)" + regex + "(?!.*?" + regex + ")", replacement);
     }
