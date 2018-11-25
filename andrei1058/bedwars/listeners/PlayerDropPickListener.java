@@ -45,7 +45,13 @@ public class PlayerDropPickListener implements Listener {
             e.setCancelled(true);
             return;
         }
-        if (e.getItem().getItemStack().getType() == Material.BED) {
+
+        if (e.getItem().getItemStack().getType() == Material.ARROW){
+            e.getItem().setItemStack(Main.nms.createItemStack(e.getItem().getItemStack().getType().toString(), e.getItem().getItemStack().getAmount(), (short) 0));
+            return;
+        }
+
+        if (e.getItem().getItemStack().getType().toString().equals("BED")) {
             e.setCancelled(true);
             e.getItem().remove();
             return;
