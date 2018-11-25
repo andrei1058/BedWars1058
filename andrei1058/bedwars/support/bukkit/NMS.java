@@ -310,6 +310,11 @@ public interface NMS {
     Material materialFireball();
 
     /**
+     * Player head material
+     */
+    Material materialPlayerHead();
+
+    /**
      * Get snowball material
      *
      * @since API 11
@@ -366,7 +371,7 @@ public interface NMS {
     String getShopUpgradeIdentifier(ItemStack itemStack);
 
     /**
-     *Set an upgrade identifier
+     * Set an upgrade identifier
      */
     ItemStack setShopUpgradeIdentifier(ItemStack itemStack, String identifier);
 

@@ -13,7 +13,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.ItemStack;
 
-import static com.andrei1058.bedwars.configuration.Language.getMsg;
+import static com.andrei1058.bedwars.Main.nms;
+import static com.andrei1058.bedwars.language.Language.getMsg;
 
 public class Inventory implements Listener {
 
@@ -35,6 +36,16 @@ public class Inventory implements Listener {
         ItemStack i = e.getCurrentItem();
         if (i == null) return;
         if (i.getType() == Material.AIR) return;
+
+        //Prevent moving of command items
+        if (!nms.isCustomBedWarsItem(i)) return;
+        String[] customData = nms.getCustomData(i).split("_");
+        if (customData.length >= 2) {
+            if (customData[0].equals("RUNCOMMAND")) {
+                e.setCancelled(true);
+                return;
+            }
+        }
 
         Arena a = Arena.getArenaByPlayer(p);
         if (a != null) {

@@ -1,8 +1,7 @@
-package com.andrei1058.bedwars.configuration;
+package com.andrei1058.bedwars.language;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.configuration.language.*;
-import com.andrei1058.bedwars.configuration.language.Messages;
+import com.andrei1058.bedwars.configuration.ConfigPath;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -66,12 +65,7 @@ public class Language {
 
         lbj.save();
         lbj.langName = lbj.m("name");
-        lbj.prefixColor = ChatColor.translateAlternateColorCodes('&', yml.getString(com.andrei1058.bedwars.configuration.language.Messages.PREFIX));
-    }
-
-    public void saveShopStuff(String path, Object name, Object lore) {
-        yml.addDefault(com.andrei1058.bedwars.configuration.language.Messages.SHOP_PATH + "." + path + ".name", name);
-        yml.addDefault(com.andrei1058.bedwars.configuration.language.Messages.SHOP_PATH + "." + path + ".lore", lore);
+        lbj.prefixColor = ChatColor.translateAlternateColorCodes('&', yml.getString(com.andrei1058.bedwars.language.Messages.PREFIX));
     }
 
     public static List<String> getScoreboard(Player p, String path, String alternative) {
@@ -115,7 +109,7 @@ public class Language {
         return langByPlayer.getOrDefault(p, lang).l(path);
     }
 
-    static void saveIfNotExists(String path, Object data) {
+    public static void saveIfNotExists(String path, Object data) {
         for (Language l : languages) {
             if (l.yml.get(path) == null) {
                 l.set(path, data);
@@ -170,16 +164,16 @@ public class Language {
             /* save messages for stats gui items if custom items added */
             for (String item : Main.config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_STATS_PATH).getKeys(false)) {
                 if (ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE.contains(item)) continue;
-                l.yml.addDefault(com.andrei1058.bedwars.configuration.language.Messages.PLAYER_STATS_GUI_PATH + "-" + item + "-name", "Name not set");
-                l.yml.addDefault(com.andrei1058.bedwars.configuration.language.Messages.PLAYER_STATS_GUI_PATH + "-" + item + "-lore", Collections.singletonList("lore not set"));
+                l.yml.addDefault(com.andrei1058.bedwars.language.Messages.PLAYER_STATS_GUI_PATH + "-" + item + "-name", "Name not set");
+                l.yml.addDefault(com.andrei1058.bedwars.language.Messages.PLAYER_STATS_GUI_PATH + "-" + item + "-lore", Collections.singletonList("lore not set"));
             }
             l.save();
         }
     }
 
     public void addDefaultStatsMsg(YamlConfiguration yml, String path, String name, String... lore) {
-        yml.addDefault(com.andrei1058.bedwars.configuration.language.Messages.PLAYER_STATS_GUI_PATH + "-" + path + "-name", name);
-        yml.addDefault(com.andrei1058.bedwars.configuration.language.Messages.PLAYER_STATS_GUI_PATH + "-" + path + "-lore", lore);
+        yml.addDefault(com.andrei1058.bedwars.language.Messages.PLAYER_STATS_GUI_PATH + "-" + path + "-name", name);
+        yml.addDefault(com.andrei1058.bedwars.language.Messages.PLAYER_STATS_GUI_PATH + "-" + path + "-lore", lore);
     }
 
     /**
@@ -189,23 +183,23 @@ public class Language {
         YamlConfiguration yml = language.yml;
         if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH) != null) {
             for (String item : Main.config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH).getKeys(false)) {
-                String p1 = com.andrei1058.bedwars.configuration.language.Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", item);
-                String p2 = com.andrei1058.bedwars.configuration.language.Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", item);
+                String p1 = com.andrei1058.bedwars.language.Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", item);
+                String p2 = com.andrei1058.bedwars.language.Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", item);
                 yml.addDefault(p1, "&cName not set at: &f" + p1);
                 yml.addDefault(p2, Arrays.asList("&cLore not set at:", " &f" + p2));
             }
         }
         if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH) != null) {
             for (String item : Main.config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH).getKeys(false)) {
-                String p1 = com.andrei1058.bedwars.configuration.language.Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", item);
-                String p2 = com.andrei1058.bedwars.configuration.language.Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", item);
+                String p1 = com.andrei1058.bedwars.language.Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", item);
+                String p2 = com.andrei1058.bedwars.language.Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", item);
                 yml.addDefault(p1, "&cName not set at: &f" + p1);
                 yml.addDefault(p2, Arrays.asList("&cLore not set at:", " &f" + p2));
             }
         }
         if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH) != null) {
             for (String item : Main.config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH).getKeys(false)) {
-                String p1 = com.andrei1058.bedwars.configuration.language.Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", item);
+                String p1 = com.andrei1058.bedwars.language.Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", item);
                 String p2 = Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", item);
                 yml.addDefault(p1, "&cName not set at: &f" + p1);
                 yml.addDefault(p2, Arrays.asList("&cLore not set at:", " &f" + p2));

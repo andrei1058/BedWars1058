@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.shop.main;
 
-import com.andrei1058.bedwars.configuration.Language;
+import com.andrei1058.bedwars.language.Language;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;

@@ -6,7 +6,7 @@ import com.andrei1058.bedwars.api.events.ArenaPlayerRespawnEvent;
 import com.andrei1058.bedwars.api.GeneratorType;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.configuration.ConfigPath;
-import com.andrei1058.bedwars.configuration.language.Messages;
+import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.shop.ShopCache;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static com.andrei1058.bedwars.Main.*;
-import static com.andrei1058.bedwars.configuration.Language.getMsg;
+import static com.andrei1058.bedwars.language.Language.getMsg;
 
 public class BedWarsTeam {
 

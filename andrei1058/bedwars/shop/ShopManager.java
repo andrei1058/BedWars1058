@@ -3,7 +3,7 @@ package com.andrei1058.bedwars.shop;
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.configuration.ConfigManager;
 import com.andrei1058.bedwars.configuration.ConfigPath;
-import com.andrei1058.bedwars.configuration.language.Messages;
+import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.shop.listeners.*;
 import com.andrei1058.bedwars.shop.main.QuickBuyButton;
 import com.andrei1058.bedwars.shop.main.ShopCategory;
@@ -216,7 +216,7 @@ public class ShopManager {
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "pickaxe", 20, "tier3",
                     Main.getForCurrentVersion("GOLD_PICKAXE", "GOLD_PICKAXE", "GOLDEN_PICKAXE"), 0, 1, true, 3, "gold", true, true);
             addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "pickaxe", "tier3", "gold-pickaxe", Main.getForCurrentVersion("GOLD_PICKAXE", "GOLD_PICKAXE", "GOLDEN_PICKAXE"),
-                    0, 1, "DIG_SPEED 3, DAMAGE_ALL 2", "", "", false);
+                    0, 1, "DIG_SPEED 3,DAMAGE_ALL 2", "", "", false);
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "pickaxe", 20, "tier4",
                     Main.getForCurrentVersion("DIAMOND_PICKAXE", "DIAMOND_PICKAXE", "DIAMOND_PICKAXE"), 0, 1, true, 6, "gold", true, true);
             addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "pickaxe", "tier4", "diamond-pickaxe", Main.getForCurrentVersion("DIAMOND_PICKAXE", "DIAMOND_PICKAXE", "DIAMOND_PICKAXE"),
@@ -261,7 +261,7 @@ public class ShopManager {
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_RANGED, "bow3", 22, "tier1",
                     Main.getForCurrentVersion("BOW", "BOW", "BOW"), 0, 1, true, 6, "emerald", false, false);
             addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_RANGED, "bow3", "tier1", "bow", Main.getForCurrentVersion("BOW", "BOW", "BOW"),
-                    0, 8, "ARROW_DAMAGE 1, ARROW_KNOCKBACK 1", "", "", false);
+                    0, 8, "ARROW_DAMAGE 1,ARROW_KNOCKBACK 1", "", "", false);
 
             //POTIONS CATEGORY
             addDefaultShopCategory(ConfigPath.SHOP_PATH_CATEGORY_POTIONS, 6, Main.getForCurrentVersion("BREWING_STAND_ITEM", "BREWING_STAND_ITEM", "BREWING_STAND"), 0, 1, false);

@@ -99,6 +99,7 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA = GENERAL_CONFIGURATION_ARENA_SELECTOR_PATH + ".%path%.data";
     public static final String GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_ENCHANTED = GENERAL_CONFIGURATION_ARENA_SELECTOR_PATH + ".%path%.enchanted";
 
+    public static final String GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP = "server-ip";
 
     public static final String ARENA_CONFIGURATION_MAX_BUILD_Y = "max-build-y";
     public static final String ARENA_SPAWN_PROTECTION = "spawn-protection";

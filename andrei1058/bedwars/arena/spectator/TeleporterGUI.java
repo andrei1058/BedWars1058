@@ -2,7 +2,7 @@ package com.andrei1058.bedwars.arena.spectator;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.configuration.language.Messages;
+import com.andrei1058.bedwars.language.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 import static com.andrei1058.bedwars.Main.nms;
-import static com.andrei1058.bedwars.configuration.Language.getList;
-import static com.andrei1058.bedwars.configuration.Language.getMsg;
+import static com.andrei1058.bedwars.language.Language.getList;
+import static com.andrei1058.bedwars.language.Language.getMsg;
 
 public class TeleporterGUI {
 
@@ -98,7 +98,7 @@ public class TeleporterGUI {
      * Create a player head
      */
     private static ItemStack createHead(Player targetPlayer, Player GUIholder) {
-        ItemStack i = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+        ItemStack i = nms.createItemStack(nms.materialPlayerHead().toString(), 1, (short) 3);
         i = nms.setSkullOwner(i, targetPlayer);
         ItemMeta im = i.getItemMeta();
         im.setDisplayName(getMsg(GUIholder, Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME)

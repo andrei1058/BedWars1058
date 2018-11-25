@@ -3,7 +3,7 @@ package com.andrei1058.bedwars.arena;
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.configuration.ConfigPath;
-import com.andrei1058.bedwars.configuration.language.Messages;
+import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.exceptions.InvalidMaterialException;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.google.common.io.ByteArrayDataOutput;
@@ -38,8 +38,8 @@ import java.util.Properties;
 import java.util.Random;
 
 import static com.andrei1058.bedwars.Main.*;
-import static com.andrei1058.bedwars.configuration.Language.getList;
-import static com.andrei1058.bedwars.configuration.Language.getMsg;
+import static com.andrei1058.bedwars.language.Language.getList;
+import static com.andrei1058.bedwars.language.Language.getMsg;
 
 public class Misc {
 

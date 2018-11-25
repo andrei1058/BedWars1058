@@ -12,7 +12,7 @@ import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.AutoCreat
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.CreateTeam;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.SetShop;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.SetWaitingSpawn;
-import com.andrei1058.bedwars.configuration.language.Messages;
+import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import net.md_5.bungee.api.chat.*;
 import org.bukkit.*;
@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.andrei1058.bedwars.Main.*;
-import static com.andrei1058.bedwars.configuration.Language.getMsg;
+import static com.andrei1058.bedwars.language.Language.getMsg;
 
 public class MainCommand extends BukkitCommand implements ParentCommand {
 

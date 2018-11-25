@@ -7,8 +7,8 @@ import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.arena.ShopHolo;
 import com.andrei1058.bedwars.configuration.ConfigPath;
-import com.andrei1058.bedwars.configuration.Language;
-import com.andrei1058.bedwars.configuration.language.Messages;
+import com.andrei1058.bedwars.language.Language;
+import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.exceptions.InvalidSoundException;
 import com.andrei1058.bedwars.support.bukkit.NMS;
 import com.google.common.collect.Sets;
@@ -43,7 +43,7 @@ import java.util.Map;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.despawnables.TargetListener.owningTeam;
-import static com.andrei1058.bedwars.configuration.Language.getMsg;
+import static com.andrei1058.bedwars.language.Language.getMsg;
 
 public class v1_13_R2 implements NMS {
 
@@ -643,6 +643,11 @@ public class v1_13_R2 implements NMS {
     @Override
     public org.bukkit.Material materialFireball() {
         return org.bukkit.Material.valueOf("FIRE_CHARGE");
+    }
+
+    @Override
+    public org.bukkit.Material materialPlayerHead() {
+        return org.bukkit.Material.valueOf("PLAYER_HEAD");
     }
 
     @Override

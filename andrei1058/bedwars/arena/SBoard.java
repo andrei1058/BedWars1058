@@ -3,7 +3,8 @@ package com.andrei1058.bedwars.arena;
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.TeamColor;
-import com.andrei1058.bedwars.configuration.language.Messages;
+import com.andrei1058.bedwars.configuration.ConfigPath;
+import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -16,8 +17,8 @@ import java.util.*;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.Misc.replaceStatsPlaceholders;
-import static com.andrei1058.bedwars.configuration.Language.getMsg;
-import static com.andrei1058.bedwars.configuration.Language.getScoreboard;
+import static com.andrei1058.bedwars.language.Language.getMsg;
+import static com.andrei1058.bedwars.language.Language.getScoreboard;
 
 public class SBoard {
 
@@ -96,6 +97,7 @@ public class SBoard {
             String temp = strings.get(x - 1);
             temp = temp.replace("{generatorUpgrade}", "{nextEvent}")
                     .replace("{generatorTimer}", "{time}");
+            temp = temp.replace("{server_ip}", Main.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP));
             for (String ph : placeholders) {
                 if (temp.contains(ph)) {
                     if (!toRefresh.containsKey(t)) {

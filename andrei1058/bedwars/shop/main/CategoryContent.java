@@ -3,12 +3,10 @@ package com.andrei1058.bedwars.shop.main;
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.events.ShopBuyEvent;
 import com.andrei1058.bedwars.configuration.ConfigPath;
-import com.andrei1058.bedwars.configuration.Language;
-import com.andrei1058.bedwars.configuration.language.Messages;
+import com.andrei1058.bedwars.language.Language;
+import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.shop.ShopCache;
-import com.andrei1058.bedwars.shop.ShopManager;
 import com.andrei1058.bedwars.shop.quickbuy.PlayerQuickBuyCache;
-import com.andrei1058.bedwars.shop.quickbuy.QuickBuyAdd;
 import com.andrei1058.bedwars.shop.quickbuy.QuickBuyElement;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -22,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.andrei1058.bedwars.Main.nms;
-import static com.andrei1058.bedwars.configuration.Language.getMsg;
+import static com.andrei1058.bedwars.language.Language.getMsg;
 
 public class CategoryContent {
 

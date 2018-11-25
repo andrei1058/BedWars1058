@@ -3,8 +3,8 @@ package com.andrei1058.bedwars.arena;
 import com.andrei1058.bedwars.api.GeneratorType;
 import com.andrei1058.bedwars.api.events.GeneratorUpgradeEvent;
 import com.andrei1058.bedwars.configuration.ConfigPath;
-import com.andrei1058.bedwars.configuration.Language;
-import com.andrei1058.bedwars.configuration.language.Messages;
+import com.andrei1058.bedwars.language.Language;
+import com.andrei1058.bedwars.language.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 import static com.andrei1058.bedwars.Main.*;
-import static com.andrei1058.bedwars.configuration.Language.getMsg;
+import static com.andrei1058.bedwars.language.Language.getMsg;
 
 public class OreGenerator {
 

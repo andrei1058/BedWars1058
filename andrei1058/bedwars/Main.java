@@ -8,6 +8,7 @@ import com.andrei1058.bedwars.arena.despawnables.TargetListener;
 import com.andrei1058.bedwars.commands.party.PartyCommand;
 import com.andrei1058.bedwars.commands.rejoin.RejoinCommand;
 import com.andrei1058.bedwars.commands.shout.ShoutCommand;
+import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.listeners.EntityDropPickListener;
 import com.andrei1058.bedwars.listeners.PlayerDropPickListener;
 import com.andrei1058.bedwars.arena.spectator.SpectatorListeners;
@@ -38,7 +39,6 @@ import com.andrei1058.bedwars.support.levels.Level;
 import com.andrei1058.bedwars.support.levels.NoLevel;
 import com.andrei1058.bedwars.support.papi.PAPISupport;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
-import com.andrei1058.bedwars.support.party.NoParty;
 import com.andrei1058.bedwars.support.party.Party;
 import com.andrei1058.bedwars.support.party.Parties;
 import com.andrei1058.bedwars.support.stats.MySQL;
@@ -57,7 +57,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.util.*;
 
-import static com.andrei1058.bedwars.configuration.Language.setupLang;
+import static com.andrei1058.bedwars.language.Language.setupLang;
 
 public class Main extends JavaPlugin {
 
@@ -82,6 +82,17 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onLoad() {
+
+        //Spigot support
+        try {
+            Bukkit.getServer().spigot();
+        } catch (Exception ex){
+            this.getLogger().severe("I can't run on your server software. Please check:");
+            this.getLogger().severe("https://gitlab.com/andrei1058/BedWars1058/wikis/compatibility");
+            this.setEnabled(false);
+            return;
+        }
+
         plugin = this;
 
         /* Load version support 1.8 - 1.12 */
@@ -348,12 +359,6 @@ public class Main extends JavaPlugin {
             p.kickPlayer("BedWars1058 was RELOADED! (never reload plugins. noob staff)");
         }
 
-        /* NametagEdit by sgtcaze, Cory support*/
-        /*if (this.getServer().getPluginManager().getPlugin("NametagEdit") != null) {
-            getLogger().info("Hook into NametagEdit support.");
-            NametagEdit.setNteSupport(true);
-        }*/
-
         /* Load sounds configuration */
         new Sounds();
 
@@ -362,9 +367,10 @@ public class Main extends JavaPlugin {
 
         /* Initialize shop */
         shop = new ShopManager();
-        //This must stay after the shop initializing
+        //Leave this code at the end of the enable method
         for (Language l : Language.getLanguages()) {
             l.setupUnSetCategories();
+            Language.addDefaultMessagesCommandItems(l);
         }
     }
 
@@ -400,6 +406,7 @@ public class Main extends JavaPlugin {
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DRAGON_SPAWN_COUNTDOWN, 600);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_GAME_END_COUNTDOWN, 120);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SHOUT_COOLDOWN, 30);
+        yml.addDefault(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP, "yourSerer.Com");
 
         yml.addDefault("database.enable", false);
         yml.addDefault("database.host", "localhost");

@@ -1,20 +1,23 @@
-package com.andrei1058.bedwars.configuration.language;
+package com.andrei1058.bedwars.language;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.configuration.ConfigPath;
-import com.andrei1058.bedwars.configuration.Language;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
 import static com.andrei1058.bedwars.Main.mainCmd;
+import static com.andrei1058.bedwars.language.Language.addCategoryMessages;
+import static com.andrei1058.bedwars.language.Language.addContentMessages;
 
 public class Russian {
 
-    public Russian(Language lbj, YamlConfiguration yml){
+    public Russian(Language lbj, YamlConfiguration yml) {
         yml.addDefault(Messages.PREFIX, "");
         yml.addDefault("name", "Pусский");
+        yml.options().copyDefaults(true);
         yml.addDefault(Messages.COMMAND_MAIN, Arrays.asList("", "&2▪ &7/" + mainCmd + " stats", "&2▪ &7/" + mainCmd + " join &o<arena/group>", "&2▪ &7/" + mainCmd + " leave", "&2▪ &7/" + mainCmd + " lang", "&2▪ &7/" + mainCmd + " gui", "&2▪ &7/" + mainCmd + " start &3(vip)"));
         yml.addDefault(Messages.ARENA_JOIN_VIP_KICK, "{prefix}&cИзвините, но вас выгнали, потому что к арене присоединился донатер.\n&aЧтобы иметь больше возможностей - купите донат. &7&o(жми)");
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_IS_FULL, "{prefix}&cЭта арена полная!\n&aЧтобы иметь больше возможностей - купите донат. &7&o(жми)");
@@ -61,19 +64,19 @@ public class Russian {
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
         yml.addDefault(Messages.MEANING_SHOUT, "shout");
         yml.addDefault(Messages.INTERACT_CANNOT_PLACE_BLOCK, "{prefix}&cВы не можете ставить блоки здесь!");
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&lBED WARS", "", "&fКарта: &a{map}", "&fИгроков: &a{on}/{max}", "", "&fСтарт через &a{time}s", "", "§fСервер: &a{server}", "", "&e  andrei1058.com"));
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&lBED WARS", "", "&fКарта: &a{map}", "&fИгроков: &a{on}/{max}", "", "&fОжидание...", "", "§fСервер: &a{server}", "", "&e  andrei1058.com"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&lBED WARS", "", "&fКарта: &a{map}", "&fИгроков: &a{on}/{max}", "", "&fСтарт через &a{time}s", "", "§fСервер: &a{server}", "", "&e  {server_ip}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&lBED WARS", "", "&fКарта: &a{map}", "&fИгроков: &a{on}/{max}", "", "&fОжидание...", "", "§fСервер: &a{server}", "", "&e  {server_ip}"));
         yml.addDefault(Messages.INTERACT_CANNOT_BREAK_BLOCK, "{prefix}&cВы можете ломать блоки только игроков!");
         yml.addDefault(Messages.ARENA_STATUS_START_PLAYER_TITLE, "&aПОГНАЛИ");
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent}", "&a{time}", "", "{TeamRedColor}&lR&f {TeamRedName}&f: {TeamRedStatus}",
                 "{TeamBlueColor}&lB&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}&lG&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}&lY &f{TeamYellowName}&f: {TeamYellowStatus}", "",
-                "&fУбийств: &a{kills}", "&fФинальных убийств: &a{finalKills}", "&fКроватей уничтожено: &a{beds}", "", "&ehttp://andrei1058.com"));
+                "&fУбийств: &a{kills}", "&fФинальных убийств: &a{finalKills}", "&fКроватей уничтожено: &a{beds}", "", "&ehttp://{server_ip}"));
         yml.addDefault("scoreboard.SoloPlaying", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent}", "&a{time}", "", "{TeamRedColor}&lR&f {TeamRedName}&f: {TeamRedStatus}",
                 "{TeamBlueColor}&lB&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}&lG&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}&lY &f{TeamYellowName}&f: {TeamYellowStatus}",
-                "{TeamAquaColor}&lA&f {TeamAquaName}&f: {TeamAquaStatus}", "{TeamWhiteColor}&lW&f {TeamWhiteName}&f: {TeamWhiteStatus}", "{TeamPinkColor}&lP&f {TeamPinkName}&f: {TeamPinkStatus}", "{TeamGrayColor}&lG&f {TeamGrayName}&f: {TeamGrayStatus}", "", "&ehttp://andrei1058.com"));
+                "{TeamAquaColor}&lA&f {TeamAquaName}&f: {TeamAquaStatus}", "{TeamWhiteColor}&lW&f {TeamWhiteName}&f: {TeamWhiteStatus}", "{TeamPinkColor}&lP&f {TeamPinkName}&f: {TeamPinkStatus}", "{TeamGrayColor}&lG&f {TeamGrayName}&f: {TeamGrayStatus}", "", "&ehttp://{server_ip}"));
         yml.addDefault("scoreboard.DoublesPlaying", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent}", "&a{time}", "", "{TeamRedColor}&lR&f {TeamRedName}&f: {TeamRedStatus}",
                 "{TeamBlueColor}&lB&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}&lG&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}&lY &f{TeamYellowName}&f: {TeamYellowStatus}",
-                "{TeamAquaColor}&lA&f {TeamAquaName}&f: {TeamAquaStatus}", "{TeamWhiteColor}&lW&f {TeamWhiteName}&f: {TeamWhiteStatus}", "{TeamPinkColor}&lP&f {TeamPinkName}&f: {TeamPinkStatus}", "{TeamGrayColor}&lG&f {TeamGrayName}&f: {TeamGrayStatus}", "", "&ehttp://andrei1058.com"));
+                "{TeamAquaColor}&lA&f {TeamAquaName}&f: {TeamAquaStatus}", "{TeamWhiteColor}&lW&f {TeamWhiteName}&f: {TeamWhiteStatus}", "{TeamPinkColor}&lP&f {TeamPinkName}&f: {TeamPinkStatus}", "{TeamGrayColor}&lG&f {TeamGrayName}&f: {TeamGrayStatus}", "", "&ehttp://{server_ip}"));
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_DATE, "dd/MM/yy");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED, "&c&l✘");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_BED_DESTROYED, "&a{remainingPlayers}");
@@ -126,63 +129,100 @@ public class Russian {
         yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&e&lСОЛО,&E&LУЛУЧШЕНИЯ");
         yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&e&lМАГАЗИН");
         yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&e&lМАГАЗИН");
-        yml.addDefault(Messages.SHOP_PATH + ".name", "&7МАГАЗИН");
 
-        lbj.saveShopStuff("invContents.armor", "&aБроня", Arrays.asList("&7Доступные:", "&7▪ Кольчужные сапоги", "&7▪ Кольчужные поножи", "&7▪ Железные сапоги", "&7▪ Железные поножи", "&7▪ Алмазные сапоги", "&7▪ Алмазные поножи", "", "&eНажмите, чтобы просмотреть!"));
-        lbj.saveShopStuff("invContents.melee", "&aОружие", Arrays.asList("&7Доступные:", "&7▪ Каменный меч", "&7▪ Железный меч", "&7▪ Алмазный меч", "&7▪ Палка (Отталкивание I)", "", "&eНажмите, чтобы просмотреть!"));
-        lbj.saveShopStuff("invContents.blocks", "&aБлоки", Arrays.asList("&7Доступные:", "&7▪ Шерсть", "&7▪ Затвердевшая глина", "&7▪ Стекло", "&7▪ Камень", "&7▪ Лестница", "&7▪ Доски", "&7▪ Обсидиан", "", "&eНажмите, чтобы просмотреть!"));
-        lbj.saveShopStuff("invContents.ranged", "&aДальний бой", Arrays.asList("&7Доступные:", "&7▪ Cтрела", "&7▪ Лук", "&7▪ Лук (Сила I)", "&7▪ Лук (Сила I, Punch I)", "", "&eНажмите, чтобы просмотреть!"));
-        lbj.saveShopStuff("invContents.tools", "&aИнструменты", Arrays.asList("&7Доступные:", "&7▪ Ножницы", "&7▪ Деревянная кирка (Эффективность I)", "&7▪ Деревянный топор (Эффективность I)", "", "&eНажмите, чтобы просмотреть!"));
-        lbj.saveShopStuff("invContents.potions", "&aЗелья", Arrays.asList("&7Доступные:", "&7▪ Скорость II", "&7▪ Прыжок V", "&7▪ Зелье невидимости", "", "&eНажмите, чтобы просмотреть!"));
-        lbj.saveShopStuff("invContents.utility", "&aПолезные", Arrays.asList("&7Доступные:", "&7▪ Золотое яблоко", "&7▪ Постельный клоп", "&7▪ Защитник мечты", "&7▪ Файрбол", "&7▪ TNT", "&7▪ Эндерперл", "&7▪ Ведро воды", "&7▪ Яйца", "", "&eНажмите, чтобы просмотреть!"));
-        //lbj.saveShopStuff("invContents.favourites", "&aFavourites", Arrays.asList("&7Click to view your", "&7favourite items. You can", "&7set a favourite item by", "&7shift clicking on any shop item!"));
-        //lbj.saveShopStuff("invContents.recommended", "&aRecommended Items", Arrays.asList("&7Original", "&7Click to view some", "&7recommended items for early", "&7to late game!", "", "&eНажмите, чтобы просмотреть!"));
+        //SHOP
+        yml.addDefault(Messages.SHOP_INDEX_NAME, "&8Quick Buy");
+        yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "{prefix}&cYou don't have enough {currency}! Need {amount} more!");
+        yml.addDefault(Messages.SHOP_NEW_PURCHASE, "{prefix}&aYou purchased &6{item}");
+        yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "{prefix}&cYou've already bought that!");
+        yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "{TeamColor}&l{TeamName} &r{TeamColor}Silverfish");
+        yml.addDefault(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME, "{TeamColor}{despawn}s &8[ {TeamColor}{health}&8]");
+        yml.addDefault(Messages.SHOP_SEPARATOR_NAME, "&8⇧ Categories");
+        yml.addDefault(Messages.SHOP_SEPARATOR_LORE, Collections.singletonList("&8⇩ Items"));
+        yml.addDefault(Messages.SHOP_QUICK_BUY_NAME, "&bQuick Buy");
+        yml.addDefault(Messages.SHOP_QUICK_BUY_LORE, new ArrayList<>());
+        yml.addDefault(Messages.SHOP_QUICK_EMPTY_NAME, "&cEmpty slot!");
+        yml.addDefault(Messages.SHOP_QUICK_EMPTY_LORE, Arrays.asList("&7This is a Quick Buy Slot!", "&bSneak Click &7any item in", "&7the shop to add it here."));
+        yml.addDefault(Messages.SHOP_CAN_BUY_COLOR, "&a");
+        yml.addDefault(Messages.SHOP_CANT_BUY_COLOR, "&c");
+        yml.addDefault(Messages.SHOP_LORE_STATUS_CAN_BUY, "&eClick to purchase!");
+        yml.addDefault(Messages.SHOP_LORE_STATUS_CANT_AFFORD, "&cYou don't have enough {currency}!");
+        yml.addDefault(Messages.SHOP_LORE_STATUS_MAXED, "&aMAXED!");
+        yml.addDefault(Messages.SHOP_LORE_QUICK_ADD, "&bSneak Click to add to Quick Buy");
+        yml.addDefault(Messages.SHOP_LORE_QUICK_REMOVE, "&bSneak Click to remove from Quick Buy!");
 
-        lbj.saveShopStuff("invContents.armor.invContents.chainmail", "&aПостоянная кольчужная броня", Arrays.asList("&8Предметы:", "&8▪ &7Кольчужные сапоги", "&8▪ &7Кольчужные поножи", "", "&8Цена: &f{cost} {currency}", "&8&oТы не потеряешь это от смерти!"));
-        lbj.saveShopStuff("invContents.armor.invContents.iron", "&aПостоянные железные доспехи", Arrays.asList("&8Предметы:", "&8▪ &7Железные сапоги", "&8▪ &7Железные поножи", "", "&8Цена: &6{cost} {currency}", "&8&oТы не потеряешь это от смерти!"));
-        lbj.saveShopStuff("invContents.armor.invContents.diamond", "&aПостоянная алмазная броня", Arrays.asList("&8Предметы:", "&8▪ &7Алмазные сапоги", "&8▪ &7Алмазные поножи", "", "&8Цена: &2{cost} {currency}", "&8&oТы не потеряешь это от смерти!"));
-        lbj.saveShopStuff("invContents.armor.invContents.back", "&aОбратно", Collections.singletonList(""));
 
-        lbj.saveShopStuff("invContents.melee.invContents.stone", "&aКаменный меч", Arrays.asList("&8Предметы:", "&8▪ &7Каменный меч", "", "&8Цена: &f{cost} {currency}"));
-        lbj.saveShopStuff("invContents.melee.invContents.iron", "&aЖелезный меч", Arrays.asList("&8Предметы:", "&8▪ &7Железный меч", "&8Цена: &6{cost} {currency}"));
-        lbj.saveShopStuff("invContents.melee.invContents.diamond", "&aАлмазный меч", Arrays.asList("&8Предметы:", "&8▪ &7Алмазный меч", "", "&8Цена: &2{cost} {currency}"));
-        lbj.saveShopStuff("invContents.melee.invContents.stick", "&aПалка (Отталкивание I)", Arrays.asList("&8Предметы:", "&8▪ &7Палка (Отталкивание I)", "", "&8Цена: &6{cost} {currency}"));
-        lbj.saveShopStuff("invContents.melee.invContents.back", "&aОбратно", Collections.singletonList(""));
+        addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "&8Blocks", "&aBlocks", Collections.singletonList("&eClick to view!"));
 
-        lbj.saveShopStuff("invContents.blocks.invContents.wool", "&aШерсть", Arrays.asList("&8Предметы:", "&8▪ &7Шерсть", "", "&8Цена: &f{cost} {currency}", "", "&eНажмите, чтобы купить!"));
-        lbj.saveShopStuff("invContents.blocks.invContents.clay", "&aЗатвердевшая глина", Arrays.asList("&8Предметы:", "&8▪ &7Затвердевшая глина", "", "&8Цена: &f{cost} {currency}", "", "&eНажмите, чтобы купить!"));
-        lbj.saveShopStuff("invContents.blocks.invContents.glass", "&aСтекло", Arrays.asList("&8Предметы:", "&8▪ &7Стекло", "", "&8Цена: &f{cost} {currency}", "", "&7Immune to explosions", "", "&eНажмите, чтобы купить!"));
-        lbj.saveShopStuff("invContents.blocks.invContents.stone", "&aКамень", Arrays.asList("&8Предметы:", "&8▪ &7Камень", "", "&8Цена: &f{cost} {currency}", "", "&eНажмите, чтобы купить!"));
-        lbj.saveShopStuff("invContents.blocks.invContents.ladder", "&aЛестница", Arrays.asList("&8Предметы:", "&8▪ &7Лестница", "", "&8Цена: &f{cost} {currency}", "", "&eНажмите, чтобы купить!"));
-        lbj.saveShopStuff("invContents.blocks.invContents.wood", "&aДоски", Arrays.asList("&8Предметы:", "&8▪ &7Доски", "", "&8Цена: &6{cost} {currency}", "", "&eНажмите, чтобы купить!"));
-        lbj.saveShopStuff("invContents.blocks.invContents.obsidian", "&cОбсидиан", Arrays.asList("&8Предметы:", "&8▪ &7Обсидиан", "", "&8Цена: &2{cost} {currency}", "", "&eНажмите, чтобы купить!"));
-        lbj.saveShopStuff("invContents.blocks.invContents.back", "&aОбратно", Arrays.asList(""));
+        addContentMessages(yml, "wool", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Wool", Arrays.asList("&7Cost: &f{cost} {currency}", "", "&7Great for bridging across", "&7islands. Turns into your team's",
+                "&7color.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "clay", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Hardened Clay", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Basic block to defend your bed.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "glass", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Blast-Proof Glass", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Immune to explosions.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "stone", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}End Stone", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Solid block to defend your bed.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "ladder", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Ladder", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Useful to save cats stuck in", "&7trees.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "obsidian", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Obsidian", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Extreme protection for your bed.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "wood", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Wood", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Solid block to defend your bed", "", "{quick_buy}", "{buy_status}"));
 
-        lbj.saveShopStuff("invContents.ranged.invContents.arrow", "&aCтрела", Arrays.asList("&8Предметы:", "&8▪ &7Cтрела", "", "&8Цена: &6{cost} {currency}"));
-        lbj.saveShopStuff("invContents.ranged.invContents.bow", "&aЛук", Arrays.asList("&8Предметы:", "&8▪ &7Лук", "", "&8Цена: &6{cost} {currency}"));
-        lbj.saveShopStuff("invContents.ranged.invContents.bow2", "&aЛук (Сила I)", Arrays.asList("&8Предметы:", "&8▪ &7Лук (Сила I)", "", "&8Цена: &6{cost} {currency}"));
-        lbj.saveShopStuff("invContents.ranged.invContents.bow3", "&aЛук (Сила I, Punch I)", Arrays.asList("&8Предметы:", "&8▪ &7Лук (Сила I, Punch I)", "", "&8Цена: &2{cost} {currency}"));
-        lbj.saveShopStuff("invContents.ranged.invContents.back", "&aОбратно", Collections.singletonList(""));
+        addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_MELEE, "&8Melee", "&aMelee", Collections.singletonList("&eClick to view!"));
 
-        lbj.saveShopStuff("invContents.tools.invContents.shears", "&aПерманентные Ножницы", Arrays.asList("&8Предметы:", "&8▪ &7Перманентные Ножницы", "", "&8Цена: &f{cost} {currency}"));
-        lbj.saveShopStuff("invContents.tools.invContents.pick", "&aДеревянная кирка", Arrays.asList("&8Предметы:", "&8▪ &7Деревянная кирка", "", "&8Цена: &f{cost} {currency}"));
-        lbj.saveShopStuff("invContents.tools.invContents.axe", "&aДеревянный топор", Arrays.asList("&8Предметы:", "&8▪ &7Деревянный топор", "", "&8Цена: &f{cost} {currency}"));
-        lbj.saveShopStuff("invContents.tools.invContents.back", "&aОбратно", Collections.singletonList(""));
+        addContentMessages(yml, "stone-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "{color}Stone Sword", Arrays.asList("&7Cost: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "iron-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "{color}Iron Sword", Arrays.asList("&7Cost: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "diamond-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "{color}Diamond Sword", Arrays.asList("&7Cost: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "stick", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "{color}Stick (KnockBack I)", Arrays.asList("&7Cost: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
 
-        lbj.saveShopStuff("invContents.potions.invContents.potion1", "&aСкорость II", Arrays.asList("&8Предметы:", "&8▪ &7Скорость II", "", "&8Цена: &2{cost} {currency}"));
-        lbj.saveShopStuff("invContents.potions.invContents.potion2", "&aПрыжок V", Arrays.asList("&8Предметы:", "&8▪ &7Прыжок V", "", "&8Цена: &2{cost} {currency}"));
-        lbj.saveShopStuff("invContents.potions.invContents.potion3", "&aЗелье невидимости", Arrays.asList("&8Предметы:", "&8▪ &7Зелье невидимости", "", "&8Цена: &2{cost} {currency}"));
-        lbj.saveShopStuff("invContents.potions.invContents.back", "&aОбратно", Collections.singletonList(""));
+        addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "&8Armor", "&aArmor", Collections.singletonList("&eClick to view!"));
 
-        lbj.saveShopStuff("invContents.utility.invContents.apple", "&aЗолотое яблоко", Arrays.asList("&8Предметы:", "&8▪ &7Золотое яблоко", "", "&8Цена: &6{cost} {currency}"));
-        lbj.saveShopStuff("invContents.utility.invContents.sball", "&aBedbug", Arrays.asList("&8Предметы:", "&8▪ &7Bedbug", "", "&8Цена: &f{cost} {currency}", "", "&7Moderately annoying. These", "&7little critters can be thrown to", "&7distract enemies"));
-        lbj.saveShopStuff("invContents.utility.invContents.monsteregg", "&aЗащитник мечты", Arrays.asList("&8Предметы:", "&8▪ &7Защитник мечты", "", "&8Цена: &f{cost} {currency}", "", "&7Умеренно мотивированный.", "&7Иногда защищает вашу", "&7базу"));
-        lbj.saveShopStuff("invContents.utility.invContents.fireball", "&aФайрбол", Arrays.asList("&8Предметы:", "&8▪ &7Файрбол", "", "&8Цена: &f{cost} {currency}", "", "&7Щелкните правой кнопкой мыши, чтобы запустить!"));
-        lbj.saveShopStuff("invContents.utility.invContents.tnt", "&aTNT", Arrays.asList("&8Предметы:", "&8▪ &7TNT", "", "&8Цена: &6{cost} {currency}", "", "&7Немедленно воспламеняется", "&7чтобы взорвать вас и ваши вещи!"));
-        lbj.saveShopStuff("invContents.utility.invContents.enderpearl", "&aEnder Pearl", Arrays.asList("&8Предметы:", "", "&8Ender Pearl", "&8▪ &7Цена: &2{cost} {currency}", "", "&Довольно полезно для", "&7Вторжения на вражеские базы"));
-        lbj.saveShopStuff("invContents.utility.invContents.bucket", "&aWater Bucket", Arrays.asList("&8Предметы:", "&8▪ &7Water Bucket", "", "&8Цена: &2{cost} {currency}"));
-        lbj.saveShopStuff("invContents.utility.invContents.eggBridge", "&aBridge Egg", Arrays.asList("&8Предметы:", "&8▪ &7Bridge Egg", "", "&8Цена: &2{cost} {currency}", "&7This egg creates a bridge in", "&7its trail after being thrown."));
-        lbj.saveShopStuff("invContents.utility.invContents.back", "&aОбратно", Collections.singletonList(""));
+        addContentMessages(yml, "chainmail", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "{color}Permanent Chainmail Armor", Arrays.asList("&7Cost: {cost} {currency}",
+                "", "&7Chainmail leggings and boots", "&7which you will always spawn", "&7with.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "iron-armor", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "{color}Permanent Iron Armor", Arrays.asList("&7Cost: {cost} {currency}",
+                "", "&7Iron leggings and boots which", "&7you will always spawn with.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "diamond-armor", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "{color}Permanent Diamond Armor", Arrays.asList("&7Cost: {cost} {currency}",
+                "", "&7Diamond leggings and boots which", "&7you will always crush with.", "", "{quick_buy}", "{buy_status}"));
+
+        addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "&8Tools", "&aTools", Collections.singletonList("&eClick to view!"));
+
+        addContentMessages(yml, "shears", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "{color}Permanent Shears", Arrays.asList("&7Cost: {cost} {currency}",
+                "", "&7Great to get rid of wool. You", "&7will always spawn with these shears.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "pickaxe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "{color}Pickaxe {tier}", Arrays.asList("&7Cost: {cost} {currency}", "&7Tier: &e{tier}",
+                "", "&7This is an upgradable item.", "&7It will lose 1 tier upon.", "&7death!", "", "&7You will permanently", "&7respawn with at least the", "&7lowest tier.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "axe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "{color}Axe {tier}", Arrays.asList("&7Cost: {cost} {currency}", "&7Tier: &e{tier}",
+                "", "&7This is an upgradable item.", "&7It will lose 1 tier upon.", "&7death!", "", "&7You will permanently", "&7respawn with at least the", "&7lowest tier.", "", "{quick_buy}", "{buy_status}"));
+
+        addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_RANGED, "&8Ranged", "&aRanged", Collections.singletonList("&eClick to view!"));
+
+        addContentMessages(yml, "arrow", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "{color}Arrow", Arrays.asList("&7Cost: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "bow1", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "{color}Bow", Arrays.asList("&7Cost: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "bow2", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "{color}Bow (Power I)", Arrays.asList("&7Cost: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "bow3", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "{color}Bow (Power I, Punch I)", Arrays.asList("&7Cost: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+
+        addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "&8Potions", "&aPotions", Collections.singletonList("&eClick to view!"));
+
+        addContentMessages(yml, "speed-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "{color}Speed II Potion (45 seconds)", Arrays.asList("&7Cost: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "jump-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "{color}Jump V Potion (45 seconds)", Arrays.asList("&7Cost: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "invisibility", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "{color}Invisibility Potion (30 seconds)", Arrays.asList("&7Cost: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+
+        addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "&8Utility", "&aUtility", Collections.singletonList("&eClick to view!"));
+
+        addContentMessages(yml, "golden-apple", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Golden Apple", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Well-rounded healing.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "bedbug", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}BedBug", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Spawns silverfish where the",
+                "&7snowball lands to distract your", "&7enemies. Lasts 15 seconds.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "dream-defender", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Dream Defender", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Iron Golem to help defend your",
+                "&7base. Lasts 4 minutes.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "fireball", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Fireball", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Right-click to launch! Great to",
+                "&7knock back enemies walking on", "&7thin bridges", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "tnt", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}TNT", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Instantly ignites, appropriate",
+                "&7to explode things!", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "ender-pearl", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Ender Pearl", Arrays.asList("&7Cost: {cost} {currency}", "", "&7The quickest way to invade enemy",
+                "&7bases.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "water-bucket", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Water Bucket", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Great to slow down approaching",
+                "&7enemies. Can also protect", "against TNT.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "bridge-egg", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Bridge Egg", Arrays.asList("&7Cost: {cost} {currency}", "", "&7This egg creates a bridge in its",
+                "&7trial after being thrown.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "magic-milk", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Magic Milk", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Avoid triggering traps for 60",
+                "&7seconds after consuming.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "sponge", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Sponge", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Great for soaking up water.",
+                "", "{quick_buy}", "{buy_status}"));
+
 
         yml.addDefault(Messages.MEANING_FULL, "Full");
         yml.addDefault(Messages.MEANING_IRON_SINGULAR, "Железо");
@@ -196,8 +236,6 @@ public class Russian {
         yml.addDefault(Messages.MEANING_VAULT_SINGULAR, "$");
         yml.addDefault(Messages.MEANING_VAULT_PLURAL, "$");
 
-        yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "{prefix}&cУ вас недостаточно {currency}! Требуется {amount}!");
-        yml.addDefault(Messages.SHOP_NEW_PURCHASE, "{prefix}&aВы купили &6{item}");
         yml.addDefault(Messages.COMMAND_JOIN_USAGE, "§a▪ §7Используйте: /" + mainCmd + " join §o<arena/group>");
         yml.addDefault(Messages.COMMAND_NOT_ALLOWED_IN_GAME, "{prefix}&cВы не можете это сделать.");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY, "&aНажмите, чтобы купить!");
@@ -227,8 +265,6 @@ public class Russian {
         yml.addDefault(Messages.TRAP_ENEMY_BASE_ENTER_SUBTITLE, "&fВаша ловушка была выключена!");
         yml.addDefault(Messages.TRAP_ENEMY_BASE_ENTER_TITLE, "&cВ ЛОВУШКУ ПОПАЛИСЬ!");
         yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a{player} купил улучшение &6{upgradeName}");
-        yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "{TeamColor}&l{TeamName} &r{TeamColor}Silverfish");
-        yml.addDefault(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME, "{TeamColor}{despawn}s &8[ {TeamColor}{health}&8]");
         yml.addDefault(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH, "▮ ");
         yml.addDefault(Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR, "{PlayerColor}{PlayerName} &7умер.");
         yml.addDefault(Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL, "{PlayerColor}{PlayerName} &7умер. &b&lЗАКЛЮЧИТЕЛЬНОЕ УБИЙСТВО!");
@@ -262,7 +298,7 @@ public class Russian {
 
         yml.addDefault(Messages.MEANING_NEVER, "Никогда");
         yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&7{date}", "&fНик: &a{player}", "", "&fПобед: &a{wins}", "&fПроигрышей: &a{losses}", "&fУбийств: &a{kills}", "&fСмертей: &a{deaths}"
-                , "&fФинальных убийств: &a{fУбийств}", "&fКроватей уничтожено: &a{beds}", "", "&fОнлайн: &a{on}", "&eandrei1058.com"));
+                , "&fФинальных убийств: &a{fУбийств}", "&fКроватей уничтожено: &a{beds}", "", "&fОнлайн: &a{on}", "&e{server_ip}"));
 
         /* party commands */
         yml.addDefault(Messages.COMMAND_PARTY_HELP, Arrays.asList("&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
@@ -315,43 +351,27 @@ public class Russian {
         yml.addDefault(Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_SUBTITLE, "&cSNEAK to exit");
         yml.addDefault(Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE, "&eExiting Spectator mode");
         yml.addDefault(Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE, "");
-        yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "{prefix}&cYou've already bought that!");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE, "{prefix}&7{player} &eis offline!");
         yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG, "&cSpectators are not allowed in this arena!");
         yml.addDefault(Messages.ARENA_LEAVE_PARTY_DISBANDED, "{prefix}§cThe party owner has left and the party was disbanded!");
 
         /* Lobby Command Items */
-        if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH + ".stats") != null) {
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "stats"), "&eСтатистика");
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "stats"), Collections.singletonList("&fРик-клик, чтобы увидеть свою статистику!"));
-        }
-        if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH + ".arena-selector") != null) {
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "arena-selector"), "&eАрены");
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "arena-selector"), Collections.singletonList("&fВыберите арену!"));
-        }
-        if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH + ".leave") != null) {
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "leave"), "&eВернутья в лобби");
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "leave"), Collections.singletonList("&fЩелкните правой кнопкой мыши, чтобы вернуться в лобби!"));
-        }
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "stats"), "&eСтатистика");
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "stats"), Collections.singletonList("&fРик-клик, чтобы увидеть свою статистику!"));
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "arena-selector"), "&eАрены");
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "arena-selector"), Collections.singletonList("&fВыберите арену!"));
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "leave"), "&eВернутья в лобби");
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "leave"), Collections.singletonList("&fЩелкните правой кнопкой мыши, чтобы вернуться в лобби!"));
         /* Pre Game Command Items */
-        if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH + ".stats") != null) {
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", "stats"), "&eСтатистика");
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", "stats"), Collections.singletonList("&fРик-клик, чтобы увидеть свою статистику!"));
-        }
-        if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH + ".leave") != null) {
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", "leave"), "&eВернутья в лобби");
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", "leave"), Collections.singletonList("&fЩелкните правой кнопкой мыши, чтобы вернуться в лобби!"));
-        }
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", "stats"), "&eСтатистика");
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", "stats"), Collections.singletonList("&fРик-клик, чтобы увидеть свою статистику!"));
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", "leave"), "&eВернутья в лобби");
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", "leave"), Collections.singletonList("&fЩелкните правой кнопкой мыши, чтобы вернуться в лобби!"));
         /* Spectator Command Items */
-        if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH + ".teleporter") != null) {
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", "teleporter"), "&eTeleporter");
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", "teleporter"), Collections.singletonList("&fRight-click to spectate a player!"));
-        }
-        if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH + ".leave") != null) {
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", "leave"), "&eВернутья в лобби");
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", "leave"), Collections.singletonList("&fЩелкните правой кнопкой мыши, чтобы вернуться в лобби!"));
-        }
-        Language.addDefaultMessagesCommandItems(lbj);
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", "teleporter"), "&eTeleporter");
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", "teleporter"), Collections.singletonList("&fRight-click to spectate a player!"));
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", "leave"), "&eВернутья в лобби");
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", "leave"), Collections.singletonList("&fЩелкните правой кнопкой мыши, чтобы вернуться в лобби!"));
 
         yml.addDefault(Messages.COMMAND_COOLDOWN, "&cYou can't do that yet! Wait {seconds} more seconds!");
         yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_TEAM, "{TeamColor}[{TeamName}]");

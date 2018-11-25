@@ -5,8 +5,8 @@ import com.andrei1058.bedwars.api.*;
 import com.andrei1058.bedwars.api.events.PlayerKillEvent;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.configuration.ConfigPath;
-import com.andrei1058.bedwars.configuration.Language;
-import com.andrei1058.bedwars.configuration.language.Messages;
+import com.andrei1058.bedwars.language.Language;
+import com.andrei1058.bedwars.language.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -21,11 +21,9 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 
-import java.util.Arrays;
-
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.LastHit.getLastHit;
-import static com.andrei1058.bedwars.configuration.Language.getMsg;
+import static com.andrei1058.bedwars.language.Language.getMsg;
 
 public class DamageDeathMove implements Listener {
 

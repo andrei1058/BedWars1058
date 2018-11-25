@@ -5,7 +5,7 @@ import com.andrei1058.bedwars.arena.Arena;
 
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.configuration.ConfigPath;
-import com.andrei1058.bedwars.configuration.language.Messages;
+import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.upgrades.UpgradeGroup;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -23,7 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import static com.andrei1058.bedwars.Main.*;
-import static com.andrei1058.bedwars.configuration.Language.getMsg;
+import static com.andrei1058.bedwars.language.Language.getMsg;
 import static com.andrei1058.bedwars.upgrades.UpgradeGroup.getUpgradeGroup;
 
 public class Interact implements Listener {
@@ -187,7 +187,14 @@ public class Interact implements Listener {
 
     @EventHandler
     public void onArmorManipulate(PlayerArmorStandManipulateEvent e) {
+        if (e.isCancelled()) return;
+        //prevent from breaking generators
         if (Arena.getArenaByPlayer(e.getPlayer()) != null) {
+            e.setCancelled(true);
+        }
+
+        //prevent from stealing from armor stands in lobby
+        if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())){
             e.setCancelled(true);
         }
     }

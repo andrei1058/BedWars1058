@@ -1,21 +1,24 @@
-package com.andrei1058.bedwars.configuration.language;
+package com.andrei1058.bedwars.language;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.configuration.ConfigPath;
-import com.andrei1058.bedwars.configuration.Language;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
 import static com.andrei1058.bedwars.Main.mainCmd;
+import static com.andrei1058.bedwars.language.Language.addCategoryMessages;
+import static com.andrei1058.bedwars.language.Language.addContentMessages;
 
 public class Spanish {
 
-    public Spanish(Language lbj, YamlConfiguration yml){
+    public Spanish(Language lbj, YamlConfiguration yml) {
         yml.options().header("Translation by JuliCarles#1783");
         yml.addDefault(Messages.PREFIX, "");
         yml.addDefault("name", "Espanol");
+        yml.options().copyDefaults(true);
         yml.addDefault(Messages.COMMAND_MAIN, Arrays.asList("", "&2▪ &7/" + mainCmd + " stats", "&2▪ &7/" + mainCmd + " join &o<arena/grupo>", "&2▪ &7/" + mainCmd + " leave", "&2▪ &7/" + mainCmd + " lang", "&2▪ &7/" + mainCmd + " gui", "&2▪ &7/" + mainCmd + " start &3(vip)"));
         yml.addDefault(Messages.ARENA_JOIN_VIP_KICK, "{prefix}&cHas sido expulsado ya que un VIP se unio a la partida.\n&aConsidera donar a nuestro servidor. &7&o(click)");
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_IS_FULL, "{prefix}&cThis arena is full!\n&aPlease consider donating for more features. &7&o(click)");
@@ -62,19 +65,19 @@ public class Spanish {
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
         yml.addDefault(Messages.MEANING_SHOUT, "grita");
         yml.addDefault(Messages.INTERACT_CANNOT_PLACE_BLOCK, "{prefix}&cNo puedes colocar bloques aqui!");
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&lBED WARS", "", "&fMapa: &a{map}", "&fJugador: &a{on}/{max}", "", "&fComenzando en &a{time}s", "", "§fServer: &a{server}", "", "&e  andrei1058.com"));
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&lBED WARS", "", "&fMapa: &a{map}", "&fJugador: &a{on}/{max}", "", "&fEsperando...", "", "§fServer: &a{server}", "", "&e  andrei1058.com"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&lBED WARS", "", "&fMapa: &a{map}", "&fJugador: &a{on}/{max}", "", "&fComenzando en &a{time}s", "", "§fServer: &a{server}", "", "&e  {server_ip}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&lBED WARS", "", "&fMapa: &a{map}", "&fJugador: &a{on}/{max}", "", "&fEsperando...", "", "§fServer: &a{server}", "", "&e  {server_ip}"));
         yml.addDefault(Messages.INTERACT_CANNOT_BREAK_BLOCK, "{prefix}&cSolo puedes romper bloques puesto por jugadores!");
         yml.addDefault(Messages.ARENA_STATUS_START_PLAYER_TITLE, "&aVAMOS");
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent}", "&a{time}", "", "{TeamRedColor}&lR&f {TeamRedName}&f: {TeamRedStatus}",
                 "{TeamBlueColor}&lB&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}&lG&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}&lY &f{TeamYellowName}&f: {TeamYellowStatus}", "",
-                "&fAsesinatos: &a{kills}", "&fAsesinatos Finales: &a{finalKills}", "&fCamas Destruidas: &a{beds}", "", "&ehttp://andrei1058.com"));
+                "&fAsesinatos: &a{kills}", "&fAsesinatos Finales: &a{finalKills}", "&fCamas Destruidas: &a{beds}", "", "&ehttp://{server_ip}"));
         yml.addDefault("scoreboard.SoloPlaying", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent}", "&a{time}", "", "{TeamRedColor}&lR&f {TeamRedName}&f: {TeamRedStatus}",
                 "{TeamBlueColor}&lB&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}&lG&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}&lY &f{TeamYellowName}&f: {TeamYellowStatus}",
-                "{TeamAquaColor}&lA&f {TeamAquaName}&f: {TeamAquaStatus}", "{TeamWhiteColor}&lW&f {TeamWhiteName}&f: {TeamWhiteStatus}", "{TeamPinkColor}&lP&f {TeamPinkName}&f: {TeamPinkStatus}", "{TeamGrayColor}&lG&f {TeamGrayName}&f: {TeamGrayStatus}", "", "&ehttp://andrei1058.com"));
+                "{TeamAquaColor}&lA&f {TeamAquaName}&f: {TeamAquaStatus}", "{TeamWhiteColor}&lW&f {TeamWhiteName}&f: {TeamWhiteStatus}", "{TeamPinkColor}&lP&f {TeamPinkName}&f: {TeamPinkStatus}", "{TeamGrayColor}&lG&f {TeamGrayName}&f: {TeamGrayStatus}", "", "&ehttp://{server_ip}"));
         yml.addDefault("scoreboard.DoublesPlaying", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent}", "&a{time}", "", "{TeamRedColor}&lR&f {TeamRedName}&f: {TeamRedStatus}",
                 "{TeamBlueColor}&lB&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}&lG&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}&lY &f{TeamYellowName}&f: {TeamYellowStatus}",
-                "{TeamAquaColor}&lA&f {TeamAquaName}&f: {TeamAquaStatus}", "{TeamWhiteColor}&lW&f {TeamWhiteName}&f: {TeamWhiteStatus}", "{TeamPinkColor}&lP&f {TeamPinkName}&f: {TeamPinkStatus}", "{TeamGrayColor}&lG&f {TeamGrayName}&f: {TeamGrayStatus}", "", "&ehttp://andrei1058.com"));
+                "{TeamAquaColor}&lA&f {TeamAquaName}&f: {TeamAquaStatus}", "{TeamWhiteColor}&lW&f {TeamWhiteName}&f: {TeamWhiteStatus}", "{TeamPinkColor}&lP&f {TeamPinkName}&f: {TeamPinkStatus}", "{TeamGrayColor}&lG&f {TeamGrayName}&f: {TeamGrayStatus}", "", "&ehttp://{server_ip}"));
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_DATE, "dd/MM/yy");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED, "&c&l✘");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_BED_DESTROYED, "&a{remainingPlayers}");
@@ -127,63 +130,6 @@ public class Spanish {
         yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&e&lMEJORAS,&b&lSOLO");
         yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&b&lTIENDA,&e&lCLICK DERECHO");
         yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&b&lTIENDA,&e&lCLICK DERECHO");
-        yml.addDefault(Messages.SHOP_PATH + ".name", "&7Tienda");
-
-        lbj.saveShopStuff("invContents.armor", "&aArmadura", Arrays.asList("&7Disponible:", "&7▪ Botas de Malla", "&7▪ Pantalones de Malla", "&7▪ Botas de Hierro", "&7▪ Pantalones de Hierro", "&7▪ Botas de Diamante", "&7▪ Pantalones de Diamante", "", "&eClick para buscar!"));
-        lbj.saveShopStuff("invContents.melee", "&aMelee", Arrays.asList("&7Disponible:", "&7▪ Espada de Piedra", "&7▪ Espada de Hierro", "&7▪ Espada de Diamante", "&7▪ Palo (Knockback I)", "", "&eClick para buscar!"));
-        lbj.saveShopStuff("invContents.blocks", "&aBloques", Arrays.asList("&7Disponible:", "&7▪ Lana", "&7▪ Arcilla", "&7▪ Vidrio a prueba de explosiones", "&7▪ Piedra del End", "&7▪ Escalera", "&7▪ Madera", "&7▪ Obsidiana", "", "&eClick para buscar!"));
-        lbj.saveShopStuff("invContents.ranged", "&aArqueria", Arrays.asList("&7Disponible:", "&7▪ Flecha", "&7▪ Arco", "&7▪ Arco (Poder I)", "&7▪ Arco (Poder I, Empuje I)", "", "&eClick para buscar!"));
-        lbj.saveShopStuff("invContents.tools", "&aHerramientas", Arrays.asList("&7Disponible:", "&7▪ Tijeras permanentes", "&7▪ Pico de Madera (Effeciencia I)", "&7▪ Hacha de Madera (Eficiencia I)", "", "&eClick para buscar!"));
-        lbj.saveShopStuff("invContents.potions", "&aPociones", Arrays.asList("&7Disponible:", "&7▪ Velocidad II", "&7▪ Salto V", "&7▪ Invisibilidad", "", "&eClick para buscar!"));
-        lbj.saveShopStuff("invContents.utility", "&aUtilidades", Arrays.asList("&7Disponible:", "&7▪ Manzana Dorada", "&7▪ BedBug", "&7▪ Defensor de sueños", "&7▪ Bola de Fuego", "&7▪ TNT", "&7▪ Ender Pearl", "&7▪ Cubo de Agua", "&7▪ Bridge Egg", "", "&eClick para buscar!"));
-        //lbj.saveShopStuff("invContents.favourites", "&aFavourites", Arrays.asList("&7Click to view your", "&7favourite items. You can", "&7set a favourite item by", "&7shift clicking on any shop item!"));
-        //lbj.saveShopStuff("invContents.recommended", "&aRecommended Items", Arrays.asList("&7Original", "&7Click to view some", "&7recommended items for early", "&7to late game!", "", "&eClick para buscar!"));
-
-        lbj.saveShopStuff("invContents.armor.invContents.chainmail", "&aPermanent Chainmail Armor", Arrays.asList("&8Objetos:", "&8▪ &7Botas de Malla", "&8▪ &7Pantalones de Malla", "", "&8Precio: &f{cost} {currency}", "&8&oYou will not lose this on death!"));
-        lbj.saveShopStuff("invContents.armor.invContents.iron", "&aPermanent Iron Armor", Arrays.asList("&8Objetos:", "&8▪ &7Botas de Hierro", "&8▪ &7Pantalones de Hierro", "", "&8Precio: &6{cost} {currency}", "&8&oYou will not lose this on death!"));
-        lbj.saveShopStuff("invContents.armor.invContents.diamond", "&aPermanent Diamond Armor", Arrays.asList("&8Objetos:", "&8▪ &7Botas de Diamante", "&8▪ &7Pantalones de Diamante", "", "&8Precio: &2{cost} {currency}", "&8&oYou will not lose this on death!"));
-        lbj.saveShopStuff("invContents.armor.invContents.back", "&aIr Atrás", Collections.singletonList(""));
-
-        lbj.saveShopStuff("invContents.melee.invContents.stone", "&aEspada de Piedra", Arrays.asList("&8Objetos:", "&8▪ &7Espada de Piedra", "", "&8Precio: &f{cost} {currency}"));
-        lbj.saveShopStuff("invContents.melee.invContents.iron", "&aEspada de Hierro", Arrays.asList("&8Objetos:", "&8▪ &7Espada de Hierro", "&8Precio: &6{cost} {currency}"));
-        lbj.saveShopStuff("invContents.melee.invContents.diamond", "&aEspada de Diamante", Arrays.asList("&8Objetos:", "&8▪ &7Espada de Diamante", "", "&8Precio: &2{cost} {currency}"));
-        lbj.saveShopStuff("invContents.melee.invContents.stick", "&aPalo (Knockback I)", Arrays.asList("&8Objetos:", "&8▪ &7Palo (Knockback I)", "", "&8Precio: &6{cost} {currency}"));
-        lbj.saveShopStuff("invContents.melee.invContents.back", "&aIr Atrás", Collections.singletonList(""));
-
-        lbj.saveShopStuff("invContents.blocks.invContents.wool", "&aLana", Arrays.asList("&8Objetos:", "&8▪ &7Lana", "", "&8Precio: &f{cost} {currency}", "", "&eClick para comprar!"));
-        lbj.saveShopStuff("invContents.blocks.invContents.clay", "&aArcilla", Arrays.asList("&8Objetos:", "&8▪ &7Arcilla", "", "&8Precio: &f{cost} {currency}", "", "&eClick para comprar!"));
-        lbj.saveShopStuff("invContents.blocks.invContents.glass", "&aVidrio a prueba de explosiones", Arrays.asList("&8Objetos:", "&8▪ &7Vidrio a prueba de explosiones", "", "&8Precio: &f{cost} {currency}", "", "&7Inmune a explosiones", "", "&eClick para comprar!"));
-        lbj.saveShopStuff("invContents.blocks.invContents.stone", "&aPiedra del End", Arrays.asList("&8Objetos:", "&8▪ &7Piedra del End", "", "&8Precio: &f{cost} {currency}", "", "&eClick para comprar!"));
-        lbj.saveShopStuff("invContents.blocks.invContents.ladder", "&aEscalera", Arrays.asList("&8Objetos:", "&8▪ &7Escalera", "", "&8Precio: &f{cost} {currency}", "", "&eClick para comprar!"));
-        lbj.saveShopStuff("invContents.blocks.invContents.wood", "&aMadera", Arrays.asList("&8Objetos:", "&8▪ &7Madera", "", "&8Precio: &6{cost} {currency}", "", "&eClick para comprar!"));
-        lbj.saveShopStuff("invContents.blocks.invContents.obsidian", "&cObsidiana", Arrays.asList("&8Objetos:", "&8▪ &7Obsidiana", "", "&8Precio: &2{cost} {currency}", "", "&eClick para comprar!"));
-        lbj.saveShopStuff("invContents.blocks.invContents.back", "&aIr Atrás", Arrays.asList(""));
-
-        lbj.saveShopStuff("invContents.ranged.invContents.arrow", "&aFlecha", Arrays.asList("&8Objetos:", "&8▪ &7Flecha", "", "&8Precio: &6{cost} {currency}"));
-        lbj.saveShopStuff("invContents.ranged.invContents.bow", "&aArco", Arrays.asList("&8Objetos:", "&8▪ &7Arco", "", "&8Precio: &6{cost} {currency}"));
-        lbj.saveShopStuff("invContents.ranged.invContents.bow2", "&aArco (Poder I)", Arrays.asList("&8Objetos:", "&8▪ &7Arco (Poder I)", "", "&8Precio: &6{cost} {currency}"));
-        lbj.saveShopStuff("invContents.ranged.invContents.bow3", "&aArco (Poder I, Empuje I)", Arrays.asList("&8Objetos:", "&8▪ &7Arco (Poder I, Empuje I)", "", "&8Precio: &2{cost} {currency}"));
-        lbj.saveShopStuff("invContents.ranged.invContents.back", "&aIr Atrás", Collections.singletonList(""));
-
-        lbj.saveShopStuff("invContents.tools.invContents.shears", "&aTijeras permanentes", Arrays.asList("&8Objetos:", "&8▪ &7Tijeras permanentes", "", "&8Precio: &f{cost} {currency}"));
-        lbj.saveShopStuff("invContents.tools.invContents.pick", "&aPico de Madera", Arrays.asList("&8Objetos:", "&8▪ &7Pico de Madera", "", "&8Precio: &f{cost} {currency}"));
-        lbj.saveShopStuff("invContents.tools.invContents.axe", "&aHacha de Madera", Arrays.asList("&8Objetos:", "&8▪ &7Hacha de Madera", "", "&8Precio: &f{cost} {currency}"));
-        lbj.saveShopStuff("invContents.tools.invContents.back", "&aIr Atrás", Collections.singletonList(""));
-
-        lbj.saveShopStuff("invContents.potions.invContents.potion1", "&aVelocidad II", Arrays.asList("&8Objetos:", "&8▪ &7Velocidad II", "", "&8Precio: &2{cost} {currency}"));
-        lbj.saveShopStuff("invContents.potions.invContents.potion2", "&aSalto V", Arrays.asList("&8Objetos:", "&8▪ &7Salto V", "", "&8Precio: &2{cost} {currency}"));
-        lbj.saveShopStuff("invContents.potions.invContents.potion3", "&aInvisibilidad", Arrays.asList("&8Objetos:", "&8▪ &7Invisibilidad", "", "&8Precio: &2{cost} {currency}"));
-        lbj.saveShopStuff("invContents.potions.invContents.back", "&aIr Atrás", Collections.singletonList(""));
-
-        lbj.saveShopStuff("invContents.utility.invContents.apple", "&aManzana Dorada", Arrays.asList("&8Objetos:", "&8▪ &7Manzana Dorada", "", "&8Precio: &6{cost} {currency}"));
-        lbj.saveShopStuff("invContents.utility.invContents.sball", "&aBedbug", Arrays.asList("&8Objetos:", "&8▪ &7Bedbug", "", "&8Precio: &f{cost} {currency}", "", "&7Moderadamente molestos. Estos", "&7pequeños bichos pueden ser lanzados", "&7para distraer enemigos."));
-        lbj.saveShopStuff("invContents.utility.invContents.monsteregg", "&aDefensor de sueños", Arrays.asList("&8Objetos:", "&8▪ &7Defensor de sueños", "", "&8Precio: &f{cost} {currency}", "", "&7Moderadamente motivado.", "&7Algunas veces defendera", "&7tú base."));
-        lbj.saveShopStuff("invContents.utility.invContents.fireball", "&aBola de Fuego", Arrays.asList("&8Objetos:", "&8▪ &7Bola de Fuego", "", "&8Precio: &f{cost} {currency}", "", "&7Click-Derecho para lanzar!"));
-        lbj.saveShopStuff("invContents.utility.invContents.tnt", "&aTNT", Arrays.asList("&8Objetos:", "&8▪ &7TNT", "", "&8Precio: &6{cost} {currency}", "", "&7Enciende automáticamente, util", "&7para explotar cosas!"));
-        lbj.saveShopStuff("invContents.utility.invContents.enderpearl", "&aEnder Pearl", Arrays.asList("&8Objetos:", "", "&8Ender Pearl", "&8▪ &8Precio: &2{cost} {currency}", "", "&7Útil para evadir o atacar", "&7bases enemigas."));
-        lbj.saveShopStuff("invContents.utility.invContents.bucket", "&aCubo de Agua", Arrays.asList("&8Objetos:", "&8▪ &7Cubo de Agua", "", "&8Precio: &2{cost} {currency}"));
-        lbj.saveShopStuff("invContents.utility.invContents.eggBridge", "&aBridge Egg", Arrays.asList("&8Objetos:", "&8▪ &7Bridge Egg", "", "&8Precio: &2{cost} {currency}", "&7Este huevo creara un puente", "&7en la direccion al cual lo lanzes."));
-        lbj.saveShopStuff("invContents.utility.invContents.back", "&aIr Atrás", Collections.singletonList(""));
 
         yml.addDefault(Messages.MEANING_FULL, "Full");
         yml.addDefault(Messages.MEANING_IRON_SINGULAR, "Hierro");
@@ -197,8 +143,6 @@ public class Spanish {
         yml.addDefault(Messages.MEANING_VAULT_SINGULAR, "$");
         yml.addDefault(Messages.MEANING_VAULT_PLURAL, "$");
 
-        yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "{prefix}&cNo tienes suficiente material de {currency}");
-        yml.addDefault(Messages.SHOP_NEW_PURCHASE, "{prefix}&aHas comprado &6{item}.");
         yml.addDefault(Messages.COMMAND_JOIN_USAGE, "§a▪ §7Usa: /" + mainCmd + " join §o<arena/grupo>");
         yml.addDefault(Messages.COMMAND_NOT_ALLOWED_IN_GAME, "{prefix}&cNo tienes permisos para hacer esto.");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY, "&aClick para comprar!");
@@ -228,8 +172,6 @@ public class Spanish {
         yml.addDefault(Messages.TRAP_ENEMY_BASE_ENTER_SUBTITLE, "&fAlguien cayó en tu trampa!");
         yml.addDefault(Messages.TRAP_ENEMY_BASE_ENTER_TITLE, "&cTRAMPA ACTIVADA!");
         yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a{player} ha comprado &6{upgradeName}");
-        yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "{TeamColor}&l{TeamName} &r{TeamColor}Silverfish");
-        yml.addDefault(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME, "{TeamColor}{despawn}s &8[ {TeamColor}{health}&8]");
         yml.addDefault(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH, "▮ ");
         yml.addDefault(Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR, "{PlayerColor}{PlayerName} &7murió.");
         yml.addDefault(Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL, "{PlayerColor}{PlayerName} &7murió. &b&lMUERTE FINAL!");
@@ -263,7 +205,7 @@ public class Spanish {
 
         yml.addDefault(Messages.MEANING_NEVER, "Nunca");
         yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&7{date}", "&fNombre: &a{player}", "", "&6Victorias: &a{wins}", "&6Derrotas: &a{losses}", "&6Asesinatos: &a{kills}", "&6Muertes: &a{deaths}"
-                , "&fAsesinatos Finales: &a{fKills}", "&fCamas Destruidas: &a{beds}", "", "&fConectados: &a{on}", "&eandrei1058.com"));
+                , "&fAsesinatos Finales: &a{fKills}", "&fCamas Destruidas: &a{beds}", "", "&fConectados: &a{on}", "&e{server_ip}"));
 
         /* party commands */
         yml.addDefault(Messages.COMMAND_PARTY_HELP, Arrays.asList("&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
@@ -316,43 +258,124 @@ public class Spanish {
         yml.addDefault(Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_SUBTITLE, "&cSHIFT para salir");
         yml.addDefault(Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE, "&eSalir del Modo Espectador");
         yml.addDefault(Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE, "");
-        yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "{prefix}&cYa has comprado eso!");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE, "{prefix}&7{player} &eno está conectado!");
         yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG, "&cLos espectadores no están permitidos en esta arena!");
         yml.addDefault(Messages.ARENA_LEAVE_PARTY_DISBANDED, "{prefix}§cThe party owner has left and the party was disbanded!");
 
+
+        //shop
+        yml.addDefault(Messages.SHOP_INDEX_NAME, "&8Quick Buy");
+        yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "{prefix}&cYou don't have enough {currency}! Need {amount} more!");
+        yml.addDefault(Messages.SHOP_NEW_PURCHASE, "{prefix}&aYou purchased &6{item}");
+        yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "{prefix}&cYou've already bought that!");
+        yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "{TeamColor}&l{TeamName} &r{TeamColor}Silverfish");
+        yml.addDefault(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME, "{TeamColor}{despawn}s &8[ {TeamColor}{health}&8]");
+        yml.addDefault(Messages.SHOP_SEPARATOR_NAME, "&8⇧ Categories");
+        yml.addDefault(Messages.SHOP_SEPARATOR_LORE, Collections.singletonList("&8⇩ Items"));
+        yml.addDefault(Messages.SHOP_QUICK_BUY_NAME, "&bQuick Buy");
+        yml.addDefault(Messages.SHOP_QUICK_BUY_LORE, new ArrayList<>());
+        yml.addDefault(Messages.SHOP_QUICK_EMPTY_NAME, "&cEmpty slot!");
+        yml.addDefault(Messages.SHOP_QUICK_EMPTY_LORE, Arrays.asList("&7This is a Quick Buy Slot!", "&bSneak Click &7any item in", "&7the shop to add it here."));
+        yml.addDefault(Messages.SHOP_CAN_BUY_COLOR, "&a");
+        yml.addDefault(Messages.SHOP_CANT_BUY_COLOR, "&c");
+        yml.addDefault(Messages.SHOP_LORE_STATUS_CAN_BUY, "&eClick to purchase!");
+        yml.addDefault(Messages.SHOP_LORE_STATUS_CANT_AFFORD, "&cYou don't have enough {currency}!");
+        yml.addDefault(Messages.SHOP_LORE_STATUS_MAXED, "&aMAXED!");
+        yml.addDefault(Messages.SHOP_LORE_QUICK_ADD, "&bSneak Click to add to Quick Buy");
+        yml.addDefault(Messages.SHOP_LORE_QUICK_REMOVE, "&bSneak Click to remove from Quick Buy!");
+
+
+        addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "&8Blocks", "&aBlocks", Collections.singletonList("&eClick to view!"));
+
+        addContentMessages(yml, "wool", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Wool", Arrays.asList("&7Cost: &f{cost} {currency}", "", "&7Great for bridging across", "&7islands. Turns into your team's",
+                "&7color.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "clay", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Hardened Clay", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Basic block to defend your bed.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "glass", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Blast-Proof Glass", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Immune to explosions.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "stone", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}End Stone", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Solid block to defend your bed.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "ladder", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Ladder", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Useful to save cats stuck in", "&7trees.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "obsidian", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Obsidian", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Extreme protection for your bed.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "wood", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Wood", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Solid block to defend your bed", "", "{quick_buy}", "{buy_status}"));
+
+        addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_MELEE, "&8Melee", "&aMelee", Collections.singletonList("&eClick to view!"));
+
+        addContentMessages(yml, "stone-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "{color}Stone Sword", Arrays.asList("&7Cost: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "iron-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "{color}Iron Sword", Arrays.asList("&7Cost: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "diamond-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "{color}Diamond Sword", Arrays.asList("&7Cost: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "stick", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "{color}Stick (KnockBack I)", Arrays.asList("&7Cost: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+
+        addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "&8Armor", "&aArmor", Collections.singletonList("&eClick to view!"));
+
+        addContentMessages(yml, "chainmail", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "{color}Permanent Chainmail Armor", Arrays.asList("&7Cost: {cost} {currency}",
+                "", "&7Chainmail leggings and boots", "&7which you will always spawn", "&7with.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "iron-armor", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "{color}Permanent Iron Armor", Arrays.asList("&7Cost: {cost} {currency}",
+                "", "&7Iron leggings and boots which", "&7you will always spawn with.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "diamond-armor", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "{color}Permanent Diamond Armor", Arrays.asList("&7Cost: {cost} {currency}",
+                "", "&7Diamond leggings and boots which", "&7you will always crush with.", "", "{quick_buy}", "{buy_status}"));
+
+        addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "&8Tools", "&aTools", Collections.singletonList("&eClick to view!"));
+
+        addContentMessages(yml, "shears", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "{color}Permanent Shears", Arrays.asList("&7Cost: {cost} {currency}",
+                "", "&7Great to get rid of wool. You", "&7will always spawn with these shears.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "pickaxe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "{color}Pickaxe {tier}", Arrays.asList("&7Cost: {cost} {currency}", "&7Tier: &e{tier}",
+                "", "&7This is an upgradable item.", "&7It will lose 1 tier upon.", "&7death!", "", "&7You will permanently", "&7respawn with at least the", "&7lowest tier.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "axe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "{color}Axe {tier}", Arrays.asList("&7Cost: {cost} {currency}", "&7Tier: &e{tier}",
+                "", "&7This is an upgradable item.", "&7It will lose 1 tier upon.", "&7death!", "", "&7You will permanently", "&7respawn with at least the", "&7lowest tier.", "", "{quick_buy}", "{buy_status}"));
+
+        addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_RANGED, "&8Ranged", "&aRanged", Collections.singletonList("&eClick to view!"));
+
+        addContentMessages(yml, "arrow", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "{color}Arrow", Arrays.asList("&7Cost: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "bow1", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "{color}Bow", Arrays.asList("&7Cost: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "bow2", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "{color}Bow (Power I)", Arrays.asList("&7Cost: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "bow3", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "{color}Bow (Power I, Punch I)", Arrays.asList("&7Cost: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+
+        addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "&8Potions", "&aPotions", Collections.singletonList("&eClick to view!"));
+
+        addContentMessages(yml, "speed-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "{color}Speed II Potion (45 seconds)", Arrays.asList("&7Cost: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "jump-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "{color}Jump V Potion (45 seconds)", Arrays.asList("&7Cost: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "invisibility", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "{color}Invisibility Potion (30 seconds)", Arrays.asList("&7Cost: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+
+        addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "&8Utility", "&aUtility", Collections.singletonList("&eClick to view!"));
+
+        addContentMessages(yml, "golden-apple", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Golden Apple", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Well-rounded healing.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "bedbug", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}BedBug", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Spawns silverfish where the",
+                "&7snowball lands to distract your", "&7enemies. Lasts 15 seconds.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "dream-defender", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Dream Defender", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Iron Golem to help defend your",
+                "&7base. Lasts 4 minutes.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "fireball", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Fireball", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Right-click to launch! Great to",
+                "&7knock back enemies walking on", "&7thin bridges", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "tnt", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}TNT", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Instantly ignites, appropriate",
+                "&7to explode things!", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "ender-pearl", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Ender Pearl", Arrays.asList("&7Cost: {cost} {currency}", "", "&7The quickest way to invade enemy",
+                "&7bases.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "water-bucket", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Water Bucket", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Great to slow down approaching",
+                "&7enemies. Can also protect", "against TNT.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "bridge-egg", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Bridge Egg", Arrays.asList("&7Cost: {cost} {currency}", "", "&7This egg creates a bridge in its",
+                "&7trial after being thrown.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "magic-milk", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Magic Milk", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Avoid triggering traps for 60",
+                "&7seconds after consuming.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "sponge", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Sponge", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Great for soaking up water.",
+                "", "{quick_buy}", "{buy_status}"));
+
+
+
+
         /* Lobby Command Items */
-        if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH + ".stats") != null) {
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "stats"), "&lEstadistícas");
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "stats"), Arrays.asList("&7Utiliza este objeto para", "&7ver tus estadísticas."));
-        }
-        if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH + ".arena-selector") != null) {
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "arena-selector"), "&eJugar");
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "arena-selector"), Arrays.asList("&7Utiliza este objeto para", "&7seleccionar tu arena y jugar"));
-        }
-        if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH + ".leave") != null) {
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "leave"), "&c&lSalir");
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "leave"), Arrays.asList("&7Utiliza este objeto para", "&7regresar al lobby."));
-        }
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "stats"), "&lEstadistícas");
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "stats"), Arrays.asList("&7Utiliza este objeto para", "&7ver tus estadísticas."));
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "arena-selector"), "&eJugar");
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "arena-selector"), Arrays.asList("&7Utiliza este objeto para", "&7seleccionar tu arena y jugar"));
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "leave"), "&c&lSalir");
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "leave"), Arrays.asList("&7Utiliza este objeto para", "&7regresar al lobby."));
         /* Pre Game Command Items */
-        if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH + ".stats") != null) {
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", "stats"), "&lEstadistícas");
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", "stats"), Arrays.asList("&7Utiliza este objeto para", "&7ver tus estadísticas."));
-        }
-        if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH + ".leave") != null) {
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", "leave"), "&c&lSalir");
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", "leave"), Arrays.asList("&7Utiliza este objeto para", "&7regresar al lobby."));
-        }
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", "stats"), "&lEstadistícas");
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", "stats"), Arrays.asList("&7Utiliza este objeto para", "&7ver tus estadísticas."));
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", "leave"), "&c&lSalir");
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", "leave"), Arrays.asList("&7Utiliza este objeto para", "&7regresar al lobby."));
         /* Spectator Command Items */
-        if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH + ".teleporter") != null) {
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", "teleporter"), "&eTeletransportarse");
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", "teleporter"), Arrays.asList("&7Utiliza este objeto para", "&7transportarte a usuarios."));
-        }
-        if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH + ".leave") != null) {
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", "leave"), "&c&lSalir");
-            yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", "leave"), Arrays.asList("&7Utiliza este objeto para", "&7regresar al lobby."));
-        }
-        Language.addDefaultMessagesCommandItems(lbj);
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", "teleporter"), "&eTeletransportarse");
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", "teleporter"), Arrays.asList("&7Utiliza este objeto para", "&7transportarte a usuarios."));
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", "leave"), "&c&lSalir");
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", "leave"), Arrays.asList("&7Utiliza este objeto para", "&7regresar al lobby."));
 
         yml.addDefault(Messages.COMMAND_COOLDOWN, "&cNo puedes hacer eso aún! Espera {seconds} segundos más!");
         yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_TEAM, "{TeamColor}[{TeamName}]");

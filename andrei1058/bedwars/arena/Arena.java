@@ -6,8 +6,8 @@ import com.andrei1058.bedwars.api.events.PlayerLeaveArenaEvent;
 import com.andrei1058.bedwars.api.events.PlayerReJoinEvent;
 import com.andrei1058.bedwars.configuration.ConfigManager;
 import com.andrei1058.bedwars.configuration.ConfigPath;
-import com.andrei1058.bedwars.configuration.Language;
-import com.andrei1058.bedwars.configuration.language.Messages;
+import com.andrei1058.bedwars.language.Language;
+import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.support.nte.NametagEdit;
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.upgrades.BaseListener.isOnABase;
-import static com.andrei1058.bedwars.configuration.Language.*;
+import static com.andrei1058.bedwars.language.Language.*;
 
 public class Arena {
     private static HashMap<String, Arena> arenaByName = new HashMap<>();

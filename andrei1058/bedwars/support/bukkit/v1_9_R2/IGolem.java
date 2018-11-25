@@ -3,7 +3,7 @@ package com.andrei1058.bedwars.support.bukkit.v1_9_R2;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.configuration.ConfigPath;
-import com.andrei1058.bedwars.configuration.language.Messages;
+import com.andrei1058.bedwars.language.Messages;
 import net.minecraft.server.v1_9_R2.*;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Location;
