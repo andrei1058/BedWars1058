@@ -8,6 +8,7 @@ import com.andrei1058.bedwars.arena.despawnables.TargetListener;
 import com.andrei1058.bedwars.commands.party.PartyCommand;
 import com.andrei1058.bedwars.commands.rejoin.RejoinCommand;
 import com.andrei1058.bedwars.commands.shout.ShoutCommand;
+import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.listeners.EntityDropPickListener;
 import com.andrei1058.bedwars.listeners.PlayerDropPickListener;
 import com.andrei1058.bedwars.arena.spectator.SpectatorListeners;
@@ -18,6 +19,7 @@ import com.andrei1058.bedwars.configuration.*;
 import com.andrei1058.bedwars.listeners.*;
 import com.andrei1058.bedwars.listeners.arenaselector.ArenaSelectorListener;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
+import com.andrei1058.bedwars.shop.ShopManager;
 import com.andrei1058.bedwars.support.Metrics;
 import com.andrei1058.bedwars.support.bukkit.*;
 import com.andrei1058.bedwars.support.bukkit.v1_10_R1.v1_10_R1;
@@ -37,7 +39,6 @@ import com.andrei1058.bedwars.support.levels.Level;
 import com.andrei1058.bedwars.support.levels.NoLevel;
 import com.andrei1058.bedwars.support.papi.PAPISupport;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
-import com.andrei1058.bedwars.support.party.NoParty;
 import com.andrei1058.bedwars.support.party.Party;
 import com.andrei1058.bedwars.support.party.Parties;
 import com.andrei1058.bedwars.support.stats.MySQL;
@@ -56,7 +57,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.util.*;
 
-import static com.andrei1058.bedwars.configuration.Language.setupLang;
+import static com.andrei1058.bedwars.language.Language.setupLang;
 
 public class Main extends JavaPlugin {
 
@@ -70,7 +71,7 @@ public class Main extends JavaPlugin {
     public static Main plugin;
     public static NMS nms;
     private static Lang langSupport;
-    private static Party party = new NoParty();
+    private static Party party = null;
     private static Chat chat;
     private static Level level;
     private static Economy economy;
@@ -81,6 +82,17 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onLoad() {
+
+        //Spigot support
+        try {
+            Bukkit.getServer().spigot();
+        } catch (Exception ex){
+            this.getLogger().severe("I can't run on your server software. Please check:");
+            this.getLogger().severe("https://gitlab.com/andrei1058/BedWars1058/wikis/compatibility");
+            this.setEnabled(false);
+            return;
+        }
+
         plugin = this;
 
         /* Load version support 1.8 - 1.12 */
@@ -281,10 +293,6 @@ public class Main extends JavaPlugin {
         /* Register NMS entities */
         nms.registerEntities();
 
-        /* Setup shop */
-        shop = new ShopManager("shop", "plugins/" + this.getName());
-        shop.loadShop();
-
         /* Check for updates */
         Misc.checkUpdate();
 
@@ -351,18 +359,19 @@ public class Main extends JavaPlugin {
             p.kickPlayer("BedWars1058 was RELOADED! (never reload plugins. noob staff)");
         }
 
-        /* NametagEdit by sgtcaze, Cory support*/
-        /*if (this.getServer().getPluginManager().getPlugin("NametagEdit") != null) {
-            getLogger().info("Hook into NametagEdit support.");
-            NametagEdit.setNteSupport(true);
-        }*/
-
         /* Load sounds configuration */
         new Sounds();
 
         /* LeaderHeads Support */
         LeaderHeadsSupport.initLeaderHeads();
 
+        /* Initialize shop */
+        shop = new ShopManager();
+        //Leave this code at the end of the enable method
+        for (Language l : Language.getLanguages()) {
+            l.setupUnSetCategories();
+            Language.addDefaultMessagesCommandItems(l);
+        }
     }
 
     public void onDisable() {
@@ -397,6 +406,7 @@ public class Main extends JavaPlugin {
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DRAGON_SPAWN_COUNTDOWN, 600);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_GAME_END_COUNTDOWN, 120);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SHOUT_COOLDOWN, 30);
+        yml.addDefault(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP, "yourSerer.Com");
 
         yml.addDefault("database.enable", false);
         yml.addDefault("database.host", "localhost");
@@ -460,20 +470,20 @@ public class Main extends JavaPlugin {
         //remove old config
         //Convert old configuration
 
-        if (yml.get("arenaGui.settings.showPlaying") != null){
+        if (yml.get("arenaGui.settings.showPlaying") != null) {
             config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SHOW_PLAYING, yml.getBoolean("arenaGui.settings.showPlaying"));
         }
-        if (yml.get("arenaGui.settings.size") != null){
+        if (yml.get("arenaGui.settings.size") != null) {
             config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SIZE, yml.getInt("arenaGui.settings.size"));
         }
-        if (yml.get("arenaGui.settings.useSlots") != null){
+        if (yml.get("arenaGui.settings.useSlots") != null) {
             config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_USE_SLOTS, yml.getString("arenaGui.settings.useSlots"));
         }
         if (config.getYml().get("arenaGui") != null) {
             for (String path : config.getYml().getConfigurationSection("arenaGui").getKeys(false)) {
                 if (path.equalsIgnoreCase("settings")) continue;
                 String new_path = path;
-                switch (path){
+                switch (path) {
                     case "skippedSlot":
                         new_path = "skipped-slot";
                         break;
@@ -501,7 +511,7 @@ public class Main extends JavaPlugin {
         if (config.getYml().get("statsGUI") != null) {
             for (String stats_path : config.getYml().getConfigurationSection("statsGUI").getKeys(false)) {
                 String new_path = stats_path;
-                switch (stats_path){
+                switch (stats_path) {
                     case "gamesPlayed":
                         new_path = "games-played";
                         break;

@@ -2,9 +2,8 @@ package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.ServerType;
-import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.configuration.ConfigPath;
-import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.exceptions.InvalidMaterialException;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.google.common.io.ByteArrayDataOutput;
@@ -14,7 +13,6 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
@@ -40,8 +38,8 @@ import java.util.Properties;
 import java.util.Random;
 
 import static com.andrei1058.bedwars.Main.*;
-import static com.andrei1058.bedwars.configuration.Language.getList;
-import static com.andrei1058.bedwars.configuration.Language.getMsg;
+import static com.andrei1058.bedwars.language.Language.getList;
+import static com.andrei1058.bedwars.language.Language.getMsg;
 
 public class Misc {
 
@@ -98,6 +96,20 @@ public class Misc {
                 .withTrail().withColor(colors[r.nextInt(colors.length - 1)]).with(FireworkEffect.Type.BALL_LARGE).build());
         fw.setFireworkMeta(meta);
         fw.setVelocity(p.getEyeLocation().getDirection());
+    }
+
+
+    public static void launchFirework(@NotNull Location l) {
+        Color[] colors = {Color.WHITE, Color.AQUA, Color.BLUE, Color.FUCHSIA, Color.GRAY, Color.GREEN, Color.LIME, Color.RED,
+                Color.YELLOW, Color.BLACK, Color.MAROON, Color.NAVY, Color.OLIVE, Color.ORANGE, Color.PURPLE};
+        Random r = new Random();
+        Firework fw = l.getWorld().spawn(l, Firework.class);
+        FireworkMeta meta = fw.getFireworkMeta();
+        meta.setPower(1);
+        meta.addEffect(FireworkEffect.builder()
+                .withFade(colors[r.nextInt(colors.length - 1)])
+                .withTrail().withColor(colors[r.nextInt(colors.length - 1)]).with(FireworkEffect.Type.BALL_LARGE).build());
+        fw.setFireworkMeta(meta);
     }
 
     public static String replaceFirst(String text, String regex, String replacement) {

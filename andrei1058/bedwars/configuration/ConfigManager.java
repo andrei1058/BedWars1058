@@ -231,4 +231,8 @@ public class ConfigManager {
             save();
         }
     }
+
+    public void setFirstTime(boolean firstTime) {
+        this.firstTime = firstTime;
+    }
 }

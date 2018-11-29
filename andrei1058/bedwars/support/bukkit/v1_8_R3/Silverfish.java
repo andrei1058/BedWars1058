@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.support.bukkit.v1_8_R3;
 
 import com.andrei1058.bedwars.arena.BedWarsTeam;
+import com.andrei1058.bedwars.configuration.ConfigPath;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
@@ -55,9 +56,9 @@ public class Silverfish extends EntitySilverfish {
 
     protected void initAttributes() {
         super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.maxHealth).setValue(shop.getYml().getDouble("utilities.silverfish.health"));
-        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(shop.getYml().getDouble("utilities.silverfish.speed"));
-        this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(shop.getYml().getDouble("utilities.silverfish.damage"));
+        this.getAttributeInstance(GenericAttributes.maxHealth).setValue(shop.getYml().getDouble(ConfigPath.SHOP_SPECIAL_SILVERFISH_HEALTH));
+        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(shop.getYml().getDouble(ConfigPath.SHOP_SPECIAL_SILVERFISH_SPEED));
+        this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(shop.getYml().getDouble(ConfigPath.SHOP_SPECIAL_SILVERFISH_DAMAGE));
     }
 
     static class PathfinderGoalSilverfishHideInBlock extends PathfinderGoalRandomStroll {

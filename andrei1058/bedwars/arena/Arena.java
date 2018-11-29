@@ -6,11 +6,10 @@ import com.andrei1058.bedwars.api.events.PlayerLeaveArenaEvent;
 import com.andrei1058.bedwars.api.events.PlayerReJoinEvent;
 import com.andrei1058.bedwars.configuration.ConfigManager;
 import com.andrei1058.bedwars.configuration.ConfigPath;
-import com.andrei1058.bedwars.configuration.Language;
-import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.language.Language;
+import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
-import com.andrei1058.bedwars.support.nte.NametagEdit;
 import com.andrei1058.bedwars.tasks.GamePlayingTask;
 import com.andrei1058.bedwars.tasks.GameRestartingTask;
 import com.andrei1058.bedwars.tasks.GameStartingTask;
@@ -35,7 +34,7 @@ import java.util.stream.Collectors;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.upgrades.BaseListener.isOnABase;
-import static com.andrei1058.bedwars.configuration.Language.*;
+import static com.andrei1058.bedwars.language.Language.*;
 
 public class Arena {
     private static HashMap<String, Arena> arenaByName = new HashMap<>();
@@ -296,9 +295,6 @@ public class Arena {
             //Remove from ReJoin
             if (ReJoin.exists(p)) ReJoin.getPlayer(p).destroy();
 
-            /* NametagEdit Support */
-            NametagEdit.saveNametag(p);
-
             p.closeInventory();
             players.add(p);
             for (Player on : players) {
@@ -369,9 +365,6 @@ public class Arena {
 
             //Remove from ReJoin
             if (ReJoin.exists(p)) ReJoin.getPlayer(p).destroy();
-
-            /* NametagEdit Support */
-            NametagEdit.saveNametag(p);
 
             p.closeInventory();
             if (!playerBefore) {
@@ -588,17 +581,14 @@ public class Arena {
             if (!disconnect) Misc.giveLobbySb(p);
         }, 5L);
 
-        /* NametagEdit Support */
-        NametagEdit.restoreNametag(p);
-
         /* Remove also the party */
         if (getParty().hasParty(p)) {
             if (getParty().isOwner(p)) {
                 if (status != GameState.restarting) {
-                    getParty().disband(p);
-                    for (Player mem : getParty().getMembers(p)) {
+                    for (Player mem : new ArrayList<>(getParty().getMembers(p))) {
                         mem.sendMessage(getMsg(mem, Messages.ARENA_LEAVE_PARTY_DISBANDED));
                     }
+                    getParty().disband(p);
                 }
             }
         }
@@ -709,16 +699,14 @@ public class Arena {
         if (getParty().hasParty(p)) {
             if (getParty().isOwner(p)) {
                 if (status != GameState.restarting) {
-                    getParty().disband(p);
-                    for (Player mem : getParty().getMembers(p)) {
+                    for (Player mem : new ArrayList<>(getParty().getMembers(p))) {
                         mem.sendMessage(getMsg(mem, Messages.ARENA_LEAVE_PARTY_DISBANDED));
                     }
+                    getParty().disband(p);
                 }
             }
         }
 
-        /* NameTagEdit Support */
-        NametagEdit.restoreNametag(p);
         p.setFlying(false);
         p.setAllowFlight(false);
 

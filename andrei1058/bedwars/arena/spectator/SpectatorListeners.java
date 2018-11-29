@@ -2,7 +2,7 @@ package com.andrei1058.bedwars.arena.spectator;
 
 import com.andrei1058.bedwars.api.events.SpectatorTeleportToPlayerEvent;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.language.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -24,7 +24,7 @@ import org.bukkit.projectiles.ProjectileSource;
 import java.util.ArrayList;
 
 import static com.andrei1058.bedwars.Main.nms;
-import static com.andrei1058.bedwars.configuration.Language.getMsg;
+import static com.andrei1058.bedwars.language.Language.getMsg;
 
 public class SpectatorListeners implements Listener {
 

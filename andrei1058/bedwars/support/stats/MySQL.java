@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.support.stats;
 
+import com.andrei1058.bedwars.Main;
 import org.bukkit.entity.Player;
 
 import java.sql.*;
@@ -8,6 +9,7 @@ import java.util.UUID;
 
 import static com.andrei1058.bedwars.Main.config;
 import static com.andrei1058.bedwars.Main.plugin;
+import static com.andrei1058.bedwars.Main.shop;
 
 public class MySQL implements Database {
 
@@ -75,6 +77,11 @@ public class MySQL implements Database {
                     "name VARCHAR(200), uuid VARCHAR(200), first_play TIMESTAMP NULL DEFAULT NULL, " +
                     "last_play TIMESTAMP NULL DEFAULT NULL, wins INT(200), kills INT(200), " +
                     "final_kills INT(200), looses INT(200), deaths INT(200), final_deaths INT(200), beds_destroyed INT(200), games_played INT(200));");
+            connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS quick_buy (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, uuid VARCHAR(200), " +
+                    "slot_19 VARCHAR(200), slot_20 VARCHAR(200), slot_21 VARCHAR(200), slot_22 VARCHAR(200), slot_23 VARCHAR(200), slot_24 VARCHAR(200), slot_25 VARCHAR(200)," +
+                    "slot_28 VARCHAR(200), slot_29 VARCHAR(200), slot_30 VARCHAR(200), slot_31 VARCHAR(200), slot_32 VARCHAR(200), slot_33 VARCHAR(200), slot_34 VARCHAR(200)," +
+                    "slot_37 VARCHAR(200), slot_38 VARCHAR(200), slot_39 VARCHAR(200), slot_40 VARCHAR(200), slot_41 VARCHAR(200), slot_42 VARCHAR(200), slot_43 VARCHAR(200));");
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -373,6 +380,47 @@ public class MySQL implements Database {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public void setQuickBuySlot(UUID p, String shopPath, int slot) {
+        if (!isConnected()) connect();
+        try {
+            ResultSet rs = connection.prepareStatement("SELECT id FROM quick_buy WHERE uuid = '" + p.toString() + "';").executeQuery();
+            if (!rs.next()) {
+                connection.prepareStatement("INSERT INTO quick_buy VALUES(0,'" + p.toString() + "',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ');").executeUpdate();
+            }
+            Main.debug("UPDATE SET SLOT " + slot + " identifier " + shopPath);
+            connection.prepareStatement("UPDATE quick_buy SET slot_" + slot + " = '" + shopPath + "' WHERE uuid = '" + p.toString() + "';").executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
+    @Override
+    public String getQuickBuySlots(UUID p, int slot) {
+        String result = "";
+        if (!isConnected()) connect();
+        try {
+            ResultSet rs = connection.prepareStatement("SELECT slot_" + slot + " FROM quick_buy WHERE uuid = '" + p.toString() + "';").executeQuery();
+            if (rs.next()) result = rs.getString("slot_" + slot);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
+    @Override
+    public boolean hasQuickBuy(UUID uuid) {
+        if (!isConnected()) connect();
+        try {
+            ResultSet rs = connection.prepareStatement("SELECT id FROM quick_buy WHERE uuid = '" + uuid.toString() + "';").executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public boolean isPlayerSet(Player p) {

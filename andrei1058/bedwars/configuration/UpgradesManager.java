@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.Main.plugin;
-import static com.andrei1058.bedwars.configuration.Language.saveIfNotExists;
+import static com.andrei1058.bedwars.language.Language.saveIfNotExists;
 
 public class UpgradesManager {
 

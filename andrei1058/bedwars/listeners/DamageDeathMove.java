@@ -5,8 +5,8 @@ import com.andrei1058.bedwars.api.*;
 import com.andrei1058.bedwars.api.events.PlayerKillEvent;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.configuration.ConfigPath;
-import com.andrei1058.bedwars.configuration.Language;
-import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.language.Language;
+import com.andrei1058.bedwars.language.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -21,11 +21,9 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 
-import java.util.Arrays;
-
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.LastHit.getLastHit;
-import static com.andrei1058.bedwars.configuration.Language.getMsg;
+import static com.andrei1058.bedwars.language.Language.getMsg;
 
 public class DamageDeathMove implements Listener {
 
@@ -525,9 +523,7 @@ public class DamageDeathMove implements Listener {
                 }
                 String utility = "";
                 if (proj instanceof Snowball) {
-                    utility = getUtility(nms.materialSnowball());
-                } else if (proj instanceof Egg) {
-                    utility = getUtility(Material.EGG);
+                    utility = "silverfish";
                 }
                 if (!utility.isEmpty()) {
                     spawnUtility(utility, e.getEntity().getLocation(), a.getTeam((Player) e.getEntity().getShooter()), (Player) e.getEntity().getShooter());
@@ -555,8 +551,9 @@ public class DamageDeathMove implements Listener {
         }
     }
 
-    private static String getUtility(Material mat) {
+    /*private static String getUtility(Material mat) {
         for (String st : Arrays.asList("silverfish", "bridge")) {
+            if (shop.getYml().getBoolean(ConfigPath.SHOPSPECIALS))
             if (shop.getBoolean("utilities." + st + ".enable")) {
                 if (mat == Material.valueOf(shop.getYml().getString("utilities." + st + ".material"))) {
                     return st;
@@ -564,7 +561,7 @@ public class DamageDeathMove implements Listener {
             }
         }
         return "";
-    }
+    }*/
 
     private static void spawnUtility(String s, Location loc, BedWarsTeam t, Player p) {
         switch (s.toLowerCase()) {

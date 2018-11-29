@@ -9,7 +9,7 @@ import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.OreGenerator;
 import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.configuration.ConfigPath;
-import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.language.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -23,8 +23,8 @@ import java.util.List;
 
 import static com.andrei1058.bedwars.Main.getParty;
 import static com.andrei1058.bedwars.Main.nms;
-import static com.andrei1058.bedwars.configuration.Language.getList;
-import static com.andrei1058.bedwars.configuration.Language.getMsg;
+import static com.andrei1058.bedwars.language.Language.getList;
+import static com.andrei1058.bedwars.language.Language.getMsg;
 
 public class GameStartingTask extends BukkitRunnable {
 

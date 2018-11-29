@@ -1,12 +1,12 @@
 package com.andrei1058.bedwars.support.party;
 
-import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.language.Messages;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.andrei1058.bedwars.configuration.Language.getMsg;
+import static com.andrei1058.bedwars.language.Language.getMsg;
 
 public class Internal implements Party {
     private static List<Party> parites = new ArrayList<>();

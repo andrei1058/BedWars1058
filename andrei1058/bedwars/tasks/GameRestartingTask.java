@@ -43,11 +43,11 @@ public class GameRestartingTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        for (Player p : new ArrayList<>(getArena().getPlayers())) {
-            for (int i = 0; i < 2; i++) {
-                Misc.launchFirework(p);
-            }
+
+        for (BedWarsTeam bwt : getArena().getTeams()){
+            Misc.launchFirework(bwt.getBed());
         }
+
         if (getArena().getPlayers().isEmpty() && restarting > 9) restarting = 9;
         restarting--;
         if (restarting == 8) {

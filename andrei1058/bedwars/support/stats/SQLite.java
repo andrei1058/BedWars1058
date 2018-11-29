@@ -102,6 +102,10 @@ public class SQLite implements Database {
             connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS global_stats (id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "name VARCHAR(200), uuid VARCHAR(200), first_play TIMESTAMP NULL DEFAULT NULL, last_play TIMESTAMP NULL DEFAULT NULL, wins INTEGER(200)," +
                     " kills INTEGER(200), final_kills INTEGER(200), looses INTEGER(200), deaths INTEGER(200), final_deaths INTEGER(200), beds_destroyed INTEGER(200), games_played INTEGER(200))");
+            connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS quick_buy (id INTEGER PRIMARY KEY AUTOINCREMENT, uuid VARCHAR(200), " +
+                    "slot_19 VARCHAR(200), slot_20 VARCHAR(200), slot_21 VARCHAR(200), slot_22 VARCHAR(200), slot_23 VARCHAR(200), slot_24 VARCHAR(200), slot_25 VARCHAR(200)," +
+                    "slot_28 VARCHAR(200), slot_29 VARCHAR(200), slot_30 VARCHAR(200), slot_31 VARCHAR(200), slot_32 VARCHAR(200), slot_33 VARCHAR(200), slot_34 VARCHAR(200)," +
+                    "slot_37 VARCHAR(200), slot_38 VARCHAR(200), slot_39 VARCHAR(200), slot_40 VARCHAR(200), slot_41 VARCHAR(200), slot_42 VARCHAR(200), slot_43 VARCHAR(200));");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -396,5 +400,44 @@ public class SQLite implements Database {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public void setQuickBuySlot(UUID p, String shopPath, int slot) {
+        if (!isConnected()) connect();
+        try {
+            ResultSet rs = connection.prepareStatement("SELECT id FROM quick_buy WHERE uuid = '" + p.toString() + "';").executeQuery();
+            if (!rs.next()) {
+                connection.prepareStatement("INSERT INTO quick_buy VALUES(NULL,'" + p.toString() + "',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ');").executeUpdate();
+            }
+            connection.prepareStatement("UPDATE quick_buy SET slot_" + slot + " = '" + shopPath + "' WHERE uuid = '" + p.toString() + "';");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public String getQuickBuySlots(UUID p, int slot) {
+        String result = "";
+        if (!isConnected()) connect();
+        try {
+            ResultSet rs = connection.prepareStatement("SELECT slot_" + slot + " FROM quick_buy WHERE uuid = '" + p.toString() + "';").executeQuery();
+            if (rs.next()) result = rs.getString("slot_" + slot);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
+    @Override
+    public boolean hasQuickBuy(UUID uuid) {
+        if (!isConnected()) connect();
+        try {
+            ResultSet rs = connection.prepareStatement("SELECT id FROM quick_buy WHERE uuid = '" + uuid.toString() + "';").executeQuery();
+            return rs.next();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
     }
 }

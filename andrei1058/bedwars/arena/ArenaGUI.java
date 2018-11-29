@@ -3,8 +3,8 @@ package com.andrei1058.bedwars.arena;
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.configuration.ConfigPath;
-import com.andrei1058.bedwars.configuration.Language;
-import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.language.Language;
+import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.listeners.arenaselector.ArenaSelectorListener;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
 
 import static com.andrei1058.bedwars.Main.config;
 import static com.andrei1058.bedwars.Main.nms;
-import static com.andrei1058.bedwars.configuration.Language.getList;
-import static com.andrei1058.bedwars.configuration.Language.getMsg;
+import static com.andrei1058.bedwars.language.Language.getList;
+import static com.andrei1058.bedwars.language.Language.getMsg;
 
 public class ArenaGUI {
 

@@ -1,9 +1,8 @@
 package com.andrei1058.bedwars.upgrades;
 
 import com.andrei1058.bedwars.arena.BedWarsTeam;
-import com.andrei1058.bedwars.configuration.Language;
-import com.andrei1058.bedwars.configuration.Messages;
-import org.bukkit.Bukkit;
+import com.andrei1058.bedwars.language.Language;
+import com.andrei1058.bedwars.language.Messages;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.andrei1058.bedwars.Main.*;
-import static com.andrei1058.bedwars.configuration.Language.*;
+import static com.andrei1058.bedwars.language.Language.*;
 
 public class UpgradeTier {
 

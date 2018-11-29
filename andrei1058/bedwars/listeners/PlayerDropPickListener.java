@@ -45,7 +45,13 @@ public class PlayerDropPickListener implements Listener {
             e.setCancelled(true);
             return;
         }
-        if (e.getItem().getItemStack().getType() == Material.BED) {
+
+        if (e.getItem().getItemStack().getType() == Material.ARROW){
+            e.getItem().setItemStack(Main.nms.createItemStack(e.getItem().getItemStack().getType().toString(), e.getItem().getItemStack().getAmount(), (short) 0));
+            return;
+        }
+
+        if (e.getItem().getItemStack().getType().toString().equals("BED")) {
             e.setCancelled(true);
             e.getItem().remove();
             return;
@@ -89,14 +95,6 @@ public class PlayerDropPickListener implements Listener {
         } else {
             ItemStack i = e.getItemDrop().getItemStack();
             if (i.getType() == Material.COMPASS) {
-                e.setCancelled(true);
-                return;
-            }
-
-            //Prevent from dropping permanent items
-            BedWarsTeam.PlayerVault pv = BedWarsTeam.getVault(e.getPlayer());
-            if (pv == null) return;
-            if (pv.getInvItems().contains(i)){
                 e.setCancelled(true);
                 return;
             }

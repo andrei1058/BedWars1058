@@ -4,8 +4,8 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
-import com.andrei1058.bedwars.configuration.Language;
-import com.andrei1058.bedwars.configuration.Messages;
+import com.andrei1058.bedwars.language.Language;
+import com.andrei1058.bedwars.language.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -16,7 +16,7 @@ import java.util.List;
 
 import static com.andrei1058.bedwars.Main.getLangSupport;
 import static com.andrei1058.bedwars.Main.plugin;
-import static com.andrei1058.bedwars.configuration.Language.getMsg;
+import static com.andrei1058.bedwars.language.Language.getMsg;
 
 public class CmdLang extends SubCommand {
     /**
@@ -41,12 +41,12 @@ public class CmdLang extends SubCommand {
         if (Arena.getArenaByPlayer(p) != null) return false;
         if (args.length == 0) {
             p.sendMessage(getMsg(p, Messages.COMMAND_LANG_LIST_HEADER));
-            for (com.andrei1058.bedwars.configuration.Language l : com.andrei1058.bedwars.configuration.Language.getLanguages()) {
+            for (Language l : Language.getLanguages()) {
                 p.sendMessage(getMsg(p, Messages.COMMAND_LANG_LIST_FORMAT).replace("{iso}", l.getIso()).replace("{name}", l.getLangName()));
             }
             p.sendMessage(getMsg(p, Messages.COMMAND_LANG_USAGE));
             return true;
-        } else if (com.andrei1058.bedwars.configuration.Language.isLanguageExist(args[0])) {
+        } else if (Language.isLanguageExist(args[0])) {
             if (Arena.getArenaByPlayer(p) == null) {
                 getLangSupport().setLang(p, args[0]);
                 Bukkit.getScheduler().runTaskLater(plugin, () -> p.sendMessage(getMsg(p, Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY)), 10L);
