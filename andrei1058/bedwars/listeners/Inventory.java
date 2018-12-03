@@ -38,12 +38,17 @@ public class Inventory implements Listener {
         if (i.getType() == Material.AIR) return;
 
         //Prevent moving of command items
-        if (!nms.isCustomBedWarsItem(i)) return;
-        String[] customData = nms.getCustomData(i).split("_");
-        if (customData.length >= 2) {
-            if (customData[0].equals("RUNCOMMAND")) {
+        if (nms.isCustomBedWarsItem(i)) {
+            if (e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY){
                 e.setCancelled(true);
                 return;
+            }
+            String[] customData = nms.getCustomData(i).split("_");
+            if (customData.length >= 2) {
+                if (customData[0].equals("RUNCOMMAND")) {
+                    e.setCancelled(true);
+                    return;
+                }
             }
         }
 
