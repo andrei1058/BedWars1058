@@ -593,9 +593,9 @@ public class v1_13_R2 implements NMS {
 
     @Override
     public org.bukkit.inventory.ItemStack setSkullOwner(org.bukkit.inventory.ItemStack i, Player p) {
-        if (i.getType() != org.bukkit.Material.SKULL_ITEM) return i;
+        if (i.getType() != org.bukkit.Material.valueOf("PLAYER_HEAD")) return i;
         SkullMeta sm = (SkullMeta) i.getItemMeta();
-        sm.setOwner(p.getName());
+        sm.setOwningPlayer(p);
         i.setItemMeta(sm);
         return i;
     }
