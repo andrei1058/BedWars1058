@@ -182,6 +182,7 @@ public class BuyItem {
                 if (itm == null) continue;
                 if (itm.getType() == Material.AIR) continue;
                 if (!Main.nms.isSword(itm)) continue;
+                if (itm == i) continue;
                 if (Main.nms.getDamage(itm) <= Main.nms.getDamage(i)) {
                     player.getInventory().remove(itm);
                 }
