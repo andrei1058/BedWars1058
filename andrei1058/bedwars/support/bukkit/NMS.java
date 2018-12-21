@@ -175,6 +175,9 @@ public interface NMS {
 
     /**
      * Show a player
+     * @param whoToShow this player will be shown for the second param
+     *
+     * For 1.13 is using - #showPlayer​(Plugin plugin, Player player)
      */
     void showPlayer(Player whoToShow, Player p);
 

@@ -531,8 +531,7 @@ public class v1_13_R2 implements NMS {
     @Override
     public void showPlayer(Player victim, Player p) {
         if (victim == p) return;
-        PacketPlayOutNamedEntitySpawn packet = new PacketPlayOutNamedEntitySpawn(((CraftPlayer) victim).getHandle());
-        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+        p.showPlayer(Main.plugin, victim);
     }
 
     @Override
