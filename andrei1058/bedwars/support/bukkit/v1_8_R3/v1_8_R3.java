@@ -488,6 +488,7 @@ public class v1_8_R3 implements NMS {
         ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void showPlayer(Player victim, Player p) {
         if (victim == p) return;
