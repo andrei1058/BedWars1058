@@ -338,12 +338,16 @@ public class ShopManager {
 
         //try materials
         try {
-            Material.valueOf(Main.shop.getYml().getString(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_MATERIAL));
+            String material = yml.getString(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_MATERIAL);
+            Main.debug(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_MATERIAL + " is set to: " + material);
+            Material.valueOf(material);
         } catch (Exception ex) {
             Main.plugin.getLogger().severe("Invalid material at " + ConfigPath.SHOP_SPECIAL_IRON_GOLEM_MATERIAL);
         }
         try {
-            Material.valueOf(Main.shop.getYml().getString(ConfigPath.SHOP_SPECIAL_SILVERFISH_MATERIAL));
+            String material = yml.getString(ConfigPath.SHOP_SPECIAL_SILVERFISH_MATERIAL);
+            Main.debug(ConfigPath.SHOP_SPECIAL_SILVERFISH_MATERIAL + " is set to: " + material);
+            Material.valueOf(material);
         } catch (Exception ex) {
             Main.plugin.getLogger().severe("Invalid material at " + ConfigPath.SHOP_SPECIAL_SILVERFISH_MATERIAL);
         }
