@@ -13,6 +13,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
 
@@ -65,12 +66,9 @@ public class JoinLeaveTeleport implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onJoin(PlayerJoinEvent e) {
-        Player p = e.getPlayer();
-        if (!lang.getIso().equalsIgnoreCase(getLangSupport().getLang(p))) {
-            Language.getLangByPlayer().put(p, Language.getLang(getLangSupport().getLang(p)));
-        }
+        final Player p = e.getPlayer();
         if (plugin.getServerType() != ServerType.BUNGEE) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 for (Player on : Bukkit.getOnlinePlayers()) {
@@ -81,6 +79,9 @@ public class JoinLeaveTeleport implements Listener {
                 }
 
             }, 14L);
+        }
+        if (!lang.getIso().equalsIgnoreCase(getLangSupport().getLang(p))) {
+            Language.getLangByPlayer().put(p, Language.getLang(getLangSupport().getLang(p)));
         }
         if (debug) {
             p.sendMessage("");

@@ -79,8 +79,6 @@ public class PartyCommand extends BukkitCommand {
                         p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_DENIED_NO_INVITE));
                         return true;
                     }
-                    Bukkit.broadcastMessage(partySessionRequest.get(Bukkit.getPlayer(args[1]).getUniqueId()).toString());
-                    Bukkit.broadcastMessage(p.getUniqueId().toString());
                     if (partySessionRequest.get(Bukkit.getPlayer(args[1]).getUniqueId()).toString().equalsIgnoreCase(p.getUniqueId().toString())){
                         partySessionRequest.remove(Bukkit.getPlayer(args[1]).getUniqueId());
                         if (getParty().hasParty(Bukkit.getPlayer(args[1]))){

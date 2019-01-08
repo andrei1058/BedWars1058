@@ -31,14 +31,12 @@ public class Silverfish extends EntitySilverfish {
             bField.set(this.targetSelector, Sets.newLinkedHashSet());
             cField.set(this.goalSelector, Sets.newLinkedHashSet());
             cField.set(this.targetSelector, Sets.newLinkedHashSet());
-        } catch (IllegalAccessException e1) {
-            e1.printStackTrace();
-        } catch (NoSuchFieldException e1) {
+        } catch (IllegalAccessException | NoSuchFieldException e1) {
             e1.printStackTrace();
         }
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
         this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this,1.0D, false));
-        this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true, new Class[0]));
+        this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true));
         this.targetSelector.a(2, new AttackEnemies(this, EntityHuman.class, true, new ArrayList<>()));
         this.goalSelector.a(5, new PathfinderGoalSilverfishHideInBlock(this));
     }

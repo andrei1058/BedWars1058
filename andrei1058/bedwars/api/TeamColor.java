@@ -284,6 +284,9 @@ public enum TeamColor {
             case YELLOW:
                 color = "YELLOW_STAINED_GLASS";
                 break;
+            case RED:
+                color = "RED_STAINED_GLASS";
+                break;
         }
         return Material.valueOf(color);
     }
@@ -321,6 +324,9 @@ public enum TeamColor {
             case YELLOW:
                 color = "YELLOW_TERRACOTTA";
                 break;
+            case RED:
+                color = "RED_TERRACOTTA";
+                break;
         }
         return Material.valueOf(color);
     }
@@ -357,6 +363,9 @@ public enum TeamColor {
                 break;
             case YELLOW:
                 color = "YELLOW_WOOL";
+                break;
+            case RED:
+                color = "RED_WOOL";
                 break;
         }
         return Material.valueOf(color);

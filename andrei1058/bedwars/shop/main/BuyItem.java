@@ -173,8 +173,22 @@ public class BuyItem {
             }
 
             if (permanent) i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
-            player.getInventory().addItem(i);
         }
+
+        //Remove swords with lower damage
+        if (Main.nms.isSword(i)) {
+            for (ItemStack itm : player.getInventory().getContents()) {
+                if (itm == null) continue;
+                if (itm.getType() == Material.AIR) continue;
+                if (!Main.nms.isSword(itm)) continue;
+                if (itm == i) continue;
+                if (Main.nms.getDamage(itm) <= Main.nms.getDamage(i)) {
+                    player.getInventory().remove(itm);
+                }
+            }
+        }
+        //
+        player.getInventory().addItem(i);
         player.updateInventory();
     }
 

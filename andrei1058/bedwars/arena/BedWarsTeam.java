@@ -255,15 +255,15 @@ public class BedWarsTeam {
         p.setHealth(20);
         for (Player on : arena.getPlayers()) {
             if (p == on) continue;
-            on.showPlayer(p);
+            //on.showPlayer(p);
             nms.showPlayer(p, on);
             if (getArena().getRespawn().containsKey(on)) continue;
-            p.showPlayer(on);
+            //p.showPlayer(on);
             nms.showPlayer(on, p);
         }
         for (Player on : arena.getSpectators()) {
             if (p == on) continue;
-            on.showPlayer(p);
+            //on.showPlayer(p);
             nms.showPlayer(p, on);
         }
         nms.sendTitle(p, getMsg(p, Messages.PLAYER_DIE_RESPAWNED_TITLE), "", 0, 20, 0);

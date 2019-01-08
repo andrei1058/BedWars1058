@@ -531,8 +531,9 @@ public class v1_13_R2 implements NMS {
     @Override
     public void showPlayer(Player victim, Player p) {
         if (victim == p) return;
-        PacketPlayOutNamedEntitySpawn packet = new PacketPlayOutNamedEntitySpawn(((CraftPlayer) victim).getHandle());
-        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+        //noinspection
+        //p.showPlayer(Main.plugin, victim);
+        p.showPlayer(victim);
     }
 
     @Override
@@ -594,8 +595,10 @@ public class v1_13_R2 implements NMS {
 
     @Override
     public org.bukkit.inventory.ItemStack setSkullOwner(org.bukkit.inventory.ItemStack i, Player p) {
-        if (i.getType() != org.bukkit.Material.SKULL_ITEM) return i;
+        if (i.getType() != org.bukkit.Material.valueOf("PLAYER_HEAD")) return i;
         SkullMeta sm = (SkullMeta) i.getItemMeta();
+        //sm.setOwningPlayer(p);
+        //noinspection deprecation
         sm.setOwner(p.getName());
         i.setItemMeta(sm);
         return i;

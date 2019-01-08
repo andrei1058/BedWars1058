@@ -138,7 +138,10 @@ public class BreakPlace implements Listener {
                 }
                 return;
             }
-            a.getPlaced().add(e.getBlock());
+
+            if (a.getCm().getBoolean(ConfigPath.ARENA_ALLOW_MAP_BREAK)) {
+                a.getPlaced().add(e.getBlock());
+            }
             return;
         }
         if (Main.getServerType() != ServerType.BUNGEE) {
@@ -167,6 +170,15 @@ public class BreakPlace implements Listener {
                 e.setCancelled(true);
                 return;
             }
+            if (a.getRespawn().containsKey(p)) {
+                e.setCancelled(true);
+                return;
+            }
+            if (a.getStatus() != GameState.playing){
+                e.setCancelled(true);
+                return;
+            }
+
             if (nms.isBed(e.getBlock().getType())) {
                 for (BedWarsTeam t : a.getTeams()) {
                     for (int x = e.getBlock().getX() - 2; x < e.getBlock().getX() + 2; x++) {
@@ -204,12 +216,43 @@ public class BreakPlace implements Listener {
                     }
                 }
             }
-            if (!a.getPlaced().contains(e.getBlock())) {
-                p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
-                e.setCancelled(true);
-                return;
+
+            try {
+                for (BedWarsTeam t : a.getTeams()) {
+                    if (t.getSpawn().distance(e.getBlock().getLocation()) <= a.getCm().getInt(ConfigPath.ARENA_SPAWN_PROTECTION)) {
+                        e.setCancelled(true);
+                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
+                        return;
+                    }
+                    if (t.getShop().distance(e.getBlock().getLocation()) <= a.getCm().getInt(ConfigPath.ARENA_SHOP_PROTECTION)) {
+                        e.setCancelled(true);
+                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
+                        return;
+                    }
+                    if (t.getTeamUpgrades().distance(e.getBlock().getLocation()) <= a.getCm().getInt(ConfigPath.ARENA_UPGRADES_PROTECTION)) {
+                        e.setCancelled(true);
+                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
+                        return;
+                    }
+                }
+                for (OreGenerator o : OreGenerator.getGenerators()) {
+                    if (o.getLocation().distance(e.getBlock().getLocation()) <= 1) {
+                        e.setCancelled(true);
+                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
+                        return;
+                    }
+                }
+            } catch (Exception ex) {
             }
-            a.getPlaced().remove(e.getBlock());
+
+            if (!a.getCm().getBoolean(ConfigPath.ARENA_ALLOW_MAP_BREAK)) {
+                if (!a.getPlaced().contains(e.getBlock())) {
+                    p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
+                    e.setCancelled(true);
+                    return;
+                }
+                a.getPlaced().remove(e.getBlock());
+            }
         }
     }
 

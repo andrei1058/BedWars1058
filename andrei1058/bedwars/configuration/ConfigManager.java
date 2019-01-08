@@ -54,6 +54,7 @@ public class ConfigManager {
             yml.addDefault(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS, false);
             yml.addDefault(ConfigPath.ARENA_NORMAL_DEATH_DROPS, false);
             yml.addDefault(ConfigPath.ARENA_USE_BED_HOLO, true);
+            yml.addDefault(ConfigPath.ARENA_ALLOW_MAP_BREAK, false);
             yml.options().copyDefaults(true);
             save();
 

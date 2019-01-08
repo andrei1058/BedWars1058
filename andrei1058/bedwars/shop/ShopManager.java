@@ -153,22 +153,22 @@ public class ShopManager {
             addDefaultShopCategory(ConfigPath.SHOP_PATH_CATEGORY_MELEE, 2, Main.getForCurrentVersion("GOLD_SWORD", "GOLD_SWORD", "GOLDEN_SWORD"), 0, 1, false);
 
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_MELEE, "stone-sword", 19, "tier1",
-                    Main.getForCurrentVersion("STONE_SWORD", "STONE_SWORD", "STONE_SWORD"), 0, 1, false, 10, "iron", true, false);
+                    Main.getForCurrentVersion("STONE_SWORD", "STONE_SWORD", "STONE_SWORD"), 0, 1, false, 10, "iron", false, false);
             addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_MELEE, "stone-sword", "tier1", "sword", Main.getForCurrentVersion("STONE_SWORD", "STONE_SWORD", "STONE_SWORD"),
                     0, 1, "", "", "", false);
 
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_MELEE, "iron-sword", 20, "tier1",
-                    Main.getForCurrentVersion("IRON_SWORD", "IRON_SWORD", "IRON_SWORD"), 0, 1, false, 7, "gold", true, false);
+                    Main.getForCurrentVersion("IRON_SWORD", "IRON_SWORD", "IRON_SWORD"), 0, 1, false, 7, "gold", false, false);
             addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_MELEE, "iron-sword", "tier1", "sword", Main.getForCurrentVersion("IRON_SWORD", "IRON_SWORD", "IRON_SWORD"),
                     0, 1, "", "", "", false);
 
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_MELEE, "diamond-sword", 21, "tier1",
-                    Main.getForCurrentVersion("DIAMOND_SWORD", "DIAMOND_SWORD", "DIAMOND_SWORD"), 0, 1, false, 4, "emerald", true, false);
+                    Main.getForCurrentVersion("DIAMOND_SWORD", "DIAMOND_SWORD", "DIAMOND_SWORD"), 0, 1, false, 4, "emerald", false, false);
             addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_MELEE, "diamond-sword", "tier1", "sword", Main.getForCurrentVersion("DIAMOND_SWORD", "DIAMOND_SWORD", "DIAMOND_SWORD"),
                     0, 1, "", "", "", false);
 
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_MELEE, "stick", 22, "tier1",
-                    Main.getForCurrentVersion("STICK", "STICK", "STICK"), 0, 1, true, 10, "gold", true, false);
+                    Main.getForCurrentVersion("STICK", "STICK", "STICK"), 0, 1, true, 10, "gold", false, false);
             addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_MELEE, "stick", "tier1", "stick", Main.getForCurrentVersion("STICK", "STICK", "STICK"),
                     0, 1, "KNOCKBACK 1", "", "", false);
 
@@ -251,17 +251,17 @@ public class ShopManager {
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_RANGED, "bow1", 20, "tier1",
                     Main.getForCurrentVersion("BOW", "BOW", "BOW"), 0, 1, false, 12, "gold", false, false);
             addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_RANGED, "bow1", "tier1", "bow", Main.getForCurrentVersion("BOW", "BOW", "BOW"),
-                    0, 8, "", "", "", false);
+                    0, 1, "", "", "", false);
 
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_RANGED, "bow2", 21, "tier1",
                     Main.getForCurrentVersion("BOW", "BOW", "BOW"), 0, 1, true, 24, "gold", false, false);
             addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_RANGED, "bow2", "tier1", "bow", Main.getForCurrentVersion("BOW", "BOW", "BOW"),
-                    0, 8, "ARROW_DAMAGE 1", "", "", false);
+                    0, 1, "ARROW_DAMAGE 1", "", "", false);
 
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_RANGED, "bow3", 22, "tier1",
                     Main.getForCurrentVersion("BOW", "BOW", "BOW"), 0, 1, true, 6, "emerald", false, false);
             addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_RANGED, "bow3", "tier1", "bow", Main.getForCurrentVersion("BOW", "BOW", "BOW"),
-                    0, 8, "ARROW_DAMAGE 1,ARROW_KNOCKBACK 1", "", "", false);
+                    0, 1, "ARROW_DAMAGE 1,ARROW_KNOCKBACK 1", "", "", false);
 
             //POTIONS CATEGORY
             addDefaultShopCategory(ConfigPath.SHOP_PATH_CATEGORY_POTIONS, 6, Main.getForCurrentVersion("BREWING_STAND_ITEM", "BREWING_STAND_ITEM", "BREWING_STAND"), 0, 1, false);
@@ -329,7 +329,7 @@ public class ShopManager {
             addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "magic-milk", "tier1", "milk", Main.getForCurrentVersion("MILK_BUCKET", "MILK_BUCKET", "MILK_BUCKET"),
                     0, 1, "", "", "", false);
 
-            adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "sponge", 29, "tier1",
+            adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "sponge", 30, "tier1",
                     Main.getForCurrentVersion("SPONGE", "SPONGE", "SPONGE"), 0, 1, false, 3, "gold", false, false);
             addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "sponge", "tier1", "sponge", Main.getForCurrentVersion("SPONGE", "SPONGE", "SPONGE"),
                     0, 1, "", "", "", false);
@@ -338,12 +338,16 @@ public class ShopManager {
 
         //try materials
         try {
-            Material.valueOf(Main.shop.getYml().getString(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_MATERIAL));
+            String material = yml.getString(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_MATERIAL);
+            Main.debug(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_MATERIAL + " is set to: " + material);
+            Material.valueOf(material);
         } catch (Exception ex) {
             Main.plugin.getLogger().severe("Invalid material at " + ConfigPath.SHOP_SPECIAL_IRON_GOLEM_MATERIAL);
         }
         try {
-            Material.valueOf(Main.shop.getYml().getString(ConfigPath.SHOP_SPECIAL_SILVERFISH_MATERIAL));
+            String material = yml.getString(ConfigPath.SHOP_SPECIAL_SILVERFISH_MATERIAL);
+            Main.debug(ConfigPath.SHOP_SPECIAL_SILVERFISH_MATERIAL + " is set to: " + material);
+            Material.valueOf(material);
         } catch (Exception ex) {
             Main.plugin.getLogger().severe("Invalid material at " + ConfigPath.SHOP_SPECIAL_SILVERFISH_MATERIAL);
         }
