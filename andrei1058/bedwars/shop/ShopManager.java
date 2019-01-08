@@ -251,17 +251,17 @@ public class ShopManager {
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_RANGED, "bow1", 20, "tier1",
                     Main.getForCurrentVersion("BOW", "BOW", "BOW"), 0, 1, false, 12, "gold", false, false);
             addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_RANGED, "bow1", "tier1", "bow", Main.getForCurrentVersion("BOW", "BOW", "BOW"),
-                    0, 8, "", "", "", false);
+                    0, 1, "", "", "", false);
 
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_RANGED, "bow2", 21, "tier1",
                     Main.getForCurrentVersion("BOW", "BOW", "BOW"), 0, 1, true, 24, "gold", false, false);
             addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_RANGED, "bow2", "tier1", "bow", Main.getForCurrentVersion("BOW", "BOW", "BOW"),
-                    0, 8, "ARROW_DAMAGE 1", "", "", false);
+                    0, 1, "ARROW_DAMAGE 1", "", "", false);
 
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_RANGED, "bow3", 22, "tier1",
                     Main.getForCurrentVersion("BOW", "BOW", "BOW"), 0, 1, true, 6, "emerald", false, false);
             addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_RANGED, "bow3", "tier1", "bow", Main.getForCurrentVersion("BOW", "BOW", "BOW"),
-                    0, 8, "ARROW_DAMAGE 1,ARROW_KNOCKBACK 1", "", "", false);
+                    0, 1, "ARROW_DAMAGE 1,ARROW_KNOCKBACK 1", "", "", false);
 
             //POTIONS CATEGORY
             addDefaultShopCategory(ConfigPath.SHOP_PATH_CATEGORY_POTIONS, 6, Main.getForCurrentVersion("BREWING_STAND_ITEM", "BREWING_STAND_ITEM", "BREWING_STAND"), 0, 1, false);
