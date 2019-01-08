@@ -1,9 +1,12 @@
 package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.SetupSession;
+import com.andrei1058.bedwars.language.Language;
+import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.upgrades.TeamUpgrade;
 import com.andrei1058.bedwars.upgrades.UpgradeGroup;
 import org.bukkit.Material;
@@ -39,7 +42,7 @@ public class Inventory implements Listener {
 
         //Prevent moving of command items
         if (nms.isCustomBedWarsItem(i)) {
-            if (e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY){
+            if (e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
                 e.setCancelled(true);
                 return;
             }
@@ -54,6 +57,12 @@ public class Inventory implements Listener {
 
         Arena a = Arena.getArenaByPlayer(p);
         if (a != null) {
+
+            //Prevent players from moving items in stats GUI
+            if (e.getInventory().getName().equals(Language.getMsg(p, Messages.PLAYER_STATS_GUI_INV_NAME).replace("{player}", p.getName()))) {
+                e.setCancelled(true);
+                return;
+            }
 
             /* Make it so they can't toggle their armor */
             if (e.getSlotType() == InventoryType.SlotType.ARMOR) {
