@@ -1,3 +1,15 @@
+0.9.1beta (API 12)
+
+- fixed issue where players can take items out from the stats GUI #155
+- fixed issue where you receive milk when buying sponge
+- fixed silverfish/ iron golem console log issue #171
+- fixed issue at shop where it says "MAXED" instead of "you can buy" #160
+- fixed issue where you won't lose your sword when you die by default #160
+- fixed issue where you spawn with all the swords you bought (if permanent)
+- removed debug messages from /party accept
+- possible fix for invisible armor issue
+- added "allow-map-break" option in order to allow player to break almost all blocks from the map
+
 0.7.4beta (API 10)
 
 - fixed issue #55 where you can't delete arenas
