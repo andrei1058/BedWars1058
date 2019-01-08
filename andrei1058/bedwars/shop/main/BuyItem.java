@@ -173,7 +173,6 @@ public class BuyItem {
             }
 
             if (permanent) i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
-            player.getInventory().addItem(i);
         }
 
         //Remove swords with lower damage
@@ -189,7 +188,7 @@ public class BuyItem {
             }
         }
         //
-
+        player.getInventory().addItem(i);
         player.updateInventory();
     }
 
