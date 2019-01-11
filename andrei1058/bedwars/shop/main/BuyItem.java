@@ -154,6 +154,8 @@ public class BuyItem {
                 if (permanent) i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
                 player.getInventory().setBoots(i);
             }
+            player.updateInventory();
+            return;
         } else {
 
             i = nms.colourItem(i, arena.getTeam(player));
