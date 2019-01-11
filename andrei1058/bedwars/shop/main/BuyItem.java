@@ -139,7 +139,7 @@ public class BuyItem {
             for (BedWarsTeam.Enchant e : arena.getTeam(player).getArmorsEnchantemnts()) {
                 im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
             }
-            if (permanent) im.setUnbreakable(true);
+            if (permanent) im.spigot().setUnbreakable(true);
             i.setItemMeta(im);
 
             if (m == Material.LEATHER_HELMET || m == Material.CHAINMAIL_HELMET || m == Material.DIAMOND_HELMET || m == nms.materialGoldenHelmet() || m == Material.IRON_HELMET) {
@@ -163,14 +163,14 @@ public class BuyItem {
 
             if (i.getType() == Material.BOW) {
                 ItemMeta im = i.getItemMeta();
-                if (permanent) im.setUnbreakable(true);
+                if (permanent) im.spigot().setUnbreakable(true);
                 for (BedWarsTeam.Enchant e : arena.getTeam(player).getBowsEnchantments()) {
                     im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
                 }
                 i.setItemMeta(im);
             } else if (nms.isSword(i)) {
                 ItemMeta im = i.getItemMeta();
-                if (permanent) im.setUnbreakable(true);
+                if (permanent) im.spigot().setUnbreakable(true);
                 for (BedWarsTeam.Enchant e : arena.getTeam(player).getSwordsEnchantemnts()) {
                     im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
                 }
