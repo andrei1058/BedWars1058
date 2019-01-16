@@ -102,10 +102,9 @@ public class v1_11_R1 implements NMS {
 
     @Override
     public void hidePlayer(Player player, List<Player> players) {
-        net.minecraft.server.v1_11_R1.PacketPlayOutEntityDestroy packet = new net.minecraft.server.v1_11_R1.PacketPlayOutEntityDestroy(player.getEntityId());
-        for (Player p : players) {
+        for (Player p : players){
             if (p == player) continue;
-            ((org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+            p.hidePlayer(player);
         }
     }
 

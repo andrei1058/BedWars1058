@@ -82,10 +82,9 @@ public class v1_8_R3 implements NMS {
 
     @Override
     public void hidePlayer(Player player, List<Player> players) {
-        PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(player.getEntityId());
-        for (Player p : players) {
+        for (Player p : players){
             if (p == player) continue;
-            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+            p.hidePlayer(player);
         }
     }
 

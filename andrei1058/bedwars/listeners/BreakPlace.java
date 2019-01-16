@@ -139,9 +139,7 @@ public class BreakPlace implements Listener {
                 return;
             }
 
-            if (a.getCm().getBoolean(ConfigPath.ARENA_ALLOW_MAP_BREAK)) {
-                a.getPlaced().add(e.getBlock());
-            }
+            a.getPlaced().add(e.getBlock());
             return;
         }
         if (Main.getServerType() != ServerType.BUNGEE) {
@@ -174,7 +172,7 @@ public class BreakPlace implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            if (a.getStatus() != GameState.playing){
+            if (a.getStatus() != GameState.playing) {
                 e.setCancelled(true);
                 return;
             }
