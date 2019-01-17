@@ -544,7 +544,7 @@ public class DamageDeathMove implements Listener {
 
     @EventHandler
     public void onEat(PlayerItemConsumeEvent e) {
-        if (e.getItem().getType() == Material.CAKE_BLOCK) {
+        if (e.getItem().getType() == nms.materialCake()) {
             if (Arena.getArenaByName(e.getPlayer().getWorld().getName()) != null) {
                 e.setCancelled(true);
             }

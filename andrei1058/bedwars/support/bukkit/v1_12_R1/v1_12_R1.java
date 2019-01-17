@@ -665,6 +665,11 @@ public class v1_12_R1 implements NMS {
     }
 
     @Override
+    public org.bukkit.Material materialCake() {
+        return org.bukkit.Material.valueOf("CAKE_BLOCK");
+    }
+
+    @Override
     public boolean isBed(org.bukkit.Material material) {
         return material == org.bukkit.Material.valueOf("BED_BLOCK") || material == org.bukkit.Material.valueOf("BED");
     }

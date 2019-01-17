@@ -672,6 +672,11 @@ public class v1_13_R1 implements NMS {
     }
 
     @Override
+    public org.bukkit.Material materialCake() {
+        return org.bukkit.Material.valueOf("CAKE");
+    }
+
+    @Override
     public boolean isBed(org.bukkit.Material material) {
         return material.toString().contains("_BED");
     }

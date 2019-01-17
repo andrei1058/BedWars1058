@@ -339,6 +339,9 @@ public interface NMS {
      */
     Material materialGoldenLeggings();
 
+    /** Cake material*/
+    Material materialCake();
+
     /**
      * Check if bed
      *
