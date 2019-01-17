@@ -218,6 +218,7 @@ public class BedWarsTeam {
                         }
                     }
                     if (!hasSword) {
+                        i = nms.addCustomData(i, "DEFAULT_ITEM");
                         p.getInventory().addItem(i);
                     }
                 } catch (Exception ex) {
