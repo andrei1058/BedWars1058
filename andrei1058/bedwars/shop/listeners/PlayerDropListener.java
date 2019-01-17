@@ -18,7 +18,9 @@ public class PlayerDropListener implements Listener {
         Arena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a == null) return;
         String identifier = Main.nms.getShopUpgradeIdentifier(e.getItemDrop().getItemStack());
+        if (identifier == null) return;
         if (identifier.isEmpty() || identifier.equals(" ")) return;
+        if (identifier.equals("null")) return;
         e.setCancelled(true);
     }
 

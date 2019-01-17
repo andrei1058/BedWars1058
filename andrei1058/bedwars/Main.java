@@ -375,9 +375,11 @@ public class Main extends JavaPlugin {
     }
 
     public void onDisable() {
-        /* Close database */
         try {
             database.close();
+            for (Arena a : Arena.getArenas()){
+                a.disable();
+            }
         } catch (Exception ex) {
         }
     }
