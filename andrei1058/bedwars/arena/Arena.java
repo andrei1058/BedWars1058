@@ -56,6 +56,7 @@ public class Arena {
     private String group = "Default", worldName;
     private List<BedWarsTeam> teams = new ArrayList<>();
     private List<Block> placed = new ArrayList<>();
+    private List<NextEvent> nextEvents = Arrays.asList(NextEvent.values());
 
     /**
      * Current event, used at scoreboard
@@ -808,6 +809,7 @@ public class Arena {
         }
         players.clear();
         spectators.clear();
+        nextEvents.clear();
         Bukkit.unloadWorld(world, false);
         arenaByName.remove(world.getName());
         arenas.remove(this);
@@ -853,6 +855,7 @@ public class Arena {
                 rjt.destroy();
             }
         }
+        nextEvents = Arrays.asList(NextEvent.values());
     }
 
     //GETTER METHODS
@@ -1418,8 +1421,28 @@ public class Arena {
         this.nextEvent = nextEvent;
     }
 
-    public void updateNextEvent() {
-        if (nextEvent == NextEvent.DIAMOND_GENERATOR_TIER_II) {
+    public synchronized void updateNextEvent() {
+
+        if (nextEvent.getValue(this) > 0) return;
+
+        nextEvents.remove(nextEvent);
+
+        if (nextEvents.isEmpty()) return;
+
+        NextEvent next = nextEvents.get(0);
+        int lowest = next.getValue(this);
+
+        for (NextEvent ne : nextEvents){
+            int value = ne.getValue(this);
+            if (value == -1) continue;
+            if (lowest > value) next = ne;
+        }
+
+        setNextEvent(next);
+
+
+
+        /*if (nextEvent == NextEvent.DIAMOND_GENERATOR_TIER_II) {
             setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_III);
         } else if (nextEvent == NextEvent.DIAMOND_GENERATOR_TIER_III) {
             if (emeraldTier == 1) {
@@ -1429,13 +1452,13 @@ public class Arena {
             } else {
                 setNextEvent(NextEvent.BEDS_DESTROY);
             }
-        } else if (emeraldTier >= 3 && diamondTier >= 3 && (playingTask != null && playingTask.getBedsDestroyCountdown() >= 0)) {
+        } else if (emeraldTier >= 3 && diamondTier >= 3 && (playingTask != null && playingTask.getBedsDestroyCountdown() == 0)) {
             setNextEvent(NextEvent.BEDS_DESTROY);
         } else if (nextEvent == NextEvent.BEDS_DESTROY && (playingTask != null && playingTask.getDragonSpawnCountdown() >= 0)) {
             setNextEvent(NextEvent.ENDER_DRAGON);
         } else if (nextEvent == NextEvent.ENDER_DRAGON && (playingTask != null && playingTask.getBedsDestroyCountdown() == 0) && (playingTask != null && playingTask.getDragonSpawnCountdown() == 0)) {
             setNextEvent(NextEvent.GAME_END);
-        }
+        }*/
         debug(nextEvent.toString());
     }
 
@@ -1509,7 +1532,7 @@ public class Arena {
         return startingTask;
     }
 
-    GamePlayingTask getPlayingTask() {
+    public GamePlayingTask getPlayingTask() {
         return playingTask;
     }
 
@@ -1640,6 +1663,10 @@ public class Arena {
         }
 
         return true;
+    }
+
+    public List<NextEvent> getNextEvents() {
+        return new ArrayList<>(nextEvents);
     }
 
     /**
