@@ -115,6 +115,7 @@ public class BreakPlace implements Listener {
                 }
             } catch (Exception ex) {
             }
+            a.getPlaced().add(e.getBlock());
             if (e.getBlock().getType() == Material.TNT) {
                 e.setCancelled(true);
                 TNTPrimed tnt = e.getBlock().getLocation().getWorld().spawn(e.getBlock().getLocation(), TNTPrimed.class);
@@ -138,8 +139,6 @@ public class BreakPlace implements Listener {
                 }
                 return;
             }
-
-            a.getPlaced().add(e.getBlock());
             return;
         }
         if (Main.getServerType() != ServerType.BUNGEE) {
@@ -327,46 +326,67 @@ public class BreakPlace implements Listener {
                 }
             }
         }
-        Arena a = Arena.getArenaByPlayer(e.getPlayer());
-        if (a != null) {
-            if (a.isSpectator(e.getPlayer()) || a.getStatus() != GameState.playing || a.getRespawn().containsKey(e.getPlayer())) {
+        //Prevent player from placing during the removal from the arena
+        Arena arena = Arena.getArenaByName(e.getBlockClicked().getWorld().getName());
+        if (arena != null) {
+            if (arena.getStatus() != GameState.playing) {
                 e.setCancelled(true);
-            } else {
-                try {
-                    Player p = e.getPlayer();
-                    for (BedWarsTeam t : a.getTeams()) {
-                        if (t.getSpawn().distance(e.getBlockClicked().getLocation()) <= a.getCm().getInt("spawnProtection")) {
-                            e.setCancelled(true);
-                            p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
-                            return;
-                        }
-                        if (t.getShop().distance(e.getBlockClicked().getLocation()) <= a.getCm().getInt("shopProtection")) {
-                            e.setCancelled(true);
-                            p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
-                            return;
-                        }
-                        if (t.getTeamUpgrades().distance(e.getBlockClicked().getLocation()) <= a.getCm().getInt("upgradesProtection")) {
-                            e.setCancelled(true);
-                            p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
-                            return;
-                        }
-                    }
-                    for (OreGenerator o : OreGenerator.getGenerators()) {
-                        if (o.getLocation().distance(e.getBlockClicked().getLocation()) <= 1) {
-                            e.setCancelled(true);
-                            p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
-                            return;
-                        }
-                    }
-                    /** Remove empty bucket */
-                    Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                        nms.minusAmount(e.getPlayer(), nms.getItemInHand(e.getPlayer()), 1);
-                    }, 3L);
-                } catch (Exception ex) {
-                }
+                return;
             }
         }
+        Player p = e.getPlayer();
+        Arena a = Arena.getArenaByPlayer(p);
+        if (a != null) {
+            if (a.isSpectator(p)) {
+                e.setCancelled(true);
+                return;
+            }
+            if (a.getRespawn().containsKey(p)) {
+                e.setCancelled(true);
+                return;
+            }
+            if (a.getStatus() != GameState.playing) {
+                e.setCancelled(true);
+                return;
+            }
+            if (e.getBlockClicked().getLocation().getBlockY() >= a.getCm().getInt(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y)) {
+                e.setCancelled(true);
+                return;
+            }
+            try {
+                for (BedWarsTeam t : a.getTeams()) {
+                    if (t.getSpawn().distance(e.getBlockClicked().getLocation()) <= a.getCm().getInt(ConfigPath.ARENA_SPAWN_PROTECTION)) {
+                        e.setCancelled(true);
+                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                        return;
+                    }
+                    if (t.getShop().distance(e.getBlockClicked().getLocation()) <= a.getCm().getInt(ConfigPath.ARENA_SHOP_PROTECTION)) {
+                        e.setCancelled(true);
+                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                        return;
+                    }
+                    if (t.getTeamUpgrades().distance(e.getBlockClicked().getLocation()) <= a.getCm().getInt(ConfigPath.ARENA_UPGRADES_PROTECTION)) {
+                        e.setCancelled(true);
+                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                        return;
+                    }
+                }
+                for (OreGenerator o : OreGenerator.getGenerators()) {
+                    if (o.getLocation().distance(e.getBlockClicked().getLocation()) <= 1) {
+                        e.setCancelled(true);
+                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                        return;
+                    }
+                }
+            } catch (Exception ex) {
+            }
+            /** Remove empty bucket */
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                nms.minusAmount(e.getPlayer(), nms.getItemInHand(e.getPlayer()), 1);
+            }, 3L);
+        }
     }
+
 
     @EventHandler
     public void onBlow(EntityExplodeEvent e) {
