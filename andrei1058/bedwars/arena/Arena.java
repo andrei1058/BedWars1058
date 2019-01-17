@@ -56,7 +56,7 @@ public class Arena {
     private String group = "Default", worldName;
     private List<BedWarsTeam> teams = new ArrayList<>();
     private List<Block> placed = new ArrayList<>();
-    private List<NextEvent> nextEvents = Arrays.asList(NextEvent.values());
+    private List<String> nextEvents = new ArrayList<>();
 
     /**
      * Current event, used at scoreboard
@@ -227,6 +227,11 @@ public class Arena {
         Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.ArenaEnableEvent(this));
 
         setStatus(GameState.waiting);
+
+        //
+        for (NextEvent ne : NextEvent.values()){
+            nextEvents.add(ne.toString());
+        }
     }
 
     /**
@@ -605,9 +610,9 @@ public class Arena {
         }
 
         //Remove from magic milk
-        if (magicMilk.containsKey(p)){
-            Bukkit.getScheduler().cancelTask(magicMilk.get(p));
-            magicMilk.remove(p);
+        if (magicMilk.containsKey(p.getUniqueId())){
+            Bukkit.getScheduler().cancelTask(magicMilk.get(p.getUniqueId()));
+            magicMilk.remove(p.getUniqueId());
         }
     }
 
@@ -724,9 +729,9 @@ public class Arena {
         }
 
         //Remove from magic milk
-        if (magicMilk.containsKey(p)){
-            Bukkit.getScheduler().cancelTask(magicMilk.get(p));
-            magicMilk.remove(p);
+        if (magicMilk.containsKey(p.getUniqueId())){
+            Bukkit.getScheduler().cancelTask(magicMilk.get(p.getUniqueId()));
+            magicMilk.remove(p.getUniqueId());
         }
     }
 
@@ -855,7 +860,9 @@ public class Arena {
                 rjt.destroy();
             }
         }
-        nextEvents = Arrays.asList(NextEvent.values());
+        for (NextEvent ne : NextEvent.values()){
+            nextEvents.add(ne.toString());
+        }
     }
 
     //GETTER METHODS
@@ -1421,22 +1428,31 @@ public class Arena {
         this.nextEvent = nextEvent;
     }
 
-    public synchronized void updateNextEvent() {
+    public void updateNextEvent() {
+
+        debug("---");
+        debug("updateNextEvent called");
 
         if (nextEvent.getValue(this) > 0) return;
 
-        nextEvents.remove(nextEvent);
+        nextEvents.remove(nextEvent.toString());
+
+        for (String s : nextEvents){
+            debug(s);
+        }
 
         if (nextEvents.isEmpty()) return;
 
-        NextEvent next = nextEvents.get(0);
+        NextEvent next = NextEvent.valueOf(nextEvents.get(0));
         int lowest = next.getValue(this);
 
-        for (NextEvent ne : nextEvents){
-            int value = ne.getValue(this);
+        for (String ne : nextEvents){
+            int value = NextEvent.valueOf(ne).getValue(this);
             if (value == -1) continue;
-            if (lowest > value) next = ne;
+            if (lowest > value) next = NextEvent.valueOf(ne);
         }
+
+        debug("---");
 
         setNextEvent(next);
 
@@ -1665,7 +1681,7 @@ public class Arena {
         return true;
     }
 
-    public List<NextEvent> getNextEvents() {
+    public List<String> getNextEvents() {
         return new ArrayList<>(nextEvents);
     }
 

@@ -67,7 +67,7 @@ public class BaseListener implements Listener {
                 if (isOnABase.containsKey(p)) {
                     Bukkit.getPluginManager().callEvent(new BaseLeaveEvent(p, isOnABase.get(p)));
                     isOnABase.remove(p);
-                    if (!(isOnABase.get(p) == bwt && Arena.magicMilk.containsKey(p.getUniqueId()))) {
+                    if (!Arena.magicMilk.containsKey(p.getUniqueId())) {
                         Bukkit.getPluginManager().callEvent(new BaseEnterEvent(p, bwt));
                         isOnABase.put(p, bwt);
                     }

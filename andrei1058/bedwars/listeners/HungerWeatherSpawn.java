@@ -94,8 +94,9 @@ public class HungerWeatherSpawn implements Listener {
                 e.setCancelled(true);
                 nms.minusAmount(e.getPlayer(), nms.getItemInHand(e.getPlayer()), 1);
                 int task = Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                    Arena.magicMilk.remove(e.getPlayer());
-                }, 30L).getTaskId();
+                    Arena.magicMilk.remove(e.getPlayer().getUniqueId());
+                    debug("PlayerItemConsumeEvent player "+ e.getPlayer() + " was removed from magicMilk");
+                }, 20*30L).getTaskId();
                 Arena.magicMilk.put(e.getPlayer().getUniqueId(), task);
                 break;
         }

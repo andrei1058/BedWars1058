@@ -5,7 +5,6 @@ import com.andrei1058.bedwars.configuration.ConfigPath;
 import net.minecraft.server.v1_10_R1.*;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_10_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_10_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_10_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_10_R1.event.CraftEventFactory;
 import org.bukkit.craftbukkit.v1_10_R1.util.UnsafeList;
@@ -90,7 +89,7 @@ public class Silverfish extends EntitySilverfish {
                 BlockPosition blockposition = (new BlockPosition(this.silverfish.locX, this.silverfish.locY + 0.5D, this.silverfish.locZ)).shift(this.b);
                 IBlockData iblockdata = world.getType(blockposition);
                 if (BlockMonsterEggs.i(iblockdata)) {
-                    if (CraftEventFactory.callEntityChangeBlockEvent(this.silverfish, blockposition, Blocks.MONSTER_EGG, Block.getId(BlockMonsterEggs.getById(iblockdata.getBlock().toLegacyData(iblockdata)))).isCancelled()) {
+                    if (CraftEventFactory.callEntityChangeBlockEvent(this.silverfish, blockposition.getX(), blockposition.getY(), blockposition.getZ(), Blocks.MONSTER_EGG, Block.getId(BlockMonsterEggs.getById(iblockdata.getBlock().toLegacyData(iblockdata)))).isCancelled()) {
                         return;
                     }
 
