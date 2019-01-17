@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.listeners;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
@@ -84,12 +85,18 @@ public class HungerWeatherSpawn implements Listener {
                         }
                     }
                 }
-                Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                    nms.minusAmount(e.getPlayer(), new ItemStack(Material.GLASS_BOTTLE), 1);
-                }, 5L);
+                Bukkit.getScheduler().runTaskLater(plugin, () -> nms.minusAmount(e.getPlayer(), new ItemStack(Material.GLASS_BOTTLE), 1), 5L);
                 break;
             case GLASS_BOTTLE:
                 nms.minusAmount(e.getPlayer(), nms.getItemInHand(e.getPlayer()), 1);
+                break;
+            case MILK_BUCKET:
+                e.setCancelled(true);
+                nms.minusAmount(e.getPlayer(), nms.getItemInHand(e.getPlayer()), 1);
+                int task = Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                    Arena.magicMilk.remove(e.getPlayer());
+                }, 30L).getTaskId();
+                Arena.magicMilk.put(e.getPlayer().getUniqueId(), task);
                 break;
         }
     }

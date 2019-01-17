@@ -24,8 +24,6 @@ import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.sql.Timestamp;
@@ -42,6 +40,7 @@ public class Arena {
     private static ArrayList<Arena> arenas = new ArrayList<>();
     private static int gamesBeforeRestart = 0;//config.getInt(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART);
     public static HashMap<UUID, Integer> afkCheck = new HashMap<>();
+    public static HashMap<UUID, Integer> magicMilk = new HashMap<>();
 
 
     private List<Player> players = new ArrayList<>();
@@ -603,6 +602,12 @@ public class Arena {
                 }
             }
         }
+
+        //Remove from magic milk
+        if (magicMilk.containsKey(p)){
+            Bukkit.getScheduler().cancelTask(magicMilk.get(p));
+            magicMilk.remove(p);
+        }
     }
 
     /**
@@ -715,6 +720,12 @@ public class Arena {
             if (ReJoin.getPlayer(p).getArena() == this) {
                 ReJoin.getPlayer(p).destroy();
             }
+        }
+
+        //Remove from magic milk
+        if (magicMilk.containsKey(p)){
+            Bukkit.getScheduler().cancelTask(magicMilk.get(p));
+            magicMilk.remove(p);
         }
     }
 
@@ -882,7 +893,6 @@ public class Arena {
     /**
      * Get an arenas list
      */
-    @Contract(pure = true)
     public static ArrayList<Arena> getArenas() {
         return arenas;
     }
@@ -1095,7 +1105,7 @@ public class Arena {
     /**
      * Check if a player has vip perms
      */
-    public static boolean isVip(@NotNull Player p) {
+    public static boolean isVip(Player p) {
         return p.hasPermission(mainCmd + ".*") || p.hasPermission(mainCmd + ".vip");
     }
 
@@ -1165,7 +1175,7 @@ public class Arena {
      * Not used in serverType BUNGEE.
      * This will clear the inventory first.
      */
-    public static void sendLobbyCommandItems(@NotNull Player p) {
+    public static void sendLobbyCommandItems(Player p) {
         if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH) == null) return;
         p.getInventory().clear();
 
@@ -1204,7 +1214,7 @@ public class Arena {
      * This will give the pre-game command Items.
      * This will clear the inventory first.
      */
-    private void sendPreGameCommandItems(@NotNull Player p) {
+    private void sendPreGameCommandItems(Player p) {
         if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH) == null) return;
         p.getInventory().clear();
 
@@ -1243,7 +1253,7 @@ public class Arena {
      * This will give the spectator command Items.
      * This will clear the inventory first.
      */
-    private void sendSpectatorCommandItems(@NotNull Player p) {
+    private void sendSpectatorCommandItems(Player p) {
         if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH) == null) return;
         p.getInventory().clear();
 
@@ -1278,7 +1288,6 @@ public class Arena {
         }
     }
 
-    @Contract(pure = true)
     public static boolean isInArena(Player p) {
         return arenaByPlayer.containsKey(p);
     }
@@ -1430,7 +1439,6 @@ public class Arena {
         debug(nextEvent.toString());
     }
 
-    @Contract(pure = true)
     public static HashMap<Player, Arena> getArenaByPlayer() {
         return arenaByPlayer;
     }
@@ -1517,7 +1525,6 @@ public class Arena {
         Arena.gamesBeforeRestart = gamesBeforeRestart;
     }
 
-    @Contract(pure = true)
     public static int getGamesBeforeRestart() {
         return gamesBeforeRestart;
     }
