@@ -187,12 +187,13 @@ public class CategoryContent {
         String translatedCurrency = getMsg(player, getCurrencyMsgPath(ct));
         ChatColor cColor = getCurrencyColor(ct.getCurrency());
 
-        String tier = getRomanNumber(shopCache.getContentTier(this.getIdentifier()));
+        int tierI = shopCache.getContentTier(this.getIdentifier());
+        String tier = getRomanNumber(tierI);
         String buyStatus;
         if (!canAfford){
             buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CANT_AFFORD).replace("{currency}", translatedCurrency);
         } else {
-            if (isPermanent() && shopCache.hasCachedItem(this)){
+            if (isPermanent() && shopCache.hasCachedItem(this) && tierI == getContentTiers().size()){
                 buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_MAXED);
             } else {
                 buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CAN_BUY);
