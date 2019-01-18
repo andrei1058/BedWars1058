@@ -373,6 +373,7 @@ public interface NMS {
 
     /**
      * Get an ItemStack identifier
+     * will return null string if it doesn t have an identifier
      */
     String getShopUpgradeIdentifier(ItemStack itemStack);
 
