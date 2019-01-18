@@ -103,6 +103,9 @@ public class JoinLeaveTeleport implements Listener {
                 p.sendMessage("");
                 p.sendMessage("§8[§f" + plugin.getName() + "§8]§7§m---------------------------");
             }
+            if (Arena.getArenas().isEmpty()){
+                p.performCommand(mainCmd);
+            }
         }
         if (p.getName().equalsIgnoreCase("andrei1058") || p.getName().equalsIgnoreCase("andreea1058") || p.getName().equalsIgnoreCase("Dani3l_FTW")) {
             p.sendMessage("§8[§f" + plugin.getName() + "§8]§7§m---------------------------");
