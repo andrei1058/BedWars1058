@@ -187,8 +187,8 @@ public class CategoryContent {
         String translatedCurrency = getMsg(player, getCurrencyMsgPath(ct));
         ChatColor cColor = getCurrencyColor(ct.getCurrency());
 
-        int tierI = shopCache.getContentTier(this.getIdentifier());
-        String tier = getRomanNumber(tierI);
+        int tierI = ct.getValue();
+        String tier = getRomanNumber(tierI+1);
         String buyStatus;
         if (!canAfford){
             buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CANT_AFFORD).replace("{currency}", translatedCurrency);
