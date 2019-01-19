@@ -325,6 +325,16 @@ public class Arena {
                 }
             }
 
+            //half full arena time shorten
+            if (players.size()>=(teams.size()*maxInTeam/2)){
+                if (startingTask != null) {
+                    if (Bukkit.getScheduler().isCurrentlyRunning(startingTask.getTask())) {
+                        if (startingTask.getCountdown() > getCm().getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_HALF))
+                        startingTask.setCountdown(Main.config.getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_HALF));
+                    }
+                }
+            }
+
             /* save player inventory etc */
             new PlayerGoods(p, true);
             playerLocation.put(p, p.getLocation());
