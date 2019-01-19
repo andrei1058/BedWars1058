@@ -130,6 +130,10 @@ public class GameStartingTask extends BukkitRunnable {
             for (BedWarsTeam team : getArena().getTeams()) {
                 if (team.getMembers().isEmpty()) {
                     team.setBedDestroyed(true);
+                    if (!getArena().getCm().getBoolean(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS)){
+                        team.getIronGenerator().enable();
+                        team.getGoldGenerator().enable();
+                    }
                     continue;
                 }
                 nms.colorBed(team);
