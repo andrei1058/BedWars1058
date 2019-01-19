@@ -65,11 +65,12 @@ public class BaseListener implements Listener {
             if (p.getLocation().distance(bwt.getBed()) <= a.getIslandRadius()) {
                 notOnBase = false;
                 if (isOnABase.containsKey(p)) {
-                    Bukkit.getPluginManager().callEvent(new BaseLeaveEvent(p, isOnABase.get(p)));
-                    isOnABase.remove(p);
-                    if (!Arena.magicMilk.containsKey(p.getUniqueId())) {
-                        Bukkit.getPluginManager().callEvent(new BaseEnterEvent(p, bwt));
-                        isOnABase.put(p, bwt);
+                    if (isOnABase.get(p) != bwt) {
+                        Bukkit.getPluginManager().callEvent(new BaseLeaveEvent(p, isOnABase.get(p)));
+                        if (!Arena.magicMilk.containsKey(p.getUniqueId())) {
+                            Bukkit.getPluginManager().callEvent(new BaseEnterEvent(p, bwt));
+                        }
+                        isOnABase.replace(p, bwt);
                     }
                 } else {
                     if (!Arena.magicMilk.containsKey(p.getUniqueId())) {

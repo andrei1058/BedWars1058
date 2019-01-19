@@ -135,8 +135,10 @@ public class UpgradesManager {
         yml.addDefault("Default.trap.tier1.receive.playerEffect.blindness.amplifier", 1);
         yml.addDefault("Default.trap.tier1.receive.playerEffect.blindness.apply", "enemyBaseEnter");
         yml.addDefault("Default.trap.tier1.receive.playerEffect.slowness.effect", "SLOW");
+        yml.addDefault("Default.trap.tier1.receive.playerEffect.blindness.duration", 20);
         yml.addDefault("Default.trap.tier1.receive.playerEffect.slowness.amplifier", 0);
         yml.addDefault("Default.trap.tier1.receive.playerEffect.slowness.apply", "enemyBaseEnter");
+        yml.addDefault("Default.trap.tier1.receive.playerEffect.slowness.duration", 20);
 
         /** Mining fatigue trap Upgrade */
         yml.addDefault("Default.miningFatigue.slot", 20);
@@ -150,7 +152,7 @@ public class UpgradesManager {
         yml.addDefault("Default.miningFatigue.tier1.receive.playerEffect.fatigue.effect", "SLOW_DIGGING");
         yml.addDefault("Default.miningFatigue.tier1.receive.playerEffect.fatigue.amplifier", 0);
         yml.addDefault("Default.miningFatigue.tier1.receive.playerEffect.fatigue.apply", "enemyBaseEnter");
-        yml.addDefault("Default.miningFatigue.tier1.receive.playerEffect.fatigue.duration", 10);
+        yml.addDefault("Default.miningFatigue.tier1.receive.playerEffect.fatigue.duration", 30);
 
         /** Health pool Upgrade */
         yml.addDefault("Default.healPool.slot", 21);

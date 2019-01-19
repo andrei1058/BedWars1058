@@ -16,7 +16,11 @@ public class EffectAction extends UpgradeAction {
         this.potionEffectType = potionEffectType;
         this.amplifier = amplifier;
         this.apply = apply;
-        this.duration = duration;
+        if (apply.equals("enemybaseenter") && duration <= 0){
+            this.duration = 20;
+        } else {
+            this.duration = duration;
+        }
         plugin.debug("Loading new EffectAction: "+getName());
     }
 
@@ -25,7 +29,7 @@ public class EffectAction extends UpgradeAction {
         if (apply.equalsIgnoreCase("members")){
             bwt.addTeamEffect(getPotionEffectType(), getAmplifier(), getDuration());
         } else if(apply.equalsIgnoreCase("base")){
-            bwt.addBaseEffect(getPotionEffectType(), getAmplifier(), getDuration());
+            bwt.addBaseEffect(getPotionEffectType(), getAmplifier(), Integer.MAX_VALUE);
         } else if (apply.equalsIgnoreCase("enemybaseenter")){
             bwt.addEnemyBaseEnterEffect(getPotionEffectType(), getAmplifier(), i, getDuration());
         }
