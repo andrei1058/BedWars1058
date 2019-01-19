@@ -410,7 +410,7 @@ public class SQLite implements Database {
             if (!rs.next()) {
                 connection.prepareStatement("INSERT INTO quick_buy VALUES(NULL,'" + p.toString() + "',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ');").executeUpdate();
             }
-            connection.prepareStatement("UPDATE quick_buy SET slot_" + slot + " = '" + shopPath + "' WHERE uuid = '" + p.toString() + "';");
+            connection.prepareStatement("UPDATE quick_buy SET slot_" + slot + " = '" + shopPath + "' WHERE uuid = '" + p.toString() + "';").executeUpdate();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
