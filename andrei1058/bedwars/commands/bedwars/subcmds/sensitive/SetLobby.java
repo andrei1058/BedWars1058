@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
@@ -46,6 +47,7 @@ public class SetLobby extends SubCommand {
         config.saveConfigLoc("lobbyLoc", p.getLocation());
         p.sendMessage("§6 ▪ §7Lobby location set!");
         config.reload();
+        Main.setLobbyWorld(p.getLocation().getWorld().getName());
         return true;
     }
 
