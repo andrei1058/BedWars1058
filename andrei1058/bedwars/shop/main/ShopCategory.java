@@ -74,7 +74,7 @@ public class ShopCategory {
 
         CategoryContent cc;
         for (String s : yml.getConfigurationSection(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_PATH).getKeys(false)) {
-            cc = new CategoryContent(path + ConfigPath.SHOP_CATEGORY_CONTENT_PATH + "." + s, s, path, yml);
+            cc = new CategoryContent(path + ConfigPath.SHOP_CATEGORY_CONTENT_PATH + "." + s, s, path, yml, this);
             if (cc.isLoaded()) {
                 categoryContentList.add(cc);
                 Main.debug("Adding CategoryContent: " + s + " to Shop Category: " + path);

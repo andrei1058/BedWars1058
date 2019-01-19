@@ -2,12 +2,14 @@ package com.andrei1058.bedwars.shop;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.shop.main.CategoryContent;
+import com.andrei1058.bedwars.shop.main.ShopCategory;
 import com.andrei1058.bedwars.shop.quickbuy.PlayerQuickBuyCache;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ShopCache {
@@ -16,6 +18,7 @@ public class ShopCache {
     private List<CachedItem> cachedItems = new ArrayList<>();
     private ShopCache cache;
     private int selectedCategory;
+    private HashMap<ShopCategory, Byte> categoryWeight = new HashMap<>();
 
     private static List<ShopCache> shopCaches = new ArrayList<>();
 
@@ -30,7 +33,7 @@ public class ShopCache {
         return player;
     }
 
-    public void setSelectedCategory(int slot){
+    public void setSelectedCategory(int slot) {
         this.selectedCategory = slot;
     }
 
@@ -112,10 +115,10 @@ public class ShopCache {
             player.updateInventory();
         }
 
-        public void updateItem(){
-            if (player.getOpenInventory() != null){
-                if (player.getOpenInventory().getTopInventory() != null){
-                    player.getOpenInventory().getTopInventory().setItem(cc.getSlot(), cc.getItemStack(player,  cache));
+        public void updateItem() {
+            if (player.getOpenInventory() != null) {
+                if (player.getOpenInventory().getTopInventory() != null) {
+                    player.getOpenInventory().getTopInventory().setItem(cc.getSlot(), cc.getItemStack(player, cache));
                 }
             }
         }
@@ -141,7 +144,7 @@ public class ShopCache {
         return false;
     }
 
-    public CachedItem getCachedItem(CategoryContent cc){
+    public CachedItem getCachedItem(CategoryContent cc) {
         for (CachedItem ci : cachedItems) {
             if (ci.getCc() == cc) return ci;
         }
@@ -163,5 +166,21 @@ public class ShopCache {
                 ci.upgrade();
             }
         }
+    }
+
+    /**
+     * Used for categories where you can't buy lower items
+     * Ex. if you have bought diamond iron from it, you can't buy stone iron
+     */
+    public void setCategoryWeight(ShopCategory sc, byte weight) {
+        if (categoryWeight.containsKey(sc)){
+            categoryWeight.replace(sc, weight);
+        } else {
+            categoryWeight.put(sc, weight);
+        }
+    }
+
+    public byte getCategoryWeight(ShopCategory sc){
+        return categoryWeight.getOrDefault(sc, (byte)0);
     }
 }
