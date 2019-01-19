@@ -337,10 +337,10 @@ public class ShopManager {
         }
 
         if (yml.get(ConfigPath.SHOP_PATH_CATEGORY_ARMOR + ConfigPath.SHOP_CATEGORY_CONTENT_PATH + ".diamond-armor") != null) {
-            yml.set(ConfigPath.SHOP_PATH_CATEGORY_ARMOR + ConfigPath.SHOP_CATEGORY_CONTENT_PATH + ".diamond-armor" + "." + ConfigPath.SHOP_CATEGORY_CONTENT_WEIGHT, 2);
+            yml.addDefault(ConfigPath.SHOP_PATH_CATEGORY_ARMOR + ConfigPath.SHOP_CATEGORY_CONTENT_PATH + ".diamond-armor" + "." + ConfigPath.SHOP_CATEGORY_CONTENT_WEIGHT, 2);
         }
         if (yml.get(ConfigPath.SHOP_PATH_CATEGORY_ARMOR + ConfigPath.SHOP_CATEGORY_CONTENT_PATH + ".iron-armor") != null) {
-            yml.set(ConfigPath.SHOP_PATH_CATEGORY_ARMOR + ConfigPath.SHOP_CATEGORY_CONTENT_PATH + ".iron-armor" + "." + ConfigPath.SHOP_CATEGORY_CONTENT_WEIGHT, 1);
+            yml.addDefault(ConfigPath.SHOP_PATH_CATEGORY_ARMOR + ConfigPath.SHOP_CATEGORY_CONTENT_PATH + ".iron-armor" + "." + ConfigPath.SHOP_CATEGORY_CONTENT_WEIGHT, 1);
         }
 
         //try materials
