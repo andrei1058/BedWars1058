@@ -71,7 +71,7 @@ public class ShopCache {
     /**
      * Keep trace of shop items and player's tiers
      */
-    private class CachedItem {
+    public class CachedItem {
         private CategoryContent cc;
         private int tier = 1;
 

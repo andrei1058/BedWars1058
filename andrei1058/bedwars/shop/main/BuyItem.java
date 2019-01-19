@@ -177,7 +177,9 @@ public class BuyItem {
                 i.setItemMeta(im);
             }
 
-            if (permanent) i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
+            if (permanent) {
+                i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier).clone();
+            }
         }
 
         //Remove swords with lower damage
