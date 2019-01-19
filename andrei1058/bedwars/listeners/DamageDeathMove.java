@@ -533,6 +533,21 @@ public class DamageDeathMove implements Listener {
     }
 
     @EventHandler
+    public void onItemFrameDamage(EntityDamageByEntityEvent  e){
+        if (e.getEntity().getType() == EntityType.ITEM_FRAME){
+            Arena a = Arena.getArenaByName(e.getEntity().getWorld().getName());
+            if (a != null){
+                e.setCancelled(true);
+            }
+            if (Main.getServerType() != ServerType.SHARED) {
+                if (Main.getLobbyWorld().equals(e.getEntity().getWorld().getName())) {
+                    e.setCancelled(true);
+                }
+            }
+        }
+    }
+
+    @EventHandler
     public void onEntityDeath(EntityDeathEvent e) {
         if (Arena.getArenaByName(e.getEntity().getLocation().getWorld().getName()) != null) {
             if (e.getEntityType() == EntityType.IRON_GOLEM || e.getEntityType() == EntityType.SILVERFISH) {

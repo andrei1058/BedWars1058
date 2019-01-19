@@ -737,6 +737,10 @@ public class Main extends JavaPlugin {
         return generators;
     }
 
+    public static void setLobbyWorld(String lobbyWorld) {
+        Main.lobbyWorld = lobbyWorld;
+    }
+
     /**
      * Get the server version
      * Ex: v1_8_R3

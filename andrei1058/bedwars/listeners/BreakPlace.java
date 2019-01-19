@@ -21,6 +21,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.inventory.ItemStack;
@@ -409,7 +410,7 @@ public class BreakPlace implements Listener {
     }
 
     @EventHandler
-    public void onBlockExplode(BlockExplodeEvent e){
+    public void onBlockExplode(BlockExplodeEvent e) {
         if (e.blockList().isEmpty()) return;
         Arena a = Arena.getArenaByName(e.blockList().get(0).getWorld().getName());
         if (a != null) {
@@ -425,6 +426,18 @@ public class BreakPlace implements Listener {
                     }
                 }
             }
+        }
+    }
+
+    @EventHandler
+    public void onPaintingRemove(HangingBreakByEntityEvent e) {
+        Arena a = Arena.getArenaByName(e.getEntity().getWorld().getName());
+        if (a == null) {
+            if (Main.getServerType() == ServerType.SHARED) return;
+            if (!Main.getLobbyWorld().equals(e.getEntity().getWorld().getName())) return;
+        }
+        if (e.getEntity().getType() == EntityType.PAINTING || e.getEntity().getType() == EntityType.ITEM_FRAME) {
+            e.setCancelled(true);
         }
     }
 
