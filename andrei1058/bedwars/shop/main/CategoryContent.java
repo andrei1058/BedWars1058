@@ -193,7 +193,7 @@ public class CategoryContent {
         if (!canAfford){
             buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CANT_AFFORD).replace("{currency}", translatedCurrency);
         } else {
-            if (isPermanent() && shopCache.hasCachedItem(this) && tierI == getContentTiers().size()){
+            if (isPermanent() && shopCache.hasCachedItem(this) && shopCache.getCachedItem(this).getTier() == getContentTiers().size()){
                 buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_MAXED);
             } else {
                 buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CAN_BUY);

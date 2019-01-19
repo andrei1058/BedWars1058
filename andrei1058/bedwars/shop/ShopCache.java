@@ -141,6 +141,13 @@ public class ShopCache {
         return false;
     }
 
+    public CachedItem getCachedItem(CategoryContent cc){
+        for (CachedItem ci : cachedItems) {
+            if (ci.getCc() == cc) return ci;
+        }
+        return null;
+    }
+
     /**
      * Upgrade cached item
      * Add it if not found
