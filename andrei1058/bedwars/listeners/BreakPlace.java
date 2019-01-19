@@ -393,7 +393,27 @@ public class BreakPlace implements Listener {
         if (e.blockList().isEmpty()) return;
         Arena a = Arena.getArenaByName(e.blockList().get(0).getWorld().getName());
         if (a != null) {
-            if (e.getEntity().hasMetadata("bw1058") || a.getNextEvent() != NextEvent.GAME_END) {
+            if (a.getNextEvent() != NextEvent.GAME_END) {
+                List<Block> destroyed = e.blockList();
+                Iterator<Block> it = new ArrayList<>(destroyed).iterator();
+                while (it.hasNext()) {
+                    Block block = it.next();
+                    if (!a.getPlaced().contains(block)) {
+                        e.blockList().remove(block);
+                    } else if (AutoCreateTeams.is13Higher()) {
+                        if (block.getType().toString().contains("_GLASS")) e.blockList().remove(block);
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onBlockExplode(BlockExplodeEvent e){
+        if (e.blockList().isEmpty()) return;
+        Arena a = Arena.getArenaByName(e.blockList().get(0).getWorld().getName());
+        if (a != null) {
+            if (a.getNextEvent() != NextEvent.GAME_END) {
                 List<Block> destroyed = e.blockList();
                 Iterator<Block> it = new ArrayList<>(destroyed).iterator();
                 while (it.hasNext()) {
