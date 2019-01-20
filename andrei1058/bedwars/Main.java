@@ -198,7 +198,6 @@ public class Main extends JavaPlugin {
         /* Check if lobby location is set. Required for non Bungee servers */
         if (config.getLobbyWorldName().isEmpty() && serverType != ServerType.BUNGEE) {
             plugin.getLogger().severe("Lobby location is not set!");
-            return;
         }
 
         /* Load lobby world if not main level */
