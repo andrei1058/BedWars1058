@@ -6,6 +6,7 @@ import com.andrei1058.bedwars.configuration.ConfigPath;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import static com.andrei1058.bedwars.Main.config;
@@ -16,6 +17,7 @@ public class v1_3_Interact implements Listener {
     //Check if player is opening an inventory
     public void onInventoryInteract(PlayerInteractEvent e){
         if (e.isCancelled()) return;
+        if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         Block b = e.getClickedBlock();
         if (b == null) return;
         if (b.getWorld().getName().equals(Main.getLobbyWorld()) || Arena.getArenaByPlayer(e.getPlayer()) != null){

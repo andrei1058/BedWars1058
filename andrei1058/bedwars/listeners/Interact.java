@@ -55,6 +55,7 @@ public class Interact implements Listener {
     //Check if player is opening an inventory
     public void onInventoryInteract(PlayerInteractEvent e){
         if (e.isCancelled()) return;
+        if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         Block b = e.getClickedBlock();
         if (b == null) return;
         if (b.getWorld().getName().equals(Main.getLobbyWorld()) || Arena.getArenaByPlayer(e.getPlayer()) != null){
