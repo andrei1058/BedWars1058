@@ -339,6 +339,15 @@ public interface NMS {
      */
     Material materialGoldenLeggings();
 
+    /** Cake material*/
+    Material materialCake();
+
+    /** Crafting table material */
+    Material materialCraftingTable();
+
+    /** Enchanting table material*/
+    Material materialEnchantingTable();
+
     /**
      * Check if bed
      *
@@ -370,6 +379,7 @@ public interface NMS {
 
     /**
      * Get an ItemStack identifier
+     * will return null string if it doesn t have an identifier
      */
     String getShopUpgradeIdentifier(ItemStack itemStack);
 

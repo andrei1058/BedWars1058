@@ -164,7 +164,6 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         }
     }
 
-    @Override
     public List<String> tabComplete(CommandSender s, String alias, String[] args, Location location) throws IllegalArgumentException {
         if (args.length == 1) {
             List<String> sub = new ArrayList<>();

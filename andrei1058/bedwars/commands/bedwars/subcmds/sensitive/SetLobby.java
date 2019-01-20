@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
@@ -39,12 +40,14 @@ public class SetLobby extends SubCommand {
     public boolean execute(String[] args, CommandSender s) {
         if (s instanceof ConsoleCommandSender) return false;
         Player p = (Player) s;
-        if (config.getLobbyWorldName().isEmpty()){
+        /*if (config.getLobbyWorldName().isEmpty()){
             p.sendMessage("§6 ▪ §aAs this is the first time you set the lobby. The server needs a restart.");
             Bukkit.getScheduler().runTaskLater(plugin, ()-> plugin.getServer().spigot().restart(), 40L);
-        }
+        }*/
         config.saveConfigLoc("lobbyLoc", p.getLocation());
         p.sendMessage("§6 ▪ §7Lobby location set!");
+        config.reload();
+        Main.setLobbyWorld(p.getLocation().getWorld().getName());
         return true;
     }
 

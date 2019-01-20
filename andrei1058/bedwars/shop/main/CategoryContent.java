@@ -18,6 +18,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.language.Language.getMsg;
@@ -31,13 +32,16 @@ public class CategoryContent {
     private String itemNamePath, itemLorePath;
     private String identifier;
     private boolean permanent = false, downgradable = false;
+    private byte weight = 0;
+    private ShopCategory father;
 
     /**
      * Load a new category
      */
-    public CategoryContent(String path, String name, String categoryName, YamlConfiguration yml) {
+    public CategoryContent(String path, String name, String categoryName, YamlConfiguration yml, ShopCategory father) {
         Main.debug("Loading CategoryContent " + path);
         this.contentName = name;
+        this.father = father;
 
         if (yml.get(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_CONTENT_SLOT) == null) {
             Main.plugin.getLogger().severe("Content slot not set at " + path);
@@ -65,6 +69,10 @@ public class CategoryContent {
 
         if (yml.get(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_IS_DOWNGRADABLE) != null) {
             downgradable = yml.getBoolean(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_IS_DOWNGRADABLE);
+        }
+
+        if (yml.get(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_WEIGHT) != null){
+            weight = (byte) yml.getInt(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_WEIGHT);
         }
 
         this.slot = yml.getInt(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_CONTENT_SLOT);
@@ -102,6 +110,9 @@ public class CategoryContent {
     public void execute(Player player, ShopCache shopCache) {
 
         ContentTier ct;
+
+        //check weight
+        if (shopCache.getCategoryWeight(father) > weight) return;
 
         //check if can re-buy
         if (shopCache.getContentTier(getIdentifier()) == contentTiers.size()) {
@@ -144,6 +155,8 @@ public class CategoryContent {
 
         //call shop buy event
         Bukkit.getPluginManager().callEvent(new ShopBuyEvent(player, this));
+
+        shopCache.setCategoryWeight(father, weight);
     }
 
     /**
@@ -187,12 +200,13 @@ public class CategoryContent {
         String translatedCurrency = getMsg(player, getCurrencyMsgPath(ct));
         ChatColor cColor = getCurrencyColor(ct.getCurrency());
 
-        String tier = getRomanNumber(shopCache.getContentTier(this.getIdentifier()));
+        int tierI = ct.getValue();
+        String tier = getRomanNumber(tierI);
         String buyStatus;
         if (!canAfford){
             buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CANT_AFFORD).replace("{currency}", translatedCurrency);
         } else {
-            if (isPermanent() && shopCache.hasCachedItem(this)){
+            if (isPermanent() && shopCache.hasCachedItem(this) && shopCache.getCachedItem(this).getTier() == getContentTiers().size()){
                 buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_MAXED);
             } else {
                 buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CAN_BUY);

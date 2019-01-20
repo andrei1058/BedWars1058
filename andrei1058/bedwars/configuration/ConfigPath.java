@@ -76,6 +76,7 @@ public class ConfigPath {
 
     public static final String GENERAL_CONFIGURATION_START_COUNTDOWN_REGULAR = "countdowns.game-start-regular";
     public static final String GENERAL_CONFIGURATION_START_COUNTDOWN_SHORTENED = "countdowns.game-start-shortened";
+    public static final String GENERAL_CONFIGURATION_START_COUNTDOWN_HALF = "countdowns.game-start-half-arena";
     public static final String GENERAL_CONFIGURATION_BEDS_DESTROY_COUNTDOWN = "countdowns.next-event-beds-destroy";
     public static final String GENERAL_CONFIGURATION_DRAGON_SPAWN_COUNTDOWN = "countdowns.next-event-dragon-spawn";
     public static final String GENERAL_CONFIGURATION_GAME_END_COUNTDOWN = "countdowns.next-event-game-end";
@@ -98,6 +99,11 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL = GENERAL_CONFIGURATION_ARENA_SELECTOR_PATH + ".%path%.material";
     public static final String GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA = GENERAL_CONFIGURATION_ARENA_SELECTOR_PATH + ".%path%.data";
     public static final String GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_ENCHANTED = GENERAL_CONFIGURATION_ARENA_SELECTOR_PATH + ".%path%.enchanted";
+    public static final String GENERAL_CONFIGURATION_DISABLE_CRAFTING = "inventories.disable-crafting-table";
+    public static final String GENERAL_CONFIGURATION_DISABLE_ENCHANTING = "inventories.disable-enchanting-table";
+    public static final String GENERAL_CONFIGURATION_DISABLE_FURNACE = "inventories.disable-furnace";
+    public static final String GENERAL_CONFIGURATION_DISABLE_BREWING_STAND = "inventories.disable-brewing-stand";
+    public static final String GENERAL_CONFIGURATION_DISABLE_ANVIL = "inventories.disable-anvil";
 
     public static final String GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP = "server-ip";
 
@@ -191,6 +197,7 @@ public class ConfigPath {
     public static final String SHOP_CATEGORY_CONTENT_CONTENT_SLOT = "content-settings.content-slot";
     public static final String SHOP_CATEGORY_CONTENT_IS_PERMANENT = "content-settings.is-permanent";
     public static final String SHOP_CATEGORY_CONTENT_IS_DOWNGRADABLE = "content-settings.is-downgradable";
+    public static final String SHOP_CATEGORY_CONTENT_WEIGHT = "content-settings.weight";
     public static final String SHOP_CATEGORY_CONTENT_CONTENT_TIERS = "content-tiers";
     public static final String SHOP_CATEGORY_CONTENT_PATH = ".category-content";
 

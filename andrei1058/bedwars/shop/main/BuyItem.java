@@ -177,7 +177,9 @@ public class BuyItem {
                 i.setItemMeta(im);
             }
 
-            if (permanent) i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
+            if (permanent) {
+                i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier).clone();
+            }
         }
 
         //Remove swords with lower damage
@@ -187,8 +189,10 @@ public class BuyItem {
                 if (itm.getType() == Material.AIR) continue;
                 if (!Main.nms.isSword(itm)) continue;
                 if (itm == i) continue;
-                if (Main.nms.getDamage(itm) <= Main.nms.getDamage(i)) {
-                    player.getInventory().remove(itm);
+                if (nms.isCustomBedWarsItem(itm) && nms.getCustomData(itm).equals("DEFAULT_ITEM")) {
+                    if (Main.nms.getDamage(itm) <= Main.nms.getDamage(i)) {
+                        player.getInventory().remove(itm);
+                    }
                 }
             }
         }

@@ -7,6 +7,7 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.language.Messages;
+import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.upgrades.TeamUpgrade;
 import com.andrei1058.bedwars.upgrades.UpgradeGroup;
 import org.bukkit.Material;
@@ -16,8 +17,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.ItemStack;
 
+import static com.andrei1058.bedwars.Main.debug;
 import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.language.Language.getMsg;
+import static org.bukkit.event.inventory.InventoryAction.*;
 
 public class Inventory implements Listener {
 

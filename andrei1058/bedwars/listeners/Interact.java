@@ -1,18 +1,24 @@
 package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Messages;
+import com.andrei1058.bedwars.shop.ShopCache;
+import com.andrei1058.bedwars.shop.listeners.InventoryListener;
+import com.andrei1058.bedwars.shop.main.ShopCategory;
 import com.andrei1058.bedwars.upgrades.UpgradeGroup;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fireball;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -41,6 +47,28 @@ public class Interact implements Listener {
                     e.setCancelled(true);
                     Bukkit.dispatchCommand(p, customData[1]);
                 }
+            }
+        }
+    }
+
+    @EventHandler
+    //Check if player is opening an inventory
+    public void onInventoryInteract(PlayerInteractEvent e){
+        if (e.isCancelled()) return;
+        if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+        Block b = e.getClickedBlock();
+        if (b == null) return;
+        if (b.getWorld().getName().equals(Main.getLobbyWorld()) || Arena.getArenaByPlayer(e.getPlayer()) != null){
+            if (b.getType() == nms.materialCraftingTable() && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_CRAFTING)) {
+                e.setCancelled(true);
+            } else if (b.getType() == nms.materialEnchantingTable() && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_ENCHANTING)){
+                e.setCancelled(true);
+            } else if (b.getType() == Material.FURNACE && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_FURNACE)){
+                e.setCancelled(true);
+            } else if (b.getType() == Material.BREWING_STAND && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_BREWING_STAND)){
+                e.setCancelled(true);
+            } else if (b.getType() == Material.ANVIL && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_ANVIL)){
+                e.setCancelled(true);
             }
         }
     }
@@ -145,6 +173,36 @@ public class Interact implements Listener {
     }
 
     @EventHandler
+    public void disableItemFrameRotation(PlayerInteractEntityEvent e){
+        if (e.getRightClicked().getType() == EntityType.ITEM_FRAME){
+            if (((ItemFrame)e.getRightClicked()).getItem().getType().equals(Material.AIR)){
+                //prevent from putting upgradable items in it
+                ItemStack i = nms.getItemInHand(e.getPlayer());
+                if (i != null) {
+                    if (i.getType() != Material.AIR) {
+                        ShopCache sc = ShopCache.getShopCache(e.getPlayer());
+                        if (sc != null) {
+                            if (InventoryListener.isUpgradable(i, sc)){
+                                e.setCancelled(true);
+                            }
+                        }
+                    }
+                }
+                return;
+            }
+            Arena a = Arena.getArenaByName(e.getPlayer().getWorld().getName());
+            if (a != null){
+                e.setCancelled(true);
+            }
+            if (Main.getServerType() != ServerType.SHARED){
+                if (Main.getLobbyWorld().equals(e.getPlayer().getWorld().getName())){
+                    e.setCancelled(true);
+                }
+            }
+        }
+    }
+
+    @EventHandler
     public void onEntityInteract(PlayerInteractEntityEvent e) {
         Arena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a == null) return;
@@ -202,7 +260,7 @@ public class Interact implements Listener {
     @EventHandler
     public void onCrafting(PrepareItemCraftEvent e) {
         if (Arena.getArenaByPlayer((Player) e.getView().getPlayer()) != null) {
-            if (config.getBoolean("disableCrafting")) {
+            if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_CRAFTING)) {
                 e.getInventory().setResult(new ItemStack(Material.AIR));
             }
         }

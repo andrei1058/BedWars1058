@@ -67,6 +67,7 @@ public class GamePlayingTask extends BukkitRunnable {
                 if (getArena().upgradeDiamondsCount > 0) {
                     getArena().upgradeDiamondsCount--;
                     if (getArena().upgradeDiamondsCount == 0) {
+                        getArena().updateNextEvent();
                         for (OreGenerator o : OreGenerator.getGenerators()) {
                             if (o.getArena() == getArena()) {
                                 if (o.getOre().getType() == Material.DIAMOND) {
@@ -74,12 +75,12 @@ public class GamePlayingTask extends BukkitRunnable {
                                 }
                             }
                         }
-                        getArena().updateNextEvent();
                     }
                 }
                 if (getArena().upgradeEmeraldsCount > 0) {
                     getArena().upgradeEmeraldsCount--;
                     if (getArena().upgradeEmeraldsCount == 0) {
+                        getArena().updateNextEvent();
                         for (OreGenerator o : OreGenerator.getGenerators()) {
                             if (o.getArena() == getArena()) {
                                 if (o.getOre().getType() == Material.EMERALD) {
@@ -87,7 +88,6 @@ public class GamePlayingTask extends BukkitRunnable {
                                 }
                             }
                         }
-                        getArena().updateNextEvent();
                     }
                 }
                 break;

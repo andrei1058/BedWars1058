@@ -518,7 +518,7 @@ public class DamageDeathMove implements Listener {
             if (a != null) {
                 if (e.getEntity() instanceof Fireball) {
                     Location l = e.getEntity().getLocation();
-                    e.getEntity().getWorld().createExplosion(l.getX(), l.getY(), l.getZ(), 6, false, false);
+                    e.getEntity().getWorld().createExplosion(l.getX(), l.getY(), l.getZ(), 3, false, true);
                     return;
                 }
                 String utility = "";
@@ -527,6 +527,21 @@ public class DamageDeathMove implements Listener {
                 }
                 if (!utility.isEmpty()) {
                     spawnUtility(utility, e.getEntity().getLocation(), a.getTeam((Player) e.getEntity().getShooter()), (Player) e.getEntity().getShooter());
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onItemFrameDamage(EntityDamageByEntityEvent  e){
+        if (e.getEntity().getType() == EntityType.ITEM_FRAME){
+            Arena a = Arena.getArenaByName(e.getEntity().getWorld().getName());
+            if (a != null){
+                e.setCancelled(true);
+            }
+            if (Main.getServerType() != ServerType.SHARED) {
+                if (Main.getLobbyWorld().equals(e.getEntity().getWorld().getName())) {
+                    e.setCancelled(true);
                 }
             }
         }
@@ -544,7 +559,7 @@ public class DamageDeathMove implements Listener {
 
     @EventHandler
     public void onEat(PlayerItemConsumeEvent e) {
-        if (e.getItem().getType() == Material.CAKE_BLOCK) {
+        if (e.getItem().getType() == nms.materialCake()) {
             if (Arena.getArenaByName(e.getPlayer().getWorld().getName()) != null) {
                 e.setCancelled(true);
             }

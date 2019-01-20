@@ -19,7 +19,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -219,6 +218,7 @@ public class BedWarsTeam {
                         }
                     }
                     if (!hasSword) {
+                        i = nms.addCustomData(i, "DEFAULT_ITEM");
                         p.getInventory().addItem(i);
                     }
                 } catch (Exception ex) {
@@ -754,7 +754,6 @@ public class BedWarsTeam {
         return membersCache;
     }
 
-    @Contract(pure = true)
     public static HashMap<Player, BedHolo> getBeds() {
         return beds;
     }

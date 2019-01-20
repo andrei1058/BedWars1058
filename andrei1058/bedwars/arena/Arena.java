@@ -24,8 +24,6 @@ import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.sql.Timestamp;
@@ -42,6 +40,7 @@ public class Arena {
     private static ArrayList<Arena> arenas = new ArrayList<>();
     private static int gamesBeforeRestart = 0;//config.getInt(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART);
     public static HashMap<UUID, Integer> afkCheck = new HashMap<>();
+    public static HashMap<UUID, Integer> magicMilk = new HashMap<>();
 
 
     private List<Player> players = new ArrayList<>();
@@ -57,6 +56,7 @@ public class Arena {
     private String group = "Default", worldName;
     private List<BedWarsTeam> teams = new ArrayList<>();
     private List<Block> placed = new ArrayList<>();
+    private List<String> nextEvents = new ArrayList<>();
 
     /**
      * Current event, used at scoreboard
@@ -227,6 +227,11 @@ public class Arena {
         Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.ArenaEnableEvent(this));
 
         setStatus(GameState.waiting);
+
+        //
+        for (NextEvent ne : NextEvent.values()){
+            nextEvents.add(ne.toString());
+        }
     }
 
     /**
@@ -317,6 +322,16 @@ public class Arena {
                     setStatus(GameState.starting);
                 } else if (players.size() >= minPlayers && teams == 0) {
                     setStatus(GameState.starting);
+                }
+            }
+
+            //half full arena time shorten
+            if (players.size()>=(teams.size()*maxInTeam/2)){
+                if (startingTask != null) {
+                    if (Bukkit.getScheduler().isCurrentlyRunning(startingTask.getTask())) {
+                        if (startingTask.getCountdown() > getCm().getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_HALF))
+                        startingTask.setCountdown(Main.config.getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_HALF));
+                    }
                 }
             }
 
@@ -603,6 +618,12 @@ public class Arena {
                 }
             }
         }
+
+        //Remove from magic milk
+        if (magicMilk.containsKey(p.getUniqueId())){
+            Bukkit.getScheduler().cancelTask(magicMilk.get(p.getUniqueId()));
+            magicMilk.remove(p.getUniqueId());
+        }
     }
 
     /**
@@ -716,6 +737,12 @@ public class Arena {
                 ReJoin.getPlayer(p).destroy();
             }
         }
+
+        //Remove from magic milk
+        if (magicMilk.containsKey(p.getUniqueId())){
+            Bukkit.getScheduler().cancelTask(magicMilk.get(p.getUniqueId()));
+            magicMilk.remove(p.getUniqueId());
+        }
     }
 
     /**
@@ -797,6 +824,7 @@ public class Arena {
         }
         players.clear();
         spectators.clear();
+        nextEvents.clear();
         Bukkit.unloadWorld(world, false);
         arenaByName.remove(world.getName());
         arenas.remove(this);
@@ -842,6 +870,9 @@ public class Arena {
                 rjt.destroy();
             }
         }
+        for (NextEvent ne : NextEvent.values()){
+            nextEvents.add(ne.toString());
+        }
     }
 
     //GETTER METHODS
@@ -882,7 +913,6 @@ public class Arena {
     /**
      * Get an arenas list
      */
-    @Contract(pure = true)
     public static ArrayList<Arena> getArenas() {
         return arenas;
     }
@@ -1095,7 +1125,7 @@ public class Arena {
     /**
      * Check if a player has vip perms
      */
-    public static boolean isVip(@NotNull Player p) {
+    public static boolean isVip(Player p) {
         return p.hasPermission(mainCmd + ".*") || p.hasPermission(mainCmd + ".vip");
     }
 
@@ -1165,7 +1195,7 @@ public class Arena {
      * Not used in serverType BUNGEE.
      * This will clear the inventory first.
      */
-    public static void sendLobbyCommandItems(@NotNull Player p) {
+    public static void sendLobbyCommandItems(Player p) {
         if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH) == null) return;
         p.getInventory().clear();
 
@@ -1204,7 +1234,7 @@ public class Arena {
      * This will give the pre-game command Items.
      * This will clear the inventory first.
      */
-    private void sendPreGameCommandItems(@NotNull Player p) {
+    private void sendPreGameCommandItems(Player p) {
         if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH) == null) return;
         p.getInventory().clear();
 
@@ -1243,7 +1273,7 @@ public class Arena {
      * This will give the spectator command Items.
      * This will clear the inventory first.
      */
-    private void sendSpectatorCommandItems(@NotNull Player p) {
+    private void sendSpectatorCommandItems(Player p) {
         if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH) == null) return;
         p.getInventory().clear();
 
@@ -1278,7 +1308,6 @@ public class Arena {
         }
     }
 
-    @Contract(pure = true)
     public static boolean isInArena(Player p) {
         return arenaByPlayer.containsKey(p);
     }
@@ -1410,7 +1439,36 @@ public class Arena {
     }
 
     public void updateNextEvent() {
-        if (nextEvent == NextEvent.DIAMOND_GENERATOR_TIER_II) {
+
+        debug("---");
+        debug("updateNextEvent called");
+
+        if (nextEvent.getValue(this) > 0) return;
+
+        nextEvents.remove(nextEvent.toString());
+
+        for (String s : nextEvents){
+            debug(s);
+        }
+
+        if (nextEvents.isEmpty()) return;
+
+        NextEvent next = NextEvent.valueOf(nextEvents.get(0));
+        int lowest = next.getValue(this);
+
+        for (String ne : nextEvents){
+            int value = NextEvent.valueOf(ne).getValue(this);
+            if (value == -1) continue;
+            if (lowest > value) next = NextEvent.valueOf(ne);
+        }
+
+        debug("---");
+
+        setNextEvent(next);
+
+
+
+        /*if (nextEvent == NextEvent.DIAMOND_GENERATOR_TIER_II) {
             setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_III);
         } else if (nextEvent == NextEvent.DIAMOND_GENERATOR_TIER_III) {
             if (emeraldTier == 1) {
@@ -1420,17 +1478,16 @@ public class Arena {
             } else {
                 setNextEvent(NextEvent.BEDS_DESTROY);
             }
-        } else if (emeraldTier >= 3 && diamondTier >= 3 && (playingTask != null && playingTask.getBedsDestroyCountdown() >= 0)) {
+        } else if (emeraldTier >= 3 && diamondTier >= 3 && (playingTask != null && playingTask.getBedsDestroyCountdown() == 0)) {
             setNextEvent(NextEvent.BEDS_DESTROY);
         } else if (nextEvent == NextEvent.BEDS_DESTROY && (playingTask != null && playingTask.getDragonSpawnCountdown() >= 0)) {
             setNextEvent(NextEvent.ENDER_DRAGON);
         } else if (nextEvent == NextEvent.ENDER_DRAGON && (playingTask != null && playingTask.getBedsDestroyCountdown() == 0) && (playingTask != null && playingTask.getDragonSpawnCountdown() == 0)) {
             setNextEvent(NextEvent.GAME_END);
-        }
+        }*/
         debug(nextEvent.toString());
     }
 
-    @Contract(pure = true)
     public static HashMap<Player, Arena> getArenaByPlayer() {
         return arenaByPlayer;
     }
@@ -1501,7 +1558,7 @@ public class Arena {
         return startingTask;
     }
 
-    GamePlayingTask getPlayingTask() {
+    public GamePlayingTask getPlayingTask() {
         return playingTask;
     }
 
@@ -1517,7 +1574,6 @@ public class Arena {
         Arena.gamesBeforeRestart = gamesBeforeRestart;
     }
 
-    @Contract(pure = true)
     public static int getGamesBeforeRestart() {
         return gamesBeforeRestart;
     }
@@ -1633,6 +1689,10 @@ public class Arena {
         }
 
         return true;
+    }
+
+    public List<String> getNextEvents() {
+        return new ArrayList<>(nextEvents);
     }
 
     /**

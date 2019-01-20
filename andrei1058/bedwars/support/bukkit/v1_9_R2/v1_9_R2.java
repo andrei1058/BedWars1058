@@ -652,6 +652,21 @@ public class v1_9_R2 implements NMS {
     }
 
     @Override
+    public org.bukkit.Material materialCake() {
+        return org.bukkit.Material.valueOf("CAKE_BLOCK");
+    }
+
+    @Override
+    public org.bukkit.Material materialCraftingTable() {
+        return org.bukkit.Material.valueOf("WORKBENCH");
+    }
+
+    @Override
+    public org.bukkit.Material materialEnchantingTable() {
+        return org.bukkit.Material.valueOf("ENCHANTMENT_TABLE");
+    }
+
+    @Override
     public boolean isBed(org.bukkit.Material material) {
         return material == org.bukkit.Material.valueOf("BED_BLOCK") || material == org.bukkit.Material.valueOf("BED");
     }

@@ -72,9 +72,9 @@ public class AutoCreateTeams extends SubCommand {
                 World w = p.getWorld();
                 if (ss.getCm().getYml().get("Team") == null) {
                     p.sendMessage("§6 ▪ §7Searching for teams. This may cause lag.");
-                    for (int x = -150; x < 150; x++) {
+                    for (int x = -200; x < 200; x++) {
                         for (int y = 50; y < 130; y++) {
-                            for (int z = -150; z < 150; z++) {
+                            for (int z = -200; z < 200; z++) {
                                 Block b = new Location(w, x, y, z).getBlock();
                                 if (b.getType().toString().contains("_WOOL")) {
                                     if (!found.contains(b.getType().toString())) {
@@ -145,9 +145,9 @@ public class AutoCreateTeams extends SubCommand {
                 World w = p.getWorld();
                 if (ss.getCm().getYml().get("Team") == null) {
                     p.sendMessage("§6 ▪ §7Searching for teams. This may cause lag.");
-                    for (int x = -150; x < 150; x++) {
+                    for (int x = -200; x < 200; x++) {
                         for (int y = 50; y < 130; y++) {
-                            for (int z = -150; z < 150; z++) {
+                            for (int z = -200; z < 200; z++) {
                                 Block b = new Location(w, x, y, z).getBlock();
                                 if (b.getType() == Material.WOOL) {
                                     if (!found.contains(b.getData())) {

@@ -15,7 +15,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffect;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
@@ -58,7 +57,7 @@ public class BaseListener implements Listener {
     /**
      * Check the Enter/ Leave events and call them
      */
-    private static void checkEvents(Player p, @NotNull Arena a) {
+    private static void checkEvents(Player p, Arena a) {
         if (a.isSpectator(p)) return;
         boolean notOnBase = true;
         for (BedWarsTeam bwt : a.getTeams()) {
@@ -68,12 +67,16 @@ public class BaseListener implements Listener {
                 if (isOnABase.containsKey(p)) {
                     if (isOnABase.get(p) != bwt) {
                         Bukkit.getPluginManager().callEvent(new BaseLeaveEvent(p, isOnABase.get(p)));
-                        Bukkit.getPluginManager().callEvent(new BaseEnterEvent(p, bwt));
+                        if (!Arena.magicMilk.containsKey(p.getUniqueId())) {
+                            Bukkit.getPluginManager().callEvent(new BaseEnterEvent(p, bwt));
+                        }
                         isOnABase.replace(p, bwt);
                     }
                 } else {
-                    Bukkit.getPluginManager().callEvent(new BaseEnterEvent(p, bwt));
-                    isOnABase.put(p, bwt);
+                    if (!Arena.magicMilk.containsKey(p.getUniqueId())) {
+                        Bukkit.getPluginManager().callEvent(new BaseEnterEvent(p, bwt));
+                        isOnABase.put(p, bwt);
+                    }
                 }
             }
         }
