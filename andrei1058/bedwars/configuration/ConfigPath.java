@@ -99,6 +99,11 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL = GENERAL_CONFIGURATION_ARENA_SELECTOR_PATH + ".%path%.material";
     public static final String GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA = GENERAL_CONFIGURATION_ARENA_SELECTOR_PATH + ".%path%.data";
     public static final String GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_ENCHANTED = GENERAL_CONFIGURATION_ARENA_SELECTOR_PATH + ".%path%.enchanted";
+    public static final String GENERAL_CONFIGURATION_DISABLE_CRAFTING = "inventories.disable-crafting-table";
+    public static final String GENERAL_CONFIGURATION_DISABLE_ENCHANTING = "inventories.disable-enchanting-table";
+    public static final String GENERAL_CONFIGURATION_DISABLE_FURNACE = "inventories.disable-furnace";
+    public static final String GENERAL_CONFIGURATION_DISABLE_BREWING_STAND = "inventories.disable-brewing-stand";
+    public static final String GENERAL_CONFIGURATION_DISABLE_ANVIL = "inventories.disable-anvil";
 
     public static final String GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP = "server-ip";
 

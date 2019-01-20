@@ -52,6 +52,27 @@ public class Interact implements Listener {
     }
 
     @EventHandler
+    //Check if player is opening an inventory
+    public void onInventoryInteract(PlayerInteractEvent e){
+        if (e.isCancelled()) return;
+        Block b = e.getClickedBlock();
+        if (b == null) return;
+        if (b.getWorld().getName().equals(Main.getLobbyWorld()) || Arena.getArenaByPlayer(e.getPlayer()) != null){
+            if (b.getType() == nms.materialCraftingTable() && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_CRAFTING)) {
+                e.setCancelled(true);
+            } else if (b.getType() == nms.materialEnchantingTable() && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_ENCHANTING)){
+                e.setCancelled(true);
+            } else if (b.getType() == Material.FURNACE && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_FURNACE)){
+                e.setCancelled(true);
+            } else if (b.getType() == Material.BREWING_STAND && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_BREWING_STAND)){
+                e.setCancelled(true);
+            } else if (b.getType() == Material.ANVIL && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_ANVIL)){
+                e.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
     public void onInteract(PlayerInteractEvent e) {
         Player p = e.getPlayer();
         Arena.afkCheck.remove(p.getUniqueId());
@@ -238,7 +259,7 @@ public class Interact implements Listener {
     @EventHandler
     public void onCrafting(PrepareItemCraftEvent e) {
         if (Arena.getArenaByPlayer((Player) e.getView().getPlayer()) != null) {
-            if (config.getBoolean("disableCrafting")) {
+            if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_CRAFTING)) {
                 e.getInventory().setResult(new ItemStack(Material.AIR));
             }
         }

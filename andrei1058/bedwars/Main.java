@@ -226,6 +226,7 @@ public class Main extends JavaPlugin {
         switch (version) {
             case "v1_13_R2":
             case "v1_13_R1":
+                registerEvents(new v1_3_Interact());
             case "v1_12_R1":
                 registerEvents(new EntityDropPickListener());
                 break;
@@ -395,7 +396,6 @@ public class Main extends JavaPlugin {
         yml.addDefault("lobbyServer", "hub");
         yml.addDefault("globalChat", false);
         yml.addDefault("formatChat", true);
-        yml.addDefault("disableCrafting", true);
         yml.addDefault("debug", false);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD, true);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ALLOW_PARTIES, true);
@@ -420,6 +420,12 @@ public class Main extends JavaPlugin {
         yml.addDefault("database.ssl", false);
 
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_ROTATE_GEN, true);
+
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DISABLE_CRAFTING, true);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DISABLE_ENCHANTING, true);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DISABLE_FURNACE, true);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DISABLE_BREWING_STAND, true);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DISABLE_ANVIL, true);
 
         /* Multi-Arena Lobby Command Items */
         config.saveLobbyCommandItem("stats", "bw stats", false, getForCurrentVersion("SKULL_ITEM", "SKULL_ITEM", "PLAYER_HEAD"), 3, 0);
@@ -511,6 +517,9 @@ public class Main extends JavaPlugin {
         if (config.getYml().get("statsGUI.invSize") != null) {
             config.set(ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE, config.getInt("statsGUI.invSize"));
         }
+        if (config.getYml().get("disableCrafting") != null){
+            config.set(ConfigPath.GENERAL_CONFIGURATION_DISABLE_CRAFTING, config.getString("disableCrafting"));
+        }
         if (config.getYml().get("statsGUI") != null) {
             for (String stats_path : config.getYml().getConfigurationSection("statsGUI").getKeys(false)) {
                 String new_path = stats_path;
@@ -560,6 +569,7 @@ public class Main extends JavaPlugin {
         config.set("items", null);
         config.set("start-items-per-arena", null);
         config.set("safeMode", null);
+        config.set("disableCrafting", null);
 
         //Finished old configuration conversion
 

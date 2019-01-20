@@ -678,6 +678,16 @@ public class v1_13_R2 implements NMS {
     }
 
     @Override
+    public org.bukkit.Material materialCraftingTable() {
+        return org.bukkit.Material.valueOf("CRAFTING_TABLE");
+    }
+
+    @Override
+    public org.bukkit.Material materialEnchantingTable() {
+        return org.bukkit.Material.valueOf("ENCHANTING_TABLE");
+    }
+
+    @Override
     public boolean isBed(org.bukkit.Material material) {
         return material.toString().contains("_BED");
     }

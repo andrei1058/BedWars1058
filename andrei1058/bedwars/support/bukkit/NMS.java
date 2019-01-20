@@ -342,6 +342,12 @@ public interface NMS {
     /** Cake material*/
     Material materialCake();
 
+    /** Crafting table material */
+    Material materialCraftingTable();
+
+    /** Enchanting table material*/
+    Material materialEnchantingTable();
+
     /**
      * Check if bed
      *
