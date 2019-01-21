@@ -154,7 +154,7 @@ public class InventoryListener implements Listener {
 
         String identifier = nms.getShopUpgradeIdentifier(i);
         if (identifier.equals("null")) return false;
-        if (identifier == null) return false;
+        if (sc.getCachedItem(identifier) == null) return false;
         return sc.getCachedItem(identifier).getCc().getContentTiers().size() > 1;
     }
 }
