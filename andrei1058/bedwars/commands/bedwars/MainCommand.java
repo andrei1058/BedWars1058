@@ -118,8 +118,6 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
             if (sb.getSubCommandName().equalsIgnoreCase(args[0])) {
                 if (sb.hasPermission(s)) {
                     commandFound = sb.execute(Arrays.copyOfRange(args, 1, args.length), s);
-                } else {
-                    commandFound = sb.execute(Arrays.copyOfRange(args, 1, args.length), s);
                 }
             }
         }
