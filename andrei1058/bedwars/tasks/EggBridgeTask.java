@@ -61,6 +61,11 @@ public class EggBridgeTask extends BukkitRunnable {
             return;
         }
 
+        if (getPlayer().getWorld() != getProjectile().getWorld()){
+            cancel();
+            return;
+        }
+
         if (getPlayer().getLocation().distance(getProjectile().getLocation()) > 27) {
             cancel();
             return;
