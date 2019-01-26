@@ -112,21 +112,25 @@ public class InventoryListener implements Listener {
         }
 
         //block moving cursor item
-        if (e.getCursor().getType() != Material.AIR) {
-            if (e.getClickedInventory().getType() != e.getWhoClicked().getInventory().getType()) {
-                if (isUpgradable(e.getCursor(), sc)) {
-                    e.getWhoClicked().closeInventory();
-                    e.setCancelled(true);
+        if (e.getCursor() != null) {
+            if (e.getCursor().getType() != Material.AIR) {
+                if (e.getClickedInventory().getType() != e.getWhoClicked().getInventory().getType()) {
+                    if (isUpgradable(e.getCursor(), sc)) {
+                        e.getWhoClicked().closeInventory();
+                        e.setCancelled(true);
+                    }
                 }
             }
         }
 
         //block moving current item
-        if (e.getCurrentItem().getType() != Material.AIR) {
-            if (e.getClickedInventory().getType() != e.getWhoClicked().getInventory().getType()) {
-                if (isUpgradable(e.getCurrentItem(), sc)) {
-                    e.getWhoClicked().closeInventory();
-                    e.setCancelled(true);
+        if (e.getCurrentItem() != null) {
+            if (e.getCurrentItem().getType() != Material.AIR) {
+                if (e.getClickedInventory().getType() != e.getWhoClicked().getInventory().getType()) {
+                    if (isUpgradable(e.getCurrentItem(), sc)) {
+                        e.getWhoClicked().closeInventory();
+                        e.setCancelled(true);
+                    }
                 }
             }
         }
