@@ -150,9 +150,12 @@ public class InventoryListener implements Listener {
     @Contract("null, _ -> false")
     public static boolean isUpgradable(ItemStack i, ShopCache sc) {
         if (i == null) return false;
+        if (sc == null) return false;
 
         String identifier = nms.getShopUpgradeIdentifier(i);
+        if (identifier == null) return false;
         if (identifier.equals("null")) return false;
+        if (sc.getCachedItem(identifier) == null) return false;
         return sc.getCachedItem(identifier).getCc().getContentTiers().size() > 1;
     }
 }
