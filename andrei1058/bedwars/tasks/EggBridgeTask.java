@@ -54,7 +54,6 @@ public class EggBridgeTask extends BukkitRunnable {
     public void run() {
 
         Location loc = getProjectile().getLocation();
-        loc.getWorld().playEffect(loc, nms.eggBridge(), 5);
 
         if (getProjectile().isDead()) {
             cancel();
@@ -84,6 +83,7 @@ public class EggBridgeTask extends BukkitRunnable {
                     nms.setBlockTeamColor(b2, getTeamColor());
                     getArena().getPlaced().add(b2);
                     Bukkit.getPluginManager().callEvent(new EggBridgeBuildEvent(getTeamColor(), getArena(), b2));
+                    loc.getWorld().playEffect(b2.getLocation(), nms.eggBridge(), 3);
                 }
             }
 
@@ -94,6 +94,7 @@ public class EggBridgeTask extends BukkitRunnable {
                     nms.setBlockTeamColor(b3, getTeamColor());
                     getArena().getPlaced().add(b3);
                     Bukkit.getPluginManager().callEvent(new EggBridgeBuildEvent(getTeamColor(), getArena(), b3));
+                    loc.getWorld().playEffect(b3.getLocation(), nms.eggBridge(), 3);
                 }
             }
 
@@ -104,6 +105,7 @@ public class EggBridgeTask extends BukkitRunnable {
                     nms.setBlockTeamColor(b4, getTeamColor());
                     getArena().getPlaced().add(b4);
                     Bukkit.getPluginManager().callEvent(new EggBridgeBuildEvent(getTeamColor(), getArena(), b4));
+                    loc.getWorld().playEffect(b4.getLocation(), nms.eggBridge(), 3);
                 }
             }
         }
