@@ -366,7 +366,7 @@ public class BedWarsTeam {
         }
 
         public void spawn() {
-            if (!config.getBoolean(ConfigPath.ARENA_USE_BED_HOLO)) return;
+            if (!arena.getCm().getBoolean(ConfigPath.ARENA_USE_BED_HOLO)) return;
             a = (ArmorStand) bed.getWorld().spawnEntity(bed.getBlock().getLocation().add(+0.5, 1, +0.5), EntityType.ARMOR_STAND);
             a.setGravity(false);
             if (name != null) {
@@ -379,11 +379,11 @@ public class BedWarsTeam {
                 a.setCustomNameVisible(true);
             }
             a.setRemoveWhenFarAway(false);
-            a.setVisible(false);
             a.setCanPickupItems(false);
             a.setArms(false);
             a.setBasePlate(false);
             a.setMarker(true);
+            a.setVisible(false);
             for (Player p2 : arena.getWorld().getPlayers()) {
                 if (p != p2) {
                     nms.hideEntity(a, p2);
@@ -392,20 +392,20 @@ public class BedWarsTeam {
         }
 
         public void hide() {
-            if (!config.getBoolean(ConfigPath.ARENA_USE_BED_HOLO)) return;
+            if (!arena.getCm().getBoolean(ConfigPath.ARENA_USE_BED_HOLO)) return;
             if (bedDestroyed) return;
             hidden = true;
             a.remove();
         }
 
         public void destroy() {
-            if (!config.getBoolean(ConfigPath.ARENA_USE_BED_HOLO)) return;
+            if (!arena.getCm().getBoolean(ConfigPath.ARENA_USE_BED_HOLO)) return;
             a.remove();
             beds.remove(this);
         }
 
         public void show() {
-            if (!config.getBoolean(ConfigPath.ARENA_USE_BED_HOLO)) return;
+            if (!arena.getCm().getBoolean(ConfigPath.ARENA_USE_BED_HOLO)) return;
             hidden = false;
             spawn();
         }
