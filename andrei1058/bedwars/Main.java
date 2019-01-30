@@ -614,9 +614,9 @@ public class Main extends JavaPlugin {
         yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_WAITING_MATERIAL, getForCurrentVersion("STAINED_CLAY", "STAINED_CLAY", "GREEN_CONCRETE"));
         yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_WAITING_DATA, 5);
         yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_STARTING_MATERIAL, getForCurrentVersion("STAINED_CLAY", "STAINED_CLAY", "YELLOW_CONCRETE"));
-        yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_STARTING_DATA, 4);
+        yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_STARTING_DATA, 14);
         yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_PLAYING_MATERIAL, getForCurrentVersion("STAINED_CLAY", "STAINED_CLAY", "RED_CONCRETE"));
-        yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_PLAYING_DATA, 14);
+        yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_PLAYING_DATA, 4);
         yml.options().copyDefaults(true);
         signs.save();
         if (yml.getStringList("format").size() < 4) {

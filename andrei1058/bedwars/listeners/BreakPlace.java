@@ -267,7 +267,7 @@ public class BreakPlace implements Listener {
                 for (File f : dir.listFiles()) {
                     if (f.isFile()) {
                         if (f.getName().contains(".yml")) {
-                            if (e.getLine(1).equalsIgnoreCase(f.getName().replace(".yml", ""))) {
+                            if (e.getLine(1).equals(f.getName().replace(".yml", ""))) {
                                 exists = true;
                             }
                         }

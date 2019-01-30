@@ -176,6 +176,7 @@ public class Arena {
                         .filter(e -> e.getType() != EntityType.PAINTING).filter(e -> e.getType() != EntityType.ITEM_FRAME)
                         .forEach(Entity::remove), 30L);
         world.setGameRuleValue("doMobSpawning", "false");
+        world.setGameRuleValue("announceAdvancements", "false");
         world.setAutoSave(false);
 
         /* Clear setup armorstands */
