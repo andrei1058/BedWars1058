@@ -114,7 +114,12 @@ public class InventoryListener implements Listener {
         //block moving cursor item
         if (e.getCursor() != null) {
             if (e.getCursor().getType() != Material.AIR) {
-                if (e.getClickedInventory().getType() != e.getWhoClicked().getInventory().getType()) {
+                if (e.getClickedInventory() == null) {
+                    if (isUpgradable(e.getCursor(), sc)) {
+                        e.getWhoClicked().closeInventory();
+                        e.setCancelled(true);
+                    }
+                } else if (e.getClickedInventory().getType() != e.getWhoClicked().getInventory().getType()) {
                     if (isUpgradable(e.getCursor(), sc)) {
                         e.getWhoClicked().closeInventory();
                         e.setCancelled(true);
@@ -126,7 +131,12 @@ public class InventoryListener implements Listener {
         //block moving current item
         if (e.getCurrentItem() != null) {
             if (e.getCurrentItem().getType() != Material.AIR) {
-                if (e.getClickedInventory().getType() != e.getWhoClicked().getInventory().getType()) {
+                if (e.getClickedInventory() == null) {
+                    if (isUpgradable(e.getCursor(), sc)) {
+                        e.getWhoClicked().closeInventory();
+                        e.setCancelled(true);
+                    }
+                } else if (e.getClickedInventory().getType() != e.getWhoClicked().getInventory().getType()) {
                     if (isUpgradable(e.getCurrentItem(), sc)) {
                         e.getWhoClicked().closeInventory();
                         e.setCancelled(true);
