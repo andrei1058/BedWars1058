@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
+import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.configuration.Permissions;
@@ -61,5 +62,25 @@ public class CmdStart extends SubCommand {
     @Override
     public List<String> getTabComplete() {
         return null;
+    }
+
+    @Override
+    public boolean canSee(CommandSender s) {
+        if (s instanceof ConsoleCommandSender) return false;
+
+        Player p = (Player) s;
+
+        Arena a = Arena.getArenaByPlayer(p);
+        if (a != null){
+            if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting){
+                if (!a.isPlayer(p)) return false;
+            }
+        } else {
+            return false;
+        }
+
+        if (SetupSession.isInSetupSession(p)) return false;
+
+        return hasPermission(s);
     }
 }

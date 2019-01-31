@@ -84,4 +84,14 @@ public class SetType extends SubCommand {
             p.spigot().sendMessage(Misc.msgHoverClick("§1 ▪ §e"+st+" §7(click to set)", "§dClick to make the arena "+st, "/"+getParent().getName()+" "+getSubCommandName()+" "+st, ClickEvent.Action.RUN_COMMAND));
         }
     }
+
+    @Override
+    public boolean canSee(CommandSender s) {
+        if (s instanceof ConsoleCommandSender) return false;
+
+        Player p = (Player) s;
+        if (!SetupSession.isInSetupSession(p)) return false;
+
+        return hasPermission(s);
+    }
 }

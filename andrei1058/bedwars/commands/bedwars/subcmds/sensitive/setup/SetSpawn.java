@@ -107,4 +107,14 @@ public class SetSpawn extends SubCommand {
     public List<String> getTabComplete() {
         return null;
     }
+
+    @Override
+    public boolean canSee(CommandSender s) {
+        if (s instanceof ConsoleCommandSender) return false;
+
+        Player p = (Player) s;
+        if (!SetupSession.isInSetupSession(p)) return false;
+
+        return hasPermission(s);
+    }
 }

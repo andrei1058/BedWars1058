@@ -140,4 +140,17 @@ public class CmdList extends SubCommand {
     public List<String> getTabComplete() {
         return null;
     }
+
+    @Override
+    public boolean canSee(CommandSender s) {
+
+        if (s instanceof Player) {
+            Player p = (Player) s;
+            if (Arena.isInArena(p)) return false;
+
+            if (SetupSession.isInSetupSession(p)) return false;
+        }
+
+        return hasPermission(s);
+    }
 }

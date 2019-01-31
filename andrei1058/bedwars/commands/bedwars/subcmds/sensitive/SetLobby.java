@@ -1,9 +1,11 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
+import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -54,5 +56,19 @@ public class SetLobby extends SubCommand {
     @Override
     public List<String> getTabComplete() {
         return null;
+    }
+
+    @Override
+    public boolean canSee(CommandSender s) {
+        if (s instanceof ConsoleCommandSender) return false;
+
+        Player p = (Player) s;
+        if (Arena.isInArena(p)) return false;
+
+        if (SetupSession.isInSetupSession(p)) return false;
+
+        if (!Main.getLobbyWorld().isEmpty()) return false;
+
+        return hasPermission(s);
     }
 }

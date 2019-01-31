@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
+import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -65,5 +66,16 @@ public class DisableArena extends SubCommand {
             tab.add(a.getWorldName());
         }
         return tab;
+    }
+
+    @Override
+    public boolean canSee(CommandSender s) {
+        if (s instanceof ConsoleCommandSender) return false;
+
+        Player p = (Player) s;
+        if (Arena.isInArena(p)) return false;
+
+        if (SetupSession.isInSetupSession(p)) return false;
+        return hasPermission(s);
     }
 }
