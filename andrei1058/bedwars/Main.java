@@ -55,6 +55,7 @@ import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 import static com.andrei1058.bedwars.language.Language.setupLang;
@@ -587,7 +588,28 @@ public class Main extends JavaPlugin {
         lang = Language.getLang(whatLang);
         debug = yml.getBoolean("debug");
         new ConfigManager("bukkit", Bukkit.getWorldContainer().getPath(), false).set("ticks-per.autosave", -1);
+
+        Bukkit.spigot().getConfig().set("commands.send-namespaced", false);
+        try {
+            Bukkit.spigot().getConfig().save("spigot.yml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //Paperspigot configuration
+        /*File f1 = new File(Bukkit.getWorldContainer().getPath() + "/paper.yml");
+        if (f1.exists()) {
+            YamlConfiguration paper = YamlConfiguration.loadConfiguration(f1);
+            paper.set("settings.enable-player-collisions", false);
+            try {
+                paper.save(f1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }*/
+
         spigot = new ConfigManager("spigot", Bukkit.getWorldContainer().getPath(), false);
+
         switch (yml.getString("serverType").toUpperCase()) {
             case "BUNGEE":
                 serverType = ServerType.BUNGEE;
