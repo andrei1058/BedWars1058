@@ -14,6 +14,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -222,5 +224,7 @@ public class GameStartingTask extends BukkitRunnable {
                 }
             }
         }
+        //remove items dropped from lobby
+        getArena().getWorld().getEntities().stream().filter(e -> e.getType() == EntityType.DROPPED_ITEM).forEach(Entity::remove);
     }
 }
