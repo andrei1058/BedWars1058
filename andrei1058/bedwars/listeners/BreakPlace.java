@@ -20,6 +20,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
@@ -27,6 +28,7 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Crops;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -481,26 +483,12 @@ public class BreakPlace implements Listener {
         }
     }
 
-    //prevent farm breaking
+    //prevent farm breaking farm stuff
     @EventHandler
-    public void soilChangePlayer(PlayerInteractEvent e) {
-        if (e.getAction() == Action.PHYSICAL && e.getClickedBlock().getType() == Material.SOIL){
-            if (e.getClickedBlock().getWorld().getName().equals(Main.getLobbyWorld()) && Main.getServerType() != ServerType.SHARED){
-                e.setCancelled(true);
-            } else if (Arena.getArenaByName(e.getClickedBlock().getWorld().getName()) != null){
-                e.setCancelled(true);
-            }
-        }
-    }
-
-    //prevent farm breaking
-    @EventHandler
-    public void soilChangeEntity(EntityInteractEvent e) {
-        if (e.getEntityType() == EntityType.PLAYER && e.getBlock().getType() == Material.SOIL){
-            if (e.getBlock().getWorld().getName().equals(Main.getLobbyWorld()) && Main.getServerType() != ServerType.SHARED){
-                e.setCancelled(true);
-            } else if (Arena.getArenaByName(e.getBlock().getWorld().getName()) != null){
-                e.setCancelled(true);
+    public void soilChangeEntity(EntityChangeBlockEvent e) {
+        if (e.getTo() == Material.DIRT){
+            if (e.getBlock().getType().toString().equals("FARMLAND") || e.getBlock().getType().toString().equals("SOIL")){
+                if ((Arena.getArenaByName(e.getBlock().getWorld().getName()) != null) || (e.getBlock().getWorld().getName().equals(Main.getLobbyWorld()))) e.setCancelled(true);
             }
         }
     }
