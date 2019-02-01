@@ -57,6 +57,7 @@ public class OreGenerator {
     }
 
     public void upgrade() {
+        arena.updateNextEvent();
         switch (type) {
             case DIAMOND:
                 upgradeStage++;
