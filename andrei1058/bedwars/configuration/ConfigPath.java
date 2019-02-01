@@ -91,6 +91,7 @@ public class ConfigPath {
 
     public static final String CENERAL_CONFIGURATION_ALLOWED_COMMANDS = "allowed-commands";
     public static final String GENERAL_CONFIGURATION_LOBBY_SCOREBOARD = "lobby-scoreboard";
+    public static final String GENERAL_CONFIGURATION_DISABLED_LANGUAGES = "disabled-languages";
 
     public static final String GENERAL_CONFIGURATION_ARENA_SELECTOR_PATH = "arena-gui";
     public static final String GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SIZE = GENERAL_CONFIGURATION_ARENA_SELECTOR_PATH + ".settings.inv-size";

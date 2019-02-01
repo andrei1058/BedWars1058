@@ -392,6 +392,7 @@ public class Main extends JavaPlugin {
                 "Documentation here: https://gitlab.com/andrei1058/BedWars1058/wikis/home\n");
         yml.addDefault("serverType", "MULTIARENA");
         yml.addDefault("language", "en");
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES, Collections.singletonList("your language iso here"));
         yml.addDefault("storeLink", "https://www.spigotmc.org/resources/authors/39904/");
         yml.addDefault("lobbyServer", "hub");
         yml.addDefault("globalChat", false);
@@ -586,6 +587,16 @@ public class Main extends JavaPlugin {
             }
         }
         lang = Language.getLang(whatLang);
+
+        //remove languages if disabled
+        //server language can t be disabled
+        for (String iso : yml.getStringList(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES)){
+            Language l = Language.getLang(iso);
+            if (l != null){
+                if (l != lang) Language.getLanguages().remove(l);
+            }
+        }
+
         debug = yml.getBoolean("debug");
         new ConfigManager("bukkit", Bukkit.getWorldContainer().getPath(), false).set("ticks-per.autosave", -1);
 
