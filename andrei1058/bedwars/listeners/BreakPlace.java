@@ -21,9 +21,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
@@ -475,6 +477,30 @@ public class BreakPlace implements Listener {
                     if (e.getBlock().getType() == Material.AIR) e.setBuildable(true);
                     return;
                 }
+            }
+        }
+    }
+
+    //prevent farm breaking
+    @EventHandler
+    public void soilChangePlayer(PlayerInteractEvent e) {
+        if (e.getAction() == Action.PHYSICAL && e.getClickedBlock().getType() == Material.SOIL){
+            if (e.getClickedBlock().getWorld().getName().equals(Main.getLobbyWorld()) && Main.getServerType() != ServerType.SHARED){
+                e.setCancelled(true);
+            } else if (Arena.getArenaByName(e.getClickedBlock().getWorld().getName()) != null){
+                e.setCancelled(true);
+            }
+        }
+    }
+
+    //prevent farm breaking
+    @EventHandler
+    public void soilChangeEntity(EntityInteractEvent e) {
+        if (e.getEntityType() == EntityType.PLAYER && e.getBlock().getType() == Material.SOIL){
+            if (e.getBlock().getWorld().getName().equals(Main.getLobbyWorld()) && Main.getServerType() != ServerType.SHARED){
+                e.setCancelled(true);
+            } else if (Arena.getArenaByName(e.getBlock().getWorld().getName()) != null){
+                e.setCancelled(true);
             }
         }
     }
