@@ -371,6 +371,7 @@ public class Misc {
      * Check if location is on a protected region
      */
     public static boolean isBuildProtected(Location l, Arena a) {
+        if (!l.getWorld().getName().equals(a.getWorldName())) return false;
         for (BedWarsTeam t : a.getTeams()) {
             if (t.getSpawn().distance(l) <= a.getCm().getInt(ConfigPath.ARENA_SPAWN_PROTECTION)) {
                 return true;
