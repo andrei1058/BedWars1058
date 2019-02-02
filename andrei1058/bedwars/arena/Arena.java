@@ -1074,7 +1074,6 @@ public class Arena {
                     path = Messages.ARENA_STATUS_WAITING_NAME;
                     break;
             }
-            Misc.updateMOTD(Main.lang.m(path));
         }
 
         //Stop active tasks to prevent issues

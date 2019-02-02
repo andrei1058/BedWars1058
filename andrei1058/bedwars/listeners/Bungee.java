@@ -13,7 +13,7 @@ public class Bungee implements PluginMessageListener {
 
     @Override
     public void onPluginMessageReceived(String s, Player player, byte[] bytes) {
-        debug("amdjkwe fiun3yvb34yuvb39 n934unv 93n49vvvdddddddddddddddddddddddddd");
+        //debug("amdjkwe fiun3yvb34yuvb39 n934unv 93n49vvvdddddddddddddddddddddddddd");
         if (s.equals("BungeeCord")) {
             ByteArrayDataInput in = ByteStreams.newDataInput(bytes);
             String subchannel = in.readUTF();

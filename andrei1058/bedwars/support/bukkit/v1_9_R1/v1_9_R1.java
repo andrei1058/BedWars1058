@@ -672,11 +672,6 @@ public class v1_9_R1 implements NMS {
     }
 
     @Override
-    public boolean isCrops(org.bukkit.block.Block b) {
-        return b.getType().toString().equals("SOIL");
-    }
-
-    @Override
     public boolean isBed(org.bukkit.Material material) {
         return material == org.bukkit.Material.valueOf("BED_BLOCK") || material == org.bukkit.Material.valueOf("BED");
     }
