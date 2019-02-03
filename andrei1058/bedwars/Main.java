@@ -19,9 +19,7 @@ import com.andrei1058.bedwars.configuration.*;
 import com.andrei1058.bedwars.listeners.*;
 import com.andrei1058.bedwars.listeners.arenaselector.ArenaSelectorListener;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
-import com.andrei1058.bedwars.lobbysocket.ArenaListeners;
-import com.andrei1058.bedwars.lobbysocket.BungeeListener;
-import com.andrei1058.bedwars.lobbysocket.TempListener;
+import com.andrei1058.bedwars.lobbysocket.*;
 import com.andrei1058.bedwars.shop.ShopManager;
 import com.andrei1058.bedwars.support.Metrics;
 import com.andrei1058.bedwars.support.bukkit.*;
@@ -224,7 +222,9 @@ public class Main extends JavaPlugin {
             registerEvents(new ArenaListeners());
             Bukkit.getMessenger().registerOutgoingPluginChannel(this, "bedwars:proxy");
             Bukkit.getMessenger().registerIncomingPluginChannel(this, "bedwars:proxy", new BungeeListener());
+            ArenaSocket.lobbies.addAll(config.l(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS));
             registerEvents(new TempListener());
+            new SendTask();
         } else if (getServerType() == ServerType.MULTIARENA || getServerType() == ServerType.SHARED) {
             registerEvents(new ArenaSelectorListener(), new BlockStatusListener());
         }
@@ -318,6 +318,11 @@ public class Main extends JavaPlugin {
             } catch (Exception e) {
                 this.getLogger().severe("Could not spawn CmdJoin NPCs. Make sure you have right version of Citizens for your server!");
                 JoinNPC.setCitizensSupport(false);
+            }
+            if (getServerType() == ServerType.BUNGEE){
+                if (Arena.getArenas().size() > 0){
+                    ArenaSocket.sendMessage(Arena.getArenas().get(0));
+                }
             }
         }, 40L);
 

@@ -27,7 +27,7 @@ public class ArenaSocket {
             if (l.length != 2) continue;
             if (!Misc.isNumber(l[1])) continue;
 
-            sendMessage(formatMessage(serverName, a.getDisplayName(), a.getStatus().toString(), a.getPlayers().size(), a.getMaxPlayers(), a.getSpectators().size()), l[0], Integer.valueOf(l[1]));
+            sendMessage(formatMessage(serverName, a.getDisplayName(), a.getStatus().toString(), a.getPlayers().size(), a.getMaxPlayers(), a.getGroup()), l[0], Integer.valueOf(l[1]));
         }
     }
 
@@ -52,7 +52,7 @@ public class ArenaSocket {
     /**
      * Format message before sending it to lobbies.
      */
-    public static String formatMessage(String serverName, String arenaName, String status, int currentPlayers, int maxPlayers, int spectators) {
-        return serverName + "." + arenaName + "." + status + "." + currentPlayers + "." + maxPlayers + "." + spectators;
+    public static String formatMessage(String serverName, String arenaName, String status, int currentPlayers, int maxPlayers, String arenaGroup) {
+        return serverName + "." + arenaName + "." + status + "." + currentPlayers + "." + maxPlayers + "." + arenaGroup;
     }
 }
