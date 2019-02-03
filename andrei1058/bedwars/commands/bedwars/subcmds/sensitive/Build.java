@@ -42,7 +42,7 @@ public class Build extends SubCommand {
         Player p = (Player) s;
         if (!MainCommand.isLobbySet(p)) return true;
         if (isBuildSession(p)) {
-            p.sendMessage("§6 ▪ §7You can't place and break blocks anymore;");
+            p.sendMessage("§6 ▪ §7You can't place and break blocks anymore!");
             removeBuildSession(p);
         } else {
             p.sendMessage("§6 ▪ §7You can place and break blocks now.");
