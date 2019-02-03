@@ -25,7 +25,6 @@ public class BungeeListener implements PluginMessageListener {
                     if (server.isEmpty()) continue;
                     if (server.equals("null")) continue;
                     if (!new ArrayList<>(ArenaSocket.lobbies).contains(server)) ArenaSocket.lobbies.add(server);
-                    Main.plugin.getLogger().severe(server);
                     if (!configServers.contains(server)) configServers.add(server);
                 }
 
