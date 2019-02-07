@@ -60,9 +60,8 @@ public class GameRestartingTask extends BukkitRunnable {
         } else if (restarting == 6) {
             if (getServerType() == ServerType.BUNGEE) {
                 if (Arena.getGamesBeforeRestart() <= 0) {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
-                    Bukkit.getServer().spigot().restart();
                     Arena.setGamesBeforeRestart(Main.config.getInt(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART));
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
                     return;
                 }
                 Arena.setGamesBeforeRestart(Arena.getGamesBeforeRestart() - 1);
