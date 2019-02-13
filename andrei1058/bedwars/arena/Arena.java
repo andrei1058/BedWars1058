@@ -24,6 +24,7 @@ import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.sql.Timestamp;
@@ -34,7 +35,7 @@ import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.upgrades.BaseListener.isOnABase;
 import static com.andrei1058.bedwars.language.Language.*;
 
-public class Arena {
+public class Arena implements Comparable {
     private static HashMap<String, Arena> arenaByName = new HashMap<>();
     private static HashMap<Player, Arena> arenaByPlayer = new HashMap<>();
     private static ArrayList<Arena> arenas = new ArrayList<>();
@@ -1701,5 +1702,37 @@ public class Arena {
     public int getPlayerDeaths(Player p, boolean finalDeaths) {
         if (finalDeaths) return playerFinalKillDeaths.getOrDefault(p, 0);
         return playerDeaths.getOrDefault(p, 0);
+    }
+
+    @Override
+    public int compareTo(@NotNull Object o) {
+        Arena a2 = (Arena) o;
+        if (getStatus() == GameState.starting && a2.getStatus() == GameState.starting) {
+            if (getPlayers().size() > a2.getPlayers().size()) {
+                return -1;
+            }
+            if (getPlayers().size() == a2.getPlayers().size()) {
+                return 0;
+            } else return 1;
+        } else if (getStatus() == GameState.starting && a2.getStatus() != GameState.starting) {
+            return -1;
+        } else if (a2.getStatus() == GameState.starting && getStatus() != GameState.starting) {
+            return 1;
+        } else if (getStatus() == GameState.waiting && a2.getStatus() == GameState.waiting) {
+            if (getPlayers().size() > a2.getPlayers().size()) {
+                return -1;
+            }
+            if (getPlayers().size() == a2.getPlayers().size()) {
+                return 0;
+            } else return 1;
+        } else if (getStatus() == GameState.waiting && a2.getStatus() != GameState.waiting) {
+            return -1;
+        } else if (a2.getStatus() == GameState.waiting && getStatus() != GameState.waiting) {
+            return 1;
+        } else if (getStatus() == GameState.playing && a2.getStatus() == GameState.playing) {
+            return 0;
+        } else if (getStatus() == GameState.playing && a2.getStatus() != GameState.playing) {
+            return -1;
+        } else return 1;
     }
 }

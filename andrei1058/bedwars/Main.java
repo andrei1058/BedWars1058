@@ -88,7 +88,7 @@ public class Main extends JavaPlugin {
         //Spigot support
         try {
             Bukkit.getServer().spigot();
-        } catch (Exception ex){
+        } catch (Exception ex) {
             this.getLogger().severe("I can't run on your server software. Please check:");
             this.getLogger().severe("https://gitlab.com/andrei1058/BedWars1058/wikis/compatibility");
             this.setEnabled(false);
@@ -319,8 +319,8 @@ public class Main extends JavaPlugin {
                 this.getLogger().severe("Could not spawn CmdJoin NPCs. Make sure you have right version of Citizens for your server!");
                 JoinNPC.setCitizensSupport(false);
             }
-            if (getServerType() == ServerType.BUNGEE){
-                if (Arena.getArenas().size() > 0){
+            if (getServerType() == ServerType.BUNGEE) {
+                if (Arena.getArenas().size() > 0) {
                     ArenaSocket.sendMessage(Arena.getArenas().get(0));
                 }
             }
@@ -390,7 +390,7 @@ public class Main extends JavaPlugin {
     public void onDisable() {
         try {
             database.close();
-            for (Arena a : Arena.getArenas()){
+            for (Arena a : Arena.getArenas()) {
                 a.disable();
             }
         } catch (Exception ex) {
@@ -532,7 +532,7 @@ public class Main extends JavaPlugin {
         if (config.getYml().get("statsGUI.invSize") != null) {
             config.set(ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE, config.getInt("statsGUI.invSize"));
         }
-        if (config.getYml().get("disableCrafting") != null){
+        if (config.getYml().get("disableCrafting") != null) {
             config.set(ConfigPath.GENERAL_CONFIGURATION_DISABLE_CRAFTING, config.getString("disableCrafting"));
         }
         if (config.getYml().get("statsGUI") != null) {
@@ -604,9 +604,9 @@ public class Main extends JavaPlugin {
 
         //remove languages if disabled
         //server language can t be disabled
-        for (String iso : yml.getStringList(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES)){
+        for (String iso : yml.getStringList(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES)) {
             Language l = Language.getLang(iso);
-            if (l != null){
+            if (l != null) {
                 if (l != lang) Language.getLanguages().remove(l);
             }
         }
@@ -620,18 +620,6 @@ public class Main extends JavaPlugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        //Paperspigot configuration
-        /*File f1 = new File(Bukkit.getWorldContainer().getPath() + "/paper.yml");
-        if (f1.exists()) {
-            YamlConfiguration paper = YamlConfiguration.loadConfiguration(f1);
-            paper.set("settings.enable-player-collisions", false);
-            try {
-                paper.save(f1);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }*/
 
         spigot = new ConfigManager("spigot", Bukkit.getWorldContainer().getPath(), false);
 
@@ -752,7 +740,6 @@ public class Main extends JavaPlugin {
         yml.options().copyDefaults(true);
         generators.save();
     }
-
 
     public static String getForCurrentVersion(String v18, String v12, String v13) {
         switch (getServerVersion()) {
