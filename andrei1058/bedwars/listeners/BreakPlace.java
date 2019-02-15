@@ -191,6 +191,7 @@ public class BreakPlace implements Listener {
                                         if (t.isMember(p)) {
                                             p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_OWN_BED));
                                             e.setCancelled(true);
+                                            e.getPlayer().teleport(e.getPlayer().getLocation());
                                             return;
                                         } else {
                                             e.setCancelled(false);
