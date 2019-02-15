@@ -9,6 +9,7 @@ import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
+import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.tasks.GamePlayingTask;
 import com.andrei1058.bedwars.tasks.GameRestartingTask;
@@ -481,6 +482,11 @@ public class Arena implements Comparable {
             }
         }
 
+        List<ShopCache.CachedItem> cacheList = new ArrayList<>();
+        if (ShopCache.getShopCache(p) != null){
+            cacheList = ShopCache.getShopCache(p).getCachedPermanents();
+        }
+
         Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.PlayerLeaveArenaEvent(p, this));
         //players.remove must be under call event in order to check if the player is a spectator or not
         players.remove(p);
@@ -562,7 +568,7 @@ public class Arena implements Comparable {
                 Bukkit.getScheduler().runTaskLater(Main.plugin, () -> setStatus(GameState.restarting), 10L);
             } else {
                 //ReJoin feature
-                new ReJoin(p, this, getPlayerTeam(p.getName()));
+                new ReJoin(p, this, getPlayerTeam(p.getName()), cacheList);
             }
         }
         if (status == GameState.starting || status == GameState.waiting) {
@@ -790,6 +796,10 @@ public class Arena implements Comparable {
         reJoin.getBwt().reJoin(p);
 
         new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + "Playing", Messages.SCOREBOARD_DEFAULT_PLAYING), this);
+
+        ShopCache sc = new ShopCache(p);
+        for (ShopCache.CachedItem ci : reJoin.getPermanentsAndNonDowngradables())
+        sc.getCachedItems().add(ci);
 
         Bukkit.getPluginManager().callEvent(new PlayerReJoinEvent(p, this));
         return true;

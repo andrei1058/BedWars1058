@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
+import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.tasks.ReJoinTask;
 import org.bukkit.entity.Player;
 
@@ -15,6 +16,7 @@ public class ReJoin {
     private Arena arena;
     private BedWarsTeam bwt;
     private ReJoinTask task = null;
+    private List<ShopCache.CachedItem> permanentsAndNonDowngradables = new ArrayList<>();
 
     private int kills = 0, finalKills = 0, deaths = 0, finalDeaths = 0, beds = 0;
 
@@ -23,7 +25,7 @@ public class ReJoin {
     /**
      * Make rejoin possible for a player
      */
-    public ReJoin(Player player, Arena arena, BedWarsTeam bwt) {
+    public ReJoin(Player player, Arena arena, BedWarsTeam bwt, List<ShopCache.CachedItem> cachedArmor) {
         if (exists(player)) getPlayer(player).destroy();
         this.bwt = bwt;
         if (this.bwt.isBedDestroyed()) return;
@@ -33,6 +35,7 @@ public class ReJoin {
         Main.debug("Created ReJoin for " + player.getName() + " " + player.getUniqueId() + " at " + arena.getWorldName());
         storeStatsDiff(arena.getPlayerKills(player, false), arena.getPlayerKills(player, true), arena.getPlayerDeaths(player, false), arena.getPlayerDeaths(player, true), arena.getPlayerBedsDestroyed(player));
         if (bwt.getMembers().isEmpty()) task = new ReJoinTask(arena, bwt);
+        this.permanentsAndNonDowngradables.addAll(cachedArmor);
     }
 
     /**
@@ -163,5 +166,9 @@ public class ReJoin {
 
     public UUID getPl(){
         return player;
+    }
+
+    public List<ShopCache.CachedItem> getPermanentsAndNonDowngradables() {
+        return permanentsAndNonDowngradables;
     }
 }

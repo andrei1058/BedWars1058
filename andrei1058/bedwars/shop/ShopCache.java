@@ -3,14 +3,15 @@ package com.andrei1058.bedwars.shop;
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.shop.main.CategoryContent;
 import com.andrei1058.bedwars.shop.main.ShopCategory;
-import com.andrei1058.bedwars.shop.quickbuy.PlayerQuickBuyCache;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ShopCache {
 
@@ -173,14 +174,31 @@ public class ShopCache {
      * Ex. if you have bought diamond iron from it, you can't buy stone iron
      */
     public void setCategoryWeight(ShopCategory sc, byte weight) {
-        if (categoryWeight.containsKey(sc)){
+        if (categoryWeight.containsKey(sc)) {
             categoryWeight.replace(sc, weight);
         } else {
             categoryWeight.put(sc, weight);
         }
     }
 
-    public byte getCategoryWeight(ShopCategory sc){
-        return categoryWeight.getOrDefault(sc, (byte)0);
+    public byte getCategoryWeight(ShopCategory sc) {
+        return categoryWeight.getOrDefault(sc, (byte) 0);
+    }
+
+    /**
+     * Get permanent and non downgradable shop items.
+     */
+    public List<CachedItem> getCachedPermanents() {
+        List<CachedItem> ci = new ArrayList<>();
+        for (CachedItem c : cachedItems){
+            if (c.getCc().isPermanent() && !c.getCc().isDowngradable()){
+                ci.add(c);
+            }
+        }
+        return ci;
+    }
+
+    public List<CachedItem> getCachedItems() {
+        return cachedItems;
     }
 }
