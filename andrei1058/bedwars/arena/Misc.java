@@ -383,7 +383,7 @@ public class Misc {
                 return true;
             }
         }
-        for (OreGenerator o : OreGenerator.getGenerators()) {
+        for (OreGenerator o : a.getOreGenerators()) {
             if (o.getLocation().distance(l) <= 1) {
                 return true;
             }
