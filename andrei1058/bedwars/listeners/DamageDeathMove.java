@@ -21,6 +21,8 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 
+import java.util.Iterator;
+
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.LastHit.getLastHit;
 import static com.andrei1058.bedwars.language.Language.getMsg;
@@ -427,7 +429,7 @@ public class DamageDeathMove implements Listener {
 
                 /** update armorstands hidden by nms **/
                 String iso = Language.getPlayerLanguage(e.getPlayer()).getIso();
-                for (OreGenerator o : OreGenerator.getGenerators()) {
+                for (OreGenerator o  : OreGenerator.getGenerators()) {
                     if (o.getArena() == a) {
                         o.updateHolograms(e.getPlayer(), iso);
                     }

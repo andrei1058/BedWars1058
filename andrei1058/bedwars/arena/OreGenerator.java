@@ -200,7 +200,7 @@ public class OreGenerator {
 
     @NotNull
     @Contract(pure = true)
-    public static List<OreGenerator> getGenerators() {
+    public static ArrayList<OreGenerator> getGenerators() {
         return new ArrayList<>(generators);
     }
 

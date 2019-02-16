@@ -436,7 +436,7 @@ public class Arena implements Comparable {
 
             /* update generator holograms for spectators */
             String iso = Language.getPlayerLanguage(p).getIso();
-            for (OreGenerator o : OreGenerator.getGenerators()) {
+            for (OreGenerator o  : OreGenerator.getGenerators()) {
                 if (o.getArena() == this) {
                     o.updateHolograms(p, iso);
                 }
@@ -449,6 +449,10 @@ public class Arena implements Comparable {
             Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.PlayerJoinArenaEvent(p, true));
         } else {
             p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG));
+        }
+
+        if (showTime.containsKey(p.getUniqueId())){
+            showTime.remove(p.getUniqueId());
         }
     }
 
@@ -631,6 +635,10 @@ public class Arena implements Comparable {
         if (magicMilk.containsKey(p.getUniqueId())){
             Bukkit.getScheduler().cancelTask(magicMilk.get(p.getUniqueId()));
             magicMilk.remove(p.getUniqueId());
+        }
+
+        if (showTime.containsKey(p.getUniqueId())){
+            showTime.remove(p.getUniqueId());
         }
     }
 

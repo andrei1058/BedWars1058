@@ -15,6 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import static com.andrei1058.bedwars.Main.nms;
@@ -68,7 +69,7 @@ public class GamePlayingTask extends BukkitRunnable {
                     getArena().upgradeDiamondsCount--;
                     if (getArena().upgradeDiamondsCount == 0) {
                         getArena().updateNextEvent();
-                        for (OreGenerator o : OreGenerator.getGenerators()) {
+                        for (OreGenerator o  : OreGenerator.getGenerators()) {
                             if (o.getArena() == getArena()) {
                                 if (o.getOre().getType() == Material.DIAMOND) {
                                     o.upgrade();
@@ -81,7 +82,7 @@ public class GamePlayingTask extends BukkitRunnable {
                     getArena().upgradeEmeraldsCount--;
                     if (getArena().upgradeEmeraldsCount == 0) {
                         getArena().updateNextEvent();
-                        for (OreGenerator o : OreGenerator.getGenerators()) {
+                        for (OreGenerator o  : OreGenerator.getGenerators()) {
                             if (o.getArena() == getArena()) {
                                 if (o.getOre().getType() == Material.EMERALD) {
                                     o.upgrade();
@@ -128,9 +129,9 @@ public class GamePlayingTask extends BukkitRunnable {
                         }
                     }
                     getArena().updateNextEvent();
-                    for (OreGenerator og : OreGenerator.getGenerators()) {
-                        if (og.getArena() == getArena()) {
-                            Location l = og.getLocation();
+                    for (OreGenerator o  : OreGenerator.getGenerators()) {
+                        if (o.getArena() == getArena()) {
+                            Location l = o.getLocation();
                             for (int y = 0; y < 20; y++) {
                                 l.clone().subtract(0, y, 0).getBlock().setType(Material.AIR);
                             }

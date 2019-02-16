@@ -200,7 +200,10 @@ public class JoinLeaveTeleport implements Listener {
                 }
                 if (!(a1.isSpectator(e.getPlayer()) || a1.isPlayer(e.getPlayer()))) {
                     a1.addSpectator(e.getPlayer(), false, e.getTo());
-                    if (!e.getPlayer().isFlying()) e.getPlayer().setFlying(true);
+                    if (!e.getPlayer().isFlying()) {
+                        e.getPlayer().setAllowFlight(true);
+                        e.getPlayer().setFlying(true);
+                    }
                 }
             }
         }

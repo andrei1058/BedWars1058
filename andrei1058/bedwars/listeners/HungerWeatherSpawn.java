@@ -1,6 +1,5 @@
 package com.andrei1058.bedwars.listeners;
 
-import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
@@ -81,7 +80,7 @@ public class HungerWeatherSpawn implements Listener {
                             nms.hideArmor(e.getPlayer(), p1);
                         }
                         for (PotionEffect pe : pm.getCustomEffects()) {
-                            showTime.put(e.getPlayer(), pe.getDuration() / 20);
+                            showTime.put(e.getPlayer().getUniqueId(), pe.getDuration() / 20);
                         }
                     }
                 }

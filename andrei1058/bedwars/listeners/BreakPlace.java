@@ -111,7 +111,7 @@ public class BreakPlace implements Listener {
                         return;
                     }
                 }
-                for (OreGenerator o : OreGenerator.getGenerators()) {
+                for (OreGenerator o  : OreGenerator.getGenerators()) {
                     if (o.getLocation().distance(e.getBlock().getLocation()) <= 1) {
                         e.setCancelled(true);
                         p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
@@ -238,7 +238,7 @@ public class BreakPlace implements Listener {
                         return;
                     }
                 }
-                for (OreGenerator o : OreGenerator.getGenerators()) {
+                for (OreGenerator o  : OreGenerator.getGenerators()) {
                     if (o.getLocation().distance(e.getBlock().getLocation()) <= 1) {
                         e.setCancelled(true);
                         p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
@@ -377,7 +377,7 @@ public class BreakPlace implements Listener {
                         return;
                     }
                 }
-                for (OreGenerator o : OreGenerator.getGenerators()) {
+                for (OreGenerator o  : OreGenerator.getGenerators()) {
                     if (o.getLocation().distance(e.getBlockClicked().getLocation()) <= 1) {
                         e.setCancelled(true);
                         p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
