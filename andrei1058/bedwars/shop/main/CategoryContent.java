@@ -107,7 +107,7 @@ public class CategoryContent {
 
     }
 
-    public void execute(Player player, ShopCache shopCache) {
+    public void execute(Player player, ShopCache shopCache, int slot) {
 
         ContentTier ct;
 
@@ -141,7 +141,7 @@ public class CategoryContent {
         takeMoney(player, ct.getCurrency(), ct.getPrice());
 
         //upgrade if possible
-        shopCache.upgradeCachedItem(this);
+        shopCache.upgradeCachedItem(this, slot);
 
 
         //give items

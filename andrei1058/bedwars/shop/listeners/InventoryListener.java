@@ -47,7 +47,7 @@ public class InventoryListener implements Listener {
                         e.getWhoClicked().closeInventory();
                         return;
                     }
-                    element.getCategoryContent().execute((Player) e.getWhoClicked(), ShopCache.getShopCache((Player) e.getWhoClicked()));
+                    element.getCategoryContent().execute((Player) e.getWhoClicked(), ShopCache.getShopCache((Player) e.getWhoClicked()), element.getSlot());
                     return;
                 }
             }
@@ -70,7 +70,7 @@ public class InventoryListener implements Listener {
                             new QuickBuyAdd((Player) e.getWhoClicked(), cc);
                             return;
                         }
-                        cc.execute((Player) e.getWhoClicked(), ShopCache.getShopCache((Player) e.getWhoClicked()));
+                        cc.execute((Player) e.getWhoClicked(), ShopCache.getShopCache((Player) e.getWhoClicked()), cc.getSlot());
                         return;
                     }
                 }

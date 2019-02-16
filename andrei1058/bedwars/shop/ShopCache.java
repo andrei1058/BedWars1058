@@ -103,7 +103,7 @@ public class ShopCache {
             cc.giveItems(player, cache);
         }
 
-        public void upgrade() {
+        public void upgrade(int slot) {
             tier++;
             for (ItemStack i : player.getInventory().getContents()) {
                 if (i == null) continue;
@@ -112,14 +112,14 @@ public class ShopCache {
                     player.getInventory().remove(i);
                 }
             }
-            updateItem();
+            updateItem(slot);
             player.updateInventory();
         }
 
-        public void updateItem() {
+        public void updateItem(int slot) {
             if (player.getOpenInventory() != null) {
                 if (player.getOpenInventory().getTopInventory() != null) {
-                    player.getOpenInventory().getTopInventory().setItem(cc.getSlot(), cc.getItemStack(player, cache));
+                    player.getOpenInventory().getTopInventory().setItem(slot, cc.getItemStack(player, cache));
                 }
             }
         }
@@ -156,15 +156,15 @@ public class ShopCache {
      * Upgrade cached item
      * Add it if not found
      */
-    public void upgradeCachedItem(CategoryContent cc) {
+    public void upgradeCachedItem(CategoryContent cc, int slot) {
         CachedItem ci = getCachedItem(cc.getIdentifier());
         if (ci == null) {
             ci = new CachedItem(cc);
-            ci.updateItem();
+            ci.updateItem(slot);
         } else {
             if (cc.getContentTiers().size() > ci.getTier()) {
                 Main.debug("Cached item upgrade for " + cc.getIdentifier() + " player " + player.getName());
-                ci.upgrade();
+                ci.upgrade(slot);
             }
         }
     }
