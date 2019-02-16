@@ -758,15 +758,13 @@ public class Arena implements Comparable {
      *
      * @since API 11
      */
-    public boolean reJoin(ReJoin reJoin) {
+    public boolean reJoin(ReJoin reJoin, Player p) {
         if (reJoin.getArena() != this) return false;
         if (!reJoin.canReJoin()) return false;
 
         if (reJoin.getTask() != null) {
             reJoin.getTask().destroy();
         }
-
-        Player p = Bukkit.getPlayer(reJoin.getPlayer());
 
         for (Player on : Bukkit.getOnlinePlayers()) {
             if (getPlayers().contains(on)) {
@@ -789,17 +787,24 @@ public class Arena implements Comparable {
         setArenaByPlayer(p, false);
         /* save player inventory etc */
         new PlayerGoods(p, true);
+        p.getInventory().clear();
         playerLocation.put(p, p.getLocation());
 
         p.teleport(getCm().getArenaLoc("waiting.Loc"));
         p.getInventory().clear();
+
+        //restore items before respawning in team
+        ShopCache sc = ShopCache.getShopCache(p);
+        if (sc != null) sc.destroy();
+        sc = new ShopCache(p);
+        for (ShopCache.CachedItem ci : reJoin.getPermanentsAndNonDowngradables()) {
+            sc.getCachedItems().add(ci);
+        }
+
         reJoin.getBwt().reJoin(p);
+        reJoin.destroy();
 
         new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + "Playing", Messages.SCOREBOARD_DEFAULT_PLAYING), this);
-
-        ShopCache sc = new ShopCache(p);
-        for (ShopCache.CachedItem ci : reJoin.getPermanentsAndNonDowngradables())
-        sc.getCachedItems().add(ci);
 
         Bukkit.getPluginManager().callEvent(new PlayerReJoinEvent(p, this));
         return true;
@@ -828,7 +833,9 @@ public class Arena implements Comparable {
         for (Entity e : world.getEntities()) {
             if (e.getType() == EntityType.PLAYER) {
                 Player p = (Player) e;
-                p.kickPlayer(getMsg(p, Messages.ARENA_RESTART_PLAYER_KICK));
+                if (p.getWorld().getName().equals(worldName)) {
+                    p.kickPlayer(getMsg(p, Messages.ARENA_RESTART_PLAYER_KICK));
+                }
             }
         }
         for (OreGenerator eg : oreGenerators) {
@@ -1656,39 +1663,12 @@ public class Arena implements Comparable {
      */
     public static boolean joinRandomFromGroup(Player p, String group) {
 
-        List<Arena> arenas = new ArrayList<>(Arena.getArenas()).stream().filter(a -> a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting).sorted((a1, a2) -> {
-            if (a1.getStatus() == GameState.starting && a2.getStatus() == GameState.starting) {
-                if (a1.getPlayers().size() > a2.getPlayers().size()) {
-                    return -1;
-                }
-                if (a1.getPlayers().size() == a2.getPlayers().size()) {
-                    return 0;
-                } else return 1;
-            } else if (a1.getStatus() == GameState.starting && a2.getStatus() != GameState.starting) {
-                return -1;
-            } else if (a2.getStatus() == GameState.starting && a1.getStatus() != GameState.starting) {
-                return 1;
-            } else if (a1.getStatus() == GameState.waiting && a2.getStatus() == GameState.waiting) {
-                if (a1.getPlayers().size() > a2.getPlayers().size()) {
-                    return -1;
-                }
-                if (a1.getPlayers().size() == a2.getPlayers().size()) {
-                    return 0;
-                } else return 1;
-            } else if (a1.getStatus() == GameState.waiting && a2.getStatus() != GameState.waiting) {
-                return -1;
-            } else if (a2.getStatus() == GameState.waiting && a1.getStatus() != GameState.waiting) {
-                return 1;
-            } else if (a1.getStatus() == GameState.playing && a2.getStatus() == GameState.playing) {
-                return 0;
-            } else if (a1.getStatus() == GameState.playing && a2.getStatus() != GameState.playing) {
-                return -1;
-            } else return 1;
-        }).collect(Collectors.toList());
+        List<Arena> arenaList = new ArrayList<>(getArenas());
+        Collections.sort(arenaList);
 
         int amount = getParty().hasParty(p) ? getParty().getMembers(p).size() : 1;
 
-        for (Arena a : arenas) {
+        for (Arena a : arenaList) {
             if (!a.getGroup().equals(group)) continue;
 
             if (a.getPlayers().size() == a.getMaxPlayers()) continue;

@@ -164,7 +164,6 @@ public class BedWarsTeam {
         p.setAllowFlight(true);
         p.setFlying(true);
         arena.getRespawn().put(p, 5);
-
     }
 
     /**
@@ -269,7 +268,7 @@ public class BedWarsTeam {
         nms.sendTitle(p, getMsg(p, Messages.PLAYER_DIE_RESPAWNED_TITLE), "", 0, 20, 0);
         ShopCache sc = ShopCache.getShopCache(p);
         if (sc != null){
-            sc.managePermanentsAndDowngradables();
+            sc.managePermanentsAndDowngradables(getArena());
         }
         sendDefaultInventory(p, false);
         p.setHealth(20);

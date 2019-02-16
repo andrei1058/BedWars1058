@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.tasks.ReJoinTask;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class ReJoin {
     private Arena arena;
     private BedWarsTeam bwt;
     private ReJoinTask task = null;
-    private List<ShopCache.CachedItem> permanentsAndNonDowngradables = new ArrayList<>();
+    private ArrayList<ShopCache.CachedItem> permanentsAndNonDowngradables = new ArrayList<>();
 
     private int kills = 0, finalKills = 0, deaths = 0, finalDeaths = 0, beds = 0;
 
@@ -96,8 +97,8 @@ public class ReJoin {
     /**
      * Make a player re-join the arena
      */
-    public boolean reJoin() {
-        return arena.reJoin(this);
+    public boolean reJoin(Player player) {
+        return arena.reJoin(this, player);
     }
 
     /**

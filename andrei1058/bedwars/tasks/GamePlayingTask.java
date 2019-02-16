@@ -186,31 +186,34 @@ public class GamePlayingTask extends BukkitRunnable {
         }
 
         /* RESPAWN SESSION */
-        for (Map.Entry<Player, Integer> e : new HashMap<>(getArena().getRespawn()).entrySet()) {
-            if (e.getValue() == 0) {
-                Arena a = Arena.getArenaByPlayer(e.getKey());
-                BedWarsTeam t = a.getTeam(e.getKey());
-                t.respawnMember(e.getKey());
-                getArena().getRespawn().remove(e.getKey());
-            } else {
-                nms.sendTitle(e.getKey(), getMsg(e.getKey(), Messages.PLAYER_DIE_RESPAWN_TITLE).replace("{time}",
-                        String.valueOf(e.getValue())), getMsg(e.getKey(), Messages.PLAYER_DIE_RESPAWN_SUBTITLE).replace("{time}",
-                        String.valueOf(e.getValue())), 0, 30, 0);
-                e.getKey().sendMessage(getMsg(e.getKey(), Messages.PLAYER_DIE_RESPAWN_CHAT).replace("{time}", String.valueOf(e.getValue())));
-                getArena().getRespawn().replace(e.getKey(), e.getValue() - 1);
+        if (!getArena().getRespawn().isEmpty()) {
+            for (Map.Entry<Player, Integer> e : new HashMap<>(getArena().getRespawn()).entrySet()) {
+                if (e.getValue() == 0) {
+                    Arena a = Arena.getArenaByPlayer(e.getKey());
+                    BedWarsTeam t = a.getTeam(e.getKey());
+                    t.respawnMember(e.getKey());
+                    getArena().getRespawn().remove(e.getKey());
+                } else {
+                    nms.sendTitle(e.getKey(), getMsg(e.getKey(), Messages.PLAYER_DIE_RESPAWN_TITLE).replace("{time}",
+                            String.valueOf(e.getValue())), getMsg(e.getKey(), Messages.PLAYER_DIE_RESPAWN_SUBTITLE).replace("{time}",
+                            String.valueOf(e.getValue())), 0, 30, 0);
+                    e.getKey().sendMessage(getMsg(e.getKey(), Messages.PLAYER_DIE_RESPAWN_CHAT).replace("{time}", String.valueOf(e.getValue())));
+                    getArena().getRespawn().replace(e.getKey(), e.getValue() - 1);
+                }
             }
-
         }
 
         /* INVISIBILITY FOR ARMOR */
-        for (Map.Entry<Player, Integer> e : new HashMap<>(getArena().getShowTime()).entrySet()) {
-            if (e.getValue() <= 0) {
-                getArena().getShowTime().remove(e.getKey());
-                for (Player p : e.getKey().getWorld().getPlayers()) {
-                    nms.showArmor(e.getKey(), p);
+        if (!getArena().getShowTime().isEmpty()) {
+            for (Map.Entry<Player, Integer> e : new HashMap<>(getArena().getShowTime()).entrySet()) {
+                if (e.getValue() <= 0) {
+                    getArena().getShowTime().remove(e.getKey());
+                    for (Player p : e.getKey().getWorld().getPlayers()) {
+                        nms.showArmor(e.getKey(), p);
+                    }
+                } else {
+                    getArena().getShowTime().replace(e.getKey(), e.getValue() - 1);
                 }
-            } else {
-                getArena().getShowTime().replace(e.getKey(), e.getValue() - 1);
             }
         }
 

@@ -1,8 +1,10 @@
 package com.andrei1058.bedwars.shop;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.shop.main.CategoryContent;
 import com.andrei1058.bedwars.shop.main.ShopCategory;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -17,7 +19,6 @@ public class ShopCache {
 
     private Player player;
     private List<CachedItem> cachedItems = new ArrayList<>();
-    private ShopCache cache;
     private int selectedCategory;
     private HashMap<ShopCategory, Byte> categoryWeight = new HashMap<>();
 
@@ -25,7 +26,6 @@ public class ShopCache {
 
     public ShopCache(Player player) {
         this.player = player;
-        this.cache = this;
         this.selectedCategory = ShopManager.getShop().getQuickBuyButton().getSlot();
         this.shopCaches.add(this);
     }
@@ -49,7 +49,7 @@ public class ShopCache {
 
     public static ShopCache getShopCache(Player player) {
         for (ShopCache sc : new ArrayList<>(shopCaches)) {
-            if (sc.getPlayer() == player) return sc;
+            if (sc.getPlayer().getUniqueId().equals(player.getUniqueId())) return sc;
         }
         return null;
     }
@@ -65,10 +65,10 @@ public class ShopCache {
     /**
      * Used to give items on player respawn
      */
-    public void managePermanentsAndDowngradables() {
+    public void managePermanentsAndDowngradables(Arena arena) {
         Main.debug("Restore permanents on death for: " + player.getName());
         for (CachedItem ci : cachedItems) {
-            ci.manageDeath();
+            ci.manageDeath(arena);
         }
     }
 
@@ -97,10 +97,11 @@ public class ShopCache {
          * Give permanents on death
          * and downgrade if necessary
          */
-        public void manageDeath() {
+        public void manageDeath(Arena arena) {
             if (!cc.isPermanent()) return;
             if (cc.isDowngradable() && tier > 1) tier--;
-            cc.giveItems(player, cache);
+            Main.debug("ShopCache Item Restore: " + cc.getIdentifier() + " for " + player.getName());
+            cc.giveItems(player, getShopCache(player), arena);
         }
 
         public void upgrade(int slot) {
@@ -119,7 +120,7 @@ public class ShopCache {
         public void updateItem(int slot) {
             if (player.getOpenInventory() != null) {
                 if (player.getOpenInventory().getTopInventory() != null) {
-                    player.getOpenInventory().getTopInventory().setItem(slot, cc.getItemStack(player, cache));
+                    player.getOpenInventory().getTopInventory().setItem(slot, cc.getItemStack(player, getShopCache(player)));
                 }
             }
         }
