@@ -89,7 +89,7 @@ public class MySQL implements Database {
 
     @Override
     public void setupGroupTable(String group) {
-        //todo for games individual stats
+
     }
 
     @Override

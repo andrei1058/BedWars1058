@@ -170,11 +170,6 @@ public class Inventory implements Listener {
 
         /* Manage shop and upgrades */
         if (a != null) {
-            //todo atentie, asta poate cauza probleme, faptul ca nu va mai bloca toate click-urile
-            //if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) {
-            //    e.setCancelled(true);
-            //    return;
-            //}
             if (a.isSpectator(p)) {
                 e.setCancelled(true);
                 return;

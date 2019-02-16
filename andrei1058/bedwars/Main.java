@@ -275,7 +275,6 @@ public class Main extends JavaPlugin {
         }
 
         /* Levels support */
-        //todo levels addon
         level = new NoLevel();
 
         /* Language support */
