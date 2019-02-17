@@ -23,6 +23,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.language.Language.getMsg;
@@ -158,7 +159,7 @@ public class BedWarsTeam {
      * Rejoin a team
      */
     public void reJoin(Player p) {
-        members.add(p);
+        members.add(Bukkit.getPlayer(p.getUniqueId()));
         Bukkit.getScheduler().runTaskLater(plugin, () -> nms.hidePlayer(p, arena.getPlayers()), 5L);
         nms.setCollide(p, arena, false);
         p.setAllowFlight(true);
@@ -267,7 +268,7 @@ public class BedWarsTeam {
         }
         nms.sendTitle(p, getMsg(p, Messages.PLAYER_DIE_RESPAWNED_TITLE), "", 0, 20, 0);
         ShopCache sc = ShopCache.getShopCache(p);
-        if (sc != null){
+        if (sc != null) {
             sc.managePermanentsAndDowngradables(getArena());
         }
         sendDefaultInventory(p, false);
@@ -562,8 +563,17 @@ public class BedWarsTeam {
     /**
      * Getter, setter etc.
      */
-    public boolean isMember(Player p) {
-        return members.contains(p);
+    public boolean isMember(Player u) {
+        boolean found = members.contains(u);
+        if (!found) {
+            for (Player mem : membersCache) {
+                if (mem.getUniqueId().equals(u.getUniqueId())) {
+                    found = true;
+                    break;
+                }
+            }
+        }
+        return found;
     }
 
     public boolean isBedDestroyed() {

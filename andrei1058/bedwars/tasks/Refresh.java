@@ -12,7 +12,7 @@ import static com.andrei1058.bedwars.Main.nms;
 
 public class Refresh extends BukkitRunnable {
 
-    public static HashMap<UUID, Integer> showTime = new HashMap<>();
+    //public static HashMap<UUID, Integer> showTime = new HashMap<>();
 
     @Override
     public void run() {
@@ -24,7 +24,7 @@ public class Refresh extends BukkitRunnable {
             o.spawn();
         }
 
-        if (!showTime.isEmpty()){
+        /*if (!showTime.isEmpty()){
             for (Map.Entry<UUID, Integer> e :  new HashMap<>(showTime).entrySet()){
                 if (e.getValue() <= 0){
                     Player p1 = Bukkit.getPlayer(e.getKey());
@@ -36,7 +36,7 @@ public class Refresh extends BukkitRunnable {
                     showTime.replace(e.getKey(), e.getValue()-1);
                 }
             }
-        }
+        }*/
 
         nms.refreshDespawnables();
     }

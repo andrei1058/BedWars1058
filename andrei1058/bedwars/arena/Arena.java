@@ -369,6 +369,9 @@ public class Arena implements Comparable {
                 }
             }
         }
+
+        refreshSigns();
+        JoinNPC.updateNPCs(getGroup());
     }
 
     /**
@@ -454,6 +457,8 @@ public class Arena implements Comparable {
         if (showTime.containsKey(p.getUniqueId())){
             showTime.remove(p.getUniqueId());
         }
+        refreshSigns();
+        JoinNPC.updateNPCs(getGroup());
     }
 
     /**
@@ -640,6 +645,9 @@ public class Arena implements Comparable {
         if (showTime.containsKey(p.getUniqueId())){
             showTime.remove(p.getUniqueId());
         }
+
+        refreshSigns();
+        JoinNPC.updateNPCs(getGroup());
     }
 
     /**
@@ -759,6 +767,9 @@ public class Arena implements Comparable {
             Bukkit.getScheduler().cancelTask(magicMilk.get(p.getUniqueId()));
             magicMilk.remove(p.getUniqueId());
         }
+
+        refreshSigns();
+        JoinNPC.updateNPCs(getGroup());
     }
 
     /**
@@ -1210,6 +1221,7 @@ public class Arena implements Comparable {
         if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH) == null) return;
         p.getInventory().clear();
 
+        Bukkit.getScheduler().runTaskLater(plugin, ()-> {
         for (String item : config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH).getKeys(false)) {
             if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", item)) == null) {
                 Main.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", item) + " is not set!");
@@ -1239,6 +1251,7 @@ public class Arena implements Comparable {
 
             p.getInventory().setItem(config.getInt(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_SLOT.replace("%path%", item)), i);
         }
+        }, 15L);
     }
 
     /**

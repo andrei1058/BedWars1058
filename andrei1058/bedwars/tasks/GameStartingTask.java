@@ -22,6 +22,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import static com.andrei1058.bedwars.Main.getParty;
 import static com.andrei1058.bedwars.Main.nms;
@@ -132,7 +133,7 @@ public class GameStartingTask extends BukkitRunnable {
             for (BedWarsTeam team : getArena().getTeams()) {
                 if (team.getMembers().isEmpty()) {
                     team.setBedDestroyed(true);
-                    if (!getArena().getCm().getBoolean(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS)){
+                    if (!getArena().getCm().getBoolean(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS)) {
                         team.getIronGenerator().enable();
                         team.getGoldGenerator().enable();
                     }
@@ -140,11 +141,11 @@ public class GameStartingTask extends BukkitRunnable {
                 }
                 nms.colorBed(team);
                 if (getArena().getMaxInTeam() > 1) {
-                    nms.spawnShop(getArena().getCm().getArenaLoc("Team."+team.getName()+".Upgrade"), Messages.NPC_NAME_TEAM_UPGRADES, getArena().getPlayers(), getArena());
-                    nms.spawnShop(getArena().getCm().getArenaLoc("Team."+team.getName()+".Shop"), Messages.NPC_NAME_TEAM_SHOP, getArena().getPlayers(), getArena());
+                    nms.spawnShop(getArena().getCm().getArenaLoc("Team." + team.getName() + ".Upgrade"), Messages.NPC_NAME_TEAM_UPGRADES, getArena().getPlayers(), getArena());
+                    nms.spawnShop(getArena().getCm().getArenaLoc("Team." + team.getName() + ".Shop"), Messages.NPC_NAME_TEAM_SHOP, getArena().getPlayers(), getArena());
                 } else {
-                    nms.spawnShop(getArena().getCm().getArenaLoc("Team."+team.getName()+".Upgrade"), Messages.NPC_NAME_SOLO_UPGRADES, getArena().getPlayers(), getArena());
-                    nms.spawnShop(getArena().getCm().getArenaLoc("Team."+team.getName()+".Shop"), Messages.NPC_NAME_SOLO_SHOP, getArena().getPlayers(), getArena());
+                    nms.spawnShop(getArena().getCm().getArenaLoc("Team." + team.getName() + ".Upgrade"), Messages.NPC_NAME_SOLO_UPGRADES, getArena().getPlayers(), getArena());
+                    nms.spawnShop(getArena().getCm().getArenaLoc("Team." + team.getName() + ".Shop"), Messages.NPC_NAME_SOLO_SHOP, getArena().getPlayers(), getArena());
                 }
                 team.getIronGenerator().enable();
                 team.getGoldGenerator().enable();
@@ -193,7 +194,7 @@ public class GameStartingTask extends BukkitRunnable {
     }
 
     //Spawn players
-    private void spawnPlayers(){
+    private void spawnPlayers() {
         for (BedWarsTeam bwt : getArena().getTeams()) {
             for (Player p : bwt.getMembers()) {
                 bwt.firstSpawn(p);
@@ -207,7 +208,7 @@ public class GameStartingTask extends BukkitRunnable {
     }
 
     //Lobby removal
-    private void removeLobby(){
+    private void removeLobby() {
         if (!(getArena().getCm().getYml().get(ConfigPath.ARENA_WAITING_POS1) == null && getArena().getCm().getYml().get(ConfigPath.ARENA_WAITING_POS2) == null)) {
             Location loc1 = getArena().getCm().getArenaLoc(ConfigPath.ARENA_WAITING_POS1), loc2 = getArena().getCm().getArenaLoc(ConfigPath.ARENA_WAITING_POS2);
             int minX = Math.min(loc1.getBlockX(), loc2.getBlockX()), maxX = Math.max(loc1.getBlockX(), loc2.getBlockX());

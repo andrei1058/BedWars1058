@@ -46,7 +46,7 @@ public class ReJoin {
         Main.debug("ReJoin exists check " + pl.getUniqueId());
         for (ReJoin rj : new ArrayList<>(reJoinList)) {
             Main.debug("ReJoin exists check list scroll: " + rj.getPl().toString());
-            if (rj.getPl().toString().equalsIgnoreCase(pl.getUniqueId().toString())) {
+            if (rj.getPl().equals(pl.getUniqueId().toString())) {
                 return true;
             }
         }
@@ -59,7 +59,7 @@ public class ReJoin {
     public static ReJoin getPlayer(Player player) {
         Main.debug("ReJoin getPlayer " + player.getUniqueId());
         for (ReJoin rj : new ArrayList<>(reJoinList)) {
-            if (rj.getPl().toString().equalsIgnoreCase(player.getUniqueId().toString())) {
+            if (rj.getPl().equals(player.getUniqueId().toString())) {
                 return rj;
             }
         }

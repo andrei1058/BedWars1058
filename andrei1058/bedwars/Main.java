@@ -379,6 +379,7 @@ public class Main extends JavaPlugin {
 
         /* Initialize shop */
         shop = new ShopManager();
+
         //Leave this code at the end of the enable method
         for (Language l : Language.getLanguages()) {
             l.setupUnSetCategories();

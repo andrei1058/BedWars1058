@@ -20,7 +20,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import static com.andrei1058.bedwars.Main.*;
-import static com.andrei1058.bedwars.tasks.Refresh.showTime;
 
 public class HungerWeatherSpawn implements Listener {
 
@@ -70,6 +69,8 @@ public class HungerWeatherSpawn implements Listener {
 
     @EventHandler
     public void onDrink(PlayerItemConsumeEvent e) {
+        Arena a = Arena.getArenaByPlayer(e.getPlayer());
+        if (a == null) return;
         /* remove empty bottle */
         switch (e.getItem().getType()) {
             case POTION:
@@ -80,7 +81,9 @@ public class HungerWeatherSpawn implements Listener {
                             nms.hideArmor(e.getPlayer(), p1);
                         }
                         for (PotionEffect pe : pm.getCustomEffects()) {
-                            showTime.put(e.getPlayer().getUniqueId(), pe.getDuration() / 20);
+                            if (pe.getType() == PotionEffectType.INVISIBILITY) {
+                                a.getShowTime().put(e.getPlayer(), pe.getDuration() / 20);
+                            }
                         }
                     }
                 }

@@ -258,8 +258,8 @@ public class Messages {
     public static final String SHOP_CATEGORY_INVENTORY_NAME = SHOP_PATH + ".%category%.inventory-name";
     public static final String SHOP_CATEGORY_ITEM_NAME = SHOP_PATH + ".%category%.category-item-name";
     public static final String SHOP_CATEGORY_ITEM_LORE = SHOP_PATH + ".%category%.category-item-lore";
-    public static final String SHOP_CONTENT_TIER_ITEM_NAME = ".%category%.content-item-%content%-name";
-    public static final String SHOP_CONTENT_TIER_ITEM_LORE = ".%category%.content-item-%content%-lore";
+    public static final String SHOP_CONTENT_TIER_ITEM_NAME = SHOP_PATH + ".%category%.content-item-%content%-name";
+    public static final String SHOP_CONTENT_TIER_ITEM_LORE = SHOP_PATH + ".%category%.content-item-%content%-lore";
     public static final String SHOP_CAN_BUY_COLOR = SHOP_PATH+ ".can-buy-color";
     public static final String SHOP_CANT_BUY_COLOR = SHOP_PATH+ ".cant-buy-color";
 
