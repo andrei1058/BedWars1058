@@ -51,6 +51,7 @@ public class CitizensListener implements Listener {
     // Citizens support
     public void onNPCInteract(PlayerInteractEntityEvent e) {
         if (!JoinNPC.isCitizensSupport()) return;
+        if (e.getPlayer().isSneaking()) return;
         if (!e.getRightClicked().hasMetadata("NPC")) return;
         net.citizensnpcs.api.npc.NPC npc = CitizensAPI.getNPCRegistry().getNPC(e.getRightClicked());
         if (npc == null) return;
