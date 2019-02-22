@@ -30,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.sql.Timestamp;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static com.andrei1058.bedwars.Main.*;
@@ -69,12 +70,12 @@ public class Arena implements Comparable {
     /**
      * Players in respawn session
      */
-    private HashMap<Player, Integer> respawn = new HashMap<>();
+    private ConcurrentHashMap<Player, Integer> respawn = new ConcurrentHashMap<>();
 
     /**
      * Invisibility for armor when you drink an invisibility potion
      */
-    private HashMap<Player, Integer> showTime = new HashMap<>();
+    private ConcurrentHashMap<Player, Integer> showTime = new ConcurrentHashMap<>();
 
     /**
      * player location before joining
@@ -454,8 +455,8 @@ public class Arena implements Comparable {
             p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG));
         }
 
-        if (showTime.containsKey(p.getUniqueId())){
-            showTime.remove(p.getUniqueId());
+        if (showTime.containsKey(p)){
+            showTime.remove(p);
         }
         refreshSigns();
         JoinNPC.updateNPCs(getGroup());
@@ -642,8 +643,8 @@ public class Arena implements Comparable {
             magicMilk.remove(p.getUniqueId());
         }
 
-        if (showTime.containsKey(p.getUniqueId())){
-            showTime.remove(p.getUniqueId());
+        if (showTime.containsKey(p)){
+            showTime.remove(p);
         }
 
         refreshSigns();
@@ -1172,14 +1173,14 @@ public class Arena implements Comparable {
     }
 
     public void refreshSigns() {
-        for (BlockState b : signs) {
+        for (BlockState b : getSigns()) {
             Sign s = (Sign) b;
             int line = 0;
             for (String string : Main.signs.l("format")) {
                 s.setLine(line, string.replace("[on]", String.valueOf(getPlayers().size())).replace("[max]", String.valueOf(getMaxPlayers())).replace("[arena]", getDisplayName()).replace("[status]", getDisplayStatus(Main.lang)));
                 line++;
             }
-            b.update(true);
+            s.update();
         }
     }
 
@@ -1567,14 +1568,14 @@ public class Arena implements Comparable {
     /**
      * Get respawn session
      */
-    public HashMap<Player, Integer> getRespawn() {
+    public ConcurrentHashMap<Player, Integer> getRespawn() {
         return respawn;
     }
 
     /**
      * Get invisibility for armor
      */
-    public HashMap<Player, Integer> getShowTime() {
+    public ConcurrentHashMap<Player, Integer> getShowTime() {
         return showTime;
     }
 

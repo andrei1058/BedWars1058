@@ -13,15 +13,17 @@ import org.bukkit.entity.Egg;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import static com.andrei1058.bedwars.Main.nms;
 
-public class EggBridgeTask extends BukkitRunnable {
+public class EggBridgeTask implements Runnable {
 
     private Projectile projectile;
     private TeamColor teamColor;
     private Player player;
     private Arena arena;
+    private BukkitTask task;
 
     public EggBridgeTask(Player player, Projectile projectile, TeamColor teamColor) {
         if (!(projectile instanceof Egg)) return;
@@ -31,7 +33,7 @@ public class EggBridgeTask extends BukkitRunnable {
         this.projectile = projectile;
         this.teamColor = teamColor;
         this.player = player;
-        this.runTaskTimer(Main.plugin, 0 ,1);
+        task = Bukkit.getScheduler().runTaskTimer(Main.plugin, this, 0, 1);
     }
 
     public TeamColor getTeamColor() {
@@ -56,21 +58,21 @@ public class EggBridgeTask extends BukkitRunnable {
         Location loc = getProjectile().getLocation();
 
         if (getProjectile().isDead()) {
-            cancel();
+            task.cancel();
             return;
         }
 
         if (getPlayer().getWorld() != getProjectile().getWorld()){
-            cancel();
+            task.cancel();
             return;
         }
 
         if (getPlayer().getLocation().distance(getProjectile().getLocation()) > 27) {
-            cancel();
+            task.cancel();
             return;
         }
         if (getPlayer().getLocation().getY() - getProjectile().getLocation().getY() > 9) {
-            cancel();
+            task.cancel();
             return;
         }
 
@@ -109,5 +111,9 @@ public class EggBridgeTask extends BukkitRunnable {
                 }
             }
         }
+    }
+
+    public void cancel(){
+        task.cancel();
     }
 }

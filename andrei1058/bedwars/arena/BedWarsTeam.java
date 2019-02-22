@@ -564,16 +564,8 @@ public class BedWarsTeam {
      * Getter, setter etc.
      */
     public boolean isMember(Player u) {
-        boolean found = members.contains(u);
-        if (!found) {
-            for (Player mem : membersCache) {
-                if (mem.getUniqueId().equals(u.getUniqueId())) {
-                    found = true;
-                    break;
-                }
-            }
-        }
-        return found;
+        if (u == null) return false;
+        return members.contains(u);
     }
 
     public boolean isBedDestroyed() {

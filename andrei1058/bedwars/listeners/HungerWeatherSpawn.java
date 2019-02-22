@@ -74,6 +74,7 @@ public class HungerWeatherSpawn implements Listener {
         /* remove empty bottle */
         switch (e.getItem().getType()) {
             case POTION:
+                Bukkit.getScheduler().runTaskLater(plugin, () -> nms.minusAmount(e.getPlayer(), new ItemStack(Material.GLASS_BOTTLE), 1), 5L);
                 PotionMeta pm = (PotionMeta) e.getItem().getItemMeta();
                 if (pm.hasCustomEffects()) {
                     if (pm.hasCustomEffect(PotionEffectType.INVISIBILITY)) {
@@ -81,13 +82,11 @@ public class HungerWeatherSpawn implements Listener {
                             nms.hideArmor(e.getPlayer(), p1);
                         }
                         for (PotionEffect pe : pm.getCustomEffects()) {
-                            if (pe.getType() == PotionEffectType.INVISIBILITY) {
                                 a.getShowTime().put(e.getPlayer(), pe.getDuration() / 20);
-                            }
+                                break;
                         }
                     }
                 }
-                Bukkit.getScheduler().runTaskLater(plugin, () -> nms.minusAmount(e.getPlayer(), new ItemStack(Material.GLASS_BOTTLE), 1), 5L);
                 break;
             case GLASS_BOTTLE:
                 nms.minusAmount(e.getPlayer(), nms.getItemInHand(e.getPlayer()), 1);

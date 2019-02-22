@@ -8,6 +8,7 @@ import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.OreGenerator;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Messages;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -21,7 +22,7 @@ import java.util.Map;
 import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.language.Language.getMsg;
 
-public class GamePlayingTask extends BukkitRunnable {
+public class GamePlayingTask implements Runnable {
 
     private Arena arena;
     private BukkitTask task;
@@ -32,7 +33,7 @@ public class GamePlayingTask extends BukkitRunnable {
         this.beds_destroy_countdown = Main.config.getInt(ConfigPath.GENERAL_CONFIGURATION_BEDS_DESTROY_COUNTDOWN);
         this.dragon_spawn_countdown = Main.config.getInt(ConfigPath.GENERAL_CONFIGURATION_DRAGON_SPAWN_COUNTDOWN);
         this.game_end_countdown = Main.config.getInt(ConfigPath.GENERAL_CONFIGURATION_GAME_END_COUNTDOWN);
-        this.task = this.runTaskTimer(Main.plugin, 0, 20L);
+        this.task = Bukkit.getScheduler().runTaskTimer(Main.plugin, this, 0, 20L);
     }
 
     public Arena getArena() {
@@ -43,7 +44,7 @@ public class GamePlayingTask extends BukkitRunnable {
      * Get task ID
      */
     public int getTask() {
-        return this.getTaskId();
+        return task.getTaskId();
     }
 
     public int getBedsDestroyCountdown() {
@@ -174,12 +175,12 @@ public class GamePlayingTask extends BukkitRunnable {
         /* AFK SYSTEM FOR PLAYERS */
         int current = 0;
         for (Player p : getArena().getPlayers()) {
-            if (getArena().afkCheck.get(p.getUniqueId()) == null) {
-                getArena().afkCheck.put(p.getUniqueId(), current);
+            if (Arena.afkCheck.get(p.getUniqueId()) == null) {
+                Arena.afkCheck.put(p.getUniqueId(), current);
             } else {
-                current = getArena().afkCheck.get(p.getUniqueId());
+                current = Arena.afkCheck.get(p.getUniqueId());
                 current++;
-                getArena().afkCheck.replace(p.getUniqueId(), current);
+                Arena.afkCheck.replace(p.getUniqueId(), current);
                 if (current == 45) {
                     Main.api.setPlayerAFK(p, true);
                 }
@@ -188,7 +189,7 @@ public class GamePlayingTask extends BukkitRunnable {
 
         /* RESPAWN SESSION */
         if (!getArena().getRespawn().isEmpty()) {
-            for (Map.Entry<Player, Integer> e : new HashMap<>(getArena().getRespawn()).entrySet()) {
+            for (Map.Entry<Player, Integer> e : getArena().getRespawn().entrySet()) {
                 if (e.getValue() == 0) {
                     Arena a = Arena.getArenaByPlayer(e.getKey());
                     BedWarsTeam t = a.getTeam(e.getKey());
@@ -206,7 +207,7 @@ public class GamePlayingTask extends BukkitRunnable {
 
         /* INVISIBILITY FOR ARMOR */
         if (!getArena().getShowTime().isEmpty()) {
-            for (Map.Entry<Player, Integer> e : new HashMap<>(getArena().getShowTime()).entrySet()) {
+            for (Map.Entry<Player, Integer> e : getArena().getShowTime().entrySet()) {
                 if (e.getValue() <= 0) {
                     getArena().getShowTime().remove(e.getKey());
                     for (Player p : e.getKey().getWorld().getPlayers()) {
@@ -222,6 +223,10 @@ public class GamePlayingTask extends BukkitRunnable {
         /*for (OreGenerator o : getArena().getOreGenerators()) {
             o.spawn();
         }*/
+    }
+
+    public void cancel(){
+        task.cancel();
     }
 }
 

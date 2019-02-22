@@ -20,21 +20,22 @@ import java.util.ArrayList;
 import static com.andrei1058.bedwars.Main.config;
 import static com.andrei1058.bedwars.Main.getServerType;
 
-public class GameRestartingTask extends BukkitRunnable {
+public class GameRestartingTask implements Runnable {
 
     private Arena arena;
     private int restarting = 15;
+    private BukkitTask task;
 
     public GameRestartingTask(Arena arena) {
         this.arena = arena;
-        this.runTaskTimer(Main.plugin, 0, 20L);
+        task = Bukkit.getScheduler().runTaskTimer(Main.plugin, this, 0, 20L);
     }
 
     /**
      * Get task ID
      */
     public int getTask() {
-        return this.getTaskId();
+        return task.getTaskId();
     }
 
     public Arena getArena() {
@@ -44,9 +45,9 @@ public class GameRestartingTask extends BukkitRunnable {
     @Override
     public void run() {
 
-        for (BedWarsTeam bwt : getArena().getTeams()){
-            Misc.launchFirework(bwt.getBed());
-        }
+        //for (BedWarsTeam bwt : getArena().getTeams()){
+        //    Misc.launchFirework(bwt.getBed());
+        //}
 
         if (getArena().getPlayers().isEmpty() && restarting > 9) restarting = 9;
         restarting--;
@@ -101,9 +102,13 @@ public class GameRestartingTask extends BukkitRunnable {
         if (restarting == 0) {
             String name = getArena().getWorldName();
             new Arena(name, null);
-            cancel();
+            task.cancel();
             arena = null;
         }
+    }
+
+    public void cancel(){
+        task.cancel();
     }
 
 }

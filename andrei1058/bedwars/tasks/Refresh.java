@@ -1,16 +1,11 @@
 package com.andrei1058.bedwars.tasks;
 
-import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.OreGenerator;
 import com.andrei1058.bedwars.arena.SBoard;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
 import static com.andrei1058.bedwars.Main.nms;
 
-public class Refresh extends BukkitRunnable {
+public class Refresh implements Runnable {
 
     //public static HashMap<UUID, Integer> showTime = new HashMap<>();
 

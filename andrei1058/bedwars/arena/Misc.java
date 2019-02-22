@@ -25,6 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -190,35 +191,37 @@ public class Misc {
     }
 
     public static void checkUpdate() {
-        try {
-            HttpURLConnection checkUpdate = (HttpURLConnection) new URL("https://api.spigotmc.org/legacy/update.php?resource=50942").openConnection();
-            checkUpdate.setDoOutput(true);
-            String old = plugin.getDescription().getVersion();
-            String newV = new BufferedReader(new InputStreamReader(checkUpdate.getInputStream())).readLine();
-            if (!newV.equalsIgnoreCase(old)) {
-                updateAvailable = true;
-                newVersion = newV;
-                plugin.getLogger().info("                                    ");
-                plugin.getLogger().info("                                    ");
-                plugin.getLogger().info("                                    ");
-                plugin.getLogger().info("                                    ");
-                plugin.getLogger().info("                                    ");
-                plugin.getLogger().info("------------------------------------");
-                plugin.getLogger().info(" ");
-                plugin.getLogger().info("There is a new version available!");
-                plugin.getLogger().info("Version: " + newVersion);
-                plugin.getLogger().info(" ");
-                plugin.getLogger().info("https://www.spigotmc.org/resources/50942/");
-                plugin.getLogger().info("------------------------------------");
-                plugin.getLogger().info("                                    ");
-                plugin.getLogger().info("                                    ");
-                plugin.getLogger().info("                                    ");
-                plugin.getLogger().info("                                    ");
-                plugin.getLogger().info("                                    ");
+        Bukkit.getScheduler().runTask(plugin, ()-> {
+            try {
+                HttpURLConnection checkUpdate = (HttpURLConnection) new URL("https://api.spigotmc.org/legacy/update.php?resource=50942").openConnection();
+                checkUpdate.setDoOutput(true);
+                String old = plugin.getDescription().getVersion();
+                String newV = new BufferedReader(new InputStreamReader(checkUpdate.getInputStream())).readLine();
+                if (!newV.equalsIgnoreCase(old)) {
+                    updateAvailable = true;
+                    newVersion = newV;
+                    plugin.getLogger().info("                                    ");
+                    plugin.getLogger().info("                                    ");
+                    plugin.getLogger().info("                                    ");
+                    plugin.getLogger().info("                                    ");
+                    plugin.getLogger().info("                                    ");
+                    plugin.getLogger().info("------------------------------------");
+                    plugin.getLogger().info(" ");
+                    plugin.getLogger().info("There is a new version available!");
+                    plugin.getLogger().info("Version: " + newVersion);
+                    plugin.getLogger().info(" ");
+                    plugin.getLogger().info("https://www.spigotmc.org/resources/50942/");
+                    plugin.getLogger().info("------------------------------------");
+                    plugin.getLogger().info("                                    ");
+                    plugin.getLogger().info("                                    ");
+                    plugin.getLogger().info("                                    ");
+                    plugin.getLogger().info("                                    ");
+                    plugin.getLogger().info("                                    ");
+                }
+            } catch (IOException e) {
+                plugin.getLogger().severe("Couldn't check for updates!");
             }
-        } catch (IOException e) {
-            plugin.getLogger().severe("Couldn't check for updates!");
-        }
+        });
     }
 
     public static BlockFace getDirection(Location loc) {
@@ -285,43 +288,46 @@ public class Misc {
      */
     public static void openStatsGUI(Player p) {
 
-        /** cache stats */
-        int kills = database.getKills(p), deaths = database.getDeaths(p), looses = database.getLooses(p), wins = database.getWins(p),
-                finalKills = database.getFinalKills(p), finalDeaths = database.getFinalDeaths(p), bedsDestroyed = database.getBedsDestroyed(p), gamesPlayed = database.getGamesPlayed(p);
-        Timestamp firstPlay = database.getFirstPlay(p), lastPlay = database.getLastPlay(p);
+        Bukkit.getScheduler().runTask(plugin, ()-> {
 
-        /** cache time format */
-        String timeFormat = getMsg(p, Messages.FORMATTING_STATS_DATE_FORMAT), never = getMsg(p, Messages.MEANING_NEVER);
+            /** cache stats */
+            int kills = database.getKills(p), deaths = database.getDeaths(p), looses = database.getLooses(p), wins = database.getWins(p),
+                    finalKills = database.getFinalKills(p), finalDeaths = database.getFinalDeaths(p), bedsDestroyed = database.getBedsDestroyed(p), gamesPlayed = database.getGamesPlayed(p);
+            Timestamp firstPlay = database.getFirstPlay(p), lastPlay = database.getLastPlay(p);
 
-        /** create inventory */
-        Inventory inv = Bukkit.createInventory(null, config.getInt(ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE), replaceStatsPlaceholders(p, getMsg(p, Messages.PLAYER_STATS_GUI_INV_NAME),
-                kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never, true));
+            /** cache time format */
+            String timeFormat = getMsg(p, Messages.FORMATTING_STATS_DATE_FORMAT), never = getMsg(p, Messages.MEANING_NEVER);
 
-        /** add custom items to gui */
-        for (String s : config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_STATS_PATH).getKeys(false)) {
-            /** skip inv size, it isn't a content */
-            if (ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE.contains(s)) continue;
-            /** create new itemStack for content */
-            ItemStack i = nms.createItemStack(config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_MATERIAL.replace("%path%", s)).toUpperCase(), 1, (short) config.getInt(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_DATA.replace("%path%", s)));
-            ItemMeta im = i.getItemMeta();
-            im.setDisplayName(replaceStatsPlaceholders(p, getMsg(p, Messages.PLAYER_STATS_GUI_PATH + "-" + s + "-name"), kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed,
-                    firstPlay, lastPlay, timeFormat, p.getName(), never, true));
-            List<String> lore = new ArrayList<>();
-            for (String string : getList(p, Messages.PLAYER_STATS_GUI_PATH + "-" + s + "-lore")) {
-                lore.add(replaceStatsPlaceholders(p, string, kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never, true));
+            /** create inventory */
+            Inventory inv = Bukkit.createInventory(null, config.getInt(ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE), replaceStatsPlaceholders(p, getMsg(p, Messages.PLAYER_STATS_GUI_INV_NAME),
+                    kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never, true));
+
+            /** add custom items to gui */
+            for (String s : config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_STATS_PATH).getKeys(false)) {
+                /** skip inv size, it isn't a content */
+                if (ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE.contains(s)) continue;
+                /** create new itemStack for content */
+                ItemStack i = nms.createItemStack(config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_MATERIAL.replace("%path%", s)).toUpperCase(), 1, (short) config.getInt(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_DATA.replace("%path%", s)));
+                ItemMeta im = i.getItemMeta();
+                im.setDisplayName(replaceStatsPlaceholders(p, getMsg(p, Messages.PLAYER_STATS_GUI_PATH + "-" + s + "-name"), kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed,
+                        firstPlay, lastPlay, timeFormat, p.getName(), never, true));
+                List<String> lore = new ArrayList<>();
+                for (String string : getList(p, Messages.PLAYER_STATS_GUI_PATH + "-" + s + "-lore")) {
+                    lore.add(replaceStatsPlaceholders(p, string, kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never, true));
+                }
+                im.setLore(lore);
+                i.setItemMeta(im);
+                inv.setItem(config.getInt(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_SLOT.replace("%path%", s)), i);
             }
-            im.setLore(lore);
-            i.setItemMeta(im);
-            inv.setItem(config.getInt(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_SLOT.replace("%path%", s)), i);
-        }
 
-        p.openInventory(inv);
+            p.openInventory(inv);
+        });
     }
 
     public static String replaceStatsPlaceholders(Player pl, String s, int kills, int deaths, int looses, int wins, int finalKills, int finalDeaths,
                                                   int beds, int games, Timestamp first, Timestamp last, String timeFormat, String player, String never, boolean papiReplacements) {
-        String lastS = last == null ? never : String.valueOf(new SimpleDateFormat(timeFormat).format(last)),
-                firstS = first == null ? never : String.valueOf(new SimpleDateFormat(timeFormat).format(first));
+        String lastS = last == null ? never : new SimpleDateFormat(timeFormat).format(last),
+                firstS = first == null ? never : new SimpleDateFormat(timeFormat).format(first);
         s = s.replace("{kills}", String.valueOf(kills)).replace("{deaths}", String.valueOf(deaths)).replace("{losses}", String.valueOf(looses)).replace("{looses}", String.valueOf(looses)).replace("{wins}", String.valueOf(wins))
                 .replace("{finalKills}", String.valueOf(finalKills)).replace("{fKills}", String.valueOf(finalKills)).replace("{finalDeaths}",
                         String.valueOf(finalDeaths)).replace("{bedsDestroyed}", String.valueOf(beds)).replace("{beds}", String.valueOf(beds))
@@ -329,11 +335,10 @@ public class Misc {
         return papiReplacements ? SupportPAPI.getSupportPAPI().replace(pl, s) : s;
     }
 
+
     public static void giveLobbySb(Player p) {
         if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
-            Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
-                new SBoard(p, getList(p, Messages.SCOREBOARD_LOBBY), null);
-            }, 15L);
+            Bukkit.getScheduler().runTaskLater(Main.plugin, () -> new SBoard(p, getList(p, Messages.SCOREBOARD_LOBBY), null), 15L);
         }
     }
 
@@ -390,48 +395,4 @@ public class Misc {
         }
         return isOutsideOfBorder(l);
     }
-
-    /**
-     * Change the server MOTD in properties file
-     */
-    public static void updateMOTD(String motd) {
-        Properties p = new Properties();
-        OutputStream out = null;
-        InputStream in = null;
-
-        try {
-
-            in = new FileInputStream(Main.plugin.getServer().getWorldContainer().getPath() + "/server.properties");
-            p.load(in);
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                    try {
-                        out = new FileOutputStream(Main.plugin.getServer().getWorldContainer().getPath() + "/server.properties");
-                        p.setProperty("motd", motd);
-                        p.store(out, null);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } finally {
-                        if (out != null) {
-                            try {
-                                out.close();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
 }

@@ -18,6 +18,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,15 +30,16 @@ import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.language.Language.getList;
 import static com.andrei1058.bedwars.language.Language.getMsg;
 
-public class GameStartingTask extends BukkitRunnable {
+public class GameStartingTask implements Runnable {
 
     private int countdown;
     private Arena arena;
+    private BukkitTask task;
 
     public GameStartingTask(Arena arena) {
         this.arena = arena;
         countdown = Main.config.getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_REGULAR);
-        this.runTaskTimer(Main.plugin, 0, 20L);
+        task = Bukkit.getScheduler().runTaskTimer(Main.plugin, this, 0, 20L);
     }
 
 
@@ -63,7 +65,7 @@ public class GameStartingTask extends BukkitRunnable {
      * Get task ID
      */
     public int getTask() {
-        return this.getTaskId();
+        return task.getTaskId();
     }
 
     @Override
@@ -170,7 +172,7 @@ public class GameStartingTask extends BukkitRunnable {
             //Lobby removal
             removeLobby();
 
-            cancel();
+            task.cancel();
             return;
         }
 
@@ -227,5 +229,9 @@ public class GameStartingTask extends BukkitRunnable {
         }
         //remove items dropped from lobby
         getArena().getWorld().getEntities().stream().filter(e -> e.getType() == EntityType.DROPPED_ITEM).forEach(Entity::remove);
+    }
+
+    public void cancel(){
+        task.cancel();
     }
 }
