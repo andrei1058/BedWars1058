@@ -39,6 +39,10 @@ public class Messages {
     public static String COMMAND_JOIN_PLAYER_JOIN_MSG = "cmd-join-success";
     public static String COMMAND_JOIN_SPECTATOR_MSG = "cmd-join-spectate";
     public static String COMMAND_JOIN_SPECTATOR_DENIED_MSG = "cmd-join-spectate-denied";
+    public static String REJOIN_NO_ARENA = "cmd-rejoin-no-arena";
+    public static String REJOIN_DENIED = "cmd-rejoin-denied";
+    public static String REJOIN_ALLOWED = "cmd-rejoin-allowed";
+    public static String COMMAND_REJOIN_PLAYER_RECONNECTED = "cmd-rejoin-player-reconnected";
     public static String COMMAND_LEAVE_MSG = "cmd-leave";
     public static String COMMAND_NOT_ALLOWED_IN_GAME = "cmd-blocked-in-game";
     public static String COMMAND_LEAVE_DENIED_NOT_IN_ARENA = "cmd-not-in-arena";
@@ -254,8 +258,8 @@ public class Messages {
     public static final String SHOP_CATEGORY_INVENTORY_NAME = SHOP_PATH + ".%category%.inventory-name";
     public static final String SHOP_CATEGORY_ITEM_NAME = SHOP_PATH + ".%category%.category-item-name";
     public static final String SHOP_CATEGORY_ITEM_LORE = SHOP_PATH + ".%category%.category-item-lore";
-    public static final String SHOP_CONTENT_TIER_ITEM_NAME = ".%category%.content-item-%content%-name";
-    public static final String SHOP_CONTENT_TIER_ITEM_LORE = ".%category%.content-item-%content%-lore";
+    public static final String SHOP_CONTENT_TIER_ITEM_NAME = SHOP_PATH + ".%category%.content-item-%content%-name";
+    public static final String SHOP_CONTENT_TIER_ITEM_LORE = SHOP_PATH + ".%category%.content-item-%content%-lore";
     public static final String SHOP_CAN_BUY_COLOR = SHOP_PATH+ ".can-buy-color";
     public static final String SHOP_CANT_BUY_COLOR = SHOP_PATH+ ".cant-buy-color";
 
@@ -270,8 +274,4 @@ public class Messages {
     /* Arena waiting Items Messages */
     public static final String GENERAL_CONFIGURATION_WAITING_ITEMS_NAME = ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH+"-%path%-name";
     public static final String GENERAL_CONFIGURATION_WAITING_ITEMS_LORE = ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH+"-%path%-lore";
-
-    public static String REJOIN_NO_ARENA = "rejoin-no-arena";
-    public static String REJOIN_DENIED = "rejoin-denied";
-    public static String REJOIN_ALLOWED = "rejoin-allowed";
 }

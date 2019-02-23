@@ -21,7 +21,6 @@ public class QuickBuyAdd {
     }
 
     public void open(Player player, CategoryContent cc){
-        //todo gui name from messages
         Inventory inv = Bukkit.createInventory(null, ShopManager.getShop().getInvSize());
         PlayerQuickBuyCache cache = PlayerQuickBuyCache.getQuickBuyCache(player.getUniqueId());
         ShopCache sc = ShopCache.getShopCache(player);

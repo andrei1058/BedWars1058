@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup;
 
 import com.andrei1058.bedwars.api.TeamColor;
+import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.api.command.ParentCommand;
@@ -205,5 +206,15 @@ public class AddGenerator extends SubCommand {
     @Override
     public List<String> getTabComplete() {
         return Arrays.asList("Diamond", "Emerald", "Iron", "Gold");
+    }
+
+    @Override
+    public boolean canSee(CommandSender s) {
+        if (s instanceof ConsoleCommandSender) return false;
+
+        Player p = (Player) s;
+        if (!SetupSession.isInSetupSession(p)) return false;
+
+        return hasPermission(s);
     }
 }

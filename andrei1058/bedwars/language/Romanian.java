@@ -34,6 +34,7 @@ public class Romanian {
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_PARTY_TOO_BIG, "{prefix}&cParty-ul este prea mare pentru a intra ca un singur team :(");
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_NOT_PARTY_LEADER, "{prefix}&cDoar leader-ul poate alege arena.");
         yml.addDefault(Messages.COMMAND_JOIN_PLAYER_JOIN_MSG, "{prefix}&7{player} &ea intrat (&b{on}&e/&b{max}&e)!");
+        yml.addDefault(Messages.COMMAND_REJOIN_PLAYER_RECONNECTED, "{prefix}&7{player} &es-a reconectat!");
         yml.addDefault(Messages.COMMAND_LEAVE_MSG, "{prefix}&7{player} &ea iesit!");
         yml.addDefault(Messages.COMMAND_JOIN_USAGE, "§a▪ §7Folosire: /" + mainCmd + " join §o<arena/group>");
         yml.addDefault(Messages.COMMAND_NOT_ALLOWED_IN_GAME, "{prefix}&cNu poti face asta in timpul meciului.");
@@ -180,7 +181,7 @@ public class Romanian {
                 "&e                      &lPrimul Ucigas &7- {firstName} - {firstKills}",
                 "&6                      &lAl 2-lea Ucigas &7- {secondName} - {secondKills}",
                 "&c                      &lAl 3-lea Ucigas &7- {thirdName} - {thirdKills}", "",
-                "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬")); //todo disponibile {firstDeaths} {firstBeds} {firstName} {firstKills}
+                "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
         yml.addDefault(Messages.GAME_END_TEAM_WON_CHAT, "{prefix}{TeamColor}Echipa {TeamName} &aa castigat!");
         yml.addDefault(Messages.NPC_NAME_TEAM_UPGRADES, "&e&lTEAM,&E&LUPGRADES");
         yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&e&lSOLO,&E&LUPGRADES");

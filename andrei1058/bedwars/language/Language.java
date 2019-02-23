@@ -224,14 +224,15 @@ public class Language {
                 set(Messages.SHOP_CATEGORY_ITEM_NAME.replace("%category%", s), "&8Name not set");
             }
             if (!exists(Messages.SHOP_CATEGORY_ITEM_LORE.replace("%category%", s))) {
-                set(Messages.SHOP_CATEGORY_ITEM_LORE.replace("%category%", s), Collections.singleton("&8Lore not set"));
+                set(Messages.SHOP_CATEGORY_ITEM_LORE.replace("%category%", s), Arrays.asList("&8Lore not set"));
             }
+            if (Main.shop.getYml().get(s + ConfigPath.SHOP_CATEGORY_CONTENT_PATH) == null) continue;
             for (String c : Main.shop.getYml().getConfigurationSection(s + ConfigPath.SHOP_CATEGORY_CONTENT_PATH).getKeys(false)) {
-                if (!exists(Messages.SHOP_PATH + Messages.SHOP_CONTENT_TIER_ITEM_NAME.replace("%category%", s).replace("%content%", c))) {
-                    set(Messages.SHOP_PATH + Messages.SHOP_CONTENT_TIER_ITEM_NAME.replace("%category%", s).replace("%content%", c), "&8Name not set");
+                if (!exists(Messages.SHOP_CONTENT_TIER_ITEM_NAME.replace("%category%", s).replace("%content%", c))) {
+                    set(Messages.SHOP_CONTENT_TIER_ITEM_NAME.replace("%category%", s).replace("%content%", c), "&8Name not set");
                 }
-                if (!exists(Messages.SHOP_PATH + Messages.SHOP_CONTENT_TIER_ITEM_LORE.replace("%category%", s).replace("%content%", c))) {
-                    set(Messages.SHOP_PATH + Messages.SHOP_CONTENT_TIER_ITEM_LORE.replace("%category%", s).replace("%content%", c), Collections.singleton("&8Lore not set"));
+                if (!exists(Messages.SHOP_CONTENT_TIER_ITEM_LORE.replace("%category%", s).replace("%content%", c))) {
+                    set(Messages.SHOP_CONTENT_TIER_ITEM_LORE.replace("%category%", s).replace("%content%", c), Arrays.asList("&8Lore not set"));
                 }
             }
         }

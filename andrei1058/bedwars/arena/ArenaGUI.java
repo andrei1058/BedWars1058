@@ -31,35 +31,7 @@ public class ArenaGUI {
 
     public static void refreshInv(Player p, Inventory inv) {
 
-        List<Arena> arenas = new ArrayList<>(Arena.getArenas()).stream().filter(a -> a.getStatus() != GameState.restarting).sorted((a1, a2) -> {
-            if (a1.getStatus() == GameState.starting && a2.getStatus() == GameState.starting) {
-                if (a1.getPlayers().size() > a2.getPlayers().size()) {
-                    return -1;
-                }
-                if (a1.getPlayers().size() == a2.getPlayers().size()) {
-                    return 0;
-                } else return 1;
-            } else if (a1.getStatus() == GameState.starting && a2.getStatus() != GameState.starting) {
-                return -1;
-            } else if (a2.getStatus() == GameState.starting && a1.getStatus() != GameState.starting) {
-                return 1;
-            } else if (a1.getStatus() == GameState.waiting && a2.getStatus() == GameState.waiting) {
-                if (a1.getPlayers().size() > a2.getPlayers().size()) {
-                    return -1;
-                }
-                if (a1.getPlayers().size() == a2.getPlayers().size()) {
-                    return 0;
-                } else return 1;
-            } else if (a1.getStatus() == GameState.waiting && a2.getStatus() != GameState.waiting) {
-                return -1;
-            } else if (a2.getStatus() == GameState.waiting && a1.getStatus() != GameState.waiting) {
-                return 1;
-            } else if (a1.getStatus() == GameState.playing && a2.getStatus() == GameState.playing) {
-                return 0;
-            } else if (a1.getStatus() == GameState.playing && a2.getStatus() != GameState.playing) {
-                return -1;
-            } else return 1;
-        }).collect(Collectors.toList());
+        List<Arena> arenas = new ArrayList<>(Arena.getArenas()).stream().filter(a -> a.getStatus() != GameState.restarting).sorted().collect(Collectors.toList());
 
         int arenaKey = 0;
         for (String useSlot : config.getString(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_USE_SLOTS).split(",")) {

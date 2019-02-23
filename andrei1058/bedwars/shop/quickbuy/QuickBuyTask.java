@@ -5,7 +5,6 @@ import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.shop.ShopManager;
 import com.andrei1058.bedwars.shop.main.CategoryContent;
 import com.andrei1058.bedwars.shop.main.ShopCategory;
-import com.andrei1058.bedwars.shop.main.ShopIndex;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 

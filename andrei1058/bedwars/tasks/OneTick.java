@@ -1,9 +1,8 @@
 package com.andrei1058.bedwars.tasks;
 
 import com.andrei1058.bedwars.arena.OreGenerator;
-import org.bukkit.scheduler.BukkitRunnable;
 
-public class OneTick extends BukkitRunnable {
+public class OneTick implements Runnable {
     @Override
     public void run() {
 

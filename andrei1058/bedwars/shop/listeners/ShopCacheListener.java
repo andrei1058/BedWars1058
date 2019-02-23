@@ -25,11 +25,9 @@ public class ShopCacheListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onArenaLeave(PlayerLeaveArenaEvent e) {
-        //don't remove immediately in case of /rejoin
-        if (e.getArena().getStatus() == GameState.playing) return;
-            if (ShopCache.getShopCache(e.getPlayer()) != null) {
-                ShopCache.getShopCache(e.getPlayer()).destroy();
-            }
+        if (ShopCache.getShopCache(e.getPlayer()) != null) {
+            ShopCache.getShopCache(e.getPlayer()).destroy();
+        }
     }
 
     @EventHandler

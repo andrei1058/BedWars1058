@@ -42,6 +42,8 @@ public class ConfigPath {
 
     public static final String GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART = "bungee-settings.games-before-restart";
     public static final String GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD = "bungee-settings.restart-cmd";
+    public static final String GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_NAME = "bungee-settings.server-name";
+    public static final String GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS = "bungee-settings.lobby-servers";
     public static final String GENERAL_CONFIGURATION_ALLOW_PARTIES = "allow-parties";
 
     public static final String GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH = "lobby-items";
@@ -91,6 +93,7 @@ public class ConfigPath {
 
     public static final String CENERAL_CONFIGURATION_ALLOWED_COMMANDS = "allowed-commands";
     public static final String GENERAL_CONFIGURATION_LOBBY_SCOREBOARD = "lobby-scoreboard";
+    public static final String GENERAL_CONFIGURATION_DISABLED_LANGUAGES = "disabled-languages";
 
     public static final String GENERAL_CONFIGURATION_ARENA_SELECTOR_PATH = "arena-gui";
     public static final String GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SIZE = GENERAL_CONFIGURATION_ARENA_SELECTOR_PATH + ".settings.inv-size";

@@ -9,6 +9,7 @@ import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
+import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.tasks.GamePlayingTask;
 import com.andrei1058.bedwars.tasks.GameRestartingTask;
@@ -24,21 +25,23 @@ import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.sql.Timestamp;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.upgrades.BaseListener.isOnABase;
 import static com.andrei1058.bedwars.language.Language.*;
 
-public class Arena {
+public class Arena implements Comparable {
     private static HashMap<String, Arena> arenaByName = new HashMap<>();
     private static HashMap<Player, Arena> arenaByPlayer = new HashMap<>();
     private static ArrayList<Arena> arenas = new ArrayList<>();
-    private static int gamesBeforeRestart = 0;//config.getInt(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART);
+    private static int gamesBeforeRestart = config.getInt(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART);
     public static HashMap<UUID, Integer> afkCheck = new HashMap<>();
     public static HashMap<UUID, Integer> magicMilk = new HashMap<>();
 
@@ -67,12 +70,12 @@ public class Arena {
     /**
      * Players in respawn session
      */
-    private HashMap<Player, Integer> respawn = new HashMap<>();
+    private ConcurrentHashMap<Player, Integer> respawn = new ConcurrentHashMap<>();
 
     /**
      * Invisibility for armor when you drink an invisibility potion
      */
-    private HashMap<Player, Integer> showTime = new HashMap<>();
+    private ConcurrentHashMap<Player, Integer> showTime = new ConcurrentHashMap<>();
 
     /**
      * player location before joining
@@ -367,6 +370,9 @@ public class Arena {
                 }
             }
         }
+
+        refreshSigns();
+        JoinNPC.updateNPCs(getGroup());
     }
 
     /**
@@ -434,7 +440,7 @@ public class Arena {
 
             /* update generator holograms for spectators */
             String iso = Language.getPlayerLanguage(p).getIso();
-            for (OreGenerator o : OreGenerator.getGenerators()) {
+            for (OreGenerator o  : OreGenerator.getGenerators()) {
                 if (o.getArena() == this) {
                     o.updateHolograms(p, iso);
                 }
@@ -448,6 +454,12 @@ public class Arena {
         } else {
             p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG));
         }
+
+        if (showTime.containsKey(p)){
+            showTime.remove(p);
+        }
+        refreshSigns();
+        JoinNPC.updateNPCs(getGroup());
     }
 
     /**
@@ -478,6 +490,11 @@ public class Arena {
                     }
                 }
             }
+        }
+
+        List<ShopCache.CachedItem> cacheList = new ArrayList<>();
+        if (ShopCache.getShopCache(p) != null){
+            cacheList = ShopCache.getShopCache(p).getCachedPermanents();
         }
 
         Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.PlayerLeaveArenaEvent(p, this));
@@ -561,7 +578,7 @@ public class Arena {
                 Bukkit.getScheduler().runTaskLater(Main.plugin, () -> setStatus(GameState.restarting), 10L);
             } else {
                 //ReJoin feature
-                new ReJoin(p, this, getPlayerTeam(p.getName()));
+                new ReJoin(p, this, getPlayerTeam(p.getName()), cacheList);
             }
         }
         if (status == GameState.starting || status == GameState.waiting) {
@@ -625,6 +642,13 @@ public class Arena {
             Bukkit.getScheduler().cancelTask(magicMilk.get(p.getUniqueId()));
             magicMilk.remove(p.getUniqueId());
         }
+
+        if (showTime.containsKey(p)){
+            showTime.remove(p);
+        }
+
+        refreshSigns();
+        JoinNPC.updateNPCs(getGroup());
     }
 
     /**
@@ -744,6 +768,9 @@ public class Arena {
             Bukkit.getScheduler().cancelTask(magicMilk.get(p.getUniqueId()));
             magicMilk.remove(p.getUniqueId());
         }
+
+        refreshSigns();
+        JoinNPC.updateNPCs(getGroup());
     }
 
     /**
@@ -751,15 +778,13 @@ public class Arena {
      *
      * @since API 11
      */
-    public boolean reJoin(ReJoin reJoin) {
+    public boolean reJoin(ReJoin reJoin, Player p) {
         if (reJoin.getArena() != this) return false;
         if (!reJoin.canReJoin()) return false;
 
         if (reJoin.getTask() != null) {
             reJoin.getTask().destroy();
         }
-
-        Player p = Bukkit.getPlayer(reJoin.getPlayer());
 
         for (Player on : Bukkit.getOnlinePlayers()) {
             if (getPlayers().contains(on)) {
@@ -774,19 +799,30 @@ public class Arena {
         p.closeInventory();
         players.add(p);
         for (Player on : players) {
-            on.sendMessage(getMsg(on, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
+            on.sendMessage(getMsg(on, Messages.COMMAND_REJOIN_PLAYER_RECONNECTED).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
         }
         for (Player on : spectators) {
-            on.sendMessage(getMsg(on, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
+            on.sendMessage(getMsg(on, Messages.COMMAND_REJOIN_PLAYER_RECONNECTED).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
         }
         setArenaByPlayer(p, false);
         /* save player inventory etc */
         new PlayerGoods(p, true);
+        p.getInventory().clear();
         playerLocation.put(p, p.getLocation());
 
         p.teleport(getCm().getArenaLoc("waiting.Loc"));
         p.getInventory().clear();
+
+        //restore items before respawning in team
+        ShopCache sc = ShopCache.getShopCache(p);
+        if (sc != null) sc.destroy();
+        sc = new ShopCache(p);
+        for (ShopCache.CachedItem ci : reJoin.getPermanentsAndNonDowngradables()) {
+            sc.getCachedItems().add(ci);
+        }
+
         reJoin.getBwt().reJoin(p);
+        reJoin.destroy();
 
         new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + "Playing", Messages.SCOREBOARD_DEFAULT_PLAYING), this);
 
@@ -817,7 +853,9 @@ public class Arena {
         for (Entity e : world.getEntities()) {
             if (e.getType() == EntityType.PLAYER) {
                 Player p = (Player) e;
-                p.kickPlayer(getMsg(p, Messages.ARENA_RESTART_PLAYER_KICK));
+                if (p.getWorld().getName().equals(worldName)) {
+                    p.kickPlayer(getMsg(p, Messages.ARENA_RESTART_PLAYER_KICK));
+                }
             }
         }
         for (OreGenerator eg : oreGenerators) {
@@ -1061,22 +1099,6 @@ public class Arena {
         Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.GameStateChangeEvent(this, status));
         refreshSigns();
 
-        if (getServerType() == ServerType.BUNGEE) {
-            String path = Messages.ARENA_STATUS_RESTARTING_NAME;
-            switch (status) {
-                case starting:
-                    path = Messages.ARENA_STATUS_STARTING_NAME;
-                    break;
-                case playing:
-                    path = Messages.ARENA_STATUS_PLAYING_NAME;
-                    break;
-                case waiting:
-                    path = Messages.ARENA_STATUS_WAITING_NAME;
-                    break;
-            }
-            Misc.updateMOTD(Main.lang.m(path));
-        }
-
         //Stop active tasks to prevent issues
         BukkitScheduler bs = Bukkit.getScheduler();
         if (startingTask != null) {
@@ -1151,14 +1173,14 @@ public class Arena {
     }
 
     public void refreshSigns() {
-        for (BlockState b : signs) {
+        for (BlockState b : getSigns()) {
             Sign s = (Sign) b;
             int line = 0;
             for (String string : Main.signs.l("format")) {
                 s.setLine(line, string.replace("[on]", String.valueOf(getPlayers().size())).replace("[max]", String.valueOf(getMaxPlayers())).replace("[arena]", getDisplayName()).replace("[status]", getDisplayStatus(Main.lang)));
                 line++;
             }
-            b.update(true);
+            s.update();
         }
     }
 
@@ -1200,6 +1222,7 @@ public class Arena {
         if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH) == null) return;
         p.getInventory().clear();
 
+        Bukkit.getScheduler().runTaskLater(plugin, ()-> {
         for (String item : config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH).getKeys(false)) {
             if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", item)) == null) {
                 Main.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", item) + " is not set!");
@@ -1229,6 +1252,7 @@ public class Arena {
 
             p.getInventory().setItem(config.getInt(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_SLOT.replace("%path%", item)), i);
         }
+        }, 15L);
     }
 
     /**
@@ -1544,14 +1568,14 @@ public class Arena {
     /**
      * Get respawn session
      */
-    public HashMap<Player, Integer> getRespawn() {
+    public ConcurrentHashMap<Player, Integer> getRespawn() {
         return respawn;
     }
 
     /**
      * Get invisibility for armor
      */
-    public HashMap<Player, Integer> getShowTime() {
+    public ConcurrentHashMap<Player, Integer> getShowTime() {
         return showTime;
     }
 
@@ -1646,39 +1670,12 @@ public class Arena {
      */
     public static boolean joinRandomFromGroup(Player p, String group) {
 
-        List<Arena> arenas = new ArrayList<>(Arena.getArenas()).stream().filter(a -> a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting).sorted((a1, a2) -> {
-            if (a1.getStatus() == GameState.starting && a2.getStatus() == GameState.starting) {
-                if (a1.getPlayers().size() > a2.getPlayers().size()) {
-                    return -1;
-                }
-                if (a1.getPlayers().size() == a2.getPlayers().size()) {
-                    return 0;
-                } else return 1;
-            } else if (a1.getStatus() == GameState.starting && a2.getStatus() != GameState.starting) {
-                return -1;
-            } else if (a2.getStatus() == GameState.starting && a1.getStatus() != GameState.starting) {
-                return 1;
-            } else if (a1.getStatus() == GameState.waiting && a2.getStatus() == GameState.waiting) {
-                if (a1.getPlayers().size() > a2.getPlayers().size()) {
-                    return -1;
-                }
-                if (a1.getPlayers().size() == a2.getPlayers().size()) {
-                    return 0;
-                } else return 1;
-            } else if (a1.getStatus() == GameState.waiting && a2.getStatus() != GameState.waiting) {
-                return -1;
-            } else if (a2.getStatus() == GameState.waiting && a1.getStatus() != GameState.waiting) {
-                return 1;
-            } else if (a1.getStatus() == GameState.playing && a2.getStatus() == GameState.playing) {
-                return 0;
-            } else if (a1.getStatus() == GameState.playing && a2.getStatus() != GameState.playing) {
-                return -1;
-            } else return 1;
-        }).collect(Collectors.toList());
+        List<Arena> arenaList = new ArrayList<>(getArenas());
+        Collections.sort(arenaList);
 
         int amount = getParty().hasParty(p) ? getParty().getMembers(p).size() : 1;
 
-        for (Arena a : arenas) {
+        for (Arena a : arenaList) {
             if (!a.getGroup().equals(group)) continue;
 
             if (a.getPlayers().size() == a.getMaxPlayers()) continue;
@@ -1702,5 +1699,37 @@ public class Arena {
     public int getPlayerDeaths(Player p, boolean finalDeaths) {
         if (finalDeaths) return playerFinalKillDeaths.getOrDefault(p, 0);
         return playerDeaths.getOrDefault(p, 0);
+    }
+
+    @Override
+    public int compareTo(@NotNull Object o) {
+        Arena a2 = (Arena) o;
+        if (getStatus() == GameState.starting && a2.getStatus() == GameState.starting) {
+            if (getPlayers().size() > a2.getPlayers().size()) {
+                return -1;
+            }
+            if (getPlayers().size() == a2.getPlayers().size()) {
+                return 0;
+            } else return 1;
+        } else if (getStatus() == GameState.starting && a2.getStatus() != GameState.starting) {
+            return -1;
+        } else if (a2.getStatus() == GameState.starting && getStatus() != GameState.starting) {
+            return 1;
+        } else if (getStatus() == GameState.waiting && a2.getStatus() == GameState.waiting) {
+            if (getPlayers().size() > a2.getPlayers().size()) {
+                return -1;
+            }
+            if (getPlayers().size() == a2.getPlayers().size()) {
+                return 0;
+            } else return 1;
+        } else if (getStatus() == GameState.waiting && a2.getStatus() != GameState.waiting) {
+            return -1;
+        } else if (a2.getStatus() == GameState.waiting && getStatus() != GameState.waiting) {
+            return 1;
+        } else if (getStatus() == GameState.playing && a2.getStatus() == GameState.playing) {
+            return 0;
+        } else if (getStatus() == GameState.playing && a2.getStatus() != GameState.playing) {
+            return -1;
+        } else return 1;
     }
 }

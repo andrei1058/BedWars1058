@@ -14,27 +14,32 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import static com.andrei1058.bedwars.Main.getParty;
 import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.language.Language.getList;
 import static com.andrei1058.bedwars.language.Language.getMsg;
 
-public class GameStartingTask extends BukkitRunnable {
+public class GameStartingTask implements Runnable {
 
     private int countdown;
     private Arena arena;
+    private BukkitTask task;
 
     public GameStartingTask(Arena arena) {
         this.arena = arena;
         countdown = Main.config.getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_REGULAR);
-        this.runTaskTimer(Main.plugin, 0, 20L);
+        task = Bukkit.getScheduler().runTaskTimer(Main.plugin, this, 0, 20L);
     }
 
 
@@ -60,7 +65,7 @@ public class GameStartingTask extends BukkitRunnable {
      * Get task ID
      */
     public int getTask() {
-        return this.getTaskId();
+        return task.getTaskId();
     }
 
     @Override
@@ -130,7 +135,7 @@ public class GameStartingTask extends BukkitRunnable {
             for (BedWarsTeam team : getArena().getTeams()) {
                 if (team.getMembers().isEmpty()) {
                     team.setBedDestroyed(true);
-                    if (!getArena().getCm().getBoolean(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS)){
+                    if (!getArena().getCm().getBoolean(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS)) {
                         team.getIronGenerator().enable();
                         team.getGoldGenerator().enable();
                     }
@@ -138,11 +143,11 @@ public class GameStartingTask extends BukkitRunnable {
                 }
                 nms.colorBed(team);
                 if (getArena().getMaxInTeam() > 1) {
-                    nms.spawnShop(getArena().getCm().getArenaLoc("Team."+team.getName()+".Upgrade"), Messages.NPC_NAME_TEAM_UPGRADES, getArena().getPlayers(), getArena());
-                    nms.spawnShop(getArena().getCm().getArenaLoc("Team."+team.getName()+".Shop"), Messages.NPC_NAME_TEAM_SHOP, getArena().getPlayers(), getArena());
+                    nms.spawnShop(getArena().getCm().getArenaLoc("Team." + team.getName() + ".Upgrade"), Messages.NPC_NAME_TEAM_UPGRADES, getArena().getPlayers(), getArena());
+                    nms.spawnShop(getArena().getCm().getArenaLoc("Team." + team.getName() + ".Shop"), Messages.NPC_NAME_TEAM_SHOP, getArena().getPlayers(), getArena());
                 } else {
-                    nms.spawnShop(getArena().getCm().getArenaLoc("Team."+team.getName()+".Upgrade"), Messages.NPC_NAME_SOLO_UPGRADES, getArena().getPlayers(), getArena());
-                    nms.spawnShop(getArena().getCm().getArenaLoc("Team."+team.getName()+".Shop"), Messages.NPC_NAME_SOLO_SHOP, getArena().getPlayers(), getArena());
+                    nms.spawnShop(getArena().getCm().getArenaLoc("Team." + team.getName() + ".Upgrade"), Messages.NPC_NAME_SOLO_UPGRADES, getArena().getPlayers(), getArena());
+                    nms.spawnShop(getArena().getCm().getArenaLoc("Team." + team.getName() + ".Shop"), Messages.NPC_NAME_SOLO_SHOP, getArena().getPlayers(), getArena());
                 }
                 team.getIronGenerator().enable();
                 team.getGoldGenerator().enable();
@@ -167,7 +172,7 @@ public class GameStartingTask extends BukkitRunnable {
             //Lobby removal
             removeLobby();
 
-            cancel();
+            task.cancel();
             return;
         }
 
@@ -191,7 +196,7 @@ public class GameStartingTask extends BukkitRunnable {
     }
 
     //Spawn players
-    private void spawnPlayers(){
+    private void spawnPlayers() {
         for (BedWarsTeam bwt : getArena().getTeams()) {
             for (Player p : bwt.getMembers()) {
                 bwt.firstSpawn(p);
@@ -205,7 +210,7 @@ public class GameStartingTask extends BukkitRunnable {
     }
 
     //Lobby removal
-    private void removeLobby(){
+    private void removeLobby() {
         if (!(getArena().getCm().getYml().get(ConfigPath.ARENA_WAITING_POS1) == null && getArena().getCm().getYml().get(ConfigPath.ARENA_WAITING_POS2) == null)) {
             Location loc1 = getArena().getCm().getArenaLoc(ConfigPath.ARENA_WAITING_POS1), loc2 = getArena().getCm().getArenaLoc(ConfigPath.ARENA_WAITING_POS2);
             int minX = Math.min(loc1.getBlockX(), loc2.getBlockX()), maxX = Math.max(loc1.getBlockX(), loc2.getBlockX());
@@ -222,5 +227,11 @@ public class GameStartingTask extends BukkitRunnable {
                 }
             }
         }
+        //remove items dropped from lobby
+        getArena().getWorld().getEntities().stream().filter(e -> e.getType() == EntityType.DROPPED_ITEM).forEach(Entity::remove);
+    }
+
+    public void cancel(){
+        task.cancel();
     }
 }

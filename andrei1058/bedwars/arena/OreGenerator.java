@@ -18,6 +18,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.language.Language.getMsg;
@@ -41,8 +42,8 @@ public class OreGenerator {
     private ArmorStand item;
     public boolean stack = getGeneratorsCfg().getBoolean(ConfigPath.GENERATOR_STACK_ITEMS);
 
-    private static List<OreGenerator> generators = new ArrayList<>();
-    private static List<OreGenerator> rotation = new ArrayList<>();
+    private static ConcurrentLinkedDeque<OreGenerator> generators = new ConcurrentLinkedDeque<>();
+    private static ConcurrentLinkedDeque<OreGenerator> rotation = new ConcurrentLinkedDeque<>();
 
     public OreGenerator(Location location, Arena arena, @NotNull GeneratorType type, BedWarsTeam bwt) {
         if (type == GeneratorType.EMERALD || type == GeneratorType.DIAMOND) {
@@ -57,6 +58,7 @@ public class OreGenerator {
     }
 
     public void upgrade() {
+        arena.updateNextEvent();
         switch (type) {
             case DIAMOND:
                 upgradeStage++;
@@ -199,14 +201,14 @@ public class OreGenerator {
 
     @NotNull
     @Contract(pure = true)
-    public static List<OreGenerator> getGenerators() {
-        return new ArrayList<>(generators);
+    public static ConcurrentLinkedDeque<OreGenerator> getGenerators() {
+        return generators;
     }
 
     @NotNull
     @Contract(pure = true)
-    public static List<OreGenerator> getRotation() {
-        return new ArrayList<>(rotation);
+    public static ConcurrentLinkedDeque<OreGenerator> getRotation() {
+        return rotation;
     }
 
     public class HoloGram {

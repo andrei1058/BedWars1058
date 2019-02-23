@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.regular;
 
 import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.arena.spectator.TeleporterGUI;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
@@ -38,5 +39,22 @@ public class CmdTeleporter extends SubCommand {
     @Override
     public List<String> getTabComplete() {
         return null;
+    }
+
+    @Override
+    public boolean canSee(CommandSender s) {
+        if (s instanceof ConsoleCommandSender) return false;
+
+        Player p = (Player) s;
+
+        Arena a = Arena.getArenaByPlayer(p);
+        if (a == null){
+            return false;
+        } else {
+            if (!a.isSpectator(p)) return false;
+        }
+
+        if (SetupSession.isInSetupSession(p)) return false;
+        return hasPermission(s);
     }
 }

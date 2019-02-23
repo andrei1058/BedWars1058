@@ -36,6 +36,68 @@ public class Inventory implements Listener {
         }
     }
 
+    /**
+     * Manage command-items when clicked in inventory
+     */
+    @EventHandler
+    public void onCommandItemClick(InventoryClickEvent e) {
+        //block moving from hotBar
+        if (e.getAction() == HOTBAR_SWAP && e.getClick() == ClickType.NUMBER_KEY) {
+            if (e.getHotbarButton() > -1) {
+                ItemStack i = e.getWhoClicked().getInventory().getItem(e.getHotbarButton());
+                if (i != null) {
+                    if (isCommandItem(i)) {
+                        e.setCancelled(true);
+                        return;
+                    }
+                }
+            }
+        }
+
+        //block moving cursor item outside
+        if (e.getCursor() != null) {
+            if (e.getCursor().getType() != Material.AIR) {
+                if (e.getClickedInventory() == null) {
+                    if (isCommandItem(e.getCursor())) {
+                        e.getWhoClicked().closeInventory();
+                        e.setCancelled(true);
+                    }
+                } else if (e.getClickedInventory().getType() != e.getWhoClicked().getInventory().getType()) {
+                    if (isCommandItem(e.getCursor())) {
+                        e.getWhoClicked().closeInventory();
+                        e.setCancelled(true);
+                    }
+                } else {
+                    if (isCommandItem(e.getCursor())) e.setCancelled(true);
+                }
+            }
+        }
+
+        //block moving current item outside
+        if (e.getCurrentItem() != null) {
+            if (e.getCurrentItem().getType() != Material.AIR) {
+                if (e.getClickedInventory() == null) {
+                    if (isCommandItem(e.getCurrentItem())) {
+                        e.getWhoClicked().closeInventory();
+                        e.setCancelled(true);
+                    }
+                } else if (e.getClickedInventory().getType() != e.getWhoClicked().getInventory().getType()) {
+                    if (isCommandItem(e.getCurrentItem())) {
+                        e.getWhoClicked().closeInventory();
+                        e.setCancelled(true);
+                    }
+                } else {
+                    if (isCommandItem(e.getCurrentItem())) e.setCancelled(true);
+                }
+            }
+        }
+
+        //block moving with shift
+        if (e.getAction() == MOVE_TO_OTHER_INVENTORY) {
+            if (isCommandItem(e.getCurrentItem())) e.setCancelled(true);
+        }
+    }
+
     @EventHandler
     public void onClick(InventoryClickEvent e) {
         Player p = (Player) e.getWhoClicked();
@@ -43,7 +105,7 @@ public class Inventory implements Listener {
         if (i == null) return;
         if (i.getType() == Material.AIR) return;
 
-        //Prevent moving of command items
+        /*//Prevent moving of command items
         if (nms.isCustomBedWarsItem(i)) {
             if (e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
                 e.setCancelled(true);
@@ -56,7 +118,7 @@ public class Inventory implements Listener {
                     return;
                 }
             }
-        }
+        }*/
 
         Arena a = Arena.getArenaByPlayer(p);
         if (a != null) {
@@ -108,11 +170,6 @@ public class Inventory implements Listener {
 
         /* Manage shop and upgrades */
         if (a != null) {
-            //todo atentie, asta poate cauza probleme, faptul ca nu va mai bloca toate click-urile
-            //if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) {
-            //    e.setCancelled(true);
-            //    return;
-            //}
             if (a.isSpectator(p)) {
                 e.setCancelled(true);
                 return;
@@ -129,5 +186,22 @@ public class Inventory implements Listener {
                 }
             }
         }
+    }
+
+    /**
+     * Check if an item is command-item
+     */
+    private static boolean isCommandItem(ItemStack i) {
+        if (i == null) return false;
+        if (i.getType() == Material.AIR) return false;
+        if (nms.isCustomBedWarsItem(i)) {
+            String[] customData = nms.getCustomData(i).split("_");
+            if (customData.length >= 2) {
+                if (customData[0].equals("RUNCOMMAND")) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

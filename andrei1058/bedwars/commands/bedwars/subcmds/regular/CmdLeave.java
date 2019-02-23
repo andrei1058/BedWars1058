@@ -6,6 +6,7 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
+import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -53,5 +54,17 @@ public class CmdLeave extends SubCommand {
     @Override
     public List<String> getTabComplete() {
         return null;
+    }
+
+    @Override
+    public boolean canSee(CommandSender s) {
+        if (s instanceof ConsoleCommandSender) return false;
+
+        Player p = (Player) s;
+
+        if (Main.getServerType() == ServerType.SHARED && !Arena.isInArena(p)) return false;
+
+        if (SetupSession.isInSetupSession(p)) return false;
+        return hasPermission(s);
     }
 }

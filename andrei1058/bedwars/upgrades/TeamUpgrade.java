@@ -121,6 +121,5 @@ public class TeamUpgrade {
                 }
             }
         }
-        //todo msg ai deja upgrade maxim
     }
 }

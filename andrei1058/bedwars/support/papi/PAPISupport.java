@@ -24,11 +24,6 @@ public class PAPISupport extends PlaceholderExpansion {
     }
 
     @Override
-    public String getPlugin() {
-        return Main.plugin.getName();
-    }
-
-    @Override
     public String getAuthor() {
         return "andrei1058";
     }

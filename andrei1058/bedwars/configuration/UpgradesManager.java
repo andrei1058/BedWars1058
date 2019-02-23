@@ -94,7 +94,7 @@ public class UpgradesManager {
         yml.addDefault("Default.maniacMiner.tier1.displayItem.enchanted", false);
         yml.addDefault("Default.maniacMiner.tier1.currency", "diamond");
         yml.addDefault("Default.maniacMiner.tier1.cost", 4);
-        yml.addDefault("Default.maniacMiner.tier1.receive.playerEffect.haste1.effect", "FAST_DIGGING"); //todo asta s-ar putea sa nu fie compatibila cu 1.9+
+        yml.addDefault("Default.maniacMiner.tier1.receive.playerEffect.haste1.effect", "FAST_DIGGING");
         yml.addDefault("Default.maniacMiner.tier1.receive.playerEffect.haste1.amplifier", 0);
         yml.addDefault("Default.maniacMiner.tier1.receive.playerEffect.haste1.apply", "members");
 

@@ -56,4 +56,14 @@ public class SetMaxInTeam extends SubCommand {
     public List<String> getTabComplete() {
         return Arrays.asList("1", "2", "4");
     }
+
+    @Override
+    public boolean canSee(CommandSender s) {
+        if (s instanceof ConsoleCommandSender) return false;
+
+        Player p = (Player) s;
+        if (!SetupSession.isInSetupSession(p)) return false;
+
+        return hasPermission(s);
+    }
 }

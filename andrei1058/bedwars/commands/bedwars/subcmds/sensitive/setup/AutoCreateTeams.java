@@ -224,4 +224,14 @@ public class AutoCreateTeams extends SubCommand {
         }
         return true;
     }
+
+    @Override
+    public boolean canSee(CommandSender s) {
+        if (s instanceof ConsoleCommandSender) return false;
+
+        Player p = (Player) s;
+        if (!SetupSession.isInSetupSession(p)) return false;
+
+        return hasPermission(s);
+    }
 }

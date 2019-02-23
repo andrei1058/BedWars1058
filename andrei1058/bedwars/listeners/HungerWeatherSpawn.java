@@ -1,6 +1,5 @@
 package com.andrei1058.bedwars.listeners;
 
-import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
@@ -21,7 +20,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import static com.andrei1058.bedwars.Main.*;
-import static com.andrei1058.bedwars.tasks.Refresh.showTime;
 
 public class HungerWeatherSpawn implements Listener {
 
@@ -71,9 +69,12 @@ public class HungerWeatherSpawn implements Listener {
 
     @EventHandler
     public void onDrink(PlayerItemConsumeEvent e) {
+        Arena a = Arena.getArenaByPlayer(e.getPlayer());
+        if (a == null) return;
         /* remove empty bottle */
         switch (e.getItem().getType()) {
             case POTION:
+                Bukkit.getScheduler().runTaskLater(plugin, () -> nms.minusAmount(e.getPlayer(), new ItemStack(Material.GLASS_BOTTLE), 1), 5L);
                 PotionMeta pm = (PotionMeta) e.getItem().getItemMeta();
                 if (pm.hasCustomEffects()) {
                     if (pm.hasCustomEffect(PotionEffectType.INVISIBILITY)) {
@@ -81,11 +82,11 @@ public class HungerWeatherSpawn implements Listener {
                             nms.hideArmor(e.getPlayer(), p1);
                         }
                         for (PotionEffect pe : pm.getCustomEffects()) {
-                            showTime.put(e.getPlayer(), pe.getDuration() / 20);
+                                a.getShowTime().put(e.getPlayer(), pe.getDuration() / 20);
+                                break;
                         }
                     }
                 }
-                Bukkit.getScheduler().runTaskLater(plugin, () -> nms.minusAmount(e.getPlayer(), new ItemStack(Material.GLASS_BOTTLE), 1), 5L);
                 break;
             case GLASS_BOTTLE:
                 nms.minusAmount(e.getPlayer(), nms.getItemInHand(e.getPlayer()), 1);

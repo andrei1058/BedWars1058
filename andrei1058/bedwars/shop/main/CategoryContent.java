@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.shop.main;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.events.ShopBuyEvent;
+import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.language.Messages;
@@ -107,7 +108,7 @@ public class CategoryContent {
 
     }
 
-    public void execute(Player player, ShopCache shopCache) {
+    public void execute(Player player, ShopCache shopCache, int slot) {
 
         ContentTier ct;
 
@@ -141,11 +142,11 @@ public class CategoryContent {
         takeMoney(player, ct.getCurrency(), ct.getPrice());
 
         //upgrade if possible
-        shopCache.upgradeCachedItem(this);
+        shopCache.upgradeCachedItem(this, slot);
 
 
         //give items
-        giveItems(player, shopCache);
+        giveItems(player, shopCache, Arena.getArenaByPlayer(player));
 
         //play sound
         player.playSound(player.getLocation(), nms.bought(), 1f, 1f);
@@ -162,9 +163,9 @@ public class CategoryContent {
     /**
      * Add tier items to player inventory
      */
-    public void giveItems(Player player, ShopCache shopCache) {
+    public void giveItems(Player player, ShopCache shopCache, Arena arena) {
         for (BuyItem bi : contentTiers.get(shopCache.getContentTier(getIdentifier()) - 1).getBuyItemsList()) {
-            bi.give(player);
+            bi.give(player, arena);
         }
     }
 

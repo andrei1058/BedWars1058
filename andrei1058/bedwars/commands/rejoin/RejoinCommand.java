@@ -40,7 +40,7 @@ public class RejoinCommand extends BukkitCommand {
         }
 
         p.sendMessage(Language.getMsg(p, Messages.REJOIN_ALLOWED).replace("{arena}", ReJoin.getPlayer(p).getArena().getDisplayName()));
-        ReJoin.getPlayer(p).reJoin();
+        ReJoin.getPlayer(p).reJoin(p);
         return true;
     }
 }

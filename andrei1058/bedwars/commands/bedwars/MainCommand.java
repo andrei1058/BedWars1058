@@ -171,6 +171,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
             return sub;
         } else if (args.length == 2) {
             if (hasSubCommand(args[0])) {
+                if (getSubCommand(args[0]).canSee(s))
                 return getSubCommand(args[0]).getTabComplete();
             }
         }

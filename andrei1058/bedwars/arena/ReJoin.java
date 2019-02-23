@@ -2,7 +2,9 @@ package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
+import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.tasks.ReJoinTask;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ public class ReJoin {
     private Arena arena;
     private BedWarsTeam bwt;
     private ReJoinTask task = null;
+    private ArrayList<ShopCache.CachedItem> permanentsAndNonDowngradables = new ArrayList<>();
 
     private int kills = 0, finalKills = 0, deaths = 0, finalDeaths = 0, beds = 0;
 
@@ -23,7 +26,7 @@ public class ReJoin {
     /**
      * Make rejoin possible for a player
      */
-    public ReJoin(Player player, Arena arena, BedWarsTeam bwt) {
+    public ReJoin(Player player, Arena arena, BedWarsTeam bwt, List<ShopCache.CachedItem> cachedArmor) {
         if (exists(player)) getPlayer(player).destroy();
         this.bwt = bwt;
         if (this.bwt.isBedDestroyed()) return;
@@ -33,6 +36,7 @@ public class ReJoin {
         Main.debug("Created ReJoin for " + player.getName() + " " + player.getUniqueId() + " at " + arena.getWorldName());
         storeStatsDiff(arena.getPlayerKills(player, false), arena.getPlayerKills(player, true), arena.getPlayerDeaths(player, false), arena.getPlayerDeaths(player, true), arena.getPlayerBedsDestroyed(player));
         if (bwt.getMembers().isEmpty()) task = new ReJoinTask(arena, bwt);
+        this.permanentsAndNonDowngradables.addAll(cachedArmor);
     }
 
     /**
@@ -42,7 +46,7 @@ public class ReJoin {
         Main.debug("ReJoin exists check " + pl.getUniqueId());
         for (ReJoin rj : new ArrayList<>(reJoinList)) {
             Main.debug("ReJoin exists check list scroll: " + rj.getPl().toString());
-            if (rj.getPl().toString().equalsIgnoreCase(pl.getUniqueId().toString())) {
+            if (rj.getPl().equals(pl.getUniqueId().toString())) {
                 return true;
             }
         }
@@ -55,7 +59,7 @@ public class ReJoin {
     public static ReJoin getPlayer(Player player) {
         Main.debug("ReJoin getPlayer " + player.getUniqueId());
         for (ReJoin rj : new ArrayList<>(reJoinList)) {
-            if (rj.getPl().toString().equalsIgnoreCase(player.getUniqueId().toString())) {
+            if (rj.getPl().equals(player.getUniqueId().toString())) {
                 return rj;
             }
         }
@@ -93,8 +97,8 @@ public class ReJoin {
     /**
      * Make a player re-join the arena
      */
-    public boolean reJoin() {
-        return arena.reJoin(this);
+    public boolean reJoin(Player player) {
+        return arena.reJoin(this, player);
     }
 
     /**
@@ -163,5 +167,9 @@ public class ReJoin {
 
     public UUID getPl(){
         return player;
+    }
+
+    public List<ShopCache.CachedItem> getPermanentsAndNonDowngradables() {
+        return permanentsAndNonDowngradables;
     }
 }

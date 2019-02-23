@@ -127,7 +127,7 @@ public class JoinLeaveTeleport implements Listener {
             if (ReJoin.exists(p)) {
                 if (!ReJoin.getPlayer(p).canReJoin()) return;
                 p.sendMessage(Language.getMsg(p, Messages.REJOIN_ALLOWED).replace("{arena}", ReJoin.getPlayer(p).getArena().getDisplayName()));
-                ReJoin.getPlayer(p).reJoin();
+                ReJoin.getPlayer(p).reJoin(p);
                 return;
             }
         }
@@ -200,7 +200,10 @@ public class JoinLeaveTeleport implements Listener {
                 }
                 if (!(a1.isSpectator(e.getPlayer()) || a1.isPlayer(e.getPlayer()))) {
                     a1.addSpectator(e.getPlayer(), false, e.getTo());
-                    if (!e.getPlayer().isFlying()) e.getPlayer().setFlying(true);
+                    if (!e.getPlayer().isFlying()) {
+                        e.getPlayer().setAllowFlight(true);
+                        e.getPlayer().setFlying(true);
+                    }
                 }
             }
         }

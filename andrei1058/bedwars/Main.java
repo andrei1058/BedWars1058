@@ -19,6 +19,7 @@ import com.andrei1058.bedwars.configuration.*;
 import com.andrei1058.bedwars.listeners.*;
 import com.andrei1058.bedwars.listeners.arenaselector.ArenaSelectorListener;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
+import com.andrei1058.bedwars.lobbysocket.*;
 import com.andrei1058.bedwars.shop.ShopManager;
 import com.andrei1058.bedwars.support.Metrics;
 import com.andrei1058.bedwars.support.bukkit.*;
@@ -55,6 +56,7 @@ import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 import static com.andrei1058.bedwars.language.Language.setupLang;
@@ -86,7 +88,7 @@ public class Main extends JavaPlugin {
         //Spigot support
         try {
             Bukkit.getServer().spigot();
-        } catch (Exception ex){
+        } catch (Exception ex) {
             this.getLogger().severe("I can't run on your server software. Please check:");
             this.getLogger().severe("https://gitlab.com/andrei1058/BedWars1058/wikis/compatibility");
             this.setEnabled(false);
@@ -217,6 +219,12 @@ public class Main extends JavaPlugin {
                 new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener());
         if (getServerType() == ServerType.BUNGEE) {
             registerEvents(new Ping());
+            registerEvents(new ArenaListeners());
+            Bukkit.getMessenger().registerOutgoingPluginChannel(this, "bedwars:proxy");
+            Bukkit.getMessenger().registerIncomingPluginChannel(this, "bedwars:proxy", new BungeeListener());
+            ArenaSocket.lobbies.addAll(config.l(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS));
+            registerEvents(new TempListener());
+            new SendTask();
         } else if (getServerType() == ServerType.MULTIARENA || getServerType() == ServerType.SHARED) {
             registerEvents(new ArenaSelectorListener(), new BlockStatusListener());
         }
@@ -267,7 +275,6 @@ public class Main extends JavaPlugin {
         }
 
         /* Levels support */
-        //todo levels addon
         level = new NoLevel();
 
         /* Language support */
@@ -279,10 +286,12 @@ public class Main extends JavaPlugin {
         }
 
         /* Register tasks */
-        new Refresh().runTaskTimer(this, 20L, 20L);
+        Bukkit.getScheduler().runTaskTimer(this, new Refresh(), 20L, 20L);
+        //new Refresh().runTaskTimer(this, 20L, 20L);
 
         if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_ROTATE_GEN)) {
-            new OneTick().runTaskTimer(this, 120, 1);
+            //new OneTick().runTaskTimer(this, 120, 1);
+            Bukkit.getScheduler().runTaskTimer(this, new OneTick(), 120, 1);
         }
 
         /* Setup bStats metrics */
@@ -310,6 +319,11 @@ public class Main extends JavaPlugin {
             } catch (Exception e) {
                 this.getLogger().severe("Could not spawn CmdJoin NPCs. Make sure you have right version of Citizens for your server!");
                 JoinNPC.setCitizensSupport(false);
+            }
+            if (getServerType() == ServerType.BUNGEE) {
+                if (Arena.getArenas().size() > 0) {
+                    ArenaSocket.sendMessage(Arena.getArenas().get(0));
+                }
             }
         }, 40L);
 
@@ -367,6 +381,7 @@ public class Main extends JavaPlugin {
 
         /* Initialize shop */
         shop = new ShopManager();
+
         //Leave this code at the end of the enable method
         for (Language l : Language.getLanguages()) {
             l.setupUnSetCategories();
@@ -377,7 +392,7 @@ public class Main extends JavaPlugin {
     public void onDisable() {
         try {
             database.close();
-            for (Arena a : Arena.getArenas()){
+            for (Arena a : Arena.getArenas()) {
                 a.disable();
             }
         } catch (Exception ex) {
@@ -391,6 +406,7 @@ public class Main extends JavaPlugin {
                 "Documentation here: https://gitlab.com/andrei1058/BedWars1058/wikis/home\n");
         yml.addDefault("serverType", "MULTIARENA");
         yml.addDefault("language", "en");
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES, Collections.singletonList("your language iso here"));
         yml.addDefault("storeLink", "https://www.spigotmc.org/resources/authors/39904/");
         yml.addDefault("lobbyServer", "hub");
         yml.addDefault("globalChat", false);
@@ -401,6 +417,8 @@ public class Main extends JavaPlugin {
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_REJOIN_TIME, 60 * 5);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART, 30);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD, "restart");
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_NAME, "null");
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS, Arrays.asList("0.0.0.0:2019"));
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_REGULAR, 40);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_HALF, 25);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_SHORTENED, 10);
@@ -408,7 +426,7 @@ public class Main extends JavaPlugin {
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DRAGON_SPAWN_COUNTDOWN, 600);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_GAME_END_COUNTDOWN, 120);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SHOUT_COOLDOWN, 30);
-        yml.addDefault(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP, "yourSerer.Com");
+        yml.addDefault(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP, "yourServer.Com");
 
         yml.addDefault("database.enable", false);
         yml.addDefault("database.host", "localhost");
@@ -516,7 +534,7 @@ public class Main extends JavaPlugin {
         if (config.getYml().get("statsGUI.invSize") != null) {
             config.set(ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE, config.getInt("statsGUI.invSize"));
         }
-        if (config.getYml().get("disableCrafting") != null){
+        if (config.getYml().get("disableCrafting") != null) {
             config.set(ConfigPath.GENERAL_CONFIGURATION_DISABLE_CRAFTING, config.getString("disableCrafting"));
         }
         if (config.getYml().get("statsGUI") != null) {
@@ -585,9 +603,28 @@ public class Main extends JavaPlugin {
             }
         }
         lang = Language.getLang(whatLang);
+
+        //remove languages if disabled
+        //server language can t be disabled
+        for (String iso : yml.getStringList(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES)) {
+            Language l = Language.getLang(iso);
+            if (l != null) {
+                if (l != lang) Language.getLanguages().remove(l);
+            }
+        }
+
         debug = yml.getBoolean("debug");
         new ConfigManager("bukkit", Bukkit.getWorldContainer().getPath(), false).set("ticks-per.autosave", -1);
+
+        Bukkit.spigot().getConfig().set("commands.send-namespaced", false);
+        try {
+            Bukkit.spigot().getConfig().save("spigot.yml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         spigot = new ConfigManager("spigot", Bukkit.getWorldContainer().getPath(), false);
+
         switch (yml.getString("serverType").toUpperCase()) {
             case "BUNGEE":
                 serverType = ServerType.BUNGEE;
@@ -705,7 +742,6 @@ public class Main extends JavaPlugin {
         yml.options().copyDefaults(true);
         generators.save();
     }
-
 
     public static String getForCurrentVersion(String v18, String v12, String v13) {
         switch (getServerVersion()) {

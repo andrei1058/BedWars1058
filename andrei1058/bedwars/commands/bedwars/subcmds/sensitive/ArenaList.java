@@ -1,8 +1,10 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 
+import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
+import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.configuration.ConfigManager;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -77,5 +79,18 @@ public class ArenaList extends SubCommand {
             }
         }
         return arene;
+    }
+
+    @Override
+    public boolean canSee(CommandSender s) {
+
+        if (s instanceof Player) {
+            Player p = (Player) s;
+            if (Arena.isInArena(p)) return false;
+
+            if (SetupSession.isInSetupSession(p)) return false;
+        }
+
+        return hasPermission(s);
     }
 }

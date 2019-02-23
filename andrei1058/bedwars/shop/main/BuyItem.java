@@ -125,12 +125,10 @@ public class BuyItem {
     /**
      * Give to a player
      */
-    public void give(Player player) {
-
-        Arena arena = Arena.getArenaByPlayer(player);
-        if (arena == null) return;
+    public void give(Player player, Arena arena) {
 
         ItemStack i = itemStack.clone();
+        Main.debug("Giving BuyItem: " + getUpgradeIdentifier() + " to: " + player.getName());
 
         if (autoEquip && nms.isArmor(itemStack)) {
             Material m = i.getType();
