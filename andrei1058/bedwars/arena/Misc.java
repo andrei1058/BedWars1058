@@ -143,9 +143,7 @@ public class Misc {
         ItemStack i = new ItemStack(material, 1, data);
         if (owner != null) {
             if (nms.isPlayerHead(material.toString(), data)) {
-                SkullMeta sm = (SkullMeta) i.getItemMeta();
-                sm.setOwner(owner.getName());
-                i.setItemMeta(sm);
+                i = nms.getPlayerHead(owner);
             }
         }
         ItemMeta im = i.getItemMeta();

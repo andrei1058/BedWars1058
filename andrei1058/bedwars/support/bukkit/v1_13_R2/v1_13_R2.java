@@ -725,4 +725,21 @@ public class v1_13_R2 implements NMS {
         tag.setString("tierIdentifier", identifier);
         return CraftItemStack.asBukkitCopy(i);
     }
+
+    @Override
+    public org.bukkit.inventory.ItemStack getPlayerHead(Player player) {
+        org.bukkit.inventory.ItemStack head = new org.bukkit.inventory.ItemStack(materialPlayerHead());
+
+        SkullMeta headMeta = (SkullMeta) head.getItemMeta();
+        Field profileField;
+        try {
+            profileField = headMeta.getClass().getDeclaredField("profile");
+            profileField.setAccessible(true);
+            profileField.set(headMeta, ((CraftPlayer)player).getProfile());
+        } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e1) {
+            e1.printStackTrace();
+        }
+        head.setItemMeta(headMeta);
+        return head;
+    }
 }
