@@ -191,7 +191,7 @@ public class Misc {
     }
 
     public static void checkUpdate() {
-        Bukkit.getScheduler().runTask(plugin, ()-> {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> {
             try {
                 HttpURLConnection checkUpdate = (HttpURLConnection) new URL("https://api.spigotmc.org/legacy/update.php?resource=50942").openConnection();
                 checkUpdate.setDoOutput(true);
