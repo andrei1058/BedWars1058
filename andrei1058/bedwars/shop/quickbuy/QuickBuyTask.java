@@ -22,6 +22,10 @@ public class QuickBuyTask extends BukkitRunnable {
 
     @Override
     public void run() {
+        if (Bukkit.getPlayer(uuid) == null){
+            cancel();
+            return;
+        }
         if (Bukkit.getPlayer(uuid).isOnline()){
             PlayerQuickBuyCache cache = PlayerQuickBuyCache.getQuickBuyCache(uuid);
             if (cache == null){
