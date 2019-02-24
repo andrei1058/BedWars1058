@@ -25,9 +25,11 @@ public class GameRestartingTask implements Runnable {
     private Arena arena;
     private int restarting = 15;
     private BukkitTask task;
+    private String name;
 
     public GameRestartingTask(Arena arena) {
         this.arena = arena;
+        this.name = arena.getWorldName();
         task = Bukkit.getScheduler().runTaskTimer(Main.plugin, this, 0, 20L);
     }
 
@@ -45,12 +47,9 @@ public class GameRestartingTask implements Runnable {
     @Override
     public void run() {
 
-        //for (BedWarsTeam bwt : getArena().getTeams()){
-        //    Misc.launchFirework(bwt.getBed());
-        //}
+        restarting--;
 
         if (getArena().getPlayers().isEmpty() && restarting > 9) restarting = 9;
-        restarting--;
         if (restarting == 8) {
             for (Player on : new ArrayList<>(getArena().getPlayers())) {
                 getArena().removePlayer(on, Main.getServerType() == ServerType.BUNGEE);
@@ -79,12 +78,10 @@ public class GameRestartingTask implements Runnable {
                 for (OreGenerator eg : getArena().getOreGenerators()) {
                     eg.disable();
                 }
-                for (BedWarsTeam.BedHolo bh : BedWarsTeam.getBeds().values()) {
-                    if (bh.getArena() == getArena()) {
-                        bh.destroy();
-                    }
+                for (BedWarsTeam bwt : getArena().getTeams()) {
+                    bwt.getBeds().clear();
                 }
-                Bukkit.unloadWorld(getArena().getWorld(), false);
+                //Bukkit.unloadWorld(getArena().getWorld(), false);
             }
         } else if (restarting == 3) {
             /*World world = Bukkit.createWorld(new WorldCreator(getArena().getWorldName()));
@@ -97,10 +94,8 @@ public class GameRestartingTask implements Runnable {
                     if (!((ArmorStand) e).isVisible()) e.remove();
                 }
             }*/
-            getArena().disable();
-        }
-        if (restarting == 0) {
-            String name = getArena().getWorldName();
+            getArena().restart();
+        } else if (restarting == 0) {
             new Arena(name, null);
             task.cancel();
             arena = null;

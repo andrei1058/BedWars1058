@@ -83,7 +83,7 @@ public class EggBridgeTask implements Runnable {
                 if (b2.getType() == Material.AIR) {
                     b2.setType(nms.woolMaterial());
                     nms.setBlockTeamColor(b2, getTeamColor());
-                    getArena().getPlaced().add(b2);
+                    getArena().addPlacedBlock(b2);
                     Bukkit.getPluginManager().callEvent(new EggBridgeBuildEvent(getTeamColor(), getArena(), b2));
                     loc.getWorld().playEffect(b2.getLocation(), nms.eggBridge(), 3);
                 }
@@ -94,7 +94,7 @@ public class EggBridgeTask implements Runnable {
                 if (b3.getType() == Material.AIR) {
                     b3.setType(nms.woolMaterial());
                     nms.setBlockTeamColor(b3, getTeamColor());
-                    getArena().getPlaced().add(b3);
+                    getArena().addPlacedBlock(b3);
                     Bukkit.getPluginManager().callEvent(new EggBridgeBuildEvent(getTeamColor(), getArena(), b3));
                     loc.getWorld().playEffect(b3.getLocation(), nms.eggBridge(), 3);
                 }
@@ -105,7 +105,7 @@ public class EggBridgeTask implements Runnable {
                 if (b4.getType() == Material.AIR) {
                     b4.setType(nms.woolMaterial());
                     nms.setBlockTeamColor(b4, getTeamColor());
-                    getArena().getPlaced().add(b4);
+                    getArena().addPlacedBlock(b4);
                     Bukkit.getPluginManager().callEvent(new EggBridgeBuildEvent(getTeamColor(), getArena(), b4));
                     loc.getWorld().playEffect(b4.getLocation(), nms.eggBridge(), 3);
                 }

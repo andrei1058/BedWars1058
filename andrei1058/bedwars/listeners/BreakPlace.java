@@ -111,7 +111,7 @@ public class BreakPlace implements Listener {
                         return;
                     }
                 }
-                for (OreGenerator o  : OreGenerator.getGenerators()) {
+                for (OreGenerator o  : a.getOreGenerators()) {
                     if (o.getLocation().distance(e.getBlock().getLocation()) <= 1) {
                         e.setCancelled(true);
                         p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
@@ -120,7 +120,7 @@ public class BreakPlace implements Listener {
                 }
             } catch (Exception ex) {
             }
-            a.getPlaced().add(e.getBlock());
+            a.addPlacedBlock(e.getBlock());
             if (e.getBlock().getType() == Material.TNT) {
                 e.setCancelled(true);
                 TNTPrimed tnt = e.getBlock().getLocation().getWorld().spawn(e.getBlock().getLocation(), TNTPrimed.class);
@@ -238,7 +238,7 @@ public class BreakPlace implements Listener {
                         return;
                     }
                 }
-                for (OreGenerator o  : OreGenerator.getGenerators()) {
+                for (OreGenerator o  : a.getOreGenerators()) {
                     if (o.getLocation().distance(e.getBlock().getLocation()) <= 1) {
                         e.setCancelled(true);
                         p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
@@ -249,12 +249,12 @@ public class BreakPlace implements Listener {
             }
 
             if (!a.getCm().getBoolean(ConfigPath.ARENA_ALLOW_MAP_BREAK)) {
-                if (!a.getPlaced().contains(e.getBlock())) {
+                if (!a.isBlockPlaced(e.getBlock())) {
                     p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
                     e.setCancelled(true);
                     return;
                 }
-                a.getPlaced().remove(e.getBlock());
+                a.removePlacedBlock(e.getBlock());
             }
         }
     }
@@ -377,7 +377,7 @@ public class BreakPlace implements Listener {
                         return;
                     }
                 }
-                for (OreGenerator o  : OreGenerator.getGenerators()) {
+                for (OreGenerator o  : a.getOreGenerators()) {
                     if (o.getLocation().distance(e.getBlockClicked().getLocation()) <= 1) {
                         e.setCancelled(true);
                         p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
@@ -404,7 +404,7 @@ public class BreakPlace implements Listener {
                 Iterator<Block> it = new ArrayList<>(destroyed).iterator();
                 while (it.hasNext()) {
                     Block block = it.next();
-                    if (!a.getPlaced().contains(block)) {
+                    if (!a.isBlockPlaced(block)) {
                         e.blockList().remove(block);
                     } else if (AutoCreateTeams.is13Higher()) {
                         if (block.getType().toString().contains("_GLASS")) e.blockList().remove(block);
@@ -424,7 +424,7 @@ public class BreakPlace implements Listener {
                 Iterator<Block> it = new ArrayList<>(destroyed).iterator();
                 while (it.hasNext()) {
                     Block block = it.next();
-                    if (!a.getPlaced().contains(block)) {
+                    if (!a.isBlockPlaced(block)) {
                         e.blockList().remove(block);
                     } else if (AutoCreateTeams.is13Higher()) {
                         if (block.getType().toString().contains("_GLASS")) e.blockList().remove(block);

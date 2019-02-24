@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.*;
 import com.andrei1058.bedwars.api.events.PlayerLeaveArenaEvent;
 import com.andrei1058.bedwars.api.events.PlayerReJoinEvent;
+import com.andrei1058.bedwars.arena.mapreset.MapManager;
 import com.andrei1058.bedwars.configuration.ConfigManager;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Language;
@@ -38,6 +39,7 @@ import static com.andrei1058.bedwars.arena.upgrades.BaseListener.isOnABase;
 import static com.andrei1058.bedwars.language.Language.*;
 
 public class Arena implements Comparable {
+
     private static HashMap<String, Arena> arenaByName = new HashMap<>();
     private static HashMap<Player, Arena> arenaByPlayer = new HashMap<>();
     private static ArrayList<Arena> arenas = new ArrayList<>();
@@ -78,7 +80,8 @@ public class Arena implements Comparable {
     private ConcurrentHashMap<Player, Integer> showTime = new ConcurrentHashMap<>();
 
     /**
-     * player location before joining
+     * Player location before joining.
+     * The player is teleported to this location if the server is running in SHARED mode.
      */
     private static HashMap<Player, Location> playerLocation = new HashMap<>();
 
@@ -100,6 +103,9 @@ public class Arena implements Comparable {
     /* ARENA GENERATORS */
     private List<OreGenerator> oreGenerators = new ArrayList<>();
 
+    /* Used to reset the map. */
+    private MapManager mapManager;
+
     /**
      * Load an arena.
      * This will check if it was set up right.
@@ -108,6 +114,7 @@ public class Arena implements Comparable {
      * @param p    - This will send messages to the player if something went wrong while loading the arena. Can be NULL.
      */
     public Arena(String name, Player p) {
+        plugin.getLogger().info("Loading arena: " + getWorldName());
         cm = new ConfigManager(name, "plugins/" + plugin.getName() + "/Arenas", true);
         yml = cm.getYml();
         if (yml.get("Team") == null) {
@@ -166,6 +173,7 @@ public class Arena implements Comparable {
             return;
         }
         if (error) return;
+
         try {
             world = Bukkit.createWorld(new WorldCreator(name));
         } catch (Exception ex) {
@@ -224,6 +232,8 @@ public class Arena implements Comparable {
         }
 
         worldName = world.getName();
+        mapManager = new MapManager(this);
+        mapManager.restoreMap();
 
         /* Register arena signs */
         registerSigns();
@@ -233,7 +243,7 @@ public class Arena implements Comparable {
         setStatus(GameState.waiting);
 
         //
-        for (NextEvent ne : NextEvent.values()){
+        for (NextEvent ne : NextEvent.values()) {
             nextEvents.add(ne.toString());
         }
     }
@@ -330,11 +340,11 @@ public class Arena implements Comparable {
             }
 
             //half full arena time shorten
-            if (players.size()>=(teams.size()*maxInTeam/2)){
+            if (players.size() >= (teams.size() * maxInTeam / 2)) {
                 if (startingTask != null) {
                     if (Bukkit.getScheduler().isCurrentlyRunning(startingTask.getTask())) {
                         if (startingTask.getCountdown() > getCm().getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_HALF))
-                        startingTask.setCountdown(Main.config.getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_HALF));
+                            startingTask.setCountdown(Main.config.getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_HALF));
                     }
                 }
             }
@@ -440,10 +450,8 @@ public class Arena implements Comparable {
 
             /* update generator holograms for spectators */
             String iso = Language.getPlayerLanguage(p).getIso();
-            for (OreGenerator o  : OreGenerator.getGenerators()) {
-                if (o.getArena() == this) {
-                    o.updateHolograms(p, iso);
-                }
+            for (OreGenerator o : getOreGenerators()) {
+                o.updateHolograms(p, iso);
             }
             for (ShopHolo sh : ShopHolo.getShopHolo()) {
                 if (sh.getA() == this) {
@@ -455,7 +463,7 @@ public class Arena implements Comparable {
             p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG));
         }
 
-        if (showTime.containsKey(p)){
+        if (showTime.containsKey(p)) {
             showTime.remove(p);
         }
         refreshSigns();
@@ -493,7 +501,7 @@ public class Arena implements Comparable {
         }
 
         List<ShopCache.CachedItem> cacheList = new ArrayList<>();
-        if (ShopCache.getShopCache(p) != null){
+        if (ShopCache.getShopCache(p) != null) {
             cacheList = ShopCache.getShopCache(p).getCachedPermanents();
         }
 
@@ -638,12 +646,12 @@ public class Arena implements Comparable {
         }
 
         //Remove from magic milk
-        if (magicMilk.containsKey(p.getUniqueId())){
+        if (magicMilk.containsKey(p.getUniqueId())) {
             Bukkit.getScheduler().cancelTask(magicMilk.get(p.getUniqueId()));
             magicMilk.remove(p.getUniqueId());
         }
 
-        if (showTime.containsKey(p)){
+        if (showTime.containsKey(p)) {
             showTime.remove(p);
         }
 
@@ -764,7 +772,7 @@ public class Arena implements Comparable {
         }
 
         //Remove from magic milk
-        if (magicMilk.containsKey(p.getUniqueId())){
+        if (magicMilk.containsKey(p.getUniqueId())) {
             Bukkit.getScheduler().cancelTask(magicMilk.get(p.getUniqueId()));
             magicMilk.remove(p.getUniqueId());
         }
@@ -881,18 +889,14 @@ public class Arena implements Comparable {
 
     /**
      * Restart the arena values.
-     * This won't unload/ load the world
-     * Do not use this
+     * This will not unload or load the world
+     * Do not use this unless you know what you are doing.
      */
     public void restart() {
-        diamondTier = 1;
-        emeraldTier = 1;
-        upgradeDiamondsCount = 0;
-        upgradeEmeraldsCount = 0;
-        nextEvent = NextEvent.EMERALD_GENERATOR_TIER_II;
+        plugin.getLogger().info("Restarting arena: " + getWorldName());
+        arenas.remove(this);
         players.clear();
         spectators.clear();
-        startingTask = null;
         playerKills.clear();
         playerBedsDestroyed.clear();
         playerFinalKills.clear();
@@ -900,17 +904,12 @@ public class Arena implements Comparable {
         playerFinalKillDeaths.clear();
         respawn.clear();
         showTime.clear();
-        for (BedWarsTeam bwt : getTeams()) {
-            bwt.restore();
-        }
-        setStatus(GameState.waiting);
+        arenaByName.remove(getWorldName());
+        arenaByPlayer.entrySet().removeIf(entry -> entry.getValue() == this);
         for (ReJoinTask rjt : ReJoinTask.getReJoinTasks()) {
             if (rjt.getArena() == this) {
                 rjt.destroy();
             }
-        }
-        for (NextEvent ne : NextEvent.values()){
-            nextEvents.add(ne.toString());
         }
     }
 
@@ -1031,10 +1030,25 @@ public class Arena implements Comparable {
     }
 
     /**
-     * Get the placed blocks list
+     * Add placed block to cache.
      */
-    public List<Block> getPlaced() {
-        return placed;
+    public void addPlacedBlock(Block block) {
+        placed.add(block);
+        mapManager.addPlacedBlock(block.getX(), block.getY(), block.getZ());
+    }
+
+    /**
+     * Remove placed block.
+     */
+    public void removePlacedBlock(Block block) {
+        placed.remove(block);
+    }
+
+    /**
+     * Get the placed blocks list.
+     */
+    public boolean isBlockPlaced(Block block) {
+        return placed.contains(block);
     }
 
     /**
@@ -1222,36 +1236,36 @@ public class Arena implements Comparable {
         if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH) == null) return;
         p.getInventory().clear();
 
-        Bukkit.getScheduler().runTaskLater(plugin, ()-> {
-        for (String item : config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH).getKeys(false)) {
-            if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", item)) == null) {
-                Main.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", item) + " is not set!");
-                continue;
-            }
-            if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_DATA.replace("%path%", item)) == null) {
-                Main.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_DATA.replace("%path%", item) + " is not set!");
-                continue;
-            }
-            if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_SLOT.replace("%path%", item)) == null) {
-                Main.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_SLOT.replace("%path%", item) + " is not set!");
-                continue;
-            }
-            if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_ENCHANTED.replace("%path%", item)) == null) {
-                Main.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_ENCHANTED.replace("%path%", item) + " is not set!");
-                continue;
-            }
-            if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_COMMAND.replace("%path%", item)) == null) {
-                Main.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_COMMAND.replace("%path%", item) + " is not set!");
-                continue;
-            }
-            ItemStack i = Misc.createItem(Material.valueOf(config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", item))),
-                    (byte) config.getInt(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_DATA.replace("%path%", item)),
-                    config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_ENCHANTED.replace("%path%", item)),
-                    getMsg(p, Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", item)), getList(p, Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", item)),
-                    p, "RUNCOMMAND", config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_COMMAND.replace("%path%", item)));
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            for (String item : config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH).getKeys(false)) {
+                if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", item)) == null) {
+                    Main.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", item) + " is not set!");
+                    continue;
+                }
+                if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_DATA.replace("%path%", item)) == null) {
+                    Main.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_DATA.replace("%path%", item) + " is not set!");
+                    continue;
+                }
+                if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_SLOT.replace("%path%", item)) == null) {
+                    Main.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_SLOT.replace("%path%", item) + " is not set!");
+                    continue;
+                }
+                if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_ENCHANTED.replace("%path%", item)) == null) {
+                    Main.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_ENCHANTED.replace("%path%", item) + " is not set!");
+                    continue;
+                }
+                if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_COMMAND.replace("%path%", item)) == null) {
+                    Main.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_COMMAND.replace("%path%", item) + " is not set!");
+                    continue;
+                }
+                ItemStack i = Misc.createItem(Material.valueOf(config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", item))),
+                        (byte) config.getInt(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_DATA.replace("%path%", item)),
+                        config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_ENCHANTED.replace("%path%", item)),
+                        getMsg(p, Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", item)), getList(p, Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", item)),
+                        p, "RUNCOMMAND", config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_COMMAND.replace("%path%", item)));
 
-            p.getInventory().setItem(config.getInt(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_SLOT.replace("%path%", item)), i);
-        }
+                p.getInventory().setItem(config.getInt(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_SLOT.replace("%path%", item)), i);
+            }
         }, 15L);
     }
 
@@ -1472,7 +1486,7 @@ public class Arena implements Comparable {
 
         nextEvents.remove(nextEvent.toString());
 
-        for (String s : nextEvents){
+        for (String s : nextEvents) {
             debug(s);
         }
 
@@ -1481,7 +1495,7 @@ public class Arena implements Comparable {
         NextEvent next = NextEvent.valueOf(nextEvents.get(0));
         int lowest = next.getValue(this);
 
-        for (String ne : nextEvents){
+        for (String ne : nextEvents) {
             int value = NextEvent.valueOf(ne).getValue(this);
             if (value == -1) continue;
             if (lowest > value) next = NextEvent.valueOf(ne);

@@ -70,11 +70,9 @@ public class GamePlayingTask implements Runnable {
                     getArena().upgradeDiamondsCount--;
                     if (getArena().upgradeDiamondsCount == 0) {
                         getArena().updateNextEvent();
-                        for (OreGenerator o  : OreGenerator.getGenerators()) {
-                            if (o.getArena() == getArena()) {
-                                if (o.getOre().getType() == Material.DIAMOND) {
-                                    o.upgrade();
-                                }
+                        for (OreGenerator o : arena.getOreGenerators()) {
+                            if (o.getOre().getType() == Material.DIAMOND) {
+                                o.upgrade();
                             }
                         }
                     }
@@ -83,11 +81,9 @@ public class GamePlayingTask implements Runnable {
                     getArena().upgradeEmeraldsCount--;
                     if (getArena().upgradeEmeraldsCount == 0) {
                         getArena().updateNextEvent();
-                        for (OreGenerator o  : OreGenerator.getGenerators()) {
-                            if (o.getArena() == getArena()) {
-                                if (o.getOre().getType() == Material.EMERALD) {
-                                    o.upgrade();
-                                }
+                        for (OreGenerator o : arena.getOreGenerators()) {
+                            if (o.getOre().getType() == Material.EMERALD) {
+                                o.upgrade();
                             }
                         }
                     }
@@ -130,12 +126,10 @@ public class GamePlayingTask implements Runnable {
                         }
                     }
                     getArena().updateNextEvent();
-                    for (OreGenerator o  : OreGenerator.getGenerators()) {
-                        if (o.getArena() == getArena()) {
-                            Location l = o.getLocation();
-                            for (int y = 0; y < 20; y++) {
-                                l.clone().subtract(0, y, 0).getBlock().setType(Material.AIR);
-                            }
+                    for (OreGenerator o : arena.getOreGenerators()) {
+                        Location l = o.getLocation();
+                        for (int y = 0; y < 20; y++) {
+                            l.clone().subtract(0, y, 0).getBlock().setType(Material.AIR);
                         }
                     }
                     for (BedWarsTeam t : getArena().getTeams()) {
@@ -220,12 +214,12 @@ public class GamePlayingTask implements Runnable {
         }
 
         /* SPAWN ITEMS */
-        /*for (OreGenerator o : getArena().getOreGenerators()) {
+        for (OreGenerator o : getArena().getOreGenerators()) {
             o.spawn();
-        }*/
+        }
     }
 
-    public void cancel(){
+    public void cancel() {
         task.cancel();
     }
 }

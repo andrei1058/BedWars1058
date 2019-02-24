@@ -42,7 +42,6 @@ public class OreGenerator {
     private ArmorStand item;
     public boolean stack = getGeneratorsCfg().getBoolean(ConfigPath.GENERATOR_STACK_ITEMS);
 
-    private static ConcurrentLinkedDeque<OreGenerator> generators = new ConcurrentLinkedDeque<>();
     private static ConcurrentLinkedDeque<OreGenerator> rotation = new ConcurrentLinkedDeque<>();
 
     public OreGenerator(Location location, Arena arena, @NotNull GeneratorType type, BedWarsTeam bwt) {
@@ -201,12 +200,6 @@ public class OreGenerator {
 
     @NotNull
     @Contract(pure = true)
-    public static ConcurrentLinkedDeque<OreGenerator> getGenerators() {
-        return generators;
-    }
-
-    @NotNull
-    @Contract(pure = true)
     public static ConcurrentLinkedDeque<OreGenerator> getRotation() {
         return rotation;
     }
@@ -347,7 +340,6 @@ public class OreGenerator {
                 a.destroy();
             }
         }
-        generators.remove(this);
         armorStands.clear();
     }
 
@@ -377,7 +369,6 @@ public class OreGenerator {
         if (getOre().getType() == Material.EMERALD || getOre().getType() == Material.DIAMOND) {
             rotation.add(this);
         }
-        generators.add(this);
     }
 
     /**

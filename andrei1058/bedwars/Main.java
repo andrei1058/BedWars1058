@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.api.GameAPI;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.arena.despawnables.TargetListener;
+import com.andrei1058.bedwars.arena.mapreset.MapManager;
 import com.andrei1058.bedwars.commands.party.PartyCommand;
 import com.andrei1058.bedwars.commands.rejoin.RejoinCommand;
 import com.andrei1058.bedwars.commands.shout.ShoutCommand;
@@ -255,6 +256,12 @@ public class Main extends JavaPlugin {
                 Bukkit.getScheduler().runTaskLater(this,
                         () -> System.out.println("\u001B[31m[WARN] BedWars1058 may drop support for this server version in the future.\nPlease consider upgrading to a newer paper/spigot version.\u001B[0m"), 40L);
                 break;
+        }
+
+        /* Initialize map resetter before loading maps.*/
+        if (!MapManager.init()){
+            setEnabled(false);
+            return;
         }
 
         /* Load join signs */
@@ -614,7 +621,7 @@ public class Main extends JavaPlugin {
         }
 
         debug = yml.getBoolean("debug");
-        new ConfigManager("bukkit", Bukkit.getWorldContainer().getPath(), false).set("ticks-per.autosave", -1);
+        //new ConfigManager("bukkit", Bukkit.getWorldContainer().getPath(), false).set("ticks-per.autosave", -1);
 
         Bukkit.spigot().getConfig().set("commands.send-namespaced", false);
         try {

@@ -71,7 +71,7 @@ public class BedWarsTeam {
     /**
      * Used for show/ hide bed hologram
      */
-    private static HashMap<Player, BedHolo> beds = new HashMap<>();
+    private HashMap<Player, BedHolo> beds = new HashMap<>();
     /**
      * Used for it's a trap
      */
@@ -108,7 +108,7 @@ public class BedWarsTeam {
     /**
      * Used when the arena restarts
      */
-    public void restore() {
+    /*public void restore() {
         ebseEffectsStatic.clear();
         enemyBaseEnterSlots.clear();
         trapSlots.clear();
@@ -129,7 +129,7 @@ public class BedWarsTeam {
         bedDestroyed = false;
         members.clear();
         membersCache.clear();
-    }
+    }*/
 
     public int getSize() {
         return members.size();
@@ -755,7 +755,7 @@ public class BedWarsTeam {
         return membersCache;
     }
 
-    public static HashMap<Player, BedHolo> getBeds() {
+    public HashMap<Player, BedHolo> getBeds() {
         return beds;
     }
 }

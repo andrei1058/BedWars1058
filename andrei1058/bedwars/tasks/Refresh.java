@@ -15,9 +15,9 @@ public class Refresh implements Runnable {
             sb.refresh();
         }
 
-        for (OreGenerator o  : OreGenerator.getGenerators()) {
+        /*for (OreGenerator o  : OreGenerator.getGenerators()) {
             o.spawn();
-        }
+        }*/
 
         /*if (!showTime.isEmpty()){
             for (Map.Entry<UUID, Integer> e :  new HashMap<>(showTime).entrySet()){
