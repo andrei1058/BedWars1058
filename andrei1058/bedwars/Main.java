@@ -22,6 +22,7 @@ import com.andrei1058.bedwars.listeners.arenaselector.ArenaSelectorListener;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
 import com.andrei1058.bedwars.lobbysocket.*;
 import com.andrei1058.bedwars.shop.ShopManager;
+import com.andrei1058.bedwars.stats.StatsManager;
 import com.andrei1058.bedwars.support.Metrics;
 import com.andrei1058.bedwars.support.bukkit.*;
 import com.andrei1058.bedwars.support.bukkit.v1_10_R1.v1_10_R1;
@@ -69,6 +70,7 @@ public class Main extends JavaPlugin {
     public static String mainCmd = "bw", link = "https://www.spigotmc.org/resources/50942/";
     public static ConfigManager config, signs, spigot, generators;
     public static ShopManager shop;
+    public static StatsManager statsManager;
     public static UpgradesManager upgrades;
     public static Language lang;
     public static Main plugin;
@@ -172,6 +174,8 @@ public class Main extends JavaPlugin {
     @Override
     public void onEnable() {
 
+        ArenaSocket.serverIdentifier = Bukkit.getServer().getIp() + ":" + Bukkit.getServer().getPort();
+
         /* Citizens support */
         if (this.getServer().getPluginManager().getPlugin("Citizens") != null) {
             JoinNPC.setCitizensSupport(true);
@@ -221,10 +225,7 @@ public class Main extends JavaPlugin {
         if (getServerType() == ServerType.BUNGEE) {
             registerEvents(new Ping());
             registerEvents(new ArenaListeners());
-            Bukkit.getMessenger().registerOutgoingPluginChannel(this, "bedwars:proxy");
-            Bukkit.getMessenger().registerIncomingPluginChannel(this, "bedwars:proxy", new BungeeListener());
             ArenaSocket.lobbies.addAll(config.l(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS));
-            registerEvents(new TempListener());
             new SendTask();
         } else if (getServerType() == ServerType.MULTIARENA || getServerType() == ServerType.SHARED) {
             registerEvents(new ArenaSelectorListener(), new BlockStatusListener());
@@ -259,13 +260,15 @@ public class Main extends JavaPlugin {
         }
 
         /* Initialize map resetter before loading maps.*/
-        if (!MapManager.init()){
+        if (!MapManager.init()) {
             setEnabled(false);
             return;
         }
 
-        /* Load join signs */
+        /* Load join signs. */
         loadArenasAndSigns();
+
+        statsManager = new StatsManager();
 
         /* Party support */
         if (config.getYml().getBoolean(ConfigPath.GENERAL_CONFIGURATION_ALLOW_PARTIES)) {
@@ -404,6 +407,7 @@ public class Main extends JavaPlugin {
             }
         } catch (Exception ex) {
         }
+        MapManager.closeConnection();
     }
 
     private void setupConfig() {

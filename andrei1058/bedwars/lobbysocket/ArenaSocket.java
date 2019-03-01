@@ -3,7 +3,6 @@ package com.andrei1058.bedwars.lobbysocket;
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
-import com.andrei1058.bedwars.configuration.ConfigPath;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -14,7 +13,7 @@ import java.util.List;
 public class ArenaSocket {
 
     public static List<String> lobbies = new ArrayList<>();
-    public static String serverName = Main.config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_NAME);
+    public static String serverIdentifier;
 
     /**
      * Send arena data to the lobbies.
@@ -27,7 +26,7 @@ public class ArenaSocket {
             if (l.length != 2) continue;
             if (!Misc.isNumber(l[1])) continue;
 
-            sendMessage(formatMessage(serverName, a.getDisplayName(), a.getStatus().toString(), a.getPlayers().size(), a.getMaxPlayers(), a.getGroup()), l[0], Integer.valueOf(l[1]));
+            sendMessage(formatMessage(serverIdentifier, a.getDisplayName(), a.getStatus().toString(), a.getPlayers().size(), a.getMaxPlayers(), a.getGroup()), l[0], Integer.valueOf(l[1]));
         }
     }
 
@@ -44,6 +43,7 @@ public class ArenaSocket {
             out.close();
             socket.close();
         } catch (IOException e) {
+            Main.plugin.getLogger().info("Could not send arena info to lobby: " + host + ":" + port);
             return false;
         }
         return true;
@@ -53,6 +53,6 @@ public class ArenaSocket {
      * Format message before sending it to lobbies.
      */
     public static String formatMessage(String serverName, String arenaName, String status, int currentPlayers, int maxPlayers, String arenaGroup) {
-        return serverName + "." + arenaName + "." + status + "." + currentPlayers + "." + maxPlayers + "." + arenaGroup;
+        return serverName.replace(".", "-") + "." + arenaName + "." + status + "." + currentPlayers + "." + maxPlayers + "." + arenaGroup;
     }
 }

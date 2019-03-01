@@ -114,6 +114,7 @@ public class Arena implements Comparable {
      * @param p    - This will send messages to the player if something went wrong while loading the arena. Can be NULL.
      */
     public Arena(String name, Player p) {
+        this.worldName = name;
         plugin.getLogger().info("Loading arena: " + getWorldName());
         cm = new ConfigManager(name, "plugins/" + plugin.getName() + "/Arenas", true);
         yml = cm.getYml();
@@ -145,7 +146,9 @@ public class Arena implements Comparable {
         }
         boolean error = false;
         for (String team : yml.getConfigurationSection("Team").getKeys(false)) {
-            TeamColor color = TeamColor.valueOf(yml.getString("Team." + team + ".Color"));
+            String colorS = yml.getString("Team." + team + ".Color");
+            if (colorS == null) continue;
+            TeamColor color = TeamColor.valueOf(colorS);
             if (color == null) {
                 if (p != null) p.sendMessage("§cInvalid color at team: " + team + " in arena: " + name);
                 plugin.getLogger().severe("Invalid color at team: " + team + " in arena: " + name);
@@ -174,13 +177,18 @@ public class Arena implements Comparable {
         }
         if (error) return;
 
-        try {
-            world = Bukkit.createWorld(new WorldCreator(name));
-        } catch (Exception ex) {
-            if (p != null) p.sendMessage("§cI can't load the map called " + name);
-            plugin.getLogger().severe("I can't load the map called " + name);
-            ex.printStackTrace();
-            return;
+        world = Bukkit.getWorld(name);
+
+        if (world == null) {
+
+            try {
+                world = Bukkit.createWorld(new WorldCreator(name));
+            } catch (Exception ex) {
+                if (p != null) p.sendMessage("§cI can't load the map called " + name);
+                plugin.getLogger().severe("I can't load the map called " + name);
+                ex.printStackTrace();
+                return;
+            }
         }
         Bukkit.getScheduler().runTaskLater(plugin,
                 () -> world.getEntities().stream().filter(e -> e.getType() != EntityType.PLAYER)
@@ -231,7 +239,6 @@ public class Arena implements Comparable {
             plugin.getLogger().severe("Lobby Pos2 isn't set! The arena's lobby won't be removed!");
         }
 
-        worldName = world.getName();
         mapManager = new MapManager(this);
         mapManager.restoreMap();
 

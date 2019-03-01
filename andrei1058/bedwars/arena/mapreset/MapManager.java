@@ -97,4 +97,18 @@ public class MapManager {
         }
         return true;
     }
+
+    /**
+     * Close blocks cache connection.
+     */
+    public static void closeConnection() {
+        if (connection == null) return;
+        try {
+            if (!connection.isClosed()) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
