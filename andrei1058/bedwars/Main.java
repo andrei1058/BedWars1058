@@ -9,6 +9,8 @@ import com.andrei1058.bedwars.arena.mapreset.MapManager;
 import com.andrei1058.bedwars.commands.party.PartyCommand;
 import com.andrei1058.bedwars.commands.rejoin.RejoinCommand;
 import com.andrei1058.bedwars.commands.shout.ShoutCommand;
+import com.andrei1058.bedwars.database.Database;
+import com.andrei1058.bedwars.database.None;
 import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.listeners.EntityDropPickListener;
 import com.andrei1058.bedwars.listeners.PlayerDropPickListener;
@@ -44,8 +46,6 @@ import com.andrei1058.bedwars.support.papi.PAPISupport;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.support.party.Party;
 import com.andrei1058.bedwars.support.party.Parties;
-import com.andrei1058.bedwars.support.stats.MySQL;
-import com.andrei1058.bedwars.support.stats.SQLite;
 import com.andrei1058.bedwars.support.vault.*;
 import com.andrei1058.bedwars.tasks.OneTick;
 import com.andrei1058.bedwars.tasks.Refresh;
@@ -81,9 +81,11 @@ public class Main extends JavaPlugin {
     private static Level level;
     private static Economy economy;
     private static String version = Bukkit.getServer().getClass().getName().split("\\.")[3];
-    public static com.andrei1058.bedwars.support.stats.Database database;
     private static String lobbyWorld = "";
     public static BedWars api;
+
+    //remote database
+    private static Database remoteDatabase;
 
     @Override
     public void onLoad() {
@@ -317,12 +319,24 @@ public class Main extends JavaPlugin {
 
         /* Database support */
         if (config.getBoolean("database.enable")) {
-            database = new MySQL();
+            com.andrei1058.bedwars.database.MySQL mySQL = new com.andrei1058.bedwars.database.MySQL();
+            Long time = System.currentTimeMillis();
+            if (!mySQL.connect()) {
+                this.getLogger().severe("Could not connect to database! Please verify your credentials and make sure that the server IP is whitelisted in MySQL.");
+                remoteDatabase = new None();
+            } else {
+                remoteDatabase = mySQL;
+            }
+            if (System.currentTimeMillis() - time >= 5000) {
+                this.getLogger().severe("It took " + ((System.currentTimeMillis() - time) / 1000) + " ms to establish a database connection!\n" +
+                        "Using this remote connection is not recommended!");
+            }
+            remoteDatabase.init();
         } else {
-            database = new SQLite();
+            remoteDatabase = new None();
         }
+
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            database.setupGeneralTables();
             //spawn NPCs
             try {
                 JoinNPC.spawnNPCs();
@@ -401,13 +415,14 @@ public class Main extends JavaPlugin {
 
     public void onDisable() {
         try {
-            database.close();
             for (Arena a : Arena.getArenas()) {
                 a.disable();
             }
         } catch (Exception ex) {
         }
         MapManager.closeConnection();
+        StatsManager.getStatsCache().close();
+        remoteDatabase.close();
     }
 
     private void setupConfig() {
@@ -809,5 +824,12 @@ public class Main extends JavaPlugin {
 
     public static String getLobbyWorld() {
         return lobbyWorld;
+    }
+
+    /**
+     * Get remote database.
+     */
+    public static Database getRemoteDatabase() {
+        return remoteDatabase;
     }
 }

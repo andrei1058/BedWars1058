@@ -53,7 +53,7 @@ public class StatsCache {
         try {
             connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS '" + table + "' (id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "name VARCHAR(200), uuid VARCHAR(200), first_play TIMESTAMP NULL DEFAULT NULL, last_play TIMESTAMP NULL DEFAULT NULL, wins INTEGER(200)," +
-                    " kills INTEGER(200), final_kills INTEGER(200), looses INTEGER(200), deaths INTEGER(200), final_deaths INTEGER(200), beds_destroyed INTEGER(200), games_played INTEGER(200))");
+                    " kills INTEGER(200), final_kills INTEGER(200), looses INTEGER(200), deaths INTEGER(200), final_deaths INTEGER(200), beds_destroyed INTEGER(200), games_played INTEGER(200));");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -113,7 +113,7 @@ public class StatsCache {
         if (!isConnected()) connect();
 
         try {
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO global_stats VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO '" + table + "' VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
             ps.setString(1, player.getName());
             ps.setString(2, player.getUniqueId().toString());
             ps.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
@@ -136,10 +136,10 @@ public class StatsCache {
     /**
      * Add amount to existing cache.
      */
-    public void addBedsDestroyed(Player player, int amount) {
+    public void addBedsDestroyed(UUID uuid, int amount) {
         if (!isConnected()) connect();
         try {
-            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET beds_destroyed = beds_destroyed + '" + amount + "' WHERE uuid = '" + player.getUniqueId().toString() + "';");
+            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET beds_destroyed = beds_destroyed + '" + amount + "' WHERE uuid = '" + uuid.toString() + "';");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -148,10 +148,10 @@ public class StatsCache {
     /**
      * Add amount to existing cache.
      */
-    public void addFinalKill(Player player, int amount) {
+    public void addFinalKill(UUID uuid, int amount) {
         if (!isConnected()) connect();
         try {
-            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET final_kills = final_kills + '" + amount + "' WHERE uuid = '" + player.getUniqueId().toString() + "';");
+            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET final_kills = final_kills + '" + amount + "' WHERE uuid = '" + uuid.toString() + "';");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -160,10 +160,10 @@ public class StatsCache {
     /**
      * Add amount to existing cache.
      */
-    public void addKill(Player player, int amount) {
+    public void addKill(UUID uuid, int amount) {
         if (!isConnected()) connect();
         try {
-            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET kills = kills + '" + amount + "' WHERE uuid = '" + player.getUniqueId().toString() + "';");
+            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET kills = kills + '" + amount + "' WHERE uuid = '" + uuid.toString() + "';");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -172,10 +172,10 @@ public class StatsCache {
     /**
      * Add amount to existing cache.
      */
-    public void addDeaths(Player player, int amount) {
+    public void addDeaths(UUID uuid, int amount) {
         if (!isConnected()) connect();
         try {
-            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET deaths = deaths + '" + amount + "' WHERE uuid = '" + player.getUniqueId().toString() + "';");
+            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET deaths = deaths + '" + amount + "' WHERE uuid = '" + uuid.toString() + "';");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -184,10 +184,46 @@ public class StatsCache {
     /**
      * Add amount to existing cache.
      */
-    public void addFinalDeaths(Player player, int amount) {
+    public void addFinalDeaths(UUID uuid, int amount) {
         if (!isConnected()) connect();
         try {
-            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET final_deaths = final_deaths + '" + amount + "' WHERE uuid = '" + player.getUniqueId().toString() + "';");
+            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET final_deaths = final_deaths + '" + amount + "' WHERE uuid = '" + uuid.toString() + "';");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Add amount to existing cache.
+     */
+    public void addWins(UUID uuid, int amount) {
+        if (!isConnected()) connect();
+        try {
+            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET wins = wins + '" + amount + "' WHERE uuid = '" + uuid.toString() + "';");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Add amount to existing cache.
+     */
+    public void addLosses(UUID uuid, int amount) {
+        if (!isConnected()) connect();
+        try {
+            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET looses = looses + '" + amount + "' WHERE uuid = '" + uuid.toString() + "';");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Add amount to existing cache.
+     */
+    public void addGamesPlayed(UUID uuid, int amount) {
+        if (!isConnected()) connect();
+        try {
+            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET games_played = games_played + '" + amount + "' WHERE uuid = '" + uuid.toString() + "';");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -196,14 +232,15 @@ public class StatsCache {
     /**
      * Get last play date.
      */
-    public Timestamp getLastPlay(Player player) {
+    public Timestamp getLastPlay(UUID uuid) {
         if (!isConnected()) connect();
 
         Timestamp t = new Timestamp(0);
         try {
-            ResultSet rs = connection.createStatement().executeQuery("SELECT last_play FROM '" + table + "' WHERE uuid = '" + player.getUniqueId().toString() + "';");
+            ResultSet rs = connection.createStatement().executeQuery("SELECT last_play FROM '" + table + "' WHERE uuid = '" + uuid.toString() + "';");
             if (rs.next()) {
                 t = rs.getTimestamp("last_play");
+                rs.close();
             }
 
         } catch (SQLException e) {
@@ -215,16 +252,16 @@ public class StatsCache {
     /**
      * Get last play date.
      */
-    public Timestamp getFirstPlay(Player player) {
+    public Timestamp getFirstPlay(UUID uuid) {
         if (!isConnected()) connect();
 
         Timestamp t = new Timestamp(0);
         try {
-            ResultSet rs = connection.createStatement().executeQuery("SELECT first_play FROM '" + table + "' WHERE uuid = '" + player.getUniqueId().toString() + "';");
+            ResultSet rs = connection.createStatement().executeQuery("SELECT first_play FROM '" + table + "' WHERE uuid = '" + uuid.toString() + "';");
             if (rs.next()) {
                 t = rs.getTimestamp("first_play");
+                rs.close();
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -235,25 +272,15 @@ public class StatsCache {
     /**
      * Get cached kills.
      */
-    public int getKills(Player p) {
+    public int getKills(UUID uuid) {
         if (!isConnected()) connect();
         try {
-            ResultSet rs = connection.createStatement().executeQuery("SELECT kills FROM '" + table + "' WHERE uuid = '" + p.getUniqueId().toString() + "';");
-            if (rs.next())
-                return rs.getInt("kills");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
-    /** */
-    public int getWins(Player p) {
-        if (!isConnected()) connect();
-        try {
-            ResultSet rs = connection.createStatement().executeQuery("SELECT wins FROM '" + table + "' WHERE uuid='" + p.getUniqueId().toString() + "';");
-            if (rs.next())
-                return rs.getInt("wins");
+            ResultSet rs = connection.createStatement().executeQuery("SELECT kills FROM '" + table + "' WHERE uuid = '" + uuid.toString() + "';");
+            if (rs.next()) {
+                int i = rs.getInt("kills");
+                rs.close();
+                return i;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -261,9 +288,270 @@ public class StatsCache {
     }
 
     /**
-     * Update remote database with given
+     * Get cached wins.
      */
-    public void updateRemote(Player player) {
-        //Main.database.saveStats(getLastPlay(player));
+    public int getWins(UUID uuid) {
+        if (!isConnected()) connect();
+        try {
+            ResultSet rs = connection.createStatement().executeQuery("SELECT wins FROM '" + table + "' WHERE uuid='" + uuid.toString() + "';");
+            if (rs.next()) {
+                int i = rs.getInt("wins");
+                rs.close();
+                return i;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
+     * Get cached value.
+     */
+    public int getFinalKills(UUID uuid) {
+        if (!isConnected()) connect();
+        try {
+            ResultSet rs = connection.createStatement().executeQuery("SELECT final_kills FROM '" + table + "' WHERE uuid='" + uuid.toString() + "';");
+            if (rs.next()) {
+                int i = rs.getInt("final_kills");
+                rs.close();
+                return i;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
+     * Get cached value.
+     */
+    public int getLosses(UUID uuid) {
+        if (!isConnected()) connect();
+        try {
+            ResultSet rs = connection.createStatement().executeQuery("SELECT looses FROM '" + table + "' WHERE uuid='" + uuid.toString() + "';");
+            if (rs.next()) {
+                int i = rs.getInt("looses");
+                rs.close();
+                return i;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
+     * Get cached value.
+     */
+    public int getDeaths(UUID uuid) {
+        if (!isConnected()) connect();
+        try {
+            ResultSet rs = connection.createStatement().executeQuery("SELECT deaths FROM '" + table + "' WHERE uuid='" + uuid.toString() + "';");
+            if (rs.next()) {
+                int i = rs.getInt("deaths");
+                rs.close();
+                return i;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
+     * Get cached value.
+     */
+    public int getFinalDeaths(UUID uuid) {
+        if (!isConnected()) connect();
+        try {
+            ResultSet rs = connection.createStatement().executeQuery("SELECT final_deaths FROM '" + table + "' WHERE uuid='" + uuid.toString() + "';");
+            if (rs.next()) {
+                int i = rs.getInt("final_deaths");
+                rs.close();
+                return i;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
+     * Get cached value.
+     */
+    public int getBedsDestroyed(UUID uuid) {
+        if (!isConnected()) connect();
+        try {
+            ResultSet rs = connection.createStatement().executeQuery("SELECT beds_destroyed FROM '" + table + "' WHERE uuid='" + uuid.toString() + "';");
+            if (rs.next()) {
+                int i = rs.getInt("beds_destroyed");
+                rs.close();
+                return i;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
+     * Get cached value.
+     */
+    public int getGamesPlayed(UUID uuid) {
+        if (!isConnected()) connect();
+        try {
+            ResultSet rs = connection.createStatement().executeQuery("SELECT games_played FROM '" + table + "' WHERE uuid='" + uuid.toString() + "';");
+            if (rs.next()) {
+                int i = rs.getInt("games_played");
+                rs.close();
+                return i;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
+     * Set first play.
+     */
+    public void setFirstPlay(UUID uuid, Timestamp time) {
+        if (!isConnected()) connect();
+        try {
+            PreparedStatement ps = connection.prepareStatement("UPDATE '" + table + "' SET first_play = ? WHERE uuid = '" + uuid.toString() + "';");
+            ps.setTimestamp(1, time);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Set last play.
+     */
+    public void setLastPlay(UUID uuid, Timestamp time) {
+        if (!isConnected()) connect();
+        try {
+            PreparedStatement ps = connection.prepareStatement("UPDATE '" + table + "' SET last_play = ? WHERE uuid = '" + uuid.toString() + "';");
+            ps.setTimestamp(1, time);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Set wins.
+     */
+    public void setWins(UUID uuid, int value) {
+        if (!isConnected()) connect();
+        try {
+            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET wins = '" + value + "' WHERE uuid = '" + uuid.toString() + "';");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Set value.
+     */
+    public void setKills(UUID uuid, int value) {
+        if (!isConnected()) connect();
+        try {
+            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET kills = '" + value + "' WHERE uuid = '" + uuid.toString() + "';");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Set value.
+     */
+    public void setFinalKills(UUID uuid, int value) {
+        if (!isConnected()) connect();
+        try {
+            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET final_kills = '" + value + "' WHERE uuid = '" + uuid.toString() + "';");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Set value.
+     */
+    public void setLosses(UUID uuid, int value) {
+        if (!isConnected()) connect();
+        try {
+            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET looses = '" + value + "' WHERE uuid = '" + uuid.toString() + "';");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Set value.
+     */
+    public void setDeaths(UUID uuid, int value) {
+        if (!isConnected()) connect();
+        try {
+            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET deaths = '" + value + "' WHERE uuid = '" + uuid.toString() + "';");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Set value.
+     */
+    public void setFinalDeaths(UUID uuid, int value) {
+        if (!isConnected()) connect();
+        try {
+            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET final_deaths = '" + value + "' WHERE uuid = '" + uuid.toString() + "';");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Set value.
+     */
+    public void setBedsDestroyed(UUID uuid, int value) {
+        if (!isConnected()) connect();
+        try {
+            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET beds_destroyed = '" + value + "' WHERE uuid = '" + uuid.toString() + "';");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Set value.
+     */
+    public void setGamesPlayed(UUID uuid, int value) {
+        if (!isConnected()) connect();
+        try {
+            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET games_played = '" + value + "' WHERE uuid = '" + uuid.toString() + "';");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Update remote database.
+     */
+    public void updateRemote(UUID uuid, String username) {
+        if (!isConnected()) connect();
+        try {
+            ResultSet rs = connection.createStatement().executeQuery("SELECT * FROM '" + table + "' WHERE uuid = '" + uuid.toString() + "';");
+            if (rs.next()) {
+                Main.getRemoteDatabase().saveStats(uuid, username, rs.getTimestamp("first_play"), rs.getTimestamp("last_play"), rs.getInt("wins"),
+                        rs.getInt("kills"), rs.getInt("final_kills"), rs.getInt("looses"), rs.getInt("deaths"), rs.getInt("final_deaths"),
+                        rs.getInt("beds_destroyed"), rs.getInt("games_played"));
+            }
+            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

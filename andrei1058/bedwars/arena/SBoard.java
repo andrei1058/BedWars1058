@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Messages;
+import com.andrei1058.bedwars.stats.StatsManager;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -115,20 +116,13 @@ public class SBoard {
                 }
             }
             if (arena == null) {
-                /** stats */
-                int kills = database.getKills(p), deaths = database.getDeaths(p), looses = database.getLooses(p), wins = database.getWins(p),
-                        finalKills = database.getFinalKills(p), finalDeaths = database.getFinalDeaths(p), bedsDestroyed = database.getBedsDestroyed(p), gamesPlayed = database.getGamesPlayed(p);
-                Timestamp firstPlay = database.getFirstPlay(p), lastPlay = database.getLastPlay(p);
-                /** cache time format */
-                String timeFormat = getMsg(p, Messages.FORMATTING_STATS_DATE_FORMAT), never = getMsg(p, Messages.MEANING_NEVER);
 
                 temp = temp.replace("{server}", Bukkit.getServer().getMotd()).replace("{on}", String.valueOf(Bukkit.getOnlinePlayers().size()))
                         .replace("{max}", String.valueOf(Bukkit.getServer().getMaxPlayers())).replace("{date}",
                                 new SimpleDateFormat(getMsg(getP(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis())))
                         .replace("{money}", String.valueOf(getEconomy().getMoney(p)));
 
-                setContent(t, replaceStatsPlaceholders(getP(), temp,
-                        kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never, false));
+                setContent(t, replaceStatsPlaceholders(getP(), temp, false));
 
             } else if (arena.getStatus() == GameState.waiting || arena.getStatus() == GameState.starting) {
                 String time = "0";

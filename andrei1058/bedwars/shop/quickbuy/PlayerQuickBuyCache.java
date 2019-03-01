@@ -93,7 +93,7 @@ public class PlayerQuickBuyCache {
             addQuickElement(new QuickBuyElement(cc.getIdentifier(), slot));
             element = cc.getIdentifier();
         }
-        Main.database.setQuickBuySlot(player.getUniqueId(), element, slot);
+        Main.getRemoteDatabase().setQuickBuySlot(player.getUniqueId(), element, slot);
     }
 
     private ItemStack getEmptyItem(Player player) {

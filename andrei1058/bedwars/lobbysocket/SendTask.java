@@ -12,6 +12,6 @@ public class SendTask {
             if (!Arena.getArenas().isEmpty()){
                 ArenaSocket.sendMessage(Arena.getArenas().get(0));
             }
-        }, 0, 400L);
+        }, 0, 100L);
     }
 }

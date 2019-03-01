@@ -542,8 +542,8 @@ public class Arena implements Comparable {
                 }
             }
         }
-        if (status == GameState.playing) {
-            /* losers */
+        /*if (status == GameState.playing) {
+
             ReJoin re = ReJoin.getPlayer(p);
 
             int deaths = re == null ? getPlayerDeaths(p, false) : getPlayerDeaths(p, false) - re.getDeaths();
@@ -555,7 +555,7 @@ public class Arena implements Comparable {
             database.saveStats(p, new Timestamp(System.currentTimeMillis()), 0, kills, final_kills, ReJoin.exists(p) ? 0 : 1, deaths, final_deaths, beds, ReJoin.exists(p) ? 0 : 1);
 
         } else if (status == GameState.restarting) {
-            /* winners */
+
             ReJoin re = ReJoin.getPlayer(p);
 
             int deaths = re == null ? getPlayerDeaths(p, false) : getPlayerDeaths(p, false) - re.getDeaths();
@@ -565,7 +565,7 @@ public class Arena implements Comparable {
             int final_kills = re == null ? getPlayerKills(p, true) : getPlayerKills(p, true) - re.getFinalKills();
 
             database.saveStats(p, new Timestamp(System.currentTimeMillis()), 1, kills, final_kills, ReJoin.exists(p) ? -1 : 0, deaths, final_deaths, beds, ReJoin.exists(p) ? 0 : 1);
-        }
+        }*/
         boolean teamuri = false;
         for (Player on : getPlayers()) {
             if (getParty().hasParty(on)) {
@@ -704,8 +704,7 @@ public class Arena implements Comparable {
 
         for (BedWarsTeam bwt : getTeams()) {
             if (bwt.getMembersCache().contains(p)) {
-                if (status == GameState.playing) {
-                    /* loser */
+                /*if (status == GameState.playing) {
                     ReJoin re = ReJoin.getPlayer(p);
 
                     int deaths = re == null ? getPlayerDeaths(p, false) : getPlayerDeaths(p, false) - re.getDeaths();
@@ -717,7 +716,7 @@ public class Arena implements Comparable {
                     database.saveStats(p, new Timestamp(System.currentTimeMillis()), 0, kills, final_kills, ReJoin.exists(p) ? 0 : 1, deaths, final_deaths, beds, ReJoin.exists(p) ? 0 : 1);
 
                 } else if (status == GameState.restarting) {
-                    /* loser */
+
                     ReJoin re = ReJoin.getPlayer(p);
 
                     int deaths = re == null ? getPlayerDeaths(p, false) : getPlayerDeaths(p, false) - re.getDeaths();
@@ -727,7 +726,7 @@ public class Arena implements Comparable {
                     int final_kills = re == null ? getPlayerKills(p, true) : getPlayerKills(p, true) - re.getFinalKills();
 
                     database.saveStats(p, new Timestamp(System.currentTimeMillis()), 0, kills, final_kills, ReJoin.exists(p) ? 0 : 1, deaths, final_deaths, beds, ReJoin.exists(p) ? 0 : 1);
-                }
+                }*/
                 break;
             }
         }
