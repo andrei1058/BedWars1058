@@ -108,12 +108,14 @@ public class ConfigManager {
 
     public Location getConfigLoc(String path) {
         String d = yml.getString(path);
+        if (d == null) return null;
         String[] data = d.replace("[", "").replace("]", "").split(",");
         return new Location(Bukkit.getWorld(data[5]), Double.valueOf(data[0]), Double.valueOf(data[1]), Double.valueOf(data[2]), Float.valueOf(data[3]), Float.valueOf(data[4]));
     }
 
     public Location getArenaLoc(String path) {
         String d = yml.getString(path);
+        if (d == null) return null;
         String[] data = d.replace("[", "").replace("]", "").split(",");
         return new Location(Bukkit.getWorld(name), Double.valueOf(data[0]), Double.valueOf(data[1]), Double.valueOf(data[2]), Float.valueOf(data[3]), Float.valueOf(data[4]));
     }

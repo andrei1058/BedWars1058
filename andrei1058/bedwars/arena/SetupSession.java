@@ -98,7 +98,7 @@ public class SetupSession {
     public enum SetupType {ASSISTED, ADVANCED}
 
     /**
-     * Start setup session, load world etc
+     * Start setup session, loadStructure world etc
      *
      * @return true if started successfully
      */

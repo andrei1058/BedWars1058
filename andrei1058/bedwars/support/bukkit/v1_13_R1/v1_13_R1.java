@@ -20,7 +20,10 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.block.Bed;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_13_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_13_R1.CraftWorld;
@@ -35,8 +38,11 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scoreboard.Team;
+import org.bukkit.util.Vector;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -702,6 +708,40 @@ public class v1_13_R1 implements NMS {
     }
 
     @Override
+    public void setBlockData(Block block, String data) {
+        Method m = null;
+        try {
+            m = Block.class.getDeclaredMethod("getBlockData");
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        BlockData result = null;
+        try {
+            assert m != null;
+            result = (BlockData) m.invoke(block,null);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        Directional d = (Directional) result;
+        d.setFacing(BlockFace.valueOf(data));
+        Method m2 = null;
+        try {
+            m2 = Block.class.getDeclaredMethod("setBlockData", BlockData.class);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            m2.invoke(block, result);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        block.getState().update(true);
+    }
+
+    @Override
     public org.bukkit.Material woolMaterial() {
         return org.bukkit.Material.valueOf("WHITE_WOOL");
     }
@@ -741,5 +781,27 @@ public class v1_13_R1 implements NMS {
         }
         head.setItemMeta(headMeta);
         return head;
+    }
+
+    @Override
+    public String getBlockData(Block block) {
+        Method m = null;
+        try {
+            m = Block.class.getDeclaredMethod("getBlockData");
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        BlockData result = null;
+        try {
+            assert m != null;
+            result = (BlockData) m.invoke(block,null);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        if (result instanceof Directional) {
+            Directional d = (Directional) result;
+            return d.getFacing().name();
+        }
+        return "";
     }
 }

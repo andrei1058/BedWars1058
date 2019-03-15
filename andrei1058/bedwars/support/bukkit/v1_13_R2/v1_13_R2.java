@@ -20,7 +20,10 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.block.Bed;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
@@ -37,9 +40,12 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scoreboard.Team;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.despawnables.TargetListener.owningTeam;
@@ -139,7 +145,7 @@ public class v1_13_R2 implements NMS {
 
     @Override
     public void hidePlayer(Player player, List<Player> players) {
-        for (Player p : players){
+        for (Player p : players) {
             if (p == player) continue;
             p.hidePlayer(player);
         }
@@ -543,11 +549,11 @@ public class v1_13_R2 implements NMS {
     @Override
     @SuppressWarnings("deprecation")
     public void setBlockTeamColor(org.bukkit.block.Block block, TeamColor teamColor) {
-        if (block.getType().toString().contains("STAINED_GLASS") || block.getType().toString().equals("GLASS")){
+        if (block.getType().toString().contains("STAINED_GLASS") || block.getType().toString().equals("GLASS")) {
             block.setType(TeamColor.getGlass(teamColor));
-        } else if (block.getType().toString().contains("_TERRACOTTA")){
+        } else if (block.getType().toString().contains("_TERRACOTTA")) {
             block.setType(TeamColor.getGlazedTerracotta(teamColor));
-        } else if (block.getType().toString().contains("_WOOL")){
+        } else if (block.getType().toString().contains("_WOOL")) {
             block.setType(TeamColor.getWool(teamColor));
         }
     }
@@ -609,11 +615,11 @@ public class v1_13_R2 implements NMS {
         String type = itemStack.getType().toString();
         if (type.contains("_BED")) {
             return new org.bukkit.inventory.ItemStack(TeamColor.getBedBlock(bedWarsTeam.getColor()), itemStack.getAmount());
-        } else if (type.contains("STAINED_GLASS") || type.equals("GLASS")){
+        } else if (type.contains("STAINED_GLASS") || type.equals("GLASS")) {
             return new org.bukkit.inventory.ItemStack(TeamColor.getGlass(bedWarsTeam.getColor()), itemStack.getAmount());
-        } else if (type.contains("_TERRACOTTA")){
+        } else if (type.contains("_TERRACOTTA")) {
             return new org.bukkit.inventory.ItemStack(TeamColor.getGlazedTerracotta(bedWarsTeam.getColor()), itemStack.getAmount());
-        } else if (type.contains("_WOOL")){
+        } else if (type.contains("_WOOL")) {
             return new org.bukkit.inventory.ItemStack(TeamColor.getWool(bedWarsTeam.getColor()), itemStack.getAmount());
         }
         return itemStack;
@@ -703,6 +709,41 @@ public class v1_13_R2 implements NMS {
     }
 
     @Override
+    public void setBlockData(Block block, String data) {
+        Method m = null;
+        try {
+            m = Block.class.getDeclaredMethod("getBlockData");
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        BlockData result = null;
+        try {
+            assert m != null;
+            result = (BlockData) m.invoke(block,null);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        Directional d = (Directional) result;
+        d.setFacing(BlockFace.valueOf(data));
+        Method m2 = null;
+        try {
+            m2 = Block.class.getDeclaredMethod("setBlockData", BlockData.class);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            m2.invoke(block, result);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        block.getState().update(true);
+    }
+
+
+    @Override
     public org.bukkit.Material woolMaterial() {
         return org.bukkit.Material.valueOf("WHITE_WOOL");
     }
@@ -735,11 +776,33 @@ public class v1_13_R2 implements NMS {
         try {
             profileField = headMeta.getClass().getDeclaredField("profile");
             profileField.setAccessible(true);
-            profileField.set(headMeta, ((CraftPlayer)player).getProfile());
+            profileField.set(headMeta, ((CraftPlayer) player).getProfile());
         } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e1) {
             e1.printStackTrace();
         }
         head.setItemMeta(headMeta);
         return head;
+    }
+
+    @Override
+    public String getBlockData(Block block) {
+        Method m = null;
+        try {
+            m = Block.class.getDeclaredMethod("getBlockData");
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        BlockData result = null;
+        try {
+            assert m != null;
+            result = (BlockData) m.invoke(block,null);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        if (result instanceof Directional) {
+            Directional d = (Directional) result;
+            return d.getFacing().name();
+        }
+        return "";
     }
 }

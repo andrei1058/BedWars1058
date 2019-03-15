@@ -2,7 +2,12 @@ package com.andrei1058.bedwars.arena.mapreset;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.arena.Misc;
+import com.andrei1058.bedwars.configuration.ConfigPath;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.util.Vector;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,15 +18,17 @@ public class MapManager {
     private static MapResetter mapResetter = null;
     protected static Connection connection;
 
-    protected String table;
+    protected String table, table2;
 
     /**
      * Create a new map manager to cache placed blocks.
      */
     public MapManager(Arena arena) {
-        this.table = arena.getWorldName();
+        this.table = arena.getWorldName() + "_placed";
+        this.table2 = arena.getWorldName() + "_removed";
         try {
             connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS '" + table + "' (x INTEGER, y INTEGER, z INTEGER);");
+            connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS '" + table2 + "' (x INTEGER, y INTEGER, z INTEGER, material VARCHAR, data VARCHAR);");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -38,31 +45,47 @@ public class MapManager {
         }
     }
 
+    /** Add removed block.
+     * Used for lobby reset.
+     * */
+    @SuppressWarnings("deprecation")
+    public void addRemovedBlock(Block b){
+        //todo keep trace:
+        //MultipleFacing, Rotatable, Stairs
+        try {
+            connection.createStatement().execute("INSERT INTO '" + table2 + "' VALUES ('" + b.getX() + "', '" + b.getY() + "', '" + b.getZ() + "', '" + b.getType().toString() + "', '" + Main.nms.getBlockData(b) + "');");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Truncate table.
      */
     public void clearTable() {
         try {
             connection.createStatement().executeUpdate("DROP TABLE '" + table + "';");
+            connection.createStatement().executeUpdate("DROP TABLE '" + table2 + "';");
         } catch (SQLException e) {
             e.printStackTrace();
         }
         try {
             connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS '" + table + "' (x INTEGER, y INTEGER, z INTEGER);");
+            connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS '" + table2 + "' (x INTEGER, y INTEGER, z INTEGER, material VARCHAR, data VARCHAR);");
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * Restore map
+     * Restore map.
      */
     public void restoreMap() {
         mapResetter.resetMap(this);
     }
 
     /**
-     * Initialize on plugin load before loading arenas.
+     * Initialize on plugin loadStructure before loading arenas.
      *
      * @return false if something went wrong.
      */
@@ -76,7 +99,7 @@ public class MapManager {
 
         File folder = new File(Main.plugin.getDataFolder() + "/Cache");
         if (!folder.exists()) folder.mkdir();
-        File dataFolder = new File(folder.getPath() + "/placedBlocks.db");
+        File dataFolder = new File(folder.getPath() + "/blocks.db");
         if (!dataFolder.exists()) {
             try {
                 dataFolder.createNewFile();
@@ -110,5 +133,9 @@ public class MapManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static MapResetter getMapResetter() {
+        return mapResetter;
     }
 }

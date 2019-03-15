@@ -16,11 +16,6 @@ import java.sql.SQLException;
 public class FaweReset implements MapResetter {
 
     @Override
-    public void removeEntities() {
-
-    }
-
-    @Override
     public void resetMap(MapManager mapManager) {
         Bukkit.getScheduler().runTask(Main.plugin, () -> {
             EditSession editSession = new EditSessionBuilder(FaweAPI.getWorld(mapManager.table)).fastmode(true).build();
@@ -28,6 +23,20 @@ public class FaweReset implements MapResetter {
                 ResultSet rs = MapManager.connection.createStatement().executeQuery("SELECT x,y,z FROM '" + mapManager.table + "';");
                 while (rs.next()) {
                     editSession.setBlock(new Vector(rs.getInt(1), rs.getInt(2), rs.getInt(3)), BlockTypes.AIR.getDefaultState());
+                }
+                editSession.flushQueue();
+                Bukkit.getWorld(mapManager.table).save();
+                mapManager.clearTable();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+        Bukkit.getScheduler().runTask(Main.plugin, () -> {
+            EditSession editSession = new EditSessionBuilder(FaweAPI.getWorld(mapManager.table2)).fastmode(true).build();
+            try {
+                ResultSet rs = MapManager.connection.createStatement().executeQuery("SELECT x,y,z,material,data FROM '" + mapManager.table + "';");
+                while (rs.next()) {
+                    editSession.setBlock(new Vector(rs.getInt(1), rs.getInt(2), rs.getInt(3)), BlockTypes.valueOf(rs.getString(4)));
                 }
                 editSession.flushQueue();
                 Bukkit.getWorld(mapManager.table).save();

@@ -12,10 +12,10 @@ import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
-import com.andrei1058.bedwars.tasks.GamePlayingTask;
-import com.andrei1058.bedwars.tasks.GameRestartingTask;
-import com.andrei1058.bedwars.tasks.GameStartingTask;
-import com.andrei1058.bedwars.tasks.ReJoinTask;
+import com.andrei1058.bedwars.arena.tasks.GamePlayingTask;
+import com.andrei1058.bedwars.arena.tasks.GameRestartingTask;
+import com.andrei1058.bedwars.arena.tasks.GameStartingTask;
+import com.andrei1058.bedwars.arena.tasks.ReJoinTask;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -29,7 +29,6 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -184,8 +183,8 @@ public class Arena implements Comparable {
             try {
                 world = Bukkit.createWorld(new WorldCreator(name));
             } catch (Exception ex) {
-                if (p != null) p.sendMessage("§cI can't load the map called " + name);
-                plugin.getLogger().severe("I can't load the map called " + name);
+                if (p != null) p.sendMessage("§cI can't loadStructure the map called " + name);
+                plugin.getLogger().severe("I can't loadStructure the map called " + name);
                 ex.printStackTrace();
                 return;
             }
@@ -196,7 +195,7 @@ public class Arena implements Comparable {
                         .forEach(Entity::remove), 30L);
         world.setGameRuleValue("doMobSpawning", "false");
         world.setGameRuleValue("announceAdvancements", "false");
-        world.setAutoSave(false);
+        //world.setAutoSave(false);
 
         /* Clear setup armorstands */
         for (Entity e : world.getEntities()) {
@@ -895,7 +894,7 @@ public class Arena implements Comparable {
 
     /**
      * Restart the arena values.
-     * This will not unload or load the world
+     * This will not unload or loadStructure the world
      * Do not use this unless you know what you are doing.
      */
     public void restart() {
@@ -1751,5 +1750,9 @@ public class Arena implements Comparable {
         } else if (getStatus() == GameState.playing && a2.getStatus() != GameState.playing) {
             return -1;
         } else return 1;
+    }
+
+    public MapManager getMapManager() {
+        return mapManager;
     }
 }

@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Team;
+import org.bukkit.util.Vector;
 
 import java.util.List;
 
@@ -377,6 +378,14 @@ public interface NMS {
      */
     void setBlockData(Block block, byte data);
 
+    /**
+     * Set block data
+     * For versions before 1.13
+     *
+     * @since API 11
+     */
+    void setBlockData(Block block, String data);
+
 
     /**
      * Wool material
@@ -399,4 +408,9 @@ public interface NMS {
      */
     ItemStack getPlayerHead(Player player);
 
+    /**
+     * Get block data.
+     * Used for facing.
+     */
+    String getBlockData(Block block);
 }

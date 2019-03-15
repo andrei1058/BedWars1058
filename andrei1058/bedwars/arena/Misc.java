@@ -188,7 +188,7 @@ public class Misc {
     }
 
     public static void checkUpdate() {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 HttpURLConnection checkUpdate = (HttpURLConnection) new URL("https://api.spigotmc.org/legacy/update.php?resource=50942").openConnection();
                 checkUpdate.setDoOutput(true);
@@ -285,7 +285,7 @@ public class Misc {
      */
     public static void openStatsGUI(Player p) {
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, ()-> {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 
             /** create inventory */
             Inventory inv = Bukkit.createInventory(null, config.getInt(ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE), replaceStatsPlaceholders(p, getMsg(p, Messages.PLAYER_STATS_GUI_INV_NAME), true));
@@ -313,16 +313,26 @@ public class Misc {
 
     public static String replaceStatsPlaceholders(Player pl, String s, boolean papiReplacements) {
 
-        if (s.contains("{kills}")) s = s.replace("{kills}", String.valueOf(StatsManager.getStatsCache().getKills(pl.getUniqueId())));
-        if (s.contains("{deaths}")) s = s.replace("{deaths}", String.valueOf(StatsManager.getStatsCache().getDeaths(pl.getUniqueId())));
-        if (s.contains("{losses}")) s = s.replace("{losses}", String.valueOf(StatsManager.getStatsCache().getLosses(pl.getUniqueId())));
-        if (s.contains("{wins}")) s = s.replace("{wins}", String.valueOf(StatsManager.getStatsCache().getWins(pl.getUniqueId())));
-        if (s.contains("{finalKills}")) s = s.replace("{finalKills}", String.valueOf(StatsManager.getStatsCache().getFinalKills(pl.getUniqueId())));
-        if (s.contains("{finalDeaths}")) s = s.replace("{finalDeaths}", String.valueOf(StatsManager.getStatsCache().getFinalDeaths(pl.getUniqueId())));
-        if (s.contains("{bedsDestroyed}")) s = s.replace("{bedsDestroyed}", String.valueOf(StatsManager.getStatsCache().getBedsDestroyed(pl.getUniqueId())));
-        if (s.contains("{gamesPlayed}")) s = s.replace("{gamesPlayed}", String.valueOf(StatsManager.getStatsCache().getGamesPlayed(pl.getUniqueId())));
-        if (s.contains("{firstPlay}")) s = s.replace("{firstPlay}", new SimpleDateFormat(getMsg(pl, Messages.FORMATTING_STATS_DATE_FORMAT)).format(StatsManager.getStatsCache().getFirstPlay(pl.getUniqueId())));
-        if (s.contains("{lastPlay}")) s = s.replace("{lastPlay}", new SimpleDateFormat(getMsg(pl, Messages.FORMATTING_STATS_DATE_FORMAT)).format(StatsManager.getStatsCache().getLastPlay(pl.getUniqueId())));
+        if (s.contains("{kills}"))
+            s = s.replace("{kills}", String.valueOf(StatsManager.getStatsCache().getKills(pl.getUniqueId())));
+        if (s.contains("{deaths}"))
+            s = s.replace("{deaths}", String.valueOf(StatsManager.getStatsCache().getDeaths(pl.getUniqueId())));
+        if (s.contains("{losses}"))
+            s = s.replace("{losses}", String.valueOf(StatsManager.getStatsCache().getLosses(pl.getUniqueId())));
+        if (s.contains("{wins}"))
+            s = s.replace("{wins}", String.valueOf(StatsManager.getStatsCache().getWins(pl.getUniqueId())));
+        if (s.contains("{finalKills}"))
+            s = s.replace("{finalKills}", String.valueOf(StatsManager.getStatsCache().getFinalKills(pl.getUniqueId())));
+        if (s.contains("{finalDeaths}"))
+            s = s.replace("{finalDeaths}", String.valueOf(StatsManager.getStatsCache().getFinalDeaths(pl.getUniqueId())));
+        if (s.contains("{bedsDestroyed}"))
+            s = s.replace("{bedsDestroyed}", String.valueOf(StatsManager.getStatsCache().getBedsDestroyed(pl.getUniqueId())));
+        if (s.contains("{gamesPlayed}"))
+            s = s.replace("{gamesPlayed}", String.valueOf(StatsManager.getStatsCache().getGamesPlayed(pl.getUniqueId())));
+        if (s.contains("{firstPlay}"))
+            s = s.replace("{firstPlay}", new SimpleDateFormat(getMsg(pl, Messages.FORMATTING_STATS_DATE_FORMAT)).format(StatsManager.getStatsCache().getFirstPlay(pl.getUniqueId())));
+        if (s.contains("{lastPlay}"))
+            s = s.replace("{lastPlay}", new SimpleDateFormat(getMsg(pl, Messages.FORMATTING_STATS_DATE_FORMAT)).format(StatsManager.getStatsCache().getLastPlay(pl.getUniqueId())));
         if (s.contains("{player}")) s = s.replace("{player}", pl.getName());
         if (s.contains("{prefix}")) s = s.replace("{prefix}", Main.getChatSupport().getPrefix(pl));
 
@@ -388,5 +398,31 @@ public class Misc {
             }
         }
         return isOutsideOfBorder(l);
+    }
+
+    /**
+     * Get lower location between 2 locations.
+     *
+     * @return a new Location instance.
+     */
+    public static Location minLoc(Location loc1, Location loc2) {
+        if (loc1.getWorld() != loc2.getWorld()) throw new IllegalStateException("Locations are not in the same world!");
+        double x = Math.min(loc1.getX(), loc2.getX());
+        double y = Math.min(loc1.getY(), loc2.getY());
+        double z = Math.min(loc1.getZ(), loc2.getZ());
+        return new Location(loc1.getWorld(), x, y, z);
+    }
+
+    /**
+     * Get higher location between 2 locations.
+     *
+     * @return a new Location instance.
+     */
+    public static Location maxLoc(Location loc1, Location loc2) {
+        if (loc1.getWorld() != loc2.getWorld()) throw new IllegalStateException("Locations are not in the same world!");
+        double x = Math.max(loc1.getX(), loc2.getX());
+        double y = Math.max(loc1.getY(), loc2.getY());
+        double z = Math.max(loc1.getZ(), loc2.getZ());
+        return new Location(loc1.getWorld(), x, y, z);
     }
 }

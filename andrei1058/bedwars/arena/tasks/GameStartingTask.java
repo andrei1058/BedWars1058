@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.tasks;
+package com.andrei1058.bedwars.arena.tasks;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
@@ -17,13 +17,11 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 import static com.andrei1058.bedwars.Main.getParty;
 import static com.andrei1058.bedwars.Main.nms;
@@ -221,6 +219,7 @@ public class GameStartingTask implements Runnable {
                     for (int z = minZ; z < maxZ; z++) {
                         Block b = new Location(getArena().getWorld(), x, y, z).getBlock();
                         if (b.getType() != Material.AIR) {
+                            arena.getMapManager().addRemovedBlock(b);
                             b.setType(Material.AIR);
                         }
                     }

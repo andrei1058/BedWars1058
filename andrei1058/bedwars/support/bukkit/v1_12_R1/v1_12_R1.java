@@ -34,6 +34,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.Crops;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scoreboard.Team;
+import org.bukkit.util.Vector;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -698,6 +699,11 @@ public class v1_12_R1 implements NMS {
     }
 
     @Override
+    public void setBlockData(org.bukkit.block.Block block, String data) {
+        setBlockData(block, Byte.valueOf(data));
+    }
+
+    @Override
     public org.bukkit.Material woolMaterial() {
         return org.bukkit.Material.valueOf("WOOL");
     }
@@ -736,5 +742,11 @@ public class v1_12_R1 implements NMS {
         }
         head.setItemMeta(headMeta);
         return head;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public String getBlockData(org.bukkit.block.Block block) {
+        return String.valueOf(block.getData());
     }
 }
