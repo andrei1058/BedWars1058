@@ -74,6 +74,8 @@ public class CmdStart extends SubCommand {
         if (a != null){
             if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting){
                 if (!a.isPlayer(p)) return false;
+            } else {
+                return false;
             }
         } else {
             return false;

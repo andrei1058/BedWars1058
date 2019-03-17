@@ -24,6 +24,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.Rotatable;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
@@ -36,6 +37,7 @@ import org.bukkit.entity.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.material.Stairs;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scoreboard.Team;
 
@@ -710,6 +712,8 @@ public class v1_13_R2 implements NMS {
 
     @Override
     public void setBlockData(Block block, String data) {
+        String[] att = data.split(",");
+        if (att.length != 2) return;
         Method m = null;
         try {
             m = Block.class.getDeclaredMethod("getBlockData");
@@ -719,12 +723,18 @@ public class v1_13_R2 implements NMS {
         BlockData result = null;
         try {
             assert m != null;
-            result = (BlockData) m.invoke(block,null);
+            result = (BlockData) m.invoke(block, null);
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
-        Directional d = (Directional) result;
-        d.setFacing(BlockFace.valueOf(data));
+
+        if (!att[0].isEmpty()) {
+            if (block instanceof Directional) {
+                Directional s = (Directional) result;
+                s.setFacing(BlockFace.valueOf(data));
+            }
+        }
+
         Method m2 = null;
         try {
             m2 = Block.class.getDeclaredMethod("setBlockData", BlockData.class);
@@ -732,13 +742,19 @@ public class v1_13_R2 implements NMS {
             e.printStackTrace();
         }
 
+        /*if (!att[1].isEmpty()) {
+            if (block instanceof Rotatable) {
+                Rotatable d = (Rotatable) result;
+                d.setRotation(BlockFace.valueOf(att[1]));
+            }
+        }*/
+
         try {
             m2.invoke(block, result);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
+
         block.getState().update(true);
     }
 
@@ -795,14 +811,17 @@ public class v1_13_R2 implements NMS {
         BlockData result = null;
         try {
             assert m != null;
-            result = (BlockData) m.invoke(block,null);
+            result = (BlockData) m.invoke(block, null);
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
-        if (result instanceof Directional) {
-            Directional d = (Directional) result;
-            return d.getFacing().name();
+
+        String direction = "";
+        if (block instanceof Directional) {
+            Directional s = (Directional) result;
+            direction = s.getFacing().toString();
         }
-        return "";
+
+        return direction + ",";
     }
 }

@@ -59,19 +59,19 @@ public class ConfigManager {
             save();
 
             //convert old configuration
-            if (yml.get("spawnProtection") != null){
+            if (yml.get("spawnProtection") != null) {
                 set(ConfigPath.ARENA_SPAWN_PROTECTION, yml.getInt("spawnProtection"));
                 set("spawnProtection", null);
             }
-            if (yml.get("shopProtection") != null){
+            if (yml.get("shopProtection") != null) {
                 set(ConfigPath.ARENA_SHOP_PROTECTION, yml.getInt("shopProtection"));
                 set("shopProtection", null);
             }
-            if (yml.get("upgradesProtection") != null){
+            if (yml.get("upgradesProtection") != null) {
                 set(ConfigPath.ARENA_UPGRADES_PROTECTION, yml.getInt("upgradesProtection"));
                 set("upgradesProtection", null);
             }
-            if (yml.get("islandRadius") != null){
+            if (yml.get("islandRadius") != null) {
                 set(ConfigPath.ARENA_ISLAND_RADIUS, yml.getInt("islandRadius"));
             }
         }
@@ -126,11 +126,11 @@ public class ConfigManager {
 
     }
 
-    public List<Location> getLocations(String path){
+    public List<Location> getLocations(String path) {
         List<Location> l = new ArrayList<>();
-        for (String s : yml.getStringList(path)){
+        for (String s : yml.getStringList(path)) {
             Location loc = fromArenaStringList(s);
-            if (loc != null){
+            if (loc != null) {
                 l.add(loc);
             }
         }
@@ -185,16 +185,19 @@ public class ConfigManager {
         return firstTime;
     }
 
-    /** Return true if same */
-    public boolean compareArenaLoc(Location l1, Location l2){
+    /**
+     * Return true if same
+     */
+    public boolean compareArenaLoc(Location l1, Location l2) {
         return l1.getBlockX() == l2.getBlockX() && l1.getBlockZ() == l2.getBlockZ() && l1.getBlockY() == l2.getBlockY();
     }
 
-    /** Add Multi Arena Lobby Command Item To Config.
+    /**
+     * Add Multi Arena Lobby Command Item To Config.
      * This won't create the item back if you delete it.
-      */
-    public void saveLobbyCommandItem(String name, String cmd, boolean enchanted, String material, int data, int slot){
-        if (isFirstTime()){
+     */
+    public void saveLobbyCommandItem(String name, String cmd, boolean enchanted, String material, int data, int slot) {
+        if (isFirstTime()) {
             yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_COMMAND.replace("%path%", name), cmd);
             yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", name), material);
             yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_DATA.replace("%path%", name), data);
@@ -205,11 +208,12 @@ public class ConfigManager {
         }
     }
 
-    /** Add Pre Game Command Item To Config.
+    /**
+     * Add Pre Game Command Item To Config.
      * This won't create the item back if you delete it.
      */
-    public void savePreGameCommandItem(String name, String cmd, boolean enchanted, String material, int data, int slot){
-        if (isFirstTime()){
+    public void savePreGameCommandItem(String name, String cmd, boolean enchanted, String material, int data, int slot) {
+        if (isFirstTime()) {
             yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_COMMAND.replace("%path%", name), cmd);
             yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_MATERIAL.replace("%path%", name), material);
             yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_DATA.replace("%path%", name), data);
@@ -220,11 +224,12 @@ public class ConfigManager {
         }
     }
 
-    /** Add Spectator Command Item To Config.
+    /**
+     * Add Spectator Command Item To Config.
      * This won't create the item back if you delete it.
      */
-    public void saveSpectatorCommandItem(String name, String cmd, boolean enchanted, String material, int data, int slot){
-        if (isFirstTime()){
+    public void saveSpectatorCommandItem(String name, String cmd, boolean enchanted, String material, int data, int slot) {
+        if (isFirstTime()) {
             yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_COMMAND.replace("%path%", name), cmd);
             yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_MATERIAL.replace("%path%", name), material);
             yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_DATA.replace("%path%", name), data);
@@ -233,6 +238,13 @@ public class ConfigManager {
             yml.options().copyDefaults(true);
             save();
         }
+    }
+
+    /**
+     * File name.
+     */
+    public String getName() {
+        return name;
     }
 
     public void setFirstTime(boolean firstTime) {

@@ -411,6 +411,8 @@ public interface NMS {
     /**
      * Get block data.
      * Used for facing.
+     *
+     * 1.13 direction,rotation.
      */
     String getBlockData(Block block);
 }

@@ -3,6 +3,7 @@ package com.andrei1058.bedwars.arena.mapreset;
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
+import com.andrei1058.bedwars.configuration.ConfigManager;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -19,19 +20,28 @@ public class MapManager {
     protected static Connection connection;
 
     protected String table, table2;
+    protected ConfigManager configManager;
 
     /**
      * Create a new map manager to cache placed blocks.
      */
-    public MapManager(Arena arena) {
-        this.table = arena.getWorldName() + "_placed";
-        this.table2 = arena.getWorldName() + "_removed";
+    public MapManager(ConfigManager configManager) {
+        this.configManager = configManager;
+        this.table = configManager.getName() + "_placed";
+        this.table2 = configManager.getName() + "_removed";
         try {
             connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS '" + table + "' (x INTEGER, y INTEGER, z INTEGER);");
             connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS '" + table2 + "' (x INTEGER, y INTEGER, z INTEGER, material VARCHAR, data VARCHAR);");
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Backup lobby.
+     */
+    public void backupLobby() {
+        mapResetter.backupLobby(configManager.getArenaLoc(ConfigPath.ARENA_WAITING_POS1), configManager.getArenaLoc(ConfigPath.ARENA_WAITING_POS2));
     }
 
     /**
@@ -45,11 +55,12 @@ public class MapManager {
         }
     }
 
-    /** Add removed block.
+    /**
+     * Add removed block.
      * Used for lobby reset.
-     * */
+     */
     @SuppressWarnings("deprecation")
-    public void addRemovedBlock(Block b){
+    public void addRemovedBlock(Block b) {
         //todo keep trace:
         //MultipleFacing, Rotatable, Stairs
         try {
@@ -65,12 +76,26 @@ public class MapManager {
     public void clearTable() {
         try {
             connection.createStatement().executeUpdate("DROP TABLE '" + table + "';");
-            connection.createStatement().executeUpdate("DROP TABLE '" + table2 + "';");
         } catch (SQLException e) {
             e.printStackTrace();
         }
         try {
             connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS '" + table + "' (x INTEGER, y INTEGER, z INTEGER);");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Truncate table.
+     */
+    public void clearTable2() {
+        try {
+            connection.createStatement().executeUpdate("DROP TABLE '" + table2 + "';");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try {
             connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS '" + table2 + "' (x INTEGER, y INTEGER, z INTEGER, material VARCHAR, data VARCHAR);");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -82,6 +107,14 @@ public class MapManager {
      */
     public void restoreMap() {
         mapResetter.resetMap(this);
+        mapResetter.restoreLobby(this);
+    }
+
+    /**
+     * Get world name.
+     */
+    public String getWorldName() {
+        return configManager.getName();
     }
 
     /**
@@ -93,6 +126,7 @@ public class MapManager {
         if (Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit") != null) {
             if (Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit").isEnabled()) {
                 mapResetter = new FaweReset();
+                Main.plugin.getLogger().info("Hook into FastAsyncWorldEdit support!");
             }
         }
         if (mapResetter == null) mapResetter = new InternalReset();

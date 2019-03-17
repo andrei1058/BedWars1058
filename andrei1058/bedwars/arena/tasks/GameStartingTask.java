@@ -8,6 +8,7 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.OreGenerator;
 import com.andrei1058.bedwars.arena.SBoard;
+import com.andrei1058.bedwars.arena.mapreset.MapManager;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Messages;
 import org.bukkit.Bukkit;
@@ -156,9 +157,6 @@ public class GameStartingTask implements Runnable {
                 sb.addHealthIcon();
             }
 
-            //Spawn players
-            spawnPlayers();
-
             getArena().setStatus(GameState.playing);
             getArena().setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_II);
 
@@ -168,7 +166,10 @@ public class GameStartingTask implements Runnable {
             }
 
             //Lobby removal
-            removeLobby();
+            MapManager.getMapResetter().removeLobby(arena.getMapManager());
+
+            //Spawn players
+            spawnPlayers();
 
             task.cancel();
             return;
@@ -207,30 +208,7 @@ public class GameStartingTask implements Runnable {
         }
     }
 
-    //Lobby removal
-    private void removeLobby() {
-        if (!(getArena().getCm().getYml().get(ConfigPath.ARENA_WAITING_POS1) == null && getArena().getCm().getYml().get(ConfigPath.ARENA_WAITING_POS2) == null)) {
-            Location loc1 = getArena().getCm().getArenaLoc(ConfigPath.ARENA_WAITING_POS1), loc2 = getArena().getCm().getArenaLoc(ConfigPath.ARENA_WAITING_POS2);
-            int minX = Math.min(loc1.getBlockX(), loc2.getBlockX()), maxX = Math.max(loc1.getBlockX(), loc2.getBlockX());
-            int minY = Math.min(loc1.getBlockY(), loc2.getBlockY()), maxY = Math.max(loc1.getBlockY(), loc2.getBlockY());
-            int minZ = Math.min(loc1.getBlockZ(), loc2.getBlockZ()), maxZ = Math.max(loc1.getBlockZ(), loc2.getBlockZ());
-            for (int x = minX; x < maxX; x++) {
-                for (int y = minY; y < maxY; y++) {
-                    for (int z = minZ; z < maxZ; z++) {
-                        Block b = new Location(getArena().getWorld(), x, y, z).getBlock();
-                        if (b.getType() != Material.AIR) {
-                            arena.getMapManager().addRemovedBlock(b);
-                            b.setType(Material.AIR);
-                        }
-                    }
-                }
-            }
-        }
-        //remove items dropped from lobby
-        getArena().getWorld().getEntities().stream().filter(e -> e.getType() == EntityType.DROPPED_ITEM).forEach(Entity::remove);
-    }
-
-    public void cancel(){
+    public void cancel() {
         task.cancel();
     }
 }

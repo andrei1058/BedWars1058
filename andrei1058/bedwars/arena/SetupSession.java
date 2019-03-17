@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.ServerType;
+import com.andrei1058.bedwars.arena.mapreset.MapManager;
 import com.andrei1058.bedwars.configuration.ConfigManager;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.*;
@@ -41,6 +42,8 @@ public class SetupSession {
         this.player = player;
         this.worldName = worldName;
         getSetupSessions().add(this);
+        MapManager m = new MapManager(cm);
+        m.restoreMap();
         openGUI(player);
     }
 

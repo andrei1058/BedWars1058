@@ -23,6 +23,7 @@ import org.bukkit.block.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
 import org.bukkit.entity.*;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -238,8 +239,11 @@ public class Arena implements Comparable {
             plugin.getLogger().severe("Lobby Pos2 isn't set! The arena's lobby won't be removed!");
         }
 
-        mapManager = new MapManager(this);
+        mapManager = new MapManager(getCm());
+        //restore if backup exists
         mapManager.restoreMap();
+        //create backup/ replace existing
+        mapManager.backupLobby();
 
         /* Register arena signs */
         registerSigns();
@@ -358,7 +362,7 @@ public class Arena implements Comparable {
             /* save player inventory etc */
             new PlayerGoods(p, true);
             playerLocation.put(p, p.getLocation());
-            p.teleport(cm.getArenaLoc("waiting.Loc"));
+            p.teleport(cm.getArenaLoc("waiting.Loc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
             if (getStatus() == GameState.waiting) {
                 new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + "Waiting", Messages.SCOREBOARD_DEFAULT_WAITING), this);
             } else if (getStatus() == GameState.starting) {
@@ -405,13 +409,6 @@ public class Arena implements Comparable {
             if (ReJoin.exists(p)) ReJoin.getPlayer(p).destroy();
 
             p.closeInventory();
-            if (!playerBefore) {
-                if (staffTeleport == null) {
-                    p.teleport(cm.getArenaLoc("waiting.Loc"));
-                } else {
-                    p.teleport(staffTeleport);
-                }
-            }
             spectators.add(p);
             players.remove(p);
 
@@ -426,6 +423,14 @@ public class Arena implements Comparable {
                 new PlayerGoods(p, true);
                 setArenaByPlayer(p, true);
                 playerLocation.put(p, p.getLocation());
+            }
+
+            if (!playerBefore) {
+                if (staffTeleport == null) {
+                    p.teleport(cm.getArenaLoc("waiting.Loc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                } else {
+                    p.teleport(staffTeleport);
+                }
             }
 
             new SBoard(p, this);
