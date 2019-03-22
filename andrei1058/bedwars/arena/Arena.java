@@ -115,6 +115,9 @@ public class Arena implements Comparable {
      */
     public Arena(String name, Player p) {
         this.worldName = name;
+
+        mapManager = Main.getMapManager(this, name);
+
         plugin.getLogger().info("Loading arena: " + getWorldName());
         cm = new ConfigManager(name, "plugins/" + plugin.getName() + "/Arenas", true);
         yml = cm.getYml();
@@ -176,20 +179,14 @@ public class Arena implements Comparable {
             return;
         }
         if (error) return;
+        mapManager.restoreWorld(name, this);
+    }
 
-        world = Bukkit.getWorld(name);
-
-        if (world == null) {
-
-            try {
-                world = Bukkit.createWorld(new WorldCreator(name));
-            } catch (Exception ex) {
-                if (p != null) p.sendMessage("§cI can't loadStructure the map called " + name);
-                plugin.getLogger().severe("I can't loadStructure the map called " + name);
-                ex.printStackTrace();
-                return;
-            }
-        }
+    /**
+     * Use this method when the world was loaded successfully.
+     */
+    public void init(World world) {
+        this.world = world;
         Bukkit.getScheduler().runTaskLater(plugin,
                 () -> world.getEntities().stream().filter(e -> e.getType() != EntityType.PLAYER)
                         .filter(e -> e.getType() != EntityType.PAINTING).filter(e -> e.getType() != EntityType.ITEM_FRAME)
@@ -198,7 +195,7 @@ public class Arena implements Comparable {
         world.setGameRuleValue("announceAdvancements", "false");
         //world.setAutoSave(false);
 
-        /* Clear setup armorstands */
+        /* Clear setup armor-stands */
         for (Entity e : world.getEntities()) {
             if (e.getType() == EntityType.ARMOR_STAND) {
                 if (!((ArmorStand) e).isVisible()) e.remove();
@@ -239,18 +236,12 @@ public class Arena implements Comparable {
             plugin.getLogger().severe("Lobby Pos2 isn't set! The arena's lobby won't be removed!");
         }
 
-        mapManager = new MapManager(getCm());
-        //restore if backup exists
-        mapManager.restoreMap();
-        //create backup/ replace existing
-        mapManager.backupLobby();
-
         /* Register arena signs */
         registerSigns();
         //Call event
         Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.ArenaEnableEvent(this));
 
-        setStatus(GameState.waiting);
+        checkStatus(GameState.waiting);
 
         //
         for (NextEvent ne : NextEvent.values()) {
@@ -343,9 +334,9 @@ public class Arena implements Comparable {
                     }
                 }
                 if (minPlayers <= players.size() && teams > 0 && players.size() != teammates / teams) {
-                    setStatus(GameState.starting);
+                    checkStatus(GameState.starting);
                 } else if (players.size() >= minPlayers && teams == 0) {
-                    setStatus(GameState.starting);
+                    checkStatus(GameState.starting);
                 }
             }
 
@@ -577,7 +568,7 @@ public class Arena implements Comparable {
             }
         }
         if (status == GameState.starting && (maxInTeam > players.size() && teamuri || players.size() < minPlayers && !teamuri)) {
-            setStatus(GameState.waiting);
+            checkStatus(GameState.waiting);
             for (Player on : players) {
                 on.sendMessage(getMsg(on, Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS));
             }
@@ -592,9 +583,9 @@ public class Arena implements Comparable {
             }
             if (alive_teams == 1) {
                 checkWinner();
-                Bukkit.getScheduler().runTaskLater(Main.plugin, () -> setStatus(GameState.restarting), 10L);
+                Bukkit.getScheduler().runTaskLater(Main.plugin, () -> checkStatus(GameState.restarting), 10L);
             } else if (alive_teams == 0) {
-                Bukkit.getScheduler().runTaskLater(Main.plugin, () -> setStatus(GameState.restarting), 10L);
+                Bukkit.getScheduler().runTaskLater(Main.plugin, () -> checkStatus(GameState.restarting), 10L);
             } else {
                 //ReJoin feature
                 new ReJoin(p, this, getPlayerTeam(p.getName()), cacheList);
@@ -921,6 +912,7 @@ public class Arena implements Comparable {
                 rjt.destroy();
             }
         }
+        mapManager.unloadWorld();
     }
 
     //GETTER METHODS
@@ -1044,7 +1036,6 @@ public class Arena implements Comparable {
      */
     public void addPlacedBlock(Block block) {
         placed.add(block);
-        mapManager.addPlacedBlock(block.getX(), block.getY(), block.getZ());
     }
 
     /**
@@ -1118,7 +1109,17 @@ public class Arena implements Comparable {
         JoinNPC.updateNPCs(getGroup());
     }
 
+    /**
+     * Set game status without starting stats.
+     */
     public void setStatus(GameState status) {
+        this.status = status;
+    }
+
+    /**
+     * Change game status starting tasks.
+     */
+    public void checkStatus(GameState status) {
         this.status = status;
         Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.GameStateChangeEvent(this, status));
         refreshSigns();
@@ -1439,7 +1440,7 @@ public class Arena implements Comparable {
                         }
                     }
                 }
-                setStatus(GameState.restarting);
+                checkStatus(GameState.restarting);
 
                 //Game end event
                 List<UUID> winners = new ArrayList<>(), losers = new ArrayList<>(), aliveWinners = new ArrayList<>();
@@ -1464,7 +1465,7 @@ public class Arena implements Comparable {
 
             }
             if (players.size() == 0 && getStatus() != GameState.restarting) {
-                setStatus(GameState.restarting);
+                checkStatus(GameState.restarting);
             }
         }
     }

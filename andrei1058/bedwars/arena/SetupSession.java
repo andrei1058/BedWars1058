@@ -37,13 +37,15 @@ public class SetupSession {
     public boolean autoCreatedEmerald = false;
     public boolean autoCreatedDiamond = false;
     public List<Location> skipAutoCreateGen = new ArrayList<>();
+    private MapManager mapManager;
 
     public SetupSession(Player player, String worldName) {
         this.player = player;
         this.worldName = worldName;
         getSetupSessions().add(this);
-        MapManager m = new MapManager(cm);
-        m.restoreMap();
+        mapManager = new MapManager(null, worldName);
+        mapManager.restoreWorld(worldName, null);
+        mapManager.loadWorld();
         openGUI(player);
     }
 
@@ -188,6 +190,7 @@ public class SetupSession {
      * @since api 6
      */
     public void done() {
+        mapManager.backupWorld(true);
         getSetupSessions().remove(this);
         if (Main.getServerType() != ServerType.BUNGEE) getPlayer().teleport(config.getConfigLoc("lobbyLoc"));
         getPlayer().removePotionEffect(PotionEffectType.SPEED);

@@ -12,11 +12,6 @@ import com.andrei1058.bedwars.arena.mapreset.MapManager;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Messages;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -157,7 +152,7 @@ public class GameStartingTask implements Runnable {
                 sb.addHealthIcon();
             }
 
-            getArena().setStatus(GameState.playing);
+            getArena().checkStatus(GameState.playing);
             getArena().setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_II);
 
             //Enable diamond/ emerald generators
@@ -166,7 +161,7 @@ public class GameStartingTask implements Runnable {
             }
 
             //Lobby removal
-            MapManager.getMapResetter().removeLobby(arena.getMapManager());
+            arena.getMapManager().removeLobby();
 
             //Spawn players
             spawnPlayers();

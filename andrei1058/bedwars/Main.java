@@ -5,7 +5,9 @@ import com.andrei1058.bedwars.api.GameAPI;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.arena.despawnables.TargetListener;
+import com.andrei1058.bedwars.arena.mapreset.FAWE;
 import com.andrei1058.bedwars.arena.mapreset.MapManager;
+import com.andrei1058.bedwars.arena.mapreset.ResetAdaptor;
 import com.andrei1058.bedwars.commands.party.PartyCommand;
 import com.andrei1058.bedwars.commands.rejoin.RejoinCommand;
 import com.andrei1058.bedwars.commands.shout.ShoutCommand;
@@ -83,6 +85,7 @@ public class Main extends JavaPlugin {
     private static String version = Bukkit.getServer().getClass().getName().split("\\.")[3];
     private static String lobbyWorld = "";
     public static BedWars api;
+    private static ResetAdaptor resetAdaptor = ResetAdaptor.INTERNAL;
 
     //remote database
     private static Database remoteDatabase;
@@ -176,6 +179,14 @@ public class Main extends JavaPlugin {
     @Override
     public void onEnable() {
 
+        // Load FastAsyncWorldEdit support
+        if (Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit") != null){
+            if (Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit").isEnabled()){
+                resetAdaptor = ResetAdaptor.FAWE;
+                this.getLogger().info("Hook into FastAsyncWorldEdit support!");
+            }
+        }
+
         ArenaSocket.serverIdentifier = Bukkit.getServer().getIp() + ":" + Bukkit.getServer().getPort();
 
         /* Citizens support */
@@ -262,10 +273,10 @@ public class Main extends JavaPlugin {
         }
 
         /* Initialize map resetter before loading maps.*/
-        if (!MapManager.init()) {
-            setEnabled(false);
-            return;
-        }
+        //if (!MapManager.init()) {
+        //    setEnabled(false);
+        //    return;
+        //}
 
         /* Load join signs. */
         loadArenasAndSigns();
@@ -420,7 +431,6 @@ public class Main extends JavaPlugin {
             }
         } catch (Exception ex) {
         }
-        MapManager.closeConnection();
         StatsManager.getStatsCache().close();
         remoteDatabase.close();
     }
@@ -831,5 +841,22 @@ public class Main extends JavaPlugin {
      */
     public static Database getRemoteDatabase() {
         return remoteDatabase;
+    }
+
+    /**
+     * Get map manager.
+     */
+    public static MapManager getMapManager(Arena arena, String name) {
+        MapManager manager;
+
+        switch (resetAdaptor) {
+            default:
+                manager = new MapManager(arena, name);
+                break;
+            case FAWE:
+                manager = new FAWE(arena, name);
+        }
+
+        return manager;
     }
 }

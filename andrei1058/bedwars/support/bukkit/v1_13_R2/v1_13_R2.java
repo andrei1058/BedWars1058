@@ -723,7 +723,7 @@ public class v1_13_R2 implements NMS {
         BlockData result = null;
         try {
             assert m != null;
-            result = (BlockData) m.invoke(block, null);
+            result = (BlockData) m.invoke(block, (Object) null);
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
@@ -811,7 +811,7 @@ public class v1_13_R2 implements NMS {
         BlockData result = null;
         try {
             assert m != null;
-            result = (BlockData) m.invoke(block, null);
+            result = (BlockData) m.invoke(block, (Object) null);
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
