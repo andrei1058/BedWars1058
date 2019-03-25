@@ -139,7 +139,7 @@ public class MySQL implements Database {
     }
 
     @Override
-    public void updateLocalStats(UUID uuid) {
+    public void updateLocalCache(UUID uuid) {
         if (!isConnected()) connect();
         try {
             ResultSet rs = connection.createStatement().executeQuery("SELECT * FROM global_stats WHERE uuid = '" + uuid.toString() + "';");

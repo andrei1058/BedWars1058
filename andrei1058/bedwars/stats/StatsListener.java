@@ -22,7 +22,7 @@ public class StatsListener implements Listener {
         //create cache row for player
         StatsManager.getStatsCache().createStatsCache(p);
         //update local cache for player
-        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.plugin, ()-> Main.getRemoteDatabase().updateLocalStats(p.getUniqueId()));
+        Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, ()-> Main.getRemoteDatabase().updateLocalCache(p.getUniqueId()));
     }
 
     @EventHandler

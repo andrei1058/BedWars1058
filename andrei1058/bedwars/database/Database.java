@@ -19,7 +19,7 @@ public interface Database {
     /**
      * Update local cache from remote database.
      */
-    void updateLocalStats(UUID uuid);
+    void updateLocalCache(UUID uuid);
 
     /**
      * Close connection.

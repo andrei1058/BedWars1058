@@ -187,10 +187,9 @@ public class Arena implements Comparable {
      */
     public void init(World world) {
         this.world = world;
-        Bukkit.getScheduler().runTaskLater(plugin,
-                () -> world.getEntities().stream().filter(e -> e.getType() != EntityType.PLAYER)
-                        .filter(e -> e.getType() != EntityType.PAINTING).filter(e -> e.getType() != EntityType.ITEM_FRAME)
-                        .forEach(Entity::remove), 30L);
+        world.getEntities().stream().filter(e -> e.getType() != EntityType.PLAYER)
+                .filter(e -> e.getType() != EntityType.PAINTING).filter(e -> e.getType() != EntityType.ITEM_FRAME)
+                .forEach(Entity::remove);
         world.setGameRuleValue("doMobSpawning", "false");
         world.setGameRuleValue("announceAdvancements", "false");
         //world.setAutoSave(false);
@@ -430,7 +429,7 @@ public class Arena implements Comparable {
             /* Hide spectator  */
             //p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0), true);
             p.setGameMode(GameMode.ADVENTURE);
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
                 for (Player on : Bukkit.getOnlinePlayers()) {
                     if (on == p) continue;
                     if (getSpectators().contains(on)) {
@@ -611,7 +610,7 @@ public class Arena implements Comparable {
         }
         playerLocation.remove(p);
 
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
             for (Player on : Bukkit.getOnlinePlayers()) {
                 if (getArenaByPlayer(on) == null) {
                     on.showPlayer(p);
@@ -1247,7 +1246,7 @@ public class Arena implements Comparable {
         if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH) == null) return;
         p.getInventory().clear();
 
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
             for (String item : config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH).getKeys(false)) {
                 if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", item)) == null) {
                     Main.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", item) + " is not set!");

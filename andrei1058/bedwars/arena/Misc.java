@@ -5,7 +5,6 @@ import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.exceptions.InvalidMaterialException;
-import com.andrei1058.bedwars.stats.StatsCache;
 import com.andrei1058.bedwars.stats.StatsManager;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.google.common.io.ByteArrayDataOutput;
@@ -26,14 +25,11 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -73,7 +69,7 @@ public class Misc {
         out.writeUTF(config.getYml().getString("lobbyServer"));
         p.sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
         if (getServerType() == ServerType.BUNGEE) {
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
                 if (p.isOnline()) {
                     p.kickPlayer(getMsg(p, Messages.ARENA_RESTART_PLAYER_KICK));
                 }
@@ -285,7 +281,7 @@ public class Misc {
      */
     public static void openStatsGUI(Player p) {
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
 
             /** create inventory */
             Inventory inv = Bukkit.createInventory(null, config.getInt(ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE), replaceStatsPlaceholders(p, getMsg(p, Messages.PLAYER_STATS_GUI_INV_NAME), true));
@@ -342,7 +338,7 @@ public class Misc {
 
     public static void giveLobbySb(Player p) {
         if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
-            Bukkit.getScheduler().runTaskLater(Main.plugin, () -> new SBoard(p, getList(p, Messages.SCOREBOARD_LOBBY), null), 15L);
+            Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plugin, () -> new SBoard(p, getList(p, Messages.SCOREBOARD_LOBBY), null), 15L);
         }
     }
 
@@ -397,7 +393,7 @@ public class Misc {
                 return true;
             }
         }
-        return isOutsideOfBorder(l);
+        return l.getWorld().getWorldBorder().getCenter().distanceSquared(l) >= l.getWorld().getWorldBorder().getSize();
     }
 
     /**
