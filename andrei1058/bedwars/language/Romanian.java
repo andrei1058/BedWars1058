@@ -256,7 +256,7 @@ public class Romanian {
                 "{TeamAquaColor}&lA&f {TeamAquaName}&f: {TeamAquaStatus}", "{TeamWhiteColor}&lA&f {TeamWhiteName}&f: {TeamWhiteStatus}", "{TeamPinkColor}&lR&f {TeamPinkName}&f: {TeamPinkStatus}", "{TeamGrayColor}&lG&f {TeamGrayName}&f: {TeamGrayStatus}", "", "&ehttp://{server_ip}"));
         yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&7{date}", "&fNume: &a{player}", "", "&fVictorii: &a{wins}", "&fPierderi: &a{losses}", "&fUcideri: &a{kills}", "&fDecese: &a{deaths}"
                 , "&fDecese Finale: &a{fKills}", "&fPaturi Distruse: &a{beds}", "", "&fConectati: &a{on}", "&e{server_ip}"));
-
+        yml.addDefault("xp-reward-per-minute", "{prefix}&6+{xp} BedWars Experience Received (Play Time).");
 
         //shop
         yml.addDefault(Messages.SHOP_INDEX_NAME, "&8Cumpara Repede");

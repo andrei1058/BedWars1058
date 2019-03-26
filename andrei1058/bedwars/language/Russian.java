@@ -130,6 +130,7 @@ public class Russian {
         yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&e&lСОЛО,&E&LУЛУЧШЕНИЯ");
         yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&e&lМАГАЗИН");
         yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&e&lМАГАЗИН");
+        yml.addDefault("xp-reward-per-minute", "{prefix}&6+{xp} BedWars Experience Received (Play Time).");
 
         //SHOP
         yml.addDefault(Messages.SHOP_INDEX_NAME, "&8Quick Buy");

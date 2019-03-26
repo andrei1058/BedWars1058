@@ -45,7 +45,8 @@ public class PlayerLevel {
      * Update the player progress bar.
      */
     private void updateProgressBar() {
-        int locked = (nextLevelCost - currentXp) % nextLevelCost;
+        double l1 = ((nextLevelCost-currentXp) / (double)(nextLevelCost))*10;
+        int locked = (int) l1;
         int unlocked = 10 - locked;
         progressBar = ChatColor.translateAlternateColorCodes('&', LevelsConfig.levels.getString("progress-bar.format").replace("{progress}",
                 LevelsConfig.levels.getString("progress-bar.locked-color") + String.valueOf(new char[unlocked]).replace("\0", LevelsConfig.levels.getString("progress-bar.symbol")))

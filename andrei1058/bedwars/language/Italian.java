@@ -258,6 +258,7 @@ public class Italian {
         yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&7{date}", "&fNome: &a{player}", "", "&fVittorie: &a{wins}", "&fSconfitte: &a{losses}", "&fUccisioni: &a{kills}", "&fDecessi: &a{deaths}"
                 , "&fUccisioni finali: &a{fKills}", "&fLetti distrutti: &a{beds}", "", "&fOnline: &a{on}", "&e{server_ip}"));
         yml.addDefault(Messages.TEAM_ELIMINATED_CHAT, "\n&f&lTEAM ELIMINATO > Il team {TeamColor}{TeamName} &cè stato eliminato\n");
+        yml.addDefault("xp-reward-per-minute", "{prefix}&6+{xp} BedWars Experience Received (Play Time).");
 
         //shop
         yml.addDefault(Messages.SHOP_INDEX_NAME, "&8Quick Buy");

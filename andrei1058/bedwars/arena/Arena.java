@@ -9,6 +9,8 @@ import com.andrei1058.bedwars.configuration.ConfigManager;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.language.Messages;
+import com.andrei1058.bedwars.levels.internal.InternalLevel;
+import com.andrei1058.bedwars.levels.internal.PerMinuteTask;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
@@ -108,6 +110,8 @@ public class Arena implements Comparable {
 
     /* Keep trace of arena start time. */
     private long arenaStart = 0L;
+
+    private PerMinuteTask perMinuteTask;
 
     /**
      * Load an arena.
@@ -1108,6 +1112,7 @@ public class Arena implements Comparable {
                 }
             }
         } else if (status == GameState.playing) {
+            if (Main.getLevelSupport() instanceof InternalLevel) perMinuteTask = new PerMinuteTask(this);
             playingTask = new GamePlayingTask(this);
             arenaStart = System.currentTimeMillis();
             for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
@@ -1118,6 +1123,7 @@ public class Arena implements Comparable {
             }
         } else if (status == GameState.restarting) {
             restartingTask = new GameRestartingTask(this);
+            if (perMinuteTask != null) perMinuteTask.cancel();
         }
     }
 
