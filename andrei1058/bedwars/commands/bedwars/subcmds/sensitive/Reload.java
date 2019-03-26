@@ -26,7 +26,7 @@ public class Reload extends SubCommand {
      */
     public Reload(ParentCommand parent, String name) {
         super(parent, name);
-        setPriority(10);
+        setPriority(11);
         showInList(true);
         setPermission(Permissions.PERMISSION_RELOAD);
         setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " "+getSubCommandName()+"       §8 - §ereload messages",

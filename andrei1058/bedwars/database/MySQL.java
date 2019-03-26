@@ -240,7 +240,7 @@ public class MySQL implements Database {
         if (!isConnected()) connect();
         try {
             ResultSet rs = connection.prepareStatement("SELECT id from player_levels WHERE uuid = '"+player.toString()+"';").executeQuery();
-            if (rs.next()){
+            if (!rs.next()){
                 PreparedStatement ps = connection.prepareStatement("INSERT INTO player_levels VALUES (?, ?, ?, ?);");
                 ps.setInt(1, 0);
                 ps.setString(2, player.toString());
