@@ -338,7 +338,7 @@ public class Misc {
 
     public static void giveLobbySb(Player p) {
         if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
-            Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plugin, () -> new SBoard(p, getList(p, Messages.SCOREBOARD_LOBBY), null), 15L);
+            Bukkit.getScheduler().runTaskLater(Main.plugin, () -> new SBoard(p, getList(p, Messages.SCOREBOARD_LOBBY), null), 40L);
         }
     }
 

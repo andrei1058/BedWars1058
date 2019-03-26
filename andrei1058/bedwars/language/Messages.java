@@ -162,9 +162,9 @@ public class Messages {
     public static String MEANING_VAULT_PLURAL = "meaning-vault-plural";
 
     /** Scoreboard related */
-    public static String SCOREBOARD_DEFAULT_WAITING = "scoreboard.Default.Waiting";
-    public static String SCOREBOARD_DEFAULT_STARTING = "scoreboard.Default.Starting";
-    public static String SCOREBOARD_DEFAULT_PLAYING = "scoreboard.Default.Playing";
+    public static String SCOREBOARD_DEFAULT_WAITING = "scoreboard.Default.waiting";
+    public static String SCOREBOARD_DEFAULT_STARTING = "scoreboard.Default.starting";
+    public static String SCOREBOARD_DEFAULT_PLAYING = "scoreboard.Default.playing";
     public static String SCOREBOARD_LOBBY = "scoreboard.lobby";
 
     /** Player interact related */

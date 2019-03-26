@@ -135,7 +135,7 @@ public class SQLite implements Database {
     @Override
     public int[] getLevelData(UUID player) {
         if (!isConnected()) init();
-        int[] r = new int[] {0, 0};
+        int[] r = new int[] {1, 0};
         try {
             ResultSet rs = connection.prepareStatement("SELECT level, xp FROM player_levels WHERE uuid = '"+player.toString()+"';").executeQuery();
             if (rs.next()){

@@ -134,11 +134,7 @@ public class JoinLeaveTeleport implements Listener {
 
         if (Main.getServerType() == ServerType.SHARED) {
             if (Main.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
-                Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
-                    if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
-                        Misc.giveLobbySb(e.getPlayer());
-                    }
-                }, 20L);
+                Misc.giveLobbySb(e.getPlayer());
             }
             return;
         }
@@ -147,8 +143,9 @@ public class JoinLeaveTeleport implements Listener {
             Arena.getArenas().get(0).addPlayer(p, false);
             return;
         } else {
-            p.teleport(config.getConfigLoc("lobbyLoc"));
-            Misc.giveLobbySb(p);
+            if (config.getConfigLoc("lobbyLoc") != null)
+            p.teleport(config.getConfigLoc("lobbyLoc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
+            Misc.giveLobbySb(e.getPlayer());
             Arena.sendLobbyCommandItems(p);
         }
         p.setHealthScale(20);
@@ -219,11 +216,7 @@ public class JoinLeaveTeleport implements Listener {
                             if (sBoard.getArena() == null) sBoard.remove();
                     }
                 } else {
-                    Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
-                        if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
-                            Misc.giveLobbySb(e.getPlayer());
-                        }
-                    }, 20L);
+                    Misc.giveLobbySb(e.getPlayer());
                 }
             }
         }

@@ -248,10 +248,10 @@ public class Romanian {
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent}", "&a{time}", "", "{TeamRedColor}&lR&f {TeamRedName}&f: {TeamRedStatus}",
                 "{TeamBlueColor}&lA&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}&lV&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}&lG &f{TeamYellowName}&f: {TeamYellowStatus}", "",
                 "&fUcideri: &a{kills}", "&fUcideri Finale: &a{finalKills}", "&fPaturi distruse: &a{beds}", "", "&ehttp://{server_ip}"));
-        yml.addDefault("scoreboard.SoloPlaying", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent}", "&a{time}", "", "{TeamRedColor}&lR&f {TeamRedName}&f: {TeamRedStatus}",
+        yml.addDefault("scoreboard.Solo.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent}", "&a{time}", "", "{TeamRedColor}&lR&f {TeamRedName}&f: {TeamRedStatus}",
                 "{TeamBlueColor}&lA&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}&lV&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}&lG &f{TeamYellowName}&f: {TeamYellowStatus}",
                 "{TeamAquaColor}&lA&f {TeamAquaName}&f: {TeamAquaStatus}", "{TeamWhiteColor}&lA&f {TeamWhiteName}&f: {TeamWhiteStatus}", "{TeamPinkColor}&lR&f {TeamPinkName}&f: {TeamPinkStatus}", "{TeamGrayColor}&lG&f {TeamGrayName}&f: {TeamGrayStatus}", "", "&ehttp://{server_ip}"));
-        yml.addDefault("scoreboard.DoublesPlaying", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent}", "&a{time}", "", "{TeamRedColor}&lR&f {TeamRedName}&f: {TeamRedStatus}",
+        yml.addDefault("scoreboard.Doubles.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent}", "&a{time}", "", "{TeamRedColor}&lR&f {TeamRedName}&f: {TeamRedStatus}",
                 "{TeamBlueColor}&lA&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}&lV&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}&lG &f{TeamYellowName}&f: {TeamYellowStatus}",
                 "{TeamAquaColor}&lA&f {TeamAquaName}&f: {TeamAquaStatus}", "{TeamWhiteColor}&lA&f {TeamWhiteName}&f: {TeamWhiteStatus}", "{TeamPinkColor}&lR&f {TeamPinkName}&f: {TeamPinkStatus}", "{TeamGrayColor}&lG&f {TeamGrayName}&f: {TeamGrayStatus}", "", "&ehttp://{server_ip}"));
         yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&7{date}", "&fNume: &a{player}", "", "&fVictorii: &a{wins}", "&fPierderi: &a{losses}", "&fUcideri: &a{kills}", "&fDecese: &a{deaths}"

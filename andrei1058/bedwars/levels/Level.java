@@ -10,10 +10,10 @@ public interface Level {
     String getLevel(Player p);
 
     /**
-     * Get current progress in numbers.
-     * Ex: 12/15k
+     * Get required xp as string.
+     * 2000 - 2k
      */
-    String getProgress(Player p);
+    String getRequiredXpFormatted(Player p);
 
     /**
      * Get current progress bar.
@@ -23,5 +23,15 @@ public interface Level {
     /**
      * Get current xp.
      */
-    int getXp(Player p);
+    int getCurrentXp(Player p);
+
+    /**
+     * Get current xp formatted.
+     */
+    String getCurrentXpFormatted(Player p);
+
+    /**
+     * Get required xp
+     */
+    int getRequiredXp(Player p);
 }

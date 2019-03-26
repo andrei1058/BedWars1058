@@ -152,7 +152,7 @@ public class GameStartingTask implements Runnable {
                 sb.addHealthIcon();
             }
 
-            getArena().checkStatus(GameState.playing);
+            getArena().changeStatus(GameState.playing);
             getArena().setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_II);
 
             //Enable diamond/ emerald generators

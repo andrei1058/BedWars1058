@@ -818,13 +818,13 @@ public class Main extends JavaPlugin {
         return level;
     }
 
-    public static void setLevelSupport(Level levelsManager){
-        if (levelsManager instanceof InternalLevel && !(level instanceof InternalLevel)){
-            if (LevelListeners.instance == null){
+    public static void setLevelSupport(Level levelsManager) {
+        if (levelsManager instanceof InternalLevel) {
+            if (LevelListeners.instance == null) {
                 Bukkit.getPluginManager().registerEvents(new LevelListeners(), Main.plugin);
             }
-        } else if (!(levelsManager instanceof InternalLevel) && level instanceof InternalLevel){
-            if (LevelListeners.instance != null){
+        } else {
+            if (LevelListeners.instance != null) {
                 PlayerJoinEvent.getHandlerList().unregister(LevelListeners.instance);
                 PlayerQuitEvent.getHandlerList().unregister(LevelListeners.instance);
                 LevelListeners.instance = null;

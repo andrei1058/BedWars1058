@@ -98,6 +98,10 @@ public class SBoard {
             String temp = strings.get(x - 1);
             temp = temp.replace("{generatorUpgrade}", "{nextEvent}")
                     .replace("{generatorTimer}", "{time}");
+            temp = temp.replace("{level}", Main.getLevelSupport().getLevel(p));
+            temp = temp.replace("{progress}", Main.getLevelSupport().getProgressBar(p));
+            temp = temp.replace("{currentXp}", Main.getLevelSupport().getCurrentXpFormatted(p));
+            temp = temp.replace("{requiredXp}", Main.getLevelSupport().getRequiredXpFormatted(p));
             temp = temp.replace("{server_ip}", Main.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP));
             for (String ph : placeholders) {
                 if (temp.contains(ph)) {

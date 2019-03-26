@@ -141,7 +141,7 @@ public class GamePlayingTask implements Runnable {
                 game_end_countdown--;
                 if (getGameEndCountdown() == 0) {
                     getArena().checkWinner();
-                    getArena().checkStatus(GameState.restarting);
+                    getArena().changeStatus(GameState.restarting);
                 }
                 break;
         }

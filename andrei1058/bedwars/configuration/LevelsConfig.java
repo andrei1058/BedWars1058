@@ -38,8 +38,8 @@ public class LevelsConfig extends ConfigManager {
         levels.getYml().addDefault("xp-rewards.per-teammate", 5);
         levels.getYml().addDefault("xp-rewards.game-win", 100);
 
-        levels.getYml().addDefault("progress-bar.symbol", "▍");
-        levels.getYml().addDefault("progress-bar.unlocked-color", "&a");
+        levels.getYml().addDefault("progress-bar.symbol", "■");
+        levels.getYml().addDefault("progress-bar.unlocked-color", "&b");
         levels.getYml().addDefault("progress-bar.locked-color", "&7");
         levels.getYml().addDefault("progress-bar.format", "&8[{progress}&8]");
 

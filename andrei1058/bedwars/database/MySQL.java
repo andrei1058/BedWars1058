@@ -222,7 +222,7 @@ public class MySQL implements Database {
     @Override
     public int[] getLevelData(UUID player) {
         if (!isConnected()) connect();
-        int[] r = new int[] {0, 0};
+        int[] r = new int[] {1, 0};
         try {
             ResultSet rs = connection.prepareStatement("SELECT level, xp FROM player_levels WHERE uuid = '"+player.toString()+"';").executeQuery();
             if (rs.next()){
@@ -249,8 +249,8 @@ public class MySQL implements Database {
                 ps.executeUpdate();
             } else {
                 PreparedStatement ps = connection.prepareStatement("UPDATE player_levels SET level=?, xp=? WHERE uuid = '"+player.toString()+"';");
-                ps.setInt(3, level);
-                ps.setInt(4, xp);
+                ps.setInt(1, level);
+                ps.setInt(2, xp);
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
