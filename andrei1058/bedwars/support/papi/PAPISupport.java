@@ -109,6 +109,24 @@ public class PAPISupport extends PlaceholderExpansion {
                     }
                 }
                 break;
+            case "player_level":
+                replay = Main.getLevelSupport().getLevel(p);
+                break;
+            case "player_progress":
+                replay = Main.getLevelSupport().getProgressBar(p);
+                break;
+            case "player_xp_formatted":
+                replay = Main.getLevelSupport().getCurrentXpFormatted(p);
+                break;
+            case "player_xp":
+                replay = String.valueOf(Main.getLevelSupport().getCurrentXp(p));
+                break;
+            case "player_rerq_xp_formatted":
+                replay = Main.getLevelSupport().getRequiredXpFormatted(p);
+                break;
+            case "player_rerq_xp":
+                replay = String.valueOf(Main.getLevelSupport().getRequiredXp(p));
+                break;
         }
         return replay;
     }

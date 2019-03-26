@@ -1,9 +1,11 @@
 package com.andrei1058.bedwars.levels.internal;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.events.PlayerXpGainEvent;
 import com.andrei1058.bedwars.configuration.LevelsConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -35,59 +37,105 @@ public class PlayerLevel {
         this.currentXp = currentXp;
         updateProgressBar();
         levelByPlayer.put(player, this);
-        requiredXp = nextLevelCost>1000 ? nextLevelCost%1000 == 0 ? nextLevelCost/1000 + "k" : (double)nextLevelCost/1000 + "k" : String.valueOf(nextLevelCost);
-        formattedCurrentXp = currentXp>1000 ? currentXp%1000 == 0 ? currentXp/1000 + "k" : (double)currentXp/1000 + "k" : String.valueOf(currentXp);
+        requiredXp = nextLevelCost > 1000 ? nextLevelCost % 1000 == 0 ? nextLevelCost / 1000 + "k" : (double) nextLevelCost / 1000 + "k" : String.valueOf(nextLevelCost);
+        formattedCurrentXp = currentXp > 1000 ? currentXp % 1000 == 0 ? currentXp / 1000 + "k" : (double) currentXp / 1000 + "k" : String.valueOf(currentXp);
     }
 
+    /**
+     * Update the player progress bar.
+     */
     private void updateProgressBar() {
         int locked = (nextLevelCost - currentXp) % nextLevelCost;
         int unlocked = 10 - locked;
         progressBar = ChatColor.translateAlternateColorCodes('&', LevelsConfig.levels.getString("progress-bar.format").replace("{progress}",
                 LevelsConfig.levels.getString("progress-bar.locked-color") + String.valueOf(new char[unlocked]).replace("\0", LevelsConfig.levels.getString("progress-bar.symbol")))
                 + LevelsConfig.levels.getString("progress-bar.unlocked-color") + String.valueOf(new char[locked]).replace("\0", LevelsConfig.levels.getString("progress-bar.symbol")));
-        requiredXp = nextLevelCost>1000 ? nextLevelCost%1000 == 0 ? nextLevelCost/1000 + "k" : (double)nextLevelCost/1000 + "k" : String.valueOf(nextLevelCost);
-        formattedCurrentXp = currentXp>1000 ? currentXp%1000 == 0 ? currentXp/1000 + "k" : (double)currentXp/1000 + "k" : String.valueOf(currentXp);
+        requiredXp = nextLevelCost > 1000 ? nextLevelCost % 1000 == 0 ? nextLevelCost / 1000 + "k" : (double) nextLevelCost / 1000 + "k" : String.valueOf(nextLevelCost);
+        formattedCurrentXp = currentXp > 1000 ? currentXp % 1000 == 0 ? currentXp / 1000 + "k" : (double) currentXp / 1000 + "k" : String.valueOf(currentXp);
     }
 
+    /**
+     * Get player current level.
+     */
     public int getLevel() {
         return level;
     }
 
+    /**
+     * Get the amount of xp required to level up.
+     */
     public int getNextLevelCost() {
         return nextLevelCost;
     }
 
+    /**
+     * Get PlayerLevel by player.
+     */
+    @Nullable
     public static PlayerLevel getLevelByPlayer(UUID player) {
         return levelByPlayer.getOrDefault(player, null);
     }
 
+    /**
+     * Get player uuid.
+     */
     public UUID getUuid() {
         return uuid;
     }
 
+    /**
+     * Get player current level display name.
+     */
     public String getLevelName() {
         return levelName;
     }
 
+    /**
+     * Get player xp.
+     */
     public int getCurrentXp() {
         return currentXp;
     }
 
+    /**
+     * Get progress bar for player.
+     */
     public String getProgress() {
         return progressBar;
     }
 
-    public String getFormattedRequiredXp(){
+    /**
+     * Get target xp already formatted.
+     * Like: 2000 is 2k
+     */
+    public String getFormattedRequiredXp() {
         return requiredXp;
     }
 
-    public void setCurrentXp(int currentXp) {
+    /**
+     * Add xp to player with source.
+     */
+    public void addXp(int xp, PlayerXpGainEvent.XpSource source) {
+        this.currentXp += xp;
+        upgradeLevel();
+        updateProgressBar();
+        Bukkit.getPluginManager().callEvent(new PlayerXpGainEvent(uuid, xp, source));
+    }
+
+    /**
+     * Set player xp.
+     */
+    public void setXp(int currentXp) {
         this.currentXp = currentXp;
         upgradeLevel();
         updateProgressBar();
     }
 
-    public String getFormattedCurrentXp(){
+    /**
+     * Get player xp already formatted.
+     * Like: 1000 is 1k
+     */
+    public String getFormattedCurrentXp() {
         return formattedCurrentXp;
     }
 
@@ -102,8 +150,8 @@ public class PlayerLevel {
             currentXp = currentXp - nextLevelCost;
             this.levelName = ChatColor.translateAlternateColorCodes('&', LevelsConfig.levels.getYml().get("levels." + level + ".name") == null ?
                     LevelsConfig.levels.getYml().getString("levels.others.name") : LevelsConfig.levels.getYml().getString("levels." + level + ".name")).replace("{number}", String.valueOf(level));
-            requiredXp = nextLevelCost>1000 ? nextLevelCost%1000 == 0 ? nextLevelCost/1000 + "k" : (double)nextLevelCost/1000 + "k" : String.valueOf(nextLevelCost);
-            formattedCurrentXp = currentXp>1000 ? currentXp%1000 == 0 ? currentXp/1000 + "k" : (double)currentXp/1000 + "k" : String.valueOf(currentXp);
+            requiredXp = nextLevelCost > 1000 ? nextLevelCost % 1000 == 0 ? nextLevelCost / 1000 + "k" : (double) nextLevelCost / 1000 + "k" : String.valueOf(nextLevelCost);
+            formattedCurrentXp = currentXp > 1000 ? currentXp % 1000 == 0 ? currentXp / 1000 + "k" : (double) currentXp / 1000 + "k" : String.valueOf(currentXp);
         }
     }
 

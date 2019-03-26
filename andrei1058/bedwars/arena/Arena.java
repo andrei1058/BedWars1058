@@ -539,30 +539,6 @@ public class Arena implements Comparable {
                 }
             }
         }
-        /*if (status == GameState.playing) {
-
-            ReJoin re = ReJoin.getPlayer(p);
-
-            int deaths = re == null ? getPlayerDeaths(p, false) : getPlayerDeaths(p, false) - re.getDeaths();
-            int final_deaths = re == null ? getPlayerDeaths(p, true) : getPlayerDeaths(p, true) - re.getFinalDeaths();
-            int beds = re == null ? getPlayerBedsDestroyed(p) : getPlayerBedsDestroyed(p) - re.getBeds();
-            int kills = re == null ? getPlayerKills(p, false) : getPlayerKills(p, false) - re.getKills();
-            int final_kills = re == null ? getPlayerKills(p, true) : getPlayerKills(p, true) - re.getFinalKills();
-
-            database.saveStats(p, new Timestamp(System.currentTimeMillis()), 0, kills, final_kills, ReJoin.exists(p) ? 0 : 1, deaths, final_deaths, beds, ReJoin.exists(p) ? 0 : 1);
-
-        } else if (status == GameState.restarting) {
-
-            ReJoin re = ReJoin.getPlayer(p);
-
-            int deaths = re == null ? getPlayerDeaths(p, false) : getPlayerDeaths(p, false) - re.getDeaths();
-            int final_deaths = re == null ? getPlayerDeaths(p, true) : getPlayerDeaths(p, true) - re.getFinalDeaths();
-            int beds = re == null ? getPlayerBedsDestroyed(p) : getPlayerBedsDestroyed(p) - re.getBeds();
-            int kills = re == null ? getPlayerKills(p, false) : getPlayerKills(p, false) - re.getKills();
-            int final_kills = re == null ? getPlayerKills(p, true) : getPlayerKills(p, true) - re.getFinalKills();
-
-            database.saveStats(p, new Timestamp(System.currentTimeMillis()), 1, kills, final_kills, ReJoin.exists(p) ? -1 : 0, deaths, final_deaths, beds, ReJoin.exists(p) ? 0 : 1);
-        }*/
         boolean teamuri = false;
         for (Player on : getPlayers()) {
             if (getParty().hasParty(on)) {
@@ -696,35 +672,6 @@ public class Arena implements Comparable {
         for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
             if (sb.getP() == p) {
                 sb.remove();
-            }
-        }
-
-        for (BedWarsTeam bwt : getTeams()) {
-            if (bwt.getMembersCache().contains(p)) {
-                /*if (status == GameState.playing) {
-                    ReJoin re = ReJoin.getPlayer(p);
-
-                    int deaths = re == null ? getPlayerDeaths(p, false) : getPlayerDeaths(p, false) - re.getDeaths();
-                    int final_deaths = re == null ? getPlayerDeaths(p, true) : getPlayerDeaths(p, true) - re.getFinalDeaths();
-                    int beds = re == null ? getPlayerBedsDestroyed(p) : getPlayerBedsDestroyed(p) - re.getBeds();
-                    int kills = re == null ? getPlayerKills(p, false) : getPlayerKills(p, false) - re.getKills();
-                    int final_kills = re == null ? getPlayerKills(p, true) : getPlayerKills(p, true) - re.getFinalKills();
-
-                    database.saveStats(p, new Timestamp(System.currentTimeMillis()), 0, kills, final_kills, ReJoin.exists(p) ? 0 : 1, deaths, final_deaths, beds, ReJoin.exists(p) ? 0 : 1);
-
-                } else if (status == GameState.restarting) {
-
-                    ReJoin re = ReJoin.getPlayer(p);
-
-                    int deaths = re == null ? getPlayerDeaths(p, false) : getPlayerDeaths(p, false) - re.getDeaths();
-                    int final_deaths = re == null ? getPlayerDeaths(p, true) : getPlayerDeaths(p, true) - re.getFinalDeaths();
-                    int beds = re == null ? getPlayerBedsDestroyed(p) : getPlayerBedsDestroyed(p) - re.getBeds();
-                    int kills = re == null ? getPlayerKills(p, false) : getPlayerKills(p, false) - re.getKills();
-                    int final_kills = re == null ? getPlayerKills(p, true) : getPlayerKills(p, true) - re.getFinalKills();
-
-                    database.saveStats(p, new Timestamp(System.currentTimeMillis()), 0, kills, final_kills, ReJoin.exists(p) ? 0 : 1, deaths, final_deaths, beds, ReJoin.exists(p) ? 0 : 1);
-                }*/
-                break;
             }
         }
 
@@ -1181,14 +1128,23 @@ public class Arena implements Comparable {
         return p.hasPermission(mainCmd + ".*") || p.hasPermission(mainCmd + ".vip");
     }
 
+    /**
+     * Check if a player is playing.
+     */
     public boolean isPlayer(Player p) {
         return players.contains(p);
     }
 
+    /**
+     * Check if a player is spectating.
+     */
     public boolean isSpectator(Player p) {
         return spectators.contains(p);
     }
 
+    /**
+     * Add a join sign for the arena.
+     */
     public void addSign(Location loc) {
         if (loc.getBlock().getType() == Material.SIGN || loc.getBlock().getType() == Material.WALL_SIGN) {
             signs.add(loc.getBlock().getState());
@@ -1197,10 +1153,17 @@ public class Arena implements Comparable {
         }
     }
 
+    /**
+     * Get game stage.
+     */
     public GameState getStatus() {
         return status;
     }
 
+
+    /**
+     * Refresh signs.
+     */
     public void refreshSigns() {
         for (BlockState b : getSigns()) {
             Sign s = (Sign) b;
@@ -1213,10 +1176,16 @@ public class Arena implements Comparable {
         }
     }
 
+    /**
+     * Get a list of spectators for this arena.
+     */
     public List<Player> getSpectators() {
         return spectators;
     }
 
+    /**
+     * Add a kill point to the game stats.
+     */
     public void addPlayerKill(Player p, boolean finalKill, Player victim) {
         if (p == null) return;
         if (playerKills.containsKey(p)) {
@@ -1234,6 +1203,9 @@ public class Arena implements Comparable {
         }
     }
 
+    /**
+     * Add a destroyed bed poin to the player temp stats.
+     */
     public void addPlayerBedDestroyed(Player p) {
         if (playerBedsDestroyed.containsKey(p)) {
             playerBedsDestroyed.replace(p, playerBedsDestroyed.get(p) + 1);
@@ -1362,10 +1334,20 @@ public class Arena implements Comparable {
         }
     }
 
+    /**
+     * Check if a player is in the arena.
+     *
+     * @return true if is playing or spectating.
+     */
     public static boolean isInArena(Player p) {
         return arenaByPlayer.containsKey(p);
     }
 
+    /**
+     * Get team by player.
+     * Make sure the player is in this arena first.
+     */
+    @Nullable
     public BedWarsTeam getTeam(Player p) {
         for (BedWarsTeam t : getTeams()) {
             if (t.isMember(p)) {
@@ -1375,6 +1357,12 @@ public class Arena implements Comparable {
         return null;
     }
 
+    /**
+     * Get arena by player name.
+     * Used to get the team for a player that has left the arena.
+     * Make sure the player is in this arena first.
+     */
+    @Nullable
     public BedWarsTeam getPlayerTeam(String playerCache) {
         for (BedWarsTeam t : getTeams()) {
             for (Player p : t.getMembersCache()) {
@@ -1384,6 +1372,10 @@ public class Arena implements Comparable {
         return null;
     }
 
+    /**
+     * Check winner. You can always do that.
+     * It will manage the arena restart and the needed stuff.
+     */
     public void checkWinner() {
         if (getStatus() != GameState.restarting) {
             int max = getTeams().size(), eliminated = 0;
@@ -1474,6 +1466,9 @@ public class Arena implements Comparable {
         }
     }
 
+    /**
+     * Add a kill to the player temp stats.
+     */
     public void addPlayerDeath(Player p) {
         if (playerDeaths.containsKey(p)) {
             playerDeaths.replace(p, playerDeaths.get(p) + 1);
@@ -1482,6 +1477,10 @@ public class Arena implements Comparable {
         }
     }
 
+
+    /**
+     * Set next event for the arena.
+     */
     public void setNextEvent(NextEvent nextEvent) {
         for (Player p : getPlayers()) {
             p.getWorld().playSound(p.getLocation(), nms.bedDestroy(), 1f, 1f);
@@ -1492,6 +1491,9 @@ public class Arena implements Comparable {
         this.nextEvent = nextEvent;
     }
 
+    /**
+     * Refresh Next Event of the arena.
+     */
     public void updateNextEvent() {
 
         debug("---");
@@ -1542,10 +1544,16 @@ public class Arena implements Comparable {
         debug(nextEvent.toString());
     }
 
+    /**
+     * Get arena by players list.
+     */
     public static HashMap<Player, Arena> getArenaByPlayer() {
         return arenaByPlayer;
     }
 
+    /**
+     * Get next event.
+     */
     public NextEvent getNextEvent() {
         return nextEvent;
     }
@@ -1608,41 +1616,49 @@ public class Arena implements Comparable {
         return showTime;
     }
 
+    /**
+     * Get instance of the starting task.
+     */
+    @Nullable
     public GameStartingTask getStartingTask() {
         return startingTask;
     }
 
+    /**
+     * Get instance of the playing task.
+     */
+    @Nullable
     public GamePlayingTask getPlayingTask() {
         return playingTask;
     }
 
+    /**
+     * Get instance of the game restarting task.
+     */
+    @Nullable
     public GameRestartingTask getRestartingTask() {
         return restartingTask;
     }
 
+    /**
+     * Get Ore Generators.
+     */
     public List<OreGenerator> getOreGenerators() {
         return oreGenerators;
     }
 
+    /**
+     * Set the amount of games to be played before restarting the server.
+     */
     public static void setGamesBeforeRestart(int gamesBeforeRestart) {
         Arena.gamesBeforeRestart = gamesBeforeRestart;
     }
 
+    /**
+     * Get games amount (to be layed) before restarting the server.
+     */
     public static int getGamesBeforeRestart() {
         return gamesBeforeRestart;
-    }
-
-    public void setWorld(World world) {
-        this.world = world;
-        for (BedWarsTeam t : getTeams()) {
-            t.getBed().setWorld(world);
-            t.getSpawn().setWorld(world);
-            t.getSpawn().setWorld(world);
-            t.getTeamUpgrades().setWorld(world);
-        }
-        for (OreGenerator og : getOreGenerators()) {
-            og.getLocation().setWorld(world);
-        }
     }
 
     /**
@@ -1650,42 +1666,12 @@ public class Arena implements Comparable {
      * Check if is the party owner first.
      */
     public static boolean joinRandomArena(Player p) {
-        List<Arena> arenas = new ArrayList<>(Arena.getArenas()).stream().filter(a -> a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting).sorted((a1, a2) -> {
-            if (a1.getStatus() == GameState.starting && a2.getStatus() == GameState.starting) {
-                if (a1.getPlayers().size() > a2.getPlayers().size()) {
-                    return -1;
-                }
-                if (a1.getPlayers().size() == a2.getPlayers().size()) {
-                    return 0;
-                } else return 1;
-            } else if (a1.getStatus() == GameState.starting && a2.getStatus() != GameState.starting) {
-                return -1;
-            } else if (a2.getStatus() == GameState.starting && a1.getStatus() != GameState.starting) {
-                return 1;
-            } else if (a1.getStatus() == GameState.waiting && a2.getStatus() == GameState.waiting) {
-                if (a1.getPlayers().size() > a2.getPlayers().size()) {
-                    return -1;
-                }
-                if (a1.getPlayers().size() == a2.getPlayers().size()) {
-                    return 0;
-                } else return 1;
-            } else if (a1.getStatus() == GameState.waiting && a2.getStatus() != GameState.waiting) {
-                return -1;
-            } else if (a2.getStatus() == GameState.waiting && a1.getStatus() != GameState.waiting) {
-                return 1;
-            } else if (a1.getStatus() == GameState.playing && a2.getStatus() == GameState.playing) {
-                return 0;
-            } else if (a1.getStatus() == GameState.playing && a2.getStatus() != GameState.playing) {
-                return -1;
-            } else return 1;
-        }).collect(Collectors.toList());
-
+        List<Arena> arenas = new ArrayList<>(Arena.getArenas());
+        Collections.sort(arenas);
         int amount = getParty().hasParty(p) ? getParty().getMembers(p).size() : 1;
 
         for (Arena a : arenas) {
-
             if (a.getPlayers().size() == a.getMaxPlayers()) continue;
-
             if (a.getMaxPlayers() - a.getPlayers().size() >= amount) {
                 a.addPlayer(p, false);
                 break;
@@ -1703,12 +1689,9 @@ public class Arena implements Comparable {
         Collections.sort(arenaList);
 
         int amount = getParty().hasParty(p) ? getParty().getMembers(p).size() : 1;
-
         for (Arena a : arenaList) {
             if (!a.getGroup().equals(group)) continue;
-
             if (a.getPlayers().size() == a.getMaxPlayers()) continue;
-
             if (a.getMaxPlayers() - a.getPlayers().size() >= amount) {
                 a.addPlayer(p, false);
                 break;
@@ -1718,12 +1701,16 @@ public class Arena implements Comparable {
         return true;
     }
 
+    /**
+     * Get the list of next events to come.
+     * Not ordered.
+     */
     public List<String> getNextEvents() {
         return new ArrayList<>(nextEvents);
     }
 
     /**
-     * Get player deaths
+     * Get player deaths.
      */
     public int getPlayerDeaths(Player p, boolean finalDeaths) {
         if (finalDeaths) return playerFinalKillDeaths.getOrDefault(p, 0);
@@ -1762,6 +1749,9 @@ public class Arena implements Comparable {
         } else return 1;
     }
 
+    /**
+     * Get map resetter manager.
+     */
     public MapManager getMapManager() {
         return mapManager;
     }
