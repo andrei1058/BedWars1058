@@ -39,5 +39,18 @@ public interface Database {
     /**
      * Check if has quick buy.
      */
-    boolean hasQuickBuy(UUID uuid);
+    boolean hasQuickBuy(UUID player);
+
+    /**
+     * Get a player level and xp.
+     * <p>
+     * args 0 is level.
+     * args 1 is xp.
+     */
+    int[] getLevelData(UUID player);
+
+    /**
+     * Set a player level data.
+     */
+    void setLevelData(UUID player, int level, int xp);
 }

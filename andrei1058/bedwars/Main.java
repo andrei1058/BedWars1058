@@ -12,8 +12,11 @@ import com.andrei1058.bedwars.commands.party.PartyCommand;
 import com.andrei1058.bedwars.commands.rejoin.RejoinCommand;
 import com.andrei1058.bedwars.commands.shout.ShoutCommand;
 import com.andrei1058.bedwars.database.Database;
-import com.andrei1058.bedwars.database.None;
+import com.andrei1058.bedwars.database.SQLite;
 import com.andrei1058.bedwars.language.Language;
+import com.andrei1058.bedwars.levels.Level;
+import com.andrei1058.bedwars.levels.internal.InternalLevel;
+import com.andrei1058.bedwars.levels.internal.LevelListeners;
 import com.andrei1058.bedwars.listeners.EntityDropPickListener;
 import com.andrei1058.bedwars.listeners.PlayerDropPickListener;
 import com.andrei1058.bedwars.arena.spectator.SpectatorListeners;
@@ -42,8 +45,6 @@ import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.support.lang.Internal;
 import com.andrei1058.bedwars.support.lang.Lang;
 import com.andrei1058.bedwars.support.leaderheads.LeaderHeadsSupport;
-import com.andrei1058.bedwars.support.levels.Level;
-import com.andrei1058.bedwars.support.levels.NoLevel;
 import com.andrei1058.bedwars.support.papi.PAPISupport;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.support.party.Party;
@@ -55,6 +56,8 @@ import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -80,7 +83,7 @@ public class Main extends JavaPlugin {
     private static Lang langSupport;
     private static Party party = null;
     private static Chat chat;
-    private static Level level;
+    protected static Level level;
     private static Economy economy;
     private static String version = Bukkit.getServer().getClass().getName().split("\\.")[3];
     private static String lobbyWorld = "";
@@ -180,8 +183,8 @@ public class Main extends JavaPlugin {
     public void onEnable() {
 
         // Load FastAsyncWorldEdit support
-        if (Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit") != null){
-            if (Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit").isEnabled()){
+        if (Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit") != null) {
+            if (Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit").isEnabled()) {
                 resetAdaptor = ResetAdaptor.FAWE;
                 this.getLogger().info("Hook into FastAsyncWorldEdit support!");
             }
@@ -298,7 +301,7 @@ public class Main extends JavaPlugin {
         }
 
         /* Levels support */
-        level = new NoLevel();
+        setLevelSupport(new InternalLevel());
 
         /* Language support */
         try {
@@ -334,7 +337,7 @@ public class Main extends JavaPlugin {
             Long time = System.currentTimeMillis();
             if (!mySQL.connect()) {
                 this.getLogger().severe("Could not connect to database! Please verify your credentials and make sure that the server IP is whitelisted in MySQL.");
-                remoteDatabase = new None();
+                remoteDatabase = new SQLite();
             } else {
                 remoteDatabase = mySQL;
             }
@@ -344,7 +347,7 @@ public class Main extends JavaPlugin {
             }
             remoteDatabase.init();
         } else {
-            remoteDatabase = new None();
+            remoteDatabase = new SQLite();
         }
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
@@ -422,6 +425,8 @@ public class Main extends JavaPlugin {
             l.setupUnSetCategories();
             Language.addDefaultMessagesCommandItems(l);
         }
+
+        LevelsConfig.init();
     }
 
     public void onDisable() {
@@ -806,8 +811,26 @@ public class Main extends JavaPlugin {
         return chat;
     }
 
+    /**
+     * Get current levels manager.
+     */
     public static Level getLevelSupport() {
         return level;
+    }
+
+    public static void setLevelSupport(Level levelsManager){
+        if (levelsManager instanceof InternalLevel && !(level instanceof InternalLevel)){
+            if (LevelListeners.instance == null){
+                Bukkit.getPluginManager().registerEvents(new LevelListeners(), Main.plugin);
+            }
+        } else if (!(levelsManager instanceof InternalLevel) && level instanceof InternalLevel){
+            if (LevelListeners.instance != null){
+                PlayerJoinEvent.getHandlerList().unregister(LevelListeners.instance);
+                PlayerQuitEvent.getHandlerList().unregister(LevelListeners.instance);
+                LevelListeners.instance = null;
+            }
+        }
+        level = levelsManager;
     }
 
     public static Economy getEconomy() {

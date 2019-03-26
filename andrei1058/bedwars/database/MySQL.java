@@ -93,7 +93,12 @@ public class MySQL implements Database {
             e.printStackTrace();
         }
 
-
+        try {
+            connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS player_levels (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, uuid VARCHAR(200), " +
+                    "level INT(200), xp INT(200));");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -212,5 +217,44 @@ public class MySQL implements Database {
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public int[] getLevelData(UUID player) {
+        if (!isConnected()) connect();
+        int[] r = new int[] {0, 0};
+        try {
+            ResultSet rs = connection.prepareStatement("SELECT level, xp FROM player_levels WHERE uuid = '"+player.toString()+"';").executeQuery();
+            if (rs.next()){
+                r[0] = rs.getInt("level");
+                r[1] = rs.getInt("xp");
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return r;
+    }
+
+    @Override
+    public void setLevelData(UUID player, int level, int xp) {
+        if (!isConnected()) connect();
+        try {
+            ResultSet rs = connection.prepareStatement("SELECT id from player_levels WHERE uuid = '"+player.toString()+"';").executeQuery();
+            if (rs.next()){
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO player_levels VALUES (?, ?, ?, ?);");
+                ps.setInt(1, 0);
+                ps.setString(2, player.toString());
+                ps.setInt(3, level);
+                ps.setInt(4, xp);
+                ps.executeUpdate();
+            } else {
+                PreparedStatement ps = connection.prepareStatement("UPDATE player_levels SET level=?, xp=? WHERE uuid = '"+player.toString()+"';");
+                ps.setInt(3, level);
+                ps.setInt(4, xp);
+                ps.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

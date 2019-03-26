@@ -106,6 +106,9 @@ public class Arena implements Comparable {
     /* Used to reset the map. */
     private MapManager mapManager;
 
+    /* Keep trace of arena start time. */
+    private long arenaStart = 0L;
+
     /**
      * Load an arena.
      * This will check if it was set up right.
@@ -240,7 +243,7 @@ public class Arena implements Comparable {
         //Call event
         Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.ArenaEnableEvent(this));
 
-        checkStatus(GameState.waiting);
+        changeStatus(GameState.waiting);
 
         //
         for (NextEvent ne : NextEvent.values()) {
@@ -333,9 +336,9 @@ public class Arena implements Comparable {
                     }
                 }
                 if (minPlayers <= players.size() && teams > 0 && players.size() != teammates / teams) {
-                    checkStatus(GameState.starting);
+                    changeStatus(GameState.starting);
                 } else if (players.size() >= minPlayers && teams == 0) {
-                    checkStatus(GameState.starting);
+                    changeStatus(GameState.starting);
                 }
             }
 
@@ -567,7 +570,7 @@ public class Arena implements Comparable {
             }
         }
         if (status == GameState.starting && (maxInTeam > players.size() && teamuri || players.size() < minPlayers && !teamuri)) {
-            checkStatus(GameState.waiting);
+            changeStatus(GameState.waiting);
             for (Player on : players) {
                 on.sendMessage(getMsg(on, Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS));
             }
@@ -582,9 +585,9 @@ public class Arena implements Comparable {
             }
             if (alive_teams == 1) {
                 checkWinner();
-                Bukkit.getScheduler().runTaskLater(Main.plugin, () -> checkStatus(GameState.restarting), 10L);
+                Bukkit.getScheduler().runTaskLater(Main.plugin, () -> changeStatus(GameState.restarting), 10L);
             } else if (alive_teams == 0) {
-                Bukkit.getScheduler().runTaskLater(Main.plugin, () -> checkStatus(GameState.restarting), 10L);
+                Bukkit.getScheduler().runTaskLater(Main.plugin, () -> changeStatus(GameState.restarting), 10L);
             } else {
                 //ReJoin feature
                 new ReJoin(p, this, getPlayerTeam(p.getName()), cacheList);
@@ -911,6 +914,7 @@ public class Arena implements Comparable {
                 rjt.destroy();
             }
         }
+        arenaStart = 0L;
         mapManager.unloadWorld();
     }
 
@@ -1118,7 +1122,7 @@ public class Arena implements Comparable {
     /**
      * Change game status starting tasks.
      */
-    public void checkStatus(GameState status) {
+    public void changeStatus(GameState status) {
         this.status = status;
         Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.GameStateChangeEvent(this, status));
         refreshSigns();
@@ -1158,6 +1162,7 @@ public class Arena implements Comparable {
             }
         } else if (status == GameState.playing) {
             playingTask = new GamePlayingTask(this);
+            arenaStart = System.currentTimeMillis();
             for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
                 if (sb.getArena() == this) {
                     sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + "Playing", Messages.SCOREBOARD_DEFAULT_PLAYING));
@@ -1439,7 +1444,7 @@ public class Arena implements Comparable {
                         }
                     }
                 }
-                checkStatus(GameState.restarting);
+                changeStatus(GameState.restarting);
 
                 //Game end event
                 List<UUID> winners = new ArrayList<>(), losers = new ArrayList<>(), aliveWinners = new ArrayList<>();
@@ -1464,7 +1469,7 @@ public class Arena implements Comparable {
 
             }
             if (players.size() == 0 && getStatus() != GameState.restarting) {
-                checkStatus(GameState.restarting);
+                changeStatus(GameState.restarting);
             }
         }
     }

@@ -6,6 +6,7 @@ import com.andrei1058.bedwars.api.events.PlayerAfkEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.language.Language;
+import com.andrei1058.bedwars.levels.Level;
 import com.andrei1058.bedwars.stats.StatsManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
