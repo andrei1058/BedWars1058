@@ -231,8 +231,10 @@ public class Main extends JavaPlugin {
 
         /* Remove entities from lobby */
         if (!config.getLobbyWorldName().isEmpty()) {
-            Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getWorld(config.getLobbyWorldName())
-                    .getEntities().stream().filter(e -> e instanceof Monster).forEach(Entity::remove), 20L);
+            if (Bukkit.getWorld(config.getLobbyWorldName()) != null) {
+                Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getWorld(config.getLobbyWorldName())
+                        .getEntities().stream().filter(e -> e instanceof Monster).forEach(Entity::remove), 20L);
+            }
         }
 
         /* Register events */
