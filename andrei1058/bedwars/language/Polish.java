@@ -234,6 +234,8 @@ public class Polish {
         yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&7{date}", "&fNick: &a{player}", "", "&fWygrane: &a{wins}", "&fPrzegrane: &a{losses}", "&fZabojstwa: &a{kills}", "&fSmierci: &a{deaths}"
                 , "&fOstateczne zabojstwa: &a{fKills}", "&fZniszczone lozka: &a{beds}", "", "&fOnline: &a{on}", "&e{server_ip}"));
         yml.addDefault("xp-reward-per-minute", "{prefix}&6+{xp} BedWars Experience Received (Play Time).");
+        yml.addDefault("xp-reward-game-win", "{prefix}&6+{xp} BedWars Experience Received (Game Win).");
+        yml.addDefault("xp-reward-per-teammate", "{prefix}&6+{xp} BedWars Experience Received (Team Support).");
 
         yml.addDefault(Messages.TEAM_ELIMINATED_CHAT, "\n&f&lWYELIMINOWANA DRUZYNA > {TeamColor}{TeamName} &cdruzyna &czostala wyeliminowana!\n");
         yml.addDefault(Messages.BED_HOLOGRAM_DEFEND, "&c&lChron swojego lozka!");

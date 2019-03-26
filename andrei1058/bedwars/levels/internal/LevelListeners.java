@@ -1,7 +1,12 @@
 package com.andrei1058.bedwars.levels.internal;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.events.GameEndEvent;
+import com.andrei1058.bedwars.api.events.PlayerXpGainEvent;
+import com.andrei1058.bedwars.configuration.LevelsConfig;
+import com.andrei1058.bedwars.language.Language;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -35,5 +40,27 @@ public class LevelListeners implements Listener {
             PlayerLevel pl = PlayerLevel.getLevelByPlayer(u);
             pl.destroy();
         });
+    }
+
+    @EventHandler
+    public void onGameEnd(GameEndEvent e){
+        for (UUID p : e.getWinners()){
+            if (PlayerLevel.getLevelByPlayer(p) != null){
+                Player p1 = Bukkit.getPlayer(p);
+                PlayerLevel.getLevelByPlayer(p).addXp(LevelsConfig.levels.getInt("xp-reward.game-win"), PlayerXpGainEvent.XpSource.GAME_WIN);
+                p1.sendMessage(Language.getMsg(p1, "xp-reward-game-win").replace("{xp}", String.valueOf(LevelsConfig.levels.getInt("xp-reward.game-win"))));
+                int tr = LevelsConfig.levels.getInt("xp-reward.per-teammate")*e.getArena().getTeam(p1.getName()).getMembersCache().size();
+                PlayerLevel.getLevelByPlayer(p).addXp(tr, PlayerXpGainEvent.XpSource.PER_TEAMMATE);
+                p1.sendMessage(Language.getMsg(p1, "xp-reward-per-teammate").replace("{xp}", String.valueOf(tr)));
+            }
+        }
+        for (UUID p : e.getLoosers()){
+            if (PlayerLevel.getLevelByPlayer(p) != null){
+                Player p1 = Bukkit.getPlayer(p);
+                int tr = LevelsConfig.levels.getInt("xp-reward.per-teammate")*e.getArena().getTeam(p1.getName()).getMembersCache().size();
+                PlayerLevel.getLevelByPlayer(p).addXp(tr, PlayerXpGainEvent.XpSource.PER_TEAMMATE);
+                p1.sendMessage(Language.getMsg(p1, "xp-reward-per-teammate").replace("{xp}", String.valueOf(tr)));
+            }
+        }
     }
 }

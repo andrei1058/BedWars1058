@@ -259,6 +259,8 @@ public class Italian {
                 , "&fUccisioni finali: &a{fKills}", "&fLetti distrutti: &a{beds}", "", "&fOnline: &a{on}", "&e{server_ip}"));
         yml.addDefault(Messages.TEAM_ELIMINATED_CHAT, "\n&f&lTEAM ELIMINATO > Il team {TeamColor}{TeamName} &cè stato eliminato\n");
         yml.addDefault("xp-reward-per-minute", "{prefix}&6+{xp} BedWars Experience Received (Play Time).");
+        yml.addDefault("xp-reward-game-win", "{prefix}&6+{xp} BedWars Experience Received (Game Win).");
+        yml.addDefault("xp-reward-per-teammate", "{prefix}&6+{xp} BedWars Experience Received (Team Support).");
 
         //shop
         yml.addDefault(Messages.SHOP_INDEX_NAME, "&8Quick Buy");
