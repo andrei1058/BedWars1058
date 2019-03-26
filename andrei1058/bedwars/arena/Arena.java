@@ -361,9 +361,9 @@ public class Arena implements Comparable {
             playerLocation.put(p, p.getLocation());
             p.teleport(cm.getArenaLoc("waiting.Loc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
             if (getStatus() == GameState.waiting) {
-                Bukkit.getScheduler().runTaskLater(Main.plugin, () -> new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + ".waiting", Messages.SCOREBOARD_DEFAULT_WAITING), this), 30L);
+                Bukkit.getScheduler().runTaskLater(Main.plugin, () -> new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + ".waiting", Messages.SCOREBOARD_DEFAULT_WAITING), this), 15L);
             } else if (getStatus() == GameState.starting) {
-                Bukkit.getScheduler().runTaskLater(Main.plugin, () -> new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + ".starting", Messages.SCOREBOARD_DEFAULT_STARTING), this), 30L);
+                Bukkit.getScheduler().runTaskLater(Main.plugin, () -> new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + ".starting", Messages.SCOREBOARD_DEFAULT_STARTING), this), 15L);
             }
             sendPreGameCommandItems(p);
         } else if (status == GameState.playing) {
