@@ -1150,14 +1150,14 @@ public class Arena implements Comparable {
         if (status == GameState.starting) {
             for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
                 if (sb.getArena() == this) {
-                    sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + "Starting", Messages.SCOREBOARD_DEFAULT_STARTING));
+                    sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + ".Starting", Messages.SCOREBOARD_DEFAULT_STARTING));
                 }
             }
             startingTask = new GameStartingTask(this);
         } else if (status == GameState.waiting) {
             for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
                 if (sb.getArena() == this) {
-                    sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + "Waiting", Messages.SCOREBOARD_DEFAULT_WAITING));
+                    sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + ".Waiting", Messages.SCOREBOARD_DEFAULT_WAITING));
                 }
             }
         } else if (status == GameState.playing) {
@@ -1165,7 +1165,7 @@ public class Arena implements Comparable {
             arenaStart = System.currentTimeMillis();
             for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
                 if (sb.getArena() == this) {
-                    sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + "Playing", Messages.SCOREBOARD_DEFAULT_PLAYING));
+                    sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + ".Playing", Messages.SCOREBOARD_DEFAULT_PLAYING));
                     sb.giveTeamColorTag();
                 }
             }
