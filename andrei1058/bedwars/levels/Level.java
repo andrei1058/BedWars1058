@@ -5,9 +5,15 @@ import org.bukkit.entity.Player;
 public interface Level {
 
     /**
-     * Get current level number and sign.
+     * Get current player level formatted as string.
      */
     String getLevel(Player p);
+
+
+    /**
+     * Get current player level as number.
+     */
+    int getPlayerLevel(Player p);
 
     /**
      * Get required xp as string.

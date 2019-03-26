@@ -303,7 +303,7 @@ public class Main extends JavaPlugin {
         }
 
         /* Levels support */
-        setLevelSupport(new InternalLevel());
+        setLevelAdapter(new InternalLevel());
 
         /* Language support */
         try {
@@ -820,7 +820,13 @@ public class Main extends JavaPlugin {
         return level;
     }
 
-    public static void setLevelSupport(Level levelsManager) {
+    /**
+     * Set the levels manager.
+     * You can use this to add your own levels manager just implement
+     * the Level interface so the plugin will be able to display
+     * the level internally.
+     */
+    public static void setLevelAdapter(Level levelsManager) {
         if (levelsManager instanceof InternalLevel) {
             if (LevelListeners.instance == null) {
                 Bukkit.getPluginManager().registerEvents(new LevelListeners(), Main.plugin);

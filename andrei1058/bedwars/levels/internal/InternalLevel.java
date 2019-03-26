@@ -11,6 +11,11 @@ public class InternalLevel implements Level {
     }
 
     @Override
+    public int getPlayerLevel(Player p) {
+        return PlayerLevel.getLevelByPlayer(p.getUniqueId()).getPlayerLevel();
+    }
+
+    @Override
     public String getRequiredXpFormatted(Player p) {
         return PlayerLevel.getLevelByPlayer(p.getUniqueId()).getFormattedRequiredXp();
     }

@@ -51,11 +51,11 @@ public class Russian {
         yml.addDefault(Messages.COMMAND_JOIN_PLAYER_JOIN_MSG, "{prefix}&7{player} &eвошел в игру (&b{on}&e/&b{max}&e)!");
         yml.addDefault(Messages.COMMAND_LEAVE_MSG, "{prefix}&7{player} &eвышел из игры!");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN, "{prefix}&eИгра начнется через &6{time} &eсекунд!");
-        yml.addDefault(Messages.FORMATTING_CHAT_LOBBY, "{vPrefix}&7{player}{vSuffix}: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_WAITING, "{vPrefix}&7{player}{vSuffix}: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_SHOUT, "{vPrefix}&6[ВСЕМ] {team} &7{player}&f{vSuffix}: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_TEAM, "{vPrefix}&f{level}{team}&7 {player}{vSuffix} {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_SPECTATOR, "{vPrefix}&7[ЗРИТЕЛЬ] {player}{vSuffix}: {message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_LOBBY, "{level}{vPrefix}&7{player}{vSuffix}: {message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_WAITING, "{level}{vPrefix}&7{player}{vSuffix}: {message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_SHOUT, "{level}{vPrefix}&6[ВСЕМ] {team} &7{player}&f{vSuffix}: {message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_TEAM, "{level}{vPrefix}&f{level}{team}&7 {player}{vSuffix} {message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_SPECTATOR, "{level}{vPrefix}&7[ЗРИТЕЛЬ] {player}{vSuffix}: {message}");
         yml.addDefault(Messages.ARENA_STATUS_START_PLAYER_TUTORIAL, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
                 "&f                                   &lBedWars", "",
                 "&e&l Защищайте свою кровать и уничтожайте кровати врагов.",
