@@ -3,6 +3,7 @@ package com.andrei1058.bedwars.levels.internal;
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.events.GameEndEvent;
 import com.andrei1058.bedwars.api.events.PlayerXpGainEvent;
+import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.configuration.LevelsConfig;
 import com.andrei1058.bedwars.language.Language;
 import org.bukkit.Bukkit;
@@ -18,7 +19,7 @@ public class LevelListeners implements Listener {
 
     public static LevelListeners instance;
 
-    public LevelListeners(){
+    public LevelListeners() {
         instance = this;
     }
 
@@ -43,23 +44,34 @@ public class LevelListeners implements Listener {
     }
 
     @EventHandler
-    public void onGameEnd(GameEndEvent e){
-        for (UUID p : e.getWinners()){
-            if (PlayerLevel.getLevelByPlayer(p) != null){
+    public void onGameEnd(GameEndEvent e) {
+        for (UUID p : e.getWinners()) {
+            if (PlayerLevel.getLevelByPlayer(p) != null) {
                 Player p1 = Bukkit.getPlayer(p);
                 PlayerLevel.getLevelByPlayer(p).addXp(LevelsConfig.levels.getInt("xp-reward.game-win"), PlayerXpGainEvent.XpSource.GAME_WIN);
                 p1.sendMessage(Language.getMsg(p1, "xp-reward-game-win").replace("{xp}", String.valueOf(LevelsConfig.levels.getInt("xp-reward.game-win"))));
-                int tr = LevelsConfig.levels.getInt("xp-reward.per-teammate")*e.getArena().getTeam(p1.getName()).getMembersCache().size();
-                PlayerLevel.getLevelByPlayer(p).addXp(tr, PlayerXpGainEvent.XpSource.PER_TEAMMATE);
-                p1.sendMessage(Language.getMsg(p1, "xp-reward-per-teammate").replace("{xp}", String.valueOf(tr)));
+                BedWarsTeam bwt = e.getArena().getTeam(p1.getName());
+                if (bwt != null) {
+                    if (bwt.getMembersCache().size() > 1) {
+                        int tr = LevelsConfig.levels.getInt("xp-reward.per-teammate") * bwt.getMembersCache().size();
+                        PlayerLevel.getLevelByPlayer(p).addXp(tr, PlayerXpGainEvent.XpSource.PER_TEAMMATE);
+                        p1.sendMessage(Language.getMsg(p1, "xp-reward-per-teammate").replace("{xp}", String.valueOf(tr)));
+                    }
+                }
             }
         }
-        for (UUID p : e.getLoosers()){
-            if (PlayerLevel.getLevelByPlayer(p) != null){
+        for (UUID p : e.getLoosers()) {
+            if (PlayerLevel.getLevelByPlayer(p) != null) {
                 Player p1 = Bukkit.getPlayer(p);
-                int tr = LevelsConfig.levels.getInt("xp-reward.per-teammate")*e.getArena().getTeam(p1.getName()).getMembersCache().size();
-                PlayerLevel.getLevelByPlayer(p).addXp(tr, PlayerXpGainEvent.XpSource.PER_TEAMMATE);
-                p1.sendMessage(Language.getMsg(p1, "xp-reward-per-teammate").replace("{xp}", String.valueOf(tr)));
+
+                BedWarsTeam bwt = e.getArena().getTeam(p1.getName());
+                if (bwt != null) {
+                    if (bwt.getMembersCache().size() > 1) {
+                        int tr = LevelsConfig.levels.getInt("xp-reward.per-teammate") * bwt.getMembersCache().size();
+                        PlayerLevel.getLevelByPlayer(p).addXp(tr, PlayerXpGainEvent.XpSource.PER_TEAMMATE);
+                        p1.sendMessage(Language.getMsg(p1, "xp-reward-per-teammate").replace("{xp}", String.valueOf(tr)));
+                    }
+                }
             }
         }
     }
