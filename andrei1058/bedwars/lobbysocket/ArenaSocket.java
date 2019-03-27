@@ -43,7 +43,7 @@ public class ArenaSocket {
             out.close();
             socket.close();
         } catch (IOException e) {
-            Main.plugin.getLogger().info("Could not send arena info to lobby: " + host + ":" + port);
+            Main.debug("Could not send arena info to lobby: " + host + ":" + port);
             return false;
         }
         return true;
