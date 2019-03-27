@@ -81,6 +81,7 @@ public class FAWE extends MapManager {
     }
 
     public void restoreWorld(String name, Arena arena) {
+        if (!schematic.exists()) return;
         try {
             EditSession editSession = format.load(schematic).paste(new BukkitWorld(Bukkit.getWorld(getName())), wMin, false, false, null);
             editSession.flushQueue();
