@@ -181,6 +181,7 @@ public class PlayerLevel {
      */
     public void destroy() {
         levelByPlayer.remove(uuid);
-        Main.getRemoteDatabase().setLevelData(uuid, level, currentXp);
+        Main.getRemoteDatabase().setLevelData(uuid, level, currentXp, LevelsConfig.levels.getYml().get("levels." + level + ".name") == null ?
+                LevelsConfig.levels.getYml().getString("levels.others.name") : LevelsConfig.levels.getYml().getString("levels." + level + ".name"));
     }
 }

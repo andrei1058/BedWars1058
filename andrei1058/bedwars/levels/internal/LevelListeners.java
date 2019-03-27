@@ -29,8 +29,8 @@ public class LevelListeners implements Listener {
         final UUID u = e.getPlayer().getUniqueId();
         Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
             if (PlayerLevel.getLevelByPlayer(e.getPlayer().getUniqueId()) != null) return;
-            int[] levelData = Main.getRemoteDatabase().getLevelData(u);
-            new PlayerLevel(e.getPlayer().getUniqueId(), levelData[0], levelData[1]);
+            Object[] levelData = Main.getRemoteDatabase().getLevelData(u);
+            new PlayerLevel(e.getPlayer().getUniqueId(), (Integer)levelData[0], (Integer)levelData[1], (String)levelData[2]);
         });
     }
 
