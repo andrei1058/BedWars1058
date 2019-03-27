@@ -12,10 +12,7 @@ import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
 import com.sk89q.worldedit.regions.CuboidRegion;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.WorldCreator;
+import org.bukkit.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -80,13 +77,28 @@ public class FAWE extends MapManager {
 
     }
 
+    public void loadWorld() {
+        Bukkit.getScheduler().runTask(Main.plugin, () -> {
+            World w = Bukkit.getServer().createWorld(new WorldCreator(getName()));
+            w.setKeepSpawnInMemory(false);
+            w.setAutoSave(false);
+            if (getArena() != null) getArena().init(w);
+        });
+    }
+
     public void restoreWorld(String name, Arena arena) {
-        if (!schematic.exists()) return;
-        try {
-            EditSession editSession = format.load(schematic).paste(new BukkitWorld(Bukkit.getWorld(getName())), wMin, false, false, null);
-            editSession.flushQueue();
-        } catch (IOException e) {
-            e.printStackTrace();
+        loadWorld();
+        if (!schematic.exists()){
+            Bukkit.getScheduler().runTaskLater(Main.plugin, ()-> backupWorld(true), 40L);
+        } else {
+            Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+                try {
+                    EditSession editSession = format.load(schematic).paste(new BukkitWorld(Bukkit.getWorld(getName())), wMin, false, false, null);
+                    editSession.flushQueue();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }, 40L);
         }
     }
 

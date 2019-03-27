@@ -4,7 +4,6 @@ import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.mapreset.internal.WorldOperations.WorldOperator;
 import com.andrei1058.bedwars.arena.mapreset.internal.WorldOperations.WorldRestorer;
-import com.andrei1058.bedwars.arena.mapreset.internal.WorldOperations.WorldSaver;
 import com.andrei1058.bedwars.arena.mapreset.internal.WorldOperations.WorldZipper;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import org.bukkit.*;
@@ -61,11 +60,7 @@ public class MapManager {
      */
     public void backupWorld(boolean replace) {
         Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
-            WorldOperator worldOperator;
-
-            worldOperator = new WorldSaver(name);
-            worldOperator.execute();
-            worldOperator = new WorldZipper(name, replace);
+            WorldOperator worldOperator = new WorldZipper(name, replace);
             worldOperator.execute();
         });
     }
@@ -102,5 +97,12 @@ public class MapManager {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Get arena.
+     */
+    public Arena getArena() {
+        return arena;
     }
 }
