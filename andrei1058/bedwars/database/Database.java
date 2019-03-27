@@ -47,11 +47,12 @@ public interface Database {
      * args 0 is level.
      * args 1 is xp.
      * args 2 is display name.
+     * args 3 next level cost.
      */
     Object[] getLevelData(UUID player);
 
     /**
      * Set a player level data.
      */
-    void setLevelData(UUID player, int level, int xp, String displayName);
+    void setLevelData(UUID player, int level, int xp, String displayName, int nextCost);
 }

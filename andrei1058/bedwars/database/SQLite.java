@@ -62,14 +62,7 @@ public class SQLite implements Database {
 
         try {
             connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS player_levels (id INTEGER PRIMARY KEY AUTOINCREMENT, uuid VARCHAR(200), " +
-                    "level INTEGER, xp INTEGER);");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS player_levels (id INTEGER PRIMARY KEY AUTOINCREMENT, uuid VARCHAR(200), " +
-                    "level INTEGER, xp INTEGER, name VARCHAR(200);");
+                    "level INTEGER, xp INTEGER, name VARCHAR(200), next_cost INTEGER);");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -142,13 +135,14 @@ public class SQLite implements Database {
     @Override
     public Object[] getLevelData(UUID player) {
         if (!isConnected()) init();
-        Object[] r = new Object[] {1, 0, ""};
+        Object[] r = new Object[] {1, 0, "", 0};
         try {
-            ResultSet rs = connection.prepareStatement("SELECT level, xp, name FROM player_levels WHERE uuid = '"+player.toString()+"';").executeQuery();
+            ResultSet rs = connection.prepareStatement("SELECT level, xp, name, next_cost FROM player_levels WHERE uuid = '"+player.toString()+"';").executeQuery();
             if (rs.next()){
                 r[0] = rs.getInt("level");
                 r[1] = rs.getInt("xp");
                 r[2] = rs.getString("name");
+                r[3] = rs.getInt("next_cost");
             }
         } catch (SQLException e){
             e.printStackTrace();
@@ -157,27 +151,32 @@ public class SQLite implements Database {
     }
 
     @Override
-    public void setLevelData(UUID player, int level, int xp, String displayName) {
+    public void setLevelData(UUID player, int level, int xp, String displayName, int nextCost) {
         if (!isConnected()) init();
         try {
             ResultSet rs = connection.prepareStatement("SELECT id from player_levels WHERE uuid = '"+player.toString()+"';").executeQuery();
             if (!rs.next()){
-                PreparedStatement ps = connection.prepareStatement("INSERT INTO player_levels VALUES (?, ?, ?, ?, ?);");
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO player_levels VALUES (?, ?, ?, ?, ?, ?);");
                 ps.setInt(1, 0);
                 ps.setString(2, player.toString());
                 ps.setInt(3, level);
                 ps.setInt(4, xp);
+                ps.setString(5, displayName);
+                ps.setInt(6, nextCost);
                 ps.executeUpdate();
             } else {
                 PreparedStatement ps;
                 if (displayName == null){
                     ps = connection.prepareStatement("UPDATE player_levels SET level=?, xp=? WHERE uuid = '"+player.toString()+"';");
                 } else {
-                    ps = connection.prepareStatement("UPDATE player_levels SET level=?, xp=?, name=? WHERE uuid = '"+player.toString()+"';");
+                    ps = connection.prepareStatement("UPDATE player_levels SET level=?, xp=?, name=?, next_cost=? WHERE uuid = '"+player.toString()+"';");
                 }
                 ps.setInt(1, level);
                 ps.setInt(2, xp);
-                if (displayName != null) ps.setString(3, displayName);
+                if (displayName != null) {
+                    ps.setString(3, displayName);
+                    ps.setInt(4, nextCost);
+                }
                 ps.executeUpdate();
             }
         } catch (SQLException e) {

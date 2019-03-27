@@ -3,8 +3,11 @@ package com.andrei1058.bedwars.database;
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.stats.StatsCache;
 import com.andrei1058.bedwars.stats.StatsManager;
+import io.netty.handler.codec.base64.Base64Encoder;
+import org.apache.commons.codec.binary.Base64;
 
 import java.sql.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -37,7 +40,7 @@ public class MySQL implements Database {
     public boolean connect() {
         try {
             connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?autoReconnect=true&user=" + user
-                    + "&password=" + pass + "&useSSL=" + ssl);
+                    + "&password=" + pass + "&useSSL=" + ssl + "&useUnicode=true&characterEncoding=UTF-8");
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -95,7 +98,7 @@ public class MySQL implements Database {
 
         try {
             connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS player_levels (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, uuid VARCHAR(200), " +
-                    "level INT(200), xp INT(200), name VARCHAR(200));");
+                    "level INT(200), xp INT(200), name VARCHAR(200) CHARACTER SET utf8, next_cost INT(200));");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -222,13 +225,14 @@ public class MySQL implements Database {
     @Override
     public Object[] getLevelData(UUID player) {
         if (!isConnected()) connect();
-        Object[] r = new Object[] {1, 0, ""};
+        Object[] r = new Object[] {1, 0, "", 0};
         try {
-            ResultSet rs = connection.prepareStatement("SELECT level, xp, name FROM player_levels WHERE uuid = '"+player.toString()+"';").executeQuery();
+            ResultSet rs = connection.prepareStatement("SELECT level, xp, name, next_cost FROM player_levels WHERE uuid = '"+player.toString()+"';").executeQuery();
             if (rs.next()){
                 r[0] = rs.getInt("level");
                 r[1] = rs.getInt("xp");
                 r[2] = rs.getString("name");
+                r[3] = rs.getInt("next_cost");
             }
         } catch (SQLException e){
             e.printStackTrace();
@@ -237,27 +241,32 @@ public class MySQL implements Database {
     }
 
     @Override
-    public void setLevelData(UUID player, int level, int xp, String displayName) {
+    public void setLevelData(UUID player, int level, int xp, String displayName, int nextCost) {
         if (!isConnected()) connect();
         try {
             ResultSet rs = connection.prepareStatement("SELECT id from player_levels WHERE uuid = '"+player.toString()+"';").executeQuery();
             if (!rs.next()){
-                PreparedStatement ps = connection.prepareStatement("INSERT INTO player_levels VALUES (?, ?, ?, ?, ?);");
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO player_levels VALUES (?, ?, ?, ?, ?, ?);");
                 ps.setInt(1, 0);
                 ps.setString(2, player.toString());
                 ps.setInt(3, level);
                 ps.setInt(4, xp);
+                ps.setString(5, displayName);
+                ps.setInt(6, nextCost);
                 ps.executeUpdate();
             } else {
                 PreparedStatement ps;
                 if (displayName == null){
                     ps = connection.prepareStatement("UPDATE player_levels SET level=?, xp=? WHERE uuid = '"+player.toString()+"';");
                 } else {
-                    ps = connection.prepareStatement("UPDATE player_levels SET level=?, xp=?, name=? WHERE uuid = '"+player.toString()+"';");
+                    ps = connection.prepareStatement("UPDATE player_levels SET level=?, xp=?, name=?, next_cost=? WHERE uuid = '"+player.toString()+"';");
                 }
                 ps.setInt(1, level);
                 ps.setInt(2, xp);
-                if (displayName != null) ps.setString(3, displayName);
+                if (displayName != null) {
+                    ps.setString(3, displayName);
+                    ps.setInt(4, nextCost);
+                }
                 ps.executeUpdate();
             }
         } catch (SQLException e) {

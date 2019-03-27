@@ -545,7 +545,7 @@ public class StatsCache {
         try {
             ResultSet rs = connection.createStatement().executeQuery("SELECT * FROM '" + table + "' WHERE uuid = '" + uuid.toString() + "';");
             if (rs.next()) {
-                Main.getRemoteDatabase().saveStats(uuid, username, rs.getTimestamp("first_play"), rs.getTimestamp("last_play"), rs.getInt("wins"),
+                Main.getRemoteDatabase().saveStats(uuid, username, rs.getTimestamp("first_play"), new Timestamp(System.currentTimeMillis()), rs.getInt("wins"),
                         rs.getInt("kills"), rs.getInt("final_kills"), rs.getInt("looses"), rs.getInt("deaths"), rs.getInt("final_deaths"),
                         rs.getInt("beds_destroyed"), rs.getInt("games_played"));
             }

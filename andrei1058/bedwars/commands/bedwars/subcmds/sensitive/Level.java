@@ -6,6 +6,7 @@ import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
+import com.andrei1058.bedwars.configuration.LevelsConfig;
 import com.andrei1058.bedwars.configuration.Permissions;
 import com.andrei1058.bedwars.levels.internal.PlayerLevel;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -64,7 +65,14 @@ public class Level extends SubCommand {
             PlayerLevel pv = PlayerLevel.getLevelByPlayer(pl.getUniqueId());
             if (pv != null) pv.setLevel(level);
 
-            Main.getRemoteDatabase().setLevelData(pl.getUniqueId(), level, 0, null);
+            int nextLevelCost =  LevelsConfig.levels.getYml().get("levels." + level + ".rankup-cost") == null ?
+                    LevelsConfig.levels.getInt("levels.others.rankup-cost") : LevelsConfig.levels.getInt("levels." + level + ".rankup-cost");
+
+            String levelName = LevelsConfig.levels.getYml().get("levels." + level + ".name") == null ?
+                    LevelsConfig.levels.getYml().getString("levels.others.name") : LevelsConfig.levels.getYml().getString("levels." + level + ".name");
+
+
+            Main.getRemoteDatabase().setLevelData(pl.getUniqueId(), level, 0, levelName, nextLevelCost);
             s.sendMessage(ChatColor.GOLD + " ▪ " + ChatColor.GRAY + pl.getName() + " level was set to: " + args[2]);
             s.sendMessage(ChatColor.GOLD + " ▪ " + ChatColor.GRAY + "The player may need to rejoin to see it updated.");
         } else if (args[0].equalsIgnoreCase("givexp")) {
@@ -91,7 +99,7 @@ public class Level extends SubCommand {
             if (pv != null) pv.setXp(amount);
 
             Object[] data = Main.getRemoteDatabase().getLevelData(pl.getUniqueId());
-            Main.getRemoteDatabase().setLevelData(pl.getUniqueId(), (Integer) data[0], ((Integer)data[1]) + amount, (String) data[2]);
+            Main.getRemoteDatabase().setLevelData(pl.getUniqueId(), (Integer) data[0], ((Integer)data[1]) + amount, (String) data[2], (Integer)data[3]);
             s.sendMessage(ChatColor.GOLD + " ▪ " + ChatColor.GRAY + args[2] + " xp was given to: " + pl.getName());
             s.sendMessage(ChatColor.GOLD + " ▪ " + ChatColor.GRAY + "The player may need to rejoin to see it updated.");
         } else {

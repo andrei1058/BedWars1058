@@ -159,7 +159,7 @@ public class PlayerLevel {
     public void upgradeLevel() {
         if (currentXp >= nextLevelCost) {
             level++;
-            nextLevelCost = LevelsConfig.levels.getYml().get("levels." + level + "rankup-cost") == null ?
+            nextLevelCost = LevelsConfig.levels.getYml().get("levels." + level + ".rankup-cost") == null ?
                     LevelsConfig.levels.getInt("levels.others.rankup-cost") : LevelsConfig.levels.getInt("levels." + level + ".rankup-cost");
             currentXp = currentXp - nextLevelCost;
             this.levelName = ChatColor.translateAlternateColorCodes('&', LevelsConfig.levels.getYml().get("levels." + level + ".name") == null ?
@@ -182,6 +182,6 @@ public class PlayerLevel {
     public void destroy() {
         levelByPlayer.remove(uuid);
         Main.getRemoteDatabase().setLevelData(uuid, level, currentXp, LevelsConfig.levels.getYml().get("levels." + level + ".name") == null ?
-                LevelsConfig.levels.getYml().getString("levels.others.name") : LevelsConfig.levels.getYml().getString("levels." + level + ".name"));
+                LevelsConfig.levels.getYml().getString("levels.others.name") : LevelsConfig.levels.getYml().getString("levels." + level + ".name"), nextLevelCost);
     }
 }
