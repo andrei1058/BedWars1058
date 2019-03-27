@@ -456,4 +456,84 @@ public class OreGenerator {
     public BedWarsTeam getBwt() {
         return bwt;
     }
+
+    /**
+     * Get generator hologram holder (armor stand) containing the rotating item.
+     */
+    public ArmorStand getHologramHolder() {
+        return item;
+    }
+
+    /**
+     * Get generator type.
+     */
+    public GeneratorType getType() {
+        return type;
+    }
+
+    /**
+     * Get the amount of items that are dropped once.
+     */
+    public int getAmount() {
+        return amount;
+    }
+
+    /**
+     * Get spawn rate delay.
+     */
+    public int getDelay() {
+        return delay;
+    }
+
+    /**
+     * Get seconds before next item spawn.
+     */
+    public int getNextSpawn() {
+        return lastSpawn;
+    }
+
+    /**
+     * Get generator holograms.
+     */
+    public HashMap<String, HoloGram> getHolograms() {
+        return armorStands;
+    }
+
+    /**
+     * Get the spawn limit of the generators.
+     * If there is this amount of items dropped near the spawner
+     * it will stop spawning new items.
+     */
+    public int getSpawnLimit() {
+        return spawnLimit;
+    }
+
+    /**
+     * Set the remaining time till the next item spawn.
+     */
+    public void setNextSpawn(int lastSpawn) {
+        this.lastSpawn = lastSpawn;
+    }
+
+    /**
+     * Should the dropped items be stacked?
+     */
+    public void setStack(boolean stack) {
+        this.stack = stack;
+    }
+
+    /**
+     * Check if the dropped items can be stacked.
+     */
+    public boolean isStack() {
+        return stack;
+    }
+
+    /**
+     * Set generator type.
+     * This may break things.
+     */
+    public void setType(GeneratorType type) {
+        this.type = type;
+    }
 }

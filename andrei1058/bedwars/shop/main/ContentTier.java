@@ -3,6 +3,7 @@ package com.andrei1058.bedwars.shop.main;
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.shop.ShopManager;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
@@ -13,7 +14,7 @@ public class ContentTier {
 
     private int value, price;
     private ItemStack itemStack;
-    private String currency = "";
+    private Material currency;
     private List<BuyItem> buyItemsList = new ArrayList<>();
     private boolean loaded = false;
 
@@ -46,19 +47,19 @@ public class ContentTier {
             return;
         }
 
+        if (yml.getString(path + ConfigPath.SHOP_CONTENT_TIER_SETTINGS_CURRENCY).toLowerCase().isEmpty()) {
+            Main.plugin.getLogger().severe("Invalid currency at " + path);
+            return;
+        }
+
         switch (yml.getString(path + ConfigPath.SHOP_CONTENT_TIER_SETTINGS_CURRENCY).toLowerCase()) {
             case "iron":
             case "gold":
             case "diamond":
             case "vault":
             case "emerald":
-                currency = yml.getString(path + ConfigPath.SHOP_CONTENT_TIER_SETTINGS_CURRENCY).toLowerCase();
+                currency = CategoryContent.getCurrency(yml.getString(path + ConfigPath.SHOP_CONTENT_TIER_SETTINGS_CURRENCY).toLowerCase());
                 break;
-        }
-
-        if (currency.isEmpty()) {
-            Main.plugin.getLogger().severe("Invalid currency at " + path);
-            return;
         }
 
         itemStack = Main.nms.createItemStack(yml.getString(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_MATERIAL),
@@ -93,8 +94,36 @@ public class ContentTier {
     /**
      * Get tier currency
      */
-    public String getCurrency() {
+    public Material getCurrency() {
         return currency;
+    }
+
+    /**
+     * Set tier currency.
+     */
+    public void setCurrency(Material currency) {
+        this.currency = currency;
+    }
+
+    /**
+     * Set tier price.
+     */
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    /**
+     * Set tier preview item.
+     */
+    public void setItemStack(ItemStack itemStack) {
+        this.itemStack = itemStack;
+    }
+
+    /**
+     * Set list of items that you receive on buy.
+     */
+    public void setBuyItemsList(List<BuyItem> buyItemsList) {
+        this.buyItemsList = buyItemsList;
     }
 
     /**
