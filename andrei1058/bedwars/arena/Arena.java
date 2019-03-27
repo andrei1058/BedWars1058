@@ -34,7 +34,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.upgrades.BaseListener.isOnABase;
@@ -123,10 +122,9 @@ public class Arena implements Comparable {
     public Arena(String name, Player p) {
         this.worldName = name;
 
-        mapManager = Main.getMapManager(this, name);
-
         plugin.getLogger().info("Loading arena: " + getWorldName());
         cm = new ConfigManager(name, "plugins/" + plugin.getName() + "/Arenas", true);
+        mapManager = Main.getMapManager(this, name);
         yml = cm.getYml();
         if (yml.get("Team") == null) {
             if (p != null) p.sendMessage("You didn't set any team for arena: " + name);
@@ -436,7 +434,7 @@ public class Arena implements Comparable {
             /* Hide spectator  */
             //p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0), true);
             p.setGameMode(GameMode.ADVENTURE);
-            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 for (Player on : Bukkit.getOnlinePlayers()) {
                     if (on == p) continue;
                     if (getSpectators().contains(on)) {
