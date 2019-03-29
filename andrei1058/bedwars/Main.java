@@ -442,6 +442,9 @@ public class Main extends JavaPlugin {
         }
         StatsManager.getStatsCache().close();
         remoteDatabase.close();
+        if (getServerType() == ServerType.BUNGEE) {
+            ArenaSocket.disable();
+        }
     }
 
     private void setupConfig() {

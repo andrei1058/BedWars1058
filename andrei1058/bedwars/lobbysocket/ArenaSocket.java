@@ -32,7 +32,7 @@ public class ArenaSocket {
             } else {
                 try {
                     Socket socket = new Socket(l[0], Integer.valueOf(l[1]));
-                    RemoteLobby rl = new RemoteLobby(socket);
+                    RemoteLobby rl = new RemoteLobby(socket, lobby);
                     sockets.put(lobby, rl);
                     rl.sendMessage(formatMessage(serverIdentifier, a.getDisplayName(), a.getStatus().toString(), a.getPlayers().size(), a.getMaxPlayers(), a.getGroup(), a.getMaxInTeam()));
                 } catch (IOException e) {
@@ -52,9 +52,11 @@ public class ArenaSocket {
     private static class RemoteLobby {
         private Socket socket;
         private PrintWriter out;
+        private String lobby;
 
-        public RemoteLobby(Socket socket) {
+        public RemoteLobby(Socket socket, String lobby) {
             this.socket = socket;
+            this.lobby = lobby;
             try {
                 out = new PrintWriter(socket.getOutputStream(), true);
             } catch (IOException e) {
@@ -67,11 +69,35 @@ public class ArenaSocket {
          * @return true if message was sent successfully.
          */
         private boolean sendMessage(String message) {
-            if (socket == null) return false;
-            if (socket.isClosed()) return false;
-            if (out == null) return false;
+            if (socket == null) {
+                sockets.remove(lobby);
+                return false;
+            }
+            if (socket.isClosed()) {
+                sockets.remove(lobby);
+                return false;
+            }
+            if (out == null) {
+                sockets.remove(lobby);
+                return false;
+            }
             out.println(message);
             return true;
+        }
+    }
+
+    /**
+     * Close active sockets.
+     */
+    public static void disable() {
+        for (RemoteLobby rl : sockets.values()){
+            rl.sendMessage("stop");
+            rl.out.close();
+            try {
+                rl.socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
