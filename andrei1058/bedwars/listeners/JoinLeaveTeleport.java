@@ -69,7 +69,7 @@ public class JoinLeaveTeleport implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onJoin(PlayerJoinEvent e) {
         final Player p = e.getPlayer();
-        if (plugin.getServerType() != ServerType.BUNGEE) {
+        if (getServerType() != ServerType.BUNGEE) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 for (Player on : Bukkit.getOnlinePlayers()) {
                     if (Arena.getArenaByPlayer(on) != null) {

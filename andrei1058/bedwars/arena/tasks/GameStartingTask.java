@@ -152,9 +152,6 @@ public class GameStartingTask implements Runnable {
                 sb.addHealthIcon();
             }
 
-            getArena().changeStatus(GameState.playing);
-            getArena().setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_II);
-
             //Enable diamond/ emerald generators
             for (OreGenerator og : getArena().getOreGenerators()) {
                 if (og.getBwt() == null) og.enable();
@@ -167,6 +164,8 @@ public class GameStartingTask implements Runnable {
             spawnPlayers();
 
             task.cancel();
+            getArena().changeStatus(GameState.playing);
+            getArena().setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_II);
             return;
         }
 

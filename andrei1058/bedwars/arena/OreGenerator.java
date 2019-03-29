@@ -366,7 +366,7 @@ public class OreGenerator {
      */
     public void enable() {
         loadDefaults(false);
-        if (getOre().getType() == Material.EMERALD || getOre().getType() == Material.DIAMOND) {
+        if (getType() == GeneratorType.EMERALD || getType() == GeneratorType.DIAMOND) {
             rotation.add(this);
         }
     }
