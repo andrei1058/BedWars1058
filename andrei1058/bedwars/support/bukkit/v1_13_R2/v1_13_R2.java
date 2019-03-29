@@ -371,11 +371,9 @@ public class v1_13_R2 implements NMS {
             this.goalSelector.a(10, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0f));
         }
 
-        @Override
         public void collide(net.minecraft.server.v1_13_R2.Entity entity) {
         }
 
-        @Override
         public boolean damageEntity(DamageSource damagesource, float f) {
             return false;
         }
@@ -383,11 +381,12 @@ public class v1_13_R2 implements NMS {
         public void g(double d0, double d1, double d2) {
         }
 
-        @Override
         public void move(EnumMoveType enummovetype, double d0, double d1, double d2) {
         }
 
-        @Override
+        public void a(SoundEffect soundeffect, float f, float f1) {
+        }
+
         protected void initAttributes() {
             super.initAttributes();
             this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.0D);

@@ -376,6 +376,9 @@ public class v1_12_R1 implements NMS {
         public void move(EnumMoveType enummovetype, double d0, double d1, double d2) {
         }
 
+        public void a(SoundEffect soundeffect, float f, float f1) {
+        }
+
         @Override
         protected void initAttributes() {
             super.initAttributes();
