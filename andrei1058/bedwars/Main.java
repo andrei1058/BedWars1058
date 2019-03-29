@@ -44,8 +44,6 @@ import com.andrei1058.bedwars.support.bukkit.v1_9_R1.v1_9_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_9_R2.v1_9_R2;
 import com.andrei1058.bedwars.support.citizens.CitizensListener;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
-import com.andrei1058.bedwars.support.lang.Internal;
-import com.andrei1058.bedwars.support.lang.Lang;
 import com.andrei1058.bedwars.support.leaderheads.LeaderHeadsSupport;
 import com.andrei1058.bedwars.support.papi.PAPISupport;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
@@ -82,7 +80,7 @@ public class Main extends JavaPlugin {
     public static Language lang;
     public static Main plugin;
     public static NMS nms;
-    private static Lang langSupport;
+
     private static Party party = null;
     private static Chat chat;
     protected static Level level;
@@ -306,14 +304,6 @@ public class Main extends JavaPlugin {
 
         /* Levels support */
         setLevelAdapter(new InternalLevel());
-
-        /* Language support */
-        try {
-            langSupport = Internal.class.newInstance();
-            new ConfigManager("database", "plugins/" + this.getName() + "/Languages", false);
-        } catch (InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
 
         /* Register tasks */
         Bukkit.getScheduler().runTaskTimer(this, new Refresh(), 20L, 20L);
@@ -803,10 +793,6 @@ public class Main extends JavaPlugin {
 
     public static ServerType getServerType() {
         return serverType;
-    }
-
-    public static Lang getLangSupport() {
-        return langSupport;
     }
 
     public static Party getParty() {

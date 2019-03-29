@@ -102,6 +102,13 @@ public class MySQL implements Database {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        try {
+            connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS player_language (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, uuid VARCHAR(200), " +
+                    "iso VARCHAR(200));");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -272,5 +279,37 @@ public class MySQL implements Database {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void setLanguage(UUID player, String iso) {
+        if (!isConnected()) connect();
+        try {
+            ResultSet rs = connection.createStatement().executeQuery("SELECT iso FROM player_language WHERE uuid = '" + player.toString() + "';");
+            if (rs.next()) {
+                connection.createStatement().executeUpdate("UPDATE player_language SET iso='" + iso + "' WHERE uuid = '" + player.toString() + "';");
+            } else {
+                connection.createStatement().executeUpdate("INSERT INTO player_language VALUES (0, '" + player.toString() + "', '" + iso + "');");
+            }
+            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public String getLanguage(UUID player) {
+        if (!isConnected()) connect();
+        String iso = Main.lang.getIso();
+        try {
+            ResultSet rs = connection.createStatement().executeQuery("SELECT iso FROM player_language WHERE uuid = '" + player.toString() + "';");
+            if (rs.next()) {
+                iso = rs.getString("iso");
+            }
+            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return iso;
     }
 }

@@ -15,7 +15,6 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.andrei1058.bedwars.Main.getLangSupport;
 import static com.andrei1058.bedwars.Main.plugin;
 import static com.andrei1058.bedwars.language.Language.getMsg;
 
@@ -49,7 +48,7 @@ public class CmdLang extends SubCommand {
             return true;
         } else if (Language.isLanguageExist(args[0])) {
             if (Arena.getArenaByPlayer(p) == null) {
-                getLangSupport().setLang(p, args[0]);
+                Language.setPlayerLanguage(p, args[0], false);
                 Bukkit.getScheduler().runTaskLater(plugin, () -> p.sendMessage(getMsg(p, Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY)), 10L);
             } else {
                 p.sendMessage(getMsg(p, Messages.COMMAND_LANG_USAGE_DENIED));

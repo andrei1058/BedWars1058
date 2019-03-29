@@ -55,4 +55,14 @@ public interface Database {
      * Set a player level data.
      */
     void setLevelData(UUID player, int level, int xp, String displayName, int nextCost);
+
+    /**
+     * Set a player language.
+     */
+    void setLanguage(UUID player, String iso);
+
+    /**
+     * Get a player language.
+     */
+    String getLanguage(UUID player);
 }

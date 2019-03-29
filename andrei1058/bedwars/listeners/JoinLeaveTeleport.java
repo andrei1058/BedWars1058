@@ -18,14 +18,29 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.language.Language.getMsg;
 
 public class JoinLeaveTeleport implements Listener {
 
+    private static HashMap<UUID, String> preLoadedLanguage = new HashMap<>();
+
     @EventHandler
     public void onLogin(PlayerLoginEvent e) {
+        Player p = e.getPlayer();
+        final UUID u = p.getUniqueId();
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> {
+            String iso = Main.getRemoteDatabase().getLanguage(u);
+            if (Language.isLanguageExist(iso)) {
+                if (Main.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES).contains(iso))
+                    iso = lang.getIso();
+                preLoadedLanguage.put(u, iso);
+            }
+        });
+
         if (getServerType() == ServerType.BUNGEE) {
             if (Arena.getArenas().isEmpty()) return;
             Arena a = Arena.getArenas().get(0);
@@ -69,6 +84,11 @@ public class JoinLeaveTeleport implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onJoin(PlayerJoinEvent e) {
         final Player p = e.getPlayer();
+        if (preLoadedLanguage.containsKey(e.getPlayer().getUniqueId())){
+            Language.setPlayerLanguage(e.getPlayer(), preLoadedLanguage.get(e.getPlayer().getUniqueId()), true);
+            preLoadedLanguage.remove(e.getPlayer().getUniqueId());
+        }
+
         if (getServerType() != ServerType.BUNGEE) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 for (Player on : Bukkit.getOnlinePlayers()) {
@@ -80,9 +100,7 @@ public class JoinLeaveTeleport implements Listener {
 
             }, 14L);
         }
-        if (!lang.getIso().equalsIgnoreCase(getLangSupport().getLang(p))) {
-            Language.getLangByPlayer().put(p, Language.getLang(getLangSupport().getLang(p)));
-        }
+
         if (debug) {
             p.sendMessage("");
             p.sendMessage("");
