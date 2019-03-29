@@ -1,13 +1,11 @@
 package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.language.Messages;
-import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.upgrades.TeamUpgrade;
 import com.andrei1058.bedwars.upgrades.UpgradeGroup;
 import org.bukkit.Material;
@@ -16,8 +14,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 
-import static com.andrei1058.bedwars.Main.debug;
 import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.language.Language.getMsg;
 import static org.bukkit.event.inventory.InventoryAction.*;
@@ -100,10 +98,24 @@ public class Inventory implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent e) {
+
+        //issue #225
+        if (e.getSlotType() == InventoryType.SlotType.ARMOR) {
+            if (Arena.getArenaByPlayer((Player) e.getWhoClicked()) != null) {
+                if (e.getWhoClicked().hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+                    e.getWhoClicked().closeInventory();
+                    for (Player pl : e.getWhoClicked().getWorld().getPlayers()) {
+                        Main.nms.hideArmor((Player) e.getWhoClicked(), pl);
+                    }
+                }
+            }
+        }
+
+        if (e.getCurrentItem() == null) return;
+        if (e.getCurrentItem().getType() == Material.AIR) return;
+
         Player p = (Player) e.getWhoClicked();
         ItemStack i = e.getCurrentItem();
-        if (i == null) return;
-        if (i.getType() == Material.AIR) return;
 
         /*//Prevent moving of command items
         if (nms.isCustomBedWarsItem(i)) {
