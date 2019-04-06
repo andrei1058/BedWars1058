@@ -183,12 +183,12 @@ public class Main extends JavaPlugin {
     public void onEnable() {
 
         // Load FastAsyncWorldEdit support
-        if (Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit") != null) {
-            if (Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit").isEnabled()) {
-                resetAdaptor = ResetAdaptor.FAWE;
-                this.getLogger().info("Hook into FastAsyncWorldEdit support!");
-            }
-        }
+        //if (Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit") != null) {
+        //    if (Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit").isEnabled()) {
+        //        resetAdaptor = ResetAdaptor.FAWE;
+        //        this.getLogger().info("Hook into FastAsyncWorldEdit support!");
+        //    }
+        //}
 
         ArenaSocket.serverIdentifier = Bukkit.getServer().getIp() + ":" + Bukkit.getServer().getPort();
 

@@ -138,7 +138,7 @@ public class JoinLeaveTeleport implements Listener {
             e.setJoinMessage(null);
         }
 
-        if (Arena.getArenas().isEmpty()) return;
+        //if (Arena.getArenas().isEmpty()) return;
 
         if (getServerType() != ServerType.SHARED) {
             //ReJoin system
