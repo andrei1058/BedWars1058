@@ -591,7 +591,7 @@ public class Arena implements Comparable {
         }
         playerLocation.remove(p);
 
-        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
             for (Player on : Bukkit.getOnlinePlayers()) {
                 if (getArenaByPlayer(on) == null) {
                     on.showPlayer(p);
