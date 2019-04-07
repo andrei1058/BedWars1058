@@ -28,6 +28,7 @@ public class JoinLeaveTeleport implements Listener {
 
     private static HashMap<UUID, String> preLoadedLanguage = new HashMap<>();
 
+    @SuppressWarnings("ControlFlowStatementWithoutBraces")
     @EventHandler
     public void onLogin(PlayerLoginEvent e) {
         Player p = e.getPlayer();
@@ -48,7 +49,6 @@ public class JoinLeaveTeleport implements Listener {
                 if (a.getPlayers().size() >= a.getMaxPlayers() && !Arena.isVip(e.getPlayer())) {
                     e.setKickMessage(getMsg(e.getPlayer(), Messages.COMMAND_JOIN_DENIED_IS_FULL));
                     e.setResult(PlayerLoginEvent.Result.KICK_FULL);
-                    return;
                 } else if (a.getPlayers().size() >= a.getMaxPlayers() && Arena.isVip(e.getPlayer())) {
                     boolean canJoin = false;
                     for (Player on : a.getPlayers()) {
@@ -62,7 +62,6 @@ public class JoinLeaveTeleport implements Listener {
                     if (!canJoin) {
                         e.setKickMessage(getMsg(e.getPlayer(), Messages.COMMAND_JOIN_DENIED_IS_FULL_OF_VIPS));
                         e.setResult(PlayerLoginEvent.Result.KICK_FULL);
-                        return;
                     }
                 }
             } else if (a.getStatus() == GameState.playing) {
@@ -81,6 +80,7 @@ public class JoinLeaveTeleport implements Listener {
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     @EventHandler(priority = EventPriority.HIGH)
     public void onJoin(PlayerJoinEvent e) {
         final Player p = e.getPlayer();
@@ -158,7 +158,7 @@ public class JoinLeaveTeleport implements Listener {
         }
         p.getInventory().setArmorContents(null);
         if (getServerType() == ServerType.BUNGEE) {
-            Arena.getArenas().get(0).addPlayer(p, false);
+            if (!Arena.getArenas().isEmpty()) Arena.getArenas().get(0).addPlayer(p, false);
             return;
         } else {
             if (config.getConfigLoc("lobbyLoc") != null)
