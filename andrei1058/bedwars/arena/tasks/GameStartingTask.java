@@ -165,7 +165,13 @@ public class GameStartingTask implements Runnable {
 
             task.cancel();
             getArena().changeStatus(GameState.playing);
-            getArena().setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_II);
+
+            // Check if emerald should be first based on time
+            if (getArena().upgradeDiamondsCount < getArena().upgradeEmeraldsCount) {
+                getArena().setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_II);
+            } else {
+                getArena().setNextEvent(NextEvent.EMERALD_GENERATOR_TIER_II);
+            }
             return;
         }
 
@@ -178,10 +184,10 @@ public class GameStartingTask implements Runnable {
                     p.sendMessage(getMsg(p, Messages.ARENA_STATUS_START_COUNTDOWN).replace("{time}", String.valueOf(getCountdown())));
                 } else if (getCountdown() > 3) {
                     nms.sendTitle(p, "§e" + getCountdown(), null, 0, 20, 0);
-                    p.sendMessage(getMsg(p, Messages.ARENA_STATUS_START_COUNTDOWN).replace("{time}", "§c" + String.valueOf(getCountdown())));
+                    p.sendMessage(getMsg(p, Messages.ARENA_STATUS_START_COUNTDOWN).replace("{time}", "§c" + getCountdown()));
                 } else {
                     nms.sendTitle(p, "§c" + getCountdown(), null, 0, 20, 0);
-                    p.sendMessage(getMsg(p, Messages.ARENA_STATUS_START_COUNTDOWN).replace("{time}", "§c" + String.valueOf(getCountdown())));
+                    p.sendMessage(getMsg(p, Messages.ARENA_STATUS_START_COUNTDOWN).replace("{time}", "§c" + getCountdown()));
                 }
             }
         }

@@ -68,7 +68,7 @@ public class Arena implements Comparable {
      * Current event, used at scoreboard
      */
     private NextEvent nextEvent = NextEvent.DIAMOND_GENERATOR_TIER_II;
-    int diamondTier = 1, emeraldTier = 1;
+    private int diamondTier = 1, emeraldTier = 1;
 
     /**
      * Players in respawn session
@@ -107,7 +107,7 @@ public class Arena implements Comparable {
     /* Used to reset the map. */
     private MapManager mapManager;
 
-    /* Keep trace of arena start time. */
+    // Track arena start
     private long arenaStart = 0L;
 
     private PerMinuteTask perMinuteTask;
@@ -251,6 +251,12 @@ public class Arena implements Comparable {
         for (NextEvent ne : NextEvent.values()) {
             nextEvents.add(ne.toString());
         }
+
+        upgradeDiamondsCount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_START) == null ?
+                "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_II_START : getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_START);
+        upgradeEmeraldsCount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_START) == null ?
+                "Default." + ConfigPath.GENERATOR_EMERALD_TIER_II_START : getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_START);
+
     }
 
     /**
@@ -1496,55 +1502,105 @@ public class Arena implements Comparable {
     }
 
     /**
-     * Refresh Next Event of the arena.
+     * This will attempt to upgrade the next event if it is the case.
      */
     public void updateNextEvent() {
 
         debug("---");
         debug("updateNextEvent called");
-
-        if (nextEvent.getValue(this) > 0) return;
-
-        nextEvents.remove(nextEvent.toString());
-
-        for (String s : nextEvents) {
-            debug(s);
-        }
-
-        if (nextEvents.isEmpty()) return;
-
-        NextEvent next = NextEvent.valueOf(nextEvents.get(0));
-        int lowest = next.getValue(this);
-
-        for (String ne : nextEvents) {
-            int value = NextEvent.valueOf(ne).getValue(this);
-            if (value == -1) continue;
-            if (lowest > value) next = NextEvent.valueOf(ne);
-        }
-
-        debug("---");
-
-        setNextEvent(next);
-
-
-
-        /*if (nextEvent == NextEvent.DIAMOND_GENERATOR_TIER_II) {
-            setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_III);
-        } else if (nextEvent == NextEvent.DIAMOND_GENERATOR_TIER_III) {
-            if (emeraldTier == 1) {
+        if (nextEvent == NextEvent.EMERALD_GENERATOR_TIER_II && upgradeEmeraldsCount == 0) {
+            // next diamond time < next emerald time
+            int next = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_START) == null ?
+                    "Default." + ConfigPath.GENERATOR_EMERALD_TIER_III_START : getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_START);
+            if (upgradeDiamondsCount < next && diamondTier == 1 && upgradeDiamondsCount != 0) {
+                setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_II);
+            } else {
+                setNextEvent(NextEvent.EMERALD_GENERATOR_TIER_III);
+            }
+            upgradeEmeraldsCount = next;
+            emeraldTier = 2;
+            sendEmeraldsUpgradeMessages();
+            for (OreGenerator o : getOreGenerators()) {
+                if (o.getOre().getType() == Material.EMERALD) {
+                    o.upgrade();
+                }
+            }
+        } else if (nextEvent == NextEvent.DIAMOND_GENERATOR_TIER_II && upgradeDiamondsCount == 0) {
+            int next = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START) == null ?
+                    "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START : getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START);
+            if (upgradeEmeraldsCount < next && emeraldTier == 1 && upgradeEmeraldsCount != 0) {
                 setNextEvent(NextEvent.EMERALD_GENERATOR_TIER_II);
-            } else if (emeraldTier == 2) {
+            } else {
+                setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_III);
+            }
+            upgradeDiamondsCount = next;
+            diamondTier = 2;
+            sendDiamondsUpgradeMessages();
+            for (OreGenerator o : getOreGenerators()) {
+                if (o.getOre().getType() == Material.DIAMOND) {
+                    o.upgrade();
+                }
+            }
+        } else if (nextEvent == NextEvent.EMERALD_GENERATOR_TIER_III && upgradeEmeraldsCount == 0) {
+            emeraldTier = 3;
+            sendEmeraldsUpgradeMessages();
+            if (diamondTier == 2 && upgradeDiamondsCount > 0) {
+                setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_III);
+            } else {
+                setNextEvent(NextEvent.BEDS_DESTROY);
+            }
+        } else if (nextEvent == NextEvent.DIAMOND_GENERATOR_TIER_III && upgradeDiamondsCount == 0) {
+            diamondTier = 3;
+            sendDiamondsUpgradeMessages();
+            if (emeraldTier == 2 && upgradeEmeraldsCount > 0) {
                 setNextEvent(NextEvent.EMERALD_GENERATOR_TIER_III);
             } else {
                 setNextEvent(NextEvent.BEDS_DESTROY);
             }
-        } else if (emeraldTier >= 3 && diamondTier >= 3 && (playingTask != null && playingTask.getBedsDestroyCountdown() == 0)) {
-            setNextEvent(NextEvent.BEDS_DESTROY);
-        } else if (nextEvent == NextEvent.BEDS_DESTROY && (playingTask != null && playingTask.getDragonSpawnCountdown() >= 0)) {
+        } else if (nextEvent == NextEvent.BEDS_DESTROY && getPlayingTask().getBedsDestroyCountdown() == 0) {
             setNextEvent(NextEvent.ENDER_DRAGON);
-        } else if (nextEvent == NextEvent.ENDER_DRAGON && (playingTask != null && playingTask.getBedsDestroyCountdown() == 0) && (playingTask != null && playingTask.getDragonSpawnCountdown() == 0)) {
+        } else if (nextEvent == NextEvent.ENDER_DRAGON && getPlayingTask().getDragonSpawnCountdown() == 0) {
             setNextEvent(NextEvent.GAME_END);
-        }*/
+        }
+
+        //if (nextEvent.getValue(this) > 0) return;
+
+        //nextEvents.remove(nextEvent.toString());
+
+        //for (String s : nextEvents) {
+        //    debug(s);
+        //}
+
+        //if (nextEvents.isEmpty()) return;
+
+        //NextEvent next = NextEvent.valueOf(nextEvents.get(0));
+        //int lowest = next.getValue(this);
+
+        //for (String ne : nextEvents) {
+        //    int value = NextEvent.valueOf(ne).getValue(this);
+        //    if (value == -1) continue;
+        //    if (lowest > value) next = NextEvent.valueOf(ne);
+        //}
+
+        debug("---");
+
+    /*if (nextEvent == NextEvent.DIAMOND_GENERATOR_TIER_II) {
+        setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_III);
+    } else if (nextEvent == NextEvent.DIAMOND_GENERATOR_TIER_III) {
+        if (emeraldTier == 1) {
+            setNextEvent(NextEvent.EMERALD_GENERATOR_TIER_II);
+        } else if (emeraldTier == 2) {
+            setNextEvent(NextEvent.EMERALD_GENERATOR_TIER_III);
+        } else {
+            setNextEvent(NextEvent.BEDS_DESTROY);
+        }
+    } else if (emeraldTier >= 3 && diamondTier >= 3 && (playingTask != null && playingTask.getBedsDestroyCountdown() == 0)) {
+        setNextEvent(NextEvent.BEDS_DESTROY);
+    } else if (nextEvent == NextEvent.BEDS_DESTROY && (playingTask != null && playingTask.getDragonSpawnCountdown() >= 0)) {
+        setNextEvent(NextEvent.ENDER_DRAGON);
+    } else if (nextEvent == NextEvent.ENDER_DRAGON && (playingTask != null && playingTask.getBedsDestroyCountdown() == 0) && (playingTask != null && playingTask.getDragonSpawnCountdown() == 0)) {
+        setNextEvent(NextEvent.GAME_END);
+    }*/
         debug(nextEvent.toString());
     }
 
@@ -1758,5 +1814,36 @@ public class Arena implements Comparable {
      */
     public MapManager getMapManager() {
         return mapManager;
+    }
+
+
+    /**
+     * Show upgrade announcement to players.
+     * Change diamondTier value first.
+     */
+    private void sendDiamondsUpgradeMessages() {
+        for (Player p : getPlayers()) {
+            p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
+                    getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND)).replace("{tier}", getMsg(p, (diamondTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
+        }
+        for (Player p : getSpectators()) {
+            p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
+                    getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND)).replace("{tier}", getMsg(p, (diamondTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
+        }
+    }
+
+    /**
+     * Show upgrade announcement to players.
+     * Change emeraldTier value first.
+     */
+    private void sendEmeraldsUpgradeMessages() {
+        for (Player p : getPlayers()) {
+            p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
+                    getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD)).replace("{tier}", getMsg(p, (emeraldTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
+        }
+        for (Player p : getSpectators()) {
+            p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
+                    getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD)).replace("{tier}", getMsg(p, (emeraldTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
+        }
     }
 }

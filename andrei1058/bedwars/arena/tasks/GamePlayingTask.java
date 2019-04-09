@@ -67,22 +67,12 @@ public class GamePlayingTask implements Runnable {
                     getArena().upgradeDiamondsCount--;
                     if (getArena().upgradeDiamondsCount == 0) {
                         getArena().updateNextEvent();
-                        for (OreGenerator o : arena.getOreGenerators()) {
-                            if (o.getOre().getType() == Material.DIAMOND) {
-                                o.upgrade();
-                            }
-                        }
                     }
                 }
                 if (getArena().upgradeEmeraldsCount > 0) {
                     getArena().upgradeEmeraldsCount--;
                     if (getArena().upgradeEmeraldsCount == 0) {
                         getArena().updateNextEvent();
-                        for (OreGenerator o : arena.getOreGenerators()) {
-                            if (o.getOre().getType() == Material.EMERALD) {
-                                o.upgrade();
-                            }
-                        }
                     }
                 }
                 break;
