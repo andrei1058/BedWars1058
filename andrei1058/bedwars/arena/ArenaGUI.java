@@ -82,7 +82,7 @@ public class ArenaGUI {
             List<String> lore = new ArrayList<>();
             for (String s : Language.getList(p, Messages.ARENA_GUI_ARENA_CONTENT_LORE)) {
                 if (!(s.contains("{group}") && arenas.get(arenaKey).getGroup().equalsIgnoreCase("default"))) {
-                    lore.add(s.replace("{on}", String.valueOf(arenas.get(arenaKey).getGroup())).replace("{max}",
+                    lore.add(s.replace("{on}", String.valueOf(arenas.get(arenaKey).getPlayers().size())).replace("{max}",
                             String.valueOf(arenas.get(arenaKey).getMaxPlayers())).replace("{status}", arenas.get(arenaKey).getDisplayStatus(Language.getPlayerLanguage(p)))
                             .replace("{group}", arenas.get(arenaKey).getGroup()));
                 }
