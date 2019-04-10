@@ -61,7 +61,7 @@ public class EggBridgeTask implements Runnable {
             return;
         }
 
-        if (getPlayer().getWorld() != getProjectile().getWorld()){
+        if (!arena.isPlayer(getPlayer())){
             task.cancel();
             return;
         }
