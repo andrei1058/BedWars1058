@@ -3,13 +3,11 @@ package com.andrei1058.bedwars.listeners;
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
-
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.shop.listeners.InventoryListener;
-import com.andrei1058.bedwars.shop.main.ShopCategory;
 import com.andrei1058.bedwars.upgrades.UpgradeGroup;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

@@ -1512,8 +1512,10 @@ public class Arena implements Comparable {
             // next diamond time < next emerald time
             int next = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_START) == null ?
                     "Default." + ConfigPath.GENERATOR_EMERALD_TIER_III_START : getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_START);
-            if (upgradeDiamondsCount < next && diamondTier == 1 && upgradeDiamondsCount != 0) {
+            if (upgradeDiamondsCount < next && diamondTier == 1) {
                 setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_II);
+            } else if (upgradeDiamondsCount < next && diamondTier == 2) {
+                setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_III);
             } else {
                 setNextEvent(NextEvent.EMERALD_GENERATOR_TIER_III);
             }
@@ -1528,8 +1530,10 @@ public class Arena implements Comparable {
         } else if (nextEvent == NextEvent.DIAMOND_GENERATOR_TIER_II && upgradeDiamondsCount == 0) {
             int next = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START) == null ?
                     "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START : getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START);
-            if (upgradeEmeraldsCount < next && emeraldTier == 1 && upgradeEmeraldsCount != 0) {
+            if (upgradeEmeraldsCount < next && emeraldTier == 1) {
                 setNextEvent(NextEvent.EMERALD_GENERATOR_TIER_II);
+            } else if (upgradeEmeraldsCount < next && emeraldTier == 2) {
+                setNextEvent(NextEvent.EMERALD_GENERATOR_TIER_III);
             } else {
                 setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_III);
             }
@@ -1544,7 +1548,9 @@ public class Arena implements Comparable {
         } else if (nextEvent == NextEvent.EMERALD_GENERATOR_TIER_III && upgradeEmeraldsCount == 0) {
             emeraldTier = 3;
             sendEmeraldsUpgradeMessages();
-            if (diamondTier == 2 && upgradeDiamondsCount > 0) {
+            if (diamondTier == 1 && upgradeDiamondsCount > 0) {
+                setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_II);
+            } else if (diamondTier == 2 && upgradeDiamondsCount > 0) {
                 setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_III);
             } else {
                 setNextEvent(NextEvent.BEDS_DESTROY);
@@ -1552,7 +1558,9 @@ public class Arena implements Comparable {
         } else if (nextEvent == NextEvent.DIAMOND_GENERATOR_TIER_III && upgradeDiamondsCount == 0) {
             diamondTier = 3;
             sendDiamondsUpgradeMessages();
-            if (emeraldTier == 2 && upgradeEmeraldsCount > 0) {
+            if (emeraldTier == 1 && upgradeEmeraldsCount > 0) {
+                setNextEvent(NextEvent.EMERALD_GENERATOR_TIER_II);
+            } else if (emeraldTier == 2 && upgradeEmeraldsCount > 0) {
                 setNextEvent(NextEvent.EMERALD_GENERATOR_TIER_III);
             } else {
                 setNextEvent(NextEvent.BEDS_DESTROY);
