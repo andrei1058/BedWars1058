@@ -790,7 +790,7 @@ public class Arena implements Comparable {
         reJoin.getBwt().reJoin(p);
         reJoin.destroy();
 
-        new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + "Playing", Messages.SCOREBOARD_DEFAULT_PLAYING), this);
+        new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING), this);
 
         Bukkit.getPluginManager().callEvent(new PlayerReJoinEvent(p, this));
         return true;
@@ -1017,12 +1017,8 @@ public class Arena implements Comparable {
      * @param finalKills True if you want to get the Final Kills. False for regular kills.
      */
     int getPlayerKills(Player p, boolean finalKills) {
-        if (finalKills) {
-            if (playerFinalKills.containsKey(p)) return playerFinalKills.get(p);
-            return 0;
-        }
-        if (playerKills.containsKey(p)) return playerKills.get(p);
-        return 0;
+        if (finalKills) return playerFinalKills.getOrDefault(p, 0);
+        return playerKills.getOrDefault(p, 0);
     }
 
     /**
