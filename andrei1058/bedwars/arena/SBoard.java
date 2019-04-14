@@ -141,7 +141,7 @@ public class SBoard {
                 String[] ne = getNextEvent();
                 for (BedWarsTeam team : arena.getTeams()) {
                     temp = temp.replace("{Team" + team.getName() + "Color}", TeamColor.getChatColor(team.getColor()).toString()).replace("{Team" + team.getName() + "Name}",
-                            team.getName()).replace("{Team" + team.getName() + "Status}", String.valueOf(team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED).replace("{remainingPlayers}",
+                            team.getName()).replace("{Team" + team.getName() + "Status}", (team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED).replace("{remainingPlayers}",
                             String.valueOf(team.getSize())) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE)) + (team.isMember(getP()) ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM) : ""));
                 }
                 setContent(t, temp.replace("{map}", arena.getDisplayName()).replace("{server}", Bukkit.getServer().getMotd())
@@ -207,7 +207,7 @@ public class SBoard {
                     String text = e.getValue();
                     for (BedWarsTeam team : arena.getTeams()) {
                         text = text.replace("{Team" + team.getName() + "Color}", TeamColor.getChatColor(team.getColor()).toString()).replace("{Team" + team.getName() + "Name}",
-                                team.getName()).replace("{Team" + team.getName() + "Status}", String.valueOf(team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED).replace("{remainingPlayers}",
+                                team.getName()).replace("{Team" + team.getName() + "Status}", (team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED).replace("{remainingPlayers}",
                                 String.valueOf(team.getSize())) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE)) + (team.isMember(getP()) ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM) : ""));
                     }
                     setContent(e.getKey(), text.replace("{on}", String.valueOf(arena.getPlayers().size())).replace("{max}", String.valueOf(arena.getMaxPlayers()))
