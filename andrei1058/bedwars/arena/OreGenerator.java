@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.arena;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GeneratorType;
 import com.andrei1058.bedwars.api.events.GeneratorUpgradeEvent;
 import com.andrei1058.bedwars.configuration.ConfigPath;
@@ -54,6 +55,7 @@ public class OreGenerator {
         this.bwt = bwt;
         this.type = type;
         loadDefaults(true);
+        Main.debug("Initializing new generator at: " + location.toString() + " - " + type + " - " + (bwt == null ? "NOTEAM" : bwt.getName()));
     }
 
     public void upgrade() {
@@ -170,6 +172,7 @@ public class OreGenerator {
     }
 
     public void setOre(ItemStack ore) {
+        Main.debug("Changing ore for generator at " + location.toString() + " from " + this.ore + " to " + ore);
         this.ore = ore;
     }
 

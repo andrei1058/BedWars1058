@@ -42,11 +42,14 @@ public class GeneratorAction extends UpgradeAction {
             bwt.getGoldGenerator().setSpawnLimit(goldLimit);
         }
         if (emeraldAmount > 0 && emeraldDelay > 0 && bwt.getEmeraldGenerator() == null){
-            bwt.setEmeraldGenerator(new OreGenerator(bwt.getIronGenerator().getLocation(), bwt.getArena(), GeneratorType.IRON, bwt));
-            bwt.getEmeraldGenerator().setDelay(emeraldDelay);
-            bwt.getEmeraldGenerator().setAmount(emeraldAmount);
-            bwt.getEmeraldGenerator().enable();
-            bwt.getEmeraldGenerator().setOre(new ItemStack(Material.EMERALD));
+            OreGenerator g = new OreGenerator(bwt.getIronGenerator().getLocation(), bwt.getArena(), GeneratorType.IRON, bwt);
+            g.setDelay(emeraldDelay);
+            g.setAmount(emeraldAmount);
+            g.setOre(new ItemStack(Material.EMERALD));
+            g.setType(GeneratorType.EMERALD);
+            bwt.setEmeraldGenerator(g);
+            //bwt.getEmeraldGenerator().enable();
+            bwt.getArena().getOreGenerators().add(g);
         } else {
             if (emeraldDelay > 0){
                 bwt.getEmeraldGenerator().setDelay(emeraldDelay);
