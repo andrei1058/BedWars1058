@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Messages;
+import com.andrei1058.bedwars.levels.internal.PlayerLevel;
 import com.andrei1058.bedwars.stats.StatsManager;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import org.bukkit.Bukkit;
@@ -50,9 +51,16 @@ public class SBoard {
             this.placeholders.add("{kills}");
             this.placeholders.add("{finalKills}");
             this.placeholders.add("{beds}");
+        } else {
+            placeholders = new ArrayList<>(placeholders);
+            this.placeholders.add("{progress}");
+            this.placeholders.add("{level}");
+            this.placeholders.add("{currentXp}");
+            this.placeholders.add("{requiredXp}");
         }
         this.setStrings(content);
         Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+            if (!p.isOnline()) return;
             p.setScoreboard(sb);
             scoreboards.add(this);
         }, 10L);
@@ -77,6 +85,7 @@ public class SBoard {
         dateFormat = new SimpleDateFormat(getMsg(p, Messages.FORMATTING_SCOREBOARD_NEXEVENT_TIMER));
         this.setStrings(getScoreboard(p, "scoreboard." + arena.getGroup() + "Playing", Messages.SCOREBOARD_DEFAULT_PLAYING));
         Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+            if (!p.isOnline()) return;
             p.setScoreboard(sb);
             scoreboards.add(this);
             giveTeamColorTag();
@@ -124,7 +133,9 @@ public class SBoard {
                 temp = temp.replace("{server}", Bukkit.getServer().getMotd()).replace("{on}", String.valueOf(Bukkit.getOnlinePlayers().size()))
                         .replace("{max}", String.valueOf(Bukkit.getServer().getMaxPlayers())).replace("{date}",
                                 new SimpleDateFormat(getMsg(getP(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis())))
-                        .replace("{money}", String.valueOf(getEconomy().getMoney(p)));
+                        .replace("{money}", String.valueOf(getEconomy().getMoney(p))).replace("{progress}", PlayerLevel.getLevelByPlayer(p.getUniqueId()).getProgress())
+                .replace("{level}", PlayerLevel.getLevelByPlayer(p.getUniqueId()).getLevelName()).replace("{currentXp}", PlayerLevel.getLevelByPlayer(p.getUniqueId()).getFormattedCurrentXp())
+                .replace("{requiredXp}", PlayerLevel.getLevelByPlayer(p.getUniqueId()).getFormattedRequiredXp());
 
                 setContent(t, replaceStatsPlaceholders(getP(), temp, false));
 
