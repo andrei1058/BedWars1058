@@ -17,11 +17,15 @@ public class QuickBuyTask extends BukkitRunnable {
 
     public QuickBuyTask(UUID uuid){
         this.uuid = uuid;
-        this.runTaskLater(Main.plugin, 20*7);
+        this.runTaskLaterAsynchronously(Main.plugin, 20*7);
     }
 
     @Override
     public void run() {
+        if (Bukkit.getPlayer(uuid) == null){
+            cancel();
+            return;
+        }
         if (Bukkit.getPlayer(uuid).isOnline()){
             PlayerQuickBuyCache cache = PlayerQuickBuyCache.getQuickBuyCache(uuid);
             if (cache == null){
@@ -29,7 +33,7 @@ public class QuickBuyTask extends BukkitRunnable {
                 return;
             }
 
-            if (!Main.database.hasQuickBuy(uuid)){
+            if (!Main.getRemoteDatabase().hasQuickBuy(uuid)){
                 if (Main.shop.getYml().get(ConfigPath.SHOP_QUICK_DEFAULTS_PATH) != null){
                     for (String s : Main.shop.getYml().getConfigurationSection(ConfigPath.SHOP_QUICK_DEFAULTS_PATH).getKeys(false)) {
                         if (Main.shop.getYml().get(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + "." + s + ".path") != null) {
@@ -57,7 +61,7 @@ public class QuickBuyTask extends BukkitRunnable {
                 }
             } else {
                 for (int x : PlayerQuickBuyCache.quickSlots) {
-                    String identifier = Main.database.getQuickBuySlots(uuid, x);
+                    String identifier = Main.getRemoteDatabase().getQuickBuySlots(uuid, x);
                     if (identifier.isEmpty()) continue;
                     if (identifier.equals(" ")) continue;
                     QuickBuyElement e = new QuickBuyElement(identifier, x);

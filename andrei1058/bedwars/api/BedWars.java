@@ -6,14 +6,14 @@ import com.andrei1058.bedwars.api.events.PlayerAfkEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.language.Language;
+import com.andrei1058.bedwars.levels.Level;
+import com.andrei1058.bedwars.stats.StatsManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.UUID;
-
-import static com.andrei1058.bedwars.Main.database;
 
 public class BedWars implements GameAPI {
 
@@ -24,102 +24,57 @@ public class BedWars implements GameAPI {
 
     @Override
     public int getApiVersion() {
-        return 12;
-    }
-
-    @Override
-    public boolean isStats() {
-        return database.isStats();
+        return 13;
     }
 
     @Override
     public Timestamp getPlayerFirstPlay(Player p) {
-        return database.getFirstPlay(p);
+        return StatsManager.getStatsCache().getFirstPlay(p.getUniqueId());
     }
 
     @Override
     public Timestamp getPlayerLastPlay(Player p) {
-        return database.getLastPlay(p);
+        return StatsManager.getStatsCache().getLastPlay(p.getUniqueId());
     }
 
     @Override
     public int getPlayerWins(Player p) {
-        return database.getWins(p);
+        return StatsManager.getStatsCache().getWins(p.getUniqueId());
     }
 
     @Override
     public int getPlayerKills(Player p) {
-        return database.getKills(p);
+        return StatsManager.getStatsCache().getKills(p.getUniqueId());
     }
 
     @Override
     public int getPlayerFinalKills(Player p) {
-        return database.getFinalKills(p);
+        return StatsManager.getStatsCache().getFinalKills(p.getUniqueId());
     }
 
     @Override
     public int getPlayerLooses(Player p) {
-        return database.getLooses(p);
+        return StatsManager.getStatsCache().getLosses(p.getUniqueId());
     }
 
     @Override
     public int getPlayerDeaths(Player p) {
-        return database.getDeaths(p);
+        return StatsManager.getStatsCache().getDeaths(p.getUniqueId());
     }
 
     @Override
     public int getPlayerFinalDeaths(Player p) {
-        return database.getFinalDeaths(p);
+        return StatsManager.getStatsCache().getFinalDeaths(p.getUniqueId());
     }
 
     @Override
     public int getPlayerBedsDestroyed(Player p) {
-        return database.getBedsDestroyed(p);
+        return StatsManager.getStatsCache().getBedsDestroyed(p.getUniqueId());
     }
 
     @Override
     public int getPlayerGamesPlayed(Player p) {
-        return database.getGamesPlayed(p);
-    }
-
-    @Override
-    public HashMap<UUID, Integer> getTopWins(int x) {
-        return database.getTopWins(x);
-    }
-
-    @Override
-    public HashMap<UUID, Integer> getTopKills(int x) {
-        return database.getTopKills(x);
-    }
-
-    @Override
-    public HashMap<UUID, Integer> getTopFinalKills(int x) {
-        return database.getTopFinalKills(x);
-    }
-
-    @Override
-    public HashMap<UUID, Integer> getTopLooses(int x) {
-        return database.getTopLooses(x);
-    }
-
-    @Override
-    public HashMap<UUID, Integer> getTopDeaths(int x) {
-        return database.getTopDeaths(x);
-    }
-
-    @Override
-    public HashMap<UUID, Integer> getTopFinalDeaths(int x) {
-        return database.getTopFinalDeaths(x);
-    }
-
-    @Override
-    public HashMap<UUID, Integer> getTopBedsDestroyed(int x) {
-        return database.getTopBedsDestroyed(x);
-    }
-
-    @Override
-    public HashMap<UUID, Integer> getTopGamesPlayed(int x) {
-        return database.getTopGamesPlayed(x);
+        return StatsManager.getStatsCache().getGamesPlayed(p.getUniqueId());
     }
 
     @Override

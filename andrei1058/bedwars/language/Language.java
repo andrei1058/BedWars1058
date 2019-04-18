@@ -1,7 +1,12 @@
 package com.andrei1058.bedwars.language;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.events.PlayerLangChangeEvent;
+import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.arena.Misc;
+import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.configuration.ConfigPath;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -11,8 +16,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.andrei1058.bedwars.Main.lang;
-import static com.andrei1058.bedwars.Main.plugin;
+import static com.andrei1058.bedwars.Main.*;
 
 public class Language {
 
@@ -253,5 +257,45 @@ public class Language {
     public static void addContentMessages(YamlConfiguration yml, String contentName, String categoryName, String itemName, List<String> itemLore) {
         yml.addDefault(Messages.SHOP_CONTENT_TIER_ITEM_NAME.replace("%category%", categoryName).replace("%content%", contentName), itemName);
         yml.addDefault(Messages.SHOP_CONTENT_TIER_ITEM_LORE.replace("%category%", categoryName).replace("%content%", contentName), itemLore);
+    }
+
+    /**
+     * Change a player language and refresh
+     * scoreboard and custom join items.
+     */
+    public static void setPlayerLanguage(Player p, String iso, boolean onLogin) {
+
+        if (onLogin){
+            if (lang.getIso().equalsIgnoreCase(iso)) return;
+        }
+
+        Language newLang = Language.getLang(iso);
+
+        if (!onLogin) {
+            Language oldLang = Language.getLangByPlayer().containsKey(p) ? Language.getPlayerLanguage(p) : Language.getLanguages().get(0);
+            PlayerLangChangeEvent e = new PlayerLangChangeEvent(p, oldLang, newLang);
+            Bukkit.getPluginManager().callEvent(e);
+            if (e.isCancelled()) return;
+        }
+
+        if (Language.getLangByPlayer().containsKey(p)) {
+            Language.getLangByPlayer().replace(p, newLang);
+        } else {
+            Language.getLangByPlayer().put(p, newLang);
+        }
+
+        if (!onLogin) {
+            if (Main.config.getLobbyWorldName().equalsIgnoreCase(p.getWorld().getName())){
+                Arena.sendLobbyCommandItems(p);
+                for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
+                    if (sb.getP() == p) {
+                        sb.remove();
+                    }
+                }
+                if (p.getScoreboard() != null){
+                    Misc.giveLobbySb(p);
+                }
+            }
+        }
     }
 }

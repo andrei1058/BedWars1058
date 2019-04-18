@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.support.leaderheads;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.stats.StatsManager;
 import me.robin.leaderheads.datacollectors.OnlineDataCollector;
 import me.robin.leaderheads.objects.BoardType;
 import org.bukkit.entity.Player;
@@ -15,6 +16,6 @@ public class BedWarsLosses extends OnlineDataCollector {
 
     @Override
     public Double getScore(Player player) {
-        return Double.valueOf(Main.database.getLooses(player));
+        return (double) StatsManager.getStatsCache().getLosses(player.getUniqueId());
     }
 }

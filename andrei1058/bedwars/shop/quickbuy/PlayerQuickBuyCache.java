@@ -28,6 +28,7 @@ public class PlayerQuickBuyCache {
     private static List<PlayerQuickBuyCache> quickBuyCaches = new ArrayList<>();
 
     public PlayerQuickBuyCache(Player player) {
+        if (player == null) return;
         this.player = player;
         this.emptyItem = Main.nms.createItemStack(Main.shop.getYml().getString(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_MATERIAL),
                 Main.shop.getYml().getInt(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_AMOUNT),
@@ -93,7 +94,7 @@ public class PlayerQuickBuyCache {
             addQuickElement(new QuickBuyElement(cc.getIdentifier(), slot));
             element = cc.getIdentifier();
         }
-        Main.database.setQuickBuySlot(player.getUniqueId(), element, slot);
+        Main.getRemoteDatabase().setQuickBuySlot(player.getUniqueId(), element, slot);
     }
 
     private ItemStack getEmptyItem(Player player) {

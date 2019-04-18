@@ -1,7 +1,5 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 
-import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.api.command.ParentCommand;

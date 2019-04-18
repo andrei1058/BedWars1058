@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.tasks;
+package com.andrei1058.bedwars.arena.tasks;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
@@ -12,11 +12,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import static com.andrei1058.bedwars.Main.nms;
@@ -70,26 +67,12 @@ public class GamePlayingTask implements Runnable {
                     getArena().upgradeDiamondsCount--;
                     if (getArena().upgradeDiamondsCount == 0) {
                         getArena().updateNextEvent();
-                        for (OreGenerator o  : OreGenerator.getGenerators()) {
-                            if (o.getArena() == getArena()) {
-                                if (o.getOre().getType() == Material.DIAMOND) {
-                                    o.upgrade();
-                                }
-                            }
-                        }
                     }
                 }
                 if (getArena().upgradeEmeraldsCount > 0) {
                     getArena().upgradeEmeraldsCount--;
                     if (getArena().upgradeEmeraldsCount == 0) {
                         getArena().updateNextEvent();
-                        for (OreGenerator o  : OreGenerator.getGenerators()) {
-                            if (o.getArena() == getArena()) {
-                                if (o.getOre().getType() == Material.EMERALD) {
-                                    o.upgrade();
-                                }
-                            }
-                        }
                     }
                 }
                 break;
@@ -130,12 +113,10 @@ public class GamePlayingTask implements Runnable {
                         }
                     }
                     getArena().updateNextEvent();
-                    for (OreGenerator o  : OreGenerator.getGenerators()) {
-                        if (o.getArena() == getArena()) {
-                            Location l = o.getLocation();
-                            for (int y = 0; y < 20; y++) {
-                                l.clone().subtract(0, y, 0).getBlock().setType(Material.AIR);
-                            }
+                    for (OreGenerator o : arena.getOreGenerators()) {
+                        Location l = o.getLocation();
+                        for (int y = 0; y < 20; y++) {
+                            l.clone().subtract(0, y, 0).getBlock().setType(Material.AIR);
                         }
                     }
                     for (BedWarsTeam t : getArena().getTeams()) {
@@ -150,7 +131,7 @@ public class GamePlayingTask implements Runnable {
                 game_end_countdown--;
                 if (getGameEndCountdown() == 0) {
                     getArena().checkWinner();
-                    getArena().setStatus(GameState.restarting);
+                    getArena().changeStatus(GameState.restarting);
                 }
                 break;
         }
@@ -220,12 +201,12 @@ public class GamePlayingTask implements Runnable {
         }
 
         /* SPAWN ITEMS */
-        /*for (OreGenerator o : getArena().getOreGenerators()) {
+        for (OreGenerator o : getArena().getOreGenerators()) {
             o.spawn();
-        }*/
+        }
     }
 
-    public void cancel(){
+    public void cancel() {
         task.cancel();
     }
 }

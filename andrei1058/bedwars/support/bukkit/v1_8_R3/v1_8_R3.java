@@ -28,15 +28,16 @@ import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.material.Crops;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scoreboard.Team;
+import org.bukkit.util.Vector;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.despawnables.TargetListener.owningTeam;
@@ -367,24 +368,23 @@ public class v1_8_R3 implements NMS {
             this.goalSelector.a(10, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0f));
         }
 
-        @Override
         public void move(double d0, double d1, double d2) {
         }
 
-        @Override
         public void collide(net.minecraft.server.v1_8_R3.Entity entity) {
         }
 
-        @Override
         public boolean damageEntity(DamageSource damagesource, float f) {
             return false;
         }
 
-        @Override
         public void g(double d0, double d1, double d2) {
         }
 
-        @Override
+        public void makeSound(String s, float f, float f1) {
+
+        }
+
         protected void initAttributes() {
             super.initAttributes();
             this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.0D);
@@ -690,6 +690,11 @@ public class v1_8_R3 implements NMS {
     }
 
     @Override
+    public void setBlockData(org.bukkit.block.Block block, String data) {
+        setBlockData(block, Byte.valueOf(data));
+    }
+
+    @Override
     public org.bukkit.Material woolMaterial() {
         return org.bukkit.Material.valueOf("WOOL");
     }
@@ -711,5 +716,28 @@ public class v1_8_R3 implements NMS {
         }
         tag.setString("tierIdentifier", identifier);
         return CraftItemStack.asBukkitCopy(i);
+    }
+
+    @Override
+    public ItemStack getPlayerHead(Player player) {
+        ItemStack head = new ItemStack(org.bukkit.Material.SKULL_ITEM, 1, (short)3);
+
+        SkullMeta headMeta = (SkullMeta) head.getItemMeta();
+        Field profileField;
+        try {
+            profileField = headMeta.getClass().getDeclaredField("profile");
+            profileField.setAccessible(true);
+            profileField.set(headMeta, ((CraftPlayer)player).getProfile());
+        } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e1) {
+            e1.printStackTrace();
+        }
+        head.setItemMeta(headMeta);
+        return head;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public String getBlockData(org.bukkit.block.Block block) {
+        return String.valueOf(block.getData());
     }
 }

@@ -3,20 +3,20 @@ package com.andrei1058.bedwars.support.bukkit;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
-import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.exceptions.InvalidSoundException;
+import com.mojang.authlib.properties.Property;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Team;
+import org.bukkit.util.Vector;
 
 import java.util.List;
 
@@ -175,9 +175,10 @@ public interface NMS {
 
     /**
      * Show a player
-     * @param whoToShow this player will be shown for the second param
      *
-     * For 1.13 is using - #showPlayer​(Plugin plugin, Player player)
+     * @param whoToShow this player will be shown for the second param
+     *                  <p>
+     *                  For 1.13 is using - #showPlayer​(Plugin plugin, Player player)
      */
     void showPlayer(Player whoToShow, Player p);
 
@@ -339,13 +340,19 @@ public interface NMS {
      */
     Material materialGoldenLeggings();
 
-    /** Cake material*/
+    /**
+     * Cake material
+     */
     Material materialCake();
 
-    /** Crafting table material */
+    /**
+     * Crafting table material
+     */
     Material materialCraftingTable();
 
-    /** Enchanting table material*/
+    /**
+     * Enchanting table material
+     */
     Material materialEnchantingTable();
 
     /**
@@ -371,6 +378,14 @@ public interface NMS {
      */
     void setBlockData(Block block, byte data);
 
+    /**
+     * Set block data
+     * For versions before 1.13
+     *
+     * @since API 11
+     */
+    void setBlockData(Block block, String data);
+
 
     /**
      * Wool material
@@ -388,4 +403,16 @@ public interface NMS {
      */
     ItemStack setShopUpgradeIdentifier(ItemStack itemStack, String identifier);
 
+    /**
+     * Get player head with skin.
+     */
+    ItemStack getPlayerHead(Player player);
+
+    /**
+     * Get block data.
+     * Used for facing.
+     *
+     * 1.13 direction,rotation.
+     */
+    String getBlockData(Block block);
 }

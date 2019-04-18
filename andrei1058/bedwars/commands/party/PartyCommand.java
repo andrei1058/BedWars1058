@@ -32,118 +32,112 @@ public class PartyCommand extends BukkitCommand {
             sendPartyCmds(p);
             return true;
         }
-        if (args.length >= 1){
-            switch (args[0].toLowerCase()){
-                case "invite":
-                    if (args.length == 1){
-                        p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INVITE_USAGE));
-                     return true;
-                    }
-                    if (getParty().hasParty(p) && !getParty().isOwner(p)){
-                        p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INSUFFICIENT_PERMISSIONS));
+        switch (args[0].toLowerCase()){
+            case "invite":
+                if (args.length == 1){
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INVITE_USAGE));
+                 return true;
+                }
+                if (getParty().hasParty(p) && !getParty().isOwner(p)){
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INSUFFICIENT_PERMISSIONS));
+                    return true;
+                }
+                if (Bukkit.getPlayer(args[1]) != null && Bukkit.getPlayer(args[1]).isOnline()){
+                    if (p == Bukkit.getPlayer(args[1])){
+                        p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INVITE_DENIED_CANNOT_INVITE_YOURSELF));
                         return true;
                     }
-                    if (args.length >= 2){
-                        if (Bukkit.getPlayer(args[1]) != null && Bukkit.getPlayer(args[1]).isOnline()){
-                            if (p == Bukkit.getPlayer(args[1])){
-                                p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INVITE_DENIED_CANNOT_INVITE_YOURSELF));
-                                return true;
-                            }
-                            p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INVITE_SENT).replace("{player}", args[1]));
-                            TextComponent tc = new TextComponent(getMsg(p, Messages.COMMAND_PARTY_INVITE_SENT_TARGET_RECEIVE_MSG).replace("{player}", p.getName()));
-                            tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party accept "+p.getName()));
-                            Bukkit.getPlayer(args[1]).spigot().sendMessage(tc);
-                            if (partySessionRequest.containsKey(p.getUniqueId())){
-                                partySessionRequest.replace(p.getUniqueId(), Bukkit.getPlayer(args[1]).getUniqueId());
-                            } else {
-                                partySessionRequest.put(p.getUniqueId(), Bukkit.getPlayer(args[1]).getUniqueId());
-                            }
-                        } else {
-                            p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE).replace("{player}", args[1]));
-                        }
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INVITE_SENT).replace("{player}", args[1]));
+                    TextComponent tc = new TextComponent(getMsg(p, Messages.COMMAND_PARTY_INVITE_SENT_TARGET_RECEIVE_MSG).replace("{player}", p.getName()));
+                    tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party accept "+p.getName()));
+                    Bukkit.getPlayer(args[1]).spigot().sendMessage(tc);
+                    if (partySessionRequest.containsKey(p.getUniqueId())){
+                        partySessionRequest.replace(p.getUniqueId(), Bukkit.getPlayer(args[1]).getUniqueId());
+                    } else {
+                        partySessionRequest.put(p.getUniqueId(), Bukkit.getPlayer(args[1]).getUniqueId());
                     }
-                    break;
-                case "accept":
-                    if (args.length < 2){
-                        return true;
-                    }
-                    if (getParty().hasParty(p)){
-                        p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_DENIED_ALREADY_IN_PARTY));
-                        return true;
-                    }
-                    if (Bukkit.getPlayer(args[1]) == null || !Bukkit.getPlayer(args[1]).isOnline()){
-                        p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE).replace("{player}", args[1]));
-                        return true;
-                    }
-                    if (!partySessionRequest.containsKey(Bukkit.getPlayer(args[1]).getUniqueId())){
-                        p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_DENIED_NO_INVITE));
-                        return true;
-                    }
-                    if (partySessionRequest.get(Bukkit.getPlayer(args[1]).getUniqueId()).toString().equalsIgnoreCase(p.getUniqueId().toString())){
-                        partySessionRequest.remove(Bukkit.getPlayer(args[1]).getUniqueId());
-                        if (getParty().hasParty(Bukkit.getPlayer(args[1]))){
-                            getParty().addMember(Bukkit.getPlayer(args[1]), p);
-                            for (Player on : getParty().getMembers(Bukkit.getPlayer(args[1]))){
-                                on.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_SUCCESS).replace("{player}", p.getName()));
-                            }
-                        } else {
-                            getParty().createParty(Bukkit.getPlayer(args[1]), p);
-                            for (Player on : getParty().getMembers(Bukkit.getPlayer(args[1]))){
-                                on.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_SUCCESS).replace("{player}", p.getName()));
-                            }
+                } else {
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE).replace("{player}", args[1]));
+                }
+                break;
+            case "accept":
+                if (args.length < 2){
+                    return true;
+                }
+                if (getParty().hasParty(p)){
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_DENIED_ALREADY_IN_PARTY));
+                    return true;
+                }
+                if (Bukkit.getPlayer(args[1]) == null || !Bukkit.getPlayer(args[1]).isOnline()){
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE).replace("{player}", args[1]));
+                    return true;
+                }
+                if (!partySessionRequest.containsKey(Bukkit.getPlayer(args[1]).getUniqueId())){
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_DENIED_NO_INVITE));
+                    return true;
+                }
+                if (partySessionRequest.get(Bukkit.getPlayer(args[1]).getUniqueId()).toString().equalsIgnoreCase(p.getUniqueId().toString())){
+                    partySessionRequest.remove(Bukkit.getPlayer(args[1]).getUniqueId());
+                    if (getParty().hasParty(Bukkit.getPlayer(args[1]))){
+                        getParty().addMember(Bukkit.getPlayer(args[1]), p);
+                        for (Player on : getParty().getMembers(Bukkit.getPlayer(args[1]))){
+                            on.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_SUCCESS).replace("{player}", p.getName()));
                         }
                     } else {
-                        p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_DENIED_NO_INVITE));
-                    }
-                    break;
-                case "leave":
-                    if (!getParty().hasParty(p)){
-                        p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_GENERAL_DENIED_NOT_IN_PARTY));
-                        return true;
-                    }
-                    if (getParty().isOwner(p)){
-                        p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_LEAVE_DENIED_IS_OWNER_NEEDS_DISBAND));
-                        return true;
-                    }
-                    getParty().removeFromParty(p);
-                    break;
-                case "disband":
-                    if (!getParty().hasParty(p)){
-                        p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_GENERAL_DENIED_NOT_IN_PARTY));
-                        return true;
-                    }
-                    if (!getParty().isOwner(p)){
-                        p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INSUFFICIENT_PERMISSIONS));
-                        return true;
-                    }
-                    getParty().disband(p);
-                    break;
-                case "remove":
-                    if (args.length == 1){
-                        p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_REMOVE_USAGE));
-                        return true;
-                    }
-                    if (getParty().hasParty(p) && !getParty().isOwner(p)){
-                        p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INSUFFICIENT_PERMISSIONS));
-                        return true;
-                    }
-                    if (args.length >= 2){
-                        Player target = Bukkit.getPlayer(args[1]);
-                        if (target == null){
-                            p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_REMOVE_DENIED_TARGET_NOT_PARTY_MEMBER).replace("{player}", args[1]));
-                            return true;
+                        getParty().createParty(Bukkit.getPlayer(args[1]), p);
+                        for (Player on : getParty().getMembers(Bukkit.getPlayer(args[1]))){
+                            on.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_SUCCESS).replace("{player}", p.getName()));
                         }
-                        if (!getParty().isMember(p, target)){
-                            p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_REMOVE_DENIED_TARGET_NOT_PARTY_MEMBER).replace("{player}", args[1]));
-                            return true;
-                        }
-                        getParty().removePlayer(p, target);
                     }
+                } else {
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_DENIED_NO_INVITE));
+                }
+                break;
+            case "leave":
+                if (!getParty().hasParty(p)){
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_GENERAL_DENIED_NOT_IN_PARTY));
+                    return true;
+                }
+                if (getParty().isOwner(p)){
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_LEAVE_DENIED_IS_OWNER_NEEDS_DISBAND));
+                    return true;
+                }
+                getParty().removeFromParty(p);
+                break;
+            case "disband":
+                if (!getParty().hasParty(p)){
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_GENERAL_DENIED_NOT_IN_PARTY));
+                    return true;
+                }
+                if (!getParty().isOwner(p)){
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INSUFFICIENT_PERMISSIONS));
+                    return true;
+                }
+                getParty().disband(p);
+                break;
+            case "remove":
+                if (args.length == 1){
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_REMOVE_USAGE));
+                    return true;
+                }
+                if (getParty().hasParty(p) && !getParty().isOwner(p)){
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INSUFFICIENT_PERMISSIONS));
+                    return true;
+                }
+                Player target = Bukkit.getPlayer(args[1]);
+                if (target == null){
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_REMOVE_DENIED_TARGET_NOT_PARTY_MEMBER).replace("{player}", args[1]));
+                    return true;
+                }
+                if (!getParty().isMember(p, target)){
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_REMOVE_DENIED_TARGET_NOT_PARTY_MEMBER).replace("{player}", args[1]));
+                    return true;
+                }
+                getParty().removePlayer(p, target);
+                break;
+                default:
+                    sendPartyCmds(p);
                     break;
-                    default:
-                        sendPartyCmds(p);
-                        break;
-            }
         }
         return false;
     }

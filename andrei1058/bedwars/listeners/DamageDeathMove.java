@@ -429,7 +429,7 @@ public class DamageDeathMove implements Listener {
 
                 /** update armorstands hidden by nms **/
                 String iso = Language.getPlayerLanguage(e.getPlayer()).getIso();
-                for (OreGenerator o  : OreGenerator.getGenerators()) {
+                for (OreGenerator o  : a.getOreGenerators()) {
                     if (o.getArena() == a) {
                         o.updateHolograms(e.getPlayer(), iso);
                     }

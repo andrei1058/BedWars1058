@@ -18,14 +18,30 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.language.Language.getMsg;
 
 public class JoinLeaveTeleport implements Listener {
 
+    private static HashMap<UUID, String> preLoadedLanguage = new HashMap<>();
+
+    @SuppressWarnings("ControlFlowStatementWithoutBraces")
     @EventHandler
     public void onLogin(PlayerLoginEvent e) {
+        Player p = e.getPlayer();
+        final UUID u = p.getUniqueId();
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> {
+            String iso = Main.getRemoteDatabase().getLanguage(u);
+            if (Language.isLanguageExist(iso)) {
+                if (Main.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES).contains(iso))
+                    iso = lang.getIso();
+                preLoadedLanguage.put(u, iso);
+            }
+        });
+
         if (getServerType() == ServerType.BUNGEE) {
             if (Arena.getArenas().isEmpty()) return;
             Arena a = Arena.getArenas().get(0);
@@ -33,7 +49,6 @@ public class JoinLeaveTeleport implements Listener {
                 if (a.getPlayers().size() >= a.getMaxPlayers() && !Arena.isVip(e.getPlayer())) {
                     e.setKickMessage(getMsg(e.getPlayer(), Messages.COMMAND_JOIN_DENIED_IS_FULL));
                     e.setResult(PlayerLoginEvent.Result.KICK_FULL);
-                    return;
                 } else if (a.getPlayers().size() >= a.getMaxPlayers() && Arena.isVip(e.getPlayer())) {
                     boolean canJoin = false;
                     for (Player on : a.getPlayers()) {
@@ -47,7 +62,6 @@ public class JoinLeaveTeleport implements Listener {
                     if (!canJoin) {
                         e.setKickMessage(getMsg(e.getPlayer(), Messages.COMMAND_JOIN_DENIED_IS_FULL_OF_VIPS));
                         e.setResult(PlayerLoginEvent.Result.KICK_FULL);
-                        return;
                     }
                 }
             } else if (a.getStatus() == GameState.playing) {
@@ -66,10 +80,16 @@ public class JoinLeaveTeleport implements Listener {
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     @EventHandler(priority = EventPriority.HIGH)
     public void onJoin(PlayerJoinEvent e) {
         final Player p = e.getPlayer();
-        if (plugin.getServerType() != ServerType.BUNGEE) {
+        if (preLoadedLanguage.containsKey(e.getPlayer().getUniqueId())){
+            Language.setPlayerLanguage(e.getPlayer(), preLoadedLanguage.get(e.getPlayer().getUniqueId()), true);
+            preLoadedLanguage.remove(e.getPlayer().getUniqueId());
+        }
+
+        if (getServerType() != ServerType.BUNGEE) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 for (Player on : Bukkit.getOnlinePlayers()) {
                     if (Arena.getArenaByPlayer(on) != null) {
@@ -80,9 +100,7 @@ public class JoinLeaveTeleport implements Listener {
 
             }, 14L);
         }
-        if (!lang.getIso().equalsIgnoreCase(getLangSupport().getLang(p))) {
-            Language.getLangByPlayer().put(p, Language.getLang(getLangSupport().getLang(p)));
-        }
+
         if (debug) {
             p.sendMessage("");
             p.sendMessage("");
@@ -120,7 +138,7 @@ public class JoinLeaveTeleport implements Listener {
             e.setJoinMessage(null);
         }
 
-        if (Arena.getArenas().isEmpty()) return;
+        //if (Arena.getArenas().isEmpty()) return;
 
         if (getServerType() != ServerType.SHARED) {
             //ReJoin system
@@ -134,21 +152,18 @@ public class JoinLeaveTeleport implements Listener {
 
         if (Main.getServerType() == ServerType.SHARED) {
             if (Main.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
-                Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
-                    if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
-                        Misc.giveLobbySb(e.getPlayer());
-                    }
-                }, 20L);
+                Misc.giveLobbySb(e.getPlayer());
             }
             return;
         }
         p.getInventory().setArmorContents(null);
         if (getServerType() == ServerType.BUNGEE) {
-            Arena.getArenas().get(0).addPlayer(p, false);
+            if (!Arena.getArenas().isEmpty()) Arena.getArenas().get(0).addPlayer(p, false);
             return;
         } else {
-            p.teleport(config.getConfigLoc("lobbyLoc"));
-            Misc.giveLobbySb(p);
+            if (config.getConfigLoc("lobbyLoc") != null)
+            p.teleport(config.getConfigLoc("lobbyLoc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
+            Misc.giveLobbySb(e.getPlayer());
             Arena.sendLobbyCommandItems(p);
         }
         p.setHealthScale(20);
@@ -219,11 +234,7 @@ public class JoinLeaveTeleport implements Listener {
                             if (sBoard.getArena() == null) sBoard.remove();
                     }
                 } else {
-                    Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
-                        if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
-                            Misc.giveLobbySb(e.getPlayer());
-                        }
-                    }, 20L);
+                    Misc.giveLobbySb(e.getPlayer());
                 }
             }
         }

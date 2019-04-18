@@ -31,6 +31,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.Crops;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scoreboard.Team;
+import org.bukkit.util.Vector;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -368,6 +369,9 @@ public class v1_9_R2 implements NMS {
         public void g(double d0, double d1, double d2) {
         }
 
+        public void a(SoundEffect soundeffect, float f, float f1) {
+        }
+
         @Override
         protected void initAttributes() {
             super.initAttributes();
@@ -685,6 +689,11 @@ public class v1_9_R2 implements NMS {
     }
 
     @Override
+    public void setBlockData(org.bukkit.block.Block block, String data) {
+        setBlockData(block, Byte.valueOf(data));
+    }
+
+    @Override
     public org.bukkit.Material woolMaterial() {
         return org.bukkit.Material.valueOf("WOOL");
     }
@@ -708,4 +717,26 @@ public class v1_9_R2 implements NMS {
         return CraftItemStack.asBukkitCopy(i);
     }
 
+    @Override
+    public org.bukkit.inventory.ItemStack getPlayerHead(Player player) {
+        org.bukkit.inventory.ItemStack head = new org.bukkit.inventory.ItemStack(org.bukkit.Material.SKULL_ITEM, 1, (short)3);
+
+        SkullMeta headMeta = (SkullMeta) head.getItemMeta();
+        Field profileField;
+        try {
+            profileField = headMeta.getClass().getDeclaredField("profile");
+            profileField.setAccessible(true);
+            profileField.set(headMeta, ((CraftPlayer)player).getProfile());
+        } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e1) {
+            e1.printStackTrace();
+        }
+        head.setItemMeta(headMeta);
+        return head;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public String getBlockData(org.bukkit.block.Block block) {
+        return String.valueOf(block.getData());
+    }
 }

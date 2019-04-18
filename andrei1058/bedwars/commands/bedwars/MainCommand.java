@@ -7,6 +7,7 @@ import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.regular.*;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.regular.CmdGUI;
+import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.Level;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.Reload;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.AutoCreateTeams;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.CreateTeam;
@@ -62,7 +63,8 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.CloneArena(this, "cloneArena"); //priority 7
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.ArenaGroup(this, "arenaGroup"); //priority 8
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.Build(this, "build"); //priority 9
-        new Reload(this, "reload"); //priority 10
+        new Level(this, "level");
+        new Reload(this, "reload"); //priority 11
         new CmdList(this, "cmds"); //priority 20
 
         /* Arena setup commands (in world) */

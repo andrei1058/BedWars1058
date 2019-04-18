@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.exceptions.InvalidMaterialException;
+import com.andrei1058.bedwars.stats.StatsManager;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
@@ -24,19 +25,13 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.Random;
+import java.util.*;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.language.Language.getList;
@@ -74,7 +69,7 @@ public class Misc {
         out.writeUTF(config.getYml().getString("lobbyServer"));
         p.sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
         if (getServerType() == ServerType.BUNGEE) {
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
                 if (p.isOnline()) {
                     p.kickPlayer(getMsg(p, Messages.ARENA_RESTART_PLAYER_KICK));
                 }
@@ -143,9 +138,7 @@ public class Misc {
         ItemStack i = new ItemStack(material, 1, data);
         if (owner != null) {
             if (nms.isPlayerHead(material.toString(), data)) {
-                SkullMeta sm = (SkullMeta) i.getItemMeta();
-                sm.setOwner(owner.getName());
-                i.setItemMeta(sm);
+                i = nms.getPlayerHead(owner);
             }
         }
         ItemMeta im = i.getItemMeta();
@@ -191,7 +184,7 @@ public class Misc {
     }
 
     public static void checkUpdate() {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 HttpURLConnection checkUpdate = (HttpURLConnection) new URL("https://api.spigotmc.org/legacy/update.php?resource=50942").openConnection();
                 checkUpdate.setDoOutput(true);
@@ -288,19 +281,10 @@ public class Misc {
      */
     public static void openStatsGUI(Player p) {
 
-        Bukkit.getScheduler().runTask(plugin, ()-> {
-
-            /** cache stats */
-            int kills = database.getKills(p), deaths = database.getDeaths(p), looses = database.getLooses(p), wins = database.getWins(p),
-                    finalKills = database.getFinalKills(p), finalDeaths = database.getFinalDeaths(p), bedsDestroyed = database.getBedsDestroyed(p), gamesPlayed = database.getGamesPlayed(p);
-            Timestamp firstPlay = database.getFirstPlay(p), lastPlay = database.getLastPlay(p);
-
-            /** cache time format */
-            String timeFormat = getMsg(p, Messages.FORMATTING_STATS_DATE_FORMAT), never = getMsg(p, Messages.MEANING_NEVER);
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
 
             /** create inventory */
-            Inventory inv = Bukkit.createInventory(null, config.getInt(ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE), replaceStatsPlaceholders(p, getMsg(p, Messages.PLAYER_STATS_GUI_INV_NAME),
-                    kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never, true));
+            Inventory inv = Bukkit.createInventory(null, config.getInt(ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE), replaceStatsPlaceholders(p, getMsg(p, Messages.PLAYER_STATS_GUI_INV_NAME), true));
 
             /** add custom items to gui */
             for (String s : config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_STATS_PATH).getKeys(false)) {
@@ -309,11 +293,10 @@ public class Misc {
                 /** create new itemStack for content */
                 ItemStack i = nms.createItemStack(config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_MATERIAL.replace("%path%", s)).toUpperCase(), 1, (short) config.getInt(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_DATA.replace("%path%", s)));
                 ItemMeta im = i.getItemMeta();
-                im.setDisplayName(replaceStatsPlaceholders(p, getMsg(p, Messages.PLAYER_STATS_GUI_PATH + "-" + s + "-name"), kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed,
-                        firstPlay, lastPlay, timeFormat, p.getName(), never, true));
+                im.setDisplayName(replaceStatsPlaceholders(p, getMsg(p, Messages.PLAYER_STATS_GUI_PATH + "-" + s + "-name"), true));
                 List<String> lore = new ArrayList<>();
                 for (String string : getList(p, Messages.PLAYER_STATS_GUI_PATH + "-" + s + "-lore")) {
-                    lore.add(replaceStatsPlaceholders(p, string, kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never, true));
+                    lore.add(replaceStatsPlaceholders(p, string, true));
                 }
                 im.setLore(lore);
                 i.setItemMeta(im);
@@ -324,21 +307,41 @@ public class Misc {
         });
     }
 
-    public static String replaceStatsPlaceholders(Player pl, String s, int kills, int deaths, int looses, int wins, int finalKills, int finalDeaths,
-                                                  int beds, int games, Timestamp first, Timestamp last, String timeFormat, String player, String never, boolean papiReplacements) {
-        String lastS = last == null ? never : new SimpleDateFormat(timeFormat).format(last),
-                firstS = first == null ? never : new SimpleDateFormat(timeFormat).format(first);
-        s = s.replace("{kills}", String.valueOf(kills)).replace("{deaths}", String.valueOf(deaths)).replace("{losses}", String.valueOf(looses)).replace("{looses}", String.valueOf(looses)).replace("{wins}", String.valueOf(wins))
-                .replace("{finalKills}", String.valueOf(finalKills)).replace("{fKills}", String.valueOf(finalKills)).replace("{finalDeaths}",
-                        String.valueOf(finalDeaths)).replace("{bedsDestroyed}", String.valueOf(beds)).replace("{beds}", String.valueOf(beds))
-                .replace("{gamesPlayed}", String.valueOf(games)).replace("{firstPlay}", firstS).replace("{lastPlay}", lastS).replace("{player}", player);
+    public static String replaceStatsPlaceholders(Player pl, String s, boolean papiReplacements) {
+
+        if (s.contains("{kills}"))
+            s = s.replace("{kills}", String.valueOf(StatsManager.getStatsCache().getKills(pl.getUniqueId())));
+        if (s.contains("{deaths}"))
+            s = s.replace("{deaths}", String.valueOf(StatsManager.getStatsCache().getDeaths(pl.getUniqueId())));
+        if (s.contains("{losses}"))
+            s = s.replace("{losses}", String.valueOf(StatsManager.getStatsCache().getLosses(pl.getUniqueId())));
+        if (s.contains("{wins}"))
+            s = s.replace("{wins}", String.valueOf(StatsManager.getStatsCache().getWins(pl.getUniqueId())));
+        if (s.contains("{finalKills}"))
+            s = s.replace("{finalKills}", String.valueOf(StatsManager.getStatsCache().getFinalKills(pl.getUniqueId())));
+        if (s.contains("{finalDeaths}"))
+            s = s.replace("{finalDeaths}", String.valueOf(StatsManager.getStatsCache().getFinalDeaths(pl.getUniqueId())));
+        if (s.contains("{bedsDestroyed}"))
+            s = s.replace("{bedsDestroyed}", String.valueOf(StatsManager.getStatsCache().getBedsDestroyed(pl.getUniqueId())));
+        if (s.contains("{gamesPlayed}"))
+            s = s.replace("{gamesPlayed}", String.valueOf(StatsManager.getStatsCache().getGamesPlayed(pl.getUniqueId())));
+        if (s.contains("{firstPlay}"))
+            s = s.replace("{firstPlay}", new SimpleDateFormat(getMsg(pl, Messages.FORMATTING_STATS_DATE_FORMAT)).format(StatsManager.getStatsCache().getFirstPlay(pl.getUniqueId())));
+        if (s.contains("{lastPlay}"))
+            s = s.replace("{lastPlay}", new SimpleDateFormat(getMsg(pl, Messages.FORMATTING_STATS_DATE_FORMAT)).format(StatsManager.getStatsCache().getLastPlay(pl.getUniqueId())));
+        if (s.contains("{player}")) s = s.replace("{player}", pl.getName());
+        if (s.contains("{prefix}")) s = s.replace("{prefix}", Main.getChatSupport().getPrefix(pl));
+
         return papiReplacements ? SupportPAPI.getSupportPAPI().replace(pl, s) : s;
     }
 
 
     public static void giveLobbySb(Player p) {
         if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
-            Bukkit.getScheduler().runTaskLater(Main.plugin, () -> new SBoard(p, getList(p, Messages.SCOREBOARD_LOBBY), null), 15L);
+            Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+                if (p.isOnline())
+                new SBoard(p, getList(p, Messages.SCOREBOARD_LOBBY), null);
+            }, 40L);
         }
     }
 
@@ -376,7 +379,6 @@ public class Misc {
      * Check if location is on a protected region
      */
     public static boolean isBuildProtected(Location l, Arena a) {
-        if (!l.getWorld().getName().equals(a.getWorldName())) return false;
         for (BedWarsTeam t : a.getTeams()) {
             if (t.getSpawn().distance(l) <= a.getCm().getInt(ConfigPath.ARENA_SPAWN_PROTECTION)) {
                 return true;
@@ -394,5 +396,31 @@ public class Misc {
             }
         }
         return isOutsideOfBorder(l);
+    }
+
+    /**
+     * Get lower location between 2 locations.
+     *
+     * @return a new Location instance.
+     */
+    public static Location minLoc(Location loc1, Location loc2) {
+        if (loc1.getWorld() != loc2.getWorld()) throw new IllegalStateException("Locations are not in the same world!");
+        double x = Math.min(loc1.getX(), loc2.getX());
+        double y = Math.min(loc1.getY(), loc2.getY());
+        double z = Math.min(loc1.getZ(), loc2.getZ());
+        return new Location(loc1.getWorld(), x, y, z);
+    }
+
+    /**
+     * Get higher location between 2 locations.
+     *
+     * @return a new Location instance.
+     */
+    public static Location maxLoc(Location loc1, Location loc2) {
+        if (loc1.getWorld() != loc2.getWorld()) throw new IllegalStateException("Locations are not in the same world!");
+        double x = Math.max(loc1.getX(), loc2.getX());
+        double y = Math.max(loc1.getY(), loc2.getY());
+        double z = Math.max(loc1.getZ(), loc2.getZ());
+        return new Location(loc1.getWorld(), x, y, z);
     }
 }

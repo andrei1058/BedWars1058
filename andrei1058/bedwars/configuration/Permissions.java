@@ -18,4 +18,5 @@ public class Permissions {
     public static final String PERMISSION_NPC = Main.mainCmd+".npc";
     public static final String PERMISSION_RELOAD = Main.mainCmd+".reload";
     public static final String PERMISSION_REJOIN = Main.mainCmd+".rejoin";
+    public static final String PERMISSION_LEVEL = Main.mainCmd+".level";
 }

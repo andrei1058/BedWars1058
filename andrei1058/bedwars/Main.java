@@ -5,10 +5,18 @@ import com.andrei1058.bedwars.api.GameAPI;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.arena.despawnables.TargetListener;
+import com.andrei1058.bedwars.arena.mapreset.FAWE;
+import com.andrei1058.bedwars.arena.mapreset.MapManager;
+import com.andrei1058.bedwars.arena.mapreset.ResetAdaptor;
 import com.andrei1058.bedwars.commands.party.PartyCommand;
 import com.andrei1058.bedwars.commands.rejoin.RejoinCommand;
 import com.andrei1058.bedwars.commands.shout.ShoutCommand;
+import com.andrei1058.bedwars.database.Database;
+import com.andrei1058.bedwars.database.SQLite;
 import com.andrei1058.bedwars.language.Language;
+import com.andrei1058.bedwars.levels.Level;
+import com.andrei1058.bedwars.levels.internal.InternalLevel;
+import com.andrei1058.bedwars.levels.internal.LevelListeners;
 import com.andrei1058.bedwars.listeners.EntityDropPickListener;
 import com.andrei1058.bedwars.listeners.PlayerDropPickListener;
 import com.andrei1058.bedwars.arena.spectator.SpectatorListeners;
@@ -21,6 +29,9 @@ import com.andrei1058.bedwars.listeners.arenaselector.ArenaSelectorListener;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
 import com.andrei1058.bedwars.lobbysocket.*;
 import com.andrei1058.bedwars.shop.ShopManager;
+import com.andrei1058.bedwars.shop.main.CategoryContent;
+import com.andrei1058.bedwars.shop.main.ShopCategory;
+import com.andrei1058.bedwars.stats.StatsManager;
 import com.andrei1058.bedwars.support.Metrics;
 import com.andrei1058.bedwars.support.bukkit.*;
 import com.andrei1058.bedwars.support.bukkit.v1_10_R1.v1_10_R1;
@@ -33,24 +44,20 @@ import com.andrei1058.bedwars.support.bukkit.v1_9_R1.v1_9_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_9_R2.v1_9_R2;
 import com.andrei1058.bedwars.support.citizens.CitizensListener;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
-import com.andrei1058.bedwars.support.lang.Internal;
-import com.andrei1058.bedwars.support.lang.Lang;
 import com.andrei1058.bedwars.support.leaderheads.LeaderHeadsSupport;
-import com.andrei1058.bedwars.support.levels.Level;
-import com.andrei1058.bedwars.support.levels.NoLevel;
 import com.andrei1058.bedwars.support.papi.PAPISupport;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.support.party.Party;
 import com.andrei1058.bedwars.support.party.Parties;
-import com.andrei1058.bedwars.support.stats.MySQL;
-import com.andrei1058.bedwars.support.stats.SQLite;
 import com.andrei1058.bedwars.support.vault.*;
-import com.andrei1058.bedwars.tasks.OneTick;
-import com.andrei1058.bedwars.tasks.Refresh;
+import com.andrei1058.bedwars.arena.tasks.OneTick;
+import com.andrei1058.bedwars.arena.tasks.Refresh;
 import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -68,19 +75,23 @@ public class Main extends JavaPlugin {
     public static String mainCmd = "bw", link = "https://www.spigotmc.org/resources/50942/";
     public static ConfigManager config, signs, spigot, generators;
     public static ShopManager shop;
+    public static StatsManager statsManager;
     public static UpgradesManager upgrades;
     public static Language lang;
     public static Main plugin;
     public static NMS nms;
-    private static Lang langSupport;
+
     private static Party party = null;
     private static Chat chat;
-    private static Level level;
+    protected static Level level;
     private static Economy economy;
     private static String version = Bukkit.getServer().getClass().getName().split("\\.")[3];
-    public static com.andrei1058.bedwars.support.stats.Database database;
     private static String lobbyWorld = "";
     public static BedWars api;
+    private static ResetAdaptor resetAdaptor = ResetAdaptor.INTERNAL;
+
+    //remote database
+    private static Database remoteDatabase;
 
     @Override
     public void onLoad() {
@@ -171,6 +182,16 @@ public class Main extends JavaPlugin {
     @Override
     public void onEnable() {
 
+        // Load FastAsyncWorldEdit support
+        //if (Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit") != null) {
+        //    if (Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit").isEnabled()) {
+        //        resetAdaptor = ResetAdaptor.FAWE;
+        //        this.getLogger().info("Hook into FastAsyncWorldEdit support!");
+        //    }
+        //}
+
+        ArenaSocket.serverIdentifier = Bukkit.getServer().getIp() + ":" + Bukkit.getServer().getPort();
+
         /* Citizens support */
         if (this.getServer().getPluginManager().getPlugin("Citizens") != null) {
             JoinNPC.setCitizensSupport(true);
@@ -210,8 +231,10 @@ public class Main extends JavaPlugin {
 
         /* Remove entities from lobby */
         if (!config.getLobbyWorldName().isEmpty()) {
-            Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getWorld(config.getLobbyWorldName())
-                    .getEntities().stream().filter(e -> e instanceof Monster).forEach(Entity::remove), 20L);
+            if (Bukkit.getWorld(config.getLobbyWorldName()) != null) {
+                Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getWorld(config.getLobbyWorldName())
+                        .getEntities().stream().filter(e -> e instanceof Monster).forEach(Entity::remove), 20L);
+            }
         }
 
         /* Register events */
@@ -220,10 +243,7 @@ public class Main extends JavaPlugin {
         if (getServerType() == ServerType.BUNGEE) {
             registerEvents(new Ping());
             registerEvents(new ArenaListeners());
-            Bukkit.getMessenger().registerOutgoingPluginChannel(this, "bedwars:proxy");
-            Bukkit.getMessenger().registerIncomingPluginChannel(this, "bedwars:proxy", new BungeeListener());
             ArenaSocket.lobbies.addAll(config.l(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS));
-            registerEvents(new TempListener());
             new SendTask();
         } else if (getServerType() == ServerType.MULTIARENA || getServerType() == ServerType.SHARED) {
             registerEvents(new ArenaSelectorListener(), new BlockStatusListener());
@@ -257,8 +277,16 @@ public class Main extends JavaPlugin {
                 break;
         }
 
-        /* Load join signs */
+        /* Initialize map resetter before loading maps.*/
+        //if (!MapManager.init()) {
+        //    setEnabled(false);
+        //    return;
+        //}
+
+        /* Load join signs. */
         loadArenasAndSigns();
+
+        statsManager = new StatsManager();
 
         /* Party support */
         if (config.getYml().getBoolean(ConfigPath.GENERAL_CONFIGURATION_ALLOW_PARTIES)) {
@@ -275,15 +303,7 @@ public class Main extends JavaPlugin {
         }
 
         /* Levels support */
-        level = new NoLevel();
-
-        /* Language support */
-        try {
-            langSupport = Internal.class.newInstance();
-            new ConfigManager("database", "plugins/" + this.getName() + "/Languages", false);
-        } catch (InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        setLevelAdapter(new InternalLevel());
 
         /* Register tasks */
         Bukkit.getScheduler().runTaskTimer(this, new Refresh(), 20L, 20L);
@@ -307,12 +327,24 @@ public class Main extends JavaPlugin {
 
         /* Database support */
         if (config.getBoolean("database.enable")) {
-            database = new MySQL();
+            com.andrei1058.bedwars.database.MySQL mySQL = new com.andrei1058.bedwars.database.MySQL();
+            Long time = System.currentTimeMillis();
+            if (!mySQL.connect()) {
+                this.getLogger().severe("Could not connect to database! Please verify your credentials and make sure that the server IP is whitelisted in MySQL.");
+                remoteDatabase = new SQLite();
+            } else {
+                remoteDatabase = mySQL;
+            }
+            if (System.currentTimeMillis() - time >= 5000) {
+                this.getLogger().severe("It took " + ((System.currentTimeMillis() - time) / 1000) + " ms to establish a database connection!\n" +
+                        "Using this remote connection is not recommended!");
+            }
+            remoteDatabase.init();
         } else {
-            database = new SQLite();
+            remoteDatabase = new SQLite();
         }
+
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            database.setupGeneralTables();
             //spawn NPCs
             try {
                 JoinNPC.spawnNPCs();
@@ -387,15 +419,21 @@ public class Main extends JavaPlugin {
             l.setupUnSetCategories();
             Language.addDefaultMessagesCommandItems(l);
         }
+
+        LevelsConfig.init();
     }
 
     public void onDisable() {
         try {
-            database.close();
             for (Arena a : Arena.getArenas()) {
                 a.disable();
             }
         } catch (Exception ex) {
+        }
+        StatsManager.getStatsCache().close();
+        remoteDatabase.close();
+        if (getServerType() == ServerType.BUNGEE) {
+            ArenaSocket.disable();
         }
     }
 
@@ -417,7 +455,6 @@ public class Main extends JavaPlugin {
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_REJOIN_TIME, 60 * 5);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART, 30);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD, "restart");
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_NAME, "null");
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS, Arrays.asList("0.0.0.0:2019"));
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_REGULAR, 40);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_HALF, 25);
@@ -614,7 +651,7 @@ public class Main extends JavaPlugin {
         }
 
         debug = yml.getBoolean("debug");
-        new ConfigManager("bukkit", Bukkit.getWorldContainer().getPath(), false).set("ticks-per.autosave", -1);
+        //new ConfigManager("bukkit", Bukkit.getWorldContainer().getPath(), false).set("ticks-per.autosave", -1);
 
         Bukkit.spigot().getConfig().set("commands.send-namespaced", false);
         try {
@@ -758,10 +795,6 @@ public class Main extends JavaPlugin {
         return serverType;
     }
 
-    public static Lang getLangSupport() {
-        return langSupport;
-    }
-
     public static Party getParty() {
         return party;
     }
@@ -770,8 +803,32 @@ public class Main extends JavaPlugin {
         return chat;
     }
 
+    /**
+     * Get current levels manager.
+     */
     public static Level getLevelSupport() {
         return level;
+    }
+
+    /**
+     * Set the levels manager.
+     * You can use this to add your own levels manager just implement
+     * the Level interface so the plugin will be able to display
+     * the level internally.
+     */
+    public static void setLevelAdapter(Level levelsManager) {
+        if (levelsManager instanceof InternalLevel) {
+            if (LevelListeners.instance == null) {
+                Bukkit.getPluginManager().registerEvents(new LevelListeners(), Main.plugin);
+            }
+        } else {
+            if (LevelListeners.instance != null) {
+                PlayerJoinEvent.getHandlerList().unregister(LevelListeners.instance);
+                PlayerQuitEvent.getHandlerList().unregister(LevelListeners.instance);
+                LevelListeners.instance = null;
+            }
+        }
+        level = levelsManager;
     }
 
     public static Economy getEconomy() {
@@ -798,5 +855,29 @@ public class Main extends JavaPlugin {
 
     public static String getLobbyWorld() {
         return lobbyWorld;
+    }
+
+    /**
+     * Get remote database.
+     */
+    public static Database getRemoteDatabase() {
+        return remoteDatabase;
+    }
+
+    /**
+     * Get map manager.
+     */
+    public static MapManager getMapManager(Arena arena, String name) {
+        MapManager manager;
+
+        switch (resetAdaptor) {
+            default:
+                manager = new MapManager(arena, name);
+                break;
+            case FAWE:
+                manager = new FAWE(arena, name);
+        }
+
+        return manager;
     }
 }

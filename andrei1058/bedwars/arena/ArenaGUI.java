@@ -1,7 +1,6 @@
 package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.language.Messages;
@@ -17,24 +16,30 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
-import java.util.stream.Collectors;
-
-import static com.andrei1058.bedwars.Main.config;
-import static com.andrei1058.bedwars.Main.nms;
-import static com.andrei1058.bedwars.language.Language.getList;
-import static com.andrei1058.bedwars.language.Language.getMsg;
 
 public class ArenaGUI {
 
-    private static HashMap<Player, Inventory> refresh = new HashMap<>();
-    private static YamlConfiguration yml = config.getYml();
+    //Object[0] = inventory, Object[1] = group
+    private static HashMap<Player, Object[]> refresh = new HashMap<>();
+    private static YamlConfiguration yml = Main.config.getYml();
 
-    public static void refreshInv(Player p, Inventory inv) {
+    //Object[0] = inventory, Object[1] = group
+    public static void refreshInv(Player p, Object[] data) {
 
-        List<Arena> arenas = new ArrayList<>(Arena.getArenas()).stream().filter(a -> a.getStatus() != GameState.restarting).sorted().collect(Collectors.toList());
+        List<Arena> arenas;
+        if (((String)data[1]).equalsIgnoreCase("default")) {
+            arenas = new ArrayList<>(Arena.getArenas());
+        } else {
+            arenas = new ArrayList<>();
+            for (Arena a : Arena.getArenas()){
+                if (a.getGroup().equals(data[1])) arenas.add(a);
+            }
+        }
+
+        Collections.sort(arenas);
 
         int arenaKey = 0;
-        for (String useSlot : config.getString(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_USE_SLOTS).split(",")) {
+        for (String useSlot : Main.config.getString(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_USE_SLOTS).split(",")) {
             int slot;
             try {
                 slot = Integer.parseInt(useSlot);
@@ -42,7 +47,7 @@ public class ArenaGUI {
                 continue;
             }
             ItemStack i;
-            inv.setItem(slot, new ItemStack(Material.AIR));
+            ((Inventory)data[0]).setItem(slot, new ItemStack(Material.AIR));
             if (arenaKey >= arenas.size()) {
                 continue;
             }
@@ -62,7 +67,7 @@ public class ArenaGUI {
                     continue;
             }
 
-            i = nms.createItemStack(yml.getString(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", status)),
+            i = Main.nms.createItemStack(yml.getString(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", status)),
                     1, (short) yml.getInt(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA.replace("%path%", status)));
             if (yml.getBoolean(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_ENCHANTED.replace("%path%", status))) {
                 ItemMeta im = i.getItemMeta();
@@ -73,9 +78,9 @@ public class ArenaGUI {
 
 
             ItemMeta im = i.getItemMeta();
-            im.setDisplayName(getMsg(p, Messages.ARENA_GUI_ARENA_CONTENT_NAME).replace("{name}", arenas.get(arenaKey).getDisplayName()));
+            im.setDisplayName(Language.getMsg(p, Messages.ARENA_GUI_ARENA_CONTENT_NAME).replace("{name}", arenas.get(arenaKey).getDisplayName()));
             List<String> lore = new ArrayList<>();
-            for (String s : getList(p, Messages.ARENA_GUI_ARENA_CONTENT_LORE)) {
+            for (String s : Language.getList(p, Messages.ARENA_GUI_ARENA_CONTENT_LORE)) {
                 if (!(s.contains("{group}") && arenas.get(arenaKey).getGroup().equalsIgnoreCase("default"))) {
                     lore.add(s.replace("{on}", String.valueOf(arenas.get(arenaKey).getPlayers().size())).replace("{max}",
                             String.valueOf(arenas.get(arenaKey).getMaxPlayers())).replace("{status}", arenas.get(arenaKey).getDisplayStatus(Language.getPlayerLanguage(p)))
@@ -85,29 +90,30 @@ public class ArenaGUI {
             im.setLore(lore);
             i.setItemMeta(im);
             i = Main.nms.addCustomData(i, ArenaSelectorListener.ARENA_SELECTOR_GUI_IDENTIFIER + arenas.get(arenaKey).getWorldName());
-            inv.setItem(slot, i);
+            ((Inventory)data[0]).setItem(slot, i);
             arenaKey++;
         }
     }
 
-    public static void openGui(Player p) {
-        int size = config.getYml().getInt(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SIZE);
+    public static void openGui(Player p, String group) {
+        int size = Main.config.getYml().getInt(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SIZE);
         if (size % 9 != 0) size = 27;
         if (size > 54) size = 54;
-        Inventory inv = Bukkit.createInventory(p, size, getMsg(p, Messages.ARENA_GUI_INV_NAME));
-        ItemStack i = nms.createItemStack(Main.config.getString(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", "skipped-slot")),
+        Inventory inv = Bukkit.createInventory(p, size, Language.getMsg(p, Messages.ARENA_GUI_INV_NAME));
+
+        ItemStack i = Main.nms.createItemStack(Main.config.getString(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", "skipped-slot")),
                 1, (byte) Main.config.getInt(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA.replace("%path%", "skipped-slot")));
 
         for (int x = 0; x < inv.getSize(); x++) {
             inv.setItem(x, i);
         }
 
-        refreshInv(p, inv);
-        refresh.put(p, inv);
+        refresh.put(p, new Object[]{inv, group});
+        refreshInv(p, new Object[]{inv, group});
         p.openInventory(inv);
     }
 
-    public static HashMap<Player, Inventory> getRefresh() {
+    public static HashMap<Player, Object[]> getRefresh() {
         return refresh;
     }
 }

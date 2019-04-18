@@ -14,6 +14,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -23,7 +24,6 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.language.Language.getMsg;
@@ -71,7 +71,7 @@ public class BedWarsTeam {
     /**
      * Used for show/ hide bed hologram
      */
-    private static HashMap<Player, BedHolo> beds = new HashMap<>();
+    private HashMap<Player, BedHolo> beds = new HashMap<>();
     /**
      * Used for it's a trap
      */
@@ -108,7 +108,7 @@ public class BedWarsTeam {
     /**
      * Used when the arena restarts
      */
-    public void restore() {
+    /*public void restore() {
         ebseEffectsStatic.clear();
         enemyBaseEnterSlots.clear();
         trapSlots.clear();
@@ -129,7 +129,7 @@ public class BedWarsTeam {
         bedDestroyed = false;
         members.clear();
         membersCache.clear();
-    }
+    }*/
 
     public int getSize() {
         return members.size();
@@ -150,7 +150,7 @@ public class BedWarsTeam {
      * first spawn
      */
     public void firstSpawn(Player p) {
-        p.teleport(spawn);
+        p.teleport(spawn, PlayerTeleportEvent.TeleportCause.PLUGIN);
         sendDefaultInventory(p, true);
         Bukkit.getPluginManager().callEvent(new ArenaFirstSpawnEvent(p, getArena(), this));
     }
@@ -245,7 +245,7 @@ public class BedWarsTeam {
         if (getArena().getRespawn().containsKey(p)) {
             getArena().getRespawn().remove(p);
         }
-        p.teleport(getSpawn());
+        p.teleport(getSpawn(), PlayerTeleportEvent.TeleportCause.PLUGIN);
         if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
             p.removePotionEffect(PotionEffectType.INVISIBILITY);
         }
@@ -755,7 +755,7 @@ public class BedWarsTeam {
         return membersCache;
     }
 
-    public static HashMap<Player, BedHolo> getBeds() {
+    public HashMap<Player, BedHolo> getBeds() {
         return beds;
     }
 }

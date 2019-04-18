@@ -20,7 +20,11 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.block.Bed;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.Rotatable;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
@@ -33,13 +37,17 @@ import org.bukkit.entity.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.material.Stairs;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scoreboard.Team;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.despawnables.TargetListener.owningTeam;
@@ -139,7 +147,7 @@ public class v1_13_R2 implements NMS {
 
     @Override
     public void hidePlayer(Player player, List<Player> players) {
-        for (Player p : players){
+        for (Player p : players) {
             if (p == player) continue;
             p.hidePlayer(player);
         }
@@ -363,11 +371,9 @@ public class v1_13_R2 implements NMS {
             this.goalSelector.a(10, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0f));
         }
 
-        @Override
         public void collide(net.minecraft.server.v1_13_R2.Entity entity) {
         }
 
-        @Override
         public boolean damageEntity(DamageSource damagesource, float f) {
             return false;
         }
@@ -375,11 +381,12 @@ public class v1_13_R2 implements NMS {
         public void g(double d0, double d1, double d2) {
         }
 
-        @Override
         public void move(EnumMoveType enummovetype, double d0, double d1, double d2) {
         }
 
-        @Override
+        public void a(SoundEffect soundeffect, float f, float f1) {
+        }
+
         protected void initAttributes() {
             super.initAttributes();
             this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.0D);
@@ -543,11 +550,11 @@ public class v1_13_R2 implements NMS {
     @Override
     @SuppressWarnings("deprecation")
     public void setBlockTeamColor(org.bukkit.block.Block block, TeamColor teamColor) {
-        if (block.getType().toString().contains("STAINED_GLASS") || block.getType().toString().equals("GLASS")){
+        if (block.getType().toString().contains("STAINED_GLASS") || block.getType().toString().equals("GLASS")) {
             block.setType(TeamColor.getGlass(teamColor));
-        } else if (block.getType().toString().contains("_TERRACOTTA")){
+        } else if (block.getType().toString().contains("_TERRACOTTA")) {
             block.setType(TeamColor.getGlazedTerracotta(teamColor));
-        } else if (block.getType().toString().contains("_WOOL")){
+        } else if (block.getType().toString().contains("_WOOL")) {
             block.setType(TeamColor.getWool(teamColor));
         }
     }
@@ -609,11 +616,11 @@ public class v1_13_R2 implements NMS {
         String type = itemStack.getType().toString();
         if (type.contains("_BED")) {
             return new org.bukkit.inventory.ItemStack(TeamColor.getBedBlock(bedWarsTeam.getColor()), itemStack.getAmount());
-        } else if (type.contains("STAINED_GLASS") || type.equals("GLASS")){
+        } else if (type.contains("STAINED_GLASS") || type.equals("GLASS")) {
             return new org.bukkit.inventory.ItemStack(TeamColor.getGlass(bedWarsTeam.getColor()), itemStack.getAmount());
-        } else if (type.contains("_TERRACOTTA")){
+        } else if (type.contains("_TERRACOTTA")) {
             return new org.bukkit.inventory.ItemStack(TeamColor.getGlazedTerracotta(bedWarsTeam.getColor()), itemStack.getAmount());
-        } else if (type.contains("_WOOL")){
+        } else if (type.contains("_WOOL")) {
             return new org.bukkit.inventory.ItemStack(TeamColor.getWool(bedWarsTeam.getColor()), itemStack.getAmount());
         }
         return itemStack;
@@ -703,6 +710,55 @@ public class v1_13_R2 implements NMS {
     }
 
     @Override
+    public void setBlockData(Block block, String data) {
+        String[] att = data.split(",");
+        if (att.length != 2) return;
+        Method m = null;
+        try {
+            m = Block.class.getDeclaredMethod("getBlockData");
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        BlockData result = null;
+        try {
+            assert m != null;
+            result = (BlockData) m.invoke(block, (Object) null);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        if (!att[0].isEmpty()) {
+            if (block instanceof Directional) {
+                Directional s = (Directional) result;
+                s.setFacing(BlockFace.valueOf(data));
+            }
+        }
+
+        Method m2 = null;
+        try {
+            m2 = Block.class.getDeclaredMethod("setBlockData", BlockData.class);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+
+        /*if (!att[1].isEmpty()) {
+            if (block instanceof Rotatable) {
+                Rotatable d = (Rotatable) result;
+                d.setRotation(BlockFace.valueOf(att[1]));
+            }
+        }*/
+
+        try {
+            m2.invoke(block, result);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        block.getState().update(true);
+    }
+
+
+    @Override
     public org.bukkit.Material woolMaterial() {
         return org.bukkit.Material.valueOf("WHITE_WOOL");
     }
@@ -724,5 +780,47 @@ public class v1_13_R2 implements NMS {
         }
         tag.setString("tierIdentifier", identifier);
         return CraftItemStack.asBukkitCopy(i);
+    }
+
+    @Override
+    public org.bukkit.inventory.ItemStack getPlayerHead(Player player) {
+        org.bukkit.inventory.ItemStack head = new org.bukkit.inventory.ItemStack(materialPlayerHead());
+
+        SkullMeta headMeta = (SkullMeta) head.getItemMeta();
+        Field profileField;
+        try {
+            profileField = headMeta.getClass().getDeclaredField("profile");
+            profileField.setAccessible(true);
+            profileField.set(headMeta, ((CraftPlayer) player).getProfile());
+        } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e1) {
+            e1.printStackTrace();
+        }
+        head.setItemMeta(headMeta);
+        return head;
+    }
+
+    @Override
+    public String getBlockData(Block block) {
+        Method m = null;
+        try {
+            m = Block.class.getDeclaredMethod("getBlockData");
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        BlockData result = null;
+        try {
+            assert m != null;
+            result = (BlockData) m.invoke(block, (Object) null);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        String direction = "";
+        if (block instanceof Directional) {
+            Directional s = (Directional) result;
+            direction = s.getFacing().toString();
+        }
+
+        return direction + ",";
     }
 }

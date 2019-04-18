@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.tasks;
+package com.andrei1058.bedwars.arena.tasks;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
@@ -8,22 +8,16 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.OreGenerator;
 import com.andrei1058.bedwars.arena.SBoard;
+import com.andrei1058.bedwars.arena.mapreset.MapManager;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Messages;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 import static com.andrei1058.bedwars.Main.getParty;
 import static com.andrei1058.bedwars.Main.nms;
@@ -158,21 +152,26 @@ public class GameStartingTask implements Runnable {
                 sb.addHealthIcon();
             }
 
-            //Spawn players
-            spawnPlayers();
-
-            getArena().setStatus(GameState.playing);
-            getArena().setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_II);
-
             //Enable diamond/ emerald generators
             for (OreGenerator og : getArena().getOreGenerators()) {
                 if (og.getBwt() == null) og.enable();
             }
 
             //Lobby removal
-            removeLobby();
+            arena.getMapManager().removeLobby();
+
+            //Spawn players
+            spawnPlayers();
 
             task.cancel();
+            getArena().changeStatus(GameState.playing);
+
+            // Check if emerald should be first based on time
+            if (getArena().upgradeDiamondsCount < getArena().upgradeEmeraldsCount) {
+                getArena().setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_II);
+            } else {
+                getArena().setNextEvent(NextEvent.EMERALD_GENERATOR_TIER_II);
+            }
             return;
         }
 
@@ -185,10 +184,10 @@ public class GameStartingTask implements Runnable {
                     p.sendMessage(getMsg(p, Messages.ARENA_STATUS_START_COUNTDOWN).replace("{time}", String.valueOf(getCountdown())));
                 } else if (getCountdown() > 3) {
                     nms.sendTitle(p, "§e" + getCountdown(), null, 0, 20, 0);
-                    p.sendMessage(getMsg(p, Messages.ARENA_STATUS_START_COUNTDOWN).replace("{time}", "§c" + String.valueOf(getCountdown())));
+                    p.sendMessage(getMsg(p, Messages.ARENA_STATUS_START_COUNTDOWN).replace("{time}", "§c" + getCountdown()));
                 } else {
                     nms.sendTitle(p, "§c" + getCountdown(), null, 0, 20, 0);
-                    p.sendMessage(getMsg(p, Messages.ARENA_STATUS_START_COUNTDOWN).replace("{time}", "§c" + String.valueOf(getCountdown())));
+                    p.sendMessage(getMsg(p, Messages.ARENA_STATUS_START_COUNTDOWN).replace("{time}", "§c" + getCountdown()));
                 }
             }
         }
@@ -209,29 +208,7 @@ public class GameStartingTask implements Runnable {
         }
     }
 
-    //Lobby removal
-    private void removeLobby() {
-        if (!(getArena().getCm().getYml().get(ConfigPath.ARENA_WAITING_POS1) == null && getArena().getCm().getYml().get(ConfigPath.ARENA_WAITING_POS2) == null)) {
-            Location loc1 = getArena().getCm().getArenaLoc(ConfigPath.ARENA_WAITING_POS1), loc2 = getArena().getCm().getArenaLoc(ConfigPath.ARENA_WAITING_POS2);
-            int minX = Math.min(loc1.getBlockX(), loc2.getBlockX()), maxX = Math.max(loc1.getBlockX(), loc2.getBlockX());
-            int minY = Math.min(loc1.getBlockY(), loc2.getBlockY()), maxY = Math.max(loc1.getBlockY(), loc2.getBlockY());
-            int minZ = Math.min(loc1.getBlockZ(), loc2.getBlockZ()), maxZ = Math.max(loc1.getBlockZ(), loc2.getBlockZ());
-            for (int x = minX; x < maxX; x++) {
-                for (int y = minY; y < maxY; y++) {
-                    for (int z = minZ; z < maxZ; z++) {
-                        Block b = new Location(getArena().getWorld(), x, y, z).getBlock();
-                        if (b.getType() != Material.AIR) {
-                            b.setType(Material.AIR);
-                        }
-                    }
-                }
-            }
-        }
-        //remove items dropped from lobby
-        getArena().getWorld().getEntities().stream().filter(e -> e.getType() == EntityType.DROPPED_ITEM).forEach(Entity::remove);
-    }
-
-    public void cancel(){
+    public void cancel() {
         task.cancel();
     }
 }

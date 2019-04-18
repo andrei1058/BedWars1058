@@ -5,6 +5,8 @@ import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Messages;
+import com.andrei1058.bedwars.levels.internal.PlayerLevel;
+import com.andrei1058.bedwars.stats.StatsManager;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -49,9 +51,16 @@ public class SBoard {
             this.placeholders.add("{kills}");
             this.placeholders.add("{finalKills}");
             this.placeholders.add("{beds}");
+        } else {
+            placeholders = new ArrayList<>(placeholders);
+            this.placeholders.add("{progress}");
+            this.placeholders.add("{level}");
+            this.placeholders.add("{currentXp}");
+            this.placeholders.add("{requiredXp}");
         }
         this.setStrings(content);
         Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+            if (!p.isOnline()) return;
             p.setScoreboard(sb);
             scoreboards.add(this);
         }, 10L);
@@ -76,6 +85,7 @@ public class SBoard {
         dateFormat = new SimpleDateFormat(getMsg(p, Messages.FORMATTING_SCOREBOARD_NEXEVENT_TIMER));
         this.setStrings(getScoreboard(p, "scoreboard." + arena.getGroup() + "Playing", Messages.SCOREBOARD_DEFAULT_PLAYING));
         Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+            if (!p.isOnline()) return;
             p.setScoreboard(sb);
             scoreboards.add(this);
             giveTeamColorTag();
@@ -97,6 +107,10 @@ public class SBoard {
             String temp = strings.get(x - 1);
             temp = temp.replace("{generatorUpgrade}", "{nextEvent}")
                     .replace("{generatorTimer}", "{time}");
+            temp = temp.replace("{level}", Main.getLevelSupport().getLevel(p));
+            temp = temp.replace("{progress}", Main.getLevelSupport().getProgressBar(p));
+            temp = temp.replace("{currentXp}", Main.getLevelSupport().getCurrentXpFormatted(p));
+            temp = temp.replace("{requiredXp}", Main.getLevelSupport().getRequiredXpFormatted(p));
             temp = temp.replace("{server_ip}", Main.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP));
             for (String ph : placeholders) {
                 if (temp.contains(ph)) {
@@ -115,20 +129,15 @@ public class SBoard {
                 }
             }
             if (arena == null) {
-                /** stats */
-                int kills = database.getKills(p), deaths = database.getDeaths(p), looses = database.getLooses(p), wins = database.getWins(p),
-                        finalKills = database.getFinalKills(p), finalDeaths = database.getFinalDeaths(p), bedsDestroyed = database.getBedsDestroyed(p), gamesPlayed = database.getGamesPlayed(p);
-                Timestamp firstPlay = database.getFirstPlay(p), lastPlay = database.getLastPlay(p);
-                /** cache time format */
-                String timeFormat = getMsg(p, Messages.FORMATTING_STATS_DATE_FORMAT), never = getMsg(p, Messages.MEANING_NEVER);
 
                 temp = temp.replace("{server}", Bukkit.getServer().getMotd()).replace("{on}", String.valueOf(Bukkit.getOnlinePlayers().size()))
                         .replace("{max}", String.valueOf(Bukkit.getServer().getMaxPlayers())).replace("{date}",
                                 new SimpleDateFormat(getMsg(getP(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis())))
-                        .replace("{money}", String.valueOf(getEconomy().getMoney(p)));
+                        .replace("{money}", String.valueOf(getEconomy().getMoney(p))).replace("{progress}", PlayerLevel.getLevelByPlayer(p.getUniqueId()).getProgress())
+                .replace("{level}", PlayerLevel.getLevelByPlayer(p.getUniqueId()).getLevelName()).replace("{currentXp}", PlayerLevel.getLevelByPlayer(p.getUniqueId()).getFormattedCurrentXp())
+                .replace("{requiredXp}", PlayerLevel.getLevelByPlayer(p.getUniqueId()).getFormattedRequiredXp());
 
-                setContent(t, replaceStatsPlaceholders(getP(), temp,
-                        kills, deaths, looses, wins, finalKills, finalDeaths, bedsDestroyed, gamesPlayed, firstPlay, lastPlay, timeFormat, p.getName(), never, false));
+                setContent(t, replaceStatsPlaceholders(getP(), temp, false));
 
             } else if (arena.getStatus() == GameState.waiting || arena.getStatus() == GameState.starting) {
                 String time = "0";
@@ -143,7 +152,7 @@ public class SBoard {
                 String[] ne = getNextEvent();
                 for (BedWarsTeam team : arena.getTeams()) {
                     temp = temp.replace("{Team" + team.getName() + "Color}", TeamColor.getChatColor(team.getColor()).toString()).replace("{Team" + team.getName() + "Name}",
-                            team.getName()).replace("{Team" + team.getName() + "Status}", String.valueOf(team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED).replace("{remainingPlayers}",
+                            team.getName()).replace("{Team" + team.getName() + "Status}", (team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED).replace("{remainingPlayers}",
                             String.valueOf(team.getSize())) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE)) + (team.isMember(getP()) ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM) : ""));
                 }
                 setContent(t, temp.replace("{map}", arena.getDisplayName()).replace("{server}", Bukkit.getServer().getMotd())
@@ -209,7 +218,7 @@ public class SBoard {
                     String text = e.getValue();
                     for (BedWarsTeam team : arena.getTeams()) {
                         text = text.replace("{Team" + team.getName() + "Color}", TeamColor.getChatColor(team.getColor()).toString()).replace("{Team" + team.getName() + "Name}",
-                                team.getName()).replace("{Team" + team.getName() + "Status}", String.valueOf(team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED).replace("{remainingPlayers}",
+                                team.getName()).replace("{Team" + team.getName() + "Status}", (team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED).replace("{remainingPlayers}",
                                 String.valueOf(team.getSize())) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE)) + (team.isMember(getP()) ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM) : ""));
                     }
                     setContent(e.getKey(), text.replace("{on}", String.valueOf(arena.getPlayers().size())).replace("{max}", String.valueOf(arena.getMaxPlayers()))

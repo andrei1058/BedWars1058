@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.ServerType;
+import com.andrei1058.bedwars.arena.mapreset.MapManager;
 import com.andrei1058.bedwars.configuration.ConfigManager;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.*;
@@ -36,11 +37,15 @@ public class SetupSession {
     public boolean autoCreatedEmerald = false;
     public boolean autoCreatedDiamond = false;
     public List<Location> skipAutoCreateGen = new ArrayList<>();
+    private MapManager mapManager;
 
     public SetupSession(Player player, String worldName) {
         this.player = player;
         this.worldName = worldName;
         getSetupSessions().add(this);
+        mapManager = new MapManager(null, worldName);
+        mapManager.restoreWorld(worldName, null);
+        mapManager.loadWorld();
         openGUI(player);
     }
 
@@ -98,7 +103,7 @@ public class SetupSession {
     public enum SetupType {ASSISTED, ADVANCED}
 
     /**
-     * Start setup session, load world etc
+     * Start setup session, loadStructure world etc
      *
      * @return true if started successfully
      */
@@ -185,6 +190,7 @@ public class SetupSession {
      * @since api 6
      */
     public void done() {
+        mapManager.backupWorld(true);
         getSetupSessions().remove(this);
         if (Main.getServerType() != ServerType.BUNGEE) getPlayer().teleport(config.getConfigLoc("lobbyLoc"));
         getPlayer().removePotionEffect(PotionEffectType.SPEED);

@@ -6,12 +6,14 @@ import org.bukkit.Bukkit;
 
 public class SendTask {
 
-    /** This is used to send data to new lobby servers to improve data sync*/
-    public SendTask(){
-        Bukkit.getScheduler().runTaskTimer(Main.plugin, ()-> {
-            if (!Arena.getArenas().isEmpty()){
+    /**
+     * This is used to send data to new lobby servers to improve data sync
+     */
+    public SendTask() {
+        Bukkit.getScheduler().runTaskTimerAsynchronously(Main.plugin, () -> {
+            if (!Arena.getArenas().isEmpty()) {
                 ArenaSocket.sendMessage(Arena.getArenas().get(0));
             }
-        }, 0, 400L);
+        }, 0, 100L);
     }
 }

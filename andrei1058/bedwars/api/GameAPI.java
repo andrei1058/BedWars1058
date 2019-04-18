@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.api;
 
 import com.andrei1058.bedwars.api.command.ParentCommand;
+import com.andrei1058.bedwars.levels.Level;
 import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
 import org.bukkit.entity.Player;
 
@@ -54,13 +55,6 @@ public interface GameAPI {
     Integer getPlayerTimeAFK(Player player);
 
     /* STATS */
-
-    /**
-     * Check if stats is enabled.
-     *
-     * @since api v3
-     */
-    boolean isStats();
 
     /**
      * Get player first play date.
@@ -143,79 +137,6 @@ public interface GameAPI {
      * @since api v3
      */
     int getPlayerGamesPlayed(Player p);
-
-    /**
-     * Get top x by wins.
-     * Please note that stats are not cached. You get data directly from database.
-     * HashMap size can be greater than x if there aren't enough players on the database.
-     *
-     * @since api v3
-     */
-    HashMap<UUID, Integer> getTopWins(int x);
-
-    /**
-     * Get top x by kills.
-     * Please note that stats are not cached. You get data directly from database.
-     * HashMap size can be greater than x if there aren't enough players on the database.
-     *
-     * @since api v3
-     */
-    HashMap<UUID, Integer> getTopKills(int x);
-
-    /**
-     * Get top x by final kills .
-     * Please note that stats are not cached. You get data directly from database.
-     * HashMap size can be greater than x if there aren't enough players on the database.
-     *
-     * @since api v3
-     */
-    HashMap<UUID, Integer> getTopFinalKills(int x);
-
-    /**
-     * Get top x by looses.
-     * Please note that stats are not cached. You get data directly from database.
-     * HashMap size can be greater than x if there aren't enough players on the database.
-     *
-     * @since api v3
-     */
-    HashMap<UUID, Integer> getTopLooses(int x);
-
-    /**
-     * Get top x by deaths.
-     * Please note that stats are not cached. You get data directly from database.
-     * HashMap size can be greater than x if there aren't enough players on the database.
-     *
-     * @since api v3
-     */
-    HashMap<UUID, Integer> getTopDeaths(int x);
-
-    /**
-     * Get top x by final deaths.
-     * Please note that stats are not cached. You get data directly from database.
-     * HashMap size can be greater than x if there aren't enough players on the database.
-     *
-     * @since api v3
-     */
-    HashMap<UUID, Integer> getTopFinalDeaths(int x);
-
-    /**
-     * Get top x by beds destroyed.
-     * Please note that stats are not cached. You get data directly from database.
-     * HashMap size can be greater than x if there aren't enough players on the database.
-     *
-     * @since api v3
-     */
-    HashMap<UUID, Integer> getTopBedsDestroyed(int x);
-
-    /**
-     * Get top x by games played.
-     * Please note that stats are not cached. You get data directly from database.
-     * HashMap size can be greater than x if there aren't enough players on the database.
-     *
-     * @since api v3
-     */
-    HashMap<UUID, Integer> getTopGamesPlayed(int x);
-
 
     /* GAME RELATED */
 

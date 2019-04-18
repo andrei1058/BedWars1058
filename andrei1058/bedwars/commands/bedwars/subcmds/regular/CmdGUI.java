@@ -33,7 +33,13 @@ public class CmdGUI extends SubCommand {
         if (s instanceof ConsoleCommandSender) return false;
         Player p = (Player) s;
         if (Arena.getArenaByPlayer(p) != null) return false;
-        ArenaGUI.openGui(p);
+
+        String group = "default";
+        if (args.length == 1){
+            group = args[0];
+        }
+
+        ArenaGUI.openGui(p, group);
         return true;
     }
 

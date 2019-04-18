@@ -252,16 +252,15 @@ public class CategoryContent {
     /**
      * Get player's money amount
      */
-    public static int calculateMoney(Player player, String currency) {
+    public static int calculateMoney(Player player, Material currency) {
         if (currency.equals("vault")) {
             return (int) Main.getEconomy().getMoney(player);
         }
-        Material material = getCurrency(currency);
 
         int amount = 0;
         for (ItemStack is : player.getInventory().getContents()) {
             if (is == null) continue;
-            if (is.getType() == material) amount += is.getAmount();
+            if (is.getType() == currency) amount += is.getAmount();
         }
         return amount;
     }
@@ -288,18 +287,14 @@ public class CategoryContent {
         return material;
     }
 
-    public static ChatColor getCurrencyColor(String currency) {
+    public static ChatColor getCurrencyColor(Material currency) {
         ChatColor c = ChatColor.DARK_GREEN;
-        switch (currency.toLowerCase()) {
-            case "diamond":
-                c = ChatColor.AQUA;
-                break;
-            case "gold":
-                c = ChatColor.GOLD;
-                break;
-            case "iron":
-                c = ChatColor.WHITE;
-                break;
+        if (currency.toString().toLowerCase().contains("diamond")){
+            c = ChatColor.AQUA;
+        } else if (currency.toString().toLowerCase().contains("gold")){
+            c = ChatColor.GOLD;
+        } else if (currency.toString().toLowerCase().contains("iron")){
+            c = ChatColor.WHITE;
         }
         return c;
     }
@@ -310,24 +305,17 @@ public class CategoryContent {
     public static String getCurrencyMsgPath(ContentTier contentTier) {
         String c = "";
 
-        switch (contentTier.getCurrency()) {
-            case "iron":
-                c = contentTier.getPrice() == 1 ? Messages.MEANING_IRON_SINGULAR : Messages.MEANING_IRON_PLURAL;
-                break;
-            case "gold":
-                c = contentTier.getPrice() == 1 ? Messages.MEANING_GOLD_SINGULAR : Messages.MEANING_GOLD_PLURAL;
-                break;
-            case "emerald":
-                c = contentTier.getPrice() == 1 ? Messages.MEANING_EMERALD_SINGULAR : Messages.MEANING_EMERALD_PLURAL;
-                break;
-            case "diamond":
-                c = contentTier.getPrice() == 1 ? Messages.MEANING_DIAMOND_SINGULAR : Messages.MEANING_DIAMOND_PLURAL;
-                break;
-            case "vault":
-                c = contentTier.getPrice() == 1 ? Messages.MEANING_VAULT_SINGULAR : Messages.MEANING_VAULT_PLURAL;
-                break;
+        if (contentTier.getCurrency().toString().toLowerCase().contains("iron")){
+            c = contentTier.getPrice() == 1 ? Messages.MEANING_IRON_SINGULAR : Messages.MEANING_IRON_PLURAL;
+        } else if (contentTier.getCurrency().toString().toLowerCase().contains("gold")){
+            c = contentTier.getPrice() == 1 ? Messages.MEANING_GOLD_SINGULAR : Messages.MEANING_GOLD_PLURAL;
+        } else if (contentTier.getCurrency().toString().toLowerCase().contains("emerald")){
+            c = contentTier.getPrice() == 1 ? Messages.MEANING_EMERALD_SINGULAR : Messages.MEANING_EMERALD_PLURAL;
+        } else if (contentTier.getCurrency().toString().toLowerCase().contains("diamond")){
+            c = contentTier.getPrice() == 1 ? Messages.MEANING_DIAMOND_SINGULAR : Messages.MEANING_DIAMOND_PLURAL;
+        } else {
+            c = contentTier.getPrice() == 1 ? Messages.MEANING_VAULT_SINGULAR : Messages.MEANING_VAULT_PLURAL;
         }
-
         return c;
     }
 
@@ -378,7 +366,7 @@ public class CategoryContent {
     /**
      * Take money from player on buy
      */
-    public static void takeMoney(Player player, String currency, int amount) {
+    public static void takeMoney(Player player, Material currency, int amount) {
         if (currency.equals("vault")) {
             if (!Main.getEconomy().isEconomy()) {
                 player.sendMessage("§4§lERROR: This requires Vault Support! Please install Vault plugin!");
@@ -388,11 +376,10 @@ public class CategoryContent {
             return;
         }
 
-        Material material = getCurrency(currency);
         int cost = amount;
         for (ItemStack i : player.getInventory().getContents()) {
             if (i == null) continue;
-            if (i.getType() == material) {
+            if (i.getType() == currency) {
                 if (i.getAmount() < cost) {
                     cost -= i.getAmount();
                     nms.minusAmount(player, i, i.getAmount());

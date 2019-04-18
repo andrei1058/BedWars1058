@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.arena;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GeneratorType;
 import com.andrei1058.bedwars.api.events.GeneratorUpgradeEvent;
 import com.andrei1058.bedwars.configuration.ConfigPath;
@@ -42,7 +43,6 @@ public class OreGenerator {
     private ArmorStand item;
     public boolean stack = getGeneratorsCfg().getBoolean(ConfigPath.GENERATOR_STACK_ITEMS);
 
-    private static ConcurrentLinkedDeque<OreGenerator> generators = new ConcurrentLinkedDeque<>();
     private static ConcurrentLinkedDeque<OreGenerator> rotation = new ConcurrentLinkedDeque<>();
 
     public OreGenerator(Location location, Arena arena, @NotNull GeneratorType type, BedWarsTeam bwt) {
@@ -55,37 +55,27 @@ public class OreGenerator {
         this.bwt = bwt;
         this.type = type;
         loadDefaults(true);
+        Main.debug("Initializing new generator at: " + location.toString() + " - " + type + " - " + (bwt == null ? "NOTEAM" : bwt.getName()));
     }
 
     public void upgrade() {
-        arena.updateNextEvent();
         switch (type) {
             case DIAMOND:
                 upgradeStage++;
-                if (arena.diamondTier != upgradeStage) {
-                    for (Player p : arena.getPlayers()) {
-                        p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
-                                getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND)).replace("{tier}", getMsg(p, (upgradeStage == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
-                    }
-                    for (Player p : arena.getSpectators()) {
-                        p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
-                                getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND)).replace("{tier}", getMsg(p, (upgradeStage == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
-                    }
-                }
                 if (upgradeStage == 2) {
                     delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_DELAY) == null ?
                             "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_II_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_DELAY);
                     spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_SPAWN_LIMIT) == null ?
                             "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_II_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_SPAWN_LIMIT);
-                    arena.upgradeDiamondsCount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START) == null ?
-                            "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START);
-                    arena.diamondTier = 2;
+                    //arena.upgradeDiamondsCount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START) == null ?
+                    //        "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START);
+                   //arena.diamondTier = 2;
                 } else if (upgradeStage == 3) {
                     delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY) == null ?
                             "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY);
                     spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_SPAWN_LIMIT) == null ?
                             "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_SPAWN_LIMIT);
-                    arena.diamondTier = 3;
+                   // arena.diamondTier = 3;
                 }
                 ore = new ItemStack(Material.DIAMOND);
                 for (HoloGram e : armorStands.values()) {
@@ -95,30 +85,20 @@ public class OreGenerator {
                 break;
             case EMERALD:
                 upgradeStage++;
-                if (arena.emeraldTier != upgradeStage) {
-                    for (Player p : arena.getPlayers()) {
-                        p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
-                                getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD)).replace("{tier}", getMsg(p, (upgradeStage == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
-                    }
-                    for (Player p : arena.getSpectators()) {
-                        p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
-                                getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD)).replace("{tier}", getMsg(p, (upgradeStage == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
-                    }
-                }
                 if (upgradeStage == 2) {
                     delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_DELAY) == null ?
                             "Default." + ConfigPath.GENERATOR_EMERALD_TIER_II_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_DELAY);
                     spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_SPAWN_LIMIT) == null ?
                             "Default." + ConfigPath.GENERATOR_EMERALD_TIER_II_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_SPAWN_LIMIT);
-                    arena.upgradeEmeraldsCount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_START) == null ?
-                            "Default." + ConfigPath.GENERATOR_EMERALD_TIER_III_START : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_START);
-                    arena.emeraldTier = 2;
+                    //arena.upgradeEmeraldsCount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_START) == null ?
+                    //        "Default." + ConfigPath.GENERATOR_EMERALD_TIER_III_START : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_START);
+                    //arena.emeraldTier = 2;
                 } else if (upgradeStage == 3) {
                     delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_DELAY) == null ?
                             "Default." + ConfigPath.GENERATOR_EMERALD_TIER_III_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_DELAY);
                     spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_SPAWN_LIMIT) == null ?
                             "Default." + ConfigPath.GENERATOR_EMERALD_TIER_III_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_SPAWN_LIMIT);
-                    arena.emeraldTier = 3;
+                    //arena.emeraldTier = 3;
                 }
                 ore = new ItemStack(Material.EMERALD);
                 for (HoloGram e : armorStands.values()) {
@@ -192,17 +172,12 @@ public class OreGenerator {
     }
 
     public void setOre(ItemStack ore) {
+        Main.debug("Changing ore for generator at " + location.toString() + " from " + this.ore + " to " + ore);
         this.ore = ore;
     }
 
     public Arena getArena() {
         return arena;
-    }
-
-    @NotNull
-    @Contract(pure = true)
-    public static ConcurrentLinkedDeque<OreGenerator> getGenerators() {
-        return generators;
     }
 
     @NotNull
@@ -347,7 +322,6 @@ public class OreGenerator {
                 a.destroy();
             }
         }
-        generators.remove(this);
         armorStands.clear();
     }
 
@@ -374,10 +348,9 @@ public class OreGenerator {
      */
     public void enable() {
         loadDefaults(false);
-        if (getOre().getType() == Material.EMERALD || getOre().getType() == Material.DIAMOND) {
+        if (getType() == GeneratorType.EMERALD || getType() == GeneratorType.DIAMOND) {
             rotation.add(this);
         }
-        generators.add(this);
     }
 
     /**
@@ -415,8 +388,6 @@ public class OreGenerator {
                         "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_I_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_I_DELAY);
                 spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_I_SPAWN_LIMIT) == null ?
                         "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_I_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_I_SPAWN_LIMIT);
-                arena.upgradeDiamondsCount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_START) == null ?
-                        "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_II_START : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_START);
                 ore = new ItemStack(Material.DIAMOND);
 
                 if (!initialize) {
@@ -439,8 +410,6 @@ public class OreGenerator {
                         "Default." + ConfigPath.GENERATOR_EMERALD_TIER_I_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_I_DELAY);
                 spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_I_SPAWN_LIMIT) == null ?
                         "Default." + ConfigPath.GENERATOR_EMERALD_TIER_I_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_I_SPAWN_LIMIT);
-                arena.upgradeEmeraldsCount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_START) == null ?
-                        "Default." + ConfigPath.GENERATOR_EMERALD_TIER_II_START : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_START);
                 ore = new ItemStack(Material.EMERALD);
 
                 if (!initialize) {
@@ -464,5 +433,85 @@ public class OreGenerator {
 
     public BedWarsTeam getBwt() {
         return bwt;
+    }
+
+    /**
+     * Get generator hologram holder (armor stand) containing the rotating item.
+     */
+    public ArmorStand getHologramHolder() {
+        return item;
+    }
+
+    /**
+     * Get generator type.
+     */
+    public GeneratorType getType() {
+        return type;
+    }
+
+    /**
+     * Get the amount of items that are dropped once.
+     */
+    public int getAmount() {
+        return amount;
+    }
+
+    /**
+     * Get spawn rate delay.
+     */
+    public int getDelay() {
+        return delay;
+    }
+
+    /**
+     * Get seconds before next item spawn.
+     */
+    public int getNextSpawn() {
+        return lastSpawn;
+    }
+
+    /**
+     * Get generator holograms.
+     */
+    public HashMap<String, HoloGram> getHolograms() {
+        return armorStands;
+    }
+
+    /**
+     * Get the spawn limit of the generators.
+     * If there is this amount of items dropped near the spawner
+     * it will stop spawning new items.
+     */
+    public int getSpawnLimit() {
+        return spawnLimit;
+    }
+
+    /**
+     * Set the remaining time till the next item spawn.
+     */
+    public void setNextSpawn(int lastSpawn) {
+        this.lastSpawn = lastSpawn;
+    }
+
+    /**
+     * Should the dropped items be stacked?
+     */
+    public void setStack(boolean stack) {
+        this.stack = stack;
+    }
+
+    /**
+     * Check if the dropped items can be stacked.
+     */
+    public boolean isStack() {
+        return stack;
+    }
+
+    /**
+     * Set generator type.
+     * This may break things.
+     */
+    public void setType(GeneratorType type) {
+        this.type = type;
     }
 }
