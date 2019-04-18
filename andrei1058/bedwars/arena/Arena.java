@@ -1129,7 +1129,7 @@ public class Arena implements Comparable {
             arenaStart = System.currentTimeMillis();
             for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
                 if (sb.getArena() == this) {
-                    sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + ".Playing", Messages.SCOREBOARD_DEFAULT_PLAYING));
+                    sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING));
                     sb.giveTeamColorTag();
                 }
             }
