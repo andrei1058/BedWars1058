@@ -43,6 +43,7 @@ public class WorldRestorer implements WorldOperator {
 	}
 	
 	private void kickPlayers() {
+		if (arena == null) return;
 		World world = Bukkit.getWorld(worldName);
 		if(world == null) return;
 		Location teleportLocation = Bukkit.getWorlds().get(0).getSpawnLocation();

@@ -326,7 +326,7 @@ public class Main extends JavaPlugin {
         Misc.checkUpdate();
 
         /* Database support */
-        if (config.getBoolean("database.enable")) {
+        if (config.getBoolean("database.enableRotation")) {
             com.andrei1058.bedwars.database.MySQL mySQL = new com.andrei1058.bedwars.database.MySQL();
             Long time = System.currentTimeMillis();
             if (!mySQL.connect()) {
@@ -414,7 +414,7 @@ public class Main extends JavaPlugin {
         /* Initialize shop */
         shop = new ShopManager();
 
-        //Leave this code at the end of the enable method
+        //Leave this code at the end of the enableRotation method
         for (Language l : Language.getLanguages()) {
             l.setupUnSetCategories();
             Language.addDefaultMessagesCommandItems(l);
@@ -465,7 +465,7 @@ public class Main extends JavaPlugin {
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SHOUT_COOLDOWN, 30);
         yml.addDefault(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP, "yourServer.Com");
 
-        yml.addDefault("database.enable", false);
+        yml.addDefault("database.enableRotation", false);
         yml.addDefault("database.host", "localhost");
         yml.addDefault("database.port", 3306);
         yml.addDefault("database.database", "bedwars1058");
