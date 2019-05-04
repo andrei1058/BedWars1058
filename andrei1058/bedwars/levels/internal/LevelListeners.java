@@ -48,8 +48,8 @@ public class LevelListeners implements Listener {
         for (UUID p : e.getWinners()) {
             if (PlayerLevel.getLevelByPlayer(p) != null) {
                 Player p1 = Bukkit.getPlayer(p);
-                PlayerLevel.getLevelByPlayer(p).addXp(LevelsConfig.levels.getInt("xp-reward.game-win"), PlayerXpGainEvent.XpSource.GAME_WIN);
-                p1.sendMessage(Language.getMsg(p1, "xp-reward-game-win").replace("{xp}", String.valueOf(LevelsConfig.levels.getInt("xp-reward.game-win"))));
+                PlayerLevel.getLevelByPlayer(p).addXp(LevelsConfig.levels.getInt("xp-rewards.game-win"), PlayerXpGainEvent.XpSource.GAME_WIN);
+                p1.sendMessage(Language.getMsg(p1, "xp-reward-game-win").replace("{xp}", String.valueOf(LevelsConfig.levels.getInt("xp-rewards.game-win"))));
                 BedWarsTeam bwt = e.getArena().getTeam(p1.getName());
                 if (bwt != null) {
                     if (bwt.getMembersCache().size() > 1) {
@@ -67,7 +67,7 @@ public class LevelListeners implements Listener {
                 BedWarsTeam bwt = e.getArena().getTeam(p1.getName());
                 if (bwt != null) {
                     if (bwt.getMembersCache().size() > 1) {
-                        int tr = LevelsConfig.levels.getInt("xp-reward.per-teammate") * bwt.getMembersCache().size();
+                        int tr = LevelsConfig.levels.getInt("xp-rewards.per-teammate") * bwt.getMembersCache().size();
                         PlayerLevel.getLevelByPlayer(p).addXp(tr, PlayerXpGainEvent.XpSource.PER_TEAMMATE);
                         p1.sendMessage(Language.getMsg(p1, "xp-reward-per-teammate").replace("{xp}", String.valueOf(tr)));
                     }
