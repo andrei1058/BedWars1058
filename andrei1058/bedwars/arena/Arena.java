@@ -197,7 +197,7 @@ public class Arena implements Comparable {
                 .forEach(Entity::remove);
         world.setGameRuleValue("doMobSpawning", "false");
         world.setGameRuleValue("announceAdvancements", "false");
-        //world.setAutoSave(false);
+        world.setAutoSave(false);
 
         /* Clear setup armor-stands */
         for (Entity e : world.getEntities()) {

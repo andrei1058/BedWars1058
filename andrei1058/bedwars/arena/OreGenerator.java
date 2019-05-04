@@ -69,13 +69,13 @@ public class OreGenerator {
                             "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_II_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_SPAWN_LIMIT);
                     //arena.upgradeDiamondsCount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START) == null ?
                     //        "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START);
-                   //arena.diamondTier = 2;
+                    //arena.diamondTier = 2;
                 } else if (upgradeStage == 3) {
                     delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY) == null ?
                             "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY);
                     spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_SPAWN_LIMIT) == null ?
                             "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_SPAWN_LIMIT);
-                   // arena.diamondTier = 3;
+                    // arena.diamondTier = 3;
                 }
                 ore = new ItemStack(Material.DIAMOND);
                 for (HoloGram e : armorStands.values()) {
@@ -344,13 +344,16 @@ public class OreGenerator {
     }
 
     /**
-     * Reset generator
+     * Enable generator rotation.
+     * Make sure it has a helmet set.
+     * DIAMOND and EMERALD generator types will get
+     * the rotation activated when the arena starts.
      */
-    public void enable() {
-        loadDefaults(false);
-        if (getType() == GeneratorType.EMERALD || getType() == GeneratorType.DIAMOND) {
-            rotation.add(this);
-        }
+    public void enableRotation() {
+        //loadDefaults(false);
+        //if (getType() == GeneratorType.EMERALD || getType() == GeneratorType.DIAMOND) {
+        rotation.add(this);
+        //}
     }
 
     /**
