@@ -53,7 +53,7 @@ public class LevelListeners implements Listener {
                 BedWarsTeam bwt = e.getArena().getTeam(p1.getName());
                 if (bwt != null) {
                     if (bwt.getMembersCache().size() > 1) {
-                        int tr = LevelsConfig.levels.getInt("xp-reward.per-teammate") * bwt.getMembersCache().size();
+                        int tr = LevelsConfig.levels.getInt("xp-rewards.per-teammate") * bwt.getMembersCache().size();
                         PlayerLevel.getLevelByPlayer(p).addXp(tr, PlayerXpGainEvent.XpSource.PER_TEAMMATE);
                         p1.sendMessage(Language.getMsg(p1, "xp-reward-per-teammate").replace("{xp}", String.valueOf(tr)));
                     }
