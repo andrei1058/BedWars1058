@@ -33,6 +33,11 @@ public class PlayerLevel {
                 LevelsConfig.levels.getYml().getString("levels.others.name") : LevelsConfig.levels.getYml().getString("levels." + level + ".name")).replace("{number}", String.valueOf(level));
         this.nextLevelCost = LevelsConfig.levels.getYml().get("levels." + level + ".rankup-cost") == null ?
                 LevelsConfig.levels.getYml().getInt("levels.others.rankup-cost") : LevelsConfig.levels.getYml().getInt("levels." + level + ".rankup-cost");
+
+        //fix levels broken in the past by an issue
+        if (level < 1) level = 1;
+        if (currentXp < 0) currentXp = 0;
+
         this.level = level;
         this.currentXp = currentXp;
         updateProgressBar();
