@@ -163,13 +163,13 @@ public class SQLite implements Database {
         try {
             ResultSet rs = connection.prepareStatement("SELECT id from player_levels WHERE uuid = '"+player.toString()+"';").executeQuery();
             if (!rs.next()){
-                PreparedStatement ps = connection.prepareStatement("INSERT INTO player_levels VALUES (?, ?, ?, ?, ?, ?);");
-                ps.setInt(1, 0);
-                ps.setString(2, player.toString());
-                ps.setInt(3, level);
-                ps.setInt(4, xp);
-                ps.setString(5, displayName);
-                ps.setInt(6, nextCost);
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO player_levels (uuid, level, xp, name, next_cost) VALUES (?, ?, ?, ?, ?);");
+                //ps.setInt(1, 0);
+                ps.setString(1, player.toString());
+                ps.setInt(2, level);
+                ps.setInt(3, xp);
+                ps.setString(4, displayName);
+                ps.setInt(5, nextCost);
                 ps.executeUpdate();
             } else {
                 PreparedStatement ps;
