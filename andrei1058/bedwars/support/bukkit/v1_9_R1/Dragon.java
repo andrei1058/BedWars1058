@@ -497,6 +497,7 @@ public class Dragon extends EntityEnderDragon {
 
     }
 
+    @SuppressWarnings("deprecation")
     protected void bC() {
         if (this.bI != null) {
             this.bI.b(this);
@@ -522,7 +523,7 @@ public class Dragon extends EntityEnderDragon {
             }
 
             if (this.bF == 1) {
-                int viewDistance = ((WorldServer) this.world).getServer().getViewDistance() * 16;
+                int viewDistance = this.world.getServer().getViewDistance() * 16;
                 Iterator var4 = MinecraftServer.getServer().getPlayerList().players.iterator();
 
                 label58:
