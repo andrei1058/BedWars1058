@@ -102,7 +102,7 @@ public class SQLite implements Database {
         try {
             ResultSet rs = connection.prepareStatement("SELECT id FROM quick_buy WHERE uuid = '" + p.toString() + "';").executeQuery();
             if (!rs.next()) {
-                connection.prepareStatement("INSERT INTO quick_buy VALUES(0,'" + p.toString() + "',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ');").executeUpdate();
+                connection.prepareStatement("INSERT INTO quick_buy (uuid, slot_19, slot_20, slot_21, slot_22, slot_23, slot_24, slot_25, slot_28, slot_29, slot_30, slot_31, slot_32, slot_33, slot_34, slot_37, slot_38, slot_39, slot_40, slot_41, slot_42, slot_43) VALUES('" + p.toString() + "',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ');").executeUpdate();
             }
             Main.debug("UPDATE SET SLOT " + slot + " identifier " + shopPath);
             connection.prepareStatement("UPDATE quick_buy SET slot_" + slot + " = '" + shopPath + "' WHERE uuid = '" + p.toString() + "';").executeUpdate();
