@@ -183,7 +183,21 @@ public class JoinLeaveTeleport implements Listener {
                 a.removeSpectator(p, true);
             }
         }
-        Language.getLangByPlayer().remove(p);
+
+        //Save preferred language
+        if (Language.getLangByPlayer().containsKey(p)){
+            final UUID u = p.getUniqueId();
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> {
+                String iso = Language.getLangByPlayer().get(p).getIso();
+                if (Language.isLanguageExist(iso)) {
+                    if (Main.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES).contains(iso))
+                        iso = lang.getIso();
+                    Main.getRemoteDatabase().setLanguage(u, iso);
+                }
+                Language.getLangByPlayer().remove(p);
+            });
+        }
+
         if (getServerType() != ServerType.SHARED) {
             e.setQuitMessage(null);
         }
