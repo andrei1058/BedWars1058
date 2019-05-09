@@ -365,7 +365,7 @@ public class OreGenerator {
         }
 
         item = createArmorStand(null, location.clone().add(0, 0.5, 0));
-        item.setHelmet(new ItemStack(type == GeneratorType.DIAMOND ? Material.DIAMOND_BLOCK : Material.DIAMOND_BLOCK));
+        item.setHelmet(new ItemStack(type == GeneratorType.DIAMOND ? Material.DIAMOND_BLOCK : Material.EMERALD_BLOCK));
         //}
     }
 
