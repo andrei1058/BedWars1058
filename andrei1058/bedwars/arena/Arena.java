@@ -224,7 +224,7 @@ public class Arena implements Comparable {
             if (yml.get("generator." + type) != null) {
                 for (String s : yml.getStringList("generator." + type)) {
                     location = cm.fromArenaStringList(s);
-                    if (location == null){
+                    if (location == null) {
                         plugin.getLogger().severe("Invalid location for " + type + " generator: " + s);
                         continue;
                     }
