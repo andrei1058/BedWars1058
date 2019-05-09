@@ -224,9 +224,11 @@ public class Main extends JavaPlugin {
         }
 
         /* Load lobby world if not main level */
-        if (!config.getLobbyWorldName().equalsIgnoreCase(Bukkit.getServer().getWorlds().get(0).getName())) {
-            if (getServerType() == ServerType.MULTIARENA)
-                Bukkit.createWorld(new WorldCreator(config.getLobbyWorldName()));
+        if (!config.getLobbyWorldName().isEmpty()) {
+            if (!config.getLobbyWorldName().equalsIgnoreCase(Bukkit.getServer().getWorlds().get(0).getName())) {
+                if (getServerType() == ServerType.MULTIARENA)
+                    Bukkit.createWorld(new WorldCreator(config.getLobbyWorldName()));
+            }
         }
 
         /* Remove entities from lobby */
