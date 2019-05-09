@@ -352,7 +352,6 @@ public class OreGenerator {
     public void enableRotation() {
         //loadDefaults(false);
         //if (getType() == GeneratorType.EMERALD || getType() == GeneratorType.DIAMOND) {
-        Bukkit.getLogger().severe("ENABLING ROTATION FOR GENERATOR: " + type.toString());
         rotation.add(this);
         for (Language lan : Language.getLanguages()) {
             HoloGram h = armorStands.get(lan.getIso());
