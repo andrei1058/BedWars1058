@@ -262,9 +262,6 @@ public class Main extends JavaPlugin {
             default:
                 registerEvents(new PlayerDropPickListener());
                 break;
-            case "v1_8_R3":
-                registerEvents(new PlayerDropPickListener());
-                break;
         }
 
         /* Deprecated versions */
