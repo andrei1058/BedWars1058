@@ -807,4 +807,21 @@ public class v1_13_R1 implements NMS {
         }
         return "";
     }
+
+    @Override
+    public void invisibilityFix(Player player, Arena arena) {
+
+        EntityPlayer pc = ((CraftPlayer) player).getHandle();
+        PacketPlayOutSpawnEntityLiving out = new PacketPlayOutSpawnEntityLiving(pc);
+
+        for (Player pl : arena.getPlayers()){
+            if (pl.equals(player)) continue;
+            ((CraftPlayer) pl).getHandle().playerConnection.sendPacket(out);
+        }
+
+        for (Player pl : arena.getSpectators()){
+            if (pl.equals(player)) continue;
+            ((CraftPlayer) pl).getHandle().playerConnection.sendPacket(out);
+        }
+    }
 }

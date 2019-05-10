@@ -323,6 +323,10 @@ public class BedWarsTeam {
             }
         }
         Bukkit.getPluginManager().callEvent(new ArenaPlayerRespawnEvent(p, getArena(), this));
+
+        Bukkit.getScheduler().runTaskLater(plugin, ()-> {
+            nms.invisibilityFix(p, getArena());
+        }, 15L);
     }
 
     /**
