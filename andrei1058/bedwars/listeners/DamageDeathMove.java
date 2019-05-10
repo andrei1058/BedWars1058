@@ -571,7 +571,7 @@ public class DamageDeathMove implements Listener {
     /*private static String getUtility(Material mat) {
         for (String st : Arrays.asList("silverfish", "bridge")) {
             if (shop.getYml().getBoolean(ConfigPath.SHOPSPECIALS))
-            if (shop.getBoolean("utilities." + st + ".enable")) {
+            if (shop.getBoolean("utilities." + st + ".enableRotation")) {
                 if (mat == Material.valueOf(shop.getYml().getString("utilities." + st + ".material"))) {
                     return st;
                 }

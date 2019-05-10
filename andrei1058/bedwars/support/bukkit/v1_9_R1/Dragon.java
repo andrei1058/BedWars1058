@@ -367,6 +367,7 @@ public class Dragon extends EntityEnderDragon {
         return (float) MathHelper.g(d0);
     }
 
+    @SuppressWarnings("deprecation")
     private boolean b(AxisAlignedBB axisalignedbb) {
         int i = MathHelper.floor(axisalignedbb.a);
         int j = MathHelper.floor(axisalignedbb.b);
@@ -497,6 +498,7 @@ public class Dragon extends EntityEnderDragon {
 
     }
 
+    @SuppressWarnings("deprecation")
     protected void bC() {
         if (this.bI != null) {
             this.bI.b(this);
@@ -522,7 +524,7 @@ public class Dragon extends EntityEnderDragon {
             }
 
             if (this.bF == 1) {
-                int viewDistance = ((WorldServer) this.world).getServer().getViewDistance() * 16;
+                int viewDistance = this.world.getServer().getViewDistance() * 16;
                 Iterator var4 = MinecraftServer.getServer().getPlayerList().players.iterator();
 
                 label58:

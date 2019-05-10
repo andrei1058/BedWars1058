@@ -2,13 +2,13 @@ package com.andrei1058.bedwars.arena.tasks;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
+import com.andrei1058.bedwars.api.GeneratorType;
 import com.andrei1058.bedwars.api.NextEvent;
 import com.andrei1058.bedwars.api.events.TeamAssignEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.OreGenerator;
 import com.andrei1058.bedwars.arena.SBoard;
-import com.andrei1058.bedwars.arena.mapreset.MapManager;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Messages;
 import org.bukkit.Bukkit;
@@ -125,13 +125,13 @@ public class GameStartingTask implements Runnable {
             //Color bed block if possible
             //Destroy bed if team is empty
             //Spawn shops and upgrades
-            //Enable team generators
+            //Disable generators for empty teams if required
             for (BedWarsTeam team : getArena().getTeams()) {
                 if (team.getMembers().isEmpty()) {
                     team.setBedDestroyed(true);
-                    if (!getArena().getCm().getBoolean(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS)) {
-                        team.getIronGenerator().enable();
-                        team.getGoldGenerator().enable();
+                    if (getArena().getCm().getBoolean(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS)) {
+                        team.getIronGenerator().disable();
+                        team.getGoldGenerator().disable();
                     }
                     continue;
                 }
@@ -143,8 +143,6 @@ public class GameStartingTask implements Runnable {
                     nms.spawnShop(getArena().getCm().getArenaLoc("Team." + team.getName() + ".Upgrade"), Messages.NPC_NAME_SOLO_UPGRADES, getArena().getPlayers(), getArena());
                     nms.spawnShop(getArena().getCm().getArenaLoc("Team." + team.getName() + ".Shop"), Messages.NPC_NAME_SOLO_SHOP, getArena().getPlayers(), getArena());
                 }
-                team.getIronGenerator().enable();
-                team.getGoldGenerator().enable();
             }
 
             //Add heart on players head
@@ -154,7 +152,7 @@ public class GameStartingTask implements Runnable {
 
             //Enable diamond/ emerald generators
             for (OreGenerator og : getArena().getOreGenerators()) {
-                if (og.getBwt() == null) og.enable();
+                if (og.getType() == GeneratorType.EMERALD || og.getType() == GeneratorType.DIAMOND) og.enableRotation();
             }
 
             //Lobby removal

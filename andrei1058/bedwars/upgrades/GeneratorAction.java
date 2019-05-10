@@ -48,7 +48,7 @@ public class GeneratorAction extends UpgradeAction {
             g.setOre(new ItemStack(Material.EMERALD));
             g.setType(GeneratorType.EMERALD);
             bwt.setEmeraldGenerator(g);
-            //bwt.getEmeraldGenerator().enable();
+            //bwt.getEmeraldGenerator().enableRotation();
             bwt.getArena().getOreGenerators().add(g);
         } else {
             if (emeraldDelay > 0){

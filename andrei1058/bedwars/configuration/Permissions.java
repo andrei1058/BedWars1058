@@ -13,7 +13,7 @@ public class Permissions {
     public static final String PERMISSION_BUILD = Main.mainCmd+".build";
     public static final String PERMISSION_CLONE = Main.mainCmd+".clone";
     public static final String PERMISSION_DEL_ARENA = Main.mainCmd+".delete";
-    public static final String PERMISSION_ARENA_ENABLE = Main.mainCmd+".enable";
+    public static final String PERMISSION_ARENA_ENABLE = Main.mainCmd+".enableRotation";
     public static final String PERMISSION_ARENA_DISABLE = Main.mainCmd+".disable";
     public static final String PERMISSION_NPC = Main.mainCmd+".npc";
     public static final String PERMISSION_RELOAD = Main.mainCmd+".reload";

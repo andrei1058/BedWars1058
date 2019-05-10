@@ -54,7 +54,7 @@ public class OreGenerator {
         this.arena = arena;
         this.bwt = bwt;
         this.type = type;
-        loadDefaults(true);
+        loadDefaults();
         Main.debug("Initializing new generator at: " + location.toString() + " - " + type + " - " + (bwt == null ? "NOTEAM" : bwt.getName()));
     }
 
@@ -69,13 +69,13 @@ public class OreGenerator {
                             "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_II_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_SPAWN_LIMIT);
                     //arena.upgradeDiamondsCount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START) == null ?
                     //        "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START);
-                   //arena.diamondTier = 2;
+                    //arena.diamondTier = 2;
                 } else if (upgradeStage == 3) {
                     delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY) == null ?
                             "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY);
                     spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_SPAWN_LIMIT) == null ?
                             "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_SPAWN_LIMIT);
-                   // arena.diamondTier = 3;
+                    // arena.diamondTier = 3;
                 }
                 ore = new ItemStack(Material.DIAMOND);
                 for (HoloGram e : armorStands.values()) {
@@ -344,13 +344,28 @@ public class OreGenerator {
     }
 
     /**
-     * Reset generator
+     * Enable generator rotation.
+     * Make sure it has a helmet set.
+     * DIAMOND and EMERALD generator types will get
+     * the rotation activated when the arena starts.
      */
-    public void enable() {
-        loadDefaults(false);
-        if (getType() == GeneratorType.EMERALD || getType() == GeneratorType.DIAMOND) {
-            rotation.add(this);
+    public void enableRotation() {
+        //loadDefaults(false);
+        //if (getType() == GeneratorType.EMERALD || getType() == GeneratorType.DIAMOND) {
+        rotation.add(this);
+        for (Language lan : Language.getLanguages()) {
+            HoloGram h = armorStands.get(lan.getIso());
+            if (h == null) {
+                armorStands.put(lan.getIso(), new HoloGram(lan.getIso()));
+            }
         }
+        for (HoloGram hg : armorStands.values()) {
+            hg.updateForAll();
+        }
+
+        item = createArmorStand(null, location.clone().add(0, 0.5, 0));
+        item.setHelmet(new ItemStack(type == GeneratorType.DIAMOND ? Material.DIAMOND_BLOCK : Material.EMERALD_BLOCK));
+        //}
     }
 
     /**
@@ -363,7 +378,7 @@ public class OreGenerator {
     }
 
 
-    private void loadDefaults(boolean initialize) {
+    private void loadDefaults() {
         switch (type) {
             case GOLD:
                 delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_DELAY) == null ?
@@ -389,21 +404,6 @@ public class OreGenerator {
                 spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_I_SPAWN_LIMIT) == null ?
                         "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_I_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_I_SPAWN_LIMIT);
                 ore = new ItemStack(Material.DIAMOND);
-
-                if (!initialize) {
-                    for (Language lan : Language.getLanguages()) {
-                        HoloGram h = armorStands.get(lan.getIso());
-                        if (h == null) {
-                            armorStands.put(lan.getIso(), new HoloGram(lan.getIso()));
-                        }
-                    }
-                    for (HoloGram hg : armorStands.values()) {
-                        hg.updateForAll();
-                    }
-                }
-
-                item = createArmorStand(null, location.clone().add(0, 0.5, 0));
-                item.setHelmet(new ItemStack(Material.DIAMOND_BLOCK));
                 break;
             case EMERALD:
                 delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_I_DELAY) == null ?
@@ -411,21 +411,6 @@ public class OreGenerator {
                 spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_I_SPAWN_LIMIT) == null ?
                         "Default." + ConfigPath.GENERATOR_EMERALD_TIER_I_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_I_SPAWN_LIMIT);
                 ore = new ItemStack(Material.EMERALD);
-
-                if (!initialize) {
-                    for (Language lan : Language.getLanguages()) {
-                        HoloGram h = armorStands.get(lan.getIso());
-                        if (h == null) {
-                            armorStands.put(lan.getIso(), new HoloGram(lan.getIso()));
-                        }
-                    }
-                    for (HoloGram hg : armorStands.values()) {
-                        hg.updateForAll();
-                    }
-                }
-
-                item = createArmorStand(null, location.clone().add(0, 0.5, 0));
-                item.setHelmet(new ItemStack(Material.EMERALD_BLOCK));
                 break;
         }
         lastSpawn = delay;

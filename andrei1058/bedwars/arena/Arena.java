@@ -197,7 +197,7 @@ public class Arena implements Comparable {
                 .forEach(Entity::remove);
         world.setGameRuleValue("doMobSpawning", "false");
         world.setGameRuleValue("announceAdvancements", "false");
-        //world.setAutoSave(false);
+        world.setAutoSave(false);
 
         /* Clear setup armor-stands */
         for (Entity e : world.getEntities()) {
@@ -224,7 +224,7 @@ public class Arena implements Comparable {
             if (yml.get("generator." + type) != null) {
                 for (String s : yml.getStringList("generator." + type)) {
                     location = cm.fromArenaStringList(s);
-                    if (location == null){
+                    if (location == null) {
                         plugin.getLogger().severe("Invalid location for " + type + " generator: " + s);
                         continue;
                     }
@@ -1531,7 +1531,7 @@ public class Arena implements Comparable {
             emeraldTier = 2;
             sendEmeraldsUpgradeMessages();
             for (OreGenerator o : getOreGenerators()) {
-                if (o.getOre().getType() == Material.EMERALD && o.getBwt() == null) {
+                if (o.getType() == GeneratorType.EMERALD && o.getBwt() == null) {
                     o.upgrade();
                 }
             }
@@ -1549,7 +1549,7 @@ public class Arena implements Comparable {
             diamondTier = 2;
             sendDiamondsUpgradeMessages();
             for (OreGenerator o : getOreGenerators()) {
-                if (o.getOre().getType() == Material.DIAMOND && o.getBwt() == null) {
+                if (o.getType() == GeneratorType.DIAMOND && o.getBwt() == null) {
                     o.upgrade();
                 }
             }
@@ -1563,6 +1563,11 @@ public class Arena implements Comparable {
             } else {
                 setNextEvent(NextEvent.BEDS_DESTROY);
             }
+            for (OreGenerator o : getOreGenerators()) {
+                if (o.getType() == GeneratorType.EMERALD && o.getBwt() == null) {
+                    o.upgrade();
+                }
+            }
         } else if (nextEvent == NextEvent.DIAMOND_GENERATOR_TIER_III && upgradeDiamondsCount == 0) {
             diamondTier = 3;
             sendDiamondsUpgradeMessages();
@@ -1572,6 +1577,11 @@ public class Arena implements Comparable {
                 setNextEvent(NextEvent.EMERALD_GENERATOR_TIER_III);
             } else {
                 setNextEvent(NextEvent.BEDS_DESTROY);
+            }
+            for (OreGenerator o : getOreGenerators()) {
+                if (o.getType() == GeneratorType.DIAMOND && o.getBwt() == null) {
+                    o.upgrade();
+                }
             }
         } else if (nextEvent == NextEvent.BEDS_DESTROY && getPlayingTask().getBedsDestroyCountdown() == 0) {
             setNextEvent(NextEvent.ENDER_DRAGON);

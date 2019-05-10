@@ -47,12 +47,15 @@ public class Save extends SubCommand {
                 e.remove();
             }
         }
-        p.getWorld().save();
-        Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.unloadWorld(Bukkit.getWorld(p.getWorld().getName()), true), 30L);
-        p.sendMessage("§6 ▪ §7Arena changes saved!");
-        p.sendMessage("§6 ▪ §7You can now enable it using:");
-        p.spigot().sendMessage(Misc.msgHoverClick("§6/" + getParent().getName() + " enableArena " + ss.getWorldName() + "§7 (click to enable)", "§dEnable this arena.", "/" + getParent().getName() + " enableArena " + ss.getWorldName(), ClickEvent.Action.RUN_COMMAND));
-        ss.done();
+
+        Bukkit.getScheduler().runTaskLater(plugin, ()-> {
+            p.getWorld().save();
+            Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.unloadWorld(Bukkit.getWorld(p.getWorld().getName()), true), 30L);
+            p.sendMessage("§6 ▪ §7Arena changes saved!");
+            p.sendMessage("§6 ▪ §7You can now enableRotation it using:");
+            p.spigot().sendMessage(Misc.msgHoverClick("§6/" + getParent().getName() + " enableArena " + ss.getWorldName() + "§7 (click to enableRotation)", "§dEnable this arena.", "/" + getParent().getName() + " enableArena " + ss.getWorldName(), ClickEvent.Action.RUN_COMMAND));
+            ss.done();
+        }, 40L);
         return true;
     }
 

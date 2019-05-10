@@ -44,7 +44,7 @@ public class EnableArena extends SubCommand {
         Player p = (Player) s;
         if (!MainCommand.isLobbySet(p)) return true;
         if (args.length != 1) {
-            p.sendMessage("§c▪ §7Usage: §o/" + getParent().getName() + " enable <mapName>");
+            p.sendMessage("§c▪ §7Usage: §o/" + getParent().getName() + " enableRotation <mapName>");
             return true;
         }
         File wss2 = new File(Bukkit.getServer().getWorldContainer().getPath() + "/" + args[0]);

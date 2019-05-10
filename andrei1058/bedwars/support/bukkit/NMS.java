@@ -411,8 +411,15 @@ public interface NMS {
     /**
      * Get block data.
      * Used for facing.
-     *
+     * <p>
      * 1.13 direction,rotation.
      */
     String getBlockData(Block block);
+
+    /**
+     * This will send the player spawn packet after a player respawn.
+     *
+     * Show the target player to players and spectators in the arena.
+     */
+    void invisibilityFix(Player player, Arena arena);
 }
