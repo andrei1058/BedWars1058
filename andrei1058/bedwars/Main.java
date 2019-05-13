@@ -29,8 +29,6 @@ import com.andrei1058.bedwars.listeners.arenaselector.ArenaSelectorListener;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
 import com.andrei1058.bedwars.lobbysocket.*;
 import com.andrei1058.bedwars.shop.ShopManager;
-import com.andrei1058.bedwars.shop.main.CategoryContent;
-import com.andrei1058.bedwars.shop.main.ShopCategory;
 import com.andrei1058.bedwars.stats.StatsManager;
 import com.andrei1058.bedwars.support.Metrics;
 import com.andrei1058.bedwars.support.bukkit.*;
@@ -464,7 +462,7 @@ public class Main extends JavaPlugin {
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SHOUT_COOLDOWN, 30);
         yml.addDefault(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP, "yourServer.Com");
 
-        yml.addDefault("database.enableRotation", false);
+        yml.addDefault("database.enable", false);
         yml.addDefault("database.host", "localhost");
         yml.addDefault("database.port", 3306);
         yml.addDefault("database.database", "bedwars1058");
