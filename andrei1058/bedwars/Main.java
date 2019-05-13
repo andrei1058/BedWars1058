@@ -30,7 +30,8 @@ import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
 import com.andrei1058.bedwars.lobbysocket.*;
 import com.andrei1058.bedwars.shop.ShopManager;
 import com.andrei1058.bedwars.stats.StatsManager;
-import com.andrei1058.bedwars.support.Metrics;
+import com.andrei1058.bedwars.support.McStats;
+import com.andrei1058.bedwars.support.bStats;
 import com.andrei1058.bedwars.support.bukkit.*;
 import com.andrei1058.bedwars.support.bukkit.v1_10_R1.v1_10_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_11_R1.v1_11_R1;
@@ -315,9 +316,9 @@ public class Main extends JavaPlugin {
         }
 
         /* Setup bStats metrics */
-        Metrics metrics = new Metrics(this);
-        metrics.addCustomChart(new Metrics.SimplePie("server_type", () -> getServerType().toString()));
-        metrics.addCustomChart(new Metrics.SimplePie("default_language", () -> lang.getIso()));
+        bStats metrics = new bStats(this);
+        metrics.addCustomChart(new bStats.SimplePie("server_type", () -> getServerType().toString()));
+        metrics.addCustomChart(new bStats.SimplePie("default_language", () -> lang.getIso()));
 
         /* Register NMS entities */
         nms.registerEntities();
@@ -738,6 +739,13 @@ public class Main extends JavaPlugin {
                 plugin.setEnabled(false);
             }
         }*/
+
+        try {
+            McStats metrics = new McStats(this);
+            metrics.start();
+        } catch (IOException e) {
+            // Failed to submit the stats :-(
+        }
     }
 
     private void registerEvents(Listener... listeners) {

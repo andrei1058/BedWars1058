@@ -26,7 +26,7 @@ import java.util.zip.GZIPOutputStream;
  * Check out https://bStats.org/ to learn more about bStats!
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class Metrics {
+public class bStats {
 
     static {
         // You can use the property to disable the check in your test environment
@@ -36,8 +36,8 @@ public class Metrics {
                     new byte[]{'o', 'r', 'g', '.', 'b', 's', 't', 'a', 't', 's', '.', 'b', 'u', 'k', 'k', 'i', 't'});
             final String examplePackage = new String(new byte[]{'y', 'o', 'u', 'r', '.', 'p', 'a', 'c', 'k', 'a', 'g', 'e'});
             // We want to make sure nobody just copy & pastes the example and use the wrong package names
-            if (Metrics.class.getPackage().getName().equals(defaultPackage) || Metrics.class.getPackage().getName().equals(examplePackage)) {
-                throw new IllegalStateException("bStats Metrics class has not been relocated correctly!");
+            if (bStats.class.getPackage().getName().equals(defaultPackage) || bStats.class.getPackage().getName().equals(examplePackage)) {
+                throw new IllegalStateException("bStats bStats class has not been relocated correctly!");
             }
         }
     }
@@ -74,7 +74,7 @@ public class Metrics {
      *
      * @param plugin The plugin which stats should be submitted.
      */
-    public Metrics(Plugin plugin) {
+    public bStats(Plugin plugin) {
         if (plugin == null) {
             throw new IllegalArgumentException("Plugin cannot be null!");
         }
@@ -121,7 +121,7 @@ public class Metrics {
 
         if (enabled) {
             boolean found = false;
-            // Search for all other bStats Metrics classes to see if we are the first one
+            // Search for all other bStats bStats classes to see if we are the first one
             for (Class<?> service : Bukkit.getServicesManager().getKnownServices()) {
                 try {
                     service.getField("B_STATS_VERSION"); // Our identifier :)
@@ -131,7 +131,7 @@ public class Metrics {
                 }
             }
             // Register our service
-            Bukkit.getServicesManager().register(Metrics.class, this, plugin, ServicePriority.Normal);
+            Bukkit.getServicesManager().register(bStats.class, this, plugin, ServicePriority.Normal);
             if (!found) {
                 // We are the first!
                 startSubmitting();
@@ -262,7 +262,7 @@ public class Metrics {
         final JSONObject data = getServerData();
 
         JSONArray pluginData = new JSONArray();
-        // Search for all other bStats Metrics classes to get their plugin data
+        // Search for all other bStats bStats classes to get their plugin data
         for (Class<?> service : Bukkit.getServicesManager().getKnownServices()) {
             try {
                 service.getField("B_STATS_VERSION"); // Our identifier :)
