@@ -53,7 +53,7 @@ public class PlayerLevel {
         double l1 = ((nextLevelCost - currentXp) / (double) (nextLevelCost)) * 10;
         int locked = (int) l1;
         int unlocked = 10 - locked;
-        if (locked <0 || unlocked > 10){
+        if (locked <0 || unlocked < 0){
             locked = 10;
             unlocked = 0;
         }

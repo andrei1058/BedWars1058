@@ -120,6 +120,10 @@ public class Arena implements Comparable {
      * @param p    - This will send messages to the player if something went wrong while loading the arena. Can be NULL.
      */
     public Arena(String name, Player p) {
+        if (Bukkit.getWorld(name) != null){
+            Bukkit.getLogger().severe("Could not initialize arena! World " +name + " is already loaded!\n" +
+                    "If you're using the server in BUNGEE mode, please don't use the arena name in server.properties");
+        }
         this.worldName = name;
 
         plugin.getLogger().info("Loading arena: " + getWorldName());

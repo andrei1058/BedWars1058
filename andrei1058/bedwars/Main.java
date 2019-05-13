@@ -172,8 +172,12 @@ public class Main extends JavaPlugin {
         Language.getLanguages().remove(ru);
 
         setupConfig();
+
         generators = new ConfigManager("generators", "plugins/" + this.getName(), false);
         setupGeneratorsCfg();
+
+        //loadArenasAndSigns();
+
         upgrades = new UpgradesManager("upgrades", "plugins/" + this.getName());
     }
 
@@ -222,20 +226,19 @@ public class Main extends JavaPlugin {
         }
 
         /* Load lobby world if not main level */
-        if (!config.getLobbyWorldName().isEmpty()) {
-            if (!config.getLobbyWorldName().equalsIgnoreCase(Bukkit.getServer().getWorlds().get(0).getName())) {
-                if (getServerType() == ServerType.MULTIARENA)
-                    Bukkit.createWorld(new WorldCreator(config.getLobbyWorldName()));
-            }
-        }
+        if (getServerType() == ServerType.MULTIARENA)
+            if (!config.getLobbyWorldName().isEmpty()) {
+                if (!config.getLobbyWorldName().equalsIgnoreCase(Bukkit.getServer().getWorlds().get(0).getName())) {
+                    Bukkit.getScheduler().runTaskLater(this, ()-> {
+                        Bukkit.createWorld(new WorldCreator(config.getLobbyWorldName()));
 
-        /* Remove entities from lobby */
-        if (!config.getLobbyWorldName().isEmpty()) {
-            if (Bukkit.getWorld(config.getLobbyWorldName()) != null) {
-                Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getWorld(config.getLobbyWorldName())
-                        .getEntities().stream().filter(e -> e instanceof Monster).forEach(Entity::remove), 20L);
+                        if (Bukkit.getWorld(config.getLobbyWorldName()) != null) {
+                            Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getWorld(config.getLobbyWorldName())
+                                    .getEntities().stream().filter(e -> e instanceof Monster).forEach(Entity::remove), 20L);
+                        }
+                    }, 100L);
+                }
             }
-        }
 
         /* Register events */
         registerEvents(new JoinLeaveTeleport(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(),
@@ -708,9 +711,12 @@ public class Main extends JavaPlugin {
                 }
             }
             if (serverType == ServerType.BUNGEE) {
+                if (!Arena.getArenas().isEmpty()) return;
                 Random r = new Random();
                 int x = r.nextInt(files.size());
-                new Arena(files.get(x).getName().replace(".yml", ""), null);
+
+                String name = files.get(x).getName().replace(".yml", "");
+                new Arena(name, null);
             } else {
                 for (File file : files) {
                     new Arena(file.getName().replace(".yml", ""), null);
