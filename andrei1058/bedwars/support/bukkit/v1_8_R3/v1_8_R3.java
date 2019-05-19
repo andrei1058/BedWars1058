@@ -29,6 +29,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 
@@ -745,16 +746,14 @@ public class v1_8_R3 implements NMS {
     public void invisibilityFix(Player player, Arena arena) {
 
         EntityPlayer pc = ((CraftPlayer) player).getHandle();
-        PacketPlayOutNamedEntitySpawn s = new PacketPlayOutNamedEntitySpawn(pc);
 
         for (Player pl : arena.getPlayers()){
             if (pl.equals(player)) continue;
-            ((CraftPlayer) pl).getHandle().playerConnection.sendPacket(s);
-        }
-
-        for (Player pl : arena.getSpectators()){
-            if (pl.equals(player)) continue;
-            ((CraftPlayer) pl).getHandle().playerConnection.sendPacket(s);
+            if (arena.getRespawn().containsKey(pl)) continue;
+            if (pl.hasPotionEffect(PotionEffectType.INVISIBILITY)) continue;
+            pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer) pl).getHandle()));
+            pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer) pl).getHandle()));
+            showArmor(pl, player);
         }
     }
 }
