@@ -97,11 +97,8 @@ public class Main extends JavaPlugin {
 
         //Spigot support
         try {
-            Bukkit.getServer().spigot();
+            Class.forName("org.spigotmc.SpigotConfig");
         } catch (Exception ex) {
-            this.getLogger().severe("I can't run on your server software. Please check:");
-            this.getLogger().severe("https://gitlab.com/andrei1058/BedWars1058/wikis/compatibility");
-            this.setEnabled(false);
             return;
         }
 
@@ -184,6 +181,16 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
+        //Spigot support
+        try {
+            Class.forName("org.spigotmc.SpigotConfig");
+        } catch (Exception ex) {
+            this.getLogger().severe("I can't run on your server software. Please check:");
+            this.getLogger().severe("https://gitlab.com/andrei1058/BedWars1058/wikis/compatibility");
+            this.setEnabled(false);
+            return;
+        }
 
         // Load FastAsyncWorldEdit support
         //if (Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit") != null) {
@@ -658,7 +665,7 @@ public class Main extends JavaPlugin {
         }
 
         debug = yml.getBoolean("debug");
-        //new ConfigManager("bukkit", Bukkit.getWorldContainer().getPath(), false).set("ticks-per.autosave", -1);
+        new ConfigManager("bukkit", Bukkit.getWorldContainer().getPath(), false).set("ticks-per.autosave", -1);
 
         Bukkit.spigot().getConfig().set("commands.send-namespaced", false);
         try {
@@ -671,7 +678,7 @@ public class Main extends JavaPlugin {
             case "BUNGEE":
                 serverType = ServerType.BUNGEE;
                 new ConfigManager("bukkit", Bukkit.getWorldContainer().getPath(), false).set("settings.allow-end", false);
-                Bukkit.spigot().getConfig().set("settings.bungeecord", true);
+                //Bukkit.spigot().getConfig().set("settings.bungeecord", true);
                 try {
                     Bukkit.spigot().getConfig().save("spigot.yml");
                 } catch (IOException e) {
