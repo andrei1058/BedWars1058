@@ -92,6 +92,8 @@ public class Main extends JavaPlugin {
     //remote database
     private static Database remoteDatabase;
 
+    private boolean serverSoftwareSupport = true;
+
     @Override
     public void onLoad() {
 
@@ -99,6 +101,7 @@ public class Main extends JavaPlugin {
         try {
             Class.forName("org.spigotmc.SpigotConfig");
         } catch (Exception ex) {
+            serverSoftwareSupport = false;
             return;
         }
 
@@ -182,10 +185,7 @@ public class Main extends JavaPlugin {
     @Override
     public void onEnable() {
 
-        //Spigot support
-        try {
-            Class.forName("org.spigotmc.SpigotConfig");
-        } catch (Exception ex) {
+        if (!serverSoftwareSupport){
             this.getLogger().severe("I can't run on your server software. Please check:");
             this.getLogger().severe("https://gitlab.com/andrei1058/BedWars1058/wikis/compatibility");
             this.setEnabled(false);
@@ -437,6 +437,7 @@ public class Main extends JavaPlugin {
     }
 
     public void onDisable() {
+        if (!serverSoftwareSupport) return;
         try {
             for (Arena a : Arena.getArenas()) {
                 a.disable();
