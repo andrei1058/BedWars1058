@@ -107,9 +107,6 @@ public class Arena implements Comparable {
     /* Used to reset the map. */
     private MapManager mapManager;
 
-    // Track arena start
-    private long arenaStart = 0L;
-
     private PerMinuteTask perMinuteTask;
 
     /**
@@ -885,7 +882,6 @@ public class Arena implements Comparable {
                 rjt.destroy();
             }
         }
-        arenaStart = 0L;
         mapManager.unloadWorld();
     }
 
@@ -1130,7 +1126,6 @@ public class Arena implements Comparable {
         } else if (status == GameState.playing) {
             if (Main.getLevelSupport() instanceof InternalLevel) perMinuteTask = new PerMinuteTask(this);
             playingTask = new GamePlayingTask(this);
-            arenaStart = System.currentTimeMillis();
             for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
                 if (sb.getArena() == this) {
                     sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING));
