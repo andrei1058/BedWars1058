@@ -72,7 +72,7 @@ public class Main extends JavaPlugin {
     private static ServerType serverType = ServerType.MULTIARENA;
     public static boolean safeMode = false, lobbyServer = false, debug = true;
     public static String mainCmd = "bw", link = "https://www.spigotmc.org/resources/50942/";
-    public static ConfigManager config, signs, spigot, generators;
+    public static ConfigManager config, signs, generators;
     public static ShopManager shop;
     public static StatsManager statsManager;
     public static UpgradesManager upgrades;
@@ -107,7 +107,7 @@ public class Main extends JavaPlugin {
 
         plugin = this;
 
-        /* Load version support 1.8 - 1.12 */
+        /* Load version support */
         boolean support = true;
         switch (version) {
             case "v1_8_R3":
@@ -226,20 +226,23 @@ public class Main extends JavaPlugin {
             plugin.getLogger().severe("Lobby location is not set!");
         }
 
-        /* Load lobby world if not main level */
+        /* Load lobby world if not main level
+         * when the server finishes loading. */
         if (getServerType() == ServerType.MULTIARENA)
-            if (!config.getLobbyWorldName().isEmpty()) {
-                if (!config.getLobbyWorldName().equalsIgnoreCase(Bukkit.getServer().getWorlds().get(0).getName())) {
-                    Bukkit.getScheduler().runTaskLater(this, ()-> {
-                        Bukkit.createWorld(new WorldCreator(config.getLobbyWorldName()));
+            Bukkit.getScheduler().runTaskLater(this, () -> {
+                if (!config.getLobbyWorldName().isEmpty()) {
+                    if (!config.getLobbyWorldName().equalsIgnoreCase(Bukkit.getServer().getWorlds().get(0).getName())) {
+                        Bukkit.getScheduler().runTaskLater(this, () -> {
+                            Bukkit.createWorld(new WorldCreator(config.getLobbyWorldName()));
 
-                        if (Bukkit.getWorld(config.getLobbyWorldName()) != null) {
-                            Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getWorld(config.getLobbyWorldName())
-                                    .getEntities().stream().filter(e -> e instanceof Monster).forEach(Entity::remove), 20L);
-                        }
-                    }, 100L);
+                            if (Bukkit.getWorld(config.getLobbyWorldName()) != null) {
+                                Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getWorld(config.getLobbyWorldName())
+                                        .getEntities().stream().filter(e -> e instanceof Monster).forEach(Entity::remove), 20L);
+                            }
+                        }, 100L);
+                    }
                 }
-            }
+            }, 1L);
 
         /* Register events */
         registerEvents(new JoinLeaveTeleport(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(),
@@ -278,12 +281,6 @@ public class Main extends JavaPlugin {
                 break;
         }
 
-        /* Initialize map resetter before loading maps.*/
-        //if (!MapManager.init()) {
-        //    setEnabled(false);
-        //    return;
-        //}
-
         /* Load join signs. */
         loadArenasAndSigns();
 
@@ -314,11 +311,6 @@ public class Main extends JavaPlugin {
             //new OneTick().runTaskTimer(this, 120, 1);
             Bukkit.getScheduler().runTaskTimer(this, new OneTick(), 120, 1);
         }
-
-        /* Setup bStats metrics */
-        bStats metrics = new bStats(this);
-        metrics.addCustomChart(new bStats.SimplePie("server_type", () -> getServerType().toString()));
-        metrics.addCustomChart(new bStats.SimplePie("default_language", () -> lang.getIso()));
 
         /* Register NMS entities */
         nms.registerEntities();
@@ -422,6 +414,19 @@ public class Main extends JavaPlugin {
         }
 
         LevelsConfig.init();
+
+        // mcstats.org metrics
+        try {
+            McStats mcststs = new McStats(this);
+            mcststs.start();
+        } catch (IOException e) {
+            // Failed to submit the stats :-(
+        }
+
+        // bStats metrics
+        bStats metrics = new bStats(this);
+        metrics.addCustomChart(new bStats.SimplePie("server_type", () -> getServerType().toString()));
+        metrics.addCustomChart(new bStats.SimplePie("default_language", () -> lang.getIso()));
     }
 
     public void onDisable() {
@@ -628,6 +633,7 @@ public class Main extends JavaPlugin {
 
         //Finished old configuration conversion
 
+        //set default server language
         String whatLang = "en";
         for (File f : Objects.requireNonNull(new File("plugins/" + this.getDescription().getName() + "/Languages").listFiles())) {
             if (f.isFile()) {
@@ -661,13 +667,16 @@ public class Main extends JavaPlugin {
             e.printStackTrace();
         }
 
-        spigot = new ConfigManager("spigot", Bukkit.getWorldContainer().getPath(), false);
-
         switch (yml.getString("serverType").toUpperCase()) {
             case "BUNGEE":
                 serverType = ServerType.BUNGEE;
                 new ConfigManager("bukkit", Bukkit.getWorldContainer().getPath(), false).set("settings.allow-end", false);
-                spigot.set("settings.bungeecord", true);
+                Bukkit.spigot().getConfig().set("settings.bungeecord", true);
+                try {
+                    Bukkit.spigot().getConfig().save("spigot.yml");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
             case "SHARED":
                 serverType = ServerType.SHARED;
@@ -723,28 +732,6 @@ public class Main extends JavaPlugin {
                     new Arena(file.getName().replace(".yml", ""), null);
                 }
             }
-            /*if (Arena.getArenas().isEmpty()) {
-                if (getServerType() == ServerType.BUNGEE) {
-                    plugin.getLogger().severe("Please set the server type to MULTIARENA and do the setup.");
-                    config.set("serverType", "MULTIARENA");
-                    Bukkit.getServer().spigot().restart();
-                    plugin.setEnabled(false);
-                }
-            }*/
-        } /*else {
-            if (getServerType() == ServerType.BUNGEE) {
-                plugin.getLogger().severe("Please set the server type to MULTIARENA and do the setup.");
-                config.set("serverType", "MULTIARENA");
-                Bukkit.getServer().spigot().restart();
-                plugin.setEnabled(false);
-            }
-        }*/
-
-        try {
-            McStats metrics = new McStats(this);
-            metrics.start();
-        } catch (IOException e) {
-            // Failed to submit the stats :-(
         }
     }
 
