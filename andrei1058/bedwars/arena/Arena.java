@@ -44,7 +44,7 @@ public class Arena implements Comparable {
     private static HashMap<String, Arena> arenaByName = new HashMap<>();
     private static HashMap<Player, Arena> arenaByPlayer = new HashMap<>();
     private static ArrayList<Arena> arenas = new ArrayList<>();
-    private static int gamesBeforeRestart = config.getInt(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART);
+    //private static int gamesBeforeRestart = config.getInt(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART);
     public static HashMap<UUID, Integer> afkCheck = new HashMap<>();
     public static HashMap<UUID, Integer> magicMilk = new HashMap<>();
 
@@ -117,10 +117,6 @@ public class Arena implements Comparable {
      * @param p    - This will send messages to the player if something went wrong while loading the arena. Can be NULL.
      */
     public Arena(String name, Player p) {
-        if (Bukkit.getWorld(name) != null){
-            Bukkit.getLogger().severe("Could not initialize arena! World " +name + " is already loaded!\n" +
-                    "If you're using the server in BUNGEE mode, please don't use the arena name in server.properties");
-        }
         this.worldName = name;
 
         plugin.getLogger().info("Loading arena: " + getWorldName());
@@ -865,6 +861,11 @@ public class Arena implements Comparable {
      */
     public void restart() {
         plugin.getLogger().info("Restarting arena: " + getWorldName());
+        if (Main.getServerType() == ServerType.BUNGEE){
+            Bukkit.getLogger().info("Dispatching command: " + config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
+            return;
+        }
         arenas.remove(this);
         players.clear();
         spectators.clear();
@@ -1730,20 +1731,6 @@ public class Arena implements Comparable {
      */
     public List<OreGenerator> getOreGenerators() {
         return oreGenerators;
-    }
-
-    /**
-     * Set the amount of games to be played before restarting the server.
-     */
-    public static void setGamesBeforeRestart(int gamesBeforeRestart) {
-        Arena.gamesBeforeRestart = gamesBeforeRestart;
-    }
-
-    /**
-     * Get games amount (to be layed) before restarting the server.
-     */
-    public static int getGamesBeforeRestart() {
-        return gamesBeforeRestart;
     }
 
     /**
