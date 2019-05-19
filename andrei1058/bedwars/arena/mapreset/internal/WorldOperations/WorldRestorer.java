@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.mapreset.MapManager;
 import com.andrei1058.bedwars.arena.mapreset.internal.Util.FileUtil;
@@ -79,6 +80,10 @@ public class WorldRestorer implements WorldOperator {
     private void reloadWorld() {
         Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
             if (Bukkit.getWorlds().get(0).getName().equals(worldName)) {
+                if (Main.getServerType() != ServerType.BUNGEE){
+                    Main.plugin.getLogger().severe("You can't use an arena as level-name in MULTIARENA mode!");
+                    return;
+                }
                 World w = Bukkit.getWorlds().get(0);
                 w.setKeepSpawnInMemory(true);
                 w.setAutoSave(false);
