@@ -101,7 +101,7 @@ public class PAPISupport extends PlaceholderExpansion {
                             BedWarsTeam bwt = a.getTeam(p);
                             if (bwt != null) {
                                 replay += Language.getMsg(p, Messages.FORMAT_PAPI_PLAYER_TEAM_TEAM).replace("{TeamName}",
-                                        bwt.getName().replace("{TeamColor}", String.valueOf(TeamColor.getChatColor(bwt.getColor()))));
+                                        bwt.getName()).replace("{TeamColor}", String.valueOf(TeamColor.getChatColor(bwt.getColor())));
                             }
                         }
                     } else {
