@@ -152,7 +152,7 @@ public class JoinLeaveTeleport implements Listener {
 
         if (Main.getServerType() == ServerType.SHARED) {
             if (Main.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
-                Misc.giveLobbySb(e.getPlayer());
+                if (e.getPlayer().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) Misc.giveLobbySb(e.getPlayer());
             }
             return;
         }
@@ -215,6 +215,7 @@ public class JoinLeaveTeleport implements Listener {
 
     @EventHandler
     public void onTeleport(PlayerTeleportEvent e) {
+        if (e.isCancelled()) return;
         Arena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a != null) {
             Arena a1 = Arena.getArenaByName(e.getTo().getWorld().getName());
@@ -242,14 +243,16 @@ public class JoinLeaveTeleport implements Listener {
     public void onWorldChange(PlayerChangedWorldEvent e) {
         if (Main.getServerType() == ServerType.SHARED) {
             if (Main.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
-                if (e.getFrom().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
-                    for (SBoard sBoard : new ArrayList<>(SBoard.getScoreboards())) {
-                        if (sBoard.getP() == e.getPlayer())
-                            if (sBoard.getArena() == null) sBoard.remove();
+                //Bukkit.getScheduler().runTaskLater(plugin, ()-> {
+                    if (e.getPlayer().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())){
+                        Misc.giveLobbySb(e.getPlayer());
+                    } else {
+                        for (SBoard sBoard : new ArrayList<>(SBoard.getScoreboards())) {
+                            if (sBoard.getP() == e.getPlayer())
+                                if (sBoard.getArena() == null) sBoard.remove();
+                        }
                     }
-                } else {
-                    Misc.giveLobbySb(e.getPlayer());
-                }
+                //}, 2L);
             }
         }
         if (Arena.isInArena(e.getPlayer())) {
