@@ -89,8 +89,7 @@ public class WorldRestorer implements WorldOperator {
                 w.setAutoSave(false);
                 arena.init(w);
             } else {
-                WorldCreator worldCreator = new WorldCreator(worldName);
-                World w = worldCreator.createWorld();
+                World w =  Bukkit.createWorld(new WorldCreator(worldName));
                 w.setKeepSpawnInMemory(false);
                 w.setAutoSave(false);
                 arena.init(w);

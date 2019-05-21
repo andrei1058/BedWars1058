@@ -38,6 +38,7 @@ import com.andrei1058.bedwars.support.bukkit.v1_11_R1.v1_11_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_12_R1.v1_12_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_13_R1.v1_13_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_13_R2.v1_13_R2;
+import com.andrei1058.bedwars.support.bukkit.v1_14_R1.v1_14_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_8_R3.v1_8_R3;
 import com.andrei1058.bedwars.support.bukkit.v1_9_R1.v1_9_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_9_R2.v1_9_R2;
@@ -134,6 +135,9 @@ public class Main extends JavaPlugin {
             case "v1_13_R2":
                 nms = new v1_13_R2();
                 break;
+            case "v1_14_R1":
+                nms = new v1_14_R1();
+                break;
             default:
                 support = false;
         }
@@ -211,16 +215,19 @@ public class Main extends JavaPlugin {
 
         /* Register commands */
         nms.registerCommand(mainCmd, new MainCommand(mainCmd));
-        if (!nms.isBukkitCommandRegistered("shout")) {
-            nms.registerCommand("shout", new ShoutCommand("shout"));
-        }
-        nms.registerCommand("rejoin", new RejoinCommand("rejoin"));
-        if (!(nms.isBukkitCommandRegistered("leave") && getServerType() == ServerType.BUNGEE)) {
-            nms.registerCommand("leave", new LeaveCommand("leave"));
-        }
-        if (!(nms.isBukkitCommandRegistered("party") && getServerType() == ServerType.BUNGEE)) {
-            nms.registerCommand("party", new PartyCommand("party"));
-        }
+
+        Bukkit.getScheduler().runTaskLater(this, ()->{
+            if (!nms.isBukkitCommandRegistered("shout")) {
+                nms.registerCommand("shout", new ShoutCommand("shout"));
+            }
+            nms.registerCommand("rejoin", new RejoinCommand("rejoin"));
+            if (!(nms.isBukkitCommandRegistered("leave") && getServerType() == ServerType.BUNGEE)) {
+                nms.registerCommand("leave", new LeaveCommand("leave"));
+            }
+            if (!(nms.isBukkitCommandRegistered("party") && getServerType() == ServerType.BUNGEE)) {
+                nms.registerCommand("party", new PartyCommand("party"));
+            }
+        }, 20L);
 
         /* Setup plugin messaging channel */
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
@@ -267,6 +274,7 @@ public class Main extends JavaPlugin {
         switch (version) {
             case "v1_13_R2":
             case "v1_13_R1":
+            case "v1_14_R1":
                 registerEvents(new v1_3_Interact());
             case "v1_12_R1":
                 registerEvents(new EntityDropPickListener());
@@ -728,8 +736,45 @@ public class Main extends JavaPlugin {
                     }
                 }
             }
+
+            // lowerCase arena names - new 1.14 standard
+            File folder, newName;
+
+            List<File> toRemove = new ArrayList<>(), toAdd = new ArrayList<>();
+            for (File file : files){
+                if (!file.getName().equals(file.getName().toLowerCase())){
+                    newName = new File(dir.getPath()+"/"+file.getName().toLowerCase());
+                    if (!file.renameTo(newName)){
+                        toRemove.add(file);
+                        Main.plugin.getLogger().severe("Could not rename " + file.getName() + " to " + file.getName().toLowerCase()+"! Please do it manually!");
+                    } else {
+                        toAdd.add(newName);
+                        toRemove.add(file);
+                    }
+                    folder = new File(plugin.getServer().getWorldContainer().getPath() + "/" + file.getName().replace(".yml", ""));
+                    if (folder.exists()) {
+                        if (!folder.getName().equals(folder.getName().toLowerCase())) {
+                            if (!folder.renameTo(new File(folder.getName().toLowerCase()))) {
+                                Main.plugin.getLogger().severe("Could not rename " + folder.getName() + " folder to " + folder.getName().toLowerCase() + "! Please do it manually!");
+                                toRemove.add(file);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+
+            for (File f : toRemove){
+                files.remove(f);
+            }
+
+            files.addAll(toAdd);
+
             if (serverType == ServerType.BUNGEE) {
-                if (!Arena.getArenas().isEmpty()) return;
+                if (Arena.getArenas().isEmpty()){
+                    this.getLogger().info("Could not find any arena!");
+                    return;
+                }
                 Random r = new Random();
                 int x = r.nextInt(files.size());
 
@@ -788,13 +833,18 @@ public class Main extends JavaPlugin {
 
     public static String getForCurrentVersion(String v18, String v12, String v13) {
         switch (getServerVersion()) {
+            case "v1_8_R3":
+            case "v1_9_R1":
+            case "v1_9_R2":
+            case "v1_10_R1":
+            case "v1_11_R1":
             case "v1_12_R1":
                 return v12;
             case "v1_13_R1":
             case "v1_13_R2":
                 return v13;
         }
-        return v18;
+        return v13;
     }
 
     public static ServerType getServerType() {

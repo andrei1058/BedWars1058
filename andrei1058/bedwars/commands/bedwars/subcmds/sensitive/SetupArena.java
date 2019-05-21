@@ -10,6 +10,7 @@ import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -46,6 +47,10 @@ public class SetupArena extends SubCommand {
         if (!MainCommand.isLobbySet(p)) return true;
         if (args.length != 1) {
             p.sendMessage("§c▪ §7Usage: §o/" + getParent().getName() + " " + getSubCommandName() + " <mapName>");
+            return true;
+        }
+        if (!args[0].equals(args[0].toLowerCase())) {
+            p.sendMessage("§c▪ §c" + args[0] + ChatColor.GRAY + " mustn't contain capital letters! Rename your folder to: " + ChatColor.GREEN + args[0].toLowerCase());
             return true;
         }
         File worldServer = new File(Bukkit.getServer().getWorldContainer().getPath() + "/" + args[0]);

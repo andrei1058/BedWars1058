@@ -149,6 +149,7 @@ public class Arena implements Comparable {
             plugin.getLogger().severe("There isn't any map called " + name);
             return;
         }
+
         boolean error = false;
         for (String team : yml.getConfigurationSection("Team").getKeys(false)) {
             String colorS = yml.getString("Team." + team + ".Color");
@@ -979,7 +980,7 @@ public class Arena implements Comparable {
      * @return A string with - and _ replaced by a space.
      */
     public String getDisplayName() {
-        return world.getName().replace("_", " ").replace("-", " ");
+        return (Character.toUpperCase(worldName.charAt(0)) + worldName.substring(1)).replace("_", " ").replace("-", " ");
     }
 
     /**
