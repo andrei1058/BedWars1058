@@ -1770,7 +1770,7 @@ public class Arena implements Comparable {
 
         int amount = getParty().hasParty(p) ? getParty().getMembers(p).size() : 1;
         for (Arena a : arenaList) {
-            if (!a.getGroup().equals(group)) continue;
+            if (!a.getGroup().equalsIgnoreCase(group)) continue;
             if (a.getPlayers().size() == a.getMaxPlayers()) continue;
             if (a.getMaxPlayers() - a.getPlayers().size() >= amount) {
                 a.addPlayer(p, false);
