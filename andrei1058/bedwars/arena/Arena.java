@@ -463,6 +463,14 @@ public class Arena implements Comparable {
                 p.setAllowFlight(true);
                 p.setFlying(true);
 
+                if (!playerBefore) {
+                    if (staffTeleport == null) {
+                        p.teleport(cm.getArenaLoc("waiting.Loc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                    } else {
+                        p.teleport(staffTeleport);
+                    }
+                }
+
                 /* Spectator items */
                 sendSpectatorCommandItems(p);
             }, 15L);
