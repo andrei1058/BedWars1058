@@ -450,6 +450,10 @@ public class Arena implements Comparable {
             /* Hide spectator  */
             //p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0), true);
             p.setGameMode(GameMode.ADVENTURE);
+
+            p.setAllowFlight(true);
+            p.setFlying(true);
+
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 for (Player on : Bukkit.getOnlinePlayers()) {
                     if (on == p) continue;
@@ -461,8 +465,6 @@ public class Arena implements Comparable {
                         p.showPlayer(on);
                     }
                 }
-                p.setAllowFlight(true);
-                p.setFlying(true);
 
                 if (!playerBefore) {
                     if (staffTeleport == null) {
@@ -470,6 +472,8 @@ public class Arena implements Comparable {
                     } else {
                         p.teleport(staffTeleport);
                     }
+                } else {
+                    p.teleport(p.getLocation());
                 }
 
                 /* Spectator items */
