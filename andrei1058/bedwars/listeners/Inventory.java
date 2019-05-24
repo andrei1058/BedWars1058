@@ -25,7 +25,7 @@ public class Inventory implements Listener {
     @EventHandler
     public void onClose(InventoryCloseEvent e) {
         Player p = (Player) e.getPlayer();
-        if (e.getView().getTitle().equalsIgnoreCase(SetupSession.getInvName())) {
+        if (nms.getInventoryName(e).equalsIgnoreCase(SetupSession.getInvName())) {
             SetupSession ss = SetupSession.getSession(p);
             if (ss != null) {
                 if (ss.getSetupType() == null)
@@ -136,7 +136,7 @@ public class Inventory implements Listener {
         if (a != null) {
 
             //Prevent players from moving items in stats GUI
-            if (e.getView().getTitle().equals(Language.getMsg(p, Messages.PLAYER_STATS_GUI_INV_NAME).replace("{player}", p.getName()))) {
+            if (nms.getInventoryName(e).equals(Language.getMsg(p, Messages.PLAYER_STATS_GUI_INV_NAME).replace("{player}", p.getName()))) {
                 e.setCancelled(true);
                 return;
             }
@@ -148,7 +148,7 @@ public class Inventory implements Listener {
             }
 
             /* Prevent players from placing items in the upgrades gui. Issue 26. */
-            if (e.getView().getTitle().equalsIgnoreCase(getMsg(p, "upgrades." + UpgradeGroup.getUpgradeGroup(a.getGroup()).getName() + ".name"))) {
+            if (nms.getInventoryName(e).equalsIgnoreCase(getMsg(p, "upgrades." + UpgradeGroup.getUpgradeGroup(a.getGroup()).getName() + ".name"))) {
                 e.setCancelled(true);
                 for (TeamUpgrade tu : UpgradeGroup.getUpgradeGroup(a.getGroup()).getTeamUpgrades()) {
                     if (tu.getSlot() == e.getSlot()) {
@@ -168,7 +168,7 @@ public class Inventory implements Listener {
         }
 
         /* Check setup gui items */
-        if (SetupSession.isInSetupSession(p) && e.getView().getTitle().equalsIgnoreCase(SetupSession.getInvName())) {
+        if (SetupSession.isInSetupSession(p) && nms.getInventoryName(e).equalsIgnoreCase(SetupSession.getInvName())) {
             SetupSession ss = SetupSession.getSession(p);
             if (e.getSlot() == SetupSession.getAdvancedSlot()) {
                 ss.setSetupType(SetupSession.SetupType.ADVANCED);
@@ -187,7 +187,7 @@ public class Inventory implements Listener {
                 return;
             }
             if (a.isPlayer(p)) {
-                if (e.getView().getTitle().equalsIgnoreCase(getMsg(p, "upgrades." + UpgradeGroup.getUpgradeGroup(a.getGroup()).getName() + ".name"))) {
+                if (nms.getInventoryName(e).equalsIgnoreCase(getMsg(p, "upgrades." + UpgradeGroup.getUpgradeGroup(a.getGroup()).getName() + ".name"))) {
                     for (TeamUpgrade tu : UpgradeGroup.getUpgradeGroup(a.getGroup()).getTeamUpgrades()) {
                         if (tu.getSlot() == e.getSlot()) {
                             e.setCancelled(true);

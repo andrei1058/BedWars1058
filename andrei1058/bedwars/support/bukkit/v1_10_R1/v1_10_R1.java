@@ -27,6 +27,7 @@ import org.bukkit.craftbukkit.v1_10_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_10_R1.entity.CraftLivingEntity;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.Crops;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -757,5 +758,10 @@ public class v1_10_R1 implements NMS {
             pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer) pl).getHandle()));
             showArmor(pl, player);
         }
+    }
+
+    @Override
+    public String getInventoryName(InventoryEvent e) {
+        return e.getInventory().getName();
     }
 }
