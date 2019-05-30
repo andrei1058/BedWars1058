@@ -14,6 +14,7 @@ import org.bukkit.command.Command;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
+import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
@@ -418,8 +419,13 @@ public interface NMS {
 
     /**
      * This will send the player spawn packet after a player respawn.
-     *
+     * <p>
      * Show the target player to players and spectators in the arena.
      */
     void invisibilityFix(Player player, Arena arena);
+
+    /**
+     * Get inventory name.
+     */
+    String getInventoryName(InventoryEvent e);
 }

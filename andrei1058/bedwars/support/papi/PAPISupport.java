@@ -45,11 +45,15 @@ public class PAPISupport extends PlaceholderExpansion {
         }
 
         if (s.contains("arena_count_")){
-            Arena a = Arena.getArenaByName(s.replace("arena_status_", ""));
+            Arena a = Arena.getArenaByName(s.replace("arena_count_", ""));
             if (a == null){
                 return "0";
             }
             return String.valueOf(a.getPlayers().size());
+        }
+
+        if (s.contains("group_count_")){
+            return String.valueOf(Arena.getPlayers( s.replace("group_count_", "")));
         }
 
         String replay = "";
@@ -101,7 +105,7 @@ public class PAPISupport extends PlaceholderExpansion {
                             BedWarsTeam bwt = a.getTeam(p);
                             if (bwt != null) {
                                 replay += Language.getMsg(p, Messages.FORMAT_PAPI_PLAYER_TEAM_TEAM).replace("{TeamName}",
-                                        bwt.getName().replace("{TeamColor}", String.valueOf(TeamColor.getChatColor(bwt.getColor()))));
+                                        bwt.getName()).replace("{TeamColor}", String.valueOf(TeamColor.getChatColor(bwt.getColor())));
                             }
                         }
                     } else {

@@ -29,16 +29,16 @@ import com.andrei1058.bedwars.listeners.arenaselector.ArenaSelectorListener;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
 import com.andrei1058.bedwars.lobbysocket.*;
 import com.andrei1058.bedwars.shop.ShopManager;
-import com.andrei1058.bedwars.shop.main.CategoryContent;
-import com.andrei1058.bedwars.shop.main.ShopCategory;
 import com.andrei1058.bedwars.stats.StatsManager;
-import com.andrei1058.bedwars.support.Metrics;
+import com.andrei1058.bedwars.support.McStats;
+import com.andrei1058.bedwars.support.bStats;
 import com.andrei1058.bedwars.support.bukkit.*;
 import com.andrei1058.bedwars.support.bukkit.v1_10_R1.v1_10_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_11_R1.v1_11_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_12_R1.v1_12_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_13_R1.v1_13_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_13_R2.v1_13_R2;
+import com.andrei1058.bedwars.support.bukkit.v1_14_R1.v1_14_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_8_R3.v1_8_R3;
 import com.andrei1058.bedwars.support.bukkit.v1_9_R1.v1_9_R1;
 import com.andrei1058.bedwars.support.bukkit.v1_9_R2.v1_9_R2;
@@ -73,7 +73,7 @@ public class Main extends JavaPlugin {
     private static ServerType serverType = ServerType.MULTIARENA;
     public static boolean safeMode = false, lobbyServer = false, debug = true;
     public static String mainCmd = "bw", link = "https://www.spigotmc.org/resources/50942/";
-    public static ConfigManager config, signs, spigot, generators;
+    public static ConfigManager config, signs, generators;
     public static ShopManager shop;
     public static StatsManager statsManager;
     public static UpgradesManager upgrades;
@@ -93,22 +93,22 @@ public class Main extends JavaPlugin {
     //remote database
     private static Database remoteDatabase;
 
+    private boolean serverSoftwareSupport = true;
+
     @Override
     public void onLoad() {
 
         //Spigot support
         try {
-            Bukkit.getServer().spigot();
+            Class.forName("org.spigotmc.SpigotConfig");
         } catch (Exception ex) {
-            this.getLogger().severe("I can't run on your server software. Please check:");
-            this.getLogger().severe("https://gitlab.com/andrei1058/BedWars1058/wikis/compatibility");
-            this.setEnabled(false);
+            serverSoftwareSupport = false;
             return;
         }
 
         plugin = this;
 
-        /* Load version support 1.8 - 1.12 */
+        /* Load version support */
         boolean support = true;
         switch (version) {
             case "v1_8_R3":
@@ -134,6 +134,9 @@ public class Main extends JavaPlugin {
                 break;
             case "v1_13_R2":
                 nms = new v1_13_R2();
+                break;
+            case "v1_14_R1":
+                nms = new v1_14_R1();
                 break;
             default:
                 support = false;
@@ -174,13 +177,24 @@ public class Main extends JavaPlugin {
         Language.getLanguages().remove(ru);
 
         setupConfig();
+
         generators = new ConfigManager("generators", "plugins/" + this.getName(), false);
         setupGeneratorsCfg();
+
+        //loadArenasAndSigns();
+
         upgrades = new UpgradesManager("upgrades", "plugins/" + this.getName());
     }
 
     @Override
     public void onEnable() {
+
+        if (!serverSoftwareSupport){
+            this.getLogger().severe("I can't run on your server software. Please check:");
+            this.getLogger().severe("https://gitlab.com/andrei1058/BedWars1058/wikis/compatibility");
+            this.setEnabled(false);
+            return;
+        }
 
         // Load FastAsyncWorldEdit support
         //if (Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit") != null) {
@@ -201,16 +215,19 @@ public class Main extends JavaPlugin {
 
         /* Register commands */
         nms.registerCommand(mainCmd, new MainCommand(mainCmd));
-        if (!nms.isBukkitCommandRegistered("shout")) {
-            nms.registerCommand("shout", new ShoutCommand("shout"));
-        }
-        nms.registerCommand("rejoin", new RejoinCommand("rejoin"));
-        if (!(nms.isBukkitCommandRegistered("leave") && getServerType() == ServerType.BUNGEE)) {
-            nms.registerCommand("leave", new LeaveCommand("leave"));
-        }
-        if (!(nms.isBukkitCommandRegistered("party") && getServerType() == ServerType.BUNGEE)) {
-            nms.registerCommand("party", new PartyCommand("party"));
-        }
+
+        Bukkit.getScheduler().runTaskLater(this, ()->{
+            if (!nms.isBukkitCommandRegistered("shout")) {
+                nms.registerCommand("shout", new ShoutCommand("shout"));
+            }
+            nms.registerCommand("rejoin", new RejoinCommand("rejoin"));
+            if (!(nms.isBukkitCommandRegistered("leave") && getServerType() == ServerType.BUNGEE)) {
+                nms.registerCommand("leave", new LeaveCommand("leave"));
+            }
+            if (!(nms.isBukkitCommandRegistered("party") && getServerType() == ServerType.BUNGEE)) {
+                nms.registerCommand("party", new PartyCommand("party"));
+            }
+        }, 20L);
 
         /* Setup plugin messaging channel */
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
@@ -223,21 +240,23 @@ public class Main extends JavaPlugin {
             plugin.getLogger().severe("Lobby location is not set!");
         }
 
-        /* Load lobby world if not main level */
-        if (!config.getLobbyWorldName().isEmpty()) {
-            if (!config.getLobbyWorldName().equalsIgnoreCase(Bukkit.getServer().getWorlds().get(0).getName())) {
-                if (getServerType() == ServerType.MULTIARENA)
-                    Bukkit.createWorld(new WorldCreator(config.getLobbyWorldName()));
-            }
-        }
+        /* Load lobby world if not main level
+         * when the server finishes loading. */
+        if (getServerType() == ServerType.MULTIARENA)
+            Bukkit.getScheduler().runTaskLater(this, () -> {
+                if (!config.getLobbyWorldName().isEmpty()) {
+                    if (!config.getLobbyWorldName().equalsIgnoreCase(Bukkit.getServer().getWorlds().get(0).getName())) {
+                        Bukkit.getScheduler().runTaskLater(this, () -> {
+                            Bukkit.createWorld(new WorldCreator(config.getLobbyWorldName()));
 
-        /* Remove entities from lobby */
-        if (!config.getLobbyWorldName().isEmpty()) {
-            if (Bukkit.getWorld(config.getLobbyWorldName()) != null) {
-                Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getWorld(config.getLobbyWorldName())
-                        .getEntities().stream().filter(e -> e instanceof Monster).forEach(Entity::remove), 20L);
-            }
-        }
+                            if (Bukkit.getWorld(config.getLobbyWorldName()) != null) {
+                                Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getWorld(config.getLobbyWorldName())
+                                        .getEntities().stream().filter(e -> e instanceof Monster).forEach(Entity::remove), 20L);
+                            }
+                        }, 100L);
+                    }
+                }
+            }, 1L);
 
         /* Register events */
         registerEvents(new JoinLeaveTeleport(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(),
@@ -255,14 +274,12 @@ public class Main extends JavaPlugin {
         switch (version) {
             case "v1_13_R2":
             case "v1_13_R1":
+            case "v1_14_R1":
                 registerEvents(new v1_3_Interact());
             case "v1_12_R1":
                 registerEvents(new EntityDropPickListener());
                 break;
             default:
-                registerEvents(new PlayerDropPickListener());
-                break;
-            case "v1_8_R3":
                 registerEvents(new PlayerDropPickListener());
                 break;
         }
@@ -278,12 +295,6 @@ public class Main extends JavaPlugin {
                         () -> System.out.println("\u001B[31m[WARN] BedWars1058 may drop support for this server version in the future.\nPlease consider upgrading to a newer paper/spigot version.\u001B[0m"), 40L);
                 break;
         }
-
-        /* Initialize map resetter before loading maps.*/
-        //if (!MapManager.init()) {
-        //    setEnabled(false);
-        //    return;
-        //}
 
         /* Load join signs. */
         loadArenasAndSigns();
@@ -315,11 +326,6 @@ public class Main extends JavaPlugin {
             //new OneTick().runTaskTimer(this, 120, 1);
             Bukkit.getScheduler().runTaskTimer(this, new OneTick(), 120, 1);
         }
-
-        /* Setup bStats metrics */
-        Metrics metrics = new Metrics(this);
-        metrics.addCustomChart(new Metrics.SimplePie("server_type", () -> getServerType().toString()));
-        metrics.addCustomChart(new Metrics.SimplePie("default_language", () -> lang.getIso()));
 
         /* Register NMS entities */
         nms.registerEntities();
@@ -423,9 +429,23 @@ public class Main extends JavaPlugin {
         }
 
         LevelsConfig.init();
+
+        // mcstats.org metrics
+        try {
+            McStats mcststs = new McStats(this);
+            mcststs.start();
+        } catch (IOException e) {
+            // Failed to submit the stats :-(
+        }
+
+        // bStats metrics
+        bStats metrics = new bStats(this);
+        metrics.addCustomChart(new bStats.SimplePie("server_type", () -> getServerType().toString()));
+        metrics.addCustomChart(new bStats.SimplePie("default_language", () -> lang.getIso()));
     }
 
     public void onDisable() {
+        if (!serverSoftwareSupport) return;
         try {
             for (Arena a : Arena.getArenas()) {
                 a.disable();
@@ -467,7 +487,7 @@ public class Main extends JavaPlugin {
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SHOUT_COOLDOWN, 30);
         yml.addDefault(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP, "yourServer.Com");
 
-        yml.addDefault("database.enableRotation", false);
+        yml.addDefault("database.enable", false);
         yml.addDefault("database.host", "localhost");
         yml.addDefault("database.port", 3306);
         yml.addDefault("database.database", "bedwars1058");
@@ -629,6 +649,7 @@ public class Main extends JavaPlugin {
 
         //Finished old configuration conversion
 
+        //set default server language
         String whatLang = "en";
         for (File f : Objects.requireNonNull(new File("plugins/" + this.getDescription().getName() + "/Languages").listFiles())) {
             if (f.isFile()) {
@@ -653,7 +674,7 @@ public class Main extends JavaPlugin {
         }
 
         debug = yml.getBoolean("debug");
-        //new ConfigManager("bukkit", Bukkit.getWorldContainer().getPath(), false).set("ticks-per.autosave", -1);
+        new ConfigManager("bukkit", Bukkit.getWorldContainer().getPath(), false).set("ticks-per.autosave", -1);
 
         Bukkit.spigot().getConfig().set("commands.send-namespaced", false);
         try {
@@ -662,13 +683,16 @@ public class Main extends JavaPlugin {
             e.printStackTrace();
         }
 
-        spigot = new ConfigManager("spigot", Bukkit.getWorldContainer().getPath(), false);
-
         switch (yml.getString("serverType").toUpperCase()) {
             case "BUNGEE":
                 serverType = ServerType.BUNGEE;
                 new ConfigManager("bukkit", Bukkit.getWorldContainer().getPath(), false).set("settings.allow-end", false);
-                spigot.set("settings.bungeecord", true);
+                //Bukkit.spigot().getConfig().set("settings.bungeecord", true);
+                try {
+                    Bukkit.spigot().getConfig().save("spigot.yml");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
             case "SHARED":
                 serverType = ServerType.SHARED;
@@ -712,31 +736,56 @@ public class Main extends JavaPlugin {
                     }
                 }
             }
+
+            // lowerCase arena names - new 1.14 standard
+            File folder, newName;
+
+            List<File> toRemove = new ArrayList<>(), toAdd = new ArrayList<>();
+            for (File file : files){
+                if (!file.getName().equals(file.getName().toLowerCase())){
+                    newName = new File(dir.getPath()+"/"+file.getName().toLowerCase());
+                    if (!file.renameTo(newName)){
+                        toRemove.add(file);
+                        Main.plugin.getLogger().severe("Could not rename " + file.getName() + " to " + file.getName().toLowerCase()+"! Please do it manually!");
+                    } else {
+                        toAdd.add(newName);
+                        toRemove.add(file);
+                    }
+                    folder = new File(plugin.getServer().getWorldContainer().getPath() + "/" + file.getName().replace(".yml", ""));
+                    if (folder.exists()) {
+                        if (!folder.getName().equals(folder.getName().toLowerCase())) {
+                            if (!folder.renameTo(new File(folder.getName().toLowerCase()))) {
+                                Main.plugin.getLogger().severe("Could not rename " + folder.getName() + " folder to " + folder.getName().toLowerCase() + "! Please do it manually!");
+                                toRemove.add(file);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+
+            for (File f : toRemove){
+                files.remove(f);
+            }
+
+            files.addAll(toAdd);
+
             if (serverType == ServerType.BUNGEE) {
+                if (Arena.getArenas().isEmpty()){
+                    this.getLogger().info("Could not find any arena!");
+                    return;
+                }
                 Random r = new Random();
                 int x = r.nextInt(files.size());
-                new Arena(files.get(x).getName().replace(".yml", ""), null);
+
+                String name = files.get(x).getName().replace(".yml", "");
+                new Arena(name, null);
             } else {
                 for (File file : files) {
                     new Arena(file.getName().replace(".yml", ""), null);
                 }
             }
-            /*if (Arena.getArenas().isEmpty()) {
-                if (getServerType() == ServerType.BUNGEE) {
-                    plugin.getLogger().severe("Please set the server type to MULTIARENA and do the setup.");
-                    config.set("serverType", "MULTIARENA");
-                    Bukkit.getServer().spigot().restart();
-                    plugin.setEnabled(false);
-                }
-            }*/
-        } /*else {
-            if (getServerType() == ServerType.BUNGEE) {
-                plugin.getLogger().severe("Please set the server type to MULTIARENA and do the setup.");
-                config.set("serverType", "MULTIARENA");
-                Bukkit.getServer().spigot().restart();
-                plugin.setEnabled(false);
-            }
-        }*/
+        }
     }
 
     private void registerEvents(Listener... listeners) {
@@ -784,13 +833,18 @@ public class Main extends JavaPlugin {
 
     public static String getForCurrentVersion(String v18, String v12, String v13) {
         switch (getServerVersion()) {
+            case "v1_8_R3":
+            case "v1_9_R1":
+            case "v1_9_R2":
+            case "v1_10_R1":
+            case "v1_11_R1":
             case "v1_12_R1":
                 return v12;
             case "v1_13_R1":
             case "v1_13_R2":
                 return v13;
         }
-        return v18;
+        return v13;
     }
 
     public static ServerType getServerType() {

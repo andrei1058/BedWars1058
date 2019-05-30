@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.support.bukkit.v1_9_R2;
+package com.andrei1058.bedwars.support.bukkit.v1_14_R1;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.TeamColor;
@@ -7,35 +7,46 @@ import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.arena.ShopHolo;
 import com.andrei1058.bedwars.configuration.ConfigPath;
+import com.andrei1058.bedwars.exceptions.InvalidSoundException;
 import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.language.Messages;
-import com.andrei1058.bedwars.exceptions.InvalidSoundException;
 import com.andrei1058.bedwars.support.bukkit.NMS;
-import net.minecraft.server.v1_9_R2.*;
-import net.minecraft.server.v1_9_R2.Item;
+import com.andrei1058.bedwars.support.bukkit.v1_14_R1.IGolem;
+import com.andrei1058.bedwars.support.bukkit.v1_14_R1.Silverfish;
+import com.google.common.collect.Sets;
+import com.mojang.datafixers.DataFixUtils;
+import com.mojang.datafixers.types.Type;
+import net.minecraft.server.v1_14_R1.Item;
+import net.minecraft.server.v1_14_R1.*;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.block.Bed;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
 import org.bukkit.command.Command;
-import org.bukkit.craftbukkit.v1_9_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_9_R2.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_9_R2.entity.CraftTNTPrimed;
-import org.bukkit.craftbukkit.v1_9_R2.util.UnsafeList;
-import org.bukkit.craftbukkit.v1_9_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_9_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftTNTPrimed;
+import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.material.Crops;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
-import org.bukkit.util.Vector;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,11 +56,13 @@ import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.despawnables.TargetListener.owningTeam;
 import static com.andrei1058.bedwars.language.Language.getMsg;
 
-public class v1_9_R2 implements NMS {
+public class v1_14_R1 implements NMS {
 
-    private Sound bedDestroy = Sound.valueOf("ENTITY_ENDERDRAGON_GROWL"), playerKill = Sound.valueOf("ENTITY_WOLF_HURT"),
-            countDown = Sound.valueOf("ENTITY_CHICKEN_EGG"), bought = Sound.valueOf("BLOCK_ANVIL_HIT"), insuffMoney = Sound.valueOf("ENTITY_ENDERMEN_TELEPORT");
-
+    private Sound bedDestroy = Sound.valueOf("ENTITY_ENDER_DRAGON_GROWL"),
+            playerKill = Sound.valueOf("ENTITY_WOLF_HURT"),
+            countDown = Sound.valueOf("ENTITY_CHICKEN_EGG"),
+            bought = Sound.valueOf("BLOCK_ANVIL_HIT"),
+            insuffMoney = Sound.valueOf("ENTITY_ENDERMAN_TELEPORT");
 
     /**
      * ArenaList of despawnable entities aka special shop mobs
@@ -80,6 +93,7 @@ public class v1_9_R2 implements NMS {
         try {
             playerKill = Sound.valueOf(sound);
         } catch (Exception ex) {
+            ex.printStackTrace();
             throw new InvalidSoundException(sound);
         }
     }
@@ -112,16 +126,41 @@ public class v1_9_R2 implements NMS {
     }
 
     @Override
+    public Sound countdownTick() {
+        return countDown;
+    }
+
+    @Override
+    public void setCountdownSound(String sound) throws InvalidSoundException {
+        try {
+            countDown = Sound.valueOf(sound);
+        } catch (Exception ex) {
+            throw new InvalidSoundException(sound);
+        }
+    }
+
+    public void spawnSilverfish(Location loc, BedWarsTeam bedWarsTeam) {
+        new Despawnable(Silverfish.spawn(loc, bedWarsTeam), bedWarsTeam, shop.getYml().getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_DESPAWN), Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME);
+    }
+
+    @Override
+    public void spawnIronGolem(Location loc, BedWarsTeam bedWarsTeam) {
+        new Despawnable(IGolem.spawn(loc, bedWarsTeam), bedWarsTeam, shop.getYml().getInt(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_DESPAWN), Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME);
+    }
+
+    @Override
     public void hidePlayer(Player player, List<Player> players) {
-        for (Player p : players){
+        for (Player p : players) {
             if (p == player) continue;
             p.hidePlayer(player);
         }
     }
 
     @Override
-    public void minusAmount(Player p, org.bukkit.inventory.ItemStack i, int amount) {
-        i.setAmount(i.getAmount() - amount);
+    public void hidePlayer(Player victim, Player p) {
+        if (victim == p) return;
+        PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(victim.getEntityId());
+        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
     }
 
     @Override
@@ -132,7 +171,7 @@ public class v1_9_R2 implements NMS {
     }
 
     @Override
-    public boolean isDespawnable(org.bukkit.entity.Entity e) {
+    public boolean isDespawnable(Entity e) {
         for (Despawnable d : despawnables) {
             if (d.getE() == ((CraftEntity) e).getHandle()) return true;
         }
@@ -140,30 +179,11 @@ public class v1_9_R2 implements NMS {
     }
 
     @Override
-    public BedWarsTeam ownDespawnable(org.bukkit.entity.Entity e) {
+    public BedWarsTeam ownDespawnable(Entity e) {
         for (Despawnable d : despawnables) {
             if (d.getE() == ((CraftEntity) e).getHandle()) return d.getTeam();
         }
         return null;
-    }
-
-    @Override
-    public Sound countdownTick() {
-        return countDown;
-    }
-
-    @Override
-    public void setCountdownSound(String sound) throws InvalidSoundException {
-
-    }
-
-    public void spawnSilverfish(Location loc, BedWarsTeam bedWarsTeam) {
-        new Despawnable(Silverfish.spawn(loc, bedWarsTeam), bedWarsTeam, shop.getYml().getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_DESPAWN), Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME);
-    }
-
-    @Override
-    public void spawnIronGolem(Location loc, BedWarsTeam bedWarsTeam) {
-        new Despawnable(IGolem.spawn(loc, bedWarsTeam), bedWarsTeam, shop.getYml().getInt(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_DESPAWN), Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME);
     }
 
     @Override
@@ -198,15 +218,8 @@ public class v1_9_R2 implements NMS {
     public void playAction(Player p, String text) {
         CraftPlayer cPlayer = (CraftPlayer) p;
         IChatBaseComponent cbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + text + "\"}");
-        PacketPlayOutChat ppoc = new PacketPlayOutChat(cbc, (byte) 2);
+        PacketPlayOutChat ppoc = new PacketPlayOutChat(cbc, ChatMessageType.GAME_INFO);
         cPlayer.getHandle().playerConnection.sendPacket(ppoc);
-    }
-
-    @Override
-    public void unregisterCommand(String name) {
-        if (isBukkitCommandRegistered(name)) {
-            ((org.bukkit.craftbukkit.v1_8_R3.CraftServer) plugin.getServer()).getCommandMap().getCommand(name).unregister(((org.bukkit.craftbukkit.v1_8_R3.CraftServer) plugin.getServer()).getCommandMap());
-        }
     }
 
     @Override
@@ -214,17 +227,34 @@ public class v1_9_R2 implements NMS {
         return ((CraftServer) plugin.getServer()).getCommandMap().getCommand(name) != null;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public org.bukkit.inventory.ItemStack getItemInHand(Player p) {
-        return p.getItemInHand();
+        return p.getInventory().getItemInMainHand();
     }
 
     @Override
-    public void hideEntity(org.bukkit.entity.Entity e, Player p) {
+    public void hideEntity(Entity e, Player p) {
         PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(e.getEntityId());
         ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
 
+    }
+
+    @Override
+    public void minusAmount(Player p, org.bukkit.inventory.ItemStack i, int amount) {
+        i.setAmount(i.getAmount() - amount);
+    }
+
+    @Override
+    public void setSource(TNTPrimed tnt, Player owner) {
+        EntityLiving nmsEntityLiving = (((CraftLivingEntity) owner).getHandle());
+        EntityTNTPrimed nmsTNT = (((CraftTNTPrimed) tnt).getHandle());
+        try {
+            Field sourceField = EntityTNTPrimed.class.getDeclaredField("source");
+            sourceField.setAccessible(true);
+            sourceField.set(nmsTNT, nmsEntityLiving);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override
@@ -264,9 +294,19 @@ public class v1_9_R2 implements NMS {
 
     @Override
     public void registerEntities() {
-        registerEntity("ShopNPC", 120, VillagerShop.class);
-        registerEntity("Silverfish2", 60, Silverfish.class);
-        registerEntity("IGolem", 99, IGolem.class);
+        Map<String, Type<?>> types = (Map<String, Type<?>>) DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(SharedConstants.a().getWorldVersion())).findChoiceType(DataConverterTypes.ENTITY).types();
+        types.put("minecraft:bwvillager", types.get("minecraft:villager"));
+        /*EntityTypes.a<net.minecraft.server.v1_14_R1.Entity> a =*/
+        EntityTypes.a.a(VillagerShop::new, EnumCreatureType.CREATURE);
+        //customEntities = IRegistry.a(IRegistry.ENTITY_TYPE, "bwvillager", a.a("bwvillager"));
+
+
+        types.put("minecraft:bwsilverfish", types.get("minecraft:silverfish"));
+        EntityTypes.a.a(Silverfish::new, EnumCreatureType.MONSTER);
+
+
+        types.put("minecraft:bwgolem", types.get("minecraft:iron_golem"));
+        EntityTypes.a.a(IGolem::new, EnumCreatureType.AMBIENT);
     }
 
     @Override
@@ -293,14 +333,14 @@ public class v1_9_R2 implements NMS {
 
     @Override
     public double getDamage(org.bukkit.inventory.ItemStack i) {
-        net.minecraft.server.v1_9_R2.ItemStack nmsStack = CraftItemStack.asNMSCopy(i);
+        ItemStack nmsStack = CraftItemStack.asNMSCopy(i);
         NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
         return compound.getDouble("generic.attackDamage");
     }
 
     @Override
     public double getProtection(org.bukkit.inventory.ItemStack i) {
-        net.minecraft.server.v1_9_R2.ItemStack nmsStack = CraftItemStack.asNMSCopy(i);
+        ItemStack nmsStack = CraftItemStack.asNMSCopy(i);
         NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
         return compound.getDouble("generic.armor");
     }
@@ -314,76 +354,81 @@ public class v1_9_R2 implements NMS {
         return a;
     }
 
+    /**
+     * Custom villager class
+     */
+    public class VillagerShop extends EntityVillager {
 
-    public void registerEntity(String name, int id, Class customClass) {
-        try {
-            ArrayList<Map> dataMap = new ArrayList<>();
-            for (Field f : EntityTypes.class.getDeclaredFields()) {
-                if (!f.getType().getSimpleName().equals(Map.class.getSimpleName())) continue;
-                f.setAccessible(true);
-                dataMap.add((Map) f.get(null));
-            }
-            if (dataMap.get(2).containsKey(id)) {
-                dataMap.get(0).remove(name);
-                dataMap.get(2).remove(id);
-            }
-            Method method = EntityTypes.class.getDeclaredMethod("a", Class.class, String.class, Integer.TYPE);
-            method.setAccessible(true);
-            method.invoke(null, customClass, name, id);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public class VillagerShop extends net.minecraft.server.v1_9_R2.EntityVillager {
-        public VillagerShop(net.minecraft.server.v1_9_R2.World world) {
-            super(world);
-            try {
-                Field bField = net.minecraft.server.v1_9_R2.PathfinderGoalSelector.class.getDeclaredField("b");
-                bField.setAccessible(true);
-                Field cField = net.minecraft.server.v1_9_R2.PathfinderGoalSelector.class.getDeclaredField("c");
-                cField.setAccessible(true);
-                bField.set(this.goalSelector, new UnsafeList());
-                bField.set(this.targetSelector, new UnsafeList());
-                cField.set(this.goalSelector, new UnsafeList());
-                cField.set(this.targetSelector, new UnsafeList());
-            } catch (Exception bField) {
-            }
-            this.goalSelector.a(0, new net.minecraft.server.v1_9_R2.PathfinderGoalFloat(this));
-            this.goalSelector.a(9, new net.minecraft.server.v1_9_R2.PathfinderGoalInteract(this, net.minecraft.server.v1_9_R2.EntityHuman.class, 3.0f, 1.0f));
-            this.goalSelector.a(10, new net.minecraft.server.v1_9_R2.PathfinderGoalLookAtPlayer(this, net.minecraft.server.v1_9_R2.EntityHuman.class, 8.0f));
+        @Override
+        public void openTrade(EntityHuman entityhuman, IChatBaseComponent ichatbasecomponent, int i) {
         }
 
         @Override
-        public void move(double d0, double d1, double d2) {
+        public void setTradingPlayer(@Nullable EntityHuman entityhuman) {
+        }
+
+        public VillagerShop(EntityTypes entityTypes, World world) {
+            super(entityTypes, world);
         }
 
         @Override
-        public void collide(net.minecraft.server.v1_9_R2.Entity entity) {
+        public void collide(net.minecraft.server.v1_14_R1.Entity entity) {
         }
 
         @Override
-        public boolean damageEntity(net.minecraft.server.v1_9_R2.DamageSource damagesource, float f) {
+        public boolean damageEntity(DamageSource damagesource, float f) {
             return false;
         }
 
         @Override
-        public void g(double d0, double d1, double d2) {
-        }
-
-        public void a(SoundEffect soundeffect, float f, float f1) {
+        public void ej() {
         }
 
         @Override
+        public void setVillagerData(VillagerData villagerdata) {
+        }
+
+        @Override
+        public void a(MemoryModuleType<GlobalPos> memorymoduletype) {
+        }
+
+        @Override
+        public void onLightningStrike(EntityLightning entitylightning) {
+        }
+
+        @Override
+        public void a(EntityVillager entityvillager, long i) {
+        }
+
+        @Override
+        public void a(ReputationEvent reputationevent, net.minecraft.server.v1_14_R1.Entity entity) {
+        }
+
+        @Override
+        public int getExperience() {
+            return 0;
+        }
+
+        @Override
+        public void e(BlockPosition blockposition) {
+        }
+
+        @Override
+        public void a(SoundEffect soundeffect, float f, float f1) {
+        }
+
         protected void initAttributes() {
             super.initAttributes();
             this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.0D);
         }
     }
 
+    /**
+     * Spawn shop npc
+     */
     private Villager spawnVillager(Location loc) {
-        net.minecraft.server.v1_9_R2.WorldServer mcWorld = ((CraftWorld) loc.getWorld()).getHandle();
-        VillagerShop customEnt = new VillagerShop(mcWorld);
+        WorldServer mcWorld = ((CraftWorld) loc.getWorld()).getHandle();
+        VillagerShop customEnt = new VillagerShop(EntityTypes.VILLAGER, mcWorld);
         customEnt.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
         ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
         mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
@@ -423,7 +468,7 @@ public class v1_9_R2 implements NMS {
 
         private void setName() {
             int percentuale = (int) ((e.getHealth() * 100) / e.getMaxHealth() / 10);
-            e.setCustomName(lang.m(namePath).replace("{despawn}", String.valueOf(despawn)).replace("{health}",
+            (e.getBukkitEntity()).setCustomName(lang.m(namePath).replace("{despawn}", String.valueOf(despawn)).replace("{health}",
                     new String(new char[percentuale]).replace("\0", lang.m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH)) + new String(new char[10 - percentuale]).replace("\0", "§7" + lang.m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH))
             ).replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()).replace("{TeamName}", team.getName()));
         }
@@ -438,15 +483,9 @@ public class v1_9_R2 implements NMS {
     }
 
     @Override
-    public void setSource(TNTPrimed tnt, Player owner) {
-        EntityLiving nmsEntityLiving = (((CraftLivingEntity) owner).getHandle());
-        EntityTNTPrimed nmsTNT = (((CraftTNTPrimed) tnt).getHandle());
-        try {
-            Field sourceField = EntityTNTPrimed.class.getDeclaredField("source");
-            sourceField.setAccessible(true);
-            sourceField.set(nmsTNT, nmsEntityLiving);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+    public void unregisterCommand(String name) {
+        if (isBukkitCommandRegistered(name)) {
+            ((CraftServer) plugin.getServer()).getCommandMap().getCommand(name).unregister(((CraftServer) plugin.getServer()).getCommandMap());
         }
     }
 
@@ -457,34 +496,21 @@ public class v1_9_R2 implements NMS {
 
     @Override
     public void hideArmor(Player p, Player p2) {
-        PacketPlayOutEntityEquipment hand1 = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.MAINHAND, new ItemStack(new Item().getById(0)));
-        PacketPlayOutEntityEquipment hand2 = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.OFFHAND, new ItemStack(new Item().getById(0)));
-        PacketPlayOutEntityEquipment helmet = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.HEAD, new ItemStack(new Item().getById(0)));
-        PacketPlayOutEntityEquipment chest = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.CHEST, new ItemStack(new Item().getById(0)));
-        PacketPlayOutEntityEquipment pants = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.LEGS, new ItemStack(new Item().getById(0)));
-        PacketPlayOutEntityEquipment boots = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.FEET, new ItemStack(new Item().getById(0)));
-        PlayerConnection pc = ((CraftPlayer) p2).getHandle().playerConnection;
+        PacketPlayOutEntityEquipment hand1 = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.MAINHAND, new ItemStack(Item.getById(0)));
+        PacketPlayOutEntityEquipment hand2 = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.OFFHAND, new ItemStack(Item.getById(0)));
+        PacketPlayOutEntityEquipment helmet = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.HEAD, new ItemStack(Item.getById(0)));
+        PacketPlayOutEntityEquipment chest = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.CHEST, new ItemStack(Item.getById(0)));
+        PacketPlayOutEntityEquipment pants = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.LEGS, new ItemStack(Item.getById(0)));
+        PacketPlayOutEntityEquipment boots = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.FEET, new ItemStack(Item.getById(0)));
+        EntityPlayer pc = ((CraftPlayer) p2).getHandle();
         if (p != p2) {
-            pc.sendPacket(hand1);
-            pc.sendPacket(hand2);
+            pc.playerConnection.sendPacket(hand1);
+            pc.playerConnection.sendPacket(hand2);
         }
-        pc.sendPacket(helmet);
-        pc.sendPacket(chest);
-        pc.sendPacket(pants);
-        pc.sendPacket(boots);
-    }
-
-    @Override
-    public void hidePlayer(Player victim, Player p) {
-        if (victim == p) return;
-        PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(victim.getEntityId());
-        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
-    }
-
-    @Override
-    public void showPlayer(Player victim, Player p) {
-        if (victim == p) return;
-        p.showPlayer(victim);
+        pc.playerConnection.sendPacket(helmet);
+        pc.playerConnection.sendPacket(chest);
+        pc.playerConnection.sendPacket(pants);
+        pc.playerConnection.sendPacket(boots);
     }
 
     @Override
@@ -509,25 +535,41 @@ public class v1_9_R2 implements NMS {
     @Override
     public void spawnDragon(Location l, BedWarsTeam bwt) {
         EnderDragon ed = (EnderDragon) l.getWorld().spawnEntity(l, EntityType.ENDER_DRAGON);
-        ed.setMetadata("DragonTeam", new FixedMetadataValue(plugin, bwt));
         ed.setPhase(EnderDragon.Phase.CIRCLING);
+        ed.setMetadata("DragonTeam", new FixedMetadataValue(plugin, bwt));
     }
 
     @Override
     public void colorBed(BedWarsTeam bwt) {
-
+        for (int x = -1; x <= 1; x++) {
+            for (int z = -1; z <= 1; z++) {
+                BlockState bed = bwt.getBed().clone().add(x, 0, z).getBlock().getState();
+                if (bed instanceof Bed) {
+                    bed.setType(TeamColor.getBedBlock(bwt.getColor()));
+                    bed.update();
+                }
+            }
+        }
     }
 
     @Override
     public void registerTntWhitelist() {
-        try {
+        /*try {
             Field field = Block.class.getDeclaredField("durability");
             field.setAccessible(true);
-            field.set(Block.getByName("glass"), 300f);
-            field.set(Block.getByName("stained_glass"), 300f);
+            field.set(net.minecraft.server.v1_14_R1.Block.REGISTRY_ID.fromId(20), 300f);
+            field.set(net.minecraft.server.v1_14_R1.Block.REGISTRY_ID.fromId(95), 300f);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
-        }
+        }*/
+    }
+
+    @Override
+    public void showPlayer(Player victim, Player p) {
+        if (victim == p) return;
+        //noinspection
+        //p.showPlayer(Main.plugin, victim);
+        p.showPlayer(victim);
     }
 
     @Override
@@ -535,10 +577,16 @@ public class v1_9_R2 implements NMS {
         return Effect.MOBSPAWNER_FLAMES;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public void setBlockTeamColor(org.bukkit.block.Block block, TeamColor teamColor) {
-        block.setData(TeamColor.itemColor(teamColor));
+    @SuppressWarnings("deprecation")
+    public void setBlockTeamColor(Block block, TeamColor teamColor) {
+        if (block.getType().toString().contains("STAINED_GLASS") || block.getType().toString().equals("GLASS")) {
+            block.setType(TeamColor.getGlass(teamColor));
+        } else if (block.getType().toString().contains("_TERRACOTTA")) {
+            block.setType(TeamColor.getGlazedTerracotta(teamColor));
+        } else if (block.getType().toString().contains("_WOOL")) {
+            block.setType(TeamColor.getWool(teamColor));
+        }
     }
 
     @Override
@@ -583,35 +631,38 @@ public class v1_9_R2 implements NMS {
 
     @Override
     public org.bukkit.inventory.ItemStack setSkullOwner(org.bukkit.inventory.ItemStack i, Player p) {
-        if (i.getType() != org.bukkit.Material.SKULL_ITEM) return i;
+        if (i.getType() != org.bukkit.Material.valueOf("PLAYER_HEAD")) return i;
         SkullMeta sm = (SkullMeta) i.getItemMeta();
+        //sm.setOwningPlayer(p);
+        //noinspection deprecation
         sm.setOwner(p.getName());
         i.setItemMeta(sm);
         return i;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public org.bukkit.inventory.ItemStack colourItem(org.bukkit.inventory.ItemStack itemStack, BedWarsTeam bedWarsTeam) {
         if (itemStack == null) return null;
-        switch (itemStack.getType().toString()) {
-            default:
-                return itemStack;
-            case "WOOL":
-            case "STAINED_CLAY":
-            case "STAINED_GLASS":
-            case "GLASS":
-                return new org.bukkit.inventory.ItemStack(itemStack.getType(), itemStack.getAmount(),TeamColor.itemColor(bedWarsTeam.getColor()));
+        String type = itemStack.getType().toString();
+        if (type.contains("_BED")) {
+            return new org.bukkit.inventory.ItemStack(TeamColor.getBedBlock(bedWarsTeam.getColor()), itemStack.getAmount());
+        } else if (type.contains("STAINED_GLASS") || type.equals("GLASS")) {
+            return new org.bukkit.inventory.ItemStack(TeamColor.getGlass(bedWarsTeam.getColor()), itemStack.getAmount());
+        } else if (type.contains("_TERRACOTTA")) {
+            return new org.bukkit.inventory.ItemStack(TeamColor.getGlazedTerracotta(bedWarsTeam.getColor()), itemStack.getAmount());
+        } else if (type.contains("_WOOL")) {
+            return new org.bukkit.inventory.ItemStack(TeamColor.getWool(bedWarsTeam.getColor()), itemStack.getAmount());
         }
+        return itemStack;
     }
 
     @Override
     public org.bukkit.inventory.ItemStack createItemStack(String material, int amount, short data) {
         org.bukkit.inventory.ItemStack i;
         try {
-            i = new org.bukkit.inventory.ItemStack(org.bukkit.Material.valueOf(material), amount, data);
+            i = new org.bukkit.inventory.ItemStack(org.bukkit.Material.valueOf(material), amount);
         } catch (Exception ex) {
-            Main.plugin.getLogger().severe(material + " is not a valid " + com.andrei1058.bedwars.Main.getServerVersion() + " material!");
+            Main.plugin.getLogger().severe(material + " is not a valid " + Main.getServerVersion() + " material!");
             i = new org.bukkit.inventory.ItemStack(org.bukkit.Material.BEDROCK);
         }
         return i;
@@ -625,86 +676,128 @@ public class v1_9_R2 implements NMS {
 
     @Override
     public boolean isPlayerHead(String material, int data) {
-        return material.equals("SKULL_ITEM") && data == 3;
+        return material.equals("PLAYER_HEAD");
     }
 
     @Override
     public org.bukkit.Material materialFireball() {
-        return org.bukkit.Material.valueOf("FIREBALL");
+        return org.bukkit.Material.valueOf("FIRE_CHARGE");
     }
 
     @Override
     public org.bukkit.Material materialPlayerHead() {
-        return org.bukkit.Material.valueOf("SKULL_ITEM");
+        return org.bukkit.Material.valueOf("PLAYER_HEAD");
     }
 
     @Override
     public org.bukkit.Material materialSnowball() {
-        return org.bukkit.Material.valueOf("SNOW_BALL");
+        return org.bukkit.Material.valueOf("SNOWBALL");
     }
 
     @Override
     public org.bukkit.Material materialGoldenHelmet() {
-        return org.bukkit.Material.valueOf("GOLD_HELMET");
+        return org.bukkit.Material.valueOf("GOLDEN_HELMET");
     }
 
     @Override
     public org.bukkit.Material materialGoldenChestPlate() {
-        return org.bukkit.Material.valueOf("GOLD_CHESTPLATE");
+        return org.bukkit.Material.valueOf("GOLDEN_CHESTPLATE");
     }
 
     @Override
     public org.bukkit.Material materialGoldenLeggings() {
-        return org.bukkit.Material.valueOf("GOLD_LEGGINGS");
+        return org.bukkit.Material.valueOf("GOLDEN_LEGGINGS");
     }
 
     @Override
     public org.bukkit.Material materialCake() {
-        return org.bukkit.Material.valueOf("CAKE_BLOCK");
+        return org.bukkit.Material.valueOf("CAKE");
     }
 
     @Override
     public org.bukkit.Material materialCraftingTable() {
-        return org.bukkit.Material.valueOf("WORKBENCH");
+        return org.bukkit.Material.valueOf("CRAFTING_TABLE");
     }
 
     @Override
     public org.bukkit.Material materialEnchantingTable() {
-        return org.bukkit.Material.valueOf("ENCHANTMENT_TABLE");
+        return org.bukkit.Material.valueOf("ENCHANTING_TABLE");
     }
 
     @Override
     public boolean isBed(org.bukkit.Material material) {
-        return material == org.bukkit.Material.valueOf("BED_BLOCK") || material == org.bukkit.Material.valueOf("BED");
+        return material.toString().contains("_BED");
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public boolean itemStackDataCompare(org.bukkit.inventory.ItemStack i, short data) {
-        return i.getData().getData() == data;
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public void setBlockData(org.bukkit.block.Block block, byte data) {
-        block.setData(data, true);
+        return true;
     }
 
     @Override
-    public void setBlockData(org.bukkit.block.Block block, String data) {
-        setBlockData(block, Byte.valueOf(data));
+    public void setBlockData(Block block, byte data) {
+
     }
+
+    @Override
+    public void setBlockData(Block block, String data) {
+        String[] att = data.split(",");
+        if (att.length != 2) return;
+        Method m = null;
+        try {
+            m = Block.class.getDeclaredMethod("getBlockData");
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        BlockData result = null;
+        try {
+            assert m != null;
+            result = (BlockData) m.invoke(block, (Object) null);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        if (!att[0].isEmpty()) {
+            if (block instanceof Directional) {
+                Directional s = (Directional) result;
+                s.setFacing(BlockFace.valueOf(data));
+            }
+        }
+
+        Method m2 = null;
+        try {
+            m2 = Block.class.getDeclaredMethod("setBlockData", BlockData.class);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+
+        /*if (!att[1].isEmpty()) {
+            if (block instanceof Rotatable) {
+                Rotatable d = (Rotatable) result;
+                d.setRotation(BlockFace.valueOf(att[1]));
+            }
+        }*/
+
+        try {
+            m2.invoke(block, result);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        block.getState().update(true);
+    }
+
 
     @Override
     public org.bukkit.Material woolMaterial() {
-        return org.bukkit.Material.valueOf("WOOL");
+        return org.bukkit.Material.valueOf("WHITE_WOOL");
     }
 
     @Override
     public String getShopUpgradeIdentifier(org.bukkit.inventory.ItemStack itemStack) {
         ItemStack i = CraftItemStack.asNMSCopy(itemStack);
         NBTTagCompound tag = i.getTag();
-        return tag == null ? "" : tag.hasKey("tierIdentifier") ? tag.getString("tierIdentifier") : "";
+        return tag == null ? "null" : tag.hasKey("tierIdentifier") ? tag.getString("tierIdentifier") : "null";
     }
 
     @Override
@@ -721,14 +814,14 @@ public class v1_9_R2 implements NMS {
 
     @Override
     public org.bukkit.inventory.ItemStack getPlayerHead(Player player) {
-        org.bukkit.inventory.ItemStack head = new org.bukkit.inventory.ItemStack(org.bukkit.Material.SKULL_ITEM, 1, (short)3);
+        org.bukkit.inventory.ItemStack head = new org.bukkit.inventory.ItemStack(materialPlayerHead());
 
         SkullMeta headMeta = (SkullMeta) head.getItemMeta();
         Field profileField;
         try {
             profileField = headMeta.getClass().getDeclaredField("profile");
             profileField.setAccessible(true);
-            profileField.set(headMeta, ((CraftPlayer)player).getProfile());
+            profileField.set(headMeta, ((CraftPlayer) player).getProfile());
         } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e1) {
             e1.printStackTrace();
         }
@@ -736,10 +829,29 @@ public class v1_9_R2 implements NMS {
         return head;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public String getBlockData(org.bukkit.block.Block block) {
-        return String.valueOf(block.getData());
+    public String getBlockData(Block block) {
+        Method m = null;
+        try {
+            m = Block.class.getDeclaredMethod("getBlockData");
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        BlockData result = null;
+        try {
+            assert m != null;
+            result = (BlockData) m.invoke(block, (Object) null);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        String direction = "";
+        if (block instanceof Directional) {
+            Directional s = (Directional) result;
+            direction = s.getFacing().toString();
+        }
+
+        return direction + ",";
     }
 
     @Override
@@ -758,6 +870,6 @@ public class v1_9_R2 implements NMS {
 
     @Override
     public String getInventoryName(InventoryEvent e) {
-        return e.getInventory().getName();
+        return e.getView().getTitle();
     }
 }

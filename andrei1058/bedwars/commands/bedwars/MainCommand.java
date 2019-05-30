@@ -91,7 +91,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
 
         if (args.length == 0) {
             /* Set op commands*/
-            if (s.isOp() && !safeMode) {
+            if ((s.isOp() || s.hasPermission(Main.mainCmd + ".*")) && !safeMode) {
                 if (s instanceof Player) {
                     if (SetupSession.isInSetupSession((Player) s)) {
                         Bukkit.dispatchCommand(s, getName() + " cmds");

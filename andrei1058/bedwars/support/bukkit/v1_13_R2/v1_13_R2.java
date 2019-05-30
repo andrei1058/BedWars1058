@@ -36,9 +36,11 @@ import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.entity.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.Stairs;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 
 import java.lang.reflect.Field;
@@ -826,18 +828,20 @@ public class v1_13_R2 implements NMS {
 
     @Override
     public void invisibilityFix(Player player, Arena arena) {
-
         EntityPlayer pc = ((CraftPlayer) player).getHandle();
-        PacketPlayOutNamedEntitySpawn s = new PacketPlayOutNamedEntitySpawn(pc);
 
         for (Player pl : arena.getPlayers()){
             if (pl.equals(player)) continue;
-            ((CraftPlayer) pl).getHandle().playerConnection.sendPacket(s);
+            if (arena.getRespawn().containsKey(pl)) continue;
+            if (pl.hasPotionEffect(PotionEffectType.INVISIBILITY)) continue;
+            pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer) pl).getHandle()));
+            pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer) pl).getHandle()));
+            showArmor(pl, player);
         }
+    }
 
-        for (Player pl : arena.getSpectators()){
-            if (pl.equals(player)) continue;
-            ((CraftPlayer) pl).getHandle().playerConnection.sendPacket(s);
-        }
+    @Override
+    public String getInventoryName(InventoryEvent e) {
+        return e.getInventory().getName();
     }
 }

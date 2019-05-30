@@ -130,7 +130,6 @@ public class BedWarsTeam {
         members.clear();
         membersCache.clear();
     }*/
-
     public int getSize() {
         return members.size();
     }
@@ -253,6 +252,7 @@ public class BedWarsTeam {
         p.setAllowFlight(false);
         p.setFlying(false);
         p.setHealth(20);
+
         for (Player on : arena.getPlayers()) {
             if (p == on) continue;
             //on.showPlayer(p);
@@ -266,6 +266,7 @@ public class BedWarsTeam {
             //on.showPlayer(p);
             nms.showPlayer(p, on);
         }
+
         nms.sendTitle(p, getMsg(p, Messages.PLAYER_DIE_RESPAWNED_TITLE), "", 0, 20, 0);
         ShopCache sc = ShopCache.getShopCache(p);
         if (sc != null) {
@@ -326,7 +327,7 @@ public class BedWarsTeam {
 
         Bukkit.getScheduler().runTaskLater(plugin, ()-> {
             nms.invisibilityFix(p, getArena());
-        }, 15L);
+        }, 10L);
     }
 
     /**

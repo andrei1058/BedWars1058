@@ -44,7 +44,7 @@ public class Arena implements Comparable {
     private static HashMap<String, Arena> arenaByName = new HashMap<>();
     private static HashMap<Player, Arena> arenaByPlayer = new HashMap<>();
     private static ArrayList<Arena> arenas = new ArrayList<>();
-    private static int gamesBeforeRestart = config.getInt(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART);
+    //private static int gamesBeforeRestart = config.getInt(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART);
     public static HashMap<UUID, Integer> afkCheck = new HashMap<>();
     public static HashMap<UUID, Integer> magicMilk = new HashMap<>();
 
@@ -107,9 +107,6 @@ public class Arena implements Comparable {
     /* Used to reset the map. */
     private MapManager mapManager;
 
-    // Track arena start
-    private long arenaStart = 0L;
-
     private PerMinuteTask perMinuteTask;
 
     /**
@@ -152,6 +149,7 @@ public class Arena implements Comparable {
             plugin.getLogger().severe("There isn't any map called " + name);
             return;
         }
+
         boolean error = false;
         for (String team : yml.getConfigurationSection("Team").getKeys(false)) {
             String colorS = yml.getString("Team." + team + ".Color");
@@ -452,6 +450,10 @@ public class Arena implements Comparable {
             /* Hide spectator  */
             //p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0), true);
             p.setGameMode(GameMode.ADVENTURE);
+
+            p.setAllowFlight(true);
+            p.setFlying(true);
+
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 for (Player on : Bukkit.getOnlinePlayers()) {
                     if (on == p) continue;
@@ -463,8 +465,16 @@ public class Arena implements Comparable {
                         p.showPlayer(on);
                     }
                 }
-                p.setAllowFlight(true);
-                p.setFlying(true);
+
+                if (!playerBefore) {
+                    if (staffTeleport == null) {
+                        p.teleport(cm.getArenaLoc("waiting.Loc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                    } else {
+                        p.teleport(staffTeleport);
+                    }
+                } else {
+                    p.teleport(p.getLocation());
+                }
 
                 /* Spectator items */
                 sendSpectatorCommandItems(p);
@@ -864,6 +874,11 @@ public class Arena implements Comparable {
      */
     public void restart() {
         plugin.getLogger().info("Restarting arena: " + getWorldName());
+        if (Main.getServerType() == ServerType.BUNGEE){
+            Bukkit.getLogger().info("Dispatching command: " + config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
+            return;
+        }
         arenas.remove(this);
         players.clear();
         spectators.clear();
@@ -881,7 +896,6 @@ public class Arena implements Comparable {
                 rjt.destroy();
             }
         }
-        arenaStart = 0L;
         mapManager.unloadWorld();
     }
 
@@ -970,7 +984,7 @@ public class Arena implements Comparable {
      * @return A string with - and _ replaced by a space.
      */
     public String getDisplayName() {
-        return world.getName().replace("_", " ").replace("-", " ");
+        return (Character.toUpperCase(worldName.charAt(0)) + worldName.substring(1)).replace("_", " ").replace("-", " ");
     }
 
     /**
@@ -1126,7 +1140,6 @@ public class Arena implements Comparable {
         } else if (status == GameState.playing) {
             if (Main.getLevelSupport() instanceof InternalLevel) perMinuteTask = new PerMinuteTask(this);
             playingTask = new GamePlayingTask(this);
-            arenaStart = System.currentTimeMillis();
             for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
                 if (sb.getArena() == this) {
                     sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING));
@@ -1734,20 +1747,6 @@ public class Arena implements Comparable {
     }
 
     /**
-     * Set the amount of games to be played before restarting the server.
-     */
-    public static void setGamesBeforeRestart(int gamesBeforeRestart) {
-        Arena.gamesBeforeRestart = gamesBeforeRestart;
-    }
-
-    /**
-     * Get games amount (to be layed) before restarting the server.
-     */
-    public static int getGamesBeforeRestart() {
-        return gamesBeforeRestart;
-    }
-
-    /**
      * Add a player to the most filled arena.
      * Check if is the party owner first.
      */
@@ -1776,7 +1775,7 @@ public class Arena implements Comparable {
 
         int amount = getParty().hasParty(p) ? getParty().getMembers(p).size() : 1;
         for (Arena a : arenaList) {
-            if (!a.getGroup().equals(group)) continue;
+            if (!a.getGroup().equalsIgnoreCase(group)) continue;
             if (a.getPlayers().size() == a.getMaxPlayers()) continue;
             if (a.getMaxPlayers() - a.getPlayers().size() >= amount) {
                 a.addPlayer(p, false);
