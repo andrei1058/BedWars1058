@@ -89,6 +89,11 @@ public class SBoard {
             p.setScoreboard(sb);
             scoreboards.add(this);
             giveTeamColorTag();
+            for (SBoard sb : SBoard.getScoreboards()) {
+                if (sb.getArena() == getArena()) {
+                    sb.updateSpectators(getP(), false);
+                }
+            }
         }, 10L);
     }
 
