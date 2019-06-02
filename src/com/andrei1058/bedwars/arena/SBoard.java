@@ -83,7 +83,7 @@ public class SBoard {
         o.setDisplaySlot(DisplaySlot.SIDEBAR);
         this.arena = arena;
         dateFormat = new SimpleDateFormat(getMsg(p, Messages.FORMATTING_SCOREBOARD_NEXEVENT_TIMER));
-        this.setStrings(getScoreboard(p, "scoreboard." + arena.getGroup() + "Playing", Messages.SCOREBOARD_DEFAULT_PLAYING));
+        this.setStrings(getScoreboard(p, "scoreboard." + arena.getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING));
         Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
             if (!p.isOnline()) return;
             p.setScoreboard(sb);

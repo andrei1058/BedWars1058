@@ -126,7 +126,7 @@ public class JoinLeaveTeleport implements Listener {
             }
         }
         if (p.getName().equalsIgnoreCase("andrei1058") || p.getName().equalsIgnoreCase("andreea1058") || p.getName().equalsIgnoreCase("Dani3l_FTW")) {
-            p.sendMessage("§8[§f" + plugin.getName() + "§8]§7§m---------------------------");
+            p.sendMessage("§8[§f" + plugin.getName() + " v" + plugin.getDescription().getVersion() +  "§8]§7§m---------------------------");
             p.sendMessage("");
             p.sendMessage("§7User ID: §f%%__USER__%%");
             p.sendMessage("§7Download ID: §f%%__NONCE__%%");

@@ -452,7 +452,9 @@ public class Arena implements Comparable {
                 }
             }
 
-            new SBoard(p, this);
+            Bukkit.getScheduler().runTaskLater(plugin, ()-> {
+                new SBoard(p, this);
+            }, 15L);
             nms.setCollide(p, this, false);
 
             /* Hide spectator  */
@@ -486,7 +488,8 @@ public class Arena implements Comparable {
 
                 /* Spectator items */
                 sendSpectatorCommandItems(p);
-            }, 15L);
+
+            }, 25L);
 
             p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_MSG).replace("{arena}", this.getDisplayName()));
 
