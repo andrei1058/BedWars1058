@@ -1,0 +1,28 @@
+0.9.1beta (API 12)
+
+- fixed issue where players can take items out from the stats GUI #155
+- fixed issue where you receive milk when buying sponge
+- fixed silverfish/ iron golem console log issue #171
+- fixed issue at shop where it says "MAXED" instead of "you can buy" #160
+- fixed issue where you won't lose your sword when you die by default #160
+- fixed issue where you spawn with all the swords you bought (if permanent)
+- removed debug messages from /party accept
+- possible fix for invisible armor issue
+- added "allow-map-break" option in order to allow player to break almost all blocks from the map
+
+0.7.4beta (API 10)
+
+- fixed issue #55 where you can't delete arenas
+- bedBlock feature was removed
+- added bungee restart command, request #57
+- added spawn limit for iron and gold generators (customisable per upgrade tier) request #45
+- all members standing on the generator will now receive ores, request #45
+- afk players can't collect items from generators anymore, request #45
+- fixed issue #59
+
+ DEV NOTICE
+- added TeamAssignEvent called when aplayer is assigned to a team
+- added EggBridgeThrowEvent called when a player throws an egg (request #38)
+- added EggBridgeBuildEvent called when a new block is built
+- added PlayerLangChangeEvent called when a Player changed his bw language - GeneratorCollectEvent is now cancellable
+- added new methods: api#isPlayerAFK api#setPlayerAFK api#getPlayerTimeAFK - added PlayerAfkEvent called when a player goes AFK or comes back
