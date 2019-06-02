@@ -1,0 +1,8 @@
+name: BedWars1058
+api-version: 1.13
+version: 0.11beta
+author: andrei1058
+description: BedWars minigame by andrei1058
+main: com.andrei1058.bedwars.Main
+softdepend: [Vault,PlaceholderAPI,Citizens,LeaderHeads,Parties,FastAsyncWorldEdit]
+load: STARTUP

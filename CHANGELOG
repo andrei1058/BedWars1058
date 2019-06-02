@@ -1,4 +1,119 @@
-0.9.1beta (API 12)
+# 0.11beta
+- fixed items unbreaking deprecation at shop
+- fixed a levels error at game end
+- fixed setup holograms issue
+- fixed issue #266 about respawning players
+- fixed unbreakable deprecation at shop
+- re-added "games-before-respawn" option for BUNGEE servers
+- BUNGEE mode improvements
+
+# 0.10beta
+- fixed issue where progress bar is not updating
+- fixed database.enable path
+- minor improvements
+- removed gamesBeforeRestart option
+- made it compatible with STARTUP load type
+- fixed server software compatibility checker
+- prevent players from using arenas as level-name in MULTIARENA and SHARED
+- fixed issue #261
+- fixed issue #265
+- bw join random group is no longer case sensitive
+- set main lobby command now is blocked in setup sessions
+- added 1.14 support
+- changed a task from async to sync
+- people with bw.* permission can see now all the commands list
+- added new papi placeholder ![group_count_name](https://gitlab.com/andrei1058/BedWars1058/wikis/papi-hook#arena-group-count) and fixed arena_count_name
+
+# 0.9.13beta (API 13)
+- fixed issue where the plugin was creating world files directly in the server container
+- fixed issue where players were loosing their preferred language
+- fixed issue where generators were using tier 2 configuration at tier 3
+- fixed async kick issue https://pastebin.com/mgtraJuJ
+- fixed "A PRIMARY KEY constraint failed" error
+- fixed "Abot due to constraint violation" error
+- fixed issue where "BD set" was remaining after /bw save
+- fixed duplicated generator head issue
+- negative levels/ xp will turn to 1
+- fixed issue where you always get 0xp when you win a game
+- fixed invisibility issue after respawning
+
+# 0.9.12beta (API 13)
+- fixed some issues about levels system #253 #255
+- fixed egg bridge
+- fixed next event
+- fixed playing scoreboard path
+- changed a task from sync to async on player quit
+- fixed a placeholder in arena selector lore
+- fixed issues #245 #248 #246 #225
+- disabled shopkeepers sound
+- added /bw gui <group> feature
+- metrics update
+- lobby sockets improvements
+
+# 0.9.9beta (API 13)
+- the map restore system was improved
+- fixed issue #163 about stats head
+- added internal level system (placeholders [here](https://gitlab.com/andrei1058/BedWars1058/wikis/scoreboards-configuration)).
+- added new PAPI placeholders (check [here](https://gitlab.com/andrei1058/BedWars1058/wikis/papi-hook))
+- changed scoreboard messages path
+- bedwars lobby support improvements
+- made villagers silent
+- added possibility to open arenas GUI per group (/bw gui [group])
+
+For OWNERS:
+- if you don't want to reset the language messages, simply add the {level} placeholder in chat and {level} {progress} {currentXp} {requiredXp} in your lobby scoreboard.
+
+For DEVs:
+- api version changed to 13
+- added PlayerXpGainEvent
+- added PlayerLevelUpEvent
+- added more getters and setters for developers around the classes
+
+# 0.9.8beta (API 12)
+
+- command tab-complete is now more accurate
+- name-spaced commands are now disabled
+- fixed issue #197 where players could move items in waiting/ spectate
+- added an option to disable unused languages
+- wheat/ farms are now protected in lobby/ game #198
+- fixed issue #200 about a scoreboard error
+- dropped items because of the lobby removal are now removed
+- fixed cannot misure distace between x and y issue #194
+- added BedWarsProxy compatibility (plugin coming soon)
+- fixed games-before-restart option
+- arena selector improvements
+- fixed bed glitch #206
+
+# 0.9.7beta (API 12)
+- fixed use-bed-hologram not working
+- fixed error you get when you click outside the inventory
+- fixed default configuration for sign status-block
+- check for arenas is now case sensitive when you create a sign
+- automatically disable advancements for arena worlds
+- fixed issue where you were able to see egg bridge particles when it was not building blocks
+
+# 0.9.4beta (API 12)
+
+- fixed 1.13 issue NoSuchFieldError: CAKE_BLOCK #181
+- fixed issue where you can place anywhere #181
+- added magic milk feature
+- fixed issue where dragon was not spawning #148 #166 # 157
+- fixed issue when players buy a iron sword after buying a stone sword,then iron sword will disappear. Made it so it will remove default swords with lower damage only. #174
+- fixed issue where you can't drop items
+- now when you join the server and there are no arenas set you it will dispatch /bw (if op)
+- server restart is no longer required at /bw setLobby
+- /bw autocreateteams range was changed from 150 to 200
+- fixed issue where it says MAXED in lore when actually it isn't
+- players are not longer able to move upgradable items to other inventories
+- fixed issue where quick buy preferences were not saving (sqlite)
+- added start countdown shortener in case if the arena is half full
+- fixed issue where fireball is not breaking blocks
+- introducing "[weight](https://gitlab.com/andrei1058/BedWars1058/wikis/shop#how-to-create-items-like-the-armor-category)". A new option for shop configuration.
+- fixed disable-generator-for-empty-teams option
+- paintings and item-frames are now protected in game and in lobby
+- fixed issue where you get infinite blindness and slowness when trap triggered
+
+# 0.9.1beta (API 12)
 
 - fixed issue where players can take items out from the stats GUI #155
 - fixed issue where you receive milk when buying sponge
@@ -10,19 +125,64 @@
 - possible fix for invisible armor issue
 - added "allow-map-break" option in order to allow player to break almost all blocks from the map
 
-0.7.4beta (API 10)
+# 0.9.0beta
+* added new shop like hypixel
+* fixed issue where bridge doesn't take the team color on 1.13+
+* fixed party invite issue
+* make it so the plugin won't start on craft bukkit because it is not supported.
+* make it so the languages files take the server dns/ip from config so you don't have to edit all files.
+* fixed join item paths. "Name not set" issue.
+* fixed /bw removeTeam issue
+* fixed issue where players can pick up items from armorstands in lobby
+* fixed some other minor issues
+* fixed issue #[142](https://gitlab.com/andrei1058/BedWars1058/issues/142)
+* fixed issue #[141](https://gitlab.com/andrei1058/BedWars1058/issues/141)
 
-- fixed issue #55 where you can't delete arenas
-- bedBlock feature was removed
-- added bungee restart command, request #57
-- added spawn limit for iron and gold generators (customisable per upgrade tier) request #45
-- all members standing on the generator will now receive ores, request #45
-- afk players can't collect items from generators anymore, request #45
-- fixed issue #59
+# 0.8.6beta
+* fixed issue #139 bucket issue on SHARED mode
+* fixed issue #133 where spectators can pick up items in 1.2+
+* fixed upgrade buy insufficient money console error
 
- DEV NOTICE
-- added TeamAssignEvent called when aplayer is assigned to a team
-- added EggBridgeThrowEvent called when a player throws an egg (request #38)
-- added EggBridgeBuildEvent called when a new block is built
-- added PlayerLangChangeEvent called when a Player changed his bw language - GeneratorCollectEvent is now cancellable
-- added new methods: api#isPlayerAFK api#setPlayerAFK api#getPlayerTimeAFK - added PlayerAfkEvent called when a player goes AFK or comes back
+# 0.8.5beta
+*  fixed issue #134 where the status message is always get from the default language
+*  added compatibility with PAPI Pinger
+*  implemented request #127 - added new papi placeholders
+
+# 0.8beta
+
+*  fixed issue #112 where players in arena can see messages from the others
+*  implemented request #114 about parties
+*  implemented request #90 about restoring a player displayname
+*  added **/bw join random** command, request #105
+*  implemented chat suggestions #75 **/shout** and [papi player team placeholder](papi-hook#player-team) 
+*  fixed issue #97 where /bw join doesn't take you to the most filled arena
+*  added lobby scoreboard also in SHARED mode, request #84
+*  arena restart is now based on disable/enable
+*  changed ore generators rotation speed
+*  added new pages on the wiki/documentation
+*  code cleanup and improvements
+*  **added 1.13 support**
+*  fixed issue #121 about base emerald upgrade
+*  added new death cause messages, request #110
+*  added loot messages, request #28
+*  **arena selector** improvements
+*  removed **safe mode** feature
+*  you can now do the setup in BUNGEE mode aswell
+*  fixed shop buy items amount issue seen sometimes
+*  **added support for [Parties](parties-hook)** plugin by AlessoDP
+*  **added sign block status feature**, request #125
+*  **added [permissions](permissions) to commands** (it is no longer required to be op)
+*  added **tab complete feature**, request #103
+*  added new languages: **Romanian, Italian, Spanish, Polish and Russian**
+*  fixed language change not changing until rejoin
+*  fixed leave message called twice
+*  messages paths and layout update
+*  config paths changes (automatically converted)
+*  fixed issue where command messages are not automatically created
+
+
+For Developers: **API 11**
+*  events were moved to api/events
+*  you can get the bw commad instance trough api now
+*  ParentCommand and SubCommand were moved to the api package
+*  added PlayerReJoin event
