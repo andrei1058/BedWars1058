@@ -7,6 +7,7 @@
 - re-added "games-before-respawn" option for BUNGEE servers
 - BUNGEE mode improvements
 - fixed spectator mode
+- fixed shopkeepers and generators issue related to chunks
 
 # 0.10beta
 - fixed issue where progress bar is not updating

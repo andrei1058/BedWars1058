@@ -143,9 +143,11 @@ public class GameStartingTask implements Runnable {
             }
 
             //Enable diamond/ emerald generators
-            for (OreGenerator og : getArena().getOreGenerators()) {
-                if (og.getType() == GeneratorType.EMERALD || og.getType() == GeneratorType.DIAMOND) og.enableRotation();
-            }
+            Bukkit.getScheduler().runTaskLater(Main.plugin, ()-> {
+                for (OreGenerator og : getArena().getOreGenerators()) {
+                    if (og.getType() == GeneratorType.EMERALD || og.getType() == GeneratorType.DIAMOND) og.enableRotation();
+                }
+            }, 60L);
 
             //Lobby removal
             arena.getMapManager().removeLobby();
