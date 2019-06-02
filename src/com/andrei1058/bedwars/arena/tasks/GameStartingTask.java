@@ -135,14 +135,6 @@ public class GameStartingTask implements Runnable {
                     }
                     continue;
                 }
-                nms.colorBed(team);
-                if (getArena().getMaxInTeam() > 1) {
-                    nms.spawnShop(getArena().getCm().getArenaLoc("Team." + team.getName() + ".Upgrade"), Messages.NPC_NAME_TEAM_UPGRADES, getArena().getPlayers(), getArena());
-                    nms.spawnShop(getArena().getCm().getArenaLoc("Team." + team.getName() + ".Shop"), Messages.NPC_NAME_TEAM_SHOP, getArena().getPlayers(), getArena());
-                } else {
-                    nms.spawnShop(getArena().getCm().getArenaLoc("Team." + team.getName() + ".Upgrade"), Messages.NPC_NAME_SOLO_UPGRADES, getArena().getPlayers(), getArena());
-                    nms.spawnShop(getArena().getCm().getArenaLoc("Team." + team.getName() + ".Shop"), Messages.NPC_NAME_SOLO_SHOP, getArena().getPlayers(), getArena());
-                }
             }
 
             //Add heart on players head
