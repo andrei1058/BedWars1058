@@ -32,7 +32,7 @@ public class ArenaGUI {
         } else {
             arenas = new ArrayList<>();
             for (Arena a : Arena.getArenas()){
-                if (a.getGroup().equals(data[1])) arenas.add(a);
+                if (a.getGroup().equalsIgnoreCase(data[1].toString())) arenas.add(a);
             }
         }
 
