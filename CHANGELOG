@@ -6,6 +6,7 @@
 - fixed unbreakable deprecation at shop
 - re-added "games-before-respawn" option for BUNGEE servers
 - BUNGEE mode improvements
+- fixed spectator mode in BUNGEE mode
 
 # 0.10beta
 - fixed issue where progress bar is not updating

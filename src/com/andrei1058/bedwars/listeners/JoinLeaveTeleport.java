@@ -158,7 +158,14 @@ public class JoinLeaveTeleport implements Listener {
         }
         p.getInventory().setArmorContents(null);
         if (getServerType() == ServerType.BUNGEE) {
-            if (!Arena.getArenas().isEmpty()) Arena.getArenas().get(0).addPlayer(p, false);
+            if (!Arena.getArenas().isEmpty()){
+                Arena a = Arena.getArenas().get(0);
+                if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting){
+                    a.addPlayer(p, false);
+                } else {
+                    a.addSpectator(p, false, null);
+                }
+            }
             return;
         } else {
             if (config.getConfigLoc("lobbyLoc") != null)
