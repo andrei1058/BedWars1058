@@ -126,7 +126,7 @@ public class JoinLeaveTeleport implements Listener {
             }
         }
         if (p.getName().equalsIgnoreCase("andrei1058") || p.getName().equalsIgnoreCase("andreea1058") || p.getName().equalsIgnoreCase("Dani3l_FTW")) {
-            p.sendMessage("§8[§f" + plugin.getName() + "§8]§7§m---------------------------");
+            p.sendMessage("§8[§f" + plugin.getName() + " v" + plugin.getDescription().getVersion() +  "§8]§7§m---------------------------");
             p.sendMessage("");
             p.sendMessage("§7User ID: §f%%__USER__%%");
             p.sendMessage("§7Download ID: §f%%__NONCE__%%");
@@ -158,7 +158,14 @@ public class JoinLeaveTeleport implements Listener {
         }
         p.getInventory().setArmorContents(null);
         if (getServerType() == ServerType.BUNGEE) {
-            if (!Arena.getArenas().isEmpty()) Arena.getArenas().get(0).addPlayer(p, false);
+            if (!Arena.getArenas().isEmpty()){
+                Arena a = Arena.getArenas().get(0);
+                if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting){
+                    a.addPlayer(p, false);
+                } else {
+                    a.addSpectator(p, false, null);
+                }
+            }
             return;
         } else {
             if (config.getConfigLoc("lobbyLoc") != null)

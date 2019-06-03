@@ -105,31 +105,8 @@ public class BedWarsTeam {
         this.teamUpgrades = teamUpgrades;
     }
 
-    /**
-     * Used when the arena restarts
-     */
-    /*public void restore() {
-        ebseEffectsStatic.clear();
-        enemyBaseEnterSlots.clear();
-        trapSlots.clear();
-        trapActive = false;
-        trapChat = false;
-        trapAction = false;
-        trapTitle = false;
-        trapSubtitle = false;
-        beds.clear();
-        armorsEnchantemnts.clear();
-        swordsEnchantemnts.clear();
-        bowsEnchantments.clear();
-        enemyBaseEnter.clear();
-        base.clear();
-        teamEffects.clear();
-        upgradeTier.clear();
-        dragons = 1;
-        bedDestroyed = false;
-        members.clear();
-        membersCache.clear();
-    }*/
+    // Check if NPCs were spawned
+    private boolean NPCspawned = false;
     public int getSize() {
         return members.size();
     }
@@ -142,6 +119,20 @@ public class BedWarsTeam {
             if (!members.contains(p)) members.add(p);
             if (!membersCache.contains(p)) membersCache.add(p);
             new BedHolo(p, getArena());
+        }
+
+        if (!NPCspawned){
+            NPCspawned = true;
+            Bukkit.getScheduler().runTaskLater(plugin, ()-> {
+                nms.colorBed(this);
+                if (getArena().getMaxInTeam() > 1) {
+                    nms.spawnShop(getArena().getCm().getArenaLoc("Team." + getName() + ".Upgrade"), Messages.NPC_NAME_TEAM_UPGRADES, getArena().getPlayers(), getArena());
+                    nms.spawnShop(getArena().getCm().getArenaLoc("Team." + getName() + ".Shop"), Messages.NPC_NAME_TEAM_SHOP, getArena().getPlayers(), getArena());
+                } else {
+                    nms.spawnShop(getArena().getCm().getArenaLoc("Team." + getName() + ".Upgrade"), Messages.NPC_NAME_SOLO_UPGRADES, getArena().getPlayers(), getArena());
+                    nms.spawnShop(getArena().getCm().getArenaLoc("Team." + getName() + ".Shop"), Messages.NPC_NAME_SOLO_SHOP, getArena().getPlayers(), getArena());
+                }
+            }, 40L);
         }
     }
 
