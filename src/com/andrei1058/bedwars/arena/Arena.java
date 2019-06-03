@@ -149,7 +149,7 @@ public class Arena implements Comparable {
                 group = yml.getString("group");
             }
         }
-        File folder = new File(plugin.getServer().getWorldContainer().getPath() + "/" + name);
+        File folder = new File(plugin.getServer().getWorldContainer().getPath(), name);
         if (!folder.exists()) {
             if (p != null) p.sendMessage("§cThere isn't any map called " + name);
             plugin.getLogger().severe("There isn't any map called " + name);
@@ -452,7 +452,7 @@ public class Arena implements Comparable {
                 }
             }
 
-            Bukkit.getScheduler().runTaskLater(plugin, ()-> {
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 new SBoard(p, this);
             }, 15L);
             nms.setCollide(p, this, false);

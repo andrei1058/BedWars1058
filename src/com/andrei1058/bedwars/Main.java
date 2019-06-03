@@ -749,10 +749,10 @@ public class Main extends JavaPlugin {
                         toAdd.add(newName);
                         toRemove.add(file);
                     }
-                    folder = new File(plugin.getServer().getWorldContainer().getPath() + "/" + file.getName().replace(".yml", ""));
+                    folder = new File(plugin.getServer().getWorldContainer(), file.getName().replace(".yml", ""));
                     if (folder.exists()) {
                         if (!folder.getName().equals(folder.getName().toLowerCase())) {
-                            if (!folder.renameTo(new File(folder.getName().toLowerCase()))) {
+                            if (!folder.renameTo(new File(plugin.getServer().getWorldContainer().getPath() + "/" + folder.getName().toLowerCase()))) {
                                 Main.plugin.getLogger().severe("Could not rename " + folder.getName() + " folder to " + folder.getName().toLowerCase() + "! Please do it manually!");
                                 toRemove.add(file);
                                 return;
