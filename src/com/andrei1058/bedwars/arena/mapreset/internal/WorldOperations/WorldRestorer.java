@@ -84,16 +84,30 @@ public class WorldRestorer implements WorldOperator {
                     Main.plugin.getLogger().severe("You can't use an arena as level-name in MULTIARENA mode!");
                     return;
                 }
-                World w = Bukkit.getWorlds().get(0);
-                w.setKeepSpawnInMemory(true);
-                w.setAutoSave(false);
-                Arena.setGamesBeforeRestart(1);
-                arena.init(w);
+                try {
+                    World w = Bukkit.getWorlds().get(0);
+                    w.setKeepSpawnInMemory(true);
+                    w.setAutoSave(false);
+                    Arena.setGamesBeforeRestart(1);
+                    arena.init(w);
+                } catch (IllegalArgumentException e){
+                    if (e.getMessage().contains("ChunkNibbleArrays should be 2048 bytes")){
+                        Main.plugin.getLogger().severe("Could not load arena: " + worldName);
+                        Main.plugin.getLogger().severe("Your world has corrupt chunks!");
+                    }
+                }
             } else {
-                World w =  Bukkit.createWorld(new WorldCreator(worldName));
-                w.setKeepSpawnInMemory(false);
-                w.setAutoSave(false);
-                arena.init(w);
+                try {
+                    World w =  Bukkit.createWorld(new WorldCreator(worldName));
+                    w.setKeepSpawnInMemory(false);
+                    w.setAutoSave(false);
+                    arena.init(w);
+                } catch (IllegalArgumentException e){
+                    if (e.getMessage().contains("ChunkNibbleArrays should be 2048 bytes")){
+                        Main.plugin.getLogger().severe("Could not load arena: " + worldName);
+                        Main.plugin.getLogger().severe("Your world has corrupt chunks!");
+                    }
+                }
             }
         }, 3L);
     }
