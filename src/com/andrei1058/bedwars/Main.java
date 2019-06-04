@@ -205,13 +205,6 @@ public class Main extends JavaPlugin {
 
         ArenaSocket.serverIdentifier = Bukkit.getServer().getIp() + ":" + Bukkit.getServer().getPort();
 
-        /* Citizens support */
-        if (this.getServer().getPluginManager().getPlugin("Citizens") != null) {
-            JoinNPC.setCitizensSupport(true);
-            getLogger().info("Hook into Citizens support. /bw npc");
-            registerEvents(new CitizensListener());
-        }
-
         /* Register commands */
         nms.registerCommand(mainCmd, new MainCommand(mainCmd));
 
@@ -338,7 +331,7 @@ public class Main extends JavaPlugin {
         Misc.checkUpdate();
 
         /* Database support */
-        if (config.getBoolean("database.enableRotation")) {
+        if (config.getBoolean("database.enable")) {
             com.andrei1058.bedwars.database.MySQL mySQL = new com.andrei1058.bedwars.database.MySQL();
             Long time = System.currentTimeMillis();
             if (!mySQL.connect()) {
@@ -356,7 +349,14 @@ public class Main extends JavaPlugin {
             remoteDatabase = new SQLite();
         }
 
+        /* Citizens support */
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            if (this.getServer().getPluginManager().getPlugin("Citizens") != null) {
+                JoinNPC.setCitizensSupport(true);
+                getLogger().info("Hook into Citizens support. /bw npc");
+                registerEvents(new CitizensListener());
+            }
+
             //spawn NPCs
             try {
                 JoinNPC.spawnNPCs();
