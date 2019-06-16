@@ -19,6 +19,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.Iterator;
@@ -126,6 +127,14 @@ public class DamageDeathMove implements Listener {
                     } else {
                         new LastHit(p, damager, System.currentTimeMillis());
                     }
+
+                    // #274
+                    if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)){
+                        for (Player on : a.getPlayers()){
+                            Main.nms.showArmor(p, on);
+                        }
+                    }
+                    //
                 }
                 if ((e.getDamager() instanceof Silverfish) || (e.getDamager() instanceof IronGolem)) {
                     if (getLastHit().containsKey(p)) {
@@ -410,6 +419,14 @@ public class DamageDeathMove implements Listener {
                         sb.giveTeamColorTag();
                     }
                 }
+
+                // #274
+                for (Player p : a.getPlayers()){
+                    if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)){
+                        Main.nms.hideArmor(p, e.getPlayer());
+                    }
+                }
+                //
             }
             for (SBoard sb : SBoard.getScoreboards()) {
                 if (sb.getArena() == a) {

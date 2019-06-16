@@ -154,6 +154,15 @@ public class BuyItem {
                 player.getInventory().setBoots(i);
             }
             player.updateInventory();
+
+            // #274
+            if (player.hasPotionEffect(PotionEffectType.INVISIBILITY)){
+                for (Player p : arena.getPlayers()){
+                    Main.nms.hideArmor(player, p);
+                }
+            }
+            //
+
             return;
         } else {
 
