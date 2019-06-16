@@ -46,6 +46,7 @@ import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.support.leaderheads.LeaderHeadsSupport;
 import com.andrei1058.bedwars.support.papi.PAPISupport;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
+import com.andrei1058.bedwars.support.party.NoParty;
 import com.andrei1058.bedwars.support.party.Party;
 import com.andrei1058.bedwars.support.party.Parties;
 import com.andrei1058.bedwars.support.vault.*;
@@ -305,10 +306,12 @@ public class Main extends JavaPlugin {
                         party = new Parties();
                     }
                 }
-            }
-            if (party == null) {
-                party = new com.andrei1058.bedwars.support.party.Internal();
-                getLogger().info("Loading internal Party system. /party");
+                if (party == null) {
+                    party = new com.andrei1058.bedwars.support.party.Internal();
+                    getLogger().info("Loading internal Party system. /party");
+                }
+            } else {
+                party = new NoParty();
             }
         }, 10L);
 
