@@ -502,7 +502,7 @@ public class DamageDeathMove implements Listener {
                 }
             }
         } else {
-            if (e.getPlayer().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
+            if (e.getPlayer().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName()) && Main.getServerType() == ServerType.MULTIARENA) {
                 if (e.getTo().getY() < 0) {
                     e.getPlayer().teleport(config.getConfigLoc("lobbyLoc"));
                 }
