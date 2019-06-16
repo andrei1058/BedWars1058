@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.configuration.ConfigPath;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -141,7 +142,7 @@ public class BuyItem {
             i.setItemMeta(im);
 
             if (m == Material.LEATHER_HELMET || m == Material.CHAINMAIL_HELMET || m == Material.DIAMOND_HELMET || m == nms.materialGoldenHelmet() || m == Material.IRON_HELMET) {
-                if (permanent)  i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
+                if (permanent) i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
                 player.getInventory().setHelmet(i);
             } else if (m == Material.LEATHER_CHESTPLATE || m == Material.CHAINMAIL_CHESTPLATE || m == nms.materialGoldenChestPlate() || m == Material.DIAMOND_CHESTPLATE || m == Material.IRON_CHESTPLATE) {
                 if (permanent) i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
@@ -155,13 +156,15 @@ public class BuyItem {
             }
             player.updateInventory();
 
-            // #274
-            if (player.hasPotionEffect(PotionEffectType.INVISIBILITY)){
-                for (Player p : arena.getPlayers()){
-                    Main.nms.hideArmor(player, p);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                // #274
+                if (player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+                    for (Player p : arena.getPlayers()) {
+                        Main.nms.hideArmor(player, p);
+                    }
                 }
-            }
-            //
+                //
+            }, 20L);
 
             return;
         } else {

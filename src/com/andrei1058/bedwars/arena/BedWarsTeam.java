@@ -107,6 +107,7 @@ public class BedWarsTeam {
 
     // Check if NPCs were spawned
     private boolean NPCspawned = false;
+
     public int getSize() {
         return members.size();
     }
@@ -121,9 +122,9 @@ public class BedWarsTeam {
             new BedHolo(p, getArena());
         }
 
-        if (!NPCspawned){
+        if (!NPCspawned) {
             NPCspawned = true;
-            Bukkit.getScheduler().runTaskLater(plugin, ()-> {
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 nms.colorBed(this);
                 if (getArena().getMaxInTeam() > 1) {
                     nms.spawnShop(getArena().getCm().getArenaLoc("Team." + getName() + ".Upgrade"), Messages.NPC_NAME_TEAM_UPGRADES, getArena().getPlayers(), getArena());
@@ -316,9 +317,23 @@ public class BedWarsTeam {
         }
         Bukkit.getPluginManager().callEvent(new ArenaPlayerRespawnEvent(p, getArena(), this));
 
-        Bukkit.getScheduler().runTaskLater(plugin, ()-> {
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
             nms.invisibilityFix(p, getArena());
+
+            // #274
+            for (Player on : getArena().getShowTime().keySet()) {
+                Main.nms.hideArmor(on, p);
+            }
+            //
         }, 10L);
+
+        Bukkit.getScheduler().runTaskLater(plugin, ()-> {
+            // #274
+            for (Player on : getArena().getShowTime().keySet()) {
+                Main.nms.hideArmor(on, p);
+            }
+            //
+        }, 40L);
     }
 
     /**
@@ -501,6 +516,21 @@ public class BedWarsTeam {
             }
             p.updateInventory();
         }
+
+        // #274
+        Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+            for (Player m : getMembers()) {
+                if (m.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+                    for (Player p : getArena().getPlayers()) {
+                        Main.nms.hideArmor(m, p);
+                    }
+                    for (Player p : getArena().getSpectators()) {
+                        Main.nms.hideArmor(m, p);
+                    }
+                }
+            }
+        }, 20L);
+        //
     }
 
 
@@ -569,7 +599,7 @@ public class BedWarsTeam {
      */
     public boolean wasMember(Player u) {
         if (u == null) return false;
-        for (Player p : membersCache){
+        for (Player p : membersCache) {
             if (p.getName().equals(u.getName())) return true;
         }
         return false;

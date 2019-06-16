@@ -129,8 +129,8 @@ public class DamageDeathMove implements Listener {
                     }
 
                     // #274
-                    if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)){
-                        for (Player on : a.getPlayers()){
+                    if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+                        for (Player on : a.getPlayers()) {
                             Main.nms.showArmor(p, on);
                         }
                     }
@@ -420,13 +420,13 @@ public class DamageDeathMove implements Listener {
                     }
                 }
 
-                // #274
-                for (Player p : a.getPlayers()){
-                    if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)){
+                Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+                    // #274
+                    for (Player p : a.getShowTime().keySet()) {
                         Main.nms.hideArmor(p, e.getPlayer());
                     }
-                }
-                //
+                    //
+                }, 10L);
             }
             for (SBoard sb : SBoard.getScoreboards()) {
                 if (sb.getArena() == a) {
@@ -445,7 +445,7 @@ public class DamageDeathMove implements Listener {
 
                 /** update armorstands hidden by nms **/
                 String iso = Language.getPlayerLanguage(e.getPlayer()).getIso();
-                for (OreGenerator o  : a.getOreGenerators()) {
+                for (OreGenerator o : a.getOreGenerators()) {
                     if (o.getArena() == a) {
                         o.updateHolograms(e.getPlayer(), iso);
                     }
@@ -551,10 +551,10 @@ public class DamageDeathMove implements Listener {
     }
 
     @EventHandler
-    public void onItemFrameDamage(EntityDamageByEntityEvent  e){
-        if (e.getEntity().getType() == EntityType.ITEM_FRAME){
+    public void onItemFrameDamage(EntityDamageByEntityEvent e) {
+        if (e.getEntity().getType() == EntityType.ITEM_FRAME) {
             Arena a = Arena.getArenaByName(e.getEntity().getWorld().getName());
-            if (a != null){
+            if (a != null) {
                 e.setCancelled(true);
             }
             if (Main.getServerType() != ServerType.SHARED) {
