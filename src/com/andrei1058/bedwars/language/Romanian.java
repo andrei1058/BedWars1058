@@ -231,7 +231,7 @@ public class Romanian {
         yml.addDefault(Messages.TRAP_ENEMY_BASE_ENTER_TITLE, "&cCAPCANA ACTIVATA!");
 
         /* save default Obiecte messages for stats gui */
-        yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "&68Statisticile lui {player}");
+        yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "&8Statisticile lui {player}");
         lbj.addDefaultStatsMsg(yml, "wins", "&6Victorii", "&f{wins}");
         lbj.addDefaultStatsMsg(yml, "losses", "&6Pierderi", "&f{losses}");
         lbj.addDefaultStatsMsg(yml, "kills", "&6Ucideri", "&f{kills}");

@@ -189,7 +189,7 @@ public class Spanish {
 
         yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_REGULAR, "{PlayerColor}{PlayerName} &7fue golpeado por una bomba.");
         yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_FINAL_KILL, "{PlayerColor}{PlayerName} &7fue golpeado por una bomba. &b&lMUERTE FINAL!");
-        yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "{player} Estadistícas");
+        yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "&8{player} Estadistícas");
 
         /* save default items messages for stats gui */
         lbj.addDefaultStatsMsg(yml, "wins", "&6Victorias", "&f{wins}");

@@ -234,7 +234,7 @@ public class English {
         yml.addDefault(Messages.TRAP_ENEMY_BASE_ENTER_TITLE, "&cTRAP TRIGGERED!");
 
         /* save default items messages for stats gui */
-        yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "{player} Stats");
+        yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "&8{player} Stats");
         lbj.addDefaultStatsMsg(yml, "wins", "&6Wins", "&f{wins}");
         lbj.addDefaultStatsMsg(yml, "losses", "&6Losses", "&f{losses}");
         lbj.addDefaultStatsMsg(yml, "kills", "&6Kills", "&f{kills}");

@@ -233,7 +233,7 @@ public class Italian {
         yml.addDefault(Messages.TRAP_ENEMY_BASE_ENTER_TITLE, "&cTRAPPOLA ATTIVATA!");
 
         /* save default items messages for stats gui */
-        yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "Statistiche di {player}");
+        yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "&8Statistiche di {player}");
         lbj.addDefaultStatsMsg(yml, "wins", "&6Vittorie", "&f{wins}");
         lbj.addDefaultStatsMsg(yml, "losses", "&6Sconfitte", "&f{losses}");
         lbj.addDefaultStatsMsg(yml, "kills", "&6Uccisioni", "&f{kills}");

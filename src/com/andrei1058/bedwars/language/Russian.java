@@ -285,7 +285,7 @@ public class Russian {
 
         yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_REGULAR, "{PlayerColor}{PlayerName} &7был поражен бомбой.");
         yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_FINAL_KILL, "{PlayerColor}{PlayerName} &7был поражен бомбой. &b&lЗАКЛЮЧИТЕЛЬНОЕ УБИЙСТВО!");
-        yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "{player} Статистика");
+        yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "&8{player} Статистика");
 
         /* save default items messages for stats gui */
         lbj.addDefaultStatsMsg(yml, "wins", "&6Побед", "&f{wins}");
