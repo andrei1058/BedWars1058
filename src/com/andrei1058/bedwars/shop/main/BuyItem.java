@@ -169,23 +169,21 @@ public class BuyItem {
             return;
         } else {
 
+            ItemMeta im = i.getItemMeta();
             i = nms.colourItem(i, arena.getTeam(player));
+            if (permanent) nms.setUnbreakable(im);
 
             if (i.getType() == Material.BOW) {
-                ItemMeta im = i.getItemMeta();
                 if (permanent) nms.setUnbreakable(im);
                 for (BedWarsTeam.Enchant e : arena.getTeam(player).getBowsEnchantments()) {
                     im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
                 }
-                i.setItemMeta(im);
             } else if (nms.isSword(i)) {
-                ItemMeta im = i.getItemMeta();
-                if (permanent) nms.setUnbreakable(im);
                 for (BedWarsTeam.Enchant e : arena.getTeam(player).getSwordsEnchantemnts()) {
                     im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
                 }
-                i.setItemMeta(im);
             }
+            i.setItemMeta(im);
 
             if (permanent) {
                 i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier).clone();
