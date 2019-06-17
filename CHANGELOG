@@ -1,5 +1,31 @@
-# 0.11.1beta
+# 0.12beta
+- added "display-name" option used in scoreboards, in the arena selector etc.
+- shopkeepers messages update http://prntscr.com/o30zjo
+- added "disable-npcs-for-empty-teams" option
+- fixed issue #260 (unbreaking issue)
+- fixed (maybe) issue #270 (anticheat conflict)
+- added check to prevent error #275
+- fixed issue #187 (fireball issue)
+- fixed issue #277
+- fixed issue #273 (region protection)
+- fixed issue where villagers are not always spawning
+- fixed issue #274 (invisibility potion)
+- you can now disable parties completely using allow-parties option
+- if you fall in void in shared mode you will no longer be moved to the bedwars lobby location
+- added citizens load delay
+- added corrupt chunks issue checker at arena load
 - fixed issue where converting maps to the new mc name standard is not fully working for those who have a custom world container
+
+# 0.11.1beta
+- fixed items unbreaking deprecation at shop
+- fixed a levels error at game end
+- fixed setup holograms issue
+- fixed issue #266 (closed) about respawning players
+- fixed unbreakable deprecation at shop
+- re-added "games-before-respawn" option for BUNGEE servers
+- BUNGEE mode improvements
+- fixed spectator mode
+- fixed shopkeepers and generators issue related to chunks
 
 # 0.11beta
 - fixed items unbreaking deprecation at shop
