@@ -178,7 +178,7 @@ public class Polish {
 
         yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_REGULAR, "{PlayerColor}{PlayerName} &7zostal zabity przez bombe.");
         yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_FINAL_KILL, "{PlayerColor}{PlayerName} &7zostal zabity przez bombe. &b&lOSTATECZNE ZABOJSTWO!");
-        yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "{player} Statystyki");
+        yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "&8{player} Statystyki");
         yml.addDefault(Messages.GAME_END_GAME_OVER_PLAYER_TITLE, "&c&lPRZEGRANA!");
         yml.addDefault(Messages.GAME_END_VICTORY_PLAYER_TITLE, "&6&lWYGRANA!");
         yml.addDefault(Messages.GAME_END_TOP_PLAYER_CHAT, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
@@ -241,10 +241,10 @@ public class Polish {
         yml.addDefault(Messages.BED_HOLOGRAM_DEFEND, "&c&lChron swojego lozka!");
         yml.addDefault(Messages.BED_HOLOGRAM_DESTROYED, "&c&lTwoje lozko zostalo zniszczone!");
 
-        yml.addDefault(Messages.NPC_NAME_TEAM_UPGRADES, "&e&lDRUZYNOWE &E&LULEPSZENIA");
-        yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&e&lSOLO &E&LULEPSZENIA");
-        yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&e&lSKLEP Z PRZEDMIOTAMI");
-        yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&e&lSKLEP Z PRZEDMIOTAMI");
+        yml.addDefault(Messages.NPC_NAME_TEAM_UPGRADES, "&bDRUZYNOWE ULEPSZENIA,&e&lRIGHT CLICK");
+        yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&bSOLO ULEPSZENIA,&e&lRIGHT CLICK");
+        yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&bSKLEP Z PRZEDMIOTAMI,&e&lRIGHT CLICK");
+        yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&bSKLEP Z PRZEDMIOTAMI,&e&lRIGHT CLICK");
 
         //SHOP
         yml.addDefault(Messages.SHOP_INDEX_NAME, "&8Quick Buy");

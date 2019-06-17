@@ -7,6 +7,7 @@ import com.andrei1058.bedwars.api.GeneratorType;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Messages;
+import com.andrei1058.bedwars.region.Cuboid;
 import com.andrei1058.bedwars.shop.ShopCache;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -91,7 +92,7 @@ public class BedWarsTeam {
      */
 
     /**
-     * Player cache, used for loosers stats and rejoin
+     * Player cache, used for losers stats and rejoin
      */
     private List<Player> membersCache = new ArrayList<>();
 
@@ -103,10 +104,10 @@ public class BedWarsTeam {
         this.arena = arena;
         this.shop = shop;
         this.teamUpgrades = teamUpgrades;
+
+        arena.getRegionsList().add(new Cuboid(spawn, arena.getCm().getInt(ConfigPath.ARENA_SPAWN_PROTECTION), true));
     }
 
-    // Check if NPCs were spawned
-    private boolean NPCspawned = false;
     public int getSize() {
         return members.size();
     }
@@ -120,20 +121,6 @@ public class BedWarsTeam {
             if (!membersCache.contains(p)) membersCache.add(p);
             new BedHolo(p, getArena());
         }
-
-        if (!NPCspawned){
-            NPCspawned = true;
-            Bukkit.getScheduler().runTaskLater(plugin, ()-> {
-                nms.colorBed(this);
-                if (getArena().getMaxInTeam() > 1) {
-                    nms.spawnShop(getArena().getCm().getArenaLoc("Team." + getName() + ".Upgrade"), Messages.NPC_NAME_TEAM_UPGRADES, getArena().getPlayers(), getArena());
-                    nms.spawnShop(getArena().getCm().getArenaLoc("Team." + getName() + ".Shop"), Messages.NPC_NAME_TEAM_SHOP, getArena().getPlayers(), getArena());
-                } else {
-                    nms.spawnShop(getArena().getCm().getArenaLoc("Team." + getName() + ".Upgrade"), Messages.NPC_NAME_SOLO_UPGRADES, getArena().getPlayers(), getArena());
-                    nms.spawnShop(getArena().getCm().getArenaLoc("Team." + getName() + ".Shop"), Messages.NPC_NAME_SOLO_SHOP, getArena().getPlayers(), getArena());
-                }
-            }, 40L);
-        }
     }
 
     /**
@@ -143,6 +130,29 @@ public class BedWarsTeam {
         p.teleport(spawn, PlayerTeleportEvent.TeleportCause.PLUGIN);
         sendDefaultInventory(p, true);
         Bukkit.getPluginManager().callEvent(new ArenaFirstSpawnEvent(p, getArena(), this));
+    }
+
+    /**
+     * Spawn shopkeepers for target team (if enabld).
+     */
+    public void spawnNPCs() {
+        if (getMembers().isEmpty() && getArena().getCm().getBoolean(ConfigPath.ARENA_DISABLE_NPCS_FOR_EMPTY_TEAMS)) return;
+
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            nms.colorBed(this);
+            nms.spawnShop(getArena().getCm().getArenaLoc("Team." + getName() + ".Upgrade"), (getArena().getMaxInTeam() > 1 ? Messages.NPC_NAME_TEAM_UPGRADES : Messages.NPC_NAME_SOLO_UPGRADES), getArena().getPlayers(), getArena());
+            nms.spawnShop(getArena().getCm().getArenaLoc("Team." + getName() + ".Shop"), (getArena().getMaxInTeam() > 1 ? Messages.NPC_NAME_TEAM_SHOP : Messages.NPC_NAME_SOLO_SHOP), getArena().getPlayers(), getArena());
+        }, 70L);
+
+        Cuboid c1 = new Cuboid(getArena().getCm().getArenaLoc("Team." + getName() + ".Upgrade"), 1, true);
+        c1.setMinY(c1.getMinY() - 1);
+        c1.setMaxY(c1.getMaxY() + 4);
+        getArena().getRegionsList().add(c1);
+
+        Cuboid c2 = new Cuboid(getArena().getCm().getArenaLoc("Team." + getName() + ".Shop"), 1, true);
+        c2.setMinY(c2.getMinY() - 1);
+        c2.setMaxY(c2.getMaxY() + 4);
+        getArena().getRegionsList().add(c2);
     }
 
     /**
@@ -316,9 +326,23 @@ public class BedWarsTeam {
         }
         Bukkit.getPluginManager().callEvent(new ArenaPlayerRespawnEvent(p, getArena(), this));
 
-        Bukkit.getScheduler().runTaskLater(plugin, ()-> {
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
             nms.invisibilityFix(p, getArena());
+
+            // #274
+            for (Player on : getArena().getShowTime().keySet()) {
+                Main.nms.hideArmor(on, p);
+            }
+            //
         }, 10L);
+
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            // #274
+            for (Player on : getArena().getShowTime().keySet()) {
+                Main.nms.hideArmor(on, p);
+            }
+            //
+        }, 40L);
     }
 
     /**
@@ -501,6 +525,21 @@ public class BedWarsTeam {
             }
             p.updateInventory();
         }
+
+        // #274
+        Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+            for (Player m : getMembers()) {
+                if (m.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+                    for (Player p : getArena().getPlayers()) {
+                        Main.nms.hideArmor(m, p);
+                    }
+                    for (Player p : getArena().getSpectators()) {
+                        Main.nms.hideArmor(m, p);
+                    }
+                }
+            }
+        }, 20L);
+        //
     }
 
 
@@ -569,7 +608,7 @@ public class BedWarsTeam {
      */
     public boolean wasMember(Player u) {
         if (u == null) return false;
-        for (Player p : membersCache){
+        for (Player p : membersCache) {
             if (p.getName().equals(u.getName())) return true;
         }
         return false;

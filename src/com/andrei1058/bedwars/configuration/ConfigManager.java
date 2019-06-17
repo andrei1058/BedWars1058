@@ -40,6 +40,7 @@ public class ConfigManager {
             yml.options().header(plugin.getName() + " arena configuration file.\n" +
                     "Documentation here: https://gitlab.com/andrei1058/BedWars1058/wikis/configuration/Arena-Configuration");
             yml.addDefault("group", "Default");
+            yml.addDefault(ConfigPath.ARENA_DISPLAY_NAME, "");
             yml.addDefault("minPlayers", 2);
             yml.addDefault("maxInTeam", 1);
             yml.addDefault("allowSpectate", true);
@@ -52,6 +53,7 @@ public class ConfigManager {
             //yml.addDefault("disableGeneratorsOnOrphanIslands", false);
             yml.addDefault(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y, 180);
             yml.addDefault(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS, false);
+            yml.addDefault(ConfigPath.ARENA_DISABLE_NPCS_FOR_EMPTY_TEAMS, true);
             yml.addDefault(ConfigPath.ARENA_NORMAL_DEATH_DROPS, false);
             yml.addDefault(ConfigPath.ARENA_USE_BED_HOLO, true);
             yml.addDefault(ConfigPath.ARENA_ALLOW_MAP_BREAK, false);

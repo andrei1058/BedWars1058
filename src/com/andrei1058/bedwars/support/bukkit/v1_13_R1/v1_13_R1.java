@@ -528,14 +528,14 @@ public class v1_13_R1 implements NMS {
 
     @Override
     public void registerTntWhitelist() {
-        /*try {
-            Field field = Block.class.getDeclaredField("durability");
+        try {
+            Field field = net.minecraft.server.v1_13_R2.Block.class.getDeclaredField("durability");
             field.setAccessible(true);
-            field.set(Block.getByName("glass"), 300f);
-            field.set(Block.getByName("stained_glass"), 300f);
+            field.setFloat(Blocks.END_STONE, 69f);
+            field.setFloat(Blocks.GLASS, 300f);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
-        }*/
+        }
     }
 
     @Override

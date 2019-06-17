@@ -189,10 +189,10 @@ public class English {
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
         yml.addDefault(Messages.BED_HOLOGRAM_DEFEND, "&c&lDefend your bed!");
         yml.addDefault(Messages.BED_HOLOGRAM_DESTROYED, "&c&lYour bed was destroyed!");
-        yml.addDefault(Messages.NPC_NAME_TEAM_UPGRADES, "&e&lTEAM,&E&LUPGRADES");
-        yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&e&lSOLO,&E&LUPGRADES");
-        yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&e&lITEM SHOP");
-        yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&e&lITEM SHOP");
+        yml.addDefault(Messages.NPC_NAME_TEAM_UPGRADES, "&bTEAM UPGRADES,&e&lRIGHT CLICK");
+        yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&bSOLO UPGRADES,&e&lRIGHT CLICK");
+        yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&bTEAM SHOP,&e&lRIGHT CLICK");
+        yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&bITEM SHOP,&e&lRIGHT CLICK");
         yml.addDefault(Messages.TEAM_ELIMINATED_CHAT, "\n&f&lTEAM ELIMINATED > {TeamColor}{TeamName} Team &chas been eliminated!\n");
         yml.addDefault(Messages.NEXT_EVENT_BEDS_DESTROY, "&cBeds Destruction");
         yml.addDefault(Messages.NEXT_EVENT_DIAMOND_UPGRADE_II, "&fDiamond II");
@@ -234,7 +234,7 @@ public class English {
         yml.addDefault(Messages.TRAP_ENEMY_BASE_ENTER_TITLE, "&cTRAP TRIGGERED!");
 
         /* save default items messages for stats gui */
-        yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "{player} Stats");
+        yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "&8{player} Stats");
         lbj.addDefaultStatsMsg(yml, "wins", "&6Wins", "&f{wins}");
         lbj.addDefaultStatsMsg(yml, "losses", "&6Losses", "&f{losses}");
         lbj.addDefaultStatsMsg(yml, "kills", "&6Kills", "&f{kills}");

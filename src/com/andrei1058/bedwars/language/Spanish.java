@@ -127,10 +127,10 @@ public class Spanish {
         yml.addDefault(Messages.FORMATTING_GENERATOR_TIER2, "II");
         yml.addDefault(Messages.FORMATTING_GENERATOR_TIER3, "III");
         yml.addDefault(Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT, "{prefix}{generatorType} Los generadores &ehan sido mejorados al nivel &c{tier}");
-        yml.addDefault(Messages.NPC_NAME_TEAM_UPGRADES, "&e&lMEJORAS,&b&lTEAM");
-        yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&e&lMEJORAS,&b&lSOLO");
-        yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&b&lTIENDA,&e&lCLICK DERECHO");
-        yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&b&lTIENDA,&e&lCLICK DERECHO");
+        yml.addDefault(Messages.NPC_NAME_TEAM_UPGRADES, "&bMEJORAS TEAM,&e&lCLICK DERECHO");
+        yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&bMEJORAS SOLO,&e&lCLICK DERECHO");
+        yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&bTIENDA,&e&lCLICK DERECHO");
+        yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&bTIENDA,&e&lCLICK DERECHO");
 
         yml.addDefault(Messages.MEANING_FULL, "Full");
         yml.addDefault(Messages.MEANING_IRON_SINGULAR, "Hierro");
@@ -189,7 +189,7 @@ public class Spanish {
 
         yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_REGULAR, "{PlayerColor}{PlayerName} &7fue golpeado por una bomba.");
         yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_FINAL_KILL, "{PlayerColor}{PlayerName} &7fue golpeado por una bomba. &b&lMUERTE FINAL!");
-        yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "{player} Estadistícas");
+        yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "&8{player} Estadistícas");
 
         /* save default items messages for stats gui */
         lbj.addDefaultStatsMsg(yml, "wins", "&6Victorias", "&f{wins}");

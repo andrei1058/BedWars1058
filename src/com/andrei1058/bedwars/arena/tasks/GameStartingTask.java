@@ -164,6 +164,11 @@ public class GameStartingTask implements Runnable {
             } else {
                 getArena().setNextEvent(NextEvent.EMERALD_GENERATOR_TIER_II);
             }
+
+            //Spawn shopkeepers
+            for (BedWarsTeam bwt : getArena().getTeams()){
+                bwt.spawnNPCs();
+            }
             return;
         }
 

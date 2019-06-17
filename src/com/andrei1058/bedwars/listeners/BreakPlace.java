@@ -9,6 +9,7 @@ import com.andrei1058.bedwars.arena.OreGenerator;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.AutoCreateTeams;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Messages;
+import com.andrei1058.bedwars.region.Region;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -65,7 +66,7 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
-
+        if (e.isCancelled()) return;
         //Prevent player from placing during the removal from the arena
         Arena arena = Arena.getArenaByName(e.getBlock().getWorld().getName());
         if (arena != null) {
@@ -93,33 +94,15 @@ public class BreakPlace implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            try {
-                for (BedWarsTeam t : a.getTeams()) {
-                    if (t.getSpawn().distance(e.getBlockPlaced().getLocation()) <= a.getCm().getInt(ConfigPath.ARENA_SPAWN_PROTECTION)) {
-                        e.setCancelled(true);
-                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
-                        return;
-                    }
-                    if (t.getShop().distance(e.getBlockPlaced().getLocation()) <= a.getCm().getInt(ConfigPath.ARENA_SHOP_PROTECTION)) {
-                        e.setCancelled(true);
-                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
-                        return;
-                    }
-                    if (t.getTeamUpgrades().distance(e.getBlockPlaced().getLocation()) <= a.getCm().getInt(ConfigPath.ARENA_UPGRADES_PROTECTION)) {
-                        e.setCancelled(true);
-                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
-                        return;
-                    }
+
+            for (Region r : a.getRegionsList()) {
+                if (r.isInRegion(e.getBlock().getLocation()) && r.isProtected()) {
+                    e.setCancelled(true);
+                    p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                    return;
                 }
-                for (OreGenerator o  : a.getOreGenerators()) {
-                    if (o.getLocation().distance(e.getBlock().getLocation()) <= 1) {
-                        e.setCancelled(true);
-                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
-                        return;
-                    }
-                }
-            } catch (Exception ex) {
             }
+
             a.addPlacedBlock(e.getBlock());
             if (e.getBlock().getType() == Material.TNT) {
                 e.setCancelled(true);
@@ -157,6 +140,7 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
+        if (e.isCancelled()) return;
         Player p = e.getPlayer();
         if (Main.getServerType() != ServerType.BUNGEE) {
             if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
@@ -191,7 +175,9 @@ public class BreakPlace implements Listener {
                                         if (t.isMember(p)) {
                                             p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_OWN_BED));
                                             e.setCancelled(true);
-                                            e.getPlayer().teleport(e.getPlayer().getLocation().add(0, 0.5, 0));
+                                            if (e.getPlayer().getLocation().getBlock().getType().toString().contains("BED")) {
+                                                e.getPlayer().teleport(e.getPlayer().getLocation().add(0, 0.5, 0));
+                                            }
                                             return;
                                         } else {
                                             e.setCancelled(false);
@@ -220,32 +206,12 @@ public class BreakPlace implements Listener {
                 }
             }
 
-            try {
-                for (BedWarsTeam t : a.getTeams()) {
-                    if (t.getSpawn().distance(e.getBlock().getLocation()) <= a.getCm().getInt(ConfigPath.ARENA_SPAWN_PROTECTION)) {
-                        e.setCancelled(true);
-                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
-                        return;
-                    }
-                    if (t.getShop().distance(e.getBlock().getLocation()) <= a.getCm().getInt(ConfigPath.ARENA_SHOP_PROTECTION)) {
-                        e.setCancelled(true);
-                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
-                        return;
-                    }
-                    if (t.getTeamUpgrades().distance(e.getBlock().getLocation()) <= a.getCm().getInt(ConfigPath.ARENA_UPGRADES_PROTECTION)) {
-                        e.setCancelled(true);
-                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
-                        return;
-                    }
+            for (Region r : a.getRegionsList()) {
+                if (r.isInRegion(e.getBlock().getLocation()) && r.isProtected()) {
+                    e.setCancelled(true);
+                    p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
+                    return;
                 }
-                for (OreGenerator o  : a.getOreGenerators()) {
-                    if (o.getLocation().distance(e.getBlock().getLocation()) <= 1) {
-                        e.setCancelled(true);
-                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
-                        return;
-                    }
-                }
-            } catch (Exception ex) {
             }
 
             if (!a.getCm().getBoolean(ConfigPath.ARENA_ALLOW_MAP_BREAK)) {
@@ -309,6 +275,7 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onBucketFill(PlayerBucketFillEvent e) {
+        if (e.isCancelled()) return;
         if (Main.getServerType() != ServerType.BUNGEE) {
             if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 if (!isBuildSession(e.getPlayer())) {
@@ -325,6 +292,7 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onBucketEmpty(PlayerBucketEmptyEvent e) {
+        if (e.isCancelled()) return;
         if (Main.getServerType() != ServerType.BUNGEE) {
             if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 if (!isBuildSession(e.getPlayer())) {
@@ -377,7 +345,7 @@ public class BreakPlace implements Listener {
                         return;
                     }
                 }
-                for (OreGenerator o  : a.getOreGenerators()) {
+                for (OreGenerator o : a.getOreGenerators()) {
                     if (o.getLocation().distance(e.getBlockClicked().getLocation()) <= 1) {
                         e.setCancelled(true);
                         p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
@@ -396,6 +364,7 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onBlow(EntityExplodeEvent e) {
+        if (e.isCancelled()) return;
         if (e.blockList().isEmpty()) return;
         Arena a = Arena.getArenaByName(e.blockList().get(0).getWorld().getName());
         if (a != null) {
@@ -416,6 +385,7 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onBlockExplode(BlockExplodeEvent e) {
+        if (e.isCancelled()) return;
         if (e.blockList().isEmpty()) return;
         Arena a = Arena.getArenaByName(e.blockList().get(0).getWorld().getName());
         if (a != null) {
@@ -487,9 +457,10 @@ public class BreakPlace implements Listener {
     //prevent farm breaking farm stuff
     @EventHandler
     public void soilChangeEntity(EntityChangeBlockEvent e) {
-        if (e.getTo() == Material.DIRT){
-            if (e.getBlock().getType().toString().equals("FARMLAND") || e.getBlock().getType().toString().equals("SOIL")){
-                if ((Arena.getArenaByName(e.getBlock().getWorld().getName()) != null) || (e.getBlock().getWorld().getName().equals(Main.getLobbyWorld()))) e.setCancelled(true);
+        if (e.getTo() == Material.DIRT) {
+            if (e.getBlock().getType().toString().equals("FARMLAND") || e.getBlock().getType().toString().equals("SOIL")) {
+                if ((Arena.getArenaByName(e.getBlock().getWorld().getName()) != null) || (e.getBlock().getWorld().getName().equals(Main.getLobbyWorld())))
+                    e.setCancelled(true);
             }
         }
     }

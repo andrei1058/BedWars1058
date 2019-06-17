@@ -46,6 +46,7 @@ import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.support.leaderheads.LeaderHeadsSupport;
 import com.andrei1058.bedwars.support.papi.PAPISupport;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
+import com.andrei1058.bedwars.support.party.NoParty;
 import com.andrei1058.bedwars.support.party.Party;
 import com.andrei1058.bedwars.support.party.Parties;
 import com.andrei1058.bedwars.support.vault.*;
@@ -205,13 +206,6 @@ public class Main extends JavaPlugin {
 
         ArenaSocket.serverIdentifier = Bukkit.getServer().getIp() + ":" + Bukkit.getServer().getPort();
 
-        /* Citizens support */
-        if (this.getServer().getPluginManager().getPlugin("Citizens") != null) {
-            JoinNPC.setCitizensSupport(true);
-            getLogger().info("Hook into Citizens support. /bw npc");
-            registerEvents(new CitizensListener());
-        }
-
         /* Register commands */
         nms.registerCommand(mainCmd, new MainCommand(mainCmd));
 
@@ -312,10 +306,12 @@ public class Main extends JavaPlugin {
                         party = new Parties();
                     }
                 }
-            }
-            if (party == null) {
-                party = new com.andrei1058.bedwars.support.party.Internal();
-                getLogger().info("Loading internal Party system. /party");
+                if (party == null) {
+                    party = new com.andrei1058.bedwars.support.party.Internal();
+                    getLogger().info("Loading internal Party system. /party");
+                }
+            } else {
+                party = new NoParty();
             }
         }, 10L);
 
@@ -338,7 +334,7 @@ public class Main extends JavaPlugin {
         Misc.checkUpdate();
 
         /* Database support */
-        if (config.getBoolean("database.enableRotation")) {
+        if (config.getBoolean("database.enable")) {
             com.andrei1058.bedwars.database.MySQL mySQL = new com.andrei1058.bedwars.database.MySQL();
             Long time = System.currentTimeMillis();
             if (!mySQL.connect()) {
@@ -356,7 +352,14 @@ public class Main extends JavaPlugin {
             remoteDatabase = new SQLite();
         }
 
+        /* Citizens support */
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            if (this.getServer().getPluginManager().getPlugin("Citizens") != null) {
+                JoinNPC.setCitizensSupport(true);
+                getLogger().info("Hook into Citizens support. /bw npc");
+                registerEvents(new CitizensListener());
+            }
+
             //spawn NPCs
             try {
                 JoinNPC.spawnNPCs();
@@ -414,14 +417,14 @@ public class Main extends JavaPlugin {
 
         /* Prevent issues on reload */
         for (Player p : Bukkit.getOnlinePlayers()) {
-            p.kickPlayer("BedWars1058 was RELOADED! (never reload plugins. noob staff)");
+            p.kickPlayer("BedWars1058 was RELOADED! (do not reload plugins)");
         }
 
         /* Load sounds configuration */
         new Sounds();
 
         /* LeaderHeads Support */
-        Bukkit.getScheduler().runTaskLater(this, ()-> LeaderHeadsSupport.initLeaderHeads(), 40L);
+        Bukkit.getScheduler().runTaskLater(this, LeaderHeadsSupport::initLeaderHeads, 40L);
 
         /* Initialize shop */
         shop = new ShopManager();
@@ -749,10 +752,10 @@ public class Main extends JavaPlugin {
                         toAdd.add(newName);
                         toRemove.add(file);
                     }
-                    folder = new File(plugin.getServer().getWorldContainer().getPath() + "/" + file.getName().replace(".yml", ""));
+                    folder = new File(plugin.getServer().getWorldContainer(), file.getName().replace(".yml", ""));
                     if (folder.exists()) {
                         if (!folder.getName().equals(folder.getName().toLowerCase())) {
-                            if (!folder.renameTo(new File(folder.getName().toLowerCase()))) {
+                            if (!folder.renameTo(new File(plugin.getServer().getWorldContainer().getPath() + "/" + folder.getName().toLowerCase()))) {
                                 Main.plugin.getLogger().severe("Could not rename " + folder.getName() + " folder to " + folder.getName().toLowerCase() + "! Please do it manually!");
                                 toRemove.add(file);
                                 return;

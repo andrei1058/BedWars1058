@@ -538,6 +538,7 @@ public class v1_8_R3 implements NMS {
             field.setAccessible(true);
             field.set(Block.getByName("glass"), 300f);
             field.set(Block.getByName("stained_glass"), 300f);
+            field.set(Block.getByName("end_stone"), 69f);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }

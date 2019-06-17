@@ -19,6 +19,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.Iterator;
@@ -126,6 +127,14 @@ public class DamageDeathMove implements Listener {
                     } else {
                         new LastHit(p, damager, System.currentTimeMillis());
                     }
+
+                    // #274
+                    if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+                        for (Player on : a.getPlayers()) {
+                            Main.nms.showArmor(p, on);
+                        }
+                    }
+                    //
                 }
                 if ((e.getDamager() instanceof Silverfish) || (e.getDamager() instanceof IronGolem)) {
                     if (getLastHit().containsKey(p)) {
@@ -410,6 +419,14 @@ public class DamageDeathMove implements Listener {
                         sb.giveTeamColorTag();
                     }
                 }
+
+                Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+                    // #274
+                    for (Player p : a.getShowTime().keySet()) {
+                        Main.nms.hideArmor(p, e.getPlayer());
+                    }
+                    //
+                }, 10L);
             }
             for (SBoard sb : SBoard.getScoreboards()) {
                 if (sb.getArena() == a) {
@@ -428,7 +445,7 @@ public class DamageDeathMove implements Listener {
 
                 /** update armorstands hidden by nms **/
                 String iso = Language.getPlayerLanguage(e.getPlayer()).getIso();
-                for (OreGenerator o  : a.getOreGenerators()) {
+                for (OreGenerator o : a.getOreGenerators()) {
                     if (o.getArena() == a) {
                         o.updateHolograms(e.getPlayer(), iso);
                     }
@@ -502,7 +519,7 @@ public class DamageDeathMove implements Listener {
                 }
             }
         } else {
-            if (e.getPlayer().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
+            if (e.getPlayer().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName()) && Main.getServerType() == ServerType.MULTIARENA) {
                 if (e.getTo().getY() < 0) {
                     e.getPlayer().teleport(config.getConfigLoc("lobbyLoc"));
                 }
@@ -534,10 +551,10 @@ public class DamageDeathMove implements Listener {
     }
 
     @EventHandler
-    public void onItemFrameDamage(EntityDamageByEntityEvent  e){
-        if (e.getEntity().getType() == EntityType.ITEM_FRAME){
+    public void onItemFrameDamage(EntityDamageByEntityEvent e) {
+        if (e.getEntity().getType() == EntityType.ITEM_FRAME) {
             Arena a = Arena.getArenaByName(e.getEntity().getWorld().getName());
-            if (a != null){
+            if (a != null) {
                 e.setCancelled(true);
             }
             if (Main.getServerType() != ServerType.SHARED) {

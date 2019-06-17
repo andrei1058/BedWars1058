@@ -12,6 +12,7 @@ import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.levels.internal.InternalLevel;
 import com.andrei1058.bedwars.levels.internal.PerMinuteTask;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
+import com.andrei1058.bedwars.region.Region;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.arena.tasks.GamePlayingTask;
@@ -63,6 +64,7 @@ public class Arena implements Comparable {
     private List<BedWarsTeam> teams = new ArrayList<>();
     private List<Block> placed = new ArrayList<>();
     private List<String> nextEvents = new ArrayList<>();
+    private List<Region> regionsList = new ArrayList<>();
 
     /**
      * Current event, used at scoreboard
@@ -149,7 +151,7 @@ public class Arena implements Comparable {
                 group = yml.getString("group");
             }
         }
-        File folder = new File(plugin.getServer().getWorldContainer().getPath() + "/" + name);
+        File folder = new File(plugin.getServer().getWorldContainer().getPath(), name);
         if (!folder.exists()) {
             if (p != null) p.sendMessage("§cThere isn't any map called " + name);
             plugin.getLogger().severe("There isn't any map called " + name);
@@ -452,7 +454,7 @@ public class Arena implements Comparable {
                 }
             }
 
-            Bukkit.getScheduler().runTaskLater(plugin, ()-> {
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 new SBoard(p, this);
             }, 15L);
             nms.setCollide(p, this, false);
@@ -990,7 +992,8 @@ public class Arena implements Comparable {
      * @return A string with - and _ replaced by a space.
      */
     public String getDisplayName() {
-        return (Character.toUpperCase(worldName.charAt(0)) + worldName.substring(1)).replace("_", " ").replace("-", " ");
+        return getCm().getString(ConfigPath.ARENA_DISPLAY_NAME).trim().isEmpty() ? (Character.toUpperCase(worldName.charAt(0)) + worldName.substring(1)).replace("_", " ").replace("-", " ")
+                : getCm().getString(ConfigPath.ARENA_DISPLAY_NAME);
     }
 
     /**
@@ -1190,6 +1193,7 @@ public class Arena implements Comparable {
      * Add a join sign for the arena.
      */
     public void addSign(Location loc) {
+        if (loc == null) return;
         if (loc.getBlock().getType() == Material.SIGN || loc.getBlock().getType() == Material.WALL_SIGN) {
             signs.add(loc.getBlock().getState());
             refreshSigns();
@@ -1708,7 +1712,14 @@ public class Arena implements Comparable {
                 for (String st : Main.signs.getYml().getStringList("locations")) {
                     String[] data = st.split(",");
                     if (data[0].equals(getWorld().getName())) {
-                        addSign(new Location(Bukkit.getWorld(data[6]), Double.valueOf(data[1]), Double.valueOf(data[2]), Double.valueOf(data[3])));
+                        Location l;
+                        try {
+                            l = new Location(Bukkit.getWorld(data[6]), Double.valueOf(data[1]), Double.valueOf(data[2]), Double.valueOf(data[3]));
+                        } catch (Exception e) {
+                            plugin.getLogger().severe("Could not load sign at: " + data.toString());
+                            continue;
+                        }
+                        addSign(l);
                     }
                 }
             }
@@ -1905,5 +1916,9 @@ public class Arena implements Comparable {
 
     public static void setGamesBeforeRestart(int gamesBeforeRestart) {
         Arena.gamesBeforeRestart = gamesBeforeRestart;
+    }
+
+    public List<Region> getRegionsList() {
+        return regionsList;
     }
 }

@@ -183,10 +183,10 @@ public class Romanian {
                 "&c                      &lAl 3-lea Ucigas &7- {thirdName} - {thirdKills}", "",
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
         yml.addDefault(Messages.GAME_END_TEAM_WON_CHAT, "{prefix}{TeamColor}Echipa {TeamName} &aa castigat!");
-        yml.addDefault(Messages.NPC_NAME_TEAM_UPGRADES, "&e&lTEAM,&E&LUPGRADES");
-        yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&e&lSOLO,&E&LUPGRADES");
-        yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&e&lMAGAZIN");
-        yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&e&lMAGAZIN");
+        yml.addDefault(Messages.NPC_NAME_TEAM_UPGRADES, "&bTEAM UPGRADES,&e&lCLICK DREAPTA");
+        yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&bSOLO UPGRADES,&e&lCLICK DREAPTA");
+        yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&bMAGAZIN TEAM,&e&lCLICK DREAPTA");
+        yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&bMAGAZIN SOLO,&e&lCLICK DREAPTA");
         yml.addDefault(Messages.BED_HOLOGRAM_DEFEND, "&c&lApara-ti patul!");
         yml.addDefault(Messages.BED_HOLOGRAM_DESTROYED, "&c&lPatul tau a fost distrus!");
         yml.addDefault(Messages.TEAM_ELIMINATED_CHAT, "\n&f&lTEAM ELIMINAT > {TeamColor}Echipa {TeamName} &ca fost eliminata!\n");
@@ -231,7 +231,7 @@ public class Romanian {
         yml.addDefault(Messages.TRAP_ENEMY_BASE_ENTER_TITLE, "&cCAPCANA ACTIVATA!");
 
         /* save default Obiecte messages for stats gui */
-        yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "&68Statisticile lui {player}");
+        yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "&8Statisticile lui {player}");
         lbj.addDefaultStatsMsg(yml, "wins", "&6Victorii", "&f{wins}");
         lbj.addDefaultStatsMsg(yml, "losses", "&6Pierderi", "&f{losses}");
         lbj.addDefaultStatsMsg(yml, "kills", "&6Ucideri", "&f{kills}");

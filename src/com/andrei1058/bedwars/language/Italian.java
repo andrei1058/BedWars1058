@@ -189,10 +189,10 @@ public class Italian {
         yml.addDefault(Messages.GAME_END_TEAM_WON_CHAT, "{prefix}{TeamColor}{TeamName} &aha vinto il gioco!");
         yml.addDefault(Messages.BED_HOLOGRAM_DEFEND, "&c&lDifendi il tuo letto!");
         yml.addDefault(Messages.BED_HOLOGRAM_DESTROYED, "&c&lIl tuo letto è stato distrutto!");
-        yml.addDefault(Messages.NPC_NAME_TEAM_UPGRADES, "&e&lTEAM,&E&LUPGRADES");
-        yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&e&lSOLO,&E&LUPGRADES");
-        yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&e&lITEM SHOP");
-        yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&e&lITEM SHOP");
+        yml.addDefault(Messages.NPC_NAME_TEAM_UPGRADES, "&bTEAM UPGRADES,&e&lCLICK DESTRO");
+        yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&bSOLO UPGRADES,&e&lCLICK DESTRO");
+        yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&bITEM SHOP,&e&lCLICK DESTRO");
+        yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&bITEM SHOP,&e&lCLICK DESTRO");
         yml.addDefault(Messages.NEXT_EVENT_BEDS_DESTROY, "&cDistruzione letti");
         yml.addDefault(Messages.NEXT_EVENT_DIAMOND_UPGRADE_II, "&fDiamante II");
         yml.addDefault(Messages.NEXT_EVENT_DIAMOND_UPGRADE_III, "&fDiamante III");
@@ -233,7 +233,7 @@ public class Italian {
         yml.addDefault(Messages.TRAP_ENEMY_BASE_ENTER_TITLE, "&cTRAPPOLA ATTIVATA!");
 
         /* save default items messages for stats gui */
-        yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "Statistiche di {player}");
+        yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "&8Statistiche di {player}");
         lbj.addDefaultStatsMsg(yml, "wins", "&6Vittorie", "&f{wins}");
         lbj.addDefaultStatsMsg(yml, "losses", "&6Sconfitte", "&f{losses}");
         lbj.addDefaultStatsMsg(yml, "kills", "&6Uccisioni", "&f{kills}");
