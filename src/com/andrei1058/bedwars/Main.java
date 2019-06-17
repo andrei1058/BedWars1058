@@ -417,14 +417,14 @@ public class Main extends JavaPlugin {
 
         /* Prevent issues on reload */
         for (Player p : Bukkit.getOnlinePlayers()) {
-            p.kickPlayer("BedWars1058 was RELOADED! (never reload plugins. noob staff)");
+            p.kickPlayer("BedWars1058 was RELOADED! (do not reload plugins)");
         }
 
         /* Load sounds configuration */
         new Sounds();
 
         /* LeaderHeads Support */
-        Bukkit.getScheduler().runTaskLater(this, ()-> LeaderHeadsSupport.initLeaderHeads(), 40L);
+        Bukkit.getScheduler().runTaskLater(this, LeaderHeadsSupport::initLeaderHeads, 40L);
 
         /* Initialize shop */
         shop = new ShopManager();

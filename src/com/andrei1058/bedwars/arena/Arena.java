@@ -12,6 +12,7 @@ import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.levels.internal.InternalLevel;
 import com.andrei1058.bedwars.levels.internal.PerMinuteTask;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
+import com.andrei1058.bedwars.region.Region;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.arena.tasks.GamePlayingTask;
@@ -63,6 +64,7 @@ public class Arena implements Comparable {
     private List<BedWarsTeam> teams = new ArrayList<>();
     private List<Block> placed = new ArrayList<>();
     private List<String> nextEvents = new ArrayList<>();
+    private List<Region> regionsList = new ArrayList<>();
 
     /**
      * Current event, used at scoreboard
@@ -1905,5 +1907,9 @@ public class Arena implements Comparable {
 
     public static void setGamesBeforeRestart(int gamesBeforeRestart) {
         Arena.gamesBeforeRestart = gamesBeforeRestart;
+    }
+
+    public List<Region> getRegionsList() {
+        return regionsList;
     }
 }

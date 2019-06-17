@@ -9,6 +9,7 @@ import com.andrei1058.bedwars.arena.OreGenerator;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.AutoCreateTeams;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Messages;
+import com.andrei1058.bedwars.region.Region;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -93,33 +94,15 @@ public class BreakPlace implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            try {
-                for (BedWarsTeam t : a.getTeams()) {
-                    if (t.getSpawn().distance(e.getBlockPlaced().getLocation()) <= a.getCm().getInt(ConfigPath.ARENA_SPAWN_PROTECTION)) {
-                        e.setCancelled(true);
-                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
-                        return;
-                    }
-                    if (t.getShop().distance(e.getBlockPlaced().getLocation()) <= a.getCm().getInt(ConfigPath.ARENA_SHOP_PROTECTION)) {
-                        e.setCancelled(true);
-                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
-                        return;
-                    }
-                    if (t.getTeamUpgrades().distance(e.getBlockPlaced().getLocation()) <= a.getCm().getInt(ConfigPath.ARENA_UPGRADES_PROTECTION)) {
-                        e.setCancelled(true);
-                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
-                        return;
-                    }
+
+            for (Region r : a.getRegionsList()){
+                if (r.isInRegion(e.getBlock().getLocation()) && r.isProtected()) {
+                    e.setCancelled(true);
+                    p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                    return;
                 }
-                for (OreGenerator o  : a.getOreGenerators()) {
-                    if (o.getLocation().distance(e.getBlock().getLocation()) <= 1) {
-                        e.setCancelled(true);
-                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
-                        return;
-                    }
-                }
-            } catch (Exception ex) {
             }
+
             a.addPlacedBlock(e.getBlock());
             if (e.getBlock().getType() == Material.TNT) {
                 e.setCancelled(true);
@@ -220,32 +203,12 @@ public class BreakPlace implements Listener {
                 }
             }
 
-            try {
-                for (BedWarsTeam t : a.getTeams()) {
-                    if (t.getSpawn().distance(e.getBlock().getLocation()) <= a.getCm().getInt(ConfigPath.ARENA_SPAWN_PROTECTION)) {
-                        e.setCancelled(true);
-                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
-                        return;
-                    }
-                    if (t.getShop().distance(e.getBlock().getLocation()) <= a.getCm().getInt(ConfigPath.ARENA_SHOP_PROTECTION)) {
-                        e.setCancelled(true);
-                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
-                        return;
-                    }
-                    if (t.getTeamUpgrades().distance(e.getBlock().getLocation()) <= a.getCm().getInt(ConfigPath.ARENA_UPGRADES_PROTECTION)) {
-                        e.setCancelled(true);
-                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
-                        return;
-                    }
+            for (Region r : a.getRegionsList()){
+                if (r.isInRegion(e.getBlock().getLocation()) && r.isProtected()) {
+                    e.setCancelled(true);
+                    p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
+                    return;
                 }
-                for (OreGenerator o  : a.getOreGenerators()) {
-                    if (o.getLocation().distance(e.getBlock().getLocation()) <= 1) {
-                        e.setCancelled(true);
-                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
-                        return;
-                    }
-                }
-            } catch (Exception ex) {
             }
 
             if (!a.getCm().getBoolean(ConfigPath.ARENA_ALLOW_MAP_BREAK)) {

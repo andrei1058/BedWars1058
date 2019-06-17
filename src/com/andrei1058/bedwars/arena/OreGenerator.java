@@ -6,6 +6,7 @@ import com.andrei1058.bedwars.api.events.GeneratorUpgradeEvent;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.language.Messages;
+import com.andrei1058.bedwars.region.Cuboid;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -56,6 +57,11 @@ public class OreGenerator {
         this.type = type;
         loadDefaults();
         Main.debug("Initializing new generator at: " + location.toString() + " - " + type + " - " + (bwt == null ? "NOTEAM" : bwt.getName()));
+
+        Cuboid c = new Cuboid(location, 1, true);
+        c.setMaxY(c.getMaxY() + 5);
+        c.setMinY(c.getMinY() - 2);
+        arena.getRegionsList().add(c);
     }
 
     public void upgrade() {
