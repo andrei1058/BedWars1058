@@ -66,7 +66,7 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
-
+        if (e.isCancelled()) return;
         //Prevent player from placing during the removal from the arena
         Arena arena = Arena.getArenaByName(e.getBlock().getWorld().getName());
         if (arena != null) {
@@ -140,6 +140,7 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
+        if (e.isCancelled()) return;
         Player p = e.getPlayer();
         if (Main.getServerType() != ServerType.BUNGEE) {
             if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
@@ -274,6 +275,7 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onBucketFill(PlayerBucketFillEvent e) {
+        if (e.isCancelled()) return;
         if (Main.getServerType() != ServerType.BUNGEE) {
             if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 if (!isBuildSession(e.getPlayer())) {
@@ -290,6 +292,7 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onBucketEmpty(PlayerBucketEmptyEvent e) {
+        if (e.isCancelled()) return;
         if (Main.getServerType() != ServerType.BUNGEE) {
             if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 if (!isBuildSession(e.getPlayer())) {
@@ -361,6 +364,7 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onBlow(EntityExplodeEvent e) {
+        if (e.isCancelled()) return;
         if (e.blockList().isEmpty()) return;
         Arena a = Arena.getArenaByName(e.blockList().get(0).getWorld().getName());
         if (a != null) {
@@ -381,6 +385,7 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onBlockExplode(BlockExplodeEvent e) {
+        if (e.isCancelled()) return;
         if (e.blockList().isEmpty()) return;
         Arena a = Arena.getArenaByName(e.blockList().get(0).getWorld().getName());
         if (a != null) {
