@@ -126,10 +126,10 @@ public class Russian {
         yml.addDefault(Messages.FORMATTING_GENERATOR_TIER2, "II");
         yml.addDefault(Messages.FORMATTING_GENERATOR_TIER3, "III");
         yml.addDefault(Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT, "{prefix}{generatorType} Генератор &eбыл обновлен до уровня &c{tier}");
-        yml.addDefault(Messages.NPC_NAME_TEAM_UPGRADES, "&e&lКОМАНДНЫЕ,&E&LУЛУЧШЕНИЯ");
-        yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&e&lСОЛО,&E&LУЛУЧШЕНИЯ");
-        yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&e&lМАГАЗИН");
-        yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&e&lМАГАЗИН");
+        yml.addDefault(Messages.NPC_NAME_TEAM_UPGRADES, "&bКОМАНДНЫЕ УЛУЧШЕНИЯ,&e&lRIGHT CLICK");
+        yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&bСОЛО УЛУЧШЕНИЯ,&e&lRIGHT CLICK");
+        yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&bМАГАЗИН,&e&lRIGHT CLICK");
+        yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&bМАГАЗИН,&e&lRIGHT CLICK");
         yml.addDefault("xp-reward-per-minute", "{prefix}&6+{xp} BedWars Experience Received (Play Time).");
         yml.addDefault("xp-reward-game-win", "{prefix}&6+{xp} BedWars Experience Received (Game Win).");
         yml.addDefault("xp-reward-per-teammate", "{prefix}&6+{xp} BedWars Experience Received (Team Support).");
