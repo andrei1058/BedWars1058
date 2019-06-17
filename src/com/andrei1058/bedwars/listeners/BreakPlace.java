@@ -95,7 +95,7 @@ public class BreakPlace implements Listener {
                 return;
             }
 
-            for (Region r : a.getRegionsList()){
+            for (Region r : a.getRegionsList()) {
                 if (r.isInRegion(e.getBlock().getLocation()) && r.isProtected()) {
                     e.setCancelled(true);
                     p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
@@ -174,7 +174,9 @@ public class BreakPlace implements Listener {
                                         if (t.isMember(p)) {
                                             p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_OWN_BED));
                                             e.setCancelled(true);
-                                            e.getPlayer().teleport(e.getPlayer().getLocation().add(0, 0.5, 0));
+                                            if (e.getPlayer().getLocation().getBlock().getType().toString().contains("BED")) {
+                                                e.getPlayer().teleport(e.getPlayer().getLocation().add(0, 0.5, 0));
+                                            }
                                             return;
                                         } else {
                                             e.setCancelled(false);
@@ -203,7 +205,7 @@ public class BreakPlace implements Listener {
                 }
             }
 
-            for (Region r : a.getRegionsList()){
+            for (Region r : a.getRegionsList()) {
                 if (r.isInRegion(e.getBlock().getLocation()) && r.isProtected()) {
                     e.setCancelled(true);
                     p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
@@ -340,7 +342,7 @@ public class BreakPlace implements Listener {
                         return;
                     }
                 }
-                for (OreGenerator o  : a.getOreGenerators()) {
+                for (OreGenerator o : a.getOreGenerators()) {
                     if (o.getLocation().distance(e.getBlockClicked().getLocation()) <= 1) {
                         e.setCancelled(true);
                         p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
@@ -450,9 +452,10 @@ public class BreakPlace implements Listener {
     //prevent farm breaking farm stuff
     @EventHandler
     public void soilChangeEntity(EntityChangeBlockEvent e) {
-        if (e.getTo() == Material.DIRT){
-            if (e.getBlock().getType().toString().equals("FARMLAND") || e.getBlock().getType().toString().equals("SOIL")){
-                if ((Arena.getArenaByName(e.getBlock().getWorld().getName()) != null) || (e.getBlock().getWorld().getName().equals(Main.getLobbyWorld()))) e.setCancelled(true);
+        if (e.getTo() == Material.DIRT) {
+            if (e.getBlock().getType().toString().equals("FARMLAND") || e.getBlock().getType().toString().equals("SOIL")) {
+                if ((Arena.getArenaByName(e.getBlock().getWorld().getName()) != null) || (e.getBlock().getWorld().getName().equals(Main.getLobbyWorld())))
+                    e.setCancelled(true);
             }
         }
     }
