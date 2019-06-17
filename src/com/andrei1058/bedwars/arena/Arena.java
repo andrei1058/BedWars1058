@@ -992,7 +992,8 @@ public class Arena implements Comparable {
      * @return A string with - and _ replaced by a space.
      */
     public String getDisplayName() {
-        return (Character.toUpperCase(worldName.charAt(0)) + worldName.substring(1)).replace("_", " ").replace("-", " ");
+        return getCm().getString(ConfigPath.ARENA_DISPLAY_NAME).trim().isEmpty() ? (Character.toUpperCase(worldName.charAt(0)) + worldName.substring(1)).replace("_", " ").replace("-", " ")
+                : getCm().getString(ConfigPath.ARENA_DISPLAY_NAME);
     }
 
     /**
