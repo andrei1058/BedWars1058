@@ -114,6 +114,7 @@ public class ConfigPath {
     public static final String ARENA_SHOP_PROTECTION = "shop-protection";
     public static final String ARENA_UPGRADES_PROTECTION = "upgrades-protection";
     public static final String ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS = "disable-generator-for-empty-teams";
+    public static final String ARENA_DISABLE_NPCS_FOR_EMPTY_TEAMS = "disable-npcs-for-empty-teams";
     public static final String ARENA_ISLAND_RADIUS = "island-radius";
     public static final String ARENA_WAITING_POS1 = "waiting.Pos1";
     public static final String ARENA_WAITING_POS2 = "waiting.Pos2";

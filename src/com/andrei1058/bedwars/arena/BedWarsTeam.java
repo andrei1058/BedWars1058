@@ -108,9 +108,6 @@ public class BedWarsTeam {
         arena.getRegionsList().add(new Cuboid(spawn, arena.getCm().getInt(ConfigPath.ARENA_SPAWN_PROTECTION), true));
     }
 
-    // Check if NPCs were spawned
-    private boolean NPCspawned = false;
-
     public int getSize() {
         return members.size();
     }
@@ -133,25 +130,29 @@ public class BedWarsTeam {
         p.teleport(spawn, PlayerTeleportEvent.TeleportCause.PLUGIN);
         sendDefaultInventory(p, true);
         Bukkit.getPluginManager().callEvent(new ArenaFirstSpawnEvent(p, getArena(), this));
+    }
 
-        if (!NPCspawned) {
-            NPCspawned = true;
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                nms.colorBed(this);
-                nms.spawnShop(getArena().getCm().getArenaLoc("Team." + getName() + ".Upgrade"), (getArena().getMaxInTeam() > 1 ? Messages.NPC_NAME_TEAM_UPGRADES : Messages.NPC_NAME_SOLO_UPGRADES), getArena().getPlayers(), getArena());
-                nms.spawnShop(getArena().getCm().getArenaLoc("Team." + getName() + ".Shop"), (getArena().getMaxInTeam() > 1 ? Messages.NPC_NAME_TEAM_SHOP : Messages.NPC_NAME_SOLO_SHOP), getArena().getPlayers(), getArena());
-            }, 70L);
+    /**
+     * Spawn shopkeepers for target team (if enabld).
+     */
+    public void spawnNPCs() {
+        if (getMembers().isEmpty() && getArena().getCm().getBoolean(ConfigPath.ARENA_DISABLE_NPCS_FOR_EMPTY_TEAMS)) return;
 
-            Cuboid c1 = new Cuboid(getArena().getCm().getArenaLoc("Team." + getName() + ".Upgrade"), 1, true);
-            c1.setMinY(c1.getMinY() - 1);
-            c1.setMaxY(c1.getMaxY() + 4);
-            getArena().getRegionsList().add(c1);
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            nms.colorBed(this);
+            nms.spawnShop(getArena().getCm().getArenaLoc("Team." + getName() + ".Upgrade"), (getArena().getMaxInTeam() > 1 ? Messages.NPC_NAME_TEAM_UPGRADES : Messages.NPC_NAME_SOLO_UPGRADES), getArena().getPlayers(), getArena());
+            nms.spawnShop(getArena().getCm().getArenaLoc("Team." + getName() + ".Shop"), (getArena().getMaxInTeam() > 1 ? Messages.NPC_NAME_TEAM_SHOP : Messages.NPC_NAME_SOLO_SHOP), getArena().getPlayers(), getArena());
+        }, 70L);
 
-            Cuboid c2 = new Cuboid(getArena().getCm().getArenaLoc("Team." + getName() + ".Shop"), 1, true);
-            c2.setMinY(c2.getMinY() - 1);
-            c2.setMaxY(c2.getMaxY() + 4);
-            getArena().getRegionsList().add(c2);
-        }
+        Cuboid c1 = new Cuboid(getArena().getCm().getArenaLoc("Team." + getName() + ".Upgrade"), 1, true);
+        c1.setMinY(c1.getMinY() - 1);
+        c1.setMaxY(c1.getMaxY() + 4);
+        getArena().getRegionsList().add(c1);
+
+        Cuboid c2 = new Cuboid(getArena().getCm().getArenaLoc("Team." + getName() + ".Shop"), 1, true);
+        c2.setMinY(c2.getMinY() - 1);
+        c2.setMaxY(c2.getMaxY() + 4);
+        getArena().getRegionsList().add(c2);
     }
 
     /**
