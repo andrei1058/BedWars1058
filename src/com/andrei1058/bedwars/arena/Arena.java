@@ -1192,6 +1192,7 @@ public class Arena implements Comparable {
      * Add a join sign for the arena.
      */
     public void addSign(Location loc) {
+        if (loc == null) return;
         if (loc.getBlock().getType() == Material.SIGN || loc.getBlock().getType() == Material.WALL_SIGN) {
             signs.add(loc.getBlock().getState());
             refreshSigns();
@@ -1710,7 +1711,14 @@ public class Arena implements Comparable {
                 for (String st : Main.signs.getYml().getStringList("locations")) {
                     String[] data = st.split(",");
                     if (data[0].equals(getWorld().getName())) {
-                        addSign(new Location(Bukkit.getWorld(data[6]), Double.valueOf(data[1]), Double.valueOf(data[2]), Double.valueOf(data[3])));
+                        Location l;
+                        try {
+                            l = new Location(Bukkit.getWorld(data[6]), Double.valueOf(data[1]), Double.valueOf(data[2]), Double.valueOf(data[3]));
+                        } catch (Exception e) {
+                            plugin.getLogger().severe("Could not load sign at: " + data.toString());
+                            continue;
+                        }
+                        addSign(l);
                     }
                 }
             }
