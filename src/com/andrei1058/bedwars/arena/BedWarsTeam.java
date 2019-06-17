@@ -121,6 +121,15 @@ public class BedWarsTeam {
             if (!membersCache.contains(p)) membersCache.add(p);
             new BedHolo(p, getArena());
         }
+    }
+
+    /**
+     * first spawn
+     */
+    public void firstSpawn(Player p) {
+        p.teleport(spawn, PlayerTeleportEvent.TeleportCause.PLUGIN);
+        sendDefaultInventory(p, true);
+        Bukkit.getPluginManager().callEvent(new ArenaFirstSpawnEvent(p, getArena(), this));
 
         if (!NPCspawned) {
             NPCspawned = true;
@@ -133,17 +142,8 @@ public class BedWarsTeam {
                     nms.spawnShop(getArena().getCm().getArenaLoc("Team." + getName() + ".Upgrade"), Messages.NPC_NAME_SOLO_UPGRADES, getArena().getPlayers(), getArena());
                     nms.spawnShop(getArena().getCm().getArenaLoc("Team." + getName() + ".Shop"), Messages.NPC_NAME_SOLO_SHOP, getArena().getPlayers(), getArena());
                 }
-            }, 40L);
+            }, 70L);
         }
-    }
-
-    /**
-     * first spawn
-     */
-    public void firstSpawn(Player p) {
-        p.teleport(spawn, PlayerTeleportEvent.TeleportCause.PLUGIN);
-        sendDefaultInventory(p, true);
-        Bukkit.getPluginManager().callEvent(new ArenaFirstSpawnEvent(p, getArena(), this));
     }
 
     /**
