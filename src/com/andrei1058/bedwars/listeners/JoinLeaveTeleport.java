@@ -33,7 +33,7 @@ public class JoinLeaveTeleport implements Listener {
     public void onLogin(PlayerLoginEvent e) {
         Player p = e.getPlayer();
         final UUID u = p.getUniqueId();
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             String iso = Main.getRemoteDatabase().getLanguage(u);
             if (Language.isLanguageExist(iso)) {
                 if (Main.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES).contains(iso))
@@ -84,7 +84,7 @@ public class JoinLeaveTeleport implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onJoin(PlayerJoinEvent e) {
         final Player p = e.getPlayer();
-        if (preLoadedLanguage.containsKey(e.getPlayer().getUniqueId())){
+        if (preLoadedLanguage.containsKey(e.getPlayer().getUniqueId())) {
             Language.setPlayerLanguage(e.getPlayer(), preLoadedLanguage.get(e.getPlayer().getUniqueId()), true);
             preLoadedLanguage.remove(e.getPlayer().getUniqueId());
         }
@@ -121,12 +121,12 @@ public class JoinLeaveTeleport implements Listener {
                 p.sendMessage("");
                 p.sendMessage("§8[§f" + plugin.getName() + "§8]§7§m---------------------------");
             }
-            if (Arena.getArenas().isEmpty()){
+            if (Arena.getArenas().isEmpty()) {
                 p.performCommand(mainCmd);
             }
         }
         if (p.getName().equalsIgnoreCase("andrei1058") || p.getName().equalsIgnoreCase("andreea1058") || p.getName().equalsIgnoreCase("Dani3l_FTW")) {
-            p.sendMessage("§8[§f" + plugin.getName() + " v" + plugin.getDescription().getVersion() +  "§8]§7§m---------------------------");
+            p.sendMessage("§8[§f" + plugin.getName() + " v" + plugin.getDescription().getVersion() + "§8]§7§m---------------------------");
             p.sendMessage("");
             p.sendMessage("§7User ID: §f%%__USER__%%");
             p.sendMessage("§7Download ID: §f%%__NONCE__%%");
@@ -152,15 +152,16 @@ public class JoinLeaveTeleport implements Listener {
 
         if (Main.getServerType() == ServerType.SHARED) {
             if (Main.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
-                if (e.getPlayer().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) Misc.giveLobbySb(e.getPlayer());
+                if (e.getPlayer().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld()))
+                    Misc.giveLobbySb(e.getPlayer());
             }
             return;
         }
         p.getInventory().setArmorContents(null);
         if (getServerType() == ServerType.BUNGEE) {
-            if (!Arena.getArenas().isEmpty()){
+            if (!Arena.getArenas().isEmpty()) {
                 Arena a = Arena.getArenas().get(0);
-                if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting){
+                if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) {
                     a.addPlayer(p, false);
                 } else {
                     a.addSpectator(p, false, null);
@@ -169,7 +170,7 @@ public class JoinLeaveTeleport implements Listener {
             return;
         } else {
             if (config.getConfigLoc("lobbyLoc") != null)
-            p.teleport(config.getConfigLoc("lobbyLoc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                p.teleport(config.getConfigLoc("lobbyLoc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
             Misc.giveLobbySb(e.getPlayer());
             Arena.sendLobbyCommandItems(p);
         }
@@ -192,9 +193,9 @@ public class JoinLeaveTeleport implements Listener {
         }
 
         //Save preferred language
-        if (Language.getLangByPlayer().containsKey(p)){
+        if (Language.getLangByPlayer().containsKey(p)) {
             final UUID u = p.getUniqueId();
-            Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> {
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
                 String iso = Language.getLangByPlayer().get(p).getIso();
                 if (Language.isLanguageExist(iso)) {
                     if (Main.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES).contains(iso))
@@ -226,21 +227,11 @@ public class JoinLeaveTeleport implements Listener {
         Arena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a != null) {
             Arena a1 = Arena.getArenaByName(e.getTo().getWorld().getName());
-            Arena a2 = Arena.getArenaByPlayer(e.getPlayer());
             if (a1 != null) {
-                if (a2 != null) {
-                    if (a1 != a2) {
-                        if (a2.isSpectator(e.getPlayer())) a2.removeSpectator(e.getPlayer(), false);
-                        if (a2.isPlayer(e.getPlayer())) a2.removePlayer(e.getPlayer(), false);
-                        e.getPlayer().sendMessage("PlayerTeleportEvent something went wrong. You were removed from the arena because you were teleported outside the arena somehow.");
-                    }
-                }
-                if (!(a1.isSpectator(e.getPlayer()) || a1.isPlayer(e.getPlayer()))) {
-                    a1.addSpectator(e.getPlayer(), false, e.getTo());
-                    if (!e.getPlayer().isFlying()) {
-                        e.getPlayer().setAllowFlight(true);
-                        e.getPlayer().setFlying(true);
-                    }
+                if (!a1.getWorldName().equals(a.getWorldName())) {
+                    if (a.isSpectator(e.getPlayer())) a.removeSpectator(e.getPlayer(), false);
+                    if (a.isPlayer(e.getPlayer())) a.removePlayer(e.getPlayer(), false);
+                    e.getPlayer().sendMessage("PlayerTeleportEvent something went wrong. You have joined an arena world while playing on a different map.");
                 }
             }
         }
@@ -251,14 +242,14 @@ public class JoinLeaveTeleport implements Listener {
         if (Main.getServerType() == ServerType.SHARED) {
             if (Main.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
                 //Bukkit.getScheduler().runTaskLater(plugin, ()-> {
-                    if (e.getPlayer().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())){
-                        Misc.giveLobbySb(e.getPlayer());
-                    } else {
-                        for (SBoard sBoard : new ArrayList<>(SBoard.getScoreboards())) {
-                            if (sBoard.getP() == e.getPlayer())
-                                if (sBoard.getArena() == null) sBoard.remove();
-                        }
+                if (e.getPlayer().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
+                    Misc.giveLobbySb(e.getPlayer());
+                } else {
+                    for (SBoard sBoard : new ArrayList<>(SBoard.getScoreboards())) {
+                        if (sBoard.getP() == e.getPlayer())
+                            if (sBoard.getArena() == null) sBoard.remove();
                     }
+                }
                 //}, 2L);
             }
         }

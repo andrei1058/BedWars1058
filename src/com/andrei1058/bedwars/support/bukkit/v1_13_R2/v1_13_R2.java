@@ -619,6 +619,8 @@ public class v1_13_R2 implements NMS {
         String type = itemStack.getType().toString();
         if (type.contains("_BED")) {
             return new org.bukkit.inventory.ItemStack(TeamColor.getBedBlock(bedWarsTeam.getColor()), itemStack.getAmount());
+        } else if (type.contains("_STAINED_GLASS_PANE")) {
+            return new org.bukkit.inventory.ItemStack(TeamColor.getGlassPane(bedWarsTeam.getColor()), itemStack.getAmount());
         } else if (type.contains("STAINED_GLASS") || type.equals("GLASS")) {
             return new org.bukkit.inventory.ItemStack(TeamColor.getGlass(bedWarsTeam.getColor()), itemStack.getAmount());
         } else if (type.contains("_TERRACOTTA")) {

@@ -292,6 +292,45 @@ public enum TeamColor {
     }
 
     /**
+     * Get glass with team color
+     *
+     * @return 1.13+ material
+     */
+    public static Material getGlassPane(TeamColor teamColor) {
+        String color = "GLASS";
+        switch (teamColor) {
+            case PINK:
+                color = "PINK_STAINED_GLASS_PANE";
+                break;
+            case GRAY:
+                color = "GRAY_STAINED_GLASS_PANE";
+                break;
+            case BLUE:
+                color = "BLUE_STAINED_GLASS_PANE";
+                break;
+            case WHITE:
+                color = "WHITE_STAINED_GLASS_PANE";
+                break;
+            case DARK_GREEN:
+                color = "GREEN_STAINED_GLASS_PANE";
+                break;
+            case AQUA:
+                color = "LIGHT_BLUE_STAINED_GLASS_PANE";
+                break;
+            case GREEN:
+                color = "LIME_STAINED_GLASS_PANE";
+                break;
+            case YELLOW:
+                color = "YELLOW_STAINED_GLASS_PANE";
+                break;
+            case RED:
+                color = "RED_STAINED_GLASS_PANE";
+                break;
+        }
+        return Material.valueOf(color);
+    }
+
+    /**
      * Get glazed terracotta with team color
      *
      * @return 1.13+ material
