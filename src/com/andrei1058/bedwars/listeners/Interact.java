@@ -36,6 +36,7 @@ public class Interact implements Listener {
     /* Handle custom items with commands on them */
     public void onItemCommand(PlayerInteractEvent e) {
         Player p = e.getPlayer();
+        if (p == null) return;
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
             ItemStack i = Main.nms.getItemInHand(p);
             if (!nms.isCustomBedWarsItem(i)) return;
@@ -74,6 +75,7 @@ public class Interact implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
         Player p = e.getPlayer();
+        if (p == null) return;
         Arena.afkCheck.remove(p.getUniqueId());
         if (Main.api.isPlayerAFK(e.getPlayer())) {
             Main.api.setPlayerAFK(e.getPlayer(), false);
