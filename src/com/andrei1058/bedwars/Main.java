@@ -8,6 +8,7 @@ import com.andrei1058.bedwars.arena.despawnables.TargetListener;
 import com.andrei1058.bedwars.arena.mapreset.FAWE;
 import com.andrei1058.bedwars.arena.mapreset.MapManager;
 import com.andrei1058.bedwars.arena.mapreset.ResetAdaptor;
+import com.andrei1058.bedwars.arena.spectator.v1_9PlusListener;
 import com.andrei1058.bedwars.commands.party.PartyCommand;
 import com.andrei1058.bedwars.commands.rejoin.RejoinCommand;
 import com.andrei1058.bedwars.commands.shout.ShoutCommand;
@@ -278,6 +279,10 @@ public class Main extends JavaPlugin {
             default:
                 registerEvents(new PlayerDropPickListener());
                 break;
+        }
+
+        if (!"v1_8_R3".equals(version)) {
+            registerEvents(new v1_9PlusListener(), new v1_9_SwapItem());
         }
 
         /* Deprecated versions */
