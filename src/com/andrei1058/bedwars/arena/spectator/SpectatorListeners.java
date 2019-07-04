@@ -171,7 +171,7 @@ public class SpectatorListeners implements Listener {
     @EventHandler
     /* Prevent gamemode 3 menu */
     public void onTeleport(PlayerTeleportEvent e) {
-        if (e.getCause() == PlayerTeleportEvent.TeleportCause.SPECTATE) {
+        //if (e.getCause() == PlayerTeleportEvent.TeleportCause.SPECTATE) {
             if (com.andrei1058.bedwars.api.events.SpectatorFirstPersonEnterEvent.getSpectatingInFirstPerson().contains(e.getPlayer())) {
                 Player p = e.getPlayer();
                 e.setCancelled(true);
@@ -182,7 +182,7 @@ public class SpectatorListeners implements Listener {
                 Bukkit.getPluginManager().callEvent(event);
                 nms.sendTitle(p, event.getTitle(), event.getSubtitle(), 0, 30, 0);
             }
-        }
+        //}
     }
 
     @EventHandler
