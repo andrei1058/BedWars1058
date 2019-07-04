@@ -134,7 +134,7 @@ public class CategoryContent {
         if (money < ct.getPrice()) {
             player.sendMessage(getMsg(player, Messages.SHOP_INSUFFICIENT_MONEY).replace("{currency}", getMsg(player, getCurrencyMsgPath(ct))).
                     replace("{amount}", String.valueOf(ct.getPrice() - money)));
-            player.playSound(player.getLocation(), nms.playerKill(), 1f, 1f);
+            player.playSound(player.getLocation(), nms.insufficientMoney(), 1f, 1f);
             return;
         }
 
