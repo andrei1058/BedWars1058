@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.levels.internal;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.events.PlayerXpGainEvent;
+import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.configuration.LevelsConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -29,10 +30,8 @@ public class PlayerLevel {
      */
     public PlayerLevel(UUID player, int level, int currentXp) {
         this.uuid = player;
-        this.levelName = ChatColor.translateAlternateColorCodes('&', LevelsConfig.levels.getYml().get("levels." + level + ".name") == null ?
-                LevelsConfig.levels.getYml().getString("levels.others.name") : LevelsConfig.levels.getYml().getString("levels." + level + ".name")).replace("{number}", String.valueOf(level));
-        this.nextLevelCost = LevelsConfig.levels.getYml().get("levels." + level + ".rankup-cost") == null ?
-                LevelsConfig.levels.getYml().getInt("levels.others.rankup-cost") : LevelsConfig.levels.getYml().getInt("levels." + level + ".rankup-cost");
+        setLevelName(level);
+        setNextLevelCost(level);
 
         //fix levels broken in the past by an issue
         if (level < 1) level = 1;
@@ -44,6 +43,32 @@ public class PlayerLevel {
         levelByPlayer.put(player, this);
         //requiredXp = nextLevelCost >= 1000 ? nextLevelCost % 1000 == 0 ? nextLevelCost / 1000 + "k" : (double) nextLevelCost / 1000 + "k" : String.valueOf(nextLevelCost);
         //formattedCurrentXp = currentXp >= 1000 ? currentXp % 1000 == 0 ? currentXp / 1000 + "k" : (double) currentXp / 1000 + "k" : String.valueOf(currentXp);
+    }
+
+    public void setLevelName(int level) {
+        this.levelName = ChatColor.translateAlternateColorCodes('&', LevelsConfig.levels.getYml().get("levels." + level + ".name") == null ?
+                LevelsConfig.levels.getYml().getString("levels.others.name") : LevelsConfig.levels.getYml().getString("levels." + level + ".name")).replace("{number}", String.valueOf(level));
+
+    }
+
+    public void setNextLevelCost(int level) {
+        this.nextLevelCost = LevelsConfig.levels.getYml().get("levels." + level + ".rankup-cost") == null ?
+                LevelsConfig.levels.getYml().getInt("levels.others.rankup-cost") : LevelsConfig.levels.getYml().getInt("levels." + level + ".rankup-cost");
+    }
+
+    public void lazyLoad(int level, int currentXp){
+        setLevelName(level);
+        setNextLevelCost(level);
+        this.level = level;
+        this.currentXp = currentXp;
+        updateProgressBar();
+
+        for (SBoard sb : SBoard.getScoreboards()){
+            if (sb.getP().getUniqueId().equals(uuid)){
+                sb.refresh();
+                break;
+            }
+        }
     }
 
     /**
@@ -83,7 +108,7 @@ public class PlayerLevel {
      */
     @Nullable
     public static PlayerLevel getLevelByPlayer(UUID player) {
-        return levelByPlayer.getOrDefault(player, null);
+        return levelByPlayer.getOrDefault(player, new PlayerLevel(player, 1, 0));
     }
 
     /**
