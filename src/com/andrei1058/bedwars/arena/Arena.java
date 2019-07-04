@@ -453,13 +453,6 @@ public class Arena implements Comparable {
             }, 15L);
             nms.setCollide(p, this, false);
 
-            /* Hide spectator  */
-            //p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0), true);
-            p.setGameMode(GameMode.ADVENTURE);
-
-            p.setAllowFlight(true);
-            p.setFlying(true);
-
             if (!playerBefore) {
                 if (staffTeleport == null) {
                     p.teleport(cm.getArenaLoc("waiting.Loc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
@@ -467,6 +460,13 @@ public class Arena implements Comparable {
                     p.teleport(staffTeleport, PlayerTeleportEvent.TeleportCause.PLUGIN);
                 }
             }
+
+            /* Hide spectator  */
+            //p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0), true);
+            p.setGameMode(GameMode.ADVENTURE);
+
+            p.setAllowFlight(true);
+            p.setFlying(true);
 
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 for (Player on : Bukkit.getOnlinePlayers()) {
@@ -480,7 +480,7 @@ public class Arena implements Comparable {
                     }
                 }
 
-                /*if (!playerBefore) {
+                if (!playerBefore) {
                     if (staffTeleport == null) {
                         p.teleport(cm.getArenaLoc("waiting.Loc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
                     } else {
@@ -488,7 +488,7 @@ public class Arena implements Comparable {
                     }
                 } else {
                     p.teleport(p.getLocation());
-                }*/
+                }
 
                 /* Spectator items */
                 sendSpectatorCommandItems(p);
@@ -512,9 +512,7 @@ public class Arena implements Comparable {
             p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG));
         }
 
-        if (showTime.containsKey(p)) {
-            showTime.remove(p);
-        }
+        showTime.remove(p);
         refreshSigns();
         JoinNPC.updateNPCs(getGroup());
     }
