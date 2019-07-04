@@ -27,7 +27,6 @@ public class Misc {
         ArmorStand a = (ArmorStand) location.getWorld().spawnEntity(location.getBlock().getLocation().add(0.5, 2, 0.5), EntityType.ARMOR_STAND);
         a.setVisible(false);
         a.setMarker(true);
-        //todo check daca exista setgravity pe 1.8.8
         a.setGravity(false);
         a.setCustomNameVisible(true);
         a.setCustomName(name);
