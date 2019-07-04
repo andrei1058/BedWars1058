@@ -70,7 +70,7 @@ public class SpectatorListeners implements Listener {
 
                 String data = nms.getCustomData(i);
                 if (data.contains(TeleporterGUI.NBT_SPECTATOR_TELEPORTER_GUI_HEAD)) {
-                    String player = data.split("_")[1];
+                    String player = data.replace(TeleporterGUI.NBT_SPECTATOR_TELEPORTER_GUI_HEAD + "_", "");
                     Player target = Bukkit.getPlayer(player);
                     if (target == null) return;
                     if (target.isDead()) return;
@@ -120,7 +120,7 @@ public class SpectatorListeners implements Listener {
 
     @EventHandler
     /* Triggered when a spectator starts spectating in first person */
-    public void onSpectatorInteractPlayer(PlayerInteractAtEntityEvent e){
+    public void onSpectatorInteractPlayer(PlayerInteractAtEntityEvent e) {
         if (e.getRightClicked().getType() != EntityType.PLAYER) return;
         Player p = e.getPlayer();
         Arena a = Arena.getArenaByPlayer(p);
@@ -128,7 +128,7 @@ public class SpectatorListeners implements Listener {
         if (a.isPlayer(p)) return;
         e.setCancelled(true);
         Player target = (Player) e.getRightClicked();
-        if (a.isPlayer(target)){
+        if (a.isPlayer(target)) {
             com.andrei1058.bedwars.api.events.SpectatorFirstPersonEnterEvent event = new com.andrei1058.bedwars.api.events.SpectatorFirstPersonEnterEvent(p, target, a, getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_TITLE).replace("{player}", target.getDisplayName()), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_SUBTITLE));
             Bukkit.getPluginManager().callEvent(event);
             nms.sendTitle(p, event.getTitle(), event.getSubtitle(), 0, 30, 0);
@@ -139,7 +139,7 @@ public class SpectatorListeners implements Listener {
     }
 
     @EventHandler
-    public void onSpectatorInteract(PlayerInteractEntityEvent e){
+    public void onSpectatorInteract(PlayerInteractEntityEvent e) {
         Player p = e.getPlayer();
         Arena a = Arena.getArenaByPlayer(p);
         if (a == null) return;
@@ -153,7 +153,7 @@ public class SpectatorListeners implements Listener {
         Player p = e.getPlayer();
         Arena a = Arena.getArenaByPlayer(p);
         if (a == null) return;
-        if (com.andrei1058.bedwars.api.events.SpectatorFirstPersonEnterEvent.getSpectatingInFirstPerson().contains(p)){
+        if (com.andrei1058.bedwars.api.events.SpectatorFirstPersonEnterEvent.getSpectatingInFirstPerson().contains(p)) {
             com.andrei1058.bedwars.api.events.SpectatorFirstPersonLeaveEvent event = new com.andrei1058.bedwars.api.events.SpectatorFirstPersonLeaveEvent(p, a, getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE));
             Bukkit.getPluginManager().callEvent(event);
             nms.sendTitle(p, event.getTitle(), event.getSubtitle(), 0, 30, 0);
@@ -165,11 +165,11 @@ public class SpectatorListeners implements Listener {
 
     @EventHandler
     /* Prevent gamemode 3 menu */
-    public void onTeleport(PlayerTeleportEvent e){
-        if (e.getCause() == PlayerTeleportEvent.TeleportCause.SPECTATE){
+    public void onTeleport(PlayerTeleportEvent e) {
+        if (e.getCause() == PlayerTeleportEvent.TeleportCause.SPECTATE) {
             Player p = e.getPlayer();
             e.setCancelled(true);
-            if (com.andrei1058.bedwars.api.events.SpectatorFirstPersonEnterEvent.getSpectatingInFirstPerson().contains(p)){
+            if (com.andrei1058.bedwars.api.events.SpectatorFirstPersonEnterEvent.getSpectatingInFirstPerson().contains(p)) {
                 com.andrei1058.bedwars.api.events.SpectatorFirstPersonLeaveEvent event = new com.andrei1058.bedwars.api.events.SpectatorFirstPersonLeaveEvent(p, Arena.getArenaByPlayer(p), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE));
                 Bukkit.getPluginManager().callEvent(event);
                 nms.sendTitle(p, event.getTitle(), event.getSubtitle(), 0, 30, 0);
@@ -182,9 +182,9 @@ public class SpectatorListeners implements Listener {
 
     @EventHandler
     /* Remove from first person on target die */
-    public void onTargetDeath(com.andrei1058.bedwars.api.events.PlayerKillEvent e){
-        for (Player p : new ArrayList<>(com.andrei1058.bedwars.api.events.SpectatorFirstPersonEnterEvent.getSpectatingInFirstPerson())){
-            if (p.getSpectatorTarget() == e.getVictim()){
+    public void onTargetDeath(com.andrei1058.bedwars.api.events.PlayerKillEvent e) {
+        for (Player p : new ArrayList<>(com.andrei1058.bedwars.api.events.SpectatorFirstPersonEnterEvent.getSpectatingInFirstPerson())) {
+            if (p.getSpectatorTarget() == e.getVictim()) {
                 p.setGameMode(GameMode.ADVENTURE);
                 p.setAllowFlight(true);
                 p.setFlying(true);
@@ -220,7 +220,7 @@ public class SpectatorListeners implements Listener {
             }
         }
         if (damager == null) return;
-        if (a.isSpectator(damager)){
+        if (a.isSpectator(damager)) {
             e.setCancelled(true);
             return;
         }
