@@ -538,9 +538,14 @@ public class Arena implements Comparable {
      */
     public void removePlayer(Player p, boolean disconnect) {
         debug("Player removed: " + p.getName() + " arena: " + getWorldName());
+        respawn.remove(p);
+
+        BedWarsTeam team = null;
+
         if (getStatus() == GameState.playing) {
             for (BedWarsTeam t : getTeams()) {
                 if (t.isMember(p)) {
+                    team = t;
                     t.getMembers().remove(p);
                     if (t.getBedHolo(p) != null) {
                         t.getBedHolo(p).destroy();
@@ -570,20 +575,6 @@ public class Arena implements Comparable {
             }
         }
 
-        if (respawn.containsKey(p)) {
-            respawn.remove(p);
-            BedWarsTeam t = this.getTeam(p);
-            if (t != null) {
-                if (t.getMembers().isEmpty()) {
-                    for (Player p2 : this.getPlayers()) {
-                        p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getName()));
-                    }
-                    for (Player p2 : this.getSpectators()) {
-                        p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getName()));
-                    }
-                }
-            }
-        }
         boolean teamuri = false;
         for (Player on : getPlayers()) {
             if (getParty().hasParty(on)) {
@@ -599,14 +590,23 @@ public class Arena implements Comparable {
             int alive_teams = 0;
             for (BedWarsTeam t : getTeams()) {
                 if (t == null) continue;
-                if (t.getSize() != 0) {
+                if (!t.getMembers().isEmpty()) {
                     alive_teams++;
-                    t.getMembers().remove(p);
                 }
             }
             if (alive_teams == 1) {
                 checkWinner();
                 Bukkit.getScheduler().runTaskLater(Main.plugin, () -> changeStatus(GameState.restarting), 10L);
+                if (team != null) {
+                    if (!team.isBedDestroyed()) {
+                        for (Player p2 : this.getPlayers()) {
+                            p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()).replace("{TeamName}", team.getName()));
+                        }
+                        for (Player p2 : this.getSpectators()) {
+                            p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()).replace("{TeamName}", team.getName()));
+                        }
+                    }
+                }
             } else if (alive_teams == 0) {
                 Bukkit.getScheduler().runTaskLater(Main.plugin, () -> changeStatus(GameState.restarting), 10L);
             } else {

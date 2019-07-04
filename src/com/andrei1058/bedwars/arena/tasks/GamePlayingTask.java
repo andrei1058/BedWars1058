@@ -173,6 +173,7 @@ public class GamePlayingTask implements Runnable {
             for (Map.Entry<Player, Integer> e : getArena().getRespawn().entrySet()) {
                 if (e.getValue() == 0) {
                     Arena a = Arena.getArenaByPlayer(e.getKey());
+                    if (a == null) continue;
                     BedWarsTeam t = a.getTeam(e.getKey());
                     t.respawnMember(e.getKey());
                     getArena().getRespawn().remove(e.getKey());

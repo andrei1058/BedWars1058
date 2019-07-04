@@ -396,16 +396,14 @@ public class DamageDeathMove implements Listener {
             BedWarsTeam t = a.getTeam(e.getPlayer());
             if (t.isBedDestroyed()) {
                 a.addSpectator(e.getPlayer(), true, null);
-                Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                    t.getMembers().remove(e.getPlayer());
-                    e.getPlayer().sendMessage(getMsg(e.getPlayer(), Messages.PLAYER_DIE_ELIMINATED_CHAT));
-                    if (t.getMembers().isEmpty()) {
-                        for (Player p : a.getWorld().getPlayers()) {
-                            p.sendMessage(getMsg(p, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getName()));
-                        }
-                        a.checkWinner();
+                t.getMembers().remove(e.getPlayer());
+                e.getPlayer().sendMessage(getMsg(e.getPlayer(), Messages.PLAYER_DIE_ELIMINATED_CHAT));
+                if (t.getMembers().isEmpty()) {
+                    for (Player p : a.getWorld().getPlayers()) {
+                        p.sendMessage(getMsg(p, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getName()));
                     }
-                }, 40L);
+                    Bukkit.getScheduler().runTaskLater(plugin, a::checkWinner,40L);
+                }
             } else {
                 //respawn session
                 e.getPlayer().getInventory().clear();
