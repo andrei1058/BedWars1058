@@ -448,14 +448,6 @@ public class Arena implements Comparable {
                 playerLocation.put(p, p.getLocation());
             }
 
-            if (!playerBefore) {
-                if (staffTeleport == null) {
-                    p.teleport(cm.getArenaLoc("waiting.Loc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
-                } else {
-                    p.teleport(staffTeleport);
-                }
-            }
-
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 new SBoard(p, this);
             }, 15L);
@@ -467,6 +459,14 @@ public class Arena implements Comparable {
 
             p.setAllowFlight(true);
             p.setFlying(true);
+
+            if (!playerBefore) {
+                if (staffTeleport == null) {
+                    p.teleport(cm.getArenaLoc("waiting.Loc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                } else {
+                    p.teleport(staffTeleport, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                }
+            }
 
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 for (Player on : Bukkit.getOnlinePlayers()) {
@@ -480,7 +480,7 @@ public class Arena implements Comparable {
                     }
                 }
 
-                if (!playerBefore) {
+                /*if (!playerBefore) {
                     if (staffTeleport == null) {
                         p.teleport(cm.getArenaLoc("waiting.Loc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
                     } else {
@@ -488,7 +488,7 @@ public class Arena implements Comparable {
                     }
                 } else {
                     p.teleport(p.getLocation());
-                }
+                }*/
 
                 /* Spectator items */
                 sendSpectatorCommandItems(p);

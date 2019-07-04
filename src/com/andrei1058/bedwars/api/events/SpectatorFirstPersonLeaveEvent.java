@@ -16,8 +16,7 @@ public class SpectatorFirstPersonLeaveEvent extends Event {
     public SpectatorFirstPersonLeaveEvent(Player spectator, Arena arena, String title, String subtitle) {
         this.spectator = spectator;
         this.arena = arena;
-        if (SpectatorFirstPersonEnterEvent.getSpectatingInFirstPerson().contains(spectator))
-            SpectatorFirstPersonEnterEvent.getSpectatingInFirstPerson().remove(spectator);
+        SpectatorFirstPersonEnterEvent.getSpectatingInFirstPerson().remove(spectator);
     }
 
     /**

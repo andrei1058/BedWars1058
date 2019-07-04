@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.arena.spectator;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.events.SpectatorTeleportToPlayerEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.language.Messages;
@@ -129,12 +130,16 @@ public class SpectatorListeners implements Listener {
         e.setCancelled(true);
         Player target = (Player) e.getRightClicked();
         if (a.isPlayer(target)) {
-            com.andrei1058.bedwars.api.events.SpectatorFirstPersonEnterEvent event = new com.andrei1058.bedwars.api.events.SpectatorFirstPersonEnterEvent(p, target, a, getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_TITLE).replace("{player}", target.getDisplayName()), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_SUBTITLE));
-            Bukkit.getPluginManager().callEvent(event);
-            nms.sendTitle(p, event.getTitle(), event.getSubtitle(), 0, 30, 0);
+            if (com.andrei1058.bedwars.api.events.SpectatorFirstPersonEnterEvent.getSpectatingInFirstPerson().contains(p)) {
+                com.andrei1058.bedwars.api.events.SpectatorFirstPersonLeaveEvent e2 = new com.andrei1058.bedwars.api.events.SpectatorFirstPersonLeaveEvent(p, a, getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE));
+                Bukkit.getPluginManager().callEvent(e2);
+            }
             p.setGameMode(GameMode.SPECTATOR);
             p.getInventory().setHeldItemSlot(5);
             p.setSpectatorTarget(target);
+            com.andrei1058.bedwars.api.events.SpectatorFirstPersonEnterEvent event = new com.andrei1058.bedwars.api.events.SpectatorFirstPersonEnterEvent(p, target, a, getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_TITLE).replace("{player}", target.getDisplayName()), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_SUBTITLE));
+            Bukkit.getPluginManager().callEvent(event);
+            nms.sendTitle(p, event.getTitle(), event.getSubtitle(), 0, 30, 0);
         }
     }
 
@@ -154,30 +159,30 @@ public class SpectatorListeners implements Listener {
         Arena a = Arena.getArenaByPlayer(p);
         if (a == null) return;
         if (com.andrei1058.bedwars.api.events.SpectatorFirstPersonEnterEvent.getSpectatingInFirstPerson().contains(p)) {
-            com.andrei1058.bedwars.api.events.SpectatorFirstPersonLeaveEvent event = new com.andrei1058.bedwars.api.events.SpectatorFirstPersonLeaveEvent(p, a, getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE));
-            Bukkit.getPluginManager().callEvent(event);
-            nms.sendTitle(p, event.getTitle(), event.getSubtitle(), 0, 30, 0);
             p.setGameMode(GameMode.ADVENTURE);
             p.setAllowFlight(true);
             p.setFlying(true);
+            com.andrei1058.bedwars.api.events.SpectatorFirstPersonLeaveEvent event = new com.andrei1058.bedwars.api.events.SpectatorFirstPersonLeaveEvent(p, a, getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE));
+            Bukkit.getPluginManager().callEvent(event);
+            nms.sendTitle(p, event.getTitle(), event.getSubtitle(), 0, 30, 0);
         }
     }
 
     @EventHandler
     /* Prevent gamemode 3 menu */
     public void onTeleport(PlayerTeleportEvent e) {
-        /*if (e.getCause() == PlayerTeleportEvent.TeleportCause.SPECTATE) {
-            Player p = e.getPlayer();
-            e.setCancelled(true);
-            if (com.andrei1058.bedwars.api.events.SpectatorFirstPersonEnterEvent.getSpectatingInFirstPerson().contains(p)) {
-                com.andrei1058.bedwars.api.events.SpectatorFirstPersonLeaveEvent event = new com.andrei1058.bedwars.api.events.SpectatorFirstPersonLeaveEvent(p, Arena.getArenaByPlayer(p), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE));
-                Bukkit.getPluginManager().callEvent(event);
-                nms.sendTitle(p, event.getTitle(), event.getSubtitle(), 0, 30, 0);
+        if (e.getCause() == PlayerTeleportEvent.TeleportCause.SPECTATE) {
+            if (com.andrei1058.bedwars.api.events.SpectatorFirstPersonEnterEvent.getSpectatingInFirstPerson().contains(e.getPlayer())) {
+                Player p = e.getPlayer();
+                e.setCancelled(true);
                 p.setGameMode(GameMode.ADVENTURE);
                 p.setAllowFlight(true);
                 p.setFlying(true);
+                com.andrei1058.bedwars.api.events.SpectatorFirstPersonLeaveEvent event = new com.andrei1058.bedwars.api.events.SpectatorFirstPersonLeaveEvent(p, Arena.getArenaByPlayer(p), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE));
+                Bukkit.getPluginManager().callEvent(event);
+                nms.sendTitle(p, event.getTitle(), event.getSubtitle(), 0, 30, 0);
             }
-        }*/
+        }
     }
 
     @EventHandler
