@@ -70,7 +70,7 @@ public class SpectatorListeners implements Listener {
 
                 String data = nms.getCustomData(i);
                 if (data.contains(TeleporterGUI.NBT_SPECTATOR_TELEPORTER_GUI_HEAD)) {
-                    String player = data.replace(TeleporterGUI.NBT_SPECTATOR_TELEPORTER_GUI_HEAD + "_", "");
+                    String player = data.replace(TeleporterGUI.NBT_SPECTATOR_TELEPORTER_GUI_HEAD, "");
                     Player target = Bukkit.getPlayer(player);
                     if (target == null) return;
                     if (target.isDead()) return;
@@ -166,7 +166,7 @@ public class SpectatorListeners implements Listener {
     @EventHandler
     /* Prevent gamemode 3 menu */
     public void onTeleport(PlayerTeleportEvent e) {
-        if (e.getCause() == PlayerTeleportEvent.TeleportCause.SPECTATE) {
+        /*if (e.getCause() == PlayerTeleportEvent.TeleportCause.SPECTATE) {
             Player p = e.getPlayer();
             e.setCancelled(true);
             if (com.andrei1058.bedwars.api.events.SpectatorFirstPersonEnterEvent.getSpectatingInFirstPerson().contains(p)) {
@@ -177,7 +177,7 @@ public class SpectatorListeners implements Listener {
                 p.setAllowFlight(true);
                 p.setFlying(true);
             }
-        }
+        }*/
     }
 
     @EventHandler
