@@ -84,6 +84,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         if (JoinNPC.isCitizensSupport() && Main.getServerType() != ServerType.BUNGEE) {
             new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.NPC(this, "npc");
         }
+        new CmdTpStaff(this, "tp");
     }
 
     @Override
