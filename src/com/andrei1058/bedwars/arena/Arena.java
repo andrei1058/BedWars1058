@@ -674,9 +674,7 @@ public class Arena implements Comparable {
             magicMilk.remove(p.getUniqueId());
         }
 
-        if (showTime.containsKey(p)) {
-            showTime.remove(p);
-        }
+        showTime.remove(p);
 
         refreshSigns();
         JoinNPC.updateNPCs(getGroup());
