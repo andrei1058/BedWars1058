@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.levels.internal;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.events.PlayerLevelUpEvent;
 import com.andrei1058.bedwars.api.events.PlayerXpGainEvent;
 import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.configuration.LevelsConfig;
@@ -11,6 +12,7 @@ import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
 import java.util.HashMap;
 import java.util.UUID;
 
+@SuppressWarnings("WeakerAccess")
 public class PlayerLevel {
 
     private UUID uuid;
@@ -200,6 +202,7 @@ public class PlayerLevel {
                     LevelsConfig.levels.getYml().getString("levels.others.name") : LevelsConfig.levels.getYml().getString("levels." + level + ".name")).replace("{number}", String.valueOf(level));
             requiredXp = nextLevelCost >= 1000 ? nextLevelCost % 1000 == 0 ? nextLevelCost / 1000 + "k" : (double) nextLevelCost / 1000 + "k" : String.valueOf(nextLevelCost);
             formattedCurrentXp = currentXp >= 1000 ? currentXp % 1000 == 0 ? currentXp / 1000 + "k" : (double) currentXp / 1000 + "k" : String.valueOf(currentXp);
+            Bukkit.getPluginManager().callEvent(new PlayerLevelUpEvent(Bukkit.getPlayer(getUuid()), level, nextLevelCost));
         }
     }
 
