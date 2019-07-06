@@ -19,6 +19,7 @@ public class Sounds {
 
     private static ConfigManager sounds = new ConfigManager("sounds", "plugins/" + Main.plugin.getName(), false);
 
+    @SuppressWarnings("WeakerAccess")
     public static void saveDefaultSounds() {
         YamlConfiguration yml = sounds.getYml();
         yml.addDefault(SOUNDS_BED_DESTROY, nms.bedDestroy().toString());
@@ -30,6 +31,7 @@ public class Sounds {
         sounds.save();
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static void loadSounds() {
         try {
             nms.setBedDestroySound(sounds.getString(SOUNDS_BED_DESTROY));

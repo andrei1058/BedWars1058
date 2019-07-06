@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
+@SuppressWarnings("unchecked")
 public class SetType extends SubCommand {
     /**
      * Create a sub-command for a bedWars command
@@ -48,7 +49,7 @@ public class SetType extends SubCommand {
                 sendUsage(p);
                 return true;
             }
-            List groups = Main.plugin.config.getYml().getStringList("arenaGroups");
+            List groups = Main.config.getYml().getStringList("arenaGroups");
             String input = args[0].substring(0, 1).toUpperCase()+args[0].substring(1).toLowerCase();
             if (!groups.contains(input)){
                 groups.add(input);

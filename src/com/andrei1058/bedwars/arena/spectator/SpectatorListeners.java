@@ -1,6 +1,5 @@
 package com.andrei1058.bedwars.arena.spectator;
 
-import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.events.SpectatorTeleportToPlayerEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.language.Messages;

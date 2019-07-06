@@ -33,14 +33,12 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
-import org.bukkit.util.Vector;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.despawnables.TargetListener.owningTeam;
@@ -55,7 +53,7 @@ public class v1_8_R3 implements NMS {
     /**
      * ArenaList of despawnable entities aka special shop mobs
      */
-    private static List<Despawnable> despawnables = new ArrayList();
+    private static ArrayList<Despawnable> despawnables = new ArrayList<>();
 
     @Override
     public Sound bedDestroy() {
@@ -338,7 +336,7 @@ public class v1_8_R3 implements NMS {
     }
 
 
-    public void registerEntity(String name, int id, Class customClass) {
+    private void registerEntity(String name, int id, Class customClass) {
         try {
             ArrayList<Map> dataMap = new ArrayList<>();
             for (Field f : EntityTypes.class.getDeclaredFields()) {
@@ -359,7 +357,7 @@ public class v1_8_R3 implements NMS {
     }
 
     public class VillagerShop extends EntityVillager {
-        public VillagerShop(World world) {
+        VillagerShop(World world) {
             super(world);
             try {
                 Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
@@ -370,7 +368,7 @@ public class v1_8_R3 implements NMS {
                 bField.set(this.targetSelector, new UnsafeList());
                 cField.set(this.goalSelector, new UnsafeList());
                 cField.set(this.targetSelector, new UnsafeList());
-            } catch (Exception bField) {
+            } catch (Exception ignored) {
             }
             this.goalSelector.a(0, new PathfinderGoalFloat(this));
             this.goalSelector.a(9, new PathfinderGoalInteract(this, EntityHuman.class, 3.0f, 1.0f));
@@ -400,13 +398,13 @@ public class v1_8_R3 implements NMS {
         }
     }
 
-    private Villager spawnVillager(Location loc) {
+    private void spawnVillager(Location loc) {
         WorldServer mcWorld = ((CraftWorld) loc.getWorld()).getHandle();
         VillagerShop customEnt = new VillagerShop(mcWorld);
         customEnt.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
         ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
         mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
-        return (Villager) customEnt.getBukkitEntity();
+        customEnt.getBukkitEntity();
     }
 
     private class Despawnable {
@@ -415,7 +413,7 @@ public class v1_8_R3 implements NMS {
         int despawn = 250;
         String namePath;
 
-        public Despawnable(EntityLiving e, BedWarsTeam team, int despawn, String namePath) {
+        Despawnable(EntityLiving e, BedWarsTeam team, int despawn, String namePath) {
             this.e = e;
             this.team = team;
             if (despawn != 0) {
@@ -427,7 +425,7 @@ public class v1_8_R3 implements NMS {
             owningTeam.put(e.getUniqueID(), team.getName());
         }
 
-        public void regresh() {
+        void regresh() {
             if (!e.isAlive()) {
                 despawnables.remove(this);
                 return;
@@ -497,7 +495,6 @@ public class v1_8_R3 implements NMS {
         ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void showPlayer(Player victim, Player p) {
         if (victim == p) return;
@@ -777,7 +774,6 @@ public class v1_8_R3 implements NMS {
         itemMeta.spigot().setUnbreakable(true);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public String getLevelName() {
         return ((DedicatedServer) MinecraftServer.getServer()).propertyManager.properties.getProperty("level-name");

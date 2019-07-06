@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.upgrades;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.events.UpgradeBuyEvent;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.language.Messages;
@@ -10,7 +11,6 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.andrei1058.bedwars.Main.debug;
 import static com.andrei1058.bedwars.Main.plugin;
 import static com.andrei1058.bedwars.language.Language.getMsg;
 import static com.andrei1058.bedwars.upgrades.UpgradeGroup.getUpgradeGroup;
@@ -73,13 +73,14 @@ public class TeamUpgrade {
         this.name = name;
         this.slot = slot;
         this.tiers = new ArrayList<>(tiers);
-        plugin.debug("Loading new TeamUpgrade: " + name);
+        Main.debug("Loading new TeamUpgrade: " + name);
     }
 
     public int getSlot() {
         return slot;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public List<UpgradeTier> getTiers() {
         return tiers;
     }

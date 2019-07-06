@@ -18,8 +18,6 @@ import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.levels.Level;
 import com.andrei1058.bedwars.levels.internal.InternalLevel;
 import com.andrei1058.bedwars.levels.internal.LevelListeners;
-import com.andrei1058.bedwars.listeners.EntityDropPickListener;
-import com.andrei1058.bedwars.listeners.PlayerDropPickListener;
 import com.andrei1058.bedwars.arena.spectator.SpectatorListeners;
 import com.andrei1058.bedwars.arena.upgrades.BaseListener;
 import com.andrei1058.bedwars.commands.leave.LeaveCommand;
@@ -69,6 +67,7 @@ import java.util.*;
 
 import static com.andrei1058.bedwars.language.Language.setupLang;
 
+@SuppressWarnings("WeakerAccess")
 public class Main extends JavaPlugin {
 
     private static ServerType serverType = ServerType.MULTIARENA;
@@ -341,7 +340,7 @@ public class Main extends JavaPlugin {
         /* Database support */
         if (config.getBoolean("database.enable")) {
             com.andrei1058.bedwars.database.MySQL mySQL = new com.andrei1058.bedwars.database.MySQL();
-            Long time = System.currentTimeMillis();
+            long time = System.currentTimeMillis();
             if (!mySQL.connect()) {
                 this.getLogger().severe("Could not connect to database! Please verify your credentials and make sure that the server IP is whitelisted in MySQL.");
                 remoteDatabase = new SQLite();
@@ -454,7 +453,7 @@ public class Main extends JavaPlugin {
             for (Arena a : Arena.getArenas()) {
                 a.disable();
             }
-        } catch (Exception ex) {
+        } catch (Exception ignored) {
         }
         StatsManager.getStatsCache().close();
         remoteDatabase.close();
@@ -572,10 +571,8 @@ public class Main extends JavaPlugin {
             for (String path : config.getYml().getConfigurationSection("arenaGui").getKeys(false)) {
                 if (path.equalsIgnoreCase("settings")) continue;
                 String new_path = path;
-                switch (path) {
-                    case "skippedSlot":
-                        new_path = "skipped-slot";
-                        break;
+                if ("skippedSlot".equals(path)) {
+                    new_path = "skipped-slot";
                 }
                 if (config.getYml().get("arenaGui." + path + ".itemStack") != null) {
                     config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", new_path), config.getYml().getString("arenaGui." + path + ".itemStack"));
@@ -932,12 +929,10 @@ public class Main extends JavaPlugin {
     public static MapManager getMapManager(Arena arena, String name) {
         MapManager manager;
 
-        switch (resetAdaptor) {
-            default:
-                manager = new MapManager(arena, name);
-                break;
-            case FAWE:
-                manager = new FAWE(arena, name);
+        if (resetAdaptor == ResetAdaptor.FAWE) {
+            manager = new FAWE(arena, name);
+        } else {
+            manager = new MapManager(arena, name);
         }
 
         return manager;

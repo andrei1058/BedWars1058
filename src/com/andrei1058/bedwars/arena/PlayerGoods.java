@@ -1,13 +1,13 @@
 package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.configuration.ConfigManager;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +20,7 @@ import static com.andrei1058.bedwars.Main.plugin;
 /**
  * This is where player stuff are stored so he can have them back after a game
  */
+@SuppressWarnings("WeakerAccess")
 public class PlayerGoods {
 
     private Player player;
@@ -34,7 +35,7 @@ public class PlayerGoods {
     private boolean allowFlight, flying;
     private String displayName, tabName;
 
-    protected PlayerGoods(Player p, boolean prepare) {
+    public PlayerGoods(Player p, boolean prepare) {
         if (hasGoods(p)) {
             plugin.getLogger().severe(p.getName() + " is already having a PlayerGoods vault :|");
             return;
@@ -69,13 +70,14 @@ public class PlayerGoods {
             }
             x2++;
         }
+
         this.gamemode = p.getGameMode();
         this.allowFlight = p.getAllowFlight();
         this.flying = p.isFlying();
         this.tabName = p.getPlayerListName();
         this.displayName = p.getDisplayName();
 
-        /** prepare for arena */
+        /* prepare for arena */
         if (prepare) {
             p.setExp(0);
             p.setLevel(0);
@@ -99,21 +101,21 @@ public class PlayerGoods {
     /**
      * check if a player has a vault
      */
-    protected static boolean hasGoods(Player p) {
+    public static boolean hasGoods(Player p) {
         return playerGoods.containsKey(p);
     }
 
     /**
      * get a player vault
      */
-    protected static PlayerGoods getPlayerGoods(Player p) {
+    public static PlayerGoods getPlayerGoods(Player p) {
         return playerGoods.get(p);
     }
 
     /**
      * restore player
      */
-    protected void restore() {
+    public void restore() {
         for (PotionEffect pf : player.getActivePotionEffects()) {
             player.removePotionEffect(pf.getType());
         }

@@ -1,14 +1,11 @@
 package com.andrei1058.bedwars.upgrades;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GeneratorType;
-import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.OreGenerator;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import static com.andrei1058.bedwars.Main.plugin;
 
 public class GeneratorAction extends UpgradeAction {
 
@@ -72,7 +69,7 @@ public class GeneratorAction extends UpgradeAction {
                 emeraldAmount = amount;
                 break;
         }
-        plugin.debug("loading new GeneratorAction: "+getName());
+        Main.debug("loading new GeneratorAction: "+getName());
     }
 
     public void setLimit(String generator, int amount){

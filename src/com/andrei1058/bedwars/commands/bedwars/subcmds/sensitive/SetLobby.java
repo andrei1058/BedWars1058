@@ -9,7 +9,6 @@ import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -17,7 +16,6 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 import static com.andrei1058.bedwars.Main.config;
-import static com.andrei1058.bedwars.Main.plugin;
 
 public class SetLobby extends SubCommand {
     /**

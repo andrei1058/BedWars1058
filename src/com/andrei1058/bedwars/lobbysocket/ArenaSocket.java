@@ -14,7 +14,7 @@ import java.util.List;
 public class ArenaSocket {
 
     public static List<String> lobbies = new ArrayList<>();
-    public static HashMap<String, RemoteLobby> sockets = new HashMap<>();
+    private static HashMap<String, RemoteLobby> sockets = new HashMap<>();
     public static String serverIdentifier;
 
     /**
@@ -46,7 +46,7 @@ public class ArenaSocket {
     /**
      * Format message before sending it to lobbies.
      */
-    public static String formatMessage(String serverName, String arenaName, String status, int currentPlayers, int maxPlayers, String arenaGroup, int maxInTeam) {
+    private static String formatMessage(String serverName, String arenaName, String status, int currentPlayers, int maxPlayers, String arenaGroup, int maxInTeam) {
         return serverName.replace(".", "-") + "." + arenaName + "." + status + "." + currentPlayers + "." + maxPlayers + "." + arenaGroup + "." + maxInTeam;
     }
 
@@ -55,12 +55,12 @@ public class ArenaSocket {
         private PrintWriter out;
         private String lobby;
 
-        public RemoteLobby(Socket socket, String lobby) {
+        private RemoteLobby(Socket socket, String lobby) {
             this.socket = socket;
             this.lobby = lobby;
             try {
                 out = new PrintWriter(socket.getOutputStream(), true);
-            } catch (IOException e) {
+            } catch (IOException ignored) {
             }
         }
 
@@ -69,6 +69,7 @@ public class ArenaSocket {
          *
          * @return true if message was sent successfully.
          */
+        @SuppressWarnings("UnusedReturnValue")
         private boolean sendMessage(String message) {
             if (socket == null) {
                 sockets.remove(lobby);

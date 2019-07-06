@@ -5,7 +5,6 @@ import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.events.GeneratorCollectEvent;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.arena.BedWarsTeam;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;

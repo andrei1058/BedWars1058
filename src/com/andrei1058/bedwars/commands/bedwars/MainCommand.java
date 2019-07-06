@@ -6,7 +6,6 @@ import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.regular.*;
-import com.andrei1058.bedwars.commands.bedwars.subcmds.regular.CmdGUI;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.Level;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.Reload;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.AutoCreateTeams;
@@ -36,6 +35,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
     /* MainCommand instance*/
     private static MainCommand instance;
     /* Dot char */
+    @SuppressWarnings("WeakerAccess")
     public static char dot = 254;
 
     public MainCommand(String name) {
@@ -196,6 +196,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
     /**
      * Check if lobby location is set, else send a error message to the player
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isLobbySet(Player p) {
         if (Main.getServerType() == ServerType.BUNGEE) return true;
         if (config.getLobbyWorldName().isEmpty()) {
@@ -220,6 +221,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
     /**
      * Get sub-command by name
      */
+    @SuppressWarnings("WeakerAccess")
     public SubCommand getSubCommand(String name) {
         for (SubCommand sc : getSubCommands()) {
             if (sc.getSubCommandName().equalsIgnoreCase(name)) {
@@ -228,9 +230,6 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         }
         return null;
     }
-
-    /** Get sub-command by name */
-
 
     /**
      * Get a dot symbol

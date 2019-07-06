@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.UUID;
 
+@SuppressWarnings("WeakerAccess")
 public class StatsCache {
 
     private Connection connection;
@@ -35,7 +36,7 @@ public class StatsCache {
         }
         try {
             ClassLoader cl = Bukkit.getServer().getClass().getClassLoader();
-            Driver d = (Driver) cl.loadClass("org.sqlite.JDBC").newInstance();
+            @SuppressWarnings("deprecation") Driver d = (Driver) cl.loadClass("org.sqlite.JDBC").newInstance();
             DriverManager.registerDriver(d);
             connection = DriverManager.getConnection("jdbc:sqlite:" + dataFolder);
         } catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException e) {
@@ -63,6 +64,7 @@ public class StatsCache {
     /**
      * Check if database is connected.
      */
+    @SuppressWarnings("WeakerAccess")
     public boolean isConnected() {
         if (connection == null) return false;
         try {
@@ -108,6 +110,7 @@ public class StatsCache {
      *
      * @return true if the player did not have cache and it was created.
      */
+    @SuppressWarnings("UnusedReturnValue")
     public boolean createStatsCache(Player player) {
         if (isPlayerSet(player.getUniqueId())) return false;
         if (!isConnected()) connect();

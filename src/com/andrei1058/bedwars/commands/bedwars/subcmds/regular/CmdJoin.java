@@ -62,10 +62,7 @@ public class CmdJoin extends SubCommand {
 
     @Override
     public List<String> getTabComplete() {
-        List<String> tab = new ArrayList<>();
-        for (String group : Main.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS)){
-            tab.add(group);
-        }
+        List<String> tab = new ArrayList<>(Main.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS));
         for (Arena arena : Arena.getArenas()){
             tab.add(arena.getWorldName());
         }

@@ -5,7 +5,6 @@ import com.andrei1058.bedwars.configuration.ConfigPath;
 import net.minecraft.server.v1_9_R1.*;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_9_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_9_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_9_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_9_R1.event.CraftEventFactory;
 import org.bukkit.craftbukkit.v1_9_R1.util.UnsafeList;
@@ -31,14 +30,12 @@ public class Silverfish extends EntitySilverfish {
             bField.set(this.targetSelector, new UnsafeList());
             cField.set(this.goalSelector, new UnsafeList());
             cField.set(this.targetSelector, new UnsafeList());
-        } catch (IllegalAccessException e1) {
-            e1.printStackTrace();
-        } catch (NoSuchFieldException e1) {
+        } catch (IllegalAccessException | NoSuchFieldException e1) {
             e1.printStackTrace();
         }
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
         this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this,1.0D, false));
-        this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true, new Class[0]));
+        this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true));
         this.targetSelector.a(2, new AttackEnemies<>(this, EntityHuman.class, true, exclude));
         this.goalSelector.a(5, new PathfinderGoalSilverfishHideInBlock(this));
     }
@@ -65,6 +62,7 @@ public class Silverfish extends EntitySilverfish {
         private EnumDirection b;
         private boolean c;
 
+        @SuppressWarnings("WeakerAccess")
         public PathfinderGoalSilverfishHideInBlock(EntitySilverfish entitysilverfish) {
             super(entitysilverfish, 1.0D, 10);
             this.silverfish = entitysilverfish;
@@ -96,7 +94,7 @@ public class Silverfish extends EntitySilverfish {
         }
 
         public boolean b() {
-            return this.c ? false : super.b();
+            return !this.c && super.b();
         }
 
         public void c() {

@@ -1,8 +1,6 @@
 package com.andrei1058.bedwars.support.bukkit.v1_8_R3;
 
-import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
-import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.google.common.collect.Lists;
 import net.minecraft.server.v1_8_R3.*;
@@ -26,6 +24,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+@SuppressWarnings("ALL")
 public class Dragon extends EntityInsentient implements IComplex, IMonster {
 
     private BedWarsTeam bedWarsTeam;
@@ -54,7 +53,7 @@ public class Dragon extends EntityInsentient implements IComplex, IMonster {
     public Entity target;
     public int by;
     public EntityEnderCrystal bz;
-    private Explosion explosionSource = new Explosion((World) null, this, 0.0D / 0.0, 0.0D / 0.0, 0.0D / 0.0, (float) (0.0F / 0.0), true, true);
+    private Explosion explosionSource = new Explosion((World) null, this, Double.NaN, Double.NaN, Double.NaN, (float) (Double.NaN), true, true);
 
     public Dragon(World world, BedWarsTeam bwt) {
         super(world);
@@ -83,8 +82,8 @@ public class Dragon extends EntityInsentient implements IComplex, IMonster {
         }
 
         f = 1.0F - f;
-        int j = this.bl - i * 1 & 63;
-        int k = this.bl - i * 1 - 1 & 63;
+        int j = this.bl - i & 63;
+        int k = this.bl - i - 1 & 63;
         double[] adouble = new double[3];
         double d0 = this.bk[j][0];
         double d1 = MathHelper.g(this.bk[k][0] - d0);

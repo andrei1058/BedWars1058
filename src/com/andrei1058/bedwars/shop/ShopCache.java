@@ -4,16 +4,13 @@ import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.shop.main.CategoryContent;
 import com.andrei1058.bedwars.shop.main.ShopCategory;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ShopCache {
 
@@ -27,7 +24,7 @@ public class ShopCache {
     public ShopCache(Player player) {
         this.player = player;
         this.selectedCategory = ShopManager.getShop().getQuickBuyButton().getSlot();
-        this.shopCaches.add(this);
+        shopCaches.add(this);
     }
 
     public Player getPlayer() {
@@ -75,6 +72,7 @@ public class ShopCache {
     /**
      * Keep trace of shop items and player's tiers
      */
+    @SuppressWarnings("WeakerAccess")
     public class CachedItem {
         private CategoryContent cc;
         private int tier = 1;
@@ -101,6 +99,7 @@ public class ShopCache {
             if (!cc.isPermanent()) return;
             if (cc.isDowngradable() && tier > 1) tier--;
             Main.debug("ShopCache Item Restore: " + cc.getIdentifier() + " for " + player.getName());
+            //noinspection ConstantConditions
             cc.giveItems(player, getShopCache(player), arena);
         }
 

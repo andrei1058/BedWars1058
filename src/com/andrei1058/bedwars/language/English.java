@@ -1,6 +1,5 @@
 package com.andrei1058.bedwars.language;
 
-import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -12,6 +11,7 @@ import static com.andrei1058.bedwars.Main.mainCmd;
 import static com.andrei1058.bedwars.language.Language.addCategoryMessages;
 import static com.andrei1058.bedwars.language.Language.addContentMessages;
 
+@SuppressWarnings("WeakerAccess")
 public class English {
 
     public English(Language lbj, YamlConfiguration yml) {

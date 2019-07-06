@@ -6,14 +6,12 @@ import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.levels.internal.PlayerLevel;
-import com.andrei1058.bedwars.stats.StatsManager;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -24,7 +22,7 @@ import static com.andrei1058.bedwars.language.Language.getScoreboard;
 
 public class SBoard {
 
-    public static ScoreboardManager sbm = Bukkit.getScoreboardManager();
+    private static ScoreboardManager sbm = Bukkit.getScoreboardManager();
     private List<String> placeholders = Arrays.asList("{on}", "{max}", "{time}", "{nextEvent}", "{date}");
     private static List<SBoard> scoreboards = new ArrayList<>();
     private HashMap<Team, String> toRefresh = new HashMap<>();
@@ -69,7 +67,7 @@ public class SBoard {
             if (arena.getStatus() == GameState.playing){
                 addHealthIcon();
                 giveTeamColorTag();
-                p.damage(02);
+                p.damage(0.2);
             }
         }
     }
@@ -281,18 +279,17 @@ public class SBoard {
     }
 
     public static String formatGenTimer(int duration) {
-        long seconds = duration;
-        long absSeconds = Math.abs(seconds);
+        long absSeconds = Math.abs((long) duration);
         String positive = String.format(
                 "%d:%02d:%02d",
                 absSeconds / 3600,
                 (absSeconds % 3600) / 60,
                 absSeconds % 60);
-        return seconds < 0 ? "-" + positive : positive;
+        return (long) duration < 0 ? "-" + positive : positive;
     }
 
     private String[] getNextEvent() {
-        Long time = 0L;
+        long time = 0L;
         String st = "";
         switch (arena.getNextEvent()) {
             case EMERALD_GENERATOR_TIER_II:

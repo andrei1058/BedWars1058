@@ -10,6 +10,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.UUID;
 
+@SuppressWarnings("WeakerAccess")
 public class QuickBuyTask extends BukkitRunnable {
 
     private UUID uuid;

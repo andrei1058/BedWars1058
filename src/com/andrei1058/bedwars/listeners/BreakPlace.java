@@ -352,12 +352,10 @@ public class BreakPlace implements Listener {
                         return;
                     }
                 }
-            } catch (Exception ex) {
+            } catch (Exception ignored) {
             }
-            /** Remove empty bucket */
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                nms.minusAmount(e.getPlayer(), nms.getItemInHand(e.getPlayer()), 1);
-            }, 3L);
+            /* Remove empty bucket */
+            Bukkit.getScheduler().runTaskLater(plugin, () -> nms.minusAmount(e.getPlayer(), nms.getItemInHand(e.getPlayer()), 1), 3L);
         }
     }
 
@@ -370,9 +368,7 @@ public class BreakPlace implements Listener {
         if (a != null) {
             if (a.getNextEvent() != NextEvent.GAME_END) {
                 List<Block> destroyed = e.blockList();
-                Iterator<Block> it = new ArrayList<>(destroyed).iterator();
-                while (it.hasNext()) {
-                    Block block = it.next();
+                for (Block block : new ArrayList<>(destroyed)) {
                     if (!a.isBlockPlaced(block)) {
                         e.blockList().remove(block);
                     } else if (AutoCreateTeams.is13Higher()) {
@@ -391,9 +387,7 @@ public class BreakPlace implements Listener {
         if (a != null) {
             if (a.getNextEvent() != NextEvent.GAME_END) {
                 List<Block> destroyed = e.blockList();
-                Iterator<Block> it = new ArrayList<>(destroyed).iterator();
-                while (it.hasNext()) {
-                    Block block = it.next();
+                for (Block block : new ArrayList<>(destroyed)) {
                     if (!a.isBlockPlaced(block)) {
                         e.blockList().remove(block);
                     } else if (AutoCreateTeams.is13Higher()) {
@@ -443,7 +437,7 @@ public class BreakPlace implements Listener {
                 }
             }
             if (bed) return;
-            List<Object> players = Arrays.asList(e.getBlock().getWorld().getNearbyEntities(e.getBlock().getLocation(), 1, 1, 1).stream().filter(ee -> ee.getType() == EntityType.PLAYER).toArray());
+            Object[] players = e.getBlock().getWorld().getNearbyEntities(e.getBlock().getLocation(), 1, 1, 1).stream().filter(ee -> ee.getType() == EntityType.PLAYER).toArray();
             for (Object o : players) {
                 Player p = (Player) o;
                 if (a.isSpectator(p)) {

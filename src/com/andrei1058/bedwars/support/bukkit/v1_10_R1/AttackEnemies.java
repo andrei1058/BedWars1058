@@ -6,12 +6,14 @@ import net.minecraft.server.v1_10_R1.*;
 import org.bukkit.craftbukkit.v1_10_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityTargetEvent;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@SuppressWarnings("SimplifiableConditionalExpression")
 public class AttackEnemies<T extends EntityLiving> extends PathfinderGoalTarget {
 
     protected final Class<T> a;
@@ -32,6 +34,7 @@ public class AttackEnemies<T extends EntityLiving> extends PathfinderGoalTarget 
         this(entitycreature, oclass, 10, flag, flag1, null);
     }
 
+    @SuppressWarnings("unchecked")
     public AttackEnemies(EntityCreature entitycreature, Class<T> oclass, int i, boolean flag, boolean flag1, final Predicate<? super T> predicate) {
         super(entitycreature, flag, flag1);
         this.a = oclass;
@@ -39,6 +42,7 @@ public class AttackEnemies<T extends EntityLiving> extends PathfinderGoalTarget 
         this.b = new PathfinderGoalNearestAttackableTarget.DistanceComparator(entitycreature);
         this.a(1);
         this.c = new Predicate() {
+            @SuppressWarnings("UnclearExpression")
             public boolean a(T t0) {
                 return t0 == null ? false : excluded.contains(t0) ? false : (predicate != null && !predicate.apply(t0) ? false : (!IEntitySelector.e.apply(t0) ? false : AttackEnemies.this.a(t0, false)));
             }
@@ -49,6 +53,7 @@ public class AttackEnemies<T extends EntityLiving> extends PathfinderGoalTarget 
         };
     }
 
+    @SuppressWarnings({"unchecked", "UnnecessaryContinue", "SuspiciousMethodCalls"})
     public boolean a() {
         if (this.i > 0 && this.e.getRandom().nextInt(this.i) != 0) {
             return false;
@@ -57,12 +62,12 @@ public class AttackEnemies<T extends EntityLiving> extends PathfinderGoalTarget 
             if (list.isEmpty()) {
                 return false;
             } else {
-                Collections.sort(list, this.b);
-                for (int x = 0; x < list.size(); x++) {
-                    if (list.get(x) instanceof Silverfish) {
+                list.sort(this.b);
+                for (Object o : list) {
+                    if (o instanceof Silverfish) {
                         continue;
-                    } else if (!excluded.contains(list.get(x))) {
-                        this.d = (T) list.get(x);
+                    } else if (!excluded.contains(o)) {
+                        this.d = (T) o;
                         return true;
                     }
                 }
@@ -70,8 +75,10 @@ public class AttackEnemies<T extends EntityLiving> extends PathfinderGoalTarget 
             }
         } else {
             this.d = (T) this.e.world.a(this.e.locX, this.e.locY + (double) this.e.getHeadHeight(), this.e.locZ, this.i(), this.i(), new Function<EntityHuman, Double>() {
-                @Nullable
+                @NotNull
+                @SuppressWarnings("WeakerAccess")
                 public Double a(@Nullable EntityHuman entityhuman) {
+                    assert entityhuman != null;
                     ItemStack itemstack = entityhuman.getEquipment(EnumItemSlot.HEAD);
                     if (itemstack != null && itemstack.getItem() == Items.SKULL) {
                         int i = itemstack.h();

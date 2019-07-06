@@ -22,26 +22,20 @@ public enum TeamColor {
     public static ChatColor getChatColor(String culoare) {
         ChatColor color;
         TeamColor teamColor = TeamColor.valueOf(culoare.toUpperCase());
-        switch (teamColor) {
-            case PINK:
-                color = ChatColor.LIGHT_PURPLE;
-                break;
-            default:
-                color = ChatColor.valueOf(teamColor.toString());
-                break;
+        if (teamColor == TeamColor.PINK) {
+            color = ChatColor.LIGHT_PURPLE;
+        } else {
+            color = ChatColor.valueOf(teamColor.toString());
         }
         return color;
     }
 
     public static ChatColor getChatColor(TeamColor teamColor) {
         ChatColor color;
-        switch (teamColor) {
-            case PINK:
-                color = ChatColor.LIGHT_PURPLE;
-                break;
-            default:
-                color = ChatColor.valueOf(teamColor.toString());
-                break;
+        if (teamColor == TeamColor.PINK) {
+            color = ChatColor.LIGHT_PURPLE;
+        } else {
+            color = ChatColor.valueOf(teamColor.toString());
         }
         return color;
     }
@@ -67,14 +61,16 @@ public enum TeamColor {
     }
 
     @Contract(pure = true)
-    @Deprecated
-    /**
-     * Get the byte color for Minecraft versions until 1.12 included
-     *
+    /*
+      Get the byte color for Minecraft versions until 1.12 included
+
      */
     public static byte itemColor(@NotNull TeamColor teamColor) {
+        // 0 white
         int i = 0;
         switch (teamColor) {
+            case WHITE:
+                break;
             case PINK:
                 i = 6;
                 break;
@@ -98,9 +94,6 @@ public enum TeamColor {
                 break;
             case GRAY:
                 i = 7;
-                break;
-            case WHITE:
-                i = 0;
                 break;
         }
 
@@ -193,7 +186,6 @@ public enum TeamColor {
                 color = Color.BLUE;
                 break;
             case WHITE:
-                color = Color.WHITE;
                 break;
             case DARK_GREEN:
                 color = Color.GREEN;

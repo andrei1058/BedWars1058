@@ -19,8 +19,7 @@ import org.bukkit.entity.Player;
 public class WorldRestorer implements WorldOperator {
 
     private final String worldName;
-    private boolean jobDone = false;
-    private Arena arena = null;
+    private Arena arena;
 
     public WorldRestorer(String worldName, Arena arena) {
         this.worldName = worldName;
@@ -41,7 +40,6 @@ public class WorldRestorer implements WorldOperator {
             reloadWorld();
             Main.debug("Reloading arenaworld " + worldName + " : Done !");
         }
-        jobDone = true;
     }
 
     private void kickPlayers() {
@@ -114,26 +112,11 @@ public class WorldRestorer implements WorldOperator {
 
     private File getWorldFolder() {
         File worldContainer = Bukkit.getWorldContainer();
-        File worldFolder = new File(worldContainer, worldName);
-        return worldFolder;
+        return new File(worldContainer, worldName);
     }
 
     private File getBackupFile() {
         File backupFolder = MapManager.backupFolder;
-        File backupFile = new File(backupFolder, worldName + ".zip");
-        return backupFile;
+        return new File(backupFolder, worldName + ".zip");
     }
-
-    public Boolean isJobDone() {
-        return this.jobDone;
-    }
-
-    public String getResultMessage() {
-        if (isJobDone()) {
-            return "Successfully restored arenaworld " + worldName;
-        } else {
-            return "Arenaworld " + worldName + " isn't restored yet.";
-        }
-    }
-
 }

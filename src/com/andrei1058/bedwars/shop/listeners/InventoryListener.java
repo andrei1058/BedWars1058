@@ -19,7 +19,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
 
-import static com.andrei1058.bedwars.Main.debug;
 import static com.andrei1058.bedwars.Main.nms;
 import static org.bukkit.event.inventory.InventoryAction.*;
 

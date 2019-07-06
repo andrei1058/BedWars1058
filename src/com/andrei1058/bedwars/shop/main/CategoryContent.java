@@ -19,11 +19,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.language.Language.getMsg;
 
+@SuppressWarnings("WeakerAccess")
 public class CategoryContent {
 
     private int slot;

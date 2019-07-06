@@ -17,7 +17,6 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.language.Language.getMsg;
@@ -62,7 +61,7 @@ public class BaseListener implements Listener {
         if (a.isSpectator(p)) return;
         boolean notOnBase = true;
         for (BedWarsTeam bwt : a.getTeams()) {
-            /** BaseEnterEvent */
+            /* BaseEnterEvent */
             if (p.getLocation().distance(bwt.getBed()) <= a.getIslandRadius()) {
                 notOnBase = false;
                 if (isOnABase.containsKey(p)) {
@@ -81,12 +80,11 @@ public class BaseListener implements Listener {
                 }
             }
         }
-        /** BaseLeaveEvent */
+        /* BaseLeaveEvent */
         if (notOnBase) {
             if (isOnABase.containsKey(p)) {
                 Bukkit.getPluginManager().callEvent(new BaseLeaveEvent(p, isOnABase.get(p)));
                 isOnABase.remove(p);
-                return;
             }
         }
     }

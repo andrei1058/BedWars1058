@@ -31,7 +31,7 @@ public class MapManager {
      * Load world.
      */
     public void loadWorld() {
-        //if (isLevelWorld()) return;
+        isLevelWorld();
         Bukkit.getScheduler().runTask(Main.plugin, () -> {
             World w = Bukkit.getServer().createWorld(new WorldCreator(name));
 
@@ -115,17 +115,16 @@ public class MapManager {
     /**
      * Make it return false if your system is compatible wit level-name map.
      */
-    public boolean isLevelWorld() {
+    public void isLevelWorld() {
 
-        if (Bukkit.getWorlds().isEmpty()) return false;
+        if (Bukkit.getWorlds().isEmpty()) return;
         if (Bukkit.getWorlds().get(0).getName().equalsIgnoreCase(name)) {
-            Main.plugin.getLogger().severe("CANNOT USE level-name FROM server.properties AS ARENA!");
+            Main.plugin.getLogger().severe("-------------------");
             if (Main.getServerType() == ServerType.BUNGEE) {
                 Main.plugin.getLogger().severe("PLEASE CONSIDER ADDING A VOID MAP AS level-name IN server.properties");
+                return;
             }
-            Main.plugin.getLogger().severe("ARENA WORLDS CANNOT BE USED AS MAIN WORLD AT level-name IN server.properties");
-            return true;
+            Main.plugin.getLogger().severe("ARENA WORLDS MUSTN'T BE USED AS MAIN WORLD AT level-name IN server.properties");
         }
-        return false;
     }
 }

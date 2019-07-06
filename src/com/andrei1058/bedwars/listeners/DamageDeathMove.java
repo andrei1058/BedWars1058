@@ -22,8 +22,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 
-import java.util.Iterator;
-
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.LastHit.getLastHit;
 import static com.andrei1058.bedwars.language.Language.getMsg;
@@ -324,7 +322,7 @@ public class DamageDeathMove implements Listener {
                         .replace("{KillerTeamName}", t2 == null ? "" : t2.getName()));
             }
 
-            /** give stats and victim's inventory */
+            /* give stats and victim's inventory */
             if (killer != null) {
                 if (t.isBedDestroyed()) {
                     if (!a.getCm().getBoolean(ConfigPath.ARENA_NORMAL_DEATH_DROPS)) {
@@ -376,7 +374,7 @@ public class DamageDeathMove implements Listener {
                 killer.playSound(killer.getLocation(), nms.playerKill(), 1f, 1f);
             }
 
-            /** call game kill event */
+            /* call game kill event */
             Bukkit.getPluginManager().callEvent(new PlayerKillEvent(a, victim, killer, message, cause));
             victim.spigot().respawn();
             a.addPlayerDeath(victim);
@@ -441,7 +439,7 @@ public class DamageDeathMove implements Listener {
             Arena a = Arena.getArenaByPlayer(e.getPlayer());
             if (e.getFrom().getChunk() != e.getTo().getChunk()) {
 
-                /** update armorstands hidden by nms **/
+                /* update armorstands hidden by nms **/
                 String iso = Language.getPlayerLanguage(e.getPlayer()).getIso();
                 for (OreGenerator o : a.getOreGenerators()) {
                     if (o.getArena() == a) {
@@ -454,7 +452,7 @@ public class DamageDeathMove implements Listener {
                     }
                 }
 
-                /** Check if respawning */
+                /* Check if respawning */
                 if (a.getRespawn().containsKey(e.getPlayer())) {
                     for (Player p : a.getPlayers()) {
                         if (p == e.getPlayer()) continue;
@@ -595,10 +593,8 @@ public class DamageDeathMove implements Listener {
     }*/
 
     private static void spawnUtility(String s, Location loc, BedWarsTeam t, Player p) {
-        switch (s.toLowerCase()) {
-            case "silverfish":
-                nms.spawnSilverfish(loc, t);
-                break;
+        if ("silverfish".equals(s.toLowerCase())) {
+            nms.spawnSilverfish(loc, t);
         }
     }
 }

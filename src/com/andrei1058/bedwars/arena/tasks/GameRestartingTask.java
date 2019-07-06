@@ -13,7 +13,6 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.ArrayList;
 
 import static com.andrei1058.bedwars.Main.config;
-import static com.andrei1058.bedwars.Main.getServerType;
 
 public class GameRestartingTask implements Runnable {
 

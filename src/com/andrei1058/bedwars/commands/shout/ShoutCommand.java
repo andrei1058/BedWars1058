@@ -32,7 +32,7 @@ public class ShoutCommand extends BukkitCommand {
         }
         StringBuilder sb = new StringBuilder();
         for (String ar : args) {
-            sb.append(ar + " ");
+            sb.append(ar).append(" ");
         }
 
         p.chat("!" + sb.toString());

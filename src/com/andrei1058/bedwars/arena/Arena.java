@@ -40,7 +40,8 @@ import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.upgrades.BaseListener.isOnABase;
 import static com.andrei1058.bedwars.language.Language.*;
 
-public class Arena implements Comparable {
+@SuppressWarnings("WeakerAccess")
+public class Arena implements Comparable<Arena> {
 
     private static HashMap<String, Arena> arenaByName = new HashMap<>();
     private static HashMap<Player, Arena> arenaByPlayer = new HashMap<>();
@@ -337,7 +338,8 @@ public class Arena implements Comparable {
             }
 
             //Remove from ReJoin
-            if (ReJoin.exists(p)) ReJoin.getPlayer(p).destroy();
+            if (ReJoin.exists(p)) //noinspection ConstantConditions
+                ReJoin.getPlayer(p).destroy();
 
             p.closeInventory();
             players.add(p);
@@ -429,7 +431,8 @@ public class Arena implements Comparable {
         if (allowSpectate || playerBefore) {
 
             //Remove from ReJoin
-            if (ReJoin.exists(p)) ReJoin.getPlayer(p).destroy();
+            if (ReJoin.exists(p)) //noinspection ConstantConditions
+                ReJoin.getPlayer(p).destroy();
 
             p.closeInventory();
             spectators.add(p);
@@ -448,9 +451,7 @@ public class Arena implements Comparable {
                 playerLocation.put(p, p.getLocation());
             }
 
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                new SBoard(p, this);
-            }, 15L);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> new SBoard(p, this), 15L);
             nms.setCollide(p, this, false);
 
             if (!playerBefore) {
@@ -554,6 +555,7 @@ public class Arena implements Comparable {
 
         List<ShopCache.CachedItem> cacheList = new ArrayList<>();
         if (ShopCache.getShopCache(p) != null) {
+            //noinspection ConstantConditions
             cacheList = ShopCache.getShopCache(p).getCachedPermanents();
         }
 
@@ -662,7 +664,9 @@ public class Arena implements Comparable {
         //Remove from ReJoin if game ended
         if (status == GameState.restarting) {
             if (ReJoin.exists(p)) {
+                //noinspection ConstantConditions
                 if (ReJoin.getPlayer(p).getArena() == this) {
+                    //noinspection ConstantConditions
                     ReJoin.getPlayer(p).destroy();
                 }
             }
@@ -757,7 +761,9 @@ public class Arena implements Comparable {
 
         //Remove from ReJoin if game ended
         if (ReJoin.exists(p)) {
+            //noinspection ConstantConditions
             if (ReJoin.getPlayer(p).getArena() == this) {
+                //noinspection ConstantConditions
                 ReJoin.getPlayer(p).destroy();
             }
         }
@@ -1039,6 +1045,7 @@ public class Arena implements Comparable {
     /**
      * Get the placed blocks list.
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isBlockPlaced(Block block) {
         return placed.contains(block);
     }
@@ -1210,6 +1217,7 @@ public class Arena implements Comparable {
     /**
      * Refresh signs.
      */
+    @SuppressWarnings("WeakerAccess")
     public void refreshSigns() {
         for (BlockState b : getSigns()) {
             Sign s = (Sign) b;
@@ -1422,6 +1430,7 @@ public class Arena implements Comparable {
      * Used to get the team for a player that has left the arena.
      * Make sure the player is in this arena first.
      */
+    @SuppressWarnings("WeakerAccess")
     @Nullable
     public BedWarsTeam getPlayerTeam(String playerCache) {
         for (BedWarsTeam t : getTeams()) {
@@ -1714,6 +1723,7 @@ public class Arena implements Comparable {
                         try {
                             l = new Location(Bukkit.getWorld(data[6]), Double.valueOf(data[1]), Double.valueOf(data[2]), Double.valueOf(data[3]));
                         } catch (Exception e) {
+                            //noinspection ImplicitArrayToString
                             plugin.getLogger().severe("Could not load sign at: " + data.toString());
                             continue;
                         }
@@ -1804,6 +1814,7 @@ public class Arena implements Comparable {
     /**
      * Add a player to the most filled arena from a group.
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean joinRandomFromGroup(Player p, String group) {
 
         List<Arena> arenaList = new ArrayList<>(getArenas());
@@ -1839,33 +1850,22 @@ public class Arena implements Comparable {
     }
 
     @Override
-    public int compareTo(@NotNull Object o) {
-        Arena a2 = (Arena) o;
-        if (getStatus() == GameState.starting && a2.getStatus() == GameState.starting) {
-            if (getPlayers().size() > a2.getPlayers().size()) {
-                return -1;
-            }
-            if (getPlayers().size() == a2.getPlayers().size()) {
-                return 0;
-            } else return 1;
-        } else if (getStatus() == GameState.starting && a2.getStatus() != GameState.starting) {
+    public int compareTo(@NotNull Arena o) {
+        if (getStatus() == GameState.starting && o.getStatus() == GameState.starting) {
+            return Integer.compare(o.getPlayers().size(), getPlayers().size());
+        } else if (getStatus() == GameState.starting && o.getStatus() != GameState.starting) {
             return -1;
-        } else if (a2.getStatus() == GameState.starting && getStatus() != GameState.starting) {
+        } else if (o.getStatus() == GameState.starting && getStatus() != GameState.starting) {
             return 1;
-        } else if (getStatus() == GameState.waiting && a2.getStatus() == GameState.waiting) {
-            if (getPlayers().size() > a2.getPlayers().size()) {
-                return -1;
-            }
-            if (getPlayers().size() == a2.getPlayers().size()) {
-                return 0;
-            } else return 1;
-        } else if (getStatus() == GameState.waiting && a2.getStatus() != GameState.waiting) {
+        } else if (getStatus() == GameState.waiting && o.getStatus() == GameState.waiting) {
+            return Integer.compare(o.getPlayers().size(), getPlayers().size());
+        } else if (getStatus() == GameState.waiting && o.getStatus() != GameState.waiting) {
             return -1;
-        } else if (a2.getStatus() == GameState.waiting && getStatus() != GameState.waiting) {
+        } else if (o.getStatus() == GameState.waiting && getStatus() != GameState.waiting) {
             return 1;
-        } else if (getStatus() == GameState.playing && a2.getStatus() == GameState.playing) {
+        } else if (getStatus() == GameState.playing && o.getStatus() == GameState.playing) {
             return 0;
-        } else if (getStatus() == GameState.playing && a2.getStatus() != GameState.playing) {
+        } else if (getStatus() == GameState.playing && o.getStatus() != GameState.playing) {
             return -1;
         } else return 1;
     }

@@ -1,13 +1,10 @@
 package com.andrei1058.bedwars.api;
 
 import com.andrei1058.bedwars.api.command.ParentCommand;
-import com.andrei1058.bedwars.levels.Level;
 import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
 import org.bukkit.entity.Player;
 
 import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.UUID;
 
 public interface GameAPI {
 

@@ -63,6 +63,7 @@ public class Misc {
     }
 
 
+    @SuppressWarnings("UnstableApiUsage")
     public static void forceKick(Player p) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("Connect");
@@ -283,14 +284,14 @@ public class Misc {
 
         Bukkit.getScheduler().runTask(plugin, () -> {
 
-            /** create inventory */
+            /* create inventory */
             Inventory inv = Bukkit.createInventory(null, config.getInt(ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE), replaceStatsPlaceholders(p, getMsg(p, Messages.PLAYER_STATS_GUI_INV_NAME), true));
 
-            /** add custom items to gui */
+            /* add custom items to gui */
             for (String s : config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_STATS_PATH).getKeys(false)) {
-                /** skip inv size, it isn't a content */
+                /* skip inv size, it isn't a content */
                 if (ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE.contains(s)) continue;
-                /** create new itemStack for content */
+                /* create new itemStack for content */
                 ItemStack i = nms.createItemStack(config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_MATERIAL.replace("%path%", s)).toUpperCase(), 1, (short) config.getInt(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_DATA.replace("%path%", s)));
                 ItemMeta im = i.getItemMeta();
                 im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
@@ -368,17 +369,19 @@ public class Misc {
      *
      * @since API 8
      */
+    @SuppressWarnings("WeakerAccess")
     public static boolean isOutsideOfBorder(Location l) {
         WorldBorder border = l.getWorld().getWorldBorder();
         double radius = border.getSize() / 2;
-        Location location = l, center = border.getCenter();
+        Location center = border.getCenter();
 
-        return center.distanceSquared(location) >= (radius * radius);
+        return center.distanceSquared(l) >= (radius * radius);
     }
 
     /**
      * Check if location is on a protected region
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isBuildProtected(Location l, Arena a) {
         for (BedWarsTeam t : a.getTeams()) {
             if (t.getSpawn().distance(l) <= a.getCm().getInt(ConfigPath.ARENA_SPAWN_PROTECTION)) {

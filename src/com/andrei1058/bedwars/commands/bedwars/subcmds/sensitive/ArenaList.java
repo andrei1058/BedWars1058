@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.andrei1058.bedwars.Main.plugin;
 import static com.andrei1058.bedwars.arena.Arena.getArenaByName;
@@ -70,7 +71,7 @@ public class ArenaList extends SubCommand {
         ArrayList<String> arene = new ArrayList<>();
         File dir = new File("plugins/" + plugin.getDescription().getName() + "/Arenas");
         if (dir.exists()) {
-            for (File f : dir.listFiles()) {
+            for (File f : Objects.requireNonNull(dir.listFiles())) {
                 if (f.isFile()) {
                     if (f.getName().contains(".yml")) {
                         arene.add(f.getName().replace(".yml", ""));

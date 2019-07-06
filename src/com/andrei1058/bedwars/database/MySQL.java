@@ -3,16 +3,13 @@ package com.andrei1058.bedwars.database;
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.stats.StatsCache;
 import com.andrei1058.bedwars.stats.StatsManager;
-import io.netty.handler.codec.base64.Base64Encoder;
-import org.apache.commons.codec.binary.Base64;
 
 import java.sql.*;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.UUID;
 
 import static com.andrei1058.bedwars.Main.config;
 
+@SuppressWarnings("WeakerAccess")
 public class MySQL implements Database {
 
     private Connection connection;

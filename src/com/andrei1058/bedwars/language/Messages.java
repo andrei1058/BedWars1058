@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.language;
 
 import com.andrei1058.bedwars.configuration.ConfigPath;
 
+@SuppressWarnings("WeakerAccess")
 public class Messages {
 
     public static String PREFIX = "prefix";

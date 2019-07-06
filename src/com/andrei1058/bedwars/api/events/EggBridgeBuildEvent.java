@@ -3,7 +3,6 @@ package com.andrei1058.bedwars.api.events;
 import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.Contract;

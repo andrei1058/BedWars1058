@@ -1,10 +1,12 @@
 package com.andrei1058.bedwars.upgrades;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import org.bukkit.enchantments.Enchantment;
 
 import static com.andrei1058.bedwars.Main.plugin;
 
+@SuppressWarnings("WeakerAccess")
 public class EnchantmentAction extends UpgradeAction {
 
     private int amplifier;
@@ -16,7 +18,7 @@ public class EnchantmentAction extends UpgradeAction {
         this.enchantment = enchantment;
         this.amplifier = amplifier;
         this.apply = apply;
-        plugin.debug("loading new EnchantmentAction: "+getName());
+        Main.debug("loading new EnchantmentAction: "+getName());
     }
 
     @Override

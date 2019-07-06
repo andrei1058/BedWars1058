@@ -27,8 +27,8 @@ public class FAWE extends MapManager {
     /**
      * Create a new map manager for an arena.
      *
-     * @param arena
-     * @param name
+     * @param arena Arena instance.
+     * @param name Arena name.
      */
     @SuppressWarnings("deprecation")
     public FAWE(Arena arena, String name) {
@@ -128,10 +128,5 @@ public class FAWE extends MapManager {
 
             world.commit();
         });
-    }
-
-    @Override
-    public boolean isLevelWorld() {
-        return false;
     }
 }

@@ -23,8 +23,8 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 import static com.andrei1058.bedwars.Main.*;
-import static com.andrei1058.bedwars.language.Language.getMsg;
 
+@SuppressWarnings("WeakerAccess")
 public class OreGenerator {
 
     private Location location;
@@ -192,6 +192,7 @@ public class OreGenerator {
         return rotation;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public class HoloGram {
         String iso;
         ArmorStand tier, timer, name;

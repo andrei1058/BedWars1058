@@ -1,7 +1,6 @@
 package com.andrei1058.bedwars.shop.listeners;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.api.events.PlayerJoinArenaEvent;
 import com.andrei1058.bedwars.api.events.PlayerLeaveArenaEvent;

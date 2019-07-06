@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.upgrades;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.language.Messages;
@@ -14,6 +15,7 @@ import java.util.List;
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.language.Language.*;
 
+@SuppressWarnings("WeakerAccess")
 public class UpgradeTier {
 
     private String name, currency;
@@ -27,7 +29,7 @@ public class UpgradeTier {
         this.cost = cost;
         this.currency = currency;
         this.itemStack = itemStack;
-        plugin.debug("loading new UpgradeTier: " + getName());
+        debug("loading new UpgradeTier: " + getName());
     }
 
     public String getName() {
@@ -133,7 +135,7 @@ public class UpgradeTier {
     public boolean hasEnoughMoney(Player p) {
         switch (currency.toLowerCase()) {
             case "vault":
-                return getCost() <= plugin.getEconomy().getMoney(p);
+                return getCost() <= getEconomy().getMoney(p);
             case "iron":
                 return getCost() <= countItemStackAmount(p, Material.IRON_INGOT);
             case "gold":

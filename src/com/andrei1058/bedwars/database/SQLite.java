@@ -6,7 +6,6 @@ import org.bukkit.Bukkit;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
-import java.util.HashMap;
 import java.util.UUID;
 
 public class SQLite implements Database {
@@ -16,6 +15,7 @@ public class SQLite implements Database {
     /**
      * Check if database is connected.
      */
+    @SuppressWarnings("WeakerAccess")
     public boolean isConnected() {
         if (connection == null) return false;
         try {
@@ -41,7 +41,7 @@ public class SQLite implements Database {
         }
         try {
             ClassLoader cl = Bukkit.getServer().getClass().getClassLoader();
-            Driver d = (Driver) cl.loadClass("org.sqlite.JDBC").newInstance();
+            @SuppressWarnings("deprecation") Driver d = (Driver) cl.loadClass("org.sqlite.JDBC").newInstance();
             DriverManager.registerDriver(d);
             connection = DriverManager.getConnection("jdbc:sqlite:" + dataFolder);
         } catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException e) {

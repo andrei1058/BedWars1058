@@ -15,12 +15,12 @@ import static com.andrei1058.bedwars.language.Language.getMsg;
 public class Parties implements Party {
 
     //Support for Parties by AlessioDP
-    PartiesAPI api = com.alessiodp.parties.api.Parties.getApi();
+    private PartiesAPI api = com.alessiodp.parties.api.Parties.getApi();
 
     @Override
     public boolean hasParty(Player p) {
         PartyPlayer pp = api.getPartyPlayer(p.getUniqueId());
-        return pp == null ? true : api.getParty(pp.getPartyName()) != null ? true : false;
+        return pp == null || (api.getParty(pp.getPartyName()) != null);
     }
 
     @Override

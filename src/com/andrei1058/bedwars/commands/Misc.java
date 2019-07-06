@@ -12,7 +12,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Misc {

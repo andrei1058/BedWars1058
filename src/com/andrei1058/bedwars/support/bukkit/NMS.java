@@ -4,7 +4,6 @@ import com.andrei1058.bedwars.api.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.exceptions.InvalidSoundException;
-import com.mojang.authlib.properties.Property;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,7 +17,6 @@ import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scoreboard.Team;
-import org.bukkit.util.Vector;
 
 import java.util.List;
 

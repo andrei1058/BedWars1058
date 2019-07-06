@@ -33,18 +33,15 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.material.Crops;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
-import org.bukkit.util.Vector;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.andrei1058.bedwars.Main.*;
-import static com.andrei1058.bedwars.Main.lang;
 import static com.andrei1058.bedwars.arena.despawnables.TargetListener.owningTeam;
 import static com.andrei1058.bedwars.language.Language.getMsg;
 
@@ -56,7 +53,7 @@ public class v1_12_R1 implements NMS {
     /**
      * ArenaList of despawnable entities aka special shop mobs
      */
-    private static List<Despawnable> despawnables = new ArrayList();
+    private static ArrayList<Despawnable> despawnables = new ArrayList<>();
 
     @Override
     public Sound bedDestroy() {
@@ -339,13 +336,15 @@ public class v1_12_R1 implements NMS {
     }
 
 
-    public void registerEntity(String name, int id, Class customClass) {
+    @SuppressWarnings("unchecked")
+    private void registerEntity(String name, int id, Class customClass) {
         EntityTypes.b.a(id, new MinecraftKey(name), customClass);
     }
 
     /**
      * Custom villager class
      */
+    @SuppressWarnings("WeakerAccess")
     public class VillagerShop extends net.minecraft.server.v1_12_R1.EntityVillager {
 
         public VillagerShop(net.minecraft.server.v1_12_R1.World world) {
@@ -361,7 +360,7 @@ public class v1_12_R1 implements NMS {
                 bField.set(this.targetSelector, Sets.newLinkedHashSet());
                 cField.set(this.goalSelector, Sets.newLinkedHashSet());
                 cField.set(this.targetSelector, Sets.newLinkedHashSet());
-            } catch (Exception bField) {
+            } catch (Exception ignored) {
             }
 
             this.goalSelector.a(0, new net.minecraft.server.v1_12_R1.PathfinderGoalFloat(this));
@@ -468,12 +467,12 @@ public class v1_12_R1 implements NMS {
 
     @Override
     public void hideArmor(Player p, Player p2) {
-        PacketPlayOutEntityEquipment hand1 = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.MAINHAND, new ItemStack(new Item().getById(0)));
-        PacketPlayOutEntityEquipment hand2 = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.OFFHAND, new ItemStack(new Item().getById(0)));
-        PacketPlayOutEntityEquipment helmet = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.HEAD, new ItemStack(new Item().getById(0)));
-        PacketPlayOutEntityEquipment chest = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.CHEST, new ItemStack(new Item().getById(0)));
-        PacketPlayOutEntityEquipment pants = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.LEGS, new ItemStack(new Item().getById(0)));
-        PacketPlayOutEntityEquipment boots = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.FEET, new ItemStack(new Item().getById(0)));
+        PacketPlayOutEntityEquipment hand1 = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.MAINHAND, new ItemStack(Item.getById(0)));
+        PacketPlayOutEntityEquipment hand2 = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.OFFHAND, new ItemStack(Item.getById(0)));
+        PacketPlayOutEntityEquipment helmet = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.HEAD, new ItemStack(Item.getById(0)));
+        PacketPlayOutEntityEquipment chest = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.CHEST, new ItemStack(Item.getById(0)));
+        PacketPlayOutEntityEquipment pants = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.LEGS, new ItemStack(Item.getById(0)));
+        PacketPlayOutEntityEquipment boots = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.FEET, new ItemStack(Item.getById(0)));
         EntityPlayer pc = ((CraftPlayer) p2).getHandle();
         if (p != p2) {
             pc.playerConnection.sendPacket(hand1);

@@ -39,11 +39,11 @@ public class CreateTeam extends SubCommand {
         }
         if (args.length < 2) {
             p.sendMessage("§c▪ §7Usage: /" + mainCmd + " createTeam §o<name> §o<color>");
-            String colors = "§7";
+            StringBuilder colors = new StringBuilder("§7");
             for (TeamColor t : TeamColor.values()) {
-                colors += TeamColor.getChatColor(t) + t.toString() + "§7, ";
+                colors.append(TeamColor.getChatColor(t)).append(t.toString()).append("§7, ");
             }
-            colors = colors.substring(0, colors.length() - 2) + "§7.";
+            colors = new StringBuilder(colors.toString().substring(0, colors.toString().length() - 2) + "§7.");
             p.sendMessage("§6 ▪ §7Available colors: " + colors);
         } else {
             boolean y = true;
@@ -54,11 +54,11 @@ public class CreateTeam extends SubCommand {
             }
             if (y) {
                 p.sendMessage("§c▪ §7Invalid color!");
-                String colors = "§7";
+                StringBuilder colors = new StringBuilder("§7");
                 for (TeamColor t : TeamColor.values()) {
-                    colors += TeamColor.getChatColor(t) + t.toString() + "§7, ";
+                    colors.append(TeamColor.getChatColor(t)).append(t.toString()).append("§7, ");
                 }
-                colors = colors.substring(0, colors.length() - 2) + "§7.";
+                colors = new StringBuilder(colors.toString().substring(0, colors.toString().length() - 2) + "§7.");
                 p.sendMessage("§6 ▪ §7Available colors: " + colors);
             } else {
                 if (ss.getCm().getYml().get("Team." + args[0] + ".Color") != null) {

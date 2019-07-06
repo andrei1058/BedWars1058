@@ -15,6 +15,7 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 
 import java.util.HashMap;
 
+@SuppressWarnings("WeakerAccess")
 public class EggBridge implements Listener {
 
     //Active eggBridges

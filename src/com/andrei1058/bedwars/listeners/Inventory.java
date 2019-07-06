@@ -8,6 +8,7 @@ import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.upgrades.TeamUpgrade;
 import com.andrei1058.bedwars.upgrades.UpgradeGroup;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -175,7 +176,9 @@ public class Inventory implements Listener {
             } else if (e.getSlot() == SetupSession.getAssistedSlot()) {
                 ss.setSetupType(SetupSession.SetupType.ASSISTED);
             }
-            ss.startSetup();
+            if (!ss.startSetup()){
+                ss.getPlayer().sendMessage(ChatColor.RED + "Could not start setup session. Pleas check the console.");
+            }
             p.closeInventory();
             return;
         }
@@ -209,9 +212,7 @@ public class Inventory implements Listener {
         if (nms.isCustomBedWarsItem(i)) {
             String[] customData = nms.getCustomData(i).split("_");
             if (customData.length >= 2) {
-                if (customData[0].equals("RUNCOMMAND")) {
-                    return true;
-                }
+                return customData[0].equals("RUNCOMMAND");
             }
         }
         return false;

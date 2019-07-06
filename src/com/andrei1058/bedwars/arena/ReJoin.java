@@ -168,6 +168,7 @@ public class ReJoin {
         return player;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public List<ShopCache.CachedItem> getPermanentsAndNonDowngradables() {
         return permanentsAndNonDowngradables;
     }

@@ -8,6 +8,7 @@ import java.util.List;
 
 import static com.andrei1058.bedwars.language.Language.getMsg;
 
+@SuppressWarnings("WeakerAccess")
 public class Internal implements Party {
     private static List<Party> parites = new ArrayList<>();
 

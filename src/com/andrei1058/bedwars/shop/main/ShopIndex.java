@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@SuppressWarnings("WeakerAccess")
 public class ShopIndex {
 
     private int invSize = 54;
@@ -73,6 +74,7 @@ public class ShopIndex {
         addSeparator(player, inv);
 
         inv.setItem(getQuickBuyButton().getSlot() + 9, getSelectedItem(player));
+        //noinspection ConstantConditions
         ShopCache.getShopCache(player).setSelectedCategory(getQuickBuyButton().getSlot());
 
         quickBuyCache.addInInventory(inv, ShopCache.getShopCache(player));

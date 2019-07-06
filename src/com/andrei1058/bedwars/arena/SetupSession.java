@@ -26,17 +26,15 @@ import static com.andrei1058.bedwars.Main.plugin;
 public class SetupSession {
 
     private static List<SetupSession> setupSessions = new ArrayList<>();
-    private static String invName = "§8Choose a setup method";
-    private static int assistedSlot = 3, advancedSlot = 5;
 
     private Player player;
     private String worldName;
     private SetupType setupType;
     private ConfigManager cm;
-    public boolean started = false;
-    public boolean autoCreatedEmerald = false;
-    public boolean autoCreatedDiamond = false;
-    public List<Location> skipAutoCreateGen = new ArrayList<>();
+    private boolean started = false;
+    private boolean autoCreatedEmerald = false;
+    private boolean autoCreatedDiamond = false;
+    private List<Location> skipAutoCreateGen = new ArrayList<>();
     private MapManager mapManager;
 
     public SetupSession(Player player, String worldName) {
@@ -53,6 +51,7 @@ public class SetupSession {
         this.setupType = setupType;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static List<SetupSession> getSetupSessions() {
         return setupSessions;
     }
@@ -63,7 +62,7 @@ public class SetupSession {
      * @since api 6
      */
     public static String getInvName() {
-        return invName;
+        return "§8Choose a setup method";
     }
 
     /**
@@ -72,7 +71,7 @@ public class SetupSession {
      * @since api 6
      */
     public static int getAdvancedSlot() {
-        return advancedSlot;
+        return 5;
     }
 
     /**
@@ -81,7 +80,7 @@ public class SetupSession {
      * @since api 6
      */
     public static int getAssistedSlot() {
-        return assistedSlot;
+        return 3;
     }
 
     public SetupType getSetupType() {
@@ -114,19 +113,18 @@ public class SetupSession {
             w = Bukkit.createWorld(new WorldCreator(getWorldName()));
         } catch (Exception ex) {
             File uid = new File(Bukkit.getServer().getWorldContainer().getPath() + "/" + getWorldName() + "/uid.dat");
+            //noinspection ResultOfMethodCallIgnored
             uid.delete();
             try {
                 w = Bukkit.createWorld(new WorldCreator(getWorldName()));
-            } catch (Exception exx) {
+            } catch (Exception ignored) {
             }
         }
         if (w == null) {
             getPlayer().sendMessage("§c▪ §7There was an error while loading the map :(\n§c▪ §7Please delete uid.dat from " + getWorldName() + "'s folder.");
             return false;
         }
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            Bukkit.getWorld(getWorldName()).getEntities().stream().filter(e -> e.getType() != EntityType.PLAYER).filter(e -> e.getType() != EntityType.PAINTING).filter(e -> e.getType() != EntityType.ITEM_FRAME).forEach(Entity::remove);
-        }, 30L);
+        Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getWorld(getWorldName()).getEntities().stream().filter(e -> e.getType() != EntityType.PLAYER).filter(e -> e.getType() != EntityType.PAINTING).filter(e -> e.getType() != EntityType.ITEM_FRAME).forEach(Entity::remove), 30L);
         w.setAutoSave(true);
         w.setGameRuleValue("doMobSpawning", "false");
         getPlayer().teleport(w.getSpawnLocation());

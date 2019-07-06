@@ -19,6 +19,7 @@ import org.bukkit.potion.PotionEffectType;
 import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.Main.plugin;
 
+@SuppressWarnings("WeakerAccess")
 public class BuyItem {
 
     private ItemStack itemStack;

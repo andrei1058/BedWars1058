@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.upgrades;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import org.bukkit.Bukkit;
@@ -22,7 +23,7 @@ public class UpgradeGroup {
     public UpgradeGroup(String name, List<TeamUpgrade> teamUpgrades) {
         this.name = name;
         this.teamUpgrades = new ArrayList<>(teamUpgrades);
-        plugin.debug("loading new UpgradeGroup: " + getName());
+        Main.debug("loading new UpgradeGroup: " + getName());
         upgradeGroups.add(this);
     }
 
@@ -47,7 +48,7 @@ public class UpgradeGroup {
     }
 
     public void openToPlayer(Player p, Arena a){
-        Inventory inv = Bukkit.createInventory(p, plugin.upgrades.getInt("settings.invSize"), getMsg(p, "upgrades."+getName()+".name"));
+        Inventory inv = Bukkit.createInventory(p, Main.upgrades.getInt("settings.invSize"), getMsg(p, "upgrades."+getName()+".name"));
         BedWarsTeam team = a.getTeam(p);
 
         for (TeamUpgrade tu : getTeamUpgrades()){

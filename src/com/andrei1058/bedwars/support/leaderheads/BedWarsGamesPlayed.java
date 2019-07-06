@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 
+@SuppressWarnings("WeakerAccess")
 public class BedWarsGamesPlayed extends OnlineDataCollector {
 
     public BedWarsGamesPlayed() {

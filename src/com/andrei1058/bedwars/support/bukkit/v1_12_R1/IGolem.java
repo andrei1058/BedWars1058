@@ -30,16 +30,14 @@ public class IGolem extends EntityIronGolem {
             bField.set(this.targetSelector, Sets.newLinkedHashSet());
             cField.set(this.goalSelector, Sets.newLinkedHashSet());
             cField.set(this.targetSelector, Sets.newLinkedHashSet());
-        } catch (IllegalAccessException e1) {
-            e1.printStackTrace();
-        } catch (NoSuchFieldException e1) {
+        } catch (IllegalAccessException | NoSuchFieldException e1) {
             e1.printStackTrace();
         }
         this.setSize(1.4F, 2.9F);
         ((Navigation)this.getNavigation()).a(true);
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
         this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this,1.0D, false));
-        this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true, new Class[0]));
+        this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true));
         this.targetSelector.a(2, new AttackEnemies<>(this, EntityHuman.class, true, team.getMembers()));
         this.goalSelector.a(6, new PathfinderGoalRandomStroll(this, 0.6D));
         this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));

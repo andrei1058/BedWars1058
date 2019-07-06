@@ -11,6 +11,7 @@ import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityTargetEvent;
 
+@SuppressWarnings({"unchecked", "Java8ListSort", "SuspiciousMethodCalls", "SimplifiableConditionalExpression", "UnnecessaryContinue", "ForLoopReplaceableByForEach", "WeakerAccess", "UnclearExpression"})
 public class AttackEnemies<T extends EntityLiving> extends PathfinderGoalTarget {
 
     protected final Class<T> a;
@@ -48,7 +49,7 @@ public class AttackEnemies<T extends EntityLiving> extends PathfinderGoalTarget 
             if (list.isEmpty()) {
                 return false;
             } else {
-                Collections.sort(list, this.b);
+                list.sort(this.b);
                 for (int x = 0; x < list.size(); x++) {
                     if (list.get(x) instanceof Silverfish) {
                         continue;

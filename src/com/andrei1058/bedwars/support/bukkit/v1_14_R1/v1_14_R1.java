@@ -65,7 +65,7 @@ public class v1_14_R1 implements NMS {
     /**
      * ArenaList of despawnable entities aka special shop mobs
      */
-    private static List<Despawnable> despawnables = new ArrayList();
+    private static ArrayList<Despawnable> despawnables = new ArrayList<>();
 
     @Override
     public Sound bedDestroy() {
@@ -296,6 +296,7 @@ public class v1_14_R1 implements NMS {
         return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof IProjectile;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void registerEntities() {
         Map<String, Type<?>> types = (Map<String, Type<?>>) DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(SharedConstants.a().getWorldVersion())).findChoiceType(DataConverterTypes.ENTITY).types();
@@ -371,7 +372,8 @@ public class v1_14_R1 implements NMS {
         public void setTradingPlayer(@Nullable EntityHuman entityhuman) {
         }
 
-        public VillagerShop(EntityTypes entityTypes, World world) {
+        @SuppressWarnings("unchecked")
+        VillagerShop(EntityTypes entityTypes, World world) {
             super(entityTypes, world);
         }
 
@@ -430,6 +432,7 @@ public class v1_14_R1 implements NMS {
     /**
      * Spawn shop npc
      */
+    @SuppressWarnings("UnusedReturnValue")
     private Villager spawnVillager(Location loc) {
         WorldServer mcWorld = ((CraftWorld) loc.getWorld()).getHandle();
         VillagerShop customEnt = new VillagerShop(EntityTypes.VILLAGER, mcWorld);
@@ -445,7 +448,7 @@ public class v1_14_R1 implements NMS {
         int despawn = 250;
         String namePath;
 
-        public Despawnable(EntityLiving e, BedWarsTeam team, int despawn, String namePath) {
+        Despawnable(EntityLiving e, BedWarsTeam team, int despawn, String namePath) {
             this.e = e;
             this.team = team;
             if (despawn != 0) {
@@ -457,7 +460,7 @@ public class v1_14_R1 implements NMS {
             owningTeam.put(e.getUniqueID(), team.getName());
         }
 
-        public void regresh() {
+        void regresh() {
             if (!e.isAlive()) {
                 despawnables.remove(this);
                 return;
@@ -582,7 +585,6 @@ public class v1_14_R1 implements NMS {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public void setBlockTeamColor(Block block, TeamColor teamColor) {
         if (block.getType().toString().contains("STAINED_GLASS") || block.getType().toString().equals("GLASS")) {
             block.setType(TeamColor.getGlass(teamColor));
@@ -638,7 +640,6 @@ public class v1_14_R1 implements NMS {
         if (i.getType() != org.bukkit.Material.valueOf("PLAYER_HEAD")) return i;
         SkullMeta sm = (SkullMeta) i.getItemMeta();
         //sm.setOwningPlayer(p);
-        //noinspection deprecation
         sm.setOwner(p.getName());
         i.setItemMeta(sm);
         return i;

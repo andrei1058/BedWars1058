@@ -6,12 +6,14 @@ import net.minecraft.server.v1_11_R1.*;
 import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityTargetEvent;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@SuppressWarnings({"unchecked", "SimplifiableConditionalExpression", "SuspiciousMethodCalls", "Java8ListSort", "WeakerAccess", "ConstantConditions", "Guava"})
 public class AttackEnemies<T extends EntityLiving> extends PathfinderGoalTarget {
 
     protected final Class<T> a;
@@ -57,10 +59,9 @@ public class AttackEnemies<T extends EntityLiving> extends PathfinderGoalTarget 
             if (list.isEmpty()) {
                 return false;
             } else {
-                Collections.sort(list, this.b);
+                list.sort(this.b);
                 for (int x = 0; x < list.size(); x++) {
                     if (list.get(x) instanceof Silverfish) {
-                        continue;
                     } else if (!excluded.contains(list.get(x))) {
                         this.d = (T) list.get(x);
                         return true;
@@ -70,7 +71,7 @@ public class AttackEnemies<T extends EntityLiving> extends PathfinderGoalTarget 
             }
         } else {
             this.d = (T) this.e.world.a(this.e.locX, this.e.locY + (double) this.e.getHeadHeight(), this.e.locZ, this.i(), this.i(), new Function<EntityHuman, Double>() {
-                @Nullable
+                @NotNull
                 public Double a(@Nullable EntityHuman entityhuman) {
                     ItemStack itemstack = entityhuman.getEquipment(EnumItemSlot.HEAD);
                     if (itemstack.getItem() == Items.SKULL) {

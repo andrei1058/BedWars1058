@@ -51,8 +51,12 @@ public class CmdList extends SubCommand {
                     pos1 = ss.getCm().getYml().get("waiting.Pos1") != null,
                     pos2 = ss.getCm().getYml().get("waiting.Pos2") != null,
                     pos = pos1 && pos2;
-            String spawnNotSetNames = "";
-            String bedNotSet = "", shopNotSet = "", upgradeNotSet = "", spawnNotSet = "", generatorNotSet = "";
+            StringBuilder spawnNotSetNames = new StringBuilder();
+            StringBuilder bedNotSet = new StringBuilder();
+            StringBuilder shopNotSet = new StringBuilder();
+            StringBuilder upgradeNotSet = new StringBuilder();
+            StringBuilder spawnNotSet = new StringBuilder();
+            StringBuilder generatorNotSet = new StringBuilder();
             int teams = 0;
 
             if (ss.getCm().getYml().get("Team") != null) {
@@ -60,20 +64,20 @@ public class CmdList extends SubCommand {
                     if (ss.getCm().getYml().get("Team." + team + ".Color") == null) continue;
                     ChatColor color = TeamColor.getChatColor(ss.getCm().getYml().getString("Team." + team + ".Color"));
                     if (ss.getCm().getYml().get("Team." + team + ".Spawn") == null) {
-                        spawnNotSet += color + "▋";
-                        spawnNotSetNames += color + team + " ";
+                        spawnNotSet.append(color).append("▋");
+                        spawnNotSetNames.append(color).append(team).append(" ");
                     }
                     if (ss.getCm().getYml().get("Team." + team + ".Bed") == null) {
-                        bedNotSet += color + "▋";
+                        bedNotSet.append(color).append("▋");
                     }
                     if (ss.getCm().getYml().get("Team." + team + ".Shop") == null) {
-                        shopNotSet += color + "▋";
+                        shopNotSet.append(color).append("▋");
                     }
                     if (ss.getCm().getYml().get("Team." + team + ".Upgrade") == null) {
-                        upgradeNotSet += color + "▋";
+                        upgradeNotSet.append(color).append("▋");
                     }
                     if (ss.getCm().getYml().get("Team." + team + ".Iron") == null || ss.getCm().getYml().get("Team." + team + ".Gold") == null) {
-                        generatorNotSet += color + "▋";
+                        generatorNotSet.append(color).append("▋");
                     }
                     teams++;
                 }
@@ -88,11 +92,11 @@ public class CmdList extends SubCommand {
 
             String setWaitingSpawn = "§9 ▪ §7/" + getParent().getName() + (ss.getSetupType() == SetupSession.SetupType.ASSISTED ? (waitingSpawn ? " §m" : " ") : " ") + "setWaitingSpawn§r " + (waitingSpawn ? "§a(SET)" : "§c(NOT SET)");
             String waitingPos = "§9 ▪ §7/" + getParent().getName() + (ss.getSetupType() == SetupSession.SetupType.ASSISTED ? (pos ? " §m" : " ") : " ") + "waitingPos 1/2§r " + (!pos ? (pos1 ? "§c(POS 2 NOT SET)" : "§c(POS 1 NOT SET)") : "§a(SET)");
-            String setSpawn = "§9 ▪ §7/" + getParent().getName() + (ss.getSetupType() == SetupSession.SetupType.ASSISTED ? (spawnNotSet.isEmpty() ? " §m" : " ") : " ") + "setSpawn <teamName>§r " + (spawnNotSet.isEmpty() ? "§a(ALL SET)" : "§c(Remaining: " + spawnNotSet + "§c)");
-            String setBed = "§9 ▪ §7/" + getParent().getName() + (ss.getSetupType() == SetupSession.SetupType.ASSISTED ? (bedNotSet.isEmpty() ? " §m" : " ") : " ") + "setBed§r " + (bedNotSet.isEmpty() ? "§a(ALL SET)" : "§c(Remaining: " + bedNotSet + "§c)");
-            String setShop = "§9 ▪ §7/" + getParent().getName() + (ss.getSetupType() == SetupSession.SetupType.ASSISTED ? (shopNotSet.isEmpty() ? " §m" : " ") : " ") + "setShop§r " + (shopNotSet.isEmpty() ? "§a(ALL SET)" : "§c(Remaining: " + shopNotSet + "§c)");
-            String setUpgrade = "§9 ▪ §7/" + getParent().getName() + (ss.getSetupType() == SetupSession.SetupType.ASSISTED ? (upgradeNotSet.isEmpty() ? " §m" : " ") : " ") + "setUpgrade§r " + (upgradeNotSet.isEmpty() ? "§a(ALL SET)" : "§c(Remaining: " + upgradeNotSet + "§c)");
-            String addGenerator = "§9 ▪ §7/" + getParent().getName() + " addGenerator" + (ss.getSetupType() == SetupSession.SetupType.ASSISTED ? (generatorNotSet.isEmpty() ? " " : "§c(Remaining: " + generatorNotSet + "§c) ") : " ") + "§e(§2E" + emGen + " §bD" + dmGen + "§e)";
+            String setSpawn = "§9 ▪ §7/" + getParent().getName() + (ss.getSetupType() == SetupSession.SetupType.ASSISTED ? ((spawnNotSet.length() == 0) ? " §m" : " ") : " ") + "setSpawn <teamName>§r " + ((spawnNotSet.length() == 0) ? "§a(ALL SET)" : "§c(Remaining: " + spawnNotSet + "§c)");
+            String setBed = "§9 ▪ §7/" + getParent().getName() + (ss.getSetupType() == SetupSession.SetupType.ASSISTED ? ((bedNotSet.toString().length() == 0) ? " §m" : " ") : " ") + "setBed§r " + ((bedNotSet.length() == 0) ? "§a(ALL SET)" : "§c(Remaining: " + bedNotSet + "§c)");
+            String setShop = "§9 ▪ §7/" + getParent().getName() + (ss.getSetupType() == SetupSession.SetupType.ASSISTED ? ((shopNotSet.toString().length() == 0) ? " §m" : " ") : " ") + "setShop§r " + ((shopNotSet.length() == 0) ? "§a(ALL SET)" : "§c(Remaining: " + shopNotSet + "§c)");
+            String setUpgrade = "§9 ▪ §7/" + getParent().getName() + (ss.getSetupType() == SetupSession.SetupType.ASSISTED ? ((upgradeNotSet.toString().length() == 0) ? " §m" : " ") : " ") + "setUpgrade§r " + ((upgradeNotSet.length() == 0) ? "§a(ALL SET)" : "§c(Remaining: " + upgradeNotSet + "§c)");
+            String addGenerator = "§9 ▪ §7/" + getParent().getName() + " addGenerator" + (ss.getSetupType() == SetupSession.SetupType.ASSISTED ? ((generatorNotSet.toString().length() == 0) ? " " : "§c(Remaining: " + generatorNotSet + "§c) ") : " ") + "§e(§2E" + emGen + " §bD" + dmGen + "§e)";
 
             if (ss.getSetupType() == SetupSession.SetupType.ASSISTED) {
                 s.sendMessage("");
@@ -102,7 +106,7 @@ public class CmdList extends SubCommand {
                 p.spigot().sendMessage(Misc.msgHoverClick(waitingPos, "§dMake it so the waiting lobby will disappear at start.\nSelect it as a world edit region.", "/" + getParent().getName() + " waitingPos ", ClickEvent.Action.SUGGEST_COMMAND));
                 p.spigot().sendMessage(Misc.msgHoverClick("§9 ▪ §7/" + getParent().getName() + " autoCreateTeams §e(lazy staff)", "§dCreate teams based on islands colors.", "/" + getParent().getName() + " autoCreateTeams", ClickEvent.Action.SUGGEST_COMMAND));
                 p.spigot().sendMessage(Misc.msgHoverClick("§9 ▪ §7/" + getParent().getName() + " createTeam <name> <color> §e(" + teams + " §eSET)", "§dCreate a team.", "/" + getParent().getName() + " createTeam ", ClickEvent.Action.SUGGEST_COMMAND));
-                p.spigot().sendMessage(Misc.msgHoverClick(setSpawn, "§dSet a team spawn.\n§cTeams without a spawn set:\n" + spawnNotSetNames, "/" + getParent().getName() + " setSpawn ", ClickEvent.Action.SUGGEST_COMMAND));
+                p.spigot().sendMessage(Misc.msgHoverClick(setSpawn, "§dSet a team spawn.\n§cTeams without a spawn set:\n" + spawnNotSetNames.toString(), "/" + getParent().getName() + " setSpawn ", ClickEvent.Action.SUGGEST_COMMAND));
                 p.spigot().sendMessage(Misc.msgHoverClick(setBed, "§dSet a team's bed location.\nYou don't have to specify the team name.", "/" + getParent().getName() + " setBed", ClickEvent.Action.RUN_COMMAND));
                 p.spigot().sendMessage(Misc.msgHoverClick(setShop, "§dSet a team's NPC.\nYou don't have to specify the team name.\nIt will be spawned only when the game starts.", "/" + getParent().getName() + " setShop", ClickEvent.Action.RUN_COMMAND));
                 p.spigot().sendMessage(Misc.msgHoverClick(setUpgrade, "§dSet a team's upgrade NPC.\nYou don't have to specify the team name.\nIt will be spawned only when the game starts.", "/" + getParent().getName() + " setUpgrade", ClickEvent.Action.RUN_COMMAND));
@@ -117,7 +121,7 @@ public class CmdList extends SubCommand {
                 p.spigot().sendMessage(Misc.msgHoverClick("§9 ▪ §7/" + mainCmd + " removeTeam <name>", "§dRemove a team.", "/" + mainCmd + " removeTeam ", ClickEvent.Action.SUGGEST_COMMAND));
                 p.spigot().sendMessage(Misc.msgHoverClick("§9 ▪ §7/" + mainCmd + " setMaxInTeam <int>", "§dSet the max team size.", "/" + mainCmd + " setMaxInTeam ", ClickEvent.Action.SUGGEST_COMMAND));
                 p.spigot().sendMessage(Misc.msgHoverClick("§9 ▪ §7/" + getParent().getName() + " createTeam <name> <color> §e(" + teams + " §eSET)", "§dCreate a team.", "/" + getParent().getName() + " createTeam ", ClickEvent.Action.SUGGEST_COMMAND));
-                p.spigot().sendMessage(Misc.msgHoverClick(setSpawn, "§dSet a team spawn.\n§cTeams without a spawn set:\n" + spawnNotSetNames, "/" + getParent().getName() + " setSpawn ", ClickEvent.Action.SUGGEST_COMMAND));
+                p.spigot().sendMessage(Misc.msgHoverClick(setSpawn, "§dSet a team spawn.\n§cTeams without a spawn set:\n" + spawnNotSetNames.toString(), "/" + getParent().getName() + " setSpawn ", ClickEvent.Action.SUGGEST_COMMAND));
                 p.spigot().sendMessage(Misc.msgHoverClick(setBed, "§dSet a team's bed location.\nYou don't have to specify the team name.", "/" + getParent().getName() + " setBed", ClickEvent.Action.SUGGEST_COMMAND));
                 p.spigot().sendMessage(Misc.msgHoverClick(setShop, "§dSet a team's NPC.\nYou don't have to specify the team name.\nIt will be spawned only when the game starts.", "/" + getParent().getName() + " setShop", ClickEvent.Action.SUGGEST_COMMAND));
                 p.spigot().sendMessage(Misc.msgHoverClick(setUpgrade, "§dSet a team's upgrade NPC.\nYou don't have to specify the team name.\nIt will be spawned only when the game starts.", "/" + getParent().getName() + " setUpgrade", ClickEvent.Action.SUGGEST_COMMAND));

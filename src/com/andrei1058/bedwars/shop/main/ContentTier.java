@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("WeakerAccess")
 public class ContentTier {
 
     private int value, price;

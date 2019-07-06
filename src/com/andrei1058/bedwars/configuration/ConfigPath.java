@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.configuration;
 
+@SuppressWarnings("WeakerAccess")
 public class ConfigPath {
 
     public static final String GENERATOR_STACK_ITEMS = "stack-items";

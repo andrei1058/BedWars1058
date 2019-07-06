@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import static com.andrei1058.bedwars.Main.lang;
 import static com.andrei1058.bedwars.Main.shop;
 
+@SuppressWarnings("unchecked")
 public class IGolem extends EntityIronGolem {
 
     public IGolem(World world) {

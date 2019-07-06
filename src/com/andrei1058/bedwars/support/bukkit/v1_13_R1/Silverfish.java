@@ -8,16 +8,15 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_13_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_13_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_13_R1.event.CraftEventFactory;
-import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import static com.andrei1058.bedwars.Main.shop;
 
+@SuppressWarnings("unchecked")
 public class Silverfish extends EntitySilverfish {
 
     public Silverfish(World world) {
@@ -45,6 +44,7 @@ public class Silverfish extends EntitySilverfish {
         private EnumDirection h;
         private boolean i;
 
+        @SuppressWarnings("WeakerAccess")
         public PathfinderGoalSilverfishHideInBlock(EntitySilverfish entitysilverfish) {
             super(entitysilverfish, 1.0D, 10);
             this.a(1);
@@ -73,7 +73,7 @@ public class Silverfish extends EntitySilverfish {
         }
 
         public boolean b() {
-            return this.i ? false : super.b();
+            return !this.i && super.b();
         }
 
         public void c() {

@@ -19,6 +19,7 @@ import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.language.Language.getList;
 import static com.andrei1058.bedwars.language.Language.getMsg;
 
+@SuppressWarnings("WeakerAccess")
 public class TeleporterGUI {
 
     //Don't remove "_" because it's used as a separator somewhere
@@ -57,7 +58,7 @@ public class TeleporterGUI {
         int size = arena.getPlayers().size();
         if (size <= 9) {
             size = 9;
-        } else if (size > 9 && size <= 18) {
+        } else if (size <= 18) {
             size = 18;
         } else if (size > 19 && size <= 27) {
             size = 27;

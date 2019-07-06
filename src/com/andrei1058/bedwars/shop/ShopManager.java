@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 
+@SuppressWarnings("WeakerAccess")
 public class ShopManager {
 
     public static ShopIndex shop;
@@ -412,6 +413,7 @@ public class ShopManager {
     /**
      * Initialize a shop category to config
      */
+    @SuppressWarnings("SameParameterValue")
     private void addDefaultShopCategory(String path, int slot, String material, int data, int amount, boolean enchant) {
         yml.addDefault(path + ConfigPath.SHOP_CATEGORY_SLOT, slot);
         yml.addDefault(path + ConfigPath.SHOP_CATEGORY_ITEM_MATERIAL, material);

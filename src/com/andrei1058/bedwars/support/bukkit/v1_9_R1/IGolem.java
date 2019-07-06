@@ -17,6 +17,7 @@ import java.lang.reflect.Field;
 import static com.andrei1058.bedwars.Main.lang;
 import static com.andrei1058.bedwars.Main.shop;
 
+@SuppressWarnings("RedundantArrayCreation")
 public class IGolem extends EntityIronGolem {
 
     public IGolem(World world, BedWarsTeam team) {
@@ -30,9 +31,7 @@ public class IGolem extends EntityIronGolem {
             bField.set(this.targetSelector, new UnsafeList());
             cField.set(this.goalSelector, new UnsafeList());
             cField.set(this.targetSelector, new UnsafeList());
-        } catch (IllegalAccessException e1) {
-            e1.printStackTrace();
-        } catch (NoSuchFieldException e1) {
+        } catch (IllegalAccessException | NoSuchFieldException e1) {
             e1.printStackTrace();
         }
         this.setSize(1.4F, 2.9F);

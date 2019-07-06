@@ -72,30 +72,30 @@ public class SetSpawn extends SubCommand {
                 ss.getCm().saveArenaLoc("Team." + args[0] + ".Spawn", p.getLocation());
                 String teamm = TeamColor.getChatColor(ss.getCm().getYml().getString("Team." + args[0] + ".Color")) + args[0];
                 p.sendMessage("§6 ▪ §7Spawn set for: " + teamm);
-                com.andrei1058.bedwars.commands.Misc.createArmorStand(teamm+" §6SPAWN SET", p.getLocation());
+                com.andrei1058.bedwars.commands.Misc.createArmorStand(teamm + " §6SPAWN SET", p.getLocation());
                 int radius = ss.getCm().getInt(ConfigPath.ARENA_ISLAND_RADIUS);
                 Location l = p.getLocation();
-                for (int x = -radius; x < radius; x++){
-                    for (int y = -radius; y < radius; y++){
-                        for (int z = -radius; z < radius; z++){
+                for (int x = -radius; x < radius; x++) {
+                    for (int y = -radius; y < radius; y++) {
+                        for (int z = -radius; z < radius; z++) {
                             Block b = l.clone().add(x, y, z).getBlock();
-                            if (Main.nms.isBed(b.getType())){
+                            if (Main.nms.isBed(b.getType())) {
                                 p.teleport(b.getLocation());
-                                Bukkit.dispatchCommand(p, getParent().getName()+" setBed "+args[0]);
+                                Bukkit.dispatchCommand(p, getParent().getName() + " setBed " + args[0]);
                                 return true;
                             }
                         }
                     }
                 }
                 if (ss.getCm().getYml().get("Team") != null) {
-                    String remainging = "";
+                    StringBuilder remainging = new StringBuilder();
                     for (String team : ss.getCm().getYml().getConfigurationSection("Team").getKeys(false)) {
                         if (ss.getCm().getYml().get("Team." + team + ".Spawn") == null) {
-                            remainging+= TeamColor.getChatColor(ss.getCm().getYml().getString("Team." + team + ".Color"))+team+" ";
+                            remainging.append(TeamColor.getChatColor(ss.getCm().getYml().getString("Team." + team + ".Color"))).append(team).append(" ");
                         }
                     }
-                    if (!remainging.isEmpty()){
-                        p.sendMessage("§6Remaining: "+remainging);
+                    if (remainging.toString().length() > 0) {
+                        p.sendMessage("§6Remaining: " + remainging.toString());
                     }
                 }
             }

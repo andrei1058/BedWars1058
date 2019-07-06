@@ -14,6 +14,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import static com.andrei1058.bedwars.Main.lang;
 import static com.andrei1058.bedwars.Main.shop;
 
+@SuppressWarnings("unchecked")
 public class IGolem extends EntityIronGolem {
 
     private BedWarsTeam bedWarsTeam;

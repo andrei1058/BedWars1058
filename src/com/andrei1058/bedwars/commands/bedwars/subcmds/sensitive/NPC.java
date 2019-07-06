@@ -92,6 +92,7 @@ public class NPC extends SubCommand {
             }
             String name = Joiner.on(" ").join(args).replace(args[0] + " " + args[1] + " " + args[2] + " ", "");
             net.citizensnpcs.api.npc.NPC npc = JoinNPC.spawnNPC(p.getLocation(), name, args[2], args[1], null);
+            assert npc != null;
             npcs.add(Main.config.getConfigLoc(p.getLocation()) + "," + args[1] + "," + name + "," + args[2] + "," + npc.getId());
             p.sendMessage(NPC_SET.replace("%name%", name.replace("&", "§").replace("\\\\n", " ")));
             Main.config.set(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE, npcs);
@@ -116,8 +117,9 @@ public class NPC extends SubCommand {
             for (Integer id : JoinNPC.npcs.keySet()) {
                 if (id == npc.getId()) {
                     for (String loc : Main.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE)) {
-                        locations.remove(loc);
-                        break;
+                        if (loc.split(",")[4].equalsIgnoreCase(String.valueOf(npc.getId()))) {
+                            locations.remove(loc);
+                        }
                     }
                 }
             }
@@ -161,6 +163,7 @@ public class NPC extends SubCommand {
     /**
      * Get target NPC
      */
+    @SuppressWarnings("WeakerAccess")
     @Nullable
     public static net.citizensnpcs.api.npc.NPC getTarget(@NotNull final Player player) {
 

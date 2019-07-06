@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
+@SuppressWarnings("WeakerAccess")
 public abstract class SubCommand {
 
     /* SubCommand name */
@@ -45,7 +46,7 @@ public abstract class SubCommand {
      *
      * @since 0.6.1 api v6
      */
-    public abstract boolean execute(String args[], CommandSender s);
+    public abstract boolean execute(String[] args, CommandSender s);
 
     /**
      * Get sub-command name
@@ -132,10 +133,6 @@ public abstract class SubCommand {
         return arenaSetupCommand;
     }
 
-    @Deprecated
-    public void setOpCommand(boolean opCommand) {
-    }
-
     /**
      * Check if is displayed on the list
      */
@@ -165,8 +162,7 @@ public abstract class SubCommand {
         Player p = (Player) s;
         if (isArenaSetupCommand() && SetupSession.isInSetupSession(p)) return true;
         if (!isArenaSetupCommand() && SetupSession.isInSetupSession(p)) return false;
-        if (!isArenaSetupCommand() && hasPermission(p)) return true;
-        return false;
+        return !isArenaSetupCommand() && hasPermission(p);
     }
 
     /**

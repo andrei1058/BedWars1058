@@ -29,6 +29,7 @@ import java.util.List;
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.language.Language.getMsg;
 
+@SuppressWarnings("WeakerAccess")
 public class BedWarsTeam {
 
     private List<Player> members = new ArrayList<>();
@@ -38,7 +39,6 @@ public class BedWarsTeam {
     private String name;
     private Arena arena;
     private boolean bedDestroyed = false;
-    private int dragons = 1;
 
     /**
      * slot, tier
@@ -90,6 +90,7 @@ public class BedWarsTeam {
     /**
      * A list with team's dragons  at Sudden Death phase
      */
+    private int dragons = 1;
 
     /**
      * Player cache, used for losers stats and rejoin
@@ -221,7 +222,7 @@ public class BedWarsTeam {
                         i = nms.addCustomData(i, "DEFAULT_ITEM");
                         p.getInventory().addItem(i);
                     }
-                } catch (Exception ex) {
+                } catch (Exception ignored) {
                 }
             }
         }
@@ -242,9 +243,7 @@ public class BedWarsTeam {
      * Respawn a member
      */
     public void respawnMember(Player p) {
-        if (getArena().getRespawn().containsKey(p)) {
-            getArena().getRespawn().remove(p);
-        }
+        getArena().getRespawn().remove(p);
         p.teleport(getSpawn(), PlayerTeleportEvent.TeleportCause.PLUGIN);
         if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
             p.removePotionEffect(PotionEffectType.INVISIBILITY);
@@ -372,6 +371,7 @@ public class BedWarsTeam {
     /**
      * Creates a hologram on the team bed's per player
      */
+    @SuppressWarnings("WeakerAccess")
     public class BedHolo {
         private ArmorStand a;
         private Player p;
@@ -746,9 +746,7 @@ public class BedWarsTeam {
     public void disableTrap() {
         this.trapActive = false;
         for (Integer i : trapSlots) {
-            if (getUpgradeTier().containsKey(i)) {
-                getUpgradeTier().remove(i);
-            }
+            getUpgradeTier().remove(i);
         }
         trapSlots.clear();
     }

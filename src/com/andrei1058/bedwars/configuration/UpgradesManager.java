@@ -21,6 +21,7 @@ import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.Main.plugin;
 import static com.andrei1058.bedwars.language.Language.saveIfNotExists;
 
+@SuppressWarnings("WeakerAccess")
 public class UpgradesManager {
 
     private YamlConfiguration yml;
@@ -42,7 +43,7 @@ public class UpgradesManager {
             }
         }
         yml = YamlConfiguration.loadConfiguration(file);
-        /** Generators Upgrade **/
+        /* Generators Upgrade **/
         yml.addDefault("Default.generators.slot", 11);
 
         yml.addDefault("Default.generators.tier1.displayItem.material", "FURNACE");
@@ -86,7 +87,7 @@ public class UpgradesManager {
         yml.addDefault("Default.generators.tier3.receive.teamGenerator.emerald.delay", 10);
         yml.addDefault("Default.generators.tier3.receive.teamGenerator.emerald.amount", 1);
 
-        /** Maniac Miner Upgrades*/
+        /* Maniac Miner Upgrades*/
         yml.addDefault("Default.maniacMiner.slot", 12);
         yml.addDefault("Default.maniacMiner.tier1.displayItem.material", Main.getForCurrentVersion("GOLD_AXE", "GOLD_AXE", "GOLDEN_AXE"));
         yml.addDefault("Default.maniacMiner.tier1.displayItem.data", 0);
@@ -98,7 +99,7 @@ public class UpgradesManager {
         yml.addDefault("Default.maniacMiner.tier1.receive.playerEffect.haste1.amplifier", 0);
         yml.addDefault("Default.maniacMiner.tier1.receive.playerEffect.haste1.apply", "members");
 
-        /** Sharpened Swords Upgrade*/
+        /* Sharpened Swords Upgrade*/
         yml.addDefault("Default.sharpSword.slot", 13);
         yml.addDefault("Default.sharpSword.tier1.displayItem.material", "IRON_SWORD");
         yml.addDefault("Default.sharpSword.tier1.displayItem.data", 0);
@@ -110,7 +111,7 @@ public class UpgradesManager {
         yml.addDefault("Default.sharpSword.tier1.receive.itemEnchantment.sharp.amplifier", 1);
         yml.addDefault("Default.sharpSword.tier1.receive.itemEnchantment.sharp.apply", "sword"); //sword, bow, armor
 
-        /** Reinforced Armor Upgrade*/
+        /* Reinforced Armor Upgrade*/
         yml.addDefault("Default.reinforced.slot", 14);
         yml.addDefault("Default.reinforced.tier1.displayItem.material", "IRON_CHESTPLATE");
         yml.addDefault("Default.reinforced.tier1.displayItem.data", 0);
@@ -122,7 +123,7 @@ public class UpgradesManager {
         yml.addDefault("Default.reinforced.tier1.receive.itemEnchantment.sharp.amplifier", 1);
         yml.addDefault("Default.reinforced.tier1.receive.itemEnchantment.sharp.apply", "armor"); //sword, bow, armor
 
-        /** It's a trap Upgrade*/
+        /* It's a trap Upgrade*/
         yml.addDefault("Default.trap.slot", 15);
         yml.addDefault("Default.trap.tier1.displayItem.material", "TRIPWIRE_HOOK");
         yml.addDefault("Default.trap.tier1.displayItem.data", 0);
@@ -140,7 +141,7 @@ public class UpgradesManager {
         yml.addDefault("Default.trap.tier1.receive.playerEffect.slowness.apply", "enemyBaseEnter");
         yml.addDefault("Default.trap.tier1.receive.playerEffect.slowness.duration", 20);
 
-        /** Mining fatigue trap Upgrade */
+        /* Mining fatigue trap Upgrade */
         yml.addDefault("Default.miningFatigue.slot", 20);
         yml.addDefault("Default.miningFatigue.tier1.displayItem.material", "IRON_PICKAXE");
         yml.addDefault("Default.miningFatigue.tier1.displayItem.data", 0);
@@ -154,7 +155,7 @@ public class UpgradesManager {
         yml.addDefault("Default.miningFatigue.tier1.receive.playerEffect.fatigue.apply", "enemyBaseEnter");
         yml.addDefault("Default.miningFatigue.tier1.receive.playerEffect.fatigue.duration", 30);
 
-        /** Health pool Upgrade */
+        /* Health pool Upgrade */
         yml.addDefault("Default.healPool.slot", 21);
         yml.addDefault("Default.healPool.tier1.displayItem.material", "BEACON");
         yml.addDefault("Default.healPool.tier1.displayItem.data", 0);

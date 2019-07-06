@@ -1,6 +1,5 @@
 package com.andrei1058.bedwars.language;
 
-import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import org.bukkit.configuration.file.YamlConfiguration;
 

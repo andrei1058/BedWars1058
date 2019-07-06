@@ -1,6 +1,5 @@
 package com.andrei1058.bedwars.api.events;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 

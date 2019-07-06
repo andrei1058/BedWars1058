@@ -10,6 +10,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import static com.andrei1058.bedwars.Main.shop;
 
+@SuppressWarnings("unchecked")
 public class Silverfish extends EntitySilverfish {
 
     private BedWarsTeam bedWarsTeam;

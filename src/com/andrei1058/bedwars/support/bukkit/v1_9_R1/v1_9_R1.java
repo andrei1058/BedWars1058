@@ -55,7 +55,7 @@ public class v1_9_R1 implements NMS {
     /**
      * ArenaList of despawnable entities aka special shop mobs
      */
-    private static List<Despawnable> despawnables = new ArrayList();
+    private static ArrayList<Despawnable> despawnables = new ArrayList<>();
 
     @Override
     public Sound bedDestroy() {
@@ -326,7 +326,7 @@ public class v1_9_R1 implements NMS {
     }
 
 
-    public void registerEntity(String name, int id, Class customClass) {
+    private void registerEntity(String name, int id, Class customClass) {
         try {
             ArrayList<Map> dataMap = new ArrayList<>();
             for (Field f : EntityTypes.class.getDeclaredFields()) {
@@ -347,7 +347,7 @@ public class v1_9_R1 implements NMS {
     }
 
     public class VillagerShop extends net.minecraft.server.v1_9_R1.EntityVillager {
-        public VillagerShop(net.minecraft.server.v1_9_R1.World world) {
+        VillagerShop(net.minecraft.server.v1_9_R1.World world) {
             super(world);
             try {
                 Field bField = net.minecraft.server.v1_9_R1.PathfinderGoalSelector.class.getDeclaredField("b");
@@ -358,7 +358,7 @@ public class v1_9_R1 implements NMS {
                 bField.set(this.targetSelector, new UnsafeList());
                 cField.set(this.goalSelector, new UnsafeList());
                 cField.set(this.targetSelector, new UnsafeList());
-            } catch (Exception bField) {
+            } catch (Exception ignored) {
             }
             this.goalSelector.a(0, new net.minecraft.server.v1_9_R1.PathfinderGoalFloat(this));
             this.goalSelector.a(9, new net.minecraft.server.v1_9_R1.PathfinderGoalInteract(this, net.minecraft.server.v1_9_R1.EntityHuman.class, 3.0f, 1.0f));
@@ -392,6 +392,7 @@ public class v1_9_R1 implements NMS {
         }
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     private Villager spawnVillager(Location loc) {
         net.minecraft.server.v1_9_R1.WorldServer mcWorld = ((CraftWorld) loc.getWorld()).getHandle();
         VillagerShop customEnt = new VillagerShop(mcWorld);
@@ -407,7 +408,7 @@ public class v1_9_R1 implements NMS {
         int despawn = 250;
         String namePath;
 
-        public Despawnable(EntityLiving e, BedWarsTeam team, int despawn, String namePath) {
+        Despawnable(EntityLiving e, BedWarsTeam team, int despawn, String namePath) {
             this.e = e;
             this.team = team;
             if (despawn != 0) {
@@ -419,7 +420,7 @@ public class v1_9_R1 implements NMS {
             owningTeam.put(e.getUniqueID(), team.getName());
         }
 
-        public void regresh() {
+        void regresh() {
             if (!e.isAlive()) {
                 despawnables.remove(this);
                 return;
@@ -468,12 +469,12 @@ public class v1_9_R1 implements NMS {
 
     @Override
     public void hideArmor(Player p, Player p2) {
-        PacketPlayOutEntityEquipment hand1 = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.MAINHAND, new ItemStack(new Item().getById(0)));
-        PacketPlayOutEntityEquipment hand2 = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.OFFHAND, new ItemStack(new Item().getById(0)));
-        PacketPlayOutEntityEquipment helmet = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.HEAD, new ItemStack(new Item().getById(0)));
-        PacketPlayOutEntityEquipment chest = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.CHEST, new ItemStack(new Item().getById(0)));
-        PacketPlayOutEntityEquipment pants = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.LEGS, new ItemStack(new Item().getById(0)));
-        PacketPlayOutEntityEquipment boots = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.FEET, new ItemStack(new Item().getById(0)));
+        PacketPlayOutEntityEquipment hand1 = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.MAINHAND, new ItemStack(Item.getById(0)));
+        PacketPlayOutEntityEquipment hand2 = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.OFFHAND, new ItemStack(Item.getById(0)));
+        PacketPlayOutEntityEquipment helmet = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.HEAD, new ItemStack(Item.getById(0)));
+        PacketPlayOutEntityEquipment chest = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.CHEST, new ItemStack(Item.getById(0)));
+        PacketPlayOutEntityEquipment pants = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.LEGS, new ItemStack(Item.getById(0)));
+        PacketPlayOutEntityEquipment boots = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.FEET, new ItemStack(Item.getById(0)));
         PlayerConnection pc = ((CraftPlayer) p2).getHandle().playerConnection;
         if (p != p2) {
             pc.sendPacket(hand1);

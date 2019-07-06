@@ -16,6 +16,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import static com.andrei1058.bedwars.Main.nms;
 
+@SuppressWarnings("WeakerAccess")
 public class EggBridgeTask implements Runnable {
 
     private Projectile projectile;

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@SuppressWarnings({"unchecked", "SimplifiableConditionalExpression", "Java8ListSort", "ForLoopReplaceableByForEach", "UnnecessaryContinue", "SuspiciousMethodCalls", "WeakerAccess", "Guava"})
 public class AttackEnemies<T extends EntityLiving> extends PathfinderGoalTarget {
 
     protected final Class<T> a;
@@ -56,7 +57,7 @@ public class AttackEnemies<T extends EntityLiving> extends PathfinderGoalTarget 
             if (list.isEmpty()) {
                 return false;
             } else {
-                Collections.sort(list, this.b);
+                list.sort(this.b);
                 for (int x = 0; x < list.size(); x++) {
                     if (list.get(x) instanceof Silverfish) {
                         continue;

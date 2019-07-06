@@ -1,7 +1,6 @@
 package com.andrei1058.bedwars.database;
 
 import java.sql.Timestamp;
-import java.util.HashMap;
 import java.util.UUID;
 
 public interface Database {

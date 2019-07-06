@@ -85,21 +85,21 @@ public class ConfigManager {
     }
 
     public String stringLocationArenaFormat(Location loc) {
-        return Double.valueOf(loc.getX()) + "," + Double.valueOf(loc.getY()) + "," + Double.valueOf(loc.getZ()) + "," + Double.valueOf(loc.getYaw()) + "," + Double.valueOf(loc.getPitch());
+        return loc.getX() + "," + loc.getY() + "," + loc.getZ() + "," + (double) loc.getYaw() + "," + (double) loc.getPitch();
     }
 
     public String stringLocationConfigFormat(Location loc) {
-        return Double.valueOf(loc.getX()) + "," + Double.valueOf(loc.getY()) + "," + Double.valueOf(loc.getZ()) + "," + Double.valueOf(loc.getYaw()) + "," + Double.valueOf(loc.getPitch()) + "," + loc.getWorld().getName();
+        return loc.getX() + "," + loc.getY() + "," + loc.getZ() + "," + (double) loc.getYaw() + "," + (double) loc.getPitch() + "," + loc.getWorld().getName();
     }
 
     public void saveConfigLoc(String path, Location loc) {
-        String data = Double.valueOf(loc.getX()) + "," + Double.valueOf(loc.getY()) + "," + Double.valueOf(loc.getZ()) + "," + Double.valueOf(loc.getYaw()) + "," + Double.valueOf(loc.getPitch()) + "," + loc.getWorld().getName();
+        String data = loc.getX() + "," + loc.getY() + "," + loc.getZ() + "," + (double) loc.getYaw() + "," + (double) loc.getPitch() + "," + loc.getWorld().getName();
         yml.set(path, data);
         save();
     }
 
     public void saveArenaLoc(String path, Location loc) {
-        String data = Double.valueOf(loc.getX()) + "," + Double.valueOf(loc.getY()) + "," + Double.valueOf(loc.getZ()) + "," + Double.valueOf(loc.getYaw()) + "," + Double.valueOf(loc.getPitch());
+        String data = loc.getX() + "," + loc.getY() + "," + loc.getZ() + "," + (double) loc.getYaw() + "," + (double) loc.getPitch();
         yml.set(path, data);
         save();
     }

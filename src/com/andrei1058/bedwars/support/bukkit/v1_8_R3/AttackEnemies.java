@@ -1,16 +1,15 @@
 package com.andrei1058.bedwars.support.bukkit.v1_8_R3;
 
 import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityTargetEvent;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
+@SuppressWarnings("unchecked")
 public class AttackEnemies<T extends EntityLiving> extends PathfinderGoalTarget {
 
     protected final Class<T> a;

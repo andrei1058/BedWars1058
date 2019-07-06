@@ -30,8 +30,7 @@ public class PlayerChat implements Listener {
         if (e.isCancelled()) return;
         if (getServerType() == ServerType.SHARED) {
             if (Arena.getArenaByPlayer(p) == null) {
-                for (Iterator<Player> on = e.getRecipients().iterator(); on.hasNext(); ) {
-                    Player pl = on.next();
+                for (Player pl : e.getRecipients()) {
                     if (Arena.getArenaByPlayer(pl) != null) {
                         e.getRecipients().remove(pl);
                     }
@@ -42,7 +41,7 @@ public class PlayerChat implements Listener {
         if (p.hasPermission("bw.chatcolor") || p.hasPermission("bw.*") || p.hasPermission("bw.vip")) {
             e.setMessage(ChatColor.translateAlternateColorCodes('&', e.getMessage()));
         }
-        if (p.getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld()) && plugin.getServerType() == ServerType.MULTIARENA) {
+        if (p.getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld()) && getServerType() == ServerType.MULTIARENA) {
             if (!config.getBoolean("globalChat")) {
                 e.getRecipients().clear();
                 e.getRecipients().addAll(p.getWorld().getPlayers());

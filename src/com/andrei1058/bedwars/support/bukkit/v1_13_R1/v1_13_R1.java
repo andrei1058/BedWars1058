@@ -41,7 +41,6 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
-import org.bukkit.util.Vector;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -54,6 +53,7 @@ import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.despawnables.TargetListener.owningTeam;
 import static com.andrei1058.bedwars.language.Language.getMsg;
 
+@SuppressWarnings("UnusedReturnValue")
 public class v1_13_R1 implements NMS {
 
     private Sound bedDestroy = Sound.valueOf("ENTITY_ENDER_DRAGON_GROWL"),
@@ -65,7 +65,7 @@ public class v1_13_R1 implements NMS {
     /**
      * ArenaList of despawnable entities aka special shop mobs
      */
-    private static List<Despawnable> despawnables = new ArrayList();
+    private static ArrayList<Despawnable> despawnables = new ArrayList<>();
 
     @Override
     public Sound bedDestroy() {
@@ -295,6 +295,7 @@ public class v1_13_R1 implements NMS {
         return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof IProjectile;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void registerEntities() {
         Map<Object, Type<?>> types = (Map<Object, Type<?>>) DataConverterRegistry.a().getSchema(15190).findChoiceType(DataConverterTypes.n).types();
@@ -356,7 +357,7 @@ public class v1_13_R1 implements NMS {
      */
     public class VillagerShop extends EntityVillager {
 
-        public VillagerShop(World world) {
+        VillagerShop(World world) {
 
             super(world);
 
@@ -369,7 +370,7 @@ public class v1_13_R1 implements NMS {
                 bField.set(this.targetSelector, Sets.newLinkedHashSet());
                 cField.set(this.goalSelector, Sets.newLinkedHashSet());
                 cField.set(this.targetSelector, Sets.newLinkedHashSet());
-            } catch (Exception bField) {
+            } catch (Exception ignored) {
             }
 
             this.goalSelector.a(0, new PathfinderGoalFloat(this));
@@ -433,7 +434,7 @@ public class v1_13_R1 implements NMS {
             owningTeam.put(e.getUniqueID(), team.getName());
         }
 
-        public void regresh() {
+        void regresh() {
             if (!e.isAlive()) {
                 despawnables.remove(this);
                 return;
@@ -476,12 +477,12 @@ public class v1_13_R1 implements NMS {
 
     @Override
     public void hideArmor(Player p, Player p2) {
-        PacketPlayOutEntityEquipment hand1 = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.MAINHAND, new ItemStack(new Item(new Item.Info()).getById(0)));
-        PacketPlayOutEntityEquipment hand2 = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.OFFHAND, new ItemStack(new Item(new Item.Info()).getById(0)));
-        PacketPlayOutEntityEquipment helmet = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.HEAD, new ItemStack(new Item(new Item.Info()).getById(0)));
-        PacketPlayOutEntityEquipment chest = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.CHEST, new ItemStack(new Item(new Item.Info()).getById(0)));
-        PacketPlayOutEntityEquipment pants = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.LEGS, new ItemStack(new Item(new Item.Info()).getById(0)));
-        PacketPlayOutEntityEquipment boots = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.FEET, new ItemStack(new Item(new Item.Info()).getById(0)));
+        PacketPlayOutEntityEquipment hand1 = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.MAINHAND, new ItemStack(Item.getById(0)));
+        PacketPlayOutEntityEquipment hand2 = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.OFFHAND, new ItemStack(Item.getById(0)));
+        PacketPlayOutEntityEquipment helmet = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.HEAD, new ItemStack(Item.getById(0)));
+        PacketPlayOutEntityEquipment chest = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.CHEST, new ItemStack(Item.getById(0)));
+        PacketPlayOutEntityEquipment pants = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.LEGS, new ItemStack(Item.getById(0)));
+        PacketPlayOutEntityEquipment boots = new PacketPlayOutEntityEquipment(p.getEntityId(), EnumItemSlot.FEET, new ItemStack(Item.getById(0)));
         EntityPlayer pc = ((CraftPlayer) p2).getHandle();
         if (p != p2) {
             pc.playerConnection.sendPacket(hand1);
@@ -558,7 +559,6 @@ public class v1_13_R1 implements NMS {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public void setBlockTeamColor(org.bukkit.block.Block block, TeamColor teamColor) {
         if (block.getType().toString().contains("STAINED_GLASS") || block.getType().toString().equals("GLASS")){
             block.setType(TeamColor.getGlass(teamColor));
@@ -614,7 +614,6 @@ public class v1_13_R1 implements NMS {
         if (i.getType() != org.bukkit.Material.valueOf("PLAYER_HEAD")) return i;
         SkullMeta sm = (SkullMeta) i.getItemMeta();
         //sm.setOwningPlayer(p);
-        //noinspection deprecation
         sm.setOwner(p.getName());
         i.setItemMeta(sm);
         return i;
@@ -747,9 +746,7 @@ public class v1_13_R1 implements NMS {
 
         try {
             m2.invoke(block, result);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
         block.getState().update(true);
