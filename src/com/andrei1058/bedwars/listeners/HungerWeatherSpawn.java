@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.listeners;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
@@ -25,30 +26,24 @@ public class HungerWeatherSpawn implements Listener {
 
     @EventHandler
     public void onFoodChange(FoodLevelChangeEvent e) {
-        switch (getServerType()) {
-            case SHARED:
-                if (Arena.getArenaByPlayer((Player) e.getEntity()) != null) {
-                    e.setCancelled(true);
-                }
-                break;
-            default:
+        if (getServerType() == ServerType.SHARED) {
+            if (Arena.getArenaByPlayer((Player) e.getEntity()) != null) {
                 e.setCancelled(true);
-                break;
+            }
+        } else {
+            e.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onWeatherChange(WeatherChangeEvent e) {
         if (e.toWeatherState()) {
-            switch (getServerType()) {
-                case SHARED:
-                    if (Arena.getArenaByName(e.getWorld().getName()) != null) {
-                        e.setCancelled(true);
-                    }
-                    break;
-                default:
+            if (getServerType() == ServerType.SHARED) {
+                if (Arena.getArenaByName(e.getWorld().getName()) != null) {
                     e.setCancelled(true);
-                    break;
+                }
+            } else {
+                e.setCancelled(true);
             }
         }
     }
@@ -78,13 +73,21 @@ public class HungerWeatherSpawn implements Listener {
                 PotionMeta pm = (PotionMeta) e.getItem().getItemMeta();
                 if (pm.hasCustomEffects()) {
                     if (pm.hasCustomEffect(PotionEffectType.INVISIBILITY)) {
-                        for (Player p1 : e.getPlayer().getWorld().getPlayers()) {
-                            nms.hideArmor(e.getPlayer(), p1);
-                        }
-                        for (PotionEffect pe : pm.getCustomEffects()) {
-                                a.getShowTime().put(e.getPlayer(), pe.getDuration() / 20);
-                                break;
-                        }
+                        Bukkit.getScheduler().runTaskLater(plugin, ()-> {
+                            for (PotionEffect pe : e.getPlayer().getActivePotionEffects()) {
+                                if (pe.getType().toString().contains("INVISIBILITY")) {
+                                    if (a.getShowTime().containsKey(e.getPlayer())){
+                                        a.getShowTime().replace(e.getPlayer(), pe.getDuration() / 20);
+                                    } else {
+                                        a.getShowTime().put(e.getPlayer(), pe.getDuration() / 20);
+                                        for (Player p1 : e.getPlayer().getWorld().getPlayers()) {
+                                            nms.hideArmor(e.getPlayer(), p1);
+                                        }
+                                    }
+                                    break;
+                                }
+                            }
+                        }, 5L);
                     }
                 }
                 break;
@@ -96,8 +99,8 @@ public class HungerWeatherSpawn implements Listener {
                 nms.minusAmount(e.getPlayer(), nms.getItemInHand(e.getPlayer()), 1);
                 int task = Bukkit.getScheduler().runTaskLater(plugin, () -> {
                     Arena.magicMilk.remove(e.getPlayer().getUniqueId());
-                    debug("PlayerItemConsumeEvent player "+ e.getPlayer() + " was removed from magicMilk");
-                }, 20*30L).getTaskId();
+                    debug("PlayerItemConsumeEvent player " + e.getPlayer() + " was removed from magicMilk");
+                }, 20 * 30L).getTaskId();
                 Arena.magicMilk.put(e.getPlayer().getUniqueId(), task);
                 break;
         }
@@ -122,11 +125,11 @@ public class HungerWeatherSpawn implements Listener {
 
     @EventHandler
     //Prevent item spawning, issue #60
-    public void onItemSpawn(ItemSpawnEvent e){
+    public void onItemSpawn(ItemSpawnEvent e) {
         Location l = e.getEntity().getLocation();
         Arena a = Arena.getArenaByName(l.getWorld().getName());
         if (a == null) return;
-        if (a.getStatus() != GameState.playing){
+        if (a.getStatus() != GameState.playing) {
             e.setCancelled(true);
         }
     }
