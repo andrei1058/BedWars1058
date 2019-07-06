@@ -31,7 +31,6 @@ public class PlayerLevel {
      * Cache a player level.
      */
     public PlayerLevel(UUID player, int level, int currentXp) {
-        //Bukkit.broadcastMessage("PlayerLevel " + player.toString());
         levelByPlayer.put(player, this);
         this.uuid = player;
         setLevelName(level);
@@ -60,7 +59,8 @@ public class PlayerLevel {
     }
 
     public void lazyLoad(int level, int currentXp) {
-        //Bukkit.broadcastMessage("LAZY LOAD " + uuid.toString());
+        if (level < 1) level = 1;
+        if (currentXp < 0) currentXp = 0;
         setLevelName(level);
         setNextLevelCost(level);
         this.level = level;
@@ -157,6 +157,7 @@ public class PlayerLevel {
      * Add xp to player with source.
      */
     public void addXp(int xp, PlayerXpGainEvent.XpSource source) {
+        if (xp < 0) return;
         this.currentXp += xp;
         upgradeLevel();
         updateProgressBar();
@@ -167,6 +168,7 @@ public class PlayerLevel {
      * Set player xp.
      */
     public void setXp(int currentXp) {
+        if (currentXp <= 0) currentXp = 0;
         this.currentXp = currentXp;
         upgradeLevel();
         updateProgressBar();
