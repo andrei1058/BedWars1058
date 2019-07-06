@@ -178,7 +178,7 @@ public class BuyItem {
                 for (BedWarsTeam.Enchant e : arena.getTeam(player).getBowsEnchantments()) {
                     im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
                 }
-            } else if (nms.isSword(i)) {
+            } else if (nms.isSword(i) || nms.isAxe(i)) {
                 for (BedWarsTeam.Enchant e : arena.getTeam(player).getSwordsEnchantemnts()) {
                     im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
                 }

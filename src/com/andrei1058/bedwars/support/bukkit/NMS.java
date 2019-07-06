@@ -76,6 +76,11 @@ public interface NMS {
     boolean isSword(ItemStack itemStack);
 
     /**
+     * Check if item-stack is axe
+     */
+    boolean isAxe(ItemStack itemStack);
+
+    /**
      * Check if item-stack is bow
      */
     boolean isBow(ItemStack itemStack);

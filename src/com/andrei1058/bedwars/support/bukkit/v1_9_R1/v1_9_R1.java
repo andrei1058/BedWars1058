@@ -253,6 +253,12 @@ public class v1_9_R1 implements NMS {
         return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemSword;
     }
 
+    @Override
+    public boolean isAxe(org.bukkit.inventory.ItemStack itemStack) {
+        if (CraftItemStack.asNMSCopy(itemStack).getItem() == null) return false;
+        return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemAxe;
+    }
+
 
     @Override
     public boolean isBow(org.bukkit.inventory.ItemStack itemStack) {
