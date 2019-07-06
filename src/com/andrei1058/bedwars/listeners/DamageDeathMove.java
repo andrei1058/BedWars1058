@@ -330,6 +330,7 @@ public class DamageDeathMove implements Listener {
                             if (i == null) continue;
                             if (i.getType() == Material.AIR) continue;
                             if (nms.isArmor(i) || nms.isBow(i) || nms.isSword(i) || nms.isTool(i)) continue;
+                            if (!nms.getShopUpgradeIdentifier(i).trim().isEmpty()) continue;
                             if (a.getTeam(killer) != null) {
                                 killer.getWorld().dropItemNaturally(a.getTeam(killer).getIronGenerator().getLocation(), i);
                             }

@@ -187,7 +187,7 @@ public class BuyItem {
             i.setItemMeta(im);
 
             if (permanent) {
-                i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier).clone();
+                i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
             }
         }
 
