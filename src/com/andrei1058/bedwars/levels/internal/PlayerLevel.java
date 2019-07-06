@@ -31,6 +31,8 @@ public class PlayerLevel {
      * Cache a player level.
      */
     public PlayerLevel(UUID player, int level, int currentXp) {
+        //Bukkit.broadcastMessage("PlayerLevel " + player.toString());
+        levelByPlayer.put(player, this);
         this.uuid = player;
         setLevelName(level);
         setNextLevelCost(level);
@@ -42,7 +44,6 @@ public class PlayerLevel {
         this.level = level;
         this.currentXp = currentXp;
         updateProgressBar();
-        levelByPlayer.put(player, this);
         //requiredXp = nextLevelCost >= 1000 ? nextLevelCost % 1000 == 0 ? nextLevelCost / 1000 + "k" : (double) nextLevelCost / 1000 + "k" : String.valueOf(nextLevelCost);
         //formattedCurrentXp = currentXp >= 1000 ? currentXp % 1000 == 0 ? currentXp / 1000 + "k" : (double) currentXp / 1000 + "k" : String.valueOf(currentXp);
     }
@@ -58,19 +59,22 @@ public class PlayerLevel {
                 LevelsConfig.levels.getYml().getInt("levels.others.rankup-cost") : LevelsConfig.levels.getYml().getInt("levels." + level + ".rankup-cost");
     }
 
-    public void lazyLoad(int level, int currentXp){
+    public void lazyLoad(int level, int currentXp) {
+        //Bukkit.broadcastMessage("LAZY LOAD " + uuid.toString());
         setLevelName(level);
         setNextLevelCost(level);
         this.level = level;
         this.currentXp = currentXp;
         updateProgressBar();
 
-        for (SBoard sb : SBoard.getScoreboards()){
-            if (sb.getP().getUniqueId().equals(uuid)){
-                sb.refresh();
-                break;
+        Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+            for (SBoard sb : SBoard.getScoreboards()) {
+                if (sb.getP().getUniqueId().equals(uuid)) {
+                    sb.refresh();
+                    break;
+                }
             }
-        }
+        }, 5L);
     }
 
     /**
@@ -80,7 +84,7 @@ public class PlayerLevel {
         double l1 = ((nextLevelCost - currentXp) / (double) (nextLevelCost)) * 10;
         int locked = (int) l1;
         int unlocked = 10 - locked;
-        if (locked <0 || unlocked < 0){
+        if (locked < 0 || unlocked < 0) {
             locked = 10;
             unlocked = 0;
         }
@@ -110,7 +114,7 @@ public class PlayerLevel {
      */
     @Nullable
     public static PlayerLevel getLevelByPlayer(UUID player) {
-        return levelByPlayer.getOrDefault(player, new PlayerLevel(player, 1, 0));
+        return levelByPlayer.getOrDefault(player, null);
     }
 
     /**

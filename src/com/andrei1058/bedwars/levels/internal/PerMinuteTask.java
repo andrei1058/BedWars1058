@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.api.events.PlayerXpGainEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.configuration.LevelsConfig;
 import com.andrei1058.bedwars.language.Language;
+import com.andrei1058.bedwars.language.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
@@ -24,7 +25,7 @@ public class PerMinuteTask {
         task = Bukkit.getScheduler().runTaskTimer(Main.plugin, () -> {
             for (Player p : arena.getPlayers()) {
                 PlayerLevel.getLevelByPlayer(p.getUniqueId()).addXp(xp, PlayerXpGainEvent.XpSource.PER_MINUTE);
-                p.sendMessage(Language.getMsg(p, "xp-reward-per-minute").replace("{xp}", String.valueOf(xp)));
+                p.sendMessage(Language.getMsg(p, Messages.XP_REWARD_PER_MINUTE).replace("{xp}", String.valueOf(xp)));
             }
         }, 60 * 20, 60 * 20);
     }
