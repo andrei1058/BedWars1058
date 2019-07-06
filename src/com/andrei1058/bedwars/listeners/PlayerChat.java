@@ -47,7 +47,7 @@ public class PlayerChat implements Listener {
                 e.getRecipients().addAll(p.getWorld().getPlayers());
             }
             e.setFormat(SupportPAPI.getSupportPAPI().replace(e.getPlayer(), getMsg(p, Messages.FORMATTING_CHAT_LOBBY).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{vSuffix}", getChatSupport().getSuffix(p))
-                    .replace("{player}", p.getName()).replace("{level}", getLevelSupport().getLevel(p))).replace("{message}", "%2$s"));
+                    .replace("{player}", p.getDisplayName()).replace("{level}", getLevelSupport().getLevel(p))).replace("{message}", "%2$s"));
         } else if (Arena.getArenaByPlayer(p) != null) {
             Arena a = Arena.getArenaByPlayer(p);
             Arena.afkCheck.remove(p.getUniqueId());
@@ -60,7 +60,7 @@ public class PlayerChat implements Listener {
                     e.getRecipients().addAll(a.getSpectators());
                 }
                 e.setFormat(SupportPAPI.getSupportPAPI().replace(e.getPlayer(), getMsg(p, Messages.FORMATTING_CHAT_SPECTATOR).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{vSuffix}", getChatSupport().getSuffix(p))
-                        .replace("{player}", p.getName()).replace("{message}", "%2$s").replace("{level}", getLevelSupport().getLevel(p))));
+                        .replace("{player}", p.getDisplayName()).replace("{message}", "%2$s").replace("{level}", getLevelSupport().getLevel(p))));
             } else {
                 if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) {
                     if (!config.getBoolean("globalChat")) {
@@ -68,7 +68,7 @@ public class PlayerChat implements Listener {
                         e.getRecipients().addAll(a.getPlayers());
                     }
                     e.setFormat(SupportPAPI.getSupportPAPI().replace(e.getPlayer(), getMsg(p, Messages.FORMATTING_CHAT_WAITING).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{vSuffix}", getChatSupport().getSuffix(p))
-                            .replace("{player}", p.getName()).replace("{level}", getLevelSupport().getLevel(p))).replace("{message}", "%2$s"));
+                            .replace("{player}", p.getDisplayName()).replace("{level}", getLevelSupport().getLevel(p))).replace("{message}", "%2$s"));
                     return;
                 }
                 BedWarsTeam t = a.getTeam(p);
@@ -97,7 +97,7 @@ public class PlayerChat implements Listener {
                         msg = msg.replaceFirst(getMsg(p, Messages.MEANING_SHOUT), "");
                     e.setMessage(msg);
                     e.setFormat(SupportPAPI.getSupportPAPI().replace(e.getPlayer(), getMsg(p, Messages.FORMATTING_CHAT_SHOUT).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{vSuffix}", getChatSupport().getSuffix(p))
-                            .replace("{player}", p.getName()).replace("{team}", TeamColor.getChatColor(t.getColor()) + "[" + t.getName().toUpperCase() + "]")
+                            .replace("{player}", p.getDisplayName()).replace("{team}", TeamColor.getChatColor(t.getColor()) + "[" + t.getName().toUpperCase() + "]")
                             .replace("{level}", getLevelSupport().getLevel(p))).replace("{message}", "%2$s"));
                 } else {
                     if (a.getMaxInTeam() == 1) {
@@ -107,7 +107,7 @@ public class PlayerChat implements Listener {
                             e.getRecipients().addAll(a.getSpectators());
                         }
                         e.setFormat(SupportPAPI.getSupportPAPI().replace(e.getPlayer(), getMsg(p, Messages.FORMATTING_CHAT_TEAM).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{vSuffix}", getChatSupport().getSuffix(p))
-                                .replace("{player}", p.getName()).replace("{team}", TeamColor.getChatColor(t.getColor()) + "[" + t.getName().toUpperCase() + "]")
+                                .replace("{player}", p.getDisplayName()).replace("{team}", TeamColor.getChatColor(t.getColor()) + "[" + t.getName().toUpperCase() + "]")
                                 .replace("{level}", getLevelSupport().getLevel(p))).replace("{message}", "%2$s"));
 
                     } else {
@@ -116,7 +116,7 @@ public class PlayerChat implements Listener {
                             e.getRecipients().addAll(t.getMembers());
                         }
                         e.setFormat(SupportPAPI.getSupportPAPI().replace(e.getPlayer(), getMsg(p, Messages.FORMATTING_CHAT_TEAM).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{vSuffix}", getChatSupport().getSuffix(p))
-                                .replace("{player}", p.getName()).replace("{team}", TeamColor.getChatColor(t.getColor()) + "[" + t.getName().toUpperCase() + "]")
+                                .replace("{player}", p.getDisplayName()).replace("{team}", TeamColor.getChatColor(t.getColor()) + "[" + t.getName().toUpperCase() + "]")
                                 .replace("{level}", getLevelSupport().getLevel(p))).replace("{message}", "%2$s"));
 
                     }
