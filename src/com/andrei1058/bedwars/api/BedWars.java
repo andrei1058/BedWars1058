@@ -114,7 +114,7 @@ public class BedWars implements GameAPI {
     public void setPlayerAFK(Player player, boolean value) {
         if (value) {
             if (!afkPlayers.containsKey(player)) {
-                afkPlayers.put(player, Arena.afkCheck.get(player));
+                afkPlayers.put(player, Arena.afkCheck.get(player.getUniqueId()));
                 Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.PlayerAfkEvent(player, com.andrei1058.bedwars.api.events.PlayerAfkEvent.AFKType.START));
             }
         } else {
@@ -122,7 +122,7 @@ public class BedWars implements GameAPI {
                 afkPlayers.remove(player);
                 Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.PlayerAfkEvent(player, PlayerAfkEvent.AFKType.END));
             }
-            Arena.afkCheck.remove(player);
+            Arena.afkCheck.remove(player.getUniqueId());
         }
     }
 

@@ -509,7 +509,7 @@ public class DamageDeathMove implements Listener {
                         }
                     }
                     if (e.getFrom() != e.getTo()) {
-                        Arena.afkCheck.remove(e.getPlayer());
+                        Arena.afkCheck.remove(e.getPlayer().getUniqueId());
                         if (Main.api.isPlayerAFK(e.getPlayer())) {
                             Main.api.setPlayerAFK(e.getPlayer(), false);
                         }
