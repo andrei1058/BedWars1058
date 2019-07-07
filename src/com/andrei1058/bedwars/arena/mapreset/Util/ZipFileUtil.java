@@ -1,6 +1,4 @@
-package com.andrei1058.bedwars.arena.mapreset.internal.Util;
-
-import com.andrei1058.bedwars.Main;
+package com.andrei1058.bedwars.arena.mapreset.Util;
 
 import java.io.File;
 import java.io.FileInputStream;

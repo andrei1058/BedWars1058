@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.arena.mapreset.internal.Util;
+package com.andrei1058.bedwars.arena.mapreset.Util;
 //CODE BY: Arceus02
 import com.andrei1058.bedwars.Main;
 

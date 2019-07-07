@@ -5,9 +5,9 @@ import com.andrei1058.bedwars.api.GameAPI;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.arena.despawnables.TargetListener;
-import com.andrei1058.bedwars.arena.mapreset.FAWE;
 import com.andrei1058.bedwars.arena.mapreset.MapManager;
 import com.andrei1058.bedwars.arena.mapreset.ResetAdaptor;
+import com.andrei1058.bedwars.arena.mapreset.fawe.FastAsyncWorldEdit;
 import com.andrei1058.bedwars.arena.spectator.v1_9PlusListener;
 import com.andrei1058.bedwars.commands.party.PartyCommand;
 import com.andrei1058.bedwars.commands.rejoin.RejoinCommand;
@@ -197,12 +197,10 @@ public class Main extends JavaPlugin {
         }
 
         // Load FastAsyncWorldEdit support
-        //if (Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit") != null) {
-        //    if (Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit").isEnabled()) {
-        //        resetAdaptor = ResetAdaptor.FAWE;
-        //        this.getLogger().info("Hook into FastAsyncWorldEdit support!");
-        //    }
-        //}
+        if (Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit") != null) {
+            resetAdaptor = ResetAdaptor.FAWE;
+            this.getLogger().info("Hook into FastAsyncWorldEdit support!");
+        }
 
         ArenaSocket.serverIdentifier = Bukkit.getServer().getIp() + ":" + Bukkit.getServer().getPort();
 
@@ -930,7 +928,7 @@ public class Main extends JavaPlugin {
         MapManager manager;
 
         if (resetAdaptor == ResetAdaptor.FAWE) {
-            manager = new FAWE(arena, name);
+            manager = new FastAsyncWorldEdit(arena, name);
         } else {
             manager = new MapManager(arena, name);
         }

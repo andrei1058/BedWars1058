@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import com.andrei1058.bedwars.arena.mapreset.MapManager;
-import com.andrei1058.bedwars.arena.mapreset.internal.Util.ZipFileUtil;
+import com.andrei1058.bedwars.arena.mapreset.Util.ZipFileUtil;
 import org.bukkit.Bukkit;
 
 public class WorldZipper implements WorldOperator {

@@ -40,6 +40,10 @@ public class Russian {
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_NOT_EXIST, "{prefix}&cЭтот язык не существует!");
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY, "{prefix}&aЯзык сменен!");
         yml.addDefault(Messages.COMMAND_LANG_USAGE_DENIED, "{prefix}&cВы не можете изменить язык во время игры.");
+        yml.addDefault(Messages.COMMAND_TP_PLAYER_NOT_FOUND, "{prefix}&cPlayer not found!");
+        yml.addDefault(Messages.COMMAND_TP_NOT_IN_ARENA, "{prefix}&cThis player is not in a bedwars arena!");
+        yml.addDefault(Messages.COMMAND_TP_NOT_STARTED, "{prefix}&cThe arena where the player is didn't start yet!");
+        yml.addDefault(Messages.COMMAND_TP_USAGE, "{prefix}&cUsage: /bw tp <username>");
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_PARTY_TOO_BIG, "{prefix}&cВаша партия слишком велика для того, чтобы присоединиться к этой арене как команде :(");
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_NOT_PARTY_LEADER, "{prefix}&cТолько лидер может выбрать арену.");
         yml.addDefault(Messages.COMMAND_REJOIN_PLAYER_RECONNECTED, "{prefix}&7{player} &ehas reconnected!");
@@ -129,9 +133,9 @@ public class Russian {
         yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&bСОЛО УЛУЧШЕНИЯ,&e&lRIGHT CLICK");
         yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&bМАГАЗИН,&e&lRIGHT CLICK");
         yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&bМАГАЗИН,&e&lRIGHT CLICK");
-        yml.addDefault("xp-reward-per-minute", "{prefix}&6+{xp} BedWars Experience Received (Play Time).");
-        yml.addDefault("xp-reward-game-win", "{prefix}&6+{xp} BedWars Experience Received (Game Win).");
-        yml.addDefault("xp-reward-per-teammate", "{prefix}&6+{xp} BedWars Experience Received (Team Support).");
+        yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&6+{xp} BedWars Experience Received (Play Time).");
+        yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&6+{xp} BedWars Experience Received (Game Win).");
+        yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "{prefix}&6+{xp} BedWars Experience Received (Team Support).");
 
         //SHOP
         yml.addDefault(Messages.SHOP_INDEX_NAME, "&8Quick Buy");

@@ -40,6 +40,10 @@ public class Messages {
     public static String COMMAND_JOIN_PLAYER_JOIN_MSG = "cmd-join-success";
     public static String COMMAND_JOIN_SPECTATOR_MSG = "cmd-join-spectate";
     public static String COMMAND_JOIN_SPECTATOR_DENIED_MSG = "cmd-join-spectate-denied";
+    public static String COMMAND_TP_PLAYER_NOT_FOUND = "cmd-tp-player-not-found";
+    public static String COMMAND_TP_NOT_IN_ARENA = "cmd-tp-not-in-arena";
+    public static String COMMAND_TP_NOT_STARTED = "cmd-tp-not-started";
+    public static String COMMAND_TP_USAGE = "cmd-tp-usage";
     public static String REJOIN_NO_ARENA = "cmd-rejoin-no-arena";
     public static String REJOIN_DENIED = "cmd-rejoin-denied";
     public static String REJOIN_ALLOWED = "cmd-rejoin-allowed";
@@ -214,6 +218,9 @@ public class Messages {
     public static String GAME_END_VICTORY_PLAYER_TITLE = "game-end-victory-title";
     public static String GAME_END_TOP_PLAYER_CHAT = "game-end-top-chat";
     public static String GAME_END_TEAM_WON_CHAT = "game-end-winner-team";
+    public static String XP_REWARD_WIN = "xp-reward-game-win";
+    public static String XP_REWARD_PER_TEAMMATE = "xp-reward-per-teammate";
+    public static String XP_REWARD_PER_MINUTE = "xp-reward-per-minute";
 
     public static String TRAP_ENEMY_BASE_ENTER_TITLE = "trap-base-enter-title";
     public static String TRAP_ENEMY_BASE_ENTER_SUBTITLE = "trap-base-enter-subtitle";

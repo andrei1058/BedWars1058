@@ -28,7 +28,7 @@ public class MapManager {
     }
 
     /**
-     * Load world.
+     * Load world. Used for load the map at setup mode.
      */
     public void loadWorld() {
         isLevelWorld();
@@ -46,18 +46,17 @@ public class MapManager {
      */
     public void unloadWorld() {
         //if (isLevelWorld()) return;
-        Bukkit.unloadWorld(Bukkit.getWorld(name), false);
+        Bukkit.getScheduler().runTask(Main.plugin, () -> {
+            Bukkit.unloadWorld(Bukkit.getWorld(name), false);
+        });
     }
 
     /**
-     * Restore arena world.
+     * Restore arena world. Used to load/ enable the arena.
      */
     public void restoreWorld(String name, Arena arena) {
         //if (isLevelWorld()) return;
-        WorldOperator worldOperator;
-
-        worldOperator = new WorldRestorer(name, arena);
-        worldOperator.execute();
+        new WorldRestorer(name, arena).execute();
     }
 
     /**
