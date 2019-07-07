@@ -153,7 +153,8 @@ public class Arena implements Comparable<Arena> {
             }
         }
         File folder = new File(plugin.getServer().getWorldContainer().getPath(), name);
-        if (!folder.exists()) {
+        File folder2 = new File("plugins/BedWars1058/Cache", name + ".zip");
+        if (!(folder.exists() || folder2.exists())) {
             if (p != null) p.sendMessage("§cThere isn't any map called " + name);
             plugin.getLogger().severe("There isn't any map called " + name);
             return;
@@ -829,7 +830,9 @@ public class Arena implements Comparable<Arena> {
         reJoin.getBwt().reJoin(p);
         reJoin.destroy();
 
-        new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING), this);
+        Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+            new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING), this);
+        }, 15L);
 
         Bukkit.getPluginManager().callEvent(new PlayerReJoinEvent(p, this));
         return true;
