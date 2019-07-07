@@ -136,6 +136,11 @@ public class BuyItem {
             Material m = i.getType();
 
             ItemMeta im = i.getItemMeta();
+            // idk dadea erori
+            if (arena.getTeam(player) == null) {
+                Main.debug("Could not give BuyItem to " + player.getName() + " - TEAM IS NULL");
+                return;
+            }
             for (BedWarsTeam.Enchant e : arena.getTeam(player).getArmorsEnchantemnts()) {
                 im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
             }

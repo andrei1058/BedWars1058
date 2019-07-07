@@ -1,3 +1,10 @@
+# 0.13beta
+
+
+for devs:
+- EnemyBaseEnterEvent was removed, alternative: BaseEnterEvent (since api 9)
+- EnemyBaseLeaveEvent was removed, alternative: BaseLeaveEvent (since api 9)
+
 # 0.12beta
 - added "display-name" option used in scoreboards, in the arena selector etc.
 - shopkeepers messages update http://prntscr.com/o30zjo
