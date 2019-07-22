@@ -63,7 +63,8 @@ public class Arena implements Comparable<Arena> {
     private World world;
     private String group = "Default", worldName;
     private List<BedWarsTeam> teams = new ArrayList<>();
-    private List<Block> placed = new ArrayList<>();
+    private LinkedList<Block> placed = new LinkedList<>();
+    private LinkedList<Block> broken = new LinkedList<>();
     private List<String> nextEvents = new ArrayList<>();
     private List<Region> regionsList = new ArrayList<>();
 
@@ -194,7 +195,7 @@ public class Arena implements Comparable<Arena> {
             return;
         }
         if (error) return;
-        mapManager.restoreWorld(name, this);
+        mapManager.onEnable(name, this);
     }
 
     /**
@@ -872,7 +873,7 @@ public class Arena implements Comparable<Arena> {
         players.clear();
         spectators.clear();
         nextEvents.clear();
-        Bukkit.unloadWorld(world, false);
+        mapManager.onDisable();
         arenaByName.remove(world.getName());
         arenas.remove(this);
         //Call event
@@ -911,7 +912,7 @@ public class Arena implements Comparable<Arena> {
                 rjt.destroy();
             }
         }
-        mapManager.unloadWorld();
+        mapManager.onRestart();
     }
 
     //GETTER METHODS
@@ -1921,5 +1922,13 @@ public class Arena implements Comparable<Arena> {
 
     public List<Region> getRegionsList() {
         return regionsList;
+    }
+
+    public List<Block> getPlaced() {
+        return placed;
+    }
+
+    public LinkedList<Block> getBroken() {
+        return broken;
     }
 }

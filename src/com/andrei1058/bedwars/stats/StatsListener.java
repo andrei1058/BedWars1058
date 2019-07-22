@@ -67,6 +67,6 @@ public class StatsListener implements Listener {
     public void onQuit(PlayerQuitEvent e){
         //save or replace stats for player
         final Player p = e.getPlayer();
-        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.plugin, ()-> StatsManager.getStatsCache().updateRemote(p.getUniqueId(), p.getName()));
+        Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, ()-> StatsManager.getStatsCache().updateRemote(p.getUniqueId(), p.getName()));
     }
 }

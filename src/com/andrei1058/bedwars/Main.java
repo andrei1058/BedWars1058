@@ -7,7 +7,7 @@ import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.arena.despawnables.TargetListener;
 import com.andrei1058.bedwars.arena.mapreset.MapManager;
 import com.andrei1058.bedwars.arena.mapreset.ResetAdaptor;
-import com.andrei1058.bedwars.arena.mapreset.fawe.FastAsyncWorldEdit;
+import com.andrei1058.bedwars.arena.mapreset.worldedit.WorldEdit;
 import com.andrei1058.bedwars.arena.spectator.v1_9PlusListener;
 import com.andrei1058.bedwars.commands.party.PartyCommand;
 import com.andrei1058.bedwars.commands.rejoin.RejoinCommand;
@@ -197,9 +197,15 @@ public class Main extends JavaPlugin {
         }
 
         // Load FastAsyncWorldEdit support
-        if (Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit") != null) {
+        /*if (Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit") != null) {
             resetAdaptor = ResetAdaptor.FAWE;
             this.getLogger().info("Hook into FastAsyncWorldEdit support!");
+        }*/
+
+        // Load WorldEdit support
+        if (Bukkit.getPluginManager().getPlugin("WorldEdit") != null) {
+            resetAdaptor = ResetAdaptor.WORLD_EDIT;
+            this.getLogger().info("Hook into WorldEdit support!");
         }
 
         ArenaSocket.serverIdentifier = Bukkit.getServer().getIp() + ":" + Bukkit.getServer().getPort();
@@ -927,8 +933,13 @@ public class Main extends JavaPlugin {
     public static MapManager getMapManager(Arena arena, String name) {
         MapManager manager;
 
-        if (resetAdaptor == ResetAdaptor.FAWE) {
-            manager = new FastAsyncWorldEdit(arena, name);
+        if (resetAdaptor == ResetAdaptor.WORLD_EDIT) {
+            /*if ("v1_8_R3".equals(version) || "v_1_9_R2".equals(version) || "v1_9_R1".equals(version) || "v_1_10_R1".equals(version) || "v1_11_R1".equals(version) || "v1_12_R1".equals(version)) {
+                manager = new OldFAWE(arena, name);
+            } else {
+                manager = new NewFAWE(arena, name);
+            }*/
+            manager = new WorldEdit(arena, name);
         } else {
             manager = new MapManager(arena, name);
         }

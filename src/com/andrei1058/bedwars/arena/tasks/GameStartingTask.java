@@ -133,17 +133,16 @@ public class GameStartingTask implements Runnable {
                         team.getIronGenerator().disable();
                         team.getGoldGenerator().disable();
                     }
-                    continue;
                 }
             }
 
-            //Add heart on players head
-            for (SBoard sb : SBoard.getScoreboards()) {
-                sb.addHealthIcon();
-            }
-
-            //Enable diamond/ emerald generators
             Bukkit.getScheduler().runTaskLater(Main.plugin, ()-> {
+                //Add heart on players head
+                for (SBoard sb : SBoard.getScoreboards()) {
+                    sb.addHealthIcon();
+                }
+
+                //Enable diamond/ emerald generators
                 for (OreGenerator og : getArena().getOreGenerators()) {
                     if (og.getType() == GeneratorType.EMERALD || og.getType() == GeneratorType.DIAMOND) og.enableRotation();
                 }

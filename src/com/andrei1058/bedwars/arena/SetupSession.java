@@ -42,8 +42,8 @@ public class SetupSession {
         this.worldName = worldName;
         getSetupSessions().add(this);
         mapManager = new MapManager(null, worldName);
-        mapManager.restoreWorld(worldName, null);
-        mapManager.loadWorld();
+        mapManager.onEnable(worldName, null);
+        mapManager.onSetupSession();
         openGUI(player);
     }
 

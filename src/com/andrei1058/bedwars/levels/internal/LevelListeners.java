@@ -42,7 +42,7 @@ public class LevelListeners implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
         final UUID u = e.getPlayer().getUniqueId();
-        Bukkit.getScheduler().runTask(Main.plugin, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
             PlayerLevel pl = PlayerLevel.getLevelByPlayer(u);
             pl.destroy();
         });

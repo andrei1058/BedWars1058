@@ -59,11 +59,11 @@ public class WorldRestorer implements WorldOperator {
         Bukkit.unloadWorld(world, false);
     }
 
-    private void cleanData() {
+    public void cleanData() {
         if (getBackupFile().exists()) FileUtil.delete(getWorldFolder());
     }
 
-    private void restoreData() {
+    public void restoreData() {
         Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
             if (!getBackupFile().exists()) {
                 if (arena != null) arena.getMapManager().backupWorld(true);

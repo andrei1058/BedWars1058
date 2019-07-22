@@ -38,7 +38,11 @@ public class JoinLeaveTeleport implements Listener {
             if (Language.isLanguageExist(iso)) {
                 if (Main.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES).contains(iso))
                     iso = lang.getIso();
-                preLoadedLanguage.put(u, iso);
+                if (preLoadedLanguage.containsKey(u)){
+                    preLoadedLanguage.replace(u, iso);
+                } else {
+                    preLoadedLanguage.put(u, iso);
+                }
             }
         });
 
@@ -61,7 +65,7 @@ public class JoinLeaveTeleport implements Listener {
                     }
                     if (!canJoin) {
                         e.setKickMessage(getMsg(e.getPlayer(), Messages.COMMAND_JOIN_DENIED_IS_FULL_OF_VIPS));
-                        e.setResult(PlayerLoginEvent.Result.KICK_FULL);
+                        e.disallow(PlayerLoginEvent.Result.KICK_FULL, "The arena is full");
                     }
                 }
             } else if (a.getStatus() == GameState.playing) {
@@ -71,11 +75,11 @@ public class JoinLeaveTeleport implements Listener {
                             if (ReJoin.getPlayer(e.getPlayer()).canReJoin()) return;
                         }
                     }
-                    e.setResult(PlayerLoginEvent.Result.KICK_FULL);
+                    e.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, "Cannot rejoin");
                 }
 
             } else {
-                e.setResult(PlayerLoginEvent.Result.KICK_FULL);
+                e.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, "The arena is restarting");
             }
         }
     }

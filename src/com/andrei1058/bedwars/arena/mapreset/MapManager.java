@@ -8,6 +8,7 @@ import com.andrei1058.bedwars.arena.mapreset.internal.WorldOperations.WorldResto
 import com.andrei1058.bedwars.arena.mapreset.internal.WorldOperations.WorldZipper;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 
 import java.io.File;
 
@@ -30,21 +31,20 @@ public class MapManager {
     /**
      * Load world. Used for load the map at setup mode.
      */
-    public void loadWorld() {
+    public void onSetupSession() {
         isLevelWorld();
         Bukkit.getScheduler().runTask(Main.plugin, () -> {
             World w = Bukkit.getServer().createWorld(new WorldCreator(name));
 
             w.setKeepSpawnInMemory(false);
             w.setAutoSave(false);
-            if (arena != null) arena.init(w);
         });
     }
 
     /**
      * Unload world.
      */
-    public void unloadWorld() {
+    public void onRestart() {
         //if (isLevelWorld()) return;
         Bukkit.getScheduler().runTask(Main.plugin, () -> {
             Bukkit.unloadWorld(Bukkit.getWorld(name), false);
@@ -54,7 +54,7 @@ public class MapManager {
     /**
      * Restore arena world. Used to load/ enable the arena.
      */
-    public void restoreWorld(String name, Arena arena) {
+    public void onEnable(String name, Arena arena) {
         //if (isLevelWorld()) return;
         new WorldRestorer(name, arena).execute();
     }
@@ -68,6 +68,10 @@ public class MapManager {
             WorldOperator worldOperator = new WorldZipper(name, replace);
             worldOperator.execute();
         });
+    }
+
+    public void onDisable(){
+        Bukkit.unloadWorld(getArena().getWorld(), false);
     }
 
     /**
