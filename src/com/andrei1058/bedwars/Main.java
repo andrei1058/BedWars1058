@@ -7,7 +7,6 @@ import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.arena.despawnables.TargetListener;
 import com.andrei1058.bedwars.arena.mapreset.MapManager;
 import com.andrei1058.bedwars.arena.mapreset.ResetAdaptor;
-import com.andrei1058.bedwars.arena.mapreset.worldedit.WorldEdit;
 import com.andrei1058.bedwars.arena.spectator.v1_9PlusListener;
 import com.andrei1058.bedwars.commands.party.PartyCommand;
 import com.andrei1058.bedwars.commands.rejoin.RejoinCommand;
@@ -63,6 +62,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 import static com.andrei1058.bedwars.language.Language.setupLang;
@@ -841,6 +843,7 @@ public class Main extends JavaPlugin {
     public static String getForCurrentVersion(String v18, String v12, String v13) {
         switch (getServerVersion()) {
             case "v1_8_R3":
+                return v18;
             case "v1_9_R1":
             case "v1_9_R2":
             case "v1_10_R1":
@@ -931,16 +934,35 @@ public class Main extends JavaPlugin {
      * Get map manager.
      */
     public static MapManager getMapManager(Arena arena, String name) {
-        MapManager manager;
+        MapManager manager = null;
 
         if (resetAdaptor == ResetAdaptor.WORLD_EDIT) {
-            /*if ("v1_8_R3".equals(version) || "v_1_9_R2".equals(version) || "v1_9_R1".equals(version) || "v_1_10_R1".equals(version) || "v1_11_R1".equals(version) || "v1_12_R1".equals(version)) {
-                manager = new OldFAWE(arena, name);
+            if ("v1_8_R3".equals(version) || "v_1_9_R2".equals(version) || "v1_9_R1".equals(version) || "v_1_10_R1".equals(version) || "v1_11_R1".equals(version) || "v1_12_R1".equals(version)) {
+                try {
+                    Constructor constructor = Class.forName("com.andrei1058.bedwars.arena.mapreset.worldedit.WorldEdit6").getConstructor(Arena.class, String.class);
+                    try {
+                        manager = (MapManager) constructor.newInstance(arena, name);
+                    } catch (InstantiationException e) {
+                        e.printStackTrace();
+                    }
+                } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
             } else {
-                manager = new NewFAWE(arena, name);
-            }*/
-            manager = new WorldEdit(arena, name);
-        } else {
+                try {
+                    Constructor constructor = Class.forName("com.andrei1058.bedwars.arena.mapreset.worldedit.WorldEdit7").getConstructor(Arena.class, String.class);
+                    try {
+                        manager = (MapManager) constructor.newInstance(arena, name);
+                    } catch (InstantiationException e) {
+                        e.printStackTrace();
+                    }
+                } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        if (manager == null) {
             manager = new MapManager(arena, name);
         }
 

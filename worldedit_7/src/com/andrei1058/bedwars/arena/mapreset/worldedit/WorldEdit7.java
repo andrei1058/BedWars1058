@@ -29,14 +29,14 @@ import org.bukkit.entity.Entity;
 import java.io.*;
 import java.util.Objects;
 
-public class WorldEdit extends MapManager {
+public class WorldEdit7 extends MapManager {
 
     private File lobbySchema;
     private ClipboardFormat format;
     private int minX, minY, minZ;
     private int maxX, maxY, maxZ;
 
-    public WorldEdit(Arena arena, String name) {
+    public WorldEdit7(Arena arena, String name) {
         super(arena, name);
         format = BuiltInClipboardFormat.SPONGE_SCHEMATIC;
         lobbySchema = new File(Main.plugin.getDataFolder() + "/Cache", name + "_lobby.schem");
