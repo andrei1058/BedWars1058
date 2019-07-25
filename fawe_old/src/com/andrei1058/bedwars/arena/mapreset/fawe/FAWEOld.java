@@ -51,7 +51,7 @@ public class FAWEOld extends MapManager {
                 AsyncWorld aw = AsyncWorld.wrap(getArena().getWorld());
 
                 try {
-                    format.load(schmFile).paste(aw, new Vector(minX, minY, minZ), false);
+                    format.load(schmFile).paste(aw, new Vector(minX, minY, minZ), true);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

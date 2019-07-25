@@ -53,7 +53,7 @@ public class FAWENew extends MapManager {
                 AsyncWorld aw = AsyncWorld.wrap(Bukkit.getWorld(getName()));
 
                 try {
-                    format.load(schemFile).paste(aw, BlockVector3.at(minX, minY, minZ), false);
+                    format.load(schemFile).paste(aw, BlockVector3.at(minX, minY, minZ), true);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
