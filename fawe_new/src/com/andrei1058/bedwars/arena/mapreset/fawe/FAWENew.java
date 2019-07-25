@@ -35,7 +35,7 @@ public class FAWENew extends MapManager {
 
     public FAWENew(Arena arena, String name) {
         super(arena, name);
-        this.format = BuiltInClipboardFormat.STRUCTURE;
+        this.format = BuiltInClipboardFormat.SPONGE_SCHEMATIC;
         schemFile = new File("plugins/BedWars1058/Cache/" + getName() + "." + format.getPrimaryFileExtension());
     }
 
@@ -57,6 +57,8 @@ public class FAWENew extends MapManager {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
+                Bukkit.broadcastMessage("Pasted at: " + minX + " " + minY + " " + minZ);
 
                 aw.commit();
             });
@@ -168,12 +170,12 @@ public class FAWENew extends MapManager {
                 loc2 = getArena().getCm().getArenaLoc(ConfigPath.ARENA_WAITING_POS2);
         if (loc1 == null || loc2 == null) return;
         TaskManager.IMP.async(() -> {
-            minX = Math.min(loc1.getBlockX(), loc2.getBlockX());
-            maxX = Math.max(loc1.getBlockX(), loc2.getBlockX());
-            minY = Math.min(loc1.getBlockY(), loc2.getBlockY());
-            maxY = Math.max(loc1.getBlockY(), loc2.getBlockY());
-            minZ = Math.min(loc1.getBlockZ(), loc2.getBlockZ());
-            maxZ = Math.max(loc1.getBlockZ(), loc2.getBlockZ());
+            int minX = Math.min(loc1.getBlockX(), loc2.getBlockX());
+            int maxX = Math.max(loc1.getBlockX(), loc2.getBlockX());
+            int minY = Math.min(loc1.getBlockY(), loc2.getBlockY());
+            int maxY = Math.max(loc1.getBlockY(), loc2.getBlockY());
+            int minZ = Math.min(loc1.getBlockZ(), loc2.getBlockZ());
+            int maxZ = Math.max(loc1.getBlockZ(), loc2.getBlockZ());
 
             AsyncWorld aw = AsyncWorld.wrap(getArena().getWorld());
 
