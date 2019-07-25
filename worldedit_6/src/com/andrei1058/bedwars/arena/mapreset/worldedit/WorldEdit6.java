@@ -120,10 +120,10 @@ public class WorldEdit6 extends MapManager {
 
         EditSession editSession = com.sk89q.worldedit.WorldEdit.getInstance().getEditSessionFactory().getEditSession(region.getWorld(), -1);
 
-        ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(editSession, region, clipboard, region.getMinimumPoint());
-        forwardExtentCopy.setCopyingEntities(true);
+        //ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(editSession, region, clipboard, region.getMinimumPoint());
+        //forwardExtentCopy.setCopyingEntities(true);
         try {
-            Operations.complete(forwardExtentCopy);
+            Operations.complete(new ForwardExtentCopy(editSession, region, clipboard, region.getMinimumPoint()));
         } catch (WorldEditException e) {
             e.printStackTrace();
         }

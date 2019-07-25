@@ -837,7 +837,7 @@ public class v1_13_R1 implements NMS {
 
     @Override
     public void setUnbreakable(ItemMeta itemMeta) {
-        itemMeta.setUnbreakable(true);
+        itemMeta.spigot().setUnbreakable(true);
     }
 
     @SuppressWarnings("deprecation")
