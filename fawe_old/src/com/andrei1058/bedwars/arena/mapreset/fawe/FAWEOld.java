@@ -128,7 +128,7 @@ public class FAWEOld extends MapManager {
     public void createSchematic() {
         TaskManager.IMP.laterAsync(() -> {
             Location w = getArena().getCm().getArenaLoc("waiting.Loc");
-            int ra = getArena().getCm().getInt(ConfigPath.ARENA_ISLAND_RADIUS);
+            int ra = getArena().getCm().getInt("worldBorder");
             minX = Math.min(w.getBlockX() + ra, w.getBlockX() - ra);
             minY = 0;
             minZ = Math.min(w.getBlockZ() + ra, w.getBlockZ() - ra);
