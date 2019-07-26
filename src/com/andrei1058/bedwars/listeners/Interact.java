@@ -145,7 +145,7 @@ public class Interact implements Listener {
             }
         }
         //check hand
-        ItemStack inHand = nms.getItemInHand(p);
+        ItemStack inHand = e.getItem();
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
             if (inHand == null) return;
             Arena a = Arena.getArenaByPlayer(p);
@@ -163,7 +163,7 @@ public class Interact implements Listener {
                             if (i.getType() == null) continue;
                             if (i.getType() == Material.AIR) continue;
                             if (i.getType() == nms.materialFireball()) {
-                                nms.minusAmount(p, inHand, 1);
+                                nms.minusAmount(p, e.getItem(), 1);
                             }
                         }
                     }

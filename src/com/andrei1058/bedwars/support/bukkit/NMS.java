@@ -53,6 +53,11 @@ public interface NMS {
     ItemStack getItemInHand(Player p);
 
     /**
+     * Get off had item-stack
+     */
+    //ItemStack getItemInOffHand(Player p);
+
+    /**
      * Hide an entity
      */
     void hideEntity(Entity e, Player p);

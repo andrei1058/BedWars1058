@@ -20,7 +20,7 @@ public class SpecialsListener implements Listener {
     public void onSpecialInteract(PlayerInteractEvent e) {
         if (e.isCancelled()) return;
         Player p = e.getPlayer();
-        ItemStack i = nms.getItemInHand(p);
+        ItemStack i = e.getItem();
         if (i == null) return;
         if (i.getType() == Material.AIR) return;
         Arena a = Arena.getArenaByPlayer(p);
