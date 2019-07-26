@@ -3,7 +3,6 @@ package com.andrei1058.bedwars.arena.mapreset.fawe;
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.mapreset.MapManager;
 import com.andrei1058.bedwars.arena.mapreset.Util.ZipFileUtil;
 import com.andrei1058.bedwars.arena.mapreset.internal.WorldOperations.WorldOperator;
@@ -13,7 +12,6 @@ import com.boydti.fawe.FaweAPI;
 import com.boydti.fawe.bukkit.wrapper.AsyncWorld;
 import com.boydti.fawe.object.schematic.Schematic;
 import com.boydti.fawe.util.TaskManager;
-import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.extent.clipboard.io.BuiltInClipboardFormat;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
@@ -24,8 +22,6 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
-
 import static com.andrei1058.bedwars.Main.config;
 
 public class FAWENew extends MapManager {
