@@ -453,7 +453,7 @@ public class Arena implements Comparable<Arena> {
                 playerLocation.put(p, p.getLocation());
             }
 
-            Bukkit.getScheduler().runTaskLater(plugin, () -> new SBoard(p, this), 15L);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> new SBoard(p, this), 20L);
             nms.setCollide(p, this, false);
 
             if (!playerBefore) {
@@ -833,7 +833,7 @@ public class Arena implements Comparable<Arena> {
 
         Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
             new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING), this);
-        }, 15L);
+        }, 40L);
 
         Bukkit.getPluginManager().callEvent(new PlayerReJoinEvent(p, this));
         return true;
@@ -1357,7 +1357,7 @@ public class Arena implements Comparable<Arena> {
      * This will give the spectator command Items.
      * This will clear the inventory first.
      */
-    private void sendSpectatorCommandItems(Player p) {
+    public void sendSpectatorCommandItems(Player p) {
         if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH) == null) return;
         p.getInventory().clear();
 

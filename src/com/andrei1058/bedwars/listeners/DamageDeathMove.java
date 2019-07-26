@@ -391,6 +391,20 @@ public class DamageDeathMove implements Listener {
                 e.setRespawnLocation(e.getPlayer().getWorld().getSpawnLocation());
             }
         } else {
+            if (a.isSpectator(e.getPlayer())){
+                e.setRespawnLocation(a.getCm().getArenaLoc("waiting.Loc"));
+                String iso = Language.getPlayerLanguage(e.getPlayer()).getIso();
+                for (OreGenerator o : a.getOreGenerators()) {
+                    o.updateHolograms(e.getPlayer(), iso);
+                }
+                for (ShopHolo sh : ShopHolo.getShopHolo()) {
+                    if (sh.getA() == a) {
+                        sh.updateForPlayer(e.getPlayer(), iso);
+                    }
+                }
+                a.sendSpectatorCommandItems(e.getPlayer());
+                return;
+            }
             e.setRespawnLocation(a.getCm().getArenaLoc("waiting.Loc"));
             BedWarsTeam t = a.getTeam(e.getPlayer());
             if (t.isBedDestroyed()) {
