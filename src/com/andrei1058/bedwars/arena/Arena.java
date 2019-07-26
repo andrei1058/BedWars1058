@@ -453,7 +453,7 @@ public class Arena implements Comparable<Arena> {
                 playerLocation.put(p, p.getLocation());
             }
 
-            Bukkit.getScheduler().runTaskLater(plugin, () -> new SBoard(p, this), 20L);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> new SBoard(p, this), 35L);
             nms.setCollide(p, this, false);
 
             if (!playerBefore) {
