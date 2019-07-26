@@ -57,8 +57,6 @@ public class FAWENew extends MapManager {
                     e.printStackTrace();
                 }
 
-                Bukkit.broadcastMessage("Pasted at: " + minX + " " + minY + " " + minZ);
-
                 aw.commit();
                 aw.flush();
                 if (Main.getServerType() == ServerType.BUNGEE) {
