@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.arena.mapreset.fawe;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.mapreset.MapManager;
@@ -24,6 +25,8 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
+
+import static com.andrei1058.bedwars.Main.config;
 
 public class FAWENew extends MapManager {
 
@@ -61,6 +64,21 @@ public class FAWENew extends MapManager {
                 Bukkit.broadcastMessage("Pasted at: " + minX + " " + minY + " " + minZ);
 
                 aw.commit();
+                aw.flush();
+                if (Main.getServerType() == ServerType.BUNGEE) {
+                    Arena.setGamesBeforeRestart(Arena.getGamesBeforeRestart() - 1);
+                    if (Arena.getGamesBeforeRestart() == 0) {
+                        Bukkit.getLogger().info("Dispatching command: " + config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
+                    } else {
+                        if (Arena.getGamesBeforeRestart() != -1) {
+                            Arena.setGamesBeforeRestart(Arena.getGamesBeforeRestart() - 1);
+                        }
+                        new Arena(getName(), null);
+                    }
+                } else {
+                    new Arena(getName(), null);
+                }
             });
 
             for (Entity e : world.getEntities()) {
@@ -82,8 +100,10 @@ public class FAWENew extends MapManager {
                     p.sendMessage(ChatColor.BLUE + "The arena you were in was restored. You were kicked out of it.");
                 }
             }
-            arena.init(world);
-            createSchematic();
+            TaskManager.IMP.laterAsync(() -> {
+                createSchematic();
+                arena.init(world);
+            }, 80);
         } else {
 
             Bukkit.getScheduler().runTaskLater(Main.plugin, () -> TaskManager.IMP.async(() -> {
@@ -101,14 +121,14 @@ public class FAWENew extends MapManager {
                 if (Bukkit.getWorlds().get(0).getName().equals(getName())) {
                     org.bukkit.World w = Bukkit.getWorlds().get(0);
                     w.setKeepSpawnInMemory(true);
-                    arena.init(w);
                     createSchematic();
+                    arena.init(w);
                 } else {
                     // shared, multi arena
                     AsyncWorld w = AsyncWorld.create(new WorldCreator(name));
                     w.setKeepSpawnInMemory(true);
-                    arena.init(w.getBukkitWorld());
                     createSchematic();
+                    arena.init(w.getBukkitWorld());
                 }
             }), 40L);
         }
@@ -130,27 +150,25 @@ public class FAWENew extends MapManager {
     }
 
     public void createSchematic() {
-        TaskManager.IMP.laterAsync(() -> {
-            Location w = getArena().getCm().getArenaLoc("waiting.Loc");
-            int ra = getArena().getCm().getInt("worldBorder");
-            minX = Math.min(w.getBlockX() + ra, w.getBlockX() - ra);
-            minY = 0;
-            minZ = Math.min(w.getBlockZ() + ra, w.getBlockZ() - ra);
-            maxX = Math.max(w.getBlockX() + ra, w.getBlockX() - ra);
-            maxY = getArena().getCm().getInt(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y);
-            maxZ = Math.max(w.getBlockZ() + ra, w.getBlockZ() - ra);
+        Location w = getArena().getCm().getArenaLoc("waiting.Loc");
+        int ra = getArena().getCm().getInt("worldBorder");
+        minX = Math.min(w.getBlockX() + ra, w.getBlockX() - ra);
+        minY = 0;
+        minZ = Math.min(w.getBlockZ() + ra, w.getBlockZ() - ra);
+        maxX = Math.max(w.getBlockX() + ra, w.getBlockX() - ra);
+        maxY = getArena().getCm().getInt(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y);
+        maxZ = Math.max(w.getBlockZ() + ra, w.getBlockZ() - ra);
 
-            if (!schemFile.exists()) {
-                try {
-                    CuboidRegion r = new CuboidRegion(FaweAPI.getWorld(getName()), BlockVector3.at(minX, minY, minZ), BlockVector3.at(maxX, maxY, maxZ));
-                    //BlockArrayClipboard ac = aw.lazyCopy(r);
-                    new Schematic((Region) r).save(schemFile, format);
-                } catch (IOException e) {
-                    Main.plugin.getLogger().severe("Could not create " + getName() + " structure!");
-                    e.printStackTrace();
-                }
+        if (!schemFile.exists() || schemFile.length() == 0) {
+            try {
+                CuboidRegion r = new CuboidRegion(FaweAPI.getWorld(getName()), BlockVector3.at(minX, minY, minZ), BlockVector3.at(maxX, maxY, maxZ));
+                //BlockArrayClipboard ac = aw.lazyCopy(r);
+                new Schematic((Region) r).save(schemFile, format);
+            } catch (IOException e) {
+                Main.plugin.getLogger().severe("Could not create " + getName() + " structure!");
+                e.printStackTrace();
             }
-        }, 80);
+        }
     }
 
 

@@ -202,13 +202,13 @@ public class Main extends JavaPlugin {
         if (Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit") != null) {
             resetAdaptor = ResetAdaptor.FAST_ASYNC_WORLD_EDIT;
             this.getLogger().info("Hook into FastAsyncWorldEdit support!");
-        } else
+        } //else
 
         // Load WorldEdit support
-        if (Bukkit.getPluginManager().getPlugin("WorldEdit") != null) {
-            resetAdaptor = ResetAdaptor.WORLD_EDIT;
-            this.getLogger().info("Hook into WorldEdit support!");
-        }
+        //if (Bukkit.getPluginManager().getPlugin("WorldEdit") != null) {
+        //    resetAdaptor = ResetAdaptor.WORLD_EDIT;
+        //    this.getLogger().info("Hook into WorldEdit support!");
+        //}
 
         ArenaSocket.serverIdentifier = Bukkit.getServer().getIp() + ":" + Bukkit.getServer().getPort();
 

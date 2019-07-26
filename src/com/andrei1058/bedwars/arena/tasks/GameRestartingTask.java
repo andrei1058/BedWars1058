@@ -69,21 +69,6 @@ public class GameRestartingTask implements Runnable {
             }
         } else if (restarting == 3) {
             getArena().restart();
-        } else if (restarting == 0) {
-            if (Main.getServerType() == ServerType.BUNGEE) {
-                Arena.setGamesBeforeRestart(Arena.getGamesBeforeRestart() - 1);
-                if (Arena.getGamesBeforeRestart() == 0) {
-                    Bukkit.getLogger().info("Dispatching command: " + config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
-                } else {
-                    if (Arena.getGamesBeforeRestart() != -1) {
-                        Arena.setGamesBeforeRestart(Arena.getGamesBeforeRestart() - 1);
-                    }
-                    new Arena(name, null);
-                }
-            } else {
-                new Arena(name, null);
-            }
             task.cancel();
             arena = null;
         }

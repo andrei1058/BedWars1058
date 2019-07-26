@@ -12,6 +12,8 @@ import org.bukkit.block.Block;
 
 import java.io.File;
 
+import static com.andrei1058.bedwars.Main.config;
+
 public class MapManager {
 
     private Arena arena;
@@ -46,9 +48,26 @@ public class MapManager {
      */
     public void onRestart() {
         //if (isLevelWorld()) return;
-        Bukkit.getScheduler().runTask(Main.plugin, () -> {
-            Bukkit.unloadWorld(Bukkit.getWorld(name), false);
-        });
+        if (Main.getServerType() == ServerType.BUNGEE) {
+            Arena.setGamesBeforeRestart(Arena.getGamesBeforeRestart() - 1);
+            if (Arena.getGamesBeforeRestart() == 0) {
+                Bukkit.getLogger().info("Dispatching command: " + config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
+            } else {
+                if (Arena.getGamesBeforeRestart() != -1) {
+                    Arena.setGamesBeforeRestart(Arena.getGamesBeforeRestart() - 1);
+                }
+                Bukkit.getScheduler().runTask(Main.plugin, () -> {
+                    Bukkit.unloadWorld(Bukkit.getWorld(name), false);
+                    Bukkit.getScheduler().runTaskLater(Main.plugin, ()-> new Arena(name, null), 40L);
+                });
+            }
+        } else {
+            Bukkit.getScheduler().runTask(Main.plugin, () -> {
+                Bukkit.unloadWorld(Bukkit.getWorld(name), false);
+                Bukkit.getScheduler().runTaskLater(Main.plugin, ()-> new Arena(name, null), 40L);
+            });
+        }
     }
 
     /**
@@ -115,9 +134,6 @@ public class MapManager {
         return arena;
     }
 
-    /**
-     * Make it return false if your system is compatible wit level-name map.
-     */
     public void isLevelWorld() {
 
         if (Bukkit.getWorlds().isEmpty()) return;
