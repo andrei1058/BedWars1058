@@ -545,6 +545,7 @@ public class DamageDeathMove implements Listener {
         if (e.getEntity().getShooter() instanceof Player) {
             Arena a = Arena.getArenaByPlayer((Player) e.getEntity().getShooter());
             if (a != null) {
+                if (!a.isPlayer((Player) e.getEntity().getShooter())) return;
                 if (e.getEntity() instanceof Fireball) {
                     Location l = e.getEntity().getLocation();
                     e.getEntity().getWorld().createExplosion(l.getX(), l.getY(), l.getZ(), 3, false, true);
