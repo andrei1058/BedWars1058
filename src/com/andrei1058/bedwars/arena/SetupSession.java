@@ -42,7 +42,7 @@ public class SetupSession {
         this.worldName = worldName;
         getSetupSessions().add(this);
         mapManager = new MapManager(null, worldName);
-        mapManager.onEnable(worldName, null);
+        //mapManager.onEnable();
         mapManager.onSetupSession();
         openGUI(player);
     }
