@@ -96,6 +96,7 @@ public class JoinLeaveTeleport implements Listener {
         if (getServerType() != ServerType.BUNGEE) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 for (Player on : Bukkit.getOnlinePlayers()) {
+                    if (Arena.isInArena(e.getPlayer())) break;
                     if (Arena.getArenaByPlayer(on) != null) {
                         p.hidePlayer(on);
                         on.hidePlayer(p);
