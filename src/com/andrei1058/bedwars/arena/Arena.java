@@ -229,6 +229,7 @@ public class Arena implements Comparable<Arena> {
         world.setGameRuleValue("doMobSpawning", "false");
         world.setGameRuleValue("announceAdvancements", "false");
         world.setAutoSave(false);
+        //todo change item merge radius
 
         /* Clear setup armor-stands */
         for (Entity e : world.getEntities()) {
@@ -531,7 +532,7 @@ public class Arena implements Comparable<Arena> {
                     sh.updateForPlayer(p, iso);
                 }
             }
-            Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.PlayerJoinArenaEvent(p, true));
+            //Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.PlayerJoinArenaEvent(p, true));
         } else {
             p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG));
         }
