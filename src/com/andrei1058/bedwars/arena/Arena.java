@@ -113,6 +113,8 @@ public class Arena implements Comparable<Arena> {
 
     private PerMinuteTask perMinuteTask;
 
+    private static LinkedList<MapManager> enableQueue = new LinkedList<>();
+
     /**
      * Load an arena.
      * This will check if it was set up right.
@@ -121,9 +123,21 @@ public class Arena implements Comparable<Arena> {
      * @param p    - This will send messages to the player if something went wrong while loading the arena. Can be NULL.
      */
     public Arena(String name, Player p) {
+        for (MapManager mm : enableQueue){
+            if (mm.getName().equalsIgnoreCase(name)){
+                plugin.getLogger().severe("Tried to load arena " + name + " but it is already in the enable queue.");
+                if (p != null) p.sendMessage(ChatColor.RED + "Tried to load arena " + name + " but it is already in the enable queue.");
+                return;
+            }
+        }
+        if (getArenaByName(name) != null){
+            plugin.getLogger().severe("Tried to load arena " + name + " but it is already enabled.");
+            if (p != null) p.sendMessage(ChatColor.RED + "Tried to load arena " + name + " but it is already enabled.");
+            return;
+        }
         this.worldName = name;
 
-        plugin.getLogger().info("Loading arena: " + getWorldName());
+        plugin.getLogger().info("Arena " + getWorldName() + " was added to the enable queue.");
         cm = new ConfigManager(name, "plugins/" + plugin.getName() + "/Arenas", true);
         mapManager = Main.getMapManager(this, name);
 
@@ -195,13 +209,19 @@ public class Arena implements Comparable<Arena> {
             return;
         }
         if (error) return;
-        mapManager.onEnable(name, this);
+        enableQueue.add(mapManager);
+        if (enableQueue.size()==1) mapManager.onEnable();
     }
 
     /**
      * Use this method when the world was loaded successfully.
      */
     public void init(World world) {
+        enableQueue.remove(mapManager);
+        if (!enableQueue.isEmpty()) {
+            enableQueue.get(0).onEnable();
+        }
+        plugin.getLogger().info("Loading arena: " + getWorldName());
         this.world = world;
         world.getEntities().stream().filter(e -> e.getType() != EntityType.PLAYER)
                 .filter(e -> e.getType() != EntityType.PAINTING).filter(e -> e.getType() != EntityType.ITEM_FRAME)
@@ -273,6 +293,7 @@ public class Arena implements Comparable<Arena> {
                 "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_II_START : getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_START);
         upgradeEmeraldsCount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_START) == null ?
                 "Default." + ConfigPath.GENERATOR_EMERALD_TIER_II_START : getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_START);
+        plugin.getLogger().info("Load done: " + getWorldName());
 
     }
 
@@ -1930,5 +1951,9 @@ public class Arena implements Comparable<Arena> {
 
     public LinkedList<Block> getBroken() {
         return broken;
+    }
+
+    public static LinkedList<MapManager> getEnableQueue() {
+        return enableQueue;
     }
 }
