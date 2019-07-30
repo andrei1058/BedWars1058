@@ -620,8 +620,9 @@ public class v1_12_R1 implements NMS {
             case "WOOL":
             case "STAINED_CLAY":
             case "STAINED_GLASS":
-            case "GLASS":
                 return new org.bukkit.inventory.ItemStack(itemStack.getType(), itemStack.getAmount(),TeamColor.itemColor(bedWarsTeam.getColor()));
+            case "GLASS":
+                return new org.bukkit.inventory.ItemStack(org.bukkit.Material.STAINED_GLASS, itemStack.getAmount(), TeamColor.itemColor(bedWarsTeam.getColor()));
         }
     }
 
