@@ -74,20 +74,16 @@ public class FAWENew extends MapManager {
                     new Arena(getName(), null);
                 }
             });
-
-            for (Entity e : world.getEntities()) {
-                e.remove();
-            }
         }
     }
 
     @Override
-    public void onEnable(String name, Arena arena) {
-        if (arena == null) return;
-        org.bukkit.World world = Bukkit.getWorld(name);
+    public void onEnable() {
+        //if (getArena() == null) return;
+        org.bukkit.World world = Bukkit.getWorld(getName());
         if (world != null) {
             if (!world.getPlayers().isEmpty()) {
-                Main.debug("Restoring arena world " + name + " : Kicking players out of the world ...");
+                Main.debug("Restoring arena world " + getName() + " : Kicking players out of the world ...");
                 Location teleportLocation = Bukkit.getWorlds().get(0).getSpawnLocation();
                 for (Player p : world.getPlayers()) {
                     p.teleport(teleportLocation);
@@ -95,36 +91,32 @@ public class FAWENew extends MapManager {
                 }
             }
             TaskManager.IMP.laterAsync(() -> {
-                createSchematic();
-                arena.init(world);
+                createSchematic(true);
             }, 80);
         } else {
 
-            Bukkit.getScheduler().runTaskLater(Main.plugin, () -> TaskManager.IMP.async(() -> {
+            TaskManager.IMP.laterAsync(() -> {
                 if (!getBackupFile().exists()) {
-                    arena.getMapManager().backupWorld(true);
-                    return;
-                }
-
-                try {
-                    ZipFileUtil.unzipFileIntoDirectory(getBackupFile(), getWorldFolder());
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    getArena().getMapManager().backupWorld(true);
+                } else {
+                    try {
+                        ZipFileUtil.unzipFileIntoDirectory(getBackupFile(), getWorldFolder());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 if (Bukkit.getWorlds().get(0).getName().equals(getName())) {
                     org.bukkit.World w = Bukkit.getWorlds().get(0);
                     w.setKeepSpawnInMemory(true);
-                    createSchematic();
-                    arena.init(w);
+                    createSchematic(true);
                 } else {
                     // shared, multi arena
-                    AsyncWorld w = AsyncWorld.create(new WorldCreator(name));
+                    AsyncWorld w = AsyncWorld.create(new WorldCreator(getName()));
                     w.setKeepSpawnInMemory(true);
-                    createSchematic();
-                    arena.init(w.getBukkitWorld());
+                    createSchematic(true);
                 }
-            }), 40L);
+            }, 40);
         }
     }
 
@@ -143,17 +135,17 @@ public class FAWENew extends MapManager {
         });
     }
 
-    public void createSchematic() {
+    public void createSchematic(boolean loadArena) {
         Location w = getArena().getCm().getArenaLoc("waiting.Loc");
-        int ra = getArena().getCm().getInt("worldBorder");
-        minX = Math.min(w.getBlockX() + ra, w.getBlockX() - ra);
-        minY = 0;
-        minZ = Math.min(w.getBlockZ() + ra, w.getBlockZ() - ra);
-        maxX = Math.max(w.getBlockX() + ra, w.getBlockX() - ra);
-        maxY = getArena().getCm().getInt(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y);
-        maxZ = Math.max(w.getBlockZ() + ra, w.getBlockZ() - ra);
 
         if (!schemFile.exists() || schemFile.length() == 0) {
+            int ra = getArena().getCm().getInt("worldBorder");
+            minX = Math.min(w.getBlockX() + ra, w.getBlockX() - ra);
+            minY = 0;
+            minZ = Math.min(w.getBlockZ() + ra, w.getBlockZ() - ra);
+            maxX = Math.max(w.getBlockX() + ra, w.getBlockX() - ra);
+            maxY = getArena().getCm().getInt(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y);
+            maxZ = Math.max(w.getBlockZ() + ra, w.getBlockZ() - ra);
             try {
                 CuboidRegion r = new CuboidRegion(FaweAPI.getWorld(getName()), BlockVector3.at(minX, minY, minZ), BlockVector3.at(maxX, maxY, maxZ));
                 //BlockArrayClipboard ac = aw.lazyCopy(r);
@@ -161,7 +153,11 @@ public class FAWENew extends MapManager {
             } catch (IOException e) {
                 Main.plugin.getLogger().severe("Could not create " + getName() + " structure!");
                 e.printStackTrace();
+            } finally {
+                if (loadArena) getArena().init(w.getWorld());
             }
+        } else {
+            getArena().init(w.getWorld());
         }
     }
 

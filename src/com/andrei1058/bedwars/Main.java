@@ -934,9 +934,9 @@ public class Main extends JavaPlugin {
      * Get map manager.
      */
     public static MapManager getMapManager(Arena arena, String name) {
-        MapManager manager = null;
+        /*MapManager manager = null;*/
 
-        if (resetAdaptor == ResetAdaptor.WORLD_EDIT) {
+        /*if (resetAdaptor == ResetAdaptor.WORLD_EDIT) {
             if ("v1_8_R3".equals(version) || "v_1_9_R2".equals(version) || "v1_9_R1".equals(version) || "v_1_10_R1".equals(version) || "v1_11_R1".equals(version) || "v1_12_R1".equals(version)) {
                 try {
                     Constructor constructor = Class.forName("com.andrei1058.bedwars.arena.mapreset.worldedit.WorldEdit6").getConstructor(Arena.class, String.class);
@@ -960,10 +960,11 @@ public class Main extends JavaPlugin {
                     e.printStackTrace();
                 }
             }
-        } else if (resetAdaptor == ResetAdaptor.FAST_ASYNC_WORLD_EDIT) {
-            if ("v1_8_R3".equals(version) || "v_1_9_R2".equals(version) || "v1_9_R1".equals(version) || "v_1_10_R1".equals(version) || "v1_11_R1".equals(version) || "v1_12_R1".equals(version)) {
-                try {
-                    Constructor constructor = Class.forName("com.andrei1058.bedwars.arena.mapreset.fawe.FAWEOld").getConstructor(Arena.class, String.class);
+        } else*/
+        /*if (resetAdaptor == ResetAdaptor.FAST_ASYNC_WORLD_EDIT) {*/
+            /*if ("v1_8_R3".equals(version) || "v_1_9_R2".equals(version) || "v1_9_R1".equals(version) || "v_1_10_R1".equals(version) || "v1_11_R1".equals(version) || "v1_12_R1".equals(version)) {*/
+                /*try {
+                    Constructor constructor = Class.forName("com.andrei1058.bedwars.arena.mapreset.fawe.FAWEOld2").getConstructor(Arena.class, String.class);
                     try {
                         manager = (MapManager) constructor.newInstance(arena, name);
                     } catch (InstantiationException e) {
@@ -971,9 +972,9 @@ public class Main extends JavaPlugin {
                     }
                 } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
-                }
-            } else {
-                try {
+                }*/
+            /*} else {*/
+                /*try {
                     Constructor constructor = Class.forName("com.andrei1058.bedwars.arena.mapreset.fawe.FAWENew").getConstructor(Arena.class, String.class);
                     try {
                         manager = (MapManager) constructor.newInstance(arena, name);
@@ -982,14 +983,14 @@ public class Main extends JavaPlugin {
                     }
                 } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
-                }
-            }
+                }*/
+            /*}
         }
 
         if (manager == null) {
             manager = new MapManager(arena, name);
-        }
+        }*/
 
-        return manager;
+        return new MapManager(arena, name);
     }
 }

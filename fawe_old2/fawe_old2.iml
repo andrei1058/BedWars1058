@@ -19,23 +19,32 @@
     <orderEntry type="module-library" scope="PROVIDED">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../../Java Libs/Minecraft/Spigot/spigot-1.13.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../../Java Libs/Minecraft/Spigot/spigot-1.8.8-R0.1-SNAPSHOT-latest.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="jar://$MODULE_DIR$/../../../Java Libs/Minecraft/Spigot/spigot-1.13.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../../Java Libs/Minecraft/Spigot/spigot-1.8.8-R0.1-SNAPSHOT-latest.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
-    <orderEntry type="module" module-name="BedWars1058" scope="PROVIDED" />
     <orderEntry type="module-library" scope="PROVIDED">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../../Java Libs/Minecraft/Plugins/FastAsyncWorldEdit-bukkit-1.13.176.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../../Java Libs/Minecraft/Plugins/FastAsyncWorldEdit-bukkit-19.07.12-5cc5ce5-1277-22.3.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library" scope="PROVIDED">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../../Java Libs/Minecraft/Plugins/we-fawe-ld.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module" module-name="BedWars1058" scope="PROVIDED" />
   </component>
 </module>

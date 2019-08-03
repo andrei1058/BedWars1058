@@ -73,7 +73,7 @@ public class MapManager {
     /**
      * Restore arena world. Used to load/ enable the arena.
      */
-    public void onEnable(String name, Arena arena) {
+    public void onEnable() {
         //if (isLevelWorld()) return;
         new WorldRestorer(name, arena).execute();
     }

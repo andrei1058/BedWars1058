@@ -9,6 +9,7 @@ import com.andrei1058.bedwars.arena.mapreset.internal.WorldOperations.WorldOpera
 import com.andrei1058.bedwars.arena.mapreset.internal.WorldOperations.WorldZipper;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 
+import com.boydti.fawe.bukkit.wrapper.AsyncChunk;
 import com.boydti.fawe.bukkit.wrapper.AsyncWorld;
 import com.boydti.fawe.object.schematic.Schematic;
 import com.boydti.fawe.util.TaskManager;
@@ -18,7 +19,6 @@ import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
 import org.bukkit.*;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -28,14 +28,14 @@ import java.io.IOException;
 import static com.andrei1058.bedwars.Main.config;
 import static com.boydti.fawe.FaweAPI.getWorld;
 
-public class FAWEOld extends MapManager {
+public class FAWEOld2 extends MapManager {
 
     private int minX, minY, minZ, maxX, maxY, maxZ;
     private File schmFile;
 
     private ClipboardFormat format;
 
-    public FAWEOld(Arena arena, String name) {
+    public FAWEOld2(Arena arena, String name) {
         super(arena, name);
         this.format = ClipboardFormat.SCHEMATIC;
         schmFile = new File("plugins/BedWars1058/Cache/" + getName() + "." + format.getExtension());
@@ -52,39 +52,29 @@ public class FAWEOld extends MapManager {
         World world = Bukkit.getWorld(getName());
         if (world != null) {
             TaskManager.IMP.async(() -> {
-                //AsyncWorld aw = AsyncWorld.wrap(Bukkit.getWorld(getName()));
-
-                //for (Block b : getArena().getPlaced()){
-                //    aw.getBlockAt(b.getX(), b.getY(), b.getZ()).setType(Material.AIR);
-                //}
-
-                //aw.flush();
-                //aw.commit();
-
-                try {
-                    format.load(schmFile).paste(new BukkitWorld(Bukkit.getWorld(getName())), new Vector(minX, minY, minZ), false);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                AsyncWorld aw = AsyncWorld.wrap(Bukkit.getWorld(getName()));
+                for (Chunk ac : aw.getLoadedChunks()){
+                    aw.unloadChunk(ac);
                 }
-
-                //aw.commit();
-                //aw.flush();
-
-                if (Main.getServerType() == ServerType.BUNGEE) {
-                    Arena.setGamesBeforeRestart(Arena.getGamesBeforeRestart() - 1);
-                    if (Arena.getGamesBeforeRestart() == 0) {
-                        Bukkit.getLogger().info("Dispatching command: " + config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
-                    } else {
-                        if (Arena.getGamesBeforeRestart() != -1) {
-                            Arena.setGamesBeforeRestart(Arena.getGamesBeforeRestart() - 1);
+                aw.commit();
+                aw.flush();
+                Bukkit.unloadWorld(getName(), false);
+                TaskManager.IMP.laterAsync(()-> {
+                    if (Main.getServerType() == ServerType.BUNGEE) {
+                        Arena.setGamesBeforeRestart(Arena.getGamesBeforeRestart() - 1);
+                        if (Arena.getGamesBeforeRestart() == 0) {
+                            Bukkit.getLogger().info("Dispatching command: " + config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
+                        } else {
+                            if (Arena.getGamesBeforeRestart() != -1) {
+                                Arena.setGamesBeforeRestart(Arena.getGamesBeforeRestart() - 1);
+                            }
+                            new Arena(getName(), null);
                         }
+                    } else {
                         new Arena(getName(), null);
                     }
-                } else {
-                    new Arena(getName(), null);
-                }
-
+                }, 40);
             });
         }
     }
@@ -103,8 +93,8 @@ public class FAWEOld extends MapManager {
                 }
             }
             TaskManager.IMP.laterAsync(() -> {
-                createSchematic(true);
-                //arena.init(world);
+                //createSchematic(true);
+                getArena().init(world);
             }, 80);
         } else {
             Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
@@ -122,15 +112,16 @@ public class FAWEOld extends MapManager {
 
                     if (Bukkit.getWorlds().get(0).getName().equals(getName())) {
                         World w = Bukkit.getWorlds().get(0);
-                        w.setKeepSpawnInMemory(true);
-                        createSchematic(true);
-                        //arena.init(w);
+                        //w.setKeepSpawnInMemory(true);
+                        //createSchematic(true);
+                        getArena().init(w);
                     } else {
                         // shared, multi arena
                         AsyncWorld w = AsyncWorld.create(new WorldCreator(getName()));
-                        w.setKeepSpawnInMemory(true);
-                        createSchematic(true);
-                        //arena.init(w.getBukkitWorld());
+                        //w.setKeepSpawnInMemory(true);
+                        //createSchematic(true);
+                        getArena().init(w.getBukkitWorld());
+                        w.flush();
                     }
                 });
             }, 40L);
