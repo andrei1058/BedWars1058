@@ -206,9 +206,10 @@ public class BedWarsTeam {
                     }
                     nms.setUnbreakable(im);
                     i.setItemMeta(im);
+                    i = nms.addCustomData(i, "DEFAULT_ITEM");
 
-                    boolean hasSword = false;
                     if (Main.nms.isSword(i)) {
+                        boolean hasSword = false;
                         for (ItemStack item : p.getInventory().getContents()) {
                             if (item == null) continue;
                             if (item.getType() == Material.AIR) continue;
@@ -217,9 +218,23 @@ public class BedWarsTeam {
                                 break;
                             }
                         }
-                    }
-                    if (!hasSword) {
-                        i = nms.addCustomData(i, "DEFAULT_ITEM");
+                        if (!hasSword) {
+                            p.getInventory().addItem(i);
+                        }
+                    } else if (Main.nms.isBow(i)){
+                        boolean hasBow = false;
+                        for (ItemStack item : p.getInventory().getContents()) {
+                            if (item == null) continue;
+                            if (item.getType() == Material.AIR) continue;
+                            if (Main.nms.isBow(item)) {
+                                hasBow = true;
+                                break;
+                            }
+                        }
+                        if (!hasBow) {
+                            p.getInventory().addItem(i);
+                        }
+                    } else {
                         p.getInventory().addItem(i);
                     }
                 } catch (Exception ignored) {
@@ -227,6 +242,55 @@ public class BedWarsTeam {
             }
         }
         sendArmor(p);
+    }
+
+    /**
+     * Gives the start inventory
+     */
+    public void defaultSwordsAndBowsRestore(Player p, boolean sword, boolean bow) {
+        String path = config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + "." + arena.getGroup()) == null ?
+                ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + ".Default" : ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + "." + arena.getGroup();
+        for (String s : config.getYml().getStringList(path)) {
+            String[] parm = s.split(",");
+            if (parm.length != 0) {
+                try {
+                    ItemStack i;
+                    if (parm.length > 1) {
+                        try {
+                            Integer.parseInt(parm[1]);
+                        } catch (Exception ex) {
+                            plugin.getLogger().severe(parm[1] + " is not an integer at: " + s + " (config)");
+                            continue;
+                        }
+                        i = new ItemStack(Material.valueOf(parm[0]), Integer.valueOf(parm[1]));
+                    } else {
+                        i = new ItemStack(Material.valueOf(parm[0]));
+                    }
+                    if (parm.length > 2) {
+                        try {
+                            Integer.parseInt(parm[2]);
+                        } catch (Exception ex) {
+                            plugin.getLogger().severe(parm[2] + " is not an integer at: " + s + " (config)");
+                            continue;
+                        }
+                        i.setAmount(Integer.valueOf(parm[2]));
+                    }
+                    ItemMeta im = i.getItemMeta();
+                    if (parm.length > 3) {
+                        im.setDisplayName(ChatColor.translateAlternateColorCodes('&', parm[3]));
+                    }
+                    nms.setUnbreakable(im);
+                    i.setItemMeta(im);
+
+                    i = nms.addCustomData(i, "DEFAULT_ITEM");
+
+                    if ((Main.nms.isSword(i) && sword) || (Main.nms.isBow(i) && bow)) {
+                        p.getInventory().addItem(i);
+                    }
+                } catch (Exception ignored) {
+                }
+            }
+        }
     }
 
     /**
