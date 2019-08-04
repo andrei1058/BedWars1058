@@ -261,11 +261,11 @@ public class Romanian {
 
         yml.addDefault("scoreboard.3v3v3v3.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{TeamRedColor}R&f {TeamRedName}&f: {TeamRedStatus}",
                 "{TeamBlueColor}A&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}V&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}G &f{TeamYellowName}&f: {TeamYellowStatus}",
-                "", "&fUcideri: &a{kills}", "&fUcideri Finale: &a{finalKills}, &fPaturi Distruse: &a{beds}", "", "&e{server_ip}"));
+                "", "&fUcideri: &a{kills}", "&fUcideri Finale: &a{finalKills}", "&fPaturi Distruse: &a{beds}", "", "&e{server_ip}"));
 
         yml.addDefault("scoreboard.4v4v4v4.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{TeamRedColor}R&f {TeamRedName}&f: {TeamRedStatus}",
                 "{TeamBlueColor}A&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}V&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}G &f{TeamYellowName}&f: {TeamYellowStatus}",
-                "", "&fUcideri: &a{kills}", "&fUcideri Finale: &a{finalKills}, &fPaturi Distruse: &a{beds}", "", "&e{server_ip}"));
+                "", "&fUcideri: &a{kills}", "&fUcideri Finale: &a{finalKills}", "&fPaturi Distruse: &a{beds}", "", "&e{server_ip}"));
 
         yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&7{date}", "&fNume: &a{player}", "", "&fVictorii: &a{wins}", "&fPierderi: &a{losses}", "&fUcideri: &a{kills}", "&fDecese: &a{deaths}"
                 , "&fDecese Finale: &a{finalKills}", "&fPaturi Distruse: &a{beds}", "", "&fConectati: &a{on}", "&e{server_ip}"));
