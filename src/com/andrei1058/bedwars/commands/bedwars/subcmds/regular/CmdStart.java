@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.regular;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.api.command.ParentCommand;
@@ -55,6 +56,7 @@ public class CmdStart extends SubCommand {
         if (a.getStartingTask() == null){
             if (args.length == 1 && args[0].equalsIgnoreCase("debug") && s.isOp()){
                 a.changeStatus(GameState.starting);
+                Main.debug = true;
             } else {
                 return true;
             }
