@@ -137,7 +137,8 @@ public class BedWarsTeam {
      * Spawn shopkeepers for target team (if enabld).
      */
     public void spawnNPCs() {
-        if (getMembers().isEmpty() && getArena().getCm().getBoolean(ConfigPath.ARENA_DISABLE_NPCS_FOR_EMPTY_TEAMS)) return;
+        if (getMembers().isEmpty() && getArena().getCm().getBoolean(ConfigPath.ARENA_DISABLE_NPCS_FOR_EMPTY_TEAMS))
+            return;
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             nms.colorBed(this);
@@ -221,7 +222,7 @@ public class BedWarsTeam {
                         if (!hasSword) {
                             p.getInventory().addItem(i);
                         }
-                    } else if (Main.nms.isBow(i)){
+                    } else if (Main.nms.isBow(i)) {
                         boolean hasBow = false;
                         for (ItemStack item : p.getInventory().getContents()) {
                             if (item == null) continue;
@@ -245,9 +246,10 @@ public class BedWarsTeam {
     }
 
     /**
-     * Gives the start inventory
+     * Restore lost sword.
      */
-    public void defaultSwordsAndBowsRestore(Player p, boolean sword, boolean bow) {
+    public void defaultSword(Player p, boolean sword) {
+        if (!sword) return;
         String path = config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + "." + arena.getGroup()) == null ?
                 ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + ".Default" : ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + "." + arena.getGroup();
         for (String s : config.getYml().getStringList(path)) {
@@ -284,8 +286,9 @@ public class BedWarsTeam {
 
                     i = nms.addCustomData(i, "DEFAULT_ITEM");
 
-                    if ((Main.nms.isSword(i) && sword) || (Main.nms.isBow(i) && bow)) {
+                    if (Main.nms.isSword(i)) {
                         p.getInventory().addItem(i);
+                        break;
                     }
                 } catch (Exception ignored) {
                 }

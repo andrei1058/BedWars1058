@@ -27,6 +27,8 @@ import com.andrei1058.bedwars.listeners.arenaselector.ArenaSelectorListener;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
 import com.andrei1058.bedwars.lobbysocket.*;
 import com.andrei1058.bedwars.shop.ShopManager;
+import com.andrei1058.bedwars.shop.defaultrestore.DefaultItems_12Minus;
+import com.andrei1058.bedwars.shop.defaultrestore.DefaultItems_13Plus;
 import com.andrei1058.bedwars.stats.StatsManager;
 import com.andrei1058.bedwars.support.bStats;
 import com.andrei1058.bedwars.support.bukkit.*;
@@ -62,9 +64,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.*;
 
 import static com.andrei1058.bedwars.language.Language.setupLang;
@@ -278,11 +277,14 @@ public class Main extends JavaPlugin {
             case "v1_13_R1":
             case "v1_14_R1":
                 registerEvents(new v1_3_Interact());
+                registerEvents(new DefaultItems_13Plus());
             case "v1_12_R1":
                 registerEvents(new EntityDropPickListener());
+                registerEvents(new DefaultItems_12Minus());
                 break;
             default:
                 registerEvents(new PlayerDropPickListener());
+                registerEvents(new DefaultItems_12Minus());
                 break;
         }
 
