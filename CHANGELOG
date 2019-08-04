@@ -1,9 +1,34 @@
 # 0.13beta
-
+- fixed a null pointer exception error
+- fixed rejoin scoreboard issue
+- added /bw tp command
+- prevent negative xp patch
+- {player} placeholder stands for display name now, on chat
+- player will no longer receive permanent items at final kills
+- invisibility potion system was improved
+- fixed issue where PlayerLevelUp was not called
+- fixed anti afk system
+- added request #287
+- fixed fly issue as spectator  on 1.8 servers
+- fixed fly bug after spectating
+- fixed issue #269
+- fixed issue #272
+- item attributes are now hidden in stats gui
+- fixed issue #282 about levels delay
+- fixed issue #292
+- fixed issue #294
+- fixed issue #293
+- added color support for glass pane at bedwars teams
+- fixed issue with infinite items when using off hand
+- fixed glass color for 1.12-
+- "/bw start debug" now starts the debug mode
+- added default sword restore system
 
 for devs:
 - EnemyBaseEnterEvent was removed, alternative: BaseEnterEvent (since api 9)
 - EnemyBaseLeaveEvent was removed, alternative: BaseLeaveEvent (since api 9)
+- #sendDefaultInventory improvements
+- fixed PlayerJoinArenaEvent called twice for spectators
 
 # 0.12beta
 - added "display-name" option used in scoreboards, in the arena selector etc.
