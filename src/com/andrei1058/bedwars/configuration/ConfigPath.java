@@ -109,6 +109,7 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_DISABLE_ANVIL = "inventories.disable-anvil";
 
     public static final String GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP = "server-ip";
+    public static final String GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_NAME = "server-name";
 
     public static final String ARENA_DISPLAY_NAME = "display-name";
     public static final String ARENA_CONFIGURATION_MAX_BUILD_Y = "max-build-y";

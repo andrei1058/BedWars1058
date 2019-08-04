@@ -121,7 +121,7 @@ public class Romanian {
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_BED_DESTROYED, "&a{remainingPlayers}");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE, "&a&l✓");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_NEXEVENT_TIMER, "mm:ss");
-        yml.addDefault(Messages.FORMATTING_SCOREBOARD_YOUR_TEAM, "&7 (Tu)");
+        yml.addDefault(Messages.FORMATTING_SCOREBOARD_YOUR_TEAM, "&7 TU");
         yml.addDefault(Messages.FORMATTING_ACTION_BAR_TRACKING, "&fUrmaresti: {team} &f- Distanta: {distance}m");
         yml.addDefault(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH, "▮ ");
         yml.addDefault(Messages.FORMATTING_STATS_DATE_FORMAT, "yyyy/MM/dd HH:mm");
@@ -246,19 +246,29 @@ public class Romanian {
         lbj.addDefaultStatsMsg(yml, "last-play", "&6Ultimul Meci", "&f{lastPlay}");
         lbj.addDefaultStatsMsg(yml, "games-played", "&6Partide Jucate", "&f{gamesPlayed}");
 
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&lBED WARS", "", "&fHarta: &a{map}", "&fJucatori: &a{on}/{max}", "", "&fIncepe in &a{time}s", "", "§fServer: &a{server}", "", "&e  {server_ip}"));
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&lBED WARS", "", "&fHarta: &a{map}", "&fJucatori: &a{on}/{max}", "", "&fIn asteptare...", "", "§fServer: &a{server}", "", "&e  {server_ip}"));
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent}", "&a{time}", "", "{TeamRedColor}&lR&f {TeamRedName}&f: {TeamRedStatus}",
-                "{TeamBlueColor}&lA&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}&lV&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}&lG &f{TeamYellowName}&f: {TeamYellowStatus}", "",
-                "&fUcideri: &a{kills}", "&fUcideri Finale: &a{finalKills}", "&fPaturi distruse: &a{beds}", "", "&ehttp://{server_ip}"));
-        yml.addDefault("scoreboard.Solo.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent}", "&a{time}", "", "{TeamRedColor}&lR&f {TeamRedName}&f: {TeamRedStatus}",
-                "{TeamBlueColor}&lA&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}&lV&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}&lG &f{TeamYellowName}&f: {TeamYellowStatus}",
-                "{TeamAquaColor}&lA&f {TeamAquaName}&f: {TeamAquaStatus}", "{TeamWhiteColor}&lA&f {TeamWhiteName}&f: {TeamWhiteStatus}", "{TeamPinkColor}&lR&f {TeamPinkName}&f: {TeamPinkStatus}", "{TeamGrayColor}&lG&f {TeamGrayName}&f: {TeamGrayStatus}", "", "&ehttp://{server_ip}"));
-        yml.addDefault("scoreboard.Doubles.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent}", "&a{time}", "", "{TeamRedColor}&lR&f {TeamRedName}&f: {TeamRedStatus}",
-                "{TeamBlueColor}&lA&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}&lV&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}&lG &f{TeamYellowName}&f: {TeamYellowStatus}",
-                "{TeamAquaColor}&lA&f {TeamAquaName}&f: {TeamAquaStatus}", "{TeamWhiteColor}&lA&f {TeamWhiteName}&f: {TeamWhiteStatus}", "{TeamPinkColor}&lR&f {TeamPinkName}&f: {TeamPinkStatus}", "{TeamGrayColor}&lG&f {TeamGrayName}&f: {TeamGrayStatus}", "", "&ehttp://{server_ip}"));
+
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fHarta: &a{map}", "", "&fJucatori: &a{on}/{max}", "", "&fIn asteptare...", "", "§fMod: &a{group}", "&fVersiune: &7{version}", "", "&e{server_ip}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fMap: &a{map}", "", "&fJucatori: &a{on}/{max}", "", "&fIncepe in &a{time}s", "", "§fMod: &a{group}", "&fVersiune: &7{version}", "", "&e{server_ip}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{TeamRedColor}R&f {TeamRedName}&f: {TeamRedStatus}",
+                "{TeamBlueColor}B&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}G&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}Y &f{TeamYellowName}&f: {TeamYellowStatus}",
+                "{TeamAquaColor}A &f{TeamAquaName}&f: {TeamAquaStatus}", "{TeamWhiteColor}W &f{TeamWhiteName}&f: {TeamPinkStatus}", "{TeamPinkColor}P &f{TeamPinkName}&f: {TeamPinkStatus}",
+                "{TeamGrayColor}S &f{TeamGrayName}&f: {TeamGrayStatus}", "", "&e{server_ip}"));
+
+        yml.addDefault("scoreboard.Doubles.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{TeamRedColor}R&f {TeamRedName}&f: {TeamRedStatus}",
+                "{TeamBlueColor}B&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}G&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}Y &f{TeamYellowName}&f: {TeamYellowStatus}",
+                "{TeamAquaColor}A &f{TeamAquaName}&f: {TeamAquaStatus}", "{TeamWhiteColor}W &f{TeamWhiteName}&f: {TeamPinkStatus}", "{TeamPinkColor}P &f{TeamPinkName}&f: {TeamPinkStatus}",
+                "{TeamGrayColor}S &f{TeamGrayName}&f: {TeamGrayStatus}", "", "&e{server_ip}"));
+
+        yml.addDefault("scoreboard.3v3v3v3.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{TeamRedColor}R&f {TeamRedName}&f: {TeamRedStatus}",
+                "{TeamBlueColor}A&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}V&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}G &f{TeamYellowName}&f: {TeamYellowStatus}",
+                "", "&fUcideri: &a{kills}", "&fUcideri Finale: &a{finalKills}, &fPaturi Distruse: &a{beds}", "", "&e{server_ip}"));
+
+        yml.addDefault("scoreboard.4v4v4v4.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{TeamRedColor}R&f {TeamRedName}&f: {TeamRedStatus}",
+                "{TeamBlueColor}A&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}V&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}G &f{TeamYellowName}&f: {TeamYellowStatus}",
+                "", "&fUcideri: &a{kills}", "&fUcideri Finale: &a{finalKills}, &fPaturi Distruse: &a{beds}", "", "&e{server_ip}"));
+
         yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&7{date}", "&fNume: &a{player}", "", "&fVictorii: &a{wins}", "&fPierderi: &a{losses}", "&fUcideri: &a{kills}", "&fDecese: &a{deaths}"
-                , "&fDecese Finale: &a{fKills}", "&fPaturi Distruse: &a{beds}", "", "&fConectati: &a{on}", "&e{server_ip}"));
+                , "&fDecese Finale: &a{finalKills}", "&fPaturi Distruse: &a{beds}", "", "&fConectati: &a{on}", "&e{server_ip}"));
         yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&6+{xp} BedWars Experience Received (Play Time).");
         yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&6+{xp} BedWars Experience Received (Game Win).");
         yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "{prefix}&6+{xp} BedWars Experience Received (Team Support).");

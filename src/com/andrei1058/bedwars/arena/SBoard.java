@@ -63,8 +63,8 @@ public class SBoard {
             scoreboards.add(this);
         }, 10L);
 
-        if (arena != null){
-            if (arena.getStatus() == GameState.playing){
+        if (arena != null) {
+            if (arena.getStatus() == GameState.playing) {
                 addHealthIcon();
                 giveTeamColorTag();
                 p.damage(0.2);
@@ -114,7 +114,9 @@ public class SBoard {
             temp = temp.replace("{progress}", Main.getLevelSupport().getProgressBar(p));
             temp = temp.replace("{currentXp}", Main.getLevelSupport().getCurrentXpFormatted(p));
             temp = temp.replace("{requiredXp}", Main.getLevelSupport().getRequiredXpFormatted(p));
-            temp = temp.replace("{server_ip}", Main.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP));
+            temp = temp.replace("{server_ip}", Main.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
+                    .replace("{version}", plugin.getDescription().getVersion())
+            .replace("{server}", config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_NAME));
             for (String ph : placeholders) {
                 if (temp.contains(ph)) {
                     if (!toRefresh.containsKey(t)) {
@@ -133,12 +135,12 @@ public class SBoard {
             }
             if (arena == null) {
 
-                temp = temp.replace("{server}", Bukkit.getServer().getMotd()).replace("{on}", String.valueOf(Bukkit.getOnlinePlayers().size()))
+                temp = temp.replace("{on}", String.valueOf(Bukkit.getOnlinePlayers().size()))
                         .replace("{max}", String.valueOf(Bukkit.getServer().getMaxPlayers())).replace("{date}",
                                 new SimpleDateFormat(getMsg(getP(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis())))
                         .replace("{money}", String.valueOf(getEconomy().getMoney(p))).replace("{progress}", PlayerLevel.getLevelByPlayer(p.getUniqueId()).getProgress())
-                .replace("{level}", PlayerLevel.getLevelByPlayer(p.getUniqueId()).getLevelName()).replace("{currentXp}", PlayerLevel.getLevelByPlayer(p.getUniqueId()).getFormattedCurrentXp())
-                .replace("{requiredXp}", PlayerLevel.getLevelByPlayer(p.getUniqueId()).getFormattedRequiredXp());
+                        .replace("{level}", PlayerLevel.getLevelByPlayer(p.getUniqueId()).getLevelName()).replace("{currentXp}", PlayerLevel.getLevelByPlayer(p.getUniqueId()).getFormattedCurrentXp())
+                        .replace("{requiredXp}", PlayerLevel.getLevelByPlayer(p.getUniqueId()).getFormattedRequiredXp());
 
                 setContent(t, replaceStatsPlaceholders(getP(), temp, false));
 
@@ -147,10 +149,11 @@ public class SBoard {
                 if (getArena().getStartingTask() != null) {
                     time = String.valueOf(getArena().getStartingTask().getCountdown());
                 }
-                setContent(t, temp.replace("{map}", arena.getDisplayName()).replace("{server}", Bukkit.getServer().getMotd())
+                setContent(t, temp.replace("{map}", arena.getDisplayName())
                         .replace("{on}", String.valueOf(arena.getPlayers().size())).replace("{max}", String.valueOf(arena.getMaxPlayers()))
                         .replace("{time}", time).replace("{player}", p.getName())
-                        .replace("{money}", String.valueOf(getEconomy().getMoney(p))).replace("{date}", new SimpleDateFormat(getMsg(getP(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis()))));
+                        .replace("{money}", String.valueOf(getEconomy().getMoney(p))).replace("{date}", new SimpleDateFormat(getMsg(getP(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis())))
+                        .replace("{group}", arena.getGroup()));
             } else if (arena.getStatus() == GameState.playing) {
                 String[] ne = getNextEvent();
                 for (BedWarsTeam team : arena.getTeams()) {
@@ -158,7 +161,7 @@ public class SBoard {
                             team.getName()).replace("{Team" + team.getName() + "Status}", (team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED).replace("{remainingPlayers}",
                             String.valueOf(team.getSize())) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE)) + (team.isMember(getP()) ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM) : ""));
                 }
-                setContent(t, temp.replace("{map}", arena.getDisplayName()).replace("{server}", Bukkit.getServer().getMotd())
+                setContent(t, temp.replace("{map}", arena.getDisplayName())
                         .replace("{on}", String.valueOf(arena.getPlayers().size())).replace("{max}", String.valueOf(arena.getMaxPlayers()))
                         .replace("{player}", p.getName()).replace("{date}", new SimpleDateFormat(getMsg(getP(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis())))
                         .replace("{kills}", String.valueOf(arena.getPlayerKills(getP(), false))).replace("{finalKills}", String.valueOf(arena.getPlayerKills(getP(), true)))
