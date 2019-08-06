@@ -547,15 +547,6 @@ public class Arena implements Comparable<Arena> {
                 }
             }
 
-            if (playerBefore) {
-                PlayerJoinArenaEvent ev = new PlayerJoinArenaEvent(p, true, false);
-                Bukkit.getPluginManager().callEvent(ev);
-                if (ev.isCancelled()) {
-                    removeSpectator(p, false);
-                    return false;
-                }
-            }
-
         } else {
             p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG));
         }
