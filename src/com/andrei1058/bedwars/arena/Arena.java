@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.*;
+import com.andrei1058.bedwars.api.events.PlayerJoinArenaEvent;
 import com.andrei1058.bedwars.api.events.PlayerLeaveArenaEvent;
 import com.andrei1058.bedwars.api.events.PlayerReJoinEvent;
 import com.andrei1058.bedwars.arena.mapreset.MapManager;
@@ -123,14 +124,15 @@ public class Arena implements Comparable<Arena> {
      * @param p    - This will send messages to the player if something went wrong while loading the arena. Can be NULL.
      */
     public Arena(String name, Player p) {
-        for (MapManager mm : enableQueue){
-            if (mm.getName().equalsIgnoreCase(name)){
+        for (MapManager mm : enableQueue) {
+            if (mm.getName().equalsIgnoreCase(name)) {
                 plugin.getLogger().severe("Tried to load arena " + name + " but it is already in the enable queue.");
-                if (p != null) p.sendMessage(ChatColor.RED + "Tried to load arena " + name + " but it is already in the enable queue.");
+                if (p != null)
+                    p.sendMessage(ChatColor.RED + "Tried to load arena " + name + " but it is already in the enable queue.");
                 return;
             }
         }
-        if (getArenaByName(name) != null){
+        if (getArenaByName(name) != null) {
             plugin.getLogger().severe("Tried to load arena " + name + " but it is already enabled.");
             if (p != null) p.sendMessage(ChatColor.RED + "Tried to load arena " + name + " but it is already enabled.");
             return;
@@ -210,7 +212,7 @@ public class Arena implements Comparable<Arena> {
         }
         if (error) return;
         enableQueue.add(mapManager);
-        if (enableQueue.size()==1) mapManager.onEnable();
+        if (enableQueue.size() == 1) mapManager.onEnable();
     }
 
     /**
@@ -303,24 +305,25 @@ public class Arena implements Comparable<Arena> {
      *
      * @param p              - Player to add.
      * @param skipOwnerCheck - True if you want to skip the party checking for this player. This
+     * @return true if was added.
      */
-    public void addPlayer(Player p, boolean skipOwnerCheck) {
+    public boolean addPlayer(Player p, boolean skipOwnerCheck) {
         debug("Player added: " + p.getName() + " arena: " + getWorldName());
         /* used for base enter/leave event */
         isOnABase.remove(p);
         //
         if (getArenaByPlayer(p) != null) {
-            return;
+            return false;
         }
         if (getParty().hasParty(p)) {
             if (!skipOwnerCheck) {
                 if (!getParty().isOwner(p)) {
                     p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_DENIED_NOT_PARTY_LEADER));
-                    return;
+                    return false;
                 }
                 if (getParty().partySize(p) > maxInTeam * getTeams().size() - getPlayers().size()) {
                     p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_DENIED_PARTY_TOO_BIG));
-                    return;
+                    return false;
                 }
                 for (Player mem : getParty().getMembers(p)) {
                     if (mem == p) continue;
@@ -342,7 +345,7 @@ public class Arena implements Comparable<Arena> {
                 TextComponent text = new TextComponent(getMsg(p, Messages.COMMAND_JOIN_DENIED_IS_FULL));
                 text.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, config.getYml().getString("storeLink")));
                 p.spigot().sendMessage(text);
-                return;
+                return false;
             } else if (players.size() >= maxPlayers && isVip(p)) {
                 boolean canJoin = false;
                 for (Player on : new ArrayList<>(players)) {
@@ -357,9 +360,13 @@ public class Arena implements Comparable<Arena> {
                 }
                 if (!canJoin) {
                     p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_DENIED_IS_FULL_OF_VIPS));
-                    return;
+                    return false;
                 }
             }
+
+            PlayerJoinArenaEvent ev = new PlayerJoinArenaEvent(p, false, false);
+            Bukkit.getPluginManager().callEvent(ev);
+            if (ev.isCancelled()) return false;
 
             //Remove from ReJoin
             if (ReJoin.exists(p)) //noinspection ConstantConditions
@@ -372,7 +379,7 @@ public class Arena implements Comparable<Arena> {
             for (Player on : players) {
                 on.sendMessage(getMsg(on, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
             }
-            setArenaByPlayer(p, false);
+            setArenaByPlayer(p);
 
             /* check if you can start the arena */
             if (status == GameState.waiting) {
@@ -421,7 +428,7 @@ public class Arena implements Comparable<Arena> {
         } else if (status == GameState.playing) {
             addSpectator(p, false, null);
             /* stop code if stauts playing*/
-            return;
+            return false;
         }
         for (Player on : Bukkit.getOnlinePlayers()) {
             if (getPlayers().contains(on)) {
@@ -442,6 +449,7 @@ public class Arena implements Comparable<Arena> {
 
         refreshSigns();
         JoinNPC.updateNPCs(getGroup());
+        return true;
     }
 
     /**
@@ -450,9 +458,15 @@ public class Arena implements Comparable<Arena> {
      * @param p            Player to be added
      * @param playerBefore True if the player has played in this arena before and he died so now should be a spectator.
      */
-    public void addSpectator(Player p, boolean playerBefore, Location staffTeleport) {
+    public boolean addSpectator(Player p, boolean playerBefore, Location staffTeleport) {
         debug("Spectator added: " + p.getName() + " arena: " + getWorldName());
         if (allowSpectate || playerBefore) {
+
+            if (!playerBefore) {
+                PlayerJoinArenaEvent ev = new PlayerJoinArenaEvent(p, true, false);
+                Bukkit.getPluginManager().callEvent(ev);
+                if (ev.isCancelled()) return false;
+            }
 
             //Remove from ReJoin
             if (ReJoin.exists(p)) //noinspection ConstantConditions
@@ -471,7 +485,7 @@ public class Arena implements Comparable<Arena> {
             if (!playerBefore) {
                 /* save player inv etc if isn't saved yet*/
                 new PlayerGoods(p, true);
-                setArenaByPlayer(p, true);
+                setArenaByPlayer(p);
                 playerLocation.put(p, p.getLocation());
             }
 
@@ -532,7 +546,16 @@ public class Arena implements Comparable<Arena> {
                     sh.updateForPlayer(p, iso);
                 }
             }
-            //Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.PlayerJoinArenaEvent(p, true));
+
+            if (playerBefore) {
+                PlayerJoinArenaEvent ev = new PlayerJoinArenaEvent(p, true, false);
+                Bukkit.getPluginManager().callEvent(ev);
+                if (ev.isCancelled()) {
+                    removeSpectator(p, false);
+                    return false;
+                }
+            }
+
         } else {
             p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG));
         }
@@ -540,6 +563,7 @@ public class Arena implements Comparable<Arena> {
         showTime.remove(p);
         refreshSigns();
         JoinNPC.updateNPCs(getGroup());
+        return true;
     }
 
     /**
@@ -815,6 +839,10 @@ public class Arena implements Comparable<Arena> {
             reJoin.getTask().destroy();
         }
 
+        PlayerReJoinEvent ev = new PlayerReJoinEvent(p, this);
+        Bukkit.getPluginManager().callEvent(ev);
+        if (ev.isCancelled()) return false;
+
         for (Player on : Bukkit.getOnlinePlayers()) {
             if (getPlayers().contains(on)) {
                 on.showPlayer(p);
@@ -833,7 +861,7 @@ public class Arena implements Comparable<Arena> {
         for (Player on : spectators) {
             on.sendMessage(getMsg(on, Messages.COMMAND_REJOIN_PLAYER_RECONNECTED).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
         }
-        setArenaByPlayer(p, false);
+        setArenaByPlayer(p);
         /* save player inventory etc */
         new PlayerGoods(p, true);
         p.getInventory().clear();
@@ -856,8 +884,6 @@ public class Arena implements Comparable<Arena> {
         Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
             new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING), this);
         }, 40L);
-
-        Bukkit.getPluginManager().callEvent(new PlayerReJoinEvent(p, this));
         return true;
     }
 
@@ -1116,9 +1142,8 @@ public class Arena implements Comparable<Arena> {
         this.group = group;
     }
 
-    private void setArenaByPlayer(Player p, boolean spectator) {
+    private void setArenaByPlayer(Player p) {
         arenaByPlayer.put(p, this);
-        Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.PlayerJoinArenaEvent(p, spectator));
         refreshSigns();
         JoinNPC.updateNPCs(getGroup());
     }
@@ -1830,8 +1855,7 @@ public class Arena implements Comparable<Arena> {
         for (Arena a : arenas) {
             if (a.getPlayers().size() == a.getMaxPlayers()) continue;
             if (a.getMaxPlayers() - a.getPlayers().size() >= amount) {
-                a.addPlayer(p, false);
-                break;
+                if (a.addPlayer(p, false)) break;
             }
         }
         return true;
@@ -1851,8 +1875,7 @@ public class Arena implements Comparable<Arena> {
             if (!a.getGroup().equalsIgnoreCase(group)) continue;
             if (a.getPlayers().size() == a.getMaxPlayers()) continue;
             if (a.getMaxPlayers() - a.getPlayers().size() >= amount) {
-                a.addPlayer(p, false);
-                break;
+                if (a.addPlayer(p, false)) break;
             }
         }
 

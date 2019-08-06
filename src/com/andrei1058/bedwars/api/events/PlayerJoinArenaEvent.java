@@ -10,14 +10,29 @@ public class PlayerJoinArenaEvent extends Event {
 
     private Player player;
     private boolean spectator;
+    private boolean cancelled = false;
+    private boolean rejoin;
 
     /**
      * This event is called when a spectator is added to the arena.
      * Even if he has played before and was eliminated and then added as spectator.
      */
-    public PlayerJoinArenaEvent(Player p, boolean spectator) {
+    public PlayerJoinArenaEvent(Player p, boolean spectator, boolean rejoin) {
         this.player = p;
         this.spectator = spectator;
+        this.rejoin = rejoin;
+    }
+
+    public boolean isRejoin() {
+        return rejoin;
+    }
+
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
     }
 
     public HandlerList getHandlers() {

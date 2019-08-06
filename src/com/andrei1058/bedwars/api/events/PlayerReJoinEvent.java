@@ -11,6 +11,7 @@ public class PlayerReJoinEvent extends Event {
 
     private Player player;
     private Arena arena;
+    private boolean cancelled = false;
 
     /**
      * Called when a player re-joins the arena.
@@ -48,5 +49,13 @@ public class PlayerReJoinEvent extends Event {
 
     public static HandlerList getHandlerList() {
         return HANDLERS;
+    }
+
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
     }
 }
