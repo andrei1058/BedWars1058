@@ -72,7 +72,7 @@ public class CategoryContent {
             downgradable = yml.getBoolean(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_IS_DOWNGRADABLE);
         }
 
-        if (yml.get(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_WEIGHT) != null){
+        if (yml.get(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_WEIGHT) != null) {
             weight = (byte) yml.getInt(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_WEIGHT);
         }
 
@@ -115,6 +115,11 @@ public class CategoryContent {
         //check weight
         if (shopCache.getCategoryWeight(father) > weight) return;
 
+        if (shopCache.getContentTier(getIdentifier()) > contentTiers.size()) {
+            Bukkit.getLogger().severe("Wrong tier order at: " + getIdentifier());
+            return;
+        }
+
         //check if can re-buy
         if (shopCache.getContentTier(getIdentifier()) == contentTiers.size()) {
             if (isPermanent() && shopCache.hasCachedItem(this)) {
@@ -125,8 +130,11 @@ public class CategoryContent {
             //current tier
             ct = contentTiers.get(shopCache.getContentTier(getIdentifier()) - 1);
         } else {
-            //next tier
-            ct = contentTiers.get(shopCache.getContentTier(getIdentifier()));
+            if (!shopCache.hasCachedItem(this)) {
+                ct = contentTiers.get(0);
+            } else {
+                ct = contentTiers.get(shopCache.getContentTier(getIdentifier()));
+            }
         }
 
         //check money
@@ -195,7 +203,8 @@ public class CategoryContent {
         ItemMeta im = i.getItemMeta().clone();
 
         boolean canAfford = calculateMoney(player, ct.getCurrency()) >= ct.getPrice();
-        boolean hasQuick = hasQuick(PlayerQuickBuyCache.getQuickBuyCache(player.getUniqueId()));
+        PlayerQuickBuyCache qbc = PlayerQuickBuyCache.getQuickBuyCache(player.getUniqueId());
+        boolean hasQuick = qbc != null && hasQuick(qbc);
 
         String color = getMsg(player, canAfford ? Messages.SHOP_CAN_BUY_COLOR : Messages.SHOP_CANT_BUY_COLOR);
         String translatedCurrency = getMsg(player, getCurrencyMsgPath(ct));
@@ -204,10 +213,10 @@ public class CategoryContent {
         int tierI = ct.getValue();
         String tier = getRomanNumber(tierI);
         String buyStatus;
-        if (!canAfford){
+        if (!canAfford) {
             buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CANT_AFFORD).replace("{currency}", translatedCurrency);
         } else {
-            if (isPermanent() && shopCache.hasCachedItem(this) && shopCache.getCachedItem(this).getTier() == getContentTiers().size()){
+            if (isPermanent() && shopCache.hasCachedItem(this) && shopCache.getCachedItem(this).getTier() == getContentTiers().size()) {
                 buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_MAXED);
             } else {
                 buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CAN_BUY);
@@ -253,7 +262,7 @@ public class CategoryContent {
      * Get player's money amount
      */
     public static int calculateMoney(Player player, Material currency) {
-        if (currency.equals("vault")) {
+        if (currency == Material.AIR) {
             return (int) Main.getEconomy().getMoney(player);
         }
 
@@ -283,17 +292,20 @@ public class CategoryContent {
             case "emerald":
                 material = Material.EMERALD;
                 break;
+            case "vault":
+                material = Material.AIR;
+                break;
         }
         return material;
     }
 
     public static ChatColor getCurrencyColor(Material currency) {
         ChatColor c = ChatColor.DARK_GREEN;
-        if (currency.toString().toLowerCase().contains("diamond")){
+        if (currency.toString().toLowerCase().contains("diamond")) {
             c = ChatColor.AQUA;
-        } else if (currency.toString().toLowerCase().contains("gold")){
+        } else if (currency.toString().toLowerCase().contains("gold")) {
             c = ChatColor.GOLD;
-        } else if (currency.toString().toLowerCase().contains("iron")){
+        } else if (currency.toString().toLowerCase().contains("iron")) {
             c = ChatColor.WHITE;
         }
         return c;
@@ -303,15 +315,15 @@ public class CategoryContent {
      * Cet currency path
      */
     public static String getCurrencyMsgPath(ContentTier contentTier) {
-        String c = "";
+        String c;
 
-        if (contentTier.getCurrency().toString().toLowerCase().contains("iron")){
+        if (contentTier.getCurrency().toString().toLowerCase().contains("iron")) {
             c = contentTier.getPrice() == 1 ? Messages.MEANING_IRON_SINGULAR : Messages.MEANING_IRON_PLURAL;
-        } else if (contentTier.getCurrency().toString().toLowerCase().contains("gold")){
+        } else if (contentTier.getCurrency().toString().toLowerCase().contains("gold")) {
             c = contentTier.getPrice() == 1 ? Messages.MEANING_GOLD_SINGULAR : Messages.MEANING_GOLD_PLURAL;
-        } else if (contentTier.getCurrency().toString().toLowerCase().contains("emerald")){
+        } else if (contentTier.getCurrency().toString().toLowerCase().contains("emerald")) {
             c = contentTier.getPrice() == 1 ? Messages.MEANING_EMERALD_SINGULAR : Messages.MEANING_EMERALD_PLURAL;
-        } else if (contentTier.getCurrency().toString().toLowerCase().contains("diamond")){
+        } else if (contentTier.getCurrency().toString().toLowerCase().contains("diamond")) {
             c = contentTier.getPrice() == 1 ? Messages.MEANING_DIAMOND_SINGULAR : Messages.MEANING_DIAMOND_PLURAL;
         } else {
             c = contentTier.getPrice() == 1 ? Messages.MEANING_VAULT_SINGULAR : Messages.MEANING_VAULT_PLURAL;
@@ -367,7 +379,7 @@ public class CategoryContent {
      * Take money from player on buy
      */
     public static void takeMoney(Player player, Material currency, int amount) {
-        if (currency.equals("vault")) {
+        if (currency == Material.AIR) {
             if (!Main.getEconomy().isEconomy()) {
                 player.sendMessage("§4§lERROR: This requires Vault Support! Please install Vault plugin!");
                 return;
