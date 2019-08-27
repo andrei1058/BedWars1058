@@ -1,12 +1,13 @@
 package com.andrei1058.bedwars.support.version;
 
-import com.andrei1058.bedwars.api.TeamColor;
+import com.andrei1058.bedwars.api.team.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.exceptions.InvalidEffectException;
 import com.andrei1058.bedwars.exceptions.InvalidSoundException;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -406,9 +407,14 @@ public abstract class VersionSupport {
      * Set block data
      * For versions before 1.13
      */
-    public void setBlockData(Block block, byte data) {
+    public void setJoinSignBackgroundBlockData(BlockState b, byte data) {
 
     }
+
+    /**
+     * Change the block behind the join sign.
+     */
+    public abstract void setJoinSignBackground(BlockState b, Material material);
 
     /**
      * Wool material

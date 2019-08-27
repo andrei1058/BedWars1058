@@ -1,7 +1,7 @@
 package com.andrei1058.bedwars.support.version.v1_13_R1.entities;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.TeamColor;
+import com.andrei1058.bedwars.api.team.TeamColor;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Messages;

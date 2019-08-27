@@ -1,8 +1,8 @@
 package com.andrei1058.bedwars.support.papi;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.GameState;
-import com.andrei1058.bedwars.api.TeamColor;
+import com.andrei1058.bedwars.api.arena.GameState;
+import com.andrei1058.bedwars.api.team.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.commands.shout.ShoutCommand;

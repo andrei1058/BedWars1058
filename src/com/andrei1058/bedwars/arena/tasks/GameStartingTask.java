@@ -1,9 +1,9 @@
 package com.andrei1058.bedwars.arena.tasks;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.GameState;
-import com.andrei1058.bedwars.api.GeneratorType;
-import com.andrei1058.bedwars.api.NextEvent;
+import com.andrei1058.bedwars.api.arena.GameState;
+import com.andrei1058.bedwars.api.arena.GeneratorType;
+import com.andrei1058.bedwars.api.arena.NextEvent;
 import com.andrei1058.bedwars.api.events.TeamAssignEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;

@@ -1,10 +1,9 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.regular;
 
-import com.andrei1058.bedwars.api.GameState;
+import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.configuration.Permissions;
 import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.language.Messages;
 import org.bukkit.Bukkit;

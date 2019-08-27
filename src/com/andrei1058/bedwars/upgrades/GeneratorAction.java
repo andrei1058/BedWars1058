@@ -1,7 +1,7 @@
 package com.andrei1058.bedwars.upgrades;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.GeneratorType;
+import com.andrei1058.bedwars.api.arena.GeneratorType;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.OreGenerator;
 import org.bukkit.Material;

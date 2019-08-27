@@ -2,7 +2,7 @@ package com.andrei1058.bedwars.arena.upgrades;
 
 import com.andrei1058.bedwars.api.events.BaseEnterEvent;
 import com.andrei1058.bedwars.api.events.BaseLeaveEvent;
-import com.andrei1058.bedwars.api.GameState;
+import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.language.Messages;

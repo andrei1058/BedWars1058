@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.support.version.v1_8_R3.entities;
 
-import com.andrei1058.bedwars.api.GameState;
+import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.google.common.collect.Lists;
 import net.minecraft.server.v1_8_R3.*;

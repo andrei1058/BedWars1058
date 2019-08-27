@@ -1,7 +1,7 @@
 package com.andrei1058.bedwars.support.version;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.TeamColor;
+import com.andrei1058.bedwars.api.team.TeamColor;
 import com.andrei1058.bedwars.api.events.PlayerKillEvent;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.language.Messages;

@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.support.version.v1_9_R2.listeners;
 
-import com.andrei1058.bedwars.api.GameState;
+import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
