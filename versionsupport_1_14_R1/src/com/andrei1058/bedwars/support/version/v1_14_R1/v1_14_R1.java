@@ -644,7 +644,7 @@ public class v1_14_R1 extends VersionSupport {
     @Override
     public void setJoinSignBackground(org.bukkit.block.BlockState b, org.bukkit.Material material) {
         if (b.getBlockData() instanceof WallSign){
-            b.getBlock().getRelative(((WallSign)b).getFacing().getOppositeFace()).setType(material);
+            b.getBlock().getRelative(((WallSign)b.getBlockData()).getFacing().getOppositeFace()).setType(material);
         }
     }
 }
