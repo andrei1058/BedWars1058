@@ -61,6 +61,10 @@ public class ContentTier {
             case "emerald":
                 currency = CategoryContent.getCurrency(yml.getString(path + ConfigPath.SHOP_CONTENT_TIER_SETTINGS_CURRENCY).toLowerCase());
                 break;
+            default:
+                Main.plugin.getLogger().severe("Invalid currency at " + path);
+                currency = Material.IRON_INGOT;
+                break;
         }
 
         itemStack = Main.nms.createItemStack(yml.getString(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_MATERIAL),
