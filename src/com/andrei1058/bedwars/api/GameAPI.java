@@ -18,36 +18,26 @@ public interface GameAPI {
 
     /**
      * Get api version.
-     *
-     * @since api v2
      */
     int getApiVersion();
 
     /**
      * Get a player language iso code
-     *
-     * @since api v6
      */
     String getLangIso(Player p);
 
     /**
      * Check if a player is AFK.
-     *
-     * @since API 10
      */
     boolean isPlayerAFK(Player player);
 
     /**
      * Set a player afk.
-     *
-     * @since API 10
      */
     void setPlayerAFK(Player player, boolean value);
 
     /**
      * Get the seconds since the player is AFK
-     *
-     * @since API 10
      */
     Integer getPlayerTimeAFK(Player player);
 
@@ -55,83 +45,63 @@ public interface GameAPI {
 
     /**
      * Get player first play date.
-     * Please note that stats are not cached. You get data directly from database.
-     *
-     * @since api v3
+     * You get data from the local cache.
      */
     @Nullable
     Timestamp getPlayerFirstPlay(Player p);
 
     /**
      * Get player last play date.
-     * Please note that stats are not cached. You get data directly from database.
-     *
-     * @since api v3
+     * You get data from the local cache.
      */
     @Nullable
     Timestamp getPlayerLastPlay(Player p);
 
     /**
      * Get player total wins.
-     * Please note that stats are not cached. You get data directly from database.
-     *
-     * @since api v3
+     * You get data from the local cache.
      */
     int getPlayerWins(Player p);
 
     /**
      * Get player total kills.
-     * Please note that stats are not cached. You get data directly from database.
-     *
-     * @since api v3
+     * You get data from the local cache.
      */
     int getPlayerKills(Player p);
 
     /**
      * Get player total final kills.
-     * Please note that stats are not cached. You get data directly from database.
-     *
-     * @since api v3
+     * You get data from the local cache.
      */
     int getPlayerFinalKills(Player p);
 
     /**
      * Get player total looses.
-     * Please note that stats are not cached. You get data directly from database.
-     *
-     * @since api v3
+     * You get data from the local cache.
      */
     int getPlayerLooses(Player p);
 
     /**
      * Get player total deaths.
-     * Please note that stats are not cached. You get data directly from database.
-     *
-     * @since api v3
+     * You get data from the local cache.
      */
     int getPlayerDeaths(Player p);
 
     /**
      * Get player total final deaths.
-     * Please note that stats are not cached. You get data directly from database.
-     *
-     * @since api v3
+     * You get data from the local cache.
      */
     int getPlayerFinalDeaths(Player p);
 
     /**
      * Get player beds destroyed.
-     * Please note that stats are not cached. You get data directly from database.
-     *
-     * @since api v3
+     * You get data from the local cache.
      */
     int getPlayerBedsDestroyed(Player p);
 
     /**
      * Get player games played.
-     * Please note that stats are not cached. You get data directly from database.
-     *
-     * @since api v3
+     * You get data from the local cache.
      */
     int getPlayerGamesPlayed(Player p);
 
@@ -139,15 +109,11 @@ public interface GameAPI {
 
     /**
      * Check if a player is playing.
-     *
-     * @since api v1
      */
     boolean isPlaying(Player p);
 
     /**
      * Check if a player is spectating.
-     *
-     * @since api v1
      */
     boolean isSpectating(Player p);
 
@@ -155,8 +121,6 @@ public interface GameAPI {
 
     /**
      * Get bedWars main command
-     *
-     * @since API 11
      */
     ParentCommand getBedWarsCommand();
 }
