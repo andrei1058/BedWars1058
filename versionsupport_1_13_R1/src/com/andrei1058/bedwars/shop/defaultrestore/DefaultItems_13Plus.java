@@ -1,7 +1,7 @@
 package com.andrei1058.bedwars.shop.defaultrestore;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.GameState;
+import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -60,6 +60,7 @@ public class DefaultItems_13Plus implements Listener {
     public void onDrop(EntityDropItemEvent e) {
         if (e.isCancelled()) return;
         if (e.getItemDrop() == null) return;
+        if (!(e.getEntity() instanceof Player)) return;
         if (Arena.getArenaByPlayer((Player) e.getEntity()) == null) return;
         Arena a = Arena.getArenaByPlayer((Player) e.getEntity());
         if (a.getStatus() != GameState.playing) return;
