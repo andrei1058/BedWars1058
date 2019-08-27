@@ -7,7 +7,6 @@ import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.arena.despawnables.TargetListener;
 import com.andrei1058.bedwars.arena.mapreset.MapManager;
 import com.andrei1058.bedwars.arena.mapreset.ResetAdaptor;
-import com.andrei1058.bedwars.arena.spectator.v1_9PlusListener;
 import com.andrei1058.bedwars.commands.party.PartyCommand;
 import com.andrei1058.bedwars.commands.rejoin.RejoinCommand;
 import com.andrei1058.bedwars.commands.shout.ShoutCommand;
@@ -27,20 +26,8 @@ import com.andrei1058.bedwars.listeners.arenaselector.ArenaSelectorListener;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
 import com.andrei1058.bedwars.lobbysocket.*;
 import com.andrei1058.bedwars.shop.ShopManager;
-import com.andrei1058.bedwars.shop.defaultrestore.DefaultItems_12Minus;
-import com.andrei1058.bedwars.shop.defaultrestore.DefaultItems_13Plus;
 import com.andrei1058.bedwars.stats.StatsManager;
 import com.andrei1058.bedwars.support.bStats;
-import com.andrei1058.bedwars.support.bukkit.*;
-import com.andrei1058.bedwars.support.bukkit.v1_10_R1.v1_10_R1;
-import com.andrei1058.bedwars.support.bukkit.v1_11_R1.v1_11_R1;
-import com.andrei1058.bedwars.support.bukkit.v1_12_R1.v1_12_R1;
-import com.andrei1058.bedwars.support.bukkit.v1_13_R1.v1_13_R1;
-import com.andrei1058.bedwars.support.bukkit.v1_13_R2.v1_13_R2;
-import com.andrei1058.bedwars.support.bukkit.v1_14_R1.v1_14_R1;
-import com.andrei1058.bedwars.support.bukkit.v1_8_R3.v1_8_R3;
-import com.andrei1058.bedwars.support.bukkit.v1_9_R1.v1_9_R1;
-import com.andrei1058.bedwars.support.bukkit.v1_9_R2.v1_9_R2;
 import com.andrei1058.bedwars.support.citizens.CitizensListener;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.support.leaderheads.LeaderHeadsSupport;
@@ -52,9 +39,14 @@ import com.andrei1058.bedwars.support.party.Parties;
 import com.andrei1058.bedwars.support.vault.*;
 import com.andrei1058.bedwars.arena.tasks.OneTick;
 import com.andrei1058.bedwars.arena.tasks.Refresh;
-import org.bukkit.*;
+import com.andrei1058.bedwars.support.version.VersionSupport;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.WorldCreator;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Monster;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -64,6 +56,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 import static com.andrei1058.bedwars.language.Language.setupLang;
@@ -80,7 +73,7 @@ public class Main extends JavaPlugin {
     public static UpgradesManager upgrades;
     public static Language lang;
     public static Main plugin;
-    public static NMS nms;
+    public static VersionSupport nms;
 
     private static Party party = null;
     private static Chat chat;
@@ -110,46 +103,26 @@ public class Main extends JavaPlugin {
         plugin = this;
 
         /* Load version support */
-        boolean support = true;
-        switch (version) {
-            case "v1_8_R3":
-                nms = new v1_8_R3();
-                break;
-            case "v1_9_R1":
-                nms = new v1_9_R1();
-                break;
-            case "v1_9_R2":
-                nms = new v1_9_R2();
-                break;
-            case "v1_10_R1":
-                nms = new v1_10_R1();
-                break;
-            case "v1_11_R1":
-                nms = new v1_11_R1();
-                break;
-            case "v1_12_R1":
-                nms = new v1_12_R1();
-                break;
-            case "v1_13_R1":
-                nms = new v1_13_R1();
-                break;
-            case "v1_13_R2":
-                nms = new v1_13_R2();
-                break;
-            case "v1_14_R1":
-                nms = new v1_14_R1();
-                break;
-            default:
-                support = false;
-        }
+        Class supp;
 
-        if (!support) {
-            this.setEnabled(false);
+        try {
+            supp = Class.forName("com.andrei1058.bedwars.support.version." + version + "." + version);
+        } catch (ClassNotFoundException e) {
+            serverSoftwareSupport = false;
             this.getLogger().severe("I can't run on your version: " + version);
             return;
-        } else {
-            this.getLogger().info("Loading support for paper/ spigot " + version + ".");
         }
+
+        try {
+            //noinspection unchecked
+            nms = (VersionSupport) supp.getConstructor(String.class).newInstance(version);
+        } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            Bukkit.getPluginManager().disablePlugin(this);
+            this.getLogger().severe("Could not load support for server version: " + version);
+            return;
+        }
+
+        this.getLogger().info("Loading support for paper/ spigot " + version + ".");
 
         config = new ConfigManager("config", "plugins/" + this.getName(), false);
 
@@ -271,27 +244,6 @@ public class Main extends JavaPlugin {
         // Register setup-holograms fix
         registerEvents(new ChunkLoad());
 
-        /* Load version support */
-        switch (version) {
-            case "v1_13_R2":
-            case "v1_13_R1":
-            case "v1_14_R1":
-                registerEvents(new v1_3_Interact());
-                registerEvents(new DefaultItems_13Plus());
-            case "v1_12_R1":
-                registerEvents(new EntityDropPickListener());
-                registerEvents(new DefaultItems_12Minus());
-                break;
-            default:
-                registerEvents(new PlayerDropPickListener());
-                registerEvents(new DefaultItems_12Minus());
-                break;
-        }
-
-        if (!"v1_8_R3".equals(version)) {
-            registerEvents(new v1_9PlusListener(), new v1_9_SwapItem());
-        }
-
         /* Deprecated versions */
         switch (version) {
             case "v1_8_R3":
@@ -341,6 +293,7 @@ public class Main extends JavaPlugin {
 
         /* Register NMS entities */
         nms.registerEntities();
+        nms.registerVersionListeners();
 
         /* Check for updates */
         Misc.checkUpdate();
@@ -488,7 +441,7 @@ public class Main extends JavaPlugin {
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_REJOIN_TIME, 60 * 5);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART, 30);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD, "restart");
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS, Arrays.asList("0.0.0.0:2019"));
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS, Collections.singletonList("0.0.0.0:2019"));
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_REGULAR, 40);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_HALF, 25);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_SHORTENED, 10);
@@ -800,8 +753,8 @@ public class Main extends JavaPlugin {
         }
     }
 
-    private void registerEvents(Listener... listeners) {
-        Arrays.stream(listeners).forEach(l -> plugin.getServer().getPluginManager().registerEvents(l, this));
+    public static void registerEvents(Listener... listeners) {
+        Arrays.stream(listeners).forEach(l -> plugin.getServer().getPluginManager().registerEvents(l, plugin));
     }
 
     public static void debug(String message) {
@@ -965,7 +918,7 @@ public class Main extends JavaPlugin {
             }
         } else*/
         /*if (resetAdaptor == ResetAdaptor.FAST_ASYNC_WORLD_EDIT) {*/
-            /*if ("v1_8_R3".equals(version) || "v_1_9_R2".equals(version) || "v1_9_R1".equals(version) || "v_1_10_R1".equals(version) || "v1_11_R1".equals(version) || "v1_12_R1".equals(version)) {*/
+        /*if ("v1_8_R3".equals(version) || "v_1_9_R2".equals(version) || "v1_9_R1".equals(version) || "v_1_10_R1".equals(version) || "v1_11_R1".equals(version) || "v1_12_R1".equals(version)) {*/
                 /*try {
                     Constructor constructor = Class.forName("com.andrei1058.bedwars.arena.mapreset.fawe.FAWEOld2").getConstructor(Arena.class, String.class);
                     try {
@@ -976,7 +929,7 @@ public class Main extends JavaPlugin {
                 } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }*/
-            /*} else {*/
+        /*} else {*/
                 /*try {
                     Constructor constructor = Class.forName("com.andrei1058.bedwars.arena.mapreset.fawe.FAWENew").getConstructor(Arena.class, String.class);
                     try {

@@ -1,3 +1,7 @@
+# 0.14beta
+- minor multi server version compatibility improvements
+- removed 1.9 R1 support
+
 # 0.13beta
 - fixed a null pointer exception error
 - fixed rejoin scoreboard issue
@@ -23,6 +27,7 @@
 - fixed glass color for 1.12-
 - "/bw start debug" now starts the debug mode
 - added default sword restore system
+- scoreboards updated with the new layout
 
 for devs:
 - EnemyBaseEnterEvent was removed, alternative: BaseEnterEvent (since api 9)

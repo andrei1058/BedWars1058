@@ -1,18 +1,15 @@
 package com.andrei1058.bedwars.arena.despawnables;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.GameState;
 import com.andrei1058.bedwars.arena.Arena;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 
-import java.util.HashMap;
-import java.util.UUID;
-
 public class TargetListener implements Listener {
-
-    public static HashMap<UUID, String> owningTeam = new HashMap<>();
 
     @EventHandler
     public void onTarget(EntityTargetLivingEntityEvent e){
@@ -28,10 +25,10 @@ public class TargetListener implements Listener {
             e.setCancelled(true);
             return;
         }
-        if (!owningTeam.containsKey(e.getEntity().getUniqueId())) return;
-        if (arena.getTeam(p).getName().equals(owningTeam.get(e.getEntity().getUniqueId()))){
-            e.setCancelled(true);
-            return;
+        if (Main.nms.isDespawnable(e.getEntity())){
+            if (arena.getTeam(p) == Main.nms.getDespawnablesList().get(e.getEntity().getUniqueId()).getTeam()){
+                e.setCancelled(true);
+            }
         }
     }
 }

@@ -7,6 +7,7 @@ import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.language.Messages;
+import com.andrei1058.bedwars.support.version.Despawnable;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -58,7 +59,6 @@ public class DamageDeathMove implements Listener {
         if (Main.getServerType() != ServerType.BUNGEE) {
             if (e.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 e.setCancelled(true);
-                return;
             }
         }
     }
@@ -152,7 +152,7 @@ public class DamageDeathMove implements Listener {
                     }
                 }
             }
-        } else if (e.getEntity() instanceof Silverfish) {
+        } else if (nms.isDespawnable(e.getEntity())) {
             Player damager;
             if (e.getDamager() instanceof Player) {
                 damager = (Player) e.getDamager();
@@ -168,14 +168,15 @@ public class DamageDeathMove implements Listener {
             Arena a = Arena.getArenaByPlayer(damager);
             if (a != null) {
                 if (a.isPlayer(damager)) {
-                    if (nms.isDespawnable(e.getEntity())) {
-                        if (a.getTeam(damager) == nms.ownDespawnable(e.getEntity())) {
-                            e.setCancelled(true);
-                        }
+                    // do not hurt own mobs
+                    if (a.getTeam(damager) == nms.getDespawnablesList().get(e.getEntity().getUniqueId()).getTeam()) {
+                        e.setCancelled(true);
                     }
+                } else {
+                    e.setCancelled(true);
                 }
             }
-        } else if (e.getEntity() instanceof IronGolem) {
+        } /*else if (e.getEntity() instanceof IronGolem) {
             Player damager;
             if (e.getDamager() instanceof Player) {
                 damager = (Player) e.getDamager();
@@ -189,17 +190,16 @@ public class DamageDeathMove implements Listener {
             if (a != null) {
                 if (a.isPlayer(damager)) {
                     if (nms.isDespawnable(e.getEntity())) {
-                        if (a.getTeam(damager) == nms.ownDespawnable(e.getEntity())) {
+                        if (a.getTeam(damager) == ((OwnedByTeam) nms.getDespawnablesList().get(e.getEntity().getUniqueId())).getOwner()) {
                             e.setCancelled(true);
                         }
                     }
                 }
             }
-        }
+        }*/
         if (Main.getServerType() != ServerType.BUNGEE) {
             if (e.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 e.setCancelled(true);
-                return;
             }
         }
     }
@@ -277,19 +277,11 @@ public class DamageDeathMove implements Listener {
                     LastHit lh = getLastHit().get(victim);
                     if (lh != null) {
                         if (lh.getTime() >= System.currentTimeMillis() - 15000) {
-                            if ((lh.getDamager() instanceof Silverfish)) {
-                                if (nms.isDespawnable(lh.getDamager())) {
-                                    t2 = nms.ownDespawnable(lh.getDamager());
-                                    message = t.isBedDestroyed() ? Messages.PLAYER_DIE_DEBUG_FINAL_KILL : Messages.PLAYER_DIE_DEBUG_REGULAR;
-                                    cause = t.isBedDestroyed() ? com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause.SILVERFISH_FINAL_KILL : com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause.SILVERFISH;
-                                }
-                                killer = null;
-                            } else if (lh.getDamager() instanceof IronGolem) {
-                                if (nms.isDespawnable(lh.getDamager())) {
-                                    t2 = nms.ownDespawnable(lh.getDamager());
-                                    message = t.isBedDestroyed() ? Messages.PLAYER_DIE_IRON_GOLEM_FINAL_KILL : Messages.PLAYER_DIE_IRON_GOLEM_REGULAR;
-                                    cause = t.isBedDestroyed() ? com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause.IRON_GOLEM_FINAL_KILL : com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause.IRON_GOLEM;
-                                }
+                            if (nms.isDespawnable(lh.getDamager())) {
+                                Despawnable d = nms.getDespawnablesList().get(lh.getDamager().getUniqueId());
+                                t2 = d.getTeam();
+                                message = t.isBedDestroyed() ? Messages.PLAYER_DIE_DEBUG_FINAL_KILL : Messages.PLAYER_DIE_DEBUG_REGULAR;
+                                cause = t.isBedDestroyed() ? d.getDeathFinalCause() : d.getDeathRegularCause();
                                 killer = null;
                             }
                         }
@@ -391,7 +383,7 @@ public class DamageDeathMove implements Listener {
                 e.setRespawnLocation(e.getPlayer().getWorld().getSpawnLocation());
             }
         } else {
-            if (a.isSpectator(e.getPlayer())){
+            if (a.isSpectator(e.getPlayer())) {
                 e.setRespawnLocation(a.getCm().getArenaLoc("waiting.Loc"));
                 String iso = Language.getPlayerLanguage(e.getPlayer()).getIso();
                 for (OreGenerator o : a.getOreGenerators()) {
@@ -415,7 +407,7 @@ public class DamageDeathMove implements Listener {
                     for (Player p : a.getWorld().getPlayers()) {
                         p.sendMessage(getMsg(p, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getName()));
                     }
-                    Bukkit.getScheduler().runTaskLater(plugin, a::checkWinner,40L);
+                    Bukkit.getScheduler().runTaskLater(plugin, a::checkWinner, 40L);
                 }
             } else {
                 //respawn session
@@ -486,7 +478,6 @@ public class DamageDeathMove implements Listener {
                 if (e.getTo().getY() < 0) {
                     e.getPlayer().teleport(a.getCm().getArenaLoc("waiting.Loc"));
                 }
-                return;
             } else {
                 if (e.getPlayer().getLocation().getY() <= 0) {
                     if (a.getStatus() == GameState.playing) {
@@ -534,7 +525,6 @@ public class DamageDeathMove implements Listener {
                 if (e.getTo().getY() < 0) {
                     e.getPlayer().teleport(config.getConfigLoc("lobbyLoc"));
                 }
-                return;
             }
         }
     }

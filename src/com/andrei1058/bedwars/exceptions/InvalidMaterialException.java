@@ -5,6 +5,6 @@ import com.andrei1058.bedwars.Main;
 public class InvalidMaterialException extends Exception {
 
     public InvalidMaterialException(String s){
-        super(s + " is not a valid " + Main.getServerVersion()+" material!");
+        super(s + " is not a valid " + Main.getServerVersion()+" material! Using defaults..");
     }
 }
