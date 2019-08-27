@@ -71,6 +71,7 @@ public class ShopCategory {
         itemNamePath = Messages.SHOP_CATEGORY_ITEM_NAME.replace("%category%", path);
         itemLorePath = Messages.SHOP_CATEGORY_ITEM_LORE.replace("%category%", path);
         invNamePath = Messages.SHOP_CATEGORY_INVENTORY_NAME.replace("%category%", path);
+        loaded = true;
 
         CategoryContent cc;
         for (String s : yml.getConfigurationSection(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_PATH).getKeys(false)) {
@@ -80,8 +81,6 @@ public class ShopCategory {
                 Main.debug("Adding CategoryContent: " + s + " to Shop Category: " + path);
             }
         }
-
-        loaded = true;
     }
 
     public void open(Player player, ShopIndex index, ShopCache shopCache){

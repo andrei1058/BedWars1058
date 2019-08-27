@@ -387,7 +387,8 @@ public class ShopManager {
             if (s.equalsIgnoreCase(ConfigPath.SHOP_SETTINGS_PATH)) continue;
             if (s.equals(ConfigPath.SHOP_QUICK_DEFAULTS_PATH)) continue;
             if (s.equalsIgnoreCase(ConfigPath.SHOP_SPECIALS_PATH)) continue;
-            shop.addShopCategory(new ShopCategory(s, yml));
+            ShopCategory sc = new ShopCategory(s, yml);
+            if (sc.isLoaded()) shop.addShopCategory(sc);
         }
     }
 
