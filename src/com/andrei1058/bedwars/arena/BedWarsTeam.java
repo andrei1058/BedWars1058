@@ -188,7 +188,7 @@ public class BedWarsTeam {
                             plugin.getLogger().severe(parm[1] + " is not an integer at: " + s + " (config)");
                             continue;
                         }
-                        i = new ItemStack(Material.valueOf(parm[0]), Integer.valueOf(parm[1]));
+                        i = new ItemStack(Material.valueOf(parm[0]), Integer.parseInt(parm[1]));
                     } else {
                         i = new ItemStack(Material.valueOf(parm[0]));
                     }
@@ -199,7 +199,7 @@ public class BedWarsTeam {
                             plugin.getLogger().severe(parm[2] + " is not an integer at: " + s + " (config)");
                             continue;
                         }
-                        i.setAmount(Integer.valueOf(parm[2]));
+                        i.setAmount(Integer.parseInt(parm[2]));
                     }
                     ItemMeta im = i.getItemMeta();
                     if (parm.length > 3) {
@@ -264,7 +264,7 @@ public class BedWarsTeam {
                             plugin.getLogger().severe(parm[1] + " is not an integer at: " + s + " (config)");
                             continue;
                         }
-                        i = new ItemStack(Material.valueOf(parm[0]), Integer.valueOf(parm[1]));
+                        i = new ItemStack(Material.valueOf(parm[0]), Integer.parseInt(parm[1]));
                     } else {
                         i = new ItemStack(Material.valueOf(parm[0]));
                     }
@@ -275,7 +275,7 @@ public class BedWarsTeam {
                             plugin.getLogger().severe(parm[2] + " is not an integer at: " + s + " (config)");
                             continue;
                         }
-                        i.setAmount(Integer.valueOf(parm[2]));
+                        i.setAmount(Integer.parseInt(parm[2]));
                     }
                     ItemMeta im = i.getItemMeta();
                     if (parm.length > 3) {
@@ -428,10 +428,8 @@ public class BedWarsTeam {
      */
     public void sendArmor(Player p) {
         if (p.getInventory().getHelmet() == null) p.getInventory().setHelmet(createArmor(Material.LEATHER_HELMET));
-        if (p.getInventory().getChestplate() == null)
-            p.getInventory().setChestplate(createArmor(Material.LEATHER_CHESTPLATE));
-        if (p.getInventory().getLeggings() == null)
-            p.getInventory().setLeggings(createArmor(Material.LEATHER_LEGGINGS));
+        if (p.getInventory().getChestplate() == null) p.getInventory().setChestplate(createArmor(Material.LEATHER_CHESTPLATE));
+        if (p.getInventory().getLeggings() == null) p.getInventory().setLeggings(createArmor(Material.LEATHER_LEGGINGS));
         if (p.getInventory().getBoots() == null) p.getInventory().setBoots(createArmor(Material.LEATHER_BOOTS));
     }
 
@@ -488,7 +486,7 @@ public class BedWarsTeam {
         public void destroy() {
             if (!arena.getCm().getBoolean(ConfigPath.ARENA_USE_BED_HOLO)) return;
             a.remove();
-            beds.remove(this);
+            beds.remove(p);
         }
 
         public void show() {
