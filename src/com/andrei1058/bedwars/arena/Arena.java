@@ -14,7 +14,6 @@ import com.andrei1058.bedwars.api.events.server.ArenaDisableEvent;
 import com.andrei1058.bedwars.api.events.server.ArenaEnableEvent;
 import com.andrei1058.bedwars.api.events.server.ArenaRestartEvent;
 import com.andrei1058.bedwars.api.team.TeamColor;
-import com.andrei1058.bedwars.arena.mapreset.MapManager;
 import com.andrei1058.bedwars.configuration.ConfigManager;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Language;
@@ -118,12 +117,9 @@ public class Arena implements Comparable<Arena> {
     /* ARENA GENERATORS */
     private List<OreGenerator> oreGenerators = new ArrayList<>();
 
-    /* Used to reset the map. */
-    private MapManager mapManager;
-
     private PerMinuteTask perMinuteTask;
 
-    private static LinkedList<MapManager> enableQueue = new LinkedList<>();
+    private static LinkedList<Arena> enableQueue = new LinkedList<>();
 
     /**
      * Load an arena.
@@ -133,8 +129,8 @@ public class Arena implements Comparable<Arena> {
      * @param p    - This will send messages to the player if something went wrong while loading the arena. Can be NULL.
      */
     public Arena(String name, Player p) {
-        for (MapManager mm : enableQueue) {
-            if (mm.getName().equalsIgnoreCase(name)) {
+        for (Arena mm : enableQueue) {
+            if (mm.getWorldName().equalsIgnoreCase(name)) {
                 plugin.getLogger().severe("Tried to load arena " + name + " but it is already in the enable queue.");
                 if (p != null)
                     p.sendMessage(ChatColor.RED + "Tried to load arena " + name + " but it is already in the enable queue.");
@@ -150,7 +146,6 @@ public class Arena implements Comparable<Arena> {
 
         plugin.getLogger().info("Arena " + getWorldName() + " was added to the enable queue.");
         cm = new ConfigManager(name, "plugins/" + plugin.getName() + "/Arenas", true);
-        mapManager = Main.getMapManager(this, name);
 
         //if (mapManager.isLevelWorld()) {
         //    Main.plugin.getLogger().severe("COULD NOT LOAD ARENA: " + name);
@@ -220,17 +215,17 @@ public class Arena implements Comparable<Arena> {
             return;
         }
         if (error) return;
-        enableQueue.add(mapManager);
-        if (enableQueue.size() == 1) mapManager.onEnable();
+        enableQueue.add(this);
+        if (enableQueue.size() == 1) api.getRestoreAdapter().onEnable(this);
     }
 
     /**
      * Use this method when the world was loaded successfully.
      */
     public void init(World world) {
-        enableQueue.remove(mapManager);
+        enableQueue.remove(this);
         if (!enableQueue.isEmpty()) {
-            enableQueue.get(0).onEnable();
+            api.getRestoreAdapter().onEnable(enableQueue.get(0));
         }
         plugin.getLogger().info("Loading arena: " + getWorldName());
         this.world = world;
@@ -419,8 +414,10 @@ public class Arena implements Comparable<Arena> {
             }
 
             /* save player inventory etc */
-            new PlayerGoods(p, true);
-            playerLocation.put(p, p.getLocation());
+            if (getServerType() != ServerType.BUNGEE) {
+                new PlayerGoods(p, true);
+                playerLocation.put(p, p.getLocation());
+            }
             p.teleport(cm.getArenaLoc("waiting.Loc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
             if (getStatus() == GameState.waiting) {
                 Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
@@ -493,9 +490,11 @@ public class Arena implements Comparable<Arena> {
 
             if (!playerBefore) {
                 /* save player inv etc if isn't saved yet*/
-                new PlayerGoods(p, true);
+                if (getServerType() != ServerType.BUNGEE) {
+                    new PlayerGoods(p, true);
+                    playerLocation.put(p, p.getLocation());
+                }
                 setArenaByPlayer(p);
-                playerLocation.put(p, p.getLocation());
             }
 
             Bukkit.getScheduler().runTaskLater(plugin, () -> new SBoard(p, this), 35L);
@@ -863,14 +862,15 @@ public class Arena implements Comparable<Arena> {
         }
         setArenaByPlayer(p);
         /* save player inventory etc */
-        new PlayerGoods(p, true);
-        p.getInventory().clear();
-        playerLocation.put(p, p.getLocation());
+        if (Main.getServerType() != ServerType.BUNGEE){
+            new PlayerGoods(p, true);
+            playerLocation.put(p, p.getLocation());
+        }
 
         p.teleport(getCm().getArenaLoc("waiting.Loc"));
         p.getInventory().clear();
 
-        //restore items before respawning in team
+        //restore items before re-spawning in team
         ShopCache sc = ShopCache.getShopCache(p);
         if (sc != null) sc.destroy();
         sc = new ShopCache(p);
@@ -890,79 +890,18 @@ public class Arena implements Comparable<Arena> {
      * This will automatically kick/ remove the people from the arena.
      */
     public void disable() {
-        if (world == null) {
-            arenas.remove(this);
-            return;
-        }
-        plugin.getLogger().info("Disabling arena: " + getDisplayName());
-        for (Player on : players) {
-            removePlayer(on, Main.getServerType() == ServerType.BUNGEE);
-        }
-        for (Player on : spectators) {
-            removeSpectator(on, Main.getServerType() == ServerType.BUNGEE);
-        }
-        for (Block b : placed) {
-            b.setType(Material.AIR);
-        }
-        placed.clear();
-        for (Entity e : world.getEntities()) {
-            if (e.getType() == EntityType.PLAYER) {
-                Player p = (Player) e;
-                if (p.getWorld().getName().equals(worldName)) {
-                    p.kickPlayer(getMsg(p, Messages.ARENA_RESTART_PLAYER_KICK));
-                }
-            }
-        }
-        for (OreGenerator eg : oreGenerators) {
-            eg.disable();
-        }
-        players.clear();
-        spectators.clear();
-        nextEvents.clear();
-        world = null;
-
-        mapManager.onDisable();
-        arenaByName.remove(world.getName());
-        arenas.remove(this);
-
-        //Call event
+        destroyData();
+        api.getRestoreAdapter().onDisable(this);
         Bukkit.getPluginManager().callEvent(new ArenaDisableEvent(getWorldName()));
-        signs.clear();
-
-        for (ReJoinTask rjt : ReJoinTask.getReJoinTasks()) {
-            if (rjt.getArena() == this) {
-                rjt.destroy();
-            }
-        }
-
     }
 
     /**
-     * Restart the arena values.
-     * This will not unload or loadStructure the world
-     * Do not use this unless you know what you are doing.
+     * Restart the arena.
      */
     public void restart() {
         plugin.getLogger().info("Restarting arena: " + getWorldName());
-        arenas.remove(this);
-        players.clear();
-        spectators.clear();
-        playerKills.clear();
-        playerBedsDestroyed.clear();
-        playerFinalKills.clear();
-        playerDeaths.clear();
-        playerFinalKillDeaths.clear();
-        respawn.clear();
-        showTime.clear();
-        arenaByName.remove(getWorldName());
-        arenaByPlayer.entrySet().removeIf(entry -> entry.getValue() == this);
-        for (ReJoinTask rjt : ReJoinTask.getReJoinTasks()) {
-            if (rjt.getArena() == this) {
-                rjt.destroy();
-            }
-        }
-        world = null;
-        mapManager.onRestart();
+        destroyData();
+        api.getRestoreAdapter().onRestart(this);
         Bukkit.getPluginManager().callEvent(new ArenaRestartEvent(getWorldName()));
     }
 
@@ -1923,14 +1862,6 @@ public class Arena implements Comparable<Arena> {
     }
 
     /**
-     * Get map resetter manager.
-     */
-    public MapManager getMapManager() {
-        return mapManager;
-    }
-
-
-    /**
      * Show upgrade announcement to players.
      * Change diamondTier value first.
      */
@@ -1980,7 +1911,58 @@ public class Arena implements Comparable<Arena> {
         return broken;
     }
 
-    public static LinkedList<MapManager> getEnableQueue() {
+    public static LinkedList<Arena> getEnableQueue() {
         return enableQueue;
+    }
+
+    private void destroyData() {
+        arenas.remove(this);
+        for (ReJoinTask rjt : ReJoinTask.getReJoinTasks()) {
+            if (rjt.getArena() == this) {
+                rjt.destroy();
+            }
+        }
+        arenaByName.remove(worldName);
+        arenaByPlayer.entrySet().removeIf(entry -> entry.getValue() == this);
+        players = null;
+        spectators = null;
+        signs = null;
+        yml = null;
+        cm = null;
+        world = null;
+        for (OreGenerator og : oreGenerators){
+            og.destroyData();
+        }
+        for (BedWarsTeam bwt : teams) {
+            bwt.destroyData();
+        }
+        teams = null;
+        placed = null;
+        broken = null;
+        nextEvents = null;
+        regionsList = null;
+        respawn = null;
+        showTime = null;
+        playerLocation = null;
+        playerKills = null;
+        playerBedsDestroyed = null;
+        playerFinalKills = null;
+        playerDeaths = null;
+        playerFinalKillDeaths = null;
+        startingTask = null;
+        playingTask = null;
+        restartingTask = null;
+        oreGenerators = null;
+        perMinuteTask = null;
+    }
+
+    /**
+     * Remove an arena from the enable queue.
+     */
+    public static void removeFromEnableQueue(Arena a) {
+        enableQueue.remove(a);
+        if (!enableQueue.isEmpty()) {
+            api.getRestoreAdapter().onEnable(enableQueue.get(0));
+        }
     }
 }

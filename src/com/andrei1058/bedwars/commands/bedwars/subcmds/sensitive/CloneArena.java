@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.api.command.ParentCommand;
@@ -49,8 +50,7 @@ public class CloneArena extends SubCommand {
             p.sendMessage("§c▪ §7Usage: §o/" + getParent().getName() + " "+getSubCommandName()+" <mapName> <newArena>");
             return true;
         }
-        File mapa = new File(Bukkit.getServer().getWorldContainer().getPath() + "/" + args[0]);
-        if (!mapa.exists()) {
+        if (!Main.api.getRestoreAdapter().isWorld(args[0])) {
             p.sendMessage("§c▪ §7" + args[0] + " doesn't exist!");
             return true;
         }
@@ -59,8 +59,7 @@ public class CloneArena extends SubCommand {
             p.sendMessage("§c▪ §7" + args[0] + " doesn't exist!");
             return true;
         }
-        File mapa2 = new File(Bukkit.getServer().getWorldContainer().getPath() + "/" + args[1]);
-        if (mapa2.exists() && yml2.exists()) {
+        if (Main.api.getRestoreAdapter().isWorld(args[1]) && yml2.exists()) {
             p.sendMessage("§c▪ §7" + args[1] + " already exist!");
             return true;
         }
@@ -68,15 +67,7 @@ public class CloneArena extends SubCommand {
             p.sendMessage("§c▪ §7Please disable " + args[0] + " first!");
             return true;
         }
-        try {
-            FileUtils.copyDirectory(mapa, mapa2);
-            if (!new File(mapa2.getPath() + "/uid.dat").delete()) {
-                p.sendMessage("§c▪ §7An error occurred. Please delete uid.dat from " + args[1]);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            p.sendMessage("§c▪ §7An error occurred while copying the map. Check the console.");
-        }
+        Main.api.getRestoreAdapter().cloneArena(args[0], args[1]);
         if (yml1.exists()) {
             try {
                 FileUtils.copyFile(yml1, yml2, true);

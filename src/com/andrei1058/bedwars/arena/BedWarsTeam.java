@@ -867,4 +867,30 @@ public class BedWarsTeam {
     public HashMap<Player, BedHolo> getBeds() {
         return beds;
     }
+
+    protected void destroyData(){
+        members = null;
+        spawn = null;
+        bed = null;
+        shop = null;
+        teamUpgrades = null;
+        ironGenerator.destroyData();
+        ironGenerator = null;
+        goldGenerator.destroyData();
+        goldGenerator = null;
+        if (emeraldGenerator != null) emeraldGenerator.destroyData();
+        emeraldGenerator = null;
+        arena = null;
+        upgradeTier = null;
+        teamEffects = null;
+        base = null;
+        enemyBaseEnter = null;
+        bowsEnchantments = null;
+        swordsEnchantemnts = null;
+        armorsEnchantemnts = null;
+        trapSlots = null;
+        enemyBaseEnterSlots = null;
+        ebseEffectsStatic = null;
+        membersCache = null;
+    }
 }

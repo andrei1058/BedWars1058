@@ -596,7 +596,7 @@ public class v1_13_R2 extends VersionSupport {
 
     @Override
     public String getInventoryName(InventoryEvent e) {
-        return e.getInventory().getName();
+        return e.getView().getTitle();
     }
 
     @Override
@@ -613,6 +613,11 @@ public class v1_13_R2 extends VersionSupport {
     @Override
     public void registerVersionListeners() {
         Main.registerEvents(new EntityDropPickListener(), new v1_13_Interact(), new v1_9_R2_SwapItem(), new DefaultItems_13Plus());
+    }
+
+    @Override
+    public int getVersion() {
+        return 7;
     }
 
     @Override

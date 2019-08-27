@@ -1,14 +1,13 @@
-package com.andrei1058.bedwars.arena.mapreset.Util;
-//CODE BY: Arceus02
+package com.andrei1058.bedwars.maprestore.internal.files;
 import com.andrei1058.bedwars.Main;
 
 import java.io.File;
 
 public class FileUtil {
-	
-	@SuppressWarnings("ConstantConditions")
+
 	public static void delete(File file) {
 		if(file.isDirectory()) {
+			//noinspection ConstantConditions
 			for(File subfile : file.listFiles()) {
 				delete(subfile);
 			}

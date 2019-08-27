@@ -1,8 +1,10 @@
 package com.andrei1058.bedwars.api;
 
+import com.andrei1058.bedwars.api.arena.RestoreAdapter;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import java.sql.Timestamp;
 
@@ -123,4 +125,18 @@ public interface GameAPI {
      * Get bedWars main command
      */
     ParentCommand getBedWarsCommand();
+
+    /* ARENA RESTORE */
+
+    /**
+     * Get the restore adapter.
+     */
+    RestoreAdapter getRestoreAdapter();
+
+    /**
+     * Change the arena restore adapter.
+     *
+     * @param restoreAdapter your custom adapter.
+     */
+    void setRestoreAdapter(RestoreAdapter restoreAdapter) throws IllegalAccessError;
 }

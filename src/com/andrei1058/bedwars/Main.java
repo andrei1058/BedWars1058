@@ -3,10 +3,9 @@ package com.andrei1058.bedwars;
 import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.GameAPI;
 import com.andrei1058.bedwars.api.ServerType;
+import com.andrei1058.bedwars.api.arena.RestoreAdapter;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.arena.despawnables.TargetListener;
-import com.andrei1058.bedwars.arena.mapreset.MapManager;
-import com.andrei1058.bedwars.arena.mapreset.ResetAdaptor;
 import com.andrei1058.bedwars.commands.party.PartyCommand;
 import com.andrei1058.bedwars.commands.rejoin.RejoinCommand;
 import com.andrei1058.bedwars.commands.shout.ShoutCommand;
@@ -25,6 +24,7 @@ import com.andrei1058.bedwars.listeners.*;
 import com.andrei1058.bedwars.listeners.arenaselector.ArenaSelectorListener;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
 import com.andrei1058.bedwars.lobbysocket.*;
+import com.andrei1058.bedwars.maprestore.internal.InternalAdapter;
 import com.andrei1058.bedwars.shop.ShopManager;
 import com.andrei1058.bedwars.stats.StatsManager;
 import com.andrei1058.bedwars.support.bStats;
@@ -50,6 +50,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -66,7 +67,7 @@ import static com.andrei1058.bedwars.language.Language.setupLang;
 public class Main extends JavaPlugin {
 
     private static ServerType serverType = ServerType.MULTIARENA;
-    public static boolean safeMode = false, lobbyServer = false, debug = true;
+    public static boolean safeMode = false, paper = false, debug = true;
     public static String mainCmd = "bw", link = "https://www.spigotmc.org/resources/50942/";
     public static ConfigManager config, signs, generators;
     public static ShopManager shop;
@@ -83,7 +84,6 @@ public class Main extends JavaPlugin {
     private static String version = Bukkit.getServer().getClass().getName().split("\\.")[3];
     private static String lobbyWorld = "";
     public static BedWars api;
-    private static ResetAdaptor resetAdaptor = ResetAdaptor.INTERNAL;
 
     //remote database
     private static Database remoteDatabase;
@@ -96,9 +96,18 @@ public class Main extends JavaPlugin {
         //Spigot support
         try {
             Class.forName("org.spigotmc.SpigotConfig");
-        } catch (Exception ex) {
+        } catch (Exception ignored) {
+            this.getLogger().severe("I can't run on your server software. Please check:");
+            this.getLogger().severe("https://gitlab.com/andrei1058/BedWars1058/wikis/compatibility");
             serverSoftwareSupport = false;
             return;
+        }
+
+        //Paper support
+        try {
+            Class.forName("com.destroystokyo.paper.PaperConfig");
+            paper = true;
+        } catch (Exception ignored) {
         }
 
         plugin = this;
@@ -118,12 +127,12 @@ public class Main extends JavaPlugin {
             //noinspection unchecked
             nms = (VersionSupport) supp.getConstructor(String.class).newInstance(version);
         } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            Bukkit.getPluginManager().disablePlugin(this);
+            serverSoftwareSupport = false;
             this.getLogger().severe("Could not load support for server version: " + version);
             return;
         }
 
-        this.getLogger().info("Loading support for paper/ spigot " + version + ".");
+        this.getLogger().info("Loading support for " + (isPaper() ? "paper" : "spigot") + " " + version);
 
         config = new ConfigManager("config", "plugins/" + this.getName(), false);
 
@@ -165,16 +174,28 @@ public class Main extends JavaPlugin {
     public void onEnable() {
 
         if (!serverSoftwareSupport) {
-            this.getLogger().severe("I can't run on your server software. Please check:");
-            this.getLogger().severe("https://gitlab.com/andrei1058/BedWars1058/wikis/compatibility");
-            this.setEnabled(false);
+            Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
 
+        Bukkit.getServicesManager().register(GameAPI.class, new BedWars(), this, ServicePriority.Highest);
+        api = (BedWars) this.getServer().getServicesManager().getRegistration(GameAPI.class).getProvider();
+
         // Load SlimeWorldManager support
         if (Bukkit.getPluginManager().getPlugin("SlimeWorldManager") != null) {
-            resetAdaptor = ResetAdaptor.SLIME;
+            try {
+                Constructor constructor = Class.forName("com.andrei1058.bedwars.arena.mapreset.slime.SlimeAdapter").getConstructor(Plugin.class);
+                try {
+                    api.setRestoreAdapter((RestoreAdapter) constructor.newInstance(this));
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                }
+            } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
             this.getLogger().info("Hook into SlimeWorldManager support!");
+        } else {
+            api.setRestoreAdapter(new InternalAdapter(this));
         }
 
         ArenaSocket.serverIdentifier = Bukkit.getServer().getIp() + ":" + Bukkit.getServer().getPort();
@@ -197,9 +218,6 @@ public class Main extends JavaPlugin {
 
         /* Setup plugin messaging channel */
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-        //Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new Bungee());
-        Bukkit.getServicesManager().register(GameAPI.class, new BedWars(), this, ServicePriority.Highest);
-        api = (BedWars) this.getServer().getServicesManager().getRegistration(GameAPI.class).getProvider();
 
         /* Check if lobby location is set. Required for non Bungee servers */
         if (config.getLobbyWorldName().isEmpty() && serverType != ServerType.BUNGEE) {
@@ -801,9 +819,6 @@ public class Main extends JavaPlugin {
             case "v1_11_R1":
             case "v1_12_R1":
                 return v12;
-            case "v1_13_R1":
-            case "v1_13_R2":
-                return v13;
         }
         return v13;
     }
@@ -881,23 +896,7 @@ public class Main extends JavaPlugin {
         return remoteDatabase;
     }
 
-    /**
-     * Get map manager.
-     */
-    public static MapManager getMapManager(Arena arena, String name) {
-        if (resetAdaptor == ResetAdaptor.SLIME) {
-            try {
-                Constructor constructor = Class.forName("com.andrei1058.bedwars.arena.mapreset.slime.SlimeAdapter").getConstructor(Arena.class, String.class);
-                try {
-                    return (MapManager) constructor.newInstance(arena, name);
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                }
-            } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return new MapManager(arena, name);
+    public static boolean isPaper() {
+        return paper;
     }
 }
