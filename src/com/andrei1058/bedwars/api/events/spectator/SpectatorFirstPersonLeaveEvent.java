@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.api.events;
+package com.andrei1058.bedwars.api.events.spectator;
 
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.entity.Player;
@@ -16,13 +16,13 @@ public class SpectatorFirstPersonLeaveEvent extends Event {
     public SpectatorFirstPersonLeaveEvent(Player spectator, Arena arena, String title, String subtitle) {
         this.spectator = spectator;
         this.arena = arena;
+        this.title = title;
+        this.subtitle = subtitle;
         SpectatorFirstPersonEnterEvent.getSpectatingInFirstPerson().remove(spectator);
     }
 
     /**
      * Get the spectator
-     *
-     * @since API 9
      */
     public Player getSpectator() {
         return spectator;
@@ -30,8 +30,6 @@ public class SpectatorFirstPersonLeaveEvent extends Event {
 
     /**
      * Get the arena
-     *
-     * @since API 9
      */
     public Arena getArena() {
         return arena;
@@ -39,8 +37,6 @@ public class SpectatorFirstPersonLeaveEvent extends Event {
 
     /**
      * Get first person leave subtitle
-     *
-     * @since API 9
      */
     public String getSubtitle() {
         return subtitle;
@@ -48,8 +44,6 @@ public class SpectatorFirstPersonLeaveEvent extends Event {
 
     /**
      * Get first person leave title
-     *
-     * @since API 9
      */
     public String getTitle() {
         return title;
