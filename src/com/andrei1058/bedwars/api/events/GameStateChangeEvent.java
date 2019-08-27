@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.api.events;
 
-import com.andrei1058.bedwars.api.GameState;
+import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

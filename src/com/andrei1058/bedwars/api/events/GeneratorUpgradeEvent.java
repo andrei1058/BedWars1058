@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.api.events;
 
-import com.andrei1058.bedwars.api.GeneratorType;
+import com.andrei1058.bedwars.api.arena.GeneratorType;
 import org.bukkit.Location;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

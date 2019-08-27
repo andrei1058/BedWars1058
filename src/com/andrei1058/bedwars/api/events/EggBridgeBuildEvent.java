@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.api.events;
 
-import com.andrei1058.bedwars.api.TeamColor;
+import com.andrei1058.bedwars.api.team.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;

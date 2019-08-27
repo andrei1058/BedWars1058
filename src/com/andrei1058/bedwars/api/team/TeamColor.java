@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.api;
+package com.andrei1058.bedwars.api.team;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
