@@ -31,7 +31,7 @@ public class ContentTier {
         }
 
         try {
-            value = Integer.valueOf(tierName.replace("tier", ""));
+            value = Integer.parseInt(tierName.replace("tier", ""));
         } catch (Exception e) {
             Main.plugin.getLogger().severe(path + " doesn't end with a number. It's not recognized as a tier!");
             return;
