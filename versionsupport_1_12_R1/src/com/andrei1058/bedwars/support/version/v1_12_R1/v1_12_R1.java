@@ -633,4 +633,9 @@ public class v1_12_R1 extends VersionSupport {
     public void registerVersionListeners() {
         Main.registerEvents(new EntityDropPickListener(), new v1_9_R2_SwapItem(), new DefaultItems_12Minus());
     }
+
+    @Override
+    public void setJoinSignBackground(org.bukkit.block.BlockState b, org.bukkit.Material material) {
+        b.getLocation().getBlock().getRelative(((org.bukkit.material.Sign)b.getData()).getAttachedFace()).setType(material);
+    }
 }

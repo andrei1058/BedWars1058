@@ -26,6 +26,8 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.type.Bed;
+import org.bukkit.block.data.type.Sign;
+import org.bukkit.block.data.type.WallSign;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
@@ -637,5 +639,12 @@ public class v1_14_R1 extends VersionSupport {
     @Override
     public void registerVersionListeners() {
         Main.registerEvents(new EntityDropPickListener(), new v1_9_R2_SwapItem(), new v1_13_Interact(), new DefaultItems_13Plus());
+    }
+
+    @Override
+    public void setJoinSignBackground(org.bukkit.block.BlockState b, org.bukkit.Material material) {
+        if (b.getBlockData() instanceof WallSign){
+            b.getBlock().getRelative(((WallSign)b).getFacing().getOppositeFace()).setType(material);
+        }
     }
 }

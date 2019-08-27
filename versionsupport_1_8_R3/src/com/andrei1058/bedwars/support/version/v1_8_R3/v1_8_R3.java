@@ -543,6 +543,11 @@ public class v1_8_R3 extends VersionSupport {
     }
 
     @Override
+    public void setJoinSignBackground(org.bukkit.block.BlockState b, org.bukkit.Material material) {
+        b.getLocation().getBlock().getRelative(((org.bukkit.material.Sign)b.getData()).getAttachedFace()).setType(material);
+    }
+
+    @Override
     public org.bukkit.Material woolMaterial() {
         return org.bukkit.Material.WOOL;
     }

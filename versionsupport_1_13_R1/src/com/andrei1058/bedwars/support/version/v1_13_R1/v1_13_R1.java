@@ -39,6 +39,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.material.Sign;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
@@ -611,5 +612,10 @@ public class v1_13_R1 extends VersionSupport {
     @Override
     public void registerVersionListeners() {
         Main.registerEvents(new EntityDropPickListener(), new v1_13_Interact(), new v1_9_R2_SwapItem(), new DefaultItems_13Plus());
+    }
+
+    @Override
+    public void setJoinSignBackground(org.bukkit.block.BlockState b, org.bukkit.Material material) {
+        b.getLocation().getBlock().getRelative(((Sign)b.getData()).getAttachedFace()).setType(material);
     }
 }

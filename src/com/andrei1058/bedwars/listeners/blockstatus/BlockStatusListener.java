@@ -45,7 +45,7 @@ public class BlockStatusListener implements Listener {
                     data = ConfigPath.SIGNS_STATUS_BLOCK_PLAYING_DATA;
                     break;
             }
-            s.getLocation().getBlock().getRelative(((org.bukkit.material.Sign)s.getData()).getAttachedFace()).setType(Material.valueOf(Main.signs.getString(path)));
+            Main.nms.setJoinSignBackground(s, Material.valueOf(Main.signs.getString(path)));
             Main.nms.setBlockData(s.getBlock().getRelative(((org.bukkit.material.Sign)s.getData()).getAttachedFace()), (byte) Main.signs.getInt(data));
         }
     }

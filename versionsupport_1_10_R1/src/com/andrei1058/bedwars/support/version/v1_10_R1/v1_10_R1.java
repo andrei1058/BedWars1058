@@ -635,4 +635,9 @@ public class v1_10_R1 extends VersionSupport {
     public void registerVersionListeners() {
         Main.registerEvents(new v1_9_R2_SwapItem(), new DefaultItems_12Minus(), new PlayerDropPickListener());
     }
+
+    @Override
+    public void setJoinSignBackground(org.bukkit.block.BlockState b, org.bukkit.Material material) {
+        b.getLocation().getBlock().getRelative(((org.bukkit.material.Sign)b.getData()).getAttachedFace()).setType(material);
+    }
 }
