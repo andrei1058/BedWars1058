@@ -1,7 +1,7 @@
 package com.andrei1058.bedwars.shop.main;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.events.ShopBuyEvent;
+import com.andrei1058.bedwars.api.events.shop.ShopBuyEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Language;

@@ -1,9 +1,9 @@
 package com.andrei1058.bedwars.stats;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.events.BedBreakEvent;
-import com.andrei1058.bedwars.api.events.GameEndEvent;
-import com.andrei1058.bedwars.api.events.PlayerKillEvent;
+import com.andrei1058.bedwars.api.events.player.PlayerBedBreakEvent;
+import com.andrei1058.bedwars.api.events.gameplay.GameEndEvent;
+import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,7 +26,7 @@ public class StatsListener implements Listener {
     }
 
     @EventHandler
-    public void onBedBreak(BedBreakEvent e) {
+    public void onBedBreak(PlayerBedBreakEvent e) {
         //store beds destroyed
         StatsManager.getStatsCache().addBedsDestroyed(e.getPlayer().getUniqueId(), 1);
     }

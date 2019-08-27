@@ -1,7 +1,7 @@
 package com.andrei1058.bedwars.language;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.events.PlayerLangChangeEvent;
+import com.andrei1058.bedwars.api.events.player.PlayerLangChangeEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SBoard;
@@ -29,10 +29,12 @@ public class Language {
     public Language(String iso) {
         this.iso = iso;
         File d = new File("plugins/" + plugin.getDescription().getName() + "/Languages");
-        if (!d.exists()) d.mkdir();
+        if (!d.exists()) //noinspection ResultOfMethodCallIgnored
+            d.mkdir();
         config = new File(d.toPath() + "/messages_" + iso + ".yml");
         if (!config.exists()) {
             try {
+                //noinspection ResultOfMethodCallIgnored
                 config.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -175,6 +177,7 @@ public class Language {
         }
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void addDefaultStatsMsg(YamlConfiguration yml, String path, String name, String... lore) {
         yml.addDefault(com.andrei1058.bedwars.language.Messages.PLAYER_STATS_GUI_PATH + "-" + path + "-name", name);
         yml.addDefault(com.andrei1058.bedwars.language.Messages.PLAYER_STATS_GUI_PATH + "-" + path + "-lore", lore);
@@ -216,6 +219,7 @@ public class Language {
     /**
      * Create messages paths for new shop categories
      */
+    @SuppressWarnings("DuplicateExpressions")
     public void setupUnSetCategories() {
         for (String s : Main.shop.getYml().getConfigurationSection("").getKeys(false)) {
             if (s.equalsIgnoreCase(ConfigPath.SHOP_SETTINGS_PATH)) continue;
@@ -228,7 +232,7 @@ public class Language {
                 set(Messages.SHOP_CATEGORY_ITEM_NAME.replace("%category%", s), "&8Name not set");
             }
             if (!exists(Messages.SHOP_CATEGORY_ITEM_LORE.replace("%category%", s))) {
-                set(Messages.SHOP_CATEGORY_ITEM_LORE.replace("%category%", s), Arrays.asList("&8Lore not set"));
+                set(Messages.SHOP_CATEGORY_ITEM_LORE.replace("%category%", s), Collections.singletonList("&8Lore not set"));
             }
             if (Main.shop.getYml().get(s + ConfigPath.SHOP_CATEGORY_CONTENT_PATH) == null) continue;
             for (String c : Main.shop.getYml().getConfigurationSection(s + ConfigPath.SHOP_CATEGORY_CONTENT_PATH).getKeys(false)) {
@@ -236,7 +240,7 @@ public class Language {
                     set(Messages.SHOP_CONTENT_TIER_ITEM_NAME.replace("%category%", s).replace("%content%", c), "&8Name not set");
                 }
                 if (!exists(Messages.SHOP_CONTENT_TIER_ITEM_LORE.replace("%category%", s).replace("%content%", c))) {
-                    set(Messages.SHOP_CONTENT_TIER_ITEM_LORE.replace("%category%", s).replace("%content%", c), Arrays.asList("&8Lore not set"));
+                    set(Messages.SHOP_CONTENT_TIER_ITEM_LORE.replace("%category%", s).replace("%content%", c), Collections.singletonList("&8Lore not set"));
                 }
             }
         }
@@ -245,6 +249,7 @@ public class Language {
     /**
      * Add required messages for a shop category to the given yml
      */
+    @SuppressWarnings("WeakerAccess")
     public static void addCategoryMessages(YamlConfiguration yml, String categoryName, String invName, String itemName, List<String> itemLore) {
         yml.addDefault(Messages.SHOP_CATEGORY_INVENTORY_NAME.replace("%category%", categoryName), invName);
         yml.addDefault(Messages.SHOP_CATEGORY_ITEM_NAME.replace("%category%", categoryName), itemName);
@@ -254,6 +259,7 @@ public class Language {
     /**
      * Add required messages for a shop category to the given yml
      */
+    @SuppressWarnings("WeakerAccess")
     public static void addContentMessages(YamlConfiguration yml, String contentName, String categoryName, String itemName, List<String> itemLore) {
         yml.addDefault(Messages.SHOP_CONTENT_TIER_ITEM_NAME.replace("%category%", categoryName).replace("%content%", contentName), itemName);
         yml.addDefault(Messages.SHOP_CONTENT_TIER_ITEM_LORE.replace("%category%", categoryName).replace("%content%", contentName), itemLore);

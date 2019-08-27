@@ -1,8 +1,8 @@
 package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.events.ArenaFirstSpawnEvent;
-import com.andrei1058.bedwars.api.events.ArenaPlayerRespawnEvent;
+import com.andrei1058.bedwars.api.events.player.PlayerFirstSpawnEvent;
+import com.andrei1058.bedwars.api.events.player.PlayerReSpawnEvent;
 import com.andrei1058.bedwars.api.arena.GeneratorType;
 import com.andrei1058.bedwars.api.team.TeamColor;
 import com.andrei1058.bedwars.configuration.ConfigPath;
@@ -130,7 +130,7 @@ public class BedWarsTeam {
     public void firstSpawn(Player p) {
         p.teleport(spawn, PlayerTeleportEvent.TeleportCause.PLUGIN);
         sendDefaultInventory(p, true);
-        Bukkit.getPluginManager().callEvent(new ArenaFirstSpawnEvent(p, getArena(), this));
+        Bukkit.getPluginManager().callEvent(new PlayerFirstSpawnEvent(p, getArena(), this));
     }
 
     /**
@@ -390,7 +390,7 @@ public class BedWarsTeam {
                 p.updateInventory();
             }
         }
-        Bukkit.getPluginManager().callEvent(new ArenaPlayerRespawnEvent(p, getArena(), this));
+        Bukkit.getPluginManager().callEvent(new PlayerReSpawnEvent(p, getArena(), this));
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             nms.invisibilityFix(p, getArena());

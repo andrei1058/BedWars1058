@@ -3,7 +3,7 @@ package com.andrei1058.bedwars.listeners;
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.*;
 import com.andrei1058.bedwars.api.arena.GameState;
-import com.andrei1058.bedwars.api.events.PlayerKillEvent;
+import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
 import com.andrei1058.bedwars.api.team.TeamColor;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.configuration.ConfigPath;
@@ -238,7 +238,7 @@ public class DamageDeathMove implements Listener {
                 return;
             }
             String message = t.isBedDestroyed() ? Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL : Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR;
-            com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause cause = t.isBedDestroyed() ? com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause.UNKNOWN_FINAL_KILL : com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause.UNKNOWN;
+            PlayerKillEvent.PlayerKillCause cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.UNKNOWN_FINAL_KILL : PlayerKillEvent.PlayerKillCause.UNKNOWN;
             if (damageEvent.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
                 LastHit lh = getLastHit().get(victim);
                 if (lh != null) {
@@ -255,7 +255,7 @@ public class DamageDeathMove implements Listener {
                         message = t.isBedDestroyed() ? Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_FINAL_KILL : Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_REGULAR;
                     }
                 }
-                cause = t.isBedDestroyed() ? com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause.EXPLOSION_FINAL_KILL : com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause.EXPLOSION;
+                cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.EXPLOSION_FINAL_KILL : PlayerKillEvent.PlayerKillCause.EXPLOSION;
 
             } else if (damageEvent.getCause() == EntityDamageEvent.DamageCause.VOID) {
                 LastHit lh = getLastHit().get(victim);
@@ -273,7 +273,7 @@ public class DamageDeathMove implements Listener {
                         message = t.isBedDestroyed() ? Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL : Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL;
                     }
                 }
-                cause = t.isBedDestroyed() ? com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause.VOID_FINAL_KILL : com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause.VOID;
+                cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.VOID_FINAL_KILL : PlayerKillEvent.PlayerKillCause.VOID;
             } else if (damageEvent.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
                 if (killer == null) {
                     LastHit lh = getLastHit().get(victim);
@@ -290,12 +290,12 @@ public class DamageDeathMove implements Listener {
                     }
                 } else {
                     message = t.isBedDestroyed() ? Messages.PLAYER_DIE_PVP_FINAL_KILL : Messages.PLAYER_DIE_PVP_REGULAR_KILL;
-                    cause = t.isBedDestroyed() ? com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause.PVP_FINAL_KILL : com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause.PVP;
+                    cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.PVP_FINAL_KILL : PlayerKillEvent.PlayerKillCause.PVP;
                 }
             } else if (damageEvent.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
                 if (killer != null) {
                     message = t.isBedDestroyed() ? Messages.PLAYER_DIE_SHOOT_FINAL_KILL : Messages.PLAYER_DIE_SHOOT_REGULAR;
-                    cause = t.isBedDestroyed() ? com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause.PLAYER_SHOOT_FINAL_KILL : com.andrei1058.bedwars.api.events.PlayerKillEvent.PlayerKillCause.PLAYER_SHOOT;
+                    cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.PLAYER_SHOOT_FINAL_KILL : PlayerKillEvent.PlayerKillCause.PLAYER_SHOOT;
                 }
             }
 

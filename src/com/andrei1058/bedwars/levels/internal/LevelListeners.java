@@ -1,8 +1,8 @@
 package com.andrei1058.bedwars.levels.internal;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.events.GameEndEvent;
-import com.andrei1058.bedwars.api.events.PlayerXpGainEvent;
+import com.andrei1058.bedwars.api.events.gameplay.GameEndEvent;
+import com.andrei1058.bedwars.api.events.player.PlayerXpGainEvent;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.configuration.LevelsConfig;
 import com.andrei1058.bedwars.language.Language;
@@ -65,7 +65,7 @@ public class LevelListeners implements Listener {
                 }
             }
         }
-        for (UUID p : e.getLoosers()) {
+        for (UUID p : e.getLosers()) {
             if (PlayerLevel.getLevelByPlayer(p) != null) {
                 Player p1 = Bukkit.getPlayer(p);
 

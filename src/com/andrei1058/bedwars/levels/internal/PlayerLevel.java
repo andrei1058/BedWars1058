@@ -1,8 +1,8 @@
 package com.andrei1058.bedwars.levels.internal;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.events.PlayerLevelUpEvent;
-import com.andrei1058.bedwars.api.events.PlayerXpGainEvent;
+import com.andrei1058.bedwars.api.events.player.PlayerLevelUpEvent;
+import com.andrei1058.bedwars.api.events.player.PlayerXpGainEvent;
 import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.configuration.LevelsConfig;
 import org.bukkit.Bukkit;

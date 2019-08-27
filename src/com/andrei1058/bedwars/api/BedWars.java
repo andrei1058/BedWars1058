@@ -2,7 +2,7 @@ package com.andrei1058.bedwars.api;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.command.ParentCommand;
-import com.andrei1058.bedwars.api.events.PlayerAfkEvent;
+import com.andrei1058.bedwars.api.events.player.PlayerAfkEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.language.Language;
@@ -113,12 +113,12 @@ public class BedWars implements GameAPI {
         if (value) {
             if (!afkPlayers.containsKey(player)) {
                 afkPlayers.put(player, Arena.afkCheck.get(player.getUniqueId()));
-                Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.PlayerAfkEvent(player, com.andrei1058.bedwars.api.events.PlayerAfkEvent.AFKType.START));
+                Bukkit.getPluginManager().callEvent(new PlayerAfkEvent(player, PlayerAfkEvent.AFKType.START));
             }
         } else {
             if (afkPlayers.containsKey(player)) {
                 afkPlayers.remove(player);
-                Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.PlayerAfkEvent(player, PlayerAfkEvent.AFKType.END));
+                Bukkit.getPluginManager().callEvent(new PlayerAfkEvent(player, PlayerAfkEvent.AFKType.END));
             }
             Arena.afkCheck.remove(player.getUniqueId());
         }

@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.api.events;
+package com.andrei1058.bedwars.api.events.player;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -13,9 +13,8 @@ public class PlayerAfkEvent extends Event {
     private AFKType afkType;
 
     /**
-     * Called when a Player goes AFK or comes back from AFK
-     *
-     * @since API 10
+     * Called when a Player goes AFK or comes back from AFK.
+     * Check AFKType for more.
      */
     public PlayerAfkEvent(Player player, AFKType afkType) {
         this.afkType = afkType;
@@ -24,17 +23,13 @@ public class PlayerAfkEvent extends Event {
 
     /**
      * Get player
-     *
-     * @since API 10
      */
     public Player getPlayer() {
         return player;
     }
 
     /**
-     * Check if player target went AFK or come back
-     *
-     * @since API 10
+     * Check if player target went AFK or came back
      */
     public AFKType getAfkType() {
         return afkType;
@@ -43,8 +38,6 @@ public class PlayerAfkEvent extends Event {
     public enum AFKType {
         /**
          * When a player goes AFK
-         *
-         * @since API 10
          */
         START,
 

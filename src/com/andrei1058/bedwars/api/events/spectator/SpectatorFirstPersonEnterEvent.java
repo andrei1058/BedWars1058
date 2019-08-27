@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.api.events;
+package com.andrei1058.bedwars.api.events.spectator;
 
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.entity.Player;
@@ -20,6 +20,9 @@ public class SpectatorFirstPersonEnterEvent extends Event {
     /* A list of all players spectating in first person */
     private static List<Player> spectatingInFirstPerson = new ArrayList<>();
 
+    /**
+     * Called when a spectator enters the first person spectating system.
+     */
     public SpectatorFirstPersonEnterEvent(Player spectator, Player target, Arena arena, String title, String subtitle) {
         this.spectator = spectator;
         this.target = target;
@@ -31,8 +34,6 @@ public class SpectatorFirstPersonEnterEvent extends Event {
 
     /**
      * Get the spectator
-     *
-     * @since API 9
      */
     public Player getSpectator() {
         return spectator;
@@ -40,8 +41,6 @@ public class SpectatorFirstPersonEnterEvent extends Event {
 
     /**
      * Get the arena
-     *
-     * @since API 9
      */
     public Arena getArena() {
         return arena;
@@ -49,8 +48,6 @@ public class SpectatorFirstPersonEnterEvent extends Event {
 
     /**
      * Get the target player
-     *
-     * @since API 9
      */
     public Player getTarget() {
         return target;
@@ -58,8 +55,6 @@ public class SpectatorFirstPersonEnterEvent extends Event {
 
     /**
      * Check if it is cancelled
-     *
-     * @since API 9
      */
     public boolean isCancelled() {
         return cancelled;
@@ -67,8 +62,6 @@ public class SpectatorFirstPersonEnterEvent extends Event {
 
     /**
      * Change value
-     *
-     * @since PAI 9
      */
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
@@ -76,8 +69,6 @@ public class SpectatorFirstPersonEnterEvent extends Event {
 
     /**
      * Get a list of spectators in first person
-     *
-     * @since API 9
      */
     public static List<Player> getSpectatingInFirstPerson() {
         return spectatingInFirstPerson;
@@ -85,8 +76,6 @@ public class SpectatorFirstPersonEnterEvent extends Event {
 
     /**
      * Get first person enter subtitle
-     *
-     * @since API 9
      */
     public String getSubtitle() {
         return subtitle;
@@ -94,17 +83,17 @@ public class SpectatorFirstPersonEnterEvent extends Event {
 
     /**
      * Get first person enter title
-     *
-     * @since API 9
      */
     public String getTitle() {
         return title;
     }
 
-    /** Set first person enter title and subtitle. Leave "" for empty msg */
-    public void setTitle(String title, String subtitle){
-     this.title = title;
-     this.subtitle = subtitle;
+    /**
+     * Set first person enter title and subtitle. Leave "" for empty msg
+     */
+    public void setTitle(String title, String subtitle) {
+        this.title = title;
+        this.subtitle = subtitle;
     }
 
     public HandlerList getHandlers() {

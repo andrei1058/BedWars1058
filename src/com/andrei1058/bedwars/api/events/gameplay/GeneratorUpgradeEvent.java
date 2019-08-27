@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.api.events;
+package com.andrei1058.bedwars.api.events.gameplay;
 
 import com.andrei1058.bedwars.api.arena.GeneratorType;
 import org.bukkit.Location;
@@ -12,7 +12,10 @@ public class GeneratorUpgradeEvent extends Event {
     private GeneratorType generatorType;
     private Location location;
 
-    public GeneratorUpgradeEvent(GeneratorType generatorType, Location location){
+    /**
+     * Called when a generator is upgraded.
+     */
+    public GeneratorUpgradeEvent(GeneratorType generatorType, Location location) {
         this.generatorType = generatorType;
         this.location = location;
     }

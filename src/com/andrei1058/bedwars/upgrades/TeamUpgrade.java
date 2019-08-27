@@ -1,7 +1,7 @@
 package com.andrei1058.bedwars.upgrades;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.events.UpgradeBuyEvent;
+import com.andrei1058.bedwars.api.events.shop.UpgradeBuyEvent;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.language.Messages;
 import org.bukkit.Bukkit;
@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.andrei1058.bedwars.Main.plugin;
 import static com.andrei1058.bedwars.language.Language.getMsg;
 import static com.andrei1058.bedwars.upgrades.UpgradeGroup.getUpgradeGroup;
 

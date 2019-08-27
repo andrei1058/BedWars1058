@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.api.events;
+package com.andrei1058.bedwars.api.events.player;
 
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.entity.Player;
@@ -13,12 +13,10 @@ public class PlayerLeaveArenaEvent extends Event {
     private boolean spectator;
     private Arena arena;
 
-    @Deprecated
-    public PlayerLeaveArenaEvent(Player p, boolean spectator) {
-        this.player = p;
-        this.spectator = spectator;
-    }
-
+    /**
+     * Called when a player leaves the arena.
+     * This is called if the arena has ended as well.
+     */
     public PlayerLeaveArenaEvent(Player p, Arena arena) {
         this.player = p;
         this.spectator = arena.isSpectator(p);
@@ -39,14 +37,14 @@ public class PlayerLeaveArenaEvent extends Event {
 
     /**
      * Get the arena
-     *
-     * @since API 9
      */
     public Arena getArena() {
         return arena;
     }
 
-    @Deprecated
+    /**
+     * Check if the player was spectating.
+     */
     public boolean isSpectator() {
         return spectator;
     }

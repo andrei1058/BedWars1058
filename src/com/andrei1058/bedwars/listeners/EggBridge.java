@@ -1,7 +1,7 @@
 package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.events.EggBridgeThrowEvent;
+import com.andrei1058.bedwars.api.events.gameplay.EggBridgeThrowEvent;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.tasks.EggBridgeTask;

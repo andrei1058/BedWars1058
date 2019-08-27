@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.api.events;
+package com.andrei1058.bedwars.api.events.spectator;
 
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.entity.Player;
@@ -13,6 +13,9 @@ public class SpectatorTeleportToPlayerEvent extends Event {
     private Arena arena;
     private boolean cancelled = false;
 
+    /**
+     * Called when the spectator uses the player selector to teleport and spectate the selected player.
+     */
     public SpectatorTeleportToPlayerEvent(Player spectator, Player target, Arena arena) {
         this.spectator = spectator;
         this.target = target;
@@ -21,8 +24,6 @@ public class SpectatorTeleportToPlayerEvent extends Event {
 
     /**
      * Get the spectator
-     *
-     * @since API 9
      */
     public Player getSpectator() {
         return spectator;
@@ -30,8 +31,6 @@ public class SpectatorTeleportToPlayerEvent extends Event {
 
     /**
      * Get the arena
-     *
-     * @since API 9
      */
     public Arena getArena() {
         return arena;
@@ -39,8 +38,6 @@ public class SpectatorTeleportToPlayerEvent extends Event {
 
     /**
      * Get the target player
-     *
-     * @since API 9
      */
     public Player getTarget() {
         return target;
@@ -48,18 +45,11 @@ public class SpectatorTeleportToPlayerEvent extends Event {
 
     /**
      * Check if it is cancelled
-     *
-     * @since API 9
      */
     public boolean isCancelled() {
         return cancelled;
     }
 
-    /**
-     * Change value
-     *
-     * @since PAI 9
-     */
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
     }

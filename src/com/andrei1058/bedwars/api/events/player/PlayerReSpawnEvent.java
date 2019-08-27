@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.api.events;
+package com.andrei1058.bedwars.api.events.player;
 
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class ArenaPlayerRespawnEvent extends Event {
+public class PlayerReSpawnEvent extends Event {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
@@ -15,13 +15,11 @@ public class ArenaPlayerRespawnEvent extends Event {
     private BedWarsTeam team;
 
     /**
-     * Called when a member is respawned on his island
+     * Called when a member is re-spawned on his island
      * This is called about 5 seconds after PlayerRespawnEvent from Bukkit
      * After the respawn countdown.
-     *
-     * @since API 9
      */
-    public ArenaPlayerRespawnEvent(Player player, Arena arena, BedWarsTeam team) {
+    public PlayerReSpawnEvent(Player player, Arena arena, BedWarsTeam team) {
         this.player = player;
         this.arena = arena;
         this.team = team;
@@ -29,8 +27,6 @@ public class ArenaPlayerRespawnEvent extends Event {
 
     /**
      * Get the arena
-     *
-     * @since API 9
      */
     public Arena getArena() {
         return arena;
@@ -38,8 +34,6 @@ public class ArenaPlayerRespawnEvent extends Event {
 
     /**
      * Get the player's team
-     *
-     * @since API 9
      */
     public BedWarsTeam getTeam() {
         return team;
@@ -47,8 +41,6 @@ public class ArenaPlayerRespawnEvent extends Event {
 
     /**
      * Get the player
-     *
-     * @since API 9
      */
     public Player getPlayer() {
         return player;

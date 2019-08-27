@@ -1,11 +1,11 @@
-package com.andrei1058.bedwars.api.events;
+package com.andrei1058.bedwars.api.events.player;
 
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class BaseEnterEvent extends Event {
+public class PlayerBaseLeaveEvent extends Event {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
@@ -13,30 +13,24 @@ public class BaseEnterEvent extends Event {
     private Player p;
 
     /**
-     * Called when a player enters a team base.
-     * Called when the distance between the player and a team bed is greater than islandRadius
-     *
-     * @since API 9
+     * Called when a player leaves a team base.
+     * Called when the distance between the player and a team's bed is greater than islandRadius
      */
-    public BaseEnterEvent(Player p, BedWarsTeam team) {
+    public PlayerBaseLeaveEvent(Player p, BedWarsTeam team) {
         this.p = p;
         this.team = team;
     }
 
 
     /**
-     * Get the team owing the entered base
-     *
-     * @since API 9
+     * Get the team owing the exited base
      */
     public BedWarsTeam getTeam() {
         return team;
     }
 
     /**
-     * Get the player that entered the base
-     *
-     * @since API 9
+     * Get the player that leaved the base
      */
     public Player getPlayer() {
         return p;

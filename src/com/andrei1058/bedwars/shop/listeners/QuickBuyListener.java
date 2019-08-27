@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.shop.listeners;
 
-import com.andrei1058.bedwars.api.events.PlayerJoinArenaEvent;
+import com.andrei1058.bedwars.api.events.player.PlayerJoinArenaEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.shop.quickbuy.PlayerQuickBuyCache;
 import org.bukkit.event.EventHandler;

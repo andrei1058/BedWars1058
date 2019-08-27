@@ -5,9 +5,13 @@ import com.andrei1058.bedwars.api.*;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.GeneratorType;
 import com.andrei1058.bedwars.api.arena.NextEvent;
-import com.andrei1058.bedwars.api.events.PlayerJoinArenaEvent;
-import com.andrei1058.bedwars.api.events.PlayerLeaveArenaEvent;
-import com.andrei1058.bedwars.api.events.PlayerReJoinEvent;
+import com.andrei1058.bedwars.api.events.player.PlayerJoinArenaEvent;
+import com.andrei1058.bedwars.api.events.player.PlayerLeaveArenaEvent;
+import com.andrei1058.bedwars.api.events.player.PlayerReJoinEvent;
+import com.andrei1058.bedwars.api.events.gameplay.GameEndEvent;
+import com.andrei1058.bedwars.api.events.gameplay.GameStateChangeEvent;
+import com.andrei1058.bedwars.api.events.server.ArenaDisableEvent;
+import com.andrei1058.bedwars.api.events.server.ArenaEnableEvent;
 import com.andrei1058.bedwars.api.team.TeamColor;
 import com.andrei1058.bedwars.arena.mapreset.MapManager;
 import com.andrei1058.bedwars.configuration.ConfigManager;
@@ -287,7 +291,7 @@ public class Arena implements Comparable<Arena> {
         /* Register arena signs */
         registerSigns();
         //Call event
-        Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.ArenaEnableEvent(this));
+        Bukkit.getPluginManager().callEvent(new ArenaEnableEvent(this));
 
         changeStatus(GameState.waiting);
 
@@ -368,7 +372,7 @@ public class Arena implements Comparable<Arena> {
                 }
             }
 
-            PlayerJoinArenaEvent ev = new PlayerJoinArenaEvent(p, false, false);
+            PlayerJoinArenaEvent ev = new PlayerJoinArenaEvent(p, false);
             Bukkit.getPluginManager().callEvent(ev);
             if (ev.isCancelled()) return false;
 
@@ -467,7 +471,7 @@ public class Arena implements Comparable<Arena> {
         if (allowSpectate || playerBefore) {
 
             if (!playerBefore) {
-                PlayerJoinArenaEvent ev = new PlayerJoinArenaEvent(p, true, false);
+                PlayerJoinArenaEvent ev = new PlayerJoinArenaEvent(p, true);
                 Bukkit.getPluginManager().callEvent(ev);
                 if (ev.isCancelled()) return false;
             }
@@ -602,7 +606,7 @@ public class Arena implements Comparable<Arena> {
             cacheList = ShopCache.getShopCache(p).getCachedPermanents();
         }
 
-        Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.PlayerLeaveArenaEvent(p, this));
+        Bukkit.getPluginManager().callEvent(new PlayerLeaveArenaEvent(p, this));
         //players.remove must be under call event in order to check if the player is a spectator or not
         players.remove(p);
         removeArenaByPlayer(p);
@@ -876,9 +880,7 @@ public class Arena implements Comparable<Arena> {
         reJoin.getBwt().reJoin(p);
         reJoin.destroy();
 
-        Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
-            new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING), this);
-        }, 40L);
+        Bukkit.getScheduler().runTaskLater(Main.plugin, () -> new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING), this), 40L);
         return true;
     }
 
@@ -920,7 +922,7 @@ public class Arena implements Comparable<Arena> {
         arenaByName.remove(world.getName());
         arenas.remove(this);
         //Call event
-        Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.ArenaDisableEvent(getWorldName()));
+        Bukkit.getPluginManager().callEvent(new ArenaDisableEvent(getWorldName()));
         signs.clear();
 
         for (ReJoinTask rjt : ReJoinTask.getReJoinTasks()) {
@@ -1161,7 +1163,7 @@ public class Arena implements Comparable<Arena> {
      */
     public void changeStatus(GameState status) {
         this.status = status;
-        Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.GameStateChangeEvent(this, status));
+        Bukkit.getPluginManager().callEvent(new GameStateChangeEvent(this, status));
         refreshSigns();
 
         //Stop active tasks to prevent issues
@@ -1571,7 +1573,7 @@ public class Arena implements Comparable<Arena> {
                         losers.add(p.getUniqueId());
                     }
                 }
-                Bukkit.getPluginManager().callEvent(new com.andrei1058.bedwars.api.events.GameEndEvent(this, winners, losers, winner, aliveWinners));
+                Bukkit.getPluginManager().callEvent(new GameEndEvent(this, winners, losers, winner, aliveWinners));
                 //
 
             }
@@ -1767,7 +1769,7 @@ public class Arena implements Comparable<Arena> {
                     if (data[0].equals(getWorld().getName())) {
                         Location l;
                         try {
-                            l = new Location(Bukkit.getWorld(data[6]), Double.valueOf(data[1]), Double.valueOf(data[2]), Double.valueOf(data[3]));
+                            l = new Location(Bukkit.getWorld(data[6]), Double.parseDouble(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]));
                         } catch (Exception e) {
                             //noinspection ImplicitArrayToString
                             plugin.getLogger().severe("Could not load sign at: " + data.toString());

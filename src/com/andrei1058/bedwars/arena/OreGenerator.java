@@ -2,7 +2,7 @@ package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.arena.GeneratorType;
-import com.andrei1058.bedwars.api.events.GeneratorUpgradeEvent;
+import com.andrei1058.bedwars.api.events.gameplay.GeneratorUpgradeEvent;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.language.Messages;
@@ -163,9 +163,6 @@ public class OreGenerator {
     private void dropItem(Location location) {
         for (int temp = amount; temp >= 0; temp--) {
             ItemStack itemStack = new ItemStack(ore);
-            if (bwt != null) {
-
-            }
             if (!stack) {
                 ItemMeta itemMeta = itemStack.getItemMeta();
                 itemMeta.setDisplayName("custom" + dropID++);

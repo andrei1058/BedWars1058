@@ -1,11 +1,11 @@
-package com.andrei1058.bedwars.api.events;
+package com.andrei1058.bedwars.api.events.player;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
-public class GeneratorCollectEvent extends Event {
+public class PlayerGeneratorCollectEvent extends Event {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
@@ -14,19 +14,15 @@ public class GeneratorCollectEvent extends Event {
     private boolean cancelled = false;
 
     /**
-     * Triggered when collect from generators
-     *
-     * @since API 8
+     * Triggered when players collect from generators
      */
-    public GeneratorCollectEvent(Player player, ItemStack itemStack) {
+    public PlayerGeneratorCollectEvent(Player player, ItemStack itemStack) {
         this.player = player;
         this.itemStack = itemStack;
     }
 
     /**
      * Get the player
-     *
-     * @since API v8
      */
     public Player getPlayer() {
         return player;
@@ -34,8 +30,6 @@ public class GeneratorCollectEvent extends Event {
 
     /**
      * Get the itemStack involved
-     *
-     * @since API v8
      */
     public ItemStack getItemStack() {
         return itemStack;
@@ -43,16 +37,11 @@ public class GeneratorCollectEvent extends Event {
 
     /**
      * Cancel this event
-     *
-     * @since API 10
      */
     public boolean isCancelled() {
         return cancelled;
     }
 
-    /**
-     * @since API 10
-     */
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
     }

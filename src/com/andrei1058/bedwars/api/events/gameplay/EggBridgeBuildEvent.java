@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.api.events;
+package com.andrei1058.bedwars.api.events.gameplay;
 
 import com.andrei1058.bedwars.api.team.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
@@ -17,8 +17,6 @@ public class EggBridgeBuildEvent extends Event {
 
     /**
      * Called when the eggBridge is building another block
-     *
-     * @since API 10
      */
     public EggBridgeBuildEvent(TeamColor teamColor, Arena arena, Block block) {
         this.teamColor = teamColor;
@@ -28,8 +26,6 @@ public class EggBridgeBuildEvent extends Event {
 
     /**
      * Get the arena
-     *
-     * @since API 10
      */
     public Arena getArena() {
         return arena;
@@ -37,8 +33,6 @@ public class EggBridgeBuildEvent extends Event {
 
     /**
      * Get the built block
-     *
-     * @since API 10
      */
     public Block getBlock() {
         return block;
@@ -46,8 +40,6 @@ public class EggBridgeBuildEvent extends Event {
 
     /**
      * Get the block's team color
-     *
-     * @since API 10
      */
     public TeamColor getTeamColor() {
         return teamColor;

@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.api.events;
+package com.andrei1058.bedwars.api.events.shop;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -11,11 +11,16 @@ public class ShopOpenEvent extends Event {
     private Player player;
     private boolean cancelled = false;
 
-
-    public ShopOpenEvent(Player player){
+    /**
+     * Triggered when the shop NPS is clicked.
+     */
+    public ShopOpenEvent(Player player) {
         this.player = player;
     }
 
+    /**
+     * Get the player who opened the shop.
+     */
     public Player getPlayer() {
         return player;
     }

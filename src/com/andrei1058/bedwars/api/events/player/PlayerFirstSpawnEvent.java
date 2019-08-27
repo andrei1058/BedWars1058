@@ -1,61 +1,54 @@
-package com.andrei1058.bedwars.api.events;
+package com.andrei1058.bedwars.api.events.player;
 
 import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.arena.BedWarsTeam;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class PlayerReJoinEvent extends Event {
+public class PlayerFirstSpawnEvent extends Event {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
     private Player player;
     private Arena arena;
-    private boolean cancelled = false;
+    private BedWarsTeam team;
 
     /**
-     * Called when a player re-joins the arena.
-     * PlayerJoinArenaEvent won't be called
-     *
-     * @since API 11
+     * Called when a member is spawned for the first time on his island
      */
-    public PlayerReJoinEvent(Player player, Arena arena) {
+    public PlayerFirstSpawnEvent(Player player, Arena arena, BedWarsTeam team) {
         this.player = player;
         this.arena = arena;
+        this.team = team;
     }
 
     /**
-     * Get arena
-     *
-     * @since API 11
+     * Get the arena
      */
     public Arena getArena() {
         return arena;
     }
 
     /**
-     * Get player
-     *
-     * @since API 11
+     * Get the player's team
+     */
+    public BedWarsTeam getTeam() {
+        return team;
+    }
+
+    /**
+     * Get the player
      */
     public Player getPlayer() {
         return player;
     }
 
-    @Override
     public HandlerList getHandlers() {
         return HANDLERS;
     }
 
     public static HandlerList getHandlerList() {
         return HANDLERS;
-    }
-
-    public boolean isCancelled() {
-        return cancelled;
-    }
-
-    public void setCancelled(boolean cancelled) {
-        this.cancelled = cancelled;
     }
 }

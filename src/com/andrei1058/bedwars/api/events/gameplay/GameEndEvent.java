@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.api.events;
+package com.andrei1058.bedwars.api.events.gameplay;
 
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
@@ -14,28 +14,24 @@ public class GameEndEvent extends Event {
     private static final HandlerList HANDLERS = new HandlerList();
 
     private List<UUID> winners;
-    private List<UUID> loosers;
+    private List<UUID> losers;
     private List<UUID> aliveWinners;
     private BedWarsTeam teamWinner;
     private Arena arena;
 
     /**
-     * Triggered when the game ends
-     *
-     * @since API v8
+     * Triggered when the game ends.
      */
     public GameEndEvent(Arena arena, List<UUID> winners, List<UUID> losers, BedWarsTeam teamWinner, List<UUID> aliveWinners) {
         this.winners = new ArrayList<>(winners);
         this.arena = arena;
-        this.loosers = new ArrayList<>(losers);
+        this.losers = new ArrayList<>(losers);
         this.teamWinner = teamWinner;
         this.aliveWinners = new ArrayList<>(aliveWinners);
     }
 
     /**
      * Get a list of winners including eliminated teammates
-     *
-     * @since API v8
      */
     public List<UUID> getWinners() {
         return winners;
@@ -43,8 +39,6 @@ public class GameEndEvent extends Event {
 
     /**
      * Get the winner team
-     *
-     * @since API v8
      */
     public BedWarsTeam getTeamWinner() {
         return teamWinner;
@@ -53,17 +47,13 @@ public class GameEndEvent extends Event {
     /**
      * Get a list with people who played and didn't win.
      * This includes people who leaved the game etc.
-     *
-     * @since API v8
      */
-    public List<UUID> getLoosers() {
-        return loosers;
+    public List<UUID> getLosers() {
+        return losers;
     }
 
     /**
      * Get the arena
-     *
-     * @since API v8
      */
     public Arena getArena() {
         return arena;
@@ -72,8 +62,6 @@ public class GameEndEvent extends Event {
     /**
      * Get a list of winners.
      * Teammates killed by final kill excluded.
-     *
-     * @since API v8
      */
     public List<UUID> getAliveWinners() {
         return aliveWinners;

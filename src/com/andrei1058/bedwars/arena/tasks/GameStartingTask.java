@@ -4,7 +4,7 @@ import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.GeneratorType;
 import com.andrei1058.bedwars.api.arena.NextEvent;
-import com.andrei1058.bedwars.api.events.TeamAssignEvent;
+import com.andrei1058.bedwars.api.events.gameplay.TeamAssignEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.OreGenerator;

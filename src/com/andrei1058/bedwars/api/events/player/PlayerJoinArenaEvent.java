@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.api.events;
+package com.andrei1058.bedwars.api.events.player;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -11,20 +11,14 @@ public class PlayerJoinArenaEvent extends Event {
     private Player player;
     private boolean spectator;
     private boolean cancelled = false;
-    private boolean rejoin;
 
     /**
-     * This event is called when a spectator is added to the arena.
-     * Even if he has played before and was eliminated and then added as spectator.
+     * This event is called when a player joins the arena as a player or spectator.
+     * The event is not triggered for players who died and become spectators. Listen the kill event for this.
      */
-    public PlayerJoinArenaEvent(Player p, boolean spectator, boolean rejoin) {
+    public PlayerJoinArenaEvent(Player p, boolean spectator) {
         this.player = p;
         this.spectator = spectator;
-        this.rejoin = rejoin;
-    }
-
-    public boolean isRejoin() {
-        return rejoin;
     }
 
     public boolean isCancelled() {

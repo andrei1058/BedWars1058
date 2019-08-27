@@ -1,31 +1,29 @@
-package com.andrei1058.bedwars.api.events;
+package com.andrei1058.bedwars.api.events.server;
 
-import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class GameStateChangeEvent extends Event {
-
+public class ArenaEnableEvent extends Event {
     private static final HandlerList HANDLERS = new HandlerList();
 
     private Arena arena;
-    private GameState state;
 
-    public GameStateChangeEvent(Arena a, GameState status){
+    /**
+     * Called when an arena is enabled successfully
+     */
+    public ArenaEnableEvent(Arena a) {
         this.arena = a;
-        this.state = status;
     }
 
-
+    /**
+     * Get the arena
+     */
     public Arena getArena() {
         return arena;
     }
 
-    public GameState getState() {
-        return state;
-    }
-
+    @Override
     public HandlerList getHandlers() {
         return HANDLERS;
     }

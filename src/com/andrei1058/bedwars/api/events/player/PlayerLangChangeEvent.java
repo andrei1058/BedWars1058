@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.api.events;
+package com.andrei1058.bedwars.api.events.player;
 
 import com.andrei1058.bedwars.language.Language;
 import org.bukkit.entity.Player;
@@ -15,8 +15,6 @@ public class PlayerLangChangeEvent extends Event {
 
     /**
      * Called when a Player changes his language
-     *
-     * @since API 10
      */
     public PlayerLangChangeEvent(Player p, Language oldLang, Language newLang) {
         this.player = p;
@@ -26,8 +24,6 @@ public class PlayerLangChangeEvent extends Event {
 
     /**
      * Check if event is cancelled
-     *
-     * @since API 10
      */
     public boolean isCancelled() {
         return cancelled;
@@ -35,8 +31,6 @@ public class PlayerLangChangeEvent extends Event {
 
     /**
      * Change value
-     *
-     * @since API 10
      */
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
@@ -44,8 +38,6 @@ public class PlayerLangChangeEvent extends Event {
 
     /**
      * Get Player
-     *
-     * @since API 10
      */
     public Player getPlayer() {
         return player;
@@ -53,8 +45,6 @@ public class PlayerLangChangeEvent extends Event {
 
     /**
      * Get old Language
-     *
-     * @since API 10
      */
     public Language getOldLang() {
         return oldLang;
@@ -63,8 +53,6 @@ public class PlayerLangChangeEvent extends Event {
 
     /**
      * Get new Language
-     *
-     * @since API 10
      */
     public Language getNewLang() {
         return newLang;

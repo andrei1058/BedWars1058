@@ -4,7 +4,7 @@ import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.*;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.NextEvent;
-import com.andrei1058.bedwars.api.events.BedBreakEvent;
+import com.andrei1058.bedwars.api.events.player.PlayerBedBreakEvent;
 import com.andrei1058.bedwars.api.team.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
@@ -181,7 +181,7 @@ public class BreakPlace implements Listener {
                                             e.setCancelled(false);
                                             t.setBedDestroyed(true);
                                             a.addPlayerBedDestroyed(p);
-                                            Bukkit.getPluginManager().callEvent(new BedBreakEvent(e.getPlayer(), a.getTeam(p), t));
+                                            Bukkit.getPluginManager().callEvent(new PlayerBedBreakEvent(e.getPlayer(), a.getTeam(p), t));
                                             for (Player on : a.getWorld().getPlayers()) {
                                                 if (t.isMember(on)) {
                                                     on.sendMessage(getMsg(on, Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM).replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getName())
@@ -233,6 +233,7 @@ public class BreakPlace implements Listener {
             File dir = new File("plugins/" + plugin.getName() + "/Arenas");
             boolean exists = false;
             if (dir.exists()) {
+                //noinspection ConstantConditions
                 for (File f : dir.listFiles()) {
                     if (f.isFile()) {
                         if (f.getName().contains(".yml")) {

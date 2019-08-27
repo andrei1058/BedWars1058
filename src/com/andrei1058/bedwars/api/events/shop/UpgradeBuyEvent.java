@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.api.events;
+package com.andrei1058.bedwars.api.events.shop;
 
 import com.andrei1058.bedwars.upgrades.TeamUpgrade;
 import com.andrei1058.bedwars.upgrades.UpgradeTier;
@@ -12,24 +12,10 @@ public class UpgradeBuyEvent extends Event {
     private TeamUpgrade teamUpgrade;
     private Player buyer;
     private UpgradeTier tierBought;
-    private int tierLevel = 1;
-
-    /**
-     * Triggered when a Team Upgrade is bought
-     *
-     * @since API v8
-     */
-    @Deprecated
-    public UpgradeBuyEvent(TeamUpgrade teamUpgrade, Player buyer, UpgradeTier tierBought) {
-        this.teamUpgrade = teamUpgrade;
-        this.buyer = buyer;
-        this.tierBought = tierBought;
-    }
+    private int tierLevel;
 
     /**
      * Called when a Team Upgrade is bought
-     *
-     * @since API 9
      */
     public UpgradeBuyEvent(TeamUpgrade teamUpgrade, Player buyer, UpgradeTier tierBought, int tierLevel) {
         this.teamUpgrade = teamUpgrade;
@@ -42,8 +28,6 @@ public class UpgradeBuyEvent extends Event {
     /**
      * Ge the tier level
      * Ex: Tier 3
-     *
-     * @since API 9
      */
     public int getTierLevel() {
         return tierLevel;
@@ -51,8 +35,6 @@ public class UpgradeBuyEvent extends Event {
 
     /**
      * Get stuff about team upgrade
-     *
-     * @since API v8
      */
     public TeamUpgrade getTeamUpgrade() {
         return teamUpgrade;
@@ -60,8 +42,6 @@ public class UpgradeBuyEvent extends Event {
 
     /**
      * Get the buyer
-     *
-     * @since API v8
      */
     public Player getBuyer() {
         return buyer;
@@ -69,8 +49,6 @@ public class UpgradeBuyEvent extends Event {
 
     /**
      * Get the bought tier
-     *
-     * @since API v8
      */
     public UpgradeTier getTierBought() {
         return tierBought;

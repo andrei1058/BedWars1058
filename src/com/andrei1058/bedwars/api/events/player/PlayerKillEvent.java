@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.api.events;
+package com.andrei1058.bedwars.api.events.player;
 
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.entity.Player;
@@ -14,21 +14,9 @@ public class PlayerKillEvent extends Event {
     private String message;
 
     /**
-     * killer can be null
-     */
-    @Deprecated
-    public PlayerKillEvent(Arena a, Player victim, Player killer) {
-        this.a = a;
-        this.victim = victim;
-        this.killer = killer;
-        this.message = "";
-        this.cause = PlayerKillCause.UNKNOWN;
-    }
-
-    /**
-     * Killer can be null
+     * Called when a Player got killed during the game.
      *
-     * @since API 9
+     * @param killer can be NULL.
      */
     public PlayerKillEvent(Arena a, Player victim, Player killer, String message, PlayerKillCause cause) {
         this.a = a;
@@ -47,53 +35,35 @@ public class PlayerKillEvent extends Event {
         VOID_FINAL_KILL,
         PVP,
         PVP_FINAL_KILL,
-        /**
-         * @since API 11
-         */
         PLAYER_SHOOT,
-        /**
-         * @since API 11
-         */
         PLAYER_SHOOT_FINAL_KILL,
-        /**
-         * @since API 11
-         */
         SILVERFISH,
-        /**
-         * @since API 11
-         */
         SILVERFISH_FINAL_KILL,
-        /**
-         * @since API 11
-         */
         IRON_GOLEM,
-        /**
-         * @since API 11
-         */
         IRON_GOLEM_FINAL_KILL
     }
 
+    /**
+     * Killer can be NULL (void etc.)
+     */
     public Player getKiller() {
         return killer;
     }
 
     /**
-     * @since API 9
+     * Get kill chat message.
      */
     public String getMessage() {
         return message;
     }
 
     /**
-     * @since API 9
+     * Set chat message.
      */
     public void setMessage(String message) {
         this.message = message;
     }
 
-    /**
-     * @since API 9
-     */
     public PlayerKillCause getCause() {
         return cause;
     }
@@ -102,6 +72,9 @@ public class PlayerKillEvent extends Event {
         return a;
     }
 
+    /**
+     * Get the Player who died.
+     */
     public Player getVictim() {
         return victim;
     }

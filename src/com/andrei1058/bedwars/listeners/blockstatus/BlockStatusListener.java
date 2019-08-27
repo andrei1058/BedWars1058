@@ -1,8 +1,8 @@
 package com.andrei1058.bedwars.listeners.blockstatus;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.events.ArenaEnableEvent;
-import com.andrei1058.bedwars.api.events.GameStateChangeEvent;
+import com.andrei1058.bedwars.api.events.server.ArenaEnableEvent;
+import com.andrei1058.bedwars.api.events.gameplay.GameStateChangeEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import org.bukkit.Material;

@@ -1,7 +1,7 @@
 package com.andrei1058.bedwars.arena.upgrades;
 
-import com.andrei1058.bedwars.api.events.BaseEnterEvent;
-import com.andrei1058.bedwars.api.events.BaseLeaveEvent;
+import com.andrei1058.bedwars.api.events.player.PlayerBaseEnterEvent;
+import com.andrei1058.bedwars.api.events.player.PlayerBaseLeaveEvent;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
@@ -66,15 +66,15 @@ public class BaseListener implements Listener {
                 notOnBase = false;
                 if (isOnABase.containsKey(p)) {
                     if (isOnABase.get(p) != bwt) {
-                        Bukkit.getPluginManager().callEvent(new BaseLeaveEvent(p, isOnABase.get(p)));
+                        Bukkit.getPluginManager().callEvent(new PlayerBaseLeaveEvent(p, isOnABase.get(p)));
                         if (!Arena.magicMilk.containsKey(p.getUniqueId())) {
-                            Bukkit.getPluginManager().callEvent(new BaseEnterEvent(p, bwt));
+                            Bukkit.getPluginManager().callEvent(new PlayerBaseEnterEvent(p, bwt));
                         }
                         isOnABase.replace(p, bwt);
                     }
                 } else {
                     if (!Arena.magicMilk.containsKey(p.getUniqueId())) {
-                        Bukkit.getPluginManager().callEvent(new BaseEnterEvent(p, bwt));
+                        Bukkit.getPluginManager().callEvent(new PlayerBaseEnterEvent(p, bwt));
                         isOnABase.put(p, bwt);
                     }
                 }
@@ -83,14 +83,14 @@ public class BaseListener implements Listener {
         /* BaseLeaveEvent */
         if (notOnBase) {
             if (isOnABase.containsKey(p)) {
-                Bukkit.getPluginManager().callEvent(new BaseLeaveEvent(p, isOnABase.get(p)));
+                Bukkit.getPluginManager().callEvent(new PlayerBaseLeaveEvent(p, isOnABase.get(p)));
                 isOnABase.remove(p);
             }
         }
     }
 
     @EventHandler
-    public void onBaseEnter(BaseEnterEvent e) {
+    public void onBaseEnter(PlayerBaseEnterEvent e) {
         BedWarsTeam team = e.getTeam();
         if (team.isMember(e.getPlayer())) {
             /* Give base effects */
@@ -131,7 +131,7 @@ public class BaseListener implements Listener {
     }
 
     @EventHandler
-    public void onBaseLeave(BaseLeaveEvent e) {
+    public void onBaseLeave(PlayerBaseLeaveEvent e) {
         BedWarsTeam t = e.getTeam();
         if (t.isMember(e.getPlayer())) {
             /* Remove effects for members */
