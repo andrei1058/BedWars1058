@@ -2,6 +2,8 @@ package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.ServerType;
+import com.andrei1058.bedwars.api.events.server.SetupSessionCloseEvent;
+import com.andrei1058.bedwars.api.events.server.SetupSessionStartEvent;
 import com.andrei1058.bedwars.arena.mapreset.MapManager;
 import com.andrei1058.bedwars.configuration.ConfigManager;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -42,7 +44,6 @@ public class SetupSession {
         this.worldName = worldName;
         getSetupSessions().add(this);
         mapManager = new MapManager(null, worldName);
-        //mapManager.onEnable();
         mapManager.onSetupSession();
         openGUI(player);
     }
@@ -58,8 +59,6 @@ public class SetupSession {
 
     /**
      * Gets the setup type gui inv name
-     *
-     * @since api 6
      */
     public static String getInvName() {
         return "§8Choose a setup method";
@@ -67,8 +66,6 @@ public class SetupSession {
 
     /**
      * Get advanced type item slot
-     *
-     * @since api 6
      */
     public static int getAdvancedSlot() {
         return 5;
@@ -76,8 +73,6 @@ public class SetupSession {
 
     /**
      * Get assisted type item slot
-     *
-     * @since api 6
      */
     public static int getAssistedSlot() {
         return 3;
@@ -95,6 +90,7 @@ public class SetupSession {
         return worldName;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public boolean isStarted() {
         return started;
     }
@@ -148,6 +144,7 @@ public class SetupSession {
         } else {
             Bukkit.dispatchCommand(getPlayer(), Main.mainCmd + " cmds");
         }
+        Bukkit.getPluginManager().callEvent(new SetupSessionStartEvent(this));
         return true;
     }
 
@@ -172,8 +169,6 @@ public class SetupSession {
 
     /**
      * Cancel setup
-     *
-     * @since api 6
      */
     public void cancel() {
         if (!isStarted()) {
@@ -184,8 +179,6 @@ public class SetupSession {
 
     /**
      * End setup session
-     *
-     * @since api 6
      */
     public void done() {
         mapManager.backupWorld(true);
@@ -193,12 +186,11 @@ public class SetupSession {
         if (Main.getServerType() != ServerType.BUNGEE) getPlayer().teleport(config.getConfigLoc("lobbyLoc"));
         getPlayer().removePotionEffect(PotionEffectType.SPEED);
         if (Main.getServerType() == ServerType.MULTIARENA) Arena.sendLobbyCommandItems(getPlayer());
+        Bukkit.getPluginManager().callEvent(new SetupSessionCloseEvent(this));
     }
 
     /**
      * Check if a player is in setup session
-     *
-     * @since api 6
      */
     public static boolean isInSetupSession(Player player) {
         for (SetupSession ss : getSetupSessions()) {
@@ -209,8 +201,6 @@ public class SetupSession {
 
     /**
      * Get a player session
-     *
-     * @since api 6
      */
     public static SetupSession getSession(Player p) {
         for (SetupSession ss : getSetupSessions()) {
@@ -220,17 +210,7 @@ public class SetupSession {
     }
 
     /**
-     * Send setup commands
-     *
-     * @since api 6
-     */
-    public void sendCommands() {
-    }
-
-    /**
      * Get arena configuration
-     *
-     * @since api 6
      */
     public ConfigManager getCm() {
         return cm;

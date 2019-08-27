@@ -41,7 +41,7 @@ public class SetWaitingSpawn extends SubCommand {
         if (ss.getSetupType() == SetupSession.SetupType.ASSISTED){
             Bukkit.dispatchCommand(s, Main.mainCmd+" autocreateteams");
         } else {
-            ss.sendCommands();
+            Bukkit.dispatchCommand(s, Main.mainCmd);
         }
         return true;
     }

@@ -12,6 +12,7 @@ import com.andrei1058.bedwars.api.events.gameplay.GameEndEvent;
 import com.andrei1058.bedwars.api.events.gameplay.GameStateChangeEvent;
 import com.andrei1058.bedwars.api.events.server.ArenaDisableEvent;
 import com.andrei1058.bedwars.api.events.server.ArenaEnableEvent;
+import com.andrei1058.bedwars.api.events.server.ArenaRestartEvent;
 import com.andrei1058.bedwars.api.team.TeamColor;
 import com.andrei1058.bedwars.arena.mapreset.MapManager;
 import com.andrei1058.bedwars.configuration.ConfigManager;
@@ -918,9 +919,12 @@ public class Arena implements Comparable<Arena> {
         players.clear();
         spectators.clear();
         nextEvents.clear();
+        world = null;
+
         mapManager.onDisable();
         arenaByName.remove(world.getName());
         arenas.remove(this);
+
         //Call event
         Bukkit.getPluginManager().callEvent(new ArenaDisableEvent(getWorldName()));
         signs.clear();
@@ -957,7 +961,9 @@ public class Arena implements Comparable<Arena> {
                 rjt.destroy();
             }
         }
+        world = null;
         mapManager.onRestart();
+        Bukkit.getPluginManager().callEvent(new ArenaRestartEvent(getWorldName()));
     }
 
     //GETTER METHODS

@@ -90,7 +90,7 @@ public class MapManager {
     }
 
     public void onDisable(){
-        Bukkit.unloadWorld(getArena().getWorld(), false);
+        Bukkit.unloadWorld(Bukkit.getWorld(name), false);
     }
 
     /**
@@ -134,6 +134,7 @@ public class MapManager {
         return arena;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void isLevelWorld() {
 
         if (Bukkit.getWorlds().isEmpty()) return;
