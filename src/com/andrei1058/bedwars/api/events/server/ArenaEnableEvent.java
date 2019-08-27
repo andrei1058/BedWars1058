@@ -10,7 +10,7 @@ public class ArenaEnableEvent extends Event {
     private Arena arena;
 
     /**
-     * Called when an arena is enabled successfully
+     * Called when an arena is enabled successfully. It's called after a restart as well.
      */
     public ArenaEnableEvent(Arena a) {
         this.arena = a;
