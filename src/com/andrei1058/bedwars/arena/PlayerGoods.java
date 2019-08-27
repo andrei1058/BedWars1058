@@ -1,7 +1,6 @@
 package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.configuration.ConfigManager;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -9,10 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.Main.plugin;
@@ -20,10 +16,9 @@ import static com.andrei1058.bedwars.Main.plugin;
 /**
  * This is where player stuff are stored so he can have them back after a game
  */
-@SuppressWarnings("WeakerAccess")
-public class PlayerGoods {
+class PlayerGoods {
 
-    private Player player;
+    private UUID uuid;
     private int level, foodLevel;
     private double health, healthscale;
     private float exp;
@@ -35,18 +30,18 @@ public class PlayerGoods {
     private boolean allowFlight, flying;
     private String displayName, tabName;
 
-    public PlayerGoods(Player p, boolean prepare) {
+    PlayerGoods(Player p, boolean prepare) {
         if (hasGoods(p)) {
             plugin.getLogger().severe(p.getName() + " is already having a PlayerGoods vault :|");
             return;
         }
-        this.player = p;
+        this.uuid = p.getUniqueId();
         this.level = p.getLevel();
         this.exp = p.getExp();
         this.health = p.getHealth();
         this.healthscale = p.getHealthScale();
         this.foodLevel = p.getFoodLevel();
-        playerGoods.put(p, this);
+        playerGoods.put(p.getUniqueId(), this);
         int x = 0;
         for (ItemStack i : p.getInventory()) {
             if (i != null) {
@@ -96,26 +91,30 @@ public class PlayerGoods {
     /**
      * a list where you can get PlayerGoods by player
      */
-    private static HashMap<Player, PlayerGoods> playerGoods = new HashMap<>();
+    private static HashMap<UUID, PlayerGoods> playerGoods = new HashMap<>();
 
     /**
      * check if a player has a vault
      */
-    public static boolean hasGoods(Player p) {
-        return playerGoods.containsKey(p);
+    static boolean hasGoods(Player p) {
+        return playerGoods.containsKey(p.getUniqueId());
     }
 
     /**
      * get a player vault
      */
-    public static PlayerGoods getPlayerGoods(Player p) {
-        return playerGoods.get(p);
+    static PlayerGoods getPlayerGoods(Player p) {
+        return playerGoods.get(p.getUniqueId());
     }
 
     /**
      * restore player
      */
-    public void restore() {
+    void restore() {
+        Player player = Bukkit.getPlayer(uuid);
+        playerGoods.remove(player.getUniqueId());
+
+
         for (PotionEffect pf : player.getActivePotionEffects()) {
             player.removePotionEffect(pf.getType());
         }
@@ -156,7 +155,6 @@ public class PlayerGoods {
         player.setGameMode(gamemode);
         player.setAllowFlight(allowFlight);
         player.setFlying(flying);
-        playerGoods.remove(player);
         for (Player p : Bukkit.getOnlinePlayers()){
             nms.showPlayer(player, p);
         }
