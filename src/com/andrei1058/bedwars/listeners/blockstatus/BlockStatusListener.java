@@ -46,7 +46,7 @@ public class BlockStatusListener implements Listener {
                     break;
             }
             Main.nms.setJoinSignBackground(s, Material.valueOf(Main.signs.getString(path)));
-            Main.nms.setBlockData(s.getBlock().getRelative(((org.bukkit.material.Sign)s.getData()).getAttachedFace()), (byte) Main.signs.getInt(data));
+            Main.nms.setJoinSignBackgroundBlockData(s, (byte) Main.signs.getInt(data));
         }
     }
 }

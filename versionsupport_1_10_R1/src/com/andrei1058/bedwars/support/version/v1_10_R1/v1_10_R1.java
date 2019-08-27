@@ -556,8 +556,8 @@ public class v1_10_R1 extends VersionSupport {
 
     @SuppressWarnings("deprecation")
     @Override
-    public void setBlockData(org.bukkit.block.Block block, byte data) {
-        block.setData(data, true);
+    public void setJoinSignBackgroundBlockData(org.bukkit.block.BlockState block, byte data) {
+        block.getBlock().getRelative(((org.bukkit.material.Sign)block.getData()).getAttachedFace()).setData(data, true);
     }
 
     @Override
