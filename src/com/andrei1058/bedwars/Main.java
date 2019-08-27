@@ -457,7 +457,7 @@ public class Main extends JavaPlugin {
         yml.addDefault("database.port", 3306);
         yml.addDefault("database.database", "bedwars1058");
         yml.addDefault("database.user", "root");
-        yml.addDefault("database.pass", "cheez");
+        yml.addDefault("database.pass", "cheese");
         yml.addDefault("database.ssl", false);
 
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_ROTATE_GEN, true);
