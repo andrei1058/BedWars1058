@@ -76,4 +76,10 @@ public abstract class RestoreAdapter {
      * Get world container.
      */
     public abstract List<String> getWorldsList();
+
+    /**
+     * Convert worlds if it is necessary before loading them.
+     * If you do it async will probably cause issues.
+     */
+    public abstract void convertWorlds();
 }

@@ -702,6 +702,9 @@ public class Main extends JavaPlugin {
     }
 
     private void loadArenasAndSigns() {
+
+        api.getRestoreAdapter().convertWorlds();
+
         File dir = new File("plugins/" + plugin.getName() + "/Arenas");
         if (dir.exists()) {
             List<File> files = new ArrayList<>();
@@ -712,43 +715,6 @@ public class Main extends JavaPlugin {
                         files.add(fl);
                     }
                 }
-            }
-
-            if (api.getRestoreAdapter() instanceof InternalAdapter) {
-                // lowerCase arena names - new 1.14 standard
-                File folder, newName;
-
-                List<File> toRemove = new ArrayList<>(), toAdd = new ArrayList<>();
-                for (File file : files) {
-                    if (!file.getName().equals(file.getName().toLowerCase())) {
-                        //level-name will not be renamed
-                        if (nms.getLevelName().equals(file.getName().replace(".yml", ""))) continue;
-                        newName = new File(dir.getPath() + "/" + file.getName().toLowerCase());
-                        if (!file.renameTo(newName)) {
-                            toRemove.add(file);
-                            Main.plugin.getLogger().severe("Could not rename " + file.getName() + " to " + file.getName().toLowerCase() + "! Please do it manually!");
-                        } else {
-                            toAdd.add(newName);
-                            toRemove.add(file);
-                        }
-                        folder = new File(plugin.getServer().getWorldContainer(), file.getName().replace(".yml", ""));
-                        if (folder.exists()) {
-                            if (!folder.getName().equals(folder.getName().toLowerCase())) {
-                                if (!folder.renameTo(new File(plugin.getServer().getWorldContainer().getPath() + "/" + folder.getName().toLowerCase()))) {
-                                    Main.plugin.getLogger().severe("Could not rename " + folder.getName() + " folder to " + folder.getName().toLowerCase() + "! Please do it manually!");
-                                    toRemove.add(file);
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                for (File f : toRemove) {
-                    files.remove(f);
-                }
-
-                files.addAll(toAdd);
             }
 
             if (serverType == ServerType.BUNGEE) {

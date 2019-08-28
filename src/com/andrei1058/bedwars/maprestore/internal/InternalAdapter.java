@@ -195,7 +195,7 @@ public class InternalAdapter extends RestoreAdapter {
 
     @Override
     public void cloneArena(String name1, String name2) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 FileUtils.copyDirectory(new File(Bukkit.getWorldContainer(), name1), new File(Bukkit.getWorldContainer(), name2));
                 if (!new File(new File(Bukkit.getWorldContainer(), name2).getPath() + "/uid.dat").delete()) {
@@ -223,5 +223,56 @@ public class InternalAdapter extends RestoreAdapter {
             }
         }
         return worlds;
+    }
+
+    @Override
+    public void convertWorlds() {
+        File dir = new File("plugins/" + plugin.getName() + "/Arenas");
+        if (dir.exists()) {
+            List<File> files = new ArrayList<>();
+            File[] fls = dir.listFiles();
+            for (File fl : Objects.requireNonNull(fls)) {
+                if (fl.isFile()) {
+                    if (fl.getName().contains(".yml")) {
+                        files.add(fl);
+                    }
+                }
+            }
+
+            // lowerCase arena names - new 1.14 standard
+            File folder, newName;
+
+            List<File> toRemove = new ArrayList<>(), toAdd = new ArrayList<>();
+            for (File file : files) {
+                if (!file.getName().equals(file.getName().toLowerCase())) {
+                    //level-name will not be renamed
+                    if (Main.nms.getLevelName().equals(file.getName().replace(".yml", ""))) continue;
+                    newName = new File(dir.getPath() + "/" + file.getName().toLowerCase());
+                    if (!file.renameTo(newName)) {
+                        toRemove.add(file);
+                        Main.plugin.getLogger().severe("Could not rename " + file.getName() + " to " + file.getName().toLowerCase() + "! Please do it manually!");
+                    } else {
+                        toAdd.add(newName);
+                        toRemove.add(file);
+                    }
+                    folder = new File(plugin.getServer().getWorldContainer(), file.getName().replace(".yml", ""));
+                    if (folder.exists()) {
+                        if (!folder.getName().equals(folder.getName().toLowerCase())) {
+                            if (!folder.renameTo(new File(plugin.getServer().getWorldContainer().getPath() + "/" + folder.getName().toLowerCase()))) {
+                                Main.plugin.getLogger().severe("Could not rename " + folder.getName() + " folder to " + folder.getName().toLowerCase() + "! Please do it manually!");
+                                toRemove.add(file);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+
+            for (File f : toRemove) {
+                files.remove(f);
+            }
+
+            files.addAll(toAdd);
+        }
     }
 }
