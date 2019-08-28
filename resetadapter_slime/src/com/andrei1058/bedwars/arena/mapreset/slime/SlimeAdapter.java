@@ -61,7 +61,7 @@ public class SlimeAdapter extends RestoreAdapter {
                         Arena.removeFromEnableQueue(a);
                     }
                 });
-            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldInUseException | UnsupportedWorldException ex) {
+            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldInUseException ex) {
                 ex.printStackTrace();
             }
         });
@@ -116,7 +116,7 @@ public class SlimeAdapter extends RestoreAdapter {
                     slime.generateWorld(world);
                     s.setupStarted();
                 });
-            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldInUseException | UnsupportedWorldException ex) {
+            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldInUseException ex) {
                 ex.printStackTrace();
             }
         });
@@ -181,7 +181,7 @@ public class SlimeAdapter extends RestoreAdapter {
                 // Note that this method should be called asynchronously
                 SlimeWorld world = slime.loadWorld(slime.getLoader("file"), name1, props);
                 world.clone(name2, slime.getLoader("file"));
-            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldInUseException | UnsupportedWorldException | WorldAlreadyExistsException ex) {
+            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldInUseException | WorldAlreadyExistsException ex) {
                 ex.printStackTrace();
             }
         });

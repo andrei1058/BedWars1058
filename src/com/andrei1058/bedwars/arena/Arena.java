@@ -372,7 +372,7 @@ public class Arena implements Comparable<Arena> {
                 }
             }
 
-            PlayerJoinArenaEvent ev = new PlayerJoinArenaEvent(p, false);
+            PlayerJoinArenaEvent ev = new PlayerJoinArenaEvent(this, p, false);
             Bukkit.getPluginManager().callEvent(ev);
             if (ev.isCancelled()) return false;
 
@@ -473,7 +473,7 @@ public class Arena implements Comparable<Arena> {
         if (allowSpectate || playerBefore) {
 
             if (!playerBefore) {
-                PlayerJoinArenaEvent ev = new PlayerJoinArenaEvent(p, true);
+                PlayerJoinArenaEvent ev = new PlayerJoinArenaEvent(this, p, true);
                 Bukkit.getPluginManager().callEvent(ev);
                 if (ev.isCancelled()) return false;
             }
