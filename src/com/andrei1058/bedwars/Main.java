@@ -184,17 +184,21 @@ public class Main extends JavaPlugin {
 
         // Load SlimeWorldManager support
         if (Bukkit.getPluginManager().getPlugin("SlimeWorldManager") != null) {
-            try {
-                Constructor constructor = Class.forName("com.andrei1058.bedwars.arena.mapreset.slime.SlimeAdapter").getConstructor(Plugin.class);
+            if (Bukkit.getPluginManager().isPluginEnabled("SlimeWorldManager")) {
                 try {
-                    api.setRestoreAdapter((RestoreAdapter) constructor.newInstance(this));
-                } catch (InstantiationException e) {
+                    Constructor constructor = Class.forName("com.andrei1058.bedwars.arena.mapreset.slime.SlimeAdapter").getConstructor(Plugin.class);
+                    try {
+                        api.setRestoreAdapter((RestoreAdapter) constructor.newInstance(this));
+                    } catch (InstantiationException e) {
+                        e.printStackTrace();
+                    }
+                } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
-            } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
+                this.getLogger().info("Hook into SlimeWorldManager support!");
+            } else {
+                this.getLogger().log(java.util.logging.Level.WARNING, "Could not load support for SlimeWorldManager because it's not enabled!");
             }
-            this.getLogger().info("Hook into SlimeWorldManager support!");
         } else {
             api.setRestoreAdapter(new InternalAdapter(this));
         }
