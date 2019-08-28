@@ -22,18 +22,31 @@ import java.util.*;
 public abstract class VersionSupport {
 
     private String name;
-    private Sound bedDestroy = Sound.valueOf("ENTITY_ENDER_DRAGON_GROWL"),
-            playerKill = Sound.valueOf("ENTITY_WOLF_HURT"),
-            countDown = Sound.valueOf("ENTITY_CHICKEN_EGG"),
-            bought = Sound.valueOf("BLOCK_ANVIL_HIT"),
-            insuffMoney = Sound.valueOf("ENTITY_ENDERMAN_TELEPORT");
+    private Sound bedDestroy,
+            playerKill,
+            countDown,
+            bought,
+            insuffMoney;
 
-    private Effect eggBridge = Effect.valueOf("MOBSPAWNER_FLAMES");
+    private Effect eggBridge;
 
     private static HashMap<UUID, Despawnable> despawnables = new HashMap<>();
 
     public VersionSupport(String name) {
         this.name = name;
+    }
+
+    protected void loadDefaultSounds(){
+        try {
+            setBedDestroySound("ENTITY_ENDER_DRAGON_GROWL");
+            setPlayerKillsSound("ENTITY_WOLF_HURT");
+            setCountdownSound("ENTITY_CHICKEN_EGG");
+            setBoughtSound("BLOCK_ANVIL_HIT");
+            setInsuffMoneySound("ENTITY_ENDERMAN_TELEPORT");
+            setEggBridgeEffect("MOBSPAWNER_FLAMES");
+        } catch (InvalidSoundException | InvalidEffectException e) {
+            e.printStackTrace();
+        }
     }
 
 

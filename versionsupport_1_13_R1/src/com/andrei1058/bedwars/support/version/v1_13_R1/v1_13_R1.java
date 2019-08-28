@@ -53,6 +53,7 @@ public class v1_13_R1 extends VersionSupport {
 
     public v1_13_R1(String name) {
         super(name);
+        loadDefaultSounds();
     }
 
     @Override
