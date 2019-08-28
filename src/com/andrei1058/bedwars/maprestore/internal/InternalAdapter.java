@@ -195,14 +195,16 @@ public class InternalAdapter extends RestoreAdapter {
 
     @Override
     public void cloneArena(String name1, String name2) {
-        try {
-            FileUtils.copyDirectory(new File(Bukkit.getWorldContainer(), name1), new File(Bukkit.getWorldContainer(), name2));
-            if (!new File(new File(Bukkit.getWorldContainer(), name2).getPath() + "/uid.dat").delete()) {
-                Bukkit.getLogger().log(Level.WARNING, "Could not delete uid.dat from " + name2 + ". Please do it manually.");
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> {
+            try {
+                FileUtils.copyDirectory(new File(Bukkit.getWorldContainer(), name1), new File(Bukkit.getWorldContainer(), name2));
+                if (!new File(new File(Bukkit.getWorldContainer(), name2).getPath() + "/uid.dat").delete()) {
+                    Bukkit.getLogger().log(Level.WARNING, "Could not delete uid.dat from " + name2 + ". Please do it manually.");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        });
     }
 
     @Override
