@@ -9,7 +9,6 @@ import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -71,20 +70,7 @@ public class SetupArena extends SubCommand {
 
     @Override
     public List<String> getTabComplete() {
-        List<String> tab = new ArrayList<>();
-        File dir = Main.api.getRestoreAdapter().getWorldContainer();
-        if (dir.exists()) {
-            File[] fls = dir.listFiles();
-            for (File fl : Objects.requireNonNull(fls)) {
-                if (fl.isDirectory()) {
-                    File dat = new File(fl.getName() + "/level.dat");
-                    if (dat.exists()) {
-                        tab.add(fl.getName());
-                    }
-                }
-            }
-        }
-        return tab;
+        return Main.api.getRestoreAdapter().getWorldsList();
     }
 
     @Override

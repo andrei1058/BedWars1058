@@ -127,6 +127,7 @@ public class Main extends JavaPlugin {
             //noinspection unchecked
             nms = (VersionSupport) supp.getConstructor(String.class).newInstance(version);
         } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
             serverSoftwareSupport = false;
             this.getLogger().severe("Could not load support for server version: " + version);
             return;

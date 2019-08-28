@@ -18,7 +18,9 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 
 import static com.andrei1058.bedwars.Main.config;
@@ -209,7 +211,20 @@ public class InternalAdapter extends RestoreAdapter {
     }
 
     @Override
-    public File getWorldContainer() {
-        return Bukkit.getWorldContainer();
+    public List<String> getWorldsList() {
+        List<String> worlds = new ArrayList<>();
+        File dir = Bukkit.getWorldContainer();
+        if (dir.exists()) {
+            File[] fls = dir.listFiles();
+            for (File fl : Objects.requireNonNull(fls)) {
+                if (fl.isDirectory()) {
+                    File dat = new File(fl.getName() + "/level.dat");
+                    if (dat.exists()) {
+                        worlds.add(fl.getName());
+                    }
+                }
+            }
+        }
+        return worlds;
     }
 }

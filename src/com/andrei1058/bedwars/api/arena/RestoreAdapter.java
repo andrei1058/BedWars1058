@@ -2,10 +2,9 @@ package com.andrei1058.bedwars.api.arena;
 
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.SetupSession;
-import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
 
-import java.io.File;
+import java.util.List;
 
 public abstract class RestoreAdapter {
 
@@ -77,6 +76,7 @@ public abstract class RestoreAdapter {
 
     /**
      * Get world container.
+     * @return
      */
-    public abstract File getWorldContainer();
+    public abstract List<String> getWorldsList();
 }
