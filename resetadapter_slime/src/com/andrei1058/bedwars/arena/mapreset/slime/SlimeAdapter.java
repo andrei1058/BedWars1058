@@ -34,6 +34,11 @@ public class SlimeAdapter extends RestoreAdapter {
 
     @Override
     public void onEnable(Arena a) {
+        if (Bukkit.getWorld(a.getWorldName()) != null){
+            a.init(Bukkit.getWorld(a.getWorldName()));
+            return;
+        }
+
         Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
             SlimeLoader sqlLoader = slime.getLoader("file");
             String[] spawn = a.getCm().getString("waiting.Loc").split(",");
@@ -45,8 +50,12 @@ public class SlimeAdapter extends RestoreAdapter {
 
                 // This method must be called synchronously
                 Bukkit.getScheduler().runTask(Main.plugin, () -> {
-                    slime.generateWorld(world);
-                    a.init(Bukkit.getWorld(a.getWorldName()));
+                    try {
+                        slime.generateWorld(world);
+                        a.init(Bukkit.getWorld(a.getWorldName()));
+                    } catch (Exception e){
+                        Arena.removeFromEnableQueue(a);
+                    }
                 });
             } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldInUseException | UnsupportedWorldException ex) {
                 ex.printStackTrace();
