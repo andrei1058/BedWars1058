@@ -1,5 +1,10 @@
 # 0.14beta
-THIS UPDATE WILL BREAK COMPATIBILITY WITH MOST OF ADDONS
+
+IMPORTANT NOTICE FOR SERVER OWNERS:
+With this update most of BedWars1058 Addons won't work anymore. Please update them.
+As I usually do, the upgrade from older versions to newer versions is done automatically by me, I work a lot to make your life easier.
+
+- **added SlimeWorldManager support** a way faster to restore maps
 - minor multi server version compatibility improvements
 - removed 1.9 R1 support
 - fixed issue where current tier was taking the price from next tier (shop related)
