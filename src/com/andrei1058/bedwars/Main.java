@@ -184,21 +184,17 @@ public class Main extends JavaPlugin {
 
         // Load SlimeWorldManager support
         if (Bukkit.getPluginManager().getPlugin("SlimeWorldManager") != null) {
-            if (Bukkit.getPluginManager().isPluginEnabled("SlimeWorldManager")) {
+            try {
+                Constructor constructor = Class.forName("com.andrei1058.bedwars.arena.mapreset.slime.SlimeAdapter").getConstructor(Plugin.class);
                 try {
-                    Constructor constructor = Class.forName("com.andrei1058.bedwars.arena.mapreset.slime.SlimeAdapter").getConstructor(Plugin.class);
-                    try {
-                        api.setRestoreAdapter((RestoreAdapter) constructor.newInstance(this));
-                    } catch (InstantiationException e) {
-                        e.printStackTrace();
-                    }
-                } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
+                    api.setRestoreAdapter((RestoreAdapter) constructor.newInstance(this));
+                } catch (InstantiationException e) {
                     e.printStackTrace();
                 }
-                this.getLogger().info("Hook into SlimeWorldManager support!");
-            } else {
-                this.getLogger().log(java.util.logging.Level.WARNING, "Could not load support for SlimeWorldManager because it's not enabled!");
+            } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
             }
+            this.getLogger().info("Hook into SlimeWorldManager support!");
         } else {
             api.setRestoreAdapter(new InternalAdapter(this));
         }
@@ -718,49 +714,50 @@ public class Main extends JavaPlugin {
                 }
             }
 
-            // lowerCase arena names - new 1.14 standard
-            File folder, newName;
+            if (api.getRestoreAdapter() instanceof InternalAdapter) {
+                // lowerCase arena names - new 1.14 standard
+                File folder, newName;
 
-            List<File> toRemove = new ArrayList<>(), toAdd = new ArrayList<>();
-            for (File file : files) {
-                if (!file.getName().equals(file.getName().toLowerCase())) {
-                    //level-name will not be renamed
-                    if (nms.getLevelName().equals(file.getName().replace(".yml", ""))) continue;
-                    newName = new File(dir.getPath() + "/" + file.getName().toLowerCase());
-                    if (!file.renameTo(newName)) {
-                        toRemove.add(file);
-                        Main.plugin.getLogger().severe("Could not rename " + file.getName() + " to " + file.getName().toLowerCase() + "! Please do it manually!");
-                    } else {
-                        toAdd.add(newName);
-                        toRemove.add(file);
-                    }
-                    folder = new File(plugin.getServer().getWorldContainer(), file.getName().replace(".yml", ""));
-                    if (folder.exists()) {
-                        if (!folder.getName().equals(folder.getName().toLowerCase())) {
-                            if (!folder.renameTo(new File(plugin.getServer().getWorldContainer().getPath() + "/" + folder.getName().toLowerCase()))) {
-                                Main.plugin.getLogger().severe("Could not rename " + folder.getName() + " folder to " + folder.getName().toLowerCase() + "! Please do it manually!");
-                                toRemove.add(file);
-                                return;
+                List<File> toRemove = new ArrayList<>(), toAdd = new ArrayList<>();
+                for (File file : files) {
+                    if (!file.getName().equals(file.getName().toLowerCase())) {
+                        //level-name will not be renamed
+                        if (nms.getLevelName().equals(file.getName().replace(".yml", ""))) continue;
+                        newName = new File(dir.getPath() + "/" + file.getName().toLowerCase());
+                        if (!file.renameTo(newName)) {
+                            toRemove.add(file);
+                            Main.plugin.getLogger().severe("Could not rename " + file.getName() + " to " + file.getName().toLowerCase() + "! Please do it manually!");
+                        } else {
+                            toAdd.add(newName);
+                            toRemove.add(file);
+                        }
+                        folder = new File(plugin.getServer().getWorldContainer(), file.getName().replace(".yml", ""));
+                        if (folder.exists()) {
+                            if (!folder.getName().equals(folder.getName().toLowerCase())) {
+                                if (!folder.renameTo(new File(plugin.getServer().getWorldContainer().getPath() + "/" + folder.getName().toLowerCase()))) {
+                                    Main.plugin.getLogger().severe("Could not rename " + folder.getName() + " folder to " + folder.getName().toLowerCase() + "! Please do it manually!");
+                                    toRemove.add(file);
+                                    return;
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            for (File f : toRemove) {
-                files.remove(f);
-            }
+                for (File f : toRemove) {
+                    files.remove(f);
+                }
 
-            files.addAll(toAdd);
+                files.addAll(toAdd);
+            }
 
             if (serverType == ServerType.BUNGEE) {
                 if (files.isEmpty()) {
-                    this.getLogger().info("Could not find any arena!");
+                    this.getLogger().log(java.util.logging.Level.WARNING, "Could not find any arena!");
                     return;
                 }
                 Random r = new Random();
                 int x = r.nextInt(files.size());
-
                 String name = files.get(x).getName().replace(".yml", "");
                 new Arena(name, null);
             } else {
