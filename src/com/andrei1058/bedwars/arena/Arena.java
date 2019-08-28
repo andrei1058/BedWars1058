@@ -145,7 +145,6 @@ public class Arena implements Comparable<Arena> {
         }
         this.worldName = name;
 
-        plugin.getLogger().info("Arena " + getWorldName() + " was added to the enable queue.");
         cm = new ConfigManager(name, "plugins/" + plugin.getName() + "/Arenas", true);
 
         //if (mapManager.isLevelWorld()) {
@@ -174,9 +173,9 @@ public class Arena implements Comparable<Arena> {
                 group = yml.getString("group");
             }
         }
-        File folder = new File(plugin.getServer().getWorldContainer().getPath(), name);
-        File folder2 = new File("plugins/BedWars1058/Cache", name + ".zip");
-        if (!(folder.exists() || folder2.exists())) {
+
+
+        if (Main.api.getRestoreAdapter().isWorld(name)) {
             if (p != null) p.sendMessage("§cThere isn't any map called " + name);
             plugin.getLogger().severe("There isn't any map called " + name);
             return;
@@ -216,7 +215,9 @@ public class Arena implements Comparable<Arena> {
             return;
         }
         if (error) return;
+
         enableQueue.add(this);
+        plugin.getLogger().info("Arena " + getWorldName() + " was added to the enable queue.");
         if (enableQueue.size() == 1) {
             api.getRestoreAdapter().onEnable(this);
             plugin.getLogger().info("Loading arena: " + getWorldName());
