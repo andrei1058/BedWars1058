@@ -111,11 +111,11 @@ public class InternalAdapter extends RestoreAdapter {
                     Arena.setGamesBeforeRestart(Arena.getGamesBeforeRestart() - 1);
                 }
                 Bukkit.unloadWorld(a.getWorldName(), false);
-                new Arena(a.getWorldName(), null);
+                Bukkit.getScheduler().runTaskLater(plugin, () -> new Arena(a.getWorldName(), null), 80L);
             }
         } else {
             Bukkit.unloadWorld(a.getWorldName(), false);
-            new Arena(a.getWorldName(), null);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> new Arena(a.getWorldName(), null), 80L);
         }
     }
 
@@ -125,32 +125,25 @@ public class InternalAdapter extends RestoreAdapter {
     }
 
     @Override
-    public boolean onSetupSessionStart(SetupSession s) {
-        World w;
+    public void onSetupSessionStart(SetupSession s) {
         try {
-            w = Bukkit.createWorld(new WorldCreator(s.getWorldName()));
+            Bukkit.createWorld(new WorldCreator(s.getWorldName()));
         } catch (Exception ex) {
             File uid = new File(Bukkit.getServer().getWorldContainer().getPath() + "/" + s.getWorldName() + "/uid.dat");
             if (uid.exists() && uid.delete()) {
                 try {
-                    w = Bukkit.createWorld(new WorldCreator(s.getWorldName()));
+                    Bukkit.createWorld(new WorldCreator(s.getWorldName()));
                 } catch (Exception exx) {
                     exx.printStackTrace();
-                    return false;
+                    return;
                 }
             } else {
                 Bukkit.getLogger().log(Level.WARNING, "Could not delete uid.dat from " + s.getWorldName());
                 Bukkit.getLogger().log(Level.WARNING, "Please delete it manually and try again.");
-                return false;
+                return;
             }
         }
-
-        Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getWorld(s.getWorldName()).getEntities().stream()
-                .filter(e -> e.getType() != EntityType.PLAYER).filter(e -> e.getType() != EntityType.PAINTING)
-                .filter(e -> e.getType() != EntityType.ITEM_FRAME).forEach(Entity::remove), 30L);
-        w.setAutoSave(true);
-        w.setGameRuleValue("doMobSpawning", "false");
-        return true;
+        s.setupStarted();
     }
 
     @Override

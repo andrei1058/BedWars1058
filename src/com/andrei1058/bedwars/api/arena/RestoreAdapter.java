@@ -44,10 +44,8 @@ public abstract class RestoreAdapter {
 
     /**
      * Load the world for setting it up.
-     *
-     * @return true if the world was loaded successfully.
      */
-    public abstract boolean onSetupSessionStart(SetupSession s);
+    public abstract void onSetupSessionStart(SetupSession s);
 
     /**
      * Unload the world.
@@ -76,7 +74,6 @@ public abstract class RestoreAdapter {
 
     /**
      * Get world container.
-     * @return
      */
     public abstract List<String> getWorldsList();
 }

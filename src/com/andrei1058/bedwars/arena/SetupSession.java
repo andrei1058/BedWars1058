@@ -7,6 +7,8 @@ import com.andrei1058.bedwars.api.events.server.SetupSessionStartEvent;
 import com.andrei1058.bedwars.configuration.ConfigManager;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -97,8 +99,15 @@ public class SetupSession {
     public boolean startSetup() {
         getPlayer().sendMessage("§6 ▪ §7Loading " + getWorldName());
         cm = new ConfigManager(getWorldName(), "plugins/" + plugin.getName() + "/Arenas", true);
+        api.getRestoreAdapter().onSetupSessionStart(this);
+        return true;
+    }
+
+    /**
+     * Teleport the player and give motd.
+     */
+    public void setupStarted() {
         getPlayer().getInventory().clear();
-        if (!api.getRestoreAdapter().onSetupSessionStart(this)) return false;
         getPlayer().teleport(Bukkit.getWorld(getWorldName()).getSpawnLocation());
         getPlayer().setGameMode(GameMode.CREATIVE);
         getPlayer().setAllowFlight(true);
@@ -118,7 +127,13 @@ public class SetupSession {
             Bukkit.dispatchCommand(getPlayer(), Main.mainCmd + " cmds");
         }
         Bukkit.getPluginManager().callEvent(new SetupSessionStartEvent(this));
-        return true;
+
+        World w = Bukkit.getWorld(getWorldName());
+        Bukkit.getScheduler().runTaskLater(plugin, () -> w.getEntities().stream()
+                .filter(e -> e.getType() != EntityType.PLAYER).filter(e -> e.getType() != EntityType.PAINTING)
+                .filter(e -> e.getType() != EntityType.ITEM_FRAME).forEach(Entity::remove), 30L);
+        w.setAutoSave(false);
+        w.setGameRuleValue("doMobSpawning", "false");
     }
 
     private static void openGUI(Player player) {

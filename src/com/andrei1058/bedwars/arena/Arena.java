@@ -44,6 +44,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.upgrades.BaseListener.isOnABase;
@@ -216,7 +217,10 @@ public class Arena implements Comparable<Arena> {
         }
         if (error) return;
         enableQueue.add(this);
-        if (enableQueue.size() == 1) api.getRestoreAdapter().onEnable(this);
+        if (enableQueue.size() == 1) {
+            api.getRestoreAdapter().onEnable(this);
+            plugin.getLogger().info("Loading arena: " + getWorldName());
+        }
     }
 
     /**
@@ -227,7 +231,6 @@ public class Arena implements Comparable<Arena> {
         if (!enableQueue.isEmpty()) {
             api.getRestoreAdapter().onEnable(enableQueue.get(0));
         }
-        plugin.getLogger().info("Loading arena: " + getWorldName());
         this.world = world;
         world.getEntities().stream().filter(e -> e.getType() != EntityType.PLAYER)
                 .filter(e -> e.getType() != EntityType.PAINTING).filter(e -> e.getType() != EntityType.ITEM_FRAME)
@@ -568,16 +571,6 @@ public class Arena implements Comparable<Arena> {
     /**
      * Remove a player from the arena
      *
-     * @param p Player to be removed
-     */
-    @Deprecated
-    public void removePlayer(Player p) {
-        removePlayer(p, false);
-    }
-
-    /**
-     * Remove a player from the arena
-     *
      * @param p          Player to be removed
      * @param disconnect True if the player was disconnected
      * @since API 8
@@ -734,16 +727,6 @@ public class Arena implements Comparable<Arena> {
     /**
      * Remove a spectator from the arena
      *
-     * @param p Player to be removed
-     */
-    @Deprecated
-    public void removeSpectator(Player p) {
-        removeSpectator(p, false);
-    }
-
-    /**
-     * Remove a spectator from the arena
-     *
      * @param p          Player to be removed
      * @param disconnect True if the player was disconnected
      * @since API 8
@@ -890,6 +873,13 @@ public class Arena implements Comparable<Arena> {
      * This will automatically kick/ remove the people from the arena.
      */
     public void disable() {
+        plugin.getLogger().log(Level.WARNING, "Disabling arena: " + getWorldName());
+        for (Player p : players){
+            removePlayer(p, false);
+        }
+        for (Player p : spectators){
+            removeSpectator(p, false);
+        }
         destroyData();
         api.getRestoreAdapter().onDisable(this);
         Bukkit.getPluginManager().callEvent(new ArenaDisableEvent(getWorldName()));
@@ -899,7 +889,7 @@ public class Arena implements Comparable<Arena> {
      * Restart the arena.
      */
     public void restart() {
-        plugin.getLogger().info("Restarting arena: " + getWorldName());
+        plugin.getLogger().log(Level.FINE, "Restarting arena: " + getWorldName());
         destroyData();
         api.getRestoreAdapter().onRestart(this);
         Bukkit.getPluginManager().callEvent(new ArenaRestartEvent(getWorldName()));
@@ -1963,6 +1953,7 @@ public class Arena implements Comparable<Arena> {
         enableQueue.remove(a);
         if (!enableQueue.isEmpty()) {
             api.getRestoreAdapter().onEnable(enableQueue.get(0));
+            plugin.getLogger().info("Loading arena: " + enableQueue.get(0).getWorldName());
         }
     }
 }

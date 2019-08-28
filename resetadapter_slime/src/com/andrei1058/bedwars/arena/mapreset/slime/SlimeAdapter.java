@@ -1,10 +1,12 @@
 package com.andrei1058.bedwars.arena.mapreset.slime;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.api.arena.RestoreAdapter;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.configuration.ConfigPath;
+import com.andrei1058.bedwars.maprestore.internal.files.WorldZipper;
 import com.grinderwolf.swm.api.SlimePlugin;
 import com.grinderwolf.swm.api.exceptions.*;
 import com.grinderwolf.swm.api.loaders.SlimeLoader;
@@ -18,7 +20,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.bukkit.Bukkit.getName;
+import static com.andrei1058.bedwars.Main.config;
+import static com.andrei1058.bedwars.Main.plugin;
 
 public class SlimeAdapter extends RestoreAdapter {
 
@@ -32,18 +35,18 @@ public class SlimeAdapter extends RestoreAdapter {
     @Override
     public void onEnable(Arena a) {
         Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
-            SlimeLoader sqlLoader = slime.getLoader("mysql");
+            SlimeLoader sqlLoader = slime.getLoader("file");
             String[] spawn = a.getCm().getString("waiting.Loc").split(",");
             SlimeWorld.SlimeProperties props = SlimeWorld.SlimeProperties.builder().difficulty(1).allowAnimals(false).allowMonsters(false).spawnX(Double.parseDouble(spawn[0]))
                     .spawnY(Double.parseDouble(spawn[1])).spawnZ(Double.parseDouble(spawn[2])).pvp(true).readOnly(true).build();
             try {
                 // Note that this method should be called asynchronously
-                SlimeWorld world = slime.loadWorld(sqlLoader, getName(), props);
+                SlimeWorld world = slime.loadWorld(sqlLoader, a.getWorldName(), props);
 
                 // This method must be called synchronously
                 Bukkit.getScheduler().runTask(Main.plugin, () -> {
                     slime.generateWorld(world);
-                    a.init(Bukkit.getWorld(getName()));
+                    a.init(Bukkit.getWorld(a.getWorldName()));
                 });
             } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldInUseException | UnsupportedWorldException ex) {
                 ex.printStackTrace();
@@ -53,22 +56,55 @@ public class SlimeAdapter extends RestoreAdapter {
 
     @Override
     public void onRestart(Arena a) {
-
+        if (Main.getServerType() == ServerType.BUNGEE) {
+            Arena.setGamesBeforeRestart(Arena.getGamesBeforeRestart() - 1);
+            if (Arena.getGamesBeforeRestart() == 0) {
+                Bukkit.getLogger().info("Dispatching command: " + config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
+            } else {
+                if (Arena.getGamesBeforeRestart() != -1) {
+                    Arena.setGamesBeforeRestart(Arena.getGamesBeforeRestart() - 1);
+                }
+                Bukkit.unloadWorld(a.getWorldName(), false);
+                Bukkit.getScheduler().runTaskLater(plugin, () -> new Arena(a.getWorldName(), null), 80L);
+            }
+        } else {
+            Bukkit.unloadWorld(a.getWorldName(), false);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> new Arena(a.getWorldName(), null), 80L);
+        }
     }
 
     @Override
     public void onDisable(Arena a) {
-
+        Bukkit.unloadWorld(a.getWorldName(), false);
     }
 
     @Override
-    public boolean onSetupSessionStart(SetupSession s) {
-        return false;
+    public void onSetupSessionStart(SetupSession s) {
+        Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
+            SlimeLoader sqlLoader = slime.getLoader("file");
+            String[] spawn = s.getCm().getString("waiting.Loc").split(",");
+            SlimeWorld.SlimeProperties props = SlimeWorld.SlimeProperties.builder().difficulty(1).allowAnimals(false).allowMonsters(false).spawnX(Double.parseDouble(spawn[0]))
+                    .spawnY(Double.parseDouble(spawn[1])).spawnZ(Double.parseDouble(spawn[2])).pvp(true).readOnly(false).build();
+            try {
+                // Note that this method should be called asynchronously
+                SlimeWorld world = slime.loadWorld(sqlLoader, s.getWorldName(), props);
+
+                // This method must be called synchronously
+                Bukkit.getScheduler().runTask(Main.plugin, () -> {
+                    slime.generateWorld(world);
+                    s.setupStarted();
+                });
+            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldInUseException | UnsupportedWorldException ex) {
+                ex.printStackTrace();
+            }
+        });
     }
 
     @Override
     public void onSetupSessionClose(SetupSession s) {
-
+        Bukkit.unloadWorld(s.getWorldName(), false);
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> new WorldZipper(s.getWorldName(), true));
     }
 
     @Override
@@ -99,7 +135,7 @@ public class SlimeAdapter extends RestoreAdapter {
     @Override
     public boolean isWorld(String name) {
         try {
-            return slime.getLoader("mysql").worldExists(name);
+            return slime.getLoader("file").worldExists(name);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -109,7 +145,7 @@ public class SlimeAdapter extends RestoreAdapter {
     @Override
     public void deleteWorld(String name) {
         try {
-            slime.getLoader("mysql").deleteWorld(name);
+            slime.getLoader("file").deleteWorld(name);
         } catch (UnknownWorldException | IOException e) {
             e.printStackTrace();
         }
@@ -117,7 +153,17 @@ public class SlimeAdapter extends RestoreAdapter {
 
     @Override
     public void cloneArena(String name1, String name2) {
-        //todo not available atm
+        Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
+            SlimeWorld.SlimeProperties props = SlimeWorld.SlimeProperties.builder().difficulty(1).allowAnimals(false).allowMonsters(false).spawnX(0)
+                    .spawnY(118).spawnZ(0).pvp(true).readOnly(true).build();
+            try {
+                // Note that this method should be called asynchronously
+                SlimeWorld world = slime.loadWorld(slime.getLoader("file"), name1, props);
+                world.clone(name2, slime.getLoader("file"));
+            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldInUseException | UnsupportedWorldException | WorldAlreadyExistsException ex) {
+                ex.printStackTrace();
+            }
+        });
     }
 
     @Override
