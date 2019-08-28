@@ -175,7 +175,7 @@ public class Arena implements Comparable<Arena> {
         }
 
 
-        if (Main.api.getRestoreAdapter().isWorld(name)) {
+        if (!Main.api.getRestoreAdapter().isWorld(name)) {
             if (p != null) p.sendMessage(ChatColor.RED + "There isn't any map called " + name);
             plugin.getLogger().log(Level.WARNING, "There isn't any map called " + name);
             return;
