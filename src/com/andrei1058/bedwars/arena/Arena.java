@@ -610,8 +610,9 @@ public class Arena implements Comparable<Arena> {
 
         if (getServerType() != ServerType.BUNGEE) {
             /* restore player inventory */
-            if (PlayerGoods.hasGoods(p)) {
-                PlayerGoods.getPlayerGoods(p).restore();
+            PlayerGoods pg = PlayerGoods.getPlayerGoods(p);
+            if (pg != null) {
+                pg.restore();
             }
         }
 
@@ -845,7 +846,7 @@ public class Arena implements Comparable<Arena> {
         }
         setArenaByPlayer(p);
         /* save player inventory etc */
-        if (Main.getServerType() != ServerType.BUNGEE){
+        if (Main.getServerType() != ServerType.BUNGEE) {
             new PlayerGoods(p, true);
             playerLocation.put(p, p.getLocation());
         }
@@ -874,10 +875,10 @@ public class Arena implements Comparable<Arena> {
      */
     public void disable() {
         plugin.getLogger().log(Level.WARNING, "Disabling arena: " + getWorldName());
-        for (Player p : players){
+        for (Player p : players) {
             removePlayer(p, false);
         }
-        for (Player p : spectators){
+        for (Player p : spectators) {
             removeSpectator(p, false);
         }
         destroyData();
@@ -1920,12 +1921,13 @@ public class Arena implements Comparable<Arena> {
         yml = null;
         cm = null;
         world = null;
-        for (OreGenerator og : oreGenerators){
+        for (OreGenerator og : oreGenerators) {
             og.destroyData();
         }
         for (BedWarsTeam bwt : teams) {
             bwt.destroyData();
         }
+        playerLocation.entrySet().removeIf(e -> e.getValue().getWorld().getName().equalsIgnoreCase(worldName));
         teams = null;
         placed = null;
         broken = null;
@@ -1933,7 +1935,6 @@ public class Arena implements Comparable<Arena> {
         regionsList = null;
         respawn = null;
         showTime = null;
-        playerLocation = null;
         playerKills = null;
         playerBedsDestroyed = null;
         playerFinalKills = null;

@@ -23,9 +23,9 @@ class PlayerGoods {
     private double health, healthscale;
     private float exp;
     private HashMap<ItemStack, Integer> items = new HashMap<>();
-    private static List<PotionEffect> potions = new ArrayList<>();
-    private static ItemStack[] armor;
-    private static HashMap<ItemStack, Integer> enderchest = new HashMap<>();
+    private List<PotionEffect> potions = new ArrayList<>();
+    private ItemStack[] armor;
+    private HashMap<ItemStack, Integer> enderchest = new HashMap<>();
     private GameMode gamemode;
     private boolean allowFlight, flying;
     private String displayName, tabName;
