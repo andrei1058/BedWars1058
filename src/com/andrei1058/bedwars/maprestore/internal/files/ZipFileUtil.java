@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.arena.mapreset.Util;
+package com.andrei1058.bedwars.maprestore.internal.files;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,7 +11,7 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 public final class ZipFileUtil {
-    public static void zipDirectory(File dir, File zipFile) throws IOException {
+    static void zipDirectory(File dir, File zipFile) throws IOException {
         FileOutputStream fout = new FileOutputStream(zipFile);
         ZipOutputStream zout = new ZipOutputStream(fout);
         zipSubDirectory("", dir, zout);
@@ -21,6 +21,7 @@ public final class ZipFileUtil {
     private static void zipSubDirectory(String basePath, File dir, ZipOutputStream zout) throws IOException {
         byte[] buffer = new byte[4096];
         File[] files = dir.listFiles();
+        //noinspection ConstantConditions
         for (File file : files) {
             if (file.isDirectory()) {
                 String path = basePath + file.getName() + "/";

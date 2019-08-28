@@ -1,11 +1,12 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.arena.SetupSession;
-import com.andrei1058.bedwars.arena.mapreset.MapManager;
+import com.andrei1058.bedwars.maprestore.internal.InternalAdapter;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -48,14 +49,13 @@ public class EnableArena extends SubCommand {
             p.sendMessage("§c▪ §7Usage: §o/" + getParent().getName() + " enableRotation <mapName>");
             return true;
         }
-        File wss2 = new File(Bukkit.getServer().getWorldContainer().getPath() + "/" + args[0]);
-        if (!wss2.exists()) {
+        if (!Main.api.getRestoreAdapter().isWorld(args[0])) {
             p.sendMessage("§c▪ §7" + args[0] + " doesn't exist!");
             return true;
         }
 
-        for (MapManager mm : Arena.getEnableQueue()){
-            if (mm.getName().equalsIgnoreCase(args[0])){
+        for (Arena mm : Arena.getEnableQueue()){
+            if (mm.getWorldName().equalsIgnoreCase(args[0])){
                 p.sendMessage("§c▪ §7This arena is already in the enable queue!");
                 return true;
             }

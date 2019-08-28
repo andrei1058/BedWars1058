@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.api.command.ParentCommand;
@@ -54,8 +55,7 @@ public class DelArena extends SubCommand {
             p.sendMessage("§c▪ §7Usage: §o/" + MainCommand.getInstance().getName() + " delArena <mapName>");
             return true;
         }
-        File ws = new File(Bukkit.getServer().getWorldContainer().getPath() + "/" + args[0]);
-        if (!ws.exists()) {
+        if (!Main.api.getRestoreAdapter().isWorld(args[0])) {
             p.sendMessage("§c▪ §7" + args[0] + " doesn't exist as a world folder!");
             return true;
         }
@@ -70,11 +70,7 @@ public class DelArena extends SubCommand {
         }
         if (delArenaConfirm.containsKey(p)) {
             if (System.currentTimeMillis() - 2000 <= delArenaConfirm.get(p)) {
-                try {
-                    FileUtils.deleteDirectory(ws);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                Main.api.getRestoreAdapter().deleteWorld(args[0]);
                 FileUtils.deleteQuietly(ac);
                 p.sendMessage("§c▪ §7" + args[0] + " was deleted!");
                 return true;

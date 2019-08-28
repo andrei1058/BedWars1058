@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
@@ -8,7 +9,6 @@ import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -52,8 +52,7 @@ public class SetupArena extends SubCommand {
             p.sendMessage("§c▪ §c" + args[0] + ChatColor.GRAY + " mustn't contain capital letters! Rename your folder to: " + ChatColor.GREEN + args[0].toLowerCase());
             return true;
         }
-        File worldServer = new File(Bukkit.getServer().getWorldContainer().getPath() + "/" + args[0]);
-        if (!worldServer.exists()) {
+        if (!Main.api.getRestoreAdapter().isWorld(args[0])) {
             p.sendMessage("§c▪ §7" + args[0] + " doesn't exist!");
             return true;
         }
@@ -71,20 +70,7 @@ public class SetupArena extends SubCommand {
 
     @Override
     public List<String> getTabComplete() {
-        List<String> tab = new ArrayList<>();
-        File dir = Bukkit.getWorldContainer();
-        if (dir.exists()) {
-            File[] fls = dir.listFiles();
-            for (File fl : Objects.requireNonNull(fls)) {
-                if (fl.isDirectory()) {
-                    File dat = new File(fl.getName() + "/level.dat");
-                    if (dat.exists()) {
-                        tab.add(fl.getName());
-                    }
-                }
-            }
-        }
-        return tab;
+        return Main.api.getRestoreAdapter().getWorldsList();
     }
 
     @Override

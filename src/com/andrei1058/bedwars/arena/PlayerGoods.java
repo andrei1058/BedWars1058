@@ -161,6 +161,12 @@ class PlayerGoods {
 
         player.setDisplayName(displayName);
         player.setPlayerListName(tabName);
+
+        uuid = null;
+        items = null;
+        potions = null;
+        armor = null;
+        enderchest = null;
     }
 
 }

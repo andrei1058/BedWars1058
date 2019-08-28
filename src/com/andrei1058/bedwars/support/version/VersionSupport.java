@@ -487,4 +487,6 @@ public abstract class VersionSupport {
     public String getName() {
         return name;
     }
+
+    public abstract int getVersion();
 }

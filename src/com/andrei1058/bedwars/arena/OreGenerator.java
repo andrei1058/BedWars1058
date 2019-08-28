@@ -503,4 +503,15 @@ public class OreGenerator {
     public void setType(GeneratorType type) {
         this.type = type;
     }
+
+    protected void destroyData(){
+        rotation.remove(this);
+        location = null;
+        arena = null;
+        ore = null;
+        bwt = null;
+        boolean up = true;
+        armorStands = null;
+        item = null;
+    }
 }

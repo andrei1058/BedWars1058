@@ -4,12 +4,9 @@ import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.api.events.server.SetupSessionCloseEvent;
 import com.andrei1058.bedwars.api.events.server.SetupSessionStartEvent;
-import com.andrei1058.bedwars.arena.mapreset.MapManager;
 import com.andrei1058.bedwars.configuration.ConfigManager;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.*;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -17,13 +14,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.andrei1058.bedwars.Main.config;
-import static com.andrei1058.bedwars.Main.plugin;
+import static com.andrei1058.bedwars.Main.*;
 
 public class SetupSession {
 
@@ -37,14 +32,11 @@ public class SetupSession {
     private boolean autoCreatedEmerald = false;
     private boolean autoCreatedDiamond = false;
     private List<Location> skipAutoCreateGen = new ArrayList<>();
-    private MapManager mapManager;
 
     public SetupSession(Player player, String worldName) {
         this.player = player;
         this.worldName = worldName;
         getSetupSessions().add(this);
-        mapManager = new MapManager(null, worldName);
-        mapManager.onSetupSession();
         openGUI(player);
     }
 
@@ -104,34 +96,15 @@ public class SetupSession {
      */
     public boolean startSetup() {
         getPlayer().sendMessage("§6 ▪ §7Loading " + getWorldName());
-        World w = null;
-        try {
-            w = Bukkit.createWorld(new WorldCreator(getWorldName()));
-        } catch (Exception ex) {
-            File uid = new File(Bukkit.getServer().getWorldContainer().getPath() + "/" + getWorldName() + "/uid.dat");
-            //noinspection ResultOfMethodCallIgnored
-            uid.delete();
-            try {
-                w = Bukkit.createWorld(new WorldCreator(getWorldName()));
-            } catch (Exception ignored) {
-            }
-        }
-        if (w == null) {
-            getPlayer().sendMessage("§c▪ §7There was an error while loading the map :(\n§c▪ §7Please delete uid.dat from " + getWorldName() + "'s folder.");
-            return false;
-        }
-        Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getWorld(getWorldName()).getEntities().stream().filter(e -> e.getType() != EntityType.PLAYER).filter(e -> e.getType() != EntityType.PAINTING).filter(e -> e.getType() != EntityType.ITEM_FRAME).forEach(Entity::remove), 30L);
-        w.setAutoSave(true);
-        w.setGameRuleValue("doMobSpawning", "false");
-        getPlayer().teleport(w.getSpawnLocation());
+        cm = new ConfigManager(getWorldName(), "plugins/" + plugin.getName() + "/Arenas", true);
+        getPlayer().getInventory().clear();
+        if (!api.getRestoreAdapter().onSetupSessionStart(this)) return false;
+        getPlayer().teleport(Bukkit.getWorld(getWorldName()).getSpawnLocation());
         getPlayer().setGameMode(GameMode.CREATIVE);
         getPlayer().setAllowFlight(true);
         getPlayer().setFlying(true);
         getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2));
         getPlayer().sendMessage("§6 ▪ §7You were teleported to the " + getWorldName() + "'s spawn.");
-        started = true;
-        getPlayer().getInventory().clear();
-        cm = new ConfigManager(getWorldName(), "plugins/" + plugin.getName() + "/Arenas", true);
         if (getSetupType() == SetupType.ASSISTED && getCm().getYml().get("waiting.Loc") == null) {
             getPlayer().sendMessage("");
             getPlayer().sendMessage("§6 ▪ §c" + getWorldName() + " Setup");
@@ -181,7 +154,7 @@ public class SetupSession {
      * End setup session
      */
     public void done() {
-        mapManager.backupWorld(true);
+        api.getRestoreAdapter().onSetupSessionClose(this);
         getSetupSessions().remove(this);
         if (Main.getServerType() != ServerType.BUNGEE) getPlayer().teleport(config.getConfigLoc("lobbyLoc"));
         getPlayer().removePotionEffect(PotionEffectType.SPEED);
@@ -207,6 +180,10 @@ public class SetupSession {
             if (ss.getPlayer() == p) return ss;
         }
         return null;
+    }
+
+    public void setStarted(boolean started) {
+        this.started = started;
     }
 
     /**

@@ -622,4 +622,9 @@ public class v1_8_R3 extends VersionSupport {
     public void registerVersionListeners() {
         Main.registerEvents(new DefaultItems_12Minus(), new PlayerDropPickListener());
     }
+
+    @Override
+    public int getVersion() {
+        return 0;
+    }
 }

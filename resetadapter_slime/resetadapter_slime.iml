@@ -37,5 +37,6 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="library" name="slimeworldmanager-plugin-1.1.4" level="project" />
   </component>
 </module>

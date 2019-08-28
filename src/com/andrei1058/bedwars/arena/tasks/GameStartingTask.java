@@ -149,7 +149,7 @@ public class GameStartingTask implements Runnable {
             }, 60L);
 
             //Lobby removal
-            arena.getMapManager().removeLobby();
+            Main.api.getRestoreAdapter().onLobbyRemoval(arena);
 
             //Spawn players
             spawnPlayers();

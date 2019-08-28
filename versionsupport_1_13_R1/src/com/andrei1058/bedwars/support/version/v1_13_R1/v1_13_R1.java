@@ -616,6 +616,11 @@ public class v1_13_R1 extends VersionSupport {
     }
 
     @Override
+    public int getVersion() {
+        return 6;
+    }
+
+    @Override
     public void setJoinSignBackground(org.bukkit.block.BlockState b, org.bukkit.Material material) {
         b.getLocation().getBlock().getRelative(((Sign)b.getData()).getAttachedFace()).setType(material);
     }

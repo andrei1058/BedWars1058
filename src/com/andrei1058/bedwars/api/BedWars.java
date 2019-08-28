@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.api;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.arena.RestoreAdapter;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.events.player.PlayerAfkEvent;
 import com.andrei1058.bedwars.arena.Arena;
@@ -9,11 +10,16 @@ import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.stats.StatsManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 public class BedWars implements GameAPI {
+
+
+    private static RestoreAdapter restoreAdapter;
 
     @Override
     public ServerType getServerType() {
@@ -94,6 +100,24 @@ public class BedWars implements GameAPI {
     @Override
     public ParentCommand getBedWarsCommand() {
         return MainCommand.getInstance();
+    }
+
+    @Override
+    public RestoreAdapter getRestoreAdapter() {
+        return restoreAdapter;
+    }
+
+    @Override
+    public void setRestoreAdapter(RestoreAdapter adapter) throws IllegalAccessError {
+        if (!Arena.getArenas().isEmpty()) {
+            throw new IllegalAccessError("Arenas must be unloaded when changing the adapter");
+        }
+        restoreAdapter = adapter;
+        if (adapter.getOwner() != null) {
+            if (adapter.getOwner() != Main.plugin) {
+                Main.plugin.getLogger().log(Level.WARNING, adapter.getOwner().getName() + " changed the restore system to its own adapter.");
+            }
+        }
     }
 
     @Override
