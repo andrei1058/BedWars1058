@@ -103,6 +103,11 @@ public class SlimeAdapter extends RestoreAdapter {
             SlimeWorld.SlimeProperties props = SlimeWorld.SlimeProperties.builder().difficulty(1).allowAnimals(false).allowMonsters(false).spawnX(Double.parseDouble(spawn[0]))
                     .spawnY(Double.parseDouble(spawn[1])).spawnZ(Double.parseDouble(spawn[2])).pvp(true).readOnly(false).build();
             try {
+
+                if (Bukkit.getWorld(s.getWorldName()) != null) {
+                    Bukkit.unloadWorld(s.getWorldName(), false);
+                }
+
                 // Note that this method should be called asynchronously
                 SlimeWorld world = slime.loadWorld(sqlLoader, s.getWorldName(), props);
 

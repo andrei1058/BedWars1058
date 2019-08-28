@@ -1,5 +1,7 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup;
 
+import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.api.command.ParentCommand;
@@ -15,6 +17,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
+import static com.andrei1058.bedwars.Main.getServerType;
 import static com.andrei1058.bedwars.Main.plugin;
 
 public class Save extends SubCommand {
@@ -41,21 +44,25 @@ public class Save extends SubCommand {
             s.sendMessage("§c ▪ §7You're not in a setup session!");
             return true;
         }
-        /* Clear setup armorstands */
+
+        //Clear setup armorstands
         for (Entity e : p.getWorld().getEntities()){
             if (e.getType() == EntityType.ARMOR_STAND){
                 e.remove();
             }
         }
 
-        Bukkit.getScheduler().runTaskLater(plugin, ()-> {
-            p.getWorld().save();
-            Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.unloadWorld(Bukkit.getWorld(p.getWorld().getName()), true), 30L);
-            p.sendMessage("§6 ▪ §7Arena changes saved!");
-            p.sendMessage("§6 ▪ §7You can now enable it using:");
-            p.spigot().sendMessage(Misc.msgHoverClick("§6/" + getParent().getName() + " enableArena " + ss.getWorldName() + "§7 (click to enable)", "§dEnable this arena.", "/" + getParent().getName() + " enableArena " + ss.getWorldName(), ClickEvent.Action.RUN_COMMAND));
-            ss.done();
-        }, 40L);
+        if (getServerType() != ServerType.BUNGEE){
+            if (Bukkit.getWorld(Main.getLobbyWorld()) != null){
+                p.teleport(Bukkit.getWorld(Main.getLobbyWorld()).getSpawnLocation());
+            } else {
+                p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+            }
+        }
+        ss.done();
+        p.sendMessage("§6 ▪ §7Arena changes saved!");
+        p.sendMessage("§6 ▪ §7You can now enable it using:");
+        p.spigot().sendMessage(Misc.msgHoverClick("§6/" + getParent().getName() + " enableArena " + ss.getWorldName() + "§7 (click to enable)", "§dEnable this arena.", "/" + getParent().getName() + " enableArena " + ss.getWorldName(), ClickEvent.Action.RUN_COMMAND));
         return true;
     }
 

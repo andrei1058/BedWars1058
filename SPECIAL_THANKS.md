@@ -7,3 +7,4 @@ Casual order. If I forgot to add you on this list please contact me.
 - MrDarkness462
 - Barnaby
 - Ryan DeTree
+- Dragoș (gamster.org)
