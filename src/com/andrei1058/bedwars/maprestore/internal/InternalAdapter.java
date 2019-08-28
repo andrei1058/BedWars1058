@@ -91,10 +91,12 @@ public class InternalAdapter extends RestoreAdapter {
                     }
                 }
             } else {
-                World w = Bukkit.createWorld(new WorldCreator(a.getWorldName()));
-                w.setKeepSpawnInMemory(false);
-                w.setAutoSave(false);
-                a.init(w);
+                Bukkit.getScheduler().runTask(plugin, () -> {
+                    World w = Bukkit.createWorld(new WorldCreator(a.getWorldName()));
+                    w.setKeepSpawnInMemory(false);
+                    w.setAutoSave(false);
+                    a.init(w);
+                });
             }
         });
     }
