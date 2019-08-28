@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.api.events.server.SetupSessionCloseEvent;
 import com.andrei1058.bedwars.api.events.server.SetupSessionStartEvent;
+import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.configuration.ConfigManager;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.*;
@@ -113,16 +114,18 @@ public class SetupSession {
         getPlayer().setAllowFlight(true);
         getPlayer().setFlying(true);
         getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2));
-        getPlayer().sendMessage("§6 ▪ §7You were teleported to the " + getWorldName() + "'s spawn.");
+        getPlayer().sendMessage("\n" + ChatColor.WHITE + "\n");
+
+        getPlayer().sendMessage(ChatColor.GREEN + "You were teleported to the " + ChatColor.BLUE + getWorldName() + ChatColor.GREEN + "'s spawn.");
         if (getSetupType() == SetupType.ASSISTED && getCm().getYml().get("waiting.Loc") == null) {
             getPlayer().sendMessage("");
-            getPlayer().sendMessage("§6 ▪ §c" + getWorldName() + " Setup");
+            getPlayer().sendMessage(ChatColor.BLUE + ">>>>>>>>>>>>" + getWorldName() + " Setup Session");
             getPlayer().sendMessage("");
-            getPlayer().sendMessage("§eHello " + getPlayer().getName() + "!");
-            getPlayer().sendMessage("§fPlease set the waiting spawn.");
-            getPlayer().sendMessage("§fIt is the place where players will wait the game to start.");
-            getPlayer().spigot().sendMessage(Misc.msgHoverClick("§9     ▪     §6CLICK HERE TO SET THE WAITING LOBBY    §9 ▪", "§dClick to set the waiting spawn.", "/" + Main.mainCmd + " setWaitingSpawn", ClickEvent.Action.RUN_COMMAND));
-            getPlayer().sendMessage("§eOr type: §7/" + Main.mainCmd + " setWaitingSpawn");
+            getPlayer().sendMessage(ChatColor.GREEN + "Hello " + getPlayer().getName() + "!");
+            getPlayer().sendMessage(ChatColor.WHITE + "Please set the waiting spawn.");
+            getPlayer().sendMessage(ChatColor.WHITE + "It is the place where players will wait the game to start.");
+            getPlayer().spigot().sendMessage(Misc.msgHoverClick(ChatColor.BLUE + "     ▪     " + ChatColor.GOLD + "CLICK HERE TO SET THE WAITING LOBBY    " + ChatColor.BLUE + " ▪", ChatColor.LIGHT_PURPLE + "Click to set the waiting spawn.", "/" + Main.mainCmd + " setWaitingSpawn", ClickEvent.Action.RUN_COMMAND));
+            MainCommand.createTC(ChatColor.YELLOW + "Or type: " + ChatColor.GRAY + "/" + Main.mainCmd + " setWaitingSpawn", "/" + Main.mainCmd + " setWaitingSpawn", ChatColor.WHITE + "Set the world spawn lobby.");
         } else {
             Bukkit.dispatchCommand(getPlayer(), Main.mainCmd + " cmds");
         }
