@@ -4,7 +4,7 @@
     <facet type="minecraft" name="Minecraft">
       <configuration>
         <autoDetectTypes>
-          <platformType>PAPER</platformType>
+          <platformType>SPIGOT</platformType>
         </autoDetectTypes>
       </configuration>
     </facet>
@@ -23,11 +23,11 @@
     <orderEntry type="module-library" scope="PROVIDED">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../../Java Libs/Minecraft/Paper/cache/patched_1.13.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../../Java Libs/Minecraft/Spigot/spigot-1.13.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="jar://$MODULE_DIR$/../../../Java Libs/Minecraft/Paper/cache/patched_1.13.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../../Java Libs/Minecraft/Spigot/spigot-1.13.2.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>

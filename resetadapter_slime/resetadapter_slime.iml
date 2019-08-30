@@ -31,7 +31,7 @@
     <orderEntry type="module-library" scope="PROVIDED">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../../Java Libs/Minecraft/Plugins/slimeworldmanager-api-1.1.5-SNAPSHOT.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../../Java Libs/Minecraft/Plugins/slimeworldmanager-api-2.0.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
