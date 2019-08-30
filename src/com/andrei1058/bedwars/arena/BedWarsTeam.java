@@ -393,22 +393,26 @@ public class BedWarsTeam {
         Bukkit.getPluginManager().callEvent(new PlayerReSpawnEvent(p, getArena(), this));
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            nms.invisibilityFix(p, getArena());
+            if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_RESPAWN_PACKETS)) nms.invisibilityFix(p, getArena());
 
             // #274
-            for (Player on : getArena().getShowTime().keySet()) {
-                Main.nms.hideArmor(on, p);
+            if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS)) {
+                for (Player on : getArena().getShowTime().keySet()) {
+                    Main.nms.hideArmor(on, p);
+                }
             }
             //
         }, 10L);
 
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            // #274
-            for (Player on : getArena().getShowTime().keySet()) {
-                Main.nms.hideArmor(on, p);
-            }
-            //
-        }, 40L);
+        if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS)) {
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                // #274
+                for (Player on : getArena().getShowTime().keySet()) {
+                    Main.nms.hideArmor(on, p);
+                }
+                //
+            }, 40L);
+        }
     }
 
     /**
@@ -592,18 +596,20 @@ public class BedWarsTeam {
         }
 
         // #274
-        Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
-            for (Player m : getMembers()) {
-                if (m.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
-                    for (Player p : getArena().getPlayers()) {
-                        Main.nms.hideArmor(m, p);
-                    }
-                    for (Player p : getArena().getSpectators()) {
-                        Main.nms.hideArmor(m, p);
+        if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS)) {
+            Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+                for (Player m : getMembers()) {
+                    if (m.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+                        for (Player p : getArena().getPlayers()) {
+                            Main.nms.hideArmor(m, p);
+                        }
+                        for (Player p : getArena().getSpectators()) {
+                            Main.nms.hideArmor(m, p);
+                        }
                     }
                 }
-            }
-        }, 20L);
+            }, 20L);
+        }
         //
     }
 

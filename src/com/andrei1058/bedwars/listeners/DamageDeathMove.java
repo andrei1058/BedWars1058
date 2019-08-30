@@ -129,9 +129,11 @@ public class DamageDeathMove implements Listener {
                     }
 
                     // #274
-                    if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
-                        for (Player on : a.getPlayers()) {
-                            Main.nms.showArmor(p, on);
+                    if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS)) {
+                        if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+                            for (Player on : a.getPlayers()) {
+                                Main.nms.showArmor(p, on);
+                            }
                         }
                     }
                     //
@@ -425,13 +427,15 @@ public class DamageDeathMove implements Listener {
                     }
                 }
 
-                Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
-                    // #274
-                    for (Player p : a.getShowTime().keySet()) {
-                        Main.nms.hideArmor(p, e.getPlayer());
-                    }
-                    //
-                }, 10L);
+                if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS)) {
+                    Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+                        // #274
+                        for (Player p : a.getShowTime().keySet()) {
+                            Main.nms.hideArmor(p, e.getPlayer());
+                        }
+                        //
+                    }, 10L);
+                }
             }
             for (SBoard sb : SBoard.getScoreboards()) {
                 if (sb.getArena() == a) {

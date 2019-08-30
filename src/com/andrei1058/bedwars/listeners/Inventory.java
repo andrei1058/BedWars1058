@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.SetupSession;
+import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.upgrades.TeamUpgrade;
@@ -17,6 +18,7 @@ import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
+import static com.andrei1058.bedwars.Main.config;
 import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.language.Language.getMsg;
 import static org.bukkit.event.inventory.InventoryAction.*;
@@ -103,17 +105,21 @@ public class Inventory implements Listener {
         //issue #225
         if (e.getSlotType() == InventoryType.SlotType.ARMOR) {
             if (Arena.getArenaByPlayer((Player) e.getWhoClicked()) != null) {
-                if (e.getWhoClicked().hasPotionEffect(PotionEffectType.INVISIBILITY)) {
-                    e.getWhoClicked().closeInventory();
-                    for (Player pl : e.getWhoClicked().getWorld().getPlayers()) {
-                        Main.nms.hideArmor((Player) e.getWhoClicked(), pl);
+                if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS)) {
+                    if (e.getWhoClicked().hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+                        e.getWhoClicked().closeInventory();
+                        for (Player pl : e.getWhoClicked().getWorld().getPlayers()) {
+                            Main.nms.hideArmor((Player) e.getWhoClicked(), pl);
+                        }
                     }
                 }
             }
         }
 
         if (e.getCurrentItem() == null) return;
-        if (e.getCurrentItem().getType() == Material.AIR) return;
+        if (e.getCurrentItem().
+
+                getType() == Material.AIR) return;
 
         Player p = (Player) e.getWhoClicked();
         ItemStack i = e.getCurrentItem();
@@ -161,7 +167,9 @@ public class Inventory implements Listener {
         }
 
         if (!i.hasItemMeta()) return;
-        if (!i.getItemMeta().hasDisplayName()) return;
+        if (!i.getItemMeta().
+
+                hasDisplayName()) return;
         if (Main.getServerType() != ServerType.BUNGEE) {
             if (e.getWhoClicked().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
                 e.setCancelled(true);
@@ -169,14 +177,16 @@ public class Inventory implements Listener {
         }
 
         /* Check setup gui items */
-        if (SetupSession.isInSetupSession(p) && nms.getInventoryName(e).equalsIgnoreCase(SetupSession.getInvName())) {
+        if (SetupSession.isInSetupSession(p) && nms.getInventoryName(e).
+
+                equalsIgnoreCase(SetupSession.getInvName())) {
             SetupSession ss = SetupSession.getSession(p);
             if (e.getSlot() == SetupSession.getAdvancedSlot()) {
                 ss.setSetupType(SetupSession.SetupType.ADVANCED);
             } else if (e.getSlot() == SetupSession.getAssistedSlot()) {
                 ss.setSetupType(SetupSession.SetupType.ASSISTED);
             }
-            if (!ss.startSetup()){
+            if (!ss.startSetup()) {
                 ss.getPlayer().sendMessage(ChatColor.RED + "Could not start setup session. Pleas check the console.");
             }
             p.closeInventory();
@@ -201,6 +211,7 @@ public class Inventory implements Listener {
                 }
             }
         }
+
     }
 
     /**

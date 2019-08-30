@@ -599,7 +599,7 @@ public class v1_8_R3 extends VersionSupport {
             if (pl.hasPotionEffect(PotionEffectType.INVISIBILITY)) continue;
             pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer) pl).getHandle()));
             pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer) pl).getHandle()));
-            showArmor(pl, player);
+            if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS)) showArmor(pl, player);
         }
     }
 

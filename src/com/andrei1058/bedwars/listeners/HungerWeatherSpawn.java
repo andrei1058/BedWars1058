@@ -3,6 +3,7 @@ package com.andrei1058.bedwars.listeners;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.configuration.ConfigPath;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -69,24 +70,26 @@ public class HungerWeatherSpawn implements Listener {
         switch (e.getItem().getType()) {
             case POTION:
                 Bukkit.getScheduler().runTaskLater(plugin, () -> nms.minusAmount(e.getPlayer(), new ItemStack(Material.GLASS_BOTTLE), 1), 5L);
-                PotionMeta pm = (PotionMeta) e.getItem().getItemMeta();
-                if (pm.hasCustomEffects()) {
-                    if (pm.hasCustomEffect(PotionEffectType.INVISIBILITY)) {
-                        Bukkit.getScheduler().runTaskLater(plugin, ()-> {
-                            for (PotionEffect pe : e.getPlayer().getActivePotionEffects()) {
-                                if (pe.getType().toString().contains("INVISIBILITY")) {
-                                    if (a.getShowTime().containsKey(e.getPlayer())){
-                                        a.getShowTime().replace(e.getPlayer(), pe.getDuration() / 20);
-                                    } else {
-                                        a.getShowTime().put(e.getPlayer(), pe.getDuration() / 20);
-                                        for (Player p1 : e.getPlayer().getWorld().getPlayers()) {
-                                            nms.hideArmor(e.getPlayer(), p1);
+                if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS)) {
+                    PotionMeta pm = (PotionMeta) e.getItem().getItemMeta();
+                    if (pm.hasCustomEffects()) {
+                        if (pm.hasCustomEffect(PotionEffectType.INVISIBILITY)) {
+                            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                                for (PotionEffect pe : e.getPlayer().getActivePotionEffects()) {
+                                    if (pe.getType().toString().contains("INVISIBILITY")) {
+                                        if (a.getShowTime().containsKey(e.getPlayer())) {
+                                            a.getShowTime().replace(e.getPlayer(), pe.getDuration() / 20);
+                                        } else {
+                                            a.getShowTime().put(e.getPlayer(), pe.getDuration() / 20);
+                                            for (Player p1 : e.getPlayer().getWorld().getPlayers()) {
+                                                nms.hideArmor(e.getPlayer(), p1);
+                                            }
                                         }
+                                        break;
                                     }
-                                    break;
                                 }
-                            }
-                        }, 5L);
+                            }, 5L);
+                        }
                     }
                 }
                 break;

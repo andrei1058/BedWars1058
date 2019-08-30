@@ -16,8 +16,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import static com.andrei1058.bedwars.Main.nms;
-import static com.andrei1058.bedwars.Main.plugin;
+import static com.andrei1058.bedwars.Main.*;
 
 @SuppressWarnings("WeakerAccess")
 public class BuyItem {
@@ -162,16 +161,17 @@ public class BuyItem {
             }
             player.updateInventory();
 
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                // #274
-                if (player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
-                    for (Player p : arena.getPlayers()) {
-                        Main.nms.hideArmor(player, p);
+            if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS)) {
+                Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                    // #274
+                    if (player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+                        for (Player p : arena.getPlayers()) {
+                            Main.nms.hideArmor(player, p);
+                        }
                     }
-                }
-                //
-            }, 20L);
-
+                    //
+                }, 20L);
+            }
             return;
         } else {
 

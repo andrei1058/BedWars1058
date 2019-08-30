@@ -43,8 +43,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.andrei1058.bedwars.Main.plugin;
-import static com.andrei1058.bedwars.Main.shop;
+import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.language.Language.getMsg;
 
 public class v1_11_R1 extends VersionSupport {
@@ -596,7 +595,7 @@ public class v1_11_R1 extends VersionSupport {
             if (pl.hasPotionEffect(PotionEffectType.INVISIBILITY)) continue;
             pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer) pl).getHandle()));
             pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer) pl).getHandle()));
-            showArmor(pl, player);
+            if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS)) showArmor(pl, player);
         }
     }
 
