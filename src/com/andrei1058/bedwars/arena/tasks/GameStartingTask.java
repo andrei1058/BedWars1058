@@ -127,6 +127,7 @@ public class GameStartingTask implements Runnable {
             //Spawn shops and upgrades
             //Disable generators for empty teams if required
             for (BedWarsTeam team : getArena().getTeams()) {
+                nms.colorBed(team);
                 if (team.getMembers().isEmpty()) {
                     team.setBedDestroyed(true);
                     if (getArena().getCm().getBoolean(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS)) {
