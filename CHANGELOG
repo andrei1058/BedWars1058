@@ -17,6 +17,7 @@ As I usually do, the upgrade from older versions to newer versions is done autom
 ### 0.14beta-pre4
 - fixed ConcurrentModificationException caused probably when a player gets disconnected when the game starts
 - fixed issue where beds doesn't get colored with the team color
+- added config option to disable plugin packets (you can find then under the performance category)
 
 For developers:
 
