@@ -14,6 +14,10 @@ As I usually do, the upgrade from older versions to newer versions is done autom
 - removed FAWE support (added in 0.13beta)
 - fixed major memory leaks
 
+### 0.14beta-pre4
+- fixed ConcurrentModificationException caused probably when a player gets disconnected when the game starts
+- fixed issue where beds doesn't get colored with the team color
+
 For developers:
 
 New API version: 14
