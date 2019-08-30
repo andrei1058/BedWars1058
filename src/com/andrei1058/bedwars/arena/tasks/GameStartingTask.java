@@ -194,7 +194,7 @@ public class GameStartingTask implements Runnable {
     //Spawn players
     private void spawnPlayers() {
         for (BedWarsTeam bwt : getArena().getTeams()) {
-            for (Player p : bwt.getMembers()) {
+            for (Player p : new ArrayList<>(bwt.getMembers())) {
                 bwt.firstSpawn(p);
                 p.setHealth(p.getHealth() - 0.0001);
                 nms.sendTitle(p, getMsg(p, Messages.ARENA_STATUS_START_PLAYER_TITLE), null, 0, 20, 0);
