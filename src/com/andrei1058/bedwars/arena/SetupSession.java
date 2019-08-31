@@ -5,7 +5,7 @@ import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.api.events.server.SetupSessionCloseEvent;
 import com.andrei1058.bedwars.api.events.server.SetupSessionStartEvent;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
-import com.andrei1058.bedwars.configuration.ConfigManager;
+import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;

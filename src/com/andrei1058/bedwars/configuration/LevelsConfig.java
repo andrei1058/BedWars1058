@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.configuration;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.configuration.ConfigManager;
 
 public class LevelsConfig extends ConfigManager {
 

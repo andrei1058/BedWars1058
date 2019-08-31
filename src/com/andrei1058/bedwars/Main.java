@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.GameAPI;
 import com.andrei1058.bedwars.api.ServerType;
 import com.andrei1058.bedwars.api.arena.RestoreAdapter;
+import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.arena.despawnables.TargetListener;
 import com.andrei1058.bedwars.commands.party.PartyCommand;

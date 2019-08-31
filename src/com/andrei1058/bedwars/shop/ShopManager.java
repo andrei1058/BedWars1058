@@ -1,7 +1,7 @@
 package com.andrei1058.bedwars.shop;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.configuration.ConfigManager;
+import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.shop.listeners.*;

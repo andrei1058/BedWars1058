@@ -1,5 +1,6 @@
-package com.andrei1058.bedwars.configuration;
+package com.andrei1058.bedwars.api.configuration;
 
+import com.andrei1058.bedwars.configuration.ConfigPath;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
