@@ -19,6 +19,9 @@ As I usually do, the upgrade from older versions to newer versions is done autom
 - fixed issue where beds doesn't get colored with the team color
 - added config option to disable plugin packets (you can find then under the performance category)
 
+### 0.13beta-pre5
+- removed track of players in shop cache
+
 For developers:
 
 New API version: 14
