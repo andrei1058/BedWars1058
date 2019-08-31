@@ -11,8 +11,96 @@ import java.util.UUID;
 
 public interface BedWars {
 
+    /**
+     * Get stats utils.
+     */
+    IStats getStatsCache();
 
-    // SetupSession related.
+    interface IStats {
+        /**
+         * Get player first play date.
+         * You get data from the local cache.
+         */
+        Timestamp getPlayerFirstPlay(UUID p);
+
+        /**
+         * Get player last play date.
+         * You get data from the local cache.
+         */
+        Timestamp getPlayerLastPlay(UUID p);
+
+        /**
+         * Get player total wins.
+         * You get data from the local cache.
+         */
+        int getPlayerWins(UUID p);
+
+        /**
+         * Get player total kills.
+         * You get data from the local cache.
+         */
+        int getPlayerKills(UUID p);
+
+        /**
+         * Get player total final kills.
+         * You get data from the local cache.
+         */
+        int getPlayerFinalKills(UUID p);
+
+        /**
+         * Get player total looses.
+         * You get data from the local cache.
+         */
+        int getPlayerLoses(UUID p);
+
+        /**
+         * Get player total deaths.
+         * You get data from the local cache.
+         */
+        int getPlayerDeaths(UUID p);
+
+        /**
+         * Get player total final deaths.
+         * You get data from the local cache.
+         */
+        int getPlayerFinalDeaths(UUID p);
+
+        /**
+         * Get player beds destroyed.
+         * You get data from the local cache.
+         */
+        int getPlayerBedsDestroyed(UUID p);
+
+        /**
+         * Get player games played.
+         * You get data from the local cache.
+         */
+        int getPlayerGamesPlayed(UUID p);
+    }
+
+
+    /**
+     * Get afk system methods
+     */
+    IAFK getAFKSystem();
+
+    interface IAFK {
+        /**
+         * Check if a player is AFK.
+         */
+        boolean isPlayerAFK(Player player);
+
+        /**
+         * Set a player afk.
+         */
+        void setPlayerAFK(Player player, boolean value);
+
+        /**
+         * Get the seconds since the player is AFK
+         */
+        int getPlayerTimeAFK(Player player);
+    }
+
 
     /**
      * Get active setup session.
@@ -27,10 +115,6 @@ public interface BedWars {
      */
     boolean isInSetupSession(UUID player);
 
-    //
-
-    /* GENERAL */
-
     /**
      * Get server type.
      **/
@@ -42,85 +126,6 @@ public interface BedWars {
     String getLangIso(Player p);
 
     /**
-     * Check if a player is AFK.
-     */
-    boolean isPlayerAFK(Player player);
-
-    /**
-     * Set a player afk.
-     */
-    void setPlayerAFK(Player player, boolean value);
-
-    /**
-     * Get the seconds since the player is AFK
-     */
-    Integer getPlayerTimeAFK(Player player);
-
-    /* STATS */
-
-    /**
-     * Get player first play date.
-     * You get data from the local cache.
-     */
-    Timestamp getPlayerFirstPlay(Player p);
-
-    /**
-     * Get player last play date.
-     * You get data from the local cache.
-     */
-    Timestamp getPlayerLastPlay(Player p);
-
-    /**
-     * Get player total wins.
-     * You get data from the local cache.
-     */
-    int getPlayerWins(Player p);
-
-    /**
-     * Get player total kills.
-     * You get data from the local cache.
-     */
-    int getPlayerKills(Player p);
-
-    /**
-     * Get player total final kills.
-     * You get data from the local cache.
-     */
-    int getPlayerFinalKills(Player p);
-
-    /**
-     * Get player total looses.
-     * You get data from the local cache.
-     */
-    int getPlayerLooses(Player p);
-
-    /**
-     * Get player total deaths.
-     * You get data from the local cache.
-     */
-    int getPlayerDeaths(Player p);
-
-    /**
-     * Get player total final deaths.
-     * You get data from the local cache.
-     */
-    int getPlayerFinalDeaths(Player p);
-
-    /**
-     * Get player beds destroyed.
-     * You get data from the local cache.
-     */
-    int getPlayerBedsDestroyed(Player p);
-
-    /**
-     * Get player games played.
-     * You get data from the local cache.
-     */
-    int getPlayerGamesPlayed(Player p);
-
-    /* GAME RELATED */
-
-    /**
      * Check if a player is playing.
      */
     boolean isPlaying(Player p);
@@ -130,14 +135,10 @@ public interface BedWars {
      */
     boolean isSpectating(Player p);
 
-    /* COMMANDS RELATED */
-
     /**
      * Get bedWars main command
      */
     ParentCommand getBedWarsCommand();
-
-    /* ARENA RESTORE */
 
     /**
      * Get the restore adapter.

@@ -50,49 +50,6 @@ public class ConfigManager {
         }
 
         yml = YamlConfiguration.loadConfiguration(config);
-
-        // todo move this to a new arena config
-        if (true) {
-            yml.options().header(plugin.getName() + " arena configuration file.\n" +
-                    "Documentation here: https://gitlab.com/andrei1058/BedWars1058/wikis/configuration/Arena-Configuration");
-            yml.addDefault("group", "Default");
-            yml.addDefault(ConfigPath.ARENA_DISPLAY_NAME, "");
-            yml.addDefault("minPlayers", 2);
-            yml.addDefault("maxInTeam", 1);
-            yml.addDefault("allowSpectate", true);
-            yml.addDefault(ConfigPath.ARENA_SPAWN_PROTECTION, 5);
-            yml.addDefault(ConfigPath.ARENA_SHOP_PROTECTION, 1);
-            yml.addDefault(ConfigPath.ARENA_UPGRADES_PROTECTION, 1);
-            yml.addDefault(ConfigPath.ARENA_ISLAND_RADIUS, 17);
-            yml.addDefault("worldBorder", 300);
-            yml.addDefault("voidKill", false);
-            //yml.addDefault("disableGeneratorsOnOrphanIslands", false);
-            yml.addDefault(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y, 180);
-            yml.addDefault(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS, false);
-            yml.addDefault(ConfigPath.ARENA_DISABLE_NPCS_FOR_EMPTY_TEAMS, true);
-            yml.addDefault(ConfigPath.ARENA_NORMAL_DEATH_DROPS, false);
-            yml.addDefault(ConfigPath.ARENA_USE_BED_HOLO, true);
-            yml.addDefault(ConfigPath.ARENA_ALLOW_MAP_BREAK, false);
-            yml.options().copyDefaults(true);
-            save();
-
-            //convert old configuration
-            if (yml.get("spawnProtection") != null) {
-                set(ConfigPath.ARENA_SPAWN_PROTECTION, yml.getInt("spawnProtection"));
-                set("spawnProtection", null);
-            }
-            if (yml.get("shopProtection") != null) {
-                set(ConfigPath.ARENA_SHOP_PROTECTION, yml.getInt("shopProtection"));
-                set("shopProtection", null);
-            }
-            if (yml.get("upgradesProtection") != null) {
-                set(ConfigPath.ARENA_UPGRADES_PROTECTION, yml.getInt("upgradesProtection"));
-                set("upgradesProtection", null);
-            }
-            if (yml.get("islandRadius") != null) {
-                set(ConfigPath.ARENA_ISLAND_RADIUS, yml.getInt("islandRadius"));
-            }
-        }
         this.name = name;
     }
 
@@ -208,15 +165,6 @@ public class ConfigManager {
         }
     }
 
-
-    //todo move to general config class
-    public String getLobbyWorldName() {
-        if (yml.get("lobbyLoc") == null) return "";
-        String d = yml.getString("lobbyLoc");
-        String[] data = d.replace("[", "").replace("]", "").split(",");
-        return data[data.length - 1];
-    }
-
     /**
      * Get list of strings at given path
      *
@@ -262,57 +210,6 @@ public class ConfigManager {
      */
     public boolean compareArenaLoc(Location l1, Location l2) {
         return l1.getBlockX() == l2.getBlockX() && l1.getBlockZ() == l2.getBlockZ() && l1.getBlockY() == l2.getBlockY();
-    }
-
-    /**
-     * Add Multi Arena Lobby Command Item To Config.
-     * This won't create the item back if you delete it.
-     */
-    //todo move to the general config class
-    public void saveLobbyCommandItem(String name, String cmd, boolean enchanted, String material, int data, int slot) {
-        if (isFirstTime()) {
-            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_COMMAND.replace("%path%", name), cmd);
-            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", name), material);
-            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_DATA.replace("%path%", name), data);
-            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_ENCHANTED.replace("%path%", name), enchanted);
-            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_SLOT.replace("%path%", name), slot);
-            yml.options().copyDefaults(true);
-            save();
-        }
-    }
-
-    /**
-     * Add Pre Game Command Item To Config.
-     * This won't create the item back if you delete it.
-     */
-    //todo move to the general config class
-    public void savePreGameCommandItem(String name, String cmd, boolean enchanted, String material, int data, int slot) {
-        if (isFirstTime()) {
-            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_COMMAND.replace("%path%", name), cmd);
-            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_MATERIAL.replace("%path%", name), material);
-            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_DATA.replace("%path%", name), data);
-            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_ENCHANTED.replace("%path%", name), enchanted);
-            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_SLOT.replace("%path%", name), slot);
-            yml.options().copyDefaults(true);
-            save();
-        }
-    }
-
-    /**
-     * Add Spectator Command Item To Config.
-     * This won't create the item back if you delete it.
-     */
-    //todo move to the general config class
-    public void saveSpectatorCommandItem(String name, String cmd, boolean enchanted, String material, int data, int slot) {
-        if (isFirstTime()) {
-            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_COMMAND.replace("%path%", name), cmd);
-            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_MATERIAL.replace("%path%", name), material);
-            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_DATA.replace("%path%", name), data);
-            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_ENCHANTED.replace("%path%", name), enchanted);
-            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_SLOT.replace("%path%", name), slot);
-            yml.options().copyDefaults(true);
-            save();
-        }
     }
 
     /**
