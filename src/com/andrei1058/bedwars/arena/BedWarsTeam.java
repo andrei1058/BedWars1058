@@ -335,7 +335,7 @@ public class BedWarsTeam {
         }
 
         nms.sendTitle(p, getMsg(p, Messages.PLAYER_DIE_RESPAWNED_TITLE), "", 0, 20, 0);
-        ShopCache sc = ShopCache.getShopCache(p);
+        ShopCache sc = ShopCache.getShopCache(p.getUniqueId());
         if (sc != null) {
             sc.managePermanentsAndDowngradables(getArena());
         }

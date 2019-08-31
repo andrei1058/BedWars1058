@@ -75,9 +75,9 @@ public class ShopIndex {
 
         inv.setItem(getQuickBuyButton().getSlot() + 9, getSelectedItem(player));
         //noinspection ConstantConditions
-        ShopCache.getShopCache(player).setSelectedCategory(getQuickBuyButton().getSlot());
+        ShopCache.getShopCache(player.getUniqueId()).setSelectedCategory(getQuickBuyButton().getSlot());
 
-        quickBuyCache.addInInventory(inv, ShopCache.getShopCache(player));
+        quickBuyCache.addInInventory(inv, ShopCache.getShopCache(player.getUniqueId()));
 
         player.openInventory(inv);
         if (!indexViewers.contains(player.getUniqueId())){

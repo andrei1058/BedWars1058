@@ -27,7 +27,7 @@ public class InventoryListener implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         if (e.isCancelled()) return;
-        ShopCache shopCache = ShopCache.getShopCache((Player) e.getWhoClicked());
+        ShopCache shopCache = ShopCache.getShopCache(e.getWhoClicked().getUniqueId());
         PlayerQuickBuyCache cache = PlayerQuickBuyCache.getQuickBuyCache(e.getWhoClicked().getUniqueId());
         if (cache == null) return;
         if (shopCache == null) return;
@@ -46,7 +46,7 @@ public class InventoryListener implements Listener {
                         e.getWhoClicked().closeInventory();
                         return;
                     }
-                    element.getCategoryContent().execute((Player) e.getWhoClicked(), ShopCache.getShopCache((Player) e.getWhoClicked()), element.getSlot());
+                    element.getCategoryContent().execute((Player) e.getWhoClicked(), ShopCache.getShopCache(e.getWhoClicked().getUniqueId()), element.getSlot());
                     return;
                 }
             }
@@ -69,7 +69,7 @@ public class InventoryListener implements Listener {
                             new QuickBuyAdd((Player) e.getWhoClicked(), cc);
                             return;
                         }
-                        cc.execute((Player) e.getWhoClicked(), ShopCache.getShopCache((Player) e.getWhoClicked()), cc.getSlot());
+                        cc.execute((Player) e.getWhoClicked(), ShopCache.getShopCache(e.getWhoClicked().getUniqueId()), cc.getSlot());
                         return;
                     }
                 }
@@ -95,7 +95,7 @@ public class InventoryListener implements Listener {
     public void onUpgradableMove(InventoryClickEvent e) {
 
         Player p = (Player) e.getWhoClicked();
-        ShopCache sc = ShopCache.getShopCache(p);
+        ShopCache sc = ShopCache.getShopCache(p.getUniqueId());
         if (sc == null) return;
 
         //block moving from hotbar

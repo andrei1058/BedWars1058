@@ -23,7 +23,7 @@ public class QuickBuyAdd {
     public void open(Player player, CategoryContent cc){
         Inventory inv = Bukkit.createInventory(null, ShopManager.getShop().getInvSize());
         PlayerQuickBuyCache cache = PlayerQuickBuyCache.getQuickBuyCache(player.getUniqueId());
-        ShopCache sc = ShopCache.getShopCache(player);
+        ShopCache sc = ShopCache.getShopCache(player.getUniqueId());
         if (sc == null || cache == null){
             player.closeInventory();
         }

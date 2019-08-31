@@ -595,9 +595,9 @@ public class Arena implements Comparable<Arena> {
         }
 
         List<ShopCache.CachedItem> cacheList = new ArrayList<>();
-        if (ShopCache.getShopCache(p) != null) {
+        if (ShopCache.getShopCache(p.getUniqueId()) != null) {
             //noinspection ConstantConditions
-            cacheList = ShopCache.getShopCache(p).getCachedPermanents();
+            cacheList = ShopCache.getShopCache(p.getUniqueId()).getCachedPermanents();
         }
 
         Bukkit.getPluginManager().callEvent(new PlayerLeaveArenaEvent(p, this));
@@ -856,9 +856,9 @@ public class Arena implements Comparable<Arena> {
         p.getInventory().clear();
 
         //restore items before re-spawning in team
-        ShopCache sc = ShopCache.getShopCache(p);
+        ShopCache sc = ShopCache.getShopCache(p.getUniqueId());
         if (sc != null) sc.destroy();
-        sc = new ShopCache(p);
+        sc = new ShopCache(p.getUniqueId());
         for (ShopCache.CachedItem ci : reJoin.getPermanentsAndNonDowngradables()) {
             sc.getCachedItems().add(ci);
         }

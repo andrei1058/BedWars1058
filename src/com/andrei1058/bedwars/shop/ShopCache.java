@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.shop.main.CategoryContent;
 import com.andrei1058.bedwars.shop.main.ShopCategory;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -11,23 +12,24 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class ShopCache {
 
-    private Player player;
+    private UUID player;
     private List<CachedItem> cachedItems = new ArrayList<>();
     private int selectedCategory;
     private HashMap<ShopCategory, Byte> categoryWeight = new HashMap<>();
 
     private static List<ShopCache> shopCaches = new ArrayList<>();
 
-    public ShopCache(Player player) {
+    public ShopCache(UUID player) {
         this.player = player;
         this.selectedCategory = ShopManager.getShop().getQuickBuyButton().getSlot();
         shopCaches.add(this);
     }
 
-    public Player getPlayer() {
+    public UUID getPlayer() {
         return player;
     }
 
@@ -44,9 +46,9 @@ public class ShopCache {
         return ci == null ? 1 : ci.getTier();
     }
 
-    public static ShopCache getShopCache(Player player) {
+    public static ShopCache getShopCache(UUID player) {
         for (ShopCache sc : new ArrayList<>(shopCaches)) {
-            if (sc.getPlayer().getUniqueId().equals(player.getUniqueId())) return sc;
+            if (sc.player.equals(player)) return sc;
         }
         return null;
     }
@@ -55,15 +57,17 @@ public class ShopCache {
      * Destroy data
      */
     public void destroy() {
-        cachedItems.clear();
         shopCaches.remove(this);
+        cachedItems.clear();
+        cachedItems = null;
+        categoryWeight = null;
     }
 
     /**
      * Used to give items on player respawn
      */
     public void managePermanentsAndDowngradables(Arena arena) {
-        Main.debug("Restore permanents on death for: " + player.getName());
+        Main.debug("Restore permanents on death for: " + player);
         for (CachedItem ci : cachedItems) {
             ci.manageDeath(arena);
         }
@@ -80,7 +84,7 @@ public class ShopCache {
         public CachedItem(CategoryContent cc) {
             this.cc = cc;
             cachedItems.add(this);
-            Main.debug("New Cached item " + cc.getIdentifier() + " for player " + player.getName());
+            Main.debug("New Cached item " + cc.getIdentifier() + " for player " + player);
         }
 
         public int getTier() {
@@ -98,28 +102,29 @@ public class ShopCache {
         public void manageDeath(Arena arena) {
             if (!cc.isPermanent()) return;
             if (cc.isDowngradable() && tier > 1) tier--;
-            Main.debug("ShopCache Item Restore: " + cc.getIdentifier() + " for " + player.getName());
+            Main.debug("ShopCache Item Restore: " + cc.getIdentifier() + " for " + player);
             //noinspection ConstantConditions
-            cc.giveItems(player, getShopCache(player), arena);
+            cc.giveItems(Bukkit.getPlayer(player), getShopCache(player), arena);
         }
 
         public void upgrade(int slot) {
             tier++;
-            for (ItemStack i : player.getInventory().getContents()) {
+            Player p = Bukkit.getPlayer(player);
+            for (ItemStack i : p.getInventory().getContents()) {
                 if (i == null) continue;
                 if (i.getType() == Material.AIR) continue;
                 if (Main.nms.getShopUpgradeIdentifier(i).equals(cc.getIdentifier())) {
-                    player.getInventory().remove(i);
+                    p.getInventory().remove(i);
                 }
             }
-            updateItem(slot);
-            player.updateInventory();
+            updateItem(slot, p);
+            p.updateInventory();
         }
 
-        public void updateItem(int slot) {
-            if (player.getOpenInventory() != null) {
-                if (player.getOpenInventory().getTopInventory() != null) {
-                    player.getOpenInventory().getTopInventory().setItem(slot, cc.getItemStack(player, getShopCache(player)));
+        public void updateItem(int slot, Player p) {
+            if (p.getOpenInventory() != null) {
+                if (p.getOpenInventory().getTopInventory() != null) {
+                    p.getOpenInventory().getTopInventory().setItem(slot, cc.getItemStack(Bukkit.getPlayer(player), getShopCache(player)));
                 }
             }
         }
@@ -160,10 +165,10 @@ public class ShopCache {
         CachedItem ci = getCachedItem(cc.getIdentifier());
         if (ci == null) {
             ci = new CachedItem(cc);
-            ci.updateItem(slot);
+            ci.updateItem(slot, Bukkit.getPlayer(player));
         } else {
             if (cc.getContentTiers().size() > ci.getTier()) {
-                Main.debug("Cached item upgrade for " + cc.getIdentifier() + " player " + player.getName());
+                Main.debug("Cached item upgrade for " + cc.getIdentifier() + " player " + player);
                 ci.upgrade(slot);
             }
         }

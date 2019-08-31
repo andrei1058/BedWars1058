@@ -14,16 +14,16 @@ public class ShopCacheListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onArenaJoin(PlayerJoinArenaEvent e) {
         if (e.isSpectator()) return;
-        ShopCache sc = ShopCache.getShopCache(e.getPlayer());
+        ShopCache sc = ShopCache.getShopCache(e.getPlayer().getUniqueId());
         if (sc != null) {
             sc.destroy();
         }
-        new ShopCache(e.getPlayer());
+        new ShopCache(e.getPlayer().getUniqueId());
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onArenaLeave(PlayerLeaveArenaEvent e) {
-        ShopCache sc = ShopCache.getShopCache(e.getPlayer());
+        ShopCache sc = ShopCache.getShopCache(e.getPlayer().getUniqueId());
         if (sc != null) {
             sc.destroy();
         }
@@ -33,7 +33,7 @@ public class ShopCacheListener implements Listener {
     public void onServerLeave(PlayerQuitEvent e) {
         //if (Main.getServerType() == ServerType.BUNGEE) return;
         //don't remove immediately in case of /rejoin
-        ShopCache sc = ShopCache.getShopCache(e.getPlayer());
+        ShopCache sc = ShopCache.getShopCache(e.getPlayer().getUniqueId());
         if (sc != null) {
             sc.destroy();
         }

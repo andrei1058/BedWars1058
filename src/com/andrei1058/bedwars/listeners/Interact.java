@@ -180,7 +180,7 @@ public class Interact implements Listener {
                 ItemStack i = nms.getItemInHand(e.getPlayer());
                 if (i != null) {
                     if (i.getType() != Material.AIR) {
-                        ShopCache sc = ShopCache.getShopCache(e.getPlayer());
+                        ShopCache sc = ShopCache.getShopCache(e.getPlayer().getUniqueId());
                         if (sc != null) {
                             if (InventoryListener.isUpgradable(i, sc)){
                                 e.setCancelled(true);
