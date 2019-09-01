@@ -1,11 +1,12 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.regular;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.BedWars;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.arena.SetupSession;
-import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Messages;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -17,14 +18,7 @@ import java.util.List;
 import static com.andrei1058.bedwars.language.Language.getMsg;
 
 public class CmdJoin extends SubCommand {
-    /**
-     * Create a sub-command for a bedWars command
-     * Make sure you return true or it will say command not found
-     *
-     * @param parent parent command
-     * @param name   sub-command name
-     * @since 0.6.1 api v6
-     */
+
     public CmdJoin(ParentCommand parent, String name) {
         super(parent, name);
         setPriority(19);
@@ -70,13 +64,13 @@ public class CmdJoin extends SubCommand {
     }
 
     @Override
-    public boolean canSee(CommandSender s) {
+    public boolean canSee(CommandSender s, BedWars api) {
         if (s instanceof ConsoleCommandSender) return false;
 
         Player p = (Player) s;
         if (Arena.isInArena(p)) return false;
 
-        if (SetupSession.isInSetupSession(p)) return false;
+        if (SetupSession.isInSetupSession(p.getUniqueId())) return false;
         return hasPermission(s);
     }
 }

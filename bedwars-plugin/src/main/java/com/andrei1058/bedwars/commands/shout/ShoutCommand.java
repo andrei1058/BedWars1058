@@ -1,8 +1,8 @@
 package com.andrei1058.bedwars.commands.shout;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.language.Messages;
 import org.bukkit.command.CommandSender;
@@ -53,7 +53,7 @@ public class ShoutCommand extends BukkitCommand {
     }
 
     public static double getShoutCooldown(Player p) {
-        return (shoutCooldown.get(p.getUniqueId()) - System.currentTimeMillis()) / 1000;
+        return (shoutCooldown.get(p.getUniqueId()) - System.currentTimeMillis()) / 1000f;
     }
 
     public static boolean isShout(Player p) {

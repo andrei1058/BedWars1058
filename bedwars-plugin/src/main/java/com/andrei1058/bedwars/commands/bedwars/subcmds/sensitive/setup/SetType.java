@@ -1,6 +1,8 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.BedWars;
+import com.andrei1058.bedwars.api.server.SetupType;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.api.command.ParentCommand;
@@ -17,14 +19,7 @@ import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class SetType extends SubCommand {
-    /**
-     * Create a sub-command for a bedWars command
-     * Make sure you return true or it will say command not found
-     *
-     * @param parent parent command
-     * @param name   sub-command name
-     * @since 0.6.1 api v6
-     */
+
     public SetType(ParentCommand parent, String name) {
         super(parent, name);
         setArenaSetupCommand(true);
@@ -37,7 +32,7 @@ public class SetType extends SubCommand {
     public boolean execute(String[] args, CommandSender s) {
         if (s instanceof ConsoleCommandSender) return false;
         Player p = (Player) s;
-        SetupSession ss = SetupSession.getSession(p);
+        SetupSession ss = SetupSession.getSession(p.getUniqueId());
         if (ss == null){
             s.sendMessage("§c ▪ §7You're not in a setup session!");
             return true;
@@ -62,11 +57,11 @@ public class SetType extends SubCommand {
                 } else if (input.equalsIgnoreCase("4v4v4v4")){
                     maxInTeam = 4;
                 }
-                ss.getCm().set("maxInTeam", maxInTeam);
+                ss.getConfig().set("maxInTeam", maxInTeam);
             }
-            ss.getCm().set("group", input);
+            ss.getConfig().set("group", input);
             p.sendMessage("§6 ▪ §7Arena group changed to: §d"+input);
-            if (ss.getSetupType() == SetupSession.SetupType.ASSISTED){
+            if (ss.getSetupType() == SetupType.ASSISTED){
                 Bukkit.dispatchCommand(p, getParent().getName());
             }
         }
@@ -87,11 +82,11 @@ public class SetType extends SubCommand {
     }
 
     @Override
-    public boolean canSee(CommandSender s) {
+    public boolean canSee(CommandSender s, BedWars api) {
         if (s instanceof ConsoleCommandSender) return false;
 
         Player p = (Player) s;
-        if (!SetupSession.isInSetupSession(p)) return false;
+        if (!SetupSession.isInSetupSession(p.getUniqueId())) return false;
 
         return hasPermission(s);
     }

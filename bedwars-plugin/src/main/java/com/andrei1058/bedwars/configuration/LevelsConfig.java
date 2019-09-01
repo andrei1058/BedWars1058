@@ -8,7 +8,7 @@ public class LevelsConfig extends ConfigManager {
     public static LevelsConfig levels;
 
     private LevelsConfig() {
-        super("levels", Main.plugin.getDataFolder().toString(), false);
+        super(Main.plugin,"levels", Main.plugin.getDataFolder().toString());
     }
 
     /**

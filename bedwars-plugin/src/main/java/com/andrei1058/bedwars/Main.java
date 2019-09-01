@@ -1,7 +1,10 @@
 package com.andrei1058.bedwars;
 
+import com.andrei1058.bedwars.api.API;
 import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.server.RestoreAdapter;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.arena.despawnables.TargetListener;
@@ -40,9 +43,7 @@ import com.andrei1058.bedwars.arena.tasks.OneTick;
 import com.andrei1058.bedwars.arena.tasks.Refresh;
 import com.andrei1058.bedwars.support.version.VersionSupport;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.WorldCreator;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
@@ -51,11 +52,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -88,6 +87,8 @@ public class Main extends JavaPlugin {
     private static Database remoteDatabase;
 
     private boolean serverSoftwareSupport = true;
+
+    private static BedWars api;
 
     @Override
     public void onLoad() {
@@ -125,7 +126,7 @@ public class Main extends JavaPlugin {
             return;
         }
 
-        this.getLogger().info("Loading support for " + (isPaper() ? "paper" : "spigot") + " " + version);
+        this.getLogger().info("Loading support for paper/spigot: " + version);
 
         config = new MainConfig(this, "config", "plugins/" + this.getName());
 
@@ -153,13 +154,12 @@ public class Main extends JavaPlugin {
         setupLang(ru);
         Language.getLanguages().remove(ru);
 
-        setupConfig();
-
         generators = new GeneratorsConfig(this, "generators", "plugins/" + this.getName());
-
-        //loadArenasAndSigns();
-
         upgrades = new UpgradesManager("upgrades", "plugins/" + this.getName());
+        // Initialize signs config after the main config
+        if (getServerType() != ServerType.BUNGEE){
+            signs = new SignsConfig(this, "signs", "plugins/" + plugin.getName());
+        }
     }
 
     @Override
@@ -170,8 +170,7 @@ public class Main extends JavaPlugin {
             return;
         }
 
-        Bukkit.getServicesManager().register(GameAPI.class, new BedWars(), this, ServicePriority.Highest);
-        api = (BedWars) this.getServer().getServicesManager().getRegistration(GameAPI.class).getProvider();
+        api = new API();
 
         // Load SlimeWorldManager support
         if (Bukkit.getPluginManager().getPlugin("SlimeWorldManager") != null) {
@@ -240,7 +239,7 @@ public class Main extends JavaPlugin {
         if (getServerType() == ServerType.BUNGEE) {
             registerEvents(new Ping());
             registerEvents(new ArenaListeners());
-            ArenaSocket.lobbies.addAll(config.l(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS));
+            ArenaSocket.lobbies.addAll(config.getList(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS));
             new SendTask();
         } else if (getServerType() == ServerType.MULTIARENA || getServerType() == ServerType.SHARED) {
             registerEvents(new ArenaSelectorListener(), new BlockStatusListener());
@@ -428,24 +427,6 @@ public class Main extends JavaPlugin {
         }
     }
 
-
-    private void setupSignsConfiguration() {
-        signs = new ConfigManager("signs", "plugins/" + plugin.getName(), false);
-        YamlConfiguration yml = signs.getYml();
-        yml.addDefault("format", Arrays.asList("&a[arena]", "", "&2[on]&9/&2[max]", "[status]"));
-        yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_WAITING_MATERIAL, getForCurrentVersion("STAINED_CLAY", "STAINED_CLAY", "GREEN_CONCRETE"));
-        yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_WAITING_DATA, 5);
-        yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_STARTING_MATERIAL, getForCurrentVersion("STAINED_CLAY", "STAINED_CLAY", "YELLOW_CONCRETE"));
-        yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_STARTING_DATA, 14);
-        yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_PLAYING_MATERIAL, getForCurrentVersion("STAINED_CLAY", "STAINED_CLAY", "RED_CONCRETE"));
-        yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_PLAYING_DATA, 4);
-        yml.options().copyDefaults(true);
-        signs.save();
-        if (yml.getStringList("format").size() < 4) {
-            signs.set("format", yml.getStringList("format").subList(0, 3));
-        }
-    }
-
     private void loadArenasAndSigns() {
 
         api.getRestoreAdapter().convertWorlds();
@@ -485,6 +466,10 @@ public class Main extends JavaPlugin {
 
     public static void setDebug(boolean value){
         debug = value;
+    }
+
+    public static void setServerType(ServerType serverType) {
+        Main.serverType = serverType;
     }
 
     public static void debug(String message) {
@@ -581,7 +566,7 @@ public class Main extends JavaPlugin {
         return remoteDatabase;
     }
 
-    public static boolean isPaper() {
-        return paper;
+    public static BedWars getAPI() {
+        return api;
     }
 }

@@ -1,20 +1,28 @@
 package com.andrei1058.bedwars.maprestore.internal;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.ServerType;
-import com.andrei1058.bedwars.api.arena.RestoreAdapter;
+import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.events.server.SetupSessionStartEvent;
+import com.andrei1058.bedwars.api.server.ISetupSession;
+import com.andrei1058.bedwars.api.server.RestoreAdapter;
+import com.andrei1058.bedwars.api.server.ServerType;
+import com.andrei1058.bedwars.api.server.SetupType;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.arena.SetupSession;
+import com.andrei1058.bedwars.arena.Misc;
+import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.maprestore.internal.files.FileUtil;
 import com.andrei1058.bedwars.maprestore.internal.files.WorldZipper;
-import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.maprestore.internal.files.ZipFileUtil;
+import net.md_5.bungee.api.chat.ClickEvent;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,7 +43,7 @@ public class InternalAdapter extends RestoreAdapter {
     }
 
     @Override
-    public void onEnable(Arena a) {
+    public void onEnable(IArena a) {
         if (a == null) return;
         World world = Bukkit.getWorld(a.getWorldName());
         if (world != null) {
@@ -102,7 +110,7 @@ public class InternalAdapter extends RestoreAdapter {
     }
 
     @Override
-    public void onRestart(Arena a) {
+    public void onRestart(IArena a) {
         if (Main.getServerType() == ServerType.BUNGEE) {
             Arena.setGamesBeforeRestart(Arena.getGamesBeforeRestart() - 1);
             if (Arena.getGamesBeforeRestart() == 0) {
@@ -122,12 +130,12 @@ public class InternalAdapter extends RestoreAdapter {
     }
 
     @Override
-    public void onDisable(Arena a) {
+    public void onDisable(IArena a) {
         Bukkit.unloadWorld(a.getWorldName(), false);
     }
 
     @Override
-    public void onSetupSessionStart(SetupSession s) {
+    public void onSetupSessionStart(ISetupSession s) {
         try {
             Bukkit.createWorld(new WorldCreator(s.getWorldName()));
         } catch (Exception ex) {
@@ -145,19 +153,49 @@ public class InternalAdapter extends RestoreAdapter {
                 return;
             }
         }
-        s.setupStarted();
+
+
+        s.getPlayer().getInventory().clear();
+        s.getPlayer().teleport(Bukkit.getWorld(s.getWorldName()).getSpawnLocation());
+        s.getPlayer().setGameMode(GameMode.CREATIVE);
+        s.getPlayer().setAllowFlight(true);
+        s.getPlayer().setFlying(true);
+        s.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2));
+        s.getPlayer().sendMessage("\n" + ChatColor.WHITE + "\n");
+
+        s.getPlayer().sendMessage(ChatColor.GREEN + "You were teleported to the " + ChatColor.BLUE + s.getWorldName() + ChatColor.GREEN + "'s spawn.");
+        if (s.getSetupType() == SetupType.ASSISTED && s.getConfig().getYml().get("waiting.Loc") == null) {
+            s.getPlayer().sendMessage("");
+            s.getPlayer().sendMessage(ChatColor.BLUE + ">>>>>>>>>>>>" + s.getWorldName() + " Setup Session");
+            s.getPlayer().sendMessage("");
+            s.getPlayer().sendMessage(ChatColor.GREEN + "Hello " + s.getPlayer().getName() + "!");
+            s.getPlayer().sendMessage(ChatColor.WHITE + "Please set the waiting spawn.");
+            s.getPlayer().sendMessage(ChatColor.WHITE + "It is the place where players will wait the game to start.");
+            s.getPlayer().spigot().sendMessage(Misc.msgHoverClick(ChatColor.BLUE + "     ▪     " + ChatColor.GOLD + "CLICK HERE TO SET THE WAITING LOBBY    " + ChatColor.BLUE + " ▪", ChatColor.LIGHT_PURPLE + "Click to set the waiting spawn.", "/" + Main.mainCmd + " setWaitingSpawn", ClickEvent.Action.RUN_COMMAND));
+            MainCommand.createTC(ChatColor.YELLOW + "Or type: " + ChatColor.GRAY + "/" + Main.mainCmd + " setWaitingSpawn", "/" + Main.mainCmd + " setWaitingSpawn", ChatColor.WHITE + "Set the world spawn lobby.");
+        } else {
+            Bukkit.dispatchCommand(s.getPlayer(), Main.mainCmd + " cmds");
+        }
+        Bukkit.getPluginManager().callEvent(new SetupSessionStartEvent(s));
+
+        World w = Bukkit.getWorld(s.getWorldName());
+        Bukkit.getScheduler().runTaskLater(plugin, () -> w.getEntities().stream()
+                .filter(e -> e.getType() != EntityType.PLAYER).filter(e -> e.getType() != EntityType.PAINTING)
+                .filter(e -> e.getType() != EntityType.ITEM_FRAME).forEach(Entity::remove), 30L);
+        w.setAutoSave(false);
+        w.setGameRuleValue("doMobSpawning", "false");
     }
 
     @Override
-    public void onSetupSessionClose(SetupSession s) {
+    public void onSetupSessionClose(ISetupSession s) {
         Bukkit.unloadWorld(s.getWorldName(), false);
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> new WorldZipper(s.getWorldName(), true));
     }
 
     @Override
-    public void onLobbyRemoval(Arena a) {
-        Location loc1 = a.getCm().getArenaLoc(ConfigPath.ARENA_WAITING_POS1),
-                loc2 = a.getCm().getArenaLoc(ConfigPath.ARENA_WAITING_POS2);
+    public void onLobbyRemoval(IArena a) {
+        Location loc1 = a.getConfig().getArenaLoc(ConfigPath.ARENA_WAITING_POS1),
+                loc2 = a.getConfig().getArenaLoc(ConfigPath.ARENA_WAITING_POS2);
         if (loc1 == null || loc2 == null) return;
         Bukkit.getScheduler().runTask(Main.plugin, () -> {
             int minX, minY, minZ;

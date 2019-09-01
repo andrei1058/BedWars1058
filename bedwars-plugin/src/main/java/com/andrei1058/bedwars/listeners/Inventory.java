@@ -1,10 +1,11 @@
 package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.ServerType;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.server.ServerType;
+import com.andrei1058.bedwars.api.server.SetupType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.SetupSession;
-import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.upgrades.TeamUpgrade;
@@ -18,6 +19,8 @@ import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Objects;
+
 import static com.andrei1058.bedwars.Main.config;
 import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.language.Language.getMsg;
@@ -29,7 +32,7 @@ public class Inventory implements Listener {
     public void onClose(InventoryCloseEvent e) {
         Player p = (Player) e.getPlayer();
         if (nms.getInventoryName(e).equalsIgnoreCase(SetupSession.getInvName())) {
-            SetupSession ss = SetupSession.getSession(p);
+            SetupSession ss = SetupSession.getSession(p.getUniqueId());
             if (ss != null) {
                 if (ss.getSetupType() == null)
                     ss.cancel();
@@ -177,16 +180,14 @@ public class Inventory implements Listener {
         }
 
         /* Check setup gui items */
-        if (SetupSession.isInSetupSession(p) && nms.getInventoryName(e).
-
-                equalsIgnoreCase(SetupSession.getInvName())) {
-            SetupSession ss = SetupSession.getSession(p);
+        if (SetupSession.isInSetupSession(p.getUniqueId()) && nms.getInventoryName(e).equalsIgnoreCase(SetupSession.getInvName())) {
+            SetupSession ss = SetupSession.getSession(p.getUniqueId());
             if (e.getSlot() == SetupSession.getAdvancedSlot()) {
-                ss.setSetupType(SetupSession.SetupType.ADVANCED);
+                Objects.requireNonNull(ss).setSetupType(SetupType.ADVANCED);
             } else if (e.getSlot() == SetupSession.getAssistedSlot()) {
-                ss.setSetupType(SetupSession.SetupType.ASSISTED);
+                Objects.requireNonNull(ss).setSetupType(SetupType.ASSISTED);
             }
-            if (!ss.startSetup()) {
+            if (!Objects.requireNonNull(ss).startSetup()) {
                 ss.getPlayer().sendMessage(ChatColor.RED + "Could not start setup session. Pleas check the console.");
             }
             p.closeInventory();

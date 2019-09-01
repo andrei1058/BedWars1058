@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.arena.Arena;
@@ -19,14 +20,7 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 public class Level extends SubCommand {
-    /**
-     * Create a sub-command for a bedWars command
-     * Make sure you return true or it will say command not found
-     *
-     * @param parent parent command
-     * @param name   sub-command name
-     * @since 0.6.1 api v6
-     */
+
     public Level(ParentCommand parent, String name) {
         super(parent, name);
         setPermission(Permissions.PERMISSION_LEVEL);
@@ -39,7 +33,7 @@ public class Level extends SubCommand {
     @Override
     public boolean execute(String[] args, CommandSender s) {
         if (args.length == 0) {
-            sendSubCommands(s);
+            sendSubCommands(s, Main.getAPI());
             return true;
         }
         if (args[0].equalsIgnoreCase("setlevel")) {
@@ -103,12 +97,12 @@ public class Level extends SubCommand {
             s.sendMessage(ChatColor.GOLD + " ▪ " + ChatColor.GRAY + args[2] + " xp was given to: " + pl.getName());
             s.sendMessage(ChatColor.GOLD + " ▪ " + ChatColor.GRAY + "The player may need to rejoin to see it updated.");
         } else {
-            sendSubCommands(s);
+            sendSubCommands(s, Main.getAPI());
         }
         return true;
     }
 
-    private void sendSubCommands(CommandSender s) {
+    private void sendSubCommands(CommandSender s, BedWars api) {
         if (s instanceof Player) {
             Player p = (Player) s;
             p.spigot().sendMessage(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " " + getSubCommandName() + " setLevel §o<player> <level>",
@@ -129,13 +123,13 @@ public class Level extends SubCommand {
     }
 
     @Override
-    public boolean canSee(CommandSender s) {
+    public boolean canSee(CommandSender s, BedWars api) {
         if (s instanceof ConsoleCommandSender) return false;
 
         Player p = (Player) s;
         if (Arena.isInArena(p)) return false;
 
-        if (SetupSession.isInSetupSession(p)) return false;
+        if (SetupSession.isInSetupSession(p.getUniqueId())) return false;
         return hasPermission(s);
     }
 }

@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.upgrades;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.arena.upgrades.ITeamUpgrade;
 import com.andrei1058.bedwars.api.events.shop.UpgradeBuyEvent;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.language.Messages;
@@ -14,7 +15,7 @@ import java.util.List;
 import static com.andrei1058.bedwars.language.Language.getMsg;
 import static com.andrei1058.bedwars.upgrades.UpgradeGroup.getUpgradeGroup;
 
-public class TeamUpgrade {
+public class TeamUpgrade implements ITeamUpgrade {
 
     /**
      * upgrades.yml - Documentation

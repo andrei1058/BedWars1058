@@ -1,9 +1,9 @@
 package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.api.arena.GameState;
-import com.andrei1058.bedwars.api.ServerType;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.configuration.ConfigPath;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;

@@ -2,11 +2,11 @@ package com.andrei1058.bedwars.arena.tasks;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.arena.GameState;
-import com.andrei1058.bedwars.api.team.TeamColor;
+import com.andrei1058.bedwars.api.arena.team.TeamColor;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.OreGenerator;
-import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -122,7 +122,7 @@ public class GamePlayingTask implements Runnable {
                     for (BedWarsTeam t : getArena().getTeams()) {
                         if (t.getMembers().isEmpty()) continue;
                         for (int x = 0; x < t.getDragons(); x++) {
-                            nms.spawnDragon(getArena().getCm().getArenaLoc("waiting.Loc").add(0, 10, 0), t);
+                            nms.spawnDragon(getArena().getConfig().getArenaLoc("waiting.Loc").add(0, 10, 0), t);
                         }
                     }
                 }
@@ -163,7 +163,7 @@ public class GamePlayingTask implements Runnable {
                 current++;
                 Arena.afkCheck.replace(p.getUniqueId(), current);
                 if (current == 45) {
-                    Main.api.setPlayerAFK(p, true);
+                    Main.getAPI().getAFKSystem().setPlayerAFK(p, true);
                 }
             }
         }

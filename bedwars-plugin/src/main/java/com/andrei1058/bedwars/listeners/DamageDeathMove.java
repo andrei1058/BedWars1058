@@ -1,12 +1,12 @@
 package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.*;
 import com.andrei1058.bedwars.api.arena.GameState;
+import com.andrei1058.bedwars.api.arena.team.TeamColor;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
-import com.andrei1058.bedwars.api.team.TeamColor;
+import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.*;
-import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.support.version.Despawnable;
@@ -226,7 +226,7 @@ public class DamageDeathMove implements Listener {
             EntityDamageEvent damageEvent = e.getEntity().getLastDamageCause();
 
             ItemStack[] drops = victim.getInventory().getContents();
-            if (!a.getCm().getBoolean(ConfigPath.ARENA_NORMAL_DEATH_DROPS)) {
+            if (!a.getConfig().getBoolean(ConfigPath.ARENA_NORMAL_DEATH_DROPS)) {
                 e.getDrops().clear();
             }
 
@@ -321,7 +321,7 @@ public class DamageDeathMove implements Listener {
             /* give stats and victim's inventory */
             if (killer != null) {
                 if (t.isBedDestroyed()) {
-                    if (!a.getCm().getBoolean(ConfigPath.ARENA_NORMAL_DEATH_DROPS)) {
+                    if (!a.getConfig().getBoolean(ConfigPath.ARENA_NORMAL_DEATH_DROPS)) {
                         for (ItemStack i : drops) {
                             if (i == null) continue;
                             if (i.getType() == Material.AIR) continue;
@@ -334,7 +334,7 @@ public class DamageDeathMove implements Listener {
                     }
                     a.addPlayerKill(killer, true, victim);
                 } else {
-                    if (!a.getCm().getBoolean(ConfigPath.ARENA_NORMAL_DEATH_DROPS)) {
+                    if (!a.getConfig().getBoolean(ConfigPath.ARENA_NORMAL_DEATH_DROPS)) {
                         if (!a.getRespawn().containsKey(killer)) {
                             for (ItemStack i : drops) {
                                 if (i == null) continue;
@@ -382,13 +382,13 @@ public class DamageDeathMove implements Listener {
     public void onRespawn(PlayerRespawnEvent e) {
         Arena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a == null) {
-            SetupSession ss = SetupSession.getSession(e.getPlayer());
+            SetupSession ss = SetupSession.getSession(e.getPlayer().getUniqueId());
             if (ss != null) {
                 e.setRespawnLocation(e.getPlayer().getWorld().getSpawnLocation());
             }
         } else {
             if (a.isSpectator(e.getPlayer())) {
-                e.setRespawnLocation(a.getCm().getArenaLoc("waiting.Loc"));
+                e.setRespawnLocation(a.getConfig().getArenaLoc("waiting.Loc"));
                 String iso = Language.getPlayerLanguage(e.getPlayer()).getIso();
                 for (OreGenerator o : a.getOreGenerators()) {
                     o.updateHolograms(e.getPlayer(), iso);
@@ -401,7 +401,7 @@ public class DamageDeathMove implements Listener {
                 a.sendSpectatorCommandItems(e.getPlayer());
                 return;
             }
-            e.setRespawnLocation(a.getCm().getArenaLoc("waiting.Loc"));
+            e.setRespawnLocation(a.getConfig().getArenaLoc("waiting.Loc"));
             BedWarsTeam t = a.getTeam(e.getPlayer());
             if (t.isBedDestroyed()) {
                 a.addSpectator(e.getPlayer(), true, null);
@@ -482,12 +482,12 @@ public class DamageDeathMove implements Listener {
 
             if (a.isSpectator(e.getPlayer()) || a.isRespawning(e.getPlayer())) {
                 if (e.getTo().getY() < 0) {
-                    e.getPlayer().teleport(a.getCm().getArenaLoc("waiting.Loc"));
+                    e.getPlayer().teleport(a.getConfig().getArenaLoc("waiting.Loc"));
                 }
             } else {
                 if (e.getPlayer().getLocation().getY() <= 0) {
                     if (a.getStatus() == GameState.playing) {
-                        if (a.getCm().getBoolean("voidKill")) {
+                        if (a.getConfig().getBoolean("voidKill")) {
                             nms.voidKill(e.getPlayer());
                         }
                     } else {
@@ -495,7 +495,7 @@ public class DamageDeathMove implements Listener {
                         if (bwt != null) {
                             e.getPlayer().teleport(bwt.getSpawn());
                         } else {
-                            e.getPlayer().teleport(a.getCm().getArenaLoc("waiting.Loc"));
+                            e.getPlayer().teleport(a.getConfig().getArenaLoc("waiting.Loc"));
                         }
                     }
                 }
@@ -520,8 +520,8 @@ public class DamageDeathMove implements Listener {
                     }
                     if (e.getFrom() != e.getTo()) {
                         Arena.afkCheck.remove(e.getPlayer().getUniqueId());
-                        if (Main.api.isPlayerAFK(e.getPlayer())) {
-                            Main.api.setPlayerAFK(e.getPlayer(), false);
+                        if (Main.getAPI().getAFKSystem().isPlayerAFK(e.getPlayer())) {
+                            Main.getAPI().getAFKSystem().setPlayerAFK(e.getPlayer(), false);
                         }
                     }
                 }

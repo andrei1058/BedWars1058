@@ -1,9 +1,9 @@
 package com.andrei1058.bedwars.arena.tasks;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
-import com.andrei1058.bedwars.configuration.ConfigPath;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 

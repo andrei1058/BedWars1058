@@ -43,7 +43,7 @@ public class SpectatorListeners implements Listener {
         if (a == null) return;
         if (!a.isSpectator(p)) return;
 
-        /* Disable spectator interact */
+        // Disable spectator interact
         e.setCancelled(true);
     }
 
@@ -67,7 +67,7 @@ public class SpectatorListeners implements Listener {
         if (a == null) return;
         if (!a.isSpectator(p)) return;
 
-        /* Teleporter heads */
+        // Teleporter heads
         if (nms.isPlayerHead(i.getType().toString(), 3) && nms.itemStackDataCompare(i, (short) 3)) {
             if (nms.isCustomBedWarsItem(i)) {
                 e.setCancelled(true);
@@ -91,7 +91,7 @@ public class SpectatorListeners implements Listener {
     }
 
     @EventHandler
-    /* Refresh placeholders from GUIs*/
+    // Refresh placeholders from GUIs
     public void onHealthChange(EntityRegainHealthEvent e) {
         if (e.getEntity().getType() != EntityType.PLAYER) return;
         Player p = (Player) e.getEntity();
@@ -103,7 +103,7 @@ public class SpectatorListeners implements Listener {
     }
 
     @EventHandler
-    /* Refresh placeholders from GUIs*/
+    // Refresh placeholders from GUIs
     public void onFoodChange(FoodLevelChangeEvent e) {
         if (e.getEntity().getType() != EntityType.PLAYER) return;
         Player p = (Player) e.getEntity();
@@ -115,7 +115,7 @@ public class SpectatorListeners implements Listener {
     }
 
     @EventHandler
-    /* Refresh placeholders from GUIs*/
+    // Refresh placeholders from GUIs
     public void onPlayerLeave(PlayerLeaveArenaEvent e) {
         if (e.getArena().isPlayer(e.getPlayer())) {
             TeleporterGUI.refreshAllGUIs();
@@ -123,7 +123,7 @@ public class SpectatorListeners implements Listener {
     }
 
     @EventHandler
-    /* Triggered when a spectator starts spectating in first person */
+    // Triggered when a spectator starts spectating in first person
     public void onSpectatorInteractPlayer(PlayerInteractAtEntityEvent e) {
         if (e.getRightClicked().getType() != EntityType.PLAYER) return;
         Player p = e.getPlayer();
@@ -133,7 +133,7 @@ public class SpectatorListeners implements Listener {
         e.setCancelled(true);
         Player target = (Player) e.getRightClicked();
         if (a.isPlayer(target)) {
-            if (SpectatorFirstPersonEnterEvent.getSpectatingInFirstPerson().contains(p)) {
+            if (p.getSpectatorTarget() != null) {
                 SpectatorFirstPersonLeaveEvent e2 = new SpectatorFirstPersonLeaveEvent(p, a, getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE));
                 Bukkit.getPluginManager().callEvent(e2);
             }
@@ -156,12 +156,12 @@ public class SpectatorListeners implements Listener {
     }
 
     @EventHandler
-    /* Triggered when a spectator leaves first person */
+    // Triggered when a spectator leaves first person
     public void onSneak(PlayerToggleSneakEvent e) {
         Player p = e.getPlayer();
         Arena a = Arena.getArenaByPlayer(p);
         if (a == null) return;
-        if (SpectatorFirstPersonEnterEvent.getSpectatingInFirstPerson().contains(p)) {
+        if (p.getSpectatorTarget() != null) {
             p.setGameMode(GameMode.ADVENTURE);
             p.setAllowFlight(true);
             p.setFlying(true);
@@ -172,26 +172,26 @@ public class SpectatorListeners implements Listener {
     }
 
     @EventHandler
-    /* Prevent gamemode 3 menu */
+    // Prevent gamemode 3 menu
     public void onTeleport(PlayerTeleportEvent e) {
-        //if (e.getCause() == PlayerTeleportEvent.TeleportCause.SPECTATE) {
-            if (SpectatorFirstPersonEnterEvent.getSpectatingInFirstPerson().contains(e.getPlayer())) {
-                Player p = e.getPlayer();
-                e.setCancelled(true);
-                p.setGameMode(GameMode.ADVENTURE);
-                p.setAllowFlight(true);
-                p.setFlying(true);
-                SpectatorFirstPersonLeaveEvent event = new SpectatorFirstPersonLeaveEvent(p, Arena.getArenaByPlayer(p), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE));
-                Bukkit.getPluginManager().callEvent(event);
-                nms.sendTitle(p, event.getTitle(), event.getSubtitle(), 0, 30, 0);
-            }
-        //}
+        if (!Arena.isInArena(e.getPlayer())) return;
+        if (e.getPlayer().getSpectatorTarget() != null) {
+            Player p = e.getPlayer();
+            e.setCancelled(true);
+            p.setGameMode(GameMode.ADVENTURE);
+            p.setAllowFlight(true);
+            p.setFlying(true);
+            SpectatorFirstPersonLeaveEvent event = new SpectatorFirstPersonLeaveEvent(p, Arena.getArenaByPlayer(p), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE));
+            Bukkit.getPluginManager().callEvent(event);
+            nms.sendTitle(p, event.getTitle(), event.getSubtitle(), 0, 30, 0);
+        }
     }
 
     @EventHandler
-    /* Remove from first person on target die */
+    // Remove from first person on target die
     public void onTargetDeath(PlayerKillEvent e) {
-        for (Player p : new ArrayList<>(SpectatorFirstPersonEnterEvent.getSpectatingInFirstPerson())) {
+        for (Player p : e.getArena().getSpectators()) {
+            if (p.getSpectatorTarget() == null) continue;
             if (p.getSpectatorTarget() == e.getVictim()) {
                 p.setGameMode(GameMode.ADVENTURE);
                 p.setAllowFlight(true);
@@ -204,7 +204,7 @@ public class SpectatorListeners implements Listener {
     }
 
     @EventHandler
-    /* Disable hits from spectators */
+    // Disable hits from spectators
     public void onDamageByEntity(EntityDamageByEntityEvent e) {
         if (e.isCancelled()) return;
         Arena a = Arena.getArenaByName(e.getEntity().getWorld().getName());

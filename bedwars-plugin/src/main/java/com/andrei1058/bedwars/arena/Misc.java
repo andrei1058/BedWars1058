@@ -1,8 +1,8 @@
 package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.ServerType;
-import com.andrei1058.bedwars.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.exceptions.InvalidMaterialException;
 import com.andrei1058.bedwars.stats.StatsManager;
@@ -16,7 +16,6 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
@@ -25,7 +24,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -81,7 +79,7 @@ public class Misc {
     /**
      * Win fireworks
      */
-    public static void launchFirework(@NotNull Player p) {
+    public static void launchFirework(Player p) {
         Color[] colors = {Color.WHITE, Color.AQUA, Color.BLUE, Color.FUCHSIA, Color.GRAY, Color.GREEN, Color.LIME, Color.RED,
                 Color.YELLOW, Color.BLACK, Color.MAROON, Color.NAVY, Color.OLIVE, Color.ORANGE, Color.PURPLE};
         Random r = new Random();
@@ -96,7 +94,7 @@ public class Misc {
     }
 
 
-    public static void launchFirework(@NotNull Location l) {
+    public static void launchFirework(Location l) {
         Color[] colors = {Color.WHITE, Color.AQUA, Color.BLUE, Color.FUCHSIA, Color.GRAY, Color.GREEN, Color.LIME, Color.RED,
                 Color.YELLOW, Color.BLACK, Color.MAROON, Color.NAVY, Color.OLIVE, Color.ORANGE, Color.PURPLE};
         Random r = new Random();
@@ -158,10 +156,7 @@ public class Misc {
 
     /**
      * Create an itemStack
-     *
-     * @since API 9
      */
-    @Nullable
     public static ItemStack createItemStack(String material, int data, String name, List<String> lore, boolean enchanted, String customData) throws InvalidMaterialException {
         Material m;
         try {
@@ -384,13 +379,13 @@ public class Misc {
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isBuildProtected(Location l, Arena a) {
         for (BedWarsTeam t : a.getTeams()) {
-            if (t.getSpawn().distance(l) <= a.getCm().getInt(ConfigPath.ARENA_SPAWN_PROTECTION)) {
+            if (t.getSpawn().distance(l) <= a.getConfig().getInt(ConfigPath.ARENA_SPAWN_PROTECTION)) {
                 return true;
             }
-            if (t.getShop().distance(l) <= a.getCm().getInt(ConfigPath.ARENA_SHOP_PROTECTION)) {
+            if (t.getShop().distance(l) <= a.getConfig().getInt(ConfigPath.ARENA_SHOP_PROTECTION)) {
                 return true;
             }
-            if (t.getTeamUpgrades().distance(l) <= a.getCm().getInt(ConfigPath.ARENA_UPGRADES_PROTECTION)) {
+            if (t.getTeamUpgrades().distance(l) <= a.getConfig().getInt(ConfigPath.ARENA_UPGRADES_PROTECTION)) {
                 return true;
             }
         }

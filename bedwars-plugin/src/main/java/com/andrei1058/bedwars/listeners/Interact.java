@@ -1,10 +1,10 @@
 package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.ServerType;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
-import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.shop.listeners.InventoryListener;
@@ -77,8 +77,8 @@ public class Interact implements Listener {
         Player p = e.getPlayer();
         if (p == null) return;
         Arena.afkCheck.remove(p.getUniqueId());
-        if (Main.api.isPlayerAFK(e.getPlayer())) {
-            Main.api.setPlayerAFK(e.getPlayer(), false);
+        if (Main.getAPI().getAFKSystem().isPlayerAFK(e.getPlayer())) {
+            Main.getAPI().getAFKSystem().setPlayerAFK(e.getPlayer(), false);
         }
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             Block b = e.getClickedBlock();
@@ -110,7 +110,7 @@ public class Interact implements Listener {
                     }
                     //make it so only team members can open chests while team is alive, and all when is eliminated
                     BedWarsTeam owner = null;
-                    int isRad = a.getCm().getInt(ConfigPath.ARENA_ISLAND_RADIUS);
+                    int isRad = a.getConfig().getInt(ConfigPath.ARENA_ISLAND_RADIUS);
                     for (BedWarsTeam t : a.getTeams()) {
                         if (t.getSpawn().distance(e.getClickedBlock().getLocation()) <= isRad) {
                             owner = t;

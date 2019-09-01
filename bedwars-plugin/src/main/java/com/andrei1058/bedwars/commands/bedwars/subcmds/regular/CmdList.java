@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.regular;
 
-import com.andrei1058.bedwars.api.team.TeamColor;
+import com.andrei1058.bedwars.api.arena.team.TeamColor;
+import com.andrei1058.bedwars.api.server.SetupType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
@@ -24,14 +25,7 @@ import static com.andrei1058.bedwars.Main.plugin;
 import static com.andrei1058.bedwars.language.Language.getList;
 
 public class CmdList extends SubCommand {
-    /**
-     * Create a sub-command for a bedWars command
-     * Make sure you return true or it will say command not found
-     *
-     * @param parent parent command
-     * @param name   sub-command name
-     * @since 0.6.1 api v6
-     */
+
     public CmdList(ParentCommand parent, String name) {
         super(parent, name);
         setPriority(11);
@@ -43,13 +37,13 @@ public class CmdList extends SubCommand {
     public boolean execute(String[] args, CommandSender s) {
         if (s instanceof ConsoleCommandSender) return false;
         Player p = (Player) s;
-        if (SetupSession.isInSetupSession(p)) {
-            SetupSession ss = SetupSession.getSession(p);
-            ss.getCm().reload();
+        if (SetupSession.isInSetupSession(p.getUniqueId())) {
+            SetupSession ss = SetupSession.getSession(p.getUniqueId());
+            ss.getConfig().reload();
 
-            boolean waitingSpawn = ss.getCm().getYml().get("waiting.Loc") != null,
-                    pos1 = ss.getCm().getYml().get("waiting.Pos1") != null,
-                    pos2 = ss.getCm().getYml().get("waiting.Pos2") != null,
+            boolean waitingSpawn = ss.getConfig().getYml().get("waiting.Loc") != null,
+                    pos1 = ss.getConfig().getYml().get("waiting.Pos1") != null,
+                    pos2 = ss.getConfig().getYml().get("waiting.Pos2") != null,
                     pos = pos1 && pos2;
             StringBuilder spawnNotSetNames = new StringBuilder();
             StringBuilder bedNotSet = new StringBuilder();
@@ -59,46 +53,46 @@ public class CmdList extends SubCommand {
             StringBuilder generatorNotSet = new StringBuilder();
             int teams = 0;
 
-            if (ss.getCm().getYml().get("Team") != null) {
-                for (String team : ss.getCm().getYml().getConfigurationSection("Team").getKeys(true)) {
-                    if (ss.getCm().getYml().get("Team." + team + ".Color") == null) continue;
-                    ChatColor color = TeamColor.getChatColor(ss.getCm().getYml().getString("Team." + team + ".Color"));
-                    if (ss.getCm().getYml().get("Team." + team + ".Spawn") == null) {
+            if (ss.getConfig().getYml().get("Team") != null) {
+                for (String team : ss.getConfig().getYml().getConfigurationSection("Team").getKeys(true)) {
+                    if (ss.getConfig().getYml().get("Team." + team + ".Color") == null) continue;
+                    ChatColor color = TeamColor.getChatColor(ss.getConfig().getYml().getString("Team." + team + ".Color"));
+                    if (ss.getConfig().getYml().get("Team." + team + ".Spawn") == null) {
                         spawnNotSet.append(color).append("▋");
                         spawnNotSetNames.append(color).append(team).append(" ");
                     }
-                    if (ss.getCm().getYml().get("Team." + team + ".Bed") == null) {
+                    if (ss.getConfig().getYml().get("Team." + team + ".Bed") == null) {
                         bedNotSet.append(color).append("▋");
                     }
-                    if (ss.getCm().getYml().get("Team." + team + ".Shop") == null) {
+                    if (ss.getConfig().getYml().get("Team." + team + ".Shop") == null) {
                         shopNotSet.append(color).append("▋");
                     }
-                    if (ss.getCm().getYml().get("Team." + team + ".Upgrade") == null) {
+                    if (ss.getConfig().getYml().get("Team." + team + ".Upgrade") == null) {
                         upgradeNotSet.append(color).append("▋");
                     }
-                    if (ss.getCm().getYml().get("Team." + team + ".Iron") == null || ss.getCm().getYml().get("Team." + team + ".Gold") == null) {
+                    if (ss.getConfig().getYml().get("Team." + team + ".Iron") == null || ss.getConfig().getYml().get("Team." + team + ".Gold") == null) {
                         generatorNotSet.append(color).append("▋");
                     }
                     teams++;
                 }
             }
             int emGen = 0, dmGen = 0;
-            if (ss.getCm().getYml().get("generator.Emerald") != null) {
-                emGen = ss.getCm().getYml().getStringList("generator.Emerald").size();
+            if (ss.getConfig().getYml().get("generator.Emerald") != null) {
+                emGen = ss.getConfig().getYml().getStringList("generator.Emerald").size();
             }
-            if (ss.getCm().getYml().get("generator.Diamond") != null) {
-                dmGen = ss.getCm().getYml().getStringList("generator.Diamond").size();
+            if (ss.getConfig().getYml().get("generator.Diamond") != null) {
+                dmGen = ss.getConfig().getYml().getStringList("generator.Diamond").size();
             }
 
-            String setWaitingSpawn = "§9 ▪ §7/" + getParent().getName() + (ss.getSetupType() == SetupSession.SetupType.ASSISTED ? (waitingSpawn ? " §m" : " ") : " ") + "setWaitingSpawn§r " + (waitingSpawn ? "§a(SET)" : "§c(NOT SET)");
-            String waitingPos = "§9 ▪ §7/" + getParent().getName() + (ss.getSetupType() == SetupSession.SetupType.ASSISTED ? (pos ? " §m" : " ") : " ") + "waitingPos 1/2§r " + (!pos ? (pos1 ? "§c(POS 2 NOT SET)" : "§c(POS 1 NOT SET)") : "§a(SET)");
-            String setSpawn = "§9 ▪ §7/" + getParent().getName() + (ss.getSetupType() == SetupSession.SetupType.ASSISTED ? ((spawnNotSet.length() == 0) ? " §m" : " ") : " ") + "setSpawn <teamName>§r " + ((spawnNotSet.length() == 0) ? "§a(ALL SET)" : "§c(Remaining: " + spawnNotSet + "§c)");
-            String setBed = "§9 ▪ §7/" + getParent().getName() + (ss.getSetupType() == SetupSession.SetupType.ASSISTED ? ((bedNotSet.toString().length() == 0) ? " §m" : " ") : " ") + "setBed§r " + ((bedNotSet.length() == 0) ? "§a(ALL SET)" : "§c(Remaining: " + bedNotSet + "§c)");
-            String setShop = "§9 ▪ §7/" + getParent().getName() + (ss.getSetupType() == SetupSession.SetupType.ASSISTED ? ((shopNotSet.toString().length() == 0) ? " §m" : " ") : " ") + "setShop§r " + ((shopNotSet.length() == 0) ? "§a(ALL SET)" : "§c(Remaining: " + shopNotSet + "§c)");
-            String setUpgrade = "§9 ▪ §7/" + getParent().getName() + (ss.getSetupType() == SetupSession.SetupType.ASSISTED ? ((upgradeNotSet.toString().length() == 0) ? " §m" : " ") : " ") + "setUpgrade§r " + ((upgradeNotSet.length() == 0) ? "§a(ALL SET)" : "§c(Remaining: " + upgradeNotSet + "§c)");
-            String addGenerator = "§9 ▪ §7/" + getParent().getName() + " addGenerator" + (ss.getSetupType() == SetupSession.SetupType.ASSISTED ? ((generatorNotSet.toString().length() == 0) ? " " : "§c(Remaining: " + generatorNotSet + "§c) ") : " ") + "§e(§2E" + emGen + " §bD" + dmGen + "§e)";
+            String setWaitingSpawn = "§9 ▪ §7/" + getParent().getName() + (ss.getSetupType() == SetupType.ASSISTED ? (waitingSpawn ? " §m" : " ") : " ") + "setWaitingSpawn§r " + (waitingSpawn ? "§a(SET)" : "§c(NOT SET)");
+            String waitingPos = "§9 ▪ §7/" + getParent().getName() + (ss.getSetupType() == SetupType.ASSISTED ? (pos ? " §m" : " ") : " ") + "waitingPos 1/2§r " + (!pos ? (pos1 ? "§c(POS 2 NOT SET)" : "§c(POS 1 NOT SET)") : "§a(SET)");
+            String setSpawn = "§9 ▪ §7/" + getParent().getName() + (ss.getSetupType() == SetupType.ASSISTED ? ((spawnNotSet.length() == 0) ? " §m" : " ") : " ") + "setSpawn <teamName>§r " + ((spawnNotSet.length() == 0) ? "§a(ALL SET)" : "§c(Remaining: " + spawnNotSet + "§c)");
+            String setBed = "§9 ▪ §7/" + getParent().getName() + (ss.getSetupType() == SetupType.ASSISTED ? ((bedNotSet.toString().length() == 0) ? " §m" : " ") : " ") + "setBed§r " + ((bedNotSet.length() == 0) ? "§a(ALL SET)" : "§c(Remaining: " + bedNotSet + "§c)");
+            String setShop = "§9 ▪ §7/" + getParent().getName() + (ss.getSetupType() == SetupType.ASSISTED ? ((shopNotSet.toString().length() == 0) ? " §m" : " ") : " ") + "setShop§r " + ((shopNotSet.length() == 0) ? "§a(ALL SET)" : "§c(Remaining: " + shopNotSet + "§c)");
+            String setUpgrade = "§9 ▪ §7/" + getParent().getName() + (ss.getSetupType() == SetupType.ASSISTED ? ((upgradeNotSet.toString().length() == 0) ? " §m" : " ") : " ") + "setUpgrade§r " + ((upgradeNotSet.length() == 0) ? "§a(ALL SET)" : "§c(Remaining: " + upgradeNotSet + "§c)");
+            String addGenerator = "§9 ▪ §7/" + getParent().getName() + " addGenerator" + (ss.getSetupType() == SetupType.ASSISTED ? ((generatorNotSet.toString().length() == 0) ? " " : "§c(Remaining: " + generatorNotSet + "§c) ") : " ") + "§e(§2E" + emGen + " §bD" + dmGen + "§e)";
 
-            if (ss.getSetupType() == SetupSession.SetupType.ASSISTED) {
+            if (ss.getSetupType() == SetupType.ASSISTED) {
                 s.sendMessage("");
                 s.sendMessage("§8§l" + com.andrei1058.bedwars.commands.bedwars.MainCommand.getDot() + " §6" + plugin.getDescription().getName() + " v" + plugin.getDescription().getVersion() + " §7- §c " + ss.getWorldName() + " Commands");
                 s.sendMessage("§7Use these commands in order.");

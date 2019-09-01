@@ -94,7 +94,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
             /* Set op commands*/
             if ((s.isOp() || s.hasPermission(Main.mainCmd + ".*"))) {
                 if (s instanceof Player) {
-                    if (SetupSession.isInSetupSession((Player) s)) {
+                    if (SetupSession.isInSetupSession(((Player) s).getUniqueId())) {
                         Bukkit.dispatchCommand(s, getName() + " cmds");
                     } else {
                         s.sendMessage("");
@@ -158,7 +158,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
     public void sendSubCommands(Player p) {
         for (int i = 0; i <= 20; i++) {
             for (SubCommand sb : getSubCommands()) {
-                if (sb.getPriority() == i && sb.isShow() && sb.canSee(p)) {
+                if (sb.getPriority() == i && sb.isShow() && sb.canSee(p, Main.getAPI())) {
                     p.spigot().sendMessage(sb.getDisplayInfo());
                 }
             }
@@ -169,12 +169,12 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         if (args.length == 1) {
             List<String> sub = new ArrayList<>();
             for (SubCommand sb : getSubCommands()) {
-                if (sb.canSee(s)) sub.add(sb.getSubCommandName());
+                if (sb.canSee(s, Main.getAPI())) sub.add(sb.getSubCommandName());
             }
             return sub;
         } else if (args.length == 2) {
             if (hasSubCommand(args[0])) {
-                if (getSubCommand(args[0]).canSee(s))
+                if (getSubCommand(args[0]).canSee(s, Main.getAPI()))
                 return getSubCommand(args[0]).getTabComplete();
             }
         }

@@ -98,14 +98,14 @@ public class Misc {
             //It's better not to use it
             return;
         }
-        List<Location> locations = setupSession.getCm().getLocations(path);
+        List<Location> locations = setupSession.getConfig().getArenaLocations(path);
         for (int x = -150; x < 150; x++) {
             for (int z = -150; z < 150; z++) {
                 Block b = origin.clone().add(x, 0, z).getBlock();
                 if (b.getX() == origin.getBlockX() && b.getY() == origin.getBlockY() && b.getZ() == origin.getBlockZ()) continue;
                 Location l = b.getLocation().clone().add(0, 1, 0);
                 for (Location location : locations) {
-                    if (setupSession.getCm().compareArenaLoc(location, b.getLocation().add(0, 1, 0))) continue;
+                    if (setupSession.getConfig().compareArenaLoc(location, b.getLocation().add(0, 1, 0))) continue;
                 }
                 if (b.getType() == target) {
                     if (layout_z_minus == l.clone().add(0, 0, -1).getBlock().getType() &&

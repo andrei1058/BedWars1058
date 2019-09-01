@@ -1,6 +1,8 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup;
 
-import com.andrei1058.bedwars.api.team.TeamColor;
+import com.andrei1058.bedwars.api.BedWars;
+import com.andrei1058.bedwars.api.arena.team.TeamColor;
+import com.andrei1058.bedwars.api.server.SetupType;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
@@ -14,14 +16,7 @@ import java.util.List;
 import static com.andrei1058.bedwars.Main.mainCmd;
 
 public class CreateTeam extends SubCommand {
-    /**
-     * Create a sub-command for a bedWars command
-     * Make sure you return true or it will say command not found
-     *
-     * @param parent parent command
-     * @param name   sub-command name
-     * @since 0.6.1 api v6
-     */
+
     public CreateTeam(ParentCommand parent, String name) {
         super(parent, name);
         setArenaSetupCommand(true);
@@ -32,7 +27,7 @@ public class CreateTeam extends SubCommand {
     public boolean execute(String[] args, CommandSender s) {
         if (s instanceof ConsoleCommandSender) return false;
         Player p = (Player) s;
-        SetupSession ss = SetupSession.getSession(p);
+        SetupSession ss = SetupSession.getSession(p.getUniqueId());
         if (ss == null) {
             s.sendMessage("§c ▪ §7You're not in a setup session!");
             return true;
@@ -61,20 +56,20 @@ public class CreateTeam extends SubCommand {
                 colors = new StringBuilder(colors.toString().substring(0, colors.toString().length() - 2) + "§7.");
                 p.sendMessage("§6 ▪ §7Available colors: " + colors);
             } else {
-                if (ss.getCm().getYml().get("Team." + args[0] + ".Color") != null) {
+                if (ss.getConfig().getYml().get("Team." + args[0] + ".Color") != null) {
                     p.sendMessage("§c▪ §7" + args[0] + " team already exists!");
                     return true;
                 }
-                ss.getCm().set("Team." + args[0] + ".Color", args[1].toUpperCase());
+                ss.getConfig().set("Team." + args[0] + ".Color", args[1].toUpperCase());
                 p.sendMessage("§6 ▪ §7" + TeamColor.getChatColor(args[1]) + args[0] + " §7created!");
-                if (ss.getSetupType() == SetupSession.SetupType.ASSISTED) {
-                    ss.getCm().reload();
-                    int teams = ss.getCm().getYml().getConfigurationSection("Team").getKeys(false).size();
+                if (ss.getSetupType() == SetupType.ASSISTED) {
+                    ss.getConfig().reload();
+                    int teams = ss.getConfig().getYml().getConfigurationSection("Team").getKeys(false).size();
                     int max = 1;
                     if (teams == 4) {
                         max = 2;
                     }
-                    ss.getCm().set("maxInTeam", max);
+                    ss.getConfig().set("maxInTeam", max);
                 }
             }
         }
@@ -87,11 +82,11 @@ public class CreateTeam extends SubCommand {
     }
 
     @Override
-    public boolean canSee(CommandSender s) {
+    public boolean canSee(CommandSender s, BedWars api) {
         if (s instanceof ConsoleCommandSender) return false;
 
         Player p = (Player) s;
-        if (!SetupSession.isInSetupSession(p)) return false;
+        if (!SetupSession.isInSetupSession(p.getUniqueId())) return false;
 
         return hasPermission(s);
     }

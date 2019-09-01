@@ -2,9 +2,9 @@ package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.arena.GameState;
-import com.andrei1058.bedwars.api.ServerType;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.*;
-import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.configuration.Permissions;
@@ -221,8 +221,8 @@ public class JoinLeaveTeleport implements Listener {
             }
         }
         /* Check if was doing a setup and remove the session */
-        if (SetupSession.isInSetupSession(p)) {
-            SetupSession.getSession(p).cancel();
+        if (SetupSession.isInSetupSession(p.getUniqueId())) {
+            SetupSession.getSession(p.getUniqueId()).cancel();
         }
     }
 

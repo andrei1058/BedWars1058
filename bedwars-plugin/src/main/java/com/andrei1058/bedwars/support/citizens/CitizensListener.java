@@ -1,9 +1,10 @@
 package com.andrei1058.bedwars.support.citizens;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
-import com.andrei1058.bedwars.configuration.ConfigPath;
+
 import com.andrei1058.bedwars.language.Messages;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.event.NPCRemoveEvent;
@@ -24,7 +25,7 @@ public class CitizensListener implements Listener {
     public void removeNPC(NPCRemoveEvent e) {
         List<String> locations = Main.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE);
         boolean removed = false;
-        if (JoinNPC.npcs.keySet().contains(e.getNPC().getId())) {
+        if (JoinNPC.npcs.containsKey(e.getNPC().getId())) {
             JoinNPC.npcs.remove(e.getNPC().getId());
             removed = true;
         }
@@ -32,7 +33,7 @@ public class CitizensListener implements Listener {
             String[] data = s.split(",");
             if (data.length >= 10) {
                 if (Misc.isNumber(data[9])) {
-                    if (Integer.valueOf(data[9]) == e.getNPC().getId()) {
+                    if (Integer.parseInt(data[9]) == e.getNPC().getId()) {
                         locations.remove(s);
                         removed = true;
                     }

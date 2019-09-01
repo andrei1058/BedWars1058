@@ -3,7 +3,7 @@ package com.andrei1058.bedwars.listeners;
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.events.player.PlayerGeneratorCollectEvent;
-import com.andrei1058.bedwars.api.ServerType;
+import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -62,7 +62,7 @@ public class PlayerDropPickListener implements Listener {
                     ItemMeta itemMeta = new ItemStack(material).getItemMeta();
 
                     //Call ore pick up event
-                    PlayerGeneratorCollectEvent event = new PlayerGeneratorCollectEvent(e.getPlayer(), e.getItem().getItemStack());
+                    PlayerGeneratorCollectEvent event = new PlayerGeneratorCollectEvent(e.getPlayer(), e.getItem().getItemStack(), a);
                     Bukkit.getPluginManager().callEvent(event);
                     if (event.isCancelled()){
                         e.setCancelled(true);
@@ -109,7 +109,7 @@ public class PlayerDropPickListener implements Listener {
     @EventHandler
     //Prevent AFK players from picking items
     public void onCollect(PlayerGeneratorCollectEvent e){
-        if (Main.api.isPlayerAFK(e.getPlayer())){
+        if (Main.getAPI().getAFKSystem().isPlayerAFK(e.getPlayer())){
             e.setCancelled(true);
             return;
         }

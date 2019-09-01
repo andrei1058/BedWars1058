@@ -2,8 +2,8 @@ package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.arena.GameState;
-import com.andrei1058.bedwars.api.team.TeamColor;
-import com.andrei1058.bedwars.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.arena.team.TeamColor;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.levels.internal.PlayerLevel;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;

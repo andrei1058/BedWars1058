@@ -1,18 +1,14 @@
 package com.andrei1058.bedwars.maprestore.internal.files;
 
 import java.io.File;
-import java.io.IOException;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.ServerType;
+import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.maprestore.internal.InternalAdapter;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
-import org.bukkit.entity.Player;
 
 public class WorldRestorer {
 

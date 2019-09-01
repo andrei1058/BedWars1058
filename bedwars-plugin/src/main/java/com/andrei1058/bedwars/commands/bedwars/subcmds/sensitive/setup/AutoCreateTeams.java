@@ -1,7 +1,9 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.team.TeamColor;
+import com.andrei1058.bedwars.api.BedWars;
+import com.andrei1058.bedwars.api.arena.team.TeamColor;
+import com.andrei1058.bedwars.api.server.SetupType;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.api.command.ParentCommand;
@@ -22,14 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class AutoCreateTeams extends SubCommand {
-    /**
-     * Create a sub-command for a bedWars command
-     * Make sure you return true or it will say command not found
-     *
-     * @param parent parent command
-     * @param name   sub-command name
-     * @since 0.6.1 api v6
-     */
+
     public AutoCreateTeams(ParentCommand parent, String name) {
         super(parent, name);
         setArenaSetupCommand(true);
@@ -45,18 +40,18 @@ public class AutoCreateTeams extends SubCommand {
     public boolean execute(String[] args, CommandSender s) {
         if (s instanceof ConsoleCommandSender) return false;
         Player p = (Player) s;
-        SetupSession ss = SetupSession.getSession(p);
+        SetupSession ss = SetupSession.getSession(p.getUniqueId());
         if (ss == null) {
             s.sendMessage("§c ▪ §7You're not in a setup session!");
             return true;
         }
-        if (ss.getSetupType() == SetupSession.SetupType.ASSISTED) {
+        if (ss.getSetupType() == SetupType.ASSISTED) {
             if (is13Higher()) {
                 if (timeOut.containsKey(p) && timeOut.get(p) >= System.currentTimeMillis() && teamsFound13.containsKey(p)) {
                     for (String tf : teamsFound13.get(p)) {
                         Bukkit.dispatchCommand(s, Main.mainCmd + " createTeam " + TeamColor.enName(tf) + " " + TeamColor.enName(tf));
                     }
-                    if (ss.getCm().getYml().get("waiting.Pos1") == null) {
+                    if (ss.getConfig().getYml().get("waiting.Pos1") == null) {
                         s.sendMessage("");
                         s.sendMessage("§6§lWAITING LOBBY REMOVAL:");
                         s.sendMessage("§fIf you'd like the lobby to disappear when the game starts,");
@@ -70,7 +65,7 @@ public class AutoCreateTeams extends SubCommand {
                 }
                 List<String> found = new ArrayList<>();
                 World w = p.getWorld();
-                if (ss.getCm().getYml().get("Team") == null) {
+                if (ss.getConfig().getYml().get("Team") == null) {
                     p.sendMessage("§6 ▪ §7Searching for teams. This may cause lag.");
                     for (int x = -200; x < 200; x++) {
                         for (int y = 50; y < 130; y++) {
@@ -91,7 +86,7 @@ public class AutoCreateTeams extends SubCommand {
                                         }
                                         if (count >= 5) {
                                             if (!TeamColor.enName(b.getType().toString()).isEmpty()) {
-                                                if (ss.getCm().getYml().get("Team." + TeamColor.enName(b.getType().toString())) == null) {
+                                                if (ss.getConfig().getYml().get("Team." + TeamColor.enName(b.getType().toString())) == null) {
                                                     found.add(b.getType().toString());
                                                 }
                                             }
@@ -129,7 +124,7 @@ public class AutoCreateTeams extends SubCommand {
                     for (Byte tf : teamsFoundOld.get(p)) {
                         Bukkit.dispatchCommand(s, Main.mainCmd + " createTeam " + TeamColor.enName(tf) + " " + TeamColor.enName(tf));
                     }
-                    if (ss.getCm().getYml().get("waiting.Pos1") == null) {
+                    if (ss.getConfig().getYml().get("waiting.Pos1") == null) {
                         s.sendMessage("");
                         s.sendMessage("§6§lWAITING LOBBY REMOVAL:");
                         s.sendMessage("§fIf you'd like the lobby to disappear when the game starts,");
@@ -143,7 +138,7 @@ public class AutoCreateTeams extends SubCommand {
                 }
                 List<Byte> found = new ArrayList<>();
                 World w = p.getWorld();
-                if (ss.getCm().getYml().get("Team") == null) {
+                if (ss.getConfig().getYml().get("Team") == null) {
                     p.sendMessage("§6 ▪ §7Searching for teams. This may cause lag.");
                     for (int x = -200; x < 200; x++) {
                         for (int y = 50; y < 130; y++) {
@@ -166,7 +161,7 @@ public class AutoCreateTeams extends SubCommand {
                                         }
                                         if (count >= 5) {
                                             if (!TeamColor.enName(b.getData()).isEmpty()) {
-                                                if (ss.getCm().getYml().get("Team." + TeamColor.enName(b.getData())) == null) {
+                                                if (ss.getConfig().getYml().get("Team." + TeamColor.enName(b.getData())) == null) {
                                                     found.add(b.getData());
                                                 }
                                             }
@@ -226,11 +221,11 @@ public class AutoCreateTeams extends SubCommand {
     }
 
     @Override
-    public boolean canSee(CommandSender s) {
+    public boolean canSee(CommandSender s, BedWars api) {
         if (s instanceof ConsoleCommandSender) return false;
 
         Player p = (Player) s;
-        if (!SetupSession.isInSetupSession(p)) return false;
+        if (!SetupSession.isInSetupSession(p.getUniqueId())) return false;
 
         return hasPermission(s);
     }

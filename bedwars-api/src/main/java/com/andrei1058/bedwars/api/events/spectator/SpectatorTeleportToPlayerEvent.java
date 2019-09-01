@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.api.events.spectator;
 
-import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.api.arena.IArena;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -10,13 +10,13 @@ public class SpectatorTeleportToPlayerEvent extends Event {
     private static final HandlerList HANDLERS = new HandlerList();
 
     private Player spectator, target;
-    private Arena arena;
+    private IArena arena;
     private boolean cancelled = false;
 
     /**
      * Called when the spectator uses the player selector to teleport and spectate the selected player.
      */
-    public SpectatorTeleportToPlayerEvent(Player spectator, Player target, Arena arena) {
+    public SpectatorTeleportToPlayerEvent(Player spectator, Player target, IArena arena) {
         this.spectator = spectator;
         this.target = target;
         this.arena = arena;
@@ -32,7 +32,7 @@ public class SpectatorTeleportToPlayerEvent extends Event {
     /**
      * Get the arena
      */
-    public Arena getArena() {
+    public IArena getArena() {
         return arena;
     }
 

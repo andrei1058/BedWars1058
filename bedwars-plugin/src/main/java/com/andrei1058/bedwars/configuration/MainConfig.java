@@ -240,7 +240,7 @@ public class MainConfig extends ConfigManager {
         }
 
         Main.setDebug(yml.getBoolean("debug"));
-        new ConfigManager(plugin,"bukkit", Bukkit.getWorldContainer().getPath(), false).set("ticks-per.autosave", -1);
+        new ConfigManager(plugin,"bukkit", Bukkit.getWorldContainer().getPath()).set("ticks-per.autosave", -1);
 
         Bukkit.spigot().getConfig().set("commands.send-namespaced", false);
         try {
@@ -249,28 +249,13 @@ public class MainConfig extends ConfigManager {
             e.printStackTrace();
         }
 
-        switch (yml.getString("serverType").toUpperCase()) {
-            case "BUNGEE":
-                serverType = ServerType.BUNGEE;
-                new ConfigManager("bukkit", Bukkit.getWorldContainer().getPath(), false).set("settings.allow-end", false);
-                //Bukkit.spigot().getConfig().set("settings.bungeecord", true);
-                try {
-                    Bukkit.spigot().getConfig().save("spigot.yml");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                break;
-            case "SHARED":
-                serverType = ServerType.SHARED;
-                setupSignsConfiguration();
-                break;
-            default:
-                setupSignsConfiguration();
-                set("serverType", "MULTIARENA");
-                new ConfigManager("bukkit", Bukkit.getWorldContainer().getPath(), false).set("settings.allow-end", false);
-                break;
+        try {
+            Main.setServerType(ServerType.valueOf(yml.getString("serverType").toUpperCase()));
+        } catch (Exception e){
+            set("serverType", "MULTIARENA");
         }
-        lobbyWorld = getLobbyWorldName();
+
+        Main.setLobbyWorld(getLobbyWorldName());
     }
 
     public String getLobbyWorldName() {
@@ -286,12 +271,12 @@ public class MainConfig extends ConfigManager {
      */
     public void saveLobbyCommandItem(String name, String cmd, boolean enchanted, String material, int data, int slot) {
         if (isFirstTime()) {
-            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_COMMAND.replace("%path%", name), cmd);
-            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", name), material);
-            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_DATA.replace("%path%", name), data);
-            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_ENCHANTED.replace("%path%", name), enchanted);
-            yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_SLOT.replace("%path%", name), slot);
-            yml.options().copyDefaults(true);
+            getYml().addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_COMMAND.replace("%path%", name), cmd);
+            getYml().addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", name), material);
+            getYml().addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_DATA.replace("%path%", name), data);
+            getYml().addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_ENCHANTED.replace("%path%", name), enchanted);
+            getYml().addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_SLOT.replace("%path%", name), slot);
+            getYml().options().copyDefaults(true);
             save();
         }
     }

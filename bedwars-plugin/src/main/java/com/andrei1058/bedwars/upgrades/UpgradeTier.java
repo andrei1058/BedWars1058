@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.upgrades;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.arena.upgrades.IUpgradeTier;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.language.Messages;
@@ -16,7 +16,7 @@ import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.language.Language.*;
 
 @SuppressWarnings("WeakerAccess")
-public class UpgradeTier {
+public class UpgradeTier implements IUpgradeTier {
 
     private String name, currency;
     private List<UpgradeAction> actions;

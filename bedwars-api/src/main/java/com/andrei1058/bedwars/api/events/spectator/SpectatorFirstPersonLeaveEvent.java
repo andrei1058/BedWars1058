@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.api.events.spectator;
 
-import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.api.arena.IArena;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -10,15 +10,14 @@ public class SpectatorFirstPersonLeaveEvent extends Event {
     private static final HandlerList HANDLERS = new HandlerList();
 
     private Player spectator;
-    private Arena arena;
+    private IArena arena;
     private String title, subtitle;
 
-    public SpectatorFirstPersonLeaveEvent(Player spectator, Arena arena, String title, String subtitle) {
+    public SpectatorFirstPersonLeaveEvent(Player spectator, IArena arena, String title, String subtitle) {
         this.spectator = spectator;
         this.arena = arena;
         this.title = title;
         this.subtitle = subtitle;
-        SpectatorFirstPersonEnterEvent.getSpectatingInFirstPerson().remove(spectator);
     }
 
     /**
@@ -31,7 +30,7 @@ public class SpectatorFirstPersonLeaveEvent extends Event {
     /**
      * Get the arena
      */
-    public Arena getArena() {
+    public IArena getArena() {
         return arena;
     }
 

@@ -7,9 +7,9 @@ import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.configuration.LevelsConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.UUID;
 
 @SuppressWarnings("WeakerAccess")
@@ -48,8 +48,10 @@ public class PlayerLevel {
     }
 
     public void setLevelName(int level) {
-        this.levelName = ChatColor.translateAlternateColorCodes('&', LevelsConfig.levels.getYml().get("levels." + level + ".name") == null ?
-                LevelsConfig.levels.getYml().getString("levels.others.name") : LevelsConfig.levels.getYml().getString("levels." + level + ".name")).replace("{number}", String.valueOf(level));
+        this.levelName = ChatColor.translateAlternateColorCodes('&',
+                Objects.requireNonNull(LevelsConfig.levels.getYml().get("levels." + level + ".name") == null ?
+                        LevelsConfig.levels.getYml().getString("levels.others.name") :
+                        LevelsConfig.levels.getYml().getString("levels." + level + ".name"))).replace("{number}", String.valueOf(level));
 
     }
 
@@ -112,7 +114,6 @@ public class PlayerLevel {
     /**
      * Get PlayerLevel by player.
      */
-    @Nullable
     public static PlayerLevel getLevelByPlayer(UUID player) {
         return levelByPlayer.getOrDefault(player, null);
     }
@@ -161,7 +162,7 @@ public class PlayerLevel {
         this.currentXp += xp;
         upgradeLevel();
         updateProgressBar();
-        Bukkit.getPluginManager().callEvent(new PlayerXpGainEvent(uuid, xp, source));
+        Bukkit.getPluginManager().callEvent(new PlayerXpGainEvent(Bukkit.getPlayer(uuid), xp, source));
     }
 
     /**
@@ -181,8 +182,8 @@ public class PlayerLevel {
         this.level = level;
         nextLevelCost = LevelsConfig.levels.getYml().get("levels." + level + ".rankup-cost") == null ?
                 LevelsConfig.levels.getInt("levels.others.rankup-cost") : LevelsConfig.levels.getInt("levels." + level + ".rankup-cost");
-        this.levelName = ChatColor.translateAlternateColorCodes('&', LevelsConfig.levels.getYml().get("levels." + level + ".name") == null ?
-                LevelsConfig.levels.getYml().getString("levels.others.name") : LevelsConfig.levels.getYml().getString("levels." + level + ".name")).replace("{number}", String.valueOf(level));
+        this.levelName = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(LevelsConfig.levels.getYml().get("levels." + level + ".name") == null ?
+                LevelsConfig.levels.getYml().getString("levels.others.name") : LevelsConfig.levels.getYml().getString("levels." + level + ".name"))).replace("{number}", String.valueOf(level));
         requiredXp = nextLevelCost >= 1000 ? nextLevelCost % 1000 == 0 ? nextLevelCost / 1000 + "k" : (double) nextLevelCost / 1000 + "k" : String.valueOf(nextLevelCost);
         updateProgressBar();
     }

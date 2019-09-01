@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.api.command.ParentCommand;
@@ -29,14 +30,6 @@ public class DelArena extends SubCommand {
 
     private static HashMap<Player, Long> delArenaConfirm = new HashMap<>();
 
-    /**
-     * Create a sub-command for a bedWars command
-     * Make sure you return true or it will say command not found
-     *
-     * @param parent parent command
-     * @param name   sub-command name
-     * @since 0.6.1 api v6
-     */
     public DelArena(ParentCommand parent, String name) {
         super(parent, name);
         setPriority(4);
@@ -55,7 +48,7 @@ public class DelArena extends SubCommand {
             p.sendMessage("§c▪ §7Usage: §o/" + MainCommand.getInstance().getName() + " delArena <mapName>");
             return true;
         }
-        if (!Main.api.getRestoreAdapter().isWorld(args[0])) {
+        if (!Main.getAPI().getRestoreAdapter().isWorld(args[0])) {
             p.sendMessage("§c▪ §7" + args[0] + " doesn't exist as a world folder!");
             return true;
         }
@@ -70,7 +63,7 @@ public class DelArena extends SubCommand {
         }
         if (delArenaConfirm.containsKey(p)) {
             if (System.currentTimeMillis() - 2000 <= delArenaConfirm.get(p)) {
-                Main.api.getRestoreAdapter().deleteWorld(args[0]);
+                Main.getAPI().getRestoreAdapter().deleteWorld(args[0]);
                 FileUtils.deleteQuietly(ac);
                 p.sendMessage("§c▪ §7" + args[0] + " was deleted!");
                 return true;
@@ -102,13 +95,13 @@ public class DelArena extends SubCommand {
     }
 
     @Override
-    public boolean canSee(CommandSender s) {
+    public boolean canSee(CommandSender s, BedWars api) {
         if (s instanceof ConsoleCommandSender) return false;
 
         Player p = (Player) s;
         if (Arena.isInArena(p)) return false;
 
-        if (SetupSession.isInSetupSession(p)) return false;
+        if (SetupSession.isInSetupSession(p.getUniqueId())) return false;
         return hasPermission(s);
     }
 }

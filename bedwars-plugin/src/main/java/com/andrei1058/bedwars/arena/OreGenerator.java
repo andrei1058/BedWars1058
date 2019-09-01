@@ -1,9 +1,10 @@
 package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.arena.GeneratorType;
+import com.andrei1058.bedwars.api.arena.generator.GeneratorType;
+import com.andrei1058.bedwars.api.arena.generator.IGenerator;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.gameplay.GeneratorUpgradeEvent;
-import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.region.Cuboid;
@@ -16,8 +17,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -25,7 +24,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import static com.andrei1058.bedwars.Main.*;
 
 @SuppressWarnings("WeakerAccess")
-public class OreGenerator {
+public class OreGenerator implements IGenerator {
 
     private Location location;
     private int delay = 1, upgradeStage = 1, lastSpawn, spawnLimit = 0, amount = 1;
@@ -46,7 +45,7 @@ public class OreGenerator {
 
     private static ConcurrentLinkedDeque<OreGenerator> rotation = new ConcurrentLinkedDeque<>();
 
-    public OreGenerator(Location location, Arena arena, @NotNull GeneratorType type, BedWarsTeam bwt) {
+    public OreGenerator(Location location, Arena arena, GeneratorType type, BedWarsTeam bwt) {
         if (type == GeneratorType.EMERALD || type == GeneratorType.DIAMOND) {
             this.location = new Location(location.getWorld(), location.getBlockX() + 0.5, location.getBlockY() + 1.3, location.getBlockZ() + 0.5);
         } else {
@@ -113,7 +112,7 @@ public class OreGenerator {
                 }
                 break;
         }
-        Bukkit.getPluginManager().callEvent(new GeneratorUpgradeEvent(type, location));
+        Bukkit.getPluginManager().callEvent(new GeneratorUpgradeEvent(this));
     }
 
     public void spawn() {
@@ -183,8 +182,6 @@ public class OreGenerator {
         return arena;
     }
 
-    @NotNull
-    @Contract(pure = true)
     public static ConcurrentLinkedDeque<OreGenerator> getRotation() {
         return rotation;
     }
@@ -248,7 +245,7 @@ public class OreGenerator {
         }
     }
 
-    private static ArmorStand createArmorStand(String name, @NotNull Location l) {
+    private static ArmorStand createArmorStand(String name, Location l) {
         ArmorStand a = (ArmorStand) l.getWorld().spawnEntity(l, EntityType.ARMOR_STAND);
         a.setGravity(false);
         if (name != null) {

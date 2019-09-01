@@ -1,10 +1,12 @@
 package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.*;
 import com.andrei1058.bedwars.api.arena.GameState;
-import com.andrei1058.bedwars.api.arena.GeneratorType;
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.NextEvent;
+import com.andrei1058.bedwars.api.arena.generator.GeneratorType;
+import com.andrei1058.bedwars.api.arena.team.TeamColor;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerJoinArenaEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerLeaveArenaEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerReJoinEvent;
@@ -13,9 +15,8 @@ import com.andrei1058.bedwars.api.events.gameplay.GameStateChangeEvent;
 import com.andrei1058.bedwars.api.events.server.ArenaDisableEvent;
 import com.andrei1058.bedwars.api.events.server.ArenaEnableEvent;
 import com.andrei1058.bedwars.api.events.server.ArenaRestartEvent;
-import com.andrei1058.bedwars.api.team.TeamColor;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
-import com.andrei1058.bedwars.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.levels.internal.InternalLevel;
@@ -33,13 +34,11 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
 import org.bukkit.entity.*;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -50,7 +49,7 @@ import static com.andrei1058.bedwars.arena.upgrades.BaseListener.isOnABase;
 import static com.andrei1058.bedwars.language.Language.*;
 
 @SuppressWarnings("WeakerAccess")
-public class Arena implements Comparable<Arena> {
+public class Arena implements Comparable<Arena>, IArena {
 
     private static HashMap<String, Arena> arenaByName = new HashMap<>();
     private static HashMap<Player, Arena> arenaByPlayer = new HashMap<>();
@@ -119,7 +118,7 @@ public class Arena implements Comparable<Arena> {
 
     private PerMinuteTask perMinuteTask;
 
-    private static LinkedList<Arena> enableQueue = new LinkedList<>();
+    private static LinkedList<IArena> enableQueue = new LinkedList<>();
 
     /**
      * Load an arena.
@@ -129,7 +128,7 @@ public class Arena implements Comparable<Arena> {
      * @param p    - This will send messages to the player if something went wrong while loading the arena. Can be NULL.
      */
     public Arena(String name, Player p) {
-        for (Arena mm : enableQueue) {
+        for (IArena mm : enableQueue) {
             if (mm.getWorldName().equalsIgnoreCase(name)) {
                 plugin.getLogger().severe("Tried to load arena " + name + " but it is already in the enable queue.");
                 if (p != null)
@@ -144,7 +143,7 @@ public class Arena implements Comparable<Arena> {
         }
         this.worldName = name;
 
-        cm = new ConfigManager(name, "plugins/" + plugin.getName() + "/Arenas", true);
+        cm = new ConfigManager(Main.plugin, name, "plugins/" + plugin.getName() + "/Arenas");
 
         //if (mapManager.isLevelWorld()) {
         //    Main.plugin.getLogger().severe("COULD NOT LOAD ARENA: " + name);
@@ -174,7 +173,7 @@ public class Arena implements Comparable<Arena> {
         }
 
 
-        if (!Main.api.getRestoreAdapter().isWorld(name)) {
+        if (!Main.getAPI().getRestoreAdapter().isWorld(name)) {
             if (p != null) p.sendMessage(ChatColor.RED + "There isn't any map called " + name);
             plugin.getLogger().log(Level.WARNING, "There isn't any map called " + name);
             return;
@@ -218,7 +217,7 @@ public class Arena implements Comparable<Arena> {
         enableQueue.add(this);
         plugin.getLogger().info("Arena " + getWorldName() + " was added to the enable queue.");
         if (enableQueue.size() == 1) {
-            api.getRestoreAdapter().onEnable(this);
+            Main.getAPI().getRestoreAdapter().onEnable(this);
             plugin.getLogger().info("Loading arena: " + getWorldName());
         }
     }
@@ -226,10 +225,12 @@ public class Arena implements Comparable<Arena> {
     /**
      * Use this method when the world was loaded successfully.
      */
+    @Override
     public void init(World world) {
+        if (getArenaByName(worldName) != null) return;
         enableQueue.remove(this);
         if (!enableQueue.isEmpty()) {
-            api.getRestoreAdapter().onEnable(enableQueue.get(0));
+            Main.getAPI().getRestoreAdapter().onEnable(enableQueue.get(0));
         }
         this.world = world;
         world.getEntities().stream().filter(e -> e.getType() != EntityType.PLAYER)
@@ -256,7 +257,7 @@ public class Arena implements Comparable<Arena> {
             BedWarsTeam bwt = new BedWarsTeam(team, TeamColor.valueOf(yml.getString("Team." + team + ".Color").toUpperCase()), cm.getArenaLoc("Team." + team + ".Spawn"),
                     cm.getArenaLoc("Team." + team + ".Bed"), cm.getArenaLoc("Team." + team + ".Shop"), cm.getArenaLoc("Team." + team + ".Upgrade"), this);
             teams.add(bwt);
-            bwt.setGenerators(getCm().getArenaLoc("Team." + bwt.getName() + ".Iron"), getCm().getArenaLoc("Team." + bwt.getName() + ".Gold"));
+            bwt.setGenerators(getConfig().getArenaLoc("Team." + bwt.getName() + ".Iron"), getConfig().getArenaLoc("Team." + bwt.getName() + ".Gold"));
         }
 
         //Load diamond/ emerald generators
@@ -264,7 +265,7 @@ public class Arena implements Comparable<Arena> {
         for (String type : Arrays.asList("Diamond", "Emerald")) {
             if (yml.get("generator." + type) != null) {
                 for (String s : yml.getStringList("generator." + type)) {
-                    location = cm.fromArenaStringList(s);
+                    location = cm.convertStringToArenaLocation(s);
                     if (location == null) {
                         plugin.getLogger().severe("Invalid location for " + type + " generator: " + s);
                         continue;
@@ -280,10 +281,10 @@ public class Arena implements Comparable<Arena> {
         world.getWorldBorder().setSize(yml.getInt("worldBorder"));
 
         /* Check if lobby removal is set */
-        if (!getCm().getYml().isSet(ConfigPath.ARENA_WAITING_POS1) && getCm().getYml().isSet(ConfigPath.ARENA_WAITING_POS2)) {
+        if (!getConfig().getYml().isSet(ConfigPath.ARENA_WAITING_POS1) && getConfig().getYml().isSet(ConfigPath.ARENA_WAITING_POS2)) {
             plugin.getLogger().severe("Lobby Pos1 isn't set! The arena's lobby won't be removed!");
         }
-        if (getCm().getYml().isSet(ConfigPath.ARENA_WAITING_POS1) && !getCm().getYml().isSet(ConfigPath.ARENA_WAITING_POS2)) {
+        if (getConfig().getYml().isSet(ConfigPath.ARENA_WAITING_POS1) && !getConfig().getYml().isSet(ConfigPath.ARENA_WAITING_POS2)) {
             plugin.getLogger().severe("Lobby Pos2 isn't set! The arena's lobby won't be removed!");
         }
 
@@ -410,7 +411,7 @@ public class Arena implements Comparable<Arena> {
             if (players.size() >= (teams.size() * maxInTeam / 2)) {
                 if (startingTask != null) {
                     if (Bukkit.getScheduler().isCurrentlyRunning(startingTask.getTask())) {
-                        if (startingTask.getCountdown() > getCm().getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_HALF))
+                        if (startingTask.getCountdown() > getConfig().getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_HALF))
                             startingTask.setCountdown(Main.config.getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_HALF));
                     }
                 }
@@ -573,7 +574,6 @@ public class Arena implements Comparable<Arena> {
      *
      * @param p          Player to be removed
      * @param disconnect True if the player was disconnected
-     * @since API 8
      */
     public void removePlayer(Player p, boolean disconnect) {
         debug("Player removed: " + p.getName() + " arena: " + getWorldName());
@@ -730,7 +730,6 @@ public class Arena implements Comparable<Arena> {
      *
      * @param p          Player to be removed
      * @param disconnect True if the player was disconnected
-     * @since API 8
      */
     public void removeSpectator(Player p, boolean disconnect) {
         debug("Spectator removed: " + p.getName() + " arena: " + getWorldName());
@@ -811,8 +810,6 @@ public class Arena implements Comparable<Arena> {
 
     /**
      * Rejoin an arena
-     *
-     * @since API 11
      */
     public boolean reJoin(ReJoin reJoin, Player p) {
         if (reJoin.getArena() != this) return false;
@@ -851,7 +848,7 @@ public class Arena implements Comparable<Arena> {
             playerLocation.put(p, p.getLocation());
         }
 
-        p.teleport(getCm().getArenaLoc("waiting.Loc"));
+        p.teleport(getConfig().getArenaLoc("waiting.Loc"));
         p.getInventory().clear();
 
         //restore items before re-spawning in team
@@ -882,7 +879,7 @@ public class Arena implements Comparable<Arena> {
             removeSpectator(p, false);
         }
         destroyData();
-        api.getRestoreAdapter().onDisable(this);
+        Main.getAPI().getRestoreAdapter().onDisable(this);
         Bukkit.getPluginManager().callEvent(new ArenaDisableEvent(getWorldName()));
     }
 
@@ -892,7 +889,7 @@ public class Arena implements Comparable<Arena> {
     public void restart() {
         plugin.getLogger().log(Level.FINE, "Restarting arena: " + getWorldName());
         destroyData();
-        api.getRestoreAdapter().onRestart(this);
+        Main.getAPI().getRestoreAdapter().onRestart(this);
         Bukkit.getPluginManager().callEvent(new ArenaRestartEvent(getWorldName()));
     }
 
@@ -908,6 +905,8 @@ public class Arena implements Comparable<Arena> {
     /**
      * Get the max number of teammates in a team
      */
+
+    @Override
     public int getMaxInTeam() {
         return maxInTeam;
     }
@@ -964,6 +963,7 @@ public class Arena implements Comparable<Arena> {
     /**
      * Get the players list
      */
+    @Override
     public List<Player> getPlayers() {
         return players;
     }
@@ -971,6 +971,7 @@ public class Arena implements Comparable<Arena> {
     /**
      * Get the max number of players that can play on this arena.
      */
+    @Override
     public int getMaxPlayers() {
         return maxPlayers;
     }
@@ -980,14 +981,16 @@ public class Arena implements Comparable<Arena> {
      *
      * @return A string with - and _ replaced by a space.
      */
+    @Override
     public String getDisplayName() {
-        return getCm().getString(ConfigPath.ARENA_DISPLAY_NAME).trim().isEmpty() ? (Character.toUpperCase(worldName.charAt(0)) + worldName.substring(1)).replace("_", " ").replace("-", " ")
-                : getCm().getString(ConfigPath.ARENA_DISPLAY_NAME);
+        return getConfig().getString(ConfigPath.ARENA_DISPLAY_NAME).trim().isEmpty() ? (Character.toUpperCase(worldName.charAt(0)) + worldName.substring(1)).replace("_", " ").replace("-", " ")
+                : getConfig().getString(ConfigPath.ARENA_DISPLAY_NAME);
     }
 
     /**
      * Get the arena's group.
      */
+    @Override
     public String getGroup() {
         return group;
     }
@@ -995,6 +998,7 @@ public class Arena implements Comparable<Arena> {
     /**
      * Get the arena's world name.
      */
+    @Override
     public String getWorldName() {
         return worldName;
     }
@@ -1009,7 +1013,8 @@ public class Arena implements Comparable<Arena> {
     /**
      * Get the arena's configuration
      */
-    public ConfigManager getCm() {
+    @Override
+    public ConfigManager getConfig() {
         return cm;
     }
 
@@ -1098,8 +1103,9 @@ public class Arena implements Comparable<Arena> {
      * Change game status starting tasks.
      */
     public void changeStatus(GameState status) {
+        GameState old = status;
         this.status = status;
-        Bukkit.getPluginManager().callEvent(new GameStateChangeEvent(this, status));
+        Bukkit.getPluginManager().callEvent(new GameStateChangeEvent(this, status, old));
         refreshSigns();
 
         //Stop active tasks to prevent issues
@@ -1160,6 +1166,7 @@ public class Arena implements Comparable<Arena> {
     /**
      * Check if a player is playing.
      */
+    @Override
     public boolean isPlayer(Player p) {
         return players.contains(p);
     }
@@ -1167,6 +1174,7 @@ public class Arena implements Comparable<Arena> {
     /**
      * Check if a player is spectating.
      */
+    @Override
     public boolean isSpectator(Player p) {
         return spectators.contains(p);
     }
@@ -1193,6 +1201,7 @@ public class Arena implements Comparable<Arena> {
     /**
      * Get game stage.
      */
+    @Override
     public GameState getStatus() {
         return status;
     }
@@ -1206,7 +1215,7 @@ public class Arena implements Comparable<Arena> {
         for (BlockState b : getSigns()) {
             Sign s = (Sign) b;
             int line = 0;
-            for (String string : Main.signs.l("format")) {
+            for (String string : Main.signs.getList("format")) {
                 s.setLine(line, string.replace("[on]", String.valueOf(getPlayers().size())).replace("[max]", String.valueOf(getMaxPlayers())).replace("[arena]", getDisplayName()).replace("[status]", getDisplayStatus(Main.lang)));
                 line++;
             }
@@ -1217,6 +1226,7 @@ public class Arena implements Comparable<Arena> {
     /**
      * Get a list of spectators for this arena.
      */
+    @Override
     public List<Player> getSpectators() {
         return spectators;
     }
@@ -1385,7 +1395,7 @@ public class Arena implements Comparable<Arena> {
      * Get team by player.
      * Make sure the player is in this arena first.
      */
-    @Nullable
+    @Override
     public BedWarsTeam getTeam(Player p) {
         for (BedWarsTeam t : getTeams()) {
             if (t.isMember(p)) {
@@ -1399,8 +1409,8 @@ public class Arena implements Comparable<Arena> {
      * Get ex team by player.
      * Check the team where he played before leaving or losing.
      */
-    @Nullable
-    public BedWarsTeam getExTeam(Player p) {
+    @Override
+    public BedWarsTeam getExTeam(UUID p) {
         for (BedWarsTeam t : getTeams()) {
             if (t.wasMember(p)) {
                 return t;
@@ -1415,7 +1425,6 @@ public class Arena implements Comparable<Arena> {
      * Make sure the player is in this arena first.
      */
     @SuppressWarnings("WeakerAccess")
-    @Nullable
     public BedWarsTeam getPlayerTeam(String playerCache) {
         for (BedWarsTeam t : getTeams()) {
             for (Player p : t.getMembersCache()) {
@@ -1681,8 +1690,6 @@ public class Arena implements Comparable<Arena> {
 
     /**
      * Get players count for a group
-     *
-     * @since API v8
      */
     public static int getPlayers(String group) {
         int i = 0;
@@ -1694,8 +1701,6 @@ public class Arena implements Comparable<Arena> {
 
     /**
      * Register join-signs for arena
-     *
-     * @since API 10
      */
     private void registerSigns() {
         if (getServerType() != ServerType.BUNGEE) {
@@ -1720,10 +1725,7 @@ public class Arena implements Comparable<Arena> {
 
     /**
      * Get a team by name
-     *
-     * @since API 10
      */
-    @Nullable
     public BedWarsTeam getTeam(String name) {
         for (BedWarsTeam bwt : getTeams()) {
             if (bwt.getName().equals(name)) return bwt;
@@ -1748,7 +1750,6 @@ public class Arena implements Comparable<Arena> {
     /**
      * Get instance of the starting task.
      */
-    @Nullable
     public GameStartingTask getStartingTask() {
         return startingTask;
     }
@@ -1756,7 +1757,6 @@ public class Arena implements Comparable<Arena> {
     /**
      * Get instance of the playing task.
      */
-    @Nullable
     public GamePlayingTask getPlayingTask() {
         return playingTask;
     }
@@ -1764,7 +1764,6 @@ public class Arena implements Comparable<Arena> {
     /**
      * Get instance of the game restarting task.
      */
-    @Nullable
     public GameRestartingTask getRestartingTask() {
         return restartingTask;
     }
@@ -1832,7 +1831,7 @@ public class Arena implements Comparable<Arena> {
     }
 
     @Override
-    public int compareTo(@NotNull Arena o) {
+    public int compareTo(Arena o) {
         if (getStatus() == GameState.starting && o.getStatus() == GameState.starting) {
             return Integer.compare(o.getPlayers().size(), getPlayers().size());
         } else if (getStatus() == GameState.starting && o.getStatus() != GameState.starting) {
@@ -1902,7 +1901,7 @@ public class Arena implements Comparable<Arena> {
         return broken;
     }
 
-    public static LinkedList<Arena> getEnableQueue() {
+    public static LinkedList<IArena> getEnableQueue() {
         return enableQueue;
     }
 
@@ -1950,10 +1949,10 @@ public class Arena implements Comparable<Arena> {
     /**
      * Remove an arena from the enable queue.
      */
-    public static void removeFromEnableQueue(Arena a) {
+    public static void removeFromEnableQueue(IArena a) {
         enableQueue.remove(a);
         if (!enableQueue.isEmpty()) {
-            api.getRestoreAdapter().onEnable(enableQueue.get(0));
+            Main.getAPI().getRestoreAdapter().onEnable(enableQueue.get(0));
             plugin.getLogger().info("Loading arena: " + enableQueue.get(0).getWorldName());
         }
     }

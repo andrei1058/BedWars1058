@@ -167,9 +167,6 @@ public class UpgradesManager {
         yml.addDefault("Default.healPool.tier1.receive.playerEffect.fatigue.effect", "REGENERATION");
         yml.addDefault("Default.healPool.tier1.receive.playerEffect.fatigue.amplifier", 0);
         yml.addDefault("Default.healPool.tier1.receive.playerEffect.fatigue.apply", "base");
-        if (yml == null) {
-            yml = YamlConfiguration.loadConfiguration(file);
-        }
         yml.options().copyDefaults(true);
         yml.addDefault("settings.invSize", 36);
         save();

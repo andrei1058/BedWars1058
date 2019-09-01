@@ -1,12 +1,13 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.BedWars;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.arena.SetupSession;
-import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Permissions;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.google.common.base.Joiner;
@@ -17,10 +18,11 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.*;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.util.BlockIterator;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,14 +31,6 @@ import java.util.List;
 import static com.andrei1058.bedwars.Main.mainCmd;
 
 public class NPC extends SubCommand {
-    /**
-     * Create a sub-command for a bedWars command
-     * Make sure you return true or it will say command not found
-     *
-     * @param parent parent command
-     * @param name   sub-command name
-     * @since 0.6.1 api v6
-     */
 
     //main usage
     private final List<BaseComponent> MAIN_USAGE = Arrays.asList(Misc.msgHoverClick("§f\n§c▪ §7Usage: §e/" + mainCmd + " " + getSubCommandName() + " add", "§fUse this command to create a join NPC.\n§fClick to see the syntax.", "/"+getParent().getName()+" "+getSubCommandName()+" add", ClickEvent.Action.RUN_COMMAND),
@@ -93,7 +87,7 @@ public class NPC extends SubCommand {
             String name = Joiner.on(" ").join(args).replace(args[0] + " " + args[1] + " " + args[2] + " ", "");
             net.citizensnpcs.api.npc.NPC npc = JoinNPC.spawnNPC(p.getLocation(), name, args[2], args[1], null);
             assert npc != null;
-            npcs.add(Main.config.getConfigLoc(p.getLocation()) + "," + args[1] + "," + name + "," + args[2] + "," + npc.getId());
+            npcs.add(Main.config.stringLocationConfigFormat(p.getLocation()) + "," + args[1] + "," + name + "," + args[2] + "," + npc.getId());
             p.sendMessage(NPC_SET.replace("%name%", name.replace("&", "§").replace("\\\\n", " ")));
             Main.config.set(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE, npcs);
 
@@ -148,10 +142,8 @@ public class NPC extends SubCommand {
 
     /**
      * Create an armor-stand hologram
-     *
-     * @since API v8
      */
-    public static ArmorStand createArmorStand(@NotNull Location loc) {
+    public static ArmorStand createArmorStand(Location loc) {
         ArmorStand a = loc.getWorld().spawn(loc, ArmorStand.class);
         a.setGravity(false);
         a.setVisible(false);
@@ -164,8 +156,7 @@ public class NPC extends SubCommand {
      * Get target NPC
      */
     @SuppressWarnings("WeakerAccess")
-    @Nullable
-    public static net.citizensnpcs.api.npc.NPC getTarget(@NotNull final Player player) {
+    public static net.citizensnpcs.api.npc.NPC getTarget(Player player) {
 
         BlockIterator iterator = new BlockIterator(player.getWorld(), player.getLocation().toVector(), player.getEyeLocation().getDirection(), 0, 100);
         while (iterator.hasNext()) {
@@ -190,13 +181,13 @@ public class NPC extends SubCommand {
     }
 
     @Override
-    public boolean canSee(CommandSender s) {
+    public boolean canSee(CommandSender s, BedWars api) {
         if (s instanceof ConsoleCommandSender) return false;
 
         Player p = (Player) s;
         if (Arena.isInArena(p)) return false;
 
-        if (SetupSession.isInSetupSession(p)) return false;
+        if (SetupSession.isInSetupSession(p.getUniqueId())) return false;
         return hasPermission(s);
     }
 }

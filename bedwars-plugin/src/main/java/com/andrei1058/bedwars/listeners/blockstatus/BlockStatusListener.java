@@ -1,10 +1,10 @@
 package com.andrei1058.bedwars.listeners.blockstatus;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.server.ArenaEnableEvent;
 import com.andrei1058.bedwars.api.events.gameplay.GameStateChangeEvent;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.configuration.ConfigPath;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
@@ -15,12 +15,12 @@ public class BlockStatusListener implements Listener {
 
     @EventHandler
     public void onArenaEnable(ArenaEnableEvent e) {
-        updateBlock(e.getArena());
+        updateBlock((Arena) e.getArena());
     }
 
     @EventHandler
     public void onStatusChange(GameStateChangeEvent e) {
-        updateBlock(e.getArena());
+        updateBlock((Arena) e.getArena());
     }
 
     /**

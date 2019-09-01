@@ -1,6 +1,8 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.BedWars;
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.api.command.ParentCommand;
@@ -23,14 +25,7 @@ import java.util.Objects;
 import static com.andrei1058.bedwars.Main.plugin;
 
 public class EnableArena extends SubCommand {
-    /**
-     * Create a sub-command for a bedWars command
-     * Make sure you return true or it will say command not found
-     *
-     * @param parent parent command
-     * @param name   sub-command name
-     * @since 0.6.1 api v6
-     */
+
     public EnableArena(ParentCommand parent, String name) {
         super(parent, name);
         setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " "+getSubCommandName()+" §6<worldName>","§fEnable an arena.",
@@ -49,12 +44,12 @@ public class EnableArena extends SubCommand {
             p.sendMessage("§c▪ §7Usage: §o/" + getParent().getName() + " enableRotation <mapName>");
             return true;
         }
-        if (!Main.api.getRestoreAdapter().isWorld(args[0])) {
+        if (!Main.getAPI().getRestoreAdapter().isWorld(args[0])) {
             p.sendMessage("§c▪ §7" + args[0] + " doesn't exist!");
             return true;
         }
 
-        for (Arena mm : Arena.getEnableQueue()){
+        for (IArena mm : Arena.getEnableQueue()){
             if (mm.getWorldName().equalsIgnoreCase(args[0])){
                 p.sendMessage("§c▪ §7This arena is already in the enable queue!");
                 return true;
@@ -89,13 +84,13 @@ public class EnableArena extends SubCommand {
     }
 
     @Override
-    public boolean canSee(CommandSender s) {
+    public boolean canSee(CommandSender s, BedWars api) {
         if (s instanceof ConsoleCommandSender) return false;
 
         Player p = (Player) s;
         if (Arena.isInArena(p)) return false;
 
-        if (SetupSession.isInSetupSession(p)) return false;
+        if (SetupSession.isInSetupSession(p.getUniqueId())) return false;
         return hasPermission(s);
     }
 }

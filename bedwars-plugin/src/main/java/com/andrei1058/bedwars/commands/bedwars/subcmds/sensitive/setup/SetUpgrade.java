@@ -1,11 +1,13 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup;
 
-import com.andrei1058.bedwars.api.team.TeamColor;
+import com.andrei1058.bedwars.api.BedWars;
+import com.andrei1058.bedwars.api.arena.team.TeamColor;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.server.SetupType;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
-import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
@@ -14,20 +16,14 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.andrei1058.bedwars.Main.mainCmd;
 import static com.andrei1058.bedwars.commands.Misc.createArmorStand;
 import static com.andrei1058.bedwars.commands.Misc.removeArmorStand;
 
 public class SetUpgrade extends SubCommand {
-    /**
-     * Create a sub-command for a bedWars command
-     * Make sure you return true or it will say command not found
-     *
-     * @param parent parent command
-     * @param name   sub-command name
-     * @since 0.6.1 api v6
-     */
+
     public SetUpgrade(ParentCommand parent, String name) {
         super(parent, name);
         setArenaSetupCommand(true);
@@ -38,17 +34,17 @@ public class SetUpgrade extends SubCommand {
     public boolean execute(String[] args, CommandSender s) {
         if (s instanceof ConsoleCommandSender) return false;
         Player p = (Player) s;
-        SetupSession ss = SetupSession.getSession(p);
+        SetupSession ss = SetupSession.getSession(p.getUniqueId());
         if (ss == null){
             s.sendMessage("§c ▪ §7You're not in a setup session!");
             return true;
         }
         if (args.length == 0) {
             String foundTeam = ""; double distance = 100;
-            for (String team : ss.getCm().getYml().getConfigurationSection("Team").getKeys(false)) {
-                if (ss.getCm().getYml().get("Team."+team+".Spawn") == null) continue;
-                double dis = ss.getCm().getArenaLoc("Team."+team+".Spawn").distance(p.getLocation());
-                if (dis <= ss.getCm().getInt(ConfigPath.ARENA_ISLAND_RADIUS)){
+            for (String team : Objects.requireNonNull(ss.getConfig().getYml().getConfigurationSection("Team")).getKeys(false)) {
+                if (ss.getConfig().getYml().get("Team."+team+".Spawn") == null) continue;
+                double dis = ss.getConfig().getArenaLoc("Team."+team+".Spawn").distance(p.getLocation());
+                if (dis <= ss.getConfig().getInt(ConfigPath.ARENA_ISLAND_RADIUS)){
                     if (dis < distance){
                         distance = dis;
                         foundTeam = team;
@@ -66,24 +62,24 @@ public class SetUpgrade extends SubCommand {
                 p.spigot().sendMessage(Misc.msgHoverClick("§9Use §e/"+getParent().getName()+" "+getSubCommandName()+" <teamName>", "§dSet a team upgrades npc.", "/"+getParent().getName()+" "+getSubCommandName(), ClickEvent.Action.SUGGEST_COMMAND));
             } else Bukkit.dispatchCommand(s, getParent().getName()+" "+getSubCommandName()+" "+foundTeam);
         } else {
-            if (ss.getCm().getYml().get("Team." + args[0]) == null) {
+            if (ss.getConfig().getYml().get("Team." + args[0]) == null) {
                 p.sendMessage("§c▪ §7This team doesn't exist!");
-                if (ss.getCm().getYml().get("Team") != null) {
+                if (ss.getConfig().getYml().get("Team") != null) {
                     p.sendMessage("§6 ▪ §7Available teams: ");
-                    for (String team : ss.getCm().getYml().getConfigurationSection("Team").getKeys(false)) {
-                        p.spigot().sendMessage(Misc.msgHoverClick("§6 ▪ " + TeamColor.getChatColor(ss.getCm().getYml().getString("Team." + team + ".Color")) + team + "§7 (click to set)",
-                                "§7Upgrade npc set for " + TeamColor.getChatColor(ss.getCm().getYml().getString("Team." + team + ".Color")) + team, "/" + mainCmd + " setUpgrade " + team, ClickEvent.Action.RUN_COMMAND));
+                    for (String team : Objects.requireNonNull(ss.getConfig().getYml().getConfigurationSection("Team")).getKeys(false)) {
+                        p.spigot().sendMessage(Misc.msgHoverClick("§6 ▪ " + TeamColor.getChatColor(Objects.requireNonNull(ss.getConfig().getYml().getString("Team." + team + ".Color"))) + team + "§7 (click to set)",
+                                "§7Upgrade npc set for " + TeamColor.getChatColor(Objects.requireNonNull(ss.getConfig().getYml().getString("Team." + team + ".Color"))) + team, "/" + mainCmd + " setUpgrade " + team, ClickEvent.Action.RUN_COMMAND));
                     }
                 }
             } else {
-                String teamm = TeamColor.getChatColor(ss.getCm().getYml().getString("Team." + args[0] + ".Color")) + args[0];
-                if (ss.getCm().getYml().get("Team." + args[0] + ".Upgrade") != null) {
-                    removeArmorStand("UPGRADE SET", ss.getCm().getArenaLoc("Team." + args[0] + ".Upgrade"));
+                String teamm = TeamColor.getChatColor(Objects.requireNonNull(ss.getConfig().getYml().getString("Team." + args[0] + ".Color"))) + args[0];
+                if (ss.getConfig().getYml().get("Team." + args[0] + ".Upgrade") != null) {
+                    removeArmorStand("UPGRADE SET", ss.getConfig().getArenaLoc("Team." + args[0] + ".Upgrade"));
                 }
                 createArmorStand(teamm+" §6UPGRADE SET", p.getLocation());
-                ss.getCm().saveArenaLoc("Team." + args[0] + ".Upgrade", p.getLocation());
+                ss.getConfig().saveArenaLoc("Team." + args[0] + ".Upgrade", p.getLocation());
                 p.sendMessage("§6 ▪ §7Upgrade npc set for: " + teamm);
-                if (ss.getSetupType() == SetupSession.SetupType.ASSISTED){
+                if (ss.getSetupType() == SetupType.ASSISTED){
                     Bukkit.dispatchCommand(p, getParent().getName());
                 }
             }
@@ -97,11 +93,11 @@ public class SetUpgrade extends SubCommand {
     }
 
     @Override
-    public boolean canSee(CommandSender s) {
+    public boolean canSee(CommandSender s, BedWars api) {
         if (s instanceof ConsoleCommandSender) return false;
 
         Player p = (Player) s;
-        if (!SetupSession.isInSetupSession(p)) return false;
+        if (!SetupSession.isInSetupSession(p.getUniqueId())) return false;
 
         return hasPermission(s);
     }

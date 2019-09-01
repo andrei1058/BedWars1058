@@ -1,11 +1,11 @@
 package com.andrei1058.bedwars.language;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerLangChangeEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SBoard;
-import com.andrei1058.bedwars.configuration.ConfigPath;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -279,7 +279,7 @@ public class Language {
 
         if (!onLogin) {
             Language oldLang = Language.getLangByPlayer().containsKey(p) ? Language.getPlayerLanguage(p) : Language.getLanguages().get(0);
-            PlayerLangChangeEvent e = new PlayerLangChangeEvent(p, oldLang, newLang);
+            PlayerLangChangeEvent e = new PlayerLangChangeEvent(p, oldLang.getIso(), newLang.getIso());
             Bukkit.getPluginManager().callEvent(e);
             if (e.isCancelled()) return;
         }

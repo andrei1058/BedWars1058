@@ -1,7 +1,7 @@
 package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Language;
 import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.listeners.arenaselector.ArenaSelectorListener;

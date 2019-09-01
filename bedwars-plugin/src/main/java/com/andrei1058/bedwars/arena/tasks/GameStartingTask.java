@@ -2,14 +2,14 @@ package com.andrei1058.bedwars.arena.tasks;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.arena.GameState;
-import com.andrei1058.bedwars.api.arena.GeneratorType;
 import com.andrei1058.bedwars.api.arena.NextEvent;
+import com.andrei1058.bedwars.api.arena.generator.GeneratorType;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.gameplay.TeamAssignEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.OreGenerator;
 import com.andrei1058.bedwars.arena.SBoard;
-import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -130,7 +130,7 @@ public class GameStartingTask implements Runnable {
                 nms.colorBed(team);
                 if (team.getMembers().isEmpty()) {
                     team.setBedDestroyed(true);
-                    if (getArena().getCm().getBoolean(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS)) {
+                    if (getArena().getConfig().getBoolean(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS)) {
                         team.getIronGenerator().disable();
                         team.getGoldGenerator().disable();
                     }
@@ -150,7 +150,7 @@ public class GameStartingTask implements Runnable {
             }, 60L);
 
             //Lobby removal
-            Main.api.getRestoreAdapter().onLobbyRemoval(arena);
+            Main.getAPI().getRestoreAdapter().onLobbyRemoval(arena);
 
             //Spawn players
             spawnPlayers();

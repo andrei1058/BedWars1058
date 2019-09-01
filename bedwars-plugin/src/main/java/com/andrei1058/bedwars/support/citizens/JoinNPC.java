@@ -5,17 +5,15 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
-import com.andrei1058.bedwars.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.npc.skin.SkinnableEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
 import org.bukkit.entity.*;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -77,8 +75,7 @@ public class JoinNPC {
      * @param name  Display name
      * @param skin  A player name to get his skin
      */
-    @Nullable
-    public static NPC spawnNPC(Location l, @NotNull String name, String group, String skin, NPC spawnExisting) {
+    public static NPC spawnNPC(Location l, String name, String group, String skin, NPC spawnExisting) {
         if (!isCitizensSupport()) return null;
         NPC npc;
         if (spawnExisting == null) {

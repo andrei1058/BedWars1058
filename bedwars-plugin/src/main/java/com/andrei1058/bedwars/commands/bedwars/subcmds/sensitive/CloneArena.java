@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.api.command.ParentCommand;
@@ -10,7 +11,6 @@ import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.apache.commons.io.FileUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -24,14 +24,6 @@ import java.util.Objects;
 import static com.andrei1058.bedwars.Main.plugin;
 
 public class CloneArena extends SubCommand {
-    /**
-     * Create a sub-command for a bedWars command
-     * Make sure you return true or it will say command not found
-     *
-     * @param parent parent command
-     * @param name   sub-command name
-     * @since 0.6.1 api v6
-     */
     public CloneArena(ParentCommand parent, String name) {
         super(parent, name);
         setPriority(7);
@@ -50,7 +42,7 @@ public class CloneArena extends SubCommand {
             p.sendMessage("§c▪ §7Usage: §o/" + getParent().getName() + " "+getSubCommandName()+" <mapName> <newArena>");
             return true;
         }
-        if (!Main.api.getRestoreAdapter().isWorld(args[0])) {
+        if (!Main.getAPI().getRestoreAdapter().isWorld(args[0])) {
             p.sendMessage("§c▪ §7" + args[0] + " doesn't exist!");
             return true;
         }
@@ -59,7 +51,7 @@ public class CloneArena extends SubCommand {
             p.sendMessage("§c▪ §7" + args[0] + " doesn't exist!");
             return true;
         }
-        if (Main.api.getRestoreAdapter().isWorld(args[1]) && yml2.exists()) {
+        if (Main.getAPI().getRestoreAdapter().isWorld(args[1]) && yml2.exists()) {
             p.sendMessage("§c▪ §7" + args[1] + " already exist!");
             return true;
         }
@@ -67,7 +59,7 @@ public class CloneArena extends SubCommand {
             p.sendMessage("§c▪ §7Please disable " + args[0] + " first!");
             return true;
         }
-        Main.api.getRestoreAdapter().cloneArena(args[0], args[1]);
+        Main.getAPI().getRestoreAdapter().cloneArena(args[0], args[1]);
         if (yml1.exists()) {
             try {
                 FileUtils.copyFile(yml1, yml2, true);
@@ -98,13 +90,13 @@ public class CloneArena extends SubCommand {
     }
 
     @Override
-    public boolean canSee(CommandSender s) {
+    public boolean canSee(CommandSender s, BedWars api) {
         if (s instanceof ConsoleCommandSender) return false;
 
         Player p = (Player) s;
         if (Arena.isInArena(p)) return false;
 
-        if (SetupSession.isInSetupSession(p)) return false;
+        if (SetupSession.isInSetupSession(p.getUniqueId())) return false;
         return hasPermission(s);
     }
 }

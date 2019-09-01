@@ -1,5 +1,7 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 
+import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.api.command.ParentCommand;
@@ -7,7 +9,7 @@ import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
-import com.andrei1058.bedwars.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
@@ -24,14 +26,7 @@ import static com.andrei1058.bedwars.Main.config;
 import static com.andrei1058.bedwars.Main.plugin;
 
 public class ArenaGroup extends SubCommand {
-    /**
-     * Create a sub-command for a bedWars command
-     * Make sure you return true or it will say command not found
-     *
-     * @param parent parent command
-     * @param name   sub-command name
-     * @since 0.6.1 api v6
-     */
+
     public ArenaGroup(ParentCommand parent, String name) {
         super(parent, name);
         setPriority(8);
@@ -100,7 +95,7 @@ public class ArenaGroup extends SubCommand {
                         p.sendMessage("§c▪ §7Arena " + args[1] + " doesn't exist!");
                         return true;
                     }
-                    ConfigManager cm = new ConfigManager(args[1], "plugins/" + plugin.getName() + "/Arenas", true);
+                    ConfigManager cm = new ConfigManager(Main.plugin, args[1], "plugins/" + plugin.getName() + "/Arenas");
                     cm.set("group", args[2]);
                     if (Arena.getArenaByName(args[1]) != null) {
                         Arena.getArenaByName(args[1]).setGroup(args[2]);
@@ -141,13 +136,13 @@ public class ArenaGroup extends SubCommand {
     }
 
     @Override
-    public boolean canSee(CommandSender s) {
+    public boolean canSee(CommandSender s, BedWars api) {
         if (s instanceof ConsoleCommandSender) return false;
 
         Player p = (Player) s;
         if (Arena.isInArena(p)) return false;
 
-        if (SetupSession.isInSetupSession(p)) return false;
+        if (SetupSession.isInSetupSession(p.getUniqueId())) return false;
         return hasPermission(s);
     }
 }

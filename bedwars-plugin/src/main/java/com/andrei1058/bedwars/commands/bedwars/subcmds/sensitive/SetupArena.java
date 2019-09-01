@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
@@ -22,14 +23,7 @@ import java.util.Objects;
 import static com.andrei1058.bedwars.arena.Arena.getArenaByName;
 
 public class SetupArena extends SubCommand {
-    /**
-     * Create a sub-command for a bedWars command
-     * Make sure you return true or it will say command not found
-     *
-     * @param parent parent command
-     * @param name   sub-command name
-     * @since 0.6.1 api v6
-     */
+
     public SetupArena(ParentCommand parent, String name) {
         super(parent, name);
         setPriority(2);
@@ -52,7 +46,7 @@ public class SetupArena extends SubCommand {
             p.sendMessage("§c▪ §c" + args[0] + ChatColor.GRAY + " mustn't contain capital letters! Rename your folder to: " + ChatColor.GREEN + args[0].toLowerCase());
             return true;
         }
-        if (!Main.api.getRestoreAdapter().isWorld(args[0])) {
+        if (!Main.getAPI().getRestoreAdapter().isWorld(args[0])) {
             p.sendMessage("§c▪ §7" + args[0] + " doesn't exist!");
             return true;
         }
@@ -60,7 +54,7 @@ public class SetupArena extends SubCommand {
             p.sendMessage("§c▪ §7Please disable it first!");
             return true;
         }
-        if (SetupSession.isInSetupSession(p)) {
+        if (SetupSession.isInSetupSession(p.getUniqueId())) {
             p.sendMessage("§c ▪ §7You're already in a setup session!");
             return true;
         }
@@ -70,17 +64,17 @@ public class SetupArena extends SubCommand {
 
     @Override
     public List<String> getTabComplete() {
-        return Main.api.getRestoreAdapter().getWorldsList();
+        return Main.getAPI().getRestoreAdapter().getWorldsList();
     }
 
     @Override
-    public boolean canSee(CommandSender s) {
+    public boolean canSee(CommandSender s, BedWars api) {
         if (s instanceof ConsoleCommandSender) return false;
 
         Player p = (Player) s;
         if (Arena.isInArena(p)) return false;
 
-        if (SetupSession.isInSetupSession(p)) return false;
+        if (SetupSession.isInSetupSession(p.getUniqueId())) return false;
         return hasPermission(s);
     }
 }

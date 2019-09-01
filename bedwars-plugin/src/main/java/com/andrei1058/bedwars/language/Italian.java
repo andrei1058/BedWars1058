@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.language;
 
-import com.andrei1058.bedwars.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.ArrayList;
@@ -12,6 +12,7 @@ import static com.andrei1058.bedwars.language.Language.addCategoryMessages;
 import static com.andrei1058.bedwars.language.Language.addContentMessages;
 import static com.andrei1058.bedwars.language.Messages.*;
 
+@SuppressWarnings("WeakerAccess")
 public class Italian {
 
     public Italian(Language lbj, YamlConfiguration yml) {

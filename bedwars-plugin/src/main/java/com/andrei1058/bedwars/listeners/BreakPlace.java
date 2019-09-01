@@ -1,16 +1,16 @@
 package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.*;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.NextEvent;
+import com.andrei1058.bedwars.api.arena.team.TeamColor;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerBedBreakEvent;
-import com.andrei1058.bedwars.api.team.TeamColor;
+import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.OreGenerator;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.AutoCreateTeams;
-import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.region.Region;
 import org.bukkit.Bukkit;
@@ -88,7 +88,7 @@ public class BreakPlace implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            if (e.getBlockPlaced().getLocation().getBlockY() >= a.getCm().getInt(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y)) {
+            if (e.getBlockPlaced().getLocation().getBlockY() >= a.getConfig().getInt(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y)) {
                 e.setCancelled(true);
                 return;
             }
@@ -181,7 +181,7 @@ public class BreakPlace implements Listener {
                                             e.setCancelled(false);
                                             t.setBedDestroyed(true);
                                             a.addPlayerBedDestroyed(p);
-                                            Bukkit.getPluginManager().callEvent(new PlayerBedBreakEvent(e.getPlayer(), a.getTeam(p), t));
+                                            Bukkit.getPluginManager().callEvent(new PlayerBedBreakEvent(e.getPlayer(), a.getTeam(p), t, a));
                                             for (Player on : a.getWorld().getPlayers()) {
                                                 if (t.isMember(on)) {
                                                     on.sendMessage(getMsg(on, Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM).replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getName())
@@ -212,7 +212,7 @@ public class BreakPlace implements Listener {
                 }
             }
 
-            if (!a.getCm().getBoolean(ConfigPath.ARENA_ALLOW_MAP_BREAK)) {
+            if (!a.getConfig().getBoolean(ConfigPath.ARENA_ALLOW_MAP_BREAK)) {
                 if (!a.isBlockPlaced(e.getBlock())) {
                     p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
                     e.setCancelled(true);
@@ -250,7 +250,7 @@ public class BreakPlace implements Listener {
                     s = new ArrayList<>(signs.getYml().getStringList("locations"));
                 }
                 if (exists) {
-                    s.add(e.getLine(1) + "," + signs.getConfigLoc(e.getBlock().getLocation()));
+                    s.add(e.getLine(1) + "," + signs.stringLocationConfigFormat(e.getBlock().getLocation()));
                     signs.set("locations", s);
                 }
                 Arena a = Arena.getArenaByName(e.getLine(1));
@@ -259,7 +259,7 @@ public class BreakPlace implements Listener {
                     a.addSign(e.getBlock().getLocation());
                     Sign b = (Sign) e.getBlock().getState();
                     int line = 0;
-                    for (String string : Main.signs.l("format")) {
+                    for (String string : Main.signs.getList("format")) {
                         e.setLine(line, string.replace("[on]", String.valueOf(a.getPlayers().size())).replace("[max]",
                                 String.valueOf(a.getMaxPlayers())).replace("[arena]", a.getDisplayName()).replace("[status]", a.getDisplayStatus(Main.lang)));
                         line++;
@@ -322,23 +322,23 @@ public class BreakPlace implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            if (e.getBlockClicked().getLocation().getBlockY() >= a.getCm().getInt(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y)) {
+            if (e.getBlockClicked().getLocation().getBlockY() >= a.getConfig().getInt(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y)) {
                 e.setCancelled(true);
                 return;
             }
             try {
                 for (BedWarsTeam t : a.getTeams()) {
-                    if (t.getSpawn().distance(e.getBlockClicked().getLocation()) <= a.getCm().getInt(ConfigPath.ARENA_SPAWN_PROTECTION)) {
+                    if (t.getSpawn().distance(e.getBlockClicked().getLocation()) <= a.getConfig().getInt(ConfigPath.ARENA_SPAWN_PROTECTION)) {
                         e.setCancelled(true);
                         p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
                         return;
                     }
-                    if (t.getShop().distance(e.getBlockClicked().getLocation()) <= a.getCm().getInt(ConfigPath.ARENA_SHOP_PROTECTION)) {
+                    if (t.getShop().distance(e.getBlockClicked().getLocation()) <= a.getConfig().getInt(ConfigPath.ARENA_SHOP_PROTECTION)) {
                         e.setCancelled(true);
                         p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
                         return;
                     }
-                    if (t.getTeamUpgrades().distance(e.getBlockClicked().getLocation()) <= a.getCm().getInt(ConfigPath.ARENA_UPGRADES_PROTECTION)) {
+                    if (t.getTeamUpgrades().distance(e.getBlockClicked().getLocation()) <= a.getConfig().getInt(ConfigPath.ARENA_UPGRADES_PROTECTION)) {
                         e.setCancelled(true);
                         p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
                         return;

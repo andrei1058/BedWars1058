@@ -1,8 +1,8 @@
 package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.configuration.Permissions;
 import org.bukkit.entity.Player;
@@ -32,7 +32,7 @@ public class CmdProcess implements Listener {
         String[] cmd = e.getMessage().replaceFirst("/", "").split(" ");
         if (cmd.length == 0) return;
         if (Arena.isInArena(p)) {
-            if (!Main.config.l(ConfigPath.CENERAL_CONFIGURATION_ALLOWED_COMMANDS).contains(cmd[0])) {
+            if (!Main.config.getList(ConfigPath.CENERAL_CONFIGURATION_ALLOWED_COMMANDS).contains(cmd[0])) {
                 p.sendMessage(getMsg(p, Messages.COMMAND_NOT_ALLOWED_IN_GAME));
                 e.setCancelled(true);
             }

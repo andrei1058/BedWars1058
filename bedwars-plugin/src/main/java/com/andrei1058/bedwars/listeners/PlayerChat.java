@@ -2,8 +2,8 @@ package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.arena.GameState;
-import com.andrei1058.bedwars.api.ServerType;
-import com.andrei1058.bedwars.api.team.TeamColor;
+import com.andrei1058.bedwars.api.arena.team.TeamColor;
+import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.commands.shout.ShoutCommand;
@@ -49,8 +49,8 @@ public class PlayerChat implements Listener {
         } else if (Arena.getArenaByPlayer(p) != null) {
             Arena a = Arena.getArenaByPlayer(p);
             Arena.afkCheck.remove(p.getUniqueId());
-            if (Main.api.isPlayerAFK(e.getPlayer())) {
-                Main.api.setPlayerAFK(e.getPlayer(), false);
+            if (Main.getAPI().getAFKSystem().isPlayerAFK(e.getPlayer())) {
+                Main.getAPI().getAFKSystem().setPlayerAFK(e.getPlayer(), false);
             }
             if (a.isSpectator(p)) {
                 if (!config.getBoolean("globalChat")) {

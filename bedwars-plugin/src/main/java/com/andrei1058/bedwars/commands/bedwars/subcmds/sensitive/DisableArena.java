@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.api.command.ParentCommand;
@@ -19,14 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DisableArena extends SubCommand {
-    /**
-     * Create a sub-command for a bedWars command
-     * Make sure you return true or it will say command not found
-     *
-     * @param parent parent command
-     * @param name   sub-command name
-     * @since 0.6.1 api v6
-     */
+
     public DisableArena(ParentCommand parent, String name) {
         super(parent, name);
         setPriority(6);
@@ -45,7 +39,7 @@ public class DisableArena extends SubCommand {
             p.sendMessage("§c▪ §7Usage: §o/" + getParent().getName() + " "+getSubCommandName()+" <mapName>");
             return true;
         }
-        if (!Main.api.getRestoreAdapter().isWorld(args[0])) {
+        if (!Main.getAPI().getRestoreAdapter().isWorld(args[0])) {
             p.sendMessage("§c▪ §7" + args[0] + " doesn't exist!");
             return true;
         }
@@ -69,13 +63,13 @@ public class DisableArena extends SubCommand {
     }
 
     @Override
-    public boolean canSee(CommandSender s) {
+    public boolean canSee(CommandSender s, BedWars api) {
         if (s instanceof ConsoleCommandSender) return false;
 
         Player p = (Player) s;
         if (Arena.isInArena(p)) return false;
 
-        if (SetupSession.isInSetupSession(p)) return false;
+        if (SetupSession.isInSetupSession(p.getUniqueId())) return false;
         return hasPermission(s);
     }
 }

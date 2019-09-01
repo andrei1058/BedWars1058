@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.api.events.server.SetupSessionCloseEvent;
 import com.andrei1058.bedwars.api.events.server.SetupSessionStartEvent;
 import com.andrei1058.bedwars.api.server.ISetupSession;
 import com.andrei1058.bedwars.api.server.ServerType;
+import com.andrei1058.bedwars.api.server.SetupType;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -92,8 +93,6 @@ public class SetupSession implements ISetupSession {
         return started;
     }
 
-    public enum SetupType {ASSISTED, ADVANCED}
-
     /**
      * Start setup session, loadStructure world etc
      *
@@ -101,44 +100,9 @@ public class SetupSession implements ISetupSession {
      */
     public boolean startSetup() {
         getPlayer().sendMessage("§6 ▪ §7Loading " + getWorldName());
-        cm = new ConfigManager(getWorldName(), "plugins/" + plugin.getName() + "/Arenas", true);
-        api.getRestoreAdapter().onSetupSessionStart(this);
+        cm = new ConfigManager(Main.plugin, getWorldName(), "plugins/" + plugin.getName() + "/Arenas");
+        Main.getAPI().getRestoreAdapter().onSetupSessionStart(this);
         return true;
-    }
-
-    /**
-     * Teleport the player and give motd.
-     */
-    public void setupStarted() {
-        getPlayer().getInventory().clear();
-        getPlayer().teleport(Bukkit.getWorld(getWorldName()).getSpawnLocation());
-        getPlayer().setGameMode(GameMode.CREATIVE);
-        getPlayer().setAllowFlight(true);
-        getPlayer().setFlying(true);
-        getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2));
-        getPlayer().sendMessage("\n" + ChatColor.WHITE + "\n");
-
-        getPlayer().sendMessage(ChatColor.GREEN + "You were teleported to the " + ChatColor.BLUE + getWorldName() + ChatColor.GREEN + "'s spawn.");
-        if (getSetupType() == SetupType.ASSISTED && getCm().getYml().get("waiting.Loc") == null) {
-            getPlayer().sendMessage("");
-            getPlayer().sendMessage(ChatColor.BLUE + ">>>>>>>>>>>>" + getWorldName() + " Setup Session");
-            getPlayer().sendMessage("");
-            getPlayer().sendMessage(ChatColor.GREEN + "Hello " + getPlayer().getName() + "!");
-            getPlayer().sendMessage(ChatColor.WHITE + "Please set the waiting spawn.");
-            getPlayer().sendMessage(ChatColor.WHITE + "It is the place where players will wait the game to start.");
-            getPlayer().spigot().sendMessage(Misc.msgHoverClick(ChatColor.BLUE + "     ▪     " + ChatColor.GOLD + "CLICK HERE TO SET THE WAITING LOBBY    " + ChatColor.BLUE + " ▪", ChatColor.LIGHT_PURPLE + "Click to set the waiting spawn.", "/" + Main.mainCmd + " setWaitingSpawn", ClickEvent.Action.RUN_COMMAND));
-            MainCommand.createTC(ChatColor.YELLOW + "Or type: " + ChatColor.GRAY + "/" + Main.mainCmd + " setWaitingSpawn", "/" + Main.mainCmd + " setWaitingSpawn", ChatColor.WHITE + "Set the world spawn lobby.");
-        } else {
-            Bukkit.dispatchCommand(getPlayer(), Main.mainCmd + " cmds");
-        }
-        Bukkit.getPluginManager().callEvent(new SetupSessionStartEvent(this));
-
-        World w = Bukkit.getWorld(getWorldName());
-        Bukkit.getScheduler().runTaskLater(plugin, () -> w.getEntities().stream()
-                .filter(e -> e.getType() != EntityType.PLAYER).filter(e -> e.getType() != EntityType.PAINTING)
-                .filter(e -> e.getType() != EntityType.ITEM_FRAME).forEach(Entity::remove), 30L);
-        w.setAutoSave(false);
-        w.setGameRuleValue("doMobSpawning", "false");
     }
 
     private static void openGUI(Player player) {
@@ -174,7 +138,7 @@ public class SetupSession implements ISetupSession {
      * End setup session
      */
     public void done() {
-        api.getRestoreAdapter().onSetupSessionClose(this);
+        Main.getAPI().getRestoreAdapter().onSetupSessionClose(this);
         getSetupSessions().remove(this);
         if (Main.getServerType() != ServerType.BUNGEE) getPlayer().teleport(config.getConfigLoc("lobbyLoc"));
         getPlayer().removePotionEffect(PotionEffectType.SPEED);
@@ -209,7 +173,7 @@ public class SetupSession implements ISetupSession {
     /**
      * Get arena configuration
      */
-    public ConfigManager getCm() {
+    public ConfigManager getConfig() {
         return cm;
     }
 

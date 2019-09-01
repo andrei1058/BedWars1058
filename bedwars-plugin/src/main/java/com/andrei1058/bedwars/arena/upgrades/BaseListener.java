@@ -91,7 +91,7 @@ public class BaseListener implements Listener {
 
     @EventHandler
     public void onBaseEnter(PlayerBaseEnterEvent e) {
-        BedWarsTeam team = e.getTeam();
+        BedWarsTeam team = (BedWarsTeam) e.getTeam();
         if (team.isMember(e.getPlayer())) {
             /* Give base effects */
             for (BedWarsTeam.Effect ef : team.getBaseEffects()) {
@@ -132,7 +132,7 @@ public class BaseListener implements Listener {
 
     @EventHandler
     public void onBaseLeave(PlayerBaseLeaveEvent e) {
-        BedWarsTeam t = e.getTeam();
+        BedWarsTeam t = (BedWarsTeam) e.getTeam();
         if (t.isMember(e.getPlayer())) {
             /* Remove effects for members */
             for (PotionEffect pef : e.getPlayer().getActivePotionEffects()) {

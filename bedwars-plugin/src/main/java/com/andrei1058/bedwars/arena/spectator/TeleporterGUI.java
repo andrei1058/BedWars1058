@@ -49,8 +49,6 @@ public class TeleporterGUI {
 
     /**
      * Opens the Teleporter GUI to a Player
-     *
-     * @since API 9
      */
     public static void openGUI(Player p) {
         Arena arena = Arena.getArenaByPlayer(p);
@@ -77,8 +75,6 @@ public class TeleporterGUI {
 
     /**
      * Get a HashMap of players with Teleporter GUI opened
-     *
-     * @since API 9
      */
     public static HashMap<Player, Inventory> getRefresh() {
         return refresh;
@@ -86,8 +82,6 @@ public class TeleporterGUI {
 
     /**
      * Refresh the Teleporter GUI for all players with it opened
-     *
-     * @since API 9
      */
     public static void refreshAllGUIs() {
         for (Map.Entry<Player, Inventory> e : new HashMap<>(getRefresh()).entrySet()) {
@@ -118,8 +112,6 @@ public class TeleporterGUI {
 
     /**
      * Remove a player from the refresh list and close gui
-     *
-     * @since API 9
      */
     public static void closeGUI(Player p) {
         if (getRefresh().containsKey(p)) {

@@ -30,6 +30,6 @@
     <orderEntry type="module" module-name="versionsupport_1_12_R1" scope="PROVIDED" />
     <orderEntry type="module" module-name="versionsupport_1_9_R2" scope="PROVIDED" />
     <orderEntry type="module" module-name="versionsupport_1_13_R1" scope="PROVIDED" />
-    <orderEntry type="module" module-name="BedWars1058" />
+    <orderEntry type="module" module-name="BedWars1058" scope="PROVIDED" />
   </component>
 </module>

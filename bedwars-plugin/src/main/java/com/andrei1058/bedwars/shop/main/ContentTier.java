@@ -1,7 +1,7 @@
 package com.andrei1058.bedwars.shop.main;
 
 import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.shop.ShopManager;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;

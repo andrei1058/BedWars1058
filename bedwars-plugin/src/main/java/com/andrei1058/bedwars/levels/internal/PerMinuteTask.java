@@ -12,7 +12,6 @@ import org.bukkit.scheduler.BukkitTask;
 
 public class PerMinuteTask {
 
-    private Arena arena;
     private int xp = LevelsConfig.levels.getInt("xp-rewards.per-minute");
     private BukkitTask task;
 
@@ -20,8 +19,6 @@ public class PerMinuteTask {
      * Create a new per minute xp reward.
      */
     public PerMinuteTask(Arena arena) {
-        this.arena = arena;
-
         task = Bukkit.getScheduler().runTaskTimer(Main.plugin, () -> {
             for (Player p : arena.getPlayers()) {
                 PlayerLevel.getLevelByPlayer(p.getUniqueId()).addXp(xp, PlayerXpGainEvent.XpSource.PER_MINUTE);

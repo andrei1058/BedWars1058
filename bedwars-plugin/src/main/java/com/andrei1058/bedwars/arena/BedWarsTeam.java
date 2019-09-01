@@ -1,11 +1,12 @@
 package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.arena.generator.GeneratorType;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
+import com.andrei1058.bedwars.api.arena.team.TeamColor;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerFirstSpawnEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerReSpawnEvent;
-import com.andrei1058.bedwars.api.arena.GeneratorType;
-import com.andrei1058.bedwars.api.team.TeamColor;
-import com.andrei1058.bedwars.configuration.ConfigPath;
 import com.andrei1058.bedwars.language.Messages;
 import com.andrei1058.bedwars.region.Cuboid;
 import com.andrei1058.bedwars.shop.ShopCache;
@@ -25,12 +26,13 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.language.Language.getMsg;
 
 @SuppressWarnings("WeakerAccess")
-public class BedWarsTeam {
+public class BedWarsTeam implements ITeam {
 
     private List<Player> members = new ArrayList<>();
     private TeamColor color;
@@ -106,7 +108,7 @@ public class BedWarsTeam {
         this.shop = shop;
         this.teamUpgrades = teamUpgrades;
 
-        arena.getRegionsList().add(new Cuboid(spawn, arena.getCm().getInt(ConfigPath.ARENA_SPAWN_PROTECTION), true));
+        arena.getRegionsList().add(new Cuboid(spawn, arena.getConfig().getInt(ConfigPath.ARENA_SPAWN_PROTECTION), true));
     }
 
     public int getSize() {
@@ -137,21 +139,21 @@ public class BedWarsTeam {
      * Spawn shopkeepers for target team (if enabld).
      */
     public void spawnNPCs() {
-        if (getMembers().isEmpty() && getArena().getCm().getBoolean(ConfigPath.ARENA_DISABLE_NPCS_FOR_EMPTY_TEAMS))
+        if (getMembers().isEmpty() && getArena().getConfig().getBoolean(ConfigPath.ARENA_DISABLE_NPCS_FOR_EMPTY_TEAMS))
             return;
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             nms.colorBed(this);
-            nms.spawnShop(getArena().getCm().getArenaLoc("Team." + getName() + ".Upgrade"), (getArena().getMaxInTeam() > 1 ? Messages.NPC_NAME_TEAM_UPGRADES : Messages.NPC_NAME_SOLO_UPGRADES), getArena().getPlayers(), getArena());
-            nms.spawnShop(getArena().getCm().getArenaLoc("Team." + getName() + ".Shop"), (getArena().getMaxInTeam() > 1 ? Messages.NPC_NAME_TEAM_SHOP : Messages.NPC_NAME_SOLO_SHOP), getArena().getPlayers(), getArena());
+            nms.spawnShop(getArena().getConfig().getArenaLoc("Team." + getName() + ".Upgrade"), (getArena().getMaxInTeam() > 1 ? Messages.NPC_NAME_TEAM_UPGRADES : Messages.NPC_NAME_SOLO_UPGRADES), getArena().getPlayers(), getArena());
+            nms.spawnShop(getArena().getConfig().getArenaLoc("Team." + getName() + ".Shop"), (getArena().getMaxInTeam() > 1 ? Messages.NPC_NAME_TEAM_SHOP : Messages.NPC_NAME_SOLO_SHOP), getArena().getPlayers(), getArena());
         }, 70L);
 
-        Cuboid c1 = new Cuboid(getArena().getCm().getArenaLoc("Team." + getName() + ".Upgrade"), 1, true);
+        Cuboid c1 = new Cuboid(getArena().getConfig().getArenaLoc("Team." + getName() + ".Upgrade"), 1, true);
         c1.setMinY(c1.getMinY() - 1);
         c1.setMaxY(c1.getMaxY() + 4);
         getArena().getRegionsList().add(c1);
 
-        Cuboid c2 = new Cuboid(getArena().getCm().getArenaLoc("Team." + getName() + ".Shop"), 1, true);
+        Cuboid c2 = new Cuboid(getArena().getConfig().getArenaLoc("Team." + getName() + ".Shop"), 1, true);
         c2.setMinY(c2.getMinY() - 1);
         c2.setMaxY(c2.getMaxY() + 4);
         getArena().getRegionsList().add(c2);
@@ -455,7 +457,7 @@ public class BedWarsTeam {
         }
 
         public void spawn() {
-            if (!arena.getCm().getBoolean(ConfigPath.ARENA_USE_BED_HOLO)) return;
+            if (!arena.getConfig().getBoolean(ConfigPath.ARENA_USE_BED_HOLO)) return;
             a = (ArmorStand) bed.getWorld().spawnEntity(bed.getBlock().getLocation().add(+0.5, 1, +0.5), EntityType.ARMOR_STAND);
             a.setGravity(false);
             if (name != null) {
@@ -481,20 +483,20 @@ public class BedWarsTeam {
         }
 
         public void hide() {
-            if (!arena.getCm().getBoolean(ConfigPath.ARENA_USE_BED_HOLO)) return;
+            if (!arena.getConfig().getBoolean(ConfigPath.ARENA_USE_BED_HOLO)) return;
             if (bedDestroyed) return;
             hidden = true;
             a.remove();
         }
 
         public void destroy() {
-            if (!arena.getCm().getBoolean(ConfigPath.ARENA_USE_BED_HOLO)) return;
+            if (!arena.getConfig().getBoolean(ConfigPath.ARENA_USE_BED_HOLO)) return;
             a.remove();
             beds.remove(p);
         }
 
         public void show() {
-            if (!arena.getCm().getBoolean(ConfigPath.ARENA_USE_BED_HOLO)) return;
+            if (!arena.getConfig().getBoolean(ConfigPath.ARENA_USE_BED_HOLO)) return;
             hidden = false;
             spawn();
         }
@@ -677,10 +679,10 @@ public class BedWarsTeam {
     /**
      * Getter, setter etc.
      */
-    public boolean wasMember(Player u) {
+    public boolean wasMember(UUID u) {
         if (u == null) return false;
         for (Player p : membersCache) {
-            if (p.getName().equals(u.getName())) return true;
+            if (p.getName().equals(u)) return true;
         }
         return false;
     }
@@ -748,7 +750,7 @@ public class BedWarsTeam {
             nms.colorBed(this);
         } else {
             bed.getBlock().setType(Material.AIR);
-            if (getArena().getCm().getBoolean(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS)) {
+            if (getArena().getConfig().getBoolean(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS)) {
                 getGoldGenerator().disable();
                 getIronGenerator().disable();
             }

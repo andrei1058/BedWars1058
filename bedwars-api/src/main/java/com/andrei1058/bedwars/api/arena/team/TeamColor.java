@@ -4,8 +4,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 public enum TeamColor {
 
@@ -60,12 +58,10 @@ public enum TeamColor {
         return color;
     }
 
-    @Contract(pure = true)
-    /*
-      Get the byte color for Minecraft versions until 1.12 included
-
+    /**
+     * Get the byte color for Minecraft versions until 1.12 included
      */
-    public static byte itemColor(@NotNull TeamColor teamColor) {
+    public static byte itemColor(TeamColor teamColor) {
         // 0 white
         int i = 0;
         switch (teamColor) {
@@ -103,7 +99,6 @@ public enum TeamColor {
     /**
      * Get the english for material as color name
      *
-     * @since API 11
      */
     public static String enName(String material) {
         String name = "";
@@ -138,8 +133,6 @@ public enum TeamColor {
 
     /**
      * Get the english for byte as color name
-     *
-     * @since api 6
      */
     public static String enName(Byte b) {
         String name = "";
@@ -210,7 +203,6 @@ public enum TeamColor {
      * Get bed with color
      *
      * @return 1.13+ material
-     * @since API 11
      */
     public static Material getBedBlock(TeamColor teamColor) {
         String color = "RED_BED";
@@ -247,7 +239,6 @@ public enum TeamColor {
      * Get glass with team color
      *
      * @return 1.13+ material
-     * @since API 11
      */
     public static Material getGlass(TeamColor teamColor) {
         String color = "GLASS";
@@ -285,8 +276,6 @@ public enum TeamColor {
 
     /**
      * Get glass with team color
-     *
-     * @return 1.13+ material
      */
     public static Material getGlassPane(TeamColor teamColor) {
         String color = "GLASS";
@@ -326,7 +315,6 @@ public enum TeamColor {
      * Get glazed terracotta with team color
      *
      * @return 1.13+ material
-     * @since API 11
      */
     public static Material getGlazedTerracotta(TeamColor teamColor) {
         String color = "ORANGE_TERRACOTTA";
@@ -366,7 +354,6 @@ public enum TeamColor {
      * Get wool with team color
      *
      * @return 1.13+ material
-     * @since API 11
      */
     public static Material getWool(TeamColor teamColor) {
         String color = "WHITE_WOOL";

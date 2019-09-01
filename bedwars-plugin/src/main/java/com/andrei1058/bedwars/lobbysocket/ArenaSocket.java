@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.lobbysocket;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 
@@ -20,7 +21,7 @@ public class ArenaSocket {
     /**
      * Send arena data to the lobbies.
      */
-    public static void sendMessage(Arena a) {
+    public static void sendMessage(IArena a) {
         for (String lobby : new ArrayList<>(lobbies)) {
 
             String[] l = lobby.split(":");
@@ -32,7 +33,7 @@ public class ArenaSocket {
                 sockets.get(lobby).sendMessage(formatMessage(serverIdentifier, a.getDisplayName(), a.getStatus().toString(), a.getPlayers().size(), a.getMaxPlayers(), a.getGroup(), a.getMaxInTeam()));
             } else {
                 try {
-                    Socket socket = new Socket(l[0], Integer.valueOf(l[1]));
+                    Socket socket = new Socket(l[0], Integer.parseInt(l[1]));
                     RemoteLobby rl = new RemoteLobby(socket, lobby);
                     sockets.put(lobby, rl);
                     rl.sendMessage(formatMessage(serverIdentifier, a.getDisplayName(), a.getStatus().toString(), a.getPlayers().size(), a.getMaxPlayers(), a.getGroup(), a.getMaxInTeam()));

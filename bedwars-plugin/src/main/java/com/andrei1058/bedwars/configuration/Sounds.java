@@ -8,7 +8,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.Main.plugin;
-import static com.andrei1058.bedwars.configuration.ConfigPath.*;
+import static com.andrei1058.bedwars.api.configuration.ConfigPath.*;
 
 public class Sounds {
 
@@ -18,7 +18,7 @@ public class Sounds {
         loadSounds();
     }
 
-    private static ConfigManager sounds = new ConfigManager("sounds", "plugins/" + Main.plugin.getName(), false);
+    private static ConfigManager sounds = new ConfigManager(plugin,"sounds", "plugins/" + Main.plugin.getName());
 
     @SuppressWarnings("WeakerAccess")
     public static void saveDefaultSounds() {

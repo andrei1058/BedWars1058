@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.UUID;
 
 public class QuickBuyAdd {
@@ -27,9 +28,9 @@ public class QuickBuyAdd {
         if (sc == null || cache == null){
             player.closeInventory();
         }
-        inv.setItem(4, cc.getItemStack(player, sc));
+        inv.setItem(4, cc.getItemStack(player, Objects.requireNonNull(sc)));
 
-        cache.addInInventory(inv, sc);
+        Objects.requireNonNull(cache).addInInventory(inv, sc);
 
         player.openInventory(inv);
         quickBuyAdds.put(player.getUniqueId(), cc);

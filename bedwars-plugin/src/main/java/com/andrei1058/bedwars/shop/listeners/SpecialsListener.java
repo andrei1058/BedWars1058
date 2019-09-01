@@ -1,9 +1,9 @@
 package com.andrei1058.bedwars.shop.listeners;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
-import com.andrei1058.bedwars.configuration.ConfigPath;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

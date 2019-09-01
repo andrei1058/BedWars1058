@@ -17,7 +17,6 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.Contract;
 
 import static com.andrei1058.bedwars.Main.nms;
 import static org.bukkit.event.inventory.InventoryAction.*;
@@ -160,7 +159,6 @@ public class InventoryListener implements Listener {
     /**
      * Check if upgradable item
      */
-    @Contract("null, _ -> false")
     public static boolean isUpgradable(ItemStack i, ShopCache sc) {
         if (i == null) return false;
         if (sc == null) return false;
