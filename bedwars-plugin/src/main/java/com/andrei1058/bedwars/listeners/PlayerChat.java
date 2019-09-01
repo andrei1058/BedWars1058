@@ -7,8 +7,8 @@ import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.commands.shout.ShoutCommand;
-import com.andrei1058.bedwars.language.Language;
-import com.andrei1058.bedwars.language.Messages;
+import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.configuration.Permissions;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import org.bukkit.ChatColor;
@@ -18,7 +18,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import static com.andrei1058.bedwars.Main.*;
-import static com.andrei1058.bedwars.language.Language.getMsg;
+import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class PlayerChat implements Listener {
 

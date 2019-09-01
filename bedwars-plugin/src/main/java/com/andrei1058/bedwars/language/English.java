@@ -1,6 +1,9 @@
 package com.andrei1058.bedwars.language;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.Messages;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.ArrayList;
@@ -8,15 +11,15 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import static com.andrei1058.bedwars.Main.mainCmd;
-import static com.andrei1058.bedwars.language.Language.addCategoryMessages;
-import static com.andrei1058.bedwars.language.Language.addContentMessages;
 
-@SuppressWarnings("WeakerAccess")
-public class English {
+public class English extends Language {
 
-    public English(Language lbj, YamlConfiguration yml) {
-        yml.addDefault(Messages.PREFIX, "");
+    public English() {
+        super(Main.plugin, "en");
+
+        YamlConfiguration yml = getYml();
         yml.options().copyDefaults(true);
+        yml.addDefault(Messages.PREFIX, "");
         yml.addDefault("name", "English");
 
         yml.addDefault(Messages.COMMAND_MAIN, Arrays.asList("", "&2▪ &7/" + mainCmd + " stats", "&2▪ &7/" + mainCmd + " join &o<arena/group>", "&2▪ &7/" + mainCmd + " leave", "&2▪ &7/" + mainCmd + " lang", "&2▪ &7/" + mainCmd + " gui", "&2▪ &7/" + mainCmd + " start &3(vip)"));
@@ -239,16 +242,16 @@ public class English {
 
         /* save default items messages for stats gui */
         yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "&8{player} Stats");
-        lbj.addDefaultStatsMsg(yml, "wins", "&6Wins", "&f{wins}");
-        lbj.addDefaultStatsMsg(yml, "losses", "&6Losses", "&f{losses}");
-        lbj.addDefaultStatsMsg(yml, "kills", "&6Kills", "&f{kills}");
-        lbj.addDefaultStatsMsg(yml, "deaths", "&6Deaths", "&f{deaths}");
-        lbj.addDefaultStatsMsg(yml, "final-kills", "&6Final Kills", "&f{finalKills}");
-        lbj.addDefaultStatsMsg(yml, "final-deaths", "&6Final Deaths", "&f{finalDeaths}");
-        lbj.addDefaultStatsMsg(yml, "beds-destroyed", "&6Beds Destroyed", "&f{bedsDestroyed}");
-        lbj.addDefaultStatsMsg(yml, "first-play", "&6First Play", "&f{firstPlay}");
-        lbj.addDefaultStatsMsg(yml, "last-play", "&6Last Play", "&f{lastPlay}");
-        lbj.addDefaultStatsMsg(yml, "games-played", "&6Games Played", "&f{gamesPlayed}");
+        addDefaultStatsMsg(yml, "wins", "&6Wins", "&f{wins}");
+        addDefaultStatsMsg(yml, "losses", "&6Losses", "&f{losses}");
+        addDefaultStatsMsg(yml, "kills", "&6Kills", "&f{kills}");
+        addDefaultStatsMsg(yml, "deaths", "&6Deaths", "&f{deaths}");
+        addDefaultStatsMsg(yml, "final-kills", "&6Final Kills", "&f{finalKills}");
+        addDefaultStatsMsg(yml, "final-deaths", "&6Final Deaths", "&f{finalDeaths}");
+        addDefaultStatsMsg(yml, "beds-destroyed", "&6Beds Destroyed", "&f{bedsDestroyed}");
+        addDefaultStatsMsg(yml, "first-play", "&6First Play", "&f{firstPlay}");
+        addDefaultStatsMsg(yml, "last-play", "&6Last Play", "&f{lastPlay}");
+        addDefaultStatsMsg(yml, "games-played", "&6Games Played", "&f{gamesPlayed}");
 
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fMap: &a{map}", "", "&fPlayers: &a{on}/{max}", "", "&fWaiting...", "", "§fMode: &a{group}", "&fVersion: &7{version}", "", "&e{server_ip}"));
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fMap: &a{map}", "", "&fPlayers: &a{on}/{max}", "", "&fStarting in &a{time}s", "", "§fMode: &a{group}", "&fVersion: &7{version}", "", "&e{server_ip}"));
@@ -390,5 +393,7 @@ public class English {
         yml.addDefault("upgrades.Default.miningFatigue.tier1.lore", Arrays.asList("&7The nex enemy to enter your", "&7base will receive Mining Fatigue", "&7for 10 seconds!", "", "&7Cost:&b {cost} {currency}", "", "{loreFooter}"));
         yml.addDefault("upgrades.Default.healPool.tier1.name", "&eHeal Pool");
         yml.addDefault("upgrades.Default.healPool.tier1.lore", Arrays.asList("&7Creates a Regeneration field", "&7around your base!", "", "&7Cost:&b {cost} {currency}", "", "{loreFooter}"));
+        save();
+        setPrefix(m(Messages.PREFIX));
     }
 }

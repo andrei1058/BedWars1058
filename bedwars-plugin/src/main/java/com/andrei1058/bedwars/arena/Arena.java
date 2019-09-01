@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.NextEvent;
 import com.andrei1058.bedwars.api.arena.generator.GeneratorType;
+import com.andrei1058.bedwars.api.arena.shop.ShopHolo;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerJoinArenaEvent;
@@ -17,8 +18,8 @@ import com.andrei1058.bedwars.api.events.server.ArenaEnableEvent;
 import com.andrei1058.bedwars.api.events.server.ArenaRestartEvent;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.server.ServerType;
-import com.andrei1058.bedwars.language.Language;
-import com.andrei1058.bedwars.language.Messages;
+import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.levels.internal.InternalLevel;
 import com.andrei1058.bedwars.levels.internal.PerMinuteTask;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
@@ -46,7 +47,7 @@ import java.util.logging.Level;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.upgrades.BaseListener.isOnABase;
-import static com.andrei1058.bedwars.language.Language.*;
+import static com.andrei1058.bedwars.api.language.Language.*;
 
 @SuppressWarnings("WeakerAccess")
 public class Arena implements Comparable<Arena>, IArena {
@@ -1216,7 +1217,8 @@ public class Arena implements Comparable<Arena>, IArena {
             Sign s = (Sign) b;
             int line = 0;
             for (String string : Main.signs.getList("format")) {
-                s.setLine(line, string.replace("[on]", String.valueOf(getPlayers().size())).replace("[max]", String.valueOf(getMaxPlayers())).replace("[arena]", getDisplayName()).replace("[status]", getDisplayStatus(Main.lang)));
+                s.setLine(line, string.replace("[on]", String.valueOf(getPlayers().size())).replace("[max]", String.valueOf(getMaxPlayers())).replace("[arena]", getDisplayName())
+                        .replace("[status]", getDisplayStatus(Language.getDefaultLanguage())));
                 line++;
             }
             s.update();
@@ -1736,8 +1738,18 @@ public class Arena implements Comparable<Arena>, IArena {
     /**
      * Get respawn session
      */
+    @Override
     public ConcurrentHashMap<Player, Integer> getRespawn() {
         return respawn;
+    }
+
+    @Override
+    public void updateSpectatorCollideRule(Player p, boolean collide) {
+        for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
+            if (sb.getArena() == this) {
+                sb.updateSpectator(p, collide);
+            }
+        }
     }
 
     /**
@@ -1880,6 +1892,7 @@ public class Arena implements Comparable<Arena>, IArena {
                     getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD)).replace("{tier}", getMsg(p, (emeraldTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
         }
     }
+
 
     public static int getGamesBeforeRestart() {
         return gamesBeforeRestart;

@@ -32,7 +32,9 @@ public class SpecialsListener implements Listener {
                 if (i.getType() == Material.valueOf(Main.shop.getYml().getString(ConfigPath.SHOP_SPECIAL_SILVERFISH_MATERIAL))
                         && nms.itemStackDataCompare(i, (short) Main.shop.getYml().getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_DATA))) {
                     e.setCancelled(true);
-                    nms.spawnSilverfish(p.getLocation().add(0, 1, 0), a.getTeam(p));
+                    nms.spawnSilverfish(p.getLocation().add(0, 1, 0), a.getTeam(p), Main.shop.getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_SPEED),
+                            Main.shop.getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_HEALTH), Main.shop.getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_DESPAWN),
+                            Main.shop.getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_DAMAGE));
                     if (!nms.isProjectile(i)) {
                         nms.minusAmount(p, i, 1);
                         p.updateInventory();
@@ -45,7 +47,8 @@ public class SpecialsListener implements Listener {
                 if (i.getType() == Material.valueOf(Main.shop.getYml().getString(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_MATERIAL))
                         && nms.itemStackDataCompare(i, (short) Main.shop.getYml().getInt(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_DATA))) {
                     e.setCancelled(true);
-                    nms.spawnIronGolem(p.getLocation().add(0, 1, 0), a.getTeam(p));
+                    nms.spawnIronGolem(p.getLocation().add(0, 1, 0), a.getTeam(p), Main.shop.getInt(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_SPEED),
+                            Main.shop.getInt(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_HEALTH), Main.shop.getInt(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_DESPAWN));
                     if (!nms.isProjectile(i)) {
                         nms.minusAmount(p, i, 1);
                         p.updateInventory();

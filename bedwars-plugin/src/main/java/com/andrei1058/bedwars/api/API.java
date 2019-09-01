@@ -1,15 +1,18 @@
 package com.andrei1058.bedwars.api;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.command.ParentCommand;
+import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.events.player.PlayerAfkEvent;
 import com.andrei1058.bedwars.api.server.ISetupSession;
 import com.andrei1058.bedwars.api.server.RestoreAdapter;
 import com.andrei1058.bedwars.api.server.ServerType;
+import com.andrei1058.bedwars.api.server.VersionSupport;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
-import com.andrei1058.bedwars.language.Language;
+import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.stats.StatsManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -22,21 +25,8 @@ import java.util.logging.Level;
 public class API implements BedWars {
 
     private static RestoreAdapter restoreAdapter;
-    private IAFK afkSystem = new AFKUtil();
-
-    @Override
-    public IStats getStatsCache() {
-        return StatsManager.getStatsCache();
-    }
-
-    @Override
-    public IAFK getAFKSystem() {
-        return afkSystem;
-    }
-
-    private static class AFKUtil implements BedWars.IAFK {
-
-        private static HashMap<UUID, Integer> afkPlayers = new HashMap<>();
+    private AFKUtil afkSystem = new AFKUtil() {
+        private HashMap<UUID, Integer> afkPlayers = new HashMap<>();
 
         @Override
         public boolean isPlayerAFK(Player player) {
@@ -64,6 +54,85 @@ public class API implements BedWars {
             if (afkPlayers.containsKey(player.getUniqueId())) return afkPlayers.get(player.getUniqueId());
             return 0;
         }
+    };
+
+    private ArenaUtil arenaUtil = new ArenaUtil() {
+        @Override
+        public void removeFromEnableQueue(IArena a) {
+            Arena.removeFromEnableQueue(a);
+        }
+
+        @Override
+        public boolean isPlaying(Player p) {
+            return Arena.isInArena(p);
+        }
+
+        @Override
+        public boolean isSpectating(Player p) {
+            return Arena.isInArena(p) && Arena.getArenaByPlayer(p).isSpectator(p);
+        }
+
+        @Override
+        public void loadArena(String worldName, Player sender) {
+            new Arena(worldName, sender);
+        }
+
+        @Override
+        public void setGamesBeforeRestart(int games) {
+            Arena.setGamesBeforeRestart(games);
+        }
+
+        @Override
+        public int getGamesBeforeRestart() {
+            return Arena.getGamesBeforeRestart();
+        }
+    };
+
+    private Configs configs = new Configs() {
+        @Override
+        public ConfigManager getMainConfig() {
+            return Main.config;
+        }
+
+        @Override
+        public ConfigManager getSignsConfig() {
+            return Main.signs;
+        }
+
+        @Override
+        public ConfigManager getGeneratorsConfig() {
+            return Main.generators;
+        }
+
+        @Override
+        public ConfigManager getShopConfig() {
+            return Main.shop;
+        }
+
+        @Override
+        public ConfigManager getUpgradesConfig() {
+            return Main.upgrades;
+        }
+    };
+
+    @Override
+    public IStats getStatsCache() {
+        return StatsManager.getStatsCache();
+    }
+
+    @Override
+    public AFKUtil getAFKSystem() {
+        return afkSystem;
+    }
+
+    @Override
+    public ArenaUtil getArenaUtil() {
+        return arenaUtil;
+    }
+
+    @Override
+    public Configs getConfigs() {
+        return configs;
     }
 
     @Override
@@ -79,16 +148,6 @@ public class API implements BedWars {
     @Override
     public ServerType getServerType() {
         return Main.getServerType();
-    }
-
-    @Override
-    public boolean isPlaying(Player p) {
-        return Arena.isInArena(p) && Arena.getArenaByPlayer(p).isPlayer(p);
-    }
-
-    @Override
-    public boolean isSpectating(Player p) {
-        return Arena.isInArena(p) && Arena.getArenaByPlayer(p).isSpectator(p);
     }
 
     @Override
@@ -112,6 +171,16 @@ public class API implements BedWars {
                 Main.plugin.getLogger().log(Level.WARNING, adapter.getOwner().getName() + " changed the restore system to its own adapter.");
             }
         }
+    }
+
+    @Override
+    public VersionSupport getVersionSupport() {
+        return Main.nms;
+    }
+
+    @Override
+    public Language getDefaultLang() {
+        return Language.getDefaultLanguage();
     }
 
     @Override

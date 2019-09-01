@@ -5,7 +5,8 @@ import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Misc;
-import com.andrei1058.bedwars.language.Language;
+import com.andrei1058.bedwars.api.language.Language;
+import com.avaje.ebeaninternal.server.lib.util.NotFoundException;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -18,7 +19,6 @@ import java.util.Collections;
 import java.util.Objects;
 
 import static com.andrei1058.bedwars.Main.getForCurrentVersion;
-import static com.andrei1058.bedwars.Main.lang;
 
 public class MainConfig extends ConfigManager {
 
@@ -224,20 +224,24 @@ public class MainConfig extends ConfigManager {
                     if (lang.equalsIgnoreCase(yml.getString("language"))) {
                         whatLang = f.getName().replace("messages_", "").replace(".yml", "");
                     }
-                    Language.setupLang(new Language(lang));
+                    new Language(Main.plugin, lang);
                 }
             }
         }
-        lang = Language.getLang(whatLang);
+        Language def = Language.getLang(whatLang);
+
+        if (def == null) throw new NotFoundException("Could not found default language: " + whatLang);
+        Language.setDefaultLanguage(def);
 
         //remove languages if disabled
         //server language can t be disabled
         for (String iso : yml.getStringList(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES)) {
             Language l = Language.getLang(iso);
             if (l != null) {
-                if (l != lang) Language.getLanguages().remove(l);
+                if (l != def) Language.getLanguages().remove(l);
             }
         }
+        //
 
         Main.setDebug(yml.getBoolean("debug"));
         new ConfigManager(plugin,"bukkit", Bukkit.getWorldContainer().getPath()).set("ticks-per.autosave", -1);

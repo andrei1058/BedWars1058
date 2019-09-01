@@ -4,7 +4,7 @@ import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
-import com.andrei1058.bedwars.language.Messages;
+import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.levels.internal.PlayerLevel;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import org.bukkit.Bukkit;
@@ -17,8 +17,8 @@ import java.util.*;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.Misc.replaceStatsPlaceholders;
-import static com.andrei1058.bedwars.language.Language.getMsg;
-import static com.andrei1058.bedwars.language.Language.getScoreboard;
+import static com.andrei1058.bedwars.api.language.Language.getMsg;
+import static com.andrei1058.bedwars.api.language.Language.getScoreboard;
 
 public class SBoard {
 
@@ -87,9 +87,10 @@ public class SBoard {
             p.setScoreboard(sb);
             scoreboards.add(this);
             giveTeamColorTag();
+            //show spectator tag in sb to other spectators
             for (SBoard sb : SBoard.getScoreboards()) {
                 if (sb.getArena() == getArena()) {
-                    sb.updateSpectators(getP(), false);
+                    sb.updateSpectator(sb.getP(), false);
                 }
             }
         }, 10L);
@@ -116,7 +117,7 @@ public class SBoard {
             temp = temp.replace("{requiredXp}", Main.getLevelSupport().getRequiredXpFormatted(p));
             temp = temp.replace("{server_ip}", Main.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
                     .replace("{version}", plugin.getDescription().getVersion())
-            .replace("{server}", config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_NAME));
+                    .replace("{server}", config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_NAME));
             for (String ph : placeholders) {
                 if (temp.contains(ph)) {
                     if (!toRefresh.containsKey(t)) {
@@ -329,9 +330,9 @@ public class SBoard {
     }
 
     /**
-     * @since API 9
+     * Update spectators for player.
      */
-    public void updateSpectators(Player p, boolean value) {
+    public void updateSpectator(Player p, boolean value) {
         Team collide;
         if (sb.getTeam("spectators") == null) {
             collide = sb.registerNewTeam("spectators");
@@ -340,12 +341,10 @@ public class SBoard {
         } else {
             collide = sb.getTeam("spectators");
         }
-        for (Player spect : getArena().getSpectators()) {
-            if (!value) {
-                if (!collide.hasEntry(spect.getName())) collide.addEntry(spect.getName());
-            } else {
-                if (collide.hasEntry(spect.getName())) collide.removeEntry(spect.getName());
-            }
+        if (value) {
+            if (!collide.hasEntry(p.getName())) collide.addEntry(p.getName());
+        } else {
+            collide.hasEntry(p.getName());
         }
     }
 }

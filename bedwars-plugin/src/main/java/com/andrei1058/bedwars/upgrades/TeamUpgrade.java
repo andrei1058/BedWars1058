@@ -4,7 +4,7 @@ import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.arena.upgrades.ITeamUpgrade;
 import com.andrei1058.bedwars.api.events.shop.UpgradeBuyEvent;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
-import com.andrei1058.bedwars.language.Messages;
+import com.andrei1058.bedwars.api.language.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.andrei1058.bedwars.language.Language.getMsg;
+import static com.andrei1058.bedwars.api.language.Language.getMsg;
 import static com.andrei1058.bedwars.upgrades.UpgradeGroup.getUpgradeGroup;
 
 public class TeamUpgrade implements ITeamUpgrade {

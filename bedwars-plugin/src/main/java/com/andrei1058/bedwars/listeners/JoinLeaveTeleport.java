@@ -5,8 +5,8 @@ import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.*;
-import com.andrei1058.bedwars.language.Language;
-import com.andrei1058.bedwars.language.Messages;
+import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import static com.andrei1058.bedwars.Main.*;
-import static com.andrei1058.bedwars.language.Language.getMsg;
+import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class JoinLeaveTeleport implements Listener {
 
@@ -37,7 +37,7 @@ public class JoinLeaveTeleport implements Listener {
             String iso = Main.getRemoteDatabase().getLanguage(u);
             if (Language.isLanguageExist(iso)) {
                 if (Main.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES).contains(iso))
-                    iso = lang.getIso();
+                    iso = Language.getDefaultLanguage().getIso();
                 if (preLoadedLanguage.containsKey(u)){
                     preLoadedLanguage.replace(u, iso);
                 } else {
@@ -204,7 +204,7 @@ public class JoinLeaveTeleport implements Listener {
                 String iso = Language.getLangByPlayer().get(p).getIso();
                 if (Language.isLanguageExist(iso)) {
                     if (Main.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES).contains(iso))
-                        iso = lang.getIso();
+                        iso = Language.getDefaultLanguage().getIso();
                     Main.getRemoteDatabase().setLanguage(u, iso);
                 }
                 Language.getLangByPlayer().remove(p);

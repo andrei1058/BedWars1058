@@ -177,6 +177,39 @@ public class SetupSession implements ISetupSession {
         return cm;
     }
 
+    @Override
+    public void teleportPlayer() {
+        player.getInventory().clear();
+        player.teleport(Bukkit.getWorld(getWorldName()).getSpawnLocation());
+        player.setGameMode(GameMode.CREATIVE);
+        player.setAllowFlight(true);
+        player.setFlying(true);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2));
+        player.sendMessage("\n" + ChatColor.WHITE + "\n");
+
+        player.sendMessage(ChatColor.GREEN + "You were teleported to the " + ChatColor.BLUE + getWorldName() + ChatColor.GREEN + "'s spawn.");
+        if (getSetupType() == SetupType.ASSISTED && getConfig().getYml().get("waiting.Loc") == null) {
+            player.sendMessage("");
+            player.sendMessage(ChatColor.BLUE + ">>>>>>>>>>>>" + getWorldName() + " Setup Session");
+            player.sendMessage("");
+            player.sendMessage(ChatColor.GREEN + "Hello " + player.getName() + "!");
+            player.sendMessage(ChatColor.WHITE + "Please set the waiting spawn.");
+            player.sendMessage(ChatColor.WHITE + "It is the place where players will wait the game to start.");
+            player.spigot().sendMessage(Misc.msgHoverClick(ChatColor.BLUE + "     ▪     " + ChatColor.GOLD + "CLICK HERE TO SET THE WAITING LOBBY    " + ChatColor.BLUE + " ▪", ChatColor.LIGHT_PURPLE + "Click to set the waiting spawn.", "/" + Main.mainCmd + " setWaitingSpawn", ClickEvent.Action.RUN_COMMAND));
+            MainCommand.createTC(ChatColor.YELLOW + "Or type: " + ChatColor.GRAY + "/" + Main.mainCmd + " setWaitingSpawn", "/" + Main.mainCmd + " setWaitingSpawn", ChatColor.WHITE + "Set the world spawn lobby.");
+        } else {
+            Bukkit.dispatchCommand(player, Main.mainCmd + " cmds");
+        }
+
+        World w = Bukkit.getWorld(getWorldName());
+        Bukkit.getScheduler().runTaskLater(plugin, () -> w.getEntities().stream()
+                .filter(e -> e.getType() != EntityType.PLAYER).filter(e -> e.getType() != EntityType.PAINTING)
+                .filter(e -> e.getType() != EntityType.ITEM_FRAME).forEach(Entity::remove), 30L);
+        w.setAutoSave(false);
+        w.setGameRuleValue("doMobSpawning", "false");
+        Bukkit.getPluginManager().callEvent(new SetupSessionStartEvent(this));
+    }
+
     public List<Location> getSkipAutoCreateGen() {
         return new ArrayList<>(skipAutoCreateGen);
     }

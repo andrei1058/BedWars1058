@@ -8,7 +8,7 @@ import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
-import com.andrei1058.bedwars.language.Messages;
+import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.configuration.Permissions;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-import static com.andrei1058.bedwars.language.Language.getMsg;
+import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class CmdStart extends SubCommand {
 

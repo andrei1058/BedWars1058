@@ -2,7 +2,7 @@ package com.andrei1058.bedwars.arena.spectator;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.language.Messages;
+import com.andrei1058.bedwars.api.language.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 import static com.andrei1058.bedwars.Main.nms;
-import static com.andrei1058.bedwars.language.Language.getList;
-import static com.andrei1058.bedwars.language.Language.getMsg;
+import static com.andrei1058.bedwars.api.language.Language.getList;
+import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 @SuppressWarnings("WeakerAccess")
 public class TeleporterGUI {

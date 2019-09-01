@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.database;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.language.Language;
 import org.bukkit.Bukkit;
 
 import java.io.File;
@@ -210,7 +211,7 @@ public class SQLite implements Database {
     @Override
     public String getLanguage(UUID player) {
         if (!isConnected()) init();
-        String iso = Main.lang.getIso();
+        String iso = Language.getDefaultLanguage().getIso();
         try {
             ResultSet rs = connection.createStatement().executeQuery("SELECT iso FROM player_language WHERE uuid = '" + player.toString() + "';");
             if (rs.next()) {

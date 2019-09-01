@@ -24,4 +24,9 @@ public interface ISetupSession {
      * Get arena config.
      */
     ConfigManager getConfig();
+
+    /**
+     * Teleport player target world.
+     */
+    void teleportPlayer();
 }

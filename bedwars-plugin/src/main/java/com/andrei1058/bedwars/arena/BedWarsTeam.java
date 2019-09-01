@@ -7,7 +7,7 @@ import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerFirstSpawnEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerReSpawnEvent;
-import com.andrei1058.bedwars.language.Messages;
+import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.region.Cuboid;
 import com.andrei1058.bedwars.shop.ShopCache;
 import org.bukkit.Bukkit;
@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.andrei1058.bedwars.Main.*;
-import static com.andrei1058.bedwars.language.Language.getMsg;
+import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 @SuppressWarnings("WeakerAccess")
 public class BedWarsTeam implements ITeam {

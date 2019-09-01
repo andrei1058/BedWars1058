@@ -13,7 +13,8 @@ import com.andrei1058.bedwars.commands.rejoin.RejoinCommand;
 import com.andrei1058.bedwars.commands.shout.ShoutCommand;
 import com.andrei1058.bedwars.database.Database;
 import com.andrei1058.bedwars.database.SQLite;
-import com.andrei1058.bedwars.language.Language;
+import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.language.*;
 import com.andrei1058.bedwars.levels.Level;
 import com.andrei1058.bedwars.levels.internal.InternalLevel;
 import com.andrei1058.bedwars.levels.internal.LevelListeners;
@@ -41,7 +42,7 @@ import com.andrei1058.bedwars.support.party.Parties;
 import com.andrei1058.bedwars.support.vault.*;
 import com.andrei1058.bedwars.arena.tasks.OneTick;
 import com.andrei1058.bedwars.arena.tasks.Refresh;
-import com.andrei1058.bedwars.support.version.VersionSupport;
+import com.andrei1058.bedwars.api.server.VersionSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.WorldCreator;
 import org.bukkit.entity.Entity;
@@ -52,14 +53,13 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-
-import static com.andrei1058.bedwars.language.Language.setupLang;
 
 @SuppressWarnings("WeakerAccess")
 public class Main extends JavaPlugin {
@@ -72,7 +72,6 @@ public class Main extends JavaPlugin {
     public static ShopManager shop;
     public static StatsManager statsManager;
     public static UpgradesManager upgrades;
-    public static Language lang;
     public static Main plugin;
     public static VersionSupport nms;
 
@@ -130,29 +129,13 @@ public class Main extends JavaPlugin {
 
         config = new MainConfig(this, "config", "plugins/" + this.getName());
 
-        Language en = new Language("en");
-        setupLang(en);
-        Language.getLanguages().remove(en);
-
-        Language ro = new Language("ro");
-        setupLang(ro);
-        Language.getLanguages().remove(ro);
-
-        Language it = new Language("it");
-        setupLang(it);
-        Language.getLanguages().remove(it);
-
-        Language pl = new Language("pl");
-        setupLang(pl);
-        Language.getLanguages().remove(pl);
-
-        Language es = new Language("es");
-        setupLang(es);
-        Language.getLanguages().remove(es);
-
-        Language ru = new Language("ru");
-        setupLang(ru);
-        Language.getLanguages().remove(ru);
+        // Setup languages
+        new English();
+        new Romanian();
+        new Italian();
+        new Polish();
+        new Spanish();
+        new Russian();
 
         generators = new GeneratorsConfig(this, "generators", "plugins/" + this.getName());
         upgrades = new UpgradesManager("upgrades", "plugins/" + this.getName());
@@ -170,6 +153,7 @@ public class Main extends JavaPlugin {
             return;
         }
 
+        Bukkit.getServicesManager().register(BedWars.class, new API(), this, ServicePriority.Highest);
         api = new API();
 
         // Load SlimeWorldManager support
@@ -235,7 +219,7 @@ public class Main extends JavaPlugin {
 
         /* Register events */
         registerEvents(new JoinLeaveTeleport(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(),
-                new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener());
+                new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener(), new LangListener());
         if (getServerType() == ServerType.BUNGEE) {
             registerEvents(new Ping());
             registerEvents(new ArenaListeners());
@@ -409,7 +393,7 @@ public class Main extends JavaPlugin {
         // bStats metrics
         bStats metrics = new bStats(this);
         metrics.addCustomChart(new bStats.SimplePie("server_type", () -> getServerType().toString()));
-        metrics.addCustomChart(new bStats.SimplePie("default_language", () -> lang.getIso()));
+        metrics.addCustomChart(new bStats.SimplePie("default_language", () -> Language.getDefaultLanguage().getIso()));
     }
 
     public void onDisable() {

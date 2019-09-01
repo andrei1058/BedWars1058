@@ -6,15 +6,15 @@ import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.commands.shout.ShoutCommand;
-import com.andrei1058.bedwars.language.Language;
-import com.andrei1058.bedwars.language.Messages;
+import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.stats.StatsManager;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 
 import java.text.SimpleDateFormat;
 
-import static com.andrei1058.bedwars.language.Language.getMsg;
+import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class PAPISupport extends PlaceholderExpansion {
 
@@ -41,7 +41,7 @@ public class PAPISupport extends PlaceholderExpansion {
             if (a == null){
                 return "NULL";
             }
-            return a.getDisplayStatus(Main.lang);
+            return a.getDisplayStatus(Language.getDefaultLanguage());
         }
 
         if (s.contains("arena_count_")){

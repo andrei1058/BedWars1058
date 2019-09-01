@@ -2,8 +2,8 @@ package com.andrei1058.bedwars.upgrades;
 
 import com.andrei1058.bedwars.api.arena.upgrades.IUpgradeTier;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
-import com.andrei1058.bedwars.language.Language;
-import com.andrei1058.bedwars.language.Messages;
+import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.Messages;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.andrei1058.bedwars.Main.*;
-import static com.andrei1058.bedwars.language.Language.*;
+import static com.andrei1058.bedwars.api.language.Language.*;
 
 @SuppressWarnings("WeakerAccess")
 public class UpgradeTier implements IUpgradeTier {

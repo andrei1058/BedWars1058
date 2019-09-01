@@ -1,12 +1,14 @@
 package com.andrei1058.bedwars.api;
 
-import com.andrei1058.bedwars.api.server.ISetupSession;
-import com.andrei1058.bedwars.api.server.RestoreAdapter;
+import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.configuration.ConfigManager;
+import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.server.*;
 import com.andrei1058.bedwars.api.command.ParentCommand;
-import com.andrei1058.bedwars.api.server.ServerType;
 import org.bukkit.entity.Player;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
 
 public interface BedWars {
@@ -82,9 +84,9 @@ public interface BedWars {
     /**
      * Get afk system methods
      */
-    IAFK getAFKSystem();
+    AFKUtil getAFKSystem();
 
-    interface IAFK {
+    interface AFKUtil {
         /**
          * Check if a player is AFK.
          */
@@ -99,6 +101,74 @@ public interface BedWars {
          * Get the seconds since the player is AFK
          */
         int getPlayerTimeAFK(Player player);
+    }
+
+    ArenaUtil getArenaUtil();
+
+    interface ArenaUtil {
+        /**
+         * Remove an arena from the enable queue.
+         */
+        void removeFromEnableQueue(IArena a);
+
+        /**
+         * Check if a player is playing.
+         */
+        boolean isPlaying(Player p);
+
+        /**
+         * Check if a player is spectating.
+         */
+        boolean isSpectating(Player p);
+
+        /**
+         * Load an arena.
+         * Add it to the enable queue.
+         *
+         * @param sender If you want to send feedback. Use null otherwise.
+         */
+        void loadArena(String worldName, Player sender);
+
+        /**
+         * Set how many games to the next serve restart.
+         * This is used only if {@link com.andrei1058.bedwars.api.server.ServerType#BUNGEE}
+         */
+        void setGamesBeforeRestart(int games);
+
+        /**
+         * Get how many games till the next restart.
+         * This is used only if {@link com.andrei1058.bedwars.api.server.ServerType#BUNGEE}
+         */
+        int getGamesBeforeRestart();
+    }
+
+    Configs getConfigs();
+
+    interface Configs {
+        /**
+         * Get plugin main configuration.
+         */
+        ConfigManager getMainConfig();
+
+        /**
+         * Get signs configuration.
+         */
+        ConfigManager getSignsConfig();
+
+        /**
+         * Get generators configuration.
+         */
+        ConfigManager getGeneratorsConfig();
+
+        /**
+         * Get shop configuration.
+         */
+        ConfigManager getShopConfig();
+
+        /**
+         * Get upgrades configuration.
+         */
+        ConfigManager getUpgradesConfig();
     }
 
 
@@ -125,15 +195,6 @@ public interface BedWars {
      */
     String getLangIso(Player p);
 
-    /**
-     * Check if a player is playing.
-     */
-    boolean isPlaying(Player p);
-
-    /**
-     * Check if a player is spectating.
-     */
-    boolean isSpectating(Player p);
 
     /**
      * Get bedWars main command
@@ -151,4 +212,14 @@ public interface BedWars {
      * @param restoreAdapter your custom adapter.
      */
     void setRestoreAdapter(RestoreAdapter restoreAdapter) throws IllegalAccessError;
+
+    /**
+     * Get nms operations.
+     */
+    VersionSupport getVersionSupport();
+
+    /**
+     * Get server default language.
+     */
+    Language getDefaultLang();
 }

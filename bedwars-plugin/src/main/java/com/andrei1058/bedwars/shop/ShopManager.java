@@ -3,7 +3,7 @@ package com.andrei1058.bedwars.shop;
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
-import com.andrei1058.bedwars.language.Messages;
+import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.shop.listeners.*;
 import com.andrei1058.bedwars.shop.main.QuickBuyButton;
 import com.andrei1058.bedwars.shop.main.ShopCategory;
@@ -18,96 +18,93 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 
 @SuppressWarnings("WeakerAccess")
-public class ShopManager {
+public class ShopManager  extends ConfigManager {
 
     public static ShopIndex shop;
 
-    private ConfigManager configManager;
-    private YamlConfiguration yml;
-
-    public ShopManager() {
-        this.configManager = new ConfigManager(Main.plugin, "shop", "plugins/" + Main.plugin.getDescription().getName());
-        this.yml = configManager.getYml();
+    public ShopManager(){
+        super(Main.plugin, "shop", "plugins/" + Main.plugin.getDescription().getName());
         saveDefaults();
         loadShop();
         registerListeners();
     }
 
     private void saveDefaults() {
-        yml.options().header("Shop with quick buy and tiers");
+        YamlConfiguration yml = getYml();
+        getYml().options().header("Shop with quick buy and tiers");
 
         //quick buy
-        yml.addDefault(ConfigPath.SHOP_SETTINGS_QUICK_BUY_BUTTON_MATERIAL, Main.getForCurrentVersion("NETHER_STAR", "NETHER_STAR", "NETHER_STAR"));
-        yml.addDefault(ConfigPath.SHOP_SETTINGS_QUICK_BUY_BUTTON_AMOUNT, 1);
-        yml.addDefault(ConfigPath.SHOP_SETTINGS_QUICK_BUY_BUTTON_DATA, 0);
-        yml.addDefault(ConfigPath.SHOP_SETTINGS_QUICK_BUY_BUTTON_ENCHANTED, false);
+        getYml().addDefault(ConfigPath.SHOP_SETTINGS_QUICK_BUY_BUTTON_MATERIAL, Main.getForCurrentVersion("NETHER_STAR", "NETHER_STAR", "NETHER_STAR"));
+        getYml().addDefault(ConfigPath.SHOP_SETTINGS_QUICK_BUY_BUTTON_AMOUNT, 1);
+        getYml().addDefault(ConfigPath.SHOP_SETTINGS_QUICK_BUY_BUTTON_DATA, 0);
+        getYml().addDefault(ConfigPath.SHOP_SETTINGS_QUICK_BUY_BUTTON_ENCHANTED, false);
 
-        yml.addDefault(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_MATERIAL, Main.getForCurrentVersion("STAINED_GLASS_PANE", "STAINED_GLASS_PANE", "RED_STAINED_GLASS_PANE"));
-        yml.addDefault(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_AMOUNT, 1);
-        yml.addDefault(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_DATA, 4);
-        yml.addDefault(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_ENCHANTED, false);
+        getYml().addDefault(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_MATERIAL, Main.getForCurrentVersion("STAINED_GLASS_PANE", "STAINED_GLASS_PANE", "RED_STAINED_GLASS_PANE"));
+        getYml().addDefault(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_AMOUNT, 1);
+        getYml().addDefault(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_DATA, 4);
+        getYml().addDefault(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_ENCHANTED, false);
 
         //separator
-        yml.addDefault(ConfigPath.SHOP_SETTINGS_SEPARATOR_REGULAR_MATERIAL, Main.getForCurrentVersion("STAINED_GLASS_PANE", "STAINED_GLASS_PANE", "GRAY_STAINED_GLASS_PANE"));
-        yml.addDefault(ConfigPath.SHOP_SETTINGS_SEPARATOR_REGULAR_AMOUNT, 1);
-        yml.addDefault(ConfigPath.SHOP_SETTINGS_SEPARATOR_REGULAR_DATA, 7);
-        yml.addDefault(ConfigPath.SHOP_SETTINGS_SEPARATOR_REGULAR_ENCHANTED, false);
+        getYml().addDefault(ConfigPath.SHOP_SETTINGS_SEPARATOR_REGULAR_MATERIAL, Main.getForCurrentVersion("STAINED_GLASS_PANE", "STAINED_GLASS_PANE", "GRAY_STAINED_GLASS_PANE"));
+        getYml().addDefault(ConfigPath.SHOP_SETTINGS_SEPARATOR_REGULAR_AMOUNT, 1);
+        getYml().addDefault(ConfigPath.SHOP_SETTINGS_SEPARATOR_REGULAR_DATA, 7);
+        getYml().addDefault(ConfigPath.SHOP_SETTINGS_SEPARATOR_REGULAR_ENCHANTED, false);
 
-        yml.addDefault(ConfigPath.SHOP_SETTINGS_SEPARATOR_SELECTED_MATERIAL, Main.getForCurrentVersion("STAINED_GLASS_PANE", "STAINED_GLASS_PANE", "GREEN_STAINED_GLASS_PANE"));
-        yml.addDefault(ConfigPath.SHOP_SETTINGS_SEPARATOR_SELECTED_AMOUNT, 1);
-        yml.addDefault(ConfigPath.SHOP_SETTINGS_SEPARATOR_SELECTED_DATA, 13);
-        yml.addDefault(ConfigPath.SHOP_SETTINGS_SEPARATOR_SELECTED_ENCHANTED, false);
+        getYml().addDefault(ConfigPath.SHOP_SETTINGS_SEPARATOR_SELECTED_MATERIAL, Main.getForCurrentVersion("STAINED_GLASS_PANE", "STAINED_GLASS_PANE", "GREEN_STAINED_GLASS_PANE"));
+        getYml().addDefault(ConfigPath.SHOP_SETTINGS_SEPARATOR_SELECTED_AMOUNT, 1);
+        getYml().addDefault(ConfigPath.SHOP_SETTINGS_SEPARATOR_SELECTED_DATA, 13);
+        getYml().addDefault(ConfigPath.SHOP_SETTINGS_SEPARATOR_SELECTED_ENCHANTED, false);
 
         //specials
-        yml.addDefault(ConfigPath.SHOP_SPECIAL_SILVERFISH_ENABLE, true);
-        yml.addDefault(ConfigPath.SHOP_SPECIAL_SILVERFISH_MATERIAL, Main.getForCurrentVersion("SNOW_BALL", "SNOW_BALL", "SNOWBALL"));
-        yml.addDefault(ConfigPath.SHOP_SPECIAL_SILVERFISH_DATA, 0);
-        yml.addDefault(ConfigPath.SHOP_SPECIAL_SILVERFISH_HEALTH, 8.0);
-        yml.addDefault(ConfigPath.SHOP_SPECIAL_SILVERFISH_DAMAGE, 4.0);
-        yml.addDefault(ConfigPath.SHOP_SPECIAL_SILVERFISH_SPEED, 0.25);
-        yml.addDefault(ConfigPath.SHOP_SPECIAL_SILVERFISH_DESPAWN, 15);
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_SILVERFISH_ENABLE, true);
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_SILVERFISH_MATERIAL, Main.getForCurrentVersion("SNOW_BALL", "SNOW_BALL", "SNOWBALL"));
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_SILVERFISH_DATA, 0);
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_SILVERFISH_HEALTH, 8.0);
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_SILVERFISH_DAMAGE, 4.0);
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_SILVERFISH_SPEED, 0.25);
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_SILVERFISH_DESPAWN, 15);
 
-        yml.addDefault(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_ENABLE, true);
-        yml.addDefault(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_MATERIAL, Main.getForCurrentVersion("MONSTER_EGG", "MONSTER_EGG", "HORSE_SPAWN_EGG"));
-        yml.addDefault(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_DATA, 0);
-        yml.addDefault(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_HEALTH, 100.0);
-        yml.addDefault(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_DESPAWN, 240);
-        yml.addDefault(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_SPEED, 0.25);
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_ENABLE, true);
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_MATERIAL, Main.getForCurrentVersion("MONSTER_EGG", "MONSTER_EGG", "HORSE_SPAWN_EGG"));
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_DATA, 0);
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_HEALTH, 100.0);
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_DESPAWN, 240);
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_SPEED, 0.25);
 
-        if (configManager.isFirstTime()) {
+        if (isFirstTime()) {
             //quick buy defaults
-            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element1.path", "blocks-category.category-content.wool");
-            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element1.slot", 19);
-            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element2.path", "melee-category.category-content.stone-sword");
-            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element2.slot", 20);
-            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element3.path", "armor-category.category-content.chainmail");
-            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element3.slot", 21);
-            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element4.path", "ranged-category.category-content.bow1");
-            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element4.slot", 23);
-            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element5.path", "potions-category.category-content.speed-potion");
-            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element5.slot", 24);
-            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element6.path", "utility-category.category-content.tnt");
-            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element6.slot", 25);
+            getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element1.path", "blocks-category.category-content.wool");
+            getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element1.slot", 19);
+            getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element2.path", "melee-category.category-content.stone-sword");
+            getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element2.slot", 20);
+            getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element3.path", "armor-category.category-content.chainmail");
+            getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element3.slot", 21);
+            getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element4.path", "ranged-category.category-content.bow1");
+            getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element4.slot", 23);
+            getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element5.path", "potions-category.category-content.speed-potion");
+            getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element5.slot", 24);
+            getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element6.path", "utility-category.category-content.tnt");
+            getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element6.slot", 25);
 
-            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element7.path", "blocks-category.category-content.wood");
-            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element7.slot", 28);
-            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element8.path", "melee-category.category-content.iron-sword");
-            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element8.slot", 29);
-            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element9.path", "armor-category.category-content.iron-armor");
-            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element9.slot", 30);
-            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element10.path", "tools-category.category-content.shears");
-            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element10.slot", 31);
-            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element11.path", "ranged-category.category-content.arrow");
-            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element11.slot", 32);
-            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element12.path", "potions-category.category-content.jump-potion");
-            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element12.slot", 33);
-            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element13.path", "utility-category.category-content.water-bucket");
-            yml.addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element13.slot", 34);
+            getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element7.path", "blocks-category.category-content.wood");
+            getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element7.slot", 28);
+            getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element8.path", "melee-category.category-content.iron-sword");
+            getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element8.slot", 29);
+            getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element9.path", "armor-category.category-content.iron-armor");
+            getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element9.slot", 30);
+            getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element10.path", "tools-category.category-content.shears");
+            getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element10.slot", 31);
+            getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element11.path", "ranged-category.category-content.arrow");
+            getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element11.slot", 32);
+            getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element12.path", "potions-category.category-content.jump-potion");
+            getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element12.slot", 33);
+            getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element13.path", "utility-category.category-content.water-bucket");
+            getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element13.slot", 34);
         }
 
         //save default shop categories if the file was just generated
         //so the user can remove categories or add new ones
-        if (configManager.isFirstTime()) {
+        if (isFirstTime()) {
             //BLOCKS CATEGORY
             addDefaultShopCategory(ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, 1, Main.getForCurrentVersion("STAINED_CLAY", "STAINED_CLAY", "ORANGE_TERRACOTTA"), 1, 1, false);
 
@@ -334,57 +331,57 @@ public class ShopManager {
 
         }
 
-        if (yml.get(ConfigPath.SHOP_PATH_CATEGORY_ARMOR + ConfigPath.SHOP_CATEGORY_CONTENT_PATH + ".diamond-armor") != null) {
-            yml.addDefault(ConfigPath.SHOP_PATH_CATEGORY_ARMOR + ConfigPath.SHOP_CATEGORY_CONTENT_PATH + ".diamond-armor" + "." + ConfigPath.SHOP_CATEGORY_CONTENT_WEIGHT, 2);
+        if (getYml().get(ConfigPath.SHOP_PATH_CATEGORY_ARMOR + ConfigPath.SHOP_CATEGORY_CONTENT_PATH + ".diamond-armor") != null) {
+            getYml().addDefault(ConfigPath.SHOP_PATH_CATEGORY_ARMOR + ConfigPath.SHOP_CATEGORY_CONTENT_PATH + ".diamond-armor" + "." + ConfigPath.SHOP_CATEGORY_CONTENT_WEIGHT, 2);
         }
-        if (yml.get(ConfigPath.SHOP_PATH_CATEGORY_ARMOR + ConfigPath.SHOP_CATEGORY_CONTENT_PATH + ".iron-armor") != null) {
-            yml.addDefault(ConfigPath.SHOP_PATH_CATEGORY_ARMOR + ConfigPath.SHOP_CATEGORY_CONTENT_PATH + ".iron-armor" + "." + ConfigPath.SHOP_CATEGORY_CONTENT_WEIGHT, 1);
+        if (getYml().get(ConfigPath.SHOP_PATH_CATEGORY_ARMOR + ConfigPath.SHOP_CATEGORY_CONTENT_PATH + ".iron-armor") != null) {
+            getYml().addDefault(ConfigPath.SHOP_PATH_CATEGORY_ARMOR + ConfigPath.SHOP_CATEGORY_CONTENT_PATH + ".iron-armor" + "." + ConfigPath.SHOP_CATEGORY_CONTENT_WEIGHT, 1);
         }
 
         //try materials
         try {
-            String material = yml.getString(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_MATERIAL);
+            String material = getYml().getString(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_MATERIAL);
             Main.debug(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_MATERIAL + " is set to: " + material);
             Material.valueOf(material);
         } catch (Exception ex) {
             Main.plugin.getLogger().severe("Invalid material at " + ConfigPath.SHOP_SPECIAL_IRON_GOLEM_MATERIAL);
         }
         try {
-            String material = yml.getString(ConfigPath.SHOP_SPECIAL_SILVERFISH_MATERIAL);
+            String material = getYml().getString(ConfigPath.SHOP_SPECIAL_SILVERFISH_MATERIAL);
             Main.debug(ConfigPath.SHOP_SPECIAL_SILVERFISH_MATERIAL + " is set to: " + material);
             Material.valueOf(material);
         } catch (Exception ex) {
             Main.plugin.getLogger().severe("Invalid material at " + ConfigPath.SHOP_SPECIAL_SILVERFISH_MATERIAL);
         }
 
-        yml.options().copyDefaults(true);
-        configManager.save();
+        getYml().options().copyDefaults(true);
+        save();
     }
 
     private void loadShop() {
         //Quick Buy Button
-        ItemStack button = Main.nms.createItemStack(yml.getString(ConfigPath.SHOP_SETTINGS_QUICK_BUY_BUTTON_MATERIAL),
-                yml.getInt(ConfigPath.SHOP_SETTINGS_QUICK_BUY_BUTTON_AMOUNT), (short) yml.getInt(ConfigPath.SHOP_SETTINGS_QUICK_BUY_BUTTON_DATA));
-        if (yml.getBoolean(ConfigPath.SHOP_SETTINGS_QUICK_BUY_BUTTON_ENCHANTED)) button = enchantItem(button);
+        ItemStack button = Main.nms.createItemStack(getYml().getString(ConfigPath.SHOP_SETTINGS_QUICK_BUY_BUTTON_MATERIAL),
+                getYml().getInt(ConfigPath.SHOP_SETTINGS_QUICK_BUY_BUTTON_AMOUNT), (short) getYml().getInt(ConfigPath.SHOP_SETTINGS_QUICK_BUY_BUTTON_DATA));
+        if (getYml().getBoolean(ConfigPath.SHOP_SETTINGS_QUICK_BUY_BUTTON_ENCHANTED)) button = enchantItem(button);
         QuickBuyButton qbb = new QuickBuyButton(0, button, Messages.SHOP_QUICK_BUY_NAME, Messages.SHOP_QUICK_BUY_LORE);
 
         //Separator
-        ItemStack separatorStandard = Main.nms.createItemStack(yml.getString(ConfigPath.SHOP_SETTINGS_SEPARATOR_REGULAR_MATERIAL),
-                yml.getInt(ConfigPath.SHOP_SETTINGS_SEPARATOR_REGULAR_AMOUNT), (short) yml.getInt(ConfigPath.SHOP_SETTINGS_SEPARATOR_REGULAR_DATA));
-        if (yml.getBoolean(ConfigPath.SHOP_SETTINGS_SEPARATOR_REGULAR_ENCHANTED))
+        ItemStack separatorStandard = Main.nms.createItemStack(getYml().getString(ConfigPath.SHOP_SETTINGS_SEPARATOR_REGULAR_MATERIAL),
+                getYml().getInt(ConfigPath.SHOP_SETTINGS_SEPARATOR_REGULAR_AMOUNT), (short) getYml().getInt(ConfigPath.SHOP_SETTINGS_SEPARATOR_REGULAR_DATA));
+        if (getYml().getBoolean(ConfigPath.SHOP_SETTINGS_SEPARATOR_REGULAR_ENCHANTED))
             separatorStandard = enchantItem(separatorStandard);
-        ItemStack separatorSelected = Main.nms.createItemStack(yml.getString(ConfigPath.SHOP_SETTINGS_SEPARATOR_SELECTED_MATERIAL),
-                yml.getInt(ConfigPath.SHOP_SETTINGS_SEPARATOR_SELECTED_AMOUNT), (short) yml.getInt(ConfigPath.SHOP_SETTINGS_SEPARATOR_SELECTED_DATA));
-        if (yml.getBoolean(ConfigPath.SHOP_SETTINGS_SEPARATOR_SELECTED_ENCHANTED))
+        ItemStack separatorSelected = Main.nms.createItemStack(getYml().getString(ConfigPath.SHOP_SETTINGS_SEPARATOR_SELECTED_MATERIAL),
+                getYml().getInt(ConfigPath.SHOP_SETTINGS_SEPARATOR_SELECTED_AMOUNT), (short) getYml().getInt(ConfigPath.SHOP_SETTINGS_SEPARATOR_SELECTED_DATA));
+        if (getYml().getBoolean(ConfigPath.SHOP_SETTINGS_SEPARATOR_SELECTED_ENCHANTED))
             separatorSelected = enchantItem(separatorSelected);
 
         shop = new ShopIndex(Messages.SHOP_INDEX_NAME, qbb, Messages.SHOP_SEPARATOR_NAME, Messages.SHOP_SEPARATOR_LORE, separatorSelected, separatorStandard);
 
-        for (String s : yml.getConfigurationSection("").getKeys(false)) {
+        for (String s : getYml().getConfigurationSection("").getKeys(false)) {
             if (s.equalsIgnoreCase(ConfigPath.SHOP_SETTINGS_PATH)) continue;
             if (s.equals(ConfigPath.SHOP_QUICK_DEFAULTS_PATH)) continue;
             if (s.equalsIgnoreCase(ConfigPath.SHOP_SPECIALS_PATH)) continue;
-            ShopCategory sc = new ShopCategory(s, yml);
+            ShopCategory sc = new ShopCategory(s, getYml());
             if (sc.isLoaded()) shop.addShopCategory(sc);
         }
     }
@@ -413,11 +410,11 @@ public class ShopManager {
      */
     @SuppressWarnings("SameParameterValue")
     private void addDefaultShopCategory(String path, int slot, String material, int data, int amount, boolean enchant) {
-        yml.addDefault(path + ConfigPath.SHOP_CATEGORY_SLOT, slot);
-        yml.addDefault(path + ConfigPath.SHOP_CATEGORY_ITEM_MATERIAL, material);
-        yml.addDefault(path + ConfigPath.SHOP_CATEGORY_ITEM_DATA, data);
-        yml.addDefault(path + ConfigPath.SHOP_CATEGORY_ITEM_AMOUNT, amount);
-        yml.addDefault(path + ConfigPath.SHOP_CATEGORY_ITEM_ENCHANTED, enchant);
+        getYml().addDefault(path + ConfigPath.SHOP_CATEGORY_SLOT, slot);
+        getYml().addDefault(path + ConfigPath.SHOP_CATEGORY_ITEM_MATERIAL, material);
+        getYml().addDefault(path + ConfigPath.SHOP_CATEGORY_ITEM_DATA, data);
+        getYml().addDefault(path + ConfigPath.SHOP_CATEGORY_ITEM_AMOUNT, amount);
+        getYml().addDefault(path + ConfigPath.SHOP_CATEGORY_ITEM_ENCHANTED, enchant);
     }
 
     /**
@@ -426,16 +423,16 @@ public class ShopManager {
     public void adCategoryContentTier(String path, String contentName, int contentSlot, String tierName, String tierMaterial, int tierData, int amount, boolean enchant, int tierCost, String tierCurrency, boolean permanent,
                                       boolean downgradable) {
         path += ConfigPath.SHOP_CATEGORY_CONTENT_PATH + "." + contentName + ".";
-        yml.addDefault(path + ConfigPath.SHOP_CATEGORY_CONTENT_CONTENT_SLOT, contentSlot);
-        yml.addDefault(path + ConfigPath.SHOP_CATEGORY_CONTENT_IS_PERMANENT, permanent);
-        yml.addDefault(path + ConfigPath.SHOP_CATEGORY_CONTENT_IS_DOWNGRADABLE, downgradable);
+        getYml().addDefault(path + ConfigPath.SHOP_CATEGORY_CONTENT_CONTENT_SLOT, contentSlot);
+        getYml().addDefault(path + ConfigPath.SHOP_CATEGORY_CONTENT_IS_PERMANENT, permanent);
+        getYml().addDefault(path + ConfigPath.SHOP_CATEGORY_CONTENT_IS_DOWNGRADABLE, downgradable);
         path += ConfigPath.SHOP_CATEGORY_CONTENT_CONTENT_TIERS + "." + tierName;
-        yml.addDefault(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_MATERIAL, tierMaterial);
-        yml.addDefault(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_DATA, tierData);
-        yml.addDefault(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_AMOUNT, amount);
-        yml.addDefault(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_ENCHANTED, enchant);
-        yml.addDefault(path + ConfigPath.SHOP_CONTENT_TIER_SETTINGS_COST, tierCost);
-        yml.addDefault(path + ConfigPath.SHOP_CONTENT_TIER_SETTINGS_CURRENCY, tierCurrency);
+        getYml().addDefault(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_MATERIAL, tierMaterial);
+        getYml().addDefault(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_DATA, tierData);
+        getYml().addDefault(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_AMOUNT, amount);
+        getYml().addDefault(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_ENCHANTED, enchant);
+        getYml().addDefault(path + ConfigPath.SHOP_CONTENT_TIER_SETTINGS_COST, tierCost);
+        getYml().addDefault(path + ConfigPath.SHOP_CONTENT_TIER_SETTINGS_CURRENCY, tierCurrency);
     }
 
     /**
@@ -443,29 +440,25 @@ public class ShopManager {
      */
     public void addBuyItem(String path, String contentName, String tierName, String item, String material, int data, int amount, String enchant, String potion, String itemName, boolean autoEquip) {
         path += ConfigPath.SHOP_CATEGORY_CONTENT_PATH + "." + contentName + "." + ConfigPath.SHOP_CATEGORY_CONTENT_CONTENT_TIERS + "." + tierName + "." + ConfigPath.SHOP_CONTENT_BUY_ITEMS_PATH + "." + item + ".";
-        yml.addDefault(path + "material", material);
-        yml.addDefault(path + "data", data);
-        yml.addDefault(path + "amount", amount);
+        getYml().addDefault(path + "material", material);
+        getYml().addDefault(path + "data", data);
+        getYml().addDefault(path + "amount", amount);
         if (!enchant.isEmpty()) {
-            yml.addDefault(path + "enchants", enchant);
+            getYml().addDefault(path + "enchants", enchant);
         }
         if (!potion.isEmpty()) {
-            yml.addDefault(path + "potion", potion);
+            getYml().addDefault(path + "potion", potion);
         }
         if (autoEquip) {
-            yml.addDefault(path + "auto-equip", true);
+            getYml().addDefault(path + "auto-equip", true);
         }
         if (!itemName.isEmpty()) {
-            yml.addDefault(path + "name", itemName);
+            getYml().addDefault(path + "name", itemName);
         }
     }
 
     public static ShopIndex getShop() {
         return shop;
-    }
-
-    public YamlConfiguration getYml() {
-        return yml;
     }
 
     /**

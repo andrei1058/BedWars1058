@@ -6,8 +6,8 @@ import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.server.SetupType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.SetupSession;
-import com.andrei1058.bedwars.language.Language;
-import com.andrei1058.bedwars.language.Messages;
+import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.upgrades.TeamUpgrade;
 import com.andrei1058.bedwars.upgrades.UpgradeGroup;
 import org.bukkit.ChatColor;
@@ -23,7 +23,7 @@ import java.util.Objects;
 
 import static com.andrei1058.bedwars.Main.config;
 import static com.andrei1058.bedwars.Main.nms;
-import static com.andrei1058.bedwars.language.Language.getMsg;
+import static com.andrei1058.bedwars.api.language.Language.getMsg;
 import static org.bukkit.event.inventory.InventoryAction.*;
 
 public class Inventory implements Listener {

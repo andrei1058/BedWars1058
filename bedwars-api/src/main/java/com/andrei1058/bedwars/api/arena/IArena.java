@@ -5,8 +5,10 @@ import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public interface IArena {
 
@@ -86,4 +88,18 @@ public interface IArena {
      * Get maximum players allowed in a team.
      */
     int getMaxInTeam();
+
+    /**
+     * Get list of players in respawn screen.
+     */
+    ConcurrentHashMap<Player, Integer> getRespawn();
+
+
+    /**
+     * Disable spectator collisions.
+     *
+     * @param p - spectator.
+     * Use false when the spectator got removed from the arena.
+     */
+    void updateSpectatorCollideRule(Player p, boolean collide);
 }

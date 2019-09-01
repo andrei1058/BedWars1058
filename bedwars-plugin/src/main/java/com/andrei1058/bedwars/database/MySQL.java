@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.database;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.stats.StatsCache;
 import com.andrei1058.bedwars.stats.StatsManager;
 
@@ -297,7 +298,7 @@ public class MySQL implements Database {
     @Override
     public String getLanguage(UUID player) {
         if (!isConnected()) connect();
-        String iso = Main.lang.getIso();
+        String iso = Language.getDefaultLanguage().getIso();
         try {
             ResultSet rs = connection.createStatement().executeQuery("SELECT iso FROM player_language WHERE uuid = '" + player.toString() + "';");
             if (rs.next()) {

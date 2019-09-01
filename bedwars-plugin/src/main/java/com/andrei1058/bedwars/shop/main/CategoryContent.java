@@ -5,8 +5,8 @@ import com.andrei1058.bedwars.api.arena.shop.ICategoryContent;
 import com.andrei1058.bedwars.api.events.shop.ShopBuyEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
-import com.andrei1058.bedwars.language.Language;
-import com.andrei1058.bedwars.language.Messages;
+import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.shop.quickbuy.PlayerQuickBuyCache;
 import com.andrei1058.bedwars.shop.quickbuy.QuickBuyElement;
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.andrei1058.bedwars.Main.nms;
-import static com.andrei1058.bedwars.language.Language.getMsg;
+import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 @SuppressWarnings("WeakerAccess")
 public class CategoryContent implements ICategoryContent {
@@ -87,19 +87,15 @@ public class CategoryContent implements ICategoryContent {
         }
 
         itemNamePath = Messages.SHOP_CONTENT_TIER_ITEM_NAME.replace("%category%", categoryName).replace("%content%", contentName);
-        if (!Main.lang.exists(itemNamePath)) {
-            for (Language lang : Language.getLanguages()) {
-                if (!lang.exists(itemNamePath)) {
-                    lang.set(itemNamePath, "&cName not set");
-                }
+        for (Language lang : Language.getLanguages()) {
+            if (!lang.exists(itemNamePath)) {
+                lang.set(itemNamePath, "&cName not set");
             }
         }
         itemLorePath = Messages.SHOP_CONTENT_TIER_ITEM_LORE.replace("%category%", categoryName).replace("%content%", contentName);
-        if (!Main.lang.exists(itemLorePath)) {
-            for (Language lang : Language.getLanguages()) {
-                if (!lang.exists(itemLorePath)) {
-                    lang.set(itemLorePath, "&cLore not set");
-                }
+        for (Language lang : Language.getLanguages()) {
+            if (!lang.exists(itemLorePath)) {
+                lang.set(itemLorePath, "&cLore not set");
             }
         }
 

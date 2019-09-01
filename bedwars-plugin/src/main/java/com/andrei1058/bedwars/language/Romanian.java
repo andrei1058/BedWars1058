@@ -1,6 +1,9 @@
 package com.andrei1058.bedwars.language;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.Messages;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.ArrayList;
@@ -8,12 +11,14 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import static com.andrei1058.bedwars.Main.mainCmd;
-import static com.andrei1058.bedwars.language.Language.addCategoryMessages;
-import static com.andrei1058.bedwars.language.Language.addContentMessages;
+import static com.andrei1058.bedwars.api.language.Language.addCategoryMessages;
+import static com.andrei1058.bedwars.api.language.Language.addContentMessages;
 
-public class Romanian {
+public class Romanian extends Language {
 
-    public Romanian(Language lbj, YamlConfiguration yml) {
+    public Romanian() {
+        super(Main.plugin, "ro");
+        YamlConfiguration yml = getYml();
         yml.addDefault(Messages.PREFIX, "");
         yml.addDefault("name", "Română");
         yml.options().copyDefaults(true);
@@ -235,16 +240,16 @@ public class Romanian {
 
         /* save default Obiecte messages for stats gui */
         yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "&8Statisticile lui {player}");
-        lbj.addDefaultStatsMsg(yml, "wins", "&6Victorii", "&f{wins}");
-        lbj.addDefaultStatsMsg(yml, "losses", "&6Pierderi", "&f{losses}");
-        lbj.addDefaultStatsMsg(yml, "kills", "&6Ucideri", "&f{kills}");
-        lbj.addDefaultStatsMsg(yml, "deaths", "&6Decese", "&f{deaths}");
-        lbj.addDefaultStatsMsg(yml, "final-kills", "&6Ucideri Finale", "&f{finalKills}");
-        lbj.addDefaultStatsMsg(yml, "final-deaths", "&6Decese Finale", "&f{finalDeaths}");
-        lbj.addDefaultStatsMsg(yml, "beds-destroyed", "&6Paturi Distruse", "&f{bedsDestroyed}");
-        lbj.addDefaultStatsMsg(yml, "first-play", "&6Primul Meci", "&f{firstPlay}");
-        lbj.addDefaultStatsMsg(yml, "last-play", "&6Ultimul Meci", "&f{lastPlay}");
-        lbj.addDefaultStatsMsg(yml, "games-played", "&6Partide Jucate", "&f{gamesPlayed}");
+        addDefaultStatsMsg(yml, "wins", "&6Victorii", "&f{wins}");
+        addDefaultStatsMsg(yml, "losses", "&6Pierderi", "&f{losses}");
+        addDefaultStatsMsg(yml, "kills", "&6Ucideri", "&f{kills}");
+        addDefaultStatsMsg(yml, "deaths", "&6Decese", "&f{deaths}");
+        addDefaultStatsMsg(yml, "final-kills", "&6Ucideri Finale", "&f{finalKills}");
+        addDefaultStatsMsg(yml, "final-deaths", "&6Decese Finale", "&f{finalDeaths}");
+        addDefaultStatsMsg(yml, "beds-destroyed", "&6Paturi Distruse", "&f{bedsDestroyed}");
+        addDefaultStatsMsg(yml, "first-play", "&6Primul Meci", "&f{firstPlay}");
+        addDefaultStatsMsg(yml, "last-play", "&6Ultimul Meci", "&f{lastPlay}");
+        addDefaultStatsMsg(yml, "games-played", "&6Partide Jucate", "&f{gamesPlayed}");
 
 
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fHarta: &a{map}", "", "&fJucatori: &a{on}/{max}", "", "&fIn asteptare...", "", "§fMod: &a{group}", "&fVersiune: &7{version}", "", "&e{server_ip}"));
@@ -383,5 +388,8 @@ public class Romanian {
         yml.addDefault("upgrades.Default.healPool.tier1.name", "&eHeal Pool");
         yml.addDefault("upgrades.Default.healPool.tier1.lore", Arrays.asList("&7Creeaza un camp de Regenerare", "&7a vietii in baza ta!", "", "&7Pret:&b {cost} {currency}", "", "{loreFooter}"));
         yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a{player} a cumparat &6{upgradeName}");
+
+        save();
+        setPrefix(m(Messages.PREFIX));
     }
 }

@@ -154,36 +154,7 @@ public class InternalAdapter extends RestoreAdapter {
             }
         }
 
-
-        s.getPlayer().getInventory().clear();
-        s.getPlayer().teleport(Bukkit.getWorld(s.getWorldName()).getSpawnLocation());
-        s.getPlayer().setGameMode(GameMode.CREATIVE);
-        s.getPlayer().setAllowFlight(true);
-        s.getPlayer().setFlying(true);
-        s.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2));
-        s.getPlayer().sendMessage("\n" + ChatColor.WHITE + "\n");
-
-        s.getPlayer().sendMessage(ChatColor.GREEN + "You were teleported to the " + ChatColor.BLUE + s.getWorldName() + ChatColor.GREEN + "'s spawn.");
-        if (s.getSetupType() == SetupType.ASSISTED && s.getConfig().getYml().get("waiting.Loc") == null) {
-            s.getPlayer().sendMessage("");
-            s.getPlayer().sendMessage(ChatColor.BLUE + ">>>>>>>>>>>>" + s.getWorldName() + " Setup Session");
-            s.getPlayer().sendMessage("");
-            s.getPlayer().sendMessage(ChatColor.GREEN + "Hello " + s.getPlayer().getName() + "!");
-            s.getPlayer().sendMessage(ChatColor.WHITE + "Please set the waiting spawn.");
-            s.getPlayer().sendMessage(ChatColor.WHITE + "It is the place where players will wait the game to start.");
-            s.getPlayer().spigot().sendMessage(Misc.msgHoverClick(ChatColor.BLUE + "     ▪     " + ChatColor.GOLD + "CLICK HERE TO SET THE WAITING LOBBY    " + ChatColor.BLUE + " ▪", ChatColor.LIGHT_PURPLE + "Click to set the waiting spawn.", "/" + Main.mainCmd + " setWaitingSpawn", ClickEvent.Action.RUN_COMMAND));
-            MainCommand.createTC(ChatColor.YELLOW + "Or type: " + ChatColor.GRAY + "/" + Main.mainCmd + " setWaitingSpawn", "/" + Main.mainCmd + " setWaitingSpawn", ChatColor.WHITE + "Set the world spawn lobby.");
-        } else {
-            Bukkit.dispatchCommand(s.getPlayer(), Main.mainCmd + " cmds");
-        }
-        Bukkit.getPluginManager().callEvent(new SetupSessionStartEvent(s));
-
-        World w = Bukkit.getWorld(s.getWorldName());
-        Bukkit.getScheduler().runTaskLater(plugin, () -> w.getEntities().stream()
-                .filter(e -> e.getType() != EntityType.PLAYER).filter(e -> e.getType() != EntityType.PAINTING)
-                .filter(e -> e.getType() != EntityType.ITEM_FRAME).forEach(Entity::remove), 30L);
-        w.setAutoSave(false);
-        w.setGameRuleValue("doMobSpawning", "false");
+        s.teleportPlayer();
     }
 
     @Override

@@ -6,12 +6,13 @@ import com.andrei1058.bedwars.api.arena.NextEvent;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerBedBreakEvent;
+import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.OreGenerator;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.AutoCreateTeams;
-import com.andrei1058.bedwars.language.Messages;
+import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.region.Region;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -36,7 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.andrei1058.bedwars.Main.*;
-import static com.andrei1058.bedwars.language.Language.getMsg;
+import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class BreakPlace implements Listener {
 
@@ -261,7 +262,7 @@ public class BreakPlace implements Listener {
                     int line = 0;
                     for (String string : Main.signs.getList("format")) {
                         e.setLine(line, string.replace("[on]", String.valueOf(a.getPlayers().size())).replace("[max]",
-                                String.valueOf(a.getMaxPlayers())).replace("[arena]", a.getDisplayName()).replace("[status]", a.getDisplayStatus(Main.lang)));
+                                String.valueOf(a.getMaxPlayers())).replace("[arena]", a.getDisplayName()).replace("[status]", a.getDisplayStatus(Language.getDefaultLanguage())));
                         line++;
                     }
                     b.update(true);

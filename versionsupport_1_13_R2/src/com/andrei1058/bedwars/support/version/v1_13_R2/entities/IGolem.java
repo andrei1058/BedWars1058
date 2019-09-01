@@ -50,23 +50,18 @@ public class IGolem extends EntityIronGolem {
         super(world);
     }
 
-    @Override
-    protected void initAttributes() {
-        super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.maxHealth).setValue(shop.getYml().getDouble(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_HEALTH));
-        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(shop.getYml().getDouble(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_SPEED));
-    }
-
-    public static LivingEntity spawn(Location loc, BedWarsTeam bedWarsTeam) {
+    public static LivingEntity spawn(VersionSupport vs, Location loc, ITeam bedWarsTeam, int speed, int health, int despawn) {
         WorldServer mcWorld = ((CraftWorld)loc.getWorld()).getHandle();
-        IGolem customEnt = new IGolem(mcWorld, bedWarsTeam);
+        IGolem customEnt = new IGolem(mcWorld, bedWarsTeam, vs);
         customEnt.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
         ((CraftLivingEntity)customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
         customEnt.setCustomNameVisible(true);
-        (customEnt.getBukkitEntity()).setCustomName(lang.m(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME)
-                .replace("{despawn}", String.valueOf(shop.getYml().getInt(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_DESPAWN))).replace("{health}",
-                        StringUtils.repeat(lang.m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH), 10)).replace("{TeamColor}",
-                        TeamColor.getChatColor(bedWarsTeam.getColor()).toString()));
+        customEnt.getAttributeInstance(GenericAttributes.maxHealth).setValue(health);
+        customEnt.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(speed);
+        customEnt.setCustomName(Language.getDefaultLanguage().m(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME)
+                .replace("{despawn}", String.valueOf(speed)
+                        .replace("{health}", StringUtils.repeat(Language.getDefaultLanguage().m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH)+" ", 10))
+                        .replace("{TeamColor}", TeamColor.getChatColor(bedWarsTeam.getColor()).toString())));
         mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
         return (LivingEntity) customEnt.getBukkitEntity();
     }

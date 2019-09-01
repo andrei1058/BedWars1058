@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.configuration;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.upgrades.*;
 import org.bukkit.Material;
@@ -12,7 +13,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,30 +20,17 @@ import java.util.stream.Collectors;
 
 import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.Main.plugin;
-import static com.andrei1058.bedwars.language.Language.saveIfNotExists;
+import static com.andrei1058.bedwars.api.language.Language.saveIfNotExists;
 
 @SuppressWarnings("WeakerAccess")
-public class UpgradesManager {
+public class UpgradesManager extends ConfigManager {
 
     private YamlConfiguration yml;
     private File file;
 
     public UpgradesManager(String name, String dir) {
-        File d = new File(dir);
-        if (!d.exists()) {
-            d.mkdir();
-        }
-        file = new File(dir + "/" + name + ".yml");
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-                plugin.getLogger().info("Creating " + dir + "/" + name + ".yml");
-            } catch (IOException e) {
-                e.printStackTrace();
-                return;
-            }
-        }
-        yml = YamlConfiguration.loadConfiguration(file);
+        super(plugin, name, dir);
+        yml = getYml();
         /* Generators Upgrade **/
         yml.addDefault("Default.generators.slot", 11);
 
@@ -430,37 +417,11 @@ public class UpgradesManager {
         }
     }
 
-
-    public void set(String path, Object value) {
-        yml.set(path, value);
-        save();
-    }
-
-    public void save() {
-        try {
-            yml.save(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public YamlConfiguration getYml() {
-        return yml;
-    }
-
     private void logger(String message) {
         plugin.getLogger().severe("Team Upgrades: " + message);
     }
 
     public List<String> l(String path) {
         return yml.getStringList(path).stream().map(s -> s.replace("&", "§")).collect(Collectors.toList());
-    }
-
-    public boolean getBoolean(String path) {
-        return yml.getBoolean(path);
-    }
-
-    public int getInt(String path) {
-        return yml.getInt(path);
     }
 }

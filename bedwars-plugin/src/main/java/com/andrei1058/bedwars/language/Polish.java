@@ -1,6 +1,9 @@
 package com.andrei1058.bedwars.language;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.Messages;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.ArrayList;
@@ -8,12 +11,14 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import static com.andrei1058.bedwars.Main.mainCmd;
-import static com.andrei1058.bedwars.language.Language.addCategoryMessages;
-import static com.andrei1058.bedwars.language.Language.addContentMessages;
+import static com.andrei1058.bedwars.api.language.Language.addCategoryMessages;
+import static com.andrei1058.bedwars.api.language.Language.addContentMessages;
 
-public class Polish {
+public class Polish extends Language{
 
-    public Polish(Language lbj, YamlConfiguration yml) {
+    public Polish() {
+        super(Main.plugin, "pl");
+        YamlConfiguration yml = getYml();
         yml.options().header("Polish translation by RarstManPL#0616");
         yml.addDefault(Messages.PREFIX, "");
         yml.options().copyDefaults(true);
@@ -375,19 +380,22 @@ public class Polish {
 
 
         /* save default items messages for stats gui */
-        lbj.addDefaultStatsMsg(yml, "wins", "&6Wygrane", "&f{wins}");
-        lbj.addDefaultStatsMsg(yml, "losses", "&6Przegrane", "&f{losses}");
-        lbj.addDefaultStatsMsg(yml, "kills", "&6Wygrane", "&f{kills}");
-        lbj.addDefaultStatsMsg(yml, "deaths", "&6Smierci", "&f{deaths}");
-        lbj.addDefaultStatsMsg(yml, "final-kills", "&6Ostateczne Zabojstwa", "&f{finalKills}");
-        lbj.addDefaultStatsMsg(yml, "final-deaths", "&6Ostateczne Smierci", "&f{finalDeaths}");
-        lbj.addDefaultStatsMsg(yml, "beds-destroyed", "&6Zniszczone Lozka", "&f{bedsDestroyed}");
-        lbj.addDefaultStatsMsg(yml, "first-play", "&66Ostatnia gra", "&f{firstPlay}");
-        lbj.addDefaultStatsMsg(yml, "last-play", "&6Ostatnia gra", "&f{lastPlay}");
-        lbj.addDefaultStatsMsg(yml, "games-played", "&6Rozegrane gry", "&f{gamesPlayed}");
+        addDefaultStatsMsg(yml, "wins", "&6Wygrane", "&f{wins}");
+        addDefaultStatsMsg(yml, "losses", "&6Przegrane", "&f{losses}");
+        addDefaultStatsMsg(yml, "kills", "&6Wygrane", "&f{kills}");
+        addDefaultStatsMsg(yml, "deaths", "&6Smierci", "&f{deaths}");
+        addDefaultStatsMsg(yml, "final-kills", "&6Ostateczne Zabojstwa", "&f{finalKills}");
+        addDefaultStatsMsg(yml, "final-deaths", "&6Ostateczne Smierci", "&f{finalDeaths}");
+        addDefaultStatsMsg(yml, "beds-destroyed", "&6Zniszczone Lozka", "&f{bedsDestroyed}");
+        addDefaultStatsMsg(yml, "first-play", "&66Ostatnia gra", "&f{firstPlay}");
+        addDefaultStatsMsg(yml, "last-play", "&6Ostatnia gra", "&f{lastPlay}");
+        addDefaultStatsMsg(yml, "games-played", "&6Rozegrane gry", "&f{gamesPlayed}");
 
         yml.addDefault(Messages.REJOIN_NO_ARENA, "{prefix}&cThere is no arena to rejoin!");
         yml.addDefault(Messages.REJOIN_DENIED, "{prefix}&cYou can't rejoin the arena anymore. Game ended or bed destroyed.");
         yml.addDefault(Messages.REJOIN_ALLOWED, "{prefix}&eJoining arena &a{arena}&e!");
+
+        save();
+        setPrefix(m(Messages.PREFIX));
     }
 }

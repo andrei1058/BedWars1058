@@ -1,6 +1,9 @@
 package com.andrei1058.bedwars.language;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.Messages;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.ArrayList;
@@ -8,16 +11,17 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import static com.andrei1058.bedwars.Main.mainCmd;
-import static com.andrei1058.bedwars.language.Language.addCategoryMessages;
-import static com.andrei1058.bedwars.language.Language.addContentMessages;
-import static com.andrei1058.bedwars.language.Messages.*;
+import static com.andrei1058.bedwars.api.language.Language.addCategoryMessages;
+import static com.andrei1058.bedwars.api.language.Language.addContentMessages;
+import static com.andrei1058.bedwars.api.language.Messages.*;
 
-@SuppressWarnings("WeakerAccess")
-public class Italian {
+public class Italian extends Language {
 
-    public Italian(Language lbj, YamlConfiguration yml) {
-        yml.options().header("Traduzione in italiano di Fabian03#4583");
+    public Italian() {
+        super(Main.plugin, "it");
+        YamlConfiguration yml = getYml();
         yml.options().copyDefaults(true);
+        yml.options().header("Traduzione in italiano di Fabian03#4583");
         yml.addDefault(Messages.PREFIX, "");
         yml.addDefault("name", "Italiano");
         yml.addDefault(Messages.COMMAND_MAIN, Arrays.asList("", "&2▪ &7/" + mainCmd + " stats", "&2▪ &7/" + mainCmd + " join &o<arena/gruppo>", "&2▪ &7/" + mainCmd + " leave", "&2▪ &7/" + mainCmd + " lang", "&2▪ &7/" + mainCmd + " gui", "&2▪ &7/" + mainCmd + " start &3(vip)"));
@@ -238,16 +242,16 @@ public class Italian {
 
         /* save default items messages for stats gui */
         yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "&8Statistiche di {player}");
-        lbj.addDefaultStatsMsg(yml, "wins", "&6Vittorie", "&f{wins}");
-        lbj.addDefaultStatsMsg(yml, "losses", "&6Sconfitte", "&f{losses}");
-        lbj.addDefaultStatsMsg(yml, "kills", "&6Uccisioni", "&f{kills}");
-        lbj.addDefaultStatsMsg(yml, "deaths", "&6Decessi", "&f{deaths}");
-        lbj.addDefaultStatsMsg(yml, "final-kills", "&6Uccisioni finali", "&f{finalKills}");
-        lbj.addDefaultStatsMsg(yml, "final-deaths", "&6Decessi finali", "&f{finalDeaths}");
-        lbj.addDefaultStatsMsg(yml, "beds-destroyed", "&6Letti distrutti", "&f{bedsDestroyed}");
-        lbj.addDefaultStatsMsg(yml, "first-play", "&6Prima partita", "&f{firstPlay}");
-        lbj.addDefaultStatsMsg(yml, "last-play", "&6Ultima partita", "&f{lastPlay}");
-        lbj.addDefaultStatsMsg(yml, "games-played", "&6Partite giocate", "&f{gamesPlayed}");
+        addDefaultStatsMsg(yml, "wins", "&6Vittorie", "&f{wins}");
+        addDefaultStatsMsg(yml, "losses", "&6Sconfitte", "&f{losses}");
+        addDefaultStatsMsg(yml, "kills", "&6Uccisioni", "&f{kills}");
+        addDefaultStatsMsg(yml, "deaths", "&6Decessi", "&f{deaths}");
+        addDefaultStatsMsg(yml, "final-kills", "&6Uccisioni finali", "&f{finalKills}");
+        addDefaultStatsMsg(yml, "final-deaths", "&6Decessi finali", "&f{finalDeaths}");
+        addDefaultStatsMsg(yml, "beds-destroyed", "&6Letti distrutti", "&f{bedsDestroyed}");
+        addDefaultStatsMsg(yml, "first-play", "&6Prima partita", "&f{firstPlay}");
+        addDefaultStatsMsg(yml, "last-play", "&6Ultima partita", "&f{lastPlay}");
+        addDefaultStatsMsg(yml, "games-played", "&6Partite giocate", "&f{gamesPlayed}");
 
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fMappa: &a{map}", "", "&fGiocatori: &a{on}/{max}", "", "&fIn attesa...", "", "§fMode: &a{group}", "&fVersione: &7{version}", "", "&e{server_ip}"));
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fMappa: &a{map}", "", "&fGiocatori: &a{on}/{max}", "", "&fInizio in &a{time}s", "", "§fMode: &a{group}", "&fVersione: &7{version}", "", "&e{server_ip}"));
@@ -376,6 +380,7 @@ public class Italian {
         yml.addDefault("upgrades.Default.healPool.tier1.name", "&eRigenerazione");
         yml.addDefault("upgrades.Default.healPool.tier1.lore", Arrays.asList("&7Crea un campo di rigenerazione", "&7intorno alla tua base!", "", "&7Costo:&b {cost} {currency}", "", "{loreFooter}"));
         yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a{player} ha comprato &6{upgradeName}");
-
+        save();
+        setPrefix(m(Messages.PREFIX));
     }
 }

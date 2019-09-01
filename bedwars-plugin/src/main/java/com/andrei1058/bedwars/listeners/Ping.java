@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.listeners;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,7 +13,7 @@ public class Ping implements Listener {
             Arena a = Arena.getArenas().get(0);
             if (a != null){
                 e.setMaxPlayers(a.getMaxPlayers());
-                e.setMotd(a.getDisplayStatus(Main.lang));
+                e.setMotd(a.getDisplayStatus(Language.getDefaultLanguage()));
             }
         }
     }

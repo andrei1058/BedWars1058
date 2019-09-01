@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.arena.tasks;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.arena.shop.ShopHolo;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.*;
 import org.bukkit.Bukkit;

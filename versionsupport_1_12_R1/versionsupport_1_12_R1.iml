@@ -17,17 +17,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="BedWars1058" scope="PROVIDED" />
-    <orderEntry type="module-library" scope="PROVIDED">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../../Java Libs/Minecraft/Spigot/spigot-1.12.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="jar://$MODULE_DIR$/../../../Java Libs/Minecraft/Spigot/spigot-1.12.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
     <orderEntry type="module" module-name="versionsupport_1_9_R2" scope="PROVIDED" />
   </component>
 </module>

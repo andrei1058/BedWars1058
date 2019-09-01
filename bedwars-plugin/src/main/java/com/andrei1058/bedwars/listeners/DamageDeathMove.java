@@ -2,14 +2,16 @@ package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.arena.GameState;
+import com.andrei1058.bedwars.api.arena.shop.ShopHolo;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.*;
-import com.andrei1058.bedwars.language.Language;
-import com.andrei1058.bedwars.language.Messages;
-import com.andrei1058.bedwars.support.version.Despawnable;
+import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.api.entity.Despawnable;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -27,7 +29,7 @@ import org.bukkit.projectiles.ProjectileSource;
 
 import static com.andrei1058.bedwars.Main.*;
 import static com.andrei1058.bedwars.arena.LastHit.getLastHit;
-import static com.andrei1058.bedwars.language.Language.getMsg;
+import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class DamageDeathMove implements Listener {
 
@@ -212,7 +214,7 @@ public class DamageDeathMove implements Listener {
     public void onDeath(PlayerDeathEvent e) {
         e.setDeathMessage(null);
         Player victim = e.getEntity(), killer = e.getEntity().getKiller();
-        BedWarsTeam t2 = null;
+        ITeam t2 = null;
         Arena a = Arena.getArenaByPlayer(victim);
         if (a != null) {
             if (a.isSpectator(victim)) {
@@ -437,11 +439,8 @@ public class DamageDeathMove implements Listener {
                     }, 10L);
                 }
             }
-            for (SBoard sb : SBoard.getScoreboards()) {
-                if (sb.getArena() == a) {
-                    sb.giveTeamColorTag();
-                    sb.updateSpectators(e.getPlayer(), false);
-                }
+            for (Player p2 : a.getSpectators()) {
+                a.updateSpectatorCollideRule(p2, false);
             }
         }
     }
@@ -604,9 +603,11 @@ public class DamageDeathMove implements Listener {
         return "";
     }*/
 
-    private static void spawnUtility(String s, Location loc, BedWarsTeam t, Player p) {
+    private static void spawnUtility(String s, Location loc, ITeam t, Player p) {
         if ("silverfish".equals(s.toLowerCase())) {
-            nms.spawnSilverfish(loc, t);
+            nms.spawnSilverfish(loc, t, shop.getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_SPEED), shop.getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_HEALTH),
+                    shop.getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_DESPAWN),
+                    Main.shop.getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_DAMAGE));
         }
     }
 }

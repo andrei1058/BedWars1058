@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.commands.bedwars;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.api.command.ParentCommand;
@@ -12,7 +13,7 @@ import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.AutoCreat
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.CreateTeam;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.SetShop;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.SetWaitingSpawn;
-import com.andrei1058.bedwars.language.Messages;
+import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import net.md_5.bungee.api.chat.*;
 import org.bukkit.*;
@@ -26,7 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.andrei1058.bedwars.Main.*;
-import static com.andrei1058.bedwars.language.Language.getMsg;
+import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class MainCommand extends BukkitCommand implements ParentCommand {
 
@@ -129,7 +130,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
             if (s instanceof Player) {
                 s.sendMessage(getMsg((Player) s, Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
             } else {
-                s.sendMessage(lang.m(Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
+                s.sendMessage(Language.getDefaultLanguage().m(Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
             }
         }
         return true;

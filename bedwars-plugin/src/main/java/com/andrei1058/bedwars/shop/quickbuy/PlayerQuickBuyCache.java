@@ -2,8 +2,8 @@ package com.andrei1058.bedwars.shop.quickbuy;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
-import com.andrei1058.bedwars.language.Language;
-import com.andrei1058.bedwars.language.Messages;
+import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.shop.ShopManager;
 import com.andrei1058.bedwars.shop.main.CategoryContent;

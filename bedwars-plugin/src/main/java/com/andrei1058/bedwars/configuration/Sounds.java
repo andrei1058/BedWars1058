@@ -3,7 +3,7 @@ package com.andrei1058.bedwars.configuration;
 
 import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
-import com.andrei1058.bedwars.exceptions.InvalidSoundException;
+import com.andrei1058.bedwars.api.exceptions.InvalidSoundException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import static com.andrei1058.bedwars.Main.nms;

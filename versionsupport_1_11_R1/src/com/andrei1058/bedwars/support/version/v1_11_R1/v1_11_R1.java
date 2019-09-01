@@ -89,14 +89,14 @@ public class v1_11_R1 extends VersionSupport {
         }
     }
 
-    public void spawnSilverfish(Location loc, BedWarsTeam bedWarsTeam) {
-        new Despawnable(com.andrei1058.bedwars.support.version.v1_11_R1.entities.Silverfish.spawn(loc, bedWarsTeam), bedWarsTeam, shop.getYml().getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_DESPAWN), Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME,
-                PlayerKillEvent.PlayerKillCause.SILVERFISH_FINAL_KILL, PlayerKillEvent.PlayerKillCause.SILVERFISH);
+    public void spawnSilverfish(Location loc, ITeam bedWarsTeam, int speed, int health, int despawn) {
+        new Despawnable(Silverfish.spawn(this, loc, bedWarsTeam, speed, health, despawn), bedWarsTeam, despawn,
+                Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, PlayerKillEvent.PlayerKillCause.SILVERFISH_FINAL_KILL, PlayerKillEvent.PlayerKillCause.SILVERFISH);
     }
 
     @Override
-    public void spawnIronGolem(Location loc, BedWarsTeam bedWarsTeam) {
-        new Despawnable(IGolem.spawn(loc, bedWarsTeam), bedWarsTeam, shop.getYml().getInt(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_DESPAWN), Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME,
+    public void spawnIronGolem(Location loc, ITeam bedWarsTeam, int speed, int health, int despawn) {
+        new Despawnable(IGolem.spawn(this, loc, bedWarsTeam, speed, health, despawn), bedWarsTeam, despawn, Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME,
                 PlayerKillEvent.PlayerKillCause.IRON_GOLEM_FINAL_KILL, PlayerKillEvent.PlayerKillCause.IRON_GOLEM);
     }
 

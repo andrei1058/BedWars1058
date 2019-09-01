@@ -1,6 +1,9 @@
 package com.andrei1058.bedwars.language;
 
+import com.andrei1058.bedwars.Main;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.Messages;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.ArrayList;
@@ -8,12 +11,14 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import static com.andrei1058.bedwars.Main.mainCmd;
-import static com.andrei1058.bedwars.language.Language.addCategoryMessages;
-import static com.andrei1058.bedwars.language.Language.addContentMessages;
+import static com.andrei1058.bedwars.api.language.Language.addCategoryMessages;
+import static com.andrei1058.bedwars.api.language.Language.addContentMessages;
 
-public class Russian {
+public class Russian extends Language{
 
-    public Russian(Language lbj, YamlConfiguration yml) {
+    public Russian() {
+        super(Main.plugin, "ru");
+        YamlConfiguration yml = getYml();
         yml.addDefault(Messages.PREFIX, "");
         yml.addDefault("name", "Pусский");
         yml.options().copyDefaults(true);
@@ -301,16 +306,16 @@ public class Russian {
         yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "&8{player} Статистика");
 
         /* save default items messages for stats gui */
-        lbj.addDefaultStatsMsg(yml, "wins", "&6Побед", "&f{wins}");
-        lbj.addDefaultStatsMsg(yml, "losses", "&6Проигрышей", "&f{losses}");
-        lbj.addDefaultStatsMsg(yml, "kills", "&6Убийств", "&f{kills}");
-        lbj.addDefaultStatsMsg(yml, "deaths", "&6Смертей", "&f{deaths}");
-        lbj.addDefaultStatsMsg(yml, "final-kills", "&6Финальных убийств", "&f{finalKills}");
-        lbj.addDefaultStatsMsg(yml, "final-deaths", "&6Финальных смертей", "&f{finalDeaths}");
-        lbj.addDefaultStatsMsg(yml, "beds-destroyed", "&6Кроватей уничтожено", "&f{bedsDestroyed}");
-        lbj.addDefaultStatsMsg(yml, "first-play", "&6Первая игра", "&f{firstPlay}");
-        lbj.addDefaultStatsMsg(yml, "last-play", "&6Последняя игра", "&f{lastPlay}");
-        lbj.addDefaultStatsMsg(yml, "games-played", "&6Игр сыграно", "&f{gamesPlayed}");
+        addDefaultStatsMsg(yml, "wins", "&6Побед", "&f{wins}");
+        addDefaultStatsMsg(yml, "losses", "&6Проигрышей", "&f{losses}");
+        addDefaultStatsMsg(yml, "kills", "&6Убийств", "&f{kills}");
+        addDefaultStatsMsg(yml, "deaths", "&6Смертей", "&f{deaths}");
+        addDefaultStatsMsg(yml, "final-kills", "&6Финальных убийств", "&f{finalKills}");
+        addDefaultStatsMsg(yml, "final-deaths", "&6Финальных смертей", "&f{finalDeaths}");
+        addDefaultStatsMsg(yml, "beds-destroyed", "&6Кроватей уничтожено", "&f{bedsDestroyed}");
+        addDefaultStatsMsg(yml, "first-play", "&6Первая игра", "&f{firstPlay}");
+        addDefaultStatsMsg(yml, "last-play", "&6Последняя игра", "&f{lastPlay}");
+        addDefaultStatsMsg(yml, "games-played", "&6Игр сыграно", "&f{gamesPlayed}");
         yml.addDefault(Messages.FORMATTING_STATS_DATE_FORMAT, "yyyy/MM/dd HH:mm");
 
         yml.addDefault(Messages.MEANING_NEVER, "Никогда");
@@ -400,5 +405,8 @@ public class Russian {
         yml.addDefault(Messages.REJOIN_NO_ARENA, "{prefix}&cThere is no arena to rejoin!");
         yml.addDefault(Messages.REJOIN_DENIED, "{prefix}&cYou can't rejoin the arena anymore. Game ended or bed destroyed.");
         yml.addDefault(Messages.REJOIN_ALLOWED, "{prefix}&eJoining arena &a{arena}&e!");
+
+        save();
+        setPrefix(m(Messages.PREFIX));
     }
 }

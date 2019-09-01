@@ -20,16 +20,5 @@
     <orderEntry type="module" module-name="versionsupport_1_9_R2" scope="PROVIDED" />
     <orderEntry type="module" module-name="versionsupport_1_13_R1" scope="PROVIDED" />
     <orderEntry type="module" module-name="versionsupport_1_12_R1" scope="PROVIDED" />
-    <orderEntry type="module-library" scope="PROVIDED">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../../Java Libs/Minecraft/Spigot/spigot-1.13.2.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="jar://$MODULE_DIR$/../../../Java Libs/Minecraft/Spigot/spigot-1.13.2.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
   </component>
 </module>
