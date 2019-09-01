@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.regular;
 
+import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.server.SetupType;
 import com.andrei1058.bedwars.arena.Arena;
@@ -18,6 +19,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.andrei1058.bedwars.Main.link;
 import static com.andrei1058.bedwars.Main.mainCmd;
@@ -39,7 +41,7 @@ public class CmdList extends SubCommand {
         Player p = (Player) s;
         if (SetupSession.isInSetupSession(p.getUniqueId())) {
             SetupSession ss = SetupSession.getSession(p.getUniqueId());
-            ss.getConfig().reload();
+            Objects.requireNonNull(ss).getConfig().reload();
 
             boolean waitingSpawn = ss.getConfig().getYml().get("waiting.Loc") != null,
                     pos1 = ss.getConfig().getYml().get("waiting.Pos1") != null,
@@ -140,13 +142,13 @@ public class CmdList extends SubCommand {
     }
 
     @Override
-    public boolean canSee(CommandSender s) {
+    public boolean canSee(CommandSender s, BedWars api) {
 
         if (s instanceof Player) {
             Player p = (Player) s;
             if (Arena.isInArena(p)) return false;
 
-            if (SetupSession.isInSetupSession(p)) return false;
+            if (SetupSession.isInSetupSession(p.getUniqueId())) return false;
         }
 
         return hasPermission(s);

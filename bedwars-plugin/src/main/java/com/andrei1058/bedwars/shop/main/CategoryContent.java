@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.shop.main;
 
 import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.api.arena.shop.ICategoryContent;
 import com.andrei1058.bedwars.api.events.shop.ShopBuyEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
@@ -24,7 +25,7 @@ import static com.andrei1058.bedwars.Main.nms;
 import static com.andrei1058.bedwars.language.Language.getMsg;
 
 @SuppressWarnings("WeakerAccess")
-public class CategoryContent {
+public class CategoryContent implements ICategoryContent {
 
     private int slot;
     private boolean loaded = false;

@@ -26,11 +26,8 @@ public class ShopManager {
     private YamlConfiguration yml;
 
     public ShopManager() {
-        this.configManager = new ConfigManager("shop", "plugins/" + Main.plugin.getDescription().getName(), false);
+        this.configManager = new ConfigManager(Main.plugin, "shop", "plugins/" + Main.plugin.getDescription().getName());
         this.yml = configManager.getYml();
-        if (yml.get("main") != null) {
-            configManager.setFirstTime(true);
-        }
         saveDefaults();
         loadShop();
         registerListeners();
