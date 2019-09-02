@@ -11,6 +11,7 @@ import com.andrei1058.bedwars.api.exceptions.InvalidSoundException;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.VersionSupport;
+import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import com.andrei1058.bedwars.support.version.v1_9_R2.entities.IGolem;
 import net.minecraft.server.v1_9_R2.*;
 import net.minecraft.server.v1_9_R2.Item;
@@ -56,6 +57,7 @@ public class v1_9_R2 extends VersionSupport {
         } catch (InvalidSoundException | InvalidEffectException e) {
             e.printStackTrace();
         }
+        new VersionCommon(this);
     }
 
     @Override

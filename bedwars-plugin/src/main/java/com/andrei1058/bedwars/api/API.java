@@ -86,6 +86,11 @@ public class API implements BedWars {
         public int getGamesBeforeRestart() {
             return Arena.getGamesBeforeRestart();
         }
+
+        @Override
+        public IArena getArenaByPlayer(Player player) {
+            return Arena.getArenaByPlayer(player);
+        }
     };
 
     private Configs configs = new Configs() {

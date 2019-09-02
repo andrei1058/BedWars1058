@@ -32,12 +32,14 @@
             <groupId>net.md-5</groupId>
             <artifactId>bungeecord-chat</artifactId>
             <version>1.8-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.5</version>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>
@@ -59,6 +61,26 @@
                     <skip>true</skip>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>2.5</version>
+                <executions>
+                    <execution>
+                        <id>auto-clean</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                        <configuration>
+                            <filesets>
+                                <fileset>
+                                    <directory>bedwars-api/target/</directory>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
     <modules>
@@ -66,6 +88,8 @@
         <module>bedwars-api</module>
         <module>resetadapter_slime</module>
         <module>versionsupport_1_8_R3</module>
+        <module>versionsupport_1_9_R2</module>
+        <module>versionsupport_common</module>
     </modules>
 
     <distributionManagement>

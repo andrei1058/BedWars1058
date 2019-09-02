@@ -140,6 +140,13 @@ public interface BedWars {
          * This is used only if {@link com.andrei1058.bedwars.api.server.ServerType#BUNGEE}
          */
         int getGamesBeforeRestart();
+
+        /**
+         * Get the arena where the player is.
+         *
+         * @return null if not playing or spectating.
+         */
+        IArena getArenaByPlayer(Player player);
     }
 
     Configs getConfigs();
