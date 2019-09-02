@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.listeners;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
@@ -26,7 +26,7 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
-import static com.andrei1058.bedwars.Main.*;
+import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 import static com.andrei1058.bedwars.upgrades.UpgradeGroup.getUpgradeGroup;
 
@@ -38,7 +38,7 @@ public class Interact implements Listener {
         Player p = e.getPlayer();
         if (p == null) return;
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
-            ItemStack i = Main.nms.getItemInHand(p);
+            ItemStack i = BedWars.nms.getItemInHand(p);
             if (!nms.isCustomBedWarsItem(i)) return;
             String[] customData = nms.getCustomData(i).split("_");
             if (customData.length >= 2) {
@@ -57,7 +57,7 @@ public class Interact implements Listener {
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         Block b = e.getClickedBlock();
         if (b == null) return;
-        if (b.getWorld().getName().equals(Main.getLobbyWorld()) || Arena.getArenaByPlayer(e.getPlayer()) != null){
+        if (b.getWorld().getName().equals(BedWars.getLobbyWorld()) || Arena.getArenaByPlayer(e.getPlayer()) != null){
             if (b.getType() == nms.materialCraftingTable() && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_CRAFTING)) {
                 e.setCancelled(true);
             } else if (b.getType() == nms.materialEnchantingTable() && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_ENCHANTING)){
@@ -77,8 +77,8 @@ public class Interact implements Listener {
         Player p = e.getPlayer();
         if (p == null) return;
         Arena.afkCheck.remove(p.getUniqueId());
-        if (Main.getAPI().getAFKSystem().isPlayerAFK(e.getPlayer())) {
-            Main.getAPI().getAFKSystem().setPlayerAFK(e.getPlayer(), false);
+        if (BedWars.getAPI().getAFKSystem().isPlayerAFK(e.getPlayer())) {
+            BedWars.getAPI().getAFKSystem().setPlayerAFK(e.getPlayer(), false);
         }
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             Block b = e.getClickedBlock();
@@ -194,8 +194,8 @@ public class Interact implements Listener {
             if (a != null){
                 e.setCancelled(true);
             }
-            if (Main.getServerType() != ServerType.SHARED){
-                if (Main.getLobbyWorld().equals(e.getPlayer().getWorld().getName())){
+            if (BedWars.getServerType() != ServerType.SHARED){
+                if (BedWars.getLobbyWorld().equals(e.getPlayer().getWorld().getName())){
                     e.setCancelled(true);
                 }
             }
@@ -252,7 +252,7 @@ public class Interact implements Listener {
         }
 
         //prevent from stealing from armor stands in lobby
-        if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())){
+        if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())){
             e.setCancelled(true);
         }
     }

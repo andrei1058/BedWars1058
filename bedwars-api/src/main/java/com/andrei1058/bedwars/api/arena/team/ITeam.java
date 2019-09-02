@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.api.arena.team;
 
 import com.andrei1058.bedwars.api.arena.IArena;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -28,4 +29,11 @@ public interface ITeam {
      * Get alive team members.
      */
     List<Player> getMembers();
+
+    void defaultSword(Player p, boolean value);
+
+    /**
+     * Get bed location.
+     */
+    Location getBed();
 }

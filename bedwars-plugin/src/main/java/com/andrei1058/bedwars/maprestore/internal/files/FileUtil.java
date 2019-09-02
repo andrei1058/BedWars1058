@@ -1,5 +1,5 @@
 package com.andrei1058.bedwars.maprestore.internal.files;
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 
 import java.io.File;
 
@@ -13,7 +13,7 @@ public class FileUtil {
 			}
 		} else {
 			if (!file.delete()){
-				Main.plugin.getLogger().severe("Could not delete " + file.getPath());
+				BedWars.plugin.getLogger().severe("Could not delete " + file.getPath());
 			}
 		}
 	}

@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.listeners;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.shop.ShopHolo;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
@@ -27,7 +27,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 
-import static com.andrei1058.bedwars.Main.*;
+import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.arena.LastHit.getLastHit;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
@@ -60,8 +60,8 @@ public class DamageDeathMove implements Listener {
                 }
             }
         }
-        if (Main.getServerType() != ServerType.BUNGEE) {
-            if (e.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
+        if (BedWars.getServerType() != ServerType.BUNGEE) {
+            if (e.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
                 e.setCancelled(true);
             }
         }
@@ -134,7 +134,7 @@ public class DamageDeathMove implements Listener {
                     if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS)) {
                         if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
                             for (Player on : a.getPlayers()) {
-                                Main.nms.showArmor(p, on);
+                                BedWars.nms.showArmor(p, on);
                             }
                         }
                     }
@@ -203,8 +203,8 @@ public class DamageDeathMove implements Listener {
                 }
             }
         }*/
-        if (Main.getServerType() != ServerType.BUNGEE) {
-            if (e.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
+        if (BedWars.getServerType() != ServerType.BUNGEE) {
+            if (e.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
                 e.setCancelled(true);
             }
         }
@@ -430,10 +430,10 @@ public class DamageDeathMove implements Listener {
                 }
 
                 if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS)) {
-                    Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+                    Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
                         // #274
                         for (Player p : a.getShowTime().keySet()) {
-                            Main.nms.hideArmor(p, e.getPlayer());
+                            BedWars.nms.hideArmor(p, e.getPlayer());
                         }
                         //
                     }, 10L);
@@ -519,14 +519,14 @@ public class DamageDeathMove implements Listener {
                     }
                     if (e.getFrom() != e.getTo()) {
                         Arena.afkCheck.remove(e.getPlayer().getUniqueId());
-                        if (Main.getAPI().getAFKSystem().isPlayerAFK(e.getPlayer())) {
-                            Main.getAPI().getAFKSystem().setPlayerAFK(e.getPlayer(), false);
+                        if (BedWars.getAPI().getAFKSystem().isPlayerAFK(e.getPlayer())) {
+                            BedWars.getAPI().getAFKSystem().setPlayerAFK(e.getPlayer(), false);
                         }
                     }
                 }
             }
         } else {
-            if (e.getPlayer().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName()) && Main.getServerType() == ServerType.MULTIARENA) {
+            if (e.getPlayer().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName()) && BedWars.getServerType() == ServerType.MULTIARENA) {
                 if (e.getTo().getY() < 0) {
                     e.getPlayer().teleport(config.getConfigLoc("lobbyLoc"));
                 }
@@ -564,8 +564,8 @@ public class DamageDeathMove implements Listener {
             if (a != null) {
                 e.setCancelled(true);
             }
-            if (Main.getServerType() != ServerType.SHARED) {
-                if (Main.getLobbyWorld().equals(e.getEntity().getWorld().getName())) {
+            if (BedWars.getServerType() != ServerType.SHARED) {
+                if (BedWars.getLobbyWorld().equals(e.getEntity().getWorld().getName())) {
                     e.setCancelled(true);
                 }
             }
@@ -607,7 +607,7 @@ public class DamageDeathMove implements Listener {
         if ("silverfish".equals(s.toLowerCase())) {
             nms.spawnSilverfish(loc, t, shop.getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_SPEED), shop.getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_HEALTH),
                     shop.getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_DESPAWN),
-                    Main.shop.getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_DAMAGE));
+                    BedWars.shop.getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_DAMAGE));
         }
     }
 }

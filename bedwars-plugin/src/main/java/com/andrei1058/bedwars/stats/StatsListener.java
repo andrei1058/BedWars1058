@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.stats;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.events.player.PlayerBedBreakEvent;
 import com.andrei1058.bedwars.api.events.gameplay.GameEndEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
@@ -22,7 +22,7 @@ public class StatsListener implements Listener {
         //create cache row for player
         StatsManager.getStatsCache().createStatsCache(p);
         //update local cache for player
-        Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, ()-> Main.getRemoteDatabase().updateLocalCache(p.getUniqueId()));
+        Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, ()-> BedWars.getRemoteDatabase().updateLocalCache(p.getUniqueId()));
     }
 
     @EventHandler
@@ -67,6 +67,6 @@ public class StatsListener implements Listener {
     public void onQuit(PlayerQuitEvent e){
         //save or replace stats for player
         final Player p = e.getPlayer();
-        Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, ()-> StatsManager.getStatsCache().updateRemote(p.getUniqueId(), p.getName()));
+        Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, ()-> StatsManager.getStatsCache().updateRemote(p.getUniqueId(), p.getName()));
     }
 }

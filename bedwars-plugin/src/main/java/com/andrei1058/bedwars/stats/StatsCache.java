@@ -1,7 +1,6 @@
 package com.andrei1058.bedwars.stats;
 
-import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.BedWars;
+import com.andrei1058.bedwars.BedWars;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -11,7 +10,7 @@ import java.sql.*;
 import java.util.UUID;
 
 @SuppressWarnings("WeakerAccess")
-public class StatsCache implements BedWars.IStats {
+public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
 
     private Connection connection;
     private String table = "stats_cache";
@@ -25,7 +24,7 @@ public class StatsCache implements BedWars.IStats {
      * Connect to database.
      */
     private void connect() {
-        File folder = new File(Main.plugin.getDataFolder() + "/Cache");
+        File folder = new File(BedWars.plugin.getDataFolder() + "/Cache");
         if (!folder.exists()) folder.mkdir();
         File dataFolder = new File(folder.getPath() + "/stats.db");
         if (!dataFolder.exists()) {
@@ -42,7 +41,7 @@ public class StatsCache implements BedWars.IStats {
             connection = DriverManager.getConnection("jdbc:sqlite:" + dataFolder);
         } catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             if (e instanceof ClassNotFoundException)
-                Main.plugin.getLogger().severe("Could Not Found SQLite Driver on your system!");
+                BedWars.plugin.getLogger().severe("Could Not Found SQLite Driver on your system!");
             e.printStackTrace();
         }
     }
@@ -549,7 +548,7 @@ public class StatsCache implements BedWars.IStats {
         try {
             ResultSet rs = connection.createStatement().executeQuery("SELECT * FROM '" + table + "' WHERE uuid = '" + uuid.toString() + "';");
             if (rs.next()) {
-                Main.getRemoteDatabase().saveStats(uuid, username, rs.getTimestamp("first_play"), new Timestamp(System.currentTimeMillis()), rs.getInt("wins"),
+                BedWars.getRemoteDatabase().saveStats(uuid, username, rs.getTimestamp("first_play"), new Timestamp(System.currentTimeMillis()), rs.getInt("wins"),
                         rs.getInt("kills"), rs.getInt("final_kills"), rs.getInt("looses"), rs.getInt("deaths"), rs.getInt("final_deaths"),
                         rs.getInt("beds_destroyed"), rs.getInt("games_played"));
             }

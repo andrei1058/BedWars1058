@@ -1,7 +1,6 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup;
 
-import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.BedWars;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
@@ -18,7 +17,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-import static com.andrei1058.bedwars.Main.getServerType;
+import static com.andrei1058.bedwars.BedWars.getServerType;
 
 public class Save extends SubCommand {
 
@@ -46,8 +45,8 @@ public class Save extends SubCommand {
         }
 
         if (getServerType() != ServerType.BUNGEE){
-            if (Bukkit.getWorld(Main.getLobbyWorld()) != null){
-                p.teleport(Bukkit.getWorld(Main.getLobbyWorld()).getSpawnLocation());
+            if (Bukkit.getWorld(BedWars.getLobbyWorld()) != null){
+                p.teleport(Bukkit.getWorld(BedWars.getLobbyWorld()).getSpawnLocation());
             } else {
                 p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
             }
@@ -65,7 +64,7 @@ public class Save extends SubCommand {
     }
 
     @Override
-    public boolean canSee(CommandSender s, BedWars api) {
+    public boolean canSee(CommandSender s, com.andrei1058.bedwars.api.BedWars api) {
         if (s instanceof ConsoleCommandSender) return false;
 
         Player p = (Player) s;

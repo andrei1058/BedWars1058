@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.listeners;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.NextEvent;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
@@ -36,7 +36,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.andrei1058.bedwars.Main.*;
+import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class BreakPlace implements Listener {
@@ -45,8 +45,8 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onIceMelt(BlockFadeEvent e) {
-        if (Main.getServerType() != ServerType.BUNGEE) {
-            if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
+        if (BedWars.getServerType() != ServerType.BUNGEE) {
+            if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
                 e.setCancelled(true);
                 return;
             }
@@ -128,8 +128,8 @@ public class BreakPlace implements Listener {
             }
             return;
         }
-        if (Main.getServerType() != ServerType.BUNGEE) {
-            if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
+        if (BedWars.getServerType() != ServerType.BUNGEE) {
+            if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
                 if (!isBuildSession(p)) {
                     e.setCancelled(true);
                 }
@@ -141,8 +141,8 @@ public class BreakPlace implements Listener {
     public void onBlockBreak(BlockBreakEvent e) {
         if (e.isCancelled()) return;
         Player p = e.getPlayer();
-        if (Main.getServerType() != ServerType.BUNGEE) {
-            if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
+        if (BedWars.getServerType() != ServerType.BUNGEE) {
+            if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
                 if (!isBuildSession(p)) {
                     e.setCancelled(true);
                     return;
@@ -260,7 +260,7 @@ public class BreakPlace implements Listener {
                     a.addSign(e.getBlock().getLocation());
                     Sign b = (Sign) e.getBlock().getState();
                     int line = 0;
-                    for (String string : Main.signs.getList("format")) {
+                    for (String string : BedWars.signs.getList("format")) {
                         e.setLine(line, string.replace("[on]", String.valueOf(a.getPlayers().size())).replace("[max]",
                                 String.valueOf(a.getMaxPlayers())).replace("[arena]", a.getDisplayName()).replace("[status]", a.getDisplayStatus(Language.getDefaultLanguage())));
                         line++;
@@ -276,8 +276,8 @@ public class BreakPlace implements Listener {
     @EventHandler
     public void onBucketFill(PlayerBucketFillEvent e) {
         if (e.isCancelled()) return;
-        if (Main.getServerType() != ServerType.BUNGEE) {
-            if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
+        if (BedWars.getServerType() != ServerType.BUNGEE) {
+            if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
                 if (!isBuildSession(e.getPlayer())) {
                     e.setCancelled(true);
                 }
@@ -293,8 +293,8 @@ public class BreakPlace implements Listener {
     @EventHandler
     public void onBucketEmpty(PlayerBucketEmptyEvent e) {
         if (e.isCancelled()) return;
-        if (Main.getServerType() != ServerType.BUNGEE) {
-            if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
+        if (BedWars.getServerType() != ServerType.BUNGEE) {
+            if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
                 if (!isBuildSession(e.getPlayer())) {
                     e.setCancelled(true);
                 }
@@ -402,8 +402,8 @@ public class BreakPlace implements Listener {
     public void onPaintingRemove(HangingBreakByEntityEvent e) {
         Arena a = Arena.getArenaByName(e.getEntity().getWorld().getName());
         if (a == null) {
-            if (Main.getServerType() == ServerType.SHARED) return;
-            if (!Main.getLobbyWorld().equals(e.getEntity().getWorld().getName())) return;
+            if (BedWars.getServerType() == ServerType.SHARED) return;
+            if (!BedWars.getLobbyWorld().equals(e.getEntity().getWorld().getName())) return;
         }
         if (e.getEntity().getType() == EntityType.PAINTING || e.getEntity().getType() == EntityType.ITEM_FRAME) {
             e.setCancelled(true);
@@ -453,7 +453,7 @@ public class BreakPlace implements Listener {
     public void soilChangeEntity(EntityChangeBlockEvent e) {
         if (e.getTo() == Material.DIRT) {
             if (e.getBlock().getType().toString().equals("FARMLAND") || e.getBlock().getType().toString().equals("SOIL")) {
-                if ((Arena.getArenaByName(e.getBlock().getWorld().getName()) != null) || (e.getBlock().getWorld().getName().equals(Main.getLobbyWorld())))
+                if ((Arena.getArenaByName(e.getBlock().getWorld().getName()) != null) || (e.getBlock().getWorld().getName().equals(BedWars.getLobbyWorld())))
                     e.setCancelled(true);
             }
         }

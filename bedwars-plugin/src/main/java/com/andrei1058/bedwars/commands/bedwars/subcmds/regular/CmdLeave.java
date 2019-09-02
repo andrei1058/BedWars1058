@@ -1,7 +1,6 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.regular;
 
-import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.BedWars;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
@@ -28,7 +27,7 @@ public class CmdLeave extends SubCommand {
     public boolean execute(String[] args, CommandSender s) {
         if (s instanceof ConsoleCommandSender) return false;
         Player p = (Player) s;
-        if (Main.getServerType() == ServerType.BUNGEE){
+        if (BedWars.getServerType() == ServerType.BUNGEE){
             Misc.forceKick(p);
             return true;
         }
@@ -51,12 +50,12 @@ public class CmdLeave extends SubCommand {
     }
 
     @Override
-    public boolean canSee(CommandSender s, BedWars api) {
+    public boolean canSee(CommandSender s, com.andrei1058.bedwars.api.BedWars api) {
         if (s instanceof ConsoleCommandSender) return false;
 
         Player p = (Player) s;
 
-        if (Main.getServerType() == ServerType.SHARED && !Arena.isInArena(p)) return false;
+        if (BedWars.getServerType() == ServerType.SHARED && !Arena.isInArena(p)) return false;
 
         if (SetupSession.isInSetupSession(p.getUniqueId())) return false;
         return hasPermission(s);

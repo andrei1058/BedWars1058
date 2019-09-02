@@ -21,9 +21,9 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.Objects;
 
-import static com.andrei1058.bedwars.Main.link;
-import static com.andrei1058.bedwars.Main.mainCmd;
-import static com.andrei1058.bedwars.Main.plugin;
+import static com.andrei1058.bedwars.BedWars.link;
+import static com.andrei1058.bedwars.BedWars.mainCmd;
+import static com.andrei1058.bedwars.BedWars.plugin;
 import static com.andrei1058.bedwars.api.language.Language.getList;
 
 public class CmdList extends SubCommand {

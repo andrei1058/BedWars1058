@@ -1,7 +1,6 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup;
 
-import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.BedWars;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.arena.Misc;
@@ -20,7 +19,7 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.Objects;
 
-import static com.andrei1058.bedwars.Main.mainCmd;
+import static com.andrei1058.bedwars.BedWars.mainCmd;
 import static com.andrei1058.bedwars.commands.Misc.removeArmorStand;
 
 public class SetSpawn extends SubCommand {
@@ -74,7 +73,7 @@ public class SetSpawn extends SubCommand {
                     for (int y = -radius; y < radius; y++) {
                         for (int z = -radius; z < radius; z++) {
                             Block b = l.clone().add(x, y, z).getBlock();
-                            if (Main.nms.isBed(b.getType())) {
+                            if (BedWars.nms.isBed(b.getType())) {
                                 p.teleport(b.getLocation());
                                 Bukkit.dispatchCommand(p, getParent().getName() + " setBed " + args[0]);
                                 return true;
@@ -104,7 +103,7 @@ public class SetSpawn extends SubCommand {
     }
 
     @Override
-    public boolean canSee(CommandSender s, BedWars api) {
+    public boolean canSee(CommandSender s, com.andrei1058.bedwars.api.BedWars api) {
         if (s instanceof ConsoleCommandSender) return false;
 
         Player p = (Player) s;

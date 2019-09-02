@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.shop.main;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
@@ -16,7 +16,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import static com.andrei1058.bedwars.Main.*;
+import static com.andrei1058.bedwars.BedWars.*;
 
 @SuppressWarnings("WeakerAccess")
 public class BuyItem {
@@ -31,11 +31,11 @@ public class BuyItem {
      * Create a shop item
      */
     public BuyItem(String path, YamlConfiguration yml, String upgradeIdentifier) {
-        Main.debug("Loading BuyItems: " + path);
+        BedWars.debug("Loading BuyItems: " + path);
         this.upgradeIdentifier = upgradeIdentifier;
 
         if (yml.get(path + ".material") == null) {
-            Main.plugin.getLogger().severe("BuyItem: Material not set at " + path);
+            BedWars.plugin.getLogger().severe("BuyItem: Material not set at " + path);
             return;
         }
 
@@ -129,7 +129,7 @@ public class BuyItem {
     public void give(Player player, Arena arena) {
 
         ItemStack i = itemStack.clone();
-        Main.debug("Giving BuyItem: " + getUpgradeIdentifier() + " to: " + player.getName());
+        BedWars.debug("Giving BuyItem: " + getUpgradeIdentifier() + " to: " + player.getName());
 
         if (autoEquip && nms.isArmor(itemStack)) {
             Material m = i.getType();
@@ -137,7 +137,7 @@ public class BuyItem {
             ItemMeta im = i.getItemMeta();
             // idk dadea erori
             if (arena.getTeam(player) == null) {
-                Main.debug("Could not give BuyItem to " + player.getName() + " - TEAM IS NULL");
+                BedWars.debug("Could not give BuyItem to " + player.getName() + " - TEAM IS NULL");
                 return;
             }
             for (BedWarsTeam.Enchant e : arena.getTeam(player).getArmorsEnchantemnts()) {
@@ -166,7 +166,7 @@ public class BuyItem {
                     // #274
                     if (player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
                         for (Player p : arena.getPlayers()) {
-                            Main.nms.hideArmor(player, p);
+                            BedWars.nms.hideArmor(player, p);
                         }
                     }
                     //
@@ -197,14 +197,14 @@ public class BuyItem {
         }
 
         //Remove swords with lower damage
-        if (Main.nms.isSword(i)) {
+        if (BedWars.nms.isSword(i)) {
             for (ItemStack itm : player.getInventory().getContents()) {
                 if (itm == null) continue;
                 if (itm.getType() == Material.AIR) continue;
-                if (!Main.nms.isSword(itm)) continue;
+                if (!BedWars.nms.isSword(itm)) continue;
                 if (itm == i) continue;
                 if (nms.isCustomBedWarsItem(itm) && nms.getCustomData(itm).equals("DEFAULT_ITEM")) {
-                    if (Main.nms.getDamage(itm) <= Main.nms.getDamage(i)) {
+                    if (BedWars.nms.getDamage(itm) <= BedWars.nms.getDamage(i)) {
                         player.getInventory().remove(itm);
                     }
                 }

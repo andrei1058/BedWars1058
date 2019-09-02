@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.arena;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.language.Messages;
@@ -31,7 +31,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static com.andrei1058.bedwars.Main.*;
+import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getList;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
@@ -327,7 +327,7 @@ public class Misc {
         if (s.contains("{lastPlay}"))
             s = s.replace("{lastPlay}", new SimpleDateFormat(getMsg(pl, Messages.FORMATTING_STATS_DATE_FORMAT)).format(StatsManager.getStatsCache().getPlayerLastPlay(pl.getUniqueId())));
         if (s.contains("{player}")) s = s.replace("{player}", pl.getName());
-        if (s.contains("{prefix}")) s = s.replace("{prefix}", Main.getChatSupport().getPrefix(pl));
+        if (s.contains("{prefix}")) s = s.replace("{prefix}", BedWars.getChatSupport().getPrefix(pl));
 
         return papiReplacements ? SupportPAPI.getSupportPAPI().replace(pl, s) : s;
     }
@@ -335,7 +335,7 @@ public class Misc {
 
     public static void giveLobbySb(Player p) {
         if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
-            Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
                 if (p.isOnline())
                 new SBoard(p, getList(p, Messages.SCOREBOARD_LOBBY), null);
             }, 40L);

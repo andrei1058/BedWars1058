@@ -1,7 +1,6 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 
-import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.BedWars;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
@@ -15,10 +14,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static com.andrei1058.bedwars.arena.Arena.getArenaByName;
 
@@ -46,7 +42,7 @@ public class SetupArena extends SubCommand {
             p.sendMessage("§c▪ §c" + args[0] + ChatColor.GRAY + " mustn't contain capital letters! Rename your folder to: " + ChatColor.GREEN + args[0].toLowerCase());
             return true;
         }
-        if (!Main.getAPI().getRestoreAdapter().isWorld(args[0])) {
+        if (!BedWars.getAPI().getRestoreAdapter().isWorld(args[0])) {
             p.sendMessage("§c▪ §7" + args[0] + " doesn't exist!");
             return true;
         }
@@ -64,11 +60,11 @@ public class SetupArena extends SubCommand {
 
     @Override
     public List<String> getTabComplete() {
-        return Main.getAPI().getRestoreAdapter().getWorldsList();
+        return BedWars.getAPI().getRestoreAdapter().getWorldsList();
     }
 
     @Override
-    public boolean canSee(CommandSender s, BedWars api) {
+    public boolean canSee(CommandSender s, com.andrei1058.bedwars.api.BedWars api) {
         if (s instanceof ConsoleCommandSender) return false;
 
         Player p = (Player) s;

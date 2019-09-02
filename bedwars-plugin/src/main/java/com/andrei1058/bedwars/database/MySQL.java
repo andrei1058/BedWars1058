@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.database;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.stats.StatsCache;
 import com.andrei1058.bedwars.stats.StatsManager;
@@ -8,7 +8,7 @@ import com.andrei1058.bedwars.stats.StatsManager;
 import java.sql.*;
 import java.util.UUID;
 
-import static com.andrei1058.bedwars.Main.config;
+import static com.andrei1058.bedwars.BedWars.config;
 
 @SuppressWarnings("WeakerAccess")
 public class MySQL implements Database {
@@ -194,7 +194,7 @@ public class MySQL implements Database {
             if (!rs.next()) {
                 connection.prepareStatement("INSERT INTO quick_buy VALUES(0,'" + p.toString() + "',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ');").executeUpdate();
             }
-            Main.debug("UPDATE SET SLOT " + slot + " identifier " + shopPath);
+            BedWars.debug("UPDATE SET SLOT " + slot + " identifier " + shopPath);
             connection.prepareStatement("UPDATE quick_buy SET slot_" + slot + " = '" + shopPath + "' WHERE uuid = '" + p.toString() + "';").executeUpdate();
         } catch (Exception ex) {
             ex.printStackTrace();

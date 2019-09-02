@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.shop.listeners;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -17,7 +17,7 @@ public class PlayerDropListener implements Listener {
     public void onDrop(PlayerDropItemEvent e) {
         Arena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a == null) return;
-        String identifier = Main.nms.getShopUpgradeIdentifier(e.getItemDrop().getItemStack());
+        String identifier = BedWars.nms.getShopUpgradeIdentifier(e.getItemDrop().getItemStack());
         if (identifier == null) return;
         if (identifier.isEmpty() || identifier.equals(" ")) return;
         if (identifier.equals("null")) return;
@@ -34,7 +34,7 @@ public class PlayerDropListener implements Listener {
         for (ItemStack i : e.getInventory()) {
             if (i == null) continue;
             if (i.getType() == Material.AIR) continue;
-            identifier = Main.nms.getShopUpgradeIdentifier(i);
+            identifier = BedWars.nms.getShopUpgradeIdentifier(i);
             if (identifier.isEmpty() || identifier.equals(" ")) return;
         }
     }

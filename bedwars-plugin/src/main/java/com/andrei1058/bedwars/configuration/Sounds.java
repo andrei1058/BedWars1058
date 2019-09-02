@@ -1,13 +1,13 @@
 package com.andrei1058.bedwars.configuration;
 
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.exceptions.InvalidSoundException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import static com.andrei1058.bedwars.Main.nms;
-import static com.andrei1058.bedwars.Main.plugin;
+import static com.andrei1058.bedwars.BedWars.nms;
+import static com.andrei1058.bedwars.BedWars.plugin;
 import static com.andrei1058.bedwars.api.configuration.ConfigPath.*;
 
 public class Sounds {
@@ -18,7 +18,7 @@ public class Sounds {
         loadSounds();
     }
 
-    private static ConfigManager sounds = new ConfigManager(plugin,"sounds", "plugins/" + Main.plugin.getName());
+    private static ConfigManager sounds = new ConfigManager(plugin,"sounds", "plugins/" + BedWars.plugin.getName());
 
     @SuppressWarnings("WeakerAccess")
     public static void saveDefaultSounds() {

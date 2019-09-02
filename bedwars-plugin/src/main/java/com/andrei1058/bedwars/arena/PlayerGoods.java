@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.arena;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -10,8 +10,8 @@ import org.bukkit.potion.PotionEffect;
 
 import java.util.*;
 
-import static com.andrei1058.bedwars.Main.nms;
-import static com.andrei1058.bedwars.Main.plugin;
+import static com.andrei1058.bedwars.BedWars.nms;
+import static com.andrei1058.bedwars.BedWars.plugin;
 
 /**
  * This is where player stuff are stored so he can have them back after a game
@@ -126,7 +126,7 @@ class PlayerGoods {
         try {
             player.setHealth(health);
         } catch (Exception e){
-            Main.plugin.getLogger().severe("Something went wrong when restoring player health: "+health+". Giving default of: 20");
+            BedWars.plugin.getLogger().severe("Something went wrong when restoring player health: "+health+". Giving default of: 20");
             player.setHealth(20);
         }
         player.setFoodLevel(foodLevel);

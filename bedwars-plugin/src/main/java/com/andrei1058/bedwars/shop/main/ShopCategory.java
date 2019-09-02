@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.shop.main;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
@@ -30,32 +30,32 @@ public class ShopCategory {
      * Load a shop category from the given path
      */
     public ShopCategory(String path, YamlConfiguration yml) {
-        Main.debug("Loading shop category: " + path);
+        BedWars.debug("Loading shop category: " + path);
 
         if (yml.get(path + ConfigPath.SHOP_CATEGORY_ITEM_MATERIAL) == null) {
-            Main.plugin.getLogger().severe("Category material not set at: " + path);
+            BedWars.plugin.getLogger().severe("Category material not set at: " + path);
             return;
         }
 
         if (yml.get(path + ConfigPath.SHOP_CATEGORY_SLOT) == null) {
-            Main.plugin.getLogger().severe("Category slot not set at: " + path);
+            BedWars.plugin.getLogger().severe("Category slot not set at: " + path);
             return;
         }
         slot = yml.getInt(path + ConfigPath.SHOP_CATEGORY_SLOT);
 
         if (slot < 1 || slot > 7) {
-            Main.plugin.getLogger().severe("Slot must be n > 1 and n < 8 at: " + path);
+            BedWars.plugin.getLogger().severe("Slot must be n > 1 and n < 8 at: " + path);
             return;
         }
 
         for (ShopCategory sc : ShopManager.shop.getCategoryList()){
             if (sc.getSlot() == slot){
-                Main.plugin.getLogger().severe("Slot is already in use at: " + path);
+                BedWars.plugin.getLogger().severe("Slot is already in use at: " + path);
                 return;
             }
         }
 
-        itemStack = Main.nms.createItemStack(yml.getString(path + ConfigPath.SHOP_CATEGORY_ITEM_MATERIAL),
+        itemStack = BedWars.nms.createItemStack(yml.getString(path + ConfigPath.SHOP_CATEGORY_ITEM_MATERIAL),
                 yml.get(path + ConfigPath.SHOP_CATEGORY_ITEM_AMOUNT) == null ? 1 : yml.getInt(path + ConfigPath.SHOP_CATEGORY_ITEM_AMOUNT),
                 (short) (yml.get(path + ConfigPath.SHOP_CATEGORY_ITEM_DATA) == null ? 0 : yml.getInt(path + ConfigPath.SHOP_CATEGORY_ITEM_DATA)));
 
@@ -78,7 +78,7 @@ public class ShopCategory {
             cc = new CategoryContent(path + ConfigPath.SHOP_CATEGORY_CONTENT_PATH + "." + s, s, path, yml, this);
             if (cc.isLoaded()) {
                 categoryContentList.add(cc);
-                Main.debug("Adding CategoryContent: " + s + " to Shop Category: " + path);
+                BedWars.debug("Adding CategoryContent: " + s + " to Shop Category: " + path);
             }
         }
     }

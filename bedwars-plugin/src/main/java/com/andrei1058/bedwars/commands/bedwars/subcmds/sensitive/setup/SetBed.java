@@ -1,7 +1,6 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup;
 
-import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.BedWars;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.server.SetupType;
@@ -19,7 +18,7 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.Objects;
 
-import static com.andrei1058.bedwars.Main.mainCmd;
+import static com.andrei1058.bedwars.BedWars.mainCmd;
 import static com.andrei1058.bedwars.commands.Misc.createArmorStand;
 import static com.andrei1058.bedwars.commands.Misc.removeArmorStand;
 
@@ -64,8 +63,8 @@ public class SetBed extends SubCommand {
                 p.spigot().sendMessage(Misc.msgHoverClick("§9Use §e/" + getParent().getName() + " " + getSubCommandName() + " <teamName>", "§dSet a team bed.", "/" + getParent().getName() + " " + getSubCommandName(), ClickEvent.Action.SUGGEST_COMMAND));
             } else Bukkit.dispatchCommand(s, getParent().getName() + " " + getSubCommandName() + " " + foundTeam);
         } else {
-            if (!(Main.nms.isBed(p.getLocation().clone().add(0, -0.5, 0).getBlock().getType()) ||  Main.nms.isBed(p.getLocation().clone().add(0, 0.5, 0).getBlock().getType())
-                    || Main.nms.isBed(p.getLocation().clone().getBlock().getType()))) {
+            if (!(BedWars.nms.isBed(p.getLocation().clone().add(0, -0.5, 0).getBlock().getType()) ||  BedWars.nms.isBed(p.getLocation().clone().add(0, 0.5, 0).getBlock().getType())
+                    || BedWars.nms.isBed(p.getLocation().clone().getBlock().getType()))) {
                 p.sendMessage("§c▪ §7You must stay on a bed while using this command!");
                 return true;
             }
@@ -100,7 +99,7 @@ public class SetBed extends SubCommand {
     }
 
     @Override
-    public boolean canSee(CommandSender s, BedWars api) {
+    public boolean canSee(CommandSender s, com.andrei1058.bedwars.api.BedWars api) {
         if (s instanceof ConsoleCommandSender) return false;
 
         Player p = (Player) s;

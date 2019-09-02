@@ -483,10 +483,6 @@ public abstract class VersionSupport {
         return despawnables;
     }
 
-    /**
-     * Register listeners made for this version.
-     */
-    public abstract void registerVersionListeners();
 
     public static String getName() {
         return name2;

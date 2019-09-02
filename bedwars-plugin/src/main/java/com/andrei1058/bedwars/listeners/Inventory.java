@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.listeners;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.server.SetupType;
@@ -21,8 +21,8 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.Objects;
 
-import static com.andrei1058.bedwars.Main.config;
-import static com.andrei1058.bedwars.Main.nms;
+import static com.andrei1058.bedwars.BedWars.config;
+import static com.andrei1058.bedwars.BedWars.nms;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 import static org.bukkit.event.inventory.InventoryAction.*;
 
@@ -112,7 +112,7 @@ public class Inventory implements Listener {
                     if (e.getWhoClicked().hasPotionEffect(PotionEffectType.INVISIBILITY)) {
                         e.getWhoClicked().closeInventory();
                         for (Player pl : e.getWhoClicked().getWorld().getPlayers()) {
-                            Main.nms.hideArmor((Player) e.getWhoClicked(), pl);
+                            BedWars.nms.hideArmor((Player) e.getWhoClicked(), pl);
                         }
                     }
                 }
@@ -173,8 +173,8 @@ public class Inventory implements Listener {
         if (!i.getItemMeta().
 
                 hasDisplayName()) return;
-        if (Main.getServerType() != ServerType.BUNGEE) {
-            if (e.getWhoClicked().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
+        if (BedWars.getServerType() != ServerType.BUNGEE) {
+            if (e.getWhoClicked().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
                 e.setCancelled(true);
             }
         }

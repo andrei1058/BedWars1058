@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.arena;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
@@ -21,7 +21,7 @@ public class ArenaGUI {
 
     //Object[0] = inventory, Object[1] = group
     private static HashMap<Player, Object[]> refresh = new HashMap<>();
-    private static YamlConfiguration yml = Main.config.getYml();
+    private static YamlConfiguration yml = BedWars.config.getYml();
 
     //Object[0] = inventory, Object[1] = group
     public static void refreshInv(Player p, Object[] data) {
@@ -39,7 +39,7 @@ public class ArenaGUI {
         Collections.sort(arenas);
 
         int arenaKey = 0;
-        for (String useSlot : Main.config.getString(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_USE_SLOTS).split(",")) {
+        for (String useSlot : BedWars.config.getString(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_USE_SLOTS).split(",")) {
             int slot;
             try {
                 slot = Integer.parseInt(useSlot);
@@ -67,7 +67,7 @@ public class ArenaGUI {
                     continue;
             }
 
-            i = Main.nms.createItemStack(yml.getString(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", status)),
+            i = BedWars.nms.createItemStack(yml.getString(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", status)),
                     1, (short) yml.getInt(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA.replace("%path%", status)));
             if (yml.getBoolean(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_ENCHANTED.replace("%path%", status))) {
                 ItemMeta im = i.getItemMeta();
@@ -89,20 +89,20 @@ public class ArenaGUI {
             }
             im.setLore(lore);
             i.setItemMeta(im);
-            i = Main.nms.addCustomData(i, ArenaSelectorListener.ARENA_SELECTOR_GUI_IDENTIFIER + arenas.get(arenaKey).getWorldName());
+            i = BedWars.nms.addCustomData(i, ArenaSelectorListener.ARENA_SELECTOR_GUI_IDENTIFIER + arenas.get(arenaKey).getWorldName());
             ((Inventory)data[0]).setItem(slot, i);
             arenaKey++;
         }
     }
 
     public static void openGui(Player p, String group) {
-        int size = Main.config.getYml().getInt(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SIZE);
+        int size = BedWars.config.getYml().getInt(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SIZE);
         if (size % 9 != 0) size = 27;
         if (size > 54) size = 54;
         Inventory inv = Bukkit.createInventory(p, size, Language.getMsg(p, Messages.ARENA_GUI_INV_NAME));
 
-        ItemStack i = Main.nms.createItemStack(Main.config.getString(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", "skipped-slot")),
-                1, (byte) Main.config.getInt(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA.replace("%path%", "skipped-slot")));
+        ItemStack i = BedWars.nms.createItemStack(BedWars.config.getString(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", "skipped-slot")),
+                1, (byte) BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA.replace("%path%", "skipped-slot")));
 
         for (int x = 0; x < inv.getSize(); x++) {
             inv.setItem(x, i);

@@ -61,26 +61,6 @@
                     <skip>true</skip>
                 </configuration>
             </plugin>
-            <plugin>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>2.5</version>
-                <executions>
-                    <execution>
-                        <id>auto-clean</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>clean</goal>
-                        </goals>
-                        <configuration>
-                            <filesets>
-                                <fileset>
-                                    <directory>bedwars-api/target/</directory>
-                                </fileset>
-                            </filesets>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
     <modules>
@@ -89,6 +69,9 @@
         <module>resetadapter_slime</module>
         <module>versionsupport_1_8_R3</module>
         <module>versionsupport_1_9_R2</module>
+        <module>versionsupport_1_10_R1</module>
+        <module>versionsupport_1_11_R1</module>
+        <module>versionsupport_1_12_R1</module>
         <module>versionsupport_common</module>
     </modules>
 

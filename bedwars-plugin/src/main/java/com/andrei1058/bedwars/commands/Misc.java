@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.commands;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.arena.SetupSession;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -29,7 +29,7 @@ public class Misc {
         a.setGravity(false);
         a.setCustomNameVisible(true);
         a.setCustomName(name);
-        a.setMetadata("bw1058-setup", new FixedMetadataValue(Main.plugin, "hologram"));
+        a.setMetadata("bw1058-setup", new FixedMetadataValue(BedWars.plugin, "hologram"));
     }
 
     /**
@@ -65,9 +65,9 @@ public class Misc {
             setupSession.setAutoCreatedDiamond(true);
         }
         detectGenerators(p.getLocation().add(0, -1, 0).getBlock().getLocation(), setupSession);
-        Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+        Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
             for (Location l : setupSession.getSkipAutoCreateGen()) {
-                Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+                Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
                     p.teleport(l);
                     Bukkit.dispatchCommand(p, command + (l.add(0, -1, 0).getBlock().getType() == Material.EMERALD_BLOCK ? "emerald" : "diamond"));
                 }, 20);

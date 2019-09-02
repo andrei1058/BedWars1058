@@ -1,7 +1,6 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup;
 
-import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.BedWars;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.server.SetupType;
 import com.andrei1058.bedwars.arena.Misc;
@@ -49,17 +48,17 @@ public class AutoCreateTeams extends SubCommand {
             if (is13Higher()) {
                 if (timeOut.containsKey(p) && timeOut.get(p) >= System.currentTimeMillis() && teamsFound13.containsKey(p)) {
                     for (String tf : teamsFound13.get(p)) {
-                        Bukkit.dispatchCommand(s, Main.mainCmd + " createTeam " + TeamColor.enName(tf) + " " + TeamColor.enName(tf));
+                        Bukkit.dispatchCommand(s, BedWars.mainCmd + " createTeam " + TeamColor.enName(tf) + " " + TeamColor.enName(tf));
                     }
                     if (ss.getConfig().getYml().get("waiting.Pos1") == null) {
                         s.sendMessage("");
                         s.sendMessage("§6§lWAITING LOBBY REMOVAL:");
                         s.sendMessage("§fIf you'd like the lobby to disappear when the game starts,");
                         s.sendMessage("§fplease use the following commands like a world edit selection.");
-                        p.spigot().sendMessage(Misc.msgHoverClick("§c ▪ §7/" + Main.mainCmd + " waitingPos 1", "§dSet pos 1", "/" + getParent().getName() + " waitingPos 1", ClickEvent.Action.RUN_COMMAND));
-                        p.spigot().sendMessage(Misc.msgHoverClick("§c ▪ §7/" + Main.mainCmd + " waitingPos 2", "§dSet pos 2", "/" + getParent().getName() + " waitingPos 2", ClickEvent.Action.RUN_COMMAND));
+                        p.spigot().sendMessage(Misc.msgHoverClick("§c ▪ §7/" + BedWars.mainCmd + " waitingPos 1", "§dSet pos 1", "/" + getParent().getName() + " waitingPos 1", ClickEvent.Action.RUN_COMMAND));
+                        p.spigot().sendMessage(Misc.msgHoverClick("§c ▪ §7/" + BedWars.mainCmd + " waitingPos 2", "§dSet pos 2", "/" + getParent().getName() + " waitingPos 2", ClickEvent.Action.RUN_COMMAND));
                         s.sendMessage("");
-                        s.sendMessage("§7This step is OPTIONAL. If you wan to skip it do §6/" + Main.mainCmd);
+                        s.sendMessage("§7This step is OPTIONAL. If you wan to skip it do §6/" + BedWars.mainCmd);
                     }
                     return true;
                 }
@@ -98,7 +97,7 @@ public class AutoCreateTeams extends SubCommand {
                     }
                 }
                 if (found.isEmpty()) {
-                    p.sendMessage("§6 ▪ §7No new teams were found.\n§6 ▪ §7Manually create teams with: §6/" + Main.mainCmd + " createTeam");
+                    p.sendMessage("§6 ▪ §7No new teams were found.\n§6 ▪ §7Manually create teams with: §6/" + BedWars.mainCmd + " createTeam");
                 } else {
                     if (timeOut.containsKey(p)) {
                         p.sendMessage("§c ▪ §7Time out. Type again to search for teams.");
@@ -122,17 +121,17 @@ public class AutoCreateTeams extends SubCommand {
             } else {
                 if (timeOut.containsKey(p) && timeOut.get(p) >= System.currentTimeMillis() && teamsFoundOld.containsKey(p)) {
                     for (Byte tf : teamsFoundOld.get(p)) {
-                        Bukkit.dispatchCommand(s, Main.mainCmd + " createTeam " + TeamColor.enName(tf) + " " + TeamColor.enName(tf));
+                        Bukkit.dispatchCommand(s, BedWars.mainCmd + " createTeam " + TeamColor.enName(tf) + " " + TeamColor.enName(tf));
                     }
                     if (ss.getConfig().getYml().get("waiting.Pos1") == null) {
                         s.sendMessage("");
                         s.sendMessage("§6§lWAITING LOBBY REMOVAL:");
                         s.sendMessage("§fIf you'd like the lobby to disappear when the game starts,");
                         s.sendMessage("§fplease use the following commands like a world edit selection.");
-                        p.spigot().sendMessage(Misc.msgHoverClick("§c ▪ §7/" + Main.mainCmd + " waitingPos 1", "§dSet pos 1", "/" + getParent().getName() + " waitingPos 1", ClickEvent.Action.RUN_COMMAND));
-                        p.spigot().sendMessage(Misc.msgHoverClick("§c ▪ §7/" + Main.mainCmd + " waitingPos 2", "§dSet pos 2", "/" + getParent().getName() + " waitingPos 2", ClickEvent.Action.RUN_COMMAND));
+                        p.spigot().sendMessage(Misc.msgHoverClick("§c ▪ §7/" + BedWars.mainCmd + " waitingPos 1", "§dSet pos 1", "/" + getParent().getName() + " waitingPos 1", ClickEvent.Action.RUN_COMMAND));
+                        p.spigot().sendMessage(Misc.msgHoverClick("§c ▪ §7/" + BedWars.mainCmd + " waitingPos 2", "§dSet pos 2", "/" + getParent().getName() + " waitingPos 2", ClickEvent.Action.RUN_COMMAND));
                         s.sendMessage("");
-                        s.sendMessage("§7This step is OPTIONAL. If you wan to skip it do §6/" + Main.mainCmd);
+                        s.sendMessage("§7This step is OPTIONAL. If you wan to skip it do §6/" + BedWars.mainCmd);
                     }
                     return true;
                 }
@@ -173,7 +172,7 @@ public class AutoCreateTeams extends SubCommand {
                     }
                 }
                 if (found.isEmpty()) {
-                    p.sendMessage("§6 ▪ §7No new teams were found.\n§6 ▪ §7Manually create teams with: §6/" + Main.mainCmd + " createTeam");
+                    p.sendMessage("§6 ▪ §7No new teams were found.\n§6 ▪ §7Manually create teams with: §6/" + BedWars.mainCmd + " createTeam");
                 } else {
                     if (timeOut.containsKey(p)) {
                         p.sendMessage("§c ▪ §7Time out. Type again to search for teams.");
@@ -208,7 +207,7 @@ public class AutoCreateTeams extends SubCommand {
      * Check if server version is 1.13 or higher
      */
     public static boolean is13Higher() {
-        switch (Main.getServerVersion()) {
+        switch (BedWars.getServerVersion()) {
             case "v1_8_R3":
             case "v1_9_R1":
             case "v1_9_R2":
@@ -221,7 +220,7 @@ public class AutoCreateTeams extends SubCommand {
     }
 
     @Override
-    public boolean canSee(CommandSender s, BedWars api) {
+    public boolean canSee(CommandSender s, com.andrei1058.bedwars.api.BedWars api) {
         if (s instanceof ConsoleCommandSender) return false;
 
         Player p = (Player) s;

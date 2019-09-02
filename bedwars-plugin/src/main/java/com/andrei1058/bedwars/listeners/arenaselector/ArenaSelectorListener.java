@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.listeners.arenaselector;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.ArenaGUI;
@@ -22,7 +22,7 @@ public class ArenaSelectorListener implements Listener {
 
     @EventHandler
     public void onArenaSelectorClick(InventoryClickEvent e) {
-        Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, () -> {
             Player p = (Player) e.getWhoClicked();
             if (!ArenaGUI.getRefresh().containsKey(p)) return;
             e.setCancelled(true);
@@ -31,14 +31,14 @@ public class ArenaSelectorListener implements Listener {
             if (i == null) return;
             if (i.getType() == Material.AIR) return;
 
-            if (!Main.nms.isCustomBedWarsItem(i)) return;
-            String data = Main.nms.getCustomData(i);
+            if (!BedWars.nms.isCustomBedWarsItem(i)) return;
+            String data = BedWars.nms.getCustomData(i);
             if (!data.contains(ARENA_SELECTOR_GUI_IDENTIFIER)) return;
             String arena = data.split("=")[1];
             Arena a = Arena.getArenaByName(arena);
             if (a == null) return;
 
-            Bukkit.getScheduler().runTask(Main.plugin, () -> {
+            Bukkit.getScheduler().runTask(BedWars.plugin, () -> {
                 if (e.getClick() == ClickType.LEFT) {
                     if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) {
                         a.addPlayer(p, false);

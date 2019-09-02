@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.listeners;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.server.ServerType;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-import static com.andrei1058.bedwars.Main.*;
+import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class JoinLeaveTeleport implements Listener {
@@ -34,9 +34,9 @@ public class JoinLeaveTeleport implements Listener {
         Player p = e.getPlayer();
         final UUID u = p.getUniqueId();
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            String iso = Main.getRemoteDatabase().getLanguage(u);
+            String iso = BedWars.getRemoteDatabase().getLanguage(u);
             if (Language.isLanguageExist(iso)) {
-                if (Main.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES).contains(iso))
+                if (BedWars.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES).contains(iso))
                     iso = Language.getDefaultLanguage().getIso();
                 if (preLoadedLanguage.containsKey(u)){
                     preLoadedLanguage.replace(u, iso);
@@ -155,9 +155,9 @@ public class JoinLeaveTeleport implements Listener {
             }
         }
 
-        if (Main.getServerType() == ServerType.SHARED) {
-            if (Main.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
-                if (e.getPlayer().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld()))
+        if (BedWars.getServerType() == ServerType.SHARED) {
+            if (BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
+                if (e.getPlayer().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld()))
                     Misc.giveLobbySb(e.getPlayer());
             }
             return;
@@ -203,9 +203,9 @@ public class JoinLeaveTeleport implements Listener {
             Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
                 String iso = Language.getLangByPlayer().get(p).getIso();
                 if (Language.isLanguageExist(iso)) {
-                    if (Main.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES).contains(iso))
+                    if (BedWars.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES).contains(iso))
                         iso = Language.getDefaultLanguage().getIso();
-                    Main.getRemoteDatabase().setLanguage(u, iso);
+                    BedWars.getRemoteDatabase().setLanguage(u, iso);
                 }
                 Language.getLangByPlayer().remove(p);
             });
@@ -244,10 +244,10 @@ public class JoinLeaveTeleport implements Listener {
 
     @EventHandler
     public void onWorldChange(PlayerChangedWorldEvent e) {
-        if (Main.getServerType() == ServerType.SHARED) {
-            if (Main.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
+        if (BedWars.getServerType() == ServerType.SHARED) {
+            if (BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
                 //Bukkit.getScheduler().runTaskLater(plugin, ()-> {
-                if (e.getPlayer().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
+                if (e.getPlayer().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
                     Misc.giveLobbySb(e.getPlayer());
                 } else {
                     for (SBoard sBoard : new ArrayList<>(SBoard.getScoreboards())) {
@@ -263,7 +263,7 @@ public class JoinLeaveTeleport implements Listener {
             if (a.isPlayer(e.getPlayer())) {
                 if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) return;
                 if (!e.getPlayer().getWorld().getName().equalsIgnoreCase(a.getWorldName())) {
-                    a.removePlayer(e.getPlayer(), Main.getServerType() == ServerType.BUNGEE);
+                    a.removePlayer(e.getPlayer(), BedWars.getServerType() == ServerType.BUNGEE);
                     debug(e.getPlayer().getName() + " was removed from " + a.getDisplayName() + " because he was teleported outside the arena.");
                 }
             }

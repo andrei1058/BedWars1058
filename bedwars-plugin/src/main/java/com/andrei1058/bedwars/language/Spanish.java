@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.language;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
@@ -10,14 +10,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static com.andrei1058.bedwars.Main.mainCmd;
-import static com.andrei1058.bedwars.api.language.Language.addCategoryMessages;
-import static com.andrei1058.bedwars.api.language.Language.addContentMessages;
+import static com.andrei1058.bedwars.BedWars.mainCmd;
 
 public class Spanish extends Language{
 
     public Spanish() {
-        super(Main.plugin, "es");
+        super(BedWars.plugin, "es");
         YamlConfiguration yml = getYml();
         yml.options().header("Translation by JuliCarles#1783");
         yml.addDefault(Messages.PREFIX, "");

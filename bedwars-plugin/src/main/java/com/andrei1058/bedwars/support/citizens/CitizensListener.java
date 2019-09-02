@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.support.citizens;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
@@ -23,7 +23,7 @@ public class CitizensListener implements Listener {
 
     @EventHandler
     public void removeNPC(NPCRemoveEvent e) {
-        List<String> locations = Main.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE);
+        List<String> locations = BedWars.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE);
         boolean removed = false;
         if (JoinNPC.npcs.containsKey(e.getNPC().getId())) {
             JoinNPC.npcs.remove(e.getNPC().getId());
@@ -45,7 +45,7 @@ public class CitizensListener implements Listener {
                 e2.remove();
             }
         }
-        if (removed) Main.config.set(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE, locations);
+        if (removed) BedWars.config.set(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE, locations);
     }
 
     @EventHandler

@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.arena.spectator;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.api.language.Messages;
 import org.bukkit.Bukkit;
@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.andrei1058.bedwars.Main.nms;
+import static com.andrei1058.bedwars.BedWars.nms;
 import static com.andrei1058.bedwars.api.language.Language.getList;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
@@ -97,8 +97,8 @@ public class TeleporterGUI {
         i = nms.setSkullOwner(i, targetPlayer);
         ItemMeta im = i.getItemMeta();
         im.setDisplayName(getMsg(GUIholder, Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME)
-                .replace("{prefix}", Main.getChatSupport().getPrefix(targetPlayer))
-                .replace("{suffix}", Main.getChatSupport().getSuffix(targetPlayer))
+                .replace("{prefix}", BedWars.getChatSupport().getPrefix(targetPlayer))
+                .replace("{suffix}", BedWars.getChatSupport().getSuffix(targetPlayer))
                         .replace("{player}", targetPlayer.getDisplayName()));
         List<String> lore = new ArrayList<>();
         String health = String.valueOf((int)targetPlayer.getHealth() * 100 / targetPlayer.getHealthScale());

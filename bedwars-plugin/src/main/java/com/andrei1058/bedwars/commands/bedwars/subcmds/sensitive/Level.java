@@ -1,7 +1,6 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 
-import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.BedWars;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.arena.Arena;
@@ -33,7 +32,7 @@ public class Level extends SubCommand {
     @Override
     public boolean execute(String[] args, CommandSender s) {
         if (args.length == 0) {
-            sendSubCommands(s, Main.getAPI());
+            sendSubCommands(s, BedWars.getAPI());
             return true;
         }
         if (args[0].equalsIgnoreCase("setlevel")) {
@@ -66,7 +65,7 @@ public class Level extends SubCommand {
                     LevelsConfig.levels.getYml().getString("levels.others.name") : LevelsConfig.levels.getYml().getString("levels." + level + ".name");
 
 
-            Main.getRemoteDatabase().setLevelData(pl.getUniqueId(), level, 0, levelName, nextLevelCost);
+            BedWars.getRemoteDatabase().setLevelData(pl.getUniqueId(), level, 0, levelName, nextLevelCost);
             s.sendMessage(ChatColor.GOLD + " ▪ " + ChatColor.GRAY + pl.getName() + " level was set to: " + args[2]);
             s.sendMessage(ChatColor.GOLD + " ▪ " + ChatColor.GRAY + "The player may need to rejoin to see it updated.");
         } else if (args[0].equalsIgnoreCase("givexp")) {
@@ -92,17 +91,17 @@ public class Level extends SubCommand {
             PlayerLevel pv = PlayerLevel.getLevelByPlayer(pl.getUniqueId());
             if (pv != null) pv.setXp(amount);
 
-            Object[] data = Main.getRemoteDatabase().getLevelData(pl.getUniqueId());
-            Main.getRemoteDatabase().setLevelData(pl.getUniqueId(), (Integer) data[0], ((Integer)data[1]) + amount, (String) data[2], (Integer)data[3]);
+            Object[] data = BedWars.getRemoteDatabase().getLevelData(pl.getUniqueId());
+            BedWars.getRemoteDatabase().setLevelData(pl.getUniqueId(), (Integer) data[0], ((Integer)data[1]) + amount, (String) data[2], (Integer)data[3]);
             s.sendMessage(ChatColor.GOLD + " ▪ " + ChatColor.GRAY + args[2] + " xp was given to: " + pl.getName());
             s.sendMessage(ChatColor.GOLD + " ▪ " + ChatColor.GRAY + "The player may need to rejoin to see it updated.");
         } else {
-            sendSubCommands(s, Main.getAPI());
+            sendSubCommands(s, BedWars.getAPI());
         }
         return true;
     }
 
-    private void sendSubCommands(CommandSender s, BedWars api) {
+    private void sendSubCommands(CommandSender s, com.andrei1058.bedwars.api.BedWars api) {
         if (s instanceof Player) {
             Player p = (Player) s;
             p.spigot().sendMessage(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " " + getSubCommandName() + " setLevel §o<player> <level>",
@@ -123,7 +122,7 @@ public class Level extends SubCommand {
     }
 
     @Override
-    public boolean canSee(CommandSender s, BedWars api) {
+    public boolean canSee(CommandSender s, com.andrei1058.bedwars.api.BedWars api) {
         if (s instanceof ConsoleCommandSender) return false;
 
         Player p = (Player) s;

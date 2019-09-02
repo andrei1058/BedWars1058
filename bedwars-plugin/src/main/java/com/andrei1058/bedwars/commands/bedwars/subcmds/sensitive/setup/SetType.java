@@ -1,7 +1,6 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup;
 
-import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.BedWars;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.server.SetupType;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
@@ -44,11 +43,11 @@ public class SetType extends SubCommand {
                 sendUsage(p);
                 return true;
             }
-            List groups = Main.config.getYml().getStringList("arenaGroups");
+            List groups = BedWars.config.getYml().getStringList("arenaGroups");
             String input = args[0].substring(0, 1).toUpperCase()+args[0].substring(1).toLowerCase();
             if (!groups.contains(input)){
                 groups.add(input);
-                Main.config.set("arenaGroups", groups);
+                BedWars.config.set("arenaGroups", groups);
                 int maxInTeam = 1;
                 if (input.equalsIgnoreCase("Duals")){
                     maxInTeam = 2;
@@ -82,7 +81,7 @@ public class SetType extends SubCommand {
     }
 
     @Override
-    public boolean canSee(CommandSender s, BedWars api) {
+    public boolean canSee(CommandSender s, com.andrei1058.bedwars.api.BedWars api) {
         if (s instanceof ConsoleCommandSender) return false;
 
         Player p = (Player) s;

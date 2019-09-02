@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.arena.tasks;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.shop.ShopHolo;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.*;
@@ -22,7 +22,7 @@ public class GameRestartingTask implements Runnable {
     public GameRestartingTask(Arena arena) {
         this.arena = arena;
         this.name = arena.getWorldName();
-        task = Bukkit.getScheduler().runTaskTimer(Main.plugin, this, 0, 20L);
+        task = Bukkit.getScheduler().runTaskTimer(BedWars.plugin, this, 0, 20L);
     }
 
     /**
@@ -44,10 +44,10 @@ public class GameRestartingTask implements Runnable {
         if (getArena().getPlayers().isEmpty() && restarting > 9) restarting = 9;
         if (restarting == 8) {
             for (Player on : new ArrayList<>(getArena().getPlayers())) {
-                getArena().removePlayer(on, Main.getServerType() == ServerType.BUNGEE);
+                getArena().removePlayer(on, BedWars.getServerType() == ServerType.BUNGEE);
             }
             for (Player on : new ArrayList<>(getArena().getSpectators())) {
-                getArena().removeSpectator(on, Main.getServerType() == ServerType.BUNGEE);
+                getArena().removeSpectator(on, BedWars.getServerType() == ServerType.BUNGEE);
             }
         } else if (restarting == 6) {
             ShopHolo.clearForArena(getArena());

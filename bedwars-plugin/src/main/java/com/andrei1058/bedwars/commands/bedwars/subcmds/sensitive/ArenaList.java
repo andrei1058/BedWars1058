@@ -1,7 +1,6 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 
-import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.BedWars;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.api.command.ParentCommand;
@@ -19,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.andrei1058.bedwars.Main.plugin;
+import static com.andrei1058.bedwars.BedWars.plugin;
 import static com.andrei1058.bedwars.arena.Arena.getArenaByName;
 
 public class ArenaList extends SubCommand {
@@ -44,7 +43,7 @@ public class ArenaList extends SubCommand {
         for (String arena : getArenas()) {
             String status = getArenaByName(arena) == null ? "§cDisabled" : "§aEnabled";
             String group = "Default";
-            ConfigManager cm = new ConfigManager(Main.plugin, arena, "plugins/"+plugin.getName()+"/Arenas");
+            ConfigManager cm = new ConfigManager(BedWars.plugin, arena, "plugins/"+plugin.getName()+"/Arenas");
             if (cm.getYml().get("group") != null){
                 group = cm.getYml().getString("group");
             }
@@ -78,7 +77,7 @@ public class ArenaList extends SubCommand {
     }
 
     @Override
-    public boolean canSee(CommandSender s, BedWars api) {
+    public boolean canSee(CommandSender s, com.andrei1058.bedwars.api.BedWars api) {
 
         if (s instanceof Player) {
             Player p = (Player) s;

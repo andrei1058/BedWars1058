@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.upgrades;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 
 public class GameEndAction extends UpgradeAction {
@@ -11,7 +11,7 @@ public class GameEndAction extends UpgradeAction {
     public GameEndAction(String name, int bonusDragons) {
         this.name = name;
         this.bonusDragons = bonusDragons;
-        Main.debug("Loading new GameEndAction: " + getName());
+        BedWars.debug("Loading new GameEndAction: " + getName());
     }
 
     @Override

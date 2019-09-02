@@ -18,7 +18,7 @@ import org.bukkit.potion.PotionEffect;
 
 import java.util.HashMap;
 
-import static com.andrei1058.bedwars.Main.nms;
+import static com.andrei1058.bedwars.BedWars.nms;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class BaseListener implements Listener {

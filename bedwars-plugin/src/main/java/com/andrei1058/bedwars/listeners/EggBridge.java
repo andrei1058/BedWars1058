@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.listeners;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.events.gameplay.EggBridgeThrowEvent;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
@@ -23,8 +23,8 @@ public class EggBridge implements Listener {
 
     @EventHandler
     public void onLaunch(ProjectileLaunchEvent e) {
-        if (Main.getServerType() != ServerType.BUNGEE) {
-            if (e.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld())) {
+        if (BedWars.getServerType() != ServerType.BUNGEE) {
+            if (e.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
                 e.setCancelled(true);
                 return;
             }

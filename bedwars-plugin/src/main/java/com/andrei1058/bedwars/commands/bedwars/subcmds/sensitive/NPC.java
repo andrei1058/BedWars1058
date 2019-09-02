@@ -1,7 +1,6 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 
-import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.BedWars;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
@@ -28,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.andrei1058.bedwars.Main.mainCmd;
+import static com.andrei1058.bedwars.BedWars.mainCmd;
 
 public class NPC extends SubCommand {
 
@@ -69,27 +68,27 @@ public class NPC extends SubCommand {
                 }
                 return true;
             }
-            if (Main.config.getYml().get("arenaGroups") == null) {
+            if (BedWars.config.getYml().get("arenaGroups") == null) {
                 if (!args[2].equalsIgnoreCase("default")) {
                     p.sendMessage(NO_GROUP.replace("%name%", args[2]));
                     return true;
                 }
-            } else if (!(Main.config.getYml().getStringList("arenaGroups").contains(args[2]) || args[2].equalsIgnoreCase("default"))) {
+            } else if (!(BedWars.config.getYml().getStringList("arenaGroups").contains(args[2]) || args[2].equalsIgnoreCase("default"))) {
                 p.sendMessage(NO_GROUP.replace("%name%", args[2]));
                 return true;
             }
             List<String> npcs;
-            if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE) != null) {
-                npcs = Main.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE);
+            if (BedWars.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE) != null) {
+                npcs = BedWars.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE);
             } else {
                 npcs = new ArrayList<>();
             }
             String name = Joiner.on(" ").join(args).replace(args[0] + " " + args[1] + " " + args[2] + " ", "");
             net.citizensnpcs.api.npc.NPC npc = JoinNPC.spawnNPC(p.getLocation(), name, args[2], args[1], null);
             assert npc != null;
-            npcs.add(Main.config.stringLocationConfigFormat(p.getLocation()) + "," + args[1] + "," + name + "," + args[2] + "," + npc.getId());
+            npcs.add(BedWars.config.stringLocationConfigFormat(p.getLocation()) + "," + args[1] + "," + name + "," + args[2] + "," + npc.getId());
             p.sendMessage(NPC_SET.replace("%name%", name.replace("&", "§").replace("\\\\n", " ")));
-            Main.config.set(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE, npcs);
+            BedWars.config.set(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE, npcs);
 
         } else if (args[0].equalsIgnoreCase("remove")) {
 
@@ -98,7 +97,7 @@ public class NPC extends SubCommand {
                 p.sendMessage(NO_NPCS);
                 return true;
             }
-            if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE) == null) {
+            if (BedWars.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE) == null) {
                 p.sendMessage(NO_SET);
                 return true;
             }
@@ -107,10 +106,10 @@ public class NPC extends SubCommand {
                 p.sendMessage(NO_NPCS);
                 return true;
             }
-            List<String> locations = Main.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE);
+            List<String> locations = BedWars.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE);
             for (Integer id : JoinNPC.npcs.keySet()) {
                 if (id == npc.getId()) {
-                    for (String loc : Main.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE)) {
+                    for (String loc : BedWars.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE)) {
                         if (loc.split(",")[4].equalsIgnoreCase(String.valueOf(npc.getId()))) {
                             locations.remove(loc);
                         }
@@ -123,7 +122,7 @@ public class NPC extends SubCommand {
                     e2.remove();
                 }
             }
-            Main.config.set(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE, locations);
+            BedWars.config.set(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE, locations);
             npc.destroy();
             p.sendMessage(NPC_REMOVED);
         } else {
@@ -181,7 +180,7 @@ public class NPC extends SubCommand {
     }
 
     @Override
-    public boolean canSee(CommandSender s, BedWars api) {
+    public boolean canSee(CommandSender s, com.andrei1058.bedwars.api.BedWars api) {
         if (s instanceof ConsoleCommandSender) return false;
 
         Player p = (Player) s;

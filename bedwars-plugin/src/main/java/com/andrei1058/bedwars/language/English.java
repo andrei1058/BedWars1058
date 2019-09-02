@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.language;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
@@ -10,12 +10,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static com.andrei1058.bedwars.Main.mainCmd;
+import static com.andrei1058.bedwars.BedWars.mainCmd;
 
 public class English extends Language {
 
     public English() {
-        super(Main.plugin, "en");
+        super(BedWars.plugin, "en");
 
         YamlConfiguration yml = getYml();
         yml.options().copyDefaults(true);

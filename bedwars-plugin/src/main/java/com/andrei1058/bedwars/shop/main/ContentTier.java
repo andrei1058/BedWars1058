@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.shop.main;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.shop.ShopManager;
 import org.bukkit.Material;
@@ -23,33 +23,33 @@ public class ContentTier {
      * Create a content tier for a category content
      */
     public ContentTier(String path, String tierName, String identifier, YamlConfiguration yml) {
-        Main.debug("Loading content tier" + path);
+        BedWars.debug("Loading content tier" + path);
 
         if (yml.get(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_MATERIAL) == null) {
-            Main.plugin.getLogger().severe("tier-item material not set at " + path);
+            BedWars.plugin.getLogger().severe("tier-item material not set at " + path);
             return;
         }
 
         try {
             value = Integer.parseInt(tierName.replace("tier", ""));
         } catch (Exception e) {
-            Main.plugin.getLogger().severe(path + " doesn't end with a number. It's not recognized as a tier!");
+            BedWars.plugin.getLogger().severe(path + " doesn't end with a number. It's not recognized as a tier!");
             return;
         }
 
         if (yml.get(path + ConfigPath.SHOP_CONTENT_TIER_SETTINGS_COST) == null) {
-            Main.plugin.getLogger().severe("Cost not set for " + path);
+            BedWars.plugin.getLogger().severe("Cost not set for " + path);
             return;
         }
         price = yml.getInt(path + ConfigPath.SHOP_CONTENT_TIER_SETTINGS_COST);
 
         if (yml.get(path + ConfigPath.SHOP_CONTENT_TIER_SETTINGS_CURRENCY) == null) {
-            Main.plugin.getLogger().severe("Currency not set for " + path);
+            BedWars.plugin.getLogger().severe("Currency not set for " + path);
             return;
         }
 
         if (yml.getString(path + ConfigPath.SHOP_CONTENT_TIER_SETTINGS_CURRENCY).toLowerCase().isEmpty()) {
-            Main.plugin.getLogger().severe("Invalid currency at " + path);
+            BedWars.plugin.getLogger().severe("Invalid currency at " + path);
             return;
         }
 
@@ -62,12 +62,12 @@ public class ContentTier {
                 currency = CategoryContent.getCurrency(yml.getString(path + ConfigPath.SHOP_CONTENT_TIER_SETTINGS_CURRENCY).toLowerCase());
                 break;
             default:
-                Main.plugin.getLogger().severe("Invalid currency at " + path);
+                BedWars.plugin.getLogger().severe("Invalid currency at " + path);
                 currency = Material.IRON_INGOT;
                 break;
         }
 
-        itemStack = Main.nms.createItemStack(yml.getString(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_MATERIAL),
+        itemStack = BedWars.nms.createItemStack(yml.getString(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_MATERIAL),
                 yml.get(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_AMOUNT) == null ? 1 : yml.getInt(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_AMOUNT),
                 (short) (yml.get(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_DATA) == null ? 0 : yml.getInt(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_DATA)));
 

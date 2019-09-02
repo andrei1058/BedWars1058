@@ -1,7 +1,6 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.regular;
 
-import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.BedWars;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.api.command.ParentCommand;
@@ -50,7 +49,7 @@ public class CmdStart extends SubCommand {
         if (a.getStartingTask() == null){
             if (args.length == 1 && args[0].equalsIgnoreCase("debug") && s.isOp()){
                 a.changeStatus(GameState.starting);
-                Main.debug = true;
+                BedWars.debug = true;
             } else {
                 return true;
             }
@@ -67,7 +66,7 @@ public class CmdStart extends SubCommand {
     }
 
     @Override
-    public boolean canSee(CommandSender s, BedWars api) {
+    public boolean canSee(CommandSender s, com.andrei1058.bedwars.api.BedWars api) {
         if (s instanceof ConsoleCommandSender) return false;
 
         Player p = (Player) s;

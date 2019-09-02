@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.configuration;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.upgrades.*;
@@ -18,8 +18,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.andrei1058.bedwars.Main.nms;
-import static com.andrei1058.bedwars.Main.plugin;
+import static com.andrei1058.bedwars.BedWars.nms;
+import static com.andrei1058.bedwars.BedWars.plugin;
 import static com.andrei1058.bedwars.api.language.Language.saveIfNotExists;
 
 @SuppressWarnings("WeakerAccess")
@@ -77,7 +77,7 @@ public class UpgradesManager extends ConfigManager {
 
         /* Maniac Miner Upgrades*/
         yml.addDefault("Default.maniacMiner.slot", 12);
-        yml.addDefault("Default.maniacMiner.tier1.displayItem.material", Main.getForCurrentVersion("GOLD_AXE", "GOLD_AXE", "GOLDEN_AXE"));
+        yml.addDefault("Default.maniacMiner.tier1.displayItem.material", BedWars.getForCurrentVersion("GOLD_AXE", "GOLD_AXE", "GOLDEN_AXE"));
         yml.addDefault("Default.maniacMiner.tier1.displayItem.data", 0);
         yml.addDefault("Default.maniacMiner.tier1.displayItem.amount", 1);
         yml.addDefault("Default.maniacMiner.tier1.displayItem.enchanted", false);

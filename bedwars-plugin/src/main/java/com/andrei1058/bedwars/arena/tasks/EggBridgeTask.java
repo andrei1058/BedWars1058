@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.arena.tasks;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.events.gameplay.EggBridgeBuildEvent;
 import com.andrei1058.bedwars.arena.Arena;
@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.scheduler.BukkitTask;
 
-import static com.andrei1058.bedwars.Main.nms;
+import static com.andrei1058.bedwars.BedWars.nms;
 
 @SuppressWarnings("WeakerAccess")
 public class EggBridgeTask implements Runnable {
@@ -33,7 +33,7 @@ public class EggBridgeTask implements Runnable {
         this.projectile = projectile;
         this.teamColor = teamColor;
         this.player = player;
-        task = Bukkit.getScheduler().runTaskTimer(Main.plugin, this, 0, 1);
+        task = Bukkit.getScheduler().runTaskTimer(BedWars.plugin, this, 0, 1);
     }
 
     public TeamColor getTeamColor() {

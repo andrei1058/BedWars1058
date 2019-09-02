@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.arena;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.generator.GeneratorType;
 import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
@@ -21,7 +21,7 @@ import org.bukkit.util.Vector;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
-import static com.andrei1058.bedwars.Main.*;
+import static com.andrei1058.bedwars.BedWars.*;
 
 @SuppressWarnings("WeakerAccess")
 public class OreGenerator implements IGenerator {
@@ -55,7 +55,7 @@ public class OreGenerator implements IGenerator {
         this.bwt = bwt;
         this.type = type;
         loadDefaults();
-        Main.debug("Initializing new generator at: " + location.toString() + " - " + type + " - " + (bwt == null ? "NOTEAM" : bwt.getName()));
+        BedWars.debug("Initializing new generator at: " + location.toString() + " - " + type + " - " + (bwt == null ? "NOTEAM" : bwt.getName()));
 
         Cuboid c = new Cuboid(location, 1, true);
         c.setMaxY(c.getMaxY() + 5);
@@ -174,7 +174,7 @@ public class OreGenerator implements IGenerator {
     }
 
     public void setOre(ItemStack ore) {
-        Main.debug("Changing ore for generator at " + location.toString() + " from " + this.ore + " to " + ore);
+        BedWars.debug("Changing ore for generator at " + location.toString() + " from " + this.ore + " to " + ore);
         this.ore = ore;
     }
 

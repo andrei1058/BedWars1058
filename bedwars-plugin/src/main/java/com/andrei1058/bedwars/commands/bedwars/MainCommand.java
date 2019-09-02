@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.commands.bedwars;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.SetupSession;
@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.andrei1058.bedwars.Main.*;
+import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class MainCommand extends BukkitCommand implements ParentCommand {
@@ -53,7 +53,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         new CmdStats(this, "stats");
         new CmdStart(this, "forceStart");
         new CmdStart(this, "start");
-        if (Main.getServerType() != ServerType.BUNGEE) {
+        if (BedWars.getServerType() != ServerType.BUNGEE) {
             new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.SetLobby(this, "setLobby"); //priority 1
         }
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.SetupArena(this, "setupArena"); //priority 2
@@ -82,7 +82,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.AddGenerator(this, "addGenerator");
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.SetType(this, "setType");
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.Save(this, "save");
-        if (JoinNPC.isCitizensSupport() && Main.getServerType() != ServerType.BUNGEE) {
+        if (JoinNPC.isCitizensSupport() && BedWars.getServerType() != ServerType.BUNGEE) {
             new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.NPC(this, "npc");
         }
         new CmdTpStaff(this, "tp");
@@ -93,7 +93,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
 
         if (args.length == 0) {
             /* Set op commands*/
-            if ((s.isOp() || s.hasPermission(Main.mainCmd + ".*"))) {
+            if ((s.isOp() || s.hasPermission(BedWars.mainCmd + ".*"))) {
                 if (s instanceof Player) {
                     if (SetupSession.isInSetupSession(((Player) s).getUniqueId())) {
                         Bukkit.dispatchCommand(s, getName() + " cmds");
@@ -159,7 +159,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
     public void sendSubCommands(Player p) {
         for (int i = 0; i <= 20; i++) {
             for (SubCommand sb : getSubCommands()) {
-                if (sb.getPriority() == i && sb.isShow() && sb.canSee(p, Main.getAPI())) {
+                if (sb.getPriority() == i && sb.isShow() && sb.canSee(p, BedWars.getAPI())) {
                     p.spigot().sendMessage(sb.getDisplayInfo());
                 }
             }
@@ -170,12 +170,12 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         if (args.length == 1) {
             List<String> sub = new ArrayList<>();
             for (SubCommand sb : getSubCommands()) {
-                if (sb.canSee(s, Main.getAPI())) sub.add(sb.getSubCommandName());
+                if (sb.canSee(s, BedWars.getAPI())) sub.add(sb.getSubCommandName());
             }
             return sub;
         } else if (args.length == 2) {
             if (hasSubCommand(args[0])) {
-                if (getSubCommand(args[0]).canSee(s, Main.getAPI()))
+                if (getSubCommand(args[0]).canSee(s, BedWars.getAPI()))
                 return getSubCommand(args[0]).getTabComplete();
             }
         }
@@ -200,7 +200,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isLobbySet(Player p) {
-        if (Main.getServerType() == ServerType.BUNGEE) return true;
+        if (BedWars.getServerType() == ServerType.BUNGEE) return true;
         if (config.getLobbyWorldName().isEmpty()) {
             if (p != null) {
                 p.sendMessage("§c▪ §7You have to set the lobby location first!");

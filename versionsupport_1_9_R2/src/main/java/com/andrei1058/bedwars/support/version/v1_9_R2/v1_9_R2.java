@@ -12,7 +12,6 @@ import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.VersionSupport;
 import com.andrei1058.bedwars.support.version.common.VersionCommon;
-import com.andrei1058.bedwars.support.version.v1_9_R2.entities.IGolem;
 import net.minecraft.server.v1_9_R2.*;
 import net.minecraft.server.v1_9_R2.Item;
 import org.bukkit.Location;
@@ -101,7 +100,7 @@ public class v1_9_R2 extends VersionSupport {
     }
 
     public void spawnSilverfish(Location loc, ITeam bedWarsTeam, int speed, int health, int despawn, int damage) {
-        new Despawnable(com.andrei1058.bedwars.support.version.v1_9_R2.entities.Silverfish.spawn(this, loc, bedWarsTeam, speed, health, despawn, damage), bedWarsTeam, despawn,
+        new Despawnable(Silverfish.spawn(this, loc, bedWarsTeam, speed, health, despawn, damage), bedWarsTeam, despawn,
                 Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, PlayerKillEvent.PlayerKillCause.SILVERFISH_FINAL_KILL, PlayerKillEvent.PlayerKillCause.SILVERFISH);
     }
 
@@ -614,12 +613,6 @@ public class v1_9_R2 extends VersionSupport {
     @Override
     public String getLevelName() {
         return ((DedicatedServer) MinecraftServer.getServer()).propertyManager.properties.getProperty("level-name");
-    }
-
-    @Override
-    public void registerVersionListeners() {
-        //todo implementation required
-        //Main.registerEvents(new v1_9_R2_SwapItem(), new DefaultItems_12Minus(), new PlayerDropPickListener());
     }
 
     @Override

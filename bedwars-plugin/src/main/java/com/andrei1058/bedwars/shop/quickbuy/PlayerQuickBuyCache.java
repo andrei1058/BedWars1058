@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.shop.quickbuy;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
@@ -30,10 +30,10 @@ public class PlayerQuickBuyCache {
     public PlayerQuickBuyCache(Player player) {
         if (player == null) return;
         this.player = player;
-        this.emptyItem = Main.nms.createItemStack(Main.shop.getYml().getString(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_MATERIAL),
-                Main.shop.getYml().getInt(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_AMOUNT),
-                (short) Main.shop.getYml().getInt(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_DATA));
-        if (Main.shop.getYml().getBoolean(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_ENCHANTED)) {
+        this.emptyItem = BedWars.nms.createItemStack(BedWars.shop.getYml().getString(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_MATERIAL),
+                BedWars.shop.getYml().getInt(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_AMOUNT),
+                (short) BedWars.shop.getYml().getInt(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_DATA));
+        if (BedWars.shop.getYml().getBoolean(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_ENCHANTED)) {
             this.emptyItem = ShopManager.enchantItem(emptyItem);
         }
         this.emptyItemNamePath = Messages.SHOP_QUICK_EMPTY_NAME;
@@ -94,7 +94,7 @@ public class PlayerQuickBuyCache {
             addQuickElement(new QuickBuyElement(cc.getIdentifier(), slot));
             element = cc.getIdentifier();
         }
-        Main.getRemoteDatabase().setQuickBuySlot(player.getUniqueId(), element, slot);
+        BedWars.getRemoteDatabase().setQuickBuySlot(player.getUniqueId(), element, slot);
     }
 
     private ItemStack getEmptyItem(Player player) {

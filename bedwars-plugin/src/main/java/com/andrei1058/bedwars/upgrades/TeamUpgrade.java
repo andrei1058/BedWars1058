@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.upgrades;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.upgrades.ITeamUpgrade;
 import com.andrei1058.bedwars.api.events.shop.UpgradeBuyEvent;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
@@ -73,7 +73,7 @@ public class TeamUpgrade implements ITeamUpgrade {
         this.name = name;
         this.slot = slot;
         this.tiers = new ArrayList<>(tiers);
-        Main.debug("Loading new TeamUpgrade: " + name);
+        BedWars.debug("Loading new TeamUpgrade: " + name);
     }
 
     public int getSlot() {

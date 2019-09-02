@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.levels.internal;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.events.gameplay.GameEndEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerXpGainEvent;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
@@ -30,9 +30,9 @@ public class LevelListeners implements Listener {
     public void onPlayerJoin(PlayerJoinEvent e) {
         final UUID u = e.getPlayer().getUniqueId();
         PlayerLevel pl = new PlayerLevel(u, 1, 0);
-        Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, () -> {
             //if (PlayerLevel.getLevelByPlayer(e.getPlayer().getUniqueId()) != null) return;
-            Object[] levelData = Main.getRemoteDatabase().getLevelData(u);
+            Object[] levelData = BedWars.getRemoteDatabase().getLevelData(u);
             pl.lazyLoad((Integer)levelData[0], (Integer)levelData[1]);
             //new PlayerLevel(e.getPlayer().getUniqueId(), (Integer)levelData[0], (Integer)levelData[1]);
             //Bukkit.broadcastMessage("LAZY LOAD");
@@ -42,7 +42,7 @@ public class LevelListeners implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
         final UUID u = e.getPlayer().getUniqueId();
-        Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, () -> {
             PlayerLevel pl = PlayerLevel.getLevelByPlayer(u);
             pl.destroy();
         });

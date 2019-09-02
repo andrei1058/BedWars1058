@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.arena;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.arena.tasks.ReJoinTask;
@@ -32,7 +32,7 @@ public class ReJoin {
         this.player = player.getUniqueId();
         this.arena = arena;
         reJoinList.add(this);
-        Main.debug("Created ReJoin for " + player.getName() + " " + player.getUniqueId() + " at " + arena.getWorldName());
+        BedWars.debug("Created ReJoin for " + player.getName() + " " + player.getUniqueId() + " at " + arena.getWorldName());
         storeStatsDiff(arena.getPlayerKills(player, false), arena.getPlayerKills(player, true), arena.getPlayerDeaths(player, false), arena.getPlayerDeaths(player, true), arena.getPlayerBedsDestroyed(player));
         if (bwt.getMembers().isEmpty()) task = new ReJoinTask(arena, bwt);
         this.permanentsAndNonDowngradables.addAll(cachedArmor);
@@ -42,9 +42,9 @@ public class ReJoin {
      * Check if a player has stored data
      */
     public static boolean exists(Player pl) {
-        Main.debug("ReJoin exists check " + pl.getUniqueId());
+        BedWars.debug("ReJoin exists check " + pl.getUniqueId());
         for (ReJoin rj : new ArrayList<>(reJoinList)) {
-            Main.debug("ReJoin exists check list scroll: " + rj.getPl().toString());
+            BedWars.debug("ReJoin exists check list scroll: " + rj.getPl().toString());
             if (rj.getPl().equals(pl.getUniqueId())) {
                 return true;
             }
@@ -56,7 +56,7 @@ public class ReJoin {
      * Get a player ReJoin
      */
     public static ReJoin getPlayer(Player player) {
-        Main.debug("ReJoin getPlayer " + player.getUniqueId());
+        BedWars.debug("ReJoin getPlayer " + player.getUniqueId());
         for (ReJoin rj : new ArrayList<>(reJoinList)) {
             if (rj.getPl().equals(player.getUniqueId())) {
                 return rj;
@@ -69,24 +69,24 @@ public class ReJoin {
      * Check if can reJoin
      */
     public boolean canReJoin() {
-        Main.debug("ReJoin canReJoin  check.");
+        BedWars.debug("ReJoin canReJoin  check.");
         if (arena == null) {
-            Main.debug("ReJoin canReJoin arena is null " + player.toString());
+            BedWars.debug("ReJoin canReJoin arena is null " + player.toString());
             destroy();
             return false;
         }
         if (arena.getStatus() == GameState.restarting) {
-            Main.debug("ReJoin canReJoin status is restarting " + player.toString());
+            BedWars.debug("ReJoin canReJoin status is restarting " + player.toString());
             destroy();
             return false;
         }
         if (bwt == null) {
-            Main.debug("ReJoin canReJoin bwt is null " + player.toString());
+            BedWars.debug("ReJoin canReJoin bwt is null " + player.toString());
             destroy();
             return false;
         }
         if (bwt.isBedDestroyed()) {
-            Main.debug("ReJoin canReJoin bed is destroyed " + player.toString());
+            BedWars.debug("ReJoin canReJoin bed is destroyed " + player.toString());
             destroy();
             return false;
         }
@@ -104,7 +104,7 @@ public class ReJoin {
      * Destroy data and rejoin possibility
      */
     public void destroy() {
-        Main.debug("ReJoin destroy for " + player.toString());
+        BedWars.debug("ReJoin destroy for " + player.toString());
         reJoinList.remove(this);
     }
 

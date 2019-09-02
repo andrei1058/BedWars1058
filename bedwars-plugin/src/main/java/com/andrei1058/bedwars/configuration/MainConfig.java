@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.configuration;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.server.ServerType;
@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Objects;
 
-import static com.andrei1058.bedwars.Main.getForCurrentVersion;
+import static com.andrei1058.bedwars.BedWars.getForCurrentVersion;
 
 public class MainConfig extends ConfigManager {
 
@@ -224,7 +224,7 @@ public class MainConfig extends ConfigManager {
                     if (lang.equalsIgnoreCase(yml.getString("language"))) {
                         whatLang = f.getName().replace("messages_", "").replace(".yml", "");
                     }
-                    new Language(Main.plugin, lang);
+                    new Language(BedWars.plugin, lang);
                 }
             }
         }
@@ -243,7 +243,7 @@ public class MainConfig extends ConfigManager {
         }
         //
 
-        Main.setDebug(yml.getBoolean("debug"));
+        BedWars.setDebug(yml.getBoolean("debug"));
         new ConfigManager(plugin,"bukkit", Bukkit.getWorldContainer().getPath()).set("ticks-per.autosave", -1);
 
         Bukkit.spigot().getConfig().set("commands.send-namespaced", false);
@@ -254,12 +254,12 @@ public class MainConfig extends ConfigManager {
         }
 
         try {
-            Main.setServerType(ServerType.valueOf(yml.getString("serverType").toUpperCase()));
+            BedWars.setServerType(ServerType.valueOf(yml.getString("serverType").toUpperCase()));
         } catch (Exception e){
             set("serverType", "MULTIARENA");
         }
 
-        Main.setLobbyWorld(getLobbyWorldName());
+        BedWars.setLobbyWorld(getLobbyWorldName());
     }
 
     public String getLobbyWorldName() {

@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.arena;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.events.server.SetupSessionCloseEvent;
 import com.andrei1058.bedwars.api.events.server.SetupSessionStartEvent;
 import com.andrei1058.bedwars.api.server.ISetupSession;
@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import static com.andrei1058.bedwars.Main.*;
+import static com.andrei1058.bedwars.BedWars.*;
 
 public class SetupSession implements ISetupSession {
 
@@ -100,8 +100,8 @@ public class SetupSession implements ISetupSession {
      */
     public boolean startSetup() {
         getPlayer().sendMessage("§6 ▪ §7Loading " + getWorldName());
-        cm = new ConfigManager(Main.plugin, getWorldName(), "plugins/" + plugin.getName() + "/Arenas");
-        Main.getAPI().getRestoreAdapter().onSetupSessionStart(this);
+        cm = new ConfigManager(BedWars.plugin, getWorldName(), "plugins/" + plugin.getName() + "/Arenas");
+        BedWars.getAPI().getRestoreAdapter().onSetupSessionStart(this);
         return true;
     }
 
@@ -138,11 +138,11 @@ public class SetupSession implements ISetupSession {
      * End setup session
      */
     public void done() {
-        Main.getAPI().getRestoreAdapter().onSetupSessionClose(this);
+        BedWars.getAPI().getRestoreAdapter().onSetupSessionClose(this);
         getSetupSessions().remove(this);
-        if (Main.getServerType() != ServerType.BUNGEE) getPlayer().teleport(config.getConfigLoc("lobbyLoc"));
+        if (BedWars.getServerType() != ServerType.BUNGEE) getPlayer().teleport(config.getConfigLoc("lobbyLoc"));
         getPlayer().removePotionEffect(PotionEffectType.SPEED);
-        if (Main.getServerType() == ServerType.MULTIARENA) Arena.sendLobbyCommandItems(getPlayer());
+        if (BedWars.getServerType() == ServerType.MULTIARENA) Arena.sendLobbyCommandItems(getPlayer());
         Bukkit.getPluginManager().callEvent(new SetupSessionCloseEvent(this));
     }
 
@@ -195,10 +195,10 @@ public class SetupSession implements ISetupSession {
             player.sendMessage(ChatColor.GREEN + "Hello " + player.getName() + "!");
             player.sendMessage(ChatColor.WHITE + "Please set the waiting spawn.");
             player.sendMessage(ChatColor.WHITE + "It is the place where players will wait the game to start.");
-            player.spigot().sendMessage(Misc.msgHoverClick(ChatColor.BLUE + "     ▪     " + ChatColor.GOLD + "CLICK HERE TO SET THE WAITING LOBBY    " + ChatColor.BLUE + " ▪", ChatColor.LIGHT_PURPLE + "Click to set the waiting spawn.", "/" + Main.mainCmd + " setWaitingSpawn", ClickEvent.Action.RUN_COMMAND));
-            MainCommand.createTC(ChatColor.YELLOW + "Or type: " + ChatColor.GRAY + "/" + Main.mainCmd + " setWaitingSpawn", "/" + Main.mainCmd + " setWaitingSpawn", ChatColor.WHITE + "Set the world spawn lobby.");
+            player.spigot().sendMessage(Misc.msgHoverClick(ChatColor.BLUE + "     ▪     " + ChatColor.GOLD + "CLICK HERE TO SET THE WAITING LOBBY    " + ChatColor.BLUE + " ▪", ChatColor.LIGHT_PURPLE + "Click to set the waiting spawn.", "/" + BedWars.mainCmd + " setWaitingSpawn", ClickEvent.Action.RUN_COMMAND));
+            MainCommand.createTC(ChatColor.YELLOW + "Or type: " + ChatColor.GRAY + "/" + BedWars.mainCmd + " setWaitingSpawn", "/" + BedWars.mainCmd + " setWaitingSpawn", ChatColor.WHITE + "Set the world spawn lobby.");
         } else {
-            Bukkit.dispatchCommand(player, Main.mainCmd + " cmds");
+            Bukkit.dispatchCommand(player, BedWars.mainCmd + " cmds");
         }
 
         World w = Bukkit.getWorld(getWorldName());

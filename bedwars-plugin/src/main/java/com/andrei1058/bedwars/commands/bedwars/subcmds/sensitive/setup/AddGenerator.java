@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static com.andrei1058.bedwars.Main.mainCmd;
+import static com.andrei1058.bedwars.BedWars.mainCmd;
 import static com.andrei1058.bedwars.commands.Misc.createArmorStand;
 import static com.andrei1058.bedwars.commands.Misc.removeArmorStand;
 

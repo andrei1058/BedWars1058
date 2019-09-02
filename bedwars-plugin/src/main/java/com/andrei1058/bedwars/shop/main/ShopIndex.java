@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.shop.main;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.events.shop.ShopOpenEvent;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.shop.ShopCache;
@@ -118,7 +118,7 @@ public class ShopIndex {
      */
     public void addShopCategory(ShopCategory sc) {
         categoryList.add(sc);
-        Main.debug("Adding shop category: " + sc + " at slot " + sc.getSlot());
+        BedWars.debug("Adding shop category: " + sc + " at slot " + sc.getSlot());
     }
 
     /**

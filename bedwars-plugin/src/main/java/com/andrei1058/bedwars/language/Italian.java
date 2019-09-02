@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.language;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
@@ -10,15 +10,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static com.andrei1058.bedwars.Main.mainCmd;
-import static com.andrei1058.bedwars.api.language.Language.addCategoryMessages;
-import static com.andrei1058.bedwars.api.language.Language.addContentMessages;
+import static com.andrei1058.bedwars.BedWars.mainCmd;
 import static com.andrei1058.bedwars.api.language.Messages.*;
 
 public class Italian extends Language {
 
     public Italian() {
-        super(Main.plugin, "it");
+        super(BedWars.plugin, "it");
         YamlConfiguration yml = getYml();
         yml.options().copyDefaults(true);
         yml.options().header("Traduzione in italiano di Fabian03#4583");

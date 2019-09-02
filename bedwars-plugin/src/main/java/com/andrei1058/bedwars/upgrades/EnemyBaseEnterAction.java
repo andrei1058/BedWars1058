@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.upgrades;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 
 public class EnemyBaseEnterAction extends UpgradeAction {
@@ -10,7 +10,7 @@ public class EnemyBaseEnterAction extends UpgradeAction {
 
     public EnemyBaseEnterAction(String name){
         this.name = name;
-        Main.debug("loading new EnemyBaseEnterAction: "+getName());
+        BedWars.debug("loading new EnemyBaseEnterAction: "+getName());
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup;
 
-import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.BedWars;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.api.command.ParentCommand;
@@ -16,7 +15,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.andrei1058.bedwars.Main.mainCmd;
+import static com.andrei1058.bedwars.BedWars.mainCmd;
 
 public class WaitingPos extends SubCommand {
 
@@ -44,17 +43,17 @@ public class WaitingPos extends SubCommand {
                 ss.getConfig().reload();
                 if (ss.getConfig().getYml().get("waiting.Pos1") == null){
                     p.sendMessage("§c ▪ §7Set the remaining position:");
-                    p.spigot().sendMessage(Misc.msgHoverClick("§c ▪ §7/"+Main.mainCmd+" waitingPos 1", "§dSet pos 1", "/"+getParent().getName()+" waitingPos 1", ClickEvent.Action.RUN_COMMAND));
+                    p.spigot().sendMessage(Misc.msgHoverClick("§c ▪ §7/"+ BedWars.mainCmd+" waitingPos 1", "§dSet pos 1", "/"+getParent().getName()+" waitingPos 1", ClickEvent.Action.RUN_COMMAND));
                 } else if (ss.getConfig().getYml().get("waiting.Pos2") == null){
                     p.sendMessage("§c ▪ §7Set the remaining position:");
-                    p.spigot().sendMessage(Misc.msgHoverClick("§c ▪ §7/"+Main.mainCmd+" waitingPos 2", "§dSet pos 2", "/"+getParent().getName()+" waitingPos 2", ClickEvent.Action.RUN_COMMAND));
+                    p.spigot().sendMessage(Misc.msgHoverClick("§c ▪ §7/"+ BedWars.mainCmd+" waitingPos 2", "§dSet pos 2", "/"+getParent().getName()+" waitingPos 2", ClickEvent.Action.RUN_COMMAND));
                 }
             } else {
                 p.sendMessage("§c▪ §7Usage: /" + mainCmd + " "+getSubCommandName()+" 1 or 2");
             }
         }
         if (!((ss.getConfig().getYml().get("waiting.Pos1") == null || ss.getConfig().getYml().get("waiting.Pos2") == null))){
-            Bukkit.dispatchCommand(p, Main.mainCmd+" cmds");
+            Bukkit.dispatchCommand(p, BedWars.mainCmd+" cmds");
             s.sendMessage("§6 ▪ §7Set teams spawn if you didn't!");
         }
         return true;
@@ -66,7 +65,7 @@ public class WaitingPos extends SubCommand {
     }
 
     @Override
-    public boolean canSee(CommandSender s, BedWars api) {
+    public boolean canSee(CommandSender s, com.andrei1058.bedwars.api.BedWars api) {
         if (s instanceof ConsoleCommandSender) return false;
 
         Player p = (Player) s;

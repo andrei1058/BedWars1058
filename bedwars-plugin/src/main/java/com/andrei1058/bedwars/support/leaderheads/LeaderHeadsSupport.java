@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.support.leaderheads;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
@@ -10,7 +10,7 @@ public class LeaderHeadsSupport {
     public static void initLeaderHeads(){
         Plugin leaderheads = Bukkit.getPluginManager().getPlugin("LeaderHeads");
         if(leaderheads != null) {
-            Main.plugin.getLogger().info("Hook into LeaderHeads support!");
+            BedWars.plugin.getLogger().info("Hook into LeaderHeads support!");
             new BedWarsKills();
             new BedWarsFinalKills();
             new BedWarsWins();

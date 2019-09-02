@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.listeners;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.server.ServerType;
@@ -17,7 +17,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import static com.andrei1058.bedwars.Main.*;
+import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class PlayerChat implements Listener {
@@ -39,7 +39,7 @@ public class PlayerChat implements Listener {
         if (p.hasPermission("bw.chatcolor") || p.hasPermission("bw.*") || p.hasPermission("bw.vip")) {
             e.setMessage(ChatColor.translateAlternateColorCodes('&', e.getMessage()));
         }
-        if (p.getWorld().getName().equalsIgnoreCase(Main.getLobbyWorld()) && getServerType() == ServerType.MULTIARENA) {
+        if (p.getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld()) && getServerType() == ServerType.MULTIARENA) {
             if (!config.getBoolean("globalChat")) {
                 e.getRecipients().clear();
                 e.getRecipients().addAll(p.getWorld().getPlayers());
@@ -49,8 +49,8 @@ public class PlayerChat implements Listener {
         } else if (Arena.getArenaByPlayer(p) != null) {
             Arena a = Arena.getArenaByPlayer(p);
             Arena.afkCheck.remove(p.getUniqueId());
-            if (Main.getAPI().getAFKSystem().isPlayerAFK(e.getPlayer())) {
-                Main.getAPI().getAFKSystem().setPlayerAFK(e.getPlayer(), false);
+            if (BedWars.getAPI().getAFKSystem().isPlayerAFK(e.getPlayer())) {
+                BedWars.getAPI().getAFKSystem().setPlayerAFK(e.getPlayer(), false);
             }
             if (a.isSpectator(p)) {
                 if (!config.getBoolean("globalChat")) {

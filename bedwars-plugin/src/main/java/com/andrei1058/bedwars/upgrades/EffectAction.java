@@ -1,10 +1,8 @@
 package com.andrei1058.bedwars.upgrades;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import org.bukkit.potion.PotionEffectType;
-
-import static com.andrei1058.bedwars.Main.plugin;
 
 @SuppressWarnings("WeakerAccess")
 public class EffectAction extends UpgradeAction {
@@ -23,7 +21,7 @@ public class EffectAction extends UpgradeAction {
         } else {
             this.duration = duration;
         }
-        Main.debug("Loading new EffectAction: "+getName());
+        BedWars.debug("Loading new EffectAction: "+getName());
     }
 
     @Override

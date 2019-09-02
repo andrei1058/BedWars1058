@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.stats;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import org.bukkit.Bukkit;
 
 public class StatsManager {
@@ -16,7 +16,7 @@ public class StatsManager {
      * Register listeners related to stats cache.
      */
     private void registerListeners() {
-        Bukkit.getPluginManager().registerEvents(new StatsListener(), Main.plugin);
+        Bukkit.getPluginManager().registerEvents(new StatsListener(), BedWars.plugin);
     }
 
     /**

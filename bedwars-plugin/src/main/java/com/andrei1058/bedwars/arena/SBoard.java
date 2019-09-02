@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.arena;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
@@ -15,7 +15,7 @@ import org.bukkit.scoreboard.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static com.andrei1058.bedwars.Main.*;
+import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.arena.Misc.replaceStatsPlaceholders;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 import static com.andrei1058.bedwars.api.language.Language.getScoreboard;
@@ -57,7 +57,7 @@ public class SBoard {
             this.placeholders.add("{requiredXp}");
         }
         this.setStrings(content);
-        Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+        Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
             if (!p.isOnline()) return;
             p.setScoreboard(sb);
             scoreboards.add(this);
@@ -82,7 +82,7 @@ public class SBoard {
         this.arena = arena;
         dateFormat = new SimpleDateFormat(getMsg(p, Messages.FORMATTING_SCOREBOARD_NEXEVENT_TIMER));
         this.setStrings(getScoreboard(p, "scoreboard." + arena.getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING));
-        Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+        Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
             if (!p.isOnline()) return;
             p.setScoreboard(sb);
             scoreboards.add(this);
@@ -111,11 +111,11 @@ public class SBoard {
             String temp = strings.get(x - 1);
             temp = temp.replace("{generatorUpgrade}", "{nextEvent}")
                     .replace("{generatorTimer}", "{time}");
-            temp = temp.replace("{level}", Main.getLevelSupport().getLevel(p));
-            temp = temp.replace("{progress}", Main.getLevelSupport().getProgressBar(p));
-            temp = temp.replace("{currentXp}", Main.getLevelSupport().getCurrentXpFormatted(p));
-            temp = temp.replace("{requiredXp}", Main.getLevelSupport().getRequiredXpFormatted(p));
-            temp = temp.replace("{server_ip}", Main.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
+            temp = temp.replace("{level}", BedWars.getLevelSupport().getLevel(p));
+            temp = temp.replace("{progress}", BedWars.getLevelSupport().getProgressBar(p));
+            temp = temp.replace("{currentXp}", BedWars.getLevelSupport().getCurrentXpFormatted(p));
+            temp = temp.replace("{requiredXp}", BedWars.getLevelSupport().getRequiredXpFormatted(p));
+            temp = temp.replace("{server_ip}", BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
                     .replace("{version}", plugin.getDescription().getVersion())
                     .replace("{server}", config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_NAME));
             for (String ph : placeholders) {

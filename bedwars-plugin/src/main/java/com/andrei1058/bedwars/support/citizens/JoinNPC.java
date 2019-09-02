@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.support.citizens;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.api.command.SubCommand;
@@ -124,8 +124,8 @@ public class JoinNPC {
      */
     public static void spawnNPCs() {
         if (!isCitizensSupport()) return;
-        if (Main.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE) != null) {
-            for (String s : Main.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE)) {
+        if (BedWars.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE) != null) {
+            for (String s : BedWars.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE)) {
                 String[] data = s.split(",");
                 if (data.length < 10) continue;
                 if (!Misc.isNumber(data[0])) continue;
@@ -144,7 +144,7 @@ public class JoinNPC {
                 int id = Integer.valueOf(data[9]);
                 net.citizensnpcs.api.npc.NPC npc = CitizensAPI.getNPCRegistry().getById(id);
                 if (npc == null) {
-                    Main.plugin.getLogger().severe("Invalid npc id: " + id);
+                    BedWars.plugin.getLogger().severe("Invalid npc id: " + id);
                     continue;
                 }
                 spawnNPC(l, name, group, skin, npc);

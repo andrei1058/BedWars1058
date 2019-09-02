@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.commands.shout;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.api.language.Language;
@@ -41,9 +41,9 @@ public class ShoutCommand extends BukkitCommand {
 
     public static void updateShout(Player player) {
         if (shoutCooldown.containsKey(player.getUniqueId())) {
-            shoutCooldown.replace(player.getUniqueId(), System.currentTimeMillis() + (Main.config.getInt(ConfigPath.GENERAL_CONFIGURATION_SHOUT_COOLDOWN) * 1000));
+            shoutCooldown.replace(player.getUniqueId(), System.currentTimeMillis() + (BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_SHOUT_COOLDOWN) * 1000));
         } else {
-            shoutCooldown.put(player.getUniqueId(), System.currentTimeMillis() + (Main.config.getInt(ConfigPath.GENERAL_CONFIGURATION_SHOUT_COOLDOWN) * 1000));
+            shoutCooldown.put(player.getUniqueId(), System.currentTimeMillis() + (BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_SHOUT_COOLDOWN) * 1000));
         }
     }
 

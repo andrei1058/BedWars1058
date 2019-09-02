@@ -1,7 +1,6 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 
-import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.BedWars;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.api.command.ParentCommand;
@@ -21,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.andrei1058.bedwars.Main.plugin;
+import static com.andrei1058.bedwars.BedWars.plugin;
 
 public class CloneArena extends SubCommand {
     public CloneArena(ParentCommand parent, String name) {
@@ -42,7 +41,7 @@ public class CloneArena extends SubCommand {
             p.sendMessage("§c▪ §7Usage: §o/" + getParent().getName() + " "+getSubCommandName()+" <mapName> <newArena>");
             return true;
         }
-        if (!Main.getAPI().getRestoreAdapter().isWorld(args[0])) {
+        if (!BedWars.getAPI().getRestoreAdapter().isWorld(args[0])) {
             p.sendMessage("§c▪ §7" + args[0] + " doesn't exist!");
             return true;
         }
@@ -51,7 +50,7 @@ public class CloneArena extends SubCommand {
             p.sendMessage("§c▪ §7" + args[0] + " doesn't exist!");
             return true;
         }
-        if (Main.getAPI().getRestoreAdapter().isWorld(args[1]) && yml2.exists()) {
+        if (BedWars.getAPI().getRestoreAdapter().isWorld(args[1]) && yml2.exists()) {
             p.sendMessage("§c▪ §7" + args[1] + " already exist!");
             return true;
         }
@@ -59,7 +58,7 @@ public class CloneArena extends SubCommand {
             p.sendMessage("§c▪ §7Please disable " + args[0] + " first!");
             return true;
         }
-        Main.getAPI().getRestoreAdapter().cloneArena(args[0], args[1]);
+        BedWars.getAPI().getRestoreAdapter().cloneArena(args[0], args[1]);
         if (yml1.exists()) {
             try {
                 FileUtils.copyFile(yml1, yml2, true);
@@ -90,7 +89,7 @@ public class CloneArena extends SubCommand {
     }
 
     @Override
-    public boolean canSee(CommandSender s, BedWars api) {
+    public boolean canSee(CommandSender s, com.andrei1058.bedwars.api.BedWars api) {
         if (s instanceof ConsoleCommandSender) return false;
 
         Player p = (Player) s;

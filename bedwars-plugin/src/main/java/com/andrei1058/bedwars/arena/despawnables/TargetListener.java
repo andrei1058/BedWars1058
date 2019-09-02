@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.arena.despawnables;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.entity.Player;
@@ -24,8 +24,8 @@ public class TargetListener implements Listener {
             e.setCancelled(true);
             return;
         }
-        if (Main.nms.isDespawnable(e.getEntity())){
-            if (arena.getTeam(p) == Main.nms.getDespawnablesList().get(e.getEntity().getUniqueId()).getTeam()){
+        if (BedWars.nms.isDespawnable(e.getEntity())){
+            if (arena.getTeam(p) == BedWars.nms.getDespawnablesList().get(e.getEntity().getUniqueId()).getTeam()){
                 e.setCancelled(true);
             }
         }

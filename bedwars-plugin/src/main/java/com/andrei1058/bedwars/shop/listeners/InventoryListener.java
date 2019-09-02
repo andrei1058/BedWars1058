@@ -18,7 +18,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
-import static com.andrei1058.bedwars.Main.nms;
+import static com.andrei1058.bedwars.BedWars.nms;
 import static org.bukkit.event.inventory.InventoryAction.*;
 
 public class InventoryListener implements Listener {

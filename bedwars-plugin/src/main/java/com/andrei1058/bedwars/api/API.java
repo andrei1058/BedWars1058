@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.api;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
@@ -22,7 +22,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 
-public class API implements BedWars {
+public class API implements com.andrei1058.bedwars.api.BedWars {
 
     private static RestoreAdapter restoreAdapter;
     private AFKUtil afkSystem = new AFKUtil() {
@@ -96,27 +96,27 @@ public class API implements BedWars {
     private Configs configs = new Configs() {
         @Override
         public ConfigManager getMainConfig() {
-            return Main.config;
+            return BedWars.config;
         }
 
         @Override
         public ConfigManager getSignsConfig() {
-            return Main.signs;
+            return BedWars.signs;
         }
 
         @Override
         public ConfigManager getGeneratorsConfig() {
-            return Main.generators;
+            return BedWars.generators;
         }
 
         @Override
         public ConfigManager getShopConfig() {
-            return Main.shop;
+            return BedWars.shop;
         }
 
         @Override
         public ConfigManager getUpgradesConfig() {
-            return Main.upgrades;
+            return BedWars.upgrades;
         }
     };
 
@@ -152,7 +152,7 @@ public class API implements BedWars {
 
     @Override
     public ServerType getServerType() {
-        return Main.getServerType();
+        return BedWars.getServerType();
     }
 
     @Override
@@ -172,20 +172,25 @@ public class API implements BedWars {
         }
         restoreAdapter = adapter;
         if (adapter.getOwner() != null) {
-            if (adapter.getOwner() != Main.plugin) {
-                Main.plugin.getLogger().log(Level.WARNING, adapter.getOwner().getName() + " changed the restore system to its own adapter.");
+            if (adapter.getOwner() != BedWars.plugin) {
+                BedWars.plugin.getLogger().log(Level.WARNING, adapter.getOwner().getName() + " changed the restore system to its own adapter.");
             }
         }
     }
 
     @Override
     public VersionSupport getVersionSupport() {
-        return Main.nms;
+        return BedWars.nms;
     }
 
     @Override
     public Language getDefaultLang() {
         return Language.getDefaultLanguage();
+    }
+
+    @Override
+    public String getLobbyWorld() {
+        return BedWars.getLobbyWorld();
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.arena;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.NextEvent;
@@ -45,7 +45,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
-import static com.andrei1058.bedwars.Main.*;
+import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.arena.upgrades.BaseListener.isOnABase;
 import static com.andrei1058.bedwars.api.language.Language.*;
 
@@ -144,7 +144,7 @@ public class Arena implements Comparable<Arena>, IArena {
         }
         this.worldName = name;
 
-        cm = new ConfigManager(Main.plugin, name, "plugins/" + plugin.getName() + "/Arenas");
+        cm = new ConfigManager(BedWars.plugin, name, "plugins/" + plugin.getName() + "/Arenas");
 
         //if (mapManager.isLevelWorld()) {
         //    Main.plugin.getLogger().severe("COULD NOT LOAD ARENA: " + name);
@@ -174,7 +174,7 @@ public class Arena implements Comparable<Arena>, IArena {
         }
 
 
-        if (!Main.getAPI().getRestoreAdapter().isWorld(name)) {
+        if (!BedWars.getAPI().getRestoreAdapter().isWorld(name)) {
             if (p != null) p.sendMessage(ChatColor.RED + "There isn't any map called " + name);
             plugin.getLogger().log(Level.WARNING, "There isn't any map called " + name);
             return;
@@ -218,7 +218,7 @@ public class Arena implements Comparable<Arena>, IArena {
         enableQueue.add(this);
         plugin.getLogger().info("Arena " + getWorldName() + " was added to the enable queue.");
         if (enableQueue.size() == 1) {
-            Main.getAPI().getRestoreAdapter().onEnable(this);
+            BedWars.getAPI().getRestoreAdapter().onEnable(this);
             plugin.getLogger().info("Loading arena: " + getWorldName());
         }
     }
@@ -231,7 +231,7 @@ public class Arena implements Comparable<Arena>, IArena {
         if (getArenaByName(worldName) != null) return;
         enableQueue.remove(this);
         if (!enableQueue.isEmpty()) {
-            Main.getAPI().getRestoreAdapter().onEnable(enableQueue.get(0));
+            BedWars.getAPI().getRestoreAdapter().onEnable(enableQueue.get(0));
         }
         this.world = world;
         world.getEntities().stream().filter(e -> e.getType() != EntityType.PLAYER)
@@ -252,7 +252,7 @@ public class Arena implements Comparable<Arena>, IArena {
         //Create teams
         for (String team : yml.getConfigurationSection("Team").getKeys(false)) {
             if (getTeam(team) != null) {
-                Main.plugin.getLogger().severe("A team with name: " + team + " was already loaded for arena: " + getWorldName());
+                BedWars.plugin.getLogger().severe("A team with name: " + team + " was already loaded for arena: " + getWorldName());
                 continue;
             }
             BedWarsTeam bwt = new BedWarsTeam(team, TeamColor.valueOf(yml.getString("Team." + team + ".Color").toUpperCase()), cm.getArenaLoc("Team." + team + ".Spawn"),
@@ -413,7 +413,7 @@ public class Arena implements Comparable<Arena>, IArena {
                 if (startingTask != null) {
                     if (Bukkit.getScheduler().isCurrentlyRunning(startingTask.getTask())) {
                         if (startingTask.getCountdown() > getConfig().getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_HALF))
-                            startingTask.setCountdown(Main.config.getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_HALF));
+                            startingTask.setCountdown(BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_HALF));
                     }
                 }
             }
@@ -425,12 +425,12 @@ public class Arena implements Comparable<Arena>, IArena {
             }
             p.teleport(cm.getArenaLoc("waiting.Loc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
             if (getStatus() == GameState.waiting) {
-                Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+                Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
                     if (p.isOnline())
                         new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + ".waiting", Messages.SCOREBOARD_DEFAULT_WAITING), this);
                 }, 15L);
             } else if (getStatus() == GameState.starting) {
-                Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+                Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
                     if (p.isOnline())
                         new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + ".starting", Messages.SCOREBOARD_DEFAULT_STARTING), this);
                 }, 15L);
@@ -453,7 +453,7 @@ public class Arena implements Comparable<Arena>, IArena {
         if (getPlayers().size() == getMaxInTeam() * getTeams().size()) {
             if (startingTask != null) {
                 if (Bukkit.getScheduler().isCurrentlyRunning(startingTask.getTask())) {
-                    startingTask.setCountdown(Main.config.getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_SHORTENED));
+                    startingTask.setCountdown(BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_SHORTENED));
                 }
             }
         }
@@ -638,7 +638,7 @@ public class Arena implements Comparable<Arena>, IArena {
             }
             if (alive_teams == 1) {
                 checkWinner();
-                Bukkit.getScheduler().runTaskLater(Main.plugin, () -> changeStatus(GameState.restarting), 10L);
+                Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> changeStatus(GameState.restarting), 10L);
                 if (team != null) {
                     if (!team.isBedDestroyed()) {
                         for (Player p2 : this.getPlayers()) {
@@ -650,7 +650,7 @@ public class Arena implements Comparable<Arena>, IArena {
                     }
                 }
             } else if (alive_teams == 0) {
-                Bukkit.getScheduler().runTaskLater(Main.plugin, () -> changeStatus(GameState.restarting), 10L);
+                Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> changeStatus(GameState.restarting), 10L);
             } else {
                 //ReJoin feature
                 new ReJoin(p, this, getPlayerTeam(p.getName()), cacheList);
@@ -844,7 +844,7 @@ public class Arena implements Comparable<Arena>, IArena {
         }
         setArenaByPlayer(p);
         /* save player inventory etc */
-        if (Main.getServerType() != ServerType.BUNGEE) {
+        if (BedWars.getServerType() != ServerType.BUNGEE) {
             new PlayerGoods(p, true);
             playerLocation.put(p, p.getLocation());
         }
@@ -863,7 +863,7 @@ public class Arena implements Comparable<Arena>, IArena {
         reJoin.getBwt().reJoin(p);
         reJoin.destroy();
 
-        Bukkit.getScheduler().runTaskLater(Main.plugin, () -> new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING), this), 40L);
+        Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING), this), 40L);
         return true;
     }
 
@@ -880,7 +880,7 @@ public class Arena implements Comparable<Arena>, IArena {
             removeSpectator(p, false);
         }
         destroyData();
-        Main.getAPI().getRestoreAdapter().onDisable(this);
+        BedWars.getAPI().getRestoreAdapter().onDisable(this);
         Bukkit.getPluginManager().callEvent(new ArenaDisableEvent(getWorldName()));
     }
 
@@ -890,7 +890,7 @@ public class Arena implements Comparable<Arena>, IArena {
     public void restart() {
         plugin.getLogger().log(Level.FINE, "Restarting arena: " + getWorldName());
         destroyData();
-        Main.getAPI().getRestoreAdapter().onRestart(this);
+        BedWars.getAPI().getRestoreAdapter().onRestart(this);
         Bukkit.getPluginManager().callEvent(new ArenaRestartEvent(getWorldName()));
     }
 
@@ -1143,7 +1143,7 @@ public class Arena implements Comparable<Arena>, IArena {
                 }
             }
         } else if (status == GameState.playing) {
-            if (Main.getLevelSupport() instanceof InternalLevel) perMinuteTask = new PerMinuteTask(this);
+            if (BedWars.getLevelSupport() instanceof InternalLevel) perMinuteTask = new PerMinuteTask(this);
             playingTask = new GamePlayingTask(this);
             for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
                 if (sb.getArena() == this) {
@@ -1216,7 +1216,7 @@ public class Arena implements Comparable<Arena>, IArena {
         for (BlockState b : getSigns()) {
             Sign s = (Sign) b;
             int line = 0;
-            for (String string : Main.signs.getList("format")) {
+            for (String string : BedWars.signs.getList("format")) {
                 s.setLine(line, string.replace("[on]", String.valueOf(getPlayers().size())).replace("[max]", String.valueOf(getMaxPlayers())).replace("[arena]", getDisplayName())
                         .replace("[status]", getDisplayStatus(Language.getDefaultLanguage())));
                 line++;
@@ -1276,23 +1276,23 @@ public class Arena implements Comparable<Arena>, IArena {
         Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
             for (String item : config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH).getKeys(false)) {
                 if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", item)) == null) {
-                    Main.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", item) + " is not set!");
+                    BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", item) + " is not set!");
                     continue;
                 }
                 if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_DATA.replace("%path%", item)) == null) {
-                    Main.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_DATA.replace("%path%", item) + " is not set!");
+                    BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_DATA.replace("%path%", item) + " is not set!");
                     continue;
                 }
                 if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_SLOT.replace("%path%", item)) == null) {
-                    Main.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_SLOT.replace("%path%", item) + " is not set!");
+                    BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_SLOT.replace("%path%", item) + " is not set!");
                     continue;
                 }
                 if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_ENCHANTED.replace("%path%", item)) == null) {
-                    Main.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_ENCHANTED.replace("%path%", item) + " is not set!");
+                    BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_ENCHANTED.replace("%path%", item) + " is not set!");
                     continue;
                 }
                 if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_COMMAND.replace("%path%", item)) == null) {
-                    Main.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_COMMAND.replace("%path%", item) + " is not set!");
+                    BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_COMMAND.replace("%path%", item) + " is not set!");
                     continue;
                 }
                 ItemStack i = Misc.createItem(Material.valueOf(config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", item))),
@@ -1316,23 +1316,23 @@ public class Arena implements Comparable<Arena>, IArena {
 
         for (String item : config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH).getKeys(false)) {
             if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_MATERIAL.replace("%path%", item)) == null) {
-                Main.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_MATERIAL.replace("%path%", item) + " is not set!");
+                BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_MATERIAL.replace("%path%", item) + " is not set!");
                 continue;
             }
             if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_DATA.replace("%path%", item)) == null) {
-                Main.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_DATA.replace("%path%", item) + " is not set!");
+                BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_DATA.replace("%path%", item) + " is not set!");
                 continue;
             }
             if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_SLOT.replace("%path%", item)) == null) {
-                Main.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_SLOT.replace("%path%", item) + " is not set!");
+                BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_SLOT.replace("%path%", item) + " is not set!");
                 continue;
             }
             if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_ENCHANTED.replace("%path%", item)) == null) {
-                Main.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_ENCHANTED.replace("%path%", item) + " is not set!");
+                BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_ENCHANTED.replace("%path%", item) + " is not set!");
                 continue;
             }
             if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_COMMAND.replace("%path%", item)) == null) {
-                Main.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_COMMAND.replace("%path%", item) + " is not set!");
+                BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_COMMAND.replace("%path%", item) + " is not set!");
                 continue;
             }
             ItemStack i = Misc.createItem(Material.valueOf(config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_MATERIAL.replace("%path%", item))),
@@ -1355,23 +1355,23 @@ public class Arena implements Comparable<Arena>, IArena {
 
         for (String item : config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH).getKeys(false)) {
             if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_MATERIAL.replace("%path%", item)) == null) {
-                Main.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_MATERIAL.replace("%path%", item) + " is not set!");
+                BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_MATERIAL.replace("%path%", item) + " is not set!");
                 continue;
             }
             if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_DATA.replace("%path%", item)) == null) {
-                Main.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_DATA.replace("%path%", item) + " is not set!");
+                BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_DATA.replace("%path%", item) + " is not set!");
                 continue;
             }
             if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_SLOT.replace("%path%", item)) == null) {
-                Main.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_SLOT.replace("%path%", item) + " is not set!");
+                BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_SLOT.replace("%path%", item) + " is not set!");
                 continue;
             }
             if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_ENCHANTED.replace("%path%", item)) == null) {
-                Main.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_ENCHANTED.replace("%path%", item) + " is not set!");
+                BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_ENCHANTED.replace("%path%", item) + " is not set!");
                 continue;
             }
             if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_COMMAND.replace("%path%", item)) == null) {
-                Main.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_COMMAND.replace("%path%", item) + " is not set!");
+                BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_COMMAND.replace("%path%", item) + " is not set!");
                 continue;
             }
             ItemStack i = Misc.createItem(Material.valueOf(config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_MATERIAL.replace("%path%", item))),
@@ -1706,8 +1706,8 @@ public class Arena implements Comparable<Arena>, IArena {
      */
     private void registerSigns() {
         if (getServerType() != ServerType.BUNGEE) {
-            if (Main.signs.getYml().get("locations") != null) {
-                for (String st : Main.signs.getYml().getStringList("locations")) {
+            if (BedWars.signs.getYml().get("locations") != null) {
+                for (String st : BedWars.signs.getYml().getStringList("locations")) {
                     String[] data = st.split(",");
                     if (data[0].equals(getWorld().getName())) {
                         Location l;
@@ -1965,7 +1965,7 @@ public class Arena implements Comparable<Arena>, IArena {
     public static void removeFromEnableQueue(IArena a) {
         enableQueue.remove(a);
         if (!enableQueue.isEmpty()) {
-            Main.getAPI().getRestoreAdapter().onEnable(enableQueue.get(0));
+            BedWars.getAPI().getRestoreAdapter().onEnable(enableQueue.get(0));
             plugin.getLogger().info("Loading arena: " + enableQueue.get(0).getWorldName());
         }
     }

@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.support.papi;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
@@ -30,7 +30,7 @@ public class PAPISupport extends PlaceholderExpansion {
 
     @Override
     public String getVersion() {
-        return Main.plugin.getDescription().getVersion();
+        return BedWars.plugin.getDescription().getVersion();
     }
 
     @Override
@@ -114,22 +114,22 @@ public class PAPISupport extends PlaceholderExpansion {
                 }
                 break;
             case "player_level":
-                replay = Main.getLevelSupport().getLevel(p);
+                replay = BedWars.getLevelSupport().getLevel(p);
                 break;
             case "player_progress":
-                replay = Main.getLevelSupport().getProgressBar(p);
+                replay = BedWars.getLevelSupport().getProgressBar(p);
                 break;
             case "player_xp_formatted":
-                replay = Main.getLevelSupport().getCurrentXpFormatted(p);
+                replay = BedWars.getLevelSupport().getCurrentXpFormatted(p);
                 break;
             case "player_xp":
-                replay = String.valueOf(Main.getLevelSupport().getCurrentXp(p));
+                replay = String.valueOf(BedWars.getLevelSupport().getCurrentXp(p));
                 break;
             case "player_rerq_xp_formatted":
-                replay = Main.getLevelSupport().getRequiredXpFormatted(p);
+                replay = BedWars.getLevelSupport().getRequiredXpFormatted(p);
                 break;
             case "player_rerq_xp":
-                replay = String.valueOf(Main.getLevelSupport().getRequiredXp(p));
+                replay = String.valueOf(BedWars.getLevelSupport().getRequiredXp(p));
                 break;
         }
         return replay;

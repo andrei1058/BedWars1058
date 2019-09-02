@@ -1,28 +1,19 @@
 package com.andrei1058.bedwars.maprestore.internal;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
-import com.andrei1058.bedwars.api.events.server.SetupSessionStartEvent;
 import com.andrei1058.bedwars.api.server.ISetupSession;
 import com.andrei1058.bedwars.api.server.RestoreAdapter;
 import com.andrei1058.bedwars.api.server.ServerType;
-import com.andrei1058.bedwars.api.server.SetupType;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.arena.Misc;
-import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.maprestore.internal.files.FileUtil;
 import com.andrei1058.bedwars.maprestore.internal.files.WorldZipper;
 import com.andrei1058.bedwars.maprestore.internal.files.ZipFileUtil;
-import net.md_5.bungee.api.chat.ClickEvent;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,12 +22,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 
-import static com.andrei1058.bedwars.Main.config;
-import static com.andrei1058.bedwars.Main.plugin;
+import static com.andrei1058.bedwars.BedWars.config;
+import static com.andrei1058.bedwars.BedWars.plugin;
 
 public class InternalAdapter extends RestoreAdapter {
 
-    public static File backupFolder = new File(Main.plugin.getDataFolder() + "/Cache");
+    public static File backupFolder = new File(BedWars.plugin.getDataFolder() + "/Cache");
 
     public InternalAdapter(Plugin plugin) {
         super(plugin);
@@ -47,13 +38,13 @@ public class InternalAdapter extends RestoreAdapter {
         if (a == null) return;
         World world = Bukkit.getWorld(a.getWorldName());
         if (world != null) {
-            if (Main.getServerType() == ServerType.BUNGEE) {
+            if (BedWars.getServerType() == ServerType.BUNGEE) {
                 for (Player p : world.getPlayers()) {
                     p.kickPlayer("The arena you were in was restore. You were kicked out of it. You were not supposed to be there.");
                 }
             } else {
                 for (Player p : world.getPlayers()) {
-                    p.teleport(Bukkit.getWorld(Main.getLobbyWorld()).getSpawnLocation());
+                    p.teleport(Bukkit.getWorld(BedWars.getLobbyWorld()).getSpawnLocation());
                     p.sendMessage(ChatColor.BLUE + "The arena you were in was restored. You were kicked out of it. You were not supposed to be there.");
                 }
             }
@@ -76,15 +67,15 @@ public class InternalAdapter extends RestoreAdapter {
             }
 
             if (Bukkit.getWorlds().get(0).getName().equals(a.getWorldName())) {
-                if (Main.getServerType() != ServerType.BUNGEE) {
-                    Main.plugin.getLogger().log(Level.SEVERE, "You can't use an arena world in server.properties as level-name when running the server in MULTIARENA mode!");
-                    Main.plugin.getLogger().log(Level.SEVERE, a.getWorldName() + " won't load.");
+                if (BedWars.getServerType() != ServerType.BUNGEE) {
+                    BedWars.plugin.getLogger().log(Level.SEVERE, "You can't use an arena world in server.properties as level-name when running the server in MULTIARENA mode!");
+                    BedWars.plugin.getLogger().log(Level.SEVERE, a.getWorldName() + " won't load.");
                     Arena.removeFromEnableQueue(a);
                     return;
                 }
                 try {
-                    Main.plugin.getLogger().severe("For a better performance please do not use arena worlds as level-name in server.properties");
-                    Main.plugin.getLogger().severe("Use a void map instead.");
+                    BedWars.plugin.getLogger().severe("For a better performance please do not use arena worlds as level-name in server.properties");
+                    BedWars.plugin.getLogger().severe("Use a void map instead.");
                     Bukkit.getScheduler().runTask(plugin, () -> {
                         World w = Bukkit.getWorlds().get(0);
                         w.setKeepSpawnInMemory(true);
@@ -94,8 +85,8 @@ public class InternalAdapter extends RestoreAdapter {
                     });
                 } catch (IllegalArgumentException e) {
                     if (e.getMessage().contains("ChunkNibbleArrays should be 2048 bytes")) {
-                        Main.plugin.getLogger().log(Level.SEVERE, "Could not load arena: " + a.getWorldName());
-                        Main.plugin.getLogger().log(Level.SEVERE, "Your world has corrupt chunks!");
+                        BedWars.plugin.getLogger().log(Level.SEVERE, "Could not load arena: " + a.getWorldName());
+                        BedWars.plugin.getLogger().log(Level.SEVERE, "Your world has corrupt chunks!");
                     }
                 }
             } else {
@@ -111,7 +102,7 @@ public class InternalAdapter extends RestoreAdapter {
 
     @Override
     public void onRestart(IArena a) {
-        if (Main.getServerType() == ServerType.BUNGEE) {
+        if (BedWars.getServerType() == ServerType.BUNGEE) {
             Arena.setGamesBeforeRestart(Arena.getGamesBeforeRestart() - 1);
             if (Arena.getGamesBeforeRestart() == 0) {
                 Bukkit.getLogger().info("Dispatching command: " + config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
@@ -168,7 +159,7 @@ public class InternalAdapter extends RestoreAdapter {
         Location loc1 = a.getConfig().getArenaLoc(ConfigPath.ARENA_WAITING_POS1),
                 loc2 = a.getConfig().getArenaLoc(ConfigPath.ARENA_WAITING_POS2);
         if (loc1 == null || loc2 == null) return;
-        Bukkit.getScheduler().runTask(Main.plugin, () -> {
+        Bukkit.getScheduler().runTask(BedWars.plugin, () -> {
             int minX, minY, minZ;
             int maxX, maxY, maxZ;
             minX = Math.min(loc1.getBlockX(), loc2.getBlockX());
@@ -255,11 +246,11 @@ public class InternalAdapter extends RestoreAdapter {
             for (File file : files) {
                 if (!file.getName().equals(file.getName().toLowerCase())) {
                     //level-name will not be renamed
-                    if (Main.nms.getLevelName().equals(file.getName().replace(".yml", ""))) continue;
+                    if (BedWars.nms.getLevelName().equals(file.getName().replace(".yml", ""))) continue;
                     newName = new File(dir.getPath() + "/" + file.getName().toLowerCase());
                     if (!file.renameTo(newName)) {
                         toRemove.add(file);
-                        Main.plugin.getLogger().severe("Could not rename " + file.getName() + " to " + file.getName().toLowerCase() + "! Please do it manually!");
+                        BedWars.plugin.getLogger().severe("Could not rename " + file.getName() + " to " + file.getName().toLowerCase() + "! Please do it manually!");
                     } else {
                         toAdd.add(newName);
                         toRemove.add(file);
@@ -268,7 +259,7 @@ public class InternalAdapter extends RestoreAdapter {
                     if (folder.exists()) {
                         if (!folder.getName().equals(folder.getName().toLowerCase())) {
                             if (!folder.renameTo(new File(plugin.getServer().getWorldContainer().getPath() + "/" + folder.getName().toLowerCase()))) {
-                                Main.plugin.getLogger().severe("Could not rename " + folder.getName() + " folder to " + folder.getName().toLowerCase() + "! Please do it manually!");
+                                BedWars.plugin.getLogger().severe("Could not rename " + folder.getName() + " folder to " + folder.getName().toLowerCase() + "! Please do it manually!");
                                 toRemove.add(file);
                                 return;
                             }

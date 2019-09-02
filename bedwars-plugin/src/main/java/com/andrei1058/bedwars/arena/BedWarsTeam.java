@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.arena;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.generator.GeneratorType;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import static com.andrei1058.bedwars.Main.*;
+import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 @SuppressWarnings("WeakerAccess")
@@ -211,12 +211,12 @@ public class BedWarsTeam implements ITeam {
                     i.setItemMeta(im);
                     i = nms.addCustomData(i, "DEFAULT_ITEM");
 
-                    if (Main.nms.isSword(i)) {
+                    if (BedWars.nms.isSword(i)) {
                         boolean hasSword = false;
                         for (ItemStack item : p.getInventory().getContents()) {
                             if (item == null) continue;
                             if (item.getType() == Material.AIR) continue;
-                            if (Main.nms.isSword(item)) {
+                            if (BedWars.nms.isSword(item)) {
                                 hasSword = true;
                                 break;
                             }
@@ -224,12 +224,12 @@ public class BedWarsTeam implements ITeam {
                         if (!hasSword) {
                             p.getInventory().addItem(i);
                         }
-                    } else if (Main.nms.isBow(i)) {
+                    } else if (BedWars.nms.isBow(i)) {
                         boolean hasBow = false;
                         for (ItemStack item : p.getInventory().getContents()) {
                             if (item == null) continue;
                             if (item.getType() == Material.AIR) continue;
-                            if (Main.nms.isBow(item)) {
+                            if (BedWars.nms.isBow(item)) {
                                 hasBow = true;
                                 break;
                             }
@@ -288,7 +288,7 @@ public class BedWarsTeam implements ITeam {
 
                     i = nms.addCustomData(i, "DEFAULT_ITEM");
 
-                    if (Main.nms.isSword(i)) {
+                    if (BedWars.nms.isSword(i)) {
                         p.getInventory().addItem(i);
                         break;
                     }
@@ -400,7 +400,7 @@ public class BedWarsTeam implements ITeam {
             // #274
             if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS)) {
                 for (Player on : getArena().getShowTime().keySet()) {
-                    Main.nms.hideArmor(on, p);
+                    BedWars.nms.hideArmor(on, p);
                 }
             }
             //
@@ -410,7 +410,7 @@ public class BedWarsTeam implements ITeam {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 // #274
                 for (Player on : getArena().getShowTime().keySet()) {
-                    Main.nms.hideArmor(on, p);
+                    BedWars.nms.hideArmor(on, p);
                 }
                 //
             }, 40L);
@@ -599,14 +599,14 @@ public class BedWarsTeam implements ITeam {
 
         // #274
         if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS)) {
-            Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
                 for (Player m : getMembers()) {
                     if (m.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
                         for (Player p : getArena().getPlayers()) {
-                            Main.nms.hideArmor(m, p);
+                            BedWars.nms.hideArmor(m, p);
                         }
                         for (Player p : getArena().getSpectators()) {
-                            Main.nms.hideArmor(m, p);
+                            BedWars.nms.hideArmor(m, p);
                         }
                     }
                 }
@@ -744,7 +744,7 @@ public class BedWarsTeam implements ITeam {
         this.bedDestroyed = bedDestroyed;
         if (!bedDestroyed) {
             if (!getBed().getBlock().getType().toString().contains("BED")) {
-                Main.plugin.getLogger().severe("Bed not set for team: " + getName() + " in arena: " + getArena().getWorldName());
+                BedWars.plugin.getLogger().severe("Bed not set for team: " + getName() + " in arena: " + getArena().getWorldName());
                 return;
             }
             nms.colorBed(this);

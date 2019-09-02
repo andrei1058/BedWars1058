@@ -2,7 +2,7 @@ package com.andrei1058.bedwars.maprestore.internal.files;
 
 import java.io.File;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.maprestore.internal.InternalAdapter;
@@ -21,23 +21,23 @@ public class WorldRestorer {
     }
 
     public void execute() {
-        Main.debug("Reloading arenaworld " + worldName + " : Reloading world ...");
+        BedWars.debug("Reloading arenaworld " + worldName + " : Reloading world ...");
         if (arena != null) {
             reloadWorld();
-            Main.debug("Reloading arenaworld " + worldName + " : Done !");
+            BedWars.debug("Reloading arenaworld " + worldName + " : Done !");
         }
     }
 
     private void reloadWorld() {
-        Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+        Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
             if (Bukkit.getWorlds().get(0).getName().equals(worldName)) {
-                if (Main.getServerType() != ServerType.BUNGEE) {
-                    Main.plugin.getLogger().severe("You can't use an arena as level-name in MULTIARENA mode!");
+                if (BedWars.getServerType() != ServerType.BUNGEE) {
+                    BedWars.plugin.getLogger().severe("You can't use an arena as level-name in MULTIARENA mode!");
                     return;
                 }
                 try {
-                    Main.plugin.getLogger().severe("For a better performance please do not use arena worlds as level-name in server.properties");
-                    Main.plugin.getLogger().severe("Please use a void map instead.");
+                    BedWars.plugin.getLogger().severe("For a better performance please do not use arena worlds as level-name in server.properties");
+                    BedWars.plugin.getLogger().severe("Please use a void map instead.");
                     World w = Bukkit.getWorlds().get(0);
                     w.setKeepSpawnInMemory(true);
                     w.setAutoSave(false);
@@ -45,8 +45,8 @@ public class WorldRestorer {
                     arena.init(w);
                 } catch (IllegalArgumentException e) {
                     if (e.getMessage().contains("ChunkNibbleArrays should be 2048 bytes")) {
-                        Main.plugin.getLogger().severe("Could not load arena: " + worldName);
-                        Main.plugin.getLogger().severe("Your world has corrupt chunks!");
+                        BedWars.plugin.getLogger().severe("Could not load arena: " + worldName);
+                        BedWars.plugin.getLogger().severe("Your world has corrupt chunks!");
                     }
                 }
             } else {
@@ -57,8 +57,8 @@ public class WorldRestorer {
                     arena.init(w);
                 } catch (IllegalArgumentException e) {
                     if (e.getMessage().contains("ChunkNibbleArrays should be 2048 bytes")) {
-                        Main.plugin.getLogger().severe("Could not load arena: " + worldName);
-                        Main.plugin.getLogger().severe("Your world has corrupt chunks!");
+                        BedWars.plugin.getLogger().severe("Could not load arena: " + worldName);
+                        BedWars.plugin.getLogger().severe("Your world has corrupt chunks!");
                     }
                 }
             }

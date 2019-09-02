@@ -229,4 +229,9 @@ public interface BedWars {
      * Get server default language.
      */
     Language getDefaultLang();
+
+    /**
+     * Get lobby world name.
+     */
+    String getLobbyWorld();
 }

@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.listeners.blockstatus;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.server.ArenaEnableEvent;
 import com.andrei1058.bedwars.api.events.gameplay.GameStateChangeEvent;
@@ -45,8 +45,8 @@ public class BlockStatusListener implements Listener {
                     data = ConfigPath.SIGNS_STATUS_BLOCK_PLAYING_DATA;
                     break;
             }
-            Main.nms.setJoinSignBackground(s, Material.valueOf(Main.signs.getString(path)));
-            Main.nms.setJoinSignBackgroundBlockData(s, (byte) Main.signs.getInt(data));
+            BedWars.nms.setJoinSignBackground(s, Material.valueOf(BedWars.signs.getString(path)));
+            BedWars.nms.setJoinSignBackgroundBlockData(s, (byte) BedWars.signs.getInt(data));
         }
     }
 }

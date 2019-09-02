@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.shop.main;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.shop.ICategoryContent;
 import com.andrei1058.bedwars.api.events.shop.ShopBuyEvent;
 import com.andrei1058.bedwars.arena.Arena;
@@ -21,7 +21,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.andrei1058.bedwars.Main.nms;
+import static com.andrei1058.bedwars.BedWars.nms;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 @SuppressWarnings("WeakerAccess")
@@ -41,27 +41,27 @@ public class CategoryContent implements ICategoryContent {
      * Load a new category
      */
     public CategoryContent(String path, String name, String categoryName, YamlConfiguration yml, ShopCategory father) {
-        Main.debug("Loading CategoryContent " + path);
+        BedWars.debug("Loading CategoryContent " + path);
         this.contentName = name;
         this.father = father;
 
         if (yml.get(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_CONTENT_SLOT) == null) {
-            Main.plugin.getLogger().severe("Content slot not set at " + path);
+            BedWars.plugin.getLogger().severe("Content slot not set at " + path);
             return;
         }
 
         if (yml.get(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_CONTENT_TIERS) == null) {
-            Main.plugin.getLogger().severe("No tiers set for " + path);
+            BedWars.plugin.getLogger().severe("No tiers set for " + path);
             return;
         }
 
         if (yml.getConfigurationSection(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_CONTENT_TIERS).getKeys(false).isEmpty()) {
-            Main.plugin.getLogger().severe("No tiers set for " + path);
+            BedWars.plugin.getLogger().severe("No tiers set for " + path);
             return;
         }
 
         if (yml.get(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_CONTENT_TIERS + ".tier1") == null) {
-            Main.plugin.getLogger().severe("tier1 not found for " + path);
+            BedWars.plugin.getLogger().severe("tier1 not found for " + path);
             return;
         }
 
@@ -259,7 +259,7 @@ public class CategoryContent implements ICategoryContent {
      */
     public static int calculateMoney(Player player, Material currency) {
         if (currency == Material.AIR) {
-            return (int) Main.getEconomy().getMoney(player);
+            return (int) BedWars.getEconomy().getMoney(player);
         }
 
         int amount = 0;
@@ -376,11 +376,11 @@ public class CategoryContent implements ICategoryContent {
      */
     public static void takeMoney(Player player, Material currency, int amount) {
         if (currency == Material.AIR) {
-            if (!Main.getEconomy().isEconomy()) {
+            if (!BedWars.getEconomy().isEconomy()) {
                 player.sendMessage("§4§lERROR: This requires Vault Support! Please install Vault plugin!");
                 return;
             }
-            Main.getEconomy().buyAction(player, amount);
+            BedWars.getEconomy().buyAction(player, amount);
             return;
         }
 

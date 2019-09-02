@@ -1,8 +1,7 @@
 package com.andrei1058.bedwars.lobbysocket;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
-import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 
 import java.io.IOException;
@@ -38,7 +37,7 @@ public class ArenaSocket {
                     sockets.put(lobby, rl);
                     rl.sendMessage(formatMessage(serverIdentifier, a.getDisplayName(), a.getStatus().toString(), a.getPlayers().size(), a.getMaxPlayers(), a.getGroup(), a.getMaxInTeam()));
                 } catch (IOException e) {
-                    Main.debug("Could not send data to lobby: " + lobby);
+                    BedWars.debug("Could not send data to lobby: " + lobby);
                 }
             }
         }

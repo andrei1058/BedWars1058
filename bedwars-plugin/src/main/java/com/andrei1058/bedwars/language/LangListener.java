@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.language;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.events.player.PlayerLangChangeEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
@@ -14,7 +14,7 @@ public class LangListener implements Listener {
 
     @EventHandler
     public void onLanguageChangeEvent(PlayerLangChangeEvent e){
-        if (Main.config.getLobbyWorldName().equalsIgnoreCase(e.getPlayer().getWorld().getName())){
+        if (BedWars.config.getLobbyWorldName().equalsIgnoreCase(e.getPlayer().getWorld().getName())){
             Arena.sendLobbyCommandItems(e.getPlayer());
             for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
                 if (sb.getP().getUniqueId().equals(e.getPlayer().getUniqueId())) {

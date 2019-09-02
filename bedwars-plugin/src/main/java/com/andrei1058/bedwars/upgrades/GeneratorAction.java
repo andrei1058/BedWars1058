@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.upgrades;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.generator.GeneratorType;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.OreGenerator;
@@ -69,7 +69,7 @@ public class GeneratorAction extends UpgradeAction {
                 emeraldAmount = amount;
                 break;
         }
-        Main.debug("loading new GeneratorAction: "+getName());
+        BedWars.debug("loading new GeneratorAction: "+getName());
     }
 
     public void setLimit(String generator, int amount){

@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.levels.internal;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.events.player.PlayerLevelUpEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerXpGainEvent;
 import com.andrei1058.bedwars.arena.SBoard;
@@ -69,7 +69,7 @@ public class PlayerLevel {
         this.currentXp = currentXp;
         updateProgressBar();
 
-        Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+        Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
             for (SBoard sb : SBoard.getScoreboards()) {
                 if (sb.getP().getUniqueId().equals(uuid)) {
                     sb.refresh();
@@ -225,7 +225,7 @@ public class PlayerLevel {
      */
     public void destroy() {
         levelByPlayer.remove(uuid);
-        Main.getRemoteDatabase().setLevelData(uuid, level, currentXp, LevelsConfig.levels.getYml().get("levels." + level + ".name") == null ?
+        BedWars.getRemoteDatabase().setLevelData(uuid, level, currentXp, LevelsConfig.levels.getYml().get("levels." + level + ".name") == null ?
                 LevelsConfig.levels.getYml().getString("levels.others.name") : LevelsConfig.levels.getYml().getString("levels." + level + ".name"), nextLevelCost);
     }
 }

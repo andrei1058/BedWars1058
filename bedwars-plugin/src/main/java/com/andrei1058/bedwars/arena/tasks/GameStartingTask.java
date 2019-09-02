@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.arena.tasks;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.NextEvent;
 import com.andrei1058.bedwars.api.arena.generator.GeneratorType;
@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.andrei1058.bedwars.Main.getParty;
-import static com.andrei1058.bedwars.Main.nms;
+import static com.andrei1058.bedwars.BedWars.getParty;
+import static com.andrei1058.bedwars.BedWars.nms;
 import static com.andrei1058.bedwars.api.language.Language.getList;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
@@ -32,8 +32,8 @@ public class GameStartingTask implements Runnable {
 
     public GameStartingTask(Arena arena) {
         this.arena = arena;
-        countdown = Main.config.getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_REGULAR);
-        task = Bukkit.getScheduler().runTaskTimer(Main.plugin, this, 0, 20L);
+        countdown = BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_REGULAR);
+        task = Bukkit.getScheduler().runTaskTimer(BedWars.plugin, this, 0, 20L);
     }
 
 
@@ -137,7 +137,7 @@ public class GameStartingTask implements Runnable {
                 }
             }
 
-            Bukkit.getScheduler().runTaskLater(Main.plugin, ()-> {
+            Bukkit.getScheduler().runTaskLater(BedWars.plugin, ()-> {
                 //Add heart on players head
                 for (SBoard sb : SBoard.getScoreboards()) {
                     sb.addHealthIcon();
@@ -150,7 +150,7 @@ public class GameStartingTask implements Runnable {
             }, 60L);
 
             //Lobby removal
-            Main.getAPI().getRestoreAdapter().onLobbyRemoval(arena);
+            BedWars.getAPI().getRestoreAdapter().onLobbyRemoval(arena);
 
             //Spawn players
             spawnPlayers();

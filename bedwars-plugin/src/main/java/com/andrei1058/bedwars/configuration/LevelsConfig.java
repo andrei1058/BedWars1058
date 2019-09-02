@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.configuration;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 
 public class LevelsConfig extends ConfigManager {
@@ -8,7 +8,7 @@ public class LevelsConfig extends ConfigManager {
     public static LevelsConfig levels;
 
     private LevelsConfig() {
-        super(Main.plugin,"levels", Main.plugin.getDataFolder().toString());
+        super(BedWars.plugin,"levels", BedWars.plugin.getDataFolder().toString());
     }
 
     /**

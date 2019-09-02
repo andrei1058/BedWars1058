@@ -1,7 +1,6 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup;
 
-import com.andrei1058.bedwars.Main;
-import com.andrei1058.bedwars.api.BedWars;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.server.SetupType;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.api.command.ParentCommand;
@@ -34,9 +33,9 @@ public class SetWaitingSpawn extends SubCommand {
         p.sendMessage("§6 ▪ §7Waiting spawn set for §e"+ss.getWorldName()+"§7!");
         ss.getConfig().saveArenaLoc("waiting.Loc", p.getLocation());
         if (ss.getSetupType() == SetupType.ASSISTED){
-            Bukkit.dispatchCommand(s, Main.mainCmd+" autocreateteams");
+            Bukkit.dispatchCommand(s, BedWars.mainCmd+" autocreateteams");
         } else {
-            Bukkit.dispatchCommand(s, Main.mainCmd);
+            Bukkit.dispatchCommand(s, BedWars.mainCmd);
         }
         return true;
     }
@@ -47,7 +46,7 @@ public class SetWaitingSpawn extends SubCommand {
     }
 
     @Override
-    public boolean canSee(CommandSender s, BedWars api) {
+    public boolean canSee(CommandSender s, com.andrei1058.bedwars.api.BedWars api) {
         if (s instanceof ConsoleCommandSender) return false;
 
         Player p = (Player) s;

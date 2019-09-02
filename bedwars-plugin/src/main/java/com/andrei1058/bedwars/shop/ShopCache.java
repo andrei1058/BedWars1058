@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.shop;
 
-import com.andrei1058.bedwars.Main;
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.shop.main.CategoryContent;
 import com.andrei1058.bedwars.shop.main.ShopCategory;
@@ -67,7 +67,7 @@ public class ShopCache {
      * Used to give items on player respawn
      */
     public void managePermanentsAndDowngradables(Arena arena) {
-        Main.debug("Restore permanents on death for: " + player);
+        BedWars.debug("Restore permanents on death for: " + player);
         for (CachedItem ci : cachedItems) {
             ci.manageDeath(arena);
         }
@@ -84,7 +84,7 @@ public class ShopCache {
         public CachedItem(CategoryContent cc) {
             this.cc = cc;
             cachedItems.add(this);
-            Main.debug("New Cached item " + cc.getIdentifier() + " for player " + player);
+            BedWars.debug("New Cached item " + cc.getIdentifier() + " for player " + player);
         }
 
         public int getTier() {
@@ -102,7 +102,7 @@ public class ShopCache {
         public void manageDeath(Arena arena) {
             if (!cc.isPermanent()) return;
             if (cc.isDowngradable() && tier > 1) tier--;
-            Main.debug("ShopCache Item Restore: " + cc.getIdentifier() + " for " + player);
+            BedWars.debug("ShopCache Item Restore: " + cc.getIdentifier() + " for " + player);
             //noinspection ConstantConditions
             cc.giveItems(Bukkit.getPlayer(player), getShopCache(player), arena);
         }
@@ -113,7 +113,7 @@ public class ShopCache {
             for (ItemStack i : p.getInventory().getContents()) {
                 if (i == null) continue;
                 if (i.getType() == Material.AIR) continue;
-                if (Main.nms.getShopUpgradeIdentifier(i).equals(cc.getIdentifier())) {
+                if (BedWars.nms.getShopUpgradeIdentifier(i).equals(cc.getIdentifier())) {
                     p.getInventory().remove(i);
                 }
             }
@@ -168,7 +168,7 @@ public class ShopCache {
             ci.updateItem(slot, Bukkit.getPlayer(player));
         } else {
             if (cc.getContentTiers().size() > ci.getTier()) {
-                Main.debug("Cached item upgrade for " + cc.getIdentifier() + " player " + player);
+                BedWars.debug("Cached item upgrade for " + cc.getIdentifier() + " player " + player);
                 ci.upgrade(slot);
             }
         }
