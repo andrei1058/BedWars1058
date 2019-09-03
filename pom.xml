@@ -70,14 +70,14 @@
     </modules>
 
     <distributionManagement>
-        <snapshotRepository>
-            <id>nexus-snapshots</id>
-            <url>http://ci.andrei1058.com:8081/content/repositories/snapshots/</url>
-        </snapshotRepository>
         <repository>
-            <id>nexus-releases</id>
-            <url>http://ci.andrei1058.com:8081/content/repositories/releases/</url>
+            <id>gitlab-maven</id>
+            <url>https://gitlab.com/api/v4/projects/4800570/packages/maven</url>
         </repository>
+        <snapshotRepository>
+            <id>gitlab-maven</id>
+            <url>https://gitlab.com/api/v4/projects/4800570/packages/maven</url>
+        </snapshotRepository>
     </distributionManagement>
     
 </project>
