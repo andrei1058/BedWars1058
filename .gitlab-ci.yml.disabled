@@ -1,0 +1,8 @@
+image: "maven:latest"
+
+maven-job:
+  script: mvn clean install
+  artifacts:
+    paths:
+      - bedwars-plugin/target/bedwars-*.jar
+    expire_in: 1 days
