@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.support.version.common;
 
 import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.server.VersionSupport;
+import com.andrei1058.bedwars.listeners.Interact_1_13Plus;
 import com.andrei1058.bedwars.listeners.ItemDropPickListener;
 import com.andrei1058.bedwars.listeners.SwapItem;
 import com.andrei1058.bedwars.shop.defaultrestore.ShopItemRestoreListener;
@@ -28,7 +29,7 @@ public class VersionCommon {
 
         // 13 and newer
         if (versionSupport.getVersion() > 5){
-            registerListeners(versionSupport.getPlugin(), new ShopItemRestoreListener.EntityDrop());
+            registerListeners(versionSupport.getPlugin(), new ShopItemRestoreListener.EntityDrop(), new Interact_1_13Plus());
         }
 
         // 1.12 and newer

@@ -70,6 +70,8 @@
         <module>versionsupport_1_10_R1</module>
         <module>versionsupport_1_11_R1</module>
         <module>versionsupport_1_12_R1</module>
+        <module>versionsupport_1_13_R2</module>
+        <module>versionsupport_1_14_R1</module>
         <module>versionsupport_common</module>
     </modules>
 
