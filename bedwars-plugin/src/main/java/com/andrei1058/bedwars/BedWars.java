@@ -115,7 +115,7 @@ public class BedWars extends JavaPlugin {
 
         try {
             //noinspection unchecked
-            nms = (VersionSupport) supp.getConstructor(String.class).newInstance(version);
+            nms = (VersionSupport) supp.getConstructor(Plugin, String.class).newInstance(this, version);
         } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
             serverSoftwareSupport = false;
