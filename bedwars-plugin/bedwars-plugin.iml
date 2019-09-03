@@ -47,8 +47,7 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.citizensnpcs:citizens-v1_12_R1:2.0.25-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.citizensnpcs:citizens-v1_13_R2:2.0.25-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.citizensnpcs:citizens-v1_14_R1:2.0.25-SNAPSHOT" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: net.milkbowl.vault:VaultAPI:1.7" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.bukkit:bukkit:1.13.1-R0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: net.milkbowl.vault:Vault:1.7.3" level="project" />
     <orderEntry type="module" module-name="bedwars-api" />
     <orderEntry type="module" module-name="versionsupport_1_8_R3" />
     <orderEntry type="module" module-name="versionsupport_1_9_R2" />
@@ -64,7 +63,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.persistence:persistence-api:1.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.yaml:snakeyaml:1.15" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: me.clip:placeholderapi:2.10.3" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: me.robin:leaderheads:old" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.md-5:bungeecord-chat:1.8-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: commons-io:commons-io:2.5" level="project" />
   </component>

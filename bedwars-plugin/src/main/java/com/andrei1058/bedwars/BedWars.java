@@ -32,7 +32,6 @@ import com.andrei1058.bedwars.stats.StatsManager;
 import com.andrei1058.bedwars.support.bStats;
 import com.andrei1058.bedwars.support.citizens.CitizensListener;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
-import com.andrei1058.bedwars.support.leaderheads.LeaderHeadsSupport;
 import com.andrei1058.bedwars.support.papi.PAPISupport;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.support.party.NoParty;
