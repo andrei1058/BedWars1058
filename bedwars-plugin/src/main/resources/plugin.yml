@@ -4,5 +4,5 @@ version: 0.14beta-pre4
 author: andrei1058
 description: BedWars minigame by andrei1058
 main: com.andrei1058.bedwars.Main
-softdepend: [Vault,PlaceholderAPI,Citizens,LeaderHeads,Parties,SlimeWorldManager]
+softdepend: [Vault,PlaceholderAPI,Citizens,Parties,SlimeWorldManager]
 load: STARTUP
