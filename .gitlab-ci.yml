@@ -1,8 +1,8 @@
 image: "maven:latest"
 
 maven_build:
-  script: mvn verify
+  script: mvn clean install
   artifacts:
     paths:
-      - /bedwars-api/target
+      - bedwars-api/target
     expire_in: 1 days
