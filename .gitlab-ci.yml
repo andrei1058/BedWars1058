@@ -1,2 +1,5 @@
+script:
+  - $MAVEN_HOME/bin/mvn clean
+
 maven_build:
   script: mvn verify
