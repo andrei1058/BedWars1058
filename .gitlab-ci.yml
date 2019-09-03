@@ -7,7 +7,7 @@ image: "maven:latest"
 
 maven-job:
   script:
-    - 'mvn clean deploy'
+    - 'mvn clean deploy -s ci_settings.xml'
   artifacts:
     paths:
       - bedwars-plugin/target/bedwars-*.jar
