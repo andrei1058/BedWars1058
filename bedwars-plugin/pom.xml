@@ -21,12 +21,12 @@
             <url>https://repo.codemc.org/repository/maven-public/</url>
         </repository>
         <repository>
-            <id>nexus-snapshots</id>
-            <url>http://ci.andrei1058.com:8081/content/repositories/thirdparty/</url>
-        </repository>
-        <repository>
             <id>placeholderapi</id>
             <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        </repository>
+        <repository>
+            <id>vault-repo</id>
+            <url>http://nexus.hc.to/content/repositories/pub_releases</url>
         </repository>
     </repositories>
 
@@ -47,7 +47,7 @@
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>VaultAPI</artifactId>
-            <version>1.7.2</version>
+            <version>1.7</version>
             <type>jar</type>
             <scope>provided</scope>
         </dependency>
