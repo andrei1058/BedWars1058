@@ -12,3 +12,5 @@ maven-job:
     paths:
       - bedwars-plugin/target/bedwars-*.jar
     expire_in: 1 days
+  only:
+      - api-remake
