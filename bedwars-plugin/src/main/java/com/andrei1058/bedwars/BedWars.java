@@ -374,9 +374,6 @@ public class BedWars extends JavaPlugin {
         /* Load sounds configuration */
         new Sounds();
 
-        /* LeaderHeads Support */
-        Bukkit.getScheduler().runTaskLater(this, LeaderHeadsSupport::initLeaderHeads, 40L);
-
         /* Initialize shop */
         shop = new ShopManager();
 
