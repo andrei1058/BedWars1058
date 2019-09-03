@@ -1,0 +1,2 @@
+maven_build:
+  script: mvn verify
