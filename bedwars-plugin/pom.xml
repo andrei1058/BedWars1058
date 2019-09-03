@@ -89,13 +89,6 @@
             <type>jar</type>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>me.robin</groupId>
-            <artifactId>leaderheads</artifactId>
-            <version>old</version>
-            <type>jar</type>
-            <scope>provided</scope>
-        </dependency>
     </dependencies>
 
     <build>
