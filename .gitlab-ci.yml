@@ -1,15 +1,16 @@
 image: "maven:latest"
 
-build:api:
+build-api:
   script: mvn clean install
   artifacts:
     paths:
       - bedwars-api/target/*.jar
     expire_in: 1 days
 
-build:plugin:
+build-plugin:
+  stage: build
   artifacts:
     paths:
       - bedwars-plugin/target/bedwars-*.jar
     expire_in: 1 days
-  extends: buid:api
+  extends: build-api
