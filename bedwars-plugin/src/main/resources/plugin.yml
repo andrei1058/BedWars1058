@@ -1,6 +1,6 @@
 name: BedWars1058
 api-version: '1.13'
-version: 0.14beta-${env.buildNumber}-${env.CI_COMMIT_TAG}
+version: 0.14beta-${env.buildNumber}-${env.CI_COMMIT_TAG}-$CI_PIPELINE_ID-${buildNumber}
 author: andrei1058
 description: BedWars minigame by andrei1058
 main: com.andrei1058.bedwars.BedWars
