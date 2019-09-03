@@ -7,7 +7,7 @@ image: "maven:latest"
 
 maven-job:
   script:
-    - 'mvn -DbuildNumber=$CI_PIPELINE_ID -DbuildID=$CI_COMMIT_TAG clean deploy -s ci_settings.xml'
+    - 'mvn -DbuildNumber=$CI_PIPELINE_ID'
   artifacts:
     paths:
       - bedwars-plugin/target/bedwars-*.jar
