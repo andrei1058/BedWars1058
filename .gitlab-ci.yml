@@ -7,7 +7,6 @@ image: "maven:latest"
 
 maven-job:
   script:
-    - 'cp ./ci_settings.xml /root/.m2/settings.xml'
     - 'mvn clean deploy'
   artifacts:
     paths:
