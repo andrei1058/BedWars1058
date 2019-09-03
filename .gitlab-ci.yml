@@ -1,0 +1,4 @@
+image: "maven:latest"
+
+maven_build:
+  script: mvn verify
