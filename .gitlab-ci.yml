@@ -1,5 +1,4 @@
-script:
-  - $MAVEN_HOME/bin/mvn clean
+image: "maven:latest"
 
 maven_build:
   script: mvn verify
