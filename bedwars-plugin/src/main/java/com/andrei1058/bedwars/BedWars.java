@@ -115,8 +115,8 @@ public class BedWars extends JavaPlugin {
 
         try {
             //noinspection unchecked
-            nms = (VersionSupport) supp.getConstructor(Plugin, String.class).newInstance(this, version);
-        } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            nms = (VersionSupport) supp.getConstructor(Class.forName("org.bukkit.plugin.Plugin"), String.class).newInstance(this, version);
+        } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | ClassNotFoundException e) {
             e.printStackTrace();
             serverSoftwareSupport = false;
             this.getLogger().severe("Could not load support for server version: " + version);
