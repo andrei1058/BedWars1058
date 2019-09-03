@@ -25,6 +25,10 @@
             <id>bungeecord-repo</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
+        <repository>
+            <id>gitlab-maven</id>
+            <url>https://gitlab.com/api/v4/groups/4800570/-/packages/maven</url>
+        </repository>
     </repositories>
 
     <dependencies>
