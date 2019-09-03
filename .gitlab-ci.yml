@@ -1,14 +1,13 @@
 variables:
   MAVEN_OPTS: "-Dhttps.protocols=TLSv1.2 -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN -Dorg.slf4j.simpleLogger.showDateTime=true -Djava.awt.headless=true"
   MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
-  MVN_BUILD_NUMBER: "$CI_JOB_ID"
 
 
 image: "maven:latest"
 
 maven-job:
   script:
-    - 'mvn clean deploy -s ci_settings.xml'
+    - 'mvn -DbuildNumber=$CI_COMMIT_TAG clean deploy -s ci_settings.xml'
   artifacts:
     paths:
       - bedwars-plugin/target/bedwars-*.jar
