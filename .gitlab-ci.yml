@@ -2,3 +2,7 @@ image: "maven:latest"
 
 maven_build:
   script: mvn verify
+  artifacts:
+    paths:
+      - /bedwars-api/target
+    expire_in: 1 days
