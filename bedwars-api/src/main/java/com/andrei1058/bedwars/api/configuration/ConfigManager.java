@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-@SuppressWarnings("WeakerAccess")
 public class ConfigManager {
 
     private YamlConfiguration yml;
@@ -29,7 +28,7 @@ public class ConfigManager {
     public ConfigManager(Plugin plugin, String name, String dir) {
         File d = new File(dir);
         if (!d.exists()) {
-            if (!d.mkdir()) {
+            if (!d.mkdirs()) {
                 plugin.getLogger().log(Level.SEVERE, "Could not create " + d.getPath());
                 return;
             }
@@ -38,7 +37,7 @@ public class ConfigManager {
         config = new File(dir, name + ".yml");
         if (!config.exists()) {
             firstTime = true;
-            plugin.getLogger().info("Creating " + config.getPath());
+            plugin.getLogger().log(Level.INFO, "Creating " + config.getPath());
             try {
                 if (!config.createNewFile()) {
                     plugin.getLogger().log(Level.SEVERE, "Could not create " + config.getPath());

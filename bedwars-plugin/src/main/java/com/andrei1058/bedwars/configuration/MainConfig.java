@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Objects;
 
 import static com.andrei1058.bedwars.BedWars.getForCurrentVersion;
 
@@ -216,14 +215,17 @@ public class MainConfig extends ConfigManager {
 
         //set default server language
         String whatLang = "en";
-        for (File f : Objects.requireNonNull(new File("plugins/" + plugin.getDescription().getName() + "/Languages").listFiles())) {
-            if (f.isFile()) {
-                if (f.getName().contains("messages_") && f.getName().contains(".yml")) {
-                    String lang = f.getName().replace("messages_", "").replace(".yml", "");
-                    if (lang.equalsIgnoreCase(yml.getString("language"))) {
-                        whatLang = f.getName().replace("messages_", "").replace(".yml", "");
+        File[] langs = new File("plugins/" + plugin.getDescription().getName() + "/Languages").listFiles();
+        if (langs != null) {
+            for (File f : langs) {
+                if (f.isFile()) {
+                    if (f.getName().contains("messages_") && f.getName().contains(".yml")) {
+                        String lang = f.getName().replace("messages_", "").replace(".yml", "");
+                        if (lang.equalsIgnoreCase(yml.getString("language"))) {
+                            whatLang = f.getName().replace("messages_", "").replace(".yml", "");
+                        }
+                        if (Language.getLang(lang) == null)new Language(BedWars.plugin, lang);
                     }
-                    new Language(BedWars.plugin, lang);
                 }
             }
         }
@@ -272,6 +274,7 @@ public class MainConfig extends ConfigManager {
      * Add Multi Arena Lobby Command Item To 
      * This won't create the item back if you delete it.
      */
+    @SuppressWarnings("WeakerAccess")
     public void saveLobbyCommandItem(String name, String cmd, boolean enchanted, String material, int data, int slot) {
         if (isFirstTime()) {
             getYml().addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_COMMAND.replace("%path%", name), cmd);
@@ -289,6 +292,7 @@ public class MainConfig extends ConfigManager {
      * Add Pre Game Command Item To 
      * This won't create the item back if you delete it.
      */
+    @SuppressWarnings("WeakerAccess")
     public void savePreGameCommandItem(String name, String cmd, boolean enchanted, String material, int data, int slot) {
         if (isFirstTime()) {
             getYml().addDefault(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_COMMAND.replace("%path%", name), cmd);
@@ -305,6 +309,7 @@ public class MainConfig extends ConfigManager {
      * Add Spectator Command Item To 
      * This won't create the item back if you delete it.
      */
+    @SuppressWarnings("WeakerAccess")
     public void saveSpectatorCommandItem(String name, String cmd, boolean enchanted, String material, int data, int slot) {
         if (isFirstTime()) {
             getYml().addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_COMMAND.replace("%path%", name), cmd);

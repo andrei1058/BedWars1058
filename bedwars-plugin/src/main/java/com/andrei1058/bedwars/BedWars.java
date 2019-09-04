@@ -125,8 +125,6 @@ public class BedWars extends JavaPlugin {
 
         this.getLogger().info("Loading support for paper/spigot: " + version);
 
-        config = new MainConfig(this, "config", "plugins/" + this.getName());
-
         // Setup languages
         new English();
         new Romanian();
@@ -134,6 +132,8 @@ public class BedWars extends JavaPlugin {
         new Polish();
         new Spanish();
         new Russian();
+
+        config = new MainConfig(this, "config", "plugins/" + this.getName());
 
         generators = new GeneratorsConfig(this, "generators", "plugins/" + this.getName());
         upgrades = new UpgradesManager("upgrades", "plugins/" + this.getName());
@@ -194,7 +194,7 @@ public class BedWars extends JavaPlugin {
 
         /* Check if lobby location is set. Required for non Bungee servers */
         if (config.getLobbyWorldName().isEmpty() && serverType != ServerType.BUNGEE) {
-            plugin.getLogger().severe("Lobby location is not set!");
+            plugin.getLogger().log(java.util.logging.Level.WARNING, "Lobby location is not set!");
         }
 
         /* Load lobby world if not main level
@@ -376,7 +376,7 @@ public class BedWars extends JavaPlugin {
         /* Initialize shop */
         shop = new ShopManager();
 
-        //Leave this code at the end of the enableRotation method
+        //Leave this code at the end of the enable method
         for (Language l : Language.getLanguages()) {
             l.setupUnSetCategories();
             Language.addDefaultMessagesCommandItems(l);
