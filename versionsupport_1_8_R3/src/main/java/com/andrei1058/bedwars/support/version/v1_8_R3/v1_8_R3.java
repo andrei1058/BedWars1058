@@ -11,6 +11,7 @@ import com.andrei1058.bedwars.api.exceptions.InvalidSoundException;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.VersionSupport;
+import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import net.minecraft.server.v1_8_R3.*;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Location;
@@ -626,5 +627,10 @@ public class v1_8_R3 extends VersionSupport {
     @Override
     public int getVersion() {
         return 0;
+    }
+
+    @Override
+    public void registerVersionListeners() {
+        new VersionCommon(this);
     }
 }

@@ -56,7 +56,6 @@ public class v1_9_R2 extends VersionSupport {
         } catch (InvalidSoundException | InvalidEffectException e) {
             e.printStackTrace();
         }
-        new VersionCommon(this);
     }
 
     @Override
@@ -618,6 +617,11 @@ public class v1_9_R2 extends VersionSupport {
     @Override
     public int getVersion() {
         return 2;
+    }
+
+    @Override
+    public void registerVersionListeners() {
+        new VersionCommon(this);
     }
 
     @Override

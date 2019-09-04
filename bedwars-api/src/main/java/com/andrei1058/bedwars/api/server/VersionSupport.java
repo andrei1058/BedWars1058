@@ -40,7 +40,7 @@ public abstract class VersionSupport {
         this.plugin = plugin;
     }
 
-    protected void loadDefaultSounds(){
+    protected void loadDefaultSounds() {
         try {
             setBedDestroySound("ENTITY_ENDER_DRAGON_GROWL");
             setPlayerKillsSound("ENTITY_WOLF_HURT");
@@ -493,4 +493,6 @@ public abstract class VersionSupport {
     public Plugin getPlugin() {
         return plugin;
     }
+
+    public abstract void registerVersionListeners();
 }

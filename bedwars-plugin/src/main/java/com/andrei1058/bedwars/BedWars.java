@@ -41,6 +41,7 @@ import com.andrei1058.bedwars.support.vault.*;
 import com.andrei1058.bedwars.arena.tasks.OneTick;
 import com.andrei1058.bedwars.arena.tasks.Refresh;
 import com.andrei1058.bedwars.api.server.VersionSupport;
+import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import org.bukkit.Bukkit;
 import org.bukkit.WorldCreator;
 import org.bukkit.entity.Entity;
@@ -153,6 +154,8 @@ public class BedWars extends JavaPlugin {
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
+
+        nms.registerVersionListeners();
 
         // Load SlimeWorldManager support
         if (Bukkit.getPluginManager().getPlugin("SlimeWorldManager") != null) {
@@ -456,7 +459,6 @@ public class BedWars extends JavaPlugin {
         }
     }
 
-    //todo sa fie din interfata version support
     public static String getForCurrentVersion(String v18, String v12, String v13) {
         switch (getServerVersion()) {
             case "v1_8_R3":

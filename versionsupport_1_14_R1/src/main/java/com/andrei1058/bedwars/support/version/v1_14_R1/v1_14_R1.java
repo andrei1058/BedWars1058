@@ -48,6 +48,10 @@ public class v1_14_R1 extends VersionSupport {
     public v1_14_R1(Plugin plugin, String name) {
         super(plugin, name);
         loadDefaultSounds();
+    }
+
+    @Override
+    public void registerVersionListeners() {
         new VersionCommon(this);
     }
 

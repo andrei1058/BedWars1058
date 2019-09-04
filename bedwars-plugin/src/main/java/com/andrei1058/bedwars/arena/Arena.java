@@ -672,7 +672,11 @@ public class Arena implements Comparable<Arena>, IArena {
             Misc.moveToLobbyOrKick(p);
             return;
         } else {
-            p.teleport(config.getConfigLoc("lobbyLoc"));
+            if (BedWars.getLobbyWorld().isEmpty()) {
+                plugin.getLogger().log(Level.SEVERE, "Could not remove player from arena because the lobby location was not set!");
+            } else {
+                p.teleport(config.getConfigLoc("lobbyLoc"));
+            }
         }
         playerLocation.remove(p);
 

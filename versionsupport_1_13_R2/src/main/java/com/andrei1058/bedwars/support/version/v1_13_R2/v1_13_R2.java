@@ -9,6 +9,7 @@ import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.VersionSupport;
+import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import com.google.common.collect.Sets;
 import com.mojang.datafixers.types.Type;
 import net.minecraft.server.v1_13_R2.*;
@@ -47,6 +48,11 @@ public class v1_13_R2 extends VersionSupport {
     public v1_13_R2(Plugin plugin, String name){
         super(plugin, name);
         loadDefaultSounds();
+    }
+
+    @Override
+    public void registerVersionListeners() {
+        new VersionCommon(this);
     }
 
     @Override
