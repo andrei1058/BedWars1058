@@ -239,7 +239,6 @@ public class Arena implements Comparable<Arena>, IArena {
             if (rule.length == 2) world.setGameRuleValue(rule[0], rule[1]);
         }
         world.setAutoSave(false);
-        world.
         //todo change item merge radius
 
         /* Clear setup armor-stands */
