@@ -93,7 +93,7 @@ public class SlimeAdapter extends RestoreAdapter {
         if (api.getServerType() == ServerType.BUNGEE) {
             api.getArenaUtil().setGamesBeforeRestart(api.getArenaUtil().getGamesBeforeRestart() - 1);
             if (api.getArenaUtil().getGamesBeforeRestart() == 0) {
-                Bukkit.getLogger().info("Dispatching command: " + api.getConfigs().getMainConfig().getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
+                getOwner().getLogger().info("Dispatching command: " + api.getConfigs().getMainConfig().getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), api.getConfigs().getMainConfig().getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
             } else {
                 if (api.getArenaUtil().getGamesBeforeRestart() != -1) {
@@ -235,16 +235,16 @@ public class SlimeAdapter extends RestoreAdapter {
                             if (ff.exists()) {
                                 if (fl.getName().equals(fl.getName().toLowerCase())) {
                                     if (!fl.renameTo(new File(dir, fl.getName().toLowerCase()))) {
-                                        Bukkit.getLogger().log(Level.WARNING, "Could not rename " + fl.getName() + ".yml to " + fl.getName().toLowerCase() + ".yml");
+                                        getOwner().getLogger().log(Level.WARNING, "Could not rename " + fl.getName() + ".yml to " + fl.getName().toLowerCase() + ".yml");
                                     }
                                 }
                                 try {
                                     if (!sl.worldExists(ff.getName().toLowerCase())) {
                                         try {
-                                            Bukkit.getLogger().log(Level.INFO, "Converting " + ff.getName() + " to the Slime format.");
+                                            getOwner().getLogger().log(Level.INFO, "Converting " + ff.getName() + " to the Slime format.");
                                             slime.importWorld(ff, ff.getName().toLowerCase(), sl);
                                         } catch (WorldAlreadyExistsException | InvalidWorldException | WorldLoadedException | WorldTooBigException | IOException e) {
-                                            Bukkit.getLogger().log(Level.WARNING, "Could not convert " + ff.getName() + " to the Slime format.");
+                                            getOwner().getLogger().log(Level.WARNING, "Could not convert " + ff.getName() + " to the Slime format.");
                                             e.printStackTrace();
                                         }
                                     }

@@ -106,7 +106,7 @@ public class InternalAdapter extends RestoreAdapter {
         if (BedWars.getServerType() == ServerType.BUNGEE) {
             Arena.setGamesBeforeRestart(Arena.getGamesBeforeRestart() - 1);
             if (Arena.getGamesBeforeRestart() == 0) {
-                Bukkit.getLogger().info("Dispatching command: " + config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
+                plugin.getLogger().info("Dispatching command: " + config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
             } else {
                 if (Arena.getGamesBeforeRestart() != -1) {
@@ -140,8 +140,8 @@ public class InternalAdapter extends RestoreAdapter {
                     return;
                 }
             } else {
-                Bukkit.getLogger().log(Level.WARNING, "Could not delete uid.dat from " + s.getWorldName());
-                Bukkit.getLogger().log(Level.WARNING, "Please delete it manually and try again.");
+                plugin.getLogger().log(Level.WARNING, "Could not delete uid.dat from " + s.getWorldName());
+                plugin.getLogger().log(Level.WARNING, "Please delete it manually and try again.");
                 return;
             }
         }
@@ -200,7 +200,7 @@ public class InternalAdapter extends RestoreAdapter {
             try {
                 FileUtils.copyDirectory(new File(Bukkit.getWorldContainer(), name1), new File(Bukkit.getWorldContainer(), name2));
                 if (!new File(new File(Bukkit.getWorldContainer(), name2).getPath() + "/uid.dat").delete()) {
-                    Bukkit.getLogger().log(Level.WARNING, "Could not delete uid.dat from " + name2 + ". Please do it manually.");
+                    plugin.getLogger().log(Level.WARNING, "Could not delete uid.dat from " + name2 + ". Please do it manually.");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
