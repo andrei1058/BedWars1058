@@ -68,14 +68,15 @@ public class InternalAdapter extends RestoreAdapter {
 
             if (Bukkit.getWorlds().get(0).getName().equals(a.getWorldName())) {
                 if (BedWars.getServerType() != ServerType.BUNGEE) {
-                    BedWars.plugin.getLogger().log(Level.SEVERE, "You can't use an arena world in server.properties as level-name when running the server in MULTIARENA mode!");
-                    BedWars.plugin.getLogger().log(Level.SEVERE, a.getWorldName() + " won't load.");
+                    BedWars.plugin.getLogger().log(Level.SEVERE, "You can't use an arena world in server.properties as level-name when running the server in " + BedWars.getServerType().toString() + " mode!");
+                    BedWars.plugin.getLogger().log(Level.SEVERE, a.getWorldName() + " will not be loaded.");
                     Arena.removeFromEnableQueue(a);
                     return;
                 }
                 try {
-                    BedWars.plugin.getLogger().severe("For a better performance please do not use arena worlds as level-name in server.properties");
-                    BedWars.plugin.getLogger().severe("Use a void map instead.");
+                    BedWars.plugin.getLogger().log(Level.WARNING, "For a better performance please do not use arena worlds as level-name in server.properties");
+                    BedWars.plugin.getLogger().log(Level.WARNING, "Use a void map instead and never touch it. Minecraft requires a main level that can't be restored without restarting the server.");
+                    BedWars.plugin.getLogger().log(Level.WARNING, "Your server will be restarted after each game.");
                     Bukkit.getScheduler().runTask(plugin, () -> {
                         World w = Bukkit.getWorlds().get(0);
                         w.setKeepSpawnInMemory(true);
