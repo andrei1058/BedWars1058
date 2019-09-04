@@ -41,13 +41,14 @@ public class SlimeAdapter extends RestoreAdapter {
             if (Bukkit.getWorlds().get(0).getName().equals(a.getWorldName())) {
                 if (api.getServerType() != ServerType.BUNGEE) {
                     getOwner().getLogger().log(Level.SEVERE, "You can't use an arena world in server.properties as level-name when running the server in " + api.getServerType().toString() + " mode!");
-                    getOwner().getLogger().log(Level.SEVERE, a.getWorldName() + " won't be loaded.");
+                    getOwner().getLogger().log(Level.SEVERE, a.getWorldName() + " will not be loaded.");
                     api.getArenaUtil().removeFromEnableQueue(a);
                     return;
                 }
                 try {
                     getOwner().getLogger().severe("For a better performance please do not use arena worlds as level-name in server.properties");
-                    getOwner().getLogger().severe("Use a void map instead and never touch it. Just use it because Minecraft requires a main level that can't be restored without restarting the server.");
+                    getOwner().getLogger().severe("Use a void map instead and never touch it. Minecraft requires a main level that can't be restored without restarting the server.");
+                    getOwner().getLogger().log(Level.WARNING, "Your server will be restarted after each game.");
                     Bukkit.getScheduler().runTask(getOwner(), () -> {
                         World w = Bukkit.getWorlds().get(0);
                         w.setKeepSpawnInMemory(true);
