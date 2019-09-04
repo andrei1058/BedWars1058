@@ -13,6 +13,7 @@ import com.grinderwolf.swm.api.world.SlimeWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
@@ -35,14 +36,35 @@ public class SlimeAdapter extends RestoreAdapter {
 
     @Override
     public void onEnable(IArena a) {
-        if (Bukkit.getWorld(a.getWorldName()) != null) {
-            a.init(Bukkit.getWorld(a.getWorldName()));
-            return;
-        }
 
         Bukkit.getScheduler().runTaskAsynchronously(getOwner(), () -> {
-            SlimeLoader flat = slime.getLoader("file");
+            if (Bukkit.getWorlds().get(0).getName().equals(a.getWorldName())) {
+                if (api.getServerType() != ServerType.BUNGEE) {
+                    getOwner().getLogger().log(Level.SEVERE, "You can't use an arena world in server.properties as level-name when running the server in " + api.getServerType().toString() + " mode!");
+                    getOwner().getLogger().log(Level.SEVERE, a.getWorldName() + " won't be loaded.");
+                    api.getArenaUtil().removeFromEnableQueue(a);
+                    return;
+                }
+                try {
+                    getOwner().getLogger().severe("For a better performance please do not use arena worlds as level-name in server.properties");
+                    getOwner().getLogger().severe("Use a void map instead and never touch it. Just use it because Minecraft requires a main level that can't be restored without restarting the server.");
+                    Bukkit.getScheduler().runTask(getOwner(), () -> {
+                        World w = Bukkit.getWorlds().get(0);
+                        w.setKeepSpawnInMemory(true);
+                        w.setAutoSave(false);
+                        api.getArenaUtil().setGamesBeforeRestart(1);
+                        a.init(w);
+                    });
+                } catch (IllegalArgumentException e) {
+                    if (e.getMessage().contains("ChunkNibbleArrays should be 2048 bytes")) {
+                        getOwner().getLogger().log(Level.SEVERE, "Could not load arena: " + a.getWorldName());
+                        getOwner().getLogger().log(Level.SEVERE, "Your world has corrupt chunks!");
+                    }
+                }
+                return;
+            }
 
+            SlimeLoader flat = slime.getLoader("file");
             String[] spawn = a.getConfig().getString("waiting.Loc").split(",");
             SlimeWorld.SlimeProperties props = SlimeWorld.SlimeProperties.builder().difficulty(1).allowAnimals(false).allowMonsters(false).spawnX(Double.parseDouble(spawn[0]))
                     .spawnY(Double.parseDouble(spawn[1])).spawnZ(Double.parseDouble(spawn[2])).pvp(true).readOnly(true).build();
