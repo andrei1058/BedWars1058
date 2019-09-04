@@ -18,6 +18,8 @@ As I usually do, the upgrade from older versions is done automatically by me, I 
 - fixed issue where beds doesn't get colored with the team color
 - added config option to disable plugin packets (you can find then under the performance category)
 - added default game rules per arena in config
+- restart time was shortened
+- default world restore was improved. Should fix freezes.
 
 For developers:
 
