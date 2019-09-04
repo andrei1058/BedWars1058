@@ -670,7 +670,8 @@ public class Arena implements Comparable<Arena>, IArena {
             return;
         } else {
             if (BedWars.getLobbyWorld().isEmpty()) {
-                plugin.getLogger().log(Level.SEVERE, "Could not remove player from arena because the lobby location was not set!");
+                p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+                plugin.getLogger().log(Level.SEVERE, p.getName() + " was teleported to the main world because lobby location is not set!");
             } else {
                 p.teleport(config.getConfigLoc("lobbyLoc"));
             }
@@ -755,7 +756,12 @@ public class Arena implements Comparable<Arena>, IArena {
         if (getServerType() == ServerType.SHARED) {
             p.teleport(playerLocation.get(p));
         } else if (getServerType() == ServerType.MULTIARENA) {
-            p.teleport(config.getConfigLoc("lobbyLoc"));
+            if (BedWars.getLobbyWorld().isEmpty()) {
+                p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+                plugin.getLogger().log(Level.SEVERE, p.getName() + " was teleported to the main world because lobby location is not set!");
+            } else {
+                p.teleport(config.getConfigLoc("lobbyLoc"));
+            }
         }
         if (getServerType() == ServerType.BUNGEE) {
             Misc.moveToLobbyOrKick(p);
