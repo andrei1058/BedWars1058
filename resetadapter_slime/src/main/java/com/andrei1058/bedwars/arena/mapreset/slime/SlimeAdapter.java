@@ -38,7 +38,6 @@ public class SlimeAdapter extends RestoreAdapter {
 
     @Override
     public void onEnable(IArena a) {
-
         Bukkit.getScheduler().runTaskAsynchronously(getOwner(), () -> {
             if (Bukkit.getWorlds().get(0).getName().equals(a.getWorldName())) {
                 if (api.getServerType() != ServerType.BUNGEE) {
@@ -101,18 +100,22 @@ public class SlimeAdapter extends RestoreAdapter {
                 if (api.getArenaUtil().getGamesBeforeRestart() != -1) {
                     api.getArenaUtil().setGamesBeforeRestart(api.getArenaUtil().getGamesBeforeRestart() - 1);
                 }
-                Bukkit.unloadWorld(a.getWorldName(), false);
-                Bukkit.getScheduler().runTaskLater(getOwner(), () -> api.getArenaUtil().loadArena(a.getWorldName(), null), 80L);
+                Bukkit.getScheduler().runTask(getOwner(), () -> {
+                    Bukkit.unloadWorld(a.getWorldName(), false);
+                    Bukkit.getScheduler().runTaskLater(getOwner(), () -> api.getArenaUtil().loadArena(a.getWorldName(), null), 80L);
+                });
             }
         } else {
-            Bukkit.unloadWorld(a.getWorldName(), false);
-            Bukkit.getScheduler().runTaskLater(getOwner(), () -> api.getArenaUtil().loadArena(a.getWorldName(), null), 80L);
+            Bukkit.getScheduler().runTask(getOwner(), () -> {
+                Bukkit.unloadWorld(a.getWorldName(), false);
+                Bukkit.getScheduler().runTaskLater(getOwner(), () -> api.getArenaUtil().loadArena(a.getWorldName(), null), 80L);
+            });
         }
     }
 
     @Override
     public void onDisable(IArena a) {
-        Bukkit.unloadWorld(a.getWorldName(), false);
+        Bukkit.getScheduler().runTask(getOwner(), () -> Bukkit.unloadWorld(a.getWorldName(), false));
     }
 
     @Override

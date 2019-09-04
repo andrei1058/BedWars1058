@@ -36,94 +36,98 @@ public class InternalAdapter extends RestoreAdapter {
     @Override
     public void onEnable(IArena a) {
         if (a == null) return;
-        World world = Bukkit.getWorld(a.getWorldName());
-        if (world != null) {
-            if (BedWars.getServerType() == ServerType.BUNGEE) {
-                for (Player p : world.getPlayers()) {
-                    p.kickPlayer("The arena you were in was restore. You were kicked out of it. You were not supposed to be there.");
-                }
-            } else {
-                for (Player p : world.getPlayers()) {
-                    p.teleport(Bukkit.getWorld(BedWars.getLobbyWorld()).getSpawnLocation());
-                    p.sendMessage(ChatColor.BLUE + "The arena you were in was restored. You were kicked out of it. You were not supposed to be there.");
-                }
-            }
-            Bukkit.unloadWorld(a.getWorldName(), false);
-        }
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            File bf = new File(backupFolder, a.getWorldName() + ".zip"), af = new File(Bukkit.getWorldContainer(), a.getWorldName());
-            if (bf.exists()) {
-                FileUtil.delete(af);
-            }
-
-            if (!bf.exists()) {
-                new WorldZipper(a.getWorldName(), true);
-            } else {
-                try {
-                    ZipFileUtil.unzipFileIntoDirectory(bf, new File(Bukkit.getWorldContainer(), a.getWorldName()));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            if (Bukkit.getWorlds().get(0).getName().equals(a.getWorldName())) {
-                if (BedWars.getServerType() != ServerType.BUNGEE) {
-                    BedWars.plugin.getLogger().log(Level.SEVERE, "You can't use an arena world in server.properties as level-name when running the server in " + BedWars.getServerType().toString() + " mode!");
-                    BedWars.plugin.getLogger().log(Level.SEVERE, a.getWorldName() + " will not be loaded.");
-                    Arena.removeFromEnableQueue(a);
-                    return;
-                }
-                try {
-                    BedWars.plugin.getLogger().log(Level.WARNING, "For a better performance please do not use arena worlds as level-name in server.properties");
-                    BedWars.plugin.getLogger().log(Level.WARNING, "Use a void map instead and never touch it. Minecraft requires a main level that can't be restored without restarting the server.");
-                    BedWars.plugin.getLogger().log(Level.WARNING, "Your server will be restarted after each game.");
-                    Bukkit.getScheduler().runTask(plugin, () -> {
-                        World w = Bukkit.getWorlds().get(0);
-                        w.setKeepSpawnInMemory(true);
-                        w.setAutoSave(false);
-                        Arena.setGamesBeforeRestart(1);
-                        a.init(w);
-                    });
-                } catch (IllegalArgumentException e) {
-                    if (e.getMessage().contains("ChunkNibbleArrays should be 2048 bytes")) {
-                        BedWars.plugin.getLogger().log(Level.SEVERE, "Could not load arena: " + a.getWorldName());
-                        BedWars.plugin.getLogger().log(Level.SEVERE, "Your world has corrupt chunks!");
+        Bukkit.getScheduler().runTask(getOwner(), ()-> {
+            World world = Bukkit.getWorld(a.getWorldName());
+            if (world != null) {
+                if (BedWars.getServerType() == ServerType.BUNGEE) {
+                    for (Player p : world.getPlayers()) {
+                        p.kickPlayer("The arena you were in was restore. You were kicked out of it. You were not supposed to be there.");
+                    }
+                } else {
+                    for (Player p : world.getPlayers()) {
+                        p.teleport(Bukkit.getWorld(BedWars.getLobbyWorld()).getSpawnLocation());
+                        p.sendMessage(ChatColor.BLUE + "The arena you were in was restored. You were kicked out of it. You were not supposed to be there.");
                     }
                 }
-            } else {
-                Bukkit.getScheduler().runTask(plugin, () -> {
-                    World w = Bukkit.createWorld(new WorldCreator(a.getWorldName()));
-                    w.setKeepSpawnInMemory(false);
-                    w.setAutoSave(false);
-                    a.init(w);
-                });
+                Bukkit.unloadWorld(a.getWorldName(), false);
             }
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+                File bf = new File(backupFolder, a.getWorldName() + ".zip"), af = new File(Bukkit.getWorldContainer(), a.getWorldName());
+                if (bf.exists()) {
+                    FileUtil.delete(af);
+                }
+
+                if (!bf.exists()) {
+                    new WorldZipper(a.getWorldName(), true);
+                } else {
+                    try {
+                        ZipFileUtil.unzipFileIntoDirectory(bf, new File(Bukkit.getWorldContainer(), a.getWorldName()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if (Bukkit.getWorlds().get(0).getName().equals(a.getWorldName())) {
+                    if (BedWars.getServerType() != ServerType.BUNGEE) {
+                        BedWars.plugin.getLogger().log(Level.SEVERE, "You can't use an arena world in server.properties as level-name when running the server in " + BedWars.getServerType().toString() + " mode!");
+                        BedWars.plugin.getLogger().log(Level.SEVERE, a.getWorldName() + " will not be loaded.");
+                        Arena.removeFromEnableQueue(a);
+                        return;
+                    }
+                    try {
+                        BedWars.plugin.getLogger().log(Level.WARNING, "For a better performance please do not use arena worlds as level-name in server.properties");
+                        BedWars.plugin.getLogger().log(Level.WARNING, "Use a void map instead and never touch it. Minecraft requires a main level that can't be restored without restarting the server.");
+                        BedWars.plugin.getLogger().log(Level.WARNING, "Your server will be restarted after each game.");
+                        Bukkit.getScheduler().runTask(plugin, () -> {
+                            World w = Bukkit.getWorlds().get(0);
+                            w.setKeepSpawnInMemory(true);
+                            w.setAutoSave(false);
+                            Arena.setGamesBeforeRestart(1);
+                            a.init(w);
+                        });
+                    } catch (IllegalArgumentException e) {
+                        if (e.getMessage().contains("ChunkNibbleArrays should be 2048 bytes")) {
+                            BedWars.plugin.getLogger().log(Level.SEVERE, "Could not load arena: " + a.getWorldName());
+                            BedWars.plugin.getLogger().log(Level.SEVERE, "Your world has corrupt chunks!");
+                        }
+                    }
+                } else {
+                    Bukkit.getScheduler().runTask(plugin, () -> {
+                        World w = Bukkit.createWorld(new WorldCreator(a.getWorldName()));
+                        w.setKeepSpawnInMemory(false);
+                        w.setAutoSave(false);
+                        a.init(w);
+                    });
+                }
+            });
         });
     }
 
     @Override
     public void onRestart(IArena a) {
-        if (BedWars.getServerType() == ServerType.BUNGEE) {
-            Arena.setGamesBeforeRestart(Arena.getGamesBeforeRestart() - 1);
-            if (Arena.getGamesBeforeRestart() == 0) {
-                plugin.getLogger().info("Dispatching command: " + config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
-            } else {
-                if (Arena.getGamesBeforeRestart() != -1) {
-                    Arena.setGamesBeforeRestart(Arena.getGamesBeforeRestart() - 1);
+        Bukkit.getScheduler().runTask(getOwner(), ()-> {
+            if (BedWars.getServerType() == ServerType.BUNGEE) {
+                Arena.setGamesBeforeRestart(Arena.getGamesBeforeRestart() - 1);
+                if (Arena.getGamesBeforeRestart() == 0) {
+                    plugin.getLogger().info("Dispatching command: " + config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
+                } else {
+                    if (Arena.getGamesBeforeRestart() != -1) {
+                        Arena.setGamesBeforeRestart(Arena.getGamesBeforeRestart() - 1);
+                    }
+                    Bukkit.unloadWorld(a.getWorldName(), false);
+                    Bukkit.getScheduler().runTaskLater(plugin, () -> new Arena(a.getWorldName(), null), 80L);
                 }
+            } else {
                 Bukkit.unloadWorld(a.getWorldName(), false);
                 Bukkit.getScheduler().runTaskLater(plugin, () -> new Arena(a.getWorldName(), null), 80L);
             }
-        } else {
-            Bukkit.unloadWorld(a.getWorldName(), false);
-            Bukkit.getScheduler().runTaskLater(plugin, () -> new Arena(a.getWorldName(), null), 80L);
-        }
+        });
     }
 
     @Override
     public void onDisable(IArena a) {
-        Bukkit.unloadWorld(a.getWorldName(), false);
+        Bukkit.getScheduler().runTask(getOwner(), ()-> Bukkit.unloadWorld(a.getWorldName(), false));
     }
 
     @Override
