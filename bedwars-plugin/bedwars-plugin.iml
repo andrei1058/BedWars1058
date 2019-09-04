@@ -51,6 +51,11 @@
     <orderEntry type="module" module-name="bedwars-api" />
     <orderEntry type="module" module-name="versionsupport_1_8_R3" />
     <orderEntry type="module" module-name="versionsupport_1_9_R2" />
+    <orderEntry type="module" module-name="versionsupport_1_10_R1" />
+    <orderEntry type="module" module-name="versionsupport_1_11_R1" />
+    <orderEntry type="module" module-name="versionsupport_1_12_R1" />
+    <orderEntry type="module" module-name="versionsupport_1_13_R2" />
+    <orderEntry type="module" module-name="versionsupport_1_14_R1" />
     <orderEntry type="module" module-name="versionsupport-common" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: commons-lang:commons-lang:2.6" level="project" />

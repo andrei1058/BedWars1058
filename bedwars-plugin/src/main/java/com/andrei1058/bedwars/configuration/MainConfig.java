@@ -6,7 +6,6 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.api.language.Language;
-import com.avaje.ebeaninternal.server.lib.util.NotFoundException;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -230,7 +229,7 @@ public class MainConfig extends ConfigManager {
         }
         Language def = Language.getLang(whatLang);
 
-        if (def == null) throw new NotFoundException("Could not found default language: " + whatLang);
+        if (def == null) throw new IllegalStateException("Could not found default language: " + whatLang);
         Language.setDefaultLanguage(def);
 
         //remove languages if disabled
