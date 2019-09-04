@@ -145,7 +145,7 @@ public class SlimeAdapter extends RestoreAdapter {
 
     @Override
     public void onSetupSessionClose(ISetupSession s) {
-        Bukkit.unloadWorld(s.getWorldName(), false);
+        Bukkit.unloadWorld(s.getWorldName(), true);
     }
 
     @Override
