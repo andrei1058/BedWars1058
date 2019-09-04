@@ -1,3 +1,68 @@
+# 0.14beta
+
+IMPORTANT NOTICE FOR SERVER OWNERS:
+With this update most of BedWars1058 Addons won't work anymore. Please update them.
+As I usually do, the upgrade from older versions to newer versions is done automatically by me, I work a lot to make your life easier.
+
+- **added SlimeWorldManager support** a way faster to restore maps
+- minor multi server version compatibility improvements
+- removed 1.9 R1 support
+- fixed issue where current tier was taking the price from next tier (shop related)
+- fixed vault support at shop
+- fixed issue where "cannot afford" lore msg was shown before "maxed" event if it was maxed (shop related)
+- fixed issue where Status Block was not working and causing issues on 1.14
+- removed FAWE support (added in 0.13beta)
+- fixed major memory leaks
+
+### 0.14beta-pre4
+- fixed ConcurrentModificationException caused probably when a player gets disconnected when the game starts
+- fixed issue where beds doesn't get colored with the team color
+- added config option to disable plugin packets (you can find then under the performance category)
+
+### 0.13beta-pre5
+- removed track of players in shop cache
+
+For developers:
+
+New API version: 14
+If you are using nms methods from BedWars1058 on your Addons you need to update them.
+A lot of packages were renamed. Sorry but I'm trying to bring the plugin to a stable version.
+- fixed title and subtitle not working at SpectatorFirstPersonLeaveEvent
+- added ArenaRestartEvent, SetupSessionStartEvent and SetupSessionCloseEvent
+
+# 0.13beta
+- fixed a null pointer exception error
+- fixed rejoin scoreboard issue
+- added /bw tp command
+- prevent negative xp patch
+- {player} placeholder stands for display name now, on chat
+- player will no longer receive permanent items at final kills
+- invisibility potion system was improved
+- fixed issue where PlayerLevelUp was not called
+- fixed anti afk system
+- added request #287
+- fixed fly issue as spectator  on 1.8 servers
+- fixed fly bug after spectating
+- fixed issue #269
+- fixed issue #272
+- item attributes are now hidden in stats gui
+- fixed issue #282 about levels delay
+- fixed issue #292
+- fixed issue #294
+- fixed issue #293
+- added color support for glass pane at bedWars teams
+- fixed issue with infinite items when using off hand
+- fixed glass color for 1.12-
+- "/bw start debug" now starts the debug mode
+- added default sword restore system
+- scoreboards updated with the new layout
+
+for devs:
+- EnemyBaseEnterEvent was removed, alternative: BaseEnterEvent (since api 9)
+- EnemyBaseLeaveEvent was removed, alternative: BaseLeaveEvent (since api 9)
+- #sendDefaultInventory improvements
+- fixed PlayerJoinArenaEvent called twice for spectators
+
 # 0.12beta
 - added "display-name" option used in scoreboards, in the arena selector etc.
 - shopkeepers messages update http://prntscr.com/o30zjo
