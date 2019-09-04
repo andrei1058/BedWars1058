@@ -234,9 +234,12 @@ public class Arena implements Comparable<Arena>, IArena {
         world.getEntities().stream().filter(e -> e.getType() != EntityType.PLAYER)
                 .filter(e -> e.getType() != EntityType.PAINTING).filter(e -> e.getType() != EntityType.ITEM_FRAME)
                 .forEach(Entity::remove);
-        world.setGameRuleValue("doMobSpawning", "false");
-        world.setGameRuleValue("announceAdvancements", "false");
+        for (String s : getConfig().getList(ConfigPath.ARENA_GAME_RULES)){
+            String[] rule = s.split(":");
+            if (rule.length == 2) world.setGameRuleValue(rule[0], rule[1]);
+        }
         world.setAutoSave(false);
+        world.
         //todo change item merge radius
 
         /* Clear setup armor-stands */

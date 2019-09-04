@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
+import java.util.ArrayList;
 
 public class ArenaConfig extends ConfigManager {
 
@@ -31,6 +32,13 @@ public class ArenaConfig extends ConfigManager {
         yml.addDefault(ConfigPath.ARENA_NORMAL_DEATH_DROPS, false);
         yml.addDefault(ConfigPath.ARENA_USE_BED_HOLO, true);
         yml.addDefault(ConfigPath.ARENA_ALLOW_MAP_BREAK, false);
+        ArrayList<String> rules = new ArrayList<>();
+        rules.add("doDaylightCycle:false");
+        rules.add("announceAdvancements:false");
+        rules.add("doInsomnia:false");
+        rules.add("doImmediateRespawn:true");
+        rules.add("doWeatherCycle:false");
+        yml.addDefault(ConfigPath.ARENA_GAME_RULES, rules);
         yml.options().copyDefaults(true);
         save();
 
