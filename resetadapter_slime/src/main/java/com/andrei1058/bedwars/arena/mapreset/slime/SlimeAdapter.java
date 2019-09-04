@@ -210,7 +210,7 @@ public class SlimeAdapter extends RestoreAdapter {
     @Override
     public List<String> getWorldsList() {
         try {
-            return slime.getLoader("mysql").listWorlds();
+            return slime.getLoader("file").listWorlds();
         } catch (IOException e) {
             e.printStackTrace();
         }
