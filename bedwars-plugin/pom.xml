@@ -83,6 +83,12 @@
         </dependency>
         <dependency>
             <groupId>com.andrei1058.bedwars</groupId>
+            <artifactId>resetadapter-slime</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.bedwars</groupId>
             <artifactId>versionsupport_1_12_R1</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
