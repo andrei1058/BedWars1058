@@ -6,6 +6,8 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.server.ISetupSession;
 import com.andrei1058.bedwars.api.server.RestoreAdapter;
 import com.andrei1058.bedwars.api.server.ServerType;
+import com.andrei1058.bedwars.api.util.FileUtil;
+import com.andrei1058.bedwars.api.util.ZipFileUtil;
 import com.grinderwolf.swm.api.SlimePlugin;
 import com.grinderwolf.swm.api.exceptions.*;
 import com.grinderwolf.swm.api.loaders.SlimeLoader;
@@ -232,25 +234,27 @@ public class SlimeAdapter extends RestoreAdapter {
                         if (fl.getName().contains(".yml")) {
                             String name = fl.getName().replace(".yml", "");
                             ff = new File(Bukkit.getWorldContainer(), name);
-                            if (ff.exists()) {
-                                if (fl.getName().equals(fl.getName().toLowerCase())) {
-                                    if (!fl.renameTo(new File(dir, fl.getName().toLowerCase()))) {
-                                        getOwner().getLogger().log(Level.WARNING, "Could not rename " + fl.getName() + ".yml to " + fl.getName().toLowerCase() + ".yml");
-                                    }
-                                }
-                                try {
-                                    if (!sl.worldExists(ff.getName().toLowerCase())) {
-                                        try {
-                                            getOwner().getLogger().log(Level.INFO, "Converting " + ff.getName() + " to the Slime format.");
-                                            slime.importWorld(ff, ff.getName().toLowerCase(), sl);
-                                        } catch (WorldAlreadyExistsException | InvalidWorldException | WorldLoadedException | WorldTooBigException | IOException e) {
-                                            getOwner().getLogger().log(Level.WARNING, "Could not convert " + ff.getName() + " to the Slime format.");
-                                            e.printStackTrace();
+                            name = name.toLowerCase();
+                            try {
+                                if (!sl.worldExists(name)) {
+                                    if (!fl.getName().equals(name)) {
+                                        if (!fl.renameTo(new File(dir, name))) {
+                                            getOwner().getLogger().log(Level.WARNING, "Could not rename " + fl.getName() + ".yml to " + name + ".yml");
                                         }
                                     }
-                                } catch (IOException e) {
-                                    e.printStackTrace();
+                                    File bc = new File(getOwner().getDataFolder() + "/Cache", ff.getName() + ".zip");
+                                    if (ff.exists() && bc.exists()) FileUtil.delete(ff);
+                                    ZipFileUtil.unzipFileIntoDirectory(bc, new File(dir, name));
+                                    try {
+                                        getOwner().getLogger().log(Level.INFO, "Converting " + name + " to the Slime format.");
+                                        slime.importWorld(ff, name, sl);
+                                    } catch (WorldAlreadyExistsException | InvalidWorldException | WorldLoadedException | WorldTooBigException | IOException e) {
+                                        getOwner().getLogger().log(Level.WARNING, "Could not convert " + name + " to the Slime format.");
+                                        e.printStackTrace();
+                                    }
                                 }
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
                         }
                     }

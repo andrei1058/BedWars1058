@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.maprestore.internal.files;
+package com.andrei1058.bedwars.api.util;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,7 +11,7 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 public final class ZipFileUtil {
-    static void zipDirectory(File dir, File zipFile) throws IOException {
+    public static void zipDirectory(File dir, File zipFile) throws IOException {
         FileOutputStream fout = new FileOutputStream(zipFile);
         ZipOutputStream zout = new ZipOutputStream(fout);
         zipSubDirectory("", dir, zout);
@@ -43,6 +43,7 @@ public final class ZipFileUtil {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void unzipFileIntoDirectory(File file, File jiniHomeParentDir) throws IOException {
+        if (!file.exists()) return;
         @SuppressWarnings("resource")
         ZipFile zipFile = new ZipFile(file);
         Enumeration<?> files = zipFile.entries();

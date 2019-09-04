@@ -7,7 +7,7 @@ import com.andrei1058.bedwars.api.server.ISetupSession;
 import com.andrei1058.bedwars.api.server.RestoreAdapter;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.maprestore.internal.files.FileUtil;
+import com.andrei1058.bedwars.api.util.FileUtil;
 import com.andrei1058.bedwars.maprestore.internal.files.WorldZipper;
 import com.andrei1058.bedwars.api.util.ZipFileUtil;
 import org.apache.commons.io.FileUtils;
