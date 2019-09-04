@@ -9,7 +9,7 @@ import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.maprestore.internal.files.FileUtil;
 import com.andrei1058.bedwars.maprestore.internal.files.WorldZipper;
-import com.andrei1058.bedwars.maprestore.internal.files.ZipFileUtil;
+import com.andrei1058.bedwars.api.util.ZipFileUtil;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -51,9 +51,9 @@ public class InternalAdapter extends RestoreAdapter {
             Bukkit.unloadWorld(a.getWorldName(), false);
         }
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            File bf = new File(backupFolder, a.getWorldName() + ".zip");
+            File bf = new File(backupFolder, a.getWorldName() + ".zip"), af = new File(Bukkit.getWorldContainer(), a.getWorldName());
             if (bf.exists()) {
-                FileUtil.delete(bf);
+                FileUtil.delete(af);
             }
 
             if (!bf.exists()) {
