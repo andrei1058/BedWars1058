@@ -17,6 +17,7 @@ As I usually do, the upgrade from older versions is done automatically by me, I 
 - fixed ConcurrentModificationException caused probably when a player gets disconnected when the game starts
 - fixed issue where beds doesn't get colored with the team color
 - added config option to disable plugin packets (you can find then under the performance category)
+- added default game rules per arena in config
 
 For developers:
 
