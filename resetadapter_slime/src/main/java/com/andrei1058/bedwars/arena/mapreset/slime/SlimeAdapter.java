@@ -221,34 +221,36 @@ public class SlimeAdapter extends RestoreAdapter {
      * Convert vanilla worlds to the slime format.
      */
     public void convertWorlds() {
-        File dir = new File("plugins/" + getOwner() + "/Arenas");
+        File dir = new File("plugins/" + getOwner().getName() + "/Arenas");
         File ff;
         SlimeLoader sl = slime.getLoader("file");
         if (dir.exists()) {
             File[] fls = dir.listFiles();
-            for (File fl : Objects.requireNonNull(fls)) {
-                if (fl.isFile()) {
-                    if (fl.getName().contains(".yml")) {
-                        String name = fl.getName().replace(".yml", "");
-                        ff = new File(Bukkit.getWorldContainer(), name);
-                        if (ff.exists()) {
-                            if (fl.getName().equals(fl.getName().toLowerCase())) {
-                                if (!fl.renameTo(new File(dir, fl.getName().toLowerCase()))) {
-                                    Bukkit.getLogger().log(Level.WARNING, "Could not rename " + fl.getName() + ".yml to " + fl.getName().toLowerCase() + ".yml");
-                                }
-                            }
-                            try {
-                                if (!sl.worldExists(ff.getName().toLowerCase())) {
-                                    try {
-                                        Bukkit.getLogger().log(Level.INFO, "Converting " + ff.getName() + " to the Slime format.");
-                                        slime.importWorld(ff, ff.getName().toLowerCase(), sl);
-                                    } catch (WorldAlreadyExistsException | InvalidWorldException | WorldLoadedException | WorldTooBigException | IOException e) {
-                                        Bukkit.getLogger().log(Level.WARNING, "Could not convert " + ff.getName() + " to the Slime format.");
-                                        e.printStackTrace();
+            if (fls != null) {
+                for (File fl : fls) {
+                    if (fl.isFile()) {
+                        if (fl.getName().contains(".yml")) {
+                            String name = fl.getName().replace(".yml", "");
+                            ff = new File(Bukkit.getWorldContainer(), name);
+                            if (ff.exists()) {
+                                if (fl.getName().equals(fl.getName().toLowerCase())) {
+                                    if (!fl.renameTo(new File(dir, fl.getName().toLowerCase()))) {
+                                        Bukkit.getLogger().log(Level.WARNING, "Could not rename " + fl.getName() + ".yml to " + fl.getName().toLowerCase() + ".yml");
                                     }
                                 }
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                                try {
+                                    if (!sl.worldExists(ff.getName().toLowerCase())) {
+                                        try {
+                                            Bukkit.getLogger().log(Level.INFO, "Converting " + ff.getName() + " to the Slime format.");
+                                            slime.importWorld(ff, ff.getName().toLowerCase(), sl);
+                                        } catch (WorldAlreadyExistsException | InvalidWorldException | WorldLoadedException | WorldTooBigException | IOException e) {
+                                            Bukkit.getLogger().log(Level.WARNING, "Could not convert " + ff.getName() + " to the Slime format.");
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     }
