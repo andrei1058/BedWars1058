@@ -244,7 +244,7 @@ public class SlimeAdapter extends RestoreAdapter {
                                     }
                                     File bc = new File(getOwner().getDataFolder() + "/Cache", ff.getName() + ".zip");
                                     if (ff.exists() && bc.exists()) FileUtil.delete(ff);
-                                    ZipFileUtil.unzipFileIntoDirectory(bc, new File(dir, name));
+                                    ZipFileUtil.unzipFileIntoDirectory(bc, new File(Bukkit.getWorldContainer(), name));
                                     try {
                                         getOwner().getLogger().log(Level.INFO, "Converting " + name + " to the Slime format.");
                                         slime.importWorld(ff, name, sl);
