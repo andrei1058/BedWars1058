@@ -41,7 +41,7 @@ public class ItemDropPickListener {
         }
     }
 
-    // 1.12 or newer
+    // 1.13 or newer
     public static class EntityDrop implements Listener {
         @EventHandler
         public void onDrop(EntityDropItemEvent e){
@@ -52,7 +52,7 @@ public class ItemDropPickListener {
     // 1.12 or newer
     public static class EntityPickup implements Listener {
         @EventHandler
-        public void onDrop(EntityPickupItemEvent e){
+        public void onPickup(EntityPickupItemEvent e){
             if (managePickup(e.getItem(), e.getEntity())) e.setCancelled(true);
         }
     }
@@ -81,7 +81,7 @@ public class ItemDropPickListener {
     /**
      * @return true if event should be cancelled
      */
-    public static boolean managePickup(Item item, LivingEntity player) {
+    private static boolean managePickup(Item item, LivingEntity player) {
         if (!(player instanceof Player)) return false;
         if (api.getServerType() != ServerType.BUNGEE) {
             //noinspection ConstantConditions

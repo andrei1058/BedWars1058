@@ -29,7 +29,7 @@ public class VersionCommon {
 
         // 13 and newer
         if (versionSupport.getVersion() > 5){
-            registerListeners(versionSupport.getPlugin(), new ShopItemRestoreListener.EntityDrop(), new Interact_1_13Plus());
+            registerListeners(versionSupport.getPlugin(), new ShopItemRestoreListener.EntityDrop(), new Interact_1_13Plus(), new ItemDropPickListener.EntityDrop());
         }
 
         // 1.12 and newer
@@ -42,7 +42,7 @@ public class VersionCommon {
 
     private void registerListeners(Plugin plugin, Listener... listener) {
         for (Listener l : listener) {
-            Bukkit.getPluginManager().registerEvents(l, plugin);
+            plugin.getServer().getPluginManager().registerEvents(l, plugin);
         }
     }
 }

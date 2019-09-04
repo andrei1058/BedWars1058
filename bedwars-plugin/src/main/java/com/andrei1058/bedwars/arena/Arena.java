@@ -1745,6 +1745,7 @@ public class Arena implements Comparable<Arena>, IArena {
 
     @Override
     public void updateSpectatorCollideRule(Player p, boolean collide) {
+        if (!isSpectator(p)) return;
         for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
             if (sb.getArena() == this) {
                 sb.updateSpectator(p, collide);
