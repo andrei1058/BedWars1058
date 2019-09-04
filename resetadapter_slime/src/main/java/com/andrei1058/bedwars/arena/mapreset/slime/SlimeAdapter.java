@@ -238,7 +238,7 @@ public class SlimeAdapter extends RestoreAdapter {
                             try {
                                 if (!sl.worldExists(name)) {
                                     if (!fl.getName().equals(name)) {
-                                        if (!fl.renameTo(new File(dir, name))) {
+                                        if (!fl.renameTo(new File(dir, name + ".yml"))) {
                                             getOwner().getLogger().log(Level.WARNING, "Could not rename " + fl.getName() + ".yml to " + name + ".yml");
                                         }
                                     }
