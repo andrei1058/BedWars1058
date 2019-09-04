@@ -229,10 +229,7 @@ public class Arena implements Comparable<Arena>, IArena {
     @Override
     public void init(World world) {
         if (getArenaByName(worldName) != null) return;
-        enableQueue.remove(this);
-        if (!enableQueue.isEmpty()) {
-            BedWars.getAPI().getRestoreAdapter().onEnable(enableQueue.get(0));
-        }
+        removeFromEnableQueue(this);
         this.world = world;
         world.getEntities().stream().filter(e -> e.getType() != EntityType.PLAYER)
                 .filter(e -> e.getType() != EntityType.PAINTING).filter(e -> e.getType() != EntityType.ITEM_FRAME)
