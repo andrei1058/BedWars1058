@@ -143,6 +143,7 @@ public class SlimeAdapter extends RestoreAdapter {
             } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldInUseException | WorldAlreadyExistsException | InvalidWorldException | WorldTooBigException | WorldLoadedException ex) {
                 s.getPlayer().sendMessage(ChatColor.RED + "An error occurred! Please check console.");
                 ex.printStackTrace();
+                s.close();
             }
         });
     }

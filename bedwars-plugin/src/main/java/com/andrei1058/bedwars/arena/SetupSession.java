@@ -208,6 +208,12 @@ public class SetupSession implements ISetupSession {
         w.setAutoSave(false);
         w.setGameRuleValue("doMobSpawning", "false");
         Bukkit.getPluginManager().callEvent(new SetupSessionStartEvent(this));
+        setStarted(true);
+    }
+
+    @Override
+    public void close() {
+        cancel();
     }
 
     public List<Location> getSkipAutoCreateGen() {

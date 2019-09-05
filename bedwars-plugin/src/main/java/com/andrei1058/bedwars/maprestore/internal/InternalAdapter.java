@@ -126,6 +126,7 @@ public class InternalAdapter extends RestoreAdapter {
                         Bukkit.createWorld(wc);
                     } catch (Exception exx) {
                         exx.printStackTrace();
+                        s.close();
                         return;
                     }
                 } else {
