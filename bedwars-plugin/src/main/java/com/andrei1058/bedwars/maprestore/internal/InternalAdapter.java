@@ -121,7 +121,7 @@ public class InternalAdapter extends RestoreAdapter {
                 Bukkit.createWorld(wc);
             } catch (Exception ex) {
                 File uid = new File(Bukkit.getServer().getWorldContainer(), s.getWorldName() + "/uid.dat");
-                if (uid.exists() && uid.delete()) {
+                if (uid.exists() && !uid.delete()) {
                     try {
                         Bukkit.createWorld(wc);
                     } catch (Exception exx) {
