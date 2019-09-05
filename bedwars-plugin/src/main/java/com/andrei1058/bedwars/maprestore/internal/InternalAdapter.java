@@ -132,6 +132,8 @@ public class InternalAdapter extends RestoreAdapter {
 
     @Override
     public void onSetupSessionStart(ISetupSession s) {
+        WorldCreator wc = new WorldCreator(s.getWorldName());
+        wc.generator("1;0;1");
         try {
             Bukkit.createWorld(new WorldCreator(s.getWorldName()));
         } catch (Exception ex) {

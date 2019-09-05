@@ -121,7 +121,7 @@ public class SlimeAdapter extends RestoreAdapter {
     @Override
     public void onSetupSessionStart(ISetupSession s) {
         Bukkit.getScheduler().runTaskAsynchronously(getOwner(), () -> {
-            SlimeLoader sqlLoader = slime.getLoader("file");
+            SlimeLoader sLoader = slime.getLoader("file");
             String[] spawn = new String[]{"0", "118", "0"};
             if (s.getConfig().getYml().getString("waiting.Loc") != null) {
                 spawn = s.getConfig().getString("waiting.Loc").split(",");
@@ -134,15 +134,19 @@ public class SlimeAdapter extends RestoreAdapter {
                     Bukkit.unloadWorld(s.getWorldName(), false);
                 }
 
-                // Note that this method should be called asynchronously
-                SlimeWorld world = slime.loadWorld(sqlLoader, s.getWorldName(), props);
+                SlimeWorld world;
+                if (sLoader.worldExists(s.getWorldName())){
+                    world = slime.loadWorld(sLoader, s.getWorldName(), props);
+                } else {
+                    world = slime.createEmptyWorld(sLoader, s.getWorldName(), props);
+                }
 
                 // This method must be called synchronously
                 Bukkit.getScheduler().runTask(getOwner(), () -> {
                     slime.generateWorld(world);
                     s.teleportPlayer();
                 });
-            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldInUseException ex) {
+            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldInUseException | WorldAlreadyExistsException ex) {
                 ex.printStackTrace();
             }
         });

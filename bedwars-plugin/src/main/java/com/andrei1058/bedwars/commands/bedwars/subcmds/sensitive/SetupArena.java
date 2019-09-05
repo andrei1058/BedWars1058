@@ -42,10 +42,10 @@ public class SetupArena extends SubCommand {
             p.sendMessage("§c▪ §c" + args[0] + ChatColor.GRAY + " mustn't contain capital letters! Rename your folder to: " + ChatColor.GREEN + args[0].toLowerCase());
             return true;
         }
-        if (!BedWars.getAPI().getRestoreAdapter().isWorld(args[0])) {
-            p.sendMessage("§c▪ §7" + args[0] + " doesn't exist!");
-            return true;
-        }
+        //if (!BedWars.getAPI().getRestoreAdapter().isWorld(args[0])) {
+        //    p.sendMessage("§c▪ §7" + args[0] + " doesn't exist!");
+        //    return true;
+        //}
         if (getArenaByName(args[0]) != null) {
             p.sendMessage("§c▪ §7Please disable it first!");
             return true;
