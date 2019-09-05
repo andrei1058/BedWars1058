@@ -883,11 +883,12 @@ public class Arena implements Comparable<Arena>, IArena {
      * This will automatically kick/ remove the people from the arena.
      */
     public void disable() {
+        if (getRestartingTask() != null) getRestartingTask().cancel();
         plugin.getLogger().log(Level.WARNING, "Disabling arena: " + getWorldName());
-        for (Player p : players) {
+        for (Player p : new ArrayList<>(players)) {
             removePlayer(p, false);
         }
-        for (Player p : spectators) {
+        for (Player p : new ArrayList<>(spectators)) {
             removeSpectator(p, false);
         }
         destroyData();
