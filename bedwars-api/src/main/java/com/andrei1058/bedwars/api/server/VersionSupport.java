@@ -472,11 +472,6 @@ public abstract class VersionSupport {
     public abstract void setUnbreakable(ItemMeta itemMeta);
 
     /**
-     * Get server level name.
-     */
-    public abstract String getLevelName();
-
-    /**
      * Get list of entities that are going to despawn based on a timer.
      */
     public HashMap<UUID, Despawnable> getDespawnablesList() {
@@ -495,4 +490,14 @@ public abstract class VersionSupport {
     }
 
     public abstract void registerVersionListeners();
+
+    /**
+     * Get main level name.
+     */
+    public abstract String getMainLevel();
+
+    /**
+     * Set main level world.
+     */
+    public abstract void setMainLevel(String worldName, String generatorSettings, String levelType, String generateStructures);
 }

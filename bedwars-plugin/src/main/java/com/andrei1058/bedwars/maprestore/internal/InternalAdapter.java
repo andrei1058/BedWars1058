@@ -22,8 +22,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 
-import static com.andrei1058.bedwars.BedWars.config;
-import static com.andrei1058.bedwars.BedWars.plugin;
+import static com.andrei1058.bedwars.BedWars.*;
 
 public class InternalAdapter extends RestoreAdapter {
 
@@ -35,13 +34,15 @@ public class InternalAdapter extends RestoreAdapter {
 
     @Override
     public void onEnable(IArena a) {
-        if (a == null) return;
+        if (nms.getMainLevel().equalsIgnoreCase(a.getWorldName()) && Arena.getGamesBeforeRestart() != 1) {
+            nms.setMainLevel("ignore_main_level", "1;0;1", "flat", "false");
+        }
         Bukkit.getScheduler().runTask(getOwner(), () -> {
             World world = Bukkit.getWorld(a.getWorldName());
             if (world != null) {
                 if (BedWars.getServerType() == ServerType.BUNGEE) {
                     for (Player p : world.getPlayers()) {
-                        p.kickPlayer("The arena you were in was restore. You were kicked out of it. You were not supposed to be there.");
+                        p.kickPlayer("The arena you were in was restored. You were kicked out of it. You were not supposed to be there.");
                     }
                 } else {
                     for (Player p : world.getPlayers()) {
@@ -49,7 +50,8 @@ public class InternalAdapter extends RestoreAdapter {
                         p.sendMessage(ChatColor.BLUE + "The arena you were in was restored. You were kicked out of it. You were not supposed to be there.");
                     }
                 }
-                Bukkit.unloadWorld(a.getWorldName(), false);
+                a.init(world);
+                return;
             }
             Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
                 File bf = new File(backupFolder, a.getWorldName() + ".zip"), af = new File(Bukkit.getWorldContainer(), a.getWorldName());
@@ -66,42 +68,15 @@ public class InternalAdapter extends RestoreAdapter {
                         e.printStackTrace();
                     }
                 }
-
-                if (Bukkit.getWorlds().get(0).getName().equals(a.getWorldName())) {
-                    if (BedWars.getServerType() != ServerType.BUNGEE) {
-                        BedWars.plugin.getLogger().log(Level.SEVERE, "You can't use an arena world in server.properties as level-name when running the server in " + BedWars.getServerType().toString() + " mode!");
-                        BedWars.plugin.getLogger().log(Level.SEVERE, a.getWorldName() + " will not be loaded.");
-                        Arena.removeFromEnableQueue(a);
-                        return;
-                    }
-                    try {
-                        BedWars.plugin.getLogger().log(Level.WARNING, "For a better performance please do not use arena worlds as level-name in server.properties");
-                        BedWars.plugin.getLogger().log(Level.WARNING, "Use a void map instead and never touch it. Minecraft requires a main level that can't be restored without restarting the server.");
-                        BedWars.plugin.getLogger().log(Level.WARNING, "Your server will be restarted after each game.");
-                        Bukkit.getScheduler().runTask(plugin, () -> {
-                            World w = Bukkit.getWorlds().get(0);
-                            w.setKeepSpawnInMemory(true);
-                            w.setAutoSave(false);
-                            Arena.setGamesBeforeRestart(1);
-                            a.init(w);
-                        });
-                    } catch (IllegalArgumentException e) {
-                        if (e.getMessage().contains("ChunkNibbleArrays should be 2048 bytes")) {
-                            BedWars.plugin.getLogger().log(Level.SEVERE, "Could not load arena: " + a.getWorldName());
-                            BedWars.plugin.getLogger().log(Level.SEVERE, "Your world has corrupt chunks!");
-                        }
-                    }
-                } else {
-                    Bukkit.getScheduler().runTask(plugin, () -> {
-                        WorldCreator wc = new WorldCreator(a.getWorldName());
-                        wc.type(WorldType.FLAT);
-                        wc.generatorSettings("1;0;1");
-                        World w = Bukkit.createWorld(wc);
-                        w.setKeepSpawnInMemory(false);
-                        w.setAutoSave(false);
-                        a.init(w);
-                    });
-                }
+                Bukkit.getScheduler().runTask(plugin, () -> {
+                    WorldCreator wc = new WorldCreator(a.getWorldName());
+                    wc.type(WorldType.FLAT);
+                    wc.generatorSettings("1;0;1");
+                    World w = Bukkit.createWorld(wc);
+                    w.setKeepSpawnInMemory(false);
+                    w.setAutoSave(false);
+                    a.init(w);
+                });
             });
         });
     }
@@ -168,7 +143,7 @@ public class InternalAdapter extends RestoreAdapter {
 
     @Override
     public void onSetupSessionClose(ISetupSession s) {
-        Bukkit.getScheduler().runTask(getOwner(), ()-> {
+        Bukkit.getScheduler().runTask(getOwner(), () -> {
             Bukkit.unloadWorld(s.getWorldName(), false);
             Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> new WorldZipper(s.getWorldName(), true));
         });
@@ -206,7 +181,7 @@ public class InternalAdapter extends RestoreAdapter {
 
     @Override
     public void deleteWorld(String name) {
-        Bukkit.getScheduler().runTaskAsynchronously(getOwner(), ()-> {
+        Bukkit.getScheduler().runTaskAsynchronously(getOwner(), () -> {
             try {
                 FileUtils.deleteDirectory(new File(Bukkit.getWorldContainer(), name));
             } catch (IOException e) {
@@ -267,8 +242,6 @@ public class InternalAdapter extends RestoreAdapter {
             List<File> toRemove = new ArrayList<>(), toAdd = new ArrayList<>();
             for (File file : files) {
                 if (!file.getName().equals(file.getName().toLowerCase())) {
-                    //level-name will not be renamed
-                    if (BedWars.nms.getLevelName().equals(file.getName().replace(".yml", ""))) continue;
                     newName = new File(dir.getPath() + "/" + file.getName().toLowerCase());
                     if (!file.renameTo(newName)) {
                         toRemove.add(file);
