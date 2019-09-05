@@ -36,7 +36,7 @@ public class InternalAdapter extends RestoreAdapter {
     @Override
     public void onEnable(IArena a) {
         if (a == null) return;
-        Bukkit.getScheduler().runTask(getOwner(), ()-> {
+        Bukkit.getScheduler().runTask(getOwner(), () -> {
             World world = Bukkit.getWorld(a.getWorldName());
             if (world != null) {
                 if (BedWars.getServerType() == ServerType.BUNGEE) {
@@ -93,7 +93,10 @@ public class InternalAdapter extends RestoreAdapter {
                     }
                 } else {
                     Bukkit.getScheduler().runTask(plugin, () -> {
-                        World w = Bukkit.createWorld(new WorldCreator(a.getWorldName()));
+                        WorldCreator wc = new WorldCreator(a.getWorldName());
+                        wc.type(WorldType.FLAT);
+                        wc.generatorSettings("1;0;1");
+                        World w = Bukkit.createWorld(wc);
                         w.setKeepSpawnInMemory(false);
                         w.setAutoSave(false);
                         a.init(w);
@@ -105,7 +108,7 @@ public class InternalAdapter extends RestoreAdapter {
 
     @Override
     public void onRestart(IArena a) {
-        Bukkit.getScheduler().runTask(getOwner(), ()-> {
+        Bukkit.getScheduler().runTask(getOwner(), () -> {
             if (BedWars.getServerType() == ServerType.BUNGEE) {
                 Arena.setGamesBeforeRestart(Arena.getGamesBeforeRestart() - 1);
                 if (Arena.getGamesBeforeRestart() == 0) {
@@ -127,39 +130,48 @@ public class InternalAdapter extends RestoreAdapter {
 
     @Override
     public void onDisable(IArena a) {
-        Bukkit.getScheduler().runTask(getOwner(), ()-> Bukkit.unloadWorld(a.getWorldName(), false));
+        Bukkit.getScheduler().runTask(getOwner(), () -> Bukkit.unloadWorld(a.getWorldName(), false));
     }
 
     @Override
     public void onSetupSessionStart(ISetupSession s) {
-        WorldCreator wc = new WorldCreator(s.getWorldName());
-        wc.type(WorldType.FLAT);
-        wc.generatorSettings("1;0;1");
-        try {
-            Bukkit.createWorld(wc);
-        } catch (Exception ex) {
-            File uid = new File(Bukkit.getServer().getWorldContainer().getPath() + "/" + s.getWorldName() + "/uid.dat");
-            if (uid.exists() && uid.delete()) {
-                try {
-                    Bukkit.createWorld(wc);
-                } catch (Exception exx) {
-                    exx.printStackTrace();
+        Bukkit.getScheduler().runTask(getOwner(), () -> {
+            WorldCreator wc = new WorldCreator(s.getWorldName());
+            wc.type(WorldType.FLAT);
+            wc.generatorSettings("1;0;1");
+            try {
+                File level = new File(Bukkit.getWorldContainer(), s.getWorldName() + "/level.dat");
+                if (level.exists()) {
+                    s.getPlayer().sendMessage(ChatColor.GREEN + "Loading " + s.getWorldName() + " from Bukkit worlds container.");
+                } else {
+                    s.getPlayer().sendMessage(ChatColor.GREEN + "Creating a new void map.");
+                }
+                Bukkit.createWorld(wc);
+            } catch (Exception ex) {
+                File uid = new File(Bukkit.getServer().getWorldContainer(), s.getWorldName() + "/uid.dat");
+                if (uid.exists() && uid.delete()) {
+                    try {
+                        Bukkit.createWorld(wc);
+                    } catch (Exception exx) {
+                        exx.printStackTrace();
+                        return;
+                    }
+                } else {
+                    plugin.getLogger().log(Level.WARNING, "Could not delete uid.dat from " + s.getWorldName());
+                    plugin.getLogger().log(Level.WARNING, "Please delete it manually and try again.");
                     return;
                 }
-            } else {
-                plugin.getLogger().log(Level.WARNING, "Could not delete uid.dat from " + s.getWorldName());
-                plugin.getLogger().log(Level.WARNING, "Please delete it manually and try again.");
-                return;
             }
-        }
-
-        s.teleportPlayer();
+            s.teleportPlayer();
+        });
     }
 
     @Override
     public void onSetupSessionClose(ISetupSession s) {
-        Bukkit.unloadWorld(s.getWorldName(), false);
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> new WorldZipper(s.getWorldName(), true));
+        Bukkit.getScheduler().runTask(getOwner(), ()-> {
+            Bukkit.unloadWorld(s.getWorldName(), false);
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> new WorldZipper(s.getWorldName(), true));
+        });
     }
 
     @Override
@@ -194,11 +206,13 @@ public class InternalAdapter extends RestoreAdapter {
 
     @Override
     public void deleteWorld(String name) {
-        try {
-            FileUtils.deleteDirectory(new File(Bukkit.getWorldContainer(), name));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Bukkit.getScheduler().runTaskAsynchronously(getOwner(), ()-> {
+            try {
+                FileUtils.deleteDirectory(new File(Bukkit.getWorldContainer(), name));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override

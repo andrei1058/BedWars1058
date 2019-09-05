@@ -12,10 +12,7 @@ import com.grinderwolf.swm.api.SlimePlugin;
 import com.grinderwolf.swm.api.exceptions.*;
 import com.grinderwolf.swm.api.loaders.SlimeLoader;
 import com.grinderwolf.swm.api.world.SlimeWorld;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
@@ -131,22 +128,31 @@ public class SlimeAdapter extends RestoreAdapter {
             try {
 
                 if (Bukkit.getWorld(s.getWorldName()) != null) {
-                    Bukkit.unloadWorld(s.getWorldName(), false);
+                    Bukkit.getScheduler().runTask(getOwner(), () -> Bukkit.unloadWorld(s.getWorldName(), false));
                 }
 
-                SlimeWorld world;
-                if (sLoader.worldExists(s.getWorldName())){
+                SlimeWorld world = null;
+                if (sLoader.worldExists(s.getWorldName())) {
                     world = slime.loadWorld(sLoader, s.getWorldName(), props);
+                    Bukkit.getScheduler().runTask(getOwner(), () -> s.getPlayer().sendMessage(ChatColor.GREEN + "Loading world from SlimeWorldManager container."));
                 } else {
-                    world = slime.createEmptyWorld(sLoader, s.getWorldName(), props);
+                    if (new File(Bukkit.getWorldContainer(), s.getWorldName() + "/level.dat").exists()) {
+                        Bukkit.getScheduler().runTask(getOwner(), () -> s.getPlayer().sendMessage(ChatColor.GREEN + "Importing world to the SlimeWorldManager container."));
+                        slime.importWorld(new File(Bukkit.getWorldContainer(), s.getWorldName()), s.getWorldName().toLowerCase(), sLoader);
+                    } else {
+                        Bukkit.getScheduler().runTask(getOwner(), () -> s.getPlayer().sendMessage(ChatColor.GREEN + "Creating anew void map."));
+                        world = slime.createEmptyWorld(sLoader, s.getWorldName(), props);
+                    }
                 }
 
+                final SlimeWorld sw = world;
                 // This method must be called synchronously
                 Bukkit.getScheduler().runTask(getOwner(), () -> {
-                    slime.generateWorld(world);
+                    slime.generateWorld(sw);
                     s.teleportPlayer();
                 });
-            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldInUseException | WorldAlreadyExistsException ex) {
+            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldInUseException | WorldAlreadyExistsException | InvalidWorldException | WorldTooBigException | WorldLoadedException ex) {
+                s.getPlayer().sendMessage(ChatColor.RED + "An error occurred! Please check console.");
                 ex.printStackTrace();
             }
         });
@@ -154,7 +160,7 @@ public class SlimeAdapter extends RestoreAdapter {
 
     @Override
     public void onSetupSessionClose(ISetupSession s) {
-        Bukkit.unloadWorld(s.getWorldName(), true);
+        Bukkit.getScheduler().runTask(getOwner(), () -> Bukkit.unloadWorld(s.getWorldName(), true));
     }
 
     @Override
@@ -194,11 +200,13 @@ public class SlimeAdapter extends RestoreAdapter {
 
     @Override
     public void deleteWorld(String name) {
-        try {
-            slime.getLoader("file").deleteWorld(name);
-        } catch (UnknownWorldException | IOException e) {
-            e.printStackTrace();
-        }
+        Bukkit.getScheduler().runTaskAsynchronously(getOwner(), () -> {
+            try {
+                slime.getLoader("file").deleteWorld(name);
+            } catch (UnknownWorldException | IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
@@ -239,9 +247,8 @@ public class SlimeAdapter extends RestoreAdapter {
                 for (File fl : fls) {
                     if (fl.isFile()) {
                         if (fl.getName().contains(".yml")) {
-                            String name = fl.getName().replace(".yml", "");
-                            ff = new File(Bukkit.getWorldContainer(), name);
-                            name = name.toLowerCase();
+                            final String name = fl.getName().replace(".yml", "").toLowerCase();
+                            ff = new File(Bukkit.getWorldContainer(), fl.getName().replace(".yml", ""));
                             try {
                                 if (!sl.worldExists(name)) {
                                     if (!fl.getName().equals(name)) {

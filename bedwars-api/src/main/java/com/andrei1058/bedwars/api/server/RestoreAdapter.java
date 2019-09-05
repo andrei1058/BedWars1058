@@ -78,7 +78,7 @@ public abstract class RestoreAdapter {
 
     /**
      * Convert worlds if it is necessary before loading them.
-     * If you do it async will probably cause issues.
+     * Let them load on BedWars1058 main Thread so they will be converted before getting loaded.
      */
     public abstract void convertWorlds();
 }
