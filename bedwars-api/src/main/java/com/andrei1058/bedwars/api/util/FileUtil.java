@@ -1,5 +1,8 @@
 package com.andrei1058.bedwars.api.util;
 
+import com.andrei1058.bedwars.api.server.VersionSupport;
+import org.bukkit.WorldType;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -20,7 +23,7 @@ public class FileUtil {
 		}
 	}
 
-	public static void setMainLevel(String worldName){
+	public static void setMainLevel(String worldName, VersionSupport vs){
 		Properties properties = new Properties();
 
 		try (FileInputStream in = new FileInputStream("server.properties")) {
@@ -30,7 +33,7 @@ public class FileUtil {
 		}
 
 		properties.setProperty("level-name", worldName);
-		properties.setProperty("generator-settings", "1;0;1");
+		properties.setProperty("generator-settings", vs.getVersion() > 5 ? "minecraft:air;minecraft:air;minecraft:air" : "1;0;1");
 		properties.setProperty("allow-nether", "false");
 		properties.setProperty("level-type", "flat");
 		properties.setProperty("generate-structures", "false");

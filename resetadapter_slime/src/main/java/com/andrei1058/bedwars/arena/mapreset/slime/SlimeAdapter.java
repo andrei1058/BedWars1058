@@ -37,7 +37,7 @@ public class SlimeAdapter extends RestoreAdapter {
     public void onEnable(IArena a) {
         if (api.getVersionSupport().getMainLevel().equalsIgnoreCase(a.getWorldName())){
             if (!(api.getServerType() == ServerType.BUNGEE && api.getArenaUtil().getGamesBeforeRestart() == 1)) {
-                FileUtil.setMainLevel("ignore_main_level");
+                FileUtil.setMainLevel("ignore_main_level", api.getVersionSupport());
                 getOwner().getLogger().log(Level.SEVERE, "Cannot use level-name as arenas. Automatically creating a new void map for level-name.");
                 getOwner().getLogger().log(Level.SEVERE, "The server is restarting...");
                 Bukkit.getServer().spigot().restart();

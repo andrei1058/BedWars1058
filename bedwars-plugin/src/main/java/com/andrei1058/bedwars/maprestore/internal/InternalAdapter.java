@@ -13,6 +13,7 @@ import com.andrei1058.bedwars.api.util.ZipFileUtil;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.logging.Level;
 
 import static com.andrei1058.bedwars.BedWars.*;
@@ -36,7 +38,7 @@ public class InternalAdapter extends RestoreAdapter {
     public void onEnable(IArena a) {
         if (nms.getMainLevel().equalsIgnoreCase(a.getWorldName())){
             if (!(BedWars.getServerType() == ServerType.BUNGEE && Arena.getGamesBeforeRestart() == 1)) {
-                FileUtil.setMainLevel("ignore_main_level");
+                FileUtil.setMainLevel("ignore_main_level", nms);
                 getOwner().getLogger().log(Level.SEVERE, "Cannot use level-name as arenas. Automatically creating a new void map for level-name.");
                 getOwner().getLogger().log(Level.SEVERE, "The server is restarting...");
                 Bukkit.getServer().spigot().restart();
@@ -109,17 +111,19 @@ public class InternalAdapter extends RestoreAdapter {
     public void onSetupSessionStart(ISetupSession s) {
         Bukkit.getScheduler().runTask(getOwner(), () -> {
             WorldCreator wc = new WorldCreator(s.getWorldName());
-            wc.type(WorldType.FLAT);
-            wc.generatorSettings("1;0;1");
+            //wc.type(WorldType.CUSTOMIZED).generatorSettings(BedWars.nms.getVersion() > 5 ? "minecraft:air;minecraft:air;minecraft:air" : "1;0;1");
             try {
                 File level = new File(Bukkit.getWorldContainer(), s.getWorldName() + "/level.dat");
                 if (level.exists()) {
                     s.getPlayer().sendMessage(ChatColor.GREEN + "Loading " + s.getWorldName() + " from Bukkit worlds container.");
                 } else {
-                    s.getPlayer().sendMessage(ChatColor.GREEN + "Creating a new void map.");
+                    s.getPlayer().sendMessage(ChatColor.RED + "Could not find any map called " + s.getWorldName());
+                    s.close();
+                    //s.getPlayer().sendMessage(ChatColor.GREEN + "Creating a new void map.");
                 }
-                Bukkit.createWorld(wc);
+                wc.createWorld();
             } catch (Exception ex) {
+                ex.printStackTrace();
                 File uid = new File(Bukkit.getServer().getWorldContainer(), s.getWorldName() + "/uid.dat");
                 if (uid.exists() && !uid.delete()) {
                     try {
@@ -132,6 +136,7 @@ public class InternalAdapter extends RestoreAdapter {
                 } else {
                     plugin.getLogger().log(Level.WARNING, "Could not delete uid.dat from " + s.getWorldName());
                     plugin.getLogger().log(Level.WARNING, "Please delete it manually and try again.");
+                    s.close();
                     return;
                 }
             }
