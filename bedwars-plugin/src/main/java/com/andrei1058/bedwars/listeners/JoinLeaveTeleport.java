@@ -49,7 +49,7 @@ public class JoinLeaveTeleport implements Listener {
         if (getServerType() == ServerType.BUNGEE) {
             if (Arena.getArenas().isEmpty()){
                 if (!Arena.getEnableQueue().isEmpty()){
-                    e.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, "The arena is restarting");
+                    e.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, getMsg(e.getPlayer(), Messages.ARENA_STATUS_RESTARTING_NAME));
                 } else return;
             }
             Arena a = Arena.getArenas().get(0);
@@ -67,8 +67,7 @@ public class JoinLeaveTeleport implements Listener {
                         }
                     }
                     if (!canJoin) {
-                        e.setKickMessage(getMsg(e.getPlayer(), Messages.COMMAND_JOIN_DENIED_IS_FULL_OF_VIPS));
-                        e.disallow(PlayerLoginEvent.Result.KICK_FULL, "The arena is full");
+                        e.disallow(PlayerLoginEvent.Result.KICK_FULL, getMsg(e.getPlayer(), Messages.COMMAND_JOIN_DENIED_IS_FULL_OF_VIPS));
                     }
                 }
             } else if (a.getStatus() == GameState.playing) {
@@ -78,11 +77,11 @@ public class JoinLeaveTeleport implements Listener {
                             if (ReJoin.getPlayer(e.getPlayer()).canReJoin()) return;
                         }
                     }
-                    e.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, "Cannot rejoin");
+                    e.disallow(PlayerLoginEvent.Result.KICK_OTHER, getMsg(e.getPlayer(), Messages.REJOIN_DENIED));
                 }
 
             } else {
-                e.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, "The arena is restarting");
+                e.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, getMsg(e.getPlayer(), Messages.ARENA_STATUS_RESTARTING_NAME));
             }
         }
     }

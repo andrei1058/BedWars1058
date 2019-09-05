@@ -205,15 +205,17 @@ public class BedWars extends JavaPlugin {
         if (getServerType() == ServerType.MULTIARENA)
             Bukkit.getScheduler().runTaskLater(this, () -> {
                 if (!config.getLobbyWorldName().isEmpty()) {
-                    if (!config.getLobbyWorldName().equalsIgnoreCase(Bukkit.getServer().getWorlds().get(0).getName())) {
-                        Bukkit.getScheduler().runTaskLater(this, () -> {
-                            Bukkit.createWorld(new WorldCreator(config.getLobbyWorldName()));
+                    if (Bukkit.getWorld(config.getLobbyWorldName()) == null && new File(Bukkit.getWorldContainer(), config.getLobbyWorldName()+"/level.dat").exists()) {
+                        if (!config.getLobbyWorldName().equalsIgnoreCase(Bukkit.getServer().getWorlds().get(0).getName())) {
+                            Bukkit.getScheduler().runTaskLater(this, () -> {
+                                Bukkit.createWorld(new WorldCreator(config.getLobbyWorldName()));
 
-                            if (Bukkit.getWorld(config.getLobbyWorldName()) != null) {
-                                Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getWorld(config.getLobbyWorldName())
-                                        .getEntities().stream().filter(e -> e instanceof Monster).forEach(Entity::remove), 20L);
-                            }
-                        }, 100L);
+                                if (Bukkit.getWorld(config.getLobbyWorldName()) != null) {
+                                    Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getWorld(config.getLobbyWorldName())
+                                            .getEntities().stream().filter(e -> e instanceof Monster).forEach(Entity::remove), 20L);
+                                }
+                            }, 100L);
+                        }
                     }
                 }
             }, 1L);
@@ -229,6 +231,8 @@ public class BedWars extends JavaPlugin {
         } else if (getServerType() == ServerType.MULTIARENA || getServerType() == ServerType.SHARED) {
             registerEvents(new ArenaSelectorListener(), new BlockStatusListener());
         }
+
+        registerEvents(new WorldLoadListener());
 
         // Register setup-holograms fix
         registerEvents(new ChunkLoad());
@@ -401,8 +405,8 @@ public class BedWars extends JavaPlugin {
             }
         } catch (Exception ignored) {
         }
-        StatsManager.getStatsCache().close();
-        remoteDatabase.close();
+        if (StatsManager.getStatsCache() != null) StatsManager.getStatsCache().close();
+        if (remoteDatabase != null) remoteDatabase.close();
         if (getServerType() == ServerType.BUNGEE) {
             ArenaSocket.disable();
         }

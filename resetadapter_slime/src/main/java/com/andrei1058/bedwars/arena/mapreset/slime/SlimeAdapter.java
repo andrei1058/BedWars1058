@@ -35,8 +35,14 @@ public class SlimeAdapter extends RestoreAdapter {
 
     @Override
     public void onEnable(IArena a) {
-        if (api.getVersionSupport().getMainLevel().equalsIgnoreCase(a.getWorldName()) && api.getArenaUtil().getGamesBeforeRestart() != 1){
-            api.getVersionSupport().setMainLevel("ignore_main_level", "1;0;1", "flat", "false");
+        if (api.getVersionSupport().getMainLevel().equalsIgnoreCase(a.getWorldName())){
+            if (!(api.getServerType() == ServerType.BUNGEE && api.getArenaUtil().getGamesBeforeRestart() == 1)) {
+                FileUtil.setMainLevel("ignore_main_level");
+                getOwner().getLogger().log(Level.SEVERE, "Cannot use level-name as arenas. Automatically creating a new void map for level-name.");
+                getOwner().getLogger().log(Level.SEVERE, "The server is restarting...");
+                Bukkit.getServer().spigot().restart();
+                return;
+            }
         }
         Bukkit.getScheduler().runTaskAsynchronously(getOwner(), () -> {
             if (Bukkit.getWorld(a.getWorldName()) != null){
@@ -59,7 +65,6 @@ public class SlimeAdapter extends RestoreAdapter {
                 Bukkit.getScheduler().runTask(getOwner(), () -> {
                     try {
                         slime.generateWorld(world);
-                        a.init(Bukkit.getWorld(a.getWorldName()));
                     } catch (Exception e) {
                         api.getArenaUtil().removeFromEnableQueue(a);
                     }

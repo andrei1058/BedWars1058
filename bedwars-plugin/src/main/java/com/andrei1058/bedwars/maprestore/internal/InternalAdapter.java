@@ -34,23 +34,21 @@ public class InternalAdapter extends RestoreAdapter {
 
     @Override
     public void onEnable(IArena a) {
-        if (nms.getMainLevel().equalsIgnoreCase(a.getWorldName()) && Arena.getGamesBeforeRestart() != 1) {
-            nms.setMainLevel("ignore_main_level", "1;0;1", "flat", "false");
+        if (nms.getMainLevel().equalsIgnoreCase(a.getWorldName())){
+            if (!(BedWars.getServerType() == ServerType.BUNGEE && Arena.getGamesBeforeRestart() == 1)) {
+                FileUtil.setMainLevel("ignore_main_level");
+                getOwner().getLogger().log(Level.SEVERE, "Cannot use level-name as arenas. Automatically creating a new void map for level-name.");
+                getOwner().getLogger().log(Level.SEVERE, "The server is restarting...");
+                Bukkit.getServer().spigot().restart();
+                return;
+            }
         }
         Bukkit.getScheduler().runTask(getOwner(), () -> {
-            World world = Bukkit.getWorld(a.getWorldName());
-            if (world != null) {
-                if (BedWars.getServerType() == ServerType.BUNGEE) {
-                    for (Player p : world.getPlayers()) {
-                        p.kickPlayer("The arena you were in was restored. You were kicked out of it. You were not supposed to be there.");
-                    }
-                } else {
-                    for (Player p : world.getPlayers()) {
-                        p.teleport(Bukkit.getWorld(BedWars.getLobbyWorld()).getSpawnLocation());
-                        p.sendMessage(ChatColor.BLUE + "The arena you were in was restored. You were kicked out of it. You were not supposed to be there.");
-                    }
-                }
-                a.init(world);
+            if (Bukkit.getWorld(a.getWorldName()) != null){
+                Bukkit.getScheduler().runTask(getOwner(), () -> {
+                    World w = Bukkit.getWorld(a.getWorldName());
+                    a.init(w);
+                });
                 return;
             }
             Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
@@ -75,7 +73,6 @@ public class InternalAdapter extends RestoreAdapter {
                     World w = Bukkit.createWorld(wc);
                     w.setKeepSpawnInMemory(false);
                     w.setAutoSave(false);
-                    a.init(w);
                 });
             });
         });

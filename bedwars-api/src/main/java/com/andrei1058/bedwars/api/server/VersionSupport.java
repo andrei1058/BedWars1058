@@ -495,9 +495,4 @@ public abstract class VersionSupport {
      * Get main level name.
      */
     public abstract String getMainLevel();
-
-    /**
-     * Set main level world.
-     */
-    public abstract void setMainLevel(String worldName, String generatorSettings, String levelType, String generateStructures);
 }

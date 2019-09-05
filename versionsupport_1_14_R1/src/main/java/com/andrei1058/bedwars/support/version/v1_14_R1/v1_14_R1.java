@@ -14,6 +14,7 @@ import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
 import net.minecraft.server.v1_14_R1.Item;
 import net.minecraft.server.v1_14_R1.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -619,15 +620,7 @@ public class v1_14_R1 extends VersionSupport {
 
     @Override
     public String getMainLevel() {
-        return ((DedicatedServer) MinecraftServer.getServer()).propertyManager.getProperties().properties.getProperty("level-name");
-    }
-
-    @Override
-    public void setMainLevel(String worldName, String generatorSettings, String levelType, String generateStructures) {
-        ((DedicatedServer) MinecraftServer.getServer()).getDedicatedServerProperties().properties.setProperty("level-name", worldName);
-        ((DedicatedServer) MinecraftServer.getServer()).getDedicatedServerProperties().properties.setProperty("generator-settings", generatorSettings);
-        ((DedicatedServer) MinecraftServer.getServer()).getDedicatedServerProperties().properties.setProperty("level-type", levelType);
-        ((DedicatedServer) MinecraftServer.getServer()).getDedicatedServerProperties().properties.setProperty("generate-structures", generateStructures);
+        return ((DedicatedServer) MinecraftServer.getServer()).getDedicatedServerProperties().levelName;
     }
 
     @Override

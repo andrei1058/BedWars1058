@@ -25,7 +25,7 @@ public abstract class RestoreAdapter {
 
     /**
      * Load the world.
-     * Once you are done use Arena#init to mark it as done.
+     * Arenas will be initialized automatically based on WorldLoadEvent.
      */
     public abstract void onEnable(IArena a);
 
