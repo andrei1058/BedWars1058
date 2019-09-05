@@ -47,12 +47,15 @@ public class JoinLeaveTeleport implements Listener {
         });
 
         if (getServerType() == ServerType.BUNGEE) {
-            if (Arena.getArenas().isEmpty()) return;
+            if (Arena.getArenas().isEmpty()){
+                if (!Arena.getEnableQueue().isEmpty()){
+                    e.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, "The arena is restarting");
+                } else return;
+            }
             Arena a = Arena.getArenas().get(0);
             if (a.getStatus() == GameState.waiting || (a.getStatus() == GameState.starting && a.getStartingTask().getCountdown() > 2)) {
                 if (a.getPlayers().size() >= a.getMaxPlayers() && !Arena.isVip(e.getPlayer())) {
-                    e.setKickMessage(getMsg(e.getPlayer(), Messages.COMMAND_JOIN_DENIED_IS_FULL));
-                    e.setResult(PlayerLoginEvent.Result.KICK_FULL);
+                    e.disallow(PlayerLoginEvent.Result.KICK_FULL, getMsg(e.getPlayer(), Messages.COMMAND_JOIN_DENIED_IS_FULL));
                 } else if (a.getPlayers().size() >= a.getMaxPlayers() && Arena.isVip(e.getPlayer())) {
                     boolean canJoin = false;
                     for (Player on : a.getPlayers()) {
