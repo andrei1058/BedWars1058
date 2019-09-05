@@ -617,10 +617,17 @@ public class v1_14_R1 extends VersionSupport {
         itemMeta.setUnbreakable(true);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public String getLevelName() {
-        return ((DedicatedServer) MinecraftServer.getServer()).propertyManager.getProperties().levelName;
+    public String getMainLevel() {
+        return ((DedicatedServer) MinecraftServer.getServer()).propertyManager.getProperties().properties.getProperty("level-name");
+    }
+
+    @Override
+    public void setMainLevel(String worldName, String generatorSettings, String levelType, String generateStructures) {
+        ((DedicatedServer) MinecraftServer.getServer()).getDedicatedServerProperties().properties.setProperty("level-name", worldName);
+        ((DedicatedServer) MinecraftServer.getServer()).getDedicatedServerProperties().properties.setProperty("generator-settings", generatorSettings);
+        ((DedicatedServer) MinecraftServer.getServer()).getDedicatedServerProperties().properties.setProperty("level-type", levelType);
+        ((DedicatedServer) MinecraftServer.getServer()).getDedicatedServerProperties().properties.setProperty("generate-structures", generateStructures);
     }
 
     @Override
