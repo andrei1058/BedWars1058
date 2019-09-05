@@ -217,4 +217,11 @@ public class ConfigManager {
     public String getName() {
         return name;
     }
+
+    /**
+     * Change internal name.
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 }

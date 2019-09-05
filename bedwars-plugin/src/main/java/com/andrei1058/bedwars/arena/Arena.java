@@ -231,6 +231,8 @@ public class Arena implements Comparable<Arena>, IArena {
         if (getArenaByName(worldName) != null) return;
         removeFromEnableQueue(this);
         this.world = world;
+        this.worldName = world.getName();
+        getConfig().setName(getWorldName());
         world.getEntities().stream().filter(e -> e.getType() != EntityType.PLAYER)
                 .filter(e -> e.getType() != EntityType.PAINTING).filter(e -> e.getType() != EntityType.ITEM_FRAME)
                 .forEach(Entity::remove);

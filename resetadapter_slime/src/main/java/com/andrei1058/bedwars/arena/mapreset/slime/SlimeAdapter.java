@@ -238,6 +238,7 @@ public class SlimeAdapter extends RestoreAdapter {
      * Convert vanilla worlds to the slime format.
      */
     public void convertWorlds() {
+        FileUtil.setLevelName("main_void_world");
         File dir = new File("plugins/" + getOwner().getName() + "/Arenas");
         File ff;
         SlimeLoader sl = slime.getLoader("file");
