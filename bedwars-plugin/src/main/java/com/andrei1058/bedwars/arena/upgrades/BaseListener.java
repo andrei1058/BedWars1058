@@ -1,5 +1,7 @@
 package com.andrei1058.bedwars.arena.upgrades;
 
+import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.events.player.PlayerBaseEnterEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerBaseLeaveEvent;
 import com.andrei1058.bedwars.api.arena.GameState;
@@ -23,11 +25,11 @@ import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class BaseListener implements Listener {
 
-    public static HashMap<Player, BedWarsTeam> isOnABase = new HashMap<>();
+    public static HashMap<Player, ITeam> isOnABase = new HashMap<>();
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerMove(PlayerMoveEvent e) {
-        Arena a = Arena.getArenaByName(e.getPlayer().getWorld().getName());
+        IArena a = Arena.getArenaByName(e.getPlayer().getWorld().getName());
         if (a == null) return;
         if (a.getStatus() != GameState.playing) return;
         Player p = e.getPlayer();
@@ -38,7 +40,7 @@ public class BaseListener implements Listener {
     public void onTeleport(PlayerTeleportEvent e) {
         Player p = e.getPlayer();
         if (isOnABase.containsKey(p)) {
-            Arena a = Arena.getArenaByPlayer(p);
+            IArena a = Arena.getArenaByPlayer(p);
             if (a == null) {
                 isOnABase.remove(p);
                 return;
@@ -49,7 +51,7 @@ public class BaseListener implements Listener {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent e) {
-        Arena a = Arena.getArenaByPlayer(e.getEntity());
+        IArena a = Arena.getArenaByPlayer(e.getEntity());
         if (a == null) return;
         checkEvents(e.getEntity(), a);
     }
@@ -57,10 +59,10 @@ public class BaseListener implements Listener {
     /**
      * Check the Enter/ Leave events and call them
      */
-    private static void checkEvents(Player p, Arena a) {
+    private static void checkEvents(Player p, IArena a) {
         if (a.isSpectator(p)) return;
         boolean notOnBase = true;
-        for (BedWarsTeam bwt : a.getTeams()) {
+        for (ITeam bwt : a.getTeams()) {
             /* BaseEnterEvent */
             if (p.getLocation().distance(bwt.getBed()) <= a.getIslandRadius()) {
                 notOnBase = false;

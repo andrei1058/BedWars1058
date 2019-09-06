@@ -2,6 +2,8 @@ package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
+import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
@@ -47,10 +49,10 @@ public class PlayerChat implements Listener {
             e.setFormat(SupportPAPI.getSupportPAPI().replace(e.getPlayer(), getMsg(p, Messages.FORMATTING_CHAT_LOBBY).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{vSuffix}", getChatSupport().getSuffix(p))
                     .replace("{player}", p.getDisplayName()).replace("{level}", getLevelSupport().getLevel(p))).replace("{message}", "%2$s"));
         } else if (Arena.getArenaByPlayer(p) != null) {
-            Arena a = Arena.getArenaByPlayer(p);
+            IArena a = Arena.getArenaByPlayer(p);
             Arena.afkCheck.remove(p.getUniqueId());
-            if (BedWars.getAPI().getAFKSystem().isPlayerAFK(e.getPlayer())) {
-                BedWars.getAPI().getAFKSystem().setPlayerAFK(e.getPlayer(), false);
+            if (BedWars.getAPI().getAFKUtil().isPlayerAFK(e.getPlayer())) {
+                BedWars.getAPI().getAFKUtil().setPlayerAFK(e.getPlayer(), false);
             }
             if (a.isSpectator(p)) {
                 if (!config.getBoolean("globalChat")) {
@@ -69,7 +71,7 @@ public class PlayerChat implements Listener {
                             .replace("{player}", p.getDisplayName()).replace("{level}", getLevelSupport().getLevel(p))).replace("{message}", "%2$s"));
                     return;
                 }
-                BedWarsTeam t = a.getTeam(p);
+                ITeam t = a.getTeam(p);
                 String msg = e.getMessage();
                 if (msg.startsWith("!") || msg.startsWith("shout") || msg.startsWith("SHOUT") || msg.startsWith(getMsg(p, Messages.MEANING_SHOUT))) {
                     if (!(p.hasPermission(Permissions.PERMISSION_SHOUT_COMMAND) || p.hasPermission(Permissions.PERMISSION_ALL))) {

@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.commands.shout;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.api.language.Language;
@@ -25,7 +26,7 @@ public class ShoutCommand extends BukkitCommand {
     public boolean execute(CommandSender s, String st, String[] args) {
         if (s instanceof ConsoleCommandSender) return true;
         Player p = (Player) s;
-        Arena a = Arena.getArenaByPlayer(p);
+        IArena a = Arena.getArenaByPlayer(p);
         if (a == null || a.isSpectator(p)) {
             p.sendMessage(Language.getMsg(p, Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
             return true;

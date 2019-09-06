@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.api;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.arena.shop.IContentTier;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.events.player.PlayerAfkEvent;
@@ -13,11 +14,15 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.shop.main.CategoryContent;
 import com.andrei1058.bedwars.stats.StatsManager;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -58,6 +63,11 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
 
     private ArenaUtil arenaUtil = new ArenaUtil() {
         @Override
+        public void addToEnableQueue(IArena a) {
+            Arena.removeFromEnableQueue(a);
+        }
+
+        @Override
         public void removeFromEnableQueue(IArena a) {
             Arena.removeFromEnableQueue(a);
         }
@@ -91,6 +101,66 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
         public IArena getArenaByPlayer(Player player) {
             return Arena.getArenaByPlayer(player);
         }
+
+        @Override
+        public void setArenaByPlayer(Player p, IArena arena) {
+            Arena.setArenaByPlayer(p, arena);
+        }
+
+        @Override
+        public void removeArenaByPlayer(Player p, IArena a) {
+            Arena.removeArenaByPlayer(p, a);
+        }
+
+        @Override
+        public IArena getArenaByName(String worldName) {
+            return Arena.getArenaByName(worldName);
+        }
+
+        @Override
+        public void setArenaByName(IArena arena) {
+            Arena.setArenaByName(arena);
+        }
+
+        @Override
+        public void removeArenaByName(String worldName) {
+            Arena.removeArenaByName(worldName);
+        }
+
+        @Override
+        public LinkedList<IArena> getArenas() {
+            return Arena.getArenas();
+        }
+
+        @Override
+        public boolean vipJoin(Player p) {
+            return Arena.isVip(p);
+        }
+
+        @Override
+        public int getPlayers(String group) {
+            return Arena.getPlayers(group);
+        }
+
+        @Override
+        public boolean joinRandomArena(Player p) {
+            return Arena.joinRandomArena(p);
+        }
+
+        @Override
+        public boolean joinRandomFromGroup(Player p, String group) {
+            return Arena.joinRandomFromGroup(p, group);
+        }
+
+        @Override
+        public LinkedList<IArena> getEnableQueue() {
+            return Arena.getEnableQueue();
+        }
+
+        @Override
+        public void sendLobbyCommandItems(Player p) {
+            Arena.sendLobbyCommandItems(p);
+        }
     };
 
     private Configs configs = new Configs() {
@@ -120,13 +190,45 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
         }
     };
 
+    private ShopUtil shopUtil = new ShopUtil() {
+        @Override
+        public int calculateMoney(Player player, Material currency) {
+            return CategoryContent.calculateMoney(player, currency);
+        }
+
+        @Override
+        public Material getCurrency(String currency) {
+            return CategoryContent.getCurrency(currency);
+        }
+
+        @Override
+        public ChatColor getCurrencyColor(Material currency) {
+            return CategoryContent.getCurrencyColor(currency);
+        }
+
+        @Override
+        public String getCurrencyMsgPath(IContentTier contentTier) {
+            return CategoryContent.getCurrencyMsgPath(contentTier);
+        }
+
+        @Override
+        public String getRomanNumber(int n) {
+            return CategoryContent.getRomanNumber(n);
+        }
+
+        @Override
+        public void takeMoney(Player player, Material currency, int amount) {
+            CategoryContent.takeMoney(player, currency, amount);
+        }
+    };
+
     @Override
-    public IStats getStatsCache() {
+    public IStats getStatsUtil() {
         return StatsManager.getStatsCache();
     }
 
     @Override
-    public AFKUtil getAFKSystem() {
+    public AFKUtil getAFKUtil() {
         return afkSystem;
     }
 
@@ -138,6 +240,16 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
     @Override
     public Configs getConfigs() {
         return configs;
+    }
+
+    @Override
+    public ShopUtil getShopUtil() {
+        return shopUtil;
+    }
+
+    @Override
+    public com.andrei1058.bedwars.api.levels.Level getLevelsUtil() {
+        return null;
     }
 
     @Override

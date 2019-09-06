@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.arena.spectator;
 
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.events.spectator.SpectatorTeleportToPlayerEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerLeaveArenaEvent;
@@ -37,7 +38,7 @@ public class SpectatorListeners implements Listener {
         if (i == null) return;
         if (i.getType() == Material.AIR) return;
         if (!nms.isCustomBedWarsItem(i)) return;
-        Arena a = Arena.getArenaByPlayer(p);
+        IArena a = Arena.getArenaByPlayer(p);
         if (a == null) return;
         if (!a.isSpectator(p)) return;
 
@@ -61,7 +62,7 @@ public class SpectatorListeners implements Listener {
         ItemStack i = e.getCurrentItem();
         if (i.getType() == Material.AIR) return;
         Player p = (Player) e.getWhoClicked();
-        Arena a = Arena.getArenaByPlayer(p);
+        IArena a = Arena.getArenaByPlayer(p);
         if (a == null) return;
         if (!a.isSpectator(p)) return;
 
@@ -93,7 +94,7 @@ public class SpectatorListeners implements Listener {
     public void onHealthChange(EntityRegainHealthEvent e) {
         if (e.getEntity().getType() != EntityType.PLAYER) return;
         Player p = (Player) e.getEntity();
-        Arena arena = Arena.getArenaByPlayer(p);
+        IArena arena = Arena.getArenaByPlayer(p);
         if (arena == null) return;
         if (arena.isPlayer(p)) {
             TeleporterGUI.refreshAllGUIs();
@@ -105,7 +106,7 @@ public class SpectatorListeners implements Listener {
     public void onFoodChange(FoodLevelChangeEvent e) {
         if (e.getEntity().getType() != EntityType.PLAYER) return;
         Player p = (Player) e.getEntity();
-        Arena arena = Arena.getArenaByPlayer(p);
+        IArena arena = Arena.getArenaByPlayer(p);
         if (arena == null) return;
         if (arena.isPlayer(p)) {
             TeleporterGUI.refreshAllGUIs();
@@ -125,7 +126,7 @@ public class SpectatorListeners implements Listener {
     public void onSpectatorInteractPlayer(PlayerInteractAtEntityEvent e) {
         if (e.getRightClicked().getType() != EntityType.PLAYER) return;
         Player p = e.getPlayer();
-        Arena a = Arena.getArenaByPlayer(p);
+        IArena a = Arena.getArenaByPlayer(p);
         if (a == null) return;
         if (a.isPlayer(p)) return;
         e.setCancelled(true);
@@ -147,7 +148,7 @@ public class SpectatorListeners implements Listener {
     @EventHandler
     public void onSpectatorInteract(PlayerInteractEntityEvent e) {
         Player p = e.getPlayer();
-        Arena a = Arena.getArenaByPlayer(p);
+        IArena a = Arena.getArenaByPlayer(p);
         if (a == null) return;
         if (a.isPlayer(p)) return;
         e.setCancelled(true);
@@ -157,7 +158,7 @@ public class SpectatorListeners implements Listener {
     // Triggered when a spectator leaves first person
     public void onSneak(PlayerToggleSneakEvent e) {
         Player p = e.getPlayer();
-        Arena a = Arena.getArenaByPlayer(p);
+        IArena a = Arena.getArenaByPlayer(p);
         if (a == null) return;
         if (p.getSpectatorTarget() != null) {
             p.setGameMode(GameMode.ADVENTURE);
@@ -205,7 +206,7 @@ public class SpectatorListeners implements Listener {
     // Disable hits from spectators
     public void onDamageByEntity(EntityDamageByEntityEvent e) {
         if (e.isCancelled()) return;
-        Arena a = Arena.getArenaByName(e.getEntity().getWorld().getName());
+        IArena a = Arena.getArenaByName(e.getEntity().getWorld().getName());
         if (a == null) return;
         Player damager = null;
         if (e.getDamager() instanceof Projectile) {

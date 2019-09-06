@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.region;
+package com.andrei1058.bedwars.api.region;
 
 import org.bukkit.Location;
 

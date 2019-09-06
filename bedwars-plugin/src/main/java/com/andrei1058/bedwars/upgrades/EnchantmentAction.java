@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.upgrades;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import org.bukkit.enchantments.Enchantment;
 
@@ -20,7 +21,7 @@ public class EnchantmentAction extends UpgradeAction {
     }
 
     @Override
-    public void execute(BedWarsTeam bwt, int i) {
+    public void execute(ITeam bwt, int i) {
         switch (getApply().toLowerCase()){
             case "bow":
                 bwt.addBowEnchantment(getEnchantment(), getAmplifier());

@@ -1,14 +1,18 @@
 package com.andrei1058.bedwars.api;
 
 import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.arena.shop.IContentTier;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.levels.Level;
 import com.andrei1058.bedwars.api.server.*;
 import com.andrei1058.bedwars.api.command.ParentCommand;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.LinkedList;
 import java.util.UUID;
 
 public interface BedWars {
@@ -16,7 +20,7 @@ public interface BedWars {
     /**
      * Get stats utils.
      */
-    IStats getStatsCache();
+    IStats getStatsUtil();
 
     interface IStats {
         /**
@@ -84,7 +88,7 @@ public interface BedWars {
     /**
      * Get afk system methods
      */
-    AFKUtil getAFKSystem();
+    AFKUtil getAFKUtil();
 
     interface AFKUtil {
         /**
@@ -106,6 +110,11 @@ public interface BedWars {
     ArenaUtil getArenaUtil();
 
     interface ArenaUtil {
+        /**
+         * Add a custom arena to the enable queue.
+         */
+        void addToEnableQueue(IArena a);
+
         /**
          * Remove an arena from the enable queue.
          */
@@ -142,11 +151,75 @@ public interface BedWars {
         int getGamesBeforeRestart();
 
         /**
-         * Get the arena where the player is.
+         * Get an arena by a player. Spectator or Player.
          *
-         * @return null if not playing or spectating.
+         * @param player Target player
+         * @return The arena where the player is in. Can be NULL.
          */
         IArena getArenaByPlayer(Player player);
+
+        /**
+         * Set an arena by player if the player is in this arena.
+         */
+        void setArenaByPlayer(Player p, IArena arena);
+
+        /**
+         * Remove
+         */
+        void removeArenaByPlayer(Player p, IArena a);
+
+        /**
+         * Get an arena by world name
+         *
+         * @param worldName World name
+         */
+        IArena getArenaByName(String worldName);
+
+        void setArenaByName(IArena arena);
+
+        /**
+         * Remove
+         */
+        void removeArenaByName(String worldName);
+
+        LinkedList<IArena> getArenas();
+
+        /**
+         * Check if a player has vip join.
+         */
+        boolean vipJoin(Player p);
+
+        /**
+         * Get players count for a group
+         */
+        int getPlayers(String group);
+
+        /**
+         * Add a player to the most filled arena.
+         * Check if is the party owner first.
+         *
+         * @return true if joined.
+         */
+        boolean joinRandomArena(Player p);
+
+        /**
+         * Add a player to the most filled arena from a group.
+         *
+         * @return true if added.
+         */
+        boolean joinRandomFromGroup(Player p, String group);
+
+        /**
+         * Arena enable queue.
+         */
+        LinkedList<IArena> getEnableQueue();
+
+        /**
+         * This will give the lobby items to the player.
+         * Not used in serverType BUNGEE.
+         * This will clear the inventory first.
+         */
+        void sendLobbyCommandItems(Player p);
     }
 
     Configs getConfigs();
@@ -178,6 +251,47 @@ public interface BedWars {
         ConfigManager getUpgradesConfig();
     }
 
+    /**
+     * Get shop util.
+     */
+    ShopUtil getShopUtil();
+
+    interface ShopUtil {
+
+        /**
+         * Get player's money amount
+         */
+        int calculateMoney(Player player, Material currency);
+
+        /**
+         * Get currency as material
+         *
+         * @return {@link Material#AIR} if is vault.
+         */
+        Material getCurrency(String currency);
+
+        ChatColor getCurrencyColor(Material currency);
+
+        /**
+         * Cet currency path
+         */
+        String getCurrencyMsgPath(IContentTier contentTier);
+
+        /**
+         * Get roman number for given int.
+         */
+        String getRomanNumber(int n);
+
+        /**
+         * Take money from player on buy
+         */
+        void takeMoney(Player player, Material currency, int amount);
+    }
+
+    /**
+     * Get levels methods.
+     */
+    Level getLevelsUtil();
 
     /**
      * Get active setup session.

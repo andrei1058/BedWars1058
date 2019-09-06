@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.api.command.ParentCommand;
@@ -40,7 +41,7 @@ public class DisableArena extends SubCommand {
             p.sendMessage("§c▪ §7" + args[0] + " doesn't exist!");
             return true;
         }
-        Arena a = Arena.getArenaByName(args[0]);
+        IArena a = Arena.getArenaByName(args[0]);
         if (a == null) {
             p.sendMessage("§c▪ §7This arena is disabled yet!");
             return true;
@@ -53,7 +54,7 @@ public class DisableArena extends SubCommand {
     @Override
     public List<String> getTabComplete() {
         List<String> tab = new ArrayList<>();
-        for (Arena a : Arena.getArenas()){
+        for (IArena a : Arena.getArenas()){
             tab.add(a.getWorldName());
         }
         return tab;

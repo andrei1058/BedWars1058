@@ -2,13 +2,15 @@ package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.generator.GeneratorType;
+import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
+import com.andrei1058.bedwars.api.arena.team.TeamEnchant;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerFirstSpawnEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerReSpawnEvent;
 import com.andrei1058.bedwars.api.language.Messages;
-import com.andrei1058.bedwars.region.Cuboid;
+import com.andrei1058.bedwars.api.region.Cuboid;
 import com.andrei1058.bedwars.shop.ShopCache;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -37,7 +39,7 @@ public class BedWarsTeam implements ITeam {
     private List<Player> members = new ArrayList<>();
     private TeamColor color;
     private Location spawn, bed, shop, teamUpgrades;
-    private com.andrei1058.bedwars.arena.OreGenerator ironGenerator = null, goldGenerator = null, emeraldGenerator = null;
+    private IGenerator ironGenerator = null, goldGenerator = null, emeraldGenerator = null;
     private String name;
     private Arena arena;
     private boolean bedDestroyed = false;
@@ -62,15 +64,15 @@ public class BedWarsTeam implements ITeam {
     /**
      * Enchantments for bows
      */
-    private List<Enchant> bowsEnchantments = new ArrayList<>();
+    private List<TeamEnchant> bowsEnchantments = new ArrayList<>();
     /**
      * Enchantments for swords
      */
-    private List<Enchant> swordsEnchantemnts = new ArrayList<>();
+    private List<TeamEnchant> swordsEnchantemnts = new ArrayList<>();
     /**
      * Enchantments for armors
      */
-    private List<Enchant> armorsEnchantemnts = new ArrayList<>();
+    private List<TeamEnchant> armorsEnchantemnts = new ArrayList<>();
     /**
      * Used for show/ hide bed hologram
      */
@@ -136,7 +138,7 @@ public class BedWarsTeam implements ITeam {
     }
 
     /**
-     * Spawn shopkeepers for target team (if enabld).
+     * Spawn shopkeepers for target team (if enabled).
      */
     public void spawnNPCs() {
         if (getMembers().isEmpty() && getArena().getConfig().getBoolean(ConfigPath.ARENA_DISABLE_NPCS_FOR_EMPTY_TEAMS))
@@ -302,10 +304,8 @@ public class BedWarsTeam implements ITeam {
      * Spawn the iron and gold generators
      */
     public void setGenerators(Location ironGenerator, Location goldGenerator) {
-        this.ironGenerator = new OreGenerator(ironGenerator, arena, GeneratorType.IRON, this);
-        this.goldGenerator = new OreGenerator(goldGenerator, arena, GeneratorType.GOLD, this);
-        getArena().getOreGenerators().add(this.ironGenerator);
-        getArena().getOreGenerators().add(this.goldGenerator);
+        getArena().getOreGenerators().add(this.ironGenerator = new OreGenerator(ironGenerator, arena, GeneratorType.IRON, this));
+        getArena().getOreGenerators().add(this.goldGenerator = new OreGenerator(goldGenerator, arena, GeneratorType.GOLD, this));
     }
 
     /**
@@ -358,7 +358,7 @@ public class BedWarsTeam implements ITeam {
                 if (i == null) continue;
                 if (i.getType() == Material.BOW) {
                     ItemMeta im = i.getItemMeta();
-                    for (Enchant e : getBowsEnchantments()) {
+                    for (TeamEnchant e : getBowsEnchantments()) {
                         im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
                     }
                     i.setItemMeta(im);
@@ -366,12 +366,12 @@ public class BedWarsTeam implements ITeam {
                 p.updateInventory();
             }
         }
-        if (!getSwordsEnchantemnts().isEmpty()) {
+        if (!getSwordsEnchantments().isEmpty()) {
             for (ItemStack i : p.getInventory().getContents()) {
                 if (i == null) continue;
                 if (nms.isSword(i)) {
                     ItemMeta im = i.getItemMeta();
-                    for (Enchant e : getSwordsEnchantemnts()) {
+                    for (TeamEnchant e : getSwordsEnchantments()) {
                         im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
                     }
                     i.setItemMeta(im);
@@ -379,12 +379,12 @@ public class BedWarsTeam implements ITeam {
                 p.updateInventory();
             }
         }
-        if (!getArmorsEnchantemnts().isEmpty()) {
+        if (!getArmorsEnchantments().isEmpty()) {
             for (ItemStack i : p.getInventory().getArmorContents()) {
                 if (i == null) continue;
                 if (nms.isArmor(i)) {
                     ItemMeta im = i.getItemMeta();
-                    for (Enchant e : getArmorsEnchantemnts()) {
+                    for (TeamEnchant e : getArmorsEnchantments()) {
                         im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
                     }
                     i.setItemMeta(im);
@@ -514,7 +514,7 @@ public class BedWarsTeam implements ITeam {
      * Used when someone buys a new potion effect with apply == members
      */
     public void addTeamEffect(PotionEffectType pef, int amp, int duration) {
-        getTeamEffects().add(new BedWarsTeam.Effect(pef, amp, duration));
+        getTeamEffects().add(new Effect(pef, amp, duration));
         for (Player p : getMembers()) {
             p.addPotionEffect(new PotionEffect(pef, Integer.MAX_VALUE, amp));
         }
@@ -524,7 +524,7 @@ public class BedWarsTeam implements ITeam {
      * Used when someone buys a new potion effect with apply == base
      */
     public void addBaseEffect(PotionEffectType pef, int amp, int duration) {
-        getBaseEffects().add(new BedWarsTeam.Effect(pef, amp, duration));
+        getBaseEffects().add(new Effect(pef, amp, duration));
         for (Player p : new ArrayList<>(getMembers())) {
             if (p.getLocation().distance(getBed()) <= getArena().getIslandRadius()) {
                 for (Effect e : getBaseEffects()) {
@@ -538,7 +538,7 @@ public class BedWarsTeam implements ITeam {
      * Used when someone buys a new potion effect with apply == enemyBaseEnter
      */
     public void addEnemyBaseEnterEffect(PotionEffectType pef, int amp, int slot, int duration) {
-        Effect e = new BedWarsTeam.Effect(pef, amp, duration);
+        Effect e = new Effect(pef, amp, duration);
         getEnemyBaseEnter().add(e);
         getEnemyBaseEnterSlots().add(slot);
         getEbseEffectsStatic().add(e);
@@ -566,7 +566,7 @@ public class BedWarsTeam implements ITeam {
      * Used when someone buys a new enchantment with apply == sword
      */
     public void addSwordEnchantment(Enchantment e, int a) {
-        getSwordsEnchantemnts().add(new Enchant(e, a));
+        getSwordsEnchantments().add(new Enchant(e, a));
         for (Player p : getMembers()) {
             for (ItemStack i : p.getInventory().getContents()) {
                 if (i == null) continue;
@@ -584,7 +584,7 @@ public class BedWarsTeam implements ITeam {
      * Used when someone buys a new enchantment with apply == armor
      */
     public void addArmorEnchantment(Enchantment e, int a) {
-        getArmorsEnchantemnts().add(new Enchant(e, a));
+        getArmorsEnchantments().add(new Enchant(e, a));
         for (Player p : getMembers()) {
             for (ItemStack i : p.getInventory().getArmorContents()) {
                 if (i == null) continue;
@@ -619,7 +619,7 @@ public class BedWarsTeam implements ITeam {
     /**
      * Potion effects from the team upgrades shop
      */
-    public class Effect {
+    public static class Effect {
         PotionEffectType potionEffectType;
         int amplifier;
         int duration;
@@ -650,7 +650,7 @@ public class BedWarsTeam implements ITeam {
     /**
      * Enchantments for bows, swords and armors from the team upgrades
      */
-    public class Enchant {
+    public static class Enchant implements TeamEnchant {
         Enchantment enchantment;
         int amplifier;
 
@@ -668,9 +668,6 @@ public class BedWarsTeam implements ITeam {
         }
     }
 
-    /**
-     * Getter, setter etc.
-     */
     public boolean isMember(Player u) {
         if (u == null) return false;
         return members.contains(u);
@@ -682,7 +679,7 @@ public class BedWarsTeam implements ITeam {
     public boolean wasMember(UUID u) {
         if (u == null) return false;
         for (Player p : membersCache) {
-            if (p.getName().equals(u)) return true;
+            if (p.getUniqueId().equals(u)) return true;
         }
         return false;
     }
@@ -738,7 +735,6 @@ public class BedWarsTeam implements ITeam {
 
     /**
      * Destroy the bed for a team.
-     * Since API 8 it will also remove the team's generators if true in config.
      */
     public void setBedDestroyed(boolean bedDestroyed) {
         this.bedDestroyed = bedDestroyed;
@@ -762,19 +758,19 @@ public class BedWarsTeam implements ITeam {
 
     }
 
-    public OreGenerator getIronGenerator() {
+    public IGenerator getIronGenerator() {
         return ironGenerator;
     }
 
-    public OreGenerator getGoldGenerator() {
+    public IGenerator getGoldGenerator() {
         return goldGenerator;
     }
 
-    public OreGenerator getEmeraldGenerator() {
+    public IGenerator getEmeraldGenerator() {
         return emeraldGenerator;
     }
 
-    public void setEmeraldGenerator(OreGenerator emeraldGenerator) {
+    public void setEmeraldGenerator(IGenerator emeraldGenerator) {
         this.emeraldGenerator = emeraldGenerator;
     }
 
@@ -791,15 +787,15 @@ public class BedWarsTeam implements ITeam {
         return enemyBaseEnter;
     }
 
-    public List<Enchant> getBowsEnchantments() {
+    public List<TeamEnchant> getBowsEnchantments() {
         return bowsEnchantments;
     }
 
-    public List<Enchant> getSwordsEnchantemnts() {
+    public List<TeamEnchant> getSwordsEnchantments() {
         return swordsEnchantemnts;
     }
 
-    public List<Enchant> getArmorsEnchantemnts() {
+    public List<TeamEnchant> getArmorsEnchantments() {
         return armorsEnchantemnts;
     }
 
@@ -876,7 +872,7 @@ public class BedWarsTeam implements ITeam {
         return beds;
     }
 
-    protected void destroyData(){
+    public void destroyData(){
         members = null;
         spawn = null;
         bed = null;
@@ -900,5 +896,10 @@ public class BedWarsTeam implements ITeam {
         enemyBaseEnterSlots = null;
         ebseEffectsStatic = null;
         membersCache = null;
+    }
+
+    @Override
+    public void destroyBedHolo(Player player) {
+        if (getBeds().get(player) != null) getBeds().get(player).destroy();
     }
 }

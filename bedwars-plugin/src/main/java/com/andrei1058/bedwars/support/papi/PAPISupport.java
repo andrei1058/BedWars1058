@@ -2,6 +2,8 @@ package com.andrei1058.bedwars.support.papi;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
+import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
@@ -37,7 +39,7 @@ public class PAPISupport extends PlaceholderExpansion {
     public String onPlaceholderRequest(Player p, String s) {
 
         if (s.contains("arena_status_")){
-            Arena a = Arena.getArenaByName(s.replace("arena_status_", ""));
+            IArena a = Arena.getArenaByName(s.replace("arena_status_", ""));
             if (a == null){
                 return "NULL";
             }
@@ -45,7 +47,7 @@ public class PAPISupport extends PlaceholderExpansion {
         }
 
         if (s.contains("arena_count_")){
-            Arena a = Arena.getArenaByName(s.replace("arena_count_", ""));
+            IArena a = Arena.getArenaByName(s.replace("arena_count_", ""));
             if (a == null){
                 return "0";
             }
@@ -95,14 +97,14 @@ public class PAPISupport extends PlaceholderExpansion {
                 replay = String.valueOf(Arena.getArenas().size());
                 break;
             case "player_team":
-                Arena a = Arena.getArenaByPlayer(p);
+                IArena a = Arena.getArenaByPlayer(p);
                 if (a != null) {
                     if (ShoutCommand.isShout(p)) {
                         replay += Language.getMsg(p, Messages.FORMAT_PAPI_PLAYER_TEAM_SHOUT);
                     }
                     if (a.isPlayer(p)) {
                         if (a.getStatus() == GameState.playing) {
-                            BedWarsTeam bwt = a.getTeam(p);
+                            ITeam bwt = a.getTeam(p);
                             if (bwt != null) {
                                 replay += Language.getMsg(p, Messages.FORMAT_PAPI_PLAYER_TEAM_TEAM).replace("{TeamName}",
                                         bwt.getName()).replace("{TeamColor}", String.valueOf(TeamColor.getChatColor(bwt.getColor())));

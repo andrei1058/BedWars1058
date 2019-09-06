@@ -5,7 +5,9 @@ import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.NextEvent;
 import com.andrei1058.bedwars.api.arena.generator.GeneratorType;
+import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.shop.ShopHolo;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerJoinArenaEvent;
@@ -20,10 +22,13 @@ import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.api.tasks.PlayingTask;
+import com.andrei1058.bedwars.api.tasks.RestartingTask;
+import com.andrei1058.bedwars.api.tasks.StartingTask;
 import com.andrei1058.bedwars.levels.internal.InternalLevel;
 import com.andrei1058.bedwars.levels.internal.PerMinuteTask;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
-import com.andrei1058.bedwars.region.Region;
+import com.andrei1058.bedwars.api.region.Region;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.arena.tasks.GamePlayingTask;
@@ -50,11 +55,11 @@ import static com.andrei1058.bedwars.arena.upgrades.BaseListener.isOnABase;
 import static com.andrei1058.bedwars.api.language.Language.*;
 
 @SuppressWarnings("WeakerAccess")
-public class Arena implements Comparable<Arena>, IArena {
+public class Arena implements IArena {
 
-    private static HashMap<String, Arena> arenaByName = new HashMap<>();
-    private static HashMap<Player, Arena> arenaByPlayer = new HashMap<>();
-    private static ArrayList<Arena> arenas = new ArrayList<>();
+    private static HashMap<String, IArena> arenaByName = new HashMap<>();
+    private static HashMap<Player, IArena> arenaByPlayer = new HashMap<>();
+    private static LinkedList<IArena> arenas = new LinkedList<>();
     private static int gamesBeforeRestart = config.getInt(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART);
     public static HashMap<UUID, Integer> afkCheck = new HashMap<>();
     public static HashMap<UUID, Integer> magicMilk = new HashMap<>();
@@ -71,9 +76,8 @@ public class Arena implements Comparable<Arena>, IArena {
     public boolean allowSpectate = true;
     private World world;
     private String group = "Default", worldName;
-    private List<BedWarsTeam> teams = new ArrayList<>();
+    private List<ITeam> teams = new ArrayList<>();
     private LinkedList<Block> placed = new LinkedList<>();
-    private LinkedList<Block> broken = new LinkedList<>();
     private List<String> nextEvents = new ArrayList<>();
     private List<Region> regionsList = new ArrayList<>();
 
@@ -110,12 +114,12 @@ public class Arena implements Comparable<Arena>, IArena {
 
 
     /* ARENA TASKS */
-    private GameStartingTask startingTask = null;
-    private GamePlayingTask playingTask = null;
-    private GameRestartingTask restartingTask = null;
+    private StartingTask startingTask = null;
+    private PlayingTask playingTask = null;
+    private RestartingTask restartingTask = null;
 
     /* ARENA GENERATORS */
-    private List<OreGenerator> oreGenerators = new ArrayList<>();
+    private List<IGenerator> oreGenerators = new ArrayList<>();
 
     private PerMinuteTask perMinuteTask;
 
@@ -215,12 +219,7 @@ public class Arena implements Comparable<Arena>, IArena {
         }
         if (error) return;
 
-        enableQueue.add(this);
-        plugin.getLogger().info("Arena " + getWorldName() + " was added to the enable queue.");
-        if (enableQueue.size() == 1) {
-            BedWars.getAPI().getRestoreAdapter().onEnable(this);
-            plugin.getLogger().info("Loading arena: " + getWorldName());
-        }
+        addToEnableQueue(this);
     }
 
     /**
@@ -236,7 +235,7 @@ public class Arena implements Comparable<Arena>, IArena {
         world.getEntities().stream().filter(e -> e.getType() != EntityType.PLAYER)
                 .filter(e -> e.getType() != EntityType.PAINTING).filter(e -> e.getType() != EntityType.ITEM_FRAME)
                 .forEach(Entity::remove);
-        for (String s : getConfig().getList(ConfigPath.ARENA_GAME_RULES)){
+        for (String s : getConfig().getList(ConfigPath.ARENA_GAME_RULES)) {
             String[] rule = s.split(":");
             if (rule.length == 2) world.setGameRuleValue(rule[0], rule[1]);
         }
@@ -337,7 +336,7 @@ public class Arena implements Comparable<Arena>, IArena {
                 }
                 for (Player mem : getParty().getMembers(p)) {
                     if (mem == p) continue;
-                    Arena a = Arena.getArenaByPlayer(mem);
+                    IArena a = Arena.getArenaByPlayer(mem);
                     if (a != null) {
                         if (a.isPlayer(mem)) {
                             a.removePlayer(mem, false);
@@ -389,7 +388,7 @@ public class Arena implements Comparable<Arena>, IArena {
             for (Player on : players) {
                 on.sendMessage(getMsg(on, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
             }
-            setArenaByPlayer(p);
+            setArenaByPlayer(p, this);
 
             /* check if you can start the arena */
             if (status == GameState.waiting) {
@@ -500,7 +499,7 @@ public class Arena implements Comparable<Arena>, IArena {
                     new PlayerGoods(p, true);
                     playerLocation.put(p, p.getLocation());
                 }
-                setArenaByPlayer(p);
+                setArenaByPlayer(p, this);
             }
 
             Bukkit.getScheduler().runTaskLater(plugin, () -> new SBoard(p, this), 35L);
@@ -552,7 +551,7 @@ public class Arena implements Comparable<Arena>, IArena {
 
             /* update generator holograms for spectators */
             String iso = Language.getPlayerLanguage(p).getIso();
-            for (OreGenerator o : getOreGenerators()) {
+            for (IGenerator o : getOreGenerators()) {
                 o.updateHolograms(p, iso);
             }
             for (ShopHolo sh : ShopHolo.getShopHolo()) {
@@ -581,16 +580,14 @@ public class Arena implements Comparable<Arena>, IArena {
         debug("Player removed: " + p.getName() + " arena: " + getWorldName());
         respawn.remove(p);
 
-        BedWarsTeam team = null;
+        ITeam team = null;
 
         if (getStatus() == GameState.playing) {
-            for (BedWarsTeam t : getTeams()) {
+            for (ITeam t : getTeams()) {
                 if (t.isMember(p)) {
                     team = t;
                     t.getMembers().remove(p);
-                    if (t.getBedHolo(p) != null) {
-                        t.getBedHolo(p).destroy();
-                    }
+                    t.destroyBedHolo(p);
                 }
             }
         }
@@ -604,7 +601,7 @@ public class Arena implements Comparable<Arena>, IArena {
         Bukkit.getPluginManager().callEvent(new PlayerLeaveArenaEvent(p, this));
         //players.remove must be under call event in order to check if the player is a spectator or not
         players.remove(p);
-        removeArenaByPlayer(p);
+        removeArenaByPlayer(p, this);
 
         for (PotionEffect pf : p.getActivePotionEffects()) {
             p.removePotionEffect(pf.getType());
@@ -631,7 +628,7 @@ public class Arena implements Comparable<Arena>, IArena {
             }
         } else if (status == GameState.playing) {
             int alive_teams = 0;
-            for (BedWarsTeam t : getTeams()) {
+            for (ITeam t : getTeams()) {
                 if (t == null) continue;
                 if (!t.getMembers().isEmpty()) {
                     alive_teams++;
@@ -742,7 +739,7 @@ public class Arena implements Comparable<Arena>, IArena {
         debug("Spectator removed: " + p.getName() + " arena: " + getWorldName());
         Bukkit.getPluginManager().callEvent(new PlayerLeaveArenaEvent(p, this));
         spectators.remove(p);
-        removeArenaByPlayer(p);
+        removeArenaByPlayer(p, this);
         p.getInventory().clear();
         p.getInventory().setArmorContents(null);
         /* restore player inventory */
@@ -823,7 +820,9 @@ public class Arena implements Comparable<Arena>, IArena {
     /**
      * Rejoin an arena
      */
-    public boolean reJoin(ReJoin reJoin, Player p) {
+    public boolean reJoin(Player p) {
+        ReJoin reJoin = ReJoin.getPlayer(p);
+        if (reJoin == null) return false;
         if (reJoin.getArena() != this) return false;
         if (!reJoin.canReJoin()) return false;
 
@@ -853,7 +852,7 @@ public class Arena implements Comparable<Arena>, IArena {
         for (Player on : spectators) {
             on.sendMessage(getMsg(on, Messages.COMMAND_REJOIN_PLAYER_RECONNECTED).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
         }
-        setArenaByPlayer(p);
+        setArenaByPlayer(p, this);
         /* save player inventory etc */
         if (BedWars.getServerType() != ServerType.BUNGEE) {
             new PlayerGoods(p, true);
@@ -929,7 +928,7 @@ public class Arena implements Comparable<Arena>, IArena {
      *
      * @param name World name
      */
-    public static Arena getArenaByName(String name) {
+    public static IArena getArenaByName(String name) {
         return arenaByName.get(name);
     }
 
@@ -939,14 +938,14 @@ public class Arena implements Comparable<Arena>, IArena {
      * @param p Target player
      * @return The arena where the player is in. Can be NULL.
      */
-    public static Arena getArenaByPlayer(Player p) {
+    public static IArena getArenaByPlayer(Player p) {
         return arenaByPlayer.get(p);
     }
 
     /**
      * Get an arenas list
      */
-    public static ArrayList<Arena> getArenas() {
+    public static LinkedList<IArena> getArenas() {
         return arenas;
     }
 
@@ -1000,55 +999,37 @@ public class Arena implements Comparable<Arena>, IArena {
                 : getConfig().getString(ConfigPath.ARENA_DISPLAY_NAME);
     }
 
-    /**
-     * Get the arena's group.
-     */
     @Override
     public String getGroup() {
         return group;
     }
 
-    /**
-     * Get the arena's world name.
-     */
     @Override
     public String getWorldName() {
         return worldName;
     }
 
-    /**
-     * Get the teams list
-     */
-    public List<BedWarsTeam> getTeams() {
+    @Override
+    public List<ITeam> getTeams() {
         return teams;
     }
 
-    /**
-     * Get the arena's configuration
-     */
     @Override
     public ConfigManager getConfig() {
         return cm;
     }
 
-    /**
-     * Add placed block to cache.
-     */
+    @Override
     public void addPlacedBlock(Block block) {
         placed.add(block);
     }
 
-    /**
-     * Remove placed block.
-     */
+    @Override
     public void removePlacedBlock(Block block) {
         placed.remove(block);
     }
 
-    /**
-     * Get the placed blocks list.
-     */
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    @Override
     public boolean isBlockPlaced(Block block) {
         return placed.contains(block);
     }
@@ -1059,7 +1040,7 @@ public class Arena implements Comparable<Arena>, IArena {
      * @param p          Target player
      * @param finalKills True if you want to get the Final Kills. False for regular kills.
      */
-    int getPlayerKills(Player p, boolean finalKills) {
+    public int getPlayerKills(Player p, boolean finalKills) {
         if (finalKills) return playerFinalKills.getOrDefault(p, 0);
         return playerKills.getOrDefault(p, 0);
     }
@@ -1069,7 +1050,7 @@ public class Arena implements Comparable<Arena>, IArena {
      *
      * @param p Target player
      */
-    int getPlayerBedsDestroyed(Player p) {
+    public int getPlayerBedsDestroyed(Player p) {
         if (playerBedsDestroyed.containsKey(p)) return playerBedsDestroyed.get(p);
         return 0;
     }
@@ -1093,16 +1074,24 @@ public class Arena implements Comparable<Arena>, IArena {
         this.group = group;
     }
 
-    private void setArenaByPlayer(Player p) {
-        arenaByPlayer.put(p, this);
-        refreshSigns();
-        JoinNPC.updateNPCs(getGroup());
+    public static void setArenaByPlayer(Player p, IArena arena) {
+        arenaByPlayer.put(p, arena);
+        arena.refreshSigns();
+        JoinNPC.updateNPCs(arena.getGroup());
     }
 
-    private void removeArenaByPlayer(Player p) {
-        arenaByPlayer.remove(p, this);
-        refreshSigns();
-        JoinNPC.updateNPCs(getGroup());
+    public static void setArenaByName(IArena arena) {
+        arenaByName.put(arena.getWorldName(), arena);
+    }
+
+    public static void removeArenaByName(String arena) {
+        arenaByName.remove(arena);
+    }
+
+    public static void removeArenaByPlayer(Player p, IArena arena) {
+        arenaByPlayer.remove(p);
+        arena.refreshSigns();
+        JoinNPC.updateNPCs(arena.getGroup());
     }
 
     /**
@@ -1223,7 +1212,6 @@ public class Arena implements Comparable<Arena>, IArena {
     /**
      * Refresh signs.
      */
-    @SuppressWarnings("WeakerAccess")
     public void refreshSigns() {
         for (BlockState b : getSigns()) {
             Sign s = (Sign) b;
@@ -1322,7 +1310,7 @@ public class Arena implements Comparable<Arena>, IArena {
      * This will give the pre-game command Items.
      * This will clear the inventory first.
      */
-    private void sendPreGameCommandItems(Player p) {
+    public void sendPreGameCommandItems(Player p) {
         if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH) == null) return;
         p.getInventory().clear();
 
@@ -1410,8 +1398,8 @@ public class Arena implements Comparable<Arena>, IArena {
      * Make sure the player is in this arena first.
      */
     @Override
-    public BedWarsTeam getTeam(Player p) {
-        for (BedWarsTeam t : getTeams()) {
+    public ITeam getTeam(Player p) {
+        for (ITeam t : getTeams()) {
             if (t.isMember(p)) {
                 return t;
             }
@@ -1424,8 +1412,8 @@ public class Arena implements Comparable<Arena>, IArena {
      * Check the team where he played before leaving or losing.
      */
     @Override
-    public BedWarsTeam getExTeam(UUID p) {
-        for (BedWarsTeam t : getTeams()) {
+    public ITeam getExTeam(UUID p) {
+        for (ITeam t : getTeams()) {
             if (t.wasMember(p)) {
                 return t;
             }
@@ -1438,9 +1426,8 @@ public class Arena implements Comparable<Arena>, IArena {
      * Used to get the team for a player that has left the arena.
      * Make sure the player is in this arena first.
      */
-    @SuppressWarnings("WeakerAccess")
-    public BedWarsTeam getPlayerTeam(String playerCache) {
-        for (BedWarsTeam t : getTeams()) {
+    public ITeam getPlayerTeam(String playerCache) {
+        for (ITeam t : getTeams()) {
             for (Player p : t.getMembersCache()) {
                 if (p.getName().equals(playerCache)) return t;
             }
@@ -1455,8 +1442,8 @@ public class Arena implements Comparable<Arena>, IArena {
     public void checkWinner() {
         if (getStatus() != GameState.restarting) {
             int max = getTeams().size(), eliminated = 0;
-            BedWarsTeam winner = null;
-            for (BedWarsTeam t : getTeams()) {
+            ITeam winner = null;
+            for (ITeam t : getTeams()) {
                 if (t.getMembers().isEmpty()) {
                     eliminated++;
                 } else {
@@ -1524,7 +1511,7 @@ public class Arena implements Comparable<Arena>, IArena {
                         winners.add(p.getUniqueId());
                     }
                 }
-                for (BedWarsTeam bwt : getTeams()) {
+                for (ITeam bwt : getTeams()) {
                     if (winner != null) {
                         if (bwt == winner) continue;
                     }
@@ -1567,9 +1554,7 @@ public class Arena implements Comparable<Arena>, IArena {
         this.nextEvent = nextEvent;
     }
 
-    /**
-     * This will attempt to upgrade the next event if it is the case.
-     */
+    @Override
     public void updateNextEvent() {
 
         debug("---");
@@ -1588,7 +1573,7 @@ public class Arena implements Comparable<Arena>, IArena {
             upgradeEmeraldsCount = next;
             emeraldTier = 2;
             sendEmeraldsUpgradeMessages();
-            for (OreGenerator o : getOreGenerators()) {
+            for (IGenerator o : getOreGenerators()) {
                 if (o.getType() == GeneratorType.EMERALD && o.getBwt() == null) {
                     o.upgrade();
                 }
@@ -1606,7 +1591,7 @@ public class Arena implements Comparable<Arena>, IArena {
             upgradeDiamondsCount = next;
             diamondTier = 2;
             sendDiamondsUpgradeMessages();
-            for (OreGenerator o : getOreGenerators()) {
+            for (IGenerator o : getOreGenerators()) {
                 if (o.getType() == GeneratorType.DIAMOND && o.getBwt() == null) {
                     o.upgrade();
                 }
@@ -1621,7 +1606,7 @@ public class Arena implements Comparable<Arena>, IArena {
             } else {
                 setNextEvent(NextEvent.BEDS_DESTROY);
             }
-            for (OreGenerator o : getOreGenerators()) {
+            for (IGenerator o : getOreGenerators()) {
                 if (o.getType() == GeneratorType.EMERALD && o.getBwt() == null) {
                     o.upgrade();
                 }
@@ -1636,7 +1621,7 @@ public class Arena implements Comparable<Arena>, IArena {
             } else {
                 setNextEvent(NextEvent.BEDS_DESTROY);
             }
-            for (OreGenerator o : getOreGenerators()) {
+            for (IGenerator o : getOreGenerators()) {
                 if (o.getType() == GeneratorType.DIAMOND && o.getBwt() == null) {
                     o.upgrade();
                 }
@@ -1691,7 +1676,7 @@ public class Arena implements Comparable<Arena>, IArena {
     /**
      * Get arena by players list.
      */
-    public static HashMap<Player, Arena> getArenaByPlayer() {
+    public static HashMap<Player, IArena> getArenaByPlayer() {
         return arenaByPlayer;
     }
 
@@ -1707,7 +1692,7 @@ public class Arena implements Comparable<Arena>, IArena {
      */
     public static int getPlayers(String group) {
         int i = 0;
-        for (Arena a : getArenas()) {
+        for (IArena a : getArenas()) {
             if (a.getGroup().equalsIgnoreCase(group)) i += a.getPlayers().size();
         }
         return i;
@@ -1740,8 +1725,8 @@ public class Arena implements Comparable<Arena>, IArena {
     /**
      * Get a team by name
      */
-    public BedWarsTeam getTeam(String name) {
-        for (BedWarsTeam bwt : getTeams()) {
+    public ITeam getTeam(String name) {
+        for (ITeam bwt : getTeams()) {
             if (bwt.getName().equals(name)) return bwt;
         }
         return null;
@@ -1775,28 +1760,28 @@ public class Arena implements Comparable<Arena>, IArena {
     /**
      * Get instance of the starting task.
      */
-    public GameStartingTask getStartingTask() {
+    public StartingTask getStartingTask() {
         return startingTask;
     }
 
     /**
      * Get instance of the playing task.
      */
-    public GamePlayingTask getPlayingTask() {
+    public PlayingTask getPlayingTask() {
         return playingTask;
     }
 
     /**
      * Get instance of the game restarting task.
      */
-    public GameRestartingTask getRestartingTask() {
+    public RestartingTask getRestartingTask() {
         return restartingTask;
     }
 
     /**
      * Get Ore Generators.
      */
-    public List<OreGenerator> getOreGenerators() {
+    public List<IGenerator> getOreGenerators() {
         return oreGenerators;
     }
 
@@ -1805,11 +1790,10 @@ public class Arena implements Comparable<Arena>, IArena {
      * Check if is the party owner first.
      */
     public static boolean joinRandomArena(Player p) {
-        List<Arena> arenas = new ArrayList<>(Arena.getArenas());
-        Collections.sort(arenas);
+        List<IArena> arenas = getSorted(getArenas());
         int amount = getParty().hasParty(p) ? getParty().getMembers(p).size() : 1;
 
-        for (Arena a : arenas) {
+        for (IArena a : arenas) {
             if (a.getPlayers().size() == a.getMaxPlayers()) continue;
             if (a.getMaxPlayers() - a.getPlayers().size() >= amount) {
                 if (a.addPlayer(p, false)) break;
@@ -1818,17 +1802,48 @@ public class Arena implements Comparable<Arena>, IArena {
         return true;
     }
 
+    public static List<IArena> getSorted(List<IArena> arenas){
+        List<IArena> sorted = arenas;
+        sorted.sort(new Comparator<IArena>() {
+            @Override
+            public int compare(IArena o1, IArena o2) {
+                if (o1.getStatus() == GameState.starting && o2.getStatus() == GameState.starting) {
+                    return Integer.compare(o2.getPlayers().size(), o1.getPlayers().size());
+                } else if (o1.getStatus() == GameState.starting && o2.getStatus() != GameState.starting) {
+                    return -1;
+                } else if (o2.getStatus() == GameState.starting && o1.getStatus() != GameState.starting) {
+                    return 1;
+                } else if (o1.getStatus() == GameState.waiting && o2.getStatus() == GameState.waiting) {
+                    return Integer.compare(o2.getPlayers().size(), o1.getPlayers().size());
+                } else if (o1.getStatus() == GameState.waiting && o2.getStatus() != GameState.waiting) {
+                    return -1;
+                } else if (o2.getStatus() == GameState.waiting && o1.getStatus() != GameState.waiting) {
+                    return 1;
+                } else if (o1.getStatus() == GameState.playing && o2.getStatus() == GameState.playing) {
+                    return 0;
+                } else if (o1.getStatus() == GameState.playing && o2.getStatus() != GameState.playing) {
+                    return -1;
+                } else return 1;
+            }
+
+            @Override
+            public boolean equals(Object obj) {
+                return obj instanceof IArena;
+            }
+        });
+        return sorted;
+    }
+
     /**
      * Add a player to the most filled arena from a group.
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean joinRandomFromGroup(Player p, String group) {
 
-        List<Arena> arenaList = new ArrayList<>(getArenas());
-        Collections.sort(arenaList);
+        List<IArena> arenas = getSorted(getArenas());
 
         int amount = getParty().hasParty(p) ? getParty().getMembers(p).size() : 1;
-        for (Arena a : arenaList) {
+        for (IArena a : arenas) {
             if (!a.getGroup().equalsIgnoreCase(group)) continue;
             if (a.getPlayers().size() == a.getMaxPlayers()) continue;
             if (a.getMaxPlayers() - a.getPlayers().size() >= amount) {
@@ -1855,32 +1870,11 @@ public class Arena implements Comparable<Arena>, IArena {
         return playerDeaths.getOrDefault(p, 0);
     }
 
-    @Override
-    public int compareTo(Arena o) {
-        if (getStatus() == GameState.starting && o.getStatus() == GameState.starting) {
-            return Integer.compare(o.getPlayers().size(), getPlayers().size());
-        } else if (getStatus() == GameState.starting && o.getStatus() != GameState.starting) {
-            return -1;
-        } else if (o.getStatus() == GameState.starting && getStatus() != GameState.starting) {
-            return 1;
-        } else if (getStatus() == GameState.waiting && o.getStatus() == GameState.waiting) {
-            return Integer.compare(o.getPlayers().size(), getPlayers().size());
-        } else if (getStatus() == GameState.waiting && o.getStatus() != GameState.waiting) {
-            return -1;
-        } else if (o.getStatus() == GameState.waiting && getStatus() != GameState.waiting) {
-            return 1;
-        } else if (getStatus() == GameState.playing && o.getStatus() == GameState.playing) {
-            return 0;
-        } else if (getStatus() == GameState.playing && o.getStatus() != GameState.playing) {
-            return -1;
-        } else return 1;
-    }
-
     /**
      * Show upgrade announcement to players.
      * Change diamondTier value first.
      */
-    private void sendDiamondsUpgradeMessages() {
+    public void sendDiamondsUpgradeMessages() {
         for (Player p : getPlayers()) {
             p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
                     getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND)).replace("{tier}", getMsg(p, (diamondTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
@@ -1895,7 +1889,7 @@ public class Arena implements Comparable<Arena>, IArena {
      * Show upgrade announcement to players.
      * Change emeraldTier value first.
      */
-    private void sendEmeraldsUpgradeMessages() {
+    public void sendEmeraldsUpgradeMessages() {
         for (Player p : getPlayers()) {
             p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
                     getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD)).replace("{tier}", getMsg(p, (emeraldTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
@@ -1919,19 +1913,15 @@ public class Arena implements Comparable<Arena>, IArena {
         return regionsList;
     }
 
-    public List<Block> getPlaced() {
+    public LinkedList<Block> getPlaced() {
         return placed;
-    }
-
-    public LinkedList<Block> getBroken() {
-        return broken;
     }
 
     public static LinkedList<IArena> getEnableQueue() {
         return enableQueue;
     }
 
-    private void destroyData() {
+    public void destroyData() {
         arenas.remove(this);
         for (ReJoinTask rjt : ReJoinTask.getReJoinTasks()) {
             if (rjt.getArena() == this) {
@@ -1946,16 +1936,15 @@ public class Arena implements Comparable<Arena>, IArena {
         yml = null;
         cm = null;
         world = null;
-        for (OreGenerator og : oreGenerators) {
+        for (IGenerator og : oreGenerators) {
             og.destroyData();
         }
-        for (BedWarsTeam bwt : teams) {
+        for (ITeam bwt : teams) {
             bwt.destroyData();
         }
         playerLocation.entrySet().removeIf(e -> e.getValue().getWorld().getName().equalsIgnoreCase(worldName));
         teams = null;
         placed = null;
-        broken = null;
         nextEvents = null;
         regionsList = null;
         respawn = null;
@@ -1981,5 +1970,30 @@ public class Arena implements Comparable<Arena>, IArena {
             BedWars.getAPI().getRestoreAdapter().onEnable(enableQueue.get(0));
             plugin.getLogger().info("Loading arena: " + enableQueue.get(0).getWorldName());
         }
+    }
+
+    public static void addToEnableQueue(IArena a) {
+        enableQueue.add(a);
+        plugin.getLogger().info("Arena " + a.getWorldName() + " was added to the enable queue.");
+        if (enableQueue.size() == 1) {
+            BedWars.getAPI().getRestoreAdapter().onEnable(a);
+            plugin.getLogger().info("Loading arena: " + a.getWorldName());
+        }
+    }
+
+    public int getUpgradeDiamondsCount() {
+        return upgradeDiamondsCount;
+    }
+
+    public int getUpgradeEmeraldsCount() {
+        return upgradeEmeraldsCount;
+    }
+
+    public void setAllowSpectate(boolean allowSpectate) {
+        this.allowSpectate = allowSpectate;
+    }
+
+    public boolean isAllowSpectate() {
+        return allowSpectate;
     }
 }

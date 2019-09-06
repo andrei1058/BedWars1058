@@ -1,6 +1,8 @@
 package com.andrei1058.bedwars.shop.main;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.shop.IBuyItem;
+import com.andrei1058.bedwars.api.arena.shop.IContentTier;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.shop.ShopManager;
 import org.bukkit.Material;
@@ -11,12 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("WeakerAccess")
-public class ContentTier {
+public class ContentTier implements IContentTier {
 
     private int value, price;
     private ItemStack itemStack;
     private Material currency;
-    private List<BuyItem> buyItemsList = new ArrayList<>();
+    private List<IBuyItem> buyItemsList = new ArrayList<>();
     private boolean loaded = false;
 
     /**
@@ -80,7 +82,7 @@ public class ContentTier {
 
         itemStack.setItemMeta(ShopManager.hideItemStuff(itemStack.getItemMeta()));
 
-        BuyItem bi;
+        IBuyItem bi;
         for (String s : yml.getConfigurationSection(path + "." + ConfigPath.SHOP_CONTENT_BUY_ITEMS_PATH).getKeys(false)) {
             bi = new BuyItem(path + "." + ConfigPath.SHOP_CONTENT_BUY_ITEMS_PATH + "." + s, yml, identifier);
             if (bi.isLoaded()) buyItemsList.add(bi);
@@ -127,7 +129,7 @@ public class ContentTier {
     /**
      * Set list of items that you receive on buy.
      */
-    public void setBuyItemsList(List<BuyItem> buyItemsList) {
+    public void setBuyItemsList(List<IBuyItem> buyItemsList) {
         this.buyItemsList = buyItemsList;
     }
 
@@ -155,7 +157,7 @@ public class ContentTier {
     /**
      * Get items
      */
-    public List<BuyItem> getBuyItemsList() {
+    public List<IBuyItem> getBuyItemsList() {
         return buyItemsList;
     }
 }

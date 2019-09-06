@@ -1,5 +1,7 @@
 package com.andrei1058.bedwars.upgrades;
 
+import com.andrei1058.bedwars.api.arena.team.ITeam;
+import com.andrei1058.bedwars.api.arena.upgrades.ITeamUpgrade;
 import com.andrei1058.bedwars.api.arena.upgrades.IUpgradeTier;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.api.language.Language;
@@ -15,7 +17,6 @@ import java.util.List;
 import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.*;
 
-@SuppressWarnings("WeakerAccess")
 public class UpgradeTier implements IUpgradeTier {
 
     private String name, currency;
@@ -36,7 +37,7 @@ public class UpgradeTier implements IUpgradeTier {
         return name;
     }
 
-    public ItemStack getItemStack(Player p, String path, TeamUpgrade tu, BedWarsTeam bwt) {
+    public ItemStack getItemStack(Player p, String path, ITeamUpgrade tu, ITeam bwt) {
         ItemMeta im = itemStack.getItemMeta();
         im.setDisplayName(getMsg(p, path + "." + getName() + ".name"));
         List<String> lore = new ArrayList<>();
@@ -61,7 +62,7 @@ public class UpgradeTier implements IUpgradeTier {
         return i;
     }
 
-    public boolean buy(Player p, BedWarsTeam bwt, int slot) {
+    public boolean buy(Player p, ITeam bwt, int slot) {
         int money = 0;
         Material currency = null;
         if (getCurrency().equalsIgnoreCase("iron")) {
@@ -149,7 +150,7 @@ public class UpgradeTier implements IUpgradeTier {
         }
     }
 
-    public boolean isHighest(BedWarsTeam tm, TeamUpgrade tu) {
+    public boolean isHighest(ITeam tm, ITeamUpgrade tu) {
         return tu.getTiers().size() == (tm.getUpgradeTier().containsKey(tu.getSlot()) ? tm.getUpgradeTier().get(tu.getSlot()) + 1 : 0);
     }
 

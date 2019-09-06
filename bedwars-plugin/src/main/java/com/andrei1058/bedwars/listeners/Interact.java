@@ -1,6 +1,8 @@
 package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
@@ -77,14 +79,14 @@ public class Interact implements Listener {
         Player p = e.getPlayer();
         if (p == null) return;
         Arena.afkCheck.remove(p.getUniqueId());
-        if (BedWars.getAPI().getAFKSystem().isPlayerAFK(e.getPlayer())) {
-            BedWars.getAPI().getAFKSystem().setPlayerAFK(e.getPlayer(), false);
+        if (BedWars.getAPI().getAFKUtil().isPlayerAFK(e.getPlayer())) {
+            BedWars.getAPI().getAFKUtil().setPlayerAFK(e.getPlayer(), false);
         }
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             Block b = e.getClickedBlock();
             if (b == null) return;
             if (b.getType() == Material.AIR) return;
-            Arena a = Arena.getArenaByPlayer(p);
+            IArena a = Arena.getArenaByPlayer(p);
             if (a != null) {
                 if (a.getRespawn().containsKey(e.getPlayer())) {
                     e.setCancelled(true);
@@ -109,9 +111,9 @@ public class Interact implements Listener {
                         return;
                     }
                     //make it so only team members can open chests while team is alive, and all when is eliminated
-                    BedWarsTeam owner = null;
+                    ITeam owner = null;
                     int isRad = a.getConfig().getInt(ConfigPath.ARENA_ISLAND_RADIUS);
-                    for (BedWarsTeam t : a.getTeams()) {
+                    for (ITeam t : a.getTeams()) {
                         if (t.getSpawn().distance(e.getClickedBlock().getLocation()) <= isRad) {
                             owner = t;
                         }
@@ -136,7 +138,7 @@ public class Interact implements Listener {
                 }
             }
             if (b.getState() instanceof Sign) {
-                for (Arena a1 : Arena.getArenas()) {
+                for (IArena a1 : Arena.getArenas()) {
                     if (a1.getSigns().contains(b.getState())) {
                         a1.addPlayer(p, false);
                         return;
@@ -148,7 +150,7 @@ public class Interact implements Listener {
         ItemStack inHand = e.getItem();
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
             if (inHand == null) return;
-            Arena a = Arena.getArenaByPlayer(p);
+            IArena a = Arena.getArenaByPlayer(p);
             if (a != null) {
                 if (a.isPlayer(p)) {
                     if (inHand.getType() == nms.materialFireball()) {
@@ -190,7 +192,7 @@ public class Interact implements Listener {
                 }
                 return;
             }
-            Arena a = Arena.getArenaByName(e.getPlayer().getWorld().getName());
+            IArena a = Arena.getArenaByName(e.getPlayer().getWorld().getName());
             if (a != null){
                 e.setCancelled(true);
             }
@@ -204,10 +206,10 @@ public class Interact implements Listener {
 
     @EventHandler
     public void onEntityInteract(PlayerInteractEntityEvent e) {
-        Arena a = Arena.getArenaByPlayer(e.getPlayer());
+        IArena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a == null) return;
         Location l = e.getRightClicked().getLocation();
-        for (BedWarsTeam t : a.getTeams()) {
+        for (ITeam t : a.getTeams()) {
             Location l2 = t.getShop(), l3 = t.getTeamUpgrades();
             if (l.getBlockX() == l2.getBlockX() && l.getBlockY() == l2.getBlockY() && l.getBlockZ() == l2.getBlockZ()) {
                 e.setCancelled(true);
@@ -219,10 +221,10 @@ public class Interact implements Listener {
 
     @EventHandler
     public void onEntityInteract2(PlayerInteractAtEntityEvent e) {
-        Arena a = Arena.getArenaByPlayer(e.getPlayer());
+        IArena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a == null) return;
         Location l = e.getRightClicked().getLocation();
-        for (BedWarsTeam t : a.getTeams()) {
+        for (ITeam t : a.getTeams()) {
             Location l3 = t.getTeamUpgrades();
             if (l.getBlockX() == l3.getBlockX() && l.getBlockY() == l3.getBlockY() && l.getBlockZ() == l3.getBlockZ()) {
                 if (a.isPlayer(e.getPlayer())) {

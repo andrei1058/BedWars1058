@@ -1,9 +1,10 @@
 package com.andrei1058.bedwars.upgrades;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.upgrades.ITeamUpgrade;
+import com.andrei1058.bedwars.api.arena.upgrades.IUpgradeTier;
 import com.andrei1058.bedwars.api.events.shop.UpgradeBuyEvent;
-import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.api.language.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -64,7 +65,7 @@ public class TeamUpgrade implements ITeamUpgrade {
      * Tier2: [] etc
      */
 
-    private List<UpgradeTier> tiers;
+    private List<IUpgradeTier> tiers;
     private int slot;
     private String name;
     private int tierLevel = 1;
@@ -80,8 +81,7 @@ public class TeamUpgrade implements ITeamUpgrade {
         return slot;
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public List<UpgradeTier> getTiers() {
+    public List<IUpgradeTier> getTiers() {
         return tiers;
     }
 
@@ -89,12 +89,12 @@ public class TeamUpgrade implements ITeamUpgrade {
         return name;
     }
 
-    public void doAction(Player p, BedWarsTeam bwt) {
+    public void doAction(Player p, ITeam bwt) {
         int tier = -1;
         if (bwt.getUpgradeTier().containsKey(getSlot())) {
             tier = bwt.getUpgradeTier().get(getSlot());
         }
-        UpgradeTier ut;
+        IUpgradeTier ut;
         if (getTiers().size()-1 > tier) {
             if (getTiers().get(tier+1).buy(p, bwt, getSlot())) {
                 if (tier < getTiers().size()) {

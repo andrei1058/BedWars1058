@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.levels;
+package com.andrei1058.bedwars.api.levels;
 
 import org.bukkit.entity.Player;
 

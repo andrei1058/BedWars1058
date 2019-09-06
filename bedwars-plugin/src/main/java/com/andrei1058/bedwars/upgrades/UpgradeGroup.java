@@ -1,6 +1,8 @@
 package com.andrei1058.bedwars.upgrades;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import org.bukkit.Bukkit;
@@ -46,9 +48,9 @@ public class UpgradeGroup {
         return def;
     }
 
-    public void openToPlayer(Player p, Arena a){
+    public void openToPlayer(Player p, IArena a){
         Inventory inv = Bukkit.createInventory(p, BedWars.upgrades.getInt("settings.invSize"), getMsg(p, "upgrades."+getName()+".name"));
-        BedWarsTeam team = a.getTeam(p);
+        ITeam team = a.getTeam(p);
 
         for (TeamUpgrade tu : getTeamUpgrades()){
             inv.setItem(tu.getSlot(), tu.getTiers().get(team.getUpgradeTier().containsKey(tu.getSlot()) ? team.getUpgradeTier().get(tu.getSlot()) < tu.getTiers().size()-1 ? team.getUpgradeTier().get(tu.getSlot())+1 : team.getUpgradeTier().get(tu.getSlot()) : 0).getItemStack(p, "upgrades."+getName()+"."+tu.getName(), tu, team));

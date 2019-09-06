@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.regular;
 
 import com.andrei1058.bedwars.api.arena.GameState;
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.arena.Arena;
@@ -42,8 +43,8 @@ public class CmdTpStaff extends SubCommand {
             s.sendMessage(Language.getMsg(p2, Messages.COMMAND_TP_PLAYER_NOT_FOUND));
             return true;
         }
-        Arena a = Arena.getArenaByPlayer(p);
-        Arena a2 = Arena.getArenaByPlayer(p2);
+        IArena a = Arena.getArenaByPlayer(p);
+        IArena a2 = Arena.getArenaByPlayer(p2);
         if (a == null) {
             s.sendMessage(Language.getMsg(p2, Messages.COMMAND_TP_NOT_IN_ARENA));
             return true;
@@ -70,7 +71,7 @@ public class CmdTpStaff extends SubCommand {
     @Override
     public List<String> getTabComplete() {
         List<String> players = new ArrayList<>();
-        for (Arena a : Arena.getArenas()) {
+        for (IArena a : Arena.getArenas()) {
             for (Player p : a.getPlayers()) {
                 players.add(p.getName());
             }

@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.shop.listeners;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
@@ -23,7 +24,7 @@ public class SpecialsListener implements Listener {
         ItemStack i = e.getItem();
         if (i == null) return;
         if (i.getType() == Material.AIR) return;
-        Arena a = Arena.getArenaByPlayer(p);
+        IArena a = Arena.getArenaByPlayer(p);
         if (a == null) return;
         if (a.getRespawn().containsKey(e.getPlayer())) return;
         if (!a.isPlayer(p)) return;

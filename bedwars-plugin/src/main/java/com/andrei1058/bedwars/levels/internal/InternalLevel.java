@@ -1,6 +1,6 @@
 package com.andrei1058.bedwars.levels.internal;
 
-import com.andrei1058.bedwars.levels.Level;
+import com.andrei1058.bedwars.api.levels.Level;
 import org.bukkit.entity.Player;
 
 public class InternalLevel implements Level {

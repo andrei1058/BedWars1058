@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.arena.spectator;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.api.language.Messages;
 import org.bukkit.Bukkit;
@@ -32,7 +33,7 @@ public class TeleporterGUI {
      */
     public static void refreshInv(Player p, Inventory inv) {
         if (p.getOpenInventory() == null) return;
-        Arena arena = Arena.getArenaByPlayer(p);
+        IArena arena = Arena.getArenaByPlayer(p);
         if (arena == null) {
             p.closeInventory();
             return;
@@ -51,7 +52,7 @@ public class TeleporterGUI {
      * Opens the Teleporter GUI to a Player
      */
     public static void openGUI(Player p) {
-        Arena arena = Arena.getArenaByPlayer(p);
+        IArena arena = Arena.getArenaByPlayer(p);
         if (arena == null) return;
         int size = arena.getPlayers().size();
         if (size <= 9) {

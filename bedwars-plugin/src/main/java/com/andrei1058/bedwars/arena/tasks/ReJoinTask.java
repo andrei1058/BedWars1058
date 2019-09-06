@@ -1,6 +1,8 @@
 package com.andrei1058.bedwars.arena.tasks;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
@@ -14,11 +16,11 @@ public class ReJoinTask implements Runnable {
 
     private static List<ReJoinTask> reJoinTasks = new ArrayList<>();
 
-    private Arena arena;
-    private BedWarsTeam bedWarsTeam;
+    private IArena arena;
+    private ITeam bedWarsTeam;
     private BukkitTask task;
 
-    public ReJoinTask(Arena arena, BedWarsTeam bedWarsTeam){
+    public ReJoinTask(IArena arena, ITeam bedWarsTeam) {
         this.arena = arena;
         this.bedWarsTeam = bedWarsTeam;
         task = Bukkit.getScheduler().runTaskLater(BedWars.plugin, this, BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_REJOIN_TIME) * 20);
@@ -26,37 +28,43 @@ public class ReJoinTask implements Runnable {
 
     @Override
     public void run() {
-        if (arena == null){
+        if (arena == null) {
             destroy();
             return;
         }
-        if (bedWarsTeam == null){
+        if (bedWarsTeam == null) {
             destroy();
             return;
         }
-        if (bedWarsTeam.getMembers().isEmpty()){
+        if (bedWarsTeam.getMembers().isEmpty()) {
             bedWarsTeam.setBedDestroyed(true);
             destroy();
         }
     }
 
-    /** Get arena */
-    public Arena getArena() {
+    /**
+     * Get arena
+     */
+    public IArena getArena() {
         return arena;
     }
 
-    /** Destroy task */
-    public void destroy(){
+    /**
+     * Destroy task
+     */
+    public void destroy() {
         reJoinTasks.remove(this);
         task.cancel();
     }
 
-    /** Get tasks list */
+    /**
+     * Get tasks list
+     */
     public static List<ReJoinTask> getReJoinTasks() {
         return new ArrayList<>(reJoinTasks);
     }
 
-    public void cancel(){
+    public void cancel() {
         task.cancel();
     }
 }

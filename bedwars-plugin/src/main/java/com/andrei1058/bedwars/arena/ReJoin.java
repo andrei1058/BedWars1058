@@ -2,6 +2,8 @@ package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
+import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.arena.tasks.ReJoinTask;
 import org.bukkit.entity.Player;
@@ -13,8 +15,8 @@ import java.util.UUID;
 public class ReJoin {
 
     private UUID player;
-    private Arena arena;
-    private BedWarsTeam bwt;
+    private IArena arena;
+    private ITeam bwt;
     private ReJoinTask task = null;
     private ArrayList<ShopCache.CachedItem> permanentsAndNonDowngradables = new ArrayList<>();
 
@@ -25,7 +27,7 @@ public class ReJoin {
     /**
      * Make rejoin possible for a player
      */
-    public ReJoin(Player player, Arena arena, BedWarsTeam bwt, List<ShopCache.CachedItem> cachedArmor) {
+    public ReJoin(Player player, IArena arena, ITeam bwt, List<ShopCache.CachedItem> cachedArmor) {
         if (exists(player)) getPlayer(player).destroy();
         this.bwt = bwt;
         if (this.bwt.isBedDestroyed()) return;
@@ -97,7 +99,7 @@ public class ReJoin {
      * Make a player re-join the arena
      */
     public boolean reJoin(Player player) {
-        return arena.reJoin(this, player);
+        return arena.reJoin(player);
     }
 
     /**
@@ -118,14 +120,14 @@ public class ReJoin {
     /**
      * Get player team
      */
-    public BedWarsTeam getBwt() {
+    public ITeam getBwt() {
         return bwt;
     }
 
     /**
      * Get arena
      */
-    public Arena getArena() {
+    public IArena getArena() {
         return arena;
     }
 

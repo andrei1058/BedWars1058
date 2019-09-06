@@ -1,8 +1,17 @@
 package com.andrei1058.bedwars.api.arena;
 
+import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
+import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.region.Region;
+import com.andrei1058.bedwars.api.tasks.PlayingTask;
+import com.andrei1058.bedwars.api.tasks.RestartingTask;
+import com.andrei1058.bedwars.api.tasks.StartingTask;
+import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 
 import java.util.LinkedList;
@@ -99,7 +108,258 @@ public interface IArena {
      * Disable spectator collisions.
      *
      * @param p - spectator.
-     * Use false when the spectator got removed from the arena.
+     *          Use false when the spectator got removed from the arena.
      */
     void updateSpectatorCollideRule(Player p, boolean collide);
+
+    /**
+     * This will attempt to upgrade the next event if it is the case.
+     */
+    void updateNextEvent();
+
+    /**
+     * Add a player to the arena
+     *
+     * @param p              - Player to add.
+     * @param skipOwnerCheck - True if you want to skip the party checking for this player. This
+     * @return true if was added.
+     */
+    boolean addPlayer(Player p, boolean skipOwnerCheck);
+
+    /**
+     * Add a player as Spectator
+     *
+     * @param p            Player to be added
+     * @param playerBefore True if the player has played in this arena before and he died so now should be a spectator.
+     */
+    boolean addSpectator(Player p, boolean playerBefore, Location staffTeleport);
+
+    /**
+     * Remove a player from the arena
+     *
+     * @param p          Player to be removed
+     * @param disconnect True if the player was disconnected
+     */
+    void removePlayer(Player p, boolean disconnect);
+
+    /**
+     * Remove a spectator from the arena
+     *
+     * @param p          Player to be removed
+     * @param disconnect True if the player was disconnected
+     */
+    void removeSpectator(Player p, boolean disconnect);
+
+    /**
+     * Rejoin an arena
+     *
+     * @return true if can rejoin
+     */
+    boolean reJoin(Player p);
+
+    /**
+     * Disable the arena.
+     * This will automatically kick/ remove the people from the arena.
+     */
+    void disable();
+
+    /**
+     * Restart the arena.
+     */
+    void restart();
+
+    /**
+     * Get the arena world
+     */
+    World getWorld();
+
+    /**
+     * Get the display status for an arena.
+     * A message that can be used on signs etc.
+     */
+    String getDisplayStatus(Language lang);
+
+    List<ITeam> getTeams();
+
+    /**
+     * Add placed block to cache.
+     * So players will be able to remove blocks placed by players only.
+     */
+    void addPlacedBlock(Block block);
+
+    /**
+     * Remove placed block.
+     */
+    void removePlacedBlock(Block block);
+
+    boolean isBlockPlaced(Block block);
+
+    /**
+     * Get a player kills count.
+     *
+     * @param p          Target player
+     * @param finalKills True if you want to get the Final Kills. False for regular kills.
+     */
+    int getPlayerKills(Player p, boolean finalKills);
+
+    /**
+     * Get the player beds destroyed count
+     *
+     * @param p Target player
+     */
+    int getPlayerBedsDestroyed(Player p);
+
+    /**
+     * Get the join signs for this arena
+     */
+    List<BlockState> getSigns();
+
+    /**
+     * Get the island radius
+     */
+    int getIslandRadius();
+
+    void setGroup(String group);
+
+    /**
+     * Set game status without starting stats.
+     */
+    void setStatus(GameState status);
+
+    /**
+     * Change game status starting tasks.
+     */
+    void changeStatus(GameState status);
+
+    /**
+     * Check if target player is in re-spawning screen.
+     */
+    boolean isRespawning(Player p);
+
+    /**
+     * Add a join sign for the arena.
+     */
+    void addSign(Location loc);
+
+    /**
+     * Refresh signs.
+     */
+    void refreshSigns();
+
+    /**
+     * Add a kill point to the game stats.
+     */
+    void addPlayerKill(Player p, boolean finalKill, Player victim);
+
+    /**
+     * Add a destroyed bed point to the player temp stats.
+     */
+    void addPlayerBedDestroyed(Player p);
+
+
+    /**
+     * Get arena by player name.
+     * Used to get the team for a player that has left the arena.
+     * Make sure the player is in this arena first.
+     */
+    @Deprecated
+    ITeam getPlayerTeam(String playerName);
+
+    /**
+     * Check winner. Will check if the game has a winner in certain conditions. Manage your win conditions.
+     * Call the arena restart and the needed stuff.
+     */
+    void checkWinner();
+
+    /**
+     * Add a kill to the player temp stats.
+     */
+    void addPlayerDeath(Player p);
+
+    /**
+     * Set next event for the arena.
+     */
+    void setNextEvent(NextEvent nextEvent);
+
+    /**
+     * Get next event.
+     */
+    NextEvent getNextEvent();
+
+    /**
+     * This will give the pre-game command Items.
+     * This will clear the inventory first.
+     */
+    void sendPreGameCommandItems(Player p);
+
+    /**
+     * This will give the spectator command Items.
+     * This will clear the inventory first.
+     */
+    void sendSpectatorCommandItems(Player p);
+
+    /**
+     * Get a team by name
+     */
+    ITeam getTeam(String name);
+
+    StartingTask getStartingTask();
+
+    PlayingTask getPlayingTask();
+
+    RestartingTask getRestartingTask();
+
+    /**
+     * Get Ore Generators.
+     */
+    List<IGenerator> getOreGenerators();
+
+    /**
+     * Get the list of next events to come.
+     * Not ordered.
+     */
+    List<String> getNextEvents();
+
+    /**
+     * Get player deaths.
+     */
+    int getPlayerDeaths(Player p, boolean finalDeaths);
+
+    /**
+     * Show upgrade announcement to players.
+     * Change diamondTier value first.
+     */
+    void sendDiamondsUpgradeMessages();
+
+    /**
+     * Show upgrade announcement to players.
+     * Change emeraldTier value first.
+     */
+    void sendEmeraldsUpgradeMessages();
+
+    /**
+     * List of placed blocks.
+     */
+    @Deprecated
+    LinkedList<Block> getPlaced();
+
+    /**
+     * This is used to destroy arena data when it restarts.
+     */
+    void destroyData();
+
+    int getUpgradeDiamondsCount();
+
+    int getUpgradeEmeraldsCount();
+
+    List<Region> getRegionsList();
+
+    /**
+     * Get invisibility for armor
+     */
+    ConcurrentHashMap<Player, Integer> getShowTime();
+
+    void setAllowSpectate(boolean allowSpectate);
+
+    boolean isAllowSpectate();
 }

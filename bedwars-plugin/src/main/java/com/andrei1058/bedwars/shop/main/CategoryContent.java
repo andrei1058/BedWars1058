@@ -1,7 +1,10 @@
 package com.andrei1058.bedwars.shop.main;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.arena.shop.IBuyItem;
 import com.andrei1058.bedwars.api.arena.shop.ICategoryContent;
+import com.andrei1058.bedwars.api.arena.shop.IContentTier;
 import com.andrei1058.bedwars.api.events.shop.ShopBuyEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
@@ -25,11 +28,11 @@ import static com.andrei1058.bedwars.BedWars.nms;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 @SuppressWarnings("WeakerAccess")
-public class CategoryContent implements ICategoryContent {
+public class CategoryContent implements ICategoryContent{
 
     private int slot;
     private boolean loaded = false;
-    private List<ContentTier> contentTiers = new ArrayList<>();
+    private List<IContentTier> contentTiers = new ArrayList<>();
     private String contentName;
     private String itemNamePath, itemLorePath;
     private String identifier;
@@ -107,7 +110,7 @@ public class CategoryContent implements ICategoryContent {
 
     public void execute(Player player, ShopCache shopCache, int slot) {
 
-        ContentTier ct;
+        IContentTier ct;
 
         //check weight
         if (shopCache.getCategoryWeight(father) > weight) return;
@@ -168,24 +171,31 @@ public class CategoryContent implements ICategoryContent {
     /**
      * Add tier items to player inventory
      */
-    public void giveItems(Player player, ShopCache shopCache, Arena arena) {
-        for (BuyItem bi : contentTiers.get(shopCache.getContentTier(getIdentifier()) - 1).getBuyItemsList()) {
+    public void giveItems(Player player, ShopCache shopCache, IArena arena) {
+        for (IBuyItem bi : contentTiers.get(shopCache.getContentTier(getIdentifier()) - 1).getBuyItemsList()) {
             bi.give(player, arena);
         }
     }
 
-    /**
-     * Get content slot in category
-     */
+   @Override
     public int getSlot() {
         return slot;
     }
 
-    /**
-     * Get content preview item in player's language
-     */
+    @Override
+    public ItemStack getItemStack(Player player) {
+        ShopCache sc = ShopCache.getShopCache(player.getUniqueId());
+        return sc == null ? null : getItemStack(player, sc);
+    }
+
+    @Override
+    public boolean hasQuick(Player player) {
+        PlayerQuickBuyCache pqbc = PlayerQuickBuyCache.getQuickBuyCache(player.getUniqueId());
+        return pqbc != null && hasQuick(pqbc);
+    }
+
     public ItemStack getItemStack(Player player, ShopCache shopCache) {
-        ContentTier ct;
+        IContentTier ct;
         if (shopCache.getContentTier(identifier) == contentTiers.size()) {
             ct = contentTiers.get(contentTiers.size() - 1);
         } else {
@@ -244,9 +254,6 @@ public class CategoryContent implements ICategoryContent {
         return i;
     }
 
-    /**
-     * Check if a player has this cc to quick buy
-     */
     public boolean hasQuick(PlayerQuickBuyCache c) {
         for (QuickBuyElement q : c.getElements()) {
             if (q.getCategoryContent() == this) return true;
@@ -310,7 +317,7 @@ public class CategoryContent implements ICategoryContent {
     /**
      * Cet currency path
      */
-    public static String getCurrencyMsgPath(ContentTier contentTier) {
+    public static String getCurrencyMsgPath(IContentTier contentTier) {
         String c;
 
         if (contentTier.getCurrency().toString().toLowerCase().contains("iron")) {
@@ -421,7 +428,7 @@ public class CategoryContent implements ICategoryContent {
         return identifier;
     }
 
-    public List<ContentTier> getContentTiers() {
+    public List<IContentTier> getContentTiers() {
         return contentTiers;
     }
 }

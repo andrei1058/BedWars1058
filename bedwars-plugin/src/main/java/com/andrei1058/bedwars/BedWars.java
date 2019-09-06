@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars;
 
 import com.andrei1058.bedwars.api.API;
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.server.RestoreAdapter;
@@ -14,7 +15,7 @@ import com.andrei1058.bedwars.database.Database;
 import com.andrei1058.bedwars.database.SQLite;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.language.*;
-import com.andrei1058.bedwars.levels.Level;
+import com.andrei1058.bedwars.api.levels.Level;
 import com.andrei1058.bedwars.levels.internal.InternalLevel;
 import com.andrei1058.bedwars.levels.internal.LevelListeners;
 import com.andrei1058.bedwars.arena.spectator.SpectatorListeners;
@@ -41,7 +42,6 @@ import com.andrei1058.bedwars.support.vault.*;
 import com.andrei1058.bedwars.arena.tasks.OneTick;
 import com.andrei1058.bedwars.arena.tasks.Refresh;
 import com.andrei1058.bedwars.api.server.VersionSupport;
-import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import org.bukkit.Bukkit;
 import org.bukkit.WorldCreator;
 import org.bukkit.entity.Entity;
@@ -400,7 +400,7 @@ public class BedWars extends JavaPlugin {
     public void onDisable() {
         if (!serverSoftwareSupport) return;
         try {
-            for (Arena a : Arena.getArenas()) {
+            for (IArena a : Arena.getArenas()) {
                 a.disable();
             }
         } catch (Exception ignored) {

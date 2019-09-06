@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.api.arena.GameState;
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
@@ -64,7 +65,7 @@ public class HungerWeatherSpawn implements Listener {
 
     @EventHandler
     public void onDrink(PlayerItemConsumeEvent e) {
-        Arena a = Arena.getArenaByPlayer(e.getPlayer());
+        IArena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a == null) return;
         /* remove empty bottle */
         switch (e.getItem().getType()) {
@@ -129,7 +130,7 @@ public class HungerWeatherSpawn implements Listener {
     //Prevent item spawning, issue #60
     public void onItemSpawn(ItemSpawnEvent e) {
         Location l = e.getEntity().getLocation();
-        Arena a = Arena.getArenaByName(l.getWorld().getName());
+        IArena a = Arena.getArenaByName(l.getWorld().getName());
         if (a == null) return;
         if (a.getStatus() != GameState.playing) {
             e.setCancelled(true);

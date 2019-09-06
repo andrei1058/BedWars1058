@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.upgrades;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.generator.GeneratorType;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.OreGenerator;
 import org.bukkit.Material;
@@ -19,7 +20,7 @@ public class GeneratorAction extends UpgradeAction {
     }
 
     @Override
-    public void execute(BedWarsTeam bwt, int i) {
+    public void execute(ITeam bwt, int i) {
         if (ironAmount > 0){
             bwt.getIronGenerator().setAmount(ironAmount);
         }

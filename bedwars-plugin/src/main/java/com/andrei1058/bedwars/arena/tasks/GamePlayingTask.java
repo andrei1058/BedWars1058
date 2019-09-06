@@ -2,11 +2,13 @@ package com.andrei1058.bedwars.arena.tasks;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
+import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.arena.generator.IGenerator;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.tasks.PlayingTask;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.arena.BedWarsTeam;
-import com.andrei1058.bedwars.arena.OreGenerator;
 import com.andrei1058.bedwars.api.language.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -19,7 +21,7 @@ import java.util.Map;
 import static com.andrei1058.bedwars.BedWars.nms;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
-public class GamePlayingTask implements Runnable {
+public class GamePlayingTask implements Runnable, PlayingTask {
 
     private Arena arena;
     private BukkitTask task;
@@ -35,6 +37,11 @@ public class GamePlayingTask implements Runnable {
 
     public Arena getArena() {
         return arena;
+    }
+
+    @Override
+    public BukkitTask getBukkitTask() {
+        return task;
     }
 
     /**
@@ -87,7 +94,7 @@ public class GamePlayingTask implements Runnable {
                         nms.sendTitle(p, getMsg(p, Messages.NEXT_EVENT_TITLE_ANNOUNCE_BEDS_DESTROYED), getMsg(p, Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_BEDS_DESTROYED), 0, 30, 0);
                         p.sendMessage(getMsg(p, Messages.NEXT_EVENT_CHAT_ANNOUNCE_BEDS_DESTROYED));
                     }
-                    for (BedWarsTeam t : getArena().getTeams()) {
+                    for (ITeam t : getArena().getTeams()) {
                         t.setBedDestroyed(true);
                     }
                     getArena().updateNextEvent();
@@ -98,7 +105,7 @@ public class GamePlayingTask implements Runnable {
                 if (getDragonSpawnCountdown() == 0) {
                     for (Player p : getArena().getPlayers()) {
                         nms.sendTitle(p, getMsg(p, Messages.NEXT_EVENT_TITLE_ANNOUNCE_SUDDEN_DEATH), getMsg(p, Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_SUDDEN_DEATH), 0, 30, 0);
-                        for (BedWarsTeam t : getArena().getTeams()) {
+                        for (ITeam t : getArena().getTeams()) {
                             if (t.getMembers().isEmpty()) continue;
                             p.sendMessage(getMsg(p, Messages.NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH).replace("{TeamDragons}", String.valueOf(t.getDragons()))
                                     .replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getName()));
@@ -106,20 +113,20 @@ public class GamePlayingTask implements Runnable {
                     }
                     for (Player p : getArena().getSpectators()) {
                         nms.sendTitle(p, getMsg(p, Messages.NEXT_EVENT_TITLE_ANNOUNCE_SUDDEN_DEATH), getMsg(p, Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_SUDDEN_DEATH), 0, 30, 0);
-                        for (BedWarsTeam t : getArena().getTeams()) {
+                        for (ITeam t : getArena().getTeams()) {
                             if (t.getMembers().isEmpty()) continue;
                             p.sendMessage(getMsg(p, Messages.NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH).replace("{TeamDragons}", String.valueOf(t.getDragons()))
                                     .replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getName()));
                         }
                     }
                     getArena().updateNextEvent();
-                    for (OreGenerator o : arena.getOreGenerators()) {
+                    for (IGenerator o : arena.getOreGenerators()) {
                         Location l = o.getLocation();
                         for (int y = 0; y < 20; y++) {
                             l.clone().subtract(0, y, 0).getBlock().setType(Material.AIR);
                         }
                     }
-                    for (BedWarsTeam t : getArena().getTeams()) {
+                    for (ITeam t : getArena().getTeams()) {
                         if (t.getMembers().isEmpty()) continue;
                         for (int x = 0; x < t.getDragons(); x++) {
                             nms.spawnDragon(getArena().getConfig().getArenaLoc("waiting.Loc").add(0, 10, 0), t);
@@ -136,7 +143,7 @@ public class GamePlayingTask implements Runnable {
                 break;
         }
         int distance = 0;
-        for (BedWarsTeam t : getArena().getTeams()) {
+        for (ITeam t : getArena().getTeams()) {
             if (t.getSize() > 1) {
                 for (Player p : t.getMembers()) {
                     for (Player p2 : t.getMembers()) {
@@ -163,7 +170,7 @@ public class GamePlayingTask implements Runnable {
                 current++;
                 Arena.afkCheck.replace(p.getUniqueId(), current);
                 if (current == 45) {
-                    BedWars.getAPI().getAFKSystem().setPlayerAFK(p, true);
+                    BedWars.getAPI().getAFKUtil().setPlayerAFK(p, true);
                 }
             }
         }
@@ -172,9 +179,9 @@ public class GamePlayingTask implements Runnable {
         if (!getArena().getRespawn().isEmpty()) {
             for (Map.Entry<Player, Integer> e : getArena().getRespawn().entrySet()) {
                 if (e.getValue() == 0) {
-                    Arena a = Arena.getArenaByPlayer(e.getKey());
+                    IArena a = Arena.getArenaByPlayer(e.getKey());
                     if (a == null) continue;
-                    BedWarsTeam t = a.getTeam(e.getKey());
+                    ITeam t = a.getTeam(e.getKey());
                     t.respawnMember(e.getKey());
                     getArena().getRespawn().remove(e.getKey());
                 } else {
@@ -202,7 +209,7 @@ public class GamePlayingTask implements Runnable {
         }
 
         /* SPAWN ITEMS */
-        for (OreGenerator o : getArena().getOreGenerators()) {
+        for (IGenerator o : getArena().getOreGenerators()) {
             o.spawn();
         }
     }
