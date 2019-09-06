@@ -414,7 +414,7 @@ public abstract class VersionSupport {
 
     /**
      * Item Data compare
-     * This will always return true on versions >= 1.13
+     * This will always return true on versions major or equal 1.13
      */
     public boolean itemStackDataCompare(ItemStack i, short data) {
         return true;
