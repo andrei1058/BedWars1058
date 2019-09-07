@@ -246,8 +246,8 @@ public class Polish extends Language{
                 "{TeamBlueColor}B&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}G&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}Y &f{TeamYellowName}&f: {TeamYellowStatus}",
                 "", "&fZabojstwa: &a{kills}", "&fOstateczne Zabojstwa: &a{finalKills}", "&fZniszczone Lozka: &a{beds}", "", "&e{server_ip}"));
 
-        yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&7{date}", "&fNick: &a{player}", "", "&fWygrane: &a{wins}", "&fPrzegrane: &a{losses}", "&fZabojstwa: &a{kills}", "&fSmierci: &a{deaths}"
-                , "&fOstateczne zabojstwa: &a{finalKills}", "&fZniszczone lozka: &a{beds}", "", "&fOnline: &a{on}", "&e{server_ip}"));
+        yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&fYour Level: {level}", "", "&fProgress: &a{currentXp}&7/&b{requiredXp}", "{progress}", "", "&7{player}", "", "&fCoins: &a{money}"
+                , "", "&fTotal Wins: &a{wins}", "&fTotal Kills: &a{kills}", "", "&e{server_ip}"));
 
         yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&6+{xp} BedWars Experience Received (Play Time).");
         yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&6+{xp} BedWars Experience Received (Game Win).");
