@@ -36,7 +36,7 @@ import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.support.papi.PAPISupport;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.support.party.NoParty;
-import com.andrei1058.bedwars.support.party.Party;
+import com.andrei1058.bedwars.api.party.Party;
 import com.andrei1058.bedwars.support.party.Parties;
 import com.andrei1058.bedwars.support.vault.*;
 import com.andrei1058.bedwars.arena.tasks.OneTick;

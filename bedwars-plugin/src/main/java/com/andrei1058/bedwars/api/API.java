@@ -6,6 +6,7 @@ import com.andrei1058.bedwars.api.arena.shop.IContentTier;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.events.player.PlayerAfkEvent;
+import com.andrei1058.bedwars.api.party.Party;
 import com.andrei1058.bedwars.api.server.ISetupSession;
 import com.andrei1058.bedwars.api.server.RestoreAdapter;
 import com.andrei1058.bedwars.api.server.ServerType;
@@ -250,6 +251,11 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
     @Override
     public com.andrei1058.bedwars.api.levels.Level getLevelsUtil() {
         return null;
+    }
+
+    @Override
+    public Party getPartyUtil() {
+        return BedWars.getParty();
     }
 
     @Override

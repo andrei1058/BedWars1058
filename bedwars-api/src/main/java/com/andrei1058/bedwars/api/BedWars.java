@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.api.arena.shop.IContentTier;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.levels.Level;
+import com.andrei1058.bedwars.api.party.Party;
 import com.andrei1058.bedwars.api.server.*;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import org.bukkit.ChatColor;
@@ -292,6 +293,11 @@ public interface BedWars {
      * Get levels methods.
      */
     Level getLevelsUtil();
+
+    /**
+     * Get party util.
+     */
+    Party getPartyUtil();
 
     /**
      * Get active setup session.

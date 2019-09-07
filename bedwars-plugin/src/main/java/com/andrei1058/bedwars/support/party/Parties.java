@@ -3,6 +3,7 @@ package com.andrei1058.bedwars.support.party;
 import com.alessiodp.parties.api.interfaces.PartiesAPI;
 import com.alessiodp.parties.api.interfaces.PartyPlayer;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.api.party.Party;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
