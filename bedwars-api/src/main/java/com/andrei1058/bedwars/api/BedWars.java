@@ -348,4 +348,6 @@ public interface BedWars {
      * Get lobby world name.
      */
     String getLobbyWorld();
+
+    String getForCurrentVersion(String v18, String v12, String v13);
 }
