@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.events.gameplay.EggBridgeThrowEvent;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
@@ -32,7 +33,7 @@ public class EggBridge implements Listener {
         if (e.getEntity() instanceof Egg) {
             if (e.getEntity().getShooter() instanceof Player) {
                 Player p = (Player) e.getEntity().getShooter();
-                Arena a = Arena.getArenaByPlayer(p);
+                IArena a = Arena.getArenaByPlayer(p);
                 if (a != null) {
                     if (a.isPlayer(p)) {
                         EggBridgeThrowEvent event = new EggBridgeThrowEvent(p, a);

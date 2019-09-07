@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Messages;
@@ -126,7 +127,7 @@ public class SBoard {
                 }
             }
             if (arena != null) {
-                for (BedWarsTeam teams : arena.getTeams()) {
+                for (ITeam teams : arena.getTeams()) {
                     if (temp.contains("{Team" + teams.getName() + "Status}")) {
                         if (!toRefresh.containsKey(t)) {
                             toRefresh.put(t, temp);
@@ -157,7 +158,7 @@ public class SBoard {
                         .replace("{group}", arena.getGroup()));
             } else if (arena.getStatus() == GameState.playing) {
                 String[] ne = getNextEvent();
-                for (BedWarsTeam team : arena.getTeams()) {
+                for (ITeam team : arena.getTeams()) {
                     temp = temp.replace("{Team" + team.getName() + "Color}", TeamColor.getChatColor(team.getColor()).toString()).replace("{Team" + team.getName() + "Name}",
                             team.getName()).replace("{Team" + team.getName() + "Status}", (team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED).replace("{remainingPlayers}",
                             String.valueOf(team.getSize())) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE)) + (team.isMember(getP()) ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM) : ""));
@@ -223,7 +224,7 @@ public class SBoard {
                 String[] ne = getNextEvent();
                 for (Map.Entry<Team, String> e : toRefresh.entrySet()) {
                     String text = e.getValue();
-                    for (BedWarsTeam team : arena.getTeams()) {
+                    for (ITeam team : arena.getTeams()) {
                         text = text.replace("{Team" + team.getName() + "Color}", TeamColor.getChatColor(team.getColor()).toString()).replace("{Team" + team.getName() + "Name}",
                                 team.getName()).replace("{Team" + team.getName() + "Status}", (team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED).replace("{remainingPlayers}",
                                 String.valueOf(team.getSize())) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE)) + (team.isMember(getP()) ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM) : ""));
@@ -250,7 +251,7 @@ public class SBoard {
     }
 
     public void giveTeamColorTag() {
-        for (BedWarsTeam t : arena.getTeams()) {
+        for (ITeam t : arena.getTeams()) {
             Team team;
             if (sb.getTeam(t.getName()) == null) {
                 team = sb.registerNewTeam(t.getName());

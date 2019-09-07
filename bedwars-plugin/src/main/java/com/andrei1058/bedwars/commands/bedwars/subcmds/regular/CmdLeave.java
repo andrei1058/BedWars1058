@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.regular;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
@@ -31,7 +32,7 @@ public class CmdLeave extends SubCommand {
             Misc.forceKick(p);
             return true;
         }
-        Arena a = Arena.getArenaByPlayer(p);
+        IArena a = Arena.getArenaByPlayer(p);
         if (a == null) {
             Misc.forceKick(p);
         } else {

@@ -2,10 +2,14 @@ package com.andrei1058.bedwars.arena.tasks;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.NextEvent;
 import com.andrei1058.bedwars.api.arena.generator.GeneratorType;
+import com.andrei1058.bedwars.api.arena.generator.IGenerator;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.gameplay.TeamAssignEvent;
+import com.andrei1058.bedwars.api.tasks.StartingTask;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.OreGenerator;
@@ -24,10 +28,10 @@ import static com.andrei1058.bedwars.BedWars.nms;
 import static com.andrei1058.bedwars.api.language.Language.getList;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
-public class GameStartingTask implements Runnable {
+public class GameStartingTask implements Runnable, StartingTask {
 
     private int countdown;
-    private Arena arena;
+    private IArena arena;
     private BukkitTask task;
 
     public GameStartingTask(Arena arena) {
@@ -51,7 +55,7 @@ public class GameStartingTask implements Runnable {
     /**
      * Get arena
      */
-    public Arena getArena() {
+    public IArena getArena() {
         return arena;
     }
 
@@ -60,6 +64,11 @@ public class GameStartingTask implements Runnable {
      */
     public int getTask() {
         return task.getTaskId();
+    }
+
+    @Override
+    public BukkitTask getBukkitTask() {
+        return task;
     }
 
     @Override
@@ -79,7 +88,7 @@ public class GameStartingTask implements Runnable {
             //Team-up parties
             for (Player p : getArena().getPlayers()) {
                 if (owners.contains(p)) {
-                    for (BedWarsTeam t : getArena().getTeams()) {
+                    for (ITeam t : getArena().getTeams()) {
                         if (skip.contains(p)) continue;
                         if (t.getSize() + getParty().partySize(p) <= getArena().getMaxInTeam()) {
                             skip.add(p);
@@ -108,8 +117,8 @@ public class GameStartingTask implements Runnable {
             //Give a team to players without a party
             for (Player p : getArena().getPlayers()) {
                 if (skip.contains(p)) continue;
-                BedWarsTeam addhere = getArena().getTeams().get(0);
-                for (BedWarsTeam t : getArena().getTeams()) {
+                ITeam addhere = getArena().getTeams().get(0);
+                for (ITeam t : getArena().getTeams()) {
                     if (t.getMembers().size() < getArena().getMaxInTeam() && t.getMembers().size() < addhere.getMembers().size()) {
                         addhere = t;
                     }
@@ -126,7 +135,7 @@ public class GameStartingTask implements Runnable {
             //Destroy bed if team is empty
             //Spawn shops and upgrades
             //Disable generators for empty teams if required
-            for (BedWarsTeam team : getArena().getTeams()) {
+            for (ITeam team : getArena().getTeams()) {
                 nms.colorBed(team);
                 if (team.getMembers().isEmpty()) {
                     team.setBedDestroyed(true);
@@ -144,7 +153,7 @@ public class GameStartingTask implements Runnable {
                 }
 
                 //Enable diamond/ emerald generators
-                for (OreGenerator og : getArena().getOreGenerators()) {
+                for (IGenerator og : getArena().getOreGenerators()) {
                     if (og.getType() == GeneratorType.EMERALD || og.getType() == GeneratorType.DIAMOND) og.enableRotation();
                 }
             }, 60L);
@@ -159,14 +168,14 @@ public class GameStartingTask implements Runnable {
             getArena().changeStatus(GameState.playing);
 
             // Check if emerald should be first based on time
-            if (getArena().upgradeDiamondsCount < getArena().upgradeEmeraldsCount) {
+            if (getArena().getUpgradeDiamondsCount() < getArena().getUpgradeEmeraldsCount()) {
                 getArena().setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_II);
             } else {
                 getArena().setNextEvent(NextEvent.EMERALD_GENERATOR_TIER_II);
             }
 
             //Spawn shopkeepers
-            for (BedWarsTeam bwt : getArena().getTeams()){
+            for (ITeam bwt : getArena().getTeams()){
                 bwt.spawnNPCs();
             }
             return;
@@ -193,7 +202,7 @@ public class GameStartingTask implements Runnable {
 
     //Spawn players
     private void spawnPlayers() {
-        for (BedWarsTeam bwt : getArena().getTeams()) {
+        for (ITeam bwt : getArena().getTeams()) {
             for (Player p : new ArrayList<>(bwt.getMembers())) {
                 bwt.firstSpawn(p);
                 p.setHealth(p.getHealth() - 0.0001);

@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.commands.bedwars.subcmds.regular;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
@@ -31,7 +32,7 @@ public class CmdStart extends SubCommand {
     public boolean execute(String[] args, CommandSender s) {
         if (s instanceof ConsoleCommandSender) return false;
         Player p = (Player) s;
-        Arena a = Arena.getArenaByPlayer(p);
+        IArena a = Arena.getArenaByPlayer(p);
         if (a == null){
             p.sendMessage(getMsg(p, Messages.COMMAND_FORCESTART_NOT_IN_GAME));
             return true;
@@ -71,7 +72,7 @@ public class CmdStart extends SubCommand {
 
         Player p = (Player) s;
 
-        Arena a = Arena.getArenaByPlayer(p);
+        IArena a = Arena.getArenaByPlayer(p);
         if (a != null){
             if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting){
                 if (!a.isPlayer(p)) return false;

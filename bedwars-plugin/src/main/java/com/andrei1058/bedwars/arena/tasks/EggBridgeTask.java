@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.arena.tasks;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.events.gameplay.EggBridgeBuildEvent;
 import com.andrei1058.bedwars.arena.Arena;
@@ -22,12 +23,12 @@ public class EggBridgeTask implements Runnable {
     private Projectile projectile;
     private TeamColor teamColor;
     private Player player;
-    private Arena arena;
+    private IArena arena;
     private BukkitTask task;
 
     public EggBridgeTask(Player player, Projectile projectile, TeamColor teamColor) {
         if (!(projectile instanceof Egg)) return;
-        Arena a = Arena.getArenaByName(projectile.getWorld().getName());
+        IArena a = Arena.getArenaByName(projectile.getWorld().getName());
         if (a == null) return;
         this.arena = a;
         this.projectile = projectile;
@@ -48,7 +49,7 @@ public class EggBridgeTask implements Runnable {
         return player;
     }
 
-    public Arena getArena() {
+    public IArena getArena() {
         return arena;
     }
 

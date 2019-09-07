@@ -8,7 +8,6 @@ import com.andrei1058.bedwars.api.server.ServerType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
@@ -117,7 +116,7 @@ public class PlayerDropPick_1_11Minus {
     @EventHandler
     //Prevent AFK players from picking items
     public void onCollect(PlayerGeneratorCollectEvent e){
-        if (api.getAFKSystem().isPlayerAFK(e.getPlayer())){
+        if (api.getAFKUtil().isPlayerAFK(e.getPlayer())){
             e.setCancelled(true);
         }
     }

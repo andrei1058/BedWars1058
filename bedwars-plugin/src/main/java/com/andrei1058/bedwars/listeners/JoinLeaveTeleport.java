@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.*;
@@ -47,12 +48,15 @@ public class JoinLeaveTeleport implements Listener {
         });
 
         if (getServerType() == ServerType.BUNGEE) {
-            if (Arena.getArenas().isEmpty()) return;
-            Arena a = Arena.getArenas().get(0);
+            if (Arena.getArenas().isEmpty()){
+                if (!Arena.getEnableQueue().isEmpty()){
+                    e.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, getMsg(e.getPlayer(), Messages.ARENA_STATUS_RESTARTING_NAME));
+                } else return;
+            }
+            IArena a = Arena.getArenas().get(0);
             if (a.getStatus() == GameState.waiting || (a.getStatus() == GameState.starting && a.getStartingTask().getCountdown() > 2)) {
                 if (a.getPlayers().size() >= a.getMaxPlayers() && !Arena.isVip(e.getPlayer())) {
-                    e.setKickMessage(getMsg(e.getPlayer(), Messages.COMMAND_JOIN_DENIED_IS_FULL));
-                    e.setResult(PlayerLoginEvent.Result.KICK_FULL);
+                    e.disallow(PlayerLoginEvent.Result.KICK_FULL, getMsg(e.getPlayer(), Messages.COMMAND_JOIN_DENIED_IS_FULL));
                 } else if (a.getPlayers().size() >= a.getMaxPlayers() && Arena.isVip(e.getPlayer())) {
                     boolean canJoin = false;
                     for (Player on : a.getPlayers()) {
@@ -64,22 +68,21 @@ public class JoinLeaveTeleport implements Listener {
                         }
                     }
                     if (!canJoin) {
-                        e.setKickMessage(getMsg(e.getPlayer(), Messages.COMMAND_JOIN_DENIED_IS_FULL_OF_VIPS));
-                        e.disallow(PlayerLoginEvent.Result.KICK_FULL, "The arena is full");
+                        e.disallow(PlayerLoginEvent.Result.KICK_FULL, getMsg(e.getPlayer(), Messages.COMMAND_JOIN_DENIED_IS_FULL_OF_VIPS));
                     }
                 }
             } else if (a.getStatus() == GameState.playing) {
-                if (!a.allowSpectate) {
+                if (!a.isAllowSpectate()) {
                     if (e.getPlayer().hasPermission(Permissions.PERMISSION_REJOIN)) {
                         if (ReJoin.exists(e.getPlayer())) {
                             if (ReJoin.getPlayer(e.getPlayer()).canReJoin()) return;
                         }
                     }
-                    e.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, "Cannot rejoin");
+                    e.disallow(PlayerLoginEvent.Result.KICK_OTHER, getMsg(e.getPlayer(), Messages.REJOIN_DENIED));
                 }
 
             } else {
-                e.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, "The arena is restarting");
+                e.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, getMsg(e.getPlayer(), Messages.ARENA_STATUS_RESTARTING_NAME));
             }
         }
     }
@@ -165,7 +168,7 @@ public class JoinLeaveTeleport implements Listener {
         p.getInventory().setArmorContents(null);
         if (getServerType() == ServerType.BUNGEE) {
             if (!Arena.getArenas().isEmpty()) {
-                Arena a = Arena.getArenas().get(0);
+                IArena a = Arena.getArenas().get(0);
                 if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) {
                     a.addPlayer(p, false);
                 } else {
@@ -188,7 +191,7 @@ public class JoinLeaveTeleport implements Listener {
     public void onLeave(PlayerQuitEvent e) {
         Player p = e.getPlayer();
         /* Remove from arena */
-        Arena a = Arena.getArenaByPlayer(p);
+        IArena a = Arena.getArenaByPlayer(p);
         if (a != null) {
             if (a.isPlayer(p)) {
                 a.removePlayer(p, true);
@@ -229,9 +232,9 @@ public class JoinLeaveTeleport implements Listener {
     @EventHandler
     public void onTeleport(PlayerTeleportEvent e) {
         if (e.isCancelled()) return;
-        Arena a = Arena.getArenaByPlayer(e.getPlayer());
+        IArena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a != null) {
-            Arena a1 = Arena.getArenaByName(e.getTo().getWorld().getName());
+            IArena a1 = Arena.getArenaByName(e.getTo().getWorld().getName());
             if (a1 != null) {
                 if (!a1.getWorldName().equals(a.getWorldName())) {
                     if (a.isSpectator(e.getPlayer())) a.removeSpectator(e.getPlayer(), false);
@@ -259,7 +262,7 @@ public class JoinLeaveTeleport implements Listener {
             }
         }
         if (Arena.isInArena(e.getPlayer())) {
-            Arena a = Arena.getArenaByPlayer(e.getPlayer());
+            IArena a = Arena.getArenaByPlayer(e.getPlayer());
             if (a.isPlayer(e.getPlayer())) {
                 if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) return;
                 if (!e.getPlayer().getWorld().getName().equalsIgnoreCase(a.getWorldName())) {

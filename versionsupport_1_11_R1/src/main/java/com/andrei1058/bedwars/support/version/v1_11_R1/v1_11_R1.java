@@ -603,9 +603,8 @@ public class v1_11_R1 extends VersionSupport {
         itemMeta.setUnbreakable(true);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public String getLevelName() {
+    public String getMainLevel() {
         return ((DedicatedServer) MinecraftServer.getServer()).propertyManager.properties.getProperty("level-name");
     }
 

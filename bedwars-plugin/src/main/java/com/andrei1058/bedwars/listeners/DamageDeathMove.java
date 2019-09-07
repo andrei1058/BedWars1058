@@ -2,6 +2,8 @@ package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
+import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.shop.ShopHolo;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
@@ -37,7 +39,7 @@ public class DamageDeathMove implements Listener {
     public void onDamage(EntityDamageEvent e) {
         if (e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
-            Arena a = Arena.getArenaByPlayer(p);
+            IArena a = Arena.getArenaByPlayer(p);
             if (a != null) {
                 if (a.isSpectator(p)) {
                     e.setCancelled(true);
@@ -70,7 +72,7 @@ public class DamageDeathMove implements Listener {
     @EventHandler
     public void onDamageByEntity(EntityDamageByEntityEvent e) {
         if (e.getEntity().hasMetadata("DragonTeam")) {
-            Arena a = Arena.getArenaByName(e.getEntity().getWorld().getName());
+            IArena a = Arena.getArenaByName(e.getEntity().getWorld().getName());
             if (a != null) {
                 e.setCancelled(true);
                 return;
@@ -78,7 +80,7 @@ public class DamageDeathMove implements Listener {
         }
         if (e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
-            Arena a = Arena.getArenaByPlayer(p);
+            IArena a = Arena.getArenaByPlayer(p);
             if (a != null) {
                 if (a.getSpectators().contains(p)) {
                     e.setCancelled(true);
@@ -149,7 +151,7 @@ public class DamageDeathMove implements Listener {
                         new LastHit(p, e.getDamager(), System.currentTimeMillis());
                     }
                 }
-                for (BedWarsTeam t : a.getTeams()) {
+                for (ITeam t : a.getTeams()) {
                     if (t.isMember(p) && t.isMember(damager)) {
                         if (!(e.getDamager() instanceof TNTPrimed)) {
                             e.setCancelled(true);
@@ -171,7 +173,7 @@ public class DamageDeathMove implements Listener {
                     damager = (Player) tnt.getSource();
                 } else return;
             } else return;
-            Arena a = Arena.getArenaByPlayer(damager);
+            IArena a = Arena.getArenaByPlayer(damager);
             if (a != null) {
                 if (a.isPlayer(damager)) {
                     // do not hurt own mobs
@@ -215,7 +217,7 @@ public class DamageDeathMove implements Listener {
         e.setDeathMessage(null);
         Player victim = e.getEntity(), killer = e.getEntity().getKiller();
         ITeam t2 = null;
-        Arena a = Arena.getArenaByPlayer(victim);
+        IArena a = Arena.getArenaByPlayer(victim);
         if (a != null) {
             if (a.isSpectator(victim)) {
                 victim.spigot().respawn();
@@ -232,7 +234,7 @@ public class DamageDeathMove implements Listener {
                 e.getDrops().clear();
             }
 
-            BedWarsTeam t = a.getTeam(victim);
+            ITeam t = a.getTeam(victim);
             if (a.getStatus() != GameState.playing) {
                 victim.spigot().respawn();
                 return;
@@ -382,7 +384,7 @@ public class DamageDeathMove implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onRespawn(PlayerRespawnEvent e) {
-        Arena a = Arena.getArenaByPlayer(e.getPlayer());
+        IArena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a == null) {
             SetupSession ss = SetupSession.getSession(e.getPlayer().getUniqueId());
             if (ss != null) {
@@ -392,7 +394,7 @@ public class DamageDeathMove implements Listener {
             if (a.isSpectator(e.getPlayer())) {
                 e.setRespawnLocation(a.getConfig().getArenaLoc("waiting.Loc"));
                 String iso = Language.getPlayerLanguage(e.getPlayer()).getIso();
-                for (OreGenerator o : a.getOreGenerators()) {
+                for (IGenerator o : a.getOreGenerators()) {
                     o.updateHolograms(e.getPlayer(), iso);
                 }
                 for (ShopHolo sh : ShopHolo.getShopHolo()) {
@@ -404,7 +406,7 @@ public class DamageDeathMove implements Listener {
                 return;
             }
             e.setRespawnLocation(a.getConfig().getArenaLoc("waiting.Loc"));
-            BedWarsTeam t = a.getTeam(e.getPlayer());
+            ITeam t = a.getTeam(e.getPlayer());
             if (t.isBedDestroyed()) {
                 a.addSpectator(e.getPlayer(), true, null);
                 t.getMembers().remove(e.getPlayer());
@@ -448,12 +450,12 @@ public class DamageDeathMove implements Listener {
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
         if (Arena.isInArena(e.getPlayer())) {
-            Arena a = Arena.getArenaByPlayer(e.getPlayer());
+            IArena a = Arena.getArenaByPlayer(e.getPlayer());
             if (e.getFrom().getChunk() != e.getTo().getChunk()) {
 
                 /* update armorstands hidden by nms **/
                 String iso = Language.getPlayerLanguage(e.getPlayer()).getIso();
-                for (OreGenerator o : a.getOreGenerators()) {
+                for (IGenerator o : a.getOreGenerators()) {
                     if (o.getArena() == a) {
                         o.updateHolograms(e.getPlayer(), iso);
                     }
@@ -490,7 +492,7 @@ public class DamageDeathMove implements Listener {
                             nms.voidKill(e.getPlayer());
                         }
                     } else {
-                        BedWarsTeam bwt = a.getTeam(e.getPlayer());
+                        ITeam bwt = a.getTeam(e.getPlayer());
                         if (bwt != null) {
                             e.getPlayer().teleport(bwt.getSpawn());
                         } else {
@@ -500,27 +502,27 @@ public class DamageDeathMove implements Listener {
                 }
 
                 if (a.getStatus() == GameState.playing) {
-                    for (BedWarsTeam t : a.getTeams()) {
+                    for (ITeam t : a.getTeams()) {
                         if (e.getPlayer().getLocation().distance(t.getBed()) < 4) {
-                            if (t.isMember(e.getPlayer())) {
-                                if (t.getBedHolo(e.getPlayer()) == null) continue;
-                                if (!t.getBedHolo(e.getPlayer()).isHidden()) {
-                                    t.getBedHolo(e.getPlayer()).hide();
+                            if (t.isMember(e.getPlayer()) && t instanceof BedWarsTeam) {
+                                if (((BedWarsTeam) t).getBedHolo(e.getPlayer()) == null) continue;
+                                if (!((BedWarsTeam) t).getBedHolo(e.getPlayer()).isHidden()) {
+                                    ((BedWarsTeam) t).getBedHolo(e.getPlayer()).hide();
                                 }
                             }
                         } else {
-                            if (t.isMember(e.getPlayer())) {
-                                if (t.getBedHolo(e.getPlayer()) == null) continue;
-                                if (t.getBedHolo(e.getPlayer()).isHidden()) {
-                                    t.getBedHolo(e.getPlayer()).show();
+                            if (t.isMember(e.getPlayer()) && t instanceof BedWarsTeam) {
+                                if (((BedWarsTeam) t).getBedHolo(e.getPlayer()) == null) continue;
+                                if (((BedWarsTeam) t).getBedHolo(e.getPlayer()).isHidden()) {
+                                    ((BedWarsTeam) t).getBedHolo(e.getPlayer()).show();
                                 }
                             }
                         }
                     }
                     if (e.getFrom() != e.getTo()) {
                         Arena.afkCheck.remove(e.getPlayer().getUniqueId());
-                        if (BedWars.getAPI().getAFKSystem().isPlayerAFK(e.getPlayer())) {
-                            BedWars.getAPI().getAFKSystem().setPlayerAFK(e.getPlayer(), false);
+                        if (BedWars.getAPI().getAFKUtil().isPlayerAFK(e.getPlayer())) {
+                            BedWars.getAPI().getAFKUtil().setPlayerAFK(e.getPlayer(), false);
                         }
                     }
                 }
@@ -538,7 +540,7 @@ public class DamageDeathMove implements Listener {
     public void onProjHit(ProjectileHitEvent e) {
         Projectile proj = e.getEntity();
         if (e.getEntity().getShooter() instanceof Player) {
-            Arena a = Arena.getArenaByPlayer((Player) e.getEntity().getShooter());
+            IArena a = Arena.getArenaByPlayer((Player) e.getEntity().getShooter());
             if (a != null) {
                 if (!a.isPlayer((Player) e.getEntity().getShooter())) return;
                 if (e.getEntity() instanceof Fireball) {
@@ -560,7 +562,7 @@ public class DamageDeathMove implements Listener {
     @EventHandler
     public void onItemFrameDamage(EntityDamageByEntityEvent e) {
         if (e.getEntity().getType() == EntityType.ITEM_FRAME) {
-            Arena a = Arena.getArenaByName(e.getEntity().getWorld().getName());
+            IArena a = Arena.getArenaByName(e.getEntity().getWorld().getName());
             if (a != null) {
                 e.setCancelled(true);
             }

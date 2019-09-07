@@ -29,4 +29,9 @@ public interface ISetupSession {
      * Teleport player target world.
      */
     void teleportPlayer();
+
+    /**
+     * Close setup session.
+     */
+    void close();
 }

@@ -123,6 +123,7 @@ public class ConfigPath {
     public static final String ARENA_NORMAL_DEATH_DROPS = "vanilla-death-drops";
     public static final String ARENA_USE_BED_HOLO = "use-bed-hologram";
     public static final String ARENA_ALLOW_MAP_BREAK = "allow-map-break";
+    public static final String ARENA_GAME_RULES = "game-rules";
 
 
     public static final String SOUNDS_BED_DESTROY = "bed-destroy";

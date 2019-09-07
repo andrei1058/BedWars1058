@@ -272,9 +272,8 @@ public class Italian extends Language {
                 "", "&fUccisioni: &a{kills}", "&fUccisioni Finali: &a{finalKills}", "&fLetti Distrutti: &a{beds}", "", "&e{server_ip}"));
 
 
-
-        yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&7{date}", "&fNome: &a{player}", "", "&fVittorie: &a{wins}", "&fSconfitte: &a{losses}", "&fUccisioni: &a{kills}", "&fDecessi: &a{deaths}"
-                , "&fUccisioni finali: &a{finalKills}", "&fLetti distrutti: &a{beds}", "", "&fOnline: &a{on}", "&e{server_ip}"));
+        yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&fLivello: {level}", "", "&fProgresso: &a{currentXp}&7/&b{requiredXp}", "{progress}", "", "&7{player}", "", "&fSoldi: &a{money}"
+                , "", "&fVincite: &a{wins}", "&fUccisioni: &a{kills}", "", "&e{server_ip}"));
         yml.addDefault(Messages.TEAM_ELIMINATED_CHAT, "\n&f&lTEAM ELIMINATO > Il team {TeamColor}{TeamName} &cè stato eliminato\n");
         yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&6+{xp} BedWars Experience Received (Play Time).");
         yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&6+{xp} BedWars Experience Received (Game Win).");

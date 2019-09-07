@@ -72,7 +72,7 @@ public class ItemDropPickListener {
         @EventHandler
         //Prevent AFK players from picking items
         public void onCollect(PlayerGeneratorCollectEvent e){
-            if (api.getAFKSystem().isPlayerAFK(e.getPlayer())){
+            if (api.getAFKUtil().isPlayerAFK(e.getPlayer())){
                 e.setCancelled(true);
             }
         }

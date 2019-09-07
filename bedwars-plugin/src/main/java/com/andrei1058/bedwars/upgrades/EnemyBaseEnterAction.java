@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.upgrades;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 
 public class EnemyBaseEnterAction extends UpgradeAction {
@@ -14,7 +15,7 @@ public class EnemyBaseEnterAction extends UpgradeAction {
     }
 
     @Override
-    public void execute(BedWarsTeam bwt, int slot) {
+    public void execute(ITeam bwt, int slot) {
         bwt.enableTrap(slot);
         bwt.setTrapAction(isAction());
         bwt.setTrapChat(isChat());

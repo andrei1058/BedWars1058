@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.listeners.arenaselector;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.ArenaGUI;
 import com.andrei1058.bedwars.api.language.Language;
@@ -35,7 +36,7 @@ public class ArenaSelectorListener implements Listener {
             String data = BedWars.nms.getCustomData(i);
             if (!data.contains(ARENA_SELECTOR_GUI_IDENTIFIER)) return;
             String arena = data.split("=")[1];
-            Arena a = Arena.getArenaByName(arena);
+            IArena a = Arena.getArenaByName(arena);
             if (a == null) return;
 
             Bukkit.getScheduler().runTask(BedWars.plugin, () -> {

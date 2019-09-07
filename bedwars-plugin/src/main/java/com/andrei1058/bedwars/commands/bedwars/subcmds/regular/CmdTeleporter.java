@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.regular;
 
 import com.andrei1058.bedwars.api.BedWars;
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.arena.spectator.TeleporterGUI;
@@ -23,7 +24,7 @@ public class CmdTeleporter extends SubCommand {
     public boolean execute(String[] args, CommandSender s) {
         if (s instanceof ConsoleCommandSender) return false;
         Player p = (Player) s;
-        Arena a = Arena.getArenaByPlayer(p);
+        IArena a = Arena.getArenaByPlayer(p);
         if (a == null) return false;
         if (!a.isSpectator(p)) return false;
         TeleporterGUI.openGUI(p);
@@ -41,7 +42,7 @@ public class CmdTeleporter extends SubCommand {
 
         Player p = (Player) s;
 
-        Arena a = Arena.getArenaByPlayer(p);
+        IArena a = Arena.getArenaByPlayer(p);
         if (a == null){
             return false;
         } else {

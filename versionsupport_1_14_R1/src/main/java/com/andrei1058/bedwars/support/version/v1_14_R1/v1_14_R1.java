@@ -14,6 +14,7 @@ import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
 import net.minecraft.server.v1_14_R1.Item;
 import net.minecraft.server.v1_14_R1.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -617,10 +618,9 @@ public class v1_14_R1 extends VersionSupport {
         itemMeta.setUnbreakable(true);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public String getLevelName() {
-        return ((DedicatedServer) MinecraftServer.getServer()).propertyManager.getProperties().levelName;
+    public String getMainLevel() {
+        return ((DedicatedServer) MinecraftServer.getServer()).getDedicatedServerProperties().levelName;
     }
 
     @Override

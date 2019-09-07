@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.shop.listeners;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,7 +16,7 @@ public class PlayerDropListener implements Listener {
     @EventHandler
     //Prevent from dropping permanent items
     public void onDrop(PlayerDropItemEvent e) {
-        Arena a = Arena.getArenaByPlayer(e.getPlayer());
+        IArena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a == null) return;
         String identifier = BedWars.nms.getShopUpgradeIdentifier(e.getItemDrop().getItemStack());
         if (identifier == null) return;
@@ -28,7 +29,7 @@ public class PlayerDropListener implements Listener {
     //Prevent from moving items in chests
     public void onClose(InventoryCloseEvent e) {
         if (!(e instanceof Player)) return;
-        Arena a = Arena.getArenaByPlayer((Player) e.getPlayer());
+        IArena a = Arena.getArenaByPlayer((Player) e.getPlayer());
         if (a == null) return;
         String identifier;
         for (ItemStack i : e.getInventory()) {

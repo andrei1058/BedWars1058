@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.regular;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.api.command.ParentCommand;
@@ -56,7 +57,7 @@ public class CmdJoin extends SubCommand {
     @Override
     public List<String> getTabComplete() {
         List<String> tab = new ArrayList<>(BedWars.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS));
-        for (Arena arena : Arena.getArenas()){
+        for (IArena arena : Arena.getArenas()){
             tab.add(arena.getWorldName());
         }
         return tab;

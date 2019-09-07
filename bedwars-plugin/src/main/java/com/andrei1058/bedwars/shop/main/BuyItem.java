@@ -1,6 +1,9 @@
 package com.andrei1058.bedwars.shop.main;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.arena.shop.IBuyItem;
+import com.andrei1058.bedwars.api.arena.team.TeamEnchant;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
@@ -19,7 +22,7 @@ import org.bukkit.potion.PotionEffectType;
 import static com.andrei1058.bedwars.BedWars.*;
 
 @SuppressWarnings("WeakerAccess")
-public class BuyItem {
+public class BuyItem implements IBuyItem {
 
     private ItemStack itemStack;
     private boolean autoEquip = false;
@@ -126,7 +129,7 @@ public class BuyItem {
     /**
      * Give to a player
      */
-    public void give(Player player, Arena arena) {
+    public void give(Player player, IArena arena) {
 
         ItemStack i = itemStack.clone();
         BedWars.debug("Giving BuyItem: " + getUpgradeIdentifier() + " to: " + player.getName());
@@ -140,7 +143,7 @@ public class BuyItem {
                 BedWars.debug("Could not give BuyItem to " + player.getName() + " - TEAM IS NULL");
                 return;
             }
-            for (BedWarsTeam.Enchant e : arena.getTeam(player).getArmorsEnchantemnts()) {
+            for (TeamEnchant e : arena.getTeam(player).getArmorsEnchantments()) {
                 im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
             }
             if (permanent) nms.setUnbreakable(im);
@@ -181,11 +184,11 @@ public class BuyItem {
 
             if (i.getType() == Material.BOW) {
                 if (permanent) nms.setUnbreakable(im);
-                for (BedWarsTeam.Enchant e : arena.getTeam(player).getBowsEnchantments()) {
+                for (TeamEnchant e : arena.getTeam(player).getBowsEnchantments()) {
                     im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
                 }
             } else if (nms.isSword(i) || nms.isAxe(i)) {
-                for (BedWarsTeam.Enchant e : arena.getTeam(player).getSwordsEnchantemnts()) {
+                for (TeamEnchant e : arena.getTeam(player).getSwordsEnchantments()) {
                     im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
                 }
             }
@@ -222,5 +225,29 @@ public class BuyItem {
      */
     public String getUpgradeIdentifier() {
         return upgradeIdentifier;
+    }
+
+    public ItemStack getItemStack() {
+        return itemStack;
+    }
+
+    public void setItemStack(ItemStack itemStack) {
+        this.itemStack = itemStack;
+    }
+
+    public boolean isAutoEquip() {
+        return autoEquip;
+    }
+
+    public void setAutoEquip(boolean autoEquip) {
+        this.autoEquip = autoEquip;
+    }
+
+    public boolean isPermanent() {
+        return permanent;
+    }
+
+    public void setPermanent(boolean permanent) {
+        this.permanent = permanent;
     }
 }

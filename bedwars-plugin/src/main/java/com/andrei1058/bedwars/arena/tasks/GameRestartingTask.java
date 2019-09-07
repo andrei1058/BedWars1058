@@ -1,8 +1,11 @@
 package com.andrei1058.bedwars.arena.tasks;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.shop.ShopHolo;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.server.ServerType;
+import com.andrei1058.bedwars.api.tasks.RestartingTask;
 import com.andrei1058.bedwars.arena.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -12,16 +15,14 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 
-public class GameRestartingTask implements Runnable {
+public class GameRestartingTask implements Runnable, RestartingTask {
 
     private Arena arena;
-    private int restarting = 15;
+    private int restarting = 13;
     private BukkitTask task;
-    private String name;
 
     public GameRestartingTask(Arena arena) {
         this.arena = arena;
-        this.name = arena.getWorldName();
         task = Bukkit.getScheduler().runTaskTimer(BedWars.plugin, this, 0, 20L);
     }
 
@@ -32,8 +33,18 @@ public class GameRestartingTask implements Runnable {
         return task.getTaskId();
     }
 
+    @Override
+    public int getRestarting() {
+        return restarting;
+    }
+
     public Arena getArena() {
         return arena;
+    }
+
+    @Override
+    public BukkitTask getBukkitTask() {
+        return task;
     }
 
     @Override
@@ -49,7 +60,7 @@ public class GameRestartingTask implements Runnable {
             for (Player on : new ArrayList<>(getArena().getSpectators())) {
                 getArena().removeSpectator(on, BedWars.getServerType() == ServerType.BUNGEE);
             }
-        } else if (restarting == 6) {
+        } else if (restarting == 7) {
             ShopHolo.clearForArena(getArena());
             for (Entity e : getArena().getWorld().getEntities()) {
                 if (e.getType() == EntityType.PLAYER) {
@@ -59,13 +70,10 @@ public class GameRestartingTask implements Runnable {
                     if (getArena().isPlayer(p)) getArena().removePlayer(p, false);
                 }
             }
-            for (OreGenerator eg : getArena().getOreGenerators()) {
+            for (IGenerator eg : getArena().getOreGenerators()) {
                 eg.disable();
             }
-            for (BedWarsTeam bwt : getArena().getTeams()) {
-                bwt.getBeds().clear();
-            }
-        } else if (restarting == 3) {
+        } else if (restarting == 6) {
             getArena().restart();
             task.cancel();
             arena = null;

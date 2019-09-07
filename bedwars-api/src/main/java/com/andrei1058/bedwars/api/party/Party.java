@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.support.party;
+package com.andrei1058.bedwars.api.party;
 
 import org.bukkit.entity.Player;
 

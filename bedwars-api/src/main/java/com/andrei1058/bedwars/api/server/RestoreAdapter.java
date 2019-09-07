@@ -25,7 +25,7 @@ public abstract class RestoreAdapter {
 
     /**
      * Load the world.
-     * Once you are done use Arena#init to mark it as done.
+     * Arenas will be initialized automatically based on WorldLoadEvent.
      */
     public abstract void onEnable(IArena a);
 
@@ -78,7 +78,7 @@ public abstract class RestoreAdapter {
 
     /**
      * Convert worlds if it is necessary before loading them.
-     * If you do it async will probably cause issues.
+     * Let them load on BedWars1058 main Thread so they will be converted before getting loaded.
      */
     public abstract void convertWorlds();
 }

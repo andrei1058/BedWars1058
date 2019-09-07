@@ -96,6 +96,7 @@ public class ShopItemRestoreListener {
      * @return true to cancel the event.
      */
     private static boolean manageDrop(Entity player, Item item) {
+        if (!(player instanceof Player)) return false;
         if (api.getArenaUtil().getArenaByPlayer((Player) player) == null) return false;
         IArena a = api.getArenaUtil().getArenaByPlayer((Player) player);
         if (a.getStatus() != GameState.playing) return false;

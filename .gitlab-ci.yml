@@ -11,4 +11,6 @@ maven-job:
   artifacts:
     paths:
       - bedwars-plugin/target/bedwars-*.jar
+      - bedwars-api/target/apidocs
+      - bedwars-api/target/bedwars-*.jar
     expire_in: 1 days

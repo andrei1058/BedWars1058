@@ -608,9 +608,8 @@ public class v1_9_R2 extends VersionSupport {
         itemMeta.spigot().setUnbreakable(true);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public String getLevelName() {
+    public String getMainLevel() {
         return ((DedicatedServer) MinecraftServer.getServer()).propertyManager.properties.getProperty("level-name");
     }
 

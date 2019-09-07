@@ -620,11 +620,6 @@ public class v1_8_R3 extends VersionSupport {
     }
 
     @Override
-    public String getLevelName() {
-        return ((DedicatedServer) MinecraftServer.getServer()).propertyManager.properties.getProperty("level-name");
-    }
-
-    @Override
     public int getVersion() {
         return 0;
     }
@@ -632,5 +627,10 @@ public class v1_8_R3 extends VersionSupport {
     @Override
     public void registerVersionListeners() {
         new VersionCommon(this);
+    }
+
+    @Override
+    public String getMainLevel() {
+        return ((DedicatedServer) MinecraftServer.getServer()).propertyManager.properties.getProperty("level-name");
     }
 }

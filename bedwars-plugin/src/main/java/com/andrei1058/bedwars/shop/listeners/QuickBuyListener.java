@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.shop.listeners;
 
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.events.player.PlayerJoinArenaEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.shop.quickbuy.PlayerQuickBuyCache;
@@ -22,7 +23,7 @@ public class QuickBuyListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onQuit(PlayerQuitEvent e){
-        Arena a = Arena.getArenaByPlayer(e.getPlayer());
+        IArena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a == null) return;
         PlayerQuickBuyCache cache = PlayerQuickBuyCache.getQuickBuyCache(e.getPlayer().getUniqueId());
         if (cache == null) return;

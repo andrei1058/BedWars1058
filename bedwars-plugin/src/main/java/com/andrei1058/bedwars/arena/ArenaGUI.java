@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
@@ -26,17 +27,17 @@ public class ArenaGUI {
     //Object[0] = inventory, Object[1] = group
     public static void refreshInv(Player p, Object[] data) {
 
-        List<Arena> arenas;
+        List<IArena> arenas;
         if (((String)data[1]).equalsIgnoreCase("default")) {
-            arenas = new ArrayList<>(Arena.getArenas());
+            arenas = new ArrayList<IArena>(Arena.getArenas());
         } else {
             arenas = new ArrayList<>();
-            for (Arena a : Arena.getArenas()){
+            for (IArena a : Arena.getArenas()){
                 if (a.getGroup().equalsIgnoreCase(data[1].toString())) arenas.add(a);
             }
         }
 
-        Collections.sort(arenas);
+        arenas = Arena.getSorted(arenas);
 
         int arenaKey = 0;
         for (String useSlot : BedWars.config.getString(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_USE_SLOTS).split(",")) {

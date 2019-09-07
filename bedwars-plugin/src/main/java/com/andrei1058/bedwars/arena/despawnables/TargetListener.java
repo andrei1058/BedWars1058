@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.arena.despawnables;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,7 +14,7 @@ public class TargetListener implements Listener {
     @EventHandler
     public void onTarget(EntityTargetLivingEntityEvent e){
         if (!(e.getTarget() instanceof Player)) return;
-        Arena arena = Arena.getArenaByName(e.getEntity().getWorld().getName());
+        IArena arena = Arena.getArenaByName(e.getEntity().getWorld().getName());
         Player p = (Player) e.getTarget();
         if (arena == null) return;
         if (!arena.isPlayer(p)) {

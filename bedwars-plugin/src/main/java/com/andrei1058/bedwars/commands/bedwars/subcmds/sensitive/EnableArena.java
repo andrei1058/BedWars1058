@@ -53,7 +53,7 @@ public class EnableArena extends SubCommand {
             }
         }
 
-        Arena aa = Arena.getArenaByName(args[0]);
+        IArena aa = Arena.getArenaByName(args[0]);
         if (aa != null) {
             p.sendMessage("§c▪ §7This arena is already enabled!");
             return true;

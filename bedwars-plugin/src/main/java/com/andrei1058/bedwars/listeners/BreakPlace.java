@@ -2,18 +2,19 @@ package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.NextEvent;
+import com.andrei1058.bedwars.api.arena.generator.IGenerator;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerBedBreakEvent;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.arena.BedWarsTeam;
-import com.andrei1058.bedwars.arena.OreGenerator;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.AutoCreateTeams;
 import com.andrei1058.bedwars.api.language.Messages;
-import com.andrei1058.bedwars.region.Region;
+import com.andrei1058.bedwars.api.region.Region;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -67,7 +68,7 @@ public class BreakPlace implements Listener {
     public void onBlockPlace(BlockPlaceEvent e) {
         if (e.isCancelled()) return;
         //Prevent player from placing during the removal from the arena
-        Arena arena = Arena.getArenaByName(e.getBlock().getWorld().getName());
+        IArena arena = Arena.getArenaByName(e.getBlock().getWorld().getName());
         if (arena != null) {
             if (arena.getStatus() != GameState.playing) {
                 e.setCancelled(true);
@@ -75,7 +76,7 @@ public class BreakPlace implements Listener {
             }
         }
         Player p = e.getPlayer();
-        Arena a = Arena.getArenaByPlayer(p);
+        IArena a = Arena.getArenaByPlayer(p);
         if (a != null) {
             if (a.isSpectator(p)) {
                 e.setCancelled(true);
@@ -149,7 +150,7 @@ public class BreakPlace implements Listener {
                 }
             }
         }
-        Arena a = Arena.getArenaByPlayer(p);
+        IArena a = Arena.getArenaByPlayer(p);
         if (a != null) {
             if (!a.isPlayer(p)) {
                 e.setCancelled(true);
@@ -165,7 +166,7 @@ public class BreakPlace implements Listener {
             }
 
             if (nms.isBed(e.getBlock().getType())) {
-                for (BedWarsTeam t : a.getTeams()) {
+                for (ITeam t : a.getTeams()) {
                     for (int x = e.getBlock().getX() - 2; x < e.getBlock().getX() + 2; x++) {
                         for (int y = e.getBlock().getY() - 2; y < e.getBlock().getY() + 2; y++) {
                             for (int z = e.getBlock().getZ() - 2; z < e.getBlock().getZ() + 2; z++) {
@@ -254,7 +255,7 @@ public class BreakPlace implements Listener {
                     s.add(e.getLine(1) + "," + signs.stringLocationConfigFormat(e.getBlock().getLocation()));
                     signs.set("locations", s);
                 }
-                Arena a = Arena.getArenaByName(e.getLine(1));
+                IArena a = Arena.getArenaByName(e.getLine(1));
                 if (a != null) {
                     p.sendMessage("§a▪ §7Sign saved for arena: " + e.getLine(1));
                     a.addSign(e.getBlock().getLocation());
@@ -283,7 +284,7 @@ public class BreakPlace implements Listener {
                 }
             }
         }
-        Arena a = Arena.getArenaByPlayer(e.getPlayer());
+        IArena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a != null) {
             if (a.isSpectator(e.getPlayer()) || a.getStatus() != GameState.playing || a.getRespawn().containsKey(e.getPlayer()))
                 e.setCancelled(true);
@@ -301,7 +302,7 @@ public class BreakPlace implements Listener {
             }
         }
         //Prevent player from placing during the removal from the arena
-        Arena arena = Arena.getArenaByName(e.getBlockClicked().getWorld().getName());
+        IArena arena = Arena.getArenaByName(e.getBlockClicked().getWorld().getName());
         if (arena != null) {
             if (arena.getStatus() != GameState.playing) {
                 e.setCancelled(true);
@@ -309,7 +310,7 @@ public class BreakPlace implements Listener {
             }
         }
         Player p = e.getPlayer();
-        Arena a = Arena.getArenaByPlayer(p);
+        IArena a = Arena.getArenaByPlayer(p);
         if (a != null) {
             if (a.isSpectator(p)) {
                 e.setCancelled(true);
@@ -328,7 +329,7 @@ public class BreakPlace implements Listener {
                 return;
             }
             try {
-                for (BedWarsTeam t : a.getTeams()) {
+                for (ITeam t : a.getTeams()) {
                     if (t.getSpawn().distance(e.getBlockClicked().getLocation()) <= a.getConfig().getInt(ConfigPath.ARENA_SPAWN_PROTECTION)) {
                         e.setCancelled(true);
                         p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
@@ -345,7 +346,7 @@ public class BreakPlace implements Listener {
                         return;
                     }
                 }
-                for (OreGenerator o : a.getOreGenerators()) {
+                for (IGenerator o : a.getOreGenerators()) {
                     if (o.getLocation().distance(e.getBlockClicked().getLocation()) <= 1) {
                         e.setCancelled(true);
                         p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
@@ -364,7 +365,7 @@ public class BreakPlace implements Listener {
     public void onBlow(EntityExplodeEvent e) {
         if (e.isCancelled()) return;
         if (e.blockList().isEmpty()) return;
-        Arena a = Arena.getArenaByName(e.blockList().get(0).getWorld().getName());
+        IArena a = Arena.getArenaByName(e.blockList().get(0).getWorld().getName());
         if (a != null) {
             if (a.getNextEvent() != NextEvent.GAME_END) {
                 List<Block> destroyed = e.blockList();
@@ -383,7 +384,7 @@ public class BreakPlace implements Listener {
     public void onBlockExplode(BlockExplodeEvent e) {
         if (e.isCancelled()) return;
         if (e.blockList().isEmpty()) return;
-        Arena a = Arena.getArenaByName(e.blockList().get(0).getWorld().getName());
+        IArena a = Arena.getArenaByName(e.blockList().get(0).getWorld().getName());
         if (a != null) {
             if (a.getNextEvent() != NextEvent.GAME_END) {
                 List<Block> destroyed = e.blockList();
@@ -400,7 +401,7 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onPaintingRemove(HangingBreakByEntityEvent e) {
-        Arena a = Arena.getArenaByName(e.getEntity().getWorld().getName());
+        IArena a = Arena.getArenaByName(e.getEntity().getWorld().getName());
         if (a == null) {
             if (BedWars.getServerType() == ServerType.SHARED) return;
             if (!BedWars.getLobbyWorld().equals(e.getEntity().getWorld().getName())) return;
@@ -413,10 +414,10 @@ public class BreakPlace implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onBlockCanBuildEvent(BlockCanBuildEvent e) {
         if (e.isBuildable()) return;
-        Arena a = Arena.getArenaByName(e.getBlock().getWorld().getName());
+        IArena a = Arena.getArenaByName(e.getBlock().getWorld().getName());
         if (a != null) {
             boolean bed = false;
-            for (BedWarsTeam t : a.getTeams()) {
+            for (ITeam t : a.getTeams()) {
                 for (int x = e.getBlock().getX() - 1; x < e.getBlock().getX() + 1; x++) {
                     for (int z = e.getBlock().getZ() - 1; z < e.getBlock().getZ() + 1; z++) {
 

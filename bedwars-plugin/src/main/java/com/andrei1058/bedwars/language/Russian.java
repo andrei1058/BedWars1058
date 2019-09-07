@@ -317,8 +317,8 @@ public class Russian extends Language{
         yml.addDefault(Messages.FORMATTING_STATS_DATE_FORMAT, "yyyy/MM/dd HH:mm");
 
         yml.addDefault(Messages.MEANING_NEVER, "Никогда");
-        yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&7{date}", "&fНик: &a{player}", "", "&fПобед: &a{wins}", "&fПроигрышей: &a{losses}", "&fУбийств: &a{kills}", "&fСмертей: &a{deaths}"
-                , "&fФинальных убийств: &a{fУбийств}", "&fКроватей уничтожено: &a{beds}", "", "&fОнлайн: &a{on}", "&e{server_ip}"));
+        yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&fYour Level: {level}", "", "&fProgress: &a{currentXp}&7/&b{requiredXp}", "{progress}", "", "&7{player}", "", "&fCoins: &a{money}"
+                , "", "&fTotal Wins: &a{wins}", "&fTotal Kills: &a{kills}", "", "&e{server_ip}"));
 
         /* party commands */
         yml.addDefault(Messages.COMMAND_PARTY_HELP, Arrays.asList("&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",

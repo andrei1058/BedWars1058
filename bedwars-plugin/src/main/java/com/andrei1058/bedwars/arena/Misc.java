@@ -1,6 +1,9 @@
 package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.arena.generator.IGenerator;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.language.Messages;
@@ -44,7 +47,7 @@ public class Misc {
         if (getServerType() != ServerType.BUNGEE) {
             if (!p.getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
                 p.teleport(config.getConfigLoc("lobbyLoc"));
-                Arena a = Arena.getArenaByPlayer(p);
+                IArena a = Arena.getArenaByPlayer(p);
                 if (a != null) {
                     if (a.isSpectator(p)) {
                         a.removeSpectator(p, false);
@@ -377,8 +380,8 @@ public class Misc {
      * Check if location is on a protected region
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean isBuildProtected(Location l, Arena a) {
-        for (BedWarsTeam t : a.getTeams()) {
+    public static boolean isBuildProtected(Location l, IArena a) {
+        for (ITeam t : a.getTeams()) {
             if (t.getSpawn().distance(l) <= a.getConfig().getInt(ConfigPath.ARENA_SPAWN_PROTECTION)) {
                 return true;
             }
@@ -389,7 +392,7 @@ public class Misc {
                 return true;
             }
         }
-        for (OreGenerator o : a.getOreGenerators()) {
+        for (IGenerator o : a.getOreGenerators()) {
             if (o.getLocation().distance(l) <= 1) {
                 return true;
             }

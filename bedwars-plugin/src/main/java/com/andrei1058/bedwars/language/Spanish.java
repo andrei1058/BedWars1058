@@ -223,8 +223,8 @@ public class Spanish extends Language{
         yml.addDefault(Messages.FORMATTING_STATS_DATE_FORMAT, "yyyy/MM/dd HH:mm");
 
         yml.addDefault(Messages.MEANING_NEVER, "Nunca");
-        yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&7{date}", "&fNombre: &a{player}", "", "&6Victorias: &a{wins}", "&6Derrotas: &a{losses}", "&6Asesinatos: &a{kills}", "&6Muertes: &a{deaths}"
-                , "&fAsesinatos Finales: &a{finalKills}", "&fCamas Destruidas: &a{beds}", "", "&fConectados: &a{on}", "&e{server_ip}"));
+        yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&fYour Level: {level}", "", "&fProgress: &a{currentXp}&7/&b{requiredXp}", "{progress}", "", "&7{player}", "", "&fCoins: &a{money}"
+                , "", "&fTotal Wins: &a{wins}", "&fTotal Kills: &a{kills}", "", "&e{server_ip}"));
 
         /* party commands */
         yml.addDefault(Messages.COMMAND_PARTY_HELP, Arrays.asList("&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",

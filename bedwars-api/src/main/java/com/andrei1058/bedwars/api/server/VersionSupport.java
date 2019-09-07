@@ -414,7 +414,7 @@ public abstract class VersionSupport {
 
     /**
      * Item Data compare
-     * This will always return true on versions >= 1.13
+     * This will always return true on versions major or equal 1.13
      */
     public boolean itemStackDataCompare(ItemStack i, short data) {
         return true;
@@ -472,11 +472,6 @@ public abstract class VersionSupport {
     public abstract void setUnbreakable(ItemMeta itemMeta);
 
     /**
-     * Get server level name.
-     */
-    public abstract String getLevelName();
-
-    /**
      * Get list of entities that are going to despawn based on a timer.
      */
     public HashMap<UUID, Despawnable> getDespawnablesList() {
@@ -495,4 +490,9 @@ public abstract class VersionSupport {
     }
 
     public abstract void registerVersionListeners();
+
+    /**
+     * Get main level name.
+     */
+    public abstract String getMainLevel();
 }

@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.upgrades;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import org.bukkit.potion.PotionEffectType;
 
@@ -25,7 +26,7 @@ public class EffectAction extends UpgradeAction {
     }
 
     @Override
-    public void execute(BedWarsTeam bwt, int i) {
+    public void execute(ITeam bwt, int i) {
         if (apply.equalsIgnoreCase("members")){
             bwt.addTeamEffect(getPotionEffectType(), getAmplifier(), getDuration());
         } else if(apply.equalsIgnoreCase("base")){

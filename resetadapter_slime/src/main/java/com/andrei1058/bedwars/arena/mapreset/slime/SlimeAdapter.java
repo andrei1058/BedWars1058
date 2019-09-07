@@ -6,13 +6,13 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.server.ISetupSession;
 import com.andrei1058.bedwars.api.server.RestoreAdapter;
 import com.andrei1058.bedwars.api.server.ServerType;
+import com.andrei1058.bedwars.api.util.FileUtil;
+import com.andrei1058.bedwars.api.util.ZipFileUtil;
 import com.grinderwolf.swm.api.SlimePlugin;
 import com.grinderwolf.swm.api.exceptions.*;
 import com.grinderwolf.swm.api.loaders.SlimeLoader;
 import com.grinderwolf.swm.api.world.SlimeWorld;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
@@ -35,14 +35,25 @@ public class SlimeAdapter extends RestoreAdapter {
 
     @Override
     public void onEnable(IArena a) {
-        if (Bukkit.getWorld(a.getWorldName()) != null) {
-            a.init(Bukkit.getWorld(a.getWorldName()));
-            return;
+        if (api.getVersionSupport().getMainLevel().equalsIgnoreCase(a.getWorldName())){
+            if (!(api.getServerType() == ServerType.BUNGEE && api.getArenaUtil().getGamesBeforeRestart() == 1)) {
+                FileUtil.setMainLevel("ignore_main_level", api.getVersionSupport());
+                getOwner().getLogger().log(Level.SEVERE, "Cannot use level-name as arenas. Automatically creating a new void map for level-name.");
+                getOwner().getLogger().log(Level.SEVERE, "The server is restarting...");
+                Bukkit.getServer().spigot().restart();
+                return;
+            }
         }
-
         Bukkit.getScheduler().runTaskAsynchronously(getOwner(), () -> {
-            SlimeLoader flat = slime.getLoader("file");
+            if (Bukkit.getWorld(a.getWorldName()) != null){
+                Bukkit.getScheduler().runTask(getOwner(), () -> {
+                    World w = Bukkit.getWorld(a.getWorldName());
+                    a.init(w);
+                });
+                return;
+            }
 
+            SlimeLoader flat = slime.getLoader("file");
             String[] spawn = a.getConfig().getString("waiting.Loc").split(",");
             SlimeWorld.SlimeProperties props = SlimeWorld.SlimeProperties.builder().difficulty(1).allowAnimals(false).allowMonsters(false).spawnX(Double.parseDouble(spawn[0]))
                     .spawnY(Double.parseDouble(spawn[1])).spawnZ(Double.parseDouble(spawn[2])).pvp(true).readOnly(true).build();
@@ -54,7 +65,6 @@ public class SlimeAdapter extends RestoreAdapter {
                 Bukkit.getScheduler().runTask(getOwner(), () -> {
                     try {
                         slime.generateWorld(world);
-                        a.init(Bukkit.getWorld(a.getWorldName()));
                     } catch (Exception e) {
                         api.getArenaUtil().removeFromEnableQueue(a);
                     }
@@ -70,30 +80,34 @@ public class SlimeAdapter extends RestoreAdapter {
         if (api.getServerType() == ServerType.BUNGEE) {
             api.getArenaUtil().setGamesBeforeRestart(api.getArenaUtil().getGamesBeforeRestart() - 1);
             if (api.getArenaUtil().getGamesBeforeRestart() == 0) {
-                Bukkit.getLogger().info("Dispatching command: " + api.getConfigs().getMainConfig().getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
+                getOwner().getLogger().info("Dispatching command: " + api.getConfigs().getMainConfig().getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), api.getConfigs().getMainConfig().getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
             } else {
                 if (api.getArenaUtil().getGamesBeforeRestart() != -1) {
                     api.getArenaUtil().setGamesBeforeRestart(api.getArenaUtil().getGamesBeforeRestart() - 1);
                 }
-                Bukkit.unloadWorld(a.getWorldName(), false);
-                Bukkit.getScheduler().runTaskLater(getOwner(), () -> api.getArenaUtil().loadArena(a.getWorldName(), null), 80L);
+                Bukkit.getScheduler().runTask(getOwner(), () -> {
+                    Bukkit.unloadWorld(a.getWorldName(), false);
+                    Bukkit.getScheduler().runTaskLater(getOwner(), () -> api.getArenaUtil().loadArena(a.getWorldName(), null), 80L);
+                });
             }
         } else {
-            Bukkit.unloadWorld(a.getWorldName(), false);
-            Bukkit.getScheduler().runTaskLater(getOwner(), () -> api.getArenaUtil().loadArena(a.getWorldName(), null), 80L);
+            Bukkit.getScheduler().runTask(getOwner(), () -> {
+                Bukkit.unloadWorld(a.getWorldName(), false);
+                Bukkit.getScheduler().runTaskLater(getOwner(), () -> api.getArenaUtil().loadArena(a.getWorldName(), null), 80L);
+            });
         }
     }
 
     @Override
     public void onDisable(IArena a) {
-        Bukkit.unloadWorld(a.getWorldName(), false);
+        Bukkit.getScheduler().runTask(getOwner(), () -> Bukkit.unloadWorld(a.getWorldName(), false));
     }
 
     @Override
     public void onSetupSessionStart(ISetupSession s) {
         Bukkit.getScheduler().runTaskAsynchronously(getOwner(), () -> {
-            SlimeLoader sqlLoader = slime.getLoader("file");
+            SlimeLoader sLoader = slime.getLoader("file");
             String[] spawn = new String[]{"0", "118", "0"};
             if (s.getConfig().getYml().getString("waiting.Loc") != null) {
                 spawn = s.getConfig().getString("waiting.Loc").split(",");
@@ -103,26 +117,40 @@ public class SlimeAdapter extends RestoreAdapter {
             try {
 
                 if (Bukkit.getWorld(s.getWorldName()) != null) {
-                    Bukkit.unloadWorld(s.getWorldName(), false);
+                    Bukkit.getScheduler().runTask(getOwner(), () -> Bukkit.unloadWorld(s.getWorldName(), false));
                 }
 
-                // Note that this method should be called asynchronously
-                SlimeWorld world = slime.loadWorld(sqlLoader, s.getWorldName(), props);
+                SlimeWorld world = null;
+                if (sLoader.worldExists(s.getWorldName())) {
+                    world = slime.loadWorld(sLoader, s.getWorldName(), props);
+                    Bukkit.getScheduler().runTask(getOwner(), () -> s.getPlayer().sendMessage(ChatColor.GREEN + "Loading world from SlimeWorldManager container."));
+                } else {
+                    if (new File(Bukkit.getWorldContainer(), s.getWorldName() + "/level.dat").exists()) {
+                        Bukkit.getScheduler().runTask(getOwner(), () -> s.getPlayer().sendMessage(ChatColor.GREEN + "Importing world to the SlimeWorldManager container."));
+                        slime.importWorld(new File(Bukkit.getWorldContainer(), s.getWorldName()), s.getWorldName().toLowerCase(), sLoader);
+                    } else {
+                        Bukkit.getScheduler().runTask(getOwner(), () -> s.getPlayer().sendMessage(ChatColor.GREEN + "Creating anew void map."));
+                        world = slime.createEmptyWorld(sLoader, s.getWorldName(), props);
+                    }
+                }
 
+                final SlimeWorld sw = world;
                 // This method must be called synchronously
                 Bukkit.getScheduler().runTask(getOwner(), () -> {
-                    slime.generateWorld(world);
+                    slime.generateWorld(sw);
                     s.teleportPlayer();
                 });
-            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldInUseException ex) {
+            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldInUseException | WorldAlreadyExistsException | InvalidWorldException | WorldTooBigException | WorldLoadedException ex) {
+                s.getPlayer().sendMessage(ChatColor.RED + "An error occurred! Please check console.");
                 ex.printStackTrace();
+                s.close();
             }
         });
     }
 
     @Override
     public void onSetupSessionClose(ISetupSession s) {
-        Bukkit.unloadWorld(s.getWorldName(), false);
+        Bukkit.getScheduler().runTask(getOwner(), () -> Bukkit.unloadWorld(s.getWorldName(), true));
     }
 
     @Override
@@ -162,11 +190,13 @@ public class SlimeAdapter extends RestoreAdapter {
 
     @Override
     public void deleteWorld(String name) {
-        try {
-            slime.getLoader("file").deleteWorld(name);
-        } catch (UnknownWorldException | IOException e) {
-            e.printStackTrace();
-        }
+        Bukkit.getScheduler().runTaskAsynchronously(getOwner(), () -> {
+            try {
+                slime.getLoader("file").deleteWorld(name);
+            } catch (UnknownWorldException | IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
@@ -187,7 +217,7 @@ public class SlimeAdapter extends RestoreAdapter {
     @Override
     public List<String> getWorldsList() {
         try {
-            return slime.getLoader("mysql").listWorlds();
+            return slime.getLoader("file").listWorlds();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -198,29 +228,32 @@ public class SlimeAdapter extends RestoreAdapter {
      * Convert vanilla worlds to the slime format.
      */
     public void convertWorlds() {
-        File dir = new File("plugins/" + getOwner() + "/Arenas");
+        File dir = new File("plugins/" + getOwner().getName() + "/Arenas");
         File ff;
         SlimeLoader sl = slime.getLoader("file");
         if (dir.exists()) {
             File[] fls = dir.listFiles();
-            for (File fl : Objects.requireNonNull(fls)) {
-                if (fl.isFile()) {
-                    if (fl.getName().contains(".yml")) {
-                        String name = fl.getName().replace(".yml", "");
-                        ff = new File(Bukkit.getWorldContainer(), name);
-                        if (ff.exists()) {
-                            if (fl.getName().equals(fl.getName().toLowerCase())) {
-                                if (!fl.renameTo(new File(dir, fl.getName().toLowerCase()))) {
-                                    Bukkit.getLogger().log(Level.WARNING, "Could not rename " + fl.getName() + ".yml to " + fl.getName().toLowerCase() + ".yml");
-                                }
-                            }
+            if (fls != null) {
+                for (File fl : fls) {
+                    if (fl.isFile()) {
+                        if (fl.getName().contains(".yml")) {
+                            final String name = fl.getName().replace(".yml", "").toLowerCase();
+                            ff = new File(Bukkit.getWorldContainer(), fl.getName().replace(".yml", ""));
                             try {
-                                if (!sl.worldExists(ff.getName().toLowerCase())) {
+                                if (!sl.worldExists(name)) {
+                                    if (!fl.getName().equals(name)) {
+                                        if (!fl.renameTo(new File(dir, name + ".yml"))) {
+                                            getOwner().getLogger().log(Level.WARNING, "Could not rename " + fl.getName() + ".yml to " + name + ".yml");
+                                        }
+                                    }
+                                    File bc = new File(getOwner().getDataFolder() + "/Cache", ff.getName() + ".zip");
+                                    if (ff.exists() && bc.exists()) FileUtil.delete(ff);
+                                    ZipFileUtil.unzipFileIntoDirectory(bc, new File(Bukkit.getWorldContainer(), name));
                                     try {
-                                        Bukkit.getLogger().log(Level.INFO, "Converting " + ff.getName() + " to the Slime format.");
-                                        slime.importWorld(ff, ff.getName().toLowerCase(), sl);
+                                        getOwner().getLogger().log(Level.INFO, "Converting " + name + " to the Slime format.");
+                                        slime.importWorld(ff, name, sl);
                                     } catch (WorldAlreadyExistsException | InvalidWorldException | WorldLoadedException | WorldTooBigException | IOException e) {
-                                        Bukkit.getLogger().log(Level.WARNING, "Could not convert " + ff.getName() + " to the Slime format.");
+                                        getOwner().getLogger().log(Level.WARNING, "Could not convert " + name + " to the Slime format.");
                                         e.printStackTrace();
                                     }
                                 }
