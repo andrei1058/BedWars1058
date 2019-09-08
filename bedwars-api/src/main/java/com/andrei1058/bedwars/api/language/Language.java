@@ -155,6 +155,8 @@ public class Language extends ConfigManager {
     public static void setupCustomStatsMessages() {
         BedWars api = Bukkit.getServer().getServicesManager().getRegistration(BedWars.class).getProvider();
         for (Language l : getLanguages()) {
+            if (l == null) continue;
+            if (l.getYml() == null) continue;
             /* save messages for stats gui items if custom items added */
             for (String item : api.getConfigs().getMainConfig().getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_STATS_PATH).getKeys(false)) {
                 if (ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE.contains(item)) continue;
