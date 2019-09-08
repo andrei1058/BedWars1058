@@ -1,4 +1,10 @@
-# 0.14beta
+# 0.14.1.beta
+- fixed issue where you can drop items in 1.12 lobby
+- fixed current modification exception with swm
+- fixed npe issue when loading signs
+- added support for VipFeatures
+
+# 0.14.beta
 
 IMPORTANT NOTICE FOR SERVER OWNERS:
 With this update most of BedWars1058 Addons won't work anymore. Please update them.
