@@ -1193,6 +1193,7 @@ public class Arena implements IArena {
      */
     public void addSign(Location loc) {
         if (loc == null) return;
+        if (loc.getBlock() == null) return;
         if (loc.getBlock().getType() == Material.SIGN || loc.getBlock().getType() == Material.WALL_SIGN) {
             signs.add(loc.getBlock().getState());
             refreshSigns();
