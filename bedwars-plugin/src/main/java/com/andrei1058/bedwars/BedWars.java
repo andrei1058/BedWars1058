@@ -42,6 +42,10 @@ import com.andrei1058.bedwars.support.vault.*;
 import com.andrei1058.bedwars.arena.tasks.OneTick;
 import com.andrei1058.bedwars.arena.tasks.Refresh;
 import com.andrei1058.bedwars.api.server.VersionSupport;
+import com.andrei1058.bedwars.support.vipfeatures.VipFeatures;
+import com.andrei1058.bedwars.support.vipfeatures.VipListeners;
+import com.andrei1058.vipfeatures.api.IVipFeatures;
+import com.andrei1058.vipfeatures.api.MiniGameAlreadyRegistered;
 import org.bukkit.Bukkit;
 import org.bukkit.WorldCreator;
 import org.bukkit.entity.Entity;
@@ -395,6 +399,19 @@ public class BedWars extends JavaPlugin {
         bStats metrics = new bStats(this);
         metrics.addCustomChart(new bStats.SimplePie("server_type", () -> getServerType().toString()));
         metrics.addCustomChart(new bStats.SimplePie("default_language", () -> Language.getDefaultLanguage().getIso()));
+
+        if (Bukkit.getPluginManager().getPlugin("VipFeatures") != null){
+            try {
+                IVipFeatures vf = Bukkit.getServicesManager().getRegistration(IVipFeatures.class).getProvider();
+                vf.registerMiniGame(new VipFeatures(this));
+                registerEvents(new VipListeners(vf));
+            } catch (Exception e){
+                getLogger().warning("Could not load support for VipFeatures.");
+            } catch (MiniGameAlreadyRegistered miniGameAlreadyRegistered) {
+                miniGameAlreadyRegistered.printStackTrace();
+            }
+        }
+
     }
 
     public void onDisable() {

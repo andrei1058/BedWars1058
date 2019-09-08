@@ -126,6 +126,11 @@
             <type>jar</type>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.andrei1058.vipfeatures</groupId>
+            <artifactId>vipfeatures-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
