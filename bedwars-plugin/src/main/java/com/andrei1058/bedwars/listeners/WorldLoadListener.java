@@ -13,7 +13,10 @@ public class WorldLoadListener implements Listener {
     @EventHandler
     public void onLoad(WorldLoadEvent e) {
         for (IArena a : new LinkedList<>(Arena.getEnableQueue())) {
-            if (a.getWorldName().equalsIgnoreCase(e.getWorld().getName())) a.init(e.getWorld());
+            if (a.getWorldName().equalsIgnoreCase(e.getWorld().getName())) {
+                a.init(e.getWorld());
+                return;
+            }
         }
     }
 }
