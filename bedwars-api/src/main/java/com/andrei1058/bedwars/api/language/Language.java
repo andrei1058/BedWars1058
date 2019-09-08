@@ -161,8 +161,8 @@ public class Language extends ConfigManager {
             if (api.getConfigs().getMainConfig().getYml().get("ConfigPath.GENERAL_CONFIGURATION_STATS_PATH") == null) return;
             for (String item : api.getConfigs().getMainConfig().getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_STATS_PATH).getKeys(false)) {
                 if (ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE.contains(item)) continue;
-                if (!l.getYml().getDefaults().contains(Messages.PLAYER_STATS_GUI_PATH + "-" + item + "-name")) l.getYml().addDefault(Messages.PLAYER_STATS_GUI_PATH + "-" + item + "-name", "Name not set");
-                if (!l.getYml().getDefaults().contains(Messages.PLAYER_STATS_GUI_PATH + "-" + item + "-lore")) l.getYml().addDefault(Messages.PLAYER_STATS_GUI_PATH + "-" + item + "-lore", Collections.singletonList("lore not set"));
+                if (l.getYml().getDefaults() == null || !l.getYml().getDefaults().contains(Messages.PLAYER_STATS_GUI_PATH + "-" + item + "-name")) l.getYml().addDefault(Messages.PLAYER_STATS_GUI_PATH + "-" + item + "-name", "Name not set");
+                if (l.getYml().getDefaults() == null || !l.getYml().getDefaults().contains(Messages.PLAYER_STATS_GUI_PATH + "-" + item + "-lore")) l.getYml().addDefault(Messages.PLAYER_STATS_GUI_PATH + "-" + item + "-lore", Collections.singletonList("lore not set"));
             }
             l.save();
         }
@@ -170,41 +170,43 @@ public class Language extends ConfigManager {
 
     @SuppressWarnings("WeakerAccess")
     public void addDefaultStatsMsg(YamlConfiguration yml, String path, String name, String... lore) {
-        if (!yml.getDefaults().contains(Messages.PLAYER_STATS_GUI_PATH + "-" + path + "-name")) yml.addDefault(Messages.PLAYER_STATS_GUI_PATH + "-" + path + "-name", name);
-        if (!yml.getDefaults().contains(Messages.PLAYER_STATS_GUI_PATH + "-" + path + "-lore")) yml.addDefault(Messages.PLAYER_STATS_GUI_PATH + "-" + path + "-lore", lore);
+        if (yml.getDefaults() == null || !yml.getDefaults().contains(Messages.PLAYER_STATS_GUI_PATH + "-" + path + "-name")) yml.addDefault(Messages.PLAYER_STATS_GUI_PATH + "-" + path + "-name", name);
+        if (yml.getDefaults() == null || !yml.getDefaults().contains(Messages.PLAYER_STATS_GUI_PATH + "-" + path + "-lore")) yml.addDefault(Messages.PLAYER_STATS_GUI_PATH + "-" + path + "-lore", lore);
     }
 
     /**
      * Create missing name/ lore for items: multi arena lobby, waiting, spectating
      */
     public static void addDefaultMessagesCommandItems(Language language) {
+        if (language == null) return;
         YamlConfiguration yml = language.getYml();
+        if (yml == null) return;
         BedWars api = Bukkit.getServer().getServicesManager().getRegistration(BedWars.class).getProvider();
         if (api.getConfigs().getMainConfig().getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH) != null) {
             for (String item : api.getConfigs().getMainConfig().getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH).getKeys(false)) {
+               if (item.isEmpty()) continue;
                 String p1 = Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", item);
                 String p2 = Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", item);
-                if (!yml.getDefaults().contains(p1)) yml.addDefault(p1, "&cName not set at: &f" + p1);
-                if (!yml.getDefaults().contains(p2))
-                    yml.addDefault(p2, Arrays.asList("&cLore not set at:", " &f" + p2));
+                if (yml.getDefaults() == null || !yml.getDefaults().contains(p1)) yml.addDefault(p1, "&cName not set at: &f" + p1);
+                if (yml.getDefaults() == null || !yml.getDefaults().contains(p1)) yml.addDefault(p2, Arrays.asList("&cLore not set at:", " &f" + p2));
             }
         }
         if (api.getConfigs().getMainConfig().getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH) != null) {
             for (String item : api.getConfigs().getMainConfig().getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH).getKeys(false)) {
+                if (item.isEmpty()) continue;
                 String p1 = Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", item);
                 String p2 = Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", item);
-                if (!yml.getDefaults().contains(p1)) yml.addDefault(p1, "&cName not set at: &f" + p1);
-                if (!yml.getDefaults().contains(p2))
-                    yml.addDefault(p2, Arrays.asList("&cLore not set at:", " &f" + p2));
+                if (yml.getDefaults() == null || !yml.getDefaults().contains(p1)) yml.addDefault(p1, "&cName not set at: &f" + p1);
+                if (yml.getDefaults() == null || !yml.getDefaults().contains(p1)) yml.addDefault(p2, Arrays.asList("&cLore not set at:", " &f" + p2));
             }
         }
         if (api.getConfigs().getMainConfig().getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH) != null) {
             for (String item : api.getConfigs().getMainConfig().getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH).getKeys(false)) {
+                if (item.isEmpty()) continue;
                 String p1 = Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", item);
                 String p2 = Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", item);
-                if (!yml.getDefaults().contains(p1)) yml.addDefault(p1, "&cName not set at: &f" + p1);
-                if (!yml.getDefaults().contains(p2))
-                    yml.addDefault(p2, Arrays.asList("&cLore not set at:", " &f" + p2));
+                if (yml.getDefaults() == null || !yml.getDefaults().contains(p1)) yml.addDefault(p1, "&cName not set at: &f" + p1);
+                if (yml.getDefaults() == null || !yml.getDefaults().contains(p1)) yml.addDefault(p2, Arrays.asList("&cLore not set at:", " &f" + p2));
             }
         }
         yml.options().copyDefaults(true);
@@ -247,11 +249,11 @@ public class Language extends ConfigManager {
      * Add required messages for a shop category to the given yml
      */
     public static void addCategoryMessages(YamlConfiguration yml, String categoryName, String invName, String itemName, List<String> itemLore) {
-        if (!yml.getDefaults().contains(Messages.SHOP_CATEGORY_INVENTORY_NAME.replace("%category%", categoryName)))
+        if (yml.getDefaults() == null || !yml.getDefaults().contains(Messages.SHOP_CATEGORY_INVENTORY_NAME.replace("%category%", categoryName)))
             yml.addDefault(Messages.SHOP_CATEGORY_INVENTORY_NAME.replace("%category%", categoryName), invName);
-        if (!yml.getDefaults().contains(Messages.SHOP_CATEGORY_ITEM_NAME.replace("%category%", categoryName)))
+        if (yml.getDefaults() == null || !yml.getDefaults().contains(Messages.SHOP_CATEGORY_ITEM_NAME.replace("%category%", categoryName)))
             yml.addDefault(Messages.SHOP_CATEGORY_ITEM_NAME.replace("%category%", categoryName), itemName);
-        if (!yml.getDefaults().contains(Messages.SHOP_CATEGORY_ITEM_LORE.replace("%category%", categoryName)))
+        if (yml.getDefaults() == null || !yml.getDefaults().contains(Messages.SHOP_CATEGORY_ITEM_LORE.replace("%category%", categoryName)))
             yml.addDefault(Messages.SHOP_CATEGORY_ITEM_LORE.replace("%category%", categoryName), itemLore);
     }
 
@@ -261,8 +263,8 @@ public class Language extends ConfigManager {
     public static void addContentMessages(YamlConfiguration yml, String contentName, String categoryName, String itemName, List<String> itemLore) {
         final String path1 = Messages.SHOP_CONTENT_TIER_ITEM_NAME.replace("%category%", categoryName).replace("%content%", contentName),
                 path2 = Messages.SHOP_CONTENT_TIER_ITEM_LORE.replace("%category%", categoryName).replace("%content%", contentName);
-        if (!yml.getDefaults().contains(path1)) yml.addDefault(path1, itemName);
-        if (!yml.getDefaults().contains(path2)) yml.addDefault(path2, itemLore);
+        if (yml.getDefaults() == null || !yml.getDefaults().contains(path1)) yml.addDefault(path1, itemName);
+        if (yml.getDefaults() == null || !yml.getDefaults().contains(path2)) yml.addDefault(path2, itemLore);
     }
 
     /**
