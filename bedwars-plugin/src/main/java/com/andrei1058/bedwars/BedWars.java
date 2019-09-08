@@ -412,7 +412,6 @@ public class BedWars extends JavaPlugin {
                 miniGameAlreadyRegistered.printStackTrace();
             }
         }
-
     }
 
     public void onDisable() {

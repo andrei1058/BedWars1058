@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.support.vipfeatures;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.events.player.PlayerJoinArenaEvent;
+import com.andrei1058.bedwars.api.events.player.PlayerLeaveArenaEvent;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.vipfeatures.api.IVipFeatures;
 import org.bukkit.Bukkit;
@@ -19,7 +20,7 @@ public class VipListeners implements Listener {
 
     @EventHandler
     public void onServerJoin(PlayerJoinEvent e) {
-        if (BedWars.getServerType() != ServerType.SHARED) {
+        if (BedWars.getServerType() == ServerType.MULTIARENA) {
             Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
                 api.givePlayerItemStack(e.getPlayer());
             }, 10L);
@@ -31,5 +32,13 @@ public class VipListeners implements Listener {
         Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
             api.givePlayerItemStack(e.getPlayer());
         }, 10L);
+    }
+    @EventHandler
+    public void onServerJoin(PlayerLeaveArenaEvent e) {
+        if (BedWars.getServerType() == ServerType.MULTIARENA) {
+            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
+                if (e.getPlayer().isOnline()) api.givePlayerItemStack(e.getPlayer());
+            }, 10L);
+        }
     }
 }
