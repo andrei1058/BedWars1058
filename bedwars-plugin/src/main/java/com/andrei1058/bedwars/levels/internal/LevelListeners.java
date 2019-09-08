@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.levels.internal;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.events.gameplay.GameEndEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerXpGainEvent;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
@@ -55,7 +56,7 @@ public class LevelListeners implements Listener {
                 Player p1 = Bukkit.getPlayer(p);
                 PlayerLevel.getLevelByPlayer(p).addXp(LevelsConfig.levels.getInt("xp-rewards.game-win"), PlayerXpGainEvent.XpSource.GAME_WIN);
                 p1.sendMessage(Language.getMsg(p1, Messages.XP_REWARD_WIN).replace("{xp}", String.valueOf(LevelsConfig.levels.getInt("xp-rewards.game-win"))));
-                BedWarsTeam bwt = (BedWarsTeam) e.getArena().getExTeam(p1.getUniqueId());
+                ITeam bwt = e.getArena().getExTeam(p1.getUniqueId());
                 if (bwt != null) {
                     if (bwt.getMembersCache().size() > 1) {
                         int tr = LevelsConfig.levels.getInt("xp-rewards.per-teammate") * bwt.getMembersCache().size();
@@ -69,7 +70,7 @@ public class LevelListeners implements Listener {
             if (PlayerLevel.getLevelByPlayer(p) != null) {
                 Player p1 = Bukkit.getPlayer(p);
 
-                BedWarsTeam bwt = (BedWarsTeam) e.getArena().getExTeam(p1.getUniqueId());
+                ITeam bwt = e.getArena().getExTeam(p1.getUniqueId());
                 if (bwt != null) {
                     if (bwt.getMembersCache().size() > 1) {
                         int tr = LevelsConfig.levels.getInt("xp-rewards.per-teammate") * bwt.getMembersCache().size();
