@@ -2,6 +2,7 @@
 
 For Developers:
 - added NextEventChangeEvent
+- added new methods to the Level interface
 
 # 0.14.1.beta
 - fixed issue where you can drop items in 1.12 lobby
