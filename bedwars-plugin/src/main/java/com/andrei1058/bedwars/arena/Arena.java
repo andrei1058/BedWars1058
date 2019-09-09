@@ -10,6 +10,7 @@ import com.andrei1058.bedwars.api.arena.shop.ShopHolo;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.events.gameplay.NextEventChangeEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerJoinArenaEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerLeaveArenaEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerReJoinEvent;
@@ -1552,6 +1553,7 @@ public class Arena implements IArena {
         for (Player p : getSpectators()) {
             p.getWorld().playSound(p.getLocation(), nms.bedDestroy(), 1f, 1f);
         }
+        Bukkit.getPluginManager().callEvent(new NextEventChangeEvent(this, nextEvent, this.nextEvent));
         this.nextEvent = nextEvent;
     }
 

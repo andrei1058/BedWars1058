@@ -1,3 +1,8 @@
+# 0.14.2.beta
+
+For Developers:
+- added NextEventChangeEvent
+
 # 0.14.1.beta
 - fixed issue where you can drop items in 1.12 lobby
 - fixed current modification exception with swm
