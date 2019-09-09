@@ -10,7 +10,7 @@
     <parent>
         <artifactId>compiler</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>0.14.1.beta</version>
+        <version>0.14.2.beta</version>
     </parent>
 
     <dependencies>
