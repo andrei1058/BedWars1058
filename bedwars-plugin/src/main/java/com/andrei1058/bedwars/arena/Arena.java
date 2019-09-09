@@ -996,7 +996,8 @@ public class Arena implements IArena {
      */
     @Override
     public String getDisplayName() {
-        return getConfig().getString(ConfigPath.ARENA_DISPLAY_NAME).trim().isEmpty() ? (Character.toUpperCase(worldName.charAt(0)) + worldName.substring(1)).replace("_", " ").replace("-", " ")
+        return getConfig().getYml().getString(ConfigPath.ARENA_DISPLAY_NAME, (Character.toUpperCase(worldName.charAt(0)) + worldName.substring(1)).replace("_", " ").replace("-", " ")).trim().isEmpty() ?
+                (Character.toUpperCase(worldName.charAt(0)) + worldName.substring(1)).replace("_", " ").replace("-", " ")
                 : getConfig().getString(ConfigPath.ARENA_DISPLAY_NAME);
     }
 
