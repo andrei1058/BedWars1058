@@ -7,7 +7,7 @@ import com.andrei1058.bedwars.api.server.ISetupSession;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.server.SetupType;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
-import com.andrei1058.bedwars.api.configuration.ConfigManager;
+import com.andrei1058.bedwars.configuration.ArenaConfig;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -33,7 +33,7 @@ public class SetupSession implements ISetupSession {
     private Player player;
     private String worldName;
     private SetupType setupType;
-    private ConfigManager cm;
+    private ArenaConfig cm;
     private boolean started = false;
     private boolean autoCreatedEmerald = false;
     private boolean autoCreatedDiamond = false;
@@ -100,7 +100,7 @@ public class SetupSession implements ISetupSession {
      */
     public boolean startSetup() {
         getPlayer().sendMessage("§6 ▪ §7Loading " + getWorldName());
-        cm = new ConfigManager(BedWars.plugin, getWorldName(), "plugins/" + plugin.getName() + "/Arenas");
+        cm = new ArenaConfig(BedWars.plugin, getWorldName(), "plugins/" + plugin.getName() + "/Arenas");
         BedWars.getAPI().getRestoreAdapter().onSetupSessionStart(this);
         return true;
     }
@@ -173,7 +173,7 @@ public class SetupSession implements ISetupSession {
     /**
      * Get arena configuration
      */
-    public ConfigManager getConfig() {
+    public ArenaConfig getConfig() {
         return cm;
     }
 

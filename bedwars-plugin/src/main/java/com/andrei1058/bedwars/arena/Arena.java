@@ -19,13 +19,13 @@ import com.andrei1058.bedwars.api.events.gameplay.GameStateChangeEvent;
 import com.andrei1058.bedwars.api.events.server.ArenaDisableEvent;
 import com.andrei1058.bedwars.api.events.server.ArenaEnableEvent;
 import com.andrei1058.bedwars.api.events.server.ArenaRestartEvent;
-import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.tasks.PlayingTask;
 import com.andrei1058.bedwars.api.tasks.RestartingTask;
 import com.andrei1058.bedwars.api.tasks.StartingTask;
+import com.andrei1058.bedwars.configuration.ArenaConfig;
 import com.andrei1058.bedwars.levels.internal.InternalLevel;
 import com.andrei1058.bedwars.levels.internal.PerMinuteTask;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
@@ -71,7 +71,7 @@ public class Arena implements IArena {
     private List<BlockState> signs = new ArrayList<>();
     private GameState status = GameState.waiting;
     private YamlConfiguration yml;
-    private ConfigManager cm;
+    private ArenaConfig cm;
     private int minPlayers = 2, maxPlayers = 10, maxInTeam = 1, islandRadius = 10;
     public int upgradeDiamondsCount = 0, upgradeEmeraldsCount = 0;
     public boolean allowSpectate = true;
@@ -149,7 +149,7 @@ public class Arena implements IArena {
         }
         this.worldName = name;
 
-        cm = new ConfigManager(BedWars.plugin, name, "plugins/" + plugin.getName() + "/Arenas");
+        cm = new ArenaConfig(BedWars.plugin, name, "plugins/" + plugin.getName() + "/Arenas");
 
         //if (mapManager.isLevelWorld()) {
         //    Main.plugin.getLogger().severe("COULD NOT LOAD ARENA: " + name);
@@ -1017,7 +1017,7 @@ public class Arena implements IArena {
     }
 
     @Override
-    public ConfigManager getConfig() {
+    public ArenaConfig getConfig() {
         return cm;
     }
 

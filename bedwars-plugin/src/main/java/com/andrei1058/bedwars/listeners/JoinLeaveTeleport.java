@@ -12,6 +12,7 @@ import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -177,8 +178,10 @@ public class JoinLeaveTeleport implements Listener {
             }
             return;
         } else {
-            if (config.getConfigLoc("lobbyLoc") != null)
-                p.teleport(config.getConfigLoc("lobbyLoc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
+            if (config.getConfigLoc("lobbyLoc") != null) {
+                Location loc = config.getConfigLoc("lobbyLoc");
+                if (loc.getWorld() != null) p.teleport(loc, PlayerTeleportEvent.TeleportCause.PLUGIN);
+            }
             Misc.giveLobbySb(e.getPlayer());
             Arena.sendLobbyCommandItems(p);
         }
