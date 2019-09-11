@@ -115,8 +115,8 @@ public class v1_12_R1 extends VersionSupport {
 
     @Override
     public void playAction(Player p, String text) {
-        CraftPlayer cPlayer = (CraftPlayer) p;
-        IChatBaseComponent cbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + text + "\"}");
+        org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer cPlayer = (CraftPlayer) p;
+        net.minecraft.server.v1_12_R1.IChatBaseComponent cbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + text + "\"}");
         PacketPlayOutChat ppoc = new PacketPlayOutChat(cbc, ChatMessageType.GAME_INFO);
         cPlayer.getHandle().playerConnection.sendPacket(ppoc);
     }
