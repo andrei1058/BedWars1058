@@ -49,6 +49,7 @@ public class ConfigManager {
         }
 
         yml = YamlConfiguration.loadConfiguration(config);
+        yml.options().copyDefaults(true);
         this.name = name;
     }
 
