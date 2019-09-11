@@ -317,6 +317,11 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
     }
 
     @Override
+    public void setLevelAdapter(com.andrei1058.bedwars.api.levels.Level level) {
+        BedWars.setLevelAdapter(level);
+    }
+
+    @Override
     public String getLangIso(Player p) {
         return Language.getPlayerLanguage(p).getIso();
     }

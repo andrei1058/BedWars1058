@@ -1,4 +1,5 @@
 # 0.14.2.beta
+- fixed Arena#getDisplayName npe
 
 For Developers:
 - added NextEventChangeEvent
