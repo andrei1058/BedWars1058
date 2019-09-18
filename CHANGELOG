@@ -1,3 +1,7 @@
+# 19.9
+- fixed levels NPE
+- added mysql connection ping task to avoid timeout (once a hour)
+
 # 0.14.2.beta
 - fixed Arena#getDisplayName npe
 - fixed issue where arena default configuration was not being created
