@@ -109,7 +109,7 @@ public class MySQL implements Database {
             e.printStackTrace();
         }
 
-        Bukkit.getScheduler().runTaskTimerAsynchronously(BedWars.plugin, new SessionKeeper(this), 20*60, 20*60);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(BedWars.plugin, new SessionKeeper(this), 20*60, 20*3600);
     }
 
     @Override
