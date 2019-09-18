@@ -319,7 +319,7 @@ public class MySQL implements Database {
      */
     public void ping() {
         try {
-            connection.createStatement().executeUpdate("SELECT id FROM player_levels WHERE id=0;");
+            connection.createStatement().execute("SELECT id FROM player_levels WHERE id=0;");
         } catch (SQLException e) {
             e.printStackTrace();
         }
