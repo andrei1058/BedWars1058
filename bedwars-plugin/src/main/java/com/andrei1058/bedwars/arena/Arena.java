@@ -728,6 +728,19 @@ public class Arena implements IArena {
 
         refreshSigns();
         JoinNPC.updateNPCs(getGroup());
+
+        // fix #340
+        // remove player from party if leaves and the owner is still in the arena while waiting or starting
+        if (getStatus() == GameState.waiting || getStatus() == GameState.starting) {
+            if (BedWars.getParty().hasParty(p) && !BedWars.getParty().isOwner(p)) {
+                for (Player pl : BedWars.getParty().getMembers(p)) {
+                    if (BedWars.getParty().isOwner(pl) && pl.getWorld().getName().equalsIgnoreCase(getWorldName())) {
+                        BedWars.getParty().removeFromParty(p);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -1806,7 +1819,7 @@ public class Arena implements IArena {
         return true;
     }
 
-    public static List<IArena> getSorted(List<IArena> arenas){
+    public static List<IArena> getSorted(List<IArena> arenas) {
         List<IArena> sorted = arenas;
         sorted.sort(new Comparator<IArena>() {
             @Override
