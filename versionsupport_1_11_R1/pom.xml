@@ -11,7 +11,7 @@
     <parent>
         <artifactId>compiler</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>0.14.2.beta</version>
+        <version>19.9</version>
     </parent>
 
     <dependencies>
