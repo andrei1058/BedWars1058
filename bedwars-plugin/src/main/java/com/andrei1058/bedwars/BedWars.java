@@ -44,6 +44,7 @@ import com.andrei1058.bedwars.arena.tasks.Refresh;
 import com.andrei1058.bedwars.api.server.VersionSupport;
 import com.andrei1058.bedwars.support.vipfeatures.VipFeatures;
 import com.andrei1058.bedwars.support.vipfeatures.VipListeners;
+import com.andrei1058.spigotutils.SpigotUpdater;
 import com.andrei1058.vipfeatures.api.IVipFeatures;
 import com.andrei1058.vipfeatures.api.MiniGameAlreadyRegistered;
 import org.bukkit.Bukkit;
@@ -291,9 +292,6 @@ public class BedWars extends JavaPlugin {
         /* Register NMS entities */
         nms.registerEntities();
 
-        /* Check for updates */
-        Misc.checkUpdate();
-
         /* Database support */
         if (config.getBoolean("database.enable")) {
             com.andrei1058.bedwars.database.MySQL mySQL = new com.andrei1058.bedwars.database.MySQL();
@@ -412,6 +410,9 @@ public class BedWars extends JavaPlugin {
                 miniGameAlreadyRegistered.printStackTrace();
             }
         }
+
+        /* Check updates */
+        new SpigotUpdater(this, 50942, true).checkUpdate();
     }
 
     public void onDisable() {

@@ -110,26 +110,7 @@ public class JoinLeaveTeleport implements Listener {
             }, 14L);
         }
 
-        if (debug) {
-            p.sendMessage("");
-            p.sendMessage("");
-            p.sendMessage("§7§m----------------------------------------\n" +
-                    "§eThis server is running BedWars1058 §cv" + plugin.getDescription().getVersion()
-                    + "\n§eThe latest published version is §a" + Misc.getNewVersion() +
-                    "\n§7§m----------------------------------------");
-            p.sendMessage("");
-            p.sendMessage("");
-        }
         if (p.isOp()) {
-            if (Misc.isUpdateAvailable()) {
-                p.sendMessage("§8[§f" + plugin.getName() + "§8]§7§m---------------------------");
-                p.sendMessage("");
-                TextComponent tc = new TextComponent("§eUpdate available: §6" + Misc.getNewVersion() + " §7§o(click)");
-                tc.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, link));
-                p.spigot().sendMessage(tc);
-                p.sendMessage("");
-                p.sendMessage("§8[§f" + plugin.getName() + "§8]§7§m---------------------------");
-            }
             if (Arena.getArenas().isEmpty()) {
                 p.performCommand(mainCmd);
             }

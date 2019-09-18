@@ -40,9 +40,6 @@ import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class Misc {
 
-    private static boolean updateAvailable = false;
-    private static String newVersion = "";
-
     public static void moveToLobbyOrKick(Player p) {
         if (getServerType() != ServerType.BUNGEE) {
             if (!p.getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
@@ -182,40 +179,6 @@ public class Misc {
         return i;
     }
 
-    public static void checkUpdate() {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            try {
-                HttpURLConnection checkUpdate = (HttpURLConnection) new URL("https://api.spigotmc.org/legacy/update.php?resource=50942").openConnection();
-                checkUpdate.setDoOutput(true);
-                String old = plugin.getDescription().getVersion();
-                String newV = new BufferedReader(new InputStreamReader(checkUpdate.getInputStream())).readLine();
-                if (!newV.equalsIgnoreCase(old)) {
-                    updateAvailable = true;
-                    newVersion = newV;
-                    plugin.getLogger().info("                                    ");
-                    plugin.getLogger().info("                                    ");
-                    plugin.getLogger().info("                                    ");
-                    plugin.getLogger().info("                                    ");
-                    plugin.getLogger().info("                                    ");
-                    plugin.getLogger().info("------------------------------------");
-                    plugin.getLogger().info(" ");
-                    plugin.getLogger().info("There is a new version available!");
-                    plugin.getLogger().info("Version: " + newVersion);
-                    plugin.getLogger().info(" ");
-                    plugin.getLogger().info("https://www.spigotmc.org/resources/50942/");
-                    plugin.getLogger().info("------------------------------------");
-                    plugin.getLogger().info("                                    ");
-                    plugin.getLogger().info("                                    ");
-                    plugin.getLogger().info("                                    ");
-                    plugin.getLogger().info("                                    ");
-                    plugin.getLogger().info("                                    ");
-                }
-            } catch (IOException e) {
-                plugin.getLogger().severe("Couldn't check for updates!");
-            }
-        });
-    }
-
     public static BlockFace getDirection(Location loc) {
         int rotation = (int) loc.getYaw();
         if (rotation < 0) {
@@ -242,14 +205,6 @@ public class Misc {
         } else {
             return BlockFace.SOUTH;
         }
-    }
-
-    public static boolean isUpdateAvailable() {
-        return updateAvailable;
-    }
-
-    public static String getNewVersion() {
-        return newVersion;
     }
 
     public static boolean isProjectile(Material i) {
