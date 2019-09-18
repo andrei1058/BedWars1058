@@ -31,7 +31,6 @@ public class PlayerLevel {
      * Cache a player level.
      */
     public PlayerLevel(UUID player, int level, int currentXp) {
-        levelByPlayer.put(player, this);
         this.uuid = player;
         setLevelName(level);
         setNextLevelCost(level);
@@ -45,6 +44,7 @@ public class PlayerLevel {
         updateProgressBar();
         //requiredXp = nextLevelCost >= 1000 ? nextLevelCost % 1000 == 0 ? nextLevelCost / 1000 + "k" : (double) nextLevelCost / 1000 + "k" : String.valueOf(nextLevelCost);
         //formattedCurrentXp = currentXp >= 1000 ? currentXp % 1000 == 0 ? currentXp / 1000 + "k" : (double) currentXp / 1000 + "k" : String.valueOf(currentXp);
+        if (!levelByPlayer.containsKey(player)) levelByPlayer.put(player, this);
     }
 
     public void setLevelName(int level) {
@@ -76,7 +76,7 @@ public class PlayerLevel {
                     break;
                 }
             }
-        }, 5L);
+        }, 10L);
     }
 
     /**
@@ -115,7 +115,7 @@ public class PlayerLevel {
      * Get PlayerLevel by player.
      */
     public static PlayerLevel getLevelByPlayer(UUID player) {
-        return levelByPlayer.getOrDefault(player, null);
+        return levelByPlayer.getOrDefault(player, new PlayerLevel(player, 1, 0));
     }
 
     /**

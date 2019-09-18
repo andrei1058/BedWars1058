@@ -1,5 +1,6 @@
 # 0.14.2.beta
 - fixed Arena#getDisplayName npe
+- fixed issue where arena default configuration was not being created
 
 For Developers:
 - added NextEventChangeEvent

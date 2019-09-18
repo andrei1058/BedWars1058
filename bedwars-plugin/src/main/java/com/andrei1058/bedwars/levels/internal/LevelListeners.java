@@ -30,11 +30,12 @@ public class LevelListeners implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerJoin(PlayerJoinEvent e) {
         final UUID u = e.getPlayer().getUniqueId();
-        PlayerLevel pl = new PlayerLevel(u, 1, 0);
+        // create empty level first
+        new PlayerLevel(u, 1, 0);
         Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, () -> {
             //if (PlayerLevel.getLevelByPlayer(e.getPlayer().getUniqueId()) != null) return;
             Object[] levelData = BedWars.getRemoteDatabase().getLevelData(u);
-            pl.lazyLoad((Integer)levelData[0], (Integer)levelData[1]);
+            PlayerLevel.getLevelByPlayer(u).lazyLoad((Integer)levelData[0], (Integer)levelData[1]);
             //new PlayerLevel(e.getPlayer().getUniqueId(), (Integer)levelData[0], (Integer)levelData[1]);
             //Bukkit.broadcastMessage("LAZY LOAD");
         });
