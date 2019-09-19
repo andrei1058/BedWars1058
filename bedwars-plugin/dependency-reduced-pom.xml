@@ -56,6 +56,10 @@
       <id>vault-repo</id>
       <url>http://nexus.hc.to/content/repositories/pub_releases</url>
     </repository>
+    <repository>
+      <id>spigotutils-maven</id>
+      <url>https://gitlab.com/api/v4/projects/14374071/packages/maven</url>
+    </repository>
   </repositories>
   <dependencies>
     <dependency>
