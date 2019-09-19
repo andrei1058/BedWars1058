@@ -1,9 +1,11 @@
 package com.andrei1058.bedwars.stats;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.events.player.PlayerBedBreakEvent;
 import com.andrei1058.bedwars.api.events.gameplay.GameEndEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
+import com.andrei1058.bedwars.api.events.player.PlayerLeaveArenaEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -60,6 +62,15 @@ public class StatsListener implements Listener {
             StatsManager.getStatsCache().addWins(uuid, 1);
             //store games played
             StatsManager.getStatsCache().addGamesPlayed(uuid, 1);
+        }
+    }
+
+    @EventHandler
+    public void onArenaLeave(PlayerLeaveArenaEvent e){
+        if (!(e.getArena().getStatus() == GameState.starting || e.getArena().getStatus() == GameState.waiting)){
+            //save or replace stats for player
+            final Player p = e.getPlayer();
+            Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, ()-> StatsManager.getStatsCache().updateRemote(p.getUniqueId(), p.getName()));
         }
     }
 
