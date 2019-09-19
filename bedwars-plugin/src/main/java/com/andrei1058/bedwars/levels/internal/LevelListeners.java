@@ -1,9 +1,12 @@
 package com.andrei1058.bedwars.levels.internal;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.events.gameplay.GameEndEvent;
+import com.andrei1058.bedwars.api.events.player.PlayerLeaveArenaEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerXpGainEvent;
+import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.configuration.LevelsConfig;
 import com.andrei1058.bedwars.api.language.Language;
@@ -35,13 +38,13 @@ public class LevelListeners implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, () -> {
             //if (PlayerLevel.getLevelByPlayer(e.getPlayer().getUniqueId()) != null) return;
             Object[] levelData = BedWars.getRemoteDatabase().getLevelData(u);
-            PlayerLevel.getLevelByPlayer(u).lazyLoad((Integer)levelData[0], (Integer)levelData[1]);
+            PlayerLevel.getLevelByPlayer(u).lazyLoad((Integer) levelData[0], (Integer) levelData[1]);
             //new PlayerLevel(e.getPlayer().getUniqueId(), (Integer)levelData[0], (Integer)levelData[1]);
             //Bukkit.broadcastMessage("LAZY LOAD");
         });
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerQuit(PlayerQuitEvent e) {
         final UUID u = e.getPlayer().getUniqueId();
         Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, () -> {
@@ -81,5 +84,14 @@ public class LevelListeners implements Listener {
                 }
             }
         }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onArenaLeave(PlayerLeaveArenaEvent e) {
+        final UUID u = e.getPlayer().getUniqueId();
+        Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, () -> {
+            PlayerLevel pl = PlayerLevel.getLevelByPlayer(u);
+            if (pl != null) pl.updateDatabase();
+        });
     }
 }
