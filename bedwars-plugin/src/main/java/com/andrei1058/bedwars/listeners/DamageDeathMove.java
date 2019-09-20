@@ -142,6 +142,7 @@ public class DamageDeathMove implements Listener {
                         }
                     }
                     //
+
                 }
                 if ((e.getDamager() instanceof Silverfish) || (e.getDamager() instanceof IronGolem)) {
                     if (getLastHit().containsKey(p)) {
