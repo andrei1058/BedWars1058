@@ -57,8 +57,7 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
 
         @Override
         public int getPlayerTimeAFK(Player player) {
-            if (afkPlayers.containsKey(player.getUniqueId())) return afkPlayers.get(player.getUniqueId());
-            return 0;
+            return afkPlayers.getOrDefault(player.getUniqueId(), 0);
         }
     };
 
@@ -250,7 +249,7 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
 
     @Override
     public com.andrei1058.bedwars.api.levels.Level getLevelsUtil() {
-        return null;
+        return BedWars.getLevelSupport();
     }
 
     @Override
