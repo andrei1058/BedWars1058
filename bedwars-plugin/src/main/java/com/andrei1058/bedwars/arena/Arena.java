@@ -568,6 +568,11 @@ public class Arena implements IArena {
         showTime.remove(p);
         refreshSigns();
         JoinNPC.updateNPCs(getGroup());
+
+        // hide invisible players to spectators but keep armor visible
+        for (Map.Entry<Player, Integer> e : getShowTime().entrySet()){
+            nms.hidePlayer(e.getKey(), p);
+        }
         return true;
     }
 

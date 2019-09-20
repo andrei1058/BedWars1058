@@ -1,7 +1,9 @@
 package com.andrei1058.bedwars.listeners;
 
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
@@ -81,9 +83,11 @@ public class HungerWeatherSpawn implements Listener {
                                         if (a.getShowTime().containsKey(e.getPlayer())) {
                                             a.getShowTime().replace(e.getPlayer(), pe.getDuration() / 20);
                                         } else {
+                                            ITeam t = a.getTeam(e.getPlayer());
                                             a.getShowTime().put(e.getPlayer(), pe.getDuration() / 20);
                                             for (Player p1 : e.getPlayer().getWorld().getPlayers()) {
-                                                nms.hideArmor(e.getPlayer(), p1);
+                                                if (a.isSpectator(p1)) continue;
+                                                if (t != a.getTeam(p1)) nms.hidePlayer(e.getPlayer(), p1);
                                             }
                                         }
                                         break;

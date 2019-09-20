@@ -135,8 +135,9 @@ public class DamageDeathMove implements Listener {
                     // #274
                     if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS)) {
                         if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
-                            for (Player on : a.getPlayers()) {
+                            for (Player on : a.getWorld().getPlayers()) {
                                 BedWars.nms.showArmor(p, on);
+                                BedWars.nms.showPlayer(p, on);
                             }
                         }
                     }
@@ -466,7 +467,7 @@ public class DamageDeathMove implements Listener {
                     }
                 }
 
-                /* Check if respawning */
+                /* Check if re-spawning */
                 if (a.getRespawn().containsKey(e.getPlayer())) {
                     for (Player p : a.getPlayers()) {
                         if (p == e.getPlayer()) continue;
