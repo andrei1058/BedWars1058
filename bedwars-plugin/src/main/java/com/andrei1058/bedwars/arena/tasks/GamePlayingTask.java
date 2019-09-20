@@ -201,7 +201,7 @@ public class GamePlayingTask implements Runnable, PlayingTask {
                     getArena().getShowTime().remove(e.getKey());
                     for (Player p : e.getKey().getWorld().getPlayers()) {
                         nms.showArmor(e.getKey(), p);
-                        nms.showPlayer(e.getKey(), p);
+                        //nms.showPlayer(e.getKey(), p);
                     }
                 } else {
                     getArena().getShowTime().replace(e.getKey(), e.getValue() - 1);

@@ -133,10 +133,10 @@ public class DamageDeathMove implements Listener {
                     }
 
                     // #274
-                    if (a.getShowTime().containsKey(p)) {
+                    if (a.getShowTime().containsKey(damager)) {
                         for (Player on : a.getWorld().getPlayers()) {
-                            BedWars.nms.showArmor(p, on);
-                            BedWars.nms.showPlayer(p, on);
+                            BedWars.nms.showArmor(damager, on);
+                            //BedWars.nms.showPlayer(p, on);
                         }
                     }
                     //
