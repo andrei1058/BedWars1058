@@ -322,19 +322,9 @@ public class BedWarsTeam implements ITeam {
         p.setFlying(false);
         p.setHealth(20);
 
-        for (Player on : arena.getPlayers()) {
-            if (p == on) continue;
-            //on.showPlayer(p);
-            nms.showPlayer(p, on);
-            if (getArena().getRespawn().containsKey(on)) continue;
-            //p.showPlayer(on);
-            nms.showPlayer(on, p);
-        }
-        for (Player on : arena.getSpectators()) {
-            if (p == on) continue;
-            //on.showPlayer(p);
-            nms.showPlayer(p, on);
-        }
+        // un-vanish from respawn
+        nms.showPlayer(p, arena.getPlayers());
+        nms.showPlayer(p, arena.getSpectators());
 
         nms.sendTitle(p, getMsg(p, Messages.PLAYER_DIE_RESPAWNED_TITLE), "", 0, 20, 0);
         ShopCache sc = ShopCache.getShopCache(p.getUniqueId());
@@ -395,7 +385,8 @@ public class BedWarsTeam implements ITeam {
         Bukkit.getPluginManager().callEvent(new PlayerReSpawnEvent(p, getArena(), this));
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_RESPAWN_PACKETS)) nms.invisibilityFix(p, getArena());
+            if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_RESPAWN_PACKETS))
+                nms.invisibilityFix(p, getArena());
 
             // #274
             if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS)) {
@@ -434,8 +425,10 @@ public class BedWarsTeam implements ITeam {
      */
     public void sendArmor(Player p) {
         if (p.getInventory().getHelmet() == null) p.getInventory().setHelmet(createArmor(Material.LEATHER_HELMET));
-        if (p.getInventory().getChestplate() == null) p.getInventory().setChestplate(createArmor(Material.LEATHER_CHESTPLATE));
-        if (p.getInventory().getLeggings() == null) p.getInventory().setLeggings(createArmor(Material.LEATHER_LEGGINGS));
+        if (p.getInventory().getChestplate() == null)
+            p.getInventory().setChestplate(createArmor(Material.LEATHER_CHESTPLATE));
+        if (p.getInventory().getLeggings() == null)
+            p.getInventory().setLeggings(createArmor(Material.LEATHER_LEGGINGS));
         if (p.getInventory().getBoots() == null) p.getInventory().setBoots(createArmor(Material.LEATHER_BOOTS));
     }
 
@@ -872,7 +865,7 @@ public class BedWarsTeam implements ITeam {
         return beds;
     }
 
-    public void destroyData(){
+    public void destroyData() {
         members = null;
         spawn = null;
         bed = null;

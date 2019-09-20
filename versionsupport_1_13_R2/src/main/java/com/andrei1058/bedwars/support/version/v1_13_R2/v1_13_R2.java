@@ -384,7 +384,16 @@ public class v1_13_R2 extends VersionSupport {
     @Override
     public void showPlayer(Player victim, Player p) {
         if (victim == p) return;
-        p.showPlayer(getPlugin(), victim);
+        PacketPlayOutNamedEntitySpawn s = new PacketPlayOutNamedEntitySpawn(((CraftPlayer)victim).getHandle());
+        ((CraftPlayer)p).getHandle().playerConnection.sendPacket(s);
+    }
+
+    @Override
+    public void showPlayer(Player whoToShow, List<Player> p) {
+        for (Player p1 : p){
+            if (p1.equals(whoToShow)) continue;
+            p1.showPlayer(getPlugin(), whoToShow);
+        }
     }
 
     @Override

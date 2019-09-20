@@ -71,6 +71,7 @@ public class DamageDeathMove implements Listener {
 
     @EventHandler
     public void onDamageByEntity(EntityDamageByEntityEvent e) {
+        Bukkit.broadcastMessage("EntityDamageByEntityEvent eeeeeeeee");
         if (e.getEntity().hasMetadata("DragonTeam")) {
             IArena a = Arena.getArenaByName(e.getEntity().getWorld().getName());
             if (a != null) {
@@ -419,7 +420,7 @@ public class DamageDeathMove implements Listener {
             } else {
                 //respawn session
                 e.getPlayer().getInventory().clear();
-                Bukkit.getScheduler().runTaskLater(plugin, () -> nms.hidePlayer(e.getPlayer(), a.getPlayers()), 5L);
+                //Bukkit.getScheduler().runTaskLater(plugin, () -> nms.hidePlayer(e.getPlayer(), a.getPlayers()), 5L);
                 nms.setCollide(e.getPlayer(), a, false);
                 e.getPlayer().setAllowFlight(true);
                 e.getPlayer().setFlying(true);
