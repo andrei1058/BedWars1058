@@ -6,6 +6,7 @@ import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.api.events.player.PlayerXpGainEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
+import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.configuration.LevelsConfig;
 import com.andrei1058.bedwars.configuration.Permissions;
@@ -68,6 +69,10 @@ public class Level extends SubCommand {
             BedWars.getRemoteDatabase().setLevelData(pl.getUniqueId(), level, 0, levelName, nextLevelCost);
             s.sendMessage(ChatColor.GOLD + " ▪ " + ChatColor.GRAY + pl.getName() + " level was set to: " + args[2]);
             s.sendMessage(ChatColor.GOLD + " ▪ " + ChatColor.GRAY + "The player may need to rejoin to see it updated.");
+            // refresh scoreboard
+            for (SBoard sb : SBoard.getScoreboards()){
+                if (sb.getP().getUniqueId().equals(pl.getUniqueId())) sb.refresh();
+            }
         } else if (args[0].equalsIgnoreCase("givexp")) {
             if (args.length != 3) {
                 s.sendMessage(ChatColor.GOLD + " ▪ " + ChatColor.GRAY + "Usage: /bw level giveXp §o<player> <amount>");
@@ -94,6 +99,10 @@ public class Level extends SubCommand {
             BedWars.getRemoteDatabase().setLevelData(pl.getUniqueId(), (Integer) data[0], ((Integer)data[1]) + amount, (String) data[2], (Integer)data[3]);
             s.sendMessage(ChatColor.GOLD + " ▪ " + ChatColor.GRAY + args[2] + " xp was given to: " + pl.getName());
             s.sendMessage(ChatColor.GOLD + " ▪ " + ChatColor.GRAY + "The player may need to rejoin to see it updated.");
+            // refresh scoreboard
+            for (SBoard sb : SBoard.getScoreboards()){
+                if (sb.getP().getUniqueId().equals(pl.getUniqueId())) sb.refresh();
+            }
         } else {
             sendSubCommands(s, BedWars.getAPI());
         }
