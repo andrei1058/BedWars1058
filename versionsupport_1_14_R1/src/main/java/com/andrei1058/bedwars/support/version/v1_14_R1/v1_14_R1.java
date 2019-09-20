@@ -46,6 +46,8 @@ import java.util.logging.Level;
 
 public class v1_14_R1 extends VersionSupport {
 
+    private static int renderDistance = Bukkit.spigot().getConfig().getInt("world-settings.entity-tracking-range.players");
+
     public v1_14_R1(Plugin plugin, String name) {
         super(plugin, name);
         loadDefaultSounds();
@@ -602,9 +604,11 @@ public class v1_14_R1 extends VersionSupport {
             if (pl.equals(player)) continue;
             if (arena.getRespawn().containsKey(pl)) continue;
             if (pl.hasPotionEffect(PotionEffectType.INVISIBILITY)) continue;
-            pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer) pl).getHandle()));
-            pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer) pl).getHandle()));
-            showArmor(pl, player);
+            if (pl.getLocation().distance(player.getLocation()) <= renderDistance) {
+                pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer) pl).getHandle()));
+                pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer) pl).getHandle()));
+                showArmor(pl, player);
+            }
         }
     }
 
