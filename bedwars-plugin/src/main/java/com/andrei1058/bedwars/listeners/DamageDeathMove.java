@@ -71,7 +71,6 @@ public class DamageDeathMove implements Listener {
 
     @EventHandler
     public void onDamageByEntity(EntityDamageByEntityEvent e) {
-        Bukkit.broadcastMessage("EntityDamageByEntityEvent eeeeeeeee");
         if (e.getEntity().hasMetadata("DragonTeam")) {
             IArena a = Arena.getArenaByName(e.getEntity().getWorld().getName());
             if (a != null) {
