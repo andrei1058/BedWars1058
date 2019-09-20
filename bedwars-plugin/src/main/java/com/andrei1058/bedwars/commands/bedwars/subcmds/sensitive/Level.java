@@ -3,6 +3,7 @@ package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
+import com.andrei1058.bedwars.api.events.player.PlayerXpGainEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
@@ -55,8 +56,7 @@ public class Level extends SubCommand {
                 return true;
             }
 
-            PlayerLevel pv = PlayerLevel.getLevelByPlayer(pl.getUniqueId());
-            if (pv != null) pv.setLevel(level);
+            BedWars.getAPI().getLevelsUtil().setLevel(pl, level);
 
             int nextLevelCost =  LevelsConfig.levels.getYml().get("levels." + level + ".rankup-cost") == null ?
                     LevelsConfig.levels.getInt("levels.others.rankup-cost") : LevelsConfig.levels.getInt("levels." + level + ".rankup-cost");
@@ -88,8 +88,7 @@ public class Level extends SubCommand {
                 return true;
             }
 
-            PlayerLevel pv = PlayerLevel.getLevelByPlayer(pl.getUniqueId());
-            if (pv != null) pv.setXp(amount);
+            BedWars.getAPI().getLevelsUtil().addXp(pl, amount, PlayerXpGainEvent.XpSource.OTHER);
 
             Object[] data = BedWars.getRemoteDatabase().getLevelData(pl.getUniqueId());
             BedWars.getRemoteDatabase().setLevelData(pl.getUniqueId(), (Integer) data[0], ((Integer)data[1]) + amount, (String) data[2], (Integer)data[3]);
