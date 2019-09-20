@@ -133,16 +133,13 @@ public class DamageDeathMove implements Listener {
                     }
 
                     // #274
-                    if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS)) {
-                        if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
-                            for (Player on : a.getWorld().getPlayers()) {
-                                BedWars.nms.showArmor(p, on);
-                                BedWars.nms.showPlayer(p, on);
-                            }
+                    if (a.getShowTime().containsKey(p)) {
+                        for (Player on : a.getWorld().getPlayers()) {
+                            BedWars.nms.showArmor(p, on);
+                            BedWars.nms.showPlayer(p, on);
                         }
                     }
                     //
-
                 }
                 if ((e.getDamager() instanceof Silverfish) || (e.getDamager() instanceof IronGolem)) {
                     if (getLastHit().containsKey(p)) {

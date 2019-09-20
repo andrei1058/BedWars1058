@@ -599,7 +599,7 @@ public class v1_10_R1 extends VersionSupport {
         for (Player pl : arena.getPlayers()){
             if (pl.equals(player)) continue;
             if (arena.getRespawn().containsKey(pl)) continue;
-            if (pl.hasPotionEffect(PotionEffectType.INVISIBILITY)) continue;
+            if (arena.getShowTime().containsKey(pl)) continue;
             if (player.getLocation().distance(pl.getLocation()) <= renderDistance) {
                 pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer) pl).getHandle()));
                 pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer) pl).getHandle()));
