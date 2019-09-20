@@ -87,7 +87,7 @@ public class HungerWeatherSpawn implements Listener {
                                             a.getShowTime().put(e.getPlayer(), pe.getDuration() / 20);
                                             for (Player p1 : e.getPlayer().getWorld().getPlayers()) {
                                                 if (a.isSpectator(p1)) continue;
-                                                if (t != a.getTeam(p1)) nms.hidePlayer(e.getPlayer(), p1);
+                                                if (t != a.getTeam(p1)) nms.hideArmor(e.getPlayer(), p1);
                                             }
                                         }
                                         break;
