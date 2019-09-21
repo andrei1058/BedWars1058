@@ -387,8 +387,10 @@ public class v1_11_R1 extends VersionSupport {
     @Override
     public void showPlayer(Player victim, Player p) {
         if (victim == p) return;
-        PacketPlayOutNamedEntitySpawn s = new PacketPlayOutNamedEntitySpawn(((CraftPlayer)victim).getHandle());
-        ((CraftPlayer)p).getHandle().playerConnection.sendPacket(s);
+        if (victim.getLocation().distanceSquared(p.getLocation()) <= renderDistance) {
+            PacketPlayOutNamedEntitySpawn s = new PacketPlayOutNamedEntitySpawn(((CraftPlayer) victim).getHandle());
+            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(s);
+        }
     }
 
     @Override
@@ -599,7 +601,7 @@ public class v1_11_R1 extends VersionSupport {
             if (pl.equals(player)) continue;
             if (arena.getRespawn().containsKey(pl)) continue;
             if (arena.getShowTime().containsKey(pl)) continue;
-            if (pl.getLocation().distance(player.getLocation()) <= renderDistance) {
+            if (pl.getLocation().distanceSquared(player.getLocation()) <= renderDistance) {
                 pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer) pl).getHandle()));
                 pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer) pl).getHandle()));
                 showArmor(pl, player);

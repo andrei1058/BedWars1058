@@ -342,8 +342,10 @@ public class v1_9_R2 extends VersionSupport {
     @Override
     public void hidePlayer(Player victim, Player p) {
         if (victim == p) return;
-        PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(victim.getEntityId());
-        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+        if (victim.getLocation().distanceSquared(p.getLocation()) <= renderDistance) {
+            PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(victim.getEntityId());
+            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+        }
     }
 
     @Override
@@ -604,7 +606,7 @@ public class v1_9_R2 extends VersionSupport {
             if (pl.equals(player)) continue;
             if (arena.getRespawn().containsKey(pl)) continue;
             if (arena.getShowTime().containsKey(pl)) continue;
-            if (pl.getLocation().distance(player.getLocation()) <= renderDistance) {
+            if (pl.getLocation().distanceSquared(player.getLocation()) <= renderDistance) {
                 pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer) pl).getHandle()));
                 pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer) pl).getHandle()));
                 showArmor(pl, player);
