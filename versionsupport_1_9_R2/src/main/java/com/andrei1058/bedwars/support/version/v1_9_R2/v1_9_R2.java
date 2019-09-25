@@ -342,6 +342,7 @@ public class v1_9_R2 extends VersionSupport {
     @Override
     public void hidePlayer(Player victim, Player p) {
         if (victim == p) return;
+        if (!victim.getLocation().getWorld().equals(p.getWorld())) return;
         if (victim.getLocation().distanceSquared(p.getLocation()) <= renderDistance) {
             PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(victim.getEntityId());
             ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);

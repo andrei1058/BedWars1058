@@ -387,6 +387,7 @@ public class v1_11_R1 extends VersionSupport {
     @Override
     public void showPlayer(Player victim, Player p) {
         if (victim == p) return;
+        if (!victim.getLocation().getWorld().equals(p.getWorld())) return;
         if (victim.getLocation().distanceSquared(p.getLocation()) <= renderDistance) {
             PacketPlayOutNamedEntitySpawn s = new PacketPlayOutNamedEntitySpawn(((CraftPlayer) victim).getHandle());
             ((CraftPlayer) p).getHandle().playerConnection.sendPacket(s);
