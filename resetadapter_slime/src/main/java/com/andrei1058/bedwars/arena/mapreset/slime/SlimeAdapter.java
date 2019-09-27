@@ -134,7 +134,7 @@ public class SlimeAdapter extends RestoreAdapter {
                     }
                 }
 
-                final SlimeWorld sw = world;
+                SlimeWorld sw = world;
                 // This method must be called synchronously
                 Bukkit.getScheduler().runTask(getOwner(), () -> {
                     slime.generateWorld(sw);
