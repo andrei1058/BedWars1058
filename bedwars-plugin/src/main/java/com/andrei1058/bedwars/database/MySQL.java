@@ -53,7 +53,7 @@ public class MySQL implements Database {
     public boolean isConnected() {
         if (connection == null) return false;
         try {
-            return !connection.isClosed();
+            return connection.isValid(0);
         } catch (SQLException e) {
             e.printStackTrace();
         }
