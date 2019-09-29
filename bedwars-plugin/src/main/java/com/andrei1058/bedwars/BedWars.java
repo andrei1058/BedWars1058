@@ -79,8 +79,8 @@ public class BedWars extends JavaPlugin {
     public static BedWars plugin;
     public static VersionSupport nms;
 
-    private static Party party = null;
-    private static Chat chat;
+    private static Party party = new NoParty();
+    private static Chat chat = new NoChat();
     protected static Level level;
     private static Economy economy;
     private static String version = Bukkit.getServer().getClass().getName().split("\\.")[3];
