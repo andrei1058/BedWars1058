@@ -46,7 +46,7 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onIceMelt(BlockFadeEvent e) {
-        if (BedWars.getServerType() != ServerType.BUNGEE) {
+        if (BedWars.getServerType() == ServerType.MULTIARENA) {
             if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
                 e.setCancelled(true);
                 return;
@@ -129,7 +129,7 @@ public class BreakPlace implements Listener {
             }
             return;
         }
-        if (BedWars.getServerType() != ServerType.BUNGEE) {
+        if (BedWars.getServerType() == ServerType.MULTIARENA) {
             if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
                 if (!isBuildSession(p)) {
                     e.setCancelled(true);
@@ -142,7 +142,7 @@ public class BreakPlace implements Listener {
     public void onBlockBreak(BlockBreakEvent e) {
         if (e.isCancelled()) return;
         Player p = e.getPlayer();
-        if (BedWars.getServerType() != ServerType.BUNGEE) {
+        if (BedWars.getServerType() == ServerType.MULTIARENA) {
             if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
                 if (!isBuildSession(p)) {
                     e.setCancelled(true);
@@ -277,7 +277,7 @@ public class BreakPlace implements Listener {
     @EventHandler
     public void onBucketFill(PlayerBucketFillEvent e) {
         if (e.isCancelled()) return;
-        if (BedWars.getServerType() != ServerType.BUNGEE) {
+        if (BedWars.getServerType() == ServerType.MULTIARENA) {
             if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
                 if (!isBuildSession(e.getPlayer())) {
                     e.setCancelled(true);
@@ -294,7 +294,7 @@ public class BreakPlace implements Listener {
     @EventHandler
     public void onBucketEmpty(PlayerBucketEmptyEvent e) {
         if (e.isCancelled()) return;
-        if (BedWars.getServerType() != ServerType.BUNGEE) {
+        if (BedWars.getServerType() == ServerType.MULTIARENA) {
             if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
                 if (!isBuildSession(e.getPlayer())) {
                     e.setCancelled(true);
@@ -470,9 +470,5 @@ public class BreakPlace implements Listener {
 
     public static void removeBuildSession(Player p) {
         buildSession.remove(p);
-    }
-
-    public static List<Player> getBuildSession() {
-        return buildSession;
     }
 }

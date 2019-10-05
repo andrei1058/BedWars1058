@@ -41,7 +41,7 @@ public class PlayerChat implements Listener {
         if (p.hasPermission("bw.chatcolor") || p.hasPermission("bw.*") || p.hasPermission("bw.vip")) {
             e.setMessage(ChatColor.translateAlternateColorCodes('&', e.getMessage()));
         }
-        if (p.getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld()) && getServerType() == ServerType.MULTIARENA) {
+        if (getServerType() == ServerType.MULTIARENA == p.getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
             if (!config.getBoolean("globalChat")) {
                 e.getRecipients().clear();
                 e.getRecipients().addAll(p.getWorld().getPlayers());

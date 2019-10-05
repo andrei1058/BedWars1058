@@ -62,7 +62,7 @@ public class DamageDeathMove implements Listener {
                 }
             }
         }
-        if (BedWars.getServerType() != ServerType.BUNGEE) {
+        if (BedWars.getServerType() == ServerType.MULTIARENA) {
             if (e.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
                 e.setCancelled(true);
             }
@@ -204,7 +204,7 @@ public class DamageDeathMove implements Listener {
                 }
             }
         }*/
-        if (BedWars.getServerType() != ServerType.BUNGEE) {
+        if (BedWars.getServerType() == ServerType.MULTIARENA) {
             if (e.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
                 e.setCancelled(true);
             }
@@ -565,7 +565,7 @@ public class DamageDeathMove implements Listener {
             if (a != null) {
                 e.setCancelled(true);
             }
-            if (BedWars.getServerType() != ServerType.SHARED) {
+            if (BedWars.getServerType() == ServerType.MULTIARENA) {
                 if (BedWars.getLobbyWorld().equals(e.getEntity().getWorld().getName())) {
                     e.setCancelled(true);
                 }
