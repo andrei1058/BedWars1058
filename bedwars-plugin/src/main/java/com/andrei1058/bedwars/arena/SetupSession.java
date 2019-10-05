@@ -13,6 +13,7 @@ import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -140,7 +141,13 @@ public class SetupSession implements ISetupSession {
     public void done() {
         BedWars.getAPI().getRestoreAdapter().onSetupSessionClose(this);
         getSetupSessions().remove(this);
-        if (BedWars.getServerType() != ServerType.BUNGEE) getPlayer().teleport(config.getConfigLoc("lobbyLoc"));
+        if (BedWars.getServerType() != ServerType.BUNGEE){
+            try {
+                getPlayer().teleport(config.getConfigLoc("lobbyLoc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
+            } catch (Exception ex){
+                getPlayer().teleport(Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+            }
+        }
         getPlayer().removePotionEffect(PotionEffectType.SPEED);
         if (BedWars.getServerType() == ServerType.MULTIARENA) Arena.sendLobbyCommandItems(getPlayer());
         Bukkit.getPluginManager().callEvent(new SetupSessionCloseEvent(this));
