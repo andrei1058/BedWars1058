@@ -62,7 +62,7 @@ public class DamageDeathMove implements Listener {
                 }
             }
         }
-        if (BedWars.getServerType() != ServerType.BUNGEE) {
+        if (BedWars.getServerType() == ServerType.MULTIARENA) {
             if (e.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
                 e.setCancelled(true);
             }
@@ -133,11 +133,10 @@ public class DamageDeathMove implements Listener {
                     }
 
                     // #274
-                    if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS)) {
-                        if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
-                            for (Player on : a.getPlayers()) {
-                                BedWars.nms.showArmor(p, on);
-                            }
+                    if (a.getShowTime().containsKey(p)) {
+                        for (Player on : a.getWorld().getPlayers()) {
+                            BedWars.nms.showArmor(p, on);
+                            //BedWars.nms.showPlayer(p, on);
                         }
                     }
                     //
@@ -205,7 +204,7 @@ public class DamageDeathMove implements Listener {
                 }
             }
         }*/
-        if (BedWars.getServerType() != ServerType.BUNGEE) {
+        if (BedWars.getServerType() == ServerType.MULTIARENA) {
             if (e.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
                 e.setCancelled(true);
             }
@@ -420,7 +419,7 @@ public class DamageDeathMove implements Listener {
             } else {
                 //respawn session
                 e.getPlayer().getInventory().clear();
-                Bukkit.getScheduler().runTaskLater(plugin, () -> nms.hidePlayer(e.getPlayer(), a.getPlayers()), 5L);
+                //Bukkit.getScheduler().runTaskLater(plugin, () -> nms.hidePlayer(e.getPlayer(), a.getPlayers()), 5L);
                 nms.setCollide(e.getPlayer(), a, false);
                 e.getPlayer().setAllowFlight(true);
                 e.getPlayer().setFlying(true);
@@ -466,7 +465,7 @@ public class DamageDeathMove implements Listener {
                     }
                 }
 
-                /* Check if respawning */
+                /* Check if re-spawning */
                 if (a.getRespawn().containsKey(e.getPlayer())) {
                     for (Player p : a.getPlayers()) {
                         if (p == e.getPlayer()) continue;
@@ -566,7 +565,7 @@ public class DamageDeathMove implements Listener {
             if (a != null) {
                 e.setCancelled(true);
             }
-            if (BedWars.getServerType() != ServerType.SHARED) {
+            if (BedWars.getServerType() == ServerType.MULTIARENA) {
                 if (BedWars.getLobbyWorld().equals(e.getEntity().getWorld().getName())) {
                     e.setCancelled(true);
                 }

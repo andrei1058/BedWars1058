@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.stats.StatsCache;
 import com.andrei1058.bedwars.stats.StatsManager;
+import org.bukkit.Bukkit;
 
 import java.sql.*;
 import java.util.UUID;
@@ -52,7 +53,7 @@ public class MySQL implements Database {
     public boolean isConnected() {
         if (connection == null) return false;
         try {
-            return !connection.isClosed();
+            return connection.isValid(0);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -107,6 +108,8 @@ public class MySQL implements Database {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        Bukkit.getScheduler().runTaskTimerAsynchronously(BedWars.plugin, new SessionKeeper(this), 20*60, 20*3600);
     }
 
     @Override
@@ -230,16 +233,16 @@ public class MySQL implements Database {
     @Override
     public Object[] getLevelData(UUID player) {
         if (!isConnected()) connect();
-        Object[] r = new Object[] {1, 0, "", 0};
+        Object[] r = new Object[]{1, 0, "", 0};
         try {
-            ResultSet rs = connection.prepareStatement("SELECT level, xp, name, next_cost FROM player_levels WHERE uuid = '"+player.toString()+"';").executeQuery();
-            if (rs.next()){
+            ResultSet rs = connection.prepareStatement("SELECT level, xp, name, next_cost FROM player_levels WHERE uuid = '" + player.toString() + "';").executeQuery();
+            if (rs.next()) {
                 r[0] = rs.getInt("level");
                 r[1] = rs.getInt("xp");
                 r[2] = rs.getString("name");
                 r[3] = rs.getInt("next_cost");
             }
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return r;
@@ -249,8 +252,8 @@ public class MySQL implements Database {
     public void setLevelData(UUID player, int level, int xp, String displayName, int nextCost) {
         if (!isConnected()) connect();
         try {
-            ResultSet rs = connection.prepareStatement("SELECT id from player_levels WHERE uuid = '"+player.toString()+"';").executeQuery();
-            if (!rs.next()){
+            ResultSet rs = connection.prepareStatement("SELECT id from player_levels WHERE uuid = '" + player.toString() + "';").executeQuery();
+            if (!rs.next()) {
                 PreparedStatement ps = connection.prepareStatement("INSERT INTO player_levels VALUES (?, ?, ?, ?, ?, ?);");
                 ps.setInt(1, 0);
                 ps.setString(2, player.toString());
@@ -261,10 +264,10 @@ public class MySQL implements Database {
                 ps.executeUpdate();
             } else {
                 PreparedStatement ps;
-                if (displayName == null){
-                    ps = connection.prepareStatement("UPDATE player_levels SET level=?, xp=? WHERE uuid = '"+player.toString()+"';");
+                if (displayName == null) {
+                    ps = connection.prepareStatement("UPDATE player_levels SET level=?, xp=? WHERE uuid = '" + player.toString() + "';");
                 } else {
-                    ps = connection.prepareStatement("UPDATE player_levels SET level=?, xp=?, name=?, next_cost=? WHERE uuid = '"+player.toString()+"';");
+                    ps = connection.prepareStatement("UPDATE player_levels SET level=?, xp=?, name=?, next_cost=? WHERE uuid = '" + player.toString() + "';");
                 }
                 ps.setInt(1, level);
                 ps.setInt(2, xp);
@@ -309,5 +312,16 @@ public class MySQL implements Database {
             e.printStackTrace();
         }
         return iso;
+    }
+
+    /**
+     * Ping the database in order to keep the session open.
+     */
+    public void ping() {
+        try {
+            connection.createStatement().execute("SELECT id FROM player_levels WHERE id=0;");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

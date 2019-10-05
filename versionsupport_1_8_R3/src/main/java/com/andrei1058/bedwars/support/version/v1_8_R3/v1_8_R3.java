@@ -14,6 +14,7 @@ import com.andrei1058.bedwars.api.server.VersionSupport;
 import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import net.minecraft.server.v1_8_R3.*;
 import org.apache.commons.lang3.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
@@ -44,6 +45,8 @@ import java.util.logging.Level;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class v1_8_R3 extends VersionSupport {
+
+    private static int renderDistance = Bukkit.spigot().getConfig().getInt("world-settings.entity-tracking-range.players");
 
     public v1_8_R3(Plugin pl, String name) {
         super(pl, name);
@@ -76,17 +79,19 @@ public class v1_8_R3 extends VersionSupport {
     public void spawnIronGolem(Location loc, ITeam bedWarsTeam, int speed, int health, int despawn) {
         new Despawnable(IGolem.spawn(this, loc, bedWarsTeam, speed, health, despawn), bedWarsTeam, despawn, Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME,
                 PlayerKillEvent.PlayerKillCause.IRON_GOLEM_FINAL_KILL, PlayerKillEvent.PlayerKillCause.IRON_GOLEM);
-    }    public static LivingEntity spawn(VersionSupport vs, Location loc, ITeam team, int speed, int health, int despawn, int damage) {
-        WorldServer mcWorld = ((CraftWorld)loc.getWorld()).getHandle();
+    }
+
+    public static LivingEntity spawn(VersionSupport vs, Location loc, ITeam team, int speed, int health, int despawn, int damage) {
+        WorldServer mcWorld = ((CraftWorld) loc.getWorld()).getHandle();
         Silverfish customEnt = new Silverfish(mcWorld, team, vs);
         customEnt.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
         customEnt.getAttributeInstance(GenericAttributes.maxHealth).setValue(health);
         customEnt.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(speed);
         customEnt.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(damage);
-        ((CraftLivingEntity)customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
+        ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
         customEnt.setCustomName(Language.getDefaultLanguage().m(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME)
                 .replace("{despawn}", String.valueOf(speed)
-                        .replace("{health}", StringUtils.repeat(Language.getDefaultLanguage().m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH)+" ", 10))
+                        .replace("{health}", StringUtils.repeat(Language.getDefaultLanguage().m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH) + " ", 10))
                         .replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString())));
         customEnt.setCustomNameVisible(true);
         mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
@@ -360,7 +365,19 @@ public class v1_8_R3 extends VersionSupport {
     @Override
     public void showPlayer(Player victim, Player p) {
         if (victim == p) return;
-        p.showPlayer(victim);
+        if (!victim.getLocation().getWorld().equals(p.getWorld())) return;
+        if (victim.getLocation().distanceSquared(p.getLocation()) <= renderDistance) {
+            PacketPlayOutNamedEntitySpawn s = new PacketPlayOutNamedEntitySpawn(((CraftPlayer) victim).getHandle());
+            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(s);
+        }
+    }
+
+    @Override
+    public void showPlayer(Player whoToShow, List<Player> p) {
+        for (Player p1 : p){
+            if (p1.equals(whoToShow)) continue;
+            p1.showPlayer(whoToShow);
+        }
     }
 
     @Override
@@ -602,10 +619,12 @@ public class v1_8_R3 extends VersionSupport {
         for (Player pl : arena.getPlayers()) {
             if (pl.equals(player)) continue;
             if (arena.getRespawn().containsKey(pl)) continue;
-            if (pl.hasPotionEffect(PotionEffectType.INVISIBILITY)) continue;
-            pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer) pl).getHandle()));
-            pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer) pl).getHandle()));
-            showArmor(pl, player);
+            if (arena.getShowTime().containsKey(pl)) continue;
+            if (pl.getLocation().distanceSquared(player.getLocation()) <= renderDistance) {
+                pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer) pl).getHandle()));
+                pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer) pl).getHandle()));
+                showArmor(pl, player);
+            }
         }
     }
 

@@ -7,7 +7,7 @@
     <groupId>com.andrei1058.bedwars</groupId>
     <artifactId>compiler</artifactId>
     <packaging>pom</packaging>
-    <version>0.14.beta</version>
+    <version>19.10</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -28,6 +28,10 @@
         <repository>
             <id>gitlab-maven</id>
             <url>https://gitlab.com/api/v4/groups/4800570/-/packages/maven</url>
+        </repository>
+        <repository>
+            <id>vipfeatures-maven</id>
+            <url>https://gitlab.com/api/v4/projects/6491858/packages/maven</url>
         </repository>
     </repositories>
 

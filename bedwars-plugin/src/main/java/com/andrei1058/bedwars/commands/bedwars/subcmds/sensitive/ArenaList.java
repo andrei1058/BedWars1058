@@ -7,7 +7,7 @@ import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
-import com.andrei1058.bedwars.api.configuration.ConfigManager;
+import com.andrei1058.bedwars.configuration.ArenaConfig;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -43,7 +43,7 @@ public class ArenaList extends SubCommand {
         for (String arena : getArenas()) {
             String status = getArenaByName(arena) == null ? "§cDisabled" : "§aEnabled";
             String group = "Default";
-            ConfigManager cm = new ConfigManager(BedWars.plugin, arena, "plugins/"+plugin.getName()+"/Arenas");
+            ArenaConfig cm = new ArenaConfig(BedWars.plugin, arena, "plugins/"+plugin.getName()+"/Arenas");
             if (cm.getYml().get("group") != null){
                 group = cm.getYml().getString("group");
             }

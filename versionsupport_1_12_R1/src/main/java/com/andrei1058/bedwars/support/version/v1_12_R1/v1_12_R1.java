@@ -15,6 +15,7 @@ import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import com.google.common.collect.Sets;
 import net.minecraft.server.v1_12_R1.*;
 import net.minecraft.server.v1_12_R1.Item;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Bed;
 import org.bukkit.block.BlockState;
@@ -41,7 +42,9 @@ import java.util.logging.Level;
 
 public class v1_12_R1 extends VersionSupport {
 
-    public v1_12_R1(Plugin plugin, String name){
+    private static int renderDistance = Bukkit.spigot().getConfig().getInt("world-settings.entity-tracking-range.players");
+
+    public v1_12_R1(Plugin plugin, String name) {
         super(plugin, name);
         try {
             setBedDestroySound("ENTITY_ENDERDRAGON_GROWL");
@@ -100,7 +103,7 @@ public class v1_12_R1 extends VersionSupport {
 
     @Override
     public void hidePlayer(Player player, List<Player> players) {
-        for (Player p : players){
+        for (Player p : players) {
             if (p == player) continue;
             p.hidePlayer(player);
         }
@@ -115,8 +118,8 @@ public class v1_12_R1 extends VersionSupport {
 
     @Override
     public void playAction(Player p, String text) {
-        CraftPlayer cPlayer = (CraftPlayer) p;
-        IChatBaseComponent cbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + text + "\"}");
+        org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer cPlayer = (CraftPlayer) p;
+        net.minecraft.server.v1_12_R1.IChatBaseComponent cbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + text + "\"}");
         PacketPlayOutChat ppoc = new PacketPlayOutChat(cbc, ChatMessageType.GAME_INFO);
         cPlayer.getHandle().playerConnection.sendPacket(ppoc);
     }
@@ -358,7 +361,7 @@ public class v1_12_R1 extends VersionSupport {
 
     @Override
     public void spawnDragon(Location l, ITeam bwt) {
-        if (l == null || l.getWorld() == null){
+        if (l == null || l.getWorld() == null) {
             getPlugin().getLogger().log(Level.WARNING, "Could not spawn Dragon. Location is null");
             return;
         }
@@ -369,8 +372,8 @@ public class v1_12_R1 extends VersionSupport {
 
     @Override
     public void colorBed(ITeam bwt) {
-        for (int x = -1; x <= 1; x++){
-            for (int z = -1; z <= 1; z++){
+        for (int x = -1; x <= 1; x++) {
+            for (int z = -1; z <= 1; z++) {
                 BlockState bed = bwt.getBed().clone().add(x, 0, z).getBlock().getState();
                 if (bed instanceof Bed) {
                     ((Bed) bed).setColor(TeamColor.getDyeColor(bwt.getColor().toString()));
@@ -396,7 +399,19 @@ public class v1_12_R1 extends VersionSupport {
     @Override
     public void showPlayer(Player victim, Player p) {
         if (victim == p) return;
-        p.showPlayer(victim);
+        if (!victim.getLocation().getWorld().equals(p.getWorld())) return;
+        if (victim.getLocation().distanceSquared(p.getLocation()) <= renderDistance) {
+            PacketPlayOutNamedEntitySpawn s = new PacketPlayOutNamedEntitySpawn(((CraftPlayer) victim).getHandle());
+            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(s);
+        }
+    }
+
+    @Override
+    public void showPlayer(Player whoToShow, List<Player> p) {
+        for (Player p1 : p) {
+            if (p1.equals(whoToShow)) continue;
+            p1.showPlayer(whoToShow);
+        }
     }
 
     @Override
@@ -459,7 +474,7 @@ public class v1_12_R1 extends VersionSupport {
             case "WOOL":
             case "STAINED_CLAY":
             case "STAINED_GLASS":
-                return new org.bukkit.inventory.ItemStack(itemStack.getType(), itemStack.getAmount(),TeamColor.itemColor(bedWarsTeam.getColor()));
+                return new org.bukkit.inventory.ItemStack(itemStack.getType(), itemStack.getAmount(), TeamColor.itemColor(bedWarsTeam.getColor()));
             case "GLASS":
                 return new org.bukkit.inventory.ItemStack(org.bukkit.Material.STAINED_GLASS, itemStack.getAmount(), TeamColor.itemColor(bedWarsTeam.getColor()));
         }
@@ -547,7 +562,7 @@ public class v1_12_R1 extends VersionSupport {
     @SuppressWarnings("deprecation")
     @Override
     public void setJoinSignBackgroundBlockData(BlockState block, byte data) {
-        block.getBlock().getRelative(((org.bukkit.material.Sign)block.getData()).getAttachedFace()).setData(data, true);
+        block.getBlock().getRelative(((org.bukkit.material.Sign) block.getData()).getAttachedFace()).setData(data, true);
     }
 
     @Override
@@ -576,14 +591,14 @@ public class v1_12_R1 extends VersionSupport {
 
     @Override
     public org.bukkit.inventory.ItemStack getPlayerHead(Player player) {
-        org.bukkit.inventory.ItemStack head = new org.bukkit.inventory.ItemStack(org.bukkit.Material.SKULL_ITEM, 1, (short)3);
+        org.bukkit.inventory.ItemStack head = new org.bukkit.inventory.ItemStack(org.bukkit.Material.SKULL_ITEM, 1, (short) 3);
 
         SkullMeta headMeta = (SkullMeta) head.getItemMeta();
         Field profileField;
         try {
             profileField = headMeta.getClass().getDeclaredField("profile");
             profileField.setAccessible(true);
-            profileField.set(headMeta, ((CraftPlayer)player).getProfile());
+            profileField.set(headMeta, ((CraftPlayer) player).getProfile());
         } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e1) {
             e1.printStackTrace();
         }
@@ -595,13 +610,15 @@ public class v1_12_R1 extends VersionSupport {
     public void invisibilityFix(Player player, IArena arena) {
         EntityPlayer pc = ((CraftPlayer) player).getHandle();
 
-        for (Player pl : arena.getPlayers()){
+        for (Player pl : arena.getPlayers()) {
             if (pl.equals(player)) continue;
             if (arena.getRespawn().containsKey(pl)) continue;
-            if (pl.hasPotionEffect(PotionEffectType.INVISIBILITY)) continue;
-            pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer) pl).getHandle()));
-            pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer) pl).getHandle()));
-            showArmor(pl, player);
+            if (arena.getShowTime().containsKey(pl)) continue;
+            if (pl.getLocation().distanceSquared(player.getLocation()) <= renderDistance) {
+                pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer) pl).getHandle()));
+                pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer) pl).getHandle()));
+                showArmor(pl, player);
+            }
         }
     }
 
@@ -627,6 +644,6 @@ public class v1_12_R1 extends VersionSupport {
 
     @Override
     public void setJoinSignBackground(org.bukkit.block.BlockState b, org.bukkit.Material material) {
-        b.getLocation().getBlock().getRelative(((org.bukkit.material.Sign)b.getData()).getAttachedFace()).setType(material);
+        b.getLocation().getBlock().getRelative(((org.bukkit.material.Sign) b.getData()).getAttachedFace()).setType(material);
     }
 }

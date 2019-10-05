@@ -120,7 +120,7 @@ public class SlimeAdapter extends RestoreAdapter {
                     Bukkit.getScheduler().runTask(getOwner(), () -> Bukkit.unloadWorld(s.getWorldName(), false));
                 }
 
-                SlimeWorld world = null;
+                SlimeWorld world;
                 if (sLoader.worldExists(s.getWorldName())) {
                     world = slime.loadWorld(sLoader, s.getWorldName(), props);
                     Bukkit.getScheduler().runTask(getOwner(), () -> s.getPlayer().sendMessage(ChatColor.GREEN + "Loading world from SlimeWorldManager container."));
@@ -128,13 +128,14 @@ public class SlimeAdapter extends RestoreAdapter {
                     if (new File(Bukkit.getWorldContainer(), s.getWorldName() + "/level.dat").exists()) {
                         Bukkit.getScheduler().runTask(getOwner(), () -> s.getPlayer().sendMessage(ChatColor.GREEN + "Importing world to the SlimeWorldManager container."));
                         slime.importWorld(new File(Bukkit.getWorldContainer(), s.getWorldName()), s.getWorldName().toLowerCase(), sLoader);
+                        world = slime.createEmptyWorld(sLoader, s.getWorldName(), props);
                     } else {
                         Bukkit.getScheduler().runTask(getOwner(), () -> s.getPlayer().sendMessage(ChatColor.GREEN + "Creating anew void map."));
                         world = slime.createEmptyWorld(sLoader, s.getWorldName(), props);
                     }
                 }
 
-                final SlimeWorld sw = world;
+                SlimeWorld sw = world;
                 // This method must be called synchronously
                 Bukkit.getScheduler().runTask(getOwner(), () -> {
                     slime.generateWorld(sw);

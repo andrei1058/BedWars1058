@@ -6,7 +6,6 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.shop.listeners.InventoryListener;
@@ -59,7 +58,7 @@ public class Interact implements Listener {
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         Block b = e.getClickedBlock();
         if (b == null) return;
-        if (b.getWorld().getName().equals(BedWars.getLobbyWorld()) || Arena.getArenaByPlayer(e.getPlayer()) != null){
+        if ((BedWars.getServerType() == ServerType.MULTIARENA && b.getWorld().getName().equals(BedWars.getLobbyWorld())) || Arena.getArenaByPlayer(e.getPlayer()) != null){
             if (b.getType() == nms.materialCraftingTable() && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_CRAFTING)) {
                 e.setCancelled(true);
             } else if (b.getType() == nms.materialEnchantingTable() && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_ENCHANTING)){
@@ -196,7 +195,7 @@ public class Interact implements Listener {
             if (a != null){
                 e.setCancelled(true);
             }
-            if (BedWars.getServerType() != ServerType.SHARED){
+            if (BedWars.getServerType() == ServerType.MULTIARENA){
                 if (BedWars.getLobbyWorld().equals(e.getPlayer().getWorld().getName())){
                     e.setCancelled(true);
                 }
@@ -254,7 +253,7 @@ public class Interact implements Listener {
         }
 
         //prevent from stealing from armor stands in lobby
-        if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())){
+        if (BedWars.getServerType() == ServerType.MULTIARENA && e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())){
             e.setCancelled(true);
         }
     }

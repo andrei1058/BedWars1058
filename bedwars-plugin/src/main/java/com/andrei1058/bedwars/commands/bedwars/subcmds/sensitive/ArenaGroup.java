@@ -7,8 +7,8 @@ import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
-import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.configuration.ArenaConfig;
 import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
@@ -94,7 +94,7 @@ public class ArenaGroup extends SubCommand {
                         p.sendMessage("§c▪ §7Arena " + args[1] + " doesn't exist!");
                         return true;
                     }
-                    ConfigManager cm = new ConfigManager(BedWars.plugin, args[1], "plugins/" + plugin.getName() + "/Arenas");
+                    ArenaConfig cm = new ArenaConfig(BedWars.plugin, args[1], "plugins/" + plugin.getName() + "/Arenas");
                     cm.set("group", args[2]);
                     if (Arena.getArenaByName(args[1]) != null) {
                         Arena.getArenaByName(args[1]).setGroup(args[2]);

@@ -1,4 +1,22 @@
-# 0.14beta
+# 19.9
+- fixed levels NPE
+- added mysql connection ping task to avoid timeout (once a hour)
+
+# 0.14.2.beta
+- fixed Arena#getDisplayName npe
+- fixed issue where arena default configuration was not being created
+
+For Developers:
+- added NextEventChangeEvent
+- added new methods to the Level interface
+
+# 0.14.1.beta
+- fixed issue where you can drop items in 1.12 lobby
+- fixed current modification exception with swm
+- fixed npe issue when loading signs
+- added support for VipFeatures
+
+# 0.14.beta
 
 IMPORTANT NOTICE FOR SERVER OWNERS:
 With this update most of BedWars1058 Addons won't work anymore. Please update them.

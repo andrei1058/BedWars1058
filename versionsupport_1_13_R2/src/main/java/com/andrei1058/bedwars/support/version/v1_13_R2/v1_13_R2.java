@@ -14,6 +14,7 @@ import com.google.common.collect.Sets;
 import com.mojang.datafixers.types.Type;
 import net.minecraft.server.v1_13_R2.*;
 import net.minecraft.server.v1_13_R2.Item;
+import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.block.BlockState;
@@ -44,6 +45,8 @@ import java.util.logging.Level;
 
 
 public class v1_13_R2 extends VersionSupport {
+
+    private static int renderDistance = Bukkit.spigot().getConfig().getInt("world-settings.entity-tracking-range.players");
 
     public v1_13_R2(Plugin plugin, String name){
         super(plugin, name);
@@ -381,7 +384,19 @@ public class v1_13_R2 extends VersionSupport {
     @Override
     public void showPlayer(Player victim, Player p) {
         if (victim == p) return;
-        p.showPlayer(getPlugin(), victim);
+        if (!victim.getLocation().getWorld().equals(p.getWorld())) return;
+        if (victim.getLocation().distanceSquared(p.getLocation()) <= renderDistance) {
+            PacketPlayOutNamedEntitySpawn s = new PacketPlayOutNamedEntitySpawn(((CraftPlayer) victim).getHandle());
+            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(s);
+        }
+    }
+
+    @Override
+    public void showPlayer(Player whoToShow, List<Player> p) {
+        for (Player p1 : p){
+            if (p1.equals(whoToShow)) continue;
+            p1.showPlayer(getPlugin(), whoToShow);
+        }
     }
 
     @Override
@@ -579,10 +594,12 @@ public class v1_13_R2 extends VersionSupport {
         for (Player pl : arena.getPlayers()){
             if (pl.equals(player)) continue;
             if (arena.getRespawn().containsKey(pl)) continue;
-            if (pl.hasPotionEffect(PotionEffectType.INVISIBILITY)) continue;
-            pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer) pl).getHandle()));
-            pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer) pl).getHandle()));
-            showArmor(pl, player);
+            if (arena.getShowTime().containsKey(pl)) continue;
+            if (pl.getLocation().distanceSquared(player.getLocation()) <= renderDistance) {
+                pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer) pl).getHandle()));
+                pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer) pl).getHandle()));
+                showArmor(pl, player);
+            }
         }
     }
 

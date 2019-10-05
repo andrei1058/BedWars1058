@@ -11,6 +11,7 @@ import org.bukkit.ChatColor;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @SuppressWarnings("WeakerAccess")
 public class PlayerLevel {
@@ -24,17 +25,19 @@ public class PlayerLevel {
     private String requiredXp;
     private String formattedCurrentXp;
 
-    private static HashMap<UUID, PlayerLevel> levelByPlayer = new HashMap<>();
+    // keep trace if current level is different than the one in database
+    private boolean modified = false;
+
+    private static ConcurrentHashMap<UUID, PlayerLevel> levelByPlayer = new ConcurrentHashMap<>();
 
 
     /**
      * Cache a player level.
      */
     public PlayerLevel(UUID player, int level, int currentXp) {
-        levelByPlayer.put(player, this);
         this.uuid = player;
         setLevelName(level);
-        setNextLevelCost(level);
+        setNextLevelCost(level, true);
 
         //fix levels broken in the past by an issue
         if (level < 1) level = 1;
@@ -45,6 +48,7 @@ public class PlayerLevel {
         updateProgressBar();
         //requiredXp = nextLevelCost >= 1000 ? nextLevelCost % 1000 == 0 ? nextLevelCost / 1000 + "k" : (double) nextLevelCost / 1000 + "k" : String.valueOf(nextLevelCost);
         //formattedCurrentXp = currentXp >= 1000 ? currentXp % 1000 == 0 ? currentXp / 1000 + "k" : (double) currentXp / 1000 + "k" : String.valueOf(currentXp);
+        if (!levelByPlayer.containsKey(player)) levelByPlayer.put(player, this);
     }
 
     public void setLevelName(int level) {
@@ -55,19 +59,23 @@ public class PlayerLevel {
 
     }
 
-    public void setNextLevelCost(int level) {
+    public void setNextLevelCost(int level, boolean initialize) {
+        if (!initialize) modified = true;
         this.nextLevelCost = LevelsConfig.levels.getYml().get("levels." + level + ".rankup-cost") == null ?
                 LevelsConfig.levels.getYml().getInt("levels.others.rankup-cost") : LevelsConfig.levels.getYml().getInt("levels." + level + ".rankup-cost");
     }
 
     public void lazyLoad(int level, int currentXp) {
+        modified = false;
         if (level < 1) level = 1;
         if (currentXp < 0) currentXp = 0;
         setLevelName(level);
-        setNextLevelCost(level);
+        setNextLevelCost(level, true);
         this.level = level;
         this.currentXp = currentXp;
         updateProgressBar();
+
+        modified = false;
 
         Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
             for (SBoard sb : SBoard.getScoreboards()) {
@@ -76,7 +84,7 @@ public class PlayerLevel {
                     break;
                 }
             }
-        }, 5L);
+        }, 10L);
     }
 
     /**
@@ -115,7 +123,7 @@ public class PlayerLevel {
      * Get PlayerLevel by player.
      */
     public static PlayerLevel getLevelByPlayer(UUID player) {
-        return levelByPlayer.getOrDefault(player, null);
+        return levelByPlayer.getOrDefault(player, new PlayerLevel(player, 1, 0));
     }
 
     /**
@@ -163,6 +171,7 @@ public class PlayerLevel {
         upgradeLevel();
         updateProgressBar();
         Bukkit.getPluginManager().callEvent(new PlayerXpGainEvent(Bukkit.getPlayer(uuid), xp, source));
+        modified = true;
     }
 
     /**
@@ -173,6 +182,7 @@ public class PlayerLevel {
         this.currentXp = currentXp;
         upgradeLevel();
         updateProgressBar();
+        modified = true;
     }
 
     /**
@@ -186,6 +196,7 @@ public class PlayerLevel {
                 LevelsConfig.levels.getYml().getString("levels.others.name") : LevelsConfig.levels.getYml().getString("levels." + level + ".name"))).replace("{number}", String.valueOf(level));
         requiredXp = nextLevelCost >= 1000 ? nextLevelCost % 1000 == 0 ? nextLevelCost / 1000 + "k" : (double) nextLevelCost / 1000 + "k" : String.valueOf(nextLevelCost);
         updateProgressBar();
+        modified = true;
     }
 
     /**
@@ -210,6 +221,7 @@ public class PlayerLevel {
             requiredXp = nextLevelCost >= 1000 ? nextLevelCost % 1000 == 0 ? nextLevelCost / 1000 + "k" : (double) nextLevelCost / 1000 + "k" : String.valueOf(nextLevelCost);
             formattedCurrentXp = currentXp >= 1000 ? currentXp % 1000 == 0 ? currentXp / 1000 + "k" : (double) currentXp / 1000 + "k" : String.valueOf(currentXp);
             Bukkit.getPluginManager().callEvent(new PlayerLevelUpEvent(Bukkit.getPlayer(getUuid()), level, nextLevelCost));
+            modified = true;
         }
     }
 
@@ -225,7 +237,16 @@ public class PlayerLevel {
      */
     public void destroy() {
         levelByPlayer.remove(uuid);
-        BedWars.getRemoteDatabase().setLevelData(uuid, level, currentXp, LevelsConfig.levels.getYml().get("levels." + level + ".name") == null ?
-                LevelsConfig.levels.getYml().getString("levels.others.name") : LevelsConfig.levels.getYml().getString("levels." + level + ".name"), nextLevelCost);
+        //BedWars.getRemoteDatabase().setLevelData(uuid, level, currentXp, LevelsConfig.levels.getYml().get("levels." + level + ".name") == null ?
+        //        LevelsConfig.levels.getYml().getString("levels.others.name") : LevelsConfig.levels.getYml().getString("levels." + level + ".name"), nextLevelCost);
+        updateDatabase();
+    }
+
+    public void updateDatabase() {
+        if (modified) {
+            Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, () -> BedWars.getRemoteDatabase().setLevelData(uuid, level, currentXp, LevelsConfig.levels.getYml().get("levels." + level + ".name") == null ?
+                    LevelsConfig.levels.getYml().getString("levels.others.name") : LevelsConfig.levels.getYml().getString("levels." + level + ".name"), nextLevelCost));
+            modified = false;
+        }
     }
 }

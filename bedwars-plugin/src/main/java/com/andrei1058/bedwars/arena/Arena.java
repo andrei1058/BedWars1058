@@ -10,6 +10,7 @@ import com.andrei1058.bedwars.api.arena.shop.ShopHolo;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.events.gameplay.NextEventChangeEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerJoinArenaEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerLeaveArenaEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerReJoinEvent;
@@ -18,13 +19,13 @@ import com.andrei1058.bedwars.api.events.gameplay.GameStateChangeEvent;
 import com.andrei1058.bedwars.api.events.server.ArenaDisableEvent;
 import com.andrei1058.bedwars.api.events.server.ArenaEnableEvent;
 import com.andrei1058.bedwars.api.events.server.ArenaRestartEvent;
-import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.tasks.PlayingTask;
 import com.andrei1058.bedwars.api.tasks.RestartingTask;
 import com.andrei1058.bedwars.api.tasks.StartingTask;
+import com.andrei1058.bedwars.configuration.ArenaConfig;
 import com.andrei1058.bedwars.levels.internal.InternalLevel;
 import com.andrei1058.bedwars.levels.internal.PerMinuteTask;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
@@ -70,7 +71,7 @@ public class Arena implements IArena {
     private List<BlockState> signs = new ArrayList<>();
     private GameState status = GameState.waiting;
     private YamlConfiguration yml;
-    private ConfigManager cm;
+    private ArenaConfig cm;
     private int minPlayers = 2, maxPlayers = 10, maxInTeam = 1, islandRadius = 10;
     public int upgradeDiamondsCount = 0, upgradeEmeraldsCount = 0;
     public boolean allowSpectate = true;
@@ -148,7 +149,7 @@ public class Arena implements IArena {
         }
         this.worldName = name;
 
-        cm = new ConfigManager(BedWars.plugin, name, "plugins/" + plugin.getName() + "/Arenas");
+        cm = new ArenaConfig(BedWars.plugin, name, "plugins/" + plugin.getName() + "/Arenas");
 
         //if (mapManager.isLevelWorld()) {
         //    Main.plugin.getLogger().severe("COULD NOT LOAD ARENA: " + name);
@@ -567,6 +568,11 @@ public class Arena implements IArena {
         showTime.remove(p);
         refreshSigns();
         JoinNPC.updateNPCs(getGroup());
+
+        // hide invisible players to spectators but keep armor visible
+        for (Map.Entry<Player, Integer> e : getShowTime().entrySet()){
+            nms.hidePlayer(e.getKey(), p);
+        }
         return true;
     }
 
@@ -727,6 +733,19 @@ public class Arena implements IArena {
 
         refreshSigns();
         JoinNPC.updateNPCs(getGroup());
+
+        // fix #340
+        // remove player from party if leaves and the owner is still in the arena while waiting or starting
+        if (getStatus() == GameState.waiting || getStatus() == GameState.starting) {
+            if (BedWars.getParty().hasParty(p) && !BedWars.getParty().isOwner(p)) {
+                for (Player pl : BedWars.getParty().getMembers(p)) {
+                    if (BedWars.getParty().isOwner(pl) && pl.getWorld().getName().equalsIgnoreCase(getWorldName())) {
+                        BedWars.getParty().removeFromParty(p);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -995,7 +1014,8 @@ public class Arena implements IArena {
      */
     @Override
     public String getDisplayName() {
-        return getConfig().getString(ConfigPath.ARENA_DISPLAY_NAME).trim().isEmpty() ? (Character.toUpperCase(worldName.charAt(0)) + worldName.substring(1)).replace("_", " ").replace("-", " ")
+        return getConfig().getYml().getString(ConfigPath.ARENA_DISPLAY_NAME, (Character.toUpperCase(worldName.charAt(0)) + worldName.substring(1)).replace("_", " ").replace("-", " ")).trim().isEmpty() ?
+                (Character.toUpperCase(worldName.charAt(0)) + worldName.substring(1)).replace("_", " ").replace("-", " ")
                 : getConfig().getString(ConfigPath.ARENA_DISPLAY_NAME);
     }
 
@@ -1015,7 +1035,7 @@ public class Arena implements IArena {
     }
 
     @Override
-    public ConfigManager getConfig() {
+    public ArenaConfig getConfig() {
         return cm;
     }
 
@@ -1193,6 +1213,7 @@ public class Arena implements IArena {
      */
     public void addSign(Location loc) {
         if (loc == null) return;
+        if (loc.getBlock() == null) return;
         if (loc.getBlock().getType() == Material.SIGN || loc.getBlock().getType() == Material.WALL_SIGN) {
             signs.add(loc.getBlock().getState());
             refreshSigns();
@@ -1551,6 +1572,7 @@ public class Arena implements IArena {
         for (Player p : getSpectators()) {
             p.getWorld().playSound(p.getLocation(), nms.bedDestroy(), 1f, 1f);
         }
+        Bukkit.getPluginManager().callEvent(new NextEventChangeEvent(this, nextEvent, this.nextEvent));
         this.nextEvent = nextEvent;
     }
 
@@ -1802,7 +1824,7 @@ public class Arena implements IArena {
         return true;
     }
 
-    public static List<IArena> getSorted(List<IArena> arenas){
+    public static List<IArena> getSorted(List<IArena> arenas) {
         List<IArena> sorted = arenas;
         sorted.sort(new Comparator<IArena>() {
             @Override

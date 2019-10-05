@@ -356,4 +356,6 @@ public interface BedWars {
     String getLobbyWorld();
 
     String getForCurrentVersion(String v18, String v12, String v13);
+
+    void setLevelAdapter(Level level);
 }

@@ -171,10 +171,8 @@ public class Inventory implements Listener {
         }
 
         if (!i.hasItemMeta()) return;
-        if (!i.getItemMeta().
-
-                hasDisplayName()) return;
-        if (BedWars.getServerType() != ServerType.BUNGEE) {
+        if (!i.getItemMeta().hasDisplayName()) return;
+        if (BedWars.getServerType() == ServerType.MULTIARENA) {
             if (e.getWhoClicked().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
                 e.setCancelled(true);
             }

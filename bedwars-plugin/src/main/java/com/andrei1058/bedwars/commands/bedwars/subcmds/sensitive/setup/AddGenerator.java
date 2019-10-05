@@ -8,7 +8,7 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.server.SetupType;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
-import com.andrei1058.bedwars.api.configuration.ConfigManager;
+import com.andrei1058.bedwars.configuration.ArenaConfig;
 import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
@@ -44,7 +44,7 @@ public class AddGenerator extends SubCommand {
             s.sendMessage("§c ▪ §7You're not in a setup session!");
             return true;
         }
-        ConfigManager arena = ss.getConfig();
+        ArenaConfig arena = ss.getConfig();
         if (args.length < 1) {
             String foundTeam = "";
             double distance = 100;

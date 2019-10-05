@@ -237,6 +237,7 @@ public class OreGenerator implements IGenerator {
 
         @Override
         public void setTierName(String name) {
+            if (tier.isDead()) return;
             tier.setCustomName(name);
             //Location loc  = timer.getLocation().clone();
             //timer.remove();
@@ -250,6 +251,7 @@ public class OreGenerator implements IGenerator {
 
         @Override
         public void setTimerName(String name) {
+            if (timer.isDead()) return;
             timer.setCustomName(name);
         }
 

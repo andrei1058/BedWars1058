@@ -12,6 +12,7 @@ import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -39,7 +40,7 @@ public class JoinLeaveTeleport implements Listener {
             if (Language.isLanguageExist(iso)) {
                 if (BedWars.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES).contains(iso))
                     iso = Language.getDefaultLanguage().getIso();
-                if (preLoadedLanguage.containsKey(u)){
+                if (preLoadedLanguage.containsKey(u)) {
                     preLoadedLanguage.replace(u, iso);
                 } else {
                     preLoadedLanguage.put(u, iso);
@@ -48,8 +49,8 @@ public class JoinLeaveTeleport implements Listener {
         });
 
         if (getServerType() == ServerType.BUNGEE) {
-            if (Arena.getArenas().isEmpty()){
-                if (!Arena.getEnableQueue().isEmpty()){
+            if (Arena.getArenas().isEmpty()) {
+                if (!Arena.getEnableQueue().isEmpty()) {
                     e.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, getMsg(e.getPlayer(), Messages.ARENA_STATUS_RESTARTING_NAME));
                 } else return;
             }
@@ -109,26 +110,7 @@ public class JoinLeaveTeleport implements Listener {
             }, 14L);
         }
 
-        if (debug) {
-            p.sendMessage("");
-            p.sendMessage("");
-            p.sendMessage("§7§m----------------------------------------\n" +
-                    "§eThis server is running BedWars1058 §cv" + plugin.getDescription().getVersion()
-                    + "\n§eThe latest published version is §a" + Misc.getNewVersion() +
-                    "\n§7§m----------------------------------------");
-            p.sendMessage("");
-            p.sendMessage("");
-        }
         if (p.isOp()) {
-            if (Misc.isUpdateAvailable()) {
-                p.sendMessage("§8[§f" + plugin.getName() + "§8]§7§m---------------------------");
-                p.sendMessage("");
-                TextComponent tc = new TextComponent("§eUpdate available: §6" + Misc.getNewVersion() + " §7§o(click)");
-                tc.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, link));
-                p.spigot().sendMessage(tc);
-                p.sendMessage("");
-                p.sendMessage("§8[§f" + plugin.getName() + "§8]§7§m---------------------------");
-            }
             if (Arena.getArenas().isEmpty()) {
                 p.performCommand(mainCmd);
             }
@@ -144,6 +126,7 @@ public class JoinLeaveTeleport implements Listener {
 
         if (getServerType() != ServerType.SHARED) {
             e.setJoinMessage(null);
+            p.getInventory().setArmorContents(null);
         }
 
         //if (Arena.getArenas().isEmpty()) return;
@@ -159,13 +142,10 @@ public class JoinLeaveTeleport implements Listener {
         }
 
         if (BedWars.getServerType() == ServerType.SHARED) {
-            if (BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
-                if (e.getPlayer().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld()))
-                    Misc.giveLobbySb(e.getPlayer());
-            }
-            return;
+            if (e.getPlayer().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld()))
+                Misc.giveLobbySb(e.getPlayer());
         }
-        p.getInventory().setArmorContents(null);
+
         if (getServerType() == ServerType.BUNGEE) {
             if (!Arena.getArenas().isEmpty()) {
                 IArena a = Arena.getArenas().get(0);
@@ -175,16 +155,17 @@ public class JoinLeaveTeleport implements Listener {
                     a.addSpectator(p, false, null);
                 }
             }
-            return;
-        } else {
-            if (config.getConfigLoc("lobbyLoc") != null)
-                p.teleport(config.getConfigLoc("lobbyLoc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
+        } else if (getServerType() == ServerType.MULTIARENA) {
+            if (config.getConfigLoc("lobbyLoc") != null) {
+                Location loc = config.getConfigLoc("lobbyLoc");
+                if (loc.getWorld() != null) p.teleport(loc, PlayerTeleportEvent.TeleportCause.PLUGIN);
+            }
             Misc.giveLobbySb(e.getPlayer());
             Arena.sendLobbyCommandItems(p);
+            p.setHealthScale(20);
+            p.setFoodLevel(20);
+            p.setExp(0);
         }
-        p.setHealthScale(20);
-        p.setFoodLevel(20);
-        p.setExp(0);
     }
 
     @EventHandler

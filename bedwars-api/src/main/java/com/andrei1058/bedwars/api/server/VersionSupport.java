@@ -249,6 +249,8 @@ public abstract class VersionSupport {
      */
     public abstract void showPlayer(Player whoToShow, Player p);
 
+    public abstract void showPlayer(Player whoToShow, List<Player> p);
+
     /**
      * Is despawnable entity
      */

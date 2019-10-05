@@ -7,12 +7,13 @@ import com.andrei1058.bedwars.api.server.ISetupSession;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.server.SetupType;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
-import com.andrei1058.bedwars.api.configuration.ConfigManager;
+import com.andrei1058.bedwars.configuration.ArenaConfig;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -33,7 +34,7 @@ public class SetupSession implements ISetupSession {
     private Player player;
     private String worldName;
     private SetupType setupType;
-    private ConfigManager cm;
+    private ArenaConfig cm;
     private boolean started = false;
     private boolean autoCreatedEmerald = false;
     private boolean autoCreatedDiamond = false;
@@ -100,7 +101,7 @@ public class SetupSession implements ISetupSession {
      */
     public boolean startSetup() {
         getPlayer().sendMessage("§6 ▪ §7Loading " + getWorldName());
-        cm = new ConfigManager(BedWars.plugin, getWorldName(), "plugins/" + plugin.getName() + "/Arenas");
+        cm = new ArenaConfig(BedWars.plugin, getWorldName(), "plugins/" + plugin.getName() + "/Arenas");
         BedWars.getAPI().getRestoreAdapter().onSetupSessionStart(this);
         return true;
     }
@@ -140,7 +141,13 @@ public class SetupSession implements ISetupSession {
     public void done() {
         BedWars.getAPI().getRestoreAdapter().onSetupSessionClose(this);
         getSetupSessions().remove(this);
-        if (BedWars.getServerType() != ServerType.BUNGEE) getPlayer().teleport(config.getConfigLoc("lobbyLoc"));
+        if (BedWars.getServerType() != ServerType.BUNGEE){
+            try {
+                getPlayer().teleport(config.getConfigLoc("lobbyLoc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
+            } catch (Exception ex){
+                getPlayer().teleport(Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+            }
+        }
         getPlayer().removePotionEffect(PotionEffectType.SPEED);
         if (BedWars.getServerType() == ServerType.MULTIARENA) Arena.sendLobbyCommandItems(getPlayer());
         Bukkit.getPluginManager().callEvent(new SetupSessionCloseEvent(this));
@@ -173,7 +180,7 @@ public class SetupSession implements ISetupSession {
     /**
      * Get arena configuration
      */
-    public ConfigManager getConfig() {
+    public ArenaConfig getConfig() {
         return cm;
     }
 

@@ -24,7 +24,7 @@ public class EggBridge implements Listener {
 
     @EventHandler
     public void onLaunch(ProjectileLaunchEvent e) {
-        if (BedWars.getServerType() != ServerType.BUNGEE) {
+        if (BedWars.getServerType() == ServerType.MULTIARENA) {
             if (e.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
                 e.setCancelled(true);
                 return;
