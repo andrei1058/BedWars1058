@@ -40,6 +40,8 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.logging.Level;
 
+import static com.andrei1058.bedwars.support.version.common.VersionCommon.api;
+
 public class v1_12_R1 extends VersionSupport {
 
     private static int renderDistance = Bukkit.spigot().getConfig().getInt("world-settings.entity-tracking-range.players");
@@ -400,6 +402,7 @@ public class v1_12_R1 extends VersionSupport {
     public void showPlayer(Player victim, Player p) {
         if (victim == p) return;
         if (!victim.getLocation().getWorld().equals(p.getWorld())) return;
+        if (api.getArenaUtil().isSpectating(victim) && !api.getArenaUtil().isSpectating(p)) return;
         if (victim.getLocation().distanceSquared(p.getLocation()) <= renderDistance) {
             PacketPlayOutNamedEntitySpawn s = new PacketPlayOutNamedEntitySpawn(((CraftPlayer) victim).getHandle());
             ((CraftPlayer) p).getHandle().playerConnection.sendPacket(s);
@@ -410,6 +413,8 @@ public class v1_12_R1 extends VersionSupport {
     public void showPlayer(Player whoToShow, List<Player> p) {
         for (Player p1 : p) {
             if (p1.equals(whoToShow)) continue;
+            if (!whoToShow.getLocation().getWorld().equals(p1.getWorld())) continue;
+            if (api.getArenaUtil().isSpectating(whoToShow) && !api.getArenaUtil().isSpectating(p1)) continue;
             p1.showPlayer(whoToShow);
         }
     }
