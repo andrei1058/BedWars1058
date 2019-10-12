@@ -51,11 +51,15 @@ public class PartyCommand extends BukkitCommand {
                     TextComponent tc = new TextComponent(getMsg(p, Messages.COMMAND_PARTY_INVITE_SENT_TARGET_RECEIVE_MSG).replace("{player}", p.getName()));
                     tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party accept "+p.getName()));
                     Bukkit.getPlayer(args[1]).spigot().sendMessage(tc);
+                    p.sendMessage("DEBUG 1");
                     if (partySessionRequest.containsKey(p.getUniqueId())){
+                        p.sendMessage("DEBUG 2");
                         partySessionRequest.replace(p.getUniqueId(), Bukkit.getPlayer(args[1]).getUniqueId());
                     } else {
+                        p.sendMessage("DEBUG 3");
                         partySessionRequest.put(p.getUniqueId(), Bukkit.getPlayer(args[1]).getUniqueId());
                     }
+                    p.sendMessage(partySessionRequest.toString());
                 } else {
                     p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE).replace("{player}", args[1]));
                 }
