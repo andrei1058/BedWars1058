@@ -268,7 +268,7 @@ public class BedWars extends JavaPlugin {
                         party = new Parties();
                     }
                 }
-                if (party == null) {
+                if (party instanceof NoParty) {
                     party = new com.andrei1058.bedwars.support.party.Internal();
                     getLogger().info("Loading internal Party system. /party");
                 }

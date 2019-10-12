@@ -52,12 +52,9 @@ public class PartyCommand extends BukkitCommand {
                     TextComponent tc = new TextComponent(getMsg(p, Messages.COMMAND_PARTY_INVITE_SENT_TARGET_RECEIVE_MSG).replace("{player}", p.getName()));
                     tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party accept " + p.getName()));
                     Bukkit.getPlayer(args[1]).spigot().sendMessage(tc);
-                    p.sendMessage("DEBUG 1");
                     if (partySessionRequest.containsKey(p.getUniqueId())) {
-                        p.sendMessage("DEBUG 2");
                         partySessionRequest.replace(p.getUniqueId(), Bukkit.getPlayer(args[1]).getUniqueId());
                     } else {
-                        p.sendMessage("DEBUG 3");
                         partySessionRequest.put(p.getUniqueId(), Bukkit.getPlayer(args[1]).getUniqueId());
                     }
                     p.sendMessage(partySessionRequest.toString());
@@ -78,16 +75,12 @@ public class PartyCommand extends BukkitCommand {
                     return true;
                 }
                 if (!partySessionRequest.containsKey(Bukkit.getPlayer(args[1]).getUniqueId())) {
-                    p.sendMessage("DEBUG: 1");
                     p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_DENIED_NO_INVITE));
                     return true;
                 }
-                p.sendMessage("DEBUG: a");
                 if (partySessionRequest.get(Bukkit.getPlayer(args[1]).getUniqueId()).equals(p.getUniqueId())) {
-                    p.sendMessage("DEBUG: b");
                     partySessionRequest.remove(Bukkit.getPlayer(args[1]).getUniqueId());
                     if (getParty().hasParty(Bukkit.getPlayer(args[1]))) {
-                        p.sendMessage("DEBUG: c");
                         getParty().addMember(Bukkit.getPlayer(args[1]), p);
                         for (Player on : getParty().getMembers(Bukkit.getPlayer(args[1]))) {
                             on.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_SUCCESS).replace("{player}", p.getName()));
@@ -99,7 +92,6 @@ public class PartyCommand extends BukkitCommand {
                         }
                     }
                 } else {
-                    p.sendMessage("DEBUG: 2");
                     p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_DENIED_NO_INVITE));
                 }
                 break;
