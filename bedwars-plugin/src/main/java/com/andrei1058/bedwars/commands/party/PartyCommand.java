@@ -73,10 +73,11 @@ public class PartyCommand extends BukkitCommand {
                     return true;
                 }
                 if (!partySessionRequest.containsKey(Bukkit.getPlayer(args[1]).getUniqueId())){
+                    p.sendMessage("DEBUG: 1");
                     p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_DENIED_NO_INVITE));
                     return true;
                 }
-                if (partySessionRequest.get(Bukkit.getPlayer(args[1]).getUniqueId()).toString().equalsIgnoreCase(p.getUniqueId().toString())){
+                if (partySessionRequest.get(Bukkit.getPlayer(args[1]).getUniqueId()).equals(p.getUniqueId())){
                     partySessionRequest.remove(Bukkit.getPlayer(args[1]).getUniqueId());
                     if (getParty().hasParty(Bukkit.getPlayer(args[1]))){
                         getParty().addMember(Bukkit.getPlayer(args[1]), p);
@@ -90,6 +91,7 @@ public class PartyCommand extends BukkitCommand {
                         }
                     }
                 } else {
+                    p.sendMessage("DEBUG: 2");
                     p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_DENIED_NO_INVITE));
                 }
                 break;
