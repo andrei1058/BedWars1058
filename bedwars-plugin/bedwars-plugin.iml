@@ -49,11 +49,11 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.citizensnpcs:citizens-v1_14_R1:2.0.25-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.milkbowl.vault:Vault:1.7.3" level="project" />
     <orderEntry type="module" module-name="bedwars-api" />
-    <orderEntry type="module" module-name="versionsupport_1_8_R3" />
-    <orderEntry type="module" module-name="versionsupport_1_9_R2" />
+    <orderEntry type="library" name="Maven: com.andrei1058.bedwars:versionsupport_1_8_R3:19.10" level="project" />
+    <orderEntry type="library" name="Maven: com.andrei1058.bedwars:versionsupport_1_9_R2:19.10" level="project" />
     <orderEntry type="module" module-name="versionsupport_1_10_R1" />
     <orderEntry type="module" module-name="versionsupport_1_11_R1" />
-    <orderEntry type="module" module-name="resetadapter-slime" />
+    <orderEntry type="library" name="Maven: com.andrei1058.bedwars:resetadapter-slime:19.10" level="project" />
     <orderEntry type="module" module-name="versionsupport_1_12_R1" />
     <orderEntry type="module" module-name="versionsupport_1_13_R2" />
     <orderEntry type="module" module-name="versionsupport_1_14_R1" />

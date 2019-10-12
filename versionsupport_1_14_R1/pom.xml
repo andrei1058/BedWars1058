@@ -10,7 +10,7 @@
     <parent>
         <artifactId>compiler</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>19.10</version>
+        <version>19.10.1</version>
     </parent>
 
     <dependencies>
