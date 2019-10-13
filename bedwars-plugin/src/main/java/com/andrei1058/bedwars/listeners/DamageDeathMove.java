@@ -376,7 +376,7 @@ public class DamageDeathMove implements Listener {
 
             /* call game kill event */
             Bukkit.getPluginManager().callEvent(new PlayerKillEvent(a, victim, killer, message, cause));
-            victim.spigot().respawn();
+            Bukkit.getScheduler().runTaskLater(plugin, () -> victim.spigot().respawn(), 1L);
             a.addPlayerDeath(victim);
         }
     }
