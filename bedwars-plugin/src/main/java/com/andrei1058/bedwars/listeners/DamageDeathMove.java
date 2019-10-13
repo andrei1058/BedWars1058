@@ -606,9 +606,9 @@ public class DamageDeathMove implements Listener {
 
     private static void spawnUtility(String s, Location loc, ITeam t, Player p) {
         if ("silverfish".equals(s.toLowerCase())) {
-            nms.spawnSilverfish(loc, t, shop.getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_SPEED), shop.getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_HEALTH),
+            nms.spawnSilverfish(loc, t, shop.getYml().getDouble(ConfigPath.SHOP_SPECIAL_SILVERFISH_SPEED), shop.getYml().getDouble(ConfigPath.SHOP_SPECIAL_SILVERFISH_HEALTH),
                     shop.getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_DESPAWN),
-                    BedWars.shop.getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_DAMAGE));
+                    BedWars.shop.getYml().getDouble(ConfigPath.SHOP_SPECIAL_SILVERFISH_DAMAGE));
         }
     }
 }
