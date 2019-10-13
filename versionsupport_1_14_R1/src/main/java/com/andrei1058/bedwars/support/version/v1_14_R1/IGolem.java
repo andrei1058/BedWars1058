@@ -47,11 +47,11 @@ public class IGolem extends EntityIronGolem {
         customEnt.setCustomNameVisible(true);
         customEnt.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(health);
         customEnt.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(speed);
-        customEnt.setCustomName(IChatBaseComponent.ChatSerializer.a(Language.getDefaultLanguage().m(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME)
+        mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
+        customEnt.getBukkitEntity().setCustomName(Language.getDefaultLanguage().m(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME)
                 .replace("{despawn}", String.valueOf(despawn)
                         .replace("{health}", StringUtils.repeat(Language.getDefaultLanguage().m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH) + " ", 10))
-                        .replace("{TeamColor}", TeamColor.getChatColor(bedWarsTeam.getColor()).toString()))));
-        mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
+                        .replace("{TeamColor}", TeamColor.getChatColor(bedWarsTeam.getColor()).toString())));
         return (LivingEntity) customEnt.getBukkitEntity();
     }
 }
