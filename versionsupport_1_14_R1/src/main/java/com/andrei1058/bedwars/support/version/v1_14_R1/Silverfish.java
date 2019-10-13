@@ -34,6 +34,7 @@ public class Silverfish extends EntitySilverfish {
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
         this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this,1.0D, false));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this));
+        this.goalSelector.a(2, new PathfinderGoalRandomStroll(this, 5));
         if (bedWarsTeam != null) this.targetSelector.a(2, new AttackEnemies(this, true, bedWarsTeam));
     }
 
@@ -45,6 +46,7 @@ public class Silverfish extends EntitySilverfish {
         customEnt.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(health);
         customEnt.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(speed);
         customEnt.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(damage);
+        customEnt.setPersistent();
         ((CraftLivingEntity)customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
         customEnt.setCustomNameVisible(true);
         mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
