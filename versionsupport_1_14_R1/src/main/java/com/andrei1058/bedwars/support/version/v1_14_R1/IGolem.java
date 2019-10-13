@@ -18,12 +18,12 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 @SuppressWarnings("ALL")
 public class IGolem extends EntityIronGolem {
 
-    private ITeam bedWarsTeam;
     public static VersionSupport vs;
 
     private IGolem(EntityTypes<? extends EntityIronGolem> entitytypes, World world, ITeam bedWarsTeam) {
         super(entitytypes, world);
-        this.bedWarsTeam = bedWarsTeam;
+        Bukkit.broadcastMessage("TEAM: " + bedWarsTeam.getName());
+        if (bedWarsTeam != null) this.targetSelector.a(2, new AttackEnemies(this, false, bedWarsTeam));
     }
 
     public IGolem(EntityTypes entityTypes, World world) {
@@ -35,8 +35,6 @@ public class IGolem extends EntityIronGolem {
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
         this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this, 1.0D, false));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this));
-        Bukkit.broadcastMessage("TEAM: " + bedWarsTeam.getName());
-        if (bedWarsTeam != null) this.targetSelector.a(2, new AttackEnemies(this, false, bedWarsTeam));
         this.goalSelector.a(3, new PathfinderGoalRandomStroll(this, 1.0D));
         this.goalSelector.a(1, new PathfinderGoalRandomLookaround(this));
     }
