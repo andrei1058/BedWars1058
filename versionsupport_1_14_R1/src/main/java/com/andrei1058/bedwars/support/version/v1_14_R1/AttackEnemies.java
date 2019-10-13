@@ -24,6 +24,7 @@ public class AttackEnemies extends PathfinderGoalTarget {
     }
 
     public boolean b() {
+        System.out.println("1");
         EntityLiving entityliving = this.e.getGoalTarget();
         if (entityliving == null) {
             entityliving = this.g;
@@ -34,16 +35,19 @@ public class AttackEnemies extends PathfinderGoalTarget {
         } else if (!entityliving.isAlive()) {
             return false;
         } else {
+            System.out.println("2");
             ScoreboardTeamBase scoreboardteambase = this.e.getScoreboardTeam();
             ScoreboardTeamBase scoreboardteambase1 = entityliving.getScoreboardTeam();
             if (scoreboardteambase != null && scoreboardteambase1 == scoreboardteambase) {
                 return false;
             } else {
+                System.out.println("3");
                 double d0 = this.k();
                 if (this.e.h(entityliving) > d0 * d0) {
                     return false;
                 } else {
                     if (this.f) {
+                        System.out.println("4");
                         if (this.e.getEntitySenses().a(entityliving)) {
                             this.d = 0;
                         } else if (++this.d > this.h) {
