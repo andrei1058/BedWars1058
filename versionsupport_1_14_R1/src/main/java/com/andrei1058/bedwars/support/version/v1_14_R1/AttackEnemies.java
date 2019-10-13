@@ -16,7 +16,6 @@ public class AttackEnemies extends PathfinderGoalTarget {
     public AttackEnemies(EntityInsentient entityinsentient, boolean flag, ITeam bedWarsTeam) {
         super(entityinsentient, flag, false);
         this.bedWarsTeam = bedWarsTeam;
-
     }
 
     @Override
