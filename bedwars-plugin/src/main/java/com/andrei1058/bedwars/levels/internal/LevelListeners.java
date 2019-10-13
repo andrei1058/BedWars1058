@@ -74,7 +74,7 @@ public class LevelListeners implements Listener {
         for (UUID p : e.getLosers()) {
             if (PlayerLevel.getLevelByPlayer(p) != null) {
                 Player p1 = Bukkit.getPlayer(p);
-
+                if (p1 == null) continue;
                 ITeam bwt = e.getArena().getExTeam(p1.getUniqueId());
                 if (bwt != null) {
                     if (bwt.getMembersCache().size() > 1) {
