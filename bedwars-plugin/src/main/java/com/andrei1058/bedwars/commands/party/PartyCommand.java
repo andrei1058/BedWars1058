@@ -57,7 +57,6 @@ public class PartyCommand extends BukkitCommand {
                     } else {
                         partySessionRequest.put(p.getUniqueId(), Bukkit.getPlayer(args[1]).getUniqueId());
                     }
-                    p.sendMessage(partySessionRequest.toString());
                 } else {
                     p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE).replace("{player}", args[1]));
                 }
