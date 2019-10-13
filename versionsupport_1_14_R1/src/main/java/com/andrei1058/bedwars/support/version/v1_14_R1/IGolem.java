@@ -7,6 +7,7 @@ import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.VersionSupport;
 import net.minecraft.server.v1_14_R1.*;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity;
@@ -34,6 +35,7 @@ public class IGolem extends EntityIronGolem {
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
         this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this, 1.0D, false));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this));
+        Bukkit.broadcastMessage("TEAM: " + bedWarsTeam.getName());
         if (bedWarsTeam != null) this.targetSelector.a(2, new AttackEnemies(this, false, bedWarsTeam));
         this.goalSelector.a(3, new PathfinderGoalRandomStroll(this, 1.0D));
         this.goalSelector.a(1, new PathfinderGoalRandomLookaround(this));
