@@ -52,16 +52,20 @@ public class AttackEnemies extends PathfinderGoalTarget {
                     }
 
                     if (entityliving instanceof EntityHuman) {
+                        System.out.println("a");
                         if (((EntityHuman) entityliving).abilities.isInvulnerable) {
+                            System.out.println("b");
                             return false;
                         } else if (bedWarsTeam.getMembers().contains(Bukkit.getPlayer(entityliving.getName()))) {
+                            System.out.println("c");
                             return false;
                         }
                         // do not hurt mobs with same owner
                     } else if (IGolem.vs.isDespawnable(entityliving.getBukkitEntity())){
+                        System.out.println("d");
                         if (IGolem.vs.getDespawnablesList().get(entityliving.getBukkitEntity().getUniqueId()).getTeam() == bedWarsTeam) return false;
                     }
-
+                    System.out.println("e");
                     this.e.setGoalTarget(entityliving, EntityTargetEvent.TargetReason.CLOSEST_ENTITY, true);
                     return true;
                 }

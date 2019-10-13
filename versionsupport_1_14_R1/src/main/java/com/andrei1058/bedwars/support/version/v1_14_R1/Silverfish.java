@@ -32,9 +32,9 @@ public class Silverfish extends EntitySilverfish {
     @Override
     protected void initPathfinder() {
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
-        this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this,this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue(), true));
+        this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this,1.0D, false));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this));
-        this.goalSelector.a(2, new PathfinderGoalRandomStroll(this, this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue()));
+        this.goalSelector.a(2, new PathfinderGoalRandomStroll(this, 1.0D));
         if (bedWarsTeam != null) this.targetSelector.a(2, new AttackEnemies(this, true, bedWarsTeam));
     }
 
