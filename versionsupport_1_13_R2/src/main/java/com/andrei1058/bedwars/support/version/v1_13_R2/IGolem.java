@@ -35,32 +35,32 @@ public class IGolem extends EntityIronGolem {
             e1.printStackTrace();
         }
         this.setSize(1.4F, 2.9F);
-        ((Navigation)this.getNavigation()).a(true);
+        ((Navigation) this.getNavigation()).a(true);
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
-        this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this,1.0D, false));
+        this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this, 1.0D, false));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true));
         this.targetSelector.a(2, new AttackEnemies(this, EntityHuman.class, true, bedWarsTeam, vs));
         this.goalSelector.a(6, new PathfinderGoalRandomStroll(this, 0.6D));
         this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
     }
 
-    public IGolem(World world){
+    public IGolem(World world) {
         super(world);
     }
 
     public static LivingEntity spawn(VersionSupport vs, Location loc, ITeam bedWarsTeam, int speed, int health, int despawn) {
-        WorldServer mcWorld = ((CraftWorld)loc.getWorld()).getHandle();
+        WorldServer mcWorld = ((CraftWorld) loc.getWorld()).getHandle();
         IGolem customEnt = new IGolem(mcWorld, bedWarsTeam, vs);
         customEnt.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
-        ((CraftLivingEntity)customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
+        ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
         customEnt.setCustomNameVisible(true);
         customEnt.getAttributeInstance(GenericAttributes.maxHealth).setValue(health);
         customEnt.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(speed);
-        customEnt.setCustomName(IChatBaseComponent.ChatSerializer.a(Language.getDefaultLanguage().m(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME)
-                .replace("{despawn}", String.valueOf(despawn)
-                        .replace("{health}", StringUtils.repeat(Language.getDefaultLanguage().m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH)+" ", 10))
-                        .replace("{TeamColor}", TeamColor.getChatColor(bedWarsTeam.getColor()).toString()))));
         mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
+        customEnt.getBukkitEntity().setCustomName(Language.getDefaultLanguage().m(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME)
+                .replace("{despawn}", String.valueOf(despawn)
+                        .replace("{health}", StringUtils.repeat(Language.getDefaultLanguage().m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH) + " ", 10))
+                        .replace("{TeamColor}", TeamColor.getChatColor(bedWarsTeam.getColor()).toString())));
         return (LivingEntity) customEnt.getBukkitEntity();
     }
 }
