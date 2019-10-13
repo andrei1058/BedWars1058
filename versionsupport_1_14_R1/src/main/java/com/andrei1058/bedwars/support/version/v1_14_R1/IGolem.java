@@ -38,7 +38,7 @@ public class IGolem extends EntityIronGolem {
         this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
     }
 
-    public static LivingEntity spawn(VersionSupport versionSupport, Location loc, ITeam bedWarsTeam, int speed, int health, int despawn) {
+    public static LivingEntity spawn(VersionSupport versionSupport, Location loc, ITeam bedWarsTeam, double speed, double health, int despawn) {
         if (vs == null) vs = versionSupport;
         WorldServer mcWorld = ((CraftWorld) loc.getWorld()).getHandle();
         IGolem customEnt = new IGolem(EntityTypes.IRON_GOLEM, mcWorld, bedWarsTeam);

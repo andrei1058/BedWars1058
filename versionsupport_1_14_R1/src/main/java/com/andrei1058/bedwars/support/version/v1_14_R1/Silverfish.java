@@ -37,7 +37,7 @@ public class Silverfish extends EntitySilverfish {
         if (bedWarsTeam != null) this.targetSelector.a(2, new AttackEnemies(this, true, bedWarsTeam));
     }
 
-    public static LivingEntity spawn(VersionSupport versionSupport, Location loc, ITeam team, int speed, int health, int despawn, int damage) {
+    public static LivingEntity spawn(VersionSupport versionSupport, Location loc, ITeam team, double speed, double health, int despawn, double damage) {
         if (IGolem.vs == null) IGolem.vs = versionSupport;
         WorldServer mcWorld = ((CraftWorld)loc.getWorld()).getHandle();
         Silverfish customEnt = new Silverfish(EntityTypes.SILVERFISH, mcWorld, team);

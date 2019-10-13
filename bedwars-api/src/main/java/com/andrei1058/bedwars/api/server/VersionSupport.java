@@ -224,12 +224,12 @@ public abstract class VersionSupport {
     /**
      * Spawn silverfish for a team
      */
-    public abstract void spawnSilverfish(Location loc, ITeam team, int speed, int health, int despawn, int damage);
+    public abstract void spawnSilverfish(Location loc, ITeam team, double speed, double health, int despawn, double damage);
 
     /**
      * Spawn a iron-golem for a team
      */
-    public abstract void spawnIronGolem(Location loc, ITeam team, int speed, int health, int despawn);
+    public abstract void spawnIronGolem(Location loc, ITeam team, double speed, double health, int despawn);
 
     /**
      * Hide a player

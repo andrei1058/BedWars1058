@@ -48,7 +48,7 @@ public class IGolem extends EntityIronGolem {
         super(world);
     }
 
-    public static LivingEntity spawn(VersionSupport vs, Location loc, ITeam bedWarsTeam, int speed, int health, int despawn) {
+    public static LivingEntity spawn(VersionSupport vs, Location loc, ITeam bedWarsTeam, double speed, double health, int despawn) {
         WorldServer mcWorld = ((CraftWorld) loc.getWorld()).getHandle();
         IGolem customEnt = new IGolem(mcWorld, bedWarsTeam, vs);
         customEnt.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());

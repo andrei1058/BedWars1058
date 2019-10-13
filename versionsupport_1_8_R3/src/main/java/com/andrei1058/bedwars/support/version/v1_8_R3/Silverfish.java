@@ -41,7 +41,7 @@ public class Silverfish extends EntitySilverfish {
     }
 
 
-    public static LivingEntity spawn(VersionSupport vs, Location loc, ITeam team, int speed, int health, int despawn, int damage) {
+    public static LivingEntity spawn(VersionSupport vs, Location loc, ITeam team, double speed, double health, int despawn, double damage) {
         WorldServer mcWorld = ((CraftWorld)loc.getWorld()).getHandle();
         Silverfish customEnt = new Silverfish(mcWorld, team, vs);
         customEnt.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());

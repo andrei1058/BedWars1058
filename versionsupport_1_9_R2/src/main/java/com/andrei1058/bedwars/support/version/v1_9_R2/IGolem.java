@@ -42,7 +42,7 @@ public class IGolem extends EntityIronGolem {
         this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
     }
 
-    public static LivingEntity spawn(VersionSupport vs, Location loc, ITeam bedWarsTeam, int speed, int health, int despawn) {
+    public static LivingEntity spawn(VersionSupport vs, Location loc, ITeam bedWarsTeam, double speed, double health, int despawn) {
         WorldServer mcWorld = ((CraftWorld)loc.getWorld()).getHandle();
         IGolem customEnt = new IGolem(mcWorld, bedWarsTeam, vs);
         customEnt.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
@@ -51,7 +51,7 @@ public class IGolem extends EntityIronGolem {
         customEnt.getAttributeInstance(GenericAttributes.maxHealth).setValue(health);
         customEnt.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(speed);
         customEnt.setCustomName(Language.getDefaultLanguage().m(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME)
-                .replace("{despawn}", String.valueOf(speed)
+                .replace("{despawn}", String.valueOf(despawn)
                         .replace("{health}", StringUtils.repeat(Language.getDefaultLanguage().m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH)+" ", 10))
                         .replace("{TeamColor}", TeamColor.getChatColor(bedWarsTeam.getColor()).toString())));
         mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
