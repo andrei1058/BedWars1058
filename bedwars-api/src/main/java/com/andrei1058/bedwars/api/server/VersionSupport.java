@@ -20,6 +20,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.Team;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class VersionSupport {
 
@@ -32,7 +33,7 @@ public abstract class VersionSupport {
 
     private Effect eggBridge;
 
-    private static HashMap<UUID, Despawnable> despawnables = new HashMap<>();
+    private static ConcurrentHashMap<UUID, Despawnable> despawnables = new ConcurrentHashMap<>();
     private Plugin plugin;
 
     public VersionSupport(Plugin plugin, String versionName) {
@@ -476,7 +477,7 @@ public abstract class VersionSupport {
     /**
      * Get list of entities that are going to despawn based on a timer.
      */
-    public HashMap<UUID, Despawnable> getDespawnablesList() {
+    public ConcurrentHashMap<UUID, Despawnable> getDespawnablesList() {
         return despawnables;
     }
 
