@@ -2,9 +2,11 @@ package com.andrei1058.bedwars.shop.listeners;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -48,7 +50,18 @@ public class SpecialsListener implements Listener {
                 if (i.getType() == Material.valueOf(BedWars.shop.getYml().getString(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_MATERIAL))
                         && nms.itemStackDataCompare(i, (short) BedWars.shop.getYml().getInt(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_DATA))) {
                     e.setCancelled(true);
-                    nms.spawnIronGolem(p.getLocation().add(0, 1, 0), a.getTeam(p), BedWars.shop.getYml().getDouble(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_SPEED),
+                    ITeam team = a.getTeam(p);
+                    if (team== null){
+                        Bukkit.broadcastMessage("TEAM IS NULL");
+                        team = a.getPlayerTeam(p.getName());
+                    }
+                    if (team== null){
+                        team = a.getExTeam(p.getUniqueId());
+                        Bukkit.broadcastMessage("TEAM EX");
+                    }
+                    else Bukkit.broadcastMessage("PLAYER TEAM: " + team.getName());
+
+                    nms.spawnIronGolem(p.getLocation().add(0, 1, 0), team, BedWars.shop.getYml().getDouble(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_SPEED),
                             BedWars.shop.getYml().getDouble(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_HEALTH), BedWars.shop.getInt(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_DESPAWN));
                     if (!nms.isProjectile(i)) {
                         nms.minusAmount(p, i, 1);
