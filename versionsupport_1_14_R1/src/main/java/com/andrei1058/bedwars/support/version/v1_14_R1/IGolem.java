@@ -32,10 +32,10 @@ public class IGolem extends EntityIronGolem {
     @Override
     protected void initPathfinder() {
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
-        this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this, 1.0D, false));
+        this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this, this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue(), true));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this));
-        if (bedWarsTeam != null) this.targetSelector.a(2, new AttackEnemies(this, false, bedWarsTeam));
-        this.goalSelector.a(3, new PathfinderGoalRandomStroll(this, 2));
+        if (bedWarsTeam != null) this.targetSelector.a(2, new AttackEnemies(this, true, bedWarsTeam));
+        this.goalSelector.a(3, new PathfinderGoalRandomStroll(this, this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue()));
         this.goalSelector.a(1, new PathfinderGoalRandomLookaround(this));
     }
 
