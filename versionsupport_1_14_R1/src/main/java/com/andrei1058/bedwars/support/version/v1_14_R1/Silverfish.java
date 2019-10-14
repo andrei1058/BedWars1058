@@ -32,12 +32,12 @@ public class Silverfish extends EntitySilverfish {
     @Override
     protected void initPathfinder() {
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
-        this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this,1.0D, true));
+        this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this,1.0D, false));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this));
         this.goalSelector.a(2, new PathfinderGoalRandomStroll(this, 1.0D));
-        this.goalSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityPlayer.class, false));
-        this.goalSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, IGolem.class, false));
-        this.goalSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, Silverfish.class, false));
+        this.goalSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, true));
+        this.goalSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, IGolem.class, true));
+        this.goalSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, Silverfish.class, true));
     }
 
     public static LivingEntity spawn(VersionSupport versionSupport, Location loc, ITeam team, double speed, double health, int despawn, double damage) {

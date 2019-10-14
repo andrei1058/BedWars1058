@@ -33,13 +33,13 @@ public class IGolem extends EntityIronGolem {
     @Override
     protected void initPathfinder() {
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
-        this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this, 1.0D, true));
+        this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this, 1.0D, false));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this));
         this.goalSelector.a(6, new PathfinderGoalRandomStroll(this, 0.6D));
         this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
-        this.goalSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, CraftPlayer.class, false));
-        this.goalSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, IGolem.class, false));
-        this.goalSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, Silverfish.class, false));
+        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, 5, false, false, null));
+        this.goalSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, IGolem.class, true));
+        this.goalSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, Silverfish.class, true));
     }
 
     public static LivingEntity spawn(VersionSupport versionSupport, Location loc, ITeam bedWarsTeam, double speed, double health, int despawn) {
