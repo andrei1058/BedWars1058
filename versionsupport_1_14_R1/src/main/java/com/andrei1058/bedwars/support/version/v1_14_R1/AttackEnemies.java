@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.support.version.v1_14_R1;
 
 import com.andrei1058.bedwars.api.arena.team.ITeam;
+import com.andrei1058.bedwars.api.entity.Despawnable;
 import net.minecraft.server.v1_14_R1.*;
 import org.bukkit.Bukkit;
 
@@ -26,6 +27,13 @@ public class AttackEnemies extends PathfinderGoalTarget {
     }
 
     public boolean b() {
+        /*for (ITeam t : bedWarsTeam.getArena().getTeams()){
+            if (t==bedWarsTeam) continue;
+
+        }
+        for (Despawnable d : IGolem.vs.getDespawnablesList().values()){
+            if (d.getTeam()==bedWarsTeam) continue;
+        }*/
         Bukkit.broadcastMessage("1");
         EntityLiving entityliving = this.e.getGoalTarget();
         if (entityliving == null) {
@@ -69,7 +77,11 @@ public class AttackEnemies extends PathfinderGoalTarget {
                         // do not hurt mobs with same owner
                     } else if (IGolem.vs.isDespawnable(entityliving.getBukkitEntity())){
                         Bukkit.broadcastMessage("10");
-                        if (IGolem.vs.getDespawnablesList().get(entityliving.getBukkitEntity().getUniqueId()).getTeam() == bedWarsTeam) return false;
+                        if (IGolem.vs.getDespawnablesList().get(entityliving.getUniqueID()).getTeam() == bedWarsTeam){
+                            Bukkit.broadcastMessage("12");
+                            this.e.setGoalTarget(null);
+                            return false;
+                        }
                     }
                     Bukkit.broadcastMessage("11");
                     this.e.setGoalTarget(entityliving, EntityTargetEvent.TargetReason.CLOSEST_ENTITY, true);

@@ -12,6 +12,7 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
@@ -22,7 +23,6 @@ public class IGolem extends EntityIronGolem {
 
     private IGolem(EntityTypes<? extends EntityIronGolem> entitytypes, World world, ITeam bedWarsTeam) {
         super(entitytypes, world);
-        Bukkit.broadcastMessage("TEAM: " + bedWarsTeam.getName());
         if (bedWarsTeam != null) this.targetSelector.a(2, new AttackEnemies(this, true, bedWarsTeam));
     }
 
@@ -35,8 +35,11 @@ public class IGolem extends EntityIronGolem {
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
         this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this, 1.0D, true));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this));
-        this.goalSelector.a(3, new PathfinderGoalRandomStroll(this, 1.0D));
-        this.goalSelector.a(1, new PathfinderGoalRandomLookaround(this));
+        this.goalSelector.a(6, new PathfinderGoalRandomStroll(this, 0.6D));
+        this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
+        this.goalSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, CraftPlayer.class, true));
+        this.goalSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, IGolem.class, true));
+        this.goalSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, Silverfish.class, true));
     }
 
     public static LivingEntity spawn(VersionSupport versionSupport, Location loc, ITeam bedWarsTeam, double speed, double health, int despawn) {

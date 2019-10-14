@@ -10,6 +10,8 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
@@ -17,11 +19,9 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 @SuppressWarnings("ALL")
 public class Silverfish extends EntitySilverfish {
 
-    private ITeam bedWarsTeam;
-
     private Silverfish(EntityTypes<? extends EntitySilverfish> entitytypes, World world, ITeam bedWarsTeam) {
         super(entitytypes, world);
-        this.bedWarsTeam = bedWarsTeam;
+        this.targetSelector.a(2, new AttackEnemies(this, true, bedWarsTeam));
     }
 
     @SuppressWarnings("unchecked")
@@ -32,10 +32,12 @@ public class Silverfish extends EntitySilverfish {
     @Override
     protected void initPathfinder() {
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
-        this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this,1.0D, false));
+        this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this,1.0D, true));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this));
         this.goalSelector.a(2, new PathfinderGoalRandomStroll(this, 1.0D));
-        if (bedWarsTeam != null) this.targetSelector.a(2, new AttackEnemies(this, true, bedWarsTeam));
+        this.goalSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityPlayer.class, true));
+        this.goalSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, IGolem.class, true));
+        this.goalSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, Silverfish.class, true));
     }
 
     public static LivingEntity spawn(VersionSupport versionSupport, Location loc, ITeam team, double speed, double health, int despawn, double damage) {

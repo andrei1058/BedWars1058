@@ -17,6 +17,7 @@ public class AttackEnemies<T extends EntityLiving> extends PathfinderGoalTarget 
     public AttackEnemies(EntityCreature entitycreature, Class<T> oclass, boolean flag, ITeam bedWarsTeam, VersionSupport vs) {
         this(entitycreature, oclass, flag, false);
         this.bedWarsTeam = bedWarsTeam;
+        this.vs = vs;
     }
 
     private boolean isMember(EntityLiving t0) {
