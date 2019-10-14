@@ -13,7 +13,6 @@ import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.VersionSupport;
 import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import net.minecraft.server.v1_8_R3.*;
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -79,23 +78,6 @@ public class v1_8_R3 extends VersionSupport {
     public void spawnIronGolem(Location loc, ITeam bedWarsTeam, double speed, double health, int despawn) {
         new Despawnable(IGolem.spawn(loc, bedWarsTeam, speed, health, despawn), bedWarsTeam, despawn, Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME,
                 PlayerKillEvent.PlayerKillCause.IRON_GOLEM_FINAL_KILL, PlayerKillEvent.PlayerKillCause.IRON_GOLEM);
-    }
-
-    public static LivingEntity spawn(VersionSupport vs, Location loc, ITeam team, int speed, int health, int despawn, int damage) {
-        WorldServer mcWorld = ((CraftWorld) loc.getWorld()).getHandle();
-        Silverfish customEnt = new Silverfish(mcWorld, team, vs);
-        customEnt.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
-        customEnt.getAttributeInstance(GenericAttributes.maxHealth).setValue(health);
-        customEnt.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(speed);
-        customEnt.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(damage);
-        ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
-        customEnt.setCustomName(Language.getDefaultLanguage().m(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME)
-                .replace("{despawn}", String.valueOf(speed)
-                        .replace("{health}", StringUtils.repeat(Language.getDefaultLanguage().m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH) + " ", 10))
-                        .replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString())));
-        customEnt.setCustomNameVisible(true);
-        mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
-        return (LivingEntity) customEnt.getBukkitEntity();
     }
 
     @Override
