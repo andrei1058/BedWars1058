@@ -10,17 +10,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_9_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_9_R2.event.CraftEventFactory;
 import org.bukkit.craftbukkit.v1_9_R2.util.UnsafeList;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import java.lang.reflect.Field;
-import java.util.Random;
 
+@SuppressWarnings("ALL")
 public class Silverfish extends EntitySilverfish {
 
-    public Silverfish(World world, ITeam team, VersionSupport vs) {
+    private ITeam team;
+
+    public Silverfish(World world, ITeam team) {
         super(world);
         try {
             Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
@@ -34,15 +35,30 @@ public class Silverfish extends EntitySilverfish {
         } catch (IllegalAccessException | NoSuchFieldException e1) {
             e1.printStackTrace();
         }
+        this.team = team;
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
-        this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this,1.0D, false));
+        this.goalSelector.a(2, new PathfinderGoalMeleeAttack(this,15D, false));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true));
-        this.targetSelector.a(2, new AttackEnemies<>(this, EntityHuman.class, true, team, vs));
+        this.goalSelector.a(3, new PathfinderGoalRandomStroll(this, 2D));
+        this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, 10, true, false, player -> {
+            return ((EntityHuman)player).isAlive() && !team.wasMember(((EntityHuman)player).getUniqueID()) && !team.getArena().isReSpawning(((EntityHuman)player).getUniqueID())
+                    && !team.getArena().isSpectator(((EntityHuman)player).getUniqueID());
+        }));
+        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget(this, IGolem.class, 10, true, false, golem -> {
+            return ((IGolem)golem).getTeam() != team;
+        }));
+        this.targetSelector.a(4, new PathfinderGoalNearestAttackableTarget(this, Silverfish.class, 10, true, false, sf -> {
+            return ((Silverfish)sf).getTeam() != team;
+        }));
     }
 
-    public static LivingEntity spawn(VersionSupport vs, Location loc, ITeam team, double speed, double health, int despawn, double damage) {
+    public ITeam getTeam() {
+        return team;
+    }
+
+    public static LivingEntity spawn(Location loc, ITeam team, double speed, double health, int despawn, double damage) {
         WorldServer mcWorld = ((CraftWorld)loc.getWorld()).getHandle();
-        Silverfish customEnt = new Silverfish(mcWorld, team, vs);
+        Silverfish customEnt = new Silverfish(mcWorld, team);
         customEnt.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
         customEnt.getAttributeInstance(GenericAttributes.maxHealth).setValue(health);
         customEnt.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(speed);

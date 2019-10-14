@@ -1201,6 +1201,22 @@ public class Arena implements IArena {
         return spectators.contains(p);
     }
 
+    @Override
+    public boolean isSpectator(UUID player) {
+        for (Player p : getSpectators()){
+            if (p.getUniqueId().equals(player)) return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isReSpawning(UUID player) {
+        for (Map.Entry<Player, Integer> p : getRespawn().entrySet()){
+            if (p.getKey().getUniqueId().equals(player)) return true;
+        }
+        return false;
+    }
+
     /**
      * Check if player is respawning.
      */
