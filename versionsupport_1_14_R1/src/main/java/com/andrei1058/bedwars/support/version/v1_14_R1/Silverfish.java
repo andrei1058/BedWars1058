@@ -19,9 +19,12 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 @SuppressWarnings("ALL")
 public class Silverfish extends EntitySilverfish {
 
+    private ITeam team;
+
     private Silverfish(EntityTypes<? extends EntitySilverfish> entitytypes, World world, ITeam bedWarsTeam) {
         super(entitytypes, world);
-        this.targetSelector.a(4, new AttackEnemies(this, true, bedWarsTeam));
+        this.team = bedWarsTeam;
+        //this.targetSelector.a(4, new AttackEnemies(this, true, bedWarsTeam));
     }
 
     @SuppressWarnings("unchecked")
@@ -35,9 +38,20 @@ public class Silverfish extends EntitySilverfish {
         this.goalSelector.a(2, new PathfinderGoalMeleeAttack(this,2D, false));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this));
         this.goalSelector.a(3, new PathfinderGoalRandomStroll(this, 1.0D));
-        this.targetSelector.a(1, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, 18, true, false, null));
-        this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, IGolem.class, 18, true, false, null));
-        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget(this, Silverfish.class, 18, true, false, null));
+        this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, 15, true, false, player -> {
+            //todo finish respawn thing is not ok
+            return ((EntityHuman)player).isAlive() && !team.wasMember(((EntityHuman)player).getUniqueID()) && !team.getArena().getRespawn().containsKey(((EntityHuman)player).getUniqueID());
+        }));
+        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget(this, IGolem.class, 15, true, false, golem -> {
+            return ((IGolem)golem).getTeam() != team;
+        }));
+        this.targetSelector.a(4, new PathfinderGoalNearestAttackableTarget(this, Silverfish.class, 15, true, false, sf -> {
+            return ((Silverfish)sf).getTeam() != team;
+        }));
+    }
+
+    public ITeam getTeam() {
+        return team;
     }
 
     public static LivingEntity spawn(VersionSupport versionSupport, Location loc, ITeam team, double speed, double health, int despawn, double damage) {

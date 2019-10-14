@@ -20,10 +20,12 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 public class IGolem extends EntityIronGolem {
 
     public static VersionSupport vs;
+    private static ITeam team;
 
     private IGolem(EntityTypes<? extends EntityIronGolem> entitytypes, World world, ITeam bedWarsTeam) {
         super(entitytypes, world);
-        if (bedWarsTeam != null) this.targetSelector.a(5, new AttackEnemies(this, true, bedWarsTeam));
+        this.team = bedWarsTeam;
+        //if (bedWarsTeam != null) this.targetSelector.a(5, new AttackEnemies(this, true, bedWarsTeam));
     }
 
     public IGolem(EntityTypes entityTypes, World world) {
@@ -37,9 +39,20 @@ public class IGolem extends EntityIronGolem {
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this));
         this.goalSelector.a(3, new PathfinderGoalRandomStroll(this, 1.0D));
         this.goalSelector.a(4, new PathfinderGoalRandomLookaround(this));
-        this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, 15, true, false, null));
-        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget(this, IGolem.class, 15, true, false, null));
-        this.targetSelector.a(4, new PathfinderGoalNearestAttackableTarget(this, Silverfish.class, 15, true, false, null));
+        this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, 15, true, false, player -> {
+            //todo finish respawn thing is not ok
+            return ((EntityHuman)player).isAlive() && !team.wasMember(((EntityHuman)player).getUniqueID()) && !team.getArena().getRespawn().containsKey(((EntityHuman)player).getUniqueID());
+        }));
+        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget(this, IGolem.class, 15, true, false, golem -> {
+            return ((IGolem)golem).getTeam() != team;
+        }));
+        this.targetSelector.a(4, new PathfinderGoalNearestAttackableTarget(this, Silverfish.class, 15, true, false, sf -> {
+            return ((Silverfish)sf).getTeam() != team;
+        }));
+    }
+
+    public static ITeam getTeam() {
+        return team;
     }
 
     public static LivingEntity spawn(VersionSupport versionSupport, Location loc, ITeam bedWarsTeam, double speed, double health, int despawn) {
