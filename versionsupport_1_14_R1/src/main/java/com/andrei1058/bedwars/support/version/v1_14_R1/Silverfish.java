@@ -21,7 +21,7 @@ public class Silverfish extends EntitySilverfish {
 
     private Silverfish(EntityTypes<? extends EntitySilverfish> entitytypes, World world, ITeam bedWarsTeam) {
         super(entitytypes, world);
-        this.targetSelector.a(2, new AttackEnemies(this, true, bedWarsTeam));
+        this.targetSelector.a(4, new AttackEnemies(this, true, bedWarsTeam));
     }
 
     @SuppressWarnings("unchecked")
@@ -32,12 +32,12 @@ public class Silverfish extends EntitySilverfish {
     @Override
     protected void initPathfinder() {
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
-        this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this,1.0D, false));
+        this.goalSelector.a(2, new PathfinderGoalMeleeAttack(this,1.0D, false));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this));
-        this.goalSelector.a(2, new PathfinderGoalRandomStroll(this, 1.0D));
-        this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, 20, false, false, null));
-        this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, IGolem.class, 20, false, false, null));
-        this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, Silverfish.class, 20, false, false, null));
+        this.goalSelector.a(3, new PathfinderGoalRandomStroll(this, 1.0D));
+        this.targetSelector.a(1, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, 2, true, false, null));
+        this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, IGolem.class, 2, true, false, null));
+        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget(this, Silverfish.class, 2, true, false, null));
     }
 
     public static LivingEntity spawn(VersionSupport versionSupport, Location loc, ITeam team, double speed, double health, int despawn, double damage) {
