@@ -23,6 +23,7 @@ public class Sounds {
     @SuppressWarnings("WeakerAccess")
     public static void saveDefaultSounds() {
         YamlConfiguration yml = sounds.getYml();
+        yml.addDefault(SOUND_GAME_START, nms.gameStart().toString());
         yml.addDefault(SOUNDS_BED_DESTROY, nms.bedDestroy().toString());
         yml.addDefault(SOUNDS_PLAYER_KILL, nms.playerKill().toString());
         yml.addDefault(SOUNDS_INSUFF_MONEY, nms.insufficientMoney().toString());
@@ -35,6 +36,7 @@ public class Sounds {
     @SuppressWarnings("WeakerAccess")
     public static void loadSounds() {
         try {
+            nms.setGameStartSound(sounds.getString(SOUND_GAME_START));
             nms.setBedDestroySound(sounds.getString(SOUNDS_BED_DESTROY));
             nms.setPlayerKillsSound(sounds.getString(SOUNDS_PLAYER_KILL));
             nms.setInsuffMoneySound(sounds.getString(SOUNDS_INSUFF_MONEY));

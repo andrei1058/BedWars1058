@@ -16,6 +16,7 @@ import com.google.common.collect.Sets;
 import net.minecraft.server.v1_11_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_11_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_11_R1.CraftWorld;
@@ -45,6 +46,7 @@ public class v1_11_R1 extends VersionSupport {
     public v1_11_R1(Plugin plugin, String name){
         super(plugin, name);
         try {
+            setGameStartSound("BLOCK_SLIME_FALL");
             setBedDestroySound("ENTITY_ENDERDRAGON_GROWL");
             setPlayerKillsSound("ENTITY_WOLF_HURT");
             setCountdownSound("ENTITY_CHICKEN_EGG");

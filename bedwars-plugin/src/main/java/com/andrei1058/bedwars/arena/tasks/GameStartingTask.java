@@ -206,6 +206,7 @@ public class GameStartingTask implements Runnable, StartingTask {
             for (Player p : new ArrayList<>(bwt.getMembers())) {
                 bwt.firstSpawn(p);
                 p.setHealth(p.getHealth() - 0.0001);
+                p.playSound(p.getLocation(), nms.gameStart(), 1f, 1f);
                 nms.sendTitle(p, getMsg(p, Messages.ARENA_STATUS_START_PLAYER_TITLE), null, 0, 20, 0);
                 for (String tut : getList(p, Messages.ARENA_STATUS_START_PLAYER_TUTORIAL)) {
                     p.sendMessage(tut);

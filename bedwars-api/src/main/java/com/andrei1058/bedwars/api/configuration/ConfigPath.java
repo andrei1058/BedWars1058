@@ -125,7 +125,7 @@ public class ConfigPath {
     public static final String ARENA_ALLOW_MAP_BREAK = "allow-map-break";
     public static final String ARENA_GAME_RULES = "game-rules";
 
-
+    public static final String SOUND_GAME_START = "game-start";
     public static final String SOUNDS_BED_DESTROY = "bed-destroy";
     public static final String SOUNDS_PLAYER_KILL = "player-kill";
     public static final String SOUNDS_INSUFF_MONEY = "insufficient-money";

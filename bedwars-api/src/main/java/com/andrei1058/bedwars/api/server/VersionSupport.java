@@ -29,7 +29,8 @@ public abstract class VersionSupport {
             playerKill,
             countDown,
             bought,
-            insuffMoney;
+            insuffMoney,
+            gameStart;
 
     private Effect eggBridge;
 
@@ -43,6 +44,7 @@ public abstract class VersionSupport {
 
     protected void loadDefaultSounds() {
         try {
+            setGameStartSound("BLOCK_SLIME_BLOCK_FALL");
             setBedDestroySound("ENTITY_ENDER_DRAGON_GROWL");
             setPlayerKillsSound("ENTITY_WOLF_HURT");
             setCountdownSound("ENTITY_CHICKEN_EGG");
@@ -162,6 +164,24 @@ public abstract class VersionSupport {
     public void setPlayerKillsSound(String sound) throws InvalidSoundException {
         try {
             this.playerKill = Sound.valueOf(sound);
+        } catch (Exception e) {
+            throw new InvalidSoundException(sound);
+        }
+    }
+
+    /**
+     * Get game start sound
+     */
+    public Sound gameStart() {
+        return gameStart;
+    }
+
+    /**
+     * Set the game start sound
+     */
+    public void setGameStartSound(String sound) throws InvalidSoundException {
+        try {
+            this.gameStart = Sound.valueOf(sound);
         } catch (Exception e) {
             throw new InvalidSoundException(sound);
         }

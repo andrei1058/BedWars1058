@@ -48,6 +48,7 @@ public class v1_12_R1 extends VersionSupport {
     public v1_12_R1(Plugin plugin, String name) {
         super(plugin, name);
         try {
+            setGameStartSound("BLOCK_SLIME_FALL");
             setBedDestroySound("ENTITY_ENDERDRAGON_GROWL");
             setPlayerKillsSound("ENTITY_WOLF_HURT");
             setCountdownSound("ENTITY_CHICKEN_EGG");
