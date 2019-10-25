@@ -323,8 +323,8 @@ public class BedWarsTeam implements ITeam {
         p.setHealth(20);
 
         // un-vanish from respawn
-        nms.showPlayer(p, arena.getPlayers());
-        nms.showPlayer(p, arena.getSpectators());
+        arena.getPlayers().forEach(pl -> nms.showPlayer(p, pl));
+        arena.getSpectators().forEach(pl -> nms.showPlayer(p, pl));
 
         nms.sendTitle(p, getMsg(p, Messages.PLAYER_DIE_RESPAWNED_TITLE), "", 0, 20, 0);
         ShopCache sc = ShopCache.getShopCache(p.getUniqueId());

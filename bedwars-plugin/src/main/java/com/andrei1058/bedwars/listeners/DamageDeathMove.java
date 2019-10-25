@@ -419,7 +419,8 @@ public class DamageDeathMove implements Listener {
             } else {
                 //respawn session
                 e.getPlayer().getInventory().clear();
-                //Bukkit.getScheduler().runTaskLater(plugin, () -> nms.hidePlayer(e.getPlayer(), a.getPlayers()), 5L);
+                Bukkit.getScheduler().runTaskLater(plugin, () -> a.getPlayers().forEach(p -> nms.hidePlayer(e.getPlayer(), p)), 5L);
+                Bukkit.getScheduler().runTaskLater(plugin, () -> a.getSpectators().forEach(p -> nms.hidePlayer(e.getPlayer(), p)), 5L);
                 nms.setCollide(e.getPlayer(), a, false);
                 e.getPlayer().setAllowFlight(true);
                 e.getPlayer().setFlying(true);
