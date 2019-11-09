@@ -1,5 +1,22 @@
 package com.andrei1058.bedwars.api.arena;
 
 public enum NextEvent {
-    DIAMOND_GENERATOR_TIER_II, DIAMOND_GENERATOR_TIER_III, EMERALD_GENERATOR_TIER_II, EMERALD_GENERATOR_TIER_III, BEDS_DESTROY, ENDER_DRAGON, GAME_END;
+
+    DIAMOND_GENERATOR_TIER_II("next-event.diamond-II"),
+    DIAMOND_GENERATOR_TIER_III("next-event.diamond-III"),
+    EMERALD_GENERATOR_TIER_II("next-event.emerald-II"),
+    EMERALD_GENERATOR_TIER_III("next-event.emerald-III"),
+    BEDS_DESTROY("next-event.beds-destroy"),
+    ENDER_DRAGON("next-event.dragons-spawn"),
+    GAME_END("next-event.game-end");
+
+    private String soundPath;
+
+    NextEvent(String soundPath){
+        this.soundPath = soundPath;
+    }
+
+    public String getSoundPath() {
+        return soundPath;
+    }
 }

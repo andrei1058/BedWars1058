@@ -26,6 +26,7 @@ import com.andrei1058.bedwars.api.tasks.PlayingTask;
 import com.andrei1058.bedwars.api.tasks.RestartingTask;
 import com.andrei1058.bedwars.api.tasks.StartingTask;
 import com.andrei1058.bedwars.configuration.ArenaConfig;
+import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.levels.internal.InternalLevel;
 import com.andrei1058.bedwars.levels.internal.PerMinuteTask;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
@@ -1582,11 +1583,10 @@ public class Arena implements IArena {
      * Set next event for the arena.
      */
     public void setNextEvent(NextEvent nextEvent) {
-        for (Player p : getPlayers()) {
-            p.getWorld().playSound(p.getLocation(), nms.bedDestroy(), 1f, 1f);
-        }
-        for (Player p : getSpectators()) {
-            p.getWorld().playSound(p.getLocation(), nms.bedDestroy(), 1f, 1f);
+        if (this.nextEvent != null){
+            Sound sound = Sounds.getSound(this.nextEvent.getSoundPath());
+            Sounds.playSound(sound, getPlayers());
+            Sounds.playSound(sound, getSpectators());
         }
         Bukkit.getPluginManager().callEvent(new NextEventChangeEvent(this, nextEvent, this.nextEvent));
         this.nextEvent = nextEvent;
