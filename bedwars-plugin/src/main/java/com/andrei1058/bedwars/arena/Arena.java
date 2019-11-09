@@ -1126,9 +1126,8 @@ public class Arena implements IArena {
      * Change game status starting tasks.
      */
     public void changeStatus(GameState status) {
-        GameState old = status;
         this.status = status;
-        Bukkit.getPluginManager().callEvent(new GameStateChangeEvent(this, status, old));
+        Bukkit.getPluginManager().callEvent(new GameStateChangeEvent(this, status, status));
         refreshSigns();
 
         //Stop active tasks to prevent issues

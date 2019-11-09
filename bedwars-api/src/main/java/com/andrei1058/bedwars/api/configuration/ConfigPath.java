@@ -126,11 +126,12 @@ public class ConfigPath {
     public static final String ARENA_GAME_RULES = "game-rules";
 
     public static final String SOUND_GAME_START = "game-start";
+    public static final String SOUNDS_COUNTDOWN_TICK = "game-countdown";
     public static final String SOUNDS_BED_DESTROY = "bed-destroy";
-    public static final String SOUNDS_PLAYER_KILL = "player-kill";
-    public static final String SOUNDS_INSUFF_MONEY = "insufficient-money";
-    public static final String SOUNDS_BOUGHT = "bought";
-    public static final String SOUNDS_COUNTDOWN_TICK = "countdown";
+    public static final String SOUNDS_PLAYER_KILL = "kill-player-regular";
+    public static final String SOUNDS_PLAYER_KILL_FINAL = "kill-player-final";
+    public static final String SOUNDS_INSUFF_MONEY = "shop-insufficient-money";
+    public static final String SOUNDS_BOUGHT = "shop-bought";
 
     public static final String SIGNS_STATUS_BLOCK_WAITING_MATERIAL = "status-block.waiting.material";
     public static final String SIGNS_STATUS_BLOCK_WAITING_DATA = "status-block.waiting.data";
