@@ -21,7 +21,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="bedwars-api" scope="PROVIDED" />
-    <orderEntry type="module" module-name="versionsupport-common" scope="PROVIDED" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.andrei1058.bedwars:versionsupport-common:19.10.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.spigotmc:spigot-api:1.13-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: commons-lang:commons-lang:2.6" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.googlecode.json-simple:json-simple:1.1.1" level="project" />
