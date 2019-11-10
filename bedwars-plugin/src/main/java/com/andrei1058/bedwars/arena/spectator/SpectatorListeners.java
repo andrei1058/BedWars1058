@@ -139,8 +139,7 @@ public class SpectatorListeners implements Listener {
             }
             p.setGameMode(GameMode.SPECTATOR);
             p.getInventory().setHeldItemSlot(5);
-            Bukkit.getScheduler().runTaskLater(plugin, ()-> p.setSpectatorTarget(target), 5L);
-            e.getPlayer().sendMessage("target set ffs");
+            p.setSpectatorTarget(target);
             SpectatorFirstPersonEnterEvent event = new SpectatorFirstPersonEnterEvent(p, target, a, getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_TITLE).replace("{player}", target.getDisplayName()), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_SUBTITLE));
             Bukkit.getPluginManager().callEvent(event);
             nms.sendTitle(p, event.getTitle(), event.getSubtitle(), 0, 30, 0);
@@ -162,7 +161,7 @@ public class SpectatorListeners implements Listener {
         Player p = e.getPlayer();
         IArena a = Arena.getArenaByPlayer(p);
         if (a == null) return;
-        if (p.getSpectatorTarget() != null) {
+        if (a.isSpectator(p) && p.getSpectatorTarget() != null) {
             p.setGameMode(GameMode.ADVENTURE);
             p.setAllowFlight(true);
             p.setFlying(true);
@@ -173,19 +172,21 @@ public class SpectatorListeners implements Listener {
     }
 
     @EventHandler
-    // Prevent gamemode 3 menu
+    // Prevent game-mode 3 menu
     public void onTeleport(PlayerTeleportEvent e) {
-        e.getPlayer().sendMessage("SpectatorListeners#onTeleport is the cause.");
-        if (!Arena.isInArena(e.getPlayer())) return;
-        if (e.getPlayer().getSpectatorTarget() != null) {
-            Player p = e.getPlayer();
-            e.setCancelled(true);
-            p.setGameMode(GameMode.ADVENTURE);
-            p.setAllowFlight(true);
-            p.setFlying(true);
-            SpectatorFirstPersonLeaveEvent event = new SpectatorFirstPersonLeaveEvent(p, Arena.getArenaByPlayer(p), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE));
-            Bukkit.getPluginManager().callEvent(event);
-            nms.sendTitle(p, event.getTitle(), event.getSubtitle(), 0, 30, 0);
+        IArena a = Arena.getArenaByPlayer(e.getPlayer());
+        if (a == null) return;
+        if (a.isSpectator(e.getPlayer())){
+            if (!(e.getPlayer().getSpectatorTarget() == null && e.getTo().getWorld().equals(e.getPlayer().getWorld())) && e.getCause() == PlayerTeleportEvent.TeleportCause.SPECTATE) {
+                Player p = e.getPlayer();
+                e.setCancelled(true);
+                p.setGameMode(GameMode.ADVENTURE);
+                p.setAllowFlight(true);
+                p.setFlying(true);
+                SpectatorFirstPersonLeaveEvent event = new SpectatorFirstPersonLeaveEvent(p, Arena.getArenaByPlayer(p), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE));
+                Bukkit.getPluginManager().callEvent(event);
+                nms.sendTitle(p, event.getTitle(), event.getSubtitle(), 0, 30, 0);
+            }
         }
     }
 

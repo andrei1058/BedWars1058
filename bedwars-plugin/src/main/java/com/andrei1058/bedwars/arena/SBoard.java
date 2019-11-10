@@ -156,7 +156,7 @@ public class SBoard {
                         .replace("{on}", String.valueOf(arena.getPlayers().size())).replace("{max}", String.valueOf(arena.getMaxPlayers()))
                         .replace("{time}", time).replace("{player}", p.getName())
                         .replace("{money}", String.valueOf(getEconomy().getMoney(p))).replace("{date}", new SimpleDateFormat(getMsg(getP(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis())))
-                        .replace("{group}", arena.getGroup()));
+                        .replace("{group}", arena.getGroup()).replace("{deaths}", String.valueOf(getArena().getPlayerDeaths(p, false))));
             } else if (arena.getStatus() == GameState.playing) {
                 String[] ne = getNextEvent();
                 for (ITeam team : arena.getTeams()) {
@@ -169,7 +169,7 @@ public class SBoard {
                         .replace("{player}", p.getName()).replace("{date}", new SimpleDateFormat(getMsg(getP(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis())))
                         .replace("{kills}", String.valueOf(arena.getPlayerKills(getP(), false))).replace("{finalKills}", String.valueOf(arena.getPlayerKills(getP(), true)))
                         .replace("{beds}", String.valueOf(arena.getPlayerBedsDestroyed(getP()))).replace("{time}", ne[1])
-                        .replace("{nextEvent}", ne[0]).replace("{money}", String.valueOf(getEconomy().getMoney(p))));
+                        .replace("{nextEvent}", ne[0]).replace("{money}", String.valueOf(getEconomy().getMoney(p))).replace("{deaths}", String.valueOf(getArena().getPlayerDeaths(p, false))));
             }
         }
     }
