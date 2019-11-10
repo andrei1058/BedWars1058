@@ -326,7 +326,6 @@ public class BedWarsTeam implements ITeam {
             arena.getSpectators().forEach(pl -> nms.showPlayer(p, pl));
 
             arena.getPlayers().forEach(pl -> nms.showPlayer(pl, p));
-            arena.getSpectators().forEach(pl -> nms.showPlayer(pl, p));
         }, 20L);
 
         nms.sendTitle(p, getMsg(p, Messages.PLAYER_DIE_RESPAWNED_TITLE), "", 0, 20, 0);
@@ -400,6 +399,7 @@ public class BedWarsTeam implements ITeam {
         if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_RESPAWN_PACKETS)) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> nms.invisibilityFix(p, getArena()), 12L);
             Bukkit.getScheduler().runTaskLater(plugin, () -> nms.invisibilityFix(p, getArena()), 30L);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> arena.getPlayers().forEach(pl -> nms.showPlayer(pl, p)), 25L);
         }
     }
 
