@@ -327,7 +327,7 @@ public class BedWarsTeam implements ITeam {
 
             arena.getPlayers().forEach(pl -> nms.showPlayer(pl, p));
             arena.getSpectators().forEach(pl -> nms.showPlayer(pl, p));
-        }, 15L);
+        }, 20L);
 
         nms.sendTitle(p, getMsg(p, Messages.PLAYER_DIE_RESPAWNED_TITLE), "", 0, 20, 0);
         ShopCache sc = ShopCache.getShopCache(p.getUniqueId());
