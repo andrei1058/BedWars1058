@@ -180,13 +180,10 @@ public class GamePlayingTask implements Runnable, PlayingTask {
             for (Map.Entry<Player, Integer> e : getArena().getRespawn().entrySet()) {
                 if (e.getValue() == 0) {
                     IArena a = Arena.getArenaByPlayer(e.getKey());
-                    if (a == null){
-                        getArena().getRespawn().remove(e.getKey());
-                        continue;
-                    }
+                    getArena().getRespawn().remove(e.getKey());
+                    if (a == null) continue;
                     ITeam t = a.getTeam(e.getKey());
                     t.respawnMember(e.getKey());
-                    getArena().getRespawn().remove(e.getKey());
                 } else {
                     nms.sendTitle(e.getKey(), getMsg(e.getKey(), Messages.PLAYER_DIE_RESPAWN_TITLE).replace("{time}",
                             String.valueOf(e.getValue())), getMsg(e.getKey(), Messages.PLAYER_DIE_RESPAWN_SUBTITLE).replace("{time}",

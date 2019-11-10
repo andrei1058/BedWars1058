@@ -320,14 +320,6 @@ public class BedWarsTeam implements ITeam {
         p.setFlying(false);
         p.setHealth(20);
 
-        // un-vanish from respawn
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            arena.getPlayers().forEach(pl -> nms.showPlayer(p, pl));
-            arena.getSpectators().forEach(pl -> nms.showPlayer(p, pl));
-
-            arena.getPlayers().forEach(pl -> nms.showPlayer(pl, p));
-        }, 17L);
-
         nms.sendTitle(p, getMsg(p, Messages.PLAYER_DIE_RESPAWNED_TITLE), "", 0, 20, 0);
         ShopCache sc = ShopCache.getShopCache(p.getUniqueId());
         if (sc != null) {
@@ -401,6 +393,23 @@ public class BedWarsTeam implements ITeam {
             Bukkit.getScheduler().runTaskLater(plugin, () -> nms.invisibilityFix(p, getArena()), 30L);
             Bukkit.getScheduler().runTaskLater(plugin, () -> arena.getPlayers().forEach(pl -> nms.showPlayer(pl, p)), 25L);
         }*/
+
+        // un-vanish from respawn
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            arena.getPlayers().forEach(pl -> nms.showPlayer(p, pl));
+            arena.getSpectators().forEach(pl -> nms.showPlayer(p, pl));
+
+            arena.getPlayers().forEach(pl -> nms.showPlayer(pl, p));
+        }, 17L);
+
+
+        // un-vanish from respawn
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            arena.getPlayers().forEach(pl -> nms.showPlayer(p, pl));
+            arena.getSpectators().forEach(pl -> nms.showPlayer(p, pl));
+
+            arena.getPlayers().forEach(pl -> nms.showPlayer(pl, p));
+        }, 20*5L);
     }
 
     /**
