@@ -180,7 +180,10 @@ public class GamePlayingTask implements Runnable, PlayingTask {
             for (Map.Entry<Player, Integer> e : getArena().getRespawn().entrySet()) {
                 if (e.getValue() == 0) {
                     IArena a = Arena.getArenaByPlayer(e.getKey());
-                    if (a == null) continue;
+                    if (a == null){
+                        getArena().getRespawn().remove(e.getKey());
+                        continue;
+                    }
                     ITeam t = a.getTeam(e.getKey());
                     t.respawnMember(e.getKey());
                     getArena().getRespawn().remove(e.getKey());

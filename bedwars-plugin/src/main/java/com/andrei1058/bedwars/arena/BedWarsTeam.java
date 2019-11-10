@@ -324,7 +324,7 @@ public class BedWarsTeam implements ITeam {
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             arena.getPlayers().forEach(pl -> nms.showPlayer(p, pl));
             arena.getSpectators().forEach(pl -> nms.showPlayer(p, pl));
-        }, 10L);
+        }, 20L);
 
         nms.sendTitle(p, getMsg(p, Messages.PLAYER_DIE_RESPAWNED_TITLE), "", 0, 20, 0);
         ShopCache sc = ShopCache.getShopCache(p.getUniqueId());
@@ -394,8 +394,8 @@ public class BedWarsTeam implements ITeam {
             //
         }, 5L);
 
-        if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_RESPAWN_PACKETS))
-            Bukkit.getScheduler().runTaskLater(plugin, () -> nms.invisibilityFix(p, getArena()), 12L);
+        //if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_RESPAWN_PACKETS))
+        //    Bukkit.getScheduler().runTaskLater(plugin, () -> nms.invisibilityFix(p, getArena()), 12L);
     }
 
     /**
