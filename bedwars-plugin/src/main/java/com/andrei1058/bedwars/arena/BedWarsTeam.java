@@ -324,7 +324,10 @@ public class BedWarsTeam implements ITeam {
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             arena.getPlayers().forEach(pl -> nms.showPlayer(p, pl));
             arena.getSpectators().forEach(pl -> nms.showPlayer(p, pl));
-        }, 20L);
+
+            arena.getPlayers().forEach(pl -> nms.showPlayer(pl, p));
+            arena.getSpectators().forEach(pl -> nms.showPlayer(pl, p));
+        }, 15L);
 
         nms.sendTitle(p, getMsg(p, Messages.PLAYER_DIE_RESPAWNED_TITLE), "", 0, 20, 0);
         ShopCache sc = ShopCache.getShopCache(p.getUniqueId());
