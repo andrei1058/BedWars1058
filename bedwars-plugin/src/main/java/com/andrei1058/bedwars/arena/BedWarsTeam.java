@@ -12,10 +12,7 @@ import com.andrei1058.bedwars.api.events.player.PlayerReSpawnEvent;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.region.Cuboid;
 import com.andrei1058.bedwars.shop.ShopCache;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -133,6 +130,7 @@ public class BedWarsTeam implements ITeam {
      */
     public void firstSpawn(Player p) {
         p.teleport(spawn, PlayerTeleportEvent.TeleportCause.PLUGIN);
+        p.setGameMode(GameMode.SURVIVAL);
         sendDefaultInventory(p, true);
         Bukkit.getPluginManager().callEvent(new PlayerFirstSpawnEvent(p, getArena(), this));
     }
