@@ -50,6 +50,7 @@ public class SBoard {
             this.placeholders.add("{kills}");
             this.placeholders.add("{finalKills}");
             this.placeholders.add("{beds}");
+            this.placeholders.add("{deaths}");
         } else {
             placeholders = new ArrayList<>(placeholders);
             this.placeholders.add("{progress}");
@@ -232,7 +233,7 @@ public class SBoard {
                     setContent(e.getKey(), text.replace("{on}", String.valueOf(arena.getPlayers().size())).replace("{max}", String.valueOf(arena.getMaxPlayers()))
                             .replace("{date}", date).replace("{kills}", kills).replace("{finalKills}", finalKills).replace("{beds}", beds)
                             .replace("{nextEvent}", ne[0])
-                            .replace("{time}", ne[1]));
+                            .replace("{time}", ne[1]).replace("{deaths}", String.valueOf(getArena().getPlayerDeaths(p, false))));
                 }
             }
         }
