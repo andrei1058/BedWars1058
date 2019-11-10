@@ -27,6 +27,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 
 import static com.andrei1058.bedwars.BedWars.nms;
+import static com.andrei1058.bedwars.BedWars.plugin;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class SpectatorListeners implements Listener {
@@ -138,7 +139,8 @@ public class SpectatorListeners implements Listener {
             }
             p.setGameMode(GameMode.SPECTATOR);
             p.getInventory().setHeldItemSlot(5);
-            p.setSpectatorTarget(target);
+            Bukkit.getScheduler().runTaskLater(plugin, ()-> p.setSpectatorTarget(target), 5L);
+            e.getPlayer().sendMessage("target set ffs");
             SpectatorFirstPersonEnterEvent event = new SpectatorFirstPersonEnterEvent(p, target, a, getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_TITLE).replace("{player}", target.getDisplayName()), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_SUBTITLE));
             Bukkit.getPluginManager().callEvent(event);
             nms.sendTitle(p, event.getTitle(), event.getSubtitle(), 0, 30, 0);
@@ -173,6 +175,7 @@ public class SpectatorListeners implements Listener {
     @EventHandler
     // Prevent gamemode 3 menu
     public void onTeleport(PlayerTeleportEvent e) {
+        e.getPlayer().sendMessage("SpectatorListeners#onTeleport is the cause.");
         if (!Arena.isInArena(e.getPlayer())) return;
         if (e.getPlayer().getSpectatorTarget() != null) {
             Player p = e.getPlayer();
