@@ -9,6 +9,7 @@ import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.configuration.Permissions;
+import com.andrei1058.bedwars.configuration.Sounds;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -153,6 +154,7 @@ public class JoinLeaveTeleport implements Listener {
                     a.addPlayer(p, false);
                 } else {
                     a.addSpectator(p, false, null);
+                    Sounds.playSound("spectate-allowed", p);
                 }
             }
         } else if (getServerType() == ServerType.MULTIARENA) {

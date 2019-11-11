@@ -7,6 +7,7 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.ArenaGUI;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.configuration.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -47,10 +48,11 @@ public class ArenaSelectorListener implements Listener {
                         p.sendMessage(Language.getMsg(p, Messages.ARENA_JOIN_DENIED_SELECTOR));
                     }
                 } else if (e.getClick() == ClickType.RIGHT) {
-                    if (a.getStatus() == GameState.playing) {
-                        a.addSpectator(p, false, null);
+                    if (a.getStatus() == GameState.playing && a.addSpectator(p, false, null)) {
+                        Sounds.playSound("spectate-allowed", p);
                     } else {
                         p.sendMessage(Language.getMsg(p, Messages.ARENA_SPECTATE_DENIED_SELECTOR));
+                        Sounds.playSound("spectate-denied", p);
                     }
                 }
 

@@ -32,6 +32,8 @@ public class Sounds {
         yml.addDefault("game-end", BedWars.getForCurrentVersion("AMBIENCE_THUNDER", "ENTITY_LIGHTNING_THUNDER", "ITEM_TRIDENT_THUNDER"));
         yml.addDefault("rejoin-denied", BedWars.getForCurrentVersion("VILLAGER_NO","ENTITY_VILLAGER_NO","ENTITY_VILLAGER_NO"));
         yml.addDefault("rejoin-allowed", BedWars.getForCurrentVersion("SLIME_WALK","ENTITY_SLIME_JUMP","ENTITY_SLIME_JUMP"));
+        yml.addDefault("spectate-denied", BedWars.getForCurrentVersion("VILLAGER_NO","ENTITY_VILLAGER_NO","ENTITY_VILLAGER_NO"));
+        yml.addDefault("spectate-allowed", BedWars.getForCurrentVersion("SLIME_WALK","ENTITY_SLIME_JUMP","ENTITY_SLIME_JUMP"));
         yml.addDefault(SOUNDS_COUNTDOWN_TICK, nms.countdownTick().toString());
         yml.addDefault(SOUNDS_BED_DESTROY, nms.bedDestroy().toString());
         yml.addDefault(SOUNDS_PLAYER_KILL, nms.playerKill().toString());
