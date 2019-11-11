@@ -380,6 +380,8 @@ public class BedWarsTeam implements ITeam {
         Bukkit.getPluginManager().callEvent(new PlayerReSpawnEvent(p, getArena(), this));
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            nms.invisibilityFix(p, getArena());
+
             // #274
             if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS)) {
                 for (Player on : getArena().getShowTime().keySet()) {
@@ -387,7 +389,7 @@ public class BedWarsTeam implements ITeam {
                 }
             }
             //
-        }, 5L);
+        }, 10L);
 
         /*if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_RESPAWN_PACKETS)) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> nms.invisibilityFix(p, getArena()), 12L);

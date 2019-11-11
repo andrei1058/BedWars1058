@@ -599,11 +599,11 @@ public class v1_8_R3 extends VersionSupport {
             if (pl.equals(player)) continue;
             if (arena.getRespawn().containsKey(pl)) continue;
             if (arena.getShowTime().containsKey(pl)) continue;
-            if (pl.getLocation().distanceSquared(player.getLocation()) <= renderDistance) {
+            //if (pl.getLocation().distanceSquared(player.getLocation()) <= renderDistance) {
                 pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer) pl).getHandle()));
                 pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer) pl).getHandle()));
                 showArmor(pl, player);
-            }
+            //}
         }
     }
 
