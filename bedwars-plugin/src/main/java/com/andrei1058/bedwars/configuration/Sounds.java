@@ -29,7 +29,9 @@ public class Sounds {
     public static void saveDefaultSounds() {
         YamlConfiguration yml = sounds.getYml();
         yml.addDefault(SOUND_GAME_START, nms.gameStart().toString());
-        yml.addDefault("game-end", BedWars.getForCurrentVersion("AMBIENCE_THUNDER", "AMBIENCE_THUNDER", "ITEM_TRIDENT_THUNDER"));
+        yml.addDefault("game-end", BedWars.getForCurrentVersion("AMBIENCE_THUNDER", "ENTITY_LIGHTNING_THUNDER", "ITEM_TRIDENT_THUNDER"));
+        yml.addDefault("rejoin-denied", BedWars.getForCurrentVersion("VILLAGER_NO","ENTITY_VILLAGER_NO","ENTITY_VILLAGER_NO"));
+        yml.addDefault("rejoin-allowed", BedWars.getForCurrentVersion("SLIME_WALK","ENTITY_SLIME_JUMP","ENTITY_SLIME_JUMP"));
         yml.addDefault(SOUNDS_COUNTDOWN_TICK, nms.countdownTick().toString());
         yml.addDefault(SOUNDS_BED_DESTROY, nms.bedDestroy().toString());
         yml.addDefault(SOUNDS_PLAYER_KILL, nms.playerKill().toString());
@@ -37,11 +39,11 @@ public class Sounds {
         yml.addDefault(SOUNDS_BOUGHT, nms.bought().toString());
 
         yml.addDefault(NextEvent.BEDS_DESTROY.getSoundPath(), nms.bedDestroy().toString());
-        yml.addDefault(NextEvent.DIAMOND_GENERATOR_TIER_II.getSoundPath(), BedWars.getForCurrentVersion("LEVEL_UP", "LEVEL_UP", "ENTITY_PLAYER_LEVELUP"));
-        yml.addDefault(NextEvent.DIAMOND_GENERATOR_TIER_III.getSoundPath(), BedWars.getForCurrentVersion("LEVEL_UP", "LEVEL_UP", "ENTITY_PLAYER_LEVELUP"));
-        yml.addDefault(NextEvent.EMERALD_GENERATOR_TIER_II.getSoundPath(), BedWars.getForCurrentVersion("GHAST_MOAN", "GHAST_MOAN", "ENTITY_GHAST_WARN"));
-        yml.addDefault(NextEvent.EMERALD_GENERATOR_TIER_III.getSoundPath(), BedWars.getForCurrentVersion("GHAST_MOAN", "GHAST_MOAN", "ENTITY_GHAST_WARN"));
-        yml.addDefault(NextEvent.ENDER_DRAGON.getSoundPath(), BedWars.getForCurrentVersion("ENDERDRAGON_WINGS", "ENDERDRAGON_WINGS", "ENTITY_ENDER_DRAGON_FLAP"));
+        yml.addDefault(NextEvent.DIAMOND_GENERATOR_TIER_II.getSoundPath(), BedWars.getForCurrentVersion("LEVEL_UP", "ENTITY_PLAYER_LEVELUP", "ENTITY_PLAYER_LEVELUP"));
+        yml.addDefault(NextEvent.DIAMOND_GENERATOR_TIER_III.getSoundPath(), BedWars.getForCurrentVersion("LEVEL_UP", "ENTITY_PLAYER_LEVELUP", "ENTITY_PLAYER_LEVELUP"));
+        yml.addDefault(NextEvent.EMERALD_GENERATOR_TIER_II.getSoundPath(), BedWars.getForCurrentVersion("GHAST_MOAN", "ENTITY_GHAST_WARN", "ENTITY_GHAST_WARN"));
+        yml.addDefault(NextEvent.EMERALD_GENERATOR_TIER_III.getSoundPath(), BedWars.getForCurrentVersion("GHAST_MOAN", "ENTITY_GHAST_WARN", "ENTITY_GHAST_WARN"));
+        yml.addDefault(NextEvent.ENDER_DRAGON.getSoundPath(), BedWars.getForCurrentVersion("ENDERDRAGON_WINGS", "ENTITY_ENDERDRAGON_FLAP", "ENTITY_ENDER_DRAGON_FLAP"));
 
         yml.options().copyDefaults(true);
 
