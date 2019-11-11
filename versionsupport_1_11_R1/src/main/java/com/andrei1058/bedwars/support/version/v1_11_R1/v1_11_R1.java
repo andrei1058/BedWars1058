@@ -589,16 +589,22 @@ public class v1_11_R1 extends VersionSupport {
 
     @Override
     public void invisibilityFix(Player player, IArena arena) {
-        EntityPlayer pc = ((CraftPlayer) player).getHandle();
 
-        for (Player pl : arena.getPlayers()){
+        EntityPlayer pc = ((CraftPlayer) player).getHandle(), pc2;
+
+        for (Player pl : arena.getPlayers()) {
             if (pl.equals(player)) continue;
             if (arena.getRespawn().containsKey(pl)) continue;
             if (arena.getShowTime().containsKey(pl)) continue;
-            if (pl.getLocation().distanceSquared(player.getLocation()) <= renderDistance) {
-                pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer) pl).getHandle()));
-                pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer) pl).getHandle()));
+            if (pl.getLocation().distance(player.getLocation()) <= renderDistance) {
+                pc2 = ((CraftPlayer) pl).getHandle();
+                pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(pc2));
+                pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, pc2));
                 showArmor(pl, player);
+
+                pc2.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(pc));
+                pc2.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, pc));
+                showArmor(player, pl);
             }
         }
     }
