@@ -49,7 +49,7 @@ public class v1_13_R2 extends VersionSupport {
 
     public v1_13_R2(Plugin plugin, String name){
         super(plugin, name);
-        loadDefaultSounds();
+        loadDefaultEffects();
     }
 
     @Override
@@ -614,6 +614,7 @@ public class v1_13_R2 extends VersionSupport {
 
     @Override
     public String getMainLevel() {
+        //noinspection deprecation
         return ((DedicatedServer) MinecraftServer.getServer()).propertyManager.properties.getProperty("level-name");
     }
 

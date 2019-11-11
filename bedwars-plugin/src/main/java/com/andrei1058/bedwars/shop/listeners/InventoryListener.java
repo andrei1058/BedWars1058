@@ -1,5 +1,7 @@
 package com.andrei1058.bedwars.shop.listeners;
 
+import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.shop.ShopManager;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.shop.main.CategoryContent;
@@ -26,10 +28,17 @@ public class InventoryListener implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         if (e.isCancelled()) return;
+        if (!(e.getWhoClicked() instanceof Player)) return;
+        IArena a = Arena.getArenaByPlayer((Player) e.getWhoClicked());
+        if (a == null) return;
+        if (a.isSpectator((Player) e.getWhoClicked())) return;
+
         ShopCache shopCache = ShopCache.getShopCache(e.getWhoClicked().getUniqueId());
         PlayerQuickBuyCache cache = PlayerQuickBuyCache.getQuickBuyCache(e.getWhoClicked().getUniqueId());
+
         if (cache == null) return;
         if (shopCache == null) return;
+
         if (ShopIndex.getIndexViewers().contains(e.getWhoClicked().getUniqueId())) {
             e.setCancelled(true);
             for (ShopCategory sc : ShopManager.getShop().getCategoryList()) {
@@ -45,7 +54,7 @@ public class InventoryListener implements Listener {
                         e.getWhoClicked().closeInventory();
                         return;
                     }
-                    element.getCategoryContent().execute((Player) e.getWhoClicked(), ShopCache.getShopCache(e.getWhoClicked().getUniqueId()), element.getSlot());
+                    element.getCategoryContent().execute((Player) e.getWhoClicked(), shopCache, element.getSlot());
                     return;
                 }
             }
@@ -68,7 +77,7 @@ public class InventoryListener implements Listener {
                             new QuickBuyAdd((Player) e.getWhoClicked(), cc);
                             return;
                         }
-                        cc.execute((Player) e.getWhoClicked(), ShopCache.getShopCache(e.getWhoClicked().getUniqueId()), cc.getSlot());
+                        cc.execute((Player) e.getWhoClicked(), shopCache, cc.getSlot());
                         return;
                     }
                 }

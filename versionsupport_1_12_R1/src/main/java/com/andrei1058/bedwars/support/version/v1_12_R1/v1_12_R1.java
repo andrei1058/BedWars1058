@@ -48,14 +48,8 @@ public class v1_12_R1 extends VersionSupport {
     public v1_12_R1(Plugin plugin, String name) {
         super(plugin, name);
         try {
-            setGameStartSound("BLOCK_SLIME_FALL");
-            setBedDestroySound("ENTITY_ENDERDRAGON_GROWL");
-            setPlayerKillsSound("ENTITY_WOLF_HURT");
-            setCountdownSound("ENTITY_CHICKEN_EGG");
-            setBoughtSound("BLOCK_ANVIL_HIT");
-            setInsuffMoneySound("ENTITY_ENDERMEN_TELEPORT");
             setEggBridgeEffect("MOBSPAWNER_FLAMES");
-        } catch (InvalidSoundException | InvalidEffectException e) {
+        } catch (InvalidEffectException e) {
             e.printStackTrace();
         }
     }
@@ -638,6 +632,7 @@ public class v1_12_R1 extends VersionSupport {
 
     @Override
     public String getMainLevel() {
+        //noinspection deprecation
         return ((DedicatedServer) MinecraftServer.getServer()).propertyManager.properties.getProperty("level-name");
     }
 

@@ -23,7 +23,6 @@ import org.bukkit.block.data.type.WallSign;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftTNTPrimed;
@@ -36,7 +35,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 
 import java.lang.reflect.Field;
@@ -51,7 +49,7 @@ public class v1_14_R1 extends VersionSupport {
 
     public v1_14_R1(Plugin plugin, String name) {
         super(plugin, name);
-        loadDefaultSounds();
+        loadDefaultEffects();
     }
 
     @Override
@@ -415,6 +413,7 @@ public class v1_14_R1 extends VersionSupport {
     @Override
     public void showPlayer(Player victim, Player p) {
         if (victim == p) return;
+        if (victim.getLocation().getWorld() == null) return;
         if (!victim.getLocation().getWorld().equals(p.getWorld())) return;
         if (victim.getLocation().distanceSquared(p.getLocation()) <= renderDistance) {
             PacketPlayOutNamedEntitySpawn s = new PacketPlayOutNamedEntitySpawn(((CraftPlayer) victim).getHandle());
@@ -637,6 +636,7 @@ public class v1_14_R1 extends VersionSupport {
 
     @Override
     public String getMainLevel() {
+        //noinspection deprecation
         return ((DedicatedServer) MinecraftServer.getServer()).getDedicatedServerProperties().levelName;
     }
 

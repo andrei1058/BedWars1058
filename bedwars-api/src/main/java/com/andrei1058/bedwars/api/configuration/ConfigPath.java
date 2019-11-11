@@ -125,11 +125,10 @@ public class ConfigPath {
     public static final String ARENA_ALLOW_MAP_BREAK = "allow-map-break";
     public static final String ARENA_GAME_RULES = "game-rules";
 
-    public static final String SOUND_GAME_START = "game-start";
-    public static final String SOUNDS_COUNTDOWN_TICK = "game-countdown";
+    public static final String SOUNDS_COUNTDOWN_TICK = "game-countdown-others";
+    public static final String SOUNDS_COUNTDOWN_TICK_X = "game-countdown-s";
+    public static final String SOUND_GAME_START = "game-countdown-start";
     public static final String SOUNDS_BED_DESTROY = "bed-destroy";
-    public static final String SOUNDS_PLAYER_KILL = "kill-player-regular";
-    public static final String SOUNDS_PLAYER_KILL_FINAL = "kill-player-final";
     public static final String SOUNDS_INSUFF_MONEY = "shop-insufficient-money";
     public static final String SOUNDS_BOUGHT = "shop-bought";
 

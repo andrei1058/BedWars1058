@@ -5,7 +5,6 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.entity.Despawnable;
 import com.andrei1058.bedwars.api.exceptions.InvalidEffectException;
-import com.andrei1058.bedwars.api.exceptions.InvalidSoundException;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -25,12 +24,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public abstract class VersionSupport {
 
     private static String name2;
-    private Sound bedDestroy,
-            playerKill,
-            countDown,
-            bought,
-            insuffMoney,
-            gameStart;
 
     private Effect eggBridge;
 
@@ -42,20 +35,13 @@ public abstract class VersionSupport {
         this.plugin = plugin;
     }
 
-    protected void loadDefaultSounds() {
+    protected void loadDefaultEffects() {
         try {
-            setGameStartSound("BLOCK_SLIME_BLOCK_FALL");
-            setBedDestroySound("ENTITY_ENDER_DRAGON_GROWL");
-            setPlayerKillsSound("ENTITY_WOLF_HURT");
-            setCountdownSound("ENTITY_CHICKEN_EGG");
-            setBoughtSound("BLOCK_ANVIL_HIT");
-            setInsuffMoneySound("ENTITY_ENDERMAN_TELEPORT");
             setEggBridgeEffect("MOBSPAWNER_FLAMES");
-        } catch (InvalidSoundException | InvalidEffectException e) {
+        } catch (InvalidEffectException e) {
             e.printStackTrace();
         }
     }
-
 
     /**
      * Register a new command as bukkit command
@@ -132,114 +118,6 @@ public abstract class VersionSupport {
      * Get item-stack damage amount
      */
     public abstract double getDamage(ItemStack i);
-
-    /**
-     * Get bed-destroy sound
-     */
-    public Sound bedDestroy() {
-        return bedDestroy;
-    }
-
-    /**
-     * Set the bed destroy sound
-     */
-    public void setBedDestroySound(String sound) throws InvalidSoundException {
-        try {
-            this.bedDestroy = Sound.valueOf(sound);
-        } catch (Exception e) {
-            throw new InvalidSoundException(sound);
-        }
-    }
-
-    /**
-     * Get player-kill sound
-     */
-    public Sound playerKill() {
-        return playerKill;
-    }
-
-    /**
-     * Set the player kill sound
-     */
-    public void setPlayerKillsSound(String sound) throws InvalidSoundException {
-        try {
-            this.playerKill = Sound.valueOf(sound);
-        } catch (Exception e) {
-            throw new InvalidSoundException(sound);
-        }
-    }
-
-    /**
-     * Get game start sound
-     */
-    public Sound gameStart() {
-        return gameStart;
-    }
-
-    /**
-     * Set the game start sound
-     */
-    public void setGameStartSound(String sound) throws InvalidSoundException {
-        try {
-            this.gameStart = Sound.valueOf(sound);
-        } catch (Exception e) {
-            throw new InvalidSoundException(sound);
-        }
-    }
-
-    /**
-     * Get insufficient money sound
-     */
-    public Sound insufficientMoney() {
-        return insuffMoney;
-    }
-
-    /**
-     * Set the insufficient money sound
-     */
-    public void setInsuffMoneySound(String sound) throws InvalidSoundException {
-        try {
-            this.insuffMoney = Sound.valueOf(sound);
-        } catch (Exception e) {
-            throw new InvalidSoundException(sound);
-        }
-    }
-
-    /**
-     * Get boy success sound
-     */
-    public Sound bought() {
-        return bought;
-    }
-
-    /**
-     * Set the bought sound
-     */
-    public void setBoughtSound(String sound) throws InvalidSoundException {
-        try {
-            this.bought = Sound.valueOf(sound);
-        } catch (Exception e) {
-            throw new InvalidSoundException(sound);
-        }
-    }
-
-    /**
-     * Get countdown sound
-     */
-    public Sound countdownTick() {
-        return countDown;
-    }
-
-    /**
-     * Set countdown tick sound
-     */
-    public void setCountdownSound(String sound) throws InvalidSoundException {
-        try {
-            this.countDown = Sound.valueOf(sound);
-        } catch (Exception e) {
-            throw new InvalidSoundException(sound);
-        }
-    }
 
     /**
      * Spawn silverfish for a team

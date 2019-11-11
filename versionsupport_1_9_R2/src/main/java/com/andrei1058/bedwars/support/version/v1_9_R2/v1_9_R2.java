@@ -16,7 +16,6 @@ import net.minecraft.server.v1_9_R2.*;
 import net.minecraft.server.v1_9_R2.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_9_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftLivingEntity;
@@ -50,14 +49,8 @@ public class v1_9_R2 extends VersionSupport {
     public v1_9_R2(Plugin plugin, String name){
         super(plugin, name);
         try {
-            setGameStartSound("BLOCK_SLIME_FALL");
-            setBedDestroySound("ENTITY_ENDERDRAGON_GROWL");
-            setPlayerKillsSound("ENTITY_WOLF_HURT");
-            setCountdownSound("ENTITY_CHICKEN_EGG");
-            setBoughtSound("BLOCK_ANVIL_HIT");
-            setInsuffMoneySound("ENTITY_ENDERMEN_TELEPORT");
             setEggBridgeEffect("MOBSPAWNER_FLAMES");
-        } catch (InvalidSoundException | InvalidEffectException e) {
+        } catch (InvalidEffectException e) {
             e.printStackTrace();
         }
     }
@@ -631,6 +624,7 @@ public class v1_9_R2 extends VersionSupport {
 
     @Override
     public String getMainLevel() {
+        //noinspection deprecation
         return ((DedicatedServer) MinecraftServer.getServer()).propertyManager.properties.getProperty("level-name");
     }
 

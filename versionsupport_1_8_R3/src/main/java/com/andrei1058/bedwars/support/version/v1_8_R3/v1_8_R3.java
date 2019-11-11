@@ -7,7 +7,6 @@ import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.entity.Despawnable;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
 import com.andrei1058.bedwars.api.exceptions.InvalidEffectException;
-import com.andrei1058.bedwars.api.exceptions.InvalidSoundException;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.VersionSupport;
@@ -15,7 +14,6 @@ import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
@@ -51,14 +49,8 @@ public class v1_8_R3 extends VersionSupport {
     public v1_8_R3(Plugin pl, String name) {
         super(pl, name);
         try {
-            setGameStartSound("SLIME_ATTACK");
-            setBedDestroySound("ENDERDRAGON_GROWL");
-            setPlayerKillsSound("WOLF_HURT");
-            setCountdownSound("CHICKEN_EGG_POP");
-            setBoughtSound("NOTE_STICKS");
-            setInsuffMoneySound("ENDERMAN_TELEPORT");
             setEggBridgeEffect("MOBSPAWNER_FLAMES");
-        } catch (InvalidSoundException | InvalidEffectException e) {
+        } catch (InvalidEffectException e) {
             e.printStackTrace();
         }
     }

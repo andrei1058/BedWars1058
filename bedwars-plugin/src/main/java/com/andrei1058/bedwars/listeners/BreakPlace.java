@@ -15,6 +15,7 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.AutoCreateTeams;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.region.Region;
+import com.andrei1058.bedwars.configuration.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -189,12 +190,11 @@ public class BreakPlace implements Listener {
                                                     on.sendMessage(getMsg(on, Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM).replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getName())
                                                             .replace("{PlayerColor}", TeamColor.getChatColor(a.getTeam(p).getColor()).toString()).replace("{PlayerName}", p.getName()));
                                                     nms.sendTitle(on, getMsg(on, Messages.INTERACT_BED_DESTROY_TITLE_ANNOUNCEMENT), getMsg(on, Messages.INTERACT_BED_DESTROY_SUBTITLE_ANNOUNCEMENT), 0, 25, 0);
-                                                    on.playSound(on.getLocation(), nms.bedDestroy(), 2f, 2f);
                                                 } else {
                                                     on.sendMessage(getMsg(on, Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT).replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getName())
                                                             .replace("{PlayerColor}", TeamColor.getChatColor(a.getTeam(p).getColor()).toString()).replace("{PlayerName}", p.getName()));
-                                                    on.playSound(on.getLocation(), nms.bedDestroy(), 1f, 1f);
                                                 }
+                                                Sounds.playSound(ConfigPath.SOUNDS_BED_DESTROY, on);
                                             }
                                             return;
                                         }
