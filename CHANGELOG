@@ -20,6 +20,7 @@
 - added re-spawn sounds
 - added arena selector open sound
 - added stats gui open sound
+- fixed "against TNT" default message color
 
 # 19.10
 - fixed issue where you get npe after closing setup session if you didn't set the main lobby location in multi-arena mode
