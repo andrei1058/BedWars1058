@@ -6,6 +6,7 @@
 - fixed invisibility issues, again
 - fixed issue where spectators can interact with doors etc.
 - dropped items from lobby removal are now removed
+- re-spawning players are now protected from any damage
 
 # 19.10
 - fixed issue where you get npe after closing setup session if you didn't set the main lobby location in multi-arena mode

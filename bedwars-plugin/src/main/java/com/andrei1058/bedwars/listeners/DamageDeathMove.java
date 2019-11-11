@@ -45,6 +45,10 @@ public class DamageDeathMove implements Listener {
                     e.setCancelled(true);
                     return;
                 }
+                if (a.isRespawning(p)){
+                    e.setCancelled(true);
+                    return;
+                }
                 if (a.getStatus() != GameState.playing) {
                     e.setCancelled(true);
                     return;
@@ -100,7 +104,7 @@ public class DamageDeathMove implements Listener {
                         return;
                     }
                 }
-                if (a.getRespawn().containsKey(p)) {
+                if (a.isRespawning(p)) {
                     e.setCancelled(true);
                     return;
                 }
