@@ -9,6 +9,7 @@ import com.andrei1058.bedwars.api.events.spectator.SpectatorFirstPersonEnterEven
 import com.andrei1058.bedwars.api.events.spectator.SpectatorFirstPersonLeaveEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.configuration.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -95,6 +96,7 @@ public class SpectatorListeners implements Listener {
                     if (!event.isCancelled()) {
                         p.teleport(target);
                     }
+                    Sounds.playSound("spectator-gui-click", p);
                     p.closeInventory();
                 }
             }

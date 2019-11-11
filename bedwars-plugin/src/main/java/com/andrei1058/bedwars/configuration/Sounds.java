@@ -36,6 +36,7 @@ public class Sounds {
         yml.addDefault("spectate-allowed", BedWars.getForCurrentVersion("SLIME_WALK","ENTITY_SLIME_JUMP","ENTITY_SLIME_JUMP"));
         yml.addDefault("join-denied", BedWars.getForCurrentVersion("VILLAGER_NO","ENTITY_VILLAGER_NO","ENTITY_VILLAGER_NO"));
         yml.addDefault("join-allowed", BedWars.getForCurrentVersion("SLIME_WALK","ENTITY_SLIME_JUMP","ENTITY_SLIME_JUMP"));
+        yml.addDefault("spectator-gui-click", BedWars.getForCurrentVersion("SLIME_WALK","ENTITY_SLIME_JUMP","ENTITY_SLIME_JUMP"));
         yml.addDefault(SOUNDS_COUNTDOWN_TICK, nms.countdownTick().toString());
         yml.addDefault(SOUNDS_BED_DESTROY, nms.bedDestroy().toString());
         yml.addDefault(SOUNDS_PLAYER_KILL, nms.playerKill().toString());
