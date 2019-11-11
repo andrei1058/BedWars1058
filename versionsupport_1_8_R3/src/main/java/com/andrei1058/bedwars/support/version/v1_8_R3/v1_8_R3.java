@@ -344,7 +344,6 @@ public class v1_8_R3 extends VersionSupport {
         if (!victim.getLocation().getWorld().equals(p.getWorld())) return;
         //if (api.getArenaUtil().isSpectating(victim) && !api.getArenaUtil().isSpectating(p)) return;
         if (victim.getLocation().distanceSquared(p.getLocation()) <= renderDistance) {
-            Bukkit.broadcastMessage("showPlayer debug 3");
             PacketPlayOutNamedEntitySpawn s = new PacketPlayOutNamedEntitySpawn(((CraftPlayer) victim).getHandle());
             ((CraftPlayer) p).getHandle().playerConnection.sendPacket(s);
         }
