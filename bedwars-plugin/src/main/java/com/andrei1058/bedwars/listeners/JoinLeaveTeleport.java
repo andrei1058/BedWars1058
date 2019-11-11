@@ -151,7 +151,12 @@ public class JoinLeaveTeleport implements Listener {
             if (!Arena.getArenas().isEmpty()) {
                 IArena a = Arena.getArenas().get(0);
                 if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) {
-                    a.addPlayer(p, false);
+                    if (a.addPlayer(p, false)) {
+                        Sounds.playSound("join-allowed", p);
+                    } else {
+                        a.addSpectator(p, false, null);
+                        Sounds.playSound("join-denied", p);
+                    }
                 } else {
                     a.addSpectator(p, false, null);
                     Sounds.playSound("spectate-allowed", p);

@@ -42,9 +42,10 @@ public class ArenaSelectorListener implements Listener {
 
             Bukkit.getScheduler().runTask(BedWars.plugin, () -> {
                 if (e.getClick() == ClickType.LEFT) {
-                    if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) {
-                        a.addPlayer(p, false);
+                    if ((a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) && a.addPlayer(p, false)) {
+                        Sounds.playSound("join-allowed", p);
                     } else {
+                        Sounds.playSound("join-denied", p);
                         p.sendMessage(Language.getMsg(p, Messages.ARENA_JOIN_DENIED_SELECTOR));
                     }
                 } else if (e.getClick() == ClickType.RIGHT) {

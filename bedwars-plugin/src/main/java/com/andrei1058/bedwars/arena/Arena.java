@@ -1874,7 +1874,6 @@ public class Arena implements IArena {
     /**
      * Add a player to the most filled arena from a group.
      */
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean joinRandomFromGroup(Player p, String group) {
 
         List<IArena> arenas = getSorted(getArenas());

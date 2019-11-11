@@ -7,6 +7,7 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.shop.listeners.InventoryListener;
 import com.andrei1058.bedwars.upgrades.UpgradeGroup;
@@ -139,7 +140,11 @@ public class Interact implements Listener {
             if (b.getState() instanceof Sign) {
                 for (IArena a1 : Arena.getArenas()) {
                     if (a1.getSigns().contains(b.getState())) {
-                        a1.addPlayer(p, false);
+                        if (a1.addPlayer(p, false)) {
+                            Sounds.playSound("join-allowed", p);
+                        } else {
+                            Sounds.playSound("join-denied", p);
+                        }
                         return;
                     }
                 }
