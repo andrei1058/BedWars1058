@@ -52,7 +52,7 @@ public class Despawnable {
                 new String(new char[percentuale]).replace("\0", api.getDefaultLang()
                         .m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH)) + new String(new char[10 - percentuale]).replace("\0", "§7" + api.getDefaultLang()
                         .m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH)))
-                .replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()).replace("{TeamName}", team.getName()));
+                .replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()).replace("{TeamName}", team.getDisplayName(api.getDefaultLang())));
     }
 
     public Entity getEntity() {

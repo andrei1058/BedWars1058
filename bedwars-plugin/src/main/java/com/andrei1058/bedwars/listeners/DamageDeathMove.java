@@ -316,14 +316,14 @@ public class DamageDeathMove implements Listener {
                         replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName())
                         .replace("{KillerColor}", t2 == null ? "" : TeamColor.getChatColor(t2.getColor()).toString())
                         .replace("{KillerName}", killer == null ? "" : killer.getName())
-                        .replace("{KillerTeamName}", t2 == null ? "" : t2.getName()));
+                        .replace("{KillerTeamName}", t2 == null ? "" : t2.getDisplayName(Language.getPlayerLanguage(on))));
             }
             for (Player on : a.getSpectators()) {
                 on.sendMessage(getMsg(on, message).
                         replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName())
                         .replace("{KillerColor}", t2 == null ? "" : TeamColor.getChatColor(t2.getColor()).toString())
                         .replace("{KillerName}", killer == null ? "" : killer.getName())
-                        .replace("{KillerTeamName}", t2 == null ? "" : t2.getName()));
+                        .replace("{KillerTeamName}", t2 == null ? "" : t2.getDisplayName(Language.getPlayerLanguage(on))));
             }
 
             /* give stats and victim's inventory */
@@ -416,7 +416,8 @@ public class DamageDeathMove implements Listener {
                 e.getPlayer().sendMessage(getMsg(e.getPlayer(), Messages.PLAYER_DIE_ELIMINATED_CHAT));
                 if (t.getMembers().isEmpty()) {
                     for (Player p : a.getWorld().getPlayers()) {
-                        p.sendMessage(getMsg(p, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getName()));
+                        p.sendMessage(getMsg(p, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}",
+                                TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(p))));
                     }
                     Bukkit.getScheduler().runTaskLater(plugin, a::checkWinner, 40L);
                 }

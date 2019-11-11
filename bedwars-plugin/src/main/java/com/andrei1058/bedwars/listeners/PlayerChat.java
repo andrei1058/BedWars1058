@@ -97,7 +97,7 @@ public class PlayerChat implements Listener {
                         msg = msg.replaceFirst(getMsg(p, Messages.MEANING_SHOUT), "");
                     e.setMessage(msg);
                     e.setFormat(SupportPAPI.getSupportPAPI().replace(e.getPlayer(), getMsg(p, Messages.FORMATTING_CHAT_SHOUT).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{vSuffix}", getChatSupport().getSuffix(p))
-                            .replace("{player}", p.getDisplayName()).replace("{team}", TeamColor.getChatColor(t.getColor()) + "[" + t.getName().toUpperCase() + "]")
+                            .replace("{player}", p.getDisplayName()).replace("{team}", TeamColor.getChatColor(t.getColor()) + "[" + t.getDisplayName(Language.getPlayerLanguage(e.getPlayer())).toUpperCase() + "]")
                             .replace("{level}", getLevelSupport().getLevel(p))).replace("{message}", "%2$s"));
                 } else {
                     if (a.getMaxInTeam() == 1) {
@@ -107,7 +107,7 @@ public class PlayerChat implements Listener {
                             e.getRecipients().addAll(a.getSpectators());
                         }
                         e.setFormat(SupportPAPI.getSupportPAPI().replace(e.getPlayer(), getMsg(p, Messages.FORMATTING_CHAT_TEAM).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{vSuffix}", getChatSupport().getSuffix(p))
-                                .replace("{player}", p.getDisplayName()).replace("{team}", TeamColor.getChatColor(t.getColor()) + "[" + t.getName().toUpperCase() + "]")
+                                .replace("{player}", p.getDisplayName()).replace("{team}", TeamColor.getChatColor(t.getColor()) + "[" + t.getDisplayName(Language.getPlayerLanguage(e.getPlayer())).toUpperCase() + "]")
                                 .replace("{level}", getLevelSupport().getLevel(p))).replace("{message}", "%2$s"));
 
                     } else {
@@ -116,7 +116,7 @@ public class PlayerChat implements Listener {
                             e.getRecipients().addAll(t.getMembers());
                         }
                         e.setFormat(SupportPAPI.getSupportPAPI().replace(e.getPlayer(), getMsg(p, Messages.FORMATTING_CHAT_TEAM).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{vSuffix}", getChatSupport().getSuffix(p))
-                                .replace("{player}", p.getDisplayName()).replace("{team}", TeamColor.getChatColor(t.getColor()) + "[" + t.getName().toUpperCase() + "]")
+                                .replace("{player}", p.getDisplayName()).replace("{team}", TeamColor.getChatColor(t.getColor()) + "[" + t.getDisplayName(Language.getPlayerLanguage(e.getPlayer())).toUpperCase() + "]")
                                 .replace("{level}", getLevelSupport().getLevel(p))).replace("{message}", "%2$s"));
 
                     }

@@ -9,6 +9,7 @@ import com.andrei1058.bedwars.api.arena.team.TeamEnchant;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerFirstSpawnEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerReSpawnEvent;
+import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.region.Cuboid;
 import com.andrei1058.bedwars.configuration.Sounds;
@@ -108,7 +109,7 @@ public class BedWarsTeam implements ITeam {
         this.arena = arena;
         this.shop = shop;
         this.teamUpgrades = teamUpgrades;
-
+        Language.saveIfNotExists(ConfigPath.TEAM_NAME_PATH.replace("{arena}", getArena().getWorldName()).replace("{team}", getName()), name);
         arena.getRegionsList().add(new Cuboid(spawn, arena.getConfig().getInt(ConfigPath.ARENA_SPAWN_PROTECTION), true));
     }
 
@@ -313,7 +314,7 @@ public class BedWarsTeam implements ITeam {
      */
     public void respawnMember(Player p) {
         p.teleport(getSpawn(), PlayerTeleportEvent.TeleportCause.PLUGIN);
-        p.setVelocity(new Vector(0,0,0));
+        p.setVelocity(new Vector(0, 0, 0));
         getArena().getRespawn().remove(p);
         if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
             p.removePotionEffect(PotionEffectType.INVISIBILITY);
@@ -703,6 +704,11 @@ public class BedWarsTeam implements ITeam {
 
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String getDisplayName(Language language) {
+        return language.m(ConfigPath.TEAM_NAME_PATH.replace("{arena}", getArena().getWorldName()).replace("{team}", getName()));
     }
 
     public TeamColor getColor() {

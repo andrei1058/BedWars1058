@@ -216,4 +216,6 @@ public class ConfigPath {
     public static final String SHOP_PATH_CATEGORY_RANGED = "ranged-category";
     public static final String SHOP_PATH_CATEGORY_POTIONS = "potions-category";
     public static final String SHOP_PATH_CATEGORY_UTILITY = "utility-category";
+
+    public static final String TEAM_NAME_PATH = "team-name-{arena}-{team}";
 }

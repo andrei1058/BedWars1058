@@ -594,6 +594,7 @@ public class Arena implements IArena {
                 if (t.isMember(p)) {
                     team = t;
                     t.getMembers().remove(p);
+                    //noinspection deprecation
                     t.destroyBedHolo(p);
                 }
             }
@@ -647,10 +648,12 @@ public class Arena implements IArena {
                 if (team != null) {
                     if (!team.isBedDestroyed()) {
                         for (Player p2 : this.getPlayers()) {
-                            p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()).replace("{TeamName}", team.getName()));
+                            p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}",
+                                    TeamColor.getChatColor(team.getColor()).toString()).replace("{TeamName}", team.getDisplayName(Language.getPlayerLanguage(p2))));
                         }
                         for (Player p2 : this.getSpectators()) {
-                            p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()).replace("{TeamName}", team.getName()));
+                            p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}",
+                                    TeamColor.getChatColor(team.getColor()).toString()).replace("{TeamName}", team.getDisplayName(Language.getPlayerLanguage(p2))));
                         }
                     }
                 }
@@ -1465,6 +1468,7 @@ public class Arena implements IArena {
      */
     public ITeam getPlayerTeam(String playerCache) {
         for (ITeam t : getTeams()) {
+            //noinspection deprecation
             for (Player p : t.getMembersCache()) {
                 if (p.getName().equals(playerCache)) return t;
             }
@@ -1523,7 +1527,8 @@ public class Arena implements IArena {
                         }
                     }
                     for (Player p : world.getPlayers()) {
-                        p.sendMessage(getMsg(p, Messages.GAME_END_TEAM_WON_CHAT).replace("{TeamColor}", TeamColor.getChatColor(winner.getColor()).toString()).replace("{TeamName}", winner.getName()));
+                        p.sendMessage(getMsg(p, Messages.GAME_END_TEAM_WON_CHAT).replace("{TeamColor}",
+                                TeamColor.getChatColor(winner.getColor()).toString()).replace("{TeamName}", winner.getDisplayName(Language.getPlayerLanguage(p))));
                         if (!winner.getMembers().contains(p)) {
                             nms.sendTitle(p, getMsg(p, Messages.GAME_END_GAME_OVER_PLAYER_TITLE), null, 0, 40, 0);
                         }
@@ -1532,7 +1537,7 @@ public class Arena implements IArena {
                                     .replace("{secondName}", secondName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : secondName).replace("{secondKills}", String.valueOf(second))
                                     .replace("{thirdName}", thirdName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : thirdName).replace("{thirdKills}", String.valueOf(third))
                                     .replace("{winnerFormat}", getMaxInTeam() > 1 ? getMsg(p, Messages.FORMATTING_TEAM_WINNER_FORMAT).replace("{members}", winners.toString()) : getMsg(p, Messages.FORMATTING_SOLO_WINNER_FORMAT).replace("{members}", winners.toString()))
-                                    .replace("{TeamColor}", TeamColor.getChatColor(winner.getColor()).toString()).replace("{TeamName}", winner.getName()));
+                                    .replace("{TeamColor}", TeamColor.getChatColor(winner.getColor()).toString()).replace("{TeamName}", winner.getDisplayName(Language.getPlayerLanguage(p))));
                         }
                     }
                 }
@@ -1544,6 +1549,7 @@ public class Arena implements IArena {
                     aliveWinners.add(p.getUniqueId());
                 }
                 if (winner != null) {
+                    //noinspection deprecation
                     for (Player p : winner.getMembersCache()) {
                         winners.add(p.getUniqueId());
                     }
@@ -1552,6 +1558,7 @@ public class Arena implements IArena {
                     if (winner != null) {
                         if (bwt == winner) continue;
                     }
+                    //noinspection deprecation
                     for (Player p : bwt.getMembersCache()) {
                         losers.add(p.getUniqueId());
                     }
@@ -1840,7 +1847,7 @@ public class Arena implements IArena {
     }
 
     public static List<IArena> getSorted(List<IArena> arenas) {
-        List<IArena> sorted = arenas;
+        List<IArena> sorted = new ArrayList<>(arenas);
         sorted.sort(new Comparator<IArena>() {
             @Override
             public int compare(IArena o1, IArena o2) {

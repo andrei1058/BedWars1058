@@ -23,6 +23,7 @@
 - fixed "against TNT" default message color
 - fixed issue where map changes were when closing the setup session
 - fixed fall damage after respawn
+- teams have now configurable display names in each language file
 
 # 19.10
 - fixed issue where you get npe after closing setup session if you didn't set the main lobby location in multi-arena mode
