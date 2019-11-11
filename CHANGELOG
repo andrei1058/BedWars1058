@@ -18,6 +18,8 @@
 - added game end sound
 - next events have configurable sounds now
 - added re-spawn sounds
+- added arena selector open sound
+- added stats gui open sound
 
 # 19.10
 - fixed issue where you get npe after closing setup session if you didn't set the main lobby location in multi-arena mode

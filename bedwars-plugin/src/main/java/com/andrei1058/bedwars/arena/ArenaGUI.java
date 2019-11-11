@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.listeners.arenaselector.ArenaSelectorListener;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -29,7 +30,7 @@ public class ArenaGUI {
 
         List<IArena> arenas;
         if (((String)data[1]).equalsIgnoreCase("default")) {
-            arenas = new ArrayList<IArena>(Arena.getArenas());
+            arenas = new ArrayList<>(Arena.getArenas());
         } else {
             arenas = new ArrayList<>();
             for (IArena a : Arena.getArenas()){
@@ -112,6 +113,7 @@ public class ArenaGUI {
         refresh.put(p, new Object[]{inv, group});
         refreshInv(p, new Object[]{inv, group});
         p.openInventory(inv);
+        Sounds.playSound("arena-selector-open", p);
     }
 
     public static HashMap<Player, Object[]> getRefresh() {
