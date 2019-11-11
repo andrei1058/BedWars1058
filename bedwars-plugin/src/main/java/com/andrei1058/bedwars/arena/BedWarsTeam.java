@@ -396,7 +396,7 @@ public class BedWarsTeam implements ITeam {
         }*/
 
         // un-vanish from respawn
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+        /*Bukkit.getScheduler().runTaskLater(plugin, () -> {
             arena.getPlayers().forEach(pl -> {
                 nms.showPlayer(p, pl);
                 nms.showArmor(p, pl);
@@ -407,7 +407,7 @@ public class BedWarsTeam implements ITeam {
                 nms.showPlayer(p, pl);
                 nms.showArmor(p, pl);
             });
-        }, 10L);
+        }, 20L);*/
 
         Sounds.playSound("player-re-spawn", p);
     }
