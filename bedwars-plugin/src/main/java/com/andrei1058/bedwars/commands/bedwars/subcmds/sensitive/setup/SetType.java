@@ -25,7 +25,7 @@ public class SetType extends SubCommand {
         setPermission(Permissions.PERMISSION_SETUP_ARENA);
     }
 
-    private static List<String> available = Arrays.asList("Solo", "Duals", "3v3v3v3", "4v4v4v4");
+    private static List<String> available = Arrays.asList("Solo", "Doubles", "3v3v3v3", "4v4v4v4");
 
     @Override
     public boolean execute(String[] args, CommandSender s) {
@@ -49,7 +49,7 @@ public class SetType extends SubCommand {
                 groups.add(input);
                 BedWars.config.set("arenaGroups", groups);
                 int maxInTeam = 1;
-                if (input.equalsIgnoreCase("Duals")){
+                if (input.equalsIgnoreCase("Doubles")){
                     maxInTeam = 2;
                 } else if (input.equalsIgnoreCase("3v3v3v3")){
                     maxInTeam = 3;
