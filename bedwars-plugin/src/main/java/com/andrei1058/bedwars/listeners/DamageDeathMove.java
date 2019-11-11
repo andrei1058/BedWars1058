@@ -14,6 +14,7 @@ import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.entity.Despawnable;
+import com.andrei1058.bedwars.configuration.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -375,7 +376,6 @@ public class DamageDeathMove implements Listener {
                     }
                     a.addPlayerKill(killer, false, victim);
                 }
-                killer.playSound(killer.getLocation(), nms.playerKill(), 1f, 1f);
             }
 
             /* call game kill event */
