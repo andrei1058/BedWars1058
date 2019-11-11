@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.arena.spectator;
 
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.events.spectator.SpectatorTeleportToPlayerEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
@@ -17,6 +18,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
@@ -42,6 +44,15 @@ public class SpectatorListeners implements Listener {
         IArena a = Arena.getArenaByPlayer(p);
         if (a == null) return;
         if (!a.isSpectator(p)) return;
+
+        // Disable spectator interact
+        e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onSpectatorBlockInteract(PlayerInteractEvent e) {
+        if (e.getAction() != Action.PHYSICAL) return;
+        if (!BedWars.getAPI().getArenaUtil().isSpectating(e.getPlayer())) return;
 
         // Disable spectator interact
         e.setCancelled(true);
