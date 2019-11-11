@@ -11,6 +11,7 @@ import com.andrei1058.bedwars.api.events.player.PlayerFirstSpawnEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerReSpawnEvent;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.region.Cuboid;
+import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.shop.ShopCache;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
@@ -410,6 +411,7 @@ public class BedWarsTeam implements ITeam {
 
             arena.getPlayers().forEach(pl -> nms.showPlayer(pl, p));
         }, 20*5L);
+        Sounds.playSound("player-re-spawn", p);
     }
 
     /**
