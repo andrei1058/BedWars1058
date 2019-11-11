@@ -343,9 +343,14 @@ public class v1_8_R3 extends VersionSupport {
         if (victim == p) return;
         if (!victim.getLocation().getWorld().equals(p.getWorld())) return;
         //if (api.getArenaUtil().isSpectating(victim) && !api.getArenaUtil().isSpectating(p)) return;
+        Bukkit.broadcastMessage("showPlayer debug 1");
+        Bukkit.broadcastMessage("showPlayer debug 2: " + renderDistance);
         if (victim.getLocation().distanceSquared(p.getLocation()) <= renderDistance) {
+            Bukkit.broadcastMessage("showPlayer debug 3");
             PacketPlayOutNamedEntitySpawn s = new PacketPlayOutNamedEntitySpawn(((CraftPlayer) victim).getHandle());
             ((CraftPlayer) p).getHandle().playerConnection.sendPacket(s);
+        } else {
+            Bukkit.broadcastMessage("NO DISTANCE IS: " + victim.getLocation().distanceSquared(p.getLocation()));
         }
     }
 
