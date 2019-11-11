@@ -12,8 +12,8 @@ import com.andrei1058.bedwars.maprestore.internal.files.WorldZipper;
 import com.andrei1058.bedwars.api.util.ZipFileUtil;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
-import org.bukkit.entity.Player;
-import org.bukkit.generator.ChunkGenerator;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
 import java.util.logging.Level;
 
 import static com.andrei1058.bedwars.BedWars.*;
@@ -36,7 +35,7 @@ public class InternalAdapter extends RestoreAdapter {
 
     @Override
     public void onEnable(IArena a) {
-        if (nms.getMainLevel().equalsIgnoreCase(a.getWorldName())){
+        if (nms.getMainLevel().equalsIgnoreCase(a.getWorldName())) {
             if (!(BedWars.getServerType() == ServerType.BUNGEE && Arena.getGamesBeforeRestart() == 1)) {
                 FileUtil.setMainLevel("ignore_main_level", nms);
                 getOwner().getLogger().log(Level.SEVERE, "Cannot use level-name as arenas. Automatically creating a new void map for level-name.");
@@ -46,7 +45,7 @@ public class InternalAdapter extends RestoreAdapter {
             }
         }
         Bukkit.getScheduler().runTask(getOwner(), () -> {
-            if (Bukkit.getWorld(a.getWorldName()) != null){
+            if (Bukkit.getWorld(a.getWorldName()) != null) {
                 Bukkit.getScheduler().runTask(getOwner(), () -> {
                     World w = Bukkit.getWorld(a.getWorldName());
                     a.init(w);
@@ -174,6 +173,10 @@ public class InternalAdapter extends RestoreAdapter {
                     }
                 }
             }
+            Bukkit.getScheduler().runTaskLater(plugin, () ->
+                    loc1.getWorld().getEntities().forEach(e -> {
+                        if (e instanceof Item) e.remove();
+                    }), 15L);
         });
     }
 

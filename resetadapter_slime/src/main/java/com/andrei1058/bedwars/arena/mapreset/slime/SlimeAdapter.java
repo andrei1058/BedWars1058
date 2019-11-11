@@ -13,6 +13,7 @@ import com.grinderwolf.swm.api.exceptions.*;
 import com.grinderwolf.swm.api.loaders.SlimeLoader;
 import com.grinderwolf.swm.api.world.SlimeWorld;
 import org.bukkit.*;
+import org.bukkit.entity.Item;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
@@ -176,6 +177,11 @@ public class SlimeAdapter extends RestoreAdapter {
                     }
                 }
             }
+
+            Bukkit.getScheduler().runTaskLater(getOwner(), () ->
+                    loc1.getWorld().getEntities().forEach(e -> {
+                        if (e instanceof Item) e.remove();
+                    }), 15L);
         });
     }
 
