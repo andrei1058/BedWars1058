@@ -2,6 +2,8 @@
 - improved BedBug and DreamDefender AI
 - fixed BedBug and DreamDefender name error on 1.13+
 - fixed issue where you get adventure mode sometimes in arena
+- fixed 1st person spectate in 1.8
+- fixed invisibility issues, again
 
 # 19.10
 - fixed issue where you get npe after closing setup session if you didn't set the main lobby location in multi-arena mode
