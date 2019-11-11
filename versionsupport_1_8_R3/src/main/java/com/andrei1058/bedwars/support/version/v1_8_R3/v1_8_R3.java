@@ -44,7 +44,7 @@ import static com.andrei1058.bedwars.support.version.common.VersionCommon.api;
 
 public class v1_8_R3 extends VersionSupport {
 
-    private static int renderDistance = Bukkit.spigot().getConfig().getInt("world-settings.entity-tracking-range.players");
+    private static int renderDistance = 48;
 
     public v1_8_R3(Plugin pl, String name) {
         super(pl, name);
@@ -343,14 +343,10 @@ public class v1_8_R3 extends VersionSupport {
         if (victim == p) return;
         if (!victim.getLocation().getWorld().equals(p.getWorld())) return;
         //if (api.getArenaUtil().isSpectating(victim) && !api.getArenaUtil().isSpectating(p)) return;
-        Bukkit.broadcastMessage("showPlayer debug 1");
-        Bukkit.broadcastMessage("showPlayer debug 2: " + renderDistance);
         if (victim.getLocation().distanceSquared(p.getLocation()) <= renderDistance) {
             Bukkit.broadcastMessage("showPlayer debug 3");
             PacketPlayOutNamedEntitySpawn s = new PacketPlayOutNamedEntitySpawn(((CraftPlayer) victim).getHandle());
             ((CraftPlayer) p).getHandle().playerConnection.sendPacket(s);
-        } else {
-            Bukkit.broadcastMessage("NO DISTANCE IS: " + victim.getLocation().distanceSquared(p.getLocation()));
         }
     }
 

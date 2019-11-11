@@ -44,7 +44,7 @@ import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class v1_9_R2 extends VersionSupport {
 
-    private static int renderDistance = Bukkit.spigot().getConfig().getInt("world-settings.entity-tracking-range.players");
+    private static int renderDistance = 48;
 
     public v1_9_R2(Plugin plugin, String name){
         super(plugin, name);

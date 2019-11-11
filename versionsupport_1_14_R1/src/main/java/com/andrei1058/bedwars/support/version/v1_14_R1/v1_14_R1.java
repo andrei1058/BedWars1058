@@ -45,7 +45,7 @@ import java.util.logging.Level;
 
 public class v1_14_R1 extends VersionSupport {
 
-    private static int renderDistance = Bukkit.spigot().getConfig().getInt("world-settings.entity-tracking-range.players");
+    private static int renderDistance = 48;
 
     public v1_14_R1(Plugin plugin, String name) {
         super(plugin, name);
