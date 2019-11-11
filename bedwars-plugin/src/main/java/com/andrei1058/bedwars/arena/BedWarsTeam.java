@@ -22,6 +22,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -312,6 +313,7 @@ public class BedWarsTeam implements ITeam {
      */
     public void respawnMember(Player p) {
         p.teleport(getSpawn(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+        p.setVelocity(new Vector(0,0,0));
         getArena().getRespawn().remove(p);
         if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
             p.removePotionEffect(PotionEffectType.INVISIBILITY);
