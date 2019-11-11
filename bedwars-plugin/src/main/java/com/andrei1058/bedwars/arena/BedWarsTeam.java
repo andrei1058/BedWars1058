@@ -311,8 +311,8 @@ public class BedWarsTeam implements ITeam {
      * Respawn a member
      */
     public void respawnMember(Player p) {
-        getArena().getRespawn().remove(p);
         p.teleport(getSpawn(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+        getArena().getRespawn().remove(p);
         if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
             p.removePotionEffect(PotionEffectType.INVISIBILITY);
         }
