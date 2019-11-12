@@ -101,6 +101,8 @@ public class BedWarsTeam implements ITeam {
      */
     private List<Player> membersCache = new ArrayList<>();
 
+    public static HashMap<Player, Long> antiFallDamageAtRespawn = new HashMap<>();
+
     public BedWarsTeam(String name, TeamColor color, Location spawn, Location bed, Location shop, Location teamUpgrades, Arena arena) {
         this.name = name;
         this.color = color;
@@ -313,6 +315,11 @@ public class BedWarsTeam implements ITeam {
      * Respawn a member
      */
     public void respawnMember(Player p) {
+        if (antiFallDamageAtRespawn.containsKey(p)) {
+            antiFallDamageAtRespawn.replace(p, System.currentTimeMillis() + 3500L);
+        } else {
+            antiFallDamageAtRespawn.put(p, System.currentTimeMillis() + 3500L);
+        }
         p.teleport(getSpawn(), PlayerTeleportEvent.TeleportCause.PLUGIN);
         p.setVelocity(new Vector(0, 0, 0));
         getArena().getRespawn().remove(p);
@@ -383,7 +390,6 @@ public class BedWarsTeam implements ITeam {
         Bukkit.getPluginManager().callEvent(new PlayerReSpawnEvent(p, getArena(), this));
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            p.setVelocity(new Vector(0, 0, 0));
             nms.invisibilityFix(p, getArena());
 
             // #274

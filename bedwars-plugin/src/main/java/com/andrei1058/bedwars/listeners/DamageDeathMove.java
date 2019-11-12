@@ -59,9 +59,10 @@ public class DamageDeathMove implements Listener {
                     return;
                 }
                 if (e.getCause() == EntityDamageEvent.DamageCause.FALL) {
-                    if (a.getTeam(p) != null) {
-                        if (p.getLocation().getBlock().equals(a.getTeam(p).getSpawn().getBlock())) {
+                    if (BedWarsTeam.antiFallDamageAtRespawn.containsKey(p)) {
+                        if (BedWarsTeam.antiFallDamageAtRespawn.get(p) > System.currentTimeMillis()){
                             e.setCancelled(true);
+                            BedWarsTeam.antiFallDamageAtRespawn.remove(p);
                         }
                     }
                 }
