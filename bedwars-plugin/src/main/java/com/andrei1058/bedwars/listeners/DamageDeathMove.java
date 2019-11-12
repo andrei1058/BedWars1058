@@ -62,8 +62,7 @@ public class DamageDeathMove implements Listener {
                     if (BedWarsTeam.antiFallDamageAtRespawn.containsKey(p)) {
                         if (BedWarsTeam.antiFallDamageAtRespawn.get(p) > System.currentTimeMillis()){
                             e.setCancelled(true);
-                            BedWarsTeam.antiFallDamageAtRespawn.remove(p);
-                        }
+                        } else BedWarsTeam.antiFallDamageAtRespawn.remove(p);
                     }
                 }
             }
