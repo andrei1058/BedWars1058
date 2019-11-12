@@ -383,6 +383,7 @@ public class BedWarsTeam implements ITeam {
         Bukkit.getPluginManager().callEvent(new PlayerReSpawnEvent(p, getArena(), this));
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            p.setVelocity(new Vector(0, 0, 0));
             nms.invisibilityFix(p, getArena());
 
             // #274
