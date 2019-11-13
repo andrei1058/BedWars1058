@@ -897,6 +897,8 @@ public class Arena implements IArena {
         reJoin.destroy();
 
         Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING), this), 40L);
+        Bukkit.getScheduler().runTaskLater(plugin, () -> getPlayers().forEach(p2 -> nms.hidePlayer(p, p2)), 10L);
+        Bukkit.getScheduler().runTaskLater(plugin, () -> getSpectators().forEach(p2 -> nms.hidePlayer(p, p2)), 10L);
         return true;
     }
 

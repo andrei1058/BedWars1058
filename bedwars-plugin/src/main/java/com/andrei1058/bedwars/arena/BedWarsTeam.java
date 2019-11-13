@@ -169,7 +169,7 @@ public class BedWarsTeam implements ITeam {
      */
     public void reJoin(Player p) {
         members.add(Bukkit.getPlayer(p.getUniqueId()));
-        Bukkit.getScheduler().runTaskLater(plugin, () -> nms.hidePlayer(p, arena.getPlayers()), 5L);
+        //Bukkit.getScheduler().runTaskLater(plugin, () -> nms.hidePlayer(p, arena.getPlayers()), 5L);
         nms.setCollide(p, arena, false);
         p.setAllowFlight(true);
         p.setFlying(true);
