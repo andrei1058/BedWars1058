@@ -1,3 +1,7 @@
+# 19.11.1
+- fixed issue where you can't open the shop after rejoin
+- fixed issue where you are invisible after rejoin
+
 # 19.11
 - improved BedBug and DreamDefender AI
 - fixed BedBug and DreamDefender name error on 1.13+
