@@ -1,6 +1,7 @@
 # 19.11.1
 - fixed issue where you can't open the shop after rejoin
 - fixed issue where you are invisible after rejoin
+- fixed issue where you couldn't spawn eggs/armor-stands outside arenas in MULTIARENA mode.
 
 # 19.11
 - improved BedBug and DreamDefender AI
