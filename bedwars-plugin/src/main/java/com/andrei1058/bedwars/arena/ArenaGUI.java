@@ -8,6 +8,7 @@ import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.listeners.arenaselector.ArenaSelectorListener;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -107,7 +108,7 @@ public class ArenaGUI {
                 1, (byte) BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA.replace("%path%", "skipped-slot")));
         i = BedWars.nms.addCustomData(i, "RUNCOMMAND_bw join random");
         ItemMeta im = i.getItemMeta();
-        im.setDisplayName(Language.getMsg(p, ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP));
+        im.setDisplayName(ChatColor.translateAlternateColorCodes('&', BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP)));
         im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         i.setItemMeta(im);
 
