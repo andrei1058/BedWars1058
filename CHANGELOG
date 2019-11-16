@@ -2,6 +2,8 @@
 - fixed issue where you can't open the shop after rejoin
 - fixed issue where you are invisible after rejoin
 - fixed issue where you couldn't spawn eggs/armor-stands outside arenas in MULTIARENA mode.
+- fixed issue #364 where you can take glass from arena selector
+- arena selector skipped slots have names now take from config "server-ip"
 
 # 19.11
 - improved BedBug and DreamDefender AI

@@ -146,6 +146,7 @@ public class InternalAdapter extends RestoreAdapter {
     @Override
     public void onSetupSessionClose(ISetupSession s) {
         Bukkit.getScheduler().runTask(getOwner(), () -> {
+            Bukkit.getWorld(s.getWorldName()).save();
             Bukkit.unloadWorld(s.getWorldName(), true);
             Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> new WorldZipper(s.getWorldName(), true));
         });
