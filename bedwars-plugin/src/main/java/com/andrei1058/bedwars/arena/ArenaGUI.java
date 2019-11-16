@@ -105,6 +105,11 @@ public class ArenaGUI {
 
         ItemStack i = BedWars.nms.createItemStack(BedWars.config.getString(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", "skipped-slot")),
                 1, (byte) BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA.replace("%path%", "skipped-slot")));
+        i = BedWars.nms.addCustomData(i, "RUNCOMMAND_bw join random");
+        ItemMeta im = i.getItemMeta();
+        im.setDisplayName(Language.getMsg(p, ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP));
+        im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        i.setItemMeta(im);
 
         for (int x = 0; x < inv.getSize(); x++) {
             inv.setItem(x, i);
