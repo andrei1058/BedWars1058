@@ -152,6 +152,7 @@ public class SlimeAdapter extends RestoreAdapter {
 
     @Override
     public void onSetupSessionClose(ISetupSession s) {
+        Bukkit.getWorld(s.getWorldName()).save();
         Bukkit.getScheduler().runTask(getOwner(), () -> Bukkit.unloadWorld(s.getWorldName(), true));
     }
 
