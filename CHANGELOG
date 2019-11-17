@@ -4,6 +4,7 @@
 - fixed issue where you couldn't spawn eggs/armor-stands outside arenas in MULTIARENA mode.
 - fixed issue #364 where you can take glass from arena selector
 - arena selector skipped slots have names now take from config "server-ip"
+- fixed issue where maps were not saved after /bw save
 
 # 19.11
 - improved BedBug and DreamDefender AI
