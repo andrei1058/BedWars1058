@@ -1,3 +1,44 @@
+# 19.11.1
+- fixed issue where you can't open the shop after rejoin
+- fixed issue where you are invisible after rejoin
+- fixed issue where you couldn't spawn eggs/armor-stands outside arenas in MULTIARENA mode.
+- fixed issue #364 where you can take glass from arena selector
+- arena selector skipped slots have names now take from config "server-ip"
+- fixed issue where maps were not saved after /bw save
+
+# 19.11
+- improved BedBug and DreamDefender AI
+- fixed BedBug and DreamDefender name error on 1.13+
+- fixed issue where you get adventure mode sometimes in arena
+- fixed 1st person spectate in 1.8
+- fixed invisibility issues, again
+- fixed issue where spectators can interact with doors etc.
+- dropped items from lobby removal are now removed
+- re-spawning players are now protected from any damage
+- removed player kill sound
+- all sounds are now optional. leave them empty in config to disable them
+- you can now configure countdown sounds between [5;1]
+- added game start sound
+- added arena join allowed/ denied sounds
+- added spectate allowed/ denied sounds
+- added rejoin allowed/ denied sounds
+- added spectator gui click sound
+- added game end sound
+- next events have configurable sounds now
+- added re-spawn sounds
+- added arena selector open sound
+- added stats gui open sound
+- fixed "against TNT" default message color
+- fixed issue where map changes were when closing the setup session
+- fixed fall damage after respawn
+- teams have now configurable display names in each language file
+
+# 19.10
+- fixed issue where you get npe after closing setup session if you didn't set the main lobby location in multi-arena mode
+- fixed issue #356 (closed) where you get a NPE when using SWM
+- implemented feature request #344 (shout cool-down bypass)
+- lobby world is no longer protected in shared mode. related to issue #347 (closed)
+
 # 19.9
 - fixed levels NPE
 - added mysql connection ping task to avoid timeout (once a hour)

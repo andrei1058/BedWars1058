@@ -15,6 +15,7 @@ import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.OreGenerator;
 import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.configuration.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
@@ -146,7 +147,7 @@ public class GameStartingTask implements Runnable, StartingTask {
                 }
             }
 
-            Bukkit.getScheduler().runTaskLater(BedWars.plugin, ()-> {
+            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
                 //Add heart on players head
                 for (SBoard sb : SBoard.getScoreboards()) {
                     sb.addHealthIcon();
@@ -154,7 +155,8 @@ public class GameStartingTask implements Runnable, StartingTask {
 
                 //Enable diamond/ emerald generators
                 for (IGenerator og : getArena().getOreGenerators()) {
-                    if (og.getType() == GeneratorType.EMERALD || og.getType() == GeneratorType.DIAMOND) og.enableRotation();
+                    if (og.getType() == GeneratorType.EMERALD || og.getType() == GeneratorType.DIAMOND)
+                        og.enableRotation();
                 }
             }, 60L);
 
@@ -175,7 +177,7 @@ public class GameStartingTask implements Runnable, StartingTask {
             }
 
             //Spawn shopkeepers
-            for (ITeam bwt : getArena().getTeams()){
+            for (ITeam bwt : getArena().getTeams()) {
                 bwt.spawnNPCs();
             }
             return;
@@ -183,15 +185,23 @@ public class GameStartingTask implements Runnable, StartingTask {
 
         //Send countdown
         if (getCountdown() % 10 == 0 || getCountdown() <= 5) {
-            for (Player p : getArena().getPlayers()) {
-                p.playSound(p.getLocation(), nms.countdownTick(), 1f, 1f);
-                if (getCountdown() >= 10) {
+            if (getCountdown() < 5) {
+                Sounds.playSound(ConfigPath.SOUNDS_COUNTDOWN_TICK_X + getCountdown(), getArena().getPlayers());
+            } else {
+                Sounds.playSound(ConfigPath.SOUNDS_COUNTDOWN_TICK, getArena().getPlayers());
+            }
+            if (getCountdown() >= 10) {
+                for (Player p : getArena().getPlayers()) {
                     nms.sendTitle(p, "§a" + getCountdown(), null, 0, 20, 0);
                     p.sendMessage(getMsg(p, Messages.ARENA_STATUS_START_COUNTDOWN).replace("{time}", String.valueOf(getCountdown())));
-                } else if (getCountdown() > 3) {
+                }
+            } else if (getCountdown() > 3) {
+                for (Player p : getArena().getPlayers()) {
                     nms.sendTitle(p, "§e" + getCountdown(), null, 0, 20, 0);
                     p.sendMessage(getMsg(p, Messages.ARENA_STATUS_START_COUNTDOWN).replace("{time}", "§c" + getCountdown()));
-                } else {
+                }
+            } else {
+                for (Player p : getArena().getPlayers()) {
                     nms.sendTitle(p, "§c" + getCountdown(), null, 0, 20, 0);
                     p.sendMessage(getMsg(p, Messages.ARENA_STATUS_START_COUNTDOWN).replace("{time}", "§c" + getCountdown()));
                 }
@@ -206,6 +216,7 @@ public class GameStartingTask implements Runnable, StartingTask {
             for (Player p : new ArrayList<>(bwt.getMembers())) {
                 bwt.firstSpawn(p);
                 p.setHealth(p.getHealth() - 0.0001);
+                Sounds.playSound(ConfigPath.SOUND_GAME_START, p);
                 nms.sendTitle(p, getMsg(p, Messages.ARENA_STATUS_START_PLAYER_TITLE), null, 0, 20, 0);
                 for (String tut : getList(p, Messages.ARENA_STATUS_START_PLAYER_TUTORIAL)) {
                     p.sendMessage(tut);

@@ -27,6 +27,16 @@ public interface IArena {
     boolean isSpectator(Player player);
 
     /**
+     * Check if a player is spectating on this arena.
+     */
+    boolean isSpectator(UUID player);
+
+    /**
+     * Check if a player is spectating on this arena.
+     */
+    boolean isReSpawning(UUID player);
+
+    /**
      * Get used world name.
      */
     String getWorldName();

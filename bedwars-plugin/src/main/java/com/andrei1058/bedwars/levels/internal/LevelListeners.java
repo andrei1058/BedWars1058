@@ -58,6 +58,7 @@ public class LevelListeners implements Listener {
         for (UUID p : e.getWinners()) {
             if (PlayerLevel.getLevelByPlayer(p) != null) {
                 Player p1 = Bukkit.getPlayer(p);
+                if (p1 == null) continue;
                 PlayerLevel.getLevelByPlayer(p).addXp(LevelsConfig.levels.getInt("xp-rewards.game-win"), PlayerXpGainEvent.XpSource.GAME_WIN);
                 p1.sendMessage(Language.getMsg(p1, Messages.XP_REWARD_WIN).replace("{xp}", String.valueOf(LevelsConfig.levels.getInt("xp-rewards.game-win"))));
                 ITeam bwt = e.getArena().getExTeam(p1.getUniqueId());
@@ -73,7 +74,7 @@ public class LevelListeners implements Listener {
         for (UUID p : e.getLosers()) {
             if (PlayerLevel.getLevelByPlayer(p) != null) {
                 Player p1 = Bukkit.getPlayer(p);
-
+                if (p1 == null) continue;
                 ITeam bwt = e.getArena().getExTeam(p1.getUniqueId());
                 if (bwt != null) {
                     if (bwt.getMembersCache().size() > 1) {

@@ -2,11 +2,10 @@ package com.andrei1058.bedwars.api.arena.team;
 
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.generator.IGenerator;
+import com.andrei1058.bedwars.api.language.Language;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashMap;
@@ -24,6 +23,11 @@ public interface ITeam {
      * Get team name.
      */
     String getName();
+
+    /**
+     * Get team display name.
+     */
+    String getDisplayName(Language language);
 
     /**
      * Check if is member.

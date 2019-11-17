@@ -8,6 +8,7 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.exceptions.InvalidMaterialException;
+import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.stats.StatsManager;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.google.common.io.ByteArrayDataOutput;
@@ -133,7 +134,7 @@ public class Misc {
      * @param lore     item lore
      * @param owner    in case of skull, can be null, don't worry
      */
-    public static ItemStack createItem(Material material, byte data, boolean enchanted, String name, List<String> lore, Player owner, String metaKey, String metaData) {
+    static ItemStack createItem(Material material, byte data, boolean enchanted, String name, List<String> lore, Player owner, @SuppressWarnings("SameParameterValue") String metaKey, String metaData) {
         ItemStack i = new ItemStack(material, 1, data);
         if (owner != null) {
             if (nms.isPlayerHead(material.toString(), data)) {
@@ -207,6 +208,7 @@ public class Misc {
         }
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isProjectile(Material i) {
         return Material.EGG == i || nms.materialFireball() == i || nms.materialSnowball() == i || Material.ARROW == i;
     }
@@ -259,9 +261,11 @@ public class Misc {
             }
 
             p.openInventory(inv);
+            Sounds.playSound("stats-gui-open", p);
         });
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static String replaceStatsPlaceholders(Player pl, String s, boolean papiReplacements) {
 
         if (s.contains("{kills}"))

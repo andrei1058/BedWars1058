@@ -10,6 +10,7 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.shop.quickbuy.PlayerQuickBuyCache;
 import com.andrei1058.bedwars.shop.quickbuy.QuickBuyElement;
@@ -124,7 +125,7 @@ public class CategoryContent implements ICategoryContent{
         if (shopCache.getContentTier(getIdentifier()) == contentTiers.size()) {
             if (isPermanent() && shopCache.hasCachedItem(this)) {
                 player.sendMessage(getMsg(player, Messages.SHOP_ALREADY_BOUGHT));
-                player.playSound(player.getLocation(), nms.playerKill(), 1f, 1f);
+                Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, player);
                 return;
             }
             //current tier
@@ -142,7 +143,7 @@ public class CategoryContent implements ICategoryContent{
         if (money < ct.getPrice()) {
             player.sendMessage(getMsg(player, Messages.SHOP_INSUFFICIENT_MONEY).replace("{currency}", getMsg(player, getCurrencyMsgPath(ct))).
                     replace("{amount}", String.valueOf(ct.getPrice() - money)));
-            player.playSound(player.getLocation(), nms.insufficientMoney(), 1f, 1f);
+            Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, player);
             return;
         }
 
@@ -157,7 +158,7 @@ public class CategoryContent implements ICategoryContent{
         giveItems(player, shopCache, Arena.getArenaByPlayer(player));
 
         //play sound
-        player.playSound(player.getLocation(), nms.bought(), 1f, 1f);
+        Sounds.playSound(ConfigPath.SOUNDS_BOUGHT, player);
 
         //send purchase msg
         player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", ChatColor.stripColor(getMsg(player, itemNamePath))).replace("{color}", "").replace("{tier}", ""));

@@ -26,6 +26,7 @@ import com.andrei1058.bedwars.api.tasks.PlayingTask;
 import com.andrei1058.bedwars.api.tasks.RestartingTask;
 import com.andrei1058.bedwars.api.tasks.StartingTask;
 import com.andrei1058.bedwars.configuration.ArenaConfig;
+import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.levels.internal.InternalLevel;
 import com.andrei1058.bedwars.levels.internal.PerMinuteTask;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
@@ -593,6 +594,7 @@ public class Arena implements IArena {
                 if (t.isMember(p)) {
                     team = t;
                     t.getMembers().remove(p);
+                    //noinspection deprecation
                     t.destroyBedHolo(p);
                 }
             }
@@ -646,10 +648,12 @@ public class Arena implements IArena {
                 if (team != null) {
                     if (!team.isBedDestroyed()) {
                         for (Player p2 : this.getPlayers()) {
-                            p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()).replace("{TeamName}", team.getName()));
+                            p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}",
+                                    TeamColor.getChatColor(team.getColor()).toString()).replace("{TeamName}", team.getDisplayName(Language.getPlayerLanguage(p2))));
                         }
                         for (Player p2 : this.getSpectators()) {
-                            p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString()).replace("{TeamName}", team.getName()));
+                            p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}",
+                                    TeamColor.getChatColor(team.getColor()).toString()).replace("{TeamName}", team.getDisplayName(Language.getPlayerLanguage(p2))));
                         }
                     }
                 }
@@ -893,6 +897,8 @@ public class Arena implements IArena {
         reJoin.destroy();
 
         Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> new SBoard(p, getScoreboard(p, "scoreboard." + getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING), this), 40L);
+        Bukkit.getScheduler().runTaskLater(plugin, () -> getPlayers().forEach(p2 -> nms.hidePlayer(p, p2)), 10L);
+        Bukkit.getScheduler().runTaskLater(plugin, () -> getSpectators().forEach(p2 -> nms.hidePlayer(p, p2)), 10L);
         return true;
     }
 
@@ -1125,9 +1131,8 @@ public class Arena implements IArena {
      * Change game status starting tasks.
      */
     public void changeStatus(GameState status) {
-        GameState old = status;
         this.status = status;
-        Bukkit.getPluginManager().callEvent(new GameStateChangeEvent(this, status, old));
+        Bukkit.getPluginManager().callEvent(new GameStateChangeEvent(this, status, status));
         refreshSigns();
 
         //Stop active tasks to prevent issues
@@ -1199,6 +1204,22 @@ public class Arena implements IArena {
     @Override
     public boolean isSpectator(Player p) {
         return spectators.contains(p);
+    }
+
+    @Override
+    public boolean isSpectator(UUID player) {
+        for (Player p : getSpectators()){
+            if (p.getUniqueId().equals(player)) return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isReSpawning(UUID player) {
+        for (Map.Entry<Player, Integer> p : getRespawn().entrySet()){
+            if (p.getKey().getUniqueId().equals(player)) return true;
+        }
+        return false;
     }
 
     /**
@@ -1449,6 +1470,7 @@ public class Arena implements IArena {
      */
     public ITeam getPlayerTeam(String playerCache) {
         for (ITeam t : getTeams()) {
+            //noinspection deprecation
             for (Player p : t.getMembersCache()) {
                 if (p.getName().equals(playerCache)) return t;
             }
@@ -1507,7 +1529,8 @@ public class Arena implements IArena {
                         }
                     }
                     for (Player p : world.getPlayers()) {
-                        p.sendMessage(getMsg(p, Messages.GAME_END_TEAM_WON_CHAT).replace("{TeamColor}", TeamColor.getChatColor(winner.getColor()).toString()).replace("{TeamName}", winner.getName()));
+                        p.sendMessage(getMsg(p, Messages.GAME_END_TEAM_WON_CHAT).replace("{TeamColor}",
+                                TeamColor.getChatColor(winner.getColor()).toString()).replace("{TeamName}", winner.getDisplayName(Language.getPlayerLanguage(p))));
                         if (!winner.getMembers().contains(p)) {
                             nms.sendTitle(p, getMsg(p, Messages.GAME_END_GAME_OVER_PLAYER_TITLE), null, 0, 40, 0);
                         }
@@ -1516,7 +1539,7 @@ public class Arena implements IArena {
                                     .replace("{secondName}", secondName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : secondName).replace("{secondKills}", String.valueOf(second))
                                     .replace("{thirdName}", thirdName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : thirdName).replace("{thirdKills}", String.valueOf(third))
                                     .replace("{winnerFormat}", getMaxInTeam() > 1 ? getMsg(p, Messages.FORMATTING_TEAM_WINNER_FORMAT).replace("{members}", winners.toString()) : getMsg(p, Messages.FORMATTING_SOLO_WINNER_FORMAT).replace("{members}", winners.toString()))
-                                    .replace("{TeamColor}", TeamColor.getChatColor(winner.getColor()).toString()).replace("{TeamName}", winner.getName()));
+                                    .replace("{TeamColor}", TeamColor.getChatColor(winner.getColor()).toString()).replace("{TeamName}", winner.getDisplayName(Language.getPlayerLanguage(p))));
                         }
                     }
                 }
@@ -1528,6 +1551,7 @@ public class Arena implements IArena {
                     aliveWinners.add(p.getUniqueId());
                 }
                 if (winner != null) {
+                    //noinspection deprecation
                     for (Player p : winner.getMembersCache()) {
                         winners.add(p.getUniqueId());
                     }
@@ -1536,6 +1560,7 @@ public class Arena implements IArena {
                     if (winner != null) {
                         if (bwt == winner) continue;
                     }
+                    //noinspection deprecation
                     for (Player p : bwt.getMembersCache()) {
                         losers.add(p.getUniqueId());
                     }
@@ -1566,11 +1591,10 @@ public class Arena implements IArena {
      * Set next event for the arena.
      */
     public void setNextEvent(NextEvent nextEvent) {
-        for (Player p : getPlayers()) {
-            p.getWorld().playSound(p.getLocation(), nms.bedDestroy(), 1f, 1f);
-        }
-        for (Player p : getSpectators()) {
-            p.getWorld().playSound(p.getLocation(), nms.bedDestroy(), 1f, 1f);
+        if (this.nextEvent != null){
+            Sound sound = Sounds.getSound(this.nextEvent.getSoundPath());
+            Sounds.playSound(sound, getPlayers());
+            Sounds.playSound(sound, getSpectators());
         }
         Bukkit.getPluginManager().callEvent(new NextEventChangeEvent(this, nextEvent, this.nextEvent));
         this.nextEvent = nextEvent;
@@ -1825,7 +1849,7 @@ public class Arena implements IArena {
     }
 
     public static List<IArena> getSorted(List<IArena> arenas) {
-        List<IArena> sorted = arenas;
+        List<IArena> sorted = new ArrayList<>(arenas);
         sorted.sort(new Comparator<IArena>() {
             @Override
             public int compare(IArena o1, IArena o2) {
@@ -1859,7 +1883,6 @@ public class Arena implements IArena {
     /**
      * Add a player to the most filled arena from a group.
      */
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean joinRandomFromGroup(Player p, String group) {
 
         List<IArena> arenas = getSorted(getArenas());

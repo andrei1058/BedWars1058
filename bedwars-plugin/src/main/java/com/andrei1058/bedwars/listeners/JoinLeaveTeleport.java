@@ -9,6 +9,7 @@ import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.configuration.Permissions;
+import com.andrei1058.bedwars.configuration.Sounds;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -150,9 +151,15 @@ public class JoinLeaveTeleport implements Listener {
             if (!Arena.getArenas().isEmpty()) {
                 IArena a = Arena.getArenas().get(0);
                 if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) {
-                    a.addPlayer(p, false);
+                    if (a.addPlayer(p, false)) {
+                        Sounds.playSound("join-allowed", p);
+                    } else {
+                        a.addSpectator(p, false, null);
+                        Sounds.playSound("join-denied", p);
+                    }
                 } else {
                     a.addSpectator(p, false, null);
+                    Sounds.playSound("spectate-allowed", p);
                 }
             }
         } else if (getServerType() == ServerType.MULTIARENA) {

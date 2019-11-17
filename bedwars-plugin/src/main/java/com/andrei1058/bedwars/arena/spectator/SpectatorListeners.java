@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.arena.spectator;
 
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.events.spectator.SpectatorTeleportToPlayerEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
@@ -8,6 +9,7 @@ import com.andrei1058.bedwars.api.events.spectator.SpectatorFirstPersonEnterEven
 import com.andrei1058.bedwars.api.events.spectator.SpectatorFirstPersonLeaveEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.configuration.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -17,6 +19,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
@@ -27,6 +30,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 
 import static com.andrei1058.bedwars.BedWars.nms;
+import static com.andrei1058.bedwars.BedWars.plugin;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class SpectatorListeners implements Listener {
@@ -42,6 +46,15 @@ public class SpectatorListeners implements Listener {
         if (a == null) return;
         if (!a.isSpectator(p)) return;
 
+        // Disable spectator interact
+        e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onSpectatorBlockInteract(PlayerInteractEvent e) {
+        if (e.getClickedBlock() == null) return;
+        if (!BedWars.getAPI().getArenaUtil().isSpectating(e.getPlayer())) return;
+        if (e.getClickedBlock().getType().toString().contains("DOOR"))
         // Disable spectator interact
         e.setCancelled(true);
     }
@@ -83,6 +96,7 @@ public class SpectatorListeners implements Listener {
                     if (!event.isCancelled()) {
                         p.teleport(target);
                     }
+                    Sounds.playSound("spectator-gui-click", p);
                     p.closeInventory();
                 }
             }
@@ -160,7 +174,7 @@ public class SpectatorListeners implements Listener {
         Player p = e.getPlayer();
         IArena a = Arena.getArenaByPlayer(p);
         if (a == null) return;
-        if (p.getSpectatorTarget() != null) {
+        if (a.isSpectator(p) && p.getSpectatorTarget() != null) {
             p.setGameMode(GameMode.ADVENTURE);
             p.setAllowFlight(true);
             p.setFlying(true);
@@ -171,18 +185,21 @@ public class SpectatorListeners implements Listener {
     }
 
     @EventHandler
-    // Prevent gamemode 3 menu
+    // Prevent game-mode 3 menu
     public void onTeleport(PlayerTeleportEvent e) {
-        if (!Arena.isInArena(e.getPlayer())) return;
-        if (e.getPlayer().getSpectatorTarget() != null) {
-            Player p = e.getPlayer();
-            e.setCancelled(true);
-            p.setGameMode(GameMode.ADVENTURE);
-            p.setAllowFlight(true);
-            p.setFlying(true);
-            SpectatorFirstPersonLeaveEvent event = new SpectatorFirstPersonLeaveEvent(p, Arena.getArenaByPlayer(p), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE));
-            Bukkit.getPluginManager().callEvent(event);
-            nms.sendTitle(p, event.getTitle(), event.getSubtitle(), 0, 30, 0);
+        IArena a = Arena.getArenaByPlayer(e.getPlayer());
+        if (a == null) return;
+        if (a.isSpectator(e.getPlayer())){
+            if (!(e.getPlayer().getSpectatorTarget() == null && e.getTo().getWorld().equals(e.getPlayer().getWorld())) && e.getCause() == PlayerTeleportEvent.TeleportCause.SPECTATE) {
+                Player p = e.getPlayer();
+                e.setCancelled(true);
+                p.setGameMode(GameMode.ADVENTURE);
+                p.setAllowFlight(true);
+                p.setFlying(true);
+                SpectatorFirstPersonLeaveEvent event = new SpectatorFirstPersonLeaveEvent(p, Arena.getArenaByPlayer(p), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE));
+                Bukkit.getPluginManager().callEvent(event);
+                nms.sendTitle(p, event.getTitle(), event.getSubtitle(), 0, 30, 0);
+            }
         }
     }
 

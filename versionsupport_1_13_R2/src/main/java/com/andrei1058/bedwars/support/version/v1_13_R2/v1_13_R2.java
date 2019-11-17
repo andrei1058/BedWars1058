@@ -35,7 +35,6 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.Sign;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 
 import java.lang.reflect.Field;
@@ -46,11 +45,11 @@ import java.util.logging.Level;
 
 public class v1_13_R2 extends VersionSupport {
 
-    private static int renderDistance = Bukkit.spigot().getConfig().getInt("world-settings.entity-tracking-range.players");
+    private static int renderDistance = 48;
 
     public v1_13_R2(Plugin plugin, String name){
         super(plugin, name);
-        loadDefaultSounds();
+        loadDefaultEffects();
     }
 
     @Override
@@ -86,14 +85,14 @@ public class v1_13_R2 extends VersionSupport {
     }
 
 
-    public void spawnSilverfish(Location loc, ITeam bedWarsTeam, int speed, int health, int despawn, int damage) {
-        new Despawnable(Silverfish.spawn(this, loc, bedWarsTeam, speed, health, despawn, damage), bedWarsTeam, despawn,
+    public void spawnSilverfish(Location loc, ITeam bedWarsTeam, double speed, double health, int despawn, double damage) {
+        new Despawnable(Silverfish.spawn(loc, bedWarsTeam, speed, health, despawn, damage), bedWarsTeam, despawn,
                 Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, PlayerKillEvent.PlayerKillCause.SILVERFISH_FINAL_KILL, PlayerKillEvent.PlayerKillCause.SILVERFISH);
     }
 
     @Override
-    public void spawnIronGolem(Location loc, ITeam bedWarsTeam, int speed, int health, int despawn) {
-        new Despawnable(IGolem.spawn(this, loc, bedWarsTeam, speed, health, despawn), bedWarsTeam, despawn, Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME,
+    public void spawnIronGolem(Location loc, ITeam bedWarsTeam, double speed, double health, int despawn) {
+        new Despawnable(IGolem.spawn(loc, bedWarsTeam, speed, health, despawn), bedWarsTeam, despawn, Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME,
                 PlayerKillEvent.PlayerKillCause.IRON_GOLEM_FINAL_KILL, PlayerKillEvent.PlayerKillCause.IRON_GOLEM);
     }
 
@@ -589,16 +588,22 @@ public class v1_13_R2 extends VersionSupport {
 
     @Override
     public void invisibilityFix(Player player, IArena arena) {
-        EntityPlayer pc = ((CraftPlayer) player).getHandle();
 
-        for (Player pl : arena.getPlayers()){
+        EntityPlayer pc = ((CraftPlayer) player).getHandle(), pc2;
+
+        for (Player pl : arena.getPlayers()) {
             if (pl.equals(player)) continue;
             if (arena.getRespawn().containsKey(pl)) continue;
             if (arena.getShowTime().containsKey(pl)) continue;
-            if (pl.getLocation().distanceSquared(player.getLocation()) <= renderDistance) {
-                pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer) pl).getHandle()));
-                pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer) pl).getHandle()));
+            if (pl.getLocation().distance(player.getLocation()) <= renderDistance) {
+                pc2 = ((CraftPlayer) pl).getHandle();
+                pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(pc2));
+                pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, pc2));
                 showArmor(pl, player);
+
+                pc2.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(pc));
+                pc2.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, pc));
+                showArmor(player, pl);
             }
         }
     }
@@ -615,6 +620,7 @@ public class v1_13_R2 extends VersionSupport {
 
     @Override
     public String getMainLevel() {
+        //noinspection deprecation
         return ((DedicatedServer) MinecraftServer.getServer()).propertyManager.properties.getProperty("level-name");
     }
 

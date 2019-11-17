@@ -7,6 +7,7 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.tasks.RestartingTask;
 import com.andrei1058.bedwars.arena.*;
+import com.andrei1058.bedwars.configuration.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -24,6 +25,8 @@ public class GameRestartingTask implements Runnable, RestartingTask {
     public GameRestartingTask(Arena arena) {
         this.arena = arena;
         task = Bukkit.getScheduler().runTaskTimer(BedWars.plugin, this, 0, 20L);
+        Sounds.playSound("game-end", arena.getPlayers());
+        Sounds.playSound("game-end", arena.getSpectators());
     }
 
     /**

@@ -9,13 +9,12 @@ import com.andrei1058.bedwars.api.arena.team.TeamEnchant;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerFirstSpawnEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerReSpawnEvent;
+import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.region.Cuboid;
+import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.shop.ShopCache;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -24,6 +23,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -101,6 +101,8 @@ public class BedWarsTeam implements ITeam {
      */
     private List<Player> membersCache = new ArrayList<>();
 
+    public static HashMap<Player, Long> antiFallDamageAtRespawn = new HashMap<>();
+
     public BedWarsTeam(String name, TeamColor color, Location spawn, Location bed, Location shop, Location teamUpgrades, Arena arena) {
         this.name = name;
         this.color = color;
@@ -109,7 +111,7 @@ public class BedWarsTeam implements ITeam {
         this.arena = arena;
         this.shop = shop;
         this.teamUpgrades = teamUpgrades;
-
+        Language.saveIfNotExists(ConfigPath.TEAM_NAME_PATH.replace("{arena}", getArena().getWorldName()).replace("{team}", getName()), name);
         arena.getRegionsList().add(new Cuboid(spawn, arena.getConfig().getInt(ConfigPath.ARENA_SPAWN_PROTECTION), true));
     }
 
@@ -133,6 +135,7 @@ public class BedWarsTeam implements ITeam {
      */
     public void firstSpawn(Player p) {
         p.teleport(spawn, PlayerTeleportEvent.TeleportCause.PLUGIN);
+        p.setGameMode(GameMode.SURVIVAL);
         sendDefaultInventory(p, true);
         Bukkit.getPluginManager().callEvent(new PlayerFirstSpawnEvent(p, getArena(), this));
     }
@@ -166,7 +169,7 @@ public class BedWarsTeam implements ITeam {
      */
     public void reJoin(Player p) {
         members.add(Bukkit.getPlayer(p.getUniqueId()));
-        Bukkit.getScheduler().runTaskLater(plugin, () -> nms.hidePlayer(p, arena.getPlayers()), 5L);
+        //Bukkit.getScheduler().runTaskLater(plugin, () -> nms.hidePlayer(p, arena.getPlayers()), 5L);
         nms.setCollide(p, arena, false);
         p.setAllowFlight(true);
         p.setFlying(true);
@@ -312,8 +315,14 @@ public class BedWarsTeam implements ITeam {
      * Respawn a member
      */
     public void respawnMember(Player p) {
-        getArena().getRespawn().remove(p);
+        if (antiFallDamageAtRespawn.containsKey(p)) {
+            antiFallDamageAtRespawn.replace(p, System.currentTimeMillis() + 3500L);
+        } else {
+            antiFallDamageAtRespawn.put(p, System.currentTimeMillis() + 3500L);
+        }
         p.teleport(getSpawn(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+        p.setVelocity(new Vector(0, 0, 0));
+        getArena().getRespawn().remove(p);
         if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
             p.removePotionEffect(PotionEffectType.INVISIBILITY);
         }
@@ -321,10 +330,6 @@ public class BedWarsTeam implements ITeam {
         p.setAllowFlight(false);
         p.setFlying(false);
         p.setHealth(20);
-
-        // un-vanish from respawn
-        nms.showPlayer(p, arena.getPlayers());
-        nms.showPlayer(p, arena.getSpectators());
 
         nms.sendTitle(p, getMsg(p, Messages.PLAYER_DIE_RESPAWNED_TITLE), "", 0, 20, 0);
         ShopCache sc = ShopCache.getShopCache(p.getUniqueId());
@@ -385,6 +390,8 @@ public class BedWarsTeam implements ITeam {
         Bukkit.getPluginManager().callEvent(new PlayerReSpawnEvent(p, getArena(), this));
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            nms.invisibilityFix(p, getArena());
+
             // #274
             if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS)) {
                 for (Player on : getArena().getShowTime().keySet()) {
@@ -392,10 +399,29 @@ public class BedWarsTeam implements ITeam {
                 }
             }
             //
-        }, 5L);
+        }, 10L);
 
-        if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_RESPAWN_PACKETS))
-            nms.invisibilityFix(p, getArena());
+        /*if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_RESPAWN_PACKETS)) {
+            Bukkit.getScheduler().runTaskLater(plugin, () -> nms.invisibilityFix(p, getArena()), 12L);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> nms.invisibilityFix(p, getArena()), 30L);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> arena.getPlayers().forEach(pl -> nms.showPlayer(pl, p)), 25L);
+        }*/
+
+        // un-vanish from respawn
+        /*Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            arena.getPlayers().forEach(pl -> {
+                nms.showPlayer(p, pl);
+                nms.showArmor(p, pl);
+                nms.showPlayer(pl, p);
+                nms.showArmor(pl, p);
+            });
+            arena.getSpectators().forEach(pl -> {
+                nms.showPlayer(p, pl);
+                nms.showArmor(p, pl);
+            });
+        }, 20L);*/
+
+        Sounds.playSound("player-re-spawn", p);
     }
 
     /**
@@ -685,6 +711,11 @@ public class BedWarsTeam implements ITeam {
 
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String getDisplayName(Language language) {
+        return language.m(ConfigPath.TEAM_NAME_PATH.replace("{arena}", getArena().getWorldName()).replace("{team}", getName()));
     }
 
     public TeamColor getColor() {

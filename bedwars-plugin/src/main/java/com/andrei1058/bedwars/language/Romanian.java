@@ -355,7 +355,7 @@ public class Romanian extends Language {
         addContentMessages(yml, "ender-pearl", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Ender Pearl", Arrays.asList("&7Preț: {cost} {currency}", "", "&7Cel mai rapid mod pentru a invada",
                 "&7bazele inamice.", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "water-bucket", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Găleată Cu Apă", Arrays.asList("&7Preț: {cost} {currency}", "", "&7Util pentru a incetini",
-                "&7inamicii. Te poate proteja și", "împotriva TNT-ilui.", "", "{quick_buy}", "{buy_status}"));
+                "&7inamicii. Te poate proteja și", "&7împotriva TNT-ilui.", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "bridge-egg", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Bridge Egg", Arrays.asList("&7Preț: {cost} {currency}", "", "&7Acest ou creează un pod in",
                 "&7direcția in care este aruncat.", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "magic-milk", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Lapte Magic", Arrays.asList("&7Preț: {cost} {currency}", "", "&7Evită capcanele timp de 60",

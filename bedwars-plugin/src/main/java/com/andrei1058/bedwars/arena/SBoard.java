@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.levels.internal.PlayerLevel;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
@@ -50,6 +51,7 @@ public class SBoard {
             this.placeholders.add("{kills}");
             this.placeholders.add("{finalKills}");
             this.placeholders.add("{beds}");
+            this.placeholders.add("{deaths}");
         } else {
             placeholders = new ArrayList<>(placeholders);
             this.placeholders.add("{progress}");
@@ -155,12 +157,12 @@ public class SBoard {
                         .replace("{on}", String.valueOf(arena.getPlayers().size())).replace("{max}", String.valueOf(arena.getMaxPlayers()))
                         .replace("{time}", time).replace("{player}", p.getName())
                         .replace("{money}", String.valueOf(getEconomy().getMoney(p))).replace("{date}", new SimpleDateFormat(getMsg(getP(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis())))
-                        .replace("{group}", arena.getGroup()));
+                        .replace("{group}", arena.getGroup()).replace("{deaths}", String.valueOf(getArena().getPlayerDeaths(p, false))));
             } else if (arena.getStatus() == GameState.playing) {
                 String[] ne = getNextEvent();
                 for (ITeam team : arena.getTeams()) {
                     temp = temp.replace("{Team" + team.getName() + "Color}", TeamColor.getChatColor(team.getColor()).toString()).replace("{Team" + team.getName() + "Name}",
-                            team.getName()).replace("{Team" + team.getName() + "Status}", (team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED).replace("{remainingPlayers}",
+                            team.getDisplayName(Language.getPlayerLanguage(getP()))).replace("{Team" + team.getName() + "Status}", (team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED).replace("{remainingPlayers}",
                             String.valueOf(team.getSize())) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE)) + (team.isMember(getP()) ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM) : ""));
                 }
                 setContent(t, temp.replace("{map}", arena.getDisplayName())
@@ -168,7 +170,7 @@ public class SBoard {
                         .replace("{player}", p.getName()).replace("{date}", new SimpleDateFormat(getMsg(getP(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis())))
                         .replace("{kills}", String.valueOf(arena.getPlayerKills(getP(), false))).replace("{finalKills}", String.valueOf(arena.getPlayerKills(getP(), true)))
                         .replace("{beds}", String.valueOf(arena.getPlayerBedsDestroyed(getP()))).replace("{time}", ne[1])
-                        .replace("{nextEvent}", ne[0]).replace("{money}", String.valueOf(getEconomy().getMoney(p))));
+                        .replace("{nextEvent}", ne[0]).replace("{money}", String.valueOf(getEconomy().getMoney(p))).replace("{deaths}", String.valueOf(getArena().getPlayerDeaths(p, false))));
             }
         }
     }
@@ -226,13 +228,13 @@ public class SBoard {
                     String text = e.getValue();
                     for (ITeam team : arena.getTeams()) {
                         text = text.replace("{Team" + team.getName() + "Color}", TeamColor.getChatColor(team.getColor()).toString()).replace("{Team" + team.getName() + "Name}",
-                                team.getName()).replace("{Team" + team.getName() + "Status}", (team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED).replace("{remainingPlayers}",
+                                team.getDisplayName(Language.getPlayerLanguage(getP()))).replace("{Team" + team.getName() + "Status}", (team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED).replace("{remainingPlayers}",
                                 String.valueOf(team.getSize())) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE)) + (team.isMember(getP()) ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM) : ""));
                     }
                     setContent(e.getKey(), text.replace("{on}", String.valueOf(arena.getPlayers().size())).replace("{max}", String.valueOf(arena.getMaxPlayers()))
                             .replace("{date}", date).replace("{kills}", kills).replace("{finalKills}", finalKills).replace("{beds}", beds)
                             .replace("{nextEvent}", ne[0])
-                            .replace("{time}", ne[1]));
+                            .replace("{time}", ne[1]).replace("{deaths}", String.valueOf(getArena().getPlayerDeaths(p, false))));
                 }
             }
         }
@@ -333,7 +335,7 @@ public class SBoard {
     /**
      * Update spectators for player.
      */
-    public void updateSpectator(Player p, boolean value) {
+    void updateSpectator(Player p, boolean value) {
         Team collide;
         if (sb.getTeam("spectators") == null) {
             collide = sb.registerNewTeam("spectators");

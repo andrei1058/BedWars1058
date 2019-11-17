@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.arena.ReJoin;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.configuration.Permissions;
+import com.andrei1058.bedwars.configuration.Sounds;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
@@ -29,18 +30,23 @@ public class RejoinCommand extends BukkitCommand {
             return true;
         }
 
-        if (!ReJoin.exists(p)) {
+        ReJoin rj = ReJoin.getPlayer(p);
+
+        if (rj == null) {
             p.sendMessage(Language.getMsg(p, Messages.REJOIN_NO_ARENA));
+            Sounds.playSound("rejoin-denied", p);
             return true;
         }
 
-        if (!ReJoin.getPlayer(p).canReJoin()) {
+        if (!rj.canReJoin()) {
             p.sendMessage(Language.getMsg(p, Messages.REJOIN_DENIED));
+            Sounds.playSound("rejoin-denied", p);
             return true;
         }
 
-        p.sendMessage(Language.getMsg(p, Messages.REJOIN_ALLOWED).replace("{arena}", ReJoin.getPlayer(p).getArena().getDisplayName()));
-        ReJoin.getPlayer(p).reJoin(p);
+        p.sendMessage(Language.getMsg(p, Messages.REJOIN_ALLOWED).replace("{arena}", rj.getArena().getDisplayName()));
+        Sounds.playSound("rejoin-allowed", p);
+        rj.reJoin(p);
         return true;
     }
 }

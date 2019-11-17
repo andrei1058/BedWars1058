@@ -14,6 +14,7 @@ import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.entity.Despawnable;
+import com.andrei1058.bedwars.configuration.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -45,6 +46,10 @@ public class DamageDeathMove implements Listener {
                     e.setCancelled(true);
                     return;
                 }
+                if (a.isRespawning(p)){
+                    e.setCancelled(true);
+                    return;
+                }
                 if (a.getStatus() != GameState.playing) {
                     e.setCancelled(true);
                     return;
@@ -54,10 +59,10 @@ public class DamageDeathMove implements Listener {
                     return;
                 }
                 if (e.getCause() == EntityDamageEvent.DamageCause.FALL) {
-                    if (a.getTeam(p) != null) {
-                        if (p.getLocation().getBlock().equals(a.getTeam(p).getSpawn().getBlock())) {
+                    if (BedWarsTeam.antiFallDamageAtRespawn.containsKey(p)) {
+                        if (BedWarsTeam.antiFallDamageAtRespawn.get(p) > System.currentTimeMillis()){
                             e.setCancelled(true);
-                        }
+                        } else BedWarsTeam.antiFallDamageAtRespawn.remove(p);
                     }
                 }
             }
@@ -100,7 +105,7 @@ public class DamageDeathMove implements Listener {
                         return;
                     }
                 }
-                if (a.getRespawn().containsKey(p)) {
+                if (a.isRespawning(p)) {
                     e.setCancelled(true);
                     return;
                 }
@@ -311,14 +316,14 @@ public class DamageDeathMove implements Listener {
                         replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName())
                         .replace("{KillerColor}", t2 == null ? "" : TeamColor.getChatColor(t2.getColor()).toString())
                         .replace("{KillerName}", killer == null ? "" : killer.getName())
-                        .replace("{KillerTeamName}", t2 == null ? "" : t2.getName()));
+                        .replace("{KillerTeamName}", t2 == null ? "" : t2.getDisplayName(Language.getPlayerLanguage(on))));
             }
             for (Player on : a.getSpectators()) {
                 on.sendMessage(getMsg(on, message).
                         replace("{PlayerColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{PlayerName}", victim.getName())
                         .replace("{KillerColor}", t2 == null ? "" : TeamColor.getChatColor(t2.getColor()).toString())
                         .replace("{KillerName}", killer == null ? "" : killer.getName())
-                        .replace("{KillerTeamName}", t2 == null ? "" : t2.getName()));
+                        .replace("{KillerTeamName}", t2 == null ? "" : t2.getDisplayName(Language.getPlayerLanguage(on))));
             }
 
             /* give stats and victim's inventory */
@@ -371,12 +376,11 @@ public class DamageDeathMove implements Listener {
                     }
                     a.addPlayerKill(killer, false, victim);
                 }
-                killer.playSound(killer.getLocation(), nms.playerKill(), 1f, 1f);
             }
 
             /* call game kill event */
             Bukkit.getPluginManager().callEvent(new PlayerKillEvent(a, victim, killer, message, cause));
-            victim.spigot().respawn();
+            Bukkit.getScheduler().runTaskLater(plugin, () -> victim.spigot().respawn(), 1L);
             a.addPlayerDeath(victim);
         }
     }
@@ -412,14 +416,16 @@ public class DamageDeathMove implements Listener {
                 e.getPlayer().sendMessage(getMsg(e.getPlayer(), Messages.PLAYER_DIE_ELIMINATED_CHAT));
                 if (t.getMembers().isEmpty()) {
                     for (Player p : a.getWorld().getPlayers()) {
-                        p.sendMessage(getMsg(p, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getName()));
+                        p.sendMessage(getMsg(p, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}",
+                                TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(p))));
                     }
                     Bukkit.getScheduler().runTaskLater(plugin, a::checkWinner, 40L);
                 }
             } else {
                 //respawn session
                 e.getPlayer().getInventory().clear();
-                //Bukkit.getScheduler().runTaskLater(plugin, () -> nms.hidePlayer(e.getPlayer(), a.getPlayers()), 5L);
+                Bukkit.getScheduler().runTaskLater(plugin, () -> a.getPlayers().forEach(p -> nms.hidePlayer(e.getPlayer(), p)), 10L);
+                Bukkit.getScheduler().runTaskLater(plugin, () -> a.getSpectators().forEach(p -> nms.hidePlayer(e.getPlayer(), p)), 10L);
                 nms.setCollide(e.getPlayer(), a, false);
                 e.getPlayer().setAllowFlight(true);
                 e.getPlayer().setFlying(true);
@@ -606,9 +612,9 @@ public class DamageDeathMove implements Listener {
 
     private static void spawnUtility(String s, Location loc, ITeam t, Player p) {
         if ("silverfish".equals(s.toLowerCase())) {
-            nms.spawnSilverfish(loc, t, shop.getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_SPEED), shop.getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_HEALTH),
+            nms.spawnSilverfish(loc, t, shop.getYml().getDouble(ConfigPath.SHOP_SPECIAL_SILVERFISH_SPEED), shop.getYml().getDouble(ConfigPath.SHOP_SPECIAL_SILVERFISH_HEALTH),
                     shop.getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_DESPAWN),
-                    BedWars.shop.getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_DAMAGE));
+                    BedWars.shop.getYml().getDouble(ConfigPath.SHOP_SPECIAL_SILVERFISH_DAMAGE));
         }
     }
 }

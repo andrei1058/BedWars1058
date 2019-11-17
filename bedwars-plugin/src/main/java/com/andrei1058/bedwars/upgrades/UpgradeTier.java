@@ -3,9 +3,11 @@ package com.andrei1058.bedwars.upgrades;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.upgrades.ITeamUpgrade;
 import com.andrei1058.bedwars.api.arena.upgrades.IUpgradeTier;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.configuration.Sounds;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -95,7 +97,7 @@ public class UpgradeTier implements IUpgradeTier {
             }
         }
         if (money < getCost()) {
-            p.playSound(p.getLocation(), nms.insufficientMoney(), 1f, 1f);
+            Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, p);
             p.sendMessage(getMsg(p, Messages.SHOP_INSUFFICIENT_MONEY)
                     .replace("{currency}", getCurrencyMsg(p))
                     .replace("{amount}", String.valueOf(getCost() - money)));
@@ -125,7 +127,7 @@ public class UpgradeTier implements IUpgradeTier {
                 }
             }
         }
-        p.playSound(p.getLocation(), nms.bought(), 1f, 1f);
+        Sounds.playSound(ConfigPath.SOUNDS_BOUGHT, p);
         for (UpgradeAction a : actions) {
             a.execute(bwt, slot);
         }
