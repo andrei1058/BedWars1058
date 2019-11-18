@@ -1,9 +1,8 @@
-package com.andrei1058.bedwars.upgrades;
+package com.andrei1058.bedwars.upgradesold;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.generator.GeneratorType;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
-import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.arena.OreGenerator;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;

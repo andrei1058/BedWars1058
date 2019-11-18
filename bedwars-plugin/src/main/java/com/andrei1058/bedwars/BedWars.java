@@ -75,7 +75,7 @@ public class BedWars extends JavaPlugin {
     public static MainConfig config;
     public static ShopManager shop;
     public static StatsManager statsManager;
-    public static UpgradesManager upgrades;
+    public static UpgradesConfig upgrades;
     public static BedWars plugin;
     public static VersionSupport nms;
 
@@ -145,7 +145,6 @@ public class BedWars extends JavaPlugin {
         config = new MainConfig(this, "config", "plugins/" + this.getName());
 
         generators = new GeneratorsConfig(this, "generators", "plugins/" + this.getName());
-        upgrades = new UpgradesManager("upgrades", "plugins/" + this.getName());
         // Initialize signs config after the main config
         if (getServerType() != ServerType.BUNGEE){
             signs = new SignsConfig(this, "signs", "plugins/" + plugin.getName());
@@ -413,6 +412,9 @@ public class BedWars extends JavaPlugin {
 
         /* Check updates */
         new SpigotUpdater(this, 50942, true).checkUpdate();
+
+        // Initialize team upgrades
+        com.andrei1058.bedwars.upgrades.UpgradesManager.init();
     }
 
     public void onDisable() {

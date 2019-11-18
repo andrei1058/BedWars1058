@@ -10,7 +10,7 @@ import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.shop.listeners.InventoryListener;
-import com.andrei1058.bedwars.upgrades.UpgradeGroup;
+import com.andrei1058.bedwars.upgradesold.UpgradeGroup;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -30,7 +30,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
-import static com.andrei1058.bedwars.upgrades.UpgradeGroup.getUpgradeGroup;
+import static com.andrei1058.bedwars.upgradesold.UpgradeGroup.getUpgradeGroup;
 
 public class Interact implements Listener {
 

@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.upgrades;
+package com.andrei1058.bedwars.upgradesold;
 
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 

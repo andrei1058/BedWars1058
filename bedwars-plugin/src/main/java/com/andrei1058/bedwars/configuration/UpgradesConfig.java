@@ -1,37 +1,85 @@
 package com.andrei1058.bedwars.configuration;
 
-import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
-import com.andrei1058.bedwars.api.configuration.ConfigPath;
-import com.andrei1058.bedwars.upgrades.*;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionEffectType;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static com.andrei1058.bedwars.BedWars.nms;
 import static com.andrei1058.bedwars.BedWars.plugin;
-import static com.andrei1058.bedwars.api.language.Language.saveIfNotExists;
 
-@SuppressWarnings("WeakerAccess")
-public class UpgradesManager extends ConfigManager {
+public class UpgradesConfig extends ConfigManager {
 
-    private YamlConfiguration yml;
-    private File file;
 
-    public UpgradesManager(String name, String dir) {
+    public UpgradesConfig(String name, String dir) {
         super(plugin, name, dir);
-        yml = getYml();
-        /* Generators Upgrade **/
+        YamlConfiguration yml = this.getYml();
+        if (!yml.isSet("default-upgrades-menu")){
+            List<String> elements = Arrays.asList("upgrade-swords,10", "upgrade-armor,11", "upgrade-miner,12", "upgrade-forge,13",
+                    "upgrade-heal-pool,14", "upgrade-dragon,15", "category-traps,16", "separator-glass,18,19,20,21,22,23,24,25,26",
+                    "trap-slot,30,31,32");
+            yml.set("default-upgrades-menu", elements);
+        }
+
+        if (isFirstTime()){
+            yml.addDefault("upgrade-swords.tier-1.cost", 4);
+            yml.addDefault("upgrade-swords.tier-1.currency", "diamond");
+            addDefaultDisplayItem("upgrade-swords.tier-1", "IRON_SWORD", 0, 1, false);
+            yml.addDefault("upgrade-swords.tier-1.tier-1.receive", Arrays.asList("enchant-item: DAMAGE_ALL,1,sword", "enchant-item: DAMAGE_ALL,1,axe"));
+
+            yml.addDefault("upgrade-armor.tier-1.currency", "diamond");
+            yml.addDefault("upgrade-armor.tier-1.cost", 2);
+            addDefaultDisplayItem("upgrade-armor.tier-1", "IRON_CHESTPLATE", 0, 1, false);
+            yml.addDefault("upgrade-armor.tier-1.receive", Arrays.asList("enchant-item: PROTECTION_ENVIRONMENTAL,1,helmet",
+                    "enchant-item: PROTECTION_ENVIRONMENTAL,1,chestplate", "enchant-item: PROTECTION_ENVIRONMENTAL,1,leggings",
+                    "enchant-item: PROTECTION_ENVIRONMENTAL,1,boots"));
+
+            yml.addDefault("upgrade-armor.tier-2.currency", "diamond");
+            yml.addDefault("upgrade-armor.tier-2.cost", 4);
+            addDefaultDisplayItem("upgrade-armor.tier-2", "IRON_CHESTPLATE", 0, 2, false);
+            yml.addDefault("upgrade-armor.tier-2.receive", Arrays.asList("enchant-item: PROTECTION_ENVIRONMENTAL,2,helmet",
+                    "enchant-item: PROTECTION_ENVIRONMENTAL,2,chestplate", "enchant-item: PROTECTION_ENVIRONMENTAL,2,leggings",
+                    "enchant-item: PROTECTION_ENVIRONMENTAL,2,boots"));
+
+            yml.addDefault("upgrade-armor.tier-3.currency", "diamond");
+            yml.addDefault("upgrade-armor.tier-3.cost", 8);
+            addDefaultDisplayItem("upgrade-armor.tier-3", "IRON_CHESTPLATE", 0, 3, false);
+            yml.addDefault("upgrade-armor.tier-3.receive", Arrays.asList("enchant-item: PROTECTION_ENVIRONMENTAL,3,helmet",
+                    "enchant-item: PROTECTION_ENVIRONMENTAL,3,chestplate", "enchant-item: PROTECTION_ENVIRONMENTAL,3,leggings",
+                    "enchant-item: PROTECTION_ENVIRONMENTAL,3,boots"));
+
+            yml.addDefault("upgrade-armor.tier-4.currency", "diamond");
+            yml.addDefault("upgrade-armor.tier-4.cost", 16);
+            addDefaultDisplayItem("upgrade-armor.tier-4", "IRON_CHESTPLATE", 0, 4, false);
+            yml.addDefault("upgrade-armor.tier-4.receive", Arrays.asList("enchant-item: PROTECTION_ENVIRONMENTAL,4,helmet",
+                    "enchant-item: PROTECTION_ENVIRONMENTAL,4,chestplate", "enchant-item: PROTECTION_ENVIRONMENTAL,4,leggings",
+                    "enchant-item: PROTECTION_ENVIRONMENTAL,4,boots"));
+
+
+            yml.addDefault("upgrade-miner", "");
+            yml.addDefault("upgrade-forge", "");
+            yml.addDefault("upgrade-heal-pool", "");
+            yml.addDefault("upgrade-dragon", "");
+            yml.addDefault("category-traps", "");
+            yml.addDefault("separator-glass", "");
+            yml.addDefault("trap-slot", "");
+        }
+        yml.options().copyDefaults(true);
+        save();
+    }
+
+    private void addDefaultDisplayItem(String path, String material, int data, int amount, boolean enchanted){
+        getYml().addDefault(path+".display-item.material", material);
+        getYml().addDefault(path+".display-item.data", data);
+        getYml().addDefault(path+".display-item.amount", amount);
+        getYml().addDefault(path+".display-item.enchanted", enchanted);
+    }
+
+    //private YamlConfiguration yml;
+
+    /*public UpgradesConfig(String name, String dir) {
+        super(plugin, name, dir);
+        YamlConfiguration yml = getYml();
         yml.addDefault("Default.generators.slot", 11);
 
         yml.addDefault("Default.generators.tier1.displayItem.material", "FURNACE");
@@ -75,7 +123,6 @@ public class UpgradesManager extends ConfigManager {
         yml.addDefault("Default.generators.tier3.receive.teamGenerator.emerald.delay", 10);
         yml.addDefault("Default.generators.tier3.receive.teamGenerator.emerald.amount", 1);
 
-        /* Maniac Miner Upgrades*/
         yml.addDefault("Default.maniacMiner.slot", 12);
         yml.addDefault("Default.maniacMiner.tier1.displayItem.material", BedWars.getForCurrentVersion("GOLD_AXE", "GOLD_AXE", "GOLDEN_AXE"));
         yml.addDefault("Default.maniacMiner.tier1.displayItem.data", 0);
@@ -87,7 +134,7 @@ public class UpgradesManager extends ConfigManager {
         yml.addDefault("Default.maniacMiner.tier1.receive.playerEffect.haste1.amplifier", 0);
         yml.addDefault("Default.maniacMiner.tier1.receive.playerEffect.haste1.apply", "members");
 
-        /* Sharpened Swords Upgrade*/
+
         yml.addDefault("Default.sharpSword.slot", 13);
         yml.addDefault("Default.sharpSword.tier1.displayItem.material", "IRON_SWORD");
         yml.addDefault("Default.sharpSword.tier1.displayItem.data", 0);
@@ -99,7 +146,7 @@ public class UpgradesManager extends ConfigManager {
         yml.addDefault("Default.sharpSword.tier1.receive.itemEnchantment.sharp.amplifier", 1);
         yml.addDefault("Default.sharpSword.tier1.receive.itemEnchantment.sharp.apply", "sword"); //sword, bow, armor
 
-        /* Reinforced Armor Upgrade*/
+
         yml.addDefault("Default.reinforced.slot", 14);
         yml.addDefault("Default.reinforced.tier1.displayItem.material", "IRON_CHESTPLATE");
         yml.addDefault("Default.reinforced.tier1.displayItem.data", 0);
@@ -111,7 +158,7 @@ public class UpgradesManager extends ConfigManager {
         yml.addDefault("Default.reinforced.tier1.receive.itemEnchantment.sharp.amplifier", 1);
         yml.addDefault("Default.reinforced.tier1.receive.itemEnchantment.sharp.apply", "armor"); //sword, bow, armor
 
-        /* It's a trap Upgrade*/
+
         yml.addDefault("Default.trap.slot", 15);
         yml.addDefault("Default.trap.tier1.displayItem.material", "TRIPWIRE_HOOK");
         yml.addDefault("Default.trap.tier1.displayItem.data", 0);
@@ -129,7 +176,6 @@ public class UpgradesManager extends ConfigManager {
         yml.addDefault("Default.trap.tier1.receive.playerEffect.slowness.apply", "enemyBaseEnter");
         yml.addDefault("Default.trap.tier1.receive.playerEffect.slowness.duration", 20);
 
-        /* Mining fatigue trap Upgrade */
         yml.addDefault("Default.miningFatigue.slot", 20);
         yml.addDefault("Default.miningFatigue.tier1.displayItem.material", "IRON_PICKAXE");
         yml.addDefault("Default.miningFatigue.tier1.displayItem.data", 0);
@@ -143,7 +189,6 @@ public class UpgradesManager extends ConfigManager {
         yml.addDefault("Default.miningFatigue.tier1.receive.playerEffect.fatigue.apply", "enemyBaseEnter");
         yml.addDefault("Default.miningFatigue.tier1.receive.playerEffect.fatigue.duration", 30);
 
-        /* Health pool Upgrade */
         yml.addDefault("Default.healPool.slot", 21);
         yml.addDefault("Default.healPool.tier1.displayItem.material", "BEACON");
         yml.addDefault("Default.healPool.tier1.displayItem.data", 0);
@@ -166,8 +211,8 @@ public class UpgradesManager extends ConfigManager {
                 loadTeamUpgrades(s);
             }
         }
-    }
 
+    /*
     public void loadTeamUpgrades(String path) {
         saveIfNotExists("upgrades." + path + ".name", "&8Team Upgrades");
         List<TeamUpgrade> teamUpgrades = new ArrayList<>();
@@ -423,5 +468,5 @@ public class UpgradesManager extends ConfigManager {
 
     public List<String> l(String path) {
         return yml.getStringList(path).stream().map(s -> s.replace("&", "§")).collect(Collectors.toList());
-    }
+    }*/
 }

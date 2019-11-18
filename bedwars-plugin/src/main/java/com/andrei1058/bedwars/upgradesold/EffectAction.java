@@ -1,8 +1,7 @@
-package com.andrei1058.bedwars.upgrades;
+package com.andrei1058.bedwars.upgradesold;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
-import com.andrei1058.bedwars.arena.BedWarsTeam;
 import org.bukkit.potion.PotionEffectType;
 
 @SuppressWarnings("WeakerAccess")
