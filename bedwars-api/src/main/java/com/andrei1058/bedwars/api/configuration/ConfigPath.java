@@ -35,9 +35,6 @@ public class ConfigPath {
     public static final String GENERATOR_EMERALD_TIER_III_SPAWN_LIMIT = "emerald.tierIII.spawn-limit";
     public static final String GENERATOR_EMERALD_TIER_III_START = "emerald.tierIII.start";
 
-    // Replace %r% with receive and %g% with generator
-    public static final String UPGRADES_TEAM_UPGRADE_RECEIVE_TEAM_GENERATOR_SPAWN_LIMIT = "receive.%r%.%g%.spawn-limit";
-
 
     public static final String GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART = "bungee-settings.games-before-restart";
     public static final String GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD = "bungee-settings.restart-cmd";

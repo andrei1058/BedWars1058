@@ -1,6 +1,8 @@
 package com.andrei1058.bedwars.configuration;
 
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.Arrays;
@@ -14,14 +16,12 @@ public class UpgradesConfig extends ConfigManager {
     public UpgradesConfig(String name, String dir) {
         super(plugin, name, dir);
         YamlConfiguration yml = this.getYml();
-        if (!yml.isSet("default-upgrades-menu")){
-            List<String> elements = Arrays.asList("upgrade-swords,10", "upgrade-armor,11", "upgrade-miner,12", "upgrade-forge,13",
-                    "upgrade-heal-pool,14", "upgrade-dragon,15", "category-traps,16", "separator-glass,18,19,20,21,22,23,24,25,26",
-                    "trap-slot,30,31,32");
-            yml.set("default-upgrades-menu", elements);
-        }
+        List<String> elements = Arrays.asList("upgrade-swords,10", "upgrade-armor,11", "upgrade-miner,12", "upgrade-forge,13",
+                "upgrade-heal-pool,14", "upgrade-dragon,15", "category-traps,16", "separator-glass,18,19,20,21,22,23,24,25,26",
+                "trap-slot-first,30", "trap-slot-second,31", "trap-slot-third,32");
+        yml.addDefault("default-upgrades-menu", elements);
 
-        if (isFirstTime()){
+        if (isFirstTime()) {
             yml.addDefault("upgrade-swords.tier-1.cost", 4);
             yml.addDefault("upgrade-swords.tier-1.currency", "diamond");
             addDefaultDisplayItem("upgrade-swords.tier-1", "IRON_SWORD", 0, 1, false);
@@ -55,24 +55,99 @@ public class UpgradesConfig extends ConfigManager {
                     "enchant-item: PROTECTION_ENVIRONMENTAL,4,chestplate", "enchant-item: PROTECTION_ENVIRONMENTAL,4,leggings",
                     "enchant-item: PROTECTION_ENVIRONMENTAL,4,boots"));
 
+            yml.addDefault("upgrade-miner.tier-1.currency", "diamond");
+            yml.addDefault("upgrade-miner.tier-1.cost", 2);
+            addDefaultDisplayItem("upgrade-miner.tier-1", "GOLD_PICKAXE", 0, 1, false);
+            yml.addDefault("upgrade-miner.tier-1.receive", Arrays.asList("player-effect: FAST_DIGGING,1,0,team"));
 
-            yml.addDefault("upgrade-miner", "");
-            yml.addDefault("upgrade-forge", "");
-            yml.addDefault("upgrade-heal-pool", "");
-            yml.addDefault("upgrade-dragon", "");
-            yml.addDefault("category-traps", "");
-            yml.addDefault("separator-glass", "");
-            yml.addDefault("trap-slot", "");
+            yml.addDefault("upgrade-miner.tier-2.currency", "diamond");
+            yml.addDefault("upgrade-miner.tier-2.cost", 4);
+            addDefaultDisplayItem("upgrade-miner.tier-2", "GOLD_PICKAXE", 0, 2, false);
+            yml.addDefault("upgrade-miner.tier-2.receive", Arrays.asList("player-effect: FAST_DIGGING,2,0,team"));
+
+            yml.addDefault("upgrade-forge.tier-1.currency", "diamond");
+            yml.addDefault("upgrade-forge.tier-1.cost", 2);
+            addDefaultDisplayItem("upgrade-forge.tier-1", "FURNACE", 0, 1, false);
+            yml.addDefault("upgrade-forge.tier-1.receive", Arrays.asList("generator-edit: iron,2,2,41", "generator-edit: gold,3,1,14"));
+
+            yml.addDefault("upgrade-forge.tier-2.currency", "diamond");
+            yml.addDefault("upgrade-forge.tier-2.cost", 4);
+            addDefaultDisplayItem("upgrade-forge.tier-2", "FURNACE", 0, 2, false);
+            yml.addDefault("upgrade-forge.tier-2.receive", Arrays.asList("generator-edit: iron,1,2,48", "generator-edit: gold,3,2,21"));
+
+            yml.addDefault("upgrade-forge.tier-3.currency", "diamond");
+            yml.addDefault("upgrade-forge.tier-3.cost", 6);
+            addDefaultDisplayItem("upgrade-forge.tier-3", "FURNACE", 0, 3, false);
+            yml.addDefault("upgrade-forge.tier-3.receive", Arrays.asList("generator-edit: iron,1,2,64", "generator-edit: gold,3,2,29",
+                    "generator-edit: emerald,10,1,10"));
+
+            yml.addDefault("upgrade-forge.tier-4.currency", "diamond");
+            yml.addDefault("upgrade-forge.tier-4.cost", 8);
+            addDefaultDisplayItem("upgrade-forge.tier-4", "FURNACE", 0, 4, false);
+            yml.addDefault("upgrade-forge.tier-4.receive", Arrays.asList("generator-edit: iron,1,4,120", "generator-edit: gold,2,4,80",
+                    "generator-edit: emerald,10,2,20"));
+
+            yml.addDefault("upgrade-heal-pool.tier-1.currency", "diamond");
+            yml.addDefault("upgrade-heal-pool.tier-1.cost", 1);
+            addDefaultDisplayItem("upgrade-heal-pool.tier-1", "BEACON", 0, 1, false);
+            yml.addDefault("upgrade-heal-pool.tier-1.receive", Arrays.asList("player-effect: REGENERATION,1,0,base"));
+
+            yml.addDefault("upgrade-dragon.tier-1.currency", "diamond");
+            yml.addDefault("upgrade-dragon.tier-1.cost", 5);
+            addDefaultDisplayItem("upgrade-dragon.tier-1", "DRAGON_EGG", 0, 1, false);
+            yml.addDefault("upgrade-dragon.tier-1.receive", Arrays.asList("dragon: 1"));
+
+            addDefaultDisplayItem("category-traps", "LEATHER", 0, 1, false);
+            yml.addDefault("category-traps.category-content", Arrays.asList("upgrade-trap-1,10", "upgrade-trap-2,11",
+                    "upgrade-trap-3,12", "upgrade-trap-4,13", "separator-back,22"));
+
+            yml.addDefault("separator-glass.on-click", "");
+            addDefaultDisplayItem("separator-glass", BedWars.getForCurrentVersion("STAINED_GLASS_PANE", "STAINED_GLASS_PANE",
+                    "GRAY_STAINED_GLASS_PANE"), 2, 1, false);
+
+            addDefaultDisplayItem("trap-slot-first", BedWars.getForCurrentVersion("STAINED_GLASS", "STAINED_GLASS",
+                    "GRAY_STAINED_GLASS"), 1, 1, false);
+            addDefaultDisplayItem("trap-slot-second", BedWars.getForCurrentVersion("STAINED_GLASS", "STAINED_GLASS",
+                    "GRAY_STAINED_GLASS"), 1, 2, false);
+            addDefaultDisplayItem("trap-slot-third", BedWars.getForCurrentVersion("STAINED_GLASS", "STAINED_GLASS",
+                    "GRAY_STAINED_GLASS"), 1, 3, false);
+
+            yml.addDefault("upgrade-trap-1.trap", true);
+            yml.addDefault("upgrade-trap-1.tier-1.currency", "diamond");
+            yml.addDefault("upgrade-trap-1.tier-1.cost", 1);
+            addDefaultDisplayItem("upgrade-trap-1.tier-1", "TRIPWIRE_HOOK", 0, 1, false);
+            yml.addDefault("upgrade-trap-1.tier-1.receive", Arrays.asList("player-effect: BLINDNESS,1,5,enemies", "player-effect: SLOW,1,5,enemies"));
+
+            yml.addDefault("upgrade-trap-2.trap", true);
+            yml.addDefault("upgrade-trap-2.tier-1.currency", "diamond");
+            yml.addDefault("upgrade-trap-2.tier-1.cost", 1);
+            addDefaultDisplayItem("upgrade-trap-2.tier-1", "FEATHER", 0, 1, false);
+            yml.addDefault("upgrade-trap-2.tier-1.receive", Arrays.asList("player-effect: SPEED,1,15,base"));
+
+            yml.addDefault("upgrade-trap-3.trap", true);
+            yml.addDefault("upgrade-trap-3.tier-1.currency", "diamond");
+            yml.addDefault("upgrade-trap-3.tier-1.cost", 1);
+            addDefaultDisplayItem("upgrade-trap-3.tier-1", "REDSTONE_TORCH", 0, 1, false);
+            yml.addDefault("upgrade-trap-3.tier-1.receive", Arrays.asList("remove-effect: INVISIBILITY,enemies"));
+
+            yml.addDefault("upgrade-trap-4.trap", true);
+            yml.addDefault("upgrade-trap-4.tier-1.currency", "diamond");
+            yml.addDefault("upgrade-trap-4.tier-1.cost", 1);
+            addDefaultDisplayItem("upgrade-trap-4.tier-1", "IRON_PICKAXE", 0, 1, false);
+            yml.addDefault("upgrade-trap-4.tier-1.receive", Arrays.asList("player-effect: SLOW_DIGGING,1,15,enemies"));
+
+            yml.addDefault("separator-back.on-click", "bw upgradesmenu");
+            addDefaultDisplayItem("separator-back", "ARROW", 0, 1, false);
         }
         yml.options().copyDefaults(true);
         save();
     }
 
-    private void addDefaultDisplayItem(String path, String material, int data, int amount, boolean enchanted){
-        getYml().addDefault(path+".display-item.material", material);
-        getYml().addDefault(path+".display-item.data", data);
-        getYml().addDefault(path+".display-item.amount", amount);
-        getYml().addDefault(path+".display-item.enchanted", enchanted);
+    private void addDefaultDisplayItem(String path, String material, int data, int amount, boolean enchanted) {
+        getYml().addDefault(path + ".display-item.material", material);
+        getYml().addDefault(path + ".display-item.data", data);
+        getYml().addDefault(path + ".display-item.amount", amount);
+        getYml().addDefault(path + ".display-item.enchanted", enchanted);
     }
 
     //private YamlConfiguration yml;

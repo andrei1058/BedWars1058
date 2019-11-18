@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.UUID;
@@ -33,6 +34,9 @@ public class UpgradesManager {
     }
 
     public static void init() {
+        File oldFile = new File("plugins/" + BedWars.plugin.getName()+"/upgrades.yml");
+        oldFile.delete();
+
         upgrades = new UpgradesConfig("upgrades2", "plugins/" + BedWars.plugin.getName());
         Bukkit.getPluginManager().registerEvents(new InventoryListener(), BedWars.plugin);
         String name = "";
