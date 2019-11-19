@@ -1,37 +1,32 @@
 package com.andrei1058.bedwars.upgrades.menu;
 
 import com.andrei1058.bedwars.BedWars;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.logging.Level;
 
 public class UpgradeTier implements MenuContent{
 
     private ItemStack displayItem;
+    private String name;
 
-    public UpgradeTier(String name, String material, int amount, byte data){
-
-        // create display item
-        try {
-            Material.valueOf(material);
-        } catch (Exception ex){
-            Bukkit.getLogger().log(Level.WARNING, "Invalid material " + material + " at upgrade tier " + name);
-            return;
-        }
-        //displayItem = BedWars.nms.createItemStack()
-        displayItem = BedWars.nms.addCustomData(displayItem, "MCONT_" + name);
+    public UpgradeTier(String name, ItemStack displayItem, int cost, ItemStack currency){
+        this.displayItem = BedWars.nms.addCustomData(displayItem, "MCONT_" + name);
+        this.name = name;
     }
 
     @Override
     public ItemStack getDisplayItem() {
-        return null;
+        return displayItem;
     }
 
     @Override
-    public void onClick(ClickType clickType) {
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void onClick(Player player, ClickType clickType) {
 
     }
 }

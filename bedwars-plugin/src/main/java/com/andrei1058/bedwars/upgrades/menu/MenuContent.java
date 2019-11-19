@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.upgrades.menu;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
@@ -15,5 +16,12 @@ public interface MenuContent {
     /**
      * Manage what to do on click.
      */
-    void onClick(ClickType clickType);
+    void onClick(Player player, ClickType clickType);
+
+    /**
+     * Get identifier.
+     *
+     * @return content name.
+     */
+    String getName();
 }

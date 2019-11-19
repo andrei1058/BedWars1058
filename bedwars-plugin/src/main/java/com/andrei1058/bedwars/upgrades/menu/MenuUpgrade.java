@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.upgrades.menu;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
@@ -24,22 +25,32 @@ public class MenuUpgrade implements MenuContent {
     @Override
     public ItemStack getDisplayItem() {
         //return next tier display item
-        return null;
+        //todo
+        return tiers.get(0).getDisplayItem();
     }
 
     @Override
-    public void onClick(ClickType clickType) {
-
+    public void onClick(Player player, ClickType clickType) {
+        //todo
     }
 
     /**
      * Load a upgrade element tiers.
      *
+     * @param upgradeTier tier.
      * @return false if something went wrong.
      */
-    private boolean loadTiers() {
-        //todo
-        return false;
+    public boolean addTier(UpgradeTier upgradeTier) {
+        for (UpgradeTier ut : tiers){
+            if (ut.getName().equalsIgnoreCase(upgradeTier.getName())) return false;
+        }
+        tiers.add(upgradeTier);
+        return true;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     /**
