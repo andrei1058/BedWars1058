@@ -14,6 +14,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.*;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -49,6 +50,7 @@ public class JoinNPC {
                 for (SubCommand sc : bw.getSubCommands()) {
                     if (sc.getSubCommandName().equalsIgnoreCase("npc")) {
                         registered = true;
+                        break;
                     }
                 }
                 if (!registered) {
@@ -58,11 +60,7 @@ public class JoinNPC {
         } else {
             //remove npc subCommand
             if (bw.isRegistered()) {
-                for (SubCommand sc : new ArrayList<>(bw.getSubCommands())) {
-                    if (sc.getSubCommandName().equalsIgnoreCase("npc")) {
-                        bw.getSubCommands().remove(sc);
-                    }
-                }
+                bw.getSubCommands().removeIf(sc -> sc.getSubCommandName().equalsIgnoreCase("npc"));
             }
         }
     }
@@ -75,6 +73,7 @@ public class JoinNPC {
      * @param name  Display name
      * @param skin  A player name to get his skin
      */
+    @Nullable
     public static NPC spawnNPC(Location l, String name, String group, String skin, NPC spawnExisting) {
         if (!isCitizensSupport()) return null;
         NPC npc;
@@ -138,10 +137,10 @@ public class JoinNPC {
                 if (Misc.isNumber(data[7])) continue;
                 if (Misc.isNumber(data[8])) continue;
                 if (!Misc.isNumber(data[9])) continue;
-                Location l = new Location(Bukkit.getWorld(data[5]), Double.valueOf(data[0]), Double.valueOf(data[1]), Double.valueOf(data[2]), Float.valueOf(data[3]),
-                        Float.valueOf(data[4]));
+                Location l = new Location(Bukkit.getWorld(data[5]), Double.parseDouble(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]), Float.parseFloat(data[3]),
+                        Float.parseFloat(data[4]));
                 String skin = data[6], name = data[7], group = data[8];
-                int id = Integer.valueOf(data[9]);
+                int id = Integer.parseInt(data[9]);
                 net.citizensnpcs.api.npc.NPC npc = CitizensAPI.getNPCRegistry().getById(id);
                 if (npc == null) {
                     BedWars.plugin.getLogger().severe("Invalid npc id: " + id);
@@ -162,9 +161,12 @@ public class JoinNPC {
         String x = String.valueOf(Arena.getPlayers(group));
         for (Map.Entry<ArmorStand, List<String>> e : npcs_holos.entrySet()) {
             if (e.getValue().get(0).equalsIgnoreCase(group)) {
-                if (!(e.getKey() == null && e.getKey().isDead())) {
-                    e.getKey().setCustomName(ChatColor.translateAlternateColorCodes('&', e.getValue().get(1).replace("{players}", x)));
+                if (e.getKey() != null) {
+                    if (!e.getKey().isDead()) {
+                        e.getKey().setCustomName(ChatColor.translateAlternateColorCodes('&', e.getValue().get(1).replace("{players}", x)));
+                    }
                 }
+
             }
         }
     }

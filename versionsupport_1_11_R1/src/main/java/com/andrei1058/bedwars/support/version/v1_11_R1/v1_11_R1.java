@@ -41,7 +41,7 @@ public class v1_11_R1 extends VersionSupport {
 
     private static int renderDistance = 48;
 
-    public v1_11_R1(Plugin plugin, String name){
+    public v1_11_R1(Plugin plugin, String name) {
         super(plugin, name);
         try {
             setEggBridgeEffect("MOBSPAWNER_FLAMES");
@@ -96,7 +96,7 @@ public class v1_11_R1 extends VersionSupport {
 
     @Override
     public void hidePlayer(Player player, List<Player> players) {
-        for (Player p : players){
+        for (Player p : players) {
             if (p == player) continue;
             p.hidePlayer(player);
         }
@@ -240,7 +240,7 @@ public class v1_11_R1 extends VersionSupport {
     }
 
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private void registerEntity(String name, int id, Class customClass) {
         EntityTypes.b.a(id, new MinecraftKey(name), customClass);
     }
@@ -351,7 +351,7 @@ public class v1_11_R1 extends VersionSupport {
 
     @Override
     public void spawnDragon(Location l, ITeam bwt) {
-        if (l == null || l.getWorld() == null){
+        if (l == null || l.getWorld() == null) {
             getPlugin().getLogger().log(Level.WARNING, "Could not spawn Dragon. Location is null");
             return;
         }
@@ -389,7 +389,7 @@ public class v1_11_R1 extends VersionSupport {
 
     @Override
     public void showPlayer(Player whoToShow, List<Player> p) {
-        for (Player p1 : p){
+        for (Player p1 : p) {
             if (p1.equals(whoToShow)) continue;
             p1.showPlayer(whoToShow);
         }
@@ -398,7 +398,7 @@ public class v1_11_R1 extends VersionSupport {
     @Override
     @SuppressWarnings("deprecation")
     public void setBlockTeamColor(org.bukkit.block.Block block, TeamColor teamColor) {
-        block.setData(TeamColor.itemColor(teamColor));
+        block.setData(teamColor.itemByte());
     }
 
     @Override
@@ -455,9 +455,9 @@ public class v1_11_R1 extends VersionSupport {
             case "WOOL":
             case "STAINED_CLAY":
             case "STAINED_GLASS":
-                return new org.bukkit.inventory.ItemStack(itemStack.getType(), itemStack.getAmount(),TeamColor.itemColor(bedWarsTeam.getColor()));
+                return new org.bukkit.inventory.ItemStack(itemStack.getType(), itemStack.getAmount(), bedWarsTeam.getColor().itemByte());
             case "GLASS":
-                return new org.bukkit.inventory.ItemStack(org.bukkit.Material.STAINED_GLASS, itemStack.getAmount(), TeamColor.itemColor(bedWarsTeam.getColor()));
+                return new org.bukkit.inventory.ItemStack(org.bukkit.Material.STAINED_GLASS, itemStack.getAmount(), bedWarsTeam.getColor().itemByte());
         }
     }
 
@@ -543,7 +543,7 @@ public class v1_11_R1 extends VersionSupport {
     @SuppressWarnings("deprecation")
     @Override
     public void setJoinSignBackgroundBlockData(org.bukkit.block.BlockState block, byte data) {
-        block.getBlock().getRelative(((org.bukkit.material.Sign)block.getData()).getAttachedFace()).setData(data, true);
+        block.getBlock().getRelative(((org.bukkit.material.Sign) block.getData()).getAttachedFace()).setData(data, true);
     }
 
     @Override
@@ -572,14 +572,14 @@ public class v1_11_R1 extends VersionSupport {
 
     @Override
     public org.bukkit.inventory.ItemStack getPlayerHead(Player player) {
-        org.bukkit.inventory.ItemStack head = new org.bukkit.inventory.ItemStack(org.bukkit.Material.SKULL_ITEM, 1, (short)3);
+        org.bukkit.inventory.ItemStack head = new org.bukkit.inventory.ItemStack(org.bukkit.Material.SKULL_ITEM, 1, (short) 3);
 
         SkullMeta headMeta = (SkullMeta) head.getItemMeta();
         Field profileField;
         try {
             profileField = headMeta.getClass().getDeclaredField("profile");
             profileField.setAccessible(true);
-            profileField.set(headMeta, ((CraftPlayer)player).getProfile());
+            profileField.set(headMeta, ((CraftPlayer) player).getProfile());
         } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e1) {
             e1.printStackTrace();
         }
@@ -595,12 +595,14 @@ public class v1_11_R1 extends VersionSupport {
         for (Player pl : arena.getPlayers()) {
             if (pl.equals(player)) continue;
             if (arena.getRespawn().containsKey(pl)) continue;
-            if (arena.getShowTime().containsKey(pl)) continue;
+            //if (arena.getShowTime().containsKey(pl)) continue;
             if (pl.getLocation().distance(player.getLocation()) <= renderDistance) {
                 pc2 = ((CraftPlayer) pl).getHandle();
-                pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(pc2));
-                pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, pc2));
-                showArmor(pl, player);
+                if (!arena.getShowTime().containsKey(pl)) {
+                    pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(pc2));
+                    pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, pc2));
+                    showArmor(pl, player);
+                }
 
                 pc2.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(pc));
                 pc2.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, pc));
@@ -632,6 +634,6 @@ public class v1_11_R1 extends VersionSupport {
 
     @Override
     public void setJoinSignBackground(org.bukkit.block.BlockState b, org.bukkit.Material material) {
-        b.getLocation().getBlock().getRelative(((org.bukkit.material.Sign)b.getData()).getAttachedFace()).setType(material);
+        b.getLocation().getBlock().getRelative(((org.bukkit.material.Sign) b.getData()).getAttachedFace()).setType(material);
     }
 }

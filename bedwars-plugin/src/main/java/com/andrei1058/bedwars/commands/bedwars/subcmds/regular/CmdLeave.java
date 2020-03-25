@@ -13,9 +13,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class CmdLeave extends SubCommand {
+
+    private static HashMap<UUID, Long> delay = new HashMap<>();
 
     public CmdLeave(ParentCommand parent, String name) {
         super(parent, name);
@@ -28,6 +32,9 @@ public class CmdLeave extends SubCommand {
     public boolean execute(String[] args, CommandSender s) {
         if (s instanceof ConsoleCommandSender) return false;
         Player p = (Player) s;
+
+        if (cancel(p.getUniqueId())) return true;
+        update(p.getUniqueId());
         if (BedWars.getServerType() == ServerType.BUNGEE){
             Misc.forceKick(p);
             return true;
@@ -60,5 +67,17 @@ public class CmdLeave extends SubCommand {
 
         if (SetupSession.isInSetupSession(p.getUniqueId())) return false;
         return hasPermission(s);
+    }
+
+    private static boolean cancel(UUID player){
+        return delay.getOrDefault(player, 0L) > System.currentTimeMillis();
+    }
+
+    private static void update(UUID player){
+        if (delay.containsKey(player)){
+            delay.replace(player, System.currentTimeMillis() + 2500L);
+            return;
+        }
+        delay.put(player, System.currentTimeMillis() + 2500L);
     }
 }

@@ -1,5 +1,4 @@
-<settings xmlns="http://maven.apache.org/SETTINGS/1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.1.0 http://maven.apache.org/xsd/settings-1.1.0.xsd">
+<settings>
     <servers>
         <server>
             <id>gitlab-maven</id>
@@ -11,6 +10,11 @@
                     </property>
                 </httpHeaders>
             </configuration>
+        </server>
+        <server>
+            <id>ftp-repo</id>
+            <username>${env.FTP_USR}</username>
+            <password>${env.FTP_PASS}</password>
         </server>
     </servers>
 </settings>

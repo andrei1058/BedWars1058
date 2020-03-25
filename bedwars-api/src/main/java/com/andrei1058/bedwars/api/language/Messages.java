@@ -148,7 +148,12 @@ public class Messages {
     public static String FORMAT_PAPI_PLAYER_TEAM_TEAM = "format-papi-player-team";
     public static String FORMAT_PAPI_PLAYER_TEAM_SHOUT = "format-papi-player-shout";
     public static String FORMAT_PAPI_PLAYER_TEAM_SPECTATOR = "format-papi-player-spectator";
-
+    public static String FORMAT_UPGRADE_TIER_LOCKED = "format-tier-color-locked";
+    public static String FORMAT_UPGRADE_TIER_UNLOCKED = "format-tier-color-unlocked";
+    public static String FORMAT_UPGRADE_COLOR_CANT_AFFORD = "format-upgrade-color-cant-afford";
+    public static String FORMAT_UPGRADE_COLOR_CAN_AFFORD = "format-upgrade-color-can-afford";
+    public static String FORMAT_UPGRADE_COLOR_UNLOCKED = "format-upgrade-color-unlocked";
+    public static String FORMAT_UPGRADE_TRAP_COST = "format-upgrade-trap-cost";
 
     /** Meaning/ Translations */
     public static String MEANING_FULL = "meaning-full";
@@ -165,6 +170,7 @@ public class Messages {
     public static String MEANING_DIAMOND_PLURAL = "meaning-diamond-plural";
     public static String MEANING_VAULT_SINGULAR = "meaning-vault-singular";
     public static String MEANING_VAULT_PLURAL = "meaning-vault-plural";
+    public static String MEANING_NO_TRAP = "meaning-no-trap";
 
     /** Scoreboard related */
     public static String SCOREBOARD_DEFAULT_WAITING = "scoreboard.Default.waiting";
@@ -222,11 +228,6 @@ public class Messages {
     public static String XP_REWARD_PER_TEAMMATE = "xp-reward-per-teammate";
     public static String XP_REWARD_PER_MINUTE = "xp-reward-per-minute";
 
-    public static String TRAP_ENEMY_BASE_ENTER_TITLE = "trap-base-enter-title";
-    public static String TRAP_ENEMY_BASE_ENTER_SUBTITLE = "trap-base-enter-subtitle";
-    public static String TRAP_ENEMY_BASE_ENTER_ACTION = "trap-base-enter-action";
-    public static String TRAP_ENEMY_BASE_ENTER_CHAT = "trap-base-enter-chat";
-
     public static String BED_HOLOGRAM_DEFEND = "bed-hologram-defend";
     public static String BED_HOLOGRAM_DESTROYED = "bed-hologram-destroyed";
     public static String TEAM_ELIMINATED_CHAT = "team-eliminated";
@@ -238,11 +239,32 @@ public class Messages {
     public static String NPC_NAME_SOLO_UPGRADES = "npc-solo-upgrades";
     public static String NPC_NAME_SOLO_SHOP = "npc-solo-shop";
 
+    public static String UPGRADES_MENU_GUI_NAME_PATH = "upgrades-menu-gui-name-";
+    public static String UPGRADES_CATEGORY_GUI_NAME_PATH = "upgrades-category-gui-name-";
+    public static String UPGRADES_CATEGORY_ITEM_NAME_PATH = "upgrades-category-item-name-";
+    public static String UPGRADES_CATEGORY_ITEM_LORE_PATH = "upgrades-category-item-lore-";
+    public static String UPGRADES_SEPARATOR_ITEM_NAME_PATH = "upgrades-separator-item-name-";
+    public static String UPGRADES_SEPARATOR_ITEM_LORE_PATH = "upgrades-separator-item-lore-";
+    public static String UPGRADES_TRAP_SLOT_ITEM_NAME_PATH = "upgrades-trap-slot-item-name-";
+    public static String UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH = "upgrades-trap-slot-item-lore1-";
+    public static String UPGRADES_TRAP_SLOT_ITEM_LORE2_PATH = "upgrades-trap-slot-item-lore2-";
+    public static String UPGRADES_UPGRADE_TIER_ITEM_NAME = "upgrades-upgrade-name-{name}-{tier}";
+    public static String UPGRADES_UPGRADE_TIER_ITEM_LORE = "upgrades-upgrade-lore-{name}-{tier}";
+    public static String UPGRADES_BASE_TRAP_ITEM_NAME_PATH = "upgrades-base-trap-name-";
+    public static String UPGRADES_BASE_TRAP_ITEM_LORE_PATH = "upgrades-base-trap-lore-";
+    public static String UPGRADES_TRAP_CUSTOM_TITLE = "upgrades-base-trap-title-";
+    public static String UPGRADES_TRAP_CUSTOM_SUBTITLE = "upgrades-base-trap-subtitle-";
+    public static String UPGRADES_TRAP_CUSTOM_MSG = "upgrades-base-trap-msg-";
+
     public static String UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY = "upgrades-lore-insuff-money";
     public static String UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY = "upgrades-lore-click-buy";
     public static String UPGRADES_LORE_REPLACEMENT_UNLOCKED = "upgrades-lore-unlocked";
     public static String UPGRADES_LORE_REPLACEMENT_LOCKED = "upgrades-lore-locked";
     public static String UPGRADES_UPGRADE_BOUGHT_CHAT = "upgrades-new-purchase";
+    public static String UPGRADES_TRAP_QUEUE_LIMIT = "upgrades-trap-queue-full";
+    public static String UPGRADES_TRAP_DEFAULT_TITLE = "upgrades-trap-default-title";
+    public static String UPGRADES_TRAP_DEFAULT_SUBTITLE = "upgrades-trap-default-subtitle";
+    public static String UPGRADES_TRAP_DEFAULT_MSG = "upgrades-trap-default-msg";
 
     public static String SHOP_NEW_PURCHASE = "shop-new-purchase";
     public static String SHOP_UTILITY_NPC_SILVERFISH_NAME = "shop-utility-silverfish";

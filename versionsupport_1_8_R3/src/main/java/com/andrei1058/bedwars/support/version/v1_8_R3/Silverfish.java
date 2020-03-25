@@ -23,6 +23,7 @@ public class Silverfish extends EntitySilverfish {
 
     public Silverfish(World world, ITeam bedWarsTeam) {
         super(world);
+        if (bedWarsTeam == null) return;
         try {
             Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
             bField.setAccessible(true);
@@ -35,19 +36,22 @@ public class Silverfish extends EntitySilverfish {
         } catch (IllegalAccessException | NoSuchFieldException e1) {
             e1.printStackTrace();
         }
-        this.team = team;
+        this.team = bedWarsTeam;
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
-        this.goalSelector.a(2, new PathfinderGoalMeleeAttack(this,15D, false));
+        this.goalSelector.a(2, new PathfinderGoalMeleeAttack(this,1.9D, false));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true));
         this.goalSelector.a(3, new PathfinderGoalRandomStroll(this, 2D));
-        this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, 10, true, false, player -> {
+        this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, 20, true, false, player -> {
+            if (player == null) return false;
             return ((EntityHuman)player).isAlive() && !team.wasMember(((EntityHuman)player).getUniqueID()) && !team.getArena().isReSpawning(((EntityHuman)player).getUniqueID())
                     && !team.getArena().isSpectator(((EntityHuman)player).getUniqueID());
         }));
-        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget(this, IGolem.class, 10, true, false, golem -> {
+        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget(this, IGolem.class, 20, true, false, golem -> {
+            if (golem == null) return false;
             return ((IGolem)golem).getTeam() != team;
         }));
-        this.targetSelector.a(4, new PathfinderGoalNearestAttackableTarget(this, Silverfish.class, 10, true, false, sf -> {
+        this.targetSelector.a(4, new PathfinderGoalNearestAttackableTarget(this, Silverfish.class, 20, true, false, sf -> {
+            if (sf == null) return false;
             return ((Silverfish)sf).getTeam() != team;
         }));
     }
@@ -67,7 +71,7 @@ public class Silverfish extends EntitySilverfish {
         customEnt.setCustomName(Language.getDefaultLanguage().m(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME)
                 .replace("{despawn}", String.valueOf(despawn)
                         .replace("{health}", StringUtils.repeat(Language.getDefaultLanguage().m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH)+" ", 10))
-                        .replace("{TeamColor}", TeamColor.getChatColor(team.getColor()).toString())));
+                        .replace("{TeamColor}", team.getColor().chat().toString())));
         customEnt.setCustomNameVisible(true);
         mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
         return (LivingEntity) customEnt.getBukkitEntity();

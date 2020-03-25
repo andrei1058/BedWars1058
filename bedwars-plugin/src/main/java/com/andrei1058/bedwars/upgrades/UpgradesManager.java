@@ -2,11 +2,17 @@ package com.andrei1058.bedwars.upgrades;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.api.upgrades.MenuContent;
+import com.andrei1058.bedwars.api.upgrades.UpgradesIndex;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.configuration.UpgradesConfig;
 import com.andrei1058.bedwars.upgrades.listeners.InventoryListener;
+import com.andrei1058.bedwars.upgrades.listeners.UpgradeOpenListener;
 import com.andrei1058.bedwars.upgrades.menu.*;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -20,7 +26,7 @@ import java.util.LinkedList;
 import java.util.UUID;
 import java.util.logging.Level;
 
-import static com.andrei1058.bedwars.BedWars.nms;
+import static com.andrei1058.bedwars.BedWars.*;
 
 public class UpgradesManager {
 
@@ -38,36 +44,44 @@ public class UpgradesManager {
     }
 
     public static void init() {
-        File oldFile = new File("plugins/" + BedWars.plugin.getName() + "/upgrades.yml");
+        File oldFile = new File(plugin.getDataFolder(), "/upgrades.yml");
+        //noinspection ResultOfMethodCallIgnored
         oldFile.delete();
 
-        upgrades = new UpgradesConfig("upgrades2", "plugins/" + BedWars.plugin.getName());
-        Bukkit.getPluginManager().registerEvents(new InventoryListener(), BedWars.plugin);
-        String name = "";
-        for (String index : BedWars.upgrades.getYml().getConfigurationSection("").getKeys(false)) {
+        upgrades = new UpgradesConfig("upgrades2", plugin.getDataFolder().getPath());
+        String name;
+        for (String index : upgrades.getYml().getConfigurationSection("").getKeys(false)) {
+            name = index;
             if (index.startsWith("upgrade-")) {
-                name = index.replace("upgrade-", "");
-                if (!name.isEmpty()) {
-                    if (!loadUpgrade(name)) {
-                        Bukkit.getLogger().log(Level.WARNING, "Could not load upgrade: " + name);
-                    }
+                //name = index.replace("upgrade-", "");
+                //if (!name.isEmpty()) {
+                if (getMenuContent(name) == null && !loadUpgrade(name)) {
+                    Bukkit.getLogger().log(Level.WARNING, "Could not load upgrade: " + name);
                 }
+                //}
             } else if (index.startsWith("separator-")) {
-                name = index.replace("separator-", "");
-                if (!name.isEmpty()) {
-                    if (!loadSeparator(name)) {
-                        Bukkit.getLogger().log(Level.WARNING, "Could not load separator: " + name);
-                    }
+                //name = index.replace("separator-", "");
+                //if (!name.isEmpty()) {
+                if (getMenuContent(name) == null && !loadSeparator(name)) {
+                    Bukkit.getLogger().log(Level.WARNING, "Could not load separator: " + name);
                 }
+                //}
             } else if (index.startsWith("category-")) {
-                name = index.replace("category-", "");
-                if (!name.isEmpty()) {
-                    if (!loadCategory(name)) {
-                        Bukkit.getLogger().log(Level.WARNING, "Could not load category: " + name);
-                    }
+                //name = index.replace("category-", "");
+                //if (!name.isEmpty()) {
+                if (getMenuContent(name) == null && !loadCategory(name)) {
+                    Bukkit.getLogger().log(Level.WARNING, "Could not load category: " + name);
                 }
-            } else if (index.endsWith("-upgrades-menu")) {
-                name = index.replace("-upgrades-menu", "");
+                //}
+            } else if (index.startsWith("base-trap-")) {
+                //name = index.replace("category-", "");
+                //if (!name.isEmpty()) {
+                if (getMenuContent(name) == null && !loadBaseTrap(name)) {
+                    Bukkit.getLogger().log(Level.WARNING, "Could not base trap: " + name);
+                }
+                //}
+            } else if (index.endsWith("-upgrades-settings")) {
+                name = index.replace("-upgrades-settings", "");
                 if (!name.isEmpty()) {
                     if (!loadMenu(name)) {
                         Bukkit.getLogger().log(Level.WARNING, "Could not load menu: " + name);
@@ -75,6 +89,8 @@ public class UpgradesManager {
                 }
             }
         }
+
+        BedWars.registerEvents(new InventoryListener(), new UpgradeOpenListener());
     }
 
     /**
@@ -105,31 +121,32 @@ public class UpgradesManager {
      * @return false if cannot be loaded.
      */
     public static boolean loadMenu(String groupName) {
-        if (!upgrades.getYml().isSet(groupName + "-upgrades-menu")) return false;
+        if (!upgrades.getYml().isSet(groupName + "-upgrades-settings.menu-content")) return false;
+        if (menuByName.containsKey(groupName.toLowerCase())) return false;
         InternalMenu um = new InternalMenu(groupName);
-        for (String component : upgrades.getYml().getStringList(groupName + "-upgrades-menu")) {
+        for (String component : upgrades.getYml().getStringList(groupName + "-upgrades-settings.menu-content")) {
             String[] data = component.split(",");
             if (data.length <= 1) continue;
 
-            MenuContent mc = null;
+            MenuContent mc = getMenuContent(data[0]);
             if (data[0].startsWith("category-")) {
-                mc = getMenuContent(data[0]);
                 if (mc == null && loadCategory(data[0])) {
                     mc = getMenuContent(data[0]);
                 }
             } else if (data[0].startsWith("upgrade-")) {
-                mc = getMenuContent(data[0]);
                 if (mc == null && loadUpgrade(data[0])) {
                     mc = getMenuContent(data[0]);
                 }
             } else if (data[0].startsWith("trap-slot-")) {
-                mc = getMenuContent(data[0]);
                 if (mc == null && loadTrapSlot(data[0])) {
                     mc = getMenuContent(data[0]);
                 }
             } else if (data[0].startsWith("separator-")) {
-                mc = getMenuContent(data[0]);
                 if (mc == null && loadSeparator(data[0])) {
+                    mc = getMenuContent(data[0]);
+                }
+            } else if (data[0].startsWith("base-trap-")) {
+                if (mc == null && loadBaseTrap(data[0])) {
                     mc = getMenuContent(data[0]);
                 }
             }
@@ -138,17 +155,21 @@ public class UpgradesManager {
                 if (Misc.isNumber(data[i])) um.addContent(mc, Integer.parseInt(data[i]));
             }
         }
+        menuByName.put(groupName.toLowerCase(), um);
+        BedWars.debug("Registering upgrade menu: " + groupName);
         return true;
     }
 
     /**
      * Load a category with given name from the shop file.
      *
-     * @param name category name.
+     * @param name category name. Must start with "category-".
      * @return false if cannot be loaded.
      */
     private static boolean loadCategory(String name) {
-        if (!upgrades.getYml().isSet(name)) return false;
+        if (name == null) return false;
+        if (!name.startsWith("category-")) return false;
+        if (upgrades.getYml().get(name) == null) return false;
         if (getMenuContent(name) != null) return false;
         MenuCategory uc = new MenuCategory(name, createDisplayItem(name));
         for (String component : upgrades.getYml().getStringList(name + ".category-content")) {
@@ -176,62 +197,114 @@ public class UpgradesManager {
                 if (mc == null && loadSeparator(data[0])) {
                     mc = getMenuContent(data[0]);
                 }
+            } else if (data[0].startsWith("base-trap-")) {
+                mc = getMenuContent(data[0]);
+                if (mc == null && loadBaseTrap(data[0])) {
+                    mc = getMenuContent(data[0]);
+                }
             }
             if (mc == null) continue;
             for (int i = 1; i < data.length; i++) {
                 if (Misc.isNumber(data[i])) uc.addContent(mc, Integer.parseInt(data[i]));
             }
         }
+        menuContentByName.put(name.toLowerCase(), uc);
+        BedWars.debug("Registering upgrade: " + name);
         return true;
     }
 
     /**
      * Load an upgrade element with given name.
      *
-     * @param name upgrade name.
+     * @param name upgrade name. Must start with "upgrade-".
      * @return false if can't be loaded.
      */
     private static boolean loadUpgrade(String name) {
-        if (!upgrades.getYml().isSet(name)) return false;
-        if (!upgrades.getYml().isSet(name + ".tier-1")) return false;
+        if (name == null) return false;
+        if (!name.startsWith("upgrade-")) return false;
+        if (upgrades.getYml().get(name) == null) return false;
+        if (upgrades.getYml().get(name + ".tier-1") == null) return false;
         if (getMenuContent(name) != null) return false;
         MenuUpgrade mu = new MenuUpgrade(name);
 
         for (String s : upgrades.getYml().getConfigurationSection(name).getKeys(false)) {
             if (!s.startsWith("tier-")) continue;
-            if (!upgrades.getYml().isSet(name + "." + s + ".receive")) continue;
-            if (!upgrades.getYml().isSet(name + "." + s + ".display-item")) continue;
-            if (!upgrades.getYml().isSet(name + "." + s + ".cost")) continue;
-            if (!upgrades.getYml().isSet(name + "." + s + ".currency")) continue;
-            UpgradeTier ut = new UpgradeTier(name + "." + s, createDisplayItem(name + "." + s), upgrades.getYml().getInt(name + "." + s + ".cost"), getCurrency(upgrades.getYml().getString(name + "." + s + ".currency")));
-            mu.addTier(ut);
+            if (upgrades.getYml().get(name + "." + s + ".receive") == null) {
+                BedWars.debug("Could not load Upgrade " + name + " tier: " + s + ". Receive not set.");
+                continue;
+            }
+            if (upgrades.getYml().get(name + "." + s + ".display-item") == null) {
+                BedWars.debug("Could not load Upgrade " + name + " tier: " + s + ". Display item not set.");
+                continue;
+            }
+            if (upgrades.getYml().get(name + "." + s + ".cost") == null) {
+                BedWars.debug("Could not load Upgrade " + name + " tier: " + s + ". Cost not set.");
+                continue;
+            }
+            if (upgrades.getYml().get(name + "." + s + ".currency") == null) {
+                BedWars.debug("Could not load Upgrade " + name + " tier: " + s + ". Currency not set.");
+                continue;
+            }
+            UpgradeTier ut = new UpgradeTier(name, s, createDisplayItem(name + "." + s), upgrades.getYml().getInt(name + "." + s + ".cost"), getCurrency(upgrades.getYml().getString(name + "." + s + ".currency")));
+            if (!mu.addTier(ut)) {
+                Bukkit.getLogger().log(Level.WARNING, "Could not load tier: " + s + " at upgrade: " + name);
+            }
         }
+        BedWars.debug("Registering upgrade: " + name);
+        menuContentByName.put(name.toLowerCase(), mu);
         return true;
     }
 
     /**
      * Load a separator with given name.
      *
-     * @param name name.
+     * @param name name. Must start with "separator-".
      * @return false if cannot be loaded.
      */
     private static boolean loadSeparator(String name) {
-        if (!upgrades.getYml().isSet(name)) return false;
+        if (name == null) return false;
+        if (!name.startsWith("separator-")) return false;
+        if (upgrades.getYml().get(name) == null) return false;
         if (getMenuContent(name) != null) return false;
-        new MenuSeparator(name, createDisplayItem(name));
+        MenuSeparator ms = new MenuSeparator(name, createDisplayItem(name));
+        menuContentByName.put(name.toLowerCase(), ms);
+        BedWars.debug("Registering upgrade: " + name);
         return true;
     }
 
     /**
      * Load a trap slot with given name.
      *
-     * @param name name.
+     * @param name name. Must start with "trap-slot-".
      * @return false if cannot be loaded.
      */
     private static boolean loadTrapSlot(String name) {
-        if (!upgrades.getYml().isSet(name)) return false;
+        if (name == null) return false;
+        if (!name.startsWith("trap-slot-")) return false;
+        if (upgrades.getYml().get(name) == null) return false;
         if (getMenuContent(name) != null) return false;
-        new MenuTrapSlot(name, createDisplayItem(name));
+        MenuTrapSlot mts = new MenuTrapSlot(name, createDisplayItem(name));
+        menuContentByName.put(name.toLowerCase(), mts);
+        BedWars.debug("Registering upgrade: " + name);
+        return true;
+    }
+
+    private static boolean loadBaseTrap(String name) {
+        if (name == null) return false;
+        if (!name.startsWith("base-trap-")) return false;
+        if (upgrades.getYml().get(name) == null) return false;
+        if (upgrades.getYml().get(name + ".receive") == null) {
+            BedWars.debug("Could not load BaseTrap. Receive not set.");
+            return false;
+        }
+        if (upgrades.getYml().get(name + ".display-item") == null) {
+            BedWars.debug("Could not load BaseTrap. Display item not set.");
+            return false;
+        }
+
+        MenuBaseTrap bt = new MenuBaseTrap(name, createDisplayItem(name), upgrades.getYml().getInt(name + ".cost"), getCurrency(upgrades.getYml().getString(name + ".currency")));
+        BedWars.debug("Registering upgrade: " + name);
+        menuContentByName.put(name.toLowerCase(), bt);
         return true;
     }
 
@@ -242,18 +315,21 @@ public class UpgradesManager {
      * @param currency {@link org.bukkit.Material#AIR} is used for vault, {@link org.bukkit.Material#IRON_INGOT} for iron, {@link org.bukkit.Material#GOLD_INGOT} for gold, {@link org.bukkit.Material#DIAMOND} for diamond, {@link org.bukkit.Material#EMERALD} for emerald.
      * @return the amount of money.
      */
-    public static int getMoney(Player player, ItemStack currency) {
-        //todo
-        return 0;
+    public static int getMoney(Player player, Material currency) {
+        if (currency == Material.AIR) {
+            double amount = BedWars.getEconomy().getMoney(player);
+            return amount % 2 == 0 ? (int) amount : (int) (amount - 1);
+        }
+        return BedWars.getAPI().getShopUtil().calculateMoney(player, currency);
     }
 
     /**
      * @param name the string to be converted.
      * @return NULL if not a currency. {@link org.bukkit.Material#AIR} is used for vault, {@link org.bukkit.Material#IRON_INGOT} for iron, {@link org.bukkit.Material#GOLD_INGOT} for gold, {@link org.bukkit.Material#DIAMOND} for diamond, {@link org.bukkit.Material#EMERALD} for emerald.
      */
-    public static ItemStack getCurrency(String name) {
-        //todo
-        return null;
+    public static Material getCurrency(String name) {
+        if (name == null || name.isEmpty()) return null;
+        return BedWars.getAPI().getShopUtil().getCurrency(name);
     }
 
     /**
@@ -261,12 +337,12 @@ public class UpgradesManager {
      * Used in inventory click.
      *
      * @param item item to be checked.
-     * @retrun {@link com.andrei1058.bedwars.upgrades.menu.MenuContent} NULL if isn't an element.
+     * @retrun {@link MenuContent} NULL if isn't an element.
      */
     public static MenuContent getMenuContent(ItemStack item) {
         if (item == null) return null;
 
-        String identifier = nms.getShopUpgradeIdentifier(item);
+        String identifier = nms.getCustomData(item);
         if (identifier == null) return null;
         if (identifier.equals("null")) return null;
         if (!identifier.startsWith("MCONT_")) return null;
@@ -291,7 +367,13 @@ public class UpgradesManager {
      * @param menu  custom menu.
      */
     public static void setCustomMenuForArena(IArena arena, UpgradesIndex menu) {
-        if (!customMenuForArena.containsKey(arena)) customMenuForArena.put(arena, menu);
+        if (!customMenuForArena.containsKey(arena)) {
+            customMenuForArena.put(arena, menu);
+            BedWars.debug("Registering custom menu for arena: " + arena.getArenaName() + ". Using index: " + menu.getName());
+        } else {
+            BedWars.debug("Overriding custom menu for arena: " + arena.getArenaName() + ". Using index: " + menu.getName() + " Old index: " + customMenuForArena.get(arena).getName());
+            customMenuForArena.replace(arena, menu);
+        }
     }
 
     /**
@@ -326,5 +408,102 @@ public class UpgradesManager {
             i.setItemMeta(im);
         }
         return i;
+    }
+
+    /**
+     * Get currency msg.
+     */
+    public static String getCurrencyMsg(Player p, UpgradeTier ut) {
+        String c = "";
+
+        switch (ut.getCurrency()) {
+            case IRON_INGOT:
+                c = ut.getCost() == 1 ? Messages.MEANING_IRON_SINGULAR : Messages.MEANING_IRON_PLURAL;
+                break;
+            case GOLD_INGOT:
+                c = ut.getCost() == 1 ? Messages.MEANING_GOLD_SINGULAR : Messages.MEANING_GOLD_PLURAL;
+                break;
+            case EMERALD:
+                c = ut.getCost() == 1 ? Messages.MEANING_EMERALD_SINGULAR : Messages.MEANING_EMERALD_PLURAL;
+                break;
+            case DIAMOND:
+                c = ut.getCost() == 1 ? Messages.MEANING_DIAMOND_SINGULAR : Messages.MEANING_DIAMOND_PLURAL;
+                break;
+            case AIR:
+                c = ut.getCost() == 1 ? Messages.MEANING_VAULT_SINGULAR : Messages.MEANING_VAULT_PLURAL;
+                break;
+        }
+
+        return Language.getMsg(p, c);
+    }
+
+    public static String getCurrencyMsg(Player p, int money, String currency) {
+        String c;
+        if (currency == null) {
+            return Language.getMsg(p, money == 1 ? Messages.MEANING_VAULT_SINGULAR : Messages.MEANING_VAULT_PLURAL);
+        }
+
+        switch (currency.toLowerCase()) {
+            case "iron":
+                c = money == 1 ? Messages.MEANING_IRON_SINGULAR : Messages.MEANING_IRON_PLURAL;
+                break;
+            case "gold":
+                c = money == 1 ? Messages.MEANING_GOLD_SINGULAR : Messages.MEANING_GOLD_PLURAL;
+                break;
+            case "emerald":
+                c = money == 1 ? Messages.MEANING_EMERALD_SINGULAR : Messages.MEANING_EMERALD_PLURAL;
+                break;
+            case "diamond":
+                c = money == 1 ? Messages.MEANING_DIAMOND_SINGULAR : Messages.MEANING_DIAMOND_PLURAL;
+                break;
+            default:
+                c = money == 1 ? Messages.MEANING_VAULT_SINGULAR : Messages.MEANING_VAULT_PLURAL;
+                break;
+        }
+
+        return Language.getMsg(p, c);
+    }
+
+    public static String getCurrencyMsg(Player p, int money, Material currency) {
+        String c;
+
+        switch (currency) {
+            case IRON_INGOT:
+                c = money == 1 ? Messages.MEANING_IRON_SINGULAR : Messages.MEANING_IRON_PLURAL;
+                break;
+            case GOLD_INGOT:
+                c = money == 1 ? Messages.MEANING_GOLD_SINGULAR : Messages.MEANING_GOLD_PLURAL;
+                break;
+            case EMERALD:
+                c = money == 1 ? Messages.MEANING_EMERALD_SINGULAR : Messages.MEANING_EMERALD_PLURAL;
+                break;
+            case DIAMOND:
+                c = money == 1 ? Messages.MEANING_DIAMOND_SINGULAR : Messages.MEANING_DIAMOND_PLURAL;
+                break;
+            default:
+                c = money == 1 ? Messages.MEANING_VAULT_SINGULAR : Messages.MEANING_VAULT_PLURAL;
+                break;
+        }
+
+        return Language.getMsg(p, c);
+    }
+
+    public static ChatColor getCurrencyColor(Material currency) {
+        switch (currency) {
+            case DIAMOND:
+                return ChatColor.AQUA;
+            case GOLD_INGOT:
+                return ChatColor.GOLD;
+            case IRON_INGOT:
+                return ChatColor.WHITE;
+            case EMERALD:
+                return ChatColor.GREEN;
+            default:
+                return ChatColor.DARK_GREEN;
+        }
+    }
+
+    public static UpgradesConfig getConfiguration() {
+        return upgrades;
     }
 }

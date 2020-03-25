@@ -6,14 +6,15 @@ import org.bukkit.event.HandlerList;
 public class ArenaRestartEvent extends Event {
     private static final HandlerList HANDLERS = new HandlerList();
 
-    private String arena;
+    private String arena, worldName;
 
     /**
      * Called when an arena is restarting.
      * After the world was unloaded.
      */
-    public ArenaRestartEvent(String arena) {
+    public ArenaRestartEvent(String arena, String worldName) {
         this.arena = arena;
+        this.worldName = worldName;
     }
 
     /**
@@ -26,6 +27,10 @@ public class ArenaRestartEvent extends Event {
     @Override
     public HandlerList getHandlers() {
         return HANDLERS;
+    }
+
+    public String getWorldName() {
+        return worldName;
     }
 
     public static HandlerList getHandlerList() {

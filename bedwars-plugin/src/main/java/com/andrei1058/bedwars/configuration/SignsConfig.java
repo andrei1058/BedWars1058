@@ -21,6 +21,8 @@ public class SignsConfig extends ConfigManager {
         yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_STARTING_DATA, 14);
         yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_PLAYING_MATERIAL, getForCurrentVersion("STAINED_CLAY", "STAINED_CLAY", "RED_CONCRETE"));
         yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_PLAYING_DATA, 4);
+        yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_RESTARTING_MATERIAL, getForCurrentVersion("STAINED_CLAY", "STAINED_CLAY", "RED_CONCRETE"));
+        yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_RESTARTING_DATA, 4);
         yml.options().copyDefaults(true);
         save();
         if (yml.getStringList("format").size() < 4) {

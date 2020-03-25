@@ -8,10 +8,11 @@ import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.commands.bedwars.subcmds.regular.CmdStats;
 import com.andrei1058.bedwars.configuration.Permissions;
 import com.andrei1058.bedwars.configuration.Sounds;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import com.andrei1058.bedwars.lobbysocket.LoadedUser;
+import com.andrei1058.bedwars.support.preloadedparty.PreLoadedParty;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -20,7 +21,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -36,6 +36,39 @@ public class JoinLeaveTeleport implements Listener {
     public void onLogin(PlayerLoginEvent e) {
         Player p = e.getPlayer();
         final UUID u = p.getUniqueId();
+
+        if (autoscale) {
+            if (LoadedUser.isPreLoaded(u)) {
+                debug("PlayerLoginEvent is pre loaded");
+                LoadedUser lu = LoadedUser.getPreLoaded(u);
+                Language l = lu.getLanguage() == null ? Language.getDefaultLanguage() : lu.getLanguage();
+
+                if (e.getPlayer().hasPermission(Permissions.PERMISSION_REJOIN)) {
+                    ReJoin rj = ReJoin.getPlayer(p);
+                    if (rj != null) {
+                        if (rj.canReJoin()) {
+                            return;
+                        } else {
+                            e.disallow(PlayerLoginEvent.Result.KICK_OTHER, l.m(Messages.REJOIN_DENIED));
+                            return;
+                        }
+                    }
+                }
+                IArena a = Arena.getArenaByIdentifier(lu.getArenaIdentifier());
+                if (a == null || lu.getRequestTime() > System.currentTimeMillis() + 5000 || a.getStatus() == GameState.restarting) {
+                    debug("PlayerLoginEvent is pre loaded but time out");
+                    e.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, l.m(Messages.ARENA_STATUS_RESTARTING_NAME));
+                    lu.destroy();
+                    return;
+                }
+                return;
+            } else {
+                if (!e.getPlayer().hasPermission("bw.setup")) {
+                    e.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, "You must be op to join directly. Use the arena selector otherwise.");
+                }
+            }
+        }
+
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             String iso = BedWars.getRemoteDatabase().getLanguage(u);
             if (Language.isLanguageExist(iso)) {
@@ -76,8 +109,9 @@ public class JoinLeaveTeleport implements Listener {
             } else if (a.getStatus() == GameState.playing) {
                 if (!a.isAllowSpectate()) {
                     if (e.getPlayer().hasPermission(Permissions.PERMISSION_REJOIN)) {
-                        if (ReJoin.exists(e.getPlayer())) {
-                            if (ReJoin.getPlayer(e.getPlayer()).canReJoin()) return;
+                        ReJoin rj = ReJoin.getPlayer(p);
+                        if (rj != null) {
+                            if (rj.canReJoin()) return;
                         }
                     }
                     e.disallow(PlayerLoginEvent.Result.KICK_OTHER, getMsg(e.getPlayer(), Messages.REJOIN_DENIED));
@@ -93,6 +127,66 @@ public class JoinLeaveTeleport implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onJoin(PlayerJoinEvent e) {
         final Player p = e.getPlayer();
+
+        if (autoscale) {
+            e.setJoinMessage(null);
+            if (LoadedUser.isPreLoaded(p.getUniqueId())) {
+                LoadedUser lu = LoadedUser.getPreLoaded(p.getUniqueId());
+                IArena a = Arena.getArenaByIdentifier(lu.getArenaIdentifier());
+
+                if (ReJoin.exists(p)) {
+                    if (!ReJoin.getPlayer(p).canReJoin()) {
+                        p.kickPlayer(Language.getMsg(p, Messages.REJOIN_DENIED));
+                        return;
+                    }
+                    p.sendMessage(Language.getMsg(p, Messages.REJOIN_ALLOWED).replace("{arena}", ReJoin.getPlayer(p).getArena().getDisplayName()));
+                    ReJoin.getPlayer(p).reJoin(p);
+                    return;
+                }
+
+                if (a == null || lu.getRequestTime() > System.currentTimeMillis() + 5000 || a.getStatus() == GameState.restarting) {
+                    Language l = lu.getLanguage() == null ? Language.getDefaultLanguage() : lu.getLanguage();
+                    p.kickPlayer(l.m(Messages.ARENA_STATUS_RESTARTING_NAME));
+                    return;
+                }
+                if (lu.getLanguage() != null)
+                    Language.setPlayerLanguage(e.getPlayer(), lu.getLanguage().getIso(), true);
+                if (a.getStatus() == GameState.starting || a.getStatus() == GameState.waiting) {
+                    Sounds.playSound("join-allowed", p);
+                    if (lu.getPartyOwnerOrSpectateTarget() != null) {
+                        Player po = Bukkit.getPlayer(lu.getPartyOwnerOrSpectateTarget());
+                        if (po != null && po.isOnline()) {
+                            if (po.equals(e.getPlayer())) {
+                                BedWars.getParty().createParty(e.getPlayer());
+                            } else {
+                                BedWars.getParty().addMember(po, e.getPlayer());
+                            }
+                        } else {
+                            PreLoadedParty plp = PreLoadedParty.getPartyByOwner(lu.getPartyOwnerOrSpectateTarget());
+                            if (plp == null)
+                                plp = new PreLoadedParty(lu.getArenaIdentifier(), lu.getPartyOwnerOrSpectateTarget());
+                            plp.addMember(e.getPlayer());
+                        }
+                    }
+                    a.addPlayer(p, true);
+                } else {
+                    a.addSpectator(p, false, lu.getPartyOwnerOrSpectateTarget() == null ? null : Bukkit.getPlayer(lu.getPartyOwnerOrSpectateTarget()) == null ? null : Bukkit.getPlayer(lu.getPartyOwnerOrSpectateTarget()).getLocation());
+                    Sounds.playSound("spectate-allowed", p);
+                }
+                lu.destroy();
+                return;
+            } else {
+                if (p.hasPermission("bw.setup")) {
+                    Bukkit.dispatchCommand(p, "/bw");
+                    p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+                } else {
+                    p.kickPlayer(Language.getMsg(p, Messages.ARENA_STATUS_RESTARTING_NAME));
+                    return;
+                }
+            }
+        }
+
+
         if (preLoadedLanguage.containsKey(e.getPlayer().getUniqueId())) {
             Language.setPlayerLanguage(e.getPlayer(), preLoadedLanguage.get(e.getPlayer().getUniqueId()), true);
             preLoadedLanguage.remove(e.getPlayer().getUniqueId());
@@ -143,11 +237,12 @@ public class JoinLeaveTeleport implements Listener {
         }
 
         if (BedWars.getServerType() == ServerType.SHARED) {
-            if (e.getPlayer().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld()))
-                Misc.giveLobbySb(e.getPlayer());
+            if (e.getPlayer().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
+                SBoard.giveLobbyScoreboard(e.getPlayer());
+            }
         }
 
-        if (getServerType() == ServerType.BUNGEE) {
+        if (getServerType() == ServerType.BUNGEE && !autoscale) {
             if (!Arena.getArenas().isEmpty()) {
                 IArena a = Arena.getArenas().get(0);
                 if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) {
@@ -167,7 +262,7 @@ public class JoinLeaveTeleport implements Listener {
                 Location loc = config.getConfigLoc("lobbyLoc");
                 if (loc.getWorld() != null) p.teleport(loc, PlayerTeleportEvent.TeleportCause.PLUGIN);
             }
-            Misc.giveLobbySb(e.getPlayer());
+            SBoard.giveLobbyScoreboard(p);
             Arena.sendLobbyCommandItems(p);
             p.setHealthScale(20);
             p.setFoodLevel(20);
@@ -212,19 +307,37 @@ public class JoinLeaveTeleport implements Listener {
             }
         }
         /* Check if was doing a setup and remove the session */
-        if (SetupSession.isInSetupSession(p.getUniqueId())) {
-            SetupSession.getSession(p.getUniqueId()).cancel();
+        SetupSession ss = SetupSession.getSession(p.getUniqueId());
+        if (ss != null) {
+            ss.cancel();
         }
+
+        SBoard sb = SBoard.getSBoard(e.getPlayer().getUniqueId());
+        if (sb != null) {
+            sb.remove();
+        }
+
+        BedWarsTeam.antiFallDamageAtRespawn.remove(e.getPlayer().getUniqueId());
+
+        LastHit lh = LastHit.getLastHit(p);
+        if (lh != null){
+            lh.remove();
+        }
+
+        CmdStats.getStatsCoolDown().remove(e.getPlayer().getUniqueId());
     }
 
     @EventHandler
     public void onTeleport(PlayerTeleportEvent e) {
+        if (e == null) return;
         if (e.isCancelled()) return;
+        if (e.getTo() == null) return;
+        if (e.getTo().getWorld() == null) return;
         IArena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a != null) {
-            IArena a1 = Arena.getArenaByName(e.getTo().getWorld().getName());
+            IArena a1 = Arena.getArenaByIdentifier(e.getTo().getWorld().getName());
             if (a1 != null) {
-                if (!a1.getWorldName().equals(a.getWorldName())) {
+                if (!a1.equals(a)) {
                     if (a.isSpectator(e.getPlayer())) a.removeSpectator(e.getPlayer(), false);
                     if (a.isPlayer(e.getPlayer())) a.removePlayer(e.getPlayer(), false);
                     e.getPlayer().sendMessage("PlayerTeleportEvent something went wrong. You have joined an arena world while playing on a different map.");
@@ -239,11 +352,14 @@ public class JoinLeaveTeleport implements Listener {
             if (BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
                 //Bukkit.getScheduler().runTaskLater(plugin, ()-> {
                 if (e.getPlayer().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
-                    Misc.giveLobbySb(e.getPlayer());
+                    SBoard.giveLobbyScoreboard(e.getPlayer());
                 } else {
-                    for (SBoard sBoard : new ArrayList<>(SBoard.getScoreboards())) {
-                        if (sBoard.getP() == e.getPlayer())
-                            if (sBoard.getArena() == null) sBoard.remove();
+                    SBoard sb = SBoard.getSBoard(e.getPlayer().getUniqueId());
+                    if (sb != null) {
+                        if (sb.getArena() == null) {
+                            sb.remove();
+                        }
+                        sb.remove();
                     }
                 }
                 //}, 2L);
@@ -253,7 +369,7 @@ public class JoinLeaveTeleport implements Listener {
             IArena a = Arena.getArenaByPlayer(e.getPlayer());
             if (a.isPlayer(e.getPlayer())) {
                 if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) return;
-                if (!e.getPlayer().getWorld().getName().equalsIgnoreCase(a.getWorldName())) {
+                if (!e.getPlayer().getWorld().getName().equalsIgnoreCase(a.getWorld().getName())) {
                     a.removePlayer(e.getPlayer(), BedWars.getServerType() == ServerType.BUNGEE);
                     debug(e.getPlayer().getName() + " was removed from " + a.getDisplayName() + " because he was teleported outside the arena.");
                 }

@@ -7,6 +7,7 @@ import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.configuration.Permissions;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -36,9 +37,9 @@ public class CreateTeam extends SubCommand {
             p.sendMessage("§c▪ §7Usage: /" + mainCmd + " createTeam §o<name> §o<color>");
             StringBuilder colors = new StringBuilder("§7");
             for (TeamColor t : TeamColor.values()) {
-                colors.append(TeamColor.getChatColor(t)).append(t.toString()).append("§7, ");
+                colors.append(t.chat()).append(t.toString()).append(ChatColor.GRAY).append(", ");
             }
-            colors = new StringBuilder(colors.toString().substring(0, colors.toString().length() - 2) + "§7.");
+            colors = new StringBuilder(colors.toString().substring(0, colors.toString().length() - 2) + ChatColor.GRAY + ".");
             p.sendMessage("§6 ▪ §7Available colors: " + colors);
         } else {
             boolean y = true;
@@ -51,9 +52,9 @@ public class CreateTeam extends SubCommand {
                 p.sendMessage("§c▪ §7Invalid color!");
                 StringBuilder colors = new StringBuilder("§7");
                 for (TeamColor t : TeamColor.values()) {
-                    colors.append(TeamColor.getChatColor(t)).append(t.toString()).append("§7, ");
+                    colors.append(t.chat()).append(t.toString()).append(ChatColor.GRAY).append(", ");
                 }
-                colors = new StringBuilder(colors.toString().substring(0, colors.toString().length() - 2) + "§7.");
+                colors = new StringBuilder(colors.toString().substring(0, colors.toString().length() - 2) + ChatColor.GRAY + ".");
                 p.sendMessage("§6 ▪ §7Available colors: " + colors);
             } else {
                 if (ss.getConfig().getYml().get("Team." + args[0] + ".Color") != null) {

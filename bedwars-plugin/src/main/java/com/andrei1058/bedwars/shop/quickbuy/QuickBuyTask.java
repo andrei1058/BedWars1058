@@ -52,7 +52,7 @@ public class QuickBuyTask extends BukkitRunnable {
                             for (ShopCategory sc : ShopManager.getShop().getCategoryList()) {
                                 for (CategoryContent cc : sc.getCategoryContentList()) {
                                     if (cc.getIdentifier().equals(BedWars.shop.getYml().getString(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + "." + s + ".path"))) {
-                                        cache.setElement(Integer.valueOf(BedWars.shop.getYml().getString(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + "." + s + ".slot")), cc);
+                                        cache.setElement(Integer.parseInt(BedWars.shop.getYml().getString(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + "." + s + ".slot")), cc);
                                     }
                                 }
                             }

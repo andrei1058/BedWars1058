@@ -9,10 +9,7 @@ import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.regular.*;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.Level;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.Reload;
-import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.AutoCreateTeams;
-import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.CreateTeam;
-import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.SetShop;
-import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.SetWaitingSpawn;
+import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.*;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import net.md_5.bungee.api.chat.*;
@@ -71,6 +68,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         /* Arena setup commands (in world) */
         new AutoCreateTeams(this, "autoCreateTeams");
         new SetWaitingSpawn(this, "setWaitingSpawn");
+        new SetSpectatorPos(this, "setSpectSpawn");
         new CreateTeam(this, "createTeam");
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.WaitingPos(this, "waitingPos");
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.RemoveTeam(this, "removeTeam");
@@ -80,12 +78,15 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         new SetShop(this, "setShop");
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.SetUpgrade(this, "setUpgrade");
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.AddGenerator(this, "addGenerator");
+        new RemoveGenerator(this, "removeGenerator");
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.SetType(this, "setType");
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.Save(this, "save");
         if (JoinNPC.isCitizensSupport() && BedWars.getServerType() != ServerType.BUNGEE) {
             new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.NPC(this, "npc");
         }
         new CmdTpStaff(this, "tp");
+        new CmdUpgrades(this, "upgradesmenu");
+        new SetKillDropsLoc(this, "setKillDrops");
     }
 
     @Override
@@ -108,7 +109,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
                 }
             } else {
                 if (s instanceof ConsoleCommandSender) {
-                    s.sendMessage("§f   bw safemode §eenable/ disable");
+                    s.sendMessage("§fNo console commands available atm.");
                     return true;
                 }
                 /* Send player commands */
@@ -176,7 +177,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         } else if (args.length == 2) {
             if (hasSubCommand(args[0])) {
                 if (getSubCommand(args[0]).canSee(s, BedWars.getAPI()))
-                return getSubCommand(args[0]).getTabComplete();
+                    return getSubCommand(args[0]).getTabComplete();
             }
         }
         return null;

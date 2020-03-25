@@ -3,6 +3,7 @@ package com.andrei1058.bedwars.commands;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.arena.SetupSession;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -11,6 +12,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -22,7 +24,7 @@ public class Misc {
      *
      * @since api v6
      */
-    public static void createArmorStand(String name, Location location) {
+    public static void createArmorStand(String name, @NotNull Location location, String configLoc) {
         ArmorStand a = (ArmorStand) location.getWorld().spawnEntity(location.getBlock().getLocation().add(0.5, 2, 0.5), EntityType.ARMOR_STAND);
         a.setVisible(false);
         a.setMarker(true);
@@ -30,22 +32,37 @@ public class Misc {
         a.setCustomNameVisible(true);
         a.setCustomName(name);
         a.setMetadata("bw1058-setup", new FixedMetadataValue(BedWars.plugin, "hologram"));
+        if (configLoc != null) {
+            a.setMetadata("bw1058-loc", new FixedMetadataValue(BedWars.plugin, configLoc));
+        }
     }
 
     /**
      * Remove an armor stand
-     *
-     * @since api v10
      */
-    public static void removeArmorStand(String contains, Location location) {
+    public static void removeArmorStand(String contains, @NotNull Location location, String configLoc) {
         for (Entity e : location.getWorld().getNearbyEntities(location, 1, 3, 1)) {
-            if (e.hasMetadata("bw1058-setup")){
-                e.remove();
+            if (e.hasMetadata("bw1058-setup")) {
+                if (e.hasMetadata("bw1058-loc")) {
+                    if (e.getMetadata("bw1058-loc").get(0).asString().equalsIgnoreCase(configLoc)) {
+                        if (contains != null){
+                            if (!contains.isEmpty()){
+                                if (ChatColor.stripColor(e.getCustomName()).contains(contains)){
+                                    e.remove();
+                                    return;
+                                }
+                            }
+                        }
+                        e.remove();
+                    }
+                } else {
+                    e.remove();
+                }
                 continue;
             }
             if (e.getType() == EntityType.ARMOR_STAND) {
                 if (!((ArmorStand) e).isVisible()) {
-                    if (e.getCustomName().contains(contains)) {
+                    if (contains != null && e.getCustomName().contains(contains)) {
                         e.remove();
                     }
                 }
@@ -102,7 +119,8 @@ public class Misc {
         for (int x = -150; x < 150; x++) {
             for (int z = -150; z < 150; z++) {
                 Block b = origin.clone().add(x, 0, z).getBlock();
-                if (b.getX() == origin.getBlockX() && b.getY() == origin.getBlockY() && b.getZ() == origin.getBlockZ()) continue;
+                if (b.getX() == origin.getBlockX() && b.getY() == origin.getBlockY() && b.getZ() == origin.getBlockZ())
+                    continue;
                 Location l = b.getLocation().clone().add(0, 1, 0);
                 for (Location location : locations) {
                     if (setupSession.getConfig().compareArenaLoc(location, b.getLocation().add(0, 1, 0))) continue;

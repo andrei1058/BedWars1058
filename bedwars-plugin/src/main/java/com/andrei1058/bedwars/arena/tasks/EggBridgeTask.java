@@ -28,7 +28,7 @@ public class EggBridgeTask implements Runnable {
 
     public EggBridgeTask(Player player, Projectile projectile, TeamColor teamColor) {
         if (!(projectile instanceof Egg)) return;
-        IArena a = Arena.getArenaByName(projectile.getWorld().getName());
+        IArena a = Arena.getArenaByPlayer(player);
         if (a == null) return;
         this.arena = a;
         this.projectile = projectile;

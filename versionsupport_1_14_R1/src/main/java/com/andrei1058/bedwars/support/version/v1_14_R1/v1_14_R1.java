@@ -391,7 +391,7 @@ public class v1_14_R1 extends VersionSupport {
             for (int z = -1; z <= 1; z++) {
                 BlockState bed = bwt.getBed().clone().add(x, 0, z).getBlock().getState();
                 if (bed instanceof Bed) {
-                    bed.setType(TeamColor.getBedBlock(bwt.getColor()));
+                    bed.setType(bwt.getColor().bedMaterial());
                     bed.update();
                 }
             }
@@ -432,11 +432,11 @@ public class v1_14_R1 extends VersionSupport {
     @Override
     public void setBlockTeamColor(Block block, TeamColor teamColor) {
         if (block.getType().toString().contains("STAINED_GLASS") || block.getType().toString().equals("GLASS")) {
-            block.setType(TeamColor.getGlass(teamColor));
+            block.setType(teamColor.glassMaterial());
         } else if (block.getType().toString().contains("_TERRACOTTA")) {
-            block.setType(TeamColor.getGlazedTerracotta(teamColor));
+            block.setType(teamColor.glazedTerracottaMaterial());
         } else if (block.getType().toString().contains("_WOOL")) {
-            block.setType(TeamColor.getWool(teamColor));
+            block.setType(teamColor.woolMaterial());
         }
     }
 
@@ -490,15 +490,15 @@ public class v1_14_R1 extends VersionSupport {
         if (itemStack == null) return null;
         String type = itemStack.getType().toString();
         if (type.contains("_BED")) {
-            return new org.bukkit.inventory.ItemStack(TeamColor.getBedBlock(bedWarsTeam.getColor()), itemStack.getAmount());
+            return new org.bukkit.inventory.ItemStack(bedWarsTeam.getColor().bedMaterial(), itemStack.getAmount());
         } else if (type.contains("_STAINED_GLASS_PANE")) {
-            return new org.bukkit.inventory.ItemStack(TeamColor.getGlassPane(bedWarsTeam.getColor()), itemStack.getAmount());
+            return new org.bukkit.inventory.ItemStack(bedWarsTeam.getColor().glassPaneMaterial(), itemStack.getAmount());
         } else if (type.contains("STAINED_GLASS") || type.equals("GLASS")) {
-            return new org.bukkit.inventory.ItemStack(TeamColor.getGlass(bedWarsTeam.getColor()), itemStack.getAmount());
+            return new org.bukkit.inventory.ItemStack(bedWarsTeam.getColor().glassMaterial(), itemStack.getAmount());
         } else if (type.contains("_TERRACOTTA")) {
-            return new org.bukkit.inventory.ItemStack(TeamColor.getGlazedTerracotta(bedWarsTeam.getColor()), itemStack.getAmount());
+            return new org.bukkit.inventory.ItemStack(bedWarsTeam.getColor().glazedTerracottaMaterial(), itemStack.getAmount());
         } else if (type.contains("_WOOL")) {
-            return new org.bukkit.inventory.ItemStack(TeamColor.getWool(bedWarsTeam.getColor()), itemStack.getAmount());
+            return new org.bukkit.inventory.ItemStack(bedWarsTeam.getColor().woolMaterial(), itemStack.getAmount());
         }
         return itemStack;
     }
@@ -616,12 +616,14 @@ public class v1_14_R1 extends VersionSupport {
         for (Player pl : arena.getPlayers()) {
             if (pl.equals(player)) continue;
             if (arena.getRespawn().containsKey(pl)) continue;
-            if (arena.getShowTime().containsKey(pl)) continue;
+            //if (arena.getShowTime().containsKey(pl)) continue;
             if (pl.getLocation().distance(player.getLocation()) <= renderDistance) {
                 pc2 = ((CraftPlayer) pl).getHandle();
-                pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(pc2));
-                pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, pc2));
-                showArmor(pl, player);
+                if (!arena.getShowTime().containsKey(pl)) {
+                    pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(pc2));
+                    pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, pc2));
+                    showArmor(pl, player);
+                }
 
                 pc2.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(pc));
                 pc2.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, pc));

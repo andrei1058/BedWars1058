@@ -7,7 +7,6 @@ import com.andrei1058.bedwars.api.events.player.PlayerBaseLeaveEvent;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
-import com.andrei1058.bedwars.api.language.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,16 +19,13 @@ import org.bukkit.potion.PotionEffect;
 
 import java.util.HashMap;
 
-import static com.andrei1058.bedwars.BedWars.nms;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
-
 public class BaseListener implements Listener {
 
     public static HashMap<Player, ITeam> isOnABase = new HashMap<>();
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerMove(PlayerMoveEvent e) {
-        IArena a = Arena.getArenaByName(e.getPlayer().getWorld().getName());
+        IArena a = Arena.getArenaByIdentifier(e.getPlayer().getWorld().getName());
         if (a == null) return;
         if (a.getStatus() != GameState.playing) return;
         Player p = e.getPlayer();
@@ -60,6 +56,7 @@ public class BaseListener implements Listener {
      * Check the Enter/ Leave events and call them
      */
     private static void checkEvents(Player p, IArena a) {
+        if (p == null || a == null) return;
         if (a.isSpectator(p)) return;
         boolean notOnBase = true;
         for (ITeam bwt : a.getTeams()) {
@@ -93,26 +90,24 @@ public class BaseListener implements Listener {
 
     @EventHandler
     public void onBaseEnter(PlayerBaseEnterEvent e) {
-        BedWarsTeam team = (BedWarsTeam) e.getTeam();
+        if (e == null) return;
+        ITeam team = e.getTeam();
         if (team.isMember(e.getPlayer())) {
-            /* Give base effects */
-            for (BedWarsTeam.Effect ef : team.getBaseEffects()) {
-                e.getPlayer().addPotionEffect(new PotionEffect(ef.getPotionEffectType(), ef.getDuration(), ef.getAmplifier()));
+            // Give base effects
+            for (PotionEffect ef : team.getBaseEffects()) {
+                e.getPlayer().addPotionEffect(ef);
             }
         } else {
-            /* Give base effects */
-            for (BedWarsTeam.Effect ef : team.getEnemyBaseEnter()) {
-                e.getPlayer().addPotionEffect(new PotionEffect(ef.getPotionEffectType(), ef.getDuration(), ef.getAmplifier()));
+            // Trigger trap
+            if (!team.getActiveTraps().isEmpty()) {
+                if (!team.isBedDestroyed()) {
+                    team.getActiveTraps().get(0).trigger(team, e.getPlayer());
+                    team.getActiveTraps().remove(0);
+                }
             }
-            /* Downgrade base enter effects for enemies */
-            team.getEnemyBaseEnter().clear();
-            for (int i : team.getEnemyBaseEnterSlots()) {
-                team.getUpgradeTier().remove(i);
-            }
-            team.getEnemyBaseEnterSlots().clear();
 
             /* Manage trap */
-            if (team.isTrapActive()) {
+            /*if (team.isTrapActive()) {
                 team.disableTrap();
                 for (Player mem : team.getMembers()) {
                     if (team.isTrapTitle()) {
@@ -128,24 +123,25 @@ public class BaseListener implements Listener {
                         mem.sendMessage(getMsg(mem, Messages.TRAP_ENEMY_BASE_ENTER_CHAT));
                     }
                 }
-            }
+            }*/
         }
     }
 
     @EventHandler
     public void onBaseLeave(PlayerBaseLeaveEvent e) {
+        if (e == null) return;
         BedWarsTeam t = (BedWarsTeam) e.getTeam();
         if (t.isMember(e.getPlayer())) {
-            /* Remove effects for members */
+            // Remove effects for members
             for (PotionEffect pef : e.getPlayer().getActivePotionEffects()) {
-                for (BedWarsTeam.Effect pf : t.getBaseEffects()) {
-                    if (pef.getType() == pf.getPotionEffectType()) {
-                        e.getPlayer().removePotionEffect(pf.getPotionEffectType());
+                for (PotionEffect pf : t.getBaseEffects()) {
+                    if (pef.getType() == pf.getType()) {
+                        e.getPlayer().removePotionEffect(pf.getType());
                     }
                 }
             }
-        } else {
-            /* Remove effects for enemies */
+        }/* else {
+            // Remove effects for enemies
             for (PotionEffect pef : e.getPlayer().getActivePotionEffects()) {
                 for (BedWarsTeam.Effect pf : t.getEbseEffectsStatic()) {
                     if (pef.getType() == pf.getPotionEffectType()) {
@@ -153,6 +149,6 @@ public class BaseListener implements Listener {
                     }
                 }
             }
-        }
+        }*/
     }
 }

@@ -24,6 +24,7 @@ public class CitizensListener implements Listener {
 
     @EventHandler
     public void removeNPC(NPCRemoveEvent e) {
+        if (e == null) return;
         List<String> locations = BedWars.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE);
         boolean removed = false;
         if (JoinNPC.npcs.containsKey(e.getNPC().getId())) {

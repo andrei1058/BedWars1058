@@ -2,8 +2,8 @@ package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
-import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
@@ -13,32 +13,32 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.andrei1058.bedwars.BedWars.*;
+import static com.andrei1058.bedwars.api.language.Language.*;
 import static com.andrei1058.bedwars.arena.Misc.replaceStatsPlaceholders;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
-import static com.andrei1058.bedwars.api.language.Language.getScoreboard;
 
 public class SBoard {
 
     private static ScoreboardManager sbm = Bukkit.getScoreboardManager();
     private List<String> placeholders = Arrays.asList("{on}", "{max}", "{time}", "{nextEvent}", "{date}");
-    private static List<SBoard> scoreboards = new ArrayList<>();
+    private static ConcurrentHashMap<UUID, SBoard> scoreboards = new ConcurrentHashMap<>();
     private HashMap<Team, String> toRefresh = new HashMap<>();
     private Scoreboard sb = sbm.getNewScoreboard();
     private Player p;
     private Objective o;
-    private Arena arena;
+    private IArena arena;
     private SimpleDateFormat dateFormat;
 
-    public SBoard(Player p, List<String> content, Arena arena) {
-        for (SBoard sb : new ArrayList<>(SBoard.getScoreboards())) {
-            if (sb.getP() == p) {
-                sb.remove();
-            }
+    private SBoard(@NotNull Player p, @NotNull List<String> content, IArena arena) {
+        SBoard sbb = scoreboards.get(p.getUniqueId());
+        if (sbb != null) {
+            sbb.remove();
         }
 
         this.p = p;
@@ -63,7 +63,7 @@ public class SBoard {
         Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
             if (!p.isOnline()) return;
             p.setScoreboard(sb);
-            scoreboards.add(this);
+            scoreboards.put(p.getUniqueId(), this);
         }, 10L);
 
         if (arena != null) {
@@ -78,7 +78,7 @@ public class SBoard {
     /**
      * Used for spectators
      */
-    public SBoard(Player p, Arena arena) {
+    private SBoard(@NotNull Player p, IArena arena) {
         this.p = p;
         o = sb.registerNewObjective("Sb", "or");
         o.setDisplaySlot(DisplaySlot.SIDEBAR);
@@ -88,10 +88,10 @@ public class SBoard {
         Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
             if (!p.isOnline()) return;
             p.setScoreboard(sb);
-            scoreboards.add(this);
+            scoreboards.put(p.getUniqueId(), this);
             giveTeamColorTag();
             //show spectator tag in sb to other spectators
-            for (SBoard sb : SBoard.getScoreboards()) {
+            for (SBoard sb : SBoard.getScoreboards().values()) {
                 if (sb.getArena() == getArena()) {
                     sb.updateSpectator(sb.getP(), false);
                 }
@@ -120,7 +120,7 @@ public class SBoard {
             temp = temp.replace("{requiredXp}", BedWars.getLevelSupport().getRequiredXpFormatted(p));
             temp = temp.replace("{server_ip}", BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
                     .replace("{version}", plugin.getDescription().getVersion())
-                    .replace("{server}", config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_NAME));
+                    .replace("{server}", config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID));
             for (String ph : placeholders) {
                 if (temp.contains(ph)) {
                     if (!toRefresh.containsKey(t)) {
@@ -155,19 +155,19 @@ public class SBoard {
                 }
                 setContent(t, temp.replace("{map}", arena.getDisplayName())
                         .replace("{on}", String.valueOf(arena.getPlayers().size())).replace("{max}", String.valueOf(arena.getMaxPlayers()))
-                        .replace("{time}", time).replace("{player}", p.getName())
+                        .replace("{time}", time).replace("{player}", p.getDisplayName())
                         .replace("{money}", String.valueOf(getEconomy().getMoney(p))).replace("{date}", new SimpleDateFormat(getMsg(getP(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis())))
                         .replace("{group}", arena.getGroup()).replace("{deaths}", String.valueOf(getArena().getPlayerDeaths(p, false))));
             } else if (arena.getStatus() == GameState.playing) {
                 String[] ne = getNextEvent();
                 for (ITeam team : arena.getTeams()) {
-                    temp = temp.replace("{Team" + team.getName() + "Color}", TeamColor.getChatColor(team.getColor()).toString()).replace("{Team" + team.getName() + "Name}",
+                    temp = temp.replace("{Team" + team.getName() + "Color}", team.getColor().chat().toString()).replace("{Team" + team.getName() + "Name}",
                             team.getDisplayName(Language.getPlayerLanguage(getP()))).replace("{Team" + team.getName() + "Status}", (team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED).replace("{remainingPlayers}",
                             String.valueOf(team.getSize())) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE)) + (team.isMember(getP()) ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM) : ""));
                 }
                 setContent(t, temp.replace("{map}", arena.getDisplayName())
                         .replace("{on}", String.valueOf(arena.getPlayers().size())).replace("{max}", String.valueOf(arena.getMaxPlayers()))
-                        .replace("{player}", p.getName()).replace("{date}", new SimpleDateFormat(getMsg(getP(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis())))
+                        .replace("{player}", p.getDisplayName()).replace("{date}", new SimpleDateFormat(getMsg(getP(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis())))
                         .replace("{kills}", String.valueOf(arena.getPlayerKills(getP(), false))).replace("{finalKills}", String.valueOf(arena.getPlayerKills(getP(), true)))
                         .replace("{beds}", String.valueOf(arena.getPlayerBedsDestroyed(getP()))).replace("{time}", ne[1])
                         .replace("{nextEvent}", ne[0]).replace("{money}", String.valueOf(getEconomy().getMoney(p))).replace("{deaths}", String.valueOf(getArena().getPlayerDeaths(p, false))));
@@ -227,9 +227,10 @@ public class SBoard {
                 for (Map.Entry<Team, String> e : toRefresh.entrySet()) {
                     String text = e.getValue();
                     for (ITeam team : arena.getTeams()) {
-                        text = text.replace("{Team" + team.getName() + "Color}", TeamColor.getChatColor(team.getColor()).toString()).replace("{Team" + team.getName() + "Name}",
-                                team.getDisplayName(Language.getPlayerLanguage(getP()))).replace("{Team" + team.getName() + "Status}", (team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED).replace("{remainingPlayers}",
-                                String.valueOf(team.getSize())) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE)) + (team.isMember(getP()) ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM) : ""));
+                        text = text.replace("{Team" + team.getName() + "Color}", team.getColor().chat().toString())
+                                .replace("{Team" + team.getName() + "Name}", team.getDisplayName(Language.getPlayerLanguage(getP())))
+                                .replace("{Team" + team.getName() + "Status}", (team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED)
+                                        .replace("{remainingPlayers}", String.valueOf(team.getSize())) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE)) + (team.isMember(getP()) ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM) : ""));
                     }
                     setContent(e.getKey(), text.replace("{on}", String.valueOf(arena.getPlayers().size())).replace("{max}", String.valueOf(arena.getMaxPlayers()))
                             .replace("{date}", date).replace("{kills}", kills).replace("{finalKills}", finalKills).replace("{beds}", beds)
@@ -260,8 +261,7 @@ public class SBoard {
             } else {
                 team = sb.getTeam(t.getName());
             }
-            team.setPrefix(TeamColor.getChatColor(t.getColor()) + "§l" +
-                    t.getName().substring(0, 1).toUpperCase() + " §r" + TeamColor.getChatColor(t.getColor()));
+            team.setPrefix(t.getColor().chat() + "" + ChatColor.BOLD + t.getName().substring(0, 1).toUpperCase() + ChatColor.RESET + " " + t.getColor().chat());
             for (Player p : t.getMembers()) {
                 team.addEntry(p.getName());
             }
@@ -274,15 +274,19 @@ public class SBoard {
 
     public void remove() {
         p.setScoreboard(sbm.getNewScoreboard());
-        scoreboards.remove(this);
+        scoreboards.remove(getP().getUniqueId());
     }
 
-    public Arena getArena() {
+    public IArena getArena() {
         return arena;
     }
 
-    public static List<SBoard> getScoreboards() {
+    public static ConcurrentHashMap<UUID, SBoard> getScoreboards() {
         return scoreboards;
+    }
+
+    public static SBoard getSBoard(UUID player){
+        return scoreboards.getOrDefault(player, null);
     }
 
     public static String formatGenTimer(int duration) {
@@ -296,6 +300,8 @@ public class SBoard {
     }
 
     private String[] getNextEvent() {
+        if (!(arena instanceof Arena)) return new String[]{"null", "null"};
+        Arena arena = (Arena) this.arena;
         long time = 0L;
         String st = "";
         switch (arena.getNextEvent()) {
@@ -344,10 +350,64 @@ public class SBoard {
         } else {
             collide = sb.getTeam("spectators");
         }
-        if (value) {
+        if (!value) {
             if (!collide.hasEntry(p.getName())) collide.addEntry(p.getName());
         } else {
-            collide.hasEntry(p.getName());
+            if (collide.hasEntry(p.getName())) collide.removeEntry(p.getName());
+        }
+    }
+
+    public void invisibilityPotion(@NotNull ITeam team, Player player, boolean trueRemoveAddFalse) {
+        Team t = sb.getTeam(team.getName());
+        if (t != null) {
+            if (trueRemoveAddFalse) t.removeEntry(player.getName());
+            else t.addEntry(player.getName());
+        }
+    }
+
+    /**
+     * Give game scoreboard.
+     *
+     * @param p     target player.
+     * @param arena target arena.
+     */
+    public static void giveGameScoreboard(@NotNull Player p, @NotNull final IArena arena) {
+        if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_GAME_SCOREBOARD)) return;
+        if (arena.getStatus() == GameState.waiting) {
+            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
+                if (p.isOnline())
+                    new SBoard(p, getScoreboard(p, "scoreboard." + arena.getGroup() + ".waiting", Messages.SCOREBOARD_DEFAULT_WAITING), arena);
+            }, 15L);
+        } else if (arena.getStatus() == GameState.starting) {
+            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
+                if (p.isOnline())
+                    new SBoard(p, getScoreboard(p, "scoreboard." + arena.getGroup() + ".starting", Messages.SCOREBOARD_DEFAULT_STARTING), arena);
+            }, 15L);
+        }
+    }
+
+    /**
+     * Give spectator scoreboard.
+     *
+     * @param player target player.
+     * @param arena  target arena.
+     */
+    public static void giveSpectatorScoreboard(Player player, final IArena arena) {
+        if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_GAME_SCOREBOARD)) return;
+        Bukkit.getScheduler().runTaskLater(plugin, () -> new SBoard(player, arena), 35L);
+    }
+
+    /**
+     * Give lobby scoreboard if enabled in config.
+     *
+     * @param p target player.
+     */
+    public static void giveLobbyScoreboard(Player p) {
+        if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
+            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
+                if (p.isOnline())
+                    new SBoard(p, getList(p, Messages.SCOREBOARD_LOBBY), null);
+            }, 40L);
         }
     }
 }

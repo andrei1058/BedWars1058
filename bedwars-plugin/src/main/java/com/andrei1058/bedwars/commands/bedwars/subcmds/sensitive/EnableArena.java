@@ -47,7 +47,7 @@ public class EnableArena extends SubCommand {
         }
 
         for (IArena mm : Arena.getEnableQueue()){
-            if (mm.getWorldName().equalsIgnoreCase(args[0])){
+            if (mm.getArenaName().equalsIgnoreCase(args[0])){
                 p.sendMessage("§c▪ §7This arena is already in the enable queue!");
                 return true;
             }
@@ -66,7 +66,7 @@ public class EnableArena extends SubCommand {
     @Override
     public List<String> getTabComplete() {
         List<String> tab = new ArrayList<>();
-        File dir = new File("plugins/" + plugin.getName() + "/Arenas");
+        File dir = new File(plugin.getDataFolder(), "/Arenas");
         if (dir.exists()) {
             File[] fls = dir.listFiles();
             for (File fl : Objects.requireNonNull(fls)) {

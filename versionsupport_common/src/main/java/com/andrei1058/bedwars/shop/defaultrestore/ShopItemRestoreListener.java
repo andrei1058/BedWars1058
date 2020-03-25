@@ -76,7 +76,8 @@ public class ShopItemRestoreListener {
                 if (api.getVersionSupport().isSword(item.getItemStack())) {
                     if (api.getVersionSupport().getDamage(item.getItemStack()) >= api.getVersionSupport().getDamage(is)) {
                         ((Player) player).getInventory().remove(is);
-                        break;
+                        ((Player) player).updateInventory();
+                        return false;
                     }
                 }
             }

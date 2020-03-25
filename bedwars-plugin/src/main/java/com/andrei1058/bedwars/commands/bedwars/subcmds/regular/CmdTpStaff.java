@@ -54,7 +54,7 @@ public class CmdTpStaff extends SubCommand {
             if (a2 != null) {
                 if (a2.isPlayer(p2)) a2.removePlayer(p2, false);
                 if (a2.isSpectator(p2)) {
-                    if (a2.getWorldName().equals(a.getWorldName())) {
+                    if (a2.getArenaName().equals(a.getArenaName())) {
                         p2.teleport(p);
                         return true;
                     } else a2.removeSpectator(p2, false);

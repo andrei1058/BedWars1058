@@ -7,13 +7,15 @@ public class ArenaDisableEvent extends Event {
     private static final HandlerList HANDLERS = new HandlerList();
 
     private String arenaName;
+    private String worldName;
 
     /**
      * Called when an arena is disabled.
      * This is not called when you restart the server.
      */
-    public ArenaDisableEvent(String arenaName) {
+    public ArenaDisableEvent(String arenaName, String worldName) {
         this.arenaName = arenaName;
+        this.worldName = worldName;
     }
 
     /**
@@ -21,6 +23,10 @@ public class ArenaDisableEvent extends Event {
      */
     public String getArenaName() {
         return arenaName;
+    }
+
+    public String getWorldName() {
+        return worldName;
     }
 
     @Override

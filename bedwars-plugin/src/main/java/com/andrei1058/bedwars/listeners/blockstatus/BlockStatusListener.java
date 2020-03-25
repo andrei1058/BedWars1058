@@ -6,7 +6,7 @@ import com.andrei1058.bedwars.api.events.server.ArenaEnableEvent;
 import com.andrei1058.bedwars.api.events.gameplay.GameStateChangeEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.Material;
-import org.bukkit.block.BlockState;
+import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,11 +15,13 @@ public class BlockStatusListener implements Listener {
 
     @EventHandler
     public void onArenaEnable(ArenaEnableEvent e) {
+        if (e == null) return;
         updateBlock((Arena) e.getArena());
     }
 
     @EventHandler
     public void onStatusChange(GameStateChangeEvent e) {
+        if (e == null) return;
         updateBlock((Arena) e.getArena());
     }
 
@@ -27,8 +29,9 @@ public class BlockStatusListener implements Listener {
      * Update sign block
      */
     public static void updateBlock(Arena a) {
-        for (BlockState s : a.getSigns()) {
-            if (!(s instanceof Sign)) continue;
+        if (a == null) return;
+        for (Block s : a.getSigns()) {
+            if (!(s.getState() instanceof Sign)) continue;
             String path = "", data = "";
             switch (a.getStatus()) {
                 case waiting:
@@ -39,14 +42,17 @@ public class BlockStatusListener implements Listener {
                     path = ConfigPath.SIGNS_STATUS_BLOCK_PLAYING_MATERIAL;
                     data = ConfigPath.SIGNS_STATUS_BLOCK_STARTING_DATA;
                     break;
-                case restarting:
                 case starting:
                     path = ConfigPath.SIGNS_STATUS_BLOCK_PLAYING_MATERIAL;
                     data = ConfigPath.SIGNS_STATUS_BLOCK_PLAYING_DATA;
                     break;
+                case restarting:
+                    path = ConfigPath.SIGNS_STATUS_BLOCK_RESTARTING_MATERIAL;
+                    data = ConfigPath.SIGNS_STATUS_BLOCK_RESTARTING_DATA;
+                    break;
             }
-            BedWars.nms.setJoinSignBackground(s, Material.valueOf(BedWars.signs.getString(path)));
-            BedWars.nms.setJoinSignBackgroundBlockData(s, (byte) BedWars.signs.getInt(data));
+            BedWars.nms.setJoinSignBackground(s.getState(), Material.valueOf(BedWars.signs.getString(path)));
+            BedWars.nms.setJoinSignBackgroundBlockData(s.getState(), (byte) BedWars.signs.getInt(data));
         }
     }
 }

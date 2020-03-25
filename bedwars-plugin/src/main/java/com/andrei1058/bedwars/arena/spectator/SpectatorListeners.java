@@ -223,7 +223,7 @@ public class SpectatorListeners implements Listener {
     // Disable hits from spectators
     public void onDamageByEntity(EntityDamageByEntityEvent e) {
         if (e.isCancelled()) return;
-        IArena a = Arena.getArenaByName(e.getEntity().getWorld().getName());
+        IArena a = Arena.getArenaByIdentifier(e.getEntity().getWorld().getName());
         if (a == null) return;
         Player damager = null;
         if (e.getDamager() instanceof Projectile) {

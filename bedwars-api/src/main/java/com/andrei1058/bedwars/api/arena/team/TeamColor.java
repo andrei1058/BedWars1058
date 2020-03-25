@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 
 public enum TeamColor {
 
@@ -17,9 +18,15 @@ public enum TeamColor {
     GRAY,
     DARK_GREEN;
 
-    public static ChatColor getChatColor(String culoare) {
+    /**
+     * Get chat color by team color.
+     *
+     * @param tColor - {@link TeamColor} string.
+     * @return {@link ChatColor} for given team.
+     */
+    public static ChatColor getChatColor(@NotNull String tColor) {
         ChatColor color;
-        TeamColor teamColor = TeamColor.valueOf(culoare.toUpperCase());
+        TeamColor teamColor = TeamColor.valueOf(tColor.toUpperCase());
         if (teamColor == TeamColor.PINK) {
             color = ChatColor.LIGHT_PURPLE;
         } else {
@@ -28,6 +35,25 @@ public enum TeamColor {
         return color;
     }
 
+    /**
+     * @return Chat color for this team color.
+     */
+    public ChatColor chat() {
+        ChatColor color;
+        TeamColor teamColor = TeamColor.valueOf(this.toString());
+        if (teamColor == TeamColor.PINK) {
+            color = ChatColor.LIGHT_PURPLE;
+        } else {
+            color = ChatColor.valueOf(teamColor.toString());
+        }
+        return color;
+    }
+
+    /**
+     * @param teamColor team color.
+     * @return Chat color for this team color.
+     */
+    @Deprecated
     public static ChatColor getChatColor(TeamColor teamColor) {
         ChatColor color;
         if (teamColor == TeamColor.PINK) {
@@ -38,10 +64,14 @@ public enum TeamColor {
         return color;
     }
 
-    public static DyeColor getDyeColor(String culoare) {
-        TeamColor teamColor = TeamColor.valueOf(culoare.toUpperCase());
+    /**
+     * @param teamColor team color.
+     * @return DyeColor color for this team color.
+     */
+    @Deprecated
+    public static DyeColor getDyeColor(@NotNull String teamColor) {
         DyeColor color;
-        switch (teamColor) {
+        switch (TeamColor.valueOf(teamColor.toUpperCase())) {
             case GREEN:
                 color = DyeColor.LIME;
                 break;
@@ -52,16 +82,40 @@ public enum TeamColor {
                 color = DyeColor.GREEN;
                 break;
             default:
-                color = DyeColor.valueOf(teamColor.toString());
+                color = DyeColor.valueOf(teamColor.toUpperCase());
                 break;
         }
         return color;
     }
 
     /**
-     * Get the byte color for Minecraft versions until 1.12 included
+     * @return DyeColor color for this team color.
      */
-    public static byte itemColor(TeamColor teamColor) {
+    public DyeColor dye() {
+        DyeColor color;
+        switch (this) {
+            case GREEN:
+                color = DyeColor.LIME;
+                break;
+            case AQUA:
+                color = DyeColor.LIGHT_BLUE;
+                break;
+            case DARK_GREEN:
+                color = DyeColor.GREEN;
+                break;
+            default:
+                color = DyeColor.valueOf(this.toString());
+                break;
+        }
+        return color;
+    }
+
+    /**
+     * @param teamColor team color.
+     * @return byte color for MC versions until 1.12 included
+     */
+    @Deprecated
+    public static byte itemColor(@NotNull TeamColor teamColor) {
         // 0 white
         int i = 0;
         switch (teamColor) {
@@ -92,17 +146,55 @@ public enum TeamColor {
                 i = 7;
                 break;
         }
-
         return (byte) i;
     }
 
     /**
-     * Get the english for material as color name
-     *
+     * @return byte color for MC versions until 1.12 included
      */
-    public static String enName(String material) {
+    public byte itemByte() {
+        // 0 white
+        int i = 0;
+        switch (this) {
+            case WHITE:
+                break;
+            case PINK:
+                i = 6;
+                break;
+            case RED:
+                i = 14;
+                break;
+            case AQUA:
+                i = 9;
+                break;
+            case GREEN:
+                i = 5;
+                break;
+            case DARK_GREEN:
+                i = 13;
+                break;
+            case YELLOW:
+                i = 4;
+                break;
+            case BLUE:
+                i = 11;
+                break;
+            case GRAY:
+                i = 7;
+                break;
+        }
+        return (byte) i;
+    }
+
+    /**
+     * Get the english for material as color name.
+     *
+     * @param material material string.
+     * @return the english color name for given material. EMPTY if item is not supported.
+     */
+    public static String enName(@NotNull String material) {
         String name = "";
-        switch (material) {
+        switch (material.toUpperCase()) {
             case "PINK_WOOL":
                 name = "Pink";
                 break;
@@ -132,9 +224,12 @@ public enum TeamColor {
     }
 
     /**
-     * Get the english for byte as color name
+     * Get the english for byte as color name.
+     *
+     * @param b color byte. Used for 1.12 and older.
+     * @return the english color name for given material. EMPTY if item is not supported.
      */
-    public static String enName(Byte b) {
+    public static String enName(byte b) {
         String name = "";
         switch (b) {
             case 6:
@@ -166,7 +261,14 @@ public enum TeamColor {
         return name;
     }
 
-    public static Color getColor(TeamColor teamColor) {
+    /**
+     * This may be used for leather armor.
+     *
+     * @param teamColor team color.
+     * @return Equivalent color. Returns WHITE if given color has no equivalent.
+     */
+    @Deprecated
+    public static Color getColor(@NotNull TeamColor teamColor) {
         Color color = Color.WHITE;
         switch (teamColor) {
             case PINK:
@@ -200,11 +302,51 @@ public enum TeamColor {
     }
 
     /**
-     * Get bed with color
+     * This is usually used for leather armor.
      *
+     * @return Equivalent color. Returns WHITE if given color has no equivalent.
+     */
+    public Color bukkitColor() {
+        Color color = Color.WHITE;
+        switch (this) {
+            case PINK:
+                color = Color.FUCHSIA;
+                break;
+            case GRAY:
+                color = Color.GRAY;
+                break;
+            case BLUE:
+                color = Color.BLUE;
+                break;
+            case WHITE:
+                break;
+            case DARK_GREEN:
+                color = Color.GREEN;
+                break;
+            case AQUA:
+                color = Color.AQUA;
+                break;
+            case RED:
+                color = Color.RED;
+                break;
+            case GREEN:
+                color = Color.LIME;
+                break;
+            case YELLOW:
+                color = Color.YELLOW;
+                break;
+        }
+        return color;
+    }
+
+    /**
+     * Get bed with color.
+     *
+     * @param teamColor team color.
      * @return 1.13+ material
      */
-    public static Material getBedBlock(TeamColor teamColor) {
+    @Deprecated
+    public static Material getBedBlock(@NotNull TeamColor teamColor) {
         String color = "RED_BED";
         switch (teamColor) {
             case PINK:
@@ -236,11 +378,49 @@ public enum TeamColor {
     }
 
     /**
-     * Get glass with team color
+     * Get bed with color. Used for 1.13+.
      *
+     * @return 1.13+ bed material. Return RED_BED if not found.
+     */
+    public Material bedMaterial() {
+        String color = "RED_BED";
+        switch (this) {
+            case PINK:
+                color = "PINK_BED";
+                break;
+            case GRAY:
+                color = "GRAY_BED";
+                break;
+            case BLUE:
+                color = "BLUE_BED";
+                break;
+            case WHITE:
+                color = "WHITE_BED";
+                break;
+            case DARK_GREEN:
+                color = "GREEN_BED";
+                break;
+            case AQUA:
+                color = "LIGHT_BLUE_BED";
+                break;
+            case GREEN:
+                color = "LIME_BED";
+                break;
+            case YELLOW:
+                color = "YELLOW_BED";
+                break;
+        }
+        return Material.valueOf(color);
+    }
+
+    /**
+     * Get glass with team color.
+     *
+     * @param teamColor team color.
      * @return 1.13+ material
      */
-    public static Material getGlass(TeamColor teamColor) {
+    @Deprecated
+    public static Material getGlass(@NotNull TeamColor teamColor) {
         String color = "GLASS";
         switch (teamColor) {
             case PINK:
@@ -275,9 +455,52 @@ public enum TeamColor {
     }
 
     /**
-     * Get glass with team color
+     * Get glass with team color. Used for 1.13+ team glass.
+     *
+     * @return 1.13+ glass material. Return GLASS if this team does not have a custom glass.
      */
-    public static Material getGlassPane(TeamColor teamColor) {
+    public Material glassMaterial() {
+        String color = "GLASS";
+        switch (this) {
+            case PINK:
+                color = "PINK_STAINED_GLASS";
+                break;
+            case GRAY:
+                color = "GRAY_STAINED_GLASS";
+                break;
+            case BLUE:
+                color = "BLUE_STAINED_GLASS";
+                break;
+            case WHITE:
+                color = "WHITE_STAINED_GLASS";
+                break;
+            case DARK_GREEN:
+                color = "GREEN_STAINED_GLASS";
+                break;
+            case AQUA:
+                color = "LIGHT_BLUE_STAINED_GLASS";
+                break;
+            case GREEN:
+                color = "LIME_STAINED_GLASS";
+                break;
+            case YELLOW:
+                color = "YELLOW_STAINED_GLASS";
+                break;
+            case RED:
+                color = "RED_STAINED_GLASS";
+                break;
+        }
+        return Material.valueOf(color);
+    }
+
+    /**
+     * Retrieve glass pane with team color.
+     *
+     * @param teamColor team color.
+     * @return glass pane material for 1.13+.
+     */
+    @Deprecated
+    public static Material getGlassPane(@NotNull TeamColor teamColor) {
         String color = "GLASS";
         switch (teamColor) {
             case PINK:
@@ -312,11 +535,52 @@ public enum TeamColor {
     }
 
     /**
-     * Get glazed terracotta with team color
+     * Retrieve glass pane with team color.
      *
+     * @return glass pane material for 1.13+.
+     */
+    public Material glassPaneMaterial() {
+        String color = "GLASS";
+        switch (this) {
+            case PINK:
+                color = "PINK_STAINED_GLASS_PANE";
+                break;
+            case GRAY:
+                color = "GRAY_STAINED_GLASS_PANE";
+                break;
+            case BLUE:
+                color = "BLUE_STAINED_GLASS_PANE";
+                break;
+            case WHITE:
+                color = "WHITE_STAINED_GLASS_PANE";
+                break;
+            case DARK_GREEN:
+                color = "GREEN_STAINED_GLASS_PANE";
+                break;
+            case AQUA:
+                color = "LIGHT_BLUE_STAINED_GLASS_PANE";
+                break;
+            case GREEN:
+                color = "LIME_STAINED_GLASS_PANE";
+                break;
+            case YELLOW:
+                color = "YELLOW_STAINED_GLASS_PANE";
+                break;
+            case RED:
+                color = "RED_STAINED_GLASS_PANE";
+                break;
+        }
+        return Material.valueOf(color);
+    }
+
+    /**
+     * Get glazed terracotta with team color.
+     *
+     * @param teamColor team color.
      * @return 1.13+ material
      */
-    public static Material getGlazedTerracotta(TeamColor teamColor) {
+    @Deprecated
+    public static Material getGlazedTerracotta(@NotNull TeamColor teamColor) {
         String color = "ORANGE_TERRACOTTA";
         switch (teamColor) {
             case PINK:
@@ -351,13 +615,93 @@ public enum TeamColor {
     }
 
     /**
-     * Get wool with team color
+     * Get glazed terracotta with team color.
      *
-     * @return 1.13+ material
+     * @return 1.13+ material.
      */
-    public static Material getWool(TeamColor teamColor) {
+    public Material glazedTerracottaMaterial() {
+        String color = "ORANGE_TERRACOTTA";
+        switch (this) {
+            case PINK:
+                color = "PINK_TERRACOTTA";
+                break;
+            case GRAY:
+                color = "GRAY_TERRACOTTA";
+                break;
+            case BLUE:
+                color = "BLUE_TERRACOTTA";
+                break;
+            case WHITE:
+                color = "WHITE_TERRACOTTA";
+                break;
+            case DARK_GREEN:
+                color = "GREEN_TERRACOTTA";
+                break;
+            case AQUA:
+                color = "LIGHT_BLUE_TERRACOTTA";
+                break;
+            case GREEN:
+                color = "LIME_TERRACOTTA";
+                break;
+            case YELLOW:
+                color = "YELLOW_TERRACOTTA";
+                break;
+            case RED:
+                color = "RED_TERRACOTTA";
+                break;
+        }
+        return Material.valueOf(color);
+    }
+
+    /**
+     * Get wool with team color.
+     *
+     * @param teamColor team color.
+     * @return 1.13+ material.
+     */
+    @Deprecated
+    public static Material getWool(@NotNull TeamColor teamColor) {
         String color = "WHITE_WOOL";
         switch (teamColor) {
+            case PINK:
+                color = "PINK_WOOL";
+                break;
+            case GRAY:
+                color = "GRAY_WOOL";
+                break;
+            case BLUE:
+                color = "BLUE_WOOL";
+                break;
+            case WHITE:
+                color = "WHITE_WOOL";
+                break;
+            case DARK_GREEN:
+                color = "GREEN_WOOL";
+                break;
+            case AQUA:
+                color = "LIGHT_BLUE_WOOL";
+                break;
+            case GREEN:
+                color = "LIME_WOOL";
+                break;
+            case YELLOW:
+                color = "YELLOW_WOOL";
+                break;
+            case RED:
+                color = "RED_WOOL";
+                break;
+        }
+        return Material.valueOf(color);
+    }
+
+    /**
+     * Get wool with team color.
+     *
+     * @return 1.13+ material.
+     */
+    public Material woolMaterial() {
+        String color = "WHITE_WOOL";
+        switch (this) {
             case PINK:
                 color = "PINK_WOOL";
                 break;

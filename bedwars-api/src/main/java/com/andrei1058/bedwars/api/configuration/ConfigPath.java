@@ -37,8 +37,10 @@ public class ConfigPath {
 
 
     public static final String GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART = "bungee-settings.games-before-restart";
+    public static final String GENERAL_CONFIGURATION_AUTO_SCALE_LIMIT = "bungee-settings.auto-scale-clone-limit";
     public static final String GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD = "bungee-settings.restart-cmd";
-    public static final String GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS = "bungee-settings.lobby-servers";
+    public static final String GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS = "bungee-settings.lobby-sockets";
+    public static final String GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID = "bungee-settings.server-id";
     public static final String GENERAL_CONFIGURATION_ALLOW_PARTIES = "allow-parties";
 
     public static final String GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH = "lobby-items";
@@ -89,6 +91,7 @@ public class ConfigPath {
 
     public static final String CENERAL_CONFIGURATION_ALLOWED_COMMANDS = "allowed-commands";
     public static final String GENERAL_CONFIGURATION_LOBBY_SCOREBOARD = "lobby-scoreboard";
+    public static final String GENERAL_CONFIGURATION_GAME_SCOREBOARD = "game-scoreboard";
     public static final String GENERAL_CONFIGURATION_DISABLED_LANGUAGES = "disabled-languages";
 
     public static final String GENERAL_CONFIGURATION_ARENA_SELECTOR_PATH = "arena-gui";
@@ -105,7 +108,6 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_DISABLE_ANVIL = "inventories.disable-anvil";
 
     public static final String GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP = "server-ip";
-    public static final String GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_NAME = "server-name";
 
     public static final String ARENA_DISPLAY_NAME = "display-name";
     public static final String ARENA_CONFIGURATION_MAX_BUILD_Y = "max-build-y";
@@ -121,6 +123,8 @@ public class ConfigPath {
     public static final String ARENA_USE_BED_HOLO = "use-bed-hologram";
     public static final String ARENA_ALLOW_MAP_BREAK = "allow-map-break";
     public static final String ARENA_GAME_RULES = "game-rules";
+    public static final String ARENA_SPEC_LOC = "spectator-loc";
+    public static final String ARENA_TEAM_KILL_DROPS_LOC = "kill-drops-loc";
 
     public static final String SOUNDS_COUNTDOWN_TICK = "game-countdown-others";
     public static final String SOUNDS_COUNTDOWN_TICK_X = "game-countdown-s";
@@ -135,6 +139,10 @@ public class ConfigPath {
     public static final String SIGNS_STATUS_BLOCK_STARTING_DATA = "status-block.starting.data";
     public static final String SIGNS_STATUS_BLOCK_PLAYING_MATERIAL = "status-block.playing.material";
     public static final String SIGNS_STATUS_BLOCK_PLAYING_DATA = "status-block.playing.data";
+    public static final String SIGNS_STATUS_BLOCK_RESTARTING_MATERIAL = "status-block.restarting.material";
+    public static final String SIGNS_STATUS_BLOCK_RESTARTING_DATA = "status-block.restarting.data";
+
+    public static final String GENERAL_ENABLE_PARTY_CMD = "enable-party-cmd";
 
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_PATH = "performance-settings";
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_ROTATE_GEN = GENERAL_CONFIGURATION_PERFORMANCE_PATH + ".rotate-generators";

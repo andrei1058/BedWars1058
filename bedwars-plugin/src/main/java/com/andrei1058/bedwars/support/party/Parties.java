@@ -72,18 +72,16 @@ public class Parties implements Party {
         PartyPlayer pp = api.getPartyPlayer(member.getUniqueId());
         if (pp == null) return;
         com.alessiodp.parties.api.interfaces.Party party = api.getParty(pp.getPartyName());
-        if (party == null) {
-            api.removePlayerFromParty(pp);
-        }
+        if (party == null) return;
         if (party.getLeader() == member.getUniqueId()){
             disband(member);
         } else {
-            api.removePlayerFromParty(pp);
+            party.removeMember(pp);
             for (UUID mem : party.getMembers()) {
                 Player p = Bukkit.getPlayer(mem);
                 if (p == null) continue;
                 if (!p.isOnline()) continue;
-                p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_LEAVE_SUCCESS).replace("{player}", member.getName()));
+                p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_LEAVE_SUCCESS).replace("{player}", member.getDisplayName()));
             }
         }
     }
@@ -100,7 +98,7 @@ public class Parties implements Party {
             if (!p.isOnline()) continue;
             p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_DISBAND_SUCCESS));
         }
-        api.deleteParty(party);
+        party.delete();
     }
 
     @Override
@@ -117,11 +115,8 @@ public class Parties implements Party {
         PartyPlayer pp = api.getPartyPlayer(target.getUniqueId());
         if (pp == null) return;
         com.alessiodp.parties.api.interfaces.Party party = api.getParty(pp.getPartyName());
-        if (party == null) {
-            api.removePlayerFromParty(pp);
-            return;
-        }
-        api.removePlayerFromParty(pp);
+        if (party == null) return;
+        party.removeMember(pp);
         for (UUID mem : party.getMembers()) {
             Player p = Bukkit.getPlayer(mem);
             if (p == null) continue;

@@ -53,7 +53,7 @@ public class DelArena extends SubCommand {
             p.sendMessage("§c▪ §7Please disable it first!");
             return true;
         }
-        File ac = new File("plugins/" + plugin.getName() + "/Arenas/" + args[0]+ ".yml");
+        File ac = new File(plugin.getDataFolder(), "/Arenas/" + args[0]+ ".yml");
         if (!ac.exists()) {
             p.sendMessage("§c▪ §7This arena doesn't exist!");
             return true;
@@ -77,7 +77,7 @@ public class DelArena extends SubCommand {
     @Override
     public List<String> getTabComplete() {
         List<String> tab = new ArrayList<>();
-        File dir = new File("plugins/" + plugin.getName() + "/Arenas");
+        File dir = new File(plugin.getDataFolder(), "/Arenas");
         if (dir.exists()) {
             File[] fls = dir.listFiles();
             for (File fl : Objects.requireNonNull(fls)) {

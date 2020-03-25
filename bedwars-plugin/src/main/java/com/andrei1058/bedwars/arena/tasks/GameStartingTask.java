@@ -11,8 +11,6 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.gameplay.TeamAssignEvent;
 import com.andrei1058.bedwars.api.tasks.StartingTask;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.arena.BedWarsTeam;
-import com.andrei1058.bedwars.arena.OreGenerator;
 import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.configuration.Sounds;
@@ -101,6 +99,12 @@ public class GameStartingTask implements Runnable, StartingTask {
                             }
                             for (Player mem : getParty().getMembers(p)) {
                                 if (mem != p) {
+                                    IArena ia = Arena.getArenaByPlayer(mem);
+                                    if (ia == null) {
+                                        continue;
+                                    } else if (!ia.equals(getArena())) {
+                                        continue;
+                                    }
                                     TeamAssignEvent ee = new TeamAssignEvent(p, t, getArena());
                                     Bukkit.getPluginManager().callEvent(ee);
                                     if (!e.isCancelled()) {
@@ -141,16 +145,19 @@ public class GameStartingTask implements Runnable, StartingTask {
                 if (team.getMembers().isEmpty()) {
                     team.setBedDestroyed(true);
                     if (getArena().getConfig().getBoolean(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS)) {
-                        team.getIronGenerator().disable();
-                        team.getGoldGenerator().disable();
+                        for (IGenerator gen : team.getGenerators()) {
+                            gen.disable();
+                        }
                     }
                 }
             }
 
             Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
                 //Add heart on players head
-                for (SBoard sb : SBoard.getScoreboards()) {
-                    sb.addHealthIcon();
+                for (SBoard sb : SBoard.getScoreboards().values()) {
+                    if (sb.getArena() == getArena()) {
+                        sb.addHealthIcon();
+                    }
                 }
 
                 //Enable diamond/ emerald generators

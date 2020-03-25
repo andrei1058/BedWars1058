@@ -10,6 +10,7 @@ import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.apache.commons.io.FileUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -28,8 +29,8 @@ public class CloneArena extends SubCommand {
         setPriority(7);
         showInList(true);
         setPermission(Permissions.PERMISSION_CLONE);
-        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " "+getSubCommandName()+" §6<worldName> <newName>", "§fClone an existing arena.",
-                "/" + getParent().getName() + " "+getSubCommandName(), ClickEvent.Action.SUGGEST_COMMAND));
+        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " " + getSubCommandName() + " §6<worldName> <newName>", "§fClone an existing arena.",
+                "/" + getParent().getName() + " " + getSubCommandName(), ClickEvent.Action.SUGGEST_COMMAND));
     }
 
     @Override
@@ -38,14 +39,14 @@ public class CloneArena extends SubCommand {
         Player p = (Player) s;
         if (!MainCommand.isLobbySet(p)) return true;
         if (args.length != 2) {
-            p.sendMessage("§c▪ §7Usage: §o/" + getParent().getName() + " "+getSubCommandName()+" <mapName> <newArena>");
+            p.sendMessage("§c▪ §7Usage: §o/" + getParent().getName() + " " + getSubCommandName() + " <mapName> <newArena>");
             return true;
         }
         if (!BedWars.getAPI().getRestoreAdapter().isWorld(args[0])) {
             p.sendMessage("§c▪ §7" + args[0] + " doesn't exist!");
             return true;
         }
-        File yml1 = new File("plugins/" + plugin.getName() + "/Arenas/" + args[0] + ".yml"), yml2 = new File("plugins/" + plugin.getName() + "/Arenas/" + args[1] + ".yml");
+        File yml1 = new File(plugin.getDataFolder(), "/Arenas/" + args[0] + ".yml"), yml2 = new File(plugin.getDataFolder(), "/Arenas/" + args[1] + ".yml");
         if (!yml1.exists()) {
             p.sendMessage("§c▪ §7" + args[0] + " doesn't exist!");
             return true;
@@ -54,7 +55,11 @@ public class CloneArena extends SubCommand {
             p.sendMessage("§c▪ §7" + args[1] + " already exist!");
             return true;
         }
-        if (Arena.getArenaByName(args[0]) != null){
+        if (args[1].contains("+")) {
+            p.sendMessage("§c▪ §7" + args[1] + " mustn't contain this symbol: " + ChatColor.RED + "+");
+            return true;
+        }
+        if (Arena.getArenaByName(args[0]) != null) {
             p.sendMessage("§c▪ §7Please disable " + args[0] + " first!");
             return true;
         }
@@ -74,7 +79,7 @@ public class CloneArena extends SubCommand {
     @Override
     public List<String> getTabComplete() {
         List<String> tab = new ArrayList<>();
-        File dir = new File("plugins/" + plugin.getName() + "/Arenas");
+        File dir = new File(plugin.getDataFolder(), "/Arenas");
         if (dir.exists()) {
             File[] fls = dir.listFiles();
             for (File fl : Objects.requireNonNull(fls)) {

@@ -23,7 +23,7 @@ public class CmdStart extends SubCommand {
     public CmdStart(ParentCommand parent, String name) {
         super(parent, name);
         setPriority(15);
-        showInList(false);
+        showInList(true);
         setDisplayInfo(com.andrei1058.bedwars.commands.bedwars.MainCommand.createTC("§6 ▪ §7/"+ MainCommand.getInstance().getName()+" "+getSubCommandName()+" §8 - §eforce start an arena",
                 "/"+getParent().getName()+" "+getSubCommandName(), "§fForcestart an arena.\n§fPermission: §c"+Permissions.PERMISSION_FORCESTART));
     }
@@ -85,6 +85,6 @@ public class CmdStart extends SubCommand {
 
         if (SetupSession.isInSetupSession(p.getUniqueId())) return false;
 
-        return hasPermission(s);
+        return s.hasPermission(Permissions.PERMISSION_FORCESTART);
     }
 }

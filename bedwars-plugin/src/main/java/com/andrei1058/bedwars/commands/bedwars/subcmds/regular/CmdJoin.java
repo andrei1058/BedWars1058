@@ -45,7 +45,7 @@ public class CmdJoin extends SubCommand {
             }
             return true;
         }
-        if (com.andrei1058.bedwars.commands.bedwars.MainCommand.isArenaGroup(args[0])) {
+        if (com.andrei1058.bedwars.commands.bedwars.MainCommand.isArenaGroup(args[0]) || args[0].contains("+")) {
             if (!Arena.joinRandomFromGroup(p, args[0])) {
                 s.sendMessage(getMsg(p, Messages.COMMAND_JOIN_NO_EMPTY_FOUND));
                 Sounds.playSound("join-denied", p);
@@ -60,6 +60,13 @@ public class CmdJoin extends SubCommand {
                 Sounds.playSound("join-denied", p);
             }
             return true;
+        } else if (Arena.getArenaByIdentifier(args[0]) != null) {
+            if (Arena.getArenaByIdentifier(args[0]).addPlayer(p, false)){
+                Sounds.playSound("join-allowed", p);
+            } else {
+                Sounds.playSound("join-denied", p);
+            }
+            return true;
         }
         s.sendMessage(getMsg(p, Messages.COMMAND_JOIN_GROUP_OR_ARENA_NOT_FOUND).replace("{name}", args[0]));
         return true;
@@ -69,7 +76,7 @@ public class CmdJoin extends SubCommand {
     public List<String> getTabComplete() {
         List<String> tab = new ArrayList<>(BedWars.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS));
         for (IArena arena : Arena.getArenas()){
-            tab.add(arena.getWorldName());
+            tab.add(arena.getArenaName());
         }
         return tab;
     }

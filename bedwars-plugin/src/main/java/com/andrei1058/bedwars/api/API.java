@@ -17,6 +17,7 @@ import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.shop.main.CategoryContent;
 import com.andrei1058.bedwars.stats.StatsManager;
+import com.andrei1058.bedwars.upgrades.UpgradesManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -63,8 +64,13 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
 
     private ArenaUtil arenaUtil = new ArenaUtil() {
         @Override
+        public boolean canAutoScale(String arenaName) {
+            return Arena.canAutoScale(arenaName);
+        }
+
+        @Override
         public void addToEnableQueue(IArena a) {
-            Arena.removeFromEnableQueue(a);
+            Arena.addToEnableQueue(a);
         }
 
         @Override
@@ -115,6 +121,11 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
         @Override
         public IArena getArenaByName(String worldName) {
             return Arena.getArenaByName(worldName);
+        }
+
+        @Override
+        public IArena getArenaByIdentifier(String worldName) {
+            return Arena.getArenaByIdentifier(worldName);
         }
 
         @Override
@@ -186,7 +197,7 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
 
         @Override
         public ConfigManager getUpgradesConfig() {
-            return BedWars.upgrades;
+            return UpgradesManager.getConfiguration();
         }
     };
 
@@ -245,6 +256,28 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
     @Override
     public ShopUtil getShopUtil() {
         return shopUtil;
+    }
+
+    private TeamUpgradesUtil teamUpgradesUtil = new TeamUpgradesUtil() {
+        @Override
+        public boolean isWatchingGUI(Player player) {
+            return UpgradesManager.isWatchingUpgrades(player.getUniqueId());
+        }
+
+        @Override
+        public void setWatchingGUI(Player player) {
+            UpgradesManager.setWatchingUpgrades(player.getUniqueId());
+        }
+
+        @Override
+        public void removeWatchingUpgrades(UUID uuid) {
+            UpgradesManager.removeWatchingUpgrades(uuid);
+        }
+    };
+
+    @Override
+    public TeamUpgradesUtil getTeamUpgradesUtil() {
+        return teamUpgradesUtil;
     }
 
     @Override

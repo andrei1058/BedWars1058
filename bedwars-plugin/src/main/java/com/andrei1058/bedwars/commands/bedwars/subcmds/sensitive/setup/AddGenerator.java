@@ -1,31 +1,29 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup;
 
 import com.andrei1058.bedwars.api.BedWars;
-import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.server.SetupType;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
-import com.andrei1058.bedwars.configuration.ArenaConfig;
 import com.andrei1058.bedwars.configuration.Permissions;
+import com.andrei1058.bedwars.configuration.Sounds;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
-import static com.andrei1058.bedwars.BedWars.mainCmd;
 import static com.andrei1058.bedwars.commands.Misc.createArmorStand;
-import static com.andrei1058.bedwars.commands.Misc.removeArmorStand;
 
 public class AddGenerator extends SubCommand {
 
@@ -41,166 +39,146 @@ public class AddGenerator extends SubCommand {
         Player p = (Player) s;
         SetupSession ss = SetupSession.getSession(p.getUniqueId());
         if (ss == null) {
-            s.sendMessage("§c ▪ §7You're not in a setup session!");
+            //s.sendMessage(ChatColor.RED + "You're not in a setup session!");
+            return false;
+        }
+
+        if (args.length == 0 && ss.getSetupType() == SetupType.ASSISTED) {
+            String team = ss.getNearestTeam();
+            if (team.isEmpty()) {
+                // save emerald or diamond generator if is standing on a block of this type
+                if (p.getLocation().add(0, -1, 0).getBlock().getType() == Material.DIAMOND_BLOCK) {
+                    Bukkit.dispatchCommand(p, getParent().getName() + " " + getSubCommandName() + " diamond");
+                    return true;
+                } else if (p.getLocation().add(0, -1, 0).getBlock().getType() == Material.EMERALD_BLOCK) {
+                    Bukkit.dispatchCommand(p, getParent().getName() + " " + getSubCommandName() + " emerald");
+                    return true;
+                }
+
+                // else send usage message
+                p.sendMessage(ss.getPrefix() + ChatColor.RED + "Could not find any nearby team.");
+                p.spigot().sendMessage(Misc.msgHoverClick(ss.getPrefix() + "Make sure you set the team's spawn first!", ChatColor.WHITE + "Set a team spawn.", "/" + getParent().getName() + " " + getSubCommandName() + " ", ClickEvent.Action.SUGGEST_COMMAND));
+                p.spigot().sendMessage(Misc.msgHoverClick(ss.getPrefix() + "Or if you set the spawn and it wasn't found automatically try using: /bw addGenerator <team>", "Add a team generator.", "/" + getParent().getName() + " " + getSubCommandName() + " ", ClickEvent.Action.SUGGEST_COMMAND));
+                p.spigot().sendMessage(Misc.msgHoverClick(ss.getPrefix() + "Other use: /bw addGenerator <emerald/ diamond>", "Add an emerald/ diamond generator.", "/" + getParent().getName() + " " + getSubCommandName() + " ", ClickEvent.Action.SUGGEST_COMMAND));
+                com.andrei1058.bedwars.BedWars.nms.sendTitle(p, " ", ChatColor.RED + "Could not find any nearby team.", 5, 60, 5);
+                Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, p);
+                return true;
+            }
+            // save team generators
+            saveTeamGen(p.getLocation(), team, ss, "Iron");
+            saveTeamGen(p.getLocation(), team, ss, "Gold");
+            saveTeamGen(p.getLocation(), team, ss, "Emerald");
+
+            createArmorStand(ChatColor.GOLD + "Generator set for team: " + ss.getTeamColor(team) + team, p.getLocation(), ss.getConfig().stringLocationArenaFormat(p.getLocation()));
+            p.sendMessage(ss.getPrefix() + "Generator set for team: " + ss.getTeamColor(team) + team);
+
+            Bukkit.dispatchCommand(p, getParent().getName());
+
+            com.andrei1058.bedwars.BedWars.nms.sendTitle(p, " ", ChatColor.GREEN + "Generator set for team: " + ss.getTeamColor(team) + team, 5, 60, 5);
+            Sounds.playSound(ConfigPath.SOUNDS_BOUGHT, p);
+            return true;
+        } else if (args.length == 1 && (args[0].equalsIgnoreCase("diamond") || args[0].equalsIgnoreCase("emerald"))) {
+            // add emerald or diamond generator to the list if it was not added yet
+            List<Location> locations = ss.getConfig().getArenaLocations("generator." + args[0].substring(0, 1).toUpperCase() + args[0].substring(1).toLowerCase());
+            for (Location l : locations) {
+                if (ss.getConfig().compareArenaLoc(l, p.getLocation())) {
+                    p.sendMessage(ss.getPrefix() + ChatColor.RED + "This generator was already set!");
+                    com.andrei1058.bedwars.BedWars.nms.sendTitle(p, " ", ChatColor.RED + "This generator was already set!", 5, 30, 5);
+                    Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, p);
+                    return true;
+                }
+            }
+            String gen = args[0].substring(0, 1).toUpperCase() + args[0].substring(1).toLowerCase();
+
+            ArrayList<String> saved;
+            if (ss.getConfig().getYml().get("generator." + gen) == null) {
+                saved = new ArrayList<>();
+            } else {
+                saved = (ArrayList<String>) ss.getConfig().getYml().getStringList("generator." + gen);
+            }
+            saved.add(ss.getConfig().stringLocationArenaFormat(p.getLocation()));
+
+            ss.getConfig().set("generator." + gen, saved);
+            p.sendMessage(ss.getPrefix() + gen + " generator was added!");
+            createArmorStand(ChatColor.GOLD + gen + " SET", p.getLocation(), ss.getConfig().stringLocationArenaFormat(p.getLocation()));
+            if (ss.getSetupType() == SetupType.ASSISTED) {
+                Bukkit.dispatchCommand(p, getParent().getName());
+            }
+            com.andrei1058.bedwars.BedWars.nms.sendTitle(p, " ", ChatColor.GOLD + gen + ChatColor.GREEN + " generator added!", 5, 60, 5);
+            Sounds.playSound(ConfigPath.SOUNDS_BOUGHT, p);
+            return true;
+        } else if (args.length >= 1 && (args[0].equalsIgnoreCase("iron") || args[0].equalsIgnoreCase("gold") || args[0].equalsIgnoreCase("upgrade")) && ss.getSetupType() == SetupType.ADVANCED) {
+            String team;
+            if (args.length == 1) {
+                team = ss.getNearestTeam();
+            } else {
+                team = args[1];
+                if (ss.getConfig().getYml().get("Team." + team + ".Color") == null) {
+                    p.sendMessage(ss.getPrefix() + ChatColor.RED + "Could not find team: " + team);
+                    p.sendMessage(ss.getPrefix() + "Use: /bw createTeam if you want to create one.");
+                    ss.displayAvailableTeams();
+                    com.andrei1058.bedwars.BedWars.nms.sendTitle(p, " ", ChatColor.RED + "Could not find any nearby team.", 5, 60, 5);
+                    Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, p);
+                    return true;
+                }
+            }
+            // find nearest team to set the generator else send usage msg
+            if (team.isEmpty()) {
+                p.sendMessage(ss.getPrefix() + ChatColor.RED + "Could not find any nearby team.");
+                p.sendMessage(ss.getPrefix() + "Try using: /bw addGenerator <iron/ gold/ upgrade> <team>");
+                return true;
+            }
+
+            String gen = args[0].substring(0, 1).toUpperCase() + args[0].substring(1).toLowerCase();
+            if (gen.equalsIgnoreCase("upgrade")) {
+                gen = "Emerald";
+            }
+
+            createArmorStand(ChatColor.GOLD + gen + " generator added for team: " + ss.getTeamColor(team) + team, p.getLocation(), ss.getConfig().stringLocationArenaFormat(p.getLocation()));
+            p.sendMessage(ss.getPrefix() + gen + " generator added for team: " + ss.getTeamColor(team) + team);
+            saveTeamGen(p.getLocation(), team, ss, gen);
+            com.andrei1058.bedwars.BedWars.nms.sendTitle(p, " ", ChatColor.GOLD + gen + ChatColor.GREEN + " generator for " + ss.getTeamColor(team) + team + ChatColor.GREEN + " was added!", 5, 60, 5);
+            Sounds.playSound(ConfigPath.SOUNDS_BOUGHT, p);
+            return true;
+        } else if (args.length == 1 && ss.getSetupType() == SetupType.ASSISTED) {
+            String team = args[0];
+            if (ss.getConfig().getYml().get("Team." + team + ".Color") == null) {
+                p.sendMessage(ss.getPrefix() + "Could not find team: " + ChatColor.RED + team);
+                p.sendMessage(ss.getPrefix() + "Use: /bw createTeam if you want to create one.");
+                ss.displayAvailableTeams();
+                com.andrei1058.bedwars.BedWars.nms.sendTitle(p, " ", "Could not find team: " + ChatColor.RED + team, 5, 40, 5);
+                Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, p);
+                return true;
+            }
+
+            saveTeamGen(p.getLocation(), team, ss, "Iron");
+            saveTeamGen(p.getLocation(), team, ss, "Gold");
+            saveTeamGen(p.getLocation(), team, ss, "Emerald");
+            createArmorStand(ChatColor.GOLD + "Generator set for team: " + ss.getTeamColor(team) + team, p.getLocation(), ss.getConfig().stringLocationArenaFormat(p.getLocation()));
+            p.sendMessage(ss.getPrefix() + "Generator set for team: " + ss.getTeamColor(team) + team);
+            Bukkit.dispatchCommand(p, getParent().getName());
+
+            com.andrei1058.bedwars.BedWars.nms.sendTitle(p, " ", ChatColor.GREEN + "Generator set for team: " + ss.getTeamColor(team) + team, 5, 60, 5);
+            Sounds.playSound(ConfigPath.SOUNDS_BOUGHT, p);
             return true;
         }
-        ArenaConfig arena = ss.getConfig();
-        if (args.length < 1) {
-            String foundTeam = "";
-            double distance = 100;
-            if (ss.getConfig().getYml().getConfigurationSection("Team") == null) {
-                p.sendMessage("§c ▪ §7Please create teams first!");
-                return true;
-            }
-            for (String team : ss.getConfig().getYml().getConfigurationSection("Team").getKeys(false)) {
-                if (ss.getConfig().getYml().get("Team." + team + ".Spawn") == null) continue;
-                double dis = ss.getConfig().getArenaLoc("Team." + team + ".Spawn").distance(p.getLocation());
-                if (dis <= ss.getConfig().getInt(ConfigPath.ARENA_ISLAND_RADIUS)) {
-                    if (dis < distance) {
-                        distance = dis;
-                        foundTeam = team;
-                    }
-                }
-            }
-            if (!foundTeam.isEmpty()) {
-                if (ss.getConfig().getYml().get("Team." + foundTeam + ".Iron") != null) {
-                    removeArmorStand("Generator", ss.getConfig().getArenaLoc("Team." + foundTeam + ".Iron"));
-                }
-                if (ss.getConfig().getYml().get("Team." + foundTeam + ".Gold") != null) {
-                    removeArmorStand("Generator", ss.getConfig().getArenaLoc("Team." + foundTeam + ".Gold"));
-                }
-                arena.set("Team." + foundTeam + ".Iron", arena.stringLocationArenaFormat(p.getLocation()));
-                arena.set("Team." + foundTeam + ".Gold", arena.stringLocationArenaFormat(p.getLocation()));
-                String team = TeamColor.getChatColor(Objects.requireNonNull(ss.getConfig().getYml().getString("Team." + foundTeam + ".Color"))) + foundTeam;
-                p.sendMessage("§6▪ §7Generator set for team: " + team);
-                createArmorStand("§7Generator set for " + team, p.getLocation());
-                if (ss.getSetupType() == SetupType.ASSISTED) {
-                    Bukkit.dispatchCommand(p, getParent().getName());
-                }
-                return true;
-            }
-            if (p.getLocation().add(0, -1, 0).getBlock().getType() == Material.DIAMOND_BLOCK) {
-                Bukkit.dispatchCommand(p, getParent().getName() + " " + getSubCommandName() + " diamond");
-                return true;
-            } else if (p.getLocation().add(0, -1, 0).getBlock().getType() == Material.EMERALD_BLOCK) {
-                Bukkit.dispatchCommand(p, getParent().getName() + " " + getSubCommandName() + " emerald");
-                return true;
-            }
-            p.sendMessage("§c▪ §7Usage: /" + mainCmd + " addGenerator <Diamond/Emerald>");
-            if (ss.getSetupType() == SetupType.ADVANCED) {
-                p.sendMessage("§c▪ §7Usage: /" + mainCmd + " addGenerator <Iron/Gold> <teamName>");
-            } else {
-                p.sendMessage("§c▪ §7Usage: /" + mainCmd + " addGenerator <Iron/Gold>");
-            }
-            return true;
+        if (ss.getSetupType() == SetupType.ASSISTED) {
+            p.spigot().sendMessage(Misc.msgHoverClick(ss.getPrefix() + "/bw addGenerator (detect team automatically)", "Add a team generator.", "/" + getParent().getName() + " " + getSubCommandName() + " ", ClickEvent.Action.SUGGEST_COMMAND));
+            p.spigot().sendMessage(Misc.msgHoverClick(ss.getPrefix() + "/bw addGenerator <team>", "Add a team generator.", "/" + getParent().getName() + " " + getSubCommandName() + " ", ClickEvent.Action.SUGGEST_COMMAND));
+
         }
-        List<String> types = Arrays.asList("diamond", "emerald", "iron", "gold");
-        if (types.contains(args[0].toLowerCase())) {
-            switch (args[0].toLowerCase()) {
-                case "diamond":
-                case "emerald":
-                    List<Location> locations = ss.getConfig().getArenaLocations("generator." + args[0].substring(0, 1).toUpperCase() + args[0].substring(1).toLowerCase());
-                    for (Location l : locations){
-                        if (ss.getConfig().compareArenaLoc(l, p.getLocation())){
-                            p.sendMessage("§6 ▪ §cThis generator was already set!");
-                            return true;
-                        }
-                    }
-                    ArrayList<String> saved;
-                    if (arena.getYml().get("generator." + args[0].substring(0, 1).toUpperCase() + args[0].substring(1).toLowerCase()) == null) {
-                        saved = new ArrayList<>();
-                    } else {
-                        saved = (ArrayList<String>) arena.getYml().getStringList("generator." + args[0].substring(0, 1).toUpperCase() + args[0].substring(1).toLowerCase());
-                    }
-                    saved.add(arena.stringLocationArenaFormat(p.getLocation()));
-                    arena.set("generator." + args[0].substring(0, 1).toUpperCase() + args[0].substring(1).toLowerCase(), saved);
-                    p.sendMessage("§6 ▪ §7" + args[0].substring(0, 1).toUpperCase() + args[0].substring(1).toLowerCase() + " generator saved!");
-                    createArmorStand("§6" + args[0] + " SET", p.getLocation());
-                    if (ss.getSetupType() == SetupType.ASSISTED) {
-                        //autoSetGen(p, getParent().getName()+" "+getSubCommandName()+" ", ss, args[0].equalsIgnoreCase("diamond") ?
-                        //        Material.DIAMOND_BLOCK : Material.EMERALD_BLOCK);
-                        Bukkit.dispatchCommand(p, getParent().getName());
-                    }
-                    break;
-                case "iron":
-                case "gold":
-                    String foundTeam = "";
-                    double distance = 100;
-                    if (args.length == 1) {
-                        for (String team : ss.getConfig().getYml().getConfigurationSection("Team").getKeys(false)) {
-                            if (ss.getConfig().getYml().get("Team." + team + ".Spawn") == null) continue;
-                            double dis = ss.getConfig().getArenaLoc("Team." + team + ".Spawn").distance(p.getLocation());
-                            if (dis <= ss.getConfig().getInt(ConfigPath.ARENA_ISLAND_RADIUS)) {
-                                if (dis < distance) {
-                                    distance = dis;
-                                    foundTeam = team;
-                                }
-                            }
-                        }
-                        if (foundTeam.isEmpty()) {
-                            p.sendMessage("");
-                            p.sendMessage("§6§lTEAM GENERATORS SETUP:");
-                            p.sendMessage("§7There isn't any team nearby :(");
-                            p.sendMessage("§dMake sure you set the team's spawn first!");
-                            p.spigot().sendMessage(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " setSpawn <teamName> ",
-                                    "§dSet a team spawn.", "/" + getParent().getName() + " " + getSubCommandName() + " ", ClickEvent.Action.SUGGEST_COMMAND));
-                            p.sendMessage("§9Or if you set the spawn and the team wasn't found automatically");
-                            p.spigot().sendMessage(Misc.msgHoverClick("§9Use §e/" + getParent().getName() + " " + getSubCommandName() + " " + args[0] + " <teamName>", "§dSet a team " + args[0] + " generator.", "/" + getParent().getName() + " " + getSubCommandName() + " " + args[0], ClickEvent.Action.SUGGEST_COMMAND));
-                            return true;
-                        }
-                    } else if (args.length == 2) {
-                        if (arena.getYml().get("Team." + args[1]) != null) {
-                            foundTeam = args[1];
-                        } else {
-                            p.sendMessage("§c▪ §7Invalid team!");
-                            if (arena.getYml().get("Team") != null) {
-                                p.sendMessage("§6 ▪ §7Available teams: ");
-                                for (String team : Objects.requireNonNull(arena.getYml().getConfigurationSection("Team")).getKeys(false)) {
-                                    p.spigot().sendMessage(Misc.msgHoverClick("§6 ▪ §fIron generator " + TeamColor.getChatColor(Objects.requireNonNull(arena.getYml().getString("Team." + team + ".Color"))) + team + "§7 (click to set)",
-                                            "§7Set Iron Generator for " + TeamColor.getChatColor(Objects.requireNonNull(arena.getYml().getString("Team." + team + ".Color"))) + team, "/" + mainCmd + " addGenerator Iron " + team, ClickEvent.Action.RUN_COMMAND));
-                                    p.spigot().sendMessage(Misc.msgHoverClick("§6 ▪ §6Gold generator " + TeamColor.getChatColor(Objects.requireNonNull(arena.getYml().getString("Team." + team + ".Color"))) + team + "§7 (click to set)",
-                                            "§7Set Gold Generator for " + TeamColor.getChatColor(Objects.requireNonNull(arena.getYml().getString("Team." + team + ".Color"))) + team, "/" + mainCmd + " addGenerator Gold  " + team, ClickEvent.Action.RUN_COMMAND));
-                                }
-                            }
-                            return true;
-                        }
-                    } else {
-                        if (ss.getSetupType() == SetupType.ADVANCED) {
-                            p.sendMessage("§c▪ §7Usage: /" + mainCmd + " addGenerator <Iron/Gold> <teamName>");
-                        } else {
-                            p.sendMessage("§c▪ §7Usage: /" + mainCmd + " addGenerator <Iron/Gold>");
-                        }
-                        if (arena.getYml().get("Team") != null) {
-                            p.sendMessage("§6 ▪ §7Available teams: ");
-                            for (String team : Objects.requireNonNull(arena.getYml().getConfigurationSection("Team")).getKeys(false)) {
-                                p.spigot().sendMessage(Misc.msgHoverClick("§6 ▪ §fIron generator " + TeamColor.getChatColor(Objects.requireNonNull(arena.getYml().getString("Team." + team + ".Color"))) + team + "§7 (click to set)",
-                                        "§7Set Iron Generator for " + TeamColor.getChatColor(Objects.requireNonNull(arena.getYml().getString("Team." + team + ".Color"))) + team, "/" + mainCmd + " addGenerator Iron " + team, ClickEvent.Action.RUN_COMMAND));
-                                p.spigot().sendMessage(Misc.msgHoverClick("§6 ▪ §6Gold generator " + TeamColor.getChatColor(Objects.requireNonNull(arena.getYml().getString("Team." + team + ".Color"))) + team + "§7 (click to set)",
-                                        "§7Set Gold Generator for " + TeamColor.getChatColor(Objects.requireNonNull(arena.getYml().getString("Team." + team + ".Color"))) + team, "/" + mainCmd + " addGenerator Gold  " + team, ClickEvent.Action.RUN_COMMAND));
-                            }
-                        }
-                        return true;
-                    }
-                    arena.set("Team." + foundTeam + "." + args[0].substring(0, 1).toUpperCase() + args[0].substring(1).toLowerCase(), arena.stringLocationArenaFormat(p.getLocation()));
-                    p.sendMessage("§6 ▪ §7" + args[0] + " set for: " + TeamColor.getChatColor(Objects.requireNonNull(arena.getYml().getString("Team." + foundTeam + ".Color"))) + foundTeam);
-                    if (ss.getSetupType() == SetupType.ASSISTED) {
-                        Bukkit.dispatchCommand(p, getParent().getName());
-                    }
-            }
-        } else {
-            p.sendMessage("§c▪ §7Usage: /" + mainCmd + " addGenerator <Diamond/Emerald>");
-            if (ss.getSetupType() == SetupType.ADVANCED) {
-                p.sendMessage("§c▪ §7Usage: /" + mainCmd + " addGenerator <Iron/Gold> <teamName>");
-            } else {
-                p.sendMessage("§c▪ §7Usage: /" + mainCmd + " addGenerator <Iron/Gold>");
-            }
+        if (ss.getSetupType() == SetupType.ADVANCED) {
+            p.spigot().sendMessage(Misc.msgHoverClick(ss.getPrefix() + "/bw addGenerator <iron/ gold/ upgrade>", "Add a team generator.\nThe team will be detected automatically.", "/" + getParent().getName() + " " + getSubCommandName() + " ", ClickEvent.Action.SUGGEST_COMMAND));
+
+            p.spigot().sendMessage(Misc.msgHoverClick(ss.getPrefix() + "/bw addGenerator <iron/ gold/ upgrade> <team>", "Add a team generator.", "/" + getParent().getName() + " " + getSubCommandName() + " ", ClickEvent.Action.SUGGEST_COMMAND));
         }
+        p.spigot().sendMessage(Misc.msgHoverClick(ss.getPrefix() + "/bw addGenerator <emerald/ diamond>", "Add an emerald/ diamond generator.", "/" + getParent().getName() + " " + getSubCommandName() + " ", ClickEvent.Action.SUGGEST_COMMAND));
         return true;
     }
 
     @Override
     public List<String> getTabComplete() {
-        return Arrays.asList("Diamond", "Emerald", "Iron", "Gold");
+        return Arrays.asList("Diamond", "Emerald", "Iron", "Gold", "Upgrade");
     }
 
     @Override
@@ -211,5 +189,29 @@ public class AddGenerator extends SubCommand {
         if (!SetupSession.isInSetupSession(p.getUniqueId())) return false;
 
         return hasPermission(s);
+    }
+
+    /**
+     * Save team generator.
+     *
+     * @param l    location.
+     * @param t    team.
+     * @param ss   setup session.
+     * @param type Iron/ Gold.
+     */
+    private static void saveTeamGen(Location l, String t, @NotNull SetupSession ss, String type) {
+        Object o = ss.getConfig().getYml().get("Team." + t + "." + type);
+        List<String> locs;
+        if (o == null) {
+            locs = new ArrayList<>();
+        } else if (o instanceof String) {
+            locs = new ArrayList<>();
+            locs.add((String) o);
+        } else {
+            locs = ss.getConfig().getList("Team." + t + "." + type);
+        }
+
+        locs.add(ss.getConfig().stringLocationArenaFormat(l));
+        ss.getConfig().set("Team." + t + "." + type, locs);
     }
 }

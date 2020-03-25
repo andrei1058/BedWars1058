@@ -1,7 +1,6 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup;
 
 import com.andrei1058.bedwars.BedWars;
-import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
@@ -10,12 +9,14 @@ import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,37 +37,35 @@ public class SetSpawn extends SubCommand {
         Player p = (Player) s;
         SetupSession ss = SetupSession.getSession(p.getUniqueId());
         if (ss == null) {
-            s.sendMessage("§c ▪ §7You're not in a setup session!");
-            return true;
+            //s.sendMessage("§c ▪ §7You're not in a setup session!");
+            return false;
         }
         if (args.length < 1) {
-            p.sendMessage("§6 ▪ §7Usage: /" + mainCmd + " setSpawn §o<team>");
+            p.sendMessage(ss.getPrefix() + ChatColor.RED + "Usage: /" + mainCmd + " setSpawn <team>");
             if (ss.getConfig().getYml().get("Team") != null) {
                 for (String team : Objects.requireNonNull(ss.getConfig().getYml().getConfigurationSection("Team")).getKeys(false)) {
                     if (ss.getConfig().getYml().get("Team." + team + ".Spawn") == null) {
-                        p.spigot().sendMessage(Misc.msgHoverClick("§6Set spawn for: " + TeamColor.getChatColor(Objects.requireNonNull(ss.getConfig().getYml().getString("Team." + team + ".Color"))) + team + "§7 (click to set)",
-                                "§7Set spawn for " + TeamColor.getChatColor(Objects.requireNonNull(ss.getConfig().getYml().getString("Team." + team + ".Color"))) + team, "/" + mainCmd + " setSpawn " + team, ClickEvent.Action.RUN_COMMAND));
+                        p.spigot().sendMessage(Misc.msgHoverClick(ss.getPrefix() + "Set spawn for: " + ss.getTeamColor(team) + team + " " + ChatColor.getLastColors(ss.getPrefix()) + "(click to set)", ChatColor.WHITE + "Set spawn for " + ss.getTeamColor(team) + team, "/" + mainCmd + " setSpawn " + team, ClickEvent.Action.RUN_COMMAND));
                     }
                 }
             }
         } else {
             if (ss.getConfig().getYml().get("Team." + args[0]) == null) {
-                p.sendMessage("§c▪ §7This team doesn't exist!");
+                p.sendMessage(ss.getPrefix() + ChatColor.RED + "Could not find target team: " + ChatColor.RED + args[0]);
                 if (ss.getConfig().getYml().get("Team") != null) {
-                    p.sendMessage("§a§lTeams list: ");
+                    p.sendMessage(ss.getPrefix() + "Teams list: ");
                     for (String team : Objects.requireNonNull(ss.getConfig().getYml().getConfigurationSection("Team")).getKeys(false)) {
-                        p.spigot().sendMessage(Misc.msgHoverClick("§6 ▪ " + TeamColor.getChatColor(Objects.requireNonNull(ss.getConfig().getYml().getString("Team." + team + ".Color"))) + team + " §7(click to set)",
-                                "§7Set spawn for " + TeamColor.getChatColor(Objects.requireNonNull(ss.getConfig().getYml().getString("Team." + team + ".Color"))) + team, "/" + mainCmd + " setSpawn " + team, ClickEvent.Action.RUN_COMMAND));
+                        p.spigot().sendMessage(Misc.msgHoverClick(ChatColor.GOLD + " " + '▪' + " " + ss.getTeamColor(team) + team + " " + ChatColor.getLastColors(ss.getPrefix()) + "(click to set)", ChatColor.WHITE + "Set spawn for " + ss.getTeamColor(team) + team, "/" + mainCmd + " setSpawn " + team, ClickEvent.Action.RUN_COMMAND));
                     }
                 }
             } else {
                 if (ss.getConfig().getYml().get("Team." + args[0] + ".Spawn") != null) {
-                    removeArmorStand("SPAWN SET", ss.getConfig().getArenaLoc("Team." + args[0] + ".Spawn"));
+                    removeArmorStand("spawn", ss.getConfig().getArenaLoc("Team." + args[0] + ".Spawn"), ss.getConfig().getString("Team." + args[0] + ".Spawn"));
                 }
                 ss.getConfig().saveArenaLoc("Team." + args[0] + ".Spawn", p.getLocation());
-                String teamm = TeamColor.getChatColor(Objects.requireNonNull(ss.getConfig().getYml().getString("Team." + args[0] + ".Color"))) + args[0];
-                p.sendMessage("§6 ▪ §7Spawn set for: " + teamm);
-                com.andrei1058.bedwars.commands.Misc.createArmorStand(teamm + " §6SPAWN SET", p.getLocation());
+                String teamm = ss.getTeamColor(args[0]) + args[0];
+                p.sendMessage(ChatColor.GOLD + " " + '▪' + " " + "Spawn set for: " + teamm);
+                com.andrei1058.bedwars.commands.Misc.createArmorStand(teamm + " " + ChatColor.GOLD + "SPAWN SET", p.getLocation(), ss.getConfig().stringLocationArenaFormat(p.getLocation()));
                 int radius = ss.getConfig().getInt(ConfigPath.ARENA_ISLAND_RADIUS);
                 Location l = p.getLocation();
                 for (int x = -radius; x < radius; x++) {
@@ -85,11 +84,11 @@ public class SetSpawn extends SubCommand {
                     StringBuilder remainging = new StringBuilder();
                     for (String team : Objects.requireNonNull(ss.getConfig().getYml().getConfigurationSection("Team")).getKeys(false)) {
                         if (ss.getConfig().getYml().get("Team." + team + ".Spawn") == null) {
-                            remainging.append(TeamColor.getChatColor(Objects.requireNonNull(ss.getConfig().getYml().getString("Team." + team + ".Color")))).append(team).append(" ");
+                            remainging.append(ss.getTeamColor(team)).append(team).append(" ");
                         }
                     }
                     if (remainging.toString().length() > 0) {
-                        p.sendMessage("§6Remaining: " + remainging.toString());
+                        p.sendMessage(ss.getPrefix() + "Remaining: " + remainging.toString());
                     }
                 }
             }
@@ -99,7 +98,7 @@ public class SetSpawn extends SubCommand {
 
     @Override
     public List<String> getTabComplete() {
-        return null;
+        return new ArrayList<>();
     }
 
     @Override

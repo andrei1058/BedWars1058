@@ -4,9 +4,7 @@ import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
-import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.commands.shout.ShoutCommand;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
@@ -36,29 +34,52 @@ public class PAPISupport extends PlaceholderExpansion {
     }
 
     @Override
-    public String onPlaceholderRequest(Player p, String s) {
+    public boolean persist() {
+        return true;
+    }
 
-        if (s.contains("arena_status_")){
+    @Override
+    public String onPlaceholderRequest(Player p, String s) {
+        if (s == null) return "";
+
+        if (s.startsWith("arena_status_")){
             IArena a = Arena.getArenaByName(s.replace("arena_status_", ""));
             if (a == null){
-                return "NULL";
+                return Language.getMsg(p, Messages.ARENA_STATUS_RESTARTING_NAME);
             }
             return a.getDisplayStatus(Language.getDefaultLanguage());
         }
 
-        if (s.contains("arena_count_")){
-            IArena a = Arena.getArenaByName(s.replace("arena_count_", ""));
-            if (a == null){
-                return "0";
+        if (s.startsWith("arena_count_")){
+            int players = 0;
+
+            String[] arenas = s.replace("arena_count_", "").split("\\+");
+            IArena a;
+            for (String arena : arenas){
+                a = Arena.getArenaByName(arena);
+                if (a != null){
+                    players += a.getPlayers().size();
+                }
             }
-            return String.valueOf(a.getPlayers().size());
+
+            return String.valueOf(players);
         }
 
-        if (s.contains("group_count_")){
+        if (s.startsWith("group_count_")){
             return String.valueOf(Arena.getPlayers( s.replace("group_count_", "")));
         }
 
+        if (s.startsWith("arena_group_")){
+            String a = s.replace("arena_group_", "");
+            IArena arena = Arena.getArenaByName(a);
+            if (arena != null){
+                return arena.getGroup();
+            }
+            return "-";
+        }
+
         String replay = "";
+        IArena a = Arena.getArenaByPlayer(p);
         switch (s) {
             case "stats_firstplay":
                 replay = new SimpleDateFormat(getMsg(p, Messages.FORMATTING_STATS_DATE_FORMAT)).format(StatsManager.getStatsCache().getPlayerFirstPlay(p.getUniqueId()));
@@ -97,7 +118,6 @@ public class PAPISupport extends PlaceholderExpansion {
                 replay = String.valueOf(Arena.getArenas().size());
                 break;
             case "player_team":
-                IArena a = Arena.getArenaByPlayer(p);
                 if (a != null) {
                     if (ShoutCommand.isShout(p)) {
                         replay += Language.getMsg(p, Messages.FORMAT_PAPI_PLAYER_TEAM_SHOUT);
@@ -107,7 +127,7 @@ public class PAPISupport extends PlaceholderExpansion {
                             ITeam bwt = a.getTeam(p);
                             if (bwt != null) {
                                 replay += Language.getMsg(p, Messages.FORMAT_PAPI_PLAYER_TEAM_TEAM).replace("{TeamName}",
-                                        bwt.getName()).replace("{TeamColor}", String.valueOf(TeamColor.getChatColor(bwt.getColor())));
+                                        bwt.getDisplayName(Language.getPlayerLanguage(p))).replace("{TeamColor}", String.valueOf(bwt.getColor().chat()));
                             }
                         }
                     } else {
@@ -132,6 +152,11 @@ public class PAPISupport extends PlaceholderExpansion {
                 break;
             case "player_rerq_xp":
                 replay = String.valueOf(BedWars.getLevelSupport().getRequiredXp(p));
+                break;
+            case "current_arena_group":
+                if (a != null){
+                    replay = a.getGroup();
+                }
                 break;
         }
         return replay;
