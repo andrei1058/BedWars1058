@@ -55,7 +55,7 @@ public class DisableArena extends SubCommand {
     public List<String> getTabComplete() {
         List<String> tab = new ArrayList<>();
         for (IArena a : Arena.getArenas()){
-            tab.add(a.getWorldName());
+            tab.add(a.getArenaName());
         }
         return tab;
     }

@@ -14,7 +14,7 @@ public class TargetListener implements Listener {
     @EventHandler
     public void onTarget(EntityTargetLivingEntityEvent e){
         if (!(e.getTarget() instanceof Player)) return;
-        IArena arena = Arena.getArenaByName(e.getEntity().getWorld().getName());
+        IArena arena = Arena.getArenaByIdentifier(e.getEntity().getWorld().getName());
         Player p = (Player) e.getTarget();
         if (arena == null) return;
         if (!arena.isPlayer(p)) {

@@ -9,7 +9,7 @@ public class Refresh implements Runnable {
 
     @Override
     public void run() {
-        for (SBoard sb : SBoard.getScoreboards()){
+        for (SBoard sb : SBoard.getScoreboards().values()){
             sb.refresh();
         }
 

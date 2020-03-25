@@ -227,6 +227,7 @@ public class v1_8_R3 extends VersionSupport {
     }
 
 
+    @SuppressWarnings("rawtypes")
     private void registerEntity(String name, int id, Class customClass) {
         try {
             ArrayList<Map> dataMap = new ArrayList<>();
@@ -248,6 +249,7 @@ public class v1_8_R3 extends VersionSupport {
     }
 
     public static class VillagerShop extends EntityVillager {
+        @SuppressWarnings("rawtypes")
         VillagerShop(World world) {
             super(world);
             try {
@@ -403,7 +405,7 @@ public class v1_8_R3 extends VersionSupport {
     @Override
     @SuppressWarnings("deprecation")
     public void setBlockTeamColor(org.bukkit.block.Block block, TeamColor teamColor) {
-        block.setData(TeamColor.itemColor(teamColor));
+        block.setData(teamColor.itemByte());
     }
 
     @Override
@@ -454,9 +456,9 @@ public class v1_8_R3 extends VersionSupport {
             case "WOOL":
             case "STAINED_CLAY":
             case "STAINED_GLASS":
-                return new ItemStack(itemStack.getType(), itemStack.getAmount(), TeamColor.itemColor(bedWarsTeam.getColor()));
+                return new ItemStack(itemStack.getType(), itemStack.getAmount(), bedWarsTeam.getColor().itemByte());
             case "GLASS":
-                return new ItemStack(org.bukkit.Material.STAINED_GLASS, itemStack.getAmount(), TeamColor.itemColor(bedWarsTeam.getColor()));
+                return new ItemStack(org.bukkit.Material.STAINED_GLASS, itemStack.getAmount(), bedWarsTeam.getColor().itemByte());
         }
     }
 
@@ -598,12 +600,15 @@ public class v1_8_R3 extends VersionSupport {
         for (Player pl : arena.getPlayers()) {
             if (pl.equals(player)) continue;
             if (arena.getRespawn().containsKey(pl)) continue;
-            if (arena.getShowTime().containsKey(pl)) continue;
+            //if (arena.getShowTime().containsKey(pl)) continue;
             if (pl.getLocation().distance(player.getLocation()) <= renderDistance) {
+
                 pc2 = ((CraftPlayer) pl).getHandle();
-                pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(pc2));
-                pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, pc2));
-                showArmor(pl, player);
+                if (!arena.getShowTime().containsKey(pl)) {
+                    pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(pc2));
+                    pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, pc2));
+                    showArmor(pl, player);
+                }
 
                 pc2.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(pc));
                 pc2.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, pc));

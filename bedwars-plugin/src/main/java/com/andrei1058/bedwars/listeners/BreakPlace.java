@@ -54,14 +54,14 @@ public class BreakPlace implements Listener {
             }
         }
         if (e.getBlock().getType() == Material.ICE) {
-            if (Arena.getArenaByName(e.getBlock().getWorld().getName()) != null) e.setCancelled(true);
+            if (Arena.getArenaByIdentifier(e.getBlock().getWorld().getName()) != null) e.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onCactus(BlockPhysicsEvent e) {
         if (e.getBlock().getType() == Material.CACTUS) {
-            if (Arena.getArenaByName(e.getBlock().getWorld().getName()) != null) e.setCancelled(true);
+            if (Arena.getArenaByIdentifier(e.getBlock().getWorld().getName()) != null) e.setCancelled(true);
         }
     }
 
@@ -69,7 +69,7 @@ public class BreakPlace implements Listener {
     public void onBlockPlace(BlockPlaceEvent e) {
         if (e.isCancelled()) return;
         //Prevent player from placing during the removal from the arena
-        IArena arena = Arena.getArenaByName(e.getBlock().getWorld().getName());
+        IArena arena = Arena.getArenaByIdentifier(e.getBlock().getWorld().getName());
         if (arena != null) {
             if (arena.getStatus() != GameState.playing) {
                 e.setCancelled(true);
@@ -107,7 +107,7 @@ public class BreakPlace implements Listener {
             a.addPlacedBlock(e.getBlock());
             if (e.getBlock().getType() == Material.TNT) {
                 e.setCancelled(true);
-                TNTPrimed tnt = e.getBlock().getLocation().getWorld().spawn(e.getBlock().getLocation(), TNTPrimed.class);
+                TNTPrimed tnt = e.getBlock().getLocation().getWorld().spawn(e.getBlock().getLocation().add(0.5, 0, 0.5), TNTPrimed.class);
                 tnt.setFuseTicks(45);
                 nms.setSource(tnt, p);
                 for (ItemStack i : p.getInventory().getContents()) {
@@ -187,12 +187,12 @@ public class BreakPlace implements Listener {
                                             Bukkit.getPluginManager().callEvent(new PlayerBedBreakEvent(e.getPlayer(), a.getTeam(p), t, a));
                                             for (Player on : a.getWorld().getPlayers()) {
                                                 if (t.isMember(on)) {
-                                                    on.sendMessage(getMsg(on, Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM).replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getName())
-                                                            .replace("{PlayerColor}", TeamColor.getChatColor(a.getTeam(p).getColor()).toString()).replace("{PlayerName}", p.getName()));
+                                                    on.sendMessage(getMsg(on, Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM).replace("{TeamColor}", t.getColor().chat().toString()).replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(on)))
+                                                            .replace("{PlayerColor}", a.getTeam(p).getColor().chat().toString()).replace("{PlayerName}", p.getDisplayName()));
                                                     nms.sendTitle(on, getMsg(on, Messages.INTERACT_BED_DESTROY_TITLE_ANNOUNCEMENT), getMsg(on, Messages.INTERACT_BED_DESTROY_SUBTITLE_ANNOUNCEMENT), 0, 25, 0);
                                                 } else {
-                                                    on.sendMessage(getMsg(on, Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT).replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getName())
-                                                            .replace("{PlayerColor}", TeamColor.getChatColor(a.getTeam(p).getColor()).toString()).replace("{PlayerName}", p.getName()));
+                                                    on.sendMessage(getMsg(on, Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT).replace("{TeamColor}", t.getColor().chat().toString()).replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(on)))
+                                                            .replace("{PlayerColor}", a.getTeam(p).getColor().chat().toString()).replace("{PlayerName}", p.getDisplayName()));
                                                 }
                                                 Sounds.playSound(ConfigPath.SOUNDS_BED_DESTROY, on);
                                             }
@@ -230,9 +230,10 @@ public class BreakPlace implements Listener {
      */
     @EventHandler
     public void onSignChange(SignChangeEvent e) {
+        if (e == null) return;
         Player p = e.getPlayer();
         if (e.getLine(0).equalsIgnoreCase("[" + mainCmd + "]")) {
-            File dir = new File("plugins/" + plugin.getName() + "/Arenas");
+            File dir = new File(plugin.getDataFolder(), "/Arenas");
             boolean exists = false;
             if (dir.exists()) {
                 //noinspection ConstantConditions
@@ -302,7 +303,7 @@ public class BreakPlace implements Listener {
             }
         }
         //Prevent player from placing during the removal from the arena
-        IArena arena = Arena.getArenaByName(e.getBlockClicked().getWorld().getName());
+        IArena arena = Arena.getArenaByIdentifier(e.getBlockClicked().getWorld().getName());
         if (arena != null) {
             if (arena.getStatus() != GameState.playing) {
                 e.setCancelled(true);
@@ -345,6 +346,13 @@ public class BreakPlace implements Listener {
                         p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
                         return;
                     }
+                    for (IGenerator o : t.getGenerators()) {
+                        if (o.getLocation().distance(e.getBlockClicked().getLocation()) <= 1) {
+                            e.setCancelled(true);
+                            p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                            return;
+                        }
+                    }
                 }
                 for (IGenerator o : a.getOreGenerators()) {
                     if (o.getLocation().distance(e.getBlockClicked().getLocation()) <= 1) {
@@ -365,7 +373,7 @@ public class BreakPlace implements Listener {
     public void onBlow(EntityExplodeEvent e) {
         if (e.isCancelled()) return;
         if (e.blockList().isEmpty()) return;
-        IArena a = Arena.getArenaByName(e.blockList().get(0).getWorld().getName());
+        IArena a = Arena.getArenaByIdentifier(e.blockList().get(0).getWorld().getName());
         if (a != null) {
             if (a.getNextEvent() != NextEvent.GAME_END) {
                 List<Block> destroyed = e.blockList();
@@ -384,7 +392,7 @@ public class BreakPlace implements Listener {
     public void onBlockExplode(BlockExplodeEvent e) {
         if (e.isCancelled()) return;
         if (e.blockList().isEmpty()) return;
-        IArena a = Arena.getArenaByName(e.blockList().get(0).getWorld().getName());
+        IArena a = Arena.getArenaByIdentifier(e.blockList().get(0).getWorld().getName());
         if (a != null) {
             if (a.getNextEvent() != NextEvent.GAME_END) {
                 List<Block> destroyed = e.blockList();
@@ -401,7 +409,7 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onPaintingRemove(HangingBreakByEntityEvent e) {
-        IArena a = Arena.getArenaByName(e.getEntity().getWorld().getName());
+        IArena a = Arena.getArenaByIdentifier(e.getEntity().getWorld().getName());
         if (a == null) {
             if (BedWars.getServerType() == ServerType.SHARED) return;
             if (!BedWars.getLobbyWorld().equals(e.getEntity().getWorld().getName())) return;
@@ -414,7 +422,7 @@ public class BreakPlace implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onBlockCanBuildEvent(BlockCanBuildEvent e) {
         if (e.isBuildable()) return;
-        IArena a = Arena.getArenaByName(e.getBlock().getWorld().getName());
+        IArena a = Arena.getArenaByIdentifier(e.getBlock().getWorld().getName());
         if (a != null) {
             boolean bed = false;
             for (ITeam t : a.getTeams()) {
@@ -454,7 +462,7 @@ public class BreakPlace implements Listener {
     public void soilChangeEntity(EntityChangeBlockEvent e) {
         if (e.getTo() == Material.DIRT) {
             if (e.getBlock().getType().toString().equals("FARMLAND") || e.getBlock().getType().toString().equals("SOIL")) {
-                if ((Arena.getArenaByName(e.getBlock().getWorld().getName()) != null) || (e.getBlock().getWorld().getName().equals(BedWars.getLobbyWorld())))
+                if ((Arena.getArenaByIdentifier(e.getBlock().getWorld().getName()) != null) || (e.getBlock().getWorld().getName().equals(BedWars.getLobbyWorld())))
                     e.setCancelled(true);
             }
         }

@@ -18,12 +18,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 
 @SuppressWarnings("WeakerAccess")
-public class ShopManager  extends ConfigManager {
+public class ShopManager extends ConfigManager {
 
     public static ShopIndex shop;
 
-    public ShopManager(){
-        super(BedWars.plugin, "shop", "plugins/" + BedWars.plugin.getDescription().getName());
+    public ShopManager() {
+        super(BedWars.plugin, "shop", BedWars.plugin.getDataFolder().getPath());
         saveDefaults();
         loadShop();
         registerListeners();

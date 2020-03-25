@@ -243,7 +243,7 @@ public class v1_12_R1 extends VersionSupport {
     }
 
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private void registerEntity(String name, int id, Class customClass) {
         EntityTypes.b.a(id, new MinecraftKey(name), customClass);
     }
@@ -372,7 +372,7 @@ public class v1_12_R1 extends VersionSupport {
             for (int z = -1; z <= 1; z++) {
                 BlockState bed = bwt.getBed().clone().add(x, 0, z).getBlock().getState();
                 if (bed instanceof Bed) {
-                    ((Bed) bed).setColor(TeamColor.getDyeColor(bwt.getColor().toString()));
+                    ((Bed) bed).setColor(bwt.getColor().dye());
                     bed.update();
                 }
             }
@@ -415,7 +415,7 @@ public class v1_12_R1 extends VersionSupport {
     @Override
     @SuppressWarnings("deprecation")
     public void setBlockTeamColor(org.bukkit.block.Block block, TeamColor teamColor) {
-        block.setData(TeamColor.itemColor(teamColor));
+        block.setData(teamColor.itemByte());
     }
 
     @Override
@@ -472,9 +472,9 @@ public class v1_12_R1 extends VersionSupport {
             case "WOOL":
             case "STAINED_CLAY":
             case "STAINED_GLASS":
-                return new org.bukkit.inventory.ItemStack(itemStack.getType(), itemStack.getAmount(), TeamColor.itemColor(bedWarsTeam.getColor()));
+                return new org.bukkit.inventory.ItemStack(itemStack.getType(), itemStack.getAmount(), bedWarsTeam.getColor().itemByte());
             case "GLASS":
-                return new org.bukkit.inventory.ItemStack(org.bukkit.Material.STAINED_GLASS, itemStack.getAmount(), TeamColor.itemColor(bedWarsTeam.getColor()));
+                return new org.bukkit.inventory.ItemStack(org.bukkit.Material.STAINED_GLASS, itemStack.getAmount(), bedWarsTeam.getColor().itemByte());
         }
     }
 
@@ -612,12 +612,14 @@ public class v1_12_R1 extends VersionSupport {
         for (Player pl : arena.getPlayers()) {
             if (pl.equals(player)) continue;
             if (arena.getRespawn().containsKey(pl)) continue;
-            if (arena.getShowTime().containsKey(pl)) continue;
+            //if (arena.getShowTime().containsKey(pl)) continue;
             if (pl.getLocation().distance(player.getLocation()) <= renderDistance) {
                 pc2 = ((CraftPlayer) pl).getHandle();
-                pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(pc2));
-                pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, pc2));
-                showArmor(pl, player);
+                if (!arena.getShowTime().containsKey(pl)) {
+                    pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(pc2));
+                    pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, pc2));
+                    showArmor(pl, player);
+                }
 
                 pc2.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(pc));
                 pc2.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, pc));

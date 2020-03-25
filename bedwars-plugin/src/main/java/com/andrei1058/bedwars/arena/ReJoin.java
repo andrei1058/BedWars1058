@@ -4,8 +4,11 @@ import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.lobbysocket.ArenaSocket;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.arena.tasks.ReJoinTask;
+import com.google.gson.JsonObject;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -34,10 +37,18 @@ public class ReJoin {
         this.player = player.getUniqueId();
         this.arena = arena;
         reJoinList.add(this);
-        BedWars.debug("Created ReJoin for " + player.getName() + " " + player.getUniqueId() + " at " + arena.getWorldName());
+        BedWars.debug("Created ReJoin for " + player.getName() + " " + player.getUniqueId() + " at " + arena.getArenaName());
         storeStatsDiff(arena.getPlayerKills(player, false), arena.getPlayerKills(player, true), arena.getPlayerDeaths(player, false), arena.getPlayerDeaths(player, true), arena.getPlayerBedsDestroyed(player));
         if (bwt.getMembers().isEmpty()) task = new ReJoinTask(arena, bwt);
         this.permanentsAndNonDowngradables.addAll(cachedArmor);
+
+
+        JsonObject json = new JsonObject();
+        json.addProperty("type", "RC");
+        json.addProperty("uuid", player.getUniqueId().toString());
+        json.addProperty("arena_id", arena.getWorldName());
+        json.addProperty("server", BedWars.config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID));
+        ArenaSocket.sendMessage(json.toString());
     }
 
     /**
@@ -108,6 +119,11 @@ public class ReJoin {
     public void destroy() {
         BedWars.debug("ReJoin destroy for " + player.toString());
         reJoinList.remove(this);
+        JsonObject json = new JsonObject();
+        json.addProperty("type", "RD");
+        json.addProperty("uuid", player.toString());
+        json.addProperty("server", BedWars.config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID));
+        ArenaSocket.sendMessage(json.toString());
     }
 
     /**

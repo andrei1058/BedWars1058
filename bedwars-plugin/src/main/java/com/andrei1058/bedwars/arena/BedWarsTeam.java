@@ -12,6 +12,7 @@ import com.andrei1058.bedwars.api.events.player.PlayerReSpawnEvent;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.region.Cuboid;
+import com.andrei1058.bedwars.api.upgrades.EnemyBaseEnterTrap;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.shop.ShopCache;
 import org.bukkit.*;
@@ -24,11 +25,11 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
@@ -39,71 +40,40 @@ public class BedWarsTeam implements ITeam {
     private List<Player> members = new ArrayList<>();
     private TeamColor color;
     private Location spawn, bed, shop, teamUpgrades;
-    private IGenerator ironGenerator = null, goldGenerator = null, emeraldGenerator = null;
+    //private IGenerator ironGenerator = null, goldGenerator = null, emeraldGenerator = null;
     private String name;
     private Arena arena;
     private boolean bedDestroyed = false;
+    private Vector killDropsLoc = null;
 
-    /**
-     * slot, tier
-     */
-    private HashMap<Integer, Integer> upgradeTier = new HashMap<>();
-    /**
-     * Potion effects for teammates from the upgrades
-     */
-    private List<Effect> teamEffects = new ArrayList<>();
-    /**
-     * Potion effects for teammates on base only
-     */
-    private List<Effect> base = new ArrayList<>();
-    /**
-     * Potion effects for enemies when they enter in this team's base
-     */
-    private List<Effect> enemyBaseEnter = new ArrayList<>();
+    // team generators
+    private List<IGenerator> generators = new ArrayList<>();
 
-    /**
-     * Enchantments for bows
-     */
+    // team upgrade name, tier
+    private ConcurrentHashMap<String, Integer> teamUpgradeList = new ConcurrentHashMap<>();
+    // Potion effects for teammates from the upgrades
+    private List<PotionEffect> teamEffects = new ArrayList<>();
+    // Potion effects for teammates on base only
+    private List<PotionEffect> base = new ArrayList<>();
+    // Enchantments for bows
     private List<TeamEnchant> bowsEnchantments = new ArrayList<>();
-    /**
-     * Enchantments for swords
-     */
+    // Enchantments for swords
     private List<TeamEnchant> swordsEnchantemnts = new ArrayList<>();
-    /**
-     * Enchantments for armors
-     */
+    // Enchantments for armors
     private List<TeamEnchant> armorsEnchantemnts = new ArrayList<>();
-    /**
-     * Used for show/ hide bed hologram
-     */
-    private HashMap<Player, BedHolo> beds = new HashMap<>();
-    /**
-     * Used for it's a trap
-     */
-    private boolean trapActive = false, trapChat = false, trapAction = false, trapTitle = false, trapSubtitle = false;
-    private List<Integer> trapSlots = new ArrayList<>();
-    /**
-     * One time upgrades with effects slots
-     */
-    private List<Integer> enemyBaseEnterSlots = new ArrayList<>();
-    /**
-     * A list with all potions for clear them when someone leaves the island
-     */
-    private List<Effect> ebseEffectsStatic = new ArrayList<>();
-
-    /**
-     * A list with team's dragons  at Sudden Death phase
-     */
+    // Used for show/ hide bed hologram
+    private HashMap<UUID, BedHolo> beds = new HashMap<>();
+    // Queued traps
+    private LinkedList<EnemyBaseEnterTrap> enemyBaseEnterTraps = new LinkedList<>();
+    // Amount of dragons for Sudden Death phase
     private int dragons = 1;
-
-    /**
-     * Player cache, used for losers stats and rejoin
-     */
+    // Player cache, used for losers stats and rejoin
     private List<Player> membersCache = new ArrayList<>();
-
-    public static HashMap<Player, Long> antiFallDamageAtRespawn = new HashMap<>();
+    // Fall invulnerability when teammates respawn
+    public static HashMap<UUID, Long> antiFallDamageAtRespawn = new HashMap<>();
 
     public BedWarsTeam(String name, TeamColor color, Location spawn, Location bed, Location shop, Location teamUpgrades, Arena arena) {
+        if (arena == null) return;
         this.name = name;
         this.color = color;
         this.spawn = spawn;
@@ -111,8 +81,13 @@ public class BedWarsTeam implements ITeam {
         this.arena = arena;
         this.shop = shop;
         this.teamUpgrades = teamUpgrades;
-        Language.saveIfNotExists(ConfigPath.TEAM_NAME_PATH.replace("{arena}", getArena().getWorldName()).replace("{team}", getName()), name);
+        Language.saveIfNotExists(ConfigPath.TEAM_NAME_PATH.replace("{arena}", getArena().getArenaName()).replace("{team}", getName()), name);
         arena.getRegionsList().add(new Cuboid(spawn, arena.getConfig().getInt(ConfigPath.ARENA_SPAWN_PROTECTION), true));
+
+        Location drops = getArena().getConfig().getArenaLoc("Team." + getName() + "." + ConfigPath.ARENA_TEAM_KILL_DROPS_LOC);
+        if (drops != null) {
+            setKillDropsLocation(drops);
+        }
     }
 
     public int getSize() {
@@ -123,7 +98,9 @@ public class BedWarsTeam implements ITeam {
      * Add a new member to the team
      */
     public void addPlayers(Player... players) {
+        if (players == null) return;
         for (Player p : players) {
+            if (p == null) continue;
             if (!members.contains(p)) members.add(p);
             if (!membersCache.contains(p)) membersCache.add(p);
             new BedHolo(p, getArena());
@@ -134,6 +111,7 @@ public class BedWarsTeam implements ITeam {
      * first spawn
      */
     public void firstSpawn(Player p) {
+        if (p == null) return;
         p.teleport(spawn, PlayerTeleportEvent.TeleportCause.PLUGIN);
         p.setGameMode(GameMode.SURVIVAL);
         sendDefaultInventory(p, true);
@@ -252,9 +230,6 @@ public class BedWarsTeam implements ITeam {
         sendArmor(p);
     }
 
-    /**
-     * Restore lost sword.
-     */
     public void defaultSword(Player p, boolean sword) {
         if (!sword) return;
         String path = config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + "." + arena.getGroup()) == null ?
@@ -304,21 +279,34 @@ public class BedWarsTeam implements ITeam {
     }
 
     /**
-     * Spawn the iron and gold generators
+     * Spawn iron and gold generators
      */
-    public void setGenerators(Location ironGenerator, Location goldGenerator) {
-        getArena().getOreGenerators().add(this.ironGenerator = new OreGenerator(ironGenerator, arena, GeneratorType.IRON, this));
-        getArena().getOreGenerators().add(this.goldGenerator = new OreGenerator(goldGenerator, arena, GeneratorType.GOLD, this));
+    public void spawnGenerators() {
+        for (String type : new String[]{"Iron", "Gold"}) {
+            GeneratorType gt = GeneratorType.valueOf(type.toUpperCase());
+            List<Location> locs = new ArrayList<>();
+            Object o = getArena().getConfig().getYml().get("Team." + getName() + "." + type);
+            if (o instanceof String) {
+                locs.add(getArena().getConfig().getArenaLoc("Team." + getName() + "." + type));
+            } else {
+                locs = getArena().getConfig().getArenaLocations("Team." + getName() + "." + type);
+            }
+            for (Location loc : locs) {
+                IGenerator gen = new OreGenerator(loc, getArena(), gt, this);
+                //getArena().getOreGenerators().add(gen);
+                generators.add(gen);
+            }
+        }
     }
 
     /**
      * Respawn a member
      */
-    public void respawnMember(Player p) {
-        if (antiFallDamageAtRespawn.containsKey(p)) {
-            antiFallDamageAtRespawn.replace(p, System.currentTimeMillis() + 3500L);
+    public void respawnMember(@NotNull Player p) {
+        if (antiFallDamageAtRespawn.containsKey(p.getUniqueId())) {
+            antiFallDamageAtRespawn.replace(p.getUniqueId(), System.currentTimeMillis() + 3500L);
         } else {
-            antiFallDamageAtRespawn.put(p, System.currentTimeMillis() + 3500L);
+            antiFallDamageAtRespawn.put(p.getUniqueId(), System.currentTimeMillis() + 3500L);
         }
         p.teleport(getSpawn(), PlayerTeleportEvent.TeleportCause.PLUGIN);
         p.setVelocity(new Vector(0, 0, 0));
@@ -339,13 +327,13 @@ public class BedWarsTeam implements ITeam {
         sendDefaultInventory(p, false);
         p.setHealth(20);
         if (!getBaseEffects().isEmpty()) {
-            for (BedWarsTeam.Effect ef : getBaseEffects()) {
-                p.addPotionEffect(new PotionEffect(ef.getPotionEffectType(), ef.getDuration(), ef.getAmplifier()));
+            for (PotionEffect ef : getBaseEffects()) {
+                p.addPotionEffect(ef);
             }
         }
         if (!getTeamEffects().isEmpty()) {
-            for (BedWarsTeam.Effect ef : getTeamEffects()) {
-                p.addPotionEffect(new PotionEffect(ef.getPotionEffectType(), ef.getDuration(), ef.getAmplifier()));
+            for (PotionEffect ef : getTeamEffects()) {
+                p.addPotionEffect(ef);
             }
         }
         if (!getBowsEnchantments().isEmpty()) {
@@ -390,13 +378,15 @@ public class BedWarsTeam implements ITeam {
         Bukkit.getPluginManager().callEvent(new PlayerReSpawnEvent(p, getArena(), this));
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            nms.invisibilityFix(p, getArena());
+            if (getArena() != null) {
+                nms.invisibilityFix(p, getArena());
 
             // #274
             if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS)) {
                 for (Player on : getArena().getShowTime().keySet()) {
                     BedWars.nms.hideArmor(on, p);
                 }
+            }
             }
             //
         }, 10L);
@@ -430,7 +420,7 @@ public class BedWarsTeam implements ITeam {
     private ItemStack createArmor(Material material) {
         ItemStack i = new ItemStack(material);
         LeatherArmorMeta lam = (LeatherArmorMeta) i.getItemMeta();
-        lam.setColor(TeamColor.getColor(color));
+        lam.setColor(color.bukkitColor());
         nms.setUnbreakable(lam);
         i.setItemMeta(lam);
         return i;
@@ -454,15 +444,15 @@ public class BedWarsTeam implements ITeam {
     @SuppressWarnings("WeakerAccess")
     public class BedHolo {
         private ArmorStand a;
-        private Player p;
+        private UUID p;
         private Arena arena;
         private boolean hidden = false, bedDestroyed = false;
 
-        public BedHolo(Player p, Arena arena) {
-            this.p = p;
+        public BedHolo(@NotNull Player p, Arena arena) {
+            this.p = p.getUniqueId();
             this.arena = arena;
             spawn();
-            beds.put(p, this);
+            beds.put(p.getUniqueId(), this);
         }
 
         public void spawn() {
@@ -471,10 +461,10 @@ public class BedWarsTeam implements ITeam {
             a.setGravity(false);
             if (name != null) {
                 if (isBedDestroyed()) {
-                    a.setCustomName(getMsg(p, Messages.BED_HOLOGRAM_DESTROYED));
+                    a.setCustomName(getMsg(Bukkit.getPlayer(p), Messages.BED_HOLOGRAM_DESTROYED));
                     bedDestroyed = true;
                 } else {
-                    a.setCustomName(getMsg(p, Messages.BED_HOLOGRAM_DEFEND));
+                    a.setCustomName(getMsg(Bukkit.getPlayer(p), Messages.BED_HOLOGRAM_DEFEND));
                 }
                 a.setCustomNameVisible(true);
             }
@@ -485,7 +475,7 @@ public class BedWarsTeam implements ITeam {
             a.setMarker(true);
             a.setVisible(false);
             for (Player p2 : arena.getWorld().getPlayers()) {
-                if (p != p2) {
+                if (p != p2.getUniqueId()) {
                     nms.hideEntity(a, p2);
                 }
             }
@@ -523,9 +513,9 @@ public class BedWarsTeam implements ITeam {
      * Used when someone buys a new potion effect with apply == members
      */
     public void addTeamEffect(PotionEffectType pef, int amp, int duration) {
-        getTeamEffects().add(new Effect(pef, amp, duration));
+        getTeamEffects().add(new PotionEffect(pef, amp, duration));
         for (Player p : getMembers()) {
-            p.addPotionEffect(new PotionEffect(pef, Integer.MAX_VALUE, amp));
+            p.addPotionEffect(new PotionEffect(pef, duration, amp));
         }
     }
 
@@ -533,24 +523,14 @@ public class BedWarsTeam implements ITeam {
      * Used when someone buys a new potion effect with apply == base
      */
     public void addBaseEffect(PotionEffectType pef, int amp, int duration) {
-        getBaseEffects().add(new Effect(pef, amp, duration));
+        getBaseEffects().add(new PotionEffect(pef, amp, duration));
         for (Player p : new ArrayList<>(getMembers())) {
             if (p.getLocation().distance(getBed()) <= getArena().getIslandRadius()) {
-                for (Effect e : getBaseEffects()) {
-                    p.addPotionEffect(new PotionEffect(e.getPotionEffectType(), e.getDuration(), e.getAmplifier()));
+                for (PotionEffect e : getBaseEffects()) {
+                    p.addPotionEffect(e);
                 }
             }
         }
-    }
-
-    /**
-     * Used when someone buys a new potion effect with apply == enemyBaseEnter
-     */
-    public void addEnemyBaseEnterEffect(PotionEffectType pef, int amp, int slot, int duration) {
-        Effect e = new Effect(pef, amp, duration);
-        getEnemyBaseEnter().add(e);
-        getEnemyBaseEnterSlots().add(slot);
-        getEbseEffectsStatic().add(e);
     }
 
     /**
@@ -621,39 +601,6 @@ public class BedWarsTeam implements ITeam {
                 }
             }, 20L);
         }
-        //
-    }
-
-
-    /**
-     * Potion effects from the team upgrades shop
-     */
-    public static class Effect {
-        PotionEffectType potionEffectType;
-        int amplifier;
-        int duration;
-
-        public Effect(PotionEffectType potionEffectType, int amplifier, int duration) {
-            this.potionEffectType = potionEffectType;
-            this.amplifier = amplifier;
-            if (duration < 1) {
-                this.duration = Integer.MAX_VALUE;
-            } else {
-                this.duration = duration;
-            }
-        }
-
-        public PotionEffectType getPotionEffectType() {
-            return potionEffectType;
-        }
-
-        public int getAmplifier() {
-            return amplifier;
-        }
-
-        public int getDuration() {
-            return duration;
-        }
     }
 
     /**
@@ -715,7 +662,8 @@ public class BedWarsTeam implements ITeam {
 
     @Override
     public String getDisplayName(Language language) {
-        return language.m(ConfigPath.TEAM_NAME_PATH.replace("{arena}", getArena().getWorldName()).replace("{team}", getName()));
+        String m = language.m(ConfigPath.TEAM_NAME_PATH.replace("{arena}", getArena().getArenaName()).replace("{team}", getName()));
+        return m == null ? getName() : m;
     }
 
     public TeamColor getColor() {
@@ -726,25 +674,17 @@ public class BedWarsTeam implements ITeam {
         return members;
     }
 
-    /*public List<Player> getPotionEffectApplied() {
-        return potionEffectApplied;
-    }*/
-
-    /*public void removePotionEffectApplied(Player p) {
-        p.sendMessage("removePotionEffectApplied " + p.getName());
-        potionEffectApplied.remove(p);
-    }*/
-
-    public HashMap<Integer, Integer> getUpgradeTier() {
-        return upgradeTier;
-    }
-
     public Location getBed() {
         return bed;
     }
 
-    public BedHolo getBedHolo(Player p) {
-        return beds.get(p);
+    @Override
+    public ConcurrentHashMap<String, Integer> getTeamUpgradeTiers() {
+        return teamUpgradeList;
+    }
+
+    public BedHolo getBedHolo(@NotNull Player p) {
+        return beds.get(p.getUniqueId());
     }
 
     /**
@@ -754,15 +694,16 @@ public class BedWarsTeam implements ITeam {
         this.bedDestroyed = bedDestroyed;
         if (!bedDestroyed) {
             if (!getBed().getBlock().getType().toString().contains("BED")) {
-                BedWars.plugin.getLogger().severe("Bed not set for team: " + getName() + " in arena: " + getArena().getWorldName());
+                BedWars.plugin.getLogger().severe("Bed not set for team: " + getName() + " in arena: " + getArena().getArenaName());
                 return;
             }
             nms.colorBed(this);
         } else {
             bed.getBlock().setType(Material.AIR);
             if (getArena().getConfig().getBoolean(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS)) {
-                getGoldGenerator().disable();
-                getIronGenerator().disable();
+                for (IGenerator g : getGenerators()) {
+                    g.disable();
+                }
             }
         }
         for (BedHolo bh : beds.values()) {
@@ -772,33 +713,44 @@ public class BedWarsTeam implements ITeam {
 
     }
 
+    @Deprecated
     public IGenerator getIronGenerator() {
-        return ironGenerator;
+        IGenerator[] gens = (IGenerator[]) generators.stream().filter(f -> f.getType() == GeneratorType.IRON).toArray();
+        if (gens.length == 0) return null;
+        return gens[0];
     }
 
+    @Deprecated
     public IGenerator getGoldGenerator() {
-        return goldGenerator;
+        IGenerator[] gens = (IGenerator[]) generators.stream().filter(f -> f.getType() == GeneratorType.GOLD).toArray();
+        if (gens.length == 0) return null;
+        return gens[0];
     }
 
+    @Deprecated
     public IGenerator getEmeraldGenerator() {
-        return emeraldGenerator;
+        IGenerator[] gens = (IGenerator[]) generators.stream().filter(f -> f.getType() == GeneratorType.EMERALD).toArray();
+        if (gens.length == 0) return null;
+        return gens[0];
     }
 
+    @Deprecated
     public void setEmeraldGenerator(IGenerator emeraldGenerator) {
-        this.emeraldGenerator = emeraldGenerator;
+        generators.add(emeraldGenerator);
+    }
+
+    @Override
+    public List<IGenerator> getGenerators() {
+        return generators;
     }
 
 
-    public List<Effect> getBaseEffects() {
+    public List<PotionEffect> getBaseEffects() {
         return base;
     }
 
-    public List<Effect> getTeamEffects() {
+    public List<PotionEffect> getTeamEffects() {
         return teamEffects;
-    }
-
-    public List<Effect> getEnemyBaseEnter() {
-        return enemyBaseEnter;
     }
 
     public List<TeamEnchant> getBowsEnchantments() {
@@ -813,63 +765,6 @@ public class BedWarsTeam implements ITeam {
         return armorsEnchantemnts;
     }
 
-    public boolean isTrapActive() {
-        return trapActive;
-    }
-
-    public void setTrapAction(boolean trapAction) {
-        this.trapAction = trapAction;
-    }
-
-    public void enableTrap(int slot) {
-        this.trapActive = true;
-        trapSlots.add(slot);
-    }
-
-    public void disableTrap() {
-        this.trapActive = false;
-        for (Integer i : trapSlots) {
-            getUpgradeTier().remove(i);
-        }
-        trapSlots.clear();
-    }
-
-    public void setTrapChat(boolean trapChat) {
-        this.trapChat = trapChat;
-    }
-
-    public void setTrapSubtitle(boolean trapSubtitle) {
-        this.trapSubtitle = trapSubtitle;
-    }
-
-    public void setTrapTitle(boolean trapTitle) {
-        this.trapTitle = trapTitle;
-    }
-
-    public boolean isTrapAction() {
-        return trapAction;
-    }
-
-    public boolean isTrapChat() {
-        return trapChat;
-    }
-
-    public boolean isTrapSubtitle() {
-        return trapSubtitle;
-    }
-
-    public boolean isTrapTitle() {
-        return trapTitle;
-    }
-
-    public List<Integer> getEnemyBaseEnterSlots() {
-        return enemyBaseEnterSlots;
-    }
-
-    public List<Effect> getEbseEffectsStatic() {
-        return ebseEffectsStatic;
-    }
-
     public Arena getArena() {
         return arena;
     }
@@ -878,11 +773,16 @@ public class BedWarsTeam implements ITeam {
         return dragons;
     }
 
+    @Override
+    public void setDragons(int amount) {
+        this.dragons = amount;
+    }
+
     public List<Player> getMembersCache() {
         return membersCache;
     }
 
-    public HashMap<Player, BedHolo> getBeds() {
+    public HashMap<UUID, BedHolo> getBeds() {
         return beds;
     }
 
@@ -892,28 +792,53 @@ public class BedWarsTeam implements ITeam {
         bed = null;
         shop = null;
         teamUpgrades = null;
-        ironGenerator.destroyData();
-        ironGenerator = null;
-        goldGenerator.destroyData();
-        goldGenerator = null;
-        if (emeraldGenerator != null) emeraldGenerator.destroyData();
-        emeraldGenerator = null;
+        for (IGenerator ig : new ArrayList<>(generators)) {
+            ig.destroyData();
+        }
         arena = null;
-        upgradeTier = null;
         teamEffects = null;
         base = null;
-        enemyBaseEnter = null;
         bowsEnchantments = null;
         swordsEnchantemnts = null;
         armorsEnchantemnts = null;
-        trapSlots = null;
-        enemyBaseEnterSlots = null;
-        ebseEffectsStatic = null;
+        enemyBaseEnterTraps.clear();
         membersCache = null;
     }
 
     @Override
-    public void destroyBedHolo(Player player) {
-        if (getBeds().get(player) != null) getBeds().get(player).destroy();
+    public void destroyBedHolo(@NotNull Player player) {
+        if (getBeds().get(player.getUniqueId()) != null) getBeds().get(player.getUniqueId()).destroy();
+    }
+
+    @Override
+    public LinkedList<EnemyBaseEnterTrap> getActiveTraps() {
+        return enemyBaseEnterTraps;
+    }
+
+    @Override
+    public Vector getKillDropsLocation() {
+        if (killDropsLoc == null) {
+            List<IGenerator> gen = generators.stream().filter(p -> (p.getType() == GeneratorType.IRON || p.getType() == GeneratorType.GOLD)).collect(Collectors.toList());
+            if (gen.isEmpty()) return new Vector(getSpawn().getX(), getSpawn().getY(), getSpawn().getZ());
+            return new Vector(gen.get(0).getLocation().getX(), gen.get(0).getLocation().getY(), gen.get(0).getLocation().getZ());
+        }
+        return killDropsLoc;
+    }
+
+    @Override
+    public void setKillDropsLocation(Vector loc) {
+        if (loc == null) {
+            this.killDropsLoc = null;
+            return;
+        }
+        this.killDropsLoc = new Vector(loc.getBlockX() + 0.5, loc.getBlockY(), loc.getBlockZ() + 0.5);
+    }
+
+    public void setKillDropsLocation(Location loc) {
+        if (loc == null) {
+            this.killDropsLoc = null;
+            return;
+        }
+        this.killDropsLoc = new Vector(loc.getBlockX() + 0.5, loc.getBlockY(), loc.getBlockZ() + 0.5);
     }
 }

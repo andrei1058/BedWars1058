@@ -2,21 +2,23 @@ package com.andrei1058.bedwars.arena;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class LastHit {
 
-    private Player victim;
+    private UUID victim;
     private Entity damager;
     private long time;
-    private static HashMap<Player, LastHit> lastHit = new HashMap<>();
+    private static ConcurrentHashMap<UUID, LastHit> lastHit = new ConcurrentHashMap<>();
 
-    public LastHit (Player victim, Entity damager, long time){
-        this.victim = victim;
+    public LastHit(@NotNull Player victim, Entity damager, long time) {
+        this.victim = victim.getUniqueId();
         this.damager = damager;
         this.time = time;
-        lastHit.put(victim, this);
+        lastHit.put(victim.getUniqueId(), this);
     }
 
     public void setTime(long time) {
@@ -31,15 +33,19 @@ public class LastHit {
         return damager;
     }
 
-    public Player getVictim() {
+    public UUID getVictim() {
         return victim;
+    }
+
+    public void remove() {
+        lastHit.remove(victim);
     }
 
     public long getTime() {
         return time;
     }
 
-    public static HashMap<Player, LastHit> getLastHit() {
-        return lastHit;
+    public static LastHit getLastHit(@NotNull Player player) {
+        return lastHit.getOrDefault(player.getUniqueId(), null);
     }
 }

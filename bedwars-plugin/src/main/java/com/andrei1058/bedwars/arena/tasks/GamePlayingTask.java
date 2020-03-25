@@ -7,6 +7,7 @@ import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.events.player.PlayerInvisibilityPotionEvent;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.tasks.PlayingTask;
 import com.andrei1058.bedwars.arena.Arena;
@@ -109,7 +110,7 @@ public class GamePlayingTask implements Runnable, PlayingTask {
                         for (ITeam t : getArena().getTeams()) {
                             if (t.getMembers().isEmpty()) continue;
                             p.sendMessage(getMsg(p, Messages.NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH).replace("{TeamDragons}", String.valueOf(t.getDragons()))
-                                    .replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(p))));
+                                    .replace("{TeamColor}", t.getColor().chat().toString()).replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(p))));
                         }
                     }
                     for (Player p : getArena().getSpectators()) {
@@ -117,7 +118,7 @@ public class GamePlayingTask implements Runnable, PlayingTask {
                         for (ITeam t : getArena().getTeams()) {
                             if (t.getMembers().isEmpty()) continue;
                             p.sendMessage(getMsg(p, Messages.NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH).replace("{TeamDragons}", String.valueOf(t.getDragons()))
-                                    .replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(p))));
+                                    .replace("{TeamColor}", t.getColor().chat().toString()).replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(p))));
                         }
                     }
                     getArena().updateNextEvent();
@@ -125,6 +126,14 @@ public class GamePlayingTask implements Runnable, PlayingTask {
                         Location l = o.getLocation();
                         for (int y = 0; y < 20; y++) {
                             l.clone().subtract(0, y, 0).getBlock().setType(Material.AIR);
+                        }
+                    }
+                    for (ITeam team : arena.getTeams()){
+                        for (IGenerator o : team.getGenerators()) {
+                            Location l = o.getLocation();
+                            for (int y = 0; y < 20; y++) {
+                                l.clone().subtract(0, y, 0).getBlock().setType(Material.AIR);
+                            }
                         }
                     }
                     for (ITeam t : getArena().getTeams()) {
@@ -155,9 +164,14 @@ public class GamePlayingTask implements Runnable, PlayingTask {
                             distance = (int) p.getLocation().distance(p2.getLocation());
                         }
                     }
-                    nms.playAction(p, getMsg(p, Messages.FORMATTING_ACTION_BAR_TRACKING).replace("{team}", TeamColor.getChatColor(t.getColor()) + t.getDisplayName(Language.getPlayerLanguage(p)))
-                            .replace("{distance}", TeamColor.getChatColor(t.getColor()).toString() + distance).replace("&", "§"));
+                    nms.playAction(p, getMsg(p, Messages.FORMATTING_ACTION_BAR_TRACKING).replace("{team}", t.getColor().chat() + t.getDisplayName(Language.getPlayerLanguage(p)))
+                            .replace("{distance}", t.getColor().chat().toString() + distance).replace("&", "§"));
                 }
+            }
+
+            // spawn items
+            for (IGenerator o : t.getGenerators()) {
+                o.spawn();
             }
         }
 
@@ -202,6 +216,7 @@ public class GamePlayingTask implements Runnable, PlayingTask {
             for (Map.Entry<Player, Integer> e : getArena().getShowTime().entrySet()) {
                 if (e.getValue() <= 0) {
                     getArena().getShowTime().remove(e.getKey());
+                    Bukkit.getPluginManager().callEvent(new PlayerInvisibilityPotionEvent(PlayerInvisibilityPotionEvent.Type.REMOVED, getArena().getTeam(e.getKey()), e.getKey(), getArena()));
                     for (Player p : e.getKey().getWorld().getPlayers()) {
                         nms.showArmor(e.getKey(), p);
                         //nms.showPlayer(e.getKey(), p);

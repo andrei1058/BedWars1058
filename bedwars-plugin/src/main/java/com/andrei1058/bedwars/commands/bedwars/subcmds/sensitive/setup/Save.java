@@ -9,6 +9,7 @@ import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Entity;
@@ -33,28 +34,26 @@ public class Save extends SubCommand {
         Player p = (Player) s;
         SetupSession ss = SetupSession.getSession(p.getUniqueId());
         if (ss == null) {
-            s.sendMessage("§c ▪ §7You're not in a setup session!");
-            return true;
+            //s.sendMessage("§c ▪ §7You're not in a setup session!");
+            return false;
         }
 
-        //Clear setup armorstands
-        for (Entity e : p.getWorld().getEntities()){
-            if (e.getType() == EntityType.ARMOR_STAND){
+        //Clear setup armor-stands
+        for (Entity e : p.getWorld().getEntities()) {
+            if (e.getType() == EntityType.ARMOR_STAND) {
                 e.remove();
             }
         }
 
-        if (getServerType() != ServerType.BUNGEE){
-            if (Bukkit.getWorld(BedWars.getLobbyWorld()) != null){
-                p.teleport(Bukkit.getWorld(BedWars.getLobbyWorld()).getSpawnLocation());
-            } else {
-                p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
-            }
+        if (Bukkit.getWorld(BedWars.getLobbyWorld()) != null) {
+            p.teleport(Bukkit.getWorld(BedWars.getLobbyWorld()).getSpawnLocation());
+        } else {
+            p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
         }
         ss.done();
-        p.sendMessage("§6 ▪ §7Arena changes saved!");
-        p.sendMessage("§6 ▪ §7You can now enable it using:");
-        p.spigot().sendMessage(Misc.msgHoverClick("§6/" + getParent().getName() + " enableArena " + ss.getWorldName() + "§7 (click to enable)", "§dEnable this arena.", "/" + getParent().getName() + " enableArena " + ss.getWorldName(), ClickEvent.Action.RUN_COMMAND));
+        p.sendMessage(ss.getPrefix() + "Arena changes saved!");
+        p.sendMessage(ss.getPrefix() + "You can now enable it using:");
+        p.spigot().sendMessage(Misc.msgHoverClick(ChatColor.GOLD + "/" + getParent().getName() + " enableArena " + ss.getWorldName() + ChatColor.GRAY +" (click to enable)", ChatColor.GREEN + "Enable this arena.", "/" + getParent().getName() + " enableArena " + ss.getWorldName(), ClickEvent.Action.RUN_COMMAND));
         return true;
     }
 

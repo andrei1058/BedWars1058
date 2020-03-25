@@ -13,8 +13,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CmdStats extends SubCommand {
 
@@ -25,7 +27,7 @@ public class CmdStats extends SubCommand {
         setDisplayInfo(com.andrei1058.bedwars.commands.bedwars.MainCommand.createTC("§6 ▪ §7/"+ MainCommand.getInstance().getName()+" "+getSubCommandName(), "/"+getParent().getName()+" "+getSubCommandName(), "§fOpens the stats GUI."));
     }
 
-    private static HashMap<Player, Long> statsCoolDown = new HashMap<>();
+    private static ConcurrentHashMap<UUID, Long> statsCoolDown = new ConcurrentHashMap<>();
 
     @Override
     public boolean execute(String[] args, CommandSender s) {
@@ -39,15 +41,15 @@ public class CmdStats extends SubCommand {
                 }
             }
         }
-        if (statsCoolDown.containsKey(p)){
-            if (System.currentTimeMillis() - 3000 >= statsCoolDown.get(p)) {
-                statsCoolDown.replace(p, System.currentTimeMillis());
+        if (statsCoolDown.containsKey(p.getUniqueId())){
+            if (System.currentTimeMillis() - 3000 >= statsCoolDown.get(p.getUniqueId())) {
+                statsCoolDown.replace(p.getUniqueId(), System.currentTimeMillis());
             } else {
                 //wait 3 seconds
                 return true;
             }
         } else {
-            statsCoolDown.put(p, System.currentTimeMillis());
+            statsCoolDown.put(p.getUniqueId(), System.currentTimeMillis());
         }
         Misc.openStatsGUI(p);
         return true;
@@ -55,7 +57,7 @@ public class CmdStats extends SubCommand {
 
     @Override
     public List<String> getTabComplete() {
-        return null;
+        return new ArrayList<>();
     }
 
 
@@ -68,5 +70,9 @@ public class CmdStats extends SubCommand {
 
         if (SetupSession.isInSetupSession(p.getUniqueId())) return false;
         return hasPermission(s);
+    }
+
+    public static ConcurrentHashMap<UUID, Long> getStatsCoolDown() {
+        return statsCoolDown;
     }
 }

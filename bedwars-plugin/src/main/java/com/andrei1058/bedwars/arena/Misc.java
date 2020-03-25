@@ -29,9 +29,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -288,20 +285,10 @@ public class Misc {
             s = s.replace("{firstPlay}", new SimpleDateFormat(getMsg(pl, Messages.FORMATTING_STATS_DATE_FORMAT)).format(StatsManager.getStatsCache().getPlayerFirstPlay(pl.getUniqueId())));
         if (s.contains("{lastPlay}"))
             s = s.replace("{lastPlay}", new SimpleDateFormat(getMsg(pl, Messages.FORMATTING_STATS_DATE_FORMAT)).format(StatsManager.getStatsCache().getPlayerLastPlay(pl.getUniqueId())));
-        if (s.contains("{player}")) s = s.replace("{player}", pl.getName());
+        if (s.contains("{player}")) s = s.replace("{player}", pl.getDisplayName());
         if (s.contains("{prefix}")) s = s.replace("{prefix}", BedWars.getChatSupport().getPrefix(pl));
 
         return papiReplacements ? SupportPAPI.getSupportPAPI().replace(pl, s) : s;
-    }
-
-
-    public static void giveLobbySb(Player p) {
-        if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
-            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
-                if (p.isOnline())
-                new SBoard(p, getList(p, Messages.SCOREBOARD_LOBBY), null);
-            }, 40L);
-        }
     }
 
     public static boolean isNumber(String s) {
@@ -349,6 +336,11 @@ public class Misc {
             }
             if (t.getTeamUpgrades().distance(l) <= a.getConfig().getInt(ConfigPath.ARENA_UPGRADES_PROTECTION)) {
                 return true;
+            }
+            for (IGenerator o : t.getGenerators()) {
+                if (o.getLocation().distance(l) <= 1) {
+                    return true;
+                }
             }
         }
         for (IGenerator o : a.getOreGenerators()) {

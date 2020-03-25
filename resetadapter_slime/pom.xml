@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>compiler</artifactId>
+        <artifactId>BedWars1058</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>19.11.1</version>
+        <version>20.3-SNAPSHOT</version>
     </parent>
 
     <artifactId>resetadapter-slime</artifactId>
@@ -40,4 +40,15 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

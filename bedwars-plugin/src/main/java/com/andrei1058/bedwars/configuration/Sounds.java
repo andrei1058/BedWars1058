@@ -24,7 +24,7 @@ public class Sounds {
         saveDefaultSounds();
     }
 
-    private static ConfigManager sounds = new ConfigManager(plugin, "sounds", "plugins/" + BedWars.plugin.getName());
+    private static ConfigManager sounds = new ConfigManager(plugin, "sounds", plugin.getDataFolder().getPath());
 
     @SuppressWarnings("WeakerAccess")
     public static void saveDefaultSounds() {
@@ -59,6 +59,7 @@ public class Sounds {
         yml.addDefault("player-re-spawn", BedWars.getForCurrentVersion("SLIME_ATTACK", "BLOCK_SLIME_FALL", "BLOCK_SLIME_BLOCK_FALL"));
         yml.addDefault("arena-selector-open", BedWars.getForCurrentVersion("CHICKEN_EGG_POP", "ENTITY_CHICKEN_EGG", "ENTITY_CHICKEN_EGG"));
         yml.addDefault("stats-gui-open", BedWars.getForCurrentVersion("CHICKEN_EGG_POP", "ENTITY_CHICKEN_EGG", "ENTITY_CHICKEN_EGG"));
+        yml.addDefault("trap-sound", BedWars.getForCurrentVersion("ENDERMAN_TELEPORT", "ENDERMAN_TELEPORT", "ENTITY_ENDERMAN_TELEPORT"));
         yml.options().copyDefaults(true);
 
         // remove old paths
@@ -77,13 +78,25 @@ public class Sounds {
         }
     }
 
-    public static void playSound(String path, List<Player> players) {
+    /**
+     * @return true if sound is valid and it was played.
+     */
+    public static boolean playSound(String path, List<Player> players) {
         final Sound sound = getSound(path);
-        if (sound != null) players.forEach(p -> p.playSound(p.getLocation(), sound, 1f, 1f));
+        if (sound != null) {
+            players.forEach(p -> p.playSound(p.getLocation(), sound, 1f, 1f));
+            return true;
+        }
+        return false;
     }
 
-    public static void playSound(Sound sound, List<Player> players) {
-        if (sound != null) players.forEach(p -> p.playSound(p.getLocation(), sound, 1f, 1f));
+    /**
+     * @return true if sound is valid and it was played.
+     */
+    public static boolean playSound(Sound sound, List<Player> players) {
+        if (sound == null) return false;
+        players.forEach(p -> p.playSound(p.getLocation(), sound, 1f, 1f));
+        return true;
     }
 
     public static void playSound(String path, Player player) {

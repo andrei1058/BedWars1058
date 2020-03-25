@@ -82,12 +82,12 @@ public class PartyCommand extends BukkitCommand {
                     if (getParty().hasParty(Bukkit.getPlayer(args[1]))) {
                         getParty().addMember(Bukkit.getPlayer(args[1]), p);
                         for (Player on : getParty().getMembers(Bukkit.getPlayer(args[1]))) {
-                            on.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_SUCCESS).replace("{player}", p.getName()));
+                            on.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_SUCCESS).replace("{player}", p.getDisplayName()));
                         }
                     } else {
                         getParty().createParty(Bukkit.getPlayer(args[1]), p);
                         for (Player on : getParty().getMembers(Bukkit.getPlayer(args[1]))) {
-                            on.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_SUCCESS).replace("{player}", p.getName()));
+                            on.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_SUCCESS).replace("{player}", p.getDisplayName()));
                         }
                     }
                 } else {

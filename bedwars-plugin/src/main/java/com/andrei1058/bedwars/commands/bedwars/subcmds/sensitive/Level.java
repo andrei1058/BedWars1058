@@ -10,7 +10,6 @@ import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.configuration.LevelsConfig;
 import com.andrei1058.bedwars.configuration.Permissions;
-import com.andrei1058.bedwars.levels.internal.PlayerLevel;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -70,8 +69,9 @@ public class Level extends SubCommand {
             s.sendMessage(ChatColor.GOLD + " ▪ " + ChatColor.GRAY + pl.getName() + " level was set to: " + args[2]);
             s.sendMessage(ChatColor.GOLD + " ▪ " + ChatColor.GRAY + "The player may need to rejoin to see it updated.");
             // refresh scoreboard
-            for (SBoard sb : SBoard.getScoreboards()){
-                if (sb.getP().getUniqueId().equals(pl.getUniqueId())) sb.refresh();
+            SBoard sb = SBoard.getSBoard(pl.getUniqueId());
+            if (sb != null) {
+                sb.refresh();
             }
         } else if (args[0].equalsIgnoreCase("givexp")) {
             if (args.length != 3) {
@@ -100,8 +100,9 @@ public class Level extends SubCommand {
             s.sendMessage(ChatColor.GOLD + " ▪ " + ChatColor.GRAY + args[2] + " xp was given to: " + pl.getName());
             s.sendMessage(ChatColor.GOLD + " ▪ " + ChatColor.GRAY + "The player may need to rejoin to see it updated.");
             // refresh scoreboard
-            for (SBoard sb : SBoard.getScoreboards()){
-                if (sb.getP().getUniqueId().equals(pl.getUniqueId())) sb.refresh();
+            SBoard sb = SBoard.getSBoard(pl.getUniqueId());
+            if (sb != null) {
+                sb.refresh();
             }
         } else {
             sendSubCommands(s, BedWars.getAPI());

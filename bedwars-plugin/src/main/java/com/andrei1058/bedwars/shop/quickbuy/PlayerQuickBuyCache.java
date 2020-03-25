@@ -7,29 +7,33 @@ import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.shop.ShopManager;
 import com.andrei1058.bedwars.shop.main.CategoryContent;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerQuickBuyCache {
 
     private List<QuickBuyElement> elements = new ArrayList<>();
     private String emptyItemNamePath, emptyItemLorePath;
     private ItemStack emptyItem;
-    private Player player;
+    private UUID player;
     private QuickBuyTask task;
 
     public static int[] quickSlots = new int[]{19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43};
-    private static List<PlayerQuickBuyCache> quickBuyCaches = new ArrayList<>();
+    private static ConcurrentHashMap<UUID, PlayerQuickBuyCache> quickBuyCaches = new ConcurrentHashMap<>();
 
     public PlayerQuickBuyCache(Player player) {
         if (player == null) return;
-        this.player = player;
+        this.player = player.getUniqueId();
         this.emptyItem = BedWars.nms.createItemStack(BedWars.shop.getYml().getString(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_MATERIAL),
                 BedWars.shop.getYml().getInt(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_AMOUNT),
                 (short) BedWars.shop.getYml().getInt(ConfigPath.SHOP_SETTINGS_QUICK_BUY_EMPTY_DATA));
@@ -39,7 +43,7 @@ public class PlayerQuickBuyCache {
         this.emptyItemNamePath = Messages.SHOP_QUICK_EMPTY_NAME;
         this.emptyItemLorePath = Messages.SHOP_QUICK_EMPTY_LORE;
         task = new QuickBuyTask(player.getUniqueId());
-        quickBuyCaches.add(this);
+        quickBuyCaches.put(this.player, this);
     }
 
 
@@ -49,13 +53,15 @@ public class PlayerQuickBuyCache {
      */
     public void addInInventory(Inventory inv, ShopCache shopCache) {
 
+        Player p = Bukkit.getPlayer(player);
+
         for (QuickBuyElement qbe : elements) {
-            inv.setItem(qbe.getSlot(), qbe.getCategoryContent().getItemStack(player, shopCache));
+            inv.setItem(qbe.getSlot(), qbe.getCategoryContent().getItemStack(p, shopCache));
         }
 
         if (elements.size() == 21) return;
 
-        ItemStack i = getEmptyItem(player);
+        ItemStack i = getEmptyItem(p);
         for (int x : quickSlots) {
             if (inv.getItem(x) == null) {
                 inv.setItem(x, i);
@@ -78,15 +84,11 @@ public class PlayerQuickBuyCache {
         if (task != null) {
             task.cancel();
         }
-        quickBuyCaches.remove(this);
+        quickBuyCaches.remove(player);
     }
 
     public void setElement(int slot, CategoryContent cc) {
-        for (QuickBuyElement q : new ArrayList<>(elements)) {
-            if (q.getSlot() == slot) {
-                elements.remove(q);
-            }
-        }
+        elements.removeIf(q -> q.getSlot() == slot);
         String element;
         if (cc == null){
             element = " ";
@@ -94,9 +96,10 @@ public class PlayerQuickBuyCache {
             addQuickElement(new QuickBuyElement(cc.getIdentifier(), slot));
             element = cc.getIdentifier();
         }
-        BedWars.getRemoteDatabase().setQuickBuySlot(player.getUniqueId(), element, slot);
+        BedWars.getRemoteDatabase().setQuickBuySlot(player, element, slot);
     }
 
+    @NotNull
     private ItemStack getEmptyItem(Player player) {
         ItemStack i = emptyItem.clone();
         ItemMeta im = i.getItemMeta();
@@ -119,11 +122,9 @@ public class PlayerQuickBuyCache {
     /**
      * Get a Player Quick buy cache
      */
+    @Nullable
     public static PlayerQuickBuyCache getQuickBuyCache(UUID uuid) {
-        for (PlayerQuickBuyCache pqbc : new ArrayList<>(quickBuyCaches)) {
-            if (pqbc.player.getUniqueId() == uuid) return pqbc;
-        }
-        return null;
+        return quickBuyCaches.getOrDefault(uuid, null);
     }
 
     public List<QuickBuyElement> getElements() {

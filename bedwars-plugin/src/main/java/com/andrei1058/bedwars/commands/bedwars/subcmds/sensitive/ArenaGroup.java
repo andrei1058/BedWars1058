@@ -12,6 +12,7 @@ import com.andrei1058.bedwars.configuration.ArenaConfig;
 import com.andrei1058.bedwars.configuration.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -43,6 +44,10 @@ public class ArenaGroup extends SubCommand {
         if (args.length < 1) {
             sendArenaGroupCmdList(p);
         } else if (args[0].equalsIgnoreCase("create")) {
+            if (args[1].contains("+")) {
+                p.sendMessage("§c▪ §7" + args[0] + " mustn't contain this symbol: " + ChatColor.RED + "+");
+                return true;
+            }
             java.util.List<String> groups;
             if (config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS) == null) {
                 groups = new ArrayList<>();
@@ -89,12 +94,12 @@ public class ArenaGroup extends SubCommand {
             }
             if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS) != null) {
                 if (config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS).contains(args[2])) {
-                    File arena = new File("plugins/" + plugin.getName() + "/Arenas/" + args[1] + ".yml");
+                    File arena = new File(plugin.getDataFolder(), "/Arenas/" + args[1] + ".yml");
                     if (!arena.exists()) {
                         p.sendMessage("§c▪ §7Arena " + args[1] + " doesn't exist!");
                         return true;
                     }
-                    ArenaConfig cm = new ArenaConfig(BedWars.plugin, args[1], "plugins/" + plugin.getName() + "/Arenas");
+                    ArenaConfig cm = new ArenaConfig(BedWars.plugin, args[1], plugin.getDataFolder().getPath() + "/Arenas");
                     cm.set("group", args[2]);
                     if (Arena.getArenaByName(args[1]) != null) {
                         Arena.getArenaByName(args[1]).setGroup(args[2]);

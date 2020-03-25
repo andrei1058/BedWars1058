@@ -76,6 +76,11 @@ public class GameRestartingTask implements Runnable, RestartingTask {
             for (IGenerator eg : getArena().getOreGenerators()) {
                 eg.disable();
             }
+            for (ITeam t : getArena().getTeams()) {
+                for (IGenerator eg : t.getGenerators()) {
+                    eg.disable();
+                }
+            }
         } else if (restarting == 6) {
             getArena().restart();
             task.cancel();

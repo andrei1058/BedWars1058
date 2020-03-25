@@ -1,13 +1,10 @@
 package com.andrei1058.bedwars.levels.internal;
 
 import com.andrei1058.bedwars.BedWars;
-import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.events.gameplay.GameEndEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerLeaveArenaEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerXpGainEvent;
-import com.andrei1058.bedwars.api.server.ServerType;
-import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.configuration.LevelsConfig;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
@@ -63,7 +60,9 @@ public class LevelListeners implements Listener {
                 p1.sendMessage(Language.getMsg(p1, Messages.XP_REWARD_WIN).replace("{xp}", String.valueOf(LevelsConfig.levels.getInt("xp-rewards.game-win"))));
                 ITeam bwt = e.getArena().getExTeam(p1.getUniqueId());
                 if (bwt != null) {
+                    //noinspection deprecation
                     if (bwt.getMembersCache().size() > 1) {
+                        //noinspection deprecation
                         int tr = LevelsConfig.levels.getInt("xp-rewards.per-teammate") * bwt.getMembersCache().size();
                         PlayerLevel.getLevelByPlayer(p).addXp(tr, PlayerXpGainEvent.XpSource.PER_TEAMMATE);
                         p1.sendMessage(Language.getMsg(p1, "xp-reward-per-teammate").replace("{xp}", String.valueOf(tr)));
@@ -77,7 +76,9 @@ public class LevelListeners implements Listener {
                 if (p1 == null) continue;
                 ITeam bwt = e.getArena().getExTeam(p1.getUniqueId());
                 if (bwt != null) {
+                    //noinspection deprecation
                     if (bwt.getMembersCache().size() > 1) {
+                        //noinspection deprecation
                         int tr = LevelsConfig.levels.getInt("xp-rewards.per-teammate") * bwt.getMembersCache().size();
                         PlayerLevel.getLevelByPlayer(p).addXp(tr, PlayerXpGainEvent.XpSource.PER_TEAMMATE);
                         p1.sendMessage(Language.getMsg(p1, Messages.XP_REWARD_PER_TEAMMATE).replace("{xp}", String.valueOf(tr)));

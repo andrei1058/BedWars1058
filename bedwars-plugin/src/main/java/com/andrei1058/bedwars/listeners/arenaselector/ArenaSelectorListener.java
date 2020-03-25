@@ -15,7 +15,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class ArenaSelectorListener implements Listener {
@@ -26,7 +25,7 @@ public class ArenaSelectorListener implements Listener {
     public void onArenaSelectorClick(InventoryClickEvent e) {
         Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, () -> {
             Player p = (Player) e.getWhoClicked();
-            if (!ArenaGUI.getRefresh().containsKey(p)) return;
+            if (!(p.getOpenInventory().getTopInventory().getHolder() instanceof ArenaGUI.ArenaSelectorHolder)) return;
             e.setCancelled(true);
             ItemStack i = e.getCurrentItem();
 
@@ -35,6 +34,9 @@ public class ArenaSelectorListener implements Listener {
 
             if (!BedWars.nms.isCustomBedWarsItem(i)) return;
             String data = BedWars.nms.getCustomData(i);
+            if (data.startsWith("RUNCOMMAND")) {
+                Bukkit.dispatchCommand(p, data.split("_")[1]);
+            }
             if (!data.contains(ARENA_SELECTOR_GUI_IDENTIFIER)) return;
             String arena = data.split("=")[1];
             IArena a = Arena.getArenaByName(arena);
@@ -60,10 +62,5 @@ public class ArenaSelectorListener implements Listener {
                 p.closeInventory();
             });
         });
-    }
-
-    @EventHandler
-    public void onArenaSelectorClose(InventoryCloseEvent e) {
-        ArenaGUI.getRefresh().remove(e.getPlayer());
     }
 }

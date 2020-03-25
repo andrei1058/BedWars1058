@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.events.player.PlayerInvisibilityPotionEvent;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.Bukkit;
@@ -41,7 +42,7 @@ public class HungerWeatherSpawn implements Listener {
     public void onWeatherChange(WeatherChangeEvent e) {
         if (e.toWeatherState()) {
             if (getServerType() == ServerType.SHARED) {
-                if (Arena.getArenaByName(e.getWorld().getName()) != null) {
+                if (Arena.getArenaByIdentifier(e.getWorld().getName()) != null) {
                     e.setCancelled(true);
                 }
             } else {
@@ -55,7 +56,7 @@ public class HungerWeatherSpawn implements Listener {
     public void onCreatureSpawn(CreatureSpawnEvent e) {
         if (e.getSpawnReason() != CreatureSpawnEvent.SpawnReason.CUSTOM) {
             if (getServerType() != ServerType.BUNGEE) {
-                if (Arena.getArenaByName(e.getEntity().getWorld().getName()) != null) {
+                if (Arena.getArenaByIdentifier(e.getEntity().getWorld().getName()) != null) {
                     e.setCancelled(true);
                 }
             } else {
@@ -80,13 +81,16 @@ public class HungerWeatherSpawn implements Listener {
                                 for (PotionEffect pe : e.getPlayer().getActivePotionEffects()) {
                                     if (pe.getType().toString().contains("INVISIBILITY")) {
                                         if (a.getShowTime().containsKey(e.getPlayer())) {
+                                            ITeam t = a.getTeam(e.getPlayer());
                                             a.getShowTime().replace(e.getPlayer(), pe.getDuration() / 20);
+                                            Bukkit.getPluginManager().callEvent(new PlayerInvisibilityPotionEvent(PlayerInvisibilityPotionEvent.Type.ADDED, t, e.getPlayer(), t.getArena()));
                                         } else {
                                             ITeam t = a.getTeam(e.getPlayer());
                                             a.getShowTime().put(e.getPlayer(), pe.getDuration() / 20);
                                             for (Player p1 : e.getPlayer().getWorld().getPlayers()) {
                                                 if (a.isSpectator(p1)) continue;
                                                 if (t != a.getTeam(p1)) nms.hideArmor(e.getPlayer(), p1);
+                                                Bukkit.getPluginManager().callEvent(new PlayerInvisibilityPotionEvent(PlayerInvisibilityPotionEvent.Type.ADDED, t, e.getPlayer(), t.getArena()));
                                             }
                                         }
                                         break;
@@ -133,7 +137,7 @@ public class HungerWeatherSpawn implements Listener {
     //Prevent item spawning, issue #60
     public void onItemSpawn(ItemSpawnEvent e) {
         Location l = e.getEntity().getLocation();
-        IArena a = Arena.getArenaByName(l.getWorld().getName());
+        IArena a = Arena.getArenaByIdentifier(l.getWorld().getName());
         if (a == null) return;
         if (a.getStatus() != GameState.playing) {
             e.setCancelled(true);

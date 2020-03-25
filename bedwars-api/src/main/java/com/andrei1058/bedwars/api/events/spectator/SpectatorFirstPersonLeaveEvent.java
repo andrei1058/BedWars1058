@@ -1,20 +1,23 @@
 package com.andrei1058.bedwars.api.events.spectator;
 
 import com.andrei1058.bedwars.api.arena.IArena;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+
+import java.util.UUID;
 
 public class SpectatorFirstPersonLeaveEvent extends Event {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
-    private Player spectator;
+    private UUID spectator;
     private IArena arena;
     private String title, subtitle;
 
     public SpectatorFirstPersonLeaveEvent(Player spectator, IArena arena, String title, String subtitle) {
-        this.spectator = spectator;
+        this.spectator = spectator.getUniqueId();
         this.arena = arena;
         this.title = title;
         this.subtitle = subtitle;
@@ -24,7 +27,7 @@ public class SpectatorFirstPersonLeaveEvent extends Event {
      * Get the spectator
      */
     public Player getSpectator() {
-        return spectator;
+        return Bukkit.getPlayer(spectator);
     }
 
     /**

@@ -1,43 +1,45 @@
 package com.andrei1058.bedwars.api.events.spectator;
 
 import com.andrei1058.bedwars.api.arena.IArena;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class SpectatorFirstPersonEnterEvent extends Event {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
-    private Player spectator, target;
+    private UUID spectator, target;
     private IArena arena;
     private boolean cancelled = false;
     private String title, subtitle;
 
     // A list of all players spectating in first person
-    private static List<Player> spectatingInFirstPerson = new ArrayList<>();
+    private static List<UUID> spectatingInFirstPerson = new ArrayList<>();
 
     /**
      * Called when a spectator enters the first person spectating system.
      */
-    public SpectatorFirstPersonEnterEvent(Player spectator, Player target, IArena arena, String title, String subtitle) {
-        this.spectator = spectator;
-        this.target = target;
+    public SpectatorFirstPersonEnterEvent(@NotNull Player spectator, @NotNull Player target, IArena arena, String title, String subtitle) {
+        this.spectator = spectator.getUniqueId();
+        this.target = target.getUniqueId();
         this.arena = arena;
         this.title = title;
         this.subtitle = subtitle;
-        //todo manage it somewhere else
-        if (!spectatingInFirstPerson.contains(spectator)) spectatingInFirstPerson.add(spectator);
+        if (!spectatingInFirstPerson.contains(spectator.getUniqueId())) spectatingInFirstPerson.add(spectator.getUniqueId());
     }
 
     /**
      * Get the spectator
      */
     public Player getSpectator() {
-        return spectator;
+        return Bukkit.getPlayer(spectator);
     }
 
     /**
@@ -51,7 +53,7 @@ public class SpectatorFirstPersonEnterEvent extends Event {
      * Get the target player
      */
     public Player getTarget() {
-        return target;
+        return Bukkit.getPlayer(target);
     }
 
     /**

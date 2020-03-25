@@ -4,10 +4,8 @@ import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
-import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.arena.BedWarsTeam;
 import com.andrei1058.bedwars.commands.shout.ShoutCommand;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
@@ -26,22 +24,19 @@ public class PlayerChat implements Listener {
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent e) {
+        if (e == null) return;
         Player p = e.getPlayer();
         if (e.isCancelled()) return;
         if (getServerType() == ServerType.SHARED) {
             if (Arena.getArenaByPlayer(p) == null) {
-                for (Player pl : e.getRecipients()) {
-                    if (Arena.getArenaByPlayer(pl) != null) {
-                        e.getRecipients().remove(pl);
-                    }
-                }
+                e.getRecipients().removeIf(pl -> Arena.getArenaByPlayer(pl) != null);
                 return;
             }
         }
         if (p.hasPermission("bw.chatcolor") || p.hasPermission("bw.*") || p.hasPermission("bw.vip")) {
             e.setMessage(ChatColor.translateAlternateColorCodes('&', e.getMessage()));
         }
-        if (getServerType() == ServerType.MULTIARENA == p.getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
+        if (getServerType() == ServerType.MULTIARENA && p.getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
             if (!config.getBoolean("globalChat")) {
                 e.getRecipients().clear();
                 e.getRecipients().addAll(p.getWorld().getPlayers());
@@ -97,7 +92,7 @@ public class PlayerChat implements Listener {
                         msg = msg.replaceFirst(getMsg(p, Messages.MEANING_SHOUT), "");
                     e.setMessage(msg);
                     e.setFormat(SupportPAPI.getSupportPAPI().replace(e.getPlayer(), getMsg(p, Messages.FORMATTING_CHAT_SHOUT).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{vSuffix}", getChatSupport().getSuffix(p))
-                            .replace("{player}", p.getDisplayName()).replace("{team}", TeamColor.getChatColor(t.getColor()) + "[" + t.getDisplayName(Language.getPlayerLanguage(e.getPlayer())).toUpperCase() + "]")
+                            .replace("{player}", p.getDisplayName()).replace("{team}", t.getColor().chat() + "[" + t.getDisplayName(Language.getPlayerLanguage(e.getPlayer())).toUpperCase() + "]")
                             .replace("{level}", getLevelSupport().getLevel(p))).replace("{message}", "%2$s"));
                 } else {
                     if (a.getMaxInTeam() == 1) {
@@ -107,7 +102,7 @@ public class PlayerChat implements Listener {
                             e.getRecipients().addAll(a.getSpectators());
                         }
                         e.setFormat(SupportPAPI.getSupportPAPI().replace(e.getPlayer(), getMsg(p, Messages.FORMATTING_CHAT_TEAM).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{vSuffix}", getChatSupport().getSuffix(p))
-                                .replace("{player}", p.getDisplayName()).replace("{team}", TeamColor.getChatColor(t.getColor()) + "[" + t.getDisplayName(Language.getPlayerLanguage(e.getPlayer())).toUpperCase() + "]")
+                                .replace("{player}", p.getDisplayName()).replace("{team}", t.getColor().chat() + "[" + t.getDisplayName(Language.getPlayerLanguage(e.getPlayer())).toUpperCase() + "]")
                                 .replace("{level}", getLevelSupport().getLevel(p))).replace("{message}", "%2$s"));
 
                     } else {
@@ -116,7 +111,7 @@ public class PlayerChat implements Listener {
                             e.getRecipients().addAll(t.getMembers());
                         }
                         e.setFormat(SupportPAPI.getSupportPAPI().replace(e.getPlayer(), getMsg(p, Messages.FORMATTING_CHAT_TEAM).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{vSuffix}", getChatSupport().getSuffix(p))
-                                .replace("{player}", p.getDisplayName()).replace("{team}", TeamColor.getChatColor(t.getColor()) + "[" + t.getDisplayName(Language.getPlayerLanguage(e.getPlayer())).toUpperCase() + "]")
+                                .replace("{player}", p.getDisplayName()).replace("{team}", t.getColor().chat() + "[" + t.getDisplayName(Language.getPlayerLanguage(e.getPlayer())).toUpperCase() + "]")
                                 .replace("{level}", getLevelSupport().getLevel(p))).replace("{message}", "%2$s"));
 
                     }

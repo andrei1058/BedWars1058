@@ -12,6 +12,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,8 +28,8 @@ public class ArenaList extends SubCommand {
         super(parent, name);
         setPriority(3);
         showInList(true);
-        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + com.andrei1058.bedwars.commands.bedwars.MainCommand.getInstance().getName() + " "+getSubCommandName() + ((getArenas().size() == 0) ? " §c(0 set)" : " §a("+getArenas().size()+" set)"),
-                "§fShow available arenas", "/" + MainCommand.getInstance().getName() + " "+getSubCommandName(), ClickEvent.Action.RUN_COMMAND));
+        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + com.andrei1058.bedwars.commands.bedwars.MainCommand.getInstance().getName() + " " + getSubCommandName() + ((getArenas().size() == 0) ? " §c(0 set)" : " §a(" + getArenas().size() + " set)"),
+                "§fShow available arenas", "/" + MainCommand.getInstance().getName() + " " + getSubCommandName(), ClickEvent.Action.RUN_COMMAND));
     }
 
     @Override
@@ -43,15 +44,15 @@ public class ArenaList extends SubCommand {
         for (String arena : getArenas()) {
             String status = getArenaByName(arena) == null ? "§cDisabled" : "§aEnabled";
             String group = "Default";
-            ArenaConfig cm = new ArenaConfig(BedWars.plugin, arena, "plugins/"+plugin.getName()+"/Arenas");
-            if (cm.getYml().get("group") != null){
+            ArenaConfig cm = new ArenaConfig(BedWars.plugin, arena, plugin.getDataFolder().getPath() + "/Arenas");
+            if (cm.getYml().get("group") != null) {
                 group = cm.getYml().getString("group");
             }
             int teams = 0;
-            if (cm.getYml().get("Team") != null){
+            if (cm.getYml().get("Team") != null) {
                 teams = cm.getYml().getConfigurationSection("Team").getKeys(false).size();
             }
-            p.sendMessage("§6 ▪    §f" + arena + " §7[" + status + "§7] [§eGroup: §d"+group+"§7] [§eTeams: §d"+teams+"§7]");
+            p.sendMessage("§6 ▪    §f" + arena + " §7[" + status + "§7] [§eGroup: §d" + group + "§7] [§eTeams: §d" + teams + "§7]");
         }
         return true;
     }
@@ -61,9 +62,10 @@ public class ArenaList extends SubCommand {
         return null;
     }
 
+    @NotNull
     private java.util.List<String> getArenas() {
         ArrayList<String> arene = new ArrayList<>();
-        File dir = new File("plugins/" + plugin.getDescription().getName() + "/Arenas");
+        File dir = new File(plugin.getDataFolder(), "/Arenas");
         if (dir.exists()) {
             for (File f : Objects.requireNonNull(dir.listFiles())) {
                 if (f.isFile()) {

@@ -13,6 +13,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -39,7 +40,7 @@ public interface IArena {
     /**
      * Get used world name.
      */
-    String getWorldName();
+    String getArenaName();
 
     /**
      * Initialize the arena after loading the world.
@@ -82,6 +83,13 @@ public interface IArena {
      * @return A string with - and _ replaced by a space.
      */
     String getDisplayName();
+
+    /**
+     * Change world name for auto-scaling.
+     *
+     * @param name new name.
+     */
+    void setWorldName(String name);
 
     /**
      * Get arena status.
@@ -202,6 +210,7 @@ public interface IArena {
      */
     void removePlacedBlock(Block block);
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     boolean isBlockPlaced(Block block);
 
     /**
@@ -221,8 +230,9 @@ public interface IArena {
 
     /**
      * Get the join signs for this arena
+     * @return signs.
      */
-    List<BlockState> getSigns();
+    List<Block> getSigns();
 
     /**
      * Get the island radius
@@ -350,8 +360,7 @@ public interface IArena {
     /**
      * List of placed blocks.
      */
-    @Deprecated
-    LinkedList<Block> getPlaced();
+    LinkedList<Vector> getPlaced();
 
     /**
      * This is used to destroy arena data when it restarts.
@@ -372,4 +381,6 @@ public interface IArena {
     void setAllowSpectate(boolean allowSpectate);
 
     boolean isAllowSpectate();
+
+    String getWorldName();
 }

@@ -8,9 +8,9 @@
     <version>${parent.version}</version>
 
     <parent>
-        <artifactId>compiler</artifactId>
+        <artifactId>BedWars1058</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>19.11.1</version>
+        <version>20.3-SNAPSHOT</version>
     </parent>
 
     <dependencies>
@@ -36,9 +36,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.azbh111</groupId>
-            <artifactId>craftbukkit-1.12.2</artifactId>
-            <version>R</version>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit-nms</artifactId>
+            <version>v1_12_R1</version>
             <type>jar</type>
             <scope>provided</scope>
         </dependency>

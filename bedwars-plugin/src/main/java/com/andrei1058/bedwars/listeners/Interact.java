@@ -10,7 +10,6 @@ import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.shop.listeners.InventoryListener;
-import com.andrei1058.bedwars.upgradesold.UpgradeGroup;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -30,13 +29,13 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
-import static com.andrei1058.bedwars.upgradesold.UpgradeGroup.getUpgradeGroup;
 
 public class Interact implements Listener {
 
     @EventHandler
     /* Handle custom items with commands on them */
     public void onItemCommand(PlayerInteractEvent e) {
+        if (e == null) return;
         Player p = e.getPlayer();
         if (p == null) return;
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
@@ -55,6 +54,7 @@ public class Interact implements Listener {
     @EventHandler
     //Check if player is opening an inventory
     public void onInventoryInteract(PlayerInteractEvent e){
+        if (e == null) return;
         if (e.isCancelled()) return;
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         Block b = e.getClickedBlock();
@@ -76,6 +76,7 @@ public class Interact implements Listener {
 
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
+        if (e == null) return;
         Player p = e.getPlayer();
         if (p == null) return;
         Arena.afkCheck.remove(p.getUniqueId());
@@ -139,7 +140,7 @@ public class Interact implements Listener {
             }
             if (b.getState() instanceof Sign) {
                 for (IArena a1 : Arena.getArenas()) {
-                    if (a1.getSigns().contains(b.getState())) {
+                    if (a1.getSigns().contains(b)) {
                         if (a1.addPlayer(p, false)) {
                             Sounds.playSound("join-allowed", p);
                         } else {
@@ -180,6 +181,7 @@ public class Interact implements Listener {
 
     @EventHandler
     public void disableItemFrameRotation(PlayerInteractEntityEvent e){
+        if (e == null) return;
         if (e.getRightClicked().getType() == EntityType.ITEM_FRAME){
             if (((ItemFrame)e.getRightClicked()).getItem().getType().equals(Material.AIR)){
                 //prevent from putting upgradable items in it
@@ -196,7 +198,7 @@ public class Interact implements Listener {
                 }
                 return;
             }
-            IArena a = Arena.getArenaByName(e.getPlayer().getWorld().getName());
+            IArena a = Arena.getArenaByIdentifier(e.getPlayer().getWorld().getName());
             if (a != null){
                 e.setCancelled(true);
             }
@@ -210,6 +212,7 @@ public class Interact implements Listener {
 
     @EventHandler
     public void onEntityInteract(PlayerInteractEntityEvent e) {
+        if (e == null) return;
         IArena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a == null) return;
         Location l = e.getRightClicked().getLocation();
@@ -224,26 +227,8 @@ public class Interact implements Listener {
     }
 
     @EventHandler
-    public void onEntityInteract2(PlayerInteractAtEntityEvent e) {
-        IArena a = Arena.getArenaByPlayer(e.getPlayer());
-        if (a == null) return;
-        Location l = e.getRightClicked().getLocation();
-        for (ITeam t : a.getTeams()) {
-            Location l3 = t.getTeamUpgrades();
-            if (l.getBlockX() == l3.getBlockX() && l.getBlockY() == l3.getBlockY() && l.getBlockZ() == l3.getBlockZ()) {
-                if (a.isPlayer(e.getPlayer())) {
-                    UpgradeGroup ug = getUpgradeGroup(a.getGroup());
-                    if (ug != null) {
-                        ug.openToPlayer(e.getPlayer(), a);
-                    }
-                }
-                e.setCancelled(true);
-            }
-        }
-    }
-
-    @EventHandler
     public void onBedEnter(PlayerBedEnterEvent e) {
+        if (e == null) return;
         if (Arena.getArenaByPlayer(e.getPlayer()) != null) {
             e.setCancelled(true);
         }
@@ -251,6 +236,7 @@ public class Interact implements Listener {
 
     @EventHandler
     public void onArmorManipulate(PlayerArmorStandManipulateEvent e) {
+        if (e == null) return;
         if (e.isCancelled()) return;
         //prevent from breaking generators
         if (Arena.getArenaByPlayer(e.getPlayer()) != null) {
@@ -265,6 +251,7 @@ public class Interact implements Listener {
 
     @EventHandler
     public void onCrafting(PrepareItemCraftEvent e) {
+        if (e == null) return;
         if (Arena.getArenaByPlayer((Player) e.getView().getPlayer()) != null) {
             if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_CRAFTING)) {
                 e.getInventory().setResult(new ItemStack(Material.AIR));

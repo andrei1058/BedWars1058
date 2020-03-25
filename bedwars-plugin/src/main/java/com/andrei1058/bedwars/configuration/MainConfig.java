@@ -13,15 +13,17 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import static com.andrei1058.bedwars.BedWars.getForCurrentVersion;
 
 public class MainConfig extends ConfigManager {
 
-    public MainConfig(Plugin plugin, String name, String dir) {
-        super(plugin, name, dir);
+    public MainConfig(Plugin plugin, String name) {
+        super(plugin, name, BedWars.plugin.getDataFolder().getPath());
 
         YamlConfiguration yml = getYml();
 
@@ -35,11 +37,14 @@ public class MainConfig extends ConfigManager {
         yml.addDefault("globalChat", false);
         yml.addDefault("formatChat", true);
         yml.addDefault("debug", false);
+        yml.addDefault(ConfigPath.GENERAL_ENABLE_PARTY_CMD, true);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD, true);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_GAME_SCOREBOARD, true);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ALLOW_PARTIES, true);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_REJOIN_TIME, 60 * 5);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART, 30);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD, "restart");
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_AUTO_SCALE_LIMIT, 5);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS, Collections.singletonList("0.0.0.0:2019"));
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_REGULAR, 40);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_HALF, 25);
@@ -49,7 +54,7 @@ public class MainConfig extends ConfigManager {
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_GAME_END_COUNTDOWN, 120);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SHOUT_COOLDOWN, 30);
         yml.addDefault(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP, "yourServer.Com");
-        yml.addDefault(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_NAME, "bw1");
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID, "bw1");
 
         yml.addDefault("database.enable", false);
         yml.addDefault("database.host", "localhost");
@@ -121,6 +126,12 @@ public class MainConfig extends ConfigManager {
         //remove old config
         //Convert old configuration
 
+        if (yml.get("bungee-settings.lobby-servers") != null) {
+            List<String> sockets = new ArrayList<>(yml.getStringList("bungee-settings.lobby-servers"));
+            yml.set(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS, sockets);
+            yml.set("bungee-settings.lobby-servers", null);
+        }
+
         if (yml.get("arenaGui.settings.showPlaying") != null) {
             set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SHOW_PLAYING, yml.getBoolean("arenaGui.settings.showPlaying"));
         }
@@ -148,7 +159,7 @@ public class MainConfig extends ConfigManager {
                 }
             }
         }
-        
+
         set("arenaGui", null);
 
         if (getYml().get("npcLoc") != null) {
@@ -195,6 +206,11 @@ public class MainConfig extends ConfigManager {
             }
         }
 
+        if (yml.get("server-name") != null) {
+            set(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID, yml.get("server-name"));
+        }
+
+        set("server-name", null);
         set("statsGUI", null);
         set("startItems", null);
         set("generators", null);
@@ -215,7 +231,7 @@ public class MainConfig extends ConfigManager {
 
         //set default server language
         String whatLang = "en";
-        File[] langs = new File("plugins/" + plugin.getDescription().getName() + "/Languages").listFiles();
+        File[] langs = new File(plugin.getDataFolder(), "/Languages").listFiles();
         if (langs != null) {
             for (File f : langs) {
                 if (f.isFile()) {
@@ -224,7 +240,7 @@ public class MainConfig extends ConfigManager {
                         if (lang.equalsIgnoreCase(yml.getString("language"))) {
                             whatLang = f.getName().replace("messages_", "").replace(".yml", "");
                         }
-                        if (Language.getLang(lang) == null)new Language(BedWars.plugin, lang);
+                        if (Language.getLang(lang) == null) new Language(BedWars.plugin, lang);
                     }
                 }
             }
@@ -245,7 +261,7 @@ public class MainConfig extends ConfigManager {
         //
 
         BedWars.setDebug(yml.getBoolean("debug"));
-        new ConfigManager(plugin,"bukkit", Bukkit.getWorldContainer().getPath()).set("ticks-per.autosave", -1);
+        new ConfigManager(plugin, "bukkit", Bukkit.getWorldContainer().getPath()).set("ticks-per.autosave", -1);
 
         Bukkit.spigot().getConfig().set("commands.send-namespaced", false);
         try {
@@ -256,8 +272,13 @@ public class MainConfig extends ConfigManager {
 
         try {
             BedWars.setServerType(ServerType.valueOf(yml.getString("serverType").toUpperCase()));
-        } catch (Exception e){
-            set("serverType", "MULTIARENA");
+        } catch (Exception e) {
+            if (yml.getString("serverType").equalsIgnoreCase("BUNGEE_LEGACY")) {
+                BedWars.setServerType(ServerType.BUNGEE);
+                BedWars.setAutoscale(false);
+            } else {
+                set("serverType", "MULTIARENA");
+            }
         }
 
         BedWars.setLobbyWorld(getLobbyWorldName());
@@ -271,7 +292,7 @@ public class MainConfig extends ConfigManager {
     }
 
     /**
-     * Add Multi Arena Lobby Command Item To 
+     * Add Multi Arena Lobby Command Item To
      * This won't create the item back if you delete it.
      */
     @SuppressWarnings("WeakerAccess")
@@ -289,7 +310,7 @@ public class MainConfig extends ConfigManager {
 
 
     /**
-     * Add Pre Game Command Item To 
+     * Add Pre Game Command Item To
      * This won't create the item back if you delete it.
      */
     @SuppressWarnings("WeakerAccess")
@@ -306,7 +327,7 @@ public class MainConfig extends ConfigManager {
     }
 
     /**
-     * Add Spectator Command Item To 
+     * Add Spectator Command Item To
      * This won't create the item back if you delete it.
      */
     @SuppressWarnings("WeakerAccess")

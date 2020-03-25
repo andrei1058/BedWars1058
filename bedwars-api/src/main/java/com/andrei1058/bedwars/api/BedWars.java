@@ -111,6 +111,14 @@ public interface BedWars {
     ArenaUtil getArenaUtil();
 
     interface ArenaUtil {
+
+        /**
+         * Check if an arena can be auto-scaled.
+         *
+         * @return always true if auto-scale is disabled.
+         */
+        boolean canAutoScale(String arenaName);
+
         /**
          * Add a custom arena to the enable queue.
          */
@@ -175,6 +183,8 @@ public interface BedWars {
          * @param worldName World name
          */
         IArena getArenaByName(String worldName);
+
+        IArena getArenaByIdentifier(String worldName);
 
         void setArenaByName(IArena arena);
 
@@ -287,6 +297,28 @@ public interface BedWars {
          * Take money from player on buy
          */
         void takeMoney(Player player, Material currency, int amount);
+    }
+
+    /**
+     * Get shop util.
+     */
+    TeamUpgradesUtil getTeamUpgradesUtil();
+
+    interface TeamUpgradesUtil {
+        /**
+         * Check if a player is watching the team upgrades menu.
+         */
+        boolean isWatchingGUI(Player player);
+
+        /**
+         * Set a player watching the team upgrades menu.
+         */
+        void setWatchingGUI(Player player);
+
+        /**
+         * Remove from upgrades GUI.
+         */
+        void removeWatchingUpgrades(UUID uuid);
     }
 
     /**
