@@ -117,6 +117,14 @@ public class PAPISupport extends PlaceholderExpansion {
             case "current_arenas":
                 replay = String.valueOf(Arena.getArenas().size());
                 break;
+            case "player_team_color":
+                if (a != null && a.isPlayer(p) && a.getStatus() == GameState.playing) {
+                    ITeam team = a.getTeam(p);
+                    if (team != null) {
+                        replay += String.valueOf(team.getColor().chat());
+                    }
+                }
+                break;
             case "player_team":
                 if (a != null) {
                     if (ShoutCommand.isShout(p)) {

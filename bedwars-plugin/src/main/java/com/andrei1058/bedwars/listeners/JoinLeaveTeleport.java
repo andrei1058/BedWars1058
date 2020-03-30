@@ -11,6 +11,7 @@ import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.regular.CmdStats;
 import com.andrei1058.bedwars.configuration.Permissions;
 import com.andrei1058.bedwars.configuration.Sounds;
+import com.andrei1058.bedwars.language.PreLoadedLanguage;
 import com.andrei1058.bedwars.lobbysocket.LoadedUser;
 import com.andrei1058.bedwars.support.preloadedparty.PreLoadedParty;
 import org.bukkit.Bukkit;
@@ -28,8 +29,6 @@ import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class JoinLeaveTeleport implements Listener {
-
-    private static HashMap<UUID, String> preLoadedLanguage = new HashMap<>();
 
     @SuppressWarnings("ControlFlowStatementWithoutBraces")
     @EventHandler
@@ -69,18 +68,16 @@ public class JoinLeaveTeleport implements Listener {
             }
         }
 
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            String iso = BedWars.getRemoteDatabase().getLanguage(u);
-            if (Language.isLanguageExist(iso)) {
-                if (BedWars.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES).contains(iso))
-                    iso = Language.getDefaultLanguage().getIso();
-                if (preLoadedLanguage.containsKey(u)) {
-                    preLoadedLanguage.replace(u, iso);
-                } else {
-                    preLoadedLanguage.put(u, iso);
+        if (!autoscale) {
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+                String iso = BedWars.getRemoteDatabase().getLanguage(u);
+                if (Language.isLanguageExist(iso)) {
+                    if (!BedWars.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES).contains(iso)) {
+                        new PreLoadedLanguage(e.getPlayer().getUniqueId(), iso);
+                    }
                 }
-            }
-        });
+            });
+        }
 
         if (getServerType() == ServerType.BUNGEE) {
             if (Arena.getArenas().isEmpty()) {
@@ -158,13 +155,18 @@ public class JoinLeaveTeleport implements Listener {
                         if (po != null && po.isOnline()) {
                             if (po.equals(e.getPlayer())) {
                                 BedWars.getParty().createParty(e.getPlayer());
+                                PreLoadedParty plp = PreLoadedParty.getPartyByOwner(e.getPlayer().getName());
+                                if (plp != null) {
+                                    plp.teamUp();
+                                }
                             } else {
                                 BedWars.getParty().addMember(po, e.getPlayer());
                             }
                         } else {
                             PreLoadedParty plp = PreLoadedParty.getPartyByOwner(lu.getPartyOwnerOrSpectateTarget());
-                            if (plp == null)
-                                plp = new PreLoadedParty(lu.getArenaIdentifier(), lu.getPartyOwnerOrSpectateTarget());
+                            if (plp == null) {
+                                plp = new PreLoadedParty(lu.getPartyOwnerOrSpectateTarget());
+                            }
                             plp.addMember(e.getPlayer());
                         }
                     }
@@ -186,10 +188,10 @@ public class JoinLeaveTeleport implements Listener {
             }
         }
 
-
-        if (preLoadedLanguage.containsKey(e.getPlayer().getUniqueId())) {
-            Language.setPlayerLanguage(e.getPlayer(), preLoadedLanguage.get(e.getPlayer().getUniqueId()), true);
-            preLoadedLanguage.remove(e.getPlayer().getUniqueId());
+        PreLoadedLanguage preLoadedLanguage = PreLoadedLanguage.getByUUID(e.getPlayer().getUniqueId());
+        if (preLoadedLanguage != null) {
+            Language.setPlayerLanguage(e.getPlayer(), preLoadedLanguage.getIso(), true);
+            PreLoadedLanguage.clear(e.getPlayer().getUniqueId());
         }
 
         if (getServerType() != ServerType.BUNGEE) {
@@ -320,7 +322,7 @@ public class JoinLeaveTeleport implements Listener {
         BedWarsTeam.antiFallDamageAtRespawn.remove(e.getPlayer().getUniqueId());
 
         LastHit lh = LastHit.getLastHit(p);
-        if (lh != null){
+        if (lh != null) {
             lh.remove();
         }
 

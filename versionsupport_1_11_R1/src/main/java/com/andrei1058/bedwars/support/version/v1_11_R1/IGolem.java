@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import com.google.common.collect.Sets;
 import net.minecraft.server.v1_11_R1.*;
 import org.apache.commons.lang3.StringUtils;
@@ -79,5 +80,19 @@ public class IGolem extends EntityIronGolem {
     @Override
     protected MinecraftKey J() {
         return null;
+    }
+
+    @Override
+    public void die() {
+        super.die();
+        team = null;
+        VersionCommon.api.getVersionSupport().getDespawnablesList().remove(this.getUniqueID());
+    }
+
+    @Override
+    public void die(DamageSource damagesource) {
+        super.die(damagesource);
+        team = null;
+        VersionCommon.api.getVersionSupport().getDespawnablesList().remove(this.getUniqueID());
     }
 }

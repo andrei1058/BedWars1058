@@ -53,10 +53,6 @@
       <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
     </repository>
     <repository>
-      <id>vault-repo</id>
-      <url>http://nexus.hc.to/content/repositories/pub_releases</url>
-    </repository>
-    <repository>
       <id>spigotutils-maven</id>
       <url>https://gitlab.com/api/v4/projects/14374071/packages/maven</url>
     </repository>
@@ -74,6 +70,14 @@
       <version>2.0.25-SNAPSHOT</version>
       <scope>provided</scope>
       <exclusions>
+        <exclusion>
+          <artifactId>junit</artifactId>
+          <groupId>junit</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>bstats-bukkit</artifactId>
+          <groupId>org.bstats</groupId>
+        </exclusion>
         <exclusion>
           <artifactId>citizens-main</artifactId>
           <groupId>net.citizensnpcs</groupId>
@@ -106,9 +110,15 @@
     </dependency>
     <dependency>
       <groupId>net.milkbowl.vault</groupId>
-      <artifactId>Vault</artifactId>
-      <version>1.7.3</version>
+      <artifactId>VaultAPI</artifactId>
+      <version>1.7</version>
       <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>bukkit</artifactId>
+          <groupId>org.bukkit</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.spigotmc</groupId>

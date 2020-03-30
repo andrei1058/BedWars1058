@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import net.minecraft.server.v1_14_R1.*;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
@@ -64,5 +65,19 @@ public class IGolem extends EntityIronGolem {
                         .replace("{health}", StringUtils.repeat(Language.getDefaultLanguage().m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH) + " ", 10))
                         .replace("{TeamColor}", bedWarsTeam.getColor().chat().toString())));
         return (LivingEntity) customEnt.getBukkitEntity();
+    }
+
+    @Override
+    public void die() {
+        super.die();
+        team = null;
+        VersionCommon.api.getVersionSupport().getDespawnablesList().remove(this.getUniqueID());
+    }
+
+    @Override
+    public void die(DamageSource damagesource) {
+        super.die(damagesource);
+        team = null;
+        VersionCommon.api.getVersionSupport().getDespawnablesList().remove(this.getUniqueID());
     }
 }

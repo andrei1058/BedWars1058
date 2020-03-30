@@ -51,14 +51,15 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     private void createTable() {
         if (!isConnected()) connect();
-        try {
-            connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS '" + table + "' (id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "name VARCHAR(200), uuid VARCHAR(200), first_play TIMESTAMP NULL DEFAULT NULL, last_play TIMESTAMP NULL DEFAULT NULL, wins INTEGER(200)," +
-                    " kills INTEGER(200), final_kills INTEGER(200), looses INTEGER(200), deaths INTEGER(200), final_deaths INTEGER(200), beds_destroyed INTEGER(200), games_played INTEGER(200));");
+
+        String sql = "CREATE TABLE IF NOT EXISTS '" + table + "' (id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "name VARCHAR(200), uuid VARCHAR(200), first_play TIMESTAMP NULL DEFAULT NULL, last_play TIMESTAMP NULL DEFAULT NULL, wins INTEGER(200)," +
+                " kills INTEGER(200), final_kills INTEGER(200), looses INTEGER(200), deaths INTEGER(200), final_deaths INTEGER(200), beds_destroyed INTEGER(200), games_played INTEGER(200));";
+        try(Statement statement = connection.createStatement()) {
+            statement.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     /**
@@ -93,11 +94,12 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     public boolean isPlayerSet(UUID uuid) {
         if (!isConnected()) connect();
-        try {
-            ResultSet rs = connection.createStatement().executeQuery("SELECT id FROM '" + table + "' WHERE uuid = '" + uuid.toString() + "';");
-            if (rs.next()) {
-                rs.close();
-                return true;
+
+        String sql = "SELECT id FROM '" + table + "' WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, uuid.toString());
+            try(ResultSet result = statement.executeQuery()) {
+                return result.next();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -115,21 +117,21 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
         if (isPlayerSet(player.getUniqueId())) return false;
         if (!isConnected()) connect();
 
-        try {
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO '" + table + "' VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-            ps.setString(1, player.getName());
-            ps.setString(2, player.getUniqueId().toString());
-            ps.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
-            ps.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
-            ps.setInt(5, 0);
-            ps.setInt(6, 0);
-            ps.setInt(7, 0);
-            ps.setInt(8, 0);
-            ps.setInt(9, 0);
-            ps.setInt(10, 0);
-            ps.setInt(11, 0);
-            ps.setInt(12, 0);
-            ps.executeUpdate();
+        String sql = "INSERT INTO '" + table + "' VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, player.getName());
+            statement.setString(2, player.getUniqueId().toString());
+            statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
+            statement.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
+            statement.setInt(5, 0);
+            statement.setInt(6, 0);
+            statement.setInt(7, 0);
+            statement.setInt(8, 0);
+            statement.setInt(9, 0);
+            statement.setInt(10, 0);
+            statement.setInt(11, 0);
+            statement.setInt(12, 0);
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -141,8 +143,12 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     public void addBedsDestroyed(UUID uuid, int amount) {
         if (!isConnected()) connect();
-        try {
-            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET beds_destroyed = beds_destroyed + '" + amount + "' WHERE uuid = '" + uuid.toString() + "';");
+
+        String sql = "UPDATE '" + table + "' SET beds_destroyed = beds_destroyed + ? WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, amount);
+            statement.setString(2, uuid.toString());
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -153,8 +159,12 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     public void addFinalKill(UUID uuid, int amount) {
         if (!isConnected()) connect();
-        try {
-            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET final_kills = final_kills + '" + amount + "' WHERE uuid = '" + uuid.toString() + "';");
+
+        String sql = "UPDATE '" + table + "' SET final_kills = final_kills + ? WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, amount);
+            statement.setString(2, uuid.toString());
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -165,8 +175,12 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     public void addKill(UUID uuid, int amount) {
         if (!isConnected()) connect();
-        try {
-            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET kills = kills + '" + amount + "' WHERE uuid = '" + uuid.toString() + "';");
+
+        String sql = "UPDATE '" + table + "' SET kills = kills + ? WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, amount);
+            statement.setString(2, uuid.toString());
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -177,8 +191,12 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     public void addDeaths(UUID uuid, int amount) {
         if (!isConnected()) connect();
-        try {
-            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET deaths = deaths + '" + amount + "' WHERE uuid = '" + uuid.toString() + "';");
+
+        String sql = "UPDATE '" + table + "' SET deaths = deaths + ? WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, amount);
+            statement.setString(2, uuid.toString());
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -189,8 +207,12 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     public void addFinalDeaths(UUID uuid, int amount) {
         if (!isConnected()) connect();
-        try {
-            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET final_deaths = final_deaths + '" + amount + "' WHERE uuid = '" + uuid.toString() + "';");
+
+        String sql = "UPDATE '" + table + "' SET final_deaths = final_deaths + ? WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, amount);
+            statement.setString(2, uuid.toString());
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -201,8 +223,12 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     public void addWins(UUID uuid, int amount) {
         if (!isConnected()) connect();
-        try {
-            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET wins = wins + '" + amount + "' WHERE uuid = '" + uuid.toString() + "';");
+
+        String sql = "UPDATE '" + table + "' SET wins = wins + ? WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, amount);
+            statement.setString(2, uuid.toString());
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -213,8 +239,12 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     public void addLosses(UUID uuid, int amount) {
         if (!isConnected()) connect();
-        try {
-            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET looses = looses + '" + amount + "' WHERE uuid = '" + uuid.toString() + "';");
+
+        String sql = "UPDATE '" + table + "' SET looses = looses + ? WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, amount);
+            statement.setString(2, uuid.toString());
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -225,8 +255,12 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     public void addGamesPlayed(UUID uuid, int amount) {
         if (!isConnected()) connect();
-        try {
-            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET games_played = games_played + '" + amount + "' WHERE uuid = '" + uuid.toString() + "';");
+
+        String sql = "UPDATE '" + table + "' SET games_played = games_played + ? WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, amount);
+            statement.setString(2, uuid.toString());
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -238,18 +272,18 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
     public Timestamp getPlayerLastPlay(UUID uuid) {
         if (!isConnected()) connect();
 
-        Timestamp t = new Timestamp(0);
-        try {
-            ResultSet rs = connection.createStatement().executeQuery("SELECT last_play FROM '" + table + "' WHERE uuid = '" + uuid.toString() + "';");
-            if (rs.next()) {
-                t = rs.getTimestamp("last_play");
-                rs.close();
+        String sql = "SELECT last_play FROM '" + table + "' WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, uuid.toString());
+            try(ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    return result.getTimestamp("last_play");
+                }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return t;
+        return new Timestamp(0);
     }
 
     /**
@@ -258,17 +292,18 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
     public Timestamp getPlayerFirstPlay(UUID uuid) {
         if (!isConnected()) connect();
 
-        Timestamp t = new Timestamp(0);
-        try {
-            ResultSet rs = connection.createStatement().executeQuery("SELECT first_play FROM '" + table + "' WHERE uuid = '" + uuid.toString() + "';");
-            if (rs.next()) {
-                t = rs.getTimestamp("first_play");
-                rs.close();
+        String sql = "SELECT first_play FROM '" + table + "' WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, uuid.toString());
+            try(ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    return result.getTimestamp("first_play");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return t;
+        return new Timestamp(0);
     }
 
 
@@ -277,12 +312,14 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     public int getPlayerKills(UUID uuid) {
         if (!isConnected()) connect();
-        try {
-            ResultSet rs = connection.createStatement().executeQuery("SELECT kills FROM '" + table + "' WHERE uuid = '" + uuid.toString() + "';");
-            if (rs.next()) {
-                int i = rs.getInt("kills");
-                rs.close();
-                return i;
+
+        String sql = "SELECT kills FROM '" + table + "' WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, uuid.toString());
+            try(ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    return result.getInt("kills");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -295,12 +332,14 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     public int getPlayerWins(UUID uuid) {
         if (!isConnected()) connect();
-        try {
-            ResultSet rs = connection.createStatement().executeQuery("SELECT wins FROM '" + table + "' WHERE uuid='" + uuid.toString() + "';");
-            if (rs.next()) {
-                int i = rs.getInt("wins");
-                rs.close();
-                return i;
+
+        String sql = "SELECT wins FROM '" + table + "' WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, uuid.toString());
+            try(ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    return result.getInt("wins");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -313,12 +352,14 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     public int getPlayerFinalKills(UUID uuid) {
         if (!isConnected()) connect();
-        try {
-            ResultSet rs = connection.createStatement().executeQuery("SELECT final_kills FROM '" + table + "' WHERE uuid='" + uuid.toString() + "';");
-            if (rs.next()) {
-                int i = rs.getInt("final_kills");
-                rs.close();
-                return i;
+
+        String sql = "SELECT final_kills FROM '" + table + "' WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, uuid.toString());
+            try(ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    return result.getInt("final_kills");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -331,12 +372,14 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     public int getPlayerLoses(UUID uuid) {
         if (!isConnected()) connect();
-        try {
-            ResultSet rs = connection.createStatement().executeQuery("SELECT looses FROM '" + table + "' WHERE uuid='" + uuid.toString() + "';");
-            if (rs.next()) {
-                int i = rs.getInt("looses");
-                rs.close();
-                return i;
+
+        String sql = "SELECT looses FROM '" + table + "' WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, uuid.toString());
+            try(ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    return result.getInt("looses");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -349,12 +392,14 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     public int getPlayerDeaths(UUID uuid) {
         if (!isConnected()) connect();
-        try {
-            ResultSet rs = connection.createStatement().executeQuery("SELECT deaths FROM '" + table + "' WHERE uuid='" + uuid.toString() + "';");
-            if (rs.next()) {
-                int i = rs.getInt("deaths");
-                rs.close();
-                return i;
+
+        String sql = "SELECT deaths FROM '" + table + "' WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, uuid.toString());
+            try(ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    return result.getInt("deaths");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -367,12 +412,14 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     public int getPlayerFinalDeaths(UUID uuid) {
         if (!isConnected()) connect();
-        try {
-            ResultSet rs = connection.createStatement().executeQuery("SELECT final_deaths FROM '" + table + "' WHERE uuid='" + uuid.toString() + "';");
-            if (rs.next()) {
-                int i = rs.getInt("final_deaths");
-                rs.close();
-                return i;
+
+        String sql = "SELECT final_deaths FROM '" + table + "' WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, uuid.toString());
+            try(ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    return result.getInt("final_deaths");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -385,12 +432,14 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     public int getPlayerBedsDestroyed(UUID uuid) {
         if (!isConnected()) connect();
-        try {
-            ResultSet rs = connection.createStatement().executeQuery("SELECT beds_destroyed FROM '" + table + "' WHERE uuid='" + uuid.toString() + "';");
-            if (rs.next()) {
-                int i = rs.getInt("beds_destroyed");
-                rs.close();
-                return i;
+
+        String sql = "SELECT beds_destroyed FROM '" + table + "' WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, uuid.toString());
+            try(ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    return result.getInt("beds_destroyed");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -403,12 +452,14 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     public int getPlayerGamesPlayed(UUID uuid) {
         if (!isConnected()) connect();
-        try {
-            ResultSet rs = connection.createStatement().executeQuery("SELECT games_played FROM '" + table + "' WHERE uuid='" + uuid.toString() + "';");
-            if (rs.next()) {
-                int i = rs.getInt("games_played");
-                rs.close();
-                return i;
+
+        String sql = "SELECT games_played FROM '" + table + "' WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, uuid.toString());
+            try(ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    return result.getInt("games_played");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -421,10 +472,12 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     public void setFirstPlay(UUID uuid, Timestamp time) {
         if (!isConnected()) connect();
-        try {
-            PreparedStatement ps = connection.prepareStatement("UPDATE '" + table + "' SET first_play = ? WHERE uuid = '" + uuid.toString() + "';");
-            ps.setTimestamp(1, time);
-            ps.executeUpdate();
+
+        String sql = "UPDATE '" + table + "' SET first_play = ? WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setTimestamp(1, time);
+            statement.setString(2, uuid.toString());
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -435,10 +488,12 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     public void setLastPlay(UUID uuid, Timestamp time) {
         if (!isConnected()) connect();
-        try {
-            PreparedStatement ps = connection.prepareStatement("UPDATE '" + table + "' SET last_play = ? WHERE uuid = '" + uuid.toString() + "';");
-            ps.setTimestamp(1, time);
-            ps.executeUpdate();
+
+        String sql = "UPDATE '" + table + "' SET last_play = ? WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setTimestamp(1, time);
+            statement.setString(2, uuid.toString());
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -449,8 +504,12 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     public void setWins(UUID uuid, int value) {
         if (!isConnected()) connect();
-        try {
-            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET wins = '" + value + "' WHERE uuid = '" + uuid.toString() + "';");
+
+        String sql = "UPDATE '" + table + "' SET wins = ? WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, value);
+            statement.setString(2, uuid.toString());
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -461,8 +520,12 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     public void setKills(UUID uuid, int value) {
         if (!isConnected()) connect();
-        try {
-            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET kills = '" + value + "' WHERE uuid = '" + uuid.toString() + "';");
+
+        String sql = "UPDATE '" + table + "' SET kills = ? WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, value);
+            statement.setString(2, uuid.toString());
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -473,8 +536,12 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     public void setFinalKills(UUID uuid, int value) {
         if (!isConnected()) connect();
-        try {
-            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET final_kills = '" + value + "' WHERE uuid = '" + uuid.toString() + "';");
+
+        String sql = "UPDATE '" + table + "' SET final_kills = ? WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, value);
+            statement.setString(2, uuid.toString());
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -485,8 +552,12 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     public void setLosses(UUID uuid, int value) {
         if (!isConnected()) connect();
-        try {
-            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET looses = '" + value + "' WHERE uuid = '" + uuid.toString() + "';");
+
+        String sql = "UPDATE '" + table + "' SET looses = ? WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, value);
+            statement.setString(2, uuid.toString());
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -497,8 +568,12 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     public void setDeaths(UUID uuid, int value) {
         if (!isConnected()) connect();
-        try {
-            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET deaths = '" + value + "' WHERE uuid = '" + uuid.toString() + "';");
+
+        String sql = "UPDATE '" + table + "' SET deaths = ? WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, value);
+            statement.setString(2, uuid.toString());
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -509,8 +584,12 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     public void setFinalDeaths(UUID uuid, int value) {
         if (!isConnected()) connect();
-        try {
-            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET final_deaths = '" + value + "' WHERE uuid = '" + uuid.toString() + "';");
+
+        String sql = "UPDATE '" + table + "' SET final_deaths = ? WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, value);
+            statement.setString(2, uuid.toString());
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -521,8 +600,12 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     public void setBedsDestroyed(UUID uuid, int value) {
         if (!isConnected()) connect();
-        try {
-            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET beds_destroyed = '" + value + "' WHERE uuid = '" + uuid.toString() + "';");
+
+        String sql = "UPDATE '" + table + "' SET beds_destroyed = ? WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, value);
+            statement.setString(2, uuid.toString());
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -533,8 +616,12 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     public void setGamesPlayed(UUID uuid, int value) {
         if (!isConnected()) connect();
-        try {
-            connection.createStatement().executeUpdate("UPDATE '" + table + "' SET games_played = '" + value + "' WHERE uuid = '" + uuid.toString() + "';");
+
+        String sql = "UPDATE '" + table + "' SET games_played = ? WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, value);
+            statement.setString(2, uuid.toString());
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -545,14 +632,16 @@ public class StatsCache implements com.andrei1058.bedwars.api.BedWars.IStats {
      */
     public void updateRemote(UUID uuid, String username) {
         if (!isConnected()) connect();
-        try {
-            ResultSet rs = connection.createStatement().executeQuery("SELECT * FROM '" + table + "' WHERE uuid = '" + uuid.toString() + "';");
-            if (rs.next()) {
-                BedWars.getRemoteDatabase().saveStats(uuid, username, rs.getTimestamp("first_play"), new Timestamp(System.currentTimeMillis()), rs.getInt("wins"),
-                        rs.getInt("kills"), rs.getInt("final_kills"), rs.getInt("looses"), rs.getInt("deaths"), rs.getInt("final_deaths"),
-                        rs.getInt("beds_destroyed"), rs.getInt("games_played"));
+        String sql = "SELECT * FROM '" + table + "' WHERE uuid = ?;";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, uuid.toString());
+            try(ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    BedWars.getRemoteDatabase().saveStats(uuid, username, result.getTimestamp("first_play"), new Timestamp(System.currentTimeMillis()), result.getInt("wins"),
+                            result.getInt("kills"), result.getInt("final_kills"), result.getInt("looses"), result.getInt("deaths"),
+                            result.getInt("final_deaths"), result.getInt("beds_destroyed"), result.getInt("games_played"));
+                }
             }
-            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

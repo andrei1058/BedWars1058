@@ -12,6 +12,7 @@ import com.google.gson.JsonObject;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,7 +32,10 @@ public class ReJoin {
      * Make rejoin possible for a player
      */
     public ReJoin(Player player, IArena arena, ITeam bwt, List<ShopCache.CachedItem> cachedArmor) {
-        if (exists(player)) getPlayer(player).destroy();
+        ReJoin rj = getPlayer(player);
+        if (rj != null){
+            rj.destroy();
+        }
         this.bwt = bwt;
         if (this.bwt.isBedDestroyed()) return;
         this.player = player.getUniqueId();
@@ -189,5 +193,9 @@ public class ReJoin {
     @SuppressWarnings("WeakerAccess")
     public List<ShopCache.CachedItem> getPermanentsAndNonDowngradables() {
         return permanentsAndNonDowngradables;
+    }
+
+    public static List<ReJoin> getReJoinList() {
+        return Collections.unmodifiableList(reJoinList);
     }
 }

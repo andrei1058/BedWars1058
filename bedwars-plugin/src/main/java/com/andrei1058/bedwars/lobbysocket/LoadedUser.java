@@ -3,6 +3,7 @@ package com.andrei1058.bedwars.lobbysocket;
 import com.andrei1058.bedwars.api.language.Language;
 import org.bukkit.Bukkit;
 
+import java.util.Collections;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -40,6 +41,10 @@ public class LoadedUser {
         return requestTime;
     }
 
+    public UUID getUuid() {
+        return uuid;
+    }
+
     public String getArenaIdentifier() {
         return arenaIdentifier;
     }
@@ -59,5 +64,9 @@ public class LoadedUser {
     // if arena is started is used as staff teleport target
     public String getPartyOwnerOrSpectateTarget() {
         return partyOwnerOrSpectateTarget;
+    }
+
+    public static ConcurrentHashMap<UUID, LoadedUser> getLoaded() {
+        return loaded;
     }
 }

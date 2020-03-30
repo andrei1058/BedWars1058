@@ -27,7 +27,7 @@ maven-job2:
   script:
     - 'mvn versions:set -DnewVersion=20.3.1-SNAPSHOT'
     - 'mvn versions:update-child-modules'
-    - 'mvn clean install -s ci_settings.xml'
+    - 'mvn -DgitVer=git-$CI_COMMIT_SHORT_SHA- clean install -s ci_settings.xml'
   artifacts:
     paths:
       - bedwars-plugin/target/bedwars-*.jar
@@ -39,7 +39,7 @@ maven-rel:
   only:
     - 'master'
   script:
-    - 'mvn versions:set -DnewVersion=20.3'
+    - 'mvn versions:set -DnewVersion=20.3.1'
     - 'mvn versions:update-child-modules'
     - 'mvn -DgitVer='''' clean deploy -s ci_settings.xml'
   artifacts:
