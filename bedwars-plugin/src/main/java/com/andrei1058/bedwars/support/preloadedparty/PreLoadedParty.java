@@ -1,46 +1,54 @@
 package com.andrei1058.bedwars.support.preloadedparty;
 
 import com.andrei1058.bedwars.BedWars;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PreLoadedParty {
 
-    private String arenaIdentifier;
     private String owner;
     private List<Player> members = new ArrayList<>();
 
-    private static LinkedList<PreLoadedParty> preLoadedParties = new LinkedList<>();
+    private static ConcurrentHashMap<String, PreLoadedParty> preLoadedParties = new ConcurrentHashMap<>();
 
-    public PreLoadedParty(String arenaIdentifier, String owner){
-        this.arenaIdentifier = arenaIdentifier;
+    public PreLoadedParty(String owner){
+        PreLoadedParty plp = getPartyByOwner(owner);
+        if (plp != null){
+            plp.clean();
+        }
         this.owner = owner;
-        preLoadedParties.add(this);
+        preLoadedParties.put(owner, this);
     }
 
     public static PreLoadedParty getPartyByOwner(String owner){
-        for (PreLoadedParty plp : preLoadedParties){
-            if (plp.owner.equals(owner)) return plp;
-        }
-        return null;
+        return preLoadedParties.getOrDefault(owner, null);
     }
 
     public void addMember(Player player){
-        if (player.getName().equals(owner)){
-            BedWars.getParty().createParty(player);
-            preLoadedParties.remove(this);
-            for (Player p : members){
-                BedWars.getParty().addMember(player, p);
-            }
-            return;
-        }
         members.add(player);
     }
 
-    public static LinkedList<PreLoadedParty> getPreLoadedParties() {
+    public void teamUp(){
+        if (this.owner == null) return;
+        Player owner = Bukkit.getPlayer(this.owner);
+        if (owner == null) return;
+        if (!owner.isOnline()) return;
+        for (Player player : members){
+            if (!player.getName().equalsIgnoreCase(this.owner)){
+                BedWars.getParty().addMember(owner, player);
+            }
+        }
+        preLoadedParties.remove(this.owner);
+    }
+
+    public static ConcurrentHashMap<String, PreLoadedParty> getPreLoadedParties() {
         return preLoadedParties;
+    }
+    public void clean(){
+        preLoadedParties.remove(this.owner);
     }
 }

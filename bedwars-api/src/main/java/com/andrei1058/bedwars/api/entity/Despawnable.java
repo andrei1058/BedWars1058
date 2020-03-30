@@ -5,7 +5,9 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.api.server.VersionSupport;
 import org.bukkit.Bukkit;
+import org.bukkit.command.defaults.VersionCommand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
@@ -66,7 +68,7 @@ public class Despawnable {
         e.setCustomName(name);
     }
 
-    public Entity getEntity() {
+    public LivingEntity getEntity() {
         return e;
     }
 
@@ -84,6 +86,14 @@ public class Despawnable {
 
     public PlayerKillEvent.PlayerKillCause getDeathRegularCause() {
         return deathRegularCause;
+    }
+
+    public void destroy(){
+        if (getEntity() != null){
+            getEntity().damage(Integer.MAX_VALUE);
+        }
+        team = null;
+        api.getVersionSupport().getDespawnablesList().remove(uuid);
     }
 
     @Override

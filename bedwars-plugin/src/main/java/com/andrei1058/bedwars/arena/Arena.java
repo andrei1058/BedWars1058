@@ -10,6 +10,7 @@ import com.andrei1058.bedwars.api.arena.shop.ShopHolo;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.entity.Despawnable;
 import com.andrei1058.bedwars.api.events.gameplay.NextEventChangeEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerJoinArenaEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerLeaveArenaEvent;
@@ -51,6 +52,7 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.Comparator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
@@ -2055,11 +2057,17 @@ public class Arena implements IArena {
     }
 
     public void destroyData() {
+        destroyReJoins();
         if (worldName != null) arenaByIdentifier.remove(worldName);
         arenas.remove(this);
         for (ReJoinTask rjt : ReJoinTask.getReJoinTasks()) {
             if (rjt.getArena() == this) {
                 rjt.destroy();
+            }
+        }
+        for (Despawnable despawnable : new ArrayList<>(BedWars.nms.getDespawnablesList().values())){
+            if (despawnable.getTeam().getArena() == this){
+                despawnable.destroy();
             }
         }
         arenaByName.remove(arenaName);
@@ -2161,5 +2169,14 @@ public class Arena implements IArena {
             return ((IArena) obj).getWorldName().equals(this.getWorldName());
         }
         return false;
+    }
+
+    private void destroyReJoins(){
+        List<ReJoin> reJoins = new ArrayList<>(ReJoin.getReJoinList());
+        for (ReJoin reJoin : reJoins){
+            if (reJoin.getArena() == this){
+                reJoin.destroy();
+            }
+        }
     }
 }

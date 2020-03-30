@@ -14,7 +14,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
 @SuppressWarnings("WeakerAccess")
 public class EggBridge implements Listener {
@@ -23,26 +25,27 @@ public class EggBridge implements Listener {
     private static HashMap<Egg, EggBridgeTask> bridges = new HashMap<>();
 
     @EventHandler
-    public void onLaunch(ProjectileLaunchEvent e) {
+    public void onLaunch(ProjectileLaunchEvent event) {
         if (BedWars.getServerType() == ServerType.MULTIARENA) {
-            if (e.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
-                e.setCancelled(true);
+            if (event.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
+                event.setCancelled(true);
                 return;
             }
         }
-        if (e.getEntity() instanceof Egg) {
-            if (e.getEntity().getShooter() instanceof Player) {
-                Player p = (Player) e.getEntity().getShooter();
-                IArena a = Arena.getArenaByPlayer(p);
-                if (a != null) {
-                    if (a.isPlayer(p)) {
-                        EggBridgeThrowEvent event = new EggBridgeThrowEvent(p, a);
-                        Bukkit.getPluginManager().callEvent(event);
-                        if (e.isCancelled()) {
-                            e.setCancelled(true);
+        if (event.getEntity() instanceof Egg) {
+            Egg projectile = (Egg) event.getEntity();
+            if (projectile.getShooter() instanceof Player) {
+                Player shooter = (Player) projectile.getShooter();
+                IArena arena = Arena.getArenaByPlayer(shooter);
+                if (arena != null) {
+                    if (arena.isPlayer(shooter)) {
+                        EggBridgeThrowEvent throwEvent = new EggBridgeThrowEvent(shooter, arena);
+                        Bukkit.getPluginManager().callEvent(throwEvent);
+                        if (event.isCancelled()) {
+                            event.setCancelled(true);
                             return;
                         }
-                        bridges.put((Egg) e.getEntity(), new EggBridgeTask(p, e.getEntity(), a.getTeam(p).getColor()));
+                        bridges.put(projectile, new EggBridgeTask(shooter, projectile, arena.getTeam(shooter).getColor()));
                     }
                 }
             }
@@ -76,7 +79,7 @@ public class EggBridge implements Listener {
      *
      * @since API 11
      */
-    public static HashMap<Egg, EggBridgeTask> getBridges() {
-        return new HashMap<>(bridges);
+    public static Map<Egg, EggBridgeTask> getBridges() {
+        return Collections.unmodifiableMap(bridges);
     }
 }

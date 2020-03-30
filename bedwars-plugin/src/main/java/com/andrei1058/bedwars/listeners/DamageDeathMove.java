@@ -293,7 +293,7 @@ public class DamageDeathMove implements Listener {
                                 if (nms.isDespawnable(lh.getDamager())) {
                                     Despawnable d = nms.getDespawnablesList().get(lh.getDamager().getUniqueId());
                                     t2 = d.getTeam();
-                                    message = t.isBedDestroyed() ? Messages.PLAYER_DIE_DEBUG_FINAL_KILL : Messages.PLAYER_DIE_DEBUG_REGULAR;
+                                    message = d.getEntity().getType() == EntityType.IRON_GOLEM ? t.isBedDestroyed() ? Messages.PLAYER_DIE_IRON_GOLEM_FINAL_KILL : Messages.PLAYER_DIE_IRON_GOLEM_REGULAR : t.isBedDestroyed() ? Messages.PLAYER_DIE_DEBUG_FINAL_KILL : Messages.PLAYER_DIE_DEBUG_REGULAR;
                                     cause = t.isBedDestroyed() ? d.getDeathFinalCause() : d.getDeathRegularCause();
                                     killer = null;
                                 }

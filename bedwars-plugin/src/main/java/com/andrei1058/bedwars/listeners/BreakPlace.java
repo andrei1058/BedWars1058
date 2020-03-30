@@ -19,6 +19,7 @@ import com.andrei1058.bedwars.configuration.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -32,6 +33,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
@@ -134,6 +136,20 @@ public class BreakPlace implements Listener {
             if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
                 if (!isBuildSession(p)) {
                     e.setCancelled(true);
+                }
+            }
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onInteract(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        if (BedWars.getServerType() == ServerType.MULTIARENA
+                && player.getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
+            if (event.getClickedBlock() != null && event.getClickedBlock().getRelative(BlockFace.UP).getType() == Material.FIRE) {
+                if (!isBuildSession(player)) {
+                    event.setCancelled(true);
+                    return;
                 }
             }
         }

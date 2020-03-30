@@ -254,6 +254,7 @@ public class BedWars extends JavaPlugin {
                 ArenaSocket.lobbies.addAll(config.getList(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS));
                 new SendTask();
                 registerEvents(new AutoscaleListener(), new PrePartyListener());
+                Bukkit.getScheduler().runTaskTimerAsynchronously(this, new LoadedUsersCleaner(), 60L, 60L);
             } else {
                 registerEvents(new Ping());
             }
@@ -453,6 +454,8 @@ public class BedWars extends JavaPlugin {
 
         // Initialize team upgrades
         com.andrei1058.bedwars.upgrades.UpgradesManager.init();
+
+        PreLoadedCleaner.init();
     }
 
     public void onDisable() {

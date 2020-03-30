@@ -30,15 +30,15 @@ public class SQLite implements Database {
     @Override
     public void init() {
         File folder = new File(BedWars.plugin.getDataFolder() + "/Cache");
-        if (!folder.exists()){
-            if (!folder.mkdir()){
+        if (!folder.exists()) {
+            if (!folder.mkdir()) {
                 BedWars.plugin.getLogger().severe("Could not create /Cache folder!");
             }
         }
         File dataFolder = new File(folder.getPath() + "/shop.db");
         if (!dataFolder.exists()) {
             try {
-                if (!dataFolder.createNewFile()){
+                if (!dataFolder.createNewFile()) {
                     BedWars.plugin.getLogger().severe("Could not create /Cache/shop.db file!");
                 }
             } catch (IOException e) {
@@ -106,16 +106,21 @@ public class SQLite implements Database {
     @Override
     public void setQuickBuySlot(UUID p, String shopPath, int slot) {
         if (!isConnected()) init();
-        try (ResultSet rs = connection.prepareStatement("SELECT id FROM quick_buy WHERE uuid = '" + p.toString() + "';").executeQuery()) {
-            if (!rs.next()) {
-                try (PreparedStatement ps = connection.prepareStatement("INSERT INTO quick_buy (uuid, slot_19, slot_20, slot_21, slot_22, slot_23, slot_24, slot_25, slot_28, slot_29, slot_30, slot_31, slot_32, slot_33, slot_34, slot_37, slot_38, slot_39, slot_40, slot_41, slot_42, slot_43) VALUES('" + p.toString() + "',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ');")) {
-                    ps.executeUpdate();
-
+        try (PreparedStatement statement = connection.prepareStatement("SELECT id FROM quick_buy WHERE uuid = ?;")) {
+            statement.setString(1, p.toString());
+            try (ResultSet rs = statement.executeQuery()) {
+                if (!rs.next()) {
+                    try (PreparedStatement ps = connection.prepareStatement("INSERT INTO quick_buy (uuid, slot_19, slot_20, slot_21, slot_22, slot_23, slot_24, slot_25, slot_28, slot_29, slot_30, slot_31, slot_32, slot_33, slot_34, slot_37, slot_38, slot_39, slot_40, slot_41, slot_42, slot_43) VALUES(?,' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ');")) {
+                        ps.setString(1, p.toString());
+                        ps.execute();
+                    }
                 }
-            }
-            BedWars.debug("UPDATE SET SLOT " + slot + " identifier " + shopPath);
-            try (PreparedStatement ps = connection.prepareStatement("UPDATE quick_buy SET slot_" + slot + " = '" + shopPath + "' WHERE uuid = '" + p.toString() + "';")) {
-                ps.executeUpdate();
+                BedWars.debug("UPDATE SET SLOT " + slot + " identifier " + shopPath);
+                try (PreparedStatement ps = connection.prepareStatement("UPDATE quick_buy SET slot_" + slot + " = '?' WHERE uuid = ?;")) {
+                    ps.setString(1, shopPath);
+                    ps.setString(2, p.toString());
+                    ps.executeUpdate();
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -126,7 +131,8 @@ public class SQLite implements Database {
     public String getQuickBuySlots(UUID p, int slot) {
         String result = "";
         if (!isConnected()) init();
-        try (PreparedStatement ps = connection.prepareStatement("SELECT slot_" + slot + " FROM quick_buy WHERE uuid = '" + p.toString() + "';")) {
+        try (PreparedStatement ps = connection.prepareStatement("SELECT slot_" + slot + " FROM quick_buy WHERE uuid = ?;")) {
+            ps.setString(1, p.toString());
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) result = rs.getString("slot_" + slot);
             }
@@ -139,10 +145,12 @@ public class SQLite implements Database {
     @Override
     public boolean hasQuickBuy(UUID uuid) {
         if (!isConnected()) init();
-        try (ResultSet rs = connection.createStatement().executeQuery("SELECT id FROM quick_buy WHERE uuid = '" + uuid.toString() + "';")) {
-            if (rs.next()) {
-                rs.close();
-                return true;
+        try (Statement statement = connection.createStatement()) {
+            try (ResultSet rs = statement.executeQuery("SELECT id FROM quick_buy WHERE uuid = '" + uuid.toString() + "';")) {
+                if (rs.next()) {
+                    rs.close();
+                    return true;
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -154,7 +162,8 @@ public class SQLite implements Database {
     public Object[] getLevelData(UUID player) {
         if (!isConnected()) init();
         Object[] r = new Object[]{1, 0, "", 0};
-        try (PreparedStatement ps = connection.prepareStatement("SELECT level, xp, name, next_cost FROM player_levels WHERE uuid = '" + player.toString() + "';")) {
+        try (PreparedStatement ps = connection.prepareStatement("SELECT level, xp, name, next_cost FROM player_levels WHERE uuid = ?;")) {
+            ps.setString(1, player.toString());
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     r[0] = rs.getInt("level");
@@ -172,7 +181,8 @@ public class SQLite implements Database {
     @Override
     public void setLevelData(UUID player, int level, int xp, String displayName, int nextCost) {
         if (!isConnected()) init();
-        try (PreparedStatement pss = connection.prepareStatement("SELECT id from player_levels WHERE uuid = '" + player.toString() + "';")) {
+        try (PreparedStatement pss = connection.prepareStatement("SELECT id from player_levels WHERE uuid = ?;")) {
+            pss.setString(1, player.toString());
             try (ResultSet rs = pss.executeQuery()) {
                 if (!rs.next()) {
                     try (PreparedStatement ps = connection.prepareStatement("INSERT INTO player_levels (uuid, level, xp, name, next_cost) VALUES (?, ?, ?, ?, ?);")) {
@@ -204,14 +214,18 @@ public class SQLite implements Database {
     @Override
     public void setLanguage(UUID player, String iso) {
         if (!isConnected()) init();
-        try (ResultSet rs = connection.createStatement().executeQuery("SELECT iso FROM player_language WHERE uuid = '" + player.toString() + "';")) {
-            if (rs.next()) {
-                try (Statement st = connection.createStatement()) {
-                    st.executeUpdate("UPDATE player_language SET iso='" + iso + "' WHERE uuid = '" + player.toString() + "';");
-                }
-            } else {
-                try (Statement st = connection.createStatement()) {
-                    st.executeUpdate("INSERT INTO player_language VALUES (0, '" + player.toString() + "', '" + iso + "');");
+        try (Statement statement = connection.createStatement()) {
+            try (ResultSet rs = statement.executeQuery("SELECT iso FROM player_language WHERE uuid = '" + player.toString() + "';")) {
+                if (rs.next()) {
+                    try (Statement st = connection.createStatement()) {
+                        st.executeUpdate("UPDATE player_language SET iso='" + iso + "' WHERE uuid = '" + player.toString() + "';");
+                    }
+                } else {
+                    try (PreparedStatement st = connection.prepareStatement("INSERT INTO player_language VALUES (0, ?, ?);")) {
+                        st.setString(1, player.toString());
+                        st.setString(2, iso);
+                        st.execute();
+                    }
                 }
             }
         } catch (SQLException e) {
@@ -223,9 +237,12 @@ public class SQLite implements Database {
     public String getLanguage(UUID player) {
         if (!isConnected()) init();
         String iso = Language.getDefaultLanguage().getIso();
-        try (ResultSet rs = connection.createStatement().executeQuery("SELECT iso FROM player_language WHERE uuid = '" + player.toString() + "';")) {
-            if (rs.next()) {
-                iso = rs.getString("iso");
+        try (PreparedStatement ps = connection.prepareStatement("SELECT iso FROM player_language WHERE uuid = ?;")) {
+            ps.setString(1, player.toString());
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    iso = rs.getString("iso");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

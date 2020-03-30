@@ -6,13 +6,13 @@ import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.events.gameplay.EggBridgeBuildEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
+import com.andrei1058.bedwars.listeners.EggBridge;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.scheduler.BukkitTask;
 
 import static com.andrei1058.bedwars.BedWars.nms;
@@ -20,14 +20,13 @@ import static com.andrei1058.bedwars.BedWars.nms;
 @SuppressWarnings("WeakerAccess")
 public class EggBridgeTask implements Runnable {
 
-    private Projectile projectile;
+    private Egg projectile;
     private TeamColor teamColor;
     private Player player;
     private IArena arena;
     private BukkitTask task;
 
-    public EggBridgeTask(Player player, Projectile projectile, TeamColor teamColor) {
-        if (!(projectile instanceof Egg)) return;
+    public EggBridgeTask(Player player, Egg projectile, TeamColor teamColor) {
         IArena a = Arena.getArenaByPlayer(player);
         if (a == null) return;
         this.arena = a;
@@ -41,7 +40,7 @@ public class EggBridgeTask implements Runnable {
         return teamColor;
     }
 
-    public Projectile getProjectile() {
+    public Egg getProjectile() {
         return projectile;
     }
 
@@ -58,22 +57,11 @@ public class EggBridgeTask implements Runnable {
 
         Location loc = getProjectile().getLocation();
 
-        if (getProjectile().isDead()) {
-            task.cancel();
-            return;
-        }
-
-        if (!arena.isPlayer(getPlayer())){
-            task.cancel();
-            return;
-        }
-
-        if (getPlayer().getLocation().distance(getProjectile().getLocation()) > 27) {
-            task.cancel();
-            return;
-        }
-        if (getPlayer().getLocation().getY() - getProjectile().getLocation().getY() > 9) {
-            task.cancel();
+        if (getProjectile().isDead()
+                || !arena.isPlayer(getPlayer())
+                || getPlayer().getLocation().distance(getProjectile().getLocation()) > 27
+                || getPlayer().getLocation().getY() - getProjectile().getLocation().getY() > 9) {
+            EggBridge.removeEgg(projectile);
             return;
         }
 
