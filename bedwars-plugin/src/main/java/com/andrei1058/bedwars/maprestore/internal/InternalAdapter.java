@@ -149,14 +149,23 @@ public class InternalAdapter extends RestoreAdapter {
                         //s.getPlayer().sendMessage(ChatColor.RED + "Could not find any map called " + s.getWorldName());
                         //s.close();
                         //return;
-                        s.getPlayer().sendMessage(ChatColor.GREEN + "Creating a new void map: " + s.getWorldName());
+                        try {
+                            s.getPlayer().sendMessage(ChatColor.GREEN + "Creating a new void map: " + s.getWorldName());
+                            World w = Bukkit.createWorld(wc);
+                            w.setKeepSpawnInMemory(true);
+                            Bukkit.getScheduler().runTaskLater(plugin, s::teleportPlayer, 20L);
+                        } catch (Exception ex){
+                            ex.printStackTrace();
+                            s.close();
+                        }
+                        return;
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     s.close();
                     return;
                 }
-                s.teleportPlayer();
+                Bukkit.getScheduler().runTaskLater(plugin, s::teleportPlayer, 20L);
             });
         });
     }
