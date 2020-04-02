@@ -156,6 +156,7 @@ public class GameStartingTask implements Runnable, StartingTask {
                 //Add heart on players head
                 for (SBoard sb : SBoard.getScoreboards().values()) {
                     if (sb.getArena() == getArena()) {
+                        //todo manage with sidebar api
                         sb.addHealthIcon();
                     }
                 }
