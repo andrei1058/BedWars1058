@@ -383,6 +383,11 @@ public class SBoard {
                 if (p.isOnline())
                     new SBoard(p, getScoreboard(p, "scoreboard." + arena.getGroup() + ".starting", Messages.SCOREBOARD_DEFAULT_STARTING), arena);
             }, 15L);
+        } else if (arena.getStatus() == GameState.playing){
+            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
+                if (p.isOnline())
+                    new SBoard(p, getScoreboard(p, "scoreboard." + arena.getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_STARTING), arena);
+            }, 15L);
         }
     }
 
