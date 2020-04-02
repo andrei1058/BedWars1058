@@ -342,6 +342,8 @@ public class SBoard {
      * Update spectators for player.
      */
     void updateSpectator(Player p, boolean value) {
+        if (getArena() == null) return;
+        if (getArena().getTeam(p) != null) return;
         Team collide;
         if (sb.getTeam("spectators") == null) {
             collide = sb.registerNewTeam("spectators");
