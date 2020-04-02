@@ -10,7 +10,7 @@ maven-dev:
   only:
     - 'development'
   script:
-    - 'mvn versions:set -DnewVersion=20.3.1-SNAPSHOT'
+    - 'mvn versions:set -DnewVersion=20.4-SNAPSHOT'
     - 'mvn versions:update-child-modules'
     - 'mvn -DgitVer=git-$CI_COMMIT_SHORT_SHA- clean deploy -s ci_settings.xml'
   artifacts:
@@ -25,7 +25,7 @@ maven-job2:
     - 'development'
     - 'master'
   script:
-    - 'mvn versions:set -DnewVersion=20.3.1-SNAPSHOT'
+    - 'mvn versions:set -DnewVersion=20.4-SNAPSHOT'
     - 'mvn versions:update-child-modules'
     - 'mvn -DgitVer=git-$CI_COMMIT_SHORT_SHA- clean install -s ci_settings.xml'
   artifacts:
@@ -39,7 +39,7 @@ maven-rel:
   only:
     - 'master'
   script:
-    - 'mvn versions:set -DnewVersion=20.3.1'
+    - 'mvn versions:set -DnewVersion=20.4'
     - 'mvn versions:update-child-modules'
     - 'mvn -DgitVer='''' clean deploy -s ci_settings.xml'
   artifacts:

@@ -342,6 +342,8 @@ public class SBoard {
      * Update spectators for player.
      */
     void updateSpectator(Player p, boolean value) {
+        if (getArena() == null) return;
+        if (getArena().getTeam(p) != null) return;
         Team collide;
         if (sb.getTeam("spectators") == null) {
             collide = sb.registerNewTeam("spectators");
@@ -382,6 +384,11 @@ public class SBoard {
             Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
                 if (p.isOnline())
                     new SBoard(p, getScoreboard(p, "scoreboard." + arena.getGroup() + ".starting", Messages.SCOREBOARD_DEFAULT_STARTING), arena);
+            }, 15L);
+        } else if (arena.getStatus() == GameState.playing){
+            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
+                if (p.isOnline())
+                    new SBoard(p, getScoreboard(p, "scoreboard." + arena.getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING), arena);
             }, 15L);
         }
     }
