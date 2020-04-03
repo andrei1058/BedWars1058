@@ -31,7 +31,6 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.Team;
 
@@ -39,7 +38,6 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
-
 
 public class v1_15_R1 extends VersionSupport {
 
@@ -376,7 +374,6 @@ public class v1_15_R1 extends VersionSupport {
         }
         EnderDragon ed = (EnderDragon) l.getWorld().spawnEntity(l, EntityType.ENDER_DRAGON);
         ed.setPhase(EnderDragon.Phase.CIRCLING);
-        ed.setMetadata("DragonTeam", new FixedMetadataValue(getPlugin(), bwt));
     }
 
     @Override
