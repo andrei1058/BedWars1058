@@ -77,6 +77,7 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_START_COUNTDOWN_REGULAR = "countdowns.game-start-regular";
     public static final String GENERAL_CONFIGURATION_START_COUNTDOWN_SHORTENED = "countdowns.game-start-shortened";
     public static final String GENERAL_CONFIGURATION_START_COUNTDOWN_HALF = "countdowns.game-start-half-arena";
+    public static final String GENERAL_CONFIGURATION_RESTART = "countdowns.game-restart";
     public static final String GENERAL_CONFIGURATION_BEDS_DESTROY_COUNTDOWN = "countdowns.next-event-beds-destroy";
     public static final String GENERAL_CONFIGURATION_DRAGON_SPAWN_COUNTDOWN = "countdowns.next-event-dragon-spawn";
     public static final String GENERAL_CONFIGURATION_GAME_END_COUNTDOWN = "countdowns.next-event-game-end";
