@@ -8,6 +8,7 @@ import com.andrei1058.bedwars.api.server.RestoreAdapter;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.arena.despawnables.TargetListener;
+import com.andrei1058.bedwars.arena.tasks.ScoreboardRefresh;
 import com.andrei1058.bedwars.commands.party.PartyCommand;
 import com.andrei1058.bedwars.commands.rejoin.RejoinCommand;
 import com.andrei1058.bedwars.commands.shout.ShoutCommand;
@@ -456,6 +457,8 @@ public class BedWars extends JavaPlugin {
         com.andrei1058.bedwars.upgrades.UpgradesManager.init();
 
         PreLoadedCleaner.init();
+
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new ScoreboardRefresh(), 20L, 20L);
     }
 
     public void onDisable() {

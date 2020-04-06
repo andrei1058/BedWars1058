@@ -70,13 +70,6 @@ public class PlayerLevel {
         updateProgressBar();
 
         modified = false;
-
-        Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
-            SBoard sb = SBoard.getSBoard(getUuid());
-            if (sb != null) {
-                sb.refresh();
-            }
-        }, 10L);
     }
 
     /**

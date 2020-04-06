@@ -15,7 +15,7 @@ public class InvisibilityPotionListener implements Listener {
             if (e.getPlayer().getPassenger() == null){
                 for (SBoard sb : SBoard.getScoreboards().values()){
                     if (sb.getArena() == null) continue;
-                    if (sb.getArena().equals(e.getArena()) && !e.getTeam().isMember(sb.getP())){
+                    if (sb.getArena().equals(e.getArena()) && !e.getTeam().isMember(sb.getPlayer())){
                         sb.invisibilityPotion(e.getTeam(), e.getPlayer(), true);
                     }
                 }
@@ -24,7 +24,7 @@ public class InvisibilityPotionListener implements Listener {
             if (e.getPlayer().getPassenger() == null){
                 for (SBoard sb : SBoard.getScoreboards().values()){
                     if (sb.getArena() == null) continue;
-                    if (sb.getArena().equals(e.getArena()) && !e.getTeam().isMember(sb.getP())){
+                    if (sb.getArena().equals(e.getArena()) && !e.getTeam().isMember(sb.getPlayer())){
                         sb.invisibilityPotion(e.getTeam(), e.getPlayer(), false);
                     }
                 }

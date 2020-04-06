@@ -7,13 +7,16 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
-import com.andrei1058.bedwars.levels.internal.PlayerLevel;
-import com.andrei1058.bedwars.support.papi.SupportPAPI;
+import com.andrei1058.bedwars.stats.StatsManager;
+import com.andrei1058.spigot.sidebar.PlaceholderProvider;
+import com.andrei1058.spigot.sidebar.Sidebar;
+import com.andrei1058.spigot.sidebar.SidebarLine;
+import com.andrei1058.spigot.sidebar.SidebarManager;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -25,47 +28,115 @@ import static com.andrei1058.bedwars.arena.Misc.replaceStatsPlaceholders;
 
 public class SBoard {
 
-    private static ScoreboardManager sbm = Bukkit.getScoreboardManager();
-    private List<String> placeholders = Arrays.asList("{on}", "{max}", "{time}", "{nextEvent}", "{date}");
-    private static ConcurrentHashMap<UUID, SBoard> scoreboards = new ConcurrentHashMap<>();
-    private HashMap<Team, String> toRefresh = new HashMap<>();
-    private Scoreboard sb = sbm.getNewScoreboard();
-    private Player p;
-    private Objective o;
-    private IArena arena;
-    private SimpleDateFormat dateFormat;
+    private static SidebarManager sidebarManager = null;
 
-    private SBoard(@NotNull Player p, @NotNull List<String> content, IArena arena) {
+    private Sidebar handle;
+    private IArena arena;
+    private static ConcurrentHashMap<UUID, SBoard> scoreboards = new ConcurrentHashMap<>();
+    private Player player;
+    private SimpleDateFormat dateFormat;
+    private Scoreboard scoreboard;
+
+    private SBoard(@NotNull Player p, @NotNull List<String> content, @Nullable IArena arena) {
+        if (content.isEmpty()) return;
+        if (sidebarManager == null) {
+            try {
+                sidebarManager = new SidebarManager();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            }
+        }
+
+        this.arena = arena;
+
         SBoard sbb = scoreboards.get(p.getUniqueId());
         if (sbb != null) {
             sbb.remove();
         }
 
-        this.p = p;
-        o = sb.registerNewObjective("Sb", "or");
-        o.setDisplaySlot(DisplaySlot.SIDEBAR);
-        this.arena = arena;
-        dateFormat = new SimpleDateFormat(getMsg(p, Messages.FORMATTING_SCOREBOARD_NEXEVENT_TIMER));
-        if (this.arena != null) {
-            placeholders = new ArrayList<>(placeholders);
-            this.placeholders.add("{kills}");
-            this.placeholders.add("{finalKills}");
-            this.placeholders.add("{beds}");
-            this.placeholders.add("{deaths}");
-        } else {
-            placeholders = new ArrayList<>(placeholders);
-            this.placeholders.add("{progress}");
-            this.placeholders.add("{level}");
-            this.placeholders.add("{currentXp}");
-            this.placeholders.add("{requiredXp}");
-        }
-        this.setStrings(content);
-        Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
-            if (!p.isOnline()) return;
-            p.setScoreboard(sb);
-            scoreboards.put(p.getUniqueId(), this);
-        }, 10L);
+        this.player = p;
 
+        LinkedList<PlaceholderProvider> placeholders = new LinkedList<>();
+        placeholders.add(new PlaceholderProvider("{on}", () -> {
+            if (this.arena == null) {
+                return String.valueOf(Bukkit.getOnlinePlayers().size());
+            }
+            return String.valueOf(this.arena.getPlayers().size());
+        }));
+        placeholders.add(new PlaceholderProvider("{max}", () -> {
+            if (this.arena == null) {
+                return String.valueOf(Bukkit.getMaxPlayers());
+            }
+            return String.valueOf(this.arena.getMaxPlayers());
+        }));
+        placeholders.add(new PlaceholderProvider("{time}", () -> {
+            if (this.arena == null) {
+                return new SimpleDateFormat(getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis()));
+            } else if (this.arena.getStatus() != GameState.playing) {
+                if (this.arena.getStatus() == GameState.starting) {
+                    if (getArena().getStartingTask() != null) {
+                        return String.valueOf(getArena().getStartingTask().getCountdown());
+                    }
+                }
+                return new SimpleDateFormat(getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis()));
+            }
+            return getNextEventTime();
+        }));
+        placeholders.add(new PlaceholderProvider("{nextEvent}", this::getNextEventName));
+        placeholders.add(new PlaceholderProvider("{date}", () -> new SimpleDateFormat(getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis()))));
+
+        placeholders.add(new PlaceholderProvider("{kills}", () -> {
+            if (this.arena == null) {
+                return String.valueOf(StatsManager.getStatsCache().getPlayerKills(getPlayer().getUniqueId()));
+            }
+            return String.valueOf(this.arena.getPlayerKills(getPlayer(), false));
+        }));
+        placeholders.add(new PlaceholderProvider("{finalKills}", () -> {
+            if (this.arena == null) {
+                return String.valueOf(StatsManager.getStatsCache().getPlayerFinalKills(getPlayer().getUniqueId()));
+            }
+            return String.valueOf(this.arena.getPlayerKills(getPlayer(), true));
+        }));
+        placeholders.add(new PlaceholderProvider("{beds}", () -> {
+            if (this.arena == null) {
+                return String.valueOf(StatsManager.getStatsCache().getPlayerBedsDestroyed(getPlayer().getUniqueId()));
+            }
+            return String.valueOf(this.arena.getPlayerBedsDestroyed(getPlayer()));
+        }));
+        placeholders.add(new PlaceholderProvider("{deaths}", () -> {
+            if (this.arena == null) {
+                return String.valueOf(StatsManager.getStatsCache().getPlayerDeaths(getPlayer().getUniqueId()));
+            }
+            return String.valueOf(this.arena.getPlayerDeaths(getPlayer(), false));
+        }));
+        placeholders.add(new PlaceholderProvider("{progress}", () -> BedWars.getLevelSupport().getProgressBar(getPlayer())));
+        placeholders.add(new PlaceholderProvider("{level}", () -> BedWars.getLevelSupport().getLevel(getPlayer())));
+        placeholders.add(new PlaceholderProvider("{currentXp}", () -> BedWars.getLevelSupport().getCurrentXpFormatted(getPlayer())));
+        placeholders.add(new PlaceholderProvider("{requiredXp}", () -> BedWars.getLevelSupport().getRequiredXpFormatted(getPlayer())));
+
+        this.handle = sidebarManager.createSidebar(new SidebarLine() {
+            @NotNull
+            @Override
+            public String getLine() {
+                return "BedWars1058";
+            }
+        }, new ArrayList<>(), placeholders);
+
+        dateFormat = new SimpleDateFormat(getMsg(p, Messages.FORMATTING_SCOREBOARD_NEXEVENT_TIMER));
+
+        this.setStrings(content);
+
+
+        if (!p.isOnline()) {
+            remove();
+            return;
+        }
+
+        handle.apply(getPlayer());
+        scoreboards.put(p.getUniqueId(), this);
+        handle.refreshPlaceholders();
+
+        /* not ready
         if (arena != null) {
             if (arena.getStatus() == GameState.playing) {
                 addHealthIcon();
@@ -73,190 +144,112 @@ public class SBoard {
                 p.damage(0.2);
             }
         }
+        */
+        if (this.arena != null) {
+            if (arena.isSpectator(player)) {
+                //todo
+                //giveTeamColorTag();
+                //collision rule?
+            }
+        }
     }
 
-    /**
-     * Used for spectators
-     */
-    private SBoard(@NotNull Player p, IArena arena) {
-        this.p = p;
-        o = sb.registerNewObjective("Sb", "or");
-        o.setDisplaySlot(DisplaySlot.SIDEBAR);
+    public void setArena(IArena arena) {
         this.arena = arena;
-        dateFormat = new SimpleDateFormat(getMsg(p, Messages.FORMATTING_SCOREBOARD_NEXEVENT_TIMER));
-        this.setStrings(getScoreboard(p, "scoreboard." + arena.getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING));
-        Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
-            if (!p.isOnline()) return;
-            p.setScoreboard(sb);
-            scoreboards.put(p.getUniqueId(), this);
-            giveTeamColorTag();
-            //show spectator tag in sb to other spectators
-            for (SBoard sb : SBoard.getScoreboards().values()) {
-                if (sb.getArena() == getArena()) {
-                    sb.updateSpectator(sb.getP(), false);
+    }
+
+    private void setStrings(@NotNull List<String> strings) {
+        if (arena != null) {
+            if (arena.getStatus() == GameState.playing || arena.getStatus() == GameState.restarting) {
+                ITeam team = arena.getTeam(getPlayer());
+                if (team != null) {
+                    getPlayer().setPlayerListName(team.getColor() + getPlayer().getName());
                 }
             }
-        }, 10L);
-    }
-
-    public void setStrings(List<String> strings) {
-        for (Team t1 : sb.getTeams()) {
-            t1.unregister();
         }
-        toRefresh.clear();
-        o.setDisplayName(strings.get(0));
-        int score = 0;
-        for (int x = strings.size(); x > 1; x--) {
-            Team t = sb.registerNewTeam("team" + x);
-            t.addEntry(ChatColor.values()[x - 1].toString());
-            o.getScore(ChatColor.values()[x - 1].toString()).setScore(score);
-            score++;
-            String temp = strings.get(x - 1);
-            temp = temp.replace("{generatorUpgrade}", "{nextEvent}")
-                    .replace("{generatorTimer}", "{time}");
-            temp = temp.replace("{level}", BedWars.getLevelSupport().getLevel(p));
-            temp = temp.replace("{progress}", BedWars.getLevelSupport().getProgressBar(p));
-            temp = temp.replace("{currentXp}", BedWars.getLevelSupport().getCurrentXpFormatted(p));
-            temp = temp.replace("{requiredXp}", BedWars.getLevelSupport().getRequiredXpFormatted(p));
+        while (handle.linesAmount() > 0) {
+            handle.removeLine(0);
+        }
+        String title = strings.get(0);
+        strings.remove(0);
+        handle.setTitle(new SidebarLine() {
+            @NotNull
+            @Override
+            public String getLine() {
+                return title;
+            }
+        });
+        for (String temp : strings) {
             temp = temp.replace("{server_ip}", BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
                     .replace("{version}", plugin.getDescription().getVersion())
                     .replace("{server}", config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID));
-            for (String ph : placeholders) {
-                if (temp.contains(ph)) {
-                    if (!toRefresh.containsKey(t)) {
-                        toRefresh.put(t, temp);
-                    }
-                }
-            }
             if (arena != null) {
+                //Language language = Language.getPlayerLanguage(player);
                 for (ITeam teams : arena.getTeams()) {
-                    if (temp.contains("{Team" + teams.getName() + "Status}")) {
-                        if (!toRefresh.containsKey(t)) {
-                            toRefresh.put(t, temp);
-                        }
-                    }
+                    handle.addPlaceholder(new PlaceholderProvider("{Team" + teams.getName() + "Status}", () -> (teams.isBedDestroyed() ? teams.getSize() > 0 ? getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED).replace("{remainingPlayers}",
+                            String.valueOf(teams.getSize())) : getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED) : getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE)) + (teams.isMember(getPlayer()) ? getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM) : "")));
+                    //handle.addPlaceholder(new PlaceholderProvider("{Team" + teams.getName() + "Color}", () -> teams.getColor().toString()));
+                    //handle.addPlaceholder(new PlaceholderProvider("{Team" + teams.getName() + "Name}", () -> teams.getDisplayName(language)));
                 }
             }
             if (arena == null) {
-
-                temp = temp.replace("{on}", String.valueOf(Bukkit.getOnlinePlayers().size()))
-                        .replace("{max}", String.valueOf(Bukkit.getServer().getMaxPlayers())).replace("{date}",
-                                new SimpleDateFormat(getMsg(getP(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis())))
-                        .replace("{money}", String.valueOf(getEconomy().getMoney(p))).replace("{progress}", PlayerLevel.getLevelByPlayer(p.getUniqueId()).getProgress())
-                        .replace("{level}", PlayerLevel.getLevelByPlayer(p.getUniqueId()).getLevelName()).replace("{currentXp}", PlayerLevel.getLevelByPlayer(p.getUniqueId()).getFormattedCurrentXp())
-                        .replace("{requiredXp}", PlayerLevel.getLevelByPlayer(p.getUniqueId()).getFormattedRequiredXp());
-
-                setContent(t, replaceStatsPlaceholders(getP(), temp, false));
-
-            } else if (arena.getStatus() == GameState.waiting || arena.getStatus() == GameState.starting) {
-                String time = "0";
-                if (getArena().getStartingTask() != null) {
-                    time = String.valueOf(getArena().getStartingTask().getCountdown());
-                }
-                setContent(t, temp.replace("{map}", arena.getDisplayName())
-                        .replace("{on}", String.valueOf(arena.getPlayers().size())).replace("{max}", String.valueOf(arena.getMaxPlayers()))
-                        .replace("{time}", time).replace("{player}", p.getDisplayName())
-                        .replace("{money}", String.valueOf(getEconomy().getMoney(p))).replace("{date}", new SimpleDateFormat(getMsg(getP(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis())))
-                        .replace("{group}", arena.getGroup()).replace("{deaths}", String.valueOf(getArena().getPlayerDeaths(p, false))));
-            } else if (arena.getStatus() == GameState.playing) {
-                String[] ne = getNextEvent();
-                for (ITeam team : arena.getTeams()) {
-                    temp = temp.replace("{Team" + team.getName() + "Color}", team.getColor().chat().toString()).replace("{Team" + team.getName() + "Name}",
-                            team.getDisplayName(Language.getPlayerLanguage(getP()))).replace("{Team" + team.getName() + "Status}", (team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED).replace("{remainingPlayers}",
-                            String.valueOf(team.getSize())) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE)) + (team.isMember(getP()) ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM) : ""));
-                }
-                setContent(t, temp.replace("{map}", arena.getDisplayName())
-                        .replace("{on}", String.valueOf(arena.getPlayers().size())).replace("{max}", String.valueOf(arena.getMaxPlayers()))
-                        .replace("{player}", p.getDisplayName()).replace("{date}", new SimpleDateFormat(getMsg(getP(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis())))
-                        .replace("{kills}", String.valueOf(arena.getPlayerKills(getP(), false))).replace("{finalKills}", String.valueOf(arena.getPlayerKills(getP(), true)))
-                        .replace("{beds}", String.valueOf(arena.getPlayerBedsDestroyed(getP()))).replace("{time}", ne[1])
-                        .replace("{nextEvent}", ne[0]).replace("{money}", String.valueOf(getEconomy().getMoney(p))).replace("{deaths}", String.valueOf(getArena().getPlayerDeaths(p, false))));
-            }
-        }
-    }
-
-    private void setContent(Team t, String s) {
-        s = SupportPAPI.getSupportPAPI().replace(getP(), s);
-        if (s.length() >= 16) {
-            String prefix = s.substring(0, 16);
-            String suffix;
-            if (prefix.endsWith("&") || prefix.endsWith("§")) {
-                prefix = prefix.substring(0, prefix.length() - 1);
-                suffix = s.substring(prefix.length());
-            } else if (prefix.substring(0, 15).endsWith("&") || prefix.substring(0, 15).endsWith("§")) {
-                prefix = prefix.substring(0, prefix.length() - 2);
-                suffix = s.substring(prefix.length());
+                temp = temp.replace("{money}", String.valueOf(getEconomy().getMoney(player))).replace("{player}", player.getName());
+                temp = replaceStatsPlaceholders(getPlayer(), temp, true);
             } else {
-                suffix = ChatColor.getLastColors(prefix) + s.substring(prefix.length());
-            }
-            if (suffix.length() > 16) {
-                suffix = suffix.substring(0, 16);
-            }
-            t.setPrefix(prefix);
-            t.setSuffix(suffix);
-        } else {
-            t.setPrefix(s);
-            t.setSuffix("");
-        }
-    }
-
-
-    public void refresh() {
-        String date = new SimpleDateFormat(getMsg(getP(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis()));
-        if (arena == null) {
-            for (Map.Entry<Team, String> e : toRefresh.entrySet()) {
-                setContent(e.getKey(), e.getValue().replace("{on}", String.valueOf(Bukkit.getOnlinePlayers().size()))
-                        .replace("{max}", String.valueOf(Bukkit.getServer().getMaxPlayers())).replace("{date}", date));
-            }
-        } else {
-            if (arena.getStatus() == GameState.waiting || arena.getStatus() == GameState.starting) {
-                String time = "0";
-                if (getArena().getStartingTask() != null) {
-                    time = String.valueOf(getArena().getStartingTask().getCountdown());
-                }
-                for (Map.Entry<Team, String> e : toRefresh.entrySet()) {
-                    setContent(e.getKey(), e.getValue().replace("{on}", String.valueOf(arena.getPlayers().size()))
-                            .replace("{max}", String.valueOf(arena.getMaxPlayers()))
-                            .replace("{time}", time).replace("{date}", date));
-                }
-            } else if (arena.getStatus() == GameState.playing) {
-                if (getArena().getPlayingTask() == null) return;
-                String kills = String.valueOf(arena.getPlayerKills(getP(), false)), finalKills = String.valueOf(arena.getPlayerKills(getP(), true)),
-                        beds = String.valueOf(arena.getPlayerBedsDestroyed(getP()));
-                String[] ne = getNextEvent();
-                for (Map.Entry<Team, String> e : toRefresh.entrySet()) {
-                    String text = e.getValue();
+                if (arena.getStatus() == GameState.playing || arena.getStatus() == GameState.restarting) {
                     for (ITeam team : arena.getTeams()) {
-                        text = text.replace("{Team" + team.getName() + "Color}", team.getColor().chat().toString())
-                                .replace("{Team" + team.getName() + "Name}", team.getDisplayName(Language.getPlayerLanguage(getP())))
-                                .replace("{Team" + team.getName() + "Status}", (team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED)
-                                        .replace("{remainingPlayers}", String.valueOf(team.getSize())) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED) : getMsg(getP(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE)) + (team.isMember(getP()) ? getMsg(getP(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM) : ""));
+                        temp = temp.replace("{Team" + team.getName() + "Color}", team.getColor().chat().toString()).replace("{Team" + team.getName() + "Name}",
+                                team.getDisplayName(Language.getPlayerLanguage(getPlayer()))).replace("{Team" + team.getName() + "Status}", (team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED).replace("{remainingPlayers}",
+                                String.valueOf(team.getSize())) : getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED) : getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE)) + (team.isMember(getPlayer()) ? getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM) : ""));
                     }
-                    setContent(e.getKey(), text.replace("{on}", String.valueOf(arena.getPlayers().size())).replace("{max}", String.valueOf(arena.getMaxPlayers()))
-                            .replace("{date}", date).replace("{kills}", kills).replace("{finalKills}", finalKills).replace("{beds}", beds)
-                            .replace("{nextEvent}", ne[0])
-                            .replace("{time}", ne[1]).replace("{deaths}", String.valueOf(getArena().getPlayerDeaths(p, false))));
+                    temp = temp.replace("{map}", arena.getDisplayName())
+                            .replace("{player}", player.getDisplayName())
+                            .replace("{money}", String.valueOf(getEconomy().getMoney(player)));
                 }
+                temp = temp.replace("{map}", arena.getDisplayName())
+                        .replace("{player}", player.getName())
+                        .replace("{money}", String.valueOf(getEconomy().getMoney(player)));
             }
+
+
+            String finalTemp = temp;
+            SidebarLine sidebarLine = new SidebarLine() {
+                @NotNull
+                @Override
+                public String getLine() {
+                    return finalTemp;
+                }
+            };
+            handle.addLine(sidebarLine);
         }
     }
 
     public void addHealthIcon() {
+        if (scoreboard == null) {
+            scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+        }
         if (getArena() == null) return;
         if (getArena().getSpectators() == null) return;
-        if (getP() == null) return;
-        if (getArena().getSpectators().contains(getP())) return;
-        if (sb.getObjective("my") == null) {
-            Objective objective = sb.registerNewObjective("my", "health");
+        if (getPlayer() == null) return;
+        if (getArena().getSpectators().contains(getPlayer())) return;
+        if (scoreboard.getObjective(getPlayer().getName()) == null) {
+            Objective objective = scoreboard.registerNewObjective(getPlayer().getName(), "health");
             objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
-            objective.setDisplayName("§c ❤");
+            objective.setDisplayName("§c❤");
         }
     }
 
     public void giveTeamColorTag() {
+        /*if (scoreboard == null){
+            scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+        }
+        if (scoreboard.getObjective("list") == null) {
+            Objective objective = scoreboard.registerNewObjective("list", "health");
+            objective.setDisplaySlot(DisplaySlot.PLAYER_LIST);
+        }
         for (ITeam t : arena.getTeams()) {
             Team team;
-            if (sb.getTeam(t.getName()) == null) {
+            if (scoreboard.getTeam(t.getName()) == null) {
                 team = sb.registerNewTeam(t.getName());
             } else {
                 team = sb.getTeam(t.getName());
@@ -265,16 +258,20 @@ public class SBoard {
             for (Player p : t.getMembers()) {
                 team.addEntry(p.getName());
             }
-        }
+        }*/
     }
 
-    public Player getP() {
-        return p;
+    public Player getPlayer() {
+        return player;
     }
 
     public void remove() {
-        p.setScoreboard(sbm.getNewScoreboard());
-        scoreboards.remove(getP().getUniqueId());
+        scoreboards.remove(getPlayer().getUniqueId());
+        if (handle != null) {
+            handle.remove(player.getUniqueId());
+            handle = null;
+        }
+        scoreboard = null;
     }
 
     public IArena getArena() {
@@ -285,7 +282,7 @@ public class SBoard {
         return scoreboards;
     }
 
-    public static SBoard getSBoard(UUID player){
+    public static SBoard getSBoard(UUID player) {
         return scoreboards.getOrDefault(player, null);
     }
 
@@ -306,31 +303,31 @@ public class SBoard {
         String st = "";
         switch (arena.getNextEvent()) {
             case EMERALD_GENERATOR_TIER_II:
-                st = getMsg(getP(), Messages.NEXT_EVENT_EMERALD_UPGRADE_II);
+                st = getMsg(getPlayer(), Messages.NEXT_EVENT_EMERALD_UPGRADE_II);
                 time = (arena.upgradeEmeraldsCount) * 1000L;
                 break;
             case EMERALD_GENERATOR_TIER_III:
-                st = getMsg(getP(), Messages.NEXT_EVENT_EMERALD_UPGRADE_III);
+                st = getMsg(getPlayer(), Messages.NEXT_EVENT_EMERALD_UPGRADE_III);
                 time = (arena.upgradeEmeraldsCount) * 1000L;
                 break;
             case DIAMOND_GENERATOR_TIER_II:
-                st = getMsg(getP(), Messages.NEXT_EVENT_DIAMOND_UPGRADE_II);
+                st = getMsg(getPlayer(), Messages.NEXT_EVENT_DIAMOND_UPGRADE_II);
                 time = (arena.upgradeDiamondsCount) * 1000L;
                 break;
             case DIAMOND_GENERATOR_TIER_III:
-                st = getMsg(getP(), Messages.NEXT_EVENT_DIAMOND_UPGRADE_III);
+                st = getMsg(getPlayer(), Messages.NEXT_EVENT_DIAMOND_UPGRADE_III);
                 time = (arena.upgradeDiamondsCount) * 1000L;
                 break;
             case GAME_END:
-                st = getMsg(getP(), Messages.NEXT_EVENT_GAME_END);
+                st = getMsg(getPlayer(), Messages.NEXT_EVENT_GAME_END);
                 time = (arena.getPlayingTask().getGameEndCountdown()) * 1000L;
                 break;
             case BEDS_DESTROY:
-                st = getMsg(getP(), Messages.NEXT_EVENT_BEDS_DESTROY);
+                st = getMsg(getPlayer(), Messages.NEXT_EVENT_BEDS_DESTROY);
                 time = (arena.getPlayingTask().getBedsDestroyCountdown()) * 1000L;
                 break;
             case ENDER_DRAGON:
-                st = getMsg(getP(), Messages.NEXT_EVENT_DRAGON_SPAWN);
+                st = getMsg(getPlayer(), Messages.NEXT_EVENT_DRAGON_SPAWN);
                 time = (arena.getPlayingTask().getDragonSpawnCountdown()) * 1000L;
                 break;
         }
@@ -338,11 +335,71 @@ public class SBoard {
         return new String[]{st, dateFormat.format((time))};
     }
 
+    @NotNull
+    private String getNextEventName() {
+        if (!(arena instanceof Arena)) return "-";
+        Arena arena = (Arena) this.arena;
+        String st = "-";
+        switch (arena.getNextEvent()) {
+            case EMERALD_GENERATOR_TIER_II:
+                st = getMsg(getPlayer(), Messages.NEXT_EVENT_EMERALD_UPGRADE_II);
+                break;
+            case EMERALD_GENERATOR_TIER_III:
+                st = getMsg(getPlayer(), Messages.NEXT_EVENT_EMERALD_UPGRADE_III);
+                break;
+            case DIAMOND_GENERATOR_TIER_II:
+                st = getMsg(getPlayer(), Messages.NEXT_EVENT_DIAMOND_UPGRADE_II);
+                break;
+            case DIAMOND_GENERATOR_TIER_III:
+                st = getMsg(getPlayer(), Messages.NEXT_EVENT_DIAMOND_UPGRADE_III);
+                break;
+            case GAME_END:
+                st = getMsg(getPlayer(), Messages.NEXT_EVENT_GAME_END);
+                break;
+            case BEDS_DESTROY:
+                st = getMsg(getPlayer(), Messages.NEXT_EVENT_BEDS_DESTROY);
+                break;
+            case ENDER_DRAGON:
+                st = getMsg(getPlayer(), Messages.NEXT_EVENT_DRAGON_SPAWN);
+                break;
+        }
+
+        return st;
+    }
+
+    @NotNull
+    private String getNextEventTime() {
+        if (!(arena instanceof Arena)) return dateFormat.format((0L));
+        Arena arena = (Arena) this.arena;
+        long time = 0L;
+        switch (arena.getNextEvent()) {
+            case EMERALD_GENERATOR_TIER_II:
+            case EMERALD_GENERATOR_TIER_III:
+                time = (arena.upgradeEmeraldsCount) * 1000L;
+                break;
+            case DIAMOND_GENERATOR_TIER_II:
+            case DIAMOND_GENERATOR_TIER_III:
+                time = (arena.upgradeDiamondsCount) * 1000L;
+                break;
+            case GAME_END:
+                time = (arena.getPlayingTask().getGameEndCountdown()) * 1000L;
+                break;
+            case BEDS_DESTROY:
+                time = (arena.getPlayingTask().getBedsDestroyCountdown()) * 1000L;
+                break;
+            case ENDER_DRAGON:
+                time = (arena.getPlayingTask().getDragonSpawnCountdown()) * 1000L;
+                break;
+        }
+
+        return dateFormat.format((time));
+    }
+
     /**
      * Update spectators for player.
      */
     void updateSpectator(Player p, boolean value) {
-        if (getArena() == null) return;
+        /*if (getArena() == null) return;
         if (getArena().getTeam(p) != null) return;
         Team collide;
         if (sb.getTeam("spectators") == null) {
@@ -356,15 +413,15 @@ public class SBoard {
             if (!collide.hasEntry(p.getName())) collide.addEntry(p.getName());
         } else {
             if (collide.hasEntry(p.getName())) collide.removeEntry(p.getName());
-        }
+        }*/
     }
 
     public void invisibilityPotion(@NotNull ITeam team, Player player, boolean trueRemoveAddFalse) {
-        Team t = sb.getTeam(team.getName());
+        /*Team t = sb.getTeam(team.getName());
         if (t != null) {
             if (trueRemoveAddFalse) t.removeEntry(player.getName());
             else t.addEntry(player.getName());
-        }
+        }*/
     }
 
     /**
@@ -373,23 +430,32 @@ public class SBoard {
      * @param p     target player.
      * @param arena target arena.
      */
-    public static void giveGameScoreboard(@NotNull Player p, @NotNull final IArena arena) {
+    public static void giveGameScoreboard(@NotNull Player p, @NotNull IArena arena, boolean delay) {
         if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_GAME_SCOREBOARD)) return;
+        SBoard sb = SBoard.getSBoard(p.getUniqueId());
+        List<String> lines = new ArrayList<>();
         if (arena.getStatus() == GameState.waiting) {
-            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
-                if (p.isOnline())
-                    new SBoard(p, getScoreboard(p, "scoreboard." + arena.getGroup() + ".waiting", Messages.SCOREBOARD_DEFAULT_WAITING), arena);
-            }, 15L);
+            lines.addAll(getScoreboard(p, "scoreboard." + arena.getGroup() + ".waiting", Messages.SCOREBOARD_DEFAULT_WAITING));
         } else if (arena.getStatus() == GameState.starting) {
-            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
-                if (p.isOnline())
-                    new SBoard(p, getScoreboard(p, "scoreboard." + arena.getGroup() + ".starting", Messages.SCOREBOARD_DEFAULT_STARTING), arena);
-            }, 15L);
-        } else if (arena.getStatus() == GameState.playing){
-            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
-                if (p.isOnline())
-                    new SBoard(p, getScoreboard(p, "scoreboard." + arena.getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING), arena);
-            }, 15L);
+            lines.addAll(getScoreboard(p, "scoreboard." + arena.getGroup() + ".starting", Messages.SCOREBOARD_DEFAULT_STARTING));
+        } else if (arena.getStatus() == GameState.playing || arena.getStatus() == GameState.restarting) {
+            lines.addAll(getScoreboard(p, "scoreboard." + arena.getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING));
+        }
+        if (!lines.isEmpty()) {
+            if (delay && sb == null) {
+                Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
+                    if (p.isOnline()) {
+                        new SBoard(p, lines, arena);
+                    }
+                }, 10L);
+            } else {
+                if (sb == null) {
+                    new SBoard(p, lines, arena);
+                } else {
+                    sb.setStrings(lines);
+                    sb.setArena(arena);
+                }
+            }
         }
     }
 
@@ -401,7 +467,7 @@ public class SBoard {
      */
     public static void giveSpectatorScoreboard(Player player, final IArena arena) {
         if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_GAME_SCOREBOARD)) return;
-        Bukkit.getScheduler().runTaskLater(plugin, () -> new SBoard(player, arena), 35L);
+        Bukkit.getScheduler().runTaskLater(plugin, () -> new SBoard(player, getScoreboard(player, "scoreboard." + arena.getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING), arena), 35L);
     }
 
     /**
@@ -416,5 +482,9 @@ public class SBoard {
                     new SBoard(p, getList(p, Messages.SCOREBOARD_LOBBY), null);
             }, 40L);
         }
+    }
+
+    public Sidebar getHandle() {
+        return handle;
     }
 }

@@ -28,6 +28,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -263,7 +264,7 @@ public class Misc {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public static String replaceStatsPlaceholders(Player pl, String s, boolean papiReplacements) {
+    public static String replaceStatsPlaceholders(Player pl, @NotNull String s, boolean papiReplacements) {
 
         if (s.contains("{kills}"))
             s = s.replace("{kills}", String.valueOf(StatsManager.getStatsCache().getPlayerKills(pl.getUniqueId())));

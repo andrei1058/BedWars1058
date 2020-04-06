@@ -449,7 +449,7 @@ public class Arena implements IArena {
             }
             p.teleport(l, PlayerTeleportEvent.TeleportCause.PLUGIN);
 
-            SBoard.giveGameScoreboard(p, this);
+            SBoard.giveGameScoreboard(p, this, true);
             sendPreGameCommandItems(p);
         } else if (status == GameState.playing) {
             addSpectator(p, false, null);
@@ -942,7 +942,7 @@ public class Arena implements IArena {
         reJoin.getBwt().reJoin(p);
         reJoin.destroy();
 
-        SBoard.giveGameScoreboard(p, this);
+        SBoard.giveGameScoreboard(p, this, true);
         Bukkit.getScheduler().runTaskLater(plugin, () -> getPlayers().forEach(p2 -> nms.hidePlayer(p, p2)), 10L);
         Bukkit.getScheduler().runTaskLater(plugin, () -> getSpectators().forEach(p2 -> nms.hidePlayer(p, p2)), 10L);
         return true;
@@ -1222,25 +1222,21 @@ public class Arena implements IArena {
         }
         restartingTask = null;
 
-        if (status == GameState.starting) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             for (SBoard sb : SBoard.getScoreboards().values()) {
                 if (sb.getArena() == this) {
-                    sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + ".starting", Messages.SCOREBOARD_DEFAULT_STARTING));
+                    SBoard.giveGameScoreboard(sb.getPlayer(), this, false);
                 }
             }
+        });
+
+        if (status == GameState.starting) {
             startingTask = new GameStartingTask(this);
-        } else if (status == GameState.waiting) {
-            for (SBoard sbb : SBoard.getScoreboards().values()) {
-                if (sbb.getArena() == this) {
-                    sbb.setStrings(getScoreboard(sbb.getP(), "scoreboard." + getGroup() + ".waiting", Messages.SCOREBOARD_DEFAULT_WAITING));
-                }
-            }
         } else if (status == GameState.playing) {
             if (BedWars.getLevelSupport() instanceof InternalLevel) perMinuteTask = new PerMinuteTask(this);
             playingTask = new GamePlayingTask(this);
             for (SBoard sbb : SBoard.getScoreboards().values()) {
                 if (sbb.getArena() == this) {
-                    sbb.setStrings(getScoreboard(sbb.getP(), "scoreboard." + getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING));
                     sbb.giveTeamColorTag();
                 }
             }
@@ -2065,8 +2061,8 @@ public class Arena implements IArena {
                 rjt.destroy();
             }
         }
-        for (Despawnable despawnable : new ArrayList<>(BedWars.nms.getDespawnablesList().values())){
-            if (despawnable.getTeam().getArena() == this){
+        for (Despawnable despawnable : new ArrayList<>(BedWars.nms.getDespawnablesList().values())) {
+            if (despawnable.getTeam().getArena() == this) {
                 despawnable.destroy();
             }
         }
@@ -2171,10 +2167,10 @@ public class Arena implements IArena {
         return false;
     }
 
-    private void destroyReJoins(){
+    private void destroyReJoins() {
         List<ReJoin> reJoins = new ArrayList<>(ReJoin.getReJoinList());
-        for (ReJoin reJoin : reJoins){
-            if (reJoin.getArena() == this){
+        for (ReJoin reJoin : reJoins) {
+            if (reJoin.getArena() == this) {
                 reJoin.destroy();
             }
         }
