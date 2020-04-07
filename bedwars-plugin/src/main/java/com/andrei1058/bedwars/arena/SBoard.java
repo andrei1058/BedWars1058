@@ -208,7 +208,8 @@ public class SBoard {
                 }
                 temp = temp.replace("{map}", arena.getDisplayName())
                         .replace("{player}", player.getName())
-                        .replace("{money}", String.valueOf(getEconomy().getMoney(player)));
+                        .replace("{money}", String.valueOf(getEconomy().getMoney(player)))
+                .replace("{group}", arena.getGroup());
             }
 
 

@@ -197,6 +197,34 @@ public interface IArena {
      */
     String getDisplayStatus(Language lang);
 
+    /**
+     * Get arena display name for given language.
+     *
+     * @return translated name.
+     */
+    String getDisplayName(Language lang);
+
+    /**
+     * Get arena display name for given player.
+     *
+     * @return translated name.
+     */
+    String getDisplayName(Player player);
+
+    /**
+     * Get arena display group for given player.
+     *
+     * @return translated group.
+     */
+    String getDisplayGroup(Player player);
+
+    /**
+     * Get arena display group for given language.
+     *
+     * @return translated group.
+     */
+    String getDisplayGroup(Language language);
+
     List<ITeam> getTeams();
 
     /**
@@ -230,6 +258,7 @@ public interface IArena {
 
     /**
      * Get the join signs for this arena
+     *
      * @return signs.
      */
     List<Block> getSigns();
