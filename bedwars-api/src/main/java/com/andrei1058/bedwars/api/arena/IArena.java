@@ -198,20 +198,6 @@ public interface IArena {
     String getDisplayStatus(Language lang);
 
     /**
-     * Get arena display name for given language.
-     *
-     * @return translated name.
-     */
-    String getDisplayName(Language lang);
-
-    /**
-     * Get arena display name for given player.
-     *
-     * @return translated name.
-     */
-    String getDisplayName(Player player);
-
-    /**
      * Get arena display group for given player.
      *
      * @return translated group.

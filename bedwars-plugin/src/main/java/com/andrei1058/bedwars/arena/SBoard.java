@@ -8,10 +8,7 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.stats.StatsManager;
-import com.andrei1058.spigot.sidebar.PlaceholderProvider;
-import com.andrei1058.spigot.sidebar.Sidebar;
-import com.andrei1058.spigot.sidebar.SidebarLine;
-import com.andrei1058.spigot.sidebar.SidebarManager;
+import com.andrei1058.spigot.sidebar.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
@@ -35,7 +32,7 @@ public class SBoard {
     private static ConcurrentHashMap<UUID, SBoard> scoreboards = new ConcurrentHashMap<>();
     private Player player;
     private SimpleDateFormat dateFormat;
-    private Scoreboard scoreboard;
+    private List<TeamList> teamList = new LinkedList();
 
     private SBoard(@NotNull Player p, @NotNull List<String> content, @Nullable IArena arena) {
         if (content.isEmpty()) return;
@@ -124,17 +121,13 @@ public class SBoard {
 
         dateFormat = new SimpleDateFormat(getMsg(p, Messages.FORMATTING_SCOREBOARD_NEXEVENT_TIMER));
 
+        handle.apply(getPlayer());
         this.setStrings(content);
-
 
         if (!p.isOnline()) {
             remove();
             return;
         }
-
-        handle.apply(getPlayer());
-        scoreboards.put(p.getUniqueId(), this);
-        handle.refreshPlaceholders();
 
         /* not ready
         if (arena != null) {
@@ -159,17 +152,17 @@ public class SBoard {
     }
 
     private void setStrings(@NotNull List<String> strings) {
-        if (arena != null) {
-            if (arena.getStatus() == GameState.playing || arena.getStatus() == GameState.restarting) {
-                ITeam team = arena.getTeam(getPlayer());
-                if (team != null) {
-                    getPlayer().setPlayerListName(team.getColor() + getPlayer().getName());
-                }
-            }
-        }
+        scoreboards.remove(player.getUniqueId());
         while (handle.linesAmount() > 0) {
             handle.removeLine(0);
         }
+        List<String> toRemove = new ArrayList<>();
+        handle.getPlaceholders().forEach(c -> {
+            if (c.getPlaceholder().startsWith("{Team")) {
+                toRemove.add(c.getPlaceholder());
+            }
+        });
+        toRemove.forEach(c -> handle.removePlaceholder(c));
         String title = strings.get(0);
         strings.remove(0);
         handle.setTitle(new SidebarLine() {
@@ -190,6 +183,8 @@ public class SBoard {
                             String.valueOf(teams.getSize())) : getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED) : getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE)) + (teams.isMember(getPlayer()) ? getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM) : "")));
                     //handle.addPlaceholder(new PlaceholderProvider("{Team" + teams.getName() + "Color}", () -> teams.getColor().toString()));
                     //handle.addPlaceholder(new PlaceholderProvider("{Team" + teams.getName() + "Name}", () -> teams.getDisplayName(language)));
+                    TeamList team = handle.createTeamList(teams.getName(), teams.getColor().chat());
+                    teamList.add(team);
                 }
             }
             if (arena == null) {
@@ -209,7 +204,7 @@ public class SBoard {
                 temp = temp.replace("{map}", arena.getDisplayName())
                         .replace("{player}", player.getName())
                         .replace("{money}", String.valueOf(getEconomy().getMoney(player)))
-                .replace("{group}", arena.getGroup());
+                        .replace("{group}", arena.getDisplayGroup(player));
             }
 
 
@@ -223,20 +218,32 @@ public class SBoard {
             };
             handle.addLine(sidebarLine);
         }
+        handle.refreshPlaceholders();
+        scoreboards.put(player.getUniqueId(), this);
     }
 
     public void addHealthIcon() {
-        if (scoreboard == null) {
-            scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
-        }
-        if (getArena() == null) return;
-        if (getArena().getSpectators() == null) return;
-        if (getPlayer() == null) return;
-        if (getArena().getSpectators().contains(getPlayer())) return;
-        if (scoreboard.getObjective(getPlayer().getName()) == null) {
-            Objective objective = scoreboard.registerNewObjective(getPlayer().getName(), "health");
-            objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
-            objective.setDisplayName("§c❤");
+        if (handle != null) {
+            List<String> animation = Language.getList(player, Messages.FORMATTING_SCOREBOARD_HEALTH);
+            if (animation.isEmpty()) return;
+            SidebarLine line;
+            if (animation.size() > 1) {
+                String[] lines = new String[animation.size()];
+                for (int i = 0; i < animation.size(); i++){
+                    lines[i] = animation.get(i);
+                }
+                line = new SidebarLineAnimated(lines);
+            } else {
+                final String text = animation.get(0);
+                line = new SidebarLine() {
+                    @NotNull
+                    @Override
+                    public String getLine() {
+                        return text;
+                    }
+                };
+            }
+            handle.displayPlayersHealth(line);
         }
     }
 
@@ -272,7 +279,6 @@ public class SBoard {
             handle.remove(player.getUniqueId());
             handle = null;
         }
-        scoreboard = null;
     }
 
     public IArena getArena() {
@@ -431,16 +437,24 @@ public class SBoard {
      * @param p     target player.
      * @param arena target arena.
      */
-    public static void giveGameScoreboard(@NotNull Player p, @NotNull IArena arena, boolean delay) {
-        if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_GAME_SCOREBOARD)) return;
-        SBoard sb = SBoard.getSBoard(p.getUniqueId());
-        List<String> lines = new ArrayList<>();
-        if (arena.getStatus() == GameState.waiting) {
-            lines.addAll(getScoreboard(p, "scoreboard." + arena.getGroup() + ".waiting", Messages.SCOREBOARD_DEFAULT_WAITING));
-        } else if (arena.getStatus() == GameState.starting) {
-            lines.addAll(getScoreboard(p, "scoreboard." + arena.getGroup() + ".starting", Messages.SCOREBOARD_DEFAULT_STARTING));
-        } else if (arena.getStatus() == GameState.playing || arena.getStatus() == GameState.restarting) {
-            lines.addAll(getScoreboard(p, "scoreboard." + arena.getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING));
+    public static void giveScoreboard(@NotNull Player p, IArena arena, boolean delay) {
+        SBoard sb;
+        List<String> lines;
+        if (arena == null) {
+            if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) return;
+            lines = new ArrayList<>();
+            sb = SBoard.getSBoard(p.getUniqueId());
+        } else {
+            if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_GAME_SCOREBOARD)) return;
+            lines = new ArrayList<>();
+            sb = SBoard.getSBoard(p.getUniqueId());
+            if (arena.getStatus() == GameState.waiting) {
+                lines.addAll(getScoreboard(p, "scoreboard." + arena.getGroup() + ".waiting", Messages.SCOREBOARD_DEFAULT_WAITING));
+            } else if (arena.getStatus() == GameState.starting) {
+                lines.addAll(getScoreboard(p, "scoreboard." + arena.getGroup() + ".starting", Messages.SCOREBOARD_DEFAULT_STARTING));
+            } else if (arena.getStatus() == GameState.playing || arena.getStatus() == GameState.restarting) {
+                lines.addAll(getScoreboard(p, "scoreboard." + arena.getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING));
+            }
         }
         if (!lines.isEmpty()) {
             if (delay && sb == null) {
@@ -448,27 +462,18 @@ public class SBoard {
                     if (p.isOnline()) {
                         new SBoard(p, lines, arena);
                     }
-                }, 10L);
+                }, 5L);
             } else {
                 if (sb == null) {
                     new SBoard(p, lines, arena);
                 } else {
-                    sb.setStrings(lines);
                     sb.setArena(arena);
+                    sb.setStrings(lines);
+                    sb.handle.refreshPlaceholders();
+                    sb.handle.hidePlayersHealth();
                 }
             }
         }
-    }
-
-    /**
-     * Give spectator scoreboard.
-     *
-     * @param player target player.
-     * @param arena  target arena.
-     */
-    public static void giveSpectatorScoreboard(Player player, final IArena arena) {
-        if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_GAME_SCOREBOARD)) return;
-        Bukkit.getScheduler().runTaskLater(plugin, () -> new SBoard(player, getScoreboard(player, "scoreboard." + arena.getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING), arena), 35L);
     }
 
     /**

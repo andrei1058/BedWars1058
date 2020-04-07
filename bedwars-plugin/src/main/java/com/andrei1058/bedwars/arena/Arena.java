@@ -235,6 +235,7 @@ public class Arena implements IArena {
         if (error) return;
 
         addToEnableQueue(this);
+        Language.saveIfNotExists(Messages.ARENA_DISPLAY_GROUP_PATH + getGroup().toLowerCase(), String.valueOf(getGroup().charAt(0)).toUpperCase() + group.substring(1).toLowerCase());
     }
 
     /**
@@ -449,7 +450,7 @@ public class Arena implements IArena {
             }
             p.teleport(l, PlayerTeleportEvent.TeleportCause.PLUGIN);
 
-            SBoard.giveGameScoreboard(p, this, true);
+            SBoard.giveScoreboard(p, this, false);
             sendPreGameCommandItems(p);
         } else if (status == GameState.playing) {
             addSpectator(p, false, null);
@@ -527,7 +528,7 @@ public class Arena implements IArena {
                 setArenaByPlayer(p, this);
             }
 
-            SBoard.giveSpectatorScoreboard(p, this);
+            SBoard.giveScoreboard(p, this, false);
             nms.setCollide(p, this, false);
 
             if (!playerBefore) {
@@ -942,7 +943,7 @@ public class Arena implements IArena {
         reJoin.getBwt().reJoin(p);
         reJoin.destroy();
 
-        SBoard.giveGameScoreboard(p, this, true);
+        SBoard.giveScoreboard(p, this, false);
         Bukkit.getScheduler().runTaskLater(plugin, () -> getPlayers().forEach(p2 -> nms.hidePlayer(p, p2)), 10L);
         Bukkit.getScheduler().runTaskLater(plugin, () -> getSpectators().forEach(p2 -> nms.hidePlayer(p, p2)), 10L);
         return true;
@@ -1050,6 +1051,16 @@ public class Arena implements IArena {
                 break;
         }
         return s.replace("{full}", this.getPlayers().size() == this.getMaxPlayers() ? lang.m(Messages.MEANING_FULL) : "");
+    }
+
+    @Override
+    public String getDisplayGroup(Player player) {
+        return getPlayerLanguage(player).m(Messages.ARENA_DISPLAY_GROUP_PATH + getGroup().toLowerCase());
+    }
+
+    @Override
+    public String getDisplayGroup(@NotNull Language language) {
+        return language.m(Messages.ARENA_DISPLAY_GROUP_PATH + getGroup().toLowerCase());
     }
 
     /**
@@ -1225,7 +1236,7 @@ public class Arena implements IArena {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             for (SBoard sb : SBoard.getScoreboards().values()) {
                 if (sb.getArena() == this) {
-                    SBoard.giveGameScoreboard(sb.getPlayer(), this, false);
+                    SBoard.giveScoreboard(sb.getPlayer(), this, false);
                 }
             }
         });

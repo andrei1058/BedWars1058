@@ -7,6 +7,7 @@ public class ScoreboardRefresh implements Runnable {
     public void run() {
         for (SBoard sb : SBoard.getScoreboards().values()){
             sb.getHandle().refreshPlaceholders();
+            sb.getHandle().refreshHealthAnimation();
         }
     }
 }

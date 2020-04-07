@@ -92,6 +92,7 @@ public class Messages {
     public static String ARENA_STATUS_START_PLAYER_TITLE = "arena-start-title";
     public static String ARENA_STATUS_START_PLAYER_TUTORIAL = "arena-start-tutorial";
     public static String ARENA_STATUS_START_COUNTDOWN = "arena-start-countdown";
+    public static String ARENA_DISPLAY_GROUP_PATH = "display-group-";
 
     /** Arena GUI related */
     public static String ARENA_GUI_INV_NAME = "arena-selector-gui-name";
@@ -131,6 +132,7 @@ public class Messages {
     public static String FORMATTING_CHAT_TEAM = "format-chat-team";
     public static String FORMATTING_CHAT_SPECTATOR = "format-chat-spectator";
     public static String FORMATTING_SCOREBOARD_DATE = "format-sb-date";
+    public static String FORMATTING_SCOREBOARD_HEALTH = "format-sb-health";
     public static String FORMATTING_SCOREBOARD_TEAM_ELIMINATED = "format-sb-team-eliminated";
     public static String FORMATTING_SCOREBOARD_BED_DESTROYED = "format-sb-bed-destroyed";
     public static String FORMATTING_SCOREBOARD_TEAM_ALIVE = "format-sb-team-alive";
