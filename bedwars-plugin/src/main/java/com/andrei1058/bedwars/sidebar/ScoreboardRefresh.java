@@ -1,12 +1,11 @@
-package com.andrei1058.bedwars.arena.tasks;
-
-import com.andrei1058.bedwars.arena.SBoard;
+package com.andrei1058.bedwars.sidebar;
 
 public class ScoreboardRefresh implements Runnable {
     @Override
     public void run() {
-        for (SBoard sb : SBoard.getScoreboards().values()){
+        for (BedWarsScoreboard sb : BedWarsScoreboard.getScoreboards().values()){
             sb.getHandle().refreshPlaceholders();
+            sb.getHandle().playerListRefreshAnimation();
             sb.getHandle().refreshHealthAnimation();
         }
     }

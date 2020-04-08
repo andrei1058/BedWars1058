@@ -13,6 +13,7 @@ import com.andrei1058.bedwars.configuration.Permissions;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.language.PreLoadedLanguage;
 import com.andrei1058.bedwars.lobbysocket.LoadedUser;
+import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
 import com.andrei1058.bedwars.support.preloadedparty.PreLoadedParty;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -22,7 +23,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
 
-import java.util.HashMap;
 import java.util.UUID;
 
 import static com.andrei1058.bedwars.BedWars.*;
@@ -240,7 +240,7 @@ public class JoinLeaveTeleport implements Listener {
 
         if (BedWars.getServerType() == ServerType.SHARED) {
             if (e.getPlayer().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
-                SBoard.giveLobbyScoreboard(e.getPlayer());
+                BedWarsScoreboard.giveScoreboard(e.getPlayer(), null, true);
             }
         }
 
@@ -264,7 +264,7 @@ public class JoinLeaveTeleport implements Listener {
                 Location loc = config.getConfigLoc("lobbyLoc");
                 if (loc.getWorld() != null) p.teleport(loc, PlayerTeleportEvent.TeleportCause.PLUGIN);
             }
-            SBoard.giveLobbyScoreboard(p);
+            BedWarsScoreboard.giveScoreboard(p, null, true);
             Arena.sendLobbyCommandItems(p);
             p.setHealthScale(20);
             p.setFoodLevel(20);
@@ -314,7 +314,7 @@ public class JoinLeaveTeleport implements Listener {
             ss.cancel();
         }
 
-        SBoard sb = SBoard.getSBoard(e.getPlayer().getUniqueId());
+        BedWarsScoreboard sb = BedWarsScoreboard.getSBoard(e.getPlayer().getUniqueId());
         if (sb != null) {
             sb.remove();
         }
@@ -354,13 +354,10 @@ public class JoinLeaveTeleport implements Listener {
             if (BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
                 //Bukkit.getScheduler().runTaskLater(plugin, ()-> {
                 if (e.getPlayer().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
-                    SBoard.giveLobbyScoreboard(e.getPlayer());
+                    BedWarsScoreboard.giveScoreboard(e.getPlayer(), null, true);
                 } else {
-                    SBoard sb = SBoard.getSBoard(e.getPlayer().getUniqueId());
+                    BedWarsScoreboard sb = BedWarsScoreboard.getSBoard(e.getPlayer().getUniqueId());
                     if (sb != null) {
-                        if (sb.getArena() == null) {
-                            sb.remove();
-                        }
                         sb.remove();
                     }
                 }

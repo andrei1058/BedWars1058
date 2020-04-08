@@ -6,7 +6,6 @@ import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.api.events.player.PlayerXpGainEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
-import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.configuration.LevelsConfig;
 import com.andrei1058.bedwars.configuration.Permissions;

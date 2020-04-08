@@ -11,7 +11,6 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.gameplay.TeamAssignEvent;
 import com.andrei1058.bedwars.api.tasks.StartingTask;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.configuration.Sounds;
 import org.bukkit.Bukkit;

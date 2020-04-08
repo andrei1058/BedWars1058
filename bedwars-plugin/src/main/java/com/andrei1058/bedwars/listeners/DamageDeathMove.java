@@ -13,6 +13,7 @@ import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.entity.Despawnable;
+import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -446,7 +447,7 @@ public class DamageDeathMove implements Listener {
                     e.getPlayer().setFlying(true);
                 }, 10L);
                 a.getRespawn().put(e.getPlayer(), 5);
-                for (SBoard sb : SBoard.getScoreboards().values()) {
+                for (BedWarsScoreboard sb : BedWarsScoreboard.getScoreboards().values()) {
                     if (sb.getArena() == a) {
                         sb.giveTeamColorTag();
                     }

@@ -8,7 +8,8 @@ import com.andrei1058.bedwars.api.server.RestoreAdapter;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.arena.despawnables.TargetListener;
-import com.andrei1058.bedwars.arena.tasks.ScoreboardRefresh;
+import com.andrei1058.bedwars.sidebar.ScoreboardHealthListener;
+import com.andrei1058.bedwars.sidebar.ScoreboardRefresh;
 import com.andrei1058.bedwars.commands.party.PartyCommand;
 import com.andrei1058.bedwars.commands.rejoin.RejoinCommand;
 import com.andrei1058.bedwars.commands.shout.ShoutCommand;
@@ -49,7 +50,6 @@ import com.andrei1058.bedwars.support.vipfeatures.VipListeners;
 import com.andrei1058.spigotutils.SpigotUpdater;
 import com.andrei1058.vipfeatures.api.IVipFeatures;
 import com.andrei1058.vipfeatures.api.MiniGameAlreadyRegistered;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.WorldCreator;
@@ -63,7 +63,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -459,6 +458,8 @@ public class BedWars extends JavaPlugin {
         PreLoadedCleaner.init();
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new ScoreboardRefresh(), 20L, 20L);
+
+        registerEvents(new ScoreboardHealthListener());
     }
 
     public void onDisable() {

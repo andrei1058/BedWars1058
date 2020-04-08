@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.arena;
+package com.andrei1058.bedwars.sidebar;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
@@ -7,6 +7,7 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.stats.StatsManager;
 import com.andrei1058.spigot.sidebar.*;
 import org.bukkit.Bukkit;
@@ -23,17 +24,17 @@ import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.*;
 import static com.andrei1058.bedwars.arena.Misc.replaceStatsPlaceholders;
 
-public class SBoard {
+public class BedWarsScoreboard {
 
     private static SidebarManager sidebarManager = null;
 
     private Sidebar handle;
     private IArena arena;
-    private static ConcurrentHashMap<UUID, SBoard> scoreboards = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<UUID, BedWarsScoreboard> scoreboards = new ConcurrentHashMap<>();
     private Player player;
     private SimpleDateFormat dateFormat;
 
-    private SBoard(@NotNull Player p, @NotNull List<String> content, @Nullable IArena arena) {
+    private BedWarsScoreboard(@NotNull Player p, @NotNull List<String> content, @Nullable IArena arena) {
         if (content.isEmpty()) return;
         if (sidebarManager == null) {
             try {
@@ -45,7 +46,7 @@ public class SBoard {
 
         this.arena = arena;
 
-        SBoard sbb = scoreboards.get(p.getUniqueId());
+        BedWarsScoreboard sbb = scoreboards.get(p.getUniqueId());
         if (sbb != null) {
             sbb.remove();
         }
@@ -71,7 +72,7 @@ public class SBoard {
             } else if (this.arena.getStatus() != GameState.playing) {
                 if (this.arena.getStatus() == GameState.starting) {
                     if (getArena().getStartingTask() != null) {
-                        return String.valueOf(getArena().getStartingTask().getCountdown());
+                        return String.valueOf(getArena().getStartingTask().getCountdown() + 1);
                     }
                 }
                 return new SimpleDateFormat(getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis()));
@@ -120,8 +121,8 @@ public class SBoard {
 
         dateFormat = new SimpleDateFormat(getMsg(p, Messages.FORMATTING_SCOREBOARD_NEXEVENT_TIMER));
 
-        handle.apply(getPlayer());
         this.setStrings(content);
+        handle.apply(getPlayer());
 
         if (!p.isOnline()) {
             remove();
@@ -137,13 +138,6 @@ public class SBoard {
             }
         }
         */
-        if (this.arena != null) {
-            if (arena.isSpectator(player)) {
-                //todo
-                //giveTeamColorTag();
-                //collision rule?
-            }
-        }
     }
 
     public void setArena(IArena arena) {
@@ -176,28 +170,90 @@ public class SBoard {
                     .replace("{version}", plugin.getDescription().getVersion())
                     .replace("{server}", config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID));
             if (arena != null) {
-                addHealthIcon();
-                //Language language = Language.getPlayerLanguage(player);
-                for (ITeam teams : arena.getTeams()) {
-                    handle.addPlaceholder(new PlaceholderProvider("{Team" + teams.getName() + "Status}", () -> (teams.isBedDestroyed() ? teams.getSize() > 0 ? getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED).replace("{remainingPlayers}",
-                            String.valueOf(teams.getSize())) : getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED) : getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE)) + (teams.isMember(getPlayer()) ? getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM) : "")));
-                    //handle.addPlaceholder(new PlaceholderProvider("{Team" + teams.getName() + "Color}", () -> teams.getColor().toString()));
-                    //handle.addPlaceholder(new PlaceholderProvider("{Team" + teams.getName() + "Name}", () -> teams.getDisplayName(language)));
-                    String color = teams.getColor().chat().toString();
-                    handle.teamListCreate(teams.getName(), teams.getColor().chat(), new SidebarLine() {
-                        @NotNull
-                        @Override
-                        public String getLine() {
-                            return "prefx "+color;
-                        }
-                    }, new SidebarLine() {
-                        @NotNull
-                        @Override
-                        public String getLine() {
-                            return " suffix";
-                        }
-                    });
-                    teams.getMembers().forEach(c -> handle.teamListAddPlayer(teams.getName(), c));
+                if (arena.getStatus() == GameState.playing) {
+                    addHealthIcon();
+
+                    for (ITeam teams : arena.getTeams()) {
+                        handle.addPlaceholder(new PlaceholderProvider("{Team" + teams.getName() + "Status}", () -> (teams.isBedDestroyed() ? teams.getSize() > 0 ? getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED).replace("{remainingPlayers}",
+                                String.valueOf(teams.getSize())) : getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED) : getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE)) + (teams.isMember(getPlayer()) ? getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM) : "")));
+                        final ChatColor color = teams.getColor().chat();
+
+                        teams.getMembers().forEach(c -> {
+                            handle.playerListCreate(c, color, getTeamListText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_PLAYING), getTeamListText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_PLAYING));
+                            handle.playerListAddPlaceholders(c, new PlaceholderProvider("{team}", () -> {
+                                        if (arena == null) {
+                                            return "";
+                                        } else {
+                                            if (arena.isSpectator(c)) {
+                                                return Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_COLOR) + Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_TEAM);
+                                            } else {
+                                                ITeam team = arena.getTeam(c);
+                                                if (team == null) {
+                                                    team = arena.getExTeam(c.getUniqueId());
+                                                }
+                                                if (team == null) {
+                                                    return Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_COLOR) + Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_TEAM);
+                                                }
+                                                return team.getColor().chat() + team.getDisplayName(Language.getPlayerLanguage(getPlayer()));
+                                            }
+                                        }
+                                    }),
+                                    new PlaceholderProvider("{teamLetter}", () -> {
+                                        if (arena == null) {
+                                            return "";
+                                        } else {
+                                            if (arena.isSpectator(c)) {
+                                                return Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_TEAM).substring(0, 1);
+                                            } else {
+                                                ITeam team = arena.getTeam(c);
+                                                if (team == null) {
+                                                    team = arena.getExTeam(c.getUniqueId());
+                                                }
+                                                if (team == null) {
+                                                    return Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_TEAM).substring(0, 1);
+                                                }
+                                                return team.getDisplayName(Language.getPlayerLanguage(getPlayer())).substring(0, 1);
+                                            }
+                                        }
+                                    }),
+                                    new PlaceholderProvider("{teamName}", () -> {
+                                        if (arena == null) {
+                                            return "";
+                                        } else {
+                                            if (arena.isSpectator(c)) {
+                                                return Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_TEAM);
+                                            } else {
+                                                ITeam team = arena.getTeam(c);
+                                                if (team == null) {
+                                                    team = arena.getExTeam(c.getUniqueId());
+                                                }
+                                                if (team == null) {
+                                                    return Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_TEAM);
+                                                }
+                                                return team.getDisplayName(Language.getPlayerLanguage(getPlayer()));
+                                            }
+                                        }
+                                    }),
+                                    new PlaceholderProvider("{teamColor}", () -> {
+                                        if (arena == null) {
+                                            return "";
+                                        } else {
+                                            if (arena.isSpectator(c)) {
+                                                return Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_COLOR);
+                                            } else {
+                                                ITeam team = arena.getTeam(c);
+                                                if (team == null) {
+                                                    team = arena.getExTeam(c.getUniqueId());
+                                                }
+                                                if (team == null) {
+                                                    return Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_COLOR);
+                                                }
+                                                return team.getColor().chat().toString();
+                                            }
+                                        }
+                                    }));
+                        });
+                    }
                 }
             }
             if (arena == null) {
@@ -231,7 +287,6 @@ public class SBoard {
             };
             handle.addLine(sidebarLine);
         }
-        handle.refreshPlaceholders();
         scoreboards.put(player.getUniqueId(), this);
     }
 
@@ -242,7 +297,7 @@ public class SBoard {
             SidebarLine line;
             if (animation.size() > 1) {
                 String[] lines = new String[animation.size()];
-                for (int i = 0; i < animation.size(); i++){
+                for (int i = 0; i < animation.size(); i++) {
                     lines[i] = animation.get(i);
                 }
                 line = new SidebarLineAnimated(lines);
@@ -256,7 +311,7 @@ public class SBoard {
                     }
                 };
             }
-            handle.displayPlayersHealth(line);
+            handle.showPlayersHealth(line);
         }
     }
 
@@ -298,11 +353,11 @@ public class SBoard {
         return arena;
     }
 
-    public static ConcurrentHashMap<UUID, SBoard> getScoreboards() {
+    public static ConcurrentHashMap<UUID, BedWarsScoreboard> getScoreboards() {
         return scoreboards;
     }
 
-    public static SBoard getSBoard(UUID player) {
+    public static BedWarsScoreboard getSBoard(UUID player) {
         return scoreboards.getOrDefault(player, null);
     }
 
@@ -418,7 +473,7 @@ public class SBoard {
     /**
      * Update spectators for player.
      */
-    void updateSpectator(Player p, boolean value) {
+    public void updateSpectator(Player p, boolean value) {
         /*if (getArena() == null) return;
         if (getArena().getTeam(p) != null) return;
         Team collide;
@@ -437,6 +492,7 @@ public class SBoard {
     }
 
     public void invisibilityPotion(@NotNull ITeam team, Player player, boolean trueRemoveAddFalse) {
+        //todo I think it's still required, not sure
         /*Team t = sb.getTeam(team.getName());
         if (t != null) {
             if (trueRemoveAddFalse) t.removeEntry(player.getName());
@@ -451,16 +507,16 @@ public class SBoard {
      * @param arena target arena.
      */
     public static void giveScoreboard(@NotNull Player p, IArena arena, boolean delay) {
-        SBoard sb;
+        BedWarsScoreboard sb;
         List<String> lines;
         if (arena == null) {
             if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) return;
-            lines = new ArrayList<>();
-            sb = SBoard.getSBoard(p.getUniqueId());
+            lines = Language.getList(p, Messages.SCOREBOARD_LOBBY);
+            sb = BedWarsScoreboard.getSBoard(p.getUniqueId());
         } else {
             if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_GAME_SCOREBOARD)) return;
             lines = new ArrayList<>();
-            sb = SBoard.getSBoard(p.getUniqueId());
+            sb = BedWarsScoreboard.getSBoard(p.getUniqueId());
             if (arena.getStatus() == GameState.waiting) {
                 lines.addAll(getScoreboard(p, "scoreboard." + arena.getGroup() + ".waiting", Messages.SCOREBOARD_DEFAULT_WAITING));
             } else if (arena.getStatus() == GameState.starting) {
@@ -473,38 +529,64 @@ public class SBoard {
             if (delay && sb == null) {
                 Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
                     if (p.isOnline()) {
-                        new SBoard(p, lines, arena);
+                        new BedWarsScoreboard(p, lines, arena);
                     }
                 }, 5L);
             } else {
                 if (sb == null) {
-                    new SBoard(p, lines, arena);
+                    new BedWarsScoreboard(p, lines, arena);
                 } else {
                     sb.setArena(arena);
                     sb.setStrings(lines);
-                    if (sb.getArena() == null){
+                    if (sb.getArena() == null) {
                         sb.handle.hidePlayersHealth();
+                    } else {
+                        if (sb.getArena().getStatus() != GameState.playing) {
+                            sb.handle.hidePlayersHealth();
+                        }
                     }
                 }
             }
         }
     }
 
-    /**
-     * Give lobby scoreboard if enabled in config.
-     *
-     * @param p target player.
-     */
-    public static void giveLobbyScoreboard(Player p) {
-        if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
-            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
-                if (p.isOnline())
-                    new SBoard(p, getList(p, Messages.SCOREBOARD_LOBBY), null);
-            }, 40L);
-        }
-    }
-
     public Sidebar getHandle() {
         return handle;
+    }
+
+    @NotNull
+    private SidebarLine getTeamListText(String path) {
+        List<String> strings = Language.getList(getPlayer(), path);
+        if (strings.isEmpty()) {
+            return new SidebarLine() {
+                @NotNull
+                @Override
+                public String getLine() {
+                    return "";
+                }
+            };
+        }
+
+        strings = new ArrayList<>();
+        for (String string : Language.getList(getPlayer(), path)) {
+            strings.add(string.replace("{vPrefix}", BedWars.getChatSupport().getPrefix(getPlayer())).replace("{vSuffix}", BedWars.getChatSupport().getSuffix(getPlayer())));
+        }
+
+        if (strings.size() == 1) {
+            final String line = strings.get(0);
+            return new SidebarLine() {
+                @NotNull
+                @Override
+                public String getLine() {
+                    return line;
+                }
+            };
+        }
+
+        final String[] lines = new String[strings.size()];
+        for (int i = 0; i < lines.length; i++) {
+            lines[i] = strings.get(i);
+        }
+        return new SidebarLineAnimated(lines);
     }
 }

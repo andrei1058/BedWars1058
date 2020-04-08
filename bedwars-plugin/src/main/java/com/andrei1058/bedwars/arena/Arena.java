@@ -33,6 +33,7 @@ import com.andrei1058.bedwars.levels.internal.PerMinuteTask;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
 import com.andrei1058.bedwars.api.region.Region;
 import com.andrei1058.bedwars.shop.ShopCache;
+import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.arena.tasks.GamePlayingTask;
 import com.andrei1058.bedwars.arena.tasks.GameRestartingTask;
@@ -450,7 +451,7 @@ public class Arena implements IArena {
             }
             p.teleport(l, PlayerTeleportEvent.TeleportCause.PLUGIN);
 
-            SBoard.giveScoreboard(p, this, false);
+            BedWarsScoreboard.giveScoreboard(p, this, false);
             sendPreGameCommandItems(p);
         } else if (status == GameState.playing) {
             addSpectator(p, false, null);
@@ -512,7 +513,7 @@ public class Arena implements IArena {
             spectators.add(p);
             players.remove(p);
 
-            SBoard sb = SBoard.getSBoard(p.getUniqueId());
+            BedWarsScoreboard sb = BedWarsScoreboard.getSBoard(p.getUniqueId());
             if (sb != null) {
                 sb.remove();
             }
@@ -528,7 +529,7 @@ public class Arena implements IArena {
                 setArenaByPlayer(p, this);
             }
 
-            SBoard.giveScoreboard(p, this, false);
+            BedWarsScoreboard.giveScoreboard(p, this, false);
             nms.setCollide(p, this, false);
 
             if (!playerBefore) {
@@ -713,7 +714,7 @@ public class Arena implements IArena {
                 on.sendMessage(getMsg(on, Messages.COMMAND_LEAVE_MSG).replace("{player}", p.getDisplayName()));
             }
         }
-        SBoard sb = SBoard.getSBoard(p.getUniqueId());
+        BedWarsScoreboard sb = BedWarsScoreboard.getSBoard(p.getUniqueId());
         if (sb != null) {
             sb.remove();
         }
@@ -742,7 +743,7 @@ public class Arena implements IArena {
                     on.hidePlayer(p);
                 }
             }
-            if (!disconnect) SBoard.giveLobbyScoreboard(p);
+            if (!disconnect) BedWarsScoreboard.giveScoreboard(p, null, true);
         }, 5L);
 
         /* Remove also the party */
@@ -819,7 +820,7 @@ public class Arena implements IArena {
         }
         nms.setCollide(p, this, true);
 
-        SBoard sb = SBoard.getSBoard(p.getUniqueId());
+        BedWarsScoreboard sb = BedWarsScoreboard.getSBoard(p.getUniqueId());
         if (sb != null) {
             sb.remove();
         }
@@ -850,7 +851,7 @@ public class Arena implements IArena {
                     p.hidePlayer(on);
                 }
             }
-            if (!disconnect) SBoard.giveLobbyScoreboard(p);
+            if (!disconnect) BedWarsScoreboard.giveScoreboard(p, null, true);
         }, 10L);
 
         /* Remove also the party */
@@ -943,7 +944,7 @@ public class Arena implements IArena {
         reJoin.getBwt().reJoin(p);
         reJoin.destroy();
 
-        SBoard.giveScoreboard(p, this, false);
+        BedWarsScoreboard.giveScoreboard(p, this, false);
         Bukkit.getScheduler().runTaskLater(plugin, () -> getPlayers().forEach(p2 -> nms.hidePlayer(p, p2)), 10L);
         Bukkit.getScheduler().runTaskLater(plugin, () -> getSpectators().forEach(p2 -> nms.hidePlayer(p, p2)), 10L);
         return true;
@@ -1234,9 +1235,9 @@ public class Arena implements IArena {
         restartingTask = null;
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            for (SBoard sb : SBoard.getScoreboards().values()) {
+            for (BedWarsScoreboard sb : BedWarsScoreboard.getScoreboards().values()) {
                 if (sb.getArena() == this) {
-                    SBoard.giveScoreboard(sb.getPlayer(), this, false);
+                    BedWarsScoreboard.giveScoreboard(sb.getPlayer(), this, false);
                 }
             }
         });
@@ -1246,7 +1247,7 @@ public class Arena implements IArena {
         } else if (status == GameState.playing) {
             if (BedWars.getLevelSupport() instanceof InternalLevel) perMinuteTask = new PerMinuteTask(this);
             playingTask = new GamePlayingTask(this);
-            for (SBoard sbb : SBoard.getScoreboards().values()) {
+            for (BedWarsScoreboard sbb : BedWarsScoreboard.getScoreboards().values()) {
                 if (sbb.getArena() == this) {
                     sbb.giveTeamColorTag();
                 }
@@ -1880,7 +1881,7 @@ public class Arena implements IArena {
     @Override
     public void updateSpectatorCollideRule(Player p, boolean collide) {
         if (!isSpectator(p)) return;
-        for (SBoard sb : SBoard.getScoreboards().values()) {
+        for (BedWarsScoreboard sb : BedWarsScoreboard.getScoreboards().values()) {
             if (sb.getArena() == this) {
                 sb.updateSpectator(p, collide);
             }
