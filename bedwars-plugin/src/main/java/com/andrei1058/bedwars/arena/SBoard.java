@@ -10,8 +10,8 @@ import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.stats.StatsManager;
 import com.andrei1058.spigot.sidebar.*;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,7 +32,6 @@ public class SBoard {
     private static ConcurrentHashMap<UUID, SBoard> scoreboards = new ConcurrentHashMap<>();
     private Player player;
     private SimpleDateFormat dateFormat;
-    private List<TeamList> teamList = new LinkedList();
 
     private SBoard(@NotNull Player p, @NotNull List<String> content, @Nullable IArena arena) {
         if (content.isEmpty()) return;
@@ -177,14 +176,28 @@ public class SBoard {
                     .replace("{version}", plugin.getDescription().getVersion())
                     .replace("{server}", config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID));
             if (arena != null) {
+                addHealthIcon();
                 //Language language = Language.getPlayerLanguage(player);
                 for (ITeam teams : arena.getTeams()) {
                     handle.addPlaceholder(new PlaceholderProvider("{Team" + teams.getName() + "Status}", () -> (teams.isBedDestroyed() ? teams.getSize() > 0 ? getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED).replace("{remainingPlayers}",
                             String.valueOf(teams.getSize())) : getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED) : getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE)) + (teams.isMember(getPlayer()) ? getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM) : "")));
                     //handle.addPlaceholder(new PlaceholderProvider("{Team" + teams.getName() + "Color}", () -> teams.getColor().toString()));
                     //handle.addPlaceholder(new PlaceholderProvider("{Team" + teams.getName() + "Name}", () -> teams.getDisplayName(language)));
-                    TeamList team = handle.createTeamList(teams.getName(), teams.getColor().chat());
-                    teamList.add(team);
+                    String color = teams.getColor().chat().toString();
+                    handle.teamListCreate(teams.getName(), teams.getColor().chat(), new SidebarLine() {
+                        @NotNull
+                        @Override
+                        public String getLine() {
+                            return "prefx "+color;
+                        }
+                    }, new SidebarLine() {
+                        @NotNull
+                        @Override
+                        public String getLine() {
+                            return " suffix";
+                        }
+                    });
+                    teams.getMembers().forEach(c -> handle.teamListAddPlayer(teams.getName(), c));
                 }
             }
             if (arena == null) {
@@ -469,8 +482,9 @@ public class SBoard {
                 } else {
                     sb.setArena(arena);
                     sb.setStrings(lines);
-                    sb.handle.refreshPlaceholders();
-                    sb.handle.hidePlayersHealth();
+                    if (sb.getArena() == null){
+                        sb.handle.hidePlayersHealth();
+                    }
                 }
             }
         }

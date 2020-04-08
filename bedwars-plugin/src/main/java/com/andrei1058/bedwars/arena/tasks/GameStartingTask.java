@@ -153,14 +153,6 @@ public class GameStartingTask implements Runnable, StartingTask {
             }
 
             Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
-                //Add heart on players head
-                for (SBoard sb : SBoard.getScoreboards().values()) {
-                    if (sb.getArena() == getArena()) {
-                        //todo manage with sidebar api
-                        sb.addHealthIcon();
-                    }
-                }
-
                 //Enable diamond/ emerald generators
                 for (IGenerator og : getArena().getOreGenerators()) {
                     if (og.getType() == GeneratorType.EMERALD || og.getType() == GeneratorType.DIAMOND)
