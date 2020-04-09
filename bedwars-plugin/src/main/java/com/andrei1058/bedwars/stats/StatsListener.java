@@ -2,82 +2,101 @@ package com.andrei1058.bedwars.stats;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
-import com.andrei1058.bedwars.api.events.player.PlayerBedBreakEvent;
 import com.andrei1058.bedwars.api.events.gameplay.GameEndEvent;
+import com.andrei1058.bedwars.api.events.player.PlayerBedBreakEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerLeaveArenaEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.time.Instant;
 import java.util.UUID;
 
 public class StatsListener implements Listener {
 
-    @EventHandler
-    // Create cache for player if does not exist yet.
-    public void onLogin(PlayerLoginEvent e) {
-        final Player p = e.getPlayer();
-        //create cache row for player
-        StatsManager.getStatsCache().createStatsCache(p);
-        //update local cache for player
-        Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, ()-> BedWars.getRemoteDatabase().updateLocalCache(p.getUniqueId()));
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    public void onAsyncPreLoginEvent(AsyncPlayerPreLoginEvent event) {
+        PlayerStats stats = BedWars.getRemoteDatabase().fetchStats(event.getUniqueId());
+        stats.setName(event.getName());
+        BedWars.getStatsManager().put(event.getUniqueId(), stats);
     }
 
     @EventHandler
-    public void onBedBreak(PlayerBedBreakEvent e) {
+    public void onBedBreak(PlayerBedBreakEvent event) {
+        PlayerStats stats = BedWars.getStatsManager().get(event.getPlayer().getUniqueId());
         //store beds destroyed
-        StatsManager.getStatsCache().addBedsDestroyed(e.getPlayer().getUniqueId(), 1);
+        stats.setBedsDestroyed(stats.getBedsDestroyed() + 1);
     }
 
     @EventHandler
-    public void onPlayerKill(PlayerKillEvent e) {
-        if (e.getCause().toString().contains("FINAL")) {
+    public void onPlayerKill(PlayerKillEvent event) {
+        PlayerStats victimStats = BedWars.getStatsManager().get(event.getVictim().getUniqueId());
+        PlayerStats killerStats = BedWars.getStatsManager().get(event.getKiller().getUniqueId());
+
+        if (event.getCause().toString().endsWith("_FINAL")) {
             //store final deaths
-            StatsManager.getStatsCache().addFinalDeaths(e.getVictim().getUniqueId(), 1);
+            victimStats.setFinalKills(victimStats.getFinalDeaths() + 1);
             //store losses
-            StatsManager.getStatsCache().addLosses(e.getVictim().getUniqueId(), 1);
+            victimStats.setLosses(victimStats.getLosses() + 1);
             //store games played
-            StatsManager.getStatsCache().addGamesPlayed(e.getVictim().getUniqueId(), 1);
+            victimStats.setGamesPlayed(victimStats.getGamesPlayed() + 1);
             //store final kills
-            if (e.getKiller() != null) StatsManager.getStatsCache().addFinalKill(e.getKiller().getUniqueId(), 1);
+            if (event.getKiller() != null) killerStats.setFinalKills(killerStats.getFinalKills() + 1);
         } else {
             //store deaths
-            StatsManager.getStatsCache().addDeaths(e.getVictim().getUniqueId(), 1);
+            victimStats.setDeaths(victimStats.getDeaths() + 1);
             //store kills
-            if (e.getKiller() != null) StatsManager.getStatsCache().addKill(e.getKiller().getUniqueId(), 1);
+            if (event.getKiller() != null) killerStats.setKills(killerStats.getKills() + 1);
         }
     }
 
     @EventHandler
-    public void onGameEnd(GameEndEvent e){
-        for (UUID uuid : e.getWinners()){
-            Player p = Bukkit.getPlayer(uuid);
-            if (p == null) continue;
-            if (!p.isOnline()) continue;
+    public void onGameEnd(GameEndEvent event) {
+        for (UUID uuid : event.getWinners()) {
+            Player player = Bukkit.getPlayer(uuid);
+            if (player == null) continue;
+            if (!player.isOnline()) continue;
+
+            PlayerStats stats = BedWars.getStatsManager().get(uuid);
+
             //store wins
-            StatsManager.getStatsCache().addWins(uuid, 1);
+            stats.setWins(stats.getWins() + 1);
             //store games played
-            StatsManager.getStatsCache().addGamesPlayed(uuid, 1);
+            stats.setGamesPlayed(stats.getGamesPlayed() + 1);
         }
     }
 
     @EventHandler
-    public void onArenaLeave(PlayerLeaveArenaEvent e){
-        if (!(e.getArena().getStatus() == GameState.starting || e.getArena().getStatus() == GameState.waiting)){
+    public void onArenaLeave(PlayerLeaveArenaEvent event) {
+        final Player player = event.getPlayer();
+
+        if (!(event.getArena().getStatus() == GameState.starting || event.getArena().getStatus() == GameState.waiting)) {
             //save or replace stats for player
-            final Player p = e.getPlayer();
-            Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, ()-> StatsManager.getStatsCache().updateRemote(p.getUniqueId(), p.getName()));
+            Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, () -> {
+                PlayerStats stats = BedWars.getStatsManager().get(player.getUniqueId());
+                Instant now = Instant.now();
+                stats.setLastPlay(now);
+                if(stats.getFirstPlay() == null) {
+                    stats.setFirstPlay(now);
+                }
+                BedWars.getRemoteDatabase().saveStats(stats);
+            });
         }
     }
 
     @EventHandler
-    public void onQuit(PlayerQuitEvent e){
+    public void onQuit(PlayerQuitEvent event) {
+        final Player player = event.getPlayer();
+
+        PlayerStats stats = BedWars.getStatsManager().get(player.getUniqueId());
+        BedWars.getStatsManager().remove(player.getUniqueId());
+
         //save or replace stats for player
-        final Player p = e.getPlayer();
-        Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, ()-> StatsManager.getStatsCache().updateRemote(p.getUniqueId(), p.getName()));
+        Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, () -> BedWars.getRemoteDatabase().saveStats(stats));
     }
 }

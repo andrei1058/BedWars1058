@@ -82,34 +82,34 @@ public class PAPISupport extends PlaceholderExpansion {
         IArena a = Arena.getArenaByPlayer(p);
         switch (s) {
             case "stats_firstplay":
-                replay = new SimpleDateFormat(getMsg(p, Messages.FORMATTING_STATS_DATE_FORMAT)).format(StatsManager.getStatsCache().getPlayerFirstPlay(p.getUniqueId()));
+                replay = new SimpleDateFormat(getMsg(p, Messages.FORMATTING_STATS_DATE_FORMAT)).format(BedWars.getStatsManager().get(p.getUniqueId()).getFirstPlay());
                 break;
             case "stats_lastplay":
-                replay = new SimpleDateFormat(getMsg(p, Messages.FORMATTING_STATS_DATE_FORMAT)).format(StatsManager.getStatsCache().getPlayerLastPlay(p.getUniqueId()));
+                replay = new SimpleDateFormat(getMsg(p, Messages.FORMATTING_STATS_DATE_FORMAT)).format(BedWars.getStatsManager().get(p.getUniqueId()).getLastPlay());
                 break;
             case "stats_kills":
-                replay = String.valueOf(StatsManager.getStatsCache().getPlayerKills(p.getUniqueId()));
+                replay = String.valueOf(BedWars.getStatsManager().get(p.getUniqueId()).getKills());
                 break;
             case "stats_wins":
-                replay = String.valueOf(StatsManager.getStatsCache().getPlayerWins(p.getUniqueId()));
+                replay = String.valueOf(BedWars.getStatsManager().get(p.getUniqueId()).getWins());
                 break;
             case "stats_finalkills":
-                replay = String.valueOf(StatsManager.getStatsCache().getPlayerFinalKills(p.getUniqueId()));
+                replay = String.valueOf(BedWars.getStatsManager().get(p.getUniqueId()).getFinalKills());
                 break;
             case "stats_deaths":
-                replay = String.valueOf(StatsManager.getStatsCache().getPlayerDeaths(p.getUniqueId()));
+                replay = String.valueOf(BedWars.getStatsManager().get(p.getUniqueId()).getDeaths());
                 break;
             case "stats_losses":
-                replay = String.valueOf(StatsManager.getStatsCache().getPlayerLoses(p.getUniqueId()));
+                replay = String.valueOf(BedWars.getStatsManager().get(p.getUniqueId()).getLosses());
                 break;
             case "stats_finaldeaths":
-                replay = String.valueOf(StatsManager.getStatsCache().getPlayerFinalDeaths(p.getUniqueId()));
+                replay = String.valueOf(BedWars.getStatsManager().get(p.getUniqueId()).getFinalDeaths());
                 break;
             case "stats_bedsdestroyed":
-                replay = String.valueOf(StatsManager.getStatsCache().getPlayerBedsDestroyed(p.getUniqueId()));
+                replay = String.valueOf(BedWars.getStatsManager().get(p.getUniqueId()).getBedsDestroyed());
                 break;
             case "stats_gamesplayed":
-                replay = String.valueOf(StatsManager.getStatsCache().getPlayerGamesPlayed(p.getUniqueId()));
+                replay = String.valueOf(BedWars.getStatsManager().get(p.getUniqueId()).getGamesPlayed());
                 break;
             case "current_online":
                 replay = String.valueOf(Arena.getArenaByPlayer().size());

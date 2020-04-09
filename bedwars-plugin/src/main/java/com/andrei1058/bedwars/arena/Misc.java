@@ -9,6 +9,7 @@ import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.exceptions.InvalidMaterialException;
 import com.andrei1058.bedwars.configuration.Sounds;
+import com.andrei1058.bedwars.stats.PlayerStats;
 import com.andrei1058.bedwars.stats.StatsManager;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.google.common.io.ByteArrayDataOutput;
@@ -263,33 +264,33 @@ public class Misc {
         });
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public static String replaceStatsPlaceholders(Player pl, @NotNull String s, boolean papiReplacements) {
+    public static String replaceStatsPlaceholders(Player player, @NotNull String s, boolean papiReplacements) {
+        PlayerStats stats = BedWars.getStatsManager().get(player.getUniqueId());
 
         if (s.contains("{kills}"))
-            s = s.replace("{kills}", String.valueOf(StatsManager.getStatsCache().getPlayerKills(pl.getUniqueId())));
+            s = s.replace("{kills}", String.valueOf(stats.getKills()));
         if (s.contains("{deaths}"))
-            s = s.replace("{deaths}", String.valueOf(StatsManager.getStatsCache().getPlayerDeaths(pl.getUniqueId())));
+            s = s.replace("{deaths}", String.valueOf(stats.getDeaths()));
         if (s.contains("{losses}"))
-            s = s.replace("{losses}", String.valueOf(StatsManager.getStatsCache().getPlayerLoses(pl.getUniqueId())));
+            s = s.replace("{losses}", String.valueOf(stats.getLosses()));
         if (s.contains("{wins}"))
-            s = s.replace("{wins}", String.valueOf(StatsManager.getStatsCache().getPlayerWins(pl.getUniqueId())));
+            s = s.replace("{wins}", String.valueOf(stats.getWins()));
         if (s.contains("{finalKills}"))
-            s = s.replace("{finalKills}", String.valueOf(StatsManager.getStatsCache().getPlayerFinalKills(pl.getUniqueId())));
+            s = s.replace("{finalKills}", String.valueOf(stats.getFinalKills()));
         if (s.contains("{finalDeaths}"))
-            s = s.replace("{finalDeaths}", String.valueOf(StatsManager.getStatsCache().getPlayerFinalDeaths(pl.getUniqueId())));
+            s = s.replace("{finalDeaths}", String.valueOf(stats.getFinalDeaths()));
         if (s.contains("{bedsDestroyed}"))
-            s = s.replace("{bedsDestroyed}", String.valueOf(StatsManager.getStatsCache().getPlayerBedsDestroyed(pl.getUniqueId())));
+            s = s.replace("{bedsDestroyed}", String.valueOf(stats.getBedsDestroyed()));
         if (s.contains("{gamesPlayed}"))
-            s = s.replace("{gamesPlayed}", String.valueOf(StatsManager.getStatsCache().getPlayerGamesPlayed(pl.getUniqueId())));
+            s = s.replace("{gamesPlayed}", String.valueOf(stats.getGamesPlayed()));
         if (s.contains("{firstPlay}"))
-            s = s.replace("{firstPlay}", new SimpleDateFormat(getMsg(pl, Messages.FORMATTING_STATS_DATE_FORMAT)).format(StatsManager.getStatsCache().getPlayerFirstPlay(pl.getUniqueId())));
+            s = s.replace("{firstPlay}", new SimpleDateFormat(getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(stats.getFirstPlay()));
         if (s.contains("{lastPlay}"))
-            s = s.replace("{lastPlay}", new SimpleDateFormat(getMsg(pl, Messages.FORMATTING_STATS_DATE_FORMAT)).format(StatsManager.getStatsCache().getPlayerLastPlay(pl.getUniqueId())));
-        if (s.contains("{player}")) s = s.replace("{player}", pl.getDisplayName());
-        if (s.contains("{prefix}")) s = s.replace("{prefix}", BedWars.getChatSupport().getPrefix(pl));
+            s = s.replace("{lastPlay}", new SimpleDateFormat(getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(stats.getLastPlay()));
+        if (s.contains("{player}")) s = s.replace("{player}", player.getDisplayName());
+        if (s.contains("{prefix}")) s = s.replace("{prefix}", BedWars.getChatSupport().getPrefix(player));
 
-        return papiReplacements ? SupportPAPI.getSupportPAPI().replace(pl, s) : s;
+        return papiReplacements ? SupportPAPI.getSupportPAPI().replace(player, s) : s;
     }
 
     public static boolean isNumber(String s) {

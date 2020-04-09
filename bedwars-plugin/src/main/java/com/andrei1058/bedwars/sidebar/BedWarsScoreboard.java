@@ -8,6 +8,7 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.stats.PlayerStats;
 import com.andrei1058.bedwars.stats.StatsManager;
 import com.andrei1058.spigot.sidebar.*;
 import org.bukkit.Bukkit;
@@ -84,25 +85,29 @@ public class BedWarsScoreboard {
 
         placeholders.add(new PlaceholderProvider("{kills}", () -> {
             if (this.arena == null) {
-                return String.valueOf(StatsManager.getStatsCache().getPlayerKills(getPlayer().getUniqueId()));
+                PlayerStats stats = BedWars.getStatsManager().get(getPlayer().getUniqueId());
+                return String.valueOf(stats.getKills());
             }
             return String.valueOf(this.arena.getPlayerKills(getPlayer(), false));
         }));
         placeholders.add(new PlaceholderProvider("{finalKills}", () -> {
             if (this.arena == null) {
-                return String.valueOf(StatsManager.getStatsCache().getPlayerFinalKills(getPlayer().getUniqueId()));
+                PlayerStats stats = BedWars.getStatsManager().get(getPlayer().getUniqueId());
+                return String.valueOf(stats.getFinalKills());
             }
             return String.valueOf(this.arena.getPlayerKills(getPlayer(), true));
         }));
         placeholders.add(new PlaceholderProvider("{beds}", () -> {
             if (this.arena == null) {
-                return String.valueOf(StatsManager.getStatsCache().getPlayerBedsDestroyed(getPlayer().getUniqueId()));
+                PlayerStats stats = BedWars.getStatsManager().get(getPlayer().getUniqueId());
+                return String.valueOf(stats.getBedsDestroyed());
             }
             return String.valueOf(this.arena.getPlayerBedsDestroyed(getPlayer()));
         }));
         placeholders.add(new PlaceholderProvider("{deaths}", () -> {
             if (this.arena == null) {
-                return String.valueOf(StatsManager.getStatsCache().getPlayerDeaths(getPlayer().getUniqueId()));
+                PlayerStats stats = BedWars.getStatsManager().get(getPlayer().getUniqueId());
+                return String.valueOf(stats.getDeaths());
             }
             return String.valueOf(this.arena.getPlayerDeaths(getPlayer(), false));
         }));
@@ -311,7 +316,7 @@ public class BedWarsScoreboard {
                     }
                 };
             }
-            handle.showPlayersHealth(line);
+            handle.showPlayersHealth(line, false);
         }
     }
 
