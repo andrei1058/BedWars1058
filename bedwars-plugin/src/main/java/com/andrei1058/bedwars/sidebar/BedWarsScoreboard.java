@@ -179,7 +179,7 @@ public class BedWarsScoreboard {
                         final ChatColor color = teams.getColor().chat();
 
                         teams.getMembers().forEach(c -> {
-                            handle.playerListCreate(c, color, getTeamListText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_PLAYING), getTeamListText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_PLAYING));
+                            handle.playerListCreate(c, color, getTeamListText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_PLAYING, c), getTeamListText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_PLAYING, c));
                             handle.playerListAddPlaceholders(c, new PlaceholderProvider("{team}", () -> {
                                         if (arena == null) {
                                             return "";
@@ -555,7 +555,7 @@ public class BedWarsScoreboard {
     }
 
     @NotNull
-    private SidebarLine getTeamListText(String path) {
+    private SidebarLine getTeamListText(String path, Player targetPlayer) {
         List<String> strings = Language.getList(getPlayer(), path);
         if (strings.isEmpty()) {
             return new SidebarLine() {
@@ -569,7 +569,7 @@ public class BedWarsScoreboard {
 
         strings = new ArrayList<>();
         for (String string : Language.getList(getPlayer(), path)) {
-            strings.add(string.replace("{vPrefix}", BedWars.getChatSupport().getPrefix(getPlayer())).replace("{vSuffix}", BedWars.getChatSupport().getSuffix(getPlayer())));
+            strings.add(string.replace("{vPrefix}", BedWars.getChatSupport().getPrefix(targetPlayer)).replace("{vSuffix}", BedWars.getChatSupport().getSuffix(targetPlayer)));
         }
 
         if (strings.size() == 1) {
