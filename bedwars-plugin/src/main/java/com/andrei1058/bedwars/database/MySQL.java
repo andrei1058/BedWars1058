@@ -124,19 +124,20 @@ public class MySQL implements Database {
 
         String sql;
         if (hasStats(stats.getUuid())) {
-            sql = "UPDATE global_stats SET last_play=?, wins=?, kills=?, final_kills=?, looses=?, deaths=?, final_deaths=?, beds_destroyed=?, games_played=?, name=? WHERE uuid = ?;";
+            sql = "UPDATE global_stats SET first_play=?, last_play=?, wins=?, kills=?, final_kills=?, looses=?, deaths=?, final_deaths=?, beds_destroyed=?, games_played=?, name=? WHERE uuid = ?;";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setTimestamp(1, Timestamp.from(stats.getLastPlay()));
-                statement.setInt(2, stats.getWins());
-                statement.setInt(3, stats.getKills());
-                statement.setInt(4, stats.getFinalKills());
-                statement.setInt(5, stats.getLosses());
-                statement.setInt(6, stats.getDeaths());
-                statement.setInt(7, stats.getFinalDeaths());
-                statement.setInt(8, stats.getBedsDestroyed());
-                statement.setInt(9, stats.getGamesPlayed());
-                statement.setString(10, stats.getName());
-                statement.setString(11, stats.getUuid().toString());
+                statement.setTimestamp(1, stats.getFirstPlay() != null ? Timestamp.from(stats.getFirstPlay()) : null);
+                statement.setTimestamp(2, stats.getLastPlay() != null ? Timestamp.from(stats.getLastPlay()) : null);
+                statement.setInt(3, stats.getWins());
+                statement.setInt(4, stats.getKills());
+                statement.setInt(5, stats.getFinalKills());
+                statement.setInt(6, stats.getLosses());
+                statement.setInt(7, stats.getDeaths());
+                statement.setInt(8, stats.getFinalDeaths());
+                statement.setInt(9, stats.getBedsDestroyed());
+                statement.setInt(10, stats.getGamesPlayed());
+                statement.setString(11, stats.getName());
+                statement.setString(12, stats.getUuid().toString());
                 statement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -174,8 +175,10 @@ public class MySQL implements Database {
             statement.setString(1, uuid.toString());
             try (ResultSet result = statement.executeQuery()) {
                 if (result.next()) {
-                    stats.setFirstPlay(result.getTimestamp("first_play").toInstant());
-                    stats.setLastPlay(result.getTimestamp("last_play").toInstant());
+                    Timestamp firstPlay = result.getTimestamp("first_play");
+                    Timestamp lastPlay = result.getTimestamp("last_play");
+                    stats.setFirstPlay(firstPlay != null ? firstPlay.toInstant() : null);
+                    stats.setLastPlay(lastPlay != null ? lastPlay.toInstant() : null);
                     stats.setWins(result.getInt("wins"));
                     stats.setKills(result.getInt("kills"));
                     stats.setFinalKills(result.getInt("final_kills"));

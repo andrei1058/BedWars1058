@@ -12,7 +12,9 @@ import com.andrei1058.bedwars.stats.StatsManager;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
@@ -82,10 +84,12 @@ public class PAPISupport extends PlaceholderExpansion {
         IArena a = Arena.getArenaByPlayer(p);
         switch (s) {
             case "stats_firstplay":
-                replay = new SimpleDateFormat(getMsg(p, Messages.FORMATTING_STATS_DATE_FORMAT)).format(BedWars.getStatsManager().get(p.getUniqueId()).getFirstPlay());
+                Instant firstPlay = BedWars.getStatsManager().get(p.getUniqueId()).getFirstPlay();
+                replay = new SimpleDateFormat(getMsg(p, Messages.FORMATTING_STATS_DATE_FORMAT)).format(firstPlay != null ? Timestamp.from(firstPlay) : null);
                 break;
             case "stats_lastplay":
-                replay = new SimpleDateFormat(getMsg(p, Messages.FORMATTING_STATS_DATE_FORMAT)).format(BedWars.getStatsManager().get(p.getUniqueId()).getLastPlay());
+                Instant lastPlay = BedWars.getStatsManager().get(p.getUniqueId()).getLastPlay();
+                replay = new SimpleDateFormat(getMsg(p, Messages.FORMATTING_STATS_DATE_FORMAT)).format(lastPlay != null ? Timestamp.from(lastPlay) : null);
                 break;
             case "stats_kills":
                 replay = String.valueOf(BedWars.getStatsManager().get(p.getUniqueId()).getKills());

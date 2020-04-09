@@ -31,6 +31,7 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -284,9 +285,9 @@ public class Misc {
         if (s.contains("{gamesPlayed}"))
             s = s.replace("{gamesPlayed}", String.valueOf(stats.getGamesPlayed()));
         if (s.contains("{firstPlay}"))
-            s = s.replace("{firstPlay}", new SimpleDateFormat(getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(stats.getFirstPlay()));
+            s = s.replace("{firstPlay}", new SimpleDateFormat(getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(stats.getFirstPlay() != null ? Timestamp.from(stats.getFirstPlay()) : null));
         if (s.contains("{lastPlay}"))
-            s = s.replace("{lastPlay}", new SimpleDateFormat(getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(stats.getLastPlay()));
+            s = s.replace("{lastPlay}", new SimpleDateFormat(getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(stats.getLastPlay() != null ? Timestamp.from(stats.getLastPlay()) : null));
         if (s.contains("{player}")) s = s.replace("{player}", player.getDisplayName());
         if (s.contains("{prefix}")) s = s.replace("{prefix}", BedWars.getChatSupport().getPrefix(player));
 
