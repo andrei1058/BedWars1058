@@ -14,7 +14,6 @@ import com.google.common.collect.Sets;
 import com.mojang.datafixers.types.Type;
 import net.minecraft.server.v1_13_R2.*;
 import net.minecraft.server.v1_13_R2.Item;
-import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.block.BlockState;
@@ -33,7 +32,6 @@ import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.Sign;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.Team;
 
@@ -352,7 +350,6 @@ public class v1_13_R2 extends VersionSupport {
     public void spawnDragon(Location l, ITeam bwt) {
         EnderDragon ed = (EnderDragon) l.getWorld().spawnEntity(l, EntityType.ENDER_DRAGON);
         ed.setPhase(EnderDragon.Phase.CIRCLING);
-        ed.setMetadata("DragonTeam", new FixedMetadataValue(getPlugin(), bwt));
     }
 
     @Override

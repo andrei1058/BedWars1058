@@ -75,13 +75,6 @@ public class DamageDeathMove implements Listener {
 
     @EventHandler
     public void onDamageByEntity(EntityDamageByEntityEvent e) {
-        if (e.getEntity().hasMetadata("DragonTeam")) {
-            IArena a = Arena.getArenaByIdentifier(e.getEntity().getWorld().getName());
-            if (a != null) {
-                e.setCancelled(true);
-                return;
-            }
-        }
         if (e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
             IArena a = Arena.getArenaByPlayer(p);

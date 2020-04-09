@@ -2173,6 +2173,7 @@ public class Arena implements IArena {
 
     @Override
     public boolean equals(Object obj) {
+        if (obj == null) return false;
         if (obj instanceof IArena) {
             return ((IArena) obj).getWorldName().equals(this.getWorldName());
         }
