@@ -30,8 +30,8 @@
             <url>https://gitlab.com/api/v4/projects/14374071/packages/maven</url>
         </repository>
         <repository>
-            <id>andrei1058-repo</id>
-            <url>http://repo.andrei1058.com/snapshots/</url>
+            <id>codemc-repo</id>
+            <url>https://repo.codemc.io/repository/maven-public/</url>
         </repository>
     </repositories>
 

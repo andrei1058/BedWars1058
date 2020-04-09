@@ -25,7 +25,7 @@ public class ScoreboardHealthListener implements Listener {
         if (arena == null) return;
 
         for (BedWarsScoreboard scoreboard : BedWarsScoreboard.getScoreboards().values()){
-            if (scoreboard.getArena().equals(arena)){
+            if (arena.equals(scoreboard.getArena())) {
                 scoreboard.getHandle().refreshHealth(player, health);
             }
         }
@@ -45,7 +45,7 @@ public class ScoreboardHealthListener implements Listener {
             health -= 1;
         }
         for (BedWarsScoreboard scoreboard : BedWarsScoreboard.getScoreboards().values()){
-            if (scoreboard.getArena().equals(arena)){
+            if (arena.equals(scoreboard.getArena())){
                 scoreboard.getHandle().refreshHealth(player, health);
             }
         }
@@ -56,7 +56,7 @@ public class ScoreboardHealthListener implements Listener {
         if (e == null) return;
         final IArena arena = e.getArena();
         for (BedWarsScoreboard scoreboard : BedWarsScoreboard.getScoreboards().values()){
-            if (scoreboard.getArena().equals(arena)){
+            if (arena.equals(scoreboard.getArena())){
                 scoreboard.getHandle().refreshHealth(e.getPlayer(), (int) e.getPlayer().getHealth());
             }
         }
