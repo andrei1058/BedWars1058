@@ -311,7 +311,7 @@ public class BedWarsScoreboard {
                     }
                 };
             }
-            handle.showPlayersHealth(line);
+            handle.showPlayersHealth(line, false);
         }
     }
 
