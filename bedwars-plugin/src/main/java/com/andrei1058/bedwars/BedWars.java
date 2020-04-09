@@ -457,7 +457,7 @@ public class BedWars extends JavaPlugin {
 
         PreLoadedCleaner.init();
 
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new ScoreboardRefresh(), 20L, 20L);
+        Bukkit.getScheduler().runTaskTimer(this, new ScoreboardRefresh(), 20L, 20L);
 
         registerEvents(new ScoreboardHealthListener());
     }
