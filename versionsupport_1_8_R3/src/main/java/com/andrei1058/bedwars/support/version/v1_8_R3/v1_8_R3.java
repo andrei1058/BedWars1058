@@ -12,7 +12,6 @@ import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.VersionSupport;
 import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import net.minecraft.server.v1_8_R3.*;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
@@ -28,7 +27,6 @@ import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.Team;
 
@@ -380,8 +378,7 @@ public class v1_8_R3 extends VersionSupport {
 
     @Override
     public void spawnDragon(Location l, ITeam bwt) {
-        EnderDragon ed = (EnderDragon) l.getWorld().spawnEntity(l, EntityType.ENDER_DRAGON);
-        ed.setMetadata("DragonTeam", new FixedMetadataValue(getPlugin(), bwt));
+        l.getWorld().spawnEntity(l, EntityType.ENDER_DRAGON);
     }
 
     @Override
