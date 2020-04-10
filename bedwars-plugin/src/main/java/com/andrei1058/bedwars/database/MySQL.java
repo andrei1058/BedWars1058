@@ -2,13 +2,9 @@ package com.andrei1058.bedwars.database;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.language.Language;
-import com.andrei1058.bedwars.stats.StatsCache;
-import com.andrei1058.bedwars.stats.StatsManager;
+import com.andrei1058.bedwars.stats.PlayerStats;
 import org.bukkit.Bukkit;
 
-import javax.swing.plaf.nimbus.State;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.sql.*;
 import java.util.UUID;
 
@@ -63,9 +59,7 @@ public class MySQL implements Database {
         return false;
     }
 
-    /**
-     * Check if player has remote stats.
-     */
+    @Override
     public boolean hasStats(UUID uuid) {
         if (!isConnected()) connect();
 
@@ -125,23 +119,25 @@ public class MySQL implements Database {
     }
 
     @Override
-    public void saveStats(UUID uuid, String username, Timestamp firstPlay, Timestamp lastPlay, int wins, int kills, int finalKills, int losses, int deaths, int finalDeaths, int bedsDestroyed, int gamesPlayed) {
+    public void saveStats(PlayerStats stats) {
         if (!isConnected()) connect();
 
         String sql;
-        if (hasStats(uuid)) {
-            sql = "UPDATE global_stats SET last_play=?, wins=?, kills=?, final_kills=?, looses=?, deaths=?, final_deaths=?, beds_destroyed=?, games_played=? WHERE uuid = ?;";
+        if (hasStats(stats.getUuid())) {
+            sql = "UPDATE global_stats SET first_play=?, last_play=?, wins=?, kills=?, final_kills=?, looses=?, deaths=?, final_deaths=?, beds_destroyed=?, games_played=?, name=? WHERE uuid = ?;";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setTimestamp(1, lastPlay);
-                statement.setInt(2, wins);
-                statement.setInt(3, kills);
-                statement.setInt(4, finalKills);
-                statement.setInt(5, losses);
-                statement.setInt(6, deaths);
-                statement.setInt(7, finalDeaths);
-                statement.setInt(8, bedsDestroyed);
-                statement.setInt(9, gamesPlayed);
-                statement.setString(10, uuid.toString());
+                statement.setTimestamp(1, stats.getFirstPlay() != null ? Timestamp.from(stats.getFirstPlay()) : null);
+                statement.setTimestamp(2, stats.getLastPlay() != null ? Timestamp.from(stats.getLastPlay()) : null);
+                statement.setInt(3, stats.getWins());
+                statement.setInt(4, stats.getKills());
+                statement.setInt(5, stats.getFinalKills());
+                statement.setInt(6, stats.getLosses());
+                statement.setInt(7, stats.getDeaths());
+                statement.setInt(8, stats.getFinalDeaths());
+                statement.setInt(9, stats.getBedsDestroyed());
+                statement.setInt(10, stats.getGamesPlayed());
+                statement.setString(11, stats.getName());
+                statement.setString(12, stats.getUuid().toString());
                 statement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -150,18 +146,18 @@ public class MySQL implements Database {
             sql = "INSERT INTO global_stats VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setInt(1, 0);
-                statement.setString(2, username);
-                statement.setString(3, uuid.toString());
-                statement.setTimestamp(4, firstPlay);
-                statement.setTimestamp(5, lastPlay);
-                statement.setInt(6, wins);
-                statement.setInt(7, kills);
-                statement.setInt(8, finalKills);
-                statement.setInt(9, losses);
-                statement.setInt(10, deaths);
-                statement.setInt(11, finalDeaths);
-                statement.setInt(12, bedsDestroyed);
-                statement.setInt(13, gamesPlayed);
+                statement.setString(2, stats.getName());
+                statement.setString(3, stats.getUuid().toString());
+                statement.setTimestamp(4, Timestamp.from(stats.getFirstPlay()));
+                statement.setTimestamp(5, Timestamp.from(stats.getLastPlay()));
+                statement.setInt(6, stats.getWins());
+                statement.setInt(7, stats.getKills());
+                statement.setInt(8, stats.getFinalKills());
+                statement.setInt(9, stats.getLosses());
+                statement.setInt(10, stats.getDeaths());
+                statement.setInt(11, stats.getFinalDeaths());
+                statement.setInt(12, stats.getBedsDestroyed());
+                statement.setInt(13, stats.getGamesPlayed());
                 statement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -170,30 +166,34 @@ public class MySQL implements Database {
     }
 
     @Override
-    public void updateLocalCache(UUID uuid) {
+    public PlayerStats fetchStats(UUID uuid) {
         if (!isConnected()) connect();
+        PlayerStats stats = new PlayerStats(uuid);
 
         String sql = "SELECT * FROM global_stats WHERE uuid = ?;";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, uuid.toString());
             try (ResultSet result = statement.executeQuery()) {
                 if (result.next()) {
-                    StatsCache cache = StatsManager.getStatsCache();
-                    cache.setFirstPlay(uuid, result.getTimestamp("first_play"));
-                    cache.setLastPlay(uuid, result.getTimestamp("last_play"));
-                    cache.setWins(uuid, result.getInt("wins"));
-                    cache.setKills(uuid, result.getInt("kills"));
-                    cache.setFinalKills(uuid, result.getInt("final_kills"));
-                    cache.setLosses(uuid, result.getInt("looses"));
-                    cache.setDeaths(uuid, result.getInt("deaths"));
-                    cache.setFinalDeaths(uuid, result.getInt("final_deaths"));
-                    cache.setBedsDestroyed(uuid, result.getInt("beds_destroyed"));
-                    cache.setGamesPlayed(uuid, result.getInt("games_played"));
+                    Timestamp firstPlay = result.getTimestamp("first_play");
+                    Timestamp lastPlay = result.getTimestamp("last_play");
+                    stats.setFirstPlay(firstPlay != null ? firstPlay.toInstant() : null);
+                    stats.setLastPlay(lastPlay != null ? lastPlay.toInstant() : null);
+                    stats.setWins(result.getInt("wins"));
+                    stats.setKills(result.getInt("kills"));
+                    stats.setFinalKills(result.getInt("final_kills"));
+                    stats.setLosses(result.getInt("looses"));
+                    stats.setDeaths(result.getInt("deaths"));
+                    stats.setFinalDeaths(result.getInt("final_deaths"));
+                    stats.setBedsDestroyed(result.getInt("beds_destroyed"));
+                    stats.setGamesPlayed(result.getInt("games_played"));
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return stats;
     }
 
     @Override

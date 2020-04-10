@@ -473,7 +473,6 @@ public class BedWars extends JavaPlugin {
             }
         } catch (Exception ignored) {
         }
-        if (StatsManager.getStatsCache() != null) StatsManager.getStatsCache().close();
         if (remoteDatabase != null) remoteDatabase.close();
     }
 
@@ -618,6 +617,10 @@ public class BedWars extends JavaPlugin {
      */
     public static Database getRemoteDatabase() {
         return remoteDatabase;
+    }
+
+    public static StatsManager getStatsManager() {
+        return statsManager;
     }
 
     public static com.andrei1058.bedwars.api.BedWars getAPI() {
