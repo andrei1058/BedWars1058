@@ -185,6 +185,7 @@ public class BedWarsScoreboard {
                         final ChatColor color = teams.getColor().chat();
 
                         teams.getMembers().forEach(c -> {
+                            handle.refreshHealth(c, (int) c.getHealth());
                             handle.playerListCreate(c, color, getTeamListText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_PLAYING, c), getTeamListText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_PLAYING, c));
                             handle.playerListAddPlaceholders(c, new PlaceholderProvider("{team}", () -> {
                                         if (arena == null) {
