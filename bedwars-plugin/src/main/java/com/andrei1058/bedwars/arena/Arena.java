@@ -513,11 +513,6 @@ public class Arena implements IArena {
             spectators.add(p);
             players.remove(p);
 
-            BedWarsScoreboard sb = BedWarsScoreboard.getSBoard(p.getUniqueId());
-            if (sb != null) {
-                sb.remove();
-            }
-
             updateSpectatorCollideRule(p, false);
 
             if (!playerBefore) {
@@ -714,11 +709,12 @@ public class Arena implements IArena {
                 on.sendMessage(getMsg(on, Messages.COMMAND_LEAVE_MSG).replace("{player}", p.getDisplayName()));
             }
         }
-        BedWarsScoreboard sb = BedWarsScoreboard.getSBoard(p.getUniqueId());
-        if (sb != null) {
-            sb.remove();
-        }
+
         if (getServerType() == ServerType.SHARED) {
+            BedWarsScoreboard sb = BedWarsScoreboard.getSBoard(p.getUniqueId());
+            if (sb != null){
+                sb.remove();
+            }
             p.teleport(playerLocation.get(p));
         } else if (getServerType() == ServerType.BUNGEE) {
             Misc.moveToLobbyOrKick(p);
@@ -820,12 +816,11 @@ public class Arena implements IArena {
         }
         nms.setCollide(p, this, true);
 
-        BedWarsScoreboard sb = BedWarsScoreboard.getSBoard(p.getUniqueId());
-        if (sb != null) {
-            sb.remove();
-        }
-
         if (getServerType() == ServerType.SHARED) {
+            BedWarsScoreboard sb = BedWarsScoreboard.getSBoard(p.getUniqueId());
+            if (sb != null){
+                sb.remove();
+            }
             p.teleport(playerLocation.get(p));
         } else if (getServerType() == ServerType.MULTIARENA) {
             if (BedWars.getLobbyWorld().isEmpty()) {

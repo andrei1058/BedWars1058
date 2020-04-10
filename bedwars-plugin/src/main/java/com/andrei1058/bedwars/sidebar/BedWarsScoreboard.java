@@ -7,6 +7,7 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.stats.StatsManager;
 import com.andrei1058.spigot.sidebar.*;
@@ -148,6 +149,11 @@ public class BedWarsScoreboard {
         scoreboards.remove(player.getUniqueId());
         while (handle.linesAmount() > 0) {
             handle.removeLine(0);
+        }
+
+        //todo config
+        if (arena == null) {
+            handle.playerListClear();
         }
         List<String> toRemove = new ArrayList<>();
         handle.getPlaceholders().forEach(c -> {
@@ -507,16 +513,25 @@ public class BedWarsScoreboard {
      * @param arena target arena.
      */
     public static void giveScoreboard(@NotNull Player p, IArena arena, boolean delay) {
-        BedWarsScoreboard sb;
+        BedWarsScoreboard sb = BedWarsScoreboard.getSBoard(p.getUniqueId());
         List<String> lines;
         if (arena == null) {
-            if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) return;
+            if (getServerType() == ServerType.SHARED) return;
+            if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
+                if (sb != null) {
+                    sb.remove();
+                }
+                return;
+            }
             lines = Language.getList(p, Messages.SCOREBOARD_LOBBY);
-            sb = BedWarsScoreboard.getSBoard(p.getUniqueId());
         } else {
-            if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_GAME_SCOREBOARD)) return;
+            if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_GAME_SCOREBOARD)) {
+                if (sb != null) {
+                    sb.remove();
+                }
+                return;
+            }
             lines = new ArrayList<>();
-            sb = BedWarsScoreboard.getSBoard(p.getUniqueId());
             if (arena.getStatus() == GameState.waiting) {
                 lines.addAll(getScoreboard(p, "scoreboard." + arena.getGroup() + ".waiting", Messages.SCOREBOARD_DEFAULT_WAITING));
             } else if (arena.getStatus() == GameState.starting) {
@@ -527,20 +542,14 @@ public class BedWarsScoreboard {
         }
         if (!lines.isEmpty()) {
             if (delay && sb == null) {
-                Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
-                    if (p.isOnline()) {
-                        new BedWarsScoreboard(p, lines, arena);
-                    }
-                }, 5L);
+                Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> new BedWarsScoreboard(p, lines, arena), 5L);
             } else {
                 if (sb == null) {
                     new BedWarsScoreboard(p, lines, arena);
                 } else {
                     sb.setArena(arena);
                     sb.setStrings(lines);
-                    if (sb.getArena() == null) {
-                        sb.handle.hidePlayersHealth();
-                    } else {
+                    if (sb.getArena() != null) {
                         if (sb.getArena().getStatus() != GameState.playing) {
                             sb.handle.hidePlayersHealth();
                         }
