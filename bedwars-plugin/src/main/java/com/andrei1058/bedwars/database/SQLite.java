@@ -59,6 +59,16 @@ public class SQLite implements Database {
             return;
         }
 
+        String sql = "CREATE TABLE IF NOT EXISTS global_stats (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "name VARCHAR(200), uuid VARCHAR(36), first_play TIMESTAMP NULL DEFAULT NULL, " +
+                "last_play TIMESTAMP DEFAULT NULL, wins INTEGER(10), kills INTEGER(10), " +
+                "final_kills INTEGER(10), looses INTEGER(10), deaths INTEGER(10), final_deaths INTEGER(10), beds_destroyed INTEGER(10), games_played INTEGER(10));";
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         try (Statement st = connection.createStatement()) {
             st.executeUpdate("CREATE TABLE IF NOT EXISTS quick_buy (id INTEGER PRIMARY KEY AUTOINCREMENT, uuid VARCHAR(200), " +
                     "slot_19 VARCHAR(200), slot_20 VARCHAR(200), slot_21 VARCHAR(200), slot_22 VARCHAR(200), slot_23 VARCHAR(200), slot_24 VARCHAR(200), slot_25 VARCHAR(200)," +
