@@ -9,7 +9,6 @@ import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.stats.PlayerStats;
 import com.andrei1058.spigot.sidebar.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -17,129 +16,103 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.sql.Struct;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static com.andrei1058.bedwars.BedWars.*;
-import static com.andrei1058.bedwars.api.language.Language.*;
+import static com.andrei1058.bedwars.api.language.Language.getMsg;
+import static com.andrei1058.bedwars.api.language.Language.getScoreboard;
 import static com.andrei1058.bedwars.arena.Misc.replaceStatsPlaceholders;
 
 public class BedWarsScoreboard {
 
     private static SidebarManager sidebarManager = null;
+    private static HashMap<UUID, BedWarsScoreboard> scoreboards = new HashMap<>();
+
+    private final Player player;
+    private IArena arena;
 
     private Sidebar handle;
-    private IArena arena;
-    private static ConcurrentHashMap<UUID, BedWarsScoreboard> scoreboards = new ConcurrentHashMap<>();
-    private Player player;
-    private SimpleDateFormat dateFormat;
 
-    private BedWarsScoreboard(@NotNull Player p, @NotNull List<String> content, @Nullable IArena arena) {
+    private SimpleDateFormat dateFormat;
+    private SimpleDateFormat nextEventDateFormat;
+
+    private BedWarsScoreboard(@NotNull Player player, @NotNull List<String> content, @Nullable IArena arena) {
+        this.arena = arena;
+        this.player = player;
+
+        // Ignore if content is empty
         if (content.isEmpty()) return;
+
+        // Remove previous player scoreboard
+        BedWarsScoreboard previousScoreboard = scoreboards.get(player.getUniqueId());
+        if (previousScoreboard != null) {
+            previousScoreboard.remove();
+        }
+
+        if(!player.isOnline()) {
+            return;
+        }
+
+        // Cache the next event date format
+        nextEventDateFormat = new SimpleDateFormat(getMsg(player, Messages.FORMATTING_SCOREBOARD_NEXEVENT_TIMER));
+        dateFormat = new SimpleDateFormat(getMsg(player, Messages.FORMATTING_SCOREBOARD_DATE));
+
+        // Define common placeholders
+        List<PlaceholderProvider> placeholders = Arrays.asList(
+                new PlaceholderProvider("{on}", () -> String.valueOf(arena == null ? Bukkit.getOnlinePlayers().size() : arena.getPlayers().size())),
+                new PlaceholderProvider("{max}", () -> String.valueOf(arena == null ? Bukkit.getMaxPlayers() : arena.getMaxPlayers())),
+                new PlaceholderProvider("{time}", () -> {
+                    if (this.arena == null) {
+                        return dateFormat.format(new Date(System.currentTimeMillis()));
+                    } else if (this.arena.getStatus() != GameState.playing) {
+                        if (this.arena.getStatus() == GameState.starting) {
+                            if (getArena().getStartingTask() != null) {
+                                return String.valueOf(getArena().getStartingTask().getCountdown() + 1);
+                            }
+                        }
+                        return dateFormat.format(new Date(System.currentTimeMillis()));
+                    }
+                    return getNextEventTime();
+                }),
+                new PlaceholderProvider("{nextEvent}", this::getNextEventName),
+                new PlaceholderProvider("{date}", () -> dateFormat.format(new Date(System.currentTimeMillis()))),
+                new PlaceholderProvider("{kills}", () -> String.valueOf(arena == null ? BedWars.getStatsManager().get(getPlayer().getUniqueId()).getKills() : arena.getPlayerKills(getPlayer(), false))),
+                new PlaceholderProvider("{finalKills}", () -> String.valueOf(arena == null ? BedWars.getStatsManager().get(getPlayer().getUniqueId()).getFinalKills() : arena.getPlayerKills(getPlayer(), true))),
+                new PlaceholderProvider("{beds}", () -> String.valueOf(arena == null ? BedWars.getStatsManager().get(getPlayer().getUniqueId()).getBedsDestroyed() : arena.getPlayerBedsDestroyed(getPlayer()))),
+                new PlaceholderProvider("{deaths}", () -> String.valueOf(arena == null ? BedWars.getStatsManager().get(getPlayer().getUniqueId()).getDeaths() : arena.getPlayerDeaths(getPlayer(), false))),
+                new PlaceholderProvider("{progress}", () -> BedWars.getLevelSupport().getProgressBar(getPlayer())),
+                new PlaceholderProvider("{level}", () -> BedWars.getLevelSupport().getLevel(getPlayer())),
+                new PlaceholderProvider("{currentXp}", () -> BedWars.getLevelSupport().getCurrentXpFormatted(getPlayer())),
+                new PlaceholderProvider("{requiredXp}", () -> BedWars.getLevelSupport().getRequiredXpFormatted(getPlayer()))
+        );
+
+        // Initialize sidebar manager if not initialized
         if (sidebarManager == null) {
             try {
                 sidebarManager = new SidebarManager();
             } catch (InstantiationException e) {
-                e.printStackTrace();
+                throw new IllegalStateException(e);
             }
         }
 
-        this.arena = arena;
+        // Create the sidebar, with a title but empty content
+        // Note: we can set the title to null as we set it in setStrings and the first update is sent on handle.apply(player)
+        handle = sidebarManager.createSidebar(null, Collections.emptyList(), placeholders);
 
-        BedWarsScoreboard sbb = scoreboards.get(p.getUniqueId());
-        if (sbb != null) {
-            sbb.remove();
-        }
+        // Set lines
+        setStrings(content);
 
-        this.player = p;
+        // Apply the sidebar to the player
+        handle.apply(player);
 
-        LinkedList<PlaceholderProvider> placeholders = new LinkedList<>();
-        placeholders.add(new PlaceholderProvider("{on}", () -> {
-            if (this.arena == null) {
-                return String.valueOf(Bukkit.getOnlinePlayers().size());
-            }
-            return String.valueOf(this.arena.getPlayers().size());
-        }));
-        placeholders.add(new PlaceholderProvider("{max}", () -> {
-            if (this.arena == null) {
-                return String.valueOf(Bukkit.getMaxPlayers());
-            }
-            return String.valueOf(this.arena.getMaxPlayers());
-        }));
-        placeholders.add(new PlaceholderProvider("{time}", () -> {
-            if (this.arena == null) {
-                return new SimpleDateFormat(getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis()));
-            } else if (this.arena.getStatus() != GameState.playing) {
-                if (this.arena.getStatus() == GameState.starting) {
-                    if (getArena().getStartingTask() != null) {
-                        return String.valueOf(getArena().getStartingTask().getCountdown() + 1);
-                    }
-                }
-                return new SimpleDateFormat(getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis()));
-            }
-            return getNextEventTime();
-        }));
-        placeholders.add(new PlaceholderProvider("{nextEvent}", this::getNextEventName));
-        placeholders.add(new PlaceholderProvider("{date}", () -> new SimpleDateFormat(getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_DATE)).format(new Date(System.currentTimeMillis()))));
-
-        placeholders.add(new PlaceholderProvider("{kills}", () -> {
-            if (this.arena == null) {
-                PlayerStats stats = BedWars.getStatsManager().get(getPlayer().getUniqueId());
-                return String.valueOf(stats.getKills());
-            }
-            return String.valueOf(this.arena.getPlayerKills(getPlayer(), false));
-        }));
-        placeholders.add(new PlaceholderProvider("{finalKills}", () -> {
-            if (this.arena == null) {
-                PlayerStats stats = BedWars.getStatsManager().get(getPlayer().getUniqueId());
-                return String.valueOf(stats.getFinalKills());
-            }
-            return String.valueOf(this.arena.getPlayerKills(getPlayer(), true));
-        }));
-        placeholders.add(new PlaceholderProvider("{beds}", () -> {
-            if (this.arena == null) {
-                PlayerStats stats = BedWars.getStatsManager().get(getPlayer().getUniqueId());
-                return String.valueOf(stats.getBedsDestroyed());
-            }
-            return String.valueOf(this.arena.getPlayerBedsDestroyed(getPlayer()));
-        }));
-        placeholders.add(new PlaceholderProvider("{deaths}", () -> {
-            if (this.arena == null) {
-                PlayerStats stats = BedWars.getStatsManager().get(getPlayer().getUniqueId());
-                return String.valueOf(stats.getDeaths());
-            }
-            return String.valueOf(this.arena.getPlayerDeaths(getPlayer(), false));
-        }));
-        placeholders.add(new PlaceholderProvider("{progress}", () -> BedWars.getLevelSupport().getProgressBar(getPlayer())));
-        placeholders.add(new PlaceholderProvider("{level}", () -> BedWars.getLevelSupport().getLevel(getPlayer())));
-        placeholders.add(new PlaceholderProvider("{currentXp}", () -> BedWars.getLevelSupport().getCurrentXpFormatted(getPlayer())));
-        placeholders.add(new PlaceholderProvider("{requiredXp}", () -> BedWars.getLevelSupport().getRequiredXpFormatted(getPlayer())));
-
-        this.handle = sidebarManager.createSidebar(new SidebarLine() {
-            @NotNull
-            @Override
-            public String getLine() {
-                return "BedWars1058";
-            }
-        }, new ArrayList<>(), placeholders);
-
-        dateFormat = new SimpleDateFormat(getMsg(p, Messages.FORMATTING_SCOREBOARD_NEXEVENT_TIMER));
-
-        this.setStrings(content);
-        handle.apply(getPlayer());
-
-        if (!p.isOnline()) {
-            remove();
-            return;
-        }
-
-        /* not ready
+        /* TODO: not ready
         if (arena != null) {
             if (arena.getStatus() == GameState.playing) {
                 addHealthIcon();
                 giveTeamColorTag();
-                p.damage(0.2);
+                player.damage(0.2);
             }
         }
         */
@@ -150,24 +123,23 @@ public class BedWarsScoreboard {
     }
 
     private void setStrings(@NotNull List<String> strings) {
-        scoreboards.remove(player.getUniqueId());
+        //scoreboards.remove(player.getUniqueId()); TODO: shouldn't be needed
+
+        // Remove existing lines
         while (handle.linesAmount() > 0) {
             handle.removeLine(0);
         }
 
-        //todo config
+        // TODO: config
         if (arena == null) {
             handle.playerListClear();
         }
-        List<String> toRemove = new ArrayList<>();
-        handle.getPlaceholders().forEach(c -> {
-            if (c.getPlaceholder().startsWith("{Team")) {
-                toRemove.add(c.getPlaceholder());
-            }
-        });
-        toRemove.forEach(c -> handle.removePlaceholder(c));
-        String title = strings.get(0);
-        strings.remove(0);
+
+        // Remove team/game related placeholders
+        handle.getPlaceholders().removeIf(placeholder -> placeholder.getPlaceholder().startsWith("{Team"));
+
+        // Set the title
+        String title = strings.remove(0);
         handle.setTitle(new SidebarLine() {
             @NotNull
             @Override
@@ -175,10 +147,14 @@ public class BedWarsScoreboard {
                 return title;
             }
         });
-        for (String temp : strings) {
-            temp = temp.replace("{server_ip}", BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
+
+        for (String current : strings) {
+            // General static placeholders
+            current = current
+                    .replace("{server_ip}", BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
                     .replace("{version}", plugin.getDescription().getVersion())
                     .replace("{server}", config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID));
+
             if (arena != null) {
                 if (arena.getStatus() == GameState.playing || arena.getStatus() == GameState.restarting) {
                     addHealthIcon();
@@ -268,26 +244,26 @@ public class BedWarsScoreboard {
                 }
             }
             if (arena == null) {
-                temp = temp.replace("{money}", String.valueOf(getEconomy().getMoney(player))).replace("{player}", player.getName());
-                temp = replaceStatsPlaceholders(getPlayer(), temp, true);
+                current = current.replace("{money}", String.valueOf(getEconomy().getMoney(player))).replace("{player}", player.getName());
+                current = replaceStatsPlaceholders(getPlayer(), current, true);
             } else {
                 if (arena.getStatus() == GameState.playing || arena.getStatus() == GameState.restarting) {
                     for (ITeam team : arena.getTeams()) {
-                        temp = temp.replace("{Team" + team.getName() + "Color}", team.getColor().chat().toString()).replace("{Team" + team.getName() + "Name}",
+                        current = current.replace("{Team" + team.getName() + "Color}", team.getColor().chat().toString()).replace("{Team" + team.getName() + "Name}",
                                 team.getDisplayName(Language.getPlayerLanguage(getPlayer())));
                     }
-                    temp = temp.replace("{map}", arena.getDisplayName())
+                    current = current.replace("{map}", arena.getDisplayName())
                             .replace("{player}", player.getDisplayName())
                             .replace("{money}", String.valueOf(getEconomy().getMoney(player)));
                 }
-                temp = temp.replace("{map}", arena.getDisplayName())
+                current = current.replace("{map}", arena.getDisplayName())
                         .replace("{player}", player.getName())
                         .replace("{money}", String.valueOf(getEconomy().getMoney(player)))
                         .replace("{group}", arena.getDisplayGroup(player));
             }
 
-
-            String finalTemp = temp;
+            // Add the line to the sidebar
+            String finalTemp = current;
             SidebarLine sidebarLine = new SidebarLine() {
                 @NotNull
                 @Override
@@ -297,7 +273,8 @@ public class BedWarsScoreboard {
             };
             handle.addLine(sidebarLine);
         }
-        scoreboards.put(player.getUniqueId(), this);
+
+        //scoreboards.put(player.getUniqueId(), this); TODO: shouldn't be needed
     }
 
     public void addHealthIcon() {
@@ -325,8 +302,9 @@ public class BedWarsScoreboard {
         }
     }
 
-    //public void giveTeamColorTag() {
-        /*if (scoreboard == null){
+    /* TODO: not ready
+    public void giveTeamColorTag() {
+        if (scoreboard == null){
             scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
         }
         if (scoreboard.getObjective("list") == null) {
@@ -344,8 +322,9 @@ public class BedWarsScoreboard {
             for (Player p : t.getMembers()) {
                 team.addEntry(p.getName());
             }
-        }*/
-    //}
+        /
+    }
+    */
 
     public Player getPlayer() {
         return player;
@@ -363,14 +342,15 @@ public class BedWarsScoreboard {
         return arena;
     }
 
-    public static ConcurrentHashMap<UUID, BedWarsScoreboard> getScoreboards() {
+    public static Map<UUID, BedWarsScoreboard> getScoreboards() {
         return scoreboards;
     }
 
     public static BedWarsScoreboard getSBoard(UUID player) {
-        return scoreboards.getOrDefault(player, null);
+        return scoreboards.get(player);
     }
 
+    /* TODO: unused
     public static String formatGenTimer(int duration) {
         long absSeconds = Math.abs((long) duration);
         String positive = String.format(
@@ -417,8 +397,9 @@ public class BedWarsScoreboard {
                 break;
         }
 
-        return new String[]{st, dateFormat.format((time))};
+        return new String[]{st, nextEventDateFormat.format((time))};
     }
+    */
 
     @NotNull
     private String getNextEventName() {
@@ -454,7 +435,7 @@ public class BedWarsScoreboard {
 
     @NotNull
     private String getNextEventTime() {
-        if (!(arena instanceof Arena)) return dateFormat.format((0L));
+        if (!(arena instanceof Arena)) return nextEventDateFormat.format((0L));
         Arena arena = (Arena) this.arena;
         long time = 0L;
         switch (arena.getNextEvent()) {
@@ -477,14 +458,15 @@ public class BedWarsScoreboard {
                 break;
         }
 
-        return dateFormat.format((time));
+        return nextEventDateFormat.format((time));
     }
 
     /**
      * Update spectators for player.
      */
-    public void updateSpectator(Player p, boolean value) {
-        /*if (getArena() == null) return;
+    public void updateSpectator(Player player, boolean value) {
+        /* TODO: not ready
+        if (getArena() == null) return;
         if (getArena().getTeam(p) != null) return;
         Team collide;
         if (sb.getTeam("spectators") == null) {
@@ -498,67 +480,76 @@ public class BedWarsScoreboard {
             if (!collide.hasEntry(p.getName())) collide.addEntry(p.getName());
         } else {
             if (collide.hasEntry(p.getName())) collide.removeEntry(p.getName());
-        }*/
+        }
+        */
     }
 
     public void invisibilityPotion(@NotNull ITeam team, Player player, boolean trueRemoveAddFalse) {
-        //todo I think it's still required, not sure
-        /*Team t = sb.getTeam(team.getName());
+        /* TODO: i think it's still required, not sure
+        Team t = sb.getTeam(team.getName());
         if (t != null) {
             if (trueRemoveAddFalse) t.removeEntry(player.getName());
             else t.addEntry(player.getName());
-        }*/
+        }
+        */
     }
 
     /**
      * Give game scoreboard.
      *
-     * @param p     target player.
-     * @param arena target arena.
+     * @param player target player.
+     * @param arena  target arena.
      */
-    public static void giveScoreboard(@NotNull Player p, IArena arena, boolean delay) {
-        BedWarsScoreboard sb = BedWarsScoreboard.getSBoard(p.getUniqueId());
-        List<String> lines;
+    public static void giveScoreboard(@NotNull Player player, IArena arena, boolean delay) {
+        BedWarsScoreboard scoreboard = BedWarsScoreboard.getSBoard(player.getUniqueId());
+        List<String> lines = null;
+
         if (arena == null) {
+            // Lobby scoreboard
             if (getServerType() == ServerType.SHARED) return;
             if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
-                if (sb != null) {
-                    sb.remove();
+                if (scoreboard != null) {
+                    scoreboard.remove();
                 }
                 return;
             }
-            lines = Language.getList(p, Messages.SCOREBOARD_LOBBY);
+            lines = Language.getList(player, Messages.SCOREBOARD_LOBBY);
         } else {
+            // Game scoreboard
             if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_GAME_SCOREBOARD)) {
-                if (sb != null) {
-                    sb.remove();
+                if (scoreboard != null) {
+                    scoreboard.remove();
                 }
                 return;
             }
-            lines = new ArrayList<>();
             if (arena.getStatus() == GameState.waiting) {
-                lines.addAll(getScoreboard(p, "scoreboard." + arena.getGroup() + ".waiting", Messages.SCOREBOARD_DEFAULT_WAITING));
+                lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".waiting", Messages.SCOREBOARD_DEFAULT_WAITING);
             } else if (arena.getStatus() == GameState.starting) {
-                lines.addAll(getScoreboard(p, "scoreboard." + arena.getGroup() + ".starting", Messages.SCOREBOARD_DEFAULT_STARTING));
+                lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".starting", Messages.SCOREBOARD_DEFAULT_STARTING);
             } else if (arena.getStatus() == GameState.playing || arena.getStatus() == GameState.restarting) {
-                lines.addAll(getScoreboard(p, "scoreboard." + arena.getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING));
+                lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING);
             }
         }
-        if (!lines.isEmpty()) {
-            if (delay && sb == null) {
-                Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> new BedWarsScoreboard(p, lines, arena), 5L);
+
+        if (lines == null || lines.isEmpty()) {
+            if (scoreboard != null) {
+                scoreboard.remove();
+            }
+            return;
+        }
+
+        if (scoreboard == null) {
+            if (delay) {
+                List<String> finalLines = lines;
+                Bukkit.getScheduler().runTaskLater(plugin, () -> new BedWarsScoreboard(player, finalLines, arena), 5L);
             } else {
-                if (sb == null) {
-                    new BedWarsScoreboard(p, lines, arena);
-                } else {
-                    sb.setArena(arena);
-                    sb.setStrings(lines);
-                    if (sb.getArena() != null) {
-                        if (sb.getArena().getStatus() != GameState.playing) {
-                            sb.handle.hidePlayersHealth();
-                        }
-                    }
-                }
+                new BedWarsScoreboard(player, lines, arena);
+            }
+        } else {
+            scoreboard.setArena(arena);
+            scoreboard.setStrings(lines);
+            if (arena != null && arena.getStatus() != GameState.playing) {
+                scoreboard.handle.hidePlayersHealth();
             }
         }
     }
