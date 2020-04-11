@@ -35,6 +35,7 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -108,26 +109,10 @@ public class BreakPlace implements Listener {
 
             a.addPlacedBlock(e.getBlock());
             if (e.getBlock().getType() == Material.TNT) {
-                e.setCancelled(true);
+                e.getBlockPlaced().setType(Material.AIR);
                 TNTPrimed tnt = e.getBlock().getLocation().getWorld().spawn(e.getBlock().getLocation().add(0.5, 0, 0.5), TNTPrimed.class);
                 tnt.setFuseTicks(45);
                 nms.setSource(tnt, p);
-                for (ItemStack i : p.getInventory().getContents()) {
-                    if (i == null) continue;
-                    if (i.getType() == null) continue;
-                    if (i.getType() == Material.AIR) continue;
-                    if (i.getType() == Material.TNT) {
-                        if (i.getAmount() <= 1) {
-                            p.getInventory().remove(i);
-                            p.updateInventory();
-                            return;
-                        } else {
-                            i.setAmount(i.getAmount() - 1);
-                            p.updateInventory();
-                            return;
-                        }
-                    }
-                }
                 return;
             }
             return;
