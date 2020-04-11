@@ -16,7 +16,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.sql.Struct;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -34,7 +33,6 @@ public class BedWarsScoreboard {
     private IArena arena;
 
     private Sidebar handle;
-
     private SimpleDateFormat dateFormat;
     private SimpleDateFormat nextEventDateFormat;
 
@@ -51,7 +49,7 @@ public class BedWarsScoreboard {
             previousScoreboard.remove();
         }
 
-        if(!player.isOnline()) {
+        if (!player.isOnline()) {
             return;
         }
 
@@ -123,8 +121,6 @@ public class BedWarsScoreboard {
     }
 
     private void setStrings(@NotNull List<String> strings) {
-        //scoreboards.remove(player.getUniqueId()); TODO: shouldn't be needed
-
         // Remove existing lines
         while (handle.linesAmount() > 0) {
             handle.removeLine(0);
@@ -153,113 +149,121 @@ public class BedWarsScoreboard {
             current = current
                     .replace("{server_ip}", BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
                     .replace("{version}", plugin.getDescription().getVersion())
-                    .replace("{server}", config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID));
+                    .replace("{server}", config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID))
+                    .replace("{player}", player.getDisplayName())
+                    .replace("{money}", String.valueOf(getEconomy().getMoney(player)));
 
-            if (arena != null) {
+            if (arena == null) {
+                // Lobby scoreboard
+                current = replaceStatsPlaceholders(getPlayer(), current, true);
+            } else {
+                // Game scoreboard
+                current = current
+                        .replace("{map}", arena.getDisplayName())
+                        .replace("{group}", arena.getDisplayGroup(player));
+
                 if (arena.getStatus() == GameState.playing || arena.getStatus() == GameState.restarting) {
                     addHealthIcon();
 
-                    for (ITeam teams : arena.getTeams()) {
-                        handle.addPlaceholder(new PlaceholderProvider("{Team" + teams.getName() + "Status}", () -> (teams.isBedDestroyed() ? teams.getSize() > 0 ? getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED).replace("{remainingPlayers}",
-                                String.valueOf(teams.getSize())) : getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED) : getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE)) + (teams.isMember(getPlayer()) ? getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM) : "")));
-                        final ChatColor color = teams.getColor().chat();
+                    for (ITeam currentTeam : arena.getTeams()) {
+                        // Dynamic team placeholders
+                        handle.addPlaceholder(new PlaceholderProvider("{Team" + currentTeam.getName() + "Status}", () -> {
+                            String result;
+                            if (currentTeam.isBedDestroyed()) {
+                                if (currentTeam.getSize() > 0) {
+                                    result = getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED)
+                                            .replace("{remainingPlayers}", String.valueOf(currentTeam.getSize()));
+                                } else {
+                                    result = getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED);
+                                }
+                            } else {
+                                result = getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE);
+                            }
+                            if (currentTeam.isMember(getPlayer())) {
+                                result += getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM);
+                            }
+                            return result;
+                        }));
 
-                        teams.getMembers().forEach(c -> {
-                            handle.refreshHealth(c, (int) c.getHealth());
-                            handle.playerListCreate(c, color, getTeamListText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_PLAYING, c), getTeamListText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_PLAYING, c));
-                            handle.playerListAddPlaceholders(c, new PlaceholderProvider("{team}", () -> {
+                        final ChatColor color = currentTeam.getColor().chat();
+
+                        // Static team placeholders
+                        current = current
+                                .replace("{Team" + currentTeam.getName() + "Color}", color.toString())
+                                .replace("{Team" + currentTeam.getName() + "Name}", currentTeam.getDisplayName(Language.getPlayerLanguage(getPlayer())));
+
+                        // Update player list and health bars
+                        currentTeam.getMembers().forEach(currentMember -> {
+                            handle.refreshHealth(currentMember, (int) currentMember.getHealth());
+                            handle.playerListCreate(currentMember, color, getTeamListText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_PLAYING, currentMember), getTeamListText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_PLAYING, currentMember));
+                            handle.playerListAddPlaceholders(currentMember,
+                                    new PlaceholderProvider("{team}", () -> {
                                         if (arena == null) {
                                             return "";
-                                        } else {
-                                            if (arena.isSpectator(c)) {
-                                                return Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_COLOR) + Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_TEAM);
-                                            } else {
-                                                ITeam team = arena.getTeam(c);
-                                                if (team == null) {
-                                                    team = arena.getExTeam(c.getUniqueId());
-                                                }
-                                                if (team == null) {
-                                                    return Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_COLOR) + Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_TEAM);
-                                                }
-                                                return team.getColor().chat() + team.getDisplayName(Language.getPlayerLanguage(getPlayer()));
-                                            }
                                         }
+                                        if (arena.isSpectator(currentMember)) {
+                                            return Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_COLOR) + Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_TEAM);
+                                        }
+                                        ITeam team = arena.getTeam(currentMember);
+                                        if (team == null) {
+                                            team = arena.getExTeam(currentMember.getUniqueId());
+                                        }
+                                        if (team == null) {
+                                            return Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_COLOR) + Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_TEAM);
+                                        }
+                                        return team.getColor().chat() + team.getDisplayName(Language.getPlayerLanguage(getPlayer()));
                                     }),
                                     new PlaceholderProvider("{teamLetter}", () -> {
                                         if (arena == null) {
                                             return "";
-                                        } else {
-                                            if (arena.isSpectator(c)) {
-                                                return Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_TEAM).substring(0, 1);
-                                            } else {
-                                                ITeam team = arena.getTeam(c);
-                                                if (team == null) {
-                                                    team = arena.getExTeam(c.getUniqueId());
-                                                }
-                                                if (team == null) {
-                                                    return Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_TEAM).substring(0, 1);
-                                                }
-                                                return team.getDisplayName(Language.getPlayerLanguage(getPlayer())).substring(0, 1);
-                                            }
                                         }
+                                        if (arena.isSpectator(currentMember)) {
+                                            return Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_TEAM).substring(0, 1);
+                                        }
+                                        ITeam team = arena.getTeam(currentMember);
+                                        if (team == null) {
+                                            team = arena.getExTeam(currentMember.getUniqueId());
+                                        }
+                                        if (team == null) {
+                                            return Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_TEAM).substring(0, 1);
+                                        }
+                                        return team.getDisplayName(Language.getPlayerLanguage(getPlayer())).substring(0, 1);
                                     }),
                                     new PlaceholderProvider("{teamName}", () -> {
                                         if (arena == null) {
                                             return "";
-                                        } else {
-                                            if (arena.isSpectator(c)) {
-                                                return Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_TEAM);
-                                            } else {
-                                                ITeam team = arena.getTeam(c);
-                                                if (team == null) {
-                                                    team = arena.getExTeam(c.getUniqueId());
-                                                }
-                                                if (team == null) {
-                                                    return Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_TEAM);
-                                                }
-                                                return team.getDisplayName(Language.getPlayerLanguage(getPlayer()));
-                                            }
                                         }
+                                        if (arena.isSpectator(currentMember)) {
+                                            return Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_TEAM);
+                                        }
+                                        ITeam team = arena.getTeam(currentMember);
+                                        if (team == null) {
+                                            team = arena.getExTeam(currentMember.getUniqueId());
+                                        }
+                                        if (team == null) {
+                                            return Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_TEAM);
+                                        }
+                                        return team.getDisplayName(Language.getPlayerLanguage(getPlayer()));
                                     }),
                                     new PlaceholderProvider("{teamColor}", () -> {
                                         if (arena == null) {
                                             return "";
-                                        } else {
-                                            if (arena.isSpectator(c)) {
-                                                return Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_COLOR);
-                                            } else {
-                                                ITeam team = arena.getTeam(c);
-                                                if (team == null) {
-                                                    team = arena.getExTeam(c.getUniqueId());
-                                                }
-                                                if (team == null) {
-                                                    return Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_COLOR);
-                                                }
-                                                return team.getColor().chat().toString();
-                                            }
                                         }
+                                        if (arena.isSpectator(currentMember)) {
+                                            return Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_COLOR);
+                                        }
+                                        ITeam team = arena.getTeam(currentMember);
+                                        if (team == null) {
+                                            team = arena.getExTeam(currentMember.getUniqueId());
+                                        }
+                                        if (team == null) {
+                                            return Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_COLOR);
+                                        }
+                                        return team.getColor().chat().toString();
                                     }));
                         });
                     }
                 }
-            }
-            if (arena == null) {
-                current = current.replace("{money}", String.valueOf(getEconomy().getMoney(player))).replace("{player}", player.getName());
-                current = replaceStatsPlaceholders(getPlayer(), current, true);
-            } else {
-                if (arena.getStatus() == GameState.playing || arena.getStatus() == GameState.restarting) {
-                    for (ITeam team : arena.getTeams()) {
-                        current = current.replace("{Team" + team.getName() + "Color}", team.getColor().chat().toString()).replace("{Team" + team.getName() + "Name}",
-                                team.getDisplayName(Language.getPlayerLanguage(getPlayer())));
-                    }
-                    current = current.replace("{map}", arena.getDisplayName())
-                            .replace("{player}", player.getDisplayName())
-                            .replace("{money}", String.valueOf(getEconomy().getMoney(player)));
-                }
-                current = current.replace("{map}", arena.getDisplayName())
-                        .replace("{player}", player.getName())
-                        .replace("{money}", String.valueOf(getEconomy().getMoney(player)))
-                        .replace("{group}", arena.getDisplayGroup(player));
             }
 
             // Add the line to the sidebar
@@ -273,8 +277,6 @@ public class BedWarsScoreboard {
             };
             handle.addLine(sidebarLine);
         }
-
-        //scoreboards.put(player.getUniqueId(), this); TODO: shouldn't be needed
     }
 
     public void addHealthIcon() {
