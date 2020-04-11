@@ -712,7 +712,7 @@ public class Arena implements IArena {
 
         if (getServerType() == ServerType.SHARED) {
             BedWarsScoreboard sb = BedWarsScoreboard.getSBoard(p.getUniqueId());
-            if (sb != null){
+            if (sb != null) {
                 sb.remove();
             }
             p.teleport(playerLocation.get(p));
@@ -818,7 +818,7 @@ public class Arena implements IArena {
 
         if (getServerType() == ServerType.SHARED) {
             BedWarsScoreboard sb = BedWarsScoreboard.getSBoard(p.getUniqueId());
-            if (sb != null){
+            if (sb != null) {
                 sb.remove();
             }
             p.teleport(playerLocation.get(p));
@@ -1229,12 +1229,12 @@ public class Arena implements IArena {
         }
         restartingTask = null;
 
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            for (BedWarsScoreboard sb : BedWarsScoreboard.getScoreboards().values()) {
-                if (sb.getArena() == this) {
-                    BedWarsScoreboard.giveScoreboard(sb.getPlayer(), this, false);
-                }
-            }
+        players.forEach(c -> {
+            BedWarsScoreboard.giveScoreboard(c, this, false);
+        });
+
+        spectators.forEach(c -> {
+            BedWarsScoreboard.giveScoreboard(c, this, false);
         });
 
         if (status == GameState.starting) {
@@ -1242,11 +1242,6 @@ public class Arena implements IArena {
         } else if (status == GameState.playing) {
             if (BedWars.getLevelSupport() instanceof InternalLevel) perMinuteTask = new PerMinuteTask(this);
             playingTask = new GamePlayingTask(this);
-            for (BedWarsScoreboard sbb : BedWarsScoreboard.getScoreboards().values()) {
-                if (sbb.getArena() == this) {
-                    sbb.giveTeamColorTag();
-                }
-            }
         } else if (status == GameState.restarting) {
             restartingTask = new GameRestartingTask(this);
             if (perMinuteTask != null) perMinuteTask.cancel();

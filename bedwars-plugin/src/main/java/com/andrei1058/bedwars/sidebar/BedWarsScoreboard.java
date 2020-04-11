@@ -10,7 +10,6 @@ import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.stats.PlayerStats;
-import com.andrei1058.bedwars.stats.StatsManager;
 import com.andrei1058.spigot.sidebar.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -181,7 +180,7 @@ public class BedWarsScoreboard {
                     .replace("{version}", plugin.getDescription().getVersion())
                     .replace("{server}", config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID));
             if (arena != null) {
-                if (arena.getStatus() == GameState.playing) {
+                if (arena.getStatus() == GameState.playing || arena.getStatus() == GameState.restarting) {
                     addHealthIcon();
 
                     for (ITeam teams : arena.getTeams()) {
@@ -275,8 +274,7 @@ public class BedWarsScoreboard {
                 if (arena.getStatus() == GameState.playing || arena.getStatus() == GameState.restarting) {
                     for (ITeam team : arena.getTeams()) {
                         temp = temp.replace("{Team" + team.getName() + "Color}", team.getColor().chat().toString()).replace("{Team" + team.getName() + "Name}",
-                                team.getDisplayName(Language.getPlayerLanguage(getPlayer()))).replace("{Team" + team.getName() + "Status}", (team.isBedDestroyed() ? team.getSize() > 0 ? getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED).replace("{remainingPlayers}",
-                                String.valueOf(team.getSize())) : getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED) : getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE)) + (team.isMember(getPlayer()) ? getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM) : ""));
+                                team.getDisplayName(Language.getPlayerLanguage(getPlayer())));
                     }
                     temp = temp.replace("{map}", arena.getDisplayName())
                             .replace("{player}", player.getDisplayName())
@@ -327,7 +325,7 @@ public class BedWarsScoreboard {
         }
     }
 
-    public void giveTeamColorTag() {
+    //public void giveTeamColorTag() {
         /*if (scoreboard == null){
             scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
         }
@@ -347,7 +345,7 @@ public class BedWarsScoreboard {
                 team.addEntry(p.getName());
             }
         }*/
-    }
+    //}
 
     public Player getPlayer() {
         return player;
