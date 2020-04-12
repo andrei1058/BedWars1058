@@ -114,6 +114,7 @@ public class BedWarsScoreboard {
             }
         }
         */
+        scoreboards.put(player.getUniqueId(), this);
     }
 
     public void setArena(IArena arena) {
