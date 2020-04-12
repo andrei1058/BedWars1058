@@ -135,18 +135,18 @@ public class SQLite implements Database {
         } else {
             sql = "INSERT INTO global_stats (name, uuid, first_play, last_play, wins, kills, final_kills, looses, deaths, final_deaths, beds_destroyed, games_played) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(2, stats.getName());
-                statement.setString(3, stats.getUuid().toString());
-                statement.setTimestamp(4, Timestamp.from(stats.getFirstPlay()));
-                statement.setTimestamp(5, Timestamp.from(stats.getLastPlay()));
-                statement.setInt(6, stats.getWins());
-                statement.setInt(7, stats.getKills());
-                statement.setInt(8, stats.getFinalKills());
-                statement.setInt(9, stats.getLosses());
-                statement.setInt(10, stats.getDeaths());
-                statement.setInt(11, stats.getFinalDeaths());
-                statement.setInt(12, stats.getBedsDestroyed());
-                statement.setInt(13, stats.getGamesPlayed());
+                statement.setString(1, stats.getName());
+                statement.setString(2, stats.getUuid().toString());
+                statement.setTimestamp(3, Timestamp.from(stats.getFirstPlay()));
+                statement.setTimestamp(4, Timestamp.from(stats.getLastPlay()));
+                statement.setInt(5, stats.getWins());
+                statement.setInt(6, stats.getKills());
+                statement.setInt(7, stats.getFinalKills());
+                statement.setInt(8, stats.getLosses());
+                statement.setInt(9, stats.getDeaths());
+                statement.setInt(10, stats.getFinalDeaths());
+                statement.setInt(11, stats.getBedsDestroyed());
+                statement.setInt(12, stats.getGamesPlayed());
                 statement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();

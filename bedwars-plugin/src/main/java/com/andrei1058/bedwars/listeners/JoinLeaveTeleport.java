@@ -351,7 +351,7 @@ public class JoinLeaveTeleport implements Listener {
     @EventHandler
     public void onWorldChange(PlayerChangedWorldEvent e) {
         if (BedWars.getServerType() == ServerType.SHARED) {
-            if (BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD)) {
+            if (BedWars.config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR)) {
                 //Bukkit.getScheduler().runTaskLater(plugin, ()-> {
                 if (e.getPlayer().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
                     BedWarsScoreboard.giveScoreboard(e.getPlayer(), null, true);

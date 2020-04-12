@@ -1,12 +1,12 @@
 package com.andrei1058.bedwars.sidebar;
 
-public class ScoreboardRefresh implements Runnable {
+public class SidebarPlaceholderRefresh implements Runnable {
     @Override
     public void run() {
         for (BedWarsScoreboard sb : BedWarsScoreboard.getScoreboards().values()){
             sb.getHandle().refreshPlaceholders();
-            sb.getHandle().playerListRefreshAnimation();
-            sb.getHandle().refreshHealthAnimation();
+            //TODO: move to their own task
+            //sb.getHandle().refreshHealthAnimation();
         }
     }
 }
