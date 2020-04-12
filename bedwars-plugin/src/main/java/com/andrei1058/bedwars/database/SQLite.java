@@ -133,9 +133,8 @@ public class SQLite implements Database {
                 e.printStackTrace();
             }
         } else {
-            sql = "INSERT INTO global_stats VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+            sql = "INSERT INTO global_stats (name, uuid, first_play, last_play, wins, kills, final_kills, looses, deaths, final_deaths, beds_destroyed, games_played) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setInt(1, 0);
                 statement.setString(2, stats.getName());
                 statement.setString(3, stats.getUuid().toString());
                 statement.setTimestamp(4, Timestamp.from(stats.getFirstPlay()));
