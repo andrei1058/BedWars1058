@@ -152,46 +152,6 @@ public class BedWarsScoreboard {
             handle.setTitle(new SidebarLineAnimated(title));
         }
 
-        for (String current : strings) {
-            // General static placeholders
-            current = current
-                    .replace("{server_ip}", BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
-                    .replace("{version}", plugin.getDescription().getVersion())
-                    .replace("{server}", config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID))
-                    .replace("{player}", player.getDisplayName())
-                    .replace("{money}", String.valueOf(getEconomy().getMoney(player)));
-
-            if (arena == null) {
-                // Lobby scoreboard
-                current = replaceStatsPlaceholders(getPlayer(), current, true);
-            } else {
-                // Game scoreboard
-                current = current
-                        .replace("{map}", arena.getDisplayName())
-                        .replace("{group}", arena.getDisplayGroup(player));
-
-                for (ITeam currentTeam : arena.getTeams()) {
-                    final ChatColor color = currentTeam.getColor().chat();
-                    // Static team placeholders
-                    current = current
-                            .replace("{Team" + currentTeam.getName() + "Color}", color.toString())
-                            .replace("{Team" + currentTeam.getName() + "Name}", currentTeam.getDisplayName(Language.getPlayerLanguage(getPlayer())));
-
-                }
-            }
-
-            // Add the line to the sidebar
-            String finalTemp = current;
-            SidebarLine sidebarLine = new SidebarLine() {
-                @NotNull
-                @Override
-                public String getLine() {
-                    return finalTemp;
-                }
-            };
-            handle.addLine(sidebarLine);
-        }
-
         //remove previous list formatting
         handle.playerListClear();
 
@@ -267,6 +227,47 @@ public class BedWarsScoreboard {
                 }
             }
         }
+
+        for (String current : strings) {
+            // General static placeholders
+            current = current
+                    .replace("{server_ip}", BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
+                    .replace("{version}", plugin.getDescription().getVersion())
+                    .replace("{server}", config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID))
+                    .replace("{player}", player.getDisplayName())
+                    .replace("{money}", String.valueOf(getEconomy().getMoney(player)));
+
+            if (arena == null) {
+                // Lobby scoreboard
+                current = replaceStatsPlaceholders(getPlayer(), current, true);
+            } else {
+                // Game scoreboard
+                current = current
+                        .replace("{map}", arena.getDisplayName())
+                        .replace("{group}", arena.getDisplayGroup(player));
+
+                for (ITeam currentTeam : arena.getTeams()) {
+                    final ChatColor color = currentTeam.getColor().chat();
+                    // Static team placeholders
+                    current = current
+                            .replace("{Team" + currentTeam.getName() + "Color}", color.toString())
+                            .replace("{Team" + currentTeam.getName() + "Name}", currentTeam.getDisplayName(Language.getPlayerLanguage(getPlayer())));
+
+                }
+            }
+
+            // Add the line to the sidebar
+            String finalTemp = current;
+            SidebarLine sidebarLine = new SidebarLine() {
+                @NotNull
+                @Override
+                public String getLine() {
+                    return finalTemp;
+                }
+            };
+            handle.addLine(sidebarLine);
+        }
+
     }
 
     // alter scoreboard list
