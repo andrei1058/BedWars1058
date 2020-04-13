@@ -65,7 +65,9 @@ public class BedWarsScoreboard {
                 new PlaceholderProvider("{time}", () -> {
                     if (this.arena == null) {
                         return dateFormat.format(new Date(System.currentTimeMillis()));
-                    } else if (this.arena.getStatus() != GameState.playing) {
+                    } else if (this.arena.getStatus() == GameState.playing || this.arena.getStatus() == GameState.restarting) {
+                        return getNextEventTime();
+                    } else {
                         if (this.arena.getStatus() == GameState.starting) {
                             if (getArena().getStartingTask() != null) {
                                 return String.valueOf(getArena().getStartingTask().getCountdown() + 1);
@@ -73,7 +75,6 @@ public class BedWarsScoreboard {
                         }
                         return dateFormat.format(new Date(System.currentTimeMillis()));
                     }
-                    return getNextEventTime();
                 }),
                 new PlaceholderProvider("{nextEvent}", this::getNextEventName),
                 new PlaceholderProvider("{date}", () -> dateFormat.format(new Date(System.currentTimeMillis()))),
