@@ -545,8 +545,15 @@ public class Arena implements IArena {
             //p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0), true);
             p.setGameMode(GameMode.ADVENTURE);
 
-            p.setAllowFlight(true);
-            p.setFlying(true);
+            if (playerBefore){
+                Bukkit.getScheduler().runTaskLater(plugin, ()-> {
+                    p.setAllowFlight(true);
+                    p.setFlying(true);
+                }, 10L);
+            } else {
+                p.setAllowFlight(true);
+                p.setFlying(true);
+            }
 
             if (p.getPassenger() != null && p.getPassenger().getType() == EntityType.ARMOR_STAND)
                 p.getPassenger().remove();
