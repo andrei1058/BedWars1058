@@ -2,7 +2,6 @@ package com.andrei1058.bedwars.database;
 
 import com.andrei1058.bedwars.stats.PlayerStats;
 
-import java.sql.Timestamp;
 import java.util.UUID;
 
 public interface Database {

@@ -4,14 +4,12 @@ package com.andrei1058.bedwars.configuration;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.NextEvent;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
-import com.andrei1058.bedwars.api.exceptions.InvalidSoundException;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
-import static com.andrei1058.bedwars.BedWars.nms;
 import static com.andrei1058.bedwars.BedWars.plugin;
 import static com.andrei1058.bedwars.api.configuration.ConfigPath.*;
 

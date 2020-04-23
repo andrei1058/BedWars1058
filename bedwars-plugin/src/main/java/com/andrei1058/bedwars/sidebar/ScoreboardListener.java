@@ -9,14 +9,12 @@ import com.andrei1058.bedwars.api.events.player.PlayerReJoinEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerReSpawnEvent;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.Arena;
-import com.sun.corba.se.pept.transport.ReaderThread;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 
 public class ScoreboardListener implements Listener {
 

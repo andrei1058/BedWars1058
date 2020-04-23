@@ -2,7 +2,6 @@ package com.andrei1058.bedwars.stats;
 
 import com.andrei1058.bedwars.BedWars;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.util.Map;
 import java.util.UUID;

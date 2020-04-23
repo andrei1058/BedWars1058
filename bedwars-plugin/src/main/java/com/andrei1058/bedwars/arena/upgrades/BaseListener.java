@@ -17,7 +17,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffect;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
 

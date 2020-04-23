@@ -10,7 +10,6 @@ import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.exceptions.InvalidMaterialException;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.stats.PlayerStats;
-import com.andrei1058.bedwars.stats.StatsManager;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
