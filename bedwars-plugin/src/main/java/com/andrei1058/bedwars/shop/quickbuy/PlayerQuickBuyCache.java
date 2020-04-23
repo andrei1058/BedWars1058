@@ -96,7 +96,8 @@ public class PlayerQuickBuyCache {
             addQuickElement(new QuickBuyElement(cc.getIdentifier(), slot));
             element = cc.getIdentifier();
         }
-        BedWars.getRemoteDatabase().setQuickBuySlot(player, element, slot);
+        BedWars.plugin.getServer().getScheduler().runTaskAsynchronously(BedWars.plugin, () ->
+                BedWars.getRemoteDatabase().setQuickBuySlot(player, element, slot));
     }
 
     @NotNull
