@@ -219,7 +219,7 @@ public class MySQL implements Database {
                     sql = "INSERT INTO quick_buy VALUES(0, ?, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');";
                     try (PreparedStatement statement2 = connection.prepareStatement(sql)) {
                         statement2.setString(1, uuid.toString());
-                        statement2.executeUpdate();
+                        statement2.execute();
                     }
                 }
                 BedWars.debug("UPDATE SET SLOT " + slot + " identifier " + shopPath);

@@ -563,6 +563,7 @@ public class BedWarsScoreboard {
      * @param arena  target arena.
      */
     public static void giveScoreboard(@NotNull Player player, IArena arena, boolean delay) {
+        if (!player.isOnline()) return;
         BedWarsScoreboard scoreboard = BedWarsScoreboard.getSBoard(player.getUniqueId());
         List<String> lines = null;
 

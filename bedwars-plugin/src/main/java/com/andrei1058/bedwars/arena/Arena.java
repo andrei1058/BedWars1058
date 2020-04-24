@@ -746,7 +746,7 @@ public class Arena implements IArena {
                     on.hidePlayer(p);
                 }
             }
-            if (!disconnect) BedWarsScoreboard.giveScoreboard(p, null, true);
+            if (!disconnect) BedWarsScoreboard.giveScoreboard(p, null, false);
         }, 5L);
 
         /* Remove also the party */
