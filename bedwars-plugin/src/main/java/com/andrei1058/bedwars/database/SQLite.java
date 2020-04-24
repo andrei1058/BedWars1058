@@ -207,7 +207,7 @@ public class SQLite implements Database {
                     }
                 }
                 BedWars.debug("UPDATE SET SLOT " + slot + " identifier " + shopPath);
-                try (PreparedStatement ps = connection.prepareStatement("UPDATE quick_buy SET slot_" + slot + " = '?' WHERE uuid = ?;")) {
+                try (PreparedStatement ps = connection.prepareStatement("UPDATE quick_buy SET slot_" + slot + " = ? WHERE uuid = ?;")) {
                     ps.setString(1, shopPath);
                     ps.setString(2, p.toString());
                     ps.executeUpdate();
