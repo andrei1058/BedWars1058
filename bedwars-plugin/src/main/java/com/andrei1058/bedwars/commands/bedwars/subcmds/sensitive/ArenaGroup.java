@@ -44,7 +44,7 @@ public class ArenaGroup extends SubCommand {
         if (args.length < 1) {
             sendArenaGroupCmdList(p);
         } else if (args[0].equalsIgnoreCase("create")) {
-            if (args[1].contains("+")) {
+            if (args[0].contains("+")) {
                 p.sendMessage("§c▪ §7" + args[0] + " mustn't contain this symbol: " + ChatColor.RED + "+");
                 return true;
             }
