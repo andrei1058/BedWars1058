@@ -220,7 +220,7 @@
                         </relocation>
                         <relocation>
                             <pattern>org.slf4j</pattern>
-                            <shadedPattern>fr.xephi.authme.libs.org.slf4j</shadedPattern>
+                            <shadedPattern>com.andrei1058.bedwars.libs.org.slf4j</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
