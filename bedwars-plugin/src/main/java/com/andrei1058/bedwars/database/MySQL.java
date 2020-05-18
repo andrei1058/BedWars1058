@@ -3,20 +3,25 @@ package com.andrei1058.bedwars.database;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.stats.PlayerStats;
-import org.bukkit.Bukkit;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
 import java.sql.*;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import static com.andrei1058.bedwars.BedWars.config;
 
 @SuppressWarnings("WeakerAccess")
 public class MySQL implements Database {
 
-    private Connection connection;
+    private HikariDataSource dataSource;
     private String host, database, user, pass;
     private int port;
     private boolean ssl;
+    private boolean certificateVerification;
+    private int poolSize;
+    private int maxLifetime;
 
     /**
      * Create new MySQL connection.
@@ -28,43 +33,55 @@ public class MySQL implements Database {
         this.pass = config.getYml().getString("database.pass");
         this.port = config.getYml().getInt("database.port");
         this.ssl = config.getYml().getBoolean("database.ssl");
+        this.certificateVerification = config.getYml().getBoolean("database.verify-certificate", true);
+        this.poolSize = config.getYml().getInt("database.pool-size", 10);
+        this.maxLifetime = config.getYml().getInt("database.max-lifetime", 1800);
+        createPool();
     }
 
     /**
-     * Connect to remote database.
-     *
-     * @return true if connected successfully.
+     * Creates the SQL connection pool.
      */
-    public boolean connect() {
-        try {
-            connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?autoReconnect=true&user=" + user
-                    + "&password=" + pass + "&useSSL=" + ssl + "&useUnicode=true&characterEncoding=UTF-8");
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+    public void createPool() {
+        HikariConfig hikariConfig = new HikariConfig();
 
-    /**
-     * Check if database is connected.
-     */
-    public boolean isConnected() {
-        if (connection == null) return false;
-        try {
-            return connection.isValid(0);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        hikariConfig.setPoolName("BedWars1058MySQLPool");
+
+        hikariConfig.setMaximumPoolSize(poolSize);
+        hikariConfig.setMaxLifetime(maxLifetime * 1000);
+
+        hikariConfig.setJdbcUrl("jdbc:mysql://" + host + ":" + port + "/" + database);
+
+        hikariConfig.setUsername(user);
+        hikariConfig.setPassword(pass);
+
+        hikariConfig.addDataSourceProperty("useSSL", String.valueOf(ssl));
+        if (!certificateVerification) {
+            hikariConfig.addDataSourceProperty("verifyServerCertificate", String.valueOf(false));
         }
-        return false;
+
+        hikariConfig.addDataSourceProperty("characterEncoding", "utf8");
+        hikariConfig.addDataSourceProperty("encoding", "UTF-8");
+        hikariConfig.addDataSourceProperty("useUnicode", "true");
+
+        hikariConfig.addDataSourceProperty("rewriteBatchedStatements", "true");
+        hikariConfig.addDataSourceProperty("jdbcCompliantTruncation", "false");
+
+        hikariConfig.addDataSourceProperty("cachePrepStmts", "true");
+        hikariConfig.addDataSourceProperty("prepStmtCacheSize", "275");
+        hikariConfig.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+
+        // Recover if connection gets interrupted
+        hikariConfig.addDataSourceProperty("socketTimeout", String.valueOf(TimeUnit.SECONDS.toMillis(30)));
+
+        dataSource = new HikariDataSource(hikariConfig);
     }
 
     @Override
     public boolean hasStats(UUID uuid) {
-        if (!isConnected()) connect();
-
         String sql = "SELECT id FROM global_stats WHERE uuid = ?;";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, uuid.toString());
             try (ResultSet result = statement.executeQuery()) {
                 return result.next();
@@ -77,55 +94,54 @@ public class MySQL implements Database {
 
     @Override
     public void init() {
-        if (!isConnected()) connect();
+        try(Connection connection = dataSource.getConnection()) {
+            String sql = "CREATE TABLE IF NOT EXISTS global_stats (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
+                    "name VARCHAR(200), uuid VARCHAR(200), first_play TIMESTAMP NULL DEFAULT NULL, " +
+                    "last_play TIMESTAMP NULL DEFAULT NULL, wins INT(200), kills INT(200), " +
+                    "final_kills INT(200), looses INT(200), deaths INT(200), final_deaths INT(200), beds_destroyed INT(200), games_played INT(200));";
+            try (Statement statement = connection.createStatement()) {
+                statement.executeUpdate(sql);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
 
-        String sql = "CREATE TABLE IF NOT EXISTS global_stats (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
-                "name VARCHAR(200), uuid VARCHAR(200), first_play TIMESTAMP NULL DEFAULT NULL, " +
-                "last_play TIMESTAMP NULL DEFAULT NULL, wins INT(200), kills INT(200), " +
-                "final_kills INT(200), looses INT(200), deaths INT(200), final_deaths INT(200), beds_destroyed INT(200), games_played INT(200));";
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(sql);
+            sql = "CREATE TABLE IF NOT EXISTS quick_buy (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, uuid VARCHAR(200), " +
+                    "slot_19 VARCHAR(200), slot_20 VARCHAR(200), slot_21 VARCHAR(200), slot_22 VARCHAR(200), slot_23 VARCHAR(200), slot_24 VARCHAR(200), slot_25 VARCHAR(200)," +
+                    "slot_28 VARCHAR(200), slot_29 VARCHAR(200), slot_30 VARCHAR(200), slot_31 VARCHAR(200), slot_32 VARCHAR(200), slot_33 VARCHAR(200), slot_34 VARCHAR(200)," +
+                    "slot_37 VARCHAR(200), slot_38 VARCHAR(200), slot_39 VARCHAR(200), slot_40 VARCHAR(200), slot_41 VARCHAR(200), slot_42 VARCHAR(200), slot_43 VARCHAR(200));";
+            try (Statement statement = connection.createStatement()) {
+                statement.executeUpdate(sql);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+
+            sql = "CREATE TABLE IF NOT EXISTS player_levels (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, uuid VARCHAR(200), " +
+                    "level INT(200), xp INT(200), name VARCHAR(200) CHARACTER SET utf8, next_cost INT(200));";
+            try (Statement statement = connection.createStatement()) {
+                statement.executeUpdate(sql);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            sql = "CREATE TABLE IF NOT EXISTS player_language (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, uuid VARCHAR(200), iso VARCHAR(200));";
+            try (Statement statement = connection.createStatement()) {
+                statement.executeUpdate(sql);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        sql = "CREATE TABLE IF NOT EXISTS quick_buy (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, uuid VARCHAR(200), " +
-                "slot_19 VARCHAR(200), slot_20 VARCHAR(200), slot_21 VARCHAR(200), slot_22 VARCHAR(200), slot_23 VARCHAR(200), slot_24 VARCHAR(200), slot_25 VARCHAR(200)," +
-                "slot_28 VARCHAR(200), slot_29 VARCHAR(200), slot_30 VARCHAR(200), slot_31 VARCHAR(200), slot_32 VARCHAR(200), slot_33 VARCHAR(200), slot_34 VARCHAR(200)," +
-                "slot_37 VARCHAR(200), slot_38 VARCHAR(200), slot_39 VARCHAR(200), slot_40 VARCHAR(200), slot_41 VARCHAR(200), slot_42 VARCHAR(200), slot_43 VARCHAR(200));";
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-
-        sql = "CREATE TABLE IF NOT EXISTS player_levels (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, uuid VARCHAR(200), " +
-                "level INT(200), xp INT(200), name VARCHAR(200) CHARACTER SET utf8, next_cost INT(200));";
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        sql = "CREATE TABLE IF NOT EXISTS player_language (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, uuid VARCHAR(200), iso VARCHAR(200));";
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        Bukkit.getScheduler().runTaskTimerAsynchronously(BedWars.plugin, new SessionKeeper(this), 20 * 60, 20 * 3600);
     }
 
     @Override
     public void saveStats(PlayerStats stats) {
-        if (!isConnected()) connect();
-
         String sql;
         if (hasStats(stats.getUuid())) {
             sql = "UPDATE global_stats SET first_play=?, last_play=?, wins=?, kills=?, final_kills=?, looses=?, deaths=?, final_deaths=?, beds_destroyed=?, games_played=?, name=? WHERE uuid = ?;";
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setTimestamp(1, stats.getFirstPlay() != null ? Timestamp.from(stats.getFirstPlay()) : null);
                 statement.setTimestamp(2, stats.getLastPlay() != null ? Timestamp.from(stats.getLastPlay()) : null);
                 statement.setInt(3, stats.getWins());
@@ -144,7 +160,8 @@ public class MySQL implements Database {
             }
         } else {
             sql = "INSERT INTO global_stats VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setInt(1, 0);
                 statement.setString(2, stats.getName());
                 statement.setString(3, stats.getUuid().toString());
@@ -167,26 +184,27 @@ public class MySQL implements Database {
 
     @Override
     public PlayerStats fetchStats(UUID uuid) {
-        if (!isConnected()) connect();
         PlayerStats stats = new PlayerStats(uuid);
 
-        String sql = "SELECT * FROM global_stats WHERE uuid = ?;";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        String sql = "SELECT first_play, last_play, wins, kills, final_kills, looses, deaths, final_deaths, looses," +
+                "deaths, final_deaths, beds_destroyed, games_played FROM global_stats WHERE uuid = ?;";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, uuid.toString());
             try (ResultSet result = statement.executeQuery()) {
                 if (result.next()) {
-                    Timestamp firstPlay = result.getTimestamp("first_play");
-                    Timestamp lastPlay = result.getTimestamp("last_play");
+                    Timestamp firstPlay = result.getTimestamp(1);
+                    Timestamp lastPlay = result.getTimestamp(2);
                     stats.setFirstPlay(firstPlay != null ? firstPlay.toInstant() : null);
                     stats.setLastPlay(lastPlay != null ? lastPlay.toInstant() : null);
-                    stats.setWins(result.getInt("wins"));
-                    stats.setKills(result.getInt("kills"));
-                    stats.setFinalKills(result.getInt("final_kills"));
-                    stats.setLosses(result.getInt("looses"));
-                    stats.setDeaths(result.getInt("deaths"));
-                    stats.setFinalDeaths(result.getInt("final_deaths"));
-                    stats.setBedsDestroyed(result.getInt("beds_destroyed"));
-                    stats.setGamesPlayed(result.getInt("games_played"));
+                    stats.setWins(result.getInt(3));
+                    stats.setKills(result.getInt(4));
+                    stats.setFinalKills(result.getInt(5));
+                    stats.setLosses(result.getInt(6));
+                    stats.setDeaths(result.getInt(7));
+                    stats.setFinalDeaths(result.getInt(8));
+                    stats.setBedsDestroyed(result.getInt(9));
+                    stats.setGamesPlayed(result.getInt(10));
                 }
             }
         } catch (SQLException e) {
@@ -198,28 +216,21 @@ public class MySQL implements Database {
 
     @Override
     public void close() {
-        if (isConnected()) {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        dataSource.close();
     }
 
     @Override
     public void setQuickBuySlot(UUID uuid, String shopPath, int slot) {
-        if (!isConnected()) connect();
-
         String sql = "SELECT id FROM quick_buy WHERE uuid = ?;";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, uuid.toString());
             try (ResultSet result = statement.executeQuery()) {
                 if (!result.next()) {
                     sql = "INSERT INTO quick_buy VALUES(0, ?, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');";
                     try (PreparedStatement statement2 = connection.prepareStatement(sql)) {
                         statement2.setString(1, uuid.toString());
-                        statement2.execute();
+                        statement2.executeUpdate();
                     }
                 }
                 BedWars.debug("UPDATE SET SLOT " + slot + " identifier " + shopPath);
@@ -238,14 +249,13 @@ public class MySQL implements Database {
 
     @Override
     public String getQuickBuySlots(UUID uuid, int slot) {
-        if (!isConnected()) connect();
-
         String sql = "SELECT slot_" + slot + " FROM quick_buy WHERE uuid = ?;";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, uuid.toString());
             try (ResultSet result = statement.executeQuery()) {
                 if (result.next()) {
-                    return result.getString("slot_" + slot);
+                    return result.getString(1);
                 }
             }
         } catch (Exception ex) {
@@ -256,10 +266,9 @@ public class MySQL implements Database {
 
     @Override
     public boolean hasQuickBuy(UUID uuid) {
-        if (!isConnected()) connect();
-
         String sql = "SELECT id FROM quick_buy WHERE uuid = ?;";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, uuid.toString());
             try (ResultSet result = statement.executeQuery()) {
                 return result.next();
@@ -272,18 +281,17 @@ public class MySQL implements Database {
 
     @Override
     public Object[] getLevelData(UUID uuid) {
-        if (!isConnected()) connect();
-
         String sql = "SELECT level, xp, name, next_cost FROM player_levels WHERE uuid = ?;";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, uuid.toString());
             try (ResultSet result = statement.executeQuery()) {
                 if (result.next()) {
                     return new Object[]{
-                            result.getInt("level"),
-                            result.getInt("xp"),
-                            result.getString("name"),
-                            result.getInt("next_cost")
+                            result.getInt(1),
+                            result.getInt(2),
+                            result.getString(3),
+                            result.getInt(4)
                     };
                 }
             }
@@ -295,10 +303,9 @@ public class MySQL implements Database {
 
     @Override
     public void setLevelData(UUID uuid, int level, int xp, String displayName, int nextCost) {
-        if (!isConnected()) connect();
-
         String sql = "SELECT id from player_levels WHERE uuid = ?;";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, uuid.toString());
             try (ResultSet result = statement.executeQuery()) {
                 if (!result.next()) {
@@ -339,10 +346,9 @@ public class MySQL implements Database {
 
     @Override
     public void setLanguage(UUID uuid, String iso) {
-        if (!isConnected()) connect();
-
         String sql = "SELECT iso FROM player_language WHERE uuid = ?;";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, uuid.toString());
             try (ResultSet result = statement.executeQuery()) {
                 if (result.next()) {
@@ -368,30 +374,18 @@ public class MySQL implements Database {
 
     @Override
     public String getLanguage(UUID uuid) {
-        if (!isConnected()) connect();
-
         String sql = "SELECT iso FROM player_language WHERE uuid = ?;";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, uuid.toString());
             try (ResultSet result = statement.executeQuery()) {
                 if (result.next()) {
-                    return result.getString("iso");
+                    return result.getString(1);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return Language.getDefaultLanguage().getIso();
-    }
-
-    /**
-     * Ping the database in order to keep the session open.
-     */
-    public void ping() {
-        try (Statement statement = connection.createStatement()) {
-            statement.execute("SELECT id FROM player_levels WHERE id=0;");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }
