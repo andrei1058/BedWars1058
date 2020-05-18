@@ -36,13 +36,14 @@ public class MySQL implements Database {
         this.certificateVerification = config.getYml().getBoolean("database.verify-certificate", true);
         this.poolSize = config.getYml().getInt("database.pool-size", 10);
         this.maxLifetime = config.getYml().getInt("database.max-lifetime", 1800);
-        createPool();
     }
 
     /**
-     * Creates the SQL connection pool.
+     * Creates the SQL connection pool and tries to connect.
+     *
+     * @return true if connected successfully.
      */
-    public void createPool() {
+    public boolean connect() {
         HikariConfig hikariConfig = new HikariConfig();
 
         hikariConfig.setPoolName("BedWars1058MySQLPool");
@@ -75,6 +76,14 @@ public class MySQL implements Database {
         hikariConfig.addDataSourceProperty("socketTimeout", String.valueOf(TimeUnit.SECONDS.toMillis(30)));
 
         dataSource = new HikariDataSource(hikariConfig);
+
+        try {
+            dataSource.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     @Override
