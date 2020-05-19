@@ -51,7 +51,7 @@ public class StatsListener implements Listener {
         PlayerStats victimStats = BedWars.getStatsManager().get(event.getVictim().getUniqueId());
         PlayerStats killerStats = event.getKiller() != null ? BedWars.getStatsManager().get(event.getKiller().getUniqueId()) : null;
 
-        if (event.getCause().toString().endsWith("_FINAL")) {
+        if (event.getCause().isFinalKill()) {
             //store final deaths
             victimStats.setFinalKills(victimStats.getFinalDeaths() + 1);
             //store losses

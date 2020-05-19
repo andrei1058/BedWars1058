@@ -100,7 +100,7 @@ public class ScoreboardListener implements Listener {
     @EventHandler
     public void onFinalKill(PlayerKillEvent e){
         if (e == null) return;
-        if (!e.getCause().toString().contains("FINAL")) return;
+        if (!e.getCause().isFinalKill()) return;
         final IArena arena = e.getArena();
 
         // refresh placeholders in case placeholders refresh is disabled
