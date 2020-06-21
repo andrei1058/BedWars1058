@@ -109,7 +109,7 @@ public class BedWarsScoreboard {
         // Apply the sidebar to the player
         handle.apply(player);
 
-        /* TODO: not ready
+        /* not sure if still required. but I think not
         if (arena != null) {
             if (arena.getStatus() == GameState.playing) {
                 addHealthIcon();
@@ -140,7 +140,7 @@ public class BedWarsScoreboard {
         placeholdersToRemove.forEach(placeholder -> handle.removePlaceholder(placeholder));
 
         // Set the title
-        String[] title = strings.remove(0).split("\\n|,");
+        String[] title = strings.remove(0).split("[\\n,]");
         if (title.length == 1) {
             handle.setTitle(new SidebarLine() {
                 @NotNull
@@ -189,9 +189,7 @@ public class BedWarsScoreboard {
 
                 // format current teams in tab
                 for (ITeam currentTeam : arena.getTeams()) {
-                    currentTeam.getMembers().forEach(currentMember -> {
-                        addToTabList(currentMember, prefixListPath, suffixListPath);
-                    });
+                    currentTeam.getMembers().forEach(currentMember -> addToTabList(currentMember, prefixListPath, suffixListPath));
                 }
                 // format spectators in tab for current spectator
                 if (arena.isSpectator(getPlayer())) {
@@ -272,7 +270,7 @@ public class BedWarsScoreboard {
     }
 
     // alter scoreboard list
-    // must be used when a player joins/ re-joins
+    // must be used when a player joins/ re-joins/ invisibility potion has expired
     public void addToTabList(Player player, @NotNull String prefixListPath, @NotNull String suffixListPath) {
         handle.playerListCreate(player, getTeamListText(prefixListPath, player), getTeamListText(suffixListPath, player));
         if (arena != null) {
@@ -361,7 +359,7 @@ public class BedWarsScoreboard {
         }
     }
 
-    /* TODO: not ready
+    /* I think this is no longer required
     public void giveTeamColorTag() {
         if (scoreboard == null){
             scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
@@ -546,14 +544,17 @@ public class BedWarsScoreboard {
         */
     }
 
-    public void invisibilityPotion(@NotNull ITeam team, Player player, boolean trueRemoveAddFalse) {
-        /* TODO: i think it's still required, not sure
-        Team t = sb.getTeam(team.getName());
-        if (t != null) {
-            if (trueRemoveAddFalse) t.removeEntry(player.getName());
-            else t.addEntry(player.getName());
+    /**
+     * This will remove the player name tag when he drinks a potion.
+     *
+     * @param toggle true when applied, false when expired.
+     */
+    public void invisibilityPotion(@NotNull ITeam team, Player player, boolean toggle) {
+        if (toggle){
+            handle.playerListHideNameTag(player);
+        } else {
+            handle.playerListRestoreNameTag(player);
         }
-        */
     }
 
     /**
