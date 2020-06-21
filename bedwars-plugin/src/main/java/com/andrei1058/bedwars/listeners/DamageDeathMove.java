@@ -74,13 +74,6 @@ public class DamageDeathMove implements Listener {
 
     @EventHandler
     public void onDamageByEntity(EntityDamageByEntityEvent e) {
-        if (e.getEntity().hasMetadata("DragonTeam")) {
-            IArena a = Arena.getArenaByIdentifier(e.getEntity().getWorld().getName());
-            if (a != null) {
-                e.setCancelled(true);
-                return;
-            }
-        }
         if (e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
             IArena a = Arena.getArenaByPlayer(p);
@@ -383,7 +376,7 @@ public class DamageDeathMove implements Listener {
 
             /* call game kill event */
             Bukkit.getPluginManager().callEvent(new PlayerKillEvent(a, victim, killer, message, cause));
-            Bukkit.getScheduler().runTaskLater(plugin, () -> victim.spigot().respawn(), 1L);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> victim.spigot().respawn(), 3L);
             a.addPlayerDeath(victim);
         }
     }
@@ -446,11 +439,6 @@ public class DamageDeathMove implements Listener {
                     e.getPlayer().setFlying(true);
                 }, 10L);
                 a.getRespawn().put(e.getPlayer(), 5);
-                for (SBoard sb : SBoard.getScoreboards().values()) {
-                    if (sb.getArena() == a) {
-                        sb.giveTeamColorTag();
-                    }
-                }
 
                 if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS)) {
                     Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {

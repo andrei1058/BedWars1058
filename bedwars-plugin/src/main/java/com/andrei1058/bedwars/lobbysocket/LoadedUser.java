@@ -3,7 +3,6 @@ package com.andrei1058.bedwars.lobbysocket;
 import com.andrei1058.bedwars.api.language.Language;
 import org.bukkit.Bukkit;
 
-import java.util.Collections;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 

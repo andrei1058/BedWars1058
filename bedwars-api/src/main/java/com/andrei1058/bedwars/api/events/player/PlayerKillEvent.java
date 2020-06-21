@@ -27,20 +27,30 @@ public class PlayerKillEvent extends Event {
     }
 
     public enum PlayerKillCause {
-        UNKNOWN,
-        UNKNOWN_FINAL_KILL,
-        EXPLOSION,
-        EXPLOSION_FINAL_KILL,
-        VOID,
-        VOID_FINAL_KILL,
-        PVP,
-        PVP_FINAL_KILL,
-        PLAYER_SHOOT,
-        PLAYER_SHOOT_FINAL_KILL,
-        SILVERFISH,
-        SILVERFISH_FINAL_KILL,
-        IRON_GOLEM,
-        IRON_GOLEM_FINAL_KILL
+        UNKNOWN(false),
+        UNKNOWN_FINAL_KILL(true),
+        EXPLOSION(false),
+        EXPLOSION_FINAL_KILL(true),
+        VOID(false),
+        VOID_FINAL_KILL(true),
+        PVP(false),
+        PVP_FINAL_KILL(true),
+        PLAYER_SHOOT(false),
+        PLAYER_SHOOT_FINAL_KILL(true),
+        SILVERFISH(false),
+        SILVERFISH_FINAL_KILL(true),
+        IRON_GOLEM(false),
+        IRON_GOLEM_FINAL_KILL(true);
+
+        private boolean finalKill;
+
+        PlayerKillCause(boolean finalKill) {
+            this.finalKill = finalKill;
+        }
+
+        public boolean isFinalKill() {
+            return finalKill;
+        }
     }
 
     /**

@@ -19,7 +19,6 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
@@ -30,7 +29,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 
 import static com.andrei1058.bedwars.BedWars.nms;
-import static com.andrei1058.bedwars.BedWars.plugin;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class SpectatorListeners implements Listener {

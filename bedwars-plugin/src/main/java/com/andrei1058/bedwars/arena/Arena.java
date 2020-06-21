@@ -33,6 +33,7 @@ import com.andrei1058.bedwars.levels.internal.PerMinuteTask;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
 import com.andrei1058.bedwars.api.region.Region;
 import com.andrei1058.bedwars.shop.ShopCache;
+import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.arena.tasks.GamePlayingTask;
 import com.andrei1058.bedwars.arena.tasks.GameRestartingTask;
@@ -235,6 +236,7 @@ public class Arena implements IArena {
         if (error) return;
 
         addToEnableQueue(this);
+        Language.saveIfNotExists(Messages.ARENA_DISPLAY_GROUP_PATH + getGroup().toLowerCase(), String.valueOf(getGroup().charAt(0)).toUpperCase() + group.substring(1).toLowerCase());
     }
 
     /**
@@ -449,7 +451,7 @@ public class Arena implements IArena {
             }
             p.teleport(l, PlayerTeleportEvent.TeleportCause.PLUGIN);
 
-            SBoard.giveGameScoreboard(p, this);
+            BedWarsScoreboard.giveScoreboard(p, this, false);
             sendPreGameCommandItems(p);
         } else if (status == GameState.playing) {
             addSpectator(p, false, null);
@@ -511,11 +513,6 @@ public class Arena implements IArena {
             spectators.add(p);
             players.remove(p);
 
-            SBoard sb = SBoard.getSBoard(p.getUniqueId());
-            if (sb != null) {
-                sb.remove();
-            }
-
             updateSpectatorCollideRule(p, false);
 
             if (!playerBefore) {
@@ -527,7 +524,7 @@ public class Arena implements IArena {
                 setArenaByPlayer(p, this);
             }
 
-            SBoard.giveSpectatorScoreboard(p, this);
+            BedWarsScoreboard.giveScoreboard(p, this, false);
             nms.setCollide(p, this, false);
 
             if (!playerBefore) {
@@ -548,8 +545,15 @@ public class Arena implements IArena {
             //p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0), true);
             p.setGameMode(GameMode.ADVENTURE);
 
-            p.setAllowFlight(true);
-            p.setFlying(true);
+            if (playerBefore){
+                Bukkit.getScheduler().runTaskLater(plugin, ()-> {
+                    p.setAllowFlight(true);
+                    p.setFlying(true);
+                }, 10L);
+            } else {
+                p.setAllowFlight(true);
+                p.setFlying(true);
+            }
 
             if (p.getPassenger() != null && p.getPassenger().getType() == EntityType.ARMOR_STAND)
                 p.getPassenger().remove();
@@ -712,11 +716,12 @@ public class Arena implements IArena {
                 on.sendMessage(getMsg(on, Messages.COMMAND_LEAVE_MSG).replace("{player}", p.getDisplayName()));
             }
         }
-        SBoard sb = SBoard.getSBoard(p.getUniqueId());
-        if (sb != null) {
-            sb.remove();
-        }
+
         if (getServerType() == ServerType.SHARED) {
+            BedWarsScoreboard sb = BedWarsScoreboard.getSBoard(p.getUniqueId());
+            if (sb != null) {
+                sb.remove();
+            }
             p.teleport(playerLocation.get(p));
         } else if (getServerType() == ServerType.BUNGEE) {
             Misc.moveToLobbyOrKick(p);
@@ -741,7 +746,7 @@ public class Arena implements IArena {
                     on.hidePlayer(p);
                 }
             }
-            if (!disconnect) SBoard.giveLobbyScoreboard(p);
+            if (!disconnect) BedWarsScoreboard.giveScoreboard(p, null, false);
         }, 5L);
 
         /* Remove also the party */
@@ -818,12 +823,11 @@ public class Arena implements IArena {
         }
         nms.setCollide(p, this, true);
 
-        SBoard sb = SBoard.getSBoard(p.getUniqueId());
-        if (sb != null) {
-            sb.remove();
-        }
-
         if (getServerType() == ServerType.SHARED) {
+            BedWarsScoreboard sb = BedWarsScoreboard.getSBoard(p.getUniqueId());
+            if (sb != null) {
+                sb.remove();
+            }
             p.teleport(playerLocation.get(p));
         } else if (getServerType() == ServerType.MULTIARENA) {
             if (BedWars.getLobbyWorld().isEmpty()) {
@@ -849,7 +853,7 @@ public class Arena implements IArena {
                     p.hidePlayer(on);
                 }
             }
-            if (!disconnect) SBoard.giveLobbyScoreboard(p);
+            if (!disconnect) BedWarsScoreboard.giveScoreboard(p, null, true);
         }, 10L);
 
         /* Remove also the party */
@@ -942,7 +946,7 @@ public class Arena implements IArena {
         reJoin.getBwt().reJoin(p);
         reJoin.destroy();
 
-        SBoard.giveGameScoreboard(p, this);
+        BedWarsScoreboard.giveScoreboard(p, this, false);
         Bukkit.getScheduler().runTaskLater(plugin, () -> getPlayers().forEach(p2 -> nms.hidePlayer(p, p2)), 10L);
         Bukkit.getScheduler().runTaskLater(plugin, () -> getSpectators().forEach(p2 -> nms.hidePlayer(p, p2)), 10L);
         return true;
@@ -1050,6 +1054,16 @@ public class Arena implements IArena {
                 break;
         }
         return s.replace("{full}", this.getPlayers().size() == this.getMaxPlayers() ? lang.m(Messages.MEANING_FULL) : "");
+    }
+
+    @Override
+    public String getDisplayGroup(Player player) {
+        return getPlayerLanguage(player).m(Messages.ARENA_DISPLAY_GROUP_PATH + getGroup().toLowerCase());
+    }
+
+    @Override
+    public String getDisplayGroup(@NotNull Language language) {
+        return language.m(Messages.ARENA_DISPLAY_GROUP_PATH + getGroup().toLowerCase());
     }
 
     /**
@@ -1222,28 +1236,19 @@ public class Arena implements IArena {
         }
         restartingTask = null;
 
+        players.forEach(c -> {
+            BedWarsScoreboard.giveScoreboard(c, this, false);
+        });
+
+        spectators.forEach(c -> {
+            BedWarsScoreboard.giveScoreboard(c, this, false);
+        });
+
         if (status == GameState.starting) {
-            for (SBoard sb : SBoard.getScoreboards().values()) {
-                if (sb.getArena() == this) {
-                    sb.setStrings(getScoreboard(sb.getP(), "scoreboard." + getGroup() + ".starting", Messages.SCOREBOARD_DEFAULT_STARTING));
-                }
-            }
             startingTask = new GameStartingTask(this);
-        } else if (status == GameState.waiting) {
-            for (SBoard sbb : SBoard.getScoreboards().values()) {
-                if (sbb.getArena() == this) {
-                    sbb.setStrings(getScoreboard(sbb.getP(), "scoreboard." + getGroup() + ".waiting", Messages.SCOREBOARD_DEFAULT_WAITING));
-                }
-            }
         } else if (status == GameState.playing) {
             if (BedWars.getLevelSupport() instanceof InternalLevel) perMinuteTask = new PerMinuteTask(this);
             playingTask = new GamePlayingTask(this);
-            for (SBoard sbb : SBoard.getScoreboards().values()) {
-                if (sbb.getArena() == this) {
-                    sbb.setStrings(getScoreboard(sbb.getP(), "scoreboard." + getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING));
-                    sbb.giveTeamColorTag();
-                }
-            }
         } else if (status == GameState.restarting) {
             restartingTask = new GameRestartingTask(this);
             if (perMinuteTask != null) perMinuteTask.cancel();
@@ -1873,7 +1878,7 @@ public class Arena implements IArena {
     @Override
     public void updateSpectatorCollideRule(Player p, boolean collide) {
         if (!isSpectator(p)) return;
-        for (SBoard sb : SBoard.getScoreboards().values()) {
+        for (BedWarsScoreboard sb : BedWarsScoreboard.getScoreboards().values()) {
             if (sb.getArena() == this) {
                 sb.updateSpectator(p, collide);
             }
@@ -2065,8 +2070,8 @@ public class Arena implements IArena {
                 rjt.destroy();
             }
         }
-        for (Despawnable despawnable : new ArrayList<>(BedWars.nms.getDespawnablesList().values())){
-            if (despawnable.getTeam().getArena() == this){
+        for (Despawnable despawnable : new ArrayList<>(BedWars.nms.getDespawnablesList().values())) {
+            if (despawnable.getTeam().getArena() == this) {
                 despawnable.destroy();
             }
         }
@@ -2165,16 +2170,17 @@ public class Arena implements IArena {
 
     @Override
     public boolean equals(Object obj) {
+        if (obj == null) return false;
         if (obj instanceof IArena) {
             return ((IArena) obj).getWorldName().equals(this.getWorldName());
         }
         return false;
     }
 
-    private void destroyReJoins(){
+    private void destroyReJoins() {
         List<ReJoin> reJoins = new ArrayList<>(ReJoin.getReJoinList());
-        for (ReJoin reJoin : reJoins){
-            if (reJoin.getArena() == this){
+        for (ReJoin reJoin : reJoins) {
+            if (reJoin.getArena() == this) {
                 reJoin.destroy();
             }
         }

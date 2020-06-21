@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.database;
 
-import java.sql.Timestamp;
+import com.andrei1058.bedwars.stats.PlayerStats;
+
 import java.util.UUID;
 
 public interface Database {
@@ -11,14 +12,16 @@ public interface Database {
     void init();
 
     /**
-     * Create or replace stats for a player.
+     * Check if player has remote stats.
      */
-    void saveStats(UUID uuid, String username, Timestamp firstPlay, Timestamp lastPlay, int wins, int kills, int finalKills, int losses, int deaths, int finalDeaths, int bedsDestroyed, int gamesPlayed);
+    boolean hasStats(UUID uuid);
 
     /**
-     * Update local cache from remote database.
+     * Create or replace stats for a player.
      */
-    void updateLocalCache(UUID uuid);
+    void saveStats(PlayerStats stats);
+
+    PlayerStats fetchStats(UUID uuid);
 
     /**
      * Close connection.

@@ -12,7 +12,6 @@ import static com.andrei1058.bedwars.BedWars.plugin;
 
 public class UpgradesConfig extends ConfigManager {
 
-
     public UpgradesConfig(String name, String dir) {
         super(plugin, name, dir);
         YamlConfiguration yml = this.getYml();

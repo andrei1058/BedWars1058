@@ -7,14 +7,12 @@ import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.entity.Despawnable;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
 import com.andrei1058.bedwars.api.exceptions.InvalidEffectException;
-import com.andrei1058.bedwars.api.exceptions.InvalidSoundException;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.VersionSupport;
 import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import net.minecraft.server.v1_9_R2.*;
 import net.minecraft.server.v1_9_R2.Item;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_9_R2.CraftWorld;
@@ -29,7 +27,6 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.Team;
 
@@ -385,7 +382,6 @@ public class v1_9_R2 extends VersionSupport {
     @Override
     public void spawnDragon(Location l, ITeam bwt) {
         EnderDragon ed = (EnderDragon) l.getWorld().spawnEntity(l, EntityType.ENDER_DRAGON);
-        ed.setMetadata("DragonTeam", new FixedMetadataValue(getPlugin(), bwt));
         ed.setPhase(EnderDragon.Phase.CIRCLING);
     }
 

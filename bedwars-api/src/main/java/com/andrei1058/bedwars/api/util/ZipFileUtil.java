@@ -21,7 +21,7 @@ public final class ZipFileUtil {
     private static void zipSubDirectory(String basePath, File dir, ZipOutputStream zout) throws IOException {
         byte[] buffer = new byte[4096];
         File[] files = dir.listFiles();
-        //noinspection ConstantConditions
+        if (files == null) return;
         for (File file : files) {
             if (file.isDirectory()) {
                 String path = basePath + file.getName() + "/";

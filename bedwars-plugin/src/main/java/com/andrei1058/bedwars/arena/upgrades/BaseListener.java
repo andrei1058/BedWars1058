@@ -17,11 +17,12 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffect;
 
-import java.util.HashMap;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 public class BaseListener implements Listener {
 
-    public static HashMap<Player, ITeam> isOnABase = new HashMap<>();
+    public static Map<Player, ITeam> isOnABase = new WeakHashMap<>();
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerMove(PlayerMoveEvent e) {

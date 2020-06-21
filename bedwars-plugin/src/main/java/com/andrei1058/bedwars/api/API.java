@@ -16,7 +16,7 @@ import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.shop.main.CategoryContent;
-import com.andrei1058.bedwars.stats.StatsManager;
+import com.andrei1058.bedwars.stats.StatsAPI;
 import com.andrei1058.bedwars.upgrades.UpgradesManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.UUID;
 import java.util.logging.Level;
-
 
 public class API implements com.andrei1058.bedwars.api.BedWars {
 
@@ -235,7 +234,7 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
 
     @Override
     public IStats getStatsUtil() {
-        return StatsManager.getStatsCache();
+        return StatsAPI.getInstance();
     }
 
     @Override
