@@ -53,7 +53,7 @@ public class StatsListener implements Listener {
 
         if (event.getCause().isFinalKill()) {
             //store final deaths
-            victimStats.setFinalKills(victimStats.getFinalDeaths() + 1);
+            victimStats.setFinalDeaths(victimStats.getFinalDeaths() + 1);
             //store losses
             victimStats.setLosses(victimStats.getLosses() + 1);
             //store games played
