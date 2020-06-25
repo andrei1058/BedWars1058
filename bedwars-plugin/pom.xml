@@ -52,6 +52,7 @@
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-api</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>net.citizensnpcs</groupId>
