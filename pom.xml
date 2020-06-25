@@ -114,6 +114,7 @@
         <module>versionsupport_1_14_R1</module>
         <module>versionsupport_common</module>
         <module>versionsupport_1_15_R1</module>
+        <module>versionsupport_1_16_R1</module>
         <module>resetadapter_eswm</module>
     </modules>
 
