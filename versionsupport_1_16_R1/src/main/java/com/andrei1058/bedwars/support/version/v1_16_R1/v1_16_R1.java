@@ -398,7 +398,7 @@ public class v1_16_R1 extends VersionSupport {
     @Override
     public void registerTntWhitelist() {
         try {
-            Field field = net.minecraft.server.v1_16_R1.Block.class.getDeclaredField("durability");
+            Field field = net.minecraft.server.v1_16_R1.BlockBase.class.getDeclaredField("durability");
             field.setAccessible(true);
             field.set(Blocks.END_STONE, 12f);
             field.set(Blocks.GLASS, 300f);
