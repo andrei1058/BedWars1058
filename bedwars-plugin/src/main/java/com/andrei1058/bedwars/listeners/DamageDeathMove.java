@@ -78,30 +78,19 @@ public class DamageDeathMove implements Listener {
             Player p = (Player) e.getEntity();
             IArena a = Arena.getArenaByPlayer(p);
             if (a != null) {
-                if (a.getSpectators().contains(p)) {
-                    e.setCancelled(true);
-                    return;
-                }
                 if (a.getStatus() != GameState.playing) {
                     e.setCancelled(true);
                     return;
                 }
-                if (a.isSpectator(p)) {
+                if (a.isSpectator(p) || a.isRespawning(p)) {
                     e.setCancelled(true);
                     return;
                 }
-                if (e.getDamager() instanceof Player) {
-                    if (a.isSpectator((Player) e.getDamager())) {
-                        e.setCancelled(true);
-                        return;
-                    }
-                }
-                if (a.isRespawning(p)) {
-                    e.setCancelled(true);
-                    return;
-                }
+
                 Player damager = null;
-                if (e.getDamager() instanceof Projectile) {
+                if (e.getDamager() instanceof Player) {
+                    damager = (Player) e.getDamager();
+                } else if (e.getDamager() instanceof Projectile) {
                     ProjectileSource shooter = ((Projectile) e.getDamager()).getShooter();
                     if (shooter instanceof Player) {
                         damager = (Player) shooter;
@@ -117,9 +106,29 @@ public class DamageDeathMove implements Listener {
                     if (tnt.getSource() instanceof Player) {
                         damager = (Player) tnt.getSource();
                     } else return;
+                } else if ((e.getDamager() instanceof Silverfish) || (e.getDamager() instanceof IronGolem)) {
+                    damager = null;
+                    LastHit lh = LastHit.getLastHit(p);
+                    if (lh != null) {
+                        lh.setDamager(e.getDamager());
+                        lh.setTime(System.currentTimeMillis());
+                    } else {
+                        new LastHit(p, e.getDamager(), System.currentTimeMillis());
+                    }
                 }
                 if (damager != null) {
-                    if (a.isSpectator(damager)) return;
+                    if (a.isSpectator(damager) || a.isReSpawning(damager.getUniqueId())) {
+                        e.setCancelled(true);
+                        return;
+                    }
+
+                    if (a.getTeam(p).equals(a.getTeam(damager))) {
+                        if (!(e.getDamager() instanceof TNTPrimed)){
+                            e.setCancelled(true);
+                        }
+                        return;
+                    }
+
                     LastHit lh = LastHit.getLastHit(p);
                     if (lh != null) {
                         lh.setDamager(damager);
@@ -127,6 +136,7 @@ public class DamageDeathMove implements Listener {
                     } else {
                         new LastHit(p, damager, System.currentTimeMillis());
                     }
+
 
                     // #274
                     if (a.getShowTime().containsKey(p)) {
@@ -136,23 +146,6 @@ public class DamageDeathMove implements Listener {
                         }
                     }
                     //
-                }
-                if ((e.getDamager() instanceof Silverfish) || (e.getDamager() instanceof IronGolem)) {
-                    LastHit lh = LastHit.getLastHit(p);
-                    if (lh != null) {
-                        lh.setDamager(e.getDamager());
-                        lh.setTime(System.currentTimeMillis());
-                    } else {
-                        new LastHit(p, e.getDamager(), System.currentTimeMillis());
-                    }
-                }
-                for (ITeam t : a.getTeams()) {
-                    if (t.isMember(p) && t.isMember(damager)) {
-                        if (!(e.getDamager() instanceof TNTPrimed)) {
-                            e.setCancelled(true);
-                        }
-                        return;
-                    }
                 }
             }
         } else if (nms.isDespawnable(e.getEntity())) {
