@@ -136,11 +136,6 @@ public class Misc {
      */
     static ItemStack createItem(Material material, byte data, boolean enchanted, String name, List<String> lore, Player owner, @SuppressWarnings("SameParameterValue") String metaKey, String metaData) {
         ItemStack i = new ItemStack(material, 1, data);
-        if (owner != null) {
-            if (nms.isPlayerHead(material.toString(), data)) {
-                i = nms.getPlayerHead(owner);
-            }
-        }
         ItemMeta im = i.getItemMeta();
         im.setDisplayName(name);
         im.setLore(lore);
@@ -151,6 +146,11 @@ public class Misc {
         i.setItemMeta(im);
         if (!(metaData.isEmpty() || metaKey.isEmpty())) {
             i = nms.addCustomData(i, metaKey + "_" + metaData);
+        }
+        if (owner != null) {
+            if (nms.isPlayerHead(material.toString(), data)) {
+                i = nms.getPlayerHead(owner);
+            }
         }
         return i;
     }
