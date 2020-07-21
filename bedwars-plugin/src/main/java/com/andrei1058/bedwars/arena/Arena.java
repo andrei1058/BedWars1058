@@ -759,6 +759,20 @@ public class Arena implements IArena {
                         mem.sendMessage(getMsg(mem, Messages.ARENA_LEAVE_PARTY_DISBANDED));
                     }
                     getParty().disband(p);
+
+                    // prevent arena from staring with a single player
+                    teamuri = false;
+                    for (Player on : getPlayers()) {
+                        if (getParty().hasParty(on)) {
+                            teamuri = true;
+                        }
+                    }
+                    if (status == GameState.starting && (maxInTeam > players.size() && teamuri || players.size() < minPlayers && !teamuri)) {
+                        changeStatus(GameState.waiting);
+                        for (Player on : players) {
+                            on.sendMessage(getMsg(on, Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS));
+                        }
+                    }
                 }
             }
         }
