@@ -614,6 +614,8 @@ public class BedWarsScoreboard {
             scoreboard.setStrings(lines);
             if (arena != null && arena.getStatus() != GameState.playing) {
                 scoreboard.handle.hidePlayersHealth();
+            } else if (arena == null){
+                scoreboard.handle.hidePlayersHealth();
             }
         }
     }
