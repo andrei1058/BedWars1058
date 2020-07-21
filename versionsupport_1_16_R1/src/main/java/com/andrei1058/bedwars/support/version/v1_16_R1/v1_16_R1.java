@@ -313,6 +313,19 @@ public class v1_16_R1 extends VersionSupport {
         public static AttributeProvider.Builder eX() {
             return EntityInsentient.p().a(GenericAttributes.MOVEMENT_SPEED, 0.0D).a(GenericAttributes.FOLLOW_RANGE, 0.0D);
         }
+
+        @Override
+        public void move(EnumMoveType enummovetype, Vec3D vec3d) {
+
+        }
+
+        @Override
+        public void playSound(SoundEffect soundeffect, float f, float f1) {
+        }
+
+        @Override
+        public void fd() {
+        }
     }
 
     /**
