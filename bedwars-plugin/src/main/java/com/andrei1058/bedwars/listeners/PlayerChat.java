@@ -11,6 +11,7 @@ import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.configuration.Permissions;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -47,7 +48,7 @@ public class PlayerChat implements Listener {
             IArena a = Arena.getArenaByPlayer(p);
             Arena.afkCheck.remove(p.getUniqueId());
             if (BedWars.getAPI().getAFKUtil().isPlayerAFK(e.getPlayer())) {
-                BedWars.getAPI().getAFKUtil().setPlayerAFK(e.getPlayer(), false);
+                Bukkit.getScheduler().runTask(plugin, ()-> BedWars.getAPI().getAFKUtil().setPlayerAFK(e.getPlayer(), false));
             }
             if (a.isSpectator(p)) {
                 if (!config.getBoolean("globalChat")) {
@@ -90,6 +91,10 @@ public class PlayerChat implements Listener {
                     if (msg.startsWith("shout")) msg = msg.replaceFirst("shout", "");
                     if (msg.startsWith(getMsg(p, Messages.MEANING_SHOUT)))
                         msg = msg.replaceFirst(getMsg(p, Messages.MEANING_SHOUT), "");
+                    if (msg.isEmpty()) {
+                        e.setCancelled(true);
+                        return;
+                    }
                     e.setMessage(msg);
                     e.setFormat(SupportPAPI.getSupportPAPI().replace(e.getPlayer(), getMsg(p, Messages.FORMATTING_CHAT_SHOUT).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{vSuffix}", getChatSupport().getSuffix(p))
                             .replace("{player}", p.getDisplayName()).replace("{team}", t.getColor().chat() + "[" + t.getDisplayName(Language.getPlayerLanguage(e.getPlayer())).toUpperCase() + "]")
