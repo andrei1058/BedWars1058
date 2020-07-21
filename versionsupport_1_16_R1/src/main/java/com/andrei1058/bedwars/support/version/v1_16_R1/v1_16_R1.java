@@ -354,7 +354,7 @@ public class v1_16_R1 extends VersionSupport {
 
         items.add(new Pair<>(EnumItemSlot.HEAD, new ItemStack(net.minecraft.server.v1_16_R1.Item.getById(0))));
         items.add(new Pair<>(EnumItemSlot.CHEST, new ItemStack(net.minecraft.server.v1_16_R1.Item.getById(0))));
-        items.add(new Pair<>(EnumItemSlot.CHEST, new ItemStack(net.minecraft.server.v1_16_R1.Item.getById(0))));
+        items.add(new Pair<>(EnumItemSlot.LEGS, new ItemStack(net.minecraft.server.v1_16_R1.Item.getById(0))));
         items.add(new Pair<>(EnumItemSlot.FEET, new ItemStack(net.minecraft.server.v1_16_R1.Item.getById(0))));
         PacketPlayOutEntityEquipment packet1 = new PacketPlayOutEntityEquipment(p.getEntityId(), items);
         PacketPlayOutEntityEquipment packet2 = new PacketPlayOutEntityEquipment(p.getEntityId(), hands);
@@ -375,7 +375,7 @@ public class v1_16_R1 extends VersionSupport {
 
         items.add(new Pair<>(EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(p.getInventory().getHelmet())));
         items.add(new Pair<>(EnumItemSlot.CHEST, CraftItemStack.asNMSCopy(p.getInventory().getChestplate())));
-        items.add(new Pair<>(EnumItemSlot.CHEST, CraftItemStack.asNMSCopy(p.getInventory().getLeggings())));
+        items.add(new Pair<>(EnumItemSlot.LEGS, CraftItemStack.asNMSCopy(p.getInventory().getLeggings())));
         items.add(new Pair<>(EnumItemSlot.FEET, CraftItemStack.asNMSCopy(p.getInventory().getBoots())));
         PacketPlayOutEntityEquipment packet1 = new PacketPlayOutEntityEquipment(p.getEntityId(), items);
         PacketPlayOutEntityEquipment packet2 = new PacketPlayOutEntityEquipment(p.getEntityId(), hands);
