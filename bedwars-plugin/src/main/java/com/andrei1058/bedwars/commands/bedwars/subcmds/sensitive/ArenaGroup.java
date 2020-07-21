@@ -41,7 +41,7 @@ public class ArenaGroup extends SubCommand {
         if (s instanceof ConsoleCommandSender) return false;
         Player p = (Player) s;
         if (!MainCommand.isLobbySet(p)) return true;
-        if (args.length < 1) {
+        if (args.length < 2) {
             sendArenaGroupCmdList(p);
         } else if (args[0].equalsIgnoreCase("create")) {
             if (args[0].contains("+")) {
