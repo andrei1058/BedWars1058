@@ -190,6 +190,7 @@ public class BedWarsScoreboard {
                 // format current teams in tab
                 for (ITeam currentTeam : arena.getTeams()) {
                     currentTeam.getMembers().forEach(currentMember -> addToTabList(currentMember, prefixListPath, suffixListPath));
+                    handle.playerListRefreshAnimation();
                 }
                 // format spectators in tab for current spectator
                 if (arena.isSpectator(getPlayer())) {
@@ -200,6 +201,7 @@ public class BedWarsScoreboard {
                             // add current player to current spectator tab list
                             currentSpectatorScoreboard.addToTabList(getPlayer(), prefixListPath, suffixListPath);
                         }
+                        handle.playerListRefreshAnimation();
                     });
                 }
             } else {
@@ -209,6 +211,7 @@ public class BedWarsScoreboard {
                     String prefixListPath = arena.getStatus() == GameState.waiting ? Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_WAITING : Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_STARTING;
                     String suffixListPath = arena.getStatus() == GameState.waiting ? Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_WAITING : Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_STARTING;
                     arena.getPlayers().forEach(player -> addToTabList(player, prefixListPath, suffixListPath));
+                    handle.playerListRefreshAnimation();
                 }
             }
         } else {
@@ -222,6 +225,7 @@ public class BedWarsScoreboard {
                         if (currentPlayerScoreboard != null) {
                             currentPlayerScoreboard.addToTabList(getPlayer(), Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_LOBBY, Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_LOBBY);
                         }
+                        handle.playerListRefreshAnimation();
                     });
                 }
             }
@@ -266,7 +270,6 @@ public class BedWarsScoreboard {
             };
             handle.addLine(sidebarLine);
         }
-
     }
 
     // alter scoreboard list
