@@ -38,8 +38,18 @@ public class MainConfig extends ConfigManager {
         yml.addDefault("formatChat", true);
         yml.addDefault("debug", false);
         yml.addDefault(ConfigPath.GENERAL_ENABLE_PARTY_CMD, true);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_LOBBY_SCOREBOARD, true);
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_GAME_SCOREBOARD, true);
+        yml.addDefault(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR, true);
+        yml.addDefault(ConfigPath.SB_CONFIG_SIDEBAR_USE_GAME_SIDEBAR, true);
+        yml.addDefault(ConfigPath.SB_CONFIG_SIDEBAR_TITLE_REFRESH_INTERVAL, 4);
+        yml.addDefault(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL, 20);
+        yml.addDefault(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_LOBBY, false);
+        yml.addDefault(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_WAITING, false);
+        yml.addDefault(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_STARTING, false);
+        yml.addDefault(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_PLAYING, true);
+        yml.addDefault(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_RESTARTING, true);
+        yml.addDefault(ConfigPath.SB_CONFIG_SIDEBAR_LIST_REFRESH, 200);
+        yml.addDefault(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_IN_TAB, true);
+        yml.addDefault(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_REFRESH, 80);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ALLOW_PARTIES, true);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_REJOIN_TIME, 60 * 5);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART, 30);
@@ -49,6 +59,7 @@ public class MainConfig extends ConfigManager {
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_REGULAR, 40);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_HALF, 25);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_SHORTENED, 10);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_RESTART, 15);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BEDS_DESTROY_COUNTDOWN, 360);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DRAGON_SPAWN_COUNTDOWN, 600);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_GAME_END_COUNTDOWN, 120);
@@ -208,6 +219,14 @@ public class MainConfig extends ConfigManager {
 
         if (yml.get("server-name") != null) {
             set(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID, yml.get("server-name"));
+        }
+        if (yml.get("lobby-scoreboard") != null){
+            set(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR, yml.getBoolean("lobby-scoreboard"));
+            set("lobby-scoreboard", null);
+        }
+        if (yml.get("game-scoreboard") != null){
+            set(ConfigPath.SB_CONFIG_SIDEBAR_USE_GAME_SIDEBAR, yml.getBoolean("game-scoreboard"));
+            set("game-scoreboard", null);
         }
 
         set("server-name", null);

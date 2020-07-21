@@ -92,6 +92,7 @@ public class Messages {
     public static String ARENA_STATUS_START_PLAYER_TITLE = "arena-start-title";
     public static String ARENA_STATUS_START_PLAYER_TUTORIAL = "arena-start-tutorial";
     public static String ARENA_STATUS_START_COUNTDOWN = "arena-start-countdown";
+    public static String ARENA_DISPLAY_GROUP_PATH = "display-group-";
 
     /** Arena GUI related */
     public static String ARENA_GUI_INV_NAME = "arena-selector-gui-name";
@@ -131,6 +132,19 @@ public class Messages {
     public static String FORMATTING_CHAT_TEAM = "format-chat-team";
     public static String FORMATTING_CHAT_SPECTATOR = "format-chat-spectator";
     public static String FORMATTING_SCOREBOARD_DATE = "format-sb-date";
+    public static String FORMATTING_SCOREBOARD_HEALTH = "format-sb-health";
+    public static String FORMATTING_SCOREBOARD_TAB_PREFIX_LOBBY = "format-sb-tab-prefix.lobby";
+    public static String FORMATTING_SCOREBOARD_TAB_SUFFIX_LOBBY = "format-sb-tab-suffix.lobby";
+    public static String FORMATTING_SCOREBOARD_TAB_PREFIX_WAITING = "format-sb-tab-prefix.waiting";
+    public static String FORMATTING_SCOREBOARD_TAB_SUFFIX_WAITING = "format-sb-tab-suffix.waiting";
+    public static String FORMATTING_SCOREBOARD_TAB_PREFIX_STARTING = "format-sb-tab-prefix.starting";
+    public static String FORMATTING_SCOREBOARD_TAB_SUFFIX_STARTING = "format-sb-tab-suffix.starting";
+    public static String FORMATTING_SCOREBOARD_TAB_PREFIX_PLAYING = "format-sb-tab-prefix.playing";
+    public static String FORMATTING_SCOREBOARD_TAB_SUFFIX_PLAYING = "format-sb-tab-suffix.playing";
+    public static String FORMATTING_SCOREBOARD_TAB_PREFIX_PRESTARTING = "format-sb-tab-prefix.restarting";
+    public static String FORMATTING_SCOREBOARD_TAB_SUFFIX_PRESTARTING = "format-sb-tab-suffix.restarting";
+    public static String FORMATTING_SPECTATOR_TEAM = "format-spectator-team";
+    public static String FORMATTING_SPECTATOR_COLOR = "format-spectator-color";
     public static String FORMATTING_SCOREBOARD_TEAM_ELIMINATED = "format-sb-team-eliminated";
     public static String FORMATTING_SCOREBOARD_BED_DESTROYED = "format-sb-bed-destroyed";
     public static String FORMATTING_SCOREBOARD_TEAM_ALIVE = "format-sb-team-alive";

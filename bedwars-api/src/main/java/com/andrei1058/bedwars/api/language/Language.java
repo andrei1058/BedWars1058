@@ -114,7 +114,11 @@ public class Language extends ConfigManager {
      * Get a color translated list.
      */
     public List<String> l(String path) {
-        return getYml().getStringList(path).stream().map(s -> ChatColor.translateAlternateColorCodes('&', s)).collect(Collectors.toList());
+        List<String> result = new ArrayList<>();
+        for (String line : getYml().getStringList(path)) {
+            result.add(ChatColor.translateAlternateColorCodes('&', line));
+        }
+        return result;
     }
 
     public static HashMap<Player, Language> getLangByPlayer() {

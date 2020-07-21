@@ -22,13 +22,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
 import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.commands.Misc.createArmorStand;
-import static com.andrei1058.bedwars.commands.Misc.removeArmorStand;
 
 public class SetupSession implements ISetupSession {
 

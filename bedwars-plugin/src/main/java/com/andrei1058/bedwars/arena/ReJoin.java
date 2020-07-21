@@ -10,11 +10,10 @@ import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.arena.tasks.ReJoinTask;
 import com.google.gson.JsonObject;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class ReJoin {
 
@@ -22,11 +21,11 @@ public class ReJoin {
     private IArena arena;
     private ITeam bwt;
     private ReJoinTask task = null;
-    private ArrayList<ShopCache.CachedItem> permanentsAndNonDowngradables = new ArrayList<>();
+    private final ArrayList<ShopCache.CachedItem> permanentsAndNonDowngradables = new ArrayList<>();
 
     private int kills = 0, finalKills = 0, deaths = 0, finalDeaths = 0, beds = 0;
 
-    private static List<ReJoin> reJoinList = new ArrayList<>();
+    private static final List<ReJoin> reJoinList = new ArrayList<>();
 
     /**
      * Make rejoin possible for a player
@@ -36,8 +35,8 @@ public class ReJoin {
         if (rj != null){
             rj.destroy();
         }
+        if (bwt.isBedDestroyed()) return;
         this.bwt = bwt;
-        if (this.bwt.isBedDestroyed()) return;
         this.player = player.getUniqueId();
         this.arena = arena;
         reJoinList.add(this);
@@ -58,9 +57,9 @@ public class ReJoin {
     /**
      * Check if a player has stored data
      */
-    public static boolean exists(Player pl) {
+    public static boolean exists(@NotNull Player pl) {
         BedWars.debug("ReJoin exists check " + pl.getUniqueId());
-        for (ReJoin rj : new ArrayList<>(reJoinList)) {
+        for (ReJoin rj : getReJoinList()) {
             BedWars.debug("ReJoin exists check list scroll: " + rj.getPl().toString());
             if (rj.getPl().equals(pl.getUniqueId())) {
                 return true;
@@ -72,9 +71,10 @@ public class ReJoin {
     /**
      * Get a player ReJoin
      */
-    public static ReJoin getPlayer(Player player) {
+    @Nullable
+    public static ReJoin getPlayer(@NotNull Player player) {
         BedWars.debug("ReJoin getPlayer " + player.getUniqueId());
-        for (ReJoin rj : new ArrayList<>(reJoinList)) {
+        for (ReJoin rj : getReJoinList()) {
             if (rj.getPl().equals(player.getUniqueId())) {
                 return rj;
             }
@@ -197,5 +197,12 @@ public class ReJoin {
 
     public static List<ReJoin> getReJoinList() {
         return Collections.unmodifiableList(reJoinList);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        ReJoin reJoin = (ReJoin) o;
+        return reJoin.getPl().equals(getPl());
     }
 }

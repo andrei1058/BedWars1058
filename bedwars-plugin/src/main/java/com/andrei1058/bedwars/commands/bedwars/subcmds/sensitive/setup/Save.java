@@ -1,7 +1,6 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup;
 
 import com.andrei1058.bedwars.BedWars;
-import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.api.command.ParentCommand;
@@ -17,8 +16,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import java.util.List;
-
-import static com.andrei1058.bedwars.BedWars.getServerType;
 
 public class Save extends SubCommand {
 

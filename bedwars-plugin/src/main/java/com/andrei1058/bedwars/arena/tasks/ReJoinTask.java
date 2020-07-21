@@ -6,17 +6,21 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class ReJoinTask implements Runnable {
 
-    private static List<ReJoinTask> reJoinTasks = new ArrayList<>();
+    private static final List<ReJoinTask> reJoinTasks = new ArrayList<>();
 
-    private IArena arena;
-    private ITeam bedWarsTeam;
-    private BukkitTask task;
+    private final IArena arena;
+    private final ITeam bedWarsTeam;
+    private final BukkitTask task;
 
     public ReJoinTask(IArena arena, ITeam bedWarsTeam) {
         this.arena = arena;
@@ -62,8 +66,10 @@ public class ReJoinTask implements Runnable {
     /**
      * Get tasks list
      */
-    public static List<ReJoinTask> getReJoinTasks() {
-        return new ArrayList<>(reJoinTasks);
+    @NotNull
+    @Contract(pure = true)
+    public static Collection<ReJoinTask> getReJoinTasks() {
+        return Collections.unmodifiableCollection(reJoinTasks);
     }
 
     public void cancel() {

@@ -23,8 +23,8 @@ public class VersionCommon {
             }
             // 11 and older
             if (versionSupport.getVersion() < 5){
-                registerListeners(versionSupport.getPlugin(), new ItemDropPickListener.PlayerDrop(), new ItemDropPickListener.PlayerPickup(),
-                        new ShopItemRestoreListener.PlayerDrop(), new ShopItemRestoreListener.PlayerPickup());
+                registerListeners(versionSupport.getPlugin() /*, new ItemDropPickListener.PlayerDrop()*/, new ItemDropPickListener.PlayerPickup()/*,
+                        new ShopItemRestoreListener.PlayerDrop()*/, new ShopItemRestoreListener.PlayerPickup());
             }
 
             // 13 and newer
@@ -38,9 +38,10 @@ public class VersionCommon {
             }
 
             // 1.12 drop listeners
-            if (versionSupport.getVersion() == 5){
+            //if (versionSupport.getVersion() == 5){
+                // common
                 registerListeners(versionSupport.getPlugin(), new ItemDropPickListener.PlayerDrop(), new ShopItemRestoreListener.PlayerDrop());
-            }
+            //}
 
             // common
             registerListeners(versionSupport.getPlugin(), new ItemDropPickListener.GeneratorCollect(), new ShopItemRestoreListener.DefaultRestoreInvClose());

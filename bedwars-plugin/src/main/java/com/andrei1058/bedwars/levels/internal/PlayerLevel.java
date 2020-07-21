@@ -3,7 +3,6 @@ package com.andrei1058.bedwars.levels.internal;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.events.player.PlayerLevelUpEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerXpGainEvent;
-import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.configuration.LevelsConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -70,13 +69,6 @@ public class PlayerLevel {
         updateProgressBar();
 
         modified = false;
-
-        Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
-            SBoard sb = SBoard.getSBoard(getUuid());
-            if (sb != null) {
-                sb.refresh();
-            }
-        }, 10L);
     }
 
     /**

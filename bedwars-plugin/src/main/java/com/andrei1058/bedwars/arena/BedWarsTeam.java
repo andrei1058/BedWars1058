@@ -145,13 +145,14 @@ public class BedWarsTeam implements ITeam {
     /**
      * Rejoin a team
      */
-    public void reJoin(Player p) {
+    public void reJoin(@NotNull Player p) {
         members.add(Bukkit.getPlayer(p.getUniqueId()));
         //Bukkit.getScheduler().runTaskLater(plugin, () -> nms.hidePlayer(p, arena.getPlayers()), 5L);
         nms.setCollide(p, arena, false);
         p.setAllowFlight(true);
         p.setFlying(true);
         arena.getRespawn().put(p, 5);
+        //todo re-add on scoreboards
     }
 
     /**
@@ -513,7 +514,7 @@ public class BedWarsTeam implements ITeam {
      * Used when someone buys a new potion effect with apply == members
      */
     public void addTeamEffect(PotionEffectType pef, int amp, int duration) {
-        getTeamEffects().add(new PotionEffect(pef, amp, duration));
+        getTeamEffects().add(new PotionEffect(pef, duration, amp));
         for (Player p : getMembers()) {
             p.addPotionEffect(new PotionEffect(pef, duration, amp));
         }
@@ -523,7 +524,7 @@ public class BedWarsTeam implements ITeam {
      * Used when someone buys a new potion effect with apply == base
      */
     public void addBaseEffect(PotionEffectType pef, int amp, int duration) {
-        getBaseEffects().add(new PotionEffect(pef, amp, duration));
+        getBaseEffects().add(new PotionEffect(pef, duration, amp));
         for (Player p : new ArrayList<>(getMembers())) {
             if (p.getLocation().distance(getBed()) <= getArena().getIslandRadius()) {
                 for (PotionEffect e : getBaseEffects()) {
