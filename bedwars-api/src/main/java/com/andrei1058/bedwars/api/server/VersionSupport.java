@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.Team;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -352,11 +353,12 @@ public abstract class VersionSupport {
 
     /**
      * Get player head with skin.
+     * @param copyTagFrom will copy nbt tag from this item.
      */
-    public abstract ItemStack getPlayerHead(Player player);
+    public abstract ItemStack getPlayerHead(Player player, @Nullable ItemStack copyTagFrom);
 
     /**
-     * This will send the player spawn packet after a player respawn.
+     * This will send the player spawn packet after a player re-spawn.
      * <p>
      * Show the target player to players and spectators in the arena.
      */

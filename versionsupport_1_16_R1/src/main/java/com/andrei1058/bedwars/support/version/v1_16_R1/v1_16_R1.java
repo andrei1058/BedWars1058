@@ -22,6 +22,7 @@ import org.bukkit.block.data.type.WallSign;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_16_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_16_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R1.entity.CraftItem;
 import org.bukkit.craftbukkit.v1_16_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_16_R1.entity.CraftTNTPrimed;
@@ -374,7 +375,7 @@ public class v1_16_R1 extends VersionSupport {
 
     @Override
     public void spawnDragon(Location l, ITeam bwt) {
-        if (l == null || l.getWorld() == null){
+        if (l == null || l.getWorld() == null) {
             getPlugin().getLogger().log(Level.WARNING, "Could not spawn Dragon. Location is null");
             return;
         }
@@ -420,7 +421,7 @@ public class v1_16_R1 extends VersionSupport {
 
     @Override
     public void showPlayer(Player whoToShow, List<Player> p) {
-        for (Player p1 : p){
+        for (Player p1 : p) {
             if (p1.equals(whoToShow)) continue;
             p1.showPlayer(getPlugin(), whoToShow);
         }
@@ -588,8 +589,14 @@ public class v1_16_R1 extends VersionSupport {
     }
 
     @Override
-    public org.bukkit.inventory.ItemStack getPlayerHead(Player player) {
+    public org.bukkit.inventory.ItemStack getPlayerHead(Player player, org.bukkit.inventory.ItemStack copyTagFrom) {
         org.bukkit.inventory.ItemStack head = new org.bukkit.inventory.ItemStack(materialPlayerHead());
+
+        if (copyTagFrom != null) {
+            ItemStack i = CraftItemStack.asNMSCopy(head);
+            i.setTag(CraftItemStack.asNMSCopy(copyTagFrom).getTag());
+            head = CraftItemStack.asBukkitCopy(i);
+        }
 
         SkullMeta headMeta = (SkullMeta) head.getItemMeta();
         Field profileField;
@@ -602,6 +609,7 @@ public class v1_16_R1 extends VersionSupport {
             e1.printStackTrace();
         }
         head.setItemMeta(headMeta);
+
         return head;
     }
 
@@ -652,8 +660,8 @@ public class v1_16_R1 extends VersionSupport {
 
     @Override
     public void setJoinSignBackground(BlockState b, org.bukkit.Material material) {
-        if (b.getBlockData() instanceof WallSign){
-            b.getBlock().getRelative(((WallSign)b.getBlockData()).getFacing().getOppositeFace()).setType(material);
+        if (b.getBlockData() instanceof WallSign) {
+            b.getBlock().getRelative(((WallSign) b.getBlockData()).getFacing().getOppositeFace()).setType(material);
         }
     }
 }

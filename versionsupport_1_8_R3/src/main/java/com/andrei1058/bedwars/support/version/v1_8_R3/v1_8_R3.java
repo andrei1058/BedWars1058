@@ -573,8 +573,14 @@ public class v1_8_R3 extends VersionSupport {
     }
 
     @Override
-    public ItemStack getPlayerHead(Player player) {
+    public ItemStack getPlayerHead(Player player, ItemStack copyTagFrom) {
         ItemStack head = new ItemStack(org.bukkit.Material.SKULL_ITEM, 1, (short) 3);
+
+        if (copyTagFrom != null) {
+            net.minecraft.server.v1_8_R3.ItemStack i = CraftItemStack.asNMSCopy(head);
+            i.setTag(CraftItemStack.asNMSCopy(copyTagFrom).getTag());
+            head = CraftItemStack.asBukkitCopy(i);
+        }
 
         SkullMeta headMeta = (SkullMeta) head.getItemMeta();
         Field profileField;

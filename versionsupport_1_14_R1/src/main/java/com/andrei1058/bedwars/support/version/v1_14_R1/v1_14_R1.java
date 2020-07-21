@@ -587,8 +587,14 @@ public class v1_14_R1 extends VersionSupport {
     }
 
     @Override
-    public org.bukkit.inventory.ItemStack getPlayerHead(Player player) {
+    public org.bukkit.inventory.ItemStack getPlayerHead(Player player, org.bukkit.inventory.ItemStack copyTagFrom) {
         org.bukkit.inventory.ItemStack head = new org.bukkit.inventory.ItemStack(materialPlayerHead());
+
+        if (copyTagFrom != null) {
+            ItemStack i = CraftItemStack.asNMSCopy(head);
+            i.setTag(CraftItemStack.asNMSCopy(copyTagFrom).getTag());
+            head = CraftItemStack.asBukkitCopy(i);
+        }
 
         SkullMeta headMeta = (SkullMeta) head.getItemMeta();
         Field profileField;

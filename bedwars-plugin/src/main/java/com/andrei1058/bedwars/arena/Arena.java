@@ -398,8 +398,10 @@ public class Arena implements IArena {
             if (ev.isCancelled()) return false;
 
             //Remove from ReJoin
-            if (ReJoin.exists(p)) //noinspection ConstantConditions
-                ReJoin.getPlayer(p).destroy();
+            ReJoin rejoin = ReJoin.getPlayer(p);
+            if (rejoin != null){
+                rejoin.destroy();
+            }
 
             Location l = cm.getArenaLoc("waiting.Loc");
             if (l == null) {
@@ -708,7 +710,7 @@ public class Arena implements IArena {
                 Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> changeStatus(GameState.restarting), 10L);
             } else {
                 //ReJoin feature
-                new ReJoin(p, this, getPlayerTeam(p.getName()), cacheList);
+                new ReJoin(p, this, getTeam(p), cacheList);
             }
         }
         if (status == GameState.starting || status == GameState.waiting) {
@@ -1551,7 +1553,6 @@ public class Arena implements IArena {
      * Used to get the team for a player that has left the arena.
      * Make sure the player is in this arena first.
      */
-    @SuppressWarnings("DeprecatedIsStillUsed")
     @Deprecated
     public ITeam getPlayerTeam(String playerCache) {
         for (ITeam t : getTeams()) {

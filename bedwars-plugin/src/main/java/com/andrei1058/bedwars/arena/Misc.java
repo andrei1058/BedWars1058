@@ -149,7 +149,7 @@ public class Misc {
         }
         if (owner != null) {
             if (nms.isPlayerHead(material.toString(), data)) {
-                i = nms.getPlayerHead(owner);
+                i = nms.getPlayerHead(owner, i);
             }
         }
         return i;

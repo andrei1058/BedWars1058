@@ -29,8 +29,8 @@ import static com.andrei1058.bedwars.api.language.Language.getMsg;
 public class GameStartingTask implements Runnable, StartingTask {
 
     private int countdown;
-    private IArena arena;
-    private BukkitTask task;
+    private final IArena arena;
+    private final BukkitTask task;
 
     public GameStartingTask(Arena arena) {
         this.arena = arena;
