@@ -3,13 +3,37 @@ package com.andrei1058.bedwars.stats;
 import com.andrei1058.bedwars.BedWars;
 import org.bukkit.Bukkit;
 
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class StatsManager {
 
-    private static StatsCache statsCache;
+    private Map<UUID, PlayerStats> stats;
 
     public StatsManager() {
+        stats = new ConcurrentHashMap<>();
         registerListeners();
-        statsCache = new StatsCache();
+    }
+
+    public void remove(UUID uuid) {
+        stats.remove(uuid);
+    }
+
+    public void put(UUID uuid, PlayerStats playerStats) {
+        stats.put(uuid, playerStats);
+    }
+
+    public PlayerStats get(UUID uuid) {
+        PlayerStats playerStats = stats.get(uuid);
+        if (playerStats == null) {
+            throw new IllegalStateException("Trying to get stats data of an unloaded player!");
+        }
+        return playerStats;
+    }
+
+    public PlayerStats getUnsafe(UUID uuid) {
+        return stats.get(uuid);
     }
 
     /**
@@ -17,12 +41,5 @@ public class StatsManager {
      */
     private void registerListeners() {
         Bukkit.getPluginManager().registerEvents(new StatsListener(), BedWars.plugin);
-    }
-
-    /**
-     * Get stats cache.
-     */
-    public static StatsCache getStatsCache() {
-        return statsCache;
     }
 }

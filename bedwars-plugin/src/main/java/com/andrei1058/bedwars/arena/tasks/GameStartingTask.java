@@ -11,7 +11,6 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.gameplay.TeamAssignEvent;
 import com.andrei1058.bedwars.api.tasks.StartingTask;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.arena.SBoard;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.configuration.Sounds;
 import org.bukkit.Bukkit;
@@ -30,8 +29,8 @@ import static com.andrei1058.bedwars.api.language.Language.getMsg;
 public class GameStartingTask implements Runnable, StartingTask {
 
     private int countdown;
-    private IArena arena;
-    private BukkitTask task;
+    private final IArena arena;
+    private final BukkitTask task;
 
     public GameStartingTask(Arena arena) {
         this.arena = arena;
@@ -153,14 +152,6 @@ public class GameStartingTask implements Runnable, StartingTask {
             }
 
             Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
-                //Add heart on players head
-                for (SBoard sb : SBoard.getScoreboards().values()) {
-                    if (sb.getArena() == getArena()) {
-                        //todo manage with sidebar api
-                        sb.addHealthIcon();
-                    }
-                }
-
                 //Enable diamond/ emerald generators
                 for (IGenerator og : getArena().getOreGenerators()) {
                     if (og.getType() == GeneratorType.EMERALD || og.getType() == GeneratorType.DIAMOND)
@@ -223,7 +214,6 @@ public class GameStartingTask implements Runnable, StartingTask {
         for (ITeam bwt : getArena().getTeams()) {
             for (Player p : new ArrayList<>(bwt.getMembers())) {
                 bwt.firstSpawn(p);
-                p.setHealth(p.getHealth() - 0.0001);
                 Sounds.playSound(ConfigPath.SOUND_GAME_START, p);
                 nms.sendTitle(p, getMsg(p, Messages.ARENA_STATUS_START_PLAYER_TITLE), null, 0, 20, 0);
                 for (String tut : getList(p, Messages.ARENA_STATUS_START_PLAYER_TUTORIAL)) {

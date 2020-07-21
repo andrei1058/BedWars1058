@@ -16,7 +16,7 @@ import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.shop.main.CategoryContent;
-import com.andrei1058.bedwars.stats.StatsManager;
+import com.andrei1058.bedwars.stats.StatsAPI;
 import com.andrei1058.bedwars.upgrades.UpgradesManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -28,12 +28,11 @@ import java.util.LinkedList;
 import java.util.UUID;
 import java.util.logging.Level;
 
-
 public class API implements com.andrei1058.bedwars.api.BedWars {
 
     private static RestoreAdapter restoreAdapter;
-    private AFKUtil afkSystem = new AFKUtil() {
-        private HashMap<UUID, Integer> afkPlayers = new HashMap<>();
+    private final AFKUtil afkSystem = new AFKUtil() {
+        private final HashMap<UUID, Integer> afkPlayers = new HashMap<>();
 
         @Override
         public boolean isPlayerAFK(Player player) {
@@ -62,7 +61,7 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
         }
     };
 
-    private ArenaUtil arenaUtil = new ArenaUtil() {
+    private final ArenaUtil arenaUtil = new ArenaUtil() {
         @Override
         public boolean canAutoScale(String arenaName) {
             return Arena.canAutoScale(arenaName);
@@ -174,7 +173,7 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
         }
     };
 
-    private Configs configs = new Configs() {
+    private final Configs configs = new Configs() {
         @Override
         public ConfigManager getMainConfig() {
             return BedWars.config;
@@ -201,7 +200,7 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
         }
     };
 
-    private ShopUtil shopUtil = new ShopUtil() {
+    private final ShopUtil shopUtil = new ShopUtil() {
         @Override
         public int calculateMoney(Player player, Material currency) {
             return CategoryContent.calculateMoney(player, currency);
@@ -235,7 +234,7 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
 
     @Override
     public IStats getStatsUtil() {
-        return StatsManager.getStatsCache();
+        return StatsAPI.getInstance();
     }
 
     @Override
@@ -258,7 +257,7 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
         return shopUtil;
     }
 
-    private TeamUpgradesUtil teamUpgradesUtil = new TeamUpgradesUtil() {
+    private final TeamUpgradesUtil teamUpgradesUtil = new TeamUpgradesUtil() {
         @Override
         public boolean isWatchingGUI(Player player) {
             return UpgradesManager.isWatchingUpgrades(player.getUniqueId());

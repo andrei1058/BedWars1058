@@ -8,6 +8,7 @@ import com.andrei1058.bedwars.api.server.RestoreAdapter;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.arena.despawnables.TargetListener;
+import com.andrei1058.bedwars.sidebar.*;
 import com.andrei1058.bedwars.commands.party.PartyCommand;
 import com.andrei1058.bedwars.commands.rejoin.RejoinCommand;
 import com.andrei1058.bedwars.commands.shout.ShoutCommand;
@@ -30,7 +31,6 @@ import com.andrei1058.bedwars.lobbysocket.*;
 import com.andrei1058.bedwars.maprestore.internal.InternalAdapter;
 import com.andrei1058.bedwars.shop.ShopManager;
 import com.andrei1058.bedwars.stats.StatsManager;
-import com.andrei1058.bedwars.support.bStats;
 import com.andrei1058.bedwars.support.citizens.CitizensListener;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.support.papi.PAPISupport;
@@ -48,7 +48,7 @@ import com.andrei1058.bedwars.support.vipfeatures.VipListeners;
 import com.andrei1058.spigotutils.SpigotUpdater;
 import com.andrei1058.vipfeatures.api.IVipFeatures;
 import com.andrei1058.vipfeatures.api.MiniGameAlreadyRegistered;
-import net.md_5.bungee.api.ChatColor;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.WorldCreator;
@@ -62,7 +62,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -423,15 +422,15 @@ public class BedWars extends JavaPlugin {
         LevelsConfig.init();
 
         // bStats metrics
-        bStats metrics = new bStats(this);
-        metrics.addCustomChart(new bStats.SimplePie("server_type", () -> getServerType().toString()));
-        metrics.addCustomChart(new bStats.SimplePie("default_language", () -> Language.getDefaultLanguage().getIso()));
-        metrics.addCustomChart(new bStats.SimplePie("auto_scale", () -> String.valueOf(autoscale)));
-        metrics.addCustomChart(new bStats.SimplePie("party_adapter", () -> String.valueOf(party.getClass().getName())));
-        metrics.addCustomChart(new bStats.SimplePie("chat_adapter", () -> String.valueOf(chat.getClass().getName())));
-        metrics.addCustomChart(new bStats.SimplePie("level_adapter", () -> String.valueOf(getLevelSupport().getClass().getName())));
-        metrics.addCustomChart(new bStats.SimplePie("db_adapter", () -> String.valueOf(getRemoteDatabase().getClass().getName())));
-        metrics.addCustomChart(new bStats.SimplePie("map_adapter", () -> String.valueOf(getAPI().getRestoreAdapter().getOwner().getName())));
+        Metrics metrics = new Metrics(this, 1885);
+        metrics.addCustomChart(new Metrics.SimplePie("server_type", () -> getServerType().toString()));
+        metrics.addCustomChart(new Metrics.SimplePie("default_language", () -> Language.getDefaultLanguage().getIso()));
+        metrics.addCustomChart(new Metrics.SimplePie("auto_scale", () -> String.valueOf(autoscale)));
+        metrics.addCustomChart(new Metrics.SimplePie("party_adapter", () -> String.valueOf(party.getClass().getName())));
+        metrics.addCustomChart(new Metrics.SimplePie("chat_adapter", () -> String.valueOf(chat.getClass().getName())));
+        metrics.addCustomChart(new Metrics.SimplePie("level_adapter", () -> String.valueOf(getLevelSupport().getClass().getName())));
+        metrics.addCustomChart(new Metrics.SimplePie("db_adapter", () -> String.valueOf(getRemoteDatabase().getClass().getName())));
+        metrics.addCustomChart(new Metrics.SimplePie("map_adapter", () -> String.valueOf(getAPI().getRestoreAdapter().getOwner().getName())));
 
         if (Bukkit.getPluginManager().getPlugin("VipFeatures") != null) {
             try {
@@ -456,6 +455,55 @@ public class BedWars extends JavaPlugin {
         com.andrei1058.bedwars.upgrades.UpgradesManager.init();
 
         PreLoadedCleaner.init();
+
+        int playerListRefreshInterval  = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_LIST_REFRESH);
+        if (playerListRefreshInterval < 1) {
+            Bukkit.getLogger().info("Scoreboard names list refresh is disabled. (Is set to " + playerListRefreshInterval + ").");
+        } else {
+            if (playerListRefreshInterval < 20) {
+                Bukkit.getLogger().warning("Scoreboard names list refresh interval is set to: " + playerListRefreshInterval);
+                Bukkit.getLogger().warning("It is not recommended to use a value under 20 ticks.");
+                Bukkit.getLogger().warning("If you expect performance issues please increase its timer.");
+            }
+            Bukkit.getScheduler().runTaskTimer(this, new SidebarListRefresh(), 23L, playerListRefreshInterval);
+        }
+
+        int placeholdersRefreshInterval  = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL);
+        if (placeholdersRefreshInterval < 1) {
+            Bukkit.getLogger().info("Scoreboard placeholders refresh is disabled. (Is set to " + placeholdersRefreshInterval + ").");
+        } else {
+            if (placeholdersRefreshInterval < 20) {
+                Bukkit.getLogger().warning("Scoreboard placeholders refresh interval is set to: " + placeholdersRefreshInterval);
+                Bukkit.getLogger().warning("It is not recommended to use a value under 20 ticks.");
+                Bukkit.getLogger().warning("If you expect performance issues please increase its timer.");
+            }
+            Bukkit.getScheduler().runTaskTimer(this, new SidebarPlaceholderRefresh(), 28L, placeholdersRefreshInterval);
+        }
+
+        int titleRefreshInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_TITLE_REFRESH_INTERVAL);
+        if (titleRefreshInterval < 1) {
+            Bukkit.getLogger().info("Scoreboard title refresh is disabled. (Is set to " + titleRefreshInterval + ").");
+        } else {
+            if (titleRefreshInterval < 4) {
+                Bukkit.getLogger().warning("Scoreboard title refresh interval is set to: " + titleRefreshInterval);
+                Bukkit.getLogger().warning("If you expect performance issues please increase its timer.");
+            }
+            Bukkit.getScheduler().runTaskTimer(this, new SidebarTitleRefresh(), 32L, titleRefreshInterval);
+        }
+
+        int healthAnimationInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_REFRESH);
+        if (healthAnimationInterval < 1) {
+            Bukkit.getLogger().info("Scoreboard health animation refresh is disabled. (Is set to " + healthAnimationInterval + ").");
+        } else {
+            if (healthAnimationInterval < 20) {
+                Bukkit.getLogger().warning("Scoreboard health animation refresh interval is set to: " + healthAnimationInterval);
+                Bukkit.getLogger().warning("It is not recommended to use a value under 20 ticks.");
+                Bukkit.getLogger().warning("If you expect performance issues please increase its timer.");
+            }
+            Bukkit.getScheduler().runTaskTimer(this, new SidebarLifeRefresh(), 40L, healthAnimationInterval);
+        }
+
+        registerEvents(new ScoreboardListener());
     }
 
     public void onDisable() {
@@ -469,7 +517,6 @@ public class BedWars extends JavaPlugin {
             }
         } catch (Exception ignored) {
         }
-        if (StatsManager.getStatsCache() != null) StatsManager.getStatsCache().close();
         if (remoteDatabase != null) remoteDatabase.close();
     }
 
@@ -614,6 +661,10 @@ public class BedWars extends JavaPlugin {
      */
     public static Database getRemoteDatabase() {
         return remoteDatabase;
+    }
+
+    public static StatsManager getStatsManager() {
+        return statsManager;
     }
 
     public static com.andrei1058.bedwars.api.BedWars getAPI() {

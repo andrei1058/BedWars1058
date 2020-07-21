@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.shop.ShopHolo;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.tasks.RestartingTask;
 import com.andrei1058.bedwars.arena.*;
@@ -13,16 +14,17 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
 public class GameRestartingTask implements Runnable, RestartingTask {
 
     private Arena arena;
-    private int restarting = 13;
+    private int restarting = BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_RESTART) + 3;
     private BukkitTask task;
 
-    public GameRestartingTask(Arena arena) {
+    public GameRestartingTask(@NotNull Arena arena) {
         this.arena = arena;
         task = Bukkit.getScheduler().runTaskTimer(BedWars.plugin, this, 0, 20L);
         Sounds.playSound("game-end", arena.getPlayers());
@@ -56,14 +58,14 @@ public class GameRestartingTask implements Runnable, RestartingTask {
         restarting--;
 
         if (getArena().getPlayers().isEmpty() && restarting > 9) restarting = 9;
-        if (restarting == 8) {
+        if (restarting == 3) {
             for (Player on : new ArrayList<>(getArena().getPlayers())) {
                 getArena().removePlayer(on, BedWars.getServerType() == ServerType.BUNGEE);
             }
             for (Player on : new ArrayList<>(getArena().getSpectators())) {
                 getArena().removeSpectator(on, BedWars.getServerType() == ServerType.BUNGEE);
             }
-        } else if (restarting == 7) {
+        } else if (restarting == 1) {
             ShopHolo.clearForArena(getArena());
             for (Entity e : getArena().getWorld().getEntities()) {
                 if (e.getType() == EntityType.PLAYER) {
@@ -81,7 +83,7 @@ public class GameRestartingTask implements Runnable, RestartingTask {
                     eg.disable();
                 }
             }
-        } else if (restarting == 6) {
+        } else if (restarting == 0) {
             getArena().restart();
             task.cancel();
             arena = null;

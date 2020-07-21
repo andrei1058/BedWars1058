@@ -7,14 +7,12 @@ import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.entity.Despawnable;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
 import com.andrei1058.bedwars.api.exceptions.InvalidEffectException;
-import com.andrei1058.bedwars.api.exceptions.InvalidSoundException;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.VersionSupport;
 import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import com.google.common.collect.Sets;
 import net.minecraft.server.v1_10_R1.*;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_10_R1.CraftServer;
@@ -28,7 +26,6 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.Team;
 
@@ -369,7 +366,6 @@ public class v1_10_R1 extends VersionSupport {
         }
         EnderDragon ed = (EnderDragon) l.getWorld().spawnEntity(l, EntityType.ENDER_DRAGON);
         ed.setPhase(EnderDragon.Phase.CIRCLING);
-        ed.setMetadata("DragonTeam", new FixedMetadataValue(getPlugin(), bwt));
     }
 
     @Override
@@ -583,8 +579,14 @@ public class v1_10_R1 extends VersionSupport {
     }
 
     @Override
-    public org.bukkit.inventory.ItemStack getPlayerHead(Player player) {
+    public org.bukkit.inventory.ItemStack getPlayerHead(Player player, org.bukkit.inventory.ItemStack copyTagFrom) {
         org.bukkit.inventory.ItemStack head = new org.bukkit.inventory.ItemStack(org.bukkit.Material.SKULL_ITEM, 1, (short) 3);
+
+        if (copyTagFrom != null) {
+            ItemStack i = CraftItemStack.asNMSCopy(head);
+            i.setTag(CraftItemStack.asNMSCopy(copyTagFrom).getTag());
+            head = CraftItemStack.asBukkitCopy(i);
+        }
 
         SkullMeta headMeta = (SkullMeta) head.getItemMeta();
         Field profileField;
