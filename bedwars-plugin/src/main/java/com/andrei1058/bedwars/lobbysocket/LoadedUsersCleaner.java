@@ -9,7 +9,7 @@ import java.util.List;
 
 public class LoadedUsersCleaner implements Runnable {
 
-    private List<LoadedUser> toRemove = new LinkedList<>();
+    private final List<LoadedUser> toRemove = new LinkedList<>();
 
     @Override
     public void run() {
@@ -27,7 +27,7 @@ public class LoadedUsersCleaner implements Runnable {
                         plp.clean();
                     }
                 }
-                c.destroy();
+                c.destroy("Removed by cleaner task.");
             });
             toRemove.clear();
         }

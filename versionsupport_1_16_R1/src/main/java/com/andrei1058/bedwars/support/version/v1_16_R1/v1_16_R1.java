@@ -22,7 +22,6 @@ import org.bukkit.block.data.type.WallSign;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_16_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_16_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_16_R1.entity.CraftItem;
 import org.bukkit.craftbukkit.v1_16_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_16_R1.entity.CraftTNTPrimed;
@@ -34,6 +33,7 @@ import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 
 import java.lang.reflect.Field;
@@ -45,7 +45,6 @@ import java.util.logging.Level;
 
 public class v1_16_R1 extends VersionSupport {
 
-    private static int renderDistance = 48;
     private static final UUID chatUUID = new UUID(0L, 0L);
 
     public v1_16_R1(Plugin plugin, String name) {
@@ -97,21 +96,6 @@ public class v1_16_R1 extends VersionSupport {
     }
 
     @Override
-    public void hidePlayer(Player player, List<Player> players) {
-        for (Player p : players) {
-            if (p == player) continue;
-            p.hidePlayer(getPlugin(), player);
-        }
-    }
-
-    @Override
-    public void hidePlayer(Player victim, Player p) {
-        if (victim == p) return;
-        PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(victim.getEntityId());
-        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
-    }
-
-    @Override
     public void playAction(Player p, String text) {
         CraftPlayer cPlayer = (CraftPlayer) p;
         IChatBaseComponent cbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + text + "\"}");
@@ -138,7 +122,12 @@ public class v1_16_R1 extends VersionSupport {
 
     @Override
     public void minusAmount(Player p, org.bukkit.inventory.ItemStack i, int amount) {
+        if (i.getAmount() - amount <= 0) {
+            p.getInventory().removeItem(i);
+            return;
+        }
         i.setAmount(i.getAmount() - amount);
+        p.updateInventory();
     }
 
     @Override
@@ -195,7 +184,7 @@ public class v1_16_R1 extends VersionSupport {
         return CraftItemStack.asNMSCopy(itemStack).A() instanceof IProjectile;
     }
 
-    @SuppressWarnings({"unchecked", "ResultOfMethodCallIgnored"})
+    @SuppressWarnings({"unchecked"})
     @Override
     public void registerEntities() {
         Map<String, Type<?>> types = (Map<String, Type<?>>) DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(SharedConstants.getGameVersion().getWorldVersion())).findChoiceType(DataConverterTypes.ENTITY).types();
@@ -346,7 +335,7 @@ public class v1_16_R1 extends VersionSupport {
     }
 
     @Override
-    public void hideArmor(Player p, Player p2) {
+    public void hideArmor(Player victim, Player receiver) {
         List<Pair<EnumItemSlot, ItemStack>> items = new ArrayList<>();
         List<Pair<EnumItemSlot, ItemStack>> hands = new ArrayList<>();
         hands.add(new Pair<>(EnumItemSlot.MAINHAND, new ItemStack(net.minecraft.server.v1_16_R1.Item.getById(0))));
@@ -356,31 +345,31 @@ public class v1_16_R1 extends VersionSupport {
         items.add(new Pair<>(EnumItemSlot.CHEST, new ItemStack(net.minecraft.server.v1_16_R1.Item.getById(0))));
         items.add(new Pair<>(EnumItemSlot.LEGS, new ItemStack(net.minecraft.server.v1_16_R1.Item.getById(0))));
         items.add(new Pair<>(EnumItemSlot.FEET, new ItemStack(net.minecraft.server.v1_16_R1.Item.getById(0))));
-        PacketPlayOutEntityEquipment packet1 = new PacketPlayOutEntityEquipment(p.getEntityId(), items);
-        PacketPlayOutEntityEquipment packet2 = new PacketPlayOutEntityEquipment(p.getEntityId(), hands);
-        EntityPlayer pc = ((CraftPlayer) p2).getHandle();
-        if (p != p2) {
+        PacketPlayOutEntityEquipment packet1 = new PacketPlayOutEntityEquipment(victim.getEntityId(), items);
+        PacketPlayOutEntityEquipment packet2 = new PacketPlayOutEntityEquipment(victim.getEntityId(), hands);
+        EntityPlayer pc = ((CraftPlayer) receiver).getHandle();
+        if (victim != receiver) {
             pc.playerConnection.sendPacket(packet2);
         }
         pc.playerConnection.sendPacket(packet1);
     }
 
     @Override
-    public void showArmor(Player p, Player p2) {
+    public void showArmor(Player victim, Player receiver) {
         List<Pair<EnumItemSlot, ItemStack>> items = new ArrayList<>();
         List<Pair<EnumItemSlot, ItemStack>> hands = new ArrayList<>();
 
-        hands.add(new Pair<>(EnumItemSlot.MAINHAND, CraftItemStack.asNMSCopy(p.getInventory().getItemInMainHand())));
-        hands.add(new Pair<>(EnumItemSlot.OFFHAND, CraftItemStack.asNMSCopy(p.getInventory().getItemInOffHand())));
+        hands.add(new Pair<>(EnumItemSlot.MAINHAND, CraftItemStack.asNMSCopy(victim.getInventory().getItemInMainHand())));
+        hands.add(new Pair<>(EnumItemSlot.OFFHAND, CraftItemStack.asNMSCopy(victim.getInventory().getItemInOffHand())));
 
-        items.add(new Pair<>(EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(p.getInventory().getHelmet())));
-        items.add(new Pair<>(EnumItemSlot.CHEST, CraftItemStack.asNMSCopy(p.getInventory().getChestplate())));
-        items.add(new Pair<>(EnumItemSlot.LEGS, CraftItemStack.asNMSCopy(p.getInventory().getLeggings())));
-        items.add(new Pair<>(EnumItemSlot.FEET, CraftItemStack.asNMSCopy(p.getInventory().getBoots())));
-        PacketPlayOutEntityEquipment packet1 = new PacketPlayOutEntityEquipment(p.getEntityId(), items);
-        PacketPlayOutEntityEquipment packet2 = new PacketPlayOutEntityEquipment(p.getEntityId(), hands);
-        EntityPlayer pc = ((CraftPlayer) p2).getHandle();
-        if (p != p2) {
+        items.add(new Pair<>(EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(victim.getInventory().getHelmet())));
+        items.add(new Pair<>(EnumItemSlot.CHEST, CraftItemStack.asNMSCopy(victim.getInventory().getChestplate())));
+        items.add(new Pair<>(EnumItemSlot.LEGS, CraftItemStack.asNMSCopy(victim.getInventory().getLeggings())));
+        items.add(new Pair<>(EnumItemSlot.FEET, CraftItemStack.asNMSCopy(victim.getInventory().getBoots())));
+        PacketPlayOutEntityEquipment packet1 = new PacketPlayOutEntityEquipment(victim.getEntityId(), items);
+        PacketPlayOutEntityEquipment packet2 = new PacketPlayOutEntityEquipment(victim.getEntityId(), hands);
+        EntityPlayer pc = ((CraftPlayer) receiver).getHandle();
+        if (victim != receiver) {
             pc.playerConnection.sendPacket(packet2);
         }
         pc.playerConnection.sendPacket(packet1);
@@ -418,25 +407,6 @@ public class v1_16_R1 extends VersionSupport {
             field.set(Blocks.GLASS, 300f);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void showPlayer(Player victim, Player p) {
-        if (victim == p) return;
-        if (victim.getLocation().getWorld() == null) return;
-        if (!victim.getLocation().getWorld().equals(p.getWorld())) return;
-        if (victim.getLocation().distanceSquared(p.getLocation()) <= renderDistance) {
-            PacketPlayOutNamedEntitySpawn s = new PacketPlayOutNamedEntitySpawn(((CraftPlayer) victim).getHandle());
-            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(s);
-        }
-    }
-
-    @Override
-    public void showPlayer(Player whoToShow, List<Player> p) {
-        for (Player p1 : p) {
-            if (p1.equals(whoToShow)) continue;
-            p1.showPlayer(getPlugin(), whoToShow);
         }
     }
 
@@ -627,25 +597,75 @@ public class v1_16_R1 extends VersionSupport {
     }
 
     @Override
-    public void invisibilityFix(Player player, IArena arena) {
+    public void sendPlayerSpawnPackets(Player respawned, IArena arena) {
+        if (respawned == null) return;
+        if (arena == null) return;
+        if (!arena.isPlayer(respawned)) return;
 
-        EntityPlayer pc = ((CraftPlayer) player).getHandle(), pc2;
+        // if method was used when the player was still in re-spawning screen
+        if (arena.getRespawnSessions().containsKey(respawned)) return;
 
-        for (Player pl : arena.getPlayers()) {
-            if (pl.equals(player)) continue;
-            if (arena.getRespawn().containsKey(pl)) continue;
-            //if (arena.getShowTime().containsKey(pl)) continue;
-            if (pl.getLocation().distance(player.getLocation()) <= renderDistance) {
-                pc2 = ((CraftPlayer) pl).getHandle();
-                if (!arena.getShowTime().containsKey(pl)) {
-                    pc.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(pc2));
-                    pc.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, pc2));
-                    showArmor(pl, player);
+        EntityPlayer entityPlayer = ((CraftPlayer) respawned).getHandle();
+        PacketPlayOutNamedEntitySpawn show = new PacketPlayOutNamedEntitySpawn(entityPlayer);
+        PacketPlayOutEntityVelocity playerVelocity = new PacketPlayOutEntityVelocity(entityPlayer);
+        PacketPlayOutEntityHeadRotation head = new PacketPlayOutEntityHeadRotation(entityPlayer, getCompressedAngle(entityPlayer.yaw));
+
+        List<Pair<EnumItemSlot, ItemStack>> list = new ArrayList<>();
+        list.add(new Pair<>(EnumItemSlot.MAINHAND, entityPlayer.getItemInMainHand()));
+        list.add(new Pair<>(EnumItemSlot.OFFHAND, entityPlayer.getItemInOffHand()));
+        list.add(new Pair<>(EnumItemSlot.HEAD, entityPlayer.inventory.getArmorContents().get(3)));
+        list.add(new Pair<>(EnumItemSlot.CHEST, entityPlayer.inventory.getArmorContents().get(2)));
+        list.add(new Pair<>(EnumItemSlot.LEGS, entityPlayer.inventory.getArmorContents().get(1)));
+        list.add(new Pair<>(EnumItemSlot.FEET, entityPlayer.inventory.getArmorContents().get(0)));
+
+
+        for (Player p : arena.getPlayers()) {
+            if (p == null) continue;
+            if (p.equals(respawned)) continue;
+            // if p is in re-spawning screen continue
+            if (arena.getRespawnSessions().containsKey(p)) continue;
+
+            EntityPlayer boundTo = ((CraftPlayer) p).getHandle();
+            if (p.getWorld().equals(respawned.getWorld())) {
+                if (respawned.getLocation().distance(p.getLocation()) <= arena.getRenderDistance()) {
+
+                    // send respawned player to regular players
+                    boundTo.playerConnection.sendPacket(show);
+                    boundTo.playerConnection.sendPacket(head);
+                    boundTo.playerConnection.sendPacket(playerVelocity);
+                    boundTo.playerConnection.sendPacket(new PacketPlayOutEntityEquipment(entityPlayer.getId(), list));
+
+                    // send nearby players to respawned player
+                    // if the player has invisibility hide armor
+                    if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+                        hideArmor(p, respawned);
+                    } else {
+                        PacketPlayOutNamedEntitySpawn show2 = new PacketPlayOutNamedEntitySpawn(boundTo);
+                        PacketPlayOutEntityVelocity playerVelocity2 = new PacketPlayOutEntityVelocity(boundTo);
+                        PacketPlayOutEntityHeadRotation head2 = new PacketPlayOutEntityHeadRotation(boundTo, getCompressedAngle(boundTo.yaw));
+                        entityPlayer.playerConnection.sendPacket(show2);
+                        entityPlayer.playerConnection.sendPacket(playerVelocity2);
+                        entityPlayer.playerConnection.sendPacket(head2);
+                        showArmor(p, respawned);
+                    }
                 }
+            }
+        }
 
-                pc2.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(pc));
-                pc2.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, pc));
-                showArmor(player, pl);
+        for (Player spectator : arena.getSpectators()) {
+            if (spectator == null) continue;
+            if (spectator.equals(respawned)) continue;
+            EntityPlayer boundTo = ((CraftPlayer) spectator).getHandle();
+            respawned.hidePlayer(getPlugin(), spectator);
+            if (spectator.getWorld().equals(respawned.getWorld())) {
+                if (respawned.getLocation().distance(spectator.getLocation()) <= arena.getRenderDistance()) {
+
+                    // send respawned player to spectator
+                    boundTo.playerConnection.sendPacket(show);
+                    boundTo.playerConnection.sendPacket(playerVelocity);
+                    boundTo.playerConnection.sendPacket(new PacketPlayOutEntityEquipment(entityPlayer.getId(), list));
+                    boundTo.playerConnection.sendPacket(new PacketPlayOutEntityHeadRotation(entityPlayer, getCompressedAngle(entityPlayer.yaw)));
+                }
             }
         }
     }
@@ -676,5 +696,15 @@ public class v1_16_R1 extends VersionSupport {
         if (b.getBlockData() instanceof WallSign) {
             b.getBlock().getRelative(((WallSign) b.getBlockData()).getFacing().getOppositeFace()).setType(material);
         }
+    }
+
+    @Override
+    public void spigotShowPlayer(Player victim, Player receiver) {
+        receiver.showPlayer(getPlugin(), victim);
+    }
+
+    @Override
+    public void spigotHidePlayer(Player victim, Player receiver) {
+        receiver.hidePlayer(getPlugin(), victim);
     }
 }

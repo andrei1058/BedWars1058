@@ -5,6 +5,10 @@ import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.api.server.ServerType;
+import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.lobbysocket.ArenaSocket;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.arena.tasks.ReJoinTask;
@@ -32,9 +36,10 @@ public class ReJoin {
      */
     public ReJoin(Player player, IArena arena, ITeam bwt, List<ShopCache.CachedItem> cachedArmor) {
         ReJoin rj = getPlayer(player);
-        if (rj != null){
-            rj.destroy();
+        if (rj != null) {
+            rj.destroy(true);
         }
+        if (bwt == null) return;
         if (bwt.isBedDestroyed()) return;
         this.bwt = bwt;
         this.player = player.getUniqueId();
@@ -45,13 +50,14 @@ public class ReJoin {
         if (bwt.getMembers().isEmpty()) task = new ReJoinTask(arena, bwt);
         this.permanentsAndNonDowngradables.addAll(cachedArmor);
 
-
-        JsonObject json = new JsonObject();
-        json.addProperty("type", "RC");
-        json.addProperty("uuid", player.getUniqueId().toString());
-        json.addProperty("arena_id", arena.getWorldName());
-        json.addProperty("server", BedWars.config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID));
-        ArenaSocket.sendMessage(json.toString());
+        if (BedWars.autoscale) {
+            JsonObject json = new JsonObject();
+            json.addProperty("type", "RC");
+            json.addProperty("uuid", player.getUniqueId().toString());
+            json.addProperty("arena_id", arena.getWorldName());
+            json.addProperty("server", BedWars.config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID));
+            ArenaSocket.sendMessage(json.toString());
+        }
     }
 
     /**
@@ -89,22 +95,22 @@ public class ReJoin {
         BedWars.debug("ReJoin canReJoin  check.");
         if (arena == null) {
             BedWars.debug("ReJoin canReJoin arena is null " + player.toString());
-            destroy();
+            destroy(true);
             return false;
         }
         if (arena.getStatus() == GameState.restarting) {
             BedWars.debug("ReJoin canReJoin status is restarting " + player.toString());
-            destroy();
+            destroy(true);
             return false;
         }
         if (bwt == null) {
             BedWars.debug("ReJoin canReJoin bwt is null " + player.toString());
-            destroy();
+            destroy(true);
             return false;
         }
         if (bwt.isBedDestroyed()) {
             BedWars.debug("ReJoin canReJoin bed is destroyed " + player.toString());
-            destroy();
+            destroy(false);
             return false;
         }
         return true;
@@ -114,13 +120,15 @@ public class ReJoin {
      * Make a player re-join the arena
      */
     public boolean reJoin(Player player) {
+        Sounds.playSound("rejoin-allowed", player);
+        player.sendMessage(Language.getMsg(player, Messages.REJOIN_ALLOWED).replace("{arena}", getArena().getDisplayName()));
         return arena.reJoin(player);
     }
 
     /**
      * Destroy data and rejoin possibility
      */
-    public void destroy() {
+    public void destroy(boolean destroyTeam) {
         BedWars.debug("ReJoin destroy for " + player.toString());
         reJoinList.remove(this);
         JsonObject json = new JsonObject();
@@ -128,6 +136,10 @@ public class ReJoin {
         json.addProperty("uuid", player.toString());
         json.addProperty("server", BedWars.config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID));
         ArenaSocket.sendMessage(json.toString());
+        if (bwt != null && destroyTeam && bwt.getMembers().isEmpty()) {
+            bwt.setBedDestroyed(true);
+            arena.checkWinner();
+        }
     }
 
     /**
@@ -186,7 +198,7 @@ public class ReJoin {
         return task;
     }
 
-    public UUID getPl(){
+    public UUID getPl() {
         return player;
     }
 
@@ -201,7 +213,8 @@ public class ReJoin {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null) return false;
+        if (!(o instanceof ReJoin)) return false;
         ReJoin reJoin = (ReJoin) o;
         return reJoin.getPl().equals(getPl());
     }

@@ -33,8 +33,6 @@ import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -70,6 +68,7 @@ public class BreakPlace implements Listener {
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
         if (e.isCancelled()) return;
+
         //Prevent player from placing during the removal from the arena
         IArena arena = Arena.getArenaByIdentifier(e.getBlock().getWorld().getName());
         if (arena != null) {
@@ -85,7 +84,7 @@ public class BreakPlace implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            if (a.getRespawn().containsKey(p)) {
+            if (a.getRespawnSessions().containsKey(p)) {
                 e.setCancelled(true);
                 return;
             }
@@ -102,6 +101,15 @@ public class BreakPlace implements Listener {
                 if (r.isInRegion(e.getBlock().getLocation()) && r.isProtected()) {
                     e.setCancelled(true);
                     p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                    return;
+                }
+            }
+
+            // prevent modifying wood if protected
+            // issue #531
+            if (e.getBlockPlaced().getType().toString().contains("STRIPPED_") && e.getBlock().getType().toString().contains("_WOOD")){
+                if (!a.getConfig().getBoolean(ConfigPath.ARENA_ALLOW_MAP_BREAK)){
+                    e.setCancelled(true);
                     return;
                 }
             }
@@ -157,7 +165,7 @@ public class BreakPlace implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            if (a.getRespawn().containsKey(p)) {
+            if (a.getRespawnSessions().containsKey(p)) {
                 e.setCancelled(true);
                 return;
             }
@@ -287,7 +295,7 @@ public class BreakPlace implements Listener {
         }
         IArena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a != null) {
-            if (a.isSpectator(e.getPlayer()) || a.getStatus() != GameState.playing || a.getRespawn().containsKey(e.getPlayer()))
+            if (a.isSpectator(e.getPlayer()) || a.getStatus() != GameState.playing || a.getRespawnSessions().containsKey(e.getPlayer()))
                 e.setCancelled(true);
         }
     }
@@ -317,7 +325,7 @@ public class BreakPlace implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            if (a.getRespawn().containsKey(p)) {
+            if (a.getRespawnSessions().containsKey(p)) {
                 e.setCancelled(true);
                 return;
             }

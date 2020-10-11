@@ -9,8 +9,9 @@ image: "maven:3.6.3-jdk-8"
 maven-dev:
   only:
     - 'development'
+    - 'milestone-*'
   script:
-    - 'mvn versions:set -DnewVersion=20.7-SNAPSHOT'
+    - 'mvn versions:set -DnewVersion=20.10.1-SNAPSHOT'
     - 'mvn versions:update-child-modules'
     - 'mvn -DgitVer=git-$CI_COMMIT_SHORT_SHA- clean deploy -s ci_settings.xml'
   artifacts:
@@ -18,14 +19,19 @@ maven-dev:
       - bedwars-plugin/target/bedwars-*.jar
       - bedwars-api/target/apidocs
       - bedwars-api/target/bedwars-*.jar
-    expire_in: 2 days
+    expire_in: 10 days
+  after_script:
+    - 'apt-get update && apt-get install -y -qq lftp'
+    - 'lftp -c "set ftp:ssl-allow no; open -u $APIDOCS_USER,$APIDOCS_PASS andrei1058.com; mirror -Rev invisibility-common/target/apidocs ./$CI_PROJECT_TITLE  --ignore-time --parallel=10 --exclude-glob .git* --exclude .git/"'
+
 
 maven-job2:
   except:
     - 'development'
     - 'master'
+    - 'milestone-*'
   script:
-    - 'mvn versions:set -DnewVersion=20.7-SNAPSHOT'
+    - 'mvn versions:set -DnewVersion=20.10.1'
     - 'mvn versions:update-child-modules'
     - 'mvn -DgitVer=git-$CI_COMMIT_SHORT_SHA- clean install -s ci_settings.xml'
   artifacts:
@@ -39,7 +45,7 @@ maven-rel:
   only:
     - 'master'
   script:
-    - 'mvn versions:set -DnewVersion=20.7'
+    - 'mvn versions:set -DnewVersion=20.10.1'
     - 'mvn versions:update-child-modules'
     - 'mvn -DgitVer='''' clean deploy -s ci_settings.xml'
   artifacts:
@@ -47,3 +53,6 @@ maven-rel:
       - bedwars-plugin/target/bedwars-*.jar
       - bedwars-api/target/apidocs
       - bedwars-api/target/bedwars-*.jar
+  after_script:
+    - 'apt-get update && apt-get install -y -qq lftp'
+    - 'lftp -c "set ftp:ssl-allow no; open -u $APIDOCS_USER,$APIDOCS_PASS andrei1058.com; mirror -Rev invisibility-common/target/apidocs ./$CI_PROJECT_TITLE  --ignore-time --parallel=10 --exclude-glob .git* --exclude .git/"'

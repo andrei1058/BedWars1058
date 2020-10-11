@@ -30,7 +30,11 @@ class PlayerGoods {
     private boolean allowFlight, flying;
     private String displayName, tabName;
 
-    PlayerGoods(Player p, boolean prepare) {
+    PlayerGoods(Player p, boolean prepare){
+        this(p, prepare, false);
+    }
+
+    PlayerGoods(Player p, boolean prepare, boolean rejoin) {
         if (hasGoods(p)) {
             plugin.getLogger().severe(p.getName() + " is already having a PlayerGoods vault :|");
             return;
@@ -56,14 +60,17 @@ class PlayerGoods {
             if (prepare) p.removePotionEffect(ef.getType());
         }
         armor = p.getInventory().getArmorContents();
-        int x2 = 0;
-        for (ItemStack i : p.getEnderChest()) {
-            if (i != null) {
-                if (i.getType() != Material.AIR) {
-                    enderchest.put(i, x2);
+
+        if (!rejoin) {
+            int x2 = 0;
+            for (ItemStack i : p.getEnderChest()) {
+                if (i != null) {
+                    if (i.getType() != Material.AIR) {
+                        enderchest.put(i, x2);
+                    }
                 }
+                x2++;
             }
-            x2++;
         }
 
         this.gamemode = p.getGameMode();
@@ -81,7 +88,9 @@ class PlayerGoods {
             p.setFoodLevel(20);
             p.getInventory().clear();
             p.getInventory().setArmorContents(null);
-            p.getEnderChest().clear();
+            if (!rejoin) {
+                p.getEnderChest().clear();
+            }
             p.setGameMode(GameMode.SURVIVAL);
             p.setAllowFlight(false);
             p.setFlying(false);
@@ -156,11 +165,19 @@ class PlayerGoods {
         player.setAllowFlight(allowFlight);
         player.setFlying(flying);
         for (Player p : Bukkit.getOnlinePlayers()){
-            nms.showPlayer(player, p);
+            if (player.equals(p)) continue;
+            if (!Arena.isInArena(p)) {
+                BedWars.nms.spigotShowPlayer(p, player);
+                BedWars.nms.spigotShowPlayer(player, p);
+            }
         }
 
-        player.setDisplayName(displayName);
-        player.setPlayerListName(tabName);
+        if (!displayName.equals(player.getDisplayName())) {
+            player.setDisplayName(displayName);
+        }
+        if (!tabName.equals(player.getPlayerListName())) {
+            player.setPlayerListName(tabName);
+        }
 
         uuid = null;
         items = null;

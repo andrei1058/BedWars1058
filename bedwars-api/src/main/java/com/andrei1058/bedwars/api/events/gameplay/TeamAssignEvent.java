@@ -19,7 +19,10 @@ public class TeamAssignEvent extends Event {
      * Called for each player when the waiting countdown == 0
      * You can cancel each team assign event in order to manage them yourself
      * but make sure to set BedWarsTeam#setBedDestroyed(false) if teams are marked as eliminated when they are not,
-     * and use BedWarsTeam#firstSpawn(p) to spawn them. But first assign them to a team BedWarsTeam#addPlayers(p)
+     * and use BedWarsTeam#firstSpawn(p) to spawn them. But first assign them to a team BedWarsTeam#addPlayers(p).
+     * <p>
+     * READ THIS: If you want to assign the player another team there's no ned of a setTeam method in this event.
+     * Just use {@link ITeam#addPlayers(Player...)} right after using {@link #setCancelled(boolean)}.
      */
     public TeamAssignEvent(Player player, ITeam team, IArena arena) {
         this.player = player;

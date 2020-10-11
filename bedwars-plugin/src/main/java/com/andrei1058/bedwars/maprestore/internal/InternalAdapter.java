@@ -20,14 +20,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Level;
 
 import static com.andrei1058.bedwars.BedWars.*;
 
 public class InternalAdapter extends RestoreAdapter {
 
+    private static final String LEGACY_GENERATOR_SETTINGS = "1;0;1";
+    private static final String V1_13_GENERATOR_SETTINGS = "{\"layers\": [{\"block\": \"air\", \"height\": 1}, {\"block\": \"air\", \"height\": 1}], \"biome\":\"plains\"}";
+    private static final String V1_16_GENERATOR_SETTINGS = "{\"biome\":\"minecraft:plains\",\"layers\":[{\"block\":\"minecraft:air\",\"height\":1}],\"structures\":{\"structures\":{}}}";
+
     public static File backupFolder = new File(BedWars.plugin.getDataFolder() + "/Cache");
-    private String generator = BedWars.nms.getVersion() > 5 ? "{\"layers\": [{\"block\": \"air\", \"height\": 1}, {\"block\": \"air\", \"height\": 1}], \"biome\":\"plains\"}" : "1;0;1";
+    private final String generator =
+            BedWars.nms.getVersion() > 7 ? V1_16_GENERATOR_SETTINGS :
+            BedWars.nms.getVersion() > 5 ? V1_13_GENERATOR_SETTINGS :
+            LEGACY_GENERATOR_SETTINGS;
 
     public InternalAdapter(Plugin plugin) {
         super(plugin);
@@ -106,7 +112,7 @@ public class InternalAdapter extends RestoreAdapter {
                 Bukkit.getScheduler().runTaskLater(plugin, () -> new Arena(a.getArenaName(), null), 80L);
             }
             if (!a.getWorldName().equals(a.getArenaName())) {
-                Bukkit.getScheduler().runTaskAsynchronously(getOwner(), () -> deleteWorld(a.getWorldName()));
+                deleteWorld(a.getWorldName());
             }
         });
     }

@@ -190,22 +190,26 @@ public class GamePlayingTask implements Runnable, PlayingTask {
         }
 
         /* RESPAWN SESSION */
-        if (!getArena().getRespawn().isEmpty()) {
-            for (Map.Entry<Player, Integer> e : getArena().getRespawn().entrySet()) {
-                if (e.getValue() == 0) {
+        if (!getArena().getRespawnSessions().isEmpty()) {
+            for (Map.Entry<Player, Integer> e : getArena().getRespawnSessions().entrySet()) {
+                if (e.getValue() <= 0) {
                     IArena a = Arena.getArenaByPlayer(e.getKey());
                     if (a == null) {
-                        getArena().getRespawn().remove(e.getKey());
+                        getArena().getRespawnSessions().remove(e.getKey());
                         continue;
                     }
                     ITeam t = a.getTeam(e.getKey());
-                    t.respawnMember(e.getKey());
+                    if (t == null){
+                        a.addSpectator(e.getKey(), true, null);
+                    } else {
+                        t.respawnMember(e.getKey());
+                    }
                 } else {
                     nms.sendTitle(e.getKey(), getMsg(e.getKey(), Messages.PLAYER_DIE_RESPAWN_TITLE).replace("{time}",
                             String.valueOf(e.getValue())), getMsg(e.getKey(), Messages.PLAYER_DIE_RESPAWN_SUBTITLE).replace("{time}",
                             String.valueOf(e.getValue())), 0, 30, 0);
                     e.getKey().sendMessage(getMsg(e.getKey(), Messages.PLAYER_DIE_RESPAWN_CHAT).replace("{time}", String.valueOf(e.getValue())));
-                    getArena().getRespawn().replace(e.getKey(), e.getValue() - 1);
+                    getArena().getRespawnSessions().replace(e.getKey(), e.getValue() - 1);
                 }
             }
         }

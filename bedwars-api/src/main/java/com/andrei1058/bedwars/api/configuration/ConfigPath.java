@@ -78,6 +78,7 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_START_COUNTDOWN_SHORTENED = "countdowns.game-start-shortened";
     public static final String GENERAL_CONFIGURATION_START_COUNTDOWN_HALF = "countdowns.game-start-half-arena";
     public static final String GENERAL_CONFIGURATION_RESTART = "countdowns.game-restart";
+    public static final String GENERAL_CONFIGURATION_RE_SPAWN_COUNTDOWN = "countdowns.player-re-spawn";
     public static final String GENERAL_CONFIGURATION_BEDS_DESTROY_COUNTDOWN = "countdowns.next-event-beds-destroy";
     public static final String GENERAL_CONFIGURATION_DRAGON_SPAWN_COUNTDOWN = "countdowns.next-event-dragon-spawn";
     public static final String GENERAL_CONFIGURATION_GAME_END_COUNTDOWN = "countdowns.next-event-game-end";
@@ -157,8 +158,6 @@ public class ConfigPath {
 
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_PATH = "performance-settings";
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_ROTATE_GEN = GENERAL_CONFIGURATION_PERFORMANCE_PATH + ".rotate-generators";
-    public static final String GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS = GENERAL_CONFIGURATION_PERFORMANCE_PATH + ".disable-armor-packets";
-    public static final String GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_RESPAWN_PACKETS = GENERAL_CONFIGURATION_PERFORMANCE_PATH + ".disable-respawn-packets";
 
     public static final String SHOP_SETTINGS_PATH = "shop-settings";
     public static final String SHOP_SPECIALS_PATH = "shop-specials";

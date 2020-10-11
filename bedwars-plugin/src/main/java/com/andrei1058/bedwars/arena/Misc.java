@@ -319,10 +319,9 @@ public class Misc {
     @SuppressWarnings("WeakerAccess")
     public static boolean isOutsideOfBorder(Location l) {
         WorldBorder border = l.getWorld().getWorldBorder();
-        double radius = border.getSize() / 2;
+        double radius = (border.getSize() / 2) + border.getWarningDistance();
         Location center = border.getCenter();
-
-        return center.distanceSquared(l) >= (radius * radius);
+        return center.distance(l) >= radius;
     }
 
     /**

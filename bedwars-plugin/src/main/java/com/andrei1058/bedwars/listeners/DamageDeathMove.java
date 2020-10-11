@@ -24,9 +24,13 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.arena.LastHit.getLastHit;
@@ -44,7 +48,7 @@ public class DamageDeathMove implements Listener {
                     e.setCancelled(true);
                     return;
                 }
-                if (a.isRespawning(p)) {
+                if (a.isReSpawning(p)) {
                     e.setCancelled(true);
                     return;
                 }
@@ -97,15 +101,22 @@ public class DamageDeathMove implements Listener {
                     } else return;
                 } else if (e.getDamager() instanceof Player) {
                     damager = (Player) e.getDamager();
-                    if (a.getRespawn().containsKey(damager)) {
+                    if (a.isReSpawning(damager)) {
                         e.setCancelled(true);
                         return;
                     }
                 } else if (e.getDamager() instanceof TNTPrimed) {
                     TNTPrimed tnt = (TNTPrimed) e.getDamager();
-                    if (tnt.getSource() instanceof Player) {
-                        damager = (Player) tnt.getSource();
-                    } else return;
+                    if (tnt.getSource() != null) {
+                        if (tnt.getSource() instanceof Player) {
+                            damager = (Player) tnt.getSource();
+                            if (tnt.getSource().equals(e.getEntity())) {
+                                e.setDamage(1);
+                                Vector direction = e.getEntity().getLocation().getDirection().add(new Vector(0, 0.42, 0)).multiply(2); // should be enough
+                                e.getEntity().setVelocity(direction);
+                            }
+                        } else return;
+                    }
                 } else if ((e.getDamager() instanceof Silverfish) || (e.getDamager() instanceof IronGolem)) {
                     damager = null;
                     LastHit lh = LastHit.getLastHit(p);
@@ -123,7 +134,7 @@ public class DamageDeathMove implements Listener {
                     }
 
                     if (a.getTeam(p).equals(a.getTeam(damager))) {
-                        if (!(e.getDamager() instanceof TNTPrimed)){
+                        if (!(e.getDamager() instanceof TNTPrimed)) {
                             e.setCancelled(true);
                         }
                         return;
@@ -315,7 +326,7 @@ public class DamageDeathMove implements Listener {
             }
 
             /* give stats and victim's inventory */
-            if (killer != null) {
+            if ((killer != null && !t.equals(t2)) && !victim.equals(killer)) {
                 if (t.isBedDestroyed()) {
                     if (!a.getConfig().getBoolean(ConfigPath.ARENA_NORMAL_DEATH_DROPS)) {
                         for (ItemStack i : drops) {
@@ -332,39 +343,53 @@ public class DamageDeathMove implements Listener {
                     a.addPlayerKill(killer, true, victim);
                 } else {
                     if (!a.getConfig().getBoolean(ConfigPath.ARENA_NORMAL_DEATH_DROPS)) {
-                        if (!a.getRespawn().containsKey(killer)) {
+                        if (!a.isReSpawning(killer)) {
+                            Map<Material, Integer> materialDrops = new HashMap<>();
                             for (ItemStack i : drops) {
                                 if (i == null) continue;
                                 if (i.getType() == Material.AIR) continue;
                                 if (i.getType() == Material.DIAMOND || i.getType() == Material.EMERALD || i.getType() == Material.IRON_INGOT || i.getType() == Material.GOLD_INGOT) {
+
+                                    // add to killer inventory
                                     killer.getInventory().addItem(i);
-                                    String msg = "";
-                                    int amount = i.getAmount();
-                                    switch (i.getType()) {
-                                        case DIAMOND:
-                                            msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_DIAMOND).replace("{meaning}", amount == 1 ?
-                                                    getMsg(killer, Messages.MEANING_DIAMOND_SINGULAR) : getMsg(killer, Messages.MEANING_DIAMOND_PLURAL));
-                                            break;
-                                        case EMERALD:
-                                            msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_EMERALD).replace("{meaning}", amount == 1 ?
-                                                    getMsg(killer, Messages.MEANING_EMERALD_SINGULAR) : getMsg(killer, Messages.MEANING_EMERALD_PLURAL));
-                                            break;
-                                        case IRON_INGOT:
-                                            msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_IRON).replace("{meaning}", amount == 1 ?
-                                                    getMsg(killer, Messages.MEANING_IRON_SINGULAR) : getMsg(killer, Messages.MEANING_IRON_PLURAL));
-                                            break;
-                                        case GOLD_INGOT:
-                                            msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_GOLD).replace("{meaning}", amount == 1 ?
-                                                    getMsg(killer, Messages.MEANING_GOLD_SINGULAR) : getMsg(killer, Messages.MEANING_GOLD_PLURAL));
-                                            break;
+
+                                    // count items
+                                    if (materialDrops.containsKey(i.getType())) {
+                                        materialDrops.replace(i.getType(), materialDrops.get(i.getType()) + i.getAmount());
+                                    } else {
+                                        materialDrops.put(i.getType(), i.getAmount());
                                     }
-                                    killer.sendMessage(msg.replace("{amount}", String.valueOf(amount)));
                                 }
                             }
+
+                            for (Map.Entry<Material, Integer> entry : materialDrops.entrySet()) {
+                                String msg = "";
+                                int amount = entry.getValue();
+                                switch (entry.getKey()) {
+                                    case DIAMOND:
+                                        msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_DIAMOND).replace("{meaning}", amount == 1 ?
+                                                getMsg(killer, Messages.MEANING_DIAMOND_SINGULAR) : getMsg(killer, Messages.MEANING_DIAMOND_PLURAL));
+                                        break;
+                                    case EMERALD:
+                                        msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_EMERALD).replace("{meaning}", amount == 1 ?
+                                                getMsg(killer, Messages.MEANING_EMERALD_SINGULAR) : getMsg(killer, Messages.MEANING_EMERALD_PLURAL));
+                                        break;
+                                    case IRON_INGOT:
+                                        msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_IRON).replace("{meaning}", amount == 1 ?
+                                                getMsg(killer, Messages.MEANING_IRON_SINGULAR) : getMsg(killer, Messages.MEANING_IRON_PLURAL));
+                                        break;
+                                    case GOLD_INGOT:
+                                        msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_GOLD).replace("{meaning}", amount == 1 ?
+                                                getMsg(killer, Messages.MEANING_GOLD_SINGULAR) : getMsg(killer, Messages.MEANING_GOLD_PLURAL));
+                                        break;
+                                }
+                                killer.sendMessage(msg.replace("{amount}", String.valueOf(amount)));
+                            }
+                            materialDrops.clear();
                         }
                     }
-                    a.addPlayerKill(killer, false, victim);
                 }
+                a.addPlayerKill(killer, false, victim);
             }
 
             /* call game kill event */
@@ -384,7 +409,7 @@ public class DamageDeathMove implements Listener {
             }
         } else {
             if (a.isSpectator(e.getPlayer())) {
-                e.setRespawnLocation(a.getConfig().getArenaLoc("waiting.Loc"));
+                e.setRespawnLocation(a.getSpectatorLocation());
                 String iso = Language.getPlayerLanguage(e.getPlayer()).getIso();
                 for (IGenerator o : a.getOreGenerators()) {
                     o.updateHolograms(e.getPlayer(), iso);
@@ -402,16 +427,17 @@ public class DamageDeathMove implements Listener {
                 a.sendSpectatorCommandItems(e.getPlayer());
                 return;
             }
-            e.setRespawnLocation(a.getConfig().getArenaLoc("waiting.Loc"));
             ITeam t = a.getTeam(e.getPlayer());
-            if (t == null){
-                plugin.getLogger().severe(e.getPlayer().getName() + " re-spawn error on " + a.getArenaName() + "["+a.getWorldName()+"] because the team was NULL and he was not spectating!");
+            if (t == null) {
+                e.setRespawnLocation(a.getReSpawnLocation());
+                plugin.getLogger().severe(e.getPlayer().getName() + " re-spawn error on " + a.getArenaName() + "[" + a.getWorldName() + "] because the team was NULL and he was not spectating!");
                 plugin.getLogger().severe("This is caused by one of your plugins: remove or configure any re-spawn related plugins.");
                 a.removePlayer(e.getPlayer(), false);
                 a.removeSpectator(e.getPlayer(), false);
                 return;
             }
             if (t.isBedDestroyed()) {
+                e.setRespawnLocation(a.getSpectatorLocation());
                 a.addSpectator(e.getPlayer(), true, null);
                 t.getMembers().remove(e.getPlayer());
                 e.getPlayer().sendMessage(getMsg(e.getPlayer(), Messages.PLAYER_DIE_ELIMINATED_CHAT));
@@ -423,28 +449,15 @@ public class DamageDeathMove implements Listener {
                 }
             } else {
                 //respawn session
-                e.getPlayer().getInventory().clear();
-                Bukkit.getScheduler().runTaskLater(plugin, () -> a.getPlayers().forEach(p -> nms.hidePlayer(e.getPlayer(), p)), 10L);
-                Bukkit.getScheduler().runTaskLater(plugin, () -> a.getSpectators().forEach(p -> nms.hidePlayer(e.getPlayer(), p)), 10L);
-                nms.setCollide(e.getPlayer(), a, false);
-                Bukkit.getScheduler().runTaskLater(plugin, ()-> {
-                    e.getPlayer().setAllowFlight(true);
-                    e.getPlayer().setFlying(true);
-                }, 10L);
-                a.getRespawn().put(e.getPlayer(), 5);
-
-                if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS)) {
-                    Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
-                        // #274
-                        for (Player p : a.getShowTime().keySet()) {
-                            BedWars.nms.hideArmor(p, e.getPlayer());
-                        }
-                        //
-                    }, 10L);
+                int respawnTime = config.getInt(ConfigPath.GENERAL_CONFIGURATION_RE_SPAWN_COUNTDOWN);
+                if (respawnTime > 1){
+                    e.setRespawnLocation(a.getReSpawnLocation());
+                    a.startReSpawnSession(e.getPlayer(), respawnTime);
+                } else {
+                    // instant respawn configuration
+                    e.setRespawnLocation(t.getSpawn());
+                    t.respawnMember(e.getPlayer());
                 }
-            }
-            for (Player p2 : a.getSpectators()) {
-                a.updateSpectatorCollideRule(p2, false);
             }
         }
     }
@@ -470,25 +483,14 @@ public class DamageDeathMove implements Listener {
                         sh.updateForPlayer(e.getPlayer(), iso);
                     }
                 }
-
-                /* Check if re-spawning */
-                if (a.getRespawn().containsKey(e.getPlayer())) {
-                    for (Player p : a.getPlayers()) {
-                        if (p == e.getPlayer()) continue;
-                        nms.hidePlayer(e.getPlayer(), p);
-                    }
-                } else {
-                    for (Player p : a.getPlayers()) {
-                        if (a.getRespawn().containsKey(p)) {
-                            nms.hidePlayer(e.getPlayer(), p);
-                        }
-                    }
-                }
             }
 
-            if (a.isSpectator(e.getPlayer()) || a.isRespawning(e.getPlayer())) {
+            if (a.isSpectator(e.getPlayer()) || a.isReSpawning(e.getPlayer())) {
                 if (e.getTo().getY() < 0) {
-                    e.getPlayer().teleport(a.getConfig().getArenaLoc("waiting.Loc"));
+                    e.getPlayer().teleport(a.isSpectator(e.getPlayer()) ? a.getSpectatorLocation() : a.getReSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                    e.getPlayer().setAllowFlight(true);
+                    e.getPlayer().setFlying(true);
+                    // how to remove fall velocity?
                 }
             } else {
                 if (e.getPlayer().getLocation().getY() <= 0) {
@@ -501,7 +503,7 @@ public class DamageDeathMove implements Listener {
                         if (bwt != null) {
                             e.getPlayer().teleport(bwt.getSpawn());
                         } else {
-                            e.getPlayer().teleport(a.getConfig().getArenaLoc("waiting.Loc"));
+                            e.getPlayer().teleport(a.getSpectatorLocation());
                         }
                     }
                 }

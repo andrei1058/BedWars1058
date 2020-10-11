@@ -312,7 +312,7 @@ public class SQLite implements Database {
                         st.executeUpdate("UPDATE player_language SET iso='" + iso + "' WHERE uuid = '" + player.toString() + "';");
                     }
                 } else {
-                    try (PreparedStatement st = connection.prepareStatement("INSERT INTO player_language VALUES (0, ?, ?);")) {
+                    try (PreparedStatement st = connection.prepareStatement("INSERT INTO player_language (uuid, iso) VALUES (?, ?);")) {
                         st.setString(1, player.toString());
                         st.setString(2, iso);
                         st.execute();

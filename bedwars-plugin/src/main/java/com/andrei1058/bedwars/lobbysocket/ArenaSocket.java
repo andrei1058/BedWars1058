@@ -102,7 +102,7 @@ public class ArenaSocket {
                 while (compute) {
                     if (in.hasNext()) {
                         String msg = in.next();
-                        BedWars.plugin.getLogger().warning(msg);
+                        BedWars.debug(msg);
                         if (msg.isEmpty()) continue;
                         final JsonObject json;
                         try {
@@ -135,6 +135,8 @@ public class ArenaSocket {
                                 }
                                 break;
                         }
+                    } else {
+                        disable();
                     }
                 }
             });

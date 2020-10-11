@@ -5,7 +5,7 @@
     <parent>
         <artifactId>BedWars1058</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>20.3-SNAPSHOT</version>
+        <version>20.8-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>bedwars-plugin</artifactId>
@@ -32,6 +32,10 @@
         <repository>
             <id>codemc-repo</id>
             <url>https://repo.codemc.io/repository/maven-public/</url>
+        </repository>
+        <repository>
+            <id>spigotmc-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
     </repositories>
 
@@ -110,11 +114,6 @@
         <dependency>
             <groupId>com.andrei1058.bedwars</groupId>
             <artifactId>resetadapter-slime</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.andrei1058.bedwars</groupId>
-            <artifactId>resetadapter_eswm</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

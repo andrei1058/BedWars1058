@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.stats;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.events.gameplay.GameEndEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerBedBreakEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
@@ -49,7 +50,9 @@ public class StatsListener implements Listener {
     @EventHandler
     public void onPlayerKill(PlayerKillEvent event) {
         PlayerStats victimStats = BedWars.getStatsManager().get(event.getVictim().getUniqueId());
-        PlayerStats killerStats = event.getKiller() != null ? BedWars.getStatsManager().get(event.getKiller().getUniqueId()) : null;
+        // If killer is not null and not equal to victim
+        PlayerStats killerStats = !event.getVictim().equals(event.getKiller()) ?
+                (event.getKiller() == null ? null : BedWars.getStatsManager().getUnsafe(event.getKiller().getUniqueId())) : null;
 
         if (event.getCause().isFinalKill()) {
             //store final deaths
@@ -88,17 +91,45 @@ public class StatsListener implements Listener {
     public void onArenaLeave(PlayerLeaveArenaEvent event) {
         final Player player = event.getPlayer();
 
-        if (!(event.getArena().getStatus() == GameState.starting || event.getArena().getStatus() == GameState.waiting)) {
-            PlayerStats stats = BedWars.getStatsManager().get(player.getUniqueId());
-            Instant now = Instant.now();
-            stats.setLastPlay(now);
-            if(stats.getFirstPlay() == null) {
-                stats.setFirstPlay(now);
-            }
-
-            //save or replace stats for player
-            Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, () -> BedWars.getRemoteDatabase().saveStats(stats));
+        ITeam team = event.getArena().getExTeam(player.getUniqueId());
+        if (team == null) {
+            return; // The player didn't play this game
         }
+
+        if (event.getArena().getStatus() == GameState.starting || event.getArena().getStatus() == GameState.waiting) {
+            return; // Game didn't start
+        }
+
+        PlayerStats playerStats = BedWars.getStatsManager().get(player.getUniqueId());
+
+        // Update last play and first play (if required)
+        Instant now = Instant.now();
+        playerStats.setLastPlay(now);
+        if(playerStats.getFirstPlay() == null) {
+            playerStats.setFirstPlay(now);
+        }
+
+        // Check quit abuse
+        if (event.getArena().getStatus() == GameState.playing) {
+            // Only if the player leaved the arena while the game was running
+            if (team.isBedDestroyed()) {
+                // Only if the team had the bed destroyed
+
+                // Punish player
+                playerStats.setFinalDeaths(playerStats.getFinalDeaths() + 1);
+                playerStats.setLosses(playerStats.getLosses() + 1);
+
+                // Reward attacker
+                Player damager = event.getLastDamager();
+                if (damager != null && event.getArena().isPlayer(damager)) {
+                    PlayerStats damagerStats = BedWars.getStatsManager().get(damager.getUniqueId());
+                    damagerStats.setFinalKills(damagerStats.getFinalKills() + 1);
+                }
+            }
+        }
+
+        //save or replace stats for player
+        Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, () -> BedWars.getRemoteDatabase().saveStats(playerStats));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
