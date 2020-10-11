@@ -26,7 +26,7 @@ public class SpecialsListener implements Listener {
         if (i.getType() == Material.AIR) return;
         IArena a = Arena.getArenaByPlayer(p);
         if (a == null) return;
-        if (a.getRespawn().containsKey(e.getPlayer())) return;
+        if (a.getRespawnSessions().containsKey(e.getPlayer())) return;
         if (!a.isPlayer(p)) return;
         if (BedWars.shop.getYml().getBoolean(ConfigPath.SHOP_SPECIAL_SILVERFISH_ENABLE)) {
             if (!Misc.isProjectile(Material.valueOf(BedWars.shop.getYml().getString(ConfigPath.SHOP_SPECIAL_SILVERFISH_MATERIAL)))) {

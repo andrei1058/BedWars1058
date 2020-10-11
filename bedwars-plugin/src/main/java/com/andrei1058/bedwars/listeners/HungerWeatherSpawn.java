@@ -73,31 +73,29 @@ public class HungerWeatherSpawn implements Listener {
         switch (e.getItem().getType()) {
             case POTION:
                 Bukkit.getScheduler().runTaskLater(plugin, () -> nms.minusAmount(e.getPlayer(), new ItemStack(Material.GLASS_BOTTLE), 1), 5L);
-                if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS)) {
-                    PotionMeta pm = (PotionMeta) e.getItem().getItemMeta();
-                    if (pm.hasCustomEffects()) {
-                        if (pm.hasCustomEffect(PotionEffectType.INVISIBILITY)) {
-                            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                                for (PotionEffect pe : e.getPlayer().getActivePotionEffects()) {
-                                    if (pe.getType().toString().contains("INVISIBILITY")) {
-                                        if (a.getShowTime().containsKey(e.getPlayer())) {
-                                            ITeam t = a.getTeam(e.getPlayer());
-                                            a.getShowTime().replace(e.getPlayer(), pe.getDuration() / 20);
+                PotionMeta pm = (PotionMeta) e.getItem().getItemMeta();
+                if (pm.hasCustomEffects()) {
+                    if (pm.hasCustomEffect(PotionEffectType.INVISIBILITY)) {
+                        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                            for (PotionEffect pe : e.getPlayer().getActivePotionEffects()) {
+                                if (pe.getType().toString().contains("INVISIBILITY")) {
+                                    if (a.getShowTime().containsKey(e.getPlayer())) {
+                                        ITeam t = a.getTeam(e.getPlayer());
+                                        a.getShowTime().replace(e.getPlayer(), pe.getDuration() / 20);
+                                        Bukkit.getPluginManager().callEvent(new PlayerInvisibilityPotionEvent(PlayerInvisibilityPotionEvent.Type.ADDED, t, e.getPlayer(), t.getArena()));
+                                    } else {
+                                        ITeam t = a.getTeam(e.getPlayer());
+                                        a.getShowTime().put(e.getPlayer(), pe.getDuration() / 20);
+                                        for (Player p1 : e.getPlayer().getWorld().getPlayers()) {
+                                            if (a.isSpectator(p1)) continue;
+                                            if (t != a.getTeam(p1)) nms.hideArmor(e.getPlayer(), p1);
                                             Bukkit.getPluginManager().callEvent(new PlayerInvisibilityPotionEvent(PlayerInvisibilityPotionEvent.Type.ADDED, t, e.getPlayer(), t.getArena()));
-                                        } else {
-                                            ITeam t = a.getTeam(e.getPlayer());
-                                            a.getShowTime().put(e.getPlayer(), pe.getDuration() / 20);
-                                            for (Player p1 : e.getPlayer().getWorld().getPlayers()) {
-                                                if (a.isSpectator(p1)) continue;
-                                                if (t != a.getTeam(p1)) nms.hideArmor(e.getPlayer(), p1);
-                                                Bukkit.getPluginManager().callEvent(new PlayerInvisibilityPotionEvent(PlayerInvisibilityPotionEvent.Type.ADDED, t, e.getPlayer(), t.getArena()));
-                                            }
                                         }
-                                        break;
                                     }
+                                    break;
                                 }
-                            }, 5L);
-                        }
+                            }
+                        }, 5L);
                     }
                 }
                 break;

@@ -8,6 +8,10 @@ import com.andrei1058.bedwars.api.server.RestoreAdapter;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.arena.despawnables.TargetListener;
+import com.andrei1058.bedwars.listeners.joinhandler.JoinListenerBungee;
+import com.andrei1058.bedwars.listeners.joinhandler.JoinListenerBungeeLegacy;
+import com.andrei1058.bedwars.listeners.joinhandler.JoinListenerMultiArena;
+import com.andrei1058.bedwars.listeners.joinhandler.JoinListenerShared;
 import com.andrei1058.bedwars.sidebar.*;
 import com.andrei1058.bedwars.commands.party.PartyCommand;
 import com.andrei1058.bedwars.commands.rejoin.RejoinCommand;
@@ -51,6 +55,7 @@ import com.andrei1058.vipfeatures.api.MiniGameAlreadyRegistered;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Monster;
@@ -172,26 +177,34 @@ public class BedWars extends JavaPlugin {
                 Constructor constructor = Class.forName("com.andrei1058.bedwars.arena.mapreset.eswm.ESlimeAdapter").getConstructor(Plugin.class);
                 try {
                     api.setRestoreAdapter((RestoreAdapter) constructor.newInstance(this));
+                    this.getLogger().info("Hook into Enhanced-SlimeWorldManager support!");
                 } catch (InstantiationException e) {
                     e.printStackTrace();
+                    api.setRestoreAdapter(new InternalAdapter(this));
+                    this.getLogger().info("Failed to hook into Enhanced-SlimeWorldManager support! Using the internal reset adapter.");
                 }
             } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
+                api.setRestoreAdapter(new InternalAdapter(this));
+                this.getLogger().info("Failed to hook into Enhanced-SlimeWorldManager support! Using the internal reset adapter.");
             }
-            this.getLogger().info("Hook into Enhanced-SlimeWorldManager support!");
         } else if (checkSWM()) {
             try {
                 //noinspection rawtypes
                 Constructor constructor = Class.forName("com.andrei1058.bedwars.arena.mapreset.slime.SlimeAdapter").getConstructor(Plugin.class);
                 try {
                     api.setRestoreAdapter((RestoreAdapter) constructor.newInstance(this));
+                    this.getLogger().info("Hook into SlimeWorldManager support!");
                 } catch (InstantiationException e) {
                     e.printStackTrace();
+                    api.setRestoreAdapter(new InternalAdapter(this));
+                    this.getLogger().info("Failed to hook into SlimeWorldManager support! Using internal reset adapter.");
                 }
             } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
+                api.setRestoreAdapter(new InternalAdapter(this));
+                this.getLogger().info("Failed to hook into SlimeWorldManager support! Using internal reset adapter.");
             }
-            this.getLogger().info("Hook into SlimeWorldManager support!");
         } else {
             api.setRestoreAdapter(new InternalAdapter(this));
         }
@@ -239,26 +252,34 @@ public class BedWars extends JavaPlugin {
                     }
                     Location l = config.getConfigLoc("lobbyLoc");
                     if (l != null) {
-                        Bukkit.getWorld(config.getLobbyWorldName()).setSpawnLocation(l.getBlockX(), l.getBlockY(), l.getBlockZ());
+                        World w = Bukkit.getWorld(config.getLobbyWorldName());
+                        if (w != null) {
+                            w.setSpawnLocation(l.getBlockX(), l.getBlockY(), l.getBlockZ());
+                        }
                     }
                 }
             }, 1L);
 
-        /* Register events */
-        registerEvents(new JoinLeaveTeleport(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(),
+        // Register events
+        registerEvents(new QuitAndTeleportListener(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(),
                 new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener(), new LangListener());
         if (getServerType() == ServerType.BUNGEE) {
             if (autoscale) {
                 //registerEvents(new ArenaListeners());
                 ArenaSocket.lobbies.addAll(config.getList(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS));
                 new SendTask();
-                registerEvents(new AutoscaleListener(), new PrePartyListener());
+                registerEvents(new AutoscaleListener(), new PrePartyListener(), new JoinListenerBungee());
                 Bukkit.getScheduler().runTaskTimerAsynchronously(this, new LoadedUsersCleaner(), 60L, 60L);
             } else {
-                registerEvents(new Ping());
+                registerEvents(new ServerPingListener(), new JoinListenerBungeeLegacy());
             }
         } else if (getServerType() == ServerType.MULTIARENA || getServerType() == ServerType.SHARED) {
             registerEvents(new ArenaSelectorListener(), new BlockStatusListener());
+            if (getServerType() == ServerType.MULTIARENA){
+                registerEvents(new JoinListenerMultiArena());
+            } else {
+                registerEvents(new JoinListenerShared());
+            }
         }
 
         registerEvents(new WorldLoadListener());
@@ -456,7 +477,7 @@ public class BedWars extends JavaPlugin {
 
         PreLoadedCleaner.init();
 
-        int playerListRefreshInterval  = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_LIST_REFRESH);
+        int playerListRefreshInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_LIST_REFRESH);
         if (playerListRefreshInterval < 1) {
             Bukkit.getLogger().info("Scoreboard names list refresh is disabled. (Is set to " + playerListRefreshInterval + ").");
         } else {
@@ -468,7 +489,7 @@ public class BedWars extends JavaPlugin {
             Bukkit.getScheduler().runTaskTimer(this, new SidebarListRefresh(), 23L, playerListRefreshInterval);
         }
 
-        int placeholdersRefreshInterval  = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL);
+        int placeholdersRefreshInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL);
         if (placeholdersRefreshInterval < 1) {
             Bukkit.getLogger().info("Scoreboard placeholders refresh is disabled. (Is set to " + placeholdersRefreshInterval + ").");
         } else {

@@ -80,7 +80,7 @@ public class SlimeAdapter extends RestoreAdapter {
             try {
                 // Note that this method should be called asynchronously
                 SlimeWorld world = slime.loadWorld(flat, a.getArenaName(), true, spm);
-                if (api.getServerType() == ServerType.BUNGEE) {
+                if (api.getServerType() == ServerType.BUNGEE && api.isAutoScale()) {
                     world = world.clone(a.getWorldName());
                 }
 

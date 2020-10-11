@@ -231,7 +231,7 @@ public class SpectatorListeners implements Listener {
             }
         } else if (e.getDamager() instanceof Player) {
             damager = (Player) e.getDamager();
-            if (a.getRespawn().containsKey(damager)) {
+            if (a.getRespawnSessions().containsKey(damager)) {
                 e.setCancelled(true);
                 return;
             }

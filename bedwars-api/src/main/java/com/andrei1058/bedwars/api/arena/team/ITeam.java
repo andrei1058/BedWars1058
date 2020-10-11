@@ -93,7 +93,9 @@ public interface ITeam {
     int getSize();
 
     /**
-     * Add a new member to the team
+     * Add a new member to the team.
+     * Be careful! This will cache players on this team until the game is finished
+     * so you can retrieve who played here with {@link #wasMember(UUID)}.
      *
      * @param players players to be added.
      */

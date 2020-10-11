@@ -162,17 +162,15 @@ public class BuyItem implements IBuyItem {
             }
             player.updateInventory();
 
-            if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS)) {
-                Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                    // #274
-                    if (player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
-                        for (Player p : arena.getPlayers()) {
-                            BedWars.nms.hideArmor(player, p);
-                        }
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                // #274
+                if (player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+                    for (Player p : arena.getPlayers()) {
+                        BedWars.nms.hideArmor(player, p);
                     }
-                    //
-                }, 20L);
-            }
+                }
+                //
+            }, 20L);
             return;
         } else {
 

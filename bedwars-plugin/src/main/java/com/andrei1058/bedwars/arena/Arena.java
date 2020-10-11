@@ -52,6 +52,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.util.*;
 import java.util.Comparator;
 import java.util.concurrent.ConcurrentHashMap;
@@ -88,6 +89,7 @@ public class Arena implements IArena {
     private LinkedList<org.bukkit.util.Vector> placed = new LinkedList<>();
     private List<String> nextEvents = new ArrayList<>();
     private List<Region> regionsList = new ArrayList<>();
+    private int renderDistance;
 
     /**
      * Current event, used at scoreboard
@@ -98,7 +100,7 @@ public class Arena implements IArena {
     /**
      * Players in respawn session
      */
-    private ConcurrentHashMap<Player, Integer> respawn = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Player, Integer> respawnSessions = new ConcurrentHashMap<>();
 
     /**
      * Invisibility for armor when you drink an invisibility potion
@@ -132,6 +134,8 @@ public class Arena implements IArena {
     private PerMinuteTask perMinuteTask;
 
     private static LinkedList<IArena> enableQueue = new LinkedList<>();
+
+    private Location respawnLocation, spectatorLocation, waitingLocation;
 
     /**
      * Load an arena.
@@ -314,6 +318,33 @@ public class Arena implements IArena {
         //Call event
         Bukkit.getPluginManager().callEvent(new ArenaEnableEvent(this));
 
+        // Re Spawn Session Location
+        respawnLocation = cm.getArenaLoc(ConfigPath.ARENA_SPEC_LOC);
+        if (respawnLocation == null) {
+            respawnLocation = cm.getArenaLoc("waiting.Loc");
+        }
+        if (respawnLocation == null) {
+            respawnLocation = world.getSpawnLocation();
+        }
+        //
+
+        // Spectator location
+        spectatorLocation = cm.getArenaLoc(ConfigPath.ARENA_SPEC_LOC);
+        if (spectatorLocation == null) {
+            spectatorLocation = cm.getArenaLoc("waiting.Loc");
+        }
+        if (spectatorLocation == null) {
+            spectatorLocation = world.getSpawnLocation();
+        }
+        //
+
+        // Waiting location
+        waitingLocation = cm.getArenaLoc("waiting.Loc");
+        if (waitingLocation == null) {
+            waitingLocation = world.getSpawnLocation();
+        }
+        //
+
         changeStatus(GameState.waiting);
 
         //
@@ -326,6 +357,12 @@ public class Arena implements IArena {
         upgradeEmeraldsCount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_START) == null ?
                 "Default." + ConfigPath.GENERATOR_EMERALD_TIER_II_START : getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_START);
         plugin.getLogger().info("Load done: " + getArenaName());
+
+
+        // entity tracking range - player
+        YamlConfiguration yaml = YamlConfiguration.loadConfiguration(new File("spigot.yml"));
+        renderDistance = yaml.get("world-settings." + getWorldName() + ".entity-tracking-range.players") == null ?
+                yaml.getInt("world-settings.default.entity-tracking-range.players") : yaml.getInt("world-settings." + getWorldName() + ".entity-tracking-range.players");
     }
 
     /**
@@ -399,14 +436,8 @@ public class Arena implements IArena {
 
             //Remove from ReJoin
             ReJoin rejoin = ReJoin.getPlayer(p);
-            if (rejoin != null){
-                rejoin.destroy();
-            }
-
-            Location l = cm.getArenaLoc("waiting.Loc");
-            if (l == null) {
-                p.sendMessage(ChatColor.RED + "Could not join the arena. Waiting lobby is not set. Contact the server ADMIN.");
-                return false;
+            if (rejoin != null) {
+                rejoin.destroy(true);
             }
 
             p.closeInventory();
@@ -437,11 +468,12 @@ public class Arena implements IArena {
             }
 
             //half full arena time shorten
-            if (players.size() >= (teams.size() * maxInTeam / 2)) {
+            if (players.size() >= getMaxPlayers() / 2 && players.size() > minPlayers) {
                 if (startingTask != null) {
                     if (Bukkit.getScheduler().isCurrentlyRunning(startingTask.getTask())) {
-                        if (startingTask.getCountdown() > getConfig().getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_HALF))
+                        if (startingTask.getCountdown() > getConfig().getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_HALF)) {
                             startingTask.setCountdown(BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_HALF));
+                        }
                     }
                 }
             }
@@ -451,7 +483,7 @@ public class Arena implements IArena {
                 new PlayerGoods(p, true);
                 playerLocation.put(p, p.getLocation());
             }
-            p.teleport(l, PlayerTeleportEvent.TeleportCause.PLUGIN);
+            p.teleport(getWaitingLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
 
             BedWarsScoreboard.giveScoreboard(p, this, false);
             sendPreGameCommandItems(p);
@@ -461,27 +493,37 @@ public class Arena implements IArena {
             return false;
         }
 
+        p.getInventory().setArmorContents(null);
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            p.getInventory().setArmorContents(null);
-            for (Player on : Bukkit.getOnlinePlayers()) {
-                if (getPlayers().contains(on)) {
-                    on.showPlayer(p);
-                    p.showPlayer(on);
-                } else {
-                    on.hidePlayer(p);
-                    p.hidePlayer(on);
+            // bungee mode invisibility issues
+            if (getServerType() == ServerType.BUNGEE && autoscale) {
+                // fix invisibility issue 1.13
+                if (BedWars.nms.getVersion() == 7) {
+                    BedWars.nms.sendPlayerSpawnPackets(p, this);
                 }
             }
-        }, 30L);
+            for (Player on : Bukkit.getOnlinePlayers()) {
+                if (on.equals(p)) continue;
+                if (isPlayer(on)) {
+                    BedWars.nms.spigotShowPlayer(p, on);
+                    BedWars.nms.spigotShowPlayer(on, p);
+                } else {
+                    BedWars.nms.spigotHidePlayer(p, on);
+                    BedWars.nms.spigotHidePlayer(on, p);
+                }
+            }
+        }, 17L);
 
         if (getServerType() == ServerType.BUNGEE) {
             p.getEnderChest().clear();
         }
 
-        if (getPlayers().size() == getMaxInTeam() * getTeams().size()) {
+        if (getPlayers().size() >= getMaxPlayers()) {
             if (startingTask != null) {
                 if (Bukkit.getScheduler().isCurrentlyRunning(startingTask.getTask())) {
-                    startingTask.setCountdown(BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_SHORTENED));
+                    if (startingTask.getCountdown() > BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_SHORTENED)) {
+                        startingTask.setCountdown(BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_SHORTENED));
+                    }
                 }
             }
         }
@@ -508,8 +550,9 @@ public class Arena implements IArena {
             }
 
             //Remove from ReJoin
-            if (ReJoin.exists(p)) //noinspection ConstantConditions
-                ReJoin.getPlayer(p).destroy();
+            if (ReJoin.exists(p)) {
+                ReJoin.getPlayer(p).destroy(true);
+            }
 
             p.closeInventory();
             spectators.add(p);
@@ -531,31 +574,18 @@ public class Arena implements IArena {
 
             if (!playerBefore) {
                 if (staffTeleport == null) {
-                    Location loc = cm.getArenaLoc(ConfigPath.ARENA_SPEC_LOC);
-                    if (loc == null) {
-                        loc = cm.getArenaLoc("waiting.Loc");
-                    }
-                    if (loc != null) {
-                        p.teleport(loc, PlayerTeleportEvent.TeleportCause.PLUGIN);
-                    }
+                    p.teleport(getSpectatorLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                 } else {
                     p.teleport(staffTeleport, PlayerTeleportEvent.TeleportCause.PLUGIN);
                 }
             }
 
-            /* Hide spectator  */
-            //p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0), true);
             p.setGameMode(GameMode.ADVENTURE);
 
-            if (playerBefore){
-                Bukkit.getScheduler().runTaskLater(plugin, ()-> {
-                    p.setAllowFlight(true);
-                    p.setFlying(true);
-                }, 10L);
-            } else {
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 p.setAllowFlight(true);
                 p.setFlying(true);
-            }
+            }, 5L);
 
             if (p.getPassenger() != null && p.getPassenger().getType() == EntityType.ARMOR_STAND)
                 p.getPassenger().remove();
@@ -564,26 +594,30 @@ public class Arena implements IArena {
                 for (Player on : Bukkit.getOnlinePlayers()) {
                     if (on == p) continue;
                     if (getSpectators().contains(on)) {
-                        on.showPlayer(p);
-                        p.showPlayer(on);
+                        BedWars.nms.spigotShowPlayer(p, on);
+                        BedWars.nms.spigotShowPlayer(on, p);
                     } else if (getPlayers().contains(on)) {
-                        on.hidePlayer(p);
-                        p.showPlayer(on);
+                        BedWars.nms.spigotHidePlayer(p, on);
+                        BedWars.nms.spigotShowPlayer(on, p);
                     } else {
-                        on.hidePlayer(p);
-                        p.hidePlayer(on);
+                        BedWars.nms.spigotHidePlayer(p, on);
+                        BedWars.nms.spigotHidePlayer(on, p);
                     }
                 }
 
+
                 if (!playerBefore) {
                     if (staffTeleport == null) {
-                        p.teleport(cm.getArenaLoc("waiting.Loc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                        p.teleport(getSpectatorLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                     } else {
                         p.teleport(staffTeleport);
                     }
                 } else {
-                    p.teleport(p.getLocation());
+                    p.teleport(getSpectatorLocation());
                 }
+
+                p.setAllowFlight(true);
+                p.setFlying(true);
 
                 /* Spectator items */
                 sendSpectatorCommandItems(p);
@@ -616,11 +650,6 @@ public class Arena implements IArena {
         showTime.remove(p);
         refreshSigns();
         JoinNPC.updateNPCs(getGroup());
-
-        // hide invisible players to spectators but keep armor visible
-        for (Map.Entry<Player, Integer> e : getShowTime().entrySet()) {
-            nms.hidePlayer(e.getKey(), p);
-        }
         return true;
     }
 
@@ -632,7 +661,7 @@ public class Arena implements IArena {
      */
     public void removePlayer(@NotNull Player p, boolean disconnect) {
         debug("Player removed: " + p.getName() + " arena: " + getArenaName());
-        respawn.remove(p);
+        respawnSessions.remove(p);
 
         ITeam team = null;
 
@@ -653,7 +682,10 @@ public class Arena implements IArena {
             cacheList = ShopCache.getShopCache(p.getUniqueId()).getCachedPermanents();
         }
 
-        Bukkit.getPluginManager().callEvent(new PlayerLeaveArenaEvent(p, this));
+        LastHit lastHit = LastHit.getLastHit(p);
+        Player lastDamager = (lastHit == null) ? null :
+                (lastHit.getDamager() instanceof Player) ? (Player) lastHit.getDamager() : null;
+        Bukkit.getPluginManager().callEvent(new PlayerLeaveArenaEvent(p, this, lastDamager));
         //players.remove must be under call event in order to check if the player is a spectator or not
         players.remove(p);
         removeArenaByPlayer(p, this);
@@ -710,7 +742,7 @@ public class Arena implements IArena {
                 Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> changeStatus(GameState.restarting), 10L);
             } else {
                 //ReJoin feature
-                new ReJoin(p, this, getTeam(p), cacheList);
+                new ReJoin(p, this, getExTeam(p.getUniqueId()), cacheList);
             }
         }
         if (status == GameState.starting || status == GameState.waiting) {
@@ -740,12 +772,13 @@ public class Arena implements IArena {
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
             for (Player on : Bukkit.getOnlinePlayers()) {
+                if (on.equals(p)) continue;
                 if (getArenaByPlayer(on) == null) {
-                    on.showPlayer(p);
-                    p.showPlayer(on);
+                    BedWars.nms.spigotShowPlayer(p, on);
+                    BedWars.nms.spigotShowPlayer(on, p);
                 } else {
-                    p.hidePlayer(on);
-                    on.hidePlayer(p);
+                    BedWars.nms.spigotHidePlayer(p, on);
+                    BedWars.nms.spigotHidePlayer(on, p);
                 }
             }
             if (!disconnect) BedWarsScoreboard.giveScoreboard(p, null, false);
@@ -785,7 +818,7 @@ public class Arena implements IArena {
                 //noinspection ConstantConditions
                 if (ReJoin.getPlayer(p).getArena() == this) {
                     //noinspection ConstantConditions
-                    ReJoin.getPlayer(p).destroy();
+                    ReJoin.getPlayer(p).destroy(false);
                 }
             }
         }
@@ -828,7 +861,7 @@ public class Arena implements IArena {
      */
     public void removeSpectator(@NotNull Player p, boolean disconnect) {
         debug("Spectator removed: " + p.getName() + " arena: " + getArenaName());
-        Bukkit.getPluginManager().callEvent(new PlayerLeaveArenaEvent(p, this));
+        Bukkit.getPluginManager().callEvent(new PlayerLeaveArenaEvent(p, this, null));
         spectators.remove(p);
         removeArenaByPlayer(p, this);
         p.getInventory().clear();
@@ -861,12 +894,13 @@ public class Arena implements IArena {
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             for (Player on : Bukkit.getOnlinePlayers()) {
+                if (on.equals(p)) continue;
                 if (getArenaByPlayer(on) == null) {
-                    on.showPlayer(p);
-                    p.showPlayer(on);
+                    BedWars.nms.spigotShowPlayer(p, on);
+                    BedWars.nms.spigotShowPlayer(on, p);
                 } else {
-                    on.hidePlayer(p);
-                    p.hidePlayer(on);
+                    BedWars.nms.spigotHidePlayer(p, on);
+                    BedWars.nms.spigotHidePlayer(on, p);
                 }
             }
             if (!disconnect) BedWarsScoreboard.giveScoreboard(p, null, true);
@@ -892,7 +926,7 @@ public class Arena implements IArena {
             //noinspection ConstantConditions
             if (ReJoin.getPlayer(p).getArena() == this) {
                 //noinspection ConstantConditions
-                ReJoin.getPlayer(p).destroy();
+                ReJoin.getPlayer(p).destroy(false);
             }
         }
 
@@ -924,12 +958,10 @@ public class Arena implements IArena {
         if (ev.isCancelled()) return false;
 
         for (Player on : Bukkit.getOnlinePlayers()) {
-            if (getPlayers().contains(on)) {
-                on.showPlayer(p);
-                p.showPlayer(on);
-            } else {
-                on.hidePlayer(p);
-                p.hidePlayer(on);
+            if (on.equals(p)) continue;
+            if (!isInArena(on)) {
+                BedWars.nms.spigotHidePlayer(on ,p);
+                BedWars.nms.spigotHidePlayer(p ,on);
             }
         }
 
@@ -944,11 +976,11 @@ public class Arena implements IArena {
         setArenaByPlayer(p, this);
         /* save player inventory etc */
         if (BedWars.getServerType() != ServerType.BUNGEE) {
-            new PlayerGoods(p, true);
+            new PlayerGoods(p, true, true);
             playerLocation.put(p, p.getLocation());
         }
 
-        p.teleport(getConfig().getArenaLoc("waiting.Loc"));
+        p.teleport(getSpectatorLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
         p.getInventory().clear();
 
         //restore items before re-spawning in team
@@ -960,11 +992,9 @@ public class Arena implements IArena {
         }
 
         reJoin.getBwt().reJoin(p);
-        reJoin.destroy();
+        reJoin.destroy(false);
 
-        BedWarsScoreboard.giveScoreboard(p, this, false);
-        Bukkit.getScheduler().runTaskLater(plugin, () -> getPlayers().forEach(p2 -> nms.hidePlayer(p, p2)), 10L);
-        Bukkit.getScheduler().runTaskLater(plugin, () -> getSpectators().forEach(p2 -> nms.hidePlayer(p, p2)), 10L);
+        BedWarsScoreboard.giveScoreboard(p, this, true);
         return true;
     }
 
@@ -1304,17 +1334,13 @@ public class Arena implements IArena {
 
     @Override
     public boolean isReSpawning(UUID player) {
-        for (Map.Entry<Player, Integer> p : getRespawn().entrySet()) {
-            if (p.getKey().getUniqueId().equals(player)) return true;
+        if (player == null) return false;
+        for (Player reSpawnSession : respawnSessions.keySet()) {
+            if (reSpawnSession.getUniqueId().equals(player)) {
+                return true;
+            }
         }
         return false;
-    }
-
-    /**
-     * Check if player is respawning.
-     */
-    public boolean isRespawning(Player p) {
-        return respawn.containsKey(p);
     }
 
     /**
@@ -1883,11 +1909,11 @@ public class Arena implements IArena {
     }
 
     /**
-     * Get respawn session
+     * Get respawn sessions.
      */
     @Override
-    public ConcurrentHashMap<Player, Integer> getRespawn() {
-        return respawn;
+    public ConcurrentHashMap<Player, Integer> getRespawnSessions() {
+        return respawnSessions;
     }
 
     @Override
@@ -2109,7 +2135,7 @@ public class Arena implements IArena {
         placed = null;
         nextEvents = null;
         regionsList = null;
-        respawn = null;
+        respawnSessions = null;
         showTime = null;
         playerKills = null;
         playerBedsDestroyed = null;
@@ -2163,6 +2189,76 @@ public class Arena implements IArena {
         return worldName;
     }
 
+    @Override
+    public int getRenderDistance() {
+        return renderDistance;
+    }
+
+    @Override
+    public Location getReSpawnLocation() {
+        return respawnLocation;
+    }
+
+    @Override
+    public Location getSpectatorLocation() {
+        return spectatorLocation;
+    }
+
+    @Override
+    public Location getWaitingLocation() {
+        return waitingLocation;
+    }
+
+    @Override
+    public boolean startReSpawnSession(Player player, int seconds) {
+        if (respawnSessions.get(player) == null) {
+            IArena arena = Arena.getArenaByPlayer(player);
+            if (arena == null) {
+                return false;
+            }
+            if (!arena.isPlayer(player)) {
+                return false;
+            }
+            player.getInventory().clear();
+            if (seconds > 1) {
+                // hide to others
+                for (Player playing : arena.getPlayers()) {
+                    if (playing.equals(player)) continue;
+                    BedWars.nms.spigotHidePlayer(player, playing);
+                }
+                player.teleport(getReSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                player.setAllowFlight(true);
+                player.setFlying(true);
+
+                respawnSessions.put(player, seconds);
+                Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
+                    player.setAllowFlight(true);
+                    player.setFlying(true);
+
+                    nms.setCollide(player, this, false);
+                    // #274
+                    for (Player invisible : getShowTime().keySet()) {
+                        BedWars.nms.hideArmor(invisible, player);
+                    }
+
+                    updateSpectatorCollideRule(player, false);
+                    player.teleport(getReSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                    //
+                }, 10L);
+            } else {
+                ITeam team = getTeam(player);
+                team.respawnMember(player);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isReSpawning(Player player) {
+        return respawnSessions.containsKey(player);
+    }
+
     // used for auto scale conditions
     public static boolean canAutoScale(String arenaName) {
         if (!autoscale) return true;
@@ -2196,7 +2292,7 @@ public class Arena implements IArena {
         List<ReJoin> reJoins = new ArrayList<>(ReJoin.getReJoinList());
         for (ReJoin reJoin : reJoins) {
             if (reJoin.getArena() == this) {
-                reJoin.destroy();
+                reJoin.destroy(true);
             }
         }
     }

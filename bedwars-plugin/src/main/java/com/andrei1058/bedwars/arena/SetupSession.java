@@ -191,8 +191,10 @@ public class SetupSession implements ISetupSession {
         player.getInventory().clear();
         player.teleport(Bukkit.getWorld(getWorldName()).getSpawnLocation());
         player.setGameMode(GameMode.CREATIVE);
-        player.setAllowFlight(true);
-        player.setFlying(true);
+        Bukkit.getScheduler().runTaskLater(plugin, ()->{
+            player.setAllowFlight(true);
+            player.setFlying(true);
+        }, 5L);
         player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2));
         player.sendMessage("\n" + ChatColor.WHITE + "\n");
 

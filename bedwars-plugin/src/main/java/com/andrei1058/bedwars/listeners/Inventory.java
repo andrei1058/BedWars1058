@@ -106,12 +106,10 @@ public class Inventory implements Listener {
         //issue #225
         if (e.getSlotType() == InventoryType.SlotType.ARMOR) {
             if (Arena.getArenaByPlayer((Player) e.getWhoClicked()) != null) {
-                if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS)) {
-                    if (e.getWhoClicked().hasPotionEffect(PotionEffectType.INVISIBILITY)) {
-                        e.getWhoClicked().closeInventory();
-                        for (Player pl : e.getWhoClicked().getWorld().getPlayers()) {
-                            BedWars.nms.hideArmor((Player) e.getWhoClicked(), pl);
-                        }
+                if (e.getWhoClicked().hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+                    e.getWhoClicked().closeInventory();
+                    for (Player pl : e.getWhoClicked().getWorld().getPlayers()) {
+                        BedWars.nms.hideArmor((Player) e.getWhoClicked(), pl);
                     }
                 }
             }

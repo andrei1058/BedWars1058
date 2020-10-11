@@ -8,16 +8,18 @@ import com.andrei1058.bedwars.api.server.ServerType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 
-public class PlayerDropPick_1_11Minus {
+public class PlayerDropPick_1_11Minus implements Listener {
 
     private static BedWars api;
 
+    // Why is it unused????????
     public PlayerDropPick_1_11Minus(BedWars bedWars){
         api = bedWars;
     }
@@ -48,7 +50,7 @@ public class PlayerDropPick_1_11Minus {
             return;
         }
 
-        if (a.getRespawn().containsKey(e.getPlayer())) {
+        if (a.getRespawnSessions().containsKey(e.getPlayer())) {
             e.setCancelled(true);
             return;
         }
@@ -108,7 +110,7 @@ public class PlayerDropPick_1_11Minus {
             }
         }
 
-        if (a.getRespawn().containsKey(e.getPlayer())) {
+        if (a.getRespawnSessions().containsKey(e.getPlayer())) {
             e.setCancelled(true);
         }
     }

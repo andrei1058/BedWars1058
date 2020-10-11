@@ -109,15 +109,102 @@ public class BedWarsScoreboard {
         // Apply the sidebar to the player
         handle.apply(player);
 
-        /* not sure if still required. but I think not
+        handlePlayerList();
+    }
+
+    public void handlePlayerList() {
+        //remove previous list formatting
+        handle.playerListClear();
+
+        // Handle health in tab and bellow name
+        handleHealthIcon();
+
+        // Update player list and health bars
         if (arena != null) {
-            if (arena.getStatus() == GameState.playing) {
-                addHealthIcon();
-                giveTeamColorTag();
-                player.damage(0.2);
+
+            // Dynamic team placeholders
+            for (ITeam currentTeam : arena.getTeams()) {
+                handle.addPlaceholder(new PlaceholderProvider("{Team" + currentTeam.getName() + "Status}", () -> {
+                    String result;
+                    if (currentTeam.isBedDestroyed()) {
+                        if (currentTeam.getSize() > 0) {
+                            result = getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED)
+                                    .replace("{remainingPlayers}", String.valueOf(currentTeam.getSize()));
+                        } else {
+                            result = getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED);
+                        }
+                    } else {
+                        result = getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE);
+                    }
+                    if (currentTeam.isMember(getPlayer())) {
+                        result += getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM);
+                    }
+                    return result;
+                }));
+            }
+
+            if ((arena.getStatus() == GameState.playing && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_PLAYING))
+                    || (arena.getStatus() == GameState.restarting && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_RESTARTING))) {
+                String prefixListPath = arena.getStatus() == GameState.playing ? Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_PLAYING : Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_PRESTARTING;
+                String suffixListPath = arena.getStatus() == GameState.playing ? Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_PLAYING : Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_PRESTARTING;
+
+                // format current teams in tab
+                for (ITeam currentTeam : arena.getTeams()) {
+                    currentTeam.getMembers().forEach(currentMember -> {
+                        addToTabList(currentMember, prefixListPath, suffixListPath);
+                        BedWarsScoreboard currentSpectatorScoreboard = getSBoard(currentMember.getUniqueId());
+                        if (currentSpectatorScoreboard != null) {
+                            // add current player to current member tab list
+                            currentSpectatorScoreboard.addToTabList(getPlayer(), prefixListPath, suffixListPath);
+                        }
+                    });
+                    handle.playerListRefreshAnimation();
+                }
+                // format spectators in tab for current spectator
+                if (arena.isSpectator(getPlayer())) {
+                    arena.getSpectators().forEach(spectator -> {
+                        addToTabList(spectator, prefixListPath, suffixListPath);
+                        BedWarsScoreboard currentSpectatorScoreboard = getSBoard(spectator.getUniqueId());
+                        if (currentSpectatorScoreboard != null) {
+                            // add current player to current spectator tab list
+                            currentSpectatorScoreboard.addToTabList(getPlayer(), prefixListPath, suffixListPath);
+                        }
+                        handle.playerListRefreshAnimation();
+                    });
+                }
+            } else {
+                // waiting/ starting tab formatting
+                if (arena.getStatus() == GameState.waiting && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_WAITING) ||
+                        arena.getStatus() == GameState.starting && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_STARTING)) {
+                    String prefixListPath = arena.getStatus() == GameState.waiting ? Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_WAITING : Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_STARTING;
+                    String suffixListPath = arena.getStatus() == GameState.waiting ? Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_WAITING : Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_STARTING;
+                    arena.getPlayers().forEach(inGame -> {
+                        addToTabList(inGame, prefixListPath, suffixListPath);
+                        BedWarsScoreboard currentSpectatorScoreboard = getSBoard(inGame.getUniqueId());
+                        if (currentSpectatorScoreboard != null) {
+                            // add current player to current inGame tab list
+                            currentSpectatorScoreboard.addToTabList(getPlayer(), prefixListPath, suffixListPath);
+                        }
+                    });
+                    handle.playerListRefreshAnimation();
+                }
+            }
+        } else {
+            // multi-arena lobby tab formatting
+            if (config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_LOBBY)) {
+                World lobbyWorld = Bukkit.getWorld(config.getLobbyWorldName());
+                if (lobbyWorld != null) {
+                    lobbyWorld.getPlayers().forEach(inGame -> {
+                        addToTabList(inGame, Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_LOBBY, Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_LOBBY);
+                        BedWarsScoreboard currentPlayerScoreboard = getSBoard(inGame.getUniqueId());
+                        if (currentPlayerScoreboard != null) {
+                            currentPlayerScoreboard.addToTabList(getPlayer(), Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_LOBBY, Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_LOBBY);
+                        }
+                        handle.playerListRefreshAnimation();
+                    });
+                }
             }
         }
-        */
     }
 
     public void setArena(IArena arena) {
@@ -153,83 +240,7 @@ public class BedWarsScoreboard {
             handle.setTitle(new SidebarLineAnimated(title));
         }
 
-        //remove previous list formatting
-        handle.playerListClear();
-
-        // Update player list and health bars
-        if (arena != null) {
-            addHealthIcon();
-            arena.getPlayers().forEach(player -> handle.refreshHealth(player, (int) player.getHealth()));
-
-            // Dynamic team placeholders
-            for (ITeam currentTeam : arena.getTeams()) {
-                handle.addPlaceholder(new PlaceholderProvider("{Team" + currentTeam.getName() + "Status}", () -> {
-                    String result;
-                    if (currentTeam.isBedDestroyed()) {
-                        if (currentTeam.getSize() > 0) {
-                            result = getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED)
-                                    .replace("{remainingPlayers}", String.valueOf(currentTeam.getSize()));
-                        } else {
-                            result = getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED);
-                        }
-                    } else {
-                        result = getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE);
-                    }
-                    if (currentTeam.isMember(getPlayer())) {
-                        result += getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM);
-                    }
-                    return result;
-                }));
-            }
-
-            if ((arena.getStatus() == GameState.playing && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_PLAYING))
-                    || (arena.getStatus() == GameState.restarting && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_RESTARTING))) {
-                String prefixListPath = arena.getStatus() == GameState.playing ? Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_PLAYING : Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_PRESTARTING;
-                String suffixListPath = arena.getStatus() == GameState.playing ? Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_PLAYING : Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_PRESTARTING;
-
-                // format current teams in tab
-                for (ITeam currentTeam : arena.getTeams()) {
-                    currentTeam.getMembers().forEach(currentMember -> addToTabList(currentMember, prefixListPath, suffixListPath));
-                    handle.playerListRefreshAnimation();
-                }
-                // format spectators in tab for current spectator
-                if (arena.isSpectator(getPlayer())) {
-                    arena.getSpectators().forEach(spectator -> {
-                        addToTabList(spectator, prefixListPath, suffixListPath);
-                        BedWarsScoreboard currentSpectatorScoreboard = getSBoard(spectator.getUniqueId());
-                        if (currentSpectatorScoreboard != null) {
-                            // add current player to current spectator tab list
-                            currentSpectatorScoreboard.addToTabList(getPlayer(), prefixListPath, suffixListPath);
-                        }
-                        handle.playerListRefreshAnimation();
-                    });
-                }
-            } else {
-                // waiting/ starting tab formatting
-                if (arena.getStatus() == GameState.waiting && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_WAITING) ||
-                        arena.getStatus() == GameState.starting && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_STARTING)) {
-                    String prefixListPath = arena.getStatus() == GameState.waiting ? Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_WAITING : Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_STARTING;
-                    String suffixListPath = arena.getStatus() == GameState.waiting ? Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_WAITING : Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_STARTING;
-                    arena.getPlayers().forEach(player -> addToTabList(player, prefixListPath, suffixListPath));
-                    handle.playerListRefreshAnimation();
-                }
-            }
-        } else {
-            // multi-arena lobby tab formatting
-            if (config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_LOBBY)) {
-                World lobbyWorld = Bukkit.getWorld(config.getLobbyWorldName());
-                if (lobbyWorld != null) {
-                    lobbyWorld.getPlayers().forEach(player -> {
-                        addToTabList(player, Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_LOBBY, Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_LOBBY);
-                        BedWarsScoreboard currentPlayerScoreboard = getSBoard(player.getUniqueId());
-                        if (currentPlayerScoreboard != null) {
-                            currentPlayerScoreboard.addToTabList(getPlayer(), Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_LOBBY, Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_LOBBY);
-                        }
-                        handle.playerListRefreshAnimation();
-                    });
-                }
-            }
-        }
+        handlePlayerList();
 
         for (String current : strings) {
             // General static placeholders
@@ -337,7 +348,15 @@ public class BedWarsScoreboard {
         }
     }
 
-    public void addHealthIcon() {
+    public void handleHealthIcon() {
+        if (arena == null) {
+            handle.hidePlayersHealth();
+            return;
+        }
+        if (arena.getStatus() != GameState.playing) {
+            handle.hidePlayersHealth();
+            return;
+        }
         if (handle != null) {
             List<String> animation = Language.getList(player, Messages.FORMATTING_SCOREBOARD_HEALTH);
             if (animation.isEmpty()) return;
@@ -359,6 +378,14 @@ public class BedWarsScoreboard {
                 };
             }
             handle.showPlayersHealth(line, config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_IN_TAB));
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                if (arena != null) {
+                    arena.getPlayers().forEach(player -> handle.refreshHealth(player, (int) player.getHealth()));
+                    if (arena.isSpectator(getPlayer())) {
+                        arena.getSpectators().forEach(player -> handle.refreshHealth(player, (int) player.getHealth()));
+                    }
+                }
+            }, 20L);
         }
     }
 
@@ -520,8 +547,7 @@ public class BedWarsScoreboard {
                 time = (arena.getPlayingTask().getDragonSpawnCountdown()) * 1000L;
                 break;
         }
-
-        return nextEventDateFormat.format((time));
+        return nextEventDateFormat.format(new Date(time));
     }
 
     /**
@@ -553,7 +579,7 @@ public class BedWarsScoreboard {
      * @param toggle true when applied, false when expired.
      */
     public void invisibilityPotion(@NotNull ITeam team, Player player, boolean toggle) {
-        if (toggle){
+        if (toggle) {
             handle.playerListHideNameTag(player);
         } else {
             handle.playerListRestoreNameTag(player);
@@ -615,11 +641,6 @@ public class BedWarsScoreboard {
         } else {
             scoreboard.setArena(arena);
             scoreboard.setStrings(lines);
-            if (arena != null && arena.getStatus() != GameState.playing) {
-                scoreboard.handle.hidePlayersHealth();
-            } else if (arena == null){
-                scoreboard.handle.hidePlayersHealth();
-            }
         }
     }
 

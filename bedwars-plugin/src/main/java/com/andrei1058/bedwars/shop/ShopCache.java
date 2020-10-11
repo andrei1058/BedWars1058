@@ -9,15 +9,12 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class ShopCache {
 
     private UUID player;
-    private List<CachedItem> cachedItems = new ArrayList<>();
+    private List<CachedItem> cachedItems = new LinkedList<>();
     private int selectedCategory;
     private HashMap<ShopCategory, Byte> categoryWeight = new HashMap<>();
 
@@ -68,7 +65,7 @@ public class ShopCache {
      */
     public void managePermanentsAndDowngradables(Arena arena) {
         BedWars.debug("Restore permanents on death for: " + player);
-        for (CachedItem ci : cachedItems) {
+        for (CachedItem ci : cachedItems){
             ci.manageDeath(arena);
         }
     }

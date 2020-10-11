@@ -131,27 +131,6 @@ public abstract class VersionSupport {
     public abstract void spawnIronGolem(Location loc, ITeam team, double speed, double health, int despawn);
 
     /**
-     * Hide a player
-     */
-    public abstract void hidePlayer(Player whoToShow, List<Player> players);
-
-    /**
-     * Hide a player
-     */
-    public abstract void hidePlayer(Player whoToShow, Player p);
-
-    /**
-     * Show a player
-     *
-     * @param whoToShow this player will be shown for the second param
-     *                  <p>
-     *                  For 1.13 is using - #showPlayer​(Plugin plugin, Player player)
-     */
-    public abstract void showPlayer(Player whoToShow, Player p);
-
-    public abstract void showPlayer(Player whoToShow, List<Player> p);
-
-    /**
      * Is despawnable entity
      */
     public boolean isDespawnable(Entity e) {
@@ -176,12 +155,12 @@ public abstract class VersionSupport {
     /**
      * Hide player armor to a player
      */
-    public abstract void hideArmor(Player p, Player p2);
+    public abstract void hideArmor(Player victim, Player receiver);
 
     /**
      * Show a player armor
      */
-    public abstract void showArmor(Player p, Player p2);
+    public abstract void showArmor(Player victim, Player receiver);
 
     /**
      * Spawn ender dragon
@@ -362,7 +341,7 @@ public abstract class VersionSupport {
      * <p>
      * Show the target player to players and spectators in the arena.
      */
-    public abstract void invisibilityFix(Player player, IArena arena);
+    public abstract void sendPlayerSpawnPackets(Player player, IArena arena);
 
     /**
      * Get inventory name.
@@ -398,4 +377,16 @@ public abstract class VersionSupport {
      * Get main level name.
      */
     public abstract String getMainLevel();
+
+    public byte getCompressedAngle(float value) {
+        return (byte) ((value * 256.0F) / 360.0F);
+    }
+
+    public void spigotShowPlayer(Player victim, Player receiver){
+        receiver.showPlayer(victim);
+    }
+
+    public void spigotHidePlayer(Player victim, Player receiver){
+        receiver.hidePlayer(victim);
+    }
 }

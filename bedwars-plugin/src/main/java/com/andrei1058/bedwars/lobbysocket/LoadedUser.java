@@ -1,5 +1,6 @@
 package com.andrei1058.bedwars.lobbysocket;
 
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.language.Language;
 import org.bukkit.Bukkit;
 
@@ -48,7 +49,8 @@ public class LoadedUser {
         return arenaIdentifier;
     }
 
-    public void destroy(){
+    public void destroy(String reason){
+        BedWars.debug("Destroyed PreLoaded User: " + uuid + " Reason: " + reason);
         loaded.remove(uuid);
     }
 
@@ -57,7 +59,7 @@ public class LoadedUser {
     }
 
     public static LoadedUser getPreLoaded(UUID uuid){
-        return loaded.getOrDefault(uuid, null);
+        return loaded.get(uuid);
     }
 
     // if arena is started is used as staff teleport target

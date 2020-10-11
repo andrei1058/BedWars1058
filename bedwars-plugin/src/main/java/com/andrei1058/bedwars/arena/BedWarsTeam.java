@@ -146,13 +146,8 @@ public class BedWarsTeam implements ITeam {
      * Rejoin a team
      */
     public void reJoin(@NotNull Player p) {
-        members.add(Bukkit.getPlayer(p.getUniqueId()));
-        //Bukkit.getScheduler().runTaskLater(plugin, () -> nms.hidePlayer(p, arena.getPlayers()), 5L);
-        nms.setCollide(p, arena, false);
-        p.setAllowFlight(true);
-        p.setFlying(true);
-        arena.getRespawn().put(p, 5);
-        //todo re-add on scoreboards
+        addPlayers(p);
+        arena.startReSpawnSession(p, BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_RE_SPAWN_COUNTDOWN));
     }
 
     /**
@@ -311,21 +306,31 @@ public class BedWarsTeam implements ITeam {
         }
         p.teleport(getSpawn(), PlayerTeleportEvent.TeleportCause.PLUGIN);
         p.setVelocity(new Vector(0, 0, 0));
-        getArena().getRespawn().remove(p);
-        if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
-            p.removePotionEffect(PotionEffectType.INVISIBILITY);
-        }
+        getArena().getRespawnSessions().remove(p);
+        p.removePotionEffect(PotionEffectType.INVISIBILITY);
         nms.setCollide(p, arena, true);
         p.setAllowFlight(false);
         p.setFlying(false);
         p.setHealth(20);
 
+        Bukkit.getScheduler().runTaskLater(plugin, ()-> {
+            for (Player inGame : arena.getPlayers()){
+                if (inGame.equals(p)) continue;
+                BedWars.nms.spigotShowPlayer(p, inGame);
+                BedWars.nms.spigotShowPlayer(inGame, p);
+            }
+            for (Player spectator : arena.getSpectators()){
+                BedWars.nms.spigotShowPlayer(p, spectator);
+            }
+        }, 8L);
+
         nms.sendTitle(p, getMsg(p, Messages.PLAYER_DIE_RESPAWNED_TITLE), "", 0, 20, 0);
+
+        sendDefaultInventory(p, false);
         ShopCache sc = ShopCache.getShopCache(p.getUniqueId());
         if (sc != null) {
             sc.managePermanentsAndDowngradables(getArena());
         }
-        sendDefaultInventory(p, false);
         p.setHealth(20);
         if (!getBaseEffects().isEmpty()) {
             for (PotionEffect ef : getBaseEffects()) {
@@ -377,17 +382,16 @@ public class BedWarsTeam implements ITeam {
             }
         }
         Bukkit.getPluginManager().callEvent(new PlayerReSpawnEvent(p, getArena(), this));
+        nms.sendPlayerSpawnPackets(p, getArena());
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (getArena() != null) {
-                nms.invisibilityFix(p, getArena());
+                nms.sendPlayerSpawnPackets(p, getArena());
 
-            // #274
-            if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS)) {
+                // #274
                 for (Player on : getArena().getShowTime().keySet()) {
                     BedWars.nms.hideArmor(on, p);
                 }
-            }
             }
             //
         }, 10L);
@@ -588,20 +592,18 @@ public class BedWarsTeam implements ITeam {
         }
 
         // #274
-        if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_DISABLE_ARMOR_PACKETS)) {
-            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
-                for (Player m : getMembers()) {
-                    if (m.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
-                        for (Player p : getArena().getPlayers()) {
-                            BedWars.nms.hideArmor(m, p);
-                        }
-                        for (Player p : getArena().getSpectators()) {
-                            BedWars.nms.hideArmor(m, p);
-                        }
+        Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
+            for (Player m : getMembers()) {
+                if (m.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+                    for (Player p : getArena().getPlayers()) {
+                        BedWars.nms.hideArmor(m, p);
+                    }
+                    for (Player p : getArena().getSpectators()) {
+                        BedWars.nms.hideArmor(m, p);
                     }
                 }
-            }, 20L);
-        }
+            }
+        }, 20L);
     }
 
     /**

@@ -353,6 +353,21 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
     }
 
     @Override
+    public boolean isAutoScale() {
+        return BedWars.autoscale;
+    }
+
+    @Override
+    public Language getLanguageByIso(String isoCode) {
+        return Language.getLang(isoCode);
+    }
+
+    @Override
+    public Language getPlayerLanguage(Player player) {
+        return Language.getPlayerLanguage(player);
+    }
+
+    @Override
     public String getLangIso(Player p) {
         return Language.getPlayerLanguage(p).getIso();
     }

@@ -97,7 +97,7 @@ public class ItemDropPickListener {
         if (a.getStatus() != GameState.playing) {
             return true;
         }
-        if (a.getRespawn().containsKey(player)) {
+        if (a.getRespawnSessions().containsKey(player)) {
             return true;
         }
         if (item.getItemStack().getType() == Material.ARROW) {
@@ -156,6 +156,6 @@ public class ItemDropPickListener {
             }
         }
 
-        return a.getRespawn().containsKey(player);
+        return a.getRespawnSessions().containsKey(player);
     }
 }

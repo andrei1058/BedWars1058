@@ -11,7 +11,6 @@ import com.andrei1058.bedwars.api.tasks.StartingTask;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -118,8 +117,10 @@ public interface IArena {
 
     /**
      * Get list of players in respawn screen.
+     * Player is the actual player in re-spawn screen.
+     * Integer is the remaining time.
      */
-    ConcurrentHashMap<Player, Integer> getRespawn();
+    ConcurrentHashMap<Player, Integer> getRespawnSessions();
 
 
     /**
@@ -269,7 +270,10 @@ public interface IArena {
     /**
      * Check if target player is in re-spawning screen.
      */
-    boolean isRespawning(Player p);
+    @Deprecated
+    default boolean isRespawning(Player p) {
+        return isReSpawning(p);
+    }
 
     /**
      * Add a join sign for the arena.
@@ -398,4 +402,39 @@ public interface IArena {
     boolean isAllowSpectate();
 
     String getWorldName();
+
+    /**
+     * Get player render distance in blocks.
+     */
+    int getRenderDistance();
+
+    /**
+     * Put a player in re-spawning countdown.
+     *
+     * @param player  target player.
+     * @param seconds countdown in seconds. 0 for instant re-spawn.
+     * @return false if the player is not actually in game or if is in another re-spawn session.
+     */
+    boolean startReSpawnSession(Player player, int seconds);
+
+    /**
+     * Check if a player is in re-spawning screen/ countdown.
+     */
+    boolean isReSpawning(Player player);
+
+    /**
+     * Get re-spawning screen location.
+     */
+    Location getReSpawnLocation();
+
+    /**
+     * Where spectators will spawn.
+     */
+    Location getSpectatorLocation();
+
+    /**
+     * Location where to spawn at join (waiting/ starting).
+     */
+    Location getWaitingLocation();
+
 }

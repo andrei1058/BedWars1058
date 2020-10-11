@@ -7,7 +7,7 @@
     <groupId>com.andrei1058.bedwars</groupId>
     <artifactId>BedWars1058</artifactId>
     <packaging>pom</packaging>
-    <version>20.3-SNAPSHOT</version>
+    <version>20.8-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -15,10 +15,6 @@
     </properties>
 
     <repositories>
-        <repository>
-            <id>spigotmc-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
         <!--Bungeecord Repo-->
         <!--Only include if using the Spigot API dependency-->
         <repository>
@@ -115,7 +111,6 @@
         <module>versionsupport_common</module>
         <module>versionsupport_1_15_R1</module>
         <module>versionsupport_1_16_R1</module>
-        <module>resetadapter_eswm</module>
     </modules>
 
     <distributionManagement>

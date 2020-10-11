@@ -390,4 +390,16 @@ public interface BedWars {
     String getForCurrentVersion(String v18, String v12, String v13);
 
     void setLevelAdapter(Level level);
+
+    boolean isAutoScale();
+
+    /**
+     * Get language by iso code.
+     */
+    Language getLanguageByIso(String isoCode);
+
+    /**
+     * Get a player language.
+     */
+    Language getPlayerLanguage(Player player);
 }
