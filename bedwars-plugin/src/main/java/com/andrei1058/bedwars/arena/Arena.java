@@ -65,10 +65,10 @@ import static com.andrei1058.bedwars.api.language.Language.*;
 @SuppressWarnings("WeakerAccess")
 public class Arena implements IArena {
 
-    private static HashMap<String, IArena> arenaByName = new HashMap<>();
-    private static HashMap<Player, IArena> arenaByPlayer = new HashMap<>();
-    private static HashMap<String, IArena> arenaByIdentifier = new HashMap<>();
-    private static LinkedList<IArena> arenas = new LinkedList<>();
+    private static final HashMap<String, IArena> arenaByName = new HashMap<>();
+    private static final HashMap<Player, IArena> arenaByPlayer = new HashMap<>();
+    private static final HashMap<String, IArena> arenaByIdentifier = new HashMap<>();
+    private static final LinkedList<IArena> arenas = new LinkedList<>();
     private static int gamesBeforeRestart = config.getInt(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART);
     public static HashMap<UUID, Integer> afkCheck = new HashMap<>();
     public static HashMap<UUID, Integer> magicMilk = new HashMap<>();
@@ -111,12 +111,12 @@ public class Arena implements IArena {
      * Player location before joining.
      * The player is teleported to this location if the server is running in SHARED mode.
      */
-    private static HashMap<Player, Location> playerLocation = new HashMap<>();
+    private static final HashMap<Player, Location> playerLocation = new HashMap<>();
 
     /**
-     * temp stats
+     * temp stats. some of them use player name as key to keep names of players who left. at checkWinners for example.
      */
-    private HashMap<Player, Integer> playerKills = new HashMap<>();
+    private HashMap<String, Integer> playerKills = new HashMap<>();
     private HashMap<Player, Integer> playerBedsDestroyed = new HashMap<>();
     private HashMap<Player, Integer> playerFinalKills = new HashMap<>();
     private HashMap<Player, Integer> playerDeaths = new HashMap<>();
@@ -133,7 +133,7 @@ public class Arena implements IArena {
 
     private PerMinuteTask perMinuteTask;
 
-    private static LinkedList<IArena> enableQueue = new LinkedList<>();
+    private static final LinkedList<IArena> enableQueue = new LinkedList<>();
 
     private Location respawnLocation, spectatorLocation, waitingLocation;
 
@@ -550,8 +550,9 @@ public class Arena implements IArena {
             }
 
             //Remove from ReJoin
-            if (ReJoin.exists(p)) {
-                ReJoin.getPlayer(p).destroy(true);
+            ReJoin reJoin = ReJoin.getPlayer(p);
+            if (reJoin != null) {
+                reJoin.destroy(true);
             }
 
             p.closeInventory();
@@ -960,8 +961,8 @@ public class Arena implements IArena {
         for (Player on : Bukkit.getOnlinePlayers()) {
             if (on.equals(p)) continue;
             if (!isInArena(on)) {
-                BedWars.nms.spigotHidePlayer(on ,p);
-                BedWars.nms.spigotHidePlayer(p ,on);
+                BedWars.nms.spigotHidePlayer(on, p);
+                BedWars.nms.spigotHidePlayer(p, on);
             }
         }
 
@@ -1193,7 +1194,7 @@ public class Arena implements IArena {
      */
     public int getPlayerKills(Player p, boolean finalKills) {
         if (finalKills) return playerFinalKills.getOrDefault(p, 0);
-        return playerKills.getOrDefault(p, 0);
+        return playerKills.getOrDefault(p.getName(), 0);
     }
 
     /**
@@ -1282,13 +1283,9 @@ public class Arena implements IArena {
         }
         restartingTask = null;
 
-        players.forEach(c -> {
-            BedWarsScoreboard.giveScoreboard(c, this, false);
-        });
+        players.forEach(c -> BedWarsScoreboard.giveScoreboard(c, this, false));
 
-        spectators.forEach(c -> {
-            BedWarsScoreboard.giveScoreboard(c, this, false);
-        });
+        spectators.forEach(c -> BedWarsScoreboard.giveScoreboard(c, this, false));
 
         if (status == GameState.starting) {
             startingTask = new GameStartingTask(this);
@@ -1405,10 +1402,10 @@ public class Arena implements IArena {
      */
     public void addPlayerKill(Player p, boolean finalKill, Player victim) {
         if (p == null) return;
-        if (playerKills.containsKey(p)) {
-            playerKills.replace(p, playerKills.get(p) + 1);
+        if (playerKills.containsKey(p.getName())) {
+            playerKills.replace(p.getName(), playerKills.get(p.getName()) + 1);
         } else {
-            playerKills.put(p, 1);
+            playerKills.put(p.getName(), 1);
         }
         if (finalKill) {
             if (playerFinalKills.containsKey(p)) {
@@ -1630,25 +1627,39 @@ public class Arena implements IArena {
                     String secondName = "";
                     String thirdName = "";
                     StringBuilder winners = new StringBuilder();
-                    for (Player p : winner.getMembers()) {
+                    //noinspection deprecation
+                    for (Player p : winner.getMembersCache()) {
                         nms.sendTitle(p, getMsg(p, Messages.GAME_END_VICTORY_PLAYER_TITLE), null, 0, 40, 0);
-                        winners.append(p.getDisplayName()).append(" ");
+                        if (!winners.toString().contains(p.getDisplayName())) {
+                            winners.append(p.getDisplayName()).append(" ");
+                        }
                     }
                     if (winners.toString().endsWith(" ")) {
                         winners = new StringBuilder(winners.substring(0, winners.length() - 1));
                     }
                     int first = 0, second = 0, third = 0;
                     if (!playerKills.isEmpty()) {
-                        for (Map.Entry<Player, Integer> e : playerKills.entrySet()) {
-                            if (e.getKey() == null) continue;
+                        for (Map.Entry<String, Integer> e : playerKills.entrySet()) {
                             if (e.getValue() > first) {
-                                firstName = e.getKey().getDisplayName();
+                                firstName = e.getKey();
+                                Player onlinePlayer = Bukkit.getPlayerExact(e.getKey());
+                                if (onlinePlayer != null) {
+                                    firstName = onlinePlayer.getDisplayName();
+                                }
                                 first = e.getValue();
                             } else if (e.getValue() > second) {
-                                secondName = e.getKey().getDisplayName();
+                                secondName = e.getKey();
+                                Player onlinePlayer = Bukkit.getPlayerExact(e.getKey());
+                                if (onlinePlayer != null) {
+                                    secondName = onlinePlayer.getDisplayName();
+                                }
                                 second = e.getValue();
                             } else if (e.getValue() > third) {
-                                thirdName = e.getKey().getDisplayName();
+                                thirdName = e.getKey();
+                                Player onlinePlayer = Bukkit.getPlayerExact(e.getKey());
+                                if (onlinePlayer != null) {
+                                    thirdName = onlinePlayer.getDisplayName();
+                                }
                                 third = e.getValue();
                             }
                         }
