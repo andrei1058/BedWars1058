@@ -25,7 +25,7 @@ public class CmdLang extends SubCommand {
         super(parent, name);
         setPriority(18);
         showInList(false);
-        setDisplayInfo(com.andrei1058.bedwars.commands.bedwars.MainCommand.createTC("§6 ▪ §7/"+ MainCommand.getInstance().getName()+" "+getSubCommandName(), "/"+getParent().getName()+" "+getSubCommandName(), "§fChange your language."));
+        setDisplayInfo(com.andrei1058.bedwars.commands.bedwars.MainCommand.createTC("§6 ▪ §7/" + MainCommand.getInstance().getName() + " " + getSubCommandName(), "/" + getParent().getName() + " " + getSubCommandName(), "§fChange your language."));
     }
 
     @Override
@@ -42,8 +42,16 @@ public class CmdLang extends SubCommand {
             return true;
         } else if (Language.isLanguageExist(args[0])) {
             if (Arena.getArenaByPlayer(p) == null) {
-                Language.setPlayerLanguage(p, args[0], false);
-                Bukkit.getScheduler().runTaskLater(plugin, () -> p.sendMessage(getMsg(p, Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY)), 10L);
+                if (Language.setPlayerLanguage(p, args[0], false)) {
+                    Bukkit.getScheduler().runTaskLater(plugin, () -> p.sendMessage(getMsg(p, Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY)), 3L);
+                } else {
+                    p.sendMessage(getMsg(p, Messages.COMMAND_LANG_LIST_HEADER));
+                    for (Language l : Language.getLanguages()) {
+                        p.sendMessage(getMsg(p, Messages.COMMAND_LANG_LIST_FORMAT).replace("{iso}", l.getIso()).replace("{name}", l.getLangName()));
+                    }
+                    p.sendMessage(getMsg(p, Messages.COMMAND_LANG_USAGE));
+                    return true;
+                }
             } else {
                 p.sendMessage(getMsg(p, Messages.COMMAND_LANG_USAGE_DENIED));
             }
@@ -56,7 +64,7 @@ public class CmdLang extends SubCommand {
     @Override
     public List<String> getTabComplete() {
         List<String> tab = new ArrayList<>();
-        for (Language lang : Language.getLanguages()){
+        for (Language lang : Language.getLanguages()) {
             tab.add(lang.getIso());
         }
         return tab;

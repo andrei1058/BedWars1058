@@ -164,13 +164,6 @@ class PlayerGoods {
         player.setGameMode(gamemode);
         player.setAllowFlight(allowFlight);
         player.setFlying(flying);
-        for (Player p : Bukkit.getOnlinePlayers()){
-            if (player.equals(p)) continue;
-            if (!Arena.isInArena(p)) {
-                BedWars.nms.spigotShowPlayer(p, player);
-                BedWars.nms.spigotShowPlayer(player, p);
-            }
-        }
 
         if (!displayName.equals(player.getDisplayName())) {
             player.setDisplayName(displayName);

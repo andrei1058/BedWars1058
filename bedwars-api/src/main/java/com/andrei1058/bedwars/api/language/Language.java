@@ -298,19 +298,17 @@ public class Language extends ConfigManager {
      * Change a player language and refresh
      * scoreboard and custom join items.
      */
-    public static void setPlayerLanguage(Player p, String iso, boolean onLogin) {
-
-        if (onLogin) {
-            if (getDefaultLanguage().getIso().equalsIgnoreCase(iso)) return;
-        }
+    public static boolean setPlayerLanguage(Player p, String iso, boolean onLogin) {
 
         Language newLang = Language.getLang(iso);
+        if (newLang == null) return false;
+        Language oldLang = Language.getPlayerLanguage(p);
+        if (oldLang.getIso().equals(newLang.getIso())) return false;
 
         if (!onLogin) {
-            Language oldLang = Language.getLangByPlayer().containsKey(p) ? Language.getPlayerLanguage(p) : Language.getLanguages().get(0);
             PlayerLangChangeEvent e = new PlayerLangChangeEvent(p, oldLang.getIso(), newLang.getIso());
             Bukkit.getPluginManager().callEvent(e);
-            if (e.isCancelled()) return;
+            if (e.isCancelled()) return false;
         }
 
         if (Language.getLangByPlayer().containsKey(p)) {
@@ -318,6 +316,7 @@ public class Language extends ConfigManager {
         } else {
             Language.getLangByPlayer().put(p, newLang);
         }
+        return true;
     }
 
     /**
