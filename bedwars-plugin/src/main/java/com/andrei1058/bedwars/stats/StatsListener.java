@@ -7,6 +7,8 @@ import com.andrei1058.bedwars.api.events.gameplay.GameEndEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerBedBreakEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerLeaveArenaEvent;
+import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,7 +25,7 @@ public class StatsListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onAsyncPreLoginEvent(AsyncPlayerPreLoginEvent event) {
-        if(event.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED) {
+        if (event.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED) {
             // Do nothing if login fails
             return;
         }
@@ -34,7 +36,7 @@ public class StatsListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerLoginEvent(PlayerLoginEvent event) {
-        if(event.getResult() != PlayerLoginEvent.Result.ALLOWED) {
+        if (event.getResult() != PlayerLoginEvent.Result.ALLOWED) {
             // Prevent memory leak if login fails
             BedWars.getStatsManager().remove(event.getPlayer().getUniqueId());
         }
@@ -105,13 +107,13 @@ public class StatsListener implements Listener {
         // Update last play and first play (if required)
         Instant now = Instant.now();
         playerStats.setLastPlay(now);
-        if(playerStats.getFirstPlay() == null) {
+        if (playerStats.getFirstPlay() == null) {
             playerStats.setFirstPlay(now);
         }
 
         // Check quit abuse
         if (event.getArena().getStatus() == GameState.playing) {
-            // Only if the player leaved the arena while the game was running
+            // Only if the player left the arena while the game was running
             if (team.isBedDestroyed()) {
                 // Only if the team had the bed destroyed
 
@@ -121,9 +123,65 @@ public class StatsListener implements Listener {
 
                 // Reward attacker
                 Player damager = event.getLastDamager();
-                if (damager != null && event.getArena().isPlayer(damager)) {
+                ITeam killerTeam = event.getArena().getTeam(damager);
+                if (damager != null && event.getArena().isPlayer(damager) && killerTeam != null) {
                     PlayerStats damagerStats = BedWars.getStatsManager().get(damager.getUniqueId());
                     damagerStats.setFinalKills(damagerStats.getFinalKills() + 1);
+                    event.getArena().addPlayerKill(damager, true, player);
+
+                    // Announce in arena
+                    for (Player inGame : event.getArena().getPlayers()) {
+                        Language lang = Language.getPlayerLanguage(inGame);
+                        inGame.sendMessage(Language.getMsg(inGame, Messages.PLAYER_DIE_PVP_LOG_OUT_FINAL)
+                                .replace("{PlayerTeamName}", team.getDisplayName(lang))
+                                .replace("{PlayerColor}", team.getColor().chat().toString()).replace("{PlayerName}", player.getDisplayName())
+                                .replace("{KillerColor}", killerTeam.getColor().chat().toString())
+                                .replace("{KillerName}", damager.getDisplayName())
+                                .replace("{KillerTeamName}", killerTeam.getDisplayName(lang)));
+                    }
+                    for (Player inGame : event.getArena().getSpectators()) {
+                        Language lang = Language.getPlayerLanguage(inGame);
+                        inGame.sendMessage(Language.getMsg(inGame, Messages.PLAYER_DIE_PVP_LOG_OUT_FINAL)
+                                .replace("{PlayerTeamName}", team.getDisplayName(lang))
+                                .replace("{PlayerColor}", team.getColor().chat().toString()).replace("{PlayerName}", player.getDisplayName())
+                                .replace("{KillerColor}", killerTeam.getColor().chat().toString())
+                                .replace("{KillerName}", damager.getDisplayName())
+                                .replace("{KillerTeamName}", killerTeam.getDisplayName(lang)));
+                    }
+                }
+            } else {
+                // Prevent pvp log out abuse
+                Player damager = event.getLastDamager();
+                ITeam killerTeam = event.getArena().getTeam(damager);
+                if (event.getLastDamager() != null && event.getArena().isPlayer(damager) && killerTeam != null) {
+                    // Punish player
+                    playerStats.setDeaths(playerStats.getDeaths() + 1);
+                    event.getArena().addPlayerDeath(player);
+
+                    // Reward attacker
+                    event.getArena().addPlayerKill(damager, false, player);
+                    PlayerStats damagerStats = BedWars.getStatsManager().get(damager.getUniqueId());
+                    damagerStats.setKills(damagerStats.getKills() + 1);
+
+                    // Announce in arena
+                    for (Player inGame : event.getArena().getPlayers()) {
+                        Language lang = Language.getPlayerLanguage(inGame);
+                        inGame.sendMessage(Language.getMsg(inGame, Messages.PLAYER_DIE_PVP_LOG_OUT_REGULAR)
+                                .replace("{PlayerTeamName}", team.getDisplayName(lang))
+                                .replace("{PlayerColor}", team.getColor().chat().toString()).replace("{PlayerName}", player.getDisplayName())
+                                .replace("{KillerColor}", killerTeam.getColor().chat().toString())
+                                .replace("{KillerName}", damager.getDisplayName())
+                                .replace("{KillerTeamName}", killerTeam.getDisplayName(lang)));
+                    }
+                    for (Player inGame : event.getArena().getSpectators()) {
+                        Language lang = Language.getPlayerLanguage(inGame);
+                        inGame.sendMessage(Language.getMsg(inGame, Messages.PLAYER_DIE_PVP_LOG_OUT_REGULAR)
+                                .replace("{PlayerTeamName}", team.getDisplayName(lang))
+                                .replace("{PlayerColor}", team.getColor().chat().toString()).replace("{PlayerName}", player.getDisplayName())
+                                .replace("{KillerColor}", killerTeam.getColor().chat().toString())
+                                .replace("{KillerName}", damager.getDisplayName())
+                                .replace("{KillerTeamName}", killerTeam.getDisplayName(lang)));
+                    }
                 }
             }
         }

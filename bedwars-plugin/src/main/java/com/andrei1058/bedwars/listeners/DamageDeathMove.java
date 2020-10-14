@@ -328,18 +328,22 @@ public class DamageDeathMove implements Listener {
             if (killer != null) t2 = a.getTeam(killer);
 
             for (Player on : a.getPlayers()) {
+                Language lang = Language.getPlayerLanguage(on);
                 on.sendMessage(getMsg(on, message).
                         replace("{PlayerColor}", t.getColor().chat().toString()).replace("{PlayerName}", victim.getDisplayName())
+                        .replace("{PlayerTeamName}", t.getDisplayName(lang))
                         .replace("{KillerColor}", t2 == null ? "" : t2.getColor().chat().toString())
                         .replace("{KillerName}", killer == null ? "" : killer.getDisplayName())
-                        .replace("{KillerTeamName}", t2 == null ? "" : t2.getDisplayName(Language.getPlayerLanguage(on))));
+                        .replace("{KillerTeamName}", t2 == null ? "" : t2.getDisplayName(lang)));
             }
             for (Player on : a.getSpectators()) {
+                Language lang = Language.getPlayerLanguage(on);
                 on.sendMessage(getMsg(on, message).
                         replace("{PlayerColor}", t.getColor().chat().toString()).replace("{PlayerName}", victim.getDisplayName())
                         .replace("{KillerColor}", t2 == null ? "" : t2.getColor().chat().toString())
+                        .replace("{PlayerTeamName}", t.getDisplayName(lang))
                         .replace("{KillerName}", killer == null ? "" : killer.getDisplayName())
-                        .replace("{KillerTeamName}", t2 == null ? "" : t2.getDisplayName(Language.getPlayerLanguage(on))));
+                        .replace("{KillerTeamName}", t2 == null ? "" : t2.getDisplayName(lang)));
             }
 
             /* give stats and victim's inventory */
@@ -413,6 +417,12 @@ public class DamageDeathMove implements Listener {
             Bukkit.getPluginManager().callEvent(new PlayerKillEvent(a, victim, killer, message, cause));
             Bukkit.getScheduler().runTaskLater(plugin, () -> victim.spigot().respawn(), 3L);
             a.addPlayerDeath(victim);
+
+            // reset last damager
+            LastHit lastHit = LastHit.getLastHit(victim);
+            if (lastHit != null){
+                lastHit.setDamager(null);
+            }
         }
     }
 

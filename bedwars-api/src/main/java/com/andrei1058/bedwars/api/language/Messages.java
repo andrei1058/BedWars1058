@@ -230,6 +230,8 @@ public class Messages {
     public static String PLAYER_DIE_DEBUG_FINAL_KILL = "player-die-bedbug-final";
     public static String PLAYER_DIE_IRON_GOLEM_REGULAR = "player-die-golem-regular";
     public static String PLAYER_DIE_IRON_GOLEM_FINAL_KILL = "player-die-golem-final";
+    public static String PLAYER_DIE_PVP_LOG_OUT_REGULAR = "player-die-pvp-log-out-regular";
+    public static String PLAYER_DIE_PVP_LOG_OUT_FINAL = "player-die-pvp-log-out-final";
 
     public static String PLAYER_DIE_REWARD_DIAMOND = "player-loot-diamond";
     public static String PLAYER_DIE_REWARD_IRON = "player-loot-iron";

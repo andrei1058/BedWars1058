@@ -686,6 +686,12 @@ public class Arena implements IArena {
         LastHit lastHit = LastHit.getLastHit(p);
         Player lastDamager = (lastHit == null) ? null :
                 (lastHit.getDamager() instanceof Player) ? (Player) lastHit.getDamager() : null;
+        if (lastHit != null){
+            // accept damager in last 13 seconds only.
+            if (lastHit.getTime() > System.currentTimeMillis() - 13_000){
+                lastDamager = null;
+            }
+        }
         Bukkit.getPluginManager().callEvent(new PlayerLeaveArenaEvent(p, this, lastDamager));
         //players.remove must be under call event in order to check if the player is a spectator or not
         players.remove(p);
@@ -1418,7 +1424,7 @@ public class Arena implements IArena {
     }
 
     /**
-     * Add a destroyed bed poin to the player temp stats.
+     * Add a destroyed bed point to the player temp stats.
      */
     public void addPlayerBedDestroyed(Player p) {
         if (playerBedsDestroyed.containsKey(p)) {
