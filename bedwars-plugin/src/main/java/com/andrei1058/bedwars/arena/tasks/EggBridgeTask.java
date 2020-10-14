@@ -6,6 +6,7 @@ import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.events.gameplay.EggBridgeBuildEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
+import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.listeners.EggBridge;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -75,6 +76,7 @@ public class EggBridgeTask implements Runnable {
                     getArena().addPlacedBlock(b2);
                     Bukkit.getPluginManager().callEvent(new EggBridgeBuildEvent(getTeamColor(), getArena(), b2));
                     loc.getWorld().playEffect(b2.getLocation(), nms.eggBridge(), 3);
+                    Sounds.playSound("egg-bridge-block", getPlayer());
                 }
             }
 
@@ -86,6 +88,7 @@ public class EggBridgeTask implements Runnable {
                     getArena().addPlacedBlock(b3);
                     Bukkit.getPluginManager().callEvent(new EggBridgeBuildEvent(getTeamColor(), getArena(), b3));
                     loc.getWorld().playEffect(b3.getLocation(), nms.eggBridge(), 3);
+                    Sounds.playSound("egg-bridge-block", getPlayer());
                 }
             }
 
@@ -97,6 +100,7 @@ public class EggBridgeTask implements Runnable {
                     getArena().addPlacedBlock(b4);
                     Bukkit.getPluginManager().callEvent(new EggBridgeBuildEvent(getTeamColor(), getArena(), b4));
                     loc.getWorld().playEffect(b4.getLocation(), nms.eggBridge(), 3);
+                    Sounds.playSound("egg-bridge-block", getPlayer());
                 }
             }
         }

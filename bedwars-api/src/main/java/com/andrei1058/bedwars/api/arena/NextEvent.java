@@ -10,7 +10,7 @@ public enum NextEvent {
     ENDER_DRAGON("next-event.dragons-spawn"),
     GAME_END("next-event.game-end");
 
-    private String soundPath;
+    private final String soundPath;
 
     NextEvent(String soundPath){
         this.soundPath = soundPath;

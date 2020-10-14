@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.shop.IBuyItem;
 import com.andrei1058.bedwars.api.arena.team.TeamEnchant;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.configuration.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -161,6 +162,7 @@ public class BuyItem implements IBuyItem {
                 player.getInventory().setBoots(i);
             }
             player.updateInventory();
+            Sounds.playSound("shop-auto-equip", player);
 
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 // #274

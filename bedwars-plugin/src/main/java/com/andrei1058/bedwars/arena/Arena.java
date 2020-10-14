@@ -1734,9 +1734,8 @@ public class Arena implements IArena {
      */
     public void setNextEvent(NextEvent nextEvent) {
         if (this.nextEvent != null) {
-            Sound sound = Sounds.getSound(this.nextEvent.getSoundPath());
-            Sounds.playSound(sound, getPlayers());
-            Sounds.playSound(sound, getSpectators());
+            Sounds.playSound(this.nextEvent.getSoundPath(), getPlayers());
+            Sounds.playSound(this.nextEvent.getSoundPath(), getSpectators());
         }
         Bukkit.getPluginManager().callEvent(new NextEventChangeEvent(this, nextEvent, this.nextEvent));
         this.nextEvent = nextEvent;
