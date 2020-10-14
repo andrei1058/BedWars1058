@@ -71,7 +71,7 @@ public class Sounds {
 
     private static Sound getSound(String path) {
         try {
-            return Sound.valueOf(sounds.getString(path));
+            return Sound.valueOf(sounds.getString(path + ".sound"));
         } catch (Exception ex) {
             return Sound.valueOf(BedWars.getForCurrentVersion("AMBIENCE_THUNDER", "ENTITY_LIGHTNING_THUNDER", "ITEM_TRIDENT_THUNDER"));
         }
