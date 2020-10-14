@@ -11,17 +11,16 @@ import org.bukkit.event.Listener;
 public class LangListener implements Listener {
 
     @EventHandler
-    public void onLanguageChangeEvent(PlayerLangChangeEvent e){
+    public void onLanguageChangeEvent(PlayerLangChangeEvent e) {
         if (e == null) return;
-        if (BedWars.config.getLobbyWorldName().equalsIgnoreCase(e.getPlayer().getWorld().getName())){
+        if (BedWars.config.getLobbyWorldName().equalsIgnoreCase(e.getPlayer().getWorld().getName())) {
             Arena.sendLobbyCommandItems(e.getPlayer());
+
             BedWarsScoreboard sb = BedWarsScoreboard.getSBoard(e.getPlayer().getUniqueId());
             if (sb == null) return;
             IArena arena = sb.getArena();
             sb.remove();
-            if (e.getPlayer().getScoreboard() != null){
-                BedWarsScoreboard.giveScoreboard(e.getPlayer(), arena, false);
-            }
+            BedWarsScoreboard.giveScoreboard(e.getPlayer(), arena, true);
         }
     }
 }

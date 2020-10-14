@@ -28,7 +28,7 @@ import static com.andrei1058.bedwars.arena.Misc.replaceStatsPlaceholders;
 public class BedWarsScoreboard {
 
     private static SidebarManager sidebarManager = null;
-    private static HashMap<UUID, BedWarsScoreboard> scoreboards = new HashMap<>();
+    private static final HashMap<UUID, BedWarsScoreboard> scoreboards = new HashMap<>();
 
     private final Player player;
     private IArena arena;
@@ -553,7 +553,7 @@ public class BedWarsScoreboard {
     /**
      * Update spectators for player.
      */
-    public void updateSpectator(Player player, boolean value) {
+    public void updateSpectator(@SuppressWarnings("unused") Player player, @SuppressWarnings("unused") boolean value) {
         /* TODO: not ready
         if (getArena() == null) return;
         if (getArena().getTeam(p) != null) return;
@@ -578,7 +578,7 @@ public class BedWarsScoreboard {
      *
      * @param toggle true when applied, false when expired.
      */
-    public void invisibilityPotion(@NotNull ITeam team, Player player, boolean toggle) {
+    public void invisibilityPotion(@SuppressWarnings("unused") @NotNull ITeam team, Player player, boolean toggle) {
         if (toggle) {
             handle.playerListHideNameTag(player);
         } else {
