@@ -9,8 +9,9 @@ public class PlayerKillEvent extends Event {
     private static final HandlerList HANDLERS = new HandlerList();
 
     private IArena a;
-    private Player victim, killer;
-    private PlayerKillCause cause;
+    private final Player victim;
+    private final Player killer;
+    private final PlayerKillCause cause;
     private String message;
 
     /**
@@ -40,9 +41,11 @@ public class PlayerKillEvent extends Event {
         SILVERFISH(false),
         SILVERFISH_FINAL_KILL(true),
         IRON_GOLEM(false),
-        IRON_GOLEM_FINAL_KILL(true);
+        IRON_GOLEM_FINAL_KILL(true),
+        PLAYER_PUSH(false),
+        PLAYER_PUSH_FINAL(true);
 
-        private boolean finalKill;
+        private final boolean finalKill;
 
         PlayerKillCause(boolean finalKill) {
             this.finalKill = finalKill;

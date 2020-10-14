@@ -305,6 +305,23 @@ public class DamageDeathMove implements Listener {
                         message = t.isBedDestroyed() ? Messages.PLAYER_DIE_SHOOT_FINAL_KILL : Messages.PLAYER_DIE_SHOOT_REGULAR;
                         cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.PLAYER_SHOOT_FINAL_KILL : PlayerKillEvent.PlayerKillCause.PLAYER_SHOOT;
                     }
+                } else if (damageEvent.getCause() == EntityDamageEvent.DamageCause.FALL){
+                    LastHit lh = getLastHit(victim);
+                    if (lh != null) {
+                        // check if kicked off in the last 10 seconds
+                        if (lh.getTime() >= System.currentTimeMillis() - 10000) {
+                            if (lh.getDamager() instanceof Player) killer = (Player) lh.getDamager();
+                            if (killer != null && killer.getUniqueId().equals(victim.getUniqueId())) killer = null;
+                            if (killer != null){
+                                if (killer != victim) {
+                                    message = t.isBedDestroyed() ? Messages.PLAYER_DIE_KNOCKED_BY_FINAL_KILL : Messages.PLAYER_DIE_KNOCKED_BY_REGULAR_KILL;
+                                } else {
+                                    message = t.isBedDestroyed() ? Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL : Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL;
+                                }
+                            }
+                            cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.PLAYER_PUSH_FINAL : PlayerKillEvent.PlayerKillCause.PLAYER_PUSH;
+                        }
+                    }
                 }
             }
 

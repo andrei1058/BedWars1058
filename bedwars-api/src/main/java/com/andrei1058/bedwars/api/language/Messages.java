@@ -212,8 +212,10 @@ public class Messages {
 
     public static String PLAYER_DIE_VOID_FALL_REGULAR_KILL = "player-die-void-regular";
     public static String PLAYER_DIE_VOID_FALL_FINAL_KILL =  "player-die-void-final";
-    public static String PLAYER_DIE_KNOCKED_IN_VOID_REGULAR_KILL = "player-die-knocked-regular";
-    public static String PLAYER_DIE_KNOCKED_IN_VOID_FINAL_KILL = "player-die-knocked-final";
+    public static String PLAYER_DIE_KNOCKED_IN_VOID_REGULAR_KILL = "player-die-knocked-void-regular";
+    public static String PLAYER_DIE_KNOCKED_IN_VOID_FINAL_KILL = "player-die-knocked-void-final";
+    public static String PLAYER_DIE_KNOCKED_BY_REGULAR_KILL = "player-die-knocked-fall-regular";
+    public static String PLAYER_DIE_KNOCKED_BY_FINAL_KILL = "player-die-knocked-fall-final";
     public static String PLAYER_DIE_EXPLOSION_WITH_SOURCE_REGULAR_KILL = "player-die-bomb-regular";
     public static String PLAYER_DIE_EXPLOSION_WITH_SOURCE_FINAL_KILL = "player-die-bomb-final";
     public static String PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_REGULAR = "player-die-bomb2-regular";
