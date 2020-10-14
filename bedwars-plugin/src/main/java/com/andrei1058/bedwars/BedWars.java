@@ -7,10 +7,7 @@ import com.andrei1058.bedwars.api.server.RestoreAdapter;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.arena.despawnables.TargetListener;
-import com.andrei1058.bedwars.listeners.joinhandler.JoinListenerBungee;
-import com.andrei1058.bedwars.listeners.joinhandler.JoinListenerBungeeLegacy;
-import com.andrei1058.bedwars.listeners.joinhandler.JoinListenerMultiArena;
-import com.andrei1058.bedwars.listeners.joinhandler.JoinListenerShared;
+import com.andrei1058.bedwars.listeners.joinhandler.*;
 import com.andrei1058.bedwars.sidebar.*;
 import com.andrei1058.bedwars.commands.party.PartyCommand;
 import com.andrei1058.bedwars.commands.rejoin.RejoinCommand;
@@ -281,7 +278,7 @@ public class BedWars extends JavaPlugin {
             }
         }
 
-        registerEvents(new WorldLoadListener());
+        registerEvents(new WorldLoadListener(), new JoinHandlerCommon());
 
         // Register setup-holograms fix
         registerEvents(new ChunkLoad());
@@ -446,10 +443,10 @@ public class BedWars extends JavaPlugin {
         metrics.addCustomChart(new Metrics.SimplePie("server_type", () -> getServerType().toString()));
         metrics.addCustomChart(new Metrics.SimplePie("default_language", () -> Language.getDefaultLanguage().getIso()));
         metrics.addCustomChart(new Metrics.SimplePie("auto_scale", () -> String.valueOf(autoscale)));
-        metrics.addCustomChart(new Metrics.SimplePie("party_adapter", () -> String.valueOf(party.getClass().getName())));
-        metrics.addCustomChart(new Metrics.SimplePie("chat_adapter", () -> String.valueOf(chat.getClass().getName())));
-        metrics.addCustomChart(new Metrics.SimplePie("level_adapter", () -> String.valueOf(getLevelSupport().getClass().getName())));
-        metrics.addCustomChart(new Metrics.SimplePie("db_adapter", () -> String.valueOf(getRemoteDatabase().getClass().getName())));
+        metrics.addCustomChart(new Metrics.SimplePie("party_adapter", () -> party.getClass().getName()));
+        metrics.addCustomChart(new Metrics.SimplePie("chat_adapter", () -> chat.getClass().getName()));
+        metrics.addCustomChart(new Metrics.SimplePie("level_adapter", () -> getLevelSupport().getClass().getName()));
+        metrics.addCustomChart(new Metrics.SimplePie("db_adapter", () -> getRemoteDatabase().getClass().getName()));
         metrics.addCustomChart(new Metrics.SimplePie("map_adapter", () -> String.valueOf(getAPI().getRestoreAdapter().getOwner().getName())));
 
         if (Bukkit.getPluginManager().getPlugin("VipFeatures") != null) {
@@ -473,8 +470,6 @@ public class BedWars extends JavaPlugin {
 
         // Initialize team upgrades
         com.andrei1058.bedwars.upgrades.UpgradesManager.init();
-
-        PreLoadedCleaner.init();
 
         int playerListRefreshInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_LIST_REFRESH);
         if (playerListRefreshInterval < 1) {

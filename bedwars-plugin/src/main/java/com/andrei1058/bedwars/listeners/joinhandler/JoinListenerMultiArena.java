@@ -1,10 +1,8 @@
 package com.andrei1058.bedwars.listeners.joinhandler;
 
 import com.andrei1058.bedwars.BedWars;
-import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.ReJoin;
-import com.andrei1058.bedwars.language.PreLoadedLanguage;
 import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -13,7 +11,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import static com.andrei1058.bedwars.BedWars.*;
@@ -21,33 +18,11 @@ import static com.andrei1058.bedwars.BedWars.*;
 
 public class JoinListenerMultiArena implements Listener {
 
-    @EventHandler
-    public void onLogin(PlayerLoginEvent e) {
-        // If login is allowed load language from DB
-        if (e.getResult() == PlayerLoginEvent.Result.ALLOWED) {
-            final Player p = e.getPlayer();
-            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-                String iso = BedWars.getRemoteDatabase().getLanguage(p.getUniqueId());
-                if (Language.isLanguageExist(iso)) {
-                    new PreLoadedLanguage(e.getPlayer().getUniqueId(), iso);
-
-                }
-            });
-        }
-    }
-
     @EventHandler(priority = EventPriority.HIGH)
     public void onJoin(PlayerJoinEvent e) {
         e.setJoinMessage(null);
         final Player p = e.getPlayer();
         p.getInventory().setArmorContents(null);
-
-        // Set player language
-        PreLoadedLanguage preLoadedLanguage = PreLoadedLanguage.getByUUID(p.getUniqueId());
-        if (preLoadedLanguage != null) {
-            Language.setPlayerLanguage(p, preLoadedLanguage.getIso(), true);
-            PreLoadedLanguage.clear(p.getUniqueId());
-        }
 
         JoinHandlerCommon.displayCustomerDetails(p);
 
