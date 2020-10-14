@@ -12,6 +12,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
+import java.io.File;
 import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.UUID;
@@ -28,12 +29,14 @@ public interface BedWars {
          * Get player first play date.
          * You get data from the local cache.
          */
+        @SuppressWarnings("unused")
         Timestamp getPlayerFirstPlay(UUID p);
 
         /**
          * Get player last play date.
          * You get data from the local cache.
          */
+        @SuppressWarnings("unused")
         Timestamp getPlayerLastPlay(UUID p);
 
         /**
@@ -105,6 +108,7 @@ public interface BedWars {
         /**
          * Get the seconds since the player is AFK
          */
+        @SuppressWarnings("unused")
         int getPlayerTimeAFK(Player player);
     }
 
@@ -122,6 +126,7 @@ public interface BedWars {
         /**
          * Add a custom arena to the enable queue.
          */
+        @SuppressWarnings("unused")
         void addToEnableQueue(IArena a);
 
         /**
@@ -175,6 +180,7 @@ public interface BedWars {
         /**
          * Remove
          */
+        @SuppressWarnings("unused")
         void removeArenaByPlayer(Player p, IArena a);
 
         /**
@@ -191,6 +197,7 @@ public interface BedWars {
         /**
          * Remove
          */
+        @SuppressWarnings("unused")
         void removeArenaByName(String worldName);
 
         LinkedList<IArena> getArenas();
@@ -211,6 +218,7 @@ public interface BedWars {
          *
          * @return true if joined.
          */
+        @SuppressWarnings("unused")
         boolean joinRandomArena(Player p);
 
         /**
@@ -218,6 +226,7 @@ public interface BedWars {
          *
          * @return true if added.
          */
+        @SuppressWarnings("unused")
         boolean joinRandomFromGroup(Player p, String group);
 
         /**
@@ -244,11 +253,13 @@ public interface BedWars {
         /**
          * Get signs configuration.
          */
+        @SuppressWarnings("unused")
         ConfigManager getSignsConfig();
 
         /**
          * Get generators configuration.
          */
+        @SuppressWarnings("unused")
         ConfigManager getGeneratorsConfig();
 
         /**
@@ -259,6 +270,7 @@ public interface BedWars {
         /**
          * Get upgrades configuration.
          */
+        @SuppressWarnings("unused")
         ConfigManager getUpgradesConfig();
     }
 
@@ -286,6 +298,7 @@ public interface BedWars {
         /**
          * Cet currency path
          */
+        @SuppressWarnings("unused")
         String getCurrencyMsgPath(IContentTier contentTier);
 
         /**
@@ -302,12 +315,14 @@ public interface BedWars {
     /**
      * Get shop util.
      */
+    @SuppressWarnings("unused")
     TeamUpgradesUtil getTeamUpgradesUtil();
 
     interface TeamUpgradesUtil {
         /**
          * Check if a player is watching the team upgrades menu.
          */
+        @SuppressWarnings("unused")
         boolean isWatchingGUI(Player player);
 
         /**
@@ -352,6 +367,7 @@ public interface BedWars {
     /**
      * Get a player language iso code
      */
+    @SuppressWarnings("unused")
     String getLangIso(Player p);
 
 
@@ -389,6 +405,7 @@ public interface BedWars {
 
     String getForCurrentVersion(String v18, String v12, String v13);
 
+    @SuppressWarnings("unused")
     void setLevelAdapter(Level level);
 
     boolean isAutoScale();
@@ -396,10 +413,18 @@ public interface BedWars {
     /**
      * Get language by iso code.
      */
+    @SuppressWarnings("unused")
     Language getLanguageByIso(String isoCode);
 
     /**
      * Get a player language.
      */
     Language getPlayerLanguage(Player player);
+
+    /**
+     * This is my standard location where to store addons configurations.
+     * Make sure to create a folder in it with your addon name.
+     */
+    @SuppressWarnings("unused")
+    File getAddonsPath();
 }

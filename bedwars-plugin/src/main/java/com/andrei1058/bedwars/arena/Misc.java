@@ -80,6 +80,7 @@ public class Misc {
     /**
      * Win fireworks
      */
+    @SuppressWarnings("unused")
     public static void launchFirework(Player p) {
         Color[] colors = {Color.WHITE, Color.AQUA, Color.BLUE, Color.FUCHSIA, Color.GRAY, Color.GREEN, Color.LIME, Color.RED,
                 Color.YELLOW, Color.BLACK, Color.MAROON, Color.NAVY, Color.OLIVE, Color.ORANGE, Color.PURPLE};
@@ -95,6 +96,7 @@ public class Misc {
     }
 
 
+    @SuppressWarnings("unused")
     public static void launchFirework(Location l) {
         Color[] colors = {Color.WHITE, Color.AQUA, Color.BLUE, Color.FUCHSIA, Color.GRAY, Color.GREEN, Color.LIME, Color.RED,
                 Color.YELLOW, Color.BLACK, Color.MAROON, Color.NAVY, Color.OLIVE, Color.ORANGE, Color.PURPLE};
@@ -158,6 +160,7 @@ public class Misc {
     /**
      * Create an itemStack
      */
+    @SuppressWarnings("unused")
     public static ItemStack createItemStack(String material, int data, String name, List<String> lore, boolean enchanted, String customData) throws InvalidMaterialException {
         Material m;
         try {
@@ -180,6 +183,7 @@ public class Misc {
         return i;
     }
 
+    @SuppressWarnings("unused")
     public static BlockFace getDirection(Location loc) {
         int rotation = (int) loc.getYaw();
         if (rotation < 0) {
@@ -327,7 +331,6 @@ public class Misc {
     /**
      * Check if location is on a protected region
      */
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isBuildProtected(Location l, IArena a) {
         for (ITeam t : a.getTeams()) {
             if (t.getSpawn().distance(l) <= a.getConfig().getInt(ConfigPath.ARENA_SPAWN_PROTECTION)) {

@@ -210,6 +210,7 @@ public interface IArena {
      *
      * @return translated group.
      */
+    @SuppressWarnings("unused")
     String getDisplayGroup(Language language);
 
     List<ITeam> getTeams();
@@ -415,6 +416,7 @@ public interface IArena {
      * @param seconds countdown in seconds. 0 for instant re-spawn.
      * @return false if the player is not actually in game or if is in another re-spawn session.
      */
+    @SuppressWarnings("UnusedReturnValue")
     boolean startReSpawnSession(Player player, int seconds);
 
     /**
@@ -436,5 +438,12 @@ public interface IArena {
      * Location where to spawn at join (waiting/ starting).
      */
     Location getWaitingLocation();
+
+    /**
+     * Check if the given location is protected.
+     * Border checks, regions, island spawn protection, npc protections, generator protections.
+     */
+    boolean isProtected(Location location);
+
 
 }

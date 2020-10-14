@@ -1,6 +1,5 @@
 package com.andrei1058.bedwars;
 
-import com.andrei1058.bedwars.api.API;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;

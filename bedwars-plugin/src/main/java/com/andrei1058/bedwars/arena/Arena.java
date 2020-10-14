@@ -2313,4 +2313,9 @@ public class Arena implements IArena {
             }
         }
     }
+
+    @Override
+    public boolean isProtected(Location location) {
+        return Misc.isBuildProtected(location, this);
+    }
 }

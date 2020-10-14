@@ -1,6 +1,5 @@
-package com.andrei1058.bedwars.api;
+package com.andrei1058.bedwars;
 
-import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.shop.IContentTier;
 import com.andrei1058.bedwars.api.command.ParentCommand;
@@ -23,6 +22,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.UUID;
@@ -370,5 +370,10 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
     @Override
     public String getLangIso(Player p) {
         return Language.getPlayerLanguage(p).getIso();
+    }
+
+    @Override
+    public File getAddonsPath() {
+        return new File(BedWars.plugin.getDataFolder(), "Addons");
     }
 }
