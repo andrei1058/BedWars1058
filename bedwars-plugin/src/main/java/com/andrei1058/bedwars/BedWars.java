@@ -428,7 +428,7 @@ public class BedWars extends JavaPlugin {
         }
 
         /* Load sounds configuration */
-        new Sounds();
+        Sounds.init();
 
         /* Initialize shop */
         shop = new ShopManager();

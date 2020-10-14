@@ -23,7 +23,7 @@ public class Sounds {
     private Sounds() {
     }
 
-    public void init() {
+    public static void init() {
         YamlConfiguration yml = sounds.getYml();
 
         addDefSound("game-end", BedWars.getForCurrentVersion("AMBIENCE_THUNDER", "ENTITY_LIGHTNING_THUNDER", "ITEM_TRIDENT_THUNDER"));
@@ -106,7 +106,7 @@ public class Sounds {
         return sounds;
     }
 
-    private void addDefSound(String path, String value) {
+    private static void addDefSound(String path, String value) {
         // convert old paths
         if (getSounds().getYml().get(path) != null && getSounds().getYml().get(path + ".volume") == null) {
             String temp = getSounds().getYml().getString(path);
