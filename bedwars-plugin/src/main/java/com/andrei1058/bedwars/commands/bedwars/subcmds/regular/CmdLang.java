@@ -42,7 +42,7 @@ public class CmdLang extends SubCommand {
             return true;
         } else if (Language.isLanguageExist(args[0])) {
             if (Arena.getArenaByPlayer(p) == null) {
-                if (Language.setPlayerLanguage(p, args[0], false)) {
+                if (Language.setPlayerLanguage(p.getUniqueId(), args[0])) {
                     Bukkit.getScheduler().runTaskLater(plugin, () -> p.sendMessage(getMsg(p, Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY)), 3L);
                 } else {
                     p.sendMessage(getMsg(p, Messages.COMMAND_LANG_LIST_HEADER));

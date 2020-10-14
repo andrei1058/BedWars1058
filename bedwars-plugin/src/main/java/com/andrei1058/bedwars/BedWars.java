@@ -278,7 +278,11 @@ public class BedWars extends JavaPlugin {
             }
         }
 
-        registerEvents(new WorldLoadListener(), new JoinHandlerCommon());
+        registerEvents(new WorldLoadListener());
+
+        if (!(getServerType() == ServerType.BUNGEE && autoscale)){
+            registerEvents(new JoinHandlerCommon());
+        }
 
         // Register setup-holograms fix
         registerEvents(new ChunkLoad());

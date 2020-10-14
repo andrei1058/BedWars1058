@@ -129,7 +129,7 @@ public class JoinListenerBungee implements Listener {
                     JoinHandlerCommon.displayCustomerDetails(p);
                     reJoin.reJoin(p);
                     // Cache player language
-                    Language.setPlayerLanguage(p, playerLang.getIso(), true);
+                    Language.setPlayerLanguage(p.getUniqueId(), playerLang.getIso());
                 } else {
                     p.kickPlayer(playerLang.m(Messages.REJOIN_DENIED));
                 }
@@ -149,7 +149,7 @@ public class JoinListenerBungee implements Listener {
             }
 
             // Join allowed, cache player language
-            Language.setPlayerLanguage(p, playerLang.getIso(), true);
+            Language.setPlayerLanguage(p.getUniqueId(), playerLang.getIso());
             JoinHandlerCommon.displayCustomerDetails(p);
 
             // Join as player
