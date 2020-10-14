@@ -111,6 +111,7 @@
         <module>versionsupport_common</module>
         <module>versionsupport_1_15_R1</module>
         <module>versionsupport_1_16_R1</module>
+        <module>versionsupport_1_16_R2</module>
     </modules>
 
     <distributionManagement>
