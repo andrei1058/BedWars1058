@@ -97,8 +97,8 @@ public class Sounds {
 
     public static void playSound(String path, Player player) {
         final Sound sound = getSound(path);
-        int volume = getSounds().getInt(path + ".volume");
-        int pitch = getSounds().getInt(path + ".pitch");
+        float volume = (float) getSounds().getYml().getDouble(path + ".volume");
+        float pitch = (float) getSounds().getYml().getDouble(path + ".pitch");
         if (sound != null) player.playSound(player.getLocation(), sound, volume, pitch);
     }
 
