@@ -14,7 +14,7 @@ public class LangListener implements Listener {
     @EventHandler
     public void onLanguageChangeEvent(PlayerLangChangeEvent e) {
         if (e == null) return;
-        if (!e.isCancelled()) return;
+        if (e.isCancelled()) return;
         if (BedWars.config.getLobbyWorldName().equalsIgnoreCase(e.getPlayer().getWorld().getName())) {
             BedWarsScoreboard sb = BedWarsScoreboard.getSBoard(e.getPlayer().getUniqueId());
             if (sb != null){
