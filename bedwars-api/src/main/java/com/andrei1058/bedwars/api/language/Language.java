@@ -311,6 +311,11 @@ public class Language extends ConfigManager {
             if (e.isCancelled()) return false;
         }
 
+        if (Language.getDefaultLanguage().getIso().equals(newLang.getIso())){
+            Language.getLangByPlayer().remove(p);
+            return true;
+        }
+
         if (Language.getLangByPlayer().containsKey(p)) {
             Language.getLangByPlayer().replace(p, newLang);
         } else {
