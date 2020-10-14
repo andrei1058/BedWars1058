@@ -500,6 +500,15 @@ public class DamageDeathMove implements Listener {
                         sh.updateForPlayer(e.getPlayer(), iso);
                     }
                 }
+
+                // hide armor for those with invisibility potions
+                if (!a.getShowTime().isEmpty()){
+                    for (Map.Entry<Player, Integer> entry : a.getShowTime().entrySet()){
+                        if (entry.getValue() > 2){
+                            BedWars.nms.hideArmor(entry.getKey(), e.getPlayer());
+                        }
+                    }
+                }
             }
 
             if (a.isSpectator(e.getPlayer()) || a.isReSpawning(e.getPlayer())) {
