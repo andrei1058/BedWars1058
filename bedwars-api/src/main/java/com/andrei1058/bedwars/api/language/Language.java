@@ -111,7 +111,12 @@ public class Language extends ConfigManager {
      * Get a color translated message.
      */
     public String m(String path) {
-        return ChatColor.translateAlternateColorCodes('&', getYml().getString(path).replace("{prefix}", prefix));
+        String message = getYml().getString(path);
+        if (message == null) {
+            System.err.println("Missing message key " + path + " in language " + getIso());
+            message = "MISSING_LANG";
+        }
+        return ChatColor.translateAlternateColorCodes('&', message.replace("{prefix}", prefix));
     }
 
     /**
@@ -119,7 +124,12 @@ public class Language extends ConfigManager {
      */
     public List<String> l(String path) {
         List<String> result = new ArrayList<>();
-        for (String line : getYml().getStringList(path)) {
+        List<String> lines = getYml().getStringList(path);
+        if (lines == null) {
+            System.err.println("Missing message list key " + path + " in language " + getIso());
+            lines = Collections.emptyList();
+        }
+        for (String line : lines) {
             result.add(ChatColor.translateAlternateColorCodes('&', line));
         }
         return result;
