@@ -105,9 +105,6 @@ public class SlimeAdapter extends RestoreAdapter {
                     api.getArenaUtil().setGamesBeforeRestart(api.getArenaUtil().getGamesBeforeRestart() - 1);
                 }
                 Bukkit.getScheduler().runTask(getOwner(), () -> {
-                    for (Player inWorld : a.getWorld().getPlayers()){
-                        inWorld.kickPlayer("You're not supposed to be here.");
-                    }
                     Bukkit.unloadWorld(a.getWorldName(), false);
                     if (api.getArenaUtil().canAutoScale(a.getArenaName())) {
                         Bukkit.getScheduler().runTaskLater(getOwner(), () -> api.getArenaUtil().loadArena(a.getArenaName(), null), 80L);
@@ -116,9 +113,6 @@ public class SlimeAdapter extends RestoreAdapter {
             }
         } else {
             Bukkit.getScheduler().runTask(getOwner(), () -> {
-                for (Player inWorld : a.getWorld().getPlayers()){
-                    inWorld.kickPlayer("You're not supposed to be here.");
-                }
                 Bukkit.unloadWorld(a.getWorldName(), false);
                 Bukkit.getScheduler().runTaskLater(getOwner(), () -> api.getArenaUtil().loadArena(a.getArenaName(), null), 80L);
             });
@@ -127,9 +121,6 @@ public class SlimeAdapter extends RestoreAdapter {
 
     @Override
     public void onDisable(IArena a) {
-        for (Player inWorld : a.getWorld().getPlayers()){
-            inWorld.kickPlayer("You're not supposed to be here.");
-        }
         Bukkit.getScheduler().runTask(getOwner(), () -> Bukkit.unloadWorld(a.getWorldName(), false));
     }
 

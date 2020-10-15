@@ -68,6 +68,7 @@ public class Language extends ConfigManager {
      * Get message in player's language.
      */
     public static String getMsg(Player p, String path) {
+        if (p == null) return getDefaultLanguage().m(path);
         return langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage()).m(path);
     }
 

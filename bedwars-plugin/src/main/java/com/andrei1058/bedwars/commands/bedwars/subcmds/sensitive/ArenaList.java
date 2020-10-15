@@ -56,7 +56,12 @@ public class ArenaList extends SubCommand {
             } catch (Exception ignored) {
             }
         }
+        int start = (page - 1) * ARENAS_PER_PAGE;
         List<IArena> arenas = new ArrayList<>(Arena.getArenas());
+        if (arenas.size() <= start){
+            page = 1;
+            start = 0;
+        }
 
         p.sendMessage(color(" \n&1|| &3" + plugin.getName() + "&7 Instantiated games: \n "));
 
@@ -65,7 +70,6 @@ public class ArenaList extends SubCommand {
             return true;
         }
 
-        int start = (page - 1) * ARENAS_PER_PAGE;
         int limit = Math.min(arenas.size(), start + ARENAS_PER_PAGE);
 
         arenas.subList(start, limit).forEach(arena -> {

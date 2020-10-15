@@ -1029,6 +1029,9 @@ public class Arena implements IArena {
     public void restart() {
         plugin.getLogger().log(Level.FINE, "Restarting arena: " + getArenaName());
         Bukkit.getPluginManager().callEvent(new ArenaRestartEvent(getArenaName(), getWorldName()));
+        for (Player inWorld : getWorld().getPlayers()){
+            inWorld.kickPlayer("You're not supposed to be here.");
+        }
         destroyData();
         BedWars.getAPI().getRestoreAdapter().onRestart(this);
     }
