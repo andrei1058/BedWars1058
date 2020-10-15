@@ -11,7 +11,6 @@ import com.andrei1058.bedwars.api.util.ZipFileUtil;
 import com.flowpowered.nbt.CompoundMap;
 import com.flowpowered.nbt.CompoundTag;
 import com.flowpowered.nbt.IntTag;
-import com.flowpowered.nbt.Tag;
 import com.flowpowered.nbt.stream.NBTInputStream;
 import com.flowpowered.nbt.stream.NBTOutputStream;
 import com.grinderwolf.swm.api.SlimePlugin;
@@ -25,7 +24,6 @@ import org.bukkit.*;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -107,6 +105,9 @@ public class SlimeAdapter extends RestoreAdapter {
                     api.getArenaUtil().setGamesBeforeRestart(api.getArenaUtil().getGamesBeforeRestart() - 1);
                 }
                 Bukkit.getScheduler().runTask(getOwner(), () -> {
+                    for (Player inWorld : a.getWorld().getPlayers()){
+                        inWorld.kickPlayer("You're not supposed to be here.");
+                    }
                     Bukkit.unloadWorld(a.getWorldName(), false);
                     if (api.getArenaUtil().canAutoScale(a.getArenaName())) {
                         Bukkit.getScheduler().runTaskLater(getOwner(), () -> api.getArenaUtil().loadArena(a.getArenaName(), null), 80L);
@@ -115,6 +116,9 @@ public class SlimeAdapter extends RestoreAdapter {
             }
         } else {
             Bukkit.getScheduler().runTask(getOwner(), () -> {
+                for (Player inWorld : a.getWorld().getPlayers()){
+                    inWorld.kickPlayer("You're not supposed to be here.");
+                }
                 Bukkit.unloadWorld(a.getWorldName(), false);
                 Bukkit.getScheduler().runTaskLater(getOwner(), () -> api.getArenaUtil().loadArena(a.getArenaName(), null), 80L);
             });
@@ -123,6 +127,9 @@ public class SlimeAdapter extends RestoreAdapter {
 
     @Override
     public void onDisable(IArena a) {
+        for (Player inWorld : a.getWorld().getPlayers()){
+            inWorld.kickPlayer("You're not supposed to be here.");
+        }
         Bukkit.getScheduler().runTask(getOwner(), () -> Bukkit.unloadWorld(a.getWorldName(), false));
     }
 
@@ -325,7 +332,7 @@ public class SlimeAdapter extends RestoreAdapter {
         });
     }
 
-    private void convertWorld(String name, @Nullable Player player) {
+    private void convertWorld(String name, Player player) {
         SlimeLoader sl = slime.getLoader("file");
         try {
             getOwner().getLogger().log(Level.INFO, "Converting " + name + " to the Slime format.");

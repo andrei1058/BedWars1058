@@ -13,6 +13,7 @@ import com.andrei1058.bedwars.api.util.ZipFileUtil;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
@@ -102,12 +103,18 @@ public class InternalAdapter extends RestoreAdapter {
                     if (Arena.getGamesBeforeRestart() != -1) {
                         Arena.setGamesBeforeRestart(Arena.getGamesBeforeRestart() - 1);
                     }
+                    for (Player inWorld : a.getWorld().getPlayers()){
+                        inWorld.kickPlayer("You're not supposed to be here.");
+                    }
                     Bukkit.unloadWorld(a.getWorldName(), false);
                     if (Arena.canAutoScale(a.getArenaName())) {
                         Bukkit.getScheduler().runTaskLater(plugin, () -> new Arena(a.getArenaName(), null), 80L);
                     }
                 }
             } else {
+                for (Player inWorld : a.getWorld().getPlayers()){
+                    inWorld.kickPlayer("You're not supposed to be here.");
+                }
                 Bukkit.unloadWorld(a.getWorldName(), false);
                 Bukkit.getScheduler().runTaskLater(plugin, () -> new Arena(a.getArenaName(), null), 80L);
             }
@@ -120,6 +127,9 @@ public class InternalAdapter extends RestoreAdapter {
     @Override
     public void onDisable(IArena a) {
         Bukkit.getScheduler().runTask(getOwner(), () -> {
+            for (Player inWorld : a.getWorld().getPlayers()){
+                inWorld.kickPlayer("You're not supposed to be here.");
+            }
             Bukkit.unloadWorld(a.getWorldName(), false);
             /*if (!a.getWorldName().equals(a.getArenaName()) && new File(backupFolder, a.getArenaName()+".zip").exists()) {
                 Bukkit.getScheduler().runTaskAsynchronously(getOwner(), () -> deleteWorld(a.getWorldName()));
