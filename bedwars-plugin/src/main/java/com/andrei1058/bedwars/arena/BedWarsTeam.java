@@ -101,9 +101,10 @@ public class BedWarsTeam implements ITeam {
         if (players == null) return;
         for (Player p : players) {
             if (p == null) continue;
-            if (!members.contains(p)) members.add(p);
-
             members.removeIf(player -> player.getUniqueId().equals(p.getUniqueId()));
+            members.add(p);
+
+            membersCache.removeIf(player -> player.getUniqueId().equals(p.getUniqueId()));
             membersCache.add(p);
 
             new BedHolo(p, getArena());
