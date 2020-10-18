@@ -39,6 +39,7 @@ import com.andrei1058.bedwars.arena.tasks.GamePlayingTask;
 import com.andrei1058.bedwars.arena.tasks.GameRestartingTask;
 import com.andrei1058.bedwars.arena.tasks.GameStartingTask;
 import com.andrei1058.bedwars.arena.tasks.ReJoinTask;
+import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -686,9 +687,9 @@ public class Arena implements IArena {
         LastHit lastHit = LastHit.getLastHit(p);
         Player lastDamager = (lastHit == null) ? null :
                 (lastHit.getDamager() instanceof Player) ? (Player) lastHit.getDamager() : null;
-        if (lastHit != null){
+        if (lastHit != null) {
             // accept damager in last 13 seconds only.
-            if (lastHit.getTime() > System.currentTimeMillis() - 13_000){
+            if (lastHit.getTime() > System.currentTimeMillis() - 13_000) {
                 lastDamager = null;
             }
         }
@@ -1029,7 +1030,7 @@ public class Arena implements IArena {
     public void restart() {
         plugin.getLogger().log(Level.FINE, "Restarting arena: " + getArenaName());
         Bukkit.getPluginManager().callEvent(new ArenaRestartEvent(getArenaName(), getWorldName()));
-        for (Player inWorld : getWorld().getPlayers()){
+        for (Player inWorld : getWorld().getPlayers()) {
             inWorld.kickPlayer("You're not supposed to be here.");
         }
         destroyData();
@@ -1682,11 +1683,12 @@ public class Arena implements IArena {
                             nms.sendTitle(p, getMsg(p, Messages.GAME_END_GAME_OVER_PLAYER_TITLE), null, 0, 40, 0);
                         }
                         for (String s : getList(p, Messages.GAME_END_TOP_PLAYER_CHAT)) {
-                            p.sendMessage(s.replace("{firstName}", firstName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : firstName).replace("{firstKills}", String.valueOf(first))
+                            String message = s.replace("{firstName}", firstName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : firstName).replace("{firstKills}", String.valueOf(first))
                                     .replace("{secondName}", secondName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : secondName).replace("{secondKills}", String.valueOf(second))
                                     .replace("{thirdName}", thirdName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : thirdName).replace("{thirdKills}", String.valueOf(third))
                                     .replace("{winnerFormat}", getMaxInTeam() > 1 ? getMsg(p, Messages.FORMATTING_TEAM_WINNER_FORMAT).replace("{members}", winners.toString()) : getMsg(p, Messages.FORMATTING_SOLO_WINNER_FORMAT).replace("{members}", winners.toString()))
-                                    .replace("{TeamColor}", winner.getColor().chat().toString()).replace("{TeamName}", winner.getDisplayName(Language.getPlayerLanguage(p))));
+                                    .replace("{TeamColor}", winner.getColor().chat().toString()).replace("{TeamName}", winner.getDisplayName(Language.getPlayerLanguage(p)));
+                            p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, message));
                         }
                     }
                 }
