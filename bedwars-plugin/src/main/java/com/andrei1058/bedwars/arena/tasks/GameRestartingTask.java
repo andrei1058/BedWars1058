@@ -22,7 +22,7 @@ public class GameRestartingTask implements Runnable, RestartingTask {
 
     private Arena arena;
     private int restarting = BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_RESTART) + 3;
-    private BukkitTask task;
+    private final BukkitTask task;
 
     public GameRestartingTask(@NotNull Arena arena) {
         this.arena = arena;
@@ -70,7 +70,7 @@ public class GameRestartingTask implements Runnable, RestartingTask {
             for (Entity e : getArena().getWorld().getEntities()) {
                 if (e.getType() == EntityType.PLAYER) {
                     Player p = (Player) e;
-                    Misc.moveToLobbyOrKick(p);
+                    Misc.moveToLobbyOrKick(p, getArena(), true);
                     if (getArena().isSpectator(p)) getArena().removeSpectator(p, false);
                     if (getArena().isPlayer(p)) getArena().removePlayer(p, false);
                 }

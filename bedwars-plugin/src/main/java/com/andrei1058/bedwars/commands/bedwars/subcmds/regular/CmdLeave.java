@@ -35,20 +35,9 @@ public class CmdLeave extends SubCommand {
 
         if (cancel(p.getUniqueId())) return true;
         update(p.getUniqueId());
-        if (BedWars.getServerType() == ServerType.BUNGEE){
-            Misc.forceKick(p);
-            return true;
-        }
         IArena a = Arena.getArenaByPlayer(p);
-        if (a == null) {
-            Misc.forceKick(p);
-        } else {
-            if (a.isPlayer(p)) {
-                a.removePlayer(p, false);
-            } else if (a.isSpectator(p)) {
-                a.removeSpectator(p, false);
-            }
-        }
+
+        Misc.moveToLobbyOrKick(p, a, a != null && a.isSpectator(p.getUniqueId()));
         return true;
     }
 

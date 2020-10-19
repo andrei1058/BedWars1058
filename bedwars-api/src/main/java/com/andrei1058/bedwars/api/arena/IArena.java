@@ -445,5 +445,10 @@ public interface IArena {
      */
     boolean isProtected(Location location);
 
-
+    /**
+     * This is triggered when a player has abandoned a game.
+     * This should remove its assist from existing team and re-join session.
+     * This does not replace {@link #removePlayer(Player, boolean)}.
+     */
+    void abandonGame(Player player);
 }

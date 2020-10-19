@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
@@ -29,6 +30,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -41,39 +43,49 @@ import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class Misc {
 
-    public static void moveToLobbyOrKick(Player p) {
+    public static void moveToLobbyOrKick(Player p, @Nullable IArena arena, boolean notAbandon) {
         if (getServerType() != ServerType.BUNGEE) {
             if (!p.getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
                 p.teleport(config.getConfigLoc("lobbyLoc"));
-                IArena a = Arena.getArenaByPlayer(p);
-                if (a != null) {
-                    if (a.isSpectator(p)) {
-                        a.removeSpectator(p, false);
+                if (arena != null) {
+                    if (arena.isSpectator(p)) {
+                        arena.removeSpectator(p, false);
                     } else {
-                        a.removePlayer(p, false);
+                        arena.removePlayer(p, false);
+                        if (!notAbandon && arena.getStatus() == GameState.playing) {
+                            arena.abandonGame(p);
+                        }
                     }
                 }
             } else {
-                forceKick(p);
+                forceKick(p, arena, notAbandon);
             }
             return;
         }
-        forceKick(p);
+        forceKick(p, arena, notAbandon);
     }
 
 
     @SuppressWarnings("UnstableApiUsage")
-    public static void forceKick(Player p) {
+    private static void forceKick(Player p, @Nullable IArena arena, boolean notAbandon) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("Connect");
         out.writeUTF(config.getYml().getString("lobbyServer"));
         p.sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
+        if (arena != null && !notAbandon && arena.getStatus() == GameState.playing) {
+            arena.abandonGame(p);
+        }
+
         if (getServerType() == ServerType.BUNGEE) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                // if lobby server is unreachable
                 if (p.isOnline()) {
                     p.kickPlayer(getMsg(p, Messages.ARENA_RESTART_PLAYER_KICK));
+                    if (arena != null && !notAbandon && arena.getStatus() == GameState.playing) {
+                        arena.abandonGame(p);
+                    }
                 }
-            }, 120L);
+            }, 30L);
         }
     }
 

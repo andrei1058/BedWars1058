@@ -766,7 +766,7 @@ public class Arena implements IArena {
             }
             p.teleport(playerLocation.get(p));
         } else if (getServerType() == ServerType.BUNGEE) {
-            Misc.moveToLobbyOrKick(p);
+            Misc.moveToLobbyOrKick(p, this, true);
             return;
         } else {
             if (BedWars.getLobbyWorld().isEmpty()) {
@@ -895,7 +895,7 @@ public class Arena implements IArena {
             }
         }
         if (getServerType() == ServerType.BUNGEE) {
-            Misc.moveToLobbyOrKick(p);
+            Misc.moveToLobbyOrKick(p, this, true);
             return;
         }
         playerLocation.remove(p);
@@ -1641,7 +1641,9 @@ public class Arena implements IArena {
                     StringBuilder winners = new StringBuilder();
                     //noinspection deprecation
                     for (Player p : winner.getMembersCache()) {
-                        nms.sendTitle(p, getMsg(p, Messages.GAME_END_VICTORY_PLAYER_TITLE), null, 0, 40, 0);
+                        if (p.getWorld().equals(getWorld())) {
+                            nms.sendTitle(p, getMsg(p, Messages.GAME_END_VICTORY_PLAYER_TITLE), null, 0, 40, 0);
+                        }
                         if (!winners.toString().contains(p.getDisplayName())) {
                             winners.append(p.getDisplayName()).append(" ");
                         }
@@ -2323,5 +2325,19 @@ public class Arena implements IArena {
     @Override
     public boolean isProtected(Location location) {
         return Misc.isBuildProtected(location, this);
+    }
+
+    @Override
+    public void abandonGame(Player player) {
+        if (player == null) return;
+        ITeam team = getTeams().stream().filter(team1 -> team1.wasMember(player.getUniqueId())).findFirst().orElse(null);
+        if (team != null) {
+            //noinspection deprecation
+            team.getMembersCache().removeIf(cachedPlayer -> cachedPlayer.getUniqueId().equals(player.getUniqueId()));
+            ReJoin rejoin = ReJoin.getPlayer(player);
+            if (rejoin != null) {
+                rejoin.destroy(team.getMembers().isEmpty());
+            }
+        }
     }
 }
