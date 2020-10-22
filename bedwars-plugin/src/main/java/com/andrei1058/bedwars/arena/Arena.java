@@ -2330,6 +2330,13 @@ public class Arena implements IArena {
     @Override
     public void abandonGame(Player player) {
         if (player == null) return;
+
+        this.playerKills.remove(player.getName());
+        this.playerBedsDestroyed.remove(player);
+        this.playerFinalKills.remove(player);
+        this.playerDeaths.remove(player);
+        this.playerFinalKillDeaths.remove(player);
+
         ITeam team = getTeams().stream().filter(team1 -> team1.wasMember(player.getUniqueId())).findFirst().orElse(null);
         if (team != null) {
             //noinspection deprecation

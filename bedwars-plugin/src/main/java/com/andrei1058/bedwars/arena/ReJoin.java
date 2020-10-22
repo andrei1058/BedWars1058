@@ -7,7 +7,6 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
-import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.lobbysocket.ArenaSocket;
 import com.andrei1058.bedwars.shop.ShopCache;
@@ -27,8 +26,6 @@ public class ReJoin {
     private ReJoinTask task = null;
     private final ArrayList<ShopCache.CachedItem> permanentsAndNonDowngradables = new ArrayList<>();
 
-    private int kills = 0, finalKills = 0, deaths = 0, finalDeaths = 0, beds = 0;
-
     private static final List<ReJoin> reJoinList = new ArrayList<>();
 
     /**
@@ -46,7 +43,6 @@ public class ReJoin {
         this.arena = arena;
         reJoinList.add(this);
         BedWars.debug("Created ReJoin for " + player.getName() + " " + player.getUniqueId() + " at " + arena.getArenaName());
-        storeStatsDiff(arena.getPlayerKills(player, false), arena.getPlayerKills(player, true), arena.getPlayerDeaths(player, false), arena.getPlayerDeaths(player, true), arena.getPlayerBedsDestroyed(player));
         if (bwt.getMembers().isEmpty()) task = new ReJoinTask(arena, bwt);
         this.permanentsAndNonDowngradables.addAll(cachedArmor);
 
@@ -161,37 +157,6 @@ public class ReJoin {
      */
     public IArena getArena() {
         return arena;
-    }
-
-    /**
-     * Save arena stats cache for player in order to save them correctly to database
-     */
-    private void storeStatsDiff(int kills, int finalKills, int deaths, int finalDeaths, int beds) {
-        this.kills = kills;
-        this.finalKills = finalKills;
-        this.deaths = deaths;
-        this.finalDeaths = finalDeaths;
-        this.beds = beds;
-    }
-
-    public int getKills() {
-        return kills;
-    }
-
-    public int getFinalDeaths() {
-        return finalDeaths;
-    }
-
-    public int getDeaths() {
-        return deaths;
-    }
-
-    public int getFinalKills() {
-        return finalKills;
-    }
-
-    public int getBeds() {
-        return beds;
     }
 
     public ReJoinTask getTask() {
