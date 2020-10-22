@@ -58,6 +58,7 @@ public class HalloweenListener implements Listener {
         if (e.getBlock().hasMetadata("give-bw-exp")) {
             PlayerLevel level = PlayerLevel.getLevelByPlayer(e.getPlayer().getUniqueId());
             if (level != null) {
+                e.getBlock().getDrops().clear();
                 level.addXp(5, PlayerXpGainEvent.XpSource.OTHER);
                 e.getPlayer().sendMessage(ChatColor.GOLD + "+5 xp!");
             }
