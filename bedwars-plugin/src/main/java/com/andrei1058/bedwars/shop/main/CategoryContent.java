@@ -49,6 +49,8 @@ public class CategoryContent implements ICategoryContent{
         this.contentName = name;
         this.father = father;
 
+        if (path == null || name == null || categoryName == null || yml == null) return;
+
         if (yml.get(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_CONTENT_SLOT) == null) {
             BedWars.plugin.getLogger().severe("Content slot not set at " + path);
             return;
@@ -408,6 +410,10 @@ public class CategoryContent implements ICategoryContent{
             }
         }
 
+    }
+
+    public void setLoaded(boolean loaded) {
+        this.loaded = loaded;
     }
 
     /**

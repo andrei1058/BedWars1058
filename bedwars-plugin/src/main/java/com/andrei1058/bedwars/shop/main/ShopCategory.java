@@ -23,14 +23,16 @@ public class ShopCategory {
     private ItemStack itemStack;
     private String itemNamePath, itemLorePath, invNamePath;
     private boolean loaded = false;
-    private List<CategoryContent> categoryContentList = new ArrayList<>();
+    private final List<CategoryContent> categoryContentList = new ArrayList<>();
     public static List<UUID> categoryViewers = new ArrayList<>();
+    private final String name;
 
     /**
      * Load a shop category from the given path
      */
     public ShopCategory(String path, YamlConfiguration yml) {
         BedWars.debug("Loading shop category: " + path);
+        this.name = path;
 
         if (yml.get(path + ConfigPath.SHOP_CATEGORY_ITEM_MATERIAL) == null) {
             BedWars.plugin.getLogger().severe("Category material not set at: " + path);
@@ -149,6 +151,10 @@ public class ShopCategory {
             }
         }
         return null;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public static List<UUID> getCategoryViewers() {

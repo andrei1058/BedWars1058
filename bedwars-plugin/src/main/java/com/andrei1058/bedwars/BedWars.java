@@ -7,6 +7,7 @@ import com.andrei1058.bedwars.api.server.RestoreAdapter;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.arena.despawnables.TargetListener;
+import com.andrei1058.bedwars.halloween.HalloweenSpecial;
 import com.andrei1058.bedwars.listeners.joinhandler.*;
 import com.andrei1058.bedwars.sidebar.*;
 import com.andrei1058.bedwars.commands.party.PartyCommand;
@@ -523,6 +524,9 @@ public class BedWars extends JavaPlugin {
         }
 
         registerEvents(new ScoreboardListener());
+
+        // Halloween Special
+        HalloweenSpecial.init();
     }
 
     public void onDisable() {
