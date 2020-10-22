@@ -163,7 +163,7 @@ public class CategoryContent implements ICategoryContent {
         Sounds.playSound(ConfigPath.SOUNDS_BOUGHT, player);
 
         //send purchase msg
-        if (Language.getPlayerLanguage(player).getYml().get(itemNamePath) == null) {
+        if (itemNamePath == null || Language.getPlayerLanguage(player).getYml().get(itemNamePath) == null) {
             ItemStack displayItem = ct.getItemStack();
             if (displayItem.getItemMeta().hasDisplayName()){
                 player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", displayItem.getItemMeta().getDisplayName()));

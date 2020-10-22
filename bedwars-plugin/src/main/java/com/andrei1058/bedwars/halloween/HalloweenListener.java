@@ -7,10 +7,8 @@ import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerXpGainEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.levels.internal.PlayerLevel;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -27,6 +25,7 @@ public class HalloweenListener implements Listener {
     public void onCreatureSpawn(CreatureSpawnEvent e) {
         if (e.isCancelled()) return;
         LivingEntity entity = e.getEntity();
+        if (entity.getType() == EntityType.ARMOR_STAND) return;
         entity.getEquipment().setHelmet(new ItemStack(Material.PUMPKIN));
     }
 
@@ -60,6 +59,7 @@ public class HalloweenListener implements Listener {
             PlayerLevel level = PlayerLevel.getLevelByPlayer(e.getPlayer().getUniqueId());
             if (level != null) {
                 level.addXp(5, PlayerXpGainEvent.XpSource.OTHER);
+                e.getPlayer().sendMessage(ChatColor.GOLD + "+5 xp!");
             }
         }
     }

@@ -93,7 +93,7 @@ public class PumpkinContent extends CategoryContent {
         }
         ChatColor cColor = getCurrencyColor(tier.getCurrency());
 
-        pumpkin.setAmount(8);
+        pumpkin.setAmount(12);
         ItemMeta itemMeta = pumpkin.getItemMeta();
         itemMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "Happy Halloween!");
         itemMeta.setLore(Arrays.asList("", cColor + String.valueOf(tier.getPrice()) + " " + cColor + translatedCurrency, " ", buyStatus));
@@ -140,7 +140,7 @@ public class PumpkinContent extends CategoryContent {
 
         @Override
         public ItemStack getItemStack() {
-            return new ItemStack(Material.PUMPKIN, 8);
+            return new ItemStack(Material.PUMPKIN, 12);
         }
 
         @Override
@@ -163,7 +163,7 @@ public class PumpkinContent extends CategoryContent {
 
         @Override
         public void give(Player player, IArena arena) {
-            player.getInventory().addItem(new ItemStack(Material.PUMPKIN, 8));
+            player.getInventory().addItem(new ItemStack(Material.PUMPKIN, 12));
         }
 
         @Override
