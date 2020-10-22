@@ -116,6 +116,7 @@ public class Arena implements IArena {
 
     /**
      * temp stats. some of them use player name as key to keep names of players who left. at checkWinners for example.
+     * Those maps are not used for db stats but is for internal use only.
      */
     private HashMap<String, Integer> playerKills = new HashMap<>();
     private HashMap<Player, Integer> playerBedsDestroyed = new HashMap<>();
@@ -2331,7 +2332,7 @@ public class Arena implements IArena {
     public void abandonGame(Player player) {
         if (player == null) return;
 
-        this.playerKills.remove(player.getName());
+        //this.playerKills.remove(player.getName());
         this.playerBedsDestroyed.remove(player);
         this.playerFinalKills.remove(player);
         this.playerDeaths.remove(player);

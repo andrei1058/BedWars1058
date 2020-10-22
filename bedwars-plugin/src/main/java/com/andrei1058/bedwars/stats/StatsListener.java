@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.stats;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.events.gameplay.GameEndEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerBedBreakEvent;
@@ -9,6 +10,7 @@ import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerLeaveArenaEvent;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,6 +21,9 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.time.Instant;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
 public class StatsListener implements Listener {
@@ -82,10 +87,17 @@ public class StatsListener implements Listener {
 
             PlayerStats stats = BedWars.getStatsManager().get(uuid);
 
-            //store wins
+            // store wins even if is in another game because he assisted this team
+            // the ones who abandoned are already removed from the winners list
             stats.setWins(stats.getWins() + 1);
-            //store games played
-            stats.setGamesPlayed(stats.getGamesPlayed() + 1);
+
+            // store games played
+            // give if he remained in this arena till the end even if was eliminated
+            // for those who left games played are updated in arena leave listener
+            IArena playerArena = Arena.getArenaByPlayer(player);
+            if (playerArena != null && playerArena.equals(event.getArena())) {
+                stats.setGamesPlayed(stats.getGamesPlayed() + 1);
+            }
         }
     }
 
@@ -117,11 +129,16 @@ public class StatsListener implements Listener {
             if (team.isBedDestroyed()) {
                 // Only if the team had the bed destroyed
 
-                // Punish player
-                playerStats.setFinalDeaths(playerStats.getFinalDeaths() + 1);
-                playerStats.setLosses(playerStats.getLosses() + 1);
+                // Punish player if bed is destroyed and he disconnects without getting killed
+                // if he is not in the spectators list it means he did not pass trough player kill event and he did not receive
+                // the penalty bellow.
+                if (event.getArena().isPlayer(player)) {
+                    playerStats.setFinalDeaths(playerStats.getFinalDeaths() + 1);
+                    playerStats.setLosses(playerStats.getLosses() + 1);
+                }
 
                 // Reward attacker
+                // if attacker is not null it means the victim did pvp log out
                 Player damager = event.getLastDamager();
                 ITeam killerTeam = event.getArena().getTeam(damager);
                 if (damager != null && event.getArena().isPlayer(damager) && killerTeam != null) {
@@ -153,6 +170,10 @@ public class StatsListener implements Listener {
                 // Prevent pvp log out abuse
                 Player damager = event.getLastDamager();
                 ITeam killerTeam = event.getArena().getTeam(damager);
+
+                // killer is null if if he already received kill point.
+                // LastHit damager is set to null at PlayerDeathEvent so this part is not duplicated for sure.
+                // damager is not null if the victim disconnected during pvp only.
                 if (event.getLastDamager() != null && event.getArena().isPlayer(damager) && killerTeam != null) {
                     // Punish player
                     playerStats.setDeaths(playerStats.getDeaths() + 1);
@@ -193,5 +214,63 @@ public class StatsListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent event) {
         BedWars.getStatsManager().remove(event.getPlayer().getUniqueId());
+    }
+
+
+    private static class DuplicationPatch {
+
+        private static final LinkedHashMap<UUID, DuplicationPatch> duplicationPatch = new LinkedHashMap<>();
+
+        // if already received those
+        private boolean win;
+        private boolean lost;
+        private boolean finalDeath;
+        private boolean gamePlayed;
+
+        // last time this action was performed
+        private long lastDeath;
+        private long lastKill;
+
+        // if already final killed someone
+        private final List<UUID> finalKills = new LinkedList<>();
+
+        // prevent outside instantiation
+        private DuplicationPatch() {
+        }
+
+        /**
+         * Set last kill performed to now.
+         */
+        private void updateLastKill() {
+            lastKill = System.currentTimeMillis();
+        }
+
+        /**
+         * Check kill delay.
+         */
+        private boolean passKillDelay(UUID uuid) {
+            return System.currentTimeMillis() > lastKill + 3000L;
+        }
+
+        /**
+         * Get cached data.
+         */
+        private static DuplicationPatch getPlayer(UUID uuid) {
+            return duplicationPatch.get(uuid);
+        }
+
+        /**
+         * Create duplication patch for player stats.
+         */
+        private static DuplicationPatch createPlayer(UUID uuid) {
+            return duplicationPatch.put(uuid, new DuplicationPatch());
+        }
+
+        /**
+         * Get cached data or create new.
+         */
+        private static DuplicationPatch getOrCreatePlayer(UUID uuid) {
+            return duplicationPatch.getOrDefault(uuid, createPlayer(uuid));
+        }
     }
 }
