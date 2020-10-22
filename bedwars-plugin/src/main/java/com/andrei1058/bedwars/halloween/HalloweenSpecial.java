@@ -19,7 +19,7 @@ public class HalloweenSpecial {
     private HalloweenSpecial() {
         BedWars.plugin.getLogger().info(ChatColor.AQUA + "Loaded Halloween Special <3");
         // pumpkin hats
-        Bukkit.getPluginManager().registerEvents(new CreatureSpawnListener(), BedWars.plugin);
+        Bukkit.getPluginManager().registerEvents(new HalloweenListener(), BedWars.plugin);
 
         // pumpkin in shop
         ShopCategory blockCategory = ShopManager.getShop().getCategoryList().stream().filter(category -> category.getName().equals("blocks-category")).findFirst().orElse(null);

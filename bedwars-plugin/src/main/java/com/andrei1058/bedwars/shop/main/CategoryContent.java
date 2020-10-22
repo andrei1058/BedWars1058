@@ -29,7 +29,7 @@ import static com.andrei1058.bedwars.BedWars.nms;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 @SuppressWarnings("WeakerAccess")
-public class CategoryContent implements ICategoryContent{
+public class CategoryContent implements ICategoryContent {
 
     private int slot;
     private boolean loaded = false;
@@ -163,8 +163,14 @@ public class CategoryContent implements ICategoryContent{
         Sounds.playSound(ConfigPath.SOUNDS_BOUGHT, player);
 
         //send purchase msg
-        player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", ChatColor.stripColor(getMsg(player, itemNamePath))).replace("{color}", "").replace("{tier}", ""));
-
+        if (Language.getPlayerLanguage(player).getYml().get(itemNamePath) == null) {
+            ItemStack displayItem = ct.getItemStack();
+            if (displayItem.getItemMeta().hasDisplayName()){
+                player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", displayItem.getItemMeta().getDisplayName()));
+            }
+        } else {
+            player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", ChatColor.stripColor(getMsg(player, itemNamePath))).replace("{color}", "").replace("{tier}", ""));
+        }
         //call shop buy event
         Bukkit.getPluginManager().callEvent(new ShopBuyEvent(player, this));
 
@@ -180,7 +186,7 @@ public class CategoryContent implements ICategoryContent{
         }
     }
 
-   @Override
+    @Override
     public int getSlot() {
         return slot;
     }
