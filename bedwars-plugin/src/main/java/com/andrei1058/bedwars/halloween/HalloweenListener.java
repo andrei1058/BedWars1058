@@ -7,6 +7,7 @@ import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerXpGainEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.levels.internal.PlayerLevel;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -43,7 +44,7 @@ public class HalloweenListener implements Listener {
     public void onPlayerDie(PlayerKillEvent e) {
         if (e.getKiller() != null) {
             Location location = e.getVictim().getLocation().add(0, 1, 0);
-            if (location.getBlock().getType() == Material.AIR){
+            if (location.getBlock().getType() == Material.AIR) {
                 location.getBlock().setType(Material.valueOf(BedWars.getForCurrentVersion("WEB", "WEB", "COBWEB")));
                 location.getWorld().playSound(location, Sound.GHAST_SCREAM2, 2f, 1f);
                 e.getArena().addPlacedBlock(location.getBlock());
@@ -53,20 +54,20 @@ public class HalloweenListener implements Listener {
     }
 
     @EventHandler
-    public void onBlockBreak(BlockBreakEvent e){
+    public void onBlockBreak(BlockBreakEvent e) {
         if (e.isCancelled()) return;
-        if (e.getBlock().hasMetadata("give-bw-exp")){
+        if (e.getBlock().hasMetadata("give-bw-exp")) {
             PlayerLevel level = PlayerLevel.getLevelByPlayer(e.getPlayer().getUniqueId());
-            if (level != null){
+            if (level != null) {
                 level.addXp(5, PlayerXpGainEvent.XpSource.OTHER);
             }
         }
     }
 
     @EventHandler
-    public void onJoin(PlayerJoinArenaEvent e){
-        if (!e.isSpectator()){
-            e.getPlayer().getWorld().playSound(e.getPlayer().getLocation(), Sound.AMBIENCE_CAVE, 3f, 1f);
+    public void onJoin(PlayerJoinArenaEvent e) {
+        if (!e.isSpectator()) {
+            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> e.getPlayer().getWorld().playSound(e.getPlayer().getLocation(), Sound.AMBIENCE_CAVE, 3f, 1f), 20L);
         }
     }
 }
