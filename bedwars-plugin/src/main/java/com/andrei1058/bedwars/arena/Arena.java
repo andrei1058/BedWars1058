@@ -1643,7 +1643,7 @@ public class Arena implements IArena {
                     //noinspection deprecation
                     for (Player p : winner.getMembersCache()) {
                         if (p.getWorld().equals(getWorld())) {
-                            nms.sendTitle(p, getMsg(p, Messages.GAME_END_VICTORY_PLAYER_TITLE), null, 0, 40, 0);
+                            nms.sendTitle(p, getMsg(p, Messages.GAME_END_VICTORY_PLAYER_TITLE), null, 0, 70, 0);
                         }
                         if (!winners.toString().contains(p.getDisplayName())) {
                             winners.append(p.getDisplayName()).append(" ");
@@ -1654,36 +1654,49 @@ public class Arena implements IArena {
                     }
                     int first = 0, second = 0, third = 0;
                     if (!playerKills.isEmpty()) {
-                        for (Map.Entry<String, Integer> e : playerKills.entrySet()) {
-                            if (e.getValue() > first) {
+
+
+                        LinkedHashMap<String, Integer> reverseSortedMap = new LinkedHashMap<>();
+
+                        //Use Comparator.reverseOrder() for reverse ordering
+                        playerKills.entrySet()
+                                .stream()
+                                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                                .forEachOrdered(x -> reverseSortedMap.put(x.getKey(), x.getValue()));
+
+                        int entry = 0;
+                        for (Map.Entry<String, Integer> e : reverseSortedMap.entrySet()) {
+                            if (entry == 0) {
                                 firstName = e.getKey();
                                 Player onlinePlayer = Bukkit.getPlayerExact(e.getKey());
                                 if (onlinePlayer != null) {
                                     firstName = onlinePlayer.getDisplayName();
                                 }
                                 first = e.getValue();
-                            } else if (e.getValue() > second) {
+                            } else if (entry == 1) {
                                 secondName = e.getKey();
                                 Player onlinePlayer = Bukkit.getPlayerExact(e.getKey());
                                 if (onlinePlayer != null) {
                                     secondName = onlinePlayer.getDisplayName();
                                 }
                                 second = e.getValue();
-                            } else if (e.getValue() > third) {
+                            } else if (entry == 2) {
                                 thirdName = e.getKey();
                                 Player onlinePlayer = Bukkit.getPlayerExact(e.getKey());
                                 if (onlinePlayer != null) {
                                     thirdName = onlinePlayer.getDisplayName();
                                 }
                                 third = e.getValue();
+                                break;
                             }
+                            entry++;
                         }
                     }
                     for (Player p : world.getPlayers()) {
                         p.sendMessage(getMsg(p, Messages.GAME_END_TEAM_WON_CHAT).replace("{TeamColor}", winner.getColor().chat().toString())
                                 .replace("{TeamName}", winner.getDisplayName(Language.getPlayerLanguage(p))));
                         if (!winner.getMembers().contains(p)) {
-                            nms.sendTitle(p, getMsg(p, Messages.GAME_END_GAME_OVER_PLAYER_TITLE), null, 0, 40, 0);
+                            nms.sendTitle(p, getMsg(p, Messages.GAME_END_GAME_OVER_PLAYER_TITLE), null, 0, 70, 0);
                         }
                         for (String s : getList(p, Messages.GAME_END_TOP_PLAYER_CHAT)) {
                             String message = s.replace("{firstName}", firstName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : firstName).replace("{firstKills}", String.valueOf(first))
