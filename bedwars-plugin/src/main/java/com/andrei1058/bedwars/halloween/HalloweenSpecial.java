@@ -9,7 +9,6 @@ import org.bukkit.ChatColor;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Calendar;
 import java.util.Date;
 
 public class HalloweenSpecial {
@@ -44,7 +43,6 @@ public class HalloweenSpecial {
     protected static boolean checkAvailabilityDate() {
         // check date
         ZoneId zone = ZoneId.of("Europe/Rome");
-        Calendar calendar = Calendar.getInstance();
         Date date = new Date();
         LocalDate localDate = date.toInstant().atZone(zone).toLocalDate();
         int month = localDate.getMonthValue();
