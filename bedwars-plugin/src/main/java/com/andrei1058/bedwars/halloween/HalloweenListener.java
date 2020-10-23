@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.events.player.PlayerJoinArenaEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerXpGainEvent;
+import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.levels.internal.PlayerLevel;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
@@ -50,10 +51,12 @@ public class HalloweenListener implements Listener {
         if (e.getKiller() != null) {
             Location location = e.getVictim().getLocation().add(0, 1, 0);
             if (location.getBlock().getType() == Material.AIR) {
-                location.getBlock().setType(Material.valueOf(BedWars.getForCurrentVersion("WEB", "WEB", "COBWEB")));
                 location.getWorld().playSound(location, ghastSound, 2f, 1f);
-                e.getArena().addPlacedBlock(location.getBlock());
-                location.getBlock().setMetadata("give-bw-exp", new FixedMetadataValue(BedWars.plugin, "ok"));
+                if (!Misc.isBuildProtected(location, e.getArena())) {
+                    location.getBlock().setType(Material.valueOf(BedWars.getForCurrentVersion("WEB", "WEB", "COBWEB")));
+                    e.getArena().addPlacedBlock(location.getBlock());
+                    location.getBlock().setMetadata("give-bw-exp", new FixedMetadataValue(BedWars.plugin, "ok"));
+                }
             }
         }
     }
