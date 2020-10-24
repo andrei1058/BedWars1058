@@ -1,9 +1,14 @@
 package com.andrei1058.bedwars.halloween;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.GameState;
+import com.andrei1058.bedwars.api.events.gameplay.GameStateChangeEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerJoinArenaEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerXpGainEvent;
+import com.andrei1058.bedwars.api.events.server.ArenaDisableEvent;
+import com.andrei1058.bedwars.api.events.server.ArenaEnableEvent;
+import com.andrei1058.bedwars.api.events.server.ArenaRestartEvent;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.levels.internal.PlayerLevel;
 import org.bukkit.*;
@@ -23,7 +28,7 @@ public class HalloweenListener implements Listener {
     private final Sound ambienceSound;
     private final Sound ghastSound;
 
-    public HalloweenListener(){
+    public HalloweenListener() {
         ambienceSound = Sound.valueOf(BedWars.getForCurrentVersion("AMBIENCE_CAVE", "AMBIENT_CAVE", "AMBIENT_CAVE"));
         ghastSound = Sound.valueOf(BedWars.getForCurrentVersion("GHAST_SCREAM2", "ENTITY_GHAST_SCREAM", "ENTITY_GHAST_SCREAM"));
     }
@@ -56,6 +61,10 @@ public class HalloweenListener implements Listener {
                     location.getBlock().setType(Material.valueOf(BedWars.getForCurrentVersion("WEB", "WEB", "COBWEB")));
                     e.getArena().addPlacedBlock(location.getBlock());
                     location.getBlock().setMetadata("give-bw-exp", new FixedMetadataValue(BedWars.plugin, "ok"));
+                    CobWebRemover remover = CobWebRemover.getByArena(e.getArena());
+                    if (remover != null) {
+                        remover.addCobWeb(location.getBlock());
+                    }
                 }
             }
         }
@@ -79,5 +88,36 @@ public class HalloweenListener implements Listener {
         if (!e.isSpectator()) {
             Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> e.getPlayer().getWorld().playSound(e.getPlayer().getLocation(), ambienceSound, 3f, 1f), 20L);
         }
+    }
+
+    @EventHandler
+    public void onGameStateChange(GameStateChangeEvent e) {
+        if (e.getNewState() == GameState.restarting) {
+            CobWebRemover remover = CobWebRemover.getByArena(e.getArena());
+            if (remover != null) {
+                remover.destroy();
+            }
+        }
+    }
+
+    @EventHandler
+    public void onRestart(ArenaRestartEvent e) {
+        CobWebRemover remover = CobWebRemover.getByArenaWorld(e.getWorldName());
+        if (remover != null) {
+            remover.destroy();
+        }
+    }
+
+    @EventHandler
+    public void onDisable(ArenaDisableEvent e) {
+        CobWebRemover remover = CobWebRemover.getByArenaWorld(e.getWorldName());
+        if (remover != null) {
+            remover.destroy();
+        }
+    }
+
+    @EventHandler
+    public void onEnable(ArenaEnableEvent e){
+        new CobWebRemover(e.getArena());
     }
 }

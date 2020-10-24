@@ -121,6 +121,7 @@ class PlayerGoods {
      */
     void restore() {
         Player player = Bukkit.getPlayer(uuid);
+        if (player == null) return;
         playerGoods.remove(player.getUniqueId());
 
 

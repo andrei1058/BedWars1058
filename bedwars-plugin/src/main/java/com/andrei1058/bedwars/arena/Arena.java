@@ -505,6 +505,7 @@ public class Arena implements IArena {
                 }
             }
             for (Player on : Bukkit.getOnlinePlayers()) {
+                if (on == null) continue;
                 if (on.equals(p)) continue;
                 if (isPlayer(on)) {
                     BedWars.nms.spigotShowPlayer(p, on);

@@ -115,6 +115,8 @@ public class StatsListener implements Listener {
         }
 
         PlayerStats playerStats = BedWars.getStatsManager().get(player.getUniqueId());
+        // sometimes can be null due to scheduling delays
+        if (playerStats == null) return;
 
         // Update last play and first play (if required)
         Instant now = Instant.now();

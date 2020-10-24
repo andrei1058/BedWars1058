@@ -34,8 +34,8 @@ import java.util.logging.Level;
 
 public class SlimeAdapter extends RestoreAdapter {
 
-    private SlimePlugin slime;
-    private BedWars api;
+    private final SlimePlugin slime;
+    private final BedWars api;
 
     public SlimeAdapter(Plugin plugin) {
         super(plugin);
@@ -88,6 +88,17 @@ public class SlimeAdapter extends RestoreAdapter {
             } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldInUseException ex) {
                 api.getArenaUtil().removeFromEnableQueue(a);
                 ex.printStackTrace();
+            } catch (ConcurrentModificationException thisShouldNotHappenSWM){
+                // this should not happen since they say to use #load async
+                // https://github.com/Grinderwolf/Slime-World-Manager/blob/develop/.docs/api/load-world.md
+                thisShouldNotHappenSWM.printStackTrace();
+                api.getArenaUtil().removeFromEnableQueue(a);
+                getOwner().getLogger().severe("This is a SlimeWorldManager issue!");
+                getOwner().getLogger().severe("I've submitted a bug report: https://github.com/Grinderwolf/Slime-World-Manager/issues/174");
+                getOwner().getLogger().severe("Trying again to load arena: " + a.getArenaName());
+
+                // hope not to get an overflow
+                onEnable(a);
             }
         });
     }
