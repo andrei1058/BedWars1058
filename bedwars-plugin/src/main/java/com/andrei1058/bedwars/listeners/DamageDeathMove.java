@@ -56,10 +56,12 @@ public class DamageDeathMove implements Listener {
                     e.setCancelled(true);
                     return;
                 }
-                if (e.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
+
+                // todo why did I set this to 1? disabled for now
+                /*if (e.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
                     e.setDamage(1);
                     return;
-                }
+                }*/
                 if (e.getCause() == EntityDamageEvent.DamageCause.FALL) {
                     if (BedWarsTeam.antiFallDamageAtRespawn.containsKey(p.getUniqueId())) {
                         if (BedWarsTeam.antiFallDamageAtRespawn.get(p.getUniqueId()) > System.currentTimeMillis()) {
@@ -110,6 +112,7 @@ public class DamageDeathMove implements Listener {
                     if (tnt.getSource() != null) {
                         if (tnt.getSource() instanceof Player) {
                             damager = (Player) tnt.getSource();
+                            // tnt jump?
                             if (tnt.getSource().equals(e.getEntity())) {
                                 e.setDamage(1);
                                 Vector direction = e.getEntity().getLocation().getDirection().add(new Vector(0, 0.42, 0)).multiply(2); // should be enough
