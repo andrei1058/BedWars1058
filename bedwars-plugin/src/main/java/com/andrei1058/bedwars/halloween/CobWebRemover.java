@@ -59,7 +59,7 @@ public class CobWebRemover {
         public void run() {
             long currentTime = System.currentTimeMillis();
             cobWebs.forEach((key, value) -> {
-                if (value >= currentTime) {
+                if (value <= currentTime) {
                     toBeRemoved.add(key);
                     if (key.getType().toString().contains("WEB")) {
                         key.breakNaturally();
