@@ -223,37 +223,37 @@ public class PAPISupport extends PlaceholderExpansion {
         String replay = "";
         Language playerLang = Language.getPlayerLanguage(player.getUniqueId());
         switch (s) {
-            case "stats_firstplay":
+            /*case "stats_firstplay":
                 Instant firstPlay = BedWars.getStatsManager().getUnsafe(player.getUniqueId()).getFirstPlay();
                 replay = new SimpleDateFormat(playerLang.m(Messages.FORMATTING_STATS_DATE_FORMAT)).format(firstPlay != null ? Timestamp.from(firstPlay) : null);
                 break;
             case "stats_lastplay":
                 Instant lastPlay = BedWars.getStatsManager().getUnsafe(player.getUniqueId()).getLastPlay();
                 replay = new SimpleDateFormat(playerLang.m(Messages.FORMATTING_STATS_DATE_FORMAT)).format(lastPlay != null ? Timestamp.from(lastPlay) : null);
-                break;
+                break;*/
             case "stats_kills":
-                replay = String.valueOf(BedWars.getStatsManager().getUnsafe(player.getUniqueId()).getKills());
+                replay = String.valueOf(BedWars.getRemoteDatabase().getColumn(player.getUniqueId(), "kills"));
                 break;
             case "stats_wins":
-                replay = String.valueOf(BedWars.getStatsManager().getUnsafe(player.getUniqueId()).getWins());
+                replay = String.valueOf(BedWars.getRemoteDatabase().getColumn(player.getUniqueId(), "wins"));
                 break;
             case "stats_finalkills":
-                replay = String.valueOf(BedWars.getStatsManager().getUnsafe(player.getUniqueId()).getFinalKills());
+                replay = String.valueOf(BedWars.getRemoteDatabase().getColumn(player.getUniqueId(), "final_kills"));
                 break;
             case "stats_deaths":
-                replay = String.valueOf(BedWars.getStatsManager().getUnsafe(player.getUniqueId()).getDeaths());
+                replay = String.valueOf(BedWars.getRemoteDatabase().getColumn(player.getUniqueId(), "deaths"));
                 break;
             case "stats_losses":
-                replay = String.valueOf(BedWars.getStatsManager().getUnsafe(player.getUniqueId()).getLosses());
+                replay = String.valueOf(BedWars.getRemoteDatabase().getColumn(player.getUniqueId(), "looses"));
                 break;
             case "stats_finaldeaths":
-                replay = String.valueOf(BedWars.getStatsManager().getUnsafe(player.getUniqueId()).getFinalDeaths());
+                replay = String.valueOf(BedWars.getRemoteDatabase().getColumn(player.getUniqueId(), "final_deaths"));
                 break;
             case "stats_bedsdestroyed":
-                replay = String.valueOf(BedWars.getStatsManager().getUnsafe(player.getUniqueId()).getBedsDestroyed());
+                replay = String.valueOf(BedWars.getRemoteDatabase().getColumn(player.getUniqueId(), "beds_destroyed"));
                 break;
             case "stats_gamesplayed":
-                replay = String.valueOf(BedWars.getStatsManager().getUnsafe(player.getUniqueId()).getGamesPlayed());
+                replay = String.valueOf(BedWars.getRemoteDatabase().getColumn(player.getUniqueId(), "games_played"));
                 break;
             case "current_online":
                 replay = String.valueOf(Arena.getArenaByPlayer().size());

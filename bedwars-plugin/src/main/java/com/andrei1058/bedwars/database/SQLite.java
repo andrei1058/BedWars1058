@@ -250,6 +250,24 @@ public class SQLite implements Database {
     }
 
     @Override
+    public int getColumn(UUID player, String column) {
+        String sql = "SELECT ? FROM global_stats WHERE uuid = ?;";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, column);
+            statement.setString(2, player.toString());
+            try (ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    return result.getInt(column);
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return 0;
+        }
+        return 0;
+    }
+
+    @Override
     public Object[] getLevelData(UUID player) {
         if (!isConnected()) init();
         Object[] r = new Object[]{1, 0, "", 0};
