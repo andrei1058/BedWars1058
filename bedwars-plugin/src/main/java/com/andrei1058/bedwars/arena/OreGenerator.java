@@ -179,7 +179,7 @@ public class OreGenerator implements IGenerator {
             }
             Item item = location.getWorld().dropItem(location, itemStack);
             item.setVelocity(new Vector(0, 0, 0));
-            //temp--;
+            temp--; // FIXME: why is this required? something must be wrong...
         }
     }
 
