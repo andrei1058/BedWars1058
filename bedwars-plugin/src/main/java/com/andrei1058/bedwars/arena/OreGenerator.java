@@ -15,6 +15,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
+import org.bukkit.Sound;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -145,13 +146,20 @@ public class OreGenerator implements IGenerator {
                 return;
             }
             Object[] players = location.getWorld().getNearbyEntities(location, 1, 1, 1).stream().filter(entity -> entity.getType() == EntityType.PLAYER)
-                    .filter(entity -> arena.isPlayer((Player) entity)).filter(entity -> arena.getTeam((Player) entity) == bwt).toArray();
+                    .filter(entity -> arena.isPlayer((Player) entity))/*.filter(entity -> arena.getTeam((Player) entity) == bwt)*/.toArray();
             if (players.length <= 1) {
                 dropItem(location);
                 return;
             }
             for (Object o : players) {
-                dropItem(((Player) o).getLocation());
+                Player player = (Player) o;
+                ItemStack item = ore.clone();
+                item.setAmount(amount);
+                player.playSound(player.getLocation(), Sound.valueOf(BedWars.getForCurrentVersion("ITEM_PICKUP ", "ENTITY_ITEM_PICKUP", "ENTITY_ITEM_PICKUP")), 0.8f, 1.0f);
+                Collection<ItemStack> excess = player.getInventory().addItem(item).values();
+                for (ItemStack value : excess) {
+                    dropItem(player.getLocation(), value.getAmount());
+                }
             }
             return;
         }
@@ -161,11 +169,7 @@ public class OreGenerator implements IGenerator {
         }
     }
 
-    /**
-     * Drop item stack with ID
-     */
-    @Override
-    public void dropItem(Location location) {
+    private void dropItem(Location location, int amount) {
         for (int temp = amount; temp >= 0; temp--) {
             ItemStack itemStack = new ItemStack(ore);
             if (!stack) {
@@ -175,8 +179,16 @@ public class OreGenerator implements IGenerator {
             }
             Item item = location.getWorld().dropItem(location, itemStack);
             item.setVelocity(new Vector(0, 0, 0));
-            temp--;
+            //temp--;
         }
+    }
+
+    /**
+     * Drop item stack with ID
+     */
+    @Override
+    public void dropItem(Location location) {
+        dropItem(location, amount);
     }
 
     @Override
