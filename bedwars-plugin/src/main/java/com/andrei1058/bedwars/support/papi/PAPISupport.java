@@ -43,23 +43,23 @@ public class PAPISupport extends PlaceholderExpansion {
     public String onPlaceholderRequest(Player player, String s) {
         if (s == null) return null;
 
-        if (s.startsWith("arena_status_")){
+        if (s.startsWith("arena_status_")) {
             IArena a = Arena.getArenaByName(s.replace("arena_status_", ""));
-            if (a == null){
+            if (a == null) {
                 return player == null ? Language.getDefaultLanguage().m(Messages.ARENA_STATUS_RESTARTING_NAME) :
-                Language.getMsg(player, Messages.ARENA_STATUS_RESTARTING_NAME);
+                        Language.getMsg(player, Messages.ARENA_STATUS_RESTARTING_NAME);
             }
             return a.getDisplayStatus(Language.getDefaultLanguage());
         }
 
-        if (s.startsWith("arena_count_")){
+        if (s.startsWith("arena_count_")) {
             int players = 0;
 
             String[] arenas = s.replace("arena_count_", "").split("\\+");
             IArena a;
-            for (String arena : arenas){
+            for (String arena : arenas) {
                 a = Arena.getArenaByName(arena);
-                if (a != null){
+                if (a != null) {
                     players += a.getPlayers().size();
                 }
             }
@@ -67,14 +67,14 @@ public class PAPISupport extends PlaceholderExpansion {
             return String.valueOf(players);
         }
 
-        if (s.startsWith("group_count_")){
-            return String.valueOf(Arena.getPlayers( s.replace("group_count_", "")));
+        if (s.startsWith("group_count_")) {
+            return String.valueOf(Arena.getPlayers(s.replace("group_count_", "")));
         }
 
-        if (s.startsWith("arena_group_")){
+        if (s.startsWith("arena_group_")) {
             String a = s.replace("arena_group_", "");
             IArena arena = Arena.getArenaByName(a);
-            if (arena != null){
+            if (arena != null) {
                 return arena.getGroup();
             }
             return "-";
@@ -170,7 +170,7 @@ public class PAPISupport extends PlaceholderExpansion {
                 replay = String.valueOf(BedWars.getLevelSupport().getRequiredXp(player));
                 break;
             case "current_arena_group":
-                if (a != null){
+                if (a != null) {
                     replay = a.getGroup();
                 }
                 break;
@@ -181,24 +181,29 @@ public class PAPISupport extends PlaceholderExpansion {
     @Override
     public String onRequest(org.bukkit.OfflinePlayer player, String s) {
         if (s == null) return null;
+        if (player == null) {
+            onPlaceholderRequest(null, s);
+        } else if (player.isOnline()) {
+            onPlaceholderRequest(player.getPlayer(), s);
+        }
 
-        if (s.startsWith("arena_status_")){
+        if (s.startsWith("arena_status_")) {
             IArena a = Arena.getArenaByName(s.replace("arena_status_", ""));
-            if (a == null){
+            if (a == null) {
                 return player == null ? Language.getDefaultLanguage().m(Messages.ARENA_STATUS_RESTARTING_NAME) :
                         Language.getPlayerLanguage(player.getUniqueId()).m(Messages.ARENA_STATUS_RESTARTING_NAME);
             }
             return a.getDisplayStatus(Language.getDefaultLanguage());
         }
 
-        if (s.startsWith("arena_count_")){
+        if (s.startsWith("arena_count_")) {
             int players = 0;
 
             String[] arenas = s.replace("arena_count_", "").split("\\+");
             IArena a;
-            for (String arena : arenas){
+            for (String arena : arenas) {
                 a = Arena.getArenaByName(arena);
-                if (a != null){
+                if (a != null) {
                     players += a.getPlayers().size();
                 }
             }
@@ -206,14 +211,14 @@ public class PAPISupport extends PlaceholderExpansion {
             return String.valueOf(players);
         }
 
-        if (s.startsWith("group_count_")){
-            return String.valueOf(Arena.getPlayers( s.replace("group_count_", "")));
+        if (s.startsWith("group_count_")) {
+            return String.valueOf(Arena.getPlayers(s.replace("group_count_", "")));
         }
 
-        if (s.startsWith("arena_group_")){
+        if (s.startsWith("arena_group_")) {
             String a = s.replace("arena_group_", "");
             IArena arena = Arena.getArenaByName(a);
-            if (arena != null){
+            if (arena != null) {
                 return arena.getGroup();
             }
             return "-";
