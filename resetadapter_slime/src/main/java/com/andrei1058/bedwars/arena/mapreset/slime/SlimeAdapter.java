@@ -67,6 +67,7 @@ public class SlimeAdapter extends RestoreAdapter {
             String[] spawn = a.getConfig().getString("waiting.Loc").split(",");
 
             SlimePropertyMap spm = new SlimePropertyMap();
+            spm.setString(SlimeProperties.WORLD_TYPE, "flat");
             spm.setInt(SlimeProperties.SPAWN_X, (int) Double.parseDouble(spawn[0]));
             spm.setInt(SlimeProperties.SPAWN_Y, (int) Double.parseDouble(spawn[1]));
             spm.setInt(SlimeProperties.SPAWN_Z, (int) Double.parseDouble(spawn[2]));
@@ -144,6 +145,7 @@ public class SlimeAdapter extends RestoreAdapter {
                 spawn = s.getConfig().getString("waiting.Loc").split(",");
             }
             SlimePropertyMap spm = new SlimePropertyMap();
+            spm.setString(SlimeProperties.WORLD_TYPE, "flat");
             spm.setInt(SlimeProperties.SPAWN_X, (int) Double.parseDouble(spawn[0]));
             spm.setInt(SlimeProperties.SPAWN_Y, (int) Double.parseDouble(spawn[1]));
             spm.setInt(SlimeProperties.SPAWN_Z, (int) Double.parseDouble(spawn[2]));
@@ -248,6 +250,7 @@ public class SlimeAdapter extends RestoreAdapter {
     public void cloneArena(String name1, String name2) {
         Bukkit.getScheduler().runTaskAsynchronously(getOwner(), () -> {
             SlimePropertyMap spm = new SlimePropertyMap();
+            spm.setString(SlimeProperties.WORLD_TYPE, "flat");
             spm.setInt(SlimeProperties.SPAWN_X, 0);
             spm.setInt(SlimeProperties.SPAWN_Y, 118);
             spm.setInt(SlimeProperties.SPAWN_Z, 0);

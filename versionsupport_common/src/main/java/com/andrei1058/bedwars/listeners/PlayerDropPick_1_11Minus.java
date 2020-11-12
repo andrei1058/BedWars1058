@@ -71,7 +71,7 @@ public class PlayerDropPick_1_11Minus implements Listener {
                     ItemMeta itemMeta = new ItemStack(material).getItemMeta();
 
                     //Call ore pick up event
-                    PlayerGeneratorCollectEvent event = new PlayerGeneratorCollectEvent(e.getPlayer(), e.getItem().getItemStack(), a);
+                    PlayerGeneratorCollectEvent event = new PlayerGeneratorCollectEvent(e.getPlayer(), e.getItem(), a);
                     Bukkit.getPluginManager().callEvent(event);
                     if (event.isCancelled()){
                         e.setCancelled(true);
