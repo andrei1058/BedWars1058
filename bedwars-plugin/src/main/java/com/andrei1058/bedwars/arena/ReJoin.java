@@ -18,6 +18,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
+import static com.andrei1058.bedwars.api.language.Language.getMsg;
+
 public class ReJoin {
 
     private UUID player;
@@ -134,6 +136,16 @@ public class ReJoin {
         ArenaSocket.sendMessage(json.toString());
         if (bwt != null && destroyTeam && bwt.getMembers().isEmpty()) {
             bwt.setBedDestroyed(true);
+            if (bwt != null) {
+                for (Player p2 : arena.getPlayers()) {
+                    p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", bwt.getColor().chat().toString())
+                            .replace("{TeamName}", bwt.getDisplayName(Language.getPlayerLanguage(p2))));
+                }
+                for (Player p2 : arena.getSpectators()) {
+                    p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", bwt.getColor().chat().toString())
+                            .replace("{TeamName}", bwt.getDisplayName(Language.getPlayerLanguage(p2))));
+                }
+            }
             arena.checkWinner();
         }
     }

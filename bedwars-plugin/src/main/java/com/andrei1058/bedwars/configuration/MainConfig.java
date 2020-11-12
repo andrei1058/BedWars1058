@@ -37,6 +37,7 @@ public class MainConfig extends ConfigManager {
         yml.addDefault("globalChat", false);
         yml.addDefault("formatChat", true);
         yml.addDefault("debug", false);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_MARK_LEAVE_AS_ABANDON, false);
         yml.addDefault(ConfigPath.GENERAL_ENABLE_PARTY_CMD, true);
         yml.addDefault(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR, true);
         yml.addDefault(ConfigPath.SB_CONFIG_SIDEBAR_USE_GAME_SIDEBAR, true);

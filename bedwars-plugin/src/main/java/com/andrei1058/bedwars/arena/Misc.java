@@ -53,7 +53,9 @@ public class Misc {
                     } else {
                         arena.removePlayer(p, false);
                         if (!notAbandon && arena.getStatus() == GameState.playing) {
-                            arena.abandonGame(p);
+                            if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_MARK_LEAVE_AS_ABANDON)) {
+                                arena.abandonGame(p);
+                            }
                         }
                     }
                 }
@@ -73,7 +75,9 @@ public class Misc {
         out.writeUTF(config.getYml().getString("lobbyServer"));
         p.sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
         if (arena != null && !notAbandon && arena.getStatus() == GameState.playing) {
-            arena.abandonGame(p);
+            if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_MARK_LEAVE_AS_ABANDON)) {
+                arena.abandonGame(p);
+            }
         }
 
         if (getServerType() == ServerType.BUNGEE) {
@@ -82,7 +86,9 @@ public class Misc {
                 if (p.isOnline()) {
                     p.kickPlayer(getMsg(p, Messages.ARENA_RESTART_PLAYER_KICK));
                     if (arena != null && !notAbandon && arena.getStatus() == GameState.playing) {
-                        arena.abandonGame(p);
+                        if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_MARK_LEAVE_AS_ABANDON)) {
+                            arena.abandonGame(p);
+                        }
                     }
                 }
             }, 30L);
