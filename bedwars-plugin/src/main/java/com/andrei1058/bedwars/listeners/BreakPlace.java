@@ -147,6 +147,14 @@ public class BreakPlace implements Listener {
         }
     }
 
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onBlockBreakMonitor(BlockBreakEvent event){
+        IArena a = Arena.getArenaByPlayer(event.getPlayer());
+        if (a != null) {
+            a.removePlacedBlock(event.getBlock());
+        }
+    }
+
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
         if (e.isCancelled()) return;
@@ -226,9 +234,7 @@ public class BreakPlace implements Listener {
                 if (!a.isBlockPlaced(e.getBlock())) {
                     p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
                     e.setCancelled(true);
-                    return;
                 }
-                a.removePlacedBlock(e.getBlock());
             }
         }
     }

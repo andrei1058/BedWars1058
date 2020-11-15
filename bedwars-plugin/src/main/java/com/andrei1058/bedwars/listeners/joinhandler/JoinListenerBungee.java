@@ -159,7 +159,9 @@ public class JoinListenerBungee implements Listener {
                 // If has no party
                 if (proxyUser.getPartyOwnerOrSpectateTarget() == null) {
                     // Add to arena
-                    arena.addPlayer(p, true);
+                    if (arena.addPlayer(p, true)){
+                        p.kickPlayer(Language.getMsg(p, Messages.ARENA_JOIN_DENIED_NO_PROXY));
+                    }
                 } else {
                     // If is member or owner of a remote party
 
@@ -188,7 +190,9 @@ public class JoinListenerBungee implements Listener {
                         }
                         preLoadedParty.addMember(p);
                     }
-                    arena.addPlayer(p, true);
+                    if (arena.addPlayer(p, true)){
+                        p.kickPlayer(Language.getMsg(p, Messages.ARENA_JOIN_DENIED_NO_PROXY));
+                    }
                 }
             } else {
                 // Join as spectator

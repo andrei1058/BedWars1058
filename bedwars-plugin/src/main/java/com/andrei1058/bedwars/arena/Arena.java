@@ -498,11 +498,11 @@ public class Arena implements IArena {
         p.getInventory().setArmorContents(null);
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             // bungee mode invisibility issues
-            if (getServerType() == ServerType.BUNGEE && autoscale) {
-                // fix invisibility issue 1.13
-                if (BedWars.nms.getVersion() == 7) {
-                    BedWars.nms.sendPlayerSpawnPackets(p, this);
-                }
+            if (getServerType() == ServerType.BUNGEE) {
+                // fix invisibility issue
+                //if (BedWars.nms.getVersion() == 7) {
+                BedWars.nms.sendPlayerSpawnPackets(p, this);
+                //}
             }
             for (Player on : Bukkit.getOnlinePlayers()) {
                 if (on == null) continue;
@@ -1187,6 +1187,7 @@ public class Arena implements IArena {
     @Override
     public void removePlacedBlock(Block block) {
         if (block == null) return;
+        if (!isBlockPlaced(block)) return;
         placed.remove(new org.bukkit.util.Vector(block.getX(), block.getY(), block.getZ()));
     }
 
