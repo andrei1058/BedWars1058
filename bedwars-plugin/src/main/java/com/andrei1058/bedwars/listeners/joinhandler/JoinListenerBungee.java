@@ -159,7 +159,7 @@ public class JoinListenerBungee implements Listener {
                 // If has no party
                 if (proxyUser.getPartyOwnerOrSpectateTarget() == null) {
                     // Add to arena
-                    if (arena.addPlayer(p, true)){
+                    if (!arena.addPlayer(p, true)){
                         p.kickPlayer(Language.getMsg(p, Messages.ARENA_JOIN_DENIED_NO_PROXY));
                     }
                 } else {
@@ -190,7 +190,7 @@ public class JoinListenerBungee implements Listener {
                         }
                         preLoadedParty.addMember(p);
                     }
-                    if (arena.addPlayer(p, true)){
+                    if (!arena.addPlayer(p, true)){
                         p.kickPlayer(Language.getMsg(p, Messages.ARENA_JOIN_DENIED_NO_PROXY));
                     }
                 }
