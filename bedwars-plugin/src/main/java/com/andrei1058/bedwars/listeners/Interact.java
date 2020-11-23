@@ -26,6 +26,7 @@ import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.util.Vector;
 
 import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
@@ -161,8 +162,12 @@ public class Interact implements Listener {
                     if (inHand.getType() == nms.materialFireball()) {
                         e.setCancelled(true);
                         Fireball fb = p.launchProjectile(Fireball.class);
-                        fb.setMetadata("bw1058", new FixedMetadataValue(plugin, "ceva"));
+                        Vector direction = p.getEyeLocation().getDirection();
+
+                        fb.setDirection(new Vector(direction.getX() * 0.1D, direction.getY() * 0.1D, direction.getZ() * 0.1D));
+                        fb.setVelocity(fb.getDirection().multiply(5));
                         fb.setIsIncendiary(false);
+                        fb.setMetadata("bw1058", new FixedMetadataValue(plugin, "ceva"));
                         //fb.setGlowing(true);
 
                         for (ItemStack i : p.getInventory().getContents()) {
