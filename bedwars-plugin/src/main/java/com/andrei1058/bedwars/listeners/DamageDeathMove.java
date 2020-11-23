@@ -109,6 +109,7 @@ public class DamageDeathMove implements Listener {
                     TNTPrimed tnt = (TNTPrimed) e.getDamager();
                     if (tnt.getSource() != null) {
                         if (tnt.getSource() instanceof Player) {
+                            e.setDamage(1);
                             damager = (Player) tnt.getSource();
                             // tnt jump. credits to feargames.it
                             LivingEntity damaged = (LivingEntity) e.getEntity();
@@ -501,7 +502,7 @@ public class DamageDeathMove implements Listener {
                         }
                     }
                 } else {
-                    if (e.getPlayer().getLocation().getBlockY() <= 0){
+                    if (e.getPlayer().getLocation().getBlockY() <= 0) {
                         ITeam bwt = a.getTeam(e.getPlayer());
                         if (bwt != null) {
                             e.getPlayer().teleport(bwt.getSpawn());
