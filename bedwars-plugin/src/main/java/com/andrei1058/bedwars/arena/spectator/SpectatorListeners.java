@@ -151,9 +151,8 @@ public class SpectatorListeners implements Listener {
             SpectatorFirstPersonEnterEvent event = new SpectatorFirstPersonEnterEvent(p, target, a, getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_TITLE).replace("{player}", target.getDisplayName()), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_SUBTITLE));
             Bukkit.getPluginManager().callEvent(event);
             if (event.isCancelled()) return;
-            p.setSpectatorTarget(null);
-            p.setGameMode(GameMode.SPECTATOR);
             p.getInventory().setHeldItemSlot(5);
+            p.setGameMode(GameMode.SPECTATOR);
             Bukkit.getScheduler().scheduleSyncDelayedTask(BedWars.plugin, ()-> {
                 p.setSpectatorTarget(target);
             }, 10L);
