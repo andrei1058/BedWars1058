@@ -114,12 +114,15 @@ public class DamageDeathMove implements Listener {
                     if (tnt.getSource() != null) {
                         if (tnt.getSource() instanceof Player) {
                             damager = (Player) tnt.getSource();
-                            // tnt jump?
-                            if (tnt.getSource().equals(e.getEntity())) {
-                                e.setDamage(1);
-                                Vector direction = e.getEntity().getLocation().getDirection().add(new Vector(0, 0.42, 0)).multiply(2); // should be enough
-                                e.getEntity().setVelocity(direction);
-                            }
+                            // tnt jump. credits to feargames.it
+                            LivingEntity damaged = (LivingEntity) e.getEntity();
+                            Vector distance = damaged.getLocation().subtract(0, 0.5, 0).toVector().subtract(tnt.getLocation().toVector());
+                            Vector direction = distance.clone().normalize();
+                            double force = (tnt.getYield() / 1 + distance.length());
+
+                            Vector resultingForce = direction.clone().multiply(force);
+                            resultingForce.setY(resultingForce.getY() / (Math.sqrt(distance.lengthSquared()) + 2));
+                            damaged.setVelocity(resultingForce);
                         } else return;
                     }
                 } else if ((e.getDamager() instanceof Silverfish) || (e.getDamager() instanceof IronGolem)) {
