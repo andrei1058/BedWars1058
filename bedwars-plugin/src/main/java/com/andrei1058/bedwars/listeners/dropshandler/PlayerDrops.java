@@ -53,7 +53,9 @@ public class PlayerDrops {
             if (victimsTeam != null) {
                 Location dropsLocation = new Location(victim.getWorld(), victimsTeam.getKillDropsLocation().getBlockX(), victimsTeam.getKillDropsLocation().getY(), victimsTeam.getKillDropsLocation().getZ());
                 victim.getEnderChest().forEach(item -> {
-                    victim.getWorld().dropItemNaturally(dropsLocation, item);
+                    if (item != null) {
+                        victim.getWorld().dropItemNaturally(dropsLocation, item);
+                    }
                 });
                 victim.getEnderChest().clear();
             }
