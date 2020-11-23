@@ -65,6 +65,34 @@ public class BreakPlace implements Listener {
         }
     }
 
+
+    @EventHandler(ignoreCancelled = true)
+    public void onBurn(BlockBurnEvent event) {
+        IArena arena = Arena.getArenaByIdentifier(event.getBlock().getWorld().getName());
+        if (arena == null) return;
+        if (!arena.getConfig().getBoolean(ConfigPath.ARENA_ALLOW_MAP_BREAK)){
+            event.setCancelled(true);
+            return;
+        }
+        // check if bed if allow map break
+        if (nms.isBed(event.getBlock().getType())) {
+            for (ITeam t : arena.getTeams()) {
+                for (int x = event.getBlock().getX() - 2; x < event.getBlock().getX() + 2; x++) {
+                    for (int y = event.getBlock().getY() - 2; y < event.getBlock().getY() + 2; y++) {
+                        for (int z = event.getBlock().getZ() - 2; z < event.getBlock().getZ() + 2; z++) {
+                            if (t.getBed().getBlockX() == x && t.getBed().getBlockY() == y && t.getBed().getBlockZ() == z) {
+                                if (!t.isBedDestroyed()) {
+                                    event.setCancelled(true);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
         if (e.isCancelled()) return;
@@ -107,8 +135,8 @@ public class BreakPlace implements Listener {
 
             // prevent modifying wood if protected
             // issue #531
-            if (e.getBlockPlaced().getType().toString().contains("STRIPPED_") && e.getBlock().getType().toString().contains("_WOOD")){
-                if (!a.getConfig().getBoolean(ConfigPath.ARENA_ALLOW_MAP_BREAK)){
+            if (e.getBlockPlaced().getType().toString().contains("STRIPPED_") && e.getBlock().getType().toString().contains("_WOOD")) {
+                if (!a.getConfig().getBoolean(ConfigPath.ARENA_ALLOW_MAP_BREAK)) {
                     e.setCancelled(true);
                     return;
                 }
@@ -148,7 +176,7 @@ public class BreakPlace implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onBlockBreakMonitor(BlockBreakEvent event){
+    public void onBlockBreakMonitor(BlockBreakEvent event) {
         IArena a = Arena.getArenaByPlayer(event.getPlayer());
         if (a != null) {
             a.removePlacedBlock(event.getBlock());
