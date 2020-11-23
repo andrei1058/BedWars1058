@@ -11,15 +11,21 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 
 public class SpectatorFirstPersonEnterEvent extends Event implements Cancellable {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
-    private UUID spectator, target;
-    private IArena arena;
+    private final Player spectator;
+    private final Player target;
+    private final IArena arena;
     private boolean cancelled = false;
-    private String title, subtitle;
+    private Function<Player, String> title;
+    private Function<Player, String> subTitle;
+    private int fadeIn = 0;
+    private int stay = 30;
+    private int fadeOut = 0;
 
     // A list of all players spectating in first person
     private static List<UUID> spectatingInFirstPerson = new ArrayList<>();
@@ -27,20 +33,21 @@ public class SpectatorFirstPersonEnterEvent extends Event implements Cancellable
     /**
      * Called when a spectator enters the first person spectating system.
      */
-    public SpectatorFirstPersonEnterEvent(@NotNull Player spectator, @NotNull Player target, IArena arena, String title, String subtitle) {
-        this.spectator = spectator.getUniqueId();
-        this.target = target.getUniqueId();
+    public SpectatorFirstPersonEnterEvent(@NotNull Player spectator, @NotNull Player target, IArena arena, Function<Player, String> title, Function<Player, String> subtitle) {
+        this.spectator = spectator;
+        this.target = target;
         this.arena = arena;
         this.title = title;
-        this.subtitle = subtitle;
-        if (!spectatingInFirstPerson.contains(spectator.getUniqueId())) spectatingInFirstPerson.add(spectator.getUniqueId());
+        this.subTitle = subtitle;
+        if (!spectatingInFirstPerson.contains(spectator.getUniqueId()))
+            spectatingInFirstPerson.add(spectator.getUniqueId());
     }
 
     /**
      * Get the spectator
      */
     public Player getSpectator() {
-        return Bukkit.getPlayer(spectator);
+        return spectator;
     }
 
     /**
@@ -54,7 +61,7 @@ public class SpectatorFirstPersonEnterEvent extends Event implements Cancellable
      * Get the target player
      */
     public Player getTarget() {
-        return Bukkit.getPlayer(target);
+        return target;
     }
 
     /**
@@ -71,26 +78,58 @@ public class SpectatorFirstPersonEnterEvent extends Event implements Cancellable
         this.cancelled = cancelled;
     }
 
+    public Function<Player, String> getSubTitle() {
+        return subTitle;
+    }
+
     /**
      * Get first person enter subtitle
      */
-    public String getSubtitle() {
-        return subtitle;
+
+
+    public Function<Player, String> getTitle() {
+        return title;
     }
 
     /**
      * Get first person enter title
      */
-    public String getTitle() {
-        return title;
+    public void setTitle(Function<Player, String> title) {
+        this.title = title;
     }
 
     /**
      * Set first person enter title and subtitle. Leave "" for empty msg
      */
-    public void setTitle(String title, String subtitle) {
-        this.title = title;
-        this.subtitle = subtitle;
+    public void setSubTitle(Function<Player, String> subTitle) {
+        this.subTitle = subTitle;
+    }
+
+    public int getStay() {
+        return stay;
+    }
+
+    public int getFadeOut() {
+        return fadeOut;
+    }
+
+    public int getFadeIn() {
+        return fadeIn;
+    }
+
+    public void setStay(int stay) {
+        if (stay < 0) return;
+        this.stay = stay;
+    }
+
+    public void setFadeOut(int fadeOut) {
+        if (fadeOut < 0) return;
+        this.fadeOut = fadeOut;
+    }
+
+    public void setFadeIn(int fadeIn) {
+        if (fadeIn < 0) return;
+        this.fadeIn = fadeIn;
     }
 
     public HandlerList getHandlers() {

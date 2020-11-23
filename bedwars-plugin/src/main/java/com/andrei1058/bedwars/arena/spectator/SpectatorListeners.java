@@ -145,18 +145,16 @@ public class SpectatorListeners implements Listener {
         Player target = (Player) e.getRightClicked();
         if (a.isPlayer(target)) {
             if (p.getSpectatorTarget() != null) {
-                SpectatorFirstPersonLeaveEvent e2 = new SpectatorFirstPersonLeaveEvent(p, a, getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE));
+                SpectatorFirstPersonLeaveEvent e2 = new SpectatorFirstPersonLeaveEvent(p, a, player -> getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE), player -> getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE));
                 Bukkit.getPluginManager().callEvent(e2);
             }
-            SpectatorFirstPersonEnterEvent event = new SpectatorFirstPersonEnterEvent(p, target, a, getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_TITLE).replace("{player}", target.getDisplayName()), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_SUBTITLE));
+            SpectatorFirstPersonEnterEvent event = new SpectatorFirstPersonEnterEvent(p, target, a, player -> getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_TITLE), player -> getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_SUBTITLE));
             Bukkit.getPluginManager().callEvent(event);
             if (event.isCancelled()) return;
             p.getInventory().setHeldItemSlot(5);
             p.setGameMode(GameMode.SPECTATOR);
-            Bukkit.getScheduler().scheduleSyncDelayedTask(BedWars.plugin, ()-> {
-                p.setSpectatorTarget(target);
-            }, 10L);
-            nms.sendTitle(p, event.getTitle(), event.getSubtitle(), 0, 30, 0);
+            p.setSpectatorTarget(target);
+            nms.sendTitle(p, event.getTitle().apply(p).replace("{player}", target.getDisplayName()), event.getSubTitle().apply(p).replace("{player}", target.getDisplayName()), event.getFadeIn(), event.getStay(), event.getFadeOut());
         }
     }
 
@@ -170,9 +168,9 @@ public class SpectatorListeners implements Listener {
             p.setGameMode(GameMode.ADVENTURE);
             p.setAllowFlight(true);
             p.setFlying(true);
-            SpectatorFirstPersonLeaveEvent event = new SpectatorFirstPersonLeaveEvent(p, a, getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE));
+            SpectatorFirstPersonLeaveEvent event = new SpectatorFirstPersonLeaveEvent(p, a, player -> getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE), player -> getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE));
             Bukkit.getPluginManager().callEvent(event);
-            nms.sendTitle(p, event.getTitle(), event.getSubtitle(), 0, 30, 0);
+            nms.sendTitle(p, event.getTitle().apply(p), event.getSubTitle().apply(p), event.getFadeIn(), event.getStay(), event.getFadeOut());
         }
     }
 
@@ -182,15 +180,15 @@ public class SpectatorListeners implements Listener {
         IArena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a == null) return;
         if (a.isSpectator(e.getPlayer())){
-            if (!(e.getPlayer().getSpectatorTarget() == null && e.getTo().getWorld().equals(e.getPlayer().getWorld())) && e.getCause() == PlayerTeleportEvent.TeleportCause.SPECTATE) {
+            if (!(e.getTo().getWorld().equals(e.getPlayer().getWorld())) && e.getCause() == PlayerTeleportEvent.TeleportCause.SPECTATE) {
                 Player p = e.getPlayer();
                 e.setCancelled(true);
                 p.setGameMode(GameMode.ADVENTURE);
                 p.setAllowFlight(true);
                 p.setFlying(true);
-                SpectatorFirstPersonLeaveEvent event = new SpectatorFirstPersonLeaveEvent(p, Arena.getArenaByPlayer(p), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE));
+                SpectatorFirstPersonLeaveEvent event = new SpectatorFirstPersonLeaveEvent(p, Arena.getArenaByPlayer(p), player -> getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE), player -> getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE));
                 Bukkit.getPluginManager().callEvent(event);
-                nms.sendTitle(p, event.getTitle(), event.getSubtitle(), 0, 30, 0);
+                nms.sendTitle(p, event.getTitle().apply(p), event.getSubTitle().apply(p), event.getFadeIn(), event.getStay(), event.getFadeOut());
             }
         }
     }
@@ -204,9 +202,9 @@ public class SpectatorListeners implements Listener {
                 p.setGameMode(GameMode.ADVENTURE);
                 p.setAllowFlight(true);
                 p.setFlying(true);
-                SpectatorFirstPersonLeaveEvent event = new SpectatorFirstPersonLeaveEvent(p, e.getArena(), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE));
+                SpectatorFirstPersonLeaveEvent event = new SpectatorFirstPersonLeaveEvent(p, e.getArena(), player -> getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE), player -> getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE));
                 Bukkit.getPluginManager().callEvent(event);
-                nms.sendTitle(p, event.getTitle(), event.getSubtitle(), 0, 30, 0);
+                nms.sendTitle(p, event.getTitle().apply(p), event.getSubTitle().apply(p), event.getFadeIn(), event.getStay(), event.getFadeOut());
             }
         }
     }
