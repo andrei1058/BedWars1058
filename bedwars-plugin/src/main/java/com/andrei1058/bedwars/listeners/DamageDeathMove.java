@@ -16,7 +16,6 @@ import com.andrei1058.bedwars.api.entity.Despawnable;
 import com.andrei1058.bedwars.listeners.dropshandler.PlayerDrops;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -26,13 +25,10 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
 
 import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.arena.LastHit.getLastHit;
@@ -90,7 +86,7 @@ public class DamageDeathMove implements Listener {
                     e.setCancelled(true);
                     return;
                 }
-                if (a.isSpectator(p) || a.isRespawning(p)) {
+                if (a.isSpectator(p) || a.isReSpawning(p)) {
                     e.setCancelled(true);
                     return;
                 }
@@ -126,7 +122,6 @@ public class DamageDeathMove implements Listener {
                         } else return;
                     }
                 } else if ((e.getDamager() instanceof Silverfish) || (e.getDamager() instanceof IronGolem)) {
-                    damager = null;
                     LastHit lh = LastHit.getLastHit(p);
                     if (lh != null) {
                         lh.setDamager(e.getDamager());
@@ -476,22 +471,12 @@ public class DamageDeathMove implements Listener {
                     // how to remove fall velocity?
                 }
             } else {
-                if (e.getPlayer().getLocation().getY() <= 0) {
-                    if (a.getStatus() == GameState.playing) {
-                        if (a.getConfig().getBoolean("voidKill")) {
+                if (a.getStatus() == GameState.playing) {
+                    if (a.getYKillHeight() != -1) {
+                        if (e.getPlayer().getLocation().getBlockY() <= a.getYKillHeight()) {
                             nms.voidKill(e.getPlayer());
                         }
-                    } else {
-                        ITeam bwt = a.getTeam(e.getPlayer());
-                        if (bwt != null) {
-                            e.getPlayer().teleport(bwt.getSpawn());
-                        } else {
-                            e.getPlayer().teleport(a.getSpectatorLocation());
-                        }
                     }
-                }
-
-                if (a.getStatus() == GameState.playing) {
                     for (ITeam t : a.getTeams()) {
                         if (e.getPlayer().getLocation().distance(t.getBed()) < 4) {
                             if (t.isMember(e.getPlayer()) && t instanceof BedWarsTeam) {
@@ -513,6 +498,15 @@ public class DamageDeathMove implements Listener {
                         Arena.afkCheck.remove(e.getPlayer().getUniqueId());
                         if (BedWars.getAPI().getAFKUtil().isPlayerAFK(e.getPlayer())) {
                             BedWars.getAPI().getAFKUtil().setPlayerAFK(e.getPlayer(), false);
+                        }
+                    }
+                } else {
+                    if (e.getPlayer().getLocation().getBlockY() <= 0){
+                        ITeam bwt = a.getTeam(e.getPlayer());
+                        if (bwt != null) {
+                            e.getPlayer().teleport(bwt.getSpawn());
+                        } else {
+                            e.getPlayer().teleport(a.getSpectatorLocation());
                         }
                     }
                 }
@@ -582,18 +576,6 @@ public class DamageDeathMove implements Listener {
             }
         }
     }
-
-    /*private static String getUtility(Material mat) {
-        for (String st : Arrays.asList("silverfish", "bridge")) {
-            if (shop.getYml().getBoolean(ConfigPath.SHOPSPECIALS))
-            if (shop.getBoolean("utilities." + st + ".enableRotation")) {
-                if (mat == Material.valueOf(shop.getYml().getString("utilities." + st + ".material"))) {
-                    return st;
-                }
-            }
-        }
-        return "";
-    }*/
 
     private static void spawnUtility(String s, Location loc, ITeam t, Player p) {
         if ("silverfish".equals(s.toLowerCase())) {

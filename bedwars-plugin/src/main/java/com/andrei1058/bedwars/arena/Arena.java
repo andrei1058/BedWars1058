@@ -60,7 +60,6 @@ import java.io.File;
 import java.util.*;
 import java.util.Comparator;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 import java.util.logging.Level;
 
 import static com.andrei1058.bedwars.BedWars.*;
@@ -142,6 +141,7 @@ public class Arena implements IArena {
     private static final LinkedList<IArena> enableQueue = new LinkedList<>();
 
     private Location respawnLocation, spectatorLocation, waitingLocation;
+    private int yKillHeight;
 
     /**
      * Load an arena.
@@ -244,7 +244,10 @@ public class Arena implements IArena {
             return;
         }
         if (error) return;
-
+        yKillHeight = config.getInt(ConfigPath.ARENA_Y_LEVEL_KILL);
+        if (yKillHeight < -1){
+            yKillHeight = -1;
+        }
         addToEnableQueue(this);
         Language.saveIfNotExists(Messages.ARENA_DISPLAY_GROUP_PATH + getGroup().toLowerCase(), String.valueOf(getGroup().charAt(0)).toUpperCase() + group.substring(1).toLowerCase());
     }
@@ -2401,5 +2404,10 @@ public class Arena implements IArena {
                 rejoin.destroy(team.getMembers().isEmpty());
             }
         }
+    }
+
+    @Override
+    public int getYKillHeight() {
+        return yKillHeight;
     }
 }

@@ -451,4 +451,10 @@ public interface IArena {
      * This does not replace {@link #removePlayer(Player, boolean)}.
      */
     void abandonGame(Player player);
+
+    /**
+     * -1 won't handle void kill.
+     * Instant kill when player y is under this number.
+     */
+    int getYKillHeight();
 }
