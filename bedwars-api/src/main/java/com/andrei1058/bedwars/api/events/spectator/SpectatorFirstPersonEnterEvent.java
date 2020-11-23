@@ -3,6 +3,7 @@ package com.andrei1058.bedwars.api.events.spectator;
 import com.andrei1058.bedwars.api.arena.IArena;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class SpectatorFirstPersonEnterEvent extends Event {
+public class SpectatorFirstPersonEnterEvent extends Event implements Cancellable {
 
     private static final HandlerList HANDLERS = new HandlerList();
 

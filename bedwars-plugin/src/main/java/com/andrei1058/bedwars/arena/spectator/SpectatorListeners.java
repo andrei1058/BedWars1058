@@ -148,11 +148,15 @@ public class SpectatorListeners implements Listener {
                 SpectatorFirstPersonLeaveEvent e2 = new SpectatorFirstPersonLeaveEvent(p, a, getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE));
                 Bukkit.getPluginManager().callEvent(e2);
             }
-            p.setGameMode(GameMode.SPECTATOR);
-            p.getInventory().setHeldItemSlot(5);
-            p.setSpectatorTarget(target);
             SpectatorFirstPersonEnterEvent event = new SpectatorFirstPersonEnterEvent(p, target, a, getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_TITLE).replace("{player}", target.getDisplayName()), getMsg(p, Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_SUBTITLE));
             Bukkit.getPluginManager().callEvent(event);
+            if (event.isCancelled()) return;
+            p.setSpectatorTarget(null);
+            p.setGameMode(GameMode.SPECTATOR);
+            p.getInventory().setHeldItemSlot(5);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(BedWars.plugin, ()-> {
+                p.setSpectatorTarget(target);
+            }, 10L);
             nms.sendTitle(p, event.getTitle(), event.getSubtitle(), 0, 30, 0);
         }
     }
