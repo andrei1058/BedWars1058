@@ -10,6 +10,7 @@ import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -19,16 +20,19 @@ import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class PAPISupport extends PlaceholderExpansion {
 
+    @NotNull
     @Override
     public String getIdentifier() {
         return "bw1058";
     }
 
+    @NotNull
     @Override
     public String getAuthor() {
         return "andrei1058";
     }
 
+    @NotNull
     @Override
     public String getVersion() {
         return BedWars.plugin.getDescription().getVersion();
@@ -121,6 +125,11 @@ public class PAPISupport extends PlaceholderExpansion {
                 break;
             case "current_arenas":
                 replay = String.valueOf(Arena.getArenas().size());
+                break;
+            case "current_playing":
+                if (a != null) {
+                    replay = String.valueOf(a.getPlayers().size());
+                }
                 break;
             case "player_team_color":
                 if (a != null && a.isPlayer(player) && a.getStatus() == GameState.playing) {
