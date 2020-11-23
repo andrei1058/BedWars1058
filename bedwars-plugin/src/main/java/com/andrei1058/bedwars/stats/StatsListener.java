@@ -147,26 +147,6 @@ public class StatsListener implements Listener {
                     PlayerStats damagerStats = BedWars.getStatsManager().get(damager.getUniqueId());
                     damagerStats.setFinalKills(damagerStats.getFinalKills() + 1);
                     event.getArena().addPlayerKill(damager, true, player);
-
-                    // Announce in arena
-                    for (Player inGame : event.getArena().getPlayers()) {
-                        Language lang = Language.getPlayerLanguage(inGame);
-                        inGame.sendMessage(Language.getMsg(inGame, Messages.PLAYER_DIE_PVP_LOG_OUT_FINAL)
-                                .replace("{PlayerTeamName}", team.getDisplayName(lang))
-                                .replace("{PlayerColor}", team.getColor().chat().toString()).replace("{PlayerName}", player.getDisplayName())
-                                .replace("{KillerColor}", killerTeam.getColor().chat().toString())
-                                .replace("{KillerName}", damager.getDisplayName())
-                                .replace("{KillerTeamName}", killerTeam.getDisplayName(lang)));
-                    }
-                    for (Player inGame : event.getArena().getSpectators()) {
-                        Language lang = Language.getPlayerLanguage(inGame);
-                        inGame.sendMessage(Language.getMsg(inGame, Messages.PLAYER_DIE_PVP_LOG_OUT_FINAL)
-                                .replace("{PlayerTeamName}", team.getDisplayName(lang))
-                                .replace("{PlayerColor}", team.getColor().chat().toString()).replace("{PlayerName}", player.getDisplayName())
-                                .replace("{KillerColor}", killerTeam.getColor().chat().toString())
-                                .replace("{KillerName}", damager.getDisplayName())
-                                .replace("{KillerTeamName}", killerTeam.getDisplayName(lang)));
-                    }
                 }
             } else {
                 // Prevent pvp log out abuse
@@ -185,26 +165,6 @@ public class StatsListener implements Listener {
                     event.getArena().addPlayerKill(damager, false, player);
                     PlayerStats damagerStats = BedWars.getStatsManager().get(damager.getUniqueId());
                     damagerStats.setKills(damagerStats.getKills() + 1);
-
-                    // Announce in arena
-                    for (Player inGame : event.getArena().getPlayers()) {
-                        Language lang = Language.getPlayerLanguage(inGame);
-                        inGame.sendMessage(Language.getMsg(inGame, Messages.PLAYER_DIE_PVP_LOG_OUT_REGULAR)
-                                .replace("{PlayerTeamName}", team.getDisplayName(lang))
-                                .replace("{PlayerColor}", team.getColor().chat().toString()).replace("{PlayerName}", player.getDisplayName())
-                                .replace("{KillerColor}", killerTeam.getColor().chat().toString())
-                                .replace("{KillerName}", damager.getDisplayName())
-                                .replace("{KillerTeamName}", killerTeam.getDisplayName(lang)));
-                    }
-                    for (Player inGame : event.getArena().getSpectators()) {
-                        Language lang = Language.getPlayerLanguage(inGame);
-                        inGame.sendMessage(Language.getMsg(inGame, Messages.PLAYER_DIE_PVP_LOG_OUT_REGULAR)
-                                .replace("{PlayerTeamName}", team.getDisplayName(lang))
-                                .replace("{PlayerColor}", team.getColor().chat().toString()).replace("{PlayerName}", player.getDisplayName())
-                                .replace("{KillerColor}", killerTeam.getColor().chat().toString())
-                                .replace("{KillerName}", damager.getDisplayName())
-                                .replace("{KillerTeamName}", killerTeam.getDisplayName(lang)));
-                    }
                 }
             }
         }
@@ -216,63 +176,5 @@ public class StatsListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent event) {
         BedWars.getStatsManager().remove(event.getPlayer().getUniqueId());
-    }
-
-
-    private static class DuplicationPatch {
-
-        private static final LinkedHashMap<UUID, DuplicationPatch> duplicationPatch = new LinkedHashMap<>();
-
-        // if already received those
-        private boolean win;
-        private boolean lost;
-        private boolean finalDeath;
-        private boolean gamePlayed;
-
-        // last time this action was performed
-        private long lastDeath;
-        private long lastKill;
-
-        // if already final killed someone
-        private final List<UUID> finalKills = new LinkedList<>();
-
-        // prevent outside instantiation
-        private DuplicationPatch() {
-        }
-
-        /**
-         * Set last kill performed to now.
-         */
-        private void updateLastKill() {
-            lastKill = System.currentTimeMillis();
-        }
-
-        /**
-         * Check kill delay.
-         */
-        private boolean passKillDelay(UUID uuid) {
-            return System.currentTimeMillis() > lastKill + 3000L;
-        }
-
-        /**
-         * Get cached data.
-         */
-        private static DuplicationPatch getPlayer(UUID uuid) {
-            return duplicationPatch.get(uuid);
-        }
-
-        /**
-         * Create duplication patch for player stats.
-         */
-        private static DuplicationPatch createPlayer(UUID uuid) {
-            return duplicationPatch.put(uuid, new DuplicationPatch());
-        }
-
-        /**
-         * Get cached data or create new.
-         */
-        private static DuplicationPatch getOrCreatePlayer(UUID uuid) {
-            return duplicationPatch.getOrDefault(uuid, createPlayer(uuid));
-        }
     }
 }

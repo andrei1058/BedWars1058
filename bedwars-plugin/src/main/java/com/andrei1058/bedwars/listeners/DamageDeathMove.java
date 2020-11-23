@@ -13,6 +13,7 @@ import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.entity.Despawnable;
+import com.andrei1058.bedwars.listeners.dropshandler.PlayerDrops;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -31,6 +32,7 @@ import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.arena.LastHit.getLastHit;
@@ -218,7 +220,7 @@ public class DamageDeathMove implements Listener {
     public void onDeath(PlayerDeathEvent e) {
         e.setDeathMessage(null);
         Player victim = e.getEntity(), killer = e.getEntity().getKiller();
-        ITeam t2 = null;
+        ITeam killersTeam = null;
         IArena a = Arena.getArenaByPlayer(victim);
         if (a != null) {
             if (a.isSpectator(victim)) {
@@ -231,22 +233,17 @@ public class DamageDeathMove implements Listener {
             }
             EntityDamageEvent damageEvent = e.getEntity().getLastDamageCause();
 
-            ItemStack[] drops = victim.getInventory().getContents();
-            if (!a.getConfig().getBoolean(ConfigPath.ARENA_NORMAL_DEATH_DROPS)) {
-                e.getDrops().clear();
-            }
-
-            ITeam t = a.getTeam(victim);
+            ITeam victimsTeam = a.getTeam(victim);
             if (a.getStatus() != GameState.playing) {
                 victim.spigot().respawn();
                 return;
             }
-            if (t == null) {
+            if (victimsTeam == null) {
                 victim.spigot().respawn();
                 return;
             }
-            String message = t.isBedDestroyed() ? Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL : Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR;
-            PlayerKillEvent.PlayerKillCause cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.UNKNOWN_FINAL_KILL : PlayerKillEvent.PlayerKillCause.UNKNOWN;
+            String message = victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL : Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR;
+            PlayerKillEvent.PlayerKillCause cause = victimsTeam.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.UNKNOWN_FINAL_KILL : PlayerKillEvent.PlayerKillCause.UNKNOWN;
             if (damageEvent != null) {
                 if (damageEvent.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
                     LastHit lh = getLastHit(victim);
@@ -257,15 +254,15 @@ public class DamageDeathMove implements Listener {
                         }
                     }
                     if (killer == null) {
-                        message = t.isBedDestroyed() ? Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_FINAL_KILL : Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_REGULAR;
+                        message = victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_FINAL_KILL : Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_REGULAR;
                     } else {
                         if (killer != victim) {
-                            message = t.isBedDestroyed() ? Messages.PLAYER_DIE_EXPLOSION_WITH_SOURCE_FINAL_KILL : Messages.PLAYER_DIE_EXPLOSION_WITH_SOURCE_REGULAR_KILL;
+                            message = victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_EXPLOSION_WITH_SOURCE_FINAL_KILL : Messages.PLAYER_DIE_EXPLOSION_WITH_SOURCE_REGULAR_KILL;
                         } else {
-                            message = t.isBedDestroyed() ? Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_FINAL_KILL : Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_REGULAR;
+                            message = victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_FINAL_KILL : Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_REGULAR;
                         }
                     }
-                    cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.EXPLOSION_FINAL_KILL : PlayerKillEvent.PlayerKillCause.EXPLOSION;
+                    cause = victimsTeam.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.EXPLOSION_FINAL_KILL : PlayerKillEvent.PlayerKillCause.EXPLOSION;
 
                 } else if (damageEvent.getCause() == EntityDamageEvent.DamageCause.VOID) {
                     LastHit lh = getLastHit(victim);
@@ -276,15 +273,15 @@ public class DamageDeathMove implements Listener {
                         }
                     }
                     if (killer == null) {
-                        message = t.isBedDestroyed() ? Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL : Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL;
+                        message = victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL : Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL;
                     } else {
                         if (killer != victim) {
-                            message = t.isBedDestroyed() ? Messages.PLAYER_DIE_KNOCKED_IN_VOID_FINAL_KILL : Messages.PLAYER_DIE_KNOCKED_IN_VOID_REGULAR_KILL;
+                            message = victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_KNOCKED_IN_VOID_FINAL_KILL : Messages.PLAYER_DIE_KNOCKED_IN_VOID_REGULAR_KILL;
                         } else {
-                            message = t.isBedDestroyed() ? Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL : Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL;
+                            message = victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL : Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL;
                         }
                     }
-                    cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.VOID_FINAL_KILL : PlayerKillEvent.PlayerKillCause.VOID;
+                    cause = victimsTeam.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.VOID_FINAL_KILL : PlayerKillEvent.PlayerKillCause.VOID;
                 } else if (damageEvent.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
                     if (killer == null) {
                         LastHit lh = getLastHit(victim);
@@ -292,138 +289,82 @@ public class DamageDeathMove implements Listener {
                             if (lh.getTime() >= System.currentTimeMillis() - 15000) {
                                 if (nms.isDespawnable(lh.getDamager())) {
                                     Despawnable d = nms.getDespawnablesList().get(lh.getDamager().getUniqueId());
-                                    t2 = d.getTeam();
-                                    message = d.getEntity().getType() == EntityType.IRON_GOLEM ? t.isBedDestroyed() ? Messages.PLAYER_DIE_IRON_GOLEM_FINAL_KILL : Messages.PLAYER_DIE_IRON_GOLEM_REGULAR : t.isBedDestroyed() ? Messages.PLAYER_DIE_DEBUG_FINAL_KILL : Messages.PLAYER_DIE_DEBUG_REGULAR;
-                                    cause = t.isBedDestroyed() ? d.getDeathFinalCause() : d.getDeathRegularCause();
+                                    killersTeam = d.getTeam();
+                                    message = d.getEntity().getType() == EntityType.IRON_GOLEM ? victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_IRON_GOLEM_FINAL_KILL : Messages.PLAYER_DIE_IRON_GOLEM_REGULAR : victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_DEBUG_FINAL_KILL : Messages.PLAYER_DIE_DEBUG_REGULAR;
+                                    cause = victimsTeam.isBedDestroyed() ? d.getDeathFinalCause() : d.getDeathRegularCause();
                                     killer = null;
                                 }
                             }
                         }
                     } else {
-                        message = t.isBedDestroyed() ? Messages.PLAYER_DIE_PVP_FINAL_KILL : Messages.PLAYER_DIE_PVP_REGULAR_KILL;
-                        cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.PVP_FINAL_KILL : PlayerKillEvent.PlayerKillCause.PVP;
+                        message = victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_PVP_FINAL_KILL : Messages.PLAYER_DIE_PVP_REGULAR_KILL;
+                        cause = victimsTeam.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.PVP_FINAL_KILL : PlayerKillEvent.PlayerKillCause.PVP;
                     }
                 } else if (damageEvent.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
                     if (killer != null) {
-                        message = t.isBedDestroyed() ? Messages.PLAYER_DIE_SHOOT_FINAL_KILL : Messages.PLAYER_DIE_SHOOT_REGULAR;
-                        cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.PLAYER_SHOOT_FINAL_KILL : PlayerKillEvent.PlayerKillCause.PLAYER_SHOOT;
+                        message = victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_SHOOT_FINAL_KILL : Messages.PLAYER_DIE_SHOOT_REGULAR;
+                        cause = victimsTeam.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.PLAYER_SHOOT_FINAL_KILL : PlayerKillEvent.PlayerKillCause.PLAYER_SHOOT;
                     }
-                } else if (damageEvent.getCause() == EntityDamageEvent.DamageCause.FALL){
+                } else if (damageEvent.getCause() == EntityDamageEvent.DamageCause.FALL) {
                     LastHit lh = getLastHit(victim);
                     if (lh != null) {
                         // check if kicked off in the last 10 seconds
                         if (lh.getTime() >= System.currentTimeMillis() - 10000) {
                             if (lh.getDamager() instanceof Player) killer = (Player) lh.getDamager();
                             if (killer != null && killer.getUniqueId().equals(victim.getUniqueId())) killer = null;
-                            if (killer != null){
+                            if (killer != null) {
                                 if (killer != victim) {
-                                    message = t.isBedDestroyed() ? Messages.PLAYER_DIE_KNOCKED_BY_FINAL_KILL : Messages.PLAYER_DIE_KNOCKED_BY_REGULAR_KILL;
+                                    message = victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_KNOCKED_BY_FINAL_KILL : Messages.PLAYER_DIE_KNOCKED_BY_REGULAR_KILL;
                                 } else {
-                                    message = t.isBedDestroyed() ? Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL : Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL;
+                                    message = victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL : Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL;
                                 }
                             }
-                            cause = t.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.PLAYER_PUSH_FINAL : PlayerKillEvent.PlayerKillCause.PLAYER_PUSH;
+                            cause = victimsTeam.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.PLAYER_PUSH_FINAL : PlayerKillEvent.PlayerKillCause.PLAYER_PUSH;
                         }
                     }
                 }
             }
 
-            if (killer != null) t2 = a.getTeam(killer);
-
+            if (killer != null) killersTeam = a.getTeam(killer);
+            String finalMessage = message;
+            PlayerKillEvent playerKillEvent = new PlayerKillEvent(a, victim, killer, player -> Language.getMsg(player, finalMessage), cause);
+            Bukkit.getPluginManager().callEvent(playerKillEvent);
             for (Player on : a.getPlayers()) {
                 Language lang = Language.getPlayerLanguage(on);
-                on.sendMessage(getMsg(on, message).
-                        replace("{PlayerColor}", t.getColor().chat().toString()).replace("{PlayerName}", victim.getDisplayName())
-                        .replace("{PlayerTeamName}", t.getDisplayName(lang))
-                        .replace("{KillerColor}", t2 == null ? "" : t2.getColor().chat().toString())
+                on.sendMessage(playerKillEvent.getMessage().apply(on).
+                        replace("{PlayerColor}", victimsTeam.getColor().chat().toString()).replace("{PlayerName}", victim.getDisplayName())
+                        .replace("{PlayerTeamName}", victimsTeam.getDisplayName(lang))
+                        .replace("{KillerColor}", killersTeam == null ? "" : killersTeam.getColor().chat().toString())
                         .replace("{KillerName}", killer == null ? "" : killer.getDisplayName())
-                        .replace("{KillerTeamName}", t2 == null ? "" : t2.getDisplayName(lang)));
+                        .replace("{KillerTeamName}", killersTeam == null ? "" : killersTeam.getDisplayName(lang)));
             }
             for (Player on : a.getSpectators()) {
                 Language lang = Language.getPlayerLanguage(on);
-                on.sendMessage(getMsg(on, message).
-                        replace("{PlayerColor}", t.getColor().chat().toString()).replace("{PlayerName}", victim.getDisplayName())
-                        .replace("{KillerColor}", t2 == null ? "" : t2.getColor().chat().toString())
-                        .replace("{PlayerTeamName}", t.getDisplayName(lang))
+                on.sendMessage(playerKillEvent.getMessage().apply(on).
+                        replace("{PlayerColor}", victimsTeam.getColor().chat().toString()).replace("{PlayerName}", victim.getDisplayName())
+                        .replace("{KillerColor}", killersTeam == null ? "" : killersTeam.getColor().chat().toString())
+                        .replace("{PlayerTeamName}", victimsTeam.getDisplayName(lang))
                         .replace("{KillerName}", killer == null ? "" : killer.getDisplayName())
-                        .replace("{KillerTeamName}", t2 == null ? "" : t2.getDisplayName(lang)));
+                        .replace("{KillerTeamName}", killersTeam == null ? "" : killersTeam.getDisplayName(lang)));
             }
 
-            /* give stats and victim's inventory */
-            if ((killer != null && !t.equals(t2)) && !victim.equals(killer)) {
-                if (t.isBedDestroyed()) {
-                    if (!a.getConfig().getBoolean(ConfigPath.ARENA_NORMAL_DEATH_DROPS)) {
-                        for (ItemStack i : drops) {
-                            if (i == null) continue;
-                            if (i.getType() == Material.AIR) continue;
-                            if (nms.isArmor(i) || nms.isBow(i) || nms.isSword(i) || nms.isTool(i)) continue;
-                            if (!nms.getShopUpgradeIdentifier(i).trim().isEmpty()) continue;
-                            if (a.getTeam(killer) != null) {
-                                Vector v = t.getKillDropsLocation();
-                                killer.getWorld().dropItemNaturally(new Location(a.getWorld(), v.getX(), v.getY(), v.getZ()), i);
-                            }
-                        }
-                    }
-                    a.addPlayerKill(killer, true, victim);
-                } else {
-                    if (!a.getConfig().getBoolean(ConfigPath.ARENA_NORMAL_DEATH_DROPS)) {
-                        if (!a.isReSpawning(killer)) {
-                            Map<Material, Integer> materialDrops = new HashMap<>();
-                            for (ItemStack i : drops) {
-                                if (i == null) continue;
-                                if (i.getType() == Material.AIR) continue;
-                                if (i.getType() == Material.DIAMOND || i.getType() == Material.EMERALD || i.getType() == Material.IRON_INGOT || i.getType() == Material.GOLD_INGOT) {
-
-                                    // add to killer inventory
-                                    killer.getInventory().addItem(i);
-
-                                    // count items
-                                    if (materialDrops.containsKey(i.getType())) {
-                                        materialDrops.replace(i.getType(), materialDrops.get(i.getType()) + i.getAmount());
-                                    } else {
-                                        materialDrops.put(i.getType(), i.getAmount());
-                                    }
-                                }
-                            }
-
-                            for (Map.Entry<Material, Integer> entry : materialDrops.entrySet()) {
-                                String msg = "";
-                                int amount = entry.getValue();
-                                switch (entry.getKey()) {
-                                    case DIAMOND:
-                                        msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_DIAMOND).replace("{meaning}", amount == 1 ?
-                                                getMsg(killer, Messages.MEANING_DIAMOND_SINGULAR) : getMsg(killer, Messages.MEANING_DIAMOND_PLURAL));
-                                        break;
-                                    case EMERALD:
-                                        msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_EMERALD).replace("{meaning}", amount == 1 ?
-                                                getMsg(killer, Messages.MEANING_EMERALD_SINGULAR) : getMsg(killer, Messages.MEANING_EMERALD_PLURAL));
-                                        break;
-                                    case IRON_INGOT:
-                                        msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_IRON).replace("{meaning}", amount == 1 ?
-                                                getMsg(killer, Messages.MEANING_IRON_SINGULAR) : getMsg(killer, Messages.MEANING_IRON_PLURAL));
-                                        break;
-                                    case GOLD_INGOT:
-                                        msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_GOLD).replace("{meaning}", amount == 1 ?
-                                                getMsg(killer, Messages.MEANING_GOLD_SINGULAR) : getMsg(killer, Messages.MEANING_GOLD_PLURAL));
-                                        break;
-                                }
-                                killer.sendMessage(msg.replace("{amount}", String.valueOf(amount)));
-                            }
-                            materialDrops.clear();
-                        }
-                    }
-                }
-                a.addPlayerKill(killer, false, victim);
+            // increase stats to killer
+            if ((killer != null && !victimsTeam.equals(killersTeam)) && !victim.equals(killer)) {
+                a.addPlayerKill(killer, cause.isFinalKill(), victim);
             }
 
-            /* call game kill event */
-            Bukkit.getPluginManager().callEvent(new PlayerKillEvent(a, victim, killer, message, cause));
+            // handle drops
+            if (PlayerDrops.handlePlayerDrops(a, victim, killer, victimsTeam, killersTeam, cause)) {
+                e.getDrops().clear();
+            }
+
+            // send respawn packet
             Bukkit.getScheduler().runTaskLater(plugin, () -> victim.spigot().respawn(), 3L);
             a.addPlayerDeath(victim);
 
             // reset last damager
             LastHit lastHit = LastHit.getLastHit(victim);
-            if (lastHit != null){
+            if (lastHit != null) {
                 lastHit.setDamager(null);
             }
         }
@@ -480,7 +421,7 @@ public class DamageDeathMove implements Listener {
             } else {
                 //respawn session
                 int respawnTime = config.getInt(ConfigPath.GENERAL_CONFIGURATION_RE_SPAWN_COUNTDOWN);
-                if (respawnTime > 1){
+                if (respawnTime > 1) {
                     e.setRespawnLocation(a.getReSpawnLocation());
                     a.startReSpawnSession(e.getPlayer(), respawnTime);
                 } else {
@@ -515,9 +456,9 @@ public class DamageDeathMove implements Listener {
                 }
 
                 // hide armor for those with invisibility potions
-                if (!a.getShowTime().isEmpty()){
-                    for (Map.Entry<Player, Integer> entry : a.getShowTime().entrySet()){
-                        if (entry.getValue() > 2){
+                if (!a.getShowTime().isEmpty()) {
+                    for (Map.Entry<Player, Integer> entry : a.getShowTime().entrySet()) {
+                        if (entry.getValue() > 2) {
                             BedWars.nms.hideArmor(entry.getKey(), e.getPlayer());
                         }
                     }
