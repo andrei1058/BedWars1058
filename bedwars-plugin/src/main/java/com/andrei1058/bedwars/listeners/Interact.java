@@ -169,15 +169,7 @@ public class Interact implements Listener {
                         fb.setIsIncendiary(false);
                         fb.setMetadata("bw1058", new FixedMetadataValue(plugin, "ceva"));
                         //fb.setGlowing(true);
-
-                        for (ItemStack i : p.getInventory().getContents()) {
-                            if (i == null) continue;
-                            if (i.getType() == null) continue;
-                            if (i.getType() == Material.AIR) continue;
-                            if (i.getType() == nms.materialFireball()) {
-                                nms.minusAmount(p, e.getItem(), 1);
-                            }
-                        }
+                        nms.minusAmount(p, inHand, 1);
                     }
                 }
             }
