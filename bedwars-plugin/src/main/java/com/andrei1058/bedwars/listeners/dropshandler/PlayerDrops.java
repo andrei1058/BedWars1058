@@ -50,8 +50,8 @@ public class PlayerDrops {
         }
         if (cause.isFinalKill()) {
             // if is final kill drop items at generator
-            if (killersTeam != null) {
-                Location dropsLocation = new Location(victim.getWorld(), killersTeam.getKillDropsLocation().getBlockX(), killersTeam.getKillDropsLocation().getY(), killersTeam.getKillDropsLocation().getZ());
+            if (victimsTeam != null) {
+                Location dropsLocation = new Location(victim.getWorld(), victimsTeam.getKillDropsLocation().getBlockX(), victimsTeam.getKillDropsLocation().getY(), victimsTeam.getKillDropsLocation().getZ());
                 victim.getEnderChest().forEach(item -> {
                     victim.getWorld().dropItemNaturally(dropsLocation, item);
                 });
