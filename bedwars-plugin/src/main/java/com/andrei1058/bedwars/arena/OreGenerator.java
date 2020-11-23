@@ -155,7 +155,7 @@ public class OreGenerator implements IGenerator {
                 Player player = (Player) o;
                 ItemStack item = ore.clone();
                 item.setAmount(amount);
-                player.playSound(player.getLocation(), Sound.valueOf(BedWars.getForCurrentVersion("ITEM_PICKUP ", "ENTITY_ITEM_PICKUP", "ENTITY_ITEM_PICKUP")), 0.6f, 1.3f);
+                player.playSound(player.getLocation(), Sound.valueOf(BedWars.getForCurrentVersion("ITEM_PICKUP", "ENTITY_ITEM_PICKUP", "ENTITY_ITEM_PICKUP")), 0.6f, 1.3f);
                 Collection<ItemStack> excess = player.getInventory().addItem(item).values();
                 for (ItemStack value : excess) {
                     dropItem(player.getLocation(), value.getAmount());
