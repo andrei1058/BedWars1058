@@ -135,7 +135,7 @@ public class SpectatorListeners implements Listener {
 
     @EventHandler
     // Triggered when a spectator starts spectating in first person
-    public void onSpectatorInteractPlayer(PlayerInteractAtEntityEvent e) {
+    public void onSpectatorInteractPlayer(PlayerInteractEntityEvent e) {
         if (e.getRightClicked().getType() != EntityType.PLAYER) return;
         Player p = e.getPlayer();
         IArena a = Arena.getArenaByPlayer(p);
@@ -159,15 +159,6 @@ public class SpectatorListeners implements Listener {
             }, 10L);
             nms.sendTitle(p, event.getTitle(), event.getSubtitle(), 0, 30, 0);
         }
-    }
-
-    @EventHandler
-    public void onSpectatorInteract(PlayerInteractEntityEvent e) {
-        Player p = e.getPlayer();
-        IArena a = Arena.getArenaByPlayer(p);
-        if (a == null) return;
-        if (a.isPlayer(p)) return;
-        e.setCancelled(true);
     }
 
     @EventHandler
