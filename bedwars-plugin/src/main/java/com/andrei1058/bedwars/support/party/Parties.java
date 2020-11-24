@@ -16,7 +16,7 @@ import static com.andrei1058.bedwars.api.language.Language.getMsg;
 public class Parties implements Party {
 
     //Support for Parties by AlessioDP
-    private PartiesAPI api = com.alessiodp.parties.api.Parties.getApi();
+    private final PartiesAPI api = com.alessiodp.parties.api.Parties.getApi();
 
     @Override
     public boolean hasParty(Player p) {
@@ -35,10 +35,14 @@ public class Parties implements Party {
 
     @Override
     public boolean isOwner(Player p) {
+        p.sendMessage("a");
         PartyPlayer pp = api.getPartyPlayer(p.getUniqueId());
+        p.sendMessage("b");
         if (pp == null) return false;
+        p.sendMessage("c: " + pp.getPartyName());
         com.alessiodp.parties.api.interfaces.Party party = api.getParty(pp.getPartyName());
         if (party == null) return false;
+        p.sendMessage("d");
         return party.getLeader() == p.getUniqueId();
     }
 
@@ -73,7 +77,7 @@ public class Parties implements Party {
         if (pp == null) return;
         com.alessiodp.parties.api.interfaces.Party party = api.getParty(pp.getPartyName());
         if (party == null) return;
-        if (party.getLeader() == member.getUniqueId()){
+        if (party.getLeader() == member.getUniqueId()) {
             disband(member);
         } else {
             party.removeMember(pp);
