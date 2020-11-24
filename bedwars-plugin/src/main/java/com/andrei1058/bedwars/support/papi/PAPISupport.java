@@ -20,6 +20,8 @@ import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class PAPISupport extends PlaceholderExpansion {
 
+    private static final SimpleDateFormat elapsedFormat = new SimpleDateFormat("HH:mm");
+
     @NotNull
     @Override
     public String getIdentifier() {
@@ -183,6 +185,12 @@ public class PAPISupport extends PlaceholderExpansion {
                     replay = a.getGroup();
                 }
                 break;
+            case "elapsed_time":
+                if (a != null) {
+                    replay = elapsedFormat.format(Instant.now().minusMillis(a.getStartTime().toEpochMilli()));
+                }
+                break;
+
         }
         return replay;
     }

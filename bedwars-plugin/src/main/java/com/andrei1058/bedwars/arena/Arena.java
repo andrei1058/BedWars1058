@@ -57,6 +57,7 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.time.Instant;
 import java.util.*;
 import java.util.Comparator;
 import java.util.concurrent.ConcurrentHashMap;
@@ -142,6 +143,7 @@ public class Arena implements IArena {
 
     private Location respawnLocation, spectatorLocation, waitingLocation;
     private int yKillHeight;
+    private Instant startTime;
 
     /**
      * Load an arena.
@@ -245,7 +247,7 @@ public class Arena implements IArena {
         }
         if (error) return;
         yKillHeight = config.getInt(ConfigPath.ARENA_Y_LEVEL_KILL);
-        if (yKillHeight < -1){
+        if (yKillHeight < -1) {
             yKillHeight = -1;
         }
         addToEnableQueue(this);
@@ -1307,6 +1309,9 @@ public class Arena implements IArena {
      * Set game status without starting stats.
      */
     public void setStatus(GameState status) {
+        if (this.status != GameState.playing && status == GameState.playing) {
+            startTime = Instant.now();
+        }
         this.status = status;
     }
 
@@ -2409,5 +2414,10 @@ public class Arena implements IArena {
     @Override
     public int getYKillHeight() {
         return yKillHeight;
+    }
+
+    @Override
+    public Instant getStartTime() {
+        return startTime;
     }
 }

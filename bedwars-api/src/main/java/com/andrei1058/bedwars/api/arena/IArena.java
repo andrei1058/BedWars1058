@@ -14,6 +14,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -457,4 +458,6 @@ public interface IArena {
      * Instant kill when player y is under this number.
      */
     int getYKillHeight();
+
+    Instant getStartTime();
 }
