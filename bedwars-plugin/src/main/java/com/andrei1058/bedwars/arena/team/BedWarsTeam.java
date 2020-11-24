@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.arena;
+package com.andrei1058.bedwars.arena.team;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.generator.GeneratorType;
@@ -13,6 +13,8 @@ import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.region.Cuboid;
 import com.andrei1058.bedwars.api.upgrades.EnemyBaseEnterTrap;
+import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.arena.OreGenerator;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.shop.ShopCache;
 import org.bukkit.*;

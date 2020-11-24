@@ -8,11 +8,10 @@ import com.andrei1058.bedwars.api.arena.generator.GeneratorType;
 import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
-import com.andrei1058.bedwars.api.events.gameplay.TeamAssignEvent;
 import com.andrei1058.bedwars.api.tasks.StartingTask;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.api.language.Messages;
-import com.andrei1058.bedwars.arena.BedWarsTeam;
+import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import com.andrei1058.bedwars.arena.team.LegacyTeamAssigner;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
@@ -21,10 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
-import static com.andrei1058.bedwars.BedWars.getParty;
 import static com.andrei1058.bedwars.BedWars.nms;
 import static com.andrei1058.bedwars.api.language.Language.getList;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;

@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.arena;
+package com.andrei1058.bedwars.arena.team;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
@@ -66,6 +66,7 @@ public class TeamAssigner implements ITeamAssigner {
                         remaining.closeInventory();
                         team.addPlayers(remaining);
                     }
+                    break;
                 }
             }
         }

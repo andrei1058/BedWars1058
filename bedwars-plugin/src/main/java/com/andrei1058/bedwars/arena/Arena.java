@@ -28,6 +28,8 @@ import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.tasks.PlayingTask;
 import com.andrei1058.bedwars.api.tasks.RestartingTask;
 import com.andrei1058.bedwars.api.tasks.StartingTask;
+import com.andrei1058.bedwars.arena.team.BedWarsTeam;
+import com.andrei1058.bedwars.arena.team.TeamAssigner;
 import com.andrei1058.bedwars.configuration.ArenaConfig;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.levels.internal.InternalLevel;

@@ -7,6 +7,7 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.regular.CmdStats;
 import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
 import org.bukkit.Bukkit;

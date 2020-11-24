@@ -13,6 +13,7 @@ import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.entity.Despawnable;
+import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import com.andrei1058.bedwars.listeners.dropshandler.PlayerDrops;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
