@@ -34,19 +34,23 @@ public class PlayerDrops {
         }
         if (cause == PlayerKillEvent.PlayerKillCause.PLAYER_PUSH || cause == PlayerKillEvent.PlayerKillCause.PLAYER_PUSH_FINAL) {
             // if died by fall damage drop items at location
-            return false;
+            dropItems(victim);
+            return true;
         }
         if (killer == null) {
             // Death without a attacker drops items on the floor
-            return false;
+            dropItems(victim);
+            return true;
         }
         if (cause.isDespawnable()) {
             // If killed by a ironGolem or silverFish drop on floor
-            return false;
+            dropItems(victim);
+            return true;
         }
         if (cause.isPvpLogOut()) {
             // if is pvp log out drop at disconnect location
-            return false;
+            dropItems(victim);
+            return true;
         }
         if (cause.isFinalKill()) {
             // if is final kill drop items at generator
@@ -64,7 +68,7 @@ public class PlayerDrops {
         // victim's inventory
         ItemStack[] drops = victim.getInventory().getContents();
 
-        if (!(victimsTeam.equals(killersTeam)) && victim.equals(killer)) {
+        if (victimsTeam != null && !(victimsTeam.equals(killersTeam)) && victim.equals(killer)) {
             // if final kill give items at kill drops location (team generator)
             if (victimsTeam.isBedDestroyed()) {
                 for (ItemStack i : drops) {
@@ -128,5 +132,15 @@ public class PlayerDrops {
 
         }
         return true;
+    }
+
+    private static void dropItems(Player player) {
+        for (ItemStack i : player.getInventory().getContents()) {
+            if (i == null) continue;
+            if (i.getType() == Material.AIR) continue;
+            if (i.getType() == Material.DIAMOND || i.getType() == Material.EMERALD || i.getType() == Material.IRON_INGOT || i.getType() == Material.GOLD_INGOT) {
+                player.getLocation().getWorld().dropItemNaturally(player.getLocation(), i);
+            }
+        }
     }
 }

@@ -115,10 +115,9 @@ public class DamageDeathMove implements Listener {
                             LivingEntity damaged = (LivingEntity) e.getEntity();
                             Vector distance = damaged.getLocation().subtract(0, 0.5, 0).toVector().subtract(tnt.getLocation().toVector());
                             Vector direction = distance.clone().normalize();
-                            double force = (tnt.getYield() / 1 + distance.length());
-
+                            double force = (tnt.getYield() / (3 + distance.length()));
                             Vector resultingForce = direction.clone().multiply(force);
-                            resultingForce.setY(resultingForce.getY() / (Math.sqrt(distance.lengthSquared()) + 2));
+                            resultingForce.setY(resultingForce.getY() / (distance.length() + 2));
                             damaged.setVelocity(resultingForce);
                         } else return;
                     }
