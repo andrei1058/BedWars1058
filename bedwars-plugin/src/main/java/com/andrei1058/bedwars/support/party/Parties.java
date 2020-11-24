@@ -43,7 +43,7 @@ public class Parties implements Party {
         com.alessiodp.parties.api.interfaces.Party party = api.getParty(pp.getPartyName());
         if (party == null) return false;
         p.sendMessage("d");
-        return party.getLeader() == p.getUniqueId();
+        return party.getLeader().equals(p.getUniqueId());
     }
 
     @Override
