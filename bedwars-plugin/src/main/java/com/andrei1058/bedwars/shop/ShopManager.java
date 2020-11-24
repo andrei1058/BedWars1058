@@ -263,18 +263,21 @@ public class ShopManager extends ConfigManager {
 
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "jump-potion", 20, "tier1",
                     BedWars.getForCurrentVersion("POTION", "POTION", "POTION"), 0, 1, false, 1, "emerald", false, false);
-            addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "jump-potion", "tier1", "jump", BedWars.getForCurrentVersion("POTION", "POTION", "POTION"),
-                    0, 1, "", "JUMP 45 5", "", false);
+            getYml().addDefault(ConfigPath.SHOP_PATH_CATEGORY_POTIONS + ".jump-potion." + ConfigPath.SHOP_CATEGORY_CONTENT_CONTENT_TIERS + ".tier1.tier-item.potion-display", "minecraft:leaping");
+            addBuyPotion(ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "jump-potion", "tier1", "jump", BedWars.getForCurrentVersion("POTION", "POTION", "POTION"),
+                    0, 1, "", "JUMP 45 5", "", "minecraft:leaping");
 
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "speed-potion", 19, "tier1",
                     BedWars.getForCurrentVersion("POTION", "POTION", "POTION"), 0, 1, false, 1, "emerald", false, false);
-            addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "speed-potion", "tier1", "speed", BedWars.getForCurrentVersion("POTION", "POTION", "POTION"),
-                    0, 1, "", "SPEED 45 2", "", false);
+            getYml().addDefault(ConfigPath.SHOP_PATH_CATEGORY_POTIONS + ".speed-potion." + ConfigPath.SHOP_CATEGORY_CONTENT_CONTENT_TIERS + ".tier1.tier-item.potion-display", "minecraft:swiftness");
+            addBuyPotion(ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "speed-potion", "tier1", "speed", BedWars.getForCurrentVersion("POTION", "POTION", "POTION"),
+                    0, 1, "", "SPEED 45 2", "", "minecraft:swiftness");
 
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "invisibility", 21, "tier1",
                     BedWars.getForCurrentVersion("POTION", "POTION", "POTION"), 0, 1, false, 2, "emerald", false, false);
-            addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "invisibility", "tier1", "invisibility", BedWars.getForCurrentVersion("POTION", "POTION", "POTION"),
-                    0, 1, "", "INVISIBILITY 30 1", "", false);
+            getYml().addDefault(ConfigPath.SHOP_PATH_CATEGORY_POTIONS + ".invisibility." + ConfigPath.SHOP_CATEGORY_CONTENT_CONTENT_TIERS + ".tier1.tier-item.potion-display", "minecraft:invisibility");
+            addBuyPotion(ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "invisibility", "tier1", "invisibility", BedWars.getForCurrentVersion("POTION", "POTION", "POTION"),
+                    0, 1, "", "INVISIBILITY 30 1", "", "minecraft:invisibility");
 
             //UTILITY CATEGORY
             addDefaultShopCategory(ConfigPath.SHOP_PATH_CATEGORY_UTILITY, 7, BedWars.getForCurrentVersion("TNT", "TNT", "TNT"), 0, 1, false);
@@ -452,6 +455,26 @@ public class ShopManager extends ConfigManager {
         if (autoEquip) {
             getYml().addDefault(path + "auto-equip", true);
         }
+        if (!itemName.isEmpty()) {
+            getYml().addDefault(path + "name", itemName);
+        }
+    }
+
+    public void addBuyPotion(String path, String contentName, String tierName, String item, String material, int data, int amount, String enchant, String potion, String itemName, String potionNBT) {
+        path += ConfigPath.SHOP_CATEGORY_CONTENT_PATH + "." + contentName + "." + ConfigPath.SHOP_CATEGORY_CONTENT_CONTENT_TIERS + "." + tierName + "." + ConfigPath.SHOP_CONTENT_BUY_ITEMS_PATH + "." + item + ".";
+        getYml().addDefault(path + "material", material);
+        getYml().addDefault(path + "data", data);
+        getYml().addDefault(path + "amount", amount);
+        if (!enchant.isEmpty()) {
+            getYml().addDefault(path + "enchants", enchant);
+        }
+        if (!potion.isEmpty()) {
+            getYml().addDefault(path + "potion", potion);
+        }
+        if (!potionNBT.isEmpty()) {
+            getYml().addDefault(path + "potion-display", potionNBT);
+        }
+        getYml().addDefault(path + "potion-color", "");
         if (!itemName.isEmpty()) {
             getYml().addDefault(path + "name", itemName);
         }
