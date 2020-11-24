@@ -263,19 +263,19 @@ public class ShopManager extends ConfigManager {
 
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "jump-potion", 20, "tier1",
                     BedWars.getForCurrentVersion("POTION", "POTION", "POTION"), 0, 1, false, 1, "emerald", false, false);
-            getYml().addDefault(ConfigPath.SHOP_PATH_CATEGORY_POTIONS + ".jump-potion." + ConfigPath.SHOP_CATEGORY_CONTENT_CONTENT_TIERS + ".tier1.tier-item.potion-display", "minecraft:leaping");
+            getYml().addDefault(ConfigPath.SHOP_PATH_CATEGORY_POTIONS + ".jump-potion." + "tier1.tier-item.potion-display", "minecraft:leaping");
             addBuyPotion(ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "jump-potion", "tier1", "jump", BedWars.getForCurrentVersion("POTION", "POTION", "POTION"),
                     0, 1, "", "JUMP 45 5", "", "minecraft:leaping");
 
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "speed-potion", 19, "tier1",
                     BedWars.getForCurrentVersion("POTION", "POTION", "POTION"), 0, 1, false, 1, "emerald", false, false);
-            getYml().addDefault(ConfigPath.SHOP_PATH_CATEGORY_POTIONS + ".speed-potion." + ConfigPath.SHOP_CATEGORY_CONTENT_CONTENT_TIERS + ".tier1.tier-item.potion-display", "minecraft:swiftness");
+            getYml().addDefault(ConfigPath.SHOP_PATH_CATEGORY_POTIONS + ".speed-potion." + "tier1.tier-item.potion-display", "minecraft:swiftness");
             addBuyPotion(ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "speed-potion", "tier1", "speed", BedWars.getForCurrentVersion("POTION", "POTION", "POTION"),
                     0, 1, "", "SPEED 45 2", "", "minecraft:swiftness");
 
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "invisibility", 21, "tier1",
                     BedWars.getForCurrentVersion("POTION", "POTION", "POTION"), 0, 1, false, 2, "emerald", false, false);
-            getYml().addDefault(ConfigPath.SHOP_PATH_CATEGORY_POTIONS + ".invisibility." + ConfigPath.SHOP_CATEGORY_CONTENT_CONTENT_TIERS + ".tier1.tier-item.potion-display", "minecraft:invisibility");
+            getYml().addDefault(ConfigPath.SHOP_PATH_CATEGORY_POTIONS + ".invisibility." + "tier1.tier-item.potion-display", "minecraft:invisibility");
             addBuyPotion(ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "invisibility", "tier1", "invisibility", BedWars.getForCurrentVersion("POTION", "POTION", "POTION"),
                     0, 1, "", "INVISIBILITY 30 1", "", "minecraft:invisibility");
 
