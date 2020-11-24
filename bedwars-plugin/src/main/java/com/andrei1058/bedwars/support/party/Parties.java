@@ -2,7 +2,6 @@ package com.andrei1058.bedwars.support.party;
 
 import com.alessiodp.parties.api.interfaces.PartiesAPI;
 import com.alessiodp.parties.api.interfaces.PartyPlayer;
-import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.party.Party;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -10,8 +9,6 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class Parties implements Party {
 
@@ -26,23 +23,16 @@ public class Parties implements Party {
 
     @Override
     public int partySize(Player p) {
-        PartyPlayer pp = api.getPartyPlayer(p.getUniqueId());
-        if (pp == null) return 0;
-        com.alessiodp.parties.api.interfaces.Party party = api.getParty(pp.getPartyName());
-        if (party == null) return 0;
-        return party.getMembers().size();
+        return getMembers(p).size();
     }
 
     @Override
     public boolean isOwner(Player p) {
-        p.sendMessage("a");
         PartyPlayer pp = api.getPartyPlayer(p.getUniqueId());
-        p.sendMessage("b");
         if (pp == null) return false;
-        p.sendMessage("c: " + pp.getPartyName());
         com.alessiodp.parties.api.interfaces.Party party = api.getParty(pp.getPartyName());
         if (party == null) return false;
-        p.sendMessage("d");
+        if (party.getLeader() == null) return false;
         return party.getLeader().equals(p.getUniqueId());
     }
 
@@ -73,7 +63,7 @@ public class Parties implements Party {
 
     @Override
     public void removeFromParty(Player member) {
-        PartyPlayer pp = api.getPartyPlayer(member.getUniqueId());
+        /*PartyPlayer pp = api.getPartyPlayer(member.getUniqueId());
         if (pp == null) return;
         com.alessiodp.parties.api.interfaces.Party party = api.getParty(pp.getPartyName());
         if (party == null) return;
@@ -87,12 +77,12 @@ public class Parties implements Party {
                 if (!p.isOnline()) continue;
                 p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_LEAVE_SUCCESS).replace("{player}", member.getDisplayName()));
             }
-        }
+        }*/
     }
 
     @Override
     public void disband(Player owner) {
-        PartyPlayer pp = api.getPartyPlayer(owner.getUniqueId());
+        /*PartyPlayer pp = api.getPartyPlayer(owner.getUniqueId());
         if (pp == null) return;
         com.alessiodp.parties.api.interfaces.Party party = api.getParty(pp.getPartyName());
         if (party == null) return;
@@ -102,7 +92,7 @@ public class Parties implements Party {
             if (!p.isOnline()) continue;
             p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_DISBAND_SUCCESS));
         }
-        party.delete();
+        party.delete();*/
     }
 
     @Override
@@ -116,7 +106,7 @@ public class Parties implements Party {
 
     @Override
     public void removePlayer(Player owner, Player target) {
-        PartyPlayer pp = api.getPartyPlayer(target.getUniqueId());
+        /*PartyPlayer pp = api.getPartyPlayer(target.getUniqueId());
         if (pp == null) return;
         com.alessiodp.parties.api.interfaces.Party party = api.getParty(pp.getPartyName());
         if (party == null) return;
@@ -126,7 +116,7 @@ public class Parties implements Party {
             if (p == null) continue;
             if (!p.isOnline()) continue;
             p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_REMOVE_SUCCESS));
-        }
+        }*/
     }
 
     @Override

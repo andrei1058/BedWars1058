@@ -13,6 +13,7 @@ import com.andrei1058.bedwars.api.tasks.StartingTask;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.BedWarsTeam;
+import com.andrei1058.bedwars.arena.team.LegacyTeamAssigner;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import org.bukkit.Bukkit;
@@ -74,68 +75,12 @@ public class GameStartingTask implements Runnable, StartingTask {
     @Override
     public void run() {
         if (countdown == 0) {
-            //Check who is having parties
-            List<Player> skip = new ArrayList<>(), owners = new ArrayList<>();
-            for (Player p : getArena().getPlayers()) {
-                if (getParty().hasParty(p) && getParty().isOwner(p)) {
-                    owners.add(p);
-                }
+            if (BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_EXPERIMENTAL_TEAM_ASSIGNER)){
+                getArena().getTeamAssigner().assignTeams(getArena());
+            } else {
+                LegacyTeamAssigner.assignTeams(getArena());
             }
 
-            //Mix teams order
-            Collections.shuffle(getArena().getTeams());
-
-            //Team-up parties
-            for (Player p : getArena().getPlayers()) {
-                if (owners.contains(p)) {
-                    for (ITeam t : getArena().getTeams()) {
-                        if (skip.contains(p)) continue;
-                        if (t.getSize() + getParty().partySize(p) <= getArena().getMaxInTeam()) {
-                            skip.add(p);
-                            p.closeInventory();
-                            TeamAssignEvent e = new TeamAssignEvent(p, t, getArena());
-                            Bukkit.getPluginManager().callEvent(e);
-                            if (!e.isCancelled()) {
-                                t.addPlayers(p);
-                            }
-                            for (Player mem : getParty().getMembers(p)) {
-                                if (mem != p) {
-                                    IArena ia = Arena.getArenaByPlayer(mem);
-                                    if (ia == null) {
-                                        continue;
-                                    } else if (!ia.equals(getArena())) {
-                                        continue;
-                                    }
-                                    TeamAssignEvent ee = new TeamAssignEvent(p, t, getArena());
-                                    Bukkit.getPluginManager().callEvent(ee);
-                                    if (!e.isCancelled()) {
-                                        t.addPlayers(mem);
-                                    }
-                                    skip.add(mem);
-                                    mem.closeInventory();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            //Give a team to players without a party
-            for (Player p : getArena().getPlayers()) {
-                if (skip.contains(p)) continue;
-                ITeam addhere = getArena().getTeams().get(0);
-                for (ITeam t : getArena().getTeams()) {
-                    if (t.getMembers().size() < getArena().getMaxInTeam() && t.getMembers().size() < addhere.getMembers().size()) {
-                        addhere = t;
-                    }
-                }
-                TeamAssignEvent e = new TeamAssignEvent(p, addhere, getArena());
-                Bukkit.getPluginManager().callEvent(e);
-                if (!e.isCancelled()) {
-                    addhere.addPlayers(p);
-                }
-                p.closeInventory();
-            }
 
             //Color bed block if possible
             //Destroy bed if team is empty

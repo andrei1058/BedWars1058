@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.api.arena;
 
 import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
+import com.andrei1058.bedwars.api.arena.team.ITeamAssigner;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.region.Region;
@@ -460,4 +461,8 @@ public interface IArena {
     int getYKillHeight();
 
     Instant getStartTime();
+
+    ITeamAssigner getTeamAssigner();
+
+    void setTeamAssigner(ITeamAssigner teamAssigner);
 }

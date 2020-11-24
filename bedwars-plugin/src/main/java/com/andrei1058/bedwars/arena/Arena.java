@@ -8,6 +8,7 @@ import com.andrei1058.bedwars.api.arena.generator.GeneratorType;
 import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.shop.ShopHolo;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
+import com.andrei1058.bedwars.api.arena.team.ITeamAssigner;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.entity.Despawnable;
@@ -36,7 +37,6 @@ import com.andrei1058.bedwars.api.region.Region;
 import com.andrei1058.bedwars.listeners.dropshandler.PlayerDrops;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
-import com.andrei1058.bedwars.stats.PlayerStats;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.arena.tasks.GamePlayingTask;
 import com.andrei1058.bedwars.arena.tasks.GameRestartingTask;
@@ -144,6 +144,7 @@ public class Arena implements IArena {
     private Location respawnLocation, spectatorLocation, waitingLocation;
     private int yKillHeight;
     private Instant startTime;
+    private ITeamAssigner teamAssigner = new TeamAssigner();
 
     /**
      * Load an arena.
@@ -398,7 +399,15 @@ public class Arena implements IArena {
                     p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_DENIED_NOT_PARTY_LEADER));
                     return false;
                 }
-                if (getParty().partySize(p) > maxInTeam * getTeams().size() - getPlayers().size()) {
+                int partySize = (int) getParty().getMembers(p).stream().filter(member -> {
+                    IArena arena = Arena.getArenaByPlayer(member);
+                    if (arena == null) {
+                        return true;
+                    }
+                    return arena.isSpectator(member);
+                }).count();
+
+                if (partySize > maxInTeam * getTeams().size() - getPlayers().size()) {
                     p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_DENIED_PARTY_TOO_BIG));
                     return false;
                 }
@@ -406,9 +415,10 @@ public class Arena implements IArena {
                     if (mem == p) continue;
                     IArena a = Arena.getArenaByPlayer(mem);
                     if (a != null) {
-                        if (a.isPlayer(mem)) {
+                        /*if (a.isPlayer(mem)) {
                             a.removePlayer(mem, false);
-                        } else if (a.isSpectator(mem)) {
+                        } else */
+                        if (a.isSpectator(mem)) {
                             a.removeSpectator(mem, false);
                         }
                     }
@@ -842,8 +852,10 @@ public class Arena implements IArena {
         if (getParty().hasParty(p)) {
             if (getParty().isOwner(p)) {
                 if (status != GameState.restarting) {
-                    for (Player mem : new ArrayList<>(getParty().getMembers(p))) {
-                        mem.sendMessage(getMsg(mem, Messages.ARENA_LEAVE_PARTY_DISBANDED));
+                    if (getParty().isInternal()) {
+                        for (Player mem : new ArrayList<>(getParty().getMembers(p))) {
+                            mem.sendMessage(getMsg(mem, Messages.ARENA_LEAVE_PARTY_DISBANDED));
+                        }
                     }
                     getParty().disband(p);
 
@@ -964,8 +976,10 @@ public class Arena implements IArena {
         if (getParty().hasParty(p)) {
             if (getParty().isOwner(p)) {
                 if (status != GameState.restarting) {
-                    for (Player mem : new ArrayList<>(getParty().getMembers(p))) {
-                        mem.sendMessage(getMsg(mem, Messages.ARENA_LEAVE_PARTY_DISBANDED));
+                    if (getParty().isInternal()) {
+                        for (Player mem : new ArrayList<>(getParty().getMembers(p))) {
+                            mem.sendMessage(getMsg(mem, Messages.ARENA_LEAVE_PARTY_DISBANDED));
+                        }
                     }
                     getParty().disband(p);
                 }
@@ -2055,7 +2069,14 @@ public class Arena implements IArena {
      */
     public static boolean joinRandomArena(Player p) {
         List<IArena> arenas = getSorted(getArenas());
-        int amount = getParty().hasParty(p) ? getParty().getMembers(p).size() : 1;
+
+        int amount = getParty().hasParty(p) ? (int) getParty().getMembers(p).stream().filter(member -> {
+            IArena arena = Arena.getArenaByPlayer(member);
+            if (arena == null) {
+                return true;
+            }
+            return arena.isSpectator(member);
+        }).count() : 1;
 
         for (IArena a : arenas) {
             if (a.getPlayers().size() == a.getMaxPlayers()) continue;
@@ -2105,7 +2126,14 @@ public class Arena implements IArena {
 
         List<IArena> arenas = getSorted(getArenas());
 
-        int amount = getParty().hasParty(p) ? getParty().getMembers(p).size() : 1;
+        int amount = getParty().hasParty(p) ? (int) getParty().getMembers(p).stream().filter(member -> {
+            IArena arena = Arena.getArenaByPlayer(member);
+            if (arena == null) {
+                return true;
+            }
+            return arena.isSpectator(member);
+        }).count() : 1;
+
         String[] groups = group.split("\\+");
         for (IArena a : arenas) {
             if (a.getPlayers().size() == a.getMaxPlayers()) continue;
@@ -2419,5 +2447,19 @@ public class Arena implements IArena {
     @Override
     public Instant getStartTime() {
         return startTime;
+    }
+
+    @Override
+    public ITeamAssigner getTeamAssigner() {
+        return teamAssigner;
+    }
+
+    @Override
+    public void setTeamAssigner(ITeamAssigner teamAssigner) {
+        if (teamAssigner == null){
+            this.teamAssigner = new TeamAssigner();
+        } else {
+            this.teamAssigner = teamAssigner;
+        }
     }
 }

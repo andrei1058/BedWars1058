@@ -44,6 +44,7 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_ALLOW_PARTIES = "allow-parties";
 
     public static final String GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH = "lobby-items";
+    public static final String GENERAL_CONFIGURATION_EXPERIMENTAL_TEAM_ASSIGNER = "use-experimental-team-assigner";
 
     // Replace %path% with name
     public static final String GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL = GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH + ".%path%.material";
