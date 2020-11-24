@@ -9,6 +9,7 @@ import com.andrei1058.bedwars.configuration.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -17,6 +18,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import java.util.List;
 
 import static com.andrei1058.bedwars.BedWars.*;
 
@@ -105,6 +108,15 @@ public class BuyItem implements IBuyItem {
                 imm.addCustomEffect(new PotionEffect(PotionEffectType.getByName(stuff[0]), duration * 20, amplifier), false);
             }
             itemStack.setItemMeta(imm);
+
+            // potion display color based on NBT tag
+            if (yml.getString(path + ".potion-display") != null && !yml.getString(path + ".potion-display").isEmpty()) {
+                itemStack = nms.setTag(itemStack, "Potion", yml.getString(path + ".potion-display"));
+            }
+            // 1.16+ custom color
+            if (yml.getString(path + ".potion-color") != null && !yml.getString(path + ".potion-color").isEmpty()) {
+                itemStack = nms.setTag(itemStack, "CustomPotionColor", yml.getString(path + ".potion-color"));
+            }
         }
 
         if (yml.get(path + ".auto-equip") != null) {

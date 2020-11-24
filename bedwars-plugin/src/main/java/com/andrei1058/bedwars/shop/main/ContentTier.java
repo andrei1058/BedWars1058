@@ -12,6 +12,8 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.andrei1058.bedwars.BedWars.nms;
+
 @SuppressWarnings("WeakerAccess")
 public class ContentTier implements IContentTier {
 
@@ -50,7 +52,7 @@ public class ContentTier implements IContentTier {
             return;
         }
 
-        if (yml.getString(path + ConfigPath.SHOP_CONTENT_TIER_SETTINGS_CURRENCY).toLowerCase().isEmpty()) {
+        if (yml.getString(path + ConfigPath.SHOP_CONTENT_TIER_SETTINGS_CURRENCY).isEmpty()) {
             BedWars.plugin.getLogger().severe("Invalid currency at " + path);
             return;
         }
@@ -78,6 +80,15 @@ public class ContentTier implements IContentTier {
             if (yml.getBoolean(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_ENCHANTED)) {
                 itemStack = ShopManager.enchantItem(itemStack);
             }
+        }
+
+        // potion display color based on NBT tag
+        if (yml.getString(path + ".tier-item.potion-display") != null && !yml.getString(path + ".tier-item.potion-display").isEmpty()) {
+            itemStack = nms.setTag(itemStack, "Potion", yml.getString(path + ".tier-item.potion-display"));
+        }
+        // 1.16+ custom color
+        if (yml.getString(path + ".tier-item.potion-color") != null && !yml.getString(path + ".tier-item.potion-color").isEmpty()) {
+            itemStack = nms.setTag(itemStack, "CustomPotionColor", yml.getString(path + ".tier-item.potion-color"));
         }
 
         itemStack.setItemMeta(ShopManager.hideItemStuff(itemStack.getItemMeta()));

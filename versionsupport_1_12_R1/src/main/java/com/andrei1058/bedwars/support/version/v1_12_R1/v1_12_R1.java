@@ -404,6 +404,19 @@ public class v1_12_R1 extends VersionSupport {
     }
 
     @Override
+    public org.bukkit.inventory.ItemStack setTag(org.bukkit.inventory.ItemStack i, String key, String value) {
+        ItemStack itemStack = CraftItemStack.asNMSCopy(i);
+        NBTTagCompound tag = itemStack.getTag();
+        if (tag == null) {
+            tag = new NBTTagCompound();
+            itemStack.setTag(tag);
+        }
+
+        tag.setString(key, value);
+        return CraftItemStack.asBukkitCopy(itemStack);
+    }
+
+    @Override
     public boolean isCustomBedWarsItem(org.bukkit.inventory.ItemStack i) {
         ItemStack itemStack = CraftItemStack.asNMSCopy(i);
         NBTTagCompound tag = itemStack.getTag();

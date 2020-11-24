@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static com.andrei1058.bedwars.BedWars.nms;
+
 public class ShopCategory {
 
     private int slot;
@@ -66,6 +68,15 @@ public class ShopCategory {
             if (yml.getBoolean(path + ConfigPath.SHOP_CATEGORY_ITEM_ENCHANTED)) {
                 itemStack = ShopManager.enchantItem(itemStack);
             }
+        }
+
+        // potion display color based on NBT tag
+        if (yml.getString(path + ".category-item.potion-display") != null && !yml.getString(path + ".category-item.potion-display").isEmpty()) {
+            itemStack = nms.setTag(itemStack, "Potion", yml.getString(path + ".category-item.potion-display"));
+        }
+        // 1.16+ custom color
+        if (yml.getString(path + ".category-item.potion-color") != null && !yml.getString(path + ".category-item.potion-color").isEmpty()) {
+            itemStack = nms.setTag(itemStack, "CustomPotionColor", yml.getString(path + ".category-item.potion-color"));
         }
 
         itemStack.setItemMeta(ShopManager.hideItemStuff(itemStack.getItemMeta()));

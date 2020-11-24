@@ -384,6 +384,19 @@ public class v1_8_R3 extends VersionSupport {
     }
 
     @Override
+    public ItemStack setTag(ItemStack itemStack, String key, String value) {
+        net.minecraft.server.v1_8_R3.ItemStack is = CraftItemStack.asNMSCopy(itemStack);
+        NBTTagCompound tag = is.getTag();
+        if (tag == null) {
+            tag = new NBTTagCompound();
+            is.setTag(tag);
+        }
+
+        tag.setString(key, value);
+        return CraftItemStack.asBukkitCopy(is);
+    }
+
+    @Override
     public boolean isCustomBedWarsItem(org.bukkit.inventory.ItemStack i) {
         net.minecraft.server.v1_8_R3.ItemStack itemStack = CraftItemStack.asNMSCopy(i);
         if (itemStack == null) return false;

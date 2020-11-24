@@ -210,6 +210,8 @@ public abstract class VersionSupport {
      */
     public abstract ItemStack addCustomData(ItemStack i, String data);
 
+    public abstract ItemStack setTag(ItemStack itemStack, String key, String value);
+
     /**
      * Check if an item has a BedWars1058 NBTTag
      */
