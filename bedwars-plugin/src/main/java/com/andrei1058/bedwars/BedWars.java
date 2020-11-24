@@ -508,7 +508,7 @@ public class BedWars extends JavaPlugin {
                 Bukkit.getLogger().warning("Scoreboard title refresh interval is set to: " + titleRefreshInterval);
                 Bukkit.getLogger().warning("If you expect performance issues please increase its timer.");
             }
-            Bukkit.getScheduler().runTaskTimer(this, new SidebarTitleRefresh(), 32L, titleRefreshInterval);
+            Bukkit.getScheduler().runTaskTimerAsynchronously(this, new SidebarTitleRefresh(), 32L, titleRefreshInterval);
         }
 
         int healthAnimationInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_REFRESH);
@@ -520,7 +520,7 @@ public class BedWars extends JavaPlugin {
                 Bukkit.getLogger().warning("It is not recommended to use a value under 20 ticks.");
                 Bukkit.getLogger().warning("If you expect performance issues please increase its timer.");
             }
-            Bukkit.getScheduler().runTaskTimer(this, new SidebarLifeRefresh(), 40L, healthAnimationInterval);
+            Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new SidebarLifeRefresh(), 40L, healthAnimationInterval);
         }
 
         registerEvents(new ScoreboardListener());
