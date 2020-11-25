@@ -37,6 +37,16 @@ import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class DamageDeathMove implements Listener {
 
+    private final double tntJumpBarycenterAlterationInY;
+    private final double tntJumpStrengthReductionConstant;
+    private final double tntJumpYAxisReductionConstant;
+
+    public DamageDeathMove(){
+        this.tntJumpBarycenterAlterationInY = config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_BARYCENTER_IN_Y);
+        this.tntJumpStrengthReductionConstant = config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_STRENGTH_REDUCTION);
+        this.tntJumpYAxisReductionConstant = config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_Y_REDUCTION);
+    }
+
     @EventHandler
     public void onDamage(EntityDamageEvent e) {
         if (e.getEntity() instanceof Player) {
@@ -114,11 +124,11 @@ public class DamageDeathMove implements Listener {
                             damager = (Player) tnt.getSource();
                             // tnt jump. credits to feargames.it
                             LivingEntity damaged = (LivingEntity) e.getEntity();
-                            Vector distance = damaged.getLocation().subtract(0, 0.5, 0).toVector().subtract(tnt.getLocation().toVector());
+                            Vector distance = damaged.getLocation().subtract(0, tntJumpBarycenterAlterationInY, 0).toVector().subtract(tnt.getLocation().toVector());
                             Vector direction = distance.clone().normalize();
-                            double force = (tnt.getYield() / (3 + distance.length()));
+                            double force = (tnt.getYield() / (tntJumpStrengthReductionConstant + distance.length()));
                             Vector resultingForce = direction.clone().multiply(force);
-                            resultingForce.setY(resultingForce.getY() / (distance.length() + 2));
+                            resultingForce.setY(resultingForce.getY() / (distance.length() + tntJumpYAxisReductionConstant));
                             damaged.setVelocity(resultingForce);
                         } else return;
                     }

@@ -156,10 +156,16 @@ public class ConfigPath {
     public static final String SIGNS_STATUS_BLOCK_RESTARTING_MATERIAL = "status-block.restarting.material";
     public static final String SIGNS_STATUS_BLOCK_RESTARTING_DATA = "status-block.restarting.data";
 
-    public static final String GENERAL_PARTY_SETTINGS_PATH = "party-settings";
+    private static final String GENERAL_PARTY_SETTINGS_PATH = "party-settings";
     public static final String GENERAL_ENABLE_PARTY_CMD = GENERAL_PARTY_SETTINGS_PATH + ".enable-party-cmd";
     public static final String GENERAL_CONFIGURATION_ALLOW_PARTIES = GENERAL_PARTY_SETTINGS_PATH + ".allow-parties";
     public static final String GENERAL_ALESSIODP_PARTIES_RANK = GENERAL_PARTY_SETTINGS_PATH + ".alessioDP-choose-arena-rank";
+
+    private static final String GENERAL_TNT_JUMP_PATH = "tnt-jump-settings";
+    public static final String GENERAL_TNT_JUMP_BARYCENTER_IN_Y = GENERAL_TNT_JUMP_PATH + ".barycenter-alteration-in-y";
+    public static final String GENERAL_TNT_JUMP_STRENGTH_REDUCTION = GENERAL_TNT_JUMP_PATH + ".strength-reduction-constant";
+    public static final String GENERAL_TNT_JUMP_Y_REDUCTION = GENERAL_TNT_JUMP_PATH + ".y-axis-reduction-constant";
+
 
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_PATH = "performance-settings";
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_ROTATE_GEN = GENERAL_CONFIGURATION_PERFORMANCE_PATH + ".rotate-generators";
