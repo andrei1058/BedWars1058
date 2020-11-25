@@ -744,7 +744,7 @@ public class Arena implements IArena {
         if (status == GameState.starting && (maxInTeam > players.size() && teamuri || players.size() < minPlayers && !teamuri)) {
             changeStatus(GameState.waiting);
             for (Player on : players) {
-                on.sendMessage(getMsg(on, Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS));
+                on.sendMessage(getMsg(on, Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT));
             }
         } else if (status == GameState.playing) {
             int alive_teams = 0;
@@ -871,7 +871,7 @@ public class Arena implements IArena {
                     if (status == GameState.starting && (maxInTeam > players.size() && teamuri || players.size() < minPlayers && !teamuri)) {
                         changeStatus(GameState.waiting);
                         for (Player on : players) {
-                            on.sendMessage(getMsg(on, Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS));
+                            on.sendMessage(getMsg(on, Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT));
                         }
                     }
                 }
@@ -1327,6 +1327,13 @@ public class Arena implements IArena {
     public void setStatus(GameState status) {
         if (this.status != GameState.playing && status == GameState.playing) {
             startTime = Instant.now();
+        }
+        // if countdown cancelled
+        if (this.status == GameState.starting && status == GameState.waiting) {
+            for (Player player : getPlayers()) {
+                Language playerLang = Language.getPlayerLanguage(player);
+                nms.sendTitle(player, playerLang.m(Messages.ARENA_STATUS_START_COUNTDOWN_CANCELLED_TITLE), playerLang.m(Messages.ARENA_STATUS_START_COUNTDOWN_CANCELLED_SUB_TITLE), 0, 40, 0);
+            }
         }
         this.status = status;
     }
@@ -2458,7 +2465,7 @@ public class Arena implements IArena {
 
     @Override
     public void setTeamAssigner(ITeamAssigner teamAssigner) {
-        if (teamAssigner == null){
+        if (teamAssigner == null) {
             this.teamAssigner = new TeamAssigner();
         } else {
             this.teamAssigner = teamAssigner;

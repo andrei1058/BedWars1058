@@ -8,6 +8,7 @@ import com.andrei1058.bedwars.api.arena.generator.GeneratorType;
 import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.tasks.StartingTask;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.api.language.Messages;
@@ -71,7 +72,7 @@ public class GameStartingTask implements Runnable, StartingTask {
     @Override
     public void run() {
         if (countdown == 0) {
-            if (BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_EXPERIMENTAL_TEAM_ASSIGNER)){
+            if (BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_EXPERIMENTAL_TEAM_ASSIGNER)) {
                 getArena().getTeamAssigner().assignTeams(getArena());
             } else {
                 LegacyTeamAssigner.assignTeams(getArena());
@@ -132,21 +133,11 @@ public class GameStartingTask implements Runnable, StartingTask {
             } else {
                 Sounds.playSound(ConfigPath.SOUNDS_COUNTDOWN_TICK, getArena().getPlayers());
             }
-            if (getCountdown() >= 10) {
-                for (Player p : getArena().getPlayers()) {
-                    nms.sendTitle(p, "§a" + getCountdown(), null, 0, 20, 0);
-                    p.sendMessage(getMsg(p, Messages.ARENA_STATUS_START_COUNTDOWN).replace("{time}", String.valueOf(getCountdown())));
-                }
-            } else if (getCountdown() > 3) {
-                for (Player p : getArena().getPlayers()) {
-                    nms.sendTitle(p, "§e" + getCountdown(), null, 0, 20, 0);
-                    p.sendMessage(getMsg(p, Messages.ARENA_STATUS_START_COUNTDOWN).replace("{time}", "§c" + getCountdown()));
-                }
-            } else {
-                for (Player p : getArena().getPlayers()) {
-                    nms.sendTitle(p, "§c" + getCountdown(), null, 0, 20, 0);
-                    p.sendMessage(getMsg(p, Messages.ARENA_STATUS_START_COUNTDOWN).replace("{time}", "§c" + getCountdown()));
-                }
+            for (Player player : getArena().getPlayers()) {
+                Language playerLang = Language.getPlayerLanguage(player);
+                String[] titleSubtitle = Language.getCountDownTitle(playerLang, getCountdown());
+                nms.sendTitle(player, titleSubtitle[0], titleSubtitle[1], 0, 20, 0);
+                player.sendMessage(getMsg(player, Messages.ARENA_STATUS_START_COUNTDOWN_CHAT).replace("{time}", String.valueOf(getCountdown())));
             }
         }
         countdown--;

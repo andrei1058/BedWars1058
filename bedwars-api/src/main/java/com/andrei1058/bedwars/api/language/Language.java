@@ -315,8 +315,8 @@ public class Language extends ConfigManager {
      */
     public static boolean setPlayerLanguage(UUID uuid, String iso) {
 
-        if (iso == null){
-            if (langByPlayer.containsKey(uuid)){
+        if (iso == null) {
+            if (langByPlayer.containsKey(uuid)) {
                 Player player = Bukkit.getPlayer(uuid);
                 if (player != null && player.isOnline()) {
                     PlayerLangChangeEvent e = new PlayerLangChangeEvent(player, langByPlayer.get(uuid).iso, getDefaultLanguage().iso);
@@ -351,6 +351,19 @@ public class Language extends ConfigManager {
             langByPlayer.put(uuid, newLang);
         }
         return true;
+    }
+
+    public static String[] getCountDownTitle(Language playerLang, int second) {
+        String[] result = new String[2];
+        result[0] = ChatColor.translateAlternateColorCodes('&', playerLang.getYml().get(Messages.ARENA_STATUS_START_COUNTDOWN_TITLE + "-" + second, playerLang.getString(Messages.ARENA_STATUS_START_COUNTDOWN_TITLE)).toString().replace("{second}", String.valueOf(second)));
+        if (result[0].isEmpty()) {
+            result[0] = " ";
+        }
+        result[1] = ChatColor.translateAlternateColorCodes('&', playerLang.getYml().get(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-" + second, playerLang.getString(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE)).toString().replace("{second}", String.valueOf(second)));
+        if (result[1].isEmpty()) {
+            result[1] = " ";
+        }
+        return result;
     }
 
     /**
