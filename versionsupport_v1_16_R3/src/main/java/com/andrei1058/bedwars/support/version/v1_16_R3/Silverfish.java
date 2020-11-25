@@ -8,7 +8,6 @@ import net.minecraft.server.v1_16_R3.EntitySilverfish;
 import net.minecraft.server.v1_16_R3.EntityTypes;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftLivingEntity;
 import org.bukkit.entity.LivingEntity;
@@ -26,8 +25,8 @@ public class Silverfish extends EntitySilverfish {
     }
 
     @SuppressWarnings("unchecked")
-    public Silverfish(EntityTypes entityTypes, World world) {
-        super(entityTypes, ((CraftWorld)world).getHandle());
+    public Silverfish(EntityTypes entityTypes, net.minecraft.server.v1_16_R3.World world) {
+        super(entityTypes, world);
     }
 
     @Override
