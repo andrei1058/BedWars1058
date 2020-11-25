@@ -13,6 +13,7 @@ import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.server.v1_16_R3.*;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -25,6 +26,7 @@ import org.bukkit.craftbukkit.v1_16_R3.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftTNTPrimed;
 import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.inventory.InventoryEvent;
@@ -387,7 +389,7 @@ public class v1_16_R3 extends VersionSupport {
     @Override
     public void registerTntWhitelist() {
         try {
-            Field field = BlockBase.class.getDeclaredField("durability");
+            Field field = net.minecraft.server.v1_16_R3.BlockBase.class.getDeclaredField("durability");
             field.setAccessible(true);
             field.set(Blocks.END_STONE, 12f);
             field.set(Blocks.GLASS, 300f);
@@ -429,7 +431,7 @@ public class v1_16_R3 extends VersionSupport {
 
     @Override
     public org.bukkit.inventory.ItemStack setTag(org.bukkit.inventory.ItemStack itemStack, String key, String value) {
-        ItemStack is = CraftItemStack.asNMSCopy(itemStack);
+        net.minecraft.server.v1_16_R3.ItemStack is = CraftItemStack.asNMSCopy(itemStack);
         NBTTagCompound tag = is.getTag();
         if (tag == null) {
             tag = new NBTTagCompound();

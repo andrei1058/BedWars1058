@@ -1,11 +1,14 @@
 package com.andrei1058.bedwars.support.version.v1_16_R3;
-
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.support.version.common.VersionCommon;
+import net.minecraft.server.v1_16_R3.*;
+import net.minecraft.server.v1_16_R3.EntitySilverfish;
+import net.minecraft.server.v1_16_R3.EntityTypes;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftLivingEntity;
 import org.bukkit.entity.LivingEntity;
@@ -17,14 +20,14 @@ public class Silverfish extends EntitySilverfish {
 
     private ITeam team;
 
-    private Silverfish(EntityTypes<? extends EntitySilverfish> entitytypes, World world, ITeam bedWarsTeam) {
+    private Silverfish(EntityTypes<? extends EntitySilverfish> entitytypes, net.minecraft.server.v1_16_R3.World world, ITeam bedWarsTeam) {
         super(entitytypes, world);
         this.team = bedWarsTeam;
     }
 
     @SuppressWarnings("unchecked")
     public Silverfish(EntityTypes entityTypes, World world) {
-        super(entityTypes, world);
+        super(entityTypes, ((CraftWorld)world).getHandle());
     }
 
     @Override

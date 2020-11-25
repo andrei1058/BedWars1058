@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.support.version.common.VersionCommon;
+import net.minecraft.server.v1_16_R3.*;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
@@ -11,9 +12,7 @@ import org.bukkit.craftbukkit.v1_16_R3.entity.CraftLivingEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
-@SuppressWarnings("ALL")
 public class IGolem extends EntityIronGolem {
-
     private ITeam team;
 
     private IGolem(EntityTypes<? extends EntityIronGolem> entitytypes, World world, ITeam bedWarsTeam) {
@@ -34,7 +33,7 @@ public class IGolem extends EntityIronGolem {
         this.goalSelector.a(4, new PathfinderGoalRandomLookaround(this));
         this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, 20, true, false, player -> {
             return ((EntityHuman)player).isAlive() && !team.wasMember(((EntityHuman)player).getUniqueID()) && !team.getArena().isReSpawning(((EntityHuman)player).getUniqueID())
-            && !team.getArena().isSpectator(((EntityHuman)player).getUniqueID());
+                    && !team.getArena().isSpectator(((EntityHuman)player).getUniqueID());
         }));
         this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget(this, IGolem.class, 20, true, false, golem -> {
             return ((IGolem)golem).getTeam() != team;
