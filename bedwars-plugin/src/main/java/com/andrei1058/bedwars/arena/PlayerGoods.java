@@ -10,7 +10,6 @@ import org.bukkit.potion.PotionEffect;
 
 import java.util.*;
 
-import static com.andrei1058.bedwars.BedWars.nms;
 import static com.andrei1058.bedwars.BedWars.plugin;
 
 /**

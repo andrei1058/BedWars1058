@@ -1,10 +1,10 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 
 import com.andrei1058.bedwars.api.BedWars;
-import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
+import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.configuration.Permissions;
@@ -15,9 +15,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-import static com.andrei1058.bedwars.listeners.BreakPlace.addBuildSession;
-import static com.andrei1058.bedwars.listeners.BreakPlace.isBuildSession;
-import static com.andrei1058.bedwars.listeners.BreakPlace.removeBuildSession;
+import static com.andrei1058.bedwars.listeners.BreakPlace.*;
 
 public class Build extends SubCommand {
 

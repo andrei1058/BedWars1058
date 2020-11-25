@@ -1,8 +1,8 @@
 package com.andrei1058.bedwars.commands.rejoin;
 
-import com.andrei1058.bedwars.arena.ReJoin;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.arena.ReJoin;
 import com.andrei1058.bedwars.configuration.Permissions;
 import com.andrei1058.bedwars.configuration.Sounds;
 import org.bukkit.command.CommandSender;

@@ -26,7 +26,8 @@ import java.util.LinkedList;
 import java.util.UUID;
 import java.util.logging.Level;
 
-import static com.andrei1058.bedwars.BedWars.*;
+import static com.andrei1058.bedwars.BedWars.nms;
+import static com.andrei1058.bedwars.BedWars.plugin;
 
 public class UpgradesManager {
 

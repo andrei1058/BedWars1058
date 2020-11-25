@@ -25,7 +25,8 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
-import static com.andrei1058.bedwars.BedWars.*;
+import static com.andrei1058.bedwars.BedWars.config;
+import static com.andrei1058.bedwars.BedWars.plugin;
 import static com.andrei1058.bedwars.commands.Misc.createArmorStand;
 
 public class SetupSession implements ISetupSession {

@@ -9,7 +9,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import static com.andrei1058.bedwars.BedWars.*;
+import static com.andrei1058.bedwars.BedWars.mainCmd;
+import static com.andrei1058.bedwars.BedWars.plugin;
 
 
 public class JoinListenerShared implements Listener {

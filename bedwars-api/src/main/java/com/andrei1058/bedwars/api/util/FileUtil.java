@@ -1,7 +1,6 @@
 package com.andrei1058.bedwars.api.util;
 
 import com.andrei1058.bedwars.api.server.VersionSupport;
-import org.bukkit.WorldType;
 
 import java.io.File;
 import java.io.FileInputStream;

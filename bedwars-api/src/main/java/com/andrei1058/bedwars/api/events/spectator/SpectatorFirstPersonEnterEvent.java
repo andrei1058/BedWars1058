@@ -1,7 +1,6 @@
 package com.andrei1058.bedwars.api.events.spectator;
 
 import com.andrei1058.bedwars.api.arena.IArena;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;

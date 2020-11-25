@@ -2,12 +2,15 @@ package com.andrei1058.bedwars.api;
 
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.shop.IContentTier;
+import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.levels.Level;
 import com.andrei1058.bedwars.api.party.Party;
-import com.andrei1058.bedwars.api.server.*;
-import com.andrei1058.bedwars.api.command.ParentCommand;
+import com.andrei1058.bedwars.api.server.ISetupSession;
+import com.andrei1058.bedwars.api.server.RestoreAdapter;
+import com.andrei1058.bedwars.api.server.ServerType;
+import com.andrei1058.bedwars.api.server.VersionSupport;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

@@ -6,10 +6,10 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.server.ISetupSession;
 import com.andrei1058.bedwars.api.server.RestoreAdapter;
 import com.andrei1058.bedwars.api.server.ServerType;
-import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.api.util.FileUtil;
-import com.andrei1058.bedwars.maprestore.internal.files.WorldZipper;
 import com.andrei1058.bedwars.api.util.ZipFileUtil;
+import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.maprestore.internal.files.WorldZipper;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Item;
@@ -21,7 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.andrei1058.bedwars.BedWars.*;
+import static com.andrei1058.bedwars.BedWars.config;
+import static com.andrei1058.bedwars.BedWars.plugin;
 
 public class InternalAdapter extends RestoreAdapter {
 
