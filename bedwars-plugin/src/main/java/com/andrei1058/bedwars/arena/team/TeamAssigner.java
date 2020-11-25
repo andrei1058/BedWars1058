@@ -25,7 +25,9 @@ public class TeamAssigner implements ITeamAssigner {
 
             List<Player> members;
             for (Player player : arena.getPlayers()) {
-                members = new ArrayList<>(BedWars.getParty().getMembers(player));
+                members = BedWars.getParty().getMembers(player);
+                if (members == null) continue;
+                members = new ArrayList<>(members);
                 if (members.isEmpty()) continue;
                 members.removeIf(member -> !arena.isPlayer(member));
                 if (members.isEmpty()) continue;
