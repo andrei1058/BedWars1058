@@ -41,7 +41,6 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD = "bungee-settings.restart-cmd";
     public static final String GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS = "bungee-settings.lobby-sockets";
     public static final String GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID = "bungee-settings.server-id";
-    public static final String GENERAL_CONFIGURATION_ALLOW_PARTIES = "allow-parties";
 
     public static final String GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH = "lobby-items";
     public static final String GENERAL_CONFIGURATION_EXPERIMENTAL_TEAM_ASSIGNER = "use-experimental-team-assigner";
@@ -157,7 +156,10 @@ public class ConfigPath {
     public static final String SIGNS_STATUS_BLOCK_RESTARTING_MATERIAL = "status-block.restarting.material";
     public static final String SIGNS_STATUS_BLOCK_RESTARTING_DATA = "status-block.restarting.data";
 
-    public static final String GENERAL_ENABLE_PARTY_CMD = "enable-party-cmd";
+    public static final String GENERAL_PARTY_SETTINGS_PATH = "party-settings";
+    public static final String GENERAL_ENABLE_PARTY_CMD = GENERAL_PARTY_SETTINGS_PATH + ".enable-party-cmd";
+    public static final String GENERAL_CONFIGURATION_ALLOW_PARTIES = GENERAL_PARTY_SETTINGS_PATH + ".allow-parties";
+    public static final String GENERAL_ALESSIODP_PARTIES_RANK = GENERAL_PARTY_SETTINGS_PATH + ".alessioDP-choose-arena-rank";
 
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_PATH = "performance-settings";
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_ROTATE_GEN = GENERAL_CONFIGURATION_PERFORMANCE_PATH + ".rotate-generators";
@@ -170,16 +172,16 @@ public class ConfigPath {
     public static final String SHOP_SPECIAL_SILVERFISH_MATERIAL = SHOP_SPECIALS_PATH + ".silverfish.material";
     public static final String SHOP_SPECIAL_SILVERFISH_DATA = SHOP_SPECIALS_PATH + ".silverfish.data";
     public static final String SHOP_SPECIAL_SILVERFISH_HEALTH = SHOP_SPECIALS_PATH + ".silverfish.health";
-    public static final String SHOP_SPECIAL_SILVERFISH_DAMAGE= SHOP_SPECIALS_PATH + ".silverfish.damage";
-    public static final String SHOP_SPECIAL_SILVERFISH_SPEED= SHOP_SPECIALS_PATH + ".silverfish.speed";
-    public static final String SHOP_SPECIAL_SILVERFISH_DESPAWN= SHOP_SPECIALS_PATH + ".silverfish.despawn";
+    public static final String SHOP_SPECIAL_SILVERFISH_DAMAGE = SHOP_SPECIALS_PATH + ".silverfish.damage";
+    public static final String SHOP_SPECIAL_SILVERFISH_SPEED = SHOP_SPECIALS_PATH + ".silverfish.speed";
+    public static final String SHOP_SPECIAL_SILVERFISH_DESPAWN = SHOP_SPECIALS_PATH + ".silverfish.despawn";
 
     public static final String SHOP_SPECIAL_IRON_GOLEM_ENABLE = SHOP_SPECIALS_PATH + ".iron-golem.enable";
     public static final String SHOP_SPECIAL_IRON_GOLEM_MATERIAL = SHOP_SPECIALS_PATH + ".iron-golem.material";
     public static final String SHOP_SPECIAL_IRON_GOLEM_DATA = SHOP_SPECIALS_PATH + ".iron-golem.data";
     public static final String SHOP_SPECIAL_IRON_GOLEM_HEALTH = SHOP_SPECIALS_PATH + ".iron-golem.health";
-    public static final String SHOP_SPECIAL_IRON_GOLEM_DESPAWN= SHOP_SPECIALS_PATH + ".iron-golem.despawn";
-    public static final String SHOP_SPECIAL_IRON_GOLEM_SPEED= SHOP_SPECIALS_PATH + ".iron-golem.speed";
+    public static final String SHOP_SPECIAL_IRON_GOLEM_DESPAWN = SHOP_SPECIALS_PATH + ".iron-golem.despawn";
+    public static final String SHOP_SPECIAL_IRON_GOLEM_SPEED = SHOP_SPECIALS_PATH + ".iron-golem.speed";
 
     public static final String SHOP_SETTINGS_QUICK_BUY_CATEGORY_PATH = SHOP_SETTINGS_PATH + ".quick-buy-category";
     public static final String SHOP_SETTINGS_QUICK_BUY_BUTTON_MATERIAL = SHOP_SETTINGS_QUICK_BUY_CATEGORY_PATH + ".material";

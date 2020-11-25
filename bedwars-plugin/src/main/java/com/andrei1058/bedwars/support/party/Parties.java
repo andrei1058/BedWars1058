@@ -2,6 +2,8 @@ package com.andrei1058.bedwars.support.party;
 
 import com.alessiodp.parties.api.interfaces.PartiesAPI;
 import com.alessiodp.parties.api.interfaces.PartyPlayer;
+import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.party.Party;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -14,6 +16,7 @@ public class Parties implements Party {
 
     //Support for Parties by AlessioDP
     private final PartiesAPI api = com.alessiodp.parties.api.Parties.getApi();
+    private static final int requiredRankToSelect = BedWars.config.getInt(ConfigPath.GENERAL_ALESSIODP_PARTIES_RANK);
 
     @Override
     public boolean hasParty(Player p) {
@@ -33,7 +36,7 @@ public class Parties implements Party {
         com.alessiodp.parties.api.interfaces.Party party = api.getParty(pp.getPartyName());
         if (party == null) return false;
         if (party.getLeader() == null) return false;
-        return party.getLeader().equals(p.getUniqueId());
+        return pp.getRank() >= requiredRankToSelect;
     }
 
     @Override
