@@ -75,6 +75,9 @@ public class MainConfig extends ConfigManager {
         yml.addDefault(ConfigPath.GENERAL_TNT_JUMP_BARYCENTER_IN_Y, 0.5);
         yml.addDefault(ConfigPath.GENERAL_TNT_JUMP_STRENGTH_REDUCTION, 3);
         yml.addDefault(ConfigPath.GENERAL_TNT_JUMP_Y_REDUCTION, 2);
+        yml.addDefault(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_SELF, 1);
+        yml.addDefault(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_TEAMMATES, 5);
+        yml.addDefault(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_OTHERS, 10);
         //
         yml.addDefault("database.enable", false);
         yml.addDefault("database.host", "localhost");
@@ -228,19 +231,19 @@ public class MainConfig extends ConfigManager {
         if (yml.get("server-name") != null) {
             set(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID, yml.get("server-name"));
         }
-        if (yml.get("lobby-scoreboard") != null){
+        if (yml.get("lobby-scoreboard") != null) {
             set(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR, yml.getBoolean("lobby-scoreboard"));
             set("lobby-scoreboard", null);
         }
-        if (yml.get("game-scoreboard") != null){
+        if (yml.get("game-scoreboard") != null) {
             set(ConfigPath.SB_CONFIG_SIDEBAR_USE_GAME_SIDEBAR, yml.getBoolean("game-scoreboard"));
             set("game-scoreboard", null);
         }
-        if (yml.get("enable-party-cmd") != null){
+        if (yml.get("enable-party-cmd") != null) {
             set(ConfigPath.GENERAL_ENABLE_PARTY_CMD, yml.getBoolean("enable-party-cmd"));
             set("enable-party-cmd", null);
         }
-        if (yml.get("allow-parties") != null){
+        if (yml.get("allow-parties") != null) {
             set(ConfigPath.GENERAL_CONFIGURATION_ALLOW_PARTIES, yml.getBoolean("allow-parties"));
             set("allow-parties", null);
         }

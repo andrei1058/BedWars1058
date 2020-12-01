@@ -42,11 +42,17 @@ public class DamageDeathMove implements Listener {
     private final double tntJumpBarycenterAlterationInY;
     private final double tntJumpStrengthReductionConstant;
     private final double tntJumpYAxisReductionConstant;
+    private final double tntDamageSelf;
+    private final double tntDamageTeammates;
+    private final double tntDamageOthers;
 
-    public DamageDeathMove(){
+    public DamageDeathMove() {
         this.tntJumpBarycenterAlterationInY = config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_BARYCENTER_IN_Y);
         this.tntJumpStrengthReductionConstant = config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_STRENGTH_REDUCTION);
         this.tntJumpYAxisReductionConstant = config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_Y_REDUCTION);
+        this.tntDamageSelf = config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_SELF);
+        this.tntDamageTeammates = config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_TEAMMATES);
+        this.tntDamageOthers = config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_OTHERS);
     }
 
     @EventHandler
@@ -122,8 +128,24 @@ public class DamageDeathMove implements Listener {
                     TNTPrimed tnt = (TNTPrimed) e.getDamager();
                     if (tnt.getSource() != null) {
                         if (tnt.getSource() instanceof Player) {
-                            e.setDamage(1);
                             damager = (Player) tnt.getSource();
+                            if (damager.equals(p)) {
+                                if (tntDamageSelf > -1) {
+                                    e.setDamage(tntDamageSelf);
+                                }
+                            } else {
+                                ITeam currentTeam = a.getTeam(p);
+                                ITeam damagerTeam = a.getTeam(damager);
+                                if (currentTeam.equals(damagerTeam)) {
+                                    if (tntDamageTeammates > -1) {
+                                        e.setDamage(tntDamageTeammates);
+                                    }
+                                } else {
+                                    if (tntDamageOthers > -1) {
+                                        e.setDamage(tntDamageOthers);
+                                    }
+                                }
+                            }
                             // tnt jump. credits to feargames.it
                             LivingEntity damaged = (LivingEntity) e.getEntity();
                             Vector distance = damaged.getLocation().subtract(0, tntJumpBarycenterAlterationInY, 0).toVector().subtract(tnt.getLocation().toVector());
