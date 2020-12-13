@@ -133,6 +133,14 @@ public class DamageDeathMove implements Listener {
                                 if (tntDamageSelf > -1) {
                                     e.setDamage(tntDamageSelf);
                                 }
+                                // tnt jump. credits to feargames.it
+                                LivingEntity damaged = (LivingEntity) e.getEntity();
+                                Vector distance = damaged.getLocation().subtract(0, tntJumpBarycenterAlterationInY, 0).toVector().subtract(tnt.getLocation().toVector());
+                                Vector direction = distance.clone().normalize();
+                                double force = ((tnt.getYield() * tnt.getYield()) / (tntJumpStrengthReductionConstant + distance.length()));
+                                Vector resultingForce = direction.clone().multiply(force);
+                                resultingForce.setY(resultingForce.getY() / (distance.length() + tntJumpYAxisReductionConstant));
+                                damaged.setVelocity(resultingForce);
                             } else {
                                 ITeam currentTeam = a.getTeam(p);
                                 ITeam damagerTeam = a.getTeam(damager);
@@ -146,14 +154,6 @@ public class DamageDeathMove implements Listener {
                                     }
                                 }
                             }
-                            // tnt jump. credits to feargames.it
-                            LivingEntity damaged = (LivingEntity) e.getEntity();
-                            Vector distance = damaged.getLocation().subtract(0, tntJumpBarycenterAlterationInY, 0).toVector().subtract(tnt.getLocation().toVector());
-                            Vector direction = distance.clone().normalize();
-                            double force = (tnt.getYield() / (tntJumpStrengthReductionConstant + distance.length()));
-                            Vector resultingForce = direction.clone().multiply(force);
-                            resultingForce.setY(resultingForce.getY() / (distance.length() + tntJumpYAxisReductionConstant));
-                            damaged.setVelocity(resultingForce);
                         } else return;
                     }
                 } else if ((e.getDamager() instanceof Silverfish) || (e.getDamager() instanceof IronGolem)) {
