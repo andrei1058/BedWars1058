@@ -775,6 +775,8 @@ public class Arena implements IArena {
             } else if (alive_teams == 0) {
                 Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> changeStatus(GameState.restarting), 10L);
             } else {
+                //ReJoin feature
+                new ReJoin(p, this, team, cacheList);
                 // pvp log out
                 if (team != null) {
                     ITeam killerTeam = getTeam(lastDamager);
@@ -787,8 +789,6 @@ public class Arena implements IArena {
                         } else {
                             message = Messages.PLAYER_DIE_PVP_LOG_OUT_REGULAR;
                             cause = PlayerKillEvent.PlayerKillCause.PLAYER_DISCONNECT;
-                            //ReJoin feature
-                            new ReJoin(p, this, team, cacheList);
                         }
                         PlayerKillEvent event = new PlayerKillEvent(this, p, lastDamager, player -> Language.getMsg(player, message), cause);
                         for (Player inGame : getPlayers()) {

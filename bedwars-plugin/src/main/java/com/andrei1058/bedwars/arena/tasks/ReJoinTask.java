@@ -25,7 +25,7 @@ public class ReJoinTask implements Runnable {
     public ReJoinTask(IArena arena, ITeam bedWarsTeam) {
         this.arena = arena;
         this.bedWarsTeam = bedWarsTeam;
-        task = Bukkit.getScheduler().runTaskLater(BedWars.plugin, this, BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_REJOIN_TIME) * 20);
+        task = Bukkit.getScheduler().runTaskLater(BedWars.plugin, this, BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_REJOIN_TIME) * 20L);
     }
 
     @Override
