@@ -9,6 +9,7 @@ import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.util.FileUtil;
 import com.andrei1058.bedwars.api.util.ZipFileUtil;
 import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.arena.VoidChunkGenerator;
 import com.andrei1058.bedwars.maprestore.internal.files.WorldZipper;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
@@ -26,15 +27,15 @@ import static com.andrei1058.bedwars.BedWars.plugin;
 
 public class InternalAdapter extends RestoreAdapter {
 
-    private static final String LEGACY_GENERATOR_SETTINGS = "1;0;1";
-    private static final String V1_13_GENERATOR_SETTINGS = "{\"layers\": [{\"block\": \"air\", \"height\": 1}, {\"block\": \"air\", \"height\": 1}], \"biome\":\"plains\"}";
-    private static final String V1_16_GENERATOR_SETTINGS = "{\"biome\":\"minecraft:plains\",\"layers\":[{\"block\":\"minecraft:air\",\"height\":1}],\"structures\":{\"structures\":{}}}";
+    //private static final String LEGACY_GENERATOR_SETTINGS = "1;0;1";
+    //private static final String V1_13_GENERATOR_SETTINGS = "{\"layers\": [{\"block\": \"air\", \"height\": 1}, {\"block\": \"air\", \"height\": 1}], \"biome\":\"plains\"}";
+    //private static final String V1_16_GENERATOR_SETTINGS = "{\"biome\":\"minecraft:plains\",\"layers\":[{\"block\":\"minecraft:air\",\"height\":1}],\"structures\":{\"structures\":{}}}";
 
     public static File backupFolder = new File(BedWars.plugin.getDataFolder() + "/Cache");
-    private final String generator =
+    /*private final String generator =
             BedWars.nms.getVersion() > 7 ? V1_16_GENERATOR_SETTINGS :
             BedWars.nms.getVersion() > 5 ? V1_13_GENERATOR_SETTINGS :
-            LEGACY_GENERATOR_SETTINGS;
+            LEGACY_GENERATOR_SETTINGS;*/
 
     public InternalAdapter(Plugin plugin) {
         super(plugin);
@@ -79,9 +80,10 @@ public class InternalAdapter extends RestoreAdapter {
 
                 Bukkit.getScheduler().runTask(plugin, () -> {
                     WorldCreator wc = new WorldCreator(a.getWorldName());
-                    wc.type(WorldType.FLAT);
-                    wc.generatorSettings(generator);
+                    //wc.type(WorldType.FLAT);
+                    //wc.generatorSettings(generator);
                     wc.generateStructures(false);
+                    wc.generator(new VoidChunkGenerator());
                     World w = Bukkit.createWorld(wc);
                     w.setKeepSpawnInMemory(true);
                     w.setAutoSave(false);
@@ -141,8 +143,9 @@ public class InternalAdapter extends RestoreAdapter {
                 }
             }
             WorldCreator wc = new WorldCreator(s.getWorldName());
-            wc.type(WorldType.FLAT);
-            wc.generatorSettings(generator);
+            //wc.type(WorldType.FLAT);
+            //wc.generatorSettings(generator);
+            wc.generator(new VoidChunkGenerator());
             wc.generateStructures(false);
             Bukkit.getScheduler().runTask(getOwner(), () -> {
                 try {
