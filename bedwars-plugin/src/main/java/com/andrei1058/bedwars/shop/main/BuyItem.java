@@ -78,6 +78,14 @@ public class BuyItem implements IBuyItem {
         }
 
         if (yml.get(path + ".potion") != null && (itemStack.getType() == Material.POTION)) {
+            // potion display color based on NBT tag
+            if (yml.getString(path + ".potion-display") != null && !yml.getString(path + ".potion-display").isEmpty()) {
+                itemStack = nms.setTag(itemStack, "Potion", yml.getString(path + ".potion-display"));
+            }
+            // 1.16+ custom color
+            if (yml.getString(path + ".potion-color") != null && !yml.getString(path + ".potion-color").isEmpty()) {
+                itemStack = nms.setTag(itemStack, "CustomPotionColor", yml.getString(path + ".potion-color"));
+            }
             PotionMeta imm = (PotionMeta) itemStack.getItemMeta();
             String[] enchant = yml.getString(path + ".potion").split(",");
             for (String enc : enchant) {
@@ -107,14 +115,6 @@ public class BuyItem implements IBuyItem {
             }
             itemStack.setItemMeta(imm);
 
-            // potion display color based on NBT tag
-            if (yml.getString(path + ".potion-display") != null && !yml.getString(path + ".potion-display").isEmpty()) {
-                itemStack = nms.setTag(itemStack, "Potion", yml.getString(path + ".potion-display"));
-            }
-            // 1.16+ custom color
-            if (yml.getString(path + ".potion-color") != null && !yml.getString(path + ".potion-color").isEmpty()) {
-                itemStack = nms.setTag(itemStack, "CustomPotionColor", yml.getString(path + ".potion-color"));
-            }
         }
 
         if (yml.get(path + ".auto-equip") != null) {
