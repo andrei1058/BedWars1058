@@ -112,10 +112,11 @@ public class BuyItem implements IBuyItem {
                     }
                 }
                 imm.addCustomEffect(new PotionEffect(PotionEffectType.getByName(stuff[0].toUpperCase()), duration * 20, amplifier), true);
-                imm.setMainEffect(PotionEffectType.getByName(stuff[0].toUpperCase()));
             }
             itemStack.setItemMeta(imm);
-
+            if (!imm.getCustomEffects().isEmpty()) {
+                itemStack = BedWars.nms.setPotionBase(itemStack, imm.getCustomEffects().get(0).getType().toString());
+            }
         }
 
         if (yml.get(path + ".auto-equip") != null) {

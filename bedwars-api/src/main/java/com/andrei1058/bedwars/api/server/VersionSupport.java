@@ -17,7 +17,9 @@ import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,6 +48,8 @@ public abstract class VersionSupport {
             e.printStackTrace();
         }
     }
+
+    public abstract ItemStack setPotionBase(ItemStack itemStack, String potionType);
 
     /**
      * Register a new command as bukkit command
@@ -337,6 +341,7 @@ public abstract class VersionSupport {
 
     /**
      * Get player head with skin.
+     *
      * @param copyTagFrom will copy nbt tag from this item.
      */
     public abstract ItemStack getPlayerHead(Player player, @Nullable ItemStack copyTagFrom);
@@ -387,11 +392,11 @@ public abstract class VersionSupport {
         return (byte) ((value * 256.0F) / 360.0F);
     }
 
-    public void spigotShowPlayer(Player victim, Player receiver){
+    public void spigotShowPlayer(Player victim, Player receiver) {
         receiver.showPlayer(victim);
     }
 
-    public void spigotHidePlayer(Player victim, Player receiver){
+    public void spigotHidePlayer(Player victim, Player receiver) {
         receiver.hidePlayer(victim);
     }
 }
