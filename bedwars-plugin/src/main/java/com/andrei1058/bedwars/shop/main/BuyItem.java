@@ -91,7 +91,7 @@ public class BuyItem implements IBuyItem {
             for (String enc : enchant) {
                 String[] stuff = enc.split(" ");
                 try {
-                    PotionEffectType.getByName(stuff[0]);
+                    PotionEffectType.getByName(stuff[0].toUpperCase());
                 } catch (Exception ex) {
                     plugin.getLogger().severe("BuyItem: Invalid potion effect " + stuff[0] + " at: " + path + ".potion");
                     continue;
@@ -111,7 +111,7 @@ public class BuyItem implements IBuyItem {
                         continue;
                     }
                 }
-                imm.addCustomEffect(new PotionEffect(PotionEffectType.getByName(stuff[0]), duration * 20, amplifier), false);
+                imm.addCustomEffect(new PotionEffect(PotionEffectType.getByName(stuff[0].toUpperCase()), duration * 20, amplifier), true);
             }
             itemStack.setItemMeta(imm);
 
