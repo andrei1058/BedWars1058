@@ -65,7 +65,7 @@ public class v1_16_R3 extends VersionSupport {
                 try {
                     PotionEffect potionEffect = potionMeta.getCustomEffects().get(0);
                     PotionData potionData = new PotionData(PotionType.valueOf(potionEffect.getType().getName()));
-                    potionMeta.setBasePotionData(potionMeta.getBasePotionData());
+                    potionMeta.setBasePotionData(potionData);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
