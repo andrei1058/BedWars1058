@@ -2470,8 +2470,10 @@ public class Arena implements IArena {
     public void setTeamAssigner(ITeamAssigner teamAssigner) {
         if (teamAssigner == null) {
             this.teamAssigner = new TeamAssigner();
+            plugin.getLogger().info("Using Default team assigner on arena: " + this.getArenaName());
         } else {
             this.teamAssigner = teamAssigner;
+            plugin.getLogger().warning("Using " + teamAssigner.getClass().getSimpleName() + " team assigner on arena: " + this.getArenaName());
         }
     }
 }
