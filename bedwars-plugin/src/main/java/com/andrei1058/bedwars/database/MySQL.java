@@ -103,7 +103,7 @@ public class MySQL implements Database {
 
     @Override
     public void init() {
-        try(Connection connection = dataSource.getConnection()) {
+        try (Connection connection = dataSource.getConnection()) {
             String sql = "CREATE TABLE IF NOT EXISTS global_stats (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
                     "name VARCHAR(200), uuid VARCHAR(200), first_play TIMESTAMP NULL DEFAULT NULL, " +
                     "last_play TIMESTAMP NULL DEFAULT NULL, wins INT(200), kills INT(200), " +
@@ -285,6 +285,24 @@ public class MySQL implements Database {
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public int getColumn(UUID player, String column) {
+        String sql = "SELECT ? FROM global_stats WHERE uuid = ?;";
+        try (Connection connection = dataSource.getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, column);
+            statement.setString(2, player.toString());
+            try (ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    return result.getInt(column);
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return 0;
+        }
+        return 0;
     }
 
     @Override

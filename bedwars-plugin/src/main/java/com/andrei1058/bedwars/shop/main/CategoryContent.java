@@ -5,11 +5,11 @@ import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.shop.IBuyItem;
 import com.andrei1058.bedwars.api.arena.shop.ICategoryContent;
 import com.andrei1058.bedwars.api.arena.shop.IContentTier;
-import com.andrei1058.bedwars.api.events.shop.ShopBuyEvent;
-import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.events.shop.ShopBuyEvent;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.shop.quickbuy.PlayerQuickBuyCache;
@@ -29,7 +29,7 @@ import static com.andrei1058.bedwars.BedWars.nms;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 @SuppressWarnings("WeakerAccess")
-public class CategoryContent implements ICategoryContent{
+public class CategoryContent implements ICategoryContent {
 
     private int slot;
     private boolean loaded = false;
@@ -48,6 +48,8 @@ public class CategoryContent implements ICategoryContent{
         BedWars.debug("Loading CategoryContent " + path);
         this.contentName = name;
         this.father = father;
+
+        if (path == null || name == null || categoryName == null || yml == null) return;
 
         if (yml.get(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_CONTENT_SLOT) == null) {
             BedWars.plugin.getLogger().severe("Content slot not set at " + path);
@@ -161,8 +163,14 @@ public class CategoryContent implements ICategoryContent{
         Sounds.playSound(ConfigPath.SOUNDS_BOUGHT, player);
 
         //send purchase msg
-        player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", ChatColor.stripColor(getMsg(player, itemNamePath))).replace("{color}", "").replace("{tier}", ""));
-
+        if (itemNamePath == null || Language.getPlayerLanguage(player).getYml().get(itemNamePath) == null) {
+            ItemStack displayItem = ct.getItemStack();
+            if (displayItem.getItemMeta().hasDisplayName()){
+                player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", displayItem.getItemMeta().getDisplayName()));
+            }
+        } else {
+            player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", ChatColor.stripColor(getMsg(player, itemNamePath))).replace("{color}", "").replace("{tier}", ""));
+        }
         //call shop buy event
         Bukkit.getPluginManager().callEvent(new ShopBuyEvent(player, this));
 
@@ -178,7 +186,7 @@ public class CategoryContent implements ICategoryContent{
         }
     }
 
-   @Override
+    @Override
     public int getSlot() {
         return slot;
     }
@@ -408,6 +416,10 @@ public class CategoryContent implements ICategoryContent{
             }
         }
 
+    }
+
+    public void setLoaded(boolean loaded) {
+        this.loaded = loaded;
     }
 
     /**

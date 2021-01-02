@@ -49,13 +49,13 @@
         <dependency>
             <groupId>com.alessiodp.parties</groupId>
             <artifactId>parties-api</artifactId>
-            <version>2.6.14</version>
+            <version>[2.6.16,)</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>0.3-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -143,6 +143,16 @@
         </dependency>
         <dependency>
             <groupId>com.andrei1058.bedwars</groupId>
+            <artifactId>versionsupport_1_16_R2</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.bedwars</groupId>
+            <artifactId>versionsupport_v1_16_R3</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.bedwars</groupId>
             <artifactId>versionsupport-common</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -155,7 +165,7 @@
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
-            <version>2.10.6</version>
+            <version>2.10.9</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -217,15 +227,23 @@
                     <relocations>
                         <relocation>
                             <pattern>org.bstats</pattern>
-                            <shadedPattern>com.andrei1058.bedwars.bstats</shadedPattern>
+                            <shadedPattern>com.andrei1058.bedwars.libs.bstats</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>com.zaxxer.hikari</pattern>
-                            <shadedPattern>com.andrei1058.bedwars.libs.com.zaxxer.hikari</shadedPattern>
+                            <shadedPattern>com.andrei1058.bedwars.libs.hikari</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.slf4j</pattern>
-                            <shadedPattern>com.andrei1058.bedwars.libs.org.slf4j</shadedPattern>
+                            <shadedPattern>com.andrei1058.bedwars.libs.slf4j</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.andrei1058.spigot.sidebar</pattern>
+                            <shadedPattern>com.andrei1058.bedwars.libs.sidebar</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.andrei1058.spigot.sidebarutils</pattern>
+                            <shadedPattern>com.andrei1058.bedwars.libs.updater</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>

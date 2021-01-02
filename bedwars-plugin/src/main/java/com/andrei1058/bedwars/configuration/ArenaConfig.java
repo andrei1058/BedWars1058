@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
+
 import java.util.ArrayList;
 
 public class ArenaConfig extends ConfigManager {
@@ -24,7 +25,7 @@ public class ArenaConfig extends ConfigManager {
         yml.addDefault(ConfigPath.ARENA_UPGRADES_PROTECTION, 1);
         yml.addDefault(ConfigPath.ARENA_ISLAND_RADIUS, 17);
         yml.addDefault("worldBorder", 300);
-        yml.addDefault("voidKill", false);
+        yml.addDefault(ConfigPath.ARENA_Y_LEVEL_KILL, -1);
         //yml.addDefault("disableGeneratorsOnOrphanIslands", false);
         yml.addDefault(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y, 180);
         yml.addDefault(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS, false);
@@ -57,6 +58,9 @@ public class ArenaConfig extends ConfigManager {
         }
         if (yml.get("islandRadius") != null) {
             set(ConfigPath.ARENA_ISLAND_RADIUS, yml.getInt("islandRadius"));
+        }
+        if (yml.get("voidKill") != null){
+            set("voidKill", null);
         }
     }
 }

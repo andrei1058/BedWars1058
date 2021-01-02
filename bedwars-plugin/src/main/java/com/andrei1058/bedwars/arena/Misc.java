@@ -1,13 +1,14 @@
 package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
-import com.andrei1058.bedwars.api.server.ServerType;
-import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.exceptions.InvalidMaterialException;
+import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.stats.PlayerStats;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
@@ -29,11 +30,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getList;
@@ -41,45 +45,62 @@ import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class Misc {
 
-    public static void moveToLobbyOrKick(Player p) {
+    public static void moveToLobbyOrKick(Player p, @Nullable IArena arena, boolean notAbandon) {
         if (getServerType() != ServerType.BUNGEE) {
             if (!p.getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
                 p.teleport(config.getConfigLoc("lobbyLoc"));
-                IArena a = Arena.getArenaByPlayer(p);
-                if (a != null) {
-                    if (a.isSpectator(p)) {
-                        a.removeSpectator(p, false);
+                if (arena != null) {
+                    if (arena.isSpectator(p)) {
+                        arena.removeSpectator(p, false);
                     } else {
-                        a.removePlayer(p, false);
+                        arena.removePlayer(p, false);
+                        if (!notAbandon && arena.getStatus() == GameState.playing) {
+                            if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_MARK_LEAVE_AS_ABANDON)) {
+                                arena.abandonGame(p);
+                            }
+                        }
                     }
                 }
             } else {
-                forceKick(p);
+                forceKick(p, arena, notAbandon);
             }
             return;
         }
-        forceKick(p);
+        forceKick(p, arena, notAbandon);
     }
 
 
     @SuppressWarnings("UnstableApiUsage")
-    public static void forceKick(Player p) {
+    private static void forceKick(Player p, @Nullable IArena arena, boolean notAbandon) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("Connect");
         out.writeUTF(config.getYml().getString("lobbyServer"));
         p.sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
+        if (arena != null && !notAbandon && arena.getStatus() == GameState.playing) {
+            if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_MARK_LEAVE_AS_ABANDON)) {
+                arena.abandonGame(p);
+            }
+        }
+
         if (getServerType() == ServerType.BUNGEE) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                // if lobby server is unreachable
                 if (p.isOnline()) {
                     p.kickPlayer(getMsg(p, Messages.ARENA_RESTART_PLAYER_KICK));
+                    if (arena != null && !notAbandon && arena.getStatus() == GameState.playing) {
+                        if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_MARK_LEAVE_AS_ABANDON)) {
+                            arena.abandonGame(p);
+                        }
+                    }
                 }
-            }, 120L);
+            }, 30L);
         }
     }
 
     /**
      * Win fireworks
      */
+    @SuppressWarnings("unused")
     public static void launchFirework(Player p) {
         Color[] colors = {Color.WHITE, Color.AQUA, Color.BLUE, Color.FUCHSIA, Color.GRAY, Color.GREEN, Color.LIME, Color.RED,
                 Color.YELLOW, Color.BLACK, Color.MAROON, Color.NAVY, Color.OLIVE, Color.ORANGE, Color.PURPLE};
@@ -95,6 +116,7 @@ public class Misc {
     }
 
 
+    @SuppressWarnings("unused")
     public static void launchFirework(Location l) {
         Color[] colors = {Color.WHITE, Color.AQUA, Color.BLUE, Color.FUCHSIA, Color.GRAY, Color.GREEN, Color.LIME, Color.RED,
                 Color.YELLOW, Color.BLACK, Color.MAROON, Color.NAVY, Color.OLIVE, Color.ORANGE, Color.PURPLE};
@@ -158,6 +180,7 @@ public class Misc {
     /**
      * Create an itemStack
      */
+    @SuppressWarnings("unused")
     public static ItemStack createItemStack(String material, int data, String name, List<String> lore, boolean enchanted, String customData) throws InvalidMaterialException {
         Material m;
         try {
@@ -180,6 +203,7 @@ public class Misc {
         return i;
     }
 
+    @SuppressWarnings("unused")
     public static BlockFace getDirection(Location loc) {
         int rotation = (int) loc.getYaw();
         if (rotation < 0) {
@@ -327,7 +351,6 @@ public class Misc {
     /**
      * Check if location is on a protected region
      */
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isBuildProtected(Location l, IArena a) {
         for (ITeam t : a.getTeams()) {
             if (t.getSpawn().distance(l) <= a.getConfig().getInt(ConfigPath.ARENA_SPAWN_PROTECTION)) {

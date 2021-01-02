@@ -9,11 +9,11 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerBedBreakEvent;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.api.region.Region;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.AutoCreateTeams;
-import com.andrei1058.bedwars.api.language.Messages;
-import com.andrei1058.bedwars.api.region.Region;
 import com.andrei1058.bedwars.configuration.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -65,6 +65,34 @@ public class BreakPlace implements Listener {
         }
     }
 
+
+    @EventHandler(ignoreCancelled = true)
+    public void onBurn(BlockBurnEvent event) {
+        IArena arena = Arena.getArenaByIdentifier(event.getBlock().getWorld().getName());
+        if (arena == null) return;
+        if (!arena.getConfig().getBoolean(ConfigPath.ARENA_ALLOW_MAP_BREAK)){
+            event.setCancelled(true);
+            return;
+        }
+        // check if bed if allow map break
+        if (nms.isBed(event.getBlock().getType())) {
+            for (ITeam t : arena.getTeams()) {
+                for (int x = event.getBlock().getX() - 2; x < event.getBlock().getX() + 2; x++) {
+                    for (int y = event.getBlock().getY() - 2; y < event.getBlock().getY() + 2; y++) {
+                        for (int z = event.getBlock().getZ() - 2; z < event.getBlock().getZ() + 2; z++) {
+                            if (t.getBed().getBlockX() == x && t.getBed().getBlockY() == y && t.getBed().getBlockZ() == z) {
+                                if (!t.isBedDestroyed()) {
+                                    event.setCancelled(true);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
         if (e.isCancelled()) return;
@@ -107,8 +135,8 @@ public class BreakPlace implements Listener {
 
             // prevent modifying wood if protected
             // issue #531
-            if (e.getBlockPlaced().getType().toString().contains("STRIPPED_") && e.getBlock().getType().toString().contains("_WOOD")){
-                if (!a.getConfig().getBoolean(ConfigPath.ARENA_ALLOW_MAP_BREAK)){
+            if (e.getBlockPlaced().getType().toString().contains("STRIPPED_") && e.getBlock().getType().toString().contains("_WOOD")) {
+                if (!a.getConfig().getBoolean(ConfigPath.ARENA_ALLOW_MAP_BREAK)) {
                     e.setCancelled(true);
                     return;
                 }
@@ -144,6 +172,14 @@ public class BreakPlace implements Listener {
                     return;
                 }
             }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onBlockBreakMonitor(BlockBreakEvent event) {
+        IArena a = Arena.getArenaByPlayer(event.getPlayer());
+        if (a != null) {
+            a.removePlacedBlock(event.getBlock());
         }
     }
 
@@ -226,9 +262,7 @@ public class BreakPlace implements Listener {
                 if (!a.isBlockPlaced(e.getBlock())) {
                     p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
                     e.setCancelled(true);
-                    return;
                 }
-                a.removePlacedBlock(e.getBlock());
             }
         }
     }

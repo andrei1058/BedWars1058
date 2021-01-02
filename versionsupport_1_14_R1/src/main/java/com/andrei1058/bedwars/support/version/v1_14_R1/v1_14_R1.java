@@ -31,9 +31,13 @@ import org.bukkit.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 import org.bukkit.scoreboard.Team;
 
 import java.lang.reflect.Field;
@@ -41,6 +45,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
+@SuppressWarnings("unused")
 public class v1_14_R1 extends VersionSupport {
 
     public v1_14_R1(Plugin plugin, String name) {
@@ -424,6 +429,19 @@ public class v1_14_R1 extends VersionSupport {
 
         tag.setString("BedWars1058", data);
         return CraftItemStack.asBukkitCopy(itemStack);
+    }
+
+    @Override
+    public org.bukkit.inventory.ItemStack setTag(org.bukkit.inventory.ItemStack itemStack, String key, String value) {
+        net.minecraft.server.v1_14_R1.ItemStack is = CraftItemStack.asNMSCopy(itemStack);
+        NBTTagCompound tag = is.getTag();
+        if (tag == null) {
+            tag = new NBTTagCompound();
+            is.setTag(tag);
+        }
+
+        tag.setString(key, value);
+        return CraftItemStack.asBukkitCopy(is);
     }
 
     @Override

@@ -4,9 +4,9 @@ import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.shop.listeners.InventoryListener;
@@ -23,9 +23,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
+import org.bukkit.event.player.PlayerBedEnterEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.util.Vector;
 
 import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
@@ -161,18 +165,14 @@ public class Interact implements Listener {
                     if (inHand.getType() == nms.materialFireball()) {
                         e.setCancelled(true);
                         Fireball fb = p.launchProjectile(Fireball.class);
-                        fb.setMetadata("bw1058", new FixedMetadataValue(plugin, "ceva"));
-                        fb.setIsIncendiary(false);
-                        //fb.setGlowing(true);
+                        Vector direction = p.getEyeLocation().getDirection();
 
-                        for (ItemStack i : p.getInventory().getContents()) {
-                            if (i == null) continue;
-                            if (i.getType() == null) continue;
-                            if (i.getType() == Material.AIR) continue;
-                            if (i.getType() == nms.materialFireball()) {
-                                nms.minusAmount(p, e.getItem(), 1);
-                            }
-                        }
+                        fb.setDirection(new Vector(direction.getX() * 0.1D, direction.getY() * 0.1D, direction.getZ() * 0.1D));
+                        fb.setVelocity(fb.getDirection().multiply(5));
+                        fb.setIsIncendiary(false);
+                        fb.setMetadata("bw1058", new FixedMetadataValue(plugin, "ceva"));
+                        //fb.setGlowing(true);
+                        nms.minusAmount(p, inHand, 1);
                     }
                 }
             }

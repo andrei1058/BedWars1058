@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.arena;
+package com.andrei1058.bedwars.arena.team;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.generator.GeneratorType;
@@ -13,11 +13,15 @@ import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.region.Cuboid;
 import com.andrei1058.bedwars.api.upgrades.EnemyBaseEnterTrap;
+import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.arena.OreGenerator;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.shop.ShopCache;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.*;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -101,8 +105,12 @@ public class BedWarsTeam implements ITeam {
         if (players == null) return;
         for (Player p : players) {
             if (p == null) continue;
-            if (!members.contains(p)) members.add(p);
-            if (!membersCache.contains(p)) membersCache.add(p);
+            members.removeIf(player -> player.getUniqueId().equals(p.getUniqueId()));
+            members.add(p);
+
+            membersCache.removeIf(player -> player.getUniqueId().equals(p.getUniqueId()));
+            membersCache.add(p);
+
             new BedHolo(p, getArena());
         }
     }

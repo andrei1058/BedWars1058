@@ -4,29 +4,25 @@ import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
-import com.andrei1058.bedwars.api.server.ServerType;
-import com.andrei1058.bedwars.arena.*;
 import com.andrei1058.bedwars.api.language.Language;
-import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.api.server.ServerType;
+import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.arena.LastHit;
+import com.andrei1058.bedwars.arena.SetupSession;
+import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.regular.CmdStats;
-import com.andrei1058.bedwars.configuration.Permissions;
-import com.andrei1058.bedwars.configuration.Sounds;
-import com.andrei1058.bedwars.language.PreLoadedLanguage;
-import com.andrei1058.bedwars.lobbysocket.LoadedUser;
 import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
-import com.andrei1058.bedwars.support.preloadedparty.PreLoadedParty;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.UUID;
 
 import static com.andrei1058.bedwars.BedWars.*;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class QuitAndTeleportListener implements Listener {
 

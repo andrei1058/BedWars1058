@@ -1,14 +1,16 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 
-import com.andrei1058.bedwars.BedWars;
-import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.arena.Misc;
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
+import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
-import com.andrei1058.bedwars.configuration.ArenaConfig;
 import net.md_5.bungee.api.chat.ClickEvent;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -20,9 +22,10 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.andrei1058.bedwars.BedWars.plugin;
-import static com.andrei1058.bedwars.arena.Arena.getArenaByName;
 
 public class ArenaList extends SubCommand {
+
+    private static final int ARENAS_PER_PAGE = 10;
 
     public ArenaList(ParentCommand parent, String name) {
         super(parent, name);
@@ -36,23 +39,52 @@ public class ArenaList extends SubCommand {
     public boolean execute(String[] args, CommandSender s) {
         if (s instanceof ConsoleCommandSender) return false;
         Player p = (Player) s;
-        if (getArenas().size() == 0) {
-            p.sendMessage("§6 ▪ §7You didn't set any arena yet!");
+
+
+        int page = 1;
+        if (args.length >= 1) {
+            try {
+                page = Integer.parseInt(args[0]);
+                if (page < 0) {
+                    page = 1;
+                }
+            } catch (Exception ignored) {
+            }
+        }
+        int start = (page - 1) * ARENAS_PER_PAGE;
+        List<IArena> arenas = new ArrayList<>(Arena.getArenas());
+        if (arenas.size() <= start){
+            page = 1;
+            start = 0;
+        }
+
+        p.sendMessage(color(" \n&1|| &3" + plugin.getName() + "&7 Instantiated games: \n "));
+
+        if (arenas.isEmpty()) {
+            p.sendMessage(ChatColor.RED + "No arenas to display.");
             return true;
         }
-        p.sendMessage("§6 ▪ §7Available arenas:");
-        for (String arena : getArenas()) {
-            String status = getArenaByName(arena) == null ? "§cDisabled" : "§aEnabled";
-            String group = "Default";
-            ArenaConfig cm = new ArenaConfig(BedWars.plugin, arena, plugin.getDataFolder().getPath() + "/Arenas");
-            if (cm.getYml().get("group") != null) {
-                group = cm.getYml().getString("group");
-            }
-            int teams = 0;
-            if (cm.getYml().get("Team") != null) {
-                teams = cm.getYml().getConfigurationSection("Team").getKeys(false).size();
-            }
-            p.sendMessage("§6 ▪    §f" + arena + " §7[" + status + "§7] [§eGroup: §d" + group + "§7] [§eTeams: §d" + teams + "§7]");
+
+        int limit = Math.min(arenas.size(), start + ARENAS_PER_PAGE);
+
+        arenas.subList(start, limit).forEach(arena -> {
+            String gameState = arena.getDisplayStatus(Language.getPlayerLanguage(p));
+            String msg = color(
+                    "ID: &e" + arena.getWorldName() +
+                            " &fG: &e" + arena.getDisplayGroup(p) +
+                            " &fP: &e" + (arena.getPlayers().size() + arena.getSpectators().size()) +
+                            " &fS: " + gameState +
+                            " &fWl: &e" + (Bukkit.getWorld(arena.getWorldName()) != null)
+            );
+
+
+            p.sendMessage(msg);
+        });
+
+        p.sendMessage(" ");
+
+        if (arenas.size() > ARENAS_PER_PAGE * page) {
+            p.sendMessage(ChatColor.GRAY + "Type /" + ChatColor.GREEN + MainCommand.getInstance().getName() + " arenaList " + ++page + ChatColor.GREEN + "for next page.");
         }
         return true;
     }
@@ -89,5 +121,9 @@ public class ArenaList extends SubCommand {
         }
 
         return hasPermission(s);
+    }
+
+    private static String color(String msg) {
+        return ChatColor.translateAlternateColorCodes('&', msg);
     }
 }

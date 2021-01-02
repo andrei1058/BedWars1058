@@ -4,7 +4,6 @@ import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerLangChangeEvent;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -12,13 +11,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Language extends ConfigManager {
 
-    private String iso, prefix = "";
-    private static HashMap<Player, Language> langByPlayer = new HashMap<>();
-    private static List<Language> languages = new ArrayList<>();
+    private final String iso;
+    private String prefix = "";
+    private static final HashMap<UUID, Language> langByPlayer = new HashMap<>();
+    private static final List<Language> languages = new ArrayList<>();
     private static Language defaultLanguage;
 
     public Language(Plugin plugin, String iso) {
@@ -68,13 +67,18 @@ public class Language extends ConfigManager {
      * Get message in player's language.
      */
     public static String getMsg(Player p, String path) {
-        return langByPlayer.getOrDefault(p, getDefaultLanguage()).m(path);
+        if (p == null) return getDefaultLanguage().m(path);
+        return langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage()).m(path);
     }
 
     /**
      * Retrieve a player language.
      */
     public static Language getPlayerLanguage(Player p) {
+        return langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage());
+    }
+
+    public static Language getPlayerLanguage(UUID p) {
         return langByPlayer.getOrDefault(p, getDefaultLanguage());
     }
 
@@ -89,7 +93,7 @@ public class Language extends ConfigManager {
      * Get a string list in player's language.
      */
     public static List<String> getList(Player p, String path) {
-        return langByPlayer.getOrDefault(p, getDefaultLanguage()).l(path);
+        return langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage()).l(path);
     }
 
     /**
@@ -107,7 +111,12 @@ public class Language extends ConfigManager {
      * Get a color translated message.
      */
     public String m(String path) {
-        return ChatColor.translateAlternateColorCodes('&', getYml().getString(path).replace("{prefix}", prefix));
+        String message = getYml().getString(path);
+        if (message == null) {
+            System.err.println("Missing message key " + path + " in language " + getIso());
+            message = "MISSING_LANG";
+        }
+        return ChatColor.translateAlternateColorCodes('&', message.replace("{prefix}", prefix));
     }
 
     /**
@@ -115,13 +124,18 @@ public class Language extends ConfigManager {
      */
     public List<String> l(String path) {
         List<String> result = new ArrayList<>();
-        for (String line : getYml().getStringList(path)) {
+        List<String> lines = getYml().getStringList(path);
+        if (lines == null) {
+            System.err.println("Missing message list key " + path + " in language " + getIso());
+            lines = Collections.emptyList();
+        }
+        for (String line : lines) {
             result.add(ChatColor.translateAlternateColorCodes('&', line));
         }
         return result;
     }
 
-    public static HashMap<Player, Language> getLangByPlayer() {
+    public static HashMap<UUID, Language> getLangByPlayer() {
         return langByPlayer;
     }
 
@@ -298,26 +312,57 @@ public class Language extends ConfigManager {
      * Change a player language and refresh
      * scoreboard and custom join items.
      */
-    public static void setPlayerLanguage(Player p, String iso, boolean onLogin) {
+    public static boolean setPlayerLanguage(UUID uuid, String iso) {
 
-        if (onLogin) {
-            if (getDefaultLanguage().getIso().equalsIgnoreCase(iso)) return;
+        if (iso == null) {
+            if (langByPlayer.containsKey(uuid)) {
+                Player player = Bukkit.getPlayer(uuid);
+                if (player != null && player.isOnline()) {
+                    PlayerLangChangeEvent e = new PlayerLangChangeEvent(player, langByPlayer.get(uuid).iso, getDefaultLanguage().iso);
+                    Bukkit.getPluginManager().callEvent(e);
+                    if (e.isCancelled()) return false;
+                }
+            }
+            langByPlayer.remove(uuid);
+            return true;
         }
 
         Language newLang = Language.getLang(iso);
+        if (newLang == null) return false;
+        Language oldLang = Language.getPlayerLanguage(uuid);
+        if (oldLang.getIso().equals(newLang.getIso())) return false;
 
-        if (!onLogin) {
-            Language oldLang = Language.getLangByPlayer().containsKey(p) ? Language.getPlayerLanguage(p) : Language.getLanguages().get(0);
-            PlayerLangChangeEvent e = new PlayerLangChangeEvent(p, oldLang.getIso(), newLang.getIso());
+        Player player = Bukkit.getPlayer(uuid);
+        if (player != null && player.isOnline()) {
+            PlayerLangChangeEvent e = new PlayerLangChangeEvent(player, oldLang.getIso(), newLang.getIso());
             Bukkit.getPluginManager().callEvent(e);
-            if (e.isCancelled()) return;
+            if (e.isCancelled()) return false;
         }
 
-        if (Language.getLangByPlayer().containsKey(p)) {
-            Language.getLangByPlayer().replace(p, newLang);
-        } else {
-            Language.getLangByPlayer().put(p, newLang);
+        if (Language.getDefaultLanguage().getIso().equals(newLang.getIso())) {
+            langByPlayer.remove(uuid);
+            return true;
         }
+
+        if (langByPlayer.containsKey(uuid)) {
+            langByPlayer.replace(uuid, newLang);
+        } else {
+            langByPlayer.put(uuid, newLang);
+        }
+        return true;
+    }
+
+    public static String[] getCountDownTitle(Language playerLang, int second) {
+        String[] result = new String[2];
+        result[0] = ChatColor.translateAlternateColorCodes('&', playerLang.getYml().get(Messages.ARENA_STATUS_START_COUNTDOWN_TITLE + "-" + second, playerLang.getString(Messages.ARENA_STATUS_START_COUNTDOWN_TITLE)).toString().replace("{second}", String.valueOf(second)));
+        if (result[0].isEmpty()) {
+            result[0] = " ";
+        }
+        result[1] = ChatColor.translateAlternateColorCodes('&', playerLang.getYml().get(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-" + second, playerLang.getString(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE)).toString().replace("{second}", String.valueOf(second)));
+        if (result[1].isEmpty()) {
+            result[1] = " ";
+        }
+        return result;
     }
 
     /**

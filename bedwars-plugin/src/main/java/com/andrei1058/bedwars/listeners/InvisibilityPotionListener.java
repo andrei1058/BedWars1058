@@ -1,7 +1,6 @@
 package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.api.events.player.PlayerInvisibilityPotionEvent;
-
 import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

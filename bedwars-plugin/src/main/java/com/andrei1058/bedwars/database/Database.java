@@ -44,6 +44,11 @@ public interface Database {
     boolean hasQuickBuy(UUID player);
 
     /**
+     * Get a stats value for the given player.
+     */
+    int getColumn(UUID player, String column);
+
+    /**
      * Get a player level and xp.
      * <p>
      * args 0 is level.

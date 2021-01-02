@@ -5,7 +5,9 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.entity.Despawnable;
 import com.andrei1058.bedwars.api.exceptions.InvalidEffectException;
-import org.bukkit.*;
+import org.bukkit.Effect;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
@@ -19,7 +21,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class VersionSupport {
@@ -210,6 +213,8 @@ public abstract class VersionSupport {
      */
     public abstract ItemStack addCustomData(ItemStack i, String data);
 
+    public abstract ItemStack setTag(ItemStack itemStack, String key, String value);
+
     /**
      * Check if an item has a BedWars1058 NBTTag
      */
@@ -332,6 +337,7 @@ public abstract class VersionSupport {
 
     /**
      * Get player head with skin.
+     *
      * @param copyTagFrom will copy nbt tag from this item.
      */
     public abstract ItemStack getPlayerHead(Player player, @Nullable ItemStack copyTagFrom);
@@ -382,11 +388,11 @@ public abstract class VersionSupport {
         return (byte) ((value * 256.0F) / 360.0F);
     }
 
-    public void spigotShowPlayer(Player victim, Player receiver){
+    public void spigotShowPlayer(Player victim, Player receiver) {
         receiver.showPlayer(victim);
     }
 
-    public void spigotHidePlayer(Player victim, Player receiver){
+    public void spigotHidePlayer(Player victim, Player receiver) {
         receiver.hidePlayer(victim);
     }
 }

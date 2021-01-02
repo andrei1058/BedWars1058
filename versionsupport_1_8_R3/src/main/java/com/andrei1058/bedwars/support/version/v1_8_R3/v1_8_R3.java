@@ -21,11 +21,15 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftTNTPrimed;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
-import org.bukkit.entity.*;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
@@ -40,6 +44,7 @@ import java.util.logging.Level;
 
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
+@SuppressWarnings("unused")
 public class v1_8_R3 extends VersionSupport {
 
     public v1_8_R3(Plugin pl, String name) {
@@ -381,6 +386,19 @@ public class v1_8_R3 extends VersionSupport {
 
         tag.setString("BedWars1058", data);
         return CraftItemStack.asBukkitCopy(itemStack);
+    }
+
+    @Override
+    public ItemStack setTag(ItemStack itemStack, String key, String value) {
+        net.minecraft.server.v1_8_R3.ItemStack is = CraftItemStack.asNMSCopy(itemStack);
+        NBTTagCompound tag = is.getTag();
+        if (tag == null) {
+            tag = new NBTTagCompound();
+            is.setTag(tag);
+        }
+
+        tag.setString(key, value);
+        return CraftItemStack.asBukkitCopy(is);
     }
 
     @Override

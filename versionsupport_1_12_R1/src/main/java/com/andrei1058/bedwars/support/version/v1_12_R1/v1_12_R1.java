@@ -12,32 +12,34 @@ import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.VersionSupport;
 import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import com.google.common.collect.Sets;
-import net.minecraft.server.v1_12_R1.*;
 import net.minecraft.server.v1_12_R1.Item;
+import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.Location;
 import org.bukkit.block.Bed;
 import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_12_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftTNTPrimed;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 import org.bukkit.scoreboard.Team;
 
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.logging.Level;
-
-import static com.andrei1058.bedwars.support.version.common.VersionCommon.api;
 
 public class v1_12_R1 extends VersionSupport {
 
@@ -400,6 +402,19 @@ public class v1_12_R1 extends VersionSupport {
         }
 
         tag.setString("BedWars1058", data);
+        return CraftItemStack.asBukkitCopy(itemStack);
+    }
+
+    @Override
+    public org.bukkit.inventory.ItemStack setTag(org.bukkit.inventory.ItemStack i, String key, String value) {
+        ItemStack itemStack = CraftItemStack.asNMSCopy(i);
+        NBTTagCompound tag = itemStack.getTag();
+        if (tag == null) {
+            tag = new NBTTagCompound();
+            itemStack.setTag(tag);
+        }
+
+        tag.setString(key, value);
         return CraftItemStack.asBukkitCopy(itemStack);
     }
 

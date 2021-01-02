@@ -194,9 +194,9 @@ public class PlayerLevel {
      */
     public void upgradeLevel() {
         if (currentXp >= nextLevelCost) {
+            currentXp = currentXp - nextLevelCost;
             level++;
             nextLevelCost = LevelsConfig.getNextCost(level);
-            currentXp = currentXp - nextLevelCost;
             this.levelName = ChatColor.translateAlternateColorCodes('&', LevelsConfig.getLevelName(level)).replace("{number}", String.valueOf(level));
             requiredXp = nextLevelCost >= 1000 ? nextLevelCost % 1000 == 0 ? nextLevelCost / 1000 + "k" : (double) nextLevelCost / 1000 + "k" : String.valueOf(nextLevelCost);
             formattedCurrentXp = currentXp >= 1000 ? currentXp % 1000 == 0 ? currentXp / 1000 + "k" : (double) currentXp / 1000 + "k" : String.valueOf(currentXp);

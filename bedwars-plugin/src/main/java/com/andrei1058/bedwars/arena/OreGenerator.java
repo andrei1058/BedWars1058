@@ -14,17 +14,19 @@ import com.andrei1058.bedwars.api.region.Cuboid;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-
+import org.bukkit.Sound;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
-import static com.andrei1058.bedwars.BedWars.*;
+import static com.andrei1058.bedwars.BedWars.getGeneratorsCfg;
+import static com.andrei1058.bedwars.BedWars.nms;
 
 @SuppressWarnings("WeakerAccess")
 public class OreGenerator implements IGenerator {
@@ -145,13 +147,20 @@ public class OreGenerator implements IGenerator {
                 return;
             }
             Object[] players = location.getWorld().getNearbyEntities(location, 1, 1, 1).stream().filter(entity -> entity.getType() == EntityType.PLAYER)
-                    .filter(entity -> arena.isPlayer((Player) entity)).filter(entity -> arena.getTeam((Player) entity) == bwt).toArray();
+                    .filter(entity -> arena.isPlayer((Player) entity))/*.filter(entity -> arena.getTeam((Player) entity) == bwt)*/.toArray();
             if (players.length <= 1) {
                 dropItem(location);
                 return;
             }
             for (Object o : players) {
-                dropItem(((Player) o).getLocation());
+                Player player = (Player) o;
+                ItemStack item = ore.clone();
+                item.setAmount(amount);
+                player.playSound(player.getLocation(), Sound.valueOf(BedWars.getForCurrentVersion("ITEM_PICKUP", "ENTITY_ITEM_PICKUP", "ENTITY_ITEM_PICKUP")), 0.6f, 1.3f);
+                Collection<ItemStack> excess = player.getInventory().addItem(item).values();
+                for (ItemStack value : excess) {
+                    dropItem(player.getLocation(), value.getAmount());
+                }
             }
             return;
         }
@@ -161,11 +170,7 @@ public class OreGenerator implements IGenerator {
         }
     }
 
-    /**
-     * Drop item stack with ID
-     */
-    @Override
-    public void dropItem(Location location) {
+    private void dropItem(Location location, int amount) {
         for (int temp = amount; temp >= 0; temp--) {
             ItemStack itemStack = new ItemStack(ore);
             if (!stack) {
@@ -175,8 +180,16 @@ public class OreGenerator implements IGenerator {
             }
             Item item = location.getWorld().dropItem(location, itemStack);
             item.setVelocity(new Vector(0, 0, 0));
-            temp--;
+            temp--; // FIXME: why is this required? something must be wrong...
         }
+    }
+
+    /**
+     * Drop item stack with ID
+     */
+    @Override
+    public void dropItem(Location location) {
+        dropItem(location, amount);
     }
 
     @Override

@@ -1,9 +1,9 @@
 package com.andrei1058.bedwars.upgrades.listeners;
 
 import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.upgrades.MenuContent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.upgrades.UpgradesManager;
-import com.andrei1058.bedwars.api.upgrades.MenuContent;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

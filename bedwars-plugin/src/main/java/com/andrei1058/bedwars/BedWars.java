@@ -1,52 +1,53 @@
 package com.andrei1058.bedwars;
 
-import com.andrei1058.bedwars.api.API;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.levels.Level;
+import com.andrei1058.bedwars.api.party.Party;
 import com.andrei1058.bedwars.api.server.RestoreAdapter;
 import com.andrei1058.bedwars.api.server.ServerType;
-import com.andrei1058.bedwars.arena.*;
+import com.andrei1058.bedwars.api.server.VersionSupport;
+import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.arena.ArenaManager;
+import com.andrei1058.bedwars.arena.VoidChunkGenerator;
 import com.andrei1058.bedwars.arena.despawnables.TargetListener;
-import com.andrei1058.bedwars.listeners.joinhandler.JoinListenerBungee;
-import com.andrei1058.bedwars.listeners.joinhandler.JoinListenerBungeeLegacy;
-import com.andrei1058.bedwars.listeners.joinhandler.JoinListenerMultiArena;
-import com.andrei1058.bedwars.listeners.joinhandler.JoinListenerShared;
-import com.andrei1058.bedwars.sidebar.*;
+import com.andrei1058.bedwars.arena.spectator.SpectatorListeners;
+import com.andrei1058.bedwars.arena.tasks.OneTick;
+import com.andrei1058.bedwars.arena.tasks.Refresh;
+import com.andrei1058.bedwars.arena.upgrades.BaseListener;
+import com.andrei1058.bedwars.commands.bedwars.MainCommand;
+import com.andrei1058.bedwars.commands.leave.LeaveCommand;
 import com.andrei1058.bedwars.commands.party.PartyCommand;
 import com.andrei1058.bedwars.commands.rejoin.RejoinCommand;
 import com.andrei1058.bedwars.commands.shout.ShoutCommand;
+import com.andrei1058.bedwars.configuration.*;
 import com.andrei1058.bedwars.database.Database;
 import com.andrei1058.bedwars.database.SQLite;
-import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.halloween.HalloweenSpecial;
 import com.andrei1058.bedwars.language.*;
-import com.andrei1058.bedwars.api.levels.Level;
 import com.andrei1058.bedwars.levels.internal.InternalLevel;
 import com.andrei1058.bedwars.levels.internal.LevelListeners;
-import com.andrei1058.bedwars.arena.spectator.SpectatorListeners;
-import com.andrei1058.bedwars.arena.upgrades.BaseListener;
-import com.andrei1058.bedwars.commands.leave.LeaveCommand;
-import com.andrei1058.bedwars.commands.bedwars.MainCommand;
-import com.andrei1058.bedwars.configuration.*;
 import com.andrei1058.bedwars.listeners.*;
 import com.andrei1058.bedwars.listeners.arenaselector.ArenaSelectorListener;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
-import com.andrei1058.bedwars.lobbysocket.*;
+import com.andrei1058.bedwars.listeners.joinhandler.*;
+import com.andrei1058.bedwars.lobbysocket.ArenaSocket;
+import com.andrei1058.bedwars.lobbysocket.LoadedUsersCleaner;
+import com.andrei1058.bedwars.lobbysocket.SendTask;
 import com.andrei1058.bedwars.maprestore.internal.InternalAdapter;
 import com.andrei1058.bedwars.shop.ShopManager;
+import com.andrei1058.bedwars.sidebar.*;
 import com.andrei1058.bedwars.stats.StatsManager;
 import com.andrei1058.bedwars.support.citizens.CitizensListener;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.support.papi.PAPISupport;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.support.party.NoParty;
-import com.andrei1058.bedwars.api.party.Party;
 import com.andrei1058.bedwars.support.party.Parties;
 import com.andrei1058.bedwars.support.preloadedparty.PrePartyListener;
 import com.andrei1058.bedwars.support.vault.*;
-import com.andrei1058.bedwars.arena.tasks.OneTick;
-import com.andrei1058.bedwars.arena.tasks.Refresh;
-import com.andrei1058.bedwars.api.server.VersionSupport;
 import com.andrei1058.bedwars.support.vipfeatures.VipFeatures;
 import com.andrei1058.bedwars.support.vipfeatures.VipListeners;
 import com.andrei1058.spigotutils.SpigotUpdater;
@@ -63,6 +64,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
@@ -284,6 +286,10 @@ public class BedWars extends JavaPlugin {
 
         registerEvents(new WorldLoadListener());
 
+        if (!(getServerType() == ServerType.BUNGEE && autoscale)){
+            registerEvents(new JoinHandlerCommon());
+        }
+
         // Register setup-holograms fix
         registerEvents(new ChunkLoad());
 
@@ -429,7 +435,7 @@ public class BedWars extends JavaPlugin {
         }
 
         /* Load sounds configuration */
-        new Sounds();
+        Sounds.init();
 
         /* Initialize shop */
         shop = new ShopManager();
@@ -447,10 +453,10 @@ public class BedWars extends JavaPlugin {
         metrics.addCustomChart(new Metrics.SimplePie("server_type", () -> getServerType().toString()));
         metrics.addCustomChart(new Metrics.SimplePie("default_language", () -> Language.getDefaultLanguage().getIso()));
         metrics.addCustomChart(new Metrics.SimplePie("auto_scale", () -> String.valueOf(autoscale)));
-        metrics.addCustomChart(new Metrics.SimplePie("party_adapter", () -> String.valueOf(party.getClass().getName())));
-        metrics.addCustomChart(new Metrics.SimplePie("chat_adapter", () -> String.valueOf(chat.getClass().getName())));
-        metrics.addCustomChart(new Metrics.SimplePie("level_adapter", () -> String.valueOf(getLevelSupport().getClass().getName())));
-        metrics.addCustomChart(new Metrics.SimplePie("db_adapter", () -> String.valueOf(getRemoteDatabase().getClass().getName())));
+        metrics.addCustomChart(new Metrics.SimplePie("party_adapter", () -> party.getClass().getName()));
+        metrics.addCustomChart(new Metrics.SimplePie("chat_adapter", () -> chat.getClass().getName()));
+        metrics.addCustomChart(new Metrics.SimplePie("level_adapter", () -> getLevelSupport().getClass().getName()));
+        metrics.addCustomChart(new Metrics.SimplePie("db_adapter", () -> getRemoteDatabase().getClass().getName()));
         metrics.addCustomChart(new Metrics.SimplePie("map_adapter", () -> String.valueOf(getAPI().getRestoreAdapter().getOwner().getName())));
 
         if (Bukkit.getPluginManager().getPlugin("VipFeatures") != null) {
@@ -474,8 +480,6 @@ public class BedWars extends JavaPlugin {
 
         // Initialize team upgrades
         com.andrei1058.bedwars.upgrades.UpgradesManager.init();
-
-        PreLoadedCleaner.init();
 
         int playerListRefreshInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_LIST_REFRESH);
         if (playerListRefreshInterval < 1) {
@@ -509,7 +513,7 @@ public class BedWars extends JavaPlugin {
                 Bukkit.getLogger().warning("Scoreboard title refresh interval is set to: " + titleRefreshInterval);
                 Bukkit.getLogger().warning("If you expect performance issues please increase its timer.");
             }
-            Bukkit.getScheduler().runTaskTimer(this, new SidebarTitleRefresh(), 32L, titleRefreshInterval);
+            Bukkit.getScheduler().runTaskTimerAsynchronously(this, new SidebarTitleRefresh(), 32L, titleRefreshInterval);
         }
 
         int healthAnimationInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_REFRESH);
@@ -521,10 +525,13 @@ public class BedWars extends JavaPlugin {
                 Bukkit.getLogger().warning("It is not recommended to use a value under 20 ticks.");
                 Bukkit.getLogger().warning("If you expect performance issues please increase its timer.");
             }
-            Bukkit.getScheduler().runTaskTimer(this, new SidebarLifeRefresh(), 40L, healthAnimationInterval);
+            Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new SidebarLifeRefresh(), 40L, healthAnimationInterval);
         }
 
         registerEvents(new ScoreboardListener());
+
+        // Halloween Special
+        HalloweenSpecial.init();
     }
 
     public void onDisable() {
@@ -725,5 +732,10 @@ public class BedWars extends JavaPlugin {
             default:
                 return true;
         }
+    }
+
+    @Override
+    public ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
+        return new VoidChunkGenerator();
     }
 }

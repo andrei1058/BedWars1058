@@ -1,6 +1,5 @@
 package com.andrei1058.bedwars.listeners.joinhandler;
 
-import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.language.Language;
@@ -9,8 +8,6 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.ReJoin;
 import com.andrei1058.bedwars.configuration.Permissions;
 import com.andrei1058.bedwars.configuration.Sounds;
-import com.andrei1058.bedwars.language.PreLoadedLanguage;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -19,7 +16,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 
 import static com.andrei1058.bedwars.BedWars.mainCmd;
-import static com.andrei1058.bedwars.BedWars.plugin;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 
@@ -80,18 +76,6 @@ public class JoinListenerBungeeLegacy implements Listener {
                 }
             } else {
                 e.disallow(PlayerLoginEvent.Result.KICK_OTHER, Language.getDefaultLanguage().m(Messages.ARENA_STATUS_RESTARTING_NAME));
-                return;
-            }
-
-            // If login is allowed load language from DB
-            if (e.getResult() == PlayerLoginEvent.Result.ALLOWED) {
-                Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-                    String iso = BedWars.getRemoteDatabase().getLanguage(p.getUniqueId());
-                    if (Language.isLanguageExist(iso)) {
-                        new PreLoadedLanguage(e.getPlayer().getUniqueId(), iso);
-
-                    }
-                });
             }
         }
     }
@@ -108,13 +92,6 @@ public class JoinListenerBungeeLegacy implements Listener {
                 p.kickPlayer(getMsg(e.getPlayer(), Messages.ARENA_STATUS_RESTARTING_NAME));
                 return;
             }
-        }
-
-        // Set player language
-        PreLoadedLanguage preLoadedLanguage = PreLoadedLanguage.getByUUID(p.getUniqueId());
-        if (preLoadedLanguage != null) {
-            Language.setPlayerLanguage(p, preLoadedLanguage.getIso(), true);
-            PreLoadedLanguage.clear(p.getUniqueId());
         }
 
         JoinHandlerCommon.displayCustomerDetails(p);

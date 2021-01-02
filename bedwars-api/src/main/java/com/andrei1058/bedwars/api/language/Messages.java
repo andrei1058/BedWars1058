@@ -77,7 +77,7 @@ public class Messages {
 
     /** Arena join/ leave related */
     public static String ARENA_JOIN_VIP_KICK = "arena-kicked-by-vip";
-    public static String ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS = "arena-countdown-stopped";
+    public static String ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT = "arena-countdown-stopped";
     //public static String ARENA_PLAYER_QUIT = "player.quit";
     public static String ARENA_RESTART_PLAYER_KICK = "arena-restart-kick";
     public static String ARENA_JOIN_DENIED_SELECTOR = "arena-join-denied-selector";
@@ -92,7 +92,11 @@ public class Messages {
     public static String ARENA_STATUS_RESTARTING_NAME = "arena-status-restarting";
     public static String ARENA_STATUS_START_PLAYER_TITLE = "arena-start-title";
     public static String ARENA_STATUS_START_PLAYER_TUTORIAL = "arena-start-tutorial";
-    public static String ARENA_STATUS_START_COUNTDOWN = "arena-start-countdown";
+    public static String ARENA_STATUS_START_COUNTDOWN_CHAT = "arena-start-countdown";
+    public static String ARENA_STATUS_START_COUNTDOWN_TITLE = "arena-start-countdown-title";
+    public static String ARENA_STATUS_START_COUNTDOWN_SUB_TITLE = "arena-start-countdown-subtitle";
+    public static String ARENA_STATUS_START_COUNTDOWN_CANCELLED_TITLE = "arena-countdown-stopped-subtitle";
+    public static String ARENA_STATUS_START_COUNTDOWN_CANCELLED_SUB_TITLE = "arena-countdown-stopped-subtitle";
     public static String ARENA_DISPLAY_GROUP_PATH = "display-group-";
 
     /** Arena GUI related */
@@ -212,8 +216,10 @@ public class Messages {
 
     public static String PLAYER_DIE_VOID_FALL_REGULAR_KILL = "player-die-void-regular";
     public static String PLAYER_DIE_VOID_FALL_FINAL_KILL =  "player-die-void-final";
-    public static String PLAYER_DIE_KNOCKED_IN_VOID_REGULAR_KILL = "player-die-knocked-regular";
-    public static String PLAYER_DIE_KNOCKED_IN_VOID_FINAL_KILL = "player-die-knocked-final";
+    public static String PLAYER_DIE_KNOCKED_IN_VOID_REGULAR_KILL = "player-die-knocked-void-regular";
+    public static String PLAYER_DIE_KNOCKED_IN_VOID_FINAL_KILL = "player-die-knocked-void-final";
+    public static String PLAYER_DIE_KNOCKED_BY_REGULAR_KILL = "player-die-knocked-fall-regular";
+    public static String PLAYER_DIE_KNOCKED_BY_FINAL_KILL = "player-die-knocked-fall-final";
     public static String PLAYER_DIE_EXPLOSION_WITH_SOURCE_REGULAR_KILL = "player-die-bomb-regular";
     public static String PLAYER_DIE_EXPLOSION_WITH_SOURCE_FINAL_KILL = "player-die-bomb-final";
     public static String PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_REGULAR = "player-die-bomb2-regular";
@@ -228,6 +234,8 @@ public class Messages {
     public static String PLAYER_DIE_DEBUG_FINAL_KILL = "player-die-bedbug-final";
     public static String PLAYER_DIE_IRON_GOLEM_REGULAR = "player-die-golem-regular";
     public static String PLAYER_DIE_IRON_GOLEM_FINAL_KILL = "player-die-golem-final";
+    public static String PLAYER_DIE_PVP_LOG_OUT_REGULAR = "player-die-pvp-log-out-regular";
+    public static String PLAYER_DIE_PVP_LOG_OUT_FINAL = "player-die-pvp-log-out-final";
 
     public static String PLAYER_DIE_REWARD_DIAMOND = "player-loot-diamond";
     public static String PLAYER_DIE_REWARD_IRON = "player-loot-iron";

@@ -7,17 +7,21 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
-import com.andrei1058.bedwars.api.server.ServerType;
+import com.andrei1058.bedwars.arena.tasks.ReJoinTask;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.lobbysocket.ArenaSocket;
 import com.andrei1058.bedwars.shop.ShopCache;
-import com.andrei1058.bedwars.arena.tasks.ReJoinTask;
 import com.google.gson.JsonObject;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+
+import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class ReJoin {
 
@@ -26,8 +30,6 @@ public class ReJoin {
     private ITeam bwt;
     private ReJoinTask task = null;
     private final ArrayList<ShopCache.CachedItem> permanentsAndNonDowngradables = new ArrayList<>();
-
-    private int kills = 0, finalKills = 0, deaths = 0, finalDeaths = 0, beds = 0;
 
     private static final List<ReJoin> reJoinList = new ArrayList<>();
 
@@ -46,7 +48,6 @@ public class ReJoin {
         this.arena = arena;
         reJoinList.add(this);
         BedWars.debug("Created ReJoin for " + player.getName() + " " + player.getUniqueId() + " at " + arena.getArenaName());
-        storeStatsDiff(arena.getPlayerKills(player, false), arena.getPlayerKills(player, true), arena.getPlayerDeaths(player, false), arena.getPlayerDeaths(player, true), arena.getPlayerBedsDestroyed(player));
         if (bwt.getMembers().isEmpty()) task = new ReJoinTask(arena, bwt);
         this.permanentsAndNonDowngradables.addAll(cachedArmor);
 
@@ -138,6 +139,16 @@ public class ReJoin {
         ArenaSocket.sendMessage(json.toString());
         if (bwt != null && destroyTeam && bwt.getMembers().isEmpty()) {
             bwt.setBedDestroyed(true);
+            if (bwt != null) {
+                for (Player p2 : arena.getPlayers()) {
+                    p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", bwt.getColor().chat().toString())
+                            .replace("{TeamName}", bwt.getDisplayName(Language.getPlayerLanguage(p2))));
+                }
+                for (Player p2 : arena.getSpectators()) {
+                    p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", bwt.getColor().chat().toString())
+                            .replace("{TeamName}", bwt.getDisplayName(Language.getPlayerLanguage(p2))));
+                }
+            }
             arena.checkWinner();
         }
     }
@@ -161,37 +172,6 @@ public class ReJoin {
      */
     public IArena getArena() {
         return arena;
-    }
-
-    /**
-     * Save arena stats cache for player in order to save them correctly to database
-     */
-    private void storeStatsDiff(int kills, int finalKills, int deaths, int finalDeaths, int beds) {
-        this.kills = kills;
-        this.finalKills = finalKills;
-        this.deaths = deaths;
-        this.finalDeaths = finalDeaths;
-        this.beds = beds;
-    }
-
-    public int getKills() {
-        return kills;
-    }
-
-    public int getFinalDeaths() {
-        return finalDeaths;
-    }
-
-    public int getDeaths() {
-        return deaths;
-    }
-
-    public int getFinalKills() {
-        return finalKills;
-    }
-
-    public int getBeds() {
-        return beds;
     }
 
     public ReJoinTask getTask() {

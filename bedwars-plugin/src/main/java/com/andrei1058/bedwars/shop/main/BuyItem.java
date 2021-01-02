@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.shop.IBuyItem;
 import com.andrei1058.bedwars.api.arena.team.TeamEnchant;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.configuration.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -17,7 +18,8 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import static com.andrei1058.bedwars.BedWars.*;
+import static com.andrei1058.bedwars.BedWars.nms;
+import static com.andrei1058.bedwars.BedWars.plugin;
 
 @SuppressWarnings("WeakerAccess")
 public class BuyItem implements IBuyItem {
@@ -26,12 +28,12 @@ public class BuyItem implements IBuyItem {
     private boolean autoEquip = false;
     private boolean permanent = false;
     private boolean loaded = false;
-    private String upgradeIdentifier;
+    private final String upgradeIdentifier;
 
     /**
      * Create a shop item
      */
-    public BuyItem(String path, YamlConfiguration yml, String upgradeIdentifier) {
+    public BuyItem(String path, YamlConfiguration yml, String upgradeIdentifier, ContentTier parent) {
         BedWars.debug("Loading BuyItems: " + path);
         this.upgradeIdentifier = upgradeIdentifier;
 
@@ -76,12 +78,16 @@ public class BuyItem implements IBuyItem {
         }
 
         if (yml.get(path + ".potion") != null && (itemStack.getType() == Material.POTION)) {
+            // 1.16+ custom color
+            if (yml.getString(path + ".potion-color") != null && !yml.getString(path + ".potion-color").isEmpty()) {
+                itemStack = nms.setTag(itemStack, "CustomPotionColor", yml.getString(path + ".potion-color"));
+            }
             PotionMeta imm = (PotionMeta) itemStack.getItemMeta();
             String[] enchant = yml.getString(path + ".potion").split(",");
             for (String enc : enchant) {
                 String[] stuff = enc.split(" ");
                 try {
-                    PotionEffectType.getByName(stuff[0]);
+                    PotionEffectType.getByName(stuff[0].toUpperCase());
                 } catch (Exception ex) {
                     plugin.getLogger().severe("BuyItem: Invalid potion effect " + stuff[0] + " at: " + path + ".potion");
                     continue;
@@ -101,9 +107,21 @@ public class BuyItem implements IBuyItem {
                         continue;
                     }
                 }
-                imm.addCustomEffect(new PotionEffect(PotionEffectType.getByName(stuff[0]), duration * 20, amplifier), false);
+                imm.addCustomEffect(new PotionEffect(PotionEffectType.getByName(stuff[0].toUpperCase()), duration * 20, amplifier), true);
             }
             itemStack.setItemMeta(imm);
+
+            itemStack = nms.setTag(itemStack, "Potion", "minecraft:water");
+            if (parent.getItemStack().getType() == Material.POTION && !imm.getCustomEffects().isEmpty()){
+                ItemStack parentItemStack = parent.getItemStack();
+                PotionMeta potionMeta = (PotionMeta) parentItemStack.getItemMeta();
+                for (PotionEffect potionEffect : imm.getCustomEffects()){
+                    potionMeta.addCustomEffect(potionEffect, true);
+                }
+                parentItemStack.setItemMeta(potionMeta);
+                parentItemStack = nms.setTag(parentItemStack, "Potion", "minecraft:water");
+                parent.setItemStack(parentItemStack);
+            }
         }
 
         if (yml.get(path + ".auto-equip") != null) {
@@ -161,6 +179,7 @@ public class BuyItem implements IBuyItem {
                 player.getInventory().setBoots(i);
             }
             player.updateInventory();
+            Sounds.playSound("shop-auto-equip", player);
 
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 // #274

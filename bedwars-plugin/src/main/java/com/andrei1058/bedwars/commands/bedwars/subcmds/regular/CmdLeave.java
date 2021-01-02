@@ -2,11 +2,11 @@ package com.andrei1058.bedwars.commands.bedwars.subcmds.regular;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.command.ParentCommand;
+import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
-import com.andrei1058.bedwars.api.command.ParentCommand;
-import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import org.bukkit.command.CommandSender;
@@ -35,20 +35,9 @@ public class CmdLeave extends SubCommand {
 
         if (cancel(p.getUniqueId())) return true;
         update(p.getUniqueId());
-        if (BedWars.getServerType() == ServerType.BUNGEE){
-            Misc.forceKick(p);
-            return true;
-        }
         IArena a = Arena.getArenaByPlayer(p);
-        if (a == null) {
-            Misc.forceKick(p);
-        } else {
-            if (a.isPlayer(p)) {
-                a.removePlayer(p, false);
-            } else if (a.isSpectator(p)) {
-                a.removeSpectator(p, false);
-            }
-        }
+
+        Misc.moveToLobbyOrKick(p, a, a != null && a.isSpectator(p.getUniqueId()));
         return true;
     }
 

@@ -4,8 +4,8 @@ import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
-import com.andrei1058.bedwars.shop.ShopManager;
 import com.andrei1058.bedwars.shop.ShopCache;
+import com.andrei1058.bedwars.shop.ShopManager;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -17,20 +17,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static com.andrei1058.bedwars.BedWars.nms;
+
 public class ShopCategory {
 
     private int slot;
     private ItemStack itemStack;
     private String itemNamePath, itemLorePath, invNamePath;
     private boolean loaded = false;
-    private List<CategoryContent> categoryContentList = new ArrayList<>();
+    private final List<CategoryContent> categoryContentList = new ArrayList<>();
     public static List<UUID> categoryViewers = new ArrayList<>();
+    private final String name;
 
     /**
      * Load a shop category from the given path
      */
     public ShopCategory(String path, YamlConfiguration yml) {
         BedWars.debug("Loading shop category: " + path);
+        this.name = path;
 
         if (yml.get(path + ConfigPath.SHOP_CATEGORY_ITEM_MATERIAL) == null) {
             BedWars.plugin.getLogger().severe("Category material not set at: " + path);
@@ -64,6 +68,15 @@ public class ShopCategory {
             if (yml.getBoolean(path + ConfigPath.SHOP_CATEGORY_ITEM_ENCHANTED)) {
                 itemStack = ShopManager.enchantItem(itemStack);
             }
+        }
+
+        // potion display color based on NBT tag
+        if (yml.getString(path + ".category-item.potion-display") != null && !yml.getString(path + ".category-item.potion-display").isEmpty()) {
+            itemStack = nms.setTag(itemStack, "Potion", yml.getString(path + ".category-item.potion-display"));
+        }
+        // 1.16+ custom color
+        if (yml.getString(path + ".category-item.potion-color") != null && !yml.getString(path + ".category-item.potion-color").isEmpty()) {
+            itemStack = nms.setTag(itemStack, "CustomPotionColor", yml.getString(path + ".category-item.potion-color"));
         }
 
         itemStack.setItemMeta(ShopManager.hideItemStuff(itemStack.getItemMeta()));
@@ -149,6 +162,10 @@ public class ShopCategory {
             }
         }
         return null;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public static List<UUID> getCategoryViewers() {

@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.api.arena;
 
 import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
+import com.andrei1058.bedwars.api.arena.team.ITeamAssigner;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.region.Region;
@@ -14,6 +15,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -210,6 +212,7 @@ public interface IArena {
      *
      * @return translated group.
      */
+    @SuppressWarnings("unused")
     String getDisplayGroup(Language language);
 
     List<ITeam> getTeams();
@@ -415,6 +418,7 @@ public interface IArena {
      * @param seconds countdown in seconds. 0 for instant re-spawn.
      * @return false if the player is not actually in game or if is in another re-spawn session.
      */
+    @SuppressWarnings("UnusedReturnValue")
     boolean startReSpawnSession(Player player, int seconds);
 
     /**
@@ -437,4 +441,28 @@ public interface IArena {
      */
     Location getWaitingLocation();
 
+    /**
+     * Check if the given location is protected.
+     * Border checks, regions, island spawn protection, npc protections, generator protections.
+     */
+    boolean isProtected(Location location);
+
+    /**
+     * This is triggered when a player has abandoned a game.
+     * This should remove its assist from existing team and re-join session.
+     * This does not replace {@link #removePlayer(Player, boolean)}.
+     */
+    void abandonGame(Player player);
+
+    /**
+     * -1 won't handle void kill.
+     * Instant kill when player y is under this number.
+     */
+    int getYKillHeight();
+
+    Instant getStartTime();
+
+    ITeamAssigner getTeamAssigner();
+
+    void setTeamAssigner(ITeamAssigner teamAssigner);
 }

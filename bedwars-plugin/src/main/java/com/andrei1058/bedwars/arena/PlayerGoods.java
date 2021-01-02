@@ -10,7 +10,6 @@ import org.bukkit.potion.PotionEffect;
 
 import java.util.*;
 
-import static com.andrei1058.bedwars.BedWars.nms;
 import static com.andrei1058.bedwars.BedWars.plugin;
 
 /**
@@ -121,6 +120,7 @@ class PlayerGoods {
      */
     void restore() {
         Player player = Bukkit.getPlayer(uuid);
+        if (player == null) return;
         playerGoods.remove(player.getUniqueId());
 
 
@@ -164,13 +164,6 @@ class PlayerGoods {
         player.setGameMode(gamemode);
         player.setAllowFlight(allowFlight);
         player.setFlying(flying);
-        for (Player p : Bukkit.getOnlinePlayers()){
-            if (player.equals(p)) continue;
-            if (!Arena.isInArena(p)) {
-                BedWars.nms.spigotShowPlayer(p, player);
-                BedWars.nms.spigotShowPlayer(player, p);
-            }
-        }
 
         if (!displayName.equals(player.getDisplayName())) {
             player.setDisplayName(displayName);

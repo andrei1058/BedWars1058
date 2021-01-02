@@ -11,7 +11,6 @@ import com.andrei1058.bedwars.api.util.ZipFileUtil;
 import com.flowpowered.nbt.CompoundMap;
 import com.flowpowered.nbt.CompoundTag;
 import com.flowpowered.nbt.IntTag;
-import com.flowpowered.nbt.Tag;
 import com.flowpowered.nbt.stream.NBTInputStream;
 import com.flowpowered.nbt.stream.NBTOutputStream;
 import com.grinderwolf.swm.api.SlimePlugin;
@@ -25,7 +24,6 @@ import org.bukkit.*;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,8 +34,8 @@ import java.util.logging.Level;
 
 public class SlimeAdapter extends RestoreAdapter {
 
-    private SlimePlugin slime;
-    private BedWars api;
+    private final SlimePlugin slime;
+    private final BedWars api;
 
     public SlimeAdapter(Plugin plugin) {
         super(plugin);
@@ -69,6 +67,7 @@ public class SlimeAdapter extends RestoreAdapter {
             String[] spawn = a.getConfig().getString("waiting.Loc").split(",");
 
             SlimePropertyMap spm = new SlimePropertyMap();
+            spm.setString(SlimeProperties.WORLD_TYPE, "flat");
             spm.setInt(SlimeProperties.SPAWN_X, (int) Double.parseDouble(spawn[0]));
             spm.setInt(SlimeProperties.SPAWN_Y, (int) Double.parseDouble(spawn[1]));
             spm.setInt(SlimeProperties.SPAWN_Z, (int) Double.parseDouble(spawn[2]));
@@ -90,6 +89,17 @@ public class SlimeAdapter extends RestoreAdapter {
             } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldInUseException ex) {
                 api.getArenaUtil().removeFromEnableQueue(a);
                 ex.printStackTrace();
+            } catch (ConcurrentModificationException thisShouldNotHappenSWM){
+                // this should not happen since they say to use #load async
+                // https://github.com/Grinderwolf/Slime-World-Manager/blob/develop/.docs/api/load-world.md
+                thisShouldNotHappenSWM.printStackTrace();
+                api.getArenaUtil().removeFromEnableQueue(a);
+                getOwner().getLogger().severe("This is a SlimeWorldManager issue!");
+                getOwner().getLogger().severe("I've submitted a bug report: https://github.com/Grinderwolf/Slime-World-Manager/issues/174");
+                getOwner().getLogger().severe("Trying again to load arena: " + a.getArenaName());
+
+                // hope not to get an overflow
+                onEnable(a);
             }
         });
     }
@@ -135,6 +145,7 @@ public class SlimeAdapter extends RestoreAdapter {
                 spawn = s.getConfig().getString("waiting.Loc").split(",");
             }
             SlimePropertyMap spm = new SlimePropertyMap();
+            spm.setString(SlimeProperties.WORLD_TYPE, "flat");
             spm.setInt(SlimeProperties.SPAWN_X, (int) Double.parseDouble(spawn[0]));
             spm.setInt(SlimeProperties.SPAWN_Y, (int) Double.parseDouble(spawn[1]));
             spm.setInt(SlimeProperties.SPAWN_Z, (int) Double.parseDouble(spawn[2]));
@@ -239,6 +250,7 @@ public class SlimeAdapter extends RestoreAdapter {
     public void cloneArena(String name1, String name2) {
         Bukkit.getScheduler().runTaskAsynchronously(getOwner(), () -> {
             SlimePropertyMap spm = new SlimePropertyMap();
+            spm.setString(SlimeProperties.WORLD_TYPE, "flat");
             spm.setInt(SlimeProperties.SPAWN_X, 0);
             spm.setInt(SlimeProperties.SPAWN_Y, 118);
             spm.setInt(SlimeProperties.SPAWN_Z, 0);
@@ -325,7 +337,7 @@ public class SlimeAdapter extends RestoreAdapter {
         });
     }
 
-    private void convertWorld(String name, @Nullable Player player) {
+    private void convertWorld(String name, Player player) {
         SlimeLoader sl = slime.getLoader("file");
         try {
             getOwner().getLogger().log(Level.INFO, "Converting " + name + " to the Slime format.");

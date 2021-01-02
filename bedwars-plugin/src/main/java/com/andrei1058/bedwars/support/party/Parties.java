@@ -2,7 +2,8 @@ package com.andrei1058.bedwars.support.party;
 
 import com.alessiodp.parties.api.interfaces.PartiesAPI;
 import com.alessiodp.parties.api.interfaces.PartyPlayer;
-import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.party.Party;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -11,12 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
-
 public class Parties implements Party {
 
     //Support for Parties by AlessioDP
-    private PartiesAPI api = com.alessiodp.parties.api.Parties.getApi();
+    private final PartiesAPI api = com.alessiodp.parties.api.Parties.getApi();
+    private static final int requiredRankToSelect = BedWars.config.getInt(ConfigPath.GENERAL_ALESSIODP_PARTIES_RANK);
 
     @Override
     public boolean hasParty(Player p) {
@@ -26,11 +26,7 @@ public class Parties implements Party {
 
     @Override
     public int partySize(Player p) {
-        PartyPlayer pp = api.getPartyPlayer(p.getUniqueId());
-        if (pp == null) return 0;
-        com.alessiodp.parties.api.interfaces.Party party = api.getParty(pp.getPartyName());
-        if (party == null) return 0;
-        return party.getMembers().size();
+        return getMembers(p).size();
     }
 
     @Override
@@ -39,7 +35,8 @@ public class Parties implements Party {
         if (pp == null) return false;
         com.alessiodp.parties.api.interfaces.Party party = api.getParty(pp.getPartyName());
         if (party == null) return false;
-        return party.getLeader() == p.getUniqueId();
+        if (party.getLeader() == null) return false;
+        return pp.getRank() >= requiredRankToSelect;
     }
 
     @Override
@@ -69,11 +66,11 @@ public class Parties implements Party {
 
     @Override
     public void removeFromParty(Player member) {
-        PartyPlayer pp = api.getPartyPlayer(member.getUniqueId());
+        /*PartyPlayer pp = api.getPartyPlayer(member.getUniqueId());
         if (pp == null) return;
         com.alessiodp.parties.api.interfaces.Party party = api.getParty(pp.getPartyName());
         if (party == null) return;
-        if (party.getLeader() == member.getUniqueId()){
+        if (party.getLeader() == member.getUniqueId()) {
             disband(member);
         } else {
             party.removeMember(pp);
@@ -83,12 +80,12 @@ public class Parties implements Party {
                 if (!p.isOnline()) continue;
                 p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_LEAVE_SUCCESS).replace("{player}", member.getDisplayName()));
             }
-        }
+        }*/
     }
 
     @Override
     public void disband(Player owner) {
-        PartyPlayer pp = api.getPartyPlayer(owner.getUniqueId());
+        /*PartyPlayer pp = api.getPartyPlayer(owner.getUniqueId());
         if (pp == null) return;
         com.alessiodp.parties.api.interfaces.Party party = api.getParty(pp.getPartyName());
         if (party == null) return;
@@ -98,7 +95,7 @@ public class Parties implements Party {
             if (!p.isOnline()) continue;
             p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_DISBAND_SUCCESS));
         }
-        party.delete();
+        party.delete();*/
     }
 
     @Override
@@ -112,7 +109,7 @@ public class Parties implements Party {
 
     @Override
     public void removePlayer(Player owner, Player target) {
-        PartyPlayer pp = api.getPartyPlayer(target.getUniqueId());
+        /*PartyPlayer pp = api.getPartyPlayer(target.getUniqueId());
         if (pp == null) return;
         com.alessiodp.parties.api.interfaces.Party party = api.getParty(pp.getPartyName());
         if (party == null) return;
@@ -122,7 +119,7 @@ public class Parties implements Party {
             if (p == null) continue;
             if (!p.isOnline()) continue;
             p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_REMOVE_SUCCESS));
-        }
+        }*/
     }
 
     @Override

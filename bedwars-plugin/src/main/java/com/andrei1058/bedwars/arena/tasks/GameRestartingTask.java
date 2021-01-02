@@ -7,7 +7,8 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.tasks.RestartingTask;
-import com.andrei1058.bedwars.arena.*;
+import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.configuration.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -22,7 +23,7 @@ public class GameRestartingTask implements Runnable, RestartingTask {
 
     private Arena arena;
     private int restarting = BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_RESTART) + 3;
-    private BukkitTask task;
+    private final BukkitTask task;
 
     public GameRestartingTask(@NotNull Arena arena) {
         this.arena = arena;
@@ -58,19 +59,19 @@ public class GameRestartingTask implements Runnable, RestartingTask {
         restarting--;
 
         if (getArena().getPlayers().isEmpty() && restarting > 9) restarting = 9;
-        if (restarting == 3) {
+        if (restarting == 7) {
             for (Player on : new ArrayList<>(getArena().getPlayers())) {
                 getArena().removePlayer(on, BedWars.getServerType() == ServerType.BUNGEE);
             }
             for (Player on : new ArrayList<>(getArena().getSpectators())) {
                 getArena().removeSpectator(on, BedWars.getServerType() == ServerType.BUNGEE);
             }
-        } else if (restarting == 1) {
+        } else if (restarting == 4) {
             ShopHolo.clearForArena(getArena());
             for (Entity e : getArena().getWorld().getEntities()) {
                 if (e.getType() == EntityType.PLAYER) {
                     Player p = (Player) e;
-                    Misc.moveToLobbyOrKick(p);
+                    Misc.moveToLobbyOrKick(p, getArena(), true);
                     if (getArena().isSpectator(p)) getArena().removeSpectator(p, false);
                     if (getArena().isPlayer(p)) getArena().removePlayer(p, false);
                 }
