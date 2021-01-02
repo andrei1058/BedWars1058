@@ -114,10 +114,11 @@ public class BuyItem implements IBuyItem {
                 imm.addCustomEffect(new PotionEffect(PotionEffectType.getByName(stuff[0].toUpperCase()), duration * 20, amplifier), true);
             }
             itemStack.setItemMeta(imm);
-            if (!imm.getCustomEffects().isEmpty()) {
-                itemStack = BedWars.nms.setPotionBase(itemStack);
-            }
+            //if (!imm.getCustomEffects().isEmpty()) {
+            //itemStack = BedWars.nms.setPotionBase(itemStack);
+            //}
         }
+        itemStack = nms.setTag(itemStack, "Potion", "minecraft:water");
 
         if (yml.get(path + ".auto-equip") != null) {
             autoEquip = yml.getBoolean(path + ".auto-equip");
