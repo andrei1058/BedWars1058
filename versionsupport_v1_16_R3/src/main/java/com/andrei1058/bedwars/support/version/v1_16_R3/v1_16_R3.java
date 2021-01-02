@@ -57,24 +57,6 @@ public class v1_16_R3 extends VersionSupport {
         loadDefaultEffects();
     }
 
-    public org.bukkit.inventory.ItemStack setPotionBase(org.bukkit.inventory.ItemStack itemStack) {
-        if (itemStack.getType() == org.bukkit.Material.POTION) {
-            PotionMeta potionMeta = ((PotionMeta) itemStack.getItemMeta());
-            assert potionMeta != null;
-            if (!potionMeta.getCustomEffects().isEmpty()) {
-                try {
-                    PotionEffect potionEffect = potionMeta.getCustomEffects().get(0);
-                    PotionData potionData = new PotionData(PotionType.valueOf(potionEffect.getType().getName()));
-                    potionMeta.setBasePotionData(potionData);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-                itemStack.setItemMeta(potionMeta);
-            }
-        }
-        return itemStack;
-    }
-
     @Override
     public void registerVersionListeners() {
         new VersionCommon(this);

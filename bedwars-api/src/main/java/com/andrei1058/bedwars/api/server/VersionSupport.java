@@ -18,7 +18,6 @@ import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,8 +46,6 @@ public abstract class VersionSupport {
             e.printStackTrace();
         }
     }
-
-    public abstract ItemStack setPotionBase(ItemStack itemStack);
 
     /**
      * Register a new command as bukkit command

@@ -28,12 +28,12 @@ public class BuyItem implements IBuyItem {
     private boolean autoEquip = false;
     private boolean permanent = false;
     private boolean loaded = false;
-    private String upgradeIdentifier;
+    private final String upgradeIdentifier;
 
     /**
      * Create a shop item
      */
-    public BuyItem(String path, YamlConfiguration yml, String upgradeIdentifier) {
+    public BuyItem(String path, YamlConfiguration yml, String upgradeIdentifier, ContentTier parent) {
         BedWars.debug("Loading BuyItems: " + path);
         this.upgradeIdentifier = upgradeIdentifier;
 
@@ -78,10 +78,6 @@ public class BuyItem implements IBuyItem {
         }
 
         if (yml.get(path + ".potion") != null && (itemStack.getType() == Material.POTION)) {
-            // potion display color based on NBT tag
-            if (yml.getString(path + ".potion-display") != null && !yml.getString(path + ".potion-display").isEmpty()) {
-                itemStack = nms.setTag(itemStack, "Potion", yml.getString(path + ".potion-display"));
-            }
             // 1.16+ custom color
             if (yml.getString(path + ".potion-color") != null && !yml.getString(path + ".potion-color").isEmpty()) {
                 itemStack = nms.setTag(itemStack, "CustomPotionColor", yml.getString(path + ".potion-color"));
@@ -114,11 +110,19 @@ public class BuyItem implements IBuyItem {
                 imm.addCustomEffect(new PotionEffect(PotionEffectType.getByName(stuff[0].toUpperCase()), duration * 20, amplifier), true);
             }
             itemStack.setItemMeta(imm);
-            //if (!imm.getCustomEffects().isEmpty()) {
-            //itemStack = BedWars.nms.setPotionBase(itemStack);
-            //}
+
+            itemStack = nms.setTag(itemStack, "Potion", "minecraft:water");
+            if (parent.getItemStack().getType() == Material.POTION && !imm.getCustomEffects().isEmpty()){
+                ItemStack parentItemStack = parent.getItemStack();
+                PotionMeta potionMeta = (PotionMeta) parentItemStack.getItemMeta();
+                for (PotionEffect potionEffect : imm.getCustomEffects()){
+                    potionMeta.addCustomEffect(potionEffect, true);
+                }
+                parentItemStack.setItemMeta(potionMeta);
+                parentItemStack = nms.setTag(parentItemStack, "Potion", "minecraft:water");
+                parent.setItemStack(parentItemStack);
+            }
         }
-        itemStack = nms.setTag(itemStack, "Potion", "minecraft:water");
 
         if (yml.get(path + ".auto-equip") != null) {
             autoEquip = yml.getBoolean(path + ".auto-equip");

@@ -56,21 +56,6 @@ public class v1_8_R3 extends VersionSupport {
         }
     }
 
-    public ItemStack setPotionBase(ItemStack itemStack) {
-        if (itemStack.getType() == org.bukkit.Material.POTION) {
-            PotionMeta potionMeta = ((PotionMeta) itemStack.getItemMeta());
-            if (!potionMeta.getCustomEffects().isEmpty()) {
-                try {
-                    potionMeta.setMainEffect(potionMeta.getCustomEffects().get(0).getType());
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-                itemStack.setItemMeta(potionMeta);
-            }
-        }
-        return itemStack;
-    }
-
     public void spawnSilverfish(Location loc, ITeam bedWarsTeam, double speed, double health, int despawn, double damage) {
         new Despawnable(Silverfish.spawn(loc, bedWarsTeam, speed, health, despawn, damage), bedWarsTeam, despawn,
                 Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, PlayerKillEvent.PlayerKillCause.SILVERFISH_FINAL_KILL, PlayerKillEvent.PlayerKillCause.SILVERFISH);
