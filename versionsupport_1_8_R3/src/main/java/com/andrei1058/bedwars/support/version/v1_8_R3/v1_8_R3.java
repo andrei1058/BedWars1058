@@ -44,6 +44,7 @@ import java.util.logging.Level;
 
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
+@SuppressWarnings("unused")
 public class v1_8_R3 extends VersionSupport {
 
     public v1_8_R3(Plugin pl, String name) {
@@ -55,15 +56,17 @@ public class v1_8_R3 extends VersionSupport {
         }
     }
 
-    public ItemStack setPotionBase(ItemStack itemStack, String potionType) {
+    public ItemStack setPotionBase(ItemStack itemStack) {
         if (itemStack.getType() == org.bukkit.Material.POTION) {
             PotionMeta potionMeta = ((PotionMeta) itemStack.getItemMeta());
-            try {
-                potionMeta.setMainEffect(PotionEffectType.getByName(potionType.toUpperCase()));
-            } catch (Exception ex) {
-                ex.printStackTrace();
+            if (!potionMeta.getCustomEffects().isEmpty()) {
+                try {
+                    potionMeta.setMainEffect(potionMeta.getCustomEffects().get(0).getType());
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                itemStack.setItemMeta(potionMeta);
             }
-            itemStack.setItemMeta(potionMeta);
         }
         return itemStack;
     }

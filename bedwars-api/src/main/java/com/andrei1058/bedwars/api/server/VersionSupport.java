@@ -17,9 +17,8 @@ import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,7 +48,7 @@ public abstract class VersionSupport {
         }
     }
 
-    public abstract ItemStack setPotionBase(ItemStack itemStack, String potionType);
+    public abstract ItemStack setPotionBase(ItemStack itemStack);
 
     /**
      * Register a new command as bukkit command

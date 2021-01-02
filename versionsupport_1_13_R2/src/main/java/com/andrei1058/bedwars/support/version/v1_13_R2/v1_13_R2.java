@@ -35,6 +35,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.Sign;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.bukkit.scoreboard.Team;
@@ -45,6 +46,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 
+@SuppressWarnings("unused")
 public class v1_13_R2 extends VersionSupport {
 
     public v1_13_R2(Plugin plugin, String name) {
@@ -52,11 +54,12 @@ public class v1_13_R2 extends VersionSupport {
         loadDefaultEffects();
     }
 
-    public org.bukkit.inventory.ItemStack setPotionBase(org.bukkit.inventory.ItemStack itemStack, String potionType) {
+    public org.bukkit.inventory.ItemStack setPotionBase(org.bukkit.inventory.ItemStack itemStack) {
         if (itemStack.getType() == org.bukkit.Material.POTION) {
             PotionMeta potionMeta = ((PotionMeta) itemStack.getItemMeta());
             try {
-                potionMeta.setBasePotionData(new PotionData(PotionType.valueOf(potionType.toUpperCase())));
+                assert potionMeta != null;
+                potionMeta.setBasePotionData(potionMeta.getBasePotionData());
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

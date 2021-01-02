@@ -115,7 +115,7 @@ public class BuyItem implements IBuyItem {
             }
             itemStack.setItemMeta(imm);
             if (!imm.getCustomEffects().isEmpty()) {
-                itemStack = BedWars.nms.setPotionBase(itemStack, imm.getCustomEffects().get(0).getType().getName());
+                itemStack = BedWars.nms.setPotionBase(itemStack);
             }
         }
 
