@@ -28,6 +28,7 @@ import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Openable;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
@@ -137,8 +138,12 @@ public class Interact implements Listener {
                         case ANVIL:
                         case WORKBENCH:
                         case HOPPER:
+                        case TRAPPED_CHEST:
                             e.setCancelled(true);
                             break;
+                    }
+                    if (b.getState() instanceof Openable){
+                        e.setCancelled(true);
                     }
                 }
             }
