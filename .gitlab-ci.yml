@@ -22,7 +22,7 @@ maven-dev:
     expire_in: 10 days
   after_script:
     - 'apt-get update && apt-get install -y -qq lftp'
-    - 'lftp -c "set ftp:ssl-allow no; open -u $APIDOCS_USER,$APIDOCS_PASS andrei1058.com; mirror -Rev invisibility-common/target/apidocs ./$CI_PROJECT_TITLE  --ignore-time --parallel=10 --exclude-glob .git* --exclude .git/"'
+    - 'lftp -c "set ftp:ssl-allow no; open -u $APIDOCS_USER,$APIDOCS_PASS andrei1058.com; mirror -Rev bedwars-api/target/apidocs ./$CI_PROJECT_TITLE  --ignore-time --parallel=10 --exclude-glob .git* --exclude .git/"'
 
 
 maven-job2:
@@ -55,4 +55,4 @@ maven-rel:
       - bedwars-api/target/bedwars-*.jar
   after_script:
     - 'apt-get update && apt-get install -y -qq lftp'
-    - 'lftp -c "set ftp:ssl-allow no; open -u $APIDOCS_USER,$APIDOCS_PASS andrei1058.com; mirror -Rev invisibility-common/target/apidocs ./$CI_PROJECT_TITLE  --ignore-time --parallel=10 --exclude-glob .git* --exclude .git/"'
+    - 'lftp -c "set ftp:ssl-allow no; open -u $APIDOCS_USER,$APIDOCS_PASS andrei1058.com; mirror -Rev bedwars-api/target/apidocs ./$CI_PROJECT_TITLE  --ignore-time --parallel=10 --exclude-glob .git* --exclude .git/"'
