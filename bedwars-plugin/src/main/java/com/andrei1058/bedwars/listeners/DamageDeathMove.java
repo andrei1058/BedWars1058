@@ -28,6 +28,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
@@ -193,6 +194,9 @@ public class DamageDeathMove implements Listener {
                             BedWars.nms.showArmor(p, on);
                             //BedWars.nms.showPlayer(p, on);
                         }
+                        int taskId = a.getShowTime().remove(p);
+                        Bukkit.getScheduler().cancelTask(taskId);
+                        p.removePotionEffect(PotionEffectType.INVISIBILITY);
                     }
                     //
                 }
