@@ -34,7 +34,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 import org.bukkit.scoreboard.Team;
 
 import java.lang.reflect.Field;
@@ -57,13 +60,17 @@ public class v1_16_R3 extends VersionSupport {
     public org.bukkit.inventory.ItemStack setPotionBase(org.bukkit.inventory.ItemStack itemStack) {
         if (itemStack.getType() == org.bukkit.Material.POTION) {
             PotionMeta potionMeta = ((PotionMeta) itemStack.getItemMeta());
-            try {
-                assert potionMeta != null;
-                potionMeta.setBasePotionData(potionMeta.getBasePotionData());
-            } catch (Exception ex) {
-                ex.printStackTrace();
+            assert potionMeta != null;
+            if (!potionMeta.getCustomEffects().isEmpty()) {
+                try {
+                    PotionEffect potionEffect = potionMeta.getCustomEffects().get(0);
+                    PotionData potionData = new PotionData(PotionType.valueOf(potionEffect.getType().getName()));
+                    potionMeta.setBasePotionData(potionMeta.getBasePotionData());
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                itemStack.setItemMeta(potionMeta);
             }
-            itemStack.setItemMeta(potionMeta);
         }
         return itemStack;
     }
