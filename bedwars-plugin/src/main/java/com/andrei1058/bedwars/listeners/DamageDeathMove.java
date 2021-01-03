@@ -81,13 +81,13 @@ public class DamageDeathMove implements Listener {
                     e.setDamage(1);
                     return;
                 }*/
-                if (e.getCause() == EntityDamageEvent.DamageCause.FALL) {
-                    if (BedWarsTeam.antiFallDamageAtRespawn.containsKey(p.getUniqueId())) {
-                        if (BedWarsTeam.antiFallDamageAtRespawn.get(p.getUniqueId()) > System.currentTimeMillis()) {
-                            e.setCancelled(true);
-                        } else BedWarsTeam.antiFallDamageAtRespawn.remove(p.getUniqueId());
-                    }
+                //if (e.getCause() == EntityDamageEvent.DamageCause.FALL) {
+                if (BedWarsTeam.reSpawnInvulnerability.containsKey(p.getUniqueId())) {
+                    if (BedWarsTeam.reSpawnInvulnerability.get(p.getUniqueId()) > System.currentTimeMillis()) {
+                        e.setCancelled(true);
+                    } else BedWarsTeam.reSpawnInvulnerability.remove(p.getUniqueId());
                 }
+                //}
             }
         }
         if (BedWars.getServerType() == ServerType.MULTIARENA) {
@@ -178,6 +178,18 @@ public class DamageDeathMove implements Listener {
                             e.setCancelled(true);
                         }
                         return;
+                    }
+
+                    // protection after re-spawn
+                    if (BedWarsTeam.reSpawnInvulnerability.containsKey(p.getUniqueId())) {
+                        if (BedWarsTeam.reSpawnInvulnerability.get(p.getUniqueId()) > System.currentTimeMillis()) {
+                            e.setCancelled(true);
+                            return;
+                        } else BedWarsTeam.reSpawnInvulnerability.remove(p.getUniqueId());
+                    }
+                    // but if the damager is the re-spawning player remove protection
+                    if (BedWarsTeam.reSpawnInvulnerability.containsKey(damager.getUniqueId())) {
+                        BedWarsTeam.reSpawnInvulnerability.remove(damager.getUniqueId());
                     }
 
                     LastHit lh = LastHit.getLastHit(p);
@@ -628,7 +640,7 @@ public class DamageDeathMove implements Listener {
     }
 
     private static void spawnUtility(String s, Location loc, ITeam t, Player p) {
-        if ("silverfish".equals(s.toLowerCase())) {
+        if ("silverfish".equalsIgnoreCase(s)) {
             nms.spawnSilverfish(loc, t, shop.getYml().getDouble(ConfigPath.SHOP_SPECIAL_SILVERFISH_SPEED), shop.getYml().getDouble(ConfigPath.SHOP_SPECIAL_SILVERFISH_HEALTH),
                     shop.getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_DESPAWN),
                     BedWars.shop.getYml().getDouble(ConfigPath.SHOP_SPECIAL_SILVERFISH_DAMAGE));

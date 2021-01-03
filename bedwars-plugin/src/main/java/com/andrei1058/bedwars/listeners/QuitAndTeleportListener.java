@@ -73,7 +73,7 @@ public class QuitAndTeleportListener implements Listener {
             sb.remove();
         }
 
-        BedWarsTeam.antiFallDamageAtRespawn.remove(e.getPlayer().getUniqueId());
+        BedWarsTeam.reSpawnInvulnerability.remove(e.getPlayer().getUniqueId());
 
         LastHit lh = LastHit.getLastHit(p);
         if (lh != null) {
