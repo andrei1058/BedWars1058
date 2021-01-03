@@ -1062,7 +1062,8 @@ public class Arena implements IArena {
         setArenaByPlayer(p, this);
         /* save player inventory etc */
         if (BedWars.getServerType() != ServerType.BUNGEE) {
-            new PlayerGoods(p, true, true);
+            // no need to backup inventory because it's empty
+            //new PlayerGoods(p, true, true);
             playerLocation.put(p, p.getLocation());
         }
 
