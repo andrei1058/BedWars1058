@@ -731,7 +731,13 @@ public class Arena implements IArena {
         if (getServerType() != ServerType.BUNGEE) {
             /* restore player inventory */
             PlayerGoods pg = PlayerGoods.getPlayerGoods(p);
-            if (pg != null) {
+            if (pg == null){
+                // if there is no previous backup of the inventory send lobby items if multi arena
+                if (BedWars.getServerType() == ServerType.MULTIARENA){
+                    // Send items
+                    Arena.sendLobbyCommandItems(p);
+                }
+            } else {
                 pg.restore();
             }
         }
@@ -938,8 +944,15 @@ public class Arena implements IArena {
         p.getInventory().clear();
         p.getInventory().setArmorContents(null);
         /* restore player inventory */
-        if (PlayerGoods.hasGoods(p)) {
-            PlayerGoods.getPlayerGoods(p).restore();
+        PlayerGoods pg = PlayerGoods.getPlayerGoods(p);
+        if (pg == null){
+            // if there is no previous backup of the inventory send lobby items if multi arena
+            if (BedWars.getServerType() == ServerType.MULTIARENA){
+                // Send items
+                Arena.sendLobbyCommandItems(p);
+            }
+        } else {
+            pg.restore();
         }
         nms.setCollide(p, this, true);
 
