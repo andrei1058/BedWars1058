@@ -17,6 +17,7 @@ import com.andrei1058.bedwars.arena.LastHit;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import com.andrei1058.bedwars.listeners.dropshandler.PlayerDrops;
+import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.*;
@@ -190,13 +191,23 @@ public class DamageDeathMove implements Listener {
 
                     // #274
                     if (a.getShowTime().containsKey(p)) {
-                        for (Player on : a.getWorld().getPlayers()) {
-                            BedWars.nms.showArmor(p, on);
-                            //BedWars.nms.showPlayer(p, on);
-                        }
-                        int taskId = a.getShowTime().remove(p);
-                        Bukkit.getScheduler().cancelTask(taskId);
-                        p.removePotionEffect(PotionEffectType.INVISIBILITY);
+                        Bukkit.getScheduler().runTask(plugin, () -> {
+                            for (Player on : a.getWorld().getPlayers()) {
+                                BedWars.nms.showArmor(p, on);
+                                //BedWars.nms.showPlayer(p, on);
+                            }
+                            int taskId = a.getShowTime().remove(p);
+                            Bukkit.getScheduler().cancelTask(taskId);
+                            p.removePotionEffect(PotionEffectType.INVISIBILITY);
+                            ITeam team = a.getTeam(p);
+                            // show name tag
+                            for (BedWarsScoreboard sb : BedWarsScoreboard.getScoreboards().values()) {
+                                if (sb.getArena() == null) continue;
+                                if (sb.getArena().equals(a) && !team.isMember(sb.getPlayer())) {
+                                    sb.invisibilityPotion(team, p, false);
+                                }
+                            }
+                        });
                     }
                     //
                 }
