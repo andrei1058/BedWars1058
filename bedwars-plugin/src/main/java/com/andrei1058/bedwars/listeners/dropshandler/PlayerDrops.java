@@ -67,7 +67,7 @@ public class PlayerDrops {
 
         // victim's inventory
 
-        if (victimsTeam != null && !(victimsTeam.equals(killersTeam)) && victim.equals(killer)) {
+        if (victimsTeam != null && !(victimsTeam.equals(killersTeam) && victim.equals(killer))) {
             // if final kill give items at kill drops location (team generator)
             if (victimsTeam.isBedDestroyed()) {
                 for (ItemStack i : inventory) {
