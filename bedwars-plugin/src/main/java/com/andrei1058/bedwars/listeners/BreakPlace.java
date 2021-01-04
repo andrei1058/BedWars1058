@@ -220,6 +220,8 @@ public class BreakPlace implements Listener {
                 case "SUGAR_CANE":
                 case "SUGAR_CANE_BLOCK":
                 case "GRASS_PATH":
+                    e.setCancelled(true);
+                    e.getBlock().setType(Material.AIR);
                 return;
             }
 
