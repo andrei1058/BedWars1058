@@ -801,7 +801,7 @@ public class Arena implements IArena {
                                     .replace("{KillerName}", lastDamager.getDisplayName())
                                     .replace("{KillerTeamName}", killerTeam.getDisplayName(lang)));
                         }
-                        PlayerDrops.handlePlayerDrops(this, p, lastDamager, team, killerTeam, cause);
+                        PlayerDrops.handlePlayerDrops(this, p, lastDamager, team, killerTeam, cause, new ArrayList<>(Arrays.asList(p.getInventory().getContents())));
                     }
                 }
             }
