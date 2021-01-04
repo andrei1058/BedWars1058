@@ -219,6 +219,7 @@ public class BreakPlace implements Listener {
                 case "SEAGRASS":
                 case "SUGAR_CANE":
                 case "SUGAR_CANE_BLOCK":
+                case "GRASS_PATH":
                 return;
             }
 
