@@ -213,7 +213,6 @@ public class BreakPlace implements Listener {
             // allow breaking of grass
             switch (e.getBlock().getType().toString()){
                 case "LONG_GRASS":
-                case "GRASS":
                 case "TALL_GRASS":
                 case "TALL_SEAGRASS":
                 case "SEAGRASS":
