@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.andrei1058.bedwars.BedWars.nms;
@@ -27,28 +28,28 @@ public class PlayerDrops {
      *
      * @return true if event drops must be cleared.
      */
-    public static boolean handlePlayerDrops(IArena arena, Player victim, Player killer, ITeam victimsTeam, ITeam killersTeam, PlayerKillEvent.PlayerKillCause cause) {
+    public static boolean handlePlayerDrops(IArena arena, Player victim, Player killer, ITeam victimsTeam, ITeam killersTeam, PlayerKillEvent.PlayerKillCause cause, List<ItemStack> inventory) {
         if (arena.getConfig().getBoolean(ConfigPath.ARENA_NORMAL_DEATH_DROPS)) {
             return false;
         }
         if (cause == PlayerKillEvent.PlayerKillCause.PLAYER_PUSH || cause == PlayerKillEvent.PlayerKillCause.PLAYER_PUSH_FINAL) {
             // if died by fall damage drop items at location
-            dropItems(victim);
+            dropItems(victim, inventory);
             return true;
         }
         if (killer == null) {
             // Death without a attacker drops items on the floor
-            dropItems(victim);
+            dropItems(victim, inventory);
             return true;
         }
         if (cause.isDespawnable()) {
             // If killed by a ironGolem or silverFish drop on floor
-            dropItems(victim);
+            dropItems(victim, inventory);
             return true;
         }
         if (cause.isPvpLogOut()) {
             // if is pvp log out drop at disconnect location
-            dropItems(victim);
+            dropItems(victim, inventory);
             return true;
         }
         if (cause.isFinalKill()) {
@@ -65,12 +66,11 @@ public class PlayerDrops {
         }
 
         // victim's inventory
-        ItemStack[] drops = victim.getInventory().getContents();
 
         if (victimsTeam != null && !(victimsTeam.equals(killersTeam)) && victim.equals(killer)) {
             // if final kill give items at kill drops location (team generator)
             if (victimsTeam.isBedDestroyed()) {
-                for (ItemStack i : drops) {
+                for (ItemStack i : inventory) {
                     if (i == null) continue;
                     if (i.getType() == Material.AIR) continue;
                     if (nms.isArmor(i) || nms.isBow(i) || nms.isSword(i) || nms.isTool(i)) continue;
@@ -85,7 +85,7 @@ public class PlayerDrops {
                 // add-to-inventory feature if receiver is not respawning
                 if (!arena.isReSpawning(killer)) {
                     Map<Material, Integer> materialDrops = new HashMap<>();
-                    for (ItemStack i : drops) {
+                    for (ItemStack i : inventory) {
                         if (i == null) continue;
                         if (i.getType() == Material.AIR) continue;
                         if (i.getType() == Material.DIAMOND || i.getType() == Material.EMERALD || i.getType() == Material.IRON_INGOT || i.getType() == Material.GOLD_INGOT) {
@@ -133,8 +133,8 @@ public class PlayerDrops {
         return true;
     }
 
-    private static void dropItems(Player player) {
-        for (ItemStack i : player.getInventory().getContents()) {
+    private static void dropItems(Player player, List<ItemStack> inventory) {
+        for (ItemStack i : inventory) {
             if (i == null) continue;
             if (i.getType() == Material.AIR) continue;
             if (i.getType() == Material.DIAMOND || i.getType() == Material.EMERALD || i.getType() == Material.IRON_INGOT || i.getType() == Material.GOLD_INGOT) {

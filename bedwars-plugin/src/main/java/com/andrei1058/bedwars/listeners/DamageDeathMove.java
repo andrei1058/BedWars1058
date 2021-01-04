@@ -414,7 +414,7 @@ public class DamageDeathMove implements Listener {
             }
 
             // handle drops
-            if (PlayerDrops.handlePlayerDrops(a, victim, killer, victimsTeam, killersTeam, cause)) {
+            if (PlayerDrops.handlePlayerDrops(a, victim, killer, victimsTeam, killersTeam, cause, e.getDrops())) {
                 e.getDrops().clear();
             }
 
