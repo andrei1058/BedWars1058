@@ -728,20 +728,6 @@ public class Arena implements IArena {
             p.removePotionEffect(pf.getType());
         }
 
-        if (getServerType() != ServerType.BUNGEE) {
-            /* restore player inventory */
-            PlayerGoods pg = PlayerGoods.getPlayerGoods(p);
-            if (pg == null){
-                // if there is no previous backup of the inventory send lobby items if multi arena
-                if (BedWars.getServerType() == ServerType.MULTIARENA){
-                    // Send items
-                    Arena.sendLobbyCommandItems(p);
-                }
-            } else {
-                pg.restore();
-            }
-        }
-
         if (p.getPassenger() != null && p.getPassenger().getType() == EntityType.ARMOR_STAND) p.getPassenger().remove();
 
         boolean teamuri = false;
@@ -841,6 +827,18 @@ public class Arena implements IArena {
                 plugin.getLogger().log(Level.SEVERE, p.getName() + " was teleported to the main world because lobby location is not set!");
             } else {
                 p.teleport(config.getConfigLoc("lobbyLoc"));
+            }
+
+            /* restore player inventory */
+            PlayerGoods pg = PlayerGoods.getPlayerGoods(p);
+            if (pg == null) {
+                // if there is no previous backup of the inventory send lobby items if multi arena
+                if (BedWars.getServerType() == ServerType.MULTIARENA) {
+                    // Send items
+                    Arena.sendLobbyCommandItems(p);
+                }
+            } else {
+                pg.restore();
             }
         }
         playerLocation.remove(p);
@@ -943,17 +941,6 @@ public class Arena implements IArena {
         removeArenaByPlayer(p, this);
         p.getInventory().clear();
         p.getInventory().setArmorContents(null);
-        /* restore player inventory */
-        PlayerGoods pg = PlayerGoods.getPlayerGoods(p);
-        if (pg == null){
-            // if there is no previous backup of the inventory send lobby items if multi arena
-            if (BedWars.getServerType() == ServerType.MULTIARENA){
-                // Send items
-                Arena.sendLobbyCommandItems(p);
-            }
-        } else {
-            pg.restore();
-        }
         nms.setCollide(p, this, true);
 
         if (getServerType() == ServerType.SHARED) {
@@ -968,6 +955,18 @@ public class Arena implements IArena {
                 plugin.getLogger().log(Level.SEVERE, p.getName() + " was teleported to the main world because lobby location is not set!");
             } else {
                 p.teleport(config.getConfigLoc("lobbyLoc"));
+            }
+
+            /* restore player inventory */
+            PlayerGoods pg = PlayerGoods.getPlayerGoods(p);
+            if (pg == null) {
+                // if there is no previous backup of the inventory send lobby items if multi arena
+                if (BedWars.getServerType() == ServerType.MULTIARENA) {
+                    // Send items
+                    Arena.sendLobbyCommandItems(p);
+                }
+            } else {
+                pg.restore();
             }
         }
         if (getServerType() == ServerType.BUNGEE) {
