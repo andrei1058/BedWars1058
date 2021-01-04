@@ -210,6 +210,18 @@ public class BreakPlace implements Listener {
                 return;
             }
 
+            // allow breaking of grass
+            switch (e.getBlock().getType().toString()){
+                case "LONG_GRASS":
+                case "GRASS":
+                case "TALL_GRASS":
+                case "TALL_SEAGRASS":
+                case "SEAGRASS":
+                case "SUGAR_CANE":
+                case "SUGAR_CANE_BLOCK":
+                return;
+            }
+
             if (nms.isBed(e.getBlock().getType())) {
                 for (ITeam t : a.getTeams()) {
                     for (int x = e.getBlock().getX() - 2; x < e.getBlock().getX() + 2; x++) {
