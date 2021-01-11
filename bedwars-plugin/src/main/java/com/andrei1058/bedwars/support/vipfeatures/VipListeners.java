@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.util.Vector;
 
 public class VipListeners implements Listener {
 
@@ -47,11 +48,12 @@ public class VipListeners implements Listener {
                                 e.getLocation().getBlockY() == t.getBed().getBlockY() &&
                                 e.getLocation().getBlockZ() == t.getBed().getBlockZ()) {
                             if (BedWars.nms.isBed(t.getBed().clone().add(x, 0, z).getBlock().getType())) e.setCancelled(true);
-                            break;
+                            return;
                         }
                     }
                 }
             }
+            a.getPlaced().add(new Vector(e.getLocation().getBlockX(), e.getLocation().getBlockY(),e.getLocation().getBlockZ()));
         }
     }
 }
