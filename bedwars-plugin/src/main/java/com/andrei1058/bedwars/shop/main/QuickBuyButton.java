@@ -32,9 +32,11 @@ public class QuickBuyButton {
     public ItemStack getItemStack(Player player) {
         ItemStack i = itemStack.clone();
         ItemMeta im = i.getItemMeta();
-        im.setDisplayName(Language.getMsg(player, namePath));
-        im.setLore(Language.getList(player, lorePath));
-        i.setItemMeta(im);
+        if (im != null) {
+            im.setDisplayName(Language.getMsg(player, namePath));
+            im.setLore(Language.getList(player, lorePath));
+            i.setItemMeta(im);
+        }
         return i;
     }
 

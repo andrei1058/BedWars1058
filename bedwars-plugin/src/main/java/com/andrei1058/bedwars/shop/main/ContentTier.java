@@ -91,7 +91,9 @@ public class ContentTier implements IContentTier {
             itemStack = nms.setTag(itemStack, "CustomPotionColor", yml.getString(path + ".tier-item.potion-color"));
         }
 
-        itemStack.setItemMeta(ShopManager.hideItemStuff(itemStack.getItemMeta()));
+        if (itemStack != null) {
+            itemStack.setItemMeta(ShopManager.hideItemStuff(itemStack.getItemMeta()));
+        }
 
         IBuyItem bi;
         for (String s : yml.getConfigurationSection(path + "." + ConfigPath.SHOP_CONTENT_BUY_ITEMS_PATH).getKeys(false)) {

@@ -79,7 +79,9 @@ public class ShopCategory {
             itemStack = nms.setTag(itemStack, "CustomPotionColor", yml.getString(path + ".category-item.potion-color"));
         }
 
-        itemStack.setItemMeta(ShopManager.hideItemStuff(itemStack.getItemMeta()));
+        if (itemStack.getItemMeta() != null) {
+            itemStack.setItemMeta(ShopManager.hideItemStuff(itemStack.getItemMeta()));
+        }
 
         itemNamePath = Messages.SHOP_CATEGORY_ITEM_NAME.replace("%category%", path);
         itemLorePath = Messages.SHOP_CATEGORY_ITEM_LORE.replace("%category%", path);
@@ -130,9 +132,11 @@ public class ShopCategory {
     public ItemStack getItemStack(Player player) {
         ItemStack i = itemStack.clone();
         ItemMeta im = i.getItemMeta();
-        im.setDisplayName(Language.getMsg(player, itemNamePath));
-        im.setLore(Language.getList(player, itemLorePath));
-        i.setItemMeta(im);
+        if (im != null) {
+            im.setDisplayName(Language.getMsg(player, itemNamePath));
+            im.setLore(Language.getList(player, itemLorePath));
+            i.setItemMeta(im);
+        }
         return i;
     }
 

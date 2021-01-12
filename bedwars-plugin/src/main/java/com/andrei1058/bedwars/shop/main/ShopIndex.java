@@ -80,7 +80,7 @@ public class ShopIndex {
         quickBuyCache.addInInventory(inv, ShopCache.getShopCache(player.getUniqueId()));
 
         player.openInventory(inv);
-        if (!indexViewers.contains(player.getUniqueId())){
+        if (!indexViewers.contains(player.getUniqueId())) {
             indexViewers.add(player.getUniqueId());
         }
     }
@@ -92,9 +92,11 @@ public class ShopIndex {
     public void addSeparator(Player player, Inventory inv) {
         ItemStack i = separatorStandard.clone();
         ItemMeta im = i.getItemMeta();
-        im.setDisplayName(Language.getMsg(player, separatorNamePath));
-        im.setLore(Language.getList(player, separatorLorePath));
-        i.setItemMeta(im);
+        if (im != null) {
+            im.setDisplayName(Language.getMsg(player, separatorNamePath));
+            im.setLore(Language.getList(player, separatorLorePath));
+            i.setItemMeta(im);
+        }
 
         for (int x = 9; x < 18; x++) {
             inv.setItem(x, i);
@@ -107,9 +109,11 @@ public class ShopIndex {
     public ItemStack getSelectedItem(Player player) {
         ItemStack i = separatorSelected.clone();
         ItemMeta im = i.getItemMeta();
-        im.setDisplayName(Language.getMsg(player, separatorNamePath));
-        im.setLore(Language.getList(player, separatorLorePath));
-        i.setItemMeta(im);
+        if (im != null) {
+            im.setDisplayName(Language.getMsg(player, separatorNamePath));
+            im.setLore(Language.getList(player, separatorLorePath));
+            i.setItemMeta(im);
+        }
         return i;
     }
 

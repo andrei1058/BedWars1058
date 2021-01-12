@@ -31,13 +31,13 @@ import static com.andrei1058.bedwars.BedWars.plugin;
 
 public class UpgradesManager {
 
-    private static LinkedList<UUID> upgradeViewers = new LinkedList<>();
+    private static final LinkedList<UUID> upgradeViewers = new LinkedList<>();
     //store lower case names
-    private static HashMap<String, MenuContent> menuContentByName = new HashMap<>();
+    private static final HashMap<String, MenuContent> menuContentByName = new HashMap<>();
     //store lower case names
-    private static HashMap<String, UpgradesIndex> menuByName = new HashMap<>();
+    private static final HashMap<String, UpgradesIndex> menuByName = new HashMap<>();
 
-    private static HashMap<IArena, UpgradesIndex> customMenuForArena = new HashMap<>();
+    private static final HashMap<IArena, UpgradesIndex> customMenuForArena = new HashMap<>();
 
     private static UpgradesConfig upgrades;
 
@@ -367,6 +367,7 @@ public class UpgradesManager {
      * @param arena target arena.
      * @param menu  custom menu.
      */
+    @SuppressWarnings("unused")
     public static void setCustomMenuForArena(IArena arena, UpgradesIndex menu) {
         if (!customMenuForArena.containsKey(arena)) {
             customMenuForArena.put(arena, menu);
@@ -405,8 +406,10 @@ public class UpgradesManager {
         if (upgrades.getYml().getBoolean(path + ".display-item.enchanted")) {
             i.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
             ItemMeta im = i.getItemMeta();
-            im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-            i.setItemMeta(im);
+            if (im != null) {
+                im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                i.setItemMeta(im);
+            }
         }
         return i;
     }
