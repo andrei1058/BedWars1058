@@ -209,7 +209,9 @@ public class DamageDeathMove implements Listener {
                                 //BedWars.nms.showPlayer(p, on);
                             }
                             int taskId = a.getShowTime().remove(p);
-                            Bukkit.getScheduler().cancelTask(taskId);
+                            if (taskId > 0) {
+                                Bukkit.getScheduler().cancelTask(taskId);
+                            }
                             p.removePotionEffect(PotionEffectType.INVISIBILITY);
                             ITeam team = a.getTeam(p);
                             // show name tag

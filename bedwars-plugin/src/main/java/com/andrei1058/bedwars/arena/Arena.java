@@ -900,8 +900,10 @@ public class Arena implements IArena {
 
         //Remove from magic milk
         if (magicMilk.containsKey(p.getUniqueId())) {
-            Bukkit.getScheduler().cancelTask(magicMilk.get(p.getUniqueId()));
-            magicMilk.remove(p.getUniqueId());
+            int taskId = magicMilk.remove(p.getUniqueId());
+            if (taskId > 0) {
+                Bukkit.getScheduler().cancelTask(taskId);
+            }
         }
 
         showTime.remove(p);
@@ -1017,8 +1019,10 @@ public class Arena implements IArena {
 
         //Remove from magic milk
         if (magicMilk.containsKey(p.getUniqueId())) {
-            Bukkit.getScheduler().cancelTask(magicMilk.get(p.getUniqueId()));
-            magicMilk.remove(p.getUniqueId());
+            int taskId = magicMilk.get(p.getUniqueId());
+            if (taskId > 0){
+                Bukkit.getScheduler().cancelTask(taskId);
+            }
         }
 
         refreshSigns();
