@@ -8,6 +8,7 @@ import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.gameplay.GeneratorUpgradeEvent;
+import com.andrei1058.bedwars.api.events.player.PlayerGeneratorCollectEvent;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.region.Cuboid;
@@ -146,23 +147,27 @@ public class OreGenerator implements IGenerator {
                 dropItem(location);
                 return;
             }
-            Object[] players = location.getWorld().getNearbyEntities(location, 1, 1, 1).stream().filter(entity -> entity.getType() == EntityType.PLAYER)
-                    .filter(entity -> arena.isPlayer((Player) entity))/*.filter(entity -> arena.getTeam((Player) entity) == bwt)*/.toArray();
-            if (players.length <= 1) {
-                dropItem(location);
-                return;
-            }
-            for (Object o : players) {
-                Player player = (Player) o;
-                ItemStack item = ore.clone();
-                item.setAmount(amount);
-                player.playSound(player.getLocation(), Sound.valueOf(BedWars.getForCurrentVersion("ITEM_PICKUP", "ENTITY_ITEM_PICKUP", "ENTITY_ITEM_PICKUP")), 0.6f, 1.3f);
-                Collection<ItemStack> excess = player.getInventory().addItem(item).values();
-                for (ItemStack value : excess) {
-                    dropItem(player.getLocation(), value.getAmount());
+            if (BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_ENABLE_GEN_SPLIT)) {
+                Object[] players = location.getWorld().getNearbyEntities(location, 1, 1, 1).stream().filter(entity -> entity.getType() == EntityType.PLAYER)
+                        .filter(entity -> arena.isPlayer((Player) entity))/*.filter(entity -> arena.getTeam((Player) entity) == bwt)*/.toArray();
+                if (players.length <= 1) {
+                    dropItem(location);
+                    return;
                 }
+                for (Object o : players) {
+                    Player player = (Player) o;
+                    ItemStack item = ore.clone();
+                    item.setAmount(amount);
+                    player.playSound(player.getLocation(), Sound.valueOf(BedWars.getForCurrentVersion("ITEM_PICKUP", "ENTITY_ITEM_PICKUP", "ENTITY_ITEM_PICKUP")), 0.6f, 1.3f);
+                    Collection<ItemStack> excess = player.getInventory().addItem(item).values();
+                    for (ItemStack value : excess) {
+                        dropItem(player.getLocation(), value.getAmount());
+                    }
+                }
+                return;
+            } else {
+                dropItem(location);
             }
-            return;
         }
         lastSpawn--;
         for (IGenHolo e : armorStands.values()) {
