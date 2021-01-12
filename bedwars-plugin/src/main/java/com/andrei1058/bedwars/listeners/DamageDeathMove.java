@@ -8,6 +8,7 @@ import com.andrei1058.bedwars.api.arena.shop.ShopHolo;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.entity.Despawnable;
+import com.andrei1058.bedwars.api.events.player.PlayerInvisibilityPotionEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
@@ -208,12 +209,10 @@ public class DamageDeathMove implements Listener {
                                 BedWars.nms.showArmor(p, on);
                                 //BedWars.nms.showPlayer(p, on);
                             }
-                            int taskId = a.getShowTime().remove(p);
-                            if (taskId > 0) {
-                                Bukkit.getScheduler().cancelTask(taskId);
-                            }
+                            a.getShowTime().remove(p);
                             p.removePotionEffect(PotionEffectType.INVISIBILITY);
                             ITeam team = a.getTeam(p);
+                            Bukkit.getPluginManager().callEvent(new PlayerInvisibilityPotionEvent(PlayerInvisibilityPotionEvent.Type.REMOVED, team, p, a));
                             // show name tag
                             for (BedWarsScoreboard sb : BedWarsScoreboard.getScoreboards().values()) {
                                 if (sb.getArena() == null) continue;
