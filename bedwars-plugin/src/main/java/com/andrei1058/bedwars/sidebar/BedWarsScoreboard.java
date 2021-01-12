@@ -547,7 +547,7 @@ public class BedWarsScoreboard {
                 time = (arena.getPlayingTask().getDragonSpawnCountdown()) * 1000L;
                 break;
         }
-        return nextEventDateFormat.format(new Date(time));
+        return time == 0 ? "0" : nextEventDateFormat.format(new Date(time));
     }
 
     /**
