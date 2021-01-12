@@ -15,7 +15,7 @@ import org.bukkit.util.Vector;
 
 public class VipListeners implements Listener {
 
-    private IVipFeatures api;
+    private final IVipFeatures api;
 
     public VipListeners(IVipFeatures api) {
         this.api = api;
@@ -24,17 +24,13 @@ public class VipListeners implements Listener {
     @EventHandler
     public void onServerJoin(PlayerJoinEvent e) {
         if (BedWars.getServerType() == ServerType.MULTIARENA) {
-            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
-                api.givePlayerItemStack(e.getPlayer());
-            }, 10L);
+            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> api.givePlayerItemStack(e.getPlayer()), 10L);
         }
     }
 
     @EventHandler
     public void onArenaJoin(PlayerJoinArenaEvent e) {
-        Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
-            api.givePlayerItemStack(e.getPlayer());
-        }, 10L);
+        Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> api.givePlayerItemStack(e.getPlayer()), 10L);
     }
 
     @EventHandler
