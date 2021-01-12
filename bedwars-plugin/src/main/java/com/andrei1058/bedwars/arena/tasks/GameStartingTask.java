@@ -136,7 +136,7 @@ public class GameStartingTask implements Runnable, StartingTask {
             for (Player player : getArena().getPlayers()) {
                 Language playerLang = Language.getPlayerLanguage(player);
                 String[] titleSubtitle = Language.getCountDownTitle(playerLang, getCountdown());
-                nms.sendTitle(player, titleSubtitle[0], titleSubtitle[1], 0, 22, 0);
+                nms.sendTitle(player, titleSubtitle[0], titleSubtitle[1], 4, 22, 4);
                 player.sendMessage(getMsg(player, Messages.ARENA_STATUS_START_COUNTDOWN_CHAT).replace("{time}", String.valueOf(getCountdown())));
             }
         }
