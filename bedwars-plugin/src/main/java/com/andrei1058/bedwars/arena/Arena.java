@@ -655,6 +655,8 @@ public class Arena implements IArena {
                 sendSpectatorCommandItems(p);
                 // make invisible because it is annoying whene there are many spectators around the map
                 p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false));
+
+                p.getInventory().setArmorContents(null);
             }, 25L);
 
             p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_MSG).replace("{arena}", this.getDisplayName()));
