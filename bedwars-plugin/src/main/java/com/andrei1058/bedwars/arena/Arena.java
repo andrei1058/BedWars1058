@@ -2421,7 +2421,7 @@ public class Arena implements IArena {
             if (ar.getArenaName().equalsIgnoreCase(arenaName)) return false;
         }
 
-        if (Arena.getArenas().size() >= config.getInt(ConfigPath.GENERAL_CONFIGURATION_AUTO_SCALE_LIMIT)) return false;
+        if (Arena.getArenas().size() >= Arena.getGamesBeforeRestart()) return false;
 
         for (IArena ar : Arena.getArenas()) {
             if (ar.getArenaName().equalsIgnoreCase(arenaName)) {
