@@ -849,6 +849,9 @@ public class Arena implements IArena {
             }
         }
         playerLocation.remove(p);
+        for (PotionEffect pf : p.getActivePotionEffects()){
+            p.removePotionEffect(pf.getType());
+        }
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
             for (Player on : Bukkit.getOnlinePlayers()) {
@@ -976,6 +979,10 @@ public class Arena implements IArena {
                 }
             } else {
                 pg.restore();
+            }
+
+            for (PotionEffect pf : p.getActivePotionEffects()){
+                p.removePotionEffect(pf.getType());
             }
         }
         if (getServerType() == ServerType.BUNGEE) {
