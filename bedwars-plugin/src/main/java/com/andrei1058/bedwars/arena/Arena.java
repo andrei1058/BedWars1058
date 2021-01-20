@@ -514,6 +514,9 @@ public class Arena implements IArena {
 
             BedWarsScoreboard.giveScoreboard(p, this, false);
             sendPreGameCommandItems(p);
+            for (PotionEffect pf : p.getActivePotionEffects()) {
+                p.removePotionEffect(pf.getType());
+            }
         } else if (status == GameState.playing) {
             addSpectator(p, false, null);
             /* stop code if status playing*/
