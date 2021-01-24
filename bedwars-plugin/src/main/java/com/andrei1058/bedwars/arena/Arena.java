@@ -543,6 +543,13 @@ public class Arena implements IArena {
                     BedWars.nms.spigotHidePlayer(on, p);
                 }
             }
+
+            if (getServerType() == ServerType.BUNGEE) {
+                // fix invisibility issue
+                //if (BedWars.nms.getVersion() == 7) {
+                BedWars.nms.sendPlayerSpawnPackets(p, this);
+                //}
+            }
         }, 17L);
 
         if (getServerType() == ServerType.BUNGEE) {
