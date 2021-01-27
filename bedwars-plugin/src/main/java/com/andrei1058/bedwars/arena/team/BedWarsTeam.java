@@ -343,12 +343,12 @@ public class BedWarsTeam implements ITeam {
         p.setHealth(20);
         if (!getBaseEffects().isEmpty()) {
             for (PotionEffect ef : getBaseEffects()) {
-                p.addPotionEffect(ef);
+                p.addPotionEffect(ef, true);
             }
         }
         if (!getTeamEffects().isEmpty()) {
             for (PotionEffect ef : getTeamEffects()) {
-                p.addPotionEffect(ef);
+                p.addPotionEffect(ef, true);
             }
         }
         if (!getBowsEnchantments().isEmpty()) {
@@ -529,7 +529,7 @@ public class BedWarsTeam implements ITeam {
     public void addTeamEffect(PotionEffectType pef, int amp, int duration) {
         getTeamEffects().add(new PotionEffect(pef, duration, amp));
         for (Player p : getMembers()) {
-            p.addPotionEffect(new PotionEffect(pef, duration, amp));
+            p.addPotionEffect(new PotionEffect(pef, duration, amp), true);
         }
     }
 
@@ -541,7 +541,7 @@ public class BedWarsTeam implements ITeam {
         for (Player p : new ArrayList<>(getMembers())) {
             if (p.getLocation().distance(getBed()) <= getArena().getIslandRadius()) {
                 for (PotionEffect e : getBaseEffects()) {
-                    p.addPotionEffect(e);
+                    p.addPotionEffect(e, true);
                 }
             }
         }

@@ -96,7 +96,7 @@ public class BaseListener implements Listener {
         if (team.isMember(e.getPlayer())) {
             // Give base effects
             for (PotionEffect ef : team.getBaseEffects()) {
-                e.getPlayer().addPotionEffect(ef);
+                e.getPlayer().addPotionEffect(ef, true);
             }
         } else {
             // Trigger trap
