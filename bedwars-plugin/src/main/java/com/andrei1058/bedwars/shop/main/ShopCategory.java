@@ -47,8 +47,8 @@ public class ShopCategory {
         }
         slot = yml.getInt(path + ConfigPath.SHOP_CATEGORY_SLOT);
 
-        if (slot < 1 || slot > 7) {
-            BedWars.plugin.getLogger().severe("Slot must be n > 1 and n < 8 at: " + path);
+        if (slot < 1 || slot > 8) {
+            BedWars.plugin.getLogger().severe("Slot must be n > 1 and n < 9 at: " + path);
             return;
         }
 

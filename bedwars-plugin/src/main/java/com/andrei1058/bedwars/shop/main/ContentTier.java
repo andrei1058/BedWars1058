@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.api.arena.shop.IBuyItem;
 import com.andrei1058.bedwars.api.arena.shop.IContentTier;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.shop.ShopManager;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -96,9 +97,19 @@ public class ContentTier implements IContentTier {
         }
 
         IBuyItem bi;
-        for (String s : yml.getConfigurationSection(path + "." + ConfigPath.SHOP_CONTENT_BUY_ITEMS_PATH).getKeys(false)) {
-            bi = new BuyItem(path + "." + ConfigPath.SHOP_CONTENT_BUY_ITEMS_PATH + "." + s, yml, identifier, this);
+        if (yml.get(path + "." + ConfigPath.SHOP_CONTENT_BUY_ITEMS_PATH) != null) {
+            for (String s : yml.getConfigurationSection(path + "." + ConfigPath.SHOP_CONTENT_BUY_ITEMS_PATH).getKeys(false)) {
+                bi = new BuyItem(path + "." + ConfigPath.SHOP_CONTENT_BUY_ITEMS_PATH + "." + s, yml, identifier, this);
+                if (bi.isLoaded()) buyItemsList.add(bi);
+            }
+        }
+        if (yml.get(path + "." + ConfigPath.SHOP_CONTENT_BUY_CMDS_PATH) != null) {
+            bi = new BuyCommand(path + "." + ConfigPath.SHOP_CONTENT_BUY_CMDS_PATH, yml, identifier);
             if (bi.isLoaded()) buyItemsList.add(bi);
+        }
+
+        if (buyItemsList.isEmpty()) {
+            Bukkit.getLogger().warning("Loaded 0 buy content for: " + path);
         }
 
         loaded = true;

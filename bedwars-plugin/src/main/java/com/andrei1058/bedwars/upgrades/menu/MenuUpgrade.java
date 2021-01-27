@@ -122,7 +122,7 @@ public class MenuUpgrade implements MenuContent, TeamUpgrade {
             }
             Sounds.playSound(ConfigPath.SOUNDS_BOUGHT, player);
             for (UpgradeAction a : ut.getUpgradeActions()) {
-                a.onBuy(team);
+                a.onBuy(player, team);
             }
             player.closeInventory();
 

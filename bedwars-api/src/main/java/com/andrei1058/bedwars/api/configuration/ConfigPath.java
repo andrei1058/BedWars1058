@@ -233,6 +233,7 @@ public class ConfigPath {
 
     public static final String SHOP_CATEGORY_SLOT = ".category-slot";
     public static final String SHOP_CONTENT_BUY_ITEMS_PATH = "buy-items";
+    public static final String SHOP_CONTENT_BUY_CMDS_PATH = "buy-cmds";
     public static final String SHOP_CATEGORY_CONTENT_CONTENT_SLOT = "content-settings.content-slot";
     public static final String SHOP_CATEGORY_CONTENT_IS_PERMANENT = "content-settings.is-permanent";
     public static final String SHOP_CATEGORY_CONTENT_IS_DOWNGRADABLE = "content-settings.is-downgradable";
