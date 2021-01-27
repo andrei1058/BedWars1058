@@ -29,6 +29,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
@@ -43,7 +44,7 @@ import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class BreakPlace implements Listener {
 
-    private static List<Player> buildSession = new ArrayList<>();
+    private static final List<Player> buildSession = new ArrayList<>();
 
     @EventHandler
     public void onIceMelt(BlockFadeEvent e) {
@@ -169,7 +170,7 @@ public class BreakPlace implements Listener {
             if (event.getClickedBlock() != null && event.getClickedBlock().getRelative(BlockFace.UP).getType() == Material.FIRE) {
                 if (!isBuildSession(player)) {
                     event.setCancelled(true);
-                    return;
+                    //return;
                 }
             }
         }
@@ -180,6 +181,17 @@ public class BreakPlace implements Listener {
         IArena a = Arena.getArenaByPlayer(event.getPlayer());
         if (a != null) {
             a.removePlacedBlock(event.getBlock());
+        }
+    }
+
+    @EventHandler
+    public void onBlockDrop(ItemSpawnEvent event){
+        //WHEAT_SEEDS
+        IArena arena = Arena.getArenaByIdentifier(event.getEntity().getWorld().getName());
+        if (arena == null) return;
+        String material = event.getEntity().getItemStack().getType().toString();
+        if (material.equals("SEEDS") || material.equals("WHEAT_SEEDS")){
+            event.setCancelled(true);
         }
     }
 
@@ -211,6 +223,7 @@ public class BreakPlace implements Listener {
             }
 
             // allow breaking of grass
+            // drops are removed in another event
             switch (e.getBlock().getType().toString()){
                 case "LONG_GRASS":
                 case "TALL_GRASS":
@@ -219,8 +232,10 @@ public class BreakPlace implements Listener {
                 case "SUGAR_CANE":
                 case "SUGAR_CANE_BLOCK":
                 case "GRASS_PATH":
-                    e.setCancelled(true);
-                    e.getBlock().setType(Material.AIR);
+                case "DOUBLE_PLANT":
+                    if (e.isCancelled()) {
+                        e.setCancelled(false);
+                    }
                 return;
             }
 
@@ -237,7 +252,6 @@ public class BreakPlace implements Listener {
                                             if (e.getPlayer().getLocation().getBlock().getType().toString().contains("BED")) {
                                                 e.getPlayer().teleport(e.getPlayer().getLocation().add(0, 0.5, 0));
                                             }
-                                            return;
                                         } else {
                                             e.setCancelled(false);
                                             t.setBedDestroyed(true);
@@ -254,8 +268,8 @@ public class BreakPlace implements Listener {
                                                 }
                                                 Sounds.playSound(ConfigPath.SOUNDS_BED_DESTROY, on);
                                             }
-                                            return;
                                         }
+                                        return;
                                     }
                                 }
                             }
@@ -292,7 +306,6 @@ public class BreakPlace implements Listener {
             File dir = new File(plugin.getDataFolder(), "/Arenas");
             boolean exists = false;
             if (dir.exists()) {
-                //noinspection ConstantConditions
                 for (File f : dir.listFiles()) {
                     if (f.isFile()) {
                         if (f.getName().contains(".yml")) {
@@ -501,8 +514,8 @@ public class BreakPlace implements Listener {
                     }
                 }
             }
-            if (bed) return;
-            /**Object[] players = e.getBlock().getWorld().getNearbyEntities(e.getBlock().getLocation(), 1, 1, 1).stream().filter(ee -> ee.getType() == EntityType.PLAYER).toArray();
+            //if (bed) return;
+            /*Object[] players = e.getBlock().getWorld().getNearbyEntities(e.getBlock().getLocation(), 1, 1, 1).stream().filter(ee -> ee.getType() == EntityType.PLAYER).toArray();
             for (Object o : players) {
                 Player p = (Player) o;
                 if (a.isSpectator(p)) {
