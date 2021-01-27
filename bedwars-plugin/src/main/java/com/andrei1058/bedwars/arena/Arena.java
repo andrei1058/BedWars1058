@@ -254,9 +254,6 @@ public class Arena implements IArena {
         }
         if (error) return;
         yKillHeight = config.getInt(ConfigPath.ARENA_Y_LEVEL_KILL);
-        if (yKillHeight < -1) {
-            yKillHeight = -1;
-        }
         addToEnableQueue(this);
         Language.saveIfNotExists(Messages.ARENA_DISPLAY_GROUP_PATH + getGroup().toLowerCase(), String.valueOf(getGroup().charAt(0)).toUpperCase() + group.substring(1).toLowerCase());
     }
