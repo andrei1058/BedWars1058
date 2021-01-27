@@ -528,9 +528,7 @@ public class DamageDeathMove implements Listener {
             } else {
                 if (a.getStatus() == GameState.playing) {
                     if (a.getYKillHeight() != -1) {
-                        e.getPlayer().sendMessage("1: " + a.getYKillHeight());
                         if (e.getPlayer().getLocation().getBlockY() <= a.getYKillHeight()) {
-                            e.getPlayer().sendMessage("2");
                             nms.voidKill(e.getPlayer());
                         }
                     }

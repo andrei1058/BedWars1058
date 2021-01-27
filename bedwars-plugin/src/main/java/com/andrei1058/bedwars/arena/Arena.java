@@ -253,7 +253,7 @@ public class Arena implements IArena {
             return;
         }
         if (error) return;
-        yKillHeight = config.getInt(ConfigPath.ARENA_Y_LEVEL_KILL);
+        yKillHeight = yml.getInt(ConfigPath.ARENA_Y_LEVEL_KILL);
         addToEnableQueue(this);
         Language.saveIfNotExists(Messages.ARENA_DISPLAY_GROUP_PATH + getGroup().toLowerCase(), String.valueOf(getGroup().charAt(0)).toUpperCase() + group.substring(1).toLowerCase());
     }
