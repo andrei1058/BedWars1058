@@ -22,6 +22,7 @@ import org.bukkit.block.data.type.WallSign;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_16_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_16_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R1.entity.CraftFireball;
 import org.bukkit.craftbukkit.v1_16_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_16_R1.entity.CraftTNTPrimed;
@@ -39,6 +40,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.bukkit.scoreboard.Team;
+import org.bukkit.util.Vector;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -723,5 +725,14 @@ public class v1_16_R1 extends VersionSupport {
     @Override
     public void spigotHidePlayer(Player victim, Player receiver) {
         receiver.hidePlayer(getPlugin(), victim);
+    }
+
+    @Override
+    public Fireball setFireballDirection(Fireball fireball, Vector vector) {
+        EntityFireball fb = ((CraftFireball) fireball).getHandle();
+        fb.dirX = vector.getX() * 0.1D;
+        fb.dirY = vector.getY() * 0.1D;
+        fb.dirZ = vector.getZ() * 0.1D;
+        return (Fireball) fb.getBukkitEntity();
     }
 }

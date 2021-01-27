@@ -171,12 +171,10 @@ public class Interact implements Listener {
                         e.setCancelled(true);
                         Fireball fb = p.launchProjectile(Fireball.class);
                         Vector direction = p.getEyeLocation().getDirection();
-
-                        fb.setDirection(new Vector(direction.getX() * 0.1D, direction.getY() * 0.1D, direction.getZ() * 0.1D));
-                        fb.setVelocity(fb.getDirection().multiply(5));
+                        fb = nms.setFireballDirection(fb, direction);
+                        fb.setVelocity(fb.getDirection().multiply(2));
                         fb.setIsIncendiary(false);
                         fb.setMetadata("bw1058", new FixedMetadataValue(plugin, "ceva"));
-                        //fb.setGlowing(true);
                         nms.minusAmount(p, inHand, 1);
                     }
                 }

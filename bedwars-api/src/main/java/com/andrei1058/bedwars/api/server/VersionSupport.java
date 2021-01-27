@@ -12,6 +12,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.inventory.InventoryEvent;
@@ -19,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.Team;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -395,4 +397,13 @@ public abstract class VersionSupport {
     public void spigotHidePlayer(Player victim, Player receiver) {
         receiver.hidePlayer(victim);
     }
+
+    /**
+     * Make fireball go straight.
+     *
+     * @param fireball fireball instance;
+     * @param vector   fireball direction to normalize.
+     * @return modified fireball.
+     */
+    public abstract Fireball setFireballDirection(Fireball fireball, Vector vector);
 }
