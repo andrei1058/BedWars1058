@@ -1114,13 +1114,18 @@ public class Arena implements IArena {
      * This will automatically kick/ remove the people from the arena.
      */
     public void disable() {
-        if (getRestartingTask() != null) getRestartingTask().cancel();
-        plugin.getLogger().log(Level.WARNING, "Disabling arena: " + getArenaName());
         for (Player p : new ArrayList<>(players)) {
             removePlayer(p, false);
         }
         for (Player p : new ArrayList<>(spectators)) {
             removeSpectator(p, false);
+        }
+        if (getRestartingTask() != null) getRestartingTask().cancel();
+        if (getStartingTask() != null) getStartingTask().cancel();
+        if (getPlayingTask() != null) getPlayingTask().cancel();
+        plugin.getLogger().log(Level.WARNING, "Disabling arena: " + getArenaName());
+        for (Player inWorld : getWorld().getPlayers()) {
+            inWorld.kickPlayer("You're not supposed to be here.");
         }
         BedWars.getAPI().getRestoreAdapter().onDisable(this);
         Bukkit.getPluginManager().callEvent(new ArenaDisableEvent(getArenaName(), getWorldName()));
@@ -1131,13 +1136,16 @@ public class Arena implements IArena {
      * Restart the arena.
      */
     public void restart() {
+        if (getRestartingTask() != null) getRestartingTask().cancel();
+        if (getStartingTask() != null) getStartingTask().cancel();
+        if (getPlayingTask() != null) getPlayingTask().cancel();
         plugin.getLogger().log(Level.FINE, "Restarting arena: " + getArenaName());
         Bukkit.getPluginManager().callEvent(new ArenaRestartEvent(getArenaName(), getWorldName()));
         for (Player inWorld : getWorld().getPlayers()) {
             inWorld.kickPlayer("You're not supposed to be here.");
         }
-        destroyData();
         BedWars.getAPI().getRestoreAdapter().onRestart(this);
+        destroyData();
     }
 
     //GETTER METHODS
