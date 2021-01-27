@@ -18,7 +18,6 @@ import com.andrei1058.bedwars.arena.LastHit;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import com.andrei1058.bedwars.listeners.dropshandler.PlayerDrops;
-import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.*;

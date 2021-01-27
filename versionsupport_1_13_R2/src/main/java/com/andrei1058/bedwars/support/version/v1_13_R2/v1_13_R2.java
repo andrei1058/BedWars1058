@@ -10,7 +10,6 @@ import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.VersionSupport;
 import com.andrei1058.bedwars.support.version.common.VersionCommon;
-import com.google.common.collect.Sets;
 import com.mojang.datafixers.types.Type;
 import net.minecraft.server.v1_13_R2.Item;
 import net.minecraft.server.v1_13_R2.*;
@@ -20,7 +19,6 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.data.type.Bed;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftFireball;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
@@ -28,7 +26,6 @@ import org.bukkit.craftbukkit.v1_13_R2.entity.CraftTNTPrimed;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.*;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -189,8 +186,6 @@ public class v1_13_R2 extends VersionSupport {
     @Override
     public void registerEntities() {
         Map<Object, Type<?>> types = (Map<Object, Type<?>>) DataConverterRegistry.a().getSchema(15190).findChoiceType(DataConverterTypes.n).types();
-        types.put("minecraft:bwvillager", types.get("minecraft:villager"));
-        EntityTypes.a("bwvillager", EntityTypes.a.a(VillagerShop.class, VillagerShop::new));
         types.put("minecraft:bwsilverfish", types.get("minecraft:silverfish"));
         EntityTypes.a("bwsilverfish", EntityTypes.a.a(Silverfish.class, Silverfish::new));
         types.put("minecraft:bwgolem", types.get("minecraft:iron_golem"));
@@ -200,7 +195,15 @@ public class v1_13_R2 extends VersionSupport {
     @Override
     public void spawnShop(Location loc, String name1, List<Player> players, IArena arena) {
         Location l = loc.clone();
-        spawnVillager(l);
+
+        if (l.getWorld() == null) return;
+        Villager vlg = (Villager) l.getWorld().spawnEntity(loc, EntityType.VILLAGER);
+        vlg.setAI(false);
+        vlg.setRemoveWhenFarAway(false);
+        vlg.setCollidable(false);
+        vlg.setInvulnerable(true);
+        vlg.setSilent(true);
+
         for (Player p : players) {
             String[] nume = Language.getMsg(p, name1).split(",");
             if (nume.length == 1) {
@@ -228,71 +231,13 @@ public class v1_13_R2 extends VersionSupport {
     }
 
     private static ArmorStand createArmorStand(String name, Location loc) {
+        if (loc.getWorld() == null) return null;
         ArmorStand a = loc.getWorld().spawn(loc, ArmorStand.class);
         a.setGravity(false);
         a.setVisible(false);
         a.setCustomNameVisible(true);
         a.setCustomName(name);
         return a;
-    }
-
-    /**
-     * Custom villager class
-     */
-    public static class VillagerShop extends EntityVillager {
-
-        VillagerShop(World world) {
-
-            super(world);
-
-            try {
-                Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
-                bField.setAccessible(true);
-                Field cField = PathfinderGoalSelector.class.getDeclaredField("c");
-                cField.setAccessible(true);
-                bField.set(this.goalSelector, Sets.newLinkedHashSet());
-                bField.set(this.targetSelector, Sets.newLinkedHashSet());
-                cField.set(this.goalSelector, Sets.newLinkedHashSet());
-                cField.set(this.targetSelector, Sets.newLinkedHashSet());
-            } catch (Exception ignored) {
-            }
-
-            this.goalSelector.a(0, new PathfinderGoalFloat(this));
-            this.goalSelector.a(9, new PathfinderGoalInteract(this, EntityHuman.class, 3.0f, 1.0f));
-            this.goalSelector.a(10, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0f));
-        }
-
-        public void collide(net.minecraft.server.v1_13_R2.Entity entity) {
-        }
-
-        public boolean damageEntity(DamageSource damagesource, float f) {
-            return false;
-        }
-
-        public void g(double d0, double d1, double d2) {
-        }
-
-        public void move(EnumMoveType enummovetype, double d0, double d1, double d2) {
-        }
-
-        public void a(SoundEffect soundeffect, float f, float f1) {
-        }
-
-        protected void initAttributes() {
-            super.initAttributes();
-            this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.0D);
-        }
-    }
-
-    /**
-     * Spawn shop npc
-     */
-    private void spawnVillager(Location loc) {
-        WorldServer mcWorld = ((CraftWorld) loc.getWorld()).getHandle();
-        VillagerShop customEnt = new VillagerShop(mcWorld);
-        customEnt.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
-        ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
-        mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
     }
 
     @Override
@@ -340,6 +285,7 @@ public class v1_13_R2 extends VersionSupport {
 
     @Override
     public void spawnDragon(Location l, ITeam bwt) {
+        if (l.getWorld() == null) return;
         EnderDragon ed = (EnderDragon) l.getWorld().spawnEntity(l, EntityType.ENDER_DRAGON);
         ed.setPhase(EnderDragon.Phase.CIRCLING);
     }
@@ -437,9 +383,11 @@ public class v1_13_R2 extends VersionSupport {
     @Override
     public org.bukkit.inventory.ItemStack setSkullOwner(org.bukkit.inventory.ItemStack i, Player p) {
         if (i.getType() != org.bukkit.Material.PLAYER_HEAD) return i;
-        SkullMeta sm = (SkullMeta) i.getItemMeta();
-        sm.setOwningPlayer(p);
-        i.setItemMeta(sm);
+        if (i.hasItemMeta() && i.getItemMeta() instanceof SkullMeta) {
+            SkullMeta sm = (SkullMeta) i.getItemMeta();
+            sm.setOwningPlayer(p);
+            i.setItemMeta(sm);
+        }
         return i;
     }
 
@@ -563,16 +511,18 @@ public class v1_13_R2 extends VersionSupport {
             head = CraftItemStack.asBukkitCopy(i);
         }
 
-        SkullMeta headMeta = (SkullMeta) head.getItemMeta();
-        Field profileField;
-        try {
-            profileField = headMeta.getClass().getDeclaredField("profile");
-            profileField.setAccessible(true);
-            profileField.set(headMeta, ((CraftPlayer) player).getProfile());
-        } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e1) {
-            e1.printStackTrace();
+        if (head.hasItemMeta() && head.getItemMeta() instanceof SkullMeta) {
+            SkullMeta headMeta = (SkullMeta) head.getItemMeta();
+            Field profileField;
+            try {
+                profileField = headMeta.getClass().getDeclaredField("profile");
+                profileField.setAccessible(true);
+                profileField.set(headMeta, ((CraftPlayer) player).getProfile());
+            } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e1) {
+                e1.printStackTrace();
+            }
+            head.setItemMeta(headMeta);
         }
-        head.setItemMeta(headMeta);
         return head;
     }
 

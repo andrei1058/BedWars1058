@@ -11,7 +11,6 @@ import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.VersionSupport;
 import com.andrei1058.bedwars.support.version.common.VersionCommon;
-import com.google.common.collect.Sets;
 import net.minecraft.server.v1_12_R1.Item;
 import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.Location;
@@ -19,14 +18,12 @@ import org.bukkit.block.Bed;
 import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_12_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftFireball;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftTNTPrimed;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.entity.*;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -185,7 +182,6 @@ public class v1_12_R1 extends VersionSupport {
 
     @Override
     public void registerEntities() {
-        registerEntity("ShopNPC", 120, VillagerShop.class);
         registerEntity("Silverfish2", 60, Silverfish.class);
         registerEntity("IGolem", 99, IGolem.class);
     }
@@ -193,7 +189,14 @@ public class v1_12_R1 extends VersionSupport {
     @Override
     public void spawnShop(Location loc, String name1, List<Player> players, IArena arena) {
         Location l = loc.clone();
-        spawnVillager(l);
+
+        Villager vlg = (Villager) loc.getWorld().spawnEntity(loc, EntityType.VILLAGER);
+        vlg.setAI(false);
+        vlg.setRemoveWhenFarAway(false);
+        vlg.setCollidable(false);
+        vlg.setInvulnerable(true);
+        vlg.setSilent(true);
+
         for (Player p : players) {
             String[] nume = Language.getMsg(p, name1).split(",");
             if (nume.length == 1) {
@@ -236,59 +239,6 @@ public class v1_12_R1 extends VersionSupport {
     }
 
     /**
-     * Custom villager class
-     */
-    @SuppressWarnings("WeakerAccess")
-    public static class VillagerShop extends net.minecraft.server.v1_12_R1.EntityVillager {
-
-        public VillagerShop(net.minecraft.server.v1_12_R1.World world) {
-
-            super(world);
-
-            try {
-                Field bField = net.minecraft.server.v1_12_R1.PathfinderGoalSelector.class.getDeclaredField("b");
-                bField.setAccessible(true);
-                Field cField = net.minecraft.server.v1_12_R1.PathfinderGoalSelector.class.getDeclaredField("c");
-                cField.setAccessible(true);
-                bField.set(this.goalSelector, Sets.newLinkedHashSet());
-                bField.set(this.targetSelector, Sets.newLinkedHashSet());
-                cField.set(this.goalSelector, Sets.newLinkedHashSet());
-                cField.set(this.targetSelector, Sets.newLinkedHashSet());
-            } catch (Exception ignored) {
-            }
-
-            this.goalSelector.a(0, new net.minecraft.server.v1_12_R1.PathfinderGoalFloat(this));
-            this.goalSelector.a(9, new net.minecraft.server.v1_12_R1.PathfinderGoalInteract(this, net.minecraft.server.v1_12_R1.EntityHuman.class, 3.0f, 1.0f));
-            this.goalSelector.a(10, new net.minecraft.server.v1_12_R1.PathfinderGoalLookAtPlayer(this, net.minecraft.server.v1_12_R1.EntityHuman.class, 8.0f));
-        }
-
-        @Override
-        public void collide(net.minecraft.server.v1_12_R1.Entity entity) {
-        }
-
-        @Override
-        public boolean damageEntity(net.minecraft.server.v1_12_R1.DamageSource damagesource, float f) {
-            return false;
-        }
-
-        public void g(double d0, double d1, double d2) {
-        }
-
-        @Override
-        public void move(EnumMoveType enummovetype, double d0, double d1, double d2) {
-        }
-
-        public void a(SoundEffect soundeffect, float f, float f1) {
-        }
-
-        @Override
-        protected void initAttributes() {
-            super.initAttributes();
-            this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.0D);
-        }
-    }
-
-    /**
      * Spawn shop npc
      */
     private void spawnVillager(Location loc) {
@@ -297,6 +247,7 @@ public class v1_12_R1 extends VersionSupport {
         vlg.setRemoveWhenFarAway(false);
         vlg.setCollidable(false);
         vlg.setInvulnerable(true);
+        vlg.setSilent(true);
     }
 
     @Override

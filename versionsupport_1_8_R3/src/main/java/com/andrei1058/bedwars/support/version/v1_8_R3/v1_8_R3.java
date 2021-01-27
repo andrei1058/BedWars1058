@@ -12,23 +12,15 @@ import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.VersionSupport;
 import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import net.minecraft.server.v1_8_R3.*;
-import net.minecraft.server.v1_8_R3.Entity;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftFireball;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftTNTPrimed;
+import org.bukkit.craftbukkit.v1_8_R3.entity.*;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
 import org.bukkit.entity.*;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
@@ -161,7 +153,6 @@ public class v1_8_R3 extends VersionSupport {
 
     @Override
     public void registerEntities() {
-        registerEntity("ShopNPC", 120, VillagerShop.class);
         registerEntity("Silverfish2", 60, Silverfish.class);
         registerEntity("IGolem", 99, IGolem.class);
     }
@@ -184,7 +175,14 @@ public class v1_8_R3 extends VersionSupport {
     @Override
     public void spawnShop(Location loc, String name1, List<Player> players, IArena arena) {
         Location l = loc.clone();
-        spawnVillager(l);
+
+        Villager vlg = (Villager) loc.getWorld().spawnEntity(loc, EntityType.VILLAGER);
+        vlg.setRemoveWhenFarAway(false);
+        EntityVillager nmsVlg = ((CraftVillager)vlg).getHandle();
+        nmsVlg.ai = false;
+        nmsVlg.getNBTTag().setBoolean("Invulnerable", true);
+        nmsVlg.getNBTTag().setBoolean("Silent", true);
+
         for (Player p : players) {
             String[] nume = getMsg(p, name1).split(",");
             if (nume.length == 1) {
@@ -239,58 +237,6 @@ public class v1_8_R3 extends VersionSupport {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public static class VillagerShop extends EntityVillager {
-        @SuppressWarnings("rawtypes")
-        VillagerShop(World world) {
-            super(world);
-            try {
-                Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
-                bField.setAccessible(true);
-                Field cField = PathfinderGoalSelector.class.getDeclaredField("c");
-                cField.setAccessible(true);
-                bField.set(this.goalSelector, new UnsafeList());
-                bField.set(this.targetSelector, new UnsafeList());
-                cField.set(this.goalSelector, new UnsafeList());
-                cField.set(this.targetSelector, new UnsafeList());
-            } catch (Exception ignored) {
-            }
-            this.goalSelector.a(0, new PathfinderGoalFloat(this));
-            this.goalSelector.a(9, new PathfinderGoalInteract(this, EntityHuman.class, 3.0f, 1.0f));
-            this.goalSelector.a(10, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0f));
-        }
-
-        public void move(double d0, double d1, double d2) {
-        }
-
-        public void collide(net.minecraft.server.v1_8_R3.Entity entity) {
-        }
-
-        public boolean damageEntity(DamageSource damagesource, float f) {
-            return false;
-        }
-
-        public void g(double d0, double d1, double d2) {
-        }
-
-        public void makeSound(String s, float f, float f1) {
-
-        }
-
-        protected void initAttributes() {
-            super.initAttributes();
-            this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.0D);
-        }
-    }
-
-    private void spawnVillager(Location loc) {
-        WorldServer mcWorld = ((CraftWorld) loc.getWorld()).getHandle();
-        VillagerShop customEnt = new VillagerShop(mcWorld);
-        customEnt.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
-        ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
-        mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
-        customEnt.getBukkitEntity();
     }
 
     @Override
