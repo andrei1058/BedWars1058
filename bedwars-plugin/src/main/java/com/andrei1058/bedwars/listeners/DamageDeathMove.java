@@ -188,10 +188,8 @@ public class DamageDeathMove implements Listener {
                             return;
                         } else BedWarsTeam.reSpawnInvulnerability.remove(p.getUniqueId());
                     }
-                    // but if the damager is the re-spawning player remove protection
-                    if (BedWarsTeam.reSpawnInvulnerability.containsKey(damager.getUniqueId())) {
-                        BedWarsTeam.reSpawnInvulnerability.remove(damager.getUniqueId());
-                    }
+                    // but if the damageR is the re-spawning player remove protection
+                    BedWarsTeam.reSpawnInvulnerability.remove(damager.getUniqueId());
 
                     LastHit lh = LastHit.getLastHit(p);
                     if (lh != null) {
@@ -203,6 +201,7 @@ public class DamageDeathMove implements Listener {
 
 
                     // #274
+                    // if player gets hit show him
                     if (a.getShowTime().containsKey(p)) {
                         Bukkit.getScheduler().runTask(plugin, () -> {
                             for (Player on : a.getWorld().getPlayers()) {
@@ -213,13 +212,6 @@ public class DamageDeathMove implements Listener {
                             p.removePotionEffect(PotionEffectType.INVISIBILITY);
                             ITeam team = a.getTeam(p);
                             Bukkit.getPluginManager().callEvent(new PlayerInvisibilityPotionEvent(PlayerInvisibilityPotionEvent.Type.REMOVED, team, p, a));
-                            // show name tag
-                            for (BedWarsScoreboard sb : BedWarsScoreboard.getScoreboards().values()) {
-                                if (sb.getArena() == null) continue;
-                                if (sb.getArena().equals(a) && !team.isMember(sb.getPlayer())) {
-                                    sb.invisibilityPotion(team, p, false);
-                                }
-                            }
                         });
                     }
                     //
