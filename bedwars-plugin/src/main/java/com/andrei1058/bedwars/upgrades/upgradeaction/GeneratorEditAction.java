@@ -7,6 +7,7 @@ import com.andrei1058.bedwars.api.upgrades.UpgradeAction;
 import com.andrei1058.bedwars.arena.OreGenerator;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -15,8 +16,10 @@ import java.util.stream.Collectors;
 
 public class GeneratorEditAction implements UpgradeAction {
 
-    private int amount, delay, limit;
-    private ApplyType type;
+    private final int amount;
+    private final int delay;
+    private final int limit;
+    private final ApplyType type;
 
     public GeneratorEditAction(ApplyType type, int amount, int delay, int limit) {
         this.type = type;
@@ -26,7 +29,7 @@ public class GeneratorEditAction implements UpgradeAction {
     }
 
     @Override
-    public void onBuy(ITeam bwt) {
+    public void onBuy(Player player, ITeam bwt) {
         List<IGenerator> generator = new ArrayList<>();
         if (type == ApplyType.IRON) {
             generator = bwt.getGenerators().stream().filter(g -> g.getType() == GeneratorType.IRON).collect(Collectors.toList());
