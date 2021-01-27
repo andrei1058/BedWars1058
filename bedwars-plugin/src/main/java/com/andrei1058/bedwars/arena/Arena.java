@@ -575,7 +575,7 @@ public class Arena implements IArena {
      * @param playerBefore True if the player has played in this arena before and he died so now should be a spectator.
      */
     public boolean addSpectator(@NotNull Player p, boolean playerBefore, Location staffTeleport) {
-        if (allowSpectate || playerBefore) {
+        if (allowSpectate || playerBefore || staffTeleport != null) {
             debug("Spectator added: " + p.getName() + " arena: " + getArenaName());
 
             if (!playerBefore) {
