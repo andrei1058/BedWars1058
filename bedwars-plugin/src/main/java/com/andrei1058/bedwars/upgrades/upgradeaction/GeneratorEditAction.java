@@ -46,7 +46,7 @@ public class GeneratorEditAction implements UpgradeAction {
                     generator.add(gen);
                 }
             } else {
-                IGenerator gen = new OreGenerator(bwt.getGenerators().get(0).getLocation(), bwt.getArena(), GeneratorType.CUSTOM, bwt);
+                IGenerator gen = new OreGenerator(bwt.getGenerators().get(0).getLocation().clone(), bwt.getArena(), GeneratorType.CUSTOM, bwt);
                 gen.setOre(new ItemStack(Material.EMERALD));
                 gen.setType(GeneratorType.EMERALD);
                 bwt.getGenerators().add(gen);

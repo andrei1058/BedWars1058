@@ -8,7 +8,6 @@ import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.gameplay.GeneratorUpgradeEvent;
-import com.andrei1058.bedwars.api.events.player.PlayerGeneratorCollectEvent;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.region.Cuboid;
@@ -49,7 +48,7 @@ public class OreGenerator implements IGenerator {
     private ArmorStand item;
     public boolean stack = getGeneratorsCfg().getBoolean(ConfigPath.GENERATOR_STACK_ITEMS);
 
-    private static ConcurrentLinkedDeque<OreGenerator> rotation = new ConcurrentLinkedDeque<>();
+    private static final ConcurrentLinkedDeque<OreGenerator> rotation = new ConcurrentLinkedDeque<>();
 
     public OreGenerator(Location location, IArena arena, GeneratorType type, ITeam bwt) {
         if (type == GeneratorType.EMERALD || type == GeneratorType.DIAMOND) {
@@ -79,15 +78,11 @@ public class OreGenerator implements IGenerator {
                             "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_II_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_DELAY);
                     spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_SPAWN_LIMIT) == null ?
                             "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_II_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_SPAWN_LIMIT);
-                    //arena.upgradeDiamondsCount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START) == null ?
-                    //        "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START);
-                    //arena.diamondTier = 2;
                 } else if (upgradeStage == 3) {
                     delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY) == null ?
                             "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY);
                     spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_SPAWN_LIMIT) == null ?
                             "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_SPAWN_LIMIT);
-                    // arena.diamondTier = 3;
                 }
                 ore = new ItemStack(Material.DIAMOND);
                 for (IGenHolo e : armorStands.values()) {
@@ -102,15 +97,11 @@ public class OreGenerator implements IGenerator {
                             "Default." + ConfigPath.GENERATOR_EMERALD_TIER_II_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_DELAY);
                     spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_SPAWN_LIMIT) == null ?
                             "Default." + ConfigPath.GENERATOR_EMERALD_TIER_II_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_SPAWN_LIMIT);
-                    //arena.upgradeEmeraldsCount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_START) == null ?
-                    //        "Default." + ConfigPath.GENERATOR_EMERALD_TIER_III_START : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_START);
-                    //arena.emeraldTier = 2;
                 } else if (upgradeStage == 3) {
                     delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_DELAY) == null ?
                             "Default." + ConfigPath.GENERATOR_EMERALD_TIER_III_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_DELAY);
                     spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_SPAWN_LIMIT) == null ?
                             "Default." + ConfigPath.GENERATOR_EMERALD_TIER_III_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_SPAWN_LIMIT);
-                    //arena.emeraldTier = 3;
                 }
                 ore = new ItemStack(Material.EMERALD);
                 for (IGenHolo e : armorStands.values()) {
@@ -149,7 +140,7 @@ public class OreGenerator implements IGenerator {
             }
             if (BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_ENABLE_GEN_SPLIT)) {
                 Object[] players = location.getWorld().getNearbyEntities(location, 1, 1, 1).stream().filter(entity -> entity.getType() == EntityType.PLAYER)
-                        .filter(entity -> arena.isPlayer((Player) entity))/*.filter(entity -> arena.getTeam((Player) entity) == bwt)*/.toArray();
+                        .filter(entity -> arena.isPlayer((Player) entity)).toArray();
                 if (players.length <= 1) {
                     dropItem(location);
                     return;
@@ -257,9 +248,6 @@ public class OreGenerator implements IGenerator {
         public void setTierName(String name) {
             if (tier.isDead()) return;
             tier.setCustomName(name);
-            //Location loc  = timer.getLocation().clone();
-            //timer.remove();
-            //timer = createArmorStand(name, loc);
         }
 
         @Override
@@ -496,7 +484,6 @@ public class OreGenerator implements IGenerator {
         arena = null;
         ore = null;
         bwt = null;
-        boolean up = true;
         armorStands = null;
         item = null;
     }
