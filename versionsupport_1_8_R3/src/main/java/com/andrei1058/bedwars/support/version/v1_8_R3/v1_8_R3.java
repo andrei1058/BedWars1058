@@ -179,9 +179,11 @@ public class v1_8_R3 extends VersionSupport {
         Villager vlg = (Villager) loc.getWorld().spawnEntity(loc, EntityType.VILLAGER);
         vlg.setRemoveWhenFarAway(false);
         EntityVillager nmsVlg = ((CraftVillager)vlg).getHandle();
-        nmsVlg.ai = false;
-        nmsVlg.getNBTTag().setBoolean("Invulnerable", true);
-        nmsVlg.getNBTTag().setBoolean("Silent", true);
+        NBTTagCompound nbt = nmsVlg.getNBTTag();
+        nbt.setBoolean("Invulnerable", true);
+        nbt.setBoolean("Silent", true);
+        nbt.setInt("NoAI", 1);
+        nmsVlg.f(nbt);
 
         for (Player p : players) {
             String[] nume = getMsg(p, name1).split(",");
