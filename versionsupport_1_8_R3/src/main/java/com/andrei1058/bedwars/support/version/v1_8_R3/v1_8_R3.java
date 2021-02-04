@@ -158,6 +158,7 @@ public class v1_8_R3 extends VersionSupport {
     public void registerEntities() {
         registerEntity("Silverfish2", 60, Silverfish.class);
         registerEntity("IGolem", 99, IGolem.class);
+        registerEntity("BwVilager", 120, VillagerShop.class);
     }
 
     @Override
@@ -201,8 +202,8 @@ public class v1_8_R3 extends VersionSupport {
 
     public static class VillagerShop extends EntityVillager {
         @SuppressWarnings("rawtypes")
-        VillagerShop(World world) {
-            super(world);
+        VillagerShop(Location loc) {
+            super(((CraftWorld) loc.getWorld()).getHandle());
             try {
                 Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
                 bField.setAccessible(true);
@@ -214,6 +215,9 @@ public class v1_8_R3 extends VersionSupport {
                 cField.set(this.targetSelector, new UnsafeList());
             } catch (Exception ignored) {
             }
+            this.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
+            this.setPositionRotation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
+            (((CraftWorld) loc.getWorld()).getHandle()).addEntity(this, CreatureSpawnEvent.SpawnReason.CUSTOM);
         }
 
         public void move(double d0, double d1, double d2) {
@@ -240,13 +244,8 @@ public class v1_8_R3 extends VersionSupport {
     }
 
     private void spawnVillager(Location loc) {
-        WorldServer mcWorld = ((CraftWorld) loc.getWorld()).getHandle();
-        VillagerShop customEnt = new VillagerShop(mcWorld);
-        customEnt.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
+        VillagerShop customEnt = new VillagerShop(loc);
         ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
-        customEnt.setPositionRotation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
-        mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
-        customEnt.getBukkitEntity();
     }
 
     @Override
