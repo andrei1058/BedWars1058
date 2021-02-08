@@ -218,6 +218,7 @@ public class v1_8_R3 extends VersionSupport {
             this.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
             this.setPositionRotation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
             (((CraftWorld) loc.getWorld()).getHandle()).addEntity(this, CreatureSpawnEvent.SpawnReason.CUSTOM);
+            persistent = true;
         }
 
         public void move(double d0, double d1, double d2) {
