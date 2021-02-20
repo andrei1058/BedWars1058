@@ -242,7 +242,24 @@ public class BedWarsScoreboard {
 
         handlePlayerList();
 
+        int teamCount = 0;
+        Language language = Language.getPlayerLanguage(player);
+        String genericTeamFormat = language.m(Messages.FORMATTING_SCOREBOARD_TEAM_GENERIC);
         for (String current : strings) {
+            // generic team placeholder {team}
+            if (arena != null && current.trim().equals("{team}")) {
+                if (arena.getTeams().size() > teamCount) {
+                    ITeam team = arena.getTeams().get(teamCount++);
+                    String teamName = team.getDisplayName(language);
+                    current = genericTeamFormat.replace("{TeamLetter}", String.valueOf(teamName.length() != 0 ? teamName.charAt(0) : ""))
+                            .replace("{TeamColor}", team.getColor().chat().toString())
+                            .replace("{TeamName}", teamName).replace("{TeamStatus}", "{Team" + team.getName() + "Status}");
+                } else {
+                    // skip line
+                    continue;
+                }
+            }
+
             // General static placeholders
             current = current
                     .replace("{server_ip}", BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
