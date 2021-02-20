@@ -242,6 +242,8 @@ public class Messages {
     public static String PLAYER_DIE_REWARD_GOLD = "player-loot-gold";
     public static String PLAYER_DIE_REWARD_EMERALD = "player-loot-emerald";
 
+    public static String PLAYER_HIT_BOW = "player-hit-bow";
+
     /** Misc */
     public static String GAME_END_GAME_OVER_PLAYER_TITLE = "game-end-game-over-title";
     public static String GAME_END_VICTORY_PLAYER_TITLE = "game-end-victory-title";

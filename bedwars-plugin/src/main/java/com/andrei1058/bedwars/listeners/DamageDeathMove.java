@@ -19,6 +19,7 @@ import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import com.andrei1058.bedwars.listeners.dropshandler.PlayerDrops;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -33,6 +34,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
+import java.text.DecimalFormat;
 import java.util.Map;
 
 import static com.andrei1058.bedwars.BedWars.*;
@@ -113,6 +115,7 @@ public class DamageDeathMove implements Listener {
                 }
 
                 Player damager = null;
+                boolean projectile = false;
                 if (e.getDamager() instanceof Player) {
                     damager = (Player) e.getDamager();
                 } else if (e.getDamager() instanceof Projectile) {
@@ -120,6 +123,7 @@ public class DamageDeathMove implements Listener {
                     if (shooter instanceof Player) {
                         damager = (Player) shooter;
                     } else return;
+                    projectile = true;
                 } else if (e.getDamager() instanceof Player) {
                     damager = (Player) e.getDamager();
                     if (a.isReSpawning(damager)) {
@@ -198,6 +202,17 @@ public class DamageDeathMove implements Listener {
                         new LastHit(p, damager, System.currentTimeMillis());
                     }
 
+                    // projectile hit message #696
+                    if (projectile){
+                        ITeam team = a.getTeam(p);
+                        Language lang = Language.getPlayerLanguage(damager);
+                        String message = lang.m(Messages.PLAYER_HIT_BOW)
+                                .replace("{amount}", new DecimalFormat("00.#").format(p.getHealth()))
+                                .replace("{TeamColor}", team.getColor().chat().toString())
+                                .replace("{TeamName}", team.getDisplayName(lang))
+                                .replace("{PlayerName}", ChatColor.stripColor(p.getDisplayName()));
+                        damager.sendMessage(message);
+                    }
 
                     // #274
                     // if player gets hit show him
@@ -629,6 +644,7 @@ public class DamageDeathMove implements Listener {
         }
     }
 
+    @SuppressWarnings("unused")
     private static void spawnUtility(String s, Location loc, ITeam t, Player p) {
         if ("silverfish".equalsIgnoreCase(s)) {
             nms.spawnSilverfish(loc, t, shop.getYml().getDouble(ConfigPath.SHOP_SPECIAL_SILVERFISH_SPEED), shop.getYml().getDouble(ConfigPath.SHOP_SPECIAL_SILVERFISH_HEALTH),
