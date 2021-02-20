@@ -13,6 +13,7 @@ public class PlayerStats {
     private int wins;
     private int kills;
     private int finalKills;
+    private int totalKills;
     private int losses;
     private int deaths;
     private int finalDeaths;
@@ -65,6 +66,7 @@ public class PlayerStats {
 
     public void setKills(int kills) {
         this.kills = kills;
+        this.totalKills = kills + finalKills;
     }
 
     public int getFinalKills() {
@@ -73,6 +75,7 @@ public class PlayerStats {
 
     public void setFinalKills(int finalKills) {
         this.finalKills = finalKills;
+        this.totalKills = kills + finalKills;
     }
 
     public int getLosses() {
@@ -113,5 +116,9 @@ public class PlayerStats {
 
     public void setGamesPlayed(int gamePlayed) {
         this.gamesPlayed = gamePlayed;
+    }
+
+    public int getTotalKills() {
+        return totalKills;
     }
 }

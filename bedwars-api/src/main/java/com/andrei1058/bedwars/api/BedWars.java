@@ -49,10 +49,17 @@ public interface BedWars {
         int getPlayerWins(UUID p);
 
         /**
-         * Get player total kills.
+         * Get player regular kills.
          * You get data from the local cache.
          */
         int getPlayerKills(UUID p);
+
+        /**
+         * Get player total kills.
+         * Regular kills + final kills.
+         * You get data from the local cache.
+         */
+        int getPlayerTotalKills(UUID p);
 
         /**
          * Get player total final kills.

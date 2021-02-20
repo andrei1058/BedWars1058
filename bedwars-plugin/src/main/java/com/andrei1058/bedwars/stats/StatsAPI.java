@@ -57,6 +57,11 @@ public class StatsAPI implements BedWars.IStats {
     }
 
     @Override
+    public int getPlayerTotalKills(UUID p) {
+        return getData(p).getTotalKills();
+    }
+
+    @Override
     public int getPlayerFinalKills(UUID p) {
         return getData(p).getFinalKills();
     }
