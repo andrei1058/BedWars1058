@@ -125,7 +125,7 @@ public class Interact implements Listener {
                         }
                     }
                     if (owner != null) {
-                        if (owner.getMembers().isEmpty()) {
+                        if (!(owner.getMembers().isEmpty() && owner.isBedDestroyed())) {
                             e.setCancelled(true);
                             p.sendMessage(getMsg(p, Messages.INTERACT_CHEST_CANT_OPEN_TEAM_ELIMINATED));
                         }
