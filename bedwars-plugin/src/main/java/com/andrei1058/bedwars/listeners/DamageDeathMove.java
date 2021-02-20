@@ -526,10 +526,8 @@ public class DamageDeathMove implements Listener {
                 }
             } else {
                 if (a.getStatus() == GameState.playing) {
-                    if (a.getYKillHeight() != -1) {
-                        if (e.getPlayer().getLocation().getBlockY() <= a.getYKillHeight()) {
-                            nms.voidKill(e.getPlayer());
-                        }
+                    if (e.getPlayer().getLocation().getBlockY() <= a.getYKillHeight()) {
+                        nms.voidKill(e.getPlayer());
                     }
                     for (ITeam t : a.getTeams()) {
                         if (e.getPlayer().getLocation().distance(t.getBed()) < 4) {
