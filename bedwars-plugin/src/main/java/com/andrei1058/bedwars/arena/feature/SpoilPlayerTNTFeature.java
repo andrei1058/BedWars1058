@@ -77,7 +77,7 @@ public class SpoilPlayerTNTFeature {
 
         @EventHandler(ignoreCancelled = true)
         public void onPlace(BlockPlaceEvent event){
-            if (event.getBlock().getType() == Material.TNT) {
+            if (event.getBlockPlaced().getType() == Material.TNT) {
                 IArena arena = Arena.getArenaByPlayer(event.getPlayer());
                 if (arena != null) {
                     if (instance.playersWithTnt.contains(event.getPlayer())){
