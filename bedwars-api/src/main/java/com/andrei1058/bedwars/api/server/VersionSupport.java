@@ -406,4 +406,8 @@ public abstract class VersionSupport {
      * @return modified fireball.
      */
     public abstract Fireball setFireballDirection(Fireball fireball, Vector vector);
+
+    public void playRedStoneDot(Player player){
+
+    }
 }
