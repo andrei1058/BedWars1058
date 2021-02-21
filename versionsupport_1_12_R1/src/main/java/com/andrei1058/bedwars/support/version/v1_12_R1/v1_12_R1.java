@@ -13,6 +13,7 @@ import com.andrei1058.bedwars.api.server.VersionSupport;
 import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import net.minecraft.server.v1_12_R1.Item;
 import net.minecraft.server.v1_12_R1.*;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.block.Bed;
@@ -664,6 +665,17 @@ public class v1_12_R1 extends VersionSupport {
 
     @Override
     public void playRedStoneDot(Player player) {
-        player.getWorld().spawnParticle(Particle.REDSTONE, player.getLocation().add(0, 2.5, 0), 1, 1);
+        try {
+            player.getWorld().spawnParticle(Particle.REDSTONE, player.getLocation().add(0, 2.5, 0), 1, Color.RED);
+        } catch (Exception ex){}
+        try {
+            player.getWorld().spawnParticle(Particle.REDSTONE, player.getLocation().add(0, 3, 0), 1,Particle.REDSTONE.getDataType());
+        } catch (Exception ex){}
+        try {
+            player.getWorld().spawnParticle(Particle.BLOCK_DUST, player.getLocation().add(0, 3.5, 0), 1, Color.RED);
+        } catch (Exception ex){}
+        try {
+            player.getWorld().spawnParticle(Particle.FALLING_DUST, player.getLocation().add(0, 4, 0), 1, Color.RED);
+        } catch (Exception ex){}
     }
 }
