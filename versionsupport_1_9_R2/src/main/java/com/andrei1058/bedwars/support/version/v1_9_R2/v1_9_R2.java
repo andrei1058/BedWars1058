@@ -14,17 +14,15 @@ import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import net.minecraft.server.v1_9_R2.Item;
 import net.minecraft.server.v1_9_R2.*;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_9_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_9_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftFireball;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftTNTPrimed;
 import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_9_R2.util.UnsafeList;
 import org.bukkit.entity.*;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -646,5 +644,13 @@ public class v1_9_R2 extends VersionSupport {
     @Override
     public void setJoinSignBackground(org.bukkit.block.BlockState b, org.bukkit.Material material) {
         b.getLocation().getBlock().getRelative(((org.bukkit.material.Sign) b.getData()).getAttachedFace()).setType(material);
+    }
+
+    @Override
+    public void playRedStoneDot(Player player) {
+        player.getWorld().spawnParticle(Particle.REDSTONE, player.getLocation().getX(),
+                player.getLocation().getY() + 2.2,
+                player.getLocation().getZ(),
+                1, 0, 0, 0, 0);
     }
 }

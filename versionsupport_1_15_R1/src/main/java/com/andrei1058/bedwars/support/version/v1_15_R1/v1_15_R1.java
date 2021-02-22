@@ -13,7 +13,9 @@ import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
 import net.minecraft.server.v1_15_R1.*;
+import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.type.Bed;
@@ -637,5 +639,10 @@ public class v1_15_R1 extends VersionSupport {
         fb.dirY = vector.getY() * 0.1D;
         fb.dirZ = vector.getZ() * 0.1D;
         return (Fireball) fb.getBukkitEntity();
+    }
+
+    @Override
+    public void playRedStoneDot(Player player) {
+        player.getWorld().spawnParticle(org.bukkit.Particle.REDSTONE, player.getLocation(), 1, new Particle.DustOptions(Color.RED, 1));
     }
 }

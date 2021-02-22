@@ -407,7 +407,5 @@ public abstract class VersionSupport {
      */
     public abstract Fireball setFireballDirection(Fireball fireball, Vector vector);
 
-    public void playRedStoneDot(Player player){
-
-    }
+    public abstract void playRedStoneDot(Player player);
 }

@@ -12,6 +12,8 @@ import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.VersionSupport;
 import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import net.minecraft.server.v1_8_R3.*;
+import org.bukkit.Effect;
+import org.bukkit.EntityEffect;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
@@ -679,5 +681,10 @@ public class v1_8_R3 extends VersionSupport {
         fb.dirY = vector.getY() * 0.1D;
         fb.dirZ = vector.getZ() * 0.1D;
         return (Fireball) fb.getBukkitEntity();
+    }
+
+    @Override
+    public void playRedStoneDot(Player player) {
+        player.playEffect(EntityEffect.VILLAGER_ANGRY);
     }
 }

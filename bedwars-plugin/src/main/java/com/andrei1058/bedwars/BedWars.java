@@ -93,7 +93,7 @@ public class BedWars extends JavaPlugin {
     private static Chat chat = new NoChat();
     protected static Level level;
     private static Economy economy;
-    private static String version = Bukkit.getServer().getClass().getName().split("\\.")[3];
+    private static final String version = Bukkit.getServer().getClass().getName().split("\\.")[3];
     private static String lobbyWorld = "";
 
     public static ArenaManager arenaManager = new ArenaManager();

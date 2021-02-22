@@ -665,13 +665,9 @@ public class v1_12_R1 extends VersionSupport {
 
     @Override
     public void playRedStoneDot(Player player) {
-        try {
-            player.getWorld().spawnParticle(Particle.REDSTONE, player.getLocation().getX(),
-                    player.getLocation().getY() + 2.2,
-                    player.getLocation().getZ(),
-                    1, 0, 0, 0, 0);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        player.getWorld().spawnParticle(Particle.REDSTONE, player.getLocation().getX(),
+                player.getLocation().getY() + 2.2,
+                player.getLocation().getZ(),
+                1, 0, 0, 0, 0);
     }
 }

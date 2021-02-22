@@ -13,6 +13,7 @@ import com.andrei1058.bedwars.api.server.VersionSupport;
 import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import net.minecraft.server.v1_10_R1.*;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_10_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_10_R1.entity.CraftFireball;
@@ -643,5 +644,13 @@ public class v1_10_R1 extends VersionSupport {
     @Override
     public void setJoinSignBackground(org.bukkit.block.BlockState b, org.bukkit.Material material) {
         b.getLocation().getBlock().getRelative(((org.bukkit.material.Sign) b.getData()).getAttachedFace()).setType(material);
+    }
+
+    @Override
+    public void playRedStoneDot(Player player) {
+        player.getWorld().spawnParticle(Particle.REDSTONE, player.getLocation().getX(),
+                player.getLocation().getY() + 2.2,
+                player.getLocation().getZ(),
+                1, 0, 0, 0, 0);
     }
 }
