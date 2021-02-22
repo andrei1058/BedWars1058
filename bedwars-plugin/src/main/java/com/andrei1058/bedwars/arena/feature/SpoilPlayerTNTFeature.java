@@ -15,6 +15,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.LinkedList;
 
@@ -77,7 +78,8 @@ public class SpoilPlayerTNTFeature {
 
         @EventHandler(ignoreCancelled = true)
         public void onPlace(BlockPlaceEvent event) {
-            if (event.getBlockPlaced().getType() == Material.TNT) {
+            ItemStack inHand = event.getItemInHand();
+            if (inHand.getType() == Material.TNT) {
                 IArena arena = Arena.getArenaByPlayer(event.getPlayer());
                 if (arena != null) {
                     if (instance.playersWithTnt.contains(event.getPlayer())) {
