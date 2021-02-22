@@ -23,14 +23,14 @@ public class SpoilPlayerTNTFeature {
     private static SpoilPlayerTNTFeature instance;
     private final LinkedList<Player> playersWithTnt = new LinkedList<>();
 
-    private SpoilPlayerTNTFeature(){
+    private SpoilPlayerTNTFeature() {
         Bukkit.getPluginManager().registerEvents(new TNTListener(), BedWars.plugin);
         Bukkit.getScheduler().runTaskTimer(BedWars.plugin, new ParticleTask(), 20, 1L);
     }
 
-    public static void init(){
-        if (BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_SPOIL_TNT_PLAYERS)){
-            if (instance == null){
+    public static void init() {
+        if (BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_SPOIL_TNT_PLAYERS)) {
+            if (instance == null) {
                 instance = new SpoilPlayerTNTFeature();
             }
         }
@@ -40,7 +40,7 @@ public class SpoilPlayerTNTFeature {
 
         @Override
         public void run() {
-            for (Player player : instance.playersWithTnt){
+            for (Player player : instance.playersWithTnt) {
                 BedWars.nms.playRedStoneDot(player);
             }
         }
@@ -49,11 +49,11 @@ public class SpoilPlayerTNTFeature {
     private static class TNTListener implements Listener {
 
         @EventHandler(ignoreCancelled = true)
-        public void onPickUp(PlayerPickupItemEvent event){
-            if (event.getItem().getItemStack().getType() == Material.TNT){
+        public void onPickUp(PlayerPickupItemEvent event) {
+            if (event.getItem().getItemStack().getType() == Material.TNT) {
                 IArena arena = Arena.getArenaByPlayer(event.getPlayer());
-                if (arena != null){
-                    if (instance.playersWithTnt.contains(event.getPlayer())){
+                if (arena != null) {
+                    if (instance.playersWithTnt.contains(event.getPlayer())) {
                         return;
                     }
                     instance.playersWithTnt.add(event.getPlayer());
@@ -62,12 +62,12 @@ public class SpoilPlayerTNTFeature {
         }
 
         @EventHandler(ignoreCancelled = true)
-        public void onDrop(PlayerDropItemEvent event){
-            if (event.getItemDrop().getItemStack().getType() == Material.TNT){
+        public void onDrop(PlayerDropItemEvent event) {
+            if (event.getItemDrop().getItemStack().getType() == Material.TNT) {
                 IArena arena = Arena.getArenaByPlayer(event.getPlayer());
-                if (arena != null){
-                    if (instance.playersWithTnt.contains(event.getPlayer())){
-                        if (!event.getPlayer().getInventory().contains(Material.TNT)){
+                if (arena != null) {
+                    if (instance.playersWithTnt.contains(event.getPlayer())) {
+                        if (!event.getPlayer().getInventory().contains(Material.TNT)) {
                             instance.playersWithTnt.remove(event.getPlayer());
                         }
                     }
@@ -76,40 +76,40 @@ public class SpoilPlayerTNTFeature {
         }
 
         @EventHandler(ignoreCancelled = true)
-        public void onPlace(BlockPlaceEvent event){
+        public void onPlace(BlockPlaceEvent event) {
             if (event.getBlockPlaced().getType() == Material.TNT) {
                 IArena arena = Arena.getArenaByPlayer(event.getPlayer());
                 if (arena != null) {
-                    if (instance.playersWithTnt.contains(event.getPlayer())){
-                        if (!event.getPlayer().getInventory().contains(Material.TNT)){
-                            instance.playersWithTnt.remove(event.getPlayer());
-                        }
+                    if (instance.playersWithTnt.contains(event.getPlayer())) {
+                        Bukkit.getScheduler().runTaskLater(BedWars.plugin,
+                                () -> {
+                                    if (!event.getPlayer().getInventory().contains(Material.TNT)) {
+                                        instance.playersWithTnt.remove(event.getPlayer());
+                                    }
+                                }, 1L);
                     }
                 }
             }
         }
 
         @EventHandler(ignoreCancelled = true)
-        public void inventorySwitch(InventoryCloseEvent event){
-            if (event.getInventory().getHolder() == null) return;
+        public void inventorySwitch(InventoryCloseEvent event) {
             if (event.getPlayer() == null) return;
-            if (event.getInventory().getHolder().equals(event.getPlayer())){
-                if (instance.playersWithTnt.contains(event.getPlayer())){
-                    if (!event.getPlayer().getInventory().contains(Material.TNT)){
-                        instance.playersWithTnt.remove(event.getPlayer());
-                    }
-                } else {
-                    if (event.getPlayer().getInventory().contains(Material.TNT)){
-                        instance.playersWithTnt.add((Player) event.getPlayer());
-                    }
+            if (instance.playersWithTnt.contains(event.getPlayer())) {
+                if (!event.getPlayer().getInventory().contains(Material.TNT)) {
+                    instance.playersWithTnt.remove(event.getPlayer());
+                }
+            } else {
+                if (event.getPlayer().getInventory().contains(Material.TNT)) {
+                    instance.playersWithTnt.add((Player) event.getPlayer());
                 }
             }
         }
 
         @EventHandler
-        public void onBuy(ShopBuyEvent event){
-            if (event.getBuyer().getInventory().contains(Material.TNT)){
-                if (!instance.playersWithTnt.contains(event.getBuyer())){
+        public void onBuy(ShopBuyEvent event) {
+            if (event.getBuyer().getInventory().contains(Material.TNT)) {
+                if (!instance.playersWithTnt.contains(event.getBuyer())) {
                     instance.playersWithTnt.add(event.getBuyer());
                 }
             }
