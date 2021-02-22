@@ -265,6 +265,8 @@ public class MainConfig extends ConfigManager {
         set("start-items-per-arena", null);
         set("safeMode", null);
         set("disableCrafting", null);
+        set("performance-settings.disable-armor-packets", null);
+        set("performance-settings.disable-respawn-packets", null);
 
         //Finished old configuration conversion
 
