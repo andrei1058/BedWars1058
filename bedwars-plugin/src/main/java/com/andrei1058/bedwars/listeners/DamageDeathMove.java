@@ -590,12 +590,14 @@ public class DamageDeathMove implements Listener {
     @EventHandler
     public void onProjHit(ProjectileHitEvent e) {
         Projectile proj = e.getEntity();
+        if (proj == null) return;
         if (e.getEntity().getShooter() instanceof Player) {
             IArena a = Arena.getArenaByPlayer((Player) e.getEntity().getShooter());
             if (a != null) {
                 if (!a.isPlayer((Player) e.getEntity().getShooter())) return;
                 if (e.getEntity() instanceof Fireball) {
                     Location l = e.getEntity().getLocation();
+                    if (l == null) return;
                     e.getEntity().getWorld().createExplosion(l.getX(), l.getY(), l.getZ(), 3, false, true);
                     return;
                 }
