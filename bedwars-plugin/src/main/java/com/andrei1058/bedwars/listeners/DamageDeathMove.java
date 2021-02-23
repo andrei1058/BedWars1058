@@ -203,11 +203,11 @@ public class DamageDeathMove implements Listener {
                     }
 
                     // projectile hit message #696
-                    if (projectile){
+                    if (projectile) {
                         ITeam team = a.getTeam(p);
                         Language lang = Language.getPlayerLanguage(damager);
                         String message = lang.m(Messages.PLAYER_HIT_BOW)
-                                .replace("{amount}", new DecimalFormat("00.#").format(p.getHealth()))
+                                .replace("{amount}", new DecimalFormat("00.#").format(p.getHealth() - e.getDamage()))
                                 .replace("{TeamColor}", team.getColor().chat().toString())
                                 .replace("{TeamName}", team.getDisplayName(lang))
                                 .replace("{PlayerName}", ChatColor.stripColor(p.getDisplayName()));
@@ -531,13 +531,13 @@ public class DamageDeathMove implements Listener {
                         }
                     }
                     // if the moving player has invisible armor
-                    if (a.getShowTime().containsKey(e.getPlayer())){
-                        for (Player p : a.getPlayers()){
+                    if (a.getShowTime().containsKey(e.getPlayer())) {
+                        for (Player p : a.getPlayers()) {
                             nms.hideArmor(e.getPlayer(), p);
                         }
                     }
-                    if (a.getShowTime().containsKey(e.getPlayer())){
-                        for (Player p : a.getSpectators()){
+                    if (a.getShowTime().containsKey(e.getPlayer())) {
+                        for (Player p : a.getSpectators()) {
                             nms.hideArmor(e.getPlayer(), p);
                         }
                     }
