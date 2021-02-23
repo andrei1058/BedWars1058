@@ -11,13 +11,14 @@ public class PlayerGeneratorCollectEvent extends Event {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
-    private Player player;
-    private Item item;
-    private IArena arena;
+    private final Player player;
+    private final Item item;
+    private final IArena arena;
     private boolean cancelled = false;
 
     /**
-     * Triggered when players collect from generators
+     * Triggered when players collect from generators.
+     * This is not hired when player will receive items in inv from gen-split feature. This feature can be disabled in bw config.
      */
     public PlayerGeneratorCollectEvent(Player player, Item item, IArena arena) {
         this.player = player;

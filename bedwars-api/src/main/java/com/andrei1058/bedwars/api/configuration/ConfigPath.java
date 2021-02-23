@@ -85,6 +85,7 @@ public class ConfigPath {
 
     public static final String GENERAL_CONFIGURATION_ARENA_GROUPS = "arenaGroups";
     public static final String GENERAL_CONFIGURATION_REJOIN_TIME = "rejoin-time";
+    public static final String GENERAL_CONFIGURATION_RE_SPAWN_INVULNERABILITY = "re-spawn-invulnerability";
 
     public static final String GENERAL_CONFIGURATION_SHOUT_COOLDOWN = "shout-cmd-cooldown";
 
@@ -119,6 +120,7 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_DISABLE_BREWING_STAND = "inventories.disable-brewing-stand";
     public static final String GENERAL_CONFIGURATION_DISABLE_ANVIL = "inventories.disable-anvil";
     public static final String GENERAL_CONFIGURATION_MARK_LEAVE_AS_ABANDON = "mark-leave-as-abandon";
+    public static final String GENERAL_CONFIGURATION_ENABLE_GEN_SPLIT = "enable-gen-split";
 
     public static final String GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP = "server-ip";
 
@@ -172,6 +174,7 @@ public class ConfigPath {
 
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_PATH = "performance-settings";
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_ROTATE_GEN = GENERAL_CONFIGURATION_PERFORMANCE_PATH + ".rotate-generators";
+    public static final String GENERAL_CONFIGURATION_PERFORMANCE_SPOIL_TNT_PLAYERS = GENERAL_CONFIGURATION_PERFORMANCE_PATH + ".spoil-tnt-players";
 
     public static final String SHOP_SETTINGS_PATH = "shop-settings";
     public static final String SHOP_SPECIALS_PATH = "shop-specials";
@@ -231,6 +234,7 @@ public class ConfigPath {
 
     public static final String SHOP_CATEGORY_SLOT = ".category-slot";
     public static final String SHOP_CONTENT_BUY_ITEMS_PATH = "buy-items";
+    public static final String SHOP_CONTENT_BUY_CMDS_PATH = "buy-cmds";
     public static final String SHOP_CATEGORY_CONTENT_CONTENT_SLOT = "content-settings.content-slot";
     public static final String SHOP_CATEGORY_CONTENT_IS_PERMANENT = "content-settings.is-permanent";
     public static final String SHOP_CATEGORY_CONTENT_IS_DOWNGRADABLE = "content-settings.is-downgradable";

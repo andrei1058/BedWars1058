@@ -40,16 +40,16 @@ public class QuitAndTeleportListener implements Listener {
         }
 
         //Save preferred language
-        if (Language.getLangByPlayer().containsKey(p)) {
+        if (Language.getLangByPlayer().containsKey(p.getUniqueId())) {
             final UUID u = p.getUniqueId();
             Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-                String iso = Language.getLangByPlayer().get(p).getIso();
+                String iso = Language.getLangByPlayer().get(p.getUniqueId()).getIso();
                 if (Language.isLanguageExist(iso)) {
                     if (BedWars.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES).contains(iso))
                         iso = Language.getDefaultLanguage().getIso();
                     BedWars.getRemoteDatabase().setLanguage(u, iso);
                 }
-                Language.getLangByPlayer().remove(p);
+                Language.getLangByPlayer().remove(p.getUniqueId());
             });
         }
 
@@ -73,7 +73,7 @@ public class QuitAndTeleportListener implements Listener {
             sb.remove();
         }
 
-        BedWarsTeam.antiFallDamageAtRespawn.remove(e.getPlayer().getUniqueId());
+        BedWarsTeam.reSpawnInvulnerability.remove(e.getPlayer().getUniqueId());
 
         LastHit lh = LastHit.getLastHit(p);
         if (lh != null) {

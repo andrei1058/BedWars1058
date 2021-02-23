@@ -38,16 +38,16 @@ public class PlayerEffectAction implements TrapAction {
     public void onTrigger(@NotNull Player player, ITeam playerTeam, ITeam targetTeam) {
         if (type == ApplyType.TEAM){
             for (Player p : targetTeam.getMembers()){
-                p.addPotionEffect(new PotionEffect(potionEffectType, duration, amplifier));
+                p.addPotionEffect(new PotionEffect(potionEffectType, duration, amplifier), true);
             }
         } else if (type == ApplyType.BASE){
             for (Player p : targetTeam.getMembers()){
                 if (p.getLocation().distance(targetTeam.getBed()) <= targetTeam.getArena().getIslandRadius()) {
-                    p.addPotionEffect(new PotionEffect(potionEffectType, duration, amplifier));
+                    p.addPotionEffect(new PotionEffect(potionEffectType, duration, amplifier), true);
                 }
             }
         } else if (type == ApplyType.ENEMY){
-            player.addPotionEffect(new PotionEffect(potionEffectType, duration, amplifier));
+            player.addPotionEffect(new PotionEffect(potionEffectType, duration, amplifier), true);
         }
     }
 

@@ -3,12 +3,13 @@ package com.andrei1058.bedwars.upgrades.upgradeaction;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.upgrades.UpgradeAction;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 
 public class EnchantItemAction implements UpgradeAction {
 
-    private Enchantment enchantment;
-    private int amplifier;
-    private ApplyType type;
+    private final Enchantment enchantment;
+    private final int amplifier;
+    private final ApplyType type;
 
     public EnchantItemAction(Enchantment enchantment, int amplifier, ApplyType type){
         this.enchantment = enchantment;
@@ -17,7 +18,7 @@ public class EnchantItemAction implements UpgradeAction {
     }
 
     @Override
-    public void onBuy(ITeam bwt) {
+    public void onBuy(Player player, ITeam bwt) {
         if (type == ApplyType.ARMOR){
             bwt.addArmorEnchantment(enchantment, amplifier);
         } else if (type == ApplyType.SWORD){

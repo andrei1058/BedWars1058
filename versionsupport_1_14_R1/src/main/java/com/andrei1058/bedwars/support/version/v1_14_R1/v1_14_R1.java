@@ -14,31 +14,29 @@ import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
 import net.minecraft.server.v1_14_R1.Item;
 import net.minecraft.server.v1_14_R1.*;
+import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.type.Bed;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftFireball;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftTNTPrimed;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.*;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.potion.PotionData;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionType;
 import org.bukkit.scoreboard.Team;
+import org.bukkit.util.Vector;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -189,15 +187,9 @@ public class v1_14_R1 extends VersionSupport {
     @Override
     public void registerEntities() {
         Map<String, Type<?>> types = (Map<String, Type<?>>) DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(SharedConstants.a().getWorldVersion())).findChoiceType(DataConverterTypes.ENTITY).types();
-        types.put("minecraft:bwvillager", types.get("minecraft:villager"));
-        /*EntityTypes.a<net.minecraft.server.v1_14_R1.Entity> a =*/
-        EntityTypes.a.a(VillagerShop::new, EnumCreatureType.CREATURE);
-        //customEntities = IRegistry.a(IRegistry.ENTITY_TYPE, "bwvillager", a.a("bwvillager"));
-
 
         types.put("minecraft:bwsilverfish", types.get("minecraft:silverfish"));
         EntityTypes.a.a(Silverfish::new, EnumCreatureType.MONSTER);
-
 
         types.put("minecraft:bwgolem", types.get("minecraft:iron_golem"));
         EntityTypes.a.a(IGolem::new, EnumCreatureType.AMBIENT);
@@ -206,7 +198,15 @@ public class v1_14_R1 extends VersionSupport {
     @Override
     public void spawnShop(Location loc, String name1, List<Player> players, IArena arena) {
         Location l = loc.clone();
-        spawnVillager(l);
+
+        if (l.getWorld() == null) return;
+        Villager vlg = (Villager) l.getWorld().spawnEntity(loc, EntityType.VILLAGER);
+        vlg.setAI(false);
+        vlg.setRemoveWhenFarAway(false);
+        vlg.setCollidable(false);
+        vlg.setInvulnerable(true);
+        vlg.setSilent(true);
+
         for (Player p : players) {
             String[] nume = Language.getMsg(p, name1).split(",");
             if (nume.length == 1) {
@@ -242,84 +242,6 @@ public class v1_14_R1 extends VersionSupport {
         a.setCustomNameVisible(true);
         a.setCustomName(name);
         return a;
-    }
-
-    /**
-     * Custom villager class
-     */
-    public static class VillagerShop extends EntityVillager {
-
-        @Override
-        public void openTrade(EntityHuman entityhuman, IChatBaseComponent ichatbasecomponent, int i) {
-        }
-
-        @Override
-        public void setTradingPlayer(EntityHuman entityhuman) {
-        }
-
-        @SuppressWarnings("unchecked")
-        VillagerShop(EntityTypes entityTypes, World world) {
-            super(entityTypes, world);
-        }
-
-        @Override
-        public void collide(net.minecraft.server.v1_14_R1.Entity entity) {
-        }
-
-        @Override
-        public boolean damageEntity(DamageSource damagesource, float f) {
-            return false;
-        }
-
-        @Override
-        public void setVillagerData(VillagerData villagerdata) {
-        }
-
-        @Override
-        public void a(MemoryModuleType<GlobalPos> memorymoduletype) {
-        }
-
-        @Override
-        public void onLightningStrike(EntityLightning entitylightning) {
-        }
-
-        @Override
-        public void a(EntityVillager entityvillager, long i) {
-        }
-
-        @Override
-        public void a(ReputationEvent reputationevent, net.minecraft.server.v1_14_R1.Entity entity) {
-        }
-
-        @Override
-        public int getExperience() {
-            return 0;
-        }
-
-        @Override
-        public void e(BlockPosition blockposition) {
-        }
-
-        @Override
-        public void a(SoundEffect soundeffect, float f, float f1) {
-        }
-
-        protected void initAttributes() {
-            super.initAttributes();
-            this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.0D);
-        }
-    }
-
-    /**
-     * Spawn shop npc
-     */
-    private void spawnVillager(Location loc) {
-        //noinspection ConstantConditions
-        WorldServer mcWorld = ((CraftWorld) loc.getWorld()).getHandle();
-        VillagerShop customEnt = new VillagerShop(EntityTypes.VILLAGER, mcWorld);
-        customEnt.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
-        ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
-        mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
     }
 
     @Override
@@ -367,7 +289,7 @@ public class v1_14_R1 extends VersionSupport {
 
     @Override
     public void spawnDragon(Location l, ITeam bwt) {
-        if (l == null || l.getWorld() == null){
+        if (l == null || l.getWorld() == null) {
             getPlugin().getLogger().log(Level.WARNING, "Could not spawn Dragon. Location is null");
             return;
         }
@@ -696,8 +618,8 @@ public class v1_14_R1 extends VersionSupport {
 
     @Override
     public void setJoinSignBackground(org.bukkit.block.BlockState b, org.bukkit.Material material) {
-        if (b.getBlockData() instanceof WallSign){
-            b.getBlock().getRelative(((WallSign)b.getBlockData()).getFacing().getOppositeFace()).setType(material);
+        if (b.getBlockData() instanceof WallSign) {
+            b.getBlock().getRelative(((WallSign) b.getBlockData()).getFacing().getOppositeFace()).setType(material);
         }
     }
 
@@ -709,5 +631,19 @@ public class v1_14_R1 extends VersionSupport {
     @Override
     public void spigotHidePlayer(Player victim, Player receiver) {
         receiver.hidePlayer(getPlugin(), victim);
+    }
+
+    @Override
+    public Fireball setFireballDirection(Fireball fireball, Vector vector) {
+        EntityFireball fb = ((CraftFireball) fireball).getHandle();
+        fb.dirX = vector.getX() * 0.1D;
+        fb.dirY = vector.getY() * 0.1D;
+        fb.dirZ = vector.getZ() * 0.1D;
+        return (Fireball) fb.getBukkitEntity();
+    }
+
+    @Override
+    public void playRedStoneDot(Player player) {
+        player.getWorld().spawnParticle(org.bukkit.Particle.REDSTONE, player.getLocation(), 1, new Particle.DustOptions(Color.RED, 1));
     }
 }

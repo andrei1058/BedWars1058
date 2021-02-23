@@ -58,6 +58,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -252,10 +253,7 @@ public class Arena implements IArena {
             return;
         }
         if (error) return;
-        yKillHeight = config.getInt(ConfigPath.ARENA_Y_LEVEL_KILL);
-        if (yKillHeight < -1) {
-            yKillHeight = -1;
-        }
+        yKillHeight = yml.getInt(ConfigPath.ARENA_Y_LEVEL_KILL);
         addToEnableQueue(this);
         Language.saveIfNotExists(Messages.ARENA_DISPLAY_GROUP_PATH + getGroup().toLowerCase(), String.valueOf(getGroup().charAt(0)).toUpperCase() + group.substring(1).toLowerCase());
     }
@@ -513,6 +511,9 @@ public class Arena implements IArena {
 
             BedWarsScoreboard.giveScoreboard(p, this, false);
             sendPreGameCommandItems(p);
+            for (PotionEffect pf : p.getActivePotionEffects()) {
+                p.removePotionEffect(pf.getType());
+            }
         } else if (status == GameState.playing) {
             addSpectator(p, false, null);
             /* stop code if status playing*/
@@ -538,6 +539,13 @@ public class Arena implements IArena {
                     BedWars.nms.spigotHidePlayer(p, on);
                     BedWars.nms.spigotHidePlayer(on, p);
                 }
+            }
+
+            if (getServerType() == ServerType.BUNGEE) {
+                // fix invisibility issue
+                //if (BedWars.nms.getVersion() == 7) {
+                BedWars.nms.sendPlayerSpawnPackets(p, this);
+                //}
             }
         }, 17L);
 
@@ -567,7 +575,7 @@ public class Arena implements IArena {
      * @param playerBefore True if the player has played in this arena before and he died so now should be a spectator.
      */
     public boolean addSpectator(@NotNull Player p, boolean playerBefore, Location staffTeleport) {
-        if (allowSpectate || playerBefore) {
+        if (allowSpectate || playerBefore || staffTeleport != null) {
             debug("Spectator added: " + p.getName() + " arena: " + getArenaName());
 
             if (!playerBefore) {
@@ -649,7 +657,10 @@ public class Arena implements IArena {
 
                 /* Spectator items */
                 sendSpectatorCommandItems(p);
+                // make invisible because it is annoying whene there are many spectators around the map
+                p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false));
 
+                p.getInventory().setArmorContents(null);
             }, 25L);
 
             p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_MSG).replace("{arena}", this.getDisplayName()));
@@ -728,14 +739,6 @@ public class Arena implements IArena {
             p.removePotionEffect(pf.getType());
         }
 
-        if (getServerType() != ServerType.BUNGEE) {
-            /* restore player inventory */
-            PlayerGoods pg = PlayerGoods.getPlayerGoods(p);
-            if (pg != null) {
-                pg.restore();
-            }
-        }
-
         if (p.getPassenger() != null && p.getPassenger().getType() == EntityType.ARMOR_STAND) p.getPassenger().remove();
 
         boolean teamuri = false;
@@ -809,7 +812,7 @@ public class Arena implements IArena {
                                     .replace("{KillerName}", lastDamager.getDisplayName())
                                     .replace("{KillerTeamName}", killerTeam.getDisplayName(lang)));
                         }
-                        PlayerDrops.handlePlayerDrops(this, p, lastDamager, team, killerTeam, cause);
+                        PlayerDrops.handlePlayerDrops(this, p, lastDamager, team, killerTeam, cause, new ArrayList<>(Arrays.asList(p.getInventory().getContents())));
                     }
                 }
             }
@@ -836,8 +839,23 @@ public class Arena implements IArena {
             } else {
                 p.teleport(config.getConfigLoc("lobbyLoc"));
             }
+
+            /* restore player inventory */
+            PlayerGoods pg = PlayerGoods.getPlayerGoods(p);
+            if (pg == null) {
+                // if there is no previous backup of the inventory send lobby items if multi arena
+                if (BedWars.getServerType() == ServerType.MULTIARENA) {
+                    // Send items
+                    Arena.sendLobbyCommandItems(p);
+                }
+            } else {
+                pg.restore();
+            }
         }
         playerLocation.remove(p);
+        for (PotionEffect pf : p.getActivePotionEffects()){
+            p.removePotionEffect(pf.getType());
+        }
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
             for (Player on : Bukkit.getOnlinePlayers()) {
@@ -896,8 +914,10 @@ public class Arena implements IArena {
 
         //Remove from magic milk
         if (magicMilk.containsKey(p.getUniqueId())) {
-            Bukkit.getScheduler().cancelTask(magicMilk.get(p.getUniqueId()));
-            magicMilk.remove(p.getUniqueId());
+            int taskId = magicMilk.remove(p.getUniqueId());
+            if (taskId > 0) {
+                Bukkit.getScheduler().cancelTask(taskId);
+            }
         }
 
         showTime.remove(p);
@@ -937,10 +957,6 @@ public class Arena implements IArena {
         removeArenaByPlayer(p, this);
         p.getInventory().clear();
         p.getInventory().setArmorContents(null);
-        /* restore player inventory */
-        if (PlayerGoods.hasGoods(p)) {
-            PlayerGoods.getPlayerGoods(p).restore();
-        }
         nms.setCollide(p, this, true);
 
         if (getServerType() == ServerType.SHARED) {
@@ -955,6 +971,22 @@ public class Arena implements IArena {
                 plugin.getLogger().log(Level.SEVERE, p.getName() + " was teleported to the main world because lobby location is not set!");
             } else {
                 p.teleport(config.getConfigLoc("lobbyLoc"));
+            }
+
+            /* restore player inventory */
+            PlayerGoods pg = PlayerGoods.getPlayerGoods(p);
+            if (pg == null) {
+                // if there is no previous backup of the inventory send lobby items if multi arena
+                if (BedWars.getServerType() == ServerType.MULTIARENA) {
+                    // Send items
+                    Arena.sendLobbyCommandItems(p);
+                }
+            } else {
+                pg.restore();
+            }
+
+            for (PotionEffect pf : p.getActivePotionEffects()){
+                p.removePotionEffect(pf.getType());
             }
         }
         if (getServerType() == ServerType.BUNGEE) {
@@ -1005,8 +1037,10 @@ public class Arena implements IArena {
 
         //Remove from magic milk
         if (magicMilk.containsKey(p.getUniqueId())) {
-            Bukkit.getScheduler().cancelTask(magicMilk.get(p.getUniqueId()));
-            magicMilk.remove(p.getUniqueId());
+            int taskId = magicMilk.get(p.getUniqueId());
+            if (taskId > 0){
+                Bukkit.getScheduler().cancelTask(taskId);
+            }
         }
 
         refreshSigns();
@@ -1049,7 +1083,8 @@ public class Arena implements IArena {
         setArenaByPlayer(p, this);
         /* save player inventory etc */
         if (BedWars.getServerType() != ServerType.BUNGEE) {
-            new PlayerGoods(p, true, true);
+            // no need to backup inventory because it's empty
+            //new PlayerGoods(p, true, true);
             playerLocation.put(p, p.getLocation());
         }
 
@@ -1076,13 +1111,18 @@ public class Arena implements IArena {
      * This will automatically kick/ remove the people from the arena.
      */
     public void disable() {
-        if (getRestartingTask() != null) getRestartingTask().cancel();
-        plugin.getLogger().log(Level.WARNING, "Disabling arena: " + getArenaName());
         for (Player p : new ArrayList<>(players)) {
             removePlayer(p, false);
         }
         for (Player p : new ArrayList<>(spectators)) {
             removeSpectator(p, false);
+        }
+        if (getRestartingTask() != null) getRestartingTask().cancel();
+        if (getStartingTask() != null) getStartingTask().cancel();
+        if (getPlayingTask() != null) getPlayingTask().cancel();
+        plugin.getLogger().log(Level.WARNING, "Disabling arena: " + getArenaName());
+        for (Player inWorld : getWorld().getPlayers()) {
+            inWorld.kickPlayer("You're not supposed to be here.");
         }
         BedWars.getAPI().getRestoreAdapter().onDisable(this);
         Bukkit.getPluginManager().callEvent(new ArenaDisableEvent(getArenaName(), getWorldName()));
@@ -1093,13 +1133,16 @@ public class Arena implements IArena {
      * Restart the arena.
      */
     public void restart() {
+        if (getRestartingTask() != null) getRestartingTask().cancel();
+        if (getStartingTask() != null) getStartingTask().cancel();
+        if (getPlayingTask() != null) getPlayingTask().cancel();
         plugin.getLogger().log(Level.FINE, "Restarting arena: " + getArenaName());
         Bukkit.getPluginManager().callEvent(new ArenaRestartEvent(getArenaName(), getWorldName()));
         for (Player inWorld : getWorld().getPlayers()) {
             inWorld.kickPlayer("You're not supposed to be here.");
         }
-        destroyData();
         BedWars.getAPI().getRestoreAdapter().onRestart(this);
+        destroyData();
     }
 
     //GETTER METHODS
@@ -2397,7 +2440,7 @@ public class Arena implements IArena {
             if (ar.getArenaName().equalsIgnoreCase(arenaName)) return false;
         }
 
-        if (Arena.getArenas().size() >= config.getInt(ConfigPath.GENERAL_CONFIGURATION_AUTO_SCALE_LIMIT)) return false;
+        if (Arena.getArenas().size() >= Arena.getGamesBeforeRestart()) return false;
 
         for (IArena ar : Arena.getArenas()) {
             if (ar.getArenaName().equalsIgnoreCase(arenaName)) {

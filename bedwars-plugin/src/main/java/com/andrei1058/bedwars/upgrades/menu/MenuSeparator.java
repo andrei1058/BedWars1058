@@ -47,10 +47,12 @@ public class MenuSeparator implements MenuContent {
     public ItemStack getDisplayItem(Player player, ITeam team) {
         ItemStack i = new ItemStack(displayItem);
         ItemMeta im = i.getItemMeta();
-        im.setDisplayName(Language.getMsg(player, Messages.UPGRADES_SEPARATOR_ITEM_NAME_PATH + name.replace("separator-", "")));
-        im.setLore(Language.getList(player, Messages.UPGRADES_SEPARATOR_ITEM_LORE_PATH + name.replace("separator-", "")));
-        im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        i.setItemMeta(im);
+        if (im != null) {
+            im.setDisplayName(Language.getMsg(player, Messages.UPGRADES_SEPARATOR_ITEM_NAME_PATH + name.replace("separator-", "")));
+            im.setLore(Language.getList(player, Messages.UPGRADES_SEPARATOR_ITEM_LORE_PATH + name.replace("separator-", "")));
+            im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            i.setItemMeta(im);
+        }
         return i;
     }
 

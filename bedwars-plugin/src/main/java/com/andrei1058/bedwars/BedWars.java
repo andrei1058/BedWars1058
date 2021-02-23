@@ -13,6 +13,7 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.ArenaManager;
 import com.andrei1058.bedwars.arena.VoidChunkGenerator;
 import com.andrei1058.bedwars.arena.despawnables.TargetListener;
+import com.andrei1058.bedwars.arena.feature.SpoilPlayerTNTFeature;
 import com.andrei1058.bedwars.arena.spectator.SpectatorListeners;
 import com.andrei1058.bedwars.arena.tasks.OneTick;
 import com.andrei1058.bedwars.arena.tasks.Refresh;
@@ -92,7 +93,7 @@ public class BedWars extends JavaPlugin {
     private static Chat chat = new NoChat();
     protected static Level level;
     private static Economy economy;
-    private static String version = Bukkit.getServer().getClass().getName().split("\\.")[3];
+    private static final String version = Bukkit.getServer().getClass().getName().split("\\.")[3];
     private static String lobbyWorld = "";
 
     public static ArenaManager arenaManager = new ArenaManager();
@@ -532,6 +533,8 @@ public class BedWars extends JavaPlugin {
 
         // Halloween Special
         HalloweenSpecial.init();
+
+        SpoilPlayerTNTFeature.init();
     }
 
     public void onDisable() {

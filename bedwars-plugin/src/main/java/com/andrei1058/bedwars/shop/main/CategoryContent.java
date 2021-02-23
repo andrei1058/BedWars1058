@@ -165,7 +165,7 @@ public class CategoryContent implements ICategoryContent {
         //send purchase msg
         if (itemNamePath == null || Language.getPlayerLanguage(player).getYml().get(itemNamePath) == null) {
             ItemStack displayItem = ct.getItemStack();
-            if (displayItem.getItemMeta().hasDisplayName()){
+            if (displayItem.getItemMeta() != null && displayItem.getItemMeta().hasDisplayName()) {
                 player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", displayItem.getItemMeta().getDisplayName()));
             }
         } else {
@@ -216,50 +216,54 @@ public class CategoryContent implements ICategoryContent {
         }
 
         ItemStack i = ct.getItemStack();
-        ItemMeta im = i.getItemMeta().clone();
+        ItemMeta im = i.getItemMeta();
 
-        boolean canAfford = calculateMoney(player, ct.getCurrency()) >= ct.getPrice();
-        PlayerQuickBuyCache qbc = PlayerQuickBuyCache.getQuickBuyCache(player.getUniqueId());
-        boolean hasQuick = qbc != null && hasQuick(qbc);
+        if (im != null) {
+            im = i.getItemMeta().clone();
+            boolean canAfford = calculateMoney(player, ct.getCurrency()) >= ct.getPrice();
+            PlayerQuickBuyCache qbc = PlayerQuickBuyCache.getQuickBuyCache(player.getUniqueId());
+            boolean hasQuick = qbc != null && hasQuick(qbc);
 
-        String color = getMsg(player, canAfford ? Messages.SHOP_CAN_BUY_COLOR : Messages.SHOP_CANT_BUY_COLOR);
-        String translatedCurrency = getMsg(player, getCurrencyMsgPath(ct));
-        ChatColor cColor = getCurrencyColor(ct.getCurrency());
+            String color = getMsg(player, canAfford ? Messages.SHOP_CAN_BUY_COLOR : Messages.SHOP_CANT_BUY_COLOR);
+            String translatedCurrency = getMsg(player, getCurrencyMsgPath(ct));
+            ChatColor cColor = getCurrencyColor(ct.getCurrency());
 
-        int tierI = ct.getValue();
-        String tier = getRomanNumber(tierI);
-        String buyStatus;
+            int tierI = ct.getValue();
+            String tier = getRomanNumber(tierI);
+            String buyStatus;
 
-        if (isPermanent() && shopCache.hasCachedItem(this) && shopCache.getCachedItem(this).getTier() == getContentTiers().size()) {
-            buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_MAXED);
-        } else if (!canAfford) {
-            buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CANT_AFFORD).replace("{currency}", translatedCurrency);
-        } else {
-            buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CAN_BUY);
-        }
-
-        im.setDisplayName(getMsg(player, itemNamePath).replace("{color}", color).replace("{tier}", tier));
-
-        List<String> lore = new ArrayList<>();
-        for (String s : Language.getList(player, itemLorePath)) {
-            if (s.contains("{quick_buy}")) {
-                if (hasQuick) {
-                    if (ShopIndex.getIndexViewers().contains(player.getUniqueId())) {
-                        s = getMsg(player, Messages.SHOP_LORE_QUICK_REMOVE);
-                    } else {
-                        continue;
-                    }
-                } else {
-                    s = getMsg(player, Messages.SHOP_LORE_QUICK_ADD);
-                }
+            if (isPermanent() && shopCache.hasCachedItem(this) && shopCache.getCachedItem(this).getTier() == getContentTiers().size()) {
+                buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_MAXED);
+            } else if (!canAfford) {
+                buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CANT_AFFORD).replace("{currency}", translatedCurrency);
+            } else {
+                buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CAN_BUY);
             }
-            s = s.replace("{tier}", tier).replace("{color}", color).replace("{cost}", cColor + String.valueOf(ct.getPrice()))
-                    .replace("{currency}", cColor + translatedCurrency).replace("{buy_status}", buyStatus);
-            lore.add(s);
-        }
 
-        im.setLore(lore);
-        i.setItemMeta(im);
+
+            im.setDisplayName(getMsg(player, itemNamePath).replace("{color}", color).replace("{tier}", tier));
+
+            List<String> lore = new ArrayList<>();
+            for (String s : Language.getList(player, itemLorePath)) {
+                if (s.contains("{quick_buy}")) {
+                    if (hasQuick) {
+                        if (ShopIndex.getIndexViewers().contains(player.getUniqueId())) {
+                            s = getMsg(player, Messages.SHOP_LORE_QUICK_REMOVE);
+                        } else {
+                            continue;
+                        }
+                    } else {
+                        s = getMsg(player, Messages.SHOP_LORE_QUICK_ADD);
+                    }
+                }
+                s = s.replace("{tier}", tier).replace("{color}", color).replace("{cost}", cColor + String.valueOf(ct.getPrice()))
+                        .replace("{currency}", cColor + translatedCurrency).replace("{buy_status}", buyStatus);
+                lore.add(s);
+            }
+
+            im.setLore(lore);
+            i.setItemMeta(im);
+        }
         return i;
     }
 

@@ -69,7 +69,7 @@ public class MenuBaseTrap implements MenuContent, EnemyBaseEnterTrap, TeamUpgrad
             switch (type[0].trim().toLowerCase()) {
                 case "player-effect":
                     if (data.length < 4) {
-                        BedWars.plugin.getLogger().warning("Invalid " + type[0] + " at upgrades2: "+ name);
+                        BedWars.plugin.getLogger().warning("Invalid " + type[0] + " at upgrades2: " + name);
                         continue;
                     }
                     PotionEffectType pe = PotionEffectType.getByName(data[0].toUpperCase());
@@ -104,7 +104,7 @@ public class MenuBaseTrap implements MenuContent, EnemyBaseEnterTrap, TeamUpgrad
                     break;
                 case "disenchant-item":
                     if (data.length < 2) {
-                        BedWars.plugin.getLogger().warning("Invalid " + type[0] + " at upgrades2: "+ name);
+                        BedWars.plugin.getLogger().warning("Invalid " + type[0] + " at upgrades2: " + name);
                         continue;
                     }
                     Enchantment re = Enchantment.getByName(data[0].toUpperCase());
@@ -132,7 +132,7 @@ public class MenuBaseTrap implements MenuContent, EnemyBaseEnterTrap, TeamUpgrad
                     break;
                 case "remove-effect":
                     if (data.length < 1) {
-                        BedWars.plugin.getLogger().warning("Invalid " + type[0] + " at upgrades2: "+ name);
+                        BedWars.plugin.getLogger().warning("Invalid " + type[0] + " at upgrades2: " + name);
                         continue;
                     }
                     PotionEffectType pet = PotionEffectType.getByName(data[0].toUpperCase());
@@ -176,29 +176,31 @@ public class MenuBaseTrap implements MenuContent, EnemyBaseEnterTrap, TeamUpgrad
 
         ItemStack i = displayItem.clone();
         ItemMeta im = i.getItemMeta();
-        boolean afford = UpgradesManager.getMoney(player, currency) >= cost;
-        String color;
-        if (afford) {
-            color = Language.getMsg(player, Messages.FORMAT_UPGRADE_COLOR_CAN_AFFORD);
-        } else {
-            color = Language.getMsg(player, Messages.FORMAT_UPGRADE_COLOR_CANT_AFFORD);
-        }
-        im.setDisplayName(Language.getMsg(player, Messages.UPGRADES_BASE_TRAP_ITEM_NAME_PATH + name.replace("base-trap-", ""))
-                .replace("{color}", color));
+        if (im != null) {
+            boolean afford = UpgradesManager.getMoney(player, currency) >= cost;
+            String color;
+            if (afford) {
+                color = Language.getMsg(player, Messages.FORMAT_UPGRADE_COLOR_CAN_AFFORD);
+            } else {
+                color = Language.getMsg(player, Messages.FORMAT_UPGRADE_COLOR_CANT_AFFORD);
+            }
+            im.setDisplayName(Language.getMsg(player, Messages.UPGRADES_BASE_TRAP_ITEM_NAME_PATH + name.replace("base-trap-", ""))
+                    .replace("{color}", color));
 
-        List<String> lore = Language.getList(player, Messages.UPGRADES_BASE_TRAP_ITEM_LORE_PATH + name.replace("base-trap-", ""));
-        String currencyMsg = UpgradesManager.getCurrencyMsg(player, cost, currency);
-        lore.add(Language.getMsg(player, Messages.FORMAT_UPGRADE_TRAP_COST).replace("{cost}", String.valueOf(cost)).replace("{currency}", currencyMsg)
-                .replace("{currencyColor}", String.valueOf(UpgradesManager.getCurrencyColor(currency))));
-        lore.add("");
-        if (afford) {
-            lore.add(Language.getMsg(player, Messages.UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY).replace("{color}", color));
-        } else {
-            lore.add(Language.getMsg(player, Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY).replace("{currency}", currencyMsg).replace("{color}", color));
+            List<String> lore = Language.getList(player, Messages.UPGRADES_BASE_TRAP_ITEM_LORE_PATH + name.replace("base-trap-", ""));
+            String currencyMsg = UpgradesManager.getCurrencyMsg(player, cost, currency);
+            lore.add(Language.getMsg(player, Messages.FORMAT_UPGRADE_TRAP_COST).replace("{cost}", String.valueOf(cost)).replace("{currency}", currencyMsg)
+                    .replace("{currencyColor}", String.valueOf(UpgradesManager.getCurrencyColor(currency))));
+            lore.add("");
+            if (afford) {
+                lore.add(Language.getMsg(player, Messages.UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY).replace("{color}", color));
+            } else {
+                lore.add(Language.getMsg(player, Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY).replace("{currency}", currencyMsg).replace("{color}", color));
+            }
+            im.setLore(lore);
+            im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            i.setItemMeta(im);
         }
-        im.setLore(lore);
-        im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        i.setItemMeta(im);
         return i;
     }
 

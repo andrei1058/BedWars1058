@@ -5,10 +5,7 @@ import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.upgrades.UpgradeAction;
 import com.andrei1058.bedwars.upgrades.UpgradesManager;
-import com.andrei1058.bedwars.upgrades.upgradeaction.DragonAction;
-import com.andrei1058.bedwars.upgrades.upgradeaction.EnchantItemAction;
-import com.andrei1058.bedwars.upgrades.upgradeaction.GeneratorEditAction;
-import com.andrei1058.bedwars.upgrades.upgradeaction.PlayerEffectAction;
+import com.andrei1058.bedwars.upgrades.upgradeaction.*;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -115,7 +112,7 @@ public class UpgradeTier {
                         continue;
                     }
                     GeneratorEditAction.ApplyType genType = null;
-                    switch (data[0].toLowerCase()){
+                    switch (data[0].toLowerCase()) {
                         case "gold":
                         case "g":
                             genType = GeneratorEditAction.ApplyType.GOLD;
@@ -129,7 +126,7 @@ public class UpgradeTier {
                             genType = GeneratorEditAction.ApplyType.EMERALD;
                             break;
                     }
-                    if (genType == null){
+                    if (genType == null) {
                         BedWars.plugin.getLogger().warning("Invalid generator type " + data[0] + " at upgrades2: " + parentName + "." + name);
                     }
                     int spawn, amount, limit;
@@ -137,25 +134,43 @@ public class UpgradeTier {
                         spawn = Integer.parseInt(data[1]);
                         amount = Integer.parseInt(data[2]);
                         limit = Integer.parseInt(data[3]);
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
                         BedWars.plugin.getLogger().warning("Invalid generator configuration " + data[0] + " at upgrades2: " + parentName + "." + name);
                         continue;
                     }
                     ua = new GeneratorEditAction(genType, amount, spawn, limit);
                     break;
                 case "dragon":
-                    if (data.length < 1){
+                    if (data.length < 1) {
                         BedWars.plugin.getLogger().warning("Invalid " + type[0] + " at upgrades2: " + parentName + "." + name);
                         continue;
                     }
                     int dragons;
                     try {
                         dragons = Integer.parseInt(data[0]);
-                    } catch (Exception exc){
+                    } catch (Exception exc) {
                         BedWars.plugin.getLogger().warning("Invalid dragon amount at upgrades2: " + parentName + "." + name);
                         continue;
                     }
                     ua = new DragonAction(dragons);
+                    break;
+                case "command":
+                    // once-as-console,command
+                    if (data.length < 2) {
+                        BedWars.plugin.getLogger().warning("Invalid " + type[0] + " at upgrades2: " + parentName + "." + name);
+                        continue;
+                    }
+                    DispatchCommand.CommandType cmdType;
+                    try {
+                        cmdType = DispatchCommand.CommandType.valueOf(data[0].toUpperCase());
+                    } catch (Exception exception) {
+                        BedWars.plugin.getLogger().warning("Invalid command type " + data[0] + " at upgrades2: " + parentName + "." + name);
+                        continue;
+                    }
+                    // re-do here because the first one does a trim on data
+                    // we need data with spaces
+                    data = type[1].split(",");
+                    ua = new DispatchCommand(cmdType, data[1]);
                     break;
             }
             if (ua != null) upgradeActions.add(ua);

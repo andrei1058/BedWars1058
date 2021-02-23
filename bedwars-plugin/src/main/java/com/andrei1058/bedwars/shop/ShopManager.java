@@ -10,7 +10,6 @@ import com.andrei1058.bedwars.shop.main.ShopCategory;
 import com.andrei1058.bedwars.shop.main.ShopIndex;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -389,7 +388,9 @@ public class ShopManager extends ConfigManager {
      * Hide an item details
      */
     public static ItemMeta hideItemStuff(ItemMeta im) {
-        im.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_PLACED_ON);
+        if (im != null) {
+            im.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_PLACED_ON);
+        }
         return im;
     }
 
@@ -399,8 +400,10 @@ public class ShopManager extends ConfigManager {
     public static ItemStack enchantItem(ItemStack itemStack) {
         ItemStack i = new ItemStack(itemStack);
         ItemMeta im = i.getItemMeta();
-        im.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
-        i.setItemMeta(hideItemStuff(im));
+        if (im != null) {
+            im.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
+            i.setItemMeta(hideItemStuff(im));
+        }
         return i;
     }
 

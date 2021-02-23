@@ -28,6 +28,7 @@ import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Openable;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
@@ -124,9 +125,11 @@ public class Interact implements Listener {
                         }
                     }
                     if (owner != null) {
-                        if (owner.getMembers().isEmpty()) {
-                            e.setCancelled(true);
-                            p.sendMessage(getMsg(p, Messages.INTERACT_CHEST_CANT_OPEN_TEAM_ELIMINATED));
+                        if (!owner.isMember(p)) {
+                            if (!(owner.getMembers().isEmpty() && owner.isBedDestroyed())) {
+                                e.setCancelled(true);
+                                p.sendMessage(getMsg(p, Messages.INTERACT_CHEST_CANT_OPEN_TEAM_ELIMINATED));
+                            }
                         }
                     }
                 }
@@ -137,8 +140,12 @@ public class Interact implements Listener {
                         case ANVIL:
                         case WORKBENCH:
                         case HOPPER:
+                        case TRAPPED_CHEST:
                             e.setCancelled(true);
                             break;
+                    }
+                    if (b.getState() instanceof Openable){
+                        e.setCancelled(true);
                     }
                 }
             }
@@ -166,12 +173,10 @@ public class Interact implements Listener {
                         e.setCancelled(true);
                         Fireball fb = p.launchProjectile(Fireball.class);
                         Vector direction = p.getEyeLocation().getDirection();
-
-                        fb.setDirection(new Vector(direction.getX() * 0.1D, direction.getY() * 0.1D, direction.getZ() * 0.1D));
-                        fb.setVelocity(fb.getDirection().multiply(5));
+                        fb = nms.setFireballDirection(fb, direction);
+                        fb.setVelocity(fb.getDirection().multiply(2));
                         fb.setIsIncendiary(false);
                         fb.setMetadata("bw1058", new FixedMetadataValue(plugin, "ceva"));
-                        //fb.setGlowing(true);
                         nms.minusAmount(p, inHand, 1);
                     }
                 }

@@ -98,6 +98,9 @@ public class PAPISupport extends PlaceholderExpansion {
                 Instant lastPlay = BedWars.getStatsManager().get(player.getUniqueId()).getLastPlay();
                 replay = new SimpleDateFormat(getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(lastPlay != null ? Timestamp.from(lastPlay) : null);
                 break;
+            case "stats_total_kills":
+                replay = String.valueOf(BedWars.getStatsManager().get(player.getUniqueId()).getTotalKills());
+                break;
             case "stats_kills":
                 replay = String.valueOf(BedWars.getStatsManager().get(player.getUniqueId()).getKills());
                 break;

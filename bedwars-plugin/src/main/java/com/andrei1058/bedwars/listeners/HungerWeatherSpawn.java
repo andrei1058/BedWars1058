@@ -2,13 +2,10 @@ package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
-import com.andrei1058.bedwars.api.arena.team.ITeam;
-import com.andrei1058.bedwars.api.events.player.PlayerInvisibilityPotionEvent;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,10 +14,6 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import static com.andrei1058.bedwars.BedWars.*;
 
@@ -70,34 +63,6 @@ public class HungerWeatherSpawn implements Listener {
         if (a == null) return;
         /* remove empty bottle */
         switch (e.getItem().getType()) {
-            case POTION:
-                Bukkit.getScheduler().runTaskLater(plugin, () -> nms.minusAmount(e.getPlayer(), new ItemStack(Material.GLASS_BOTTLE), 1), 5L);
-                PotionMeta pm = (PotionMeta) e.getItem().getItemMeta();
-                if (pm.hasCustomEffects()) {
-                    if (pm.hasCustomEffect(PotionEffectType.INVISIBILITY)) {
-                        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                            for (PotionEffect pe : e.getPlayer().getActivePotionEffects()) {
-                                if (pe.getType().toString().contains("INVISIBILITY")) {
-                                    if (a.getShowTime().containsKey(e.getPlayer())) {
-                                        ITeam t = a.getTeam(e.getPlayer());
-                                        a.getShowTime().replace(e.getPlayer(), pe.getDuration() / 20);
-                                        Bukkit.getPluginManager().callEvent(new PlayerInvisibilityPotionEvent(PlayerInvisibilityPotionEvent.Type.ADDED, t, e.getPlayer(), t.getArena()));
-                                    } else {
-                                        ITeam t = a.getTeam(e.getPlayer());
-                                        a.getShowTime().put(e.getPlayer(), pe.getDuration() / 20);
-                                        for (Player p1 : e.getPlayer().getWorld().getPlayers()) {
-                                            if (a.isSpectator(p1)) continue;
-                                            if (t != a.getTeam(p1)) nms.hideArmor(e.getPlayer(), p1);
-                                            Bukkit.getPluginManager().callEvent(new PlayerInvisibilityPotionEvent(PlayerInvisibilityPotionEvent.Type.ADDED, t, e.getPlayer(), t.getArena()));
-                                        }
-                                    }
-                                    break;
-                                }
-                            }
-                        }, 5L);
-                    }
-                }
-                break;
             case GLASS_BOTTLE:
                 nms.minusAmount(e.getPlayer(), e.getItem(), 1);
                 break;
@@ -112,23 +77,6 @@ public class HungerWeatherSpawn implements Listener {
                 break;
         }
     }
-
-    /*@EventHandler
-    public void he(EntityRegainHealthEvent e){
-        if (e.getEntity() instanceof Player) {
-            Player p = (Player) e.getEntity();
-            Arena a = Arena.getArenaByPlayer(p);
-            if (a != null) {
-                if (a.isPlayer(p)) {
-                    BedWarsTeam t = a.getTeam(p);
-                    if (t != null) {
-                        p.setPlayerListName(lang.m(lang.tablistFormat).replace("{TeamColor}", TeamColor.getChatColor(t.getColor()).toString()).replace("{TeamLetter}", t.getName().substring(0, 1).toUpperCase())
-                                .replace("{TeamName}", t.getName()).replace("{PlayerName}", p.getName()).replace("{PlayerHealth}", String.valueOf((int) p.getHealth())));
-                    }
-                }
-            }
-        }
-    }*/
 
     @EventHandler
     //Prevent item spawning, issue #60

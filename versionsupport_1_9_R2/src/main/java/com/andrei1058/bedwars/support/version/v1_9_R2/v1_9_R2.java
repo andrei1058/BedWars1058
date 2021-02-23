@@ -14,26 +14,22 @@ import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import net.minecraft.server.v1_9_R2.Item;
 import net.minecraft.server.v1_9_R2.*;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_9_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_9_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_9_R2.entity.CraftFireball;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftTNTPrimed;
 import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_9_R2.util.UnsafeList;
 import org.bukkit.entity.*;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.potion.PotionData;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionType;
 import org.bukkit.scoreboard.Team;
+import org.bukkit.util.Vector;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -44,6 +40,7 @@ import java.util.logging.Level;
 
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
+@SuppressWarnings("unused")
 public class v1_9_R2 extends VersionSupport {
 
     public v1_9_R2(Plugin plugin, String name) {
@@ -172,7 +169,6 @@ public class v1_9_R2 extends VersionSupport {
 
     @Override
     public void registerEntities() {
-        registerEntity("ShopNPC", 120, VillagerShop.class);
         registerEntity("Silverfish2", 60, Silverfish.class);
         registerEntity("IGolem", 99, IGolem.class);
     }
@@ -180,7 +176,14 @@ public class v1_9_R2 extends VersionSupport {
     @Override
     public void spawnShop(Location loc, String name1, List<Player> players, IArena arena) {
         Location l = loc.clone();
-        spawnVillager(l);
+
+        Villager vlg = (Villager) loc.getWorld().spawnEntity(loc, EntityType.VILLAGER);
+        vlg.setAI(false);
+        vlg.setRemoveWhenFarAway(false);
+        vlg.setCollidable(false);
+        vlg.setInvulnerable(true);
+        vlg.setSilent(true);
+
         for (Player p : players) {
             String[] nume = getMsg(p, name1).split(",");
             if (nume.length == 1) {
@@ -236,63 +239,6 @@ public class v1_9_R2 extends VersionSupport {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public static class VillagerShop extends net.minecraft.server.v1_9_R2.EntityVillager {
-        @SuppressWarnings("rawtypes")
-        VillagerShop(net.minecraft.server.v1_9_R2.World world) {
-            super(world);
-            try {
-                Field bField = net.minecraft.server.v1_9_R2.PathfinderGoalSelector.class.getDeclaredField("b");
-                bField.setAccessible(true);
-                Field cField = net.minecraft.server.v1_9_R2.PathfinderGoalSelector.class.getDeclaredField("c");
-                cField.setAccessible(true);
-                bField.set(this.goalSelector, new UnsafeList());
-                bField.set(this.targetSelector, new UnsafeList());
-                cField.set(this.goalSelector, new UnsafeList());
-                cField.set(this.targetSelector, new UnsafeList());
-            } catch (Exception ignored) {
-            }
-            this.goalSelector.a(0, new net.minecraft.server.v1_9_R2.PathfinderGoalFloat(this));
-            this.goalSelector.a(9, new net.minecraft.server.v1_9_R2.PathfinderGoalInteract(this, net.minecraft.server.v1_9_R2.EntityHuman.class, 3.0f, 1.0f));
-            this.goalSelector.a(10, new net.minecraft.server.v1_9_R2.PathfinderGoalLookAtPlayer(this, net.minecraft.server.v1_9_R2.EntityHuman.class, 8.0f));
-        }
-
-        @Override
-        public void move(double d0, double d1, double d2) {
-        }
-
-        @Override
-        public void collide(net.minecraft.server.v1_9_R2.Entity entity) {
-        }
-
-        @Override
-        public boolean damageEntity(net.minecraft.server.v1_9_R2.DamageSource damagesource, float f) {
-            return false;
-        }
-
-        @Override
-        public void g(double d0, double d1, double d2) {
-        }
-
-        public void a(SoundEffect soundeffect, float f, float f1) {
-        }
-
-        @Override
-        protected void initAttributes() {
-            super.initAttributes();
-            this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.0D);
-        }
-    }
-
-    @SuppressWarnings("UnusedReturnValue")
-    private Villager spawnVillager(Location loc) {
-        net.minecraft.server.v1_9_R2.WorldServer mcWorld = ((CraftWorld) loc.getWorld()).getHandle();
-        VillagerShop customEnt = new VillagerShop(mcWorld);
-        customEnt.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
-        ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
-        mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
-        return (Villager) customEnt.getBukkitEntity();
     }
 
     @Override
@@ -677,6 +623,15 @@ public class v1_9_R2 extends VersionSupport {
     }
 
     @Override
+    public Fireball setFireballDirection(Fireball fireball, Vector vector) {
+        EntityFireball fb = ((CraftFireball) fireball).getHandle();
+        fb.dirX = vector.getX() * 0.1D;
+        fb.dirY = vector.getY() * 0.1D;
+        fb.dirZ = vector.getZ() * 0.1D;
+        return (Fireball) fb.getBukkitEntity();
+    }
+
+    @Override
     public int getVersion() {
         return 2;
     }
@@ -689,5 +644,13 @@ public class v1_9_R2 extends VersionSupport {
     @Override
     public void setJoinSignBackground(org.bukkit.block.BlockState b, org.bukkit.Material material) {
         b.getLocation().getBlock().getRelative(((org.bukkit.material.Sign) b.getData()).getAttachedFace()).setType(material);
+    }
+
+    @Override
+    public void playRedStoneDot(Player player) {
+        player.getWorld().spawnParticle(Particle.REDSTONE, player.getLocation().getX(),
+                player.getLocation().getY() + 2.2,
+                player.getLocation().getZ(),
+                1, 0, 0, 0, 0);
     }
 }

@@ -73,8 +73,9 @@ public class BedWarsTeam implements ITeam {
     private int dragons = 1;
     // Player cache, used for losers stats and rejoin
     private List<Player> membersCache = new ArrayList<>();
+    // Invulnerability at re-spawn
     // Fall invulnerability when teammates respawn
-    public static HashMap<UUID, Long> antiFallDamageAtRespawn = new HashMap<>();
+    public static HashMap<UUID, Long> reSpawnInvulnerability = new HashMap<>();
 
     public BedWarsTeam(String name, TeamColor color, Location spawn, Location bed, Location shop, Location teamUpgrades, Arena arena) {
         if (arena == null) return;
@@ -307,10 +308,10 @@ public class BedWarsTeam implements ITeam {
      * Respawn a member
      */
     public void respawnMember(@NotNull Player p) {
-        if (antiFallDamageAtRespawn.containsKey(p.getUniqueId())) {
-            antiFallDamageAtRespawn.replace(p.getUniqueId(), System.currentTimeMillis() + 3500L);
+        if (reSpawnInvulnerability.containsKey(p.getUniqueId())) {
+            reSpawnInvulnerability.replace(p.getUniqueId(), System.currentTimeMillis() + config.getInt(ConfigPath.GENERAL_CONFIGURATION_RE_SPAWN_INVULNERABILITY));
         } else {
-            antiFallDamageAtRespawn.put(p.getUniqueId(), System.currentTimeMillis() + 3500L);
+            reSpawnInvulnerability.put(p.getUniqueId(), System.currentTimeMillis() + config.getInt(ConfigPath.GENERAL_CONFIGURATION_RE_SPAWN_INVULNERABILITY));
         }
         p.teleport(getSpawn(), PlayerTeleportEvent.TeleportCause.PLUGIN);
         p.setVelocity(new Vector(0, 0, 0));
@@ -342,12 +343,12 @@ public class BedWarsTeam implements ITeam {
         p.setHealth(20);
         if (!getBaseEffects().isEmpty()) {
             for (PotionEffect ef : getBaseEffects()) {
-                p.addPotionEffect(ef);
+                p.addPotionEffect(ef, true);
             }
         }
         if (!getTeamEffects().isEmpty()) {
             for (PotionEffect ef : getTeamEffects()) {
-                p.addPotionEffect(ef);
+                p.addPotionEffect(ef, true);
             }
         }
         if (!getBowsEnchantments().isEmpty()) {
@@ -528,7 +529,7 @@ public class BedWarsTeam implements ITeam {
     public void addTeamEffect(PotionEffectType pef, int amp, int duration) {
         getTeamEffects().add(new PotionEffect(pef, duration, amp));
         for (Player p : getMembers()) {
-            p.addPotionEffect(new PotionEffect(pef, duration, amp));
+            p.addPotionEffect(new PotionEffect(pef, duration, amp), true);
         }
     }
 
@@ -540,7 +541,7 @@ public class BedWarsTeam implements ITeam {
         for (Player p : new ArrayList<>(getMembers())) {
             if (p.getLocation().distance(getBed()) <= getArena().getIslandRadius()) {
                 for (PotionEffect e : getBaseEffects()) {
-                    p.addPotionEffect(e);
+                    p.addPotionEffect(e, true);
                 }
             }
         }

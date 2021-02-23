@@ -104,9 +104,11 @@ public class PlayerQuickBuyCache {
     private ItemStack getEmptyItem(Player player) {
         ItemStack i = emptyItem.clone();
         ItemMeta im = i.getItemMeta();
-        im.setDisplayName(Language.getMsg(player, emptyItemNamePath));
-        im.setLore(Language.getList(player, emptyItemLorePath));
-        i.setItemMeta(im);
+        if (im != null) {
+            im.setDisplayName(Language.getMsg(player, emptyItemNamePath));
+            im.setLore(Language.getList(player, emptyItemLorePath));
+            i.setItemMeta(im);
+        }
         return i;
     }
 

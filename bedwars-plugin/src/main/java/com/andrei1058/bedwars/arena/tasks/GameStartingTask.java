@@ -136,7 +136,7 @@ public class GameStartingTask implements Runnable, StartingTask {
             for (Player player : getArena().getPlayers()) {
                 Language playerLang = Language.getPlayerLanguage(player);
                 String[] titleSubtitle = Language.getCountDownTitle(playerLang, getCountdown());
-                nms.sendTitle(player, titleSubtitle[0], titleSubtitle[1], 0, 20, 0);
+                nms.sendTitle(player, titleSubtitle[0], titleSubtitle[1], 4, 22, 4);
                 player.sendMessage(getMsg(player, Messages.ARENA_STATUS_START_COUNTDOWN_CHAT).replace("{time}", String.valueOf(getCountdown())));
             }
         }
@@ -147,7 +147,7 @@ public class GameStartingTask implements Runnable, StartingTask {
     private void spawnPlayers() {
         for (ITeam bwt : getArena().getTeams()) {
             for (Player p : new ArrayList<>(bwt.getMembers())) {
-                BedWarsTeam.antiFallDamageAtRespawn.put(p.getUniqueId(), System.currentTimeMillis() + 2000L);
+                BedWarsTeam.reSpawnInvulnerability.put(p.getUniqueId(), System.currentTimeMillis() + 2000L);
                 bwt.firstSpawn(p);
                 Sounds.playSound(ConfigPath.SOUND_GAME_START, p);
                 nms.sendTitle(p, getMsg(p, Messages.ARENA_STATUS_START_PLAYER_TITLE), null, 0, 20, 0);

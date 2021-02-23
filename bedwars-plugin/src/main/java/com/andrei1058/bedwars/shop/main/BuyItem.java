@@ -48,11 +48,13 @@ public class BuyItem implements IBuyItem {
 
         if (yml.get(path + ".name") != null) {
             ItemMeta im = itemStack.getItemMeta();
-            im.setDisplayName(ChatColor.translateAlternateColorCodes('&', yml.getString(path + ".name")));
-            itemStack.setItemMeta(im);
+            if (im != null) {
+                im.setDisplayName(ChatColor.translateAlternateColorCodes('&', yml.getString(path + ".name")));
+                itemStack.setItemMeta(im);
+            }
         }
 
-        if (yml.get(path + ".enchants") != null) {
+        if (yml.get(path + ".enchants") != null && itemStack.getItemMeta() != null) {
             ItemMeta imm = itemStack.getItemMeta();
             String[] enchant = yml.getString(path + ".enchants").split(",");
             for (String enc : enchant) {
@@ -83,42 +85,46 @@ public class BuyItem implements IBuyItem {
                 itemStack = nms.setTag(itemStack, "CustomPotionColor", yml.getString(path + ".potion-color"));
             }
             PotionMeta imm = (PotionMeta) itemStack.getItemMeta();
-            String[] enchant = yml.getString(path + ".potion").split(",");
-            for (String enc : enchant) {
-                String[] stuff = enc.split(" ");
-                try {
-                    PotionEffectType.getByName(stuff[0].toUpperCase());
-                } catch (Exception ex) {
-                    plugin.getLogger().severe("BuyItem: Invalid potion effect " + stuff[0] + " at: " + path + ".potion");
-                    continue;
-                }
-                int duration = 50, amplifier = 1;
-                if (stuff.length >= 3) {
+            if (imm != null) {
+                String[] enchant = yml.getString(path + ".potion").split(",");
+                for (String enc : enchant) {
+                    String[] stuff = enc.split(" ");
                     try {
-                        duration = Integer.parseInt(stuff[1]);
-                    } catch (Exception exx) {
-                        plugin.getLogger().severe("BuyItem: Invalid int (duration) " + stuff[1] + " at: " + path + ".potion");
+                        PotionEffectType.getByName(stuff[0].toUpperCase());
+                    } catch (Exception ex) {
+                        plugin.getLogger().severe("BuyItem: Invalid potion effect " + stuff[0] + " at: " + path + ".potion");
                         continue;
                     }
-                    try {
-                        amplifier = Integer.parseInt(stuff[2]);
-                    } catch (Exception exx) {
-                        plugin.getLogger().severe("BuyItem: Invalid int (amplifier) " + stuff[2] + " at: " + path + ".potion");
-                        continue;
+                    int duration = 50, amplifier = 1;
+                    if (stuff.length >= 3) {
+                        try {
+                            duration = Integer.parseInt(stuff[1]);
+                        } catch (Exception exx) {
+                            plugin.getLogger().severe("BuyItem: Invalid int (duration) " + stuff[1] + " at: " + path + ".potion");
+                            continue;
+                        }
+                        try {
+                            amplifier = Integer.parseInt(stuff[2]);
+                        } catch (Exception exx) {
+                            plugin.getLogger().severe("BuyItem: Invalid int (amplifier) " + stuff[2] + " at: " + path + ".potion");
+                            continue;
+                        }
                     }
+                    imm.addCustomEffect(new PotionEffect(PotionEffectType.getByName(stuff[0].toUpperCase()), duration * 20, amplifier), true);
                 }
-                imm.addCustomEffect(new PotionEffect(PotionEffectType.getByName(stuff[0].toUpperCase()), duration * 20, amplifier), true);
+                itemStack.setItemMeta(imm);
             }
-            itemStack.setItemMeta(imm);
 
             itemStack = nms.setTag(itemStack, "Potion", "minecraft:water");
-            if (parent.getItemStack().getType() == Material.POTION && !imm.getCustomEffects().isEmpty()){
+            if (parent.getItemStack().getType() == Material.POTION && imm != null && !imm.getCustomEffects().isEmpty()) {
                 ItemStack parentItemStack = parent.getItemStack();
-                PotionMeta potionMeta = (PotionMeta) parentItemStack.getItemMeta();
-                for (PotionEffect potionEffect : imm.getCustomEffects()){
-                    potionMeta.addCustomEffect(potionEffect, true);
+                if (parentItemStack.getItemMeta() != null) {
+                    PotionMeta potionMeta = (PotionMeta) parentItemStack.getItemMeta();
+                    for (PotionEffect potionEffect : imm.getCustomEffects()) {
+                        potionMeta.addCustomEffect(potionEffect, true);
+                    }
+                    parentItemStack.setItemMeta(potionMeta);
                 }
-                parentItemStack.setItemMeta(potionMeta);
                 parentItemStack = nms.setTag(parentItemStack, "Potion", "minecraft:water");
                 parent.setItemStack(parentItemStack);
             }
@@ -159,11 +165,13 @@ public class BuyItem implements IBuyItem {
                 BedWars.debug("Could not give BuyItem to " + player.getName() + " - TEAM IS NULL");
                 return;
             }
-            for (TeamEnchant e : arena.getTeam(player).getArmorsEnchantments()) {
-                im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
+            if (im != null) {
+                for (TeamEnchant e : arena.getTeam(player).getArmorsEnchantments()) {
+                    im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
+                }
+                if (permanent) nms.setUnbreakable(im);
+                i.setItemMeta(im);
             }
-            if (permanent) nms.setUnbreakable(im);
-            i.setItemMeta(im);
 
             if (m == Material.LEATHER_HELMET || m == Material.CHAINMAIL_HELMET || m == Material.DIAMOND_HELMET || m == nms.materialGoldenHelmet() || m == Material.IRON_HELMET) {
                 if (permanent) i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
@@ -195,19 +203,21 @@ public class BuyItem implements IBuyItem {
 
             ItemMeta im = i.getItemMeta();
             i = nms.colourItem(i, arena.getTeam(player));
-            if (permanent) nms.setUnbreakable(im);
-
-            if (i.getType() == Material.BOW) {
+            if (im != null) {
                 if (permanent) nms.setUnbreakable(im);
-                for (TeamEnchant e : arena.getTeam(player).getBowsEnchantments()) {
-                    im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
+
+                if (i.getType() == Material.BOW) {
+                    if (permanent) nms.setUnbreakable(im);
+                    for (TeamEnchant e : arena.getTeam(player).getBowsEnchantments()) {
+                        im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
+                    }
+                } else if (nms.isSword(i) || nms.isAxe(i)) {
+                    for (TeamEnchant e : arena.getTeam(player).getSwordsEnchantments()) {
+                        im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
+                    }
                 }
-            } else if (nms.isSword(i) || nms.isAxe(i)) {
-                for (TeamEnchant e : arena.getTeam(player).getSwordsEnchantments()) {
-                    im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
-                }
+                i.setItemMeta(im);
             }
-            i.setItemMeta(im);
 
             if (permanent) {
                 i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);

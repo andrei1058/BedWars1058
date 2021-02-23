@@ -55,6 +55,7 @@ public class MenuUpgrade implements MenuContent, TeamUpgrade {
 
         ItemStack i = new ItemStack(tiers.get(tier).getDisplayItem());
         ItemMeta im = i.getItemMeta();
+        if (im == null) return i;
         String color;
         if (!highest){
             if (afford){
@@ -121,7 +122,7 @@ public class MenuUpgrade implements MenuContent, TeamUpgrade {
             }
             Sounds.playSound(ConfigPath.SOUNDS_BOUGHT, player);
             for (UpgradeAction a : ut.getUpgradeActions()) {
-                a.onBuy(team);
+                a.onBuy(player, team);
             }
             player.closeInventory();
 

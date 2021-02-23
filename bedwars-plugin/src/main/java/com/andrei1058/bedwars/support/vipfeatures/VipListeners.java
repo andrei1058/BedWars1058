@@ -11,10 +11,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.util.Vector;
 
 public class VipListeners implements Listener {
 
-    private IVipFeatures api;
+    private final IVipFeatures api;
 
     public VipListeners(IVipFeatures api) {
         this.api = api;
@@ -23,17 +24,13 @@ public class VipListeners implements Listener {
     @EventHandler
     public void onServerJoin(PlayerJoinEvent e) {
         if (BedWars.getServerType() == ServerType.MULTIARENA) {
-            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
-                api.givePlayerItemStack(e.getPlayer());
-            }, 10L);
+            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> api.givePlayerItemStack(e.getPlayer()), 10L);
         }
     }
 
     @EventHandler
     public void onArenaJoin(PlayerJoinArenaEvent e) {
-        Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
-            api.givePlayerItemStack(e.getPlayer());
-        }, 10L);
+        Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> api.givePlayerItemStack(e.getPlayer()), 10L);
     }
 
     @EventHandler
@@ -47,11 +44,12 @@ public class VipListeners implements Listener {
                                 e.getLocation().getBlockY() == t.getBed().getBlockY() &&
                                 e.getLocation().getBlockZ() == t.getBed().getBlockZ()) {
                             if (BedWars.nms.isBed(t.getBed().clone().add(x, 0, z).getBlock().getType())) e.setCancelled(true);
-                            break;
+                            return;
                         }
                     }
                 }
             }
+            a.getPlaced().add(new Vector(e.getLocation().getBlockX(), e.getLocation().getBlockY(),e.getLocation().getBlockZ()));
         }
     }
 }

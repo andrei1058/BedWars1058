@@ -50,21 +50,23 @@ public class MenuCategory implements MenuContent {
     public ItemStack getDisplayItem(Player player, ITeam team) {
         ItemStack i = new ItemStack(displayItem);
         ItemMeta im = i.getItemMeta();
-        im.setDisplayName(Language.getMsg(player, Messages.UPGRADES_CATEGORY_ITEM_NAME_PATH + name.replace("category-", "")));
-        List<String> lore = Language.getList(player, Messages.UPGRADES_CATEGORY_ITEM_LORE_PATH + name.replace("category-", ""));
+        if (im != null) {
+            im.setDisplayName(Language.getMsg(player, Messages.UPGRADES_CATEGORY_ITEM_NAME_PATH + name.replace("category-", "")));
+            List<String> lore = Language.getList(player, Messages.UPGRADES_CATEGORY_ITEM_LORE_PATH + name.replace("category-", ""));
 
-        if (name.equalsIgnoreCase("traps")) {
-            int queueLimit = UpgradesManager.getConfiguration().getInt(team.getArena().getGroup().toLowerCase() + "-upgrades-settings.trap-queue-limit");
-            if (queueLimit == 0) {
-                queueLimit = UpgradesManager.getConfiguration().getInt("default-upgrades-settings.trap-queue-limit");
+            if (name.equalsIgnoreCase("traps")) {
+                int queueLimit = UpgradesManager.getConfiguration().getInt(team.getArena().getGroup().toLowerCase() + "-upgrades-settings.trap-queue-limit");
+                if (queueLimit == 0) {
+                    queueLimit = UpgradesManager.getConfiguration().getInt("default-upgrades-settings.trap-queue-limit");
+                }
+                if (queueLimit == team.getActiveTraps().size()) {
+                    lore.add("");
+                    lore.add(Language.getMsg(player, Messages.UPGRADES_TRAP_QUEUE_LIMIT));
+                }
             }
-            if (queueLimit == team.getActiveTraps().size()) {
-                lore.add("");
-                lore.add(Language.getMsg(player, Messages.UPGRADES_TRAP_QUEUE_LIMIT));
-            }
+            im.setLore(lore);
+            i.setItemMeta(im);
         }
-        im.setLore(lore);
-        i.setItemMeta(im);
         return i;
     }
 
