@@ -524,9 +524,21 @@ public class DamageDeathMove implements Listener {
 
                 // hide armor for those with invisibility potions
                 if (!a.getShowTime().isEmpty()) {
+                    // generic hide packets
                     for (Map.Entry<Player, Integer> entry : a.getShowTime().entrySet()) {
-                        if (entry.getValue() > 2) {
+                        if (entry.getValue() > 1) {
                             BedWars.nms.hideArmor(entry.getKey(), e.getPlayer());
+                        }
+                    }
+                    // if the moving player has invisible armor
+                    if (a.getShowTime().containsKey(e.getPlayer())){
+                        for (Player p : a.getPlayers()){
+                            nms.hideArmor(e.getPlayer(), p);
+                        }
+                    }
+                    if (a.getShowTime().containsKey(e.getPlayer())){
+                        for (Player p : a.getSpectators()){
+                            nms.hideArmor(e.getPlayer(), p);
                         }
                     }
                 }
