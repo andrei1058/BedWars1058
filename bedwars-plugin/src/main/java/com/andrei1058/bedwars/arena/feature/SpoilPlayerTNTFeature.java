@@ -3,6 +3,7 @@ package com.andrei1058.bedwars.arena.feature;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.events.player.PlayerLeaveArenaEvent;
 import com.andrei1058.bedwars.api.events.shop.ShopBuyEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.Bukkit;
@@ -48,6 +49,11 @@ public class SpoilPlayerTNTFeature {
     }
 
     private static class TNTListener implements Listener {
+
+        @EventHandler
+        public void onLeave(PlayerLeaveArenaEvent event){
+            instance.playersWithTnt.remove(event.getPlayer());
+        }
 
         @EventHandler(ignoreCancelled = true)
         public void onPickUp(PlayerPickupItemEvent event) {
