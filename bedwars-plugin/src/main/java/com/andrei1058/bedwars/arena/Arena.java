@@ -753,6 +753,7 @@ public class Arena implements IArena {
                 on.sendMessage(getMsg(on, Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT));
             }
         } else if (status == GameState.playing) {
+            Bukkit.broadcastMessage("debug 1");
             int alive_teams = 0;
             for (ITeam t : getTeams()) {
                 if (t == null) continue;
@@ -778,12 +779,15 @@ public class Arena implements IArena {
             } else if (alive_teams == 0) {
                 Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> changeStatus(GameState.restarting), 10L);
             } else {
+                Bukkit.broadcastMessage("debug 2");
                 //ReJoin feature
                 new ReJoin(p, this, team, cacheList);
                 // pvp log out
                 if (team != null) {
                     ITeam killerTeam = getTeam(lastDamager);
+                    Bukkit.broadcastMessage("debug 3 - " + team.getName());
                     if (lastDamager != null && isPlayer(lastDamager) && killerTeam != null) {
+                        Bukkit.broadcastMessage("debug 4");
                         String message;
                         PlayerKillEvent.PlayerKillCause cause;
                         if (team.isBedDestroyed()) {
@@ -817,10 +821,11 @@ public class Arena implements IArena {
                 }
             }
         }
-        if (status == GameState.starting || status == GameState.waiting) {
-            for (Player on : players) {
-                on.sendMessage(getMsg(on, Messages.COMMAND_LEAVE_MSG).replace("{player}", p.getDisplayName()));
-            }
+        for (Player on : getPlayers()) {
+            on.sendMessage(getMsg(on, Messages.COMMAND_LEAVE_MSG).replace("{player}", p.getDisplayName()));
+        }
+        for (Player on : getSpectators()) {
+            on.sendMessage(getMsg(on, Messages.COMMAND_LEAVE_MSG).replace("{player}", p.getDisplayName()));
         }
 
         if (getServerType() == ServerType.SHARED) {
@@ -938,9 +943,8 @@ public class Arena implements IArena {
             }
         }
 
-        LastHit lh = LastHit.getLastHit(p);
-        if (lh != null) {
-            lh.remove();
+        if (lastHit != null){
+            lastHit.remove();
         }
     }
 
