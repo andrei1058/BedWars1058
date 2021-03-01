@@ -17,6 +17,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.LinkedList;
 
@@ -43,7 +44,9 @@ public class SpoilPlayerTNTFeature {
         @Override
         public void run() {
             for (Player player : instance.playersWithTnt) {
-                BedWars.nms.playRedStoneDot(player);
+                if (!player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+                    BedWars.nms.playRedStoneDot(player);
+                }
             }
         }
     }
