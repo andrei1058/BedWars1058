@@ -247,9 +247,6 @@
                         <relocation>
                             <pattern>com.andrei1058.spigot.sidebarutils</pattern>
                             <shadedPattern>com.andrei1058.bedwars.libs.updater</shadedPattern>
-                        </relocation><relocation>
-                            <pattern>com.google.gson</pattern>
-                            <shadedPattern>com.andrei1058.bedwars.libs.gson</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
