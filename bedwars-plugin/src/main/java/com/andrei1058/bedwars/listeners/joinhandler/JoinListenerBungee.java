@@ -55,7 +55,7 @@ public class JoinListenerBungee implements Listener {
 
             IArena arena = Arena.getArenaByIdentifier(proxyUser.getArenaIdentifier());
             // check if arena is not available, time out etc.
-            if (arena == null || proxyUser.getRequestTime() + 5000 < System.currentTimeMillis() || arena.getStatus() == GameState.restarting) {
+            if (arena == null || proxyUser.isTimedOut() || arena.getStatus() == GameState.restarting) {
                 e.disallow(PlayerLoginEvent.Result.KICK_OTHER, playerLang.m(Messages.ARENA_STATUS_RESTARTING_NAME));
                 proxyUser.destroy("Time out or game unavailable at PlayerLoginEvent");
                 return;
@@ -142,7 +142,7 @@ public class JoinListenerBungee implements Listener {
             IArena arena = Arena.getArenaByIdentifier(proxyUser.getArenaIdentifier());
 
             // Check if the arena is still available or request time-out etc.
-            if (arena == null || proxyUser.getRequestTime() + 5000 < System.currentTimeMillis() || arena.getStatus() == GameState.restarting) {
+            if (arena == null || proxyUser.isTimedOut() || arena.getStatus() == GameState.restarting) {
                 p.kickPlayer(playerLang.m(Messages.ARENA_STATUS_RESTARTING_NAME));
                 proxyUser.destroy("Time out or game unavailable at PlayerLoginEvent");
                 return;

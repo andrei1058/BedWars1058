@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.lobbysocket;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import org.bukkit.Bukkit;
 
@@ -9,13 +10,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class LoadedUser {
 
+    private static final long waitSeconds = BedWars.config.getYml().getLong(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_BWP_TIME_OUT);
+
     private UUID uuid;
     private String partyOwnerOrSpectateTarget = null;
-    private long requestTime;
+    private long toleranceTime;
     private String arenaIdentifier;
     private Language language = null;
 
-    private static ConcurrentHashMap<UUID, LoadedUser> loaded = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<UUID, LoadedUser> loaded = new ConcurrentHashMap<>();
 
     public LoadedUser(String uuid, String arenaIdentifier, String langIso, String partyOwnerOrSpectateTarget){
         if (Bukkit.getWorld(arenaIdentifier) == null) return;
@@ -26,7 +29,7 @@ public class LoadedUser {
                 this.partyOwnerOrSpectateTarget = partyOwnerOrSpectateTarget;
             }
         }
-        this.requestTime = System.currentTimeMillis();
+        this.toleranceTime = System.currentTimeMillis() + waitSeconds;
         Language l = Language.getLang(langIso);
         if (l != null) language = l;
 
@@ -37,8 +40,8 @@ public class LoadedUser {
         return loaded.containsKey(uuid);
     }
 
-    public long getRequestTime() {
-        return requestTime;
+    public boolean isTimedOut() {
+        return System.currentTimeMillis() > this.toleranceTime;
     }
 
     public UUID getUuid() {
@@ -50,7 +53,7 @@ public class LoadedUser {
     }
 
     public void destroy(String reason){
-        BedWars.debug("Destroyed PreLoaded User: " + uuid + " Reason: " + reason);
+        BedWars.debug("Destroyed PreLoaded User: " + uuid + " Reason: " + reason + ". Tolerance: " + waitSeconds);
         loaded.remove(uuid);
     }
 

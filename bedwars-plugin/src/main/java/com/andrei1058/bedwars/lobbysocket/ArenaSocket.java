@@ -23,7 +23,7 @@ import java.util.logging.Level;
 public class ArenaSocket {
 
     public static List<String> lobbies = new ArrayList<>();
-    private static ConcurrentHashMap<String, RemoteLobby> sockets = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, RemoteLobby> sockets = new ConcurrentHashMap<>();
 
     /**
      * Send arena data to the lobbies.

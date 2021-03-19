@@ -14,7 +14,7 @@ public class LoadedUsersCleaner implements Runnable {
     @Override
     public void run() {
         for (LoadedUser lu : LoadedUser.getLoaded().values()) {
-            if (lu.getRequestTime() + 6000 > System.currentTimeMillis()) {
+            if (lu.isTimedOut()) {
                 toRemove.add(lu);
             }
         }
