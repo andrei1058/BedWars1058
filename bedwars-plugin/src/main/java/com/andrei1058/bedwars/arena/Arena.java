@@ -753,7 +753,7 @@ public class Arena implements IArena {
                 on.sendMessage(getMsg(on, Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT));
             }
         } else if (status == GameState.playing) {
-            Bukkit.broadcastMessage("debug 1");
+            BedWars.debug("addPlayer debug1");
             int alive_teams = 0;
             for (ITeam t : getTeams()) {
                 if (t == null) continue;
@@ -779,15 +779,15 @@ public class Arena implements IArena {
             } else if (alive_teams == 0) {
                 Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> changeStatus(GameState.restarting), 10L);
             } else {
-                Bukkit.broadcastMessage("debug 2");
+                BedWars.debug("addPlayer debug2");
                 //ReJoin feature
                 new ReJoin(p, this, team, cacheList);
                 // pvp log out
                 if (team != null) {
                     ITeam killerTeam = getTeam(lastDamager);
-                    Bukkit.broadcastMessage("debug 3 - " + team.getName());
+                    BedWars.debug("addPlayer debug3 - " + team.getName());
                     if (lastDamager != null && isPlayer(lastDamager) && killerTeam != null) {
-                        Bukkit.broadcastMessage("debug 4");
+                        BedWars.debug("addPlayer debug4");
                         String message;
                         PlayerKillEvent.PlayerKillCause cause;
                         if (team.isBedDestroyed()) {
