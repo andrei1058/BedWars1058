@@ -52,7 +52,7 @@
         <dependency>
             <groupId>com.alessiodp.parties</groupId>
             <artifactId>parties-api</artifactId>
-            <version>3.0.0-rc.3</version>
+            <version>3.0.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
