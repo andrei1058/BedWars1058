@@ -143,7 +143,7 @@ public class AutoCreateTeams extends SubCommand {
                         for (int y = 50; y < 130; y++) {
                             for (int z = -200; z < 200; z++) {
                                 Block b = new Location(w, x, y, z).getBlock();
-                                if (b.getType() == Material.WOOL) {
+                                if (b.getType() == Material.valueOf("WOOL")) {
                                     if (!found.contains(b.getData())) {
                                         int count = 0;
                                         for (int x1 = -2; x1 < 2; x1++) {

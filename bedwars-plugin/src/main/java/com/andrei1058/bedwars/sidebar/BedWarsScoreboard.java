@@ -397,9 +397,9 @@ public class BedWarsScoreboard {
             handle.showPlayersHealth(line, config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_IN_TAB));
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 if (arena != null && handle != null) {
-                    arena.getPlayers().forEach(player -> handle.refreshHealth(player, (int) player.getHealth()));
+                    arena.getPlayers().forEach(player -> handle.refreshHealth(player, (int) Math.ceil(player.getHealth())));
                     if (arena.isSpectator(getPlayer())) {
-                        arena.getSpectators().forEach(player -> handle.refreshHealth(player, (int) player.getHealth()));
+                        arena.getSpectators().forEach(player -> handle.refreshHealth(player, (int) Math.ceil(player.getHealth())));
                     }
                 }
             }, 20L);

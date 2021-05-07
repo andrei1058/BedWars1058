@@ -9,7 +9,7 @@ public class SidebarLifeRefresh implements Runnable {
             if (scoreboard.getArena() != null){
                 scoreboard.getHandle().refreshHealthAnimation();
                 for (Player player : scoreboard.getArena().getPlayers()){
-                    scoreboard.getHandle().refreshHealth(player, (int) player.getHealth());
+                    scoreboard.getHandle().refreshHealth(player, (int) Math.ceil(player.getHealth()));
                 }
             }
         }

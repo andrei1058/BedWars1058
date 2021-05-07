@@ -3,6 +3,8 @@ package com.andrei1058.bedwars.arena.feature;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
+import com.andrei1058.bedwars.api.events.player.PlayerLeaveArenaEvent;
 import com.andrei1058.bedwars.api.events.shop.ShopBuyEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.Bukkit;
@@ -16,6 +18,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.LinkedList;
 
@@ -42,12 +45,24 @@ public class SpoilPlayerTNTFeature {
         @Override
         public void run() {
             for (Player player : instance.playersWithTnt) {
-                BedWars.nms.playRedStoneDot(player);
+                if (!player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+                    BedWars.nms.playRedStoneDot(player);
+                }
             }
         }
     }
 
     private static class TNTListener implements Listener {
+
+        @EventHandler
+        public void onDie(PlayerKillEvent event){
+            instance.playersWithTnt.remove(event.getVictim());
+        }
+
+        @EventHandler
+        public void onLeave(PlayerLeaveArenaEvent event){
+            instance.playersWithTnt.remove(event.getPlayer());
+        }
 
         @EventHandler(ignoreCancelled = true)
         public void onPickUp(PlayerPickupItemEvent event) {

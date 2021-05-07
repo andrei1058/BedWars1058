@@ -13,6 +13,7 @@ import com.andrei1058.bedwars.api.server.VersionSupport;
 import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import net.minecraft.server.v1_9_R2.Item;
 import net.minecraft.server.v1_9_R2.*;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.command.Command;
@@ -648,9 +649,12 @@ public class v1_9_R2 extends VersionSupport {
 
     @Override
     public void playRedStoneDot(Player player) {
-        player.getWorld().spawnParticle(Particle.REDSTONE, player.getLocation().getX(),
-                player.getLocation().getY() + 2.2,
-                player.getLocation().getZ(),
-                1, 0, 0, 0, 0);
+        Color color = Color.RED;
+        PacketPlayOutWorldParticles particlePacket = new PacketPlayOutWorldParticles(EnumParticle.REDSTONE, true, (float) player.getLocation().getX(),
+                (float) (player.getLocation().getY() + 2.2), (float) player.getLocation().getZ(), color.getRed(), color.getGreen(), color.getBlue(), 0, 1);
+        for (Player inWorld : player.getWorld().getPlayers()) {
+            if (inWorld.equals(player)) continue;
+            ((CraftPlayer) inWorld).getHandle().playerConnection.sendPacket(particlePacket);
+        }
     }
 }

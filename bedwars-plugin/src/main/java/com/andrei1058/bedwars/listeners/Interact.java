@@ -134,13 +134,14 @@ public class Interact implements Listener {
                     }
                 }
                 if (a.isSpectator(p) || a.getRespawnSessions().containsKey(p)) {
-                    switch (b.getType()) {
-                        case CHEST:
-                        case ENDER_CHEST:
-                        case ANVIL:
-                        case WORKBENCH:
-                        case HOPPER:
-                        case TRAPPED_CHEST:
+                    switch (b.getType().toString()) {
+                        case "CHEST":
+                        case "ENDER_CHEST":
+                        case "ANVIL":
+                        case "WORKBENCH":
+                        case "HOPPER":
+                        case "TRAPPED_CHEST":
+                        case "CRAFTING_TABLE":
                             e.setCancelled(true);
                             break;
                     }

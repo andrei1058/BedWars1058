@@ -154,6 +154,11 @@ public class MenuUpgrade implements MenuContent, TeamUpgrade {
         return name;
     }
 
+    @Override
+    public int getTierCount() {
+        return tiers.size();
+    }
+
     /**
      * @return tiers list.
      */

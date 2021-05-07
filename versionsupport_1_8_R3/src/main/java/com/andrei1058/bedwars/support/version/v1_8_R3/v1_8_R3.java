@@ -12,6 +12,7 @@ import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.VersionSupport;
 import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import net.minecraft.server.v1_8_R3.*;
+import org.bukkit.Color;
 import org.bukkit.Effect;
 import org.bukkit.EntityEffect;
 import org.bukkit.Location;
@@ -685,6 +686,12 @@ public class v1_8_R3 extends VersionSupport {
 
     @Override
     public void playRedStoneDot(Player player) {
-        player.playEffect(EntityEffect.VILLAGER_ANGRY);
+        Color color = Color.RED;
+        PacketPlayOutWorldParticles particlePacket = new PacketPlayOutWorldParticles(EnumParticle.REDSTONE, true, (float) player.getLocation().getX(),
+                (float) (player.getLocation().getY() + 2.2), (float) player.getLocation().getZ(), color.getRed(), color.getGreen(), color.getBlue(), 0, 1);
+        for (Player inWorld : player.getWorld().getPlayers()) {
+            if (inWorld.equals(player)) continue;
+            ((CraftPlayer) inWorld).getHandle().playerConnection.sendPacket(particlePacket);
+        }
     }
 }
