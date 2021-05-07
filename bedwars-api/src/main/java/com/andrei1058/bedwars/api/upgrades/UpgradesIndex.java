@@ -25,4 +25,10 @@ public interface UpgradesIndex {
      * @return false if te given slot is in use.
      */
     boolean addContent(MenuContent content, int slot);
+
+    /**
+     *
+     * @return total amount of tiers in upgrades
+     */
+    int countTiers();
 }

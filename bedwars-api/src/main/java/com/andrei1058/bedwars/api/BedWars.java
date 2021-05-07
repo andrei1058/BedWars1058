@@ -344,6 +344,14 @@ public interface BedWars {
          * Remove from upgrades GUI.
          */
         void removeWatchingUpgrades(UUID uuid);
+
+        /**
+         * Get total tiers in team upgrades to be bought in the given arena.
+         * Sum of tiers in team upgrades.
+         * @param arena arena
+         * @return count
+         */
+        int getTotalUpgradeTiers(IArena arena);
     }
 
     /**

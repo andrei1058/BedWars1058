@@ -272,6 +272,11 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
         public void removeWatchingUpgrades(UUID uuid) {
             UpgradesManager.removeWatchingUpgrades(uuid);
         }
+
+        @Override
+        public int getTotalUpgradeTiers(IArena arena) {
+            return UpgradesManager.getMenuForArena(arena).countTiers();
+        }
     };
 
     @Override

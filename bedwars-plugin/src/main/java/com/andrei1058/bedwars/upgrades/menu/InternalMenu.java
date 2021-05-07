@@ -6,6 +6,7 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.upgrades.MenuContent;
+import com.andrei1058.bedwars.api.upgrades.TeamUpgrade;
 import com.andrei1058.bedwars.api.upgrades.UpgradesIndex;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.upgrades.UpgradesManager;
@@ -57,5 +58,16 @@ public class InternalMenu implements UpgradesIndex {
         if (menuContentBySlot.get(slot) != null) return false;
         menuContentBySlot.put(slot, content);
         return true;
+    }
+
+    public int countTiers() {
+        int count = 0;
+        for (MenuContent content : menuContentBySlot.values()){
+            if (content instanceof TeamUpgrade){
+                TeamUpgrade tu = (TeamUpgrade) content;
+                count+=tu.getTierCount();
+            }
+        }
+        return count;
     }
 }
