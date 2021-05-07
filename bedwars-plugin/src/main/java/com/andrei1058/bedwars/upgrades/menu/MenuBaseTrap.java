@@ -271,6 +271,11 @@ public class MenuBaseTrap implements MenuContent, EnemyBaseEnterTrap, TeamUpgrad
     }
 
     @Override
+    public int getTierCount() {
+        return trapActions.size();
+    }
+
+    @Override
     public String getNameMsgPath() {
         return Messages.UPGRADES_BASE_TRAP_ITEM_NAME_PATH + name.replace("base-trap-", "");
     }
