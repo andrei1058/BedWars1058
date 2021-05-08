@@ -54,6 +54,13 @@ public class v1_9_R2 extends VersionSupport {
     }
 
     @Override
+    public String getTag(org.bukkit.inventory.ItemStack itemStack, String key) {
+        net.minecraft.server.v1_9_R2.ItemStack i = CraftItemStack.asNMSCopy(itemStack);
+        NBTTagCompound tag = i.getTag();
+        return tag == null ? null : tag.hasKey(key) ? tag.getString(key) : null;
+    }
+
+    @Override
     public void registerCommand(String name, Command clasa) {
         ((CraftServer) getPlugin().getServer()).getCommandMap().register(name, clasa);
     }

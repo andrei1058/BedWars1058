@@ -211,11 +211,16 @@ public abstract class VersionSupport {
 
     /**
      * Add custom data to an ItemStack
-     * Adds a NBTTag to the item with BedWars1058 key
      */
     public abstract ItemStack addCustomData(ItemStack i, String data);
 
     public abstract ItemStack setTag(ItemStack itemStack, String key, String value);
+
+    /**
+     * Get a custom item tag.
+     * @return null if not present.
+     */
+    public abstract String getTag(ItemStack itemStack, String key);
 
     /**
      * Check if an item has a BedWars1058 NBTTag

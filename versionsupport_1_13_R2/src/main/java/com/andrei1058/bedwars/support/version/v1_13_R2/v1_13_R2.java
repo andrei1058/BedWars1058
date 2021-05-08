@@ -52,6 +52,13 @@ public class v1_13_R2 extends VersionSupport {
     }
 
     @Override
+    public String getTag(org.bukkit.inventory.ItemStack itemStack, String key) {
+        net.minecraft.server.v1_13_R2.ItemStack i = CraftItemStack.asNMSCopy(itemStack);
+        NBTTagCompound tag = i.getTag();
+        return tag == null ? null : tag.hasKey(key) ? tag.getString(key) : null;
+    }
+
+    @Override
     public void registerVersionListeners() {
         new VersionCommon(this);
     }
