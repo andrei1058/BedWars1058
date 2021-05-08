@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.shop.defaultrestore;
 
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -25,7 +26,7 @@ public class ShopItemRestoreListener {
     // 1.11 or older
     public static class PlayerDrop implements Listener {
         @EventHandler
-        public void onDrop(PlayerDropItemEvent e){
+        public void onDrop(PlayerDropItemEvent e) {
             if (manageDrop(e.getPlayer(), e.getItemDrop())) e.setCancelled(true);
         }
     }
@@ -34,7 +35,7 @@ public class ShopItemRestoreListener {
     public static class PlayerPickup implements Listener {
         @SuppressWarnings("deprecation")
         @EventHandler
-        public void onDrop(PlayerPickupItemEvent e){
+        public void onDrop(PlayerPickupItemEvent e) {
             if (managePickup(e.getItem(), e.getPlayer())) e.setCancelled(true);
         }
     }
@@ -42,7 +43,7 @@ public class ShopItemRestoreListener {
     // 1.12 or newer
     public static class EntityDrop implements Listener {
         @EventHandler
-        public void onDrop(EntityDropItemEvent e){
+        public void onDrop(EntityDropItemEvent e) {
             if (manageDrop(e.getEntity(), e.getItemDrop())) e.setCancelled(true);
         }
     }
@@ -50,7 +51,7 @@ public class ShopItemRestoreListener {
     // 1.12 or newer
     public static class EntityPickup implements Listener {
         @EventHandler
-        public void onDrop(EntityPickupItemEvent e){
+        public void onDrop(EntityPickupItemEvent e) {
             if (managePickup(e.getItem(), e.getEntity())) e.setCancelled(true);
         }
     }
@@ -153,7 +154,12 @@ public class ShopItemRestoreListener {
                 if (api.getVersionSupport().isSword(is)) sword = true;
             }
 
-            if (!sword) a.getTeam((Player) e.getPlayer()).defaultSword((Player) e.getPlayer(), true);
+            if (!sword) {
+                ITeam team = a.getTeam((Player) e.getPlayer());
+                if (team != null) {
+                    team.defaultSword((Player) e.getPlayer(), true);
+                }
+            }
         }
     }
 }
