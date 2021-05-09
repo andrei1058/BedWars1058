@@ -74,7 +74,7 @@ public class v1_16_R3 extends VersionSupport {
 
     @Override
     public void sendTitle(Player p, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
-        p.sendTitle(title.isEmpty() ? " " : title, subtitle.isEmpty() ? " " : subtitle, fadeIn, stay, fadeOut);
+        p.sendTitle(title == null ? " " : title, subtitle == null ? " " : subtitle, fadeIn, stay, fadeOut);
     }
 
     public void spawnSilverfish(Location loc, ITeam bedWarsTeam, double speed, double health, int despawn, double damage) {
