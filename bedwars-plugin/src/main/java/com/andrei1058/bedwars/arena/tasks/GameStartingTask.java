@@ -103,11 +103,12 @@ public class GameStartingTask implements Runnable, StartingTask {
                 }
             }, 60L);
 
+            //Spawn players
+            spawnPlayers();
+
             //Lobby removal
             BedWars.getAPI().getRestoreAdapter().onLobbyRemoval(arena);
 
-            //Spawn players
-            spawnPlayers();
 
             task.cancel();
             getArena().changeStatus(GameState.playing);
