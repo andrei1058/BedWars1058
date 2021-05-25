@@ -1391,6 +1391,16 @@ public class Arena implements IArena {
         this.status = status;
         Bukkit.getPluginManager().callEvent(new GameStateChangeEvent(this, status, status));
         refreshSigns();
+        if (status == GameState.playing) {
+            for (Player p : players) {
+                Arena.afkCheck.remove(p.getUniqueId());
+                BedWars.getAPI().getAFKUtil().setPlayerAFK(p, false);
+            }
+            for (Player p : spectators) {
+                Arena.afkCheck.remove(p.getUniqueId());
+                BedWars.getAPI().getAFKUtil().setPlayerAFK(p, false);
+            }
+        }
 
         //Stop active tasks to prevent issues
         BukkitScheduler bs = Bukkit.getScheduler();
