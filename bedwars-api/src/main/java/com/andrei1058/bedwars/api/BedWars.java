@@ -100,7 +100,7 @@ public interface BedWars {
 
 
     /**
-     * Get afk system methods
+     * Get afk system methods. It will only work if the game is started.
      */
     AFKUtil getAFKUtil();
 

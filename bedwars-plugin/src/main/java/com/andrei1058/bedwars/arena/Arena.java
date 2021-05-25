@@ -704,6 +704,9 @@ public class Arena implements IArena {
 
         ITeam team = null;
 
+        Arena.afkCheck.remove(p.getUniqueId());
+        BedWars.getAPI().getAFKUtil().setPlayerAFK(p, false);
+
         if (getStatus() == GameState.playing) {
             for (ITeam t : getTeams()) {
                 if (t.isMember(p)) {
@@ -853,7 +856,7 @@ public class Arena implements IArena {
             }
         }
         playerLocation.remove(p);
-        for (PotionEffect pf : p.getActivePotionEffects()){
+        for (PotionEffect pf : p.getActivePotionEffects()) {
             p.removePotionEffect(pf.getType());
         }
 
@@ -938,7 +941,7 @@ public class Arena implements IArena {
             }
         }
 
-        if (lastHit != null){
+        if (lastHit != null) {
             lastHit.remove();
         }
     }
@@ -957,6 +960,9 @@ public class Arena implements IArena {
         p.getInventory().clear();
         p.getInventory().setArmorContents(null);
         nms.setCollide(p, this, true);
+
+        Arena.afkCheck.remove(p.getUniqueId());
+        BedWars.getAPI().getAFKUtil().setPlayerAFK(p, false);
 
         if (getServerType() == ServerType.SHARED) {
             BedWarsScoreboard sb = BedWarsScoreboard.getSBoard(p.getUniqueId());
@@ -979,7 +985,7 @@ public class Arena implements IArena {
                 pg.restore();
             }
 
-            for (PotionEffect pf : p.getActivePotionEffects()){
+            for (PotionEffect pf : p.getActivePotionEffects()) {
                 p.removePotionEffect(pf.getType());
             }
         }
@@ -1032,7 +1038,7 @@ public class Arena implements IArena {
         //Remove from magic milk
         if (magicMilk.containsKey(p.getUniqueId())) {
             int taskId = magicMilk.get(p.getUniqueId());
-            if (taskId > 0){
+            if (taskId > 0) {
                 Bukkit.getScheduler().cancelTask(taskId);
             }
         }
@@ -2517,16 +2523,16 @@ public class Arena implements IArena {
      * Remove player from world.
      * Contains fall-backs.
      */
-    private void sendToMainLobby(Player player){
-        if (BedWars.getServerType() == ServerType.SHARED){
+    private void sendToMainLobby(Player player) {
+        if (BedWars.getServerType() == ServerType.SHARED) {
             Location loc = playerLocation.get(player);
-            if (loc == null){
+            if (loc == null) {
                 player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                 plugin.getLogger().log(Level.SEVERE, player.getName() + " was teleported to the main world because lobby location is not set!");
             } else {
                 player.teleport(loc, PlayerTeleportEvent.TeleportCause.PLUGIN);
             }
-        } else if (BedWars.getServerType() == ServerType.MULTIARENA){
+        } else if (BedWars.getServerType() == ServerType.MULTIARENA) {
             if (BedWars.getLobbyWorld().isEmpty()) {
                 player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                 plugin.getLogger().log(Level.SEVERE, player.getName() + " was teleported to the main world because lobby location is not set!");

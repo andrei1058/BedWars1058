@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Map;
+import java.util.UUID;
 
 import static com.andrei1058.bedwars.BedWars.nms;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
@@ -238,6 +239,13 @@ public class GamePlayingTask implements Runnable, PlayingTask {
 
     public void cancel() {
         task.cancel();
+        for (UUID uuid : Arena.afkCheck.keySet()) {
+            Arena.afkCheck.remove(uuid);
+            Player p = Bukkit.getPlayer(uuid);
+            if (p != null) {
+                BedWars.getAPI().getAFKUtil().setPlayerAFK(p, false);
+            }
+        }
     }
 }
 
