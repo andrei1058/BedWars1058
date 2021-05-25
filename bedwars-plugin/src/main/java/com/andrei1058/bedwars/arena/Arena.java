@@ -833,17 +833,12 @@ public class Arena implements IArena {
             if (sb != null) {
                 sb.remove();
             }
-            p.teleport(playerLocation.get(p));
+            this.sendToMainLobby(p);
         } else if (getServerType() == ServerType.BUNGEE) {
             Misc.moveToLobbyOrKick(p, this, true);
             return;
         } else {
-            if (BedWars.getLobbyWorld().isEmpty()) {
-                p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
-                plugin.getLogger().log(Level.SEVERE, p.getName() + " was teleported to the main world because lobby location is not set!");
-            } else {
-                p.teleport(config.getConfigLoc("lobbyLoc"));
-            }
+            this.sendToMainLobby(p);
 
             /* restore player inventory */
             PlayerGoods pg = PlayerGoods.getPlayerGoods(p);
@@ -968,14 +963,9 @@ public class Arena implements IArena {
             if (sb != null) {
                 sb.remove();
             }
-            p.teleport(playerLocation.get(p));
+            this.sendToMainLobby(p);
         } else if (getServerType() == ServerType.MULTIARENA) {
-            if (BedWars.getLobbyWorld().isEmpty()) {
-                p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
-                plugin.getLogger().log(Level.SEVERE, p.getName() + " was teleported to the main world because lobby location is not set!");
-            } else {
-                p.teleport(config.getConfigLoc("lobbyLoc"));
-            }
+            this.sendToMainLobby(p);
 
             /* restore player inventory */
             PlayerGoods pg = PlayerGoods.getPlayerGoods(p);
@@ -1478,7 +1468,6 @@ public class Arena implements IArena {
      */
     public void addSign(Location loc) {
         if (loc == null) return;
-        if (loc.getBlock() == null) return;
         if (loc.getBlock().getType().toString().endsWith("_SIGN") || loc.getBlock().getType().toString().endsWith("_WALL_SIGN")) {
             signs.add(loc.getBlock());
             refreshSigns();
@@ -2521,6 +2510,29 @@ public class Arena implements IArena {
         } else {
             this.teamAssigner = teamAssigner;
             plugin.getLogger().warning("Using " + teamAssigner.getClass().getSimpleName() + " team assigner on arena: " + this.getArenaName());
+        }
+    }
+
+    /**
+     * Remove player from world.
+     * Contains fall-backs.
+     */
+    private void sendToMainLobby(Player player){
+        if (BedWars.getServerType() == ServerType.SHARED){
+            Location loc = playerLocation.get(player);
+            if (loc == null){
+                player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                plugin.getLogger().log(Level.SEVERE, player.getName() + " was teleported to the main world because lobby location is not set!");
+            } else {
+                player.teleport(loc, PlayerTeleportEvent.TeleportCause.PLUGIN);
+            }
+        } else if (BedWars.getServerType() == ServerType.MULTIARENA){
+            if (BedWars.getLobbyWorld().isEmpty()) {
+                player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                plugin.getLogger().log(Level.SEVERE, player.getName() + " was teleported to the main world because lobby location is not set!");
+            } else {
+                player.teleport(config.getConfigLoc("lobbyLoc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
+            }
         }
     }
 }
