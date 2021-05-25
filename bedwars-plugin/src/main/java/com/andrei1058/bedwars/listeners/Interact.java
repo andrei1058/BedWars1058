@@ -42,15 +42,14 @@ public class Interact implements Listener {
     public void onItemCommand(PlayerInteractEvent e) {
         if (e == null) return;
         Player p = e.getPlayer();
-        if (p == null) return;
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
             ItemStack i = BedWars.nms.getItemInHand(p);
             if (!nms.isCustomBedWarsItem(i)) return;
-            String[] customData = nms.getCustomData(i).split("_");
+            final String[] customData = nms.getCustomData(i).split("_");
             if (customData.length >= 2) {
                 if (customData[0].equals("RUNCOMMAND")) {
                     e.setCancelled(true);
-                    Bukkit.dispatchCommand(p, customData[1]);
+                    Bukkit.getScheduler().runTask(plugin, () -> Bukkit.dispatchCommand(p, customData[1]));
                 }
             }
         }
@@ -58,22 +57,22 @@ public class Interact implements Listener {
 
     @EventHandler
     //Check if player is opening an inventory
-    public void onInventoryInteract(PlayerInteractEvent e){
+    public void onInventoryInteract(PlayerInteractEvent e) {
         if (e == null) return;
         if (e.isCancelled()) return;
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         Block b = e.getClickedBlock();
         if (b == null) return;
-        if ((BedWars.getServerType() == ServerType.MULTIARENA && b.getWorld().getName().equals(BedWars.getLobbyWorld())) || Arena.getArenaByPlayer(e.getPlayer()) != null){
+        if ((BedWars.getServerType() == ServerType.MULTIARENA && b.getWorld().getName().equals(BedWars.getLobbyWorld())) || Arena.getArenaByPlayer(e.getPlayer()) != null) {
             if (b.getType() == nms.materialCraftingTable() && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_CRAFTING)) {
                 e.setCancelled(true);
-            } else if (b.getType() == nms.materialEnchantingTable() && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_ENCHANTING)){
+            } else if (b.getType() == nms.materialEnchantingTable() && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_ENCHANTING)) {
                 e.setCancelled(true);
-            } else if (b.getType() == Material.FURNACE && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_FURNACE)){
+            } else if (b.getType() == Material.FURNACE && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_FURNACE)) {
                 e.setCancelled(true);
-            } else if (b.getType() == Material.BREWING_STAND && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_BREWING_STAND)){
+            } else if (b.getType() == Material.BREWING_STAND && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_BREWING_STAND)) {
                 e.setCancelled(true);
-            } else if (b.getType() == Material.ANVIL && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_ANVIL)){
+            } else if (b.getType() == Material.ANVIL && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_ANVIL)) {
                 e.setCancelled(true);
             }
         }
@@ -83,7 +82,6 @@ public class Interact implements Listener {
     public void onInteract(PlayerInteractEvent e) {
         if (e == null) return;
         Player p = e.getPlayer();
-        if (p == null) return;
         Arena.afkCheck.remove(p.getUniqueId());
         if (BedWars.getAPI().getAFKUtil().isPlayerAFK(e.getPlayer())) {
             BedWars.getAPI().getAFKUtil().setPlayerAFK(e.getPlayer(), false);
@@ -145,7 +143,7 @@ public class Interact implements Listener {
                             e.setCancelled(true);
                             break;
                     }
-                    if (b.getState() instanceof Openable){
+                    if (b.getState() instanceof Openable) {
                         e.setCancelled(true);
                     }
                 }
@@ -186,17 +184,17 @@ public class Interact implements Listener {
     }
 
     @EventHandler
-    public void disableItemFrameRotation(PlayerInteractEntityEvent e){
+    public void disableItemFrameRotation(PlayerInteractEntityEvent e) {
         if (e == null) return;
-        if (e.getRightClicked().getType() == EntityType.ITEM_FRAME){
-            if (((ItemFrame)e.getRightClicked()).getItem().getType().equals(Material.AIR)){
+        if (e.getRightClicked().getType() == EntityType.ITEM_FRAME) {
+            if (((ItemFrame) e.getRightClicked()).getItem().getType().equals(Material.AIR)) {
                 //prevent from putting upgradable items in it
                 ItemStack i = nms.getItemInHand(e.getPlayer());
                 if (i != null) {
                     if (i.getType() != Material.AIR) {
                         ShopCache sc = ShopCache.getShopCache(e.getPlayer().getUniqueId());
                         if (sc != null) {
-                            if (InventoryListener.isUpgradable(i, sc)){
+                            if (InventoryListener.isUpgradable(i, sc)) {
                                 e.setCancelled(true);
                             }
                         }
@@ -205,11 +203,11 @@ public class Interact implements Listener {
                 return;
             }
             IArena a = Arena.getArenaByIdentifier(e.getPlayer().getWorld().getName());
-            if (a != null){
+            if (a != null) {
                 e.setCancelled(true);
             }
-            if (BedWars.getServerType() == ServerType.MULTIARENA){
-                if (BedWars.getLobbyWorld().equals(e.getPlayer().getWorld().getName())){
+            if (BedWars.getServerType() == ServerType.MULTIARENA) {
+                if (BedWars.getLobbyWorld().equals(e.getPlayer().getWorld().getName())) {
                     e.setCancelled(true);
                 }
             }
@@ -250,7 +248,7 @@ public class Interact implements Listener {
         }
 
         //prevent from stealing from armor stands in lobby
-        if (BedWars.getServerType() == ServerType.MULTIARENA && e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())){
+        if (BedWars.getServerType() == ServerType.MULTIARENA && e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
             e.setCancelled(true);
         }
     }
