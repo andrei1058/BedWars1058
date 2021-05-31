@@ -138,7 +138,7 @@ public class OreGenerator implements IGenerator {
                 dropItem(location);
                 return;
             }
-            if (BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_ENABLE_GEN_SPLIT)) {
+            if (arena.getConfig().getBoolean(ConfigPath.GENERAL_CONFIGURATION_ENABLE_GEN_SPLIT)) {
                 Object[] players = location.getWorld().getNearbyEntities(location, 1, 1, 1).stream().filter(entity -> entity.getType() == EntityType.PLAYER)
                         .filter(entity -> arena.isPlayer((Player) entity)).toArray();
                 if (players.length <= 1) {
