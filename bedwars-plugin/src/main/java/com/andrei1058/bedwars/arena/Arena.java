@@ -729,7 +729,7 @@ public class Arena implements IArena {
                 (lastHit.getDamager() instanceof Player) ? (Player) lastHit.getDamager() : null;
         if (lastHit != null) {
             // accept damager in last 13 seconds only.
-            if (lastHit.getTime() > System.currentTimeMillis() - 13_000) {
+            if (lastHit.getTime() < System.currentTimeMillis() - 13_000) {
                 lastDamager = null;
             }
         }
@@ -756,7 +756,7 @@ public class Arena implements IArena {
                 on.sendMessage(getMsg(on, Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT));
             }
         } else if (status == GameState.playing) {
-            BedWars.debug("addPlayer debug1");
+            BedWars.debug("removePlayer debug1");
             int alive_teams = 0;
             for (ITeam t : getTeams()) {
                 if (t == null) continue;
@@ -782,45 +782,43 @@ public class Arena implements IArena {
             } else if (alive_teams == 0) {
                 Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> changeStatus(GameState.restarting), 10L);
             } else {
-                BedWars.debug("addPlayer debug2");
                 //ReJoin feature
                 new ReJoin(p, this, team, cacheList);
-                // pvp log out
-                if (team != null) {
-                    ITeam killerTeam = getTeam(lastDamager);
-                    BedWars.debug("addPlayer debug3 - " + team.getName());
-                    if (lastDamager != null && isPlayer(lastDamager) && killerTeam != null) {
-                        BedWars.debug("addPlayer debug4");
-                        String message;
-                        PlayerKillEvent.PlayerKillCause cause;
-                        if (team.isBedDestroyed()) {
-                            cause = PlayerKillEvent.PlayerKillCause.PLAYER_DISCONNECT_FINAL;
-                            message = Messages.PLAYER_DIE_PVP_LOG_OUT_FINAL;
-                        } else {
-                            message = Messages.PLAYER_DIE_PVP_LOG_OUT_REGULAR;
-                            cause = PlayerKillEvent.PlayerKillCause.PLAYER_DISCONNECT;
-                        }
-                        PlayerKillEvent event = new PlayerKillEvent(this, p, lastDamager, player -> Language.getMsg(player, message), cause);
-                        for (Player inGame : getPlayers()) {
-                            Language lang = Language.getPlayerLanguage(inGame);
-                            inGame.sendMessage(event.getMessage().apply(inGame)
-                                    .replace("{PlayerTeamName}", team.getDisplayName(lang))
-                                    .replace("{PlayerColor}", team.getColor().chat().toString()).replace("{PlayerName}", p.getDisplayName())
-                                    .replace("{KillerColor}", killerTeam.getColor().chat().toString())
-                                    .replace("{KillerName}", lastDamager.getDisplayName())
-                                    .replace("{KillerTeamName}", killerTeam.getDisplayName(lang)));
-                        }
-                        for (Player inGame : getSpectators()) {
-                            Language lang = Language.getPlayerLanguage(inGame);
-                            inGame.sendMessage(event.getMessage().apply(inGame)
-                                    .replace("{PlayerTeamName}", team.getDisplayName(lang))
-                                    .replace("{PlayerColor}", team.getColor().chat().toString()).replace("{PlayerName}", p.getDisplayName())
-                                    .replace("{KillerColor}", killerTeam.getColor().chat().toString())
-                                    .replace("{KillerName}", lastDamager.getDisplayName())
-                                    .replace("{KillerTeamName}", killerTeam.getDisplayName(lang)));
-                        }
-                        PlayerDrops.handlePlayerDrops(this, p, lastDamager, team, killerTeam, cause, new ArrayList<>(Arrays.asList(p.getInventory().getContents())));
+            }
+
+            // pvp log out
+            if (team != null) {
+                ITeam killerTeam = getTeam(lastDamager);
+                if (lastDamager != null && isPlayer(lastDamager) && killerTeam != null) {
+                    String message;
+                    PlayerKillEvent.PlayerKillCause cause;
+                    if (team.isBedDestroyed()) {
+                        cause = PlayerKillEvent.PlayerKillCause.PLAYER_DISCONNECT_FINAL;
+                        message = Messages.PLAYER_DIE_PVP_LOG_OUT_FINAL;
+                    } else {
+                        message = Messages.PLAYER_DIE_PVP_LOG_OUT_REGULAR;
+                        cause = PlayerKillEvent.PlayerKillCause.PLAYER_DISCONNECT;
                     }
+                    PlayerKillEvent event = new PlayerKillEvent(this, p, lastDamager, player -> Language.getMsg(player, message), cause);
+                    for (Player inGame : getPlayers()) {
+                        Language lang = Language.getPlayerLanguage(inGame);
+                        inGame.sendMessage(event.getMessage().apply(inGame)
+                                .replace("{PlayerTeamName}", team.getDisplayName(lang))
+                                .replace("{PlayerColor}", team.getColor().chat().toString()).replace("{PlayerName}", p.getDisplayName())
+                                .replace("{KillerColor}", killerTeam.getColor().chat().toString())
+                                .replace("{KillerName}", lastDamager.getDisplayName())
+                                .replace("{KillerTeamName}", killerTeam.getDisplayName(lang)));
+                    }
+                    for (Player inGame : getSpectators()) {
+                        Language lang = Language.getPlayerLanguage(inGame);
+                        inGame.sendMessage(event.getMessage().apply(inGame)
+                                .replace("{PlayerTeamName}", team.getDisplayName(lang))
+                                .replace("{PlayerColor}", team.getColor().chat().toString()).replace("{PlayerName}", p.getDisplayName())
+                                .replace("{KillerColor}", killerTeam.getColor().chat().toString())
+                                .replace("{KillerName}", lastDamager.getDisplayName())
+                                .replace("{KillerTeamName}", killerTeam.getDisplayName(lang)));
+                    }
+                    PlayerDrops.handlePlayerDrops(this, p, lastDamager, team, killerTeam, cause, new ArrayList<>(Arrays.asList(p.getInventory().getContents())));
                 }
             }
         }
