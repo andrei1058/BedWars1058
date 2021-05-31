@@ -118,7 +118,7 @@ public class DamageDeathMove implements Listener {
         ITeam team = a.getTeam(p);
         Language lang = Language.getPlayerLanguage(damager);
         String message = lang.m(Messages.PLAYER_HIT_BOW)
-                .replace("{amount}", new DecimalFormat("00.#").format(e.getFinalDamage()))
+                .replace("{amount}", new DecimalFormat("00.#").format(((Player) e.getEntity()).getHealth()))
                 .replace("{TeamColor}", team.getColor().chat().toString())
                 .replace("{TeamName}", team.getDisplayName(lang))
                 .replace("{PlayerName}", ChatColor.stripColor(p.getDisplayName()));
@@ -226,18 +226,6 @@ public class DamageDeathMove implements Listener {
                         lh.setTime(System.currentTimeMillis());
                     } else {
                         new LastHit(p, damager, System.currentTimeMillis());
-                    }
-
-                    // projectile hit message #696
-                    if (projectile) {
-                        ITeam team = a.getTeam(p);
-                        Language lang = Language.getPlayerLanguage(damager);
-                        String message = lang.m(Messages.PLAYER_HIT_BOW)
-                                .replace("{amount}", new DecimalFormat("00.#").format(p.getHealth() - e.getDamage()))
-                                .replace("{TeamColor}", team.getColor().chat().toString())
-                                .replace("{TeamName}", team.getDisplayName(lang))
-                                .replace("{PlayerName}", ChatColor.stripColor(p.getDisplayName()));
-                        damager.sendMessage(message);
                     }
 
                     // #274
