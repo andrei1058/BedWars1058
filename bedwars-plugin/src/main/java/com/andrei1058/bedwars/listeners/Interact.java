@@ -194,7 +194,7 @@ public class Interact implements Listener {
                     if (i.getType() != Material.AIR) {
                         ShopCache sc = ShopCache.getShopCache(e.getPlayer().getUniqueId());
                         if (sc != null) {
-                            if (InventoryListener.isUpgradable(i, sc)) {
+                            if (InventoryListener.isAllowedMovement(i, sc)) {
                                 e.setCancelled(true);
                             }
                         }
