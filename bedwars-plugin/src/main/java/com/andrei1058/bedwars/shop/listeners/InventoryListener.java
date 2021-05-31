@@ -113,7 +113,7 @@ public class InventoryListener implements Listener {
                 ItemStack i = e.getWhoClicked().getInventory().getItem(e.getHotbarButton());
                 if (i != null) {
                     if (e.getClickedInventory() != e.getWhoClicked().getInventory()) {
-                        if (isAllowedMovement(i, sc)) {
+                        if (shouldCancelMovement(i, sc)) {
                             e.setCancelled(true);
                         }
                     }
@@ -125,12 +125,12 @@ public class InventoryListener implements Listener {
         if (e.getCursor() != null) {
             if (e.getCursor().getType() != Material.AIR) {
                 if (e.getClickedInventory() == null) {
-                    if (isAllowedMovement(e.getCursor(), sc)) {
+                    if (shouldCancelMovement(e.getCursor(), sc)) {
                         e.getWhoClicked().closeInventory();
                         e.setCancelled(true);
                     }
                 } else if (e.getClickedInventory().getType() != e.getWhoClicked().getInventory().getType()) {
-                    if (isAllowedMovement(e.getCursor(), sc)) {
+                    if (shouldCancelMovement(e.getCursor(), sc)) {
                         e.getWhoClicked().closeInventory();
                         e.setCancelled(true);
                     }
@@ -142,12 +142,12 @@ public class InventoryListener implements Listener {
         if (e.getCurrentItem() != null) {
             if (e.getCurrentItem().getType() != Material.AIR) {
                 if (e.getClickedInventory() == null) {
-                    if (isAllowedMovement(e.getCursor(), sc)) {
+                    if (shouldCancelMovement(e.getCursor(), sc)) {
                         e.getWhoClicked().closeInventory();
                         e.setCancelled(true);
                     }
                 } else if (e.getClickedInventory().getType() != e.getWhoClicked().getInventory().getType()) {
-                    if (isAllowedMovement(e.getCurrentItem(), sc)) {
+                    if (shouldCancelMovement(e.getCurrentItem(), sc)) {
                         e.getWhoClicked().closeInventory();
                         e.setCancelled(true);
                     }
@@ -157,7 +157,7 @@ public class InventoryListener implements Listener {
 
         //block moving with shift
         if (e.getAction() == MOVE_TO_OTHER_INVENTORY) {
-            if (isAllowedMovement(e.getCurrentItem(), sc)) {
+            if (shouldCancelMovement(e.getCurrentItem(), sc)) {
                 if (e.getView().getTopInventory().getHolder() != null && e.getInventory().getHolder() == e.getWhoClicked())
                     return;
                 e.setCancelled(true);
@@ -173,11 +173,18 @@ public class InventoryListener implements Listener {
     }
 
     /**
-     * Check can move item outside inventory
+     * Check can move item outside inventory.
+     * Block despawnable, permanent and start items dropping and inventory change.
      */
-    public static boolean isAllowedMovement(ItemStack i, ShopCache sc) {
+    public static boolean shouldCancelMovement(ItemStack i, ShopCache sc) {
         if (i == null) return false;
         if (sc == null) return false;
+
+        if (nms.isCustomBedWarsItem(i)){
+            if (nms.getCustomData(i).equalsIgnoreCase("DEFAULT_ITEM")){
+                return true;
+            }
+        }
 
         String identifier = nms.getShopUpgradeIdentifier(i);
         if (identifier == null) return false;
