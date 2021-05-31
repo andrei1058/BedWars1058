@@ -99,6 +99,32 @@ public class DamageDeathMove implements Listener {
         }
     }
 
+    // show player health on bow hit
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onBowHit(EntityDamageByEntityEvent e) {
+        if (e.getEntity().getType() != EntityType.PLAYER) return;
+        if (!(e.getDamager() instanceof Projectile)) return;
+        Projectile projectile = (Projectile) e.getDamager();
+        if (projectile.getShooter() == null) return;
+        if (!(projectile.getShooter() instanceof Player)) return;
+
+        Player p = (Player) e.getEntity();
+        Player damager = (Player) projectile.getShooter();
+        IArena a = Arena.getArenaByPlayer(p);
+        if (a == null) return;
+        if (a.getStatus() != GameState.playing) return;
+
+        // projectile hit message #696, #711
+        ITeam team = a.getTeam(p);
+        Language lang = Language.getPlayerLanguage(damager);
+        String message = lang.m(Messages.PLAYER_HIT_BOW)
+                .replace("{amount}", new DecimalFormat("00.#").format(e.getFinalDamage()))
+                .replace("{TeamColor}", team.getColor().chat().toString())
+                .replace("{TeamName}", team.getDisplayName(lang))
+                .replace("{PlayerName}", ChatColor.stripColor(p.getDisplayName()));
+        damager.sendMessage(message);
+    }
+
     @EventHandler
     public void onDamageByEntity(EntityDamageByEntityEvent e) {
         if (e.getEntity() instanceof Player) {
