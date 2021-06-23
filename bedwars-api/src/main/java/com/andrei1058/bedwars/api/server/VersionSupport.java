@@ -233,11 +233,6 @@ public abstract class VersionSupport {
     public abstract String getCustomData(ItemStack i);
 
     /**
-     * Set a skull skin
-     */
-    public abstract ItemStack setSkullOwner(ItemStack i, Player p);
-
-    /**
      * Color an item if possible with the team's color
      */
     public abstract ItemStack colourItem(ItemStack itemStack, ITeam bedWarsTeam);

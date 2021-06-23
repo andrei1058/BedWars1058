@@ -421,15 +421,6 @@ public class v1_8_R3 extends VersionSupport {
     }
 
     @Override
-    public org.bukkit.inventory.ItemStack setSkullOwner(org.bukkit.inventory.ItemStack i, Player p) {
-        if (i.getType() != org.bukkit.Material.SKULL_ITEM) return i;
-        SkullMeta sm = (SkullMeta) i.getItemMeta();
-        sm.setOwner(p.getName());
-        i.setItemMeta(sm);
-        return i;
-    }
-
-    @Override
     public ItemStack colourItem(ItemStack itemStack, ITeam bedWarsTeam) {
         if (itemStack == null) return null;
         switch (itemStack.getType().toString()) {
