@@ -407,6 +407,12 @@ public interface BedWars {
     void setRestoreAdapter(RestoreAdapter restoreAdapter) throws IllegalAccessError;
 
     /**
+     * Change the party interface.
+     * You man need to unregister /party command yourself.
+     */
+    void setPartyAdapter(Party partyAdapter);
+
+    /**
      * Get nms operations.
      */
     VersionSupport getVersionSupport();

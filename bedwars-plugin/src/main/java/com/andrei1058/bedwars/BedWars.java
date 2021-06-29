@@ -737,6 +737,10 @@ public class BedWars extends JavaPlugin {
         }
     }
 
+    public static void setParty(Party party) {
+        BedWars.party = party;
+    }
+
     @Override
     public ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
         return new VoidChunkGenerator();
