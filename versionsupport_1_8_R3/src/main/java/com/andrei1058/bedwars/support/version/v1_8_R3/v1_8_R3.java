@@ -16,12 +16,9 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.*;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
 import org.bukkit.entity.*;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -159,7 +156,6 @@ public class v1_8_R3 extends VersionSupport {
     public void registerEntities() {
         registerEntity("Silverfish2", 60, Silverfish.class);
         registerEntity("IGolem", 99, IGolem.class);
-        registerEntity("BwVilager", 120, VillagerShop.class);
     }
 
     @Override
@@ -181,7 +177,16 @@ public class v1_8_R3 extends VersionSupport {
     public void spawnShop(Location loc, String name1, List<Player> players, IArena arena) {
         Location l = loc.clone();
 
-        spawnVillager(l);
+        Villager vlg = (Villager) loc.getWorld().spawnEntity(loc, EntityType.VILLAGER);
+        vlg.setRemoveWhenFarAway(false);
+        net.minecraft.server.v1_8_R3.EntityVillager nmsEntity = ((CraftVillager) vlg).getHandle();
+        NBTTagCompound tag = nmsEntity.getNBTTag();
+        if (tag == null) {
+            tag = new NBTTagCompound();
+        }
+        nmsEntity.c(tag);
+        tag.setInt("NoAI", 1);
+        nmsEntity.f(tag);
 
         for (Player p : players) {
             String[] nume = getMsg(p, name1).split(",");
@@ -199,55 +204,6 @@ public class v1_8_R3 extends VersionSupport {
                 sh.update();
             }
         }
-    }
-
-    public static class VillagerShop extends EntityVillager {
-        @SuppressWarnings("rawtypes")
-        VillagerShop(Location loc) {
-            super(((CraftWorld) loc.getWorld()).getHandle());
-            try {
-                Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
-                bField.setAccessible(true);
-                Field cField = PathfinderGoalSelector.class.getDeclaredField("c");
-                cField.setAccessible(true);
-                bField.set(this.goalSelector, new UnsafeList());
-                bField.set(this.targetSelector, new UnsafeList());
-                cField.set(this.goalSelector, new UnsafeList());
-                cField.set(this.targetSelector, new UnsafeList());
-            } catch (Exception ignored) {
-            }
-            this.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
-            this.setPositionRotation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
-            (((CraftWorld) loc.getWorld()).getHandle()).addEntity(this, CreatureSpawnEvent.SpawnReason.CUSTOM);
-            persistent = true;
-        }
-
-        public void move(double d0, double d1, double d2) {
-        }
-
-        public void collide(net.minecraft.server.v1_8_R3.Entity entity) {
-        }
-
-        public boolean damageEntity(DamageSource damagesource, float f) {
-            return false;
-        }
-
-        public void g(double d0, double d1, double d2) {
-        }
-
-        public void makeSound(String s, float f, float f1) {
-
-        }
-
-        protected void initAttributes() {
-            super.initAttributes();
-            this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.0D);
-        }
-    }
-
-    private void spawnVillager(Location loc) {
-        VillagerShop customEnt = new VillagerShop(loc);
-        ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
     }
 
     @Override
