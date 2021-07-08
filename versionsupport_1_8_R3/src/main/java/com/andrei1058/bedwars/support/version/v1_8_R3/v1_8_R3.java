@@ -159,6 +159,7 @@ public class v1_8_R3 extends VersionSupport {
     public void registerEntities() {
         registerEntity("Silverfish2", 60, Silverfish.class);
         registerEntity("IGolem", 99, IGolem.class);
+        registerEntity("BwVilager", 120, VillagerShop.class);
     }
 
     @Override
