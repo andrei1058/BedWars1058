@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.arena.mapreset.slime;
 
 import com.andrei1058.bedwars.api.BedWars;
+import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.server.ISetupSession;
@@ -108,7 +109,7 @@ public class SlimeAdapter extends RestoreAdapter {
     public void onRestart(IArena a) {
         if (api.getServerType() == ServerType.BUNGEE) {
             if (api.getArenaUtil().getGamesBeforeRestart() == 0) {
-                if (api.getArenaUtil().getArenas().isEmpty()) {
+                if (api.getArenaUtil().getArenas().size() == 1 && api.getArenaUtil().getArenas().get(0).getStatus() == GameState.restarting) {
                     getOwner().getLogger().info("Dispatching command: " + api.getConfigs().getMainConfig().getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), api.getConfigs().getMainConfig().getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
                 }
