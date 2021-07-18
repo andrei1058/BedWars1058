@@ -25,8 +25,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
-import static com.andrei1058.bedwars.BedWars.getGeneratorsCfg;
-import static com.andrei1058.bedwars.BedWars.nms;
+import static com.andrei1058.bedwars.BedWars.*;
 
 @SuppressWarnings("WeakerAccess")
 public class OreGenerator implements IGenerator {
@@ -138,7 +137,7 @@ public class OreGenerator implements IGenerator {
                 dropItem(location);
                 return;
             }
-            if (arena.getConfig().getBoolean(ConfigPath.GENERAL_CONFIGURATION_ENABLE_GEN_SPLIT)) {
+            if (plugin.getConfig().getBoolean(ConfigPath.GENERAL_CONFIGURATION_ENABLE_GEN_SPLIT)) {
                 Object[] players = location.getWorld().getNearbyEntities(location, 1, 1, 1).stream().filter(entity -> entity.getType() == EntityType.PLAYER)
                         .filter(entity -> arena.isPlayer((Player) entity)).toArray();
                 if (players.length <= 1) {
