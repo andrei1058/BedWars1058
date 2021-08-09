@@ -15,7 +15,6 @@ public class PlayerKillEvent extends Event {
     private final Player killer;
     private final PlayerKillCause cause;
     private Function<Player, String> message;
-    private String deprecatedMessage;
 
     /**
      * Called when a Player got killed during the game.

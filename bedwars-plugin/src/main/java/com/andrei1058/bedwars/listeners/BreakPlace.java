@@ -38,6 +38,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
@@ -49,7 +50,7 @@ public class BreakPlace implements Listener {
     @EventHandler
     public void onIceMelt(BlockFadeEvent e) {
         if (BedWars.getServerType() == ServerType.MULTIARENA) {
-            if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
+            if (Objects.requireNonNull(e.getBlock().getLocation().getWorld()).getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
                 e.setCancelled(true);
                 return;
             }
@@ -71,7 +72,7 @@ public class BreakPlace implements Listener {
     public void onBurn(BlockBurnEvent event) {
         IArena arena = Arena.getArenaByIdentifier(event.getBlock().getWorld().getName());
         if (arena == null) return;
-        if (!arena.getConfig().getBoolean(ConfigPath.ARENA_ALLOW_MAP_BREAK)){
+        if (!arena.getConfig().getBoolean(ConfigPath.ARENA_ALLOW_MAP_BREAK)) {
             event.setCancelled(true);
             return;
         }
@@ -146,7 +147,7 @@ public class BreakPlace implements Listener {
             a.addPlacedBlock(e.getBlock());
             if (e.getBlock().getType() == Material.TNT) {
                 e.getBlockPlaced().setType(Material.AIR);
-                TNTPrimed tnt = e.getBlock().getLocation().getWorld().spawn(e.getBlock().getLocation().add(0.5, 0, 0.5), TNTPrimed.class);
+                TNTPrimed tnt = Objects.requireNonNull(e.getBlock().getLocation().getWorld()).spawn(e.getBlock().getLocation().add(0.5, 0, 0.5), TNTPrimed.class);
                 tnt.setFuseTicks(45);
                 nms.setSource(tnt, p);
                 return;
@@ -154,7 +155,7 @@ public class BreakPlace implements Listener {
             return;
         }
         if (BedWars.getServerType() == ServerType.MULTIARENA) {
-            if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
+            if (Objects.requireNonNull(e.getBlock().getLocation().getWorld()).getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
                 if (!isBuildSession(p)) {
                     e.setCancelled(true);
                 }
@@ -185,12 +186,12 @@ public class BreakPlace implements Listener {
     }
 
     @EventHandler
-    public void onBlockDrop(ItemSpawnEvent event){
+    public void onBlockDrop(ItemSpawnEvent event) {
         //WHEAT_SEEDS
         IArena arena = Arena.getArenaByIdentifier(event.getEntity().getWorld().getName());
         if (arena == null) return;
         String material = event.getEntity().getItemStack().getType().toString();
-        if (material.equals("SEEDS") || material.equals("WHEAT_SEEDS")){
+        if (material.equals("SEEDS") || material.equals("WHEAT_SEEDS")) {
             event.setCancelled(true);
         }
     }
@@ -200,7 +201,7 @@ public class BreakPlace implements Listener {
         if (e.isCancelled()) return;
         Player p = e.getPlayer();
         if (BedWars.getServerType() == ServerType.MULTIARENA) {
-            if (e.getBlock().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
+            if (Objects.requireNonNull(e.getBlock().getLocation().getWorld()).getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
                 if (!isBuildSession(p)) {
                     e.setCancelled(true);
                     return;
@@ -224,7 +225,7 @@ public class BreakPlace implements Listener {
 
             // allow breaking of grass
             // drops are removed in another event
-            switch (e.getBlock().getType().toString()){
+            switch (e.getBlock().getType().toString()) {
                 case "LONG_GRASS":
                 case "TALL_GRASS":
                 case "TALL_SEAGRASS":
@@ -236,7 +237,7 @@ public class BreakPlace implements Listener {
                     if (e.isCancelled()) {
                         e.setCancelled(false);
                     }
-                return;
+                    return;
             }
 
             if (nms.isBed(e.getBlock().getType())) {
@@ -256,15 +257,37 @@ public class BreakPlace implements Listener {
                                             e.setCancelled(false);
                                             t.setBedDestroyed(true);
                                             a.addPlayerBedDestroyed(p);
-                                            Bukkit.getPluginManager().callEvent(new PlayerBedBreakEvent(e.getPlayer(), a.getTeam(p), t, a));
+                                            PlayerBedBreakEvent breakEvent;
+                                            Bukkit.getPluginManager().callEvent(breakEvent = new PlayerBedBreakEvent(e.getPlayer(), a.getTeam(p), t, a,
+                                                    player -> {
+                                                        if (t.isMember(player)) {
+                                                            return getMsg(player, Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM).replace("{TeamColor}",
+                                                                            t.getColor().chat().toString()).replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(player)))
+                                                                    .replace("{PlayerColor}", a.getTeam(p).getColor().chat().toString()).replace("{PlayerName}", p.getDisplayName());
+                                                        } else {
+                                                            return getMsg(player, Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT).replace("{TeamColor}",
+                                                                            t.getColor().chat().toString()).replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(player)))
+                                                                    .replace("{PlayerColor}", a.getTeam(p).getColor().chat().toString()).replace("{PlayerName}", p.getDisplayName());
+                                                        }
+                                                    },
+                                                    player -> {
+                                                        if (t.isMember(player)) {
+                                                            return getMsg(player, Messages.INTERACT_BED_DESTROY_TITLE_ANNOUNCEMENT);
+                                                        }
+                                                        return null;
+                                                    },
+                                                    player -> {
+                                                        if (t.isMember(player)) {
+                                                            return getMsg(player, Messages.INTERACT_BED_DESTROY_SUBTITLE_ANNOUNCEMENT);
+                                                        }
+                                                        return null;
+                                                    }));
                                             for (Player on : a.getWorld().getPlayers()) {
-                                                if (t.isMember(on)) {
-                                                    on.sendMessage(getMsg(on, Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM).replace("{TeamColor}", t.getColor().chat().toString()).replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(on)))
-                                                            .replace("{PlayerColor}", a.getTeam(p).getColor().chat().toString()).replace("{PlayerName}", p.getDisplayName()));
-                                                    nms.sendTitle(on, getMsg(on, Messages.INTERACT_BED_DESTROY_TITLE_ANNOUNCEMENT), getMsg(on, Messages.INTERACT_BED_DESTROY_SUBTITLE_ANNOUNCEMENT), 0, 25, 0);
-                                                } else {
-                                                    on.sendMessage(getMsg(on, Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT).replace("{TeamColor}", t.getColor().chat().toString()).replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(on)))
-                                                            .replace("{PlayerColor}", a.getTeam(p).getColor().chat().toString()).replace("{PlayerName}", p.getDisplayName()));
+                                                if (breakEvent.getMessage() != null) {
+                                                    on.sendMessage(breakEvent.getMessage().apply(on));
+                                                }
+                                                if (breakEvent.getTitle() != null && breakEvent.getSubTitle() != null) {
+                                                    nms.sendTitle(on, breakEvent.getTitle().apply(on), breakEvent.getSubTitle().apply(on), 0, 25, 0);
                                                 }
                                                 Sounds.playSound(ConfigPath.SOUNDS_BED_DESTROY, on);
                                             }
@@ -302,14 +325,14 @@ public class BreakPlace implements Listener {
     public void onSignChange(SignChangeEvent e) {
         if (e == null) return;
         Player p = e.getPlayer();
-        if (e.getLine(0).equalsIgnoreCase("[" + mainCmd + "]")) {
+        if (Objects.requireNonNull(e.getLine(0)).equalsIgnoreCase("[" + mainCmd + "]")) {
             File dir = new File(plugin.getDataFolder(), "/Arenas");
             boolean exists = false;
             if (dir.exists()) {
-                for (File f : dir.listFiles()) {
+                for (File f : Objects.requireNonNull(dir.listFiles())) {
                     if (f.isFile()) {
                         if (f.getName().contains(".yml")) {
-                            if (e.getLine(1).equals(f.getName().replace(".yml", ""))) {
+                            if (Objects.equals(e.getLine(1), f.getName().replace(".yml", ""))) {
                                 exists = true;
                             }
                         }
@@ -348,7 +371,7 @@ public class BreakPlace implements Listener {
     public void onBucketFill(PlayerBucketFillEvent e) {
         if (e.isCancelled()) return;
         if (BedWars.getServerType() == ServerType.MULTIARENA) {
-            if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
+            if (Objects.requireNonNull(e.getPlayer().getLocation().getWorld()).getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
                 if (!isBuildSession(e.getPlayer())) {
                     e.setCancelled(true);
                 }
@@ -365,7 +388,7 @@ public class BreakPlace implements Listener {
     public void onBucketEmpty(PlayerBucketEmptyEvent e) {
         if (e.isCancelled()) return;
         if (BedWars.getServerType() == ServerType.MULTIARENA) {
-            if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
+            if (Objects.requireNonNull(e.getPlayer().getLocation().getWorld()).getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
                 if (!isBuildSession(e.getPlayer())) {
                     e.setCancelled(true);
                 }
