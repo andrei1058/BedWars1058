@@ -149,6 +149,14 @@ public class CategoryContent implements ICategoryContent {
             return;
         }
 
+        ShopBuyEvent event;
+        //call shop buy event
+        Bukkit.getPluginManager().callEvent(event = new ShopBuyEvent(player, this));
+
+        if (event.isCancelled()){
+            return;
+        }
+
         //take money
         takeMoney(player, ct.getCurrency(), ct.getPrice());
 
@@ -171,8 +179,7 @@ public class CategoryContent implements ICategoryContent {
         } else {
             player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", ChatColor.stripColor(getMsg(player, itemNamePath))).replace("{color}", "").replace("{tier}", ""));
         }
-        //call shop buy event
-        Bukkit.getPluginManager().callEvent(new ShopBuyEvent(player, this));
+
 
         shopCache.setCategoryWeight(father, weight);
     }
