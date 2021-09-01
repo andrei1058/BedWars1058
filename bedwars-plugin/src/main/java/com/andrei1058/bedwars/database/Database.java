@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.database;
 
 import com.andrei1058.bedwars.stats.PlayerStats;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 public interface Database {
@@ -31,6 +32,8 @@ public interface Database {
     /**
      * Set quick buy slot value.
      */
+    @Deprecated
+    @SuppressWarnings("unused")
     void setQuickBuySlot(UUID uuid, String shopPath, int slot);
 
     /**
@@ -46,6 +49,7 @@ public interface Database {
     /**
      * Get a stats value for the given player.
      */
+    @SuppressWarnings("unused")
     int getColumn(UUID player, String column);
 
     /**
@@ -72,4 +76,9 @@ public interface Database {
      * Get a player language.
      */
     String getLanguage(UUID player);
+
+    /**
+     * @param updateSlots key is slot id and value is the element.
+     */
+    void pushQuickBuyChanges(HashMap<Integer, String> updateSlots, UUID uuid);
 }

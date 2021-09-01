@@ -3,11 +3,14 @@ package com.andrei1058.bedwars.database;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.stats.PlayerStats;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class SQLite implements Database {
@@ -357,5 +360,30 @@ public class SQLite implements Database {
             e.printStackTrace();
         }
         return iso;
+    }
+
+    @Override
+    public void pushQuickBuyChanges(HashMap<Integer, String> updateSlots, UUID uuid) {
+        StringBuilder columns = new StringBuilder();
+        int i = 0;
+        for (Map.Entry<Integer, String> entry : updateSlots.entrySet()){
+            i++;
+            columns.append("slot_").append(entry.getKey());
+            if (i != updateSlots.size()) {
+                columns.append(", ");
+            }
+        }
+        String sql = "REPLACE INTO quick_buy ("+ columns +") VALUES (" + (StringUtils.repeat("?, ", updateSlots.size())) + ") WHERE uuid = ?;";
+        try (Connection con = connection){
+            try (PreparedStatement ps = con.prepareStatement(sql)){
+                for (int pos = 1; pos <= updateSlots.size(); pos++){
+                    ps.setString(pos, updateSlots.get(pos-1));
+                }
+                ps.setString(updateSlots.size()+1, uuid.toString());
+                ps.execute();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 }

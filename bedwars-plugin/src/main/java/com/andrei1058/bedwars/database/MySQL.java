@@ -5,8 +5,11 @@ import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.stats.PlayerStats;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.apache.commons.lang3.StringUtils;
 
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -16,12 +19,15 @@ import static com.andrei1058.bedwars.BedWars.config;
 public class MySQL implements Database {
 
     private HikariDataSource dataSource;
-    private String host, database, user, pass;
-    private int port;
-    private boolean ssl;
-    private boolean certificateVerification;
-    private int poolSize;
-    private int maxLifetime;
+    private final String host;
+    private final String database;
+    private final String user;
+    private final String pass;
+    private final int port;
+    private final boolean ssl;
+    private final boolean certificateVerification;
+    private final int poolSize;
+    private final int maxLifetime;
 
     /**
      * Create new MySQL connection.
@@ -49,7 +55,7 @@ public class MySQL implements Database {
         hikariConfig.setPoolName("BedWars1058MySQLPool");
 
         hikariConfig.setMaximumPoolSize(poolSize);
-        hikariConfig.setMaxLifetime(maxLifetime * 1000);
+        hikariConfig.setMaxLifetime(maxLifetime * 1000L);
 
         hikariConfig.setJdbcUrl("jdbc:mysql://" + host + ":" + port + "/" + database);
 
@@ -413,5 +419,30 @@ public class MySQL implements Database {
             e.printStackTrace();
         }
         return Language.getDefaultLanguage().getIso();
+    }
+
+    @Override
+    public void pushQuickBuyChanges(HashMap<Integer, String> updateSlots, UUID uuid) {
+        StringBuilder columns = new StringBuilder();
+        int i = 0;
+        for (Map.Entry<Integer, String> entry : updateSlots.entrySet()){
+            i++;
+            columns.append("slot_").append(entry.getKey());
+            if (i != updateSlots.size()) {
+                columns.append(", ");
+            }
+        }
+        String sql = "REPLACE INTO quick_buy ("+ columns +") VALUES (" + (StringUtils.repeat("?, ", updateSlots.size())) + ") WHERE uuid = ?;";
+        try (Connection con = dataSource.getConnection()){
+            try (PreparedStatement ps = con.prepareStatement(sql)){
+                for (int pos = 1; pos <= updateSlots.size(); pos++){
+                    ps.setString(pos, updateSlots.get(pos-1));
+                }
+                ps.setString(updateSlots.size()+1, uuid.toString());
+                ps.execute();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 }
