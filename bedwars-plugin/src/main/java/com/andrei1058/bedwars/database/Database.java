@@ -1,8 +1,10 @@
 package com.andrei1058.bedwars.database;
 
+import com.andrei1058.bedwars.shop.quickbuy.QuickBuyElement;
 import com.andrei1058.bedwars.stats.PlayerStats;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 public interface Database {
@@ -40,6 +42,12 @@ public interface Database {
      * Get quick buy slot value.
      */
     String getQuickBuySlots(UUID uuid, int slot);
+
+    /**
+     * Get quick buy.
+     * slot - identifier string
+     */
+    HashMap<Integer, String> getQuickBuySlots(UUID uuid, int[] slot);
 
     /**
      * Check if has quick buy.
@@ -80,5 +88,5 @@ public interface Database {
     /**
      * @param updateSlots key is slot id and value is the element.
      */
-    void pushQuickBuyChanges(HashMap<Integer, String> updateSlots, UUID uuid);
+    void pushQuickBuyChanges(HashMap<Integer, String> updateSlots, UUID uuid, List<QuickBuyElement> elementList);
 }

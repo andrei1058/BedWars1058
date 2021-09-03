@@ -139,6 +139,6 @@ public class PlayerQuickBuyCache {
 
     public void pushChangesToDB() {
         Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin,
-                () -> BedWars.getRemoteDatabase().pushQuickBuyChanges(updateSlots, this.player));
+                () -> BedWars.getRemoteDatabase().pushQuickBuyChanges(updateSlots, this.player, elements));
     }
 }
