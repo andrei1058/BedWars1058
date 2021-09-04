@@ -298,7 +298,6 @@ public class MySQL implements Database {
                         }
                     }
                 }
-                Bukkit.getLogger().severe("out of while");
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
