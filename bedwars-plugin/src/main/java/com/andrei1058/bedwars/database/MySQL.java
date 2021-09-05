@@ -284,16 +284,16 @@ public class MySQL implements Database {
     @Override
     public HashMap<Integer, String> getQuickBuySlots(UUID uuid, int[] slot) {
         HashMap<Integer, String> results = new HashMap<>();
-        if (slot.length == 0){
+        if (slot.length == 0) {
             return results;
         }
         try (PreparedStatement ps = dataSource.getConnection().prepareStatement("SELECT * FROM quick_buy_2 WHERE uuid = ?;")) {
             ps.setString(1, uuid.toString());
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()){
-                    for (int i : slot){
-                        String id = rs.getString("slot_"+i);
-                        if (null != id && !id.isEmpty()){
+                if (rs.next()) {
+                    for (int i : slot) {
+                        String id = rs.getString("slot_" + i);
+                        if (null != id && !id.isEmpty()) {
                             results.put(i, id);
                         }
                     }
@@ -451,9 +451,10 @@ public class MySQL implements Database {
     @Override
     public void pushQuickBuyChanges(HashMap<Integer, String> updateSlots, UUID uuid, List<QuickBuyElement> elements) {
         if (updateSlots.isEmpty()) return;
-        if (!hasQuickBuy(uuid)){
-            for (QuickBuyElement element : elements){
-                if (!updateSlots.containsKey(element.getSlot())){
+        boolean hasQuick;
+        if (!(hasQuick = hasQuickBuy(uuid))) {
+            for (QuickBuyElement element : elements) {
+                if (!updateSlots.containsKey(element.getSlot())) {
                     updateSlots.put(element.getSlot(), element.getCategoryContent().getIdentifier());
                 }
             }
@@ -461,25 +462,35 @@ public class MySQL implements Database {
         StringBuilder columns = new StringBuilder();
         StringBuilder values = new StringBuilder();
         int i = 0;
-        for (Map.Entry<Integer, String> entry : updateSlots.entrySet()){
-            i++;
-            columns.append("slot_").append(entry.getKey());
-            values.append("?");
-            if (i != updateSlots.size()) {
-                columns.append(", ");
-                values.append(", ");
+        if (hasQuick) {
+            for (Map.Entry<Integer, String> entry : updateSlots.entrySet()) {
+                i++;
+                columns.append("slot_").append(entry.getKey()).append("=?");
+                if (i != updateSlots.size()) {
+                    columns.append(", ");
+                }
+            }
+        } else {
+            for (Map.Entry<Integer, String> entry : updateSlots.entrySet()) {
+                i++;
+                columns.append("slot_").append(entry.getKey());
+                values.append("?");
+                if (i != updateSlots.size()) {
+                    columns.append(", ");
+                    values.append(", ");
+                }
             }
         }
-        String sql = "REPLACE INTO quick_buy_2 (uuid,"+ columns +") VALUES (?," + values + ");";
-        try (Connection con = dataSource.getConnection()){
-            try (PreparedStatement ps = con.prepareStatement(sql)){
-                int index = 1;
-                for (int key : updateSlots.keySet()){
+        String sql = hasQuick ? "UPDATE quick_buy_2 SET " + columns + " WHERE uuid=?;" : "INSERT INTO quick_buy_2 (uuid," + columns + ") VALUES (?," + values + ");";
+        try (Connection con = dataSource.getConnection()) {
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                int index = hasQuick ? 0 : 1;
+                for (int key : updateSlots.keySet()) {
                     index++;
                     String identifier = updateSlots.get(key);
                     ps.setString(index, identifier.trim().isEmpty() ? null : identifier);
                 }
-                ps.setString(1, uuid.toString());
+                ps.setString(hasQuick ? updateSlots.size()+1 : 1, uuid.toString());
                 ps.execute();
             }
         } catch (SQLException throwables) {
