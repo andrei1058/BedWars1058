@@ -11,7 +11,7 @@ maven-dev:
     - 'development'
     - 'milestone-*'
   script:
-    - 'mvn versions:set -DnewVersion=21.9-SNAPSHOT'
+    - 'mvn versions:set -DnewVersion=21.10.1-SNAPSHOT'
     - 'mvn versions:update-child-modules'
     - 'mvn -DgitVer=git-$CI_COMMIT_SHORT_SHA- clean deploy -s ci_settings.xml'
   artifacts:
