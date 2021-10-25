@@ -8,6 +8,36 @@ As from November 1st 2021 BedWars1058 by Andrei Dascălu becomes open source und
 BedWars is a mini-game where you have to defend your bed and destroy the others.  
 Once your bed is destroyed, you cannot respawn.
 
+# System requirements
+This software runs on [Spigot](https://www.spigotmc.org/) and NMS.
+Spigot forks without compiled NMS code are not supported.
+Officially supported servers are [spigot](https://www.spigotmc.org/) and [paper](https://papermc.io/).
+It is recommended to use Java 11.
+
+The internal world restore system is based on zipping and unzipping maps which can become
+heavy if you are still making use of HDD in 2021, and you do not have a decent CPU, for a better
+and faster restore system install [SlimeWorldManager](https://www.spigotmc.org/resources/slimeworldmanager.69974/) or [AdvancedWorldManager](https://www.spigotmc.org/resources/advanced-slimeworldmanager.87209/).
+BedWars1058 will hook into it and do everything for you.
+
+# Pre-made setups
+You can contact us, so we can add yours here :)
+
+- by Adi100 - [BEDWARS SETUP ✨Generator Upgrade | Afk System | Custom Menus | NPCs](https://www.mc-market.org/resources/12378/?__cf_chl_jschl_tk__=pmd_zUe1xjS2ei0EP72mxwcz.hbPaDehkT0pn1EYURI9QEk-1635185029-0-gqNtZGzNAnujcnBszQj9)
+- by Ruben_Artz - [BEDWARS + DISCORD BOT](https://polymart.org/resource/bedwars-discord-bot-setup.544)
+
+# Community Add-ons
+
+- [Private Games - Create private games and play with friends](https://polymart.org/resource/1620) - by Mher
+- [Compass - Team Tracker, Quick Communications, Multi-language support](https://www.spigotmc.org/resources/91537/) - by Mher
+- [Sponge - Playing cool effect when placing a sponge](https://www.spigotmc.org/resources/93540/) - by Mher
+- [AntiDrop - Players Not Allow To Drop The Items In The Void](https://www.spigotmc.org/resources/86391/) - by Mher
+- [Team Selector - Select your color before the game starts](https://www.spigotmc.org/resources/60438/) - by andrei1058
+- [BedWarsProxy - Arena selector for bungee scalable mode](https://www.spigotmc.org/resources/66642/) - by andrei1058
+- [Reward commands - Execute commands in certain moments of the game](https://www.spigotmc.org/resources/55381/) - by andrei1058
+- [Web stats - Display player stats on a web page](https://www.spigotmc.org/resources/55523/) - by MrDuckBoy_Xx
+- [Pop-up Towers](https://www.spigotmc.org/resources/83661/) - by KimoVoidDSGN
+- [Generator Split](https://www.spigotmc.org/resources/83883/) - by KimoVoidDSGN
+
 # Main features
 
 ###### Flexible | Ways you can run the plugin:
@@ -99,37 +129,6 @@ If you get disconnected, or if you leave a game (configurable) you can re-join i
 
 ###### Season events:
 - Halloween special. It is enabled automatically based on your machine timezone and will provide cool effects.
-
-
-# System requirements
-This software runs on [Spigot](https://www.spigotmc.org/) and NMS. 
-Spigot forks without compiled NMS code are not supported. 
-Officially supported servers are [spigot](https://www.spigotmc.org/) and [paper](https://papermc.io/).
-It is recommended to use Java 11.
-
-The internal world restore system is based on zipping and unzipping maps which can become 
-heavy if you are still making use of HDD in 2021, and you do not have a decent CPU, for a better 
-and faster restore system install [SlimeWorldManager](https://www.spigotmc.org/resources/slimeworldmanager.69974/) or [AdvancedWorldManager](https://www.spigotmc.org/resources/advanced-slimeworldmanager.87209/).
-BedWars1058 will hook into it and do everything for you.
-
-# Pre-made setups
-You can contact us, so we can add yours here :)
-
-- by Adi100 - [BEDWARS SETUP ✨Generator Upgrade | Afk System | Custom Menus | NPCs](https://www.mc-market.org/resources/12378/?__cf_chl_jschl_tk__=pmd_zUe1xjS2ei0EP72mxwcz.hbPaDehkT0pn1EYURI9QEk-1635185029-0-gqNtZGzNAnujcnBszQj9)
-- by Ruben_Artz - [BEDWARS + DISCORD BOT](https://polymart.org/resource/bedwars-discord-bot-setup.544)
-
-# Community Add-ons
-
-- [Private Games - Create private games and play with friends](https://polymart.org/resource/1620) - by Mher
-- [Compass - Team Tracker, Quick Communications, Multi-language support](https://www.spigotmc.org/resources/91537/) - by Mher
-- [Sponge - Playing cool effect when placing a sponge](https://www.spigotmc.org/resources/93540/) - by Mher
-- [AntiDrop - Players Not Allow To Drop The Items In The Void](https://www.spigotmc.org/resources/86391/) - by Mher
-- [Team Selector - Select your color before the game starts](https://www.spigotmc.org/resources/60438/) - by andrei1058
-- [BedWarsProxy - Arena selector for bungee scalable mode](https://www.spigotmc.org/resources/66642/) - by andrei1058
-- [Reward commands - Execute commands in certain moments of the game](https://www.spigotmc.org/resources/55381/) - by andrei1058
-- [Web stats - Display player stats on a web page](https://www.spigotmc.org/resources/55523/) - by MrDuckBoy_Xx
-- [Pop-up Towers](https://www.spigotmc.org/resources/83661/) - by KimoVoidDSGN
-- [Generator Split](https://www.spigotmc.org/resources/83883/) - by KimoVoidDSGN
 
 # Community servers
 Chosen by hundreds of servers all around the world.  
