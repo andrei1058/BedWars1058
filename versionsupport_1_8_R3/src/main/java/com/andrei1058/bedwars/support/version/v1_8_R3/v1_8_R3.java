@@ -13,8 +13,6 @@ import com.andrei1058.bedwars.api.server.VersionSupport;
 import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Color;
-import org.bukkit.Effect;
-import org.bukkit.EntityEffect;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
@@ -179,30 +177,6 @@ public class v1_8_R3 extends VersionSupport {
         p.updateInventory();
     }
 
-    @Override
-    public void spawnShop(Location loc, String name1, List<Player> players, IArena arena) {
-        Location l = loc.clone();
-
-        spawnVillager(l);
-
-        for (Player p : players) {
-            String[] nume = getMsg(p, name1).split(",");
-            if (nume.length == 1) {
-                ArmorStand a = createArmorStand(nume[0], l.clone().add(0, 1.85, 0));
-                new ShopHolo(Language.getPlayerLanguage(p).getIso(), a, null, l, arena);
-            } else {
-                ArmorStand a = createArmorStand(nume[0], l.clone().add(0, 2.1, 0));
-                ArmorStand b = createArmorStand(nume[1], l.clone().add(0, 1.85, 0));
-                new ShopHolo(Language.getPlayerLanguage(p).getIso(), a, b, l, arena);
-            }
-        }
-        for (ShopHolo sh : ShopHolo.getShopHolo()) {
-            if (sh.getA() == arena) {
-                sh.update();
-            }
-        }
-    }
-
     public static class VillagerShop extends EntityVillager {
         @SuppressWarnings("rawtypes")
         VillagerShop(Location loc) {
@@ -248,8 +222,39 @@ public class v1_8_R3 extends VersionSupport {
     }
 
     private void spawnVillager(Location loc) {
-        VillagerShop customEnt = new VillagerShop(loc);
-        ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
+        VillagerShop nmsEntity = new VillagerShop(loc);
+        NBTTagCompound tag = nmsEntity.getNBTTag();
+        if (tag == null) {
+            tag = new NBTTagCompound();
+        }
+        nmsEntity.c(tag);
+        tag.setInt("NoAI", 1);
+        nmsEntity.f(tag);
+        ((CraftLivingEntity) nmsEntity.getBukkitEntity()).setRemoveWhenFarAway(false);
+    }
+
+    @Override
+    public void spawnShop(Location loc, String name1, List<Player> players, IArena arena) {
+        Location l = loc.clone();
+
+        spawnVillager(l);
+
+        for (Player p : players) {
+            String[] nume = getMsg(p, name1).split(",");
+            if (nume.length == 1) {
+                ArmorStand a = createArmorStand(nume[0], l.clone().add(0, 1.85, 0));
+                new ShopHolo(Language.getPlayerLanguage(p).getIso(), a, null, l, arena);
+            } else {
+                ArmorStand a = createArmorStand(nume[0], l.clone().add(0, 2.1, 0));
+                ArmorStand b = createArmorStand(nume[1], l.clone().add(0, 1.85, 0));
+                new ShopHolo(Language.getPlayerLanguage(p).getIso(), a, b, l, arena);
+            }
+        }
+        for (ShopHolo sh : ShopHolo.getShopHolo()) {
+            if (sh.getA() == arena) {
+                sh.update();
+            }
+        }
     }
 
     @Override
@@ -399,6 +404,13 @@ public class v1_8_R3 extends VersionSupport {
     }
 
     @Override
+    public String getTag(ItemStack itemStack, String key) {
+        net.minecraft.server.v1_8_R3.ItemStack i = CraftItemStack.asNMSCopy(itemStack);
+        NBTTagCompound tag = i.getTag();
+        return tag == null ? null : tag.hasKey(key) ? tag.getString(key) : null;
+    }
+
+    @Override
     public boolean isCustomBedWarsItem(org.bukkit.inventory.ItemStack i) {
         net.minecraft.server.v1_8_R3.ItemStack itemStack = CraftItemStack.asNMSCopy(i);
         if (itemStack == null) return false;
@@ -413,15 +425,6 @@ public class v1_8_R3 extends VersionSupport {
         NBTTagCompound tag = itemStack.getTag();
         if (tag == null) return "";
         return tag.getString("BedWars1058");
-    }
-
-    @Override
-    public org.bukkit.inventory.ItemStack setSkullOwner(org.bukkit.inventory.ItemStack i, Player p) {
-        if (i.getType() != org.bukkit.Material.SKULL_ITEM) return i;
-        SkullMeta sm = (SkullMeta) i.getItemMeta();
-        sm.setOwner(p.getName());
-        i.setItemMeta(sm);
-        return i;
     }
 
     @Override

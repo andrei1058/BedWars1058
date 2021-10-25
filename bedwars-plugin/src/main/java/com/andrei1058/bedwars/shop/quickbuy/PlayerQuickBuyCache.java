@@ -16,20 +16,22 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerQuickBuyCache {
 
-    private List<QuickBuyElement> elements = new ArrayList<>();
+    private final List<QuickBuyElement> elements = new ArrayList<>();
     private String emptyItemNamePath, emptyItemLorePath;
     private ItemStack emptyItem;
     private UUID player;
     private QuickBuyTask task;
 
     public static int[] quickSlots = new int[]{19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43};
-    private static ConcurrentHashMap<UUID, PlayerQuickBuyCache> quickBuyCaches = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<UUID, PlayerQuickBuyCache> quickBuyCaches = new ConcurrentHashMap<>();
+    private final HashMap<Integer, String> updateSlots = new HashMap<>();
 
     public PlayerQuickBuyCache(Player player) {
         if (player == null) return;
@@ -67,16 +69,6 @@ public class PlayerQuickBuyCache {
                 inv.setItem(x, i);
             }
         }
-        /*for (int x = 28; x < 35; x++) {
-            if (inv.getItem(x) == null) {
-                inv.setItem(x, i);
-            }
-        }
-        for (int x = 37; x < 44; x++) {
-            if (inv.getItem(x) == null) {
-                inv.setItem(x, i);
-            }
-        }*/
     }
 
     public void destroy() {
@@ -85,6 +77,7 @@ public class PlayerQuickBuyCache {
             task.cancel();
         }
         quickBuyCaches.remove(player);
+        this.pushChangesToDB();
     }
 
     public void setElement(int slot, CategoryContent cc) {
@@ -96,8 +89,11 @@ public class PlayerQuickBuyCache {
             addQuickElement(new QuickBuyElement(cc.getIdentifier(), slot));
             element = cc.getIdentifier();
         }
-        BedWars.plugin.getServer().getScheduler().runTaskAsynchronously(BedWars.plugin, () ->
-                BedWars.getRemoteDatabase().setQuickBuySlot(player, element, slot));
+        if (updateSlots.containsKey(slot)){
+            updateSlots.replace(slot, element);
+        } else {
+            updateSlots.put(slot, element);
+        }
     }
 
     @NotNull
@@ -139,5 +135,10 @@ public class PlayerQuickBuyCache {
      */
     public void addQuickElement(QuickBuyElement e) {
         this.elements.add(e);
+    }
+
+    public void pushChangesToDB() {
+        Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin,
+                () -> BedWars.getRemoteDatabase().pushQuickBuyChanges(updateSlots, this.player, elements));
     }
 }

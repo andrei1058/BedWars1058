@@ -8,6 +8,8 @@ import com.andrei1058.bedwars.shop.main.ShopCategory;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @SuppressWarnings("WeakerAccess")
@@ -61,11 +63,14 @@ public class QuickBuyTask extends BukkitRunnable {
                     }
                 }
             } else {
-                for (int x : PlayerQuickBuyCache.quickSlots) {
-                    String identifier = BedWars.getRemoteDatabase().getQuickBuySlots(uuid, x);
-                    if (identifier.isEmpty()) continue;
-                    if (identifier.equals(" ")) continue;
-                    QuickBuyElement e = new QuickBuyElement(identifier, x);
+                // slot, identifier
+                HashMap<Integer, String> items = BedWars.getRemoteDatabase().getQuickBuySlots(uuid, PlayerQuickBuyCache.quickSlots);
+                if (items == null) return;
+                if (items.isEmpty()) return;
+                for (Map.Entry<Integer, String> entry : items.entrySet()) {
+                    if (entry.getValue().isEmpty()) continue;
+                    if (entry.getValue().equals(" ")) continue;
+                    QuickBuyElement e = new QuickBuyElement(entry.getValue(), entry.getKey());
                     if (e.isLoaded()) {
                         cache.addQuickElement(e);
                     }

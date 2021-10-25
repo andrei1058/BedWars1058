@@ -56,16 +56,21 @@ public class LevelListeners implements Listener {
             if (PlayerLevel.getLevelByPlayer(p) != null) {
                 Player p1 = Bukkit.getPlayer(p);
                 if (p1 == null) continue;
-                PlayerLevel.getLevelByPlayer(p).addXp(LevelsConfig.levels.getInt("xp-rewards.game-win"), PlayerXpGainEvent.XpSource.GAME_WIN);
-                p1.sendMessage(Language.getMsg(p1, Messages.XP_REWARD_WIN).replace("{xp}", String.valueOf(LevelsConfig.levels.getInt("xp-rewards.game-win"))));
+                int xpAmount = LevelsConfig.levels.getInt("xp-rewards.game-win");
+                if (xpAmount > 0){
+                    PlayerLevel.getLevelByPlayer(p).addXp(xpAmount, PlayerXpGainEvent.XpSource.GAME_WIN);
+                    p1.sendMessage(Language.getMsg(p1, Messages.XP_REWARD_WIN).replace("{xp}", String.valueOf(xpAmount)));
+                }
                 ITeam bwt = e.getArena().getExTeam(p1.getUniqueId());
                 if (bwt != null) {
                     //noinspection deprecation
                     if (bwt.getMembersCache().size() > 1) {
-                        //noinspection deprecation
-                        int tr = LevelsConfig.levels.getInt("xp-rewards.per-teammate") * bwt.getMembersCache().size();
-                        PlayerLevel.getLevelByPlayer(p).addXp(tr, PlayerXpGainEvent.XpSource.PER_TEAMMATE);
-                        p1.sendMessage(Language.getMsg(p1, "xp-reward-per-teammate").replace("{xp}", String.valueOf(tr)));
+                        int xpAmountPerTmt = LevelsConfig.levels.getInt("xp-rewards.per-teammate");
+                        if (xpAmountPerTmt > 0){
+                            int tr = xpAmountPerTmt * bwt.getMembersCache().size();
+                            PlayerLevel.getLevelByPlayer(p).addXp(tr, PlayerXpGainEvent.XpSource.PER_TEAMMATE);
+                            p1.sendMessage(Language.getMsg(p1, "xp-reward-per-teammate").replace("{xp}", String.valueOf(tr)));
+                        }
                     }
                 }
             }
@@ -79,9 +84,12 @@ public class LevelListeners implements Listener {
                     //noinspection deprecation
                     if (bwt.getMembersCache().size() > 1) {
                         //noinspection deprecation
-                        int tr = LevelsConfig.levels.getInt("xp-rewards.per-teammate") * bwt.getMembersCache().size();
-                        PlayerLevel.getLevelByPlayer(p).addXp(tr, PlayerXpGainEvent.XpSource.PER_TEAMMATE);
-                        p1.sendMessage(Language.getMsg(p1, Messages.XP_REWARD_PER_TEAMMATE).replace("{xp}", String.valueOf(tr)));
+                        int xpAmountPerTmt = LevelsConfig.levels.getInt("xp-rewards.per-teammate");
+                        if (xpAmountPerTmt > 0){
+                            int tr = LevelsConfig.levels.getInt("xp-rewards.per-teammate") * bwt.getMembersCache().size();
+                            PlayerLevel.getLevelByPlayer(p).addXp(tr, PlayerXpGainEvent.XpSource.PER_TEAMMATE);
+                            p1.sendMessage(Language.getMsg(p1, Messages.XP_REWARD_PER_TEAMMATE).replace("{xp}", String.valueOf(tr)));
+                        }
                     }
                 }
             }

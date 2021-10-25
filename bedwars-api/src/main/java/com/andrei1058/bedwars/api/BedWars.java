@@ -100,7 +100,7 @@ public interface BedWars {
 
 
     /**
-     * Get afk system methods
+     * Get afk system methods. It will only work if the game is started.
      */
     AFKUtil getAFKUtil();
 
@@ -405,6 +405,12 @@ public interface BedWars {
      * @param restoreAdapter your custom adapter.
      */
     void setRestoreAdapter(RestoreAdapter restoreAdapter) throws IllegalAccessError;
+
+    /**
+     * Change the party interface.
+     * You man need to unregister /party command yourself.
+     */
+    void setPartyAdapter(Party partyAdapter);
 
     /**
      * Get nms operations.

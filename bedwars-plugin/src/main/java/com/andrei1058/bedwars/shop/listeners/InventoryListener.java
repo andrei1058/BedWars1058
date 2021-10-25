@@ -112,8 +112,10 @@ public class InventoryListener implements Listener {
             if (e.getHotbarButton() > -1) {
                 ItemStack i = e.getWhoClicked().getInventory().getItem(e.getHotbarButton());
                 if (i != null) {
-                    if (e.getClickedInventory().getType() != e.getWhoClicked().getInventory().getType()) {
-                        if (isUpgradable(i, sc)) e.setCancelled(true);
+                    if (e.getClickedInventory() != e.getWhoClicked().getInventory()) {
+                        if (shouldCancelMovement(i, sc)) {
+                            e.setCancelled(true);
+                        }
                     }
                 }
             }
@@ -123,12 +125,12 @@ public class InventoryListener implements Listener {
         if (e.getCursor() != null) {
             if (e.getCursor().getType() != Material.AIR) {
                 if (e.getClickedInventory() == null) {
-                    if (isUpgradable(e.getCursor(), sc)) {
+                    if (shouldCancelMovement(e.getCursor(), sc)) {
                         e.getWhoClicked().closeInventory();
                         e.setCancelled(true);
                     }
                 } else if (e.getClickedInventory().getType() != e.getWhoClicked().getInventory().getType()) {
-                    if (isUpgradable(e.getCursor(), sc)) {
+                    if (shouldCancelMovement(e.getCursor(), sc)) {
                         e.getWhoClicked().closeInventory();
                         e.setCancelled(true);
                     }
@@ -140,12 +142,12 @@ public class InventoryListener implements Listener {
         if (e.getCurrentItem() != null) {
             if (e.getCurrentItem().getType() != Material.AIR) {
                 if (e.getClickedInventory() == null) {
-                    if (isUpgradable(e.getCursor(), sc)) {
+                    if (shouldCancelMovement(e.getCursor(), sc)) {
                         e.getWhoClicked().closeInventory();
                         e.setCancelled(true);
                     }
                 } else if (e.getClickedInventory().getType() != e.getWhoClicked().getInventory().getType()) {
-                    if (isUpgradable(e.getCurrentItem(), sc)) {
+                    if (shouldCancelMovement(e.getCurrentItem(), sc)) {
                         e.getWhoClicked().closeInventory();
                         e.setCancelled(true);
                     }
@@ -155,7 +157,11 @@ public class InventoryListener implements Listener {
 
         //block moving with shift
         if (e.getAction() == MOVE_TO_OTHER_INVENTORY) {
-            if (isUpgradable(e.getCurrentItem(), sc)) e.setCancelled(true);
+            if (shouldCancelMovement(e.getCurrentItem(), sc)) {
+                if (e.getView().getTopInventory().getHolder() != null && e.getInventory().getHolder() == e.getWhoClicked())
+                    return;
+                e.setCancelled(true);
+            }
         }
     }
 
@@ -167,16 +173,25 @@ public class InventoryListener implements Listener {
     }
 
     /**
-     * Check if upgradable item
+     * Check can move item outside inventory.
+     * Block despawnable, permanent and start items dropping and inventory change.
      */
-    public static boolean isUpgradable(ItemStack i, ShopCache sc) {
+    public static boolean shouldCancelMovement(ItemStack i, ShopCache sc) {
         if (i == null) return false;
         if (sc == null) return false;
+
+        if (nms.isCustomBedWarsItem(i)){
+            if (nms.getCustomData(i).equalsIgnoreCase("DEFAULT_ITEM")){
+                return true;
+            }
+        }
 
         String identifier = nms.getShopUpgradeIdentifier(i);
         if (identifier == null) return false;
         if (identifier.equals("null")) return false;
-        if (sc.getCachedItem(identifier) == null) return false;
-        return sc.getCachedItem(identifier).getCc().getContentTiers().size() > 1;
+        ShopCache.CachedItem cachedItem = sc.getCachedItem(identifier);
+        return cachedItem != null;
+        // the commented line bellow was blocking movement only if tiers amount > 1
+        // return sc.getCachedItem(identifier).getCc().getContentTiers().size() > 1;
     }
 }

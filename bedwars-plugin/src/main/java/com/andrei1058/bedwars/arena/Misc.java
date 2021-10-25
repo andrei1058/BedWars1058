@@ -8,6 +8,7 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.exceptions.InvalidMaterialException;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.api.region.Region;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.stats.PlayerStats;
@@ -352,16 +353,12 @@ public class Misc {
      * Check if location is on a protected region
      */
     public static boolean isBuildProtected(Location l, IArena a) {
+        for (Region region : a.getRegionsList()){
+            if (region.isInRegion(l)){
+                return true;
+            }
+        }
         for (ITeam t : a.getTeams()) {
-            if (t.getSpawn().distance(l) <= a.getConfig().getInt(ConfigPath.ARENA_SPAWN_PROTECTION)) {
-                return true;
-            }
-            if (t.getShop().distance(l) <= a.getConfig().getInt(ConfigPath.ARENA_SHOP_PROTECTION)) {
-                return true;
-            }
-            if (t.getTeamUpgrades().distance(l) <= a.getConfig().getInt(ConfigPath.ARENA_UPGRADES_PROTECTION)) {
-                return true;
-            }
             for (IGenerator o : t.getGenerators()) {
                 if (o.getLocation().distance(l) <= 1) {
                     return true;

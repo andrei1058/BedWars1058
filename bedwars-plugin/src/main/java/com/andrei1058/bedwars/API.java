@@ -333,6 +333,14 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
     }
 
     @Override
+    public void setPartyAdapter(Party partyAdapter) throws IllegalAccessError {
+        if (partyAdapter == null) return;
+        if (partyAdapter.equals(BedWars.getParty())) return;
+        BedWars.setParty(partyAdapter);
+        BedWars.plugin.getLogger().log(Level.WARNING,  "One of your plugins changed the Party adapter to: " + partyAdapter.getClass().getName());
+    }
+
+    @Override
     public VersionSupport getVersionSupport() {
         return BedWars.nms;
     }

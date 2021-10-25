@@ -52,6 +52,13 @@ public class v1_13_R2 extends VersionSupport {
     }
 
     @Override
+    public String getTag(org.bukkit.inventory.ItemStack itemStack, String key) {
+        net.minecraft.server.v1_13_R2.ItemStack i = CraftItemStack.asNMSCopy(itemStack);
+        NBTTagCompound tag = i.getTag();
+        return tag == null ? null : tag.hasKey(key) ? tag.getString(key) : null;
+    }
+
+    @Override
     public void registerVersionListeners() {
         new VersionCommon(this);
     }
@@ -380,17 +387,6 @@ public class v1_13_R2 extends VersionSupport {
         NBTTagCompound tag = itemStack.getTag();
         if (tag == null) return "";
         return tag.getString("BedWars1058");
-    }
-
-    @Override
-    public org.bukkit.inventory.ItemStack setSkullOwner(org.bukkit.inventory.ItemStack i, Player p) {
-        if (i.getType() != org.bukkit.Material.PLAYER_HEAD) return i;
-        if (i.hasItemMeta() && i.getItemMeta() instanceof SkullMeta) {
-            SkullMeta sm = (SkullMeta) i.getItemMeta();
-            sm.setOwningPlayer(p);
-            i.setItemMeta(sm);
-        }
-        return i;
     }
 
     @Override

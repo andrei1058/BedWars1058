@@ -94,9 +94,9 @@ public class TeleporterGUI {
      * Create a player head
      */
     private static ItemStack createHead(Player targetPlayer, Player GUIholder) {
-        ItemStack i = nms.createItemStack(nms.materialPlayerHead().toString(), 1, (short) 3);
-        i = nms.setSkullOwner(i, targetPlayer);
+        ItemStack i = nms.getPlayerHead(targetPlayer, null);
         ItemMeta im = i.getItemMeta();
+        assert im != null;
         im.setDisplayName(getMsg(GUIholder, Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME)
                 .replace("{prefix}", BedWars.getChatSupport().getPrefix(targetPlayer))
                 .replace("{suffix}", BedWars.getChatSupport().getSuffix(targetPlayer))
@@ -117,7 +117,7 @@ public class TeleporterGUI {
     public static void closeGUI(Player p) {
         if (getRefresh().containsKey(p)) {
             refresh.remove(p);
-            if (p.getOpenInventory() != null) p.closeInventory();
+            p.closeInventory();
         }
     }
 }

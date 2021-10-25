@@ -716,6 +716,7 @@ public class BedWarsTeam implements ITeam {
                 for (IGenerator g : getGenerators()) {
                     g.disable();
                 }
+                generators.clear();
             }
         }
         for (BedHolo bh : beds.values()) {

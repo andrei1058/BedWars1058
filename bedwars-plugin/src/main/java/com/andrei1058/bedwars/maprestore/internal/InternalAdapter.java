@@ -27,31 +27,13 @@ import static com.andrei1058.bedwars.BedWars.plugin;
 
 public class InternalAdapter extends RestoreAdapter {
 
-    //private static final String LEGACY_GENERATOR_SETTINGS = "1;0;1";
-    //private static final String V1_13_GENERATOR_SETTINGS = "{\"layers\": [{\"block\": \"air\", \"height\": 1}, {\"block\": \"air\", \"height\": 1}], \"biome\":\"plains\"}";
-    //private static final String V1_16_GENERATOR_SETTINGS = "{\"biome\":\"minecraft:plains\",\"layers\":[{\"block\":\"minecraft:air\",\"height\":1}],\"structures\":{\"structures\":{}}}";
-
     public static File backupFolder = new File(BedWars.plugin.getDataFolder() + "/Cache");
-    /*private final String generator =
-            BedWars.nms.getVersion() > 7 ? V1_16_GENERATOR_SETTINGS :
-            BedWars.nms.getVersion() > 5 ? V1_13_GENERATOR_SETTINGS :
-            LEGACY_GENERATOR_SETTINGS;*/
-
     public InternalAdapter(Plugin plugin) {
         super(plugin);
     }
 
     @Override
     public void onEnable(IArena a) {
-        /*if (nms.getMainLevel().equalsIgnoreCase(a.getWorldName())) {
-            if (!(BedWars.getServerType() == ServerType.BUNGEE && Arena.getGamesBeforeRestart() == 1)) {
-                FileUtil.setMainLevel("ignore_main_level", nms);
-                getOwner().getLogger().log(Level.SEVERE, "Cannot use level-name as arenas. Automatically creating a new void map for level-name.");
-                getOwner().getLogger().log(Level.SEVERE, "The server is restarting...");
-                Bukkit.getServer().spigot().restart();
-                return;
-            }
-        }*/
         Bukkit.getScheduler().runTask(getOwner(), () -> {
             if (Bukkit.getWorld(a.getWorldName()) != null) {
                 Bukkit.getScheduler().runTask(getOwner(), () -> {
@@ -80,11 +62,12 @@ public class InternalAdapter extends RestoreAdapter {
 
                 Bukkit.getScheduler().runTask(plugin, () -> {
                     WorldCreator wc = new WorldCreator(a.getWorldName());
-                    //wc.type(WorldType.FLAT);
-                    //wc.generatorSettings(generator);
                     wc.generateStructures(false);
                     wc.generator(new VoidChunkGenerator());
                     World w = Bukkit.createWorld(wc);
+                    if (w == null){
+                        throw new IllegalStateException("World should be null");
+                    }
                     w.setKeepSpawnInMemory(true);
                     w.setAutoSave(false);
                 });
@@ -124,9 +107,6 @@ public class InternalAdapter extends RestoreAdapter {
     public void onDisable(IArena a) {
         Bukkit.getScheduler().runTask(getOwner(), () -> {
             Bukkit.unloadWorld(a.getWorldName(), false);
-            /*if (!a.getWorldName().equals(a.getArenaName()) && new File(backupFolder, a.getArenaName()+".zip").exists()) {
-                Bukkit.getScheduler().runTaskAsynchronously(getOwner(), () -> deleteWorld(a.getWorldName()));
-            }*/
         });
     }
 
@@ -143,8 +123,6 @@ public class InternalAdapter extends RestoreAdapter {
                 }
             }
             WorldCreator wc = new WorldCreator(s.getWorldName());
-            //wc.type(WorldType.FLAT);
-            //wc.generatorSettings(generator);
             wc.generator(new VoidChunkGenerator());
             wc.generateStructures(false);
             Bukkit.getScheduler().runTask(getOwner(), () -> {
@@ -156,9 +134,6 @@ public class InternalAdapter extends RestoreAdapter {
                         World w = Bukkit.createWorld(wc);
                         w.setKeepSpawnInMemory(true);
                     } else {
-                        //s.getPlayer().sendMessage(ChatColor.RED + "Could not find any map called " + s.getWorldName());
-                        //s.close();
-                        //return;
                         try {
                             s.getPlayer().sendMessage(ChatColor.GREEN + "Creating a new void map: " + s.getWorldName());
                             World w = Bukkit.createWorld(wc);

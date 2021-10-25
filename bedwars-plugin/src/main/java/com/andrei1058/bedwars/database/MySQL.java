@@ -2,11 +2,17 @@ package com.andrei1058.bedwars.database;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.shop.quickbuy.QuickBuyElement;
 import com.andrei1058.bedwars.stats.PlayerStats;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.apache.commons.lang3.StringUtils;
+import org.bukkit.Bukkit;
 
 import java.sql.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -16,12 +22,15 @@ import static com.andrei1058.bedwars.BedWars.config;
 public class MySQL implements Database {
 
     private HikariDataSource dataSource;
-    private String host, database, user, pass;
-    private int port;
-    private boolean ssl;
-    private boolean certificateVerification;
-    private int poolSize;
-    private int maxLifetime;
+    private final String host;
+    private final String database;
+    private final String user;
+    private final String pass;
+    private final int port;
+    private final boolean ssl;
+    private final boolean certificateVerification;
+    private final int poolSize;
+    private final int maxLifetime;
 
     /**
      * Create new MySQL connection.
@@ -49,7 +58,7 @@ public class MySQL implements Database {
         hikariConfig.setPoolName("BedWars1058MySQLPool");
 
         hikariConfig.setMaximumPoolSize(poolSize);
-        hikariConfig.setMaxLifetime(maxLifetime * 1000);
+        hikariConfig.setMaxLifetime(maxLifetime * 1000L);
 
         hikariConfig.setJdbcUrl("jdbc:mysql://" + host + ":" + port + "/" + database);
 
@@ -114,7 +123,7 @@ public class MySQL implements Database {
                 e.printStackTrace();
             }
 
-            sql = "CREATE TABLE IF NOT EXISTS quick_buy (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, uuid VARCHAR(200), " +
+            sql = "CREATE TABLE IF NOT EXISTS quick_buy_2 (uuid VARCHAR(36) PRIMARY KEY, " +
                     "slot_19 VARCHAR(200), slot_20 VARCHAR(200), slot_21 VARCHAR(200), slot_22 VARCHAR(200), slot_23 VARCHAR(200), slot_24 VARCHAR(200), slot_25 VARCHAR(200)," +
                     "slot_28 VARCHAR(200), slot_29 VARCHAR(200), slot_30 VARCHAR(200), slot_31 VARCHAR(200), slot_32 VARCHAR(200), slot_33 VARCHAR(200), slot_34 VARCHAR(200)," +
                     "slot_37 VARCHAR(200), slot_38 VARCHAR(200), slot_39 VARCHAR(200), slot_40 VARCHAR(200), slot_41 VARCHAR(200), slot_42 VARCHAR(200), slot_43 VARCHAR(200));";
@@ -229,20 +238,20 @@ public class MySQL implements Database {
 
     @Override
     public void setQuickBuySlot(UUID uuid, String shopPath, int slot) {
-        String sql = "SELECT id FROM quick_buy WHERE uuid = ?;";
+        String sql = "SELECT id FROM quick_buy_2 WHERE uuid = ?;";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, uuid.toString());
             try (ResultSet result = statement.executeQuery()) {
                 if (!result.next()) {
-                    sql = "INSERT INTO quick_buy VALUES(0, ?, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');";
+                    sql = "INSERT INTO quick_buy_2 VALUES(0, ?, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');";
                     try (PreparedStatement statement2 = connection.prepareStatement(sql)) {
                         statement2.setString(1, uuid.toString());
                         statement2.executeUpdate();
                     }
                 }
                 BedWars.debug("UPDATE SET SLOT " + slot + " identifier " + shopPath);
-                sql = "UPDATE quick_buy SET slot_" + slot + " = ? WHERE uuid = ?;";
+                sql = "UPDATE quick_buy_2 SET slot_" + slot + " = ? WHERE uuid = ?;";
                 try (PreparedStatement statement2 = connection.prepareStatement(sql)) {
                     statement2.setString(1, shopPath);
                     statement2.setString(2, uuid.toString());
@@ -257,7 +266,7 @@ public class MySQL implements Database {
 
     @Override
     public String getQuickBuySlots(UUID uuid, int slot) {
-        String sql = "SELECT slot_" + slot + " FROM quick_buy WHERE uuid = ?;";
+        String sql = "SELECT slot_" + slot + " FROM quick_buy_2 WHERE uuid = ?;";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, uuid.toString());
@@ -273,8 +282,32 @@ public class MySQL implements Database {
     }
 
     @Override
+    public HashMap<Integer, String> getQuickBuySlots(UUID uuid, int[] slot) {
+        HashMap<Integer, String> results = new HashMap<>();
+        if (slot.length == 0) {
+            return results;
+        }
+        try (PreparedStatement ps = dataSource.getConnection().prepareStatement("SELECT * FROM quick_buy_2 WHERE uuid = ?;")) {
+            ps.setString(1, uuid.toString());
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    for (int i : slot) {
+                        String id = rs.getString("slot_" + i);
+                        if (null != id && !id.isEmpty()) {
+                            results.put(i, id);
+                        }
+                    }
+                }
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return results;
+    }
+
+    @Override
     public boolean hasQuickBuy(UUID uuid) {
-        String sql = "SELECT id FROM quick_buy WHERE uuid = ?;";
+        String sql = "SELECT uuid FROM quick_buy_2 WHERE uuid = ?;";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, uuid.toString());
@@ -413,5 +446,55 @@ public class MySQL implements Database {
             e.printStackTrace();
         }
         return Language.getDefaultLanguage().getIso();
+    }
+
+    @Override
+    public void pushQuickBuyChanges(HashMap<Integer, String> updateSlots, UUID uuid, List<QuickBuyElement> elements) {
+        if (updateSlots.isEmpty()) return;
+        boolean hasQuick;
+        if (!(hasQuick = hasQuickBuy(uuid))) {
+            for (QuickBuyElement element : elements) {
+                if (!updateSlots.containsKey(element.getSlot())) {
+                    updateSlots.put(element.getSlot(), element.getCategoryContent().getIdentifier());
+                }
+            }
+        }
+        StringBuilder columns = new StringBuilder();
+        StringBuilder values = new StringBuilder();
+        int i = 0;
+        if (hasQuick) {
+            for (Map.Entry<Integer, String> entry : updateSlots.entrySet()) {
+                i++;
+                columns.append("slot_").append(entry.getKey()).append("=?");
+                if (i != updateSlots.size()) {
+                    columns.append(", ");
+                }
+            }
+        } else {
+            for (Map.Entry<Integer, String> entry : updateSlots.entrySet()) {
+                i++;
+                columns.append("slot_").append(entry.getKey());
+                values.append("?");
+                if (i != updateSlots.size()) {
+                    columns.append(", ");
+                    values.append(", ");
+                }
+            }
+        }
+        String sql = hasQuick ? "UPDATE quick_buy_2 SET " + columns + " WHERE uuid=?;" : "INSERT INTO quick_buy_2 (uuid," + columns + ") VALUES (?," + values + ");";
+        try (Connection con = dataSource.getConnection()) {
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                int index = hasQuick ? 0 : 1;
+                for (int key : updateSlots.keySet()) {
+                    index++;
+                    String identifier = updateSlots.get(key);
+                    ps.setString(index, identifier.trim().isEmpty() ? null : identifier);
+                }
+                ps.setString(hasQuick ? updateSlots.size()+1 : 1, uuid.toString());
+                ps.execute();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 }

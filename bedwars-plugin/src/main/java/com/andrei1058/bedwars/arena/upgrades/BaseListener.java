@@ -61,6 +61,7 @@ public class BaseListener implements Listener {
     private static void checkEvents(Player p, IArena a) {
         if (p == null || a == null) return;
         if (a.isSpectator(p)) return;
+        if (a.isReSpawning(p)) return;
         boolean notOnBase = true;
         for (ITeam bwt : a.getTeams()) {
             /* BaseEnterEvent */
