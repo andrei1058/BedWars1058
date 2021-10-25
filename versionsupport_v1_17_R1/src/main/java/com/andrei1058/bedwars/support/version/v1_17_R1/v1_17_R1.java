@@ -18,7 +18,7 @@
  * Contact e-mail: andrew.dascalu@gmail.com
  */
 
-package com.andrei1058.bedwars.support.version.v1_16_R3;
+package com.andrei1058.bedwars.support.version.v1_17_R1;
 
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.shop.ShopHolo;
@@ -33,21 +33,43 @@ import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.server.v1_16_R3.*;
+import com.mojang.math.Vector3fa;
+import net.minecraft.SharedConstants;
+import net.minecraft.core.particles.ParticleParamRedstone;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.chat.ChatMessageType;
+import net.minecraft.network.chat.IChatBaseComponent;
+import net.minecraft.network.protocol.game.*;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.dedicated.DedicatedServer;
+import net.minecraft.server.level.EntityPlayer;
+import net.minecraft.util.datafix.DataConverterRegistry;
+import net.minecraft.util.datafix.fixes.DataConverterTypes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityLiving;
+import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.EnumCreatureType;
+import net.minecraft.world.entity.EnumItemSlot;
+import net.minecraft.world.entity.item.EntityTNTPrimed;
+import net.minecraft.world.entity.projectile.EntityFireball;
+import net.minecraft.world.entity.projectile.IProjectile;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockBase;
 import org.bukkit.Color;
 import org.bukkit.Location;
-import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.type.Bed;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.command.Command;
-import org.bukkit.craftbukkit.v1_16_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftFireball;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftTNTPrimed;
-import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftFireball;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftTNTPrimed;
+import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.*;
 import org.bukkit.event.inventory.InventoryEvent;
@@ -66,11 +88,11 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 @SuppressWarnings("unused")
-public class v1_16_R3 extends VersionSupport {
+public class v1_17_R1 extends VersionSupport {
 
     private static final UUID chatUUID = new UUID(0L, 0L);
 
-    public v1_16_R3(Plugin plugin, String name) {
+    public v1_17_R1(Plugin plugin, String name) {
         super(plugin, name);
         loadDefaultEffects();
     }
@@ -87,7 +109,7 @@ public class v1_16_R3 extends VersionSupport {
 
     @Override
     public String getTag(org.bukkit.inventory.ItemStack itemStack, String key) {
-        net.minecraft.server.v1_16_R3.ItemStack i = CraftItemStack.asNMSCopy(itemStack);
+        ItemStack i = CraftItemStack.asNMSCopy(itemStack);
         NBTTagCompound tag = i.getTag();
         return tag == null ? null : tag.hasKey(key) ? tag.getString(key) : null;
     }
@@ -112,8 +134,8 @@ public class v1_16_R3 extends VersionSupport {
     public void playAction(Player p, String text) {
         CraftPlayer cPlayer = (CraftPlayer) p;
         IChatBaseComponent cbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + text + "\"}");
-        PacketPlayOutChat ppoc = new PacketPlayOutChat(cbc, ChatMessageType.GAME_INFO, chatUUID);
-        cPlayer.getHandle().playerConnection.sendPacket(ppoc);
+        PacketPlayOutChat ppoc = new PacketPlayOutChat(cbc, ChatMessageType.c, chatUUID);
+        cPlayer.getHandle().b.sendPacket(ppoc);
     }
 
     @Override
@@ -129,7 +151,7 @@ public class v1_16_R3 extends VersionSupport {
     @Override
     public void hideEntity(Entity e, Player p) {
         PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(e.getEntityId());
-        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+        ((CraftPlayer) p).getHandle().b.sendPacket(packet);
 
     }
 
@@ -148,6 +170,7 @@ public class v1_16_R3 extends VersionSupport {
         EntityLiving nmsEntityLiving = (((CraftLivingEntity) owner).getHandle());
         EntityTNTPrimed nmsTNT = (((CraftTNTPrimed) tnt).getHandle());
         try {
+            //noinspection JavaReflectionMemberAccess
             Field sourceField = EntityTNTPrimed.class.getDeclaredField("source");
             sourceField.setAccessible(true);
             sourceField.set(nmsTNT, nmsEntityLiving);
@@ -193,20 +216,22 @@ public class v1_16_R3 extends VersionSupport {
     @Override
     public boolean isProjectile(org.bukkit.inventory.ItemStack itemStack) {
         if (CraftItemStack.asNMSCopy(itemStack) == null) return false;
-        if (CraftItemStack.asNMSCopy(itemStack).A() == null) return false;
-        return CraftItemStack.asNMSCopy(itemStack).A() instanceof IProjectile;
+        if (CraftItemStack.asNMSCopy(itemStack).E() == null) return false;
+        return CraftItemStack.asNMSCopy(itemStack).E() instanceof IProjectile;
     }
 
     @SuppressWarnings({"unchecked"})
     @Override
     public void registerEntities() {
-        Map<String, Type<?>> types = (Map<String, Type<?>>) DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(SharedConstants.getGameVersion().getWorldVersion())).findChoiceType(DataConverterTypes.ENTITY).types();
+        Map<String, Type<?>> types = (Map<String, Type<?>>) DataConverterRegistry.a().getSchema(
+                DataFixUtils.makeKey(SharedConstants.getGameVersion().getWorldVersion())
+        ).findChoiceType(DataConverterTypes.q).types();
 
         types.put("minecraft:bwsilverfish", types.get("minecraft:silverfish"));
-        EntityTypes.Builder.a(Silverfish::new, EnumCreatureType.MONSTER).a("bwsilverfish");
+        EntityTypes.Builder.a(Silverfish::new, EnumCreatureType.a).a("bwsilverfish");
 
         types.put("minecraft:bwgolem", types.get("minecraft:iron_golem"));
-        EntityTypes.Builder.a(IGolem::new, EnumCreatureType.AMBIENT).a("bwgolem");
+        EntityTypes.Builder.a(IGolem::new, EnumCreatureType.a).a("bwgolem");
     }
 
     @Override
@@ -260,27 +285,27 @@ public class v1_16_R3 extends VersionSupport {
 
     @Override
     public void voidKill(Player p) {
-        ((CraftPlayer) p).getHandle().damageEntity(DamageSource.OUT_OF_WORLD, 1000);
+        ((CraftPlayer) p).getHandle().damageEntity(DamageSource.m, 1000);
     }
 
     @Override
     public void hideArmor(Player victim, Player receiver) {
         List<Pair<EnumItemSlot, ItemStack>> items = new ArrayList<>();
         List<Pair<EnumItemSlot, ItemStack>> hands = new ArrayList<>();
-        hands.add(new Pair<>(EnumItemSlot.MAINHAND, new ItemStack(net.minecraft.server.v1_16_R3.Item.getById(0))));
-        hands.add(new Pair<>(EnumItemSlot.OFFHAND, new ItemStack(net.minecraft.server.v1_16_R3.Item.getById(0))));
+        hands.add(new Pair<>(EnumItemSlot.a, new ItemStack(Item.getById(0))));
+        hands.add(new Pair<>(EnumItemSlot.b, new ItemStack(Item.getById(0))));
 
-        items.add(new Pair<>(EnumItemSlot.HEAD, new ItemStack(net.minecraft.server.v1_16_R3.Item.getById(0))));
-        items.add(new Pair<>(EnumItemSlot.CHEST, new ItemStack(net.minecraft.server.v1_16_R3.Item.getById(0))));
-        items.add(new Pair<>(EnumItemSlot.LEGS, new ItemStack(net.minecraft.server.v1_16_R3.Item.getById(0))));
-        items.add(new Pair<>(EnumItemSlot.FEET, new ItemStack(net.minecraft.server.v1_16_R3.Item.getById(0))));
+        items.add(new Pair<>(EnumItemSlot.f, new ItemStack(Item.getById(0))));
+        items.add(new Pair<>(EnumItemSlot.e, new ItemStack(Item.getById(0))));
+        items.add(new Pair<>(EnumItemSlot.d, new ItemStack(Item.getById(0))));
+        items.add(new Pair<>(EnumItemSlot.c, new ItemStack(Item.getById(0))));
         PacketPlayOutEntityEquipment packet1 = new PacketPlayOutEntityEquipment(victim.getEntityId(), items);
         PacketPlayOutEntityEquipment packet2 = new PacketPlayOutEntityEquipment(victim.getEntityId(), hands);
         EntityPlayer pc = ((CraftPlayer) receiver).getHandle();
         if (victim != receiver) {
-            pc.playerConnection.sendPacket(packet2);
+            pc.b.sendPacket(packet2);
         }
-        pc.playerConnection.sendPacket(packet1);
+        pc.b.sendPacket(packet1);
     }
 
     @Override
@@ -288,20 +313,20 @@ public class v1_16_R3 extends VersionSupport {
         List<Pair<EnumItemSlot, ItemStack>> items = new ArrayList<>();
         List<Pair<EnumItemSlot, ItemStack>> hands = new ArrayList<>();
 
-        hands.add(new Pair<>(EnumItemSlot.MAINHAND, CraftItemStack.asNMSCopy(victim.getInventory().getItemInMainHand())));
-        hands.add(new Pair<>(EnumItemSlot.OFFHAND, CraftItemStack.asNMSCopy(victim.getInventory().getItemInOffHand())));
+        hands.add(new Pair<>(EnumItemSlot.a, CraftItemStack.asNMSCopy(victim.getInventory().getItemInMainHand())));
+        hands.add(new Pair<>(EnumItemSlot.b, CraftItemStack.asNMSCopy(victim.getInventory().getItemInOffHand())));
 
-        items.add(new Pair<>(EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(victim.getInventory().getHelmet())));
-        items.add(new Pair<>(EnumItemSlot.CHEST, CraftItemStack.asNMSCopy(victim.getInventory().getChestplate())));
-        items.add(new Pair<>(EnumItemSlot.LEGS, CraftItemStack.asNMSCopy(victim.getInventory().getLeggings())));
-        items.add(new Pair<>(EnumItemSlot.FEET, CraftItemStack.asNMSCopy(victim.getInventory().getBoots())));
+        items.add(new Pair<>(EnumItemSlot.f, CraftItemStack.asNMSCopy(victim.getInventory().getHelmet())));
+        items.add(new Pair<>(EnumItemSlot.e, CraftItemStack.asNMSCopy(victim.getInventory().getChestplate())));
+        items.add(new Pair<>(EnumItemSlot.d, CraftItemStack.asNMSCopy(victim.getInventory().getLeggings())));
+        items.add(new Pair<>(EnumItemSlot.c, CraftItemStack.asNMSCopy(victim.getInventory().getBoots())));
         PacketPlayOutEntityEquipment packet1 = new PacketPlayOutEntityEquipment(victim.getEntityId(), items);
         PacketPlayOutEntityEquipment packet2 = new PacketPlayOutEntityEquipment(victim.getEntityId(), hands);
         EntityPlayer pc = ((CraftPlayer) receiver).getHandle();
         if (victim != receiver) {
-            pc.playerConnection.sendPacket(packet2);
+            pc.b.sendPacket(packet2);
         }
-        pc.playerConnection.sendPacket(packet1);
+        pc.b.sendPacket(packet1);
     }
 
     @Override
@@ -330,10 +355,11 @@ public class v1_16_R3 extends VersionSupport {
     @Override
     public void registerTntWhitelist() {
         try {
-            Field field = net.minecraft.server.v1_16_R3.BlockBase.class.getDeclaredField("durability");
+            //noinspection JavaReflectionMemberAccess
+            Field field = BlockBase.class.getDeclaredField("durability");
             field.setAccessible(true);
-            field.set(Blocks.END_STONE, 12f);
-            field.set(Blocks.GLASS, 300f);
+            field.set(Blocks.eq, 12f);
+            field.set(Blocks.au, 300f);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -372,7 +398,7 @@ public class v1_16_R3 extends VersionSupport {
 
     @Override
     public org.bukkit.inventory.ItemStack setTag(org.bukkit.inventory.ItemStack itemStack, String key, String value) {
-        net.minecraft.server.v1_16_R3.ItemStack is = CraftItemStack.asNMSCopy(itemStack);
+        ItemStack is = CraftItemStack.asNMSCopy(itemStack);
         NBTTagCompound tag = is.getTag();
         if (tag == null) {
             tag = new NBTTagCompound();
@@ -541,15 +567,15 @@ public class v1_16_R3 extends VersionSupport {
         EntityPlayer entityPlayer = ((CraftPlayer) respawned).getHandle();
         PacketPlayOutNamedEntitySpawn show = new PacketPlayOutNamedEntitySpawn(entityPlayer);
         PacketPlayOutEntityVelocity playerVelocity = new PacketPlayOutEntityVelocity(entityPlayer);
-        PacketPlayOutEntityHeadRotation head = new PacketPlayOutEntityHeadRotation(entityPlayer, getCompressedAngle(entityPlayer.yaw));
+        PacketPlayOutEntityHeadRotation head = new PacketPlayOutEntityHeadRotation(entityPlayer, getCompressedAngle(entityPlayer.getBukkitYaw()));
 
         List<Pair<EnumItemSlot, ItemStack>> list = new ArrayList<>();
-        list.add(new Pair<>(EnumItemSlot.MAINHAND, entityPlayer.getItemInMainHand()));
-        list.add(new Pair<>(EnumItemSlot.OFFHAND, entityPlayer.getItemInOffHand()));
-        list.add(new Pair<>(EnumItemSlot.HEAD, entityPlayer.inventory.getArmorContents().get(3)));
-        list.add(new Pair<>(EnumItemSlot.CHEST, entityPlayer.inventory.getArmorContents().get(2)));
-        list.add(new Pair<>(EnumItemSlot.LEGS, entityPlayer.inventory.getArmorContents().get(1)));
-        list.add(new Pair<>(EnumItemSlot.FEET, entityPlayer.inventory.getArmorContents().get(0)));
+        list.add(new Pair<>(EnumItemSlot.a, entityPlayer.getItemInMainHand()));
+        list.add(new Pair<>(EnumItemSlot.b, entityPlayer.getItemInOffHand()));
+        list.add(new Pair<>(EnumItemSlot.f, entityPlayer.getInventory().getArmorContents().get(3)));
+        list.add(new Pair<>(EnumItemSlot.e, entityPlayer.getInventory().getArmorContents().get(2)));
+        list.add(new Pair<>(EnumItemSlot.d, entityPlayer.getInventory().getArmorContents().get(1)));
+        list.add(new Pair<>(EnumItemSlot.c, entityPlayer.getInventory().getArmorContents().get(0)));
 
 
         for (Player p : arena.getPlayers()) {
@@ -563,10 +589,10 @@ public class v1_16_R3 extends VersionSupport {
                 if (respawned.getLocation().distance(p.getLocation()) <= arena.getRenderDistance()) {
 
                     // send respawned player to regular players
-                    boundTo.playerConnection.sendPacket(show);
-                    boundTo.playerConnection.sendPacket(head);
-                    boundTo.playerConnection.sendPacket(playerVelocity);
-                    boundTo.playerConnection.sendPacket(new PacketPlayOutEntityEquipment(entityPlayer.getId(), list));
+                    boundTo.b.sendPacket(show);
+                    boundTo.b.sendPacket(head);
+                    boundTo.b.sendPacket(playerVelocity);
+                    boundTo.b.sendPacket(new PacketPlayOutEntityEquipment(entityPlayer.getId(), list));
 
                     // send nearby players to respawned player
                     // if the player has invisibility hide armor
@@ -575,10 +601,10 @@ public class v1_16_R3 extends VersionSupport {
                     } else {
                         PacketPlayOutNamedEntitySpawn show2 = new PacketPlayOutNamedEntitySpawn(boundTo);
                         PacketPlayOutEntityVelocity playerVelocity2 = new PacketPlayOutEntityVelocity(boundTo);
-                        PacketPlayOutEntityHeadRotation head2 = new PacketPlayOutEntityHeadRotation(boundTo, getCompressedAngle(boundTo.yaw));
-                        entityPlayer.playerConnection.sendPacket(show2);
-                        entityPlayer.playerConnection.sendPacket(playerVelocity2);
-                        entityPlayer.playerConnection.sendPacket(head2);
+                        PacketPlayOutEntityHeadRotation head2 = new PacketPlayOutEntityHeadRotation(boundTo, getCompressedAngle(boundTo.getBukkitYaw()));
+                        entityPlayer.b.sendPacket(show2);
+                        entityPlayer.b.sendPacket(playerVelocity2);
+                        entityPlayer.b.sendPacket(head2);
                         showArmor(p, respawned);
                     }
                 }
@@ -594,10 +620,10 @@ public class v1_16_R3 extends VersionSupport {
                 if (respawned.getLocation().distance(spectator.getLocation()) <= arena.getRenderDistance()) {
 
                     // send respawned player to spectator
-                    boundTo.playerConnection.sendPacket(show);
-                    boundTo.playerConnection.sendPacket(playerVelocity);
-                    boundTo.playerConnection.sendPacket(new PacketPlayOutEntityEquipment(entityPlayer.getId(), list));
-                    boundTo.playerConnection.sendPacket(new PacketPlayOutEntityHeadRotation(entityPlayer, getCompressedAngle(entityPlayer.yaw)));
+                    boundTo.b.sendPacket(show);
+                    boundTo.b.sendPacket(playerVelocity);
+                    boundTo.b.sendPacket(new PacketPlayOutEntityEquipment(entityPlayer.getId(), list));
+                    boundTo.b.sendPacket(new PacketPlayOutEntityHeadRotation(entityPlayer, getCompressedAngle(entityPlayer.getBukkitYaw())));
                 }
             }
         }
@@ -616,7 +642,7 @@ public class v1_16_R3 extends VersionSupport {
     @Override
     public String getMainLevel() {
         //noinspection deprecation
-        return ((DedicatedServer) MinecraftServer.getServer()).getDedicatedServerProperties().levelName;
+        return ((DedicatedServer) MinecraftServer.getServer()).getWorld();
     }
 
     @Override
@@ -644,9 +670,9 @@ public class v1_16_R3 extends VersionSupport {
     @Override
     public Fireball setFireballDirection(Fireball fireball, Vector vector) {
         EntityFireball fb = ((CraftFireball) fireball).getHandle();
-        fb.dirX = vector.getX() * 0.1D;
-        fb.dirY = vector.getY() * 0.1D;
-        fb.dirZ = vector.getZ() * 0.1D;
+        fb.b = vector.getX() * 0.1D;
+        fb.c = vector.getY() * 0.1D;
+        fb.d = vector.getZ() * 0.1D;
         return (Fireball) fb.getBukkitEntity();
     }
 
@@ -654,11 +680,11 @@ public class v1_16_R3 extends VersionSupport {
     public void playRedStoneDot(Player player) {
         Color color = Color.RED;
         PacketPlayOutWorldParticles particlePacket = new PacketPlayOutWorldParticles(
-                new ParticleParamRedstone((float) color.getRed(), (float) color.getGreen(), (float) color.getBlue(), (float) 1),
+                new ParticleParamRedstone(new Vector3fa((float) color.getRed(), (float) color.getGreen(), (float) color.getBlue()), (float) 1),
                 true, player.getLocation().getX(), player.getLocation().getY() + 2.2, player.getLocation().getZ(), 0, 0, 0, 0, 1);
         for (Player inWorld : player.getWorld().getPlayers()) {
             if (inWorld.equals(player)) continue;
-            ((CraftPlayer) inWorld).getHandle().playerConnection.sendPacket(particlePacket);
+            ((CraftPlayer) inWorld).getHandle().b.sendPacket(particlePacket);
         }
     }
 }

@@ -113,6 +113,7 @@
         <module>versionsupport_1_16_R1</module>
         <module>versionsupport_1_16_R2</module>
         <module>versionsupport_v1_16_R3</module>
+        <module>versionsupport_v1_17_R1</module>
     </modules>
 
     <distributionManagement>
