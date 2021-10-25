@@ -37,6 +37,8 @@ You can contact us, so we can add yours here :)
 - [Web stats - Display player stats on a web page](https://www.spigotmc.org/resources/55523/) - by MrDuckBoy_Xx
 - [Pop-up Towers](https://www.spigotmc.org/resources/83661/) - by KimoVoidDSGN
 - [Generator Split](https://www.spigotmc.org/resources/83883/) - by KimoVoidDSGN
+- [Discord Stats](https://www.mc-market.org/resources/20403/) - by Zorino
+
 
 # Main features
 
