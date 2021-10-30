@@ -64,27 +64,27 @@ considered by the maintainers:
 # Additional Notes
 
 ### Issue and Pull Request Labels
-| Label name | `BedWars1058` 🔍 | Description |  
-| --- | --- | --- |
-| `enhancement` | [search][search-BedWars1058-repo-label-enhancement] | Feature requests. |
-| `bug` | [search][search-BedWars1058-repo-label-bug] | Confirmed bugs or reports that are very likely to be bugs. |
-| `question` | [search][search-BedWars1058-repo-label-question] | Questions more than bug reports or feature requests (e.g. how do I do X). |
-| `feedback` | [search][search-BedWars1058-repo-label-feedback] | General feedback more than bug reports or feature requests. |
-| `help-wanted` | [search][search-BedWars1058-repo-label-help-wanted] | The team would appreciate help from the community in resolving these issues. |
-| `beginner` | [search][search-BedWars1058-repo-label-beginner] | Less complex issues which would be good first issues to work on for users who want to contribute. |
-| `more-information-needed` | [search][search-BedWars1058-repo-label-more-information-needed] | More information needs to be collected about these problems or feature requests (e.g. steps to reproduce). |
-| `needs-reproduction` | [search][search-BedWars1058-repo-label-needs-reproduction] | Likely bugs, but haven't been reliably reproduced. |
-| `duplicate` | [search][search-BedWars1058-repo-label-duplicate] | Issues which are duplicates of other issues, i.e. they have been reported before. |
-| `wontfix` | [search][search-BedWars1058-repo-label-wontfix] | The team has decided not to fix these issues for now, either because they're working as intended or for some other reason. |
-| `invalid` | [search][search-BedWars1058-repo-label-invalid] | Issues which aren't valid (e.g. user errors). |
+| Label name | Description |  
+| ---  | --- |
+| `enhancement` | Feature requests. |
+| `bug` | Confirmed bugs or reports that are very likely to be bugs. |
+| `question` | Questions more than bug reports or feature requests (e.g. how do I do X). |
+| `feedback` | General feedback more than bug reports or feature requests. |
+| `help-wanted` | The team would appreciate help from the community in resolving these issues. |
+| `beginner` | Less complex issues which would be good first issues to work on for users who want to contribute. |
+| `more-information-needed` | More information needs to be collected about these problems or feature requests (e.g. steps to reproduce). |
+| `needs-reproduction` | Likely bugs, but haven't been reliably reproduced. |
+| `duplicate` | Issues which are duplicates of other issues, i.e. they have been reported before. |
+| `wontfix` | The team has decided not to fix these issues for now, either because they're working as intended or for some other reason. |
+| `invalid` | Issues which aren't valid (e.g. user errors). |
 
 ### Pull Request Labels
 
 
-| Label name | `BedWars1058` 🔍 | Description
-| --- | ---  | --- |
-| `work-in-progress` | [search][search-BedWars1058-repo-label-work-in-progress] | Pull requests which are still being worked on, more changes will follow. |
-| `needs-review` | [search][search-BedWars1058-repo-label-needs-review] | Pull requests which need code review, and approval from maintainers or Atom core team. |
-| `under-review` | [search][search-BedWars1058-repo-label-under-review] | Pull requests being reviewed by maintainers or Atom core team. |
-| `requires-changes` | [search][search-BedWars1058-repo-label-requires-changes] | Pull requests which need to be updated based on review comments and then reviewed again. |
-| `needs-testing` | [search][search-BedWars1058-repo-label-needs-testing] | Pull requests which need manual testing. |
+| Label name | Description
+| --- | --- |
+| `work-in-progress` | Pull requests which are still being worked on, more changes will follow. |
+| `needs-review` | Pull requests which need code review, and approval from maintainers or Atom core team. |
+| `under-review` | Pull requests being reviewed by maintainers or Atom core team. |
+| `requires-changes` | Pull requests which need to be updated based on review comments and then reviewed again. |
+| `needs-testing` | Pull requests which need manual testing. |
