@@ -177,6 +177,7 @@ public class OreGenerator implements IGenerator {
                 return;
             } else {
                 dropItem(location);
+                return;
             }
         }
         lastSpawn--;
