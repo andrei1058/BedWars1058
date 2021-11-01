@@ -75,6 +75,7 @@ import com.andrei1058.spigotutils.SpigotUpdater;
 import com.andrei1058.vipfeatures.api.IVipFeatures;
 import com.andrei1058.vipfeatures.api.MiniGameAlreadyRegistered;
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -471,14 +472,14 @@ public class BedWars extends JavaPlugin {
 
         // bStats metrics
         Metrics metrics = new Metrics(this, 1885);
-        metrics.addCustomChart(new Metrics.SimplePie("server_type", () -> getServerType().toString()));
-        metrics.addCustomChart(new Metrics.SimplePie("default_language", () -> Language.getDefaultLanguage().getIso()));
-        metrics.addCustomChart(new Metrics.SimplePie("auto_scale", () -> String.valueOf(autoscale)));
-        metrics.addCustomChart(new Metrics.SimplePie("party_adapter", () -> party.getClass().getName()));
-        metrics.addCustomChart(new Metrics.SimplePie("chat_adapter", () -> chat.getClass().getName()));
-        metrics.addCustomChart(new Metrics.SimplePie("level_adapter", () -> getLevelSupport().getClass().getName()));
-        metrics.addCustomChart(new Metrics.SimplePie("db_adapter", () -> getRemoteDatabase().getClass().getName()));
-        metrics.addCustomChart(new Metrics.SimplePie("map_adapter", () -> String.valueOf(getAPI().getRestoreAdapter().getOwner().getName())));
+        metrics.addCustomChart(new SimplePie("server_type", () -> getServerType().toString()));
+        metrics.addCustomChart(new SimplePie("default_language", () -> Language.getDefaultLanguage().getIso()));
+        metrics.addCustomChart(new SimplePie("auto_scale", () -> String.valueOf(autoscale)));
+        metrics.addCustomChart(new SimplePie("party_adapter", () -> party.getClass().getName()));
+        metrics.addCustomChart(new SimplePie("chat_adapter", () -> chat.getClass().getName()));
+        metrics.addCustomChart(new SimplePie("level_adapter", () -> getLevelSupport().getClass().getName()));
+        metrics.addCustomChart(new SimplePie("db_adapter", () -> getRemoteDatabase().getClass().getName()));
+        metrics.addCustomChart(new SimplePie("map_adapter", () -> String.valueOf(getAPI().getRestoreAdapter().getOwner().getName())));
 
         if (Bukkit.getPluginManager().getPlugin("VipFeatures") != null) {
             try {
