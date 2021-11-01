@@ -384,6 +384,7 @@ public class BedWars extends JavaPlugin {
             remoteDatabase.init();
         } else {
             remoteDatabase = new SQLite();
+            remoteDatabase.init();
         }
 
         /* Citizens support */
@@ -569,7 +570,6 @@ public class BedWars extends JavaPlugin {
             }
         } catch (Exception ignored) {
         }
-        if (remoteDatabase != null) remoteDatabase.close();
     }
 
     private void loadArenasAndSigns() {
