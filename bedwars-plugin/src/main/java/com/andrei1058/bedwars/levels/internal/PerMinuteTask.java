@@ -26,6 +26,7 @@ import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.configuration.LevelsConfig;
+import com.andrei1058.bedwars.configuration.MoneyConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
@@ -33,6 +34,8 @@ import org.bukkit.scheduler.BukkitTask;
 public class PerMinuteTask {
 
     private final int xp = LevelsConfig.levels.getInt("xp-rewards.per-minute");
+    private final int money = MoneyConfig.money.getInt("money-rewards.per-minute");
+
     private BukkitTask task;
 
     /**
@@ -44,8 +47,12 @@ public class PerMinuteTask {
         }
         task = Bukkit.getScheduler().runTaskTimer(BedWars.plugin, () -> {
             for (Player p : arena.getPlayers()) {
-                PlayerLevel.getLevelByPlayer(p.getUniqueId()).addXp(xp, PlayerXpGainEvent.XpSource.PER_MINUTE);
-                p.sendMessage(Language.getMsg(p, Messages.XP_REWARD_PER_MINUTE).replace("{xp}", String.valueOf(xp)));
+                PlayerLevel.getLevelByPlayer ( p.getUniqueId () ).addXp ( xp, PlayerXpGainEvent.XpSource.PER_MINUTE );
+                p.sendMessage ( Language.getMsg ( p, Messages.XP_REWARD_PER_MINUTE ).replace ( "{xp}", String.valueOf ( xp ) ) );
+                if (MoneyConfig.money.getBoolean ( "money-rewards.enable" )) {
+                    BedWars.getEconomy ().giveMoney ( p, money );
+                    p.sendMessage ( Language.getMsg ( p, Messages.MONEY_REWARD_PER_MINUTE ).replace ( "{money}", String.valueOf ( money ) ) );
+                }
             }
         }, 60 * 20, 60 * 20);
     }

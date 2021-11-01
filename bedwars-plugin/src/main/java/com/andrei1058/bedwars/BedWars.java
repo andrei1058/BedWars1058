@@ -469,6 +469,9 @@ public class BedWars extends JavaPlugin {
 
         LevelsConfig.init();
 
+        /* Load Money Configuration */
+        MoneyConfig.init();
+
         // bStats metrics
         Metrics metrics = new Metrics(this, 1885);
         metrics.addCustomChart(new Metrics.SimplePie("server_type", () -> getServerType().toString()));
