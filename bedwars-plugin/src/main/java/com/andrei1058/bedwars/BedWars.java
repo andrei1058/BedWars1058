@@ -58,6 +58,7 @@ import com.andrei1058.bedwars.lobbysocket.ArenaSocket;
 import com.andrei1058.bedwars.lobbysocket.LoadedUsersCleaner;
 import com.andrei1058.bedwars.lobbysocket.SendTask;
 import com.andrei1058.bedwars.maprestore.internal.InternalAdapter;
+import com.andrei1058.bedwars.money.internal.MoneyListeners;
 import com.andrei1058.bedwars.shop.ShopManager;
 import com.andrei1058.bedwars.sidebar.*;
 import com.andrei1058.bedwars.stats.StatsManager;
@@ -186,7 +187,6 @@ public class BedWars extends JavaPlugin {
 
     @Override
     public void onEnable() {
-
         if (!serverSoftwareSupport) {
             Bukkit.getPluginManager().disablePlugin(this);
             return;
@@ -314,6 +314,7 @@ public class BedWars extends JavaPlugin {
         // Register setup-holograms fix
         registerEvents(new ChunkLoad());
 
+
         /* Deprecated versions */
         switch (version) {
             case "v1_8_R3":
@@ -430,6 +431,7 @@ public class BedWars extends JavaPlugin {
             }
             try {
                 //noinspection rawtypes
+                registerEvents(new MoneyListeners());
                 RegisteredServiceProvider rsp = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
                 WithEconomy.setEconomy((net.milkbowl.vault.economy.Economy) rsp.getProvider());
                 plugin.getLogger().info("Hook into vault economy support!");
@@ -669,6 +671,7 @@ public class BedWars extends JavaPlugin {
      * the Level interface so the plugin will be able to display
      * the level internally.
      */
+
     public static void setLevelAdapter(Level levelsManager) {
         if (levelsManager instanceof InternalLevel) {
             if (LevelListeners.instance == null) {
