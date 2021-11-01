@@ -892,31 +892,33 @@ public class Arena implements IArena {
             if (!disconnect) BedWarsScoreboard.giveScoreboard(p, null, false);
         }, 5L);
 
-        /* Remove also the party
+        /* Remove also the party */
         if (getParty().hasParty(p)) {
             if (getParty().isOwner(p)) {
-                if (getParty().isInternal()) {
-                    for (Player mem : new ArrayList<>(getParty().getMembers(p))) {
-                        mem.sendMessage(getMsg(mem, Messages.ARENA_LEAVE_PARTY_DISBANDED));
+                if (status != GameState.restarting) {
+                    if (getParty().isInternal()) {
+                        for (Player mem : new ArrayList<>(getParty().getMembers(p))) {
+                            mem.sendMessage(getMsg(mem, Messages.ARENA_LEAVE_PARTY_DISBANDED));
+                        }
                     }
-                }
-                getParty().disband(p);
+                    getParty().disband(p);
 
-                // prevent arena from staring with a single player
-                teamuri = false;
-                for (Player on : getPlayers()) {
-                    if (getParty().hasParty(on)) {
-                        teamuri = true;
+                    // prevent arena from staring with a single player
+                    teamuri = false;
+                    for (Player on : getPlayers()) {
+                        if (getParty().hasParty(on)) {
+                            teamuri = true;
+                        }
                     }
-                }
-                if (status == GameState.starting && (maxInTeam > players.size() && teamuri || players.size() < minPlayers && !teamuri)) {
-                    changeStatus(GameState.waiting);
-                    for (Player on : players) {
-                        on.sendMessage(getMsg(on, Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT));
+                    if (status == GameState.starting && (maxInTeam > players.size() && teamuri || players.size() < minPlayers && !teamuri)) {
+                        changeStatus(GameState.waiting);
+                        for (Player on : players) {
+                            on.sendMessage(getMsg(on, Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT));
+                        }
                     }
                 }
             }
-        }*/
+        }
         p.setFlying(false);
         p.setAllowFlight(false);
 
@@ -1028,12 +1030,14 @@ public class Arena implements IArena {
         /* Remove also the party */
         if (getParty().hasParty(p)) {
             if (getParty().isOwner(p)) {
-                if (getParty().isInternal()) {
-                    for (Player mem : new ArrayList<>(getParty().getMembers(p))) {
-                        mem.sendMessage(getMsg(mem, Messages.ARENA_LEAVE_PARTY_DISBANDED));
+                if (status != GameState.restarting) {
+                    if (getParty().isInternal()) {
+                        for (Player mem : new ArrayList<>(getParty().getMembers(p))) {
+                            mem.sendMessage(getMsg(mem, Messages.ARENA_LEAVE_PARTY_DISBANDED));
+                        }
                     }
+                    getParty().disband(p);
                 }
-                getParty().disband(p);
             }
         }
 
