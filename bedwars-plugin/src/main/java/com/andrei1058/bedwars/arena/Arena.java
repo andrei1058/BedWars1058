@@ -1030,7 +1030,7 @@ public class Arena implements IArena {
         /* Remove also the party */
         if (getParty().hasParty(p)) {
             if (getParty().isOwner(p)) {
-                if (status != GameState.restarting) {
+                if (status != GameState.restarting || status != GameState.playing) {
                     if (getParty().isInternal()) {
                         for (Player mem : new ArrayList<>(getParty().getMembers(p))) {
                             mem.sendMessage(getMsg(mem, Messages.ARENA_LEAVE_PARTY_DISBANDED));
