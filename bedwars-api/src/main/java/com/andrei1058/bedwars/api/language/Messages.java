@@ -93,6 +93,7 @@ public class Messages {
     public static String COMMAND_FORCESTART_NOT_IN_GAME = "cmd-start-no-game";
     public static String COMMAND_FORCESTART_SUCCESS = "cmd-start";
     public static String COMMAND_FORCESTART_NO_PERM = "cmd-start-no-perm";
+    public static String COMMAND_PLAYAGAIN_NOT_IN_GAME = "cmd-start-no-game";
     public static String COMMAND_COOLDOWN = "cmd-cooldown";
 
     /** Arena join/ leave related */
@@ -133,6 +134,9 @@ public class Messages {
 
     public static String ARENA_SPECTATOR_LEAVE_ITEM_NAME = "spectator-tp-name";
     public static String ARENA_SPECTATOR_LEAVE_ITEM_LORE = "spectator-tp-lore";
+
+    public static String ARENA_SPECTATOR_PLAYAGAIN_ITEM_NAME = "spectator-playagain-name";
+    public static String ARENA_SPECTATOR_PLAYAGAIN_ITEM_LORE = "spectator-playagain-lore";
 
     public static String ARENA_SPECTATOR_FIRST_PERSON_ENTER_TITLE = "spectator-first-person-enter-title";
     public static String ARENA_SPECTATOR_FIRST_PERSON_ENTER_SUBTITLE = "spectator-first-person-enter-subtitle";
@@ -273,6 +277,7 @@ public class Messages {
     public static String XP_REWARD_WIN = "xp-reward-game-win";
     public static String XP_REWARD_PER_TEAMMATE = "xp-reward-per-teammate";
     public static String XP_REWARD_PER_MINUTE = "xp-reward-per-minute";
+    public static String XP_REWARD_HALLOWEEN_PUMPKIN = "xp-reward-per-minute";
 
     public static String BED_HOLOGRAM_DEFEND = "bed-hologram-defend";
     public static String BED_HOLOGRAM_DESTROYED = "bed-hologram-destroyed";

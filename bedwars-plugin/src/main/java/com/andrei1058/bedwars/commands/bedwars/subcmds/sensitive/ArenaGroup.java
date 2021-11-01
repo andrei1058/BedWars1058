@@ -61,11 +61,26 @@ public class ArenaGroup extends SubCommand {
         if (s instanceof ConsoleCommandSender) return false;
         Player p = (Player) s;
         if (!MainCommand.isLobbySet(p)) return true;
+        if (args[0].equalsIgnoreCase("list")) {
+            List<String> groups;
+            if (config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS) == null) {
+                groups = new ArrayList<>();
+            } else {
+                groups = config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS);
+            }
+            p.sendMessage("§7Available arena groups:");
+            p.sendMessage("§6 ▪ §fDefault");
+            for (String gs : groups) {
+                p.sendMessage("§6 ▪ §f" + gs);
+            }
+            return true;
+        }
         if (args.length < 2) {
             sendArenaGroupCmdList(p);
         } else if (args[0].equalsIgnoreCase("create")) {
+            if (args.length > 2)
             if (args[0].contains("+")) {
-                p.sendMessage("§c▪ §7" + args[0] + " mustn't contain this symbol: " + ChatColor.RED + "+");
+                p.sendMessage("§c▪ §7" + args[0] + " mustn't contain this symbol: §c+");
                 return true;
             }
             java.util.List<String> groups;
@@ -95,18 +110,6 @@ public class ArenaGroup extends SubCommand {
             groups.remove(args[1]);
             config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS, groups);
             p.sendMessage("§6 ▪ §7Group deleted!");
-        } else if (args[0].equalsIgnoreCase("list")) {
-            List<String> groups;
-            if (config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS) == null) {
-                groups = new ArrayList<>();
-            } else {
-                groups = config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS);
-            }
-            p.sendMessage("§7Available arena groups:");
-            p.sendMessage("§6 ▪ §fDefault");
-            for (String gs : groups) {
-                p.sendMessage("§6 ▪ §f" + gs);
-            }
         } else if (args[0].equalsIgnoreCase("set")) {
             if (args.length < 3) {
                 sendArenaGroupCmdList(p);
