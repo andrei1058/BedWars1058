@@ -43,7 +43,7 @@ import static com.andrei1058.bedwars.api.language.Language.getMsg;
 @SuppressWarnings("WeakerAccess")
 public class TeleporterGUI {
 
-    //Don't remove "_" because it's used as a separator somewhere
+    //Don't remove "_" because it's* used as a separator somewhere
     public static final String NBT_SPECTATOR_TELEPORTER_GUI_HEAD = "spectatorTeleporterGUIhead_";
 
     private static HashMap<Player, Inventory> refresh = new HashMap<>();
