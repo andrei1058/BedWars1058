@@ -41,7 +41,7 @@ public class LoadedUsersCleaner implements Runnable {
         if (!toRemove.isEmpty()) {
             toRemove.forEach(c -> {
                 OfflinePlayer op = Bukkit.getOfflinePlayer(c.getUuid());
-                if (op != null && op.getName() != null) {
+                if (op.getName() != null) {
                     PreLoadedParty plp = PreLoadedParty.getPartyByOwner(op.getName());
                     if (plp != null) {
                         plp.clean();

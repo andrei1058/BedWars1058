@@ -58,6 +58,8 @@ import com.andrei1058.bedwars.lobbysocket.ArenaSocket;
 import com.andrei1058.bedwars.lobbysocket.LoadedUsersCleaner;
 import com.andrei1058.bedwars.lobbysocket.SendTask;
 import com.andrei1058.bedwars.maprestore.internal.InternalAdapter;
+import com.andrei1058.bedwars.redis.RedisArenaListeners;
+import com.andrei1058.bedwars.redis.RedisConnection;
 import com.andrei1058.bedwars.shop.ShopManager;
 import com.andrei1058.bedwars.sidebar.*;
 import com.andrei1058.bedwars.stats.StatsManager;
@@ -115,6 +117,8 @@ public class BedWars extends JavaPlugin {
     private static Economy economy;
     private static final String version = Bukkit.getServer().getClass().getName().split("\\.")[3];
     private static String lobbyWorld = "";
+
+    private static RedisConnection redisConnection;
 
     public static ArenaManager arenaManager = new ArenaManager();
 
@@ -287,11 +291,22 @@ public class BedWars extends JavaPlugin {
         registerEvents(new QuitAndTeleportListener(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(),
                 new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener(), new LangListener());
         if (getServerType() == ServerType.BUNGEE) {
+            boolean isRedis = config.getBoolean(ConfigPath.REDIS_ENABLED);
             if (autoscale) {
                 //registerEvents(new ArenaListeners());
-                ArenaSocket.lobbies.addAll(config.getList(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS));
-                new SendTask();
-                registerEvents(new AutoscaleListener(), new PrePartyListener(), new JoinListenerBungee());
+                if(isRedis) {
+                    redisConnection = new RedisConnection();
+                    if(!redisConnection.connect()) {
+                        getLogger().log(java.util.logging.Level.SEVERE, "Failed to connect to redis, please check redis config. Disabling the plugin...");
+                        setEnabled(false);
+                        return;
+                    }
+                    registerEvents(new RedisArenaListeners(redisConnection), new JoinListenerBungee());
+                } else {
+                    ArenaSocket.lobbies.addAll(config.getList(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS));
+                    new SendTask();
+                    registerEvents(new AutoscaleListener(), new PrePartyListener(), new JoinListenerBungee());
+                }
                 Bukkit.getScheduler().runTaskTimerAsynchronously(this, new LoadedUsersCleaner(), 60L, 60L);
             } else {
                 registerEvents(new ServerPingListener(), new JoinListenerBungeeLegacy());

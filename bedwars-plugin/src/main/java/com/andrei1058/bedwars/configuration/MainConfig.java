@@ -109,6 +109,13 @@ public class MainConfig extends ConfigManager {
         yml.addDefault("database.pass", "cheese");
         yml.addDefault("database.ssl", false);
 
+        yml.addDefault(ConfigPath.REDIS_ENABLED, false);
+        yml.addDefault(ConfigPath.REDIS_HOST, "localhost");
+        yml.addDefault(ConfigPath.REDIS_PORT, 6379);
+        yml.addDefault(ConfigPath.REDIS_CHANNEL, "bw1058_arenas");
+        yml.addDefault(ConfigPath.REDIS_AUTH_USERNAME, "redisUser");
+        yml.addDefault(ConfigPath.REDIS_AUTH_PASSWORD, "changeThisValuePlx");
+
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_ROTATE_GEN, true);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_SPOIL_TNT_PLAYERS, true);
 
