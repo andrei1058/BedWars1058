@@ -241,7 +241,7 @@ public class MySQL implements Database {
 
     @Override
     public void setQuickBuySlot(UUID uuid, String shopPath, int slot) {
-        String sql = "SELECT * FROM quick_buy_2 WHERE uuid = ?;";
+        String sql = "SELECT uuid FROM quick_buy_2 WHERE uuid = ?;";
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, uuid.toString());
