@@ -37,7 +37,7 @@ and provide the following information:
 
 
 ### Your First Code Contribution
-Unsure where to begin contributing to Atom? 
+Unsure where to begin contributing to BedWars1058? 
 You can start by looking through these `beginner` and `help-wanted` issues:
 - [Beginner issues](beginner) - issues which should only require a few lines of code, and a test or two.
 - [Help wanted issues](help-wanted) - issues which should be a bit more involved than beginner issues.
@@ -84,7 +84,8 @@ considered by the maintainers:
 | Label name | Description
 | --- | --- |
 | `work-in-progress` | Pull requests which are still being worked on, more changes will follow. |
-| `needs-review` | Pull requests which need code review, and approval from maintainers or Atom core team. |
-| `under-review` | Pull requests being reviewed by maintainers or Atom core team. |
+| `needs-review` | Pull requests which need code review, and approval from maintainers or 
+core team. |
+| `under-review` | Pull requests being reviewed by maintainers. |
 | `requires-changes` | Pull requests which need to be updated based on review comments and then reviewed again. |
 | `needs-testing` | Pull requests which need manual testing. |
