@@ -52,11 +52,17 @@ public class CmdJoin extends SubCommand {
     public boolean execute(String[] args, CommandSender s) {
         if (s instanceof ConsoleCommandSender) return false;
         Player p = (Player) s;
+
         if (args.length < 1) {
             s.sendMessage(getMsg(p, Messages.COMMAND_JOIN_USAGE));
             return true;
         }
         if (args[0].equalsIgnoreCase("random")){
+            setPermission("bw.join.random");
+            if (!hasPermission(p)) {
+                p.sendMessage(getMsg(p, Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
+                return true;
+            }
             if (!Arena.joinRandomArena(p)){
                 s.sendMessage(getMsg(p, Messages.COMMAND_JOIN_NO_EMPTY_FOUND));
                 Sounds.playSound("join-denied", p);
@@ -66,6 +72,11 @@ public class CmdJoin extends SubCommand {
             return true;
         }
         if (com.andrei1058.bedwars.commands.bedwars.MainCommand.isArenaGroup(args[0]) || args[0].contains("+")) {
+            setPermission("bw.join." + args[0].toLowerCase());
+            if (!hasPermission(p)) {
+                p.sendMessage(getMsg(p, Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
+                return true;
+            }
             if (!Arena.joinRandomFromGroup(p, args[0])) {
                 s.sendMessage(getMsg(p, Messages.COMMAND_JOIN_NO_EMPTY_FOUND));
                 Sounds.playSound("join-denied", p);
@@ -74,6 +85,11 @@ public class CmdJoin extends SubCommand {
             }
             return true;
         } else if (Arena.getArenaByName(args[0]) != null) {
+            setPermission("bw.join." + Arena.getArenaByName(args[0]).getGroup());
+            if (!hasPermission(p)) {
+                p.sendMessage(getMsg(p, Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
+                return true;
+            }
             if (Arena.getArenaByName(args[0]).addPlayer(p, false)){
                 Sounds.playSound("join-allowed", p);
             } else {
@@ -81,6 +97,11 @@ public class CmdJoin extends SubCommand {
             }
             return true;
         } else if (Arena.getArenaByIdentifier(args[0]) != null) {
+            setPermission("bw.join." + Arena.getArenaByIdentifier(args[0]).getGroup());
+            if (!hasPermission(p)) {
+                p.sendMessage(getMsg(p, Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
+                return true;
+            }
             if (Arena.getArenaByIdentifier(args[0]).addPlayer(p, false)){
                 Sounds.playSound("join-allowed", p);
             } else {

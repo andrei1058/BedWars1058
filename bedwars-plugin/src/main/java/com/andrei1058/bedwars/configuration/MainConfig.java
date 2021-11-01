@@ -56,6 +56,8 @@ public class MainConfig extends ConfigManager {
         yml.addDefault("lobbyServer", "hub");
         yml.addDefault("globalChat", false);
         yml.addDefault("formatChat", true);
+        yml.addDefault("halloweenSpecial.enabled", true);
+        yml.addDefault("halloweenSpecial.timeZone", "Europe/Rome");
         yml.addDefault("debug", false);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_MARK_LEAVE_AS_ABANDON, false);
         // parties category
@@ -100,6 +102,14 @@ public class MainConfig extends ConfigManager {
         yml.addDefault(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_SELF, 1);
         yml.addDefault(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_TEAMMATES, 5);
         yml.addDefault(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_OTHERS, 10);
+        // fireball jump category
+        yml.addDefault(ConfigPath.GENERAL_FIREBALL_JUMP_BARYCENTER_IN_Y, 0.5);
+        yml.addDefault(ConfigPath.GENERAL_FIREBALL_JUMP_STRENGTH_REDUCTION, 5);
+        yml.addDefault(ConfigPath.GENERAL_FIREBALL_JUMP_Y_REDUCTION, 2);
+        yml.addDefault(ConfigPath.GENERAL_FIREBALL_JUMP_DAMAGE_SELF, 1);
+        yml.addDefault(ConfigPath.GENERAL_FIREBALL_JUMP_DAMAGE_TEAMMATES, 2);
+        yml.addDefault(ConfigPath.GENERAL_FIREBALL_JUMP_DAMAGE_OTHERS, 5);
+        yml.addDefault(ConfigPath.GENERAL_FIREBALL_JUMP_DAMAGE_OTHERS, 5);
         //
         yml.addDefault("database.enable", false);
         yml.addDefault("database.host", "localhost");
@@ -129,6 +139,7 @@ public class MainConfig extends ConfigManager {
 
         /* Spectator Command Items */
         saveSpectatorCommandItem("teleporter", "bw teleporter", false, getForCurrentVersion("SKULL_ITEM", "SKULL_ITEM", "PLAYER_HEAD"), 3, 0);
+        saveSpectatorCommandItem("playagain", "bw playagain", false, getForCurrentVersion("PAPER", "PAPER", "PAPER"), 0, 7);
         saveSpectatorCommandItem("leave", "bw leave", false, getForCurrentVersion("BED", "BED", "RED_BED"), 0, 8);
 
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SIZE, 27);

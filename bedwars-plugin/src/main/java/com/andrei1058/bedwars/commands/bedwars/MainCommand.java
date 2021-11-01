@@ -74,6 +74,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         new CmdStats(this, "stats");
         new CmdStart(this, "forceStart");
         new CmdStart(this, "start");
+        new CmdPlayAgain(this, "playagain");
         if (BedWars.getServerType() != ServerType.BUNGEE) {
             new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.SetLobby(this, "setLobby"); //priority 1
         }
@@ -128,14 +129,14 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
                         s.sendMessage("");
                         sendSubCommands((Player) s);
                     }
-                } else {
+                /*} else {
                     s.sendMessage("§f   bw safemode §eenable/ disable");
-                }
-            } else {
-                if (s instanceof ConsoleCommandSender) {
-                    s.sendMessage("§fNo console commands available atm.");
+                }*/
+                } else {
+                    s.sendMessage("§fNo console commands available at the moment.");
                     return true;
                 }
+            } else {
                 /* Send player commands */
                 Bukkit.dispatchCommand(s, mainCmd + " cmds");
             }

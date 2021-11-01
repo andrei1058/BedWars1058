@@ -56,13 +56,14 @@ public class HalloweenSpecial {
     public static void init() {
         if (INSTANCE == null) {
             if (!checkAvailabilityDate()) return;
+            if (!BedWars.config.getYml().getBoolean("halloweenSpecial.enabled")) return;
             INSTANCE = new HalloweenSpecial();
         }
     }
 
     protected static boolean checkAvailabilityDate() {
         // check date
-        ZoneId zone = ZoneId.of("Europe/Rome");
+        ZoneId zone = ZoneId.of(BedWars.config.getYml().getString("halloweenSpecial.timeZone"));
         Date date = new Date();
         LocalDate localDate = date.toInstant().atZone(zone).toLocalDate();
         int month = localDate.getMonthValue();
