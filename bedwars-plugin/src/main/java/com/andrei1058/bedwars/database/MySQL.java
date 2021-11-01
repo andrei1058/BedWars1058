@@ -307,7 +307,8 @@ public class MySQL implements Database {
         if (slot.length == 0) {
             return results;
         }
-        try (PreparedStatement ps = dataSource.getConnection().prepareStatement("SELECT * FROM quick_buy_2 WHERE uuid = ?;")) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement("SELECT * FROM quick_buy_2 WHERE uuid = ?;")) {
             ps.setString(1, uuid.toString());
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
