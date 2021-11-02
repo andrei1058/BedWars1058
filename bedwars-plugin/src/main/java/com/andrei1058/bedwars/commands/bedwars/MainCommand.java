@@ -53,7 +53,7 @@ import static com.andrei1058.bedwars.api.language.Language.getMsg;
 public class MainCommand extends BukkitCommand implements ParentCommand {
 
     /* SubCommands ArenaList */
-    private static List<SubCommand> subCommandList = new ArrayList<>();
+    private static final List<SubCommand> subCommandList = new ArrayList<>();
     /* MainCommand instance*/
     private static MainCommand instance;
     /* Dot char */
@@ -118,26 +118,23 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
 
         if (args.length == 0) {
             /* Set op commands*/
-            if ((s.isOp() || s.hasPermission(BedWars.mainCmd + ".*"))) {
-                if (s instanceof Player) {
-                    if (SetupSession.isInSetupSession(((Player) s).getUniqueId())) {
-                        Bukkit.dispatchCommand(s, getName() + " cmds");
-                    } else {
-                        s.sendMessage("");
-                        s.sendMessage("§8§l" + dot + " §6" + plugin.getDescription().getName() + " v" + plugin.getDescription().getVersion() + " §7- §c Admin Commands");
-                        s.sendMessage("");
-                        sendSubCommands((Player) s);
-                    }
+            if (s instanceof ConsoleCommandSender) {
+                s.sendMessage("§fNo console commands available at the moment.");
+                return true;
+            }
+            Player p = (Player) s;
+            if (s.hasPermission(BedWars.mainCmd + ".*")) {
+                if (SetupSession.isInSetupSession(p.getUniqueId())) {
+                    p.performCommand(mainCmd + " cmds");
                 } else {
-                    s.sendMessage("§f   bw safemode §eenable/ disable");
+                    s.sendMessage("");
+                    s.sendMessage("§8§l" + dot + " §6" + plugin.getDescription().getName() + " v" + plugin.getDescription().getVersion() + " §7- §c Admin Commands");
+                    s.sendMessage("");
+                    sendSubCommands(p);
                 }
             } else {
-                if (s instanceof ConsoleCommandSender) {
-                    s.sendMessage("§fNo console commands available atm.");
-                    return true;
-                }
                 /* Send player commands */
-                Bukkit.dispatchCommand(s, mainCmd + " cmds");
+                p.performCommand(mainCmd + " cmds");
             }
             return true;
         }
