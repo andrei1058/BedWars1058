@@ -37,6 +37,11 @@ public class WithEconomy implements Economy {
     }
 
     @Override
+    public void giveMoney(Player p, double money) {
+        economy.depositPlayer (p, money);
+    }
+
+    @Override
     public void buyAction(Player p, double cost) {
         economy.bankWithdraw(p.getName(), cost);
     }

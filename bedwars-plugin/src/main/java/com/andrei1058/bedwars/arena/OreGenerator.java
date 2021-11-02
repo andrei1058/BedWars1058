@@ -187,7 +187,7 @@ public class OreGenerator implements IGenerator {
     }
 
     private void dropItem(Location location, int amount) {
-        for (int temp = amount; temp >= 0; temp--) {
+        for (int temp = amount; temp > 0; temp--) {
             ItemStack itemStack = new ItemStack(ore);
             if (!stack) {
                 ItemMeta itemMeta = itemStack.getItemMeta();
@@ -196,7 +196,6 @@ public class OreGenerator implements IGenerator {
             }
             Item item = location.getWorld().dropItem(location, itemStack);
             item.setVelocity(new Vector(0, 0, 0));
-            temp--; // FIXME: why is this required? something must be wrong...
         }
     }
 
