@@ -23,6 +23,7 @@ package com.andrei1058.bedwars.commands.bedwars.subcmds.regular;
 import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
+import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.ArenaGUI;
 import com.andrei1058.bedwars.arena.SetupSession;
@@ -32,6 +33,8 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+
+import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class CmdGUI extends SubCommand {
 
@@ -52,7 +55,10 @@ public class CmdGUI extends SubCommand {
         if (args.length == 1){
             group = args[0];
         }
-
+        if (!p.hasPermission("bw.gui." + group.toLowerCase())) {
+            p.sendMessage(getMsg(p, Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
+            return false;
+        }
         ArenaGUI.openGui(p, group);
         return true;
     }

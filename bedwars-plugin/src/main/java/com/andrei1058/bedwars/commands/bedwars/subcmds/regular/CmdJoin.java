@@ -57,6 +57,10 @@ public class CmdJoin extends SubCommand {
             return true;
         }
         if (args[0].equalsIgnoreCase("random")){
+            if (!p.hasPermission("bw.join." + args[0].toLowerCase())) {
+                p.sendMessage(getMsg(p, Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
+                return false;
+            }
             if (!Arena.joinRandomArena(p)){
                 s.sendMessage(getMsg(p, Messages.COMMAND_JOIN_NO_EMPTY_FOUND));
                 Sounds.playSound("join-denied", p);
@@ -66,6 +70,10 @@ public class CmdJoin extends SubCommand {
             return true;
         }
         if (com.andrei1058.bedwars.commands.bedwars.MainCommand.isArenaGroup(args[0]) || args[0].contains("+")) {
+            if (!p.hasPermission("bw.join." + args[0].toLowerCase())) {
+                p.sendMessage(getMsg(p, Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
+                return false;
+            }
             if (!Arena.joinRandomFromGroup(p, args[0])) {
                 s.sendMessage(getMsg(p, Messages.COMMAND_JOIN_NO_EMPTY_FOUND));
                 Sounds.playSound("join-denied", p);
@@ -74,6 +82,10 @@ public class CmdJoin extends SubCommand {
             }
             return true;
         } else if (Arena.getArenaByName(args[0]) != null) {
+            if (!p.hasPermission("bw.join." + Arena.getArenaByName(args[0]).getGroup())) {
+                p.sendMessage(getMsg(p, Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
+                return false;
+            }
             if (Arena.getArenaByName(args[0]).addPlayer(p, false)){
                 Sounds.playSound("join-allowed", p);
             } else {
@@ -81,6 +93,10 @@ public class CmdJoin extends SubCommand {
             }
             return true;
         } else if (Arena.getArenaByIdentifier(args[0]) != null) {
+            if (!p.hasPermission("bw.join." + Arena.getArenaByName(args[0]).getGroup())) {
+                p.sendMessage(getMsg(p, Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
+                return false;
+            }
             if (Arena.getArenaByIdentifier(args[0]).addPlayer(p, false)){
                 Sounds.playSound("join-allowed", p);
             } else {
