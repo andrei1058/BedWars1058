@@ -251,9 +251,9 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.GAME_END_TEAM_WON_CHAT, "{prefix}{TeamColor}{TeamName} &atelah memenangkan permainan!");
         yml.addDefault(Messages.GAME_END_TOP_PLAYER_CHAT, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
                 "&f                                   &lBedWars", "", "{winnerFormat}", "", "",
-                "&e                     &lJuara 1 Sebagai Pembunuh &7- {firstName} - {firstKills}",
-                "&6                     &lJuara 2 Sebagai Pembunuh &7- {secondName} - {secondKills}",
-                "&c                     &lJuara 3 Sebagai Pembunuh &7- {thirdName} - {thirdKills}", "",
+                "&e                       &lTOP 1 Kill &7- {firstName} - {firstKills}",
+                "&6                       &lTOP 2 Kill &7- {secondName} - {secondKills}",
+                "&c                       &lTOP 3 Kill &7- {thirdName} - {thirdKills}", "",
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
         yml.addDefault(Messages.BED_HOLOGRAM_DEFEND, "&c&lPertahankan tempat tidurmu!");
         yml.addDefault(Messages.BED_HOLOGRAM_DESTROYED, "&c&lTempat tidurmu telah hancur!");
