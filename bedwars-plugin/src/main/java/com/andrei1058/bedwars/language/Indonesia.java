@@ -84,7 +84,7 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS, "{prefix}&cPerintah tidak ditemukan atau kamu tidak memiliki akses!");
         yml.addDefault(Messages.COMMAND_PARTY_HELP, Arrays.asList("&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
                 "&aParty Commands:", "&e/party help &7- &bMelihat daftar bantuan", "&e/party invite <player> &7- &bMengundang pemain kedalam party anda",
-                "&e/party leave &7- &bLeaves the current party",
+                "&e/party leave &7- &bMeninggalkan party",
                 "&e/party remove <player> &7- &bKeluarkan pemain dari party",
                 "&e/party accept <player> &7- &bTerima undangan party", "&e/party disband &7- &bMembubarkan party"));
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_USAGE, "{prefix}&eUsage: &7/party invite <player>");
