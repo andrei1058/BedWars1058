@@ -37,7 +37,7 @@ public class Spanish extends Language{
     public Spanish() {
         super(BedWars.plugin, "es");
         YamlConfiguration yml = getYml();
-        yml.options().header("Translation by JuliCarles#1783 and Danidev819 🎃#7465");
+        yml.options().header("Translation by JuliCarles#1783 and Danidev819#7465");
         yml.addDefault(Messages.PREFIX, "");
         yml.addDefault("name", "Espanol");
 
