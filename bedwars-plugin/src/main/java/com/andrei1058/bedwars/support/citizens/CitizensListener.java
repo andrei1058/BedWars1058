@@ -61,11 +61,17 @@ public class CitizensListener implements Listener {
                 }
             }
         }
-        for (Entity e2 : e.getNPC().getEntity().getNearbyEntities(0, 3, 0)) {
-            if (e2.getType() == EntityType.ARMOR_STAND) {
-                e2.remove();
-            }
-        }
+		if( e.getNPC() != null && e.getNPC().getEntity() != null )
+		{
+			for (Entity e2 : e.getNPC().getEntity().getNearbyEntities(0, 3, 0)) 
+			{
+				if (e2.getType() == EntityType.ARMOR_STAND) 
+				{
+					e2.remove();
+				}
+			}
+		}
+        
         if (removed) BedWars.config.set(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE, locations);
     }
 
