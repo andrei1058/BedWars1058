@@ -12,7 +12,7 @@ public class MoneyConfig extends ConfigManager {
     }
 
     /**
-     * Initialize money config.
+     * Money Config
      */
     public static void init() {
         money = new MoneyConfig ();

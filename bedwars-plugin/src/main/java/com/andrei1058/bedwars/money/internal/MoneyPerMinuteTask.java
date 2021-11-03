@@ -16,7 +16,7 @@ public class MoneyPerMinuteTask {
     private BukkitTask task;
 
     /**
-     * Create a new per minute money reward.
+     * Per Minute Rewards
      */
     public MoneyPerMinuteTask(Arena arena) {
         if (money < 1){

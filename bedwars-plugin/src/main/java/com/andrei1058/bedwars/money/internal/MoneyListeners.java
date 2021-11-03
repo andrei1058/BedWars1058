@@ -17,7 +17,7 @@ import java.util.UUID;
 public class MoneyListeners implements Listener {
 
     /**
-     * Create a new winner / loser money reward.
+     * Win / Lose Rewards
      */
     @EventHandler
     public void onGameEnd(GameEndEvent e) {
@@ -42,7 +42,7 @@ public class MoneyListeners implements Listener {
     }
 
     /**
-     * Create a new bed destroyed money reward.
+     * Break Bed Rewards
      */
     @EventHandler
     public void onBreakBed(PlayerBedBreakEvent e) {
@@ -56,7 +56,7 @@ public class MoneyListeners implements Listener {
     }
 
     /**
-     * Create a kill money reward.
+     * Kill Rewards
      */
     @EventHandler
     public void onKill(PlayerKillEvent e) {
