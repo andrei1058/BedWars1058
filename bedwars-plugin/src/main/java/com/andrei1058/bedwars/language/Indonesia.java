@@ -75,7 +75,7 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.COMMAND_TP_NOT_STARTED, "{prefix}&cArena tempat dimana pemain bermain belum dimulai!");
         yml.addDefault(Messages.COMMAND_TP_USAGE, "{prefix}&cUsage: /bw tp <username>");
         yml.addDefault(Messages.REJOIN_NO_ARENA, "{prefix}&cTidak ada arena untuk bergabung kembali!");
-        yml.addDefault(Messages.REJOIN_DENIED, "{prefix}&cKamu tidak dapat bergabung kembali kedalam arena. karena permainan sudah berakhir atau tempat tidurmu telah hancur!");
+        yml.addDefault(Messages.REJOIN_DENIED, "{prefix}&cKamu tidak dapat bergabung kembali kedalam arena. karena permainan sudah berakhir atau bed mu telah hancur!");
         yml.addDefault(Messages.REJOIN_ALLOWED, "{prefix}&eBergabung dengan arena &a{arena}&e!");
         yml.addDefault(Messages.COMMAND_REJOIN_PLAYER_RECONNECTED, "{prefix}&7{player} &etelah terhubung kembali!");
         yml.addDefault(Messages.COMMAND_LEAVE_DENIED_NOT_IN_ARENA, "{prefix}&cKamu tidak berada di arena!");
@@ -132,14 +132,14 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.ARENA_STATUS_START_PLAYER_TITLE, "&aGO");
         yml.addDefault(Messages.ARENA_STATUS_START_PLAYER_TUTORIAL, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
                 "&f                                   &lBedWars", "",
-                "&e&l Lindungi tempat tidurmu dan hancurkan tempat tidur lawan!.",
-                "&e&l Tingkatkan diri anda dan tim anda dengan mengumpulkan",
-                "&e&l Iron, Gold, Emerald, dan Diamond dari generator",
-                "&e&l untuk mengakses peningkatan agar lebih kuat.", "",
+                "&e&l      Lindungi bed mu dan hancurkan bed musuh!.",
+                "&e&l    Perkuat dirimu dan timmu dengan mengumpulkan",
+                "&e&l   Iron, Gold, Emerald, dan Diamond dari generator",
+                "&e&l     untuk meningkatkan kekuatan agar lebih kuat.", "",
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
         yml.addDefault(Messages.ARENA_JOIN_DENIED_SELECTOR, "{prefix}&cMaaf, kamu tidak dapat bergabung dengan arena ini sekarang, gunakan klik kanan untuk menonton!");
         yml.addDefault(Messages.ARENA_SPECTATE_DENIED_SELECTOR, "{prefix}&cMaaf, kamu tidak dapat menonton arena ini sekarang, gunakan klik kiri untuk bergabung!");
-        yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_PROXY, "&cMaaf, kamu harus bergabung dengan arena menggunakan BedWarsProxy. \n&eJika kamu ingin menyiapkan arena, silahkan berikan anda akses bw.setup supaya bisa bergabung dengan server secara langsung!");
+        yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_PROXY, "&cMaaf, kamu harus bergabung dengan arena menggunakan BedWarsProxy. \n&eJika kamu ingin menyiapkan arena, silahkan berikan akses bw.setup agar bisa bergabung dengan server secara langsung!");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_NAME, "&8Teleporter");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME, "{prefix}{player}");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_LORE, Arrays.asList("&7Health: &f{health}%", "&7Food: &f{food}", "", "&7Klik kiri untuk menonton"));
@@ -208,11 +208,11 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.MEANING_VAULT_PLURAL, "$");
         yml.addDefault(Messages.INTERACT_CANNOT_PLACE_BLOCK, "{prefix}&cKamu tidak dapat memasang block disini!");
         yml.addDefault(Messages.INTERACT_CANNOT_BREAK_BLOCK, "{prefix}&cKamu hanya dapat menghancurkan block yang dipasang oleh pemain!");
-        yml.addDefault(Messages.INTERACT_CANNOT_BREAK_OWN_BED, "&cKamu tidak dapat menghancurkan tempat tidurmu sendiri!");
-        yml.addDefault(Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT, "\n&f&lPENGHANCURAN TEMPAT TIDUR > {TeamColor}{TeamName} Tempat Tidur &7telah digoreng oleh {PlayerColor}{PlayerName}&7!\n");
-        yml.addDefault(Messages.INTERACT_BED_DESTROY_TITLE_ANNOUNCEMENT, "&cTEMPAT TIDUR DIHANCURKAN!");
+        yml.addDefault(Messages.INTERACT_CANNOT_BREAK_OWN_BED, "&cKamu tidak dapat menghancurkan bed mu sendiri!");
+        yml.addDefault(Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT, "\n&f&lBED DIHANCURKAN > {TeamColor}{TeamName} Bed &7telah digoreng oleh {PlayerColor}{PlayerName}&7!\n");
+        yml.addDefault(Messages.INTERACT_BED_DESTROY_TITLE_ANNOUNCEMENT, "&cBED DIHANCURKAN!");
         yml.addDefault(Messages.INTERACT_BED_DESTROY_SUBTITLE_ANNOUNCEMENT, "&fKamu tidak akan bisa respawn lagi!");
-        yml.addDefault(Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM, "&f&lPENGHANCURAN TEMPAT TIDUR > &7tempat tidurmu telah dibekukan oleh {PlayerColor}{PlayerName}&7!");
+        yml.addDefault(Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM, "&f&lBED DIHANCURKAN > &7bed mu telah dibekukan oleh {PlayerColor}{PlayerName}&7!");
         yml.addDefault(Messages.INTERACT_CHEST_CANT_OPEN_TEAM_ELIMINATED, "&cKamu tidak dapat membuka peti ini, karena team ini belum tereliminasi!");
         yml.addDefault(Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL, "{PlayerColor}{PlayerName} &7jatuh kedalam void.");
         yml.addDefault(Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL, "{PlayerColor}{PlayerName} &7jatuh kedalam void. &b&lFINAL KILL!");
@@ -251,17 +251,17 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.GAME_END_TEAM_WON_CHAT, "{prefix}{TeamColor}{TeamName} &atelah memenangkan permainan!");
         yml.addDefault(Messages.GAME_END_TOP_PLAYER_CHAT, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
                 "&f                                   &lBedWars", "", "{winnerFormat}", "", "",
-                "&e                       &lTOP 1 Kill &7- {firstName} - {firstKills}",
-                "&6                       &lTOP 2 Kill &7- {secondName} - {secondKills}",
-                "&c                       &lTOP 3 Kill &7- {thirdName} - {thirdKills}", "",
+                "&e                      &lTOP 1 Kill &7- {firstName} - {firstKills}",
+                "&6                      &lTOP 2 Kill &7- {secondName} - {secondKills}",
+                "&c                      &lTOP 3 Kill &7- {thirdName} - {thirdKills}", "",
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
-        yml.addDefault(Messages.BED_HOLOGRAM_DEFEND, "&c&lPertahankan tempat tidurmu!");
-        yml.addDefault(Messages.BED_HOLOGRAM_DESTROYED, "&c&lTempat tidurmu telah hancur!");
+        yml.addDefault(Messages.BED_HOLOGRAM_DEFEND, "&c&lPertahankan bed mu!");
+        yml.addDefault(Messages.BED_HOLOGRAM_DESTROYED, "&c&lbed mu telah hancur!");
         yml.addDefault(Messages.NPC_NAME_TEAM_UPGRADES, "&bPENINGKATAN TIM,&e&lKLIK KANAN");
         yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&bPENINGKATAN SOLO,&e&lKLIK KANAN");
         yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&bTOKO TIM,&e&lKLIK KANAN");
         yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&bTOKO BARANG,&e&lKLIK KANAN");
-        yml.addDefault(Messages.TEAM_ELIMINATED_CHAT, "\n&f&lTEAM ELIMINATED > {TeamColor}{TeamName} Tim &ctelah tereliminasi!\n");
+        yml.addDefault(Messages.TEAM_ELIMINATED_CHAT, "\n&f&lTEAM ELIMINATED > {TeamColor}tim {TeamName} &ctelah tereliminasi!\n");
         yml.addDefault(Messages.NEXT_EVENT_BEDS_DESTROY, "&cBeds Destruction");
         yml.addDefault(Messages.NEXT_EVENT_DIAMOND_UPGRADE_II, "&fDiamond II");
         yml.addDefault(Messages.NEXT_EVENT_DIAMOND_UPGRADE_III, "&fDiamond III");
@@ -269,9 +269,9 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.NEXT_EVENT_EMERALD_UPGRADE_II, "&fEmerald II");
         yml.addDefault(Messages.NEXT_EVENT_EMERALD_UPGRADE_III, "&fEmerald III");
         yml.addDefault(Messages.NEXT_EVENT_GAME_END, "&4Game End");
-        yml.addDefault(Messages.NEXT_EVENT_TITLE_ANNOUNCE_BEDS_DESTROYED, "&cTEMPAT TIDUR DIHANCURKAN!");
-        yml.addDefault(Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_BEDS_DESTROYED, "&fSemua tempat tidur telah dihancurkan!");
-        yml.addDefault(Messages.NEXT_EVENT_CHAT_ANNOUNCE_BEDS_DESTROYED, "&c&lSemua tempat tidur telah dihancurkan!");
+        yml.addDefault(Messages.NEXT_EVENT_TITLE_ANNOUNCE_BEDS_DESTROYED, "&cBED DIHANCURKAN!");
+        yml.addDefault(Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_BEDS_DESTROYED, "&fSemua bed telah dihancurkan!");
+        yml.addDefault(Messages.NEXT_EVENT_CHAT_ANNOUNCE_BEDS_DESTROYED, "&c&lSemua bed telah dihancurkan!");
         yml.addDefault(Messages.NEXT_EVENT_TITLE_ANNOUNCE_SUDDEN_DEATH, "&cSudden Death");
         yml.addDefault(Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_SUDDEN_DEATH, "");
         yml.addDefault(Messages.NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH, "&cSUDDEN DEATH: &6&b{TeamDragons} {TeamColor}{TeamName} Naga!");
