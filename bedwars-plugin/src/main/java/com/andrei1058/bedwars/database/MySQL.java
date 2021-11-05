@@ -115,7 +115,7 @@ public class MySQL implements Database {
 
     @Override
     public boolean hasStats(UUID uuid) {
-        String sql = "SELECT id FROM global_stats WHERE uuid = ?;";
+        String sql = "SELECT uuid FROM global_stats WHERE uuid = ?;";
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, uuid.toString());
@@ -372,7 +372,7 @@ public class MySQL implements Database {
 
     @Override
     public void setLevelData(UUID uuid, int level, int xp, String displayName, int nextCost) {
-        String sql = "SELECT id from player_levels WHERE uuid = ?;";
+        String sql = "SELECT uuid from player_levels WHERE uuid = ?;";
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, uuid.toString());

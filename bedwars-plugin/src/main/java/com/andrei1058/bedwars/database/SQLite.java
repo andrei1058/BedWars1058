@@ -102,7 +102,7 @@ public class SQLite implements Database {
 
     @Override
     public boolean hasStats(UUID uuid) {
-        String sql = "SELECT id FROM global_stats WHERE uuid = ?;";
+        String sql = "SELECT uuid FROM global_stats WHERE uuid = ?;";
         try (Connection connection = DriverManager.getConnection(url)) {
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, uuid.toString());
@@ -190,7 +190,7 @@ public class SQLite implements Database {
     @Override
     public void setQuickBuySlot(UUID p, String shopPath, int slot) {
         try (Connection connection = DriverManager.getConnection(url)) {
-            try (PreparedStatement statement = connection.prepareStatement("SELECT id FROM quick_buy_2 WHERE uuid = ?;")) {
+            try (PreparedStatement statement = connection.prepareStatement("SELECT uuid FROM quick_buy_2 WHERE uuid = ?;")) {
                 statement.setString(1, p.toString());
                 try (ResultSet rs = statement.executeQuery()) {
                     if (!rs.next()) {
@@ -292,7 +292,7 @@ public class SQLite implements Database {
     @Override
     public void setLevelData(UUID player, int level, int xp, String displayName, int nextCost) {
         try (Connection connection = DriverManager.getConnection(url)) {
-            try (PreparedStatement pss = connection.prepareStatement("SELECT id from player_levels WHERE uuid = ?;")) {
+            try (PreparedStatement pss = connection.prepareStatement("SELECT uuid from player_levels WHERE uuid = ?;")) {
                 pss.setString(1, player.toString());
                 try (ResultSet rs = pss.executeQuery()) {
                     if (!rs.next()) {
