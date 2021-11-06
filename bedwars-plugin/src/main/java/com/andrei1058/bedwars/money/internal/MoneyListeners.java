@@ -16,9 +16,6 @@ import java.util.UUID;
 
 public class MoneyListeners implements Listener {
 
-    /**
-     * Win / Lose Rewards
-     */
     @EventHandler
     public void onGameEnd(GameEndEvent e) {
         for (UUID p : e.getWinners ()) {
@@ -41,9 +38,6 @@ public class MoneyListeners implements Listener {
         }
     }
 
-    /**
-     * Break Bed Rewards
-     */
     @EventHandler
     public void onBreakBed(PlayerBedBreakEvent e) {
         Player player = e.getPlayer ();
@@ -55,9 +49,6 @@ public class MoneyListeners implements Listener {
         }
     }
 
-    /**
-     * Kill Rewards
-     */
     @EventHandler
     public void onKill(PlayerKillEvent e) {
         Player player = e.getKiller ();

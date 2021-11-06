@@ -15,9 +15,6 @@ public class MoneyPerMinuteTask {
 
     private BukkitTask task;
 
-    /**
-     * Per Minute Rewards
-     */
     public MoneyPerMinuteTask(Arena arena) {
         if (money < 1){
             return;
@@ -30,9 +27,6 @@ public class MoneyPerMinuteTask {
         }, 60 * 20, 60 * 20);
     }
 
-    /**
-     * Cancel task.
-     */
     public void cancel() {
         if (task != null) {
             task.cancel();

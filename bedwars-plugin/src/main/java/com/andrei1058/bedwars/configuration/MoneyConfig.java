@@ -11,9 +11,6 @@ public class MoneyConfig extends ConfigManager {
         super ( BedWars.plugin, "rewards", BedWars.plugin.getDataFolder ().toString () );
     }
 
-    /**
-     * Money Config
-     */
     public static void init() {
         money = new MoneyConfig ();
         money.getYml ().options ().copyDefaults ( true );
