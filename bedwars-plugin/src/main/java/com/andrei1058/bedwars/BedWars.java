@@ -176,6 +176,7 @@ public class BedWars extends JavaPlugin {
         new Polish();
         new Spanish();
         new Russian();
+        new Bangla();
 
         config = new MainConfig(this, "config");
 
