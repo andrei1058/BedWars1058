@@ -113,13 +113,13 @@ public class Bangla extends Language {
         yml.addDefault(Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT, "{prefix}§cPorjapto players nei! Countdown bondho hoye gelo!");
         yml.addDefault(Messages.ARENA_RESTART_PLAYER_KICK, "{prefix}&eApnar join kora arena restart hocche.");
         yml.addDefault(Messages.ARENA_STATUS_PLAYING_NAME, "&cPlaying");
-        yml.addDefault(Messages.ARENA_STATUS_RESTARTING_NAME, "&4Restarting");
+        yml.addDefault(Messages.ARENA_STATUS_RESTARTING_NAME, "&4Restarting hocche");
         yml.addDefault(Messages.ARENA_STATUS_WAITING_NAME, "&2Waiting §c{full}");
         yml.addDefault(Messages.ARENA_STATUS_STARTING_NAME, "&6Starting §c{full}");
         yml.addDefault(Messages.ARENA_GUI_INV_NAME, "&8Join korte click korun!");
         yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_NAME, "&a&l{name}");
         yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_LORE, Arrays.asList("", "&7Status: {status}", "&7Players: &f{on}&7/&f{max}", "&7Type: &a{group}", "", "&aJoin korte Right-Click korun", "&eSpectate korte Right-Click korun."));
-        yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_CHAT, "{prefix}&eThe game starts in &6{time} &eseconds!");
+        yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_CHAT, "{prefix}&eGame ti &6{time} &eseconds e start hobe!");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_TITLE, " ");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE, "&a{second}");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-5", "&e❺");
@@ -335,8 +335,8 @@ public class Bangla extends Language {
 
         //
         yml.addDefault(Messages.SHOP_INDEX_NAME, "&8Quick Buy");
-        yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "{prefix}&cYou don't have enough {currency}! Need {amount} more!");
-        yml.addDefault(Messages.SHOP_NEW_PURCHASE, "{prefix}&aYou purchased &6{item}");
+        yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "{prefix}&cApnar kache porjapto {currency} ney! Apnar aro {amount} beshi lagbe!");
+        yml.addDefault(Messages.SHOP_NEW_PURCHASE, "{prefix}&a&aApni &6{item} &akinlen.");
         yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "{prefix}&cYou've already bought that!");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "{TeamColor}&l{TeamName} &r{TeamColor}Silverfish");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME, "{TeamColor}{despawn}s &8[ {TeamColor}{health}&8]");
@@ -344,15 +344,15 @@ public class Bangla extends Language {
         yml.addDefault(Messages.SHOP_SEPARATOR_LORE, Collections.singletonList("&8⇩ Items"));
         yml.addDefault(Messages.SHOP_QUICK_BUY_NAME, "&bQuick Buy");
         yml.addDefault(Messages.SHOP_QUICK_BUY_LORE, new ArrayList<>());
-        yml.addDefault(Messages.SHOP_QUICK_EMPTY_NAME, "&cEmpty slot!");
-        yml.addDefault(Messages.SHOP_QUICK_EMPTY_LORE, Arrays.asList("&7This is a Quick Buy Slot!", "&bSneak Click &7any item in", "&7the shop to add it here."));
+        yml.addDefault(Messages.SHOP_QUICK_EMPTY_NAME, "&cKhali slot!");
+        yml.addDefault(Messages.SHOP_QUICK_EMPTY_LORE, Arrays.asList("&7Eti ekti Quick Buy Slot!", "&7Kono item add korte", "&7Ekhane &bSneak Click korun."));
         yml.addDefault(Messages.SHOP_CAN_BUY_COLOR, "&a");
         yml.addDefault(Messages.SHOP_CANT_BUY_COLOR, "&c");
         yml.addDefault(Messages.SHOP_LORE_STATUS_CAN_BUY, "&ePurchase korte click korun!");
-        yml.addDefault(Messages.SHOP_LORE_STATUS_CANT_AFFORD, "&cYou don't have enough {currency}!");
+        yml.addDefault(Messages.SHOP_LORE_STATUS_CANT_AFFORD, "&cApnar kache porjaptop {currency} ney");
         yml.addDefault(Messages.SHOP_LORE_STATUS_MAXED, "&aMAXED!");
-        yml.addDefault(Messages.SHOP_LORE_QUICK_ADD, "&bSneak Click to add to Quick Buy");
-        yml.addDefault(Messages.SHOP_LORE_QUICK_REMOVE, "&bSneak Click to remove from Quick Buy!");
+        yml.addDefault(Messages.SHOP_LORE_QUICK_ADD, "&7Quick Buy te add korte &bSneal Click &7korun");
+        yml.addDefault(Messages.SHOP_LORE_QUICK_REMOVE, "&7Quick Buy theke remove korte &bSneak Click &7korun!");
 
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "&8Blocks", "&aBlocks", Collections.singletonList("&eClick to view!"));
@@ -434,11 +434,11 @@ public class Bangla extends Language {
         yml.addDefault(Messages.FORMAT_UPGRADE_COLOR_UNLOCKED, "&a");
         yml.addDefault(Messages.FORMAT_UPGRADE_TIER_LOCKED, "&7");
         yml.addDefault(Messages.FORMAT_UPGRADE_TIER_UNLOCKED, "&a");
-        yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY, "{color}Click to purchase!");
-        yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY, "{color}You don't have enough {currency}");
+        yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY, "{color}Purchase korte click korun!");
+        yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY, "{color}Apnar kache porjapto {currency} ney");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_LOCKED, "&cLOCKED");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_UNLOCKED, "{color}UNLOCKED");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a{player} purchased &6{upgradeName}");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a{player} &6{upgradeName} &akinlen.");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-1"), "{color}Iron Forge");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "forge").replace("{tier}", "tier-1"),
                 Arrays.asList("&7Upgrade resource spawning on", "&7your island.", "", "{tierColor}Tier 1: +50% Resources, &b{cost} {currency}",
