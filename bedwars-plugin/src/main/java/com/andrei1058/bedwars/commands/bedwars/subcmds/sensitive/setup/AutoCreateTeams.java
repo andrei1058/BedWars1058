@@ -209,7 +209,7 @@ public class AutoCreateTeams extends SubCommand {
                     p.sendMessage("§6§lNEW TEAMS FOUND:");
                     for (Byte tf : found) {
                         String name = TeamColor.enName(tf);
-                        p.sendMessage("§f ▪ " + TeamColor.getChatColor(name) + name);
+                        p.sendMessage("§f ▪ " + TeamColor.getChatColor(name) + name.replace('_', ' '));
                     }
                     p.spigot().sendMessage(Misc.msgHoverClick("§6 ▪ §7§lClick here to create found teams.", "§fClick to create found teams!", "/" + getParent().getName() + " " + getSubCommandName(), ClickEvent.Action.RUN_COMMAND));
                 }
