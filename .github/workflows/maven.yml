@@ -1,0 +1,51 @@
+# This workflow will build a Java project with Maven
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: Java CI with Maven
+
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+    branches:
+      - '*'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 1.16
+        uses: actions/setup-java@v2
+        with:
+          java-version: 16
+          distribution: 'adopt'
+      - name: Build with Maven
+        run: mvn clean install --file pom.xml -s ci_settings.xml
+#        env:
+#          APIDOCS_PASS: ${{ secrets.APIDOCS_PASS }}
+#          APIDOCS_USER: ${{ secrets.APIDOCS_USER }}
+#      - name: release
+#        uses: actions/create-release@v1
+#        id: create_release
+#        with:
+#          draft: false
+#          prerelease: false
+#          release_name: Release ${{ github.ref }}
+#          tag_name: ${{ github.ref }}
+#          body_path: CHANGELOG.md
+#        env:
+#          GITHUB_TOKEN: ${{ github.token }}
+#      - name: upload plugin jar artifact
+#        uses: actions/upload-release-asset@v1
+#        env:
+#          GITHUB_TOKEN: ${{ github.token }}
+#        with:
+#          upload_url: ${{ steps.create_release.outputs.upload_url }}
+#          asset_path: ./bedwars-plugin/target/bedwars-plugin-*.jar
+#          asset_name: bedwars-plugin.jar
+#          asset_content_type: application/jar
+#          prerelease: false
