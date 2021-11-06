@@ -26,8 +26,6 @@ import com.andrei1058.bedwars.shop.quickbuy.QuickBuyElement;
 import com.andrei1058.bedwars.stats.PlayerStats;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.apache.commons.lang3.StringUtils;
-import org.bukkit.Bukkit;
 
 import java.sql.*;
 import java.util.HashMap;
@@ -117,12 +115,13 @@ public class MySQL implements Database {
 
     @Override
     public boolean hasStats(UUID uuid) {
-        String sql = "SELECT id FROM global_stats WHERE uuid = ?;";
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, uuid.toString());
-            try (ResultSet result = statement.executeQuery()) {
-                return result.next();
+        String sql = "SELECT uuid FROM global_stats WHERE uuid = ?;";
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setString(1, uuid.toString());
+                try (ResultSet result = statement.executeQuery()) {
+                    return result.next();
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -137,10 +136,9 @@ public class MySQL implements Database {
                     "name VARCHAR(200), uuid VARCHAR(200), first_play TIMESTAMP NULL DEFAULT NULL, " +
                     "last_play TIMESTAMP NULL DEFAULT NULL, wins INT(200), kills INT(200), " +
                     "final_kills INT(200), looses INT(200), deaths INT(200), final_deaths INT(200), beds_destroyed INT(200), games_played INT(200));";
+
             try (Statement statement = connection.createStatement()) {
                 statement.executeUpdate(sql);
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
 
             sql = "CREATE TABLE IF NOT EXISTS quick_buy_2 (uuid VARCHAR(36) PRIMARY KEY, " +
@@ -149,24 +147,17 @@ public class MySQL implements Database {
                     "slot_37 VARCHAR(200), slot_38 VARCHAR(200), slot_39 VARCHAR(200), slot_40 VARCHAR(200), slot_41 VARCHAR(200), slot_42 VARCHAR(200), slot_43 VARCHAR(200));";
             try (Statement statement = connection.createStatement()) {
                 statement.executeUpdate(sql);
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
-
 
             sql = "CREATE TABLE IF NOT EXISTS player_levels (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, uuid VARCHAR(200), " +
                     "level INT(200), xp INT(200), name VARCHAR(200) CHARACTER SET utf8, next_cost INT(200));";
             try (Statement statement = connection.createStatement()) {
                 statement.executeUpdate(sql);
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
 
             sql = "CREATE TABLE IF NOT EXISTS player_language (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, uuid VARCHAR(200), iso VARCHAR(200));";
             try (Statement statement = connection.createStatement()) {
                 statement.executeUpdate(sql);
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -176,106 +167,99 @@ public class MySQL implements Database {
     @Override
     public void saveStats(PlayerStats stats) {
         String sql;
-        if (hasStats(stats.getUuid())) {
-            sql = "UPDATE global_stats SET first_play=?, last_play=?, wins=?, kills=?, final_kills=?, looses=?, deaths=?, final_deaths=?, beds_destroyed=?, games_played=?, name=? WHERE uuid = ?;";
-            try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setTimestamp(1, stats.getFirstPlay() != null ? Timestamp.from(stats.getFirstPlay()) : null);
-                statement.setTimestamp(2, stats.getLastPlay() != null ? Timestamp.from(stats.getLastPlay()) : null);
-                statement.setInt(3, stats.getWins());
-                statement.setInt(4, stats.getKills());
-                statement.setInt(5, stats.getFinalKills());
-                statement.setInt(6, stats.getLosses());
-                statement.setInt(7, stats.getDeaths());
-                statement.setInt(8, stats.getFinalDeaths());
-                statement.setInt(9, stats.getBedsDestroyed());
-                statement.setInt(10, stats.getGamesPlayed());
-                statement.setString(11, stats.getName());
-                statement.setString(12, stats.getUuid().toString());
-                statement.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
+        try (Connection connection = dataSource.getConnection()) {
+            if (hasStats(stats.getUuid())) {
+                sql = "UPDATE global_stats SET first_play=?, last_play=?, wins=?, kills=?, final_kills=?, looses=?, deaths=?, final_deaths=?, beds_destroyed=?, games_played=?, name=? WHERE uuid = ?;";
+                try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                    statement.setTimestamp(1, stats.getFirstPlay() != null ? Timestamp.from(stats.getFirstPlay()) : null);
+                    statement.setTimestamp(2, stats.getLastPlay() != null ? Timestamp.from(stats.getLastPlay()) : null);
+                    statement.setInt(3, stats.getWins());
+                    statement.setInt(4, stats.getKills());
+                    statement.setInt(5, stats.getFinalKills());
+                    statement.setInt(6, stats.getLosses());
+                    statement.setInt(7, stats.getDeaths());
+                    statement.setInt(8, stats.getFinalDeaths());
+                    statement.setInt(9, stats.getBedsDestroyed());
+                    statement.setInt(10, stats.getGamesPlayed());
+                    statement.setString(11, stats.getName());
+                    statement.setString(12, stats.getUuid().toString());
+                    statement.executeUpdate();
+                }
+            } else {
+                sql = "INSERT INTO global_stats (name, uuid, first_play, last_play, wins, kills, final_kills, looses, deaths, final_deaths, beds_destroyed, games_played) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+                try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                    statement.setString(1, stats.getName());
+                    statement.setString(2, stats.getUuid().toString());
+                    statement.setTimestamp(3, Timestamp.from(stats.getFirstPlay()));
+                    statement.setTimestamp(4, Timestamp.from(stats.getLastPlay()));
+                    statement.setInt(5, stats.getWins());
+                    statement.setInt(6, stats.getKills());
+                    statement.setInt(7, stats.getFinalKills());
+                    statement.setInt(8, stats.getLosses());
+                    statement.setInt(9, stats.getDeaths());
+                    statement.setInt(10, stats.getFinalDeaths());
+                    statement.setInt(11, stats.getBedsDestroyed());
+                    statement.setInt(12, stats.getGamesPlayed());
+                    statement.executeUpdate();
+                }
             }
-        } else {
-            sql = "INSERT INTO global_stats (name, uuid, first_play, last_play, wins, kills, final_kills, looses, deaths, final_deaths, beds_destroyed, games_played) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-            try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, stats.getName());
-                statement.setString(2, stats.getUuid().toString());
-                statement.setTimestamp(3, Timestamp.from(stats.getFirstPlay()));
-                statement.setTimestamp(4, Timestamp.from(stats.getLastPlay()));
-                statement.setInt(5, stats.getWins());
-                statement.setInt(6, stats.getKills());
-                statement.setInt(7, stats.getFinalKills());
-                statement.setInt(8, stats.getLosses());
-                statement.setInt(9, stats.getDeaths());
-                statement.setInt(10, stats.getFinalDeaths());
-                statement.setInt(11, stats.getBedsDestroyed());
-                statement.setInt(12, stats.getGamesPlayed());
-                statement.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public PlayerStats fetchStats(UUID uuid) {
         PlayerStats stats = new PlayerStats(uuid);
-
         String sql = "SELECT first_play, last_play, wins, kills, final_kills, looses, deaths, final_deaths," +
                 "beds_destroyed, games_played FROM global_stats WHERE uuid = ?;";
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, uuid.toString());
-            try (ResultSet result = statement.executeQuery()) {
-                if (result.next()) {
-                    Timestamp firstPlay = result.getTimestamp(1);
-                    Timestamp lastPlay = result.getTimestamp(2);
-                    stats.setFirstPlay(firstPlay != null ? firstPlay.toInstant() : null);
-                    stats.setLastPlay(lastPlay != null ? lastPlay.toInstant() : null);
-                    stats.setWins(result.getInt(3));
-                    stats.setKills(result.getInt(4));
-                    stats.setFinalKills(result.getInt(5));
-                    stats.setLosses(result.getInt(6));
-                    stats.setDeaths(result.getInt(7));
-                    stats.setFinalDeaths(result.getInt(8));
-                    stats.setBedsDestroyed(result.getInt(9));
-                    stats.setGamesPlayed(result.getInt(10));
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setString(1, uuid.toString());
+                try (ResultSet result = statement.executeQuery()) {
+                    if (result.next()) {
+                        Timestamp firstPlay = result.getTimestamp(1);
+                        Timestamp lastPlay = result.getTimestamp(2);
+                        stats.setFirstPlay(firstPlay != null ? firstPlay.toInstant() : null);
+                        stats.setLastPlay(lastPlay != null ? lastPlay.toInstant() : null);
+                        stats.setWins(result.getInt(3));
+                        stats.setKills(result.getInt(4));
+                        stats.setFinalKills(result.getInt(5));
+                        stats.setLosses(result.getInt(6));
+                        stats.setDeaths(result.getInt(7));
+                        stats.setFinalDeaths(result.getInt(8));
+                        stats.setBedsDestroyed(result.getInt(9));
+                        stats.setGamesPlayed(result.getInt(10));
+                    }
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return stats;
     }
 
     @Override
-    public void close() {
-        dataSource.close();
-    }
-
-    @Override
     public void setQuickBuySlot(UUID uuid, String shopPath, int slot) {
-        String sql = "SELECT id FROM quick_buy_2 WHERE uuid = ?;";
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, uuid.toString());
-            try (ResultSet result = statement.executeQuery()) {
-                if (!result.next()) {
-                    sql = "INSERT INTO quick_buy_2 VALUES(0, ?, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');";
+        String sql = "SELECT uuid FROM quick_buy_2 WHERE uuid = ?;";
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setString(1, uuid.toString());
+                try (ResultSet result = statement.executeQuery()) {
+                    if (!result.next()) {
+                        sql = "INSERT INTO quick_buy_2 VALUES(0, ?, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');";
+                        try (PreparedStatement statement2 = connection.prepareStatement(sql)) {
+                            statement2.setString(1, uuid.toString());
+                            statement2.executeUpdate();
+                        }
+                    }
+                    BedWars.debug("UPDATE SET SLOT " + slot + " identifier " + shopPath);
+                    sql = "UPDATE quick_buy_2 SET slot_" + slot + " = ? WHERE uuid = ?;";
                     try (PreparedStatement statement2 = connection.prepareStatement(sql)) {
-                        statement2.setString(1, uuid.toString());
+                        statement2.setString(1, shopPath);
+                        statement2.setString(2, uuid.toString());
                         statement2.executeUpdate();
                     }
-                }
-                BedWars.debug("UPDATE SET SLOT " + slot + " identifier " + shopPath);
-                sql = "UPDATE quick_buy_2 SET slot_" + slot + " = ? WHERE uuid = ?;";
-                try (PreparedStatement statement2 = connection.prepareStatement(sql)) {
-                    statement2.setString(1, shopPath);
-                    statement2.setString(2, uuid.toString());
-                    statement2.executeUpdate();
                 }
             }
         } catch (Exception ex) {
@@ -283,16 +267,16 @@ public class MySQL implements Database {
         }
     }
 
-
     @Override
     public String getQuickBuySlots(UUID uuid, int slot) {
         String sql = "SELECT slot_" + slot + " FROM quick_buy_2 WHERE uuid = ?;";
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, uuid.toString());
-            try (ResultSet result = statement.executeQuery()) {
-                if (result.next()) {
-                    return result.getString(1);
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setString(1, uuid.toString());
+                try (ResultSet result = statement.executeQuery()) {
+                    if (result.next()) {
+                        return result.getString(1);
+                    }
                 }
             }
         } catch (Exception ex) {
@@ -307,21 +291,22 @@ public class MySQL implements Database {
         if (slot.length == 0) {
             return results;
         }
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement ps = connection.prepareStatement("SELECT * FROM quick_buy_2 WHERE uuid = ?;")) {
-            ps.setString(1, uuid.toString());
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    for (int i : slot) {
-                        String id = rs.getString("slot_" + i);
-                        if (null != id && !id.isEmpty()) {
-                            results.put(i, id);
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM quick_buy_2 WHERE uuid = ?;")) {
+                ps.setString(1, uuid.toString());
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        for (int i : slot) {
+                            String id = rs.getString("slot_" + i);
+                            if (null != id && !id.isEmpty()) {
+                                results.put(i, id);
+                            }
                         }
                     }
                 }
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return results;
     }
@@ -329,11 +314,12 @@ public class MySQL implements Database {
     @Override
     public boolean hasQuickBuy(UUID uuid) {
         String sql = "SELECT uuid FROM quick_buy_2 WHERE uuid = ?;";
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, uuid.toString());
-            try (ResultSet result = statement.executeQuery()) {
-                return result.next();
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setString(1, uuid.toString());
+                try (ResultSet result = statement.executeQuery()) {
+                    return result.next();
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -344,12 +330,14 @@ public class MySQL implements Database {
     @Override
     public int getColumn(UUID player, String column) {
         String sql = "SELECT ? FROM global_stats WHERE uuid = ?;";
-        try (Connection connection = dataSource.getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, column);
-            statement.setString(2, player.toString());
-            try (ResultSet result = statement.executeQuery()) {
-                if (result.next()) {
-                    return result.getInt(column);
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setString(1, column);
+                statement.setString(2, player.toString());
+                try (ResultSet result = statement.executeQuery()) {
+                    if (result.next()) {
+                        return result.getInt(column);
+                    }
                 }
             }
         } catch (SQLException ex) {
@@ -362,17 +350,18 @@ public class MySQL implements Database {
     @Override
     public Object[] getLevelData(UUID uuid) {
         String sql = "SELECT level, xp, name, next_cost FROM player_levels WHERE uuid = ?;";
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, uuid.toString());
-            try (ResultSet result = statement.executeQuery()) {
-                if (result.next()) {
-                    return new Object[]{
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setString(1, uuid.toString());
+                try (ResultSet result = statement.executeQuery()) {
+                    if (result.next()) {
+                        return new Object[]{
                             result.getInt(1),
                             result.getInt(2),
                             result.getString(3),
                             result.getInt(4)
-                    };
+                        };
+                    }
                 }
             }
         } catch (SQLException e) {
@@ -383,39 +372,40 @@ public class MySQL implements Database {
 
     @Override
     public void setLevelData(UUID uuid, int level, int xp, String displayName, int nextCost) {
-        String sql = "SELECT id from player_levels WHERE uuid = ?;";
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, uuid.toString());
-            try (ResultSet result = statement.executeQuery()) {
-                if (!result.next()) {
-                    sql = "INSERT INTO player_levels VALUES (?, ?, ?, ?, ?, ?);";
-                    try (PreparedStatement statement2 = connection.prepareStatement(sql)) {
-                        statement2.setInt(1, 0);
-                        statement2.setString(2, uuid.toString());
-                        statement2.setInt(3, level);
-                        statement2.setInt(4, xp);
-                        statement2.setString(5, displayName);
-                        statement2.setInt(6, nextCost);
-                        statement2.executeUpdate();
-                    }
-                } else {
-                    if (displayName == null) {
-                        sql = "UPDATE player_levels SET level=?, xp=? WHERE uuid = ?;";
-                    } else {
-                        sql = "UPDATE player_levels SET level=?, xp=?, name=?, next_cost=? WHERE uuid = ?;";
-                    }
-                    try (PreparedStatement statement2 = connection.prepareStatement(sql)) {
-                        statement2.setInt(1, level);
-                        statement2.setInt(2, xp);
-                        if (displayName != null) {
-                            statement2.setString(3, displayName);
-                            statement2.setInt(4, nextCost);
-                            statement2.setString(5, uuid.toString());
-                        } else {
-                            statement2.setString(3, uuid.toString());
+        String sql = "SELECT uuid from player_levels WHERE uuid = ?;";
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setString(1, uuid.toString());
+                try (ResultSet result = statement.executeQuery()) {
+                    if (!result.next()) {
+                        sql = "INSERT INTO player_levels VALUES (?, ?, ?, ?, ?, ?);";
+                        try (PreparedStatement statement2 = connection.prepareStatement(sql)) {
+                            statement2.setInt(1, 0);
+                            statement2.setString(2, uuid.toString());
+                            statement2.setInt(3, level);
+                            statement2.setInt(4, xp);
+                            statement2.setString(5, displayName);
+                            statement2.setInt(6, nextCost);
+                            statement2.executeUpdate();
                         }
-                        statement2.executeUpdate();
+                    } else {
+                        if (displayName == null) {
+                            sql = "UPDATE player_levels SET level=?, xp=? WHERE uuid = ?;";
+                        } else {
+                            sql = "UPDATE player_levels SET level=?, xp=?, name=?, next_cost=? WHERE uuid = ?;";
+                        }
+                        try (PreparedStatement statement2 = connection.prepareStatement(sql)) {
+                            statement2.setInt(1, level);
+                            statement2.setInt(2, xp);
+                            if (displayName != null) {
+                                statement2.setString(3, displayName);
+                                statement2.setInt(4, nextCost);
+                                statement2.setString(5, uuid.toString());
+                            } else {
+                                statement2.setString(3, uuid.toString());
+                            }
+                            statement2.executeUpdate();
+                        }
                     }
                 }
             }
@@ -427,23 +417,24 @@ public class MySQL implements Database {
     @Override
     public void setLanguage(UUID uuid, String iso) {
         String sql = "SELECT iso FROM player_language WHERE uuid = ?;";
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, uuid.toString());
-            try (ResultSet result = statement.executeQuery()) {
-                if (result.next()) {
-                    sql = "UPDATE player_language SET iso = ? WHERE uuid = ?;";
-                    try (PreparedStatement statement2 = connection.prepareStatement(sql)) {
-                        statement2.setString(1, iso);
-                        statement2.setString(2, uuid.toString());
-                        statement2.executeUpdate();
-                    }
-                } else {
-                    sql = "INSERT INTO player_language VALUES (0, ?, ?);";
-                    try (PreparedStatement statement2 = connection.prepareStatement(sql)) {
-                        statement2.setString(1, uuid.toString());
-                        statement2.setString(2, iso);
-                        statement2.executeUpdate();
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setString(1, uuid.toString());
+                try (ResultSet result = statement.executeQuery()) {
+                    if (result.next()) {
+                        sql = "UPDATE player_language SET iso = ? WHERE uuid = ?;";
+                        try (PreparedStatement statement2 = connection.prepareStatement(sql)) {
+                            statement2.setString(1, iso);
+                            statement2.setString(2, uuid.toString());
+                            statement2.executeUpdate();
+                        }
+                    } else {
+                        sql = "INSERT INTO player_language VALUES (0, ?, ?);";
+                        try (PreparedStatement statement2 = connection.prepareStatement(sql)) {
+                            statement2.setString(1, uuid.toString());
+                            statement2.setString(2, iso);
+                            statement2.executeUpdate();
+                        }
                     }
                 }
             }
@@ -455,12 +446,13 @@ public class MySQL implements Database {
     @Override
     public String getLanguage(UUID uuid) {
         String sql = "SELECT iso FROM player_language WHERE uuid = ?;";
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, uuid.toString());
-            try (ResultSet result = statement.executeQuery()) {
-                if (result.next()) {
-                    return result.getString(1);
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setString(1, uuid.toString());
+                try (ResultSet result = statement.executeQuery()) {
+                    if (result.next()) {
+                        return result.getString(1);
+                    }
                 }
             }
         } catch (SQLException e) {
@@ -514,8 +506,9 @@ public class MySQL implements Database {
                 ps.setString(hasQuick ? updateSlots.size()+1 : 1, uuid.toString());
                 ps.execute();
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
+
 }

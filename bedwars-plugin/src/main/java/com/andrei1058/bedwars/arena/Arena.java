@@ -61,10 +61,12 @@ import com.andrei1058.bedwars.levels.internal.InternalLevel;
 import com.andrei1058.bedwars.levels.internal.PerMinuteTask;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
 import com.andrei1058.bedwars.listeners.dropshandler.PlayerDrops;
+import com.andrei1058.bedwars.money.internal.MoneyPerMinuteTask;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
+import com.andrei1058.bedwars.support.vault.WithEconomy;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -164,6 +166,8 @@ public class Arena implements IArena {
     private List<IGenerator> oreGenerators = new ArrayList<>();
 
     private PerMinuteTask perMinuteTask;
+
+    private MoneyPerMinuteTask moneyperMinuteTask;
 
     private static final LinkedList<IArena> enableQueue = new LinkedList<>();
 
@@ -1447,11 +1451,21 @@ public class Arena implements IArena {
         if (status == GameState.starting) {
             startingTask = new GameStartingTask(this);
         } else if (status == GameState.playing) {
-            if (BedWars.getLevelSupport() instanceof InternalLevel) perMinuteTask = new PerMinuteTask(this);
+            if (BedWars.getLevelSupport() instanceof InternalLevel) {
+                perMinuteTask = new PerMinuteTask(this);
+            }
+            if (BedWars.getEconomy() instanceof WithEconomy) {
+                moneyperMinuteTask = new MoneyPerMinuteTask(this);
+            }
             playingTask = new GamePlayingTask(this);
         } else if (status == GameState.restarting) {
             restartingTask = new GameRestartingTask(this);
-            if (perMinuteTask != null) perMinuteTask.cancel();
+            if (perMinuteTask != null) {
+                perMinuteTask.cancel ();
+            }
+            if (moneyperMinuteTask != null) {
+                moneyperMinuteTask.cancel ();
+            }
         }
     }
 
@@ -2345,6 +2359,7 @@ public class Arena implements IArena {
         restartingTask = null;
         oreGenerators = null;
         perMinuteTask = null;
+        moneyperMinuteTask = null;
     }
 
     /**

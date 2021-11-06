@@ -47,11 +47,6 @@ public interface Database {
     PlayerStats fetchStats(UUID uuid);
 
     /**
-     * Close connection.
-     */
-    void close();
-
-    /**
      * Set quick buy slot value.
      */
     @Deprecated

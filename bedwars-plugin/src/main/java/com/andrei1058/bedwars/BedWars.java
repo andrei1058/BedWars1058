@@ -58,6 +58,7 @@ import com.andrei1058.bedwars.lobbysocket.ArenaSocket;
 import com.andrei1058.bedwars.lobbysocket.LoadedUsersCleaner;
 import com.andrei1058.bedwars.lobbysocket.SendTask;
 import com.andrei1058.bedwars.maprestore.internal.InternalAdapter;
+import com.andrei1058.bedwars.money.internal.MoneyListeners;
 import com.andrei1058.bedwars.shop.ShopManager;
 import com.andrei1058.bedwars.sidebar.*;
 import com.andrei1058.bedwars.stats.StatsManager;
@@ -75,6 +76,7 @@ import com.andrei1058.spigotutils.SpigotUpdater;
 import com.andrei1058.vipfeatures.api.IVipFeatures;
 import com.andrei1058.vipfeatures.api.MiniGameAlreadyRegistered;
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -186,7 +188,6 @@ public class BedWars extends JavaPlugin {
 
     @Override
     public void onEnable() {
-
         if (!serverSoftwareSupport) {
             Bukkit.getPluginManager().disablePlugin(this);
             return;
@@ -314,6 +315,7 @@ public class BedWars extends JavaPlugin {
         // Register setup-holograms fix
         registerEvents(new ChunkLoad());
 
+
         /* Deprecated versions */
         switch (version) {
             case "v1_8_R3":
@@ -383,6 +385,7 @@ public class BedWars extends JavaPlugin {
             remoteDatabase.init();
         } else {
             remoteDatabase = new SQLite();
+            remoteDatabase.init();
         }
 
         /* Citizens support */
@@ -430,6 +433,7 @@ public class BedWars extends JavaPlugin {
             }
             try {
                 //noinspection rawtypes
+                registerEvents(new MoneyListeners());
                 RegisteredServiceProvider rsp = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
                 WithEconomy.setEconomy((net.milkbowl.vault.economy.Economy) rsp.getProvider());
                 plugin.getLogger().info("Hook into vault economy support!");
@@ -469,16 +473,19 @@ public class BedWars extends JavaPlugin {
 
         LevelsConfig.init();
 
+        /* Load Money Configuration */
+        MoneyConfig.init();
+
         // bStats metrics
         Metrics metrics = new Metrics(this, 1885);
-        metrics.addCustomChart(new Metrics.SimplePie("server_type", () -> getServerType().toString()));
-        metrics.addCustomChart(new Metrics.SimplePie("default_language", () -> Language.getDefaultLanguage().getIso()));
-        metrics.addCustomChart(new Metrics.SimplePie("auto_scale", () -> String.valueOf(autoscale)));
-        metrics.addCustomChart(new Metrics.SimplePie("party_adapter", () -> party.getClass().getName()));
-        metrics.addCustomChart(new Metrics.SimplePie("chat_adapter", () -> chat.getClass().getName()));
-        metrics.addCustomChart(new Metrics.SimplePie("level_adapter", () -> getLevelSupport().getClass().getName()));
-        metrics.addCustomChart(new Metrics.SimplePie("db_adapter", () -> getRemoteDatabase().getClass().getName()));
-        metrics.addCustomChart(new Metrics.SimplePie("map_adapter", () -> String.valueOf(getAPI().getRestoreAdapter().getOwner().getName())));
+        metrics.addCustomChart(new SimplePie("server_type", () -> getServerType().toString()));
+        metrics.addCustomChart(new SimplePie("default_language", () -> Language.getDefaultLanguage().getIso()));
+        metrics.addCustomChart(new SimplePie("auto_scale", () -> String.valueOf(autoscale)));
+        metrics.addCustomChart(new SimplePie("party_adapter", () -> party.getClass().getName()));
+        metrics.addCustomChart(new SimplePie("chat_adapter", () -> chat.getClass().getName()));
+        metrics.addCustomChart(new SimplePie("level_adapter", () -> getLevelSupport().getClass().getName()));
+        metrics.addCustomChart(new SimplePie("db_adapter", () -> getRemoteDatabase().getClass().getName()));
+        metrics.addCustomChart(new SimplePie("map_adapter", () -> String.valueOf(getAPI().getRestoreAdapter().getOwner().getName())));
 
         if (Bukkit.getPluginManager().getPlugin("VipFeatures") != null) {
             try {
@@ -568,7 +575,6 @@ public class BedWars extends JavaPlugin {
             }
         } catch (Exception ignored) {
         }
-        if (remoteDatabase != null) remoteDatabase.close();
     }
 
     private void loadArenasAndSigns() {
@@ -666,6 +672,7 @@ public class BedWars extends JavaPlugin {
      * the Level interface so the plugin will be able to display
      * the level internally.
      */
+
     public static void setLevelAdapter(Level levelsManager) {
         if (levelsManager instanceof InternalLevel) {
             if (LevelListeners.instance == null) {

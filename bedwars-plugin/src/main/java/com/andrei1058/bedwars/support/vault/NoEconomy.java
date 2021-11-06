@@ -34,6 +34,11 @@ public class NoEconomy implements Economy {
     }
 
     @Override
+    public void giveMoney(Player p, double money) {
+        p.sendMessage("§cVault support missing!");
+    }
+
+    @Override
     public void buyAction(Player p, double cost) {
         p.sendMessage("§cVault support missing!");
     }
