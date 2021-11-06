@@ -19,11 +19,11 @@
     </servers>
     <mirrors>
         <mirror>
-            <id>my-repository-http-unblocker</id>
-            <mirrorOf>my-blocked-http-repository</mirrorOf>
-            <name></name>
-            <url>http://........</url>
-            <blocked>false</blocked>
+            <id>maven-default-http-blocker</id>
+            <mirrorOf>dummy</mirrorOf>
+            <name>Dummy mirror to override default blocking mirror that blocks http</name>
+            <url>http://0.0.0.0/</url>
+            <blocked>true</blocked>
         </mirror>
     </mirrors>
 </settings>
