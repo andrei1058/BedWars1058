@@ -61,13 +61,13 @@ public class Bangla extends Language {
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY, "{prefix}&aBhasa bodle gelo!");
         yml.addDefault(Messages.COMMAND_LANG_USAGE_DENIED, "{prefix}&cApni match er vitore language change korte parben na.");
         yml.addDefault(Messages.COMMAND_JOIN_USAGE, "§a▪ §7Usage: /" + mainCmd + " join §o<arena/group>");
-        yml.addDefault(Messages.COMMAND_JOIN_GROUP_OR_ARENA_NOT_FOUND, "{prefix}&c{arena} Eii name e kono arena ba arena group nei.");
+        yml.addDefault(Messages.COMMAND_JOIN_GROUP_OR_ARENA_NOT_FOUND, "{prefix}&c{arena} Ei name e kono arena ba arena group nei.");
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_IS_FULL, "{prefix}&cEi arena ti full!\n&aAro features er jonno donate korar bibechona korun.");
         yml.addDefault(Messages.COMMAND_JOIN_NO_EMPTY_FOUND, "{prefix}&cEi muhurte kono arena available nei. ;(");
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_IS_FULL_OF_VIPS, "{prefix}&cDukkhito kintu ei arena ti fukk. \n&cAmra jani apni ekjon donor kintu ei arena ti Staff/and onno donor purno.");
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_PARTY_TOO_BIG, "{prefix}&cEi arena ti te jog dite apnar dol onek boro :(");
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_NOT_PARTY_LEADER, "{prefix}&cEkmatro Leader arena select korte parben.");
-        yml.addDefault(Messages.COMMAND_JOIN_PLAYER_JOIN_MSG, "{prefix}&7{player} &ejog diyechen (&b{on}&e/&b{max}&e)!");
+        yml.addDefault(Messages.COMMAND_JOIN_PLAYER_JOIN_MSG, "{prefix}&7{player} &ejog diyechen! (&b{on}&e/&b{max}&e)");
         yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_MSG, "{prefix}§6Apni akhon spectate korchen §9{arena}§6.\n{prefix}§eApni §c/leave§e kore je kono muhurte leave korte parben.");
         yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG, "&cEi arena ti te spectators allowed na!");
         yml.addDefault(Messages.COMMAND_TP_PLAYER_NOT_FOUND, "{prefix}&cPlayer paowa jai ni!");
@@ -182,7 +182,7 @@ public class Bangla extends Language {
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE, "&a&l✓");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_NEXEVENT_TIMER, "mm:ss");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_YOUR_TEAM, "&7 YOU");
-        yml.addDefault(Messages.FORMATTING_ACTION_BAR_TRACKING, "&fTracking: {team} &f- duratto: {distance}m");
+        yml.addDefault(Messages.FORMATTING_ACTION_BAR_TRACKING, "&fTracking: {team} &f- Duratto: {distance}m");
         yml.addDefault(Messages.FORMATTING_TEAM_WINNER_FORMAT, "      {TeamColor}{TeamName} &7- {members}");
         yml.addDefault(Messages.FORMATTING_SOLO_WINNER_FORMAT, "                 {TeamColor}{TeamName} &7- {members}");
         yml.addDefault(Messages.FORMATTING_GENERATOR_TIER1, "I");
@@ -336,7 +336,7 @@ public class Bangla extends Language {
         //
         yml.addDefault(Messages.SHOP_INDEX_NAME, "&8Quick Buy");
         yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "{prefix}&cApnar kache porjapto {currency} ney! Apnar aro {amount} beshi lagbe!");
-        yml.addDefault(Messages.SHOP_NEW_PURCHASE, "{prefix}&a&aApni &6{item} &akinlen.");
+        yml.addDefault(Messages.SHOP_NEW_PURCHASE, "{prefix}&aApni &6{item} &akinlen.");
         yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "{prefix}&cYou've already bought that!");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "{TeamColor}&l{TeamName} &r{TeamColor}Silverfish");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME, "{TeamColor}{despawn}s &8[ {TeamColor}{health}&8]");
