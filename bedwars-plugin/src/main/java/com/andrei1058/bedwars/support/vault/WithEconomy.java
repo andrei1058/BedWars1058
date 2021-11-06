@@ -38,7 +38,7 @@ public class WithEconomy implements Economy {
 
     @Override
     public void giveMoney(Player p, double money) {
-        economy.depositPlayer (p, money);
+        economy.depositPlayer ( p, money);
     }
 
     @Override

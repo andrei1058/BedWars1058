@@ -278,6 +278,7 @@ public class Messages {
     public static String MONEY_REWARD_PER_MINUTE = "money-reward-per-teammate";
     public static String MONEY_REWARD_PER_TEAMMATE = "money-reward-per-minute";
     public static String MONEY_REWARD_BED_DESTROYED = "money-reward-bed-destroyed";
+    public static String MONEY_REWARD_TEAM_BED_DESTROYED = "money-team-reward-bed-destroyed";
     public static String MONEY_REWARD_FINAL_KILL = "money-reward-final-kill";
     public static String MONEY_REWARD_REGULAR_KILL = "money-reward-regular-kill";
 
