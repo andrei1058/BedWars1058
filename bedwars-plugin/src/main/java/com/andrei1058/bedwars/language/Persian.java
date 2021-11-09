@@ -193,7 +193,7 @@ public class Persian extends Language {
         yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_TEAM, "{TeamColor}[{TeamName}]");
         yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_SHOUT, "&6[SHOUT]");
         yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_SPECTATOR, "&7[SPECTATOR]");
-        yml.addDefault(Messages.MEANING_FULL, "Full");
+        yml.addDefault(Messages.MEANING_FULL, "Kamel");
         yml.addDefault(Messages.MEANING_SHOUT, "shout");
         yml.addDefault(Messages.MEANING_NOBODY, "Hichkas");
         yml.addDefault(Messages.MEANING_NEVER, "Hichvaght");
@@ -202,9 +202,9 @@ public class Persian extends Language {
         yml.addDefault(Messages.MEANING_GOLD_SINGULAR, "Gold");
         yml.addDefault(Messages.MEANING_GOLD_PLURAL, "Gold");
         yml.addDefault(Messages.MEANING_EMERALD_SINGULAR, "Emerald");
-        yml.addDefault(Messages.MEANING_EMERALD_PLURAL, "Emeralds");
+        yml.addDefault(Messages.MEANING_EMERALD_PLURAL, "Emerald");
         yml.addDefault(Messages.MEANING_DIAMOND_SINGULAR, "Diamond");
-        yml.addDefault(Messages.MEANING_DIAMOND_PLURAL, "Diamonds");
+        yml.addDefault(Messages.MEANING_DIAMOND_PLURAL, "Diamond");
         yml.addDefault(Messages.MEANING_VAULT_SINGULAR, "$");
         yml.addDefault(Messages.MEANING_VAULT_PLURAL, "$");
         yml.addDefault(Messages.INTERACT_CANNOT_PLACE_BLOCK, "{prefix}&cShoma nemitavanid inja block bezarid!");
@@ -288,15 +288,15 @@ public class Persian extends Language {
         yml.addDefault(Messages.MONEY_REWARD_REGULAR_KILL, "{prefix}&6+{money} Coin (Kill e Addi).");
 
         /* Lobby Command Items */
-        yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "stats"), "&eEtelaat");
-        yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "stats"), Collections.singletonList("&fBaraye didan etelaatetoon Right-click konid!"));
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "stats"), "&eAmar");
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "stats"), Collections.singletonList("&fBaraye didan amaretoon Right-click konid!"));
         yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "arena-selector"), "&eEntekhab Arena");
         yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "arena-selector"), Collections.singletonList("&fBaraye entekhab arena Right-click konid!"));
         yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "leave"), "&eBazgasht be Hub");
         yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "leave"), Collections.singletonList("&fBaraye raftan az BedWars Right-click konid!"));
         /* Pre Game Command Items */
-        yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", "stats"), "&eEtelaat");
-        yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", "stats"), Collections.singletonList("&fBaraye didan etelaatetoon Right-click konid!"));
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", "stats"), "&eAmar");
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", "stats"), Collections.singletonList("&fBaraye didan amaretoon Right-click konid!"));
         yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", "leave"), "&eBazgasht be Lobby");
         yml.addDefault(Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", "leave"), Collections.singletonList("&fBaraye raftan az arena Right-click konid!"));
         /* Spectator Command Items */
@@ -305,7 +305,7 @@ public class Persian extends Language {
         yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", "leave"), Collections.singletonList("&fBaraye raftan az arena Right-click konid!"));
 
         /* save default items messages for stats gui */
-        yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "&8{player} Etelaat");
+        yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "&8{player} Amar");
         addDefaultStatsMsg(yml, "wins", "&6Bord", "&f{wins}");
         addDefaultStatsMsg(yml, "losses", "&6Bakht", "&f{losses}");
         addDefaultStatsMsg(yml, "kills", "&6Kill", "&f{kills}");
