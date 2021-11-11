@@ -29,21 +29,21 @@ import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.upgrades.MenuContent;
 import com.andrei1058.bedwars.api.upgrades.TeamUpgrade;
 import com.andrei1058.bedwars.api.upgrades.UpgradeAction;
+import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.upgrades.UpgradesManager;
+import com.google.common.collect.ImmutableMap;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class MenuUpgrade implements MenuContent, TeamUpgrade {
 
@@ -151,6 +151,13 @@ public class MenuUpgrade implements MenuContent, TeamUpgrade {
                                 .replace("upgrade-", "")).replace("{tier}", ut.getName())))).replace("{color}", ""));
             }
             Bukkit.getPluginManager().callEvent(new UpgradeBuyEvent(this, player, team));
+
+            ImmutableMap<Integer, MenuContent> menuContentBySlot = UpgradesManager.getMenuForArena(Arena.getArenaByPlayer(player)).getMenuContentBySlot();
+            Inventory inv = player.getOpenInventory().getTopInventory();
+            for (Map.Entry<Integer, MenuContent> entry : menuContentBySlot.entrySet()) {
+                inv.setItem(entry.getKey(), entry.getValue().getDisplayItem(player, team));
+            }
+
         }
     }
 

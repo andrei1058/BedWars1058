@@ -31,6 +31,7 @@ import com.andrei1058.bedwars.api.upgrades.TeamUpgrade;
 import com.andrei1058.bedwars.api.upgrades.UpgradesIndex;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.upgrades.UpgradesManager;
+import com.google.common.collect.ImmutableMap;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -90,5 +91,10 @@ public class InternalMenu implements UpgradesIndex {
             }
         }
         return count;
+    }
+
+    @Override
+    public ImmutableMap<Integer, MenuContent> getMenuContentBySlot() {
+        return ImmutableMap.copyOf(menuContentBySlot);
     }
 }
