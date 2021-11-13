@@ -148,7 +148,11 @@ public class v1_15_R1 extends VersionSupport {
     @Override
     public void minusAmount(Player p, org.bukkit.inventory.ItemStack i, int amount) {
         if (i.getAmount() - amount <= 0) {
-            p.getInventory().removeItem(i);
+            if(p.getInventory().getItemInOffHand().equals(i)) {
+                p.getInventory().setItemInOffHand(null);
+            } else {
+                p.getInventory().removeItem(i);
+            }
             return;
         }
         i.setAmount(i.getAmount() - amount);
