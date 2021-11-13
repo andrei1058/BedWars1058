@@ -62,7 +62,7 @@ public class MoneyListeners implements Listener {
     public void onKill(PlayerKillEvent e) {
         Player player = e.getKiller ();
         Player victim = e.getVictim ();
-        if (player == null || victim == player) return;
+        if (player == null || victim.equals(player)) return;
         int finalkill = MoneyConfig.money.getInt ( "money-rewards.final-kill" );
         int regularkill = MoneyConfig.money.getInt ( "money-rewards.regular-kill" );
         if (e.getCause ().isFinalKill ()) {
