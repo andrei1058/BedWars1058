@@ -122,6 +122,7 @@ public class DamageDeathMove implements Listener {
     // show player health on bow hit
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBowHit(EntityDamageByEntityEvent e) {
+        if(e.isCancelled()) return;
         if (e.getEntity().getType() != EntityType.PLAYER) return;
         if (!(e.getDamager() instanceof Projectile)) return;
         Projectile projectile = (Projectile) e.getDamager();
