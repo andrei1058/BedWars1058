@@ -146,7 +146,7 @@ public class MenuUpgrade implements MenuContent, TeamUpgrade {
             }
 
             for (Player p1 : team.getMembers()) {
-                p1.sendMessage(Language.getMsg(p1, Messages.UPGRADES_UPGRADE_BOUGHT_CHAT).replace("{player}", player.getDisplayName()).replace("{upgradeName}",
+                p1.sendMessage(Language.getMsg(p1, Messages.UPGRADES_UPGRADE_BOUGHT_CHAT).replace("{playername}", player.getName()).replace("{player}", player.getDisplayName()).replace("{upgradeName}",
                         ChatColor.stripColor(Language.getMsg(p1, Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", getName()
                                 .replace("upgrade-", "")).replace("{tier}", ut.getName())))).replace("{color}", ""));
             }

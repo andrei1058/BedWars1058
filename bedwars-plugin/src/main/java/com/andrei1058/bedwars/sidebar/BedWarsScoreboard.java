@@ -286,6 +286,7 @@ public class BedWarsScoreboard {
                     .replace("{server_ip}", BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
                     .replace("{version}", plugin.getDescription().getVersion())
                     .replace("{server}", config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID))
+                    .replace("{playername}", player.getName())
                     .replace("{player}", player.getDisplayName())
                     .replace("{money}", String.valueOf(getEconomy().getMoney(player)));
 

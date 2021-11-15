@@ -493,7 +493,7 @@ public class Arena implements IArena {
             p.setFlying(false);
             p.setAllowFlight(false);
             for (Player on : players) {
-                on.sendMessage(getMsg(on, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
+                on.sendMessage(getMsg(on, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
             }
             setArenaByPlayer(p, this);
 
@@ -847,10 +847,10 @@ public class Arena implements IArena {
             }
         }
         for (Player on : getPlayers()) {
-            on.sendMessage(getMsg(on, Messages.COMMAND_LEAVE_MSG).replace("{player}", p.getDisplayName()));
+            on.sendMessage(getMsg(on, Messages.COMMAND_LEAVE_MSG).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()));
         }
         for (Player on : getSpectators()) {
-            on.sendMessage(getMsg(on, Messages.COMMAND_LEAVE_MSG).replace("{player}", p.getDisplayName()));
+            on.sendMessage(getMsg(on, Messages.COMMAND_LEAVE_MSG).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()));
         }
 
         if (getServerType() == ServerType.SHARED) {
@@ -1097,10 +1097,10 @@ public class Arena implements IArena {
         p.closeInventory();
         players.add(p);
         for (Player on : players) {
-            on.sendMessage(getMsg(on, Messages.COMMAND_REJOIN_PLAYER_RECONNECTED).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
+            on.sendMessage(getMsg(on, Messages.COMMAND_REJOIN_PLAYER_RECONNECTED).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
         }
         for (Player on : spectators) {
-            on.sendMessage(getMsg(on, Messages.COMMAND_REJOIN_PLAYER_RECONNECTED).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
+            on.sendMessage(getMsg(on, Messages.COMMAND_REJOIN_PLAYER_RECONNECTED).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
         }
         setArenaByPlayer(p, this);
         /* save player inventory etc */
