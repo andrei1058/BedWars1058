@@ -20,6 +20,7 @@
 
 package com.andrei1058.bedwars.api.upgrades;
 
+import com.google.common.collect.ImmutableMap;
 import org.bukkit.entity.Player;
 
 public interface UpgradesIndex {
@@ -51,4 +52,6 @@ public interface UpgradesIndex {
      * @return total amount of tiers in upgrades
      */
     int countTiers();
+
+    ImmutableMap<Integer, MenuContent> getMenuContentBySlot();
 }
