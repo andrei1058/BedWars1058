@@ -98,6 +98,7 @@ public class Sounds {
     }
 
     public static void playSound(String path, List<Player> players) {
+        if(path.equalsIgnoreCase("none")) return;
         final Sound sound = getSound(path);
         int volume = getSounds().getInt(path + ".volume");
         int pitch = getSounds().getInt(path + ".pitch");
