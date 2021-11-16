@@ -24,7 +24,7 @@ You can contact us, so we can add yours here :)
 
 - by Adi100 - [BEDWARS SETUP ✨Generator Upgrade | Afk System | Custom Menus | NPCs](https://www.mc-market.org/resources/12378/?__cf_chl_jschl_tk__=pmd_zUe1xjS2ei0EP72mxwcz.hbPaDehkT0pn1EYURI9QEk-1635185029-0-gqNtZGzNAnujcnBszQj9)
 - by Ruben_Artz - [BEDWARS + DISCORD BOT](https://polymart.org/resource/bedwars-discord-bot-setup.544)
-
+- (**new**) by DyeEarth - [❄️ Premade Bedwars - Setups](https://polymart.org/resource/premade-bedwars-setups.1679)
 # Community Add-ons
 
 - [Private Games - Create private games and play with friends](https://polymart.org/resource/1620) - by Mher
