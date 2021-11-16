@@ -80,11 +80,11 @@ public class MenuSeparator implements MenuContent {
     public void onClick(Player player, ClickType clickType, ITeam team) {
         for (String cmd : playerCommands) {
             if (cmd.trim().isEmpty()) continue;
-            Bukkit.dispatchCommand(player, cmd.replace("{player}", player.getDisplayName()).replace("{team}", team == null ? "null" : team.getDisplayName(Language.getPlayerLanguage(player))));
+            Bukkit.dispatchCommand(player, cmd.replace("{playername}", player.getName()).replace("{player}", player.getDisplayName()).replace("{team}", team == null ? "null" : team.getDisplayName(Language.getPlayerLanguage(player))));
         }
         for (String cmd : consoleCommands) {
             if (cmd.trim().isEmpty()) continue;
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd.replace("{player}", player.getDisplayName()).replace("{team}", team == null ? "null" : team.getDisplayName(Language.getPlayerLanguage(player))));
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd.replace("{playername}", player.getName()).replace("{player}", player.getDisplayName()).replace("{team}", team == null ? "null" : team.getDisplayName(Language.getPlayerLanguage(player))));
         }
     }
 

@@ -37,6 +37,8 @@ public class SQLite implements Database {
 
     private String url;
 
+    private Connection connection;
+
     public SQLite() {
         File folder = new File(BedWars.plugin.getDataFolder() + "/Cache");
         if (!folder.exists()) {
@@ -70,29 +72,31 @@ public class SQLite implements Database {
     @Override
     public void init() {
         String sql;
-        try (Connection connection = DriverManager.getConnection(url)) {
-             sql = "CREATE TABLE IF NOT EXISTS global_stats (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "name VARCHAR(200), uuid VARCHAR(36), first_play TIMESTAMP NULL DEFAULT NULL, " +
-                "last_play TIMESTAMP DEFAULT NULL, wins INTEGER(10), kills INTEGER(10), " +
-                "final_kills INTEGER(10), looses INTEGER(10), deaths INTEGER(10), final_deaths INTEGER(10), beds_destroyed INTEGER(10), games_played INTEGER(10));";
+        try {
+            checkConnection();
+
+            sql = "CREATE TABLE IF NOT EXISTS global_stats (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "name VARCHAR(200), uuid VARCHAR(36), first_play TIMESTAMP NULL DEFAULT NULL, " +
+                    "last_play TIMESTAMP DEFAULT NULL, wins INTEGER(10), kills INTEGER(10), " +
+                    "final_kills INTEGER(10), looses INTEGER(10), deaths INTEGER(10), final_deaths INTEGER(10), beds_destroyed INTEGER(10), games_played INTEGER(10));";
             try (Statement statement = connection.createStatement()) {
                 statement.executeUpdate(sql);
             }
             try (Statement st = connection.createStatement()) {
                 sql = "CREATE TABLE IF NOT EXISTS quick_buy_2 (uuid VARCHAR(36) PRIMARY KEY, " +
-                    "slot_19 VARCHAR(200), slot_20 VARCHAR(200), slot_21 VARCHAR(200), slot_22 VARCHAR(200), slot_23 VARCHAR(200), slot_24 VARCHAR(200), slot_25 VARCHAR(200)," +
-                    "slot_28 VARCHAR(200), slot_29 VARCHAR(200), slot_30 VARCHAR(200), slot_31 VARCHAR(200), slot_32 VARCHAR(200), slot_33 VARCHAR(200), slot_34 VARCHAR(200)," +
-                    "slot_37 VARCHAR(200), slot_38 VARCHAR(200), slot_39 VARCHAR(200), slot_40 VARCHAR(200), slot_41 VARCHAR(200), slot_42 VARCHAR(200), slot_43 VARCHAR(200));";
+                        "slot_19 VARCHAR(200), slot_20 VARCHAR(200), slot_21 VARCHAR(200), slot_22 VARCHAR(200), slot_23 VARCHAR(200), slot_24 VARCHAR(200), slot_25 VARCHAR(200)," +
+                        "slot_28 VARCHAR(200), slot_29 VARCHAR(200), slot_30 VARCHAR(200), slot_31 VARCHAR(200), slot_32 VARCHAR(200), slot_33 VARCHAR(200), slot_34 VARCHAR(200)," +
+                        "slot_37 VARCHAR(200), slot_38 VARCHAR(200), slot_39 VARCHAR(200), slot_40 VARCHAR(200), slot_41 VARCHAR(200), slot_42 VARCHAR(200), slot_43 VARCHAR(200));";
                 st.executeUpdate(sql);
             }
             try (Statement st = connection.createStatement()) {
                 sql = "CREATE TABLE IF NOT EXISTS player_levels (id INTEGER PRIMARY KEY AUTOINCREMENT, uuid VARCHAR(200), " +
-                    "level INTEGER, xp INTEGER, name VARCHAR(200), next_cost INTEGER);";
+                        "level INTEGER, xp INTEGER, name VARCHAR(200), next_cost INTEGER);";
                 st.executeUpdate(sql);
             }
             try (Statement st = connection.createStatement()) {
                 sql = "CREATE TABLE IF NOT EXISTS  player_language (id INTEGER PRIMARY KEY AUTOINCREMENT, uuid VARCHAR(200), " +
-                    "iso VARCHAR(200));";
+                        "iso VARCHAR(200));";
                 st.executeUpdate(sql);
             }
         }catch (SQLException e) {
@@ -103,7 +107,9 @@ public class SQLite implements Database {
     @Override
     public boolean hasStats(UUID uuid) {
         String sql = "SELECT uuid FROM global_stats WHERE uuid = ?;";
-        try (Connection connection = DriverManager.getConnection(url)) {
+        try {
+            checkConnection();
+
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, uuid.toString());
                 try (ResultSet result = statement.executeQuery()) {
@@ -119,7 +125,9 @@ public class SQLite implements Database {
     @Override
     public void saveStats(PlayerStats stats) {
         String sql;
-        try (Connection connection = DriverManager.getConnection(url)) {
+        try {
+            checkConnection();
+
             if (hasStats(stats.getUuid())) {
                 sql = "UPDATE global_stats SET last_play=?, wins=?, kills=?, final_kills=?, looses=?, deaths=?, final_deaths=?, beds_destroyed=?, games_played=?, name=? WHERE uuid = ?;";
                 try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -163,7 +171,9 @@ public class SQLite implements Database {
     public PlayerStats fetchStats(UUID uuid) {
         PlayerStats stats = new PlayerStats(uuid);
         String sql = "SELECT * FROM global_stats WHERE uuid = ?;";
-        try (Connection connection = DriverManager.getConnection(url)) {
+        try {
+            checkConnection();
+
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, uuid.toString());
                 try (ResultSet result = statement.executeQuery()) {
@@ -189,7 +199,9 @@ public class SQLite implements Database {
 
     @Override
     public void setQuickBuySlot(UUID p, String shopPath, int slot) {
-        try (Connection connection = DriverManager.getConnection(url)) {
+        try {
+            checkConnection();
+
             try (PreparedStatement statement = connection.prepareStatement("SELECT uuid FROM quick_buy_2 WHERE uuid = ?;")) {
                 statement.setString(1, p.toString());
                 try (ResultSet rs = statement.executeQuery()) {
@@ -215,7 +227,9 @@ public class SQLite implements Database {
     @Override
     public String getQuickBuySlots(UUID p, int slot) {
         String result = "";
-        try (Connection connection = DriverManager.getConnection(url)) {
+        try {
+            checkConnection();
+
             try (PreparedStatement ps = connection.prepareStatement("SELECT slot_" + slot + " FROM quick_buy_2 WHERE uuid = ?;")) {
                 ps.setString(1, p.toString());
                 try (ResultSet rs = ps.executeQuery()) {
@@ -232,7 +246,9 @@ public class SQLite implements Database {
 
     @Override
     public boolean hasQuickBuy(UUID uuid) {
-        try (Connection connection = DriverManager.getConnection(url)) {
+        try {
+            checkConnection();
+
             try (Statement statement = connection.createStatement()) {
                 try (ResultSet rs = statement.executeQuery("SELECT uuid FROM quick_buy_2 WHERE uuid = '" + uuid.toString() + "';")) {
                     if (rs.next()) {
@@ -250,7 +266,9 @@ public class SQLite implements Database {
     @Override
     public int getColumn(UUID player, String column) {
         String sql = "SELECT ? FROM global_stats WHERE uuid = ?;";
-        try (Connection connection = DriverManager.getConnection(url)) {
+        try {
+            checkConnection();
+
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, column);
                 statement.setString(2, player.toString());
@@ -271,7 +289,9 @@ public class SQLite implements Database {
     @Override
     public Object[] getLevelData(UUID player) {
         Object[] r = new Object[]{1, 0, "", 0};
-        try (Connection connection = DriverManager.getConnection(url)) {
+        try {
+            checkConnection();
+
             try (PreparedStatement ps = connection.prepareStatement("SELECT level, xp, name, next_cost FROM player_levels WHERE uuid = ?;")) {
                 ps.setString(1, player.toString());
                 try (ResultSet rs = ps.executeQuery()) {
@@ -291,7 +311,9 @@ public class SQLite implements Database {
 
     @Override
     public void setLevelData(UUID player, int level, int xp, String displayName, int nextCost) {
-        try (Connection connection = DriverManager.getConnection(url)) {
+        try {
+            checkConnection();
+
             try (PreparedStatement pss = connection.prepareStatement("SELECT uuid from player_levels WHERE uuid = ?;")) {
                 pss.setString(1, player.toString());
                 try (ResultSet rs = pss.executeQuery()) {
@@ -325,7 +347,9 @@ public class SQLite implements Database {
 
     @Override
     public void setLanguage(UUID player, String iso) {
-        try (Connection connection = DriverManager.getConnection(url)) {
+        try {
+            checkConnection();
+
             try (Statement statement = connection.createStatement()) {
                 try (ResultSet rs = statement.executeQuery("SELECT iso FROM player_language WHERE uuid = '" + player.toString() + "';")) {
                     if (rs.next()) {
@@ -349,7 +373,9 @@ public class SQLite implements Database {
     @Override
     public String getLanguage(UUID player) {
         String iso = Language.getDefaultLanguage().getIso();
-        try (Connection connection = DriverManager.getConnection(url)) {
+        try {
+            checkConnection();
+
             try (PreparedStatement ps = connection.prepareStatement("SELECT iso FROM player_language WHERE uuid = ?;")) {
                 ps.setString(1, player.toString());
                 try (ResultSet rs = ps.executeQuery()) {
@@ -398,8 +424,10 @@ public class SQLite implements Database {
             }
         }
         String sql = hasQuick ? "UPDATE quick_buy_2 SET " + columns + " WHERE uuid=?;" : "INSERT INTO quick_buy_2 (uuid," + columns + ") VALUES (?," + values + ");";
-        try (Connection con = DriverManager.getConnection(url)) {
-            try (PreparedStatement ps = con.prepareStatement(sql)) {
+        try {
+            checkConnection();
+
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
                 int index = hasQuick ? 0 : 1;
                 for (int key : updateSlots.keySet()) {
                     index++;
@@ -420,7 +448,9 @@ public class SQLite implements Database {
         if (slot.length == 0) {
             return results;
         }
-        try (Connection connection = DriverManager.getConnection(url)) {
+        try {
+            checkConnection();
+
             try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM quick_buy_2 WHERE uuid = ?;")) {
                 ps.setString(1, uuid.toString());
                 try (ResultSet rs = ps.executeQuery()) {
@@ -438,6 +468,19 @@ public class SQLite implements Database {
             e.printStackTrace();
         }
         return results;
+    }
+
+    private void checkConnection() throws SQLException {
+        boolean renew = false;
+
+        if (this.connection == null)
+            renew = true;
+        else
+            if (this.connection.isClosed())
+                renew = true;
+
+        if (renew)
+            this.connection = DriverManager.getConnection(url);
     }
 
 }
