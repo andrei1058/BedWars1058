@@ -97,7 +97,7 @@ public class PlayerChat implements Listener {
                     }
                     if (ShoutCommand.isShoutCooldown(p)){
                         e.setCancelled(true);
-                        p.sendMessage(Language.getMsg(p, Messages.COMMAND_COOLDOWN).replace("{seconds}", String.valueOf(ShoutCommand.getShoutCooldown(p))));
+                        p.sendMessage(Language.getMsg(p, Messages.COMMAND_COOLDOWN).replace("{seconds}", String.valueOf(Math.round(ShoutCommand.getShoutCooldown(p)))));
                         return;
                     }
                     ShoutCommand.updateShout(p);
