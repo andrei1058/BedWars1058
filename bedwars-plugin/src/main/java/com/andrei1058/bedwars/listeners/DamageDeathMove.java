@@ -344,6 +344,7 @@ public class DamageDeathMove implements Listener {
                 victim.spigot().respawn();
                 return;
             }
+            ((CraftPlayer)victim).getHandle().getDataWatcher().watch(9, (byte)-1);
             String message = victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL : Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR;
             PlayerKillEvent.PlayerKillCause cause = victimsTeam.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.UNKNOWN_FINAL_KILL : PlayerKillEvent.PlayerKillCause.UNKNOWN;
             if (damageEvent != null) {
