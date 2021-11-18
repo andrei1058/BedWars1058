@@ -100,6 +100,9 @@ public class MainConfig extends ConfigManager {
         yml.addDefault(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_SELF, 1);
         yml.addDefault(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_TEAMMATES, 5);
         yml.addDefault(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_OTHERS, 10);
+        // fireball category
+        yml.addDefault(ConfigPath.GENERAL_FIREBALL_DAMAGE_MULTIPLIER, 0.1);
+        yml.addDefault(ConfigPath.GENERAL_FIREBALL_EXPLOSION_SIZE, 3);
         //
         yml.addDefault("database.enable", false);
         yml.addDefault("database.host", "localhost");

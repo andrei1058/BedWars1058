@@ -192,6 +192,10 @@ public class ConfigPath {
     public static final String GENERAL_TNT_JUMP_DAMAGE_TEAMMATES = GENERAL_TNT_JUMP_PATH + ".damage-teammates";
     public static final String GENERAL_TNT_JUMP_DAMAGE_OTHERS = GENERAL_TNT_JUMP_PATH + ".damage-others";
 
+    private static final String GENERAL_FIREBALL_PATH = "fireball";
+    public static final String GENERAL_FIREBALL_DAMAGE_MULTIPLIER = GENERAL_FIREBALL_PATH + ".damage-multiplier";
+    public static final String GENERAL_FIREBALL_EXPLOSION_SIZE = GENERAL_FIREBALL_PATH + ".explosion-size";
+
 
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_PATH = "performance-settings";
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_ROTATE_GEN = GENERAL_CONFIGURATION_PERFORMANCE_PATH + ".rotate-generators";

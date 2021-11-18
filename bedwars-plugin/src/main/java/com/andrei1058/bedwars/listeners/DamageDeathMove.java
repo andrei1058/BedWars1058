@@ -70,6 +70,9 @@ public class DamageDeathMove implements Listener {
     private final double tntDamageTeammates;
     private final double tntDamageOthers;
 
+    private final double fireballDamageMultiplier;
+    private final double fireballExplosionSize;
+
     public DamageDeathMove() {
         this.tntJumpBarycenterAlterationInY = config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_BARYCENTER_IN_Y);
         this.tntJumpStrengthReductionConstant = config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_STRENGTH_REDUCTION);
@@ -77,6 +80,9 @@ public class DamageDeathMove implements Listener {
         this.tntDamageSelf = config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_SELF);
         this.tntDamageTeammates = config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_TEAMMATES);
         this.tntDamageOthers = config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_OTHERS);
+
+        this.fireballDamageMultiplier = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_DAMAGE_MULTIPLIER);
+        this.fireballExplosionSize = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_EXPLOSION_SIZE);
     }
 
     @EventHandler
@@ -110,6 +116,11 @@ public class DamageDeathMove implements Listener {
                     } else BedWarsTeam.reSpawnInvulnerability.remove(p.getUniqueId());
                 }
                 //}
+
+                // Fireball is BLOCK_EXPLOSION because of spawned explosion
+                if(e.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
+                    e.setDamage(e.getDamage()*fireballDamageMultiplier);
+                }
             }
         }
         if (BedWars.getServerType() == ServerType.MULTIARENA) {
@@ -643,7 +654,7 @@ public class DamageDeathMove implements Listener {
                 if (e.getEntity() instanceof Fireball) {
                     Location l = e.getEntity().getLocation();
                     if (l == null) return;
-                    e.getEntity().getWorld().createExplosion(l.getX(), l.getY(), l.getZ(), 3, false, true);
+                    e.getEntity().getWorld().createExplosion(l.getX(), l.getY(), l.getZ(), (float) fireballExplosionSize, false, true);
                     return;
                 }
                 String utility = "";
