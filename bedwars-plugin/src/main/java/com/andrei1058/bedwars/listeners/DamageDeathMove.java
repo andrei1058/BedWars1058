@@ -72,6 +72,7 @@ public class DamageDeathMove implements Listener {
 
     private final double fireballDamageMultiplier;
     private final double fireballExplosionSize;
+    private final boolean fireballMakeFire;
 
     public DamageDeathMove() {
         this.tntJumpBarycenterAlterationInY = config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_BARYCENTER_IN_Y);
@@ -83,6 +84,7 @@ public class DamageDeathMove implements Listener {
 
         this.fireballDamageMultiplier = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_DAMAGE_MULTIPLIER);
         this.fireballExplosionSize = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_EXPLOSION_SIZE);
+        this.fireballMakeFire = config.getYml().getBoolean(ConfigPath.GENERAL_FIREBALL_MAKE_FIRE);
     }
 
     @EventHandler
@@ -644,6 +646,16 @@ public class DamageDeathMove implements Listener {
     }
 
     @EventHandler
+    public void fireballExplode(ExplosionPrimeEvent e) {
+        if(!(e.getEntity() instanceof Fireball)) return;
+        ProjectileSource shooter = ((Fireball) e.getEntity()).getShooter();
+        if(!(shooter instanceof Player)) return;
+        IArena a = Arena.getArenaByPlayer((Player) shooter);
+        if(a == null) return;
+        e.setCancelled(true);
+    }
+
+    @EventHandler
     public void onProjHit(ProjectileHitEvent e) {
         Projectile proj = e.getEntity();
         if (proj == null) return;
@@ -654,7 +666,7 @@ public class DamageDeathMove implements Listener {
                 if (e.getEntity() instanceof Fireball) {
                     Location l = e.getEntity().getLocation();
                     if (l == null) return;
-                    e.getEntity().getWorld().createExplosion(l.getX(), l.getY(), l.getZ(), (float) fireballExplosionSize, false, true);
+                    e.getEntity().getWorld().createExplosion(l.getX(), l.getY(), l.getZ(), (float) fireballExplosionSize, fireballMakeFire, true);
                     return;
                 }
                 String utility = "";

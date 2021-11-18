@@ -57,6 +57,12 @@ import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class Interact implements Listener {
 
+    private final double fireballSpeedMultiplier;
+
+    public Interact() {
+        this.fireballSpeedMultiplier = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_SPEED_MULTIPLIER);
+    }
+
     @EventHandler
     /* Handle custom items with commands on them */
     public void onItemCommand(PlayerInteractEvent e) {
@@ -193,7 +199,7 @@ public class Interact implements Listener {
                         Fireball fb = p.launchProjectile(Fireball.class);
                         Vector direction = p.getEyeLocation().getDirection();
                         fb = nms.setFireballDirection(fb, direction);
-                        fb.setVelocity(fb.getDirection().multiply(2));
+                        fb.setVelocity(fb.getDirection().multiply(fireballSpeedMultiplier));
                         fb.setIsIncendiary(false);
                         fb.setMetadata("bw1058", new FixedMetadataValue(plugin, "ceva"));
                         nms.minusAmount(p, inHand, 1);
