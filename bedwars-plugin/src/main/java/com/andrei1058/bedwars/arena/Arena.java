@@ -124,6 +124,8 @@ public class Arena implements IArena {
     private List<Region> regionsList = new ArrayList<>();
     private int renderDistance;
 
+    private final List<Player> leaving = new ArrayList<>();
+
     /**
      * Current event, used at scoreboard
      */
@@ -454,6 +456,8 @@ public class Arena implements IArena {
             }
         }
 
+        leaving.remove(p);
+
         if (status == GameState.waiting || (status == GameState.starting && (startingTask != null && startingTask.getCountdown() > 1))) {
             if (players.size() >= maxPlayers && !isVip(p)) {
                 TextComponent text = new TextComponent(getMsg(p, Messages.COMMAND_JOIN_DENIED_IS_FULL));
@@ -614,6 +618,8 @@ public class Arena implements IArena {
                 reJoin.destroy(true);
             }
 
+            leaving.remove(p);
+
             p.closeInventory();
             spectators.add(p);
             players.remove(p);
@@ -723,6 +729,11 @@ public class Arena implements IArena {
      * @param disconnect True if the player was disconnected
      */
     public void removePlayer(@NotNull Player p, boolean disconnect) {
+        if(leaving.contains(p)) {
+            return;
+        } else {
+            leaving.add(p);
+        }
         debug("Player removed: " + p.getName() + " arena: " + getArenaName());
         respawnSessions.remove(p);
 
@@ -2360,6 +2371,7 @@ public class Arena implements IArena {
         oreGenerators = null;
         perMinuteTask = null;
         moneyperMinuteTask = null;
+        leaving.clear();
     }
 
     /**
@@ -2560,6 +2572,11 @@ public class Arena implements IArena {
             this.teamAssigner = teamAssigner;
             plugin.getLogger().warning("Using " + teamAssigner.getClass().getSimpleName() + " team assigner on arena: " + this.getArenaName());
         }
+    }
+
+    @Override
+    public List<Player> getLeavingPlayers() {
+        return leaving;
     }
 
     /**
