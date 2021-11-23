@@ -618,8 +618,6 @@ public class Arena implements IArena {
                 reJoin.destroy(true);
             }
 
-            leaving.remove(p);
-
             p.closeInventory();
             spectators.add(p);
             players.remove(p);
@@ -649,6 +647,7 @@ public class Arena implements IArena {
             p.setGameMode(GameMode.ADVENTURE);
 
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                if(leaving.contains(p)) return;
                 p.setAllowFlight(true);
                 p.setFlying(true);
             }, 5L);
@@ -657,6 +656,7 @@ public class Arena implements IArena {
                 p.getPassenger().remove();
 
             Bukkit.getScheduler().runTask(plugin, () -> {
+                if(leaving.contains(p)) return;
                 for (Player on : Bukkit.getOnlinePlayers()) {
                     if (on == p) continue;
                     if (getSpectators().contains(on)) {
@@ -692,6 +692,8 @@ public class Arena implements IArena {
 
                 p.getInventory().setArmorContents(null);
             });
+
+            leaving.remove(p);
 
             p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_MSG).replace("{arena}", this.getDisplayName()));
 
@@ -987,6 +989,13 @@ public class Arena implements IArena {
      */
     public void removeSpectator(@NotNull Player p, boolean disconnect) {
         debug("Spectator removed: " + p.getName() + " arena: " + getArenaName());
+
+        if(leaving.contains(p)) {
+            return;
+        } else {
+            leaving.add(p);
+        }
+
         Bukkit.getPluginManager().callEvent(new PlayerLeaveArenaEvent(p, this, null));
         spectators.remove(p);
         removeArenaByPlayer(p, this);
