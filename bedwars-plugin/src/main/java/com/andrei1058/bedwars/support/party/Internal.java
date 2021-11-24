@@ -35,11 +35,11 @@ import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 @SuppressWarnings("WeakerAccess")
 public class Internal implements Party {
-    private static List<Internal.Party> parites = new ArrayList<>();
+    private static final List<Internal.Party> parties = new ArrayList<>();
 
     @Override
     public boolean hasParty(Player p) {
-        for (Party party : getParites()) {
+        for (Party party : getParties()) {
             if (party.members.contains(p)) return true;
         }
         return false;
@@ -47,7 +47,7 @@ public class Internal implements Party {
 
     @Override
     public int partySize(Player p) {
-        for (Party party : getParites()) {
+        for (Party party : getParties()) {
             if (party.members.contains(p)) {
                 return party.members.size();
             }
@@ -57,7 +57,7 @@ public class Internal implements Party {
 
     @Override
     public boolean isOwner(Player p) {
-        for (Party party : getParites()) {
+        for (Party party : getParties()) {
             if (party.members.contains(p)) {
                 if (party.owner == p) return true;
             }
@@ -67,7 +67,7 @@ public class Internal implements Party {
 
     @Override
     public List<Player> getMembers(Player owner) {
-        for (Party party : getParites()) {
+        for (Party party : getParties()) {
             if (party.members.contains(owner)) {
                 return party.members;
             }
@@ -94,7 +94,7 @@ public class Internal implements Party {
 
     @Override
     public void removeFromParty(Player member) {
-        for (Party p : new ArrayList<>(getParites())) {
+        for (Party p : new ArrayList<>(getParties())) {
             if (p.owner == member) {
                 disband(member);
             } else if (p.members.contains(member)) {
@@ -104,7 +104,7 @@ public class Internal implements Party {
                 p.members.remove(member);
                 if (p.members.isEmpty() || p.members.size() == 1) {
                     disband(p.owner);
-                    parites.remove(p);
+                    parties.remove(p);
                 }
                 return;
             }
@@ -119,12 +119,12 @@ public class Internal implements Party {
             p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_DISBAND_SUCCESS));
         }
         pa.members.clear();
-        Internal.parites.remove(pa);
+        Internal.parties.remove(pa);
     }
 
     @Override
     public boolean isMember(Player owner, Player check) {
-        for (Party p : parites) {
+        for (Party p : parties) {
             if (p.owner == owner) {
                 if (p.members.contains(check)) return true;
             }
@@ -143,7 +143,7 @@ public class Internal implements Party {
                 p.members.remove(owner);
                 if (p.members.isEmpty() || p.members.size() == 1) {
                     disband(p.owner);
-                    parites.remove(p);
+                    parties.remove(p);
                 }
             }
         }
@@ -156,7 +156,7 @@ public class Internal implements Party {
 
     @Nullable
     private Party getParty(Player owner) {
-        for (Party p : getParites()) {
+        for (Party p : getParties()) {
             if (p.getOwner() == owner) return p;
         }
         return null;
@@ -164,18 +164,18 @@ public class Internal implements Party {
 
     @NotNull
     @Contract(pure = true)
-    public static List<Party> getParites() {
-        return Collections.unmodifiableList(parites);
+    public static List<Party> getParties() {
+        return Collections.unmodifiableList(parties);
     }
 
     class Party {
 
-        private List<Player> members = new ArrayList<>();
-        private Player owner;
+        private final List<Player> members = new ArrayList<>();
+        private final Player owner;
 
         public Party(Player p) {
             owner = p;
-            Internal.parites.add(this);
+            Internal.parties.add(this);
         }
 
         public Player getOwner() {
