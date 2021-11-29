@@ -649,6 +649,7 @@ public class Arena implements IArena {
             p.setGameMode(GameMode.ADVENTURE);
 
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                if(leaving.contains(p)) return;
                 p.setAllowFlight(true);
                 p.setFlying(true);
             }, 5L);
@@ -656,7 +657,8 @@ public class Arena implements IArena {
             if (p.getPassenger() != null && p.getPassenger().getType() == EntityType.ARMOR_STAND)
                 p.getPassenger().remove();
 
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            Bukkit.getScheduler().runTask(plugin, () -> {
+                if(leaving.contains(p)) return;
                 for (Player on : Bukkit.getOnlinePlayers()) {
                     if (on == p) continue;
                     if (getSpectators().contains(on)) {
@@ -691,7 +693,9 @@ public class Arena implements IArena {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false));
 
                 p.getInventory().setArmorContents(null);
-            }, 25L);
+            });
+
+            leaving.remove(p);
 
             p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_MSG).replace("{arena}", this.getDisplayName()));
 
@@ -987,6 +991,13 @@ public class Arena implements IArena {
      */
     public void removeSpectator(@NotNull Player p, boolean disconnect) {
         debug("Spectator removed: " + p.getName() + " arena: " + getArenaName());
+
+        if(leaving.contains(p)) {
+            return;
+        } else {
+            leaving.add(p);
+        }
+
         Bukkit.getPluginManager().callEvent(new PlayerLeaveArenaEvent(p, this, null));
         spectators.remove(p);
         removeArenaByPlayer(p, this);
@@ -1028,7 +1039,7 @@ public class Arena implements IArena {
         }
         playerLocation.remove(p);
 
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+        Bukkit.getScheduler().runTask(plugin, () -> {
             for (Player on : Bukkit.getOnlinePlayers()) {
                 if (on.equals(p)) continue;
                 if (getArenaByPlayer(on) == null) {
@@ -1040,7 +1051,7 @@ public class Arena implements IArena {
                 }
             }
             if (!disconnect) BedWarsScoreboard.giveScoreboard(p, null, true);
-        }, 10L);
+        });
 
         /* Remove also the party */
         if (getParty().hasParty(p)) {
