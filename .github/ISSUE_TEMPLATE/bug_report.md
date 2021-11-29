@@ -7,6 +7,10 @@ assignees: ''
 
 ---
 
+<!-- 
+NOTE: Please do not merge multiple bugs into one issue.
+It is easier to address the bugs if they are created as seperate issues
+-->
 **Describe the bug**
 A clear and concise description of what the bug is.
 
