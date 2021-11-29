@@ -309,7 +309,8 @@ public class BreakPlace implements Listener {
                                                 if (breakEvent.getTitle() != null && breakEvent.getSubTitle() != null) {
                                                     nms.sendTitle(on, breakEvent.getTitle().apply(on), breakEvent.getSubTitle().apply(on), 0, 25, 0);
                                                 }
-                                                Sounds.playSound(ConfigPath.SOUNDS_BED_DESTROY, on);
+                                                if (t.isMember(on)) Sounds.playSound(ConfigPath.SOUNDS_BED_DESTROY_OWN, on);
+                                                else Sounds.playSound(ConfigPath.SOUNDS_BED_DESTROY, on);
                                             }
                                         }
                                         return;

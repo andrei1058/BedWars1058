@@ -167,6 +167,7 @@ public class ConfigPath {
     public static final String SOUNDS_COUNTDOWN_TICK_X = "game-countdown-s";
     public static final String SOUND_GAME_START = "game-countdown-start";
     public static final String SOUNDS_BED_DESTROY = "bed-destroy";
+    public static final String SOUNDS_BED_DESTROY_OWN = "bed-destroy-own";
     public static final String SOUNDS_INSUFF_MONEY = "shop-insufficient-money";
     public static final String SOUNDS_BOUGHT = "shop-bought";
 
