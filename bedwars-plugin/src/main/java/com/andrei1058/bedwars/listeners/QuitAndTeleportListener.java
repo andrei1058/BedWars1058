@@ -142,10 +142,7 @@ public class QuitAndTeleportListener implements Listener {
         IArena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a != null) {
             if (a.isPlayer(e.getPlayer())) {
-                if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting){
-                    e.getPlayer().setGameMode(GameMode.ADVENTURE);
-                    return;
-                }
+                if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) return;
                 if (!e.getPlayer().getWorld().getName().equalsIgnoreCase(a.getWorld().getName())) {
                     a.removePlayer(e.getPlayer(), BedWars.getServerType() == ServerType.BUNGEE);
                     debug(e.getPlayer().getName() + " was removed from " + a.getDisplayName() + " because he was teleported outside the arena.");
