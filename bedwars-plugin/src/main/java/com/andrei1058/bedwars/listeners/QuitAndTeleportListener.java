@@ -33,6 +33,7 @@ import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.regular.CmdStats;
 import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -142,7 +143,10 @@ public class QuitAndTeleportListener implements Listener {
         IArena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a != null) {
             if (a.isPlayer(e.getPlayer())) {
-                if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) return;
+                if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) {
+                    e.getPlayer().setGameMode(GameMode.ADVENTURE);
+                    return;
+                }
                 if (!e.getPlayer().getWorld().getName().equalsIgnoreCase(a.getWorld().getName())) {
                     a.removePlayer(e.getPlayer(), BedWars.getServerType() == ServerType.BUNGEE);
                     debug(e.getPlayer().getName() + " was removed from " + a.getDisplayName() + " because he was teleported outside the arena.");
