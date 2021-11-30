@@ -124,6 +124,8 @@ public class Arena implements IArena {
     private List<Region> regionsList = new ArrayList<>();
     private int renderDistance;
 
+    private final List<Player> leaving = new ArrayList<>();
+
     /**
      * Current event, used at scoreboard
      */
@@ -454,6 +456,8 @@ public class Arena implements IArena {
             }
         }
 
+        leaving.remove(p);
+
         if (status == GameState.waiting || (status == GameState.starting && (startingTask != null && startingTask.getCountdown() > 1))) {
             if (players.size() >= maxPlayers && !isVip(p)) {
                 TextComponent text = new TextComponent(getMsg(p, Messages.COMMAND_JOIN_DENIED_IS_FULL));
@@ -492,6 +496,7 @@ public class Arena implements IArena {
             players.add(p);
             p.setFlying(false);
             p.setAllowFlight(false);
+            p.setHealth(20);
             for (Player on : players) {
                 on.sendMessage(getMsg(on, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
             }
@@ -614,6 +619,8 @@ public class Arena implements IArena {
                 reJoin.destroy(true);
             }
 
+            leaving.remove(p);
+
             p.closeInventory();
             spectators.add(p);
             players.remove(p);
@@ -643,6 +650,7 @@ public class Arena implements IArena {
             p.setGameMode(GameMode.ADVENTURE);
 
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                if(leaving.contains(p)) return;
                 p.setAllowFlight(true);
                 p.setFlying(true);
             }, 5L);
@@ -650,7 +658,8 @@ public class Arena implements IArena {
             if (p.getPassenger() != null && p.getPassenger().getType() == EntityType.ARMOR_STAND)
                 p.getPassenger().remove();
 
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            Bukkit.getScheduler().runTask(plugin, () -> {
+                if(leaving.contains(p)) return;
                 for (Player on : Bukkit.getOnlinePlayers()) {
                     if (on == p) continue;
                     if (getSpectators().contains(on)) {
@@ -685,7 +694,9 @@ public class Arena implements IArena {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false));
 
                 p.getInventory().setArmorContents(null);
-            }, 25L);
+            });
+
+            leaving.remove(p);
 
             p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_MSG).replace("{arena}", this.getDisplayName()));
 
@@ -723,6 +734,11 @@ public class Arena implements IArena {
      * @param disconnect True if the player was disconnected
      */
     public void removePlayer(@NotNull Player p, boolean disconnect) {
+        if(leaving.contains(p)) {
+            return;
+        } else {
+            leaving.add(p);
+        }
         debug("Player removed: " + p.getName() + " arena: " + getArenaName());
         respawnSessions.remove(p);
 
@@ -976,6 +992,13 @@ public class Arena implements IArena {
      */
     public void removeSpectator(@NotNull Player p, boolean disconnect) {
         debug("Spectator removed: " + p.getName() + " arena: " + getArenaName());
+
+        if(leaving.contains(p)) {
+            return;
+        } else {
+            leaving.add(p);
+        }
+
         Bukkit.getPluginManager().callEvent(new PlayerLeaveArenaEvent(p, this, null));
         spectators.remove(p);
         removeArenaByPlayer(p, this);
@@ -1017,7 +1040,7 @@ public class Arena implements IArena {
         }
         playerLocation.remove(p);
 
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+        Bukkit.getScheduler().runTask(plugin, () -> {
             for (Player on : Bukkit.getOnlinePlayers()) {
                 if (on.equals(p)) continue;
                 if (getArenaByPlayer(on) == null) {
@@ -1029,7 +1052,7 @@ public class Arena implements IArena {
                 }
             }
             if (!disconnect) BedWarsScoreboard.giveScoreboard(p, null, true);
-        }, 10L);
+        });
 
         /* Remove also the party */
         if (getParty().hasParty(p)) {
@@ -2360,6 +2383,7 @@ public class Arena implements IArena {
         oreGenerators = null;
         perMinuteTask = null;
         moneyperMinuteTask = null;
+        leaving.clear();
     }
 
     /**
@@ -2482,7 +2506,7 @@ public class Arena implements IArena {
             if (ar.getArenaName().equalsIgnoreCase(arenaName)) return false;
         }
 
-        if (Arena.getArenas().size() >= Arena.getGamesBeforeRestart()) return false;
+        if (Arena.getGamesBeforeRestart() != -1 && Arena.getArenas().size() >= Arena.getGamesBeforeRestart()) return false;
 
         for (IArena ar : Arena.getArenas()) {
             if (ar.getArenaName().equalsIgnoreCase(arenaName)) {
@@ -2560,6 +2584,11 @@ public class Arena implements IArena {
             this.teamAssigner = teamAssigner;
             plugin.getLogger().warning("Using " + teamAssigner.getClass().getSimpleName() + " team assigner on arena: " + this.getArenaName());
         }
+    }
+
+    @Override
+    public List<Player> getLeavingPlayers() {
+        return leaving;
     }
 
     /**
