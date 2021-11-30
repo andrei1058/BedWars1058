@@ -38,6 +38,7 @@ import com.andrei1058.bedwars.arena.LastHit;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import com.andrei1058.bedwars.listeners.dropshandler.PlayerDrops;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -151,6 +152,7 @@ public class DamageDeathMove implements Listener {
         // projectile hit message #696, #711
         ITeam team = a.getTeam(p);
         Language lang = Language.getPlayerLanguage(damager);
+        if (StringUtils.isEmpty(lang.m(Messages.PLAYER_HIT_BOW))) return;
         String message = lang.m(Messages.PLAYER_HIT_BOW)
                 .replace("{amount}", new DecimalFormat("00.#").format(((Player) e.getEntity()).getHealth() - e.getFinalDamage()))
                 .replace("{TeamColor}", team.getColor().chat().toString())
