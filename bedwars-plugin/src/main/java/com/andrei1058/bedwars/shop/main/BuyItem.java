@@ -69,7 +69,7 @@ public class BuyItem implements IBuyItem {
         if (yml.get(path + ".name") != null) {
             ItemMeta im = itemStack.getItemMeta();
             if (im != null) {
-                im.setDisplayName(ChatColor.translateAlternateColorCodes('&', yml.getString(path + ".name")));
+                im.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&r"+yml.getString(path + ".name")));
                 itemStack.setItemMeta(im);
             }
         }
