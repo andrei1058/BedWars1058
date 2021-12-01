@@ -120,7 +120,8 @@ public class TeleporterGUI {
         im.setDisplayName(getMsg(GUIholder, Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME)
                 .replace("{prefix}", BedWars.getChatSupport().getPrefix(targetPlayer))
                 .replace("{suffix}", BedWars.getChatSupport().getSuffix(targetPlayer))
-                        .replace("{player}", targetPlayer.getDisplayName()));
+                .replace("{player}", targetPlayer.getDisplayName())
+                .replace("{playername}", targetPlayer.getName()));
         List<String> lore = new ArrayList<>();
         String health = String.valueOf((int)targetPlayer.getHealth() * 100 / targetPlayer.getHealthScale());
         for (String s : getList(GUIholder, Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_LORE)) {

@@ -167,6 +167,7 @@ public class ConfigPath {
     public static final String SOUNDS_COUNTDOWN_TICK_X = "game-countdown-s";
     public static final String SOUND_GAME_START = "game-countdown-start";
     public static final String SOUNDS_BED_DESTROY = "bed-destroy";
+    public static final String SOUNDS_BED_DESTROY_OWN = "bed-destroy-own";
     public static final String SOUNDS_INSUFF_MONEY = "shop-insufficient-money";
     public static final String SOUNDS_BOUGHT = "shop-bought";
 
@@ -191,6 +192,12 @@ public class ConfigPath {
     public static final String GENERAL_TNT_JUMP_DAMAGE_SELF = GENERAL_TNT_JUMP_PATH + ".damage-self";
     public static final String GENERAL_TNT_JUMP_DAMAGE_TEAMMATES = GENERAL_TNT_JUMP_PATH + ".damage-teammates";
     public static final String GENERAL_TNT_JUMP_DAMAGE_OTHERS = GENERAL_TNT_JUMP_PATH + ".damage-others";
+
+    private static final String GENERAL_FIREBALL_PATH = "fireball";
+    public static final String GENERAL_FIREBALL_DAMAGE_MULTIPLIER = GENERAL_FIREBALL_PATH + ".damage-multiplier";
+    public static final String GENERAL_FIREBALL_EXPLOSION_SIZE = GENERAL_FIREBALL_PATH + ".explosion-size";
+    public static final String GENERAL_FIREBALL_SPEED_MULTIPLIER = GENERAL_FIREBALL_PATH + ".speed-multiplier";
+    public static final String GENERAL_FIREBALL_MAKE_FIRE = GENERAL_FIREBALL_PATH + ".make-fire";
 
 
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_PATH = "performance-settings";

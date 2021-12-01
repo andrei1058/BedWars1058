@@ -35,7 +35,7 @@ import static com.andrei1058.bedwars.BedWars.mainCmd;
 
 public class Bangla extends Language {
     public Bangla() {
-        super(BedWars.plugin, "bl");
+        super(BedWars.plugin, "bd");
 
         YamlConfiguration yml = getYml();
         yml.options().copyDefaults(true);
