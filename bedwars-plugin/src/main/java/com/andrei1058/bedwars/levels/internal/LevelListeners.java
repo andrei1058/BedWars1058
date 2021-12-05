@@ -30,7 +30,6 @@ import com.andrei1058.bedwars.api.events.player.PlayerXpGainEvent;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.configuration.LevelsConfig;
-import com.andrei1058.bedwars.configuration.MoneyConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
