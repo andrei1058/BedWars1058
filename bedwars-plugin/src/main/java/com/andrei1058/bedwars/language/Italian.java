@@ -109,6 +109,8 @@ public class Italian extends Language {
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE, "{prefix}&7{player} &eè offline!");
         yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG, "&cGli spettatori non sono ammessi in questa arena!");
         yml.addDefault(Messages.COMMAND_COOLDOWN, "&cAspetta {seconds} scondi prima di usare ancora questo comando!");
+        yml.addDefault(Messages.COMMAND_SPECT_USAGE, "{prefix}&cUsage: /bw spect <player>");
+        yml.addDefault(Messages.COMMAND_SPECT_CANNOT_SPECTATE_YOURSELF, "{prefix}&cYou cannot spectate yourself!");
         yml.addDefault(Messages.ARENA_JOIN_VIP_KICK, "{prefix}&cIl comando non è stato trovato o non hai abbastanza permessi!\n&aPotresti fare una donazione per ottenere permessi vip. &7&o(click)");
         yml.addDefault(Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT, "{prefix}§cNon ci sono abbastanza giocatori! Conto alla rovescia fermato!");
         yml.addDefault(Messages.ARENA_RESTART_PLAYER_KICK, "{prefix}&eL'arena in cui ti trovavi si sta restartando.");
@@ -149,6 +151,7 @@ public class Italian extends Language {
         yml.addDefault(Messages.ARENA_LEAVE_PARTY_DISBANDED, "{prefix}§cIl proprietario del party è uscito e il party è stato sciolto!");
         yml.addDefault(Messages.ARENA_JOIN_DENIED_SELECTOR, "{prefix}&cCi dispiace, ma attualmente non puoi entrare in quest'arena. Usa Click-destro per guardare!");
         yml.addDefault(Messages.ARENA_SPECTATE_DENIED_SELECTOR, "{prefix}&cCi dispiace, ma attualmente non puoi guardare questa partita. Usa Click-sinistro per giocare!");
+        yml.addDefault(Messages.ARENA_SPECTATE_DENIED_COMMAND, "{prefix}&cSorry but you can't spectate this arena at this moment. Use /bw join {arena} to join!");
         yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_PROXY, "&cSorry but you must join an arena using BedWarsProxy. \n&eIf you want to setup an arena make sure to give yourself the bw.setup permission so you can join the server directly!");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIER, "&eLivello &c{tier}");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND, "&b&lDiamante");

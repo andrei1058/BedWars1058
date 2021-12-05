@@ -94,6 +94,8 @@ public class Messages {
     public static String COMMAND_FORCESTART_SUCCESS = "cmd-start";
     public static String COMMAND_FORCESTART_NO_PERM = "cmd-start-no-perm";
     public static String COMMAND_COOLDOWN = "cmd-cooldown";
+    public static String COMMAND_SPECT_USAGE = "cmd-spect-usage";
+    public static String COMMAND_SPECT_CANNOT_SPECTATE_YOURSELF = "cmd-spect-spectate-yourself";
 
     /** Arena join/ leave related */
     public static String ARENA_JOIN_VIP_KICK = "arena-kicked-by-vip";
@@ -103,6 +105,7 @@ public class Messages {
     public static String ARENA_JOIN_DENIED_SELECTOR = "arena-join-denied-selector";
     public static String ARENA_JOIN_DENIED_NO_PROXY = "arena-join-denied-no-bwp";
     public static String ARENA_SPECTATE_DENIED_SELECTOR = "arena-spectate-denied-selector";
+    public static String ARENA_SPECTATE_DENIED_COMMAND = "arena-spectate-denied-command";
     public static String ARENA_LEAVE_PARTY_DISBANDED = "arena-leave-party-disbanded";
 
     /** Arena status/ status change related */

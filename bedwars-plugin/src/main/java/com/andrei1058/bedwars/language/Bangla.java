@@ -109,6 +109,8 @@ public class Bangla extends Language {
         yml.addDefault(Messages.COMMAND_FORCESTART_SUCCESS, "§c▪ §7Countdown shongkhipto kora hoyeche!");
         yml.addDefault(Messages.COMMAND_FORCESTART_NO_PERM, "{prefix}&7Apni arena ti ke force start korte parben na.\n§7VIP Features grohon korte donate korun.");
         yml.addDefault(Messages.COMMAND_COOLDOWN, "&cApni akhono eti korte parben na! {seconds} wait korun!");
+        yml.addDefault(Messages.COMMAND_SPECT_USAGE, "{prefix}&cUsage: /bw spect <player>");
+        yml.addDefault(Messages.COMMAND_SPECT_CANNOT_SPECTATE_YOURSELF, "{prefix}&cYou cannot spectate yourself!");
         yml.addDefault(Messages.ARENA_JOIN_VIP_KICK, "{prefix}&cDukkhito, kintu ekti donor arena ti te join korar karone apnake kick kora hoyeche.\n&aAro features er jonno donate korar bibechona korun. &7&o(click)");
         yml.addDefault(Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT, "{prefix}§cPorjapto players nei! Countdown bondho hoye gelo!");
         yml.addDefault(Messages.ARENA_RESTART_PLAYER_KICK, "{prefix}&eApnar join kora arena restart hocche.");
@@ -140,6 +142,7 @@ public class Bangla extends Language {
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
         yml.addDefault(Messages.ARENA_JOIN_DENIED_SELECTOR, "{prefix}&cDukkhito kintu apni ei muhurte arenati te jog dite parben na. Spectate korar jonne Right-Click bebohar korun!");
         yml.addDefault(Messages.ARENA_SPECTATE_DENIED_SELECTOR, "{prefix}&cDukkhito kintu apni ei muhurte arenati ke spectate korte parben na. Jog dite Left-Click bebohar korun!");
+        yml.addDefault(Messages.ARENA_SPECTATE_DENIED_COMMAND, "{prefix}&cSorry but you can't spectate this arena at this moment. Use /bw join {arena} to join!");
         yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_PROXY, "&cDukkhiyo kintu apnake BedWarsProxy use kore ekti arena join korte hobe \n&eApni ekti arena setup korte chaile nijeke bw.setup permission er onumoti den jate apni shora shori server e jog dite paren!");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_NAME, "&8Teleporter");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME, "{prefix}{player}");

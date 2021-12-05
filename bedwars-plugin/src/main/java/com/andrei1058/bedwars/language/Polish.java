@@ -107,6 +107,8 @@ public class Polish extends Language{
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE, "{prefix}&7{player} &ejest offline!");
         yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG, "&cWidzowie nei mają wstępu na tę arene!");
         yml.addDefault(Messages.COMMAND_COOLDOWN, "&cYoNie możesz tego zrobić! Poczekaj {seconds}!");
+        yml.addDefault(Messages.COMMAND_SPECT_USAGE, "{prefix}&cUsage: /bw spect <player>");
+        yml.addDefault(Messages.COMMAND_SPECT_CANNOT_SPECTATE_YOURSELF, "{prefix}&cYou cannot spectate yourself!");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_NAME, "&8Teleporter");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME, "{prefix}{player}");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_LORE, Arrays.asList("&7Zycie: &f{health}%", "&7Jedzenie: &f{food}", "", "&7Left-click to spectate"));
@@ -147,6 +149,7 @@ public class Polish extends Language{
         yml.addDefault(Messages.ARENA_STATUS_START_PLAYER_TITLE, "&aSTART");
         yml.addDefault(Messages.ARENA_JOIN_DENIED_SELECTOR, "{prefix}&cAktualnie nie możesz dołączyć do tej areny, kliknij PPM aby oglądać arene");
         yml.addDefault(Messages.ARENA_SPECTATE_DENIED_SELECTOR, "{prefix}&cAktualnie nie możesz obserwować tej areny, kliknij LMP aby dołączyć");
+        yml.addDefault(Messages.ARENA_SPECTATE_DENIED_COMMAND, "{prefix}&cSorry but you can't spectate this arena at this moment. Use /bw join {arena} to join!");
         yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_PROXY, "&cSorry but you must join an arena using BedWarsProxy. \n&eIf you want to setup an arena make sure to give yourself the bw.setup permission so you can join the server directly!");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIER, "&eTier &c{tier}");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND, "&b&lDiamentow");

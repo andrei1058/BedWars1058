@@ -106,6 +106,8 @@ public class Romanian extends Language {
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE, "{prefix}&7{player} &eeste offline!");
         yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG, "&cSpectatorii nu sunt permisi in aceasta arena!");
         yml.addDefault(Messages.COMMAND_COOLDOWN, "&cNu poti face asta inca! Mai asteapta {seconds} secunde!");
+        yml.addDefault(Messages.COMMAND_SPECT_USAGE, "{prefix}&cUsage: /bw spect <player>");
+        yml.addDefault(Messages.COMMAND_SPECT_CANNOT_SPECTATE_YOURSELF, "{prefix}&cYou cannot spectate yourself!");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_NAME, "&8Teleportor");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME, "{prefix}{player}");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_LORE, Arrays.asList("&7Viata: &f{health}%", "&7Hrana: &f{food}", "", "&7Click-stanca pentru a urmari."));
@@ -145,6 +147,7 @@ public class Romanian extends Language {
         yml.addDefault(Messages.ARENA_LEAVE_PARTY_DISBANDED, "{prefix}§cParty-ul a fost sters pentru ca detinatorul a iesit!");
         yml.addDefault(Messages.ARENA_JOIN_DENIED_SELECTOR, "{prefix}&cNe pare rau dar nu poti intra chiar acum. Foloseste Click-Dreapta pentru a urmari!");
         yml.addDefault(Messages.ARENA_SPECTATE_DENIED_SELECTOR, "{prefix}&cNe pare rau dar nu poti urmari arena chiar acum. Foloseste Click-Dreapta pentru a juca!");
+        yml.addDefault(Messages.ARENA_SPECTATE_DENIED_COMMAND, "{prefix}&cSorry but you can't spectate this arena at this moment. Use /bw join {arena} to join!");
         yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_PROXY, "&cSorry but you must join an arena using BedWarsProxy. \n&eIf you want to setup an arena make sure to give yourself the bw.setup permission so you can join the server directly!");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIER, "&eTier &c{tier}");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND, "&b&lDiamant");
