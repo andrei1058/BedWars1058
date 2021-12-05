@@ -38,6 +38,19 @@ public class LevelsConfig extends ConfigManager {
     public static void init() {
         levels = new LevelsConfig();
         levels.getYml().options().copyDefaults(true);
+
+        levels.getYml().addDefault("xp-rewards.per-minute", 10);
+        levels.getYml().addDefault("xp-rewards.per-teammate", 5);
+        levels.getYml().addDefault("xp-rewards.game-win", 100);
+        levels.getYml().addDefault("xp-rewards.bed-destroyed", 10);
+        levels.getYml().addDefault("xp-rewards.regular-kill", 5);
+        levels.getYml().addDefault("xp-rewards.final-kill", 5);
+
+        levels.getYml().addDefault("progress-bar.symbol", "■");
+        levels.getYml().addDefault("progress-bar.unlocked-color", "&b");
+        levels.getYml().addDefault("progress-bar.locked-color", "&7");
+        levels.getYml().addDefault("progress-bar.format", "&8 [{progress}&8]");
+
         if (levels.isFirstTime()) {
 
             levels.getYml().addDefault("levels.1.name", "&7[{number}✩] ");
@@ -57,15 +70,6 @@ public class LevelsConfig extends ConfigManager {
             levels.getYml().addDefault("levels.others.name", "&7[{number}✩] ");
             levels.getYml().addDefault("levels.others.rankup-cost", 5000);
         }
-
-        levels.getYml().addDefault("xp-rewards.per-minute", 10);
-        levels.getYml().addDefault("xp-rewards.per-teammate", 5);
-        levels.getYml().addDefault("xp-rewards.game-win", 100);
-
-        levels.getYml().addDefault("progress-bar.symbol", "■");
-        levels.getYml().addDefault("progress-bar.unlocked-color", "&b");
-        levels.getYml().addDefault("progress-bar.locked-color", "&7");
-        levels.getYml().addDefault("progress-bar.format", "&8 [{progress}&8]");
 
         levels.save();
     }
