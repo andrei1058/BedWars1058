@@ -286,7 +286,7 @@ public class BedWars extends JavaPlugin {
             }, 1L);
 
         // Register events
-        registerEvents(new QuitAndTeleportListener(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(),
+        registerEvents(new EnderPearlLanded(), new QuitAndTeleportListener(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(),
                 new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener(), new LangListener());
         if (getServerType() == ServerType.BUNGEE) {
             if (autoscale) {
@@ -484,15 +484,6 @@ public class BedWars extends JavaPlugin {
         MoneyConfig.init();
 
         // bStats metrics
-        Metrics metrics = new Metrics(this, 1885);
-        metrics.addCustomChart(new SimplePie("server_type", () -> getServerType().toString()));
-        metrics.addCustomChart(new SimplePie("default_language", () -> Language.getDefaultLanguage().getIso()));
-        metrics.addCustomChart(new SimplePie("auto_scale", () -> String.valueOf(autoscale)));
-        metrics.addCustomChart(new SimplePie("party_adapter", () -> party.getClass().getName()));
-        metrics.addCustomChart(new SimplePie("chat_adapter", () -> chat.getClass().getName()));
-        metrics.addCustomChart(new SimplePie("level_adapter", () -> getLevelSupport().getClass().getName()));
-        metrics.addCustomChart(new SimplePie("db_adapter", () -> getRemoteDatabase().getClass().getName()));
-        metrics.addCustomChart(new SimplePie("map_adapter", () -> String.valueOf(getAPI().getRestoreAdapter().getOwner().getName())));
 
         if (Bukkit.getPluginManager().getPlugin("VipFeatures") != null) {
             try {
