@@ -57,6 +57,12 @@ import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class Interact implements Listener {
 
+    private final double fireballSpeedMultiplier;
+
+    public Interact() {
+        this.fireballSpeedMultiplier = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_SPEED_MULTIPLIER);
+    }
+
     @EventHandler
     /* Handle custom items with commands on them */
     public void onItemCommand(PlayerInteractEvent e) {
@@ -83,7 +89,7 @@ public class Interact implements Listener {
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         Block b = e.getClickedBlock();
         if (b == null) return;
-        if ((BedWars.getServerType() == ServerType.MULTIARENA && b.getWorld().getName().equals(BedWars.getLobbyWorld())) || Arena.getArenaByPlayer(e.getPlayer()) != null) {
+        if ((BedWars.getServerType() == ServerType.MULTIARENA && b.getWorld().getName().equals(BedWars.getLobbyWorld()) && !BreakPlace.isBuildSession(e.getPlayer())) || Arena.getArenaByPlayer(e.getPlayer()) != null) {
             if (b.getType() == nms.materialCraftingTable() && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_CRAFTING)) {
                 e.setCancelled(true);
             } else if (b.getType() == nms.materialEnchantingTable() && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_ENCHANTING)) {
@@ -193,7 +199,7 @@ public class Interact implements Listener {
                         Fireball fb = p.launchProjectile(Fireball.class);
                         Vector direction = p.getEyeLocation().getDirection();
                         fb = nms.setFireballDirection(fb, direction);
-                        fb.setVelocity(fb.getDirection().multiply(2));
+                        fb.setVelocity(fb.getDirection().multiply(fireballSpeedMultiplier));
                         fb.setIsIncendiary(false);
                         fb.setMetadata("bw1058", new FixedMetadataValue(plugin, "ceva"));
                         nms.minusAmount(p, inHand, 1);
@@ -227,7 +233,7 @@ public class Interact implements Listener {
                 e.setCancelled(true);
             }
             if (BedWars.getServerType() == ServerType.MULTIARENA) {
-                if (BedWars.getLobbyWorld().equals(e.getPlayer().getWorld().getName())) {
+                if (BedWars.getLobbyWorld().equals(e.getPlayer().getWorld().getName()) && !BreakPlace.isBuildSession(e.getPlayer())) {
                     e.setCancelled(true);
                 }
             }
@@ -268,7 +274,7 @@ public class Interact implements Listener {
         }
 
         //prevent from stealing from armor stands in lobby
-        if (BedWars.getServerType() == ServerType.MULTIARENA && e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
+        if (BedWars.getServerType() == ServerType.MULTIARENA && e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld()) && !BreakPlace.isBuildSession(e.getPlayer())) {
             e.setCancelled(true);
         }
     }
