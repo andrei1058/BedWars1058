@@ -55,7 +55,7 @@ import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
 import java.text.DecimalFormat;
-import java.util.Map;
+import java.util.*;
 
 import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
@@ -73,6 +73,8 @@ public class DamageDeathMove implements Listener {
     private final double fireballDamageMultiplier;
     private final double fireballExplosionSize;
     private final boolean fireballMakeFire;
+    private final double fireballHorizontal;
+    private final double fireballVertical;
 
     public DamageDeathMove() {
         this.tntJumpBarycenterAlterationInY = config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_BARYCENTER_IN_Y);
@@ -85,6 +87,8 @@ public class DamageDeathMove implements Listener {
         this.fireballDamageMultiplier = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_DAMAGE_MULTIPLIER);
         this.fireballExplosionSize = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_EXPLOSION_SIZE);
         this.fireballMakeFire = config.getYml().getBoolean(ConfigPath.GENERAL_FIREBALL_MAKE_FIRE);
+        this.fireballHorizontal = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_KNOCKBACK_HORIZONTAL);
+        this.fireballVertical = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_KNOCKBACK_VERTICAL);
     }
 
     @EventHandler
@@ -130,6 +134,67 @@ public class DamageDeathMove implements Listener {
                 e.setCancelled(true);
             }
         }
+    }
+
+    Map<Location, Player> explosionSources = new HashMap<>();
+
+    @EventHandler
+    public void fireballPrime(ExplosionPrimeEvent e) {
+        if(!(e.getEntity() instanceof Fireball)) return;
+        ProjectileSource shooter = ((Fireball) e.getEntity()).getShooter();
+        if(!(shooter instanceof Player)) return;
+        IArena a = Arena.getArenaByPlayer((Player) shooter);
+        if(a == null) return;
+        e.setRadius((float) fireballExplosionSize);
+        e.setFire(fireballMakeFire);
+        explosionSources.put(e.getEntity().getLocation(), (Player) shooter);
+    }
+
+    @EventHandler
+    public void fireballExplode(EntityExplodeEvent e) {
+        if(!(e.getEntity() instanceof Fireball)) return;
+        Location location = e.getLocation();
+
+        Player source = null;
+        for(Location sourceLocation : explosionSources.keySet()) {
+            if(sourceLocation == null) continue;
+            if(sourceLocation.distance(location) < 0.05) {
+                source = explosionSources.get(sourceLocation);
+                explosionSources.remove(sourceLocation);
+            }
+        }
+
+        if(source == null) return;
+
+        Vector vector = location.toVector();
+
+        Collection<Entity> nearbyEntities = location.getWorld()
+                .getNearbyEntities(location, fireballExplosionSize, fireballExplosionSize, fireballExplosionSize);
+        for(Entity entity : nearbyEntities) {
+            if(!(entity instanceof Player)) continue;
+            Player player = (Player) entity;
+            if(!getAPI().getArenaUtil().isPlaying(player)) continue;
+            IArena arena = Arena.getArenaByPlayer(player);
+
+
+            Vector playerVector = player.getLocation().toVector();
+            Vector normalizedVector = vector.subtract(playerVector).normalize();
+            Vector horizontalVector = normalizedVector.multiply(fireballHorizontal);
+            double y = normalizedVector.getY();
+            if(y < 0 ) y += 1.5;
+            if(y <= 0.5) {
+                y = fireballVertical*1.5; // kb for not jumping
+            } else {
+                y = y*fireballVertical*1.5; // kb for jumping
+            }
+            player.setVelocity(horizontalVector.setY(y));
+
+            // dont damage teammates
+            if(!player.equals(source) && arena.getTeam(player).equals(arena.getTeam(source))) continue;
+
+            player.damage(2.0);
+        }
+
     }
 
     // show player health on bow hit
@@ -646,16 +711,6 @@ public class DamageDeathMove implements Listener {
     }
 
     @EventHandler
-    public void fireballExplode(ExplosionPrimeEvent e) {
-        if(!(e.getEntity() instanceof Fireball)) return;
-        ProjectileSource shooter = ((Fireball) e.getEntity()).getShooter();
-        if(!(shooter instanceof Player)) return;
-        IArena a = Arena.getArenaByPlayer((Player) shooter);
-        if(a == null) return;
-        e.setCancelled(true);
-    }
-
-    @EventHandler
     public void onProjHit(ProjectileHitEvent e) {
         Projectile proj = e.getEntity();
         if (proj == null) return;
@@ -663,12 +718,6 @@ public class DamageDeathMove implements Listener {
             IArena a = Arena.getArenaByPlayer((Player) e.getEntity().getShooter());
             if (a != null) {
                 if (!a.isPlayer((Player) e.getEntity().getShooter())) return;
-                if (e.getEntity() instanceof Fireball) {
-                    Location l = e.getEntity().getLocation();
-                    if (l == null) return;
-                    e.getEntity().getWorld().createExplosion(l.getX(), l.getY(), l.getZ(), (float) fireballExplosionSize, fireballMakeFire, true);
-                    return;
-                }
                 String utility = "";
                 if (proj instanceof Snowball) {
                     utility = "silverfish";
