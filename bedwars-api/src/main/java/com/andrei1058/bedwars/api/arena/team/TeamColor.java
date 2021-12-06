@@ -289,10 +289,10 @@ public enum TeamColor {
                 name = "White";
                 break;
             case 8:
-                name = "Gray";
+                name = "Dark_Gray";
                 break;
             case 7:
-                name = "lGray";
+                name = "Gray";
                 break;
 
         }

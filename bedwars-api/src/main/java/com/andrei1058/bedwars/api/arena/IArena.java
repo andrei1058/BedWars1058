@@ -485,4 +485,6 @@ public interface IArena {
     ITeamAssigner getTeamAssigner();
 
     void setTeamAssigner(ITeamAssigner teamAssigner);
+
+    List<Player> getLeavingPlayers();
 }

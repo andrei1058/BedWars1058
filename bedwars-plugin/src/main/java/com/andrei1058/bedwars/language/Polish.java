@@ -54,6 +54,7 @@ public class Polish extends Language{
         }
 
         yml.addDefault(Messages.COMMAND_JOIN_USAGE, "§a▪ §7Poprawne uzycie: /" + mainCmd + " join §o<arena/group>");
+        yml.addDefault(Messages.COMMAND_JOIN_USAGE, "§a▪ §7Uzyj: /" + mainCmd + " join §o<arena/grupa>");
         yml.addDefault(Messages.COMMAND_NOT_ALLOWED_IN_GAME, "{prefix}&cNie mozesz tego zrobic.");
         yml.addDefault(Messages.COMMAND_MAIN, Arrays.asList("", "&2▪ &7/" + mainCmd + " stats", "&2▪ &7/" + mainCmd + " join &o<arena/group>", "&2▪ &7/" + mainCmd + " leave", "&2▪ &7/" + mainCmd + " lang", "&2▪ &7/" + mainCmd + " gui", "&2▪ &7/" + mainCmd + " start &3(vip)"));
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_IS_FULL, "{prefix}&cTa arena jast pelna!\n&aRozwaz kupno rangi VIP+ aby odblokowac mase nowych funkcji. &7&o(kliknij)");
@@ -72,6 +73,11 @@ public class Polish extends Language{
         yml.addDefault(Messages.COMMAND_TP_NOT_STARTED, "{prefix}&cArena, na ktorej znajduje sie ten gracz nie wystartowala!");
         yml.addDefault(Messages.COMMAND_TP_USAGE, "{prefix}&cPoprawne uzycie: /bw tp <username>");
         yml.addDefault(Messages.COMMAND_REJOIN_PLAYER_RECONNECTED, "{prefix}&7{player} &ewrocil do gry!");
+        yml.addDefault(Messages.COMMAND_TP_PLAYER_NOT_FOUND, "{prefix}&cNie znaleziono gracza!");
+        yml.addDefault(Messages.COMMAND_TP_NOT_IN_ARENA, "{prefix}&cTego gracza nie ma na arenie!");
+        yml.addDefault(Messages.COMMAND_TP_NOT_STARTED, "{prefix}&cArena na której jest ten gracza, jeszcze się nie rozpoczeła!");
+        yml.addDefault(Messages.COMMAND_TP_USAGE, "{prefix}&cUzycie: /bw tp <gracz>");
+        yml.addDefault(Messages.COMMAND_REJOIN_PLAYER_RECONNECTED, "{prefix}&7{player} &eponownie się połączył!");
         yml.addDefault(Messages.COMMAND_LANG_USAGE_DENIED, "{prefix}&cNie mozesz zmienic jezyka podczas gry.");
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_PARTY_TOO_BIG, "{prefix}&cTwoje party jest zbyt duze abo dolaczyc do tej areny w pelnym skladzie :(");
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_NOT_PARTY_LEADER, "{prefix}&cTylko lider party moze wybrac arene.");
@@ -107,6 +113,8 @@ public class Polish extends Language{
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE, "{prefix}&7{player} &ejest offline!");
         yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG, "&cObserwatorzy nie moga ogladac tej areny!");
         yml.addDefault(Messages.COMMAND_COOLDOWN, "&cNie mozesz tego zrobic. Zaczekaj {seconds} sekund!");
+        yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG, "&cWidzowie nei mają wstępu na tę arene!");
+        yml.addDefault(Messages.COMMAND_COOLDOWN, "&cNie możesz tego zrobić! Poczekaj {seconds}!");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_NAME, "&8Teleporter");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME, "{prefix}{player}");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_LORE, Arrays.asList("&7Zycie: &f{health}%", "&7Jedzenie: &f{food}", "", "&7Lewy przycisk, aby obserwowac"));
@@ -288,6 +296,8 @@ public class Polish extends Language{
 
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&e&lBED WARS", "&7{date} &8{server}", "", "&fMapa: &a{map}", "", "&fGracze: &a{on}/{max}", "", "&fOczekiwanie...", "", "§fTryb: &a{group}", "&fWersja: &7{version}", "", "&e{server_ip}"));
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&e&lBED WARS", "&7{date} &8{server}", "", "&fMapa: &a{map}", "", "&fGracze: &a{on}/{max}", "", "&fRozpoczecie &a{time}s", "", "§fTryb: &a{group}", "&fWersja: &7{version}", "", "&e{server_ip}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fMapa: &a{map}", "", "&fGracze: &a{on}/{max}", "", "&fOczekiwanie...", "", "§fTryb: &a{group}", "&fWersja: &7{version}", "", "&e{server_ip}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fMapa: &a{map}", "", "&fGracze: &a{on}/{max}", "", "&fRozpoczecie &a{time}s", "", "§fTryb: &a{group}", "&fWersja: &7{version}", "", "&e{server_ip}"));
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{TeamRedColor}R&f {TeamRedName}&f: {TeamRedStatus}",
                 "{TeamBlueColor}B&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}G&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}Y &f{TeamYellowName}&f: {TeamYellowStatus}",
                 "{TeamAquaColor}A &f{TeamAquaName}&f: {TeamAquaStatus}", "{TeamWhiteColor}W &f{TeamWhiteName}&f: {TeamWhiteStatus}", "{TeamPinkColor}P &f{TeamPinkName}&f: {TeamPinkStatus}",
@@ -312,6 +322,19 @@ public class Polish extends Language{
         yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&6+{xp} doswiadczenia &7(Czas Gry).");
         yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&6+{xp} doswiadczenia &7(Wygrana Gra).");
         yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "{prefix}&6+{xp} doswiadczenia. &7(Pomoc Druzynie).");
+        yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&fTwoj poziom: {level}", "", "&fProgress: &a{currentXp}&7/&b{requiredXp}", "{progress}", "", "&7{player}", "", "&fMonety: &a{money}"
+                , "", "&fWygrane: &a{wins}", "&fZabojstwa: &a{kills}", "", "&e{server_ip}"));
+
+        yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&6+{xp} Otrzymano doswiedczenie BedWars (Czas grania).");
+        yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&6+{xp} Otrzymano doswiedczenie BedWars (Wygrana gra).");
+        yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "{prefix}&6+{xp} Otrzymano doswiedczenie BedWars (Team Support).");
+
+        yml.addDefault(Messages.MONEY_REWARD_PER_MINUTE, "{prefix}&6+{money} Monety (Czas grania).");
+        yml.addDefault(Messages.MONEY_REWARD_WIN, "{prefix}&6+{money} Monety (Wygrana gra).");
+        yml.addDefault(Messages.MONEY_REWARD_PER_TEAMMATE, "{prefix}&6+{money} Monety (Druzynowa wspolpraca).");
+        yml.addDefault(Messages.MONEY_REWARD_BED_DESTROYED, "{prefix}&6+{money} Monety (Zniszczone lozko).");
+        yml.addDefault(Messages.MONEY_REWARD_FINAL_KILL, "{prefix}&6+{money} Monety (Finalne zabojstwo).");
+        yml.addDefault(Messages.MONEY_REWARD_REGULAR_KILL, "{prefix}&6+{money} Monety (Regularne zabojstwo).");
 
         yml.addDefault(Messages.TEAM_ELIMINATED_CHAT, "\n&f&lELIMINACJA > {TeamColor}{TeamName} &cdruzyna &czostala wyeliminowana!\n");
         yml.addDefault(Messages.BED_HOLOGRAM_DEFEND, "&c&lChron swojego lozka!");
