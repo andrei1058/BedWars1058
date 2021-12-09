@@ -281,13 +281,9 @@ public class BreakPlace implements Listener {
                                             Bukkit.getPluginManager().callEvent(breakEvent = new PlayerBedBreakEvent(e.getPlayer(), a.getTeam(p), t, a,
                                                     player -> {
                                                         if (t.isMember(player)) {
-                                                            return getMsg(player, Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM).replace("{TeamColor}",
-                                                                            t.getColor().chat().toString()).replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(player)))
-                                                                    .replace("{PlayerColor}", a.getTeam(p).getColor().chat().toString()).replace("{PlayerName}", p.getDisplayName());
+                                                            return getMsg(player, Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM);
                                                         } else {
-                                                            return getMsg(player, Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT).replace("{TeamColor}",
-                                                                            t.getColor().chat().toString()).replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(player)))
-                                                                    .replace("{PlayerColor}", a.getTeam(p).getColor().chat().toString()).replace("{PlayerName}", p.getDisplayName());
+                                                            return getMsg(player, Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT);
                                                         }
                                                     },
                                                     player -> {
@@ -304,7 +300,11 @@ public class BreakPlace implements Listener {
                                                     }));
                                             for (Player on : a.getWorld().getPlayers()) {
                                                 if (breakEvent.getMessage() != null) {
-                                                    on.sendMessage(breakEvent.getMessage().apply(on));
+                                                    on.sendMessage(breakEvent.getMessage().apply(on)
+                                                            .replace("{TeamColor}", t.getColor().chat().toString())
+                                                            .replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(on)))
+                                                            .replace("{PlayerColor}", a.getTeam(p).getColor().chat().toString())
+                                                            .replace("{PlayerName}", p.getDisplayName()));
                                                 }
                                                 if (breakEvent.getTitle() != null && breakEvent.getSubTitle() != null) {
                                                     nms.sendTitle(on, breakEvent.getTitle().apply(on), breakEvent.getSubTitle().apply(on), 0, 25, 0);
