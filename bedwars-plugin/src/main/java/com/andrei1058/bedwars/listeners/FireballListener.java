@@ -31,11 +31,19 @@ public class FireballListener implements Listener {
     private final double fireballHorizontal;
     private final double fireballVertical;
 
+    private final double damageSelf;
+    private final double damageEnemy;
+    private final double damageTeammates;
+
     public FireballListener() {
         this.fireballExplosionSize = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_EXPLOSION_SIZE);
         this.fireballMakeFire = config.getYml().getBoolean(ConfigPath.GENERAL_FIREBALL_MAKE_FIRE);
         this.fireballHorizontal = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_KNOCKBACK_HORIZONTAL) * -1;
         this.fireballVertical = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_KNOCKBACK_VERTICAL);
+
+        this.damageSelf = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_DAMAGE_SELF);
+        this.damageEnemy = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_DAMAGE_ENEMY);
+        this.damageTeammates = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_DAMAGE_TEAMMATES);
     }
 
     Map<Location, Player> explosionSources = new HashMap<>();
@@ -112,10 +120,19 @@ public class FireballListener implements Listener {
                 new LastHit(player, source, System.currentTimeMillis());
             }
 
-
-            if(!player.equals(source) && arena.getTeam(player).equals(arena.getTeam(source))) continue;
-
-            player.damage(2.0);
+            if(player.equals(source)) {
+                if(damageSelf > 0) {
+                    player.damage(damageSelf); // damage shooter
+                }
+            } else if(arena.getTeam(player).equals(arena.getTeam(source))) {
+                if(damageTeammates > 0) {
+                    player.damage(damageTeammates); // damage teammates
+                }
+            } else {
+                if(damageEnemy > 0) {
+                    player.damage(damageEnemy); // damage enemies
+                }
+            }
         }
 
     }

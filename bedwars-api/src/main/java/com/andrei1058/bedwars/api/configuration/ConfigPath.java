@@ -201,6 +201,10 @@ public class ConfigPath {
     public static final String GENERAL_FIREBALL_KNOCKBACK_VERTICAL = GENERAL_FIREBALL_KNOCKBACK_PATH + ".vertical";
     public static final String GENERAL_FIREBALL_KNOCKBACK_HORIZONTAL = GENERAL_FIREBALL_KNOCKBACK_PATH + ".horizontal";
     public static final String GENERAL_FIREBALL_COOLDOWN = GENERAL_FIREBALL_PATH + ".cooldown";
+    private static final String GENERAL_FIREBALL_DAMAGE_PATH = GENERAL_FIREBALL_PATH + ".damage";
+    public static final String GENERAL_FIREBALL_DAMAGE_SELF = GENERAL_FIREBALL_DAMAGE_PATH + ".self";
+    public static final String GENERAL_FIREBALL_DAMAGE_ENEMY = GENERAL_FIREBALL_DAMAGE_PATH + ".enemy";
+    public static final String GENERAL_FIREBALL_DAMAGE_TEAMMATES = GENERAL_FIREBALL_DAMAGE_PATH + ".teammates";
 
 
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_PATH = "performance-settings";
