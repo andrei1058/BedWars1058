@@ -59,7 +59,6 @@ public class FireballListener implements Listener {
         if(Arena.getArenaByPlayer((Player) e.getEntity()) == null) return;
 
         e.setCancelled(true);
-        System.out.println("canceled fireball direct hit damage!");
     }
 
     @EventHandler
