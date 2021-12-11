@@ -3,6 +3,7 @@ package com.andrei1058.bedwars.listeners;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.arena.LastHit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -103,7 +104,15 @@ public class FireballListener implements Listener {
             }
             player.setVelocity(horizontalVector.setY(y));
 
-            // dont damage teammates
+            LastHit lh = LastHit.getLastHit(player);
+            if (lh != null) {
+                lh.setDamager(source);
+                lh.setTime(System.currentTimeMillis());
+            } else {
+                new LastHit(player, source, System.currentTimeMillis());
+            }
+
+
             if(!player.equals(source) && arena.getTeam(player).equals(arena.getTeam(source))) continue;
 
             player.damage(2.0);
