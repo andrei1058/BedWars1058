@@ -194,7 +194,6 @@ public class ConfigPath {
     public static final String GENERAL_TNT_JUMP_DAMAGE_OTHERS = GENERAL_TNT_JUMP_PATH + ".damage-others";
 
     private static final String GENERAL_FIREBALL_PATH = "fireball";
-    public static final String GENERAL_FIREBALL_DAMAGE_MULTIPLIER = GENERAL_FIREBALL_PATH + ".damage-multiplier";
     public static final String GENERAL_FIREBALL_EXPLOSION_SIZE = GENERAL_FIREBALL_PATH + ".explosion-size";
     public static final String GENERAL_FIREBALL_SPEED_MULTIPLIER = GENERAL_FIREBALL_PATH + ".speed-multiplier";
     public static final String GENERAL_FIREBALL_MAKE_FIRE = GENERAL_FIREBALL_PATH + ".make-fire";
