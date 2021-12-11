@@ -10,6 +10,7 @@ import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.projectiles.ProjectileSource;
@@ -48,6 +49,17 @@ public class FireballListener implements Listener {
         e.setRadius((float) fireballExplosionSize);
         e.setFire(fireballMakeFire);
         explosionSources.put(e.getEntity().getLocation(), (Player) shooter);
+    }
+
+    @EventHandler
+    public void fireballDirectHit(EntityDamageByEntityEvent e) {
+        if(!(e.getDamager() instanceof Fireball)) return;
+        if(!(e.getEntity() instanceof Player)) return;
+
+        if(Arena.getArenaByPlayer((Player) e.getEntity()) == null) return;
+
+        e.setCancelled(true);
+        System.out.println("canceled fireball direct hit damage!");
     }
 
     @EventHandler
