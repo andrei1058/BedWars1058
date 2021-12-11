@@ -52,15 +52,21 @@ import org.bukkit.material.Openable;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class Interact implements Listener {
 
     private final double fireballSpeedMultiplier;
+    private final double fireballCooldown;
 
     public Interact() {
         this.fireballSpeedMultiplier = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_SPEED_MULTIPLIER);
+        this.fireballCooldown = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_COOLDOWN);
     }
 
     @EventHandler
@@ -195,19 +201,30 @@ public class Interact implements Listener {
             if (a != null) {
                 if (a.isPlayer(p)) {
                     if (inHand.getType() == nms.materialFireball()) {
+
                         e.setCancelled(true);
-                        Fireball fb = p.launchProjectile(Fireball.class);
-                        Vector direction = p.getEyeLocation().getDirection();
-                        fb = nms.setFireballDirection(fb, direction);
-                        fb.setVelocity(fb.getDirection().multiply(fireballSpeedMultiplier));
-                        fb.setIsIncendiary(false);
-                        fb.setMetadata("bw1058", new FixedMetadataValue(plugin, "ceva"));
-                        nms.minusAmount(p, inHand, 1);
+
+                        if(!fireballCooldowns.contains(p.getUniqueId())) {
+                            if(fireballCooldown >= 0.05) { // Dont bother doing the cooldown if the cooldown is less than one tick
+                                fireballCooldowns.add(p.getUniqueId());
+                                Bukkit.getScheduler().runTaskLater(plugin, () -> fireballCooldowns.remove(p.getUniqueId()), (long) (20L*fireballCooldown));
+                            }
+                            Fireball fb = p.launchProjectile(Fireball.class);
+                            Vector direction = p.getEyeLocation().getDirection();
+                            fb = nms.setFireballDirection(fb, direction);
+                            fb.setVelocity(fb.getDirection().multiply(fireballSpeedMultiplier));
+                            fb.setIsIncendiary(false);
+                            fb.setMetadata("bw1058", new FixedMetadataValue(plugin, "ceva"));
+                            nms.minusAmount(p, inHand, 1);
+                        }
+
                     }
                 }
             }
         }
     }
+
+    private List<UUID> fireballCooldowns = new ArrayList<>();
 
     @EventHandler
     public void disableItemFrameRotation(PlayerInteractEntityEvent e) {
