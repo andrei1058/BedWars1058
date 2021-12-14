@@ -642,8 +642,9 @@ public class BedWarsScoreboard {
             // Lobby scoreboard
             if (getServerType() == ServerType.SHARED) return;
             if (!config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR)) {
-                if (scoreboard != null) scoreboard.remove();
-                return;
+                if (scoreboard != null) {
+                    scoreboard.remove();
+                }
             }
             lines = Language.getList(player, Messages.SCOREBOARD_LOBBY);
         } else {
