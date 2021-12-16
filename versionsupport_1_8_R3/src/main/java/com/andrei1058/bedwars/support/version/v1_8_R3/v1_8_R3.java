@@ -717,6 +717,6 @@ public class v1_8_R3 extends VersionSupport {
     }
     @Override
     public void clearArrowsFromPlayerBody(Player player) {
-        ((CraftPlayer)player).getHandle().getDataWatcher().watch(9, (byte)-1);
+        ((CraftLivingEntity)player).getHandle().getDataWatcher().watch(9, (byte)-1);
     }
 }

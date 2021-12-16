@@ -670,6 +670,7 @@ public class v1_16_R1 extends VersionSupport {
 
     @Override
     public void clearArrowsFromPlayerBody(Player player) {
-        ((CraftPlayer)player).getHandle().getDataWatcher().set(new DataWatcherObject<>(10, DataWatcherRegistry.b),-1);
+        System.out.println("1.16_R1");
+        ((CraftLivingEntity)player).getHandle().getDataWatcher().set(new DataWatcherObject<>(11, DataWatcherRegistry.b),-1);
     }
 }
