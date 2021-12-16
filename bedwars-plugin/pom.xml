@@ -14,6 +14,12 @@
 
     <repositories>
         <repository>
+            <!-- This is a temporary reference as the Maven Shade plugin
+                that supports Java 17 is not released yet -->
+            <id>maven-snapshots</id>
+            <url>https://repository.apache.org/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
             <id>citizens</id>
             <url>https://repo.citizensnpcs.co/</url>
         </repository>
