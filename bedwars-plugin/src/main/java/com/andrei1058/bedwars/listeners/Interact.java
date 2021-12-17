@@ -52,9 +52,7 @@ import org.bukkit.material.Openable;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
@@ -204,11 +202,8 @@ public class Interact implements Listener {
 
                         e.setCancelled(true);
 
-                        if(!fireballCooldowns.contains(p.getUniqueId())) {
-                            if(fireballCooldown >= 0.05) { // Dont bother doing the cooldown if the cooldown is less than one tick
-                                fireballCooldowns.add(p.getUniqueId());
-                                Bukkit.getScheduler().runTaskLater(plugin, () -> fireballCooldowns.remove(p.getUniqueId()), (long) (20L*fireballCooldown));
-                            }
+                        if(System.currentTimeMillis() - a.getFireballCooldowns().getOrDefault(p.getUniqueId(), 0L) > (fireballCooldown*1000)) {
+                            a.getFireballCooldowns().put(p.getUniqueId(), System.currentTimeMillis());
                             Fireball fb = p.launchProjectile(Fireball.class);
                             Vector direction = p.getEyeLocation().getDirection();
                             fb = nms.setFireballDirection(fb, direction);
@@ -224,7 +219,7 @@ public class Interact implements Listener {
         }
     }
 
-    private List<UUID> fireballCooldowns = new ArrayList<>();
+
 
     @EventHandler
     public void disableItemFrameRotation(PlayerInteractEntityEvent e) {
