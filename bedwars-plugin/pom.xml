@@ -5,12 +5,21 @@
     <parent>
         <artifactId>BedWars1058</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>21.11.2</version>
+        <version>21.12</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>bedwars-plugin</artifactId>
     <packaging>jar</packaging>
     <version>${parent.version}</version>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <!-- This is a temporary reference as the Maven Shade plugin
+                that supports Java 17 is not released yet -->
+            <id>maven-snapshots</id>
+            <url>https://repository.apache.org/content/repositories/snapshots/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <repositories>
         <repository>
@@ -28,7 +37,8 @@
         <repository>
             <id>codemc-repo</id>
             <url>https://repo.codemc.io/repository/maven-public/</url>
-        </repository><repository>
+        </repository>
+        <repository>
             <id>codemc-nms</id>
             <url>https://repo.codemc.io/repository/nms/</url>
         </repository>
@@ -54,12 +64,6 @@
             <artifactId>parties-api</artifactId>
             <version>3.0.2</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.andrei1058.spigot.sidebar</groupId>
-            <artifactId>sidebar-api</artifactId>
-            <version>0.3-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>net.citizensnpcs</groupId>
@@ -161,6 +165,11 @@
         </dependency>
         <dependency>
             <groupId>com.andrei1058.bedwars</groupId>
+            <artifactId>versionsupport_v1_18_R1</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.bedwars</groupId>
             <artifactId>versionsupport-common</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -214,6 +223,15 @@
             <version>1.7.32</version>
             <optional>true</optional>
         </dependency>
+
+        <!--        Sidebar LIB-->
+        <dependency>
+            <groupId>com.andrei1058.spigot.sidebar</groupId>
+            <artifactId>sidebar-api</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <!--        End of Sidebar LIB-->
     </dependencies>
 
     <build>
@@ -230,6 +248,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
+                <version>3.3.1-SNAPSHOT</version>
                 <configuration>
                     <relocations>
                         <relocation>
