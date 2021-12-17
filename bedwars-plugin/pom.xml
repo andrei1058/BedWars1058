@@ -12,13 +12,16 @@
     <packaging>jar</packaging>
     <version>${parent.version}</version>
 
-    <repositories>
-        <repository>
+    <pluginRepositories>
+        <pluginRepository>
             <!-- This is a temporary reference as the Maven Shade plugin
                 that supports Java 17 is not released yet -->
             <id>maven-snapshots</id>
             <url>https://repository.apache.org/content/repositories/snapshots/</url>
-        </repository>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <repositories>
         <repository>
             <id>citizens</id>
             <url>https://repo.citizensnpcs.co/</url>
@@ -34,7 +37,8 @@
         <repository>
             <id>codemc-repo</id>
             <url>https://repo.codemc.io/repository/maven-public/</url>
-        </repository><repository>
+        </repository>
+        <repository>
             <id>codemc-nms</id>
             <url>https://repo.codemc.io/repository/nms/</url>
         </repository>
@@ -220,14 +224,14 @@
             <optional>true</optional>
         </dependency>
 
-<!--        Sidebar LIB-->
+        <!--        Sidebar LIB-->
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-api</artifactId>
             <version>0.3.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
-<!--        End of Sidebar LIB-->
+        <!--        End of Sidebar LIB-->
     </dependencies>
 
     <build>
