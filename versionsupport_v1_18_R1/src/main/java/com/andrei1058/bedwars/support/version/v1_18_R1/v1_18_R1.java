@@ -359,8 +359,7 @@ public class v1_18_R1 extends VersionSupport {
     @Override
     public void registerTntWhitelist() {
         try {
-            //noinspection JavaReflectionMemberAccess
-            Field field = BlockBase.class.getDeclaredField("durability");
+            Field field = BlockBase.class.getDeclaredField("aI");
             field.setAccessible(true);
             field.set(Blocks.eq, 12f);
             field.set(Blocks.au, 300f);
