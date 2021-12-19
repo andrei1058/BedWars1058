@@ -5,7 +5,7 @@
     <parent>
         <artifactId>BedWars1058</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>21.12</version>
+        <version>21.12.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>bedwars-plugin</artifactId>
@@ -49,6 +49,10 @@
         <repository>
             <id>alessioDP-releases</id>
             <url>https://repo.alessiodp.com/releases/</url>
+        </repository>
+        <repository>
+            <id>andrei1058-releases</id>
+            <url>https://repo.andrei1058.com/releases/</url>
         </repository>
     </repositories>
 
@@ -228,7 +232,7 @@
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-api</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
+            <version>0.3.1</version>
             <scope>compile</scope>
         </dependency>
         <!--        End of Sidebar LIB-->
