@@ -139,8 +139,8 @@ public class QuitAndTeleportListener implements Listener {
                 //}, 2L);
             }
         }
-        if (Arena.isInArena(e.getPlayer())) {
-            IArena a = Arena.getArenaByPlayer(e.getPlayer());
+        IArena a = Arena.getArenaByPlayer(e.getPlayer());
+        if (a != null) {
             if (a.isPlayer(e.getPlayer())) {
                 if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) return;
                 if (!e.getPlayer().getWorld().getName().equalsIgnoreCase(a.getWorld().getName())) {
