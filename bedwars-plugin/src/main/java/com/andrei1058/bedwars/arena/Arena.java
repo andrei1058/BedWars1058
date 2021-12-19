@@ -2337,6 +2337,12 @@ public class Arena implements IArena {
         return enableQueue;
     }
 
+    private final Map<UUID, Long> fireballCooldowns = new HashMap<>();
+
+    public Map<UUID, Long> getFireballCooldowns() {
+        return fireballCooldowns;
+    }
+
     public void destroyData() {
         destroyReJoins();
         if (worldName != null) arenaByIdentifier.remove(worldName);
@@ -2384,6 +2390,7 @@ public class Arena implements IArena {
         perMinuteTask = null;
         moneyperMinuteTask = null;
         leaving.clear();
+        fireballCooldowns.clear();
     }
 
     /**

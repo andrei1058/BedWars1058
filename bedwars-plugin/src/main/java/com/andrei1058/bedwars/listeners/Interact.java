@@ -52,15 +52,19 @@ import org.bukkit.material.Openable;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
+import java.util.*;
+
 import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class Interact implements Listener {
 
     private final double fireballSpeedMultiplier;
+    private final double fireballCooldown;
 
     public Interact() {
         this.fireballSpeedMultiplier = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_SPEED_MULTIPLIER);
+        this.fireballCooldown = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_COOLDOWN);
     }
 
     @EventHandler
@@ -195,19 +199,27 @@ public class Interact implements Listener {
             if (a != null) {
                 if (a.isPlayer(p)) {
                     if (inHand.getType() == nms.materialFireball()) {
+
                         e.setCancelled(true);
-                        Fireball fb = p.launchProjectile(Fireball.class);
-                        Vector direction = p.getEyeLocation().getDirection();
-                        fb = nms.setFireballDirection(fb, direction);
-                        fb.setVelocity(fb.getDirection().multiply(fireballSpeedMultiplier));
-                        fb.setIsIncendiary(false);
-                        fb.setMetadata("bw1058", new FixedMetadataValue(plugin, "ceva"));
-                        nms.minusAmount(p, inHand, 1);
+
+                        if(System.currentTimeMillis() - a.getFireballCooldowns().getOrDefault(p.getUniqueId(), 0L) > (fireballCooldown*1000)) {
+                            a.getFireballCooldowns().put(p.getUniqueId(), System.currentTimeMillis());
+                            Fireball fb = p.launchProjectile(Fireball.class);
+                            Vector direction = p.getEyeLocation().getDirection();
+                            fb = nms.setFireballDirection(fb, direction);
+                            fb.setVelocity(fb.getDirection().multiply(fireballSpeedMultiplier));
+                            fb.setIsIncendiary(false);
+                            fb.setMetadata("bw1058", new FixedMetadataValue(plugin, "ceva"));
+                            nms.minusAmount(p, inHand, 1);
+                        }
+
                     }
                 }
             }
         }
     }
+
+
 
     @EventHandler
     public void disableItemFrameRotation(PlayerInteractEntityEvent e) {
