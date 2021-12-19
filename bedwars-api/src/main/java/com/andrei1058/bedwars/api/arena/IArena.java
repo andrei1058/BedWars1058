@@ -38,6 +38,7 @@ import org.bukkit.util.Vector;
 import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -242,6 +243,12 @@ public interface IArena {
      * So players will be able to remove blocks placed by players only.
      */
     void addPlacedBlock(Block block);
+
+    /**
+     * Gets the cooldowns for fireballs
+     * @return The cooldowns for fireballs
+     */
+    Map<UUID, Long> getFireballCooldowns();
 
     /**
      * Remove placed block.
