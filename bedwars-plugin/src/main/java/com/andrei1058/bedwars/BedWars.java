@@ -289,13 +289,12 @@ public class BedWars extends JavaPlugin {
         // Register events
         registerEvents(new QuitAndTeleportListener(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(),
                 new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener(), new LangListener());
-        if(autoscale) registerEvents(new AutoscaleListener());
         if (getServerType() == ServerType.BUNGEE) {
             if (autoscale) {
                 //registerEvents(new ArenaListeners());
                 ArenaSocket.lobbies.addAll(config.getList(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS));
                 new SendTask();
-                registerEvents(new PrePartyListener(), new JoinListenerBungee());
+                registerEvents(new AutoscaleListener(), new PrePartyListener(), new JoinListenerBungee());
                 Bukkit.getScheduler().runTaskTimerAsynchronously(this, new LoadedUsersCleaner(), 60L, 60L);
             } else {
                 registerEvents(new ServerPingListener(), new JoinListenerBungeeLegacy());
