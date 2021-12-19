@@ -55,7 +55,7 @@ import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
 import java.text.DecimalFormat;
-import java.util.Map;
+import java.util.*;
 
 import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
@@ -70,10 +70,6 @@ public class DamageDeathMove implements Listener {
     private final double tntDamageTeammates;
     private final double tntDamageOthers;
 
-    private final double fireballDamageMultiplier;
-    private final double fireballExplosionSize;
-    private final boolean fireballMakeFire;
-
     public DamageDeathMove() {
         this.tntJumpBarycenterAlterationInY = config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_BARYCENTER_IN_Y);
         this.tntJumpStrengthReductionConstant = config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_STRENGTH_REDUCTION);
@@ -81,10 +77,6 @@ public class DamageDeathMove implements Listener {
         this.tntDamageSelf = config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_SELF);
         this.tntDamageTeammates = config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_TEAMMATES);
         this.tntDamageOthers = config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_OTHERS);
-
-        this.fireballDamageMultiplier = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_DAMAGE_MULTIPLIER);
-        this.fireballExplosionSize = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_EXPLOSION_SIZE);
-        this.fireballMakeFire = config.getYml().getBoolean(ConfigPath.GENERAL_FIREBALL_MAKE_FIRE);
     }
 
     @EventHandler
@@ -119,10 +111,6 @@ public class DamageDeathMove implements Listener {
                 }
                 //}
 
-                // Fireball is BLOCK_EXPLOSION because of spawned explosion
-                if(e.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
-                    e.setDamage(e.getDamage()*fireballDamageMultiplier);
-                }
             }
         }
         if (BedWars.getServerType() == ServerType.MULTIARENA) {
@@ -358,6 +346,7 @@ public class DamageDeathMove implements Listener {
                 victim.spigot().respawn();
                 return;
             }
+            BedWars.nms.clearArrowsFromPlayerBody(victim);
             String message = victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL : Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR;
             PlayerKillEvent.PlayerKillCause cause = victimsTeam.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.UNKNOWN_FINAL_KILL : PlayerKillEvent.PlayerKillCause.UNKNOWN;
             if (damageEvent != null) {
@@ -655,16 +644,6 @@ public class DamageDeathMove implements Listener {
     }
 
     @EventHandler
-    public void fireballExplode(ExplosionPrimeEvent e) {
-        if(!(e.getEntity() instanceof Fireball)) return;
-        ProjectileSource shooter = ((Fireball) e.getEntity()).getShooter();
-        if(!(shooter instanceof Player)) return;
-        IArena a = Arena.getArenaByPlayer((Player) shooter);
-        if(a == null) return;
-        e.setCancelled(true);
-    }
-
-    @EventHandler
     public void onProjHit(ProjectileHitEvent e) {
         Projectile proj = e.getEntity();
         if (proj == null) return;
@@ -672,12 +651,6 @@ public class DamageDeathMove implements Listener {
             IArena a = Arena.getArenaByPlayer((Player) e.getEntity().getShooter());
             if (a != null) {
                 if (!a.isPlayer((Player) e.getEntity().getShooter())) return;
-                if (e.getEntity() instanceof Fireball) {
-                    Location l = e.getEntity().getLocation();
-                    if (l == null) return;
-                    e.getEntity().getWorld().createExplosion(l.getX(), l.getY(), l.getZ(), (float) fireballExplosionSize, fireballMakeFire, true);
-                    return;
-                }
                 String utility = "";
                 if (proj instanceof Snowball) {
                     utility = "silverfish";
