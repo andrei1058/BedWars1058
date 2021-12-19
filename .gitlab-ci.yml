@@ -3,7 +3,7 @@ variables:
   MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
 
 
-image: "maven:3.6.3-jdk-8"
+image: "maven:3.8.4-openjdk-17-slim"
 #$CI_COMMIT_SHORT_SHA-SNAPSHOT
 
 maven-dev:
