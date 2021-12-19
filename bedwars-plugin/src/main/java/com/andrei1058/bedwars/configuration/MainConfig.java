@@ -79,7 +79,10 @@ public class MainConfig extends ConfigManager {
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_RE_SPAWN_INVULNERABILITY, 4000);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART, 30);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD, "restart");
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_AUTO_SCALE_LIMIT, 5);
+
+        yml.addDefault(ConfigPath.GENERAL_AUTOSCALE_LIMIT, 5);
+        yml.addDefault(ConfigPath.GENERAL_AUTOSCALE_ENABLE, true);
+
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS, Collections.singletonList("0.0.0.0:2019"));
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_REGULAR, 40);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_HALF, 25);
@@ -181,6 +184,11 @@ public class MainConfig extends ConfigManager {
             List<String> sockets = new ArrayList<>(yml.getStringList("bungee-settings.lobby-servers"));
             yml.set(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS, sockets);
             yml.set("bungee-settings.lobby-servers", null);
+        }
+
+        if(yml.get("bungee-settings.auto-scale-clone-limit") != null) {
+            yml.set(ConfigPath.GENERAL_AUTOSCALE_LIMIT, yml.get("bungee-settings.auto-scale-clone-limit"));
+            yml.set("bungee-settings.auto-scale-clone-limit", null);
         }
 
         if (yml.get("arenaGui.settings.showPlaying") != null) {
