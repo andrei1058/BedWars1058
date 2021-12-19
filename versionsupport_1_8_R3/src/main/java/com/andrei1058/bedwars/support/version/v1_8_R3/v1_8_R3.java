@@ -715,4 +715,8 @@ public class v1_8_R3 extends VersionSupport {
             ((CraftPlayer) inWorld).getHandle().playerConnection.sendPacket(particlePacket);
         }
     }
+    @Override
+    public void clearArrowsFromPlayerBody(Player player) {
+        ((CraftLivingEntity)player).getHandle().getDataWatcher().watch(9, (byte)-1);
+    }
 }
