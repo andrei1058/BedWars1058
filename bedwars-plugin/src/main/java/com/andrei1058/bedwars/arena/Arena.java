@@ -2519,12 +2519,20 @@ public class Arena implements IArena {
 
         if (Arena.getGamesBeforeRestart() != -1 && Arena.getArenas().size() >= Arena.getGamesBeforeRestart()) return false;
 
+        int activeClones = 0;
         for (IArena ar : Arena.getArenas()) {
             if (ar.getArenaName().equalsIgnoreCase(arenaName)) {
+                // clone this arena only if there aren't available arena of the same kind
                 if (ar.getStatus() == GameState.waiting || ar.getStatus() == GameState.starting) return false;
             }
+            // count active clones
+            if (ar.getArenaName().equals(arenaName)){
+                activeClones++;
+            }
         }
-        return true;
+
+        // check amount of active clones
+        return config.getInt(ConfigPath.GENERAL_CONFIGURATION_AUTO_SCALE_LIMIT) > activeClones;
     }
 
     @Override
