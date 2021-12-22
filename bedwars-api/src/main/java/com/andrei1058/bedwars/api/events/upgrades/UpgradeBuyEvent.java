@@ -20,6 +20,7 @@
 
 package com.andrei1058.bedwars.api.events.upgrades;
 
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.upgrades.TeamUpgrade;
 import org.bukkit.entity.Player;
@@ -31,6 +32,7 @@ public class UpgradeBuyEvent extends Event {
 
     private TeamUpgrade teamUpgrade;
     private Player player;
+    private final IArena arena;
     private ITeam team;
 
     /**
@@ -40,6 +42,11 @@ public class UpgradeBuyEvent extends Event {
         this.teamUpgrade = teamUpgrade;
         this.player = player;
         this.team = team;
+        this.arena = team.getArena();
+    }
+
+    public IArena getArena() {
+        return arena;
     }
 
     /**
