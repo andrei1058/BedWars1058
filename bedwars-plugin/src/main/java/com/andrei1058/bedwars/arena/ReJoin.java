@@ -32,6 +32,8 @@ import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.lobbysocket.ArenaSocket;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.google.gson.JsonObject;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -141,8 +143,17 @@ public class ReJoin {
      * Make a player re-join the arena
      */
     public boolean reJoin(Player player) {
+
         Sounds.playSound("rejoin-allowed", player);
         player.sendMessage(Language.getMsg(player, Messages.REJOIN_ALLOWED).replace("{arena}", getArena().getDisplayName()));
+
+        if (player.getGameMode() != GameMode.SURVIVAL) {
+            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
+                player.setGameMode(GameMode.SURVIVAL);
+                player.setAllowFlight(true);
+                player.setFlying(true);
+            }, 20L);
+        }
         return arena.reJoin(player);
     }
 
