@@ -99,7 +99,7 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
 
         @Override
         public boolean isPlaying(Player p) {
-            return Arena.isInArena(p);
+            return Arena.isInArena(p) && Arena.getArenaByPlayer(p).isPlayer(p);
         }
 
         @Override

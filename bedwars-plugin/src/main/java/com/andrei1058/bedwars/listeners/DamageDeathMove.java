@@ -139,6 +139,7 @@ public class DamageDeathMove implements Listener {
         // projectile hit message #696, #711
         ITeam team = a.getTeam(p);
         Language lang = Language.getPlayerLanguage(damager);
+        if (lang.m(Messages.PLAYER_HIT_BOW).isEmpty()) return;
         String message = lang.m(Messages.PLAYER_HIT_BOW)
                 .replace("{amount}", new DecimalFormat("00.#").format(((Player) e.getEntity()).getHealth() - e.getFinalDamage()))
                 .replace("{TeamColor}", team.getColor().chat().toString())
@@ -345,6 +346,7 @@ public class DamageDeathMove implements Listener {
                 victim.spigot().respawn();
                 return;
             }
+            BedWars.nms.clearArrowsFromPlayerBody(victim);
             String message = victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL : Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR;
             PlayerKillEvent.PlayerKillCause cause = victimsTeam.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.UNKNOWN_FINAL_KILL : PlayerKillEvent.PlayerKillCause.UNKNOWN;
             if (damageEvent != null) {
@@ -469,6 +471,14 @@ public class DamageDeathMove implements Listener {
             LastHit lastHit = LastHit.getLastHit(victim);
             if (lastHit != null) {
                 lastHit.setDamager(null);
+            }
+
+
+            if (victimsTeam.isBedDestroyed() && victimsTeam.getSize() == 1 &&  a.getConfig().getBoolean(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS)) {
+                for (IGenerator g : victimsTeam.getGenerators()) {
+                    g.disable();
+                }
+                victimsTeam.getGenerators().clear();
             }
         }
     }

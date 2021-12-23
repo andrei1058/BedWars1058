@@ -34,24 +34,30 @@ public class ConfigPath {
     public static final String GENERATOR_GOLD_SPAWN_LIMIT = "gold.spawn-limit";
 
     public static final String GENERATOR_DIAMOND_TIER_I_DELAY = "diamond.tierI.delay";
+    public static final String GENERATOR_DIAMOND_TIER_I_AMOUNT = "diamond.tierI.amount";
     public static final String GENERATOR_DIAMOND_TIER_I_SPAWN_LIMIT = "diamond.tierI.spawn-limit";
 
     public static final String GENERATOR_DIAMOND_TIER_II_DELAY = "diamond.tierII.delay";
+    public static final String GENERATOR_DIAMOND_TIER_II_AMOUNT = "diamond.tierII.amount";
     public static final String GENERATOR_DIAMOND_TIER_II_SPAWN_LIMIT = "diamond.tierII.spawn-limit";
     public static final String GENERATOR_DIAMOND_TIER_II_START = "diamond.tierII.start";
 
     public static final String GENERATOR_DIAMOND_TIER_III_DELAY = "diamond.tierIII.delay";
+    public static final String GENERATOR_DIAMOND_TIER_III_AMOUNT = "diamond.tierIII.amount";
     public static final String GENERATOR_DIAMOND_TIER_III_SPAWN_LIMIT = "diamond.tierIII.spawn-limit";
     public static final String GENERATOR_DIAMOND_TIER_III_START = "diamond.tierIII.start";
 
     public static final String GENERATOR_EMERALD_TIER_I_DELAY = "emerald.tierI.delay";
+    public static final String GENERATOR_EMERALD_TIER_I_AMOUNT = "emerald.tierI.amount";
     public static final String GENERATOR_EMERALD_TIER_I_SPAWN_LIMIT = "emerald.tierI.spawn-limit";
 
     public static final String GENERATOR_EMERALD_TIER_II_DELAY = "emerald.tierII.delay";
+    public static final String GENERATOR_EMERALD_TIER_II_AMOUNT = "emerald.tierII.amount";
     public static final String GENERATOR_EMERALD_TIER_II_SPAWN_LIMIT = "emerald.tierII.spawn-limit";
     public static final String GENERATOR_EMERALD_TIER_II_START = "emerald.tierII.start";
 
     public static final String GENERATOR_EMERALD_TIER_III_DELAY = "emerald.tierIII.delay";
+    public static final String GENERATOR_EMERALD_TIER_III_AMOUNT = "emerald.tierIII.amount";
     public static final String GENERATOR_EMERALD_TIER_III_SPAWN_LIMIT = "emerald.tierIII.spawn-limit";
     public static final String GENERATOR_EMERALD_TIER_III_START = "emerald.tierIII.start";
 
