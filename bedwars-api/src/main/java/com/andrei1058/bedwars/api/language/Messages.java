@@ -331,6 +331,7 @@ public class Messages {
     public static final String SHOP_LORE_QUICK_ADD  = "shop-lore-quick-add";
     public static final String SHOP_LORE_QUICK_REMOVE  = "shop-lore-quick-remove";
     public static final String SHOP_INDEX_NAME = SHOP_PATH + ".inventory-name";
+    public static final String SHOP_QUICK_ADD_NAME = SHOP_PATH + ".quick-buy-add-inventory-name";
     public static final String SHOP_SEPARATOR_NAME = SHOP_PATH + ".separator-item-name";
     public static final String SHOP_SEPARATOR_LORE = SHOP_PATH + ".separator-item-lore";
     public static final String SHOP_QUICK_BUY_NAME = SHOP_PATH + ".quick-buy-item-name";
