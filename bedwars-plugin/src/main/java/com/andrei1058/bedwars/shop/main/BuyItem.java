@@ -195,6 +195,7 @@ public class BuyItem implements IBuyItem {
 
             if (m == Material.LEATHER_HELMET || m == Material.CHAINMAIL_HELMET || m == Material.DIAMOND_HELMET || m == nms.materialGoldenHelmet() || m == Material.IRON_HELMET) {
                 if (permanent) i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
+                i.addEnchantment(Enchantment.WATER_WORKER, 1);
                 player.getInventory().setHelmet(i);
             } else if (m == Material.LEATHER_CHESTPLATE || m == Material.CHAINMAIL_CHESTPLATE || m == nms.materialGoldenChestPlate() || m == Material.DIAMOND_CHESTPLATE || m == Material.IRON_CHESTPLATE) {
                 if (permanent) i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);

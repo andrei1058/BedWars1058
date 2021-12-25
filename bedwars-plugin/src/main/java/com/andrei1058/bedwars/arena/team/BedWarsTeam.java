@@ -457,6 +457,9 @@ public class BedWarsTeam implements ITeam {
         lam.setColor(color.bukkitColor());
         nms.setUnbreakable(lam);
         i.setItemMeta(lam);
+        if (material == Material.LEATHER_HELMET || material == Material.CHAINMAIL_HELMET || material == Material.DIAMOND_HELMET || material == nms.materialGoldenHelmet() || material == Material.IRON_HELMET) {
+            i.addEnchantment(Enchantment.WATER_WORKER, 1);
+        }
         return i;
     }
 
