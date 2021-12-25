@@ -286,6 +286,7 @@ public class BedWarsScoreboard {
                     .replace("{server_ip}", BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
                     .replace("{version}", plugin.getDescription().getVersion())
                     .replace("{server}", config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID))
+                    .replace("{playername}", player.getName())
                     .replace("{player}", player.getDisplayName())
                     .replace("{money}", String.valueOf(getEconomy().getMoney(player)));
 
@@ -296,6 +297,7 @@ public class BedWarsScoreboard {
                 // Game scoreboard
                 current = current
                         .replace("{map}", arena.getDisplayName())
+                        .replace("{map_name}", arena.getArenaName())
                         .replace("{group}", arena.getDisplayGroup(player));
 
                 for (ITeam currentTeam : arena.getTeams()) {
@@ -631,6 +633,7 @@ public class BedWarsScoreboard {
      * @param arena  target arena.
      */
     public static void giveScoreboard(@NotNull Player player, IArena arena, boolean delay) {
+
         if (!player.isOnline()) return;
         BedWarsScoreboard scoreboard = BedWarsScoreboard.getSBoard(player.getUniqueId());
         List<String> lines = null;
@@ -642,7 +645,6 @@ public class BedWarsScoreboard {
                 if (scoreboard != null) {
                     scoreboard.remove();
                 }
-                return;
             }
             lines = Language.getList(player, Messages.SCOREBOARD_LOBBY);
         } else {

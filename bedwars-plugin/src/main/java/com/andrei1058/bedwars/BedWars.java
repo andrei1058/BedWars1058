@@ -177,6 +177,7 @@ public class BedWars extends JavaPlugin {
         new Spanish();
         new Russian();
         new Bangla();
+        new Persian();
 
         config = new MainConfig(this, "config");
 
@@ -287,7 +288,7 @@ public class BedWars extends JavaPlugin {
 
         // Register events
         registerEvents(new QuitAndTeleportListener(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(),
-                new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener(), new LangListener());
+                new FireballListener(), new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener(), new LangListener());
         if (getServerType() == ServerType.BUNGEE) {
             if (autoscale) {
                 //registerEvents(new ArenaListeners());
@@ -421,31 +422,37 @@ public class BedWars extends JavaPlugin {
             new PAPISupport().register();
             SupportPAPI.setSupportPAPI(new SupportPAPI.withPAPI());
         }
-        /* Vault support */
-        if (this.getServer().getPluginManager().getPlugin("Vault") != null) {
-            try {
-                //noinspection rawtypes
-                RegisteredServiceProvider rsp = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
-                WithChat.setChat((net.milkbowl.vault.chat.Chat) rsp.getProvider());
-                plugin.getLogger().info("Hook into vault chat support!");
-                chat = new WithChat();
-            } catch (Exception var2_2) {
+        /*
+         * Vault support
+         * The task is to initialize after all plugins have loaded,
+         *  to make sure any economy/chat plugins have been loaded and registered.
+         */
+        Bukkit.getScheduler().runTask(this, () -> {
+            if (this.getServer().getPluginManager().getPlugin("Vault") != null) {
+                try {
+                    //noinspection rawtypes
+                    RegisteredServiceProvider rsp = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
+                    WithChat.setChat((net.milkbowl.vault.chat.Chat) rsp.getProvider());
+                    plugin.getLogger().info("Hook into vault chat support!");
+                    chat = new WithChat();
+                } catch (Exception var2_2) {
+                    chat = new NoChat();
+                }
+                try {
+                    //noinspection rawtypes
+                    registerEvents(new MoneyListeners());
+                    RegisteredServiceProvider rsp = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+                    WithEconomy.setEconomy((net.milkbowl.vault.economy.Economy) rsp.getProvider());
+                    plugin.getLogger().info("Hook into vault economy support!");
+                    economy = new WithEconomy();
+                } catch (Exception var2_2) {
+                    economy = new NoEconomy();
+                }
+            } else {
                 chat = new NoChat();
-            }
-            try {
-                //noinspection rawtypes
-                registerEvents(new MoneyListeners());
-                RegisteredServiceProvider rsp = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-                WithEconomy.setEconomy((net.milkbowl.vault.economy.Economy) rsp.getProvider());
-                plugin.getLogger().info("Hook into vault economy support!");
-                economy = new WithEconomy();
-            } catch (Exception var2_2) {
                 economy = new NoEconomy();
             }
-        } else {
-            chat = new NoChat();
-            economy = new NoEconomy();
-        }
+        });
 
         /* Chat support */
         if (config.getBoolean("formatChat")) {

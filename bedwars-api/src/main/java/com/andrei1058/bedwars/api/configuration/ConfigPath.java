@@ -34,24 +34,30 @@ public class ConfigPath {
     public static final String GENERATOR_GOLD_SPAWN_LIMIT = "gold.spawn-limit";
 
     public static final String GENERATOR_DIAMOND_TIER_I_DELAY = "diamond.tierI.delay";
+    public static final String GENERATOR_DIAMOND_TIER_I_AMOUNT = "diamond.tierI.amount";
     public static final String GENERATOR_DIAMOND_TIER_I_SPAWN_LIMIT = "diamond.tierI.spawn-limit";
 
     public static final String GENERATOR_DIAMOND_TIER_II_DELAY = "diamond.tierII.delay";
+    public static final String GENERATOR_DIAMOND_TIER_II_AMOUNT = "diamond.tierII.amount";
     public static final String GENERATOR_DIAMOND_TIER_II_SPAWN_LIMIT = "diamond.tierII.spawn-limit";
     public static final String GENERATOR_DIAMOND_TIER_II_START = "diamond.tierII.start";
 
     public static final String GENERATOR_DIAMOND_TIER_III_DELAY = "diamond.tierIII.delay";
+    public static final String GENERATOR_DIAMOND_TIER_III_AMOUNT = "diamond.tierIII.amount";
     public static final String GENERATOR_DIAMOND_TIER_III_SPAWN_LIMIT = "diamond.tierIII.spawn-limit";
     public static final String GENERATOR_DIAMOND_TIER_III_START = "diamond.tierIII.start";
 
     public static final String GENERATOR_EMERALD_TIER_I_DELAY = "emerald.tierI.delay";
+    public static final String GENERATOR_EMERALD_TIER_I_AMOUNT = "emerald.tierI.amount";
     public static final String GENERATOR_EMERALD_TIER_I_SPAWN_LIMIT = "emerald.tierI.spawn-limit";
 
     public static final String GENERATOR_EMERALD_TIER_II_DELAY = "emerald.tierII.delay";
+    public static final String GENERATOR_EMERALD_TIER_II_AMOUNT = "emerald.tierII.amount";
     public static final String GENERATOR_EMERALD_TIER_II_SPAWN_LIMIT = "emerald.tierII.spawn-limit";
     public static final String GENERATOR_EMERALD_TIER_II_START = "emerald.tierII.start";
 
     public static final String GENERATOR_EMERALD_TIER_III_DELAY = "emerald.tierIII.delay";
+    public static final String GENERATOR_EMERALD_TIER_III_AMOUNT = "emerald.tierIII.amount";
     public static final String GENERATOR_EMERALD_TIER_III_SPAWN_LIMIT = "emerald.tierIII.spawn-limit";
     public static final String GENERATOR_EMERALD_TIER_III_START = "emerald.tierIII.start";
 
@@ -167,6 +173,7 @@ public class ConfigPath {
     public static final String SOUNDS_COUNTDOWN_TICK_X = "game-countdown-s";
     public static final String SOUND_GAME_START = "game-countdown-start";
     public static final String SOUNDS_BED_DESTROY = "bed-destroy";
+    public static final String SOUNDS_BED_DESTROY_OWN = "bed-destroy-own";
     public static final String SOUNDS_INSUFF_MONEY = "shop-insufficient-money";
     public static final String SOUNDS_BOUGHT = "shop-bought";
 
@@ -191,6 +198,19 @@ public class ConfigPath {
     public static final String GENERAL_TNT_JUMP_DAMAGE_SELF = GENERAL_TNT_JUMP_PATH + ".damage-self";
     public static final String GENERAL_TNT_JUMP_DAMAGE_TEAMMATES = GENERAL_TNT_JUMP_PATH + ".damage-teammates";
     public static final String GENERAL_TNT_JUMP_DAMAGE_OTHERS = GENERAL_TNT_JUMP_PATH + ".damage-others";
+
+    private static final String GENERAL_FIREBALL_PATH = "fireball";
+    public static final String GENERAL_FIREBALL_EXPLOSION_SIZE = GENERAL_FIREBALL_PATH + ".explosion-size";
+    public static final String GENERAL_FIREBALL_SPEED_MULTIPLIER = GENERAL_FIREBALL_PATH + ".speed-multiplier";
+    public static final String GENERAL_FIREBALL_MAKE_FIRE = GENERAL_FIREBALL_PATH + ".make-fire";
+    private static final String GENERAL_FIREBALL_KNOCKBACK_PATH = GENERAL_FIREBALL_PATH + ".knockback";
+    public static final String GENERAL_FIREBALL_KNOCKBACK_VERTICAL = GENERAL_FIREBALL_KNOCKBACK_PATH + ".vertical";
+    public static final String GENERAL_FIREBALL_KNOCKBACK_HORIZONTAL = GENERAL_FIREBALL_KNOCKBACK_PATH + ".horizontal";
+    public static final String GENERAL_FIREBALL_COOLDOWN = GENERAL_FIREBALL_PATH + ".cooldown";
+    private static final String GENERAL_FIREBALL_DAMAGE_PATH = GENERAL_FIREBALL_PATH + ".damage";
+    public static final String GENERAL_FIREBALL_DAMAGE_SELF = GENERAL_FIREBALL_DAMAGE_PATH + ".self";
+    public static final String GENERAL_FIREBALL_DAMAGE_ENEMY = GENERAL_FIREBALL_DAMAGE_PATH + ".enemy";
+    public static final String GENERAL_FIREBALL_DAMAGE_TEAMMATES = GENERAL_FIREBALL_DAMAGE_PATH + ".teammates";
 
 
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_PATH = "performance-settings";

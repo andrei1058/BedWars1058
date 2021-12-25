@@ -136,7 +136,11 @@ public class v1_16_R2 extends VersionSupport {
     @Override
     public void minusAmount(Player p, org.bukkit.inventory.ItemStack i, int amount) {
         if (i.getAmount() - amount <= 0) {
-            p.getInventory().removeItem(i);
+            if(p.getInventory().getItemInOffHand().equals(i)) {
+                p.getInventory().setItemInOffHand(null);
+            } else {
+                p.getInventory().removeItem(i);
+            }
             return;
         }
         i.setAmount(i.getAmount() - amount);
@@ -654,5 +658,10 @@ public class v1_16_R2 extends VersionSupport {
     @Override
     public void playRedStoneDot(Player player) {
         player.getWorld().spawnParticle(org.bukkit.Particle.REDSTONE, player.getLocation(), 1, new Particle.DustOptions(Color.RED, 1));
+    }
+
+    @Override
+    public void clearArrowsFromPlayerBody(Player player) {
+        ((CraftLivingEntity)player).getHandle().getDataWatcher().set(new DataWatcherObject<>(11, DataWatcherRegistry.b),-1);
     }
 }

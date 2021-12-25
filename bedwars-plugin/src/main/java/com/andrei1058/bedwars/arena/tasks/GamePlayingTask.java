@@ -224,6 +224,8 @@ public class GamePlayingTask implements Runnable, PlayingTask {
                         a.addSpectator(e.getKey(), true, null);
                     } else {
                         t.respawnMember(e.getKey());
+                        e.getKey().setAllowFlight(false);
+                        e.getKey().setFlying(false);
                     }
                 } else {
                     nms.sendTitle(e.getKey(), getMsg(e.getKey(), Messages.PLAYER_DIE_RESPAWN_TITLE).replace("{time}",

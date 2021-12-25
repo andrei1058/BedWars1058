@@ -55,7 +55,7 @@ import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
 import java.text.DecimalFormat;
-import java.util.Map;
+import java.util.*;
 
 import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
@@ -110,6 +110,7 @@ public class DamageDeathMove implements Listener {
                     } else BedWarsTeam.reSpawnInvulnerability.remove(p.getUniqueId());
                 }
                 //}
+
             }
         }
         if (BedWars.getServerType() == ServerType.MULTIARENA) {
@@ -122,6 +123,7 @@ public class DamageDeathMove implements Listener {
     // show player health on bow hit
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBowHit(EntityDamageByEntityEvent e) {
+        if(e.isCancelled()) return;
         if (e.getEntity().getType() != EntityType.PLAYER) return;
         if (!(e.getDamager() instanceof Projectile)) return;
         Projectile projectile = (Projectile) e.getDamager();
@@ -137,6 +139,7 @@ public class DamageDeathMove implements Listener {
         // projectile hit message #696, #711
         ITeam team = a.getTeam(p);
         Language lang = Language.getPlayerLanguage(damager);
+        if (lang.m(Messages.PLAYER_HIT_BOW).isEmpty()) return;
         String message = lang.m(Messages.PLAYER_HIT_BOW)
                 .replace("{amount}", new DecimalFormat("00.#").format(((Player) e.getEntity()).getHealth() - e.getFinalDamage()))
                 .replace("{TeamColor}", team.getColor().chat().toString())
@@ -343,6 +346,7 @@ public class DamageDeathMove implements Listener {
                 victim.spigot().respawn();
                 return;
             }
+            BedWars.nms.clearArrowsFromPlayerBody(victim);
             String message = victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL : Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR;
             PlayerKillEvent.PlayerKillCause cause = victimsTeam.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.UNKNOWN_FINAL_KILL : PlayerKillEvent.PlayerKillCause.UNKNOWN;
             if (damageEvent != null) {
@@ -467,6 +471,14 @@ public class DamageDeathMove implements Listener {
             LastHit lastHit = LastHit.getLastHit(victim);
             if (lastHit != null) {
                 lastHit.setDamager(null);
+            }
+
+
+            if (victimsTeam.isBedDestroyed() && victimsTeam.getSize() == 1 &&  a.getConfig().getBoolean(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS)) {
+                for (IGenerator g : victimsTeam.getGenerators()) {
+                    g.disable();
+                }
+                victimsTeam.getGenerators().clear();
             }
         }
     }
@@ -639,12 +651,6 @@ public class DamageDeathMove implements Listener {
             IArena a = Arena.getArenaByPlayer((Player) e.getEntity().getShooter());
             if (a != null) {
                 if (!a.isPlayer((Player) e.getEntity().getShooter())) return;
-                if (e.getEntity() instanceof Fireball) {
-                    Location l = e.getEntity().getLocation();
-                    if (l == null) return;
-                    e.getEntity().getWorld().createExplosion(l.getX(), l.getY(), l.getZ(), 3, false, true);
-                    return;
-                }
                 String utility = "";
                 if (proj instanceof Snowball) {
                     utility = "silverfish";

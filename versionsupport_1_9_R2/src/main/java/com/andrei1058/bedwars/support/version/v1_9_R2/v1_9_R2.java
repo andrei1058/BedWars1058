@@ -97,20 +97,22 @@ public class v1_9_R2 extends VersionSupport {
             }
         }
         if (subtitle != null) {
-            if (!subtitle.isEmpty()) {
-                IChatBaseComponent bc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + subtitle + "\"}");
-                PacketPlayOutTitle tit = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, bc);
-                PacketPlayOutTitle length = new PacketPlayOutTitle(fadeIn, stay, fadeOut);
-                ((CraftPlayer) p).getHandle().playerConnection.sendPacket(tit);
-                ((CraftPlayer) p).getHandle().playerConnection.sendPacket(length);
-            }
+            IChatBaseComponent bc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + subtitle + "\"}");
+            PacketPlayOutTitle tit = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, bc);
+            PacketPlayOutTitle length = new PacketPlayOutTitle(fadeIn, stay, fadeOut);
+            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(tit);
+            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(length);
         }
     }
 
     @Override
     public void minusAmount(Player p, org.bukkit.inventory.ItemStack i, int amount) {
         if (i.getAmount() - amount <= 0) {
-            p.getInventory().removeItem(i);
+            if(p.getInventory().getItemInOffHand().equals(i)) {
+                p.getInventory().setItemInOffHand(null);
+            } else {
+                p.getInventory().removeItem(i);
+            }
             return;
         }
         i.setAmount(i.getAmount() - amount);
@@ -674,5 +676,10 @@ public class v1_9_R2 extends VersionSupport {
             if (inWorld.equals(player)) continue;
             ((CraftPlayer) inWorld).getHandle().playerConnection.sendPacket(particlePacket);
         }
+    }
+
+    @Override
+    public void clearArrowsFromPlayerBody(Player player) {
+        ((CraftLivingEntity)player).getHandle().getDataWatcher().set(new DataWatcherObject<>(9, DataWatcherRegistry.b),-1);
     }
 }

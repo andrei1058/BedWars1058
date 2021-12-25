@@ -334,6 +334,7 @@ public class Misc {
         if (s.contains("{lastPlay}"))
             s = s.replace("{lastPlay}", new SimpleDateFormat(getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(stats.getLastPlay() != null ? Timestamp.from(stats.getLastPlay()) : Timestamp.from(Instant.now())));
         if (s.contains("{player}")) s = s.replace("{player}", player.getDisplayName());
+        if (s.contains("{playername")) s = s.replace("{playername}", player.getName());
         if (s.contains("{prefix}")) s = s.replace("{prefix}", BedWars.getChatSupport().getPrefix(player));
 
         return papiReplacements ? SupportPAPI.getSupportPAPI().replace(player, s) : s;
