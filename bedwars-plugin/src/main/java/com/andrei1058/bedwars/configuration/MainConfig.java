@@ -54,8 +54,8 @@ public class MainConfig extends ConfigManager {
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES, Collections.singletonList("your language iso here"));
         yml.addDefault("storeLink", "https://www.spigotmc.org/resources/authors/39904/");
         yml.addDefault("lobbyServer", "hub");
-        yml.addDefault("globalChat", false);
-        yml.addDefault("formatChat", true);
+        yml.addDefault(ConfigPath.GENERAL_CHAT_GLOBAL, false);
+        yml.addDefault(ConfigPath.GENERAL_CHAT_FORMATTING, true);
         yml.addDefault("debug", false);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_MARK_LEAVE_AS_ABANDON, false);
         // parties category
@@ -176,6 +176,9 @@ public class MainConfig extends ConfigManager {
 
         //remove old config
         //Convert old configuration
+
+        yml.set("formatChat", null);
+        yml.set("globalChat", null);
 
         if (yml.get("bungee-settings.lobby-servers") != null) {
             List<String> sockets = new ArrayList<>(yml.getStringList("bungee-settings.lobby-servers"));
