@@ -53,8 +53,6 @@ import com.andrei1058.bedwars.levels.internal.LevelListeners;
 import com.andrei1058.bedwars.listeners.*;
 import com.andrei1058.bedwars.listeners.arenaselector.ArenaSelectorListener;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
-import com.andrei1058.bedwars.listeners.chat.ChatAFK;
-import com.andrei1058.bedwars.listeners.chat.ChatFormatting;
 import com.andrei1058.bedwars.listeners.joinhandler.*;
 import com.andrei1058.bedwars.lobbysocket.ArenaSocket;
 import com.andrei1058.bedwars.lobbysocket.LoadedUsersCleaner;
@@ -289,9 +287,8 @@ public class BedWars extends JavaPlugin {
             }, 1L);
 
         // Register events
-        registerEvents(new QuitAndTeleportListener(), new BreakPlace(), new DamageDeathMove(), new Inventory(),
-                new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(), new ChatAFK(),
-                new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener(), new LangListener());
+        registerEvents(new QuitAndTeleportListener(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(),
+                new FireballListener(), new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener(), new LangListener());
         if (getServerType() == ServerType.BUNGEE) {
             if (autoscale) {
                 //registerEvents(new ArenaListeners());
@@ -458,8 +455,8 @@ public class BedWars extends JavaPlugin {
         });
 
         /* Chat support */
-        if (config.getBoolean(ConfigPath.GENERAL_CHAT_FORMATTING)) {
-            registerEvents(new ChatFormatting());
+        if (config.getBoolean("formatChat")) {
+            registerEvents(new PlayerChat());
         }
 
         /* Protect glass walls from tnt explosion */
