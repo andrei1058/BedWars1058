@@ -54,8 +54,8 @@ public class MainConfig extends ConfigManager {
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES, Collections.singletonList("your language iso here"));
         yml.addDefault("storeLink", "https://www.spigotmc.org/resources/authors/39904/");
         yml.addDefault("lobbyServer", "hub");
-        yml.addDefault(ConfigPath.GENERAL_CHAT_GLOBAL, false);
-        yml.addDefault(ConfigPath.GENERAL_CHAT_FORMATTING, true);
+        yml.addDefault(ConfigPath.GENERAL_CHAT_GLOBAL, yml.get("formatChat", false));
+        yml.addDefault(ConfigPath.GENERAL_CHAT_FORMATTING, yml.get("globalChat", true));
         yml.addDefault("debug", false);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_MARK_LEAVE_AS_ABANDON, false);
         // parties category
@@ -219,7 +219,7 @@ public class MainConfig extends ConfigManager {
             }
         }
 
-        if(getYml().get("fireball.damage-multiplier") != null) {
+        if (getYml().get("fireball.damage-multiplier") != null) {
             set("fireball.damage-multiplier", null);
         }
 
