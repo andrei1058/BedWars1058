@@ -1,6 +1,6 @@
 name: BedWars1058
 api-version: '1.13'
-version: ${gitVer}${project.version}
+version: ${project.version}
 author: andrei1058
 description: BedWars minigame by andrei1058
 main: com.andrei1058.bedwars.BedWars
