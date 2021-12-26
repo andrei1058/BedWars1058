@@ -2372,10 +2372,11 @@ public class Arena implements IArena {
         for (IGenerator og : oreGenerators) {
             og.destroyData();
         }
+        isOnABase.entrySet().removeIf(entry -> entry.getValue().getArena().equals(this));
         for (ITeam bwt : teams) {
             bwt.destroyData();
         }
-        playerLocation.entrySet().removeIf(e -> e.getValue().getWorld().getName().equalsIgnoreCase(worldName));
+        playerLocation.entrySet().removeIf(e -> Objects.requireNonNull(e.getValue().getWorld()).getName().equalsIgnoreCase(worldName));
         teams = null;
         placed = null;
         nextEvents = null;
