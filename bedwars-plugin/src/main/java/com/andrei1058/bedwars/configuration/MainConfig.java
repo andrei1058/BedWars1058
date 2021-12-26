@@ -171,6 +171,7 @@ public class MainConfig extends ConfigManager {
         yml.addDefault(ConfigPath.CENERAL_CONFIGURATION_ALLOWED_COMMANDS, Arrays.asList("shout", "bw", "leave"));
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_EXPERIMENTAL_TEAM_ASSIGNER, true);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ENABLE_GEN_SPLIT, true);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BED_DROP, true);
         yml.options().copyDefaults(true);
         save();
 
