@@ -732,12 +732,6 @@ public class BedWarsTeam implements ITeam {
             nms.colorBed(this);
         } else {
             bed.getBlock().setType(Material.AIR);
-            if (getArena().getConfig().getBoolean(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS)) {
-                for (IGenerator g : getGenerators()) {
-                    g.disable();
-                }
-                generators.clear();
-            }
         }
         for (BedHolo bh : beds.values()) {
             bh.hide();

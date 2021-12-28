@@ -40,6 +40,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.chat.ChatMessageType;
 import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.network.protocol.game.*;
+import net.minecraft.network.syncher.DataWatcherObject;
+import net.minecraft.network.syncher.DataWatcherRegistry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.level.EntityPlayer;
@@ -359,8 +361,7 @@ public class v1_17_R1 extends VersionSupport {
     @Override
     public void registerTntWhitelist() {
         try {
-            //noinspection JavaReflectionMemberAccess
-            Field field = BlockBase.class.getDeclaredField("durability");
+            Field field = BlockBase.class.getDeclaredField("aI");
             field.setAccessible(true);
             field.set(Blocks.eq, 12f);
             field.set(Blocks.au, 300f);
@@ -690,5 +691,10 @@ public class v1_17_R1 extends VersionSupport {
             if (inWorld.equals(player)) continue;
             ((CraftPlayer) inWorld).getHandle().b.sendPacket(particlePacket);
         }
+    }
+
+    @Override
+    public void clearArrowsFromPlayerBody(Player player) {
+        ((CraftLivingEntity)player).getHandle().getDataWatcher().set(new DataWatcherObject<>(12, DataWatcherRegistry.b),-1);
     }
 }
