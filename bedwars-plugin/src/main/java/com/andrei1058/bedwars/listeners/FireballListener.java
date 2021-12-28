@@ -5,21 +5,24 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.LastHit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static com.andrei1058.bedwars.BedWars.config;
 import static com.andrei1058.bedwars.BedWars.getAPI;
@@ -49,35 +52,14 @@ public class FireballListener implements Listener {
     Map<Location, Player> explosionSources = new HashMap<>();
 
     @EventHandler
-    public void fireballPrime(ExplosionPrimeEvent e) {
+    public void fireballHit(ProjectileHitEvent e) {
         if(!(e.getEntity() instanceof Fireball)) return;
-        ProjectileSource shooter = ((Fireball) e.getEntity()).getShooter();
-        if(!(shooter instanceof Player)) return;
-        IArena a = Arena.getArenaByPlayer((Player) shooter);
-        if(a == null) return;
-        e.setRadius((float) fireballExplosionSize);
-        e.setFire(fireballMakeFire);
-        explosionSources.put(e.getEntity().getLocation(), (Player) shooter);
-    }
-
-    @EventHandler
-    public void fireballDirectHit(EntityDamageByEntityEvent e) {
-        if(!(e.getDamager() instanceof Fireball)) return;
-        if(!(e.getEntity() instanceof Player)) return;
-
-        if(Arena.getArenaByPlayer((Player) e.getEntity()) == null) return;
-
-        e.setCancelled(true);
-    }
-
-    @EventHandler
-    public void fireballExplode(EntityExplodeEvent e) {
-        if(!(e.getEntity() instanceof Fireball)) return;
-        Location location = e.getLocation();
+        Location location = e.getEntity().getLocation();
 
         Player source = null;
         for(Location sourceLocation : explosionSources.keySet()) {
             if(sourceLocation == null) continue;
+            if(!sourceLocation.getWorld().equals(location.getWorld())) continue;
             if(sourceLocation.distance(location) < 0.05) {
                 source = explosionSources.get(sourceLocation);
                 explosionSources.remove(sourceLocation);
@@ -133,7 +115,57 @@ public class FireballListener implements Listener {
                     player.damage(damageEnemy); // damage enemies
                 }
             }
-        }
 
+            for(Block b : getNearbyBlocks(arena, location, ((int)Math.round(fireballExplosionSize)))) {
+                b.setType(Material.AIR);
+            }
+        }
+    }
+
+    private List<Block> getNearbyBlocks(IArena arena, Location loc, int radius) {
+        List<Block> blocks = new ArrayList<>();
+        for(int x = loc.getBlockX() - radius; x < loc.getBlockX() + radius; x++ ) {
+            for(int y = loc.getBlockY() - radius; y < loc.getBlockY() + radius; y++ ) {
+                for(int z = loc.getBlockZ() - radius; z < loc.getBlockZ() + radius; z++ ) {
+                    Block block = loc.getWorld().getBlockAt(x, y, z);
+                    if(block.getType().name().contains("AIR")) continue;
+                    if(block.getType().name().contains("_GLASS")) continue;
+                    if(!arena.isBlockPlaced(block)) continue;
+                    blocks.add(block);
+                }
+            }
+        }
+        return blocks;
+    }
+
+    @EventHandler
+    public void fireballPrime(ExplosionPrimeEvent e) {
+        System.out.println("prime");
+        if(!(e.getEntity() instanceof Fireball)) return;
+        ProjectileSource shooter = ((Fireball) e.getEntity()).getShooter();
+        if(!(shooter instanceof Player)) return;
+        IArena a = Arena.getArenaByPlayer((Player) shooter);
+        if(a == null) return;
+        e.setRadius((float) fireballExplosionSize);
+        e.setFire(fireballMakeFire);
+        explosionSources.put(e.getEntity().getLocation(), (Player) shooter);
+    }
+
+    @EventHandler
+    public void fireballDirectHit(EntityDamageByEntityEvent e) {
+        if(!(e.getDamager() instanceof Fireball)) return;
+        if(!(e.getEntity() instanceof Player)) return;
+
+        if(Arena.getArenaByPlayer((Player) e.getEntity()) == null) return;
+
+        e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void fireballExplode(EntityExplodeEvent e) {
+        System.out.println("explode!");
+        if(!(e.getEntity() instanceof Fireball)) return;
+        if(Arena.getArenaByIdentifier(e.getLocation().getWorld().getName()) == null) return;
+        e.blockList().clear();
     }
 }
