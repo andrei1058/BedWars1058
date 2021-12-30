@@ -35,8 +35,16 @@
             <url>https://gitlab.com/api/v4/projects/14374071/packages/maven</url>
         </repository>
         <repository>
-            <id>codemc-repo</id>
+            <id>codemc-public</id>
             <url>https://repo.codemc.io/repository/maven-public/</url>
+        </repository>
+        <repository>
+            <id>codemc-releases</id>
+            <url>https://repo.codemc.io/repository/maven-releases/</url>
+        </repository>
+        <repository>
+            <id>codemc-snapshots</id>
+            <url>https://repo.codemc.io/repository/maven-snapshots/</url>
         </repository>
         <repository>
             <id>codemc-nms</id>
@@ -232,7 +240,7 @@
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-api</artifactId>
-            <version>0.3.1</version>
+            <version>0.3.2-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <!--        End of Sidebar LIB-->
