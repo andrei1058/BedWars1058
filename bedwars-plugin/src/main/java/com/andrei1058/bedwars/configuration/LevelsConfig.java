@@ -40,21 +40,21 @@ public class LevelsConfig extends ConfigManager {
         levels.getYml().options().copyDefaults(true);
         if (levels.isFirstTime()) {
 
-            levels.getYml().addDefault("levels.1.name", "&7[{number}✩] ");
+            levels.getYml().addDefault("levels.1.name", "&7{number}✫ ");
             levels.getYml().addDefault("levels.1.rankup-cost", 1000);
 
-            levels.getYml().addDefault("levels.2.name", "&7[{number}✩] ");
+            levels.getYml().addDefault("levels.2.name", "&7{number}✫ ");
             levels.getYml().addDefault("levels.2.rankup-cost", 2000);
 
-            levels.getYml().addDefault("levels.3.name", "&7[{number}✩] ");
+            levels.getYml().addDefault("levels.3.name", "&7{number}✫ ");
             levels.getYml().addDefault("levels.3.rankup-cost", 3000);
 
-            levels.getYml().addDefault("levels.4.name", "&7[{number}✩] ");
+            levels.getYml().addDefault("levels.4.name", "&7{number}✫ ");
             levels.getYml().addDefault("levels.4.rankup-cost", 3500);
-            levels.getYml().addDefault("levels.5-10.name", "&e[{number}✩] ");
+            levels.getYml().addDefault("levels.5-10.name", "&e{number}✫ ");
             levels.getYml().addDefault("levels.5-10.rankup-cost", 5000);
 
-            levels.getYml().addDefault("levels.others.name", "&7[{number}✩] ");
+            levels.getYml().addDefault("levels.others.name", "&7{number}✫ ");
             levels.getYml().addDefault("levels.others.rankup-cost", 5000);
         }
 
