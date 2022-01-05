@@ -51,7 +51,8 @@ import static com.andrei1058.bedwars.BedWars.*;
 public class OreGenerator implements IGenerator {
 
     private Location location;
-    private int delay = 1, upgradeStage = 1, lastSpawn, spawnLimit = 0, amount = 1;
+    private float delay = 1;
+    private int upgradeStage = 1, lastSpawn, spawnLimit = 0, amount = 1;
     private IArena arena;
     private ItemStack ore;
     private GeneratorType type;
@@ -93,7 +94,7 @@ public class OreGenerator implements IGenerator {
             case DIAMOND:
                 upgradeStage++;
                 if (upgradeStage == 2) {
-                    delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_DELAY) == null ?
+                    delay =  getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_DELAY) == null ?
                             "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_II_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_DELAY);
                     amount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_AMOUNT) == null ?
                             "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_II_AMOUNT : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_AMOUNT);
@@ -143,7 +144,7 @@ public class OreGenerator implements IGenerator {
     @Override
     public void spawn() {
         if (lastSpawn == 0) {
-            lastSpawn = delay;
+            lastSpawn = (int) delay;
 
             if (spawnLimit != 0) {
                 int oreCount = 0;
@@ -157,7 +158,7 @@ public class OreGenerator implements IGenerator {
                         if (oreCount >= spawnLimit) return;
                     }
                 }
-                lastSpawn = delay;
+                lastSpawn = (int) delay;
             }
             if (bwt == null) {
                 dropItem(location);
@@ -192,7 +193,7 @@ public class OreGenerator implements IGenerator {
         }
         lastSpawn--;
         for (IGenHolo e : armorStands.values()) {
-            e.setTimerName(Language.getLang(e.getIso()).m(Messages.GENERATOR_HOLOGRAM_TIMER).replace("{seconds}", String.valueOf(lastSpawn)));
+            e.setTimerName(Language.getLang(e.getIso()).m(Messages.GENERATOR_HOLOGRAM_TIMER).replace("{seconds}", String.valueOf(Math.round(lastSpawn))));
         }
     }
 
@@ -249,7 +250,7 @@ public class OreGenerator implements IGenerator {
             this.tier = createArmorStand(Language.getLang(iso).m(Messages.GENERATOR_HOLOGRAM_TIER)
                     .replace("{tier}", Language.getLang(iso).m(Messages.FORMATTING_GENERATOR_TIER1)), location.clone().add(0, 3, 0));
             this.timer = createArmorStand(Language.getLang(iso).m(Messages.GENERATOR_HOLOGRAM_TIMER)
-                    .replace("{seconds}", String.valueOf(lastSpawn)), location.clone().add(0, 2.4, 0));
+                    .replace("{seconds}", String.valueOf(Math.round(lastSpawn))), location.clone().add(0, 2.4, 0));
             this.name = createArmorStand(Language.getLang(iso).m(getOre().getType() == Material.DIAMOND ? Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND
                     : Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD), location.clone().add(0, 2.7, 0));
 
@@ -453,7 +454,7 @@ public class OreGenerator implements IGenerator {
                 ore = new ItemStack(Material.EMERALD);
                 break;
         }
-        lastSpawn = delay;
+        lastSpawn = (int) delay;
     }
 
     @Override
@@ -478,7 +479,7 @@ public class OreGenerator implements IGenerator {
 
     @Override
     public int getDelay() {
-        return delay;
+        return (int) delay;
     }
 
     @Override
