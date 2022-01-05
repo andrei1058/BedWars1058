@@ -151,13 +151,9 @@ public class ArenaGroup extends SubCommand {
                         p.sendMessage("§6 ▪ §f" + group);
                     }
                 }
-
                 return true;
-
             default:
-
                 sendArenaGroupCmdList(p);
-
                 return true;
         }
     }
