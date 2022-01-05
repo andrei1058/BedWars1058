@@ -61,82 +61,105 @@ public class ArenaGroup extends SubCommand {
         if (s instanceof ConsoleCommandSender) return false;
         Player p = (Player) s;
         if (!MainCommand.isLobbySet(p)) return true;
-        if (args.length < 2) {
+
+        if (args.length == 0){
             sendArenaGroupCmdList(p);
-        } else if (args[0].equalsIgnoreCase("create")) {
-            if (args[0].contains("+")) {
-                p.sendMessage("§c▪ §7" + args[0] + " mustn't contain this symbol: " + ChatColor.RED + "+");
+            return true;
+        }
+
+        List<String> arenaGroups = config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS) == null ? new ArrayList<>() : config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS);
+
+        switch (args[0]){
+
+            case "create":
+
+                if (args.length < 2) {
+                    sendArenaGroupCmdList(p);
+                    return true;
+                }
+
+                if (arenaGroups.contains(args[1])) {
+                    p.sendMessage("§c▪ §7This group already exists!");
+                    return true;
+                }
+
+                arenaGroups.add(args[1]);
+                config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS, arenaGroups);
+                p.sendMessage("§6 ▪ §7Group " + args[1] + " has been created!");
+
                 return true;
-            }
-            java.util.List<String> groups;
-            if (config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS) == null) {
-                groups = new ArrayList<>();
-            } else {
-                groups = config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS);
-            }
-            if (groups.contains(args[1])) {
-                p.sendMessage("§c▪ §7This group already exists!");
+
+            case "remove":
+
+                if (args.length < 2) {
+                    sendArenaGroupCmdList(p);
+                    return true;
+                }
+
+                if (!arenaGroups.contains(args[1])) {
+                    p.sendMessage("§c▪ §7This group doesn't exist!");
+                    return true;
+                }
+
+                arenaGroups.remove(args[1]);
+                config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS, arenaGroups);
+                p.sendMessage("§6 ▪ §7Group " +  args[1] + " has been deleted!");
                 return true;
-            }
-            groups.add(args[1]);
-            config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS, groups);
-            p.sendMessage("§6 ▪ §7Group created!");
-        } else if (args[0].equalsIgnoreCase("remove")) {
-            List<String> groups;
-            if (config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS) == null) {
-                groups = new ArrayList<>();
-            } else {
-                groups = config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS);
-            }
-            if (!groups.contains(args[1])) {
-                p.sendMessage("§c▪ §7This group doesn't exist!");
+
+            case "list":
+
+                p.sendMessage("§7Available arena groups:");
+                p.sendMessage("§6 ▪ §fDefault");
+                for (String group : arenaGroups) {
+                    p.sendMessage("§6 ▪ §f" + group);
+                }
                 return true;
-            }
-            groups.remove(args[1]);
-            config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS, groups);
-            p.sendMessage("§6 ▪ §7Group deleted!");
-        } else if (args[0].equalsIgnoreCase("list")) {
-            List<String> groups;
-            if (config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS) == null) {
-                groups = new ArrayList<>();
-            } else {
-                groups = config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS);
-            }
-            p.sendMessage("§7Available arena groups:");
-            p.sendMessage("§6 ▪ §fDefault");
-            for (String gs : groups) {
-                p.sendMessage("§6 ▪ §f" + gs);
-            }
-        } else if (args[0].equalsIgnoreCase("set")) {
-            if (args.length < 3) {
-                sendArenaGroupCmdList(p);
-                return true;
-            }
-            if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS) != null) {
-                if (config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS).contains(args[2])) {
-                    File arena = new File(plugin.getDataFolder(), "/Arenas/" + args[1] + ".yml");
-                    if (!arena.exists()) {
-                        p.sendMessage("§c▪ §7Arena " + args[1] + " doesn't exist!");
-                        return true;
+
+            case "set":
+
+                if (args.length < 3) {
+                    sendArenaGroupCmdList(p);
+                    return true;
+                }
+
+                if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS) != null) {
+                    if (config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS).contains(args[2])) {
+                        File arena = new File(plugin.getDataFolder(), "/Arenas/" + args[1] + ".yml");
+                        if (!arena.exists()) {
+                            p.sendMessage("§c▪ §7Arena " + args[1] + " doesn't exist!");
+                            return true;
+                        }
+                        ArenaConfig cm = new ArenaConfig(BedWars.plugin, args[1], plugin.getDataFolder().getPath() + "/Arenas");
+                        cm.set("group", args[2]);
+                        if (Arena.getArenaByName(args[1]) != null) {
+                            Arena.getArenaByName(args[1]).setGroup(args[2]);
+                        }
+                        p.sendMessage("§6 ▪ §7Arena " + args[1] + " was added to the group: " + args[2]);
+                    } else {
+                        p.sendMessage("§6 ▪ §7There isn't any group called: " + args[2]);
+                        p.sendMessage("§7Available arena groups:");
+                        p.sendMessage("§6 ▪ §fDefault");
+                        for (String group : arenaGroups) {
+                            p.sendMessage("§6 ▪ §f" + group);
+                        }
                     }
-                    ArenaConfig cm = new ArenaConfig(BedWars.plugin, args[1], plugin.getDataFolder().getPath() + "/Arenas");
-                    cm.set("group", args[2]);
-                    if (Arena.getArenaByName(args[1]) != null) {
-                        Arena.getArenaByName(args[1]).setGroup(args[2]);
-                    }
-                    p.sendMessage("§6 ▪ §7" + args[1] + " was added to the group: " + args[2]);
                 } else {
                     p.sendMessage("§6 ▪ §7There isn't any group called: " + args[2]);
-                    Bukkit.dispatchCommand(p, "/bw list");
+                    p.sendMessage("§7Available arena groups:");
+                    p.sendMessage("§6 ▪ §fDefault");
+                    for (String group : arenaGroups) {
+                        p.sendMessage("§6 ▪ §f" + group);
+                    }
                 }
-            } else {
-                p.sendMessage("§6 ▪ §7There isn't any group called: " + args[2]);
-                Bukkit.dispatchCommand(p, "/bw list");
-            }
-        } else {
-            sendArenaGroupCmdList(p);
+
+                return true;
+
+            default:
+
+                sendArenaGroupCmdList(p);
+
+                return true;
         }
-        return true;
     }
 
     @Override
