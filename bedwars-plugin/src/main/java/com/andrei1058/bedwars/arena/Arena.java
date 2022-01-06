@@ -1906,7 +1906,7 @@ public class Arena implements IArena {
                                 String message = s
                                         .replace("{coinsEarned}", String.valueOf(getCoinsEarned(p.getUniqueId())))
                                         .replace("{experienceEarned}", String.valueOf(getExperienceEarned(p.getUniqueId())))
-                                        .replace("{requiredXpPercent}", String.valueOf(Math.round(BedWars.getLevelSupport().getCurrentXp(p) / (double) LevelsConfig.getNextCost(BedWars.getLevelSupport().getPlayerLevel(p)) * 100)))
+                                        .replace("{percentAchieved}", String.valueOf(Math.round(BedWars.getLevelSupport().getCurrentXp(p) / (double) LevelsConfig.getNextCost(BedWars.getLevelSupport().getPlayerLevel(p)) * 100)))
                                         .replace("{progress}", String.valueOf(BedWars.getLevelSupport().getLongProgressBar(p)))
                                         .replace("{level}", String.valueOf(BedWars.getLevelSupport().getPlayerLevel(p)))
                                         .replace("{nextLevel}", String.valueOf((BedWars.getLevelSupport().getPlayerLevel(p) + 1)))
