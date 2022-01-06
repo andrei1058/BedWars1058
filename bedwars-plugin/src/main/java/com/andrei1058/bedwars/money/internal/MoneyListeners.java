@@ -6,6 +6,7 @@ import com.andrei1058.bedwars.api.events.player.PlayerBedBreakEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.configuration.MoneyConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -28,6 +29,7 @@ public class MoneyListeners implements Listener {
             if (gamewin > 0) {
                 BedWars.getEconomy ().giveMoney ( player, gamewin );
                 player.sendMessage ( Language.getMsg ( player, Messages.MONEY_REWARD_WIN ).replace ( "{money}", String.valueOf ( gamewin ) ) );
+                Arena.getCoinsEarned().put(player.getUniqueId(), Arena.getCoinsEarned(player.getUniqueId()) + gamewin);
             }
         }
         for (UUID p : e.getLosers ()) {
@@ -37,6 +39,7 @@ public class MoneyListeners implements Listener {
             if (teammate > 0) {
                 BedWars.getEconomy ().giveMoney ( player, teammate );
                 player.sendMessage ( Language.getMsg ( player, Messages.MONEY_REWARD_PER_TEAMMATE ).replace ( "{money}", String.valueOf ( teammate ) ) );
+                Arena.getCoinsEarned().put(player.getUniqueId(), Arena.getCoinsEarned(player.getUniqueId()) + teammate);
             }
         }
     }
@@ -52,6 +55,7 @@ public class MoneyListeners implements Listener {
         if (beddestroy > 0) {
             BedWars.getEconomy ().giveMoney ( player, beddestroy );
             player.sendMessage ( Language.getMsg ( player, Messages.MONEY_REWARD_BED_DESTROYED ).replace ( "{money}", String.valueOf ( beddestroy ) ) );
+            Arena.getCoinsEarned().put(player.getUniqueId(), Arena.getCoinsEarned(player.getUniqueId()) + beddestroy);
         }
     }
 
@@ -69,11 +73,13 @@ public class MoneyListeners implements Listener {
             if (finalkill > 0) {
                 BedWars.getEconomy ().giveMoney ( player, finalkill );
                 player.sendMessage ( Language.getMsg ( player, Messages.MONEY_REWARD_FINAL_KILL ).replace ( "{money}", String.valueOf ( finalkill ) ) );
+                Arena.getCoinsEarned().put(player.getUniqueId(), Arena.getCoinsEarned(player.getUniqueId()) + finalkill);
             }
         } else {
             if (regularkill > 0) {
                 BedWars.getEconomy ().giveMoney ( player, regularkill );
                 player.sendMessage ( Language.getMsg ( player, Messages.MONEY_REWARD_REGULAR_KILL ).replace ( "{money}", String.valueOf ( regularkill ) ) );
+                Arena.getCoinsEarned().put(player.getUniqueId(), Arena.getCoinsEarned(player.getUniqueId()) + regularkill);
             }
         }
     }

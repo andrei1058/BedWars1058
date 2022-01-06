@@ -45,9 +45,14 @@ public interface Level {
     String getRequiredXpFormatted(Player p);
 
     /**
-     * @return current progress bar.
+     * @return current long progress bar.
      */
     String getProgressBar(Player p);
+
+    /**
+     * @return current long progress bar.
+     */
+    String getLongProgressBar(Player p);
 
     /**
      * @return current xp.

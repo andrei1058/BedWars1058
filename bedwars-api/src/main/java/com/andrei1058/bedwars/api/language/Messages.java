@@ -272,6 +272,7 @@ public class Messages {
     public static String GAME_END_VICTORY_PLAYER_TITLE = "game-end-victory-title";
     public static String GAME_END_TOP_PLAYER_CHAT = "game-end-top-chat";
     public static String GAME_END_TEAM_WON_CHAT = "game-end-winner-team";
+    public static String GAME_END_PLAYER_REWARD_SUMMARY = "game-end-player-reward-summary";
     public static String XP_REWARD_WIN = "xp-reward-game-win";
     public static String XP_REWARD_PER_TEAMMATE = "xp-reward-per-teammate";
     public static String XP_REWARD_PER_MINUTE = "xp-reward-per-minute";
