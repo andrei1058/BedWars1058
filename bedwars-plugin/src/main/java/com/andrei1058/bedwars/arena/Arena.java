@@ -496,10 +496,10 @@ public class Arena implements IArena {
                 rejoin.destroy(true);
             }
 
-            coinsEarned.put(p.getUniqueId(), 0);
-            experienceEarned.put(p.getUniqueId(), 0);
             p.closeInventory();
             players.add(p);
+            coinsEarned.put(p.getUniqueId(), 0);
+            experienceEarned.put(p.getUniqueId(), 0);
             p.setFlying(false);
             p.setAllowFlight(false);
             p.setHealth(20);
