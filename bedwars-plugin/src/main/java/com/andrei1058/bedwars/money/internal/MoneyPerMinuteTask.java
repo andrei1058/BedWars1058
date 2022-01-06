@@ -26,6 +26,7 @@ public class MoneyPerMinuteTask {
             for (Player p : arena.getPlayers()) {
                     BedWars.getEconomy ().giveMoney ( p, money );
                     p.sendMessage ( Language.getMsg ( p, Messages.MONEY_REWARD_PER_MINUTE ).replace ( "{money}", String.valueOf ( money ) ) );
+                    Arena.getCoinsEarned().put(p.getUniqueId(), Arena.getCoinsEarned(p.getUniqueId()) + money);
             }
         }, 60 * 20, 60 * 20);
     }

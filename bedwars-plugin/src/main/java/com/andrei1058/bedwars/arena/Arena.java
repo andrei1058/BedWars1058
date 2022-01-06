@@ -56,6 +56,7 @@ import com.andrei1058.bedwars.arena.tasks.ReJoinTask;
 import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import com.andrei1058.bedwars.arena.team.TeamAssigner;
 import com.andrei1058.bedwars.configuration.ArenaConfig;
+import com.andrei1058.bedwars.configuration.LevelsConfig;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.levels.internal.InternalLevel;
 import com.andrei1058.bedwars.levels.internal.PerMinuteTask;
@@ -158,6 +159,9 @@ public class Arena implements IArena {
     private HashMap<Player, Integer> playerDeaths = new HashMap<>();
     private HashMap<Player, Integer> playerFinalKillDeaths = new HashMap<>();
 
+    /* SUMMARY REWARDS */
+    private static final Map<UUID, Integer> coinsEarned = new HashMap<>();
+    private static final Map<UUID, Integer> experienceEarned = new HashMap<>();
 
     /* ARENA TASKS */
     private StartingTask startingTask = null;
@@ -492,6 +496,8 @@ public class Arena implements IArena {
                 rejoin.destroy(true);
             }
 
+            coinsEarned.put(p.getUniqueId(), 0);
+            experienceEarned.put(p.getUniqueId(), 0);
             p.closeInventory();
             players.add(p);
             p.setFlying(false);
@@ -777,6 +783,8 @@ public class Arena implements IArena {
         //players.remove must be under call event in order to check if the player is a spectator or not
         players.remove(p);
         removeArenaByPlayer(p, this);
+        coinsEarned.remove(p.getUniqueId());
+        experienceEarned.remove(p.getUniqueId());
 
         for (PotionEffect pf : p.getActivePotionEffects()) {
             p.removePotionEffect(pf.getType());
@@ -1841,7 +1849,6 @@ public class Arena implements IArena {
                     int first = 0, second = 0, third = 0;
                     if (!playerKills.isEmpty()) {
 
-
                         LinkedHashMap<String, Integer> reverseSortedMap = new LinkedHashMap<>();
 
                         //Use Comparator.reverseOrder() for reverse ordering
@@ -1892,8 +1899,25 @@ public class Arena implements IArena {
                                     .replace("{TeamColor}", winner.getColor().chat().toString()).replace("{TeamName}", winner.getDisplayName(Language.getPlayerLanguage(p)));
                             p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, message));
                         }
+
+                        //Run task later cuz some coins are given too late and are not added to the map
+                        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                            for (String  s : getList(p, Messages.GAME_END_PLAYER_REWARD_SUMMARY)){
+                                String message = s
+                                        .replace("{coinsEarned}", String.valueOf(getCoinsEarned(p.getUniqueId())))
+                                        .replace("{experienceEarned}", String.valueOf(getExperienceEarned(p.getUniqueId())))
+                                        .replace("{requiredXpPercent}", String.valueOf(Math.round(BedWars.getLevelSupport().getCurrentXp(p) / (double) LevelsConfig.getNextCost(BedWars.getLevelSupport().getPlayerLevel(p)) * 100)))
+                                        .replace("{progress}", String.valueOf(BedWars.getLevelSupport().getLongProgressBar(p)))
+                                        .replace("{level}", String.valueOf(BedWars.getLevelSupport().getPlayerLevel(p)))
+                                        .replace("{nextLevel}", String.valueOf((BedWars.getLevelSupport().getPlayerLevel(p) + 1)))
+                                        .replace("{currentXp}", String.valueOf(BedWars.getLevelSupport().getCurrentXp(p)))
+                                        .replace("{requiredXp}", String.valueOf(BedWars.getLevelSupport().getRequiredXp(p)));
+                                p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, message));
+                            }
+                        }, 11L);
                     }
                 }
+
                 changeStatus(GameState.restarting);
 
                 //Game end event
@@ -1924,6 +1948,22 @@ public class Arena implements IArena {
                 changeStatus(GameState.restarting);
             }
         }
+    }
+
+    public static int getCoinsEarned(UUID uuid){
+        return getCoinsEarned().get(uuid);
+    }
+
+    public static int getExperienceEarned(UUID uuid){
+        return getExperienceEarned().get(uuid);
+    }
+
+    public static Map<UUID, Integer> getCoinsEarned(){
+        return coinsEarned;
+    }
+
+    public static Map<UUID, Integer> getExperienceEarned(){
+        return experienceEarned;
     }
 
     /**
