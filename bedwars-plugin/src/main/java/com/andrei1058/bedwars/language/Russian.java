@@ -193,7 +193,7 @@ public class Russian extends Language{
                 "&r                 &bBed Wars Experience",
                 "&r      &bLevel {level}                             Level {nextLevel}",
                 "&r     {progress}",
-                "&r                 &b{currentXp} &7/ &a{requiredXp} &7({requiredXpPercent}%)",
+                "&r                 &b{currentXp} &7/ &a{requiredXp} &7({percentAchieved}%)",
                 "&r ",
                 "&7You earned &b{experienceEarned} Bed Wars Experience",
                 "&r ",
