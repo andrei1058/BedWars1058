@@ -281,7 +281,11 @@ public class MenuBaseTrap implements MenuContent, EnemyBaseEnterTrap, TeamUpgrad
             p1.sendMessage(Language.getMsg(p1, Messages.UPGRADES_UPGRADE_BOUGHT_CHAT).replace("{playername}", player.getName()).replace("{player}", player.getDisplayName()).replace("{upgradeName}",
                     ChatColor.stripColor(Language.getMsg(p1, Messages.UPGRADES_BASE_TRAP_ITEM_NAME_PATH + getName().replace("base-trap-", "")).replace("{color}", ""))));
         }
-        Bukkit.getPluginManager().callEvent(new UpgradeBuyEvent(this, player, team));
+
+        UpgradeBuyEvent event;
+        Bukkit.getPluginManager().callEvent(event = new UpgradeBuyEvent(this, player, team));
+        if (event.isCancelled()) return;
+
         UpgradesManager.getMenuForArena(team.getArena()).open(player);
     }
 

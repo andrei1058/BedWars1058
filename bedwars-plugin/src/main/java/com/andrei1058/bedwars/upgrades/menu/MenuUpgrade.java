@@ -150,7 +150,10 @@ public class MenuUpgrade implements MenuContent, TeamUpgrade {
                         ChatColor.stripColor(Language.getMsg(p1, Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", getName()
                                 .replace("upgrade-", "")).replace("{tier}", ut.getName())))).replace("{color}", ""));
             }
-            Bukkit.getPluginManager().callEvent(new UpgradeBuyEvent(this, player, team));
+
+            UpgradeBuyEvent event;
+            Bukkit.getPluginManager().callEvent(event = new UpgradeBuyEvent(this, player, team));
+            if (event.isCancelled()) return;
 
             ImmutableMap<Integer, MenuContent> menuContentBySlot = UpgradesManager.getMenuForArena(Arena.getArenaByPlayer(player)).getMenuContentBySlot();
             Inventory inv = player.getOpenInventory().getTopInventory();
