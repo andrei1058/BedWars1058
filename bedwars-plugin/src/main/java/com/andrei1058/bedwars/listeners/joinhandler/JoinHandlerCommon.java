@@ -48,11 +48,6 @@ public class JoinHandlerCommon implements Listener {
             player.sendMessage("");
             player.sendMessage("§8[§f" + BedWars.plugin.getName() + "§8]§7§m---------------------------");
         }
-        if (player.isOp()) {
-            if (Bukkit.getServer().getPluginManager().isPluginEnabled("Multiverse-Core")) {
-                player.sendMessage(ChatColor.RED + "Multiverse-Core detected! Please remove it or make sure it won't touch BedWars maps!");
-            }
-        }
     }
 
     @EventHandler
