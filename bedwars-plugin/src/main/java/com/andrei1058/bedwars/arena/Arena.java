@@ -844,7 +844,9 @@ public class Arena implements IArena {
                         Language lang = Language.getPlayerLanguage(inGame);
                         inGame.sendMessage(event.getMessage().apply(inGame)
                                 .replace("{PlayerTeamName}", team.getDisplayName(lang))
-                                .replace("{PlayerColor}", team.getColor().chat().toString()).replace("{PlayerName}", p.getDisplayName())
+                                .replace("{PlayerColor}", team.getColor().chat().toString())
+                                .replace("{Player}", p.getName())
+                                .replace("{PlayerName}", p.getDisplayName())
                                 .replace("{KillerColor}", killerTeam.getColor().chat().toString())
                                 .replace("{KillerName}", lastDamager.getDisplayName())
                                 .replace("{KillerTeamName}", killerTeam.getDisplayName(lang)));
@@ -853,7 +855,9 @@ public class Arena implements IArena {
                         Language lang = Language.getPlayerLanguage(inGame);
                         inGame.sendMessage(event.getMessage().apply(inGame)
                                 .replace("{PlayerTeamName}", team.getDisplayName(lang))
-                                .replace("{PlayerColor}", team.getColor().chat().toString()).replace("{PlayerName}", p.getDisplayName())
+                                .replace("{PlayerColor}", team.getColor().chat().toString())
+                                .replace("{Player}", p.getName())
+                                .replace("{PlayerName}", p.getDisplayName())
                                 .replace("{KillerColor}", killerTeam.getColor().chat().toString())
                                 .replace("{KillerName}", lastDamager.getDisplayName())
                                 .replace("{KillerTeamName}", killerTeam.getDisplayName(lang)));

@@ -307,6 +307,7 @@ public class BreakPlace implements Listener {
                                                             .replace("{TeamColor}", t.getColor().chat().toString())
                                                             .replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(on)))
                                                             .replace("{PlayerColor}", a.getTeam(p).getColor().chat().toString())
+                                                            .replace("{Player}", p.getName())
                                                             .replace("{PlayerName}", p.getDisplayName()));
                                                 }
                                                 if (breakEvent.getTitle() != null && breakEvent.getSubTitle() != null) {
