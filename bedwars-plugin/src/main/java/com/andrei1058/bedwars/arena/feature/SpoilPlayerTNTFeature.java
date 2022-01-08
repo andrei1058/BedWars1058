@@ -28,7 +28,6 @@ import com.andrei1058.bedwars.api.events.player.PlayerLeaveArenaEvent;
 import com.andrei1058.bedwars.api.events.shop.ShopBuyEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.Bukkit;
-import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -49,7 +48,7 @@ public class SpoilPlayerTNTFeature {
 
     private SpoilPlayerTNTFeature() {
         Bukkit.getPluginManager().registerEvents(new TNTListener(), BedWars.plugin);
-        Bukkit.getScheduler().runTaskTimer(BedWars.plugin, new ParticleTask(), 20, 1L);
+        Bukkit.getScheduler().runTaskTimer(BedWars.plugin, new ParticleTask(), 5, 1L);
     }
 
     public static void init() {
