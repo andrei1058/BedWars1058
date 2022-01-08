@@ -48,7 +48,7 @@ public class SpoilPlayerTNTFeature {
 
     private SpoilPlayerTNTFeature() {
         Bukkit.getPluginManager().registerEvents(new TNTListener(), BedWars.plugin);
-        Bukkit.getScheduler().runTaskTimer(BedWars.plugin, new ParticleTask(), 5, 1L);
+        Bukkit.getScheduler().runTaskTimer(BedWars.plugin, new ParticleTask(), 20, 1L);
     }
 
     public static void init() {
