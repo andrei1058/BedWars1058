@@ -39,6 +39,7 @@ public class PlayerStats {
     private int finalDeaths;
     private int bedsDestroyed;
     private int gamesPlayed;
+    private int winStreak;
 
     public PlayerStats(UUID uuid) {
         this.uuid = uuid;
@@ -46,6 +47,14 @@ public class PlayerStats {
 
     public String getName() {
         return name;
+    }
+
+    public int getWinStreak() {
+        return winStreak;
+    }
+
+    public void setWinStreak(int winStreak) {
+        this.winStreak = winStreak;
     }
 
     public void setName(String name) {

@@ -406,6 +406,9 @@ public class v1_11_R1 extends VersionSupport {
         org.bukkit.inventory.ItemStack i;
         try {
             i = new org.bukkit.inventory.ItemStack(org.bukkit.Material.valueOf(material), amount, data);
+            ItemMeta meta = i.getItemMeta();
+            meta.setUnbreakable(true);
+            i.setItemMeta(meta);
         } catch (Exception ex) {
             getPlugin().getLogger().log(Level.WARNING, material + " is not a valid " + getName() + " material!");
             i = new org.bukkit.inventory.ItemStack(org.bukkit.Material.BEDROCK);

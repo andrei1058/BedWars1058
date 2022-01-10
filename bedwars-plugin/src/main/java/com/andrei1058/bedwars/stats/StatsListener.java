@@ -37,6 +37,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -95,6 +96,7 @@ public class StatsListener implements Listener {
 
     @EventHandler
     public void onGameEnd(GameEndEvent event) {
+
         for (UUID uuid : event.getWinners()) {
             Player player = Bukkit.getPlayer(uuid);
             if (player == null) continue;
@@ -105,6 +107,7 @@ public class StatsListener implements Listener {
             // store wins even if is in another game because he assisted this team
             // the ones who abandoned are already removed from the winners list
             stats.setWins(stats.getWins() + 1);
+            stats.setWinStreak(stats.getWinStreak() + 1); //store win streaks
 
             // store games played
             // give if he remained in this arena till the end even if was eliminated
@@ -113,6 +116,22 @@ public class StatsListener implements Listener {
             if (playerArena != null && playerArena.equals(event.getArena())) {
                 stats.setGamesPlayed(stats.getGamesPlayed() + 1);
             }
+        }
+        for(UUID uuid : event.getLosers()){
+            //store win streaks
+            Player player = Bukkit.getPlayer(uuid);
+            if (player==null||!player.isOnline()) {
+                Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, () -> {
+                    PlayerStats stats = BedWars.getRemoteDatabase().fetchStats(uuid);
+                    stats.setWinStreak(0);
+                    BedWars.getRemoteDatabase().saveStats(stats);
+                });
+            }
+            else {
+                PlayerStats stats = BedWars.getStatsManager().get(uuid);
+                stats.setWinStreak(0);
+            }
+
         }
     }
 

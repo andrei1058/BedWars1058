@@ -107,6 +107,11 @@ public class StatsAPI implements BedWars.IStats {
     }
 
     @Override
+    public int getWinStreak(UUID p) {
+        return getData(p).getWinStreak();
+    }
+
+    @Override
     public int getPlayerGamesPlayed(UUID p) {
         return getData(p).getGamesPlayed();
     }

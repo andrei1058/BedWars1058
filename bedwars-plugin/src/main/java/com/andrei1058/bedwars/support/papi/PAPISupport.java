@@ -127,6 +127,9 @@ public class PAPISupport extends PlaceholderExpansion {
             case "stats_wins":
                 replay = String.valueOf(BedWars.getStatsManager().get(player.getUniqueId()).getWins());
                 break;
+            case "stats_winstreak":
+                replay = String.valueOf(BedWars.getStatsManager().get(player.getUniqueId()).getWinStreak());
+                break;
             case "stats_finalkills":
                 replay = String.valueOf(BedWars.getStatsManager().get(player.getUniqueId()).getFinalKills());
                 break;
