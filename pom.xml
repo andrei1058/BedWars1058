@@ -58,6 +58,7 @@
     </dependencies>
 
     <build>
+
         <extensions>
             <extension>
                 <groupId>org.apache.maven.wagon</groupId>

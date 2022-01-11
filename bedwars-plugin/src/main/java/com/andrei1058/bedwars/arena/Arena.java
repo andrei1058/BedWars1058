@@ -324,6 +324,8 @@ public class Arena implements IArena {
             teams.add(bwt);
             bwt.spawnGenerators();
         }
+        teams.sort(new ArenaTeamSorter());
+
 
         //Load diamond/ emerald generators
         Location location;

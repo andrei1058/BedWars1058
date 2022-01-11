@@ -31,12 +31,12 @@ public enum TeamColor {
     RED,
     BLUE,
     GREEN,
+    DARK_GREEN,
     YELLOW,
     AQUA,
     WHITE,
     PINK,
     GRAY,
-    DARK_GREEN,
     DARK_GRAY;
 
     /**
