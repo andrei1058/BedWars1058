@@ -178,6 +178,7 @@ public class BedWars extends JavaPlugin {
         new Russian();
         new Bangla();
         new Persian();
+        new Hindi();
 
         config = new MainConfig(this, "config");
 
@@ -288,7 +289,7 @@ public class BedWars extends JavaPlugin {
 
         // Register events
         registerEvents(new QuitAndTeleportListener(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(),
-                new FireballListener(), new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener(), new LangListener());
+                new FireballListener(), new Warnings(this), new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener(), new LangListener());
         if (getServerType() == ServerType.BUNGEE) {
             if (autoscale) {
                 //registerEvents(new ArenaListeners());

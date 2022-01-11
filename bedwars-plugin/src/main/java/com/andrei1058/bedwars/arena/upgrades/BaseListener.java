@@ -25,6 +25,7 @@ import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.events.player.PlayerBaseEnterEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerBaseLeaveEvent;
+import com.andrei1058.bedwars.api.events.player.PlayerLeaveArenaEvent;
 import com.andrei1058.bedwars.api.events.upgrades.UpgradeBuyEvent;
 import com.andrei1058.bedwars.api.upgrades.EnemyBaseEnterTrap;
 import com.andrei1058.bedwars.arena.Arena;
@@ -190,5 +191,10 @@ public class BaseListener implements Listener {
                 }
             }
         }*/
+    }
+
+    @EventHandler
+    public void onArenaLeave(PlayerLeaveArenaEvent event){
+        isOnABase.remove(event.getPlayer());
     }
 }
