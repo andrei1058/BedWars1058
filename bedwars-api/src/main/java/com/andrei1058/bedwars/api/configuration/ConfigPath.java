@@ -24,6 +24,7 @@ package com.andrei1058.bedwars.api.configuration;
 public class ConfigPath {
 
     public static final String GENERATOR_STACK_ITEMS = "stack-items";
+    public static final String SHUFFLE_TEAMS = "shuffleTeams";
 
     public static final String GENERATOR_IRON_DELAY = "iron.delay";
     public static final String GENERATOR_IRON_AMOUNT = "iron.amount";

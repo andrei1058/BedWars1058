@@ -266,6 +266,7 @@ public class BedWarsScoreboard {
         int teamCount = 0;
         Language language = Language.getPlayerLanguage(player);
         String genericTeamFormat = language.m(Messages.FORMATTING_SCOREBOARD_TEAM_GENERIC);
+
         for (String current : strings) {
             // generic team placeholder {team}
             if (arena != null && current.trim().equals("{team}")) {

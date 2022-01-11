@@ -22,6 +22,7 @@ package com.andrei1058.bedwars.arena.team;
 
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.gameplay.TeamAssignEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.Bukkit;
@@ -47,7 +48,8 @@ public class LegacyTeamAssigner {
         }
 
         //Mix teams order
-        Collections.shuffle(arena.getTeams());
+        if(arena.getConfig().getBoolean(ConfigPath.SHUFFLE_TEAMS))
+            Collections.shuffle(arena.getTeams());
 
         //Team-up parties
         for (Player p : arena.getPlayers()) {

@@ -326,7 +326,6 @@ public class Arena implements IArena {
         }
         teams.sort(new ArenaTeamSorter());
 
-
         //Load diamond/ emerald generators
         Location location;
         for (String type : Arrays.asList("Diamond", "Emerald")) {
