@@ -1,0 +1,8 @@
+name: BedWars1058
+api-version: '1.13'
+version: ${project.version}
+author: andrei1058
+description: BedWars minigame coded by andrei1058
+main: com.andrei1058.bedwars.BedWars
+softdepend: [Vault,PlaceholderAPI,Citizens,Parties,SlimeWorldManager,VipFeatures,Enhanced-SlimeWorldManager]
+load: STARTUP
