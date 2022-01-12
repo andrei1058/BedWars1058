@@ -127,7 +127,7 @@ public class StatsListener implements Listener {
                     PlayerStats stats = BedWars.getRemoteDatabase().fetchStats(uuid);
                     stats.setWinStreak(0);
                     BedWars.getRemoteDatabase().saveStats(stats);
-                    BedWars.getRemoteDatabase().saveExtraStats(stats);
+                    BedWars.getRemoteDatabase().saveWinStreaks(stats);
                 });
             }
             else {
@@ -215,7 +215,7 @@ public class StatsListener implements Listener {
         //save or replace stats for player
         Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, () -> {
             BedWars.getRemoteDatabase().saveStats(playerStats);
-            BedWars.getRemoteDatabase().saveExtraStats(playerStats);
+            BedWars.getRemoteDatabase().saveWinStreaks(playerStats);
         });
     }
 

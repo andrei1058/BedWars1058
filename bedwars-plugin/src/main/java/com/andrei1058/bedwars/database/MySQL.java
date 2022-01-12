@@ -130,8 +130,8 @@ public class MySQL implements Database {
     }
 
     @Override
-    public boolean hasExtraStats(UUID uuid) {
-        String sql = "SELECT uuid FROM extra_stats WHERE uuid = ?;";
+    public boolean hasWinStreaks(UUID uuid) {
+        String sql = "SELECT uuid FROM WinStreaks WHERE uuid = ?;";
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, uuid.toString());
@@ -175,7 +175,7 @@ public class MySQL implements Database {
             try (Statement statement = connection.createStatement()) {
                 statement.executeUpdate(sql);
             }
-            sql = "CREATE TABLE IF NOT EXISTS extra_stats (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
+            sql = "CREATE TABLE IF NOT EXISTS WinStreaks (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
                     "name VARCHAR(200), uuid VARCHAR(200), win_streak INT(200));";
             try (Statement statement = connection.createStatement()) {
                 statement.executeUpdate(sql);
@@ -232,11 +232,11 @@ public class MySQL implements Database {
     }
 
     @Override
-    public void saveExtraStats(PlayerStats stats) {
+    public void saveWinStreaks(PlayerStats stats) {
         String sql;
         try (Connection connection = dataSource.getConnection()) {
-            if (hasExtraStats(stats.getUuid())) {
-                sql = "UPDATE extra_stats SET name=?, win_streak=? WHERE uuid = ?;";
+            if (hasWinStreaks(stats.getUuid())) {
+                sql = "UPDATE WinStreaks SET name=?, win_streak=? WHERE uuid = ?;";
                 try (PreparedStatement statement = connection.prepareStatement(sql)) {
                     statement.setString(1, stats.getName());
                     statement.setInt(2, stats.getWinStreak());//TODO:WINSTREAK
@@ -244,7 +244,7 @@ public class MySQL implements Database {
                     statement.executeUpdate();
                 }
             } else {
-                sql = "INSERT INTO extra_stats (name, uuid, win_streak) VALUES (?, ?, ?);";
+                sql = "INSERT INTO WinStreaks (name, uuid, win_streak) VALUES (?, ?, ?);";
                 try (PreparedStatement statement = connection.prepareStatement(sql)) {
                     statement.setString(1, stats.getName());
                     statement.setString(2, stats.getUuid().toString());
@@ -283,7 +283,7 @@ public class MySQL implements Database {
                     }
                 }
             }
-            sql = "SELECT win_streak FROM extra_stats WHERE uuid = ?;";
+            sql = "SELECT win_streak FROM WinStreaks WHERE uuid = ?;";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, uuid.toString());
                 try (ResultSet result = statement.executeQuery()) {
@@ -407,8 +407,8 @@ public class MySQL implements Database {
     }
 
     @Override
-    public int getExtraStatsColumn(UUID player, String column) {
-        String sql = "SELECT ? FROM extra_stats WHERE uuid = ?;";
+    public int getWinStreaksColumn(UUID player, String column) {
+        String sql = "SELECT ? FROM WinStreaks WHERE uuid = ?;";
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, column);
