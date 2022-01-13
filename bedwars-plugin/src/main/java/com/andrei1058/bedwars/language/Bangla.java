@@ -156,12 +156,12 @@ public class Bangla extends Language {
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD, "&a&lEmerald");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIMER, "&eSpawns in &c{seconds} &eseconds");
         yml.addDefault(Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT, "{prefix}{generatorType} Generators &c{tier} &eTier e update holo");
-        yml.addDefault(Messages.FORMATTING_CHAT_LOBBY, "{level}{vPrefix}&7{player}{vSuffix}: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_WAITING, "{level}{vPrefix}&7{player}{vSuffix}: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_SHOUT, "{level}{vPrefix}&6[SHOUT] {team} &7{player}&f{vSuffix}: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_TEAM, "{level}{vPrefix}&f{team}&7 {player}{vSuffix} {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_SPECTATOR, "{level}{vPrefix}&7[SPECTATOR] {player}{vSuffix}: {message}");
-        yml.addDefault(Messages.FORMATTING_SCOREBOARD_HEALTH, Arrays.asList("&c❤", "&aHealth"));
+        yml.addDefault(Messages.FORMATTING_CHAT_LOBBY, "&7[{level}&7] {vPrefix} {player} {vSuffix}&f: &7{message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_WAITING, "&7[{level}&7] {vPrefix} {player} {vSuffix}&f: &7{message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_SHOUT, "&7[{level}&7] &6[SHOUT] {team} {vPrefix} {player} {vSuffix}&f: &7{message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_TEAM, "&7[{level}&7] &f{team} {vPrefix} {player} {vSuffix}&f: &7{message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_SPECTATOR, "&7[{level}&7] &7[SPECTATOR] {vPrefix} {player} {vSuffix}&f: &7{message}");
+        yml.addDefault(Messages.FORMATTING_SCOREBOARD_HEALTH, Arrays.asList("&c❤"));
         yml.addDefault(Messages.FORMATTING_SPECTATOR_TEAM, "SPECT");
         yml.addDefault(Messages.FORMATTING_SPECTATOR_COLOR, "&7");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_PRESTARTING, Arrays.asList("{teamColor}&l{teamLetter} &r{teamColor}", "{team} ", "{vPrefix} {teamColor}"));
