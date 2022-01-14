@@ -119,23 +119,6 @@ public class StatsListener implements Listener {
                 stats.setGamesPlayed(stats.getGamesPlayed() + 1);
             }
         }
-        for(UUID uuid : event.getLosers()){
-            //store win streaks
-            Player player = Bukkit.getPlayer(uuid);
-            if (player==null||!player.isOnline()) {
-                Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, () -> {
-                    PlayerStats stats = BedWars.getRemoteDatabase().fetchStats(uuid);
-                    stats.setWinStreak(0);
-                    BedWars.getRemoteDatabase().saveStats(stats);
-                    BedWars.getRemoteDatabase().saveWinStreaks(stats);
-                });
-            }
-            else {
-                PlayerStats stats = BedWars.getStatsManager().get(uuid);
-                stats.setWinStreak(0);
-            }
-
-        }
     }
 
     @EventHandler
@@ -215,7 +198,6 @@ public class StatsListener implements Listener {
         //save or replace stats for player
         Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, () -> {
             BedWars.getRemoteDatabase().saveStats(playerStats);
-            BedWars.getRemoteDatabase().saveWinStreaks(playerStats);
         });
     }
 

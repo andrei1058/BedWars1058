@@ -78,7 +78,7 @@ public class SQLite implements Database {
             sql = "CREATE TABLE IF NOT EXISTS global_stats (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "name VARCHAR(200), uuid VARCHAR(36), first_play TIMESTAMP NULL DEFAULT NULL, " +
                     "last_play TIMESTAMP DEFAULT NULL, wins INTEGER(10), kills INTEGER(10), " +
-                    "final_kills INTEGER(10), looses INTEGER(10), deaths INTEGER(10), final_deaths INTEGER(10), beds_destroyed INTEGER(10), games_played INTEGER(10));";
+                    "final_kills INTEGER(10), looses INTEGER(10), deaths INTEGER(10), final_deaths INTEGER(10), beds_destroyed INTEGER(10), games_played INTEGER(10), win_streak INTEGER(10) DEFAULT 0);";
             try (Statement statement = connection.createStatement()) {
                 statement.executeUpdate(sql);
             }
@@ -100,13 +100,17 @@ public class SQLite implements Database {
                 st.executeUpdate(sql);
             }
             try (Statement st = connection.createStatement()) {
-                sql = "CREATE TABLE IF NOT EXISTS WinStreaks (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "name VARCHAR(200), uuid VARCHAR(36), win_streak INTEGER(10));";
+                sql = "ALTER TABLE global_stats ADD COLUMN win_streak INTEGER(10) DEFAULT 0;";
                 st.executeUpdate(sql);
             }
 
         }catch (SQLException e) {
-            e.printStackTrace();
+            if(!e.getMessage().contains("duplicate column name")) {
+                e.printStackTrace();
+            }
+            else {
+                BedWars.debug("win_streak column already exists!");
+            }
         }
     }
 
@@ -128,23 +132,6 @@ public class SQLite implements Database {
         return false;
     }
 
-    @Override
-    public boolean hasWinStreaks(UUID uuid) {
-        String sql = "SELECT uuid FROM WinStreaks WHERE uuid = ?;";
-        try {
-            checkConnection();
-
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, uuid.toString());
-                try (ResultSet result = statement.executeQuery()) {
-                    return result.next();
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
 
     @Override
     public void saveStats(PlayerStats stats) {
@@ -153,7 +140,7 @@ public class SQLite implements Database {
             checkConnection();
 
             if (hasStats(stats.getUuid())) {
-                sql = "UPDATE global_stats SET last_play=?, wins=?, kills=?, final_kills=?, looses=?, deaths=?, final_deaths=?, beds_destroyed=?, games_played=?, name=? WHERE uuid = ?;";
+                sql = "UPDATE global_stats SET last_play=?, wins=?, kills=?, final_kills=?, looses=?, deaths=?, final_deaths=?, beds_destroyed=?, games_played=?, name=?, win_streak=? WHERE uuid = ?;";
                 try (PreparedStatement statement = connection.prepareStatement(sql)) {
                     statement.setTimestamp(1, Timestamp.from(stats.getLastPlay()));
                     statement.setInt(2, stats.getWins());
@@ -165,12 +152,12 @@ public class SQLite implements Database {
                     statement.setInt(8, stats.getBedsDestroyed());
                     statement.setInt(9, stats.getGamesPlayed());
                     statement.setString(10, stats.getName());
-//                    statement.setInt(11, stats.getWinStreak());//TODO:WINSTREAK
-                    statement.setString(11, stats.getUuid().toString());
+                    statement.setInt(11, stats.getWinStreak());//TODO:WINSTREAK
+                    statement.setString(12, stats.getUuid().toString());
                     statement.executeUpdate();
                 }
             } else {
-                sql = "INSERT INTO global_stats (name, uuid, first_play, last_play, wins, kills, final_kills, looses, deaths, final_deaths, beds_destroyed, games_played) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+                sql = "INSERT INTO global_stats (name, uuid, first_play, last_play, wins, kills, final_kills, looses, deaths, final_deaths, beds_destroyed, games_played, win_streak) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
                 try (PreparedStatement statement = connection.prepareStatement(sql)) {
                     statement.setString(1, stats.getName());
                     statement.setString(2, stats.getUuid().toString());
@@ -184,35 +171,7 @@ public class SQLite implements Database {
                     statement.setInt(10, stats.getFinalDeaths());
                     statement.setInt(11, stats.getBedsDestroyed());
                     statement.setInt(12, stats.getGamesPlayed());
-//                    statement.setInt(13, stats.getWinStreak());//TODO:WINSTREAK
-                    statement.executeUpdate();
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void saveWinStreaks(PlayerStats stats) {
-        String sql;
-        try {
-            checkConnection();
-
-            if (hasWinStreaks(stats.getUuid())) {
-                sql = "UPDATE WinStreaks SET name=?, win_streak=? WHERE uuid = ?;";
-                try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                    statement.setString(1, stats.getName());
-                    statement.setInt(2, stats.getWinStreak());
-                    statement.setString(3, stats.getUuid().toString());
-                    statement.executeUpdate();
-                }
-            } else {
-                sql = "INSERT INTO WinStreaks (name, uuid, win_streak) VALUES(?, ?, ?);";
-                try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                    statement.setString(1, stats.getName());
-                    statement.setString(2, stats.getUuid().toString());
-                    statement.setInt(3, stats.getWinStreak());
+                    statement.setInt(13, stats.getWinStreak());//TODO:WINSTREAK
                     statement.executeUpdate();
                 }
             }
@@ -242,14 +201,6 @@ public class SQLite implements Database {
                         stats.setFinalDeaths(result.getInt("final_deaths"));
                         stats.setBedsDestroyed(result.getInt("beds_destroyed"));
                         stats.setGamesPlayed(result.getInt("games_played"));
-                    }
-                }
-            }
-            sql = "SELECT * FROM WinStreaks WHERE uuid = ?;";
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, uuid.toString());
-                try (ResultSet result = statement.executeQuery()) {
-                    if (result.next()) {
                         stats.setWinStreak(result.getInt("win_streak"));
                     }
                 }
@@ -343,28 +294,6 @@ public class SQLite implements Database {
             }
         }
         catch (SQLException ex) {
-            ex.printStackTrace();
-            return 0;
-        }
-        return 0;
-    }
-
-    @Override
-    public int getWinStreaksColumn(UUID player, String column) {
-        String sql = "SELECT ? FROM WinStreaks WHERE uuid = ?;";
-        try {
-            checkConnection();
-
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, column);
-                statement.setString(2, player.toString());
-                try (ResultSet result = statement.executeQuery()) {
-                    if (result.next()) {
-                        return result.getInt(column);
-                    }
-                }
-            }
-        } catch (SQLException ex) {
             ex.printStackTrace();
             return 0;
         }

@@ -40,19 +40,10 @@ public interface Database {
     boolean hasStats(UUID uuid);
 
     /**
-     * Check if player has remote extra stats.
-     */
-    boolean hasWinStreaks(UUID uuid);
-
-    /**
      * Create or replace stats for a player.
      */
     void saveStats(PlayerStats stats);
 
-    /**
-     * Create or replace extra stats for a player.
-     */
-    void saveWinStreaks(PlayerStats stats);
 
     PlayerStats fetchStats(UUID uuid);
 
@@ -84,12 +75,6 @@ public interface Database {
      */
     @SuppressWarnings("unused")
     int getColumn(UUID player, String column);
-
-    /**
-     * Get a extra stats value for the given player.
-     */
-    @SuppressWarnings("unused")
-    int getWinStreaksColumn(UUID player, String column);
 
     /**
      * Get a player level and xp.

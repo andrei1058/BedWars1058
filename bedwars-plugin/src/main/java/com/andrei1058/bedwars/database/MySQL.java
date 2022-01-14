@@ -130,28 +130,12 @@ public class MySQL implements Database {
     }
 
     @Override
-    public boolean hasWinStreaks(UUID uuid) {
-        String sql = "SELECT uuid FROM WinStreaks WHERE uuid = ?;";
-        try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, uuid.toString());
-                try (ResultSet result = statement.executeQuery()) {
-                    return result.next();
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    @Override
     public void init() {
         try (Connection connection = dataSource.getConnection()) {
             String sql = "CREATE TABLE IF NOT EXISTS global_stats (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
                     "name VARCHAR(200), uuid VARCHAR(200), first_play TIMESTAMP NULL DEFAULT NULL, " +
                     "last_play TIMESTAMP NULL DEFAULT NULL, wins INT(200), kills INT(200), " +
-                    "final_kills INT(200), looses INT(200), deaths INT(200), final_deaths INT(200), beds_destroyed INT(200), games_played INT(200));";
+                    "final_kills INT(200), looses INT(200), deaths INT(200), final_deaths INT(200), beds_destroyed INT(200), games_played INT(200), win_streak INT(200) DEFAULT 0);";
 
             try (Statement statement = connection.createStatement()) {
                 statement.executeUpdate(sql);
@@ -175,8 +159,7 @@ public class MySQL implements Database {
             try (Statement statement = connection.createStatement()) {
                 statement.executeUpdate(sql);
             }
-            sql = "CREATE TABLE IF NOT EXISTS WinStreaks (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
-                    "name VARCHAR(200), uuid VARCHAR(200), win_streak INT(200));";
+            sql = "ALTER TABLE global_stats ADD COLUMN IF NOT EXISTS win_streak INT(200) DEFAULT 0;";
             try (Statement statement = connection.createStatement()) {
                 statement.executeUpdate(sql);
             }
@@ -190,7 +173,7 @@ public class MySQL implements Database {
         String sql;
         try (Connection connection = dataSource.getConnection()) {
             if (hasStats(stats.getUuid())) {
-                sql = "UPDATE global_stats SET first_play=?, last_play=?, wins=?, kills=?, final_kills=?, looses=?, deaths=?, final_deaths=?, beds_destroyed=?, games_played=?, name=? WHERE uuid = ?;";
+                sql = "UPDATE global_stats SET first_play=?, last_play=?, wins=?, kills=?, final_kills=?, looses=?, deaths=?, final_deaths=?, beds_destroyed=?, games_played=?, name=?, win_streak=? WHERE uuid = ?;";
                 try (PreparedStatement statement = connection.prepareStatement(sql)) {
                     statement.setTimestamp(1, stats.getFirstPlay() != null ? Timestamp.from(stats.getFirstPlay()) : null);
                     statement.setTimestamp(2, stats.getLastPlay() != null ? Timestamp.from(stats.getLastPlay()) : null);
@@ -203,12 +186,12 @@ public class MySQL implements Database {
                     statement.setInt(9, stats.getBedsDestroyed());
                     statement.setInt(10, stats.getGamesPlayed());
                     statement.setString(11, stats.getName());
-//                    statement.setInt(12, stats.getWinStreak());//TODO:WINSTREAK
-                    statement.setString(12, stats.getUuid().toString());
+                    statement.setInt(12, stats.getWinStreak());//TODO:WINSTREAK
+                    statement.setString(13, stats.getUuid().toString());
                     statement.executeUpdate();
                 }
             } else {
-                sql = "INSERT INTO global_stats (name, uuid, first_play, last_play, wins, kills, final_kills, looses, deaths, final_deaths, beds_destroyed, games_played) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+                sql = "INSERT INTO global_stats (name, uuid, first_play, last_play, wins, kills, final_kills, looses, deaths, final_deaths, beds_destroyed, games_played, win_streak) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
                 try (PreparedStatement statement = connection.prepareStatement(sql)) {
                     statement.setString(1, stats.getName());
                     statement.setString(2, stats.getUuid().toString());
@@ -222,33 +205,7 @@ public class MySQL implements Database {
                     statement.setInt(10, stats.getFinalDeaths());
                     statement.setInt(11, stats.getBedsDestroyed());
                     statement.setInt(12, stats.getGamesPlayed());
-//                    statement.setInt(13, stats.getWinStreak());//TODO:WINSTREAK
-                    statement.executeUpdate();
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void saveWinStreaks(PlayerStats stats) {
-        String sql;
-        try (Connection connection = dataSource.getConnection()) {
-            if (hasWinStreaks(stats.getUuid())) {
-                sql = "UPDATE WinStreaks SET name=?, win_streak=? WHERE uuid = ?;";
-                try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                    statement.setString(1, stats.getName());
-                    statement.setInt(2, stats.getWinStreak());//TODO:WINSTREAK
-                    statement.setString(3, stats.getUuid().toString());
-                    statement.executeUpdate();
-                }
-            } else {
-                sql = "INSERT INTO WinStreaks (name, uuid, win_streak) VALUES (?, ?, ?);";
-                try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                    statement.setString(1, stats.getName());
-                    statement.setString(2, stats.getUuid().toString());
-                    statement.setInt(3, stats.getWinStreak());//TODO:WINSTREAK
+                    statement.setInt(13, stats.getWinStreak());//TODO:WINSTREAK
                     statement.executeUpdate();
                 }
             }
@@ -261,7 +218,7 @@ public class MySQL implements Database {
     public PlayerStats fetchStats(UUID uuid) {
         PlayerStats stats = new PlayerStats(uuid);
         String sql = "SELECT first_play, last_play, wins, kills, final_kills, looses, deaths, final_deaths," +
-                "beds_destroyed, games_played FROM global_stats WHERE uuid = ?;";
+                "beds_destroyed, games_played, win_streak FROM global_stats WHERE uuid = ?;";
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, uuid.toString());
@@ -279,16 +236,7 @@ public class MySQL implements Database {
                         stats.setFinalDeaths(result.getInt(8));
                         stats.setBedsDestroyed(result.getInt(9));
                         stats.setGamesPlayed(result.getInt(10));
-//                        stats.setWinStreak(result.getInt(11));//TODO:WINSTREAK
-                    }
-                }
-            }
-            sql = "SELECT win_streak FROM WinStreaks WHERE uuid = ?;";
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, uuid.toString());
-                try (ResultSet result = statement.executeQuery()) {
-                    if (result.next()) {
-                        stats.setWinStreak(result.getInt(1));//TODO:WINSTREAK
+                        stats.setWinStreak(result.getInt(11));//TODO:WINSTREAK
                     }
                 }
             }
@@ -406,25 +354,6 @@ public class MySQL implements Database {
         return 0;
     }
 
-    @Override
-    public int getWinStreaksColumn(UUID player, String column) {
-        String sql = "SELECT ? FROM WinStreaks WHERE uuid = ?;";
-        try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, column);
-                statement.setString(2, player.toString());
-                try (ResultSet result = statement.executeQuery()) {
-                    if (result.next()) {
-                        return result.getInt(column);
-                    }
-                }
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return 0;
-        }
-        return 0;
-    }
 
     @Override
     public Object[] getLevelData(UUID uuid) {
