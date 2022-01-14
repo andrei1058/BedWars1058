@@ -24,6 +24,7 @@ import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.gameplay.GameEndEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerBedBreakEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
@@ -65,6 +66,7 @@ public class StatsListener implements Listener {
 
     @EventHandler
     public void onBedBreak(PlayerBedBreakEvent event) {
+        if(!event.getArena().getConfig().getBoolean(ConfigPath.UPDATE_STATS)) return;
         PlayerStats stats = BedWars.getStatsManager().get(event.getPlayer().getUniqueId());
         //store beds destroyed
         stats.setBedsDestroyed(stats.getBedsDestroyed() + 1);
@@ -72,6 +74,7 @@ public class StatsListener implements Listener {
 
     @EventHandler
     public void onPlayerKill(PlayerKillEvent event) {
+        if(!event.getArena().getConfig().getBoolean(ConfigPath.UPDATE_STATS)) return;
         PlayerStats victimStats = BedWars.getStatsManager().get(event.getVictim().getUniqueId());
         // If killer is not null and not equal to victim
         PlayerStats killerStats = !event.getVictim().equals(event.getKiller()) ?
@@ -98,6 +101,7 @@ public class StatsListener implements Listener {
 
     @EventHandler
     public void onGameEnd(GameEndEvent event) {
+        if(!event.getArena().getConfig().getBoolean(ConfigPath.UPDATE_STATS)) return;
 
         for (UUID uuid : event.getWinners()) {
             Player player = Bukkit.getPlayer(uuid);
@@ -123,6 +127,7 @@ public class StatsListener implements Listener {
 
     @EventHandler
     public void onArenaLeave(PlayerLeaveArenaEvent event) {
+        if(!event.getArena().getConfig().getBoolean(ConfigPath.UPDATE_STATS)) return;
         final Player player = event.getPlayer();
 
         ITeam team = event.getArena().getExTeam(player.getUniqueId());
