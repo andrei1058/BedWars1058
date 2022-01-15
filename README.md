@@ -31,6 +31,7 @@ You can contact us, so we can add yours here :)
 - [Compass - Team Tracker, Quick Communications, Multi-language support](https://www.spigotmc.org/resources/91537/) - by Mher
 - [Sponge - Playing cool effect when placing a sponge](https://www.spigotmc.org/resources/93540/) - by Mher
 - [AntiDrop - Players Not Allow To Drop The Items In The Void](https://www.spigotmc.org/resources/86391/) - by Mher
+- [LuckyBlock NTD - Add LuckyBlocks to your ingame spawners](https://www.spigotmc.org/resources/94872/) - by danirod12
 - [Team Selector - Select your color before the game starts](https://www.spigotmc.org/resources/60438/) - by andrei1058
 - [BedWarsProxy - Arena selector for bungee scalable mode](https://www.spigotmc.org/resources/66642/) - by andrei1058
 - [Reward commands - Execute commands in certain moments of the game](https://www.spigotmc.org/resources/55381/) - by andrei1058
