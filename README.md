@@ -132,6 +132,7 @@ If you get disconnected, or if you leave a game (configurable) you can re-join i
 
 ###### Season events:
 - Halloween special. It is enabled automatically based on your machine timezone and will provide cool effects.
+##### Fireball Jumping Feature By @ajgeiss0702
 
 # Community servers
 Chosen by hundreds of servers all around the world.  
