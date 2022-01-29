@@ -345,6 +345,9 @@ public class BedWars extends JavaPlugin {
                     if (getServer().getPluginManager().getPlugin("Parties").isEnabled()) {
                         getLogger().info("Hook into Parties (by AlessioDP) support!");
                         party = new Parties();
+                    } else if (getServer().getPluginManager().isPluginEnabled("PartyandFriends")) {
+                        getLogger().info("Hook into Party and Friends support!");
+                        party = new Parties();
                     }
                 }
                 if (party instanceof NoParty) {
