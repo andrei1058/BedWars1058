@@ -180,6 +180,7 @@ public class BedWars extends JavaPlugin {
         new Russian();
         new Bangla();
         new Persian();
+        new Hindi();
 
         config = new MainConfig(this, "config");
 
@@ -272,7 +273,7 @@ public class BedWars extends JavaPlugin {
                                 Bukkit.createWorld(new WorldCreator(config.getLobbyWorldName()));
 
                                 if (Bukkit.getWorld(config.getLobbyWorldName()) != null) {
-                                    Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getWorld(config.getLobbyWorldName())
+                                    Bukkit.getScheduler().runTaskLater(plugin, () -> Objects.requireNonNull(Bukkit.getWorld(config.getLobbyWorldName()))
                                             .getEntities().stream().filter(e -> e instanceof Monster).forEach(Entity::remove), 20L);
                                 }
                             }, 100L);
@@ -289,9 +290,8 @@ public class BedWars extends JavaPlugin {
             }, 1L);
 
         // Register events
-        registerEvents(new QuitAndTeleportListener(), new BreakPlace(), new DamageDeathMove(), new Inventory(),
-                new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(), new ChatAFK(),
-                new FireballListener(), new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener(), new LangListener());
+        registerEvents(new QuitAndTeleportListener(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(),
+                new FireballListener(), new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener(), new LangListener(), new Warnings(this), new ChatAFK());
         if (getServerType() == ServerType.BUNGEE) {
             if (autoscale) {
                 //registerEvents(new ArenaListeners());
@@ -442,10 +442,11 @@ public class BedWars extends JavaPlugin {
                     chat = new NoChat();
                 }
                 try {
-                    //noinspection rawtypes
                     registerEvents(new MoneyListeners());
-                    RegisteredServiceProvider rsp = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-                    WithEconomy.setEconomy((net.milkbowl.vault.economy.Economy) rsp.getProvider());
+                    RegisteredServiceProvider<net.milkbowl.vault.economy.Economy> rsp = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+                    if (rsp != null) {
+                        WithEconomy.setEconomy(rsp.getProvider());
+                    }
                     plugin.getLogger().info("Hook into vault economy support!");
                     economy = new WithEconomy();
                 } catch (Exception var2_2) {

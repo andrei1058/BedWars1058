@@ -863,10 +863,10 @@ public class Arena implements IArena {
             }
         }
         for (Player on : getPlayers()) {
-            on.sendMessage(getMsg(on, Messages.COMMAND_LEAVE_MSG).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()));
+            on.sendMessage(getMsg(on, Messages.COMMAND_LEAVE_MSG).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()));
         }
         for (Player on : getSpectators()) {
-            on.sendMessage(getMsg(on, Messages.COMMAND_LEAVE_MSG).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()));
+            on.sendMessage(getMsg(on, Messages.COMMAND_LEAVE_MSG).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()));
         }
 
         if (getServerType() == ServerType.SHARED) {
@@ -2372,10 +2372,11 @@ public class Arena implements IArena {
         for (IGenerator og : oreGenerators) {
             og.destroyData();
         }
+        isOnABase.entrySet().removeIf(entry -> entry.getValue().getArena().equals(this));
         for (ITeam bwt : teams) {
             bwt.destroyData();
         }
-        playerLocation.entrySet().removeIf(e -> e.getValue().getWorld().getName().equalsIgnoreCase(worldName));
+        playerLocation.entrySet().removeIf(e -> Objects.requireNonNull(e.getValue().getWorld()).getName().equalsIgnoreCase(worldName));
         teams = null;
         placed = null;
         nextEvents = null;
