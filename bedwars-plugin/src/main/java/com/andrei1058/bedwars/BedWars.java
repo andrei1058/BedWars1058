@@ -67,6 +67,7 @@ import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.support.papi.PAPISupport;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.support.party.NoParty;
+import com.andrei1058.bedwars.support.party.PAF;
 import com.andrei1058.bedwars.support.party.Parties;
 import com.andrei1058.bedwars.support.preloadedparty.PrePartyListener;
 import com.andrei1058.bedwars.support.vault.*;
@@ -347,7 +348,7 @@ public class BedWars extends JavaPlugin {
                         party = new Parties();
                     } else if (getServer().getPluginManager().isPluginEnabled("PartyandFriends")) {
                         getLogger().info("Hook into Party and Friends support!");
-                        party = new Parties();
+                        party = new PAF();
                     }
                 }
                 if (party instanceof NoParty) {
