@@ -77,7 +77,7 @@ import com.andrei1058.spigotutils.SpigotUpdater;
 import com.andrei1058.vipfeatures.api.IVipFeatures;
 import com.andrei1058.vipfeatures.api.MiniGameAlreadyRegistered;
 import org.bstats.bukkit.Metrics;
-import org.bstats.*;
+import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -342,15 +342,13 @@ public class BedWars extends JavaPlugin {
         /* Party support */
         Bukkit.getScheduler().runTaskLater(this, () -> {
             if (config.getYml().getBoolean(ConfigPath.GENERAL_CONFIGURATION_ALLOW_PARTIES)) {
-                if (Bukkit.getPluginManager().getPlugin("Parties") != null) {
-                    if (getServer().getPluginManager().getPlugin("Parties").isEnabled()) {
+                    if (Bukkit.getServer().getPluginManager().isPluginEnabled("Parties")) {
                         getLogger().info("Hook into Parties (by AlessioDP) support!");
                         party = new Parties();
-                    } else if (getServer().getPluginManager().isPluginEnabled("PartyandFriends")) {
+                    } else if (Bukkit.getPluginManager().isPluginEnabled("PartyAndFriends")) {
                         getLogger().info("Hook into Party and Friends support!");
                         party = new PAF();
                     }
-                }
                 if (party instanceof NoParty) {
                     party = new com.andrei1058.bedwars.support.party.Internal();
                     getLogger().info("Loading internal Party system. /party");
@@ -499,6 +497,10 @@ public class BedWars extends JavaPlugin {
         metrics.addCustomChart(new SimplePie("level_adapter", () -> getLevelSupport().getClass().getName()));
         metrics.addCustomChart(new SimplePie("db_adapter", () -> getRemoteDatabase().getClass().getName()));
         metrics.addCustomChart(new SimplePie("map_adapter", () -> String.valueOf(getAPI().getRestoreAdapter().getOwner().getName())));
+
+
+
+
 
         if (Bukkit.getPluginManager().getPlugin("VipFeatures") != null) {
             try {

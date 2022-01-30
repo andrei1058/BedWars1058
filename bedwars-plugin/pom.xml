@@ -62,6 +62,10 @@
             <id>andrei1058-releases</id>
             <url>https://repo.andrei1058.com/releases/</url>
         </repository>
+        <repository>
+            <id>simonsators Repo</id>
+            <url>https://simonsator.de/repo</url>
+        </repository>
     </repositories>
 
     <dependencies>
