@@ -346,7 +346,7 @@ public class BedWars extends JavaPlugin {
                         getLogger().info("Hook into Parties (by AlessioDP) support!");
                         party = new Parties();
                     } else if (Bukkit.getPluginManager().isPluginEnabled("PartyAndFriends")) {
-                        getLogger().info("Hook into Party and Friends support!");
+                        getLogger().info("Hook into Party and Friends Spigot support!");
                         party = new PAF();
                     }
                 if (party instanceof NoParty) {
