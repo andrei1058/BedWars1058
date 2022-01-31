@@ -67,6 +67,7 @@ import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.support.papi.PAPISupport;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.support.party.NoParty;
+import com.andrei1058.bedwars.support.party.PAF;
 import com.andrei1058.bedwars.support.party.Parties;
 import com.andrei1058.bedwars.support.preloadedparty.PrePartyListener;
 import com.andrei1058.bedwars.support.vault.*;
@@ -341,12 +342,16 @@ public class BedWars extends JavaPlugin {
         /* Party support */
         Bukkit.getScheduler().runTaskLater(this, () -> {
             if (config.getYml().getBoolean(ConfigPath.GENERAL_CONFIGURATION_ALLOW_PARTIES)) {
-                if (Bukkit.getPluginManager().getPlugin("Parties") != null) {
-                    if (getServer().getPluginManager().getPlugin("Parties").isEnabled()) {
+
+                    if (getServer().getPluginManager().isPluginEnabled("Parties")) {
                         getLogger().info("Hook into Parties (by AlessioDP) support!");
                         party = new Parties();
                     }
-                }
+                    else if (Bukkit.getServer().getPluginManager().isPluginEnabled("PartyAndFriends")){
+                        getLogger().info("Hook into Party and Friends (by Simonsator) support!");
+                        party = new PAF();
+                    }
+
                 if (party instanceof NoParty) {
                     party = new com.andrei1058.bedwars.support.party.Internal();
                     getLogger().info("Loading internal Party system. /party");
