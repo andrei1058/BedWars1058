@@ -13,7 +13,10 @@ public class PAF implements Party {
     @Override
     public boolean hasParty(Player p) {
         OnlinePAFPlayer p1 = PAFPlayerManager.getInstance().getPlayer(p);
-        return p1.getParty().isInParty(p1);
+        if((p1.getParty() == null) || p1.getParty().isInParty(p1) == false)
+            return false;
+        else
+            return true;
     }
 
     @Override
@@ -35,12 +38,11 @@ public class PAF implements Party {
     @Override
     public List<Player> getMembers(Player owner) {
         ArrayList<Player> players = new ArrayList<>();
+        if (hasParty(owner) == false) return players;
         ArrayList<OnlinePAFPlayer> playersPAF = new ArrayList<>();
         OnlinePAFPlayer p1 = PAFPlayerManager.getInstance().getPlayer(owner);
-        if (p1.getParty() == null) return players;
-        playersPAF.addAll(p1.getParty().getAllPlayers());
-        for (int i = 0; i < playersPAF.size(); i++) {
-            players.add(playersPAF.get(i).getPlayer());
+        for (int i = 0; i < p1.getParty().getAllPlayers().size(); i++) {
+            players.add(p1.getParty().getAllPlayers().get(i).getPlayer());
         }
         return players;
     }
