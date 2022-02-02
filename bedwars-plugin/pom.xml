@@ -72,13 +72,13 @@
         <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
-            <version>2.2.1</version>
+            <version>3.0.0</version>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>de.simonsator</groupId>
             <artifactId>FakePAFSpigot</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.4</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -90,7 +90,7 @@
         <dependency>
             <groupId>net.citizensnpcs</groupId>
             <artifactId>citizens</artifactId>
-            <version>2.0.25-SNAPSHOT</version>
+            <version>2.0.29-SNAPSHOT</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
