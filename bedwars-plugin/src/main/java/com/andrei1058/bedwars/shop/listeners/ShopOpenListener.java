@@ -20,6 +20,7 @@
 
 package com.andrei1058.bedwars.shop.listeners;
 
+import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.arena.Arena;
@@ -36,6 +37,7 @@ public class ShopOpenListener implements Listener {
     public void onShopOpen(PlayerInteractAtEntityEvent e){
         IArena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a == null) return;
+        if(!a.getStatus().equals(GameState.playing)) return;
         Location l = e.getRightClicked().getLocation();
         for (ITeam t : a.getTeams()) {
             Location l2 = t.getShop();
