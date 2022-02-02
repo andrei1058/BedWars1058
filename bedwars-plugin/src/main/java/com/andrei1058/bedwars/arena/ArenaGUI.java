@@ -143,8 +143,19 @@ public class ArenaGUI {
             assert im != null;
             im.setDisplayName(ChatColor.translateAlternateColorCodes(
                     '&',
-                    "&r"+BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP)
+                    Language.getMsg(p, Messages.ARENA_GUI_SKIPPED_ITEM_NAME)
+                            .replaceAll("\\{serverIp}", BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
             ));
+            List<String> lore = new ArrayList<>();
+            for(String s : Language.getList(p, Messages.ARENA_GUI_SKIPPED_ITEM_LORE)) {
+                lore.add(
+                        s
+                                .replaceAll("\\{serverIp}", BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
+                );
+            }
+            if(lore.size() > 0) {
+                im.setLore(lore);
+            }
             im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             i.setItemMeta(im);
 
