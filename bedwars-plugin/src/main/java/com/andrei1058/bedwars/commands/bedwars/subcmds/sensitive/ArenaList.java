@@ -104,7 +104,7 @@ public class ArenaList extends SubCommand {
         p.sendMessage(" ");
 
         if (arenas.size() > ARENAS_PER_PAGE * page) {
-            p.sendMessage(ChatColor.GRAY + "Type /" + ChatColor.GREEN + MainCommand.getInstance().getName() + " arenaList " + ++page + ChatColor.GREEN + "for next page.");
+            p.sendMessage(ChatColor.GRAY + "Type /" + ChatColor.GREEN + MainCommand.getInstance().getName() + " arenaList " + ++page + ChatColor.GRAY + " for next page.");
         }
         return true;
     }
