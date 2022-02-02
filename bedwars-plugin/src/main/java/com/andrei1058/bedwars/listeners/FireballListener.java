@@ -107,28 +107,8 @@ public class FireballListener implements Listener {
                 }
             }
         }
-        for(Block b : getNearbyBlocks(arena, location, ((int)Math.round(fireballExplosionSize)))) {
-            b.setType(Material.AIR);
-        }
     }
 
-    private List<Block> getNearbyBlocks(IArena arena, Location loc, int radius) {
-        List<Block> blocks = new ArrayList<>();
-        for(int x = loc.getBlockX() - radius; x < loc.getBlockX() + radius; x++ ) {
-            for(int y = loc.getBlockY() - radius; y < loc.getBlockY() + radius; y++ ) {
-                for(int z = loc.getBlockZ() - radius; z < loc.getBlockZ() + radius; z++ ) {
-                    World world = loc.getWorld();
-                    if(world == null) continue;
-                    Block block = world.getBlockAt(x, y, z);
-                    if(block.getType().name().contains("AIR")) continue;
-                    if(block.getType().name().contains("_GLASS")) continue;
-                    if(!arena.isBlockPlaced(block)) continue;
-                    blocks.add(block);
-                }
-            }
-        }
-        return blocks;
-    }
 
     @EventHandler
     public void fireballDirectHit(EntityDamageByEntityEvent e) {
@@ -141,9 +121,13 @@ public class FireballListener implements Listener {
     }
 
     @EventHandler
-    public void fireballExplode(EntityExplodeEvent e) {
+    public void fireballPrime(ExplosionPrimeEvent e) {
         if(!(e.getEntity() instanceof Fireball)) return;
-        if(Arena.getArenaByIdentifier(e.getLocation().getWorld().getName()) == null) return;
-        e.blockList().clear();
+        if(!(e.getEntity() instanceof Player)) return;
+
+        if(Arena.getArenaByPlayer((Player) e.getEntity()) == null) return;
+
+        e.setFire(fireballMakeFire);
     }
+
 }
