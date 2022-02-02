@@ -40,6 +40,7 @@ import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.UUID;
 
+@SuppressWarnings("unused")
 public interface BedWars {
 
     /**
@@ -471,4 +472,23 @@ public interface BedWars {
      */
     @SuppressWarnings("unused")
     File getAddonsPath();
+
+    /**
+     * Scoreboard options.
+     */
+    ScoreboardUtil getScoreboardUtil();
+
+    interface ScoreboardUtil {
+
+        /**
+         * Removes bed-wars sidebar for the given player.
+         */
+        void removePlayerScoreboard(Player player);
+
+        /**
+         * Restores user scoreboard based on plugin configuration.
+         * @param delay 5 seconds delay. to be used on server join.
+         */
+        void givePlayerScoreboard(Player player, boolean delay);
+    }
 }
