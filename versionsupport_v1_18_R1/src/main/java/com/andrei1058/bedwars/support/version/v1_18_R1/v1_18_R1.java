@@ -545,7 +545,7 @@ public class v1_18_R1 extends VersionSupport {
             head = CraftItemStack.asBukkitCopy(i);
         }
 
-        SkullMeta headMeta = (SkullMeta) head.getItemMeta();
+//        SkullMeta headMeta = (SkullMeta) head.getItemMeta();
 //        FIXME: current hotfix will get rate limited! how the hell do we set head texture now?
 //        wtf is this: SkullOwner:{Id:[I;-1344581477,-1919271229,-1306015584,-647763423],Name:"andrei1058"}
 //        Field profileField;
@@ -557,9 +557,9 @@ public class v1_18_R1 extends VersionSupport {
 //        } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e1) {
 //            e1.printStackTrace();
 //        }
-        assert headMeta != null;
-        headMeta.setOwningPlayer(player);
-        head.setItemMeta(headMeta);
+//        assert headMeta != null;
+//        headMeta.setOwningPlayer(player);
+//        head.setItemMeta(headMeta);
 
         return head;
     }
