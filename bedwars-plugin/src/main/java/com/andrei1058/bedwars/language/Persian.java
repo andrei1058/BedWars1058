@@ -120,6 +120,8 @@ public class Persian extends Language {
         yml.addDefault(Messages.ARENA_GUI_INV_NAME, "&8Baraye vared shodan click konid");
         yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_NAME, "&a&l{name}");
         yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_LORE, Arrays.asList("", "&7Halat: {status}", "&7Player Ha: &f{on}&7/&f{max}", "&7No: &a{group}", "", "&aBaraye vared shodan Left-Click konid.", "&eBaraye spectate kardan Right-Click konid."));
+        yml.addDefault(Messages.ARENA_GUI_SKIPPED_ITEM_NAME, "&r{serverIp}");
+        yml.addDefault(Messages.ARENA_GUI_SKIPPED_ITEM_LORE, Collections.emptyList());
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_CHAT, "{prefix}&eBazi dar &6{time} &esanie digar shoro khahad shod.");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_TITLE, " ");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE, "&a{second}");
