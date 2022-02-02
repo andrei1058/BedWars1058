@@ -546,15 +546,19 @@ public class v1_17_R1 extends VersionSupport {
         }
 
         SkullMeta headMeta = (SkullMeta) head.getItemMeta();
-        Field profileField;
-        try {
-            //noinspection ConstantConditions
-            profileField = headMeta.getClass().getDeclaredField("profile");
-            profileField.setAccessible(true);
-            profileField.set(headMeta, ((CraftPlayer) player).getProfile());
-        } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e1) {
-            e1.printStackTrace();
-        }
+//        FIXME: current hotfix will get rate limited! how the hell do we set head texture now?
+//        wtf is this: SkullOwner:{Id:[I;-1344581477,-1919271229,-1306015584,-647763423],Name:"andrei1058"}
+//        Field profileField;
+//        try {
+//            //noinspection ConstantConditions
+//            profileField = headMeta.getClass().getDeclaredField("profile");
+//            profileField.setAccessible(true);
+//            profileField.set(headMeta, ((CraftPlayer) player).getProfile());
+//        } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e1) {
+//            e1.printStackTrace();
+//        }
+        assert headMeta != null;
+        headMeta.setOwningPlayer(player);
         head.setItemMeta(headMeta);
 
         return head;
