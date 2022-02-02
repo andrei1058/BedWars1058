@@ -347,9 +347,7 @@ public class DamageDeathMove implements Listener {
                 victim.spigot().respawn();
                 return;
             }
-            if(killer != null) {
-                Sounds.playSound(ConfigPath.SOUNDS_KILL, killer);
-            }
+
             BedWars.nms.clearArrowsFromPlayerBody(victim);
             String message = victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL : Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR;
             PlayerKillEvent.PlayerKillCause cause = victimsTeam.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.UNKNOWN_FINAL_KILL : PlayerKillEvent.PlayerKillCause.UNKNOWN;
@@ -438,6 +436,9 @@ public class DamageDeathMove implements Listener {
             String finalMessage = message;
             PlayerKillEvent playerKillEvent = new PlayerKillEvent(a, victim, killer, player -> Language.getMsg(player, finalMessage), cause);
             Bukkit.getPluginManager().callEvent(playerKillEvent);
+            if(killer != null && playerKillEvent.playSound()) {
+                Sounds.playSound(ConfigPath.SOUNDS_KILL, killer);
+            }
             for (Player on : a.getPlayers()) {
                 Language lang = Language.getPlayerLanguage(on);
                 on.sendMessage(playerKillEvent.getMessage().apply(on).
