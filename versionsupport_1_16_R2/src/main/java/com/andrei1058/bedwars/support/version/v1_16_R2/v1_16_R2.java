@@ -657,7 +657,13 @@ public class v1_16_R2 extends VersionSupport {
 
     @Override
     public void playRedStoneDot(Player player) {
-        player.getWorld().spawnParticle(org.bukkit.Particle.REDSTONE, player.getLocation(), 1, new Particle.DustOptions(Color.RED, 1));
+        Color color = Color.RED;
+        PacketPlayOutWorldParticles particlePacket = new PacketPlayOutWorldParticles(new ParticleParamRedstone((float) color.getRed(), (float) color.getBlue(), (float) color.getGreen(), (float) 1),
+                true, (float) player.getLocation().getX(), (float) (player.getLocation().getY() + 2.6), (float) player.getLocation().getZ(), 0, 0, 0, 0, 0);
+        for (Player inWorld : player.getWorld().getPlayers()) {
+            if (inWorld.equals(player)) continue;
+            ((CraftPlayer) inWorld).getHandle().playerConnection.sendPacket(particlePacket);
+        }
     }
 
     @Override

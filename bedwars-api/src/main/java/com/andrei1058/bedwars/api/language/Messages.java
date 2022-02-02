@@ -123,6 +123,8 @@ public class Messages {
     public static String ARENA_GUI_INV_NAME = "arena-selector-gui-name";
     public static String ARENA_GUI_ARENA_CONTENT_NAME = "arena-selector-content-name";
     public static String ARENA_GUI_ARENA_CONTENT_LORE = "arena-selector-content-lore";
+    public static String ARENA_GUI_SKIPPED_ITEM_NAME = "arena-selector-skipped-item-name";
+    public static String ARENA_GUI_SKIPPED_ITEM_LORE = "arena-selector-skipped-item-lore";
 
     /** Spectator related */
     public static String ARENA_SPECTATOR_TELEPORTER_GUI_NAME = "spectator-tp-gui-name";

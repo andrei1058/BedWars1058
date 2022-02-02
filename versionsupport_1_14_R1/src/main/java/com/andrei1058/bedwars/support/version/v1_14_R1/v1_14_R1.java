@@ -665,9 +665,8 @@ public class v1_14_R1 extends VersionSupport {
     @Override
     public void playRedStoneDot(Player player) {
         Color color = Color.RED;
-        PacketPlayOutWorldParticles particlePacket = new PacketPlayOutWorldParticles(
-                new ParticleParamRedstone((float) color.getRed(), (float) color.getGreen(), (float) color.getBlue(), (float) 1),
-                true, (float) player.getLocation().getX(), (float) (player.getLocation().getY() + 2.2), (float) player.getLocation().getZ(), 0, 0, 0, 0, 1);
+        PacketPlayOutWorldParticles particlePacket = new PacketPlayOutWorldParticles(new ParticleParamRedstone((float) color.getRed(), (float) color.getRed(), (float) color.getRed(), (float) 1),
+                true, (float) player.getLocation().getX(), (float) (player.getLocation().getY() + 2.6), (float) player.getLocation().getZ(), 0, 0, 0, 0, 0);
         for (Player inWorld : player.getWorld().getPlayers()) {
             if (inWorld.equals(player)) continue;
             ((CraftPlayer) inWorld).getHandle().playerConnection.sendPacket(particlePacket);

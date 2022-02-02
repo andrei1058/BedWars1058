@@ -151,6 +151,10 @@ public class ConfigPath {
 
     public static final String GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP = "server-ip";
 
+    private static final String GENERAL_CHAT = "chat-settings.";
+    public static final String GENERAL_CHAT_FORMATTING = GENERAL_CHAT+"format";
+    public static final String GENERAL_CHAT_GLOBAL = GENERAL_CHAT+"global";
+
     public static final String ARENA_DISPLAY_NAME = "display-name";
     public static final String ARENA_CONFIGURATION_MAX_BUILD_Y = "max-build-y";
     public static final String ARENA_SPAWN_PROTECTION = "spawn-protection";
