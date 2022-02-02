@@ -135,7 +135,7 @@ public class ArenaGUI {
         //ash.setInv(inv);
 
         String skippedSlotMaterial = BedWars.config.getString(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", "skipped-slot"));
-        if(!skippedSlotMaterial.equalsIgnoreCase("none")) {
+        if(!skippedSlotMaterial.equalsIgnoreCase("none") && !skippedSlotMaterial.equalsIgnoreCase("air")) {
             ItemStack i = BedWars.nms.createItemStack(skippedSlotMaterial,
                     1, (byte) BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA.replace("%path%", "skipped-slot")));
             i = BedWars.nms.addCustomData(i, "RUNCOMMAND_bw join random");
