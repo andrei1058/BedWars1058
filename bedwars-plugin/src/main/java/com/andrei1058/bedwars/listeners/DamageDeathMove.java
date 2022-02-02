@@ -37,6 +37,7 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.LastHit;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.arena.team.BedWarsTeam;
+import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.listeners.dropshandler.PlayerDrops;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -345,6 +346,9 @@ public class DamageDeathMove implements Listener {
             if (victimsTeam == null) {
                 victim.spigot().respawn();
                 return;
+            }
+            if(killer != null) {
+                Sounds.playSound(ConfigPath.SOUNDS_KILL, killer);
             }
             BedWars.nms.clearArrowsFromPlayerBody(victim);
             String message = victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL : Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR;
