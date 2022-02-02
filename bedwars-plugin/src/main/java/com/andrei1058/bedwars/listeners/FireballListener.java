@@ -5,21 +5,24 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.LastHit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static com.andrei1058.bedwars.BedWars.config;
 import static com.andrei1058.bedwars.BedWars.getAPI;
@@ -46,45 +49,16 @@ public class FireballListener implements Listener {
         this.damageTeammates = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_DAMAGE_TEAMMATES);
     }
 
-    Map<Location, Player> explosionSources = new HashMap<>();
-
     @EventHandler
-    public void fireballPrime(ExplosionPrimeEvent e) {
+    public void fireballHit(ProjectileHitEvent e) {
         if(!(e.getEntity() instanceof Fireball)) return;
-        ProjectileSource shooter = ((Fireball) e.getEntity()).getShooter();
-        if(!(shooter instanceof Player)) return;
-        IArena a = Arena.getArenaByPlayer((Player) shooter);
-        if(a == null) return;
-        e.setRadius((float) fireballExplosionSize);
-        e.setFire(fireballMakeFire);
-        explosionSources.put(e.getEntity().getLocation(), (Player) shooter);
-    }
+        Location location = e.getEntity().getLocation();
 
-    @EventHandler
-    public void fireballDirectHit(EntityDamageByEntityEvent e) {
-        if(!(e.getDamager() instanceof Fireball)) return;
-        if(!(e.getEntity() instanceof Player)) return;
+        ProjectileSource projectileSource = e.getEntity().getShooter();
+        if(!(projectileSource instanceof Player)) return;
+        Player source = (Player) projectileSource;
 
-        if(Arena.getArenaByPlayer((Player) e.getEntity()) == null) return;
-
-        e.setCancelled(true);
-    }
-
-    @EventHandler
-    public void fireballExplode(EntityExplodeEvent e) {
-        if(!(e.getEntity() instanceof Fireball)) return;
-        Location location = e.getLocation();
-
-        Player source = null;
-        for(Location sourceLocation : explosionSources.keySet()) {
-            if(sourceLocation == null) continue;
-            if(sourceLocation.distance(location) < 0.05) {
-                source = explosionSources.get(sourceLocation);
-                explosionSources.remove(sourceLocation);
-            }
-        }
-
-        if(source == null) return;
+        IArena arena = Arena.getArenaByPlayer(source);
 
         Vector vector = location.toVector();
 
@@ -97,7 +71,6 @@ public class FireballListener implements Listener {
             if(!(entity instanceof Player)) continue;
             Player player = (Player) entity;
             if(!getAPI().getArenaUtil().isPlaying(player)) continue;
-            IArena arena = Arena.getArenaByPlayer(player);
 
 
             Vector playerVector = player.getLocation().toVector();
@@ -134,6 +107,27 @@ public class FireballListener implements Listener {
                 }
             }
         }
-
     }
+
+
+    @EventHandler
+    public void fireballDirectHit(EntityDamageByEntityEvent e) {
+        if(!(e.getDamager() instanceof Fireball)) return;
+        if(!(e.getEntity() instanceof Player)) return;
+
+        if(Arena.getArenaByPlayer((Player) e.getEntity()) == null) return;
+
+        e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void fireballPrime(ExplosionPrimeEvent e) {
+        if(!(e.getEntity() instanceof Fireball)) return;
+        if(!(e.getEntity() instanceof Player)) return;
+
+        if(Arena.getArenaByPlayer((Player) e.getEntity()) == null) return;
+
+        e.setFire(fireballMakeFire);
+    }
+
 }
