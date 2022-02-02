@@ -53,6 +53,8 @@ import com.andrei1058.bedwars.levels.internal.LevelListeners;
 import com.andrei1058.bedwars.listeners.*;
 import com.andrei1058.bedwars.listeners.arenaselector.ArenaSelectorListener;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
+import com.andrei1058.bedwars.listeners.chat.ChatAFK;
+import com.andrei1058.bedwars.listeners.chat.ChatFormatting;
 import com.andrei1058.bedwars.listeners.joinhandler.*;
 import com.andrei1058.bedwars.lobbysocket.ArenaSocket;
 import com.andrei1058.bedwars.lobbysocket.LoadedUsersCleaner;
@@ -271,7 +273,7 @@ public class BedWars extends JavaPlugin {
                                 Bukkit.createWorld(new WorldCreator(config.getLobbyWorldName()));
 
                                 if (Bukkit.getWorld(config.getLobbyWorldName()) != null) {
-                                    Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getWorld(config.getLobbyWorldName())
+                                    Bukkit.getScheduler().runTaskLater(plugin, () -> Objects.requireNonNull(Bukkit.getWorld(config.getLobbyWorldName()))
                                             .getEntities().stream().filter(e -> e instanceof Monster).forEach(Entity::remove), 20L);
                                 }
                             }, 100L);
@@ -289,7 +291,7 @@ public class BedWars extends JavaPlugin {
 
         // Register events
         registerEvents(new QuitAndTeleportListener(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(),
-                new FireballListener(), new Warnings(this), new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener(), new LangListener());
+                new FireballListener(), new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener(), new LangListener(), new Warnings(this), new ChatAFK());
         if (getServerType() == ServerType.BUNGEE) {
             if (autoscale) {
                 //registerEvents(new ArenaListeners());
@@ -440,10 +442,11 @@ public class BedWars extends JavaPlugin {
                     chat = new NoChat();
                 }
                 try {
-                    //noinspection rawtypes
                     registerEvents(new MoneyListeners());
-                    RegisteredServiceProvider rsp = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-                    WithEconomy.setEconomy((net.milkbowl.vault.economy.Economy) rsp.getProvider());
+                    RegisteredServiceProvider<net.milkbowl.vault.economy.Economy> rsp = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+                    if (rsp != null) {
+                        WithEconomy.setEconomy(rsp.getProvider());
+                    }
                     plugin.getLogger().info("Hook into vault economy support!");
                     economy = new WithEconomy();
                 } catch (Exception var2_2) {
@@ -456,8 +459,8 @@ public class BedWars extends JavaPlugin {
         });
 
         /* Chat support */
-        if (config.getBoolean("formatChat")) {
-            registerEvents(new PlayerChat());
+        if (config.getBoolean(ConfigPath.GENERAL_CHAT_FORMATTING)) {
+            registerEvents(new ChatFormatting());
         }
 
         /* Protect glass walls from tnt explosion */
