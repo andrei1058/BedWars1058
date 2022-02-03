@@ -231,7 +231,7 @@ public class PlayerLevel {
         format.setMaximumFractionDigits(2);
         format.setMinimumFractionDigits(0);
 
-        if (score < 1000000) {
+        if (score >= 1000) {
             return format.format(score/1000)+"k";
         }
         return format.format(score);
