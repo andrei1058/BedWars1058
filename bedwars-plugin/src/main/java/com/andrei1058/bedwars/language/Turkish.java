@@ -32,15 +32,16 @@ import java.util.Collections;
 
 import static com.andrei1058.bedwars.BedWars.mainCmd;
 
-public class English extends Language {
+public class Turkish extends Language {
 
-    public English() {
+    public Turkish() {
         super(BedWars.plugin, "tr");
 
         YamlConfiguration yml = getYml();
         yml.options().copyDefaults(true);
+        yml.options().header("Turkish translation by https://kuzeeeyk.me [kuzeeeyk#7268 or @kuzeeeyk]");
         yml.addDefault(Messages.PREFIX, "");
-        yml.addDefault("name", "Turkish");
+        yml.addDefault("name", "Türkçe");
 
         // this must stay here
         // move message to new path
