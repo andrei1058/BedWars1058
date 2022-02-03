@@ -421,7 +421,7 @@ public class BedWars extends JavaPlugin {
 
         /* PlaceholderAPI Support */
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            getLogger().info("Hook into PlaceholderAPI support!");
+            getLogger().info("Hooked into PlaceholderAPI support!");
             new PAPISupport().register();
             SupportPAPI.setSupportPAPI(new SupportPAPI.withPAPI());
         }
@@ -437,7 +437,7 @@ public class BedWars extends JavaPlugin {
                     RegisteredServiceProvider rsp = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
                    if(rsp != null) {
                        WithChat.setChat((net.milkbowl.vault.chat.Chat) rsp.getProvider());
-                       plugin.getLogger().info("Hook into vault chat support!");
+                       plugin.getLogger().info("Hooked into vault chat support!");
                        chat = new WithChat();
                    } else {
                        plugin.getLogger().info("Vault found, but no chat provider!");
@@ -451,7 +451,7 @@ public class BedWars extends JavaPlugin {
                     RegisteredServiceProvider<net.milkbowl.vault.economy.Economy> rsp = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
                     if (rsp != null) {
                         WithEconomy.setEconomy(rsp.getProvider());
-                        plugin.getLogger().info("Hook into vault economy support!");
+                        plugin.getLogger().info("Hooked into vault economy support!");
                         economy = new WithEconomy();
                     } else {
                         plugin.getLogger().info("Vault found, but no economy provider!");
