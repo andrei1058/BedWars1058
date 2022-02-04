@@ -112,7 +112,7 @@ public class ArenaGUI {
                 if (!(s.contains("{group}") && arenas.get(arenaKey).getGroup().equalsIgnoreCase("default"))) {
                     lore.add(s.replace("{on}", String.valueOf(arena != null ? arena == arenas.get(arenaKey) ? players : arenas.get(arenaKey).getPlayers().size() : arenas.get(arenaKey).getPlayers().size())).replace("{max}",
                             String.valueOf(arenas.get(arenaKey).getMaxPlayers())).replace("{status}", arenas.get(arenaKey).getDisplayStatus(Language.getPlayerLanguage(p)))
-                            .replace("{group}", arenas.get(arenaKey).getGroup()));
+                            .replace("{group}", arenas.get(arenaKey).getDisplayGroup(p)));
                 }
             }
             im.setLore(lore);
