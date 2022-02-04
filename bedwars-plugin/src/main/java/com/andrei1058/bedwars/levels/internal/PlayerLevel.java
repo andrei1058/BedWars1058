@@ -27,6 +27,7 @@ import com.andrei1058.bedwars.configuration.LevelsConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
+import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -232,7 +233,7 @@ public class PlayerLevel {
         format.setMinimumFractionDigits(0);
 
         if (score >= 1000) {
-            return format.format(score/1000)+"k";
+            return format.format(score/1000.0)+"k";
         }
         return format.format(score);
     }
