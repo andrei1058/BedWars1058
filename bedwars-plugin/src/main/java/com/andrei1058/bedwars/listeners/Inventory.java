@@ -39,6 +39,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
@@ -206,6 +207,26 @@ public class Inventory implements Listener {
                 e.setCancelled(true);
                 //noinspection UnnecessaryReturnStatement
                 return;
+            }
+        }
+    }
+
+    /* Fix for drop sword using the cursor */
+    @EventHandler
+    public void onDrop(PlayerDropItemEvent e){
+
+        Player player = e.getPlayer();
+
+        IArena a = Arena.getArenaByPlayer(player);
+
+        if (!Arena.isInArena(player) || a.getStatus() != GameState.playing) return;
+
+        if (nms.isSword(e.getItemDrop().getItemStack())){
+            e.setCancelled(true);
+
+            // This avoids the duplication of swords on cancel the event
+            if (player.getInventory().containsAtLeast(e.getItemDrop().getItemStack(), 1)){
+                player.getInventory().remove(e.getItemDrop().getItemStack());
             }
         }
     }
