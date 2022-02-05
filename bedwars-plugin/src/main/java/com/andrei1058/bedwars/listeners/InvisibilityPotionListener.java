@@ -20,6 +20,7 @@
 
 package com.andrei1058.bedwars.listeners;
 
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.events.player.PlayerInvisibilityPotionEvent;
@@ -35,9 +36,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
-import static com.andrei1058.bedwars.BedWars.nms;
-import static com.andrei1058.bedwars.BedWars.plugin;
 
 /**
  * This is used to hide and show player name tag above head when he drinks an invisibility
@@ -71,14 +69,14 @@ public class InvisibilityPotionListener implements Listener {
         if (a == null) return;
         if (e.getItem().getType() != Material.POTION) return;
         // remove potion bottle
-        Bukkit.getScheduler().runTaskLater(plugin, () ->
-                        nms.minusAmount(e.getPlayer(), new ItemStack(Material.GLASS_BOTTLE), 1),
+        Bukkit.getScheduler().runTaskLater(BedWars.plugin, () ->
+                        BedWars.nms.minusAmount(e.getPlayer(), new ItemStack(Material.GLASS_BOTTLE), 1),
                 5L);
         //
         PotionMeta pm = (PotionMeta) e.getItem().getItemMeta();
         if (pm.hasCustomEffects()) {
             if (pm.hasCustomEffect(PotionEffectType.INVISIBILITY)) {
-                Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
                     for (PotionEffect pe : e.getPlayer().getActivePotionEffects()) {
                         if (pe.getType().toString().contains("INVISIBILITY")) {
                             // if is already invisible
@@ -100,10 +98,10 @@ public class InvisibilityPotionListener implements Listener {
                                 for (Player p1 : e.getPlayer().getWorld().getPlayers()) {
                                     if (a.isSpectator(p1)) {
                                         // hide player armor to spectators
-                                        nms.hideArmor(e.getPlayer(), p1);
+                                        BedWars.nms.hideArmor(e.getPlayer(), p1);
                                     } else if (t != a.getTeam(p1)) {
                                         // hide player armor to other teams
-                                        nms.hideArmor(e.getPlayer(), p1);
+                                        BedWars.nms.hideArmor(e.getPlayer(), p1);
                                     }
                                 }
                                 // call custom event

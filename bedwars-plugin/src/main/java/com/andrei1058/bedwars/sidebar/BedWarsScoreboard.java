@@ -29,6 +29,7 @@ import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.spigot.sidebar.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -39,11 +40,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
-
-import static com.andrei1058.bedwars.BedWars.*;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
-import static com.andrei1058.bedwars.api.language.Language.getScoreboard;
-import static com.andrei1058.bedwars.arena.Misc.replaceStatsPlaceholders;
 
 public class BedWarsScoreboard {
 
@@ -75,9 +71,9 @@ public class BedWarsScoreboard {
         }
 
         // Cache the next event date format
-        nextEventDateFormat = new SimpleDateFormat(getMsg(player, Messages.FORMATTING_SCOREBOARD_NEXEVENT_TIMER));
+        nextEventDateFormat = new SimpleDateFormat(Language.getMsg(player, Messages.FORMATTING_SCOREBOARD_NEXEVENT_TIMER));
         nextEventDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-        dateFormat = new SimpleDateFormat(getMsg(player, Messages.FORMATTING_SCOREBOARD_DATE));
+        dateFormat = new SimpleDateFormat(Language.getMsg(player, Messages.FORMATTING_SCOREBOARD_DATE));
 
         // Define common placeholders
         List<PlaceholderProvider> placeholders = Arrays.asList(
@@ -149,23 +145,23 @@ public class BedWarsScoreboard {
                     String result;
                     if (currentTeam.isBedDestroyed()) {
                         if (currentTeam.getSize() > 0) {
-                            result = getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED)
+                            result = Language.getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED)
                                     .replace("{remainingPlayers}", String.valueOf(currentTeam.getSize()));
                         } else {
-                            result = getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED);
+                            result = Language.getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED);
                         }
                     } else {
-                        result = getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE);
+                        result = Language.getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE);
                     }
                     if (currentTeam.isMember(getPlayer())) {
-                        result += getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM);
+                        result += Language.getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM);
                     }
                     return result;
                 }));
             }
 
-            if ((arena.getStatus() == GameState.playing && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_PLAYING))
-                    || (arena.getStatus() == GameState.restarting && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_RESTARTING))) {
+            if ((arena.getStatus() == GameState.playing && BedWars.config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_PLAYING))
+                    || (arena.getStatus() == GameState.restarting && BedWars.config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_RESTARTING))) {
                 String prefixListPath = arena.getStatus() == GameState.playing ? Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_PLAYING : Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_PRESTARTING;
                 String suffixListPath = arena.getStatus() == GameState.playing ? Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_PLAYING : Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_PRESTARTING;
 
@@ -195,8 +191,8 @@ public class BedWarsScoreboard {
                 }
             } else {
                 // waiting/ starting tab formatting
-                if (arena.getStatus() == GameState.waiting && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_WAITING) ||
-                        arena.getStatus() == GameState.starting && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_STARTING)) {
+                if (arena.getStatus() == GameState.waiting && BedWars.config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_WAITING) ||
+                        arena.getStatus() == GameState.starting && BedWars.config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_STARTING)) {
                     String prefixListPath = arena.getStatus() == GameState.waiting ? Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_WAITING : Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_STARTING;
                     String suffixListPath = arena.getStatus() == GameState.waiting ? Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_WAITING : Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_STARTING;
                     arena.getPlayers().forEach(inGame -> {
@@ -212,8 +208,8 @@ public class BedWarsScoreboard {
             }
         } else {
             // multi-arena lobby tab formatting
-            if (config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_LOBBY)) {
-                World lobbyWorld = Bukkit.getWorld(config.getLobbyWorldName());
+            if (BedWars.config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_LOBBY)) {
+                World lobbyWorld = Bukkit.getWorld(BedWars.config.getLobbyWorldName());
                 if (lobbyWorld != null) {
                     lobbyWorld.getPlayers().forEach(inGame -> {
                         addToTabList(inGame, Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_LOBBY, Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_LOBBY);
@@ -284,15 +280,15 @@ public class BedWarsScoreboard {
             // General static placeholders
             current = current
                     .replace("{server_ip}", BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
-                    .replace("{version}", plugin.getDescription().getVersion())
-                    .replace("{server}", config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID))
+                    .replace("{version}", BedWars.plugin.getDescription().getVersion())
+                    .replace("{server}", BedWars.config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID))
                     .replace("{playername}", player.getName())
                     .replace("{player}", player.getDisplayName())
-                    .replace("{money}", String.valueOf(getEconomy().getMoney(player)));
+                    .replace("{money}", String.valueOf(BedWars.getEconomy().getMoney(player)));
 
             if (arena == null) {
                 // Lobby scoreboard
-                current = replaceStatsPlaceholders(getPlayer(), current, true);
+                current = Misc.replaceStatsPlaceholders(getPlayer(), current, true);
             } else {
                 // Game scoreboard
                 current = current
@@ -417,8 +413,8 @@ public class BedWarsScoreboard {
                     }
                 };
             }
-            handle.showPlayersHealth(line, config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_IN_TAB));
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            handle.showPlayersHealth(line, BedWars.config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_IN_TAB));
+            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
                 if (arena != null && handle != null) {
                     arena.getPlayers().forEach(player -> handle.refreshHealth(player, (int) Math.ceil(player.getHealth())));
                     if (arena.isSpectator(getPlayer())) {
@@ -487,25 +483,25 @@ public class BedWarsScoreboard {
         String st = "-";
         switch (arena.getNextEvent()) {
             case EMERALD_GENERATOR_TIER_II:
-                st = getMsg(getPlayer(), Messages.NEXT_EVENT_EMERALD_UPGRADE_II);
+                st = Language.getMsg(getPlayer(), Messages.NEXT_EVENT_EMERALD_UPGRADE_II);
                 break;
             case EMERALD_GENERATOR_TIER_III:
-                st = getMsg(getPlayer(), Messages.NEXT_EVENT_EMERALD_UPGRADE_III);
+                st = Language.getMsg(getPlayer(), Messages.NEXT_EVENT_EMERALD_UPGRADE_III);
                 break;
             case DIAMOND_GENERATOR_TIER_II:
-                st = getMsg(getPlayer(), Messages.NEXT_EVENT_DIAMOND_UPGRADE_II);
+                st = Language.getMsg(getPlayer(), Messages.NEXT_EVENT_DIAMOND_UPGRADE_II);
                 break;
             case DIAMOND_GENERATOR_TIER_III:
-                st = getMsg(getPlayer(), Messages.NEXT_EVENT_DIAMOND_UPGRADE_III);
+                st = Language.getMsg(getPlayer(), Messages.NEXT_EVENT_DIAMOND_UPGRADE_III);
                 break;
             case GAME_END:
-                st = getMsg(getPlayer(), Messages.NEXT_EVENT_GAME_END);
+                st = Language.getMsg(getPlayer(), Messages.NEXT_EVENT_GAME_END);
                 break;
             case BEDS_DESTROY:
-                st = getMsg(getPlayer(), Messages.NEXT_EVENT_BEDS_DESTROY);
+                st = Language.getMsg(getPlayer(), Messages.NEXT_EVENT_BEDS_DESTROY);
                 break;
             case ENDER_DRAGON:
-                st = getMsg(getPlayer(), Messages.NEXT_EVENT_DRAGON_SPAWN);
+                st = Language.getMsg(getPlayer(), Messages.NEXT_EVENT_DRAGON_SPAWN);
                 break;
         }
 
@@ -589,7 +585,7 @@ public class BedWarsScoreboard {
 
         if (arena == null) {
             // Lobby scoreboard
-            if (getServerType() == ServerType.SHARED  || !config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR)) {
+            if (BedWars.getServerType() == ServerType.SHARED  || !BedWars.config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR)) {
                 if (scoreboard != null) {
                     scoreboard.remove();
                 }
@@ -598,18 +594,18 @@ public class BedWarsScoreboard {
             lines = Language.getList(player, Messages.SCOREBOARD_LOBBY);
         } else {
             // Game scoreboard
-            if (!config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_GAME_SIDEBAR)) {
+            if (!BedWars.config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_GAME_SIDEBAR)) {
                 if (scoreboard != null) {
                     scoreboard.remove();
                 }
                 return;
             }
             if (arena.getStatus() == GameState.waiting) {
-                lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".waiting", Messages.SCOREBOARD_DEFAULT_WAITING);
+                lines = Language.getScoreboard(player, "scoreboard." + arena.getGroup() + ".waiting", Messages.SCOREBOARD_DEFAULT_WAITING);
             } else if (arena.getStatus() == GameState.starting) {
-                lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".starting", Messages.SCOREBOARD_DEFAULT_STARTING);
+                lines = Language.getScoreboard(player, "scoreboard." + arena.getGroup() + ".starting", Messages.SCOREBOARD_DEFAULT_STARTING);
             } else if (arena.getStatus() == GameState.playing || arena.getStatus() == GameState.restarting) {
-                lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING);
+                lines = Language.getScoreboard(player, "scoreboard." + arena.getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING);
             }
         }
 
@@ -623,7 +619,7 @@ public class BedWarsScoreboard {
         if (scoreboard == null) {
             if (delay) {
                 List<String> finalLines = lines;
-                Bukkit.getScheduler().runTaskLater(plugin, () -> new BedWarsScoreboard(player, finalLines, arena), 5L);
+                Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> new BedWarsScoreboard(player, finalLines, arena), 5L);
             } else {
                 new BedWarsScoreboard(player, lines, arena);
             }

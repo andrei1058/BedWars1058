@@ -40,10 +40,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.andrei1058.bedwars.BedWars.mainCmd;
-import static com.andrei1058.bedwars.commands.Misc.createArmorStand;
-import static com.andrei1058.bedwars.commands.Misc.removeArmorStand;
-
 public class SetBed extends SubCommand {
 
     public SetBed(ParentCommand parent, String name) {
@@ -88,15 +84,15 @@ public class SetBed extends SubCommand {
                 if (ss.getConfig().getYml().get("Team") != null) {
                     p.sendMessage(ss.getPrefix() + "Available teams: ");
                     for (String team : Objects.requireNonNull(ss.getConfig().getYml().getConfigurationSection("Team")).getKeys(false)) {
-                        p.spigot().sendMessage(Misc.msgHoverClick(ChatColor.GOLD + " " + '▪' + " " + ss.getTeamColor(team) + team, ChatColor.WHITE + "Set bed for " + ss.getTeamColor(team) + team, "/" + mainCmd + " setBed " + team, ClickEvent.Action.RUN_COMMAND));
+                        p.spigot().sendMessage(Misc.msgHoverClick(ChatColor.GOLD + " " + '▪' + " " + ss.getTeamColor(team) + team, ChatColor.WHITE + "Set bed for " + ss.getTeamColor(team) + team, "/" + BedWars.mainCmd + " setBed " + team, ClickEvent.Action.RUN_COMMAND));
                     }
                 }
             } else {
                 String team = ss.getTeamColor(args[0]) + args[0];
                 if (ss.getConfig().getYml().get("Team." + args[0] + ".Bed") != null) {
-                    removeArmorStand("bed", ss.getConfig().getArenaLoc("Team." + args[0] + ".Bed"), null);
+                    com.andrei1058.bedwars.commands.Misc.removeArmorStand("bed", ss.getConfig().getArenaLoc("Team." + args[0] + ".Bed"), null);
                 }
-                createArmorStand(team + " " + ChatColor.GOLD + "BED SET", p.getLocation().add(0.5, 0, 0.5), null);
+                com.andrei1058.bedwars.commands.Misc.createArmorStand(team + " " + ChatColor.GOLD + "BED SET", p.getLocation().add(0.5, 0, 0.5), null);
                 ss.getConfig().saveArenaLoc("Team." + args[0] + ".Bed", p.getLocation());
                 p.sendMessage(ss.getPrefix() + "Bed set for: " + team);
 

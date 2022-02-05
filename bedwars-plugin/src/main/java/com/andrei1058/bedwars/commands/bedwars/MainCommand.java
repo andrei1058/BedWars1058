@@ -47,9 +47,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.andrei1058.bedwars.BedWars.*;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
-
 public class MainCommand extends BukkitCommand implements ParentCommand {
 
     /* SubCommands ArenaList */
@@ -68,7 +65,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         new CmdLeave(this, "leave");
         new CmdLang(this, "lang");
         new CmdTeleporter(this, "teleporter");
-        if (getServerType() != ServerType.BUNGEE) {
+        if (BedWars.getServerType() != ServerType.BUNGEE) {
             new CmdGUI(this, "gui");
         }
         new CmdStats(this, "stats");
@@ -124,7 +121,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
                         Bukkit.dispatchCommand(s, getName() + " cmds");
                     } else {
                         s.sendMessage("");
-                        s.sendMessage("§8§l" + dot + " §6" + plugin.getDescription().getName() + " v" + plugin.getDescription().getVersion() + " §7- §c Admin Commands");
+                        s.sendMessage("§8§l" + dot + " §6" + BedWars.plugin.getDescription().getName() + " v" + BedWars.plugin.getDescription().getVersion() + " §7- §c Admin Commands");
                         s.sendMessage("");
                         sendSubCommands((Player) s);
                     }
@@ -137,7 +134,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
                     return true;
                 }
                 /* Send player commands */
-                Bukkit.dispatchCommand(s, mainCmd + " cmds");
+                Bukkit.dispatchCommand(s, BedWars.mainCmd + " cmds");
             }
             return true;
         }
@@ -153,7 +150,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
 
         if (!commandFound) {
             if (s instanceof Player) {
-                s.sendMessage(getMsg((Player) s, Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
+                s.sendMessage(Language.getMsg((Player) s, Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
             } else {
                 s.sendMessage(Language.getDefaultLanguage().m(Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
             }
@@ -162,8 +159,8 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
     }
 
     public static boolean isArenaGroup(String var) {
-        if (config.getYml().get("arenaGroups") != null) {
-            return config.getYml().getStringList("arenaGroups").contains(var);
+        if (BedWars.config.getYml().get("arenaGroups") != null) {
+            return BedWars.config.getYml().getStringList("arenaGroups").contains(var);
         }
         return var.equalsIgnoreCase("default");
     }
@@ -226,7 +223,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isLobbySet(Player p) {
         if (BedWars.getServerType() == ServerType.BUNGEE) return true;
-        if (config.getLobbyWorldName().isEmpty()) {
+        if (BedWars.config.getLobbyWorldName().isEmpty()) {
             if (p != null) {
                 p.sendMessage("§c▪ §7You have to set the lobby location first!");
             }

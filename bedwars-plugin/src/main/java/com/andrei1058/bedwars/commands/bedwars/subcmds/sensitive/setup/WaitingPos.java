@@ -35,8 +35,6 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.andrei1058.bedwars.BedWars.mainCmd;
-
 public class WaitingPos extends SubCommand {
 
     public WaitingPos(ParentCommand parent, String name) {
@@ -55,7 +53,7 @@ public class WaitingPos extends SubCommand {
             return true;
         }
         if (args.length == 0) {
-            p.sendMessage("§c▪ §7Usage: /" + mainCmd + " "+getSubCommandName()+" 1 or 2");
+            p.sendMessage("§c▪ §7Usage: /" + BedWars.mainCmd + " "+getSubCommandName()+" 1 or 2");
         } else {
             if (args[0].equalsIgnoreCase("1") || args[0].equalsIgnoreCase("2")) {
                 p.sendMessage("§6 ▪ §7Pos " + args[0] + " set!");
@@ -69,7 +67,7 @@ public class WaitingPos extends SubCommand {
                     p.spigot().sendMessage(Misc.msgHoverClick("§c ▪ §7/"+ BedWars.mainCmd+" waitingPos 2", "§dSet pos 2", "/"+getParent().getName()+" waitingPos 2", ClickEvent.Action.RUN_COMMAND));
                 }
             } else {
-                p.sendMessage("§c▪ §7Usage: /" + mainCmd + " "+getSubCommandName()+" 1 or 2");
+                p.sendMessage("§c▪ §7Usage: /" + BedWars.mainCmd + " "+getSubCommandName()+" 1 or 2");
             }
         }
         if (!((ss.getConfig().getYml().get("waiting.Pos1") == null || ss.getConfig().getYml().get("waiting.Pos2") == null))){

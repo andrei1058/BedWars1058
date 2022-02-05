@@ -38,9 +38,6 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import static com.andrei1058.bedwars.BedWars.nms;
-import static com.andrei1058.bedwars.BedWars.plugin;
-
 @SuppressWarnings("WeakerAccess")
 public class BuyItem implements IBuyItem {
 
@@ -62,7 +59,7 @@ public class BuyItem implements IBuyItem {
             return;
         }
 
-        itemStack = nms.createItemStack(yml.getString(path + ".material"),
+        itemStack = BedWars.nms.createItemStack(yml.getString(path + ".material"),
                 yml.get(path + ".amount") == null ? 1 : yml.getInt(path + ".amount"),
                 (short) (yml.get(path + ".data") == null ? 1 : yml.getInt(path + ".data")));
 
@@ -82,7 +79,7 @@ public class BuyItem implements IBuyItem {
                 try {
                     Enchantment.getByName(stuff[0]);
                 } catch (Exception ex) {
-                    plugin.getLogger().severe("BuyItem: Invalid enchants " + stuff[0] + " at: " + path + ".enchants");
+                    BedWars.plugin.getLogger().severe("BuyItem: Invalid enchants " + stuff[0] + " at: " + path + ".enchants");
                     continue;
                 }
                 int ieee = 1;
@@ -90,7 +87,7 @@ public class BuyItem implements IBuyItem {
                     try {
                         ieee = Integer.parseInt(stuff[1]);
                     } catch (Exception exx) {
-                        plugin.getLogger().severe("BuyItem: Invalid int " + stuff[1] + " at: " + path + ".enchants");
+                        BedWars.plugin.getLogger().severe("BuyItem: Invalid int " + stuff[1] + " at: " + path + ".enchants");
                         continue;
                     }
                 }
@@ -102,7 +99,7 @@ public class BuyItem implements IBuyItem {
         if (yml.get(path + ".potion") != null && (itemStack.getType() == Material.POTION)) {
             // 1.16+ custom color
             if (yml.getString(path + ".potion-color") != null && !yml.getString(path + ".potion-color").isEmpty()) {
-                itemStack = nms.setTag(itemStack, "CustomPotionColor", yml.getString(path + ".potion-color"));
+                itemStack = BedWars.nms.setTag(itemStack, "CustomPotionColor", yml.getString(path + ".potion-color"));
             }
             PotionMeta imm = (PotionMeta) itemStack.getItemMeta();
             if (imm != null) {
@@ -112,7 +109,7 @@ public class BuyItem implements IBuyItem {
                     try {
                         PotionEffectType.getByName(stuff[0].toUpperCase());
                     } catch (Exception ex) {
-                        plugin.getLogger().severe("BuyItem: Invalid potion effect " + stuff[0] + " at: " + path + ".potion");
+                        BedWars.plugin.getLogger().severe("BuyItem: Invalid potion effect " + stuff[0] + " at: " + path + ".potion");
                         continue;
                     }
                     int duration = 50, amplifier = 1;
@@ -120,13 +117,13 @@ public class BuyItem implements IBuyItem {
                         try {
                             duration = Integer.parseInt(stuff[1]);
                         } catch (Exception exx) {
-                            plugin.getLogger().severe("BuyItem: Invalid int (duration) " + stuff[1] + " at: " + path + ".potion");
+                            BedWars.plugin.getLogger().severe("BuyItem: Invalid int (duration) " + stuff[1] + " at: " + path + ".potion");
                             continue;
                         }
                         try {
                             amplifier = Integer.parseInt(stuff[2]);
                         } catch (Exception exx) {
-                            plugin.getLogger().severe("BuyItem: Invalid int (amplifier) " + stuff[2] + " at: " + path + ".potion");
+                            BedWars.plugin.getLogger().severe("BuyItem: Invalid int (amplifier) " + stuff[2] + " at: " + path + ".potion");
                             continue;
                         }
                     }
@@ -135,7 +132,7 @@ public class BuyItem implements IBuyItem {
                 itemStack.setItemMeta(imm);
             }
 
-            itemStack = nms.setTag(itemStack, "Potion", "minecraft:water");
+            itemStack = BedWars.nms.setTag(itemStack, "Potion", "minecraft:water");
             if (parent.getItemStack().getType() == Material.POTION && imm != null && !imm.getCustomEffects().isEmpty()) {
                 ItemStack parentItemStack = parent.getItemStack();
                 if (parentItemStack.getItemMeta() != null) {
@@ -145,7 +142,7 @@ public class BuyItem implements IBuyItem {
                     }
                     parentItemStack.setItemMeta(potionMeta);
                 }
-                parentItemStack = nms.setTag(parentItemStack, "Potion", "minecraft:water");
+                parentItemStack = BedWars.nms.setTag(parentItemStack, "Potion", "minecraft:water");
                 parent.setItemStack(parentItemStack);
             }
         }
@@ -176,7 +173,7 @@ public class BuyItem implements IBuyItem {
         ItemStack i = itemStack.clone();
         BedWars.debug("Giving BuyItem: " + getUpgradeIdentifier() + " to: " + player.getName());
 
-        if (autoEquip && nms.isArmor(itemStack)) {
+        if (autoEquip && BedWars.nms.isArmor(itemStack)) {
             Material m = i.getType();
 
             ItemMeta im = i.getItemMeta();
@@ -189,27 +186,27 @@ public class BuyItem implements IBuyItem {
                 for (TeamEnchant e : arena.getTeam(player).getArmorsEnchantments()) {
                     im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
                 }
-                if (permanent) nms.setUnbreakable(im);
+                if (permanent) BedWars.nms.setUnbreakable(im);
                 i.setItemMeta(im);
             }
 
-            if (m == Material.LEATHER_HELMET || m == Material.CHAINMAIL_HELMET || m == Material.DIAMOND_HELMET || m == nms.materialGoldenHelmet() || m == Material.IRON_HELMET) {
-                if (permanent) i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
+            if (m == Material.LEATHER_HELMET || m == Material.CHAINMAIL_HELMET || m == Material.DIAMOND_HELMET || m == BedWars.nms.materialGoldenHelmet() || m == Material.IRON_HELMET) {
+                if (permanent) i = BedWars.nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
                 player.getInventory().setHelmet(i);
-            } else if (m == Material.LEATHER_CHESTPLATE || m == Material.CHAINMAIL_CHESTPLATE || m == nms.materialGoldenChestPlate() || m == Material.DIAMOND_CHESTPLATE || m == Material.IRON_CHESTPLATE) {
-                if (permanent) i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
+            } else if (m == Material.LEATHER_CHESTPLATE || m == Material.CHAINMAIL_CHESTPLATE || m == BedWars.nms.materialGoldenChestPlate() || m == Material.DIAMOND_CHESTPLATE || m == Material.IRON_CHESTPLATE) {
+                if (permanent) i = BedWars.nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
                 player.getInventory().setChestplate(i);
-            } else if (m == Material.LEATHER_LEGGINGS || m == Material.CHAINMAIL_LEGGINGS || m == Material.DIAMOND_LEGGINGS || m == nms.materialGoldenLeggings() || m == Material.IRON_LEGGINGS) {
-                if (permanent) i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
+            } else if (m == Material.LEATHER_LEGGINGS || m == Material.CHAINMAIL_LEGGINGS || m == Material.DIAMOND_LEGGINGS || m == BedWars.nms.materialGoldenLeggings() || m == Material.IRON_LEGGINGS) {
+                if (permanent) i = BedWars.nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
                 player.getInventory().setLeggings(i);
             } else {
-                if (permanent) i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
+                if (permanent) i = BedWars.nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
                 player.getInventory().setBoots(i);
             }
             player.updateInventory();
             Sounds.playSound("shop-auto-equip", player);
 
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
                 // #274
                 if (player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
                     for (Player p : arena.getPlayers()) {
@@ -222,16 +219,16 @@ public class BuyItem implements IBuyItem {
         } else {
 
             ItemMeta im = i.getItemMeta();
-            i = nms.colourItem(i, arena.getTeam(player));
+            i = BedWars.nms.colourItem(i, arena.getTeam(player));
             if (im != null) {
-                if (permanent) nms.setUnbreakable(im);
+                if (permanent) BedWars.nms.setUnbreakable(im);
 
                 if (i.getType() == Material.BOW) {
-                    if (permanent) nms.setUnbreakable(im);
+                    if (permanent) BedWars.nms.setUnbreakable(im);
                     for (TeamEnchant e : arena.getTeam(player).getBowsEnchantments()) {
                         im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
                     }
-                } else if (nms.isSword(i) || nms.isAxe(i)) {
+                } else if (BedWars.nms.isSword(i) || BedWars.nms.isAxe(i)) {
                     for (TeamEnchant e : arena.getTeam(player).getSwordsEnchantments()) {
                         im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
                     }
@@ -240,7 +237,7 @@ public class BuyItem implements IBuyItem {
             }
 
             if (permanent) {
-                i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
+                i = BedWars.nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
             }
         }
 
@@ -251,7 +248,7 @@ public class BuyItem implements IBuyItem {
                 if (itm.getType() == Material.AIR) continue;
                 if (!BedWars.nms.isSword(itm)) continue;
                 if (itm == i) continue;
-                if (nms.isCustomBedWarsItem(itm) && nms.getCustomData(itm).equals("DEFAULT_ITEM")) {
+                if (BedWars.nms.isCustomBedWarsItem(itm) && BedWars.nms.getCustomData(itm).equals("DEFAULT_ITEM")) {
                     if (BedWars.nms.getDamage(itm) <= BedWars.nms.getDamage(i)) {
                         player.getInventory().remove(itm);
                     }

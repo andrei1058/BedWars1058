@@ -43,8 +43,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.andrei1058.bedwars.commands.Misc.createArmorStand;
-
 public class AddGenerator extends SubCommand {
 
     public AddGenerator(ParentCommand parent, String name) {
@@ -89,7 +87,7 @@ public class AddGenerator extends SubCommand {
             saveTeamGen(p.getLocation(), team, ss, "Gold");
             saveTeamGen(p.getLocation(), team, ss, "Emerald");
 
-            createArmorStand(ChatColor.GOLD + "Generator set for team: " + ss.getTeamColor(team) + team, p.getLocation(), ss.getConfig().stringLocationArenaFormat(p.getLocation()));
+            com.andrei1058.bedwars.commands.Misc.createArmorStand(ChatColor.GOLD + "Generator set for team: " + ss.getTeamColor(team) + team, p.getLocation(), ss.getConfig().stringLocationArenaFormat(p.getLocation()));
             p.sendMessage(ss.getPrefix() + "Generator set for team: " + ss.getTeamColor(team) + team);
 
             Bukkit.dispatchCommand(p, getParent().getName());
@@ -120,7 +118,7 @@ public class AddGenerator extends SubCommand {
 
             ss.getConfig().set("generator." + gen, saved);
             p.sendMessage(ss.getPrefix() + gen + " generator was added!");
-            createArmorStand(ChatColor.GOLD + gen + " SET", p.getLocation(), ss.getConfig().stringLocationArenaFormat(p.getLocation()));
+            com.andrei1058.bedwars.commands.Misc.createArmorStand(ChatColor.GOLD + gen + " SET", p.getLocation(), ss.getConfig().stringLocationArenaFormat(p.getLocation()));
             if (ss.getSetupType() == SetupType.ASSISTED) {
                 Bukkit.dispatchCommand(p, getParent().getName());
             }
@@ -154,7 +152,7 @@ public class AddGenerator extends SubCommand {
                 gen = "Emerald";
             }
 
-            createArmorStand(ChatColor.GOLD + gen + " generator added for team: " + ss.getTeamColor(team) + team, p.getLocation(), ss.getConfig().stringLocationArenaFormat(p.getLocation()));
+            com.andrei1058.bedwars.commands.Misc.createArmorStand(ChatColor.GOLD + gen + " generator added for team: " + ss.getTeamColor(team) + team, p.getLocation(), ss.getConfig().stringLocationArenaFormat(p.getLocation()));
             p.sendMessage(ss.getPrefix() + gen + " generator added for team: " + ss.getTeamColor(team) + team);
             saveTeamGen(p.getLocation(), team, ss, gen);
             com.andrei1058.bedwars.BedWars.nms.sendTitle(p, " ", ChatColor.GOLD + gen + ChatColor.GREEN + " generator for " + ss.getTeamColor(team) + team + ChatColor.GREEN + " was added!", 5, 60, 5);
@@ -174,7 +172,7 @@ public class AddGenerator extends SubCommand {
             saveTeamGen(p.getLocation(), team, ss, "Iron");
             saveTeamGen(p.getLocation(), team, ss, "Gold");
             saveTeamGen(p.getLocation(), team, ss, "Emerald");
-            createArmorStand(ChatColor.GOLD + "Generator set for team: " + ss.getTeamColor(team) + team, p.getLocation(), ss.getConfig().stringLocationArenaFormat(p.getLocation()));
+            com.andrei1058.bedwars.commands.Misc.createArmorStand(ChatColor.GOLD + "Generator set for team: " + ss.getTeamColor(team) + team, p.getLocation(), ss.getConfig().stringLocationArenaFormat(p.getLocation()));
             p.sendMessage(ss.getPrefix() + "Generator set for team: " + ss.getTeamColor(team) + team);
             Bukkit.dispatchCommand(p, getParent().getName());
 

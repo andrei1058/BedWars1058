@@ -36,8 +36,6 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
-
 public class PAPISupport extends PlaceholderExpansion {
 
     private static final SimpleDateFormat elapsedFormat = new SimpleDateFormat("HH:mm");
@@ -112,11 +110,11 @@ public class PAPISupport extends PlaceholderExpansion {
         switch (s) {
             case "stats_firstplay":
                 Instant firstPlay = BedWars.getStatsManager().get(player.getUniqueId()).getFirstPlay();
-                replay = new SimpleDateFormat(getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(firstPlay != null ? Timestamp.from(firstPlay) : null);
+                replay = new SimpleDateFormat(Language.getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(firstPlay != null ? Timestamp.from(firstPlay) : null);
                 break;
             case "stats_lastplay":
                 Instant lastPlay = BedWars.getStatsManager().get(player.getUniqueId()).getLastPlay();
-                replay = new SimpleDateFormat(getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(lastPlay != null ? Timestamp.from(lastPlay) : null);
+                replay = new SimpleDateFormat(Language.getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(lastPlay != null ? Timestamp.from(lastPlay) : null);
                 break;
             case "stats_total_kills":
                 replay = String.valueOf(BedWars.getStatsManager().get(player.getUniqueId()).getTotalKills());

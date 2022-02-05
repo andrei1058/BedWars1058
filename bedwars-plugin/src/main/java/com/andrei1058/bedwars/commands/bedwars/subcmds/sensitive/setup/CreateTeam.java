@@ -34,8 +34,6 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-import static com.andrei1058.bedwars.BedWars.mainCmd;
-
 public class CreateTeam extends SubCommand {
 
     public CreateTeam(ParentCommand parent, String name) {
@@ -54,7 +52,7 @@ public class CreateTeam extends SubCommand {
             return true;
         }
         if (args.length < 2) {
-            p.sendMessage("§c▪ §7Usage: /" + mainCmd + " createTeam §o<name> §o<color>");
+            p.sendMessage("§c▪ §7Usage: /" + com.andrei1058.bedwars.BedWars.mainCmd + " createTeam §o<name> §o<color>");
             StringBuilder colors = new StringBuilder("§7");
             for (TeamColor t : TeamColor.values()) {
                 colors.append(t.chat()).append(t.toString()).append(ChatColor.GRAY).append(", ");

@@ -55,6 +55,7 @@ import com.andrei1058.bedwars.arena.tasks.GameStartingTask;
 import com.andrei1058.bedwars.arena.tasks.ReJoinTask;
 import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import com.andrei1058.bedwars.arena.team.TeamAssigner;
+import com.andrei1058.bedwars.arena.upgrades.BaseListener;
 import com.andrei1058.bedwars.configuration.ArenaConfig;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.levels.internal.InternalLevel;
@@ -91,10 +92,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
-import static com.andrei1058.bedwars.BedWars.*;
-import static com.andrei1058.bedwars.api.language.Language.*;
-import static com.andrei1058.bedwars.arena.upgrades.BaseListener.isOnABase;
-
 @SuppressWarnings("WeakerAccess")
 public class Arena implements IArena {
 
@@ -102,7 +99,7 @@ public class Arena implements IArena {
     private static final HashMap<Player, IArena> arenaByPlayer = new HashMap<>();
     private static final HashMap<String, IArena> arenaByIdentifier = new HashMap<>();
     private static final LinkedList<IArena> arenas = new LinkedList<>();
-    private static int gamesBeforeRestart = config.getInt(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART);
+    private static int gamesBeforeRestart = BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART);
     public static HashMap<UUID, Integer> afkCheck = new HashMap<>();
     public static HashMap<UUID, Integer> magicMilk = new HashMap<>();
 
@@ -186,30 +183,30 @@ public class Arena implements IArena {
      * @param p    - This will send messages to the player if something went wrong while loading the arena. Can be NULL.
      */
     public Arena(String name, Player p) {
-        if (!autoscale) {
+        if (!BedWars.autoscale) {
             for (IArena mm : enableQueue) {
                 if (mm.getArenaName().equalsIgnoreCase(name)) {
-                    plugin.getLogger().severe("Tried to load arena " + name + " but it is already in the enable queue.");
+                    BedWars.plugin.getLogger().severe("Tried to load arena " + name + " but it is already in the enable queue.");
                     if (p != null)
                         p.sendMessage(ChatColor.RED + "Tried to load arena " + name + " but it is already in the enable queue.");
                     return;
                 }
             }
             if (getArenaByName(name) != null) {
-                plugin.getLogger().severe("Tried to load arena " + name + " but it is already enabled.");
+                BedWars.plugin.getLogger().severe("Tried to load arena " + name + " but it is already enabled.");
                 if (p != null)
                     p.sendMessage(ChatColor.RED + "Tried to load arena " + name + " but it is already enabled.");
                 return;
             }
         }
         this.arenaName = name;
-        if (autoscale) {
+        if (BedWars.autoscale) {
             this.worldName = BedWars.arenaManager.generateGameID();
         } else {
             this.worldName = arenaName;
         }
 
-        cm = new ArenaConfig(BedWars.plugin, name, plugin.getDataFolder().getPath() + "/Arenas");
+        cm = new ArenaConfig(BedWars.plugin, name, BedWars.plugin.getDataFolder().getPath() + "/Arenas");
 
         //if (mapManager.isLevelWorld()) {
         //    Main.plugin.getLogger().severe("COULD NOT LOAD ARENA: " + name);
@@ -219,12 +216,12 @@ public class Arena implements IArena {
         yml = cm.getYml();
         if (yml.get("Team") == null) {
             if (p != null) p.sendMessage("You didn't set any team for arena: " + name);
-            plugin.getLogger().severe("You didn't set any team for arena: " + name);
+            BedWars.plugin.getLogger().severe("You didn't set any team for arena: " + name);
             return;
         }
         if (yml.getConfigurationSection("Team").getKeys(false).size() < 2) {
             if (p != null) p.sendMessage("§cYou must set at least 2 teams on: " + name);
-            plugin.getLogger().severe("You must set at least 2 teams on: " + name);
+            BedWars.plugin.getLogger().severe("You must set at least 2 teams on: " + name);
             return;
         }
         maxInTeam = yml.getInt("maxInTeam");
@@ -232,8 +229,8 @@ public class Arena implements IArena {
         minPlayers = yml.getInt("minPlayers");
         allowSpectate = yml.getBoolean("allowSpectate");
         islandRadius = yml.getInt(ConfigPath.ARENA_ISLAND_RADIUS);
-        if (config.getYml().get("arenaGroups") != null) {
-            if (config.getYml().getStringList("arenaGroups").contains(yml.getString("group"))) {
+        if (BedWars.config.getYml().get("arenaGroups") != null) {
+            if (BedWars.config.getYml().getStringList("arenaGroups").contains(yml.getString("group"))) {
                 group = yml.getString("group");
             }
         }
@@ -241,7 +238,7 @@ public class Arena implements IArena {
 
         if (!BedWars.getAPI().getRestoreAdapter().isWorld(name)) {
             if (p != null) p.sendMessage(ChatColor.RED + "There isn't any map called " + name);
-            plugin.getLogger().log(Level.WARNING, "There isn't any map called " + name);
+            BedWars.plugin.getLogger().log(Level.WARNING, "There isn't any map called " + name);
             return;
         }
 
@@ -254,28 +251,28 @@ public class Arena implements IArena {
                 TeamColor.valueOf(colorS);
             } catch (Exception e) {
                 if (p != null) p.sendMessage("§cInvalid color at team: " + team + " in arena: " + name);
-                plugin.getLogger().severe("Invalid color at team: " + team + " in arena: " + name);
+                BedWars.plugin.getLogger().severe("Invalid color at team: " + team + " in arena: " + name);
                 error = true;
             }
             for (String stuff : Arrays.asList("Color", "Spawn", "Bed", "Shop", "Upgrade", "Iron", "Gold")) {
                 if (yml.get("Team." + team + "." + stuff) == null) {
                     if (p != null) p.sendMessage("§c" + stuff + " not set for " + team + " team on: " + name);
-                    plugin.getLogger().severe(stuff + " not set for " + team + " team on: " + name);
+                    BedWars.plugin.getLogger().severe(stuff + " not set for " + team + " team on: " + name);
                     error = true;
                 }
             }
         }
         if (yml.get("generator.Diamond") == null) {
             if (p != null) p.sendMessage("§cThere isn't set any Diamond generator on: " + name);
-            plugin.getLogger().severe("There isn't set any Diamond generator on: " + name);
+            BedWars.plugin.getLogger().severe("There isn't set any Diamond generator on: " + name);
         }
         if (yml.get("generator.Emerald") == null) {
             if (p != null) p.sendMessage("§cThere isn't set any Emerald generator on: " + name);
-            plugin.getLogger().severe("There isn't set any Emerald generator on: " + name);
+            BedWars.plugin.getLogger().severe("There isn't set any Emerald generator on: " + name);
         }
         if (yml.get("waiting.Loc") == null) {
             if (p != null) p.sendMessage("§cWaiting spawn not set on: " + name);
-            plugin.getLogger().severe("Waiting spawn not set on: " + name);
+            BedWars.plugin.getLogger().severe("Waiting spawn not set on: " + name);
             return;
         }
         if (error) return;
@@ -289,11 +286,11 @@ public class Arena implements IArena {
      */
     @Override
     public void init(World world) {
-        if (!autoscale) {
+        if (!BedWars.autoscale) {
             if (getArenaByName(arenaName) != null) return;
         }
         removeFromEnableQueue(this);
-        debug("Initialized arena " + getArenaName() + " with map " + world.getName());
+        BedWars.debug("Initialized arena " + getArenaName() + " with map " + world.getName());
         this.world = world;
         this.worldName = world.getName();
         getConfig().setName(worldName);
@@ -332,7 +329,7 @@ public class Arena implements IArena {
                 for (String s : yml.getStringList("generator." + type)) {
                     location = cm.convertStringToArenaLocation(s);
                     if (location == null) {
-                        plugin.getLogger().severe("Invalid location for " + type + " generator: " + s);
+                        BedWars.plugin.getLogger().severe("Invalid location for " + type + " generator: " + s);
                         continue;
                     }
                     oreGenerators.add(new OreGenerator(location, this, GeneratorType.valueOf(type.toUpperCase()), null));
@@ -348,10 +345,10 @@ public class Arena implements IArena {
 
         /* Check if lobby removal is set */
         if (!getConfig().getYml().isSet(ConfigPath.ARENA_WAITING_POS1) && getConfig().getYml().isSet(ConfigPath.ARENA_WAITING_POS2)) {
-            plugin.getLogger().severe("Lobby Pos1 isn't set! The arena's lobby won't be removed!");
+            BedWars.plugin.getLogger().severe("Lobby Pos1 isn't set! The arena's lobby won't be removed!");
         }
         if (getConfig().getYml().isSet(ConfigPath.ARENA_WAITING_POS1) && !getConfig().getYml().isSet(ConfigPath.ARENA_WAITING_POS2)) {
-            plugin.getLogger().severe("Lobby Pos2 isn't set! The arena's lobby won't be removed!");
+            BedWars.plugin.getLogger().severe("Lobby Pos2 isn't set! The arena's lobby won't be removed!");
         }
 
         /* Register arena signs */
@@ -393,11 +390,11 @@ public class Arena implements IArena {
             nextEvents.add(ne.toString());
         }
 
-        upgradeDiamondsCount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_START) == null ?
+        upgradeDiamondsCount = BedWars.getGeneratorsCfg().getInt(BedWars.getGeneratorsCfg().getYml().get(getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_START) == null ?
                 "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_II_START : getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_START);
-        upgradeEmeraldsCount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_START) == null ?
+        upgradeEmeraldsCount = BedWars.getGeneratorsCfg().getInt(BedWars.getGeneratorsCfg().getYml().get(getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_START) == null ?
                 "Default." + ConfigPath.GENERATOR_EMERALD_TIER_II_START : getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_START);
-        plugin.getLogger().info("Load done: " + getArenaName());
+        BedWars.plugin.getLogger().info("Load done: " + getArenaName());
 
 
         // entity tracking range - player
@@ -415,20 +412,20 @@ public class Arena implements IArena {
      */
     public boolean addPlayer(Player p, boolean skipOwnerCheck) {
         if (p == null) return false;
-        debug("Player added: " + p.getName() + " arena: " + getArenaName());
+        BedWars.debug("Player added: " + p.getName() + " arena: " + getArenaName());
         /* used for base enter/leave event */
-        isOnABase.remove(p);
+        BaseListener.isOnABase.remove(p);
         //
         if (getArenaByPlayer(p) != null) {
             return false;
         }
-        if (getParty().hasParty(p)) {
+        if (BedWars.getParty().hasParty(p)) {
             if (!skipOwnerCheck) {
-                if (!getParty().isOwner(p)) {
-                    p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_DENIED_NOT_PARTY_LEADER));
+                if (!BedWars.getParty().isOwner(p)) {
+                    p.sendMessage(Language.getMsg(p, Messages.COMMAND_JOIN_DENIED_NOT_PARTY_LEADER));
                     return false;
                 }
-                int partySize = (int) getParty().getMembers(p).stream().filter(member -> {
+                int partySize = (int) BedWars.getParty().getMembers(p).stream().filter(member -> {
                     IArena arena = Arena.getArenaByPlayer(member);
                     if (arena == null) {
                         return true;
@@ -437,10 +434,10 @@ public class Arena implements IArena {
                 }).count();
 
                 if (partySize > maxInTeam * getTeams().size() - getPlayers().size()) {
-                    p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_DENIED_PARTY_TOO_BIG));
+                    p.sendMessage(Language.getMsg(p, Messages.COMMAND_JOIN_DENIED_PARTY_TOO_BIG));
                     return false;
                 }
-                for (Player mem : getParty().getMembers(p)) {
+                for (Player mem : BedWars.getParty().getMembers(p)) {
                     if (mem == p) continue;
                     IArena a = Arena.getArenaByPlayer(mem);
                     if (a != null) {
@@ -460,8 +457,8 @@ public class Arena implements IArena {
 
         if (status == GameState.waiting || (status == GameState.starting && (startingTask != null && startingTask.getCountdown() > 1))) {
             if (players.size() >= maxPlayers && !isVip(p)) {
-                TextComponent text = new TextComponent(getMsg(p, Messages.COMMAND_JOIN_DENIED_IS_FULL));
-                text.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, config.getYml().getString("storeLink")));
+                TextComponent text = new TextComponent(Language.getMsg(p, Messages.COMMAND_JOIN_DENIED_IS_FULL));
+                text.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, BedWars.config.getYml().getString("storeLink")));
                 p.spigot().sendMessage(text);
                 return false;
             } else if (players.size() >= maxPlayers && isVip(p)) {
@@ -470,14 +467,14 @@ public class Arena implements IArena {
                     if (!isVip(on)) {
                         canJoin = true;
                         removePlayer(on, false);
-                        TextComponent vipKick = new TextComponent(getMsg(p, Messages.ARENA_JOIN_VIP_KICK));
-                        vipKick.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, config.getYml().getString("storeLink")));
+                        TextComponent vipKick = new TextComponent(Language.getMsg(p, Messages.ARENA_JOIN_VIP_KICK));
+                        vipKick.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, BedWars.config.getYml().getString("storeLink")));
                         p.spigot().sendMessage(vipKick);
                         break;
                     }
                 }
                 if (!canJoin) {
-                    p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_DENIED_IS_FULL_OF_VIPS));
+                    p.sendMessage(Language.getMsg(p, Messages.COMMAND_JOIN_DENIED_IS_FULL_OF_VIPS));
                     return false;
                 }
             }
@@ -499,9 +496,9 @@ public class Arena implements IArena {
             p.setHealth(20);
             for (Player on : players) {
                 on.sendMessage(
-                        getMsg(on, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG)
-                            .replace("{vPrefix}", getChatSupport().getPrefix(p))
-                            .replace("{vSuffix}", getChatSupport().getSuffix(p))
+                        Language.getMsg(on, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG)
+                            .replace("{vPrefix}", BedWars.getChatSupport().getPrefix(p))
+                            .replace("{vSuffix}", BedWars.getChatSupport().getSuffix(p))
                             .replace("{playername}", p.getName())
                             .replace("{player}", p.getDisplayName())
                             .replace("{on}", String.valueOf(getPlayers().size()))
@@ -514,10 +511,10 @@ public class Arena implements IArena {
             if (status == GameState.waiting) {
                 int teams = 0, teammates = 0;
                 for (Player on : getPlayers()) {
-                    if (getParty().isOwner(on)) {
+                    if (BedWars.getParty().isOwner(on)) {
                         teams++;
                     }
-                    if (getParty().hasParty(on)) {
+                    if (BedWars.getParty().hasParty(on)) {
                         teammates++;
                     }
                 }
@@ -540,7 +537,7 @@ public class Arena implements IArena {
             }
 
             /* save player inventory etc */
-            if (getServerType() != ServerType.BUNGEE) {
+            if (BedWars.getServerType() != ServerType.BUNGEE) {
                 new PlayerGoods(p, true);
                 playerLocation.put(p, p.getLocation());
             }
@@ -558,9 +555,9 @@ public class Arena implements IArena {
         }
 
         p.getInventory().setArmorContents(null);
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+        Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
             // bungee mode invisibility issues
-            if (getServerType() == ServerType.BUNGEE) {
+            if (BedWars.getServerType() == ServerType.BUNGEE) {
                 // fix invisibility issue
                 //if (BedWars.nms.getVersion() == 7) {
                 BedWars.nms.sendPlayerSpawnPackets(p, this);
@@ -578,7 +575,7 @@ public class Arena implements IArena {
                 }
             }
 
-            if (getServerType() == ServerType.BUNGEE) {
+            if (BedWars.getServerType() == ServerType.BUNGEE) {
                 // fix invisibility issue
                 //if (BedWars.nms.getVersion() == 7) {
                 BedWars.nms.sendPlayerSpawnPackets(p, this);
@@ -586,7 +583,7 @@ public class Arena implements IArena {
             }
         }, 17L);
 
-        if (getServerType() == ServerType.BUNGEE) {
+        if (BedWars.getServerType() == ServerType.BUNGEE) {
             p.getEnderChest().clear();
         }
 
@@ -613,7 +610,7 @@ public class Arena implements IArena {
      */
     public boolean addSpectator(@NotNull Player p, boolean playerBefore, Location staffTeleport) {
         if (allowSpectate || playerBefore || staffTeleport != null) {
-            debug("Spectator added: " + p.getName() + " arena: " + getArenaName());
+            BedWars.debug("Spectator added: " + p.getName() + " arena: " + getArenaName());
 
             if (!playerBefore) {
                 PlayerJoinArenaEvent ev = new PlayerJoinArenaEvent(this, p, true);
@@ -637,7 +634,7 @@ public class Arena implements IArena {
 
             if (!playerBefore) {
                 /* save player inv etc if isn't saved yet*/
-                if (getServerType() != ServerType.BUNGEE) {
+                if (BedWars.getServerType() != ServerType.BUNGEE) {
                     new PlayerGoods(p, true);
                     playerLocation.put(p, p.getLocation());
                 }
@@ -645,7 +642,7 @@ public class Arena implements IArena {
             }
 
             BedWarsScoreboard.giveScoreboard(p, this, false);
-            nms.setCollide(p, this, false);
+            BedWars.nms.setCollide(p, this, false);
 
             if (!playerBefore) {
                 if (staffTeleport == null) {
@@ -657,7 +654,7 @@ public class Arena implements IArena {
 
             p.setGameMode(GameMode.ADVENTURE);
 
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
                 if(leaving.contains(p)) return;
                 p.setAllowFlight(true);
                 p.setFlying(true);
@@ -666,7 +663,7 @@ public class Arena implements IArena {
             if (p.getPassenger() != null && p.getPassenger().getType() == EntityType.ARMOR_STAND)
                 p.getPassenger().remove();
 
-            Bukkit.getScheduler().runTask(plugin, () -> {
+            Bukkit.getScheduler().runTask(BedWars.plugin, () -> {
                 if(leaving.contains(p)) return;
                 for (Player on : Bukkit.getOnlinePlayers()) {
                     if (on == p) continue;
@@ -706,7 +703,7 @@ public class Arena implements IArena {
 
             leaving.remove(p);
 
-            p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_MSG).replace("{arena}", this.getDisplayName()));
+            p.sendMessage(Language.getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_MSG).replace("{arena}", this.getDisplayName()));
 
             /* update generator holograms for spectators */
             String iso = Language.getPlayerLanguage(p).getIso();
@@ -725,7 +722,7 @@ public class Arena implements IArena {
             }
 
         } else {
-            p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG));
+            p.sendMessage(Language.getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG));
             return false;
         }
 
@@ -747,7 +744,7 @@ public class Arena implements IArena {
         } else {
             leaving.add(p);
         }
-        debug("Player removed: " + p.getName() + " arena: " + getArenaName());
+        BedWars.debug("Player removed: " + p.getName() + " arena: " + getArenaName());
         respawnSessions.remove(p);
 
         ITeam team = null;
@@ -794,14 +791,14 @@ public class Arena implements IArena {
 
         boolean teamuri = false;
         for (Player on : getPlayers()) {
-            if (getParty().hasParty(on)) {
+            if (BedWars.getParty().hasParty(on)) {
                 teamuri = true;
             }
         }
         if (status == GameState.starting && (maxInTeam > players.size() && teamuri || players.size() < minPlayers && !teamuri)) {
             changeStatus(GameState.waiting);
             for (Player on : players) {
-                on.sendMessage(getMsg(on, Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT));
+                on.sendMessage(Language.getMsg(on, Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT));
             }
         } else if (status == GameState.playing) {
             BedWars.debug("removePlayer debug1");
@@ -818,11 +815,11 @@ public class Arena implements IArena {
                 if (team != null) {
                     if (!team.isBedDestroyed()) {
                         for (Player p2 : this.getPlayers()) {
-                            p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", team.getColor().chat().toString())
+                            p2.sendMessage(Language.getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", team.getColor().chat().toString())
                                     .replace("{TeamName}", team.getDisplayName(Language.getPlayerLanguage(p2))));
                         }
                         for (Player p2 : this.getSpectators()) {
-                            p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", team.getColor().chat().toString())
+                            p2.sendMessage(Language.getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", team.getColor().chat().toString())
                                     .replace("{TeamName}", team.getDisplayName(Language.getPlayerLanguage(p2))));
                         }
                     }
@@ -872,25 +869,25 @@ public class Arena implements IArena {
         }
         for (Player on : getPlayers()) {
             on.sendMessage(
-                    getMsg(on, Messages.COMMAND_LEAVE_MSG)
-                            .replace("{vPrefix}", getChatSupport().getPrefix(p))
-                            .replace("{vSuffix}", getChatSupport().getSuffix(p))
+                    Language.getMsg(on, Messages.COMMAND_LEAVE_MSG)
+                            .replace("{vPrefix}", BedWars.getChatSupport().getPrefix(p))
+                            .replace("{vSuffix}", BedWars.getChatSupport().getSuffix(p))
                             .replace("{playername}", p.getName())
                             .replace("{player}", p.getDisplayName()
                             )
             );
         }
         for (Player on : getSpectators()) {
-            on.sendMessage(getMsg(on, Messages.COMMAND_LEAVE_MSG).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()));
+            on.sendMessage(Language.getMsg(on, Messages.COMMAND_LEAVE_MSG).replace("{vPrefix}", BedWars.getChatSupport().getPrefix(p)).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()));
         }
 
-        if (getServerType() == ServerType.SHARED) {
+        if (BedWars.getServerType() == ServerType.SHARED) {
             BedWarsScoreboard sb = BedWarsScoreboard.getSBoard(p.getUniqueId());
             if (sb != null) {
                 sb.remove();
             }
             this.sendToMainLobby(p);
-        } else if (getServerType() == ServerType.BUNGEE) {
+        } else if (BedWars.getServerType() == ServerType.BUNGEE) {
             Misc.moveToLobbyOrKick(p, this, true);
             return;
         } else {
@@ -913,7 +910,7 @@ public class Arena implements IArena {
             p.removePotionEffect(pf.getType());
         }
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(BedWars.plugin, () -> {
             for (Player on : Bukkit.getOnlinePlayers()) {
                 if (on.equals(p)) continue;
                 if (getArenaByPlayer(on) == null) {
@@ -928,27 +925,27 @@ public class Arena implements IArena {
         }, 5L);
 
         /* Remove also the party */
-        if (getParty().hasParty(p)) {
-            if (getParty().isOwner(p)) {
+        if (BedWars.getParty().hasParty(p)) {
+            if (BedWars.getParty().isOwner(p)) {
                 if (status != GameState.restarting) {
-                    if (getParty().isInternal()) {
-                        for (Player mem : new ArrayList<>(getParty().getMembers(p))) {
-                            mem.sendMessage(getMsg(mem, Messages.ARENA_LEAVE_PARTY_DISBANDED));
+                    if (BedWars.getParty().isInternal()) {
+                        for (Player mem : new ArrayList<>(BedWars.getParty().getMembers(p))) {
+                            mem.sendMessage(Language.getMsg(mem, Messages.ARENA_LEAVE_PARTY_DISBANDED));
                         }
                     }
-                    getParty().disband(p);
+                    BedWars.getParty().disband(p);
 
                     // prevent arena from staring with a single player
                     teamuri = false;
                     for (Player on : getPlayers()) {
-                        if (getParty().hasParty(on)) {
+                        if (BedWars.getParty().hasParty(on)) {
                             teamuri = true;
                         }
                     }
                     if (status == GameState.starting && (maxInTeam > players.size() && teamuri || players.size() < minPlayers && !teamuri)) {
                         changeStatus(GameState.waiting);
                         for (Player on : players) {
-                            on.sendMessage(getMsg(on, Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT));
+                            on.sendMessage(Language.getMsg(on, Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT));
                         }
                     }
                 }
@@ -1006,7 +1003,7 @@ public class Arena implements IArena {
      * @param disconnect True if the player was disconnected
      */
     public void removeSpectator(@NotNull Player p, boolean disconnect) {
-        debug("Spectator removed: " + p.getName() + " arena: " + getArenaName());
+        BedWars.debug("Spectator removed: " + p.getName() + " arena: " + getArenaName());
 
         if(leaving.contains(p)) {
             return;
@@ -1019,18 +1016,18 @@ public class Arena implements IArena {
         removeArenaByPlayer(p, this);
         p.getInventory().clear();
         p.getInventory().setArmorContents(null);
-        nms.setCollide(p, this, true);
+        BedWars.nms.setCollide(p, this, true);
 
         Arena.afkCheck.remove(p.getUniqueId());
         BedWars.getAPI().getAFKUtil().setPlayerAFK(p, false);
 
-        if (getServerType() == ServerType.SHARED) {
+        if (BedWars.getServerType() == ServerType.SHARED) {
             BedWarsScoreboard sb = BedWarsScoreboard.getSBoard(p.getUniqueId());
             if (sb != null) {
                 sb.remove();
             }
             this.sendToMainLobby(p);
-        } else if (getServerType() == ServerType.MULTIARENA) {
+        } else if (BedWars.getServerType() == ServerType.MULTIARENA) {
             this.sendToMainLobby(p);
 
             /* restore player inventory */
@@ -1049,13 +1046,13 @@ public class Arena implements IArena {
                 p.removePotionEffect(pf.getType());
             }
         }
-        if (getServerType() == ServerType.BUNGEE) {
+        if (BedWars.getServerType() == ServerType.BUNGEE) {
             Misc.moveToLobbyOrKick(p, this, true);
             return;
         }
         playerLocation.remove(p);
 
-        Bukkit.getScheduler().runTask(plugin, () -> {
+        Bukkit.getScheduler().runTask(BedWars.plugin, () -> {
             for (Player on : Bukkit.getOnlinePlayers()) {
                 if (on.equals(p)) continue;
                 if (getArenaByPlayer(on) == null) {
@@ -1070,15 +1067,15 @@ public class Arena implements IArena {
         });
 
         /* Remove also the party */
-        if (getParty().hasParty(p)) {
-            if (getParty().isOwner(p)) {
+        if (BedWars.getParty().hasParty(p)) {
+            if (BedWars.getParty().isOwner(p)) {
                 if (status != GameState.restarting) {
-                    if (getParty().isInternal()) {
-                        for (Player mem : new ArrayList<>(getParty().getMembers(p))) {
-                            mem.sendMessage(getMsg(mem, Messages.ARENA_LEAVE_PARTY_DISBANDED));
+                    if (BedWars.getParty().isInternal()) {
+                        for (Player mem : new ArrayList<>(BedWars.getParty().getMembers(p))) {
+                            mem.sendMessage(Language.getMsg(mem, Messages.ARENA_LEAVE_PARTY_DISBANDED));
                         }
                     }
-                    getParty().disband(p);
+                    BedWars.getParty().disband(p);
                 }
             }
         }
@@ -1135,10 +1132,10 @@ public class Arena implements IArena {
         p.closeInventory();
         players.add(p);
         for (Player on : players) {
-            on.sendMessage(getMsg(on, Messages.COMMAND_REJOIN_PLAYER_RECONNECTED).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
+            on.sendMessage(Language.getMsg(on, Messages.COMMAND_REJOIN_PLAYER_RECONNECTED).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
         }
         for (Player on : spectators) {
-            on.sendMessage(getMsg(on, Messages.COMMAND_REJOIN_PLAYER_RECONNECTED).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
+            on.sendMessage(Language.getMsg(on, Messages.COMMAND_REJOIN_PLAYER_RECONNECTED).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
         }
         setArenaByPlayer(p, this);
         /* save player inventory etc */
@@ -1180,7 +1177,7 @@ public class Arena implements IArena {
         if (getRestartingTask() != null) getRestartingTask().cancel();
         if (getStartingTask() != null) getStartingTask().cancel();
         if (getPlayingTask() != null) getPlayingTask().cancel();
-        plugin.getLogger().log(Level.WARNING, "Disabling arena: " + getArenaName());
+        BedWars.plugin.getLogger().log(Level.WARNING, "Disabling arena: " + getArenaName());
         for (Player inWorld : getWorld().getPlayers()) {
             inWorld.kickPlayer("You're not supposed to be here.");
         }
@@ -1196,7 +1193,7 @@ public class Arena implements IArena {
         if (getRestartingTask() != null) getRestartingTask().cancel();
         if (getStartingTask() != null) getStartingTask().cancel();
         if (getPlayingTask() != null) getPlayingTask().cancel();
-        plugin.getLogger().log(Level.FINE, "Restarting arena: " + getArenaName());
+        BedWars.plugin.getLogger().log(Level.FINE, "Restarting arena: " + getArenaName());
         Bukkit.getPluginManager().callEvent(new ArenaRestartEvent(getArenaName(), getWorldName()));
         for (Player inWorld : getWorld().getPlayers()) {
             inWorld.kickPlayer("You're not supposed to be here.");
@@ -1283,7 +1280,7 @@ public class Arena implements IArena {
 
     @Override
     public String getDisplayGroup(Player player) {
-        return getPlayerLanguage(player).m(Messages.ARENA_DISPLAY_GROUP_PATH + getGroup().toLowerCase());
+        return Language.getPlayerLanguage(player).m(Messages.ARENA_DISPLAY_GROUP_PATH + getGroup().toLowerCase());
     }
 
     @Override
@@ -1438,7 +1435,7 @@ public class Arena implements IArena {
         if (this.status == GameState.starting && status == GameState.waiting) {
             for (Player player : getPlayers()) {
                 Language playerLang = Language.getPlayerLanguage(player);
-                nms.sendTitle(player, playerLang.m(Messages.ARENA_STATUS_START_COUNTDOWN_CANCELLED_TITLE), playerLang.m(Messages.ARENA_STATUS_START_COUNTDOWN_CANCELLED_SUB_TITLE), 0, 40, 0);
+                BedWars.nms.sendTitle(player, playerLang.m(Messages.ARENA_STATUS_START_COUNTDOWN_CANCELLED_TITLE), playerLang.m(Messages.ARENA_STATUS_START_COUNTDOWN_CANCELLED_SUB_TITLE), 0, 40, 0);
             }
         }
         this.status = status;
@@ -1511,7 +1508,7 @@ public class Arena implements IArena {
      * Check if a player has vip perms
      */
     public static boolean isVip(Player p) {
-        return p.hasPermission(mainCmd + ".*") || p.hasPermission(mainCmd + ".vip");
+        return p.hasPermission(BedWars.mainCmd + ".*") || p.hasPermission(BedWars.mainCmd + ".vip");
     }
 
     /**
@@ -1642,42 +1639,42 @@ public class Arena implements IArena {
      * This will clear the inventory first.
      */
     public static void sendLobbyCommandItems(Player p) {
-        if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH) == null) return;
+        if (BedWars.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH) == null) return;
         if (!BedWars.config.getLobbyWorldName().equalsIgnoreCase(p.getWorld().getName())) return;
         p.getInventory().clear();
 
-        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(BedWars.plugin, () -> {
             if (!BedWars.config.getLobbyWorldName().equalsIgnoreCase(p.getWorld().getName())) return;
-            for (String item : config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH).getKeys(false)) {
+            for (String item : BedWars.config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH).getKeys(false)) {
 
-                if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", item)) == null) {
+                if (BedWars.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", item)) == null) {
                     BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", item) + " is not set!");
                     continue;
                 }
-                if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_DATA.replace("%path%", item)) == null) {
+                if (BedWars.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_DATA.replace("%path%", item)) == null) {
                     BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_DATA.replace("%path%", item) + " is not set!");
                     continue;
                 }
-                if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_SLOT.replace("%path%", item)) == null) {
+                if (BedWars.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_SLOT.replace("%path%", item)) == null) {
                     BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_SLOT.replace("%path%", item) + " is not set!");
                     continue;
                 }
-                if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_ENCHANTED.replace("%path%", item)) == null) {
+                if (BedWars.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_ENCHANTED.replace("%path%", item)) == null) {
                     BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_ENCHANTED.replace("%path%", item) + " is not set!");
                     continue;
                 }
-                if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_COMMAND.replace("%path%", item)) == null) {
+                if (BedWars.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_COMMAND.replace("%path%", item)) == null) {
                     BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_COMMAND.replace("%path%", item) + " is not set!");
                     continue;
                 }
-                ItemStack i = Misc.createItem(Material.valueOf(config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", item))),
-                        (byte) config.getInt(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_DATA.replace("%path%", item)),
-                        config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_ENCHANTED.replace("%path%", item)),
-                        SupportPAPI.getSupportPAPI().replace(p, getMsg(p, Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", item))),
-                        SupportPAPI.getSupportPAPI().replace(p, getList(p, Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", item))),
-                        p, "RUNCOMMAND", config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_COMMAND.replace("%path%", item)));
+                ItemStack i = Misc.createItem(Material.valueOf(BedWars.config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", item))),
+                        (byte) BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_DATA.replace("%path%", item)),
+                        BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_ENCHANTED.replace("%path%", item)),
+                        SupportPAPI.getSupportPAPI().replace(p, Language.getMsg(p, Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", item))),
+                        SupportPAPI.getSupportPAPI().replace(p, Language.getList(p, Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", item))),
+                        p, "RUNCOMMAND", BedWars.config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_COMMAND.replace("%path%", item)));
 
-                p.getInventory().setItem(config.getInt(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_SLOT.replace("%path%", item)), i);
+                p.getInventory().setItem(BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_SLOT.replace("%path%", item)), i);
             }
         }, 15L);
     }
@@ -1687,38 +1684,38 @@ public class Arena implements IArena {
      * This will clear the inventory first.
      */
     public void sendPreGameCommandItems(Player p) {
-        if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH) == null) return;
+        if (BedWars.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH) == null) return;
         p.getInventory().clear();
 
-        for (String item : config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH).getKeys(false)) {
-            if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_MATERIAL.replace("%path%", item)) == null) {
+        for (String item : BedWars.config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH).getKeys(false)) {
+            if (BedWars.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_MATERIAL.replace("%path%", item)) == null) {
                 BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_MATERIAL.replace("%path%", item) + " is not set!");
                 continue;
             }
-            if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_DATA.replace("%path%", item)) == null) {
+            if (BedWars.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_DATA.replace("%path%", item)) == null) {
                 BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_DATA.replace("%path%", item) + " is not set!");
                 continue;
             }
-            if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_SLOT.replace("%path%", item)) == null) {
+            if (BedWars.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_SLOT.replace("%path%", item)) == null) {
                 BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_SLOT.replace("%path%", item) + " is not set!");
                 continue;
             }
-            if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_ENCHANTED.replace("%path%", item)) == null) {
+            if (BedWars.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_ENCHANTED.replace("%path%", item)) == null) {
                 BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_ENCHANTED.replace("%path%", item) + " is not set!");
                 continue;
             }
-            if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_COMMAND.replace("%path%", item)) == null) {
+            if (BedWars.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_COMMAND.replace("%path%", item)) == null) {
                 BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_COMMAND.replace("%path%", item) + " is not set!");
                 continue;
             }
-            ItemStack i = Misc.createItem(Material.valueOf(config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_MATERIAL.replace("%path%", item))),
-                    (byte) config.getInt(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_DATA.replace("%path%", item)),
-                    config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_ENCHANTED.replace("%path%", item)),
-                    SupportPAPI.getSupportPAPI().replace(p, getMsg(p, Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", item))),
-                    SupportPAPI.getSupportPAPI().replace(p, getList(p, Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", item))),
-                    p, "RUNCOMMAND", config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_COMMAND.replace("%path%", item)));
+            ItemStack i = Misc.createItem(Material.valueOf(BedWars.config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_MATERIAL.replace("%path%", item))),
+                    (byte) BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_DATA.replace("%path%", item)),
+                    BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_ENCHANTED.replace("%path%", item)),
+                    SupportPAPI.getSupportPAPI().replace(p, Language.getMsg(p, Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", item))),
+                    SupportPAPI.getSupportPAPI().replace(p, Language.getList(p, Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", item))),
+                    p, "RUNCOMMAND", BedWars.config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_COMMAND.replace("%path%", item)));
 
-            p.getInventory().setItem(config.getInt(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_SLOT.replace("%path%", item)), i);
+            p.getInventory().setItem(BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_SLOT.replace("%path%", item)), i);
         }
     }
 
@@ -1727,38 +1724,38 @@ public class Arena implements IArena {
      * This will clear the inventory first.
      */
     public void sendSpectatorCommandItems(Player p) {
-        if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH) == null) return;
+        if (BedWars.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH) == null) return;
         p.getInventory().clear();
 
-        for (String item : config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH).getKeys(false)) {
-            if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_MATERIAL.replace("%path%", item)) == null) {
+        for (String item : BedWars.config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH).getKeys(false)) {
+            if (BedWars.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_MATERIAL.replace("%path%", item)) == null) {
                 BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_MATERIAL.replace("%path%", item) + " is not set!");
                 continue;
             }
-            if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_DATA.replace("%path%", item)) == null) {
+            if (BedWars.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_DATA.replace("%path%", item)) == null) {
                 BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_DATA.replace("%path%", item) + " is not set!");
                 continue;
             }
-            if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_SLOT.replace("%path%", item)) == null) {
+            if (BedWars.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_SLOT.replace("%path%", item)) == null) {
                 BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_SLOT.replace("%path%", item) + " is not set!");
                 continue;
             }
-            if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_ENCHANTED.replace("%path%", item)) == null) {
+            if (BedWars.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_ENCHANTED.replace("%path%", item)) == null) {
                 BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_ENCHANTED.replace("%path%", item) + " is not set!");
                 continue;
             }
-            if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_COMMAND.replace("%path%", item)) == null) {
+            if (BedWars.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_COMMAND.replace("%path%", item)) == null) {
                 BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_COMMAND.replace("%path%", item) + " is not set!");
                 continue;
             }
-            ItemStack i = Misc.createItem(Material.valueOf(config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_MATERIAL.replace("%path%", item))),
-                    (byte) config.getInt(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_DATA.replace("%path%", item)),
-                    config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_ENCHANTED.replace("%path%", item)),
-                    SupportPAPI.getSupportPAPI().replace(p, getMsg(p, Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", item))),
-                    SupportPAPI.getSupportPAPI().replace(p, getList(p, Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", item))),
-                    p, "RUNCOMMAND", config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_COMMAND.replace("%path%", item)));
+            ItemStack i = Misc.createItem(Material.valueOf(BedWars.config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_MATERIAL.replace("%path%", item))),
+                    (byte) BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_DATA.replace("%path%", item)),
+                    BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_ENCHANTED.replace("%path%", item)),
+                    SupportPAPI.getSupportPAPI().replace(p, Language.getMsg(p, Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", item))),
+                    SupportPAPI.getSupportPAPI().replace(p, Language.getList(p, Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", item))),
+                    p, "RUNCOMMAND", BedWars.config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_COMMAND.replace("%path%", item)));
 
-            p.getInventory().setItem(config.getInt(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_SLOT.replace("%path%", item)), i);
+            p.getInventory().setItem(BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_SLOT.replace("%path%", item)), i);
         }
     }
 
@@ -1844,7 +1841,7 @@ public class Arena implements IArena {
                     //noinspection deprecation
                     for (Player p : winner.getMembersCache()) {
                         if (p.getWorld().equals(getWorld())) {
-                            nms.sendTitle(p, getMsg(p, Messages.GAME_END_VICTORY_PLAYER_TITLE), null, 0, 70, 0);
+                            BedWars.nms.sendTitle(p, Language.getMsg(p, Messages.GAME_END_VICTORY_PLAYER_TITLE), null, 0, 70, 0);
                         }
                         if (!winners.toString().contains(p.getDisplayName())) {
                             winners.append(p.getDisplayName()).append(" ");
@@ -1894,16 +1891,16 @@ public class Arena implements IArena {
                         }
                     }
                     for (Player p : world.getPlayers()) {
-                        p.sendMessage(getMsg(p, Messages.GAME_END_TEAM_WON_CHAT).replace("{TeamColor}", winner.getColor().chat().toString())
+                        p.sendMessage(Language.getMsg(p, Messages.GAME_END_TEAM_WON_CHAT).replace("{TeamColor}", winner.getColor().chat().toString())
                                 .replace("{TeamName}", winner.getDisplayName(Language.getPlayerLanguage(p))));
                         if (!winner.getMembers().contains(p)) {
-                            nms.sendTitle(p, getMsg(p, Messages.GAME_END_GAME_OVER_PLAYER_TITLE), null, 0, 70, 0);
+                            BedWars.nms.sendTitle(p, Language.getMsg(p, Messages.GAME_END_GAME_OVER_PLAYER_TITLE), null, 0, 70, 0);
                         }
-                        for (String s : getList(p, Messages.GAME_END_TOP_PLAYER_CHAT)) {
-                            String message = s.replace("{firstName}", firstName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : firstName).replace("{firstKills}", String.valueOf(first))
-                                    .replace("{secondName}", secondName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : secondName).replace("{secondKills}", String.valueOf(second))
-                                    .replace("{thirdName}", thirdName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : thirdName).replace("{thirdKills}", String.valueOf(third))
-                                    .replace("{winnerFormat}", getMaxInTeam() > 1 ? getMsg(p, Messages.FORMATTING_TEAM_WINNER_FORMAT).replace("{members}", winners.toString()) : getMsg(p, Messages.FORMATTING_SOLO_WINNER_FORMAT).replace("{members}", winners.toString()))
+                        for (String s : Language.getList(p, Messages.GAME_END_TOP_PLAYER_CHAT)) {
+                            String message = s.replace("{firstName}", firstName.isEmpty() ? Language.getMsg(p, Messages.MEANING_NOBODY) : firstName).replace("{firstKills}", String.valueOf(first))
+                                    .replace("{secondName}", secondName.isEmpty() ? Language.getMsg(p, Messages.MEANING_NOBODY) : secondName).replace("{secondKills}", String.valueOf(second))
+                                    .replace("{thirdName}", thirdName.isEmpty() ? Language.getMsg(p, Messages.MEANING_NOBODY) : thirdName).replace("{thirdKills}", String.valueOf(third))
+                                    .replace("{winnerFormat}", getMaxInTeam() > 1 ? Language.getMsg(p, Messages.FORMATTING_TEAM_WINNER_FORMAT).replace("{members}", winners.toString()) : Language.getMsg(p, Messages.FORMATTING_SOLO_WINNER_FORMAT).replace("{members}", winners.toString()))
                                     .replace("{TeamColor}", winner.getColor().chat().toString()).replace("{TeamName}", winner.getDisplayName(Language.getPlayerLanguage(p)));
                             p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, message));
                         }
@@ -1968,11 +1965,11 @@ public class Arena implements IArena {
     @Override
     public void updateNextEvent() {
 
-        debug("---");
-        debug("updateNextEvent called");
+        BedWars.debug("---");
+        BedWars.debug("updateNextEvent called");
         if (nextEvent == NextEvent.EMERALD_GENERATOR_TIER_II && upgradeEmeraldsCount == 0) {
             // next diamond time < next emerald time
-            int next = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_START) == null ?
+            int next = BedWars.getGeneratorsCfg().getInt(BedWars.getGeneratorsCfg().getYml().get(getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_START) == null ?
                     "Default." + ConfigPath.GENERATOR_EMERALD_TIER_III_START : getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_START);
             if (upgradeDiamondsCount < next && diamondTier == 1) {
                 setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_II);
@@ -1990,7 +1987,7 @@ public class Arena implements IArena {
                 }
             }
         } else if (nextEvent == NextEvent.DIAMOND_GENERATOR_TIER_II && upgradeDiamondsCount == 0) {
-            int next = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START) == null ?
+            int next = BedWars.getGeneratorsCfg().getInt(BedWars.getGeneratorsCfg().getYml().get(getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START) == null ?
                     "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START : getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_START);
             if (upgradeEmeraldsCount < next && emeraldTier == 1) {
                 setNextEvent(NextEvent.EMERALD_GENERATOR_TIER_II);
@@ -2062,7 +2059,7 @@ public class Arena implements IArena {
         //    if (lowest > value) next = NextEvent.valueOf(ne);
         //}
 
-        debug("---");
+        BedWars.debug("---");
 
     /*if (nextEvent == NextEvent.DIAMOND_GENERATOR_TIER_II) {
         setNextEvent(NextEvent.DIAMOND_GENERATOR_TIER_III);
@@ -2081,7 +2078,7 @@ public class Arena implements IArena {
     } else if (nextEvent == NextEvent.ENDER_DRAGON && (playingTask != null && playingTask.getBedsDestroyCountdown() == 0) && (playingTask != null && playingTask.getDragonSpawnCountdown() == 0)) {
         setNextEvent(NextEvent.GAME_END);
     }*/
-        debug(nextEvent.toString());
+        BedWars.debug(nextEvent.toString());
     }
 
     /**
@@ -2118,7 +2115,7 @@ public class Arena implements IArena {
      * Register join-signs for arena
      */
     private void registerSigns() {
-        if (getServerType() != ServerType.BUNGEE) {
+        if (BedWars.getServerType() != ServerType.BUNGEE) {
             if (BedWars.signs.getYml().get("locations") != null) {
                 for (String st : BedWars.signs.getYml().getStringList("locations")) {
                     String[] data = st.split(",");
@@ -2128,7 +2125,7 @@ public class Arena implements IArena {
                             l = new Location(Bukkit.getWorld(data[6]), Double.parseDouble(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]));
                         } catch (Exception e) {
                             //noinspection ImplicitArrayToString
-                            plugin.getLogger().severe("Could not load sign at: " + data.toString());
+                            BedWars.plugin.getLogger().severe("Could not load sign at: " + data.toString());
                             continue;
                         }
                         addSign(l);
@@ -2208,7 +2205,7 @@ public class Arena implements IArena {
     public static boolean joinRandomArena(Player p) {
         List<IArena> arenas = getSorted(getArenas());
 
-        int amount = getParty().hasParty(p) ? (int) getParty().getMembers(p).stream().filter(member -> {
+        int amount = BedWars.getParty().hasParty(p) ? (int) BedWars.getParty().getMembers(p).stream().filter(member -> {
             IArena arena = Arena.getArenaByPlayer(member);
             if (arena == null) {
                 return true;
@@ -2264,7 +2261,7 @@ public class Arena implements IArena {
 
         List<IArena> arenas = getSorted(getArenas());
 
-        int amount = getParty().hasParty(p) ? (int) getParty().getMembers(p).stream().filter(member -> {
+        int amount = BedWars.getParty().hasParty(p) ? (int) BedWars.getParty().getMembers(p).stream().filter(member -> {
             IArena arena = Arena.getArenaByPlayer(member);
             if (arena == null) {
                 return true;
@@ -2311,12 +2308,12 @@ public class Arena implements IArena {
      */
     public void sendDiamondsUpgradeMessages() {
         for (Player p : getPlayers()) {
-            p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
-                    getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND)).replace("{tier}", getMsg(p, (diamondTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
+            p.sendMessage(Language.getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
+                    Language.getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND)).replace("{tier}", Language.getMsg(p, (diamondTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
         }
         for (Player p : getSpectators()) {
-            p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
-                    getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND)).replace("{tier}", getMsg(p, (diamondTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
+            p.sendMessage(Language.getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
+                    Language.getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND)).replace("{tier}", Language.getMsg(p, (diamondTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
         }
     }
 
@@ -2326,12 +2323,12 @@ public class Arena implements IArena {
      */
     public void sendEmeraldsUpgradeMessages() {
         for (Player p : getPlayers()) {
-            p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
-                    getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD)).replace("{tier}", getMsg(p, (emeraldTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
+            p.sendMessage(Language.getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
+                    Language.getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD)).replace("{tier}", Language.getMsg(p, (emeraldTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
         }
         for (Player p : getSpectators()) {
-            p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
-                    getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD)).replace("{tier}", getMsg(p, (emeraldTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
+            p.sendMessage(Language.getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
+                    Language.getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD)).replace("{tier}", Language.getMsg(p, (emeraldTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
         }
     }
 
@@ -2387,7 +2384,7 @@ public class Arena implements IArena {
         for (IGenerator og : oreGenerators) {
             og.destroyData();
         }
-        isOnABase.entrySet().removeIf(entry -> entry.getValue().getArena().equals(this));
+        BaseListener.isOnABase.entrySet().removeIf(entry -> entry.getValue().getArena().equals(this));
         for (ITeam bwt : teams) {
             bwt.destroyData();
         }
@@ -2420,16 +2417,16 @@ public class Arena implements IArena {
         enableQueue.remove(a);
         if (!enableQueue.isEmpty()) {
             BedWars.getAPI().getRestoreAdapter().onEnable(enableQueue.get(0));
-            plugin.getLogger().info("Loading arena: " + enableQueue.get(0).getWorldName());
+            BedWars.plugin.getLogger().info("Loading arena: " + enableQueue.get(0).getWorldName());
         }
     }
 
     public static void addToEnableQueue(IArena a) {
         enableQueue.add(a);
-        plugin.getLogger().info("Arena " + a.getWorldName() + " was added to the enable queue.");
+        BedWars.plugin.getLogger().info("Arena " + a.getWorldName() + " was added to the enable queue.");
         if (enableQueue.size() == 1) {
             BedWars.getAPI().getRestoreAdapter().onEnable(a);
-            plugin.getLogger().info("Loading arena: " + a.getWorldName());
+            BedWars.plugin.getLogger().info("Loading arena: " + a.getWorldName());
         }
     }
 
@@ -2499,7 +2496,7 @@ public class Arena implements IArena {
                     player.setAllowFlight(true);
                     player.setFlying(true);
 
-                    nms.setCollide(player, this, false);
+                    BedWars.nms.setCollide(player, this, false);
                     // #274
                     for (Player invisible : getShowTime().keySet()) {
                         BedWars.nms.hideArmor(invisible, player);
@@ -2525,7 +2522,7 @@ public class Arena implements IArena {
 
     // used for auto scale conditions
     public static boolean canAutoScale(String arenaName) {
-        if (!autoscale) return true;
+        if (!BedWars.autoscale) return true;
 
         if (Arena.getArenas().isEmpty()) return true;
 
@@ -2548,7 +2545,7 @@ public class Arena implements IArena {
         }
 
         // check amount of active clones
-        return config.getInt(ConfigPath.GENERAL_CONFIGURATION_AUTO_SCALE_LIMIT) > activeClones;
+        return BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_AUTO_SCALE_LIMIT) > activeClones;
     }
 
     @Override
@@ -2614,10 +2611,10 @@ public class Arena implements IArena {
     public void setTeamAssigner(ITeamAssigner teamAssigner) {
         if (teamAssigner == null) {
             this.teamAssigner = new TeamAssigner();
-            plugin.getLogger().info("Using Default team assigner on arena: " + this.getArenaName());
+            BedWars.plugin.getLogger().info("Using Default team assigner on arena: " + this.getArenaName());
         } else {
             this.teamAssigner = teamAssigner;
-            plugin.getLogger().warning("Using " + teamAssigner.getClass().getSimpleName() + " team assigner on arena: " + this.getArenaName());
+            BedWars.plugin.getLogger().warning("Using " + teamAssigner.getClass().getSimpleName() + " team assigner on arena: " + this.getArenaName());
         }
     }
 
@@ -2635,16 +2632,16 @@ public class Arena implements IArena {
             Location loc = playerLocation.get(player);
             if (loc == null) {
                 player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
-                plugin.getLogger().log(Level.SEVERE, player.getName() + " was teleported to the main world because lobby location is not set!");
+                BedWars.plugin.getLogger().log(Level.SEVERE, player.getName() + " was teleported to the main world because lobby location is not set!");
             } else {
                 player.teleport(loc, PlayerTeleportEvent.TeleportCause.PLUGIN);
             }
         } else if (BedWars.getServerType() == ServerType.MULTIARENA) {
             if (BedWars.getLobbyWorld().isEmpty()) {
                 player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
-                plugin.getLogger().log(Level.SEVERE, player.getName() + " was teleported to the main world because lobby location is not set!");
+                BedWars.plugin.getLogger().log(Level.SEVERE, player.getName() + " was teleported to the main world because lobby location is not set!");
             } else {
-                player.teleport(config.getConfigLoc("lobbyLoc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                player.teleport(BedWars.config.getConfigLoc("lobbyLoc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
             }
         }
     }

@@ -24,6 +24,7 @@ import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
@@ -52,11 +53,6 @@ import org.bukkit.material.Openable;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
-import java.util.*;
-
-import static com.andrei1058.bedwars.BedWars.*;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
-
 public class Interact implements Listener {
 
     private final double fireballSpeedMultiplier;
@@ -64,9 +60,9 @@ public class Interact implements Listener {
     private final float fireballExplosionSize;
 
     public Interact() {
-        this.fireballSpeedMultiplier = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_SPEED_MULTIPLIER);
-        this.fireballCooldown = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_COOLDOWN);
-        this.fireballExplosionSize = (float) config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_EXPLOSION_SIZE);
+        this.fireballSpeedMultiplier = BedWars.config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_SPEED_MULTIPLIER);
+        this.fireballCooldown = BedWars.config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_COOLDOWN);
+        this.fireballExplosionSize = (float) BedWars.config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_EXPLOSION_SIZE);
     }
 
     @EventHandler
@@ -76,12 +72,12 @@ public class Interact implements Listener {
         Player p = e.getPlayer();
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
             ItemStack i = BedWars.nms.getItemInHand(p);
-            if (!nms.isCustomBedWarsItem(i)) return;
-            final String[] customData = nms.getCustomData(i).split("_");
+            if (!BedWars.nms.isCustomBedWarsItem(i)) return;
+            final String[] customData = BedWars.nms.getCustomData(i).split("_");
             if (customData.length >= 2) {
                 if (customData[0].equals("RUNCOMMAND")) {
                     e.setCancelled(true);
-                    Bukkit.getScheduler().runTask(plugin, () -> Bukkit.dispatchCommand(p, customData[1]));
+                    Bukkit.getScheduler().runTask(BedWars.plugin, () -> Bukkit.dispatchCommand(p, customData[1]));
                 }
             }
         }
@@ -96,15 +92,15 @@ public class Interact implements Listener {
         Block b = e.getClickedBlock();
         if (b == null) return;
         if ((BedWars.getServerType() == ServerType.MULTIARENA && b.getWorld().getName().equals(BedWars.getLobbyWorld()) && !BreakPlace.isBuildSession(e.getPlayer())) || Arena.getArenaByPlayer(e.getPlayer()) != null) {
-            if (b.getType() == nms.materialCraftingTable() && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_CRAFTING)) {
+            if (b.getType() == BedWars.nms.materialCraftingTable() && BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_CRAFTING)) {
                 e.setCancelled(true);
-            } else if (b.getType() == nms.materialEnchantingTable() && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_ENCHANTING)) {
+            } else if (b.getType() == BedWars.nms.materialEnchantingTable() && BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_ENCHANTING)) {
                 e.setCancelled(true);
-            } else if (b.getType() == Material.FURNACE && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_FURNACE)) {
+            } else if (b.getType() == Material.FURNACE && BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_FURNACE)) {
                 e.setCancelled(true);
-            } else if (b.getType() == Material.BREWING_STAND && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_BREWING_STAND)) {
+            } else if (b.getType() == Material.BREWING_STAND && BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_BREWING_STAND)) {
                 e.setCancelled(true);
-            } else if (b.getType() == Material.ANVIL && config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_ANVIL)) {
+            } else if (b.getType() == Material.ANVIL && BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_ANVIL)) {
                 e.setCancelled(true);
             }
         }
@@ -128,9 +124,9 @@ public class Interact implements Listener {
                     e.setCancelled(true);
                     return;
                 }
-                if (nms.isBed(b.getType())) {
+                if (BedWars.nms.isBed(b.getType())) {
                     if (p.isSneaking()) {
-                        ItemStack i = nms.getItemInHand(p);
+                        ItemStack i = BedWars.nms.getItemInHand(p);
                         if (i == null) {
                             e.setCancelled(true);
                         } else if (i.getType() == Material.AIR) {
@@ -158,7 +154,7 @@ public class Interact implements Listener {
                         if (!owner.isMember(p)) {
                             if (!(owner.getMembers().isEmpty() && owner.isBedDestroyed())) {
                                 e.setCancelled(true);
-                                p.sendMessage(getMsg(p, Messages.INTERACT_CHEST_CANT_OPEN_TEAM_ELIMINATED));
+                                p.sendMessage(Language.getMsg(p, Messages.INTERACT_CHEST_CANT_OPEN_TEAM_ELIMINATED));
                             }
                         }
                     }
@@ -200,7 +196,7 @@ public class Interact implements Listener {
             IArena a = Arena.getArenaByPlayer(p);
             if (a != null) {
                 if (a.isPlayer(p)) {
-                    if (inHand.getType() == nms.materialFireball()) {
+                    if (inHand.getType() == BedWars.nms.materialFireball()) {
 
                         e.setCancelled(true);
 
@@ -208,12 +204,12 @@ public class Interact implements Listener {
                             a.getFireballCooldowns().put(p.getUniqueId(), System.currentTimeMillis());
                             Fireball fb = p.launchProjectile(Fireball.class);
                             Vector direction = p.getEyeLocation().getDirection();
-                            fb = nms.setFireballDirection(fb, direction);
+                            fb = BedWars.nms.setFireballDirection(fb, direction);
                             fb.setVelocity(fb.getDirection().multiply(fireballSpeedMultiplier));
                             //fb.setIsIncendiary(false); // apparently this on <12 makes the fireball not explode on hit. wtf bukkit?
                             fb.setYield(fireballExplosionSize);
-                            fb.setMetadata("bw1058", new FixedMetadataValue(plugin, "ceva"));
-                            nms.minusAmount(p, inHand, 1);
+                            fb.setMetadata("bw1058", new FixedMetadataValue(BedWars.plugin, "ceva"));
+                            BedWars.nms.minusAmount(p, inHand, 1);
                         }
 
                     }
@@ -230,7 +226,7 @@ public class Interact implements Listener {
         if (e.getRightClicked().getType() == EntityType.ITEM_FRAME) {
             if (((ItemFrame) e.getRightClicked()).getItem().getType().equals(Material.AIR)) {
                 //prevent from putting upgradable items in it
-                ItemStack i = nms.getItemInHand(e.getPlayer());
+                ItemStack i = BedWars.nms.getItemInHand(e.getPlayer());
                 if (i != null) {
                     if (i.getType() != Material.AIR) {
                         ShopCache sc = ShopCache.getShopCache(e.getPlayer().getUniqueId());
@@ -298,7 +294,7 @@ public class Interact implements Listener {
     public void onCrafting(PrepareItemCraftEvent e) {
         if (e == null) return;
         if (Arena.getArenaByPlayer((Player) e.getView().getPlayer()) != null) {
-            if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_CRAFTING)) {
+            if (BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_CRAFTING)) {
                 e.getInventory().setResult(new ItemStack(Material.AIR));
             }
         }

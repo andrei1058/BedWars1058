@@ -20,6 +20,7 @@
 
 package com.andrei1058.bedwars.support.party;
 
+import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.party.Party;
 import org.bukkit.entity.Player;
@@ -30,8 +31,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 @SuppressWarnings("WeakerAccess")
 public class Internal implements Party {
@@ -99,7 +98,7 @@ public class Internal implements Party {
                 disband(member);
             } else if (p.members.contains(member)) {
                 for (Player mem : p.members) {
-                    mem.sendMessage(getMsg(mem, Messages.COMMAND_PARTY_LEAVE_SUCCESS).replace("{playername}", member.getName()).replace("{player}", member.getDisplayName()));
+                    mem.sendMessage(Language.getMsg(mem, Messages.COMMAND_PARTY_LEAVE_SUCCESS).replace("{playername}", member.getName()).replace("{player}", member.getDisplayName()));
                 }
                 p.members.remove(member);
                 if (p.members.isEmpty() || p.members.size() == 1) {
@@ -116,7 +115,7 @@ public class Internal implements Party {
         Internal.Party pa = getParty(owner);
         if (pa == null) return;
         for (Player p : pa.members) {
-            p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_DISBAND_SUCCESS));
+            p.sendMessage(Language.getMsg(p, Messages.COMMAND_PARTY_DISBAND_SUCCESS));
         }
         pa.members.clear();
         Internal.parites.remove(pa);
@@ -138,7 +137,7 @@ public class Internal implements Party {
         if (p != null) {
             if (p.members.contains(target)) {
                 for (Player mem : p.members) {
-                    mem.sendMessage(getMsg(mem, Messages.COMMAND_PARTY_REMOVE_SUCCESS).replace("{player}", target.getName()));
+                    mem.sendMessage(Language.getMsg(mem, Messages.COMMAND_PARTY_REMOVE_SUCCESS).replace("{player}", target.getName()));
                 }
                 p.members.remove(owner);
                 if (p.members.isEmpty() || p.members.size() == 1) {

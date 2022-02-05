@@ -27,8 +27,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import static com.andrei1058.bedwars.BedWars.plugin;
-
 public class ChatAFK implements Listener {
 
     @EventHandler(ignoreCancelled = true)
@@ -36,7 +34,7 @@ public class ChatAFK implements Listener {
         Arena.afkCheck.remove(event.getPlayer().getUniqueId());
         if (BedWars.getAPI().getAFKUtil().isPlayerAFK(event.getPlayer())) {
             // go sync
-            Bukkit.getScheduler().runTask(plugin, () ->
+            Bukkit.getScheduler().runTask(BedWars.plugin, () ->
                     BedWars.getAPI().getAFKUtil().setPlayerAFK(event.getPlayer(), false)
             );
         }

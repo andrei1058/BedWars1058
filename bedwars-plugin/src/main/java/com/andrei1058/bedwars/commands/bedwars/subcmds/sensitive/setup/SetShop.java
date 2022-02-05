@@ -41,10 +41,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.andrei1058.bedwars.BedWars.mainCmd;
-import static com.andrei1058.bedwars.commands.Misc.createArmorStand;
-import static com.andrei1058.bedwars.commands.Misc.removeArmorStand;
-
 public class SetShop extends SubCommand {
 
     public SetShop(ParentCommand parent, String name) {
@@ -81,15 +77,15 @@ public class SetShop extends SubCommand {
                 if (ss.getConfig().getYml().get("Team") != null) {
                     p.sendMessage(ss.getPrefix() + "Available teams: ");
                     for (String team : Objects.requireNonNull(ss.getConfig().getYml().getConfigurationSection("Team")).getKeys(false)) {
-                        p.spigot().sendMessage(Misc.msgHoverClick(ChatColor.GOLD + " " + '▪' + " " + ss.getTeamColor(team) + team + ChatColor.GRAY + " (click to set)", ChatColor.GRAY + "Set shop for " + TeamColor.getChatColor(Objects.requireNonNull(ss.getConfig().getYml().getString("Team." + team + ".Color"))) + team, "/" + mainCmd + " setShop " + team, ClickEvent.Action.RUN_COMMAND));
+                        p.spigot().sendMessage(Misc.msgHoverClick(ChatColor.GOLD + " " + '▪' + " " + ss.getTeamColor(team) + team + ChatColor.GRAY + " (click to set)", ChatColor.GRAY + "Set shop for " + TeamColor.getChatColor(Objects.requireNonNull(ss.getConfig().getYml().getString("Team." + team + ".Color"))) + team, "/" + com.andrei1058.bedwars.BedWars.mainCmd + " setShop " + team, ClickEvent.Action.RUN_COMMAND));
                     }
                 }
             } else {
                 String teamm = ss.getTeamColor(args[0]) + args[0];
                 if (ss.getConfig().getYml().get("Team." + args[0] + ".Shop") != null) {
-                    removeArmorStand("shop", ss.getConfig().getArenaLoc("Team." + args[0] + ".Shop"), ss.getConfig().getString("Team." + args[0] + ".Shop"));
+                    com.andrei1058.bedwars.commands.Misc.removeArmorStand("shop", ss.getConfig().getArenaLoc("Team." + args[0] + ".Shop"), ss.getConfig().getString("Team." + args[0] + ".Shop"));
                 }
-                createArmorStand(teamm + " " + ChatColor.GOLD + "SHOP SET", p.getLocation(), ss.getConfig().stringLocationArenaFormat(p.getLocation()));
+                com.andrei1058.bedwars.commands.Misc.createArmorStand(teamm + " " + ChatColor.GOLD + "SHOP SET", p.getLocation(), ss.getConfig().stringLocationArenaFormat(p.getLocation()));
                 ss.getConfig().saveArenaLoc("Team." + args[0] + ".Shop", p.getLocation());
                 p.sendMessage(ss.getPrefix() + "Shop set for: " + teamm);
                 if (ss.getSetupType() == SetupType.ASSISTED) {

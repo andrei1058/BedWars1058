@@ -42,10 +42,6 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 
-import static com.andrei1058.bedwars.BedWars.nms;
-import static com.andrei1058.bedwars.api.language.Language.getList;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
-
 public class GameStartingTask implements Runnable, StartingTask {
 
     private int countdown;
@@ -104,7 +100,7 @@ public class GameStartingTask implements Runnable, StartingTask {
             //Spawn shops and upgrades
             //Disable generators for empty teams if required
             for (ITeam team : getArena().getTeams()) {
-                nms.colorBed(team);
+                BedWars.nms.colorBed(team);
                 if (team.getMembers().isEmpty()) {
                     team.setBedDestroyed(true);
                     if (getArena().getConfig().getBoolean(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS)) {
@@ -157,8 +153,8 @@ public class GameStartingTask implements Runnable, StartingTask {
             for (Player player : getArena().getPlayers()) {
                 Language playerLang = Language.getPlayerLanguage(player);
                 String[] titleSubtitle = Language.getCountDownTitle(playerLang, getCountdown());
-                nms.sendTitle(player, titleSubtitle[0], titleSubtitle[1], 4, 22, 4);
-                player.sendMessage(getMsg(player, Messages.ARENA_STATUS_START_COUNTDOWN_CHAT).replace("{time}", String.valueOf(getCountdown())));
+                BedWars.nms.sendTitle(player, titleSubtitle[0], titleSubtitle[1], 4, 22, 4);
+                player.sendMessage(Language.getMsg(player, Messages.ARENA_STATUS_START_COUNTDOWN_CHAT).replace("{time}", String.valueOf(getCountdown())));
             }
         }
         countdown--;
@@ -171,8 +167,8 @@ public class GameStartingTask implements Runnable, StartingTask {
                 BedWarsTeam.reSpawnInvulnerability.put(p.getUniqueId(), System.currentTimeMillis() + 2000L);
                 bwt.firstSpawn(p);
                 Sounds.playSound(ConfigPath.SOUND_GAME_START, p);
-                nms.sendTitle(p, getMsg(p, Messages.ARENA_STATUS_START_PLAYER_TITLE), null, 0, 20, 0);
-                for (String tut : getList(p, Messages.ARENA_STATUS_START_PLAYER_TUTORIAL)) {
+                BedWars.nms.sendTitle(p, Language.getMsg(p, Messages.ARENA_STATUS_START_PLAYER_TITLE), null, 0, 20, 0);
+                for (String tut : Language.getList(p, Messages.ARENA_STATUS_START_PLAYER_TUTORIAL)) {
                     p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, tut));
                 }
             }

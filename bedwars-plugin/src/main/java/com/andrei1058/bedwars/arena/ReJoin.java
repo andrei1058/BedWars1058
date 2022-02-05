@@ -43,8 +43,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
-
 public class ReJoin {
 
     private UUID player;
@@ -172,11 +170,11 @@ public class ReJoin {
             bwt.setBedDestroyed(true);
             if (bwt != null) {
                 for (Player p2 : arena.getPlayers()) {
-                    p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", bwt.getColor().chat().toString())
+                    p2.sendMessage(Language.getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", bwt.getColor().chat().toString())
                             .replace("{TeamName}", bwt.getDisplayName(Language.getPlayerLanguage(p2))));
                 }
                 for (Player p2 : arena.getSpectators()) {
-                    p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", bwt.getColor().chat().toString())
+                    p2.sendMessage(Language.getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", bwt.getColor().chat().toString())
                             .replace("{TeamName}", bwt.getDisplayName(Language.getPlayerLanguage(p2))));
                 }
             }

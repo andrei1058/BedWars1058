@@ -43,8 +43,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.NPC.createArmorStand;
-
 public class JoinNPC {
     private static boolean citizensSupport = false;
 
@@ -119,12 +117,12 @@ public class JoinNPC {
             if (e.getType() == EntityType.ARMOR_STAND) e.remove();
         }
         if (nume.length >= 2) {
-            ArmorStand a = createArmorStand(l.clone().add(0, 0.05, 0));
+            ArmorStand a = com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.NPC.createArmorStand(l.clone().add(0, 0.05, 0));
             a.setMarker(false);
             a.setCustomNameVisible(true);
             a.setCustomName(ChatColor.translateAlternateColorCodes('&', nume[0]).replace("{players}", String.valueOf(Arena.getPlayers(group))));
             npcs.put(npc.getId(), group);
-            ArmorStand a2 = createArmorStand(l.clone().subtract(0, 0.25, 0));
+            ArmorStand a2 = com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.NPC.createArmorStand(l.clone().subtract(0, 0.25, 0));
             a2.setMarker(false);
             a2.setCustomName(ChatColor.translateAlternateColorCodes('&', nume[1].replace("{players}", String.valueOf(Arena.getPlayers(group)))));
             a2.setCustomNameVisible(true);
@@ -132,7 +130,7 @@ public class JoinNPC {
             npcs_holos.put(a2, Arrays.asList(group, nume[1]));
         } else if (nume.length == 1) {
             npcs.put(npc.getId(), group);
-            ArmorStand a2 = createArmorStand(l.clone().subtract(0, 0.25, 0));
+            ArmorStand a2 = com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.NPC.createArmorStand(l.clone().subtract(0, 0.25, 0));
             a2.setMarker(false);
             a2.setCustomName(ChatColor.translateAlternateColorCodes('&', nume[0]).replace("{players}", String.valueOf(Arena.getPlayers(group))));
             a2.setCustomNameVisible(true);

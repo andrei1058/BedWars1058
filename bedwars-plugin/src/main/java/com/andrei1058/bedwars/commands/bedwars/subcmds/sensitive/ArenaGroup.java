@@ -42,9 +42,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.andrei1058.bedwars.BedWars.config;
-import static com.andrei1058.bedwars.BedWars.plugin;
-
 public class ArenaGroup extends SubCommand {
 
     public ArenaGroup(ParentCommand parent, String name) {
@@ -69,38 +66,38 @@ public class ArenaGroup extends SubCommand {
                 return true;
             }
             java.util.List<String> groups;
-            if (config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS) == null) {
+            if (BedWars.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS) == null) {
                 groups = new ArrayList<>();
             } else {
-                groups = config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS);
+                groups = BedWars.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS);
             }
             if (groups.contains(args[1])) {
                 p.sendMessage("§c▪ §7This group already exists!");
                 return true;
             }
             groups.add(args[1]);
-            config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS, groups);
+            BedWars.config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS, groups);
             p.sendMessage("§6 ▪ §7Group created!");
         } else if (args[0].equalsIgnoreCase("remove")) {
             List<String> groups;
-            if (config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS) == null) {
+            if (BedWars.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS) == null) {
                 groups = new ArrayList<>();
             } else {
-                groups = config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS);
+                groups = BedWars.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS);
             }
             if (!groups.contains(args[1])) {
                 p.sendMessage("§c▪ §7This group doesn't exist!");
                 return true;
             }
             groups.remove(args[1]);
-            config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS, groups);
+            BedWars.config.set(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS, groups);
             p.sendMessage("§6 ▪ §7Group deleted!");
         } else if (args[0].equalsIgnoreCase("list")) {
             List<String> groups;
-            if (config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS) == null) {
+            if (BedWars.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS) == null) {
                 groups = new ArrayList<>();
             } else {
-                groups = config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS);
+                groups = BedWars.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS);
             }
             p.sendMessage("§7Available arena groups:");
             p.sendMessage("§6 ▪ §fDefault");
@@ -112,14 +109,14 @@ public class ArenaGroup extends SubCommand {
                 sendArenaGroupCmdList(p);
                 return true;
             }
-            if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS) != null) {
-                if (config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS).contains(args[2])) {
-                    File arena = new File(plugin.getDataFolder(), "/Arenas/" + args[1] + ".yml");
+            if (BedWars.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS) != null) {
+                if (BedWars.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS).contains(args[2])) {
+                    File arena = new File(BedWars.plugin.getDataFolder(), "/Arenas/" + args[1] + ".yml");
                     if (!arena.exists()) {
                         p.sendMessage("§c▪ §7Arena " + args[1] + " doesn't exist!");
                         return true;
                     }
-                    ArenaConfig cm = new ArenaConfig(BedWars.plugin, args[1], plugin.getDataFolder().getPath() + "/Arenas");
+                    ArenaConfig cm = new ArenaConfig(BedWars.plugin, args[1], BedWars.plugin.getDataFolder().getPath() + "/Arenas");
                     cm.set("group", args[2]);
                     if (Arena.getArenaByName(args[1]) != null) {
                         Arena.getArenaByName(args[1]).setGroup(args[2]);

@@ -23,6 +23,7 @@ package com.andrei1058.bedwars.halloween.shop;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.shop.IBuyItem;
 import com.andrei1058.bedwars.api.arena.shop.IContentTier;
+import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.shop.main.CategoryContent;
@@ -36,8 +37,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class PumpkinContent extends CategoryContent {
 
@@ -102,14 +101,14 @@ public class PumpkinContent extends CategoryContent {
         ItemStack pumpkin = tier.getItemStack();
 
         boolean canAfford = calculateMoney(player, tier.getCurrency()) >= tier.getPrice();
-        String translatedCurrency = getMsg(player, getCurrencyMsgPath(tier));
+        String translatedCurrency = Language.getMsg(player, getCurrencyMsgPath(tier));
 
         String buyStatus;
 
         if (!canAfford) {
-            buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CANT_AFFORD).replace("{currency}", translatedCurrency);
+            buyStatus = Language.getMsg(player, Messages.SHOP_LORE_STATUS_CANT_AFFORD).replace("{currency}", translatedCurrency);
         } else {
-            buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CAN_BUY);
+            buyStatus = Language.getMsg(player, Messages.SHOP_LORE_STATUS_CAN_BUY);
         }
         ChatColor cColor = getCurrencyColor(tier.getCurrency());
 

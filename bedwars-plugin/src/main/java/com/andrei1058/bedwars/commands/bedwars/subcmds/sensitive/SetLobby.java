@@ -35,8 +35,6 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-import static com.andrei1058.bedwars.BedWars.config;
-
 public class SetLobby extends SubCommand {
 
     public SetLobby(ParentCommand parent, String name) {
@@ -44,7 +42,7 @@ public class SetLobby extends SubCommand {
         setPriority(1);
         showInList(true);
         setPermission(Permissions.PERMISSION_SETUP_ARENA);
-        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/"+MainCommand.getInstance().getName()+" "+getSubCommandName()+ (config.getLobbyWorldName().isEmpty() ? " §c(not set)" : " §a(set)"),
+        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/"+MainCommand.getInstance().getName()+" "+getSubCommandName()+ (BedWars.config.getLobbyWorldName().isEmpty() ? " §c(not set)" : " §a(set)"),
                 "§aSet the main lobby. §fThis is required but\n§fif you are going to use the server in §eBUNGEE §fmode\n§fthe lobby location will §enot §fbe used.\n§eType again to replace the old spawn location.",
                 "/"+getParent().getName()+" "+getSubCommandName(), ClickEvent.Action.RUN_COMMAND));
     }
@@ -57,9 +55,9 @@ public class SetLobby extends SubCommand {
             p.sendMessage("§6 ▪ §4This command can't be used in arenas. It is meant for the main lobby!");
             return true;
         }
-        config.saveConfigLoc("lobbyLoc", p.getLocation());
+        BedWars.config.saveConfigLoc("lobbyLoc", p.getLocation());
         p.sendMessage("§6 ▪ §7Lobby location set!");
-        config.reload();
+        BedWars.config.reload();
         BedWars.setLobbyWorld(p.getLocation().getWorld().getName());
         return true;
     }

@@ -34,8 +34,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import static com.andrei1058.bedwars.BedWars.config;
-
 @SuppressWarnings("WeakerAccess")
 public class MySQL implements Database {
 
@@ -54,15 +52,15 @@ public class MySQL implements Database {
      * Create new MySQL connection.
      */
     public MySQL() {
-        this.host = config.getYml().getString("database.host");
-        this.database = config.getYml().getString("database.database");
-        this.user = config.getYml().getString("database.user");
-        this.pass = config.getYml().getString("database.pass");
-        this.port = config.getYml().getInt("database.port");
-        this.ssl = config.getYml().getBoolean("database.ssl");
-        this.certificateVerification = config.getYml().getBoolean("database.verify-certificate", true);
-        this.poolSize = config.getYml().getInt("database.pool-size", 10);
-        this.maxLifetime = config.getYml().getInt("database.max-lifetime", 1800);
+        this.host = BedWars.config.getYml().getString("database.host");
+        this.database = BedWars.config.getYml().getString("database.database");
+        this.user = BedWars.config.getYml().getString("database.user");
+        this.pass = BedWars.config.getYml().getString("database.pass");
+        this.port = BedWars.config.getYml().getInt("database.port");
+        this.ssl = BedWars.config.getYml().getBoolean("database.ssl");
+        this.certificateVerification = BedWars.config.getYml().getBoolean("database.verify-certificate", true);
+        this.poolSize = BedWars.config.getYml().getInt("database.pool-size", 10);
+        this.maxLifetime = BedWars.config.getYml().getInt("database.max-lifetime", 1800);
     }
 
     /**

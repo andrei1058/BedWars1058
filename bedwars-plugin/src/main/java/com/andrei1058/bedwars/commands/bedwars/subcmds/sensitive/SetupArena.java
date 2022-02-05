@@ -36,8 +36,6 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-import static com.andrei1058.bedwars.arena.Arena.getArenaByName;
-
 public class SetupArena extends SubCommand {
 
     public SetupArena(ParentCommand parent, String name) {
@@ -70,7 +68,7 @@ public class SetupArena extends SubCommand {
         //    p.sendMessage("§c▪ §7" + args[0] + " doesn't exist!");
         //    return true;
         //}
-        if (getArenaByName(args[0]) != null && !BedWars.autoscale) {
+        if (Arena.getArenaByName(args[0]) != null && !BedWars.autoscale) {
             p.sendMessage("§c▪ §7Please disable it first!");
             return true;
         }

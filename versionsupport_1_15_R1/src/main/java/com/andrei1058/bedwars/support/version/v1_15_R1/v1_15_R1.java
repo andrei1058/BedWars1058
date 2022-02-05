@@ -35,7 +35,6 @@ import com.mojang.datafixers.types.Type;
 import net.minecraft.server.v1_15_R1.*;
 import org.bukkit.Color;
 import org.bukkit.Location;
-import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.type.Bed;

@@ -41,8 +41,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
-
 public class JoinListenerBungee implements Listener {
 
     @EventHandler
@@ -88,7 +86,7 @@ public class JoinListenerBungee implements Listener {
                     for (Player inGame : arena.getPlayers()) {
                         if (!Arena.isVip(inGame)) {
                             canJoin = true;
-                            inGame.kickPlayer(getMsg(inGame, Messages.ARENA_JOIN_VIP_KICK));
+                            inGame.kickPlayer(Language.getMsg(inGame, Messages.ARENA_JOIN_VIP_KICK));
                             break;
                         }
                     }

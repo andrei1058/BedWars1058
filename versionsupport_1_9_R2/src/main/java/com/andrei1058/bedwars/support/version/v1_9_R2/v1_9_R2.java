@@ -35,7 +35,6 @@ import net.minecraft.server.v1_9_R2.Item;
 import net.minecraft.server.v1_9_R2.*;
 import org.bukkit.Color;
 import org.bukkit.Location;
-import org.bukkit.Particle;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_9_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftFireball;
@@ -58,8 +57,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
-
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 @SuppressWarnings("unused")
 public class v1_9_R2 extends VersionSupport {
@@ -215,7 +212,7 @@ public class v1_9_R2 extends VersionSupport {
         vlg.setSilent(true);
 
         for (Player p : players) {
-            String[] nume = getMsg(p, name1).split(",");
+            String[] nume = Language.getMsg(p, name1).split(",");
             if (nume.length == 1) {
                 ArmorStand a = createArmorStand(nume[0], l.clone().add(0, 1.85, 0));
                 new ShopHolo(Language.getPlayerLanguage(p).getIso(), a, null, l, arena);

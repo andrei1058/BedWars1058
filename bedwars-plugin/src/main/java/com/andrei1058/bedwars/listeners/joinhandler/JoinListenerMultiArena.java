@@ -33,8 +33,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
-import static com.andrei1058.bedwars.BedWars.*;
-
 public class JoinListenerMultiArena implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -48,13 +46,13 @@ public class JoinListenerMultiArena implements Listener {
         // Show commands if player is op and there is no set arenas
         if (p.isOp()) {
             if (Arena.getArenas().isEmpty()) {
-                p.performCommand(mainCmd);
+                p.performCommand(BedWars.mainCmd);
             }
         }
 
         ReJoin reJoin = ReJoin.getPlayer(p);
 
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+        Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
             // Hide new player to players and spectators, and vice versa
             // Players from lobby will remain visible
             for (Player online : Bukkit.getOnlinePlayers()){
@@ -80,9 +78,9 @@ public class JoinListenerMultiArena implements Listener {
         if (reJoin != null && reJoin.canReJoin()) return;
 
         // Teleport to lobby location
-        Location lobbyLocation = config.getConfigLoc("lobbyLoc");
+        Location lobbyLocation = BedWars.config.getConfigLoc("lobbyLoc");
         if (lobbyLocation != null && lobbyLocation.getWorld() != null) {
-            Bukkit.getScheduler().runTaskLater(plugin, () -> p.teleport(lobbyLocation, PlayerTeleportEvent.TeleportCause.PLUGIN), 2L);
+            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> p.teleport(lobbyLocation, PlayerTeleportEvent.TeleportCause.PLUGIN), 2L);
         }
 
         // Send items

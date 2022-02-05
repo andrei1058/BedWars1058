@@ -46,9 +46,6 @@ import java.util.LinkedList;
 import java.util.UUID;
 import java.util.logging.Level;
 
-import static com.andrei1058.bedwars.BedWars.nms;
-import static com.andrei1058.bedwars.BedWars.plugin;
-
 public class UpgradesManager {
 
     private static final LinkedList<UUID> upgradeViewers = new LinkedList<>();
@@ -65,11 +62,11 @@ public class UpgradesManager {
     }
 
     public static void init() {
-        File oldFile = new File(plugin.getDataFolder(), "/upgrades.yml");
+        File oldFile = new File(BedWars.plugin.getDataFolder(), "/upgrades.yml");
         //noinspection ResultOfMethodCallIgnored
         oldFile.delete();
 
-        upgrades = new UpgradesConfig("upgrades2", plugin.getDataFolder().getPath());
+        upgrades = new UpgradesConfig("upgrades2", BedWars.plugin.getDataFolder().getPath());
         String name;
         for (String index : upgrades.getYml().getConfigurationSection("").getKeys(false)) {
             name = index;
@@ -363,7 +360,7 @@ public class UpgradesManager {
     public static MenuContent getMenuContent(ItemStack item) {
         if (item == null) return null;
 
-        String identifier = nms.getCustomData(item);
+        String identifier = BedWars.nms.getCustomData(item);
         if (identifier == null) return null;
         if (identifier.equals("null")) return null;
         if (!identifier.startsWith("MCONT_")) return null;

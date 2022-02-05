@@ -20,6 +20,7 @@
 
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup;
 
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
@@ -32,8 +33,6 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.andrei1058.bedwars.BedWars.mainCmd;
 
 public class SetSpectatorPos extends SubCommand {
 
@@ -53,7 +52,7 @@ public class SetSpectatorPos extends SubCommand {
             return false;
         }
         if (args.length != 0) {
-            p.sendMessage(ss.getPrefix() + ChatColor.RED + "Usage: /" + mainCmd + " " + getSubCommandName());
+            p.sendMessage(ss.getPrefix() + ChatColor.RED + "Usage: /" + BedWars.mainCmd + " " + getSubCommandName());
         } else {
             ss.getConfig().saveArenaLoc(ConfigPath.ARENA_SPEC_LOC, p.getLocation());
             p.sendMessage(ss.getPrefix() + "Spectator location set!");

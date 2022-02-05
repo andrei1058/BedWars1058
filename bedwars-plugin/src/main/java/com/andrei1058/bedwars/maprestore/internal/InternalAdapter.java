@@ -42,9 +42,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.andrei1058.bedwars.BedWars.config;
-import static com.andrei1058.bedwars.BedWars.plugin;
-
 public class InternalAdapter extends RestoreAdapter {
 
     public static File backupFolder = new File(BedWars.plugin.getDataFolder() + "/Cache");
@@ -62,7 +59,7 @@ public class InternalAdapter extends RestoreAdapter {
                 });
                 return;
             }
-            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, () -> {
                 File bf = new File(backupFolder, a.getArenaName() + ".zip"), af = new File(Bukkit.getWorldContainer(), a.getArenaName());
                 if (bf.exists()) {
                     FileUtil.delete(af);
@@ -80,7 +77,7 @@ public class InternalAdapter extends RestoreAdapter {
 
                 deleteWorldTrash(a.getWorldName());
 
-                Bukkit.getScheduler().runTask(plugin, () -> {
+                Bukkit.getScheduler().runTask(BedWars.plugin, () -> {
                     WorldCreator wc = new WorldCreator(a.getWorldName());
                     wc.generateStructures(false);
                     wc.generator(new VoidChunkGenerator());
@@ -101,8 +98,8 @@ public class InternalAdapter extends RestoreAdapter {
             if (BedWars.getServerType() == ServerType.BUNGEE) {
                 if (Arena.getGamesBeforeRestart() == 0) {
                     if (Arena.getArenas().isEmpty()) {
-                        plugin.getLogger().info("Dispatching command: " + config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
+                        BedWars.plugin.getLogger().info("Dispatching command: " + BedWars.config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), BedWars.config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
                     }
                 } else {
                     if (Arena.getGamesBeforeRestart() != -1) {
@@ -110,12 +107,12 @@ public class InternalAdapter extends RestoreAdapter {
                     }
                     Bukkit.unloadWorld(a.getWorldName(), false);
                     if (Arena.canAutoScale(a.getArenaName())) {
-                        Bukkit.getScheduler().runTaskLater(plugin, () -> new Arena(a.getArenaName(), null), 80L);
+                        Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> new Arena(a.getArenaName(), null), 80L);
                     }
                 }
             } else {
                 Bukkit.unloadWorld(a.getWorldName(), false);
-                Bukkit.getScheduler().runTaskLater(plugin, () -> new Arena(a.getArenaName(), null), 80L);
+                Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> new Arena(a.getArenaName(), null), 80L);
             }
             if (!a.getWorldName().equals(a.getArenaName())) {
                 deleteWorld(a.getWorldName());
@@ -158,7 +155,7 @@ public class InternalAdapter extends RestoreAdapter {
                             s.getPlayer().sendMessage(ChatColor.GREEN + "Creating a new void map: " + s.getWorldName());
                             World w = Bukkit.createWorld(wc);
                             w.setKeepSpawnInMemory(true);
-                            Bukkit.getScheduler().runTaskLater(plugin, s::teleportPlayer, 20L);
+                            Bukkit.getScheduler().runTaskLater(BedWars.plugin, s::teleportPlayer, 20L);
                         } catch (Exception ex){
                             ex.printStackTrace();
                             s.close();
@@ -170,7 +167,7 @@ public class InternalAdapter extends RestoreAdapter {
                     s.close();
                     return;
                 }
-                Bukkit.getScheduler().runTaskLater(plugin, s::teleportPlayer, 20L);
+                Bukkit.getScheduler().runTaskLater(BedWars.plugin, s::teleportPlayer, 20L);
             });
         });
     }
@@ -180,7 +177,7 @@ public class InternalAdapter extends RestoreAdapter {
         Bukkit.getScheduler().runTask(getOwner(), () -> {
             Bukkit.getWorld(s.getWorldName()).save();
             Bukkit.unloadWorld(s.getWorldName(), true);
-            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> new WorldZipper(s.getWorldName(), true));
+            Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, () -> new WorldZipper(s.getWorldName(), true));
         });
     }
 
@@ -206,7 +203,7 @@ public class InternalAdapter extends RestoreAdapter {
                     }
                 }
             }
-            Bukkit.getScheduler().runTaskLater(plugin, () ->
+            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () ->
                     loc1.getWorld().getEntities().forEach(e -> {
                         if (e instanceof Item) e.remove();
                     }), 15L);
@@ -231,7 +228,7 @@ public class InternalAdapter extends RestoreAdapter {
 
     @Override
     public void cloneArena(String name1, String name2) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, () -> {
             try {
                 FileUtils.copyDirectory(new File(Bukkit.getWorldContainer(), name1), new File(Bukkit.getWorldContainer(), name2));
                 deleteWorldTrash(name2);
@@ -261,7 +258,7 @@ public class InternalAdapter extends RestoreAdapter {
 
     @Override
     public void convertWorlds() {
-        File dir = new File(plugin.getDataFolder(), "/Arenas");
+        File dir = new File(BedWars.plugin.getDataFolder(), "/Arenas");
         if (dir.exists()) {
             List<File> files = new ArrayList<>();
             File[] fls = dir.listFiles();
@@ -287,10 +284,10 @@ public class InternalAdapter extends RestoreAdapter {
                         toAdd.add(newName);
                         toRemove.add(file);
                     }
-                    folder = new File(plugin.getServer().getWorldContainer(), file.getName().replace(".yml", ""));
+                    folder = new File(BedWars.plugin.getServer().getWorldContainer(), file.getName().replace(".yml", ""));
                     if (folder.exists()) {
                         if (!folder.getName().equals(folder.getName().toLowerCase())) {
-                            if (!folder.renameTo(new File(plugin.getServer().getWorldContainer().getPath() + "/" + folder.getName().toLowerCase()))) {
+                            if (!folder.renameTo(new File(BedWars.plugin.getServer().getWorldContainer().getPath() + "/" + folder.getName().toLowerCase()))) {
                                 BedWars.plugin.getLogger().severe("Could not rename " + folder.getName() + " folder to " + folder.getName().toLowerCase() + "! Please do it manually!");
                                 toRemove.add(file);
                                 return;

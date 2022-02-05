@@ -23,6 +23,7 @@ package com.andrei1058.bedwars.shop.defaultrestore;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
+import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -37,8 +38,6 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
-
-import static com.andrei1058.bedwars.support.version.common.VersionCommon.api;
 
 // Used to restore default swords and bows if they are removed from the inventory and you remain with a less powerful weapon of the same kind. 1.12-.
 public class ShopItemRestoreListener {
@@ -83,19 +82,19 @@ public class ShopItemRestoreListener {
      */
     public static boolean managePickup(Item item, LivingEntity player) {
         if (!(player instanceof Player)) return false;
-        if (api.getArenaUtil().getArenaByPlayer((Player) player) == null) return false;
-        if (api.getArenaUtil().getArenaByPlayer((Player) player).getStatus() != GameState.playing) return false;
-        if (!api.getArenaUtil().getArenaByPlayer((Player) player).isPlayer((Player) player)) return false;
+        if (VersionCommon.api.getArenaUtil().getArenaByPlayer((Player) player) == null) return false;
+        if (VersionCommon.api.getArenaUtil().getArenaByPlayer((Player) player).getStatus() != GameState.playing) return false;
+        if (!VersionCommon.api.getArenaUtil().getArenaByPlayer((Player) player).isPlayer((Player) player)) return false;
 
-        if (api.getVersionSupport().isSword(item.getItemStack())) {
+        if (VersionCommon.api.getVersionSupport().isSword(item.getItemStack())) {
             for (ItemStack is : ((Player) player).getInventory()) {
                 if (is == null) continue;
                 if (is.getType() == Material.AIR) continue;
-                if (!api.getVersionSupport().isCustomBedWarsItem(is)) continue;
-                if (!api.getVersionSupport().getCustomData(is).equalsIgnoreCase("DEFAULT_ITEM")) continue;
+                if (!VersionCommon.api.getVersionSupport().isCustomBedWarsItem(is)) continue;
+                if (!VersionCommon.api.getVersionSupport().getCustomData(is).equalsIgnoreCase("DEFAULT_ITEM")) continue;
 
-                if (api.getVersionSupport().isSword(item.getItemStack())) {
-                    if (api.getVersionSupport().getDamage(item.getItemStack()) >= api.getVersionSupport().getDamage(is)) {
+                if (VersionCommon.api.getVersionSupport().isSword(item.getItemStack())) {
+                    if (VersionCommon.api.getVersionSupport().getDamage(item.getItemStack()) >= VersionCommon.api.getVersionSupport().getDamage(is)) {
                         ((Player) player).getInventory().remove(is);
                         ((Player) player).updateInventory();
                         return false;
@@ -119,18 +118,18 @@ public class ShopItemRestoreListener {
      */
     private static boolean manageDrop(Entity player, Item item) {
         if (!(player instanceof Player)) return false;
-        if (api.getArenaUtil().getArenaByPlayer((Player) player) == null) return false;
-        IArena a = api.getArenaUtil().getArenaByPlayer((Player) player);
+        if (VersionCommon.api.getArenaUtil().getArenaByPlayer((Player) player) == null) return false;
+        IArena a = VersionCommon.api.getArenaUtil().getArenaByPlayer((Player) player);
         if (a.getStatus() != GameState.playing) return false;
         if (!a.isPlayer((Player) player)) return false;
-        if (api.getVersionSupport().isCustomBedWarsItem(item.getItemStack())
-                && api.getVersionSupport().getCustomData(item.getItemStack()).equalsIgnoreCase("DEFAULT_ITEM")
-                && api.getVersionSupport().isSword(item.getItemStack())) {
+        if (VersionCommon.api.getVersionSupport().isCustomBedWarsItem(item.getItemStack())
+                && VersionCommon.api.getVersionSupport().getCustomData(item.getItemStack()).equalsIgnoreCase("DEFAULT_ITEM")
+                && VersionCommon.api.getVersionSupport().isSword(item.getItemStack())) {
             boolean hasSword = false;
             for (ItemStack is : ((Player) player).getInventory()) {
                 if (is == null) continue;
-                if (api.getVersionSupport().isSword(is)) {
-                    if (api.getVersionSupport().getDamage(is) >= api.getVersionSupport().getDamage(item.getItemStack())) {
+                if (VersionCommon.api.getVersionSupport().isSword(is)) {
+                    if (VersionCommon.api.getVersionSupport().getDamage(is) >= VersionCommon.api.getVersionSupport().getDamage(item.getItemStack())) {
                         hasSword = true;
                         break;
                     }
@@ -142,7 +141,7 @@ public class ShopItemRestoreListener {
             boolean sword = false;
             for (ItemStack is : ((Player) player).getInventory()) {
                 if (is == null) continue;
-                if (api.getVersionSupport().isSword(is)) {
+                if (VersionCommon.api.getVersionSupport().isSword(is)) {
                     sword = true;
                     break;
                 }
@@ -162,8 +161,8 @@ public class ShopItemRestoreListener {
         @EventHandler
         public void onInventoryClose(InventoryCloseEvent e) {
             if (e.getInventory().getType() == InventoryType.PLAYER) return;
-            if (api.getArenaUtil().getArenaByPlayer((Player) e.getPlayer()) == null) return;
-            IArena a = api.getArenaUtil().getArenaByPlayer((Player) e.getPlayer());
+            if (VersionCommon.api.getArenaUtil().getArenaByPlayer((Player) e.getPlayer()) == null) return;
+            IArena a = VersionCommon.api.getArenaUtil().getArenaByPlayer((Player) e.getPlayer());
             if (a.getStatus() != GameState.playing) return;
             if (!a.isPlayer((Player) e.getPlayer())) return;
 
@@ -171,7 +170,7 @@ public class ShopItemRestoreListener {
             for (ItemStack is : e.getPlayer().getInventory()) {
                 if (is == null) continue;
                 if (is.getType() == Material.AIR) continue;
-                if (api.getVersionSupport().isSword(is)) sword = true;
+                if (VersionCommon.api.getVersionSupport().isSword(is)) sword = true;
             }
 
             if (!sword) {

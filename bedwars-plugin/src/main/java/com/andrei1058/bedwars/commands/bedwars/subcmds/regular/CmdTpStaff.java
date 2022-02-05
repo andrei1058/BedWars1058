@@ -34,8 +34,6 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
-
 public class CmdTpStaff extends SubCommand {
 
     public CmdTpStaff(ParentCommand parent, String name) {
@@ -54,7 +52,7 @@ public class CmdTpStaff extends SubCommand {
         }
 
         if (!hasPermission(p2)) {
-            p2.sendMessage(getMsg(p2, Messages.COMMAND_FORCESTART_NO_PERM));
+            p2.sendMessage(Language.getMsg(p2, Messages.COMMAND_FORCESTART_NO_PERM));
             return true;
         }
 

@@ -28,12 +28,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static com.andrei1058.bedwars.BedWars.plugin;
-
 public class UpgradesConfig extends ConfigManager {
 
     public UpgradesConfig(String name, String dir) {
-        super(plugin, name, dir);
+        super(BedWars.plugin, name, dir);
         YamlConfiguration yml = this.getYml();
         List<String> elements = Arrays.asList("upgrade-swords,10", "upgrade-armor,11", "upgrade-miner,12", "upgrade-forge,13",
                 "upgrade-heal-pool,14", "upgrade-dragon,15", "category-traps,16", "separator-glass,18,19,20,21,22,23,24,25,26",

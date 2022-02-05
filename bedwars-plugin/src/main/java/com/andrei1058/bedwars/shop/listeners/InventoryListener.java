@@ -20,6 +20,7 @@
 
 package com.andrei1058.bedwars.shop.listeners;
 
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.shop.ShopCache;
@@ -39,10 +40,6 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
-
-import static com.andrei1058.bedwars.BedWars.nms;
-import static org.bukkit.event.inventory.InventoryAction.HOTBAR_SWAP;
-import static org.bukkit.event.inventory.InventoryAction.MOVE_TO_OTHER_INVENTORY;
 
 public class InventoryListener implements Listener {
 
@@ -128,7 +125,7 @@ public class InventoryListener implements Listener {
         if (sc == null) return;
 
         //block moving from hotbar
-        if (e.getAction() == HOTBAR_SWAP && e.getClick() == ClickType.NUMBER_KEY) {
+        if (e.getAction() == InventoryAction.HOTBAR_SWAP && e.getClick() == ClickType.NUMBER_KEY) {
             if (e.getHotbarButton() > -1) {
                 ItemStack i = e.getWhoClicked().getInventory().getItem(e.getHotbarButton());
                 if (i != null) {
@@ -176,7 +173,7 @@ public class InventoryListener implements Listener {
         }
 
         //block moving with shift
-        if (e.getAction() == MOVE_TO_OTHER_INVENTORY) {
+        if (e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
             if (shouldCancelMovement(e.getCurrentItem(), sc)) {
                 if (e.getView().getTopInventory().getHolder() != null && e.getInventory().getHolder() == e.getWhoClicked())
                     return;
@@ -200,13 +197,13 @@ public class InventoryListener implements Listener {
         if (i == null) return false;
         if (sc == null) return false;
 
-        if (nms.isCustomBedWarsItem(i)){
-            if (nms.getCustomData(i).equalsIgnoreCase("DEFAULT_ITEM")){
+        if (BedWars.nms.isCustomBedWarsItem(i)){
+            if (BedWars.nms.getCustomData(i).equalsIgnoreCase("DEFAULT_ITEM")){
                 return true;
             }
         }
 
-        String identifier = nms.getShopUpgradeIdentifier(i);
+        String identifier = BedWars.nms.getShopUpgradeIdentifier(i);
         if (identifier == null) return false;
         if (identifier.equals("null")) return false;
         ShopCache.CachedItem cachedItem = sc.getCachedItem(identifier);

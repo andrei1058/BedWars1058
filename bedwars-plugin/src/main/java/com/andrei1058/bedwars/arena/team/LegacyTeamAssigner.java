@@ -20,6 +20,7 @@
 
 package com.andrei1058.bedwars.arena.team;
 
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.events.gameplay.TeamAssignEvent;
@@ -31,8 +32,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.andrei1058.bedwars.BedWars.getParty;
-
 public class LegacyTeamAssigner {
 
     private LegacyTeamAssigner(){}
@@ -41,7 +40,7 @@ public class LegacyTeamAssigner {
         //Check who is having parties
         List<Player> skip = new ArrayList<>(), owners = new ArrayList<>();
         for (Player p : arena.getPlayers()) {
-            if (getParty().hasParty(p) && getParty().isOwner(p)) {
+            if (BedWars.getParty().hasParty(p) && BedWars.getParty().isOwner(p)) {
                 owners.add(p);
             }
         }
@@ -54,7 +53,7 @@ public class LegacyTeamAssigner {
             if (owners.contains(p)) {
                 for (ITeam t : arena.getTeams()) {
                     if (skip.contains(p)) continue;
-                    if (t.getSize() + getParty().partySize(p) <= arena.getMaxInTeam()) {
+                    if (t.getSize() + BedWars.getParty().partySize(p) <= arena.getMaxInTeam()) {
                         skip.add(p);
                         p.closeInventory();
                         TeamAssignEvent e = new TeamAssignEvent(p, t, arena);
@@ -62,7 +61,7 @@ public class LegacyTeamAssigner {
                         if (!e.isCancelled()) {
                             t.addPlayers(p);
                         }
-                        for (Player mem : getParty().getMembers(p)) {
+                        for (Player mem : BedWars.getParty().getMembers(p)) {
                             if (mem != p) {
                                 IArena ia = Arena.getArenaByPlayer(mem);
                                 if (ia == null) {

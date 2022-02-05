@@ -40,9 +40,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-import static com.andrei1058.bedwars.BedWars.plugin;
-import static com.andrei1058.bedwars.arena.Arena.getArenaByName;
-
 public class DelArena extends SubCommand {
 
     private static HashMap<Player, Long> delArenaConfirm = new HashMap<>();
@@ -69,11 +66,11 @@ public class DelArena extends SubCommand {
             p.sendMessage("§c▪ §7" + args[0] + " doesn't exist as a world folder!");
             return true;
         }
-        if (getArenaByName(args[0]) != null) {
+        if (Arena.getArenaByName(args[0]) != null) {
             p.sendMessage("§c▪ §7Please disable it first!");
             return true;
         }
-        File ac = new File(plugin.getDataFolder(), "/Arenas/" + args[0]+ ".yml");
+        File ac = new File(BedWars.plugin.getDataFolder(), "/Arenas/" + args[0]+ ".yml");
         if (!ac.exists()) {
             p.sendMessage("§c▪ §7This arena doesn't exist!");
             return true;
@@ -97,7 +94,7 @@ public class DelArena extends SubCommand {
     @Override
     public List<String> getTabComplete() {
         List<String> tab = new ArrayList<>();
-        File dir = new File(plugin.getDataFolder(), "/Arenas");
+        File dir = new File(BedWars.plugin.getDataFolder(), "/Arenas");
         if (dir.exists()) {
             File[] fls = dir.listFiles();
             for (File fl : Objects.requireNonNull(fls)) {

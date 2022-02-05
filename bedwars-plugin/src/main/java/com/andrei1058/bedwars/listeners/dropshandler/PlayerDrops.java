@@ -20,10 +20,12 @@
 
 package com.andrei1058.bedwars.listeners.dropshandler;
 
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
+import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -34,9 +36,6 @@ import org.bukkit.util.Vector;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.andrei1058.bedwars.BedWars.nms;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class PlayerDrops {
 
@@ -93,8 +92,8 @@ public class PlayerDrops {
                 for (ItemStack i : inventory) {
                     if (i == null) continue;
                     if (i.getType() == Material.AIR) continue;
-                    if (nms.isArmor(i) || nms.isBow(i) || nms.isSword(i) || nms.isTool(i)) continue;
-                    if (!nms.getShopUpgradeIdentifier(i).trim().isEmpty()) continue;
+                    if (BedWars.nms.isArmor(i) || BedWars.nms.isBow(i) || BedWars.nms.isSword(i) || BedWars.nms.isTool(i)) continue;
+                    if (!BedWars.nms.getShopUpgradeIdentifier(i).trim().isEmpty()) continue;
                     if (arena.getTeam(killer) != null) {
                         Vector v = victimsTeam.getKillDropsLocation();
                         killer.getWorld().dropItemNaturally(new Location(arena.getWorld(), v.getX(), v.getY(), v.getZ()), i);
@@ -128,20 +127,20 @@ public class PlayerDrops {
                     int amount = entry.getValue();
                     switch (entry.getKey()) {
                         case DIAMOND:
-                            msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_DIAMOND).replace("{meaning}", amount == 1 ?
-                                    getMsg(killer, Messages.MEANING_DIAMOND_SINGULAR) : getMsg(killer, Messages.MEANING_DIAMOND_PLURAL));
+                            msg = Language.getMsg(killer, Messages.PLAYER_DIE_REWARD_DIAMOND).replace("{meaning}", amount == 1 ?
+                                    Language.getMsg(killer, Messages.MEANING_DIAMOND_SINGULAR) : Language.getMsg(killer, Messages.MEANING_DIAMOND_PLURAL));
                             break;
                         case EMERALD:
-                            msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_EMERALD).replace("{meaning}", amount == 1 ?
-                                    getMsg(killer, Messages.MEANING_EMERALD_SINGULAR) : getMsg(killer, Messages.MEANING_EMERALD_PLURAL));
+                            msg = Language.getMsg(killer, Messages.PLAYER_DIE_REWARD_EMERALD).replace("{meaning}", amount == 1 ?
+                                    Language.getMsg(killer, Messages.MEANING_EMERALD_SINGULAR) : Language.getMsg(killer, Messages.MEANING_EMERALD_PLURAL));
                             break;
                         case IRON_INGOT:
-                            msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_IRON).replace("{meaning}", amount == 1 ?
-                                    getMsg(killer, Messages.MEANING_IRON_SINGULAR) : getMsg(killer, Messages.MEANING_IRON_PLURAL));
+                            msg = Language.getMsg(killer, Messages.PLAYER_DIE_REWARD_IRON).replace("{meaning}", amount == 1 ?
+                                    Language.getMsg(killer, Messages.MEANING_IRON_SINGULAR) : Language.getMsg(killer, Messages.MEANING_IRON_PLURAL));
                             break;
                         case GOLD_INGOT:
-                            msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_GOLD).replace("{meaning}", amount == 1 ?
-                                    getMsg(killer, Messages.MEANING_GOLD_SINGULAR) : getMsg(killer, Messages.MEANING_GOLD_PLURAL));
+                            msg = Language.getMsg(killer, Messages.PLAYER_DIE_REWARD_GOLD).replace("{meaning}", amount == 1 ?
+                                    Language.getMsg(killer, Messages.MEANING_GOLD_SINGULAR) : Language.getMsg(killer, Messages.MEANING_GOLD_PLURAL));
                             break;
                     }
                     killer.sendMessage(msg.replace("{amount}", String.valueOf(amount)));

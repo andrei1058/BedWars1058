@@ -37,7 +37,10 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_8_R3.entity.*;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftFireball;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftTNTPrimed;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
 import org.bukkit.entity.*;
@@ -57,8 +60,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
-
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 @SuppressWarnings("unused")
 public class v1_8_R3 extends VersionSupport {
@@ -258,7 +259,7 @@ public class v1_8_R3 extends VersionSupport {
         spawnVillager(l);
 
         for (Player p : players) {
-            String[] nume = getMsg(p, name1).split(",");
+            String[] nume = Language.getMsg(p, name1).split(",");
             if (nume.length == 1) {
                 ArmorStand a = createArmorStand(nume[0], l.clone().add(0, 1.85, 0));
                 new ShopHolo(Language.getPlayerLanguage(p).getIso(), a, null, l, arena);

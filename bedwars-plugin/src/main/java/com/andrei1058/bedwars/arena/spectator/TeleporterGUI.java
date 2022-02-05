@@ -22,6 +22,7 @@ package com.andrei1058.bedwars.arena.spectator;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.Bukkit;
@@ -35,10 +36,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.andrei1058.bedwars.BedWars.nms;
-import static com.andrei1058.bedwars.api.language.Language.getList;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 @SuppressWarnings("WeakerAccess")
 public class TeleporterGUI {
@@ -88,7 +85,7 @@ public class TeleporterGUI {
         } else {
             size = 54;
         }
-        Inventory inv = Bukkit.createInventory(p, size, getMsg(p, Messages.ARENA_SPECTATOR_TELEPORTER_GUI_NAME));
+        Inventory inv = Bukkit.createInventory(p, size, Language.getMsg(p, Messages.ARENA_SPECTATOR_TELEPORTER_GUI_NAME));
         refreshInv(p, inv);
         refresh.put(p, inv);
         p.openInventory(inv);
@@ -114,22 +111,22 @@ public class TeleporterGUI {
      * Create a player head
      */
     private static ItemStack createHead(Player targetPlayer, Player GUIholder) {
-        ItemStack i = nms.getPlayerHead(targetPlayer, null);
+        ItemStack i = BedWars.nms.getPlayerHead(targetPlayer, null);
         ItemMeta im = i.getItemMeta();
         assert im != null;
-        im.setDisplayName(getMsg(GUIholder, Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME)
+        im.setDisplayName(Language.getMsg(GUIholder, Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME)
                 .replace("{prefix}", BedWars.getChatSupport().getPrefix(targetPlayer))
                 .replace("{suffix}", BedWars.getChatSupport().getSuffix(targetPlayer))
                 .replace("{player}", targetPlayer.getDisplayName())
                 .replace("{playername}", targetPlayer.getName()));
         List<String> lore = new ArrayList<>();
         String health = String.valueOf((int)targetPlayer.getHealth() * 100 / targetPlayer.getHealthScale());
-        for (String s : getList(GUIholder, Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_LORE)) {
+        for (String s : Language.getList(GUIholder, Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_LORE)) {
             lore.add(s.replace("{health}", health).replace("{food}", String.valueOf(targetPlayer.getFoodLevel())));
         }
         im.setLore(lore);
         i.setItemMeta(im);
-        return nms.addCustomData(i, NBT_SPECTATOR_TELEPORTER_GUI_HEAD + targetPlayer.getName());
+        return BedWars.nms.addCustomData(i, NBT_SPECTATOR_TELEPORTER_GUI_HEAD + targetPlayer.getName());
     }
 
     /**

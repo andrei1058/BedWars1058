@@ -41,10 +41,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import static com.andrei1058.bedwars.BedWars.*;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
-import static com.andrei1058.bedwars.api.language.Language.getPlayerLanguage;
-
 public class ChatFormatting implements Listener {
 
     @EventHandler(ignoreCancelled = true)
@@ -53,7 +49,7 @@ public class ChatFormatting implements Listener {
         Player p = e.getPlayer();
 
         // in shared mode we don't want messages from outside the arena to be seen in game
-        if (getServerType() == ServerType.SHARED && Arena.getArenaByPlayer(p) == null) {
+        if (BedWars.getServerType() == ServerType.SHARED && Arena.getArenaByPlayer(p) == null) {
             e.getRecipients().removeIf(pl -> Arena.getArenaByPlayer(pl) != null);
             return;
         }
@@ -63,10 +59,10 @@ public class ChatFormatting implements Listener {
             e.setMessage(ChatColor.translateAlternateColorCodes('&', e.getMessage()));
         }
 
-        Language language = getPlayerLanguage(p);
+        Language language = Language.getPlayerLanguage(p);
 
         // handle lobby world for multi arena
-        if (getServerType() == ServerType.MULTIARENA && p.getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
+        if (BedWars.getServerType() == ServerType.MULTIARENA && p.getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
             setRecipients(e, p.getWorld().getPlayers());
         }
 
@@ -133,13 +129,13 @@ public class ChatFormatting implements Listener {
 
     private static String parsePHolders(String content, Player player, @Nullable ITeam team) {
         content = content
-                .replace("{vPrefix}", getChatSupport().getPrefix(player))
-                .replace("{vSuffix}", getChatSupport().getSuffix(player))
+                .replace("{vPrefix}", BedWars.getChatSupport().getPrefix(player))
+                .replace("{vSuffix}", BedWars.getChatSupport().getSuffix(player))
                 .replace("{playername}", player.getName())
-                .replace("{level}", getLevelSupport().getLevel(player))
+                .replace("{level}", BedWars.getLevelSupport().getLevel(player))
                 .replace("{player}", player.getDisplayName());
         if (team != null) {
-            String teamFormat = getMsg(player, Messages.FORMAT_PAPI_PLAYER_TEAM_TEAM)
+            String teamFormat = Language.getMsg(player, Messages.FORMAT_PAPI_PLAYER_TEAM_TEAM)
                     .replace("{TeamColor}", team.getColor().chat() + "")
                     .replace("{TeamName}", team.getDisplayName(Language.getPlayerLanguage(player)).toUpperCase());
             content = content.replace("{team}", teamFormat);
@@ -164,7 +160,7 @@ public class ChatFormatting implements Listener {
 
     @SafeVarargs
     public static void setRecipients(AsyncPlayerChatEvent event, List<Player>... target) {
-        if (!config.getBoolean(ConfigPath.GENERAL_CHAT_GLOBAL)) {
+        if (!BedWars.config.getBoolean(ConfigPath.GENERAL_CHAT_GLOBAL)) {
             event.getRecipients().clear();
             for (List<Player> list : target) {
                 event.getRecipients().addAll(list);

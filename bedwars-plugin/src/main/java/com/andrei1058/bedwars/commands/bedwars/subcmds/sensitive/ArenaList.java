@@ -20,6 +20,7 @@
 
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
@@ -40,8 +41,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import static com.andrei1058.bedwars.BedWars.plugin;
 
 public class ArenaList extends SubCommand {
 
@@ -78,7 +77,7 @@ public class ArenaList extends SubCommand {
             start = 0;
         }
 
-        p.sendMessage(color(" \n&1|| &3" + plugin.getName() + "&7 Instantiated games: \n "));
+        p.sendMessage(color(" \n&1|| &3" + BedWars.plugin.getName() + "&7 Instantiated games: \n "));
 
         if (arenas.isEmpty()) {
             p.sendMessage(ChatColor.RED + "No arenas to display.");
@@ -117,7 +116,7 @@ public class ArenaList extends SubCommand {
     @NotNull
     private java.util.List<String> getArenas() {
         ArrayList<String> arene = new ArrayList<>();
-        File dir = new File(plugin.getDataFolder(), "/Arenas");
+        File dir = new File(BedWars.plugin.getDataFolder(), "/Arenas");
         if (dir.exists()) {
             for (File f : Objects.requireNonNull(dir.listFiles())) {
                 if (f.isFile()) {

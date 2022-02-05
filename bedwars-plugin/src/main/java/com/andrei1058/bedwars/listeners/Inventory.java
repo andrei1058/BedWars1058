@@ -35,25 +35,18 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.Objects;
-
-import static com.andrei1058.bedwars.BedWars.nms;
-import static org.bukkit.event.inventory.InventoryAction.HOTBAR_SWAP;
-import static org.bukkit.event.inventory.InventoryAction.MOVE_TO_OTHER_INVENTORY;
 
 public class Inventory implements Listener {
 
     @EventHandler
     public void onClose(InventoryCloseEvent e) {
         Player p = (Player) e.getPlayer();
-        if (nms.getInventoryName(e).equalsIgnoreCase(SetupSession.getInvName())) {
+        if (BedWars.nms.getInventoryName(e).equalsIgnoreCase(SetupSession.getInvName())) {
             SetupSession ss = SetupSession.getSession(p.getUniqueId());
             if (ss != null) {
                 if (ss.getSetupType() == null)
@@ -68,7 +61,7 @@ public class Inventory implements Listener {
     @EventHandler
     public void onCommandItemClick(InventoryClickEvent e) {
         //block moving from hotBar
-        if (e.getAction() == HOTBAR_SWAP && e.getClick() == ClickType.NUMBER_KEY) {
+        if (e.getAction() == InventoryAction.HOTBAR_SWAP && e.getClick() == ClickType.NUMBER_KEY) {
             if (e.getHotbarButton() > -1) {
                 ItemStack i = e.getWhoClicked().getInventory().getItem(e.getHotbarButton());
                 if (i != null) {
@@ -119,7 +112,7 @@ public class Inventory implements Listener {
         }
 
         //block moving with shift
-        if (e.getAction() == MOVE_TO_OTHER_INVENTORY) {
+        if (e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
             if (isCommandItem(e.getCurrentItem())) e.setCancelled(true);
         }
     }
@@ -166,7 +159,7 @@ public class Inventory implements Listener {
         if (a != null) {
 
             //Prevent players from moving items in stats GUI
-            if (nms.getInventoryName(e).equals(Language.getMsg(p, Messages.PLAYER_STATS_GUI_INV_NAME).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()))) {
+            if (BedWars.nms.getInventoryName(e).equals(Language.getMsg(p, Messages.PLAYER_STATS_GUI_INV_NAME).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()))) {
                 e.setCancelled(true);
                 return;
             }
@@ -187,7 +180,7 @@ public class Inventory implements Listener {
         }
 
         /* Check setup gui items */
-        if (SetupSession.isInSetupSession(p.getUniqueId()) && nms.getInventoryName(e).equalsIgnoreCase(SetupSession.getInvName())) {
+        if (SetupSession.isInSetupSession(p.getUniqueId()) && BedWars.nms.getInventoryName(e).equalsIgnoreCase(SetupSession.getInvName())) {
             SetupSession ss = SetupSession.getSession(p.getUniqueId());
             if (e.getSlot() == SetupSession.getAdvancedSlot()) {
                 Objects.requireNonNull(ss).setSetupType(SetupType.ADVANCED);
@@ -216,8 +209,8 @@ public class Inventory implements Listener {
     private static boolean isCommandItem(ItemStack i) {
         if (i == null) return false;
         if (i.getType() == Material.AIR) return false;
-        if (nms.isCustomBedWarsItem(i)) {
-            String[] customData = nms.getCustomData(i).split("_");
+        if (BedWars.nms.isCustomBedWarsItem(i)) {
+            String[] customData = BedWars.nms.getCustomData(i).split("_");
             if (customData.length >= 2) {
                 return customData[0].equals("RUNCOMMAND");
             }

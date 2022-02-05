@@ -33,8 +33,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.andrei1058.bedwars.BedWars.nms;
-
 @SuppressWarnings("WeakerAccess")
 public class ContentTier implements IContentTier {
 
@@ -105,11 +103,11 @@ public class ContentTier implements IContentTier {
 
         // potion display color based on NBT tag
         if (yml.getString(path + ".tier-item.potion-display") != null && !yml.getString(path + ".tier-item.potion-display").isEmpty()) {
-            itemStack = nms.setTag(itemStack, "Potion", yml.getString(path + ".tier-item.potion-display"));
+            itemStack = BedWars.nms.setTag(itemStack, "Potion", yml.getString(path + ".tier-item.potion-display"));
         }
         // 1.16+ custom color
         if (yml.getString(path + ".tier-item.potion-color") != null && !yml.getString(path + ".tier-item.potion-color").isEmpty()) {
-            itemStack = nms.setTag(itemStack, "CustomPotionColor", yml.getString(path + ".tier-item.potion-color"));
+            itemStack = BedWars.nms.setTag(itemStack, "CustomPotionColor", yml.getString(path + ".tier-item.potion-color"));
         }
 
         if (itemStack != null) {

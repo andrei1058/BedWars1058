@@ -41,8 +41,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.andrei1058.bedwars.BedWars.plugin;
-
 public class CloneArena extends SubCommand {
     public CloneArena(ParentCommand parent, String name) {
         super(parent, name);
@@ -66,7 +64,7 @@ public class CloneArena extends SubCommand {
             p.sendMessage("§c▪ §7" + args[0] + " doesn't exist!");
             return true;
         }
-        File yml1 = new File(plugin.getDataFolder(), "/Arenas/" + args[0] + ".yml"), yml2 = new File(plugin.getDataFolder(), "/Arenas/" + args[1] + ".yml");
+        File yml1 = new File(BedWars.plugin.getDataFolder(), "/Arenas/" + args[0] + ".yml"), yml2 = new File(BedWars.plugin.getDataFolder(), "/Arenas/" + args[1] + ".yml");
         if (!yml1.exists()) {
             p.sendMessage("§c▪ §7" + args[0] + " doesn't exist!");
             return true;
@@ -99,7 +97,7 @@ public class CloneArena extends SubCommand {
     @Override
     public List<String> getTabComplete() {
         List<String> tab = new ArrayList<>();
-        File dir = new File(plugin.getDataFolder(), "/Arenas");
+        File dir = new File(BedWars.plugin.getDataFolder(), "/Arenas");
         if (dir.exists()) {
             File[] fls = dir.listFiles();
             for (File fl : Objects.requireNonNull(fls)) {

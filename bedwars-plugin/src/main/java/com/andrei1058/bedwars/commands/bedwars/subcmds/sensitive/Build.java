@@ -28,14 +28,13 @@ import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.configuration.Permissions;
+import com.andrei1058.bedwars.listeners.BreakPlace;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
-
-import static com.andrei1058.bedwars.listeners.BreakPlace.*;
 
 public class Build extends SubCommand {
 
@@ -53,12 +52,12 @@ public class Build extends SubCommand {
         if (s instanceof ConsoleCommandSender) return false;
         Player p = (Player) s;
         if (!MainCommand.isLobbySet(p)) return true;
-        if (isBuildSession(p)) {
+        if (BreakPlace.isBuildSession(p)) {
             p.sendMessage("§6 ▪ §7You can't place and break blocks anymore!");
-            removeBuildSession(p);
+            BreakPlace.removeBuildSession(p);
         } else {
             p.sendMessage("§6 ▪ §7You can place and break blocks now.");
-            addBuildSession(p);
+            BreakPlace.addBuildSession(p);
         }
         return true;
     }

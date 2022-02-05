@@ -20,6 +20,7 @@
 
 package com.andrei1058.bedwars.listeners;
 
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.server.ServerType;
@@ -35,13 +36,11 @@ import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
-import static com.andrei1058.bedwars.BedWars.*;
-
 public class HungerWeatherSpawn implements Listener {
 
     @EventHandler
     public void onFoodChange(FoodLevelChangeEvent e) {
-        if (getServerType() == ServerType.SHARED) {
+        if (BedWars.getServerType() == ServerType.SHARED) {
             if (Arena.getArenaByPlayer((Player) e.getEntity()) != null) {
                 e.setCancelled(true);
             }
@@ -53,7 +52,7 @@ public class HungerWeatherSpawn implements Listener {
     @EventHandler
     public void onWeatherChange(WeatherChangeEvent e) {
         if (e.toWeatherState()) {
-            if (getServerType() == ServerType.SHARED) {
+            if (BedWars.getServerType() == ServerType.SHARED) {
                 if (Arena.getArenaByIdentifier(e.getWorld().getName()) != null) {
                     e.setCancelled(true);
                 }
@@ -67,7 +66,7 @@ public class HungerWeatherSpawn implements Listener {
     //Used to prevent creature spawn
     public void onCreatureSpawn(CreatureSpawnEvent e) {
         if (e.getSpawnReason() != CreatureSpawnEvent.SpawnReason.CUSTOM) {
-            if (getServerType() != ServerType.BUNGEE) {
+            if (BedWars.getServerType() != ServerType.BUNGEE) {
                 if (Arena.getArenaByIdentifier(e.getEntity().getWorld().getName()) != null) {
                     e.setCancelled(true);
                 }
@@ -84,14 +83,14 @@ public class HungerWeatherSpawn implements Listener {
         /* remove empty bottle */
         switch (e.getItem().getType()) {
             case GLASS_BOTTLE:
-                nms.minusAmount(e.getPlayer(), e.getItem(), 1);
+                BedWars.nms.minusAmount(e.getPlayer(), e.getItem(), 1);
                 break;
             case MILK_BUCKET:
                 e.setCancelled(true);
-                nms.minusAmount(e.getPlayer(), e.getItem(), 1);
-                int task = Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                BedWars.nms.minusAmount(e.getPlayer(), e.getItem(), 1);
+                int task = Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
                     Arena.magicMilk.remove(e.getPlayer().getUniqueId());
-                    debug("PlayerItemConsumeEvent player " + e.getPlayer() + " was removed from magicMilk");
+                    BedWars.debug("PlayerItemConsumeEvent player " + e.getPlayer() + " was removed from magicMilk");
                 }, 20 * 30L).getTaskId();
                 Arena.magicMilk.put(e.getPlayer().getUniqueId(), task);
                 break;

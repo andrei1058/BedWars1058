@@ -20,6 +20,7 @@
 
 package com.andrei1058.bedwars.listeners.joinhandler;
 
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.language.Language;
@@ -35,9 +36,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 
-import static com.andrei1058.bedwars.BedWars.mainCmd;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
-
 public class JoinListenerBungeeLegacy implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -47,7 +45,7 @@ public class JoinListenerBungeeLegacy implements Listener {
         // Do not allow login if the arena wasn't loaded yet
         if (Arena.getArenas().isEmpty()) {
             if (!Arena.getEnableQueue().isEmpty()) {
-                e.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, getMsg(e.getPlayer(), Messages.ARENA_STATUS_RESTARTING_NAME));
+                e.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, Language.getMsg(e.getPlayer(), Messages.ARENA_STATUS_RESTARTING_NAME));
                 return;
             }
         }
@@ -77,7 +75,7 @@ public class JoinListenerBungeeLegacy implements Listener {
                         for (Player inGame : arena.getPlayers()) {
                             if (!Arena.isVip(inGame)) {
                                 canJoin = true;
-                                inGame.kickPlayer(getMsg(inGame, Messages.ARENA_JOIN_VIP_KICK));
+                                inGame.kickPlayer(Language.getMsg(inGame, Messages.ARENA_JOIN_VIP_KICK));
                                 break;
                             }
                         }
@@ -85,7 +83,7 @@ public class JoinListenerBungeeLegacy implements Listener {
                             e.disallow(PlayerLoginEvent.Result.KICK_FULL, Language.getDefaultLanguage().m(Messages.COMMAND_JOIN_DENIED_IS_FULL_OF_VIPS));
                         }
                     } else {
-                        e.disallow(PlayerLoginEvent.Result.KICK_OTHER, getMsg(e.getPlayer(), Messages.COMMAND_JOIN_DENIED_IS_FULL));
+                        e.disallow(PlayerLoginEvent.Result.KICK_OTHER, Language.getMsg(e.getPlayer(), Messages.COMMAND_JOIN_DENIED_IS_FULL));
                     }
                 }
             } else if (arena.getStatus() == GameState.playing) {
@@ -108,7 +106,7 @@ public class JoinListenerBungeeLegacy implements Listener {
         // I know this code is already in the login event but other plugins may allow login
         if (Arena.getArenas().isEmpty()) {
             if (!Arena.getEnableQueue().isEmpty()) {
-                p.kickPlayer(getMsg(e.getPlayer(), Messages.ARENA_STATUS_RESTARTING_NAME));
+                p.kickPlayer(Language.getMsg(e.getPlayer(), Messages.ARENA_STATUS_RESTARTING_NAME));
                 return;
             }
         }
@@ -118,7 +116,7 @@ public class JoinListenerBungeeLegacy implements Listener {
         if (Arena.getArenas().isEmpty()) {
             // Show setup commands if there is no arena available
             if (p.hasPermission("bw.setup")) {
-                p.performCommand(mainCmd);
+                p.performCommand(BedWars.mainCmd);
             }
         } else {
             IArena arena = Arena.getArenas().get(0);
@@ -127,7 +125,7 @@ public class JoinListenerBungeeLegacy implements Listener {
                 if (arena.addPlayer(p, false)) {
                     Sounds.playSound("join-allowed", p);
                 } else {
-                    p.kickPlayer(getMsg(p, Messages.COMMAND_JOIN_DENIED_IS_FULL));
+                    p.kickPlayer(Language.getMsg(p, Messages.COMMAND_JOIN_DENIED_IS_FULL));
                 }
             } else {
                 // Check ReJoin
@@ -138,7 +136,7 @@ public class JoinListenerBungeeLegacy implements Listener {
                         reJoin.destroy(false);
                         return;
                     } else {
-                        p.sendMessage(getMsg(p, Messages.REJOIN_DENIED));
+                        p.sendMessage(Language.getMsg(p, Messages.REJOIN_DENIED));
                         reJoin.destroy(true);
                     }
                 }
@@ -147,7 +145,7 @@ public class JoinListenerBungeeLegacy implements Listener {
                 if (arena.addSpectator(p, false, null)) {
                     Sounds.playSound("spectate-allowed", p);
                 } else {
-                    p.kickPlayer(getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG));
+                    p.kickPlayer(Language.getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG));
                 }
             }
         }

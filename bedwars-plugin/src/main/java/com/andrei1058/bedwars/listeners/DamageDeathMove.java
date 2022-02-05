@@ -55,11 +55,7 @@ import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
 import java.text.DecimalFormat;
-import java.util.*;
-
-import static com.andrei1058.bedwars.BedWars.*;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
-import static com.andrei1058.bedwars.arena.LastHit.getLastHit;
+import java.util.Map;
 
 public class DamageDeathMove implements Listener {
 
@@ -71,12 +67,12 @@ public class DamageDeathMove implements Listener {
     private final double tntDamageOthers;
 
     public DamageDeathMove() {
-        this.tntJumpBarycenterAlterationInY = config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_BARYCENTER_IN_Y);
-        this.tntJumpStrengthReductionConstant = config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_STRENGTH_REDUCTION);
-        this.tntJumpYAxisReductionConstant = config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_Y_REDUCTION);
-        this.tntDamageSelf = config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_SELF);
-        this.tntDamageTeammates = config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_TEAMMATES);
-        this.tntDamageOthers = config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_OTHERS);
+        this.tntJumpBarycenterAlterationInY = BedWars.config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_BARYCENTER_IN_Y);
+        this.tntJumpStrengthReductionConstant = BedWars.config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_STRENGTH_REDUCTION);
+        this.tntJumpYAxisReductionConstant = BedWars.config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_Y_REDUCTION);
+        this.tntDamageSelf = BedWars.config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_SELF);
+        this.tntDamageTeammates = BedWars.config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_TEAMMATES);
+        this.tntDamageOthers = BedWars.config.getYml().getDouble(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_OTHERS);
     }
 
     @EventHandler
@@ -254,7 +250,7 @@ public class DamageDeathMove implements Listener {
                     // #274
                     // if player gets hit show him
                     if (a.getShowTime().containsKey(p)) {
-                        Bukkit.getScheduler().runTask(plugin, () -> {
+                        Bukkit.getScheduler().runTask(BedWars.plugin, () -> {
                             for (Player on : a.getWorld().getPlayers()) {
                                 BedWars.nms.showArmor(p, on);
                                 //BedWars.nms.showPlayer(p, on);
@@ -268,7 +264,7 @@ public class DamageDeathMove implements Listener {
                     //
                 }
             }
-        } else if (nms.isDespawnable(e.getEntity())) {
+        } else if (BedWars.nms.isDespawnable(e.getEntity())) {
             Player damager;
             if (e.getDamager() instanceof Player) {
                 damager = (Player) e.getDamager();
@@ -285,7 +281,7 @@ public class DamageDeathMove implements Listener {
             if (a != null) {
                 if (a.isPlayer(damager)) {
                     // do not hurt own mobs
-                    if (a.getTeam(damager) == nms.getDespawnablesList().get(e.getEntity().getUniqueId()).getTeam()) {
+                    if (a.getTeam(damager) == BedWars.nms.getDespawnablesList().get(e.getEntity().getUniqueId()).getTeam()) {
                         e.setCancelled(true);
                     }
                 } else {
@@ -351,7 +347,7 @@ public class DamageDeathMove implements Listener {
             PlayerKillEvent.PlayerKillCause cause = victimsTeam.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.UNKNOWN_FINAL_KILL : PlayerKillEvent.PlayerKillCause.UNKNOWN;
             if (damageEvent != null) {
                 if (damageEvent.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
-                    LastHit lh = getLastHit(victim);
+                    LastHit lh = LastHit.getLastHit(victim);
                     if (lh != null) {
                         if (lh.getTime() >= System.currentTimeMillis() - 15000) {
                             if (lh.getDamager() instanceof Player) killer = (Player) lh.getDamager();
@@ -370,7 +366,7 @@ public class DamageDeathMove implements Listener {
                     cause = victimsTeam.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.EXPLOSION_FINAL_KILL : PlayerKillEvent.PlayerKillCause.EXPLOSION;
 
                 } else if (damageEvent.getCause() == EntityDamageEvent.DamageCause.VOID) {
-                    LastHit lh = getLastHit(victim);
+                    LastHit lh = LastHit.getLastHit(victim);
                     if (lh != null) {
                         if (lh.getTime() >= System.currentTimeMillis() - 15000) {
                             if (lh.getDamager() instanceof Player) killer = (Player) lh.getDamager();
@@ -389,11 +385,11 @@ public class DamageDeathMove implements Listener {
                     cause = victimsTeam.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.VOID_FINAL_KILL : PlayerKillEvent.PlayerKillCause.VOID;
                 } else if (damageEvent.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
                     if (killer == null) {
-                        LastHit lh = getLastHit(victim);
+                        LastHit lh = LastHit.getLastHit(victim);
                         if (lh != null) {
                             if (lh.getTime() >= System.currentTimeMillis() - 15000) {
-                                if (nms.isDespawnable(lh.getDamager())) {
-                                    Despawnable d = nms.getDespawnablesList().get(lh.getDamager().getUniqueId());
+                                if (BedWars.nms.isDespawnable(lh.getDamager())) {
+                                    Despawnable d = BedWars.nms.getDespawnablesList().get(lh.getDamager().getUniqueId());
                                     killersTeam = d.getTeam();
                                     message = d.getEntity().getType() == EntityType.IRON_GOLEM ? victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_IRON_GOLEM_FINAL_KILL : Messages.PLAYER_DIE_IRON_GOLEM_REGULAR : victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_DEBUG_FINAL_KILL : Messages.PLAYER_DIE_DEBUG_REGULAR;
                                     cause = victimsTeam.isBedDestroyed() ? d.getDeathFinalCause() : d.getDeathRegularCause();
@@ -411,7 +407,7 @@ public class DamageDeathMove implements Listener {
                         cause = victimsTeam.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.PLAYER_SHOOT_FINAL_KILL : PlayerKillEvent.PlayerKillCause.PLAYER_SHOOT;
                     }
                 } else if (damageEvent.getCause() == EntityDamageEvent.DamageCause.FALL) {
-                    LastHit lh = getLastHit(victim);
+                    LastHit lh = LastHit.getLastHit(victim);
                     if (lh != null) {
                         // check if kicked off in the last 10 seconds
                         if (lh.getTime() >= System.currentTimeMillis() - 10000) {
@@ -464,7 +460,7 @@ public class DamageDeathMove implements Listener {
             }
 
             // send respawn packet
-            Bukkit.getScheduler().runTaskLater(plugin, () -> victim.spigot().respawn(), 3L);
+            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> victim.spigot().respawn(), 3L);
             a.addPlayerDeath(victim);
 
             // reset last damager
@@ -514,8 +510,8 @@ public class DamageDeathMove implements Listener {
             ITeam t = a.getTeam(e.getPlayer());
             if (t == null) {
                 e.setRespawnLocation(a.getReSpawnLocation());
-                plugin.getLogger().severe(e.getPlayer().getName() + " re-spawn error on " + a.getArenaName() + "[" + a.getWorldName() + "] because the team was NULL and he was not spectating!");
-                plugin.getLogger().severe("This is caused by one of your plugins: remove or configure any re-spawn related plugins.");
+                BedWars.plugin.getLogger().severe(e.getPlayer().getName() + " re-spawn error on " + a.getArenaName() + "[" + a.getWorldName() + "] because the team was NULL and he was not spectating!");
+                BedWars.plugin.getLogger().severe("This is caused by one of your plugins: remove or configure any re-spawn related plugins.");
                 a.removePlayer(e.getPlayer(), false);
                 a.removeSpectator(e.getPlayer(), false);
                 return;
@@ -524,16 +520,16 @@ public class DamageDeathMove implements Listener {
                 e.setRespawnLocation(a.getSpectatorLocation());
                 a.addSpectator(e.getPlayer(), true, null);
                 t.getMembers().remove(e.getPlayer());
-                e.getPlayer().sendMessage(getMsg(e.getPlayer(), Messages.PLAYER_DIE_ELIMINATED_CHAT));
+                e.getPlayer().sendMessage(Language.getMsg(e.getPlayer(), Messages.PLAYER_DIE_ELIMINATED_CHAT));
                 if (t.getMembers().isEmpty()) {
                     for (Player p : a.getWorld().getPlayers()) {
-                        p.sendMessage(getMsg(p, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", t.getColor().chat().toString()).replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(p))));
+                        p.sendMessage(Language.getMsg(p, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", t.getColor().chat().toString()).replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(p))));
                     }
-                    Bukkit.getScheduler().runTaskLater(plugin, a::checkWinner, 40L);
+                    Bukkit.getScheduler().runTaskLater(BedWars.plugin, a::checkWinner, 40L);
                 }
             } else {
                 //respawn session
-                int respawnTime = config.getInt(ConfigPath.GENERAL_CONFIGURATION_RE_SPAWN_COUNTDOWN);
+                int respawnTime = BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_RE_SPAWN_COUNTDOWN);
                 if (respawnTime > 1) {
                     e.setRespawnLocation(a.getReSpawnLocation());
                     a.startReSpawnSession(e.getPlayer(), respawnTime);
@@ -579,12 +575,12 @@ public class DamageDeathMove implements Listener {
                     // if the moving player has invisible armor
                     if (a.getShowTime().containsKey(e.getPlayer())) {
                         for (Player p : a.getPlayers()) {
-                            nms.hideArmor(e.getPlayer(), p);
+                            BedWars.nms.hideArmor(e.getPlayer(), p);
                         }
                     }
                     if (a.getShowTime().containsKey(e.getPlayer())) {
                         for (Player p : a.getSpectators()) {
-                            nms.hideArmor(e.getPlayer(), p);
+                            BedWars.nms.hideArmor(e.getPlayer(), p);
                         }
                     }
                 }
@@ -600,7 +596,7 @@ public class DamageDeathMove implements Listener {
             } else {
                 if (a.getStatus() == GameState.playing) {
                     if (e.getPlayer().getLocation().getBlockY() <= a.getYKillHeight()) {
-                        nms.voidKill(e.getPlayer());
+                        BedWars.nms.voidKill(e.getPlayer());
                     }
                     for (ITeam t : a.getTeams()) {
                         if (e.getPlayer().getLocation().distance(t.getBed()) < 4) {
@@ -635,9 +631,9 @@ public class DamageDeathMove implements Listener {
                 }
             }
         } else {
-            if (e.getPlayer().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName()) && BedWars.getServerType() == ServerType.MULTIARENA) {
+            if (e.getPlayer().getWorld().getName().equalsIgnoreCase(BedWars.config.getLobbyWorldName()) && BedWars.getServerType() == ServerType.MULTIARENA) {
                 if (e.getTo().getY() < 0) {
-                    e.getPlayer().teleport(config.getConfigLoc("lobbyLoc"));
+                    e.getPlayer().teleport(BedWars.config.getConfigLoc("lobbyLoc"));
                 }
             }
         }
@@ -689,7 +685,7 @@ public class DamageDeathMove implements Listener {
 
     @EventHandler
     public void onEat(PlayerItemConsumeEvent e) {
-        if (e.getItem().getType() == nms.materialCake()) {
+        if (e.getItem().getType() == BedWars.nms.materialCake()) {
             if (Arena.getArenaByIdentifier(e.getPlayer().getWorld().getName()) != null) {
                 e.setCancelled(true);
             }
@@ -699,8 +695,8 @@ public class DamageDeathMove implements Listener {
     @SuppressWarnings("unused")
     private static void spawnUtility(String s, Location loc, ITeam t, Player p) {
         if ("silverfish".equalsIgnoreCase(s)) {
-            nms.spawnSilverfish(loc, t, shop.getYml().getDouble(ConfigPath.SHOP_SPECIAL_SILVERFISH_SPEED), shop.getYml().getDouble(ConfigPath.SHOP_SPECIAL_SILVERFISH_HEALTH),
-                    shop.getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_DESPAWN),
+            BedWars.nms.spawnSilverfish(loc, t, BedWars.shop.getYml().getDouble(ConfigPath.SHOP_SPECIAL_SILVERFISH_SPEED), BedWars.shop.getYml().getDouble(ConfigPath.SHOP_SPECIAL_SILVERFISH_HEALTH),
+                    BedWars.shop.getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_DESPAWN),
                     BedWars.shop.getYml().getDouble(ConfigPath.SHOP_SPECIAL_SILVERFISH_DAMAGE));
         }
     }

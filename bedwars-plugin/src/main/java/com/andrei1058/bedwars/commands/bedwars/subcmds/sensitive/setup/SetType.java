@@ -37,8 +37,6 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.andrei1058.bedwars.BedWars.config;
-
 public class SetType extends SubCommand {
 
     public SetType(ParentCommand parent, String name) {
@@ -97,7 +95,7 @@ public class SetType extends SubCommand {
                 groups.add(available);
             }
         });
-        return config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS);
+        return BedWars.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_ARENA_GROUPS);
     }
 
     private void sendUsage(Player p) {

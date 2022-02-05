@@ -29,9 +29,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import static com.andrei1058.bedwars.BedWars.mainCmd;
-import static com.andrei1058.bedwars.BedWars.plugin;
-
 public class JoinListenerShared implements Listener {
 
     @EventHandler
@@ -43,11 +40,11 @@ public class JoinListenerShared implements Listener {
         // Show commands if player is op and there is no set arenas
         if (p.isOp()) {
             if (Arena.getArenas().isEmpty()) {
-                p.performCommand(mainCmd);
+                p.performCommand(BedWars.mainCmd);
             }
         }
 
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+        Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
             // Hide new player to players and spectators, and vice versa
             for (Player inArena : Arena.getArenaByPlayer().keySet()){
                 if (inArena.equals(p)) continue;

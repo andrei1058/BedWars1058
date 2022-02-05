@@ -27,6 +27,7 @@ import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.exceptions.InvalidMaterialException;
+import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.region.Region;
 import com.andrei1058.bedwars.api.server.ServerType;
@@ -60,23 +61,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static com.andrei1058.bedwars.BedWars.*;
-import static com.andrei1058.bedwars.api.language.Language.getList;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
-
 public class Misc {
 
     public static void moveToLobbyOrKick(Player p, @Nullable IArena arena, boolean notAbandon) {
-        if (getServerType() != ServerType.BUNGEE) {
-            if (!p.getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
-                p.teleport(config.getConfigLoc("lobbyLoc"));
+        if (BedWars.getServerType() != ServerType.BUNGEE) {
+            if (!p.getWorld().getName().equalsIgnoreCase(BedWars.config.getLobbyWorldName())) {
+                p.teleport(BedWars.config.getConfigLoc("lobbyLoc"));
                 if (arena != null) {
                     if (arena.isSpectator(p)) {
                         arena.removeSpectator(p, false);
                     } else {
                         arena.removePlayer(p, false);
                         if (!notAbandon && arena.getStatus() == GameState.playing) {
-                            if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_MARK_LEAVE_AS_ABANDON)) {
+                            if (BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_MARK_LEAVE_AS_ABANDON)) {
                                 arena.abandonGame(p);
                             }
                         }
@@ -95,21 +92,21 @@ public class Misc {
     private static void forceKick(Player p, @Nullable IArena arena, boolean notAbandon) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("Connect");
-        out.writeUTF(config.getYml().getString("lobbyServer"));
-        p.sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
+        out.writeUTF(BedWars.config.getYml().getString("lobbyServer"));
+        p.sendPluginMessage(BedWars.plugin, "BungeeCord", out.toByteArray());
         if (arena != null && !notAbandon && arena.getStatus() == GameState.playing) {
-            if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_MARK_LEAVE_AS_ABANDON)) {
+            if (BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_MARK_LEAVE_AS_ABANDON)) {
                 arena.abandonGame(p);
             }
         }
 
-        if (getServerType() == ServerType.BUNGEE) {
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+        if (BedWars.getServerType() == ServerType.BUNGEE) {
+            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
                 // if lobby server is unreachable
                 if (p.isOnline()) {
-                    p.kickPlayer(getMsg(p, Messages.ARENA_RESTART_PLAYER_KICK));
+                    p.kickPlayer(Language.getMsg(p, Messages.ARENA_RESTART_PLAYER_KICK));
                     if (arena != null && !notAbandon && arena.getStatus() == GameState.playing) {
-                        if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_MARK_LEAVE_AS_ABANDON)) {
+                        if (BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_MARK_LEAVE_AS_ABANDON)) {
                             arena.abandonGame(p);
                         }
                     }
@@ -188,11 +185,11 @@ public class Misc {
         }
         i.setItemMeta(im);
         if (!(metaData.isEmpty() || metaKey.isEmpty())) {
-            i = nms.addCustomData(i, metaKey + "_" + metaData);
+            i = BedWars.nms.addCustomData(i, metaKey + "_" + metaData);
         }
         if (owner != null) {
-            if (nms.isPlayerHead(material.toString(), data)) {
-                i = nms.getPlayerHead(owner, i);
+            if (BedWars.nms.isPlayerHead(material.toString(), data)) {
+                i = BedWars.nms.getPlayerHead(owner, i);
             }
         }
         return i;
@@ -219,7 +216,7 @@ public class Misc {
         }
         i.setItemMeta(im);
         if (!customData.isEmpty()) {
-            i = nms.addCustomData(i, customData);
+            i = BedWars.nms.addCustomData(i, customData);
         }
         return i;
     }
@@ -255,7 +252,7 @@ public class Misc {
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isProjectile(Material i) {
-        return Material.EGG == i || nms.materialFireball() == i || nms.materialSnowball() == i || Material.ARROW == i;
+        return Material.EGG == i || BedWars.nms.materialFireball() == i || BedWars.nms.materialSnowball() == i || Material.ARROW == i;
     }
 
     /**
@@ -282,27 +279,27 @@ public class Misc {
      */
     public static void openStatsGUI(Player p) {
 
-        Bukkit.getScheduler().runTask(plugin, () -> {
+        Bukkit.getScheduler().runTask(BedWars.plugin, () -> {
 
             /* create inventory */
-            Inventory inv = Bukkit.createInventory(null, config.getInt(ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE), replaceStatsPlaceholders(p, getMsg(p, Messages.PLAYER_STATS_GUI_INV_NAME), true));
+            Inventory inv = Bukkit.createInventory(null, BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE), replaceStatsPlaceholders(p, Language.getMsg(p, Messages.PLAYER_STATS_GUI_INV_NAME), true));
 
             /* add custom items to gui */
-            for (String s : config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_STATS_PATH).getKeys(false)) {
+            for (String s : BedWars.config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_STATS_PATH).getKeys(false)) {
                 /* skip inv size, it isn't a content */
                 if (ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE.contains(s)) continue;
                 /* create new itemStack for content */
-                ItemStack i = nms.createItemStack(config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_MATERIAL.replace("%path%", s)).toUpperCase(), 1, (short) config.getInt(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_DATA.replace("%path%", s)));
+                ItemStack i = BedWars.nms.createItemStack(BedWars.config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_MATERIAL.replace("%path%", s)).toUpperCase(), 1, (short) BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_DATA.replace("%path%", s)));
                 ItemMeta im = i.getItemMeta();
                 im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-                im.setDisplayName(replaceStatsPlaceholders(p, getMsg(p, Messages.PLAYER_STATS_GUI_PATH + "-" + s + "-name"), true));
+                im.setDisplayName(replaceStatsPlaceholders(p, Language.getMsg(p, Messages.PLAYER_STATS_GUI_PATH + "-" + s + "-name"), true));
                 List<String> lore = new ArrayList<>();
-                for (String string : getList(p, Messages.PLAYER_STATS_GUI_PATH + "-" + s + "-lore")) {
+                for (String string : Language.getList(p, Messages.PLAYER_STATS_GUI_PATH + "-" + s + "-lore")) {
                     lore.add(replaceStatsPlaceholders(p, string, true));
                 }
                 im.setLore(lore);
                 i.setItemMeta(im);
-                inv.setItem(config.getInt(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_SLOT.replace("%path%", s)), i);
+                inv.setItem(BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_SLOT.replace("%path%", s)), i);
             }
 
             p.openInventory(inv);
@@ -330,9 +327,9 @@ public class Misc {
         if (s.contains("{gamesPlayed}"))
             s = s.replace("{gamesPlayed}", String.valueOf(stats.getGamesPlayed()));
         if (s.contains("{firstPlay}"))
-            s = s.replace("{firstPlay}", new SimpleDateFormat(getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(stats.getFirstPlay() != null ? Timestamp.from(stats.getFirstPlay()) : Timestamp.from(Instant.now())));
+            s = s.replace("{firstPlay}", new SimpleDateFormat(Language.getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(stats.getFirstPlay() != null ? Timestamp.from(stats.getFirstPlay()) : Timestamp.from(Instant.now())));
         if (s.contains("{lastPlay}"))
-            s = s.replace("{lastPlay}", new SimpleDateFormat(getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(stats.getLastPlay() != null ? Timestamp.from(stats.getLastPlay()) : Timestamp.from(Instant.now())));
+            s = s.replace("{lastPlay}", new SimpleDateFormat(Language.getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(stats.getLastPlay() != null ? Timestamp.from(stats.getLastPlay()) : Timestamp.from(Instant.now())));
         if (s.contains("{player}")) s = s.replace("{player}", player.getDisplayName());
         if (s.contains("{playername")) s = s.replace("{playername}", player.getName());
         if (s.contains("{prefix}")) s = s.replace("{prefix}", BedWars.getChatSupport().getPrefix(player));

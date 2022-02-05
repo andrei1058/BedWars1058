@@ -42,8 +42,6 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.UUID;
 
-import static com.andrei1058.bedwars.BedWars.*;
-
 public class QuitAndTeleportListener implements Listener {
 
     @EventHandler
@@ -62,7 +60,7 @@ public class QuitAndTeleportListener implements Listener {
         //Save preferred language
         if (Language.getLangByPlayer().containsKey(p.getUniqueId())) {
             final UUID u = p.getUniqueId();
-            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, () -> {
                 String iso = Language.getLangByPlayer().get(p.getUniqueId()).getIso();
                 if (Language.isLanguageExist(iso)) {
                     if (BedWars.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES).contains(iso))
@@ -73,13 +71,13 @@ public class QuitAndTeleportListener implements Listener {
             });
         }
 
-        if (getServerType() != ServerType.SHARED) {
+        if (BedWars.getServerType() != ServerType.SHARED) {
             e.setQuitMessage(null);
         }
         // Manage internal parties
-        if (getParty().isInternal()) {
-            if (getParty().hasParty(p)) {
-                getParty().removeFromParty(p);
+        if (BedWars.getParty().isInternal()) {
+            if (BedWars.getParty().hasParty(p)) {
+                BedWars.getParty().removeFromParty(p);
             }
         }
         // Check if was doing a setup and remove the session
@@ -145,7 +143,7 @@ public class QuitAndTeleportListener implements Listener {
                 if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) return;
                 if (!e.getPlayer().getWorld().getName().equalsIgnoreCase(a.getWorld().getName())) {
                     a.removePlayer(e.getPlayer(), BedWars.getServerType() == ServerType.BUNGEE);
-                    debug(e.getPlayer().getName() + " was removed from " + a.getDisplayName() + " because he was teleported outside the arena.");
+                    BedWars.debug(e.getPlayer().getName() + " was removed from " + a.getDisplayName() + " because he was teleported outside the arena.");
                 }
             }
         }

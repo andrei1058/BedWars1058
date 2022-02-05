@@ -55,9 +55,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import static com.andrei1058.bedwars.BedWars.*;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
-
 @SuppressWarnings("WeakerAccess")
 public class BedWarsTeam implements ITeam {
 
@@ -154,10 +151,10 @@ public class BedWarsTeam implements ITeam {
         if (getMembers().isEmpty() && getArena().getConfig().getBoolean(ConfigPath.ARENA_DISABLE_NPCS_FOR_EMPTY_TEAMS))
             return;
 
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            nms.colorBed(this);
-            nms.spawnShop(getArena().getConfig().getArenaLoc("Team." + getName() + ".Upgrade"), (getArena().getMaxInTeam() > 1 ? Messages.NPC_NAME_TEAM_UPGRADES : Messages.NPC_NAME_SOLO_UPGRADES), getArena().getPlayers(), getArena());
-            nms.spawnShop(getArena().getConfig().getArenaLoc("Team." + getName() + ".Shop"), (getArena().getMaxInTeam() > 1 ? Messages.NPC_NAME_TEAM_SHOP : Messages.NPC_NAME_SOLO_SHOP), getArena().getPlayers(), getArena());
+        Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
+            BedWars.nms.colorBed(this);
+            BedWars.nms.spawnShop(getArena().getConfig().getArenaLoc("Team." + getName() + ".Upgrade"), (getArena().getMaxInTeam() > 1 ? Messages.NPC_NAME_TEAM_UPGRADES : Messages.NPC_NAME_SOLO_UPGRADES), getArena().getPlayers(), getArena());
+            BedWars.nms.spawnShop(getArena().getConfig().getArenaLoc("Team." + getName() + ".Shop"), (getArena().getMaxInTeam() > 1 ? Messages.NPC_NAME_TEAM_SHOP : Messages.NPC_NAME_SOLO_SHOP), getArena().getPlayers(), getArena());
         }, 20L);
 
         Cuboid c1 = new Cuboid(getArena().getConfig().getArenaLoc("Team." + getName() + ".Upgrade"), 1, true);
@@ -188,9 +185,9 @@ public class BedWarsTeam implements ITeam {
      */
     public void sendDefaultInventory(Player p, boolean clean) {
         if (clean) p.getInventory().clear();
-        String path = config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + "." + arena.getGroup()) == null ?
+        String path = BedWars.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + "." + arena.getGroup()) == null ?
                 ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + ".Default" : ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + "." + arena.getGroup();
-        for (String s : config.getYml().getStringList(path)) {
+        for (String s : BedWars.config.getYml().getStringList(path)) {
             String[] parm = s.split(",");
             if (parm.length != 0) {
                 try {
@@ -199,7 +196,7 @@ public class BedWarsTeam implements ITeam {
                         try {
                             Integer.parseInt(parm[1]);
                         } catch (Exception ex) {
-                            plugin.getLogger().severe(parm[1] + " is not an integer at: " + s + " (config)");
+                            BedWars.plugin.getLogger().severe(parm[1] + " is not an integer at: " + s + " (config)");
                             continue;
                         }
                         i = new ItemStack(Material.valueOf(parm[0]), Integer.parseInt(parm[1]));
@@ -210,7 +207,7 @@ public class BedWarsTeam implements ITeam {
                         try {
                             Integer.parseInt(parm[2]);
                         } catch (Exception ex) {
-                            plugin.getLogger().severe(parm[2] + " is not an integer at: " + s + " (config)");
+                            BedWars.plugin.getLogger().severe(parm[2] + " is not an integer at: " + s + " (config)");
                             continue;
                         }
                         i.setAmount(Integer.parseInt(parm[2]));
@@ -219,9 +216,9 @@ public class BedWarsTeam implements ITeam {
                     if (parm.length > 3) {
                         im.setDisplayName(ChatColor.translateAlternateColorCodes('&', parm[3]));
                     }
-                    nms.setUnbreakable(im);
+                    BedWars.nms.setUnbreakable(im);
                     i.setItemMeta(im);
-                    i = nms.addCustomData(i, "DEFAULT_ITEM");
+                    i = BedWars.nms.addCustomData(i, "DEFAULT_ITEM");
 
                     if (BedWars.nms.isSword(i)) {
                         boolean hasSword = false;
@@ -261,9 +258,9 @@ public class BedWarsTeam implements ITeam {
 
     public void defaultSword(Player p, boolean sword) {
         if (!sword) return;
-        String path = config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + "." + arena.getGroup()) == null ?
+        String path = BedWars.config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + "." + arena.getGroup()) == null ?
                 ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + ".Default" : ConfigPath.GENERAL_CONFIGURATION_DEFAULT_ITEMS + "." + arena.getGroup();
-        for (String s : config.getYml().getStringList(path)) {
+        for (String s : BedWars.config.getYml().getStringList(path)) {
             String[] parm = s.split(",");
             if (parm.length != 0) {
                 try {
@@ -272,7 +269,7 @@ public class BedWarsTeam implements ITeam {
                         try {
                             Integer.parseInt(parm[1]);
                         } catch (Exception ex) {
-                            plugin.getLogger().severe(parm[1] + " is not an integer at: " + s + " (config)");
+                            BedWars.plugin.getLogger().severe(parm[1] + " is not an integer at: " + s + " (config)");
                             continue;
                         }
                         i = new ItemStack(Material.valueOf(parm[0]), Integer.parseInt(parm[1]));
@@ -283,7 +280,7 @@ public class BedWarsTeam implements ITeam {
                         try {
                             Integer.parseInt(parm[2]);
                         } catch (Exception ex) {
-                            plugin.getLogger().severe(parm[2] + " is not an integer at: " + s + " (config)");
+                            BedWars.plugin.getLogger().severe(parm[2] + " is not an integer at: " + s + " (config)");
                             continue;
                         }
                         i.setAmount(Integer.parseInt(parm[2]));
@@ -292,10 +289,10 @@ public class BedWarsTeam implements ITeam {
                     if (parm.length > 3) {
                         im.setDisplayName(ChatColor.translateAlternateColorCodes('&', parm[3]));
                     }
-                    nms.setUnbreakable(im);
+                    BedWars.nms.setUnbreakable(im);
                     i.setItemMeta(im);
 
-                    i = nms.addCustomData(i, "DEFAULT_ITEM");
+                    i = BedWars.nms.addCustomData(i, "DEFAULT_ITEM");
 
                     if (BedWars.nms.isSword(i)) {
                         p.getInventory().addItem(i);
@@ -333,20 +330,20 @@ public class BedWarsTeam implements ITeam {
      */
     public void respawnMember(@NotNull Player p) {
         if (reSpawnInvulnerability.containsKey(p.getUniqueId())) {
-            reSpawnInvulnerability.replace(p.getUniqueId(), System.currentTimeMillis() + config.getInt(ConfigPath.GENERAL_CONFIGURATION_RE_SPAWN_INVULNERABILITY));
+            reSpawnInvulnerability.replace(p.getUniqueId(), System.currentTimeMillis() + BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_RE_SPAWN_INVULNERABILITY));
         } else {
-            reSpawnInvulnerability.put(p.getUniqueId(), System.currentTimeMillis() + config.getInt(ConfigPath.GENERAL_CONFIGURATION_RE_SPAWN_INVULNERABILITY));
+            reSpawnInvulnerability.put(p.getUniqueId(), System.currentTimeMillis() + BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_RE_SPAWN_INVULNERABILITY));
         }
         p.teleport(getSpawn(), PlayerTeleportEvent.TeleportCause.PLUGIN);
         p.setVelocity(new Vector(0, 0, 0));
         getArena().getRespawnSessions().remove(p);
         p.removePotionEffect(PotionEffectType.INVISIBILITY);
-        nms.setCollide(p, arena, true);
+        BedWars.nms.setCollide(p, arena, true);
         p.setAllowFlight(false);
         p.setFlying(false);
         p.setHealth(20);
 
-        Bukkit.getScheduler().runTaskLater(plugin, ()-> {
+        Bukkit.getScheduler().runTaskLater(BedWars.plugin, ()-> {
             for (Player inGame : arena.getPlayers()){
                 if (inGame.equals(p)) continue;
                 BedWars.nms.spigotShowPlayer(p, inGame);
@@ -357,7 +354,7 @@ public class BedWarsTeam implements ITeam {
             }
         }, 8L);
 
-        nms.sendTitle(p, getMsg(p, Messages.PLAYER_DIE_RESPAWNED_TITLE), "", 0, 20, 0);
+        BedWars.nms.sendTitle(p, Language.getMsg(p, Messages.PLAYER_DIE_RESPAWNED_TITLE), "", 0, 20, 0);
 
         sendDefaultInventory(p, false);
         ShopCache sc = ShopCache.getShopCache(p.getUniqueId());
@@ -391,7 +388,7 @@ public class BedWarsTeam implements ITeam {
         if (!getSwordsEnchantments().isEmpty()) {
             for (ItemStack i : p.getInventory().getContents()) {
                 if (i == null) continue;
-                if (nms.isSword(i)) {
+                if (BedWars.nms.isSword(i)) {
                     ItemMeta im = i.getItemMeta();
                     for (TeamEnchant e : getSwordsEnchantments()) {
                         im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
@@ -404,7 +401,7 @@ public class BedWarsTeam implements ITeam {
         if (!getArmorsEnchantments().isEmpty()) {
             for (ItemStack i : p.getInventory().getArmorContents()) {
                 if (i == null) continue;
-                if (nms.isArmor(i)) {
+                if (BedWars.nms.isArmor(i)) {
                     ItemMeta im = i.getItemMeta();
                     for (TeamEnchant e : getArmorsEnchantments()) {
                         im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
@@ -415,11 +412,11 @@ public class BedWarsTeam implements ITeam {
             }
         }
         Bukkit.getPluginManager().callEvent(new PlayerReSpawnEvent(p, getArena(), this));
-        nms.sendPlayerSpawnPackets(p, getArena());
+        BedWars.nms.sendPlayerSpawnPackets(p, getArena());
 
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+        Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
             if (getArena() != null) {
-                nms.sendPlayerSpawnPackets(p, getArena());
+                BedWars.nms.sendPlayerSpawnPackets(p, getArena());
 
                 // #274
                 for (Player on : getArena().getShowTime().keySet()) {
@@ -459,7 +456,7 @@ public class BedWarsTeam implements ITeam {
         ItemStack i = new ItemStack(material);
         LeatherArmorMeta lam = (LeatherArmorMeta) i.getItemMeta();
         lam.setColor(color.bukkitColor());
-        nms.setUnbreakable(lam);
+        BedWars.nms.setUnbreakable(lam);
         i.setItemMeta(lam);
         return i;
     }
@@ -499,10 +496,10 @@ public class BedWarsTeam implements ITeam {
             a.setGravity(false);
             if (name != null) {
                 if (isBedDestroyed()) {
-                    a.setCustomName(getMsg(Bukkit.getPlayer(p), Messages.BED_HOLOGRAM_DESTROYED));
+                    a.setCustomName(Language.getMsg(Bukkit.getPlayer(p), Messages.BED_HOLOGRAM_DESTROYED));
                     bedDestroyed = true;
                 } else {
-                    a.setCustomName(getMsg(Bukkit.getPlayer(p), Messages.BED_HOLOGRAM_DEFEND));
+                    a.setCustomName(Language.getMsg(Bukkit.getPlayer(p), Messages.BED_HOLOGRAM_DEFEND));
                 }
                 a.setCustomNameVisible(true);
             }
@@ -514,7 +511,7 @@ public class BedWarsTeam implements ITeam {
             a.setVisible(false);
             for (Player p2 : arena.getWorld().getPlayers()) {
                 if (p != p2.getUniqueId()) {
-                    nms.hideEntity(a, p2);
+                    BedWars.nms.hideEntity(a, p2);
                 }
             }
         }
@@ -597,7 +594,7 @@ public class BedWarsTeam implements ITeam {
         for (Player p : getMembers()) {
             for (ItemStack i : p.getInventory().getContents()) {
                 if (i == null) continue;
-                if (nms.isSword(i)) {
+                if (BedWars.nms.isSword(i)) {
                     ItemMeta im = i.getItemMeta();
                     im.addEnchant(e, a, true);
                     i.setItemMeta(im);
@@ -615,7 +612,7 @@ public class BedWarsTeam implements ITeam {
         for (Player p : getMembers()) {
             for (ItemStack i : p.getInventory().getArmorContents()) {
                 if (i == null) continue;
-                if (nms.isArmor(i)) {
+                if (BedWars.nms.isArmor(i)) {
                     ItemMeta im = i.getItemMeta();
                     im.addEnchant(e, a, true);
                     i.setItemMeta(im);
@@ -733,7 +730,7 @@ public class BedWarsTeam implements ITeam {
                 BedWars.plugin.getLogger().severe("Bed not set for team: " + getName() + " in arena: " + getArena().getArenaName());
                 return;
             }
-            nms.colorBed(this);
+            BedWars.nms.colorBed(this);
         } else {
             bed.getBlock().setType(Material.AIR);
         }

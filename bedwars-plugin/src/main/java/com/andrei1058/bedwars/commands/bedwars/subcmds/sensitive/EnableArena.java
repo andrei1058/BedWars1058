@@ -39,8 +39,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.andrei1058.bedwars.BedWars.plugin;
-
 public class EnableArena extends SubCommand {
 
     public EnableArena(ParentCommand parent, String name) {
@@ -86,7 +84,7 @@ public class EnableArena extends SubCommand {
     @Override
     public List<String> getTabComplete() {
         List<String> tab = new ArrayList<>();
-        File dir = new File(plugin.getDataFolder(), "/Arenas");
+        File dir = new File(BedWars.plugin.getDataFolder(), "/Arenas");
         if (dir.exists()) {
             File[] fls = dir.listFiles();
             for (File fl : Objects.requireNonNull(fls)) {

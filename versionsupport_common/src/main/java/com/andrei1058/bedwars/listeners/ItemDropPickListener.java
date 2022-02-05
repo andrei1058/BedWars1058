@@ -24,6 +24,7 @@ import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.events.player.PlayerGeneratorCollectEvent;
 import com.andrei1058.bedwars.api.server.ServerType;
+import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -39,8 +40,6 @@ import org.bukkit.event.player.PlayerPickupArrowEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import static com.andrei1058.bedwars.support.version.common.VersionCommon.api;
 
 public class ItemDropPickListener {
 
@@ -81,7 +80,7 @@ public class ItemDropPickListener {
     public static class ArrowCollect implements Listener {
         @EventHandler
         public void onArrowPick(PlayerPickupArrowEvent e){
-            if (api.getArenaUtil().isSpectating(e.getPlayer())) {
+            if (VersionCommon.api.getArenaUtil().isSpectating(e.getPlayer())) {
                 e.setCancelled(true);
             }
         }
@@ -92,7 +91,7 @@ public class ItemDropPickListener {
         @EventHandler
         //Prevent AFK players from picking items
         public void onCollect(PlayerGeneratorCollectEvent e){
-            if (api.getAFKUtil().isPlayerAFK(e.getPlayer())){
+            if (VersionCommon.api.getAFKUtil().isPlayerAFK(e.getPlayer())){
                 e.setCancelled(true);
             }
         }
@@ -103,13 +102,13 @@ public class ItemDropPickListener {
      */
     private static boolean managePickup(Item item, LivingEntity player) {
         if (!(player instanceof Player)) return false;
-        if (api.getServerType() != ServerType.BUNGEE) {
+        if (VersionCommon.api.getServerType() != ServerType.BUNGEE) {
             //noinspection ConstantConditions
-            if (player.getLocation().getWorld().getName().equalsIgnoreCase(api.getLobbyWorld())) {
+            if (player.getLocation().getWorld().getName().equalsIgnoreCase(VersionCommon.api.getLobbyWorld())) {
                 return true;
             }
         }
-        IArena a = api.getArenaUtil().getArenaByPlayer((Player) player);
+        IArena a = VersionCommon.api.getArenaUtil().getArenaByPlayer((Player) player);
         if (a == null) return false;
         if (!a.isPlayer((Player) player)) {
             return true;
@@ -121,7 +120,7 @@ public class ItemDropPickListener {
             return true;
         }
         if (item.getItemStack().getType() == Material.ARROW) {
-            item.setItemStack(api.getVersionSupport().createItemStack(item.getItemStack().getType().toString(), item.getItemStack().getAmount(), (short) 0));
+            item.setItemStack(VersionCommon.api.getVersionSupport().createItemStack(item.getItemStack().getType().toString(), item.getItemStack().getAmount(), (short) 0));
             return false;
         }
 
@@ -154,13 +153,13 @@ public class ItemDropPickListener {
      */
     private static boolean manageDrop(Entity player, Item item) {
         if (!(player instanceof Player)) return false;
-        if (api.getServerType() != ServerType.BUNGEE) {
+        if (VersionCommon.api.getServerType() != ServerType.BUNGEE) {
             //noinspection ConstantConditions
-            if (player.getLocation().getWorld().getName().equalsIgnoreCase(api.getLobbyWorld())) {
+            if (player.getLocation().getWorld().getName().equalsIgnoreCase(VersionCommon.api.getLobbyWorld())) {
                 return true;
             }
         }
-        IArena a = api.getArenaUtil().getArenaByPlayer((Player) player);
+        IArena a = VersionCommon.api.getArenaUtil().getArenaByPlayer((Player) player);
         if (a == null) return false;
 
         if (!a.isPlayer((Player) player)) {

@@ -30,8 +30,6 @@ import org.bukkit.potion.PotionEffect;
 
 import java.util.*;
 
-import static com.andrei1058.bedwars.BedWars.plugin;
-
 /**
  * This is where player stuff are stored so he can have them back after a game
  */
@@ -55,7 +53,7 @@ class PlayerGoods {
 
     PlayerGoods(Player p, boolean prepare, boolean rejoin) {
         if (hasGoods(p)) {
-            plugin.getLogger().severe(p.getName() + " is already having a PlayerGoods vault :|");
+            BedWars.plugin.getLogger().severe(p.getName() + " is already having a PlayerGoods vault :|");
             return;
         }
         this.uuid = p.getUniqueId();

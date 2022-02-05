@@ -45,9 +45,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.andrei1058.bedwars.BedWars.nms;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
-
 @SuppressWarnings("WeakerAccess")
 public class CategoryContent implements ICategoryContent {
 
@@ -146,7 +143,7 @@ public class CategoryContent implements ICategoryContent {
         //check if can re-buy
         if (shopCache.getContentTier(getIdentifier()) == contentTiers.size()) {
             if (isPermanent() && shopCache.hasCachedItem(this)) {
-                player.sendMessage(getMsg(player, Messages.SHOP_ALREADY_BOUGHT));
+                player.sendMessage(Language.getMsg(player, Messages.SHOP_ALREADY_BOUGHT));
                 Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, player);
                 return;
             }
@@ -163,7 +160,7 @@ public class CategoryContent implements ICategoryContent {
         //check money
         int money = calculateMoney(player, ct.getCurrency());
         if (money < ct.getPrice()) {
-            player.sendMessage(getMsg(player, Messages.SHOP_INSUFFICIENT_MONEY).replace("{currency}", getMsg(player, getCurrencyMsgPath(ct))).
+            player.sendMessage(Language.getMsg(player, Messages.SHOP_INSUFFICIENT_MONEY).replace("{currency}", Language.getMsg(player, getCurrencyMsgPath(ct))).
                     replace("{amount}", String.valueOf(ct.getPrice() - money)));
             Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, player);
             return;
@@ -194,10 +191,10 @@ public class CategoryContent implements ICategoryContent {
         if (itemNamePath == null || Language.getPlayerLanguage(player).getYml().get(itemNamePath) == null) {
             ItemStack displayItem = ct.getItemStack();
             if (displayItem.getItemMeta() != null && displayItem.getItemMeta().hasDisplayName()) {
-                player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", displayItem.getItemMeta().getDisplayName()));
+                player.sendMessage(Language.getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", displayItem.getItemMeta().getDisplayName()));
             }
         } else {
-            player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", ChatColor.stripColor(getMsg(player, itemNamePath))).replace("{color}", "").replace("{tier}", ""));
+            player.sendMessage(Language.getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", ChatColor.stripColor(Language.getMsg(player, itemNamePath))).replace("{color}", "").replace("{tier}", ""));
         }
 
 
@@ -251,8 +248,8 @@ public class CategoryContent implements ICategoryContent {
             PlayerQuickBuyCache qbc = PlayerQuickBuyCache.getQuickBuyCache(player.getUniqueId());
             boolean hasQuick = qbc != null && hasQuick(qbc);
 
-            String color = getMsg(player, canAfford ? Messages.SHOP_CAN_BUY_COLOR : Messages.SHOP_CANT_BUY_COLOR);
-            String translatedCurrency = getMsg(player, getCurrencyMsgPath(ct));
+            String color = Language.getMsg(player, canAfford ? Messages.SHOP_CAN_BUY_COLOR : Messages.SHOP_CANT_BUY_COLOR);
+            String translatedCurrency = Language.getMsg(player, getCurrencyMsgPath(ct));
             ChatColor cColor = getCurrencyColor(ct.getCurrency());
 
             int tierI = ct.getValue();
@@ -260,27 +257,27 @@ public class CategoryContent implements ICategoryContent {
             String buyStatus;
 
             if (isPermanent() && shopCache.hasCachedItem(this) && shopCache.getCachedItem(this).getTier() == getContentTiers().size()) {
-                buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_MAXED);
+                buyStatus = Language.getMsg(player, Messages.SHOP_LORE_STATUS_MAXED);
             } else if (!canAfford) {
-                buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CANT_AFFORD).replace("{currency}", translatedCurrency);
+                buyStatus = Language.getMsg(player, Messages.SHOP_LORE_STATUS_CANT_AFFORD).replace("{currency}", translatedCurrency);
             } else {
-                buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CAN_BUY);
+                buyStatus = Language.getMsg(player, Messages.SHOP_LORE_STATUS_CAN_BUY);
             }
 
 
-            im.setDisplayName(getMsg(player, itemNamePath).replace("{color}", color).replace("{tier}", tier));
+            im.setDisplayName(Language.getMsg(player, itemNamePath).replace("{color}", color).replace("{tier}", tier));
 
             List<String> lore = new ArrayList<>();
             for (String s : Language.getList(player, itemLorePath)) {
                 if (s.contains("{quick_buy}")) {
                     if (hasQuick) {
                         if (ShopIndex.getIndexViewers().contains(player.getUniqueId())) {
-                            s = getMsg(player, Messages.SHOP_LORE_QUICK_REMOVE);
+                            s = Language.getMsg(player, Messages.SHOP_LORE_QUICK_REMOVE);
                         } else {
                             continue;
                         }
                     } else {
-                        s = getMsg(player, Messages.SHOP_LORE_QUICK_ADD);
+                        s = Language.getMsg(player, Messages.SHOP_LORE_QUICK_ADD);
                     }
                 }
                 s = s.replace("{tier}", tier).replace("{color}", color).replace("{cost}", cColor + String.valueOf(ct.getPrice()))
@@ -437,10 +434,10 @@ public class CategoryContent implements ICategoryContent {
             if (i.getType() == currency) {
                 if (i.getAmount() < cost) {
                     cost -= i.getAmount();
-                    nms.minusAmount(player, i, i.getAmount());
+                    BedWars.nms.minusAmount(player, i, i.getAmount());
                     player.updateInventory();
                 } else {
-                    nms.minusAmount(player, i, cost);
+                    BedWars.nms.minusAmount(player, i, cost);
                     player.updateInventory();
                     break;
                 }

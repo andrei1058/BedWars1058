@@ -41,10 +41,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.andrei1058.bedwars.BedWars.mainCmd;
-import static com.andrei1058.bedwars.commands.Misc.createArmorStand;
-import static com.andrei1058.bedwars.commands.Misc.removeArmorStand;
-
 public class SetKillDropsLoc extends SubCommand {
 
 
@@ -85,12 +81,12 @@ public class SetKillDropsLoc extends SubCommand {
             }
             if (!foundTeam.isEmpty()) {
                 if (ss.getConfig().getYml().get("Team." + foundTeam + "." + ConfigPath.ARENA_TEAM_KILL_DROPS_LOC) != null) {
-                    removeArmorStand("Kill drops", ss.getConfig().getArenaLoc("Team." + foundTeam + "." + ConfigPath.ARENA_TEAM_KILL_DROPS_LOC), null);
+                    com.andrei1058.bedwars.commands.Misc.removeArmorStand("Kill drops", ss.getConfig().getArenaLoc("Team." + foundTeam + "." + ConfigPath.ARENA_TEAM_KILL_DROPS_LOC), null);
                 }
                 arena.set("Team." + foundTeam + "." + ConfigPath.ARENA_TEAM_KILL_DROPS_LOC, arena.stringLocationArenaFormat(p.getLocation()));
                 String team = ss.getTeamColor(foundTeam) + foundTeam;
                 p.sendMessage(ss.getPrefix() + "Kill drops set for team: " + team);
-                createArmorStand(ChatColor.GOLD + "Kill drops " + team, p.getLocation(), null);
+                com.andrei1058.bedwars.commands.Misc.createArmorStand(ChatColor.GOLD + "Kill drops " + team, p.getLocation(), null);
                 com.andrei1058.bedwars.BedWars.nms.sendTitle(p, " ", ChatColor.GREEN + "Kill drops set for team: " + team, 5, 40, 5);
                 Sounds.playSound(ConfigPath.SOUNDS_BOUGHT, p);
 
@@ -100,7 +96,7 @@ public class SetKillDropsLoc extends SubCommand {
                 return true;
             }
 
-            p.sendMessage(ss.getPrefix() + ChatColor.RED + "Usage: /" + mainCmd + " setKillDrops <teamName>");
+            p.sendMessage(ss.getPrefix() + ChatColor.RED + "Usage: /" + com.andrei1058.bedwars.BedWars.mainCmd + " setKillDrops <teamName>");
             return true;
         }
 
@@ -124,7 +120,7 @@ public class SetKillDropsLoc extends SubCommand {
                 if (arena.getYml().get("Team") != null) {
                     p.sendMessage(ss.getPrefix() + "Available teams: ");
                     for (String team : Objects.requireNonNull(arena.getYml().getConfigurationSection("Team")).getKeys(false)) {
-                        p.spigot().sendMessage(Misc.msgHoverClick(ChatColor.GOLD + " " + '▪' + " " + "Kill drops " + ss.getTeamColor(team) + team + " " + ChatColor.getLastColors(ss.getPrefix()) + "(click to set)", ChatColor.WHITE + "Set Kill drops for " + ss.getTeamColor(team) + team, "/" + mainCmd + " setKillDrops " + team, ClickEvent.Action.RUN_COMMAND));
+                        p.spigot().sendMessage(Misc.msgHoverClick(ChatColor.GOLD + " " + '▪' + " " + "Kill drops " + ss.getTeamColor(team) + team + " " + ChatColor.getLastColors(ss.getPrefix()) + "(click to set)", ChatColor.WHITE + "Set Kill drops for " + ss.getTeamColor(team) + team, "/" + com.andrei1058.bedwars.BedWars.mainCmd + " setKillDrops " + team, ClickEvent.Action.RUN_COMMAND));
                     }
                 }
                 return true;

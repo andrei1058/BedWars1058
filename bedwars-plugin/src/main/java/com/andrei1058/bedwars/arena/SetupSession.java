@@ -45,10 +45,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
-import static com.andrei1058.bedwars.BedWars.config;
-import static com.andrei1058.bedwars.BedWars.plugin;
-import static com.andrei1058.bedwars.commands.Misc.createArmorStand;
-
 public class SetupSession implements ISetupSession {
 
     private static List<SetupSession> setupSessions = new ArrayList<>();
@@ -123,7 +119,7 @@ public class SetupSession implements ISetupSession {
      */
     public boolean startSetup() {
         getPlayer().sendMessage("§6 ▪ §7Loading " + getWorldName());
-        cm = new ArenaConfig(BedWars.plugin, getWorldName(), plugin.getDataFolder().getPath() + "/Arenas");
+        cm = new ArenaConfig(BedWars.plugin, getWorldName(), BedWars.plugin.getDataFolder().getPath() + "/Arenas");
         BedWars.getAPI().getRestoreAdapter().onSetupSessionStart(this);
         return true;
     }
@@ -166,7 +162,7 @@ public class SetupSession implements ISetupSession {
         getSetupSessions().remove(this);
         if (BedWars.getServerType() != ServerType.BUNGEE) {
             try {
-                getPlayer().teleport(config.getConfigLoc("lobbyLoc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                getPlayer().teleport(BedWars.config.getConfigLoc("lobbyLoc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
             } catch (Exception ex) {
                 getPlayer().teleport(Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
             }
@@ -212,7 +208,7 @@ public class SetupSession implements ISetupSession {
         player.getInventory().clear();
         player.teleport(Bukkit.getWorld(getWorldName()).getSpawnLocation());
         player.setGameMode(GameMode.CREATIVE);
-        Bukkit.getScheduler().runTaskLater(plugin, ()->{
+        Bukkit.getScheduler().runTaskLater(BedWars.plugin, ()->{
             player.setAllowFlight(true);
             player.setFlying(true);
         }, 5L);
@@ -235,7 +231,7 @@ public class SetupSession implements ISetupSession {
         }
 
         World w = Bukkit.getWorld(getWorldName());
-        Bukkit.getScheduler().runTaskLater(plugin, () -> w.getEntities().stream()
+        Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> w.getEntities().stream()
                 .filter(e -> e.getType() != EntityType.PLAYER).filter(e -> e.getType() != EntityType.PAINTING)
                 .filter(e -> e.getType() != EntityType.ITEM_FRAME).forEach(Entity::remove), 30L);
         w.setAutoSave(false);
@@ -243,36 +239,36 @@ public class SetupSession implements ISetupSession {
         Bukkit.getPluginManager().callEvent(new SetupSessionStartEvent(this));
         setStarted(true);
 
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+        Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
             for (String team : getTeams()) {
                 for (String gen : new String[]{"Iron", "Gold", "Emerald"}) {
                     if (getConfig().getYml().get("Team." + team + "." + gen) != null) {
                         for (String loc : getConfig().getList("Team." + team + ".Iron")) {
-                            createArmorStand(ChatColor.GOLD + gen + " generator added for team: " + getTeamColor(team) + team, getConfig().convertStringToArenaLocation(loc), loc);
+                            com.andrei1058.bedwars.commands.Misc.createArmorStand(ChatColor.GOLD + gen + " generator added for team: " + getTeamColor(team) + team, getConfig().convertStringToArenaLocation(loc), loc);
                         }
                     }
                     if (getConfig().getYml().get("Team." + team + ".Spawn") != null) {
-                        createArmorStand(getTeamColor(team) + team + " " + ChatColor.GOLD + "SPAWN SET", getConfig().getArenaLoc("Team." + team + ".Spawn"), getConfig().getString("Team." + team + ".Spawn"));
+                        com.andrei1058.bedwars.commands.Misc.createArmorStand(getTeamColor(team) + team + " " + ChatColor.GOLD + "SPAWN SET", getConfig().getArenaLoc("Team." + team + ".Spawn"), getConfig().getString("Team." + team + ".Spawn"));
                     }
                     if (getConfig().getYml().get("Team." + team + ".Bed") != null) {
-                        createArmorStand(getTeamColor(team) + team + " " + ChatColor.GOLD + "BED SET", getConfig().getArenaLoc("Team." + team + ".Bed"), getConfig().getString("Team." + team + ".Bed"));
+                        com.andrei1058.bedwars.commands.Misc.createArmorStand(getTeamColor(team) + team + " " + ChatColor.GOLD + "BED SET", getConfig().getArenaLoc("Team." + team + ".Bed"), getConfig().getString("Team." + team + ".Bed"));
                     }
                 }
                 if (getConfig().getYml().get("Team." + team + ".Shop") != null) {
-                    createArmorStand(getTeamColor(team) + team + " " + ChatColor.GOLD + "SHOP SET", getConfig().getArenaLoc("Team." + team + ".Shop"), null);
+                    com.andrei1058.bedwars.commands.Misc.createArmorStand(getTeamColor(team) + team + " " + ChatColor.GOLD + "SHOP SET", getConfig().getArenaLoc("Team." + team + ".Shop"), null);
                 }
                 if (getConfig().getYml().get("Team." + team + ".Upgrade") != null) {
-                    createArmorStand(getTeamColor(team) + team + " " + ChatColor.GOLD + "UPGRADE SET", getConfig().getArenaLoc("Team." + team + ".Upgrade"), null);
+                    com.andrei1058.bedwars.commands.Misc.createArmorStand(getTeamColor(team) + team + " " + ChatColor.GOLD + "UPGRADE SET", getConfig().getArenaLoc("Team." + team + ".Upgrade"), null);
                 }
                 if (getConfig().getYml().get("Team." + team + "." + ConfigPath.ARENA_TEAM_KILL_DROPS_LOC) != null) {
-                    createArmorStand(ChatColor.GOLD + "Kill drops " + team, getConfig().getArenaLoc("Team." + team + "." + ConfigPath.ARENA_TEAM_KILL_DROPS_LOC), null);
+                    com.andrei1058.bedwars.commands.Misc.createArmorStand(ChatColor.GOLD + "Kill drops " + team, getConfig().getArenaLoc("Team." + team + "." + ConfigPath.ARENA_TEAM_KILL_DROPS_LOC), null);
                 }
             }
 
             for (String type : new String[]{"Emerald", "Diamond"}) {
                 if (getConfig().getYml().get("generator." + type) != null) {
                     for (String loc : getConfig().getList("generator." + type)) {
-                        createArmorStand(ChatColor.GOLD + type + " SET", getConfig().convertStringToArenaLocation(loc), loc);
+                        com.andrei1058.bedwars.commands.Misc.createArmorStand(ChatColor.GOLD + type + " SET", getConfig().convertStringToArenaLocation(loc), loc);
                     }
                 }
             }

@@ -32,8 +32,6 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.andrei1058.bedwars.BedWars.mainCmd;
-
 public class SetMaxInTeam extends SubCommand {
 
     public SetMaxInTeam(ParentCommand parent, String name) {
@@ -52,12 +50,12 @@ public class SetMaxInTeam extends SubCommand {
             return true;
         }
         if (args.length == 0) {
-            p.sendMessage("§c▪ §7Usage: /" + mainCmd + " setMaxInTeam <int>");
+            p.sendMessage("§c▪ §7Usage: /" + com.andrei1058.bedwars.BedWars.mainCmd + " setMaxInTeam <int>");
         } else {
             try {
                 Integer.parseInt(args[0]);
             } catch (Exception ex) {
-                p.sendMessage("§c▪ §7Usage: /" + mainCmd + " setMaxInTeam <int>");
+                p.sendMessage("§c▪ §7Usage: /" + com.andrei1058.bedwars.BedWars.mainCmd + " setMaxInTeam <int>");
                 return true;
             }
             ss.getConfig().set("maxInTeam", Integer.valueOf(args[0]));
