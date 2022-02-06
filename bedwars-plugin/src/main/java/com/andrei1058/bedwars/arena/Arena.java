@@ -498,7 +498,15 @@ public class Arena implements IArena {
             p.setAllowFlight(false);
             p.setHealth(20);
             for (Player on : players) {
-                on.sendMessage(getMsg(on, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
+                on.sendMessage(
+                        getMsg(on, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG)
+                            .replace("{vPrefix}", getChatSupport().getPrefix(p))
+                            .replace("{vSuffix}", getChatSupport().getSuffix(p))
+                            .replace("{playername}", p.getName())
+                            .replace("{player}", p.getDisplayName())
+                            .replace("{on}", String.valueOf(getPlayers().size()))
+                            .replace("{max}", String.valueOf(getMaxPlayers()))
+                );
             }
             setArenaByPlayer(p, this);
 
@@ -863,7 +871,14 @@ public class Arena implements IArena {
             }
         }
         for (Player on : getPlayers()) {
-            on.sendMessage(getMsg(on, Messages.COMMAND_LEAVE_MSG).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()));
+            on.sendMessage(
+                    getMsg(on, Messages.COMMAND_LEAVE_MSG)
+                            .replace("{vPrefix}", getChatSupport().getPrefix(p))
+                            .replace("{vSuffix}", getChatSupport().getSuffix(p))
+                            .replace("{playername}", p.getName())
+                            .replace("{player}", p.getDisplayName()
+                            )
+            );
         }
         for (Player on : getSpectators()) {
             on.sendMessage(getMsg(on, Messages.COMMAND_LEAVE_MSG).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()));
@@ -1105,7 +1120,7 @@ public class Arena implements IArena {
             reJoin.getTask().destroy();
         }
 
-        PlayerReJoinEvent ev = new PlayerReJoinEvent(p, this);
+        PlayerReJoinEvent ev = new PlayerReJoinEvent(p, this, BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_RE_SPAWN_COUNTDOWN));
         Bukkit.getPluginManager().callEvent(ev);
         if (ev.isCancelled()) return false;
 
@@ -1144,7 +1159,7 @@ public class Arena implements IArena {
             sc.getCachedItems().add(ci);
         }
 
-        reJoin.getBwt().reJoin(p);
+        reJoin.getBwt().reJoin(p, ev.getRespawnTime());
         reJoin.destroy(false);
 
         BedWarsScoreboard.giveScoreboard(p, this, true);

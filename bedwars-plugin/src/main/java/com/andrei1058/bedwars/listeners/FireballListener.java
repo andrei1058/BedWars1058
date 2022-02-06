@@ -123,9 +123,11 @@ public class FireballListener implements Listener {
     @EventHandler
     public void fireballPrime(ExplosionPrimeEvent e) {
         if(!(e.getEntity() instanceof Fireball)) return;
-        if(!(e.getEntity() instanceof Player)) return;
+        ProjectileSource shooter = ((Fireball)e.getEntity()).getShooter();
+        if(!(shooter instanceof Player)) return;
+        Player player = (Player) shooter;
 
-        if(Arena.getArenaByPlayer((Player) e.getEntity()) == null) return;
+        if(Arena.getArenaByPlayer(player) == null) return;
 
         e.setFire(fireballMakeFire);
     }
