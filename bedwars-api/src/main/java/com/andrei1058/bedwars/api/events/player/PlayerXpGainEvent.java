@@ -28,9 +28,9 @@ public class PlayerXpGainEvent extends Event {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
-    private Player player;
-    private int amount;
-    private XpSource xpSource;
+    private final Player player;
+    private final int amount;
+    private final XpSource xpSource;
 
     /**
      * Called when a player receives new xp.

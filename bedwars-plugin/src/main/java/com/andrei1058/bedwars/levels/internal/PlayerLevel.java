@@ -213,9 +213,6 @@ public class PlayerLevel {
         updateLongProgressBar();
         Bukkit.getPluginManager().callEvent(new PlayerXpGainEvent(Bukkit.getPlayer(uuid), xp, source));
         modified = true;
-        if (Arena.getExperienceEarned().containsKey(uuid)) {
-            Arena.getExperienceEarned().put(uuid, Arena.getExperienceEarned(uuid) + xp);
-        }
     }
 
     /**
