@@ -39,6 +39,7 @@ public class PlayerLevel {
     private String levelName;
     private int currentXp;
     private String progressBar;
+    private String longProgressBar;
     private String requiredXp;
     private String formattedCurrentXp;
 
@@ -63,6 +64,7 @@ public class PlayerLevel {
         this.level = level;
         this.currentXp = currentXp;
         updateProgressBar();
+        updateLongProgressBar();
         //requiredXp = nextLevelCost >= 1000 ? nextLevelCost % 1000 == 0 ? nextLevelCost / 1000 + "k" : (double) nextLevelCost / 1000 + "k" : String.valueOf(nextLevelCost);
         //formattedCurrentXp = currentXp >= 1000 ? currentXp % 1000 == 0 ? currentXp / 1000 + "k" : (double) currentXp / 1000 + "k" : String.valueOf(currentXp);
         if (!levelByPlayer.containsKey(player)) levelByPlayer.put(player, this);
@@ -103,6 +105,26 @@ public class PlayerLevel {
             unlocked = 0;
         }
         progressBar = ChatColor.translateAlternateColorCodes('&', LevelsConfig.levels.getString("progress-bar.format").replace("{progress}",
+                LevelsConfig.levels.getString("progress-bar.unlocked-color") + String.valueOf(new char[unlocked]).replace("\0", LevelsConfig.levels.getString("progress-bar.symbol"))
+                        + LevelsConfig.levels.getString("progress-bar.locked-color") + String.valueOf(new char[locked]).replace("\0", LevelsConfig.levels.getString("progress-bar.symbol"))));
+        requiredXp = nextLevelCost >= 1000 ? nextLevelCost % 1000 == 0 ? nextLevelCost / 1000 + "k" : (double) nextLevelCost / 1000 + "k" : String.valueOf(nextLevelCost);
+        formattedCurrentXp = currentXp >= 1000 ? currentXp % 1000 == 0 ? currentXp / 1000 + "k" : (double) currentXp / 1000 + "k" : String.valueOf(currentXp);
+    }
+
+    /**
+     * Update the player long progress bar.
+     * This actually only change the amount of symbols.
+     * Could be improved or customized from level.yml
+     */
+    private void updateLongProgressBar() {
+        double l1 = ((nextLevelCost - currentXp) / (double) (nextLevelCost)) * 34;
+        int locked = (int) l1;
+        int unlocked = 34 - locked;
+        if (locked < 0 || unlocked < 0) {
+            locked = 34;
+            unlocked = 0;
+        }
+        longProgressBar = ChatColor.translateAlternateColorCodes('&', LevelsConfig.levels.getString("progress-bar.format").replace("{progress}",
                 LevelsConfig.levels.getString("progress-bar.unlocked-color") + String.valueOf(new char[unlocked]).replace("\0", LevelsConfig.levels.getString("progress-bar.symbol"))
                         + LevelsConfig.levels.getString("progress-bar.locked-color") + String.valueOf(new char[locked]).replace("\0", LevelsConfig.levels.getString("progress-bar.symbol"))));
         requiredXp = nextLevelCost >= 1000 ? nextLevelCost % 1000 == 0 ? nextLevelCost / 1000 + "k" : (double) nextLevelCost / 1000 + "k" : String.valueOf(nextLevelCost);
@@ -159,6 +181,13 @@ public class PlayerLevel {
     }
 
     /**
+     * Get progress long bar for player.
+     */
+    public String getLongProgressBar() {
+        return longProgressBar;
+    }
+
+    /**
      * Get target xp already formatted.
      * Like: 2000 is 2k
      */
@@ -174,6 +203,7 @@ public class PlayerLevel {
         this.currentXp += xp;
         upgradeLevel();
         updateProgressBar();
+        updateLongProgressBar();
         Bukkit.getPluginManager().callEvent(new PlayerXpGainEvent(Bukkit.getPlayer(uuid), xp, source));
         modified = true;
     }
@@ -186,6 +216,7 @@ public class PlayerLevel {
         this.currentXp = currentXp;
         upgradeLevel();
         updateProgressBar();
+        updateLongProgressBar();
         modified = true;
     }
 
@@ -198,6 +229,7 @@ public class PlayerLevel {
         this.levelName = ChatColor.translateAlternateColorCodes('&', LevelsConfig.getLevelName(level)).replace("{number}", String.valueOf(level));
         requiredXp = nextLevelCost >= 1000 ? nextLevelCost % 1000 == 0 ? nextLevelCost / 1000 + "k" : (double) nextLevelCost / 1000 + "k" : String.valueOf(nextLevelCost);
         updateProgressBar();
+        updateLongProgressBar();
         modified = true;
     }
 

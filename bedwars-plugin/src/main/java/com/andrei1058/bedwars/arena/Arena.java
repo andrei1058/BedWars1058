@@ -56,6 +56,7 @@ import com.andrei1058.bedwars.arena.tasks.ReJoinTask;
 import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import com.andrei1058.bedwars.arena.team.TeamAssigner;
 import com.andrei1058.bedwars.configuration.ArenaConfig;
+import com.andrei1058.bedwars.configuration.LevelsConfig;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.levels.internal.InternalLevel;
 import com.andrei1058.bedwars.levels.internal.PerMinuteTask;
@@ -158,6 +159,9 @@ public class Arena implements IArena {
     private HashMap<Player, Integer> playerDeaths = new HashMap<>();
     private HashMap<Player, Integer> playerFinalKillDeaths = new HashMap<>();
 
+    /* SUMMARY REWARDS */
+    private static final Map<UUID, Integer> coinsEarned = new HashMap<>();
+    private static final Map<UUID, Integer> experienceEarned = new HashMap<>();
 
     /* ARENA TASKS */
     private StartingTask startingTask = null;
@@ -494,6 +498,8 @@ public class Arena implements IArena {
 
             p.closeInventory();
             players.add(p);
+            coinsEarned.put(p.getUniqueId(), 0);
+            experienceEarned.put(p.getUniqueId(), 0);
             p.setFlying(false);
             p.setAllowFlight(false);
             p.setHealth(20);
@@ -777,6 +783,8 @@ public class Arena implements IArena {
         //players.remove must be under call event in order to check if the player is a spectator or not
         players.remove(p);
         removeArenaByPlayer(p, this);
+        coinsEarned.remove(p.getUniqueId());
+        experienceEarned.remove(p.getUniqueId());
 
         for (PotionEffect pf : p.getActivePotionEffects()) {
             p.removePotionEffect(pf.getType());
@@ -1878,20 +1886,37 @@ public class Arena implements IArena {
                             entry++;
                         }
                     }
-                    for (Player p : world.getPlayers()) {
-                        p.sendMessage(getMsg(p, Messages.GAME_END_TEAM_WON_CHAT).replace("{TeamColor}", winner.getColor().chat().toString())
-                                .replace("{TeamName}", winner.getDisplayName(Language.getPlayerLanguage(p))));
-                        if (!winner.getMembers().contains(p)) {
-                            nms.sendTitle(p, getMsg(p, Messages.GAME_END_GAME_OVER_PLAYER_TITLE), null, 0, 70, 0);
+                    for (Player player : world.getPlayers()) {
+                        player.sendMessage(getMsg(player, Messages.GAME_END_TEAM_WON_CHAT).replace("{TeamColor}", winner.getColor().chat().toString())
+                                .replace("{TeamName}", winner.getDisplayName(Language.getPlayerLanguage(player))));
+                        if (!winner.getMembers().contains(player)) {
+                            nms.sendTitle(player, getMsg(player, Messages.GAME_END_GAME_OVER_PLAYER_TITLE), null, 0, 70, 0);
                         }
-                        for (String s : getList(p, Messages.GAME_END_TOP_PLAYER_CHAT)) {
-                            String message = s.replace("{firstName}", firstName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : firstName).replace("{firstKills}", String.valueOf(first))
-                                    .replace("{secondName}", secondName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : secondName).replace("{secondKills}", String.valueOf(second))
-                                    .replace("{thirdName}", thirdName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : thirdName).replace("{thirdKills}", String.valueOf(third))
-                                    .replace("{winnerFormat}", getMaxInTeam() > 1 ? getMsg(p, Messages.FORMATTING_TEAM_WINNER_FORMAT).replace("{members}", winners.toString()) : getMsg(p, Messages.FORMATTING_SOLO_WINNER_FORMAT).replace("{members}", winners.toString()))
-                                    .replace("{TeamColor}", winner.getColor().chat().toString()).replace("{TeamName}", winner.getDisplayName(Language.getPlayerLanguage(p)));
-                            p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, message));
+
+                        for (String s : getList(player, Messages.GAME_END_TOP_PLAYER_CHAT)) {
+                            String message = s.replace("{firstName}", firstName.isEmpty() ? getMsg(player, Messages.MEANING_NOBODY) : firstName).replace("{firstKills}", String.valueOf(first))
+                                    .replace("{secondName}", secondName.isEmpty() ? getMsg(player, Messages.MEANING_NOBODY) : secondName).replace("{secondKills}", String.valueOf(second))
+                                    .replace("{thirdName}", thirdName.isEmpty() ? getMsg(player, Messages.MEANING_NOBODY) : thirdName).replace("{thirdKills}", String.valueOf(third))
+                                    .replace("{winnerFormat}", getMaxInTeam() > 1 ? getMsg(player, Messages.FORMATTING_TEAM_WINNER_FORMAT).replace("{members}", winners.toString()) : getMsg(player, Messages.FORMATTING_SOLO_WINNER_FORMAT).replace("{members}", winners.toString()))
+                                    .replace("{TeamColor}", winner.getColor().chat().toString()).replace("{TeamName}", winner.getDisplayName(Language.getPlayerLanguage(player)));
+                            player.sendMessage(SupportPAPI.getSupportPAPI().replace(player, message));
                         }
+
+                        //Run task later cuz some coins are given too late and are not added to the map
+                        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                            for (String  s : getList(player, Messages.GAME_END_PLAYER_REWARD_SUMMARY)){
+                                String message = s
+                                        .replace("{coinsEarned}", String.valueOf(getCoinsEarned(player.getUniqueId())))
+                                        .replace("{experienceEarned}", String.valueOf(getExperienceEarned(player.getUniqueId())))
+                                        .replace("{percentAchieved}", String.valueOf(Math.round(BedWars.getLevelSupport().getCurrentXp(player) / (double) LevelsConfig.getNextCost(BedWars.getLevelSupport().getPlayerLevel(player)) * 100)))
+                                        .replace("{progress}", String.valueOf(BedWars.getLevelSupport().getLongProgressBar(player)))
+                                        .replace("{level}", String.valueOf(BedWars.getLevelSupport().getPlayerLevel(player)))
+                                        .replace("{nextLevel}", String.valueOf((BedWars.getLevelSupport().getPlayerLevel(player) + 1)))
+                                        .replace("{currentXp}", String.valueOf(BedWars.getLevelSupport().getCurrentXp(player)))
+                                        .replace("{requiredXp}", String.valueOf(BedWars.getLevelSupport().getRequiredXp(player)));
+                                player.sendMessage(SupportPAPI.getSupportPAPI().replace(player, message));
+                            }
+                        }, 11L);
                     }
                 }
                 changeStatus(GameState.restarting);
@@ -1926,6 +1951,22 @@ public class Arena implements IArena {
         }
     }
 
+    public static int getCoinsEarned(UUID uuid){
+        return getCoinsEarned().get(uuid);
+    }
+
+    public static int getExperienceEarned(UUID uuid){
+        return getExperienceEarned().get(uuid);
+    }
+
+    public static Map<UUID, Integer> getCoinsEarned(){
+        return coinsEarned;
+    }
+
+    public static Map<UUID, Integer> getExperienceEarned(){
+        return experienceEarned;
+    }
+
     /**
      * Add a kill to the player temp stats.
      */
@@ -1936,7 +1977,6 @@ public class Arena implements IArena {
             playerDeaths.put(p, 1);
         }
     }
-
 
     /**
      * Set next event for the arena.
