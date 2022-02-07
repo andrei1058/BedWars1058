@@ -138,10 +138,8 @@ public class Portuguese extends Language {
                 "&e&l   Ferro, Ouro, Esmeralda e Diamante de geradores",
                 "&e&l             para adquirir as melhorias.", "",
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
-        yml.addDefault(Messages.ARENA_JOIN_DENIED_SELECTOR, "{prefix}&cDesculpe, mas você não pode participar desta partida
-  neste momento. Use o botão direito do mouse para espectar.");
-        yml.addDefault(Messages.ARENA_SPECTATE_DENIED_SELECTOR, "{prefix}&cDesculpe, mas você não pode espectar esta partida
-  neste momento. Utilize o botão esquerdo para entrar na partida.");
+        yml.addDefault(Messages.ARENA_JOIN_DENIED_SELECTOR, "{prefix}&cDesculpe, mas você não pode participar desta partida neste momento. Use o botão direito do mouse para espectar.");
+        yml.addDefault(Messages.ARENA_SPECTATE_DENIED_SELECTOR, "{prefix}&cDesculpe, mas você não pode espectar esta partida neste momento. Utilize o botão esquerdo para entrar na partida.");
         yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_PROXY, "&cDesculpe, mas precisa entrar em uma arena usando BedWarsProxy. \n&eSe você quiser configurar uma arena, certifique-se de dar a si mesmo a permissão bw.setup para que você possa entrar no servidor diretamente!");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_NAME, "&8Teletransportador");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME, "{vPrefix}{player}");
