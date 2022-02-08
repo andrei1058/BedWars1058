@@ -105,8 +105,8 @@
         </dependency>
         <dependency>
             <groupId>de.simonsator</groupId>
-            <artifactId>FakePAFSpigot</artifactId>
-            <version>1.0.5</version>
+            <artifactId>DevelopmentPAFSpigot</artifactId>
+            <version>1.0.65</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
