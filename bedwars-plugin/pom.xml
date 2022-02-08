@@ -55,10 +55,6 @@
             <url>https://repo.codemc.io/repository/nms/</url>
         </repository>
         <repository>
-            <id>ajgeiss0702-releases</id>
-            <url>https://repo.ajg0702.us/releases/</url>
-        </repository>
-        <repository>
             <id>spigotmc-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
