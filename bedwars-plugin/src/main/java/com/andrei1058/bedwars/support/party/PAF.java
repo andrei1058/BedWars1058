@@ -14,7 +14,7 @@ public class PAF implements Party {
     //Party and Friends for Spigot Support by JT122406
     @Override
     public boolean hasParty(Player p) {
-        return getPAFParty(p) == null;
+        return getPAFParty(p) != null;
     }
 
     private PlayerParty getPAFParty(Player p) {
