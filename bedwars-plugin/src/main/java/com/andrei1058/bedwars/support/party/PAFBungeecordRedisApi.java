@@ -25,10 +25,7 @@ public class PAFBungeecordRedisApi implements Party {
 
     @Override
     public int partySize(Player p) {
-        PlayerParty party = getPAFParty(p);
-        if (party == null)
-            return 0;
-        return party.getAllPlayers().size();
+        return getMembers(p).size();
     }
 
     @Override
@@ -47,7 +44,9 @@ public class PAFBungeecordRedisApi implements Party {
         if (party == null)
             return playerList;
         for (PAFPlayer players : party.getAllPlayers()) {
-            playerList.add(Bukkit.getPlayer(players.getUniqueId()));
+            Player bukkitPlayer = Bukkit.getPlayer(players.getUniqueId());
+            if (bukkitPlayer != null)
+                playerList.add(bukkitPlayer);
         }
         return playerList;
     }
