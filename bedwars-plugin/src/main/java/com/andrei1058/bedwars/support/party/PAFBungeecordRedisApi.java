@@ -1,38 +1,36 @@
 package com.andrei1058.bedwars.support.party;
 
 import com.andrei1058.bedwars.api.party.Party;
-import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
-import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
-import de.simonsator.partyandfriends.api.party.PartyManager;
-import de.simonsator.partyandfriends.api.party.PlayerParty;
+import de.simonsator.partyandfriends.spigot.api.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.spigot.api.pafplayers.PAFPlayerManager;
+import de.simonsator.partyandfriends.spigot.api.party.PartyManager;
+import de.simonsator.partyandfriends.spigot.api.party.PlayerParty;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PAF implements Party {
-    //Party and Friends for Spigot Support by JT122406
+public class PAFBungeecordRedisApi implements Party {
+    //Party and Friends Extended for BungeeCord Support by JT122406
     @Override
     public boolean hasParty(Player p) {
         return getPAFParty(p) == null;
     }
 
     private PlayerParty getPAFParty(Player p) {
-        OnlinePAFPlayer pafPlayer = PAFPlayerManager.getInstance().getPlayer(p);
+        PAFPlayer pafPlayer = PAFPlayerManager.getInstance().getPlayer(p.getUniqueId());
         return PartyManager.getInstance().getParty(pafPlayer);
     }
 
     @Override
     public int partySize(Player p) {
-        PlayerParty party = getPAFParty(p);
-        if (party == null)
-            return 0;
-        return party.getAllPlayers().size();
+        return getMembers(p).size();
     }
 
     @Override
     public boolean isOwner(Player p) {
-        OnlinePAFPlayer pafPlayer = PAFPlayerManager.getInstance().getPlayer(p);
+        PAFPlayer pafPlayer = PAFPlayerManager.getInstance().getPlayer(p.getUniqueId());
         PlayerParty party = PartyManager.getInstance().getParty(pafPlayer);
         if (party == null)
             return false;
@@ -45,8 +43,10 @@ public class PAF implements Party {
         PlayerParty party = getPAFParty(owner);
         if (party == null)
             return playerList;
-        for (OnlinePAFPlayer players : party.getAllPlayers()) {
-            playerList.add(players.getPlayer());
+        for (PAFPlayer players : party.getAllPlayers()) {
+            Player bukkitPlayer = Bukkit.getPlayer(players.getUniqueId());
+            if (bukkitPlayer != null)
+                playerList.add(bukkitPlayer);
         }
         return playerList;
     }
@@ -72,7 +72,7 @@ public class PAF implements Party {
         PlayerParty party = getPAFParty(owner);
         if (party == null)
             return false;
-        return party.isInParty(PAFPlayerManager.getInstance().getPlayer(check));
+        return party.isInParty(PAFPlayerManager.getInstance().getPlayer(check.getUniqueId()));
     }
 
     @Override

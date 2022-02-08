@@ -23,6 +23,10 @@
 
     <repositories>
         <repository>
+            <id>simonsators-repo</id>
+            <url>https://simonsator.de/repo/</url>
+        </repository>
+        <repository>
             <id>citizens</id>
             <url>https://repo.citizensnpcs.co/</url>
         </repository>
@@ -70,6 +74,30 @@
 
     <dependencies>
         <dependency>
+            <groupId>de.simonsator</groupId>
+            <artifactId>Party-and-Friends-MySQL-Edition-Spigot-API</artifactId>
+            <version>1.5.1</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>be.maximvdw</groupId>
+                    <artifactId>MVdWPlaceholderAPI</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>de.simonsator</groupId>
+            <artifactId>Spigot-Party-API-For-RedisBungee</artifactId>
+            <version>1.0.2-SNAPSHOT</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>be.maximvdw</groupId>
+                    <artifactId>MVdWPlaceholderAPI</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
             <version>3.0.0</version>
@@ -77,8 +105,8 @@
         </dependency>
         <dependency>
             <groupId>de.simonsator</groupId>
-            <artifactId>FakePAFSpigot</artifactId>
-            <version>1.0.4</version>
+            <artifactId>DevelopmentPAFSpigot</artifactId>
+            <version>1.0.65</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
