@@ -27,9 +27,9 @@ public class MoneyListeners implements Listener {
             if (player == null) continue;
             int moneyPerWin = MoneyConfig.money.getInt("money-rewards.game-win");
             if (moneyPerWin > 0) {
+                Bukkit.getPluginManager().callEvent(new PlayerMoneyGainEvent(player, moneyPerWin));
                 BedWars.getEconomy().giveMoney(player, moneyPerWin);
                 player.sendMessage(Language.getMsg(player, Messages.MONEY_REWARD_WIN).replace("{money}", String.valueOf(moneyPerWin)));
-                Bukkit.getPluginManager().callEvent(new PlayerMoneyGainEvent(player, moneyPerWin));
             }
         }
 
@@ -38,9 +38,9 @@ public class MoneyListeners implements Listener {
             if (player == null) continue;
             int moneyPerTeammate = MoneyConfig.money.getInt("money-rewards.per-teammate");
             if (moneyPerTeammate > 0) {
+                Bukkit.getPluginManager().callEvent(new PlayerMoneyGainEvent(player, moneyPerTeammate));
                 BedWars.getEconomy().giveMoney(player, moneyPerTeammate);
                 player.sendMessage(Language.getMsg(player, Messages.MONEY_REWARD_PER_TEAMMATE).replace("{money}", String.valueOf(moneyPerTeammate)));
-                Bukkit.getPluginManager().callEvent(new PlayerMoneyGainEvent(player, moneyPerTeammate));
             }
         }
     }
@@ -54,9 +54,9 @@ public class MoneyListeners implements Listener {
         if (player == null) return;
         int moneyPerBedDestroy = MoneyConfig.money.getInt ("money-rewards.bed-destroyed");
         if (moneyPerBedDestroy > 0) {
+            Bukkit.getPluginManager().callEvent(new PlayerMoneyGainEvent(player, moneyPerBedDestroy));
             BedWars.getEconomy().giveMoney(player, moneyPerBedDestroy);
             player.sendMessage(Language.getMsg(player, Messages.MONEY_REWARD_BED_DESTROYED).replace("{money}", String.valueOf(moneyPerBedDestroy)));
-            Bukkit.getPluginManager().callEvent(new PlayerMoneyGainEvent(player, moneyPerBedDestroy));
         }
     }
 
@@ -72,15 +72,15 @@ public class MoneyListeners implements Listener {
         int moneyPerRegularKill = MoneyConfig.money.getInt ( "money-rewards.regular-kill");
         if (e.getCause().isFinalKill()) {
             if (moneyPerFinalKill > 0) {
+                Bukkit.getPluginManager().callEvent(new PlayerMoneyGainEvent(player, moneyPerFinalKill));
                 BedWars.getEconomy().giveMoney(player, moneyPerFinalKill);
                 player.sendMessage(Language.getMsg(player, Messages.MONEY_REWARD_FINAL_KILL ).replace("{money}", String.valueOf(moneyPerFinalKill)));
-                Bukkit.getPluginManager().callEvent(new PlayerMoneyGainEvent(player, moneyPerFinalKill));
             }
         } else {
             if (moneyPerRegularKill > 0) {
+                Bukkit.getPluginManager().callEvent(new PlayerMoneyGainEvent(player, moneyPerRegularKill));
                 BedWars.getEconomy().giveMoney(player, moneyPerRegularKill);
                 player.sendMessage(Language.getMsg(player, Messages.MONEY_REWARD_REGULAR_KILL).replace("{money}", String.valueOf(moneyPerRegularKill)));
-                Bukkit.getPluginManager().callEvent(new PlayerMoneyGainEvent(player, moneyPerRegularKill));
             }
         }
     }
