@@ -224,10 +224,7 @@ public class BuyItem implements IBuyItem {
             ItemMeta im = i.getItemMeta();
             i = nms.colourItem(i, arena.getTeam(player));
             if (im != null) {
-                if (permanent) nms.setUnbreakable(im);
-
                 if (i.getType() == Material.BOW) {
-                    if (permanent) nms.setUnbreakable(im);
                     for (TeamEnchant e : arena.getTeam(player).getBowsEnchantments()) {
                         im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
                     }
@@ -236,6 +233,7 @@ public class BuyItem implements IBuyItem {
                         im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
                     }
                 }
+                BedWars.nms.setUnbreakable(im);
                 i.setItemMeta(im);
             }
 
