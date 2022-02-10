@@ -228,12 +228,13 @@ public class BuyItem implements IBuyItem {
                     for (TeamEnchant e : arena.getTeam(player).getBowsEnchantments()) {
                         im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
                     }
+                    BedWars.nms.setUnbreakable(im);
                 } else if (nms.isSword(i) || nms.isAxe(i)) {
                     for (TeamEnchant e : arena.getTeam(player).getSwordsEnchantments()) {
                         im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
                     }
+                    BedWars.nms.setUnbreakable(im);
                 }
-                BedWars.nms.setUnbreakable(im);
                 i.setItemMeta(im);
             }
 
