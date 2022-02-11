@@ -43,8 +43,8 @@ public class SpectatorFirstPersonEnterEvent extends Event implements Cancellable
     private Function<Player, String> title;
     private Function<Player, String> subTitle;
     private int fadeIn = 0;
-    private int stay = 30;
-    private int fadeOut = 0;
+    private int stay = 40;
+    private int fadeOut = 10;
 
     // A list of all players spectating in first person
     private static List<UUID> spectatingInFirstPerson = new ArrayList<>();
