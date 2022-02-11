@@ -497,13 +497,14 @@ public class Arena implements IArena {
             p.setFlying(false);
             p.setAllowFlight(false);
             p.setHealth(20);
-            for (Player inGame : players) {
-                inGame.sendMessage(SupportPAPI.getSupportPAPI().replace(inGame, Language.getMsg(inGame, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG))
-                        .replace("{vPrefix}", getChatSupport().getPrefix(p))
-                        .replace("{playername}", p.getName())
-                        .replace("{player}", p.getDisplayName())
-                        .replace("{on}", String.valueOf(getPlayers().size()))
-                        .replace("{max}", String.valueOf(getMaxPlayers())));
+            for (Player on : players) {
+                on.sendMessage(SupportPAPI.getSupportPAPI().replace(on, Language.getMsg(on, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG))
+                                .replace("{vPrefix}", getChatSupport().getPrefix(p))
+                                .replace("{vSuffix}", getChatSupport().getSuffix(p))
+                                .replace("{playername}", p.getName())
+                                .replace("{player}", p.getDisplayName())
+                                .replace("{on}", String.valueOf(getPlayers().size()))
+                                .replace("{max}", String.valueOf(getMaxPlayers())));
             }
             setArenaByPlayer(p, this);
 
@@ -874,6 +875,7 @@ public class Arena implements IArena {
         for (Player on : getPlayers()) {
             on.sendMessage(SupportPAPI.getSupportPAPI().replace(on, Language.getMsg(on, Messages.COMMAND_LEAVE_MSG))
                     .replace("{vPrefix}", getChatSupport().getPrefix(p))
+                    .replace("{vSuffix}", getChatSupport().getSuffix(p))
                     .replace("{playername}", p.getName())
                     .replace("{player}", p.getDisplayName()));
         }
