@@ -38,6 +38,7 @@ import com.andrei1058.bedwars.arena.LastHit;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import com.andrei1058.bedwars.listeners.dropshandler.PlayerDrops;
+import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -58,7 +59,6 @@ import java.text.DecimalFormat;
 import java.util.*;
 
 import static com.andrei1058.bedwars.BedWars.*;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
 import static com.andrei1058.bedwars.arena.LastHit.getLastHit;
 
 public class DamageDeathMove implements Listener {
@@ -145,7 +145,7 @@ public class DamageDeathMove implements Listener {
                 .replace("{TeamColor}", team.getColor().chat().toString())
                 .replace("{TeamName}", team.getDisplayName(lang))
                 .replace("{PlayerName}", ChatColor.stripColor(p.getDisplayName()));
-        damager.sendMessage(message);
+        damager.sendMessage(SupportPAPI.getSupportPAPI().replace(damager, message));
     }
 
     @EventHandler
@@ -436,8 +436,9 @@ public class DamageDeathMove implements Listener {
             Bukkit.getPluginManager().callEvent(playerKillEvent);
             for (Player on : a.getPlayers()) {
                 Language lang = Language.getPlayerLanguage(on);
-                on.sendMessage(playerKillEvent.getMessage().apply(on).
-                        replace("{PlayerColor}", victimsTeam.getColor().chat().toString()).replace("{PlayerName}", victim.getDisplayName())
+                on.sendMessage(SupportPAPI.getSupportPAPI().replace(on, playerKillEvent.getMessage().apply(on))
+                        .replace("{PlayerColor}", victimsTeam.getColor().chat().toString())
+                        .replace("{PlayerName}", victim.getDisplayName())
                         .replace("{PlayerTeamName}", victimsTeam.getDisplayName(lang))
                         .replace("{KillerColor}", killersTeam == null ? "" : killersTeam.getColor().chat().toString())
                         .replace("{KillerName}", killer == null ? "" : killer.getDisplayName())
@@ -445,10 +446,11 @@ public class DamageDeathMove implements Listener {
             }
             for (Player on : a.getSpectators()) {
                 Language lang = Language.getPlayerLanguage(on);
-                on.sendMessage(playerKillEvent.getMessage().apply(on).
-                        replace("{PlayerColor}", victimsTeam.getColor().chat().toString()).replace("{PlayerName}", victim.getDisplayName())
-                        .replace("{KillerColor}", killersTeam == null ? "" : killersTeam.getColor().chat().toString())
+                on.sendMessage(SupportPAPI.getSupportPAPI().replace(on, playerKillEvent.getMessage().apply(on))
+                        .replace("{PlayerColor}", victimsTeam.getColor().chat().toString())
+                        .replace("{PlayerName}", victim.getDisplayName())
                         .replace("{PlayerTeamName}", victimsTeam.getDisplayName(lang))
+                        .replace("{KillerColor}", killersTeam == null ? "" : killersTeam.getColor().chat().toString())
                         .replace("{KillerName}", killer == null ? "" : killer.getDisplayName())
                         .replace("{KillerTeamName}", killersTeam == null ? "" : killersTeam.getDisplayName(lang)));
             }
@@ -524,10 +526,12 @@ public class DamageDeathMove implements Listener {
                 e.setRespawnLocation(a.getSpectatorLocation());
                 a.addSpectator(e.getPlayer(), true, null);
                 t.getMembers().remove(e.getPlayer());
-                e.getPlayer().sendMessage(getMsg(e.getPlayer(), Messages.PLAYER_DIE_ELIMINATED_CHAT));
+                e.getPlayer().sendMessage(SupportPAPI.getSupportPAPI().replace(e.getPlayer(), Language.getMsg(e.getPlayer(), Messages.PLAYER_DIE_ELIMINATED_CHAT)));
                 if (t.getMembers().isEmpty()) {
                     for (Player p : a.getWorld().getPlayers()) {
-                        p.sendMessage(getMsg(p, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", t.getColor().chat().toString()).replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(p))));
+                        p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, Language.getMsg(p, Messages.TEAM_ELIMINATED_CHAT))
+                                .replace("{TeamColor}", t.getColor().chat().toString())
+                                .replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(p))));
                     }
                     Bukkit.getScheduler().runTaskLater(plugin, a::checkWinner, 40L);
                 }

@@ -95,14 +95,12 @@ public class ChatFormatting implements Listener {
             if (isShouting(msg, language)) {
                 if (!(p.hasPermission(Permissions.PERMISSION_SHOUT_COMMAND) || p.hasPermission(Permissions.PERMISSION_ALL))) {
                     e.setCancelled(true);
-                    p.sendMessage(Language.getMsg(p, Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
+                    p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, Language.getMsg(p, Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS)));
                     return;
                 }
                 if (ShoutCommand.isShoutCooldown(p)) {
                     e.setCancelled(true);
-                    p.sendMessage(language.m(Messages.COMMAND_COOLDOWN)
-                            .replace("{seconds}", String.valueOf(Math.round(ShoutCommand.getShoutCooldown(p))))
-                    );
+                    p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, Language.getMsg(p, Messages.COMMAND_COOLDOWN)).replace("{seconds}", String.valueOf(Math.round(ShoutCommand.getShoutCooldown(p)))));
                     return;
                 }
                 ShoutCommand.updateShout(p);

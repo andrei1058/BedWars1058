@@ -27,6 +27,7 @@ import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.exceptions.InvalidMaterialException;
+import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.region.Region;
 import com.andrei1058.bedwars.api.server.ServerType;
@@ -107,7 +108,7 @@ public class Misc {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 // if lobby server is unreachable
                 if (p.isOnline()) {
-                    p.kickPlayer(getMsg(p, Messages.ARENA_RESTART_PLAYER_KICK));
+                    p.kickPlayer(SupportPAPI.getSupportPAPI().replace(p, Language.getMsg(p, Messages.ARENA_RESTART_PLAYER_KICK)));
                     if (arena != null && !notAbandon && arena.getStatus() == GameState.playing) {
                         if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_MARK_LEAVE_AS_ABANDON)) {
                             arena.abandonGame(p);

@@ -28,6 +28,7 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.ReJoin;
 import com.andrei1058.bedwars.configuration.Permissions;
 import com.andrei1058.bedwars.configuration.Sounds;
+import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -127,7 +128,7 @@ public class JoinListenerBungeeLegacy implements Listener {
                 if (arena.addPlayer(p, false)) {
                     Sounds.playSound("join-allowed", p);
                 } else {
-                    p.kickPlayer(getMsg(p, Messages.COMMAND_JOIN_DENIED_IS_FULL));
+                    p.kickPlayer(SupportPAPI.getSupportPAPI().replace(p, Language.getMsg(p, Messages.COMMAND_JOIN_DENIED_IS_FULL)));
                 }
             } else {
                 // Check ReJoin
@@ -138,7 +139,7 @@ public class JoinListenerBungeeLegacy implements Listener {
                         reJoin.destroy(false);
                         return;
                     } else {
-                        p.sendMessage(getMsg(p, Messages.REJOIN_DENIED));
+                        p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, Language.getMsg(p, Messages.REJOIN_DENIED)));
                         reJoin.destroy(true);
                     }
                 }
@@ -147,7 +148,7 @@ public class JoinListenerBungeeLegacy implements Listener {
                 if (arena.addSpectator(p, false, null)) {
                     Sounds.playSound("spectate-allowed", p);
                 } else {
-                    p.kickPlayer(getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG));
+                    p.kickPlayer(SupportPAPI.getSupportPAPI().replace(p, Language.getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG)));
                 }
             }
         }

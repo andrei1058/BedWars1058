@@ -34,6 +34,7 @@ import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.shop.quickbuy.PlayerQuickBuyCache;
 import com.andrei1058.bedwars.shop.quickbuy.QuickBuyElement;
+import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -146,7 +147,7 @@ public class CategoryContent implements ICategoryContent {
         //check if can re-buy
         if (shopCache.getContentTier(getIdentifier()) == contentTiers.size()) {
             if (isPermanent() && shopCache.hasCachedItem(this)) {
-                player.sendMessage(getMsg(player, Messages.SHOP_ALREADY_BOUGHT));
+                player.sendMessage(SupportPAPI.getSupportPAPI().replace(player, Language.getMsg(player, Messages.SHOP_ALREADY_BOUGHT)));
                 Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, player);
                 return;
             }
@@ -163,8 +164,9 @@ public class CategoryContent implements ICategoryContent {
         //check money
         int money = calculateMoney(player, ct.getCurrency());
         if (money < ct.getPrice()) {
-            player.sendMessage(getMsg(player, Messages.SHOP_INSUFFICIENT_MONEY).replace("{currency}", getMsg(player, getCurrencyMsgPath(ct))).
-                    replace("{amount}", String.valueOf(ct.getPrice() - money)));
+            player.sendMessage(SupportPAPI.getSupportPAPI().replace(player, Language.getMsg(player, Messages.SHOP_INSUFFICIENT_MONEY))
+                    .replace("{currency}", getMsg(player, getCurrencyMsgPath(ct)))
+                    .replace("{amount}", String.valueOf(ct.getPrice() - money)));
             Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, player);
             return;
         }
@@ -194,10 +196,14 @@ public class CategoryContent implements ICategoryContent {
         if (itemNamePath == null || Language.getPlayerLanguage(player).getYml().get(itemNamePath) == null) {
             ItemStack displayItem = ct.getItemStack();
             if (displayItem.getItemMeta() != null && displayItem.getItemMeta().hasDisplayName()) {
-                player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", displayItem.getItemMeta().getDisplayName()));
+                player.sendMessage(SupportPAPI.getSupportPAPI().replace(player, Language.getMsg(player, Messages.SHOP_NEW_PURCHASE))
+                        .replace("{item}", displayItem.getItemMeta().getDisplayName()));
             }
         } else {
-            player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", ChatColor.stripColor(getMsg(player, itemNamePath))).replace("{color}", "").replace("{tier}", ""));
+            player.sendMessage(SupportPAPI.getSupportPAPI().replace(player, Language.getMsg(player, Messages.SHOP_NEW_PURCHASE))
+                    .replace("{item}", ChatColor.stripColor(getMsg(player, itemNamePath)))
+                    .replace("{color}", "")
+                    .replace("{tier}", ""));
         }
 
 

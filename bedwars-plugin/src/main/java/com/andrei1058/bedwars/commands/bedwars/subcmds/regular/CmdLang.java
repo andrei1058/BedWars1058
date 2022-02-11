@@ -28,6 +28,7 @@ import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
+import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -63,7 +64,7 @@ public class CmdLang extends SubCommand {
         } else if (Language.isLanguageExist(args[0])) {
             if (Arena.getArenaByPlayer(p) == null) {
                 if (Language.setPlayerLanguage(p.getUniqueId(), args[0])) {
-                    Bukkit.getScheduler().runTaskLater(plugin, () -> p.sendMessage(getMsg(p, Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY)), 3L);
+                    Bukkit.getScheduler().runTaskLater(plugin, () -> p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, Language.getMsg(p, Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY))), 3L);
                 } else {
                     p.sendMessage(getMsg(p, Messages.COMMAND_LANG_LIST_HEADER));
                     for (Language l : Language.getLanguages()) {

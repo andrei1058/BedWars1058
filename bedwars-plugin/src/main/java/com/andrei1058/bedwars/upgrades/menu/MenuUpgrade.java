@@ -31,6 +31,7 @@ import com.andrei1058.bedwars.api.upgrades.TeamUpgrade;
 import com.andrei1058.bedwars.api.upgrades.UpgradeAction;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.configuration.Sounds;
+import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.upgrades.UpgradesManager;
 import com.google.common.collect.ImmutableMap;
 import org.bukkit.Bukkit;
@@ -122,7 +123,7 @@ public class MenuUpgrade implements MenuContent, TeamUpgrade {
             int money = UpgradesManager.getMoney(player, ut.getCurrency());
             if (money < ut.getCost()) {
                 Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, player);
-                player.sendMessage(Language.getMsg(player, Messages.SHOP_INSUFFICIENT_MONEY)
+                player.sendMessage(SupportPAPI.getSupportPAPI().replace(player, Language.getMsg(player, Messages.SHOP_INSUFFICIENT_MONEY))
                         .replace("{currency}", UpgradesManager.getCurrencyMsg(player, ut))
                         .replace("{amount}", String.valueOf(ut.getCost() - money)));
                 player.closeInventory();
@@ -150,9 +151,11 @@ public class MenuUpgrade implements MenuContent, TeamUpgrade {
             }
 
             for (Player p1 : team.getMembers()) {
-                p1.sendMessage(Language.getMsg(p1, Messages.UPGRADES_UPGRADE_BOUGHT_CHAT).replace("{playername}", player.getName()).replace("{player}", player.getDisplayName()).replace("{upgradeName}",
-                        ChatColor.stripColor(Language.getMsg(p1, Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", getName()
-                                .replace("upgrade-", "")).replace("{tier}", ut.getName())))).replace("{color}", ""));
+                p1.sendMessage(SupportPAPI.getSupportPAPI().replace(player, Language.getMsg(player, Messages.UPGRADES_UPGRADE_BOUGHT_CHAT))
+                        .replace("{playername}", player.getName())
+                        .replace("{player}", player.getDisplayName())
+                        .replace("{upgradeName}", ChatColor.stripColor(Language.getMsg(p1, Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", getName().replace("upgrade-", "")).replace("{tier}", ut.getName()))))
+                        .replace("{color}", ""));
             }
 
             ImmutableMap<Integer, MenuContent> menuContentBySlot = UpgradesManager.getMenuForArena(Arena.getArenaByPlayer(player)).getMenuContentBySlot();

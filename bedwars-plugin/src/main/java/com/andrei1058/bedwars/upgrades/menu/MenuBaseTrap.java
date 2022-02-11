@@ -31,6 +31,7 @@ import com.andrei1058.bedwars.api.upgrades.MenuContent;
 import com.andrei1058.bedwars.api.upgrades.TeamUpgrade;
 import com.andrei1058.bedwars.api.upgrades.TrapAction;
 import com.andrei1058.bedwars.configuration.Sounds;
+import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.upgrades.UpgradesManager;
 import com.andrei1058.bedwars.upgrades.trapaction.DisenchantAction;
 import com.andrei1058.bedwars.upgrades.trapaction.PlayerEffectAction;
@@ -41,7 +42,6 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -232,7 +232,7 @@ public class MenuBaseTrap implements MenuContent, EnemyBaseEnterTrap, TeamUpgrad
             queueLimit = UpgradesManager.getConfiguration().getInt("default-upgrades-settings.trap-queue-limit");
         }
         if (queueLimit <= team.getActiveTraps().size()) {
-            player.sendMessage(Language.getMsg(player, Messages.UPGRADES_TRAP_QUEUE_LIMIT));
+            player.sendMessage(SupportPAPI.getSupportPAPI().replace(player, Language.getMsg(player, Messages.UPGRADES_TRAP_QUEUE_LIMIT)));
             return;
         }
 
@@ -264,7 +264,7 @@ public class MenuBaseTrap implements MenuContent, EnemyBaseEnterTrap, TeamUpgrad
         int money = UpgradesManager.getMoney(player, currency);
         if (money < cost) {
             Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, player);
-            player.sendMessage(Language.getMsg(player, Messages.SHOP_INSUFFICIENT_MONEY)
+            player.sendMessage(SupportPAPI.getSupportPAPI().replace(player, Language.getMsg(player, Messages.SHOP_INSUFFICIENT_MONEY))
                     .replace("{currency}", UpgradesManager.getCurrencyMsg(player, cost, currency))
                     .replace("{amount}", String.valueOf(cost - money)));
             player.closeInventory();
@@ -283,8 +283,9 @@ public class MenuBaseTrap implements MenuContent, EnemyBaseEnterTrap, TeamUpgrad
         Sounds.playSound(ConfigPath.SOUNDS_BOUGHT, player);
         team.getActiveTraps().add(this);
         for (Player p1 : team.getMembers()) {
-            p1.sendMessage(Language.getMsg(p1, Messages.UPGRADES_UPGRADE_BOUGHT_CHAT).replace("{playername}", player.getName()).replace("{player}", player.getDisplayName()).replace("{upgradeName}",
-                    ChatColor.stripColor(Language.getMsg(p1, Messages.UPGRADES_BASE_TRAP_ITEM_NAME_PATH + getName().replace("base-trap-", "")).replace("{color}", ""))));
+            p1.sendMessage(SupportPAPI.getSupportPAPI().replace(p1, Language.getMsg(p1, Messages.UPGRADES_UPGRADE_BOUGHT_CHAT))
+                    .replace("{playername}", player.getName()).replace("{player}", player.getDisplayName())
+                    .replace("{upgradeName}", ChatColor.stripColor(Language.getMsg(p1, Messages.UPGRADES_BASE_TRAP_ITEM_NAME_PATH + getName().replace("base-trap-", "")).replace("{color}", ""))));
         }
         UpgradesManager.getMenuForArena(team.getArena()).open(player);
     }
@@ -337,17 +338,21 @@ public class MenuBaseTrap implements MenuContent, EnemyBaseEnterTrap, TeamUpgrad
             for (Player p : trapTeam.getMembers()) {
                 String trapName = ChatColor.stripColor(Language.getMsg(p, getNameMsgPath())).replace("{color}", "");
                 String enemy = trapTeam.getArena().getTeam(player) == null ? "NULL" : trapTeam.getArena().getTeam(player).getDisplayName(Language.getPlayerLanguage(p));
-                p.sendMessage(Language.getMsg(p, Messages.UPGRADES_TRAP_CUSTOM_MSG + name2).replace("{trap}", trapName)
-                        .replace("{player}", player.getName()).replace("{team}", enemy).replace("{color}", color));
+                p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, Language.getMsg(p, Messages.UPGRADES_TRAP_CUSTOM_MSG + name2))
+                        .replace("{trap}", trapName)
+                        .replace("{player}", player.getName())
+                        .replace("{team}", enemy)
+                        .replace("{color}", color));
                 BedWars.nms.sendTitle(p, Language.getMsg(p, Messages.UPGRADES_TRAP_CUSTOM_TITLE + name2)
-                                .replace("{trap}", trapName).replace("{player}", player.getName()).replace("{team}", enemy).replace("{color}", color),
-                        Language.getMsg(p, Messages.UPGRADES_TRAP_CUSTOM_SUBTITLE + name2).replace("{trap}", trapName).replace("{player}", player.getName())
+                                .replace("{trap}", trapName)
+                                .replace("{player}", player.getName())
+                                .replace("{team}", enemy).replace("{color}", color), Language.getMsg(p, Messages.UPGRADES_TRAP_CUSTOM_SUBTITLE + name2).replace("{trap}", trapName).replace("{player}", player.getName())
                                 .replace("{team}", enemy).replace("{color}", color), 15, 35, 10);
             }
         } else {
             for (Player p : trapTeam.getMembers()) {
                 String trapName = ChatColor.stripColor(Language.getMsg(p, getNameMsgPath())).replace("{color}", "");
-                p.sendMessage(Language.getMsg(p, Messages.UPGRADES_TRAP_DEFAULT_MSG).replace("{trap}", trapName));
+                p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, Language.getMsg(p, Messages.UPGRADES_TRAP_DEFAULT_MSG)).replace("{trap}", trapName));
                 BedWars.nms.sendTitle(p, Language.getMsg(p, Messages.UPGRADES_TRAP_DEFAULT_TITLE)
                         .replace("{trap}", trapName), Language.getMsg(p, Messages.UPGRADES_TRAP_DEFAULT_SUBTITLE)
                         .replace("{trap}", trapName), 15, 35, 10);

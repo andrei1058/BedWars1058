@@ -35,6 +35,7 @@ import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.AutoCreateTeams;
 import com.andrei1058.bedwars.configuration.Sounds;
+import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -153,7 +154,7 @@ public class BreakPlace implements Listener {
             for (Region r : a.getRegionsList()) {
                 if (r.isInRegion(e.getBlock().getLocation()) && r.isProtected()) {
                     e.setCancelled(true);
-                    p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                    p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, Language.getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK)));
                     return;
                 }
             }
@@ -271,7 +272,7 @@ public class BreakPlace implements Listener {
                                 if (t.getBed().getBlockX() == x && t.getBed().getBlockY() == y && t.getBed().getBlockZ() == z) {
                                     if (!t.isBedDestroyed()) {
                                         if (t.isMember(p)) {
-                                            p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_OWN_BED));
+                                            p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, Language.getMsg(p, Messages.INTERACT_CANNOT_BREAK_OWN_BED)));
                                             e.setCancelled(true);
                                             if (e.getPlayer().getLocation().getBlock().getType().toString().contains("BED")) {
                                                 e.getPlayer().teleport(e.getPlayer().getLocation().add(0, 0.5, 0));
@@ -303,7 +304,7 @@ public class BreakPlace implements Listener {
                                                     }));
                                             for (Player on : a.getWorld().getPlayers()) {
                                                 if (breakEvent.getMessage() != null) {
-                                                    on.sendMessage(breakEvent.getMessage().apply(on)
+                                                    on.sendMessage(SupportPAPI.getSupportPAPI().replace(on, breakEvent.getMessage().apply(on))
                                                             .replace("{TeamColor}", t.getColor().chat().toString())
                                                             .replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(on)))
                                                             .replace("{PlayerColor}", a.getTeam(p).getColor().chat().toString())
@@ -328,14 +329,14 @@ public class BreakPlace implements Listener {
             for (Region r : a.getRegionsList()) {
                 if (r.isInRegion(e.getBlock().getLocation()) && r.isProtected()) {
                     e.setCancelled(true);
-                    p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
+                    p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, Language.getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK)));
                     return;
                 }
             }
 
             if (!a.getConfig().getBoolean(ConfigPath.ARENA_ALLOW_MAP_BREAK)) {
                 if (!a.isBlockPlaced(e.getBlock())) {
-                    p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
+                    p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, Language.getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK)));
                     e.setCancelled(true);
                 }
             }
@@ -449,23 +450,23 @@ public class BreakPlace implements Listener {
                 for (ITeam t : a.getTeams()) {
                     if (t.getSpawn().distance(e.getBlockClicked().getLocation()) <= a.getConfig().getInt(ConfigPath.ARENA_SPAWN_PROTECTION)) {
                         e.setCancelled(true);
-                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                        p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, Language.getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK)));
                         return;
                     }
                     if (t.getShop().distance(e.getBlockClicked().getLocation()) <= a.getConfig().getInt(ConfigPath.ARENA_SHOP_PROTECTION)) {
                         e.setCancelled(true);
-                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                        p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, Language.getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK)));
                         return;
                     }
                     if (t.getTeamUpgrades().distance(e.getBlockClicked().getLocation()) <= a.getConfig().getInt(ConfigPath.ARENA_UPGRADES_PROTECTION)) {
                         e.setCancelled(true);
-                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                        p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, Language.getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK)));
                         return;
                     }
                     for (IGenerator o : t.getGenerators()) {
                         if (o.getLocation().distance(e.getBlockClicked().getLocation()) <= 1) {
                             e.setCancelled(true);
-                            p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                            p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, Language.getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK)));
                             return;
                         }
                     }
@@ -473,7 +474,7 @@ public class BreakPlace implements Listener {
                 for (IGenerator o : a.getOreGenerators()) {
                     if (o.getLocation().distance(e.getBlockClicked().getLocation()) <= 1) {
                         e.setCancelled(true);
-                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                        p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, Language.getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK)));
                         return;
                     }
                 }

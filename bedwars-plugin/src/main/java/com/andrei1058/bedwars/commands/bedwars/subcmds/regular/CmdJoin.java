@@ -25,18 +25,18 @@ import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.configuration.Sounds;
+import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class CmdJoin extends SubCommand {
 
@@ -53,12 +53,12 @@ public class CmdJoin extends SubCommand {
         if (s instanceof ConsoleCommandSender) return false;
         Player p = (Player) s;
         if (args.length < 1) {
-            s.sendMessage(getMsg(p, Messages.COMMAND_JOIN_USAGE));
+            p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, Language.getMsg(p, Messages.COMMAND_JOIN_USAGE)));
             return true;
         }
         if (args[0].equalsIgnoreCase("random")){
             if (!Arena.joinRandomArena(p)){
-                s.sendMessage(getMsg(p, Messages.COMMAND_JOIN_NO_EMPTY_FOUND));
+                p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, Language.getMsg(p, Messages.COMMAND_JOIN_NO_EMPTY_FOUND)));
                 Sounds.playSound("join-denied", p);
             } else {
                 Sounds.playSound("join-allowed", p);
@@ -67,7 +67,7 @@ public class CmdJoin extends SubCommand {
         }
         if (com.andrei1058.bedwars.commands.bedwars.MainCommand.isArenaGroup(args[0]) || args[0].contains("+")) {
             if (!Arena.joinRandomFromGroup(p, args[0])) {
-                s.sendMessage(getMsg(p, Messages.COMMAND_JOIN_NO_EMPTY_FOUND));
+                p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, Language.getMsg(p, Messages.COMMAND_JOIN_NO_EMPTY_FOUND)));
                 Sounds.playSound("join-denied", p);
             } else {
                 Sounds.playSound("join-allowed", p);
@@ -88,7 +88,7 @@ public class CmdJoin extends SubCommand {
             }
             return true;
         }
-        s.sendMessage(getMsg(p, Messages.COMMAND_JOIN_GROUP_OR_ARENA_NOT_FOUND).replace("{name}", args[0]));
+        p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, Language.getMsg(p, Messages.COMMAND_JOIN_GROUP_OR_ARENA_NOT_FOUND)).replace("{name}", args[0]));
         return true;
     }
 

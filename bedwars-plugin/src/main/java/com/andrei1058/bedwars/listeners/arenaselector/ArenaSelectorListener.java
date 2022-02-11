@@ -28,6 +28,7 @@ import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.ArenaGUI;
 import com.andrei1058.bedwars.configuration.Sounds;
+import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -69,13 +70,13 @@ public class ArenaSelectorListener implements Listener {
                 Sounds.playSound("join-allowed", player);
             } else {
                 Sounds.playSound("join-denied", player);
-                player.sendMessage(Language.getMsg(player, Messages.ARENA_JOIN_DENIED_SELECTOR));
+                player.sendMessage(SupportPAPI.getSupportPAPI().replace(player, Language.getMsg(player, Messages.ARENA_JOIN_DENIED_SELECTOR)));
             }
         } else if (event.getClick() == ClickType.RIGHT) {
             if (arena.getStatus() == GameState.playing && arena.addSpectator(player, false, null)) {
                 Sounds.playSound("spectate-allowed", player);
             } else {
-                player.sendMessage(Language.getMsg(player, Messages.ARENA_SPECTATE_DENIED_SELECTOR));
+                player.sendMessage(SupportPAPI.getSupportPAPI().replace(player, Language.getMsg(player, Messages.ARENA_SPECTATE_DENIED_SELECTOR)));
                 Sounds.playSound("spectate-denied", player);
             }
         }

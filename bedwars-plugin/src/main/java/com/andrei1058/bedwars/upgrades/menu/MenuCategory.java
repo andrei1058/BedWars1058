@@ -25,6 +25,7 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.upgrades.MenuContent;
+import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.upgrades.UpgradesManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -103,7 +104,7 @@ public class MenuCategory implements MenuContent {
                 queueLimit = UpgradesManager.getConfiguration().getInt("default-upgrades-settings.trap-queue-limit");
             }
             if (queueLimit <= team.getActiveTraps().size()){
-                player.sendMessage(Language.getMsg(player, Messages.UPGRADES_TRAP_QUEUE_LIMIT));
+                player.sendMessage(SupportPAPI.getSupportPAPI().replace(player, Language.getMsg(player, Messages.UPGRADES_TRAP_QUEUE_LIMIT)));
                 return;
             }
         }

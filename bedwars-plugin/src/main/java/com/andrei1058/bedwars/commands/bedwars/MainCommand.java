@@ -32,6 +32,7 @@ import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.Level;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.Reload;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.*;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
+import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -153,7 +154,8 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
 
         if (!commandFound) {
             if (s instanceof Player) {
-                s.sendMessage(getMsg((Player) s, Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
+                Player player = (Player) s;
+                player.sendMessage(SupportPAPI.getSupportPAPI().replace(player, Language.getMsg(player, Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS)));
             } else {
                 s.sendMessage(Language.getDefaultLanguage().m(Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
             }

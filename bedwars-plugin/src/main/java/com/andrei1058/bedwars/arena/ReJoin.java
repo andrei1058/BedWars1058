@@ -31,6 +31,7 @@ import com.andrei1058.bedwars.arena.tasks.ReJoinTask;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.lobbysocket.ArenaSocket;
 import com.andrei1058.bedwars.shop.ShopCache;
+import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.google.gson.JsonObject;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -42,8 +43,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class ReJoin {
 
@@ -145,7 +144,7 @@ public class ReJoin {
     public boolean reJoin(Player player) {
 
         Sounds.playSound("rejoin-allowed", player);
-        player.sendMessage(Language.getMsg(player, Messages.REJOIN_ALLOWED).replace("{arena}", getArena().getDisplayName()));
+        player.sendMessage(SupportPAPI.getSupportPAPI().replace(player, Language.getMsg(player, Messages.REJOIN_ALLOWED)).replace("{arena}", getArena().getDisplayName()));
 
         if (player.getGameMode() != GameMode.SURVIVAL) {
             Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
@@ -172,11 +171,13 @@ public class ReJoin {
             bwt.setBedDestroyed(true);
             if (bwt != null) {
                 for (Player p2 : arena.getPlayers()) {
-                    p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", bwt.getColor().chat().toString())
+                    p2.sendMessage(SupportPAPI.getSupportPAPI().replace(p2, Language.getMsg(p2, Messages.TEAM_ELIMINATED_CHAT))
+                            .replace("{TeamColor}", bwt.getColor().chat().toString())
                             .replace("{TeamName}", bwt.getDisplayName(Language.getPlayerLanguage(p2))));
                 }
                 for (Player p2 : arena.getSpectators()) {
-                    p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", bwt.getColor().chat().toString())
+                    p2.sendMessage(SupportPAPI.getSupportPAPI().replace(p2, Language.getMsg(p2, Messages.TEAM_ELIMINATED_CHAT))
+                            .replace("{TeamColor}", bwt.getColor().chat().toString())
                             .replace("{TeamName}", bwt.getDisplayName(Language.getPlayerLanguage(p2))));
                 }
             }

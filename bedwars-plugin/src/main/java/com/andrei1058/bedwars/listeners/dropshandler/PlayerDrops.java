@@ -25,6 +25,7 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -144,7 +145,7 @@ public class PlayerDrops {
                                     getMsg(killer, Messages.MEANING_GOLD_SINGULAR) : getMsg(killer, Messages.MEANING_GOLD_PLURAL));
                             break;
                     }
-                    killer.sendMessage(msg.replace("{amount}", String.valueOf(amount)));
+                    killer.sendMessage(SupportPAPI.getSupportPAPI().replace(killer, msg).replace("{amount}", String.valueOf(amount)));
                 }
                 materialDrops.clear();
             }

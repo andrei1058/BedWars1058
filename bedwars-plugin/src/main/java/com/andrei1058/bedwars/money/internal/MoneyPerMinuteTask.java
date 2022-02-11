@@ -5,6 +5,7 @@ import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.configuration.MoneyConfig;
+import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
@@ -24,8 +25,8 @@ public class MoneyPerMinuteTask {
         }
         task = Bukkit.getScheduler().runTaskTimer( BedWars.plugin, () -> {
             for (Player p : arena.getPlayers()) {
-                    BedWars.getEconomy ().giveMoney ( p, money );
-                    p.sendMessage ( Language.getMsg ( p, Messages.MONEY_REWARD_PER_MINUTE ).replace ( "{money}", String.valueOf ( money ) ) );
+                BedWars.getEconomy ().giveMoney ( p, money );
+                p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, Language.getMsg(p, Messages.MONEY_REWARD_REGULAR_KILL)).replace("{money}", String.valueOf(money)));
             }
         }, 60 * 20, 60 * 20);
     }

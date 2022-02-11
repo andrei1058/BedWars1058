@@ -22,10 +22,12 @@ package com.andrei1058.bedwars.support.citizens;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.configuration.Sounds;
+import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.event.NPCRemoveEvent;
 import org.bukkit.entity.Entity;
@@ -36,8 +38,6 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class CitizensListener implements Listener {
 
@@ -79,7 +79,7 @@ public class CitizensListener implements Listener {
         if (npc == null) return;
         if (JoinNPC.npcs.containsKey(npc.getId())) {
             if (!Arena.joinRandomFromGroup(e.getPlayer(), JoinNPC.npcs.get(npc.getId()))) {
-                e.getPlayer().sendMessage(getMsg(e.getPlayer(), Messages.COMMAND_JOIN_NO_EMPTY_FOUND));
+                e.getPlayer().sendMessage(SupportPAPI.getSupportPAPI().replace(e.getPlayer(), Language.getMsg(e.getPlayer(), Messages.COMMAND_JOIN_NO_EMPTY_FOUND)));
                 Sounds.playSound("join-denied", e.getPlayer());
             } else {
                 Sounds.playSound("join-allowed", e.getPlayer());
