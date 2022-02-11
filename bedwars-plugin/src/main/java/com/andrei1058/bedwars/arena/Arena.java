@@ -499,12 +499,12 @@ public class Arena implements IArena {
             p.setHealth(20);
             for (Player on : players) {
                 on.sendMessage(SupportPAPI.getSupportPAPI().replace(on, Language.getMsg(on, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG))
-                                .replace("{vPrefix}", getChatSupport().getPrefix(p))
-                                .replace("{vSuffix}", getChatSupport().getSuffix(p))
-                                .replace("{playername}", p.getName())
-                                .replace("{player}", p.getDisplayName())
-                                .replace("{on}", String.valueOf(getPlayers().size()))
-                                .replace("{max}", String.valueOf(getMaxPlayers())));
+                        .replace("{vPrefix}", getChatSupport().getPrefix(p))
+                        .replace("{vSuffix}", getChatSupport().getSuffix(p))
+                        .replace("{playername}", p.getName())
+                        .replace("{player}", p.getDisplayName())
+                        .replace("{on}", String.valueOf(getPlayers().size()))
+                        .replace("{max}", String.valueOf(getMaxPlayers())));
             }
             setArenaByPlayer(p, this);
 
