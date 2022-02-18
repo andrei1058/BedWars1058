@@ -84,9 +84,9 @@ public class CmdLeave extends SubCommand {
 
     private static void update(UUID player){
         if (delay.containsKey(player)){
-            delay.replace(player, System.currentTimeMillis() + 2500L);
+            delay.replace(player, System.currentTimeMillis() + 250L);
             return;
         }
-        delay.put(player, System.currentTimeMillis() + 2500L);
+        delay.put(player, System.currentTimeMillis() + 250L);
     }
 }
