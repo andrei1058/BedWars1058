@@ -323,10 +323,12 @@ public class DamageDeathMove implements Listener {
 
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
-        e.setDeathMessage(null);
         Player victim = e.getEntity(), killer = e.getEntity().getKiller();
         ITeam killersTeam = null;
         IArena a = Arena.getArenaByPlayer(victim);
+        if ((BedWars.getServerType() == ServerType.MULTIARENA && BedWars.getLobbyWorld().equals(e.getEntity().getWorld().getName())) || a != null) {
+            e.setDeathMessage(null);
+        }
         if (a != null) {
             if (a.isSpectator(victim)) {
                 victim.spigot().respawn();
