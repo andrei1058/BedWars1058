@@ -35,6 +35,7 @@ public class PlayerKillEvent extends Event {
     private final Player killer;
     private final PlayerKillCause cause;
     private Function<Player, String> message;
+    private boolean playSound = true;
 
     /**
      * Called when a Player got killed during the game.
@@ -135,6 +136,20 @@ public class PlayerKillEvent extends Event {
      */
     public Player getVictim() {
         return victim;
+    }
+
+    /**
+     * Checks if the killer gets the kill sound
+     */
+    public boolean playSound() {
+        return playSound;
+    }
+
+    /**
+     * Set if the killer should get the kill sound
+     */
+    public void setPlaySound(boolean playSound) {
+        this.playSound = playSound;
     }
 
     public HandlerList getHandlers() {
