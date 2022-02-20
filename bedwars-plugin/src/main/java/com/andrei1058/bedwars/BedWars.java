@@ -119,6 +119,7 @@ public class BedWars extends JavaPlugin {
     private static Economy economy;
     private static final String version = Bukkit.getServer().getClass().getName().split("\\.")[3];
     private static String lobbyWorld = "";
+    private static boolean shuttingDown = false;
 
     public static ArenaManager arenaManager = new ArenaManager();
 
@@ -577,16 +578,19 @@ public class BedWars extends JavaPlugin {
     }
 
     public void onDisable() {
+        shuttingDown = true;
         if (!serverSoftwareSupport) return;
         if (getServerType() == ServerType.BUNGEE) {
             ArenaSocket.disable();
         }
-        try {
-            for (IArena a : Arena.getArenas()) {
+        for (IArena a : Arena.getArenas()) {
+            try {
                 a.disable();
+            } catch (Exception ignored) {
+                ignored.printStackTrace();
             }
-        } catch (Exception ignored) {
         }
+
     }
 
     private void loadArenasAndSigns() {
@@ -774,6 +778,10 @@ public class BedWars extends JavaPlugin {
             default:
                 return true;
         }
+    }
+
+    public static boolean isShuttingDown() {
+        return shuttingDown;
     }
 
     public static void setParty(Party party) {
