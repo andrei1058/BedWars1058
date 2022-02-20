@@ -21,23 +21,32 @@
 package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.api.arena.GameState;
+import com.andrei1058.bedwars.support.version.common.VersionCommon;
+import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
-
-import static com.andrei1058.bedwars.support.version.common.VersionCommon.api;
 
 // Prevent item swap.
 public class SwapItem implements Listener {
 
     @EventHandler
     public void itemSwap(PlayerSwapHandItemsEvent e) {
-        if (e.isCancelled()) return;
-        if (api.getArenaUtil().isPlaying(e.getPlayer())) {
-            if (api.getArenaUtil().getArenaByPlayer(e.getPlayer()).getStatus() != GameState.playing)
+        if (e.isCancelled()) {
+            return;
+        }
+        if (VersionCommon.api.getArenaUtil().isPlaying(e.getPlayer())) {
+            if (VersionCommon.api.getArenaUtil().getArenaByPlayer(e.getPlayer()).getStatus() != GameState.playing) {
                 e.setCancelled(true);
-        } else if (api.getArenaUtil().isSpectating(e.getPlayer())) {
+            }
+        } else if (VersionCommon.api.getArenaUtil().isSpectating(e.getPlayer())) {
             e.setCancelled(true);
+        } else {
+            Location lobbyLoc = VersionCommon.api.getConfigs().getMainConfig().getConfigLoc("lobbyLoc");
+            if (lobbyLoc != null && lobbyLoc.getWorld() != null && lobbyLoc.getWorld().equals(e.getPlayer().getWorld())) {
+                e.setCancelled(true);
+            }
         }
     }
+
 }
