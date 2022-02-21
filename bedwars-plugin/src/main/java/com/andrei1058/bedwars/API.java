@@ -436,4 +436,9 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
     public ScoreboardUtil getScoreboardUtil() {
         return scoreboardUtil;
     }
+
+    @Override
+    public boolean isShuttingDown() {
+        return BedWars.isShuttingDown();
+    }
 }

@@ -118,8 +118,8 @@ public class TeleporterGUI {
         ItemMeta im = i.getItemMeta();
         assert im != null;
         im.setDisplayName(getMsg(GUIholder, Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME)
-                .replace("{prefix}", BedWars.getChatSupport().getPrefix(targetPlayer))
-                .replace("{suffix}", BedWars.getChatSupport().getSuffix(targetPlayer))
+                .replace("{vPrefix}", BedWars.getChatSupport().getPrefix(targetPlayer))
+                .replace("{vSuffix}", BedWars.getChatSupport().getSuffix(targetPlayer))
                 .replace("{player}", targetPlayer.getDisplayName())
                 .replace("{playername}", targetPlayer.getName()));
         List<String> lore = new ArrayList<>();

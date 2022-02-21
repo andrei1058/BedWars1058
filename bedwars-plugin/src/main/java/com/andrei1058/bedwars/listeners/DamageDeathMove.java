@@ -37,6 +37,7 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.LastHit;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.arena.team.BedWarsTeam;
+import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.listeners.dropshandler.PlayerDrops;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -322,10 +323,12 @@ public class DamageDeathMove implements Listener {
 
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
-        e.setDeathMessage(null);
         Player victim = e.getEntity(), killer = e.getEntity().getKiller();
         ITeam killersTeam = null;
         IArena a = Arena.getArenaByPlayer(victim);
+        if ((BedWars.getServerType() == ServerType.MULTIARENA && BedWars.getLobbyWorld().equals(e.getEntity().getWorld().getName())) || a != null) {
+            e.setDeathMessage(null);
+        }
         if (a != null) {
             if (a.isSpectator(victim)) {
                 victim.spigot().respawn();
@@ -346,6 +349,7 @@ public class DamageDeathMove implements Listener {
                 victim.spigot().respawn();
                 return;
             }
+
             BedWars.nms.clearArrowsFromPlayerBody(victim);
             String message = victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL : Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR;
             PlayerKillEvent.PlayerKillCause cause = victimsTeam.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.UNKNOWN_FINAL_KILL : PlayerKillEvent.PlayerKillCause.UNKNOWN;
@@ -434,6 +438,9 @@ public class DamageDeathMove implements Listener {
             String finalMessage = message;
             PlayerKillEvent playerKillEvent = new PlayerKillEvent(a, victim, killer, player -> Language.getMsg(player, finalMessage), cause);
             Bukkit.getPluginManager().callEvent(playerKillEvent);
+            if(killer != null && playerKillEvent.playSound()) {
+                Sounds.playSound(ConfigPath.SOUNDS_KILL, killer);
+            }
             for (Player on : a.getPlayers()) {
                 Language lang = Language.getPlayerLanguage(on);
                 on.sendMessage(playerKillEvent.getMessage().apply(on).
