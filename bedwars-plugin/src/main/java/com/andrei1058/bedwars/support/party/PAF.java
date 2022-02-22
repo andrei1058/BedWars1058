@@ -53,10 +53,22 @@ public class PAF implements Party {
 
     @Override
     public void createParty(Player owner, Player... members) {
+        OnlinePAFPlayer pafPlayer = PAFPlayerManager.getInstance().getPlayer(owner);
+        PlayerParty party = PartyManager.getInstance().createParty(pafPlayer);
+        party.setPrivateState(false);
+        for (Player p1 : members){
+            party.addPlayer(PAFPlayerManager.getInstance().getPlayer(p1));
+        }
+        party.setPrivateState(true);
     }
 
     @Override
     public void addMember(Player owner, Player member) {
+        OnlinePAFPlayer pafPlayer = PAFPlayerManager.getInstance().getPlayer(owner);
+        PlayerParty party = pafPlayer.getParty();
+        party.setPrivateState(false);
+        party.addPlayer(PAFPlayerManager.getInstance().getPlayer(member));
+        party.setPrivateState(true);
     }
 
     @Override

@@ -111,7 +111,8 @@ Players with bw.vip permission are able to join full arenas in starting phase. T
 
 ###### Party System:
 - we provide a basic and functional internal party system to play with your friends on the same team or arena.
-- we also support Parties by AlessioDP which could be a better solution if you are a large network.
+- we support Parties by AlessioDP which could be a better solution if you are a large network.
+- we support all versions of Parties and Friends by simonsator both Spigot and Bungee versions
 
 ###### Anti AFK System:
 Inactive players for more than 45 seconds can't pick-up items from generators.
