@@ -42,6 +42,8 @@ You can contact us, so we can add yours here :)
 - [Discord Stats](https://www.mc-market.org/resources/20403/) - by Zorino
 - [BedWars Spectator & Play-Again Addon {Menu}](https://polymart.org/resource/bw1058-spectator-options-free.1937) - by StudioBeam Development
 - [BedWars Arena Start Messages](https://polymart.org/resource/bedwars1058-arena-start-message.1880) - by StudioBeam Development
+- [PlayAgain](https://polymart.org/resource/bedwars1058-play-again-addon.1946) - by CubeCrafter72
+- [WinStreak](https://polymart.org/resource/winstreak-bedwars1058-add-on.1871)- by Reussy
 
 
 # Main features
