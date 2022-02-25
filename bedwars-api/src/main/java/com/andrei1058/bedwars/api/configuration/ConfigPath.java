@@ -154,6 +154,10 @@ public class ConfigPath {
 
     public static final String GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP = "server-ip";
 
+    private static final String GENERAL_CHAT = "chat-settings.";
+    public static final String GENERAL_CHAT_FORMATTING = GENERAL_CHAT+"format";
+    public static final String GENERAL_CHAT_GLOBAL = GENERAL_CHAT+"global";
+
     public static final String ARENA_DISPLAY_NAME = "display-name";
     public static final String ARENA_CONFIGURATION_MAX_BUILD_Y = "max-build-y";
     public static final String ARENA_SPAWN_PROTECTION = "spawn-protection";
@@ -203,10 +207,17 @@ public class ConfigPath {
     public static final String GENERAL_TNT_JUMP_DAMAGE_OTHERS = GENERAL_TNT_JUMP_PATH + ".damage-others";
 
     private static final String GENERAL_FIREBALL_PATH = "fireball";
-    public static final String GENERAL_FIREBALL_DAMAGE_MULTIPLIER = GENERAL_FIREBALL_PATH + ".damage-multiplier";
     public static final String GENERAL_FIREBALL_EXPLOSION_SIZE = GENERAL_FIREBALL_PATH + ".explosion-size";
     public static final String GENERAL_FIREBALL_SPEED_MULTIPLIER = GENERAL_FIREBALL_PATH + ".speed-multiplier";
     public static final String GENERAL_FIREBALL_MAKE_FIRE = GENERAL_FIREBALL_PATH + ".make-fire";
+    private static final String GENERAL_FIREBALL_KNOCKBACK_PATH = GENERAL_FIREBALL_PATH + ".knockback";
+    public static final String GENERAL_FIREBALL_KNOCKBACK_VERTICAL = GENERAL_FIREBALL_KNOCKBACK_PATH + ".vertical";
+    public static final String GENERAL_FIREBALL_KNOCKBACK_HORIZONTAL = GENERAL_FIREBALL_KNOCKBACK_PATH + ".horizontal";
+    public static final String GENERAL_FIREBALL_COOLDOWN = GENERAL_FIREBALL_PATH + ".cooldown";
+    private static final String GENERAL_FIREBALL_DAMAGE_PATH = GENERAL_FIREBALL_PATH + ".damage";
+    public static final String GENERAL_FIREBALL_DAMAGE_SELF = GENERAL_FIREBALL_DAMAGE_PATH + ".self";
+    public static final String GENERAL_FIREBALL_DAMAGE_ENEMY = GENERAL_FIREBALL_DAMAGE_PATH + ".enemy";
+    public static final String GENERAL_FIREBALL_DAMAGE_TEAMMATES = GENERAL_FIREBALL_DAMAGE_PATH + ".teammates";
 
 
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_PATH = "performance-settings";

@@ -498,7 +498,15 @@ public class Arena implements IArena {
             p.setAllowFlight(false);
             p.setHealth(20);
             for (Player on : players) {
-                on.sendMessage(getMsg(on, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
+                on.sendMessage(
+                        getMsg(on, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG)
+                            .replace("{vPrefix}", getChatSupport().getPrefix(p))
+                            .replace("{vSuffix}", getChatSupport().getSuffix(p))
+                            .replace("{playername}", p.getName())
+                            .replace("{player}", p.getDisplayName())
+                            .replace("{on}", String.valueOf(getPlayers().size()))
+                            .replace("{max}", String.valueOf(getMaxPlayers()))
+                );
             }
             setArenaByPlayer(p, this);
 
@@ -863,10 +871,17 @@ public class Arena implements IArena {
             }
         }
         for (Player on : getPlayers()) {
-            on.sendMessage(getMsg(on, Messages.COMMAND_LEAVE_MSG).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()));
+            on.sendMessage(
+                    getMsg(on, Messages.COMMAND_LEAVE_MSG)
+                            .replace("{vPrefix}", getChatSupport().getPrefix(p))
+                            .replace("{vSuffix}", getChatSupport().getSuffix(p))
+                            .replace("{playername}", p.getName())
+                            .replace("{player}", p.getDisplayName()
+                            )
+            );
         }
         for (Player on : getSpectators()) {
-            on.sendMessage(getMsg(on, Messages.COMMAND_LEAVE_MSG).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()));
+            on.sendMessage(getMsg(on, Messages.COMMAND_LEAVE_MSG).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()));
         }
 
         if (getServerType() == ServerType.SHARED) {
@@ -1105,7 +1120,7 @@ public class Arena implements IArena {
             reJoin.getTask().destroy();
         }
 
-        PlayerReJoinEvent ev = new PlayerReJoinEvent(p, this);
+        PlayerReJoinEvent ev = new PlayerReJoinEvent(p, this, BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_RE_SPAWN_COUNTDOWN));
         Bukkit.getPluginManager().callEvent(ev);
         if (ev.isCancelled()) return false;
 
@@ -1144,7 +1159,7 @@ public class Arena implements IArena {
             sc.getCachedItems().add(ci);
         }
 
-        reJoin.getBwt().reJoin(p);
+        reJoin.getBwt().reJoin(p, ev.getRespawnTime());
         reJoin.destroy(false);
 
         BedWarsScoreboard.giveScoreboard(p, this, true);
@@ -1634,6 +1649,7 @@ public class Arena implements IArena {
         Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
             if (!BedWars.config.getLobbyWorldName().equalsIgnoreCase(p.getWorld().getName())) return;
             for (String item : config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH).getKeys(false)) {
+
                 if (config.getYml().get(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", item)) == null) {
                     BedWars.plugin.getLogger().severe(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", item) + " is not set!");
                     continue;
@@ -1657,7 +1673,8 @@ public class Arena implements IArena {
                 ItemStack i = Misc.createItem(Material.valueOf(config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", item))),
                         (byte) config.getInt(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_DATA.replace("%path%", item)),
                         config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_ENCHANTED.replace("%path%", item)),
-                        getMsg(p, Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", item)), getList(p, Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", item)),
+                        SupportPAPI.getSupportPAPI().replace(p, getMsg(p, Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", item))),
+                        SupportPAPI.getSupportPAPI().replace(p, getList(p, Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", item))),
                         p, "RUNCOMMAND", config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_COMMAND.replace("%path%", item)));
 
                 p.getInventory().setItem(config.getInt(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_SLOT.replace("%path%", item)), i);
@@ -1697,7 +1714,8 @@ public class Arena implements IArena {
             ItemStack i = Misc.createItem(Material.valueOf(config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_MATERIAL.replace("%path%", item))),
                     (byte) config.getInt(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_DATA.replace("%path%", item)),
                     config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_ENCHANTED.replace("%path%", item)),
-                    getMsg(p, Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", item)), getList(p, Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", item)),
+                    SupportPAPI.getSupportPAPI().replace(p, getMsg(p, Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", item))),
+                    SupportPAPI.getSupportPAPI().replace(p, getList(p, Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", item))),
                     p, "RUNCOMMAND", config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_COMMAND.replace("%path%", item)));
 
             p.getInventory().setItem(config.getInt(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_SLOT.replace("%path%", item)), i);
@@ -1736,7 +1754,8 @@ public class Arena implements IArena {
             ItemStack i = Misc.createItem(Material.valueOf(config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_MATERIAL.replace("%path%", item))),
                     (byte) config.getInt(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_DATA.replace("%path%", item)),
                     config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_ENCHANTED.replace("%path%", item)),
-                    getMsg(p, Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", item)), getList(p, Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", item)),
+                    SupportPAPI.getSupportPAPI().replace(p, getMsg(p, Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", item))),
+                    SupportPAPI.getSupportPAPI().replace(p, getList(p, Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", item))),
                     p, "RUNCOMMAND", config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_COMMAND.replace("%path%", item)));
 
             p.getInventory().setItem(config.getInt(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_SLOT.replace("%path%", item)), i);
@@ -2337,6 +2356,12 @@ public class Arena implements IArena {
         return enableQueue;
     }
 
+    private final Map<UUID, Long> fireballCooldowns = new HashMap<>();
+
+    public Map<UUID, Long> getFireballCooldowns() {
+        return fireballCooldowns;
+    }
+
     public void destroyData() {
         destroyReJoins();
         if (worldName != null) arenaByIdentifier.remove(worldName);
@@ -2362,10 +2387,11 @@ public class Arena implements IArena {
         for (IGenerator og : oreGenerators) {
             og.destroyData();
         }
+        isOnABase.entrySet().removeIf(entry -> entry.getValue().getArena().equals(this));
         for (ITeam bwt : teams) {
             bwt.destroyData();
         }
-        playerLocation.entrySet().removeIf(e -> e.getValue().getWorld().getName().equalsIgnoreCase(worldName));
+        playerLocation.entrySet().removeIf(e -> Objects.requireNonNull(e.getValue().getWorld()).getName().equalsIgnoreCase(worldName));
         teams = null;
         placed = null;
         nextEvents = null;
@@ -2384,6 +2410,7 @@ public class Arena implements IArena {
         perMinuteTask = null;
         moneyperMinuteTask = null;
         leaving.clear();
+        fireballCooldowns.clear();
     }
 
     /**
@@ -2508,12 +2535,20 @@ public class Arena implements IArena {
 
         if (Arena.getGamesBeforeRestart() != -1 && Arena.getArenas().size() >= Arena.getGamesBeforeRestart()) return false;
 
+        int activeClones = 0;
         for (IArena ar : Arena.getArenas()) {
             if (ar.getArenaName().equalsIgnoreCase(arenaName)) {
+                // clone this arena only if there aren't available arena of the same kind
                 if (ar.getStatus() == GameState.waiting || ar.getStatus() == GameState.starting) return false;
             }
+            // count active clones
+            if (ar.getArenaName().equals(arenaName)){
+                activeClones++;
+            }
         }
-        return true;
+
+        // check amount of active clones
+        return config.getInt(ConfigPath.GENERAL_CONFIGURATION_AUTO_SCALE_LIMIT) > activeClones;
     }
 
     @Override

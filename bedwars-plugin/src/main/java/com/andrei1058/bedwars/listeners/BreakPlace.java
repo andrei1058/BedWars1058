@@ -126,6 +126,9 @@ public class BreakPlace implements Listener {
                 e.setCancelled(true);
                 return;
             }
+            if(e.getItemInHand().getType().equals(nms.materialFireball()) && e.getBlockPlaced().getType().equals(Material.FIRE)) {
+                e.setCancelled(true);
+            }
         }
         Player p = e.getPlayer();
         IArena a = Arena.getArenaByPlayer(p);

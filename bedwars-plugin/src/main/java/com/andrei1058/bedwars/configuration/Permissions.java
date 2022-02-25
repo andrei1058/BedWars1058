@@ -21,6 +21,7 @@
 package com.andrei1058.bedwars.configuration;
 
 import com.andrei1058.bedwars.BedWars;
+import org.bukkit.entity.Player;
 
 public class Permissions {
     public static final String PERMISSION_FORCESTART = BedWars.mainCmd+".forcestart";
@@ -39,4 +40,30 @@ public class Permissions {
     public static final String PERMISSION_RELOAD = BedWars.mainCmd+".reload";
     public static final String PERMISSION_REJOIN = BedWars.mainCmd+".rejoin";
     public static final String PERMISSION_LEVEL = BedWars.mainCmd+".level";
+    public static final String PERMISSION_CHAT_COLOR = BedWars.mainCmd+".chatcolor";
+    public static final String PERMISSION_VIP = BedWars.mainCmd+".vip";
+
+    /**
+     * Check if player has one of the given permissions.
+     */
+    public static boolean hasPermission(Player player, String... permissions){
+        for (String permission : permissions){
+            if (player.hasPermission(permission)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check if player has all given permissions.
+     */
+    public static boolean hasPermissions(Player player, String... permissions){
+        for (String permission : permissions){
+            if (!player.hasPermission(permission)){
+                return false;
+            }
+        }
+        return true;
+    }
 }

@@ -709,10 +709,14 @@ public class v1_8_R3 extends VersionSupport {
     public void playRedStoneDot(Player player) {
         Color color = Color.RED;
         PacketPlayOutWorldParticles particlePacket = new PacketPlayOutWorldParticles(EnumParticle.REDSTONE, true, (float) player.getLocation().getX(),
-                (float) (player.getLocation().getY() + 2.2), (float) player.getLocation().getZ(), color.getRed(), color.getGreen(), color.getBlue(), 0, 1);
+                (float) (player.getLocation().getY() + 2.6), (float) player.getLocation().getZ(), color.getRed(), color.getRed(), color.getRed(), 0, 0);
         for (Player inWorld : player.getWorld().getPlayers()) {
             if (inWorld.equals(player)) continue;
             ((CraftPlayer) inWorld).getHandle().playerConnection.sendPacket(particlePacket);
         }
+    }
+    @Override
+    public void clearArrowsFromPlayerBody(Player player) {
+        ((CraftLivingEntity)player).getHandle().getDataWatcher().watch(9, (byte)-1);
     }
 }

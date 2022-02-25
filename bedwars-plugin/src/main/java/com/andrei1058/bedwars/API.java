@@ -35,6 +35,7 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.shop.main.CategoryContent;
+import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
 import com.andrei1058.bedwars.stats.StatsAPI;
 import com.andrei1058.bedwars.upgrades.UpgradesManager;
 import org.bukkit.Bukkit;
@@ -408,5 +409,31 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
     @Override
     public File getAddonsPath() {
         return new File(BedWars.plugin.getDataFolder(), "Addons");
+    }
+
+
+    private static final ScoreboardUtil scoreboardUtil = new ScoreboardUtil() {
+
+        @Override
+        public void removePlayerScoreboard(Player player) {
+            BedWarsScoreboard scoreboard = BedWarsScoreboard.getSBoard(player.getUniqueId());
+            if (null != scoreboard){
+                scoreboard.remove();
+            }
+        }
+
+        @Override
+        public void givePlayerScoreboard(Player player, boolean delay) {
+            BedWarsScoreboard scoreboard = BedWarsScoreboard.getSBoard(player.getUniqueId());
+            if (null == scoreboard){
+                IArena arena = Arena.getArenaByPlayer(player);
+                BedWarsScoreboard.giveScoreboard(player, arena, delay);
+            }
+        }
+    };
+
+    @Override
+    public ScoreboardUtil getScoreboardUtil() {
+        return scoreboardUtil;
     }
 }
