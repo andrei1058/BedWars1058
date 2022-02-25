@@ -21,6 +21,7 @@
 package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
@@ -182,6 +183,10 @@ public class Interact implements Listener {
             }
             if (b.getState() instanceof Sign) {
                 for (IArena a1 : Arena.getArenas()) {
+                    if(autoscale) {
+                        // If we're using autoscale, we only want to update the sign with the games in lobbies
+                        if(a1.getStatus() != GameState.starting && a1.getStatus() != GameState.waiting) continue;
+                    }
                     if (a1.getSigns().contains(b)) {
                         if (a1.addPlayer(p, false)) {
                             Sounds.playSound("join-allowed", p);

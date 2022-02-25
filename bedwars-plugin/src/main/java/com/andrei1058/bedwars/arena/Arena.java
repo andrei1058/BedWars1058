@@ -1578,6 +1578,12 @@ public class Arena implements IArena {
      * Refresh signs.
      */
     public synchronized void refreshSigns() {
+        if(autoscale) {
+            // If we're using autoscale, we only want to update the sign with the games in lobbies
+            if(getStatus() != GameState.waiting && getStatus() != GameState.starting) {
+                return;
+            }
+        }
         for (Block b : getSigns()) {
             if (b == null) continue;
             if (!(b.getType().toString().endsWith("_SIGN") || b.getType().toString().endsWith("_WALL_SIGN"))) continue;

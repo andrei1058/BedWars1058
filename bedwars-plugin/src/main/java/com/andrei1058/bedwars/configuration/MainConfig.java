@@ -357,7 +357,6 @@ public class MainConfig extends ConfigManager {
 
         try {
             BedWars.setServerType(ServerType.valueOf(Objects.requireNonNull(yml.getString("serverType")).toUpperCase()));
-            if(getSer)
         } catch (Exception e) {
             set("serverType", "MULTIARENA");
         }
