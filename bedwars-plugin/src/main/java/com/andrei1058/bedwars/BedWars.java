@@ -185,6 +185,9 @@ public class BedWars extends JavaPlugin {
         config = new MainConfig(this, "config");
 
         setAutoscale(config.getBoolean(ConfigPath.GENERAL_AUTOSCALE_ENABLE));
+        if(getServerType() == ServerType.BUNGEE_LEGACY) {
+            setAutoscale(false);
+        }
 
         generators = new GeneratorsConfig(this, "generators", this.getDataFolder().getPath());
         // Initialize signs config after the main config
