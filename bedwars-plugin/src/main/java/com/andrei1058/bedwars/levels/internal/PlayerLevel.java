@@ -27,6 +27,8 @@ import com.andrei1058.bedwars.configuration.LevelsConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
+import java.math.RoundingMode;
+import java.text.NumberFormat;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -105,8 +107,8 @@ public class PlayerLevel {
         progressBar = ChatColor.translateAlternateColorCodes('&', LevelsConfig.levels.getString("progress-bar.format").replace("{progress}",
                 LevelsConfig.levels.getString("progress-bar.unlocked-color") + String.valueOf(new char[unlocked]).replace("\0", LevelsConfig.levels.getString("progress-bar.symbol"))
                         + LevelsConfig.levels.getString("progress-bar.locked-color") + String.valueOf(new char[locked]).replace("\0", LevelsConfig.levels.getString("progress-bar.symbol"))));
-        requiredXp = nextLevelCost >= 1000 ? nextLevelCost % 1000 == 0 ? nextLevelCost / 1000 + "k" : (double) nextLevelCost / 1000 + "k" : String.valueOf(nextLevelCost);
-        formattedCurrentXp = currentXp >= 1000 ? currentXp % 1000 == 0 ? currentXp / 1000 + "k" : (double) currentXp / 1000 + "k" : String.valueOf(currentXp);
+        requiredXp = formatNumber(nextLevelCost);
+        formattedCurrentXp = formatNumber(currentXp);
     }
 
     /**
@@ -218,11 +220,22 @@ public class PlayerLevel {
             level++;
             nextLevelCost = LevelsConfig.getNextCost(level);
             this.levelName = ChatColor.translateAlternateColorCodes('&', LevelsConfig.getLevelName(level)).replace("{number}", String.valueOf(level));
-            requiredXp = nextLevelCost >= 1000 ? nextLevelCost % 1000 == 0 ? nextLevelCost / 1000 + "k" : (double) nextLevelCost / 1000 + "k" : String.valueOf(nextLevelCost);
-            formattedCurrentXp = currentXp >= 1000 ? currentXp % 1000 == 0 ? currentXp / 1000 + "k" : (double) currentXp / 1000 + "k" : String.valueOf(currentXp);
+            requiredXp = formatNumber(nextLevelCost);
+            formattedCurrentXp = formatNumber(currentXp);
             Bukkit.getPluginManager().callEvent(new PlayerLevelUpEvent(Bukkit.getPlayer(getUuid()), level, nextLevelCost));
             modified = true;
         }
+    }
+
+    private String formatNumber(int score) {
+        NumberFormat format = NumberFormat.getInstance();
+        format.setMaximumFractionDigits(2);
+        format.setMinimumFractionDigits(0);
+
+        if (score >= 1000) {
+            return format.format(score/1000.0)+"k";
+        }
+        return format.format(score);
     }
 
     /**
