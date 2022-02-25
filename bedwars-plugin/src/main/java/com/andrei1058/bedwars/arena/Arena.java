@@ -540,7 +540,7 @@ public class Arena implements IArena {
             }
 
             /* save player inventory etc */
-            if (getServerType() != ServerType.BUNGEE) {
+            if (getServerType() != ServerType.BUNGEE && getServerType() != ServerType.BUNGEE_LEGACY) {
                 new PlayerGoods(p, true);
                 playerLocation.put(p, p.getLocation());
             }
@@ -586,7 +586,7 @@ public class Arena implements IArena {
             }
         }, 17L);
 
-        if (getServerType() == ServerType.BUNGEE) {
+        if (getServerType() == ServerType.BUNGEE  || getServerType() == ServerType.BUNGEE_LEGACY) {
             p.getEnderChest().clear();
         }
 
@@ -637,7 +637,7 @@ public class Arena implements IArena {
 
             if (!playerBefore) {
                 /* save player inv etc if isn't saved yet*/
-                if (getServerType() != ServerType.BUNGEE) {
+                if (getServerType() != ServerType.BUNGEE && getServerType() != ServerType.BUNGEE_LEGACY) {
                     new PlayerGoods(p, true);
                     playerLocation.put(p, p.getLocation());
                 }
@@ -890,7 +890,7 @@ public class Arena implements IArena {
                 sb.remove();
             }
             this.sendToMainLobby(p);
-        } else if (getServerType() == ServerType.BUNGEE) {
+        } else if (getServerType() == ServerType.BUNGEE || getServerType() == ServerType.BUNGEE_LEGACY) {
             Misc.moveToLobbyOrKick(p, this, true);
             return;
         } else {
@@ -1049,7 +1049,7 @@ public class Arena implements IArena {
                 p.removePotionEffect(pf.getType());
             }
         }
-        if (getServerType() == ServerType.BUNGEE) {
+        if (getServerType() == ServerType.BUNGEE || getServerType() == ServerType.BUNGEE_LEGACY) {
             Misc.moveToLobbyOrKick(p, this, true);
             return;
         }
@@ -1142,7 +1142,7 @@ public class Arena implements IArena {
         }
         setArenaByPlayer(p, this);
         /* save player inventory etc */
-        if (BedWars.getServerType() != ServerType.BUNGEE) {
+        if (BedWars.getServerType() != ServerType.BUNGEE && getServerType() != ServerType.BUNGEE_LEGACY) {
             // no need to backup inventory because it's empty
             //new PlayerGoods(p, true, true);
             playerLocation.put(p, p.getLocation());
@@ -2118,7 +2118,7 @@ public class Arena implements IArena {
      * Register join-signs for arena
      */
     private void registerSigns() {
-        if (getServerType() != ServerType.BUNGEE) {
+        if (getServerType() != ServerType.BUNGEE && getServerType() != ServerType.BUNGEE_LEGACY) {
             if (BedWars.signs.getYml().get("locations") != null) {
                 for (String st : BedWars.signs.getYml().getStringList("locations")) {
                     String[] data = st.split(",");
@@ -2548,7 +2548,7 @@ public class Arena implements IArena {
         }
 
         // check amount of active clones
-        return config.getInt(ConfigPath.GENERAL_CONFIGURATION_AUTO_SCALE_LIMIT) > activeClones;
+        return config.getInt(ConfigPath.GENERAL_AUTOSCALE_LIMIT) > activeClones;
     }
 
     @Override

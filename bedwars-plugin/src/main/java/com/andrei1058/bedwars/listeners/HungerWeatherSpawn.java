@@ -67,7 +67,7 @@ public class HungerWeatherSpawn implements Listener {
     //Used to prevent creature spawn
     public void onCreatureSpawn(CreatureSpawnEvent e) {
         if (e.getSpawnReason() != CreatureSpawnEvent.SpawnReason.CUSTOM) {
-            if (getServerType() != ServerType.BUNGEE) {
+            if (getServerType() != ServerType.BUNGEE && getServerType() != ServerType.BUNGEE_LEGACY) {
                 if (Arena.getArenaByIdentifier(e.getEntity().getWorld().getName()) != null) {
                     e.setCancelled(true);
                 }

@@ -68,13 +68,13 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         new CmdLeave(this, "leave");
         new CmdLang(this, "lang");
         new CmdTeleporter(this, "teleporter");
-        if (getServerType() != ServerType.BUNGEE) {
+        if (getServerType() != ServerType.BUNGEE && getServerType() != ServerType.BUNGEE_LEGACY) {
             new CmdGUI(this, "gui");
         }
         new CmdStats(this, "stats");
         new CmdStart(this, "forceStart");
         new CmdStart(this, "start");
-        if (BedWars.getServerType() != ServerType.BUNGEE) {
+        if (BedWars.getServerType() != ServerType.BUNGEE && getServerType() != ServerType.BUNGEE_LEGACY) {
             new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.SetLobby(this, "setLobby"); //priority 1
         }
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.SetupArena(this, "setupArena"); //priority 2
@@ -105,7 +105,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         new RemoveGenerator(this, "removeGenerator");
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.SetType(this, "setType");
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.Save(this, "save");
-        if (JoinNPC.isCitizensSupport() && BedWars.getServerType() != ServerType.BUNGEE) {
+        if (JoinNPC.isCitizensSupport() && BedWars.getServerType() != ServerType.BUNGEE && getServerType() != ServerType.BUNGEE_LEGACY) {
             new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.NPC(this, "npc");
         }
         new CmdTpStaff(this, "tp");
@@ -225,7 +225,7 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isLobbySet(Player p) {
-        if (BedWars.getServerType() == ServerType.BUNGEE) return true;
+        if (BedWars.getServerType() == ServerType.BUNGEE || getServerType() == ServerType.BUNGEE_LEGACY) return true;
         if (config.getLobbyWorldName().isEmpty()) {
             if (p != null) {
                 p.sendMessage("§c▪ §7You have to set the lobby location first!");

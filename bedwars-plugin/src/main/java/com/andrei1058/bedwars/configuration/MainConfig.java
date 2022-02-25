@@ -357,13 +357,9 @@ public class MainConfig extends ConfigManager {
 
         try {
             BedWars.setServerType(ServerType.valueOf(Objects.requireNonNull(yml.getString("serverType")).toUpperCase()));
+            if(getSer)
         } catch (Exception e) {
-            if (Objects.requireNonNull(yml.getString("serverType")).equalsIgnoreCase("BUNGEE_LEGACY")) {
-                BedWars.setServerType(ServerType.BUNGEE);
-                BedWars.setAutoscale(false);
-            } else {
-                set("serverType", "MULTIARENA");
-            }
+            set("serverType", "MULTIARENA");
         }
 
         BedWars.setLobbyWorld(getLobbyWorldName());

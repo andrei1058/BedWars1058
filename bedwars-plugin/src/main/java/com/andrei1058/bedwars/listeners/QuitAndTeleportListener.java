@@ -144,7 +144,7 @@ public class QuitAndTeleportListener implements Listener {
             if (a.isPlayer(e.getPlayer())) {
                 if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) return;
                 if (!e.getPlayer().getWorld().getName().equalsIgnoreCase(a.getWorld().getName())) {
-                    a.removePlayer(e.getPlayer(), BedWars.getServerType() == ServerType.BUNGEE);
+                    a.removePlayer(e.getPlayer(), BedWars.getServerType() == ServerType.BUNGEE || getServerType() == ServerType.BUNGEE_LEGACY);
                     debug(e.getPlayer().getName() + " was removed from " + a.getDisplayName() + " because he was teleported outside the arena.");
                 }
             }
