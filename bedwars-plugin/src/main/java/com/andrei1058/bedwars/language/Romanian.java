@@ -156,11 +156,11 @@ public class Romanian extends Language {
         yml.addDefault(Messages.FORMATTING_GENERATOR_TIER1, "I");
         yml.addDefault(Messages.FORMATTING_GENERATOR_TIER2, "II");
         yml.addDefault(Messages.FORMATTING_GENERATOR_TIER3, "III");
-        yml.addDefault(Messages.FORMATTING_CHAT_LOBBY, "{level}{vPrefix}&7{player}{vSuffix}: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_WAITING, "{level}{vPrefix}&7{player}{vSuffix}: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_SHOUT, "{level}{vPrefix}&6[SHOUT] {team} &7{player}&f{vSuffix}: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_TEAM, "{level}{vPrefix}&f{team}&7 {player}{vSuffix} {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_SPECTATOR, "{level}{vPrefix}&7[SPECTATOR] {player}{vSuffix}: {message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_LOBBY, "{level} {vPrefix}{player}{vSuffix}&7: &f{message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_WAITING, "{level} {vPrefix}{player}{vSuffix}&7: &f{message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_SHOUT, "{level}&6[SHOUT] {team} {vPrefix}{player}{vSuffix}&7: &f{message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_TEAM, "{level}&f{team} {vPrefix}{player}{vSuffix}&7: &f{message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_SPECTATOR, "{level}&7[SPECTATOR] {vPrefix}{player}{vSuffix}&7: &f{message}");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_HEALTH, Arrays.asList("&c❤", "&aViață"));
         yml.addDefault(Messages.FORMATTING_SPECTATOR_TEAM, "SPECT");
         yml.addDefault(Messages.FORMATTING_SPECTATOR_COLOR, "&7");
