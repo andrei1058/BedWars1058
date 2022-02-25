@@ -35,13 +35,14 @@ import java.util.UUID;
 public class Parties implements Party {
 
     //Support for Parties by AlessioDP
+    //rewrite by JT122406
     private final PartiesAPI api = com.alessiodp.parties.api.Parties.getApi();
     private static final int requiredRankToSelect = BedWars.config.getInt(ConfigPath.GENERAL_ALESSIODP_PARTIES_RANK);
 
     @Override
     public boolean hasParty(Player p) {
         PartyPlayer pp = api.getPartyPlayer(p.getUniqueId());
-        return pp != null && pp.isInParty();
+        return (pp != null && pp.isInParty());
     }
 
     @Override
@@ -54,6 +55,7 @@ public class Parties implements Party {
         return party.getMembers().size();
     }
 
+
     @Override
     public boolean isOwner(Player p) {
         PartyPlayer pp = api.getPartyPlayer(p.getUniqueId());
@@ -65,35 +67,47 @@ public class Parties implements Party {
     @Override
     public List<Player> getMembers(Player p) {
         ArrayList<Player> players = new ArrayList<>();
-
-        PartyPlayer pp = api.getPartyPlayer(p.getUniqueId());
-        if (pp == null) return players;
-        if (pp.getPartyId() == null) return players;
-        com.alessiodp.parties.api.interfaces.Party party = api.getParty(pp.getPartyId());
-        if (party == null) return players;
-        for (UUID pl : party.getMembers()) {
-            Player on = Bukkit.getPlayer(pl);
-            if (on == null) continue;
-            if (!on.isOnline()) continue;
-            players.add(on);
+        if (hasParty(p)){
+            com.alessiodp.parties.api.interfaces.Party party = api.getParty(api.getPartyPlayer(p.getUniqueId()).getPartyId());
+            UUID[] array = new UUID[party.getMembers().size()];
+            party.getMembers().toArray(array);
+            for (int i = 0; i < array.length; i++){
+                players.add(Bukkit.getPlayer(array[i]));
+            }
         }
         return players;
+
     }
 
     @Override
     public void createParty(Player owner, Player... members) {
+        if (api.isBungeeCordEnabled()) return; //party creation handled on bungee side
+        else
+        {
+            api.createParty("bedwars", api.getPartyPlayer(owner.getUniqueId()));
+            for (Player player1 : members)
+                api.getParty(owner.getUniqueId()).addMember(api.getPartyPlayer(player1.getUniqueId()));
+        }
     }
 
     @Override
     public void addMember(Player owner, Player member) {
+        if (api.isBungeeCordEnabled()) return;//party operations handled on bungee side
+        else
+        {
+            api.getParty(api.getPartyPlayer(owner.getUniqueId()).getPartyId()).addMember(api.getPartyPlayer(member.getUniqueId()));
+        }
+
     }
 
     @Override
     public void removeFromParty(Player member) {
+        api.getParty(api.getPartyPlayer(member.getUniqueId()).getPartyId()).removeMember(api.getPartyPlayer(member.getUniqueId()));
     }
 
     @Override
     public void disband(Player owner) {
+        api.getParty(api.getPartyPlayer(owner.getUniqueId()).getPartyId()).delete();
     }
 
     @Override
@@ -108,6 +122,7 @@ public class Parties implements Party {
 
     @Override
     public void removePlayer(Player owner, Player target) {
+        api.getParty(api.getPartyPlayer(owner.getUniqueId()).getPartyId()).removeMember(api.getPartyPlayer(target.getUniqueId()));
     }
 
     @Override
