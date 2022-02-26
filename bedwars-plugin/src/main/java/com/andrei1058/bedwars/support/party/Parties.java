@@ -21,6 +21,8 @@
 package com.andrei1058.bedwars.support.party;
 
 import com.alessiodp.parties.api.interfaces.PartiesAPI;
+import com.alessiodp.parties.api.interfaces.Party;
+import com.alessiodp.parties.api.interfaces.PartyPlayer;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.party.Party;
@@ -65,11 +67,9 @@ public class Parties implements Party {
     public List<Player> getMembers(Player p) {
         ArrayList<Player> players = new ArrayList<>();
         if (hasParty(p)){
-            com.alessiodp.parties.api.interfaces.Party party = api.getParty(api.getPartyPlayer(p.getUniqueId()).getPartyId());
-            UUID[] array = new UUID[party.getMembers().size()];
-            party.getMembers().toArray(array);
-            for (int i = 0; i < array.length; i++){
-                players.add(Bukkit.getPlayer(array[i]));
+            Party party = api.getParty(api.getPartyPlayer(p.getUniqueId()).getPartyId());
+            for (PartyPlayer member : party.getOnlineMembers()){
+                players.add(Bukkit.getPlayer(member.getPlayerUUID()));
             }
         }
         return players;
