@@ -86,7 +86,7 @@ public class Parties implements Party {
 
     @Override
     public void addMember(Player owner, Player member) {
-        if (api.isBungeeCordEnabled()) return;//party operations handled on bungee side
+        if (api.isBungeeCordEnabled()) return;//party operations handled on bungee server side
         else
         {
             api.getParty(api.getPartyPlayer(owner.getUniqueId()).getPartyId()).addMember(api.getPartyPlayer(member.getUniqueId()));
