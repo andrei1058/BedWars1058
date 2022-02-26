@@ -21,7 +21,6 @@
 package com.andrei1058.bedwars.support.party;
 
 import com.alessiodp.parties.api.interfaces.PartiesAPI;
-import com.alessiodp.parties.api.interfaces.PartyPlayer;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.party.Party;
@@ -41,27 +40,25 @@ public class Parties implements Party {
 
     @Override
     public boolean hasParty(Player p) {
-        PartyPlayer pp = api.getPartyPlayer(p.getUniqueId());
-        return (pp != null && pp.isInParty());
+        return api.isPlayerInParty(p.getUniqueId());
     }
 
     @Override
     public int partySize(Player p) {
-        PartyPlayer pp = api.getPartyPlayer(p.getUniqueId());
-        if (pp == null) return 0;
-        if (pp.getPartyId() == null) return 0;
-        com.alessiodp.parties.api.interfaces.Party party = api.getParty(pp.getPartyId());
-        if (party == null) return 0;
-        return party.getMembers().size();
+        if (!hasParty(p)) return 0; //no party
+        else
+        {
+            return api.getParty(api.getPartyPlayer(p.getUniqueId()).getPartyId()).getOnlineMembers().size();
+        }
     }
 
 
     @Override
     public boolean isOwner(Player p) {
-        PartyPlayer pp = api.getPartyPlayer(p.getUniqueId());
-        if (pp == null) return false;
-        if (pp.getPartyId() == null) return false;
-        return pp.getRank() >= requiredRankToSelect;
+        if (!hasParty(p)) return false; //no party
+        else {
+            return api.getParty(api.getPartyPlayer(p.getUniqueId()).getPartyId()).getLeader().equals(p.getUniqueId());
+        }
     }
 
     @Override
@@ -76,7 +73,6 @@ public class Parties implements Party {
             }
         }
         return players;
-
     }
 
     @Override
@@ -84,7 +80,7 @@ public class Parties implements Party {
         if (api.isBungeeCordEnabled()) return; //party creation handled on bungee side
         else
         {
-            api.createParty("bedwars", api.getPartyPlayer(owner.getUniqueId()));
+            api.createParty(null, api.getPartyPlayer(owner.getUniqueId()));
             for (Player player1 : members)
                 api.getParty(owner.getUniqueId()).addMember(api.getPartyPlayer(player1.getUniqueId()));
         }
@@ -97,7 +93,6 @@ public class Parties implements Party {
         {
             api.getParty(api.getPartyPlayer(owner.getUniqueId()).getPartyId()).addMember(api.getPartyPlayer(member.getUniqueId()));
         }
-
     }
 
     @Override
@@ -112,12 +107,11 @@ public class Parties implements Party {
 
     @Override
     public boolean isMember(Player owner, Player check) {
-        PartyPlayer pp = api.getPartyPlayer(owner.getUniqueId());
-        if (pp == null) return false;
-        if (pp.getPartyId() == null) return false;
-        com.alessiodp.parties.api.interfaces.Party party = api.getParty(pp.getPartyId());
-        if (party == null) return false;
-        return party.getMembers().contains(check.getUniqueId());
+        if (!hasParty(owner) || !hasParty(check)) return false;
+        else
+        {
+            return api.areInTheSameParty(owner.getUniqueId(), check.getUniqueId());
+        }
     }
 
     @Override
