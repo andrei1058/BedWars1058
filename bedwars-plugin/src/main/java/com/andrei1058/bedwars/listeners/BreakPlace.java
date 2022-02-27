@@ -66,6 +66,11 @@ import static com.andrei1058.bedwars.api.language.Language.getMsg;
 public class BreakPlace implements Listener {
 
     private static final List<Player> buildSession = new ArrayList<>();
+    private final boolean allowFireBreak;
+
+    public BreakPlace() {
+        allowFireBreak = config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_ALLOW_FIRE_EXTINGUISH);
+    }
 
     @EventHandler
     public void onIceMelt(BlockFadeEvent e) {
@@ -258,6 +263,11 @@ public class BreakPlace implements Listener {
                 case "GRASS_PATH":
                 case "DOUBLE_PLANT":
                     if (e.isCancelled()) {
+                        e.setCancelled(false);
+                    }
+                    return;
+                case "FIRE":
+                    if(allowFireBreak) {
                         e.setCancelled(false);
                     }
                     return;
