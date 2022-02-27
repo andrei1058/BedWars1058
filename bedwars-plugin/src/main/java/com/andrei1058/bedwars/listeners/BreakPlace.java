@@ -269,8 +269,9 @@ public class BreakPlace implements Listener {
                 case "FIRE":
                     if(allowFireBreak) {
                         e.setCancelled(false);
+                        return;
                     }
-                    return;
+                    break;
             }
 
             if (nms.isBed(e.getBlock().getType())) {
