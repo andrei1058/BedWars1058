@@ -12,14 +12,14 @@ import java.util.List;
 
 public class PAF implements Party {
     //Party and Friends for Spigot Support by JT122406
-    @Override
-    public boolean hasParty(Player p) {
-        return getPAFParty(p) != null;
-    }
-
     private PlayerParty getPAFParty(Player p) {
         OnlinePAFPlayer pafPlayer = PAFPlayerManager.getInstance().getPlayer(p);
         return PartyManager.getInstance().getParty(pafPlayer);
+    }
+
+    @Override
+    public boolean hasParty(Player p) {
+        return getPAFParty(p) != null;
     }
 
     @Override
@@ -53,18 +53,33 @@ public class PAF implements Party {
 
     @Override
     public void createParty(Player owner, Player... members) {
+        OnlinePAFPlayer pafPlayer = PAFPlayerManager.getInstance().getPlayer(owner);
+        PlayerParty party = PartyManager.getInstance().createParty(pafPlayer);
+        party.setPrivateState(false);
+        for (Player p1 : members){
+            party.addPlayer(PAFPlayerManager.getInstance().getPlayer(p1));
+        }
+        party.setPrivateState(true);
     }
 
     @Override
     public void addMember(Player owner, Player member) {
+        OnlinePAFPlayer pafPlayer = PAFPlayerManager.getInstance().getPlayer(owner);
+        PlayerParty party = pafPlayer.getParty();
+        party.setPrivateState(false);
+        party.addPlayer(PAFPlayerManager.getInstance().getPlayer(member));
+        party.setPrivateState(true);
     }
 
     @Override
     public void removeFromParty(Player member) {
+        PlayerParty p = PAFPlayerManager.getInstance().getPlayer(member).getParty();
+        p.leaveParty(PAFPlayerManager.getInstance().getPlayer(member));
     }
 
     @Override
     public void disband(Player owner) {
+        PartyManager.getInstance().deleteParty(PartyManager.getInstance().getParty(PAFPlayerManager.getInstance().getPlayer(owner)));
     }
 
     @Override
@@ -77,6 +92,8 @@ public class PAF implements Party {
 
     @Override
     public void removePlayer(Player owner, Player target) {
+        PlayerParty p = getPAFParty(owner);
+        p.leaveParty(PAFPlayerManager.getInstance().getPlayer(target));
     }
 
     @Override
