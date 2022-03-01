@@ -41,17 +41,16 @@ public class Parties implements Party {
     @Override
     public boolean hasParty(Player p) {
         PartyPlayer pp = api.getPartyPlayer(p.getUniqueId());
-        return pp != null && pp.isInParty();
+        return (pp != null && pp.isInParty());
     }
 
     @Override
     public int partySize(Player p) {
-        PartyPlayer pp = api.getPartyPlayer(p.getUniqueId());
-        if (pp == null) return 0;
-        if (pp.getPartyId() == null) return 0;
-        com.alessiodp.parties.api.interfaces.Party party = api.getParty(pp.getPartyId());
-        if (party == null) return 0;
-        return party.getMembers().size();
+        if (!hasParty(p)) return 0; //no party
+        else
+        {
+            return api.getParty(api.getPartyPlayer(p.getUniqueId()).getPartyId()).getOnlineMembers().size();
+        }
     }
 
     @Override
@@ -65,49 +64,57 @@ public class Parties implements Party {
     @Override
     public List<Player> getMembers(Player p) {
         ArrayList<Player> players = new ArrayList<>();
-
-        PartyPlayer pp = api.getPartyPlayer(p.getUniqueId());
-        if (pp == null) return players;
-        if (pp.getPartyId() == null) return players;
-        com.alessiodp.parties.api.interfaces.Party party = api.getParty(pp.getPartyId());
-        if (party == null) return players;
-        for (UUID pl : party.getMembers()) {
-            Player on = Bukkit.getPlayer(pl);
-            if (on == null) continue;
-            if (!on.isOnline()) continue;
-            players.add(on);
+        if (hasParty(p)){
+            com.alessiodp.parties.api.interfaces.Party party = api.getParty(api.getPartyPlayer(p.getUniqueId()).getPartyId());
+            for (PartyPlayer member : party.getOnlineMembers()){
+                players.add(Bukkit.getPlayer(member.getPlayerUUID()));
+            }
         }
         return players;
     }
 
     @Override
     public void createParty(Player owner, Player... members) {
+        if (api.isBungeeCordEnabled()) return; //party creation handled on bungee side
+        else
+        {
+            api.createParty(null, api.getPartyPlayer(owner.getUniqueId()));
+            for (Player player1 : members)
+                api.getParty(owner.getUniqueId()).addMember(api.getPartyPlayer(player1.getUniqueId()));
+        }
     }
 
     @Override
     public void addMember(Player owner, Player member) {
+        if (api.isBungeeCordEnabled()) return;//party operations handled on bungee server side
+        else
+        {
+            api.getParty(api.getPartyPlayer(owner.getUniqueId()).getPartyId()).addMember(api.getPartyPlayer(member.getUniqueId()));
+        }
     }
 
     @Override
     public void removeFromParty(Player member) {
+        api.getParty(api.getPartyPlayer(member.getUniqueId()).getPartyId()).removeMember(api.getPartyPlayer(member.getUniqueId()));
     }
 
     @Override
     public void disband(Player owner) {
+        api.getParty(api.getPartyPlayer(owner.getUniqueId()).getPartyId()).delete();
     }
 
     @Override
     public boolean isMember(Player owner, Player check) {
-        PartyPlayer pp = api.getPartyPlayer(owner.getUniqueId());
-        if (pp == null) return false;
-        if (pp.getPartyId() == null) return false;
-        com.alessiodp.parties.api.interfaces.Party party = api.getParty(pp.getPartyId());
-        if (party == null) return false;
-        return party.getMembers().contains(check.getUniqueId());
+        if (!hasParty(owner) || !hasParty(check)) return false;
+        else
+        {
+            return api.areInTheSameParty(owner.getUniqueId(), check.getUniqueId());
+        }
     }
 
     @Override
     public void removePlayer(Player owner, Player target) {
+        api.getParty(api.getPartyPlayer(owner.getUniqueId()).getPartyId()).removeMember(api.getPartyPlayer(target.getUniqueId()));
     }
 
     @Override
