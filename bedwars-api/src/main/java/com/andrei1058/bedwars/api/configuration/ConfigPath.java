@@ -69,6 +69,8 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID = "bungee-settings.server-id";
     public static final String GENERAL_CONFIGURATION_BUNGEE_OPTION_BWP_TIME_OUT = "bungee-settings.bwp-time-out";
 
+    public static final String GENERAL_CONFIGURATION_ALLOW_FIRE_EXTINGUISH = "allow-fire-extinguish";
+
     public static final String GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH = "lobby-items";
     public static final String GENERAL_CONFIGURATION_EXPERIMENTAL_TEAM_ASSIGNER = "use-experimental-team-assigner";
 
@@ -160,6 +162,7 @@ public class ConfigPath {
     public static final String ARENA_SPAWN_PROTECTION = "spawn-protection";
     public static final String ARENA_SHOP_PROTECTION = "shop-protection";
     public static final String ARENA_UPGRADES_PROTECTION = "upgrades-protection";
+    public static final String ARENA_GENERATOR_PROTECTION = "generator-protection";
     public static final String ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS = "disable-generator-for-empty-teams";
     public static final String ARENA_DISABLE_NPCS_FOR_EMPTY_TEAMS = "disable-npcs-for-empty-teams";
     public static final String ARENA_ISLAND_RADIUS = "island-radius";

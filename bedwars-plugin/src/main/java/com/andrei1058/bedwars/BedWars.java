@@ -71,7 +71,7 @@ import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.support.party.NoParty;
 import com.andrei1058.bedwars.support.party.PAF;
 import com.andrei1058.bedwars.support.party.PAFBungeecordRedisApi;
-import com.andrei1058.bedwars.support.party.Parties;
+import com.andrei1058.bedwars.support.party.PartiesAdapter;
 import com.andrei1058.bedwars.support.preloadedparty.PrePartyListener;
 import com.andrei1058.bedwars.support.vault.*;
 import com.andrei1058.bedwars.support.vipfeatures.VipFeatures;
@@ -350,7 +350,7 @@ public class BedWars extends JavaPlugin {
 
                 if (getServer().getPluginManager().isPluginEnabled("Parties")) {
                     getLogger().info("Hook into Parties (by AlessioDP) support!");
-                    party = new Parties();
+                    party = new PartiesAdapter();
                 } else if (Bukkit.getServer().getPluginManager().isPluginEnabled("PartyAndFriends")) {
                     getLogger().info("Hook into Party and Friends for Spigot (by Simonsator) support!");
                     party = new PAF();
@@ -451,7 +451,7 @@ public class BedWars extends JavaPlugin {
                        chat = new WithChat();
                    } else {
                        plugin.getLogger().info("Vault found, but no chat provider!");
-                       economy = new NoEconomy();
+                       chat = new NoChat();
                    }
                 } catch (Exception var2_2) {
                     chat = new NoChat();
@@ -603,8 +603,8 @@ public class BedWars extends JavaPlugin {
         for (IArena a : Arena.getArenas()) {
             try {
                 a.disable();
-            } catch (Exception ignored) {
-                ignored.printStackTrace();
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
         }
 
