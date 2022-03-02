@@ -213,8 +213,8 @@ public class BreakPlace implements Listener {
         //WHEAT_SEEDS
         IArena arena = Arena.getArenaByIdentifier(event.getEntity().getWorld().getName());
         if (arena == null) return;
-        String material = event.getEntity().getItemStack().getType().toString();
-        if (material.equals("SEEDS") || material.equals("WHEAT_SEEDS")) {
+        Material material = event.getEntity().getItemStack().getType();
+        if (material.equals(Material.BED) || material.equals(Material.SEEDS)) {
             event.setCancelled(true);
         }
     }
