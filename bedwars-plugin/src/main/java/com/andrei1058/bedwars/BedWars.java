@@ -450,7 +450,7 @@ public class BedWars extends JavaPlugin {
                        chat = new WithChat();
                    } else {
                        plugin.getLogger().info("Vault found, but no chat provider!");
-                       economy = new NoEconomy();
+                       chat = new NoChat();
                    }
                 } catch (Exception var2_2) {
                     chat = new NoChat();
