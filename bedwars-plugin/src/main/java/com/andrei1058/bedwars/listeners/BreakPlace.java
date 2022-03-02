@@ -210,11 +210,11 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onBlockDrop(ItemSpawnEvent event) {
-        //WHEAT_SEEDS
+        //WHEAT_SEEDS AND BEDs
         IArena arena = Arena.getArenaByIdentifier(event.getEntity().getWorld().getName());
         if (arena == null) return;
-        String material = event.getEntity().getItemStack().getType().toString();
-        if (material.equals("SEEDS") || material.equals("WHEAT_SEEDS")) {
+        Material material = event.getEntity().getItemStack().getType();
+        if (nms.isBed(material) || material.toString().equalsIgnoreCase("SEEDS") || material.toString().equalsIgnoreCase("WHEAT_SEEDS")) {
             event.setCancelled(true);
         }
     }
