@@ -494,4 +494,12 @@ public interface IArena {
     void setTeamAssigner(ITeamAssigner teamAssigner);
 
     List<Player> getLeavingPlayers();
+
+    int getCoinsEarned(UUID uuid);
+
+    int getExperienceEarned(UUID uuid);
+
+    Map<UUID, Integer> getCoinsEarned();
+
+    Map<UUID, Integer> getExperienceEarned();
 }
