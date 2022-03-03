@@ -111,6 +111,7 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.COMMAND_COOLDOWN, "&cAnda belum bisa melakukannya! Tunggu {seconds} detik lagi!");
         yml.addDefault(Messages.ARENA_JOIN_VIP_KICK, "{prefix}&cMaaf, tapi Anda dikeluarkan karena donatur bergabung ke arena.\n&aHarap pertimbangkan untuk menyumbang untuk lebih banyak fitur. &7&o(click)");
         yml.addDefault(Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT, "{prefix}§cTidak ada cukup pemain! Hitung mundur dihentikan!");
+        yml.addDefault(Messages.PLAYER_LEAVE_ARENA, "{prefix}§cYou're leave of the game!");
         yml.addDefault(Messages.ARENA_RESTART_PLAYER_KICK, "{prefix}&eArena tempat Anda berada sedang dimulai ulang.");
         yml.addDefault(Messages.ARENA_STATUS_PLAYING_NAME, "&cBermain");
         yml.addDefault(Messages.ARENA_STATUS_RESTARTING_NAME, "&4Memulai Kembali");

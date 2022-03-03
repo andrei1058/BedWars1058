@@ -98,6 +98,7 @@ public class Messages {
     /** Arena join/ leave related */
     public static String ARENA_JOIN_VIP_KICK = "arena-kicked-by-vip";
     public static String ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT = "arena-countdown-stopped";
+    public static String PLAYER_LEAVE_ARENA = "player-leave-arena";
     //public static String ARENA_PLAYER_QUIT = "player.quit";
     public static String ARENA_RESTART_PLAYER_KICK = "arena-restart-kick";
     public static String ARENA_JOIN_DENIED_SELECTOR = "arena-join-denied-selector";

@@ -999,6 +999,8 @@ public class Arena implements IArena {
         if (lastHit != null) {
             lastHit.remove();
         }
+
+        p.sendMessage(getMsg(p, Messages.PLAYER_LEAVE_ARENA));
     }
 
     /**
