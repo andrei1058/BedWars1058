@@ -495,11 +495,23 @@ public interface IArena {
 
     List<Player> getLeavingPlayers();
 
+    /**
+     * Track the coins earned in-game by the player
+     */
     int getCoinsEarned(UUID uuid);
 
+    /**
+     * Track the experience earned in-game by the player
+     */
     int getExperienceEarned(UUID uuid);
 
+    /**
+     * Stored the coins for the player
+     */
     Map<UUID, Integer> getCoinsEarned();
 
+    /**
+     * Stored the experience for the player
+     */
     Map<UUID, Integer> getExperienceEarned();
 }
