@@ -2679,18 +2679,18 @@ public class Arena implements IArena {
     }
 
     public int getCoinsEarned(UUID uuid){
-        return getCoinsEarned().get(uuid);
+        return coinsEarned.get(uuid);
     }
 
     public int getExperienceEarned(UUID uuid){
-        return getExperienceEarned().get(uuid);
+        return experienceEarned.get(uuid);
     }
 
-    public Map<UUID, Integer> getCoinsEarned(){
+    public Map<UUID, Integer> getCoinsMap(){
         return coinsEarned;
     }
 
-    public Map<UUID, Integer> getExperienceEarned(){
+    public Map<UUID, Integer> getExperienceMap(){
         return experienceEarned;
     }
 }

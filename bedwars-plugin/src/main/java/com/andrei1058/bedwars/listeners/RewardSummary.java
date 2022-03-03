@@ -14,8 +14,8 @@ public class RewardSummary implements Listener {
 
         IArena arena = Arena.getArenaByPlayer(e.getPlayer());
 
-        if (arena.getExperienceEarned().containsKey(e.getPlayer().getUniqueId())) {
-            arena.getExperienceEarned().put(e.getPlayer().getUniqueId(), arena.getExperienceEarned(e.getPlayer().getUniqueId()) + e.getAmount());
+        if (arena.getExperienceMap().containsKey(e.getPlayer().getUniqueId())) {
+            arena.getExperienceMap().put(e.getPlayer().getUniqueId(), arena.getExperienceEarned(e.getPlayer().getUniqueId()) + e.getAmount());
         }
     }
 
@@ -24,8 +24,8 @@ public class RewardSummary implements Listener {
 
         IArena arena = Arena.getArenaByPlayer(e.getPlayer());
 
-        if (arena.getCoinsEarned().containsKey(e.getPlayer().getUniqueId())) {
-            arena.getCoinsEarned().put(e.getPlayer().getUniqueId(), arena.getCoinsEarned(e.getPlayer().getUniqueId()) + e.getAmount());
+        if (arena.getCoinsMap().containsKey(e.getPlayer().getUniqueId())) {
+            arena.getCoinsMap().put(e.getPlayer().getUniqueId(), arena.getCoinsEarned(e.getPlayer().getUniqueId()) + e.getAmount());
         }
     }
 }

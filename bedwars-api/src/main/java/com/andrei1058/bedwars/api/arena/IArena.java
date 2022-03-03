@@ -508,10 +508,10 @@ public interface IArena {
     /**
      * Stored the coins for the player
      */
-    Map<UUID, Integer> getCoinsEarned();
+    Map<UUID, Integer> getCoinsMap();
 
     /**
      * Stored the experience for the player
      */
-    Map<UUID, Integer> getExperienceEarned();
+    Map<UUID, Integer> getExperienceMap();
 }
