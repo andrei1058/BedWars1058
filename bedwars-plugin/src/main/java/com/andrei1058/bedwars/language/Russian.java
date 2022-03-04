@@ -57,7 +57,7 @@ public class Russian extends Language{
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_IS_FULL, "{prefix}&cЭта арена полная!\n&aЧтобы иметь больше возможностей - купите донат. &7&o(жми)");
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_IS_FULL_OF_VIPS, "{prefix}&cПриносим извинения, но эта арена полная.\n&cМы знаем, что вы являетесь донатером, но на самом деле эта арена полна сотрудников и/или донатеров.");
         yml.addDefault(Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT, "{prefix}§cНедостаточно игроков! Обратный отсчет остановился!");
-        yml.addDefault(Messages.PLAYER_LEAVE_ARENA, "{prefix}§cYou're leave of the game!");
+        yml.addDefault(Messages.PLAYER_LEAVE_ARENA, "{prefix}§cYou left the game!");
         yml.addDefault(Messages.COMMAND_LEAVE_MSG, "{prefix}&e{player} вышел из игры!");
         yml.addDefault(Messages.ARENA_RESTART_PLAYER_KICK, "{prefix}&eАрена, в которой вы были, перезапускается.");
         yml.addDefault(Messages.ARENA_STATUS_PLAYING_NAME, "&cИдет Игра");

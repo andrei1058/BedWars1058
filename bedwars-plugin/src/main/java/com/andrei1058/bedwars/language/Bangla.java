@@ -111,7 +111,7 @@ public class Bangla extends Language {
         yml.addDefault(Messages.COMMAND_COOLDOWN, "&cApni akhono eti korte parben na! {seconds} wait korun!");
         yml.addDefault(Messages.ARENA_JOIN_VIP_KICK, "{prefix}&cDukkhito, kintu ekti donor arena ti te join korar karone apnake kick kora hoyeche.\n&aAro features er jonno donate korar bibechona korun. &7&o(click)");
         yml.addDefault(Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT, "{prefix}§cPorjapto players nei! Countdown bondho hoye gelo!");
-        yml.addDefault(Messages.PLAYER_LEAVE_ARENA, "{prefix}§cYou're leave of the game!");
+        yml.addDefault(Messages.PLAYER_LEAVE_ARENA, "{prefix}§cYou left the game!");
         yml.addDefault(Messages.ARENA_RESTART_PLAYER_KICK, "{prefix}&eApnar join kora arena restart hocche.");
         yml.addDefault(Messages.ARENA_STATUS_PLAYING_NAME, "&cPlaying");
         yml.addDefault(Messages.ARENA_STATUS_RESTARTING_NAME, "&4Restarting hocche");

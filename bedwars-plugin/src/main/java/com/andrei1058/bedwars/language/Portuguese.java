@@ -110,7 +110,7 @@ public class Portuguese extends Language {
         yml.addDefault(Messages.COMMAND_COOLDOWN, "&cVocê não pode fazer isso ainda! Aguarde mais {seconds} segundos!");
         yml.addDefault(Messages.ARENA_JOIN_VIP_KICK, "{prefix}&cDesculpe, mas você foi expulso porque um doador entrou na arena.\n&aPor favor, considere doar para mais vantagens. &7&o(clique)");
         yml.addDefault(Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT, "{prefix}§cNão há jogadores suficientes! Contagem regressiva parada!");
-        yml.addDefault(Messages.PLAYER_LEAVE_ARENA, "{prefix}§cYou're leave of the game!");
+        yml.addDefault(Messages.PLAYER_LEAVE_ARENA, "{prefix}§cYou left the game!");
         yml.addDefault(Messages.ARENA_RESTART_PLAYER_KICK, "{prefix}&eA arena em que você estava está reiniciando.");
         yml.addDefault(Messages.ARENA_STATUS_PLAYING_NAME, "&cJogando");
         yml.addDefault(Messages.ARENA_STATUS_RESTARTING_NAME, "&4Reiniciando");

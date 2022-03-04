@@ -117,7 +117,7 @@ public class Romanian extends Language {
         yml.addDefault(Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE, "");
         yml.addDefault(Messages.ARENA_JOIN_VIP_KICK, "{prefix}&cNe pare rau, dar locul tau a fost rezervat unui donator.\n&aAi putea lua in considerare donarea pentru mai multe facilitati. &7&o(click)");
         yml.addDefault(Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT, "{prefix}§cNu sunt destui jucatori! Numaratoarea a fost oprita!");
-        yml.addDefault(Messages.PLAYER_LEAVE_ARENA, "{prefix}§cYou're leave of the game!");
+        yml.addDefault(Messages.PLAYER_LEAVE_ARENA, "{prefix}§cYou left the game!");
         yml.addDefault(Messages.ARENA_RESTART_PLAYER_KICK, "{prefix}&eArena in care te aflai se reporneste.");
         yml.addDefault(Messages.ARENA_STATUS_PLAYING_NAME, "&cIn joc");
         yml.addDefault(Messages.ARENA_STATUS_RESTARTING_NAME, "&4Se reporneste");

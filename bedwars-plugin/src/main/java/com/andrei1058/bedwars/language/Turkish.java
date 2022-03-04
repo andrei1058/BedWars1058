@@ -112,7 +112,7 @@ public class Turkish extends Language {
         yml.addDefault(Messages.COMMAND_COOLDOWN, "&cŞu anda bunu yapamazsın! {seconds} saniye sonra tekrar dene.");
         yml.addDefault(Messages.ARENA_JOIN_VIP_KICK, "{prefix}&cÜzgünüm, bir bağışçı haritaya katılmaya çalıştığı için haritadan atıldın!");
         yml.addDefault(Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT, "{prefix}§cOyun başlamıyor! §7Yeterli oyuncu yok!");
-        yml.addDefault(Messages.PLAYER_LEAVE_ARENA, "{prefix}§cYou're leave of the game!");
+        yml.addDefault(Messages.PLAYER_LEAVE_ARENA, "{prefix}§cYou left the game!");
         yml.addDefault(Messages.ARENA_RESTART_PLAYER_KICK, "{prefix}&eBulunduğun harita yeniden başlatılıyor");
         yml.addDefault(Messages.ARENA_STATUS_PLAYING_NAME, "&cOynanıyor");
         yml.addDefault(Messages.ARENA_STATUS_RESTARTING_NAME, "&4Yeniden Başlatılıyor");
