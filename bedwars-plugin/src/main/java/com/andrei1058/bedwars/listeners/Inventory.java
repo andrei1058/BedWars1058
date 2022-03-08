@@ -25,11 +25,13 @@ import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.events.gameplay.GameStateChangeEvent;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.server.SetupType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.SetupSession;
+import com.andrei1058.bedwars.language.LanguageManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -166,7 +168,7 @@ public class Inventory implements Listener {
         if (a != null) {
 
             //Prevent players from moving items in stats GUI
-            if (nms.getInventoryName(e).equals(Language.getMsg(p, Messages.PLAYER_STATS_GUI_INV_NAME).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()))) {
+            if (nms.getInventoryName(e).equals(getLangService().getMsg(p, Messages.PLAYER_STATS_GUI_INV_NAME).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()))) {
                 e.setCancelled(true);
                 return;
             }
@@ -229,5 +231,9 @@ public class Inventory implements Listener {
     public void onGameEnd(GameStateChangeEvent e) {
         if(e.getNewState() != GameState.restarting) return;
         e.getArena().getPlayers().forEach(Player::closeInventory); // close any open guis when the game ends (e.g. shop)
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

@@ -24,10 +24,12 @@ import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.ArenaGUI;
 import com.andrei1058.bedwars.configuration.Sounds;
+import com.andrei1058.bedwars.language.LanguageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -69,17 +71,21 @@ public class ArenaSelectorListener implements Listener {
                 Sounds.playSound("join-allowed", player);
             } else {
                 Sounds.playSound("join-denied", player);
-                player.sendMessage(Language.getMsg(player, Messages.ARENA_JOIN_DENIED_SELECTOR));
+                player.sendMessage(getLangService().getMsg(player, Messages.ARENA_JOIN_DENIED_SELECTOR));
             }
         } else if (event.getClick() == ClickType.RIGHT) {
             if (arena.getStatus() == GameState.playing && arena.addSpectator(player, false, null)) {
                 Sounds.playSound("spectate-allowed", player);
             } else {
-                player.sendMessage(Language.getMsg(player, Messages.ARENA_SPECTATE_DENIED_SELECTOR));
+                player.sendMessage(getLangService().getMsg(player, Messages.ARENA_SPECTATE_DENIED_SELECTOR));
                 Sounds.playSound("spectate-denied", player);
             }
         }
 
         player.closeInventory();
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

@@ -23,7 +23,9 @@ package com.andrei1058.bedwars.shop.main;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.events.shop.ShopOpenEvent;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.language.LanguageManager;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.shop.quickbuy.PlayerQuickBuyCache;
 import org.bukkit.Bukkit;
@@ -84,7 +86,7 @@ public class ShopIndex {
             if (event.isCancelled()) return;
         }
 
-        Inventory inv = Bukkit.createInventory(null, invSize, Language.getMsg(player, getNamePath()));
+        Inventory inv = Bukkit.createInventory(null, invSize, getLangService().getMsg(player, getNamePath()));
 
         inv.setItem(getQuickBuyButton().getSlot(), getQuickBuyButton().getItemStack(player));
 
@@ -114,8 +116,8 @@ public class ShopIndex {
         ItemStack i = separatorStandard.clone();
         ItemMeta im = i.getItemMeta();
         if (im != null) {
-            im.setDisplayName(Language.getMsg(player, separatorNamePath));
-            im.setLore(Language.getList(player, separatorLorePath));
+            im.setDisplayName(getLangService().getMsg(player, separatorNamePath));
+            im.setLore(getLangService().getList(player, separatorLorePath));
             i.setItemMeta(im);
         }
 
@@ -131,8 +133,8 @@ public class ShopIndex {
         ItemStack i = separatorSelected.clone();
         ItemMeta im = i.getItemMeta();
         if (im != null) {
-            im.setDisplayName(Language.getMsg(player, separatorNamePath));
-            im.setLore(Language.getList(player, separatorLorePath));
+            im.setDisplayName(getLangService().getMsg(player, separatorNamePath));
+            im.setLore(getLangService().getList(player, separatorLorePath));
             i.setItemMeta(im);
         }
         return i;
@@ -176,5 +178,9 @@ public class ShopIndex {
 
     public static List<UUID> getIndexViewers() {
         return new ArrayList<>(indexViewers);
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

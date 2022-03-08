@@ -24,8 +24,10 @@ import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.configuration.Sounds;
+import com.andrei1058.bedwars.language.LanguageManager;
 import com.andrei1058.bedwars.listeners.arenaselector.ArenaSelectorListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -94,6 +96,7 @@ public class ArenaGUI {
                 default:
                     continue;
             }
+            LanguageService languageService = LanguageManager.getInstance();
 
             i = BedWars.nms.createItemStack(yml.getString(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", status)),
                     1, (short) yml.getInt(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA.replace("%path%", status)));
@@ -106,12 +109,12 @@ public class ArenaGUI {
 
 
             ItemMeta im = i.getItemMeta();
-            im.setDisplayName(Language.getMsg(p, Messages.ARENA_GUI_ARENA_CONTENT_NAME).replace("{name}", arenas.get(arenaKey).getDisplayName()).replace("{map_name}", arenas.get(arenaKey).getArenaName()));
+            im.setDisplayName(getLangService().getMsg(p, Messages.ARENA_GUI_ARENA_CONTENT_NAME).replace("{name}", arenas.get(arenaKey).getDisplayName()).replace("{map_name}", arenas.get(arenaKey).getArenaName()));
             List<String> lore = new ArrayList<>();
-            for (String s : Language.getList(p, Messages.ARENA_GUI_ARENA_CONTENT_LORE)) {
+            for (String s : getLangService().getList(p, Messages.ARENA_GUI_ARENA_CONTENT_LORE)) {
                 if (!(s.contains("{group}") && arenas.get(arenaKey).getGroup().equalsIgnoreCase("default"))) {
                     lore.add(s.replace("{on}", String.valueOf(arena != null ? arena == arenas.get(arenaKey) ? players : arenas.get(arenaKey).getPlayers().size() : arenas.get(arenaKey).getPlayers().size())).replace("{max}",
-                            String.valueOf(arenas.get(arenaKey).getMaxPlayers())).replace("{status}", arenas.get(arenaKey).getDisplayStatus(Language.getPlayerLanguage(p)))
+                            String.valueOf(arenas.get(arenaKey).getMaxPlayers())).replace("{status}", arenas.get(arenaKey).getDisplayStatus(languageService.getPlayerLanguage(p)))
                             .replace("{group}", arenas.get(arenaKey).getDisplayGroup(p)));
                 }
             }
@@ -131,7 +134,7 @@ public class ArenaGUI {
         if (size % 9 != 0) size = 27;
         if (size > 54) size = 54;
         ArenaSelectorHolder ash = new ArenaSelectorHolder(group);
-        Inventory inv = Bukkit.createInventory(ash, size, Language.getMsg(p, Messages.ARENA_GUI_INV_NAME));
+        Inventory inv = Bukkit.createInventory(ash, size, getLangService().getMsg(p, Messages.ARENA_GUI_INV_NAME));
         //ash.setInv(inv);
 
         String skippedSlotMaterial = BedWars.config.getString(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", "skipped-slot"));
@@ -143,11 +146,11 @@ public class ArenaGUI {
             assert im != null;
             im.setDisplayName(ChatColor.translateAlternateColorCodes(
                     '&',
-                    Language.getMsg(p, Messages.ARENA_GUI_SKIPPED_ITEM_NAME)
+                    getLangService().getMsg(p, Messages.ARENA_GUI_SKIPPED_ITEM_NAME)
                             .replaceAll("\\{serverIp}", BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
             ));
             List<String> lore = new ArrayList<>();
-            for(String s : Language.getList(p, Messages.ARENA_GUI_SKIPPED_ITEM_LORE)) {
+            for(String s : getLangService().getList(p, Messages.ARENA_GUI_SKIPPED_ITEM_LORE)) {
                 lore.add(
                         s
                                 .replaceAll("\\{serverIp}", BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
@@ -218,5 +221,9 @@ public class ArenaGUI {
         } else {
             antiCalledTwice.put(player.getUniqueId(), System.currentTimeMillis() + 2000);
         }
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

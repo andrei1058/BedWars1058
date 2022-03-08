@@ -25,18 +25,18 @@ import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.configuration.Permissions;
+import com.andrei1058.bedwars.language.LanguageManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
-
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class CmdStart extends SubCommand {
 
@@ -54,15 +54,15 @@ public class CmdStart extends SubCommand {
         Player p = (Player) s;
         IArena a = Arena.getArenaByPlayer(p);
         if (a == null){
-            p.sendMessage(getMsg(p, Messages.COMMAND_FORCESTART_NOT_IN_GAME));
+            p.sendMessage(getLangService().getMsg(p, Messages.COMMAND_FORCESTART_NOT_IN_GAME));
             return true;
         }
         if (!a.isPlayer(p)){
-            p.sendMessage(getMsg(p, Messages.COMMAND_FORCESTART_NOT_IN_GAME));
+            p.sendMessage(getLangService().getMsg(p, Messages.COMMAND_FORCESTART_NOT_IN_GAME));
             return true;
         }
         if (!(p.hasPermission(Permissions.PERMISSION_ALL) || p.hasPermission(Permissions.PERMISSION_FORCESTART))){
-            p.sendMessage(getMsg(p, Messages.COMMAND_FORCESTART_NO_PERM));
+            p.sendMessage(getLangService().getMsg(p, Messages.COMMAND_FORCESTART_NO_PERM));
             return true;
         }
         if (a.getStatus() == GameState.playing) return true;
@@ -77,7 +77,7 @@ public class CmdStart extends SubCommand {
         }
         if (a.getStartingTask().getCountdown() < 5) return true;
         a.getStartingTask().setCountdown(5);
-        p.sendMessage(getMsg(p, Messages.COMMAND_FORCESTART_SUCCESS));
+        p.sendMessage(getLangService().getMsg(p, Messages.COMMAND_FORCESTART_SUCCESS));
         return true;
     }
 
@@ -106,5 +106,9 @@ public class CmdStart extends SubCommand {
         if (SetupSession.isInSetupSession(p.getUniqueId())) return false;
 
         return s.hasPermission(Permissions.PERMISSION_FORCESTART);
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

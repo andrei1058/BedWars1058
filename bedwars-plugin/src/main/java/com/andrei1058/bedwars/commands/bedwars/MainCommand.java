@@ -24,6 +24,7 @@ import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.SetupSession;
@@ -31,6 +32,7 @@ import com.andrei1058.bedwars.commands.bedwars.subcmds.regular.*;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.Level;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.Reload;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.*;
+import com.andrei1058.bedwars.language.LanguageManager;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -48,7 +50,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.andrei1058.bedwars.BedWars.*;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class MainCommand extends BukkitCommand implements ParentCommand {
 
@@ -153,9 +154,9 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
 
         if (!commandFound) {
             if (s instanceof Player) {
-                s.sendMessage(getMsg((Player) s, Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
+                s.sendMessage(getLangService().getMsg((Player) s, Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
             } else {
-                s.sendMessage(Language.getDefaultLanguage().m(Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
+                s.sendMessage(getLangService().getDefaultLanguage().m(Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
             }
         }
         return true;
@@ -263,5 +264,9 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
      */
     public static char getDot() {
         return dot;
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

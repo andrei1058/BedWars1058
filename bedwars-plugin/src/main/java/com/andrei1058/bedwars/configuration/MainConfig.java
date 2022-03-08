@@ -24,8 +24,10 @@ import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Misc;
+import com.andrei1058.bedwars.language.LanguageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -309,7 +311,7 @@ public class MainConfig extends ConfigManager {
 
         //Finished old configuration conversion
 
-        //set default server language
+        //register default server language
         String whatLang = "en";
         File[] langs = new File(plugin.getDataFolder(), "/Languages").listFiles();
         if (langs != null) {
@@ -320,22 +322,25 @@ public class MainConfig extends ConfigManager {
                         if (lang.equalsIgnoreCase(yml.getString("language"))) {
                             whatLang = f.getName().replace("messages_", "").replace(".yml", "");
                         }
-                        if (Language.getLang(lang) == null) new Language(BedWars.plugin, lang);
+                        // if default language is not loaded
+                        if (LanguageManager.getInstance().getLang(lang) == null){
+                            LanguageManager.getInstance().register(new Language(BedWars.plugin, lang));
+                        }
                     }
                 }
             }
         }
-        Language def = Language.getLang(whatLang);
+        Language def = LanguageManager.getInstance().getLang(whatLang);
 
         if (def == null) throw new IllegalStateException("Could not found default language: " + whatLang);
-        Language.setDefaultLanguage(def);
+        getLangService().setDefaultLanguage(def);
 
         //remove languages if disabled
         //server language can t be disabled
         for (String iso : yml.getStringList(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES)) {
-            Language l = Language.getLang(iso);
+            Language l = LanguageManager.getInstance().getLang(iso);
             if (l != null) {
-                if (l != def) Language.getLanguages().remove(l);
+                if (l != def) getLangService().unregister(l);
             }
         }
         //
@@ -421,5 +426,9 @@ public class MainConfig extends ConfigManager {
             getYml().options().copyDefaults(true);
             save();
         }
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

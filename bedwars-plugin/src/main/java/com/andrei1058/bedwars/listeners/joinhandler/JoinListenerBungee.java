@@ -24,11 +24,13 @@ import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.ReJoin;
 import com.andrei1058.bedwars.configuration.Permissions;
 import com.andrei1058.bedwars.configuration.Sounds;
+import com.andrei1058.bedwars.language.LanguageManager;
 import com.andrei1058.bedwars.lobbysocket.LoadedUser;
 import com.andrei1058.bedwars.support.preloadedparty.PreLoadedParty;
 import org.bukkit.Bukkit;
@@ -41,8 +43,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
-
 public class JoinListenerBungee implements Listener {
 
     @EventHandler
@@ -54,11 +54,11 @@ public class JoinListenerBungee implements Listener {
         // If is NOT logging in trough BedWarsProxy
         if (proxyUser == null) {
             if (!e.getPlayer().hasPermission("bw.setup")) {
-                e.disallow(PlayerLoginEvent.Result.KICK_OTHER, Language.getMsg(p, Messages.ARENA_JOIN_DENIED_NO_PROXY));
+                e.disallow(PlayerLoginEvent.Result.KICK_OTHER, getLangService().getMsg(p, Messages.ARENA_JOIN_DENIED_NO_PROXY));
             }
         } else {
             // If is logging in trough BedWarsProxy
-            Language playerLang = proxyUser.getLanguage() == null ? Language.getDefaultLanguage() : proxyUser.getLanguage();
+            Language playerLang = proxyUser.getLanguage() == null ? getLangService().getDefaultLanguage() : proxyUser.getLanguage();
 
             // Check if there is an arena to rejoin
             ReJoin reJoin = ReJoin.getPlayer(p);
@@ -88,7 +88,7 @@ public class JoinListenerBungee implements Listener {
                     for (Player inGame : arena.getPlayers()) {
                         if (!Arena.isVip(inGame)) {
                             canJoin = true;
-                            inGame.kickPlayer(getMsg(inGame, Messages.ARENA_JOIN_VIP_KICK));
+                            inGame.kickPlayer(getLangService().getMsg(inGame, Messages.ARENA_JOIN_VIP_KICK));
                             break;
                         }
                     }
@@ -134,11 +134,11 @@ public class JoinListenerBungee implements Listener {
                 }
             } else {
                 // The player is not an admin and he joined using /server or equivalent
-                p.kickPlayer(Language.getMsg(p, Messages.ARENA_JOIN_DENIED_NO_PROXY));
+                p.kickPlayer(getLangService().getMsg(p, Messages.ARENA_JOIN_DENIED_NO_PROXY));
             }
         } else {
             // The player joined using BedWarsProxy
-            Language playerLang = proxyUser.getLanguage() == null ? Language.getDefaultLanguage() : proxyUser.getLanguage();
+            Language playerLang = proxyUser.getLanguage() == null ? getLangService().getDefaultLanguage() : proxyUser.getLanguage();
 
             // Check if has an arena to ReJoin
             ReJoin reJoin = ReJoin.getPlayer(p);
@@ -148,7 +148,7 @@ public class JoinListenerBungee implements Listener {
                     JoinHandlerCommon.displayCustomerDetails(p);
                     reJoin.reJoin(p);
                     // Cache player language
-                    Language.setPlayerLanguage(p.getUniqueId(), playerLang.getIso());
+                    getLangService().setPlayerLanguage(p.getUniqueId(), playerLang.getIso());
                 } else {
                     p.kickPlayer(playerLang.m(Messages.REJOIN_DENIED));
                 }
@@ -168,7 +168,7 @@ public class JoinListenerBungee implements Listener {
             }
 
             // Join allowed, cache player language
-            Language.setPlayerLanguage(p.getUniqueId(), playerLang.getIso());
+            getLangService().setPlayerLanguage(p.getUniqueId(), playerLang.getIso());
             JoinHandlerCommon.displayCustomerDetails(p);
 
             // Join as player
@@ -179,7 +179,7 @@ public class JoinListenerBungee implements Listener {
                 if (proxyUser.getPartyOwnerOrSpectateTarget() == null) {
                     // Add to arena
                     if (!arena.addPlayer(p, true)){
-                        p.kickPlayer(Language.getMsg(p, Messages.ARENA_JOIN_DENIED_NO_PROXY));
+                        p.kickPlayer(getLangService().getMsg(p, Messages.ARENA_JOIN_DENIED_NO_PROXY));
                     }
                 } else {
                     // If is member or owner of a remote party
@@ -210,7 +210,7 @@ public class JoinListenerBungee implements Listener {
                         preLoadedParty.addMember(p);
                     }
                     if (!arena.addPlayer(p, true)){
-                        p.kickPlayer(Language.getMsg(p, Messages.ARENA_JOIN_DENIED_NO_PROXY));
+                        p.kickPlayer(getLangService().getMsg(p, Messages.ARENA_JOIN_DENIED_NO_PROXY));
                     }
                 }
             } else {
@@ -227,6 +227,10 @@ public class JoinListenerBungee implements Listener {
             }
             proxyUser.destroy("Joined as player or spectator. PreLoaded user no longer needed.");
         }
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }
 

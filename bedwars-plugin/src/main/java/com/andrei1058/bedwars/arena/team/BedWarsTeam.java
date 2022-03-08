@@ -30,12 +30,14 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerFirstSpawnEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerReSpawnEvent;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.region.Cuboid;
 import com.andrei1058.bedwars.api.upgrades.EnemyBaseEnterTrap;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.OreGenerator;
 import com.andrei1058.bedwars.configuration.Sounds;
+import com.andrei1058.bedwars.language.LanguageManager;
 import com.andrei1058.bedwars.shop.ShopCache;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
@@ -56,7 +58,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static com.andrei1058.bedwars.BedWars.*;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 @SuppressWarnings("WeakerAccess")
 public class BedWarsTeam implements ITeam {
@@ -106,7 +107,10 @@ public class BedWarsTeam implements ITeam {
         this.arena = arena;
         this.shop = shop;
         this.teamUpgrades = teamUpgrades;
-        Language.saveIfNotExists(ConfigPath.TEAM_NAME_PATH.replace("{arena}", getArena().getArenaName()).replace("{team}", getName()), name);
+        BedWars.getAPI().getLanguageService().saveIfNotExists(
+                ConfigPath.TEAM_NAME_PATH.replace("{arena}", getArena().getArenaName()).replace("{team}",
+                        getName()), name
+        );
         arena.getRegionsList().add(new Cuboid(spawn, arena.getConfig().getInt(ConfigPath.ARENA_SPAWN_PROTECTION), true));
 
         Location drops = getArena().getConfig().getArenaLoc("Team." + getName() + "." + ConfigPath.ARENA_TEAM_KILL_DROPS_LOC);
@@ -357,7 +361,7 @@ public class BedWarsTeam implements ITeam {
             }
         }, 8L);
 
-        nms.sendTitle(p, getMsg(p, Messages.PLAYER_DIE_RESPAWNED_TITLE), "", 0, 20, 0);
+        nms.sendTitle(p, getLangService().getMsg(p, Messages.PLAYER_DIE_RESPAWNED_TITLE), "", 0, 20, 0);
 
         sendDefaultInventory(p, false);
         ShopCache sc = ShopCache.getShopCache(p.getUniqueId());
@@ -499,10 +503,10 @@ public class BedWarsTeam implements ITeam {
             a.setGravity(false);
             if (name != null) {
                 if (isBedDestroyed()) {
-                    a.setCustomName(getMsg(Bukkit.getPlayer(p), Messages.BED_HOLOGRAM_DESTROYED));
+                    a.setCustomName(getLangService().getMsg(Bukkit.getPlayer(p), Messages.BED_HOLOGRAM_DESTROYED));
                     bedDestroyed = true;
                 } else {
-                    a.setCustomName(getMsg(Bukkit.getPlayer(p), Messages.BED_HOLOGRAM_DEFEND));
+                    a.setCustomName(getLangService().getMsg(Bukkit.getPlayer(p), Messages.BED_HOLOGRAM_DEFEND));
                 }
                 a.setCustomNameVisible(true);
             }
@@ -871,5 +875,9 @@ public class BedWarsTeam implements ITeam {
             return;
         }
         this.killDropsLoc = new Vector(loc.getBlockX() + 0.5, loc.getBlockY(), loc.getBlockZ() + 0.5);
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

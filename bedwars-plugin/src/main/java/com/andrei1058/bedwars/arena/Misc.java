@@ -27,10 +27,12 @@ import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.exceptions.InvalidMaterialException;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.region.Region;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.configuration.Sounds;
+import com.andrei1058.bedwars.language.LanguageManager;
 import com.andrei1058.bedwars.stats.PlayerStats;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.google.common.io.ByteArrayDataOutput;
@@ -61,8 +63,6 @@ import java.util.List;
 import java.util.Random;
 
 import static com.andrei1058.bedwars.BedWars.*;
-import static com.andrei1058.bedwars.api.language.Language.getList;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class Misc {
 
@@ -107,7 +107,7 @@ public class Misc {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 // if lobby server is unreachable
                 if (p.isOnline()) {
-                    p.kickPlayer(getMsg(p, Messages.ARENA_RESTART_PLAYER_KICK));
+                    p.kickPlayer(getLangService().getMsg(p, Messages.ARENA_RESTART_PLAYER_KICK));
                     if (arena != null && !notAbandon && arena.getStatus() == GameState.playing) {
                         if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_MARK_LEAVE_AS_ABANDON)) {
                             arena.abandonGame(p);
@@ -285,7 +285,7 @@ public class Misc {
         Bukkit.getScheduler().runTask(plugin, () -> {
 
             /* create inventory */
-            Inventory inv = Bukkit.createInventory(null, config.getInt(ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE), replaceStatsPlaceholders(p, getMsg(p, Messages.PLAYER_STATS_GUI_INV_NAME), true));
+            Inventory inv = Bukkit.createInventory(null, config.getInt(ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE), replaceStatsPlaceholders(p, getLangService().getMsg(p, Messages.PLAYER_STATS_GUI_INV_NAME), true));
 
             /* add custom items to gui */
             for (String s : config.getYml().getConfigurationSection(ConfigPath.GENERAL_CONFIGURATION_STATS_PATH).getKeys(false)) {
@@ -295,9 +295,9 @@ public class Misc {
                 ItemStack i = nms.createItemStack(config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_MATERIAL.replace("%path%", s)).toUpperCase(), 1, (short) config.getInt(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_DATA.replace("%path%", s)));
                 ItemMeta im = i.getItemMeta();
                 im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-                im.setDisplayName(replaceStatsPlaceholders(p, getMsg(p, Messages.PLAYER_STATS_GUI_PATH + "-" + s + "-name"), true));
+                im.setDisplayName(replaceStatsPlaceholders(p, getLangService().getMsg(p, Messages.PLAYER_STATS_GUI_PATH + "-" + s + "-name"), true));
                 List<String> lore = new ArrayList<>();
-                for (String string : getList(p, Messages.PLAYER_STATS_GUI_PATH + "-" + s + "-lore")) {
+                for (String string : getLangService().getList(p, Messages.PLAYER_STATS_GUI_PATH + "-" + s + "-lore")) {
                     lore.add(replaceStatsPlaceholders(p, string, true));
                 }
                 im.setLore(lore);
@@ -330,9 +330,9 @@ public class Misc {
         if (s.contains("{gamesPlayed}"))
             s = s.replace("{gamesPlayed}", String.valueOf(stats.getGamesPlayed()));
         if (s.contains("{firstPlay}"))
-            s = s.replace("{firstPlay}", new SimpleDateFormat(getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(stats.getFirstPlay() != null ? Timestamp.from(stats.getFirstPlay()) : Timestamp.from(Instant.now())));
+            s = s.replace("{firstPlay}", new SimpleDateFormat(getLangService().getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(stats.getFirstPlay() != null ? Timestamp.from(stats.getFirstPlay()) : Timestamp.from(Instant.now())));
         if (s.contains("{lastPlay}"))
-            s = s.replace("{lastPlay}", new SimpleDateFormat(getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(stats.getLastPlay() != null ? Timestamp.from(stats.getLastPlay()) : Timestamp.from(Instant.now())));
+            s = s.replace("{lastPlay}", new SimpleDateFormat(getLangService().getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(stats.getLastPlay() != null ? Timestamp.from(stats.getLastPlay()) : Timestamp.from(Instant.now())));
         if (s.contains("{player}")) s = s.replace("{player}", player.getDisplayName());
         if (s.contains("{playername")) s = s.replace("{playername}", player.getName());
         if (s.contains("{prefix}")) s = s.replace("{prefix}", BedWars.getChatSupport().getPrefix(player));
@@ -374,8 +374,8 @@ public class Misc {
      * Check if location is on a protected region
      */
     public static boolean isBuildProtected(Location l, IArena a) {
-        for (Region region : a.getRegionsList()){
-            if (region.isInRegion(l)){
+        for (Region region : a.getRegionsList()) {
+            if (region.isInRegion(l)) {
                 return true;
             }
         }
@@ -418,5 +418,9 @@ public class Misc {
         double y = Math.max(loc1.getY(), loc2.getY());
         double z = Math.max(loc1.getZ(), loc2.getZ());
         return new Location(loc1.getWorld(), x, y, z);
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

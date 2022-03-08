@@ -20,11 +20,13 @@
 
 package com.andrei1058.bedwars.api.server;
 
+import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.entity.Despawnable;
 import com.andrei1058.bedwars.api.exceptions.InvalidEffectException;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -430,4 +432,8 @@ public abstract class VersionSupport {
     public abstract void playRedStoneDot(Player player);
 
     public abstract void clearArrowsFromPlayerBody(Player player);
+
+    protected LanguageService getLangService() {
+        return ((BedWars)plugin).getLanguageService();
+    }
 }

@@ -29,12 +29,14 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerBedBreakEvent;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.region.Region;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.AutoCreateTeams;
 import com.andrei1058.bedwars.configuration.Sounds;
+import com.andrei1058.bedwars.language.LanguageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -61,7 +63,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.andrei1058.bedwars.BedWars.*;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class BreakPlace implements Listener {
 
@@ -158,7 +159,7 @@ public class BreakPlace implements Listener {
             for (Region r : a.getRegionsList()) {
                 if (r.isInRegion(e.getBlock().getLocation()) && r.isProtected()) {
                     e.setCancelled(true);
-                    p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                    p.sendMessage(getLangService().getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
                     return;
                 }
             }
@@ -282,7 +283,7 @@ public class BreakPlace implements Listener {
                                 if (t.getBed().getBlockX() == x && t.getBed().getBlockY() == y && t.getBed().getBlockZ() == z) {
                                     if (!t.isBedDestroyed()) {
                                         if (t.isMember(p)) {
-                                            p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_OWN_BED));
+                                            p.sendMessage(getLangService().getMsg(p, Messages.INTERACT_CANNOT_BREAK_OWN_BED));
                                             e.setCancelled(true);
                                             if (e.getPlayer().getLocation().getBlock().getType().toString().contains("BED")) {
                                                 e.getPlayer().teleport(e.getPlayer().getLocation().add(0, 0.5, 0));
@@ -295,28 +296,29 @@ public class BreakPlace implements Listener {
                                             Bukkit.getPluginManager().callEvent(breakEvent = new PlayerBedBreakEvent(e.getPlayer(), a.getTeam(p), t, a,
                                                     player -> {
                                                         if (t.isMember(player)) {
-                                                            return getMsg(player, Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM);
+                                                            return getLangService().getMsg(player, Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM);
                                                         } else {
-                                                            return getMsg(player, Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT);
+                                                            return getLangService().getMsg(player, Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT);
                                                         }
                                                     },
                                                     player -> {
                                                         if (t.isMember(player)) {
-                                                            return getMsg(player, Messages.INTERACT_BED_DESTROY_TITLE_ANNOUNCEMENT);
+                                                            return getLangService().getMsg(player, Messages.INTERACT_BED_DESTROY_TITLE_ANNOUNCEMENT);
                                                         }
                                                         return null;
                                                     },
                                                     player -> {
                                                         if (t.isMember(player)) {
-                                                            return getMsg(player, Messages.INTERACT_BED_DESTROY_SUBTITLE_ANNOUNCEMENT);
+                                                            return getLangService().getMsg(player, Messages.INTERACT_BED_DESTROY_SUBTITLE_ANNOUNCEMENT);
                                                         }
                                                         return null;
                                                     }));
+                                            LanguageService languageService = LanguageManager.getInstance();
                                             for (Player on : a.getWorld().getPlayers()) {
                                                 if (breakEvent.getMessage() != null) {
                                                     on.sendMessage(breakEvent.getMessage().apply(on)
                                                             .replace("{TeamColor}", t.getColor().chat().toString())
-                                                            .replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(on)))
+                                                            .replace("{TeamName}", t.getDisplayName(languageService.getPlayerLanguage(on)))
                                                             .replace("{PlayerColor}", a.getTeam(p).getColor().chat().toString())
                                                             .replace("{PlayerName}", p.getDisplayName()));
                                                 }
@@ -339,14 +341,14 @@ public class BreakPlace implements Listener {
             for (Region r : a.getRegionsList()) {
                 if (r.isInRegion(e.getBlock().getLocation()) && r.isProtected()) {
                     e.setCancelled(true);
-                    p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
+                    p.sendMessage(getLangService().getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
                     return;
                 }
             }
 
             if (!a.getConfig().getBoolean(ConfigPath.ARENA_ALLOW_MAP_BREAK)) {
                 if (!a.isBlockPlaced(e.getBlock())) {
-                    p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
+                    p.sendMessage(getLangService().getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
                     e.setCancelled(true);
                 }
             }
@@ -390,8 +392,11 @@ public class BreakPlace implements Listener {
                     Sign b = (Sign) e.getBlock().getState();
                     int line = 0;
                     for (String string : BedWars.signs.getList("format")) {
-                        e.setLine(line, string.replace("[on]", String.valueOf(a.getPlayers().size())).replace("[max]",
-                                String.valueOf(a.getMaxPlayers())).replace("[arena]", a.getDisplayName()).replace("[status]", a.getDisplayStatus(Language.getDefaultLanguage())));
+                        e.setLine(line, string.replace("[on]", String.valueOf(a.getPlayers().size()))
+                                .replace("[max]", String.valueOf(a.getMaxPlayers()))
+                                .replace("[arena]", a.getDisplayName())
+                                .replace("[status]", a.getDisplayStatus(getLangService().getDefaultLanguage()))
+                        );
                         line++;
                     }
                     b.update(true);
@@ -460,23 +465,23 @@ public class BreakPlace implements Listener {
                 for (ITeam t : a.getTeams()) {
                     if (t.getSpawn().distance(e.getBlockClicked().getLocation()) <= a.getConfig().getInt(ConfigPath.ARENA_SPAWN_PROTECTION)) {
                         e.setCancelled(true);
-                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                        p.sendMessage(getLangService().getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
                         return;
                     }
                     if (t.getShop().distance(e.getBlockClicked().getLocation()) <= a.getConfig().getInt(ConfigPath.ARENA_SHOP_PROTECTION)) {
                         e.setCancelled(true);
-                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                        p.sendMessage(getLangService().getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
                         return;
                     }
                     if (t.getTeamUpgrades().distance(e.getBlockClicked().getLocation()) <= a.getConfig().getInt(ConfigPath.ARENA_UPGRADES_PROTECTION)) {
                         e.setCancelled(true);
-                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                        p.sendMessage(getLangService().getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
                         return;
                     }
                     for (IGenerator o : t.getGenerators()) {
                         if (o.getLocation().distance(e.getBlockClicked().getLocation()) <= a.getConfig().getInt(ConfigPath.ARENA_GENERATOR_PROTECTION)) {
                             e.setCancelled(true);
-                            p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                            p.sendMessage(getLangService().getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
                             return;
                         }
                     }
@@ -484,7 +489,7 @@ public class BreakPlace implements Listener {
                 for (IGenerator o : a.getOreGenerators()) {
                     if (o.getLocation().distance(e.getBlockClicked().getLocation()) <= a.getConfig().getInt(ConfigPath.ARENA_GENERATOR_PROTECTION)) {
                         e.setCancelled(true);
-                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                        p.sendMessage(getLangService().getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
                         return;
                     }
                 }
@@ -605,5 +610,9 @@ public class BreakPlace implements Listener {
 
     public static void removeBuildSession(Player p) {
         buildSession.remove(p);
+    }
+    
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

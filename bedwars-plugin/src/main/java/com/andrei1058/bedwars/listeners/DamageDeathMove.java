@@ -31,6 +31,7 @@ import com.andrei1058.bedwars.api.entity.Despawnable;
 import com.andrei1058.bedwars.api.events.player.PlayerInvisibilityPotionEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
@@ -38,6 +39,7 @@ import com.andrei1058.bedwars.arena.LastHit;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import com.andrei1058.bedwars.configuration.Sounds;
+import com.andrei1058.bedwars.language.LanguageManager;
 import com.andrei1058.bedwars.listeners.dropshandler.PlayerDrops;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -59,7 +61,6 @@ import java.text.DecimalFormat;
 import java.util.*;
 
 import static com.andrei1058.bedwars.BedWars.*;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
 import static com.andrei1058.bedwars.arena.LastHit.getLastHit;
 
 public class DamageDeathMove implements Listener {
@@ -139,7 +140,7 @@ public class DamageDeathMove implements Listener {
 
         // projectile hit message #696, #711
         ITeam team = a.getTeam(p);
-        Language lang = Language.getPlayerLanguage(damager);
+        Language lang = LanguageManager.getInstance().getPlayerLanguage(damager);
         if (lang.m(Messages.PLAYER_HIT_BOW).isEmpty()) return;
         String message = lang.m(Messages.PLAYER_HIT_BOW)
                 .replace("{amount}", new DecimalFormat("00.#").format(((Player) e.getEntity()).getHealth() - e.getFinalDamage()))
@@ -353,6 +354,8 @@ public class DamageDeathMove implements Listener {
             BedWars.nms.clearArrowsFromPlayerBody(victim);
             String message = victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL : Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR;
             PlayerKillEvent.PlayerKillCause cause = victimsTeam.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.UNKNOWN_FINAL_KILL : PlayerKillEvent.PlayerKillCause.UNKNOWN;
+            LanguageService langService = LanguageManager.getInstance();
+
             if (damageEvent != null) {
                 if (damageEvent.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
                     LastHit lh = getLastHit(victim);
@@ -436,13 +439,13 @@ public class DamageDeathMove implements Listener {
 
             if (killer != null) killersTeam = a.getTeam(killer);
             String finalMessage = message;
-            PlayerKillEvent playerKillEvent = new PlayerKillEvent(a, victim, killer, player -> Language.getMsg(player, finalMessage), cause);
+            PlayerKillEvent playerKillEvent = new PlayerKillEvent(a, victim, killer, player -> getLangService().getMsg(player, finalMessage), cause);
             Bukkit.getPluginManager().callEvent(playerKillEvent);
             if(killer != null && playerKillEvent.playSound()) {
                 Sounds.playSound(ConfigPath.SOUNDS_KILL, killer);
             }
             for (Player on : a.getPlayers()) {
-                Language lang = Language.getPlayerLanguage(on);
+                Language lang = langService.getPlayerLanguage(on);
                 on.sendMessage(playerKillEvent.getMessage().apply(on).
                         replace("{PlayerColor}", victimsTeam.getColor().chat().toString()).replace("{PlayerName}", victim.getDisplayName())
                         .replace("{PlayerTeamName}", victimsTeam.getDisplayName(lang))
@@ -451,7 +454,7 @@ public class DamageDeathMove implements Listener {
                         .replace("{KillerTeamName}", killersTeam == null ? "" : killersTeam.getDisplayName(lang)));
             }
             for (Player on : a.getSpectators()) {
-                Language lang = Language.getPlayerLanguage(on);
+                Language lang = langService.getPlayerLanguage(on);
                 on.sendMessage(playerKillEvent.getMessage().apply(on).
                         replace("{PlayerColor}", victimsTeam.getColor().chat().toString()).replace("{PlayerName}", victim.getDisplayName())
                         .replace("{KillerColor}", killersTeam == null ? "" : killersTeam.getColor().chat().toString())
@@ -501,7 +504,7 @@ public class DamageDeathMove implements Listener {
         } else {
             if (a.isSpectator(e.getPlayer())) {
                 e.setRespawnLocation(a.getSpectatorLocation());
-                String iso = Language.getPlayerLanguage(e.getPlayer()).getIso();
+                String iso = LanguageManager.getInstance().getPlayerLanguage(e.getPlayer()).getIso();
                 for (IGenerator o : a.getOreGenerators()) {
                     o.updateHolograms(e.getPlayer(), iso);
                 }
@@ -531,10 +534,12 @@ public class DamageDeathMove implements Listener {
                 e.setRespawnLocation(a.getSpectatorLocation());
                 a.addSpectator(e.getPlayer(), true, null);
                 t.getMembers().remove(e.getPlayer());
-                e.getPlayer().sendMessage(getMsg(e.getPlayer(), Messages.PLAYER_DIE_ELIMINATED_CHAT));
+                e.getPlayer().sendMessage(getLangService().getMsg(e.getPlayer(), Messages.PLAYER_DIE_ELIMINATED_CHAT));
                 if (t.getMembers().isEmpty()) {
                     for (Player p : a.getWorld().getPlayers()) {
-                        p.sendMessage(getMsg(p, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", t.getColor().chat().toString()).replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(p))));
+                        p.sendMessage(getLangService().getMsg(p, Messages.TEAM_ELIMINATED_CHAT)
+                                .replace("{TeamColor}", t.getColor().chat().toString())
+                                .replace("{TeamName}", t.getDisplayName(LanguageManager.getInstance().getPlayerLanguage(p))));
                     }
                     Bukkit.getScheduler().runTaskLater(plugin, a::checkWinner, 40L);
                 }
@@ -560,7 +565,7 @@ public class DamageDeathMove implements Listener {
             if (e.getFrom().getChunk() != e.getTo().getChunk()) {
 
                 /* update armor-stands hidden by nms */
-                String iso = Language.getPlayerLanguage(e.getPlayer()).getIso();
+                String iso = getLangService().getPlayerLanguage(e.getPlayer()).getIso();
                 for (IGenerator o : a.getOreGenerators()) {
                     o.updateHolograms(e.getPlayer(), iso);
                 }
@@ -710,5 +715,9 @@ public class DamageDeathMove implements Listener {
                     shop.getInt(ConfigPath.SHOP_SPECIAL_SILVERFISH_DESPAWN),
                     BedWars.shop.getYml().getDouble(ConfigPath.SHOP_SPECIAL_SILVERFISH_DAMAGE));
         }
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

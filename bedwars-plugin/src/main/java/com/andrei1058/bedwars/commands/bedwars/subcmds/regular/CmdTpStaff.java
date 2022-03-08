@@ -25,16 +25,16 @@ import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.language.LanguageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class CmdTpStaff extends SubCommand {
 
@@ -49,24 +49,24 @@ public class CmdTpStaff extends SubCommand {
         if (!(s instanceof Player)) return true;
         Player p2 = (Player) s;
         if (args.length != 1) {
-            s.sendMessage(Language.getMsg(p2, Messages.COMMAND_TP_USAGE));
+            s.sendMessage(getLangService().getMsg(p2, Messages.COMMAND_TP_USAGE));
             return true;
         }
 
         if (!hasPermission(p2)) {
-            p2.sendMessage(getMsg(p2, Messages.COMMAND_FORCESTART_NO_PERM));
+            p2.sendMessage(getLangService().getMsg(p2, Messages.COMMAND_FORCESTART_NO_PERM));
             return true;
         }
 
         Player p = Bukkit.getPlayer(args[0]);
         if (p == null) {
-            s.sendMessage(Language.getMsg(p2, Messages.COMMAND_TP_PLAYER_NOT_FOUND));
+            s.sendMessage(getLangService().getMsg(p2, Messages.COMMAND_TP_PLAYER_NOT_FOUND));
             return true;
         }
         IArena a = Arena.getArenaByPlayer(p);
         IArena a2 = Arena.getArenaByPlayer(p2);
         if (a == null) {
-            s.sendMessage(Language.getMsg(p2, Messages.COMMAND_TP_NOT_IN_ARENA));
+            s.sendMessage(getLangService().getMsg(p2, Messages.COMMAND_TP_NOT_IN_ARENA));
             return true;
         }
 
@@ -82,7 +82,7 @@ public class CmdTpStaff extends SubCommand {
             }
             a.addSpectator(p2, false, p.getLocation());
         } else {
-            s.sendMessage(Language.getMsg(((Player) s), Messages.COMMAND_TP_NOT_STARTED));
+            s.sendMessage(getLangService().getMsg(((Player) s), Messages.COMMAND_TP_NOT_STARTED));
         }
 
         return true;
@@ -100,5 +100,9 @@ public class CmdTpStaff extends SubCommand {
             }
         }
         return players;
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

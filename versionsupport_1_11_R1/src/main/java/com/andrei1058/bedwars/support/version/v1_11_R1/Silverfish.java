@@ -22,6 +22,7 @@ package com.andrei1058.bedwars.support.version.v1_11_R1;
 
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import com.google.common.collect.Sets;
@@ -79,15 +80,16 @@ public class Silverfish extends EntitySilverfish {
     public static LivingEntity spawn(Location loc, ITeam team, double speed, double health, int despawn, double damage) {
         WorldServer mcWorld = ((CraftWorld)loc.getWorld()).getHandle();
         Silverfish customEnt = new Silverfish(mcWorld, team);
+        LanguageService langServ = VersionCommon.api.getLanguageService();
         customEnt.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
         customEnt.getAttributeInstance(GenericAttributes.maxHealth).setValue(health);
         customEnt.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(speed);
         customEnt.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(damage);
         customEnt.getAttributeInstance(GenericAttributes.f).setValue(speed);
         ((CraftLivingEntity)customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
-        customEnt.setCustomName(Language.getDefaultLanguage().m(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME)
+        customEnt.setCustomName(langServ.getDefaultLanguage().m(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME)
                 .replace("{despawn}", String.valueOf(despawn)
-                        .replace("{health}", StringUtils.repeat(Language.getDefaultLanguage().m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH)+" ", 10))
+                        .replace("{health}", StringUtils.repeat(langServ.getDefaultLanguage().m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH)+" ", 10))
                         .replace("{TeamColor}", team.getColor().chat().toString())));
         customEnt.setCustomNameVisible(true);
         mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);

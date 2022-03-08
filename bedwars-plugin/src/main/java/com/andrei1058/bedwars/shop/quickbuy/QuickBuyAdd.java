@@ -21,7 +21,9 @@
 package com.andrei1058.bedwars.shop.quickbuy;
 
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.language.LanguageManager;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.shop.ShopManager;
 import com.andrei1058.bedwars.shop.main.CategoryContent;
@@ -44,7 +46,7 @@ public class QuickBuyAdd {
     }
 
     public void open(Player player, CategoryContent cc){
-        Inventory inv = Bukkit.createInventory(null, ShopManager.getShop().getInvSize(), Language.getMsg(player, Messages.SHOP_QUICK_ADD_NAME));
+        Inventory inv = Bukkit.createInventory(null, ShopManager.getShop().getInvSize(), getLangService().getMsg(player, Messages.SHOP_QUICK_ADD_NAME));
         PlayerQuickBuyCache cache = PlayerQuickBuyCache.getQuickBuyCache(player.getUniqueId());
         ShopCache sc = ShopCache.getShopCache(player.getUniqueId());
         if (sc == null || cache == null){
@@ -60,5 +62,9 @@ public class QuickBuyAdd {
 
     public static HashMap<UUID, CategoryContent> getQuickBuyAdds() {
         return new HashMap<>(quickBuyAdds);
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

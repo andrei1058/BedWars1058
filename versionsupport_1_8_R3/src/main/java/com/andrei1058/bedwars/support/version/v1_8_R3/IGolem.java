@@ -22,6 +22,7 @@ package com.andrei1058.bedwars.support.version.v1_8_R3;
 
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import net.minecraft.server.v1_8_R3.*;
@@ -84,6 +85,7 @@ public class IGolem extends EntityIronGolem {
     public static LivingEntity spawn(Location loc, ITeam bedWarsTeam, double speed, double health, int despawn) {
         WorldServer mcWorld = ((CraftWorld) loc.getWorld()).getHandle();
         IGolem customEnt = new IGolem(mcWorld, bedWarsTeam);
+        LanguageService langServ = VersionCommon.api.getLanguageService();
 
         customEnt.getAttributeInstance(GenericAttributes.maxHealth).setValue(health);
         customEnt.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(speed);
@@ -91,9 +93,9 @@ public class IGolem extends EntityIronGolem {
         ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
         customEnt.setCustomNameVisible(true);
 
-        customEnt.setCustomName(Language.getDefaultLanguage().m(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME)
+        customEnt.setCustomName(langServ.getDefaultLanguage().m(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME)
                 .replace("{despawn}", String.valueOf(despawn))
-                .replace("{health}", StringUtils.repeat(Language.getDefaultLanguage().m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH) + " ", 10))
+                .replace("{health}", StringUtils.repeat(langServ.getDefaultLanguage().m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH) + " ", 10))
                 .replace("{TeamColor}", bedWarsTeam.getColor().chat().toString()));
         mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
         return (LivingEntity) customEnt.getBukkitEntity();

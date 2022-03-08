@@ -23,11 +23,13 @@ package com.andrei1058.bedwars.upgrades;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.upgrades.MenuContent;
 import com.andrei1058.bedwars.api.upgrades.UpgradesIndex;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.configuration.UpgradesConfig;
+import com.andrei1058.bedwars.language.LanguageManager;
 import com.andrei1058.bedwars.upgrades.listeners.InventoryListener;
 import com.andrei1058.bedwars.upgrades.listeners.UpgradeOpenListener;
 import com.andrei1058.bedwars.upgrades.menu.*;
@@ -458,13 +460,13 @@ public class UpgradesManager {
                 break;
         }
 
-        return Language.getMsg(p, c);
+        return getLangService().getMsg(p, c);
     }
 
     public static String getCurrencyMsg(Player p, int money, String currency) {
         String c;
         if (currency == null) {
-            return Language.getMsg(p, money == 1 ? Messages.MEANING_VAULT_SINGULAR : Messages.MEANING_VAULT_PLURAL);
+            return getLangService().getMsg(p, money == 1 ? Messages.MEANING_VAULT_SINGULAR : Messages.MEANING_VAULT_PLURAL);
         }
 
         switch (currency.toLowerCase()) {
@@ -485,7 +487,7 @@ public class UpgradesManager {
                 break;
         }
 
-        return Language.getMsg(p, c);
+        return getLangService().getMsg(p, c);
     }
 
     public static String getCurrencyMsg(Player p, int money, Material currency) {
@@ -509,7 +511,7 @@ public class UpgradesManager {
                 break;
         }
 
-        return Language.getMsg(p, c);
+        return getLangService().getMsg(p, c);
     }
 
     public static ChatColor getCurrencyColor(Material currency) {
@@ -529,5 +531,9 @@ public class UpgradesManager {
 
     public static UpgradesConfig getConfiguration() {
         return upgrades;
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

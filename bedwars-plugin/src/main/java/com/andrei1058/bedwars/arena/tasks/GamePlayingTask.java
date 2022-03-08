@@ -27,10 +27,11 @@ import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerInvisibilityPotionEvent;
-import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.tasks.PlayingTask;
 import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.language.LanguageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -38,10 +39,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Map;
-import java.util.UUID;
 
 import static com.andrei1058.bedwars.BedWars.nms;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class GamePlayingTask implements Runnable, PlayingTask {
 
@@ -109,12 +108,16 @@ public class GamePlayingTask implements Runnable, PlayingTask {
                 beds_destroy_countdown--;
                 if (getBedsDestroyCountdown() == 0) {
                     for (Player p : getArena().getPlayers()) {
-                        nms.sendTitle(p, getMsg(p, Messages.NEXT_EVENT_TITLE_ANNOUNCE_BEDS_DESTROYED), getMsg(p, Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_BEDS_DESTROYED), 0, 30, 0);
-                        p.sendMessage(getMsg(p, Messages.NEXT_EVENT_CHAT_ANNOUNCE_BEDS_DESTROYED));
+                        nms.sendTitle(p, getLangService().getMsg(p, Messages.NEXT_EVENT_TITLE_ANNOUNCE_BEDS_DESTROYED),
+                                getLangService().getMsg(p, Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_BEDS_DESTROYED), 0, 30, 0
+                        );
+                        p.sendMessage(getLangService().getMsg(p, Messages.NEXT_EVENT_CHAT_ANNOUNCE_BEDS_DESTROYED));
                     }
                     for (Player p : getArena().getSpectators()) {
-                        nms.sendTitle(p, getMsg(p, Messages.NEXT_EVENT_TITLE_ANNOUNCE_BEDS_DESTROYED), getMsg(p, Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_BEDS_DESTROYED), 0, 30, 0);
-                        p.sendMessage(getMsg(p, Messages.NEXT_EVENT_CHAT_ANNOUNCE_BEDS_DESTROYED));
+                        nms.sendTitle(p, getLangService().getMsg(p, Messages.NEXT_EVENT_TITLE_ANNOUNCE_BEDS_DESTROYED),
+                                getLangService().getMsg(p, Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_BEDS_DESTROYED), 0, 30, 0
+                        );
+                        p.sendMessage(getLangService().getMsg(p, Messages.NEXT_EVENT_CHAT_ANNOUNCE_BEDS_DESTROYED));
                     }
                     for (ITeam t : getArena().getTeams()) {
                         t.setBedDestroyed(true);
@@ -125,20 +128,32 @@ public class GamePlayingTask implements Runnable, PlayingTask {
             case ENDER_DRAGON:
                 dragon_spawn_countdown--;
                 if (getDragonSpawnCountdown() == 0) {
+                    LanguageService languageService = LanguageManager.getInstance();
+
                     for (Player p : getArena().getPlayers()) {
-                        nms.sendTitle(p, getMsg(p, Messages.NEXT_EVENT_TITLE_ANNOUNCE_SUDDEN_DEATH), getMsg(p, Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_SUDDEN_DEATH), 0, 30, 0);
+                        nms.sendTitle(p, getLangService().getMsg(p, Messages.NEXT_EVENT_TITLE_ANNOUNCE_SUDDEN_DEATH),
+                                getLangService().getMsg(p, Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_SUDDEN_DEATH), 0, 30, 0
+                        );
                         for (ITeam t : getArena().getTeams()) {
                             if (t.getMembers().isEmpty()) continue;
-                            p.sendMessage(getMsg(p, Messages.NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH).replace("{TeamDragons}", String.valueOf(t.getDragons()))
-                                    .replace("{TeamColor}", t.getColor().chat().toString()).replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(p))));
+                            p.sendMessage(getLangService().getMsg(p, Messages.NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH)
+                                    .replace("{TeamDragons}", String.valueOf(t.getDragons()))
+                                    .replace("{TeamColor}", t.getColor().chat().toString())
+                                    .replace("{TeamName}", t.getDisplayName(languageService.getPlayerLanguage(p)))
+                            );
                         }
                     }
                     for (Player p : getArena().getSpectators()) {
-                        nms.sendTitle(p, getMsg(p, Messages.NEXT_EVENT_TITLE_ANNOUNCE_SUDDEN_DEATH), getMsg(p, Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_SUDDEN_DEATH), 0, 30, 0);
+                        nms.sendTitle(p, getLangService().getMsg(p, Messages.NEXT_EVENT_TITLE_ANNOUNCE_SUDDEN_DEATH),
+                                getLangService().getMsg(p, Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_SUDDEN_DEATH), 0, 30, 0
+                        );
                         for (ITeam t : getArena().getTeams()) {
                             if (t.getMembers().isEmpty()) continue;
-                            p.sendMessage(getMsg(p, Messages.NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH).replace("{TeamDragons}", String.valueOf(t.getDragons()))
-                                    .replace("{TeamColor}", t.getColor().chat().toString()).replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(p))));
+                            p.sendMessage(getLangService().getMsg(p, Messages.NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH)
+                                    .replace("{TeamDragons}", String.valueOf(t.getDragons()))
+                                    .replace("{TeamColor}", t.getColor().chat().toString())
+                                    .replace("{TeamName}", t.getDisplayName(languageService.getPlayerLanguage(p)))
+                            );
                         }
                     }
                     getArena().updateNextEvent();
@@ -148,7 +163,7 @@ public class GamePlayingTask implements Runnable, PlayingTask {
                             l.clone().subtract(0, y, 0).getBlock().setType(Material.AIR);
                         }
                     }
-                    for (ITeam team : arena.getTeams()){
+                    for (ITeam team : arena.getTeams()) {
                         for (IGenerator o : team.getGenerators()) {
                             Location l = o.getLocation();
                             for (int y = 0; y < 20; y++) {
@@ -173,6 +188,7 @@ public class GamePlayingTask implements Runnable, PlayingTask {
                 break;
         }
         int distance = 0;
+        LanguageService languageService = LanguageManager.getInstance();
         for (ITeam t : getArena().getTeams()) {
             if (t.getSize() > 1) {
                 for (Player p : t.getMembers()) {
@@ -184,8 +200,11 @@ public class GamePlayingTask implements Runnable, PlayingTask {
                             distance = (int) p.getLocation().distance(p2.getLocation());
                         }
                     }
-                    nms.playAction(p, getMsg(p, Messages.FORMATTING_ACTION_BAR_TRACKING).replace("{team}", t.getColor().chat() + t.getDisplayName(Language.getPlayerLanguage(p)))
-                            .replace("{distance}", t.getColor().chat().toString() + distance).replace("&", "§"));
+                    nms.playAction(p, getLangService().getMsg(p, Messages.FORMATTING_ACTION_BAR_TRACKING)
+                            .replace("{team}", t.getColor().chat() + t.getDisplayName(languageService.getPlayerLanguage(p)))
+                            //todo FIXME: why am I replacing with § ?
+                            .replace("{distance}", t.getColor().chat().toString() + distance).replace("&", "§")
+                    );
                 }
             }
 
@@ -220,7 +239,7 @@ public class GamePlayingTask implements Runnable, PlayingTask {
                         continue;
                     }
                     ITeam t = a.getTeam(e.getKey());
-                    if (t == null){
+                    if (t == null) {
                         a.addSpectator(e.getKey(), true, null);
                     } else {
                         t.respawnMember(e.getKey());
@@ -228,10 +247,14 @@ public class GamePlayingTask implements Runnable, PlayingTask {
                         e.getKey().setFlying(false);
                     }
                 } else {
-                    nms.sendTitle(e.getKey(), getMsg(e.getKey(), Messages.PLAYER_DIE_RESPAWN_TITLE).replace("{time}",
-                            String.valueOf(e.getValue())), getMsg(e.getKey(), Messages.PLAYER_DIE_RESPAWN_SUBTITLE).replace("{time}",
-                            String.valueOf(e.getValue())), 0, 30, 0);
-                    e.getKey().sendMessage(getMsg(e.getKey(), Messages.PLAYER_DIE_RESPAWN_CHAT).replace("{time}", String.valueOf(e.getValue())));
+                    nms.sendTitle(e.getKey(), getLangService().getMsg(e.getKey(), Messages.PLAYER_DIE_RESPAWN_TITLE)
+                                    .replace("{time}", String.valueOf(e.getValue())),
+                            getLangService().getMsg(e.getKey(), Messages.PLAYER_DIE_RESPAWN_SUBTITLE)
+                                    .replace("{time}", String.valueOf(e.getValue())), 0, 30, 0
+                    );
+                    e.getKey().sendMessage(getLangService().getMsg(e.getKey(), Messages.PLAYER_DIE_RESPAWN_CHAT)
+                            .replace("{time}", String.valueOf(e.getValue()))
+                    );
                     getArena().getRespawnSessions().replace(e.getKey(), e.getValue() - 1);
                 }
             }
@@ -261,6 +284,10 @@ public class GamePlayingTask implements Runnable, PlayingTask {
 
     public void cancel() {
         task.cancel();
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }
 
