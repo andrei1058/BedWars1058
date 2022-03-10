@@ -277,9 +277,9 @@ public class Hindi extends Language {
         yml.addDefault(Messages.NEXT_EVENT_TITLE_ANNOUNCE_SUDDEN_DEATH, "&cSudden Death");
         yml.addDefault(Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_SUDDEN_DEATH, "");
         yml.addDefault(Messages.NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH, "&cSUDDEN DEATH: &6&b{TeamDragons} {TeamColor}{TeamName} Dragon!");
-        yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&6+{xp} BedWars praapt kiye (Play Time).");
-        yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&6+{xp} BedWars praapt kiye (Game Win).");
-        yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "{prefix}&6+{xp} BedWars Experience praapt kiye (Team Support).");
+        yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&b+{xp} BedWars praapt kiye (Play Time).");
+        yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&b+{xp} BedWars praapt kiye (Game Win).");
+        yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "{prefix}&b+{xp} BedWars Experience praapt kiye (Team Support).");
 
         yml.addDefault(Messages.MONEY_REWARD_PER_MINUTE, "{prefix}&6+{money} Coins mila (Play Time).");
         yml.addDefault(Messages.MONEY_REWARD_WIN, "{prefix}&6+{money} Coins mila (Game Win).");
