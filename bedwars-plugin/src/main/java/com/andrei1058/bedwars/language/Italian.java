@@ -159,11 +159,11 @@ public class Italian extends Language {
         yml.addDefault(Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT, "{prefix}&eI generatori di {generatorType} &esono stati potenziati a livello &c{tier}");
         yml.addDefault(Messages.FORMATTING_TEAM_WINNER_FORMAT, "      {TeamColor}{TeamName} &7- {members}");
         yml.addDefault(Messages.FORMATTING_SOLO_WINNER_FORMAT, "                 {TeamColor}{TeamName} &7- {members}");
-        yml.addDefault(Messages.FORMATTING_CHAT_LOBBY, "{level}{vPrefix}&7{player}{vSuffix}: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_WAITING, "{level}{vPrefix}&7{player}{vSuffix}: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_SHOUT, "{level}{vPrefix}&6[SHOUT] {team} &7{player}&f{vSuffix}: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_TEAM, "{level}{vPrefix}&f{team}&7 {player}{vSuffix} {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_SPECTATOR, "{level}{vPrefix}&7[SPECTATOR] {player}{vSuffix}: {message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_LOBBY, "{level} {vPrefix}{player}{vSuffix}&7: &f{message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_WAITING, "{level} {vPrefix}{player}{vSuffix}&7: &f{message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_SHOUT, "{level} &6[SHOUT] {team} {vPrefix}{player}{vSuffix}&7: &f{message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_TEAM, "{level} &f{team} {vPrefix}{player}{vSuffix}&7: &f{message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_SPECTATOR, "{level} &7[SPECTATOR] {vPrefix}{player}{vSuffix}&7: &f{message}");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_HEALTH, Arrays.asList("&c❤", "&aVita"));
         yml.addDefault(Messages.FORMATTING_SPECTATOR_TEAM, "SPECT");
         yml.addDefault(Messages.FORMATTING_SPECTATOR_COLOR, "&7");
