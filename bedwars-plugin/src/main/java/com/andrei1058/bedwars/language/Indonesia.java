@@ -157,11 +157,11 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD, "&a&lZamrud");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIMER, "&eMuncul dalam &c{seconds} &edetik");
         yml.addDefault(Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT, "{prefix}{generatorType} Generator &etelah ditingkatkan ke Tingkat &c{tier}");
-        yml.addDefault(Messages.FORMATTING_CHAT_LOBBY, "{level}{vPrefix}&7{player}{vSuffix}: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_WAITING, "{level}{vPrefix}&7{player}{vSuffix}: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_SHOUT, "&6[SHOUT] {team} {level}{vPrefix}&7{player}&f{vSuffix}: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_TEAM, "&f{team} {level}{vPrefix}&7{player}{vSuffix} {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_SPECTATOR, "&7[PENONTON] {level}{vPrefix}{player}{vSuffix}: {message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_LOBBY, "{level} {vPrefix}{player}{vSuffix}&7: &f{message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_WAITING, "{level} {vPrefix}{player}{vSuffix}&7: &f{message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_SHOUT, "{level} &6[SHOUT] {team} {vPrefix}{player}{vSuffix}&7: &f{message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_TEAM, "{level} &f{team} {vPrefix}{player}{vSuffix}&7: &f{message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_SPECTATOR, "{level} &7[SPECTATOR] {vPrefix}{player}{vSuffix}&7: &f{message}");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_HEALTH, Arrays.asList("&c❤"));
         yml.addDefault(Messages.FORMATTING_SPECTATOR_TEAM, "PENONTON");
         yml.addDefault(Messages.FORMATTING_SPECTATOR_COLOR, "&7");
