@@ -33,12 +33,12 @@ public class GeneratorsConfig extends ConfigManager {
         YamlConfiguration yml = getYml();
         yml.options().header(plugin.getDescription().getName() + " by andrei1058." +
                 "\ngenerators.yml Documentation: https://gitlab.com/andrei1058/BedWars1058/wikis/generators-configuration\n");
-        yml.addDefault("Default." + ConfigPath.GENERATOR_IRON_DELAY, 2);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_IRON_DELAY, 1.5);
         yml.addDefault("Default." + ConfigPath.GENERATOR_IRON_AMOUNT, 2);
-        yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_DELAY, 6);
-        yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_AMOUNT, 2);
-        yml.addDefault("Default." + ConfigPath.GENERATOR_IRON_SPAWN_LIMIT, 32);
-        yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_SPAWN_LIMIT, 7);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_DELAY, 2.75);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_AMOUNT, 1);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_IRON_SPAWN_LIMIT, 240);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_SPAWN_LIMIT, 24);
         yml.addDefault(ConfigPath.GENERATOR_STACK_ITEMS, false);
 
         yml.addDefault("Default." + ConfigPath.GENERATOR_DIAMOND_TIER_I_DELAY, 30);
