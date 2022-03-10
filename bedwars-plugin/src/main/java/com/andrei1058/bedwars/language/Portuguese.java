@@ -276,9 +276,9 @@ public class Portuguese extends Language {
         yml.addDefault(Messages.NEXT_EVENT_TITLE_ANNOUNCE_SUDDEN_DEATH, "&cMorte Súbita");
         yml.addDefault(Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_SUDDEN_DEATH, "");
         yml.addDefault(Messages.NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH, "&cMORTE SÚBITA: &6&b{TeamDragons} dragões do {TeamColor}{TeamName}");
-        yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&6+{xp} BedWars Experience Received (Tempo de jogo).");
-        yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&6+{xp} BedWars Experience Received (Vencer o jogo).");
-        yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "{prefix}&6+{xp} BedWars Experience Received (Suporte da equipe).");
+        yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&b+{xp} BedWars Experience Received (Tempo de jogo).");
+        yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&b+{xp} BedWars Experience Received (Vencer o jogo).");
+        yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "{prefix}&b+{xp} BedWars Experience Received (Suporte da equipe).");
 
         yml.addDefault(Messages.MONEY_REWARD_PER_MINUTE, "{prefix}&6+{money} Moedas (Tempo de jogo).");
         yml.addDefault(Messages.MONEY_REWARD_WIN, "{prefix}&6+{money} Moedas (Vencer o jogo).");
