@@ -303,9 +303,9 @@ public class Polish extends Language{
         yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&fTwoj poziom: {level}", "", "&fProgress: &a{currentXp}&7/&b{requiredXp}", "{progress}", "", "&7{player}", "", "&fMonety: &a{money}"
                 , "", "&fWygrane: &a{wins}", "&fZabojstwa: &a{kills}", "", "&e{server_ip}"));
 
-        yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&6+{xp} Otrzymano doswiedczenie BedWars (Czas grania).");
-        yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&6+{xp} Otrzymano doswiedczenie BedWars (Wygrana gra).");
-        yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "{prefix}&6+{xp} Otrzymano doswiedczenie BedWars (Team Support).");
+        yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&b+{xp} Otrzymano doswiedczenie BedWars (Czas grania).");
+        yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&b+{xp} Otrzymano doswiedczenie BedWars (Wygrana gra).");
+        yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "{prefix}&b+{xp} Otrzymano doswiedczenie BedWars (Team Support).");
 
         yml.addDefault(Messages.MONEY_REWARD_PER_MINUTE, "{prefix}&6+{money} Monety (Czas grania).");
         yml.addDefault(Messages.MONEY_REWARD_WIN, "{prefix}&6+{money} Monety (Wygrana gra).");
