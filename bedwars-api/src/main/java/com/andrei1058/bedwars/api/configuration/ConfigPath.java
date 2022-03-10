@@ -299,5 +299,12 @@ public class ConfigPath {
     public static final String SHOP_PATH_CATEGORY_POTIONS = "potions-category";
     public static final String SHOP_PATH_CATEGORY_UTILITY = "utility-category";
 
+    public static final String REDIS_ENABLED = "redis.enabled";
+    public static final String REDIS_HOST = "redis.host";
+    public static final String REDIS_PORT = "redis.port";
+    public static final String REDIS_CHANNEL = "redis.channel";
+    public static final String REDIS_AUTH_USERNAME = "redis.auth.username";
+    public static final String REDIS_AUTH_PASSWORD = "redis.auth.password";
+
     public static final String TEAM_NAME_PATH = "team-name-{arena}-{team}";
 }
