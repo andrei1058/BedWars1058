@@ -277,9 +277,9 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.NEXT_EVENT_TITLE_ANNOUNCE_SUDDEN_DEATH, "&cKematian Mendadak");
         yml.addDefault(Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_SUDDEN_DEATH, "");
         yml.addDefault(Messages.NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH, "&cKEMATIAN MENDADAK: &6&b{TeamDragons} {TeamColor}Naga {TeamName}!");
-        yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&6+{xp} Experience Bed Wars Diterima (Waktu Bermain).");
-        yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&6+{xp} Experience Bed Wars Diterima (Memenangkan Permainan).");
-        yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "{prefix}&6+{xp} Experience Bed Wars Diterima (Dukungan Tim).");
+        yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&b+{xp} Experience Bed Wars Diterima (Waktu Bermain).");
+        yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&b+{xp} Experience Bed Wars Diterima (Memenangkan Permainan).");
+        yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "{prefix}&b+{xp} Experience Bed Wars Diterima (Dukungan Tim).");
 
         yml.addDefault(Messages.MONEY_REWARD_PER_MINUTE, "{prefix}&6+{money} Koin (Waktu Bermain).");
         yml.addDefault(Messages.MONEY_REWARD_WIN, "{prefix}&6+{money} Koin (Memenangkan Permainan).");
