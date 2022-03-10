@@ -106,17 +106,17 @@ public class LevelsConfig extends ConfigManager {
             levels.getYml().addDefault("levels.3000-3099.name", "&8[{number}✪] ");
             levels.getYml().addDefault("levels.3000-3099.rankup-cost", 5000);
             levels.getYml().addDefault("levels.3100-3199.name", "&0[{number}⚝] ");
-            levels.getYml().addDefault("levels.3100-3199.rankup-cost", 2000);
+            levels.getYml().addDefault("levels.3100-3199.rankup-cost", 5000);
             levels.getYml().addDefault("levels.3200-3299.name", "&7[{number}⚝] ");
-            levels.getYml().addDefault("levels.3200-3299.rankup-cost", 2500);
+            levels.getYml().addDefault("levels.3200-3299.rankup-cost", 5000);
             levels.getYml().addDefault("levels.3300-3399.name", "&f[{number}⚝] ");
-            levels.getYml().addDefault("levels.3300-3399.rankup-cost", 3000);
+            levels.getYml().addDefault("levels.3300-3399.rankup-cost", 5000);
             levels.getYml().addDefault("levels.3400-3499.name", "&6[{number}⚝] ");
-            levels.getYml().addDefault("levels.3400-3499.rankup-cost", 3500);
+            levels.getYml().addDefault("levels.3400-3499.rankup-cost", 5000);
             levels.getYml().addDefault("levels.3500-3599.name", "&b[{number}⚝] ");
-            levels.getYml().addDefault("levels.3500-3599.rankup-cost", 4000);
+            levels.getYml().addDefault("levels.3500-3599.rankup-cost", 5000);
             levels.getYml().addDefault("levels.3600-3699.name", "&2[{number}⚝] ");
-            levels.getYml().addDefault("levels.3600-3699.rankup-cost", 4500);
+            levels.getYml().addDefault("levels.3600-3699.rankup-cost", 5000);
             levels.getYml().addDefault("levels.3700-3799.name", "&3[{number}⚝] ");
             levels.getYml().addDefault("levels.3700-3799.rankup-cost", 5000);
             levels.getYml().addDefault("levels.3800-3899.name", "&4[{number}⚝] ");
@@ -126,17 +126,17 @@ public class LevelsConfig extends ConfigManager {
             levels.getYml().addDefault("levels.4000-4099.name", "&9[{number}⚝] ");
             levels.getYml().addDefault("levels.4000-4099.rankup-cost", 5000);
             levels.getYml().addDefault("levels.4100-4199.name", "&c[{number}⚝] ");
-            levels.getYml().addDefault("levels.4100-4199.rankup-cost", 2000);
+            levels.getYml().addDefault("levels.4100-4199.rankup-cost", 5000);
             levels.getYml().addDefault("levels.4200-4299.name", "&e[{number}⚝] ");
-            levels.getYml().addDefault("levels.4200-4299.rankup-cost", 2500);
+            levels.getYml().addDefault("levels.4200-4299.rankup-cost", 5000);
             levels.getYml().addDefault("levels.4300-4399.name", "&a[{number}⚝] ");
-            levels.getYml().addDefault("levels.4300-4399.rankup-cost", 3000);
+            levels.getYml().addDefault("levels.4300-4399.rankup-cost", 5000);
             levels.getYml().addDefault("levels.4400-4499.name", "&8[{number}⚝] ");
-            levels.getYml().addDefault("levels.4400-4499.rankup-cost", 3500);
+            levels.getYml().addDefault("levels.4400-4499.rankup-cost", 5000);
             levels.getYml().addDefault("levels.4500-4599.name", "&0[{number}⚝] ");
-            levels.getYml().addDefault("levels.4500-4599.rankup-cost", 4000);
+            levels.getYml().addDefault("levels.4500-4599.rankup-cost", 5000);
             levels.getYml().addDefault("levels.4600-4699.name", "&7[{number}⚝] ");
-            levels.getYml().addDefault("levels.4600-4699.rankup-cost", 4500);
+            levels.getYml().addDefault("levels.4600-4699.rankup-cost", 5000);
             levels.getYml().addDefault("levels.4700-4799.name", "&f[{number}⚝] ");
             levels.getYml().addDefault("levels.4700-4799.rankup-cost", 5000);
             levels.getYml().addDefault("levels.4800-4899.name", "&6[{number}⚝] ");
@@ -146,7 +146,7 @@ public class LevelsConfig extends ConfigManager {
             levels.getYml().addDefault("levels.5000.name", "&e[5&600&c0⚝&4] ");
             levels.getYml().addDefault("levels.5000.rankup-cost", 5000);
 
-            levels.getYml().addDefault("levels.others.name", "&7[{number}✩] ");
+            levels.getYml().addDefault("levels.others.name", "&2[&a{number}&3⍟&2] ");
             levels.getYml().addDefault("levels.others.rankup-cost", 5000);
         }
 
