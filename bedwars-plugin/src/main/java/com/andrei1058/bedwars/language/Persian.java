@@ -278,9 +278,9 @@ public class Persian extends Language {
         yml.addDefault(Messages.NEXT_EVENT_TITLE_ANNOUNCE_SUDDEN_DEATH, "&cSudden Death");
         yml.addDefault(Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_SUDDEN_DEATH, "");
         yml.addDefault(Messages.NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH, "&cSUDDEN DEATH: &6&b{TeamDragons} {TeamColor}{TeamName} Dragon!");
-        yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&6+{xp} Tajrobe BedWars Daryaft Kardid (Zaman Play).");
-        yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&6+{xp} Tajrobe BedWars Daryaft Kardid (Bord Bazi).");
-        yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "{prefix}&6+{xp} Tajrobe BedWars Daryaft Kardid (Hemayat Az Team).");
+        yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&b+{xp} Tajrobe BedWars Daryaft Kardid (Zaman Play).");
+        yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&b+{xp} Tajrobe BedWars Daryaft Kardid (Bord Bazi).");
+        yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "{prefix}&b+{xp} Tajrobe BedWars Daryaft Kardid (Hemayat Az Team).");
 
         yml.addDefault(Messages.MONEY_REWARD_PER_MINUTE, "{prefix}&6+{money} Coin (Zaman Play).");
         yml.addDefault(Messages.MONEY_REWARD_WIN, "{prefix}&6+{money} Coin (Bord Bazi).");
