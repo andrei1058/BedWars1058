@@ -200,9 +200,9 @@ public class Russian extends Language{
         yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&bСОЛО УЛУЧШЕНИЯ, &e&lПКМ");
         yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&bМАГАЗИН, &e&lПКМ");
         yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&bМАГАЗИН, &e&lПКМ");
-        yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&6+{xp} BedWars Experience получено (Игровое время).");
-        yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&6+{xp} BedWars Experience получено (Победа в игре).");
-        yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "{prefix}&6+{xp} BedWars Experience получено (Поддержка команды).");
+        yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&b+{xp} BedWars Experience получено (Игровое время).");
+        yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&b+{xp} BedWars Experience получено (Победа в игре).");
+        yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "{prefix}&b+{xp} BedWars Experience получено (Поддержка команды).");
 
         yml.addDefault(Messages.MONEY_REWARD_PER_MINUTE, "{prefix}&6+{money} Монет (Игровое время).");
         yml.addDefault(Messages.MONEY_REWARD_WIN, "{prefix}&6+{money} Монет (Победа в игре).");
