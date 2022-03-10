@@ -270,6 +270,14 @@
             <optional>true</optional>
         </dependency>
 
+
+        <!-- Jedis Client -->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>4.1.1</version>
+        </dependency>
+
         <!--        Sidebar LIB-->
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
