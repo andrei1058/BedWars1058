@@ -278,9 +278,9 @@ public class Turkish extends Language {
         yml.addDefault(Messages.NEXT_EVENT_TITLE_ANNOUNCE_SUDDEN_DEATH, "&cEjderha Saldırısı");
         yml.addDefault(Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_SUDDEN_DEATH, "");
         yml.addDefault(Messages.NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH, "&cEJDERHA SALDIRISI: &6&b{TeamDragons} {TeamColor}{TeamName} Ejderha!");
-        yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&6+{xp} BedWars puanı kazanıldı (Oynama Süresi)");
-        yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&6+{xp} BBedWars puanı kazanıldı (Galibiyet)");
-        yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "{prefix}&6+{xp} BedWars puanı kazanıldı (Takım Yardımı)");
+        yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&b+{xp} BedWars puanı kazanıldı (Oynama Süresi)");
+        yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&b+{xp} BBedWars puanı kazanıldı (Galibiyet)");
+        yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "{prefix}&b+{xp} BedWars puanı kazanıldı (Takım Yardımı)");
 
         yml.addDefault(Messages.MONEY_REWARD_PER_MINUTE, "{prefix}&6+{money} Para (Oynama Süresi)");
         yml.addDefault(Messages.MONEY_REWARD_WIN, "{prefix}&6+{money} Para (Galibiyet)");
