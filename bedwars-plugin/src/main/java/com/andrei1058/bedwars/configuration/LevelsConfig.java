@@ -150,9 +150,9 @@ public class LevelsConfig extends ConfigManager {
             levels.getYml().addDefault("levels.others.rankup-cost", 5000);
         }
 
-        levels.getYml().addDefault("xp-rewards.per-minute", 10);
-        levels.getYml().addDefault("xp-rewards.per-teammate", 5);
-        levels.getYml().addDefault("xp-rewards.game-win", 100);
+        levels.getYml().addDefault("xp-rewards.per-minute", 25);
+        levels.getYml().addDefault("xp-rewards.per-teammate", 13);
+        levels.getYml().addDefault("xp-rewards.game-win", 250);
 
         levels.getYml().addDefault("progress-bar.symbol", "■");
         levels.getYml().addDefault("progress-bar.unlocked-color", "&b");
