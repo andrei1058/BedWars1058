@@ -5,7 +5,7 @@ name: Deployment
 
 on:
   push:
-    branches: [master]
+    branches: [workflows]
 
 jobs:
   build:
