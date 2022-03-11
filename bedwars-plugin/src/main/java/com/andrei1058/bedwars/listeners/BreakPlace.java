@@ -66,6 +66,11 @@ import static com.andrei1058.bedwars.api.language.Language.getMsg;
 public class BreakPlace implements Listener {
 
     private static final List<Player> buildSession = new ArrayList<>();
+    private final boolean allowFireBreak;
+
+    public BreakPlace() {
+        allowFireBreak = config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_ALLOW_FIRE_EXTINGUISH);
+    }
 
     @EventHandler
     public void onIceMelt(BlockFadeEvent e) {
@@ -210,11 +215,11 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onBlockDrop(ItemSpawnEvent event) {
-        //WHEAT_SEEDS
+        //WHEAT_SEEDS AND BEDs
         IArena arena = Arena.getArenaByIdentifier(event.getEntity().getWorld().getName());
         if (arena == null) return;
-        String material = event.getEntity().getItemStack().getType().toString();
-        if (material.equals("SEEDS") || material.equals("WHEAT_SEEDS")) {
+        Material material = event.getEntity().getItemStack().getType();
+        if (nms.isBed(material) || material.toString().equalsIgnoreCase("SEEDS") || material.toString().equalsIgnoreCase("WHEAT_SEEDS")) {
             event.setCancelled(true);
         }
     }
@@ -261,6 +266,12 @@ public class BreakPlace implements Listener {
                         e.setCancelled(false);
                     }
                     return;
+                case "FIRE":
+                    if(allowFireBreak) {
+                        e.setCancelled(false);
+                        return;
+                    }
+                    break;
             }
 
             if (nms.isBed(e.getBlock().getType())) {
@@ -463,7 +474,7 @@ public class BreakPlace implements Listener {
                         return;
                     }
                     for (IGenerator o : t.getGenerators()) {
-                        if (o.getLocation().distance(e.getBlockClicked().getLocation()) <= 1) {
+                        if (o.getLocation().distance(e.getBlockClicked().getLocation()) <= a.getConfig().getInt(ConfigPath.ARENA_GENERATOR_PROTECTION)) {
                             e.setCancelled(true);
                             p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
                             return;
@@ -471,7 +482,7 @@ public class BreakPlace implements Listener {
                     }
                 }
                 for (IGenerator o : a.getOreGenerators()) {
-                    if (o.getLocation().distance(e.getBlockClicked().getLocation()) <= 1) {
+                    if (o.getLocation().distance(e.getBlockClicked().getLocation()) <= a.getConfig().getInt(ConfigPath.ARENA_GENERATOR_PROTECTION)) {
                         e.setCancelled(true);
                         p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
                         return;

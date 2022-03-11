@@ -184,6 +184,7 @@ public class BedWars extends JavaPlugin {
         new Bangla();
         new Persian();
         new Hindi();
+        new Portuguese();
 
         config = new MainConfig(this, "config");
 
@@ -298,7 +299,7 @@ public class BedWars extends JavaPlugin {
             }, 1L);
 
         // Register events
-        registerEvents(new QuitAndTeleportListener(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(),
+        registerEvents(new EnderPearlLanded(), new QuitAndTeleportListener(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(),
                 new FireballListener(), new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener(), new LangListener(), new Warnings(this), new ChatAFK());
         if(autoscale) registerEvents(new AutoscaleListener());
         if (getServerType() == ServerType.BUNGEE) {
@@ -352,7 +353,7 @@ public class BedWars extends JavaPlugin {
 
                 if (getServer().getPluginManager().isPluginEnabled("Parties")) {
                     getLogger().info("Hook into Parties (by AlessioDP) support!");
-                    party = new Parties();
+                    party = new PartiesAdapter();
                 } else if (Bukkit.getServer().getPluginManager().isPluginEnabled("PartyAndFriends")) {
                     getLogger().info("Hook into Party and Friends for Spigot (by Simonsator) support!");
                     party = new PAF();
@@ -459,6 +460,7 @@ public class BedWars extends JavaPlugin {
                     chat = new NoChat();
                 }
                 try {
+                    registerEvents(new MoneyListeners());
                     RegisteredServiceProvider<net.milkbowl.vault.economy.Economy> rsp = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
                     if (rsp != null) {
                         WithEconomy.setEconomy(rsp.getProvider());
@@ -604,8 +606,8 @@ public class BedWars extends JavaPlugin {
         for (IArena a : Arena.getArenas()) {
             try {
                 a.disable();
-            } catch (Exception ignored) {
-                ignored.printStackTrace();
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
         }
 
