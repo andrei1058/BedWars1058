@@ -11,6 +11,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    environment: JAVADOCS_USER
 
     steps:
       - uses: actions/checkout@v2
@@ -21,9 +22,6 @@ jobs:
           distribution: 'adopt'
       - name: Build with Maven
         run: mvn clean deploy --file pom.xml -s ci_settings.xml
-        env:
-          APIDOCS_PASS: ${{ secrets.JAVADOCS_USER }}
-          APIDOCS_USER: ${{ secrets.JAVADOCS_PASS }}
 #      - name: release
 #        uses: actions/create-release@v1
 #        id: create_release
