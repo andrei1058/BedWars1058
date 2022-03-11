@@ -21,7 +21,7 @@ jobs:
           java-version: '17.0.2'
           distribution: 'adopt'
       - name: Build with Maven
-        run: mvn clean deploy --file pom.xml -s ci_settings.xml
+        run: mvn clean deploy --file pom.xml -s ci_settings.xml -X
 #      - name: release
 #        uses: actions/create-release@v1
 #        id: create_release
