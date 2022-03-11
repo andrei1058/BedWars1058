@@ -21,7 +21,9 @@
 package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.events.gameplay.GameStateChangeEvent;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
@@ -221,5 +223,11 @@ public class Inventory implements Listener {
             }
         }
         return false;
+    }
+
+    @EventHandler
+    public void onGameEnd(GameStateChangeEvent e) {
+        if(e.getNewState() != GameState.restarting) return;
+        e.getArena().getPlayers().forEach(Player::closeInventory); // close any open guis when the game ends (e.g. shop)
     }
 }

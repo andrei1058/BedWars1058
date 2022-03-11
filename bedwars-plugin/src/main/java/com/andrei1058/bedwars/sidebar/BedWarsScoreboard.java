@@ -480,57 +480,6 @@ public class BedWarsScoreboard {
         return scoreboards.get(player);
     }
 
-    /* TODO: unused
-    public static String formatGenTimer(int duration) {
-        long absSeconds = Math.abs((long) duration);
-        String positive = String.format(
-                "%d:%02d:%02d",
-                absSeconds / 3600,
-                (absSeconds % 3600) / 60,
-                absSeconds % 60);
-        return (long) duration < 0 ? "-" + positive : positive;
-    }
-
-    private String[] getNextEvent() {
-        if (!(arena instanceof Arena)) return new String[]{"null", "null"};
-        Arena arena = (Arena) this.arena;
-        long time = 0L;
-        String st = "";
-        switch (arena.getNextEvent()) {
-            case EMERALD_GENERATOR_TIER_II:
-                st = getMsg(getPlayer(), Messages.NEXT_EVENT_EMERALD_UPGRADE_II);
-                time = (arena.upgradeEmeraldsCount) * 1000L;
-                break;
-            case EMERALD_GENERATOR_TIER_III:
-                st = getMsg(getPlayer(), Messages.NEXT_EVENT_EMERALD_UPGRADE_III);
-                time = (arena.upgradeEmeraldsCount) * 1000L;
-                break;
-            case DIAMOND_GENERATOR_TIER_II:
-                st = getMsg(getPlayer(), Messages.NEXT_EVENT_DIAMOND_UPGRADE_II);
-                time = (arena.upgradeDiamondsCount) * 1000L;
-                break;
-            case DIAMOND_GENERATOR_TIER_III:
-                st = getMsg(getPlayer(), Messages.NEXT_EVENT_DIAMOND_UPGRADE_III);
-                time = (arena.upgradeDiamondsCount) * 1000L;
-                break;
-            case GAME_END:
-                st = getMsg(getPlayer(), Messages.NEXT_EVENT_GAME_END);
-                time = (arena.getPlayingTask().getGameEndCountdown()) * 1000L;
-                break;
-            case BEDS_DESTROY:
-                st = getMsg(getPlayer(), Messages.NEXT_EVENT_BEDS_DESTROY);
-                time = (arena.getPlayingTask().getBedsDestroyCountdown()) * 1000L;
-                break;
-            case ENDER_DRAGON:
-                st = getMsg(getPlayer(), Messages.NEXT_EVENT_DRAGON_SPAWN);
-                time = (arena.getPlayingTask().getDragonSpawnCountdown()) * 1000L;
-                break;
-        }
-
-        return new String[]{st, nextEventDateFormat.format((time))};
-    }
-    */
-
     @NotNull
     private String getNextEventName() {
         if (!(arena instanceof Arena)) return "-";
@@ -640,11 +589,11 @@ public class BedWarsScoreboard {
 
         if (arena == null) {
             // Lobby scoreboard
-            if (getServerType() == ServerType.SHARED) return;
-            if (!config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR)) {
+            if (getServerType() == ServerType.SHARED  || !config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR)) {
                 if (scoreboard != null) {
                     scoreboard.remove();
                 }
+                return;
             }
             lines = Language.getList(player, Messages.SCOREBOARD_LOBBY);
         } else {

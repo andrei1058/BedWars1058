@@ -11,7 +11,7 @@
     <parent>
         <artifactId>BedWars1058</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>21.12.1</version>
+        <version>22.2</version>
     </parent>
 
     <dependencies>

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>BedWars1058</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>21.12.1</version>
+        <version>22.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>bedwars-api</artifactId>
@@ -16,9 +16,20 @@
             <id>spigotmc-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
+        <repository>
+            <id>commons-repo</id>
+            <url>https://repo.fusesource.com/nexus/content/repositories/releases-3rd-party/</url>
+        </repository>
     </repositories>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/com.google.common/google-collect -->
+        <dependency>
+            <groupId>com.google.common</groupId>
+            <artifactId>google-collect</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>

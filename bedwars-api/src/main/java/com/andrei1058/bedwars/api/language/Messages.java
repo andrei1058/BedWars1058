@@ -123,6 +123,8 @@ public class Messages {
     public static String ARENA_GUI_INV_NAME = "arena-selector-gui-name";
     public static String ARENA_GUI_ARENA_CONTENT_NAME = "arena-selector-content-name";
     public static String ARENA_GUI_ARENA_CONTENT_LORE = "arena-selector-content-lore";
+    public static String ARENA_GUI_SKIPPED_ITEM_NAME = "arena-selector-skipped-item-name";
+    public static String ARENA_GUI_SKIPPED_ITEM_LORE = "arena-selector-skipped-item-lore";
 
     /** Spectator related */
     public static String ARENA_SPECTATOR_TELEPORTER_GUI_NAME = "spectator-tp-gui-name";
@@ -331,6 +333,7 @@ public class Messages {
     public static final String SHOP_LORE_QUICK_ADD  = "shop-lore-quick-add";
     public static final String SHOP_LORE_QUICK_REMOVE  = "shop-lore-quick-remove";
     public static final String SHOP_INDEX_NAME = SHOP_PATH + ".inventory-name";
+    public static final String SHOP_QUICK_ADD_NAME = SHOP_PATH + ".quick-buy-add-inventory-name";
     public static final String SHOP_SEPARATOR_NAME = SHOP_PATH + ".separator-item-name";
     public static final String SHOP_SEPARATOR_LORE = SHOP_PATH + ".separator-item-lore";
     public static final String SHOP_QUICK_BUY_NAME = SHOP_PATH + ".quick-buy-item-name";

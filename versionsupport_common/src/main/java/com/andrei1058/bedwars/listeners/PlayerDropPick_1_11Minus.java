@@ -34,6 +34,8 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import static com.andrei1058.bedwars.support.version.common.VersionCommon.api;
+
 public class PlayerDropPick_1_11Minus implements Listener {
 
     private static BedWars api;
@@ -48,7 +50,7 @@ public class PlayerDropPick_1_11Minus implements Listener {
     @SuppressWarnings("deprecation")
     @EventHandler
     public void onPickup(PlayerPickupItemEvent e) {
-        if (api.getServerType() != ServerType.BUNGEE) {
+        if (api.getServerType() != ServerType.BUNGEE && api.getServerType() != ServerType.BUNGEE_LEGACY) {
             //noinspection ConstantConditions
             if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(api.getLobbyWorld())) {
                 e.setCancelled(true);
@@ -104,7 +106,7 @@ public class PlayerDropPick_1_11Minus implements Listener {
 
     @EventHandler
     public void onDrop(PlayerDropItemEvent e) {
-        if (api.getServerType() != ServerType.BUNGEE) {
+        if (api.getServerType() != ServerType.BUNGEE && api.getServerType() != ServerType.BUNGEE_LEGACY) {
             //noinspection ConstantConditions
             if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(api.getLobbyWorld())) {
                 e.setCancelled(true);

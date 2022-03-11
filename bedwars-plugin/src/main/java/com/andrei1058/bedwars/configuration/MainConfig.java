@@ -33,10 +33,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static com.andrei1058.bedwars.BedWars.getForCurrentVersion;
 
@@ -54,8 +51,8 @@ public class MainConfig extends ConfigManager {
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES, Collections.singletonList("your language iso here"));
         yml.addDefault("storeLink", "https://www.spigotmc.org/resources/authors/39904/");
         yml.addDefault("lobbyServer", "hub");
-        yml.addDefault("globalChat", false);
-        yml.addDefault("formatChat", true);
+        yml.addDefault(ConfigPath.GENERAL_CHAT_GLOBAL, yml.get("globalChat", false));
+        yml.addDefault(ConfigPath.GENERAL_CHAT_FORMATTING, yml.get("formatChat", true));
         yml.addDefault("debug", false);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_MARK_LEAVE_AS_ABANDON, false);
         // parties category
@@ -185,6 +182,9 @@ public class MainConfig extends ConfigManager {
         //remove old config
         //Convert old configuration
 
+        yml.set("formatChat", null);
+        yml.set("globalChat", null);
+
         if (yml.get("bungee-settings.lobby-servers") != null) {
             List<String> sockets = new ArrayList<>(yml.getStringList("bungee-settings.lobby-servers"));
             yml.set(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS, sockets);
@@ -224,7 +224,7 @@ public class MainConfig extends ConfigManager {
             }
         }
 
-        if(getYml().get("fireball.damage-multiplier") != null) {
+        if (getYml().get("fireball.damage-multiplier") != null) {
             set("fireball.damage-multiplier", null);
         }
 
@@ -356,14 +356,9 @@ public class MainConfig extends ConfigManager {
         }
 
         try {
-            BedWars.setServerType(ServerType.valueOf(yml.getString("serverType").toUpperCase()));
+            BedWars.setServerType(ServerType.valueOf(Objects.requireNonNull(yml.getString("serverType")).toUpperCase()));
         } catch (Exception e) {
-            if (yml.getString("serverType").equalsIgnoreCase("BUNGEE_LEGACY")) {
-                BedWars.setServerType(ServerType.BUNGEE);
-                BedWars.setAutoscale(false);
-            } else {
-                set("serverType", "MULTIARENA");
-            }
+            set("serverType", "MULTIARENA");
         }
 
         BedWars.setLobbyWorld(getLobbyWorldName());

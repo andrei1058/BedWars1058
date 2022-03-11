@@ -112,12 +112,12 @@ public class ArenaGUI {
                 if (!(s.contains("{group}") && arenas.get(arenaKey).getGroup().equalsIgnoreCase("default"))) {
                     lore.add(s.replace("{on}", String.valueOf(arena != null ? arena == arenas.get(arenaKey) ? players : arenas.get(arenaKey).getPlayers().size() : arenas.get(arenaKey).getPlayers().size())).replace("{max}",
                             String.valueOf(arenas.get(arenaKey).getMaxPlayers())).replace("{status}", arenas.get(arenaKey).getDisplayStatus(Language.getPlayerLanguage(p)))
-                            .replace("{group}", arenas.get(arenaKey).getGroup()));
+                            .replace("{group}", arenas.get(arenaKey).getDisplayGroup(p)));
                 }
             }
             im.setLore(lore);
             i.setItemMeta(im);
-            i = BedWars.nms.addCustomData(i, ArenaSelectorListener.ARENA_SELECTOR_GUI_IDENTIFIER + arenas.get(arenaKey).getArenaName());
+            i = BedWars.nms.addCustomData(i, ArenaSelectorListener.ARENA_SELECTOR_GUI_IDENTIFIER + arenas.get(arenaKey).getWorldName());
             p.getOpenInventory().getTopInventory().setItem(slot, i);
             arenaKey++;
         }
@@ -134,18 +134,36 @@ public class ArenaGUI {
         Inventory inv = Bukkit.createInventory(ash, size, Language.getMsg(p, Messages.ARENA_GUI_INV_NAME));
         //ash.setInv(inv);
 
-        ItemStack i = BedWars.nms.createItemStack(BedWars.config.getString(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", "skipped-slot")),
-                1, (byte) BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA.replace("%path%", "skipped-slot")));
-        i = BedWars.nms.addCustomData(i, "RUNCOMMAND_bw join random");
-        ItemMeta im = i.getItemMeta();
-        im.setDisplayName(ChatColor.translateAlternateColorCodes('&', BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP)));
-        im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        i.setItemMeta(im);
+        String skippedSlotMaterial = BedWars.config.getString(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", "skipped-slot"));
+        if(!skippedSlotMaterial.equalsIgnoreCase("none") && !skippedSlotMaterial.equalsIgnoreCase("air")) {
+            ItemStack i = BedWars.nms.createItemStack(skippedSlotMaterial,
+                    1, (byte) BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA.replace("%path%", "skipped-slot")));
+            i = BedWars.nms.addCustomData(i, "RUNCOMMAND_bw join random");
+            ItemMeta im = i.getItemMeta();
+            assert im != null;
+            im.setDisplayName(ChatColor.translateAlternateColorCodes(
+                    '&',
+                    Language.getMsg(p, Messages.ARENA_GUI_SKIPPED_ITEM_NAME)
+                            .replaceAll("\\{serverIp}", BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
+            ));
+            List<String> lore = new ArrayList<>();
+            for(String s : Language.getList(p, Messages.ARENA_GUI_SKIPPED_ITEM_LORE)) {
+                lore.add(
+                        s
+                                .replaceAll("\\{serverIp}", BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
+                );
+            }
+            if(lore.size() > 0) {
+                im.setLore(lore);
+            }
+            im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            i.setItemMeta(im);
 
-        List<Integer> used = getUsedSlots();
-        for (int x = 0; x < inv.getSize(); x++) {
-            if (used.contains(x)) continue;
-            inv.setItem(x, i);
+            List<Integer> used = getUsedSlots();
+            for (int x = 0; x < inv.getSize(); x++) {
+                if (used.contains(x)) continue;
+                inv.setItem(x, i);
+            }
         }
 
         p.openInventory(inv);

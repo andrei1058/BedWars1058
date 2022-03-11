@@ -21,6 +21,7 @@
 package com.andrei1058.bedwars.listeners.blockstatus;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.gameplay.GameStateChangeEvent;
 import com.andrei1058.bedwars.api.events.server.ArenaEnableEvent;
@@ -42,7 +43,14 @@ public class BlockStatusListener implements Listener {
     @EventHandler
     public void onStatusChange(GameStateChangeEvent e) {
         if (e == null) return;
-        updateBlock((Arena) e.getArena());
+        if(!BedWars.autoscale) {
+            updateBlock((Arena) e.getArena());
+        } else {
+            // If we're using autoscale, we only want to update the sign with the games in lobbies
+            if(e.getNewState() == GameState.waiting || e.getNewState() == GameState.starting) {
+                updateBlock((Arena) e.getArena());
+            }
+        }
     }
 
     /**

@@ -67,7 +67,7 @@ import static com.andrei1058.bedwars.api.language.Language.getMsg;
 public class Misc {
 
     public static void moveToLobbyOrKick(Player p, @Nullable IArena arena, boolean notAbandon) {
-        if (getServerType() != ServerType.BUNGEE) {
+        if (getServerType() != ServerType.BUNGEE && getServerType() != ServerType.BUNGEE_LEGACY) {
             if (!p.getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
                 p.teleport(config.getConfigLoc("lobbyLoc"));
                 if (arena != null) {
@@ -103,7 +103,7 @@ public class Misc {
             }
         }
 
-        if (getServerType() == ServerType.BUNGEE) {
+        if (getServerType() == ServerType.BUNGEE || getServerType() == ServerType.BUNGEE_LEGACY) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 // if lobby server is unreachable
                 if (p.isOnline()) {

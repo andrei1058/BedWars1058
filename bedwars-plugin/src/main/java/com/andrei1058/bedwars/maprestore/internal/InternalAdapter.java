@@ -42,8 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.andrei1058.bedwars.BedWars.config;
-import static com.andrei1058.bedwars.BedWars.plugin;
+import static com.andrei1058.bedwars.BedWars.*;
 
 public class InternalAdapter extends RestoreAdapter {
 
@@ -98,7 +97,7 @@ public class InternalAdapter extends RestoreAdapter {
     @Override
     public void onRestart(IArena a) {
         Bukkit.getScheduler().runTask(getOwner(), () -> {
-            if (BedWars.getServerType() == ServerType.BUNGEE) {
+            if (BedWars.getServerType() == ServerType.BUNGEE || getServerType() == ServerType.BUNGEE_LEGACY) {
                 if (Arena.getGamesBeforeRestart() == 0) {
                     if (Arena.getArenas().isEmpty()) {
                         plugin.getLogger().info("Dispatching command: " + config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
@@ -125,6 +124,10 @@ public class InternalAdapter extends RestoreAdapter {
 
     @Override
     public void onDisable(IArena a) {
+        if(BedWars.isShuttingDown()) {
+            Bukkit.unloadWorld(a.getWorldName(), false);
+            return;
+        }
         Bukkit.getScheduler().runTask(getOwner(), () -> {
             Bukkit.unloadWorld(a.getWorldName(), false);
         });

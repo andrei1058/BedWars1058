@@ -67,7 +67,7 @@ public class SlimeAdapter extends RestoreAdapter {
     @Override
     public void onEnable(IArena a) {
         if (api.getVersionSupport().getMainLevel().equalsIgnoreCase(a.getWorldName())) {
-            if (!(api.getServerType() == ServerType.BUNGEE && api.getArenaUtil().getGamesBeforeRestart() == 1)) {
+            if (!((api.getServerType() == ServerType.BUNGEE || api.getServerType() == ServerType.BUNGEE_LEGACY) && api.getArenaUtil().getGamesBeforeRestart() == 1)) {
                 FileUtil.setMainLevel("ignore_main_level", api.getVersionSupport());
                 getOwner().getLogger().log(Level.SEVERE, "Cannot use level-name as arenas. Automatically creating a new void map for level-name.");
                 getOwner().getLogger().log(Level.SEVERE, "The server is restarting...");
@@ -100,7 +100,7 @@ public class SlimeAdapter extends RestoreAdapter {
             try {
                 // Note that this method should be called asynchronously
                 SlimeWorld world = slime.loadWorld(flat, a.getArenaName(), true, spm);
-                if (api.getServerType() == ServerType.BUNGEE && api.isAutoScale()) {
+                if (api.isAutoScale()) {
                     world = world.clone(a.getWorldName());
                 }
 
@@ -127,7 +127,7 @@ public class SlimeAdapter extends RestoreAdapter {
 
     @Override
     public void onRestart(IArena a) {
-        if (api.getServerType() == ServerType.BUNGEE) {
+        if (api.getServerType() == ServerType.BUNGEE || api.getServerType() == ServerType.BUNGEE_LEGACY) {
             if (api.getArenaUtil().getGamesBeforeRestart() == 0) {
                 if (api.getArenaUtil().getArenas().size() == 1 && api.getArenaUtil().getArenas().get(0).getStatus() == GameState.restarting) {
                     getOwner().getLogger().info("Dispatching command: " + api.getConfigs().getMainConfig().getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_RESTART_CMD));
@@ -154,6 +154,10 @@ public class SlimeAdapter extends RestoreAdapter {
 
     @Override
     public void onDisable(IArena a) {
+        if(api.isShuttingDown()) {
+            Bukkit.unloadWorld(a.getWorldName(), false);
+            return;
+        }
         Bukkit.getScheduler().runTask(getOwner(), () -> Bukkit.unloadWorld(a.getWorldName(), false));
     }
 

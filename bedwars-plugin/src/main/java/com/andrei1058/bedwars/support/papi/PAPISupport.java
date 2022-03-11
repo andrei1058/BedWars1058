@@ -203,6 +203,30 @@ public class PAPISupport extends PlaceholderExpansion {
             case "player_rerq_xp":
                 replay = String.valueOf(BedWars.getLevelSupport().getRequiredXp(player));
                 break;
+            case "player_status":
+                if(a != null) {
+                    switch (a.getStatus()) {
+                        case waiting:
+                        case starting:
+                            replay = "WAITING";
+                            break;
+                        case playing:
+                            if(a.isPlayer(player)) {
+                                replay = "PLAYING";
+                            } else if(a.isSpectator(player)) {
+                                replay = "SPECTATING";
+                            } else {
+                                replay = "IN_GAME_BUT_NOT"; // this shouldnt happen
+                            }
+                            break;
+                        case restarting:
+                            replay = "RESTARTING";
+                            break;
+                    }
+                } else {
+                    replay = "NONE";
+                }
+                break;
             case "current_arena_group":
                 if (a != null) {
                     replay = a.getGroup();

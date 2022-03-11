@@ -39,6 +39,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
+import static com.andrei1058.bedwars.BedWars.getServerType;
+
 public class GameRestartingTask implements Runnable, RestartingTask {
 
     private Arena arena;
@@ -81,10 +83,10 @@ public class GameRestartingTask implements Runnable, RestartingTask {
         if (getArena().getPlayers().isEmpty() && restarting > 9) restarting = 9;
         if (restarting == 7) {
             for (Player on : new ArrayList<>(getArena().getPlayers())) {
-                getArena().removePlayer(on, BedWars.getServerType() == ServerType.BUNGEE);
+                getArena().removePlayer(on, BedWars.getServerType() == ServerType.BUNGEE  || getServerType() == ServerType.BUNGEE_LEGACY);
             }
             for (Player on : new ArrayList<>(getArena().getSpectators())) {
-                getArena().removeSpectator(on, BedWars.getServerType() == ServerType.BUNGEE);
+                getArena().removeSpectator(on, BedWars.getServerType() == ServerType.BUNGEE || getServerType() == ServerType.BUNGEE_LEGACY);
             }
         } else if (restarting == 4) {
             ShopHolo.clearForArena(getArena());

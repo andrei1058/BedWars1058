@@ -171,7 +171,7 @@ public class CategoryContent implements ICategoryContent {
 
         ShopBuyEvent event;
         //call shop buy event
-        Bukkit.getPluginManager().callEvent(event = new ShopBuyEvent(player, this));
+        Bukkit.getPluginManager().callEvent(event = new ShopBuyEvent(player, Arena.getArenaByPlayer(player), this));
 
         if (event.isCancelled()){
             return;

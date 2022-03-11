@@ -141,6 +141,14 @@ public interface ITeam {
     void reJoin(Player p);
 
     /**
+     * Rejoin a team.
+     *
+     * @param p target player.
+     * @param respawnTime the time until the player should respawn.
+     */
+    void reJoin(Player p, int respawnTime);
+
+    /**
      * Gives the start inventory
      *
      * @param p     target player.

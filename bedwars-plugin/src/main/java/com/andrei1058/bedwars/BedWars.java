@@ -53,6 +53,8 @@ import com.andrei1058.bedwars.levels.internal.LevelListeners;
 import com.andrei1058.bedwars.listeners.*;
 import com.andrei1058.bedwars.listeners.arenaselector.ArenaSelectorListener;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
+import com.andrei1058.bedwars.listeners.chat.ChatAFK;
+import com.andrei1058.bedwars.listeners.chat.ChatFormatting;
 import com.andrei1058.bedwars.listeners.joinhandler.*;
 import com.andrei1058.bedwars.lobbysocket.ArenaSocket;
 import com.andrei1058.bedwars.lobbysocket.LoadedUsersCleaner;
@@ -67,6 +69,8 @@ import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.support.papi.PAPISupport;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.support.party.NoParty;
+import com.andrei1058.bedwars.support.party.PAF;
+import com.andrei1058.bedwars.support.party.PAFBungeecordRedisApi;
 import com.andrei1058.bedwars.support.party.Parties;
 import com.andrei1058.bedwars.support.preloadedparty.PrePartyListener;
 import com.andrei1058.bedwars.support.vault.*;
@@ -102,7 +106,7 @@ import java.util.*;
 public class BedWars extends JavaPlugin {
 
     private static ServerType serverType = ServerType.MULTIARENA;
-    public static boolean debug = true, autoscale = true;
+    public static boolean debug = true, autoscale = false;
     public static String mainCmd = "bw", link = "https://www.spigotmc.org/resources/50942/";
     public static ConfigManager signs, generators;
     public static MainConfig config;
@@ -117,6 +121,7 @@ public class BedWars extends JavaPlugin {
     private static Economy economy;
     private static final String version = Bukkit.getServer().getClass().getName().split("\\.")[3];
     private static String lobbyWorld = "";
+    private static boolean shuttingDown = false;
 
     public static ArenaManager arenaManager = new ArenaManager();
 
@@ -178,8 +183,14 @@ public class BedWars extends JavaPlugin {
         new Russian();
         new Bangla();
         new Persian();
+        new Hindi();
 
         config = new MainConfig(this, "config");
+
+        setAutoscale(config.getBoolean(ConfigPath.GENERAL_AUTOSCALE_ENABLE));
+        if(getServerType() == ServerType.BUNGEE_LEGACY) {
+            setAutoscale(false);
+        }
 
         generators = new GeneratorsConfig(this, "generators", this.getDataFolder().getPath());
         // Initialize signs config after the main config
@@ -255,7 +266,7 @@ public class BedWars extends JavaPlugin {
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
         /* Check if lobby location is set. Required for non Bungee servers */
-        if (config.getLobbyWorldName().isEmpty() && serverType != ServerType.BUNGEE) {
+        if (config.getLobbyWorldName().isEmpty() && serverType != ServerType.BUNGEE && serverType != ServerType.BUNGEE_LEGACY) {
             plugin.getLogger().log(java.util.logging.Level.WARNING, "Lobby location is not set!");
         }
 
@@ -270,7 +281,7 @@ public class BedWars extends JavaPlugin {
                                 Bukkit.createWorld(new WorldCreator(config.getLobbyWorldName()));
 
                                 if (Bukkit.getWorld(config.getLobbyWorldName()) != null) {
-                                    Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getWorld(config.getLobbyWorldName())
+                                    Bukkit.getScheduler().runTaskLater(plugin, () -> Objects.requireNonNull(Bukkit.getWorld(config.getLobbyWorldName()))
                                             .getEntities().stream().filter(e -> e instanceof Monster).forEach(Entity::remove), 20L);
                                 }
                             }, 100L);
@@ -288,20 +299,18 @@ public class BedWars extends JavaPlugin {
 
         // Register events
         registerEvents(new QuitAndTeleportListener(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(),
-                new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener(), new LangListener());
+                new FireballListener(), new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener(), new LangListener(), new Warnings(this), new ChatAFK());
+        if(autoscale) registerEvents(new AutoscaleListener());
         if (getServerType() == ServerType.BUNGEE) {
-            if (autoscale) {
-                //registerEvents(new ArenaListeners());
-                ArenaSocket.lobbies.addAll(config.getList(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS));
-                new SendTask();
-                registerEvents(new AutoscaleListener(), new PrePartyListener(), new JoinListenerBungee());
-                Bukkit.getScheduler().runTaskTimerAsynchronously(this, new LoadedUsersCleaner(), 60L, 60L);
-            } else {
-                registerEvents(new ServerPingListener(), new JoinListenerBungeeLegacy());
-            }
+            ArenaSocket.lobbies.addAll(config.getList(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS));
+            new SendTask();
+            registerEvents(new PrePartyListener(), new JoinListenerBungee());
+            Bukkit.getScheduler().runTaskTimerAsynchronously(this, new LoadedUsersCleaner(), 60L, 60L);
+        } else if(getServerType() == ServerType.BUNGEE_LEGACY) {
+            registerEvents(new ServerPingListener(), new JoinListenerBungeeLegacy());
         } else if (getServerType() == ServerType.MULTIARENA || getServerType() == ServerType.SHARED) {
             registerEvents(new ArenaSelectorListener(), new BlockStatusListener());
-            if (getServerType() == ServerType.MULTIARENA){
+            if (getServerType() == ServerType.MULTIARENA) {
                 registerEvents(new JoinListenerMultiArena());
             } else {
                 registerEvents(new JoinListenerShared());
@@ -310,7 +319,7 @@ public class BedWars extends JavaPlugin {
 
         registerEvents(new WorldLoadListener());
 
-        if (!(getServerType() == ServerType.BUNGEE && autoscale)){
+        if (!(getServerType() == ServerType.BUNGEE)){
             registerEvents(new JoinHandlerCommon());
         }
 
@@ -340,12 +349,18 @@ public class BedWars extends JavaPlugin {
         /* Party support */
         Bukkit.getScheduler().runTaskLater(this, () -> {
             if (config.getYml().getBoolean(ConfigPath.GENERAL_CONFIGURATION_ALLOW_PARTIES)) {
-                if (Bukkit.getPluginManager().getPlugin("Parties") != null) {
-                    if (getServer().getPluginManager().getPlugin("Parties").isEnabled()) {
-                        getLogger().info("Hook into Parties (by AlessioDP) support!");
-                        party = new Parties();
-                    }
+
+                if (getServer().getPluginManager().isPluginEnabled("Parties")) {
+                    getLogger().info("Hook into Parties (by AlessioDP) support!");
+                    party = new Parties();
+                } else if (Bukkit.getServer().getPluginManager().isPluginEnabled("PartyAndFriends")) {
+                    getLogger().info("Hook into Party and Friends for Spigot (by Simonsator) support!");
+                    party = new PAF();
+                } else if (Bukkit.getServer().getPluginManager().isPluginEnabled("Spigot-Party-API-PAF")) {
+                    getLogger().info("Hook into Spigot Party API for Party and Friends Extended (by Simonsator) support!");
+                    party = new PAFBungeecordRedisApi();
                 }
+
                 if (party instanceof NoParty) {
                     party = new com.andrei1058.bedwars.support.party.Internal();
                     getLogger().info("Loading internal Party system. /party");
@@ -418,7 +433,7 @@ public class BedWars extends JavaPlugin {
 
         /* PlaceholderAPI Support */
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            getLogger().info("Hook into PlaceholderAPI support!");
+            getLogger().info("Hooked into PlaceholderAPI support!");
             new PAPISupport().register();
             SupportPAPI.setSupportPAPI(new SupportPAPI.withPAPI());
         }
@@ -432,19 +447,27 @@ public class BedWars extends JavaPlugin {
                 try {
                     //noinspection rawtypes
                     RegisteredServiceProvider rsp = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
-                    WithChat.setChat((net.milkbowl.vault.chat.Chat) rsp.getProvider());
-                    plugin.getLogger().info("Hook into vault chat support!");
-                    chat = new WithChat();
+                    if(rsp != null) {
+                        WithChat.setChat((net.milkbowl.vault.chat.Chat) rsp.getProvider());
+                        plugin.getLogger().info("Hooked into vault chat support!");
+                        chat = new WithChat();
+                    } else {
+                        plugin.getLogger().info("Vault found, but no chat provider!");
+                        chat = new NoChat();
+                    }
                 } catch (Exception var2_2) {
                     chat = new NoChat();
                 }
                 try {
-                    //noinspection rawtypes
-                    registerEvents(new MoneyListeners());
-                    RegisteredServiceProvider rsp = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-                    WithEconomy.setEconomy((net.milkbowl.vault.economy.Economy) rsp.getProvider());
-                    plugin.getLogger().info("Hook into vault economy support!");
-                    economy = new WithEconomy();
+                    RegisteredServiceProvider<net.milkbowl.vault.economy.Economy> rsp = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+                    if (rsp != null) {
+                        WithEconomy.setEconomy(rsp.getProvider());
+                        plugin.getLogger().info("Hooked into vault economy support!");
+                        economy = new WithEconomy();
+                    } else {
+                        plugin.getLogger().info("Vault found, but no economy provider!");
+                        economy = new NoEconomy();
+                    }
                 } catch (Exception var2_2) {
                     economy = new NoEconomy();
                 }
@@ -455,8 +478,8 @@ public class BedWars extends JavaPlugin {
         });
 
         /* Chat support */
-        if (config.getBoolean("formatChat")) {
-            registerEvents(new PlayerChat());
+        if (config.getBoolean(ConfigPath.GENERAL_CHAT_FORMATTING)) {
+            registerEvents(new ChatFormatting());
         }
 
         /* Protect glass walls from tnt explosion */
@@ -573,16 +596,19 @@ public class BedWars extends JavaPlugin {
     }
 
     public void onDisable() {
+        shuttingDown = true;
         if (!serverSoftwareSupport) return;
         if (getServerType() == ServerType.BUNGEE) {
             ArenaSocket.disable();
         }
-        try {
-            for (IArena a : Arena.getArenas()) {
+        for (IArena a : Arena.getArenas()) {
+            try {
                 a.disable();
+            } catch (Exception ignored) {
+                ignored.printStackTrace();
             }
-        } catch (Exception ignored) {
         }
+
     }
 
     private void loadArenasAndSigns() {
@@ -601,7 +627,7 @@ public class BedWars extends JavaPlugin {
                 }
             }
 
-            if (serverType == ServerType.BUNGEE && !autoscale) {
+            if (serverType == ServerType.BUNGEE_LEGACY) {
                 if (files.isEmpty()) {
                     this.getLogger().log(java.util.logging.Level.WARNING, "Could not find any arena!");
                     return;
@@ -628,7 +654,6 @@ public class BedWars extends JavaPlugin {
 
     public static void setServerType(ServerType serverType) {
         BedWars.serverType = serverType;
-        if (serverType == ServerType.BUNGEE) autoscale = true;
     }
 
     public static void setAutoscale(boolean autoscale) {
@@ -770,6 +795,10 @@ public class BedWars extends JavaPlugin {
             default:
                 return true;
         }
+    }
+
+    public static boolean isShuttingDown() {
+        return shuttingDown;
     }
 
     public static void setParty(Party party) {

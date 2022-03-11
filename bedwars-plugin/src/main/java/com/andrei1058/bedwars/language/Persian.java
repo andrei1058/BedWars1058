@@ -120,6 +120,8 @@ public class Persian extends Language {
         yml.addDefault(Messages.ARENA_GUI_INV_NAME, "&8Baraye vared shodan click konid");
         yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_NAME, "&a&l{name}");
         yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_LORE, Arrays.asList("", "&7Halat: {status}", "&7Player Ha: &f{on}&7/&f{max}", "&7No: &a{group}", "", "&aBaraye vared shodan Left-Click konid.", "&eBaraye spectate kardan Right-Click konid."));
+        yml.addDefault(Messages.ARENA_GUI_SKIPPED_ITEM_NAME, "&r{serverIp}");
+        yml.addDefault(Messages.ARENA_GUI_SKIPPED_ITEM_LORE, Collections.emptyList());
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_CHAT, "{prefix}&eBazi dar &6{time} &esanie digar shoro khahad shod.");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_TITLE, " ");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE, "&a{second}");
@@ -142,7 +144,7 @@ public class Persian extends Language {
         yml.addDefault(Messages.ARENA_SPECTATE_DENIED_SELECTOR, "{prefix}&cMotasefane darhale hazer nemitoonid in arena ro spectate konid. Baraye vared shodan az Left-Click estefade konid!");
         yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_PROXY, "&cShoma bayad az tarighe BedWarsProxy vared bazi beshid. \n&eAgar mikhaid arena jadidi ijad konid motmaen shid ke permission bw.setup darid ta betoonid mostaghiman vared server beshid!");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_NAME, "&8Teleporter");
-        yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME, "{prefix}{player}");
+        yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME, "{vPrefix}{player}");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_LORE, Arrays.asList("&7Health: &f{health}%", "&7Food: &f{food}", "", "&7Left-click to spectate"));
         yml.addDefault(Messages.ARENA_SPECTATOR_LEAVE_ITEM_NAME, "&c&lBazgasht be lobby");
         yml.addDefault(Messages.ARENA_SPECTATOR_LEAVE_ITEM_LORE, Collections.singletonList("&7Baraye bargasht be lobby Right-click konid!"));
@@ -334,6 +336,7 @@ public class Persian extends Language {
 
         //
         yml.addDefault(Messages.SHOP_INDEX_NAME, "&8Kharid Sari");
+        yml.addDefault(Messages.SHOP_QUICK_ADD_NAME, "&8Adding to Quick Buy...");
         yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "{prefix}&cShoma be andaze kafi {currency} nadarid! Shoma {amount} ta bishtar mikhaid!");
         yml.addDefault(Messages.SHOP_NEW_PURCHASE, "{prefix}&aShoma &6{item} &akharidid");
         yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "{prefix}&cShoma az ghabl in ro kharidid!");
