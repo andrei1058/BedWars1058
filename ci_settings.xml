@@ -13,8 +13,8 @@
         </server>
         <server>
             <id>ftp-repo</id>
-            <username>${env.FTP_USR}</username>
-            <password>${env.FTP_PASS}</password>
+            <username>${env.REPO_USER}</username>
+            <password>${env.REPO_PASS}</password>
         </server>
     </servers>
 <!--    <mirrors>-->
