@@ -13,7 +13,6 @@ jobs:
       url: https://repo.andrei1058.com
     env:
       Greeting: ${{secrets.MVN_REPO_USER}}
-      mascot: Tux
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 17.0.2
