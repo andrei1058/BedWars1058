@@ -13,6 +13,7 @@ jobs:
       url: https://repo.andrei1058.com
     env:
       Greeting: 'Tux RUN MADAFACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+      Madafaca: ${{secrets.MVN_REPO_USER}}
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 17.0.2
@@ -21,7 +22,7 @@ jobs:
           java-version: '17.0.2'
           distribution: 'adopt'
       - name: Build with Maven
-        run: echo '${{env.MVN_REPO_USER}}'
+        run: echo '${{env.Madafaca}}'
 #        run: 'mvn clean deploy -s ci_settings.xml -X'
 
 #      - name: release
