@@ -13,18 +13,19 @@
         </server>
         <server>
             <id>ftp-repo</id>
-            <username>${env.MVN_REPO_USER}</username>
-            <password>${env.MVN_REPO_PASS}</password>
+            <!-- CALM YOUR TITS, THIS IS JUST FOR DEBUGGING -->
+            <username>repo_user@repo.andrei1058.dev</username>
+            <password>LwXT3GSkgqnn</password>
         </server>
     </servers>
-<!--    <mirrors>-->
-<!--        <mirror>-->
-<!--            <id>maven-default-http-blocker</id>-->
-<!--            <mirrorOf>dummy</mirrorOf>-->
-<!--            <name>Dummy mirror to override default blocking mirror that blocks http</name>-->
-<!--            <url>http://0.0.0.0/</url>-->
-<!--            <blocked>true</blocked>-->
-<!--        </mirror>-->
-<!--    </mirrors>-->
+    <!--    <mirrors>-->
+    <!--        <mirror>-->
+    <!--            <id>maven-default-http-blocker</id>-->
+    <!--            <mirrorOf>dummy</mirrorOf>-->
+    <!--            <name>Dummy mirror to override default blocking mirror that blocks http</name>-->
+    <!--            <url>http://0.0.0.0/</url>-->
+    <!--            <blocked>true</blocked>-->
+    <!--        </mirror>-->
+    <!--    </mirrors>-->
 
 </settings>
