@@ -9,7 +9,8 @@ jobs:
 
     runs-on: ubuntu-latest
     environment: production
-
+    env:
+      Greeting: ${{secrets.MVN_REPO_USER}}
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 17.0.2
@@ -18,8 +19,6 @@ jobs:
           java-version: '17.0.2'
           distribution: 'adopt'
       - name: Build with Maven
-        env:
-          Greeting: ${{secrets.MVN_REPO_USER}}
         run: 'echo $Greeting && echo ${{secrets.MVN_REPO_USER}} && echo ${{env.MVN_REPO_USER}}'
 #        run: 'mvn -DRepoUser=${{secrets.MVN_REPO_USER}}--settings ci_settings.xml clean deploy -X'
 
