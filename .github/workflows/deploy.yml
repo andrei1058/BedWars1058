@@ -13,6 +13,7 @@ jobs:
       url: https://repo.andrei1058.com
     env:
       Greeting: ${{secrets.MVN_REPO_USER}}
+      mascot: Tux
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 17.0.2
@@ -22,9 +23,7 @@ jobs:
           distribution: 'adopt'
       - name: Build with Maven
 #        run: 'mvn clean deploy -s ci_settings.xml -X'
-      env:
-        - mascot: Tux
-      - run: echo 'Hi ${{env.mascot}}'
+      - run: echo 'Hi ${{env.mascot}}' && echo '${{env.Greeting}}'
 #      - name: release
 #        uses: actions/create-release@v1
 #        id: create_release
