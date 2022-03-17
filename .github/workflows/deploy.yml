@@ -12,7 +12,7 @@ jobs:
       name: production
       url: https://repo.andrei1058.com
     env:
-      Greeting: ${{secrets.MVN_REPO_USER}}
+      Greeting: 'Tux'
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 17.0.2
@@ -21,8 +21,9 @@ jobs:
           java-version: '17.0.2'
           distribution: 'adopt'
       - name: Build with Maven
+        run: echo '${{env.Greeting}}'
 #        run: 'mvn clean deploy -s ci_settings.xml -X'
-      - run: echo 'Hi ${{env.mascot}}' && echo '${{env.Greeting}}'
+
 #      - name: release
 #        uses: actions/create-release@v1
 #        id: create_release
