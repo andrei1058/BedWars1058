@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: production
+      url: https://repo.andrei1058.com
     env:
       Greeting: ${{secrets.MVN_REPO_USER}}
     steps:
@@ -20,7 +21,7 @@ jobs:
           java-version: '17.0.2'
           distribution: 'adopt'
       - name: Build with Maven
-        run: 'mvn -DMavenUser=${{secrets.MVN_REPO_USER}} -DMavenPass=${{secrets.MVN_REPO_PASS}} --settings ci_settings.xml clean deploy -X'
+        run: 'mvn clean deploy -s ci_settings.xml -X'
 
 #      - name: release
 #        uses: actions/create-release@v1
