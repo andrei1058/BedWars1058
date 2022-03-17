@@ -18,7 +18,7 @@ jobs:
           java-version: '17.0.2'
           distribution: 'adopt'
       - name: Build with Maven
-        run: 'echo $MVN_REPO_USER'
+        run: 'echo $MVN_REPO_USER && echo ${{secrets.MVN_REPO_USER}} && echo ${{env.MVN_REPO_USER}}'
 #        run: 'mvn -DRepoUser=${{secrets.MVN_REPO_USER}}--settings ci_settings.xml clean deploy -X'
 
 #      - name: release
