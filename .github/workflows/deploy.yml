@@ -21,8 +21,10 @@ jobs:
           java-version: '17.0.2'
           distribution: 'adopt'
       - name: Build with Maven
-        run: 'mvn clean deploy -s ci_settings.xml -X'
-
+#        run: 'mvn clean deploy -s ci_settings.xml -X'
+      env:
+        - mascot: Tux
+      - run: echo 'Hi ${{env.mascot}}'
 #      - name: release
 #        uses: actions/create-release@v1
 #        id: create_release
