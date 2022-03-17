@@ -8,7 +8,8 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    environment: production
+    environment:
+      name: production
     env:
       Greeting: ${{secrets.MVN_REPO_USER}}
     steps:
