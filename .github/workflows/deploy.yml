@@ -11,6 +11,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    environment: production
 
     steps:
       - uses: actions/checkout@v2
@@ -21,9 +22,7 @@ jobs:
           distribution: 'adopt'
       - name: Build with Maven
         run: mvn clean deploy --file pom.xml -s ci_settings.xml -X
-        env:
-          REPO_PASS: ${{ secrets.REPO_PASS }}
-          REPO_USER: ${{ secrets.REPO_USER }}
+
 #      - name: release
 #        uses: actions/create-release@v1
 #        id: create_release
