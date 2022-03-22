@@ -6,6 +6,7 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.events.team.TeamEliminatedEvent;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -27,7 +28,7 @@ public class TeamEliminated implements Listener {
         ITeam deadteam = a.getTeam(victim);
 
         if (deadteam.isBedDestroyed() && deadteam.getMembers().isEmpty()){
-            new TeamEliminatedEvent(a, deadteam);
+            Bukkit.getPluginManager().callEvent(new TeamEliminatedEvent(a, deadteam));
         }
     }
 }
