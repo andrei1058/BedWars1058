@@ -31,7 +31,8 @@ jobs:
           UPDATE_VERSION=`jq '.version' version.json | tr -d '"'`
           mvn versions:set -DnewVersion=$UPDATE_VERSION-SNAPSHOT
           mvn versions:update-child-modules
-          mvn clean deploy javadoc:javadoc -s ci_settings.xml -X
+          mvn clean deploy -s ci_settings.xml -X
+          mvn javadoc:javadoc
           sudo apt install -y -qq lftp
           lftp -c "set ftp:ssl-allow no; open -u $J_DOCS_USER,$J_DOCS_PASS javadocs.andrei1058.dev; mirror -Rev bedwars-api/target/site/apidocs ./BedWars1058  --ignore-time --parallel=10 --exclude-glob .git* --exclude .git/"
 
