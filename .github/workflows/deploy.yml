@@ -24,7 +24,7 @@ jobs:
           MVN_REPO_PASS: ${{ secrets.MVN_REPO_PASS }}
           ANDEV_API_TOKEN: ${{ secrets.ANDEV_API_TOKEN }}
         run: |
-          apt install jq -y
+          sudo apt install jq -y
           curl -X PUT http://localhost/v1/resources/1/versioning/commit -H "Accept: application/json" -H "Authorization: Bearer ${{ secrets.ANDEV_API_TOKEN }}" -H "Content-Type: application/json" --data '{"confirmation": true}'
           UPDATE_VERSION=`jq '.version' version.json | tr -d '"'`
           mvn clean deploy -DupdateVersion=$UPDATE_vERSION -s ci_settings.xml -X
