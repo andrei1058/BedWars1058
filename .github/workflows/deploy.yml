@@ -25,7 +25,7 @@ jobs:
           ANDEV_API_TOKEN: ${{ secrets.ANDEV_API_TOKEN }}
         run: |
           sudo apt install jq -y
-          curl -X PUT https://api.andrei1058.dev/v1/resources/1/versioning/commit -H "Accept: application/json" -H "Authorization: Bearer ${{ secrets.ANDEV_API_TOKEN }}" -H "Content-Type: application/json" --data '{"confirmation": true}'
+          curl -X PUT https://api.andrei1058.dev/v1/resources/1/versioning/commit -H "Accept: application/json" -H "Authorization: Bearer ${{ secrets.ANDEV_API_TOKEN }}" -H "Content-Type: application/json" --data '{"confirmation": true}' >> version.json
           UPDATE_VERSION=`jq '.version' version.json | tr -d '"'`
           mvn versions:set -DnewVersion=$UPDATE_VERSION
           mvn versions:update-child-modules
