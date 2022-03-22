@@ -36,6 +36,8 @@ jobs:
           ls
           cd bedwars-api
           ls
+          cd target
+          ls
           cd site
           ls
 #          sudo apt install -y -qq lftp
