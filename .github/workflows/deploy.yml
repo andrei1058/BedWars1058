@@ -19,6 +19,8 @@ jobs:
           java-version: '17.0.2'
           distribution: 'adopt'
       - name: Retrieve candidate version
+        env:
+          ANDEV_API_TOKEN: ${{ secrets.ANDEV_API_TOKEN }}
         run: |
           sudo apt install jq -y
           curl -X PUT https://api.andrei1058.dev/v1/resources/1/versioning/commit -H "Accept: application/json" -H "Authorization: Bearer ${{ secrets.ANDEV_API_TOKEN }}" -H "Content-Type: application/json" --data '{"confirmation": true}' >> version.json
@@ -27,7 +29,6 @@ jobs:
         env:
           MVN_REPO_USER: ${{ secrets.MVN_REPO_USER }}
           MVN_REPO_PASS: ${{ secrets.MVN_REPO_PASS }}
-          ANDEV_API_TOKEN: ${{ secrets.ANDEV_API_TOKEN }}
         run: |
           mvn versions:set -DnewVersion=$UPDATE_VERSION-SNAPSHOT
           mvn versions:update-child-modules
