@@ -33,13 +33,6 @@ jobs:
           mvn versions:update-child-modules
           mvn clean deploy -s ci_settings.xml
           mvn javadoc:javadoc
-          ls
-          cd bedwars-api
-          ls
-          cd target
-          ls
-          cd site
-          ls
 #          sudo apt install -y -qq lftp
 #          lftp -c "set ftp:ssl-allow no; open -u $J_DOCS_USER,$J_DOCS_PASS javadocs.andrei1058.dev; mirror -Rev bedwars-api/target/site/apidocs ./BedWars1058  --ignore-time --parallel=10 --exclude-glob .git* --exclude .git/"
 
