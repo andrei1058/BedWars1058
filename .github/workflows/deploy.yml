@@ -2,7 +2,7 @@ name: Deploy with Maven
 
 on:
   push:
-    branches: [production]
+    branches: [testdeployment]
 
 jobs:
   build:
@@ -11,8 +11,6 @@ jobs:
     environment:
       name: production
       url: https://repo.andrei1058.com
-    env:
-      Greeting: 'Tux RUN MADAFACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 17.0.2
@@ -24,8 +22,12 @@ jobs:
         env:
           MVN_REPO_USER: ${{ secrets.MVN_REPO_USER }}
           MVN_REPO_PASS: ${{ secrets.MVN_REPO_PASS }}
-#        run: echo '${{env.Madafaca}}'
-        run: 'mvn clean deploy -s ci_settings.xml -X'
+          ANDEV_API_TOKEN: ${{ secrets.ANDEV_API_TOKEN }}
+        run: |
+          apt install jq -y
+          curl -X PUT http://localhost/v1/resources/1/versioning/commit -H "Accept: application/json" -H "Authorization: Bearer ${{ secrets.ANDEV_API_TOKEN }}" -H "Content-Type: application/json" --data '{"confirmation": true}'
+          UPDATE_VERSION=`jq '.version' version.json | tr -d '"'`
+          mvn clean deploy -DupdateVersion=$UPDATE_vERSION -s ci_settings.xml -X
 
 #      - name: release
 #        uses: actions/create-release@v1
