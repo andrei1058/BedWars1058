@@ -18,7 +18,7 @@
  * Contact e-mail: andrew.dascalu@gmail.com
  */
 
-package com.andrei1058.bedwars.support.version.v1_18_R1;
+package com.andrei1058.bedwars.support.version.v1_18_R2;
 
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.shop.ShopHolo;
@@ -66,12 +66,12 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.data.type.Bed;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.command.Command;
-import org.bukkit.craftbukkit.v1_18_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftFireball;
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftTNTPrimed;
-import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftFireball;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftTNTPrimed;
+import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.*;
 import org.bukkit.event.inventory.InventoryEvent;
@@ -89,11 +89,11 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 @SuppressWarnings("unused")
-public class v1_18_R1 extends VersionSupport {
+public class v1_18_R2 extends VersionSupport {
 
     private static final UUID chatUUID = new UUID(0L, 0L);
 
-    public v1_18_R1(Plugin plugin, String name) {
+    public v1_18_R2(Plugin plugin, String name) {
         super(plugin, name);
         loadDefaultEffects();
     }

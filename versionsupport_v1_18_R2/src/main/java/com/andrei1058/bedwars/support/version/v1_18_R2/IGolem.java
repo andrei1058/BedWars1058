@@ -18,7 +18,7 @@
  * Contact e-mail: andrew.dascalu@gmail.com
  */
 
-package com.andrei1058.bedwars.support.version.v1_18_R1;
+package com.andrei1058.bedwars.support.version.v1_18_R2;
 
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.language.Language;
@@ -30,78 +30,84 @@ import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.ai.attributes.GenericAttributes;
 import net.minecraft.world.entity.ai.goal.PathfinderGoalFloat;
 import net.minecraft.world.entity.ai.goal.PathfinderGoalMeleeAttack;
+import net.minecraft.world.entity.ai.goal.PathfinderGoalRandomLookaround;
 import net.minecraft.world.entity.ai.goal.PathfinderGoalRandomStroll;
 import net.minecraft.world.entity.ai.goal.target.PathfinderGoalHurtByTarget;
 import net.minecraft.world.entity.ai.goal.target.PathfinderGoalNearestAttackableTarget;
-import net.minecraft.world.entity.monster.EntitySilverfish;
+import net.minecraft.world.entity.animal.EntityIronGolem;
 import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.level.World;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_18_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_18_R1.event.CraftEventFactory;
+import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_18_R2.event.CraftEventFactory;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
-@SuppressWarnings("ALL")
-public class Silverfish extends EntitySilverfish {
+import java.util.Objects;
 
+@SuppressWarnings("unchecked")
+public class IGolem extends EntityIronGolem {
     private ITeam team;
 
-    private Silverfish(EntityTypes<? extends EntitySilverfish> entitytypes, World world, ITeam bedWarsTeam) {
+    private IGolem(EntityTypes<? extends EntityIronGolem> entitytypes, World world, ITeam bedWarsTeam) {
         super(entitytypes, world);
         this.team = bedWarsTeam;
     }
 
-    @SuppressWarnings("unchecked")
-    public Silverfish(EntityTypes entityTypes, World world) {
+    public IGolem(EntityTypes entityTypes, World world) {
         super(entityTypes, world);
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     protected void u() {
         this.bR.a(1, new PathfinderGoalFloat(this));
-        this.bR.a(2, new PathfinderGoalMeleeAttack(this, 1.9D, false));
-        this.bS.a(1, new PathfinderGoalHurtByTarget(this));
-        this.bR.a(3, new PathfinderGoalRandomStroll(this, 2D));
-        this.bS.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, 20, true, false, player -> {
-            return (!((EntityHuman) player).getBukkitEntity().isDead()) &&
-                    (!team.wasMember(((EntityHuman) player).getBukkitEntity().getUniqueId())) &&
-                    (!team.getArena().isReSpawning(((EntityHuman) player).getBukkitEntity().getUniqueId())) &&
-                    (!team.getArena().isSpectator(((EntityHuman) player).getBukkitEntity().getUniqueId()));
-        }));
-        this.bS.a(3, new PathfinderGoalNearestAttackableTarget(this, IGolem.class, 20, true, false, golem -> {
-            return ((IGolem) golem).getTeam() != team;
-        }));
-        this.bS.a(4, new PathfinderGoalNearestAttackableTarget(this, Silverfish.class, 20, true, false, sf -> {
-            return ((Silverfish) sf).getTeam() != team;
-        }));
+        this.bR.a(2, new PathfinderGoalMeleeAttack(this, 1.5D, false));
+        this.bS.a(3, new PathfinderGoalHurtByTarget(this));
+        this.bR.a(4, new PathfinderGoalRandomStroll(this, 1D));
+        this.bR.a(5, new PathfinderGoalRandomLookaround(this));
+        this.bS.a(6, new PathfinderGoalNearestAttackableTarget(
+                this, EntityHuman.class, 20, true, false,
+                player -> !((EntityHuman)player).getBukkitEntity().isDead() &&
+                        !team.wasMember(((EntityHuman)player).getBukkitEntity().getUniqueId()) &&
+                        !team.getArena().isReSpawning(((EntityHuman)player).getBukkitEntity().getUniqueId())
+                && !team.getArena().isSpectator(((EntityHuman)player).getBukkitEntity().getUniqueId()))
+        );
+        this.bS.a(7, new PathfinderGoalNearestAttackableTarget(
+                this, IGolem.class, 20, true, false,
+                golem -> ((IGolem)golem).getTeam() != team)
+        );
+        this.bS.a(8, new PathfinderGoalNearestAttackableTarget(
+                this, Silverfish.class, 20, true, false,
+                sf -> ((Silverfish)sf).getTeam() != team)
+        );
     }
 
     public ITeam getTeam() {
         return team;
     }
 
-    public static LivingEntity spawn(Location loc, ITeam team, double speed, double health, int despawn, double damage) {
-        WorldServer mcWorld = ((CraftWorld) loc.getWorld()).getHandle();
-        Silverfish customEnt = new Silverfish(EntityTypes.aA, mcWorld, team);
+    public static LivingEntity spawn(Location loc, ITeam bedWarsTeam, double speed, double health, int despawn) {
+        WorldServer mcWorld = ((CraftWorld) Objects.requireNonNull(loc.getWorld())).getHandle();
+        IGolem customEnt = new IGolem(EntityTypes.P, mcWorld, bedWarsTeam);
         customEnt.a(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
-        customEnt.a(GenericAttributes.a).a(health);
-        customEnt.a(GenericAttributes.d).a(speed);
-        customEnt.a(GenericAttributes.f).a(damage);
+        ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
+        Objects.requireNonNull(customEnt.a(GenericAttributes.a)).a(health);
+        Objects.requireNonNull(customEnt.a(GenericAttributes.d)).a(speed);
 
-        if (!CraftEventFactory.doEntityAddEventCalling(mcWorld, customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM)) {
+        if (!CraftEventFactory.doEntityAddEventCalling(mcWorld, customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM)){
             mcWorld.P.a(customEnt);
         }
-        ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
-        ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(true);
-        ((CraftLivingEntity) customEnt.getBukkitEntity()).setPersistent(true);
 
+        mcWorld.a(customEnt);
+        customEnt.getBukkitEntity().setPersistent(true);
+        customEnt.getBukkitEntity().setCustomNameVisible(true);
         customEnt.getBukkitEntity().setCustomName(Language.getDefaultLanguage().m(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME)
                 .replace("{despawn}", String.valueOf(despawn)
                         .replace("{health}", StringUtils.repeat(Language.getDefaultLanguage().m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH) + " ", 10))
-                        .replace("{TeamColor}", team.getColor().chat().toString())));
+                        .replace("{TeamColor}", bedWarsTeam.getColor().chat().toString())));
         return (LivingEntity) customEnt.getBukkitEntity();
     }
 
