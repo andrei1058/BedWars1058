@@ -36,7 +36,7 @@ jobs:
           sudo apt install -y -qq lftp
           lftp -c "set ftp:ssl-allow no; open -u $J_DOCS_USER,$J_DOCS_PASS javadocs.andrei1058.dev; mirror -Rev bedwars-api/target/site/apidocs ./BedWars1058  --ignore-time --parallel=10 --exclude-glob .git* --exclude .git/"
           curl -F "file=@bedwars-plugin/target/bedwars-plugin-$UPDATE_VERSION.jar" -F api_key=$POLY_API_KEY -F resource_id="1152" -F version="$UPDATE_VERSION" -F title="v$UPDATE_VERSION" -F message="For a detailed update log please visit https://github.com/andrei1058/BedWars1058/releases" "https://api.polymart.org/v1/postUpdate"
-          echo "$UPDATE_VERSION" >> $GITHUB_ENV
+          echo "'$UPDATE_VERSION'" >> $GITHUB_ENV
       - name: Create Tag
         uses: softprops/action-gh-release@v1
         with:
