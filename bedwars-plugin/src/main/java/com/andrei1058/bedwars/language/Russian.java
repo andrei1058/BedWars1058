@@ -203,7 +203,7 @@ public class Russian extends Language{
         yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&6+{xp} BedWars Experience получено (Игровое время).");
         yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&6+{xp} BedWars Experience получено (Победа в игре).");
         yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "{prefix}&6+{xp} BedWars Experience получено (Поддержка команды).");
-        yml.addDefault(Messages.XP_REWARD_BED_DESTROYED, "{prefix}&6+{xp} BedWars Experience получено (Разрушение кровати).");
+        yml.addDefault(Messages.XP_REWARD_BED_DESTROY, "{prefix}&6+{xp} BedWars Experience получено (Разрушение кровати).");
         yml.addDefault(Messages.XP_REWARD_REGULAR_KILL, "{prefix}&6+{xp} BedWars Experience получено (Убийство).");
         yml.addDefault(Messages.XP_REWARD_FINAL_KILL, "{prefix}&6+{xp} BedWars Experience получено (Финальное убийство).");
 

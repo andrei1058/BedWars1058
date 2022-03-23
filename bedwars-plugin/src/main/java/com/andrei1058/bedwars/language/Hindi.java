@@ -280,7 +280,7 @@ public class Hindi extends Language {
         yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&6+{xp} BedWars praapt kiye (Play Time).");
         yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&6+{xp} BedWars praapt kiye (Game Win).");
         yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "{prefix}&6+{xp} BedWars Experience praapt kiye (Team Support).");
-        yml.addDefault(Messages.XP_REWARD_BED_DESTROYED, "{prefix}&6+{xp} BedWars Experience praapt kiye (Bed Destroyed).");
+        yml.addDefault(Messages.XP_REWARD_BED_DESTROY, "{prefix}&6+{xp} BedWars Experience praapt kiye (Bed Destroyed).");
         yml.addDefault(Messages.XP_REWARD_REGULAR_KILL, "{prefix}&6+{xp} BedWars Experience praapt kiye (Regular Kill).");
         yml.addDefault(Messages.XP_REWARD_FINAL_KILL, "{prefix}&6+{xp} BedWars Experience praapt kiye (Final Kill).");
 

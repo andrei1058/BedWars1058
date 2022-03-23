@@ -136,7 +136,7 @@ public class LevelListeners implements Listener {
         int beddestroy = LevelsConfig.levels.getInt("xp-rewards.bed-destroyed");
         if (beddestroy > 0) {
             PlayerLevel.getLevelByPlayer(player.getUniqueId()).addXp(beddestroy, PlayerXpGainEvent.XpSource.BED_DESTROYED);
-            player.sendMessage(Language.getMsg(player, Messages.XP_REWARD_BED_DESTROYED).replace("{xp}", String.valueOf(beddestroy)));
+            player.sendMessage(Language.getMsg(player, Messages.XP_REWARD_BED_DESTROY).replace("{xp}", String.valueOf(beddestroy)));
         }
     }
 

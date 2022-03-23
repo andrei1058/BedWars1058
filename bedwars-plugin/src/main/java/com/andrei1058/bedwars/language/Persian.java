@@ -281,7 +281,7 @@ public class Persian extends Language {
         yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&6+{xp} Tajrobe BedWars Daryaft Kardid (Zaman Play).");
         yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&6+{xp} Tajrobe BedWars Daryaft Kardid (Bord Bazi).");
         yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "{prefix}&6+{xp} Tajrobe BedWars Daryaft Kardid (Hemayat Az Team).");
-        yml.addDefault(Messages.XP_REWARD_BED_DESTROYED, "{prefix}&6+{xp} Tajrobe BedWars Daryaft Kardid (Az Bein Raftan Bed).");
+        yml.addDefault(Messages.XP_REWARD_BED_DESTROY, "{prefix}&6+{xp} Tajrobe BedWars Daryaft Kardid (Az Bein Raftan Bed).");
         yml.addDefault(Messages.XP_REWARD_REGULAR_KILL, "{prefix}&6+{xp} Tajrobe BedWars Daryaft Kardid (Kill e Addi).");
         yml.addDefault(Messages.XP_REWARD_FINAL_KILL, "{prefix}&6+{xp} Tajrobe BedWars Daryaft Kardid (Kill e Payani).");
 
