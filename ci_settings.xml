@@ -13,8 +13,8 @@
         </server>
         <server>
             <id>ftp-repo</id>
-            <username>${env.FTP_USR}</username>
-            <password>${env.FTP_PASS}</password>
+            <username>${env.MVN_REPO_USER}</username>
+            <password>${env.MVN_REPO_PASS}</password>
         </server>
     </servers>
 <!--    <mirrors>-->
@@ -26,4 +26,5 @@
 <!--            <blocked>true</blocked>-->
 <!--        </mirror>-->
 <!--    </mirrors>-->
+
 </settings>
