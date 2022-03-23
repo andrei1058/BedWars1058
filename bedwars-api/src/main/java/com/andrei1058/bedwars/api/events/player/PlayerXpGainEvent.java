@@ -72,7 +72,7 @@ public class PlayerXpGainEvent extends Event {
      * Lets you know why did the player received new xp.
      */
     public enum XpSource {
-        PER_MINUTE, PER_TEAMMATE, GAME_WIN, OTHER
+        PER_MINUTE, PER_TEAMMATE, GAME_WIN, BED_DESTROYED, FINAL_KILL, REGULAR_KILL, OTHER
     }
 
     @Override

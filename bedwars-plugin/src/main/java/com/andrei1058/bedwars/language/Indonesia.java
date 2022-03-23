@@ -280,6 +280,9 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&6+{xp} Experience Bed Wars Diterima (Waktu Bermain).");
         yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&6+{xp} Experience Bed Wars Diterima (Memenangkan Permainan).");
         yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "{prefix}&6+{xp} Experience Bed Wars Diterima (Dukungan Tim).");
+        yml.addDefault(Messages.XP_REWARD_BED_DESTROY, "{prefix}&6+{xp} Experience Bed Wars Diterima (Menghancurkan Kasur).");
+        yml.addDefault(Messages.XP_REWARD_REGULAR_KILL, "{prefix}&6+{xp} Experience Bed Wars Diterima (Pembunuhan Biasa).");
+        yml.addDefault(Messages.XP_REWARD_FINAL_KILL, "{prefix}&6+{xp} Experience Bed Wars Diterima (Pembunuhan Terakhir).");
 
         yml.addDefault(Messages.MONEY_REWARD_PER_MINUTE, "{prefix}&6+{money} Koin (Waktu Bermain).");
         yml.addDefault(Messages.MONEY_REWARD_WIN, "{prefix}&6+{money} Koin (Memenangkan Permainan).");
