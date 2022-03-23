@@ -43,5 +43,5 @@ jobs:
           UPDATE_VERSION: "22.3"
         with:
           generate_release_notes: true
-          name: $UPDATE_VERSION
-          tag_name: $UPDATE_VERSION
+          name: ${{env.UPDATE_VERSION}}
+          tag_name: ${{env.UPDATE_VERSION}}
