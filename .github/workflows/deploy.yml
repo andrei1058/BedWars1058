@@ -44,24 +44,3 @@ jobs:
         generate_release_notes: true
           name: $UPDATE_VERSION
           tag_name: $UPDATE_VERSION
-#      - name: release
-#        uses: actions/create-release@v1
-#        id: create_release
-#        with:
-#          draft: false
-#          prerelease: false
-#          release_name: Release ${{ github.ref }}
-#          tag_name: ${{ github.ref }}
-#          body_path: CHANGELOG.md
-#        env:
-#          GITHUB_TOKEN: ${{ github.token }}
-#      - name: upload plugin jar artifact
-#        uses: actions/upload-release-asset@v1
-#        env:
-#          GITHUB_TOKEN: ${{ github.token }}
-#        with:
-#          upload_url: ${{ steps.create_release.outputs.upload_url }}
-#          asset_path: ./bedwars-plugin/target/bedwars-plugin-*.jar
-#          asset_name: bedwars-plugin.jar
-#          asset_content_type: application/jar
-#          prerelease: false
