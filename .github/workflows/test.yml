@@ -1,11 +1,16 @@
 # This workflow will build a Java project with Maven
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
-name: Java CI with Maven
+name: Test with Maven
 
 on:
   push:
-    branches: [master]
+    branches-ignore:
+      - production
+  pull_request:
+    branches-ignore:
+      - production
+
 
 jobs:
   build:
@@ -20,10 +25,10 @@ jobs:
           java-version: '17.0.2'
           distribution: 'adopt'
       - name: Build with Maven
-        run: mvn clean deploy --file pom.xml -s ci_settings.xml
-        env:
-          APIDOCS_PASS: ${{ secrets.JAVADOCS_USER }}
-          APIDOCS_USER: ${{ secrets.JAVADOCS_PASS }}
+        run: mvn clean install --file pom.xml -s ci_settings.xml
+#        env:
+#          APIDOCS_PASS: ${{ secrets.APIDOCS_PASS }}
+#          APIDOCS_USER: ${{ secrets.APIDOCS_USER }}
 #      - name: release
 #        uses: actions/create-release@v1
 #        id: create_release
