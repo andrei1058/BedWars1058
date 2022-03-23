@@ -72,6 +72,7 @@ import com.andrei1058.bedwars.support.party.NoParty;
 import com.andrei1058.bedwars.support.party.PAF;
 import com.andrei1058.bedwars.support.party.PAFBungeecordRedisApi;
 import com.andrei1058.bedwars.support.party.PartiesAdapter;
+import com.andrei1058.bedwars.support.preloadedparty.PrePartyListener;
 import com.andrei1058.bedwars.support.vault.*;
 import com.andrei1058.bedwars.support.vipfeatures.VipFeatures;
 import com.andrei1058.bedwars.support.vipfeatures.VipListeners;
@@ -303,7 +304,7 @@ public class BedWars extends JavaPlugin {
                 registerEvents(new AutoscaleListener(), new JoinListenerBungee());
                 Bukkit.getScheduler().runTaskTimerAsynchronously(this, new LoadedUsersCleaner(), 60L, 60L);
             } else {
-                registerEvents(new ServerPingListener(), new JoinListenerBungeeLegacy());
+                registerEvents(new ServerPingListener(), new PrePartyListener(), new JoinListenerBungeeLegacy());
             }
         } else if (getServerType() == ServerType.MULTIARENA || getServerType() == ServerType.SHARED) {
             registerEvents(new ArenaSelectorListener(), new BlockStatusListener());
