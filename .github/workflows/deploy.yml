@@ -25,17 +25,25 @@ jobs:
           ANDEV_API_TOKEN: ${{ secrets.ANDEV_API_TOKEN }}
           J_DOCS_USER: ${{ secrets.J_DOCS_USER }}
           J_DOCS_PASS: ${{ secrets.J_DOCS_PASS }}
+          POLY_API_KEY: ${{ secrets.POLY_API_KEY }}
         run: |
           sudo apt install jq -y
           curl -X PUT https://api.andrei1058.dev/v1/resources/1/versioning/commit -H "Accept: application/json" -H "Authorization: Bearer ${{ secrets.ANDEV_API_TOKEN }}" -H "Content-Type: application/json" --data '{"confirmation": true}' >> version.json
-          UPDATE_VERSION=`jq '.version' version.json | tr -d '"'`
+          export UPDATE_VERSION=`jq '.version' version.json | tr -d '"'`
           mvn versions:set -DnewVersion=$UPDATE_VERSION
           mvn versions:update-child-modules
           mvn clean deploy -s ci_settings.xml
           mvn javadoc:javadoc
           sudo apt install -y -qq lftp
           lftp -c "set ftp:ssl-allow no; open -u $J_DOCS_USER,$J_DOCS_PASS javadocs.andrei1058.dev; mirror -Rev bedwars-api/target/site/apidocs ./BedWars1058  --ignore-time --parallel=10 --exclude-glob .git* --exclude .git/"
-
+          curl -F "file=@bedwars-plugin/target/bedwars-plugin-$UPDATE_VERSION.jar" -F api_key=$POLY_API_KEY -F resource_id="1152" -F version="$UPDATE_VERSION" -F title="v$UPDATE_VERSION" -F message="For a detailed update log please visit https://github.com/andrei1058/BedWars1058/releases" "https://api.polymart.org/v1/postUpdate"
+       - name: Create Tag
+         uses: softprops/action-gh-release@v1
+         with:
+           token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+           generate_release_notes: true
+           name: $UPDATE_VERSION
+           tag_name: $UPDATE_VERSION
 #      - name: release
 #        uses: actions/create-release@v1
 #        id: create_release
