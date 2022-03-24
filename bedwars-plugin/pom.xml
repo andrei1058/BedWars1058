@@ -64,7 +64,7 @@
         </repository>
         <repository>
             <id>andrei1058-releases</id>
-            <url>https://repo.andrei1058.com/releases/</url>
+            <url>https://repo.andrei1058.dev/releases/</url>
         </repository>
     </repositories>
 
