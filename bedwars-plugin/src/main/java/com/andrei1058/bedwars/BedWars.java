@@ -593,7 +593,7 @@ public class BedWars extends JavaPlugin {
         if (getServerType() == ServerType.BUNGEE) {
             ArenaSocket.disable();
         }
-        for (IArena a : Arena.getArenas()) {
+        for (IArena a : new LinkedList<>(Arena.getArenas())) {
             try {
                 a.disable();
             } catch (Exception ex) {

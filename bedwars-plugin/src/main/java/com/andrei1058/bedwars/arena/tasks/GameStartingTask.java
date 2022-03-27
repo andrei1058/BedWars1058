@@ -158,7 +158,7 @@ public class GameStartingTask implements Runnable, StartingTask {
             for (Player player : getArena().getPlayers()) {
                 Language playerLang = languageService.getPlayerLanguage(player);
                 String[] titleSubtitle = Language.getCountDownTitle(playerLang, getCountdown());
-                nms.sendTitle(player, titleSubtitle[0], titleSubtitle[1], 4, 22, 4);
+                nms.sendTitle(player, titleSubtitle[0], titleSubtitle[1], 0, 20, 10);
                 player.sendMessage(getLangService().getMsg(player, Messages.ARENA_STATUS_START_COUNTDOWN_CHAT).replace("{time}", String.valueOf(getCountdown())));
             }
         }
@@ -172,7 +172,7 @@ public class GameStartingTask implements Runnable, StartingTask {
                 BedWarsTeam.reSpawnInvulnerability.put(p.getUniqueId(), System.currentTimeMillis() + 2000L);
                 bwt.firstSpawn(p);
                 Sounds.playSound(ConfigPath.SOUND_GAME_START, p);
-                nms.sendTitle(p, getLangService().getMsg(p, Messages.ARENA_STATUS_START_PLAYER_TITLE), null, 0, 20, 0);
+                nms.sendTitle(p, getLangService().getMsg(p, Messages.ARENA_STATUS_START_PLAYER_TITLE), null, 0, 30, 10);
                 for (String tut : getLangService().getList(p, Messages.ARENA_STATUS_START_PLAYER_TUTORIAL)) {
                     p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, tut));
                 }

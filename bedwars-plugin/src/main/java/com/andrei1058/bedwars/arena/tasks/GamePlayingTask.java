@@ -109,13 +109,13 @@ public class GamePlayingTask implements Runnable, PlayingTask {
                 if (getBedsDestroyCountdown() == 0) {
                     for (Player p : getArena().getPlayers()) {
                         nms.sendTitle(p, getLangService().getMsg(p, Messages.NEXT_EVENT_TITLE_ANNOUNCE_BEDS_DESTROYED),
-                                getLangService().getMsg(p, Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_BEDS_DESTROYED), 0, 30, 0
+                                getLangService().getMsg(p, Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_BEDS_DESTROYED), 0, 40, 10
                         );
                         p.sendMessage(getLangService().getMsg(p, Messages.NEXT_EVENT_CHAT_ANNOUNCE_BEDS_DESTROYED));
                     }
                     for (Player p : getArena().getSpectators()) {
                         nms.sendTitle(p, getLangService().getMsg(p, Messages.NEXT_EVENT_TITLE_ANNOUNCE_BEDS_DESTROYED),
-                                getLangService().getMsg(p, Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_BEDS_DESTROYED), 0, 30, 0
+                                getLangService().getMsg(p, Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_BEDS_DESTROYED), 0, 40, 10
                         );
                         p.sendMessage(getLangService().getMsg(p, Messages.NEXT_EVENT_CHAT_ANNOUNCE_BEDS_DESTROYED));
                     }
@@ -132,7 +132,7 @@ public class GamePlayingTask implements Runnable, PlayingTask {
 
                     for (Player p : getArena().getPlayers()) {
                         nms.sendTitle(p, getLangService().getMsg(p, Messages.NEXT_EVENT_TITLE_ANNOUNCE_SUDDEN_DEATH),
-                                getLangService().getMsg(p, Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_SUDDEN_DEATH), 0, 30, 0
+                                getLangService().getMsg(p, Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_SUDDEN_DEATH), 0, 40, 10
                         );
                         for (ITeam t : getArena().getTeams()) {
                             if (t.getMembers().isEmpty()) continue;
@@ -145,7 +145,7 @@ public class GamePlayingTask implements Runnable, PlayingTask {
                     }
                     for (Player p : getArena().getSpectators()) {
                         nms.sendTitle(p, getLangService().getMsg(p, Messages.NEXT_EVENT_TITLE_ANNOUNCE_SUDDEN_DEATH),
-                                getLangService().getMsg(p, Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_SUDDEN_DEATH), 0, 30, 0
+                                getLangService().getMsg(p, Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_SUDDEN_DEATH), 0, 40, 10
                         );
                         for (ITeam t : getArena().getTeams()) {
                             if (t.getMembers().isEmpty()) continue;
@@ -250,7 +250,7 @@ public class GamePlayingTask implements Runnable, PlayingTask {
                     nms.sendTitle(e.getKey(), getLangService().getMsg(e.getKey(), Messages.PLAYER_DIE_RESPAWN_TITLE)
                                     .replace("{time}", String.valueOf(e.getValue())),
                             getLangService().getMsg(e.getKey(), Messages.PLAYER_DIE_RESPAWN_SUBTITLE)
-                                    .replace("{time}", String.valueOf(e.getValue())), 0, 30, 0
+                                    .replace("{time}", String.valueOf(e.getValue())), 0, 30, 10
                     );
                     e.getKey().sendMessage(getLangService().getMsg(e.getKey(), Messages.PLAYER_DIE_RESPAWN_CHAT)
                             .replace("{time}", String.valueOf(e.getValue()))

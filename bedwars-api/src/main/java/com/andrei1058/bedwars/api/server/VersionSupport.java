@@ -133,6 +133,11 @@ public abstract class VersionSupport {
     public abstract boolean isProjectile(ItemStack itemStack);
 
     /**
+     * Check if itemstack is Invisibility Potion
+     */
+    public abstract boolean isInvisibilityPotion(ItemStack itemStack);
+
+    /**
      * Register custom entities
      */
     public abstract void registerEntities();

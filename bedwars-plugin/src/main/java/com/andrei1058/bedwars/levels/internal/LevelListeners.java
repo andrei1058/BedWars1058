@@ -23,6 +23,8 @@ package com.andrei1058.bedwars.levels.internal;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.events.gameplay.GameEndEvent;
+import com.andrei1058.bedwars.api.events.player.PlayerBedBreakEvent;
+import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerLeaveArenaEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerXpGainEvent;
 import com.andrei1058.bedwars.api.language.Language;
@@ -126,5 +128,40 @@ public class LevelListeners implements Listener {
 
     private static LanguageService getLangService() {
         return LanguageManager.getInstance();
+    }
+
+    @EventHandler
+    public void onBreakBed(PlayerBedBreakEvent e) {
+        Player player = e.getPlayer ();
+        if (player == null) {
+            return;
+        }
+        int beddestroy = LevelsConfig.levels.getInt("xp-rewards.bed-destroyed");
+        if (beddestroy > 0) {
+            PlayerLevel.getLevelByPlayer(player.getUniqueId()).addXp(beddestroy, PlayerXpGainEvent.XpSource.BED_DESTROYED);
+            player.sendMessage(getLangService().getMsg(player, Messages.XP_REWARD_BED_DESTROY).replace("{xp}", String.valueOf(beddestroy)));
+        }
+    }
+
+    @EventHandler
+    public void onKill(PlayerKillEvent e) {
+        Player player = e.getKiller ();
+        Player victim = e.getVictim ();
+        if (player == null || victim.equals(player)) {
+            return;
+        }
+        int finalkill = LevelsConfig.levels.getInt("xp-rewards.final-kill");
+        int regularkill = LevelsConfig.levels.getInt("xp-rewards.regular-kill");
+        if (e.getCause ().isFinalKill ()) {
+            if (finalkill > 0) {
+                PlayerLevel.getLevelByPlayer(player.getUniqueId()).addXp(finalkill, PlayerXpGainEvent.XpSource.FINAL_KILL);
+                player.sendMessage(getLangService().getMsg(player, Messages.XP_REWARD_FINAL_KILL).replace("{xp}", String.valueOf(finalkill)));
+            }
+        } else {
+            if (regularkill > 0) {
+                PlayerLevel.getLevelByPlayer(player.getUniqueId()).addXp(regularkill, PlayerXpGainEvent.XpSource.REGULAR_KILL);
+                player.sendMessage(getLangService().getMsg(player, Messages.XP_REWARD_REGULAR_KILL).replace("{xp}", String.valueOf(regularkill)));
+            }
+        }
     }
 }

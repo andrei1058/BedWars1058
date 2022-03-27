@@ -120,11 +120,11 @@
     <distributionManagement>
         <repository>
             <id>ftp-repo</id>
-            <url>ftp://andrei1058.com/releases</url>
+            <url>ftp://andrei1058.dev/releases</url>
         </repository>
         <snapshotRepository>
             <id>ftp-repo</id>
-            <url>ftp://andrei1058.com/snapshots</url>
+            <url>ftp://andrei1058.dev/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 </project>

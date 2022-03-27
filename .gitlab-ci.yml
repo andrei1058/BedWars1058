@@ -11,7 +11,7 @@ maven-dev:
     - 'development'
     - 'milestone-*'
   script:
-    - 'mvn versions:set -DnewVersion=21.12.1-SNAPSHOT'
+    - 'mvn versions:set -DnewVersion=22.3-SNAPSHOT'
     - 'mvn versions:update-child-modules'
     - 'mvn -DgitVer=git-$CI_COMMIT_SHORT_SHA- clean deploy -s ci_settings.xml'
   artifacts:
@@ -31,7 +31,7 @@ maven-job2:
     - 'master'
     - 'milestone-*'
   script:
-    - 'mvn versions:set -DnewVersion=21.12.1'
+    - 'mvn versions:set -DnewVersion=22.3'
     - 'mvn versions:update-child-modules'
     - 'mvn -DgitVer=git-$CI_COMMIT_SHORT_SHA- clean install -s ci_settings.xml'
   artifacts:
@@ -45,7 +45,7 @@ maven-rel:
   only:
     - 'master'
   script:
-    - 'mvn versions:set -DnewVersion=21.12.1'
+    - 'mvn versions:set -DnewVersion=22.3'
     - 'mvn versions:update-child-modules'
     - 'mvn -DgitVer='''' clean deploy -s ci_settings.xml'
   artifacts:

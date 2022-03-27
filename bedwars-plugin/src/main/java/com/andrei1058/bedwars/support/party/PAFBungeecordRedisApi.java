@@ -13,14 +13,15 @@ import java.util.List;
 
 public class PAFBungeecordRedisApi implements Party {
     //Party and Friends Extended for BungeeCord Support by JT122406
-    @Override
-    public boolean hasParty(Player p) {
-        return getPAFParty(p) == null;
-    }
 
     private PlayerParty getPAFParty(Player p) {
         PAFPlayer pafPlayer = PAFPlayerManager.getInstance().getPlayer(p.getUniqueId());
         return PartyManager.getInstance().getParty(pafPlayer);
+    }
+
+    @Override
+    public boolean hasParty(Player p) {
+        return getPAFParty(p) != null;
     }
 
     @Override

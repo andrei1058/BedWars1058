@@ -211,6 +211,15 @@ public class v1_11_R1 extends VersionSupport {
     }
 
     @Override
+    public boolean isInvisibilityPotion(org.bukkit.inventory.ItemStack itemStack) {
+        if (!itemStack.getType().equals(org.bukkit.Material.POTION)) return false;
+
+        org.bukkit.inventory.meta.PotionMeta pm = (org.bukkit.inventory.meta.PotionMeta) itemStack.getItemMeta();
+
+        return pm.hasCustomEffects() && pm.hasCustomEffect(org.bukkit.potion.PotionEffectType.INVISIBILITY);
+    }
+
+    @Override
     public void registerEntities() {
 
     }
