@@ -19,30 +19,9 @@ heavy if you are still making use of HDD in 2021, and you do not have a decent C
 and faster restore system install [SlimeWorldManager](https://www.spigotmc.org/resources/slimeworldmanager.69974/) or [AdvancedWorldManager](https://www.spigotmc.org/resources/advanced-slimeworldmanager.87209/).
 BedWars1058 will hook into it and do everything for you.
 
-# Pre-made setups
-You can contact us, so we can add yours here :)
+# Pre-made setups and community addons
 
-- by Adi100 - [BEDWARS SETUP ✨Generator Upgrade | Afk System | Custom Menus | NPCs](https://www.mc-market.org/resources/12378/?__cf_chl_jschl_tk__=pmd_zUe1xjS2ei0EP72mxwcz.hbPaDehkT0pn1EYURI9QEk-1635185029-0-gqNtZGzNAnujcnBszQj9)
-- by Ruben_Artz - [BEDWARS + DISCORD BOT](https://polymart.org/resource/bedwars-discord-bot-setup.544)
-- (**new**) by DyeEarth - [❄️ Premade Bedwars - Setups](https://polymart.org/resource/premade-bedwars-setups.1679)
-- By StudioBeam Development - [✨BEDWARS SETUP - With 100+ Pre-Made Arenas, Custom Menus, Grappling Hooks {Exclusive Features!}](https://polymart.org/resource/bedwars-setup-studiobeam-dev.1968)
-# Community Add-ons
-
-- [Private Games - Create private games and play with friends](https://polymart.org/resource/1620) - by Mher
-- [Compass - Team Tracker, Quick Communications, Multi-language support](https://www.spigotmc.org/resources/91537/) - by Mher
-- [Sponge - Playing cool effect when placing a sponge](https://www.spigotmc.org/resources/93540/) - by Mher
-- [AntiDrop - Players Not Allow To Drop The Items In The Void](https://www.spigotmc.org/resources/86391/) - by Mher
-- [LuckyBlock NTD - Add LuckyBlocks to your ingame spawners](https://www.spigotmc.org/resources/94872/) - by danirod12
-- [Team Selector - Select your color before the game starts](https://www.spigotmc.org/resources/60438/) - by andrei1058
-- [BedWarsProxy - Arena selector for bungee scalable mode](https://www.spigotmc.org/resources/66642/) - by andrei1058
-- [Reward commands - Execute commands in certain moments of the game](https://www.spigotmc.org/resources/55381/) - by andrei1058
-- [Web stats - Display player stats on a web page](https://www.spigotmc.org/resources/55523/) - by MrDuckBoy_Xx
-- [Pop-up Towers](https://www.spigotmc.org/resources/83661/) - by KimoVoidDSGN
-- [Generator Split](https://www.spigotmc.org/resources/83883/) - by KimoVoidDSGN
-- [Discord Stats](https://www.mc-market.org/resources/20403/) - by Zorino
-- [BedWars Spectator & Play-Again Addon {Menu}](https://polymart.org/resource/bw1058-spectator-options-free.1937) - by StudioBeam Development
-- [BedWars Arena Start Messages](https://polymart.org/resource/bedwars1058-arena-start-message.1880) - by StudioBeam Development
-
+You can find a list of pre-made setups and community addons [on the wiki](https://wiki.andrei1058.dev/docs/BedWars1058/addons)
 
 # Main features
 
