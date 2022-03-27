@@ -174,6 +174,22 @@ public class v1_8_R3 extends VersionSupport {
     }
 
     @Override
+    public boolean isInvisibilityPotion(org.bukkit.inventory.ItemStack itemStack) {
+        if (!itemStack.getType().equals(org.bukkit.Material.POTION)) return false;
+
+        org.bukkit.inventory.meta.PotionMeta pm = (org.bukkit.inventory.meta.PotionMeta) itemStack.getItemMeta();
+
+        if (pm != null && pm.hasCustomEffects()) {
+            return pm.hasCustomEffect(org.bukkit.potion.PotionEffectType.INVISIBILITY);
+        }
+
+        org.bukkit.potion.Potion potion = org.bukkit.potion.Potion.fromItemStack(itemStack);
+        org.bukkit.potion.PotionType type = potion.getType();
+
+        return type.getEffectType().equals(org.bukkit.potion.PotionEffectType.INVISIBILITY);
+    }
+
+    @Override
     public void registerEntities() {
         registerEntity("Silverfish2", 60, Silverfish.class);
         registerEntity("IGolem", 99, IGolem.class);

@@ -36,8 +36,8 @@ public class SpectatorFirstPersonLeaveEvent extends Event {
     private Function<Player, String> title;
     private Function<Player, String> subTitle;
     private int fadeIn = 0;
-    private int stay = 30;
-    private int fadeOut = 0;
+    private int stay = 40;
+    private int fadeOut = 10;
 
     public SpectatorFirstPersonLeaveEvent(Player spectator, IArena arena, Function<Player, String> title, Function<Player, String> subtitle) {
         this.spectator = spectator;

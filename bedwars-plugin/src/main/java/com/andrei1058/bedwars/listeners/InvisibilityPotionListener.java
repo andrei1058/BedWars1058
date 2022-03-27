@@ -75,45 +75,43 @@ public class InvisibilityPotionListener implements Listener {
                         nms.minusAmount(e.getPlayer(), new ItemStack(Material.GLASS_BOTTLE), 1),
                 5L);
         //
-        PotionMeta pm = (PotionMeta) e.getItem().getItemMeta();
-        if (pm.hasCustomEffects()) {
-            if (pm.hasCustomEffect(PotionEffectType.INVISIBILITY)) {
-                Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                    for (PotionEffect pe : e.getPlayer().getActivePotionEffects()) {
-                        if (pe.getType().toString().contains("INVISIBILITY")) {
-                            // if is already invisible
-                            if (a.getShowTime().containsKey(e.getPlayer())) {
-                                ITeam t = a.getTeam(e.getPlayer());
-                                // increase invisibility timer
-                                // keep trace of invisible players to send hide armor packet when required
-                                // because potions do not hide armors
-                                a.getShowTime().replace(e.getPlayer(), pe.getDuration() / 20);
-                                // call custom event
-                                Bukkit.getPluginManager().callEvent(new PlayerInvisibilityPotionEvent(PlayerInvisibilityPotionEvent.Type.ADDED, t, e.getPlayer(), t.getArena()));
-                            } else {
-                                // if not already invisible
-                                ITeam t = a.getTeam(e.getPlayer());
-                                // keep trace of invisible players to send hide armor packet when required
-                                // because potions do not hide armors
-                                a.getShowTime().put(e.getPlayer(), pe.getDuration() / 20);
-                                //
-                                for (Player p1 : e.getPlayer().getWorld().getPlayers()) {
-                                    if (a.isSpectator(p1)) {
-                                        // hide player armor to spectators
-                                        nms.hideArmor(e.getPlayer(), p1);
-                                    } else if (t != a.getTeam(p1)) {
-                                        // hide player armor to other teams
-                                        nms.hideArmor(e.getPlayer(), p1);
-                                    }
+
+        if (nms.isInvisibilityPotion(e.getItem())) {
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                for (PotionEffect pe : e.getPlayer().getActivePotionEffects()) {
+                    if (pe.getType().toString().contains("INVISIBILITY")) {
+                        // if is already invisible
+                        if (a.getShowTime().containsKey(e.getPlayer())) {
+                            ITeam t = a.getTeam(e.getPlayer());
+                            // increase invisibility timer
+                            // keep trace of invisible players to send hide armor packet when required
+                            // because potions do not hide armors
+                            a.getShowTime().replace(e.getPlayer(), pe.getDuration() / 20);
+                            // call custom event
+                            Bukkit.getPluginManager().callEvent(new PlayerInvisibilityPotionEvent(PlayerInvisibilityPotionEvent.Type.ADDED, t, e.getPlayer(), t.getArena()));
+                        } else {
+                            // if not already invisible
+                            ITeam t = a.getTeam(e.getPlayer());
+                            // keep trace of invisible players to send hide armor packet when required
+                            // because potions do not hide armors
+                            a.getShowTime().put(e.getPlayer(), pe.getDuration() / 20);
+                            //
+                            for (Player p1 : e.getPlayer().getWorld().getPlayers()) {
+                                if (a.isSpectator(p1)) {
+                                    // hide player armor to spectators
+                                    nms.hideArmor(e.getPlayer(), p1);
+                                } else if (t != a.getTeam(p1)) {
+                                    // hide player armor to other teams
+                                    nms.hideArmor(e.getPlayer(), p1);
                                 }
-                                // call custom event
-                                Bukkit.getPluginManager().callEvent(new PlayerInvisibilityPotionEvent(PlayerInvisibilityPotionEvent.Type.ADDED, t, e.getPlayer(), t.getArena()));
                             }
-                            break;
+                            // call custom event
+                            Bukkit.getPluginManager().callEvent(new PlayerInvisibilityPotionEvent(PlayerInvisibilityPotionEvent.Type.ADDED, t, e.getPlayer(), t.getArena()));
                         }
+                        break;
                     }
-                }, 5L);
-            }
+                }
+            }, 5L);
         }
     }
 }
