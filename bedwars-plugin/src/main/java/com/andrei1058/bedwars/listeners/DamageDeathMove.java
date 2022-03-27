@@ -30,6 +30,7 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.entity.Despawnable;
 import com.andrei1058.bedwars.api.events.player.PlayerInvisibilityPotionEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
+import com.andrei1058.bedwars.api.events.team.TeamEliminatedEvent;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
@@ -533,6 +534,7 @@ public class DamageDeathMove implements Listener {
                 t.getMembers().remove(e.getPlayer());
                 e.getPlayer().sendMessage(getMsg(e.getPlayer(), Messages.PLAYER_DIE_ELIMINATED_CHAT));
                 if (t.getMembers().isEmpty()) {
+                    Bukkit.getPluginManager().callEvent(new TeamEliminatedEvent(a, t));
                     for (Player p : a.getWorld().getPlayers()) {
                         p.sendMessage(getMsg(p, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", t.getColor().chat().toString()).replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(p))));
                     }
