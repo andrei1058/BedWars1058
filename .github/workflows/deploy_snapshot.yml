@@ -1,0 +1,34 @@
+name: Deploy snapshot with Maven
+
+on:
+  push:
+    branches:
+      - master
+      - development
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment:
+      name: development
+      url: https://repo.andrei1058.dev
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 17.0.2
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17.0.2'
+          distribution: 'adopt'
+      - name: Deploy snapshot with Maven
+        env:
+          MVN_REPO_USER: ${{ secrets.MVN_REPO_USER }}
+          MVN_REPO_PASS: ${{ secrets.MVN_REPO_PASS }}
+          ANDEV_RES_ID: 1
+        run: |
+          sudo apt install jq -y
+          curl -X GET https://api.andrei1058.dev/v1/resources/$ANDEV_RES_ID/versioning/current -H "Accept: application/json" >> version.json
+          export UPDATE_VERSION=`jq '.version' version.json | tr -d '"'`
+          mvn versions:set -DnewVersion=$UPDATE_VERSION-SNAPSHOT
+          mvn versions:update-child-modules
+          mvn clean deploy -s ci_settings.xml
+          echo "UPDATE_VERSION=$UPDATE_VERSION" >> $GITHUB_ENV

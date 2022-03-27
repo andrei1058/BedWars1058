@@ -125,6 +125,10 @@ public class InternalAdapter extends RestoreAdapter {
 
     @Override
     public void onDisable(IArena a) {
+        if(BedWars.isShuttingDown()) {
+            Bukkit.unloadWorld(a.getWorldName(), false);
+            return;
+        }
         Bukkit.getScheduler().runTask(getOwner(), () -> {
             Bukkit.unloadWorld(a.getWorldName(), false);
         });

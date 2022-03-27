@@ -40,6 +40,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.chat.ChatMessageType;
 import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.network.protocol.game.*;
+import net.minecraft.network.syncher.DataWatcherObject;
+import net.minecraft.network.syncher.DataWatcherRegistry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.level.EntityPlayer;
@@ -359,8 +361,7 @@ public class v1_17_R1 extends VersionSupport {
     @Override
     public void registerTntWhitelist() {
         try {
-            //noinspection JavaReflectionMemberAccess
-            Field field = BlockBase.class.getDeclaredField("durability");
+            Field field = BlockBase.class.getDeclaredField("aI");
             field.setAccessible(true);
             field.set(Blocks.eq, 12f);
             field.set(Blocks.au, 300f);
@@ -545,15 +546,19 @@ public class v1_17_R1 extends VersionSupport {
         }
 
         SkullMeta headMeta = (SkullMeta) head.getItemMeta();
-        Field profileField;
-        try {
-            //noinspection ConstantConditions
-            profileField = headMeta.getClass().getDeclaredField("profile");
-            profileField.setAccessible(true);
-            profileField.set(headMeta, ((CraftPlayer) player).getProfile());
-        } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e1) {
-            e1.printStackTrace();
-        }
+//        FIXME: current hotfix will get rate limited! how the hell do we set head texture now?
+//        wtf is this: SkullOwner:{Id:[I;-1344581477,-1919271229,-1306015584,-647763423],Name:"andrei1058"}
+//        Field profileField;
+//        try {
+//            //noinspection ConstantConditions
+//            profileField = headMeta.getClass().getDeclaredField("profile");
+//            profileField.setAccessible(true);
+//            profileField.set(headMeta, ((CraftPlayer) player).getProfile());
+//        } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e1) {
+//            e1.printStackTrace();
+//        }
+        assert headMeta != null;
+        headMeta.setOwningPlayer(player);
         head.setItemMeta(headMeta);
 
         return head;
@@ -683,12 +688,16 @@ public class v1_17_R1 extends VersionSupport {
     @Override
     public void playRedStoneDot(Player player) {
         Color color = Color.RED;
-        PacketPlayOutWorldParticles particlePacket = new PacketPlayOutWorldParticles(
-                new ParticleParamRedstone(new Vector3fa((float) color.getRed(), (float) color.getGreen(), (float) color.getBlue()), (float) 1),
-                true, player.getLocation().getX(), player.getLocation().getY() + 2.2, player.getLocation().getZ(), 0, 0, 0, 0, 1);
+        PacketPlayOutWorldParticles particlePacket = new PacketPlayOutWorldParticles(new ParticleParamRedstone(new Vector3fa((float) color.getRed(), (float) color.getGreen(), (float) color.getBlue()), (float) 1),
+                true, player.getLocation().getX(), player.getLocation().getY() + 2.6, player.getLocation().getZ(), 0, 0, 0, 0, 0);
         for (Player inWorld : player.getWorld().getPlayers()) {
             if (inWorld.equals(player)) continue;
             ((CraftPlayer) inWorld).getHandle().b.sendPacket(particlePacket);
         }
+    }
+
+    @Override
+    public void clearArrowsFromPlayerBody(Player player) {
+        ((CraftLivingEntity)player).getHandle().getDataWatcher().set(new DataWatcherObject<>(12, DataWatcherRegistry.b),-1);
     }
 }

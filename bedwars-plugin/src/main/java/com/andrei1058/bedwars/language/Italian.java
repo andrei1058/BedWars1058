@@ -71,7 +71,7 @@ public class Italian extends Language {
         yml.addDefault(Messages.COMMAND_LANG_USAGE_DENIED, "{prefix}&cNon puoi cambiare la lingua durante il gioco.");
         yml.addDefault(Messages.COMMAND_TP_PLAYER_NOT_FOUND, "{prefix}&cPlayer not found!");
         yml.addDefault(Messages.COMMAND_TP_NOT_IN_ARENA, "{prefix}&cThis player is not in a bedwars arena!");
-        yml.addDefault(Messages.COMMAND_TP_NOT_STARTED, "{prefix}&cThe arena where the player is didn't start yet!");
+        yml.addDefault(Messages.COMMAND_TP_NOT_STARTED, "{prefix}&cL'arena dove si trova il giocatore non è ancora inziata!");
         yml.addDefault(Messages.COMMAND_TP_USAGE, "{prefix}&cUsage: /bw tp <username>");
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_PARTY_TOO_BIG, "{prefix}&cIl tuo party è troppo grande per entrare in questa arena come una squadra :(");
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_NOT_PARTY_LEADER, "{prefix}&cSolo il creatore del party può scegliere l'arena.");
@@ -119,6 +119,8 @@ public class Italian extends Language {
         yml.addDefault(Messages.ARENA_GUI_INV_NAME, "&8Arene disponibili");
         yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_NAME, "&a&l{name}");
         yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_LORE, Arrays.asList("", "&7Stato: {status}", "&7Giocatori: &f{on}&7/&f{max}", "&7Tipo: &a{group}", "", "&aClick-Sinistro per entrare.", "&eClick-Destro per guardare."));
+        yml.addDefault(Messages.ARENA_GUI_SKIPPED_ITEM_NAME, "&r{serverIp}");
+        yml.addDefault(Messages.ARENA_GUI_SKIPPED_ITEM_LORE, Collections.emptyList());
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_CHAT, "{prefix}&eIl gioco avrà inizio in &6{time} &esecondi!");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_TITLE, " ");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE, "&a{second}");
@@ -138,7 +140,7 @@ public class Italian extends Language {
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
         yml.addDefault(Messages.ARENA_STATUS_START_PLAYER_TITLE, "&aVIA");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_NAME, "&8Teletrasporto");
-        yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME, "{prefix}{player}");
+        yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME, "{vPrefix}{player}");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_LORE, Arrays.asList("&7Vita: &f{health}%", "&7Cibo: &f{food}", "", "&7Click-Sinistro per guardare"));
         yml.addDefault(Messages.ARENA_SPECTATOR_LEAVE_ITEM_NAME, "&c&lRitorna alla lobby");
         yml.addDefault(Messages.ARENA_SPECTATOR_LEAVE_ITEM_LORE, Collections.singletonList("&7Click-destro per ritornare alla lobby!"));
@@ -160,7 +162,7 @@ public class Italian extends Language {
         yml.addDefault(Messages.FORMATTING_CHAT_LOBBY, "{level}{vPrefix}&7{player}{vSuffix}: {message}");
         yml.addDefault(Messages.FORMATTING_CHAT_WAITING, "{level}{vPrefix}&7{player}{vSuffix}: {message}");
         yml.addDefault(Messages.FORMATTING_CHAT_SHOUT, "{level}{vPrefix}&6[SHOUT] {team} &7{player}&f{vSuffix}: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_TEAM, "{level}{vPrefix}&f{team}&7 {player}{vSuffix} {message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_TEAM, "{level}{vPrefix}&f{team}&7 {player}{vSuffix}: {message}");
         yml.addDefault(Messages.FORMATTING_CHAT_SPECTATOR, "{level}{vPrefix}&7[SPECTATOR] {player}{vSuffix}: {message}");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_HEALTH, Arrays.asList("&c❤", "&aVita"));
         yml.addDefault(Messages.FORMATTING_SPECTATOR_TEAM, "SPECT");
@@ -276,8 +278,8 @@ public class Italian extends Language {
         /* Lobby Command Items */
         yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "stats"), "&eStatistiche");
         yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "stats"), Arrays.asList("&fClick-destro per vedere", "le tue statistiche!"));
-        yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "arena-selector"), "&eArena Selector");
-        yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "arena-selector"), Collections.singletonList("&fClick-destro to choose an arena!"));
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "arena-selector"), "&eSelettore Arena");
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "arena-selector"), Collections.singletonList("&fClick-destro Per selezionare un'arena!"));
         yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "leave"), "&eTorna nella Lobby");
         yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", "leave"), Collections.singletonList("&fClick-destro per lasciare BedWars!"));
         /* Pre Game Command Items */
@@ -310,41 +312,37 @@ public class Italian extends Language {
 
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fMappa: &a{map}", "", "&fGiocatori: &a{on}/{max}", "", "&fIn attesa...", "", "§fMode: &a{group}", "&fVersione: &7{version}", "", "&e{server_ip}"));
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fMappa: &a{map}", "", "&fGiocatori: &a{on}/{max}", "", "&fInizio in &a{time}s", "", "§fMode: &a{group}", "&fVersione: &7{version}", "", "&e{server_ip}"));
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{TeamRedColor}R&f {TeamRedName}&f: {TeamRedStatus}",
-                "{TeamBlueColor}B&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}G&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}Y &f{TeamYellowName}&f: {TeamYellowStatus}",
-                "{TeamAquaColor}A &f{TeamAquaName}&f: {TeamAquaStatus}", "{TeamWhiteColor}W &f{TeamWhiteName}&f: {TeamWhiteStatus}", "{TeamPinkColor}P &f{TeamPinkName}&f: {TeamPinkStatus}",
-                "{TeamGrayColor}S &f{TeamGrayName}&f: {TeamGrayStatus}", "", "&e{server_ip}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{server_ip}"));
 
-        yml.addDefault("scoreboard.Doubles.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{TeamRedColor}R&f {TeamRedName}&f: {TeamRedStatus}",
-                "{TeamBlueColor}B&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}G&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}Y &f{TeamYellowName}&f: {TeamYellowStatus}",
-                "{TeamAquaColor}A &f{TeamAquaName}&f: {TeamAquaStatus}", "{TeamWhiteColor}W &f{TeamWhiteName}&f: {TeamWhiteStatus}", "{TeamPinkColor}P &f{TeamPinkName}&f: {TeamPinkStatus}",
-                "{TeamGrayColor}S &f{TeamGrayName}&f: {TeamGrayStatus}", "", "&e{server_ip}"));
+        yml.addDefault("scoreboard.Doubles.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{server_ip}"));
 
-        yml.addDefault("scoreboard.3v3v3v3.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{TeamRedColor}R&f {TeamRedName}&f: {TeamRedStatus}",
-                "{TeamBlueColor}B&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}G&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}Y &f{TeamYellowName}&f: {TeamYellowStatus}",
+        yml.addDefault("scoreboard.3v3v3v3.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}",
                 "", "&fUccisioni: &a{kills}", "&fUccisioni Finali: &a{finalKills}", "&fLetti Distrutti: &a{beds}", "", "&e{server_ip}"));
 
-        yml.addDefault("scoreboard.4v4v4v4.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{TeamRedColor}R&f {TeamRedName}&f: {TeamRedStatus}",
-                "{TeamBlueColor}B&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}G&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}Y &f{TeamYellowName}&f: {TeamYellowStatus}",
+        yml.addDefault("scoreboard.4v4v4v4.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}",
                 "", "&fUccisioni: &a{kills}", "&fUccisioni Finali: &a{finalKills}", "&fLetti Distrutti: &a{beds}", "", "&e{server_ip}"));
 
 
         yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&fLivello: {level}", "", "&fProgresso: &a{currentXp}&7/&b{requiredXp}", "{progress}", "", "&7{player}", "", "&fSoldi: &a{money}"
-                , "", "&fVincite: &a{wins}", "&fUccisioni: &a{kills}", "", "&e{server_ip}"));
+                , "", "&fVittorie: &a{wins}", "&fUccisioni: &a{kills}", "", "&e{server_ip}"));
         yml.addDefault(Messages.TEAM_ELIMINATED_CHAT, "\n&f&lTEAM ELIMINATO > Il team {TeamColor}{TeamName} &cè stato eliminato\n");
-        yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&6+{xp} BedWars Experience Received (Play Time).");
-        yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&6+{xp} BedWars Experience Received (Game Win).");
-        yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "{prefix}&6+{xp} BedWars Experience Received (Team Support).");
+        yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&6+{xp} Esperienza BedWars ricevuta (Tempo di Gioco).");
+        yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&6+{xp} Esperienza BedWars ricevuta (Vittoria).");
+        yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "{prefix}&6+{xp} Esperienza BedWars ricevuta (Supporto Team).");
+        yml.addDefault(Messages.XP_REWARD_BED_DESTROY, "{prefix}&6+{xp} Esperienza BedWars ricevuta (Distruzione letto).");
+        yml.addDefault(Messages.XP_REWARD_REGULAR_KILL, "{prefix}&6+{xp} Esperienza BedWars ricevuta (Uccisione).");
+        yml.addDefault(Messages.XP_REWARD_FINAL_KILL, "{prefix}&6+{xp} Esperienza BedWars ricevuta (Uccisione Finale).");
 
-        yml.addDefault(Messages.MONEY_REWARD_PER_MINUTE, "{prefix}&6+{money} Coins (Play Time).");
-        yml.addDefault(Messages.MONEY_REWARD_WIN, "{prefix}&6+{money} Coins (Game Win).");
-        yml.addDefault(Messages.MONEY_REWARD_PER_TEAMMATE, "{prefix}&6+{money} Coins (Team Support).");
-        yml.addDefault(Messages.MONEY_REWARD_BED_DESTROYED, "{prefix}&6+{money} Coins (Bed Destroyed).");
-        yml.addDefault(Messages.MONEY_REWARD_FINAL_KILL, "{prefix}&6+{money} Coins (Final Kill).");
-        yml.addDefault(Messages.MONEY_REWARD_REGULAR_KILL, "{prefix}&6+{money} Coins (Regular Kill).");
+        yml.addDefault(Messages.MONEY_REWARD_PER_MINUTE, "{prefix}&6+{money} Coins (Tempo di Gioco).");
+        yml.addDefault(Messages.MONEY_REWARD_WIN, "{prefix}&6+{money} Coins (Vittoria).");
+        yml.addDefault(Messages.MONEY_REWARD_PER_TEAMMATE, "{prefix}&6+{money} Coins (Supporto Team).");
+        yml.addDefault(Messages.MONEY_REWARD_BED_DESTROYED, "{prefix}&6+{money} Coins (Distruzione letto).");
+        yml.addDefault(Messages.MONEY_REWARD_FINAL_KILL, "{prefix}&6+{money} Coins (Uccisione Regolare).");
+        yml.addDefault(Messages.MONEY_REWARD_REGULAR_KILL, "{prefix}&6+{money} Coins (Uccisione).");
 
         //shop
         yml.addDefault(Messages.SHOP_INDEX_NAME, "&8Quick Buy");
+        yml.addDefault(Messages.SHOP_QUICK_ADD_NAME, "&8Aggiungendo al Quick Buy...");
         yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "{prefix}&cNon hai abbastanza {currency}! Te ne occorre {amount} in più!");
         yml.addDefault(Messages.SHOP_NEW_PURCHASE, "{prefix}&aHai comprato &6{item}");
         yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "{prefix}&Hai già comprato questo!");
@@ -388,11 +386,11 @@ public class Italian extends Language {
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "&8Utensili", "&aUtensili", Collections.singletonList("&eClicca per sfogliare!"));
         addContentMessages(yml, "shears", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "{color}Cesoie Permanenti", Arrays.asList("&7Costo: {cost} {currency}",
-                "", "&7Utile per tagliare la lana.", "&7Rispawnerai sempre con questo utensile.", "", "{quick_buy}", "{buy_status}"));
+                "", "&7Utile per tagliare la lana.", "&7Respawnerai sempre con questo utensile.", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "pickaxe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "{color}Piccone {tier}", Arrays.asList("&7Costo: {cost} {currency}", "&7Tier: &e{tier}",
-                "", "&7Questo è un item upgradabile.", "&7Perderai un tier alla tua morte.", "", "&7Rispawnerai sempre con", "&7questo item avendo almeno", "&7il tier pià basso.", "", "{quick_buy}", "{buy_status}"));
+                "", "&7Questo è un item upgradabile.", "&7Perderai un tier alla tua morte.", "", "&7Respawnerai sempre con", "&7questo item avendo almeno", "&7il tier pià basso.", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "axe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "{color}Ascia {tier}", Arrays.asList("&7Costo: {cost} {currency}", "&7Tier: &e{tier}",
-                "", "&7Questo è un item upgradabile.", "&7Perderai un tier alla tua morte.", "", "&7Rispawnerai sempre con", "&7questo item avendo almeno", "&7il tier pià basso.", "", "{quick_buy}", "{buy_status}"));
+                "", "&7Questo è un item upgradabile.", "&7Perderai un tier alla tua morte.", "", "&7Respawnerai sempre con", "&7questo item avendo almeno", "&7il tier pià basso.", "", "{quick_buy}", "{buy_status}"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_RANGED, "&8Ranged", "&aArchi", Collections.singletonList("&eClicca per sfogliare!"));
         addContentMessages(yml, "arrow", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "{color}Frecce", Arrays.asList("&7Costo: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
@@ -400,7 +398,7 @@ public class Italian extends Language {
         addContentMessages(yml, "bow2", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "{color}Arco (Potenza I)", Arrays.asList("&7Costo: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "bow3", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "{color}Arco (Potenza I, Contraccolpo I)", Arrays.asList("&7Costo: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
 
-        addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "&8Pozioni", "&aPotioni", Collections.singletonList("&eClicca per sfogliare!"));
+        addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "&8Pozioni", "&aPozioni", Collections.singletonList("&eClicca per sfogliare!"));
 
         addContentMessages(yml, "speed-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "{color}Pozione Rapidità II (45 secondi)", Arrays.asList("&7Costo: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "jump-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "{color}Pozione Salto V (45 secondi)", Arrays.asList("&7Costo: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
@@ -437,7 +435,7 @@ public class Italian extends Language {
         yml.addDefault("upgrades.Default.trap.tier1.name", "&eIt's a trap!");
         yml.addDefault("upgrades.Default.trap.tier1.lore", Arrays.asList("&7Il prossimo nemico che entrerà", "&7nella tua base riceverà Blindness e", "&7Slowness!", "", "&7Costo:&b {cost} {currency}", "", "{loreFooter}"));
         yml.addDefault("upgrades.Default.miningFatigue.tier1.name", "&eMiner Fatigue Trap");
-        yml.addDefault("upgrades.Default.miningFatigue.tier1.lore", Arrays.asList("&7Il prossimo nemico che entrerà", "&7nella tua base riceverà Mining Fatigue", "&7for 10 seconds!", "", "&7Costo:&b {cost} {currency}", "", "{loreFooter}"));
+        yml.addDefault("upgrades.Default.miningFatigue.tier1.lore", Arrays.asList("&7Il prossimo nemico che entrerà", "&7nella tua base riceverà Mining Fatigue", "&7per 10 secondi!", "", "&7Costo:&b {cost} {currency}", "", "{loreFooter}"));
         yml.addDefault("upgrades.Default.healPool.tier1.name", "&eRigenerazione");
         yml.addDefault("upgrades.Default.healPool.tier1.lore", Arrays.asList("&7Crea un campo di rigenerazione", "&7intorno alla tua base!", "", "&7Costo:&b {cost} {currency}", "", "{loreFooter}"));
         yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a{player} ha comprato &6{upgradeName}");
@@ -450,10 +448,10 @@ public class Italian extends Language {
         yml.addDefault(Messages.FORMAT_UPGRADE_TIER_LOCKED, "&7");
         yml.addDefault(Messages.FORMAT_UPGRADE_TIER_UNLOCKED, "&a");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY, "{color}Click to purchase!");
-        yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY, "{color}You don't have enough {currency}");
+        yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY, "{color}Non hai abbastanza {currency}");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_LOCKED, "&cLOCKED");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_UNLOCKED, "{color}UNLOCKED");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a{player} purchased &6{upgradeName}");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a{player} ha acquisistato &6{upgradeName}");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-1"), "{color}Iron Forge");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "forge").replace("{tier}", "tier-1"),
                 Arrays.asList("&7Upgrade resource spawning on", "&7your island.", "", "{tierColor}Tier 1: +50% Resources, &b{cost} {currency}",
@@ -550,9 +548,9 @@ public class Italian extends Language {
         yml.addDefault(Messages.UPGRADES_TRAP_DEFAULT_MSG, "&c&l{trap} è stata attivata!");
         yml.addDefault(Messages.UPGRADES_TRAP_DEFAULT_TITLE, "&cTRAPPOLA ATTIVATA!");
         yml.addDefault(Messages.UPGRADES_TRAP_DEFAULT_SUBTITLE, "&ffLa tua trappola {trap} è stata attivata!");
-        yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_MSG + "3", "&c&lAlarm trap set off by &7&l{player} &c&lfrom {color}&l{team} &c&lteam!");
-        yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_TITLE + "3", "&c&lALARM!!!");
-        yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_SUBTITLE + "3", "&fAlarm trap set off by {color}{team} &fteam!");
+        yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_MSG + "3", "&c&lAllarme attivata da &7&l{player} &c&ldel team {color}&l{team} &c&l!");
+        yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_TITLE + "3", "&c&lALLARME!!!");
+        yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_SUBTITLE + "3", "&fAllarme attivata dal team {color}{team}&f!");
         save();
         setPrefix(m(Messages.PREFIX));
     }

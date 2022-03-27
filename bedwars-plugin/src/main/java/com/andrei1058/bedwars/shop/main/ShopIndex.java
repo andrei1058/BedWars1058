@@ -23,6 +23,7 @@ package com.andrei1058.bedwars.shop.main;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.events.shop.ShopOpenEvent;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.shop.quickbuy.PlayerQuickBuyCache;
 import org.bukkit.Bukkit;
@@ -78,7 +79,7 @@ public class ShopIndex {
         if (quickBuyCache == null) return;
 
         if (callEvent) {
-            ShopOpenEvent event = new ShopOpenEvent(player);
+            ShopOpenEvent event = new ShopOpenEvent(player, Arena.getArenaByPlayer(player));
             Bukkit.getPluginManager().callEvent(event);
             if (event.isCancelled()) return;
         }

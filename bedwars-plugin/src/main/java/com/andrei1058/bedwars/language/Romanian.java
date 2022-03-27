@@ -107,7 +107,7 @@ public class Romanian extends Language {
         yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG, "&cSpectatorii nu sunt permisi in aceasta arena!");
         yml.addDefault(Messages.COMMAND_COOLDOWN, "&cNu poti face asta inca! Mai asteapta {seconds} secunde!");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_NAME, "&8Teleportor");
-        yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME, "{prefix}{player}");
+        yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME, "{vPrefix}{player}");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_LORE, Arrays.asList("&7Viata: &f{health}%", "&7Hrana: &f{food}", "", "&7Click-stanca pentru a urmari."));
         yml.addDefault(Messages.ARENA_SPECTATOR_LEAVE_ITEM_NAME, "&c&lIntoarce-te in lobby");
         yml.addDefault(Messages.ARENA_SPECTATOR_LEAVE_ITEM_LORE, Collections.singletonList("&7Click-dreapta pentru a merge in lobby!"));
@@ -125,6 +125,8 @@ public class Romanian extends Language {
         yml.addDefault(Messages.ARENA_GUI_INV_NAME, "&8Click pentru a intra");
         yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_NAME, "&a&l{name}");
         yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_LORE, Arrays.asList("", "&7Status: {status}", "&7Jucatori: &f{on}&7/&f{max}", "&7Tip: &a{group}", "", "&aClick-Stanga pentru a intra.", "&eClick-Dreapta pentru a vizona."));
+        yml.addDefault(Messages.ARENA_GUI_SKIPPED_ITEM_NAME, "&r{serverIp}");
+        yml.addDefault(Messages.ARENA_GUI_SKIPPED_ITEM_LORE, Collections.emptyList());
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_CHAT, "{prefix}&eJocul incepe in &6{time} &esecunde!");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_TITLE, " ");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE, "&a{second}");
@@ -309,22 +311,14 @@ public class Romanian extends Language {
 
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fHarta: &a{map}", "", "&fJucatori: &a{on}/{max}", "", "&fIn asteptare...", "", "§fMod: &a{group}", "&fVersiune: &7{version}", "", "&e{server_ip}"));
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fMap: &a{map}", "", "&fJucatori: &a{on}/{max}", "", "&fIncepe in &a{time}s", "", "§fMod: &a{group}", "&fVersiune: &7{version}", "", "&e{server_ip}"));
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{TeamRedColor}R&f {TeamRedName}&f: {TeamRedStatus}",
-                "{TeamBlueColor}B&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}G&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}Y &f{TeamYellowName}&f: {TeamYellowStatus}",
-                "{TeamAquaColor}A &f{TeamAquaName}&f: {TeamAquaStatus}", "{TeamWhiteColor}W &f{TeamWhiteName}&f: {TeamWhiteStatus}", "{TeamPinkColor}P &f{TeamPinkName}&f: {TeamPinkStatus}",
-                "{TeamGrayColor}S &f{TeamGrayName}&f: {TeamGrayStatus}", "", "&e{server_ip}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{server_ip}"));
 
-        yml.addDefault("scoreboard.Doubles.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{TeamRedColor}R&f {TeamRedName}&f: {TeamRedStatus}",
-                "{TeamBlueColor}B&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}G&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}Y &f{TeamYellowName}&f: {TeamYellowStatus}",
-                "{TeamAquaColor}A &f{TeamAquaName}&f: {TeamAquaStatus}", "{TeamWhiteColor}W &f{TeamWhiteName}&f: {TeamWhiteStatus}", "{TeamPinkColor}P &f{TeamPinkName}&f: {TeamPinkStatus}",
-                "{TeamGrayColor}S &f{TeamGrayName}&f: {TeamGrayStatus}", "", "&e{server_ip}"));
+        yml.addDefault("scoreboard.Doubles.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{server_ip}"));
 
-        yml.addDefault("scoreboard.3v3v3v3.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{TeamRedColor}R&f {TeamRedName}&f: {TeamRedStatus}",
-                "{TeamBlueColor}A&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}V&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}G &f{TeamYellowName}&f: {TeamYellowStatus}",
+        yml.addDefault("scoreboard.3v3v3v3.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}",
                 "", "&fUcideri: &a{kills}", "&fUcideri Finale: &a{finalKills}", "&fPaturi Distruse: &a{beds}", "", "&e{server_ip}"));
 
-        yml.addDefault("scoreboard.4v4v4v4.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{TeamRedColor}R&f {TeamRedName}&f: {TeamRedStatus}",
-                "{TeamBlueColor}A&f {TeamBlueName}&f: {TeamBlueStatus}", "{TeamGreenColor}V&f {TeamGreenName}&f: {TeamGreenStatus}", "{TeamYellowColor}G &f{TeamYellowName}&f: {TeamYellowStatus}",
+        yml.addDefault("scoreboard.4v4v4v4.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}",
                 "", "&fUcideri: &a{kills}", "&fUcideri Finale: &a{finalKills}", "&fPaturi Distruse: &a{beds}", "", "&e{server_ip}"));
 
         yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&fNivelul tau: {level}", "", "&fProgres: &a{currentXp}&7/&b{requiredXp}", "{progress}", "", "&7{player}", "", "&fBani: &a{money}"
@@ -332,6 +326,9 @@ public class Romanian extends Language {
         yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&6+{xp} BedWars Experience Received (Play Time).");
         yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&6+{xp} BedWars Experience Received (Game Win).");
         yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "{prefix}&6+{xp} BedWars Experience Received (Team Support).");
+        yml.addDefault(Messages.XP_REWARD_BED_DESTROY, "{prefix}&6+{xp} BedWars Experience Received (Bed Destroyed).");
+        yml.addDefault(Messages.XP_REWARD_REGULAR_KILL, "{prefix}&6+{xp} BedWars Experience Received (Regular Kill).");
+        yml.addDefault(Messages.XP_REWARD_FINAL_KILL, "{prefix}&6+{xp} BedWars Experience Received (Final Kill).");
 
         yml.addDefault(Messages.MONEY_REWARD_PER_MINUTE, "{prefix}&6+{money} Coins (Play Time).");
         yml.addDefault(Messages.MONEY_REWARD_WIN, "{prefix}&6+{money} Coins (Game Win).");
@@ -342,6 +339,7 @@ public class Romanian extends Language {
 
         //shop
         yml.addDefault(Messages.SHOP_INDEX_NAME, "&8Cumpara Repede");
+        yml.addDefault(Messages.SHOP_QUICK_ADD_NAME, "&8Adding to Quick Buy...");
         yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "{prefix}&cNu ai destul {currency}! Mai ai nevoide de {amount} de {currency}!");
         yml.addDefault(Messages.SHOP_NEW_PURCHASE, "{prefix}&aAi cumparat &6{item}");
         yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "{prefix}&cAi cumparat deja asta!");

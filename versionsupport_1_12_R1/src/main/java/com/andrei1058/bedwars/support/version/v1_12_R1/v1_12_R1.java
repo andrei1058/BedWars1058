@@ -99,13 +99,11 @@ public class v1_12_R1 extends VersionSupport {
             }
         }
         if (subtitle != null) {
-            if (!subtitle.isEmpty()) {
-                IChatBaseComponent bc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + subtitle + "\"}");
-                PacketPlayOutTitle tit = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, bc);
-                PacketPlayOutTitle length = new PacketPlayOutTitle(fadeIn, stay, fadeOut);
-                ((CraftPlayer) p).getHandle().playerConnection.sendPacket(tit);
-                ((CraftPlayer) p).getHandle().playerConnection.sendPacket(length);
-            }
+            IChatBaseComponent bc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + subtitle + "\"}");
+            PacketPlayOutTitle tit = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, bc);
+            PacketPlayOutTitle length = new PacketPlayOutTitle(fadeIn, stay, fadeOut);
+            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(tit);
+            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(length);
         }
     }
 
@@ -688,10 +686,15 @@ public class v1_12_R1 extends VersionSupport {
     public void playRedStoneDot(Player player) {
         Color color = Color.RED;
         PacketPlayOutWorldParticles particlePacket = new PacketPlayOutWorldParticles(EnumParticle.REDSTONE, true, (float) player.getLocation().getX(),
-                (float) (player.getLocation().getY() + 2.2), (float) player.getLocation().getZ(), color.getRed(), color.getGreen(), color.getBlue(), 0, 1);
+                (float) (player.getLocation().getY() + 2.6), (float) player.getLocation().getZ(), color.getRed(), color.getRed(), color.getRed(), 0, 0);
         for (Player inWorld : player.getWorld().getPlayers()) {
             if (inWorld.equals(player)) continue;
             ((CraftPlayer) inWorld).getHandle().playerConnection.sendPacket(particlePacket);
         }
+    }
+
+    @Override
+    public void clearArrowsFromPlayerBody(Player player) {
+        ((CraftLivingEntity)player).getHandle().getDataWatcher().set(new DataWatcherObject<>(10, DataWatcherRegistry.b),-1);
     }
 }

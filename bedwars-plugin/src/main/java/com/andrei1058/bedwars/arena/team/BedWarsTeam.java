@@ -175,8 +175,12 @@ public class BedWarsTeam implements ITeam {
      * Rejoin a team
      */
     public void reJoin(@NotNull Player p) {
+        reJoin(p, BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_RE_SPAWN_COUNTDOWN));
+    }
+
+    public void reJoin(@NotNull Player p, int respawnTime) {
         addPlayers(p);
-        arena.startReSpawnSession(p, BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_RE_SPAWN_COUNTDOWN));
+        arena.startReSpawnSession(p, respawnTime);
     }
 
     /**
@@ -732,12 +736,6 @@ public class BedWarsTeam implements ITeam {
             nms.colorBed(this);
         } else {
             bed.getBlock().setType(Material.AIR);
-            if (getArena().getConfig().getBoolean(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS)) {
-                for (IGenerator g : getGenerators()) {
-                    g.disable();
-                }
-                generators.clear();
-            }
         }
         for (BedHolo bh : beds.values()) {
             bh.hide();

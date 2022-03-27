@@ -20,6 +20,7 @@
 
 package com.andrei1058.bedwars.api.events.shop;
 
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.shop.ICategoryContent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -31,15 +32,33 @@ public class ShopBuyEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
 
     private final Player buyer;
+    private final IArena arena;
     private final ICategoryContent categoryContent;
     private boolean cancelled = false;
 
     /**
      * Triggered when a player buys from the shop
+     * 
+     * @deprecated Use {@link #ShopBuyEvent(Player, IArena, ICategoryContent)}
      */
+    @Deprecated
     public ShopBuyEvent(Player buyer, ICategoryContent categoryContent) {
         this.categoryContent = categoryContent;
         this.buyer = buyer;
+        this.arena = null;
+    }
+
+    /**
+     * Triggered when a player buys from the shop
+     */
+    public ShopBuyEvent(Player buyer, IArena arena, ICategoryContent categoryContent) {
+        this.categoryContent = categoryContent;
+        this.buyer = buyer;
+        this.arena = arena;
+    }
+
+    public IArena getArena() {
+        return arena;
     }
 
     /**

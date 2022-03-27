@@ -33,10 +33,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static com.andrei1058.bedwars.BedWars.getForCurrentVersion;
 
@@ -54,8 +51,8 @@ public class MainConfig extends ConfigManager {
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES, Collections.singletonList("your language iso here"));
         yml.addDefault("storeLink", "https://www.spigotmc.org/resources/authors/39904/");
         yml.addDefault("lobbyServer", "hub");
-        yml.addDefault("globalChat", false);
-        yml.addDefault("formatChat", true);
+        yml.addDefault(ConfigPath.GENERAL_CHAT_GLOBAL, yml.get("globalChat", false));
+        yml.addDefault(ConfigPath.GENERAL_CHAT_FORMATTING, yml.get("formatChat", true));
         yml.addDefault("debug", false);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_MARK_LEAVE_AS_ABANDON, false);
         // parties category
@@ -93,6 +90,9 @@ public class MainConfig extends ConfigManager {
         yml.addDefault(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP, "yourServer.Com");
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID, "bw1");
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_BWP_TIME_OUT, 5000);
+
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ALLOW_FIRE_EXTINGUISH, true);
+
         // tnt jump category
         yml.addDefault(ConfigPath.GENERAL_TNT_JUMP_BARYCENTER_IN_Y, 0.5);
         yml.addDefault(ConfigPath.GENERAL_TNT_JUMP_STRENGTH_REDUCTION, 5);
@@ -100,6 +100,16 @@ public class MainConfig extends ConfigManager {
         yml.addDefault(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_SELF, 1);
         yml.addDefault(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_TEAMMATES, 5);
         yml.addDefault(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_OTHERS, 10);
+        // fireball category
+        yml.addDefault(ConfigPath.GENERAL_FIREBALL_EXPLOSION_SIZE, 3);
+        yml.addDefault(ConfigPath.GENERAL_FIREBALL_SPEED_MULTIPLIER, 10);
+        yml.addDefault(ConfigPath.GENERAL_FIREBALL_MAKE_FIRE, false);
+        yml.addDefault(ConfigPath.GENERAL_FIREBALL_KNOCKBACK_HORIZONTAL, 1.0);
+        yml.addDefault(ConfigPath.GENERAL_FIREBALL_KNOCKBACK_VERTICAL, 0.65);
+        yml.addDefault(ConfigPath.GENERAL_FIREBALL_COOLDOWN, 0.5);
+        yml.addDefault(ConfigPath.GENERAL_FIREBALL_DAMAGE_SELF, 2.0);
+        yml.addDefault(ConfigPath.GENERAL_FIREBALL_DAMAGE_ENEMY, 2.0);
+        yml.addDefault(ConfigPath.GENERAL_FIREBALL_DAMAGE_TEAMMATES, 0.0);
         //
         yml.addDefault("database.enable", false);
         yml.addDefault("database.host", "localhost");
@@ -172,6 +182,9 @@ public class MainConfig extends ConfigManager {
         //remove old config
         //Convert old configuration
 
+        yml.set("formatChat", null);
+        yml.set("globalChat", null);
+
         if (yml.get("bungee-settings.lobby-servers") != null) {
             List<String> sockets = new ArrayList<>(yml.getStringList("bungee-settings.lobby-servers"));
             yml.set(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS, sockets);
@@ -204,6 +217,10 @@ public class MainConfig extends ConfigManager {
                     set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_ENCHANTED.replace("%path%", new_path), getYml().getBoolean("arenaGui." + path + ".enchanted"));
                 }
             }
+        }
+
+        if (getYml().get("fireball.damage-multiplier") != null) {
+            set("fireball.damage-multiplier", null);
         }
 
         set("arenaGui", null);
@@ -334,9 +351,9 @@ public class MainConfig extends ConfigManager {
         }
 
         try {
-            BedWars.setServerType(ServerType.valueOf(yml.getString("serverType").toUpperCase()));
+            BedWars.setServerType(ServerType.valueOf(Objects.requireNonNull(yml.getString("serverType")).toUpperCase()));
         } catch (Exception e) {
-            if (yml.getString("serverType").equalsIgnoreCase("BUNGEE_LEGACY")) {
+            if (Objects.requireNonNull(yml.getString("serverType")).equalsIgnoreCase("BUNGEE_LEGACY")) {
                 BedWars.setServerType(ServerType.BUNGEE);
                 BedWars.setAutoscale(false);
             } else {

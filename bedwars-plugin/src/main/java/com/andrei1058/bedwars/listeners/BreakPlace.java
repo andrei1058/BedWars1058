@@ -66,6 +66,11 @@ import static com.andrei1058.bedwars.api.language.Language.getMsg;
 public class BreakPlace implements Listener {
 
     private static final List<Player> buildSession = new ArrayList<>();
+    private final boolean allowFireBreak;
+
+    public BreakPlace() {
+        allowFireBreak = config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_ALLOW_FIRE_EXTINGUISH);
+    }
 
     @EventHandler
     public void onIceMelt(BlockFadeEvent e) {
@@ -125,6 +130,9 @@ public class BreakPlace implements Listener {
             if (arena.getStatus() != GameState.playing) {
                 e.setCancelled(true);
                 return;
+            }
+            if(e.getItemInHand().getType().equals(nms.materialFireball()) && e.getBlockPlaced().getType().equals(Material.FIRE)) {
+                e.setCancelled(true);
             }
         }
         Player p = e.getPlayer();
@@ -207,11 +215,11 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onBlockDrop(ItemSpawnEvent event) {
-        //WHEAT_SEEDS
+        //WHEAT_SEEDS AND BEDs
         IArena arena = Arena.getArenaByIdentifier(event.getEntity().getWorld().getName());
         if (arena == null) return;
-        String material = event.getEntity().getItemStack().getType().toString();
-        if (material.equals("SEEDS") || material.equals("WHEAT_SEEDS")) {
+        Material material = event.getEntity().getItemStack().getType();
+        if (nms.isBed(material) || material.toString().equalsIgnoreCase("SEEDS") || material.toString().equalsIgnoreCase("WHEAT_SEEDS")) {
             event.setCancelled(true);
         }
     }
@@ -258,6 +266,12 @@ public class BreakPlace implements Listener {
                         e.setCancelled(false);
                     }
                     return;
+                case "FIRE":
+                    if(allowFireBreak) {
+                        e.setCancelled(false);
+                        return;
+                    }
+                    break;
             }
 
             if (nms.isBed(e.getBlock().getType())) {
@@ -281,13 +295,9 @@ public class BreakPlace implements Listener {
                                             Bukkit.getPluginManager().callEvent(breakEvent = new PlayerBedBreakEvent(e.getPlayer(), a.getTeam(p), t, a,
                                                     player -> {
                                                         if (t.isMember(player)) {
-                                                            return getMsg(player, Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM).replace("{TeamColor}",
-                                                                            t.getColor().chat().toString()).replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(player)))
-                                                                    .replace("{PlayerColor}", a.getTeam(p).getColor().chat().toString()).replace("{PlayerName}", p.getDisplayName());
+                                                            return getMsg(player, Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM);
                                                         } else {
-                                                            return getMsg(player, Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT).replace("{TeamColor}",
-                                                                            t.getColor().chat().toString()).replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(player)))
-                                                                    .replace("{PlayerColor}", a.getTeam(p).getColor().chat().toString()).replace("{PlayerName}", p.getDisplayName());
+                                                            return getMsg(player, Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT);
                                                         }
                                                     },
                                                     player -> {
@@ -304,12 +314,17 @@ public class BreakPlace implements Listener {
                                                     }));
                                             for (Player on : a.getWorld().getPlayers()) {
                                                 if (breakEvent.getMessage() != null) {
-                                                    on.sendMessage(breakEvent.getMessage().apply(on));
+                                                    on.sendMessage(breakEvent.getMessage().apply(on)
+                                                            .replace("{TeamColor}", t.getColor().chat().toString())
+                                                            .replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(on)))
+                                                            .replace("{PlayerColor}", a.getTeam(p).getColor().chat().toString())
+                                                            .replace("{PlayerName}", p.getDisplayName()));
                                                 }
                                                 if (breakEvent.getTitle() != null && breakEvent.getSubTitle() != null) {
                                                     nms.sendTitle(on, breakEvent.getTitle().apply(on), breakEvent.getSubTitle().apply(on), 0, 25, 0);
                                                 }
-                                                Sounds.playSound(ConfigPath.SOUNDS_BED_DESTROY, on);
+                                                if (t.isMember(on)) Sounds.playSound(ConfigPath.SOUNDS_BED_DESTROY_OWN, on);
+                                                else Sounds.playSound(ConfigPath.SOUNDS_BED_DESTROY, on);
                                             }
                                         }
                                         return;
@@ -459,7 +474,7 @@ public class BreakPlace implements Listener {
                         return;
                     }
                     for (IGenerator o : t.getGenerators()) {
-                        if (o.getLocation().distance(e.getBlockClicked().getLocation()) <= 1) {
+                        if (o.getLocation().distance(e.getBlockClicked().getLocation()) <= a.getConfig().getInt(ConfigPath.ARENA_GENERATOR_PROTECTION)) {
                             e.setCancelled(true);
                             p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
                             return;
@@ -467,7 +482,7 @@ public class BreakPlace implements Listener {
                     }
                 }
                 for (IGenerator o : a.getOreGenerators()) {
-                    if (o.getLocation().distance(e.getBlockClicked().getLocation()) <= 1) {
+                    if (o.getLocation().distance(e.getBlockClicked().getLocation()) <= a.getConfig().getInt(ConfigPath.ARENA_GENERATOR_PROTECTION)) {
                         e.setCancelled(true);
                         p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
                         return;

@@ -1,0 +1,47 @@
+name: Deploy with Maven
+
+on:
+  push:
+    branches: [production]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://repo.andrei1058.com
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 17.0.2
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17.0.2'
+          distribution: 'adopt'
+      - name: Deploy with Maven
+        env:
+          MVN_REPO_USER: ${{ secrets.MVN_REPO_USER }}
+          MVN_REPO_PASS: ${{ secrets.MVN_REPO_PASS }}
+          ANDEV_API_TOKEN: ${{ secrets.ANDEV_API_TOKEN }}
+          J_DOCS_USER: ${{ secrets.J_DOCS_USER }}
+          J_DOCS_PASS: ${{ secrets.J_DOCS_PASS }}
+          POLY_API_KEY: ${{ secrets.POLY_API_KEY }}
+        run: |
+          sudo apt install jq -y
+          curl -X GET https://api.andrei1058.dev/v1/resources/1/versioning/candidate -H "Accept: application/json" >> version.json
+          export UPDATE_VERSION=`jq '.version' version.json | tr -d '"'`
+          mvn versions:set -DnewVersion=$UPDATE_VERSION
+          mvn versions:update-child-modules
+          mvn clean deploy -s ci_settings.xml
+          mvn javadoc:javadoc
+          sudo apt install -y -qq lftp
+          lftp -c "set ftp:ssl-allow no; open -u $J_DOCS_USER,$J_DOCS_PASS javadocs.andrei1058.dev; mirror -Rev bedwars-api/target/site/apidocs ./BedWars1058  --ignore-time --parallel=10 --exclude-glob .git* --exclude .git/"
+          curl -F "file=@bedwars-plugin/target/bedwars-plugin-$UPDATE_VERSION.jar" -F api_key=$POLY_API_KEY -F resource_id="1152" -F version="$UPDATE_VERSION" -F title="v$UPDATE_VERSION" -F message="For a detailed update log please visit https://github.com/andrei1058/BedWars1058/releases" "https://api.polymart.org/v1/postUpdate"
+          curl -X PUT https://api.andrei1058.dev/v1/resources/1/versioning/commit -H "Accept: application/json" -H "Authorization: Bearer ${{ secrets.ANDEV_API_TOKEN }}" -H "Content-Type: application/json" --data '{"confirmation": true}' >> version.json
+          echo "UPDATE_VERSION=$UPDATE_VERSION" >> $GITHUB_ENV
+
+      - name: Create Tag
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
+          name: ${{env.UPDATE_VERSION}}
+          tag_name: ${{env.UPDATE_VERSION}}
