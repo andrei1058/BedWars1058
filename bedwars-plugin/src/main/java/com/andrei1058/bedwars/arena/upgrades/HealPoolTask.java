@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static com.andrei1058.bedwars.BedWars.config;
 import static com.andrei1058.bedwars.BedWars.plugin;
 
 public class HealPoolTask extends BukkitRunnable {
@@ -53,8 +54,16 @@ public class HealPoolTask extends BukkitRunnable {
                     if (l.getBlock().getType() != Material.AIR) continue;
                     int chance = r.nextInt(5);
                     if (chance == 0) {
-                        for (Player p : bwt.getMembers()) {
-                            BedWars.nms.playEffect(p, l);
+                        if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_HEAL_POOL_SEEN_TEAM_ONLY)) {
+                            for (Player p : bwt.getMembers()) {
+                                BedWars.nms.playEffect(p, l);
+                            }
+                        }
+                        else
+                        {
+                            for (Player p : arena.getPlayers()) {
+                                BedWars.nms.playEffect(p, l);
+                            }
                         }
                     }
                 }
