@@ -59,6 +59,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBase;
+import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -86,6 +87,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.BiFunction;
 import java.util.logging.Level;
 
 @SuppressWarnings("unused")
@@ -707,5 +709,10 @@ public class v1_18_R1 extends VersionSupport {
     @Override
     public void clearArrowsFromPlayerBody(Player player) {
         ((CraftLivingEntity)player).getHandle().ai().b(new DataWatcherObject<>(12, DataWatcherRegistry.b),-1);
+    }
+
+    @Override
+    public List<Block> calculateExplosionBlocks(IArena arena, Entity source, Location explosionLocation, int radius, boolean fire, BiFunction<Location, Block, Boolean> callback) {
+        throw new NotImplementedException("calculateExplosionBlocks is not implemented yet for v1_18_R1!");
     }
 }
