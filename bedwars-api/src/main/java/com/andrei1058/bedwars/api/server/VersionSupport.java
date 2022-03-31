@@ -435,4 +435,16 @@ public abstract class VersionSupport {
     public abstract void playRedStoneDot(Player player);
 
     public abstract void clearArrowsFromPlayerBody(Player player);
+
+    /**
+     * Calculates BrokenBlocks from an explosion source (with blast proof glass and world protection)
+     *
+     * @param arena arena instance.
+     * @param source source of explosion, can be null.
+     * @param radius radius of the explosion.
+     * @param fire whether blocks are set on fire or not.
+     * @return A Block list of blocks that should be destroyed from the explosion.
+     */
+    public abstract List<Block> calculateExplosionBlocks(IArena arena, Entity source, int radius, boolean fire);
+
 }
