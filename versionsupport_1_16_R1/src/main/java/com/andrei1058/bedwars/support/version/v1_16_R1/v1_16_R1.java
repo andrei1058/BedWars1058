@@ -36,13 +36,14 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.server.v1_16_R1.*;
 import org.bukkit.Color;
 import org.bukkit.Location;
-import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.type.Bed;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_16_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_16_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_16_R1.entity.CraftFireball;
 import org.bukkit.craftbukkit.v1_16_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer;
@@ -56,19 +57,40 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
+import org.bukkit.util.NumberConversions;
 import org.bukkit.util.Vector;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.function.BiFunction;
 import java.util.logging.Level;
 
 @SuppressWarnings("unused")
 public class v1_16_R1 extends VersionSupport {
 
     private static final UUID chatUUID = new UUID(0L, 0L);
+
+    private static class v16R1ExplosionDamageCalculatorEntity implements ExplosionDamageCalculator {
+        private final net.minecraft.server.v1_16_R1.Entity a;
+
+        v16R1ExplosionDamageCalculatorEntity(net.minecraft.server.v1_16_R1.Entity var0) {
+            this.a = var0;
+        }
+
+        public Optional<Float> a(Explosion var0, IBlockAccess var1, BlockPosition var2, IBlockData var3, Fluid var4) {
+            return ExplosionDamageCalculatorBlock.INSTANCE.a(var0, var1, var2, var3, var4).map((var5) -> this.a.a(var0, var1, var2, var3, var4, var5));
+        }
+
+        public boolean a(Explosion var0, IBlockAccess var1, BlockPosition var2, IBlockData var3, float var4) {
+            return this.a.a(var0, var1, var2, var3, var4);
+        }
+    }
 
     public v1_16_R1(Plugin plugin, String name) {
         super(plugin, name);
@@ -679,5 +701,84 @@ public class v1_16_R1 extends VersionSupport {
     @Override
     public void clearArrowsFromPlayerBody(Player player) {
         ((CraftLivingEntity)player).getHandle().getDataWatcher().set(new DataWatcherObject<>(11, DataWatcherRegistry.b),-1);
+    }
+
+    @Override
+    public List<Block> calculateExplosionBlocks(IArena arena, Entity source, Location explosionLocation, int radius, boolean fire, BiFunction<Location, Block, Boolean> callback) {
+        HashSet<Block> blocks = new HashSet<>();
+        org.bukkit.World bukkitWorld = explosionLocation.getWorld();
+
+        net.minecraft.server.v1_16_R1.Entity sourceEntity = null;
+        if (source != null) {
+            sourceEntity = ((CraftEntity) source).getHandle();
+
+        }
+
+        net.minecraft.server.v1_16_R1.World world = ((CraftWorld) Objects.requireNonNull(bukkitWorld)).getHandle();
+
+        double locX = explosionLocation.getX();
+        double locY = explosionLocation.getY();
+
+        if (sourceEntity instanceof EntityTNTPrimed) {
+            locY = sourceEntity.e(0.0625D);
+        }
+
+        double locZ = explosionLocation.getZ();
+
+        Explosion explosion = new Explosion(world, sourceEntity, null, null, locX, locY, locZ, radius, fire, Explosion.Effect.BREAK);
+        ExplosionDamageCalculator calculator = (sourceEntity == null ? ExplosionDamageCalculatorBlock.INSTANCE : new v16R1ExplosionDamageCalculatorEntity(sourceEntity));
+        
+        int i;
+        int j;
+        for (int k = 0; k < 16; ++k) {
+            for (i = 0; i < 16; ++i) {
+                for (j = 0; j < 16; ++j) {
+                    if (k == 0 || k == 15 || i == 0 || i == 15 || j == 0 || j == 15) {
+                        double d0 = (float) k / 15.0F * 2.0F - 1.0F;
+                        double d1 = (float) i / 15.0F * 2.0F - 1.0F;
+                        double d2 = (float) j / 15.0F * 2.0F - 1.0F;
+                        double d3 = Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
+
+                        d0 /= d3;
+                        d1 /= d3;
+                        d2 /= d3;
+
+                        float f = radius * (0.7F + random.nextFloat() * 0.6F);
+                        double d4 = locX;
+                        double d5 = locY;
+
+                        for (double d6 = locZ; f > 0.0F; f -= 0.22500001F) {
+                            BlockPosition blockposition = new BlockPosition(d4, d5, d6);
+                            IBlockData iblockdata = world.getType(blockposition);
+                            Fluid fluid = world.getFluid(blockposition);
+
+                            Optional<Float> optional = calculator.a(explosion, world, blockposition, iblockdata, fluid);
+
+                            if (optional.isPresent()) {
+                                org.bukkit.block.Block bukkitBlock = bukkitWorld.getBlockAt(NumberConversions.floor(d4), NumberConversions.floor(d5), NumberConversions.floor(d6));
+                                boolean allow = !callback.apply(
+                                        explosionLocation,
+                                        bukkitBlock
+                                );
+
+                                if (allow) {
+                                    f -= (optional.get() + 0.3F) * 0.3F;
+                                }
+
+                                if (allow && f > 0.0F && calculator.a(explosion, world, blockposition, iblockdata, f) && blockposition.getY() < 256 && blockposition.getY() >= 0) { // CraftBukkit - don't wrap explosions
+                                    blocks.add(bukkitBlock);
+                                }
+                            }
+
+                            d4 += d0 * 0.30000001192092896D;
+                            d5 += d1 * 0.30000001192092896D;
+                            d6 += d2 * 0.30000001192092896D;
+                        }
+                    }
+                }
+            }
+        }
+
+        return new ArrayList<>(blocks);
     }
 }
