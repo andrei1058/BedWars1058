@@ -44,6 +44,7 @@ import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
@@ -524,14 +525,24 @@ public abstract class VersionSupport {
      * @return A Block list of blocks that should be destroyed from the explosion.
      */
     public List<Block> calculateExplosionBlocks(IArena arena, Entity source, Location explosionLocation, float radius, boolean fire) {
-        return calculateExplosionBlocks(arena, source, explosionLocation, radius, fire, (loc, block) -> {
+        HashMap<Block, Boolean> functionCache = new HashMap<>();
+
+        BiFunction<Location, Block, Boolean> actualCallback = (loc, block) -> {
             if (!arena.isBlockPlaced(block))
                 // the block is not placed by a player
                 return true;
 
             // If it's protected by glass then we should skip it!
             return isProtectedByGlass(loc, block);
-        });
+        };
+
+        List<Block> result = calculateExplosionBlocks(
+                arena, source, explosionLocation, radius, fire, (loc, block) -> functionCache.computeIfAbsent(block, (b) -> actualCallback.apply(loc, b))
+        );
+
+        functionCache.clear();
+
+        return result;
     }
 
     /**
