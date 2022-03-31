@@ -745,7 +745,7 @@ public class v1_13_R2 extends VersionSupport {
                             IBlockData iblockdata = world.getType(blockposition);
                             Fluid fluid = world.getFluid(blockposition);
 
-                            // if the block is not air OR there is no fluid
+                            // if the block is not air OR the fluid is not empty
                             if (!iblockdata.isAir() || !fluid.e()) {
                                 org.bukkit.block.Block bukkitBlock = bukkitWorld.getBlockAt(NumberConversions.floor(d4), NumberConversions.floor(d5), NumberConversions.floor(d6));
                                 boolean allow = !callback.apply(
