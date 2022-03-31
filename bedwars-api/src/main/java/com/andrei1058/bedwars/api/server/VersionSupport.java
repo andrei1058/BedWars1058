@@ -48,6 +48,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiFunction;
 
 public abstract class VersionSupport {
 
@@ -510,14 +511,42 @@ public abstract class VersionSupport {
 
     /**
      * Calculates BrokenBlocks from an explosion source (with blast proof glass and world protection)
+     * <p>
+     * See: {@link #calculateExplosionBlocks(IArena, Entity, Location, int, boolean, BiFunction)}
      *
-     * @param arena  arena instance.
-     * @param source source of explosion, can be null.
-     * @param radius radius of the explosion.
-     * @param fire   whether blocks are set on fire or not.
+     * @param arena             arena instance.
+     * @param source            source of explosion, can be null.
+     * @param explosionLocation the location where the explosion should be calculated from.
+     * @param radius            radius of the explosion.
+     * @param fire              whether blocks are set on fire or not.
      * @return A Block list of blocks that should be destroyed from the explosion.
      */
-    public abstract List<Block> calculateExplosionBlocks(IArena arena, Entity source, int radius, boolean fire);
+    public List<Block> calculateExplosionBlocks(IArena arena, Entity source, Location explosionLocation, int radius, boolean fire) {
+        return calculateExplosionBlocks(arena, source, explosionLocation, radius, fire, (loc, block) -> {
+            if (!arena.isBlockPlaced(block))
+                // the block is not placed by a player
+                return true;
+
+            // If it's protected by glass then we should skip it!
+            return isProtectedByGlass(loc, block);
+        });
+    }
+
+    /**
+     * Calculates BrokenBlocks from an explosion source.
+     * <p>
+     * The Callback takes Location of the explosion and current block and
+     * Must return a boolean indicating whether to skip this block in the explosion calculation
+     *
+     * @param arena             arena instance.
+     * @param source            source of explosion, can be null.
+     * @param explosionLocation the location where the explosion should be calculated from.
+     * @param radius            radius of the explosion.
+     * @param fire              whether blocks are set on fire or not.
+     * @param callback          callback that indicates whether to skip the block.
+     * @return A Block list of blocks that should be destroyed from the explosion.
+     */
+    public abstract List<Block> calculateExplosionBlocks(IArena arena, Entity source, Location explosionLocation, int radius, boolean fire, BiFunction<Location, Block, Boolean> callback);
 
     private static int normalizeInteger(int x) {
         return Integer.compare(x, 0);
