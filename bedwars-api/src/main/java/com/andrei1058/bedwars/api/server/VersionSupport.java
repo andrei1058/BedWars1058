@@ -525,6 +525,7 @@ public abstract class VersionSupport {
      * @return A Block list of blocks that should be destroyed from the explosion.
      */
     public List<Block> calculateExplosionBlocks(IArena arena, Entity source, Location explosionLocation, float radius, boolean fire) {
+        // Honestly I don't know if there's a performance gain or lost but there just in case :)
         HashMap<Block, Boolean> functionCache = new HashMap<>();
 
         BiFunction<Location, Block, Boolean> actualCallback = (loc, block) -> {
