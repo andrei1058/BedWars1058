@@ -168,7 +168,7 @@ public abstract class VersionSupport {
         if (isGlass(block.getType()))
             return true;
 
-        int distance = (int) pov.distance(block.getLocation());
+        int distance = (int) Math.ceil(pov.distance(block.getLocation()));
         if (distance == 0) {
             return isGlass(block.getType());
         }
