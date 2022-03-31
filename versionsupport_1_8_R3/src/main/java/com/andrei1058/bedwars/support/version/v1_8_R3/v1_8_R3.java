@@ -762,7 +762,7 @@ public class v1_8_R3 extends VersionSupport {
         double locX = explosionLocation.getX();
         double locY = explosionLocation.getY();
 
-        if (sourceEntity != null) {
+        if (sourceEntity instanceof EntityTNTPrimed) {
             locY += sourceEntity.length / 2.0F;
         }
 
