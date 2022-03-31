@@ -46,6 +46,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
@@ -55,6 +56,7 @@ public abstract class VersionSupport {
     private static String name2;
 
     private Effect eggBridge;
+    protected static Random random = new Random();
 
     private static ConcurrentHashMap<UUID, Despawnable> despawnables = new ConcurrentHashMap<>();
     private Plugin plugin;
@@ -537,6 +539,8 @@ public abstract class VersionSupport {
      * <p>
      * The Callback takes Location of the explosion and current block and
      * Must return a boolean indicating whether to skip this block in the explosion calculation
+     * <p>
+     * Note: The callback could get called for the same block multiple times.
      *
      * @param arena             arena instance.
      * @param source            source of explosion, can be null.
