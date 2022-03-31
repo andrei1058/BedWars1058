@@ -40,10 +40,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.Team;
+import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -134,6 +136,75 @@ public abstract class VersionSupport {
      * Check if itemstack is Invisibility Potion
      */
     public abstract boolean isInvisibilityPotion(ItemStack itemStack);
+
+    /**
+     * Check if type is a Glass type material
+     */
+    public boolean isGlass(Material type) {
+        return type == Material.GLASS || type.toString().contains("_GLASS");
+    }
+
+    /**
+     * Check if block is protected by blast-proof glass from a point of view
+     * <p>
+     * if pov is null, block is checked by {@link #isGlass(Material)} instead.
+     *
+     * @param pov   the point of view.
+     * @param block the block instance.
+     * @return whether there's blast-proof glass between the pov and the block
+     */
+    public boolean isProtectedByGlass(Location pov, Block block) {
+        if (pov == null)
+            return isGlass(block.getType());
+
+        // maybe remove this?
+        if (block.getType() == Material.AIR)
+            return false;
+
+        if (isGlass(block.getType()))
+            return true;
+
+        int distance = (int) pov.distance(block.getLocation());
+        if (distance == 0) {
+            return isGlass(block.getType());
+        }
+
+        // Trace blocks from pov to the block location
+        Location target = block.getLocation();
+
+        // not sure if normalizeInteger is required in the direction vector
+        BlockIterator iterator = new BlockIterator(
+                pov.getWorld(),
+                pov.toVector(),
+                new Vector(
+                        normalizeInteger(target.getBlockX() - pov.getBlockX()),
+                        normalizeInteger(target.getBlockY() - pov.getBlockY()),
+                        normalizeInteger(target.getBlockZ() - pov.getBlockZ())
+                ),
+                0,
+                distance
+        );
+
+        // not using iterator.hasNext() here because it performs a scan which is not need
+        // because iterator.next() does the same
+        // and throws NoSuchElement if there is no more blocks
+        while (true) {
+            try {
+                Block next = iterator.next();
+
+                if (next.getType() == Material.AIR)
+                    continue;
+
+                // We hit a glass block
+                if (isGlass(next.getType()))
+                    return true;
+
+            } catch (NoSuchElementException stop) {
+                return false;
+            }
+        }
+
+    }
 
     /**
      * Register custom entities
@@ -243,6 +314,7 @@ public abstract class VersionSupport {
 
     /**
      * Get a custom item tag.
+     *
      * @return null if not present.
      */
     public abstract String getTag(ItemStack itemStack, String key);
@@ -439,12 +511,15 @@ public abstract class VersionSupport {
     /**
      * Calculates BrokenBlocks from an explosion source (with blast proof glass and world protection)
      *
-     * @param arena arena instance.
+     * @param arena  arena instance.
      * @param source source of explosion, can be null.
      * @param radius radius of the explosion.
-     * @param fire whether blocks are set on fire or not.
+     * @param fire   whether blocks are set on fire or not.
      * @return A Block list of blocks that should be destroyed from the explosion.
      */
     public abstract List<Block> calculateExplosionBlocks(IArena arena, Entity source, int radius, boolean fire);
 
+    private static int normalizeInteger(int x) {
+        return Integer.compare(x, 0);
+    }
 }
