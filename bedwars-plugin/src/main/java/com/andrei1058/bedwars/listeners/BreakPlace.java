@@ -527,7 +527,7 @@ public class BreakPlace implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onExplosionPrimeExplosion(ExplosionPrimeEvent e) {
-        if (e.isCancelled() || explosionSize < 0) {
+        if (e.isCancelled() || explosionSize >= 0) {
             return;
         }
         IArena a = Arena.getArenaByIdentifier(e.getEntity().getWorld().getName());
