@@ -540,9 +540,9 @@ public class BreakPlace implements Listener {
 
     private int hashLocation(Location loc) {
         int hash = 19 * 3 + (loc.getWorld() != null ? loc.getWorld().hashCode() : 0);
-        hash = 19 * hash + (int)(Double.doubleToLongBits(Math.round(loc.getX())) ^ Double.doubleToLongBits(Math.round(loc.getX())) >>> 32);
-        hash = 19 * hash + (int)(Double.doubleToLongBits(Math.round(loc.getY())) ^ Double.doubleToLongBits(Math.round(loc.getY())) >>> 32);
-        hash = 19 * hash + (int)(Double.doubleToLongBits(Math.round(loc.getZ())) ^ Double.doubleToLongBits(Math.round(loc.getZ())) >>> 32);
+        hash = 19 * hash + (int)(Double.doubleToLongBits(loc.getBlockX()) ^ Double.doubleToLongBits(loc.getBlockX()) >>> 32);
+        hash = 19 * hash + (int)(Double.doubleToLongBits(loc.getBlockY()) ^ Double.doubleToLongBits(loc.getBlockY()) >>> 32);
+        hash = 19 * hash + (int)(Double.doubleToLongBits(loc.getBlockZ()) ^ Double.doubleToLongBits(loc.getBlockZ()) >>> 32);
         return hash;
     }
 
