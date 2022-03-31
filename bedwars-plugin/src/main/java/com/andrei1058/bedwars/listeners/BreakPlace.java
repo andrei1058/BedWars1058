@@ -35,7 +35,9 @@ import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.AutoCreateTeams;
 import com.andrei1058.bedwars.configuration.Sounds;
+import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -49,6 +51,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
@@ -57,6 +60,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -65,11 +69,37 @@ import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class BreakPlace implements Listener {
 
+    private static class InfoContainer {
+        public static final long INFO_MAX_LIFETIME_MILLIS = 5 * 1000L;  // 5 seconds
+        public final float radius;
+        public final boolean fire;
+        public final long recordedAt;
+
+        public InfoContainer(float radius, boolean fire) {
+            this.radius = radius;
+            this.fire = fire;
+            this.recordedAt = System.currentTimeMillis();
+        }
+        public boolean isValid() {
+            return (System.currentTimeMillis() - recordedAt) <= INFO_MAX_LIFETIME_MILLIS;
+        }
+
+    }
+
     private static final List<Player> buildSession = new ArrayList<>();
     private final boolean allowFireBreak;
+    private final int explosionSize;
+    private final HashMap<Integer, InfoContainer> cachedPrimes = new HashMap<>();
 
     public BreakPlace() {
         allowFireBreak = config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_ALLOW_FIRE_EXTINGUISH);
+        String expType = config.getString(ConfigPath.GENERAL_EXPLOSION_SIZE).toLowerCase();
+        if (!expType.equals("auto")) {
+            explosionSize = config.getInt(ConfigPath.GENERAL_EXPLOSION_SIZE);
+        } else {
+            // Set to auto
+            explosionSize = -1;
+        }
     }
 
     @EventHandler
@@ -495,21 +525,63 @@ public class BreakPlace implements Listener {
         }
     }
 
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onExplosionPrimeExplosion(ExplosionPrimeEvent e) {
+        if (e.isCancelled() || explosionSize < 0) {
+            return;
+        }
+        IArena a = Arena.getArenaByIdentifier(e.getEntity().getWorld().getName());
+
+        if (a == null)
+            return;
+
+        cachedPrimes.put(hashLocation(e.getEntity().getLocation()), new InfoContainer(e.getRadius(), e.getFire()));
+    }
+
+    private int hashLocation(Location loc) {
+        int hash = 19 * 3 + (loc.getWorld() != null ? loc.getWorld().hashCode() : 0);
+        hash = 19 * hash + (int)(Double.doubleToLongBits(Math.round(loc.getX())) ^ Double.doubleToLongBits(Math.round(loc.getX())) >>> 32);
+        hash = 19 * hash + (int)(Double.doubleToLongBits(Math.round(loc.getY())) ^ Double.doubleToLongBits(Math.round(loc.getY())) >>> 32);
+        hash = 19 * hash + (int)(Double.doubleToLongBits(Math.round(loc.getZ())) ^ Double.doubleToLongBits(Math.round(loc.getZ())) >>> 32);
+        return hash;
+    }
 
     @EventHandler
     public void onBlow(EntityExplodeEvent e) {
         if (e.isCancelled()) return;
         if (e.blockList().isEmpty()) return;
+
         IArena a = Arena.getArenaByIdentifier(e.blockList().get(0).getWorld().getName());
         if (a != null) {
             if (a.getNextEvent() != NextEvent.GAME_END) {
-                List<Block> destroyed = e.blockList();
-                for (Block block : new ArrayList<>(destroyed)) {
-                    if (!a.isBlockPlaced(block)) {
-                        e.blockList().remove(block);
-                    } else if (AutoCreateTeams.is13Higher()) {
-                        if (block.getType().toString().contains("_GLASS")) e.blockList().remove(block);
+                try {
+                    float radius;
+                    boolean fire = true;
+
+                    if (explosionSize < 0) {
+                        // Size is auto
+
+                        InfoContainer prevInfo = cachedPrimes.get(hashLocation(e.getLocation()));
+                        if (prevInfo == null || !prevInfo.isValid()) {
+                            e.blockList().removeIf((b) -> !a.isBlockPlaced(b) || BedWars.nms.isProtectedByGlass(e.getLocation(), b));
+                            return;
+                        }
+
+                        radius = prevInfo.radius;
+                        fire = prevInfo.fire;
+
+                    } else {
+                        radius = explosionSize;
                     }
+
+
+                    List<Block> newBlockList = BedWars.nms.calculateExplosionBlocks(a, e.getEntity(), e.getLocation(), radius, fire);
+                    e.blockList().clear();
+                    e.blockList().addAll(newBlockList);
+
+                } catch (NotImplementedException ignored) {
+                    // calculateExplosionBlocks is not implemented in that version yet
+                    e.blockList().removeIf((b) -> !a.isBlockPlaced(b) || BedWars.nms.isProtectedByGlass(e.getLocation(), b));
                 }
             }
         }
@@ -519,17 +591,11 @@ public class BreakPlace implements Listener {
     public void onBlockExplode(BlockExplodeEvent e) {
         if (e.isCancelled()) return;
         if (e.blockList().isEmpty()) return;
+
         IArena a = Arena.getArenaByIdentifier(e.blockList().get(0).getWorld().getName());
         if (a != null) {
             if (a.getNextEvent() != NextEvent.GAME_END) {
-                List<Block> destroyed = e.blockList();
-                for (Block block : new ArrayList<>(destroyed)) {
-                    if (!a.isBlockPlaced(block)) {
-                        e.blockList().remove(block);
-                    } else if (AutoCreateTeams.is13Higher()) {
-                        if (block.getType().toString().contains("_GLASS")) e.blockList().remove(block);
-                    }
-                }
+                e.blockList().removeIf((b) -> !a.isBlockPlaced(b) || BedWars.nms.isProtectedByGlass(e.getBlock().getLocation(), b));
             }
         }
     }
