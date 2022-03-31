@@ -745,14 +745,15 @@ public class v1_13_R2 extends VersionSupport {
                             IBlockData iblockdata = world.getType(blockposition);
                             Fluid fluid = world.getFluid(blockposition);
 
-                            if (!iblockdata.isAir()) {
+                            // if the block is not air OR there is no fluid
+                            if (!iblockdata.isAir() || !fluid.e()) {
                                 org.bukkit.block.Block bukkitBlock = bukkitWorld.getBlockAt(NumberConversions.floor(d4), NumberConversions.floor(d5), NumberConversions.floor(d6));
                                 boolean allow = !callback.apply(
                                         explosionLocation,
                                         bukkitBlock
                                 );
 
-                                if (allow && !fluid.e()) {
+                                if (allow) {
                                     float f2 = Math.max(iblockdata.getBlock().getDurability(), fluid.l());
 
                                     if (sourceEntity != null) {
