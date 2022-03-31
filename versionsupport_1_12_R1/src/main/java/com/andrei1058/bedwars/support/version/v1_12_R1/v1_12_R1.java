@@ -35,7 +35,6 @@ import net.minecraft.server.v1_12_R1.Item;
 import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.Color;
 import org.bukkit.Location;
-import org.bukkit.Particle;
 import org.bukkit.block.Bed;
 import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
@@ -715,7 +714,7 @@ public class v1_12_R1 extends VersionSupport {
     }
 
     @Override
-    public List<org.bukkit.block.Block> calculateExplosionBlocks(IArena arena, Entity source, Location explosionLocation, int radius, boolean fire, BiFunction<Location, org.bukkit.block.Block, Boolean> callback) {
+    public List<org.bukkit.block.Block> calculateExplosionBlocks(IArena arena, Entity source, Location explosionLocation, float radius, boolean fire, BiFunction<Location, org.bukkit.block.Block, Boolean> callback) {
         HashSet<org.bukkit.block.Block> blocks = new HashSet<>();
         org.bukkit.World bukkitWorld = explosionLocation.getWorld();
 

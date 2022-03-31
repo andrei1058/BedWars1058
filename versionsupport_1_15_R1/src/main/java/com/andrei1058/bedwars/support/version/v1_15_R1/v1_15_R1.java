@@ -35,7 +35,6 @@ import com.mojang.datafixers.types.Type;
 import net.minecraft.server.v1_15_R1.*;
 import org.bukkit.Color;
 import org.bukkit.Location;
-import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.type.Bed;
@@ -694,7 +693,7 @@ public class v1_15_R1 extends VersionSupport {
     }
 
     @Override
-    public List<Block> calculateExplosionBlocks(IArena arena, Entity source, Location explosionLocation, int radius, boolean fire, BiFunction<Location, Block, Boolean> callback) {
+    public List<Block> calculateExplosionBlocks(IArena arena, Entity source, Location explosionLocation, float radius, boolean fire, BiFunction<Location, Block, Boolean> callback) {
         HashSet<Block> blocks = new HashSet<>();
         org.bukkit.World bukkitWorld = explosionLocation.getWorld();
 

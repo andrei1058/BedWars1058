@@ -698,7 +698,7 @@ public class v1_9_R2 extends VersionSupport {
     }
 
     @Override
-    public List<org.bukkit.block.Block> calculateExplosionBlocks(IArena arena, Entity source, Location explosionLocation, int radius, boolean fire, BiFunction<Location, org.bukkit.block.Block, Boolean> callback) {
+    public List<org.bukkit.block.Block> calculateExplosionBlocks(IArena arena, Entity source, Location explosionLocation, float radius, boolean fire, BiFunction<Location, org.bukkit.block.Block, Boolean> callback) {
         HashSet<org.bukkit.block.Block> blocks = new HashSet<>();
         org.bukkit.World bukkitWorld = explosionLocation.getWorld();
 

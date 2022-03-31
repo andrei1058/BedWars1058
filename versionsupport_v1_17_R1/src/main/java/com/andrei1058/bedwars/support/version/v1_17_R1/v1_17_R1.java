@@ -713,7 +713,7 @@ public class v1_17_R1 extends VersionSupport {
     }
 
     @Override
-    public List<Block> calculateExplosionBlocks(IArena arena, Entity source, Location explosionLocation, int radius, boolean fire, BiFunction<Location, Block, Boolean> callback) {
+    public List<Block> calculateExplosionBlocks(IArena arena, Entity source, Location explosionLocation, float radius, boolean fire, BiFunction<Location, Block, Boolean> callback) {
         throw new NotImplementedException("calculateExplosionBlocks is not implemented yet for v1_17_R1!");
     }
 }

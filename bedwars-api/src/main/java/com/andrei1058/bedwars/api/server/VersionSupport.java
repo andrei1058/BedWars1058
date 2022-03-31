@@ -514,7 +514,7 @@ public abstract class VersionSupport {
     /**
      * Calculates BrokenBlocks from an explosion source (with blast proof glass and world protection)
      * <p>
-     * See: {@link #calculateExplosionBlocks(IArena, Entity, Location, int, boolean, BiFunction)}
+     * See: {@link #calculateExplosionBlocks(IArena, Entity, Location, float, boolean, BiFunction)}
      *
      * @param arena             arena instance.
      * @param source            source of explosion, can be null.
@@ -523,7 +523,7 @@ public abstract class VersionSupport {
      * @param fire              whether blocks are set on fire or not.
      * @return A Block list of blocks that should be destroyed from the explosion.
      */
-    public List<Block> calculateExplosionBlocks(IArena arena, Entity source, Location explosionLocation, int radius, boolean fire) {
+    public List<Block> calculateExplosionBlocks(IArena arena, Entity source, Location explosionLocation, float radius, boolean fire) {
         return calculateExplosionBlocks(arena, source, explosionLocation, radius, fire, (loc, block) -> {
             if (!arena.isBlockPlaced(block))
                 // the block is not placed by a player
@@ -550,7 +550,7 @@ public abstract class VersionSupport {
      * @param callback          callback that indicates whether to skip the block.
      * @return A Block list of blocks that should be destroyed from the explosion.
      */
-    public abstract List<Block> calculateExplosionBlocks(IArena arena, Entity source, Location explosionLocation, int radius, boolean fire, BiFunction<Location, Block, Boolean> callback);
+    public abstract List<Block> calculateExplosionBlocks(IArena arena, Entity source, Location explosionLocation, float radius, boolean fire, BiFunction<Location, Block, Boolean> callback);
 
     private static int normalizeInteger(int x) {
         return Integer.compare(x, 0);
