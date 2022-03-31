@@ -529,6 +529,9 @@ public abstract class VersionSupport {
                 // the block is not placed by a player
                 return true;
 
+            if (block.getType() == Material.WATER)
+                return true;
+
             // If it's protected by glass then we should skip it!
             return isProtectedByGlass(loc, block);
         });
