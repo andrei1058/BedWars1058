@@ -28,9 +28,9 @@ public class HealPoolTask extends BukkitRunnable {
 
     public HealPoolTask(ITeam bwt){
         this.bwt = bwt;
-        if (bwt == null){
-            cancel();
+        if (bwt.getSpawn() == null  || bwt == null){
             removeForTeam(this.bwt);
+            cancel();
             return;
         }
         int radius = bwt.getArena().getConfig().getInt(ConfigPath.ARENA_ISLAND_RADIUS);
