@@ -90,13 +90,13 @@
         <dependency>
             <groupId>de.simonsator</groupId>
             <artifactId>DevelopmentPAFSpigot</artifactId>
-            <version>1.0.66</version>
+            <version>1.0.67</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.alessiodp.parties</groupId>
             <artifactId>parties-api</artifactId>
-            <version>3.2.2</version>
+            <version>3.2.3</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
