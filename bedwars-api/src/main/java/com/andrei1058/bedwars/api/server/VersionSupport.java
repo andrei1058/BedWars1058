@@ -192,13 +192,12 @@ public abstract class VersionSupport {
 
         while (ray.hasNext()) {
             Block nextBlock = ray.next();
-            if (block.getType() == Material.STAINED_CLAY) {
-                System.out.println("CLAY: " + nextBlock.getLocation().toVector());
-            }
+
             if (isGlass(nextBlock.getType())) {
                 // If a block is a glass
                 return true;
             }
+            
             if (arena != null && !arena.isBlockPlaced(nextBlock)) {
                 return true;
             }
