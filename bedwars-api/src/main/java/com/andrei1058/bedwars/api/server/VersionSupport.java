@@ -531,7 +531,7 @@ public abstract class VersionSupport {
                 return true;
 
             // If it's protected by glass then we should skip it!
-            return isProtectedByGlass(loc, block);
+            return isProtected(arena, loc, block, 0.3);
         };
 
         List<Block> result = calculateExplosionBlocks(
