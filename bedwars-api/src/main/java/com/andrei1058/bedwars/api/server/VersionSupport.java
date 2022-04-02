@@ -25,6 +25,7 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.entity.Despawnable;
 import com.andrei1058.bedwars.api.exceptions.InvalidEffectException;
+import com.andrei1058.bedwars.api.util.BlockRay;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -41,6 +42,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.BlockIterator;
+import org.bukkit.util.NumberConversions;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
@@ -145,19 +147,24 @@ public abstract class VersionSupport {
      * Check if type is a Glass type material
      */
     public boolean isGlass(Material type) {
-        return type == Material.GLASS || type.toString().contains("_GLASS");
+        return type != Material.AIR && (type == Material.GLASS || type.toString().contains("_GLASS"));
     }
 
     /**
-     * Check if block is protected by blast-proof glass from a point of view
+     * Check if block is protected by blast-proof glass or an unbreakable block from a point of view
      * <p>
-     * if pov is null, block is checked by {@link #isGlass(Material)} instead.
+     * if pov is null, block is checked by {@link #isGlass(Material)} and {@link IArena#isBlockPlaced(Block)} instead.
+     * Otherwise, a ray tracing is performed to check whether there is any glass block or an unbreakable block.
+     * <p>
+     * If arena is null, then glass only be checked.
      *
+     * @param arena Arena instance.
      * @param pov   the point of view.
      * @param block the block instance.
-     * @return whether there's blast-proof glass between the pov and the block
+     * @param step  how frequent to check the ray (0.25 - 0.5 recommended).
+     * @return whether there's unbreakable block between the pov and the block
      */
-    public boolean isProtectedByGlass(Location pov, Block block) {
+    public boolean isProtected(IArena arena, Location pov, Block block, double step) {
         if (pov == null)
             return isGlass(block.getType());
 
@@ -168,46 +175,36 @@ public abstract class VersionSupport {
         if (isGlass(block.getType()))
             return true;
 
-        int distance = (int) Math.ceil(pov.distance(block.getLocation()));
+        int distance = NumberConversions.ceil(pov.distanceSquared(block.getLocation()));
         if (distance == 0) {
             return isGlass(block.getType());
         }
 
         // Trace blocks from pov to the block location
-        Location target = block.getLocation();
+        final Location target = block.getLocation();
+        BlockRay ray;
 
-        // not sure if normalizeInteger is required in the direction vector
-        BlockIterator iterator = new BlockIterator(
-                pov.getWorld(),
-                pov.toVector(),
-                new Vector(
-                        normalizeInteger(target.getBlockX() - pov.getBlockX()),
-                        normalizeInteger(target.getBlockY() - pov.getBlockY()),
-                        normalizeInteger(target.getBlockZ() - pov.getBlockZ())
-                ),
-                0,
-                distance
-        );
+        try {
+            ray = new BlockRay(block.getWorld(), pov.toVector(), target.toVector(), step);
+        } catch (IllegalArgumentException ignored) {
+            return isGlass(block.getType());
+        }
 
-        // not using iterator.hasNext() here because it performs a scan which is not need
-        // because iterator.next() does the same
-        // and throws NoSuchElement if there is no more blocks
-        while (true) {
-            try {
-                Block next = iterator.next();
-
-                if (next.getType() == Material.AIR)
-                    continue;
-
-                // We hit a glass block
-                if (isGlass(next.getType()))
-                    return true;
-
-            } catch (NoSuchElementException stop) {
-                return false;
+        while (ray.hasNext()) {
+            Block nextBlock = ray.next();
+            if (block.getType() == Material.STAINED_CLAY) {
+                System.out.println("CLAY: " + nextBlock.getLocation().toVector());
+            }
+            if (isGlass(nextBlock.getType())) {
+                // If a block is a glass
+                return true;
+            }
+            if (arena != null && !arena.isBlockPlaced(nextBlock)) {
+                return true;
             }
         }
 
+        return false;
     }
 
     /**

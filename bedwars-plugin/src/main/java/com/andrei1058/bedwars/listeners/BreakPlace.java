@@ -563,7 +563,7 @@ public class BreakPlace implements Listener {
 
                         InfoContainer prevInfo = cachedPrimes.get(hashLocation(e.getLocation()));
                         if (prevInfo == null || !prevInfo.isValid()) {
-                            e.blockList().removeIf((b) -> !a.isBlockPlaced(b) || BedWars.nms.isProtectedByGlass(e.getLocation(), b));
+                            e.blockList().removeIf((b) -> !a.isBlockPlaced(b) || BedWars.nms.isProtected(a, e.getLocation(), b, 0.3));
                             return;
                         }
 
@@ -581,7 +581,7 @@ public class BreakPlace implements Listener {
 
                 } catch (NotImplementedException ignored) {
                     // calculateExplosionBlocks is not implemented in that version yet
-                    e.blockList().removeIf((b) -> !a.isBlockPlaced(b) || BedWars.nms.isProtectedByGlass(e.getLocation(), b));
+                    e.blockList().removeIf((b) -> !a.isBlockPlaced(b) || BedWars.nms.isProtected(a, e.getLocation(), b, 0.3));
                 }
             }
         }
@@ -595,7 +595,7 @@ public class BreakPlace implements Listener {
         IArena a = Arena.getArenaByIdentifier(e.blockList().get(0).getWorld().getName());
         if (a != null) {
             if (a.getNextEvent() != NextEvent.GAME_END) {
-                e.blockList().removeIf((b) -> !a.isBlockPlaced(b) || BedWars.nms.isProtectedByGlass(e.getBlock().getLocation(), b));
+                e.blockList().removeIf((b) -> !a.isBlockPlaced(b) || BedWars.nms.isProtected(a, e.getBlock().getLocation(), b, 0.3));
             }
         }
     }
