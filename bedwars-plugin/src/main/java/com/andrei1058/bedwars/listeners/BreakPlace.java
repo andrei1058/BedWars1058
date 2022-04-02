@@ -99,6 +99,7 @@ public class BreakPlace implements Listener {
         } else {
             // Set to auto
             explosionSize = -1;
+            Bukkit.getScheduler().runTaskTimerAsynchronously(BedWars.plugin, this::cleanCache, 10000L, InfoContainer.INFO_MAX_LIFETIME_MILLIS + 20L);
         }
     }
 
@@ -671,5 +672,13 @@ public class BreakPlace implements Listener {
 
     public static void removeBuildSession(Player p) {
         buildSession.remove(p);
+    }
+    
+    private void cleanCache() {
+        for (Map.Entry<Integer, InfoContainer> entry : new HashSet<>(cachedPrimes.entrySet())) {
+            if (entry.getValue() == null || !entry.getValue().isValid()) {
+                cachedPrimes.remove(entry.getKey());
+            }
+        }
     }
 }
