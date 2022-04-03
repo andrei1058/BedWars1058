@@ -166,18 +166,18 @@ public abstract class VersionSupport {
      */
     public boolean isProtected(IArena arena, Location pov, Block block, double step) {
         if (pov == null)
-            return isGlass(block.getType());
+            return isGlass(block.getType()) || (arena != null && !arena.isBlockPlaced(block));
 
         // maybe remove this?
         if (block.getType() == Material.AIR)
             return false;
 
-        if (isGlass(block.getType()))
+        if (isGlass(block.getType()) || (arena != null && !arena.isBlockPlaced(block)))
             return true;
 
         int distance = NumberConversions.ceil(pov.distanceSquared(block.getLocation()));
         if (distance == 0) {
-            return isGlass(block.getType());
+            return isGlass(block.getType()) || (arena != null && !arena.isBlockPlaced(block));
         }
 
         // Trace blocks from pov to the block location
@@ -187,7 +187,7 @@ public abstract class VersionSupport {
         try {
             ray = new BlockRay(block.getWorld(), pov.toVector(), target.toVector(), step);
         } catch (IllegalArgumentException ignored) {
-            return isGlass(block.getType());
+            return isGlass(block.getType()) || (arena != null && !arena.isBlockPlaced(block));
         }
 
         while (ray.hasNext()) {
