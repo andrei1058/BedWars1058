@@ -543,9 +543,8 @@ public class BreakPlace implements Listener {
     @EventHandler
     public void onBlow(EntityExplodeEvent e) {
         if (e.isCancelled()) return;
-        if (e.blockList().isEmpty()) return;
 
-        IArena a = Arena.getArenaByIdentifier(e.blockList().get(0).getWorld().getName());
+        IArena a = Arena.getArenaByIdentifier(e.getLocation().getWorld().getName());
         if (a != null) {
             if (a.getNextEvent() != NextEvent.GAME_END) {
                 try {
