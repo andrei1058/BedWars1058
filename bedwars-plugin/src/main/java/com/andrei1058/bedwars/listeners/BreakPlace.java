@@ -42,6 +42,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
@@ -70,7 +71,7 @@ import static com.andrei1058.bedwars.api.language.Language.getMsg;
 public class BreakPlace implements Listener {
 
     private static class InfoContainer {
-        public static final long INFO_MAX_LIFETIME_MILLIS = 5 * 1000L;  // 5 seconds
+        public static final long INFO_MAX_LIFETIME_MILLIS = 10 * 1000L;  // 10 seconds
         public final float radius;
         public final boolean fire;
         public final long recordedAt;
@@ -89,7 +90,7 @@ public class BreakPlace implements Listener {
     private static final List<Player> buildSession = new ArrayList<>();
     private final boolean allowFireBreak;
     private final int explosionSize;
-    private final HashMap<Integer, InfoContainer> cachedPrimes = new HashMap<>();
+    private final HashMap<Entity, InfoContainer> cachedPrimes = new HashMap<>();
 
     public BreakPlace() {
         allowFireBreak = config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_ALLOW_FIRE_EXTINGUISH);
@@ -99,7 +100,7 @@ public class BreakPlace implements Listener {
         } else {
             // Set to auto
             explosionSize = -1;
-            Bukkit.getScheduler().runTaskTimerAsynchronously(BedWars.plugin, this::cleanCache, 10000L, InfoContainer.INFO_MAX_LIFETIME_MILLIS + 20L);
+            Bukkit.getScheduler().runTaskTimerAsynchronously(BedWars.plugin, this::cleanCache, 10000L, InfoContainer.INFO_MAX_LIFETIME_MILLIS * 10);
         }
     }
 
@@ -536,15 +537,7 @@ public class BreakPlace implements Listener {
         if (a == null)
             return;
 
-        cachedPrimes.put(hashLocation(e.getEntity().getLocation()), new InfoContainer(e.getRadius(), e.getFire()));
-    }
-
-    private int hashLocation(Location loc) {
-        int hash = 19 * 3 + (loc.getWorld() != null ? loc.getWorld().hashCode() : 0);
-        hash = 19 * hash + (int)(Double.doubleToLongBits(loc.getBlockX()) ^ Double.doubleToLongBits(loc.getBlockX()) >>> 32);
-        hash = 19 * hash + (int)(Double.doubleToLongBits(loc.getBlockY()) ^ Double.doubleToLongBits(loc.getBlockY()) >>> 32);
-        hash = 19 * hash + (int)(Double.doubleToLongBits(loc.getBlockZ()) ^ Double.doubleToLongBits(loc.getBlockZ()) >>> 32);
-        return hash;
+        cachedPrimes.put(e.getEntity(), new InfoContainer(e.getRadius(), e.getFire()));
     }
 
     @EventHandler
@@ -562,7 +555,7 @@ public class BreakPlace implements Listener {
                     if (explosionSize < 0) {
                         // Size is auto
 
-                        InfoContainer prevInfo = cachedPrimes.get(hashLocation(e.getLocation()));
+                        InfoContainer prevInfo = cachedPrimes.get(e.getEntity());
                         if (prevInfo == null || !prevInfo.isValid()) {
                             e.blockList().removeIf((b) -> !a.isBlockPlaced(b) || BedWars.nms.isProtected(a, e.getLocation(), b, 0.3));
                             return;
@@ -675,7 +668,7 @@ public class BreakPlace implements Listener {
     }
     
     private void cleanCache() {
-        for (Map.Entry<Integer, InfoContainer> entry : new HashSet<>(cachedPrimes.entrySet())) {
+        for (Map.Entry<Entity, InfoContainer> entry : new HashSet<>(cachedPrimes.entrySet())) {
             if (entry.getValue() == null || !entry.getValue().isValid()) {
                 cachedPrimes.remove(entry.getKey());
             }
