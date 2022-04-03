@@ -91,6 +91,9 @@ public class FireballListener implements Listener {
         }
         Player source = (Player) projectileSource;
         IArena arena = Arena.getArenaByPlayer(source);
+        if (arena == null) {
+            return;
+        }
         if (arena.getStatus() != GameState.playing) {
             return;
         }
