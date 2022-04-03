@@ -193,6 +193,10 @@ public abstract class VersionSupport {
         while (ray.hasNext()) {
             Block nextBlock = ray.next();
 
+            if (nextBlock.getType() == Material.AIR) {
+                continue;
+            }
+
             if (isGlass(nextBlock.getType())) {
                 // If a block is a glass
                 return true;
