@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.LastHit;
+import com.andrei1058.bedwars.api.arena.GameState;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -59,6 +60,10 @@ public class FireballListener implements Listener {
         Player source = (Player) projectileSource;
 
         IArena arena = Arena.getArenaByPlayer(source);
+        
+        if (arena.getStatus() != GameState.playing) {
+            return;
+        }
 
         Vector vector = location.toVector();
 
