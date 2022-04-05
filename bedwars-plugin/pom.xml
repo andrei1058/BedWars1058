@@ -204,6 +204,11 @@
         </dependency>
         <dependency>
             <groupId>com.andrei1058.bedwars</groupId>
+            <artifactId>versionsupport_v1_18_R2</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.bedwars</groupId>
             <artifactId>versionsupport-common</artifactId>
             <version>${project.version}</version>
         </dependency>
