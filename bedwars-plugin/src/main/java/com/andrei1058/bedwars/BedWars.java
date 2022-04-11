@@ -68,10 +68,7 @@ import com.andrei1058.bedwars.support.citizens.CitizensListener;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.support.papi.PAPISupport;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
-import com.andrei1058.bedwars.support.party.NoParty;
-import com.andrei1058.bedwars.support.party.PAF;
-import com.andrei1058.bedwars.support.party.PAFBungeecordRedisApi;
-import com.andrei1058.bedwars.support.party.PartiesAdapter;
+import com.andrei1058.bedwars.support.party.*;
 import com.andrei1058.bedwars.support.preloadedparty.PrePartyListener;
 import com.andrei1058.bedwars.support.vault.*;
 import com.andrei1058.bedwars.support.vipfeatures.VipFeatures;
@@ -358,6 +355,9 @@ public class BedWars extends JavaPlugin {
                 } else if (Bukkit.getServer().getPluginManager().isPluginEnabled("Spigot-Party-API-PAF")) {
                     getLogger().info("Hook into Spigot Party API for Party and Friends Extended (by Simonsator) support!");
                     party = new PAFBungeecordRedisApi();
+                } else if (Bukkit.getServer().getPluginManager().isPluginEnabled("PartyAndFriendsGUI")){
+                    getLogger().info("Hook into DataCallBackAPI for Party and Friends Bungee (by Simonsator) support!");
+                    party = new PAFDataCallBack();
                 }
 
                 if (party instanceof NoParty) {
