@@ -4,6 +4,9 @@ import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.events.gameplay.GameEndEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
@@ -25,6 +28,14 @@ public class GameEnd implements Listener {
                     gen.setDelay(30);  //Stops generator from dropping items on game end
                 }
         }
+        World game = event.getArena().getWorld();
+        for (Entity item: game.getEntities()) {
+            if ((item instanceof Item) ||(item instanceof ItemStack))
+                item.remove();
+        }
+
     }
+
+
 
 }
