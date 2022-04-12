@@ -6,7 +6,7 @@
 
 
     <artifactId>versionsupport_1_11_R1</artifactId>
-    <version>${parent.version}</version>
+    <version>${project.parent.version}</version>
 
     <parent>
         <artifactId>BedWars1058</artifactId>
