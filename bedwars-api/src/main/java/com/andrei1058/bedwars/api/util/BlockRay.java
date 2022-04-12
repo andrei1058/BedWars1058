@@ -45,9 +45,9 @@ public class BlockRay implements Iterator<Block> {
 
         // How much `pov` needs to change in order to reach the target
         this.delta = new Vector(
-                dst.getBlockX() - src.getBlockX(),
-                dst.getBlockY() - src.getBlockY(),
-                dst.getBlockZ() - src.getBlockZ()
+                dst.getX() - src.getX(),
+                dst.getY() - src.getY(),
+                dst.getZ() - src.getZ()
         );
 
         if (delta.lengthSquared() == 0) {
