@@ -238,7 +238,8 @@ public class v1_18_R2 extends VersionSupport {
     @SuppressWarnings({"unchecked"})
     @Override
     public void registerEntities() {
-        //noinspection deprecation
+
+        /*
         Map<String, Type<?>> types = (Map<String, Type<?>>) DataConverterRegistry.a().getSchema(
                 DataFixUtils.makeKey(SharedConstants.b().getWorldVersion())
         ).findChoiceType(DataConverterTypes.q).types();
@@ -248,6 +249,7 @@ public class v1_18_R2 extends VersionSupport {
 
         types.put("minecraft:bwgolem", types.get("minecraft:iron_golem"));
         EntityTypes.Builder.a(IGolem::new, EnumCreatureType.a).a("bwgolem");
+         */
     }
 
     @Override
@@ -369,6 +371,7 @@ public class v1_18_R2 extends VersionSupport {
 
     @Override
     public void registerTntWhitelist() {
+        /*
         try {
             Field field = BlockBase.class.getDeclaredField("aI");
             field.setAccessible(true);
@@ -377,6 +380,8 @@ public class v1_18_R2 extends VersionSupport {
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
+
+         */
     }
 
     @Override
