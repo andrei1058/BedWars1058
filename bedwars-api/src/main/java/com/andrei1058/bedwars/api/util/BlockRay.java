@@ -45,9 +45,9 @@ public class BlockRay implements Iterator<Block> {
 
         // How much `pov` needs to change in order to reach the target
         this.delta = new Vector(
-                dst.getX() - src.getX(),
-                dst.getY() - src.getY(),
-                dst.getZ() - src.getZ()
+                dst.getBlockX() - src.getBlockX(),
+                dst.getBlockY() - src.getBlockY(),
+                dst.getBlockZ() - src.getBlockZ()
         );
 
         if (delta.lengthSquared() == 0) {
@@ -77,11 +77,14 @@ public class BlockRay implements Iterator<Block> {
         // 0 -> X component
         // 1 -> Y component
         // 2 -> Z component
-        // 3 -> Resultant
-        this.blockQueue = new Block[4];
+        // 3 -> XY component
+        // 4 -> XZ component
+        // 5 -> ZY component
+        // 6 -> Resultant
+        this.blockQueue = new Block[7];
 
-        // The current component (gets incremented whenever next() is called)
-        this.currentBlock = 3;
+        // The current component (gets decremented whenever next() is called)
+        this.currentBlock = 6;
 
         scan();
     }
@@ -104,7 +107,7 @@ public class BlockRay implements Iterator<Block> {
 
         if (currentBlock < 0) {
             scan();
-            currentBlock = 3;
+            currentBlock = 6;
         }
 
         return blockQueue[currentBlock--];
@@ -116,33 +119,62 @@ public class BlockRay implements Iterator<Block> {
         double cy = (multiple * delta.getY() * consumed);
         double cz = (multiple * delta.getZ() * consumed);
 
+        int lastXFloor = NumberConversions.floor(xOffset + lcx);
+        int lastYFloor = NumberConversions.floor(yOffset + lcy);
+        int lastZFloor = NumberConversions.floor(zOffset + lcz);
+
+        int currentXFloor = NumberConversions.floor(xOffset + cx);
+        int currentYFloor = NumberConversions.floor(yOffset + cy);
+        int currentZFloor = NumberConversions.floor(zOffset + cz);
+
 
         // Get the X component separately
         blockQueue[0] = world.getBlockAt(
-                NumberConversions.floor(xOffset + cx),
-                NumberConversions.floor(yOffset + lcy),
-                NumberConversions.floor(zOffset + lcz)
+                currentXFloor,
+                lastYFloor,
+                lastZFloor
         );
 
         // Get the Y component separately
         blockQueue[1] = world.getBlockAt(
-                NumberConversions.floor(xOffset + lcx),
-                NumberConversions.floor(yOffset + cy),
-                NumberConversions.floor(zOffset + lcz)
+                lastXFloor,
+                currentYFloor,
+                lastZFloor
         );
 
         // Get the Z component separately
         blockQueue[2] = world.getBlockAt(
-                NumberConversions.floor(xOffset + lcx),
-                NumberConversions.floor(yOffset + lcy),
-                NumberConversions.floor(zOffset + cz)
+                lastXFloor,
+                lastYFloor,
+                currentZFloor
+        );
+
+        // Get the XY separately
+        blockQueue[3] = world.getBlockAt(
+                currentXFloor,
+                currentYFloor,
+                lastZFloor
+        );
+
+        // Get the XZ separately
+        blockQueue[4] = world.getBlockAt(
+                currentXFloor,
+                lastYFloor,
+                currentZFloor
+        );
+
+        // Get the ZY separately
+        blockQueue[5] = world.getBlockAt(
+                lastXFloor,
+                currentYFloor,
+                currentZFloor
         );
 
         // Get the resultant (cx, cy, cz) together
-        blockQueue[3] =  world.getBlockAt(
-                NumberConversions.floor(xOffset + cx),
-                NumberConversions.floor(yOffset + cy),
-                NumberConversions.floor(zOffset + cz)
+        blockQueue[6] =  world.getBlockAt(
+                currentXFloor,
+                currentYFloor,
+                currentZFloor
         );
 
         lcx = cx;
