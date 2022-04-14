@@ -45,66 +45,66 @@ public class UpgradesConfig extends ConfigManager {
         yml.addDefault("default-upgrades-settings.trap-queue-limit", 3);
 
         if (isFirstTime()) {
-            yml.addDefault("upgrade-swords.tier-1.cost", 4);
+            yml.addDefault("upgrade-swords.tier-1.cost", 8);
             yml.addDefault("upgrade-swords.tier-1.currency", "diamond");
             addDefaultDisplayItem("upgrade-swords.tier-1", "IRON_SWORD", 0, 1, false);
             //noinspection ArraysAsListWithZeroOrOneArgument
             yml.addDefault("upgrade-swords.tier-1.receive", Arrays.asList("enchant-item: DAMAGE_ALL,1,sword"));
 
             yml.addDefault("upgrade-armor.tier-1.currency", "diamond");
-            yml.addDefault("upgrade-armor.tier-1.cost", 2);
+            yml.addDefault("upgrade-armor.tier-1.cost", 5);
             addDefaultDisplayItem("upgrade-armor.tier-1", "IRON_CHESTPLATE", 0, 1, false);
             yml.addDefault("upgrade-armor.tier-1.receive", Collections.singletonList("enchant-item: PROTECTION_ENVIRONMENTAL,1,armor"));
 
             yml.addDefault("upgrade-armor.tier-2.currency", "diamond");
-            yml.addDefault("upgrade-armor.tier-2.cost", 4);
+            yml.addDefault("upgrade-armor.tier-2.cost", 10);
             addDefaultDisplayItem("upgrade-armor.tier-2", "IRON_CHESTPLATE", 0, 2, false);
             yml.addDefault("upgrade-armor.tier-2.receive", Collections.singletonList("enchant-item: PROTECTION_ENVIRONMENTAL,2,armor"));
 
             yml.addDefault("upgrade-armor.tier-3.currency", "diamond");
-            yml.addDefault("upgrade-armor.tier-3.cost", 8);
+            yml.addDefault("upgrade-armor.tier-3.cost", 20);
             addDefaultDisplayItem("upgrade-armor.tier-3", "IRON_CHESTPLATE", 0, 3, false);
             yml.addDefault("upgrade-armor.tier-3.receive", Collections.singletonList("enchant-item: PROTECTION_ENVIRONMENTAL,3,armor"));
 
             yml.addDefault("upgrade-armor.tier-4.currency", "diamond");
-            yml.addDefault("upgrade-armor.tier-4.cost", 16);
+            yml.addDefault("upgrade-armor.tier-4.cost", 30);
             addDefaultDisplayItem("upgrade-armor.tier-4", "IRON_CHESTPLATE", 0, 4, false);
             yml.addDefault("upgrade-armor.tier-4.receive", Collections.singletonList("enchant-item: PROTECTION_ENVIRONMENTAL,4,armor"));
 
             yml.addDefault("upgrade-miner.tier-1.currency", "diamond");
-            yml.addDefault("upgrade-miner.tier-1.cost", 2);
-            addDefaultDisplayItem("upgrade-miner.tier-1", "GOLD_PICKAXE", 0, 1, false);
+            yml.addDefault("upgrade-miner.tier-1.cost", 4);
+            addDefaultDisplayItem("upgrade-miner.tier-1", "GOLDEN_PICKAXE", 0, 1, false);
             yml.addDefault("upgrade-miner.tier-1.receive", Collections.singletonList("player-effect: FAST_DIGGING,0,0,team"));
 
             yml.addDefault("upgrade-miner.tier-2.currency", "diamond");
-            yml.addDefault("upgrade-miner.tier-2.cost", 4);
-            addDefaultDisplayItem("upgrade-miner.tier-2", "GOLD_PICKAXE", 0, 2, false);
+            yml.addDefault("upgrade-miner.tier-2.cost", 6);
+            addDefaultDisplayItem("upgrade-miner.tier-2", "GOLDEN_PICKAXE", 0, 2, false);
             yml.addDefault("upgrade-miner.tier-2.receive", Collections.singletonList("player-effect: FAST_DIGGING,1,0,team"));
 
             yml.addDefault("upgrade-forge.tier-1.currency", "diamond");
-            yml.addDefault("upgrade-forge.tier-1.cost", 2);
+            yml.addDefault("upgrade-forge.tier-1.cost", 4);
             addDefaultDisplayItem("upgrade-forge.tier-1", "FURNACE", 0, 1, false);
             yml.addDefault("upgrade-forge.tier-1.receive", Arrays.asList("generator-edit: iron,2,2,41", "generator-edit: gold,3,1,14"));
 
             yml.addDefault("upgrade-forge.tier-2.currency", "diamond");
-            yml.addDefault("upgrade-forge.tier-2.cost", 4);
+            yml.addDefault("upgrade-forge.tier-2.cost", 8);
             addDefaultDisplayItem("upgrade-forge.tier-2", "FURNACE", 0, 2, false);
             yml.addDefault("upgrade-forge.tier-2.receive", Arrays.asList("generator-edit: iron,1,2,48", "generator-edit: gold,3,2,21"));
 
             yml.addDefault("upgrade-forge.tier-3.currency", "diamond");
-            yml.addDefault("upgrade-forge.tier-3.cost", 6);
+            yml.addDefault("upgrade-forge.tier-3.cost", 12);
             addDefaultDisplayItem("upgrade-forge.tier-3", "FURNACE", 0, 3, false);
             yml.addDefault("upgrade-forge.tier-3.receive", Arrays.asList("generator-edit: iron,1,2,64", "generator-edit: gold,3,2,29",
                     "generator-edit: emerald,10,1,10"));
 
             yml.addDefault("upgrade-forge.tier-4.currency", "diamond");
-            yml.addDefault("upgrade-forge.tier-4.cost", 8);
+            yml.addDefault("upgrade-forge.tier-4.cost", 16);
             addDefaultDisplayItem("upgrade-forge.tier-4", "FURNACE", 0, 4, false);
             yml.addDefault("upgrade-forge.tier-4.receive", Arrays.asList("generator-edit: iron,1,4,120", "generator-edit: gold,2,4,80",
                     "generator-edit: emerald,10,2,20"));
 
             yml.addDefault("upgrade-heal-pool.tier-1.currency", "diamond");
-            yml.addDefault("upgrade-heal-pool.tier-1.cost", 1);
+            yml.addDefault("upgrade-heal-pool.tier-1.cost", 3);
             addDefaultDisplayItem("upgrade-heal-pool.tier-1", "BEACON", 0, 1, false);
             yml.addDefault("upgrade-heal-pool.tier-1.receive", Collections.singletonList("player-effect: REGENERATION,1,0,base"));
 
