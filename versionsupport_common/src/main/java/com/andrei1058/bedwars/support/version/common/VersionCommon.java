@@ -58,6 +58,7 @@ public class VersionCommon {
             }
 
             // 1.12 drop listeners
+            //if (versionSupport.getVersion() == 5){
                 // common
                 registerListeners(versionSupport.getPlugin(), new ItemDropPickListener.PlayerDrop(), new ShopItemRestoreListener.PlayerDrop());
             //}
