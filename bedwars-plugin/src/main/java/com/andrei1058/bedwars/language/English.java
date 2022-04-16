@@ -452,22 +452,22 @@ public class English extends Language {
                         "&7Tier 4: +200% Resources, &b16 Diamonds", ""));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-2"), "{color}Golden Forge");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "forge").replace("{tier}", "tier-2"),
-                Arrays.asList("&7Upgrade resource spawning on", "&7your island.", "", "&aTier 1: +50% Resources, &b{cost} {currency}",
-                        "{tierColor}Tier 2: +100% Resources, &b8 Diamonds",
+                Arrays.asList("&7Upgrade resource spawning on", "&7your island.", "", "&aTier 1: +50% Resources, &b4 Diamonds",
+                        "{tierColor}Tier 2: +100% Resources, &b{cost} {currency}",
                         "&7Tier 3: Spawn emeralds, &b12 Diamonds",
                         "&7Tier 4: +200% Resources, &b16 Diamonds", ""));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-3"), "{color}Emerald Forge");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "forge").replace("{tier}", "tier-3"),
-                Arrays.asList("&7Upgrade resource spawning on", "&7your island.", "", "&aTier 1: +50% Resources, &b{cost} {currency}",
+                Arrays.asList("&7Upgrade resource spawning on", "&7your island.", "", "&aTier 1: +50% Resources, &b4 Diamonds",
                         "&aTier 2: +100% Resources, &b8 Diamonds",
-                        "{tierColor}Tier 3: Spawn emeralds, &b12 Diamonds",
+                        "{tierColor}Tier 3: Spawn emeralds, &b{cost} {currency}",
                         "&7Tier 4: +200% Resources, &b16 Diamonds", ""));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-4"), "{color}Molten Forge");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "forge").replace("{tier}", "tier-4"),
-                Arrays.asList("&7Upgrade resource spawning on", "&7your island.", "", "&aTier 1: +50% Resources, &b{cost} {currency}",
+                Arrays.asList("&7Upgrade resource spawning on", "&7your island.", "", "&aTier 1: +50% Resources, &b4 Diamonds",
                         "&aTier 2: +100% Resources, &b8 Diamonds",
                         "&aTier 3: Spawn emeralds, &b12 Diamonds",
-                        "{tierColor}Tier 4: +200% Resources, &b16 Diamonds", ""));
+                        "{tierColor}Tier 4: +200% Resources, &b{cost} {currency}", ""));
         yml.addDefault(Messages.UPGRADES_CATEGORY_ITEM_NAME_PATH + "traps", "&eBuy a trap");
         yml.addDefault(Messages.UPGRADES_CATEGORY_ITEM_LORE_PATH + "traps", Arrays.asList("&7Purchased traps will be", "&7queued on the right.", "", "&eClick to browse!"));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "swords").replace("{tier}", "tier-1"), "{color}Sharpened Swords");
