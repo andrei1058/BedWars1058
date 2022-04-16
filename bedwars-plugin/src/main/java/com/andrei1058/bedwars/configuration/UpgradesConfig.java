@@ -72,12 +72,12 @@ public class UpgradesConfig extends ConfigManager {
             yml.addDefault("upgrade-armor.tier-4.receive", Collections.singletonList("enchant-item: PROTECTION_ENVIRONMENTAL,4,armor"));
 
             yml.addDefault("upgrade-miner.tier-1.currency", "diamond");
-            yml.addDefault("upgrade-miner.tier-1.cost", 2);
+            yml.addDefault("upgrade-miner.tier-1.cost", 4);
             addDefaultDisplayItem("upgrade-miner.tier-1", "GOLD_PICKAXE", 0, 1, false);
             yml.addDefault("upgrade-miner.tier-1.receive", Collections.singletonList("player-effect: FAST_DIGGING,0,0,team"));
 
             yml.addDefault("upgrade-miner.tier-2.currency", "diamond");
-            yml.addDefault("upgrade-miner.tier-2.cost", 4);
+            yml.addDefault("upgrade-miner.tier-2.cost", 6);
             addDefaultDisplayItem("upgrade-miner.tier-2", "GOLD_PICKAXE", 0, 2, false);
             yml.addDefault("upgrade-miner.tier-2.receive", Collections.singletonList("player-effect: FAST_DIGGING,1,0,team"));
 
