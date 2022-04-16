@@ -347,6 +347,11 @@ public class ShopManager extends ConfigManager {
             addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "sponge", "tier1", "sponge", BedWars.getForCurrentVersion("SPONGE", "SPONGE", "SPONGE"),
                     0, 1, "", "", "", false);
 
+            adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "tower", 31, "tier1",
+                    BedWars.getForCurrentVersion("CHEST", "CHEST", "CHEST"), 0, 1, false, 24, "iron", false, false);
+            addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "tower", "tier1", "tower", BedWars.getForCurrentVersion("TOWER", "TOWER", "TOWER"),
+                    0, 1, "", "", "", false);
+
         }
 
         if (getYml().get(ConfigPath.SHOP_PATH_CATEGORY_ARMOR + ConfigPath.SHOP_CATEGORY_CONTENT_PATH + ".diamond-armor") != null) {

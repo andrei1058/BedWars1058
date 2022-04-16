@@ -770,7 +770,7 @@ public enum TeamColor {
      *
      * @return 1.13+ material.
      */
-    public Material woolMaterial() {
+    public org.bukkit.Material woolMaterial() {
         String color = "WHITE_WOOL";
         switch (this) {
             case PINK:
