@@ -52,22 +52,22 @@ public class UpgradesConfig extends ConfigManager {
             yml.addDefault("upgrade-swords.tier-1.receive", Arrays.asList("enchant-item: DAMAGE_ALL,1,sword"));
 
             yml.addDefault("upgrade-armor.tier-1.currency", "diamond");
-            yml.addDefault("upgrade-armor.tier-1.cost", 2);
+            yml.addDefault("upgrade-armor.tier-1.cost", 5);
             addDefaultDisplayItem("upgrade-armor.tier-1", "IRON_CHESTPLATE", 0, 1, false);
             yml.addDefault("upgrade-armor.tier-1.receive", Collections.singletonList("enchant-item: PROTECTION_ENVIRONMENTAL,1,armor"));
 
             yml.addDefault("upgrade-armor.tier-2.currency", "diamond");
-            yml.addDefault("upgrade-armor.tier-2.cost", 4);
+            yml.addDefault("upgrade-armor.tier-2.cost", 10);
             addDefaultDisplayItem("upgrade-armor.tier-2", "IRON_CHESTPLATE", 0, 2, false);
             yml.addDefault("upgrade-armor.tier-2.receive", Collections.singletonList("enchant-item: PROTECTION_ENVIRONMENTAL,2,armor"));
 
             yml.addDefault("upgrade-armor.tier-3.currency", "diamond");
-            yml.addDefault("upgrade-armor.tier-3.cost", 8);
+            yml.addDefault("upgrade-armor.tier-3.cost", 20);
             addDefaultDisplayItem("upgrade-armor.tier-3", "IRON_CHESTPLATE", 0, 3, false);
             yml.addDefault("upgrade-armor.tier-3.receive", Collections.singletonList("enchant-item: PROTECTION_ENVIRONMENTAL,3,armor"));
 
             yml.addDefault("upgrade-armor.tier-4.currency", "diamond");
-            yml.addDefault("upgrade-armor.tier-4.cost", 16);
+            yml.addDefault("upgrade-armor.tier-4.cost", 30);
             addDefaultDisplayItem("upgrade-armor.tier-4", "IRON_CHESTPLATE", 0, 4, false);
             yml.addDefault("upgrade-armor.tier-4.receive", Collections.singletonList("enchant-item: PROTECTION_ENVIRONMENTAL,4,armor"));
 
