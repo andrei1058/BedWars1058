@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
+import com.andrei1058.bedwars.configuration.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -137,11 +138,7 @@ public class TowerSouth {
         relloc.add("-2, 7, 3");
         int[] i = new int[]{0};
         this.task = Bukkit.getScheduler().runTaskTimer(BedWars.plugin, () -> {
-            if (Bukkit.getServer().getClass().getPackage().getName().contains("v1_8")) {
-                loc.getWorld().playSound(loc, Sound.valueOf("CHICKEN_EGG_POP"), 1.0F, 0.5F);
-            } else {
-                loc.getWorld().playSound(loc, Sound.valueOf("ENTITY_CHICKEN_EGG"), 1.0F, 0.5F);
-            }
+            loc.getWorld().playSound(loc, Sound.valueOf(Sounds.getSounds().getString("pop-up-tower-build")), 1.0F, 0.5F);
 
             if (relloc.size() + 1 == i[0] + 1) {
                 this.task.cancel();
