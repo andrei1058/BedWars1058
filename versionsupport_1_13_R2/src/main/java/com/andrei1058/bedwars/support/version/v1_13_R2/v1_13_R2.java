@@ -689,4 +689,10 @@ public class v1_13_R2 extends VersionSupport {
     public void clearArrowsFromPlayerBody(Player player) {
         ((CraftLivingEntity)player).getHandle().getDataWatcher().set(new DataWatcherObject<>(10, DataWatcherRegistry.b),-1);
     }
+
+    @Override
+    public void placeTowerBlocks(org.bukkit.block.Block b, IArena a, TeamColor color, int x, int y, int z){
+        b.getRelative(x, y, z).setType(color.woolMaterial());
+        a.addPlacedBlock(b.getRelative(x, y, z));
+    }
 }

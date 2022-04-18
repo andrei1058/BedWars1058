@@ -20,6 +20,7 @@
 
 package com.andrei1058.bedwars.support.version.v1_17_R1;
 
+import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.shop.ShopHolo;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
@@ -88,6 +89,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
+
+import static net.minecraft.world.level.block.Block.*;
 
 @SuppressWarnings("unused")
 public class v1_17_R1 extends VersionSupport {
@@ -708,5 +711,11 @@ public class v1_17_R1 extends VersionSupport {
     @Override
     public void clearArrowsFromPlayerBody(Player player) {
         ((CraftLivingEntity)player).getHandle().getDataWatcher().set(new DataWatcherObject<>(12, DataWatcherRegistry.b),-1);
+    }
+
+    @Override
+    public void placeTowerBlocks(Block b, IArena a, TeamColor color, int x, int y,int z){
+        b.getRelative(x, y, z).setType(color.woolMaterial());
+        a.addPlacedBlock(b.getRelative(x, y, z));
     }
 }

@@ -25,14 +25,7 @@ public class NewPlaceBlock {
                 }
             }
             if (!ladder) {
-                if (BedWars.getAPI().getVersionSupport().getVersion() >= 7) {
-                    b.getRelative(x, y, z).setType(color.woolMaterial());
-                    Arena.getArenaByPlayer(p).addPlacedBlock(b.getRelative(x, y, z));
-                } else {
-                    b.getRelative(x, y, z).setType(Material.WOOL);
-                    BedWars.getAPI().getVersionSupport().setBlockTeamColor(b.getRelative(x, y, z), color);
-                    Arena.getArenaByPlayer(p).addPlacedBlock(b.getRelative(x, y, z));
-                }
+                BedWars.nms.placeTowerBlocks(b, Arena.getArenaByPlayer(p), color, x, y, z);
             } else {
                 b.getRelative(x, y, z).setType(Material.LADDER);
                 if (BedWars.getAPI().getVersionSupport().getVersion() < 5) //1.12.2 and lower

@@ -34,6 +34,7 @@ import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import net.minecraft.server.v1_10_R1.*;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_10_R1.CraftServer;
@@ -690,5 +691,12 @@ public class v1_10_R1 extends VersionSupport {
     @Override
     public void clearArrowsFromPlayerBody(Player player) {
         ((CraftLivingEntity)player).getHandle().getDataWatcher().set(new DataWatcherObject<>(10, DataWatcherRegistry.b),-1);
+    }
+
+    @Override
+    public void placeTowerBlocks(org.bukkit.block.Block b, IArena a, TeamColor color, int x, int y, int z){
+        b.getRelative(x, y, z).setType(Material.WOOL);
+        setBlockTeamColor(b.getRelative(x, y, z), color);
+        a.addPlacedBlock(b.getRelative(x, y, z));
     }
 }
