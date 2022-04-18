@@ -138,8 +138,7 @@ public class TowerSouth {
         relloc.add("-2, 7, 3");
         int[] i = new int[]{0};
         this.task = Bukkit.getScheduler().runTaskTimer(BedWars.plugin, () -> {
-            loc.getWorld().playSound(loc, Sound.valueOf(Sounds.getSounds().getString("pop-up-tower-build")), 1.0F, 0.5F);
-
+            Sounds.playsoundArea("pop-up-tower-build", loc, 1.0F, 0.5F);
             if (relloc.size() + 1 == i[0] + 1) {
                 this.task.cancel();
             } else {
