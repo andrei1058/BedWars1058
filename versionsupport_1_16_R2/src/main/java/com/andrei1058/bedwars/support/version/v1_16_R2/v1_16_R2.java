@@ -36,6 +36,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.server.v1_16_R2.*;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -683,6 +684,12 @@ public class v1_16_R2 extends VersionSupport {
     @Override
     public void placeTowerBlocks(Block b, IArena a, TeamColor color, int x, int y,int z){
         b.getRelative(x, y, z).setType(color.woolMaterial());
+        a.addPlacedBlock(b.getRelative(x, y, z));
+    }
+
+    @Override
+    public void placeLadder(Block b, int x, int y,int z, IArena a, int ladderdata){
+        b.getRelative(x, y, z).setType(Material.LADDER);
         a.addPlacedBlock(b.getRelative(x, y, z));
     }
 }

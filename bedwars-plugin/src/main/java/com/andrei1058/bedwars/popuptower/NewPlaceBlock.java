@@ -8,6 +8,7 @@ import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.material.Bed;
 
 import java.util.Iterator;
 
@@ -27,10 +28,7 @@ public class NewPlaceBlock {
             if (!ladder) {
                 BedWars.nms.placeTowerBlocks(b, Arena.getArenaByPlayer(p), color, x, y, z);
             } else {
-                b.getRelative(x, y, z).setType(Material.LADDER);
-                if (BedWars.getAPI().getVersionSupport().getVersion() < 5) //1.12.2 and lower
-                    b.getRelative(x, y, z).setData((byte)ladderdata);
-                Arena.getArenaByPlayer(p).addPlacedBlock(b.getRelative(x, y, z));
+                BedWars.nms.placeLadder(b, x, y, z, Arena.getArenaByPlayer(p), ladderdata);
             }
         }
 
