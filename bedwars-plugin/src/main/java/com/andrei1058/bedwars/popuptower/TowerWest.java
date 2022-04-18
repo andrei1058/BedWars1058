@@ -1,8 +1,5 @@
 package com.andrei1058.bedwars.popuptower;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.configuration.Sounds;
@@ -13,6 +10,9 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TowerWest {
     private BukkitTask task;
@@ -143,7 +143,7 @@ public class TowerWest {
             if (relloc.size() + 1 == i[0] + 1) {
                 this.task.cancel();
             } else {
-                String c1 = (String)relloc.get(i[0]);
+                String c1 = relloc.get(i[0]);
                 if (c1.contains("ladder")) {
                     int ldata = Integer.parseInt(c1.split("ladder")[1]);
                     new NewPlaceBlock(chest, c1, color, p, true, ldata);
@@ -154,7 +154,7 @@ public class TowerWest {
                 if (relloc.size() + 1 == i[0] + 2) {
                     this.task.cancel();
                 } else {
-                    String c2 = (String)relloc.get(i[0] + 1);
+                    String c2 = relloc.get(i[0] + 1);
                     if (c2.contains("ladder")) {
                         int ldatax = Integer.parseInt(c2.split("ladder")[1]);
                         new NewPlaceBlock(chest, c2, color, p, true, ldatax);

@@ -3,6 +3,7 @@ package com.andrei1058.bedwars.popuptower;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.region.Region;
+import com.andrei1058.bedwars.api.server.VersionSupport;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -34,6 +35,8 @@ public class NewPlaceBlock {
                 }
             } else {
                 b.getRelative(x, y, z).setType(Material.LADDER);
+                if (BedWars.getAPI().getVersionSupport().getVersion() < 5) //1.12.2 and lower
+                    b.getRelative(x, y, z).setData((byte)ladderdata);
                 Arena.getArenaByPlayer(p).addPlacedBlock(b.getRelative(x, y, z));
             }
         }

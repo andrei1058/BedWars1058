@@ -141,7 +141,7 @@ public class TowerEast {
             if (relloc.size() + 1 == i[0] + 1) {
                 this.task.cancel();
             } else {
-                String c1 = (String)relloc.get(i[0]);
+                String c1 = relloc.get(i[0]);
                 if (c1.contains("ladder")) {
                     int ldata = Integer.parseInt(c1.split("ladder")[1]);
                     new NewPlaceBlock(chest, c1, color, p, true, ldata);
@@ -152,7 +152,7 @@ public class TowerEast {
                 if (relloc.size() + 1 == i[0] + 2) {
                     this.task.cancel();
                 } else {
-                    String c2 = (String)relloc.get(i[0] + 1);
+                    String c2 = relloc.get(i[0] + 1);
                     if (c2.contains("ladder")) {
                         int ldatax = Integer.parseInt(c2.split("ladder")[1]);
                         new NewPlaceBlock(chest, c2, color, p, true, ldatax);
