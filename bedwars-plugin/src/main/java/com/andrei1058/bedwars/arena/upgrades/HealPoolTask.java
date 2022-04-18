@@ -82,9 +82,9 @@ public class HealPoolTask extends BukkitRunnable {
         if (healPoolTasks.isEmpty()) return;
         for (HealPoolTask hpt: healPoolTasks) {
             if (hpt.getArena().equals(a)){
-                healPoolTasks.remove(hpt);
                 hpt.cancel();
-                break;
+                healPoolTasks.remove(hpt);
+                //break;
             }
         }
     }
@@ -93,9 +93,9 @@ public class HealPoolTask extends BukkitRunnable {
         if (healPoolTasks.isEmpty()) return;
         for (HealPoolTask hpt: healPoolTasks) {
             if (hpt.getArena().getWorldName().equals(a)){
-                healPoolTasks.remove(hpt);
                 hpt.cancel();
-                break;
+                healPoolTasks.remove(hpt);
+                //break;
             }
         }
     }
@@ -104,9 +104,9 @@ public class HealPoolTask extends BukkitRunnable {
         if (healPoolTasks.isEmpty()) return;
         for (HealPoolTask hpt: healPoolTasks) {
             if (hpt.getBwt().equals(team)){
-                healPoolTasks.remove(hpt);
                 hpt.cancel();
-                break;
+                healPoolTasks.remove(hpt);
+                //break;
             }
         }
     }
