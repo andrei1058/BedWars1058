@@ -28,8 +28,7 @@ public class OneTick implements Runnable {
     public void run() {
         //OneTick generators
         for (IGenerator h : OreGenerator.getRotation()) {
-            if (h != null)
-                h.rotate();
+            h.rotate();
         }
     }
 }
