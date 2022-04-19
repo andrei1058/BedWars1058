@@ -1,18 +1,17 @@
 package com.andrei1058.bedwars.popuptower;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.configuration.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TowerSouth {
     private BukkitTask task;

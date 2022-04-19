@@ -20,7 +20,6 @@
 
 package com.andrei1058.bedwars.support.version.v1_17_R1;
 
-import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.shop.ShopHolo;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
@@ -56,16 +55,16 @@ import net.minecraft.world.entity.EnumItemSlot;
 import net.minecraft.world.entity.item.EntityTNTPrimed;
 import net.minecraft.world.entity.projectile.EntityFireball;
 import net.minecraft.world.entity.projectile.IProjectile;
-import net.minecraft.world.item.*;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBase;
-import org.bukkit.*;
+import org.bukkit.Color;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.type.Bed;
 import org.bukkit.block.data.type.Ladder;
 import org.bukkit.block.data.type.WallSign;
@@ -76,7 +75,6 @@ import org.bukkit.craftbukkit.v1_17_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftTNTPrimed;
 import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.*;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -92,8 +90,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
-
-import static net.minecraft.world.level.block.Block.*;
 
 @SuppressWarnings("unused")
 public class v1_17_R1 extends VersionSupport {
@@ -727,18 +723,24 @@ public class v1_17_R1 extends VersionSupport {
         Block block = b.getRelative(x,y,z);  //ladder block
         block.setType(Material.LADDER);
         Ladder ladder = (Ladder) block.getBlockData();
-        Location location = block.getLocation();  //location of the ladder
-        if (Tag.WOOL.isTagged(b.getRelative(1, 0, 0).getType())){
-            ladder.setFacing(BlockFace.WEST);
-        }
-        else if (Tag.WOOL.isTagged(b.getRelative(-1, 0, 0).getType())) {
-            ladder.setFacing(BlockFace.EAST);
-        }else if (Tag.WOOL.isTagged(b.getRelative(0, 0, 1).getType())) {
-            ladder.setFacing(BlockFace.NORTH);
-        }else if (Tag.WOOL.isTagged(b.getRelative(0, 0, -1).getType())) {
-            ladder.setFacing(BlockFace.SOUTH);
-        }
-        block.setBlockData(ladder);
         a.addPlacedBlock(block);
+        switch (ladderdata) {
+            case 2 -> {
+                ladder.setFacing(BlockFace.NORTH);
+                block.setBlockData(ladder);
+            }
+            case 3 -> {
+                ladder.setFacing(BlockFace.SOUTH);
+                block.setBlockData(ladder);
+            }
+            case 4 -> {
+                ladder.setFacing(BlockFace.WEST);
+                block.setBlockData(ladder);
+            }
+            case 5 -> {
+                ladder.setFacing(BlockFace.EAST);
+                block.setBlockData(ladder);
+            }
+        }
     }
 }

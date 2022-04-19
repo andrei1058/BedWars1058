@@ -37,8 +37,6 @@ import org.bukkit.Color;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.type.Bed;
@@ -705,18 +703,23 @@ public class v1_13_R2 extends VersionSupport {
         org.bukkit.block.Block block = b.getRelative(x,y,z);  //ladder block
         block.setType(Material.LADDER);
         Ladder ladder = (Ladder) block.getBlockData();
-        Location location = block.getLocation();  //location of the ladder
-        if (org.bukkit.Tag.WOOL.isTagged(b.getRelative(1, 0, 0).getType())){
-            ladder.setFacing(BlockFace.WEST);
-        }
-        else if (org.bukkit.Tag.WOOL.isTagged(b.getRelative(-1, 0, 0).getType())) {
-            ladder.setFacing(BlockFace.EAST);
-        }else if (org.bukkit.Tag.WOOL.isTagged(b.getRelative(0, 0, 1).getType())) {
-            ladder.setFacing(BlockFace.NORTH);
-        }else if (Tag.WOOL.isTagged(b.getRelative(0, 0, -1).getType())) {
-            ladder.setFacing(BlockFace.SOUTH);
-        }
-        block.setBlockData(ladder);
         a.addPlacedBlock(block);
+        switch (ladderdata){
+            case 2:
+                ladder.setFacing(BlockFace.NORTH);
+                block.setBlockData(ladder);
+                return;
+            case 3:
+                ladder.setFacing(BlockFace.SOUTH);
+                block.setBlockData(ladder);
+                return;
+            case 4:
+                ladder.setFacing(BlockFace.WEST);
+                block.setBlockData(ladder);
+                return;
+            case 5:
+                ladder.setFacing(BlockFace.EAST);
+                block.setBlockData(ladder);
+        }
     }
 }
