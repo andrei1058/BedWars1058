@@ -1,9 +1,7 @@
 package com.andrei1058.bedwars.listeners;
 
-import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.events.gameplay.GameEndEvent;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -19,7 +17,6 @@ public class GameEnd implements Listener {
     public void stopPickUP(GameEndEvent event){
         if (!event.getAliveWinners().isEmpty()){
             for (UUID p : event.getAliveWinners()) {
-                Bukkit.getPlayer(p).setCanPickupItems(false);
                 Bukkit.getPlayer(p).getInventory().clear();
             }
         }
