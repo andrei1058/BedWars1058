@@ -38,8 +38,11 @@ import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.Tag;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.type.Bed;
+import org.bukkit.block.data.type.Ladder;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftFireball;
@@ -699,7 +702,21 @@ public class v1_13_R2 extends VersionSupport {
 
     @Override
     public void placeLadder(org.bukkit.block.Block b, int x, int y, int z, IArena a, int ladderdata){
-        b.getRelative(x, y, z).setType(Material.LADDER);
-        a.addPlacedBlock(b.getRelative(x, y, z));
+        org.bukkit.block.Block block = b.getRelative(x,y,z);  //ladder block
+        block.setType(Material.LADDER);
+        Ladder ladder = (Ladder) block.getBlockData();
+        Location location = block.getLocation();  //location of the ladder
+        if (org.bukkit.Tag.WOOL.isTagged(b.getRelative(1, 0, 0).getType())){
+            ladder.setFacing(BlockFace.WEST);
+        }
+        else if (org.bukkit.Tag.WOOL.isTagged(b.getRelative(-1, 0, 0).getType())) {
+            ladder.setFacing(BlockFace.EAST);
+        }else if (org.bukkit.Tag.WOOL.isTagged(b.getRelative(0, 0, 1).getType())) {
+            ladder.setFacing(BlockFace.NORTH);
+        }else if (Tag.WOOL.isTagged(b.getRelative(0, 0, -1).getType())) {
+            ladder.setFacing(BlockFace.SOUTH);
+        }
+        block.setBlockData(ladder);
+        a.addPlacedBlock(block);
     }
 }

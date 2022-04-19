@@ -60,12 +60,14 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBase;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.type.Bed;
+import org.bukkit.block.data.type.Ladder;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
@@ -722,7 +724,21 @@ public class v1_17_R1 extends VersionSupport {
 
     @Override
     public void placeLadder(Block b, int x, int y,int z, IArena a, int ladderdata){
-        b.getRelative(x, y, z).setType(Material.LADDER);
-        a.addPlacedBlock(b.getRelative(x, y, z));
+        Block block = b.getRelative(x,y,z);  //ladder block
+        block.setType(Material.LADDER);
+        Ladder ladder = (Ladder) block.getBlockData();
+        Location location = block.getLocation();  //location of the ladder
+        if (Tag.WOOL.isTagged(b.getRelative(1, 0, 0).getType())){
+            ladder.setFacing(BlockFace.WEST);
+        }
+        else if (Tag.WOOL.isTagged(b.getRelative(-1, 0, 0).getType())) {
+            ladder.setFacing(BlockFace.EAST);
+        }else if (Tag.WOOL.isTagged(b.getRelative(0, 0, 1).getType())) {
+            ladder.setFacing(BlockFace.NORTH);
+        }else if (Tag.WOOL.isTagged(b.getRelative(0, 0, -1).getType())) {
+            ladder.setFacing(BlockFace.SOUTH);
+        }
+        block.setBlockData(ladder);
+        a.addPlacedBlock(block);
     }
 }
