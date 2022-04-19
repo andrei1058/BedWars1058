@@ -22,20 +22,14 @@ public class GameEnd implements Listener {
                 Bukkit.getPlayer(p).setCanPickupItems(false);
                 Bukkit.getPlayer(p).getInventory().clear();
             }
-                for (IGenerator gen : event.getArena().getOreGenerators()) {
-                    ItemStack air = new ItemStack(Material.AIR, 1);
-                    gen.setOre(air);
-                    gen.setDelay(30);  //Stops generator from dropping items on game end
-                }
         }
+        else if (event.getArena().getPlayers().isEmpty())
+            return;  //no one in arena no need to do anything
+
         World game = event.getArena().getWorld();
-        for (Entity item: game.getEntities()) {
+        for (Entity item : game.getEntities()) {
             if ((item instanceof Item) ||(item instanceof ItemStack))
                 item.remove();
         }
-
     }
-
-
-
 }

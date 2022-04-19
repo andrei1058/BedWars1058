@@ -21,6 +21,7 @@
 package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.generator.GeneratorType;
 import com.andrei1058.bedwars.api.arena.generator.IGenHolo;
@@ -142,6 +143,9 @@ public class OreGenerator implements IGenerator {
 
     @Override
     public void spawn() {
+        if (arena.getStatus() == GameState.restarting)
+            return;
+
         if (lastSpawn == 0) {
             lastSpawn = delay;
 
