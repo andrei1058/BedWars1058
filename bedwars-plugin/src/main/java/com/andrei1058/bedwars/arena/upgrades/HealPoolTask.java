@@ -47,12 +47,19 @@ public class HealPoolTask extends BukkitRunnable {
 
     @Override
     public void run(){
+        //null checks
+        if ((bwt == null) || (bwt.getSpawn() == null) || (arena == null)){
+            healPoolTasks.remove(this);
+            return;
+        }
+
+
         for (int x = minX; x < maxX; x++) {
             for (int y = minY; y < maxY; y++) {
                 for (int z = minZ; z < maxZ; z++) {
                     l = new Location(bwt.getSpawn().getWorld(), x, y, z);
                     if (l.getBlock().getType() != Material.AIR) continue;
-                    int chance = r.nextInt(5);
+                    int chance = r.nextInt(8);
                     if (chance == 0) {
                         if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_HEAL_POOL_SEEN_TEAM_ONLY)) {
                             for (Player p : bwt.getMembers()) {
