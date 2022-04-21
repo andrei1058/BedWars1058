@@ -328,15 +328,18 @@ public class BedWars extends JavaPlugin {
 
         /* Deprecated versions */
         switch (version) {
-            case "v1_8_R3":
             case "v1_9_R1":
             case "v1_9_R2":
             case "v1_10_R1":
             case "v1_11_R1":
-            case "v1_12_R1":
+            case "v1_13_R2":
+            case "v1_14_R1":
+            case "v1_15_R1":
+            case "v1_16_R1":
+            case "v1_16_R2":
                 registerEvents(new InvisibilityPotionListener());
                 Bukkit.getScheduler().runTaskLater(this,
-                        () -> System.out.println("\u001B[31m[WARN] BedWars1058 may drop support for this server version in the future.\nPlease consider upgrading to a newer paper/spigot version.\u001B[0m"), 40L);
+                        () -> System.out.println("\u001B[31m[WARN] BedWars1058 may drop support for this server version in the future.\nSee: https://wiki.andrei1058.dev/docs/BedWars1058/compatibility \u001B[0m"), 40L);
                 break;
         }
 
