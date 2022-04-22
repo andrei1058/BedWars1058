@@ -34,12 +34,13 @@ public class HealPoolTask extends BukkitRunnable {
             return;
         }
         int radius = bwt.getArena().getConfig().getInt(ConfigPath.ARENA_ISLAND_RADIUS);
-        this.maxX = Math.max(bwt.getSpawn().clone().add(radius, 0 , 0).getBlockX(),bwt.getSpawn().clone().subtract(radius, 0, 0).getBlockX());
-        this.minX = Math.min(bwt.getSpawn().clone().add(radius, 0, 0).getBlockX(), bwt.getSpawn().clone().subtract(radius, 0, 0).getBlockX());
-        this.maxY = Math.max(bwt.getSpawn().clone().add(0, radius, 0).getBlockY(), bwt.getSpawn().clone().subtract(0, radius, 0).getBlockY());
-        this.minY = Math.min(bwt.getSpawn().clone().add(0, radius, 0).getBlockY(), bwt.getSpawn().clone().subtract(0, radius, 0).getBlockY());
-        this.maxZ = Math.max(bwt.getSpawn().clone().add(0, 0, radius).getBlockZ(), bwt.getSpawn().clone().subtract(0, 0, radius).getBlockZ());
-        this.minZ = Math.min(bwt.getSpawn().clone().add(0, 0, radius).getBlockZ(), bwt.getSpawn().clone().subtract(0, 0, radius).getBlockZ());
+        Location teamspawn = bwt.getSpawn();
+        this.maxX = (teamspawn.getBlockX() + radius);
+        this.minX = (teamspawn.getBlockX() - radius);
+        this.maxY = (teamspawn.getBlockY() + radius);
+        this.minY = (teamspawn.getBlockY() - radius);
+        this.maxZ = (teamspawn.getBlockZ() + radius);
+        this.minZ = (teamspawn.getBlockZ() - radius);
         this.arena = bwt.getArena();
         this.runTaskTimerAsynchronously(plugin, 0, 80L);
         healPoolTasks.add(this);
@@ -53,13 +54,12 @@ public class HealPoolTask extends BukkitRunnable {
             return;
         }
 
-
-        for (int x = minX; x < maxX; x++) {
-            for (int y = minY; y < maxY; y++) {
-                for (int z = minZ; z < maxZ; z++) {
-                    l = new Location(bwt.getSpawn().getWorld(), x, y, z);
+        for (int x = minX; x <= maxX; x++) {
+            for (int y = minY; y <= maxY; y++) {
+                for (int z = minZ; z <= maxZ; z++) {
+                    l = new Location(arena.getWorld(), x + .5, y + .5, z +.5);
                     if (l.getBlock().getType() != Material.AIR) continue;
-                    int chance = r.nextInt(8);
+                    int chance = r.nextInt(9);
                     if (chance == 0) {
                         if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_HEAL_POOL_SEEN_TEAM_ONLY)) {
                             for (Player p : bwt.getMembers()) {
