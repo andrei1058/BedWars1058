@@ -232,10 +232,8 @@ public class Arena implements IArena {
         minPlayers = yml.getInt("minPlayers");
         allowSpectate = yml.getBoolean("allowSpectate");
         islandRadius = yml.getInt(ConfigPath.ARENA_ISLAND_RADIUS);
-        if (config.getYml().get("arenaGroups") != null) {
-            if (config.getYml().getStringList("arenaGroups").contains(yml.getString("group"))) {
-                group = yml.getString("group");
-            }
+        if ((config.getYml().get("arenaGroups") != null)  && (config.getYml().getStringList("arenaGroups").contains(yml.getString("group")))) {
+            group = yml.getString("group");
         }
 
 
@@ -361,23 +359,18 @@ public class Arena implements IArena {
 
         // Re Spawn Session Location
         respawnLocation = cm.getArenaLoc(ConfigPath.ARENA_SPEC_LOC);
-        if (respawnLocation == null) {
-            respawnLocation = cm.getArenaLoc("waiting.Loc");
-        }
-        if (respawnLocation == null) {
+        if (cm.getArenaLoc("waiting.Loc") == null)
             respawnLocation = world.getSpawnLocation();
-        }
-        //
+        else
+            respawnLocation = cm.getArenaLoc("waiting.Loc");
 
         // Spectator location
         spectatorLocation = cm.getArenaLoc(ConfigPath.ARENA_SPEC_LOC);
-        if (spectatorLocation == null) {
+        if (cm.getArenaLoc("waiting.Loc") == null) {
             spectatorLocation = cm.getArenaLoc("waiting.Loc");
-        }
-        if (spectatorLocation == null) {
+        } else {
             spectatorLocation = world.getSpawnLocation();
         }
-        //
 
         // Waiting location
         waitingLocation = cm.getArenaLoc("waiting.Loc");
@@ -428,6 +421,7 @@ public class Arena implements IArena {
                     p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_DENIED_NOT_PARTY_LEADER));
                     return false;
                 }
+
                 int partySize = (int) getParty().getMembers(p).stream().filter(member -> {
                     IArena arena = Arena.getArenaByPlayer(member);
                     if (arena == null) {
@@ -500,12 +494,12 @@ public class Arena implements IArena {
             for (Player on : players) {
                 on.sendMessage(
                         getMsg(on, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG)
-                            .replace("{vPrefix}", getChatSupport().getPrefix(p))
-                            .replace("{vSuffix}", getChatSupport().getSuffix(p))
-                            .replace("{playername}", p.getName())
-                            .replace("{player}", p.getDisplayName())
-                            .replace("{on}", String.valueOf(getPlayers().size()))
-                            .replace("{max}", String.valueOf(getMaxPlayers()))
+                                .replace("{vPrefix}", getChatSupport().getPrefix(p))
+                                .replace("{vSuffix}", getChatSupport().getSuffix(p))
+                                .replace("{playername}", p.getName())
+                                .replace("{player}", p.getDisplayName())
+                                .replace("{on}", String.valueOf(getPlayers().size()))
+                                .replace("{max}", String.valueOf(getMaxPlayers()))
                 );
             }
             setArenaByPlayer(p, this);
