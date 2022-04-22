@@ -87,15 +87,7 @@ public class DamageDeathMove implements Listener {
             Player p = (Player) e.getEntity();
             IArena a = Arena.getArenaByPlayer(p);
             if (a != null) {
-                if (a.isSpectator(p)) {
-                    e.setCancelled(true);
-                    return;
-                }
-                if (a.isReSpawning(p)) {
-                    e.setCancelled(true);
-                    return;
-                }
-                if (a.getStatus() != GameState.playing) {
+                if (a.isSpectator(p)  || a.isReSpawning(p) || a.getStatus() != GameState.playing) {
                     e.setCancelled(true);
                     return;
                 }
@@ -156,17 +148,12 @@ public class DamageDeathMove implements Listener {
             Player p = (Player) e.getEntity();
             IArena a = Arena.getArenaByPlayer(p);
             if (a != null) {
-                if (a.getStatus() != GameState.playing) {
-                    e.setCancelled(true);
-                    return;
-                }
-                if (a.isSpectator(p) || a.isReSpawning(p)) {
+                if (a.getStatus() != GameState.playing  || a.isSpectator(p) || a.isReSpawning(p)) {
                     e.setCancelled(true);
                     return;
                 }
 
                 Player damager = null;
-                boolean projectile = false;
                 if (e.getDamager() instanceof Player) {
                     damager = (Player) e.getDamager();
                 } else if (e.getDamager() instanceof Projectile) {
@@ -174,7 +161,6 @@ public class DamageDeathMove implements Listener {
                     if (shooter instanceof Player) {
                         damager = (Player) shooter;
                     } else return;
-                    projectile = true;
                 } else if (e.getDamager() instanceof Player) {
                     damager = (Player) e.getDamager();
                     if (a.isReSpawning(damager)) {

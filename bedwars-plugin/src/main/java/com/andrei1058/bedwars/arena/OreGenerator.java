@@ -395,8 +395,7 @@ public class OreGenerator implements IGenerator {
         //if (getType() == GeneratorType.EMERALD || getType() == GeneratorType.DIAMOND) {
         rotation.add(this);
         for (Language lan : Language.getLanguages()) {
-            IGenHolo h = armorStands.get(lan.getIso());
-            if (h == null) {
+            if (armorStands.get(lan.getIso()) == null) {
                 armorStands.put(lan.getIso(), new HoloGram(lan.getIso()));
             }
         }

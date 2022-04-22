@@ -39,12 +39,7 @@ public class CmdProcess implements Listener {
 
         Player p = e.getPlayer();
 
-        if (e.getMessage().equals("/party sethome")){
-            p.sendMessage(getMsg(p, Messages.COMMAND_NOT_ALLOWED_IN_GAME));
-            e.setCancelled(true);
-        }
-
-        if (e.getMessage().equals("/party home")){
+        if (e.getMessage().equals("/party sethome")  || e.getMessage().equals("/party home")){
             p.sendMessage(getMsg(p, Messages.COMMAND_NOT_ALLOWED_IN_GAME));
             e.setCancelled(true);
         }
