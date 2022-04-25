@@ -244,11 +244,6 @@ public class SetupSession implements ISetupSession {
         Bukkit.getPluginManager().callEvent(new SetupSessionStartEvent(this));
         setStarted(true);
 
-        //Fix Armor Stand bugs where they stay for next game and cause over lap
-        for (ArmorStand stand : w.getEntitiesByClass(ArmorStand.class)) {
-            stand.remove();
-        }
-
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             for (String team : getTeams()) {
                 for (String gen : new String[]{"Iron", "Gold", "Emerald"}) {
@@ -283,6 +278,8 @@ public class SetupSession implements ISetupSession {
                 }
             }
         }, 90L);
+
+
     }
 
     @Override
