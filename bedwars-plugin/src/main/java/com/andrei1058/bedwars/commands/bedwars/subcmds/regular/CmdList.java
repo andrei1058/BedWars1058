@@ -25,11 +25,13 @@ import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.SetupType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
+import com.andrei1058.bedwars.language.LanguageManager;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -43,7 +45,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.andrei1058.bedwars.BedWars.*;
-import static com.andrei1058.bedwars.api.language.Language.getList;
 
 public class CmdList extends SubCommand {
 
@@ -177,7 +178,7 @@ public class CmdList extends SubCommand {
             credits.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, link));
             credits.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.GRAY + "Arenas: " + (Arena.getArenas().size() == 0 ? ChatColor.RED + "0" : ChatColor.GREEN + "" + Arena.getArenas().size())).create()));
             ((Player) s).spigot().sendMessage(credits);
-            for (String string : getList((Player) s, Messages.COMMAND_MAIN)) {
+            for (String string : getLangManager().getList((Player) s, Messages.COMMAND_MAIN)) {
                 s.sendMessage(string);
             }
         }
@@ -200,5 +201,9 @@ public class CmdList extends SubCommand {
         }
 
         return hasPermission(s);
+    }
+
+    private static LanguageService getLangManager() {
+        return LanguageManager.getInstance();
     }
 }

@@ -23,7 +23,9 @@ package com.andrei1058.bedwars.shop.main;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.language.LanguageManager;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.shop.ShopManager;
 import org.bukkit.Bukkit;
@@ -122,7 +124,7 @@ public class ShopCategory {
         if (player.getOpenInventory().getTopInventory() == null) return;
         ShopIndex.indexViewers.remove(player.getUniqueId());
 
-        Inventory inv = Bukkit.createInventory(null, index.getInvSize(), Language.getMsg(player, invNamePath));
+        Inventory inv = Bukkit.createInventory(null, index.getInvSize(), getLangService().getMsg(player, invNamePath));
 
         inv.setItem(index.getQuickBuyButton().getSlot(), index.getQuickBuyButton().getItemStack(player));
 
@@ -153,8 +155,8 @@ public class ShopCategory {
         ItemStack i = itemStack.clone();
         ItemMeta im = i.getItemMeta();
         if (im != null) {
-            im.setDisplayName(Language.getMsg(player, itemNamePath));
-            im.setLore(Language.getList(player, itemLorePath));
+            im.setDisplayName(getLangService().getMsg(player, itemNamePath));
+            im.setLore(getLangService().getList(player, itemLorePath));
             i.setItemMeta(im);
         }
         return i;
@@ -194,5 +196,9 @@ public class ShopCategory {
 
     public static List<UUID> getCategoryViewers() {
         return new ArrayList<>(categoryViewers);
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

@@ -26,11 +26,13 @@ import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.commands.shout.ShoutCommand;
 import com.andrei1058.bedwars.configuration.Permissions;
+import com.andrei1058.bedwars.language.LanguageManager;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -42,8 +44,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 import static com.andrei1058.bedwars.BedWars.*;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
-import static com.andrei1058.bedwars.api.language.Language.getPlayerLanguage;
 
 public class ChatFormatting implements Listener {
 
@@ -63,7 +63,7 @@ public class ChatFormatting implements Listener {
             e.setMessage(ChatColor.translateAlternateColorCodes('&', e.getMessage()));
         }
 
-        Language language = getPlayerLanguage(p);
+        Language language = getLangService().getPlayerLanguage(p);
 
         // handle lobby world for multi arena
         if (getServerType() == ServerType.MULTIARENA && p.getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
@@ -95,7 +95,7 @@ public class ChatFormatting implements Listener {
             if (isShouting(msg, language)) {
                 if (!(p.hasPermission(Permissions.PERMISSION_SHOUT_COMMAND) || p.hasPermission(Permissions.PERMISSION_ALL))) {
                     e.setCancelled(true);
-                    p.sendMessage(Language.getMsg(p, Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
+                    p.sendMessage(getLangService().getMsg(p, Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
                     return;
                 }
                 if (ShoutCommand.isShoutCooldown(p)) {
@@ -139,9 +139,9 @@ public class ChatFormatting implements Listener {
                 .replace("{level}", getLevelSupport().getLevel(player))
                 .replace("{player}", player.getDisplayName());
         if (team != null) {
-            String teamFormat = getMsg(player, Messages.FORMAT_PAPI_PLAYER_TEAM_TEAM)
+            String teamFormat = getLangService().getMsg(player, Messages.FORMAT_PAPI_PLAYER_TEAM_TEAM)
                     .replace("{TeamColor}", team.getColor().chat() + "")
-                    .replace("{TeamName}", team.getDisplayName(Language.getPlayerLanguage(player)).toUpperCase());
+                    .replace("{TeamName}", team.getDisplayName(getLangService().getPlayerLanguage(player)).toUpperCase());
             content = content.replace("{team}", teamFormat);
         }
         return SupportPAPI.getSupportPAPI().replace(player, content).replace("{message}", "%2$s");
@@ -170,5 +170,9 @@ public class ChatFormatting implements Listener {
                 event.getRecipients().addAll(list);
             }
         }
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

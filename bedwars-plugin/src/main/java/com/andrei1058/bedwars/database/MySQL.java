@@ -22,6 +22,7 @@ package com.andrei1058.bedwars.database;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.language.LanguageManager;
 import com.andrei1058.bedwars.shop.quickbuy.QuickBuyElement;
 import com.andrei1058.bedwars.stats.PlayerStats;
 import com.zaxxer.hikari.HikariConfig;
@@ -458,7 +459,7 @@ public class MySQL implements Database {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return Language.getDefaultLanguage().getIso();
+        return LanguageManager.getInstance().getDefaultLanguage().getIso();
     }
 
     @Override

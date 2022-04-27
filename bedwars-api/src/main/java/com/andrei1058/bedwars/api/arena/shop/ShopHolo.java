@@ -22,7 +22,7 @@ package com.andrei1058.bedwars.api.arena.shop;
 
 import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
-import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
@@ -31,6 +31,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class ShopHolo {
     /**
      * Shop holograms per language <iso, holo></iso,>
@@ -67,7 +68,8 @@ public class ShopHolo {
             Bukkit.broadcastMessage("LOCATION IS NULL");
         }
         for (Player p2 : l.getWorld().getPlayers()) {
-            if (Language.getPlayerLanguage(p2).getIso().equalsIgnoreCase(iso)) continue;
+            LanguageService lang = api.getLanguageService();
+            if (lang.getPlayerLanguage(p2).getIso().equalsIgnoreCase(iso)) continue;
             if (a1 != null) {
                 api.getVersionSupport().hideEntity(a1, p2);
             }

@@ -22,6 +22,7 @@ package com.andrei1058.bedwars.support.version.v1_14_R1;
 
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import net.minecraft.server.v1_14_R1.*;
@@ -72,6 +73,8 @@ public class Silverfish extends EntitySilverfish {
     public static LivingEntity spawn(Location loc, ITeam team, double speed, double health, int despawn, double damage) {
         WorldServer mcWorld = ((CraftWorld)loc.getWorld()).getHandle();
         Silverfish customEnt = new Silverfish(EntityTypes.SILVERFISH, mcWorld, team);
+        LanguageService langServ = VersionCommon.api.getLanguageService();
+
         customEnt.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
         customEnt.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(health);
         customEnt.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(speed);
@@ -80,9 +83,9 @@ public class Silverfish extends EntitySilverfish {
         ((CraftLivingEntity)customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
         customEnt.setCustomNameVisible(true);
         mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
-        customEnt.getBukkitEntity().setCustomName(Language.getDefaultLanguage().m(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME)
+        customEnt.getBukkitEntity().setCustomName(langServ.getDefaultLanguage().m(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME)
                 .replace("{despawn}", String.valueOf(despawn)
-                        .replace("{health}", StringUtils.repeat(Language.getDefaultLanguage().m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH)+" ", 10))
+                        .replace("{health}", StringUtils.repeat(langServ.getDefaultLanguage().m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH)+" ", 10))
                         .replace("{TeamColor}", team.getColor().chat().toString())));
         return (LivingEntity) customEnt.getBukkitEntity();
     }

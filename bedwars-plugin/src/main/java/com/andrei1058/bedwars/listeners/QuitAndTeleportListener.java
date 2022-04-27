@@ -24,23 +24,21 @@ import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
-import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.LastHit;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.regular.CmdStats;
+import com.andrei1058.bedwars.language.LanguageManager;
 import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-
-import java.util.UUID;
 
 import static com.andrei1058.bedwars.BedWars.*;
 
@@ -60,18 +58,7 @@ public class QuitAndTeleportListener implements Listener {
         }
 
         //Save preferred language
-        if (Language.getLangByPlayer().containsKey(p.getUniqueId())) {
-            final UUID u = p.getUniqueId();
-            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-                String iso = Language.getLangByPlayer().get(p.getUniqueId()).getIso();
-                if (Language.isLanguageExist(iso)) {
-                    if (BedWars.config.getYml().getStringList(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES).contains(iso))
-                        iso = Language.getDefaultLanguage().getIso();
-                    BedWars.getRemoteDatabase().setLanguage(u, iso);
-                }
-                Language.getLangByPlayer().remove(p.getUniqueId());
-            });
-        }
+        getLangService().onPlayerLeave(p);
 
         if (getServerType() != ServerType.SHARED) {
             e.setQuitMessage(null);
@@ -149,5 +136,9 @@ public class QuitAndTeleportListener implements Listener {
                 }
             }
         }
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

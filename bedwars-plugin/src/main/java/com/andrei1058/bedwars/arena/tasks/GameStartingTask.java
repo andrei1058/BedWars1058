@@ -29,12 +29,14 @@ import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.tasks.StartingTask;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import com.andrei1058.bedwars.arena.team.LegacyTeamAssigner;
 import com.andrei1058.bedwars.configuration.Sounds;
+import com.andrei1058.bedwars.language.LanguageManager;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -43,8 +45,6 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.ArrayList;
 
 import static com.andrei1058.bedwars.BedWars.nms;
-import static com.andrei1058.bedwars.api.language.Language.getList;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class GameStartingTask implements Runnable, StartingTask {
 
@@ -154,11 +154,12 @@ public class GameStartingTask implements Runnable, StartingTask {
             } else {
                 Sounds.playSound(ConfigPath.SOUNDS_COUNTDOWN_TICK, getArena().getPlayers());
             }
+            LanguageService languageService = LanguageManager.getInstance();
             for (Player player : getArena().getPlayers()) {
-                Language playerLang = Language.getPlayerLanguage(player);
+                Language playerLang = languageService.getPlayerLanguage(player);
                 String[] titleSubtitle = Language.getCountDownTitle(playerLang, getCountdown());
                 nms.sendTitle(player, titleSubtitle[0], titleSubtitle[1], 0, 20, 10);
-                player.sendMessage(getMsg(player, Messages.ARENA_STATUS_START_COUNTDOWN_CHAT).replace("{time}", String.valueOf(getCountdown())));
+                player.sendMessage(getLangService().getMsg(player, Messages.ARENA_STATUS_START_COUNTDOWN_CHAT).replace("{time}", String.valueOf(getCountdown())));
             }
         }
         countdown--;
@@ -171,8 +172,8 @@ public class GameStartingTask implements Runnable, StartingTask {
                 BedWarsTeam.reSpawnInvulnerability.put(p.getUniqueId(), System.currentTimeMillis() + 2000L);
                 bwt.firstSpawn(p);
                 Sounds.playSound(ConfigPath.SOUND_GAME_START, p);
-                nms.sendTitle(p, getMsg(p, Messages.ARENA_STATUS_START_PLAYER_TITLE), null, 0, 30, 10);
-                for (String tut : getList(p, Messages.ARENA_STATUS_START_PLAYER_TUTORIAL)) {
+                nms.sendTitle(p, getLangService().getMsg(p, Messages.ARENA_STATUS_START_PLAYER_TITLE), null, 0, 30, 10);
+                for (String tut : getLangService().getList(p, Messages.ARENA_STATUS_START_PLAYER_TUTORIAL)) {
                     p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, tut));
                 }
             }
@@ -181,5 +182,9 @@ public class GameStartingTask implements Runnable, StartingTask {
 
     public void cancel() {
         task.cancel();
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

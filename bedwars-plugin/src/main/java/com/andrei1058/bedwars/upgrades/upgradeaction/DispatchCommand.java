@@ -22,7 +22,9 @@ package com.andrei1058.bedwars.upgrades.upgradeaction;
 
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.upgrades.UpgradeAction;
+import com.andrei1058.bedwars.language.LanguageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
@@ -80,7 +82,7 @@ public class DispatchCommand implements UpgradeAction {
         String buyerName = player == null ? "null" : player.getName();
         String buyerUUID = player == null ? "null" : player.getUniqueId().toString();
         String teamName = team.getName();
-        String teamDisplay = team.getDisplayName(Language.getDefaultLanguage());
+        String teamDisplay = team.getDisplayName(getLangService().getDefaultLanguage());
         String teamColor = team.getColor().chat().toString();
         String arenaIdentifier = team.getArena().getArenaName();
         String arenaWorld = team.getArena().getWorldName();
@@ -93,5 +95,9 @@ public class DispatchCommand implements UpgradeAction {
                 .replace("{team_color}", teamColor).replace("{arena}", arenaIdentifier)
                 .replace("{arena_world}", arenaWorld).replace("{arena_display}", arenaDisplay)
                 .replace("{arena_group}", arenaGroup));
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

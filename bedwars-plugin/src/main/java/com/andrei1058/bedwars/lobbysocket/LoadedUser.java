@@ -23,6 +23,7 @@ package com.andrei1058.bedwars.lobbysocket;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.language.LanguageManager;
 import org.bukkit.Bukkit;
 
 import java.util.UUID;
@@ -50,7 +51,7 @@ public class LoadedUser {
             }
         }
         this.toleranceTime = System.currentTimeMillis() + waitSeconds;
-        Language l = Language.getLang(langIso);
+        Language l = LanguageManager.getInstance().getLang(langIso);
         if (l != null) language = l;
 
         loaded.put(this.uuid, this);

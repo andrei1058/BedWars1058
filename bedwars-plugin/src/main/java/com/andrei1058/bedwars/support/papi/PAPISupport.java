@@ -25,9 +25,11 @@ import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.commands.shout.ShoutCommand;
+import com.andrei1058.bedwars.language.LanguageManager;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -35,8 +37,6 @@ import org.jetbrains.annotations.NotNull;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class PAPISupport extends PlaceholderExpansion {
 
@@ -72,10 +72,10 @@ public class PAPISupport extends PlaceholderExpansion {
         if (s.startsWith("arena_status_")) {
             IArena a = Arena.getArenaByName(s.replace("arena_status_", ""));
             if (a == null) {
-                return player == null ? Language.getDefaultLanguage().m(Messages.ARENA_STATUS_RESTARTING_NAME) :
-                        Language.getMsg(player, Messages.ARENA_STATUS_RESTARTING_NAME);
+                return player == null ? getLangService().getDefaultLanguage().m(Messages.ARENA_STATUS_RESTARTING_NAME) :
+                        getLangService().getMsg(player, Messages.ARENA_STATUS_RESTARTING_NAME);
             }
-            return a.getDisplayStatus(Language.getDefaultLanguage());
+            return a.getDisplayStatus(getLangService().getDefaultLanguage());
         }
 
         if (s.startsWith("arena_count_")) {
@@ -112,11 +112,13 @@ public class PAPISupport extends PlaceholderExpansion {
         switch (s) {
             case "stats_firstplay":
                 Instant firstPlay = BedWars.getStatsManager().get(player.getUniqueId()).getFirstPlay();
-                replay = new SimpleDateFormat(getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(firstPlay != null ? Timestamp.from(firstPlay) : null);
+                replay = new SimpleDateFormat(getLangService().getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT))
+                        .format(firstPlay != null ? Timestamp.from(firstPlay) : null);
                 break;
             case "stats_lastplay":
                 Instant lastPlay = BedWars.getStatsManager().get(player.getUniqueId()).getLastPlay();
-                replay = new SimpleDateFormat(getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(lastPlay != null ? Timestamp.from(lastPlay) : null);
+                replay = new SimpleDateFormat(getLangService().getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT))
+                        .format(lastPlay != null ? Timestamp.from(lastPlay) : null);
                 break;
             case "stats_total_kills":
                 replay = String.valueOf(BedWars.getStatsManager().get(player.getUniqueId()).getTotalKills());
@@ -167,18 +169,18 @@ public class PAPISupport extends PlaceholderExpansion {
             case "player_team":
                 if (a != null) {
                     if (ShoutCommand.isShout(player)) {
-                        replay += Language.getMsg(player, Messages.FORMAT_PAPI_PLAYER_TEAM_SHOUT);
+                        replay += getLangService().getMsg(player, Messages.FORMAT_PAPI_PLAYER_TEAM_SHOUT);
                     }
                     if (a.isPlayer(player)) {
                         if (a.getStatus() == GameState.playing) {
                             ITeam bwt = a.getTeam(player);
                             if (bwt != null) {
-                                replay += Language.getMsg(player, Messages.FORMAT_PAPI_PLAYER_TEAM_TEAM).replace("{TeamName}",
-                                        bwt.getDisplayName(Language.getPlayerLanguage(player))).replace("{TeamColor}", String.valueOf(bwt.getColor().chat()));
+                                replay += getLangService().getMsg(player, Messages.FORMAT_PAPI_PLAYER_TEAM_TEAM).replace("{TeamName}",
+                                        bwt.getDisplayName(getLangService().getPlayerLanguage(player))).replace("{TeamColor}", String.valueOf(bwt.getColor().chat()));
                             }
                         }
                     } else {
-                        replay += Language.getMsg(player, Messages.FORMAT_PAPI_PLAYER_TEAM_SPECTATOR);
+                        replay += getLangService().getMsg(player, Messages.FORMAT_PAPI_PLAYER_TEAM_SPECTATOR);
                     }
                 }
                 break;
@@ -240,5 +242,9 @@ public class PAPISupport extends PlaceholderExpansion {
 
         }
         return replay;
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

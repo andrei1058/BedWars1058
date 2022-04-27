@@ -26,9 +26,11 @@ import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.tasks.ReJoinTask;
 import com.andrei1058.bedwars.configuration.Sounds;
+import com.andrei1058.bedwars.language.LanguageManager;
 import com.andrei1058.bedwars.lobbysocket.ArenaSocket;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.google.gson.JsonObject;
@@ -42,8 +44,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class ReJoin {
 
@@ -145,7 +145,7 @@ public class ReJoin {
     public boolean reJoin(Player player) {
 
         Sounds.playSound("rejoin-allowed", player);
-        player.sendMessage(Language.getMsg(player, Messages.REJOIN_ALLOWED).replace("{arena}", getArena().getDisplayName()));
+        player.sendMessage(getLangService().getMsg(player, Messages.REJOIN_ALLOWED).replace("{arena}", getArena().getDisplayName()));
 
         if (player.getGameMode() != GameMode.SURVIVAL) {
             Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
@@ -171,13 +171,14 @@ public class ReJoin {
         if (bwt != null && destroyTeam && bwt.getMembers().isEmpty()) {
             bwt.setBedDestroyed(true);
             if (bwt != null) {
+                LanguageService languageService = LanguageManager.getInstance();
                 for (Player p2 : arena.getPlayers()) {
-                    p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", bwt.getColor().chat().toString())
-                            .replace("{TeamName}", bwt.getDisplayName(Language.getPlayerLanguage(p2))));
+                    p2.sendMessage(getLangService().getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", bwt.getColor().chat().toString())
+                            .replace("{TeamName}", bwt.getDisplayName(languageService.getPlayerLanguage(p2))));
                 }
                 for (Player p2 : arena.getSpectators()) {
-                    p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", bwt.getColor().chat().toString())
-                            .replace("{TeamName}", bwt.getDisplayName(Language.getPlayerLanguage(p2))));
+                    p2.sendMessage(getLangService().getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", bwt.getColor().chat().toString())
+                            .replace("{TeamName}", bwt.getDisplayName(languageService.getPlayerLanguage(p2))));
                 }
             }
             arena.checkWinner();
@@ -228,5 +229,9 @@ public class ReJoin {
         if (!(o instanceof ReJoin)) return false;
         ReJoin reJoin = (ReJoin) o;
         return reJoin.getPl().equals(getPl());
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

@@ -238,14 +238,14 @@ public class v1_12_R1 extends VersionSupport {
         vlg.setSilent(true);
 
         for (Player p : players) {
-            String[] nume = Language.getMsg(p, name1).split(",");
+            String[] nume = getLangService().getMsg(p, name1).split(",");
             if (nume.length == 1) {
                 ArmorStand a = createArmorStand(nume[0], l.clone().add(0, 1.85, 0));
-                new ShopHolo(Language.getPlayerLanguage(p).getIso(), a, null, l, arena);
+                new ShopHolo(getLangService().getPlayerLanguage(p).getIso(), a, null, l, arena);
             } else {
                 ArmorStand a = createArmorStand(nume[0], l.clone().add(0, 2.1, 0));
                 ArmorStand b = createArmorStand(nume[1], l.clone().add(0, 1.85, 0));
-                new ShopHolo(Language.getPlayerLanguage(p).getIso(), a, b, l, arena);
+                new ShopHolo(getLangService().getPlayerLanguage(p).getIso(), a, b, l, arena);
             }
         }
         for (ShopHolo sh : ShopHolo.getShopHolo()) {

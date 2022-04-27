@@ -24,12 +24,14 @@ import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.upgrades.EnemyBaseEnterTrap;
 import com.andrei1058.bedwars.api.upgrades.MenuContent;
 import com.andrei1058.bedwars.api.upgrades.TeamUpgrade;
 import com.andrei1058.bedwars.api.upgrades.UpgradesIndex;
 import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.language.LanguageManager;
 import com.andrei1058.bedwars.upgrades.UpgradesManager;
 import com.google.common.collect.ImmutableMap;
 import org.bukkit.Bukkit;
@@ -51,7 +53,9 @@ public class InternalMenu implements UpgradesIndex {
      */
     public InternalMenu(String groupName) {
         this.name = groupName.toLowerCase();
-        Language.saveIfNotExists(Messages.UPGRADES_MENU_GUI_NAME_PATH + groupName.toLowerCase(), "&8Upgrades & Traps");
+        BedWars.getAPI().getLanguageService().saveIfNotExists(
+                Messages.UPGRADES_MENU_GUI_NAME_PATH + groupName.toLowerCase(), "&8Upgrades & Traps"
+        );
     }
 
     @Override
@@ -62,7 +66,7 @@ public class InternalMenu implements UpgradesIndex {
         ITeam team = a.getTeam(player);
         if (team == null) return;
         if (!BedWars.getAPI().getArenaUtil().isPlaying(player)) return;
-        Inventory inv = Bukkit.createInventory(null, 45, Language.getMsg(player, Messages.UPGRADES_MENU_GUI_NAME_PATH + name));
+        Inventory inv = Bukkit.createInventory(null, 45, getLangService().getMsg(player, Messages.UPGRADES_MENU_GUI_NAME_PATH + name));
         for (Map.Entry<Integer, MenuContent> entry : menuContentBySlot.entrySet()) {
             inv.setItem(entry.getKey(), entry.getValue().getDisplayItem(player, team));
         }
@@ -96,5 +100,9 @@ public class InternalMenu implements UpgradesIndex {
     @Override
     public ImmutableMap<Integer, MenuContent> getMenuContentBySlot() {
         return ImmutableMap.copyOf(menuContentBySlot);
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

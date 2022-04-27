@@ -24,7 +24,9 @@ import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.language.LanguageManager;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -36,7 +38,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.andrei1058.bedwars.BedWars.nms;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class PlayerDrops {
 
@@ -128,20 +129,32 @@ public class PlayerDrops {
                     int amount = entry.getValue();
                     switch (entry.getKey()) {
                         case DIAMOND:
-                            msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_DIAMOND).replace("{meaning}", amount == 1 ?
-                                    getMsg(killer, Messages.MEANING_DIAMOND_SINGULAR) : getMsg(killer, Messages.MEANING_DIAMOND_PLURAL));
+                            msg = getLangService().getMsg(killer, Messages.PLAYER_DIE_REWARD_DIAMOND)
+                                    .replace("{meaning}", amount == 1 ?
+                                            getLangService().getMsg(killer, Messages.MEANING_DIAMOND_SINGULAR) :
+                                            getLangService().getMsg(killer, Messages.MEANING_DIAMOND_PLURAL)
+                                    );
                             break;
                         case EMERALD:
-                            msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_EMERALD).replace("{meaning}", amount == 1 ?
-                                    getMsg(killer, Messages.MEANING_EMERALD_SINGULAR) : getMsg(killer, Messages.MEANING_EMERALD_PLURAL));
+                            msg = getLangService().getMsg(killer, Messages.PLAYER_DIE_REWARD_EMERALD)
+                                    .replace("{meaning}", amount == 1 ?
+                                            getLangService().getMsg(killer, Messages.MEANING_EMERALD_SINGULAR) :
+                                            getLangService().getMsg(killer, Messages.MEANING_EMERALD_PLURAL)
+                                    );
                             break;
                         case IRON_INGOT:
-                            msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_IRON).replace("{meaning}", amount == 1 ?
-                                    getMsg(killer, Messages.MEANING_IRON_SINGULAR) : getMsg(killer, Messages.MEANING_IRON_PLURAL));
+                            msg = getLangService().getMsg(killer, Messages.PLAYER_DIE_REWARD_IRON)
+                                    .replace("{meaning}", amount == 1 ?
+                                            getLangService().getMsg(killer, Messages.MEANING_IRON_SINGULAR) :
+                                            getLangService().getMsg(killer, Messages.MEANING_IRON_PLURAL)
+                                    );
                             break;
                         case GOLD_INGOT:
-                            msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_GOLD).replace("{meaning}", amount == 1 ?
-                                    getMsg(killer, Messages.MEANING_GOLD_SINGULAR) : getMsg(killer, Messages.MEANING_GOLD_PLURAL));
+                            msg = getLangService().getMsg(killer, Messages.PLAYER_DIE_REWARD_GOLD)
+                                    .replace("{meaning}", amount == 1 ?
+                                            getLangService().getMsg(killer, Messages.MEANING_GOLD_SINGULAR) :
+                                            getLangService().getMsg(killer, Messages.MEANING_GOLD_PLURAL)
+                                    );
                             break;
                     }
                     killer.sendMessage(msg.replace("{amount}", String.valueOf(amount)));
@@ -161,5 +174,9 @@ public class PlayerDrops {
                 player.getLocation().getWorld().dropItemNaturally(player.getLocation(), i);
             }
         }
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

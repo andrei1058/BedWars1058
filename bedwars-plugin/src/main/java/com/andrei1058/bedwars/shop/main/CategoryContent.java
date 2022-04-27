@@ -28,9 +28,11 @@ import com.andrei1058.bedwars.api.arena.shop.IContentTier;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.shop.ShopBuyEvent;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.configuration.Sounds;
+import com.andrei1058.bedwars.language.LanguageManager;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.shop.quickbuy.PlayerQuickBuyCache;
 import com.andrei1058.bedwars.shop.quickbuy.QuickBuyElement;
@@ -46,7 +48,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.andrei1058.bedwars.BedWars.nms;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 @SuppressWarnings("WeakerAccess")
 public class CategoryContent implements ICategoryContent {
@@ -113,13 +114,13 @@ public class CategoryContent implements ICategoryContent {
         }
 
         itemNamePath = Messages.SHOP_CONTENT_TIER_ITEM_NAME.replace("%category%", categoryName).replace("%content%", contentName);
-        for (Language lang : Language.getLanguages()) {
+        for (Language lang : getLangService().getRegisteredLanguages()) {
             if (!lang.exists(itemNamePath)) {
                 lang.set(itemNamePath, "&cName not set");
             }
         }
         itemLorePath = Messages.SHOP_CONTENT_TIER_ITEM_LORE.replace("%category%", categoryName).replace("%content%", contentName);
-        for (Language lang : Language.getLanguages()) {
+        for (Language lang : getLangService().getRegisteredLanguages()) {
             if (!lang.exists(itemLorePath)) {
                 lang.set(itemLorePath, "&cLore not set");
             }
@@ -146,7 +147,7 @@ public class CategoryContent implements ICategoryContent {
         //check if can re-buy
         if (shopCache.getContentTier(getIdentifier()) == contentTiers.size()) {
             if (isPermanent() && shopCache.hasCachedItem(this)) {
-                player.sendMessage(getMsg(player, Messages.SHOP_ALREADY_BOUGHT));
+                player.sendMessage(getLangService().getMsg(player, Messages.SHOP_ALREADY_BOUGHT));
                 Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, player);
                 return;
             }
@@ -163,8 +164,10 @@ public class CategoryContent implements ICategoryContent {
         //check money
         int money = calculateMoney(player, ct.getCurrency());
         if (money < ct.getPrice()) {
-            player.sendMessage(getMsg(player, Messages.SHOP_INSUFFICIENT_MONEY).replace("{currency}", getMsg(player, getCurrencyMsgPath(ct))).
-                    replace("{amount}", String.valueOf(ct.getPrice() - money)));
+            player.sendMessage(getLangService().getMsg(player, Messages.SHOP_INSUFFICIENT_MONEY)
+                    .replace("{currency}", getLangService().getMsg(player, getCurrencyMsgPath(ct)))
+                    .replace("{amount}", String.valueOf(ct.getPrice() - money))
+            );
             Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, player);
             return;
         }
@@ -173,7 +176,7 @@ public class CategoryContent implements ICategoryContent {
         //call shop buy event
         Bukkit.getPluginManager().callEvent(event = new ShopBuyEvent(player, Arena.getArenaByPlayer(player), this));
 
-        if (event.isCancelled()){
+        if (event.isCancelled()) {
             return;
         }
 
@@ -191,13 +194,18 @@ public class CategoryContent implements ICategoryContent {
         Sounds.playSound(ConfigPath.SOUNDS_BOUGHT, player);
 
         //send purchase msg
-        if (itemNamePath == null || Language.getPlayerLanguage(player).getYml().get(itemNamePath) == null) {
+        if (itemNamePath == null || getLangService().getPlayerLanguage(player).getYml().get(itemNamePath) == null) {
             ItemStack displayItem = ct.getItemStack();
             if (displayItem.getItemMeta() != null && displayItem.getItemMeta().hasDisplayName()) {
-                player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", displayItem.getItemMeta().getDisplayName()));
+                player.sendMessage(getLangService().getMsg(player, Messages.SHOP_NEW_PURCHASE)
+                        .replace("{item}", displayItem.getItemMeta().getDisplayName())
+                );
             }
         } else {
-            player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", ChatColor.stripColor(getMsg(player, itemNamePath))).replace("{color}", "").replace("{tier}", ""));
+            player.sendMessage(getLangService().getMsg(player, Messages.SHOP_NEW_PURCHASE)
+                    .replace("{item}", ChatColor.stripColor(getLangService().getMsg(player, itemNamePath)))
+                    .replace("{color}", "").replace("{tier}", "")
+            );
         }
 
 
@@ -251,8 +259,8 @@ public class CategoryContent implements ICategoryContent {
             PlayerQuickBuyCache qbc = PlayerQuickBuyCache.getQuickBuyCache(player.getUniqueId());
             boolean hasQuick = qbc != null && hasQuick(qbc);
 
-            String color = getMsg(player, canAfford ? Messages.SHOP_CAN_BUY_COLOR : Messages.SHOP_CANT_BUY_COLOR);
-            String translatedCurrency = getMsg(player, getCurrencyMsgPath(ct));
+            String color = getLangService().getMsg(player, canAfford ? Messages.SHOP_CAN_BUY_COLOR : Messages.SHOP_CANT_BUY_COLOR);
+            String translatedCurrency = getLangService().getMsg(player, getCurrencyMsgPath(ct));
             ChatColor cColor = getCurrencyColor(ct.getCurrency());
 
             int tierI = ct.getValue();
@@ -260,27 +268,27 @@ public class CategoryContent implements ICategoryContent {
             String buyStatus;
 
             if (isPermanent() && shopCache.hasCachedItem(this) && shopCache.getCachedItem(this).getTier() == getContentTiers().size()) {
-                buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_MAXED);
+                buyStatus = getLangService().getMsg(player, Messages.SHOP_LORE_STATUS_MAXED);
             } else if (!canAfford) {
-                buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CANT_AFFORD).replace("{currency}", translatedCurrency);
+                buyStatus = getLangService().getMsg(player, Messages.SHOP_LORE_STATUS_CANT_AFFORD).replace("{currency}", translatedCurrency);
             } else {
-                buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CAN_BUY);
+                buyStatus = getLangService().getMsg(player, Messages.SHOP_LORE_STATUS_CAN_BUY);
             }
 
 
-            im.setDisplayName(getMsg(player, itemNamePath).replace("{color}", color).replace("{tier}", tier));
+            im.setDisplayName(getLangService().getMsg(player, itemNamePath).replace("{color}", color).replace("{tier}", tier));
 
             List<String> lore = new ArrayList<>();
-            for (String s : Language.getList(player, itemLorePath)) {
+            for (String s : getLangService().getList(player, itemLorePath)) {
                 if (s.contains("{quick_buy}")) {
                     if (hasQuick) {
                         if (ShopIndex.getIndexViewers().contains(player.getUniqueId())) {
-                            s = getMsg(player, Messages.SHOP_LORE_QUICK_REMOVE);
+                            s = getLangService().getMsg(player, Messages.SHOP_LORE_QUICK_REMOVE);
                         } else {
                             continue;
                         }
                     } else {
-                        s = getMsg(player, Messages.SHOP_LORE_QUICK_ADD);
+                        s = getLangService().getMsg(player, Messages.SHOP_LORE_QUICK_ADD);
                     }
                 }
                 s = s.replace("{tier}", tier).replace("{color}", color).replace("{cost}", cColor + String.valueOf(ct.getPrice()))
@@ -474,5 +482,9 @@ public class CategoryContent implements ICategoryContent {
 
     public List<IContentTier> getContentTiers() {
         return contentTiers;
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

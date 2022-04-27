@@ -26,9 +26,11 @@ import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.language.LanguageManager;
 import com.andrei1058.spigot.sidebar.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -41,8 +43,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static com.andrei1058.bedwars.BedWars.*;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
-import static com.andrei1058.bedwars.api.language.Language.getScoreboard;
 import static com.andrei1058.bedwars.arena.Misc.replaceStatsPlaceholders;
 
 public class BedWarsScoreboard {
@@ -75,9 +75,9 @@ public class BedWarsScoreboard {
         }
 
         // Cache the next event date format
-        nextEventDateFormat = new SimpleDateFormat(getMsg(player, Messages.FORMATTING_SCOREBOARD_NEXEVENT_TIMER));
+        nextEventDateFormat = new SimpleDateFormat(getLangService().getMsg(player, Messages.FORMATTING_SCOREBOARD_NEXEVENT_TIMER));
         nextEventDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-        dateFormat = new SimpleDateFormat(getMsg(player, Messages.FORMATTING_SCOREBOARD_DATE));
+        dateFormat = new SimpleDateFormat(getLangService().getMsg(player, Messages.FORMATTING_SCOREBOARD_DATE));
 
         // Define common placeholders
         List<PlaceholderProvider> placeholders = Arrays.asList(
@@ -149,16 +149,16 @@ public class BedWarsScoreboard {
                     String result;
                     if (currentTeam.isBedDestroyed()) {
                         if (currentTeam.getSize() > 0) {
-                            result = getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED)
+                            result = getLangService().getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED)
                                     .replace("{remainingPlayers}", String.valueOf(currentTeam.getSize()));
                         } else {
-                            result = getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED);
+                            result = getLangService().getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED);
                         }
                     } else {
-                        result = getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE);
+                        result = getLangService().getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE);
                     }
                     if (currentTeam.isMember(getPlayer())) {
-                        result += getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM);
+                        result += getLangService().getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM);
                     }
                     return result;
                 }));
@@ -264,7 +264,7 @@ public class BedWarsScoreboard {
         handlePlayerList();
 
         int teamCount = 0;
-        Language language = Language.getPlayerLanguage(player);
+        Language language = getLangService().getPlayerLanguage(player);
         String genericTeamFormat = language.m(Messages.FORMATTING_SCOREBOARD_TEAM_GENERIC);
         for (String current : strings) {
             // generic team placeholder {team}
@@ -305,7 +305,7 @@ public class BedWarsScoreboard {
                     // Static team placeholders
                     current = current
                             .replace("{Team" + currentTeam.getName() + "Color}", color.toString())
-                            .replace("{Team" + currentTeam.getName() + "Name}", currentTeam.getDisplayName(Language.getPlayerLanguage(getPlayer())));
+                            .replace("{Team" + currentTeam.getName() + "Name}", currentTeam.getDisplayName(getLangService().getPlayerLanguage(getPlayer())));
 
                 }
             }
@@ -331,7 +331,8 @@ public class BedWarsScoreboard {
             handle.playerListAddPlaceholders(player,
                     new PlaceholderProvider("{team}", () -> {
                         if (arena.isSpectator(player)) {
-                            return Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_COLOR) + Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_TEAM);
+                            return getLangService().getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_COLOR) +
+                                    getLangService().getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_TEAM);
                         }
                         ITeam team = arena.getTeam(player);
                         if (team == null) {
@@ -341,11 +342,11 @@ public class BedWarsScoreboard {
                             //waiting/ starting phase
                             return "";
                         }
-                        return team.getColor().chat() + team.getDisplayName(Language.getPlayerLanguage(getPlayer()));
+                        return team.getColor().chat() + team.getDisplayName(getLangService().getPlayerLanguage(getPlayer()));
                     }),
                     new PlaceholderProvider("{teamLetter}", () -> {
                         if (arena.isSpectator(player)) {
-                            return Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_TEAM).substring(0, 1);
+                            return getLangService().getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_TEAM).substring(0, 1);
                         }
                         ITeam team = arena.getTeam(player);
                         if (team == null) {
@@ -355,11 +356,11 @@ public class BedWarsScoreboard {
                             //waiting/ starting phase
                             return "";
                         }
-                        return team.getDisplayName(Language.getPlayerLanguage(getPlayer())).substring(0, 1);
+                        return team.getDisplayName(getLangService().getPlayerLanguage(getPlayer())).substring(0, 1);
                     }),
                     new PlaceholderProvider("{teamName}", () -> {
                         if (arena.isSpectator(player)) {
-                            return Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_TEAM);
+                            return getLangService().getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_TEAM);
                         }
                         ITeam team = arena.getTeam(player);
                         if (team == null) {
@@ -369,11 +370,11 @@ public class BedWarsScoreboard {
                             //waiting/ starting phase
                             return "";
                         }
-                        return team.getDisplayName(Language.getPlayerLanguage(getPlayer()));
+                        return team.getDisplayName(getLangService().getPlayerLanguage(getPlayer()));
                     }),
                     new PlaceholderProvider("{teamColor}", () -> {
                         if (arena.isSpectator(player)) {
-                            return Language.getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_COLOR);
+                            return getLangService().getMsg(getPlayer(), Messages.FORMATTING_SPECTATOR_COLOR);
                         }
                         ITeam team = arena.getTeam(player);
                         if (team == null) {
@@ -398,7 +399,7 @@ public class BedWarsScoreboard {
             return;
         }
         if (handle != null) {
-            List<String> animation = Language.getList(player, Messages.FORMATTING_SCOREBOARD_HEALTH);
+            List<String> animation = getLangService().getList(player, Messages.FORMATTING_SCOREBOARD_HEALTH);
             if (animation.isEmpty()) return;
             SidebarLine line;
             if (animation.size() > 1) {
@@ -487,25 +488,25 @@ public class BedWarsScoreboard {
         String st = "-";
         switch (arena.getNextEvent()) {
             case EMERALD_GENERATOR_TIER_II:
-                st = getMsg(getPlayer(), Messages.NEXT_EVENT_EMERALD_UPGRADE_II);
+                st = getLangService().getMsg(getPlayer(), Messages.NEXT_EVENT_EMERALD_UPGRADE_II);
                 break;
             case EMERALD_GENERATOR_TIER_III:
-                st = getMsg(getPlayer(), Messages.NEXT_EVENT_EMERALD_UPGRADE_III);
+                st = getLangService().getMsg(getPlayer(), Messages.NEXT_EVENT_EMERALD_UPGRADE_III);
                 break;
             case DIAMOND_GENERATOR_TIER_II:
-                st = getMsg(getPlayer(), Messages.NEXT_EVENT_DIAMOND_UPGRADE_II);
+                st = getLangService().getMsg(getPlayer(), Messages.NEXT_EVENT_DIAMOND_UPGRADE_II);
                 break;
             case DIAMOND_GENERATOR_TIER_III:
-                st = getMsg(getPlayer(), Messages.NEXT_EVENT_DIAMOND_UPGRADE_III);
+                st = getLangService().getMsg(getPlayer(), Messages.NEXT_EVENT_DIAMOND_UPGRADE_III);
                 break;
             case GAME_END:
-                st = getMsg(getPlayer(), Messages.NEXT_EVENT_GAME_END);
+                st = getLangService().getMsg(getPlayer(), Messages.NEXT_EVENT_GAME_END);
                 break;
             case BEDS_DESTROY:
-                st = getMsg(getPlayer(), Messages.NEXT_EVENT_BEDS_DESTROY);
+                st = getLangService().getMsg(getPlayer(), Messages.NEXT_EVENT_BEDS_DESTROY);
                 break;
             case ENDER_DRAGON:
-                st = getMsg(getPlayer(), Messages.NEXT_EVENT_DRAGON_SPAWN);
+                st = getLangService().getMsg(getPlayer(), Messages.NEXT_EVENT_DRAGON_SPAWN);
                 break;
         }
 
@@ -595,7 +596,7 @@ public class BedWarsScoreboard {
                 }
                 return;
             }
-            lines = Language.getList(player, Messages.SCOREBOARD_LOBBY);
+            lines = getLangService().getList(player, Messages.SCOREBOARD_LOBBY);
         } else {
             // Game scoreboard
             if (!config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_GAME_SIDEBAR)) {
@@ -605,11 +606,11 @@ public class BedWarsScoreboard {
                 return;
             }
             if (arena.getStatus() == GameState.waiting) {
-                lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".waiting", Messages.SCOREBOARD_DEFAULT_WAITING);
+                lines = getLangService().getScoreboard(player, "scoreboard." + arena.getGroup() + ".waiting", Messages.SCOREBOARD_DEFAULT_WAITING);
             } else if (arena.getStatus() == GameState.starting) {
-                lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".starting", Messages.SCOREBOARD_DEFAULT_STARTING);
+                lines = getLangService().getScoreboard(player, "scoreboard." + arena.getGroup() + ".starting", Messages.SCOREBOARD_DEFAULT_STARTING);
             } else if (arena.getStatus() == GameState.playing || arena.getStatus() == GameState.restarting) {
-                lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING);
+                lines = getLangService().getScoreboard(player, "scoreboard." + arena.getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING);
             }
         }
 
@@ -639,7 +640,7 @@ public class BedWarsScoreboard {
 
     @NotNull
     private SidebarLine getTeamListText(String path, Player targetPlayer) {
-        List<String> strings = Language.getList(getPlayer(), path);
+        List<String> strings = getLangService().getList(getPlayer(), path);
         if (strings.isEmpty()) {
             return new SidebarLine() {
                 @NotNull
@@ -651,7 +652,7 @@ public class BedWarsScoreboard {
         }
 
         strings = new ArrayList<>();
-        for (String string : Language.getList(getPlayer(), path)) {
+        for (String string : getLangService().getList(getPlayer(), path)) {
             strings.add(string.replace("{vPrefix}", BedWars.getChatSupport().getPrefix(targetPlayer)).replace("{vSuffix}", BedWars.getChatSupport().getSuffix(targetPlayer)));
         }
 
@@ -671,5 +672,9 @@ public class BedWarsScoreboard {
             lines[i] = strings.get(i);
         }
         return new SidebarLineAnimated(lines);
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

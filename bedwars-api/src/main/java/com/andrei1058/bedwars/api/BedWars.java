@@ -25,6 +25,7 @@ import com.andrei1058.bedwars.api.arena.shop.IContentTier;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.levels.Level;
 import com.andrei1058.bedwars.api.party.Party;
 import com.andrei1058.bedwars.api.server.ISetupSession;
@@ -493,4 +494,6 @@ public interface BedWars {
          */
         void givePlayerScoreboard(Player player, boolean delay);
     }
+
+    LanguageService getLanguageService();
 }

@@ -22,8 +22,10 @@ package com.andrei1058.bedwars.arena.spectator;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.language.LanguageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -37,8 +39,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.andrei1058.bedwars.BedWars.nms;
-import static com.andrei1058.bedwars.api.language.Language.getList;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 @SuppressWarnings("WeakerAccess")
 public class TeleporterGUI {
@@ -88,7 +88,7 @@ public class TeleporterGUI {
         } else {
             size = 54;
         }
-        Inventory inv = Bukkit.createInventory(p, size, getMsg(p, Messages.ARENA_SPECTATOR_TELEPORTER_GUI_NAME));
+        Inventory inv = Bukkit.createInventory(p, size, getLangService().getMsg(p, Messages.ARENA_SPECTATOR_TELEPORTER_GUI_NAME));
         refreshInv(p, inv);
         refresh.put(p, inv);
         p.openInventory(inv);
@@ -117,14 +117,14 @@ public class TeleporterGUI {
         ItemStack i = nms.getPlayerHead(targetPlayer, null);
         ItemMeta im = i.getItemMeta();
         assert im != null;
-        im.setDisplayName(getMsg(GUIholder, Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME)
+        im.setDisplayName(getLangService().getMsg(GUIholder, Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME)
                 .replace("{vPrefix}", BedWars.getChatSupport().getPrefix(targetPlayer))
                 .replace("{vSuffix}", BedWars.getChatSupport().getSuffix(targetPlayer))
                 .replace("{player}", targetPlayer.getDisplayName())
                 .replace("{playername}", targetPlayer.getName()));
         List<String> lore = new ArrayList<>();
         String health = String.valueOf((int)targetPlayer.getHealth() * 100 / targetPlayer.getHealthScale());
-        for (String s : getList(GUIholder, Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_LORE)) {
+        for (String s : getLangService().getList(GUIholder, Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_LORE)) {
             lore.add(s.replace("{health}", health).replace("{food}", String.valueOf(targetPlayer.getFoodLevel())));
         }
         im.setLore(lore);
@@ -140,5 +140,9 @@ public class TeleporterGUI {
             refresh.remove(p);
             p.closeInventory();
         }
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

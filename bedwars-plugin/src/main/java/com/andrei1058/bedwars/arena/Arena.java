@@ -43,6 +43,7 @@ import com.andrei1058.bedwars.api.events.server.ArenaDisableEvent;
 import com.andrei1058.bedwars.api.events.server.ArenaEnableEvent;
 import com.andrei1058.bedwars.api.events.server.ArenaRestartEvent;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.region.Region;
 import com.andrei1058.bedwars.api.server.ServerType;
@@ -57,6 +58,7 @@ import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import com.andrei1058.bedwars.arena.team.TeamAssigner;
 import com.andrei1058.bedwars.configuration.ArenaConfig;
 import com.andrei1058.bedwars.configuration.Sounds;
+import com.andrei1058.bedwars.language.LanguageManager;
 import com.andrei1058.bedwars.levels.internal.InternalLevel;
 import com.andrei1058.bedwars.levels.internal.PerMinuteTask;
 import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
@@ -281,7 +283,11 @@ public class Arena implements IArena {
         if (error) return;
         yKillHeight = yml.getInt(ConfigPath.ARENA_Y_LEVEL_KILL);
         addToEnableQueue(this);
-        Language.saveIfNotExists(Messages.ARENA_DISPLAY_GROUP_PATH + getGroup().toLowerCase(), String.valueOf(getGroup().charAt(0)).toUpperCase() + group.substring(1).toLowerCase());
+
+        BedWars.getAPI().getLanguageService().saveIfNotExists(
+                Messages.ARENA_DISPLAY_GROUP_PATH + getGroup().toLowerCase(),
+                String.valueOf(getGroup().charAt(0)).toUpperCase() + group.substring(1).toLowerCase()
+        );
     }
 
     /**
@@ -425,7 +431,7 @@ public class Arena implements IArena {
         if (getParty().hasParty(p)) {
             if (!skipOwnerCheck) {
                 if (!getParty().isOwner(p)) {
-                    p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_DENIED_NOT_PARTY_LEADER));
+                    p.sendMessage(getLangService().getMsg(p, Messages.COMMAND_JOIN_DENIED_NOT_PARTY_LEADER));
                     return false;
                 }
                 int partySize = (int) getParty().getMembers(p).stream().filter(member -> {
@@ -437,7 +443,7 @@ public class Arena implements IArena {
                 }).count();
 
                 if (partySize > maxInTeam * getTeams().size() - getPlayers().size()) {
-                    p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_DENIED_PARTY_TOO_BIG));
+                    p.sendMessage(getLangService().getMsg(p, Messages.COMMAND_JOIN_DENIED_PARTY_TOO_BIG));
                     return false;
                 }
                 for (Player mem : getParty().getMembers(p)) {
@@ -460,7 +466,7 @@ public class Arena implements IArena {
 
         if (status == GameState.waiting || (status == GameState.starting && (startingTask != null && startingTask.getCountdown() > 1))) {
             if (players.size() >= maxPlayers && !isVip(p)) {
-                TextComponent text = new TextComponent(getMsg(p, Messages.COMMAND_JOIN_DENIED_IS_FULL));
+                TextComponent text = new TextComponent(getLangService().getMsg(p, Messages.COMMAND_JOIN_DENIED_IS_FULL));
                 text.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, config.getYml().getString("storeLink")));
                 p.spigot().sendMessage(text);
                 return false;
@@ -470,14 +476,14 @@ public class Arena implements IArena {
                     if (!isVip(on)) {
                         canJoin = true;
                         removePlayer(on, false);
-                        TextComponent vipKick = new TextComponent(getMsg(p, Messages.ARENA_JOIN_VIP_KICK));
+                        TextComponent vipKick = new TextComponent(getLangService().getMsg(p, Messages.ARENA_JOIN_VIP_KICK));
                         vipKick.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, config.getYml().getString("storeLink")));
                         p.spigot().sendMessage(vipKick);
                         break;
                     }
                 }
                 if (!canJoin) {
-                    p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_DENIED_IS_FULL_OF_VIPS));
+                    p.sendMessage(getLangService().getMsg(p, Messages.COMMAND_JOIN_DENIED_IS_FULL_OF_VIPS));
                     return false;
                 }
             }
@@ -499,7 +505,7 @@ public class Arena implements IArena {
             p.setHealth(20);
             for (Player on : players) {
                 on.sendMessage(
-                        getMsg(on, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG)
+                        getLangService().getMsg(on, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG)
                             .replace("{vPrefix}", getChatSupport().getPrefix(p))
                             .replace("{vSuffix}", getChatSupport().getSuffix(p))
                             .replace("{playername}", p.getName())
@@ -706,10 +712,10 @@ public class Arena implements IArena {
 
             leaving.remove(p);
 
-            p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_MSG).replace("{arena}", this.getDisplayName()));
+            p.sendMessage(getLangService().getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_MSG).replace("{arena}", this.getDisplayName()));
 
             /* update generator holograms for spectators */
-            String iso = Language.getPlayerLanguage(p).getIso();
+            String iso = LanguageManager.getInstance().getPlayerLanguage(p).getIso();
             for (IGenerator o : getOreGenerators()) {
                 o.updateHolograms(p, iso);
             }
@@ -725,7 +731,7 @@ public class Arena implements IArena {
             }
 
         } else {
-            p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG));
+            p.sendMessage(getLangService().getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG));
             return false;
         }
 
@@ -801,7 +807,7 @@ public class Arena implements IArena {
         if (status == GameState.starting && (maxInTeam > players.size() && teamuri || players.size() < minPlayers && !teamuri)) {
             changeStatus(GameState.waiting);
             for (Player on : players) {
-                on.sendMessage(getMsg(on, Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT));
+                on.sendMessage(getLangService().getMsg(on, Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT));
             }
         } else if (status == GameState.playing) {
             BedWars.debug("removePlayer debug1");
@@ -817,13 +823,14 @@ public class Arena implements IArena {
                 Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> changeStatus(GameState.restarting), 10L);
                 if (team != null) {
                     if (!team.isBedDestroyed()) {
+                        LanguageService langService = LanguageManager.getInstance();
                         for (Player p2 : this.getPlayers()) {
-                            p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", team.getColor().chat().toString())
-                                    .replace("{TeamName}", team.getDisplayName(Language.getPlayerLanguage(p2))));
+                            p2.sendMessage(getLangService().getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", team.getColor().chat().toString())
+                                    .replace("{TeamName}", team.getDisplayName(langService.getPlayerLanguage(p2))));
                         }
                         for (Player p2 : this.getSpectators()) {
-                            p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", team.getColor().chat().toString())
-                                    .replace("{TeamName}", team.getDisplayName(Language.getPlayerLanguage(p2))));
+                            p2.sendMessage(getLangService().getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", team.getColor().chat().toString())
+                                    .replace("{TeamName}", team.getDisplayName(langService.getPlayerLanguage(p2))));
                         }
                     }
                 }
@@ -847,9 +854,10 @@ public class Arena implements IArena {
                         message = Messages.PLAYER_DIE_PVP_LOG_OUT_REGULAR;
                         cause = PlayerKillEvent.PlayerKillCause.PLAYER_DISCONNECT;
                     }
-                    PlayerKillEvent event = new PlayerKillEvent(this, p, lastDamager, player -> Language.getMsg(player, message), cause);
+                    LanguageService languageService = LanguageManager.getInstance();
+                    PlayerKillEvent event = new PlayerKillEvent(this, p, lastDamager, player -> getLangService().getMsg(player, message), cause);
                     for (Player inGame : getPlayers()) {
-                        Language lang = Language.getPlayerLanguage(inGame);
+                        Language lang = languageService.getPlayerLanguage(inGame);
                         inGame.sendMessage(event.getMessage().apply(inGame)
                                 .replace("{PlayerTeamName}", team.getDisplayName(lang))
                                 .replace("{PlayerColor}", team.getColor().chat().toString()).replace("{PlayerName}", p.getDisplayName())
@@ -858,7 +866,7 @@ public class Arena implements IArena {
                                 .replace("{KillerTeamName}", killerTeam.getDisplayName(lang)));
                     }
                     for (Player inGame : getSpectators()) {
-                        Language lang = Language.getPlayerLanguage(inGame);
+                        Language lang = languageService.getPlayerLanguage(inGame);
                         inGame.sendMessage(event.getMessage().apply(inGame)
                                 .replace("{PlayerTeamName}", team.getDisplayName(lang))
                                 .replace("{PlayerColor}", team.getColor().chat().toString()).replace("{PlayerName}", p.getDisplayName())
@@ -872,7 +880,7 @@ public class Arena implements IArena {
         }
         for (Player on : getPlayers()) {
             on.sendMessage(
-                    getMsg(on, Messages.COMMAND_LEAVE_MSG)
+                    getLangService().getMsg(on, Messages.COMMAND_LEAVE_MSG)
                             .replace("{vPrefix}", getChatSupport().getPrefix(p))
                             .replace("{vSuffix}", getChatSupport().getSuffix(p))
                             .replace("{playername}", p.getName())
@@ -881,7 +889,7 @@ public class Arena implements IArena {
             );
         }
         for (Player on : getSpectators()) {
-            on.sendMessage(getMsg(on, Messages.COMMAND_LEAVE_MSG).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()));
+            on.sendMessage(getLangService().getMsg(on, Messages.COMMAND_LEAVE_MSG).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()));
         }
 
         if (getServerType() == ServerType.SHARED) {
@@ -935,7 +943,7 @@ public class Arena implements IArena {
                 if (status != GameState.restarting) {
                     if (getParty().isInternal()) {
                         for (Player mem : new ArrayList<>(getParty().getMembers(p))) {
-                            mem.sendMessage(getMsg(mem, Messages.ARENA_LEAVE_PARTY_DISBANDED));
+                            mem.sendMessage(getLangService().getMsg(mem, Messages.ARENA_LEAVE_PARTY_DISBANDED));
                         }
                     }
                     getParty().disband(p);
@@ -950,7 +958,7 @@ public class Arena implements IArena {
                     if (status == GameState.starting && (maxInTeam > players.size() && teamuri || players.size() < minPlayers && !teamuri)) {
                         changeStatus(GameState.waiting);
                         for (Player on : players) {
-                            on.sendMessage(getMsg(on, Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT));
+                            on.sendMessage(getLangService().getMsg(on, Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT));
                         }
                     }
                 }
@@ -1079,7 +1087,7 @@ public class Arena implements IArena {
                 if (status != GameState.restarting) {
                     if (getParty().isInternal()) {
                         for (Player mem : new ArrayList<>(getParty().getMembers(p))) {
-                            mem.sendMessage(getMsg(mem, Messages.ARENA_LEAVE_PARTY_DISBANDED));
+                            mem.sendMessage(getLangService().getMsg(mem, Messages.ARENA_LEAVE_PARTY_DISBANDED));
                         }
                     }
                     getParty().disband(p);
@@ -1139,10 +1147,10 @@ public class Arena implements IArena {
         p.closeInventory();
         players.add(p);
         for (Player on : players) {
-            on.sendMessage(getMsg(on, Messages.COMMAND_REJOIN_PLAYER_RECONNECTED).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
+            on.sendMessage(getLangService().getMsg(on, Messages.COMMAND_REJOIN_PLAYER_RECONNECTED).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
         }
         for (Player on : spectators) {
-            on.sendMessage(getMsg(on, Messages.COMMAND_REJOIN_PLAYER_RECONNECTED).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
+            on.sendMessage(getLangService().getMsg(on, Messages.COMMAND_REJOIN_PLAYER_RECONNECTED).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
         }
         setArenaByPlayer(p, this);
         /* save player inventory etc */
@@ -1287,7 +1295,8 @@ public class Arena implements IArena {
 
     @Override
     public String getDisplayGroup(Player player) {
-        return getPlayerLanguage(player).m(Messages.ARENA_DISPLAY_GROUP_PATH + getGroup().toLowerCase());
+        return LanguageManager.getInstance().getPlayerLanguage(player)
+                .m(Messages.ARENA_DISPLAY_GROUP_PATH + getGroup().toLowerCase());
     }
 
     @Override
@@ -1441,8 +1450,8 @@ public class Arena implements IArena {
         // if countdown cancelled
         if (this.status == GameState.starting && status == GameState.waiting) {
             for (Player player : getPlayers()) {
-                Language playerLang = Language.getPlayerLanguage(player);
-                nms.sendTitle(player, playerLang.m(Messages.ARENA_STATUS_START_COUNTDOWN_CANCELLED_TITLE), playerLang.m(Messages.ARENA_STATUS_START_COUNTDOWN_CANCELLED_SUB_TITLE), 0, 40, 10);
+                Language playerLang = LanguageManager.getInstance().getPlayerLanguage(player);
+                nms.sendTitle(player, playerLang.m(Messages.ARENA_STATUS_START_COUNTDOWN_CANCELLED_TITLE), playerLang.m(Messages.ARENA_STATUS_START_COUNTDOWN_CANCELLED_SUB_TITLE), 0, 40, 0);
             }
         }
         this.status = status;
@@ -1590,7 +1599,7 @@ public class Arena implements IArena {
                 if (getPlayers() == null) continue;
                 s.setLine(line, string.replace("[on]", String.valueOf(getPlayers().size()))
                         .replace("[max]", String.valueOf(getMaxPlayers())).replace("[arena]", getDisplayName())
-                        .replace("[status]", getDisplayStatus(Language.getDefaultLanguage())));
+                        .replace("[status]", getDisplayStatus(getLangService().getDefaultLanguage())));
                 line++;
             }
             try {
@@ -1677,8 +1686,8 @@ public class Arena implements IArena {
                 ItemStack i = Misc.createItem(Material.valueOf(config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_MATERIAL.replace("%path%", item))),
                         (byte) config.getInt(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_DATA.replace("%path%", item)),
                         config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_ENCHANTED.replace("%path%", item)),
-                        SupportPAPI.getSupportPAPI().replace(p, getMsg(p, Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", item))),
-                        SupportPAPI.getSupportPAPI().replace(p, getList(p, Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", item))),
+                        SupportPAPI.getSupportPAPI().replace(p, getLangService().getMsg(p, Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", item))),
+                        SupportPAPI.getSupportPAPI().replace(p, getLangService().getList(p, Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE.replace("%path%", item))),
                         p, "RUNCOMMAND", config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_COMMAND.replace("%path%", item)));
 
                 p.getInventory().setItem(config.getInt(ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_SLOT.replace("%path%", item)), i);
@@ -1718,8 +1727,8 @@ public class Arena implements IArena {
             ItemStack i = Misc.createItem(Material.valueOf(config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_MATERIAL.replace("%path%", item))),
                     (byte) config.getInt(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_DATA.replace("%path%", item)),
                     config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_ENCHANTED.replace("%path%", item)),
-                    SupportPAPI.getSupportPAPI().replace(p, getMsg(p, Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", item))),
-                    SupportPAPI.getSupportPAPI().replace(p, getList(p, Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", item))),
+                    SupportPAPI.getSupportPAPI().replace(p, getLangService().getMsg(p, Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_NAME.replace("%path%", item))),
+                    SupportPAPI.getSupportPAPI().replace(p, getLangService().getList(p, Messages.GENERAL_CONFIGURATION_WAITING_ITEMS_LORE.replace("%path%", item))),
                     p, "RUNCOMMAND", config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_COMMAND.replace("%path%", item)));
 
             p.getInventory().setItem(config.getInt(ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_SLOT.replace("%path%", item)), i);
@@ -1758,8 +1767,8 @@ public class Arena implements IArena {
             ItemStack i = Misc.createItem(Material.valueOf(config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_MATERIAL.replace("%path%", item))),
                     (byte) config.getInt(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_DATA.replace("%path%", item)),
                     config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_ENCHANTED.replace("%path%", item)),
-                    SupportPAPI.getSupportPAPI().replace(p, getMsg(p, Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", item))),
-                    SupportPAPI.getSupportPAPI().replace(p, getList(p, Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", item))),
+                    SupportPAPI.getSupportPAPI().replace(p, getLangService().getMsg(p, Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", item))),
+                    SupportPAPI.getSupportPAPI().replace(p, getLangService().getList(p, Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", item))),
                     p, "RUNCOMMAND", config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_COMMAND.replace("%path%", item)));
 
             p.getInventory().setItem(config.getInt(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_SLOT.replace("%path%", item)), i);
@@ -1848,7 +1857,7 @@ public class Arena implements IArena {
                     //noinspection deprecation
                     for (Player p : winner.getMembersCache()) {
                         if (p.getWorld().equals(getWorld())) {
-                            nms.sendTitle(p, getMsg(p, Messages.GAME_END_VICTORY_PLAYER_TITLE), null, 0, 70, 20);
+                            nms.sendTitle(p, getLangService().getMsg(p, Messages.GAME_END_VICTORY_PLAYER_TITLE), null, 0, 70, 0);
                         }
                         if (!winners.toString().contains(p.getDisplayName())) {
                             winners.append(p.getDisplayName()).append(" ");
@@ -1897,18 +1906,19 @@ public class Arena implements IArena {
                             entry++;
                         }
                     }
+                    LanguageService languageService = LanguageManager.getInstance();
                     for (Player p : world.getPlayers()) {
-                        p.sendMessage(getMsg(p, Messages.GAME_END_TEAM_WON_CHAT).replace("{TeamColor}", winner.getColor().chat().toString())
-                                .replace("{TeamName}", winner.getDisplayName(Language.getPlayerLanguage(p))));
+                        p.sendMessage(getLangService().getMsg(p, Messages.GAME_END_TEAM_WON_CHAT).replace("{TeamColor}", winner.getColor().chat().toString())
+                                .replace("{TeamName}", winner.getDisplayName(languageService.getPlayerLanguage(p))));
                         if (!winner.getMembers().contains(p)) {
-                            nms.sendTitle(p, getMsg(p, Messages.GAME_END_GAME_OVER_PLAYER_TITLE), null, 0, 70, 20);
+                            nms.sendTitle(p, getLangService().getMsg(p, Messages.GAME_END_GAME_OVER_PLAYER_TITLE), null, 0, 70, 0);
                         }
-                        for (String s : getList(p, Messages.GAME_END_TOP_PLAYER_CHAT)) {
-                            String message = s.replace("{firstName}", firstName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : firstName).replace("{firstKills}", String.valueOf(first))
-                                    .replace("{secondName}", secondName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : secondName).replace("{secondKills}", String.valueOf(second))
-                                    .replace("{thirdName}", thirdName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : thirdName).replace("{thirdKills}", String.valueOf(third))
-                                    .replace("{winnerFormat}", getMaxInTeam() > 1 ? getMsg(p, Messages.FORMATTING_TEAM_WINNER_FORMAT).replace("{members}", winners.toString()) : getMsg(p, Messages.FORMATTING_SOLO_WINNER_FORMAT).replace("{members}", winners.toString()))
-                                    .replace("{TeamColor}", winner.getColor().chat().toString()).replace("{TeamName}", winner.getDisplayName(Language.getPlayerLanguage(p)));
+                        for (String s : getLangService().getList(p, Messages.GAME_END_TOP_PLAYER_CHAT)) {
+                            String message = s.replace("{firstName}", firstName.isEmpty() ? getLangService().getMsg(p, Messages.MEANING_NOBODY) : firstName).replace("{firstKills}", String.valueOf(first))
+                                    .replace("{secondName}", secondName.isEmpty() ? getLangService().getMsg(p, Messages.MEANING_NOBODY) : secondName).replace("{secondKills}", String.valueOf(second))
+                                    .replace("{thirdName}", thirdName.isEmpty() ? getLangService().getMsg(p, Messages.MEANING_NOBODY) : thirdName).replace("{thirdKills}", String.valueOf(third))
+                                    .replace("{winnerFormat}", getMaxInTeam() > 1 ? getLangService().getMsg(p, Messages.FORMATTING_TEAM_WINNER_FORMAT).replace("{members}", winners.toString()) : getLangService().getMsg(p, Messages.FORMATTING_SOLO_WINNER_FORMAT).replace("{members}", winners.toString()))
+                                    .replace("{TeamColor}", winner.getColor().chat().toString()).replace("{TeamName}", winner.getDisplayName(languageService.getPlayerLanguage(p)));
                             p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, message));
                         }
                     }
@@ -2315,12 +2325,14 @@ public class Arena implements IArena {
      */
     public void sendDiamondsUpgradeMessages() {
         for (Player p : getPlayers()) {
-            p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
-                    getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND)).replace("{tier}", getMsg(p, (diamondTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
+            p.sendMessage(getLangService().getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT)
+                    .replace("{generatorType}", getLangService().getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND))
+                    .replace("{tier}", getLangService().getMsg(p, (diamondTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
         }
         for (Player p : getSpectators()) {
-            p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
-                    getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND)).replace("{tier}", getMsg(p, (diamondTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
+            p.sendMessage(getLangService().getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT)
+                    .replace("{generatorType}", getLangService().getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND))
+                    .replace("{tier}", getLangService().getMsg(p, (diamondTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
         }
     }
 
@@ -2330,12 +2342,14 @@ public class Arena implements IArena {
      */
     public void sendEmeraldsUpgradeMessages() {
         for (Player p : getPlayers()) {
-            p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
-                    getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD)).replace("{tier}", getMsg(p, (emeraldTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
+            p.sendMessage(getLangService().getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT)
+                    .replace("{generatorType}", getLangService().getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD))
+                    .replace("{tier}", getLangService().getMsg(p, (emeraldTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
         }
         for (Player p : getSpectators()) {
-            p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
-                    getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD)).replace("{tier}", getMsg(p, (emeraldTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
+            p.sendMessage(getLangService().getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT)
+                    .replace("{generatorType}", getLangService().getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD))
+                    .replace("{tier}", getLangService().getMsg(p, (emeraldTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
         }
     }
 
@@ -2651,5 +2665,9 @@ public class Arena implements IArena {
                 player.teleport(config.getConfigLoc("lobbyLoc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
             }
         }
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

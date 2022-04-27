@@ -28,8 +28,10 @@ import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerLeaveArenaEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerXpGainEvent;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.configuration.LevelsConfig;
+import com.andrei1058.bedwars.language.LanguageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -58,8 +60,6 @@ public class LevelListeners implements Listener {
             //if (PlayerLevel.getLevelByPlayer(e.getPlayer().getUniqueId()) != null) return;
             Object[] levelData = BedWars.getRemoteDatabase().getLevelData(u);
             PlayerLevel.getLevelByPlayer(u).lazyLoad((Integer) levelData[0], (Integer) levelData[1]);
-            //new PlayerLevel(e.getPlayer().getUniqueId(), (Integer)levelData[0], (Integer)levelData[1]);
-            //Bukkit.broadcastMessage("LAZY LOAD");
         });
     }
 
@@ -81,7 +81,7 @@ public class LevelListeners implements Listener {
                 int xpAmount = LevelsConfig.levels.getInt("xp-rewards.game-win");
                 if (xpAmount > 0){
                     PlayerLevel.getLevelByPlayer(p).addXp(xpAmount, PlayerXpGainEvent.XpSource.GAME_WIN);
-                    p1.sendMessage(Language.getMsg(p1, Messages.XP_REWARD_WIN).replace("{xp}", String.valueOf(xpAmount)));
+                    p1.sendMessage(getLangService().getMsg(p1, Messages.XP_REWARD_WIN).replace("{xp}", String.valueOf(xpAmount)));
                 }
                 ITeam bwt = e.getArena().getExTeam(p1.getUniqueId());
                 if (bwt != null) {
@@ -91,7 +91,7 @@ public class LevelListeners implements Listener {
                         if (xpAmountPerTmt > 0){
                             int tr = xpAmountPerTmt * bwt.getMembersCache().size();
                             PlayerLevel.getLevelByPlayer(p).addXp(tr, PlayerXpGainEvent.XpSource.PER_TEAMMATE);
-                            p1.sendMessage(Language.getMsg(p1, "xp-reward-per-teammate").replace("{xp}", String.valueOf(tr)));
+                            p1.sendMessage(getLangService().getMsg(p1, "xp-reward-per-teammate").replace("{xp}", String.valueOf(tr)));
                         }
                     }
                 }
@@ -105,12 +105,11 @@ public class LevelListeners implements Listener {
                 if (bwt != null) {
                     //noinspection deprecation
                     if (bwt.getMembersCache().size() > 1) {
-                        //noinspection deprecation
                         int xpAmountPerTmt = LevelsConfig.levels.getInt("xp-rewards.per-teammate");
                         if (xpAmountPerTmt > 0){
                             int tr = LevelsConfig.levels.getInt("xp-rewards.per-teammate") * bwt.getMembersCache().size();
                             PlayerLevel.getLevelByPlayer(p).addXp(tr, PlayerXpGainEvent.XpSource.PER_TEAMMATE);
-                            p1.sendMessage(Language.getMsg(p1, Messages.XP_REWARD_PER_TEAMMATE).replace("{xp}", String.valueOf(tr)));
+                            p1.sendMessage(getLangService().getMsg(p1, Messages.XP_REWARD_PER_TEAMMATE).replace("{xp}", String.valueOf(tr)));
                         }
                     }
                 }
@@ -127,6 +126,10 @@ public class LevelListeners implements Listener {
         });
     }
 
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
+    }
+
     @EventHandler
     public void onBreakBed(PlayerBedBreakEvent e) {
         Player player = e.getPlayer ();
@@ -136,7 +139,7 @@ public class LevelListeners implements Listener {
         int beddestroy = LevelsConfig.levels.getInt("xp-rewards.bed-destroyed");
         if (beddestroy > 0) {
             PlayerLevel.getLevelByPlayer(player.getUniqueId()).addXp(beddestroy, PlayerXpGainEvent.XpSource.BED_DESTROYED);
-            player.sendMessage(Language.getMsg(player, Messages.XP_REWARD_BED_DESTROY).replace("{xp}", String.valueOf(beddestroy)));
+            player.sendMessage(getLangService().getMsg(player, Messages.XP_REWARD_BED_DESTROY).replace("{xp}", String.valueOf(beddestroy)));
         }
     }
 
@@ -152,12 +155,12 @@ public class LevelListeners implements Listener {
         if (e.getCause ().isFinalKill ()) {
             if (finalkill > 0) {
                 PlayerLevel.getLevelByPlayer(player.getUniqueId()).addXp(finalkill, PlayerXpGainEvent.XpSource.FINAL_KILL);
-                player.sendMessage(Language.getMsg(player, Messages.XP_REWARD_FINAL_KILL).replace("{xp}", String.valueOf(finalkill)));
+                player.sendMessage(getLangService().getMsg(player, Messages.XP_REWARD_FINAL_KILL).replace("{xp}", String.valueOf(finalkill)));
             }
         } else {
             if (regularkill > 0) {
                 PlayerLevel.getLevelByPlayer(player.getUniqueId()).addXp(regularkill, PlayerXpGainEvent.XpSource.REGULAR_KILL);
-                player.sendMessage(Language.getMsg(player, Messages.XP_REWARD_REGULAR_KILL).replace("{xp}", String.valueOf(regularkill)));
+                player.sendMessage(getLangService().getMsg(player, Messages.XP_REWARD_REGULAR_KILL).replace("{xp}", String.valueOf(regularkill)));
             }
         }
     }

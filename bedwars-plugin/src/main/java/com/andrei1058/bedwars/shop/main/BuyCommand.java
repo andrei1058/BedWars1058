@@ -25,6 +25,7 @@ import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.shop.IBuyItem;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.language.LanguageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -70,7 +71,7 @@ public class BuyCommand implements IBuyItem {
         String playerUUID = player.getUniqueId().toString();
         ITeam team = arena.getTeam(player);
         String teamName = team == null ? "null" : team.getName();
-        String teamDisplay = team == null ? "null" : team.getDisplayName(Language.getPlayerLanguage(player));
+        String teamDisplay = team == null ? "null" : team.getDisplayName(LanguageManager.getInstance().getPlayerLanguage(player));
         String teamColor = team == null ? ChatColor.WHITE.toString() : team.getColor().chat().toString();
         String arenaIdentifier = arena.getArenaName();
         String arenaWorld = arena.getWorldName();

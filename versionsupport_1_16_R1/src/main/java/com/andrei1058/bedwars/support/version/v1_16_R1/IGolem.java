@@ -22,6 +22,7 @@ package com.andrei1058.bedwars.support.version.v1_16_R1;
 
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import net.minecraft.server.v1_16_R1.*;
@@ -72,6 +73,8 @@ public class IGolem extends EntityIronGolem {
     public static LivingEntity spawn(Location loc, ITeam bedWarsTeam, double speed, double health, int despawn) {
         WorldServer mcWorld = ((CraftWorld) loc.getWorld()).getHandle();
         IGolem customEnt = new IGolem(EntityTypes.IRON_GOLEM, mcWorld, bedWarsTeam);
+        LanguageService langServ = VersionCommon.api.getLanguageService();
+
         customEnt.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
         ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
         customEnt.setCustomNameVisible(true);
@@ -79,9 +82,9 @@ public class IGolem extends EntityIronGolem {
         customEnt.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(health);
         customEnt.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(speed);
         mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
-        customEnt.getBukkitEntity().setCustomName(Language.getDefaultLanguage().m(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME)
+        customEnt.getBukkitEntity().setCustomName(langServ.getDefaultLanguage().m(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME)
                 .replace("{despawn}", String.valueOf(despawn)
-                        .replace("{health}", StringUtils.repeat(Language.getDefaultLanguage().m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH) + " ", 10))
+                        .replace("{health}", StringUtils.repeat(langServ.getDefaultLanguage().m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH) + " ", 10))
                         .replace("{TeamColor}", bedWarsTeam.getColor().chat().toString())));
         return (LivingEntity) customEnt.getBukkitEntity();
     }

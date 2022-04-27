@@ -24,6 +24,7 @@ import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.levels.Level;
 import com.andrei1058.bedwars.api.party.Party;
 import com.andrei1058.bedwars.api.server.RestoreAdapter;
@@ -175,17 +176,7 @@ public class BedWars extends JavaPlugin {
         this.getLogger().info("Loading support for paper/spigot: " + version);
 
         // Setup languages
-        new English();
-        new Romanian();
-        new Italian();
-        new Polish();
-        new Spanish();
-        new Russian();
-        new Bangla();
-        new Persian();
-        new Hindi();
-        new Indonesia();
-        new Portuguese();
+        LanguageManager.onLoad();
 
         config = new MainConfig(this, "config");
 
@@ -430,7 +421,7 @@ public class BedWars extends JavaPlugin {
         }, 40L);
 
         /* Save messages for stats gui items if custom items added, for each language */
-        Language.setupCustomStatsMessages();
+        LanguageManager.getInstance().setupCustomStatsMessages();
 
 
         /* PlaceholderAPI Support */
@@ -499,8 +490,9 @@ public class BedWars extends JavaPlugin {
         /* Initialize shop */
         shop = new ShopManager();
 
+        //todo move this to LanguageManager#onEnable
         //Leave this code at the end of the enable method
-        for (Language l : Language.getLanguages()) {
+        for (Language l : LanguageManager.getInstance().getRegisteredLanguages()) {
             l.setupUnSetCategories();
             Language.addDefaultMessagesCommandItems(l);
         }
@@ -513,7 +505,7 @@ public class BedWars extends JavaPlugin {
         // bStats metrics
         Metrics metrics = new Metrics(this, 1885);
         metrics.addCustomChart(new SimplePie("server_type", () -> getServerType().toString()));
-        metrics.addCustomChart(new SimplePie("default_language", () -> Language.getDefaultLanguage().getIso()));
+        metrics.addCustomChart(new SimplePie("default_language", () -> getLangService().getDefaultLanguage().getIso()));
         metrics.addCustomChart(new SimplePie("auto_scale", () -> String.valueOf(autoscale)));
         metrics.addCustomChart(new SimplePie("party_adapter", () -> party.getClass().getName()));
         metrics.addCustomChart(new SimplePie("chat_adapter", () -> chat.getClass().getName()));
@@ -807,6 +799,10 @@ public class BedWars extends JavaPlugin {
 
     public static void setParty(Party party) {
         BedWars.party = party;
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 
     @Override

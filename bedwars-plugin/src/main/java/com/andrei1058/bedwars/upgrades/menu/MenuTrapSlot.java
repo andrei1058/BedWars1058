@@ -23,15 +23,19 @@ package com.andrei1058.bedwars.upgrades.menu;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.upgrades.EnemyBaseEnterTrap;
 import com.andrei1058.bedwars.api.upgrades.MenuContent;
+import com.andrei1058.bedwars.language.LanguageManager;
 import com.andrei1058.bedwars.upgrades.UpgradesManager;
+import org.apache.commons.codec.language.bm.Languages;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.material.Bed;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,9 +53,10 @@ public class MenuTrapSlot implements MenuContent {
     public MenuTrapSlot(String name, ItemStack displayItem) {
         this.displayItem = BedWars.nms.addCustomData(displayItem, "MCONT_" + name);
         this.name = name;
-        Language.saveIfNotExists(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + name.replace("trap-slot-", ""), "&cName not set");
-        Language.saveIfNotExists(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH + name.replace("trap-slot-", ""), Collections.singletonList("&cLore1 not set"));
-        Language.saveIfNotExists(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE2_PATH + name.replace("trap-slot-", ""), Collections.singletonList("&cLore2 not set"));
+        LanguageService lang = BedWars.getAPI().getLanguageService();
+        lang.saveIfNotExists(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + name.replace("trap-slot-", ""), "&cName not set");
+        lang.saveIfNotExists(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH + name.replace("trap-slot-", ""), Collections.singletonList("&cLore1 not set"));
+        lang.saveIfNotExists(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE2_PATH + name.replace("trap-slot-", ""), Collections.singletonList("&cLore2 not set"));
         trap = UpgradesManager.getConfiguration().getInt(name + ".trap");
         if (trap < 0) trap = 0;
         if (trap != 0) trap -= 1;
@@ -72,9 +77,10 @@ public class MenuTrapSlot implements MenuContent {
         i.setAmount(trap+1);
         ItemMeta im = i.getItemMeta();
         if (im == null) return i;
-        im.setDisplayName(Language.getMsg(player, Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + name.replace("trap-slot-", ""))
-                .replace("{name}", Language.getMsg(player, ebe == null ? Messages.MEANING_NO_TRAP : ebe.getNameMsgPath()))
-                .replace("{color}", Language.getMsg(player, ebe == null ? Messages.FORMAT_UPGRADE_COLOR_CANT_AFFORD : Messages.FORMAT_UPGRADE_COLOR_UNLOCKED)));
+        LanguageService langServ = LanguageManager.getInstance();
+        im.setDisplayName(getLangService().getMsg(player, Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + name.replace("trap-slot-", ""))
+                .replace("{name}", getLangService().getMsg(player, ebe == null ? Messages.MEANING_NO_TRAP : ebe.getNameMsgPath()))
+                .replace("{color}", getLangService().getMsg(player, ebe == null ? Messages.FORMAT_UPGRADE_COLOR_CANT_AFFORD : Messages.FORMAT_UPGRADE_COLOR_UNLOCKED)));
         List<String> lore = new ArrayList<>();
         if (ebe == null) {
             int cost = UpgradesManager.getConfiguration().getInt(team.getArena().getArenaName().toLowerCase() + "-upgrades-settings.trap-start-price");
@@ -93,16 +99,16 @@ public class MenuTrapSlot implements MenuContent {
                 }
                 cost = cost + (team.getActiveTraps().size() * multiplier);
             }
-            for (String s : Language.getList(player, Messages.UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH + name.replace("trap-slot-", ""))) {
+            for (String s : langServ.getList(player, Messages.UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH + name.replace("trap-slot-", ""))) {
                 lore.add(s.replace("{cost}", String.valueOf(cost)).replace("{currency}", currency));
             }
             lore.add("");
-            for (String s : Language.getList(player, Messages.UPGRADES_TRAP_SLOT_ITEM_LORE2_PATH + name.replace("trap-slot-", ""))) {
+            for (String s : langServ.getList(player, Messages.UPGRADES_TRAP_SLOT_ITEM_LORE2_PATH + name.replace("trap-slot-", ""))) {
                 lore.add(s.replace("{cost}", String.valueOf(cost)).replace("{currency}", currency));
             }
         } else {
-            lore.addAll(Language.getList(player, ebe.getLoreMsgPath()));
-            lore.addAll(Language.getList(player, Messages.UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH + name.replace("trap-slot-", "")));
+            lore.addAll(langServ.getList(player, ebe.getLoreMsgPath()));
+            lore.addAll(langServ.getList(player, Messages.UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH + name.replace("trap-slot-", "")));
         }
         im.setLore(lore);
         im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
@@ -117,5 +123,9 @@ public class MenuTrapSlot implements MenuContent {
     @Override
     public String getName() {
         return name;
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

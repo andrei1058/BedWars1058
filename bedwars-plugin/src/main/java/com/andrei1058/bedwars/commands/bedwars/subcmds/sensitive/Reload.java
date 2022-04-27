@@ -24,11 +24,13 @@ import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.configuration.Permissions;
+import com.andrei1058.bedwars.language.LanguageManager;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -52,7 +54,7 @@ public class Reload extends SubCommand {
         if (s instanceof ConsoleCommandSender) return false;
         Player p = (Player) s;
         if (!MainCommand.isLobbySet(p)) return true;
-        for (Language l : Language.getLanguages()){
+        for (Language l : getLangService().getRegisteredLanguages()){
             l.reload();
             p.sendMessage("§6 ▪ §7"+l.getLangName()+" reloaded!");
         }
@@ -73,5 +75,9 @@ public class Reload extends SubCommand {
 
         if (SetupSession.isInSetupSession(p.getUniqueId())) return false;
         return hasPermission(s);
+    }
+
+    private static LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

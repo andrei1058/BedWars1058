@@ -26,6 +26,7 @@ import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.events.player.PlayerAfkEvent;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.party.Party;
 import com.andrei1058.bedwars.api.server.ISetupSession;
 import com.andrei1058.bedwars.api.server.RestoreAdapter;
@@ -34,6 +35,7 @@ import com.andrei1058.bedwars.api.server.VersionSupport;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
+import com.andrei1058.bedwars.language.LanguageManager;
 import com.andrei1058.bedwars.shop.main.CategoryContent;
 import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
 import com.andrei1058.bedwars.stats.StatsAPI;
@@ -366,9 +368,10 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
         return BedWars.nms;
     }
 
+    @Deprecated
     @Override
     public Language getDefaultLang() {
-        return Language.getDefaultLanguage();
+        return LanguageManager.getInstance().getDefaultLanguage();
     }
 
     @Override
@@ -392,18 +395,21 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
     }
 
     @Override
+    @Deprecated
     public Language getLanguageByIso(String isoCode) {
-        return Language.getLang(isoCode);
+        return LanguageManager.getInstance().getLang(isoCode);
     }
 
     @Override
+    @Deprecated
     public Language getPlayerLanguage(Player player) {
-        return Language.getPlayerLanguage(player);
+        return LanguageManager.getInstance().getPlayerLanguage(player);
     }
 
     @Override
+    @Deprecated
     public String getLangIso(Player p) {
-        return Language.getPlayerLanguage(p).getIso();
+        return LanguageManager.getInstance().getPlayerLanguage(p).getIso();
     }
 
     @Override
@@ -440,5 +446,10 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
     @Override
     public boolean isShuttingDown() {
         return BedWars.isShuttingDown();
+    }
+
+    @Override
+    public LanguageService getLanguageService() {
+        return LanguageManager.getInstance();
     }
 }

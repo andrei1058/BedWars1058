@@ -27,9 +27,11 @@ import com.andrei1058.bedwars.api.events.player.PlayerLeaveArenaEvent;
 import com.andrei1058.bedwars.api.events.spectator.SpectatorFirstPersonEnterEvent;
 import com.andrei1058.bedwars.api.events.spectator.SpectatorFirstPersonLeaveEvent;
 import com.andrei1058.bedwars.api.events.spectator.SpectatorTeleportToPlayerEvent;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.configuration.Sounds;
+import com.andrei1058.bedwars.language.LanguageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -52,7 +54,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 
 import static com.andrei1058.bedwars.BedWars.nms;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class SpectatorListeners implements Listener {
 
@@ -168,10 +169,16 @@ public class SpectatorListeners implements Listener {
         Player target = (Player) e.getRightClicked();
         if (a.isPlayer(target)) {
             if (p.getSpectatorTarget() != null) {
-                SpectatorFirstPersonLeaveEvent e2 = new SpectatorFirstPersonLeaveEvent(p, a, player -> getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE), player -> getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE));
+                SpectatorFirstPersonLeaveEvent e2 = new SpectatorFirstPersonLeaveEvent(p, a,
+                        player -> getLangService().getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE),
+                        player -> getLangService().getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE)
+                );
                 Bukkit.getPluginManager().callEvent(e2);
             }
-            SpectatorFirstPersonEnterEvent event = new SpectatorFirstPersonEnterEvent(p, target, a, player -> getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_TITLE), player -> getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_SUBTITLE));
+            SpectatorFirstPersonEnterEvent event = new SpectatorFirstPersonEnterEvent(p, target, a,
+                    player -> getLangService().getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_TITLE),
+                    player -> getLangService().getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_SUBTITLE)
+            );
             Bukkit.getPluginManager().callEvent(event);
             if (event.isCancelled()) return;
             p.getInventory().setHeldItemSlot(5);
@@ -191,7 +198,10 @@ public class SpectatorListeners implements Listener {
             p.setGameMode(GameMode.ADVENTURE);
             p.setAllowFlight(true);
             p.setFlying(true);
-            SpectatorFirstPersonLeaveEvent event = new SpectatorFirstPersonLeaveEvent(p, a, player -> getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE), player -> getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE));
+            SpectatorFirstPersonLeaveEvent event = new SpectatorFirstPersonLeaveEvent(p, a,
+                    player -> getLangService().getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE),
+                    player -> getLangService().getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE)
+            );
             Bukkit.getPluginManager().callEvent(event);
             nms.sendTitle(p, event.getTitle().apply(p), event.getSubTitle().apply(p), event.getFadeIn(), event.getStay(), event.getFadeOut());
         }
@@ -209,7 +219,10 @@ public class SpectatorListeners implements Listener {
                 p.setGameMode(GameMode.ADVENTURE);
                 p.setAllowFlight(true);
                 p.setFlying(true);
-                SpectatorFirstPersonLeaveEvent event = new SpectatorFirstPersonLeaveEvent(p, Arena.getArenaByPlayer(p), player -> getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE), player -> getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE));
+                SpectatorFirstPersonLeaveEvent event = new SpectatorFirstPersonLeaveEvent(p, Arena.getArenaByPlayer(p),
+                        player -> getLangService().getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE),
+                        player -> getLangService().getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE)
+                );
                 Bukkit.getPluginManager().callEvent(event);
                 nms.sendTitle(p, event.getTitle().apply(p), event.getSubTitle().apply(p), event.getFadeIn(), event.getStay(), event.getFadeOut());
             }
@@ -225,7 +238,10 @@ public class SpectatorListeners implements Listener {
                 p.setGameMode(GameMode.ADVENTURE);
                 p.setAllowFlight(true);
                 p.setFlying(true);
-                SpectatorFirstPersonLeaveEvent event = new SpectatorFirstPersonLeaveEvent(p, e.getArena(), player -> getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE), player -> getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE));
+                SpectatorFirstPersonLeaveEvent event = new SpectatorFirstPersonLeaveEvent(p, e.getArena(),
+                        player -> getLangService().getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE),
+                        player -> getLangService().getMsg(player, Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE)
+                );
                 Bukkit.getPluginManager().callEvent(event);
                 nms.sendTitle(p, event.getTitle().apply(p), event.getSubTitle().apply(p), event.getFadeIn(), event.getStay(), event.getFadeOut());
             }
@@ -260,5 +276,9 @@ public class SpectatorListeners implements Listener {
         if (a.isSpectator(damager)) {
             e.setCancelled(true);
         }
+    }
+
+    private LanguageService getLangService() {
+        return LanguageManager.getInstance();
     }
 }

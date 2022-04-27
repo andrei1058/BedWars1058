@@ -24,10 +24,12 @@ import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
+import com.andrei1058.bedwars.language.LanguageManager;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -86,9 +88,10 @@ public class ArenaList extends SubCommand {
         }
 
         int limit = Math.min(arenas.size(), start + ARENAS_PER_PAGE);
+        LanguageService languageService = LanguageManager.getInstance();
 
         arenas.subList(start, limit).forEach(arena -> {
-            String gameState = arena.getDisplayStatus(Language.getPlayerLanguage(p));
+            String gameState = arena.getDisplayStatus(languageService.getPlayerLanguage(p));
             String msg = color(
                     "ID: &e" + arena.getWorldName() +
                             " &fG: &e" + arena.getDisplayGroup(p) +
