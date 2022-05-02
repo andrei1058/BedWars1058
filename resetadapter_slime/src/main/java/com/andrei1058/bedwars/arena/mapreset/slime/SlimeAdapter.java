@@ -47,9 +47,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -77,14 +76,11 @@ public class SlimeAdapter extends RestoreAdapter {
         }
         Bukkit.getScheduler().runTaskAsynchronously(getOwner(), () -> {
             if (Bukkit.getWorld(a.getWorldName()) != null) {
-                Bukkit.getScheduler().runTask(getOwner(), () -> {
-                    World w = Bukkit.getWorld(a.getWorldName());
-                    a.init(w);
-                });
+                Bukkit.getScheduler().runTask(getOwner(), () -> a.init(Bukkit.getWorld(a.getWorldName())));
                 return;
             }
 
-            SlimeLoader flat = slime.getLoader("file");
+            //SlimeLoader flat = slime.getLoader("file");
             String[] spawn = a.getConfig().getString("waiting.Loc").split(",");
 
             SlimePropertyMap spm = new SlimePropertyMap();
@@ -99,7 +95,7 @@ public class SlimeAdapter extends RestoreAdapter {
 
             try {
                 // Note that this method should be called asynchronously
-                SlimeWorld world = slime.loadWorld(flat, a.getArenaName(), true, spm);
+                SlimeWorld world = slime.loadWorld(slime.getLoader("file"), a.getArenaName(), true, spm);
                 if (api.getServerType() == ServerType.BUNGEE && api.isAutoScale()) {
                     world = world.clone(a.getWorldName());
                 }
@@ -226,8 +222,7 @@ public class SlimeAdapter extends RestoreAdapter {
                 loc2 = a.getConfig().getArenaLoc(ConfigPath.ARENA_WAITING_POS2);
         if (loc1 == null || loc2 == null) return;
         Bukkit.getScheduler().runTask(getOwner(), () -> {
-            int minX, minY, minZ;
-            int maxX, maxY, maxZ;
+            int minX, minY, minZ, maxX, maxY, maxZ;
             minX = Math.min(loc1.getBlockX(), loc2.getBlockX());
             maxX = Math.max(loc1.getBlockX(), loc2.getBlockX());
             minY = Math.min(loc1.getBlockY(), loc2.getBlockY());
@@ -286,8 +281,8 @@ public class SlimeAdapter extends RestoreAdapter {
 
             try {
                 // Note that this method should be called asynchronously
-                SlimeWorld world = slime.loadWorld(slime.getLoader("file"), name1, true, spm);
-                world.clone(name2, slime.getLoader("file"));
+                //SlimeWorld world = slime.loadWorld(slime.getLoader("file"), name1, true, spm);
+                slime.loadWorld(slime.getLoader("file"), name1, true, spm).clone(name2, slime.getLoader("file"));
             } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldInUseException | WorldAlreadyExistsException ex) {
                 ex.printStackTrace();
             }
@@ -406,7 +401,7 @@ public class SlimeAdapter extends RestoreAdapter {
                 if (regions.exists() && Objects.requireNonNull(regions.list()).length > 0) {
                     if (Arrays.stream(Objects.requireNonNull(regions.list())).filter(p -> p.endsWith(".mca")).toArray().length > 0) {
                         File region = new File(Bukkit.getWorldContainer(), world + "/" + Arrays.stream(Objects.requireNonNull(regions.list())).filter(p -> p.endsWith(".mca")).toArray()[0]);
-                        NBTInputStream inputStream = new NBTInputStream(new FileInputStream(region));
+                        NBTInputStream inputStream = new NBTInputStream(Files.newInputStream(region.toPath()));
                         Optional<CompoundTag> tag = inputStream.readTag().getAsCompoundTag();
                         inputStream.close();
                         if (tag.isPresent()) {
@@ -414,7 +409,7 @@ public class SlimeAdapter extends RestoreAdapter {
                             if (dataTag.isPresent()) {
                                 int dataVersion = dataTag.get().getIntValue("DataVersion").orElse(-1);
 
-                                NBTOutputStream outputStream = new NBTOutputStream(new FileOutputStream(level));
+                                NBTOutputStream outputStream = new NBTOutputStream(Files.newOutputStream(level.toPath()));
 
                                 CompoundMap cm = new CompoundMap();
                                 cm.put(new IntTag("SpawnX", 0));
