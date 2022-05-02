@@ -40,9 +40,9 @@ public class Interact_1_13Plus implements Listener {
         Block b = e.getClickedBlock();
         if (b == null) return;
         if (b.getWorld().getName().equals(api.getLobbyWorld()) || api.getArenaUtil().getArenaByPlayer(e.getPlayer()) != null) {
-            switch (b.getType().toString()) {
-                case "CHIPPED_ANVIL":
-                case "DAMAGED_ANVIL":
+            switch (b.getType()) {
+                case CHIPPED_ANVIL:
+                case DAMAGED_ANVIL:
                     if (api.getConfigs().getMainConfig().getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_ANVIL)) {
                         e.setCancelled(true);
                     } else {

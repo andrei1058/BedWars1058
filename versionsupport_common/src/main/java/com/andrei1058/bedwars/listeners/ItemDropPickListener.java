@@ -133,7 +133,6 @@ public class ItemDropPickListener {
             if (item.getItemStack().getItemMeta().hasDisplayName()) {
                 if (item.getItemStack().getItemMeta().getDisplayName().contains("custom")) {
                     Material material = item.getItemStack().getType();
-                    ItemMeta itemMeta = new ItemStack(material).getItemMeta();
 
                     //Call ore pick up event
                     PlayerGeneratorCollectEvent event = new PlayerGeneratorCollectEvent((Player) player, item, a);
@@ -141,7 +140,7 @@ public class ItemDropPickListener {
                     if (event.isCancelled()) {
                         return true;
                     } else {
-                        item.getItemStack().setItemMeta(itemMeta);
+                        item.getItemStack().setItemMeta(new ItemStack(material).getItemMeta());
                     }
                 }
             }
