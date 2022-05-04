@@ -50,8 +50,7 @@ public class Reload extends SubCommand {
     @Override
     public boolean execute(String[] args, CommandSender s) {
         if (s instanceof Player) {
-            Player p = (Player) s;
-            if (!MainCommand.isLobbySet(p)) return true;
+            if (!MainCommand.isLobbySet((Player) s)) return true;
         } else {
             if (!MainCommand.isLobbySet(null)) return true;
         }
