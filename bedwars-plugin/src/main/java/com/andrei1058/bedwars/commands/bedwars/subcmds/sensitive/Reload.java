@@ -49,12 +49,15 @@ public class Reload extends SubCommand {
 
     @Override
     public boolean execute(String[] args, CommandSender s) {
-        if (s instanceof ConsoleCommandSender) return false;
-        Player p = (Player) s;
-        if (!MainCommand.isLobbySet(p)) return true;
+        if (s instanceof Player) {
+            Player p = (Player) s;
+            if (!MainCommand.isLobbySet(p)) return true;
+        } else {
+            if (!MainCommand.isLobbySet(null)) return true;
+        }
         for (Language l : Language.getLanguages()){
             l.reload();
-            p.sendMessage("§6 ▪ §7"+l.getLangName()+" reloaded!");
+            s.sendMessage("§6 ▪ §7"+l.getLangName()+" reloaded!");
         }
         return true;
     }
