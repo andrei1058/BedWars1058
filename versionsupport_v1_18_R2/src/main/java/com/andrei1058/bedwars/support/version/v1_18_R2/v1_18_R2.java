@@ -30,12 +30,14 @@ import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.VersionSupport;
 import com.andrei1058.bedwars.support.version.common.VersionCommon;
-import com.andrei1058.bedwars.support.version.registry.Registry;
 import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Vector3fa;
 import net.minecraft.SharedConstants;
+import net.minecraft.core.Holder;
+import net.minecraft.core.IRegistry;
+import net.minecraft.core.RegistryMaterials;
 import net.minecraft.core.particles.ParticleParamRedstone;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.chat.ChatMessageType;
@@ -82,10 +84,7 @@ import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 
 @SuppressWarnings("unused")
@@ -238,10 +237,9 @@ public class v1_18_R2 extends VersionSupport {
     @Override
     public void registerEntities() {
         try {
-            boolean refreeze = false;
-            if (Registry.isFrozen()) {
-                refreeze = true;
-                Registry.setFrozen(false);
+            boolean registryFrozen = isRegistryFrozen();
+            if (registryFrozen) {
+                setRegistryFrozen(false);
             }
 
             Map<String, Type<?>> types = (Map<String, Type<?>>) DataConverterRegistry.a().getSchema(
@@ -254,12 +252,30 @@ public class v1_18_R2 extends VersionSupport {
             types.put("minecraft:bwgolem", types.get("minecraft:iron_golem"));
             EntityTypes.Builder.a(IGolem::new, EnumCreatureType.a).a("bwgolem");
 
-            if (refreeze) {
-                Registry.setFrozen(true);
+            if (registryFrozen) {
+                setRegistryFrozen(true);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean isRegistryFrozen() throws Exception {
+        Field frozenField = RegistryMaterials.class.getDeclaredField("bL");
+        frozenField.setAccessible(true);
+        return frozenField.getBoolean(IRegistry.W);
+    }
+
+    private void setRegistryFrozen(boolean frozen) throws Exception {
+        if (!frozen) {
+            Field intrusiveHolderCache = RegistryMaterials.class.getDeclaredField("bN");
+            intrusiveHolderCache.setAccessible(true);
+            intrusiveHolderCache.set(IRegistry.W, new IdentityHashMap<EntityTypes<?>, Holder.c<EntityTypes<?>>>());
+        }
+
+        Field frozenField = RegistryMaterials.class.getDeclaredField("bL");
+        frozenField.setAccessible(true);
+        frozenField.set(IRegistry.W, frozen);
     }
 
     @Override
