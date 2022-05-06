@@ -13,8 +13,7 @@ import java.util.List;
 public class PAF implements Party {
     //Party and Friends for Spigot Support by JT122406
     private PlayerParty getPAFParty(Player p) {
-        OnlinePAFPlayer pafPlayer = PAFPlayerManager.getInstance().getPlayer(p);
-        return PartyManager.getInstance().getParty(pafPlayer);
+        return PartyManager.getInstance().getParty(PAFPlayerManager.getInstance().getPlayer(p));
     }
 
     @Override
