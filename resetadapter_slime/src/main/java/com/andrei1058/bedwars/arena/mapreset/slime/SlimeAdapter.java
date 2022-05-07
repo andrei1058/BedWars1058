@@ -76,9 +76,11 @@ public class SlimeAdapter extends RestoreAdapter {
             }
         }
         Bukkit.getScheduler().runTaskAsynchronously(getOwner(), () -> {
+            Bukkit.getLogger().log(Level.WARNING,"onEnableLambda!");
             if (Bukkit.getWorld(a.getWorldName()) != null) {
                 Bukkit.getScheduler().runTask(getOwner(), () -> {
                     World w = Bukkit.getWorld(a.getWorldName());
+                    Bukkit.getLogger().log(Level.WARNING,"loaded!");
                     a.init(w);
                 });
                 return;
@@ -106,7 +108,11 @@ public class SlimeAdapter extends RestoreAdapter {
 
                 // This method must be called synchronously
                 SlimeWorld finalWorld = world;
-                Bukkit.getScheduler().runTask(getOwner(), () -> slime.generateWorld(finalWorld));
+                Bukkit.getScheduler().runTask(getOwner(), () -> {
+                    slime.generateWorld(finalWorld);
+                    onEnable(a);
+                });
+
             } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldInUseException ex) {
                 api.getArenaUtil().removeFromEnableQueue(a);
                 ex.printStackTrace();
@@ -120,7 +126,7 @@ public class SlimeAdapter extends RestoreAdapter {
                 getOwner().getLogger().severe("Trying again to load arena: " + a.getArenaName());
 
                 // hope not to get an overflow
-                onEnable(a);
+                //onEnable(a);
             }
         });
     }
