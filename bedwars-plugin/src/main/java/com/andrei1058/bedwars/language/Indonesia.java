@@ -124,11 +124,11 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_CHAT, "{prefix}&ePermainan dimulai dalam &6{time} &edetik!");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_TITLE, " ");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE, "&a{second}");
-        yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-5", "&e❺");
-        yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-4", "&e❹");
-        yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-3", "&c❸");
-        yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-2", "&c❷");
-        yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-1", "&c❶");
+        yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-5", "&e5");
+        yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-4", "&e4");
+        yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-3", "&c3");
+        yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-2", "&c2");
+        yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-1", "&c1");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_CANCELLED_TITLE, " ");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_CANCELLED_SUB_TITLE, "&cMenunggu lebih banyak pemain..");
         yml.addDefault(Messages.ARENA_STATUS_START_PLAYER_TITLE, "&aMULAI");
@@ -136,15 +136,15 @@ public class Indonesia extends Language {
                 "&f                                   &lPerang Kasur", "",
                 "&e&l    Lindungi kasur Anda dan hancurkan kasur musuh.",
                 "&e&l  Tingkatkan diri Anda dan tim Anda dengan mengumpulkan",
-                "&e&l   Besi, Emas, Zamrud, dan Berlian dari generator",
+                "&e&l   Iron, Gold, Emeralds, dan Diamonds dari generator",
                 "&e&l   untuk mendapatkan akses peningkatan yang kuat.", "",
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
         yml.addDefault(Messages.ARENA_JOIN_DENIED_SELECTOR, "{prefix}&cMaaf, tetapi sementara Anda tidak dapat bergabung ke arena tersebut. Gunakan Klik Kanan untuk menonton!");
         yml.addDefault(Messages.ARENA_SPECTATE_DENIED_SELECTOR, "{prefix}&cMaaf tapi sementara kamu tidak bisa menonton arena ini. Gunakan Klik Kiri untuk bergabung!");
         yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_PROXY, "&cMaaf, tetapi Anda harus bergabung ke arena menggunakan BedWarsProxy. \n&eJika Anda ingin menyiapkan arena, pastikan untuk memberi diri Anda izin bw.setup sehingga Anda dapat bergabung dengan server secara langsung!");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_NAME, "&8Teleporter");
-        yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME, "{prefix}{player}");
-        yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_LORE, Arrays.asList("&7Hati: &f{health}%", "&7Bar Kelaparan: &f{food}", "", "&7Klik kiri untuk menonton!"));
+        yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME, "{vPrefix}{player}");
+        yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_LORE, Arrays.asList("&7Health: &f{health}%", "&7Bar Kelaparan: &f{food}", "", "&eKlik untuk menonton!"));
         yml.addDefault(Messages.ARENA_SPECTATOR_LEAVE_ITEM_NAME, "&c&lKembali ke lobi");
         yml.addDefault(Messages.ARENA_SPECTATOR_LEAVE_ITEM_LORE, Collections.singletonList("&7Klik kanan untuk keluar ke lobi!"));
         yml.addDefault(Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_TITLE, "&aMenonton &7{player}");
@@ -153,15 +153,15 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE, "");
         yml.addDefault(Messages.ARENA_LEAVE_PARTY_DISBANDED, "{prefix}§cPemilik party telah pergi dan party itu dibubarkan!");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIER, "&eTingkat &c{tier}");
-        yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND, "&b&lBerlian");
-        yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD, "&a&lZamrud");
-        yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIMER, "&eMuncul dalam &c{seconds} &edetik");
+        yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND, "&b&lDiamond");
+        yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD, "&2&lEmerald");
+        yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIMER, "&eSpawn dalam &c{seconds} &edetik");
         yml.addDefault(Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT, "{prefix}{generatorType} Generator &etelah ditingkatkan ke Tingkat &c{tier}");
-        yml.addDefault(Messages.FORMATTING_CHAT_LOBBY, "{level}{vPrefix}&7{player}{vSuffix}: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_WAITING, "{level}{vPrefix}&7{player}{vSuffix}: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_SHOUT, "&6[SHOUT] {team} {level}{vPrefix}&7{player}&f{vSuffix}: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_TEAM, "&f{team} {level}{vPrefix}&7{player}{vSuffix} {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_SPECTATOR, "&7[PENONTON] {level}{vPrefix}{player}{vSuffix}: {message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_LOBBY, "{level}{vPrefix}{player}{vSuffix}&f: {message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_WAITING, "{vPrefix}{player}{vSuffix}&f: {message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_SHOUT, "&6[SHOUT] {team} {vPrefix}{player}{vSuffix}&f: {message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_TEAM, "&f{level} {team} {vPrefix}{player}{vSuffix}&f: {message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_SPECTATOR, "&7[PENONTON] {level}{vPrefix}{player}{vSuffix}&f: {message}");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_HEALTH, Arrays.asList("&c❤"));
         yml.addDefault(Messages.FORMATTING_SPECTATOR_TEAM, "PENONTON");
         yml.addDefault(Messages.FORMATTING_SPECTATOR_COLOR, "&7");
@@ -196,25 +196,25 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_SPECTATOR, "&7[PENONTON]");
         yml.addDefault(Messages.MEANING_FULL, "Penuh");
         yml.addDefault(Messages.MEANING_SHOUT, "shout");
-        yml.addDefault(Messages.MEANING_NOBODY, "Bukan Siapa Siapa");
-        yml.addDefault(Messages.MEANING_NEVER, "Tidak Pernah");
-        yml.addDefault(Messages.MEANING_IRON_SINGULAR, "Besi");
-        yml.addDefault(Messages.MEANING_IRON_PLURAL, "Besi");
-        yml.addDefault(Messages.MEANING_GOLD_SINGULAR, "Emas");
-        yml.addDefault(Messages.MEANING_GOLD_PLURAL, "Emas");
-        yml.addDefault(Messages.MEANING_EMERALD_SINGULAR, "Zamrud");
-        yml.addDefault(Messages.MEANING_EMERALD_PLURAL, "Zamrud");
-        yml.addDefault(Messages.MEANING_DIAMOND_SINGULAR, "Zamrud");
-        yml.addDefault(Messages.MEANING_DIAMOND_PLURAL, "Zamrud");
+        yml.addDefault(Messages.MEANING_NOBODY, "Ga Ada");
+        yml.addDefault(Messages.MEANING_NEVER, "Ga Pernah");
+        yml.addDefault(Messages.MEANING_IRON_SINGULAR, "Iron");
+        yml.addDefault(Messages.MEANING_IRON_PLURAL, "Iron");
+        yml.addDefault(Messages.MEANING_GOLD_SINGULAR, "Gold");
+        yml.addDefault(Messages.MEANING_GOLD_PLURAL, "Gold");
+        yml.addDefault(Messages.MEANING_EMERALD_SINGULAR, "Emerald");
+        yml.addDefault(Messages.MEANING_EMERALD_PLURAL, "Emeralds");
+        yml.addDefault(Messages.MEANING_DIAMOND_SINGULAR, "Diamond");
+        yml.addDefault(Messages.MEANING_DIAMOND_PLURAL, "Diamonds");
         yml.addDefault(Messages.MEANING_VAULT_SINGULAR, "$");
         yml.addDefault(Messages.MEANING_VAULT_PLURAL, "$");
-        yml.addDefault(Messages.INTERACT_CANNOT_PLACE_BLOCK, "{prefix}&cAnda tidak dapat menempatkan blok di sini!");
-        yml.addDefault(Messages.INTERACT_CANNOT_BREAK_BLOCK, "{prefix}&cAnda hanya dapat memecahkan blok yang ditempatkan oleh pemain!");
-        yml.addDefault(Messages.INTERACT_CANNOT_BREAK_OWN_BED, "&cAnda tidak dapat menghancurkan kasur Anda sendiri!");
-        yml.addDefault(Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT, "\n&f&lPENGHANCURAN KASUR > {TeamColor}{TeamName} Kasur &7telah dihancurkan oleh {PlayerColor}{PlayerName}&7!\n");
+        yml.addDefault(Messages.INTERACT_CANNOT_PLACE_BLOCK, "{prefix}&cKamu ga bisa pasang block disini!");
+        yml.addDefault(Messages.INTERACT_CANNOT_BREAK_BLOCK, "{prefix}&cKamu hanya bisa menghancurkan block yang di pasang oleh pemain!");
+        yml.addDefault(Messages.INTERACT_CANNOT_BREAK_OWN_BED, "&cKamu ga bisa menghancurkan kasur kamu sendiri!");
+        yml.addDefault(Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT, "\n&f&lPENGHANCURAN KASUR > {TeamColor}Kasur {TeamName} &7telah dihancurkan oleh {PlayerColor}{PlayerName}&7!\n");
         yml.addDefault(Messages.INTERACT_BED_DESTROY_TITLE_ANNOUNCEMENT, "&cKASUR HANCUR!");
-        yml.addDefault(Messages.INTERACT_BED_DESTROY_SUBTITLE_ANNOUNCEMENT, "&fAnda tidak akan respawn kembali!");
-        yml.addDefault(Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM, "&f&lPENGHANCURKAN KASUR N > &7Kasur Anda telah dihancurkan oleh {PlayerColor}{PlayerName}&7!");
+        yml.addDefault(Messages.INTERACT_BED_DESTROY_SUBTITLE_ANNOUNCEMENT, "&fKamu ga akan respawn lagi karena kasur telah hancur!");
+        yml.addDefault(Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM, "&f&lPENGHANCURKAN KASUR N > &7Kasur kamu telah dihancurkan oleh {PlayerColor}{PlayerName}&7!");
         yml.addDefault(Messages.INTERACT_CHEST_CANT_OPEN_TEAM_ELIMINATED, "&cAnda tidak dapat membuka peti ini karena tim ini belum tereliminasi!");
         yml.addDefault(Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL, "{PlayerColor}{PlayerName} &7jatuh ke void.");
         yml.addDefault(Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL, "{PlayerColor}{PlayerName} &7jatuh ke void. &b&lPEMBUNUHAN TERAKHIR!");
@@ -243,13 +243,13 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.PLAYER_DIE_REWARD_IRON, "{prefix}&f+{amount} {meaning}");
         yml.addDefault(Messages.PLAYER_DIE_REWARD_GOLD, "{prefix}&6+{amount} {meaning}");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_TITLE, "&cKAMU MATI!");
-        yml.addDefault(Messages.PLAYER_DIE_RESPAWN_SUBTITLE, "&eAnda akan muncul kembali dalam &c{time} &edetik!");
-        yml.addDefault(Messages.PLAYER_DIE_RESPAWN_CHAT, "{prefix}&eAnda akan muncul kembali dalam &c{time} &edetik!");
+        yml.addDefault(Messages.PLAYER_DIE_RESPAWN_SUBTITLE, "&eKamu akan respawn kembali dalam &c{time} &edetik!");
+        yml.addDefault(Messages.PLAYER_DIE_RESPAWN_CHAT, "{prefix}&eKamu akan respawn kembali dalam &c{time} &edetik!");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWNED_TITLE, "&aMUNCUL KEMBALI!");
         yml.addDefault(Messages.PLAYER_DIE_ELIMINATED_CHAT, "{prefix}&cKamu telah dieliminasi!");
         yml.addDefault(Messages.PLAYER_HIT_BOW, "{prefix}{TeamColor}{PlayerName} &7berada di &c{amount} &7HP!");
         yml.addDefault(Messages.GAME_END_GAME_OVER_PLAYER_TITLE, "&c&lPERMAINAN SELESAI!");
-        yml.addDefault(Messages.GAME_END_VICTORY_PLAYER_TITLE, "&6&lKEMENANGAN!");
+        yml.addDefault(Messages.GAME_END_VICTORY_PLAYER_TITLE, "&6&lKAMU MENANG!");
         yml.addDefault(Messages.GAME_END_TEAM_WON_CHAT, "{prefix}{TeamColor}{TeamName} &atelah memenangkan permainan!");
         yml.addDefault(Messages.GAME_END_TOP_PLAYER_CHAT, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
                 "&f                                   &lPerang Kasur", "", "{winnerFormat}", "", "",
@@ -257,32 +257,32 @@ public class Indonesia extends Language {
                 "&6                          &lPembunuh Kedua &7- {secondName} - {secondKills}",
                 "&c                          &lPembunuh Ketiga &7- {thirdName} - {thirdKills}", "",
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
-        yml.addDefault(Messages.BED_HOLOGRAM_DEFEND, "&c&lPertahankan Kasur Anda!");
-        yml.addDefault(Messages.BED_HOLOGRAM_DESTROYED, "&c&lKasur anda telah dihancurkan!");
-        yml.addDefault(Messages.NPC_NAME_TEAM_UPGRADES, "&bPENINGKATAN TIM,&e&LKLIK KANAN");
-        yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&bPENINGKATAN INDIVIDU,&e&lKLIK KANAN");
-        yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&bTOKO TIM,&e&lKLIK KANAN");
-        yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&bTOKO BARANG,&e&lKLIK KANAN");
+        yml.addDefault(Messages.BED_HOLOGRAM_DEFEND, "&c&lPertahankan Kasur Kamu!");
+        yml.addDefault(Messages.BED_HOLOGRAM_DESTROYED, "&c&lKasur kamu telah dihancurkan!");
+        yml.addDefault(Messages.NPC_NAME_TEAM_UPGRADES, "&bTIM UPGRADES,&e&LKLIK KANAN");
+        yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&bSHOP UPGRADES,&e&lKLIK KANAN");
+        yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&bSHOP TIM,&e&lKLIK KANAN");
+        yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&bSHOP BARANG,&e&lKLIK KANAN");
         yml.addDefault(Messages.TEAM_ELIMINATED_CHAT, "\n&f&lTIM ELIMINASI > {TeamColor}Tim {TeamName} &ctelah dieliminasi!\n");
         yml.addDefault(Messages.NEXT_EVENT_BEDS_DESTROY, "&cPenghancuran Kasur");
-        yml.addDefault(Messages.NEXT_EVENT_DIAMOND_UPGRADE_II, "&fBerlian II");
-        yml.addDefault(Messages.NEXT_EVENT_DIAMOND_UPGRADE_III, "&fBerlian III");
+        yml.addDefault(Messages.NEXT_EVENT_DIAMOND_UPGRADE_II, "&fDiamond II");
+        yml.addDefault(Messages.NEXT_EVENT_DIAMOND_UPGRADE_III, "&fDiamond III");
         yml.addDefault(Messages.NEXT_EVENT_DRAGON_SPAWN, "&fKematian Mendadak");
-        yml.addDefault(Messages.NEXT_EVENT_EMERALD_UPGRADE_II, "&fZamrud II");
-        yml.addDefault(Messages.NEXT_EVENT_EMERALD_UPGRADE_III, "&fZamrud III");
+        yml.addDefault(Messages.NEXT_EVENT_EMERALD_UPGRADE_II, "&fEmerald II");
+        yml.addDefault(Messages.NEXT_EVENT_EMERALD_UPGRADE_III, "&fEmerald III");
         yml.addDefault(Messages.NEXT_EVENT_GAME_END, "&4Permainan Berakhir");
         yml.addDefault(Messages.NEXT_EVENT_TITLE_ANNOUNCE_BEDS_DESTROYED, "&cKASUR HANCUR!");
         yml.addDefault(Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_BEDS_DESTROYED, "&fSemua kasur telah dihancurkan!");
         yml.addDefault(Messages.NEXT_EVENT_CHAT_ANNOUNCE_BEDS_DESTROYED, "&c&lSemua kasur telah dihancurkan!");
         yml.addDefault(Messages.NEXT_EVENT_TITLE_ANNOUNCE_SUDDEN_DEATH, "&cKematian Mendadak");
         yml.addDefault(Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_SUDDEN_DEATH, "");
-        yml.addDefault(Messages.NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH, "&cKEMATIAN MENDADAK: &6&b{TeamDragons} {TeamColor}Naga {TeamName}!");
-        yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&6+{xp} Experience Bed Wars Diterima (Waktu Bermain).");
-        yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&6+{xp} Experience Bed Wars Diterima (Memenangkan Permainan).");
-        yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "{prefix}&6+{xp} Experience Bed Wars Diterima (Dukungan Tim).");
-        yml.addDefault(Messages.XP_REWARD_BED_DESTROY, "{prefix}&6+{xp} Experience Bed Wars Diterima (Menghancurkan Kasur).");
-        yml.addDefault(Messages.XP_REWARD_REGULAR_KILL, "{prefix}&6+{xp} Experience Bed Wars Diterima (Pembunuhan Biasa).");
-        yml.addDefault(Messages.XP_REWARD_FINAL_KILL, "{prefix}&6+{xp} Experience Bed Wars Diterima (Pembunuhan Terakhir).");
+        yml.addDefault(Messages.NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH, "&cKEMATIAN MENDADAK: &6+&b{TeamDragons} {TeamColor}Naga {TeamName}!");
+        yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&6+{xp} XP Bed Wars Diterima (Waktu Bermain).");
+        yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&b+{xp} XP Bed Wars Diterima (Memenangkan Permainan).");
+        yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "{prefix}&b+{xp} XP Bed Wars Diterima (Dukungan Tim).");
+        yml.addDefault(Messages.XP_REWARD_BED_DESTROY, "{prefix}&b+{xp} XP Bed Wars Diterima (Menghancurkan Kasur).");
+        yml.addDefault(Messages.XP_REWARD_REGULAR_KILL, "{prefix}&b+{xp} XP Bed Wars Diterima (Pembunuhan Biasa).");
+        yml.addDefault(Messages.XP_REWARD_FINAL_KILL, "{prefix}&b+{xp} XP Bed Wars Diterima (Pembunuhan Terakhir).");
 
         yml.addDefault(Messages.MONEY_REWARD_PER_MINUTE, "{prefix}&6+{money} Koin (Waktu Bermain).");
         yml.addDefault(Messages.MONEY_REWARD_WIN, "{prefix}&6+{money} Koin (Memenangkan Permainan).");
@@ -334,7 +334,7 @@ public class Indonesia extends Language {
         yml.addDefault("scoreboard.4v4v4v4.playing", Arrays.asList("&e&lPERANG KASUR", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}",
                 "", "&fKills: &a{kills}", "&fPembunuhan Terakhir: &a{finalKills}", "&fBed Dihancurkan: &a{beds}", "", "&e{server_ip}"));
 
-        yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars,&4&lB&6edWars,&6&lB&4e&6dWars,&6&lBe&4d&6Wars,&6&lBed&4W&6ars,&6&lBedW&4a&6rs,&6&lBedWa&4r&6s,&6&lBedWar&4s,&6&lBedWars", "&fLevel Anda: {level}", "", "&fProgres: &a{currentXp}&7/&b{requiredXp}", "{progress}", "", "&7{player}", "", "&fKoin: &a{money}"
+        yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&e&lPERANG KASUR", "&fLevel Kamu: {level}", "", "&fProgres: &a{currentXp}&7/&b{requiredXp}", "{progress}", "", "&7{player}", "", "&fKoin: &a{money}"
                 , "", "&fTotal Kemenangan: &a{wins}", "&fTotal Membunuh: &a{kills}", "", "&e{server_ip}"));
 
         //
@@ -356,11 +356,11 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.SHOP_LORE_STATUS_CAN_BUY, "&eKlik untuk membeli!");
         yml.addDefault(Messages.SHOP_LORE_STATUS_CANT_AFFORD, "&cKamu tidak mempunyai {currency} yang cukup!");
         yml.addDefault(Messages.SHOP_LORE_STATUS_MAXED, "&aMAKSIMAL!");
-        yml.addDefault(Messages.SHOP_LORE_QUICK_ADD, "&bJongkok Klik untuk menambahkan ke Beli Cepat!");
-        yml.addDefault(Messages.SHOP_LORE_QUICK_REMOVE, "&bJongkok Klik untuk menhapus dari Beli Cepat!");
+        yml.addDefault(Messages.SHOP_LORE_QUICK_ADD, "&bSneak Click untuk menambahkan ke Quick Buy!");
+        yml.addDefault(Messages.SHOP_LORE_QUICK_REMOVE, "&bSneak Click untuk menghapus dari Quick Buy!");
 
 
-        addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "&8Blok", "&aBlok", Collections.singletonList("&eKlik untuk melihat!"));
+        addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "&8Block", "&aBlock", Collections.singletonList("&eKlik untuk melihat!"));
 
         addContentMessages(yml, "wol", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Wol", Arrays.asList("&7Biaya: &f{cost} {currency}", "", "&7Bagus untuk menyebrang", "&7pulau. Berubah menjadi tim Anda",
                 "&7color.", "", "{quick_buy}", "{buy_status}"));
@@ -369,18 +369,18 @@ public class Indonesia extends Language {
         addContentMessages(yml, "stone", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}End Stone", Arrays.asList("&7Biaya: {cost} {currency}", "", "&7Blok keras untuk mempertahankan kasur Anda", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "ladder", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Tangga", Arrays.asList("&7Biaya: {cost} {currency}", "", "&7Berguna untuk menyelamatkan kucing yang terjebak", "&7di pohon.", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "obsidian", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Obsidian", Arrays.asList("&7Biaya: {cost} {currency}", "", "&7Perlindungan ekstrim untuk kasur Anda", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "wood", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Kayu", Arrays.asList("&7Biaya: {cos} {currency}", "", "&7Blok keras untuk mempertahankan kasur Anda", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "wood", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Kayu", Arrays.asList("&7Biaya: {cost} {currency}", "", "&7Blok keras untuk mempertahankan kasur Anda", "", "{quick_buy}", "{buy_status}"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_MELEE, "&8Senjata Jarak Dekat", "&aSenjata Jarak Dekat", Collections.singletonList("&eKlik untuk melihat!"));
 
         addContentMessages(yml, "stone-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "{color}Stone Sword", Arrays.asList("&7Biaya: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "iron-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "{color}Iron Sword", Arrays.asList("&7Biaya: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "diamond-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "{color}Diamond Sword", Arrays.asList("&7Biaya: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "stick", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "{color}Stik (Knockback I)", Arrays.asList("&7Biaya: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "stick", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "{color}Stick (Knockback I)", Arrays.asList("&7Biaya: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
 
-        addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "&8Armor", "&aArmor", Collections.singletonList("&eClick to view!"));
+        addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "&8Armor", "&aArmor", Collections.singletonList("&eKlik untuk melihat!"));
 
-        addContentMessages(yml, "chainmail", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "{color}Armor Chainmail Permanenr", Arrays.asList("&7Biaya: {cost} {currency}",
+        addContentMessages(yml, "chainmail", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "{color}Armor Chainmail Permanen", Arrays.asList("&7Biaya: {cost} {currency}",
                 "", "&7Celana dan sepatu chainmail yang dapat membuat", "&7kamu akan selalu muncul dengan ini", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "iron-armor", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "{color}Armor Besi Permanen", Arrays.asList("&7Biaya: {cost} {currency}",
                 "", "&7Celana dan sepatu besi yang dapat membuat", "&7kamu akan selalu muncul dengan ini.", "", "{quick_buy}", "{buy_status}"));
@@ -389,7 +389,7 @@ public class Indonesia extends Language {
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "&8Tools", "&aTools", Collections.singletonList("&eKlik untuk melihat!"));
 
-        addContentMessages(yml, "shears", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "{color}Gunting Permanen", Arrays.asList("&7Biaya: {cost} {currency}",
+        addContentMessages(yml, "shears", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "{color}Shear Permanen", Arrays.asList("&7Biaya: {cost} {currency}",
                 "", "&7Bagus untuk menyingkirkan wol. Kamu", "&7akan selalu muncul dengan gunting ini.", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "pickaxe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "{color}Pickaxe {tier}", Arrays.asList("&7Biaya: {cost} {currency}", "&7Tingkat: &e{tier}",
                 "", "&7Ini adalah item yang dapat diupgrade.", "&7Itu akan kehilangan 1 tingkat setelah.", "&7mati!", "", "&7Anda akan secara permanen", "&7respawn dengan setidaknya", "&7tingkat terendah.", "", "{quick_buy}", "{buy_status}"));
@@ -411,8 +411,8 @@ public class Indonesia extends Language {
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "&8Utilitas", "&aUtilitas", Collections.singletonList("&eKlik untuk melihat!"));
 
-        addContentMessages(yml, "golden-apple", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Apel Emas", Arrays.asList("&7Biaya: {cost} {currency}", "", "&7Penyembuhan menyeluruh.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bedbug", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Kutu Kasur", Arrays.asList("&7Biaya: {cost} {currency}", "", "&7Memunculkan ikan gabus di mana",
+        addContentMessages(yml, "golden-apple", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Golden Apple", Arrays.asList("&7Biaya: {cost} {currency}", "", "&7Penyembuhan menyeluruh.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "bedbug", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Bed Bug", Arrays.asList("&7Biaya: {cost} {currency}", "", "&7Memunculkan bed bug di mana",
                 "&7bola salju mendarat untuk mengalihkan perhatian", "&7musuh. Berlangsung 15 detik.", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "dream-defender", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Pertahanan Impian", Arrays.asList("&7Biaya: {cost} {currency}", "", "&7Iron Golem untuk membantu mempertahankan",
                 "&7base. Berlangsung 4 menit.", "", "{quick_buy}", "{buy_status}"));
@@ -424,11 +424,11 @@ public class Indonesia extends Language {
                 "&7musuh.", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "water-bucket", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Water Bucket", Arrays.asList("&7Biaya: {cost} {currency}", "", "&7Bagus untuk memperlambat musuh.",
                 "&7Bisa juga melindungi", "&7dari serangan TNT.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bridge-egg", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Telur Jembatan", Arrays.asList("&7Biaya: {cost} {currency}", "", "&7Telur ini menciptakan jembatan di",
+        addContentMessages(yml, "bridge-egg", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Bridge Egg", Arrays.asList("&7Biaya: {cost} {currency}", "", "&7Telur ini menciptakan jembatan di",
                 "&7percobaan setelah dilempar.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "magic-milk", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Susu Ajaib", Arrays.asList("&7Biaya: {cost} {currency}", "", "&7Hindari memicu jebakan untuk 60",
+        addContentMessages(yml, "magic-milk", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Magic Milk", Arrays.asList("&7Biaya: {cost} {currency}", "", "&7Hindari memicu jebakan untuk 60",
                 "&7detik setelah diminum.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "sponge", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Spons", Arrays.asList("&7Biaya: {cost} {currency}", "", "&7Bagus untuk menyerap air.",
+        addContentMessages(yml, "sponge", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Sponge", Arrays.asList("&7Biaya: {cost} {currency}", "", "&7Bagus untuk menyerap air.",
                 "", "{quick_buy}", "{buy_status}"));
 
         //
@@ -440,34 +440,34 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.FORMAT_UPGRADE_TIER_LOCKED, "&7");
         yml.addDefault(Messages.FORMAT_UPGRADE_TIER_UNLOCKED, "&a");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY, "{color}Klik untuk membeli!");
-        yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY, "{color}Anda tidak punya {currency} yang cukup!");
+        yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY, "{color}Kamu tidak punya {currency} yang cukup!");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_LOCKED, "&cTERKUNCI");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_UNLOCKED, "{color}TERBUKA");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a{player} membeli &6{upgradeName}");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a{player} telah membeli &6{upgradeName}");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-1"), "{color}Iron Forge");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "forge").replace("{tier}", "tier-1"),
                 Arrays.asList("&7Tingkatkan pemijahan sumber daya aktif", "&7di pulau mu.", "", "{tierColor}Tingkat 1: +50% Sumber Daya, &b{cost} {currency}",
-                        "&7Tingkat 2: +100% Sumber Daya, &b8 Berlian",
-                        "&7Tingkat 3: Spawn zamrud, &b12 Berlian",
-                        "&7Tingkat 4: +200% Sumber Daya, &b16 Berlian", ""));
+                        "&7Tingkat 2: +100% Sumber Daya, &b8 Diamonds",
+                        "&7Tingkat 3: Spawn emeralds, &b12 Diamonds",
+                        "&7Tingkat 4: +200% Sumber Daya, &b16 Diamonds", ""));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-2"), "{color}Golden Forge");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "forge").replace("{tier}", "tier-2"),
                 Arrays.asList("&7Tingkatkan pemijahan sumber daya aktif", "&7di pulau mu.", "", "&aTingkat 1: +50% Sumber Daya, &b{cost} {currency}",
-                        "{tierColor}Tingkat 2: +100% Sumber Daya, &b8 Berlian",
-                        "&7Tingkat 3: Spawn zamrud, &b12 Berlian",
-                        "&7Tingkat 4: +200% Sumber Daya, &b16 Berlian", ""));
+                        "{tierColor}Tingkat 2: +100% Sumber Daya, &b8 Diamonds",
+                        "&7Tingkat 3: Spawn emeralds, &b12 Diamonds",
+                        "&7Tingkat 4: +200% Sumber Daya, &b16 Diamonds", ""));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-3"), "{color}Emerald Forge");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "forge").replace("{tier}", "tier-3"),
                 Arrays.asList("&7Tingkatkan pemijahan sumber daya aktif", "&7di pulau mu.", "", "&aTingkat 1: +50% Sumber Daya, &b{cost} {currency}",
-                        "&aTingkat 2: +100% Sumber Daya, &b8 Berlian",
-                        "{tierColor}Tingkat 3: Spawn zamrud, &b12 Berlian",
-                        "&7Tingkat 4: +200% Sumber Daya, &b16 Berlian", ""));
+                        "&aTingkat 2: +100% Sumber Daya, &b8 Diamonds",
+                        "{tierColor}Tingkat 3: Spawn emeralds, &b12 Diamonds",
+                        "&7Tingkat 4: +200% Sumber Daya, &b16 Diamonds", ""));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-4"), "{color}Molten Forge");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "forge").replace("{tier}", "tier-4"),
                 Arrays.asList("&7Tingkatkan pemijahan sumber daya aktif", "&7di pulau mu.", "", "&aTingkat 1: +50% Sumber Daya, &b{cost} {currency}",
-                        "&aTingkat 2: +100% Sumber Daya, &b8 Berlian",
-                        "&aTingkat 3: Spawn zamrud, &b12 Berlian",
-                        "{tierColor}Tingkat 4: +200% Sumber Daya, &b16 Berlian", ""));
+                        "&aTingkat 2: +100% Sumber Daya, &b8 Diamonds",
+                        "&aTingkat 3: Spawn emeralds, &b12 Diamonds",
+                        "{tierColor}Tingkat 4: +200% Sumber Daya, &b16 Diamonds", ""));
         yml.addDefault(Messages.UPGRADES_CATEGORY_ITEM_NAME_PATH + "traps", "&aBeli perangkap");
         yml.addDefault(Messages.UPGRADES_CATEGORY_ITEM_LORE_PATH + "traps", Arrays.asList("&7Perangkap yang dibeli akan menjadi", "&7antri di sebelah kanan.", "", "&eKlik untuk menelusuri!"));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "swords").replace("{tier}", "tier-1"), "{color}Pedang yang Diasah");
@@ -476,34 +476,34 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-1"), "{color}Armor Bertulang I");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "armor").replace("{tier}", "tier-1"),
                 Arrays.asList("&7Tim Anda memperoleh keuntungan secara permanen", "&7Perlindungan pada semua bagian armor!", "", "{tierColor}Tingkat 1: Perlindungan I, &b{cost} {currency}",
-                        "&7Tingkat 2: Perlindungan II, &b10 Berlian",
-                        "&7Tingkat 3: Perlindungan III, &b20 Berlian",
-                        "&7Tingkat 4: Perlindungan IV, &b30 Berlian", ""));
+                        "&7Tingkat 2: Perlindungan II, &b10 Diamonds",
+                        "&7Tingkat 3: Perlindungan III, &b20 Diamonds",
+                        "&7Tingkat 4: Perlindungan IV, &b30 Diamonds", ""));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-2"), "{color}Armor Bertulang II");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "armor").replace("{tier}", "tier-2"),
                 Arrays.asList("&7Tim Anda memperoleh keuntungan secara permanen", "&7Perlindungan pada semua bagian armor!", "", "&aTingkat 1: Perlindungan I, &b5 Diamonds",
                         "{tierColor}Tingkat 2: Perlindungan II, &b{cost} {currency}",
-                        "&7Tingkat 3: Perlindungan III, &b20 Berlian",
-                        "&7Tingkat 4: Perlindungan IV, &b30 Berlian", ""));
+                        "&7Tingkat 3: Perlindungan III, &b20 Diamonds",
+                        "&7Tingkat 4: Perlindungan IV, &b30 Diamonds", ""));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-3"), "{color}Armor Bertulang III");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "armor").replace("{tier}", "tier-3"),
                 Arrays.asList("&7Tim Anda memperoleh keuntungan secara permanen", "&7Perlindungan pada semua bagian armor!", "", "&aTingkat 1: Perlindungan I, &b5 Diamonds",
-                        "&aTingkat 2: Perlindungan II, &b10 Berlian",
+                        "&aTingkat 2: Perlindungan II, &b10 Diamonds",
                         "{tierColor}Tingkat 3: Perlindungan III, &b{cost} {currency}",
-                        "&7Tingkat 4: Perlindungan IV, &b30 Berlian", ""));
+                        "&7Tingkat 4: Perlindungan IV, &b30 Diamonds", ""));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-4"), "{color}Armor Bertulang IV");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "armor").replace("{tier}", "tier-4"),
                 Arrays.asList("&7Tim Anda memperoleh keuntungan secara permanen", "&7Perlindungan pada semua bagian armor!", "", "&aTingkat 1: Perlindungan I, &b5 Diamonds",
-                        "&aTingkat 2: Perlindungan II, &b10 Berlian",
-                        "&aTingkat 3: Perlindungan III, &b20 Berlian",
+                        "&aTingkat 2: Perlindungan II, &b10 Diamonds",
+                        "&aTingkat 3: Perlindungan III, &b20 Diamonds",
                         "{tierColor}Tingkat 4: Perlindungan IV, &b{cost} {currency}", ""));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "miner").replace("{tier}", "tier-1"), "{color}Penambang Maniak I");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "miner").replace("{tier}", "tier-1"),
                 Arrays.asList("&7Semua pemain di tim Anda", "&7mendapatkan Haste secara permanen.", "", "{tierColor}Tingkat 1: Haste I, &b{cost} {currency}",
-                        "&7Tingkat 2: Haste II, &b6 Berlian", ""));
+                        "&7Tingkat 2: Haste II, &b6 Diamonds", ""));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "miner").replace("{tier}", "tier-2"), "{color}Penambang Maniak II");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "miner").replace("{tier}", "tier-2"),
-                Arrays.asList("&7Semua pemain di tim Anda", "&7mendapatkan Haste secara permanen.", "", "&aTingkat 1: Haste I, &b4 Berlian",
+                Arrays.asList("&7Semua pemain di tim Anda", "&7mendapatkan Haste secara permanen.", "", "&aTingkat 1: Haste I, &b4 Diamonds",
                         "{tierColor}Tingkat 2: Haste II, &b{cost} {currency}", ""));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "heal-pool").replace("{tier}", "tier-1"), "{color}Kolam Penyembuhan");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "heal-pool").replace("{tier}", "tier-1"),
