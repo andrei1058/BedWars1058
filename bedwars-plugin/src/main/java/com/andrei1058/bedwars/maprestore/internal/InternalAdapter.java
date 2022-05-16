@@ -129,9 +129,7 @@ public class InternalAdapter extends RestoreAdapter {
             Bukkit.unloadWorld(a.getWorldName(), false);
             return;
         }
-        Bukkit.getScheduler().runTask(getOwner(), () -> {
-            Bukkit.unloadWorld(a.getWorldName(), false);
-        });
+        Bukkit.getScheduler().runTask(getOwner(), () -> Bukkit.unloadWorld(a.getWorldName(), false));
     }
 
     @Override
@@ -160,8 +158,7 @@ public class InternalAdapter extends RestoreAdapter {
                     } else {
                         try {
                             s.getPlayer().sendMessage(ChatColor.GREEN + "Creating a new void map: " + s.getWorldName());
-                            World w = Bukkit.createWorld(wc);
-                            w.setKeepSpawnInMemory(true);
+                            Bukkit.createWorld(wc).setKeepSpawnInMemory(true);
                             Bukkit.getScheduler().runTaskLater(plugin, s::teleportPlayer, 20L);
                         } catch (Exception ex){
                             ex.printStackTrace();
