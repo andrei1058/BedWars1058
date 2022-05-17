@@ -62,10 +62,8 @@ import net.minecraft.world.level.block.state.BlockBase;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
-import org.bukkit.block.Skull;
 import org.bukkit.block.data.type.Bed;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.command.Command;
@@ -178,14 +176,17 @@ public class v1_18_R1 extends VersionSupport {
     public void setSource(TNTPrimed tnt, Player owner) {
         EntityLiving nmsEntityLiving = (((CraftLivingEntity) owner).getHandle());
         EntityTNTPrimed nmsTNT = (((CraftTNTPrimed) tnt).getHandle());
-        try {
+        /*try {
             //noinspection JavaReflectionMemberAccess
             Field sourceField = EntityTNTPrimed.class.getDeclaredField("source");
             sourceField.setAccessible(true);
             sourceField.set(nmsTNT, nmsEntityLiving);
         } catch (Exception ex) {
             ex.printStackTrace();
-        }
+        }*/
+
+        //The igniter field is now public, so no reflection is needed.
+        nmsTNT.d = nmsEntityLiving;
     }
 
     @Override
@@ -308,11 +309,11 @@ public class v1_18_R1 extends VersionSupport {
 
     @Override
     public void hideArmor(Player victim, Player receiver) {
+        Bukkit.getLogger().log(Level.WARNING,"hideArmor!"+ victim.getDisplayName()+receiver);
         List<Pair<EnumItemSlot, ItemStack>> items = new ArrayList<>();
         List<Pair<EnumItemSlot, ItemStack>> hands = new ArrayList<>();
         hands.add(new Pair<>(EnumItemSlot.a, new ItemStack(Item.b(0))));
         hands.add(new Pair<>(EnumItemSlot.b, new ItemStack(Item.b(0))));
-
         items.add(new Pair<>(EnumItemSlot.f, new ItemStack(Item.b(0))));
         items.add(new Pair<>(EnumItemSlot.e, new ItemStack(Item.b(0))));
         items.add(new Pair<>(EnumItemSlot.d, new ItemStack(Item.b(0))));
@@ -375,8 +376,29 @@ public class v1_18_R1 extends VersionSupport {
         try {
             Field field = BlockBase.class.getDeclaredField("aI");
             field.setAccessible(true);
-            field.set(Blocks.eq, 12f);
-            field.set(Blocks.au, 300f);
+            field.set(Blocks.dg, 12f);
+
+            //field name of light gray block is "do", which is a keyword. So reflection is used to access it.
+            Field light_gray_field = Blocks.class.getDeclaredField("do");
+            Blocks blocks = new Blocks();
+            net.minecraft.world.level.block.Block light_gray_block = (net.minecraft.world.level.block.Block)light_gray_field.get(blocks);
+
+            field.set(Blocks.dh, 300f);
+            field.set(Blocks.di, 300f);
+            field.set(Blocks.dj, 300f);
+            field.set(Blocks.dk, 300f);
+            field.set(Blocks.dl, 300f);
+            field.set(Blocks.dm, 300f);
+            field.set(Blocks.dn, 300f);
+            field.set(light_gray_block, 300f);
+            field.set(Blocks.dp, 300f);
+            field.set(Blocks.dq, 300f);
+            field.set(Blocks.dr, 300f);
+            field.set(Blocks.ds, 300f);
+            field.set(Blocks.dt, 300f);
+            field.set(Blocks.du, 300f);
+            field.set(Blocks.dv, 300f);
+
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
