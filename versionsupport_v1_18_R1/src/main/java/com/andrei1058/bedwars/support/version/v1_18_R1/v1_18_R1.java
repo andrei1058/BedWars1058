@@ -59,10 +59,13 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBase;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.Skull;
 import org.bukkit.block.data.type.Bed;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.command.Command;
@@ -76,6 +79,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.*;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
@@ -545,30 +549,18 @@ public class v1_18_R1 extends VersionSupport {
 
     @Override
     public org.bukkit.inventory.ItemStack getPlayerHead(Player player, org.bukkit.inventory.ItemStack copyTagFrom) {
-        org.bukkit.inventory.ItemStack head = new org.bukkit.inventory.ItemStack(materialPlayerHead());
 
+        org.bukkit.inventory.ItemStack head = new org.bukkit.inventory.ItemStack(materialPlayerHead());
         if (copyTagFrom != null) {
             ItemStack i = CraftItemStack.asNMSCopy(head);
             i.c(CraftItemStack.asNMSCopy(copyTagFrom).s());
             head = CraftItemStack.asBukkitCopy(i);
         }
 
-//        SkullMeta headMeta = (SkullMeta) head.getItemMeta();
-//        FIXME: current hotfix will get rate limited! how the hell do we set head texture now?
-//        wtf is this: SkullOwner:{Id:[I;-1344581477,-1919271229,-1306015584,-647763423],Name:"andrei1058"}
-//        Field profileField;
-//        try {
-//            //noinspection ConstantConditions
-//            profileField = headMeta.getClass().getDeclaredField("profile");
-//            profileField.setAccessible(true);
-//            profileField.set(headMeta, ((CraftPlayer) player).getProfile());
-//        } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e1) {
-//            e1.printStackTrace();
-//        }
-//        assert headMeta != null;
-//        headMeta.setOwningPlayer(player);
-//        head.setItemMeta(headMeta);
-
+        SkullMeta headMeta = (SkullMeta) head.getItemMeta();
+        assert headMeta != null;
+        headMeta.setOwningPlayer(player);
+        head.setItemMeta(headMeta);
         return head;
     }
 
