@@ -32,9 +32,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+
+import java.lang.reflect.Method;
 
 import static com.andrei1058.bedwars.BedWars.nms;
 import static com.andrei1058.bedwars.BedWars.plugin;
@@ -74,9 +74,19 @@ public class InvisibilityPotionListener implements Listener {
         Bukkit.getScheduler().runTaskLater(plugin, () ->
                         nms.minusAmount(e.getPlayer(), new ItemStack(Material.GLASS_BOTTLE), 1),
                 5L);
-        //
 
-        if (nms.isInvisibilityPotion(e.getItem())) {
+        //The direct call of nms.isInvisibilityPotion somehow results in NoSuchMethod exception even though it actually exists, so reflection is used.
+        //TODO    Change this to direct call if you know why.
+        boolean isInvisibilityPotion = false;
+        try {
+            Class<?> vs = nms.getClass();
+            Method testPotionMethod = vs.getDeclaredMethod("isInvisibilityPotion",org.bukkit.inventory.ItemStack.class);
+            isInvisibilityPotion = (Boolean)testPotionMethod.invoke(nms,e.getItem());
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+
+        if (isInvisibilityPotion) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 for (PotionEffect pe : e.getPlayer().getActivePotionEffects()) {
                     if (pe.getType().toString().contains("INVISIBILITY")) {

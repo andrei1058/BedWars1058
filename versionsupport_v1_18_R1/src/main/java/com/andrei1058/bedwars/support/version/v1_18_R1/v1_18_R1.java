@@ -59,7 +59,6 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBase;
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -309,7 +308,6 @@ public class v1_18_R1 extends VersionSupport {
 
     @Override
     public void hideArmor(Player victim, Player receiver) {
-        Bukkit.getLogger().log(Level.WARNING,"hideArmor!"+ victim.getDisplayName()+receiver);
         List<Pair<EnumItemSlot, ItemStack>> items = new ArrayList<>();
         List<Pair<EnumItemSlot, ItemStack>> hands = new ArrayList<>();
         hands.add(new Pair<>(EnumItemSlot.a, new ItemStack(Item.b(0))));
