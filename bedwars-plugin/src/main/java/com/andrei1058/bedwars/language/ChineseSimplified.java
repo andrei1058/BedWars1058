@@ -37,7 +37,7 @@ public class ChineseSimplified extends Language {
         yml.addDefault(Messages.COMMAND_JOIN_GROUP_OR_ARENA_NOT_FOUND, "{prefix}&c游戏{name}不存在！");
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_IS_FULL, "{prefix}&c游戏已满！\n&a请考虑赞助以支持我们！ &7&o(点击查看)");
         yml.addDefault(Messages.COMMAND_JOIN_NO_EMPTY_FOUND, "{prefix}&c现在没有可用的游戏:(");
-        yml.addDefault(Messages.COMMAND_JOIN_DENIED_IS_FULL_OF_VIPS, "{prefix}&c很抱歉，该游戏已满。\n&c我们已知你已捐款，但该游戏已满！\n该游戏中全是跟你一样的赞助者或管理员。");
+        yml.addDefault(Messages.COMMAND_JOIN_DENIED_IS_FULL_OF_VIPS, "{prefix}&c很抱歉，虽然我们已知道你已赞助，但该游戏已满。\n&c此游戏中全是赞助者或管理员。");
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_PARTY_TOO_BIG, "{prefix}&c你的队伍人数太多了，不能作为一个队伍加入该游戏:(");
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_NOT_PARTY_LEADER, "{prefix}&c只有队长才能选择游戏。");
         yml.addDefault(Messages.COMMAND_JOIN_PLAYER_JOIN_MSG, "{prefix}&7{player}&e加入了游戏(&b{on}&e/&b{max}&e)！");
@@ -45,10 +45,10 @@ public class ChineseSimplified extends Language {
         yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG, "&c该游戏不允许旁观！");
         yml.addDefault(Messages.COMMAND_TP_PLAYER_NOT_FOUND, "{prefix}&c无法找到这位玩家！");
         yml.addDefault(Messages.COMMAND_TP_NOT_IN_ARENA, "{prefix}&c该玩家不在任何一场起床战争游戏中！");
-        yml.addDefault(Messages.COMMAND_TP_NOT_STARTED, "{prefix}&c该玩家所在的游戏还没有开始游戏！");
+        yml.addDefault(Messages.COMMAND_TP_NOT_STARTED, "{prefix}&c该玩家所在的游戏还没开始！");
         yml.addDefault(Messages.COMMAND_TP_USAGE, "{prefix}&c用法：/bw tp <玩家名>");
         yml.addDefault(Messages.REJOIN_NO_ARENA, "{prefix}&c没有可以重新加入的游戏！");
-        yml.addDefault(Messages.REJOIN_DENIED, "{prefix}&c由于你队伍的床被破坏或游戏已经结束，你不能重新加入。");
+        yml.addDefault(Messages.REJOIN_DENIED, "{prefix}&c由于你所属队伍的床被破坏或游戏已经结束，你不能重新加入。");
         yml.addDefault(Messages.REJOIN_ALLOWED, "{prefix}&e正在重新加入&a{arena}&e！");
         yml.addDefault(Messages.COMMAND_REJOIN_PLAYER_RECONNECTED, "{prefix}&7{player}&e重新连接。");
         yml.addDefault(Messages.COMMAND_LEAVE_DENIED_NOT_IN_ARENA, "{prefix}&c你不在一场起床战争游戏中！");
@@ -99,7 +99,7 @@ public class ChineseSimplified extends Language {
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-2", "&c❷");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-1", "&c❶");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_CANCELLED_TITLE, " ");
-        yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_CANCELLED_SUB_TITLE, "&c等待更多玩家..");
+        yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_CANCELLED_SUB_TITLE, "&c等待更多玩家...");
         yml.addDefault(Messages.ARENA_STATUS_START_PLAYER_TITLE, "&a游戏开始");
         yml.addDefault(Messages.ARENA_STATUS_START_PLAYER_TUTORIAL, Arrays.asList(
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
@@ -154,7 +154,7 @@ public class ChineseSimplified extends Language {
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE, "&a&l✓");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_NEXEVENT_TIMER, "mm：ss");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_YOUR_TEAM, "&7 你");
-        yml.addDefault(Messages.FORMATTING_ACTION_BAR_TRACKING, "&正在追踪： {team} &f- 距离： {distance}m");
+        yml.addDefault(Messages.FORMATTING_ACTION_BAR_TRACKING, "&f正在追踪： {team} &f- 距离： {distance}m");
         yml.addDefault(Messages.FORMATTING_TEAM_WINNER_FORMAT, "      {TeamColor}{TeamName} &7- {members}");
         yml.addDefault(Messages.FORMATTING_SOLO_WINNER_FORMAT, "                 {TeamColor}{TeamName} &7- {members}");
         yml.addDefault(Messages.FORMATTING_GENERATOR_TIER1, "1");
@@ -166,7 +166,7 @@ public class ChineseSimplified extends Language {
         yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_SHOUT, "&6[公屏]");
         yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_SPECTATOR, "&7[旁观者]");
         yml.addDefault(Messages.MEANING_FULL, "已满");
-        yml.addDefault(Messages.MEANING_SHOUT, "公屏喊话");
+        yml.addDefault(Messages.MEANING_SHOUT, "公屏");
         yml.addDefault(Messages.MEANING_NOBODY, "无玩家");
         yml.addDefault(Messages.MEANING_NEVER, "从不");
         yml.addDefault(Messages.MEANING_IRON_SINGULAR, "铁锭");
@@ -195,8 +195,8 @@ public class ChineseSimplified extends Language {
         yml.addDefault(Messages.PLAYER_DIE_PVP_LOG_OUT_FINAL, "{PlayerColor}{PlayerName}&7在与{KillerColor}{KillerName}&7战斗时断开连接。 &b&l最终击杀！");
         yml.addDefault(Messages.PLAYER_DIE_KNOCKED_BY_REGULAR_KILL, "{PlayerColor}{PlayerName}&7被{KillerColor}{KillerName}&7推下了悬崖。");
         yml.addDefault(Messages.PLAYER_DIE_KNOCKED_BY_FINAL_KILL, "{PlayerColor}{PlayerName}&7被{KillerColor}{KillerName}&7推下了悬崖。 &b&l最终击杀！");
-        yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITH_SOURCE_REGULAR_KILL, "{PlayerColor}{PlayerName}&7被{KillerColor}{KillerName}&7充满爱意地炸死了。");
-        yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITH_SOURCE_FINAL_KILL, "{PlayerColor}{PlayerName}&7被{KillerColor}{KillerName}&7充满爱意地炸死了。 &b&l最终击杀！");
+        yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITH_SOURCE_REGULAR_KILL, "{PlayerColor}{PlayerName}&7被{KillerColor}{KillerName}&7炸死了。");
+        yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITH_SOURCE_FINAL_KILL, "{PlayerColor}{PlayerName}&7被{KillerColor}{KillerName}&7炸死了。 &b&l最终击杀！");
         yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_REGULAR, "{PlayerColor}{PlayerName}&7爆炸了。");
         yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_FINAL_KILL, "{PlayerColor}{PlayerName}&7爆炸了。 &b&l最终击杀！");
         yml.addDefault(Messages.PLAYER_DIE_PVP_REGULAR_KILL, "{PlayerColor}{PlayerName}&7被{KillerColor}{KillerName}&7击杀。");
@@ -214,8 +214,8 @@ public class ChineseSimplified extends Language {
         yml.addDefault(Messages.PLAYER_DIE_REWARD_IRON, "{prefix}&f+{amount}{meaning}");
         yml.addDefault(Messages.PLAYER_DIE_REWARD_GOLD, "{prefix}&6+{amount}{meaning}");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_TITLE, "&c你死了！");
-        yml.addDefault(Messages.PLAYER_DIE_RESPAWN_SUBTITLE, "&e将在&a{time}&e秒后重生！");
-        yml.addDefault(Messages.PLAYER_DIE_RESPAWN_CHAT, "{prefix}&e将在&a{time}&e秒后重生！");
+        yml.addDefault(Messages.PLAYER_DIE_RESPAWN_SUBTITLE, "&e你将在&a{time}&e秒后重生！");
+        yml.addDefault(Messages.PLAYER_DIE_RESPAWN_CHAT, "{prefix}&e你将在&a{time}&e秒后重生！");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWNED_TITLE, "&a已重生！");
         yml.addDefault(Messages.PLAYER_DIE_ELIMINATED_CHAT, "{prefix}&c你已被淘汰！");
         yml.addDefault(Messages.PLAYER_HIT_BOW, "{prefix}{TeamColor}{PlayerName}&7还有&e{amount}&c❤");
@@ -341,23 +341,23 @@ public class ChineseSimplified extends Language {
         addCategoryMessages(yml, "ranged-category", "&8远程武器", "&a远程武器", Collections.singletonList("&e点击查看！"));
         addContentMessages(yml, "arrow", "ranged-category", "{color}箭", Arrays.asList("&7花费： {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "bow1", "ranged-category", "{color}弓", Arrays.asList("&7花费： {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bow2", "ranged-category", "{color}弓(力量 I)", Arrays.asList("&7花费： {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bow3", "ranged-category", "{color}弓(力量 I, 冲击 I)", Arrays.asList("&7花费： {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "bow2", "ranged-category", "{color}弓(力量I)", Arrays.asList("&7花费： {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "bow3", "ranged-category", "{color}弓(力量I, 冲击I)", Arrays.asList("&7花费： {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
         addCategoryMessages(yml, "potions-category", "&8药水", "&a药水", Collections.singletonList("&e点击查看！"));
         addContentMessages(yml, "speed-potion", "potions-category", "{color}速度II药水(45秒)", Arrays.asList("&7花费： {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "jump-potion", "potions-category", "{color}跳跃提升V药水(45秒)", Arrays.asList("&7花费： {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "invisibility", "potions-category", "{color}隐身药水(30秒)", Arrays.asList("&7花费： {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
         addCategoryMessages(yml, "utility-category", "&8实用工具", "&a实用工具", Collections.singletonList("&e点击查看！"));
-        addContentMessages(yml, "golden-apple", "utility-category", "{color}金苹果", Arrays.asList("&7花费： {cost} {currency}", "", "&7均衡的治疗。", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "golden-apple", "utility-category", "{color}金苹果", Arrays.asList("&7花费： {cost} {currency}", "", "&7均衡治疗", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "bedbug", "utility-category", "{color}蠹虫", Arrays.asList("&7花费： {cost} {currency}", "", "&7在雪球落下的地方召唤蠹虫", "&7来干扰敌人", "&7持续15秒。", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "dream-defender", "utility-category", "{color}梦境守卫者", Arrays.asList("&7花费： {cost} {currency}", "", "&7召唤铁傀儡来保护基地", "&7持续4分钟", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "fireball", "utility-category", "{color}火球", Arrays.asList("&7花费： {cost} {currency}", "", "&7右键发射！", "&7把在窄桥上的敌人打下去！", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "tnt", "utility-category", "{color}TNT", Arrays.asList("&7花费： {cost} {currency}", "", "&7立即点燃, 适合炸点东西", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "ender-pearl", "utility-category", "{color}末影珍珠", Arrays.asList("&7花费： {cost} {currency}", "", "&7偷家最好的方法", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "ender-pearl", "utility-category", "{color}末影珍珠", Arrays.asList("&7花费： {cost} {currency}", "", "&7偷家最好的方式", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "water-bucket", "utility-category", "{color}水桶", Arrays.asList("&7花费： {cost} {currency}", "", "&7减缓敌人的速度", "&7也可以防止TNT破坏方块", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "bridge-egg", "utility-category", "{color}搭桥蛋", Arrays.asList("&7花费： {cost} {currency}", "", "&7丢出后在其轨迹形成一座桥", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "magic-milk", "utility-category", "{color}魔法牛奶", Arrays.asList("&7花费： {cost} {currency}", "", "&7喝下60秒内不会触发陷阱", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "sponge", "utility-category", "{color}海绵", Arrays.asList("&7花费： {cost} {currency}", "", "&7用来吸水不错。", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "magic-milk", "utility-category", "{color}魔法牛奶", Arrays.asList("&7花费： {cost} {currency}", "", "&7喝下后60秒内不会触发陷阱", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "sponge", "utility-category", "{color}海绵", Arrays.asList("&7花费： {cost} {currency}", "", "&7用来吸水不错", "", "{quick_buy}", "{buy_status}"));
         yml.addDefault(Messages.UPGRADES_MENU_GUI_NAME_PATH + "default", "团队升级和陷阱");
         yml.addDefault(Messages.MEANING_NO_TRAP, "无陷阱！");
         yml.addDefault(Messages.FORMAT_UPGRADE_TRAP_COST, "&7花费： {currencyColor}{cost} {currency}");
