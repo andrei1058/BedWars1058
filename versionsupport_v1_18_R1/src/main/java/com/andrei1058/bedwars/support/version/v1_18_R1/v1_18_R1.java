@@ -33,32 +33,29 @@ import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Pair;
-import com.mojang.math.Vector3fa;
+import com.mojang.math.Vector3f;
 import net.minecraft.SharedConstants;
-import net.minecraft.core.particles.ParticleParamRedstone;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.chat.ChatMessageType;
-import net.minecraft.network.chat.IChatBaseComponent;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.ChatType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.protocol.game.*;
-import net.minecraft.network.syncher.DataWatcherObject;
-import net.minecraft.network.syncher.DataWatcherRegistry;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
-import net.minecraft.server.level.EntityPlayer;
-import net.minecraft.util.datafix.DataConverterRegistry;
-import net.minecraft.util.datafix.fixes.DataConverterTypes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.datafix.DataFixers;
+import net.minecraft.util.datafix.fixes.References;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.EntityLiving;
-import net.minecraft.world.entity.EntityTypes;
-import net.minecraft.world.entity.EnumCreatureType;
-import net.minecraft.world.entity.EnumItemSlot;
-import net.minecraft.world.entity.item.EntityTNTPrimed;
-import net.minecraft.world.entity.projectile.EntityFireball;
-import net.minecraft.world.entity.projectile.IProjectile;
-import net.minecraft.world.item.*;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockBase;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -72,7 +69,6 @@ import org.bukkit.craftbukkit.v1_18_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_18_R1.entity.CraftTNTPrimed;
 import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.*;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -112,8 +108,8 @@ public class v1_18_R1 extends VersionSupport {
     @Override
     public String getTag(org.bukkit.inventory.ItemStack itemStack, String key) {
         ItemStack i = CraftItemStack.asNMSCopy(itemStack);
-        NBTTagCompound tag = i.s();
-        return tag == null ? null : tag.e(key) ? tag.l(key) : null;
+        CompoundTag tag = i.getTag();
+        return tag == null ? null : tag.contains(key) ? tag.getString(key) : null;
     }
 
     @Override
@@ -135,9 +131,9 @@ public class v1_18_R1 extends VersionSupport {
     @Override
     public void playAction(Player p, String text) {
         CraftPlayer cPlayer = (CraftPlayer) p;
-        IChatBaseComponent cbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + text + "\"}");
-        PacketPlayOutChat ppoc = new PacketPlayOutChat(cbc, ChatMessageType.c, chatUUID);
-        cPlayer.getHandle().b.a(ppoc);
+        MutableComponent cbc = Component.Serializer.fromJson("{\"text\": \"" + text + "\"}");
+        ClientboundChatPacket ppoc = new ClientboundChatPacket(cbc, ChatType.GAME_INFO, chatUUID);
+        cPlayer.getHandle().connection.send(ppoc);
     }
 
     @Override
@@ -152,8 +148,8 @@ public class v1_18_R1 extends VersionSupport {
 
     @Override
     public void hideEntity(Entity e, Player p) {
-        PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(e.getEntityId());
-        ((CraftPlayer) p).getHandle().b.a(packet);
+        ClientboundRemoveEntitiesPacket packet = new ClientboundRemoveEntitiesPacket(e.getEntityId());
+        ((CraftPlayer) p).getHandle().connection.send(packet);
 
     }
 
@@ -173,60 +169,50 @@ public class v1_18_R1 extends VersionSupport {
 
     @Override
     public void setSource(TNTPrimed tnt, Player owner) {
-        EntityLiving nmsEntityLiving = (((CraftLivingEntity) owner).getHandle());
-        EntityTNTPrimed nmsTNT = (((CraftTNTPrimed) tnt).getHandle());
-        /*try {
-            //noinspection JavaReflectionMemberAccess
-            Field sourceField = EntityTNTPrimed.class.getDeclaredField("source");
-            sourceField.setAccessible(true);
-            sourceField.set(nmsTNT, nmsEntityLiving);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }*/
-
-        //The igniter field is now public, so no reflection is needed.
-        nmsTNT.d = nmsEntityLiving;
+        net.minecraft.world.entity.LivingEntity nmsEntityLiving = (((CraftLivingEntity) owner).getHandle());
+        PrimedTnt nmsTNT = (((CraftTNTPrimed) tnt).getHandle());
+        nmsTNT.owner = nmsEntityLiving;
     }
 
     @Override
     public boolean isArmor(org.bukkit.inventory.ItemStack itemStack) {
         if (CraftItemStack.asNMSCopy(itemStack) == null) return false;
-        if (CraftItemStack.asNMSCopy(itemStack).c() == null) return false;
-        return CraftItemStack.asNMSCopy(itemStack).c() instanceof ItemArmor;
+        if (CraftItemStack.asNMSCopy(itemStack).getItem() == null) return false;
+        return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ArmorItem;
     }
 
     @Override
     public boolean isTool(org.bukkit.inventory.ItemStack itemStack) {
         if (CraftItemStack.asNMSCopy(itemStack) == null) return false;
-        if (CraftItemStack.asNMSCopy(itemStack).c() == null) return false;
-        return CraftItemStack.asNMSCopy(itemStack).c() instanceof ItemTool;
+        if (CraftItemStack.asNMSCopy(itemStack).getItem() == null) return false;
+        return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof DiggerItem;
     }
 
     @Override
     public boolean isSword(org.bukkit.inventory.ItemStack itemStack) {
         if (CraftItemStack.asNMSCopy(itemStack) == null) return false;
-        if (CraftItemStack.asNMSCopy(itemStack).c() == null) return false;
-        return CraftItemStack.asNMSCopy(itemStack).c() instanceof ItemSword;
+        if (CraftItemStack.asNMSCopy(itemStack).getItem() == null) return false;
+        return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof SwordItem;
     }
 
     @Override
     public boolean isAxe(org.bukkit.inventory.ItemStack itemStack) {
-        if (CraftItemStack.asNMSCopy(itemStack).c() == null) return false;
-        return CraftItemStack.asNMSCopy(itemStack).c() instanceof ItemAxe;
+        if (CraftItemStack.asNMSCopy(itemStack).getItem() == null) return false;
+        return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof AxeItem;
     }
 
     @Override
     public boolean isBow(org.bukkit.inventory.ItemStack itemStack) {
         if (CraftItemStack.asNMSCopy(itemStack) == null) return false;
-        if (CraftItemStack.asNMSCopy(itemStack).c() == null) return false;
-        return CraftItemStack.asNMSCopy(itemStack).c() instanceof ItemBow;
+        if (CraftItemStack.asNMSCopy(itemStack).getItem() == null) return false;
+        return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof BowItem;
     }
 
     @Override
     public boolean isProjectile(org.bukkit.inventory.ItemStack itemStack) {
         if (CraftItemStack.asNMSCopy(itemStack) == null) return false;
-        if (CraftItemStack.asNMSCopy(itemStack).E() == null) return false;
-        return CraftItemStack.asNMSCopy(itemStack).E() instanceof IProjectile;
+        if (CraftItemStack.asNMSCopy(itemStack).getEntityRepresentation() == null) return false;
+        return CraftItemStack.asNMSCopy(itemStack).getEntityRepresentation() instanceof net.minecraft.world.entity.projectile.Projectile;
     }
 
     @Override
@@ -242,15 +228,14 @@ public class v1_18_R1 extends VersionSupport {
     @Override
     public void registerEntities() {
         //noinspection deprecation
-        Map<String, Type<?>> types = (Map<String, Type<?>>) DataConverterRegistry.a().getSchema(
-                DataFixUtils.makeKey(SharedConstants.b().getWorldVersion())
-        ).findChoiceType(DataConverterTypes.q).types();
-
+        Map<String, Type<?>> types = (Map<String, Type<?>>) DataFixers.getDataFixer().getSchema(
+                DataFixUtils.makeKey(SharedConstants.getCurrentVersion().getWorldVersion())
+        ).findChoiceType(References.ENTITY).types();
         types.put("minecraft:bwsilverfish", types.get("minecraft:silverfish"));
-        EntityTypes.Builder.a(Silverfish::new, EnumCreatureType.a).a("bwsilverfish");
+        net.minecraft.world.entity.EntityType.Builder.of(Silverfish::new, MobCategory.MONSTER).build("bwsilverfish");
 
         types.put("minecraft:bwgolem", types.get("minecraft:iron_golem"));
-        EntityTypes.Builder.a(IGolem::new, EnumCreatureType.a).a("bwgolem");
+        net.minecraft.world.entity.EntityType.Builder.of(IGolem::new, MobCategory.MONSTER).build("bwgolem");
     }
 
     @Override
@@ -286,8 +271,8 @@ public class v1_18_R1 extends VersionSupport {
     @Override
     public double getDamage(org.bukkit.inventory.ItemStack i) {
         ItemStack nmsStack = CraftItemStack.asNMSCopy(i);
-        NBTTagCompound compound = (nmsStack.s() != null) ? nmsStack.s() : new NBTTagCompound();
-        return compound.k("generic.attackDamage");
+        CompoundTag compound = (nmsStack.getTag() != null) ? nmsStack.getTag() : new CompoundTag();
+        return compound.getDouble("generic.attackDamage");
     }
 
     private static ArmorStand createArmorStand(String name, Location loc) {
@@ -303,47 +288,47 @@ public class v1_18_R1 extends VersionSupport {
 
     @Override
     public void voidKill(Player p) {
-        ((CraftPlayer) p).getHandle().a(DamageSource.m, 1000);
+        ((CraftPlayer) p).getHandle().hurt(DamageSource.OUT_OF_WORLD, 1000);
     }
 
     @Override
     public void hideArmor(Player victim, Player receiver) {
-        List<Pair<EnumItemSlot, ItemStack>> items = new ArrayList<>();
-        List<Pair<EnumItemSlot, ItemStack>> hands = new ArrayList<>();
-        hands.add(new Pair<>(EnumItemSlot.a, new ItemStack(Item.b(0))));
-        hands.add(new Pair<>(EnumItemSlot.b, new ItemStack(Item.b(0))));
-        items.add(new Pair<>(EnumItemSlot.f, new ItemStack(Item.b(0))));
-        items.add(new Pair<>(EnumItemSlot.e, new ItemStack(Item.b(0))));
-        items.add(new Pair<>(EnumItemSlot.d, new ItemStack(Item.b(0))));
-        items.add(new Pair<>(EnumItemSlot.c, new ItemStack(Item.b(0))));
-        PacketPlayOutEntityEquipment packet1 = new PacketPlayOutEntityEquipment(victim.getEntityId(), items);
-        PacketPlayOutEntityEquipment packet2 = new PacketPlayOutEntityEquipment(victim.getEntityId(), hands);
-        EntityPlayer pc = ((CraftPlayer) receiver).getHandle();
+        List<Pair<EquipmentSlot, ItemStack>> items = new ArrayList<>();
+        List<Pair<EquipmentSlot, ItemStack>> hands = new ArrayList<>();
+        hands.add(new Pair<>(EquipmentSlot.MAINHAND, new ItemStack(Item.byId(0))));
+        hands.add(new Pair<>(EquipmentSlot.OFFHAND, new ItemStack(Item.byId(0))));
+        items.add(new Pair<>(EquipmentSlot.LEGS, new ItemStack(Item.byId(0))));
+        items.add(new Pair<>(EquipmentSlot.FEET, new ItemStack(Item.byId(0))));
+        items.add(new Pair<>(EquipmentSlot.HEAD, new ItemStack(Item.byId(0))));
+        items.add(new Pair<>(EquipmentSlot.CHEST, new ItemStack(Item.byId(0))));
+        ClientboundSetEquipmentPacket packet1 = new ClientboundSetEquipmentPacket(victim.getEntityId(), items);
+        ClientboundSetEquipmentPacket packet2 = new ClientboundSetEquipmentPacket(victim.getEntityId(), hands);
+        ServerPlayer pc = ((CraftPlayer) receiver).getHandle();
         if (victim != receiver) {
-            pc.b.a(packet2);
+            pc.connection.send(packet2);
         }
-        pc.b.a(packet1);
+        pc.connection.send(packet1);
     }
 
     @Override
     public void showArmor(Player victim, Player receiver) {
-        List<Pair<EnumItemSlot, ItemStack>> items = new ArrayList<>();
-        List<Pair<EnumItemSlot, ItemStack>> hands = new ArrayList<>();
+        List<Pair<EquipmentSlot, ItemStack>> items = new ArrayList<>();
+        List<Pair<EquipmentSlot, ItemStack>> hands = new ArrayList<>();
 
-        hands.add(new Pair<>(EnumItemSlot.a, CraftItemStack.asNMSCopy(victim.getInventory().getItemInMainHand())));
-        hands.add(new Pair<>(EnumItemSlot.b, CraftItemStack.asNMSCopy(victim.getInventory().getItemInOffHand())));
+        hands.add(new Pair<>(EquipmentSlot.MAINHAND, CraftItemStack.asNMSCopy(victim.getInventory().getItemInMainHand())));
+        hands.add(new Pair<>(EquipmentSlot.OFFHAND, CraftItemStack.asNMSCopy(victim.getInventory().getItemInOffHand())));
 
-        items.add(new Pair<>(EnumItemSlot.f, CraftItemStack.asNMSCopy(victim.getInventory().getHelmet())));
-        items.add(new Pair<>(EnumItemSlot.e, CraftItemStack.asNMSCopy(victim.getInventory().getChestplate())));
-        items.add(new Pair<>(EnumItemSlot.d, CraftItemStack.asNMSCopy(victim.getInventory().getLeggings())));
-        items.add(new Pair<>(EnumItemSlot.c, CraftItemStack.asNMSCopy(victim.getInventory().getBoots())));
-        PacketPlayOutEntityEquipment packet1 = new PacketPlayOutEntityEquipment(victim.getEntityId(), items);
-        PacketPlayOutEntityEquipment packet2 = new PacketPlayOutEntityEquipment(victim.getEntityId(), hands);
-        EntityPlayer pc = ((CraftPlayer) receiver).getHandle();
+        items.add(new Pair<>(EquipmentSlot.HEAD, CraftItemStack.asNMSCopy(victim.getInventory().getHelmet())));
+        items.add(new Pair<>(EquipmentSlot.CHEST, CraftItemStack.asNMSCopy(victim.getInventory().getChestplate())));
+        items.add(new Pair<>(EquipmentSlot.LEGS, CraftItemStack.asNMSCopy(victim.getInventory().getLeggings())));
+        items.add(new Pair<>(EquipmentSlot.FEET, CraftItemStack.asNMSCopy(victim.getInventory().getBoots())));
+        ClientboundSetEquipmentPacket packet1 = new ClientboundSetEquipmentPacket(victim.getEntityId(), items);
+        ClientboundSetEquipmentPacket packet2 = new ClientboundSetEquipmentPacket(victim.getEntityId(), hands);
+        ServerPlayer pc = ((CraftPlayer) receiver).getHandle();
         if (victim != receiver) {
-            pc.b.a(packet2);
+            pc.connection.send(packet2);
         }
-        pc.b.a(packet1);
+        pc.connection.send(packet1);
     }
 
     @Override
@@ -372,31 +357,25 @@ public class v1_18_R1 extends VersionSupport {
     @Override
     public void registerTntWhitelist() {
         try {
-            Field field = BlockBase.class.getDeclaredField("aI");
+            Field field = net.minecraft.world.level.block.state.BlockBehaviour.class.getDeclaredField("aI");//internal name of Blast resistance
             field.setAccessible(true);
-            field.set(Blocks.dg, 12f);
-
-            //field name of light gray block is "do", which is a keyword. So reflection is used to access it.
-            Field light_gray_field = Blocks.class.getDeclaredField("do");
-            Blocks blocks = new Blocks();
-            net.minecraft.world.level.block.Block light_gray_block = (net.minecraft.world.level.block.Block)light_gray_field.get(blocks);
-
-            field.set(Blocks.dh, 300f);
-            field.set(Blocks.di, 300f);
-            field.set(Blocks.dj, 300f);
-            field.set(Blocks.dk, 300f);
-            field.set(Blocks.dl, 300f);
-            field.set(Blocks.dm, 300f);
-            field.set(Blocks.dn, 300f);
-            field.set(light_gray_block, 300f);
-            field.set(Blocks.dp, 300f);
-            field.set(Blocks.dq, 300f);
-            field.set(Blocks.dr, 300f);
-            field.set(Blocks.ds, 300f);
-            field.set(Blocks.dt, 300f);
-            field.set(Blocks.du, 300f);
-            field.set(Blocks.dv, 300f);
-
+            field.set(Blocks.END_STONE, 12f);
+            field.set(Blocks.WHITE_STAINED_GLASS, 300f);
+            field.set(Blocks.ORANGE_STAINED_GLASS, 300f);
+            field.set(Blocks.MAGENTA_STAINED_GLASS, 300f);
+            field.set(Blocks.LIGHT_BLUE_STAINED_GLASS, 300f);
+            field.set(Blocks.YELLOW_STAINED_GLASS, 300f);
+            field.set(Blocks.LIME_STAINED_GLASS, 300f);
+            field.set(Blocks.PINK_STAINED_GLASS, 300f);
+            field.set(Blocks.GRAY_STAINED_GLASS, 300f);
+            field.set(Blocks.LIGHT_GRAY_STAINED_GLASS, 300f);
+            field.set(Blocks.CYAN_STAINED_GLASS, 300f);
+            field.set(Blocks.PURPLE_STAINED_GLASS, 300f);
+            field.set(Blocks.BLUE_STAINED_GLASS, 300f);
+            field.set(Blocks.BROWN_STAINED_GLASS, 300f);
+            field.set(Blocks.GREEN_STAINED_GLASS, 300f);
+            field.set(Blocks.RED_STAINED_GLASS, 300f);
+            field.set(Blocks.BLACK_STAINED_GLASS, 300f);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -423,43 +402,43 @@ public class v1_18_R1 extends VersionSupport {
     @Override
     public org.bukkit.inventory.ItemStack addCustomData(org.bukkit.inventory.ItemStack i, String data) {
         ItemStack itemStack = CraftItemStack.asNMSCopy(i);
-        NBTTagCompound tag = itemStack.s();
+        CompoundTag tag = itemStack.getTag();
         if (tag == null) {
-            tag = new NBTTagCompound();
-            itemStack.c(tag);
+            tag = new CompoundTag();
+            itemStack.setTag(tag);
         }
 
-        tag.a("BedWars1058", data);
+        tag.putString("BedWars1058", data);
         return CraftItemStack.asBukkitCopy(itemStack);
     }
 
     @Override
     public org.bukkit.inventory.ItemStack setTag(org.bukkit.inventory.ItemStack itemStack, String key, String value) {
         ItemStack is = CraftItemStack.asNMSCopy(itemStack);
-        NBTTagCompound tag = is.s();
+        CompoundTag tag = is.getTag();
         if (tag == null) {
-            tag = new NBTTagCompound();
-            is.c(tag);
+            tag = new CompoundTag();
+            is.setTag(tag);
         }
 
-        tag.a(key, value);
+        tag.putString(key, value);
         return CraftItemStack.asBukkitCopy(is);
     }
 
     @Override
     public boolean isCustomBedWarsItem(org.bukkit.inventory.ItemStack i) {
         ItemStack itemStack = CraftItemStack.asNMSCopy(i);
-        NBTTagCompound tag = itemStack.s();
+        CompoundTag tag = itemStack.getTag();
         if (tag == null) return false;
-        return tag.e("BedWars1058");
+        return tag.contains("BedWars1058");
     }
 
     @Override
     public String getCustomData(org.bukkit.inventory.ItemStack i) {
         ItemStack itemStack = CraftItemStack.asNMSCopy(i);
-        NBTTagCompound tag = itemStack.s();
+        CompoundTag tag = itemStack.getTag();
         if (tag == null) return "";
-        return tag.l("BedWars1058");
+        return tag.getString("BedWars1058");
     }
 
     @Override
@@ -551,19 +530,19 @@ public class v1_18_R1 extends VersionSupport {
     @Override
     public String getShopUpgradeIdentifier(org.bukkit.inventory.ItemStack itemStack) {
         ItemStack i = CraftItemStack.asNMSCopy(itemStack);
-        NBTTagCompound tag = i.s();
-        return tag == null ? "null" : tag.e("tierIdentifier") ? tag.l("tierIdentifier") : "null";
+        CompoundTag tag = i.getTag();
+        return tag == null ? "null" : tag.contains("tierIdentifier") ? tag.getString("tierIdentifier") : "null";
     }
 
     @Override
     public org.bukkit.inventory.ItemStack setShopUpgradeIdentifier(org.bukkit.inventory.ItemStack itemStack, String identifier) {
         ItemStack i = CraftItemStack.asNMSCopy(itemStack);
-        NBTTagCompound tag = i.s();
+        CompoundTag tag = i.getTag();
         if (tag == null) {
-            tag = new NBTTagCompound();
-            i.c(tag);
+            tag = new CompoundTag();
+            i.setTag(tag);
         }
-        tag.a("tierIdentifier", identifier);
+        tag.putString("tierIdentifier", identifier);
         return CraftItemStack.asBukkitCopy(i);
     }
 
@@ -573,7 +552,7 @@ public class v1_18_R1 extends VersionSupport {
         org.bukkit.inventory.ItemStack head = new org.bukkit.inventory.ItemStack(materialPlayerHead());
         if (copyTagFrom != null) {
             ItemStack i = CraftItemStack.asNMSCopy(head);
-            i.c(CraftItemStack.asNMSCopy(copyTagFrom).s());
+            i.setTag(CraftItemStack.asNMSCopy(copyTagFrom).getTag());
             head = CraftItemStack.asBukkitCopy(i);
         }
 
@@ -593,18 +572,18 @@ public class v1_18_R1 extends VersionSupport {
         // if method was used when the player was still in re-spawning screen
         if (arena.getRespawnSessions().containsKey(respawned)) return;
 
-        EntityPlayer entityPlayer = ((CraftPlayer) respawned).getHandle();
-        PacketPlayOutNamedEntitySpawn show = new PacketPlayOutNamedEntitySpawn(entityPlayer);
-        PacketPlayOutEntityVelocity playerVelocity = new PacketPlayOutEntityVelocity(entityPlayer);
-        PacketPlayOutEntityHeadRotation head = new PacketPlayOutEntityHeadRotation(entityPlayer, getCompressedAngle(entityPlayer.getBukkitYaw()));
+        ServerPlayer entityPlayer = ((CraftPlayer) respawned).getHandle();
+        ClientboundAddEntityPacket show = new ClientboundAddEntityPacket(entityPlayer);
+        ClientboundSetEntityMotionPacket playerVelocity = new ClientboundSetEntityMotionPacket(entityPlayer);
+        ClientboundRotateHeadPacket head = new ClientboundRotateHeadPacket(entityPlayer, getCompressedAngle(entityPlayer.getBukkitYaw()));
 
-        List<Pair<EnumItemSlot, ItemStack>> list = new ArrayList<>();
-        list.add(new Pair<>(EnumItemSlot.a, entityPlayer.b(EnumItemSlot.a)));
-        list.add(new Pair<>(EnumItemSlot.b, entityPlayer.b(EnumItemSlot.b)));
-        list.add(new Pair<>(EnumItemSlot.f, entityPlayer.b(EnumItemSlot.f)));
-        list.add(new Pair<>(EnumItemSlot.e, entityPlayer.b(EnumItemSlot.e)));
-        list.add(new Pair<>(EnumItemSlot.d, entityPlayer.b(EnumItemSlot.d)));
-        list.add(new Pair<>(EnumItemSlot.c, entityPlayer.b(EnumItemSlot.c)));
+        List<Pair<EquipmentSlot, ItemStack>> list = new ArrayList<>();
+        list.add(new Pair<>(EquipmentSlot.MAINHAND, entityPlayer.getItemBySlot(EquipmentSlot.MAINHAND)));
+        list.add(new Pair<>(EquipmentSlot.OFFHAND, entityPlayer.getItemBySlot(EquipmentSlot.OFFHAND)));
+        list.add(new Pair<>(EquipmentSlot.HEAD, entityPlayer.getItemBySlot(EquipmentSlot.HEAD)));
+        list.add(new Pair<>(EquipmentSlot.CHEST, entityPlayer.getItemBySlot(EquipmentSlot.CHEST)));
+        list.add(new Pair<>(EquipmentSlot.LEGS, entityPlayer.getItemBySlot(EquipmentSlot.LEGS)));
+        list.add(new Pair<>(EquipmentSlot.FEET, entityPlayer.getItemBySlot(EquipmentSlot.FEET)));
 
 
         for (Player p : arena.getPlayers()) {
@@ -613,27 +592,27 @@ public class v1_18_R1 extends VersionSupport {
             // if p is in re-spawning screen continue
             if (arena.getRespawnSessions().containsKey(p)) continue;
 
-            EntityPlayer boundTo = ((CraftPlayer) p).getHandle();
+            ServerPlayer boundTo = ((CraftPlayer) p).getHandle();
             if (p.getWorld().equals(respawned.getWorld())) {
                 if (respawned.getLocation().distance(p.getLocation()) <= arena.getRenderDistance()) {
 
                     // send respawned player to regular players
-                    boundTo.b.a(show);
-                    boundTo.b.a(head);
-                    boundTo.b.a(playerVelocity);
-                    boundTo.b.a(new PacketPlayOutEntityEquipment(respawned.getEntityId(), list));
+                    boundTo.connection.send(show);
+                    boundTo.connection.send(head);
+                    boundTo.connection.send(playerVelocity);
+                    boundTo.connection.send(new ClientboundSetEquipmentPacket(respawned.getEntityId(), list));
 
                     // send nearby players to respawned player
                     // if the player has invisibility hide armor
                     if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
                         hideArmor(p, respawned);
                     } else {
-                        PacketPlayOutNamedEntitySpawn show2 = new PacketPlayOutNamedEntitySpawn(boundTo);
-                        PacketPlayOutEntityVelocity playerVelocity2 = new PacketPlayOutEntityVelocity(boundTo);
-                        PacketPlayOutEntityHeadRotation head2 = new PacketPlayOutEntityHeadRotation(boundTo, getCompressedAngle(boundTo.getBukkitYaw()));
-                        entityPlayer.b.a(show2);
-                        entityPlayer.b.a(playerVelocity2);
-                        entityPlayer.b.a(head2);
+                        ClientboundAddEntityPacket show2 = new ClientboundAddEntityPacket(boundTo);
+                        ClientboundSetEntityMotionPacket playerVelocity2 = new ClientboundSetEntityMotionPacket(boundTo);
+                        ClientboundRotateHeadPacket head2 = new ClientboundRotateHeadPacket(boundTo, getCompressedAngle(boundTo.getBukkitYaw()));
+                        entityPlayer.connection.send(show2);
+                        entityPlayer.connection.send(playerVelocity2);
+                        entityPlayer.connection.send(head2);
                         showArmor(p, respawned);
                     }
                 }
@@ -643,16 +622,16 @@ public class v1_18_R1 extends VersionSupport {
         for (Player spectator : arena.getSpectators()) {
             if (spectator == null) continue;
             if (spectator.equals(respawned)) continue;
-            EntityPlayer boundTo = ((CraftPlayer) spectator).getHandle();
+            ServerPlayer boundTo = ((CraftPlayer) spectator).getHandle();
             respawned.hidePlayer(getPlugin(), spectator);
             if (spectator.getWorld().equals(respawned.getWorld())) {
                 if (respawned.getLocation().distance(spectator.getLocation()) <= arena.getRenderDistance()) {
 
                     // send respawned player to spectator
-                    boundTo.b.a(show);
-                    boundTo.b.a(playerVelocity);
-                    boundTo.b.a(new PacketPlayOutEntityEquipment(respawned.getEntityId(), list));
-                    boundTo.b.a(new PacketPlayOutEntityHeadRotation(entityPlayer, getCompressedAngle(entityPlayer.getBukkitYaw())));
+                    boundTo.connection.send(show);
+                    boundTo.connection.send(playerVelocity);
+                    boundTo.connection.send(new ClientboundSetEquipmentPacket(respawned.getEntityId(), list));
+                    boundTo.connection.send(new ClientboundRotateHeadPacket(entityPlayer, getCompressedAngle(entityPlayer.getBukkitYaw())));
                 }
             }
         }
@@ -671,7 +650,7 @@ public class v1_18_R1 extends VersionSupport {
     @Override
     public String getMainLevel() {
         //noinspection deprecation
-        return ((DedicatedServer) MinecraftServer.getServer()).z.a().p;
+        return ((DedicatedServer) MinecraftServer.getServer()).settings.getProperties().levelName;
     }
 
     @Override
@@ -698,26 +677,26 @@ public class v1_18_R1 extends VersionSupport {
 
     @Override
     public Fireball setFireballDirection(Fireball fireball, Vector vector) {
-        EntityFireball fb = ((CraftFireball) fireball).getHandle();
-        fb.b = vector.getX() * 0.1D;
-        fb.c = vector.getY() * 0.1D;
-        fb.d = vector.getZ() * 0.1D;
+        net.minecraft.world.entity.projectile.Fireball fb = (net.minecraft.world.entity.projectile.Fireball) ((CraftFireball) fireball).getHandle();
+        fb.xPower = vector.getX() * 0.1D;
+        fb.yPower = vector.getY() * 0.1D;
+        fb.zPower = vector.getZ() * 0.1D;
         return (Fireball) fb.getBukkitEntity();
     }
 
     @Override
     public void playRedStoneDot(Player player) {
         Color color = Color.RED;
-        PacketPlayOutWorldParticles particlePacket = new PacketPlayOutWorldParticles(new ParticleParamRedstone(new Vector3fa((float) color.getRed(), (float) color.getGreen(), (float) color.getBlue()), (float) 1),
+        ClientboundLevelParticlesPacket particlePacket = new ClientboundLevelParticlesPacket(new DustParticleOptions(new Vector3f((float) color.getRed(), (float) color.getGreen(), (float) color.getBlue()), (float) 1),
                 true, player.getLocation().getX(), player.getLocation().getY() + 2.6, player.getLocation().getZ(), 0, 0, 0, 0, 0);
         for (Player inWorld : player.getWorld().getPlayers()) {
             if (inWorld.equals(player)) continue;
-            ((CraftPlayer) inWorld).getHandle().b.a(particlePacket);
+            ((CraftPlayer) inWorld).getHandle().connection.send(particlePacket);
         }
     }
 
     @Override
     public void clearArrowsFromPlayerBody(Player player) {
-        ((CraftLivingEntity)player).getHandle().ai().b(new DataWatcherObject<>(12, DataWatcherRegistry.b),-1);
+        ((CraftLivingEntity)player).getHandle().getEntityData().set(new EntityDataAccessor<>(12, EntityDataSerializers.INT),-1);
     }
 }

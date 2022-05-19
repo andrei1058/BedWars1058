@@ -24,81 +24,85 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.support.version.common.VersionCommon;
-import net.minecraft.server.level.WorldServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.EntityTypes;
-import net.minecraft.world.entity.ai.attributes.GenericAttributes;
-import net.minecraft.world.entity.ai.goal.PathfinderGoalFloat;
-import net.minecraft.world.entity.ai.goal.PathfinderGoalMeleeAttack;
-import net.minecraft.world.entity.ai.goal.PathfinderGoalRandomStroll;
-import net.minecraft.world.entity.ai.goal.target.PathfinderGoalHurtByTarget;
-import net.minecraft.world.entity.ai.goal.target.PathfinderGoalNearestAttackableTarget;
-import net.minecraft.world.entity.monster.EntitySilverfish;
-import net.minecraft.world.entity.player.EntityHuman;
-import net.minecraft.world.level.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.level.Level;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_18_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_18_R1.event.CraftEventFactory;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import net.minecraft.world.entity.player.Player;
+
+import java.util.Objects;
 
 @SuppressWarnings("ALL")
-public class Silverfish extends EntitySilverfish {
+public class Silverfish extends net.minecraft.world.entity.monster.Silverfish {
 
     private ITeam team;
 
-    private Silverfish(EntityTypes<? extends EntitySilverfish> entitytypes, World world, ITeam bedWarsTeam) {
+    private Silverfish(EntityType<? extends net.minecraft.world.entity.monster.Silverfish> entitytypes, Level world, ITeam bedWarsTeam) {
         super(entitytypes, world);
         this.team = bedWarsTeam;
     }
 
     @SuppressWarnings("unchecked")
-    public Silverfish(EntityTypes entityTypes, World world) {
+    public Silverfish(EntityType entityTypes, Level world) {
         super(entityTypes, world);
     }
 
     @Override
-    protected void u() {
-        this.bR.a(1, new PathfinderGoalFloat(this));
-        this.bR.a(2, new PathfinderGoalMeleeAttack(this, 1.9D, false));
-        this.bS.a(1, new PathfinderGoalHurtByTarget(this));
-        this.bR.a(3, new PathfinderGoalRandomStroll(this, 2D));
-        this.bS.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, 20, true, false, player -> {
-            return (!((EntityHuman) player).getBukkitEntity().isDead()) &&
-                    (!team.wasMember(((EntityHuman) player).getBukkitEntity().getUniqueId())) &&
-                    (!team.getArena().isReSpawning(((EntityHuman) player).getBukkitEntity().getUniqueId())) &&
-                    (!team.getArena().isSpectator(((EntityHuman) player).getBukkitEntity().getUniqueId()));
+    protected void registerGoals() {
+        this.goalSelector.addGoal(1, new FloatGoal(this));
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.9D, false));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.goalSelector.addGoal(3, new RandomStrollGoal(this, 2D));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, Player.class, 20, true, false, player -> {
+            return (!((Player) player).getBukkitEntity().isDead()) &&
+                    (!team.wasMember(((Player) player).getBukkitEntity().getUniqueId())) &&
+                    (!team.getArena().isReSpawning(((Player) player).getBukkitEntity().getUniqueId())) &&
+                    (!team.getArena().isSpectator(((Player) player).getBukkitEntity().getUniqueId()));
         }));
-        this.bS.a(3, new PathfinderGoalNearestAttackableTarget(this, IGolem.class, 20, true, false, golem -> {
-            return ((IGolem) golem).getTeam() != team;
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IGolem.class, 20, true, false, golem -> {
+            return ((IGolem) golem).getBwTeam() != team;
         }));
-        this.bS.a(4, new PathfinderGoalNearestAttackableTarget(this, Silverfish.class, 20, true, false, sf -> {
-            return ((Silverfish) sf).getTeam() != team;
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal(this, net.minecraft.world.entity.monster.Silverfish.class, 20, true, false, sf -> {
+            return ((Silverfish) sf).getBwTeam() != team;
         }));
     }
 
-    public ITeam getTeam() {
+    public ITeam getBwTeam() {
         return team;
     }
 
     public static LivingEntity spawn(Location loc, ITeam team, double speed, double health, int despawn, double damage) {
-        WorldServer mcWorld = ((CraftWorld) loc.getWorld()).getHandle();
-        Silverfish customEnt = new Silverfish(EntityTypes.aA, mcWorld, team);
-        customEnt.a(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
-        customEnt.a(GenericAttributes.a).a(health);
-        customEnt.a(GenericAttributes.d).a(speed);
-        customEnt.a(GenericAttributes.f).a(damage);
+        ServerLevel mcWorld = ((CraftWorld) loc.getWorld()).getHandle();
+        Silverfish customEnt = new Silverfish(EntityType.SILVERFISH, mcWorld, team);
+        customEnt.setPos(loc.getX(), loc.getY(), loc.getZ());
+        customEnt.setRot(loc.getYaw(), loc.getPitch());
+        Objects.requireNonNull(customEnt.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(health);
+        Objects.requireNonNull(customEnt.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(speed);
+        Objects.requireNonNull(customEnt.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(damage);
 
         if (!CraftEventFactory.doEntityAddEventCalling(mcWorld, customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM)) {
-            mcWorld.P.a(customEnt);
+            mcWorld.entityManager.addNewEntity(customEnt);
         }
-        ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
-        ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(true);
-        ((CraftLivingEntity) customEnt.getBukkitEntity()).setPersistent(true);
 
-        customEnt.getBukkitEntity().setCustomName(Language.getDefaultLanguage().m(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME)
+        mcWorld.addFreshEntity(customEnt,CreatureSpawnEvent.SpawnReason.CUSTOM);
+        ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
+        ((CraftLivingEntity) customEnt.getBukkitEntity()).setCustomNameVisible(true);
+        ((CraftLivingEntity) customEnt.getBukkitEntity()).setPersistent(true);
+        customEnt.getBukkitEntity().setCustomName(Language.getDefaultLanguage().m(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME)
                 .replace("{despawn}", String.valueOf(despawn)
                         .replace("{health}", StringUtils.repeat(Language.getDefaultLanguage().m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH) + " ", 10))
                         .replace("{TeamColor}", team.getColor().chat().toString())));
@@ -106,14 +110,10 @@ public class Silverfish extends EntitySilverfish {
     }
 
     @Override
-    public void a(DamageSource damagesource) {
-        super.a(damagesource);
+    public void die(DamageSource damagesource) {
+        super.die(damagesource);
         team = null;
         VersionCommon.api.getVersionSupport().getDespawnablesList().remove(this.getBukkitEntity().getUniqueId());
     }
 
-    @Override
-    public boolean d_() {
-        return super.d_();
-    }
 }
