@@ -77,7 +77,7 @@ public class SpectatorListeners implements Listener {
         if (!BedWars.getAPI().getArenaUtil().isSpectating(e.getPlayer())) return;
         if (e.getClickedBlock().getType().toString().contains("DOOR"))
         // Disable spectator interact
-        e.setCancelled(true);
+            e.setCancelled(true);
     }
 
     @EventHandler
@@ -153,6 +153,7 @@ public class SpectatorListeners implements Listener {
     public void onPlayerLeave(PlayerLeaveArenaEvent e) {
         if (e.getArena().isPlayer(e.getPlayer())) {
             TeleporterGUI.refreshAllGUIs();
+            e.getPlayer().getInventory().clear();
         }
     }
 
