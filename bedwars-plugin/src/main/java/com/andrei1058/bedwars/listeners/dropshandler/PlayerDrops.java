@@ -25,6 +25,7 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -158,7 +159,8 @@ public class PlayerDrops {
             if (i == null) continue;
             if (i.getType() == Material.AIR) continue;
             if (i.getType() == Material.DIAMOND || i.getType() == Material.EMERALD || i.getType() == Material.IRON_INGOT || i.getType() == Material.GOLD_INGOT) {
-                player.getLocation().getWorld().dropItemNaturally(player.getLocation(), i);
+                if (player.getLocation().getWorld().equals(Arena.getArenaByPlayer(player).getWorld()))
+                    player.getLocation().getWorld().dropItemNaturally(player.getLocation(), i);
             }
         }
     }
