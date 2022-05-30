@@ -66,7 +66,7 @@ public class PAPISupport extends PlaceholderExpansion {
     }
 
     @Override
-    public String onPlaceholderRequest(Player player, String s) {
+    public String onPlaceholderRequest(Player player, @NotNull String s) {
         if (s == null) return null;
 
         if (s.startsWith("arena_status_")) {

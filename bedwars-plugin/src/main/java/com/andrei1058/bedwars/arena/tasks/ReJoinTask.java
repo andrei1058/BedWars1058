@@ -52,13 +52,10 @@ public class ReJoinTask implements Runnable {
     public void run() {
         if (arena == null) {
             destroy();
-            return;
         }else if (bedWarsTeam == null) {
             destroy();
-            return;
         }else if (bedWarsTeam.getMembers() == null){
             destroy();
-            return;
         }else if (bedWarsTeam.getMembers().isEmpty()) {
             bedWarsTeam.setBedDestroyed(true);
             destroy();
