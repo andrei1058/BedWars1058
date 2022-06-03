@@ -147,6 +147,26 @@ public class BedWars extends JavaPlugin {
 
         plugin = this;
 
+        //Java 11 Requirement
+        String Version = System.getProperty("java.version");
+        if (Version.contains("1.8")) {
+            Bukkit.getLogger().info("Your Java Version is " + Version + " This plugin requires Java 11 or higher");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
+
+        double version = Double.parseDouble(Version.substring(0, 2));
+
+        if (version < 11) {
+            Bukkit.getLogger().info("Your Java Version is " + Version + " This plugin requires Java 11 or higher");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        } else if (version >= 11  && version < 17) {
+            Bukkit.getLogger().info("Your Java Version is " + Version + " This plugin is compatible with your version but we suggest you update to Java 17 or higher");
+        }else if (version >= 17) {
+            Bukkit.getLogger().info("Your Java Version is " + Version + " This plugin is compatible with your version");
+        }
+
         /* Load version support */
         //noinspection rawtypes
         Class supp;
