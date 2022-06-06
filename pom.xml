@@ -102,16 +102,8 @@
         <module>bedwars-api</module>
         <module>resetadapter_slime</module>
         <module>versionsupport_1_8_R3</module>
-        <module>versionsupport_1_9_R2</module>
-        <module>versionsupport_1_10_R1</module>
-        <module>versionsupport_1_11_R1</module>
         <module>versionsupport_1_12_R1</module>
-        <module>versionsupport_1_13_R2</module>
-        <module>versionsupport_1_14_R1</module>
         <module>versionsupport_common</module>
-        <module>versionsupport_1_15_R1</module>
-        <module>versionsupport_1_16_R1</module>
-        <module>versionsupport_1_16_R2</module>
         <module>versionsupport_v1_16_R3</module>
         <module>versionsupport_v1_17_R1</module>
         <module>versionsupport_v1_18_R1</module>
