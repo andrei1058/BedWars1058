@@ -21,7 +21,6 @@
 package com.andrei1058.bedwars.upgrades.upgradeaction;
 
 import com.andrei1058.bedwars.api.arena.team.ITeam;
-import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.upgrades.UpgradeAction;
 import com.andrei1058.bedwars.language.LanguageManager;

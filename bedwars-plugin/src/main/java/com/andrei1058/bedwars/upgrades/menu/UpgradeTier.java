@@ -21,7 +21,6 @@
 package com.andrei1058.bedwars.upgrades.menu;
 
 import com.andrei1058.bedwars.BedWars;
-import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.upgrades.UpgradeAction;
 import com.andrei1058.bedwars.upgrades.UpgradesManager;

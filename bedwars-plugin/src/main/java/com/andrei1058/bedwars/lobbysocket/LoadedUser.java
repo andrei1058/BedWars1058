@@ -22,7 +22,7 @@ package com.andrei1058.bedwars.lobbysocket;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
-import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageOld;
 import com.andrei1058.bedwars.language.LanguageManager;
 import org.bukkit.Bukkit;
 
@@ -37,7 +37,7 @@ public class LoadedUser {
     private String partyOwnerOrSpectateTarget = null;
     private long toleranceTime;
     private String arenaIdentifier;
-    private Language language = null;
+    private LanguageOld language = null;
 
     private static final ConcurrentHashMap<UUID, LoadedUser> loaded = new ConcurrentHashMap<>();
 
@@ -51,7 +51,7 @@ public class LoadedUser {
             }
         }
         this.toleranceTime = System.currentTimeMillis() + waitSeconds;
-        Language l = LanguageManager.getInstance().getLang(langIso);
+        LanguageOld l = LanguageManager.getInstance().getLang(langIso);
         if (l != null) language = l;
 
         loaded.put(this.uuid, this);
@@ -78,7 +78,7 @@ public class LoadedUser {
         loaded.remove(uuid);
     }
 
-    public Language getLanguage() {
+    public LanguageOld getLanguage() {
         return language;
     }
 

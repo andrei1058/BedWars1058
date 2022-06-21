@@ -23,7 +23,7 @@ package com.andrei1058.bedwars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
-import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageOld;
 import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.levels.Level;
 import com.andrei1058.bedwars.api.party.Party;
@@ -489,9 +489,9 @@ public class BedWars extends JavaPlugin {
 
         //todo move this to LanguageManager#onEnable
         //Leave this code at the end of the enable method
-        for (Language l : LanguageManager.getInstance().getRegisteredLanguages()) {
+        for (LanguageOld l : LanguageManager.getInstance().getRegisteredLanguages()) {
             l.setupUnSetCategories();
-            Language.addDefaultMessagesCommandItems(l);
+            LanguageOld.addDefaultMessagesCommandItems(l);
         }
 
         LevelsConfig.init();

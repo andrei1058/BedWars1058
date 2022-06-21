@@ -25,7 +25,7 @@ import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
-import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageOld;
 import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
@@ -63,7 +63,7 @@ public class ChatFormatting implements Listener {
             e.setMessage(ChatColor.translateAlternateColorCodes('&', e.getMessage()));
         }
 
-        Language language = getLangService().getPlayerLanguage(p);
+        LanguageOld language = getLangService().getPlayerLanguage(p);
 
         // handle lobby world for multi arena
         if (getServerType() == ServerType.MULTIARENA && p.getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
@@ -147,12 +147,12 @@ public class ChatFormatting implements Listener {
         return SupportPAPI.getSupportPAPI().replace(player, content).replace("{message}", "%2$s");
     }
 
-    private static boolean isShouting(String msg, Language lang) {
+    private static boolean isShouting(String msg, LanguageOld lang) {
         return msg.startsWith("!") || msg.startsWith("shout") ||
                 msg.startsWith("SHOUT") || msg.startsWith(lang.m(Messages.MEANING_SHOUT));
     }
 
-    private static String clearShout(String msg, Language lang) {
+    private static String clearShout(String msg, LanguageOld lang) {
         if (msg.startsWith("!")) msg = msg.replaceFirst("!", "");
         if (msg.startsWith("SHOUT")) msg = msg.replaceFirst("SHOUT", "");
         if (msg.startsWith("shout")) msg = msg.replaceFirst("shout", "");

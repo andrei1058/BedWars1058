@@ -42,7 +42,7 @@ import com.andrei1058.bedwars.api.events.player.PlayerReJoinEvent;
 import com.andrei1058.bedwars.api.events.server.ArenaDisableEvent;
 import com.andrei1058.bedwars.api.events.server.ArenaEnableEvent;
 import com.andrei1058.bedwars.api.events.server.ArenaRestartEvent;
-import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageOld;
 import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.region.Region;
@@ -94,7 +94,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 import static com.andrei1058.bedwars.BedWars.*;
-import static com.andrei1058.bedwars.api.language.Language.*;
 import static com.andrei1058.bedwars.arena.upgrades.BaseListener.isOnABase;
 
 @SuppressWarnings("WeakerAccess")
@@ -857,7 +856,7 @@ public class Arena implements IArena {
                     LanguageService languageService = LanguageManager.getInstance();
                     PlayerKillEvent event = new PlayerKillEvent(this, p, lastDamager, player -> getLangService().getMsg(player, message), cause);
                     for (Player inGame : getPlayers()) {
-                        Language lang = languageService.getPlayerLanguage(inGame);
+                        LanguageOld lang = languageService.getPlayerLanguage(inGame);
                         inGame.sendMessage(event.getMessage().apply(inGame)
                                 .replace("{PlayerTeamName}", team.getDisplayName(lang))
                                 .replace("{PlayerColor}", team.getColor().chat().toString()).replace("{PlayerName}", p.getDisplayName())
@@ -866,7 +865,7 @@ public class Arena implements IArena {
                                 .replace("{KillerTeamName}", killerTeam.getDisplayName(lang)));
                     }
                     for (Player inGame : getSpectators()) {
-                        Language lang = languageService.getPlayerLanguage(inGame);
+                        LanguageOld lang = languageService.getPlayerLanguage(inGame);
                         inGame.sendMessage(event.getMessage().apply(inGame)
                                 .replace("{PlayerTeamName}", team.getDisplayName(lang))
                                 .replace("{PlayerColor}", team.getColor().chat().toString()).replace("{PlayerName}", p.getDisplayName())
@@ -1274,7 +1273,7 @@ public class Arena implements IArena {
      * Get the display status for an arena.
      * A message that can be used on signs etc.
      */
-    public String getDisplayStatus(Language lang) {
+    public String getDisplayStatus(LanguageOld lang) {
         String s = "";
         switch (status) {
             case waiting:
@@ -1300,7 +1299,7 @@ public class Arena implements IArena {
     }
 
     @Override
-    public String getDisplayGroup(@NotNull Language language) {
+    public String getDisplayGroup(@NotNull LanguageOld language) {
         return language.m(Messages.ARENA_DISPLAY_GROUP_PATH + getGroup().toLowerCase());
     }
 
@@ -1450,7 +1449,7 @@ public class Arena implements IArena {
         // if countdown cancelled
         if (this.status == GameState.starting && status == GameState.waiting) {
             for (Player player : getPlayers()) {
-                Language playerLang = LanguageManager.getInstance().getPlayerLanguage(player);
+                LanguageOld playerLang = LanguageManager.getInstance().getPlayerLanguage(player);
                 nms.sendTitle(player, playerLang.m(Messages.ARENA_STATUS_START_COUNTDOWN_CANCELLED_TITLE), playerLang.m(Messages.ARENA_STATUS_START_COUNTDOWN_CANCELLED_SUB_TITLE), 0, 40, 0);
             }
         }

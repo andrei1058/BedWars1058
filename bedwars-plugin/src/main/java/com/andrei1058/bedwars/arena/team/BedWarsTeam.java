@@ -29,7 +29,7 @@ import com.andrei1058.bedwars.api.arena.team.TeamEnchant;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerFirstSpawnEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerReSpawnEvent;
-import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageOld;
 import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.region.Cuboid;
@@ -701,7 +701,7 @@ public class BedWarsTeam implements ITeam {
     }
 
     @Override
-    public String getDisplayName(Language language) {
+    public String getDisplayName(LanguageOld language) {
         String m = language.m(ConfigPath.TEAM_NAME_PATH.replace("{arena}", getArena().getArenaName()).replace("{team}", getName()));
         return m == null ? getName() : m;
     }

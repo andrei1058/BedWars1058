@@ -28,7 +28,7 @@ import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.gameplay.GeneratorUpgradeEvent;
-import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageOld;
 import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.region.Cuboid;
@@ -266,7 +266,7 @@ public class OreGenerator implements IGenerator {
 
         public HoloGram(String iso) {
             this.iso = iso;
-            Language lang = LanguageManager.getInstance().getLangOrDefault(iso);
+            LanguageOld lang = LanguageManager.getInstance().getLangOrDefault(iso);
             this.tier = createArmorStand(
                     lang.m(Messages.GENERATOR_HOLOGRAM_TIER).replace("{tier}",
                             lang.m(Messages.FORMATTING_GENERATOR_TIER1)), location.clone().add(0, 3, 0)
@@ -421,7 +421,7 @@ public class OreGenerator implements IGenerator {
         //loadDefaults(false);
         //if (getType() == GeneratorType.EMERALD || getType() == GeneratorType.DIAMOND) {
         rotation.add(this);
-        for (Language lan : getLangService().getRegisteredLanguages()) {
+        for (LanguageOld lan : getLangService().getRegisteredLanguages()) {
             IGenHolo h = armorStands.get(lan.getIso());
             if (h == null) {
                 armorStands.put(lan.getIso(), new HoloGram(lan.getIso()));

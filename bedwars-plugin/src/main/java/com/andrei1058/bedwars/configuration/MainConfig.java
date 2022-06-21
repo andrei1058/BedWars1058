@@ -23,7 +23,7 @@ package com.andrei1058.bedwars.configuration;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
-import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageOld;
 import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Misc;
@@ -324,13 +324,13 @@ public class MainConfig extends ConfigManager {
                         }
                         // if default language is not loaded
                         if (LanguageManager.getInstance().getLang(lang) == null){
-                            LanguageManager.getInstance().register(new Language(BedWars.plugin, lang));
+                            LanguageManager.getInstance().register(new LanguageOld(BedWars.plugin, lang));
                         }
                     }
                 }
             }
         }
-        Language def = LanguageManager.getInstance().getLang(whatLang);
+        LanguageOld def = LanguageManager.getInstance().getLang(whatLang);
 
         if (def == null) throw new IllegalStateException("Could not found default language: " + whatLang);
         getLangService().setDefaultLanguage(def);
@@ -338,7 +338,7 @@ public class MainConfig extends ConfigManager {
         //remove languages if disabled
         //server language can t be disabled
         for (String iso : yml.getStringList(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES)) {
-            Language l = LanguageManager.getInstance().getLang(iso);
+            LanguageOld l = LanguageManager.getInstance().getLang(iso);
             if (l != null) {
                 if (l != def) getLangService().unregister(l);
             }

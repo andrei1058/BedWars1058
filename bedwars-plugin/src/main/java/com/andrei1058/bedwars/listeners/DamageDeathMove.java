@@ -30,7 +30,7 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.entity.Despawnable;
 import com.andrei1058.bedwars.api.events.player.PlayerInvisibilityPotionEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
-import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageOld;
 import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
@@ -140,7 +140,7 @@ public class DamageDeathMove implements Listener {
 
         // projectile hit message #696, #711
         ITeam team = a.getTeam(p);
-        Language lang = LanguageManager.getInstance().getPlayerLanguage(damager);
+        LanguageOld lang = LanguageManager.getInstance().getPlayerLanguage(damager);
         if (lang.m(Messages.PLAYER_HIT_BOW).isEmpty()) return;
         String message = lang.m(Messages.PLAYER_HIT_BOW)
                 .replace("{amount}", new DecimalFormat("00.#").format(((Player) e.getEntity()).getHealth() - e.getFinalDamage()))
@@ -445,7 +445,7 @@ public class DamageDeathMove implements Listener {
                 Sounds.playSound(ConfigPath.SOUNDS_KILL, killer);
             }
             for (Player on : a.getPlayers()) {
-                Language lang = langService.getPlayerLanguage(on);
+                LanguageOld lang = langService.getPlayerLanguage(on);
                 on.sendMessage(playerKillEvent.getMessage().apply(on).
                         replace("{PlayerColor}", victimsTeam.getColor().chat().toString()).replace("{PlayerName}", victim.getDisplayName())
                         .replace("{PlayerTeamName}", victimsTeam.getDisplayName(lang))
@@ -454,7 +454,7 @@ public class DamageDeathMove implements Listener {
                         .replace("{KillerTeamName}", killersTeam == null ? "" : killersTeam.getDisplayName(lang)));
             }
             for (Player on : a.getSpectators()) {
-                Language lang = langService.getPlayerLanguage(on);
+                LanguageOld lang = langService.getPlayerLanguage(on);
                 on.sendMessage(playerKillEvent.getMessage().apply(on).
                         replace("{PlayerColor}", victimsTeam.getColor().chat().toString()).replace("{PlayerName}", victim.getDisplayName())
                         .replace("{KillerColor}", killersTeam == null ? "" : killersTeam.getColor().chat().toString())

@@ -22,7 +22,6 @@ package com.andrei1058.bedwars.upgrades;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
-import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.upgrades.MenuContent;

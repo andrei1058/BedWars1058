@@ -1,6 +1,6 @@
 /*
  * BedWars1058 - A bed wars mini-game.
- * Copyright (C) 2021 Andrei Dascălu
+ * Copyright (C) 2022 Andrei Dascălu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,11 +18,11 @@
  * Contact e-mail: andrew.dascalu@gmail.com
  */
 
-package com.andrei1058.bedwars.language;
+package com.andrei1058.bedwars.language.defaults;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
-import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageOld;
 import com.andrei1058.bedwars.api.language.Messages;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -32,7 +32,7 @@ import java.util.Collections;
 
 import static com.andrei1058.bedwars.BedWars.mainCmd;
 
-public class Russian extends Language{
+public class Russian extends LanguageOld {
 
     public Russian() {
         super(BedWars.plugin, "ru");

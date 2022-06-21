@@ -20,7 +20,6 @@
 
 package com.andrei1058.bedwars.shop.quickbuy;
 
-import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.language.LanguageManager;

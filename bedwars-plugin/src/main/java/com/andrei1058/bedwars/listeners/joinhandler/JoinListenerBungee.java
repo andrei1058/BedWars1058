@@ -23,7 +23,7 @@ package com.andrei1058.bedwars.listeners.joinhandler;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
-import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageOld;
 import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.Arena;
@@ -58,7 +58,7 @@ public class JoinListenerBungee implements Listener {
             }
         } else {
             // If is logging in trough BedWarsProxy
-            Language playerLang = proxyUser.getLanguage() == null ? getLangService().getDefaultLanguage() : proxyUser.getLanguage();
+            LanguageOld playerLang = proxyUser.getLanguage() == null ? getLangService().getDefaultLanguage() : proxyUser.getLanguage();
 
             // Check if there is an arena to rejoin
             ReJoin reJoin = ReJoin.getPlayer(p);
@@ -138,7 +138,7 @@ public class JoinListenerBungee implements Listener {
             }
         } else {
             // The player joined using BedWarsProxy
-            Language playerLang = proxyUser.getLanguage() == null ? getLangService().getDefaultLanguage() : proxyUser.getLanguage();
+            LanguageOld playerLang = proxyUser.getLanguage() == null ? getLangService().getDefaultLanguage() : proxyUser.getLanguage();
 
             // Check if has an arena to ReJoin
             ReJoin reJoin = ReJoin.getPlayer(p);

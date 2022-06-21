@@ -25,7 +25,7 @@ import com.andrei1058.bedwars.api.arena.shop.IContentTier;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.events.player.PlayerAfkEvent;
-import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageOld;
 import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.party.Party;
 import com.andrei1058.bedwars.api.server.ISetupSession;
@@ -370,7 +370,7 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
 
     @Deprecated
     @Override
-    public Language getDefaultLang() {
+    public LanguageOld getDefaultLang() {
         return LanguageManager.getInstance().getDefaultLanguage();
     }
 
@@ -396,13 +396,13 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
 
     @Override
     @Deprecated
-    public Language getLanguageByIso(String isoCode) {
+    public LanguageOld getLanguageByIso(String isoCode) {
         return LanguageManager.getInstance().getLang(isoCode);
     }
 
     @Override
     @Deprecated
-    public Language getPlayerLanguage(Player player) {
+    public LanguageOld getPlayerLanguage(Player player) {
         return LanguageManager.getInstance().getPlayerLanguage(player);
     }
 

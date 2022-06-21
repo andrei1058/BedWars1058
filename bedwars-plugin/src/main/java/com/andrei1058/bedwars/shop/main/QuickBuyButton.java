@@ -20,7 +20,6 @@
 
 package com.andrei1058.bedwars.shop.main;
 
-import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.language.LanguageManager;
 import org.bukkit.entity.Player;

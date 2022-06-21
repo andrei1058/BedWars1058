@@ -21,7 +21,6 @@
 package com.andrei1058.bedwars.database;
 
 import com.andrei1058.bedwars.BedWars;
-import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.language.LanguageManager;
 import com.andrei1058.bedwars.shop.quickbuy.QuickBuyElement;
 import com.andrei1058.bedwars.stats.PlayerStats;

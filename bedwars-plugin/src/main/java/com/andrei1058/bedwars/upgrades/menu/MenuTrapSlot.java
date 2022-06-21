@@ -22,20 +22,17 @@ package com.andrei1058.bedwars.upgrades.menu;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
-import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.upgrades.EnemyBaseEnterTrap;
 import com.andrei1058.bedwars.api.upgrades.MenuContent;
 import com.andrei1058.bedwars.language.LanguageManager;
 import com.andrei1058.bedwars.upgrades.UpgradesManager;
-import org.apache.commons.codec.language.bm.Languages;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.material.Bed;
 
 import java.util.ArrayList;
 import java.util.Collections;

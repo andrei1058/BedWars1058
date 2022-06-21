@@ -24,7 +24,7 @@ import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.ITeamAssigner;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
-import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageOld;
 import com.andrei1058.bedwars.api.region.Region;
 import com.andrei1058.bedwars.api.tasks.PlayingTask;
 import com.andrei1058.bedwars.api.tasks.RestartingTask;
@@ -219,7 +219,7 @@ public interface IArena {
      * Get the display status for an arena.
      * A message that can be used on signs etc.
      */
-    String getDisplayStatus(Language lang);
+    String getDisplayStatus(LanguageOld lang);
 
     /**
      * Get arena display group for given player.
@@ -234,7 +234,7 @@ public interface IArena {
      * @return translated group.
      */
     @SuppressWarnings("unused")
-    String getDisplayGroup(Language language);
+    String getDisplayGroup(LanguageOld language);
 
     List<ITeam> getTeams();
 

@@ -23,7 +23,7 @@ package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
-import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageOld;
 import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
@@ -32,6 +32,7 @@ import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.configuration.Permissions;
 import com.andrei1058.bedwars.language.LanguageManager;
 import net.md_5.bungee.api.chat.ClickEvent;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -45,8 +46,11 @@ public class Reload extends SubCommand {
         setPriority(11);
         showInList(true);
         setPermission(Permissions.PERMISSION_RELOAD);
-        setDisplayInfo(Misc.msgHoverClick("§6 ▪ §7/" + getParent().getName() + " "+getSubCommandName()+"       §8 - §ereload messages",
-                "§fRealod messages.\n§cNot recommended!", "/"+ getParent().getName() + " "+getSubCommandName(), ClickEvent.Action.RUN_COMMAND));
+
+        String desc = ChatColor.GOLD + " ▪ " + ChatColor.GRAY + '/' + getParent().getName() + " " + getSubCommandName() +
+                "       " + ChatColor.GRAY + " - " + ChatColor.YELLOW + "reload messages";
+        String hover = ChatColor.WHITE+"Reload messages.\n"+ChatColor.RED+"Not recommended!";
+        setDisplayInfo(Misc.msgHoverClick(desc, hover, "/" + getParent().getName() + " " + getSubCommandName(), ClickEvent.Action.RUN_COMMAND));
     }
 
     @Override
@@ -54,9 +58,9 @@ public class Reload extends SubCommand {
         if (s instanceof ConsoleCommandSender) return false;
         Player p = (Player) s;
         if (!MainCommand.isLobbySet(p)) return true;
-        for (Language l : getLangService().getRegisteredLanguages()){
+        for (LanguageOld l : getLangService().getRegisteredLanguages()) {
             l.reload();
-            p.sendMessage("§6 ▪ §7"+l.getLangName()+" reloaded!");
+            p.sendMessage(ChatColor.GOLD + " ▪ " + ChatColor.GRAY + l.getDisplayName() + " reloaded!");
         }
         return true;
     }
@@ -68,12 +72,16 @@ public class Reload extends SubCommand {
 
     @Override
     public boolean canSee(CommandSender s, BedWars api) {
-        if (s instanceof ConsoleCommandSender) return false;
+        if (s instanceof ConsoleCommandSender) {
+            return false;
+        }
 
         Player p = (Player) s;
         if (Arena.isInArena(p)) return false;
 
-        if (SetupSession.isInSetupSession(p.getUniqueId())) return false;
+        if (SetupSession.isInSetupSession(p.getUniqueId())) {
+            return false;
+        }
         return hasPermission(s);
     }
 

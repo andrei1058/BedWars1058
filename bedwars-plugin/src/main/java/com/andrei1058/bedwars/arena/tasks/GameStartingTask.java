@@ -28,7 +28,7 @@ import com.andrei1058.bedwars.api.arena.generator.GeneratorType;
 import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
-import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageOld;
 import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.tasks.StartingTask;
@@ -156,8 +156,8 @@ public class GameStartingTask implements Runnable, StartingTask {
             }
             LanguageService languageService = LanguageManager.getInstance();
             for (Player player : getArena().getPlayers()) {
-                Language playerLang = languageService.getPlayerLanguage(player);
-                String[] titleSubtitle = Language.getCountDownTitle(playerLang, getCountdown());
+                LanguageOld playerLang = languageService.getPlayerLanguage(player);
+                String[] titleSubtitle = LanguageOld.getCountDownTitle(playerLang, getCountdown());
                 nms.sendTitle(player, titleSubtitle[0], titleSubtitle[1], 0, 20, 10);
                 player.sendMessage(getLangService().getMsg(player, Messages.ARENA_STATUS_START_COUNTDOWN_CHAT).replace("{time}", String.valueOf(getCountdown())));
             }

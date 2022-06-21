@@ -27,7 +27,7 @@ import com.andrei1058.bedwars.api.arena.shop.ICategoryContent;
 import com.andrei1058.bedwars.api.arena.shop.IContentTier;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.shop.ShopBuyEvent;
-import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageOld;
 import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.Arena;
@@ -114,13 +114,13 @@ public class CategoryContent implements ICategoryContent {
         }
 
         itemNamePath = Messages.SHOP_CONTENT_TIER_ITEM_NAME.replace("%category%", categoryName).replace("%content%", contentName);
-        for (Language lang : getLangService().getRegisteredLanguages()) {
+        for (LanguageOld lang : getLangService().getRegisteredLanguages()) {
             if (!lang.exists(itemNamePath)) {
                 lang.set(itemNamePath, "&cName not set");
             }
         }
         itemLorePath = Messages.SHOP_CONTENT_TIER_ITEM_LORE.replace("%category%", categoryName).replace("%content%", contentName);
-        for (Language lang : getLangService().getRegisteredLanguages()) {
+        for (LanguageOld lang : getLangService().getRegisteredLanguages()) {
             if (!lang.exists(itemLorePath)) {
                 lang.set(itemLorePath, "&cLore not set");
             }

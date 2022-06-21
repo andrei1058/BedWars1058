@@ -22,7 +22,7 @@ package com.andrei1058.bedwars.api.arena.team;
 
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.generator.IGenerator;
-import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageOld;
 import com.andrei1058.bedwars.api.upgrades.EnemyBaseEnterTrap;
 import org.bukkit.Location;
 import org.bukkit.enchantments.Enchantment;
@@ -53,7 +53,7 @@ public interface ITeam {
      *
      * @param language get the display name in target language.
      */
-    String getDisplayName(Language language);
+    String getDisplayName(LanguageOld language);
 
     /**
      * Check if is member.

@@ -23,9 +23,10 @@ package com.andrei1058.bedwars.language;
 import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerLangChangeEvent;
-import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageOld;
 import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.language.defaults.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -56,14 +57,14 @@ public class LanguageManager implements LanguageService {
 
     ///
 
-    private final List<Language> registeredLanguages = new ArrayList<>();
-    private final HashMap<UUID, Language> langByPlayer = new HashMap<>();
-    private Language defaultLanguage;
+    private final List<LanguageOld> registeredLanguages = new ArrayList<>();
+    private final HashMap<UUID, LanguageOld> langByPlayer = new HashMap<>();
+    private LanguageOld defaultLanguage;
 
 
     private LanguageManager() {
         // initialize available languages
-        for (Language lang : new Language[]{
+        for (LanguageOld lang : new LanguageOld[]{
                 new English(), new Romanian(), new Italian(), new Polish(), new Spanish(), new Russian(),
                 new Bangla(), new Persian(), new Hindi(), new Portuguese(), new Turkish(), new Indonesia()
         }) {
@@ -74,12 +75,12 @@ public class LanguageManager implements LanguageService {
         }
     }
 
-    public Collection<Language> getRegisteredLanguages() {
+    public Collection<LanguageOld> getRegisteredLanguages() {
         return Collections.unmodifiableCollection(registeredLanguages);
     }
 
     public void saveIfNotExists(String path, Object data) {
-        for (Language l : registeredLanguages) {
+        for (LanguageOld l : registeredLanguages) {
             if (l.getYml().get(path) == null) {
                 l.set(path, data);
             }
@@ -87,7 +88,7 @@ public class LanguageManager implements LanguageService {
     }
 
     public boolean isLanguageExist(String iso) {
-        for (Language l : registeredLanguages) {
+        for (LanguageOld l : registeredLanguages) {
             if (l.getIso().equalsIgnoreCase(iso)) {
                 return true;
             }
@@ -95,8 +96,8 @@ public class LanguageManager implements LanguageService {
         return false;
     }
 
-    public Language getLang(String iso) {
-        for (Language l : registeredLanguages) {
+    public LanguageOld getLang(String iso) {
+        for (LanguageOld l : registeredLanguages) {
             if (l.getIso().equalsIgnoreCase(iso)) {
                 return l;
             }
@@ -104,8 +105,8 @@ public class LanguageManager implements LanguageService {
         return null;
     }
 
-    public Language getLangOrDefault(String iso) {
-        for (Language l : registeredLanguages) {
+    public LanguageOld getLangOrDefault(String iso) {
+        for (LanguageOld l : registeredLanguages) {
             if (l.getIso().equalsIgnoreCase(iso)) {
                 return l;
             }
@@ -130,9 +131,9 @@ public class LanguageManager implements LanguageService {
             return true;
         }
 
-        Language newLang = getLang(iso);
+        LanguageOld newLang = getLang(iso);
         if (newLang == null) return false;
-        Language oldLang = getPlayerLanguage(uuid);
+        LanguageOld oldLang = getPlayerLanguage(uuid);
         if (oldLang.getIso().equals(newLang.getIso())) return false;
 
         Player player = Bukkit.getPlayer(uuid);
@@ -173,7 +174,7 @@ public class LanguageManager implements LanguageService {
     }
 
     @Override
-    public boolean register(Language lang) {
+    public boolean register(LanguageOld lang) {
         if (isLanguageExist(lang.getIso())){
             return false;
         }
@@ -184,7 +185,7 @@ public class LanguageManager implements LanguageService {
     @Override
     public void setupCustomStatsMessages() {
         BedWars api = Bukkit.getServer().getServicesManager().getRegistration(BedWars.class).getProvider();
-        for (Language l : getRegisteredLanguages()) {
+        for (LanguageOld l : getRegisteredLanguages()) {
             if (l == null) continue;
             if (l.getYml() == null) continue;
             /* save messages for stats gui items if custom items added */
@@ -203,7 +204,7 @@ public class LanguageManager implements LanguageService {
 
     @Override
     public List<String> getScoreboard(Player p, String path, String alternative) {
-        Language language = getPlayerLanguage(p);
+        LanguageOld language = getPlayerLanguage(p);
         if (language.exists(path)) {
             return language.l(path);
         } else {
@@ -223,16 +224,16 @@ public class LanguageManager implements LanguageService {
     }
 
     @Override
-    public Language getPlayerLanguage(UUID p) {
+    public LanguageOld getPlayerLanguage(UUID p) {
         return langByPlayer.getOrDefault(p, getDefaultLanguage());
     }
 
-    public Language getDefaultLanguage() {
+    public LanguageOld getDefaultLanguage() {
         return defaultLanguage;
     }
 
     @Override
-    public Language getPlayerLanguage(@NotNull Player p) {
+    public LanguageOld getPlayerLanguage(@NotNull Player p) {
         return getPlayerLanguage(p.getUniqueId());
     }
 
@@ -250,7 +251,7 @@ public class LanguageManager implements LanguageService {
     }
 
     @Override
-    public void setDefaultLanguage(Language defaultLanguage) {
+    public void setDefaultLanguage(LanguageOld defaultLanguage) {
         if (!registeredLanguages.contains(defaultLanguage)) {
             throw new IllegalStateException("Given language is not in the languages list!");
         }
@@ -258,7 +259,7 @@ public class LanguageManager implements LanguageService {
     }
 
     @Override
-    public void unregister(Language language) {
+    public void unregister(LanguageOld language) {
         if (!registeredLanguages.contains(language)) {
             throw new IllegalStateException("Given language is not registered!");
         }

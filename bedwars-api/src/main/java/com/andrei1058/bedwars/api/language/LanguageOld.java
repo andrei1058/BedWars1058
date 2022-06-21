@@ -30,27 +30,31 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.*;
 
-public class Language extends ConfigManager {
+@Deprecated
+public class LanguageOld extends ConfigManager {
 
     private final String iso;
     private String prefix = "";
 
-    public Language(Plugin plugin, String iso) {
+    public LanguageOld(Plugin plugin, String iso) {
         super(plugin, "messages_" + iso, plugin.getDataFolder().getPath() + "/Languages");
         this.iso = iso;
     }
 
     /**
      * Set chat prefix.
+     * Comes up in every message containing {prefix}.
      */
     public void setPrefix(String prefix) {
         this.prefix = prefix;
     }
 
+
     /**
      * Get language display name.
+     * @return language display name.
      */
-    public String getLangName() {
+    public String getDisplayName() {
         return getYml().getString("name");
     }
 
@@ -63,6 +67,7 @@ public class Language extends ConfigManager {
 
     /**
      * Get a color translated message.
+     * @return color translated message.
      */
     public String m(String path) {
         String message = getYml().getString(path);
@@ -107,7 +112,7 @@ public class Language extends ConfigManager {
     /**
      * Create missing name/ lore for items: multi arena lobby, waiting, spectating
      */
-    public static void addDefaultMessagesCommandItems(Language language) {
+    public static void addDefaultMessagesCommandItems(LanguageOld language) {
         if (language == null) return;
         YamlConfiguration yml = language.getYml();
         if (yml == null) return;
@@ -203,7 +208,7 @@ public class Language extends ConfigManager {
         if (yml.getDefaults() == null || !yml.getDefaults().contains(path2)) yml.addDefault(path2, itemLore);
     }
 
-    public static String[] getCountDownTitle(Language playerLang, int second) {
+    public static String[] getCountDownTitle(LanguageOld playerLang, int second) {
         String[] result = new String[2];
         result[0] = ChatColor.translateAlternateColorCodes('&', playerLang.getYml().get(Messages.ARENA_STATUS_START_COUNTDOWN_TITLE + "-" + second, playerLang.getString(Messages.ARENA_STATUS_START_COUNTDOWN_TITLE)).toString().replace("{second}", String.valueOf(second)));
         if (result[0].isEmpty()) {

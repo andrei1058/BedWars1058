@@ -22,7 +22,6 @@ package com.andrei1058.bedwars.shop.main;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.events.shop.ShopOpenEvent;
-import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.language.LanguageManager;

@@ -23,7 +23,7 @@ package com.andrei1058.bedwars.commands.bedwars.subcmds.regular;
 import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
-import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageOld;
 import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.Arena;
@@ -56,19 +56,25 @@ public class CmdLang extends SubCommand {
         if (Arena.getArenaByPlayer(p) != null) return false;
         if (args.length == 0) {
             p.sendMessage(getLangService().getMsg(p, Messages.COMMAND_LANG_LIST_HEADER));
-            for (Language l : getLangService().getRegisteredLanguages()) {
-                p.sendMessage(getLangService().getMsg(p, Messages.COMMAND_LANG_LIST_FORMAT).replace("{iso}", l.getIso()).replace("{name}", l.getLangName()));
+            for (LanguageOld l : getLangService().getRegisteredLanguages()) {
+                p.sendMessage(getLangService().getMsg(p, Messages.COMMAND_LANG_LIST_FORMAT)
+                        .replace("{iso}", l.getIso()).replace("{name}", l.getDisplayName())
+                );
             }
             p.sendMessage(getLangService().getMsg(p, Messages.COMMAND_LANG_USAGE));
             return true;
         } else if (com.andrei1058.bedwars.BedWars.getAPI().getLanguageService().isLanguageExist(args[0])) {
             if (Arena.getArenaByPlayer(p) == null) {
                 if (getLangService().setPlayerLanguage(p.getUniqueId(), args[0])) {
-                    Bukkit.getScheduler().runTaskLater(plugin, () -> p.sendMessage(getLangService().getMsg(p, Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY)), 3L);
+                    Bukkit.getScheduler().runTaskLater(plugin, () -> p.sendMessage(
+                            getLangService().getMsg(p, Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY)), 3L
+                    );
                 } else {
                     p.sendMessage(getLangService().getMsg(p, Messages.COMMAND_LANG_LIST_HEADER));
-                    for (Language l : getLangService().getRegisteredLanguages()) {
-                        p.sendMessage(getLangService().getMsg(p, Messages.COMMAND_LANG_LIST_FORMAT).replace("{iso}", l.getIso()).replace("{name}", l.getLangName()));
+                    for (LanguageOld l : getLangService().getRegisteredLanguages()) {
+                        p.sendMessage(getLangService().getMsg(p, Messages.COMMAND_LANG_LIST_FORMAT)
+                                .replace("{iso}", l.getIso()).replace("{name}", l.getDisplayName())
+                        );
                     }
                     p.sendMessage(getLangService().getMsg(p, Messages.COMMAND_LANG_USAGE));
                     return true;
@@ -85,7 +91,7 @@ public class CmdLang extends SubCommand {
     @Override
     public List<String> getTabComplete() {
         List<String> tab = new ArrayList<>();
-        for (Language lang : getLangService().getRegisteredLanguages()) {
+        for (LanguageOld lang : getLangService().getRegisteredLanguages()) {
             tab.add(lang.getIso());
         }
         return tab;

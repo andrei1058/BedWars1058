@@ -29,7 +29,7 @@ import java.util.UUID;
 
 public interface LanguageService {
 
-    Collection<Language> getRegisteredLanguages();
+    Collection<LanguageOld> getRegisteredLanguages();
 
     /**
      * Save a new message in all registered languages if it does not exist.
@@ -51,7 +51,7 @@ public interface LanguageService {
      * @return null if not found.
      */
     @Nullable
-    Language getLang(String iso);
+    LanguageOld getLang(String iso);
 
     /**
      * Get language by iso code or server default.
@@ -59,7 +59,7 @@ public interface LanguageService {
      * @param iso - given code.
      * @return server default if not found.
      */
-    Language getLangOrDefault(String iso);
+    LanguageOld getLangOrDefault(String iso);
 
     /**
      * Change a player language and refresh
@@ -73,7 +73,7 @@ public interface LanguageService {
      *
      * @param lang - given language.
      */
-    boolean register(Language lang);
+    boolean register(LanguageOld lang);
 
     /**
      * Save messages for stats gui items if custom items added, for each language
@@ -94,14 +94,14 @@ public interface LanguageService {
      * @param p target.
      * @return player language.
      */
-    Language getPlayerLanguage(Player p);
+    LanguageOld getPlayerLanguage(Player p);
 
     /**
      * Retrieve what language is a player using.
      * @param p target.
      * @return player language.
      */
-    Language getPlayerLanguage(UUID p);
+    LanguageOld getPlayerLanguage(UUID p);
 
     /**
      * Get a string list in player's language.
@@ -123,18 +123,18 @@ public interface LanguageService {
      * Get server default language.
      * @return server default language.
      */
-    Language getDefaultLanguage();
+    LanguageOld getDefaultLanguage();
 
     /**
      * Set server default language.
      * It must be a registered language.
      * @param defaultLanguage new server default.
      */
-    void setDefaultLanguage(Language defaultLanguage);
+    void setDefaultLanguage(LanguageOld defaultLanguage);
 
     /**
      * Unregister language.
      * @param language language to be unregistered.
      */
-    void unregister(Language language);
+    void unregister(LanguageOld language);
 }

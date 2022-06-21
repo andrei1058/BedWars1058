@@ -24,7 +24,7 @@ import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.shop.IContentTier;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
-import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.LanguageOld;
 import com.andrei1058.bedwars.api.language.LanguageService;
 import com.andrei1058.bedwars.api.levels.Level;
 import com.andrei1058.bedwars.api.party.Party;
@@ -442,7 +442,7 @@ public interface BedWars {
     /**
      * Get server default language.
      */
-    Language getDefaultLang();
+    LanguageOld getDefaultLang();
 
     /**
      * Get lobby world name.
@@ -460,12 +460,12 @@ public interface BedWars {
      * Get language by iso code.
      */
     @SuppressWarnings("unused")
-    Language getLanguageByIso(String isoCode);
+    LanguageOld getLanguageByIso(String isoCode);
 
     /**
      * Get a player language.
      */
-    Language getPlayerLanguage(Player player);
+    LanguageOld getPlayerLanguage(Player player);
 
     /**
      * This is my standard location where to store addons configurations.
