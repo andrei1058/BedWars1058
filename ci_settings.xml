@@ -1,0 +1,30 @@
+<settings>
+    <servers>
+        <server>
+            <id>gitlab-maven</id>
+            <configuration>
+                <httpHeaders>
+                    <property>
+                        <name>Job-Token</name>
+                        <value>${env.CI_JOB_TOKEN}</value>
+                    </property>
+                </httpHeaders>
+            </configuration>
+        </server>
+        <server>
+            <id>ftp-repo</id>
+            <username>${env.MVN_REPO_USER}</username>
+            <password>${env.MVN_REPO_PASS}</password>
+        </server>
+    </servers>
+<!--    <mirrors>-->
+<!--        <mirror>-->
+<!--            <id>maven-default-http-blocker</id>-->
+<!--            <mirrorOf>dummy</mirrorOf>-->
+<!--            <name>Dummy mirror to override default blocking mirror that blocks http</name>-->
+<!--            <url>http://0.0.0.0/</url>-->
+<!--            <blocked>true</blocked>-->
+<!--        </mirror>-->
+<!--    </mirrors>-->
+
+</settings>
