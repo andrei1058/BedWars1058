@@ -207,6 +207,9 @@ public class ConfigPath {
     public static final String GENERAL_TNT_JUMP_DAMAGE_TEAMMATES = GENERAL_TNT_JUMP_PATH + ".damage-teammates";
     public static final String GENERAL_TNT_JUMP_DAMAGE_OTHERS = GENERAL_TNT_JUMP_PATH + ".damage-others";
 
+    public static final String GENERAL_EXPLOSION_PATH = "explosion-settings";
+    public static final String GENERAL_EXPLOSION_SIZE = GENERAL_EXPLOSION_PATH + ".explosion-size";
+
     private static final String GENERAL_FIREBALL_PATH = "fireball";
     public static final String GENERAL_FIREBALL_EXPLOSION_SIZE = GENERAL_FIREBALL_PATH + ".explosion-size";
     public static final String GENERAL_FIREBALL_SPEED_MULTIPLIER = GENERAL_FIREBALL_PATH + ".speed-multiplier";
