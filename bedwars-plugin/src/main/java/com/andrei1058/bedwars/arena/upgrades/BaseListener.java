@@ -114,22 +114,6 @@ public class BaseListener implements Listener {
     }
 
     @EventHandler
-    public void onUpgradeBuy(UpgradeBuyEvent e){
-        // when a new trap is bought check for enemies on the island #646
-        if (e.getTeamUpgrade() instanceof EnemyBaseEnterTrap){
-            for (Player player : e.getTeam().getArena().getPlayers()){
-                if (e.getTeam().isMember(player)) continue;
-                if (e.getTeam().getArena().isReSpawning(player)) continue;
-                if (player.getLocation().distance(e.getTeam().getBed()) <= e.getTeam().getArena().getIslandRadius()){
-                    e.getTeam().getActiveTraps().get(0).trigger(e.getTeam(), player);
-                    e.getTeam().getActiveTraps().remove(0);
-                    return;
-                }
-            }
-        }
-    }
-
-    @EventHandler
     public void onBaseEnter(PlayerBaseEnterEvent e) {
         if (e == null) return;
         ITeam team = e.getTeam();
