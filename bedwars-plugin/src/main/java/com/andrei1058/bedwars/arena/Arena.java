@@ -891,7 +891,7 @@ public class Arena implements IArena {
             }
             this.sendToMainLobby(p);
         } else if (getServerType() == ServerType.BUNGEE) {
-            Misc.moveToLobbyOrKick(p, this, true);
+            Misc.moveToLobbyOrKick(p, this, true, disconnect);
             return;
         } else {
             this.sendToMainLobby(p);
@@ -1052,7 +1052,7 @@ public class Arena implements IArena {
             pg.restore();
         }
         if (getServerType() == ServerType.BUNGEE) {
-            Misc.moveToLobbyOrKick(p, this, true);
+            Misc.moveToLobbyOrKick(p, this, true, disconnect);
             return;
         }
         playerLocation.remove(p);

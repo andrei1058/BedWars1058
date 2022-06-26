@@ -57,7 +57,7 @@ public class CmdLeave extends SubCommand {
         update(p.getUniqueId());
         IArena a = Arena.getArenaByPlayer(p);
 
-        Misc.moveToLobbyOrKick(p, a, a != null && a.isSpectator(p.getUniqueId()));
+        Misc.moveToLobbyOrKick(p, a, a != null && a.isSpectator(p.getUniqueId()), false);
         return true;
     }
 
