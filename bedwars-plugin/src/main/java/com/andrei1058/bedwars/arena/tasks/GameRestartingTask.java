@@ -91,7 +91,7 @@ public class GameRestartingTask implements Runnable, RestartingTask {
             for (Entity e : getArena().getWorld().getEntities()) {
                 if (e.getType() == EntityType.PLAYER) {
                     Player p = (Player) e;
-                    Misc.moveToLobbyOrKick(p, getArena(), true);
+                    Misc.moveToLobbyOrKick(p, getArena(), true, false);
                     if (getArena().isSpectator(p)) getArena().removeSpectator(p, false);
                     if (getArena().isPlayer(p)) getArena().removePlayer(p, false);
                 }

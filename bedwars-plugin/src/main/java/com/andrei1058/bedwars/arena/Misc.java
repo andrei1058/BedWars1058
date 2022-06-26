@@ -66,7 +66,7 @@ import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class Misc {
 
-    public static void moveToLobbyOrKick(Player p, @Nullable IArena arena, boolean notAbandon) {
+    public static void moveToLobbyOrKick(Player p, @Nullable IArena arena, boolean notAbandon, boolean disconnect) {
         if (getServerType() != ServerType.BUNGEE) {
             if (!p.getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
                 p.teleport(config.getConfigLoc("lobbyLoc"));
@@ -83,20 +83,22 @@ public class Misc {
                     }
                 }
             } else {
-                forceKick(p, arena, notAbandon);
+                forceKick(p, arena, notAbandon, disconnect);
             }
             return;
         }
-        forceKick(p, arena, notAbandon);
+        forceKick(p, arena, notAbandon, disconnect);
     }
 
 
     @SuppressWarnings("UnstableApiUsage")
-    private static void forceKick(Player p, @Nullable IArena arena, boolean notAbandon) {
-        ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF("Connect");
-        out.writeUTF(config.getYml().getString("lobbyServer"));
-        p.sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
+    private static void forceKick(Player p, @Nullable IArena arena, boolean notAbandon, boolean disconnect) {
+        if(!disconnect) {
+            ByteArrayDataOutput out = ByteStreams.newDataOutput();
+            out.writeUTF("Connect");
+            out.writeUTF(config.getYml().getString("lobbyServer"));
+            p.sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
+        }
         if (arena != null && !notAbandon && arena.getStatus() == GameState.playing) {
             if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_MARK_LEAVE_AS_ABANDON)) {
                 arena.abandonGame(p);
