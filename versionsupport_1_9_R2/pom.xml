@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>versionsupport_1_9_R2</artifactId>
-    <version>${parent.version}</version>
+    <version>${project.parent.version}</version>
 
     <dependencies>
         <dependency>
