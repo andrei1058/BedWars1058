@@ -139,52 +139,12 @@
         </dependency>
         <dependency>
             <groupId>com.andrei1058.bedwars</groupId>
-            <artifactId>versionsupport_1_9_R2</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.andrei1058.bedwars</groupId>
-            <artifactId>versionsupport_1_10_R1</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.andrei1058.bedwars</groupId>
-            <artifactId>versionsupport_1_11_R1</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.andrei1058.bedwars</groupId>
             <artifactId>resetadapter-slime</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.bedwars</groupId>
             <artifactId>versionsupport_1_12_R1</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.andrei1058.bedwars</groupId>
-            <artifactId>versionsupport_1_13_R2</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.andrei1058.bedwars</groupId>
-            <artifactId>versionsupport_1_14_R1</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.andrei1058.bedwars</groupId>
-            <artifactId>versionsupport_1_15_R1</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.andrei1058.bedwars</groupId>
-            <artifactId>versionsupport_1_16_R1</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.andrei1058.bedwars</groupId>
-            <artifactId>versionsupport_1_16_R2</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
