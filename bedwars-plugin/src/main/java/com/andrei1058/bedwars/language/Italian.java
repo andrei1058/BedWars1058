@@ -39,7 +39,7 @@ public class Italian extends Language {
         super(BedWars.plugin, "it");
         YamlConfiguration yml = getYml();
         yml.options().copyDefaults(true);
-        yml.options().header("Traduzione in italiano di Fabian03#4583");
+        yml.options().header("Traduzione in italiano di Fabian03#4583 aggiornata da Xx_yuri2005_xX");
         yml.addDefault(Messages.PREFIX, "");
         yml.addDefault("name", "Italiano");
 
@@ -130,7 +130,7 @@ public class Italian extends Language {
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-2", "&c❷");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-1", "&c❶");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_CANCELLED_TITLE, " ");
-        yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_CANCELLED_SUB_TITLE, "&cWaiting for more players..");
+        yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_CANCELLED_SUB_TITLE, "&cAttendendo più giocatori..");
         yml.addDefault(Messages.ARENA_STATUS_START_PLAYER_TUTORIAL, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
                 "&f                                   &lBedWars", "",
                 "&e&l    Proteggi il tuo letto e distruggi quello degli avversari.",
@@ -151,7 +151,7 @@ public class Italian extends Language {
         yml.addDefault(Messages.ARENA_LEAVE_PARTY_DISBANDED, "{prefix}§cIl proprietario del party è uscito e il party è stato sciolto!");
         yml.addDefault(Messages.ARENA_JOIN_DENIED_SELECTOR, "{prefix}&cCi dispiace, ma attualmente non puoi entrare in quest'arena. Usa Click-destro per guardare!");
         yml.addDefault(Messages.ARENA_SPECTATE_DENIED_SELECTOR, "{prefix}&cCi dispiace, ma attualmente non puoi guardare questa partita. Usa Click-sinistro per giocare!");
-        yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_PROXY, "&cSorry but you must join an arena using BedWarsProxy. \n&eIf you want to setup an arena make sure to give yourself the bw.setup permission so you can join the server directly!");
+        yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_PROXY, "&cMi spiace ma devi entrare in un'arena usando BedWarsProxy. \n&eSe vuoi impostare un'arena assicurati di darti il permesso bw.setup in modo da entrare direttamente nel server!");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIER, "&eLivello &c{tier}");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND, "&b&lDiamante");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD, "&a&lSmeraldo");
@@ -192,7 +192,7 @@ public class Italian extends Language {
         yml.addDefault(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH, "▮ ");
         yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_TEAM, "{TeamColor}[{TeamName}]");
         yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_SHOUT, "&6[SHOUT]");
-        yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_SPECTATOR, "&7[SPECTATOR]");
+        yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_SPECTATOR, "&7[SPETTATORE]");
         yml.addDefault(Messages.MEANING_SHOUT, "shout");
         yml.addDefault(Messages.MEANING_NOBODY, "Nessuno");
         yml.addDefault(Messages.MEANING_FULL, "Pieno");
@@ -353,7 +353,7 @@ public class Italian extends Language {
         yml.addDefault(SHOP_QUICK_BUY_NAME, "&bQuick Buy");
         yml.addDefault(SHOP_QUICK_BUY_LORE, new ArrayList<>());
         yml.addDefault(SHOP_QUICK_EMPTY_NAME, "&cSlot libero!");
-        yml.addDefault(Messages.SHOP_QUICK_EMPTY_LORE, Arrays.asList("&7Questo è uno slot Quick Buy!", "&bShifta + Click &7su un item nello", "&7shop per aggungerlo qui."));
+        yml.addDefault(Messages.SHOP_QUICK_EMPTY_LORE, Arrays.asList("&7Questo è uno slot Quick Buy!", "&bShift + Click &7su un item nello", "&7shop per aggungerlo qui."));
         yml.addDefault(Messages.SHOP_CAN_BUY_COLOR, "&a");
         yml.addDefault(Messages.SHOP_CANT_BUY_COLOR, "&c");
         yml.addDefault(Messages.SHOP_LORE_STATUS_CAN_BUY, "&eClick per comprare");
@@ -368,7 +368,7 @@ public class Italian extends Language {
         addContentMessages(yml, "glass", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Vetro Anti Esplosione", Arrays.asList("&7Costo: {cost} {currency}", "", "&7Immune alle esplosioni.", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "stone", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Pietra dell'End", Arrays.asList("&7Costo: {cost} {currency}", "", "&7Blocco solido per difendere il letto.", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "ladder", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Scala", Arrays.asList("&7Costo: {cost} {currency}", "", "&7Utile per salvare gatti bloccati", "&7sugli alberi.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "wood", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Wood", Arrays.asList("&7Costo: {cost} {currency}", "", "&7Blocco solido per difendere il letto.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "wood", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Legna", Arrays.asList("&7Costo: {cost} {currency}", "", "&7Blocco solido per difendere il letto.", "", "{quick_buy}", "{buy_status}"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_MELEE, "&8Spade", "&aSpade", Collections.singletonList("&eClicca per sfogliare!"));
         addContentMessages(yml, "stone-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "{color}Spada di pietra", Arrays.asList("&7Costo: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
@@ -420,13 +420,13 @@ public class Italian extends Language {
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY, "&cNon hai abbastanza {currency}");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_LOCKED, "&cBLOCCATO");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_UNLOCKED, "&aSBLOCCATO");
-        yml.addDefault("upgrades.Default.generators.tier1.name", "&eForgiatrice di ferro");
+        yml.addDefault("upgrades.Default.generators.tier1.name", "&eForgia di ferro");
         yml.addDefault("upgrades.Default.generators.tier1.lore", Arrays.asList("&7Aumenta la velocità di spawn di ferro", "&7e oro del 50%..", "", "&7Costo:&b {cost} {currency}", "", "{loreFooter}"));
-        yml.addDefault("upgrades.Default.generators.tier2.name", "&eForgiatrice d'oro");
+        yml.addDefault("upgrades.Default.generators.tier2.name", "&eForgia d'oro");
         yml.addDefault("upgrades.Default.generators.tier2.lore", Arrays.asList("&7Aumenta la velocità di spawn di ferro", "&7e oro del 100%..", "", "&7Costo:&b {cost} {currency}", "", "{loreFooter}"));
-        yml.addDefault("upgrades.Default.generators.tier3.name", "&eEmerald Forge");
+        yml.addDefault("upgrades.Default.generators.tier3.name", "&eForgia di smeraldo");
         yml.addDefault("upgrades.Default.generators.tier3.lore", Arrays.asList("&7Attiva lo spawn di smeraldi", "&7nel generatore del tuo team.", "", "&7Costo:&b {cost} {currency}", "", "{loreFooter}"));
-        yml.addDefault("upgrades.Default.maniacMiner.tier1.name", "&eManiac Miner");
+        yml.addDefault("upgrades.Default.maniacMiner.tier1.name", "Minatore Maniaco");
         yml.addDefault("upgrades.Default.maniacMiner.tier1.lore", Arrays.asList("&7Tutti i giocatori del tuo team", "&7riceveranno Haste I", "", "&7Costo:&b {cost} {currency}", "", "{loreFooter}"));
         yml.addDefault("upgrades.Default.sharpSword.tier1.name", "&eSpade affilate");
         yml.addDefault("upgrades.Default.sharpSword.tier1.lore", Arrays.asList("&7Tutti i giocatori del tuo team", "&7riceveranno Affilatezza I sulle loro spade!", "", "&7Costo:&b {cost} {currency}", "", "{loreFooter}"));
@@ -440,14 +440,14 @@ public class Italian extends Language {
         yml.addDefault("upgrades.Default.healPool.tier1.lore", Arrays.asList("&7Crea un campo di rigenerazione", "&7intorno alla tua base!", "", "&7Costo:&b {cost} {currency}", "", "{loreFooter}"));
         yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a{player} ha comprato &6{upgradeName}");
 
-        yml.addDefault(Messages.MEANING_NO_TRAP, "No trap!");
-        yml.addDefault(Messages.FORMAT_UPGRADE_TRAP_COST, "&7Cost: {currencyColor}{cost} {currency}");
+        yml.addDefault(Messages.MEANING_NO_TRAP, "Nessuna Trappola!");
+        yml.addDefault(Messages.FORMAT_UPGRADE_TRAP_COST, "&7Costo: {currencyColor}{cost} {currency}");
         yml.addDefault(Messages.FORMAT_UPGRADE_COLOR_CAN_AFFORD, "&e");
         yml.addDefault(Messages.FORMAT_UPGRADE_COLOR_CANT_AFFORD, "&c");
         yml.addDefault(Messages.FORMAT_UPGRADE_COLOR_UNLOCKED, "&a");
         yml.addDefault(Messages.FORMAT_UPGRADE_TIER_LOCKED, "&7");
         yml.addDefault(Messages.FORMAT_UPGRADE_TIER_UNLOCKED, "&a");
-        yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY, "{color}Click to purchase!");
+        yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY, "{color}Click per acquistare!");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY, "{color}Non hai abbastanza {currency}");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_LOCKED, "&cLOCKED");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_UNLOCKED, "{color}UNLOCKED");

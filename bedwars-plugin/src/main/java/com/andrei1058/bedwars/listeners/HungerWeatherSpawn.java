@@ -22,6 +22,7 @@ package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.Bukkit;
@@ -39,14 +40,44 @@ import static com.andrei1058.bedwars.BedWars.*;
 
 public class HungerWeatherSpawn implements Listener {
 
+    private final boolean hungerWaiting;
+    private final boolean hungerIngame;
+
+    public HungerWeatherSpawn() {
+        hungerWaiting = config.getYml().getBoolean(ConfigPath.GENERAL_CONFIGURATION_HUNGER_WAITING);
+        hungerIngame = config.getYml().getBoolean(ConfigPath.GENERAL_CONFIGURATION_HUNGER_INGAME);
+    }
+
     @EventHandler
     public void onFoodChange(FoodLevelChangeEvent e) {
-        if (getServerType() == ServerType.SHARED) {
-            if (Arena.getArenaByPlayer((Player) e.getEntity()) != null) {
-                e.setCancelled(true);
-            }
-        } else {
+        if(e.isCancelled()) return;
+        Player player = (Player) e.getEntity();
+        IArena arena = Arena.getArenaByPlayer(player);
+
+        // Dont cancel hunger for shared mode outside of arena
+        if(arena == null && getServerType() == ServerType.SHARED) return;
+
+        // Cancel hunger in MULTIARENA lobby
+        if(arena == null) {
             e.setCancelled(true);
+            return;
+        }
+
+        // Cancel hunger for spectators
+        if(arena.isSpectator(player)) {
+            e.setCancelled(true);
+            return;
+        }
+
+        switch(arena.getStatus()) {
+            case waiting:
+            case starting:
+            case restarting:
+                e.setCancelled(!hungerWaiting);
+                break;
+            case playing:
+                e.setCancelled(!hungerIngame);
+                break;
         }
     }
 
