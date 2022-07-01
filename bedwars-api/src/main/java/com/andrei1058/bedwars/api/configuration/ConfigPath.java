@@ -112,6 +112,9 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_DRAGON_SPAWN_COUNTDOWN = "countdowns.next-event-dragon-spawn";
     public static final String GENERAL_CONFIGURATION_GAME_END_COUNTDOWN = "countdowns.next-event-game-end";
 
+    public static final String GENERAL_CONFIGURATION_HUNGER_WAITING = "allow-hunger-depletion.waiting";
+    public static final String GENERAL_CONFIGURATION_HUNGER_INGAME = "allow-hunger-depletion.ingame";
+
     public static final String GENERAL_CONFIGURATION_ARENA_GROUPS = "arenaGroups";
     public static final String GENERAL_CONFIGURATION_REJOIN_TIME = "rejoin-time";
     public static final String GENERAL_CONFIGURATION_RE_SPAWN_INVULNERABILITY = "re-spawn-invulnerability";
