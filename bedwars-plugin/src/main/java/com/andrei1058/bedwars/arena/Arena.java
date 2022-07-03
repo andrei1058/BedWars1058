@@ -1442,7 +1442,7 @@ public class Arena implements IArena {
         if (this.status == GameState.starting && status == GameState.waiting) {
             for (Player player : getPlayers()) {
                 Language playerLang = Language.getPlayerLanguage(player);
-                nms.sendTitle(player, playerLang.m(Messages.ARENA_STATUS_START_COUNTDOWN_CANCELLED_TITLE), playerLang.m(Messages.ARENA_STATUS_START_COUNTDOWN_CANCELLED_SUB_TITLE), 0, 40, 0);
+                nms.sendTitle(player, playerLang.m(Messages.ARENA_STATUS_START_COUNTDOWN_CANCELLED_TITLE), playerLang.m(Messages.ARENA_STATUS_START_COUNTDOWN_CANCELLED_SUB_TITLE), 0, 40, 10);
             }
         }
         this.status = status;
@@ -1848,7 +1848,7 @@ public class Arena implements IArena {
                     //noinspection deprecation
                     for (Player p : winner.getMembersCache()) {
                         if (p.getWorld().equals(getWorld())) {
-                            nms.sendTitle(p, getMsg(p, Messages.GAME_END_VICTORY_PLAYER_TITLE), null, 0, 70, 0);
+                            nms.sendTitle(p, getMsg(p, Messages.GAME_END_VICTORY_PLAYER_TITLE), null, 0, 70, 20);
                         }
                         if (!winners.toString().contains(p.getDisplayName())) {
                             winners.append(p.getDisplayName()).append(" ");
@@ -1901,7 +1901,7 @@ public class Arena implements IArena {
                         p.sendMessage(getMsg(p, Messages.GAME_END_TEAM_WON_CHAT).replace("{TeamColor}", winner.getColor().chat().toString())
                                 .replace("{TeamName}", winner.getDisplayName(Language.getPlayerLanguage(p))));
                         if (!winner.getMembers().contains(p)) {
-                            nms.sendTitle(p, getMsg(p, Messages.GAME_END_GAME_OVER_PLAYER_TITLE), null, 0, 70, 0);
+                            nms.sendTitle(p, getMsg(p, Messages.GAME_END_GAME_OVER_PLAYER_TITLE), null, 0, 70, 20);
                         }
                         for (String s : getList(p, Messages.GAME_END_TOP_PLAYER_CHAT)) {
                             String message = s.replace("{firstName}", firstName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : firstName).replace("{firstKills}", String.valueOf(first))

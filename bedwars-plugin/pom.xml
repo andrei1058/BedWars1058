@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>bedwars-plugin</artifactId>
     <packaging>jar</packaging>
-    <version>${parent.version}</version>
+    <version>${project.parent.version}</version>
 
     <pluginRepositories>
         <pluginRepository>
@@ -90,19 +90,19 @@
         <dependency>
             <groupId>de.simonsator</groupId>
             <artifactId>DevelopmentPAFSpigot</artifactId>
-            <version>1.0.66</version>
+            <version>1.0.67</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.alessiodp.parties</groupId>
             <artifactId>parties-api</artifactId>
-            <version>3.2.2</version>
+            <version>3.2.6</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.citizensnpcs</groupId>
             <artifactId>citizens</artifactId>
-            <version>2.0.29-SNAPSHOT</version>
+            <version>2.0.30-SNAPSHOT</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -139,52 +139,12 @@
         </dependency>
         <dependency>
             <groupId>com.andrei1058.bedwars</groupId>
-            <artifactId>versionsupport_1_9_R2</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.andrei1058.bedwars</groupId>
-            <artifactId>versionsupport_1_10_R1</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.andrei1058.bedwars</groupId>
-            <artifactId>versionsupport_1_11_R1</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.andrei1058.bedwars</groupId>
             <artifactId>resetadapter-slime</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.bedwars</groupId>
             <artifactId>versionsupport_1_12_R1</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.andrei1058.bedwars</groupId>
-            <artifactId>versionsupport_1_13_R2</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.andrei1058.bedwars</groupId>
-            <artifactId>versionsupport_1_14_R1</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.andrei1058.bedwars</groupId>
-            <artifactId>versionsupport_1_15_R1</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.andrei1058.bedwars</groupId>
-            <artifactId>versionsupport_1_16_R1</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.andrei1058.bedwars</groupId>
-            <artifactId>versionsupport_1_16_R2</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -241,7 +201,7 @@
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>4.0.3</version>
+            <version>5.0.1</version>
             <optional>true</optional>
             <exclusions>
                 <exclusion>
@@ -282,7 +242,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.3.1-SNAPSHOT</version>
+                <version>3.3.0</version>
                 <configuration>
                     <relocations>
                         <relocation>

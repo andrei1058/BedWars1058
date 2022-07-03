@@ -230,7 +230,7 @@ public enum TeamColor {
             case "PINK_WOOL":
                 name = "Pink";
                 break;
-            case "RED":
+            case "RED_WOOL":
                 name = "Red";
                 break;
             case "LIGHT_GRAY_WOOL":
