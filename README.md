@@ -12,7 +12,7 @@ Once your bed is destroyed, you cannot respawn.
 This software runs on [Spigot](https://www.spigotmc.org/) and NMS.
 Spigot forks without compiled NMS code are not supported.
 Officially supported servers are [spigot](https://www.spigotmc.org/) and [paper](https://papermc.io/).
-It is recommended to use Java 11.
+It is required to use Java 11 or newer.
 
 The internal world restore system is based on zipping and unzipping maps which can become
 heavy if you are still making use of HDD in 2021, and you do not have a decent CPU, for a better
