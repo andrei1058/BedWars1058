@@ -419,6 +419,9 @@ public class Arena implements IArena {
         /* used for base enter/leave event */
         isOnABase.remove(p);
         //
+        if(getServerType() != ServerType.BUNGEE && config.getLobbyWorldName() == null){
+            return false;
+        }
         if (getArenaByPlayer(p) != null) {
             return false;
         }
