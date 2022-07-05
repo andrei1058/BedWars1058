@@ -36,7 +36,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Fireball;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -49,25 +48,11 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Openable;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.util.Vector;
-
-import java.util.*;
 
 import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class Interact implements Listener {
-
-    private final double fireballSpeedMultiplier;
-    private final double fireballCooldown;
-    private final float fireballExplosionSize;
-
-    public Interact() {
-        this.fireballSpeedMultiplier = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_SPEED_MULTIPLIER);
-        this.fireballCooldown = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_COOLDOWN);
-        this.fireballExplosionSize = (float) config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_EXPLOSION_SIZE);
-    }
 
     @EventHandler
     /* Handle custom items with commands on them */
@@ -189,33 +174,6 @@ public class Interact implements Listener {
                             Sounds.playSound("join-denied", p);
                         }
                         return;
-                    }
-                }
-            }
-        }
-        //check hand
-        ItemStack inHand = e.getItem();
-        if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
-            if (inHand == null) return;
-            IArena a = Arena.getArenaByPlayer(p);
-            if (a != null) {
-                if (a.isPlayer(p)) {
-                    if (inHand.getType() == nms.materialFireball()) {
-
-                        e.setCancelled(true);
-
-                        if(System.currentTimeMillis() - a.getFireballCooldowns().getOrDefault(p.getUniqueId(), 0L) > (fireballCooldown*1000)) {
-                            a.getFireballCooldowns().put(p.getUniqueId(), System.currentTimeMillis());
-                            Fireball fb = p.launchProjectile(Fireball.class);
-                            Vector direction = p.getEyeLocation().getDirection();
-                            fb = nms.setFireballDirection(fb, direction);
-                            fb.setVelocity(fb.getDirection().multiply(fireballSpeedMultiplier));
-                            //fb.setIsIncendiary(false); // apparently this on <12 makes the fireball not explode on hit. wtf bukkit?
-                            fb.setYield(fireballExplosionSize);
-                            fb.setMetadata("bw1058", new FixedMetadataValue(plugin, "ceva"));
-                            nms.minusAmount(p, inHand, 1);
-                        }
-
                     }
                 }
             }
