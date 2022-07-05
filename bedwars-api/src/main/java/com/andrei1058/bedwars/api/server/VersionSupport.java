@@ -435,4 +435,6 @@ public abstract class VersionSupport {
     public abstract void playRedStoneDot(Player player);
 
     public abstract void clearArrowsFromPlayerBody(Player player);
+
+    public abstract void playEffect(Player player, Location location);
 }

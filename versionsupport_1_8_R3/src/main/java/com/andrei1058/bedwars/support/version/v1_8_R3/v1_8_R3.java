@@ -735,4 +735,10 @@ public class v1_8_R3 extends VersionSupport {
     public void clearArrowsFromPlayerBody(Player player) {
         ((CraftLivingEntity)player).getHandle().getDataWatcher().watch(9, (byte)-1);
     }
+
+    @Override
+    public void playEffect(Player player, Location location){
+        PacketPlayOutWorldParticles pwp = new PacketPlayOutWorldParticles(EnumParticle.VILLAGER_HAPPY, true, (float) location.getX(), (float) location.getY(), (float) location.getZ(), (float) 0, (float) 0, (float) 0, (float) 0, 1);
+        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(pwp);
+    }
 }
