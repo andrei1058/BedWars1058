@@ -46,6 +46,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
@@ -53,7 +54,7 @@ import static com.andrei1058.bedwars.api.language.Language.getMsg;
 public class MainCommand extends BukkitCommand implements ParentCommand {
 
     /* SubCommands ArenaList */
-    private static List<SubCommand> subCommandList = new ArrayList<>();
+    private final static List<SubCommand> subCommandList = new ArrayList<>();
     /* MainCommand instance*/
     private static MainCommand instance;
     /* Dot char */
@@ -194,15 +195,16 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
 
     public List<String> tabComplete(CommandSender s, String alias, String[] args, Location location) throws IllegalArgumentException {
         if (args.length == 1) {
-            List<String> sub = new ArrayList<>();
-            for (SubCommand sb : getSubCommands()) {
-                if (sb.canSee(s, BedWars.getAPI())) sub.add(sb.getSubCommandName());
-            }
-            return sub;
+            return getSubCommands().stream()
+                    .filter(subCommand -> subCommand.getSubCommandName().startsWith(args[0]) && subCommand.canSee(s, BedWars.getAPI()))
+                    .map(SubCommand::getSubCommandName)
+                    .collect(Collectors.toList());
         } else if (args.length == 2) {
             if (hasSubCommand(args[0])) {
                 if (getSubCommand(args[0]).canSee(s, BedWars.getAPI()))
-                    return getSubCommand(args[0]).getTabComplete();
+                    return getSubCommand(args[0]).getTabComplete().stream()
+                            .filter(commandName -> commandName.startsWith(args[1]))
+                            .collect(Collectors.toList());
             }
         }
         return null;
