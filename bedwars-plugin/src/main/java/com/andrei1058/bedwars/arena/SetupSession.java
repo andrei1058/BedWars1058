@@ -45,8 +45,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
-import static com.andrei1058.bedwars.BedWars.config;
-import static com.andrei1058.bedwars.BedWars.plugin;
+import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.commands.Misc.createArmorStand;
 
 public class SetupSession implements ISetupSession {
@@ -164,7 +163,7 @@ public class SetupSession implements ISetupSession {
     public void done() {
         BedWars.getAPI().getRestoreAdapter().onSetupSessionClose(this);
         getSetupSessions().remove(this);
-        if (BedWars.getServerType() != ServerType.BUNGEE) {
+        if (BedWars.getServerType() != ServerType.BUNGEE && getServerType() != ServerType.BUNGEE_LEGACY) {
             try {
                 getPlayer().teleport(config.getConfigLoc("lobbyLoc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
             } catch (Exception ex) {

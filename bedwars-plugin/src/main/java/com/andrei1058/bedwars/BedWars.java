@@ -189,6 +189,11 @@ public class BedWars extends JavaPlugin {
 
         config = new MainConfig(this, "config");
 
+        setAutoscale(config.getBoolean(ConfigPath.GENERAL_AUTOSCALE_ENABLE));
+        if(getServerType() == ServerType.BUNGEE_LEGACY) {
+            setAutoscale(false);
+        }
+
         generators = new GeneratorsConfig(this, "generators", this.getDataFolder().getPath());
         // Initialize signs config after the main config
         if (getServerType() != ServerType.BUNGEE) {
@@ -263,7 +268,7 @@ public class BedWars extends JavaPlugin {
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
         /* Check if lobby location is set. Required for non Bungee servers */
-        if (config.getLobbyWorldName().isEmpty() && serverType != ServerType.BUNGEE) {
+        if (config.getLobbyWorldName().isEmpty() && serverType != ServerType.BUNGEE && serverType != ServerType.BUNGEE_LEGACY) {
             plugin.getLogger().log(java.util.logging.Level.WARNING, "Lobby location is not set!");
         }
 
@@ -297,16 +302,14 @@ public class BedWars extends JavaPlugin {
         // Register events
         registerEvents(new EnderPearlLanded(), new QuitAndTeleportListener(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(),
                 new FireballListener(), new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener(), new LangListener(), new Warnings(this), new ChatAFK());
+        if(autoscale) registerEvents(new AutoscaleListener());
         if (getServerType() == ServerType.BUNGEE) {
-            if (autoscale) {
-                //registerEvents(new ArenaListeners());
-                ArenaSocket.lobbies.addAll(config.getList(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS));
-                new SendTask();
-                registerEvents(new AutoscaleListener(), new PrePartyListener(), new JoinListenerBungee());
-                Bukkit.getScheduler().runTaskTimerAsynchronously(this, new LoadedUsersCleaner(), 60L, 60L);
-            } else {
-                registerEvents(new ServerPingListener(), new JoinListenerBungeeLegacy());
-            }
+            ArenaSocket.lobbies.addAll(config.getList(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS));
+            new SendTask();
+            registerEvents(new PrePartyListener(), new JoinListenerBungee());
+            Bukkit.getScheduler().runTaskTimerAsynchronously(this, new LoadedUsersCleaner(), 60L, 60L);
+        } else if(getServerType() == ServerType.BUNGEE_LEGACY) {
+            registerEvents(new ServerPingListener(), new JoinListenerBungeeLegacy());
         } else if (getServerType() == ServerType.MULTIARENA || getServerType() == ServerType.SHARED) {
             registerEvents(new ArenaSelectorListener(), new BlockStatusListener());
             if (getServerType() == ServerType.MULTIARENA) {
@@ -318,7 +321,7 @@ public class BedWars extends JavaPlugin {
 
         registerEvents(new WorldLoadListener());
 
-        if (!(getServerType() == ServerType.BUNGEE && autoscale)) {
+        if (!(getServerType() == ServerType.BUNGEE)){
             registerEvents(new JoinHandlerCommon());
         }
 
@@ -449,14 +452,14 @@ public class BedWars extends JavaPlugin {
                 try {
                     //noinspection rawtypes
                     RegisteredServiceProvider rsp = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
-                   if(rsp != null) {
-                       WithChat.setChat((net.milkbowl.vault.chat.Chat) rsp.getProvider());
-                       plugin.getLogger().info("Hooked into vault chat support!");
-                       chat = new WithChat();
-                   } else {
-                       plugin.getLogger().info("Vault found, but no chat provider!");
-                       chat = new NoChat();
-                   }
+                    if(rsp != null) {
+                        WithChat.setChat((net.milkbowl.vault.chat.Chat) rsp.getProvider());
+                        plugin.getLogger().info("Hooked into vault chat support!");
+                        chat = new WithChat();
+                    } else {
+                        plugin.getLogger().info("Vault found, but no chat provider!");
+                        chat = new NoChat();
+                    }
                 } catch (Exception var2_2) {
                     chat = new NoChat();
                 }
@@ -630,7 +633,7 @@ public class BedWars extends JavaPlugin {
                 }
             }
 
-            if (serverType == ServerType.BUNGEE && !autoscale) {
+            if (serverType == ServerType.BUNGEE_LEGACY) {
                 if (files.isEmpty()) {
                     this.getLogger().log(java.util.logging.Level.WARNING, "Could not find any arena!");
                     return;
@@ -657,7 +660,6 @@ public class BedWars extends JavaPlugin {
 
     public static void setServerType(ServerType serverType) {
         BedWars.serverType = serverType;
-        if (serverType == ServerType.BUNGEE) autoscale = true;
     }
 
     public static void setAutoscale(boolean autoscale) {

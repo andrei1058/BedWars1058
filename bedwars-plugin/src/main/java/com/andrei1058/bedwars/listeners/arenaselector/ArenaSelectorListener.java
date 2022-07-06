@@ -60,8 +60,8 @@ public class ArenaSelectorListener implements Listener {
 
         if (!data.contains(ARENA_SELECTOR_GUI_IDENTIFIER)) return;
 
-        String arenaName = data.split("=")[1];
-        IArena arena = Arena.getArenaByName(arenaName);
+        String arenaIdentifier = data.split("=")[1];
+        IArena arena = Arena.getArenaByIdentifier(arenaIdentifier);
         if (arena == null) return;
 
         if (event.getClick() == ClickType.LEFT) {

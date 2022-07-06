@@ -27,6 +27,7 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.tasks.ReJoinTask;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.lobbysocket.ArenaSocket;
@@ -73,7 +74,7 @@ public class ReJoin {
         if (bwt.getMembers().isEmpty()) task = new ReJoinTask(arena, bwt);
         this.permanentsAndNonDowngradables.addAll(cachedArmor);
 
-        if (BedWars.autoscale) {
+        if (BedWars.getServerType() == ServerType.BUNGEE) {
             JsonObject json = new JsonObject();
             json.addProperty("type", "RC");
             json.addProperty("uuid", player.getUniqueId().toString());

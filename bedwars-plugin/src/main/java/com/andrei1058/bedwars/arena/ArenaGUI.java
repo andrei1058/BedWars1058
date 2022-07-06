@@ -117,7 +117,7 @@ public class ArenaGUI {
             }
             im.setLore(lore);
             i.setItemMeta(im);
-            i = BedWars.nms.addCustomData(i, ArenaSelectorListener.ARENA_SELECTOR_GUI_IDENTIFIER + arenas.get(arenaKey).getArenaName());
+            i = BedWars.nms.addCustomData(i, ArenaSelectorListener.ARENA_SELECTOR_GUI_IDENTIFIER + arenas.get(arenaKey).getWorldName());
             p.getOpenInventory().getTopInventory().setItem(slot, i);
             arenaKey++;
         }
