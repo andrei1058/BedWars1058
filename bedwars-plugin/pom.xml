@@ -66,9 +66,19 @@
             <id>andrei1058-releases</id>
             <url>https://repo.andrei1058.com/releases/</url>
         </repository>
+        <repository>
+            <id>papermc</id>
+            <url>https://papermc.io/repo/repository/maven-public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>io.papermc</groupId>
+            <artifactId>paperlib</artifactId>
+            <version>1.0.7</version>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>de.simonsator</groupId>
             <artifactId>Party-and-Friends-MySQL-Edition-Spigot-API</artifactId>
@@ -264,6 +274,10 @@
                         <relocation>
                             <pattern>com.andrei1058.spigot.sidebarutils</pattern>
                             <shadedPattern>com.andrei1058.bedwars.libs.updater</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>io.papermc.lib</pattern>
+                            <shadedPattern>com.andrei1058.bedwars.paperlib</shadedPattern> <!-- Replace this -->
                         </relocation>
                     </relocations>
                 </configuration>
