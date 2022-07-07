@@ -40,6 +40,7 @@ import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.listeners.dropshandler.PlayerDrops;
+import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -601,7 +602,8 @@ public class DamageDeathMove implements Listener {
 
             if (a.isSpectator(e.getPlayer()) || a.isReSpawning(e.getPlayer())) {
                 if (e.getTo().getY() < 0) {
-                    e.getPlayer().teleport(a.isSpectator(e.getPlayer()) ? a.getSpectatorLocation() : a.getReSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                    PaperLib.teleportAsync(e.getPlayer(), a.isSpectator(e.getPlayer()) ? a.getSpectatorLocation() : a.getReSpawnLocation());
+                    //e.getPlayer().teleport(a.isSpectator(e.getPlayer()) ? a.getSpectatorLocation() : a.getReSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                     e.getPlayer().setAllowFlight(true);
                     e.getPlayer().setFlying(true);
                     // how to remove fall velocity?
@@ -636,9 +638,11 @@ public class DamageDeathMove implements Listener {
                     if (e.getPlayer().getLocation().getBlockY() <= 0) {
                         ITeam bwt = a.getTeam(e.getPlayer());
                         if (bwt != null) {
-                            e.getPlayer().teleport(bwt.getSpawn());
+                            PaperLib.teleportAsync(e.getPlayer(), bwt.getSpawn());
+                            //e.getPlayer().teleport(bwt.getSpawn());
                         } else {
-                            e.getPlayer().teleport(a.getSpectatorLocation());
+                            PaperLib.teleportAsync(e.getPlayer(), a.getSpectatorLocation());
+                            //e.getPlayer().teleport(a.getSpectatorLocation());
                         }
                     }
                 }
@@ -646,7 +650,8 @@ public class DamageDeathMove implements Listener {
         } else {
             if (e.getPlayer().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName()) && BedWars.getServerType() == ServerType.MULTIARENA) {
                 if (e.getTo().getY() < 0) {
-                    e.getPlayer().teleport(config.getConfigLoc("lobbyLoc"));
+                    PaperLib.teleportAsync(e.getPlayer(), config.getConfigLoc("lobbyLoc"));
+                    //e.getPlayer().teleport(config.getConfigLoc("lobbyLoc"));
                 }
             }
         }
