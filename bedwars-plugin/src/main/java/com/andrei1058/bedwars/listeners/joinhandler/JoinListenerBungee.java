@@ -40,7 +40,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
