@@ -29,11 +29,6 @@ import com.andrei1058.bedwars.api.server.RestoreAdapter;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.util.FileUtil;
 import com.andrei1058.bedwars.api.util.ZipFileUtil;
-import com.flowpowered.nbt.CompoundMap;
-import com.flowpowered.nbt.CompoundTag;
-import com.flowpowered.nbt.IntTag;
-import com.flowpowered.nbt.stream.NBTInputStream;
-import com.flowpowered.nbt.stream.NBTOutputStream;
 import com.grinderwolf.swm.api.SlimePlugin;
 import com.grinderwolf.swm.api.exceptions.*;
 import com.grinderwolf.swm.api.loaders.SlimeLoader;
@@ -47,8 +42,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
@@ -332,7 +325,6 @@ public class SlimeAdapter extends RestoreAdapter {
                                         ZipFileUtil.unzipFileIntoDirectory(bc, new File(Bukkit.getWorldContainer(), name));
                                     }
                                     deleteWorldTrash(name);
-                                    handleLevelDat(name);
 
                                     convertWorld(name, null);
                                 }
@@ -391,45 +383,6 @@ public class SlimeAdapter extends RestoreAdapter {
                 if (!f.delete()) {
                     getOwner().getLogger().warning("Could not delete: " + f.getPath());
                     getOwner().getLogger().warning("This may cause issues!");
-                }
-            }
-        }
-    }
-
-    private void handleLevelDat(String world) throws IOException {
-
-        File level = new File(Bukkit.getWorldContainer(), world + "/level.dat");
-
-        if (!level.exists()) {
-            if (level.createNewFile()) {
-                File regions = new File(Bukkit.getWorldContainer(), "world/region");
-                if (regions.exists() && Objects.requireNonNull(regions.list()).length > 0) {
-                    if (Arrays.stream(Objects.requireNonNull(regions.list())).filter(p -> p.endsWith(".mca")).toArray().length > 0) {
-                        File region = new File(Bukkit.getWorldContainer(), world + "/" + Arrays.stream(Objects.requireNonNull(regions.list())).filter(p -> p.endsWith(".mca")).toArray()[0]);
-                        NBTInputStream inputStream = new NBTInputStream(new FileInputStream(region));
-                        Optional<CompoundTag> tag = inputStream.readTag().getAsCompoundTag();
-                        inputStream.close();
-                        if (tag.isPresent()) {
-                            Optional<CompoundTag> dataTag = tag.get().getAsCompoundTag("Chunk");
-                            if (dataTag.isPresent()) {
-                                int dataVersion = dataTag.get().getIntValue("DataVersion").orElse(-1);
-
-                                NBTOutputStream outputStream = new NBTOutputStream(new FileOutputStream(level));
-
-                                CompoundMap cm = new CompoundMap();
-                                cm.put(new IntTag("SpawnX", 0));
-                                cm.put(new IntTag("SpawnY", 255));
-                                cm.put(new IntTag("SpawnZ", 0));
-                                if (dataVersion != -1) {
-                                    cm.put(new IntTag("DataVersion", dataVersion));
-                                }
-                                CompoundTag root = new CompoundTag("Data", cm);
-                                outputStream.writeTag(root);
-                                outputStream.flush();
-                                outputStream.close();
-                            }
-                        }
-                    }
                 }
             }
         }
