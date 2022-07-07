@@ -24,6 +24,7 @@ import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.ReJoin;
 import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
+import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -82,7 +83,7 @@ public class JoinListenerMultiArena implements Listener {
         // Teleport to lobby location
         Location lobbyLocation = config.getConfigLoc("lobbyLoc");
         if (lobbyLocation != null && lobbyLocation.getWorld() != null) {
-            Bukkit.getScheduler().runTaskLater(plugin, () -> p.teleport(lobbyLocation, PlayerTeleportEvent.TeleportCause.PLUGIN), 2L);
+            PaperLib.teleportAsync(p, lobbyLocation);
         }
 
         // Send items
