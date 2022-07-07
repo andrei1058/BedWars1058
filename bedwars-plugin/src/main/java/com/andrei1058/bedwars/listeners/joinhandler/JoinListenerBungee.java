@@ -40,6 +40,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
@@ -122,8 +123,7 @@ public class JoinListenerBungee implements Listener {
                 Bukkit.dispatchCommand(p, "bw");
                 World mainWorld = Bukkit.getWorlds().get(0);
                 if (mainWorld != null) {
-                    PaperLib.teleportAsync(p, mainWorld.getSpawnLocation());
-                   // p.teleport(mainWorld.getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                    PaperLib.teleportAsync(p, mainWorld.getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                 }
                 // hide admin to in game users
                 for (Player inGame : Bukkit.getOnlinePlayers()){

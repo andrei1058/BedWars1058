@@ -37,6 +37,7 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.OreGenerator;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.shop.ShopCache;
+import io.papermc.lib.PaperLib;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
@@ -141,7 +142,7 @@ public class BedWarsTeam implements ITeam {
      */
     public void firstSpawn(Player p) {
         if (p == null) return;
-        p.teleport(spawn, PlayerTeleportEvent.TeleportCause.PLUGIN);
+        PaperLib.teleportAsync(p, spawn, PlayerTeleportEvent.TeleportCause.PLUGIN);
         p.setGameMode(GameMode.SURVIVAL);
         p.setCanPickupItems(true);
         nms.setCollide(p, getArena(), true);
@@ -339,7 +340,7 @@ public class BedWarsTeam implements ITeam {
         } else {
             reSpawnInvulnerability.put(p.getUniqueId(), System.currentTimeMillis() + config.getInt(ConfigPath.GENERAL_CONFIGURATION_RE_SPAWN_INVULNERABILITY));
         }
-        p.teleport(getSpawn(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+        PaperLib.teleportAsync(p, getSpawn(), PlayerTeleportEvent.TeleportCause.PLUGIN);
         p.setVelocity(new Vector(0, 0, 0));
         getArena().getRespawnSessions().remove(p);
         p.removePotionEffect(PotionEffectType.INVISIBILITY);

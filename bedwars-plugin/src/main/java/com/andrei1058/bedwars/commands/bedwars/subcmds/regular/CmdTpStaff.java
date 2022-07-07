@@ -77,7 +77,6 @@ public class CmdTpStaff extends SubCommand {
                 if (a2.isSpectator(p2)) {
                     if (a2.getArenaName().equals(a.getArenaName())) {
                         PaperLib.teleportAsync(p2, p.getLocation());
-                        //p2.teleport(p);
                         return true;
                     } else a2.removeSpectator(p2, false);
                 }

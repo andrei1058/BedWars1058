@@ -65,10 +65,8 @@ public class Save extends SubCommand {
 
         if (Bukkit.getWorld(BedWars.getLobbyWorld()) != null) {
             PaperLib.teleportAsync(p, Bukkit.getWorld(BedWars.getLobbyWorld()).getSpawnLocation());
-            //p.teleport(Bukkit.getWorld(BedWars.getLobbyWorld()).getSpawnLocation());
         } else {
             PaperLib.teleportAsync(p, Bukkit.getWorlds().get(0).getSpawnLocation());
-            //p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
         }
         ss.done();
         p.sendMessage(ss.getPrefix() + "Arena changes saved!");

@@ -52,6 +52,7 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
@@ -601,8 +602,7 @@ public class DamageDeathMove implements Listener {
 
             if (a.isSpectator(e.getPlayer()) || a.isReSpawning(e.getPlayer())) {
                 if (e.getTo().getY() < 0) {
-                    PaperLib.teleportAsync(e.getPlayer(), a.isSpectator(e.getPlayer()) ? a.getSpectatorLocation() : a.getReSpawnLocation());
-                    //e.getPlayer().teleport(a.isSpectator(e.getPlayer()) ? a.getSpectatorLocation() : a.getReSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                    PaperLib.teleportAsync(e.getPlayer(), a.isSpectator(e.getPlayer()) ? a.getSpectatorLocation() : a.getReSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                     e.getPlayer().setAllowFlight(true);
                     e.getPlayer().setFlying(true);
                     // how to remove fall velocity?
@@ -638,10 +638,8 @@ public class DamageDeathMove implements Listener {
                         ITeam bwt = a.getTeam(e.getPlayer());
                         if (bwt != null) {
                             PaperLib.teleportAsync(e.getPlayer(), bwt.getSpawn());
-                            //e.getPlayer().teleport(bwt.getSpawn());
                         } else {
                             PaperLib.teleportAsync(e.getPlayer(), a.getSpectatorLocation());
-                            //e.getPlayer().teleport(a.getSpectatorLocation());
                         }
                     }
                 }
@@ -650,7 +648,6 @@ public class DamageDeathMove implements Listener {
             if (e.getPlayer().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName()) && BedWars.getServerType() == ServerType.MULTIARENA) {
                 if (e.getTo().getY() < 0) {
                     PaperLib.teleportAsync(e.getPlayer(), config.getConfigLoc("lobbyLoc"));
-                    //e.getPlayer().teleport(config.getConfigLoc("lobbyLoc"));
                 }
             }
         }

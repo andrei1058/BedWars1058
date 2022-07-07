@@ -30,6 +30,7 @@ import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.server.SetupType;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.configuration.ArenaConfig;
+import io.papermc.lib.PaperLib;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
@@ -166,9 +167,9 @@ public class SetupSession implements ISetupSession {
         getSetupSessions().remove(this);
         if (BedWars.getServerType() != ServerType.BUNGEE) {
             try {
-                getPlayer().teleport(config.getConfigLoc("lobbyLoc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                PaperLib.teleportAsync(getPlayer(), config.getConfigLoc("lobbyLoc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
             } catch (Exception ex) {
-                getPlayer().teleport(Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                PaperLib.teleportAsync(getPlayer(), Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
             }
         }
         getPlayer().removePotionEffect(PotionEffectType.SPEED);
@@ -210,7 +211,7 @@ public class SetupSession implements ISetupSession {
     @Override
     public void teleportPlayer() {
         player.getInventory().clear();
-        player.teleport(Bukkit.getWorld(getWorldName()).getSpawnLocation());
+        PaperLib.teleportAsync(player, Bukkit.getWorld(getWorldName()).getSpawnLocation());
         player.setGameMode(GameMode.CREATIVE);
         Bukkit.getScheduler().runTaskLater(plugin, ()->{
             player.setAllowFlight(true);
