@@ -7,7 +7,7 @@
     <parent>
         <artifactId>BedWars1058</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>22.3-SNAPSHOT</version>
+        <version>22.7-SNAPSHOT</version>
     </parent>
 
     <artifactId>resetadapter-slime</artifactId>
@@ -42,6 +42,11 @@
             <artifactId>slimeworldmanager-api</artifactId>
             <version>[2.2.1,)</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.flowpowered</groupId>
+            <artifactId>flow-nbt</artifactId>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 
