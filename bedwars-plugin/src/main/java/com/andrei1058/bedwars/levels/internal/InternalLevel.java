@@ -47,6 +47,11 @@ public class InternalLevel implements Level {
     }
 
     @Override
+    public String getLongProgressBar(Player p) {
+        return PlayerLevel.getLevelByPlayer(p.getUniqueId()).getLongProgressBar();
+    }
+
+    @Override
     public int getCurrentXp(Player p) {
         return PlayerLevel.getLevelByPlayer(p.getUniqueId()).getCurrentXp();
     }

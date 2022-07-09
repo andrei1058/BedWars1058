@@ -256,6 +256,20 @@ public class Portuguese extends Language {
                 "&6                          &l2º Assassino &7- {secondName} - {secondKills}",
                 "&c                          &l3º Assassino &7- {thirdName} - {thirdKills}", "",
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+        yml.addDefault(Messages.GAME_END_PLAYER_REWARD_SUMMARY, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
+                "&r             &f&lReward Summary",
+                "&r ",
+                "  &7You earned",
+                "   &f&l• &6{coinsEarned} Bed Wars Coins",
+                "&r ",
+                "&r                 &bBed Wars Experience",
+                "&r      &bLevel {level}                             Level {nextLevel}",
+                "&r     {progress}",
+                "&r                 &b{currentXp} &7/ &a{requiredXp} &7({percentAchieved}%)",
+                "&r ",
+                "&7You earned &b{experienceEarned} Bed Wars Experience",
+                "&r ",
+                "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
         yml.addDefault(Messages.BED_HOLOGRAM_DEFEND, "&c&lDefenda sua cama!");
         yml.addDefault(Messages.BED_HOLOGRAM_DESTROYED, "&c&lSua cama foi destruída!");
         yml.addDefault(Messages.NPC_NAME_TEAM_UPGRADES, "&bMELHORIAS DA EQUIPE,&e&lCLIQUE DIREITO");

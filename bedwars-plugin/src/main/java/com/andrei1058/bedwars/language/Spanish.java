@@ -187,6 +187,20 @@ public class Spanish extends Language{
                 "&6                         &l2do Asesino &7- {secondName} - {secondKills}",
                 "&c                         &l3er Asesino &7- {thirdName} - {thirdKills}", "",
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+        yml.addDefault(Messages.GAME_END_PLAYER_REWARD_SUMMARY, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
+                "&r             &f&lReward Summary",
+                "&r ",
+                "  &7You earned",
+                "   &f&l• &6{coinsEarned} Bed Wars Coins",
+                "&r ",
+                "&r                 &bBed Wars Experience",
+                "&r      &bLevel {level}                             Level {nextLevel}",
+                "&r     {progress}",
+                "&r                 &b{currentXp} &7/ &a{requiredXp} &7({percentAchieved}%)",
+                "&r ",
+                "&7You earned &b{experienceEarned} Bed Wars Experience",
+                "&r ",
+                "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
         //yml.addDefault(gameOverReward, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
         //        "&f                                   &lReward Summary", "", "",
         //        "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));

@@ -50,6 +50,11 @@ public interface Level {
     String getProgressBar(Player p);
 
     /**
+     * @return current long progress bar.
+     */
+    String getLongProgressBar(Player p);
+
+    /**
      * @return current xp.
      */
     int getCurrentXp(Player p);
