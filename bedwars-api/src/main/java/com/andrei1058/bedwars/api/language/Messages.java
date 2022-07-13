@@ -333,6 +333,7 @@ public class Messages {
     public static final String SHOP_LORE_STATUS_CANT_AFFORD = "shop-lore-status-cant-afford";
     public static final String SHOP_LORE_STATUS_CAN_BUY = "shop-lore-status-can-buy";
     public static final String SHOP_LORE_STATUS_MAXED  = "shop-lore-status-tier-maxed";
+    public static final String SHOP_LORE_STATUS_ARMOR = "shop-lore-status-armor";
     public static final String SHOP_LORE_QUICK_ADD  = "shop-lore-quick-add";
     public static final String SHOP_LORE_QUICK_REMOVE  = "shop-lore-quick-remove";
     public static final String SHOP_INDEX_NAME = SHOP_PATH + ".inventory-name";
