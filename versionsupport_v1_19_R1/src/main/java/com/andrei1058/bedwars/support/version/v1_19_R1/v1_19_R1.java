@@ -40,7 +40,6 @@ import net.minecraft.core.IRegistry;
 import net.minecraft.core.RegistryMaterials;
 import net.minecraft.core.particles.ParticleParamRedstone;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.chat.ChatMessageType;
 import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.DataWatcherObject;
@@ -134,7 +133,7 @@ public class v1_19_R1 extends VersionSupport {
     public void playAction(Player p, String text) {
         CraftPlayer cPlayer = (CraftPlayer) p;
         IChatBaseComponent cbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + text + "\"}");
-        PacketPlayOutChat ppoc = new PacketPlayOutChat(cbc, ChatMessageType.c, chatUUID);
+        ClientboundSystemChatPacket ppoc = new ClientboundSystemChatPacket(cbc, true);
         cPlayer.getHandle().b.a(ppoc);
     }
 
@@ -261,19 +260,19 @@ public class v1_19_R1 extends VersionSupport {
     }
 
     private boolean isRegistryFrozen() throws Exception {
-        Field frozenField = RegistryMaterials.class.getDeclaredField("bL");
+        Field frozenField = RegistryMaterials.class.getDeclaredField("ca");
         frozenField.setAccessible(true);
         return frozenField.getBoolean(IRegistry.W);
     }
 
     private void setRegistryFrozen(boolean frozen) throws Exception {
         if (!frozen) {
-            Field intrusiveHolderCache = RegistryMaterials.class.getDeclaredField("bN");
+            Field intrusiveHolderCache = RegistryMaterials.class.getDeclaredField("cd");
             intrusiveHolderCache.setAccessible(true);
             intrusiveHolderCache.set(IRegistry.W, new IdentityHashMap<EntityTypes<?>, Holder.c<EntityTypes<?>>>());
         }
 
-        Field frozenField = RegistryMaterials.class.getDeclaredField("bL");
+        Field frozenField = RegistryMaterials.class.getDeclaredField("ca");
         frozenField.setAccessible(true);
         frozenField.set(IRegistry.W, frozen);
     }
@@ -616,12 +615,12 @@ public class v1_19_R1 extends VersionSupport {
         PacketPlayOutEntityHeadRotation head = new PacketPlayOutEntityHeadRotation(entityPlayer, getCompressedAngle(entityPlayer.getBukkitYaw()));
 
         List<Pair<EnumItemSlot, ItemStack>> list = new ArrayList<>();
-        list.add(new Pair<>(EnumItemSlot.a, entityPlayer.b(EnumItemSlot.a)));
-        list.add(new Pair<>(EnumItemSlot.b, entityPlayer.b(EnumItemSlot.b)));
-        list.add(new Pair<>(EnumItemSlot.f, entityPlayer.b(EnumItemSlot.f)));
-        list.add(new Pair<>(EnumItemSlot.e, entityPlayer.b(EnumItemSlot.e)));
-        list.add(new Pair<>(EnumItemSlot.d, entityPlayer.b(EnumItemSlot.d)));
-        list.add(new Pair<>(EnumItemSlot.c, entityPlayer.b(EnumItemSlot.c)));
+        list.add(new Pair<>(EnumItemSlot.a, entityPlayer.c(EnumItemSlot.a)));
+        list.add(new Pair<>(EnumItemSlot.b, entityPlayer.c(EnumItemSlot.b)));
+        list.add(new Pair<>(EnumItemSlot.f, entityPlayer.c(EnumItemSlot.f)));
+        list.add(new Pair<>(EnumItemSlot.e, entityPlayer.c(EnumItemSlot.e)));
+        list.add(new Pair<>(EnumItemSlot.d, entityPlayer.c(EnumItemSlot.d)));
+        list.add(new Pair<>(EnumItemSlot.c, entityPlayer.c(EnumItemSlot.c)));
 
 
         for (Player p : arena.getPlayers()) {
