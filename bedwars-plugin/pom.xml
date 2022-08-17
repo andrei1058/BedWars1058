@@ -277,7 +277,7 @@
                         </relocation>
                         <relocation>
                             <pattern>io.papermc.lib</pattern>
-                            <shadedPattern>com.andrei1058.bedwars.paperlib</shadedPattern> <!-- Replace this -->
+                            <shadedPattern>com.andrei1058.bedwars.paperlib</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
