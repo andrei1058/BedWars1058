@@ -70,7 +70,7 @@ public class MoneyListeners implements Listener {
         int bedDestroy = MoneyConfig.money.getInt("money-rewards.bed-destroyed");
         if (bedDestroy > 0) {
             BedWars.getEconomy().giveMoney(player, bedDestroy);
-            player.sendMessage(Language.getMsg( player, Messages.MONEY_REWARD_BED_DESTROYED).replace("{money}", String.valueOf(bedDestroy)));
+            player.sendMessage(Language.getMsg(player, Messages.MONEY_REWARD_BED_DESTROYED).replace("{money}", String.valueOf(bedDestroy)));
         }
     }
 
@@ -92,7 +92,7 @@ public class MoneyListeners implements Listener {
         } else {
             if (regularKill > 0) {
                 BedWars.getEconomy().giveMoney(player, regularKill);
-                player.sendMessage(Language.getMsg (player, Messages.MONEY_REWARD_REGULAR_KILL).replace("{money}", String.valueOf(regularKill)));
+                player.sendMessage(Language.getMsg(player, Messages.MONEY_REWARD_REGULAR_KILL).replace("{money}", String.valueOf(regularKill)));
             }
         }
     }
