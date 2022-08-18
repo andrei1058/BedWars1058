@@ -63,13 +63,13 @@ public class HealPoolTask extends BukkitRunnable {
                     if (chance == 0) {
                         if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_HEAL_POOL_SEEN_TEAM_ONLY)) {
                             for (Player p : bwt.getMembers()) {
-                                BedWars.nms.playEffect(p, l);
+                                BedWars.nms.playVillagerEffect(p, l);
                             }
                         }
                         else
                         {
                             for (Player p : arena.getPlayers()) {
-                                BedWars.nms.playEffect(p, l);
+                                BedWars.nms.playVillagerEffect(p, l);
                             }
                         }
                     }

@@ -712,7 +712,7 @@ public class v1_17_R1 extends VersionSupport {
     }
 
     @Override
-    public void playEffect(Player player, Location location){
+    public void playVillagerEffect(Player player, Location location){
         player.spawnParticle(Particle.VILLAGER_HAPPY, location, 1);
     }
 }
