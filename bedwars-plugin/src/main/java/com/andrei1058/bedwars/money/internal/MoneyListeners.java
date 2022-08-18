@@ -35,7 +35,7 @@ public class MoneyListeners implements Listener {
             IArena arena = e.getArena();
             if (bwt != null) {
                 if (arena.getMaxInTeam() > 1) {
-                    int teamMate = MoneyConfig.money.getInt ("money-rewards.per-teammate");
+                    int teamMate = MoneyConfig.money.getInt("money-rewards.per-teammate");
                     if (teamMate > 0) {
                         BedWars.getEconomy().giveMoney(player, teamMate);
                         player.sendMessage(Language.getMsg(player, Messages.MONEY_REWARD_PER_TEAMMATE).replace("{money}", String.valueOf(teamMate)));
@@ -87,7 +87,7 @@ public class MoneyListeners implements Listener {
         if (e.getCause().isFinalKill()) {
             if (finalKill > 0) {
                 BedWars.getEconomy().giveMoney(player, finalKill);
-                player.sendMessage(Language.getMsg(player, Messages.MONEY_REWARD_FINAL_KILL).replace ("{money}", String.valueOf(finalKill)));
+                player.sendMessage(Language.getMsg(player, Messages.MONEY_REWARD_FINAL_KILL).replace("{money}", String.valueOf(finalKill)));
             }
         } else {
             if (regularKill > 0) {
