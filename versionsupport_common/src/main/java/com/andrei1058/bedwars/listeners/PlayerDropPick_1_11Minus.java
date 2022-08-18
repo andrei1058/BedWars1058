@@ -25,6 +25,7 @@ import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.events.player.PlayerGeneratorCollectEvent;
 import com.andrei1058.bedwars.api.server.ServerType;
+import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -79,7 +80,7 @@ public class PlayerDropPick_1_11Minus implements Listener {
             return;
         }
 
-        if (e.getItem().getItemStack().getType().toString().equals("BED")) {
+        if (VersionCommon.api.getVersionSupport().isBed(e.getItem().getItemStack().getType())) {
             e.setCancelled(true);
             e.getItem().remove();
         } else if (e.getItem().getItemStack().hasItemMeta()) {
@@ -90,12 +91,15 @@ public class PlayerDropPick_1_11Minus implements Listener {
                     ItemMeta itemMeta = new ItemStack(material).getItemMeta();
 
                     //Call ore pick up event
-                    PlayerGeneratorCollectEvent event = new PlayerGeneratorCollectEvent(e.getPlayer(), e.getItem(), a);
-                    Bukkit.getPluginManager().callEvent(event);
-                    if (event.isCancelled()){
-                        e.setCancelled(true);
-                    } else {
-                        e.getItem().getItemStack().setItemMeta(itemMeta);
+
+                    if (!api.getAFKUtil().isPlayerAFK(e.getPlayer())){
+                        PlayerGeneratorCollectEvent event = new PlayerGeneratorCollectEvent(e.getPlayer(), e.getItem(), a);
+                        Bukkit.getPluginManager().callEvent(event);
+                        if (event.isCancelled()){
+                            e.setCancelled(true);
+                        } else {
+                            e.getItem().getItemStack().setItemMeta(itemMeta);
+                        }
                     }
                 }
             }
@@ -130,14 +134,6 @@ public class PlayerDropPick_1_11Minus implements Listener {
         }
 
         if (a.getRespawnSessions().containsKey(e.getPlayer())) {
-            e.setCancelled(true);
-        }
-    }
-
-    @EventHandler
-    //Prevent AFK players from picking items
-    public void onCollect(PlayerGeneratorCollectEvent e){
-        if (api.getAFKUtil().isPlayerAFK(e.getPlayer())){
             e.setCancelled(true);
         }
     }
