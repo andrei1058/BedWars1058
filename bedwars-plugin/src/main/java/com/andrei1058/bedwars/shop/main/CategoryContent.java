@@ -34,12 +34,10 @@ import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.shop.quickbuy.PlayerQuickBuyCache;
 import com.andrei1058.bedwars.shop.quickbuy.QuickBuyElement;
-import net.minecraft.server.v1_8_R3.ItemArmor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -262,7 +260,7 @@ public class CategoryContent implements ICategoryContent {
             String buyStatus;
 
             if (isPermanent() && shopCache.hasCachedItem(this) && shopCache.getCachedItem(this).getTier() == getContentTiers().size()) {
-                if (!(CraftItemStack.asNMSCopy(i).getItem() instanceof ItemArmor)){
+                if (!(nms.isArmor(i))){
                     buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_MAXED);  //ARMOR
                 }else {
                     buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_ARMOR);
