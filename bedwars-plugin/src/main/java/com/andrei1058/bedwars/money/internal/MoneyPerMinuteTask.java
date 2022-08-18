@@ -22,7 +22,7 @@ public class MoneyPerMinuteTask {
         if (money < 1){
             return;
         }
-        task = Bukkit.getScheduler().runTaskTimerAsynchronously(BedWars.plugin, () -> {
+        task = Bukkit.getScheduler().runTaskTimer(BedWars.plugin, () -> {
             if (arena != null  && !arena.getPlayers().isEmpty()){
                 for (Player p : arena.getPlayers()) {
                     BedWars.getEconomy().giveMoney( p, money );
