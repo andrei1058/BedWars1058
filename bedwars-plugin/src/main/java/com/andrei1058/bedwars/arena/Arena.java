@@ -65,9 +65,9 @@ import com.andrei1058.bedwars.money.internal.MoneyPerMinuteTask;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
+import com.andrei1058.bedwars.support.paper.PaperSupport;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.support.vault.WithEconomy;
-import io.papermc.lib.PaperLib;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -545,7 +545,7 @@ public class Arena implements IArena {
                 new PlayerGoods(p, true);
                 playerLocation.put(p, p.getLocation());
             }
-            PaperLib.teleportAsync(p, getWaitingLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+            PaperSupport.teleportC(p, getWaitingLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
 
             BedWarsScoreboard.giveScoreboard(p, this, false);
             sendPreGameCommandItems(p);
@@ -650,9 +650,9 @@ public class Arena implements IArena {
 
             if (!playerBefore) {
                 if (staffTeleport == null) {
-                    PaperLib.teleportAsync(p, getSpectatorLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                    PaperSupport.teleportC(p, getSpectatorLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                 } else {
-                    PaperLib.teleportAsync(p, staffTeleport, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                    PaperSupport.teleportC(p, staffTeleport, PlayerTeleportEvent.TeleportCause.PLUGIN);
                 }
             }
 
@@ -686,12 +686,12 @@ public class Arena implements IArena {
 
                 if (!playerBefore) {
                     if (staffTeleport == null) {
-                        PaperLib.teleportAsync(p, getSpectatorLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                        PaperSupport.teleportC(p, getSpectatorLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                     } else {
-                        PaperLib.teleportAsync(p, staffTeleport);
+                        PaperSupport.teleport(p, staffTeleport);
                     }
                 } else {
-                    PaperLib.teleportAsync(p, getSpectatorLocation());
+                    PaperSupport.teleport(p, getSpectatorLocation());
                 }
 
                 p.setAllowFlight(true);
@@ -1152,8 +1152,7 @@ public class Arena implements IArena {
             //new PlayerGoods(p, true, true);
             playerLocation.put(p, p.getLocation());
         }
-
-        PaperLib.teleportAsync(p, getSpectatorLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+        PaperSupport.teleportC(p, getSpectatorLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
         p.getInventory().clear();
 
         //restore items before re-spawning in team
@@ -2495,7 +2494,7 @@ public class Arena implements IArena {
                     if (playing.equals(player)) continue;
                     BedWars.nms.spigotHidePlayer(player, playing);
                 }
-                PaperLib.teleportAsync(player, getReSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                PaperSupport.teleportC(player, getReSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                 player.setAllowFlight(true);
                 player.setFlying(true);
 
@@ -2511,7 +2510,7 @@ public class Arena implements IArena {
                     }
 
                     updateSpectatorCollideRule(player, false);
-                    PaperLib.teleportAsync(player, getReSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                    PaperSupport.teleportC(player, getReSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                 }, 10L);
             } else {
                 ITeam team = getTeam(player);
@@ -2638,17 +2637,17 @@ public class Arena implements IArena {
         if (BedWars.getServerType() == ServerType.SHARED) {
             Location loc = playerLocation.get(player);
             if (loc == null) {
-                PaperLib.teleportAsync(player, Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                PaperSupport.teleportC(player, Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                 plugin.getLogger().log(Level.SEVERE, player.getName() + " was teleported to the main world because lobby location is not set!");
             } else {
                 player.teleport(loc, PlayerTeleportEvent.TeleportCause.PLUGIN);
             }
         } else if (BedWars.getServerType() == ServerType.MULTIARENA) {
             if (BedWars.getLobbyWorld().isEmpty()) {
-                PaperLib.teleportAsync(player, Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                PaperSupport.teleportC(player, Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                 plugin.getLogger().log(Level.SEVERE, player.getName() + " was teleported to the main world because lobby location is not set!");
             } else {
-                PaperLib.teleportAsync(player, config.getConfigLoc("lobbyLoc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                PaperSupport.teleportC(player, config.getConfigLoc("lobbyLoc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
             }
         }
     }

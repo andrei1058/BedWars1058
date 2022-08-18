@@ -40,7 +40,7 @@ import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.listeners.dropshandler.PlayerDrops;
-import io.papermc.lib.PaperLib;
+import com.andrei1058.bedwars.support.paper.PaperSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -602,7 +602,7 @@ public class DamageDeathMove implements Listener {
 
             if (a.isSpectator(e.getPlayer()) || a.isReSpawning(e.getPlayer())) {
                 if (e.getTo().getY() < 0) {
-                    PaperLib.teleportAsync(e.getPlayer(), a.isSpectator(e.getPlayer()) ? a.getSpectatorLocation() : a.getReSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                    PaperSupport.teleportC(e.getPlayer(), a.isSpectator(e.getPlayer()) ? a.getSpectatorLocation() : a.getReSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                     e.getPlayer().setAllowFlight(true);
                     e.getPlayer().setFlying(true);
                     // how to remove fall velocity?
@@ -637,9 +637,9 @@ public class DamageDeathMove implements Listener {
                     if (e.getPlayer().getLocation().getBlockY() <= 0) {
                         ITeam bwt = a.getTeam(e.getPlayer());
                         if (bwt != null) {
-                            PaperLib.teleportAsync(e.getPlayer(), bwt.getSpawn());
+                            PaperSupport.teleport(e.getPlayer(), bwt.getSpawn());
                         } else {
-                            PaperLib.teleportAsync(e.getPlayer(), a.getSpectatorLocation());
+                           PaperSupport.teleport(e.getPlayer(), a.getSpectatorLocation());
                         }
                     }
                 }
@@ -647,7 +647,7 @@ public class DamageDeathMove implements Listener {
         } else {
             if (e.getPlayer().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName()) && BedWars.getServerType() == ServerType.MULTIARENA) {
                 if (e.getTo().getY() < 0) {
-                    PaperLib.teleportAsync(e.getPlayer(), config.getConfigLoc("lobbyLoc"));
+                    PaperSupport.teleport(e.getPlayer(), config.getConfigLoc("lobbyLoc"));
                 }
             }
         }

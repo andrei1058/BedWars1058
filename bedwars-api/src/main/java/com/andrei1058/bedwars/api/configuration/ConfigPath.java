@@ -228,6 +228,7 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_ROTATE_GEN = GENERAL_CONFIGURATION_PERFORMANCE_PATH + ".rotate-generators";
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_SPOIL_TNT_PLAYERS = GENERAL_CONFIGURATION_PERFORMANCE_PATH + ".spoil-tnt-players";
 
+    public static final String GENERAL_CONFIGURATION_PERFORMANCE_PAPER_FEATURES = GENERAL_CONFIGURATION_PERFORMANCE_PATH + ".paper-features";
     public static final String SHOP_SETTINGS_PATH = "shop-settings";
     public static final String SHOP_SPECIALS_PATH = "shop-specials";
     public static final String SHOP_QUICK_DEFAULTS_PATH = "quick-buy-defaults";

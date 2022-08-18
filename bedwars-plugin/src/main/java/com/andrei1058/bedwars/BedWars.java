@@ -115,6 +115,8 @@ public class BedWars extends JavaPlugin {
     public static BedWars plugin;
     public static VersionSupport nms;
 
+    public static boolean isPaper = false;
+
     private static Party party = new NoParty();
     private static Chat chat = new NoChat();
     protected static Level level;
@@ -143,6 +145,14 @@ public class BedWars extends JavaPlugin {
             this.getLogger().severe("https://gitlab.com/andrei1058/BedWars1058/wikis/compatibility");
             serverSoftwareSupport = false;
             return;
+        }
+
+        try{
+            Class.forName("com.destroystokyo.paper.PaperConfig");
+            isPaper = true;
+        } catch (ClassNotFoundException e) {
+            isPaper = false;
+            throw new RuntimeException(e);
         }
 
         plugin = this;
