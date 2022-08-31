@@ -1590,7 +1590,8 @@ public class Arena implements IArena {
                 if (getPlayers() == null) continue;
                 s.setLine(line, string.replace("[on]", String.valueOf(getPlayers().size()))
                         .replace("[max]", String.valueOf(getMaxPlayers())).replace("[arena]", getDisplayName())
-                        .replace("[status]", getDisplayStatus(Language.getDefaultLanguage())));
+                        .replace("[status]", getDisplayStatus(Language.getDefaultLanguage()))
+                        .replace("[type]", String.valueOf(getMaxInTeam())));
                 line++;
             }
             try {
