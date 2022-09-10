@@ -47,15 +47,8 @@ import static com.andrei1058.bedwars.arena.Misc.replaceStatsPlaceholders;
 
 public class BedWarsScoreboard {
 
-    private static SidebarManager sidebarManager = null;
-    private static final HashMap<UUID, BedWarsScoreboard> scoreboards = new HashMap<>();
+    private static SidebarService sidebarManager = null;
 
-    private final Player player;
-    private IArena arena;
-
-    private Sidebar handle;
-    private SimpleDateFormat dateFormat;
-    private SimpleDateFormat nextEventDateFormat;
 
     private BedWarsScoreboard(@NotNull Player player, @NotNull List<String> content, @Nullable IArena arena) {
         this.arena = arena;
@@ -79,40 +72,10 @@ public class BedWarsScoreboard {
         nextEventDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         dateFormat = new SimpleDateFormat(getMsg(player, Messages.FORMATTING_SCOREBOARD_DATE));
 
-        // Define common placeholders
-        List<PlaceholderProvider> placeholders = Arrays.asList(
-                new PlaceholderProvider("{on}", () -> String.valueOf(getArena() == null ? Bukkit.getOnlinePlayers().size() : getArena().getPlayers().size())),
-                new PlaceholderProvider("{max}", () -> String.valueOf(getArena() == null ? Bukkit.getMaxPlayers() : getArena().getMaxPlayers())),
-                new PlaceholderProvider("{time}", () -> {
-                    if (this.arena == null) {
-                        return dateFormat.format(new Date(System.currentTimeMillis()));
-                    } else if (this.arena.getStatus() == GameState.playing || this.arena.getStatus() == GameState.restarting) {
-                        return getNextEventTime();
-                    } else {
-                        if (this.arena.getStatus() == GameState.starting) {
-                            if (getArena().getStartingTask() != null) {
-                                return String.valueOf(getArena().getStartingTask().getCountdown() + 1);
-                            }
-                        }
-                        return dateFormat.format(new Date(System.currentTimeMillis()));
-                    }
-                }),
-                new PlaceholderProvider("{nextEvent}", this::getNextEventName),
-                new PlaceholderProvider("{date}", () -> dateFormat.format(new Date(System.currentTimeMillis()))),
-                new PlaceholderProvider("{kills}", () -> String.valueOf(getArena() == null ? BedWars.getStatsManager().get(getPlayer().getUniqueId()).getKills() : getArena().getPlayerKills(getPlayer(), false))),
-                new PlaceholderProvider("{finalKills}", () -> String.valueOf(getArena() == null ? BedWars.getStatsManager().get(getPlayer().getUniqueId()).getFinalKills() : getArena().getPlayerKills(getPlayer(), true))),
-                new PlaceholderProvider("{beds}", () -> String.valueOf(getArena() == null ? BedWars.getStatsManager().get(getPlayer().getUniqueId()).getBedsDestroyed() : getArena().getPlayerBedsDestroyed(getPlayer()))),
-                new PlaceholderProvider("{deaths}", () -> String.valueOf(getArena() == null ? BedWars.getStatsManager().get(getPlayer().getUniqueId()).getDeaths() : getArena().getPlayerDeaths(getPlayer(), false))),
-                new PlaceholderProvider("{progress}", () -> BedWars.getLevelSupport().getProgressBar(getPlayer())),
-                new PlaceholderProvider("{level}", () -> BedWars.getLevelSupport().getLevel(getPlayer())),
-                new PlaceholderProvider("{currentXp}", () -> BedWars.getLevelSupport().getCurrentXpFormatted(getPlayer())),
-                new PlaceholderProvider("{requiredXp}", () -> BedWars.getLevelSupport().getRequiredXpFormatted(getPlayer()))
-        );
-
         // Initialize sidebar manager if not initialized
         if (sidebarManager == null) {
             try {
-                sidebarManager = new SidebarManager();
+                sidebarManager = new SidebarService();
             } catch (InstantiationException e) {
                 throw new IllegalStateException(e);
             }
@@ -589,7 +552,8 @@ public class BedWarsScoreboard {
 
         if (arena == null) {
             // Lobby scoreboard
-            if (getServerType() == ServerType.SHARED  || !config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR)) {
+            if (getServerType() == ServerType.SHARED
+                    || !config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR)) {
                 if (scoreboard != null) {
                     scoreboard.remove();
                 }

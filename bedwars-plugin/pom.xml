@@ -64,7 +64,7 @@
         </repository>
         <repository>
             <id>andrei1058-releases</id>
-            <url>https://repo.andrei1058.com/releases/</url>
+            <url>https://repo.andrei1058.dev/releases/</url>
         </repository>
     </repositories>
 
@@ -221,8 +221,38 @@
         <!--        Sidebar LIB-->
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
-            <artifactId>sidebar-api</artifactId>
-            <version>0.3.2-SNAPSHOT</version>
+            <artifactId>sidebar-base</artifactId>
+            <version>22.4</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.spigot.sidebar</groupId>
+            <artifactId>sidebar-eight</artifactId>
+            <version>22.4</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.spigot.sidebar</groupId>
+            <artifactId>sidebar-twelve</artifactId>
+            <version>22.4</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.spigot.sidebar</groupId>
+            <artifactId>sidebar-sixteen</artifactId>
+            <version>22.4</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.spigot.sidebar</groupId>
+            <artifactId>sidebar-seventeen</artifactId>
+            <version>22.4</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.spigot.sidebar</groupId>
+            <artifactId>sidebar-eighteen</artifactId>
+            <version>22.4</version>
             <scope>compile</scope>
         </dependency>
         <!--        End of Sidebar LIB-->

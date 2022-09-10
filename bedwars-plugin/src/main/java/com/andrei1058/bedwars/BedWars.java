@@ -543,6 +543,15 @@ public class BedWars extends JavaPlugin {
         // Initialize team upgrades
         com.andrei1058.bedwars.upgrades.UpgradesManager.init();
 
+        // Initialize sidebar manager
+        if (SidebarService.init()) {
+            this.getLogger().info("Initializing SidebarLib by andrei1058");
+        } else {
+            this.getLogger().severe("SidebarLib by andrei1058 does not support your server version");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
+
         int playerListRefreshInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_LIST_REFRESH);
         if (playerListRefreshInterval < 1) {
             Bukkit.getLogger().info("Scoreboard names list refresh is disabled. (Is set to " + playerListRefreshInterval + ").");
