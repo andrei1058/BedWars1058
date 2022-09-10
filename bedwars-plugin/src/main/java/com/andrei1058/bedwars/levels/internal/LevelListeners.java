@@ -88,7 +88,8 @@ public class LevelListeners implements Listener {
                     //noinspection deprecation
                     if (bwt.getMembersCache().size() > 1) {
                         int xpAmountPerTmt = LevelsConfig.levels.getInt("xp-rewards.per-teammate");
-                        if (xpAmountPerTmt > 0){
+                        if (xpAmountPerTmt > 0) {
+                            //noinspection deprecation
                             int tr = xpAmountPerTmt * bwt.getMembersCache().size();
                             PlayerLevel.getLevelByPlayer(p).addXp(tr, PlayerXpGainEvent.XpSource.PER_TEAMMATE);
                             p1.sendMessage(Language.getMsg(p1, "xp-reward-per-teammate").replace("{xp}", String.valueOf(tr)));
@@ -105,9 +106,9 @@ public class LevelListeners implements Listener {
                 if (bwt != null) {
                     //noinspection deprecation
                     if (bwt.getMembersCache().size() > 1) {
-                        //noinspection deprecation
                         int xpAmountPerTmt = LevelsConfig.levels.getInt("xp-rewards.per-teammate");
-                        if (xpAmountPerTmt > 0){
+                        if (xpAmountPerTmt > 0) {
+                            //noinspection deprecation
                             int tr = LevelsConfig.levels.getInt("xp-rewards.per-teammate") * bwt.getMembersCache().size();
                             PlayerLevel.getLevelByPlayer(p).addXp(tr, PlayerXpGainEvent.XpSource.PER_TEAMMATE);
                             p1.sendMessage(Language.getMsg(p1, Messages.XP_REWARD_PER_TEAMMATE).replace("{xp}", String.valueOf(tr)));
@@ -133,10 +134,10 @@ public class LevelListeners implements Listener {
         if (player == null) {
             return;
         }
-        int beddestroy = LevelsConfig.levels.getInt("xp-rewards.bed-destroyed");
-        if (beddestroy > 0) {
-            PlayerLevel.getLevelByPlayer(player.getUniqueId()).addXp(beddestroy, PlayerXpGainEvent.XpSource.BED_DESTROYED);
-            player.sendMessage(Language.getMsg(player, Messages.XP_REWARD_BED_DESTROY).replace("{xp}", String.valueOf(beddestroy)));
+        int bedDestroy = LevelsConfig.levels.getInt("xp-rewards.bed-destroyed");
+        if (bedDestroy > 0) {
+            PlayerLevel.getLevelByPlayer(player.getUniqueId()).addXp(bedDestroy, PlayerXpGainEvent.XpSource.BED_DESTROYED);
+            player.sendMessage(Language.getMsg(player, Messages.XP_REWARD_BED_DESTROY).replace("{xp}", String.valueOf(bedDestroy)));
         }
     }
 
@@ -147,17 +148,17 @@ public class LevelListeners implements Listener {
         if (player == null || victim.equals(player)) {
             return;
         }
-        int finalkill = LevelsConfig.levels.getInt("xp-rewards.final-kill");
-        int regularkill = LevelsConfig.levels.getInt("xp-rewards.regular-kill");
+        int finalKill = LevelsConfig.levels.getInt("xp-rewards.final-kill");
+        int regularKill = LevelsConfig.levels.getInt("xp-rewards.regular-kill");
         if (e.getCause ().isFinalKill ()) {
-            if (finalkill > 0) {
-                PlayerLevel.getLevelByPlayer(player.getUniqueId()).addXp(finalkill, PlayerXpGainEvent.XpSource.FINAL_KILL);
-                player.sendMessage(Language.getMsg(player, Messages.XP_REWARD_FINAL_KILL).replace("{xp}", String.valueOf(finalkill)));
+            if (finalKill > 0) {
+                PlayerLevel.getLevelByPlayer(player.getUniqueId()).addXp(finalKill, PlayerXpGainEvent.XpSource.FINAL_KILL);
+                player.sendMessage(Language.getMsg(player, Messages.XP_REWARD_FINAL_KILL).replace("{xp}", String.valueOf(finalKill)));
             }
         } else {
-            if (regularkill > 0) {
-                PlayerLevel.getLevelByPlayer(player.getUniqueId()).addXp(regularkill, PlayerXpGainEvent.XpSource.REGULAR_KILL);
-                player.sendMessage(Language.getMsg(player, Messages.XP_REWARD_REGULAR_KILL).replace("{xp}", String.valueOf(regularkill)));
+            if (regularKill > 0) {
+                PlayerLevel.getLevelByPlayer(player.getUniqueId()).addXp(regularKill, PlayerXpGainEvent.XpSource.REGULAR_KILL);
+                player.sendMessage(Language.getMsg(player, Messages.XP_REWARD_REGULAR_KILL).replace("{xp}", String.valueOf(regularKill)));
             }
         }
     }
