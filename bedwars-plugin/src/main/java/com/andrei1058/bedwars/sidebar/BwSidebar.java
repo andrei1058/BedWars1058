@@ -88,9 +88,13 @@ public class BwSidebar {
 
     @SuppressWarnings("ConstantConditions")
     private SidebarLine normalizeTitle(@Nullable List<String> titleArray) {
+        String[] aolo = new String[titleArray.size()];
+        for (int x = 0; x < titleArray.size(); x++) {
+            aolo[x] = titleArray.get(x);
+        }
         return null == titleArray || titleArray.isEmpty() ?
                 EMPTY_TITLE :
-                new SidebarLineAnimated((String[]) titleArray.toArray());
+                new SidebarLineAnimated(aolo);
     }
 
     @Contract(pure = true)
