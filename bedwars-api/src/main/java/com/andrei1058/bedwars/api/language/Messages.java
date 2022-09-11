@@ -169,10 +169,18 @@ public class Messages {
     public static String FORMATTING_SCOREBOARD_TAB_SUFFIX_STARTING = "format-sb-tab-suffix.starting";
     public static String FORMATTING_SCOREBOARD_TAB_PREFIX_PLAYING = "format-sb-tab-prefix.playing";
     public static String FORMATTING_SCOREBOARD_TAB_SUFFIX_PLAYING = "format-sb-tab-suffix.playing";
+    @Deprecated
     public static String FORMATTING_SCOREBOARD_TAB_PREFIX_PRESTARTING = "format-sb-tab-prefix.restarting";
+    public static String FORMATTING_SCOREBOARD_TAB_PREFIX_RESTARTING = "format-sb-tab-prefix.restarting";
+    @Deprecated
     public static String FORMATTING_SCOREBOARD_TAB_SUFFIX_PRESTARTING = "format-sb-tab-suffix.restarting";
+    public static String FORMATTING_SCOREBOARD_TAB_SUFFIX_RESTARTING = "format-sb-tab-suffix.restarting";
+    public static String FORMATTING_SCOREBOARD_TAB_PREFIX_SPECTATOR = "format-sb-tab-prefix.spectator";
+    public static String FORMATTING_SCOREBOARD_TAB_SUFFIX_SPECTATOR = "format-sb-tab-suffix.spectator";
     public static String FORMATTING_SPECTATOR_TEAM = "format-spectator-team";
+    @Deprecated
     public static String FORMATTING_SPECTATOR_COLOR = "format-spectator-color";
+
     public static String FORMATTING_SCOREBOARD_TEAM_ELIMINATED = "format-sb-team-eliminated";
     public static String FORMATTING_SCOREBOARD_BED_DESTROYED = "format-sb-bed-destroyed";
     public static String FORMATTING_SCOREBOARD_TEAM_ALIVE = "format-sb-team-alive";

@@ -3,6 +3,7 @@ package com.andrei1058.bedwars.sidebar;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
@@ -100,11 +101,73 @@ public class SidebarService {
         sidebar.remove();
     }
 
+    public void remove(@NotNull Player player) {
+        BwSidebar sidebar = this.sidebars.remove(player.getUniqueId());
+        if (null != sidebar) {
+            sidebar.remove();
+        }
+    }
+
     public static SidebarService getInstance() {
         return instance;
     }
 
     protected SidebarManager getSidebarHandler() {
         return sidebarHandler;
+    }
+
+    public void refreshTitles() {
+        this.sidebars.forEach((k, v) -> v.getHandle().refreshTitle());
+    }
+
+    public void refreshPlaceholders() {
+        this.sidebars.forEach((k, v) -> v.getHandle().refreshPlaceholders());
+    }
+
+    public void refreshPlaceholders(IArena arena) {
+        this.sidebars.forEach((k, v) -> {
+            if (v.getArena().equals(arena)) {
+                v.getHandle().refreshPlaceholders();
+            }
+        });
+    }
+
+    public void refreshTabList() {
+        this.sidebars.forEach((k, v) -> v.getHandle().playerTabRefreshAnimation());
+    }
+
+    public void refreshHealth() {
+        this.sidebars.forEach((k, v) -> {
+            if (null != v.getArena()) {
+                v.getHandle().playerHealthRefreshAnimation();
+                for (Player player : v.getArena().getPlayers()){
+                    v.getHandle().setPlayerHealth(player, (int) Math.ceil(player.getHealth()));
+                }
+            }
+        });
+    }
+
+    public void refreshHealth(IArena arena, Player player, int health) {
+        this.sidebars.forEach((k,v) -> {
+            if (null != v.getArena() && v.getArena().equals(arena)) {
+                v.getHandle().setPlayerHealth(player, health);
+            }
+        });
+    }
+
+    public void handleReJoin(IArena arena, Player player) {
+        this.sidebars.forEach((k,v) -> {
+            if (null != v.getArena() && v.getArena().equals(arena)) {
+                v.giveUpdateTabFormat(player, false);
+            }
+        });
+    }
+
+    public void handleInvisibility(ITeam team, Player player, boolean toggle) {
+        this.sidebars.forEach((k,v) -> {
+            if (null != v.getArena() && v.getArena().equals(team.getArena())) {
+                v.handleInvisibilityPotion(player, toggle);
+            }
+        });
     }
 }

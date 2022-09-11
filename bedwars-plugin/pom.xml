@@ -66,6 +66,10 @@
             <id>andrei1058-releases</id>
             <url>https://repo.andrei1058.dev/releases/</url>
         </repository>
+        <repository>
+            <id>citizens-repo</id>
+            <url>https://maven.citizensnpcs.co/repo</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -101,7 +105,7 @@
         </dependency>
         <dependency>
             <groupId>net.citizensnpcs</groupId>
-            <artifactId>citizens</artifactId>
+            <artifactId>citizens-main</artifactId>
             <version>2.0.30-SNAPSHOT</version>
             <scope>provided</scope>
             <exclusions>
