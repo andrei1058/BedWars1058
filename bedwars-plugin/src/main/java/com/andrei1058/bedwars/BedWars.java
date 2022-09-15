@@ -331,6 +331,7 @@ public class BedWars extends JavaPlugin {
         // Register setup-holograms fix
         registerEvents(new ChunkLoad());
 
+        registerEvents(new InvisibilityPotionListener());
 
         /* Deprecated versions */
         switch (version) {
@@ -343,7 +344,6 @@ public class BedWars extends JavaPlugin {
             case "v1_15_R1":
             case "v1_16_R1":
             case "v1_16_R2":
-                registerEvents(new InvisibilityPotionListener());
                 Bukkit.getScheduler().runTaskLater(this,
                         () -> System.out.println("\u001B[31m[WARN] BedWars1058 may drop support for this server version in the future.\nSee: https://wiki.andrei1058.dev/docs/BedWars1058/compatibility \u001B[0m"), 40L);
                 break;
