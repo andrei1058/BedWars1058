@@ -63,9 +63,9 @@ public class BwSidebar {
     }
 
     public void setContent(List<String> titleArray, List<String> lineArray, @Nullable IArena arena) {
+        this.arena = arena;
         SidebarLine title = this.normalizeTitle(titleArray);
         List<SidebarLine> lines = this.normalizeLines(lineArray);
-        this.arena = arena;
 
         List<PlaceholderProvider> placeholders = this.getPlaceholders();
 
