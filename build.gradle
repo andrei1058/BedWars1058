@@ -1,0 +1,90 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'java'
+}
+
+allprojects {
+    group = 'com.andrei1058.bedwars'
+    version = '22.3-SNAPSHOT'
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'java-library'
+    apply plugin: 'com.github.johnrengelman.shadow'
+    apply plugin: 'maven-publish'
+
+    sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+        maven {
+            url = uri('https://oss.sonatype.org/content/repositories/snapshots/')
+        }
+
+        maven {
+            url = uri('https://gitlab.com/api/v4/groups/4800570/-/packages/maven/')
+        }
+
+        maven {
+            url = uri('https://gitlab.com/api/v4/projects/6491858/packages/maven/')
+        }
+
+        maven {
+            url = uri('https://repo.codemc.io/repository/nms/')
+        }
+
+        maven {
+            url = uri('https://repo.maven.apache.org/maven2/')
+        }
+
+        maven {
+            url = uri('https://simonsator.de/repo/')
+        }
+
+        maven {
+            url = uri('https://repo.extendedclip.com/content/repositories/placeholderapi/')
+        }
+
+        maven {
+            url = uri('https://gitlab.com/api/v4/projects/14374071/packages/maven/')
+        }
+
+        maven {
+            url = uri('https://repo.codemc.io/repository/maven-public/')
+        }
+
+        maven {
+            url = uri('https://repo.codemc.io/repository/maven-releases/')
+        }
+
+        maven {
+            url = uri('https://repo.codemc.io/repository/maven-snapshots/')
+        }
+
+        maven {
+            url = uri('https://hub.spigotmc.org/nexus/content/repositories/snapshots/')
+        }
+
+        maven {
+            url = uri('https://repo.alessiodp.com/releases/')
+        }
+
+        maven {
+            url = uri('https://maven.citizensnpcs.co/repo')
+        }
+
+        maven {
+            url = uri('https://repo.andrei1058.com/releases/')
+        }
+
+        maven {
+            url = uri('https://repo.fusesource.com/nexus/content/repositories/releases-3rd-party/')
+        }
+
+        maven {
+            url = uri('https://repo.glaremasters.me/repository/concuncan/')
+        }
+    }
+}

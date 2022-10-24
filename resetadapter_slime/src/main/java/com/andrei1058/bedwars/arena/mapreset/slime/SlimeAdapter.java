@@ -94,7 +94,7 @@ public class SlimeAdapter extends RestoreAdapter {
             spm.setInt(SlimeProperties.SPAWN_Z, (int) Double.parseDouble(spawn[2]));
             spm.setBoolean(SlimeProperties.ALLOW_ANIMALS, false);
             spm.setBoolean(SlimeProperties.ALLOW_MONSTERS, false);
-            spm.setString(SlimeProperties.DIFFICULTY, "easy");
+            spm.setString(SlimeProperties.DIFFICULTY, "hard");
             spm.setBoolean(SlimeProperties.PVP, true);
 
             try {

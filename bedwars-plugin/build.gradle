@@ -1,0 +1,81 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+clean.doFirst {
+    delete "$rootDir/out/"
+}
+
+processResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
+    from(sourceSets.main.resources.srcDirs) {
+        include '**/*.yml'
+        filter(ReplaceTokens, tokens: [VERSION: project.version])
+    }
+}
+
+dependencies {
+    implementation 'org.bstats:bstats-bukkit:3.0.0'
+    implementation project(':bedwars-api')
+    implementation project(':versionsupport_1_8_R3')
+    implementation project(':resetadapter-slime')
+    implementation project(':versionsupport_1_12_R1')
+    implementation project(':versionsupport_v1_16_R3')
+    implementation project(':versionsupport_v1_17_R1')
+    implementation project(':versionsupport_v1_18_R1')
+    implementation project(':versionsupport-common')
+    implementation 'com.andrei1058.vipfeatures:vipfeatures-api:[1.0,)'
+    implementation 'com.andrei1058.spigotutils:spigotutils:1.4-SNAPSHOT'
+    implementation 'com.zaxxer:HikariCP:5.0.1'
+    implementation 'org.slf4j:slf4j-simple:1.7.36'
+    implementation 'com.andrei1058.spigot.sidebar:sidebar-api:0.3.2-SNAPSHOT'
+    compileOnly 'de.simonsator:Party-and-Friends-MySQL-Edition-Spigot-API:1.5.3'
+    compileOnly 'de.simonsator:Spigot-Party-API-For-RedisBungee:1.0.3-SNAPSHOT'
+    compileOnly 'de.simonsator:DevelopmentPAFSpigot:1.0.67'
+    compileOnly 'com.alessiodp.parties:parties-api:3.2.6'
+    compileOnly 'net.citizensnpcs:citizens-main:2.0.30-SNAPSHOT'
+    compileOnly 'net.milkbowl.vault:VaultAPI:1.7'
+    compileOnly 'org.spigotmc:spigot:1.8.8-R0.1-SNAPSHOT'
+    compileOnly 'me.clip:placeholderapi:2.11.1'
+}
+
+description = 'bedwars-plugin'
+
+shadowJar {
+    getDestinationDirectory().set(file("$rootDir/out"))
+
+    final String archiveName = parent.name + '.jar'
+    getArchiveFileName().set(archiveName)
+
+    dependencies {
+        include(project(':bedwars-api'))
+        include(project(':versionsupport_1_8_R3'))
+        include(project(':resetadapter-slime'))
+        include(project(':versionsupport_1_12_R1'))
+        include(project(':versionsupport_v1_16_R3'))
+        include(project(':versionsupport_v1_17_R1'))
+        include(project(':versionsupport_v1_18_R1'))
+        include(project(':versionsupport-common'))
+    }
+
+//    final String group = project.group.toString() + "." + parent.name.toLowerCase() + ".shaded."
+//    relocate 'com.fasterxml.jackson.core', group + 'jackson.core'
+//    relocate 'net.wesjd', group + 'anvil.gui'
+    doLast {
+        delete "$rootDir/build/"
+    }
+}
+
+build {
+    dependsOn(shadowJar)
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = project.group.toString()
+            artifactId = project.name.toLowerCase()
+            version = project.version
+            from components.java
+        }
+    }
+}
