@@ -33,6 +33,7 @@ public class SwapItem implements Listener {
     @EventHandler
     public void itemSwap(PlayerSwapHandItemsEvent e) {
         if (e.isCancelled()) return;
+
         if (api.getArenaUtil().isPlaying(e.getPlayer())) {
             if (api.getArenaUtil().getArenaByPlayer(e.getPlayer()).getStatus() != GameState.playing)
                 e.setCancelled(true);
