@@ -25,9 +25,9 @@ dependencies {
     implementation project(':versionsupport-common')
     implementation 'com.andrei1058.vipfeatures:vipfeatures-api:[1.0,)'
     implementation 'com.andrei1058.spigotutils:spigotutils:1.4-SNAPSHOT'
+    implementation 'com.andrei1058.spigot.sidebar:sidebar-api:0.3.2-SNAPSHOT'
     implementation 'com.zaxxer:HikariCP:5.0.1'
     implementation 'org.slf4j:slf4j-simple:1.7.36'
-    implementation 'com.andrei1058.spigot.sidebar:sidebar-api:0.3.2-SNAPSHOT'
     compileOnly 'de.simonsator:Party-and-Friends-MySQL-Edition-Spigot-API:1.5.3'
     compileOnly 'de.simonsator:Spigot-Party-API-For-RedisBungee:1.0.3-SNAPSHOT'
     compileOnly 'de.simonsator:DevelopmentPAFSpigot:1.0.67'
@@ -55,14 +55,16 @@ shadowJar {
         include(project(':versionsupport_v1_16_R3'))
         include(project(':versionsupport_v1_17_R1'))
         include(project(':versionsupport_v1_18_R1'))
+        include(dependency('com.andrei1058.vipfeatures:.*'))
+        include(dependency('com.andrei1058.spigotutils:.*'))
+        include(dependency('com.andrei1058.spigot.sidebar:.*'))
+        include(dependency('com.zaxxer:.*'))
+        include(dependency('org.slf4j:.*'))
+        include(dependency('org.bstats:.*'))
     }
 
-//    final String group = project.group.toString() + "." + parent.name.toLowerCase() + ".shaded."
-//    relocate 'com.fasterxml.jackson.core', group + 'jackson.core'
-//    relocate 'net.wesjd', group + 'anvil.gui'
-    doLast {
-        delete "$rootDir/build/"
-    }
+    final String group = project.group.toString() + "." + parent.name.toLowerCase() + ".shaded."
+    relocate 'org.bstats', group + 'org.bstats'
 }
 
 build {
