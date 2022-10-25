@@ -216,6 +216,7 @@ public class Inventory implements Listener {
     private static boolean isCommandItem(ItemStack i) {
         if (i == null) return false;
         if (i.getType() == Material.AIR) return false;
+        if (nms.isTotem(i.getType())) return false;
         if (nms.isCustomBedWarsItem(i)) {
             String[] customData = nms.getCustomData(i).split("_");
             if (customData.length >= 2) {

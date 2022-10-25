@@ -35,7 +35,7 @@ import net.minecraft.server.v1_12_R1.Item;
 import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.Color;
 import org.bukkit.Location;
-import org.bukkit.Particle;
+import org.bukkit.Material;
 import org.bukkit.block.Bed;
 import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
@@ -510,6 +510,11 @@ public class v1_12_R1 extends VersionSupport {
     @Override
     public boolean isBed(org.bukkit.Material material) {
         return material == org.bukkit.Material.BED_BLOCK || material == org.bukkit.Material.BED;
+    }
+
+    @Override
+    public boolean isTotem(Material material) {
+        return material == Material.TOTEM;
     }
 
     @SuppressWarnings("deprecation")

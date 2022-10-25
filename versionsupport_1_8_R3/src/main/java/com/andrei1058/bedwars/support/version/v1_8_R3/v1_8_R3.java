@@ -34,6 +34,7 @@ import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
@@ -546,6 +547,11 @@ public class v1_8_R3 extends VersionSupport {
     @Override
     public boolean isBed(org.bukkit.Material material) {
         return material == org.bukkit.Material.BED_BLOCK || material == org.bukkit.Material.BED;
+    }
+
+    @Override
+    public boolean isTotem(Material material) {
+        return false;
     }
 
     @SuppressWarnings("deprecation")

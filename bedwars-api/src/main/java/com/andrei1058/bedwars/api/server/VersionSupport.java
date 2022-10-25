@@ -326,6 +326,13 @@ public abstract class VersionSupport {
     }
 
     /**
+     * Check if totem
+     */
+    public boolean isTotem(Material material) {
+        return material.toString().contains("TOTEM_OF_UNDYING");
+    }
+
+    /**
      * Item Data compare
      * This will always return true on versions major or equal 1.13
      */
