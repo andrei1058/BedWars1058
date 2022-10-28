@@ -592,8 +592,10 @@ public class BedWars extends JavaPlugin {
 
         registerEvents(new ScoreboardListener());
 
+        if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_ENABLE_HALLOWEEN)) {
             // Halloween Special
             HalloweenSpecial.init();
+        }
 
         SpoilPlayerTNTFeature.init();
     }
