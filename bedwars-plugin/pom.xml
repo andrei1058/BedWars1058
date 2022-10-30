@@ -28,7 +28,7 @@
         </repository>
         <repository>
             <id>citizens</id>
-            <url>https://repo.citizensnpcs.co/</url>
+            <url>https://maven.citizensnpcs.co/repo</url>
         </repository>
         <repository>
             <id>placeholderapi</id>
@@ -101,7 +101,7 @@
         </dependency>
         <dependency>
             <groupId>net.citizensnpcs</groupId>
-            <artifactId>citizens</artifactId>
+            <artifactId>citizens-main</artifactId>
             <version>2.0.30-SNAPSHOT</version>
             <scope>provided</scope>
             <exclusions>
