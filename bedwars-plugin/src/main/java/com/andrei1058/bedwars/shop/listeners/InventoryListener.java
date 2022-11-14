@@ -34,10 +34,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryAction;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.ItemStack;
 
 import static com.andrei1058.bedwars.BedWars.nms;
@@ -50,21 +47,32 @@ public class InventoryListener implements Listener {
     public void onInventoryClick(InventoryClickEvent e) {
         if (e.isCancelled()) return;
         if (!(e.getWhoClicked() instanceof Player)) return;
-        IArena a = Arena.getArenaByPlayer((Player) e.getWhoClicked());
-        if (a == null) return;
-        if (a.isSpectator((Player) e.getWhoClicked())) return;
 
-        ShopCache shopCache = ShopCache.getShopCache(e.getWhoClicked().getUniqueId());
-        PlayerQuickBuyCache cache = PlayerQuickBuyCache.getQuickBuyCache(e.getWhoClicked().getUniqueId());
+        Player p = (Player) e.getWhoClicked();
+
+        IArena a = Arena.getArenaByPlayer(p);
+        if (a == null) return;
+        if (a.isSpectator(p)) return;
+
+        ShopCache shopCache = ShopCache.getShopCache(p.getUniqueId());
+        PlayerQuickBuyCache cache = PlayerQuickBuyCache.getQuickBuyCache(p.getUniqueId());
 
         if (cache == null) return;
         if (shopCache == null) return;
 
-        if (ShopIndex.getIndexViewers().contains(e.getWhoClicked().getUniqueId())) {
+        if(ShopIndex.getIndexViewers().contains(p.getUniqueId()) || ShopCategory.getCategoryViewers().contains(p.getUniqueId())) {
+            if(e.getClickedInventory().getType().equals(InventoryType.PLAYER)) {
+                e.setCancelled(true);
+                return;
+            }
+        }
+
+        if (ShopIndex.getIndexViewers().contains(p.getUniqueId())) {
             e.setCancelled(true);
+
             for (ShopCategory sc : ShopManager.getShop().getCategoryList()) {
                 if (e.getSlot() == sc.getSlot()) {
-                    sc.open((Player) e.getWhoClicked(), ShopManager.getShop(), shopCache);
+                    sc.open(p, ShopManager.getShop(), shopCache);
                     return;
                 }
             }
@@ -72,22 +80,22 @@ public class InventoryListener implements Listener {
                 if (element.getSlot() == e.getSlot()) {
                     if (e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
                         cache.setElement(element.getSlot(), null);
-                        e.getWhoClicked().closeInventory();
+                        p.closeInventory();
                         return;
                     }
-                    element.getCategoryContent().execute((Player) e.getWhoClicked(), shopCache, element.getSlot());
+                    element.getCategoryContent().execute(p, shopCache, element.getSlot());
                     return;
                 }
             }
-        } else if (ShopCategory.getCategoryViewers().contains(e.getWhoClicked().getUniqueId())) {
+        } else if (ShopCategory.getCategoryViewers().contains(p.getUniqueId())) {
             e.setCancelled(true);
             for (ShopCategory sc : ShopManager.getShop().getCategoryList()) {
                 if (ShopManager.getShop().getQuickBuyButton().getSlot() == e.getSlot()) {
-                    ShopManager.getShop().open((Player) e.getWhoClicked(), cache, false);
+                    ShopManager.getShop().open(p, cache, false);
                     return;
                 }
                 if (e.getSlot() == sc.getSlot()) {
-                    sc.open((Player) e.getWhoClicked(), ShopManager.getShop(), shopCache);
+                    sc.open(p, ShopManager.getShop(), shopCache);
                     return;
                 }
                 if (sc.getSlot() != shopCache.getSelectedCategory()) continue;
@@ -95,10 +103,10 @@ public class InventoryListener implements Listener {
                     if (cc.getSlot() == e.getSlot()) {
                         if (e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
                             if (cache.hasCategoryContent(cc)) return;
-                            new QuickBuyAdd((Player) e.getWhoClicked(), cc);
+                            new QuickBuyAdd(p, cc);
                             return;
                         }
-                        cc.execute((Player) e.getWhoClicked(), shopCache, cc.getSlot());
+                        cc.execute(p, shopCache, cc.getSlot());
                         return;
                     }
                 }
