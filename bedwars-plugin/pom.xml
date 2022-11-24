@@ -28,7 +28,7 @@
         </repository>
         <repository>
             <id>citizens</id>
-            <url>https://repo.citizensnpcs.co/</url>
+            <url>https://maven.citizensnpcs.co/repo</url>
         </repository>
         <repository>
             <id>placeholderapi</id>
