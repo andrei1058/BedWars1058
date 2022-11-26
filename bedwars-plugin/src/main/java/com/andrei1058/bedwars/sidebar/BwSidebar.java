@@ -7,7 +7,6 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
-import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.levels.internal.PlayerLevel;
 import com.andrei1058.bedwars.stats.PlayerStats;
@@ -74,10 +73,15 @@ public class BwSidebar {
             handle = SidebarService.getInstance().getSidebarHandler().createSidebar(title, lines, placeholders);
             handle.add(player);
         } else {
-            new ArrayList<>(handle.getPlaceholders()).forEach(p -> handle.removePlaceholder(p.getPlaceholder()));
-            placeholders.forEach(p -> handle.addPlaceholder(p));
-            handle.setTitle(title);
-            lines.forEach(l -> handle.addLine(l));
+            while (handle.lineCount() > 0) {
+                handle.removeLine(0);
+            }
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                new ArrayList<>(handle.getPlaceholders()).forEach(p -> handle.removePlaceholder(p.getPlaceholder()));
+                placeholders.forEach(p -> handle.addPlaceholder(p));
+                handle.setTitle(title);
+                lines.forEach(l -> handle.addLine(l));
+            }, 2L);
         }
         handlePlayerList();
     }
@@ -182,6 +186,7 @@ public class BwSidebar {
                     String.valueOf(Bukkit.getOnlinePlayers().size()))
             );
             PlayerStats stats = BedWars.getStatsManager().get(getPlayer().getUniqueId());
+            //noinspection ConstantConditions
             if (null != stats) {
                 providers.add(new PlaceholderProvider("{kills}", () ->
                         String.valueOf(stats.getKills()))

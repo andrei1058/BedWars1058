@@ -9,13 +9,12 @@ import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.spigot.sidebar.SidebarManager;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static com.andrei1058.bedwars.BedWars.config;
 import static com.andrei1058.bedwars.api.language.Language.getScoreboard;
@@ -62,8 +61,7 @@ public class SidebarService {
 
         // set sidebar lines based on game state or lobby
         List<String> lines = null;
-        // todo create new paths for title array
-        List<String> title = List.of("TEST");
+        List<String> title;
         if (null == arena) {
             if (BedWars.getServerType() == ServerType.SHARED) {
                 lines = Language.getList(player, Messages.SCOREBOARD_LOBBY);
@@ -86,11 +84,24 @@ public class SidebarService {
             return;
         }
 
+        // title is the first line from array
+        title = new ArrayList<>(Collections.singleton(lines.get(0)));
+        if (lines.size() == 1) {
+            lines = new ArrayList<>();
+        }
+        lines = lines.subList(1, lines.size());
+
         // at this point we are sure we need a sidebar instance
+        boolean newlyAdded = false;
         if (null == sidebar) {
             sidebar = new BwSidebar(player);
+            newlyAdded = true;
         }
         sidebar.setContent(title, lines, arena);
+
+        if (newlyAdded) {
+            sidebars.put(player.getUniqueId(), sidebar);
+        }
     }
 
     /**
