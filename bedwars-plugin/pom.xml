@@ -185,11 +185,6 @@
             <version>[1.0,)</version>
             <optional>true</optional>
         </dependency>
-        <dependency>
-            <groupId>com.andrei1058.spigotutils</groupId>
-            <artifactId>spigotutils</artifactId>
-            <version>1.4-SNAPSHOT</version>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
         <dependency>
             <groupId>commons-io</groupId>
