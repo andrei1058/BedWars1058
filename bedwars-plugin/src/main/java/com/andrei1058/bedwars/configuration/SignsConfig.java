@@ -34,7 +34,7 @@ public class SignsConfig extends ConfigManager {
     public SignsConfig(Plugin plugin, String name, String dir) {
         super(plugin, name, dir);
         YamlConfiguration yml = getYml();
-        yml.addDefault("format", Arrays.asList("&a[arena]", "", "&2[on]&9/&2[max]", "[status]"));
+        yml.addDefault("format", Arrays.asList("&a[arena]", "", "&2[on]&9/&2[max] &7([type])", "[status]"));
         yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_WAITING_MATERIAL, getForCurrentVersion("STAINED_CLAY", "STAINED_CLAY", "GREEN_CONCRETE"));
         yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_WAITING_DATA, 5);
         yml.addDefault(ConfigPath.SIGNS_STATUS_BLOCK_STARTING_MATERIAL, getForCurrentVersion("STAINED_CLAY", "STAINED_CLAY", "YELLOW_CONCRETE"));
