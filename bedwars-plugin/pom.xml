@@ -28,15 +28,11 @@
         </repository>
         <repository>
             <id>citizens</id>
-            <url>https://repo.citizensnpcs.co/</url>
+            <url>https://maven.citizensnpcs.co/repo</url>
         </repository>
         <repository>
             <id>placeholderapi</id>
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
-        </repository>
-        <repository>
-            <id>spigotutils-maven</id>
-            <url>https://gitlab.com/api/v4/projects/14374071/packages/maven</url>
         </repository>
         <repository>
             <id>codemc-public</id>
@@ -72,7 +68,7 @@
         <dependency>
             <groupId>de.simonsator</groupId>
             <artifactId>Party-and-Friends-MySQL-Edition-Spigot-API</artifactId>
-            <version>1.5.3</version>
+            <version>1.5.4-RELEASE</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -101,7 +97,7 @@
         </dependency>
         <dependency>
             <groupId>net.citizensnpcs</groupId>
-            <artifactId>citizens</artifactId>
+            <artifactId>citizens-main</artifactId>
             <version>2.0.30-SNAPSHOT</version>
             <scope>provided</scope>
             <exclusions>
@@ -176,7 +172,7 @@
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
-            <version>2.11.1</version>
+            <version>2.11.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -184,11 +180,6 @@
             <artifactId>vipfeatures-api</artifactId>
             <version>[1.0,)</version>
             <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>com.andrei1058.spigotutils</groupId>
-            <artifactId>spigotutils</artifactId>
-            <version>1.4-SNAPSHOT</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
         <dependency>
@@ -214,7 +205,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>1.7.36</version>
+            <version>2.0.5</version>
             <optional>true</optional>
         </dependency>
 
@@ -242,7 +233,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.4.1</version>
                 <configuration>
                     <relocations>
                         <relocation>
