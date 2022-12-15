@@ -26,8 +26,6 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.events.player.PlayerBaseEnterEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerBaseLeaveEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerLeaveArenaEvent;
-import com.andrei1058.bedwars.api.events.upgrades.UpgradeBuyEvent;
-import com.andrei1058.bedwars.api.upgrades.EnemyBaseEnterTrap;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import org.bukkit.Bukkit;
