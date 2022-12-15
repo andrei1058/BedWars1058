@@ -176,7 +176,7 @@ public class v1_18_R1 extends VersionSupport {
         EntityTNTPrimed nmsTNT = (((CraftTNTPrimed) tnt).getHandle());
         try {
             //noinspection JavaReflectionMemberAccess
-            Field sourceField = EntityTNTPrimed.class.getDeclaredField("source");
+            Field sourceField = EntityTNTPrimed.class.getDeclaredField("d");
             sourceField.setAccessible(true);
             sourceField.set(nmsTNT, nmsEntityLiving);
         } catch (Exception ex) {

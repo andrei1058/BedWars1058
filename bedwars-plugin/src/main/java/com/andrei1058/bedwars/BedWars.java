@@ -76,7 +76,6 @@ import com.andrei1058.bedwars.support.preloadedparty.PrePartyListener;
 import com.andrei1058.bedwars.support.vault.*;
 import com.andrei1058.bedwars.support.vipfeatures.VipFeatures;
 import com.andrei1058.bedwars.support.vipfeatures.VipListeners;
-import com.andrei1058.spigotutils.SpigotUpdater;
 import com.andrei1058.vipfeatures.api.IVipFeatures;
 import com.andrei1058.vipfeatures.api.MiniGameAlreadyRegistered;
 import org.bstats.bukkit.Metrics;
@@ -325,6 +324,7 @@ public class BedWars extends JavaPlugin {
         // Register setup-holograms fix
         registerEvents(new ChunkLoad());
 
+        registerEvents(new InvisibilityPotionListener());
 
         /* Deprecated versions */
         switch (version) {
@@ -337,7 +337,6 @@ public class BedWars extends JavaPlugin {
             case "v1_15_R1":
             case "v1_16_R1":
             case "v1_16_R2":
-                registerEvents(new InvisibilityPotionListener());
                 Bukkit.getScheduler().runTaskLater(this,
                         () -> System.out.println("\u001B[31m[WARN] BedWars1058 may drop support for this server version in the future.\nSee: https://wiki.andrei1058.dev/docs/BedWars1058/compatibility \u001B[0m"), 40L);
                 break;
@@ -533,10 +532,6 @@ public class BedWars extends JavaPlugin {
                 miniGameAlreadyRegistered.printStackTrace();
             }
         }
-
-        /* Check updates */
-        new SpigotUpdater(this, 50942, true).checkUpdate();
-
 
         Bukkit.getScheduler().runTaskLater(this, () -> getLogger().info("This server is running in " + getServerType().toString() + " with auto-scale " + autoscale), 100L);
 
