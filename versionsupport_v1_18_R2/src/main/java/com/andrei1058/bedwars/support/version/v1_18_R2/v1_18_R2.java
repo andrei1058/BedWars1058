@@ -376,10 +376,9 @@ public class v1_18_R2 extends VersionSupport {
     @Override
     public void registerTntWhitelist() {
         try {
-            //noinspection JavaReflectionMemberAccess
-            Field field = BlockBase.class.getDeclaredField("explosionResistance");
+            Field field = BlockBase.class.getDeclaredField("aH");
             field.setAccessible(true);
-            field.set(Blocks.eq, 12f);
+            field.set(Blocks.eq, 300f);
             field.set(Blocks.bQ, 300f);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
@@ -714,6 +713,7 @@ public class v1_18_R2 extends VersionSupport {
 
     @Override
     public void clearArrowsFromPlayerBody(Player player) {
+        // todo this probably doesn't work
         ((CraftLivingEntity)player).getHandle().ai().b(new DataWatcherObject<>(12, DataWatcherRegistry.b),-1);
     }
 }
