@@ -380,7 +380,7 @@ public class v1_18_R2 extends VersionSupport {
             Field field = BlockBase.class.getDeclaredField("explosionResistance");
             field.setAccessible(true);
             field.set(Blocks.eq, 12f);
-            field.set(Blocks.au, 300f);
+            field.set(Blocks.bQ, 300f);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
