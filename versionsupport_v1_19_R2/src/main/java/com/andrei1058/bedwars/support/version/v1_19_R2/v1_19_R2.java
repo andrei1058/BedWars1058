@@ -16,6 +16,8 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.core.particles.ParticleParamRedstone;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.protocol.game.*;
+import net.minecraft.network.syncher.DataWatcherObject;
+import net.minecraft.network.syncher.DataWatcherRegistry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.level.EntityPlayer;
@@ -46,6 +48,7 @@ import org.bukkit.craftbukkit.v1_19_R2.inventory.CraftItemStack;
 import org.bukkit.entity.*;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
@@ -56,13 +59,14 @@ import org.joml.Vector3f;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
 @SuppressWarnings("unused")
 public class v1_19_R2 extends VersionSupport {
 
-    private DespawnableFactory despawnableFactory;
+    private final DespawnableFactory despawnableFactory;
 
     public v1_19_R2(Plugin plugin, String name) {
         super(plugin, name);
@@ -221,25 +225,8 @@ public class v1_19_R2 extends VersionSupport {
         return pm != null && pm.hasCustomEffects() && pm.hasCustomEffect(org.bukkit.potion.PotionEffectType.INVISIBILITY);
     }
 
-    private static boolean unfreezeRegistry() {
-        // todo
-        return false;
-    }
-
     @Override
     public void registerEntities() {
-        //todo
-        if (unfreezeRegistry()) {
-//            Map<String, Type<?>> types = (Map<String, Type<?>>) DataConverterRegistry.a().getSchema(
-//                    DataFixUtils.makeKey(SharedConstants.b().getWorldVersion())
-//            ).findChoiceType(DataConverterTypes.q).types();
-//
-//            types.put("minecraft:bwsilverfish", types.get("minecraft:silverfish"));
-//            EntityTypes.Builder.a(Silverfish::new, EnumCreatureType.a).a("bwsilverfish");
-
-//            types.put("minecraft:bwgolem", types.get("minecraft:iron_golem"));
-//            EntityTypes.Builder.a(IGolem::new, EnumCreatureType.a).a("bwgolem");
-        }
     }
 
     @Override
@@ -255,13 +242,13 @@ public class v1_19_R2 extends VersionSupport {
         vlg.setSilent(true);
 
         for (Player p : players) {
-            String[] nume = Language.getMsg(p, name1).split(",");
-            if (nume.length == 1) {
-                ArmorStand a = createArmorStand(nume[0], l.clone().add(0, 1.85, 0));
+            String[] name = Language.getMsg(p, name1).split(",");
+            if (name.length == 1) {
+                ArmorStand a = createArmorStand(name[0], l.clone().add(0, 1.85, 0));
                 new ShopHolo(Language.getPlayerLanguage(p).getIso(), a, null, l, arena);
             } else {
-                ArmorStand a = createArmorStand(nume[0], l.clone().add(0, 2.1, 0));
-                ArmorStand b = createArmorStand(nume[1], l.clone().add(0, 1.85, 0));
+                ArmorStand a = createArmorStand(name[0], l.clone().add(0, 2.1, 0));
+                ArmorStand b = createArmorStand(name[1], l.clone().add(0, 1.85, 0));
                 new ShopHolo(Language.getPlayerLanguage(p).getIso(), a, b, l, arena);
             }
         }
@@ -364,11 +351,34 @@ public class v1_19_R2 extends VersionSupport {
     @Override
     public void registerTntWhitelist() {
         try {
+            var protection = 300f;
+            // blast resistance
             Field field = BlockBase.class.getDeclaredField("aH");
             field.setAccessible(true);
-            field.set(Blocks.fj, 300f);
-            field.set(Blocks.ce, 300f);
-            //todo protect glass
+            // end stone
+            field.set(Blocks.fj, protection);
+            // obsidian
+            field.set(Blocks.ce, protection);
+            // standard glass
+            field.set(Blocks.aH, protection);
+
+            var coloredGlass = new net.minecraft.world.level.block.Block[]{
+                    Blocks.dU, Blocks.dV, Blocks.dW, Blocks.dX,
+                    Blocks.dY, Blocks.dZ, Blocks.dZ, Blocks.ea,
+                    Blocks.eb, Blocks.ec, Blocks.ed, Blocks.ee,
+                    Blocks.ef, Blocks.eg, Blocks.eh, Blocks.ei,
+                    Blocks.ej,
+            };
+
+            Arrays.stream(coloredGlass).forEach(
+                    glass -> {
+                        try {
+                            field.set(glass, protection);
+                        } catch (IllegalAccessException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+            );
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -524,21 +534,10 @@ public class v1_19_R2 extends VersionSupport {
             return applyTag(head, tag);
         }
 
-//        SkullMeta headMeta = (SkullMeta) head.getItemMeta();
-//        FIXME: current hotfix will get rate limited! how the hell do we set head texture now?
-//        wtf is this: SkullOwner:{Id:[I;-1344581477,-1919271229,-1306015584,-647763423],Name:"andrei1058"}
-//        Field profileField;
-//        try {
-//            //noinspection ConstantConditions
-//            profileField = headMeta.getClass().getDeclaredField("profile");
-//            profileField.setAccessible(true);
-//            profileField.set(headMeta, ((CraftPlayer) player).getProfile());
-//        } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e1) {
-//            e1.printStackTrace();
-//        }
-//        assert headMeta != null;
-//        headMeta.setOwningPlayer(player);
-//        head.setItemMeta(headMeta);
+        var meta = head.getItemMeta();
+        if (meta instanceof SkullMeta) {
+            ((SkullMeta) meta).setOwnerProfile(player.getPlayerProfile());
+        }
 
         return head;
     }
@@ -684,8 +683,7 @@ public class v1_19_R2 extends VersionSupport {
 
     @Override
     public void clearArrowsFromPlayerBody(Player player) {
-        //TODO IMPLEMENT ME
-//        ((CraftLivingEntity) player).getHandle().ai().a(new DataWatcherObject<>(12, DataWatcherRegistry.b), -1);
+        ((CraftLivingEntity) player).getHandle().al().a(new DataWatcherObject<>(12, DataWatcherRegistry.b), -1);
     }
 
     /**

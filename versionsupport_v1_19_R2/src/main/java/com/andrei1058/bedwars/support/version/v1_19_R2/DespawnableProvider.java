@@ -2,19 +2,26 @@ package com.andrei1058.bedwars.support.version.v1_19_R2;
 
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.server.VersionSupport;
-import com.google.common.collect.Sets;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityCreature;
+import net.minecraft.world.entity.EntityInsentient;
+import net.minecraft.world.entity.EntityLiving;
+import net.minecraft.world.entity.ai.attributes.GenericAttributes;
+import net.minecraft.world.entity.ai.goal.PathfinderGoal;
 import net.minecraft.world.entity.ai.goal.PathfinderGoalSelector;
+import net.minecraft.world.entity.ai.goal.target.PathfinderGoalNearestAttackableTarget;
+import net.minecraft.world.entity.player.EntityHuman;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_19_R2.util.UnsafeList;
+import org.bukkit.craftbukkit.v1_19_R2.entity.CraftEntity;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Field;
+import java.util.Objects;
 
 public abstract class DespawnableProvider<T> {
 
     abstract DespawnableType getType();
+
+    abstract String getDisplayName(DespawnableAttributes attr, ITeam team);
 
     abstract T spawn(@NotNull DespawnableAttributes attr, @NotNull Location location, @NotNull ITeam team, VersionSupport api);
 
@@ -32,17 +39,33 @@ public abstract class DespawnableProvider<T> {
     }
 
     protected void clearSelectors(@NotNull EntityCreature entityLiving) {
-        try {
-            Field dField = PathfinderGoalSelector.class.getDeclaredField("d");
-            dField.setAccessible(true);
-//            Field cField = PathfinderGoalSelector.class.getDeclaredField("c");
-//            cField.setAccessible(true);
-            dField.set(getGoalSelector(entityLiving), Sets.newLinkedHashSet());
-            dField.set(getGoalSelector(entityLiving),Sets.newLinkedHashSet());
-//            cField.set(this.goalSelector, new UnsafeList());
-//            cField.set(this.targetSelector, new UnsafeList());
-        } catch (IllegalAccessException | NoSuchFieldException e1) {
-            e1.printStackTrace();
-        }
+        entityLiving.bS.b().clear();
+        entityLiving.bT.b().clear();
+    }
+
+    protected PathfinderGoal getTargetGoal(EntityInsentient entity, ITeam team, VersionSupport api) {
+        return new PathfinderGoalNearestAttackableTarget<>(entity, EntityLiving.class, 20, true, false,
+                entityLiving -> {
+                    if (entityLiving instanceof EntityHuman) {
+                        return !((EntityHuman) entityLiving).getBukkitEntity().isDead() &&
+                                !team.wasMember(((EntityHuman) entityLiving).getBukkitEntity().getUniqueId()) &&
+                                !team.getArena().isReSpawning(((EntityHuman) entityLiving).getBukkitEntity().getUniqueId())
+                                && !team.getArena().isSpectator(((EntityHuman) entityLiving).getBukkitEntity().getUniqueId());
+                    }
+                    return notSameTeam(entityLiving, team, api);
+                });
+    }
+
+    protected void applyDefaultSettings(org.bukkit.entity.@NotNull LivingEntity bukkitEntity, DespawnableAttributes attr,
+                                        ITeam team) {
+        bukkitEntity.setRemoveWhenFarAway(false);
+        bukkitEntity.setPersistent(true);
+        bukkitEntity.setCustomNameVisible(true);
+        bukkitEntity.setCustomName(getDisplayName(attr, team));
+
+        var entity = ((EntityInsentient)((CraftEntity)bukkitEntity).getHandle());
+        Objects.requireNonNull(entity.a(GenericAttributes.a)).a(attr.health());
+        Objects.requireNonNull(entity.a(GenericAttributes.d)).a(attr.speed());
+        Objects.requireNonNull(entity.a(GenericAttributes.f)).a(attr.damage());
     }
 }
