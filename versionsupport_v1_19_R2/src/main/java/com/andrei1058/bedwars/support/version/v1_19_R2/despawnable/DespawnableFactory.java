@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.support.version.v1_19_R2;
+package com.andrei1058.bedwars.support.version.v1_19_R2.despawnable;
 
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.server.VersionSupport;
