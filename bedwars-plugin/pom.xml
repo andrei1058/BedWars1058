@@ -12,15 +12,6 @@
     <packaging>jar</packaging>
     <version>${project.parent.version}</version>
 
-    <pluginRepositories>
-        <pluginRepository>
-            <!-- This is a temporary reference as the Maven Shade plugin
-                that supports Java 17 is not released yet -->
-            <id>maven-snapshots</id>
-            <url>https://repository.apache.org/content/repositories/snapshots/</url>
-        </pluginRepository>
-    </pluginRepositories>
-
     <repositories>
         <repository>
             <id>simonsators-repo</id>
