@@ -33,8 +33,7 @@ public class LangListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onLanguageChangeEvent(PlayerLangChangeEvent e) {
-        if (e == null) return;
-        if (e.isCancelled()) return;
+        if (e == null || e.isCancelled()) return;
         if (BedWars.config.getLobbyWorldName().equalsIgnoreCase(e.getPlayer().getWorld().getName())) {
             Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
                 Arena.sendLobbyCommandItems(e.getPlayer());
