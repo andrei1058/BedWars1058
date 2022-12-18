@@ -19,8 +19,6 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.core.particles.ParticleParamRedstone;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.protocol.game.*;
-import net.minecraft.network.syncher.DataWatcherObject;
-import net.minecraft.network.syncher.DataWatcherRegistry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.level.EntityPlayer;
@@ -645,17 +643,17 @@ public class v1_19_R2 extends VersionSupport {
     }
 
     @Override
-    public void spigotShowPlayer(Player victim, Player receiver) {
+    public void spigotShowPlayer(Player victim, @NotNull Player receiver) {
         receiver.showPlayer(getPlugin(), victim);
     }
 
     @Override
-    public void spigotHidePlayer(Player victim, Player receiver) {
+    public void spigotHidePlayer(Player victim, @NotNull Player receiver) {
         receiver.hidePlayer(getPlugin(), victim);
     }
 
     @Override
-    public Fireball setFireballDirection(Fireball fireball, Vector vector) {
+    public Fireball setFireballDirection(Fireball fireball, @NotNull Vector vector) {
         EntityFireball fb = ((CraftFireball) fireball).getHandle();
         fb.b = vector.getX() * 0.1D;
         fb.c = vector.getY() * 0.1D;
@@ -686,7 +684,7 @@ public class v1_19_R2 extends VersionSupport {
 
     @Override
     public void clearArrowsFromPlayerBody(Player player) {
-        ((CraftLivingEntity) player).getHandle().al().a(new DataWatcherObject<>(12, DataWatcherRegistry.b), -1);
+        // minecraft clears them on death on newer version
     }
 
     /**
