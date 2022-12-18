@@ -23,6 +23,7 @@ package com.andrei1058.bedwars.api.language;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 
 @SuppressWarnings("WeakerAccess")
+@Deprecated
 public class Messages {
 
     public static String PREFIX = "prefix";
@@ -169,6 +170,20 @@ public class Messages {
     public static String FORMATTING_SCOREBOARD_TAB_SUFFIX_STARTING = "format-sb-tab-suffix.starting";
     public static String FORMATTING_SCOREBOARD_TAB_PREFIX_PLAYING = "format-sb-tab-prefix.playing";
     public static String FORMATTING_SCOREBOARD_TAB_SUFFIX_PLAYING = "format-sb-tab-suffix.playing";
+
+    public static String FORMATTING_SIDEBAR_TAB_HEADER_LOBBY = "format-sb-tab-header.lobby";
+    public static String FORMATTING_SIDEBAR_TAB_HEADER_WAITING = "format-sb-tab-header.waiting";
+    public static String FORMATTING_SIDEBAR_TAB_HEADER_STARTING = "format-sb-tab-header.starting";
+    public static String FORMATTING_SIDEBAR_TAB_HEADER_PLAYING = "format-sb-tab-header.playing";
+    public static String FORMATTING_SIDEBAR_TAB_HEADER_RESTARTING = "format-sb-tab-header.restarting";
+    public static String FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR = "format-sb-tab-header.spectator";
+
+    public static String FORMATTING_SIDEBAR_TAB_FOOTER_LOBBY = "format-sb-tab-footer.lobby";
+    public static String FORMATTING_SIDEBAR_TAB_FOOTER_WAITING = "format-sb-tab-footer.waiting";
+    public static String FORMATTING_SIDEBAR_TAB_FOOTER_STARTING = "format-sb-tab-footer.starting";
+    public static String FORMATTING_SIDEBAR_TAB_FOOTER_PLAYING = "format-sb-tab-footer.playing";
+    public static String FORMATTING_SIDEBAR_TAB_FOOTER_RESTARTING = "format-sb-tab-footer.restarting";
+    public static String FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR = "format-sb-tab-footer.spectator";
     @Deprecated
     public static String FORMATTING_SCOREBOARD_TAB_PREFIX_PRESTARTING = "format-sb-tab-prefix.restarting";
     public static String FORMATTING_SCOREBOARD_TAB_PREFIX_RESTARTING = "format-sb-tab-prefix.restarting";

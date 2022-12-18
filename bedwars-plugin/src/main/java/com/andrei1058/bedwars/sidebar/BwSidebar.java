@@ -7,6 +7,7 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.levels.internal.PlayerLevel;
 import com.andrei1058.bedwars.stats.PlayerStats;
@@ -232,27 +233,27 @@ public class BwSidebar {
             providers.add(new PlaceholderProvider("{deaths}", () ->
                     String.valueOf(arena.getPlayerDeaths(player, false))
             ));
-        }
 
-        // Dynamic team placeholders
-        for (ITeam currentTeam : arena.getTeams()) {
-            providers.add(new PlaceholderProvider("{Team" + currentTeam.getName() + "Status}", () -> {
-                String result;
-                if (currentTeam.isBedDestroyed()) {
-                    if (currentTeam.getSize() > 0) {
-                        result = getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED)
-                                .replace("{remainingPlayers}", String.valueOf(currentTeam.getSize()));
+            // Dynamic team placeholders
+            for (ITeam currentTeam : arena.getTeams()) {
+                providers.add(new PlaceholderProvider("{Team" + currentTeam.getName() + "Status}", () -> {
+                    String result;
+                    if (currentTeam.isBedDestroyed()) {
+                        if (currentTeam.getSize() > 0) {
+                            result = getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_BED_DESTROYED)
+                                    .replace("{remainingPlayers}", String.valueOf(currentTeam.getSize()));
+                        } else {
+                            result = getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED);
+                        }
                     } else {
-                        result = getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED);
+                        result = getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE);
                     }
-                } else {
-                    result = getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE);
-                }
-                if (currentTeam.isMember(getPlayer())) {
-                    result += getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM);
-                }
-                return result;
-            }));
+                    if (currentTeam.isMember(getPlayer())) {
+                        result += getMsg(getPlayer(), Messages.FORMATTING_SCOREBOARD_YOUR_TEAM);
+                    }
+                    return result;
+                }));
+            }
         }
 
         return providers;
@@ -367,9 +368,12 @@ public class BwSidebar {
         String tabListName = Base64.getEncoder().encodeToString(
                 player.getUniqueId().toString().getBytes(StandardCharsets.UTF_8)
         );
+        Language lang = Language.getPlayerLanguage(player);
+
         if (tabList.containsKey(tabListName)) {
             handle.removeTab(tabListName);
             tabList.remove(tabListName);
+            SidebarManager.getInstance().sendHeaderFooter(player, "", "");
         }
 
         if (!skipStateCheck) {
@@ -390,30 +394,15 @@ public class BwSidebar {
             );
             tab.add(player);
             tabList.put(tabListName, tab);
-            return;
-        }
 
-        if (arena.getStatus() != GameState.playing) {
-            if (arena.getStatus() == GameState.waiting) {
-                prefix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_WAITING, player, null);
-                suffix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_WAITING, player, null);
-            } else if (arena.getStatus() == GameState.starting) {
-                prefix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_STARTING, player, null);
-                suffix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_STARTING, player, null);
-            } else if (arena.getStatus() == GameState.restarting) {
-                prefix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_RESTARTING, player, null);
-                suffix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_RESTARTING, player, null);
-            } else {
-                throw new RuntimeException("Unhandled game status!");
-            }
-            PlayerTab t = handle.playerTabCreate(tabListName, player, prefix, suffix, PlayerTab.PushingRule.NEVER);
-            t.add(player);
-            tabList.put(tabListName, t);
+            SidebarManager.getInstance().sendHeaderFooter(
+                    player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_LOBBY),
+                    lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_LOBBY)
+            );
             return;
         }
 
         // in-game tab has a special treatment
-
         if (arena.isSpectator(player)) {
             PlayerTab tab = tabList.get(SPECTATOR_TAB);
             if (null == tab) {
@@ -423,6 +412,42 @@ public class BwSidebar {
                 tabList.put(SPECTATOR_TAB, tab);
             }
             tab.add(player);
+
+            SidebarManager.getInstance().sendHeaderFooter(
+                    player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR),
+                    lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR)
+            );
+            return;
+        }
+
+        if (arena.getStatus() != GameState.playing) {
+            if (arena.getStatus() == GameState.waiting) {
+                prefix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_WAITING, player, null);
+                suffix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_WAITING, player, null);
+                SidebarManager.getInstance().sendHeaderFooter(
+                        player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_WAITING),
+                        lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_WAITING)
+                );
+            } else if (arena.getStatus() == GameState.starting) {
+                prefix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_STARTING, player, null);
+                suffix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_STARTING, player, null);
+                SidebarManager.getInstance().sendHeaderFooter(
+                        player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_STARTING),
+                        lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_STARTING)
+                );
+            } else if (arena.getStatus() == GameState.restarting) {
+                prefix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_RESTARTING, player, null);
+                suffix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_RESTARTING, player, null);
+                SidebarManager.getInstance().sendHeaderFooter(
+                        player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_RESTARTING),
+                        lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_RESTARTING)
+                );
+            } else {
+                throw new RuntimeException("Unhandled game status!");
+            }
+            PlayerTab t = handle.playerTabCreate(tabListName, player, prefix, suffix, PlayerTab.PushingRule.NEVER);
+            t.add(player);
+            tabList.put(tabListName, t);
             return;
         }
 
@@ -453,6 +478,11 @@ public class BwSidebar {
         }
 
         teamTab.add(player);
+
+        SidebarManager.getInstance().sendHeaderFooter(
+                player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_PLAYING),
+                lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_PLAYING)
+        );
     }
 
     @NotNull
@@ -504,6 +534,19 @@ public class BwSidebar {
      * @return true if tab formatting is disabled for current sidebar/ arena stage
      */
     private boolean isTabFormattingDisabled() {
+        if (null == arena) {
+
+            if (getServerType() == ServerType.SHARED) {
+                if (config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_LOBBY) &&
+                        !config.getLobbyWorldName().trim().isEmpty()) {
+
+                    World lobby = Bukkit.getWorld(config.getLobbyWorldName());
+                    return null != lobby;
+                }
+            }
+
+            return config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_LOBBY);
+        }
         // if tab formatting is disabled in game
         if (arena.getStatus() == GameState.playing && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_PLAYING)) {
             return false;
@@ -522,13 +565,6 @@ public class BwSidebar {
         // if tab formatting is disabled in restarting
         if (arena.getStatus() == GameState.restarting && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_RESTARTING)) {
             return false;
-        }
-
-        if (arena == null && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_LOBBY) &&
-                !config.getLobbyWorldName().trim().isEmpty()) {
-
-            World lobby = Bukkit.getWorld(config.getLobbyWorldName());
-            return null != lobby;
         }
 
         return true;

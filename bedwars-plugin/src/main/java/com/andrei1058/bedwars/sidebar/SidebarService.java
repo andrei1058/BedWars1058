@@ -9,7 +9,6 @@ import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.spigot.sidebar.SidebarManager;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -45,8 +44,7 @@ public class SidebarService {
         if (null != sidebar) {
             if (null == arena) {
                 // if sidebar is disabled in lobby on shared mode
-                if (BedWars.getServerType() == ServerType.SHARED &&
-                        !config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR)) {
+                if (!config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR)) {
                     this.remove(sidebar);
                     return;
                 }
@@ -63,7 +61,7 @@ public class SidebarService {
         List<String> lines = null;
         List<String> title;
         if (null == arena) {
-            if (BedWars.getServerType() == ServerType.SHARED) {
+            if (BedWars.getServerType() != ServerType.SHARED) {
                 lines = Language.getList(player, Messages.SCOREBOARD_LOBBY);
             }
         } else {
