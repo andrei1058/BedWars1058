@@ -55,15 +55,18 @@ import net.minecraft.world.entity.EnumItemSlot;
 import net.minecraft.world.entity.item.EntityTNTPrimed;
 import net.minecraft.world.entity.projectile.EntityFireball;
 import net.minecraft.world.entity.projectile.IProjectile;
-import net.minecraft.world.item.*;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBase;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.type.Bed;
+import org.bukkit.block.data.type.Ladder;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
@@ -235,25 +238,8 @@ public class v1_18_R2 extends VersionSupport {
         return pm != null && pm.hasCustomEffects() && pm.hasCustomEffect(org.bukkit.potion.PotionEffectType.INVISIBILITY);
     }
 
-    private static boolean unfreezeRegistry() {
-        // todo
-        return false;
-    }
-
-    @SuppressWarnings({"unchecked"})
     @Override
     public void registerEntities() {
-        if (unfreezeRegistry()){
-            Map<String, Type<?>> types = (Map<String, Type<?>>) DataConverterRegistry.a().getSchema(
-                    DataFixUtils.makeKey(SharedConstants.b().getWorldVersion())
-            ).findChoiceType(DataConverterTypes.q).types();
-
-            types.put("minecraft:bwsilverfish", types.get("minecraft:silverfish"));
-            EntityTypes.Builder.a(Silverfish::new, EnumCreatureType.a).a("bwsilverfish");
-
-            types.put("minecraft:bwgolem", types.get("minecraft:iron_golem"));
-            EntityTypes.Builder.a(IGolem::new, EnumCreatureType.a).a("bwgolem");
-        }
     }
 
     @Override
@@ -702,7 +688,37 @@ public class v1_18_R2 extends VersionSupport {
 
     @Override
     public void clearArrowsFromPlayerBody(Player player) {
-        // todo this probably doesn't work
-        ((CraftLivingEntity)player).getHandle().ai().b(new DataWatcherObject<>(12, DataWatcherRegistry.b),-1);
+    }
+
+    @Override
+    public void placeTowerBlocks(@NotNull Block b, @NotNull IArena a, @NotNull TeamColor color, int x, int y, int z){
+        b.getRelative(x, y, z).setType(color.woolMaterial());
+        a.addPlacedBlock(b.getRelative(x, y, z));
+    }
+
+    @Override
+    public void placeLadder(@NotNull Block b, int x, int y, int z, @NotNull IArena a, int ladderData){
+        Block block = b.getRelative(x,y,z);  //ladder block
+        block.setType(Material.LADDER);
+        Ladder ladder = (Ladder) block.getBlockData();
+        a.addPlacedBlock(block);
+        switch (ladderData) {
+            case 2 -> {
+                ladder.setFacing(BlockFace.NORTH);
+                block.setBlockData(ladder);
+            }
+            case 3 -> {
+                ladder.setFacing(BlockFace.SOUTH);
+                block.setBlockData(ladder);
+            }
+            case 4 -> {
+                ladder.setFacing(BlockFace.WEST);
+                block.setBlockData(ladder);
+            }
+            case 5 -> {
+                ladder.setFacing(BlockFace.EAST);
+                block.setBlockData(ladder);
+            }
+        }
     }
 }
