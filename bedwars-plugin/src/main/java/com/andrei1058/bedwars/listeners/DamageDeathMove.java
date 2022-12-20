@@ -694,6 +694,9 @@ public class DamageDeathMove implements Listener {
                 e.setDroppedExp(0);
             }
         }
+
+        // clean if necessary
+        nms.getDespawnablesList().remove(e.getEntity().getUniqueId());
     }
 
     @EventHandler
