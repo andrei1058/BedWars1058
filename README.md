@@ -125,7 +125,7 @@ Chosen by hundreds of servers all around the world.
 
 # 3rd party libraries
 - [bStats](https://bstats.org/getting-started/include-metrics)
-- [Sidebar API](https://gitlab.com/andrei1058/sidebar)
+- [Sidebar API](https://github.com/andrei1058/SiderbarLib)
 - [Commons IO](https://mvnrepository.com/artifact/commons-io/commons-io)
 - [HikariCP](https://mvnrepository.com/artifact/com.zaxxer/HikariCP)
 - [SLF4J](http://www.slf4j.org/)
