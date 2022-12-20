@@ -56,6 +56,7 @@ import com.andrei1058.bedwars.arena.tasks.ReJoinTask;
 import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import com.andrei1058.bedwars.arena.team.TeamAssigner;
 import com.andrei1058.bedwars.configuration.ArenaConfig;
+import com.andrei1058.bedwars.configuration.LevelsConfig;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.levels.internal.InternalLevel;
 import com.andrei1058.bedwars.levels.internal.PerMinuteTask;
@@ -158,6 +159,9 @@ public class Arena implements IArena {
     private HashMap<Player, Integer> playerDeaths = new HashMap<>();
     private HashMap<Player, Integer> playerFinalKillDeaths = new HashMap<>();
 
+    /* SUMMARY REWARDS */
+    private final Map<UUID, Integer> coinsEarned = new HashMap<>();
+    private final Map<UUID, Integer> experienceEarned = new HashMap<>();
 
     /* ARENA TASKS */
     private StartingTask startingTask = null;
@@ -494,6 +498,8 @@ public class Arena implements IArena {
 
             p.closeInventory();
             players.add(p);
+            coinsEarned.put(p.getUniqueId(), 0);
+            experienceEarned.put(p.getUniqueId(), 0);
             p.setFlying(false);
             p.setAllowFlight(false);
             p.setHealth(20);
@@ -785,6 +791,8 @@ public class Arena implements IArena {
         //players.remove must be under call event in order to check if the player is a spectator or not
         players.remove(p);
         removeArenaByPlayer(p, this);
+        coinsEarned.remove(p.getUniqueId());
+        experienceEarned.remove(p.getUniqueId());
 
         for (PotionEffect pf : p.getActivePotionEffects()) {
             p.removePotionEffect(pf.getType());
@@ -1899,6 +1907,7 @@ public class Arena implements IArena {
                         if (!winner.getMembers().contains(p)) {
                             nms.sendTitle(p, getMsg(p, Messages.GAME_END_GAME_OVER_PLAYER_TITLE), null, 0, 70, 20);
                         }
+
                         for (String s : getList(p, Messages.GAME_END_TOP_PLAYER_CHAT)) {
                             String message = s.replace("{firstName}", firstName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : firstName).replace("{firstKills}", String.valueOf(first))
                                     .replace("{secondName}", secondName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : secondName).replace("{secondKills}", String.valueOf(second))
@@ -1907,6 +1916,22 @@ public class Arena implements IArena {
                                     .replace("{TeamColor}", winner.getColor().chat().toString()).replace("{TeamName}", winner.getDisplayName(Language.getPlayerLanguage(p)));
                             p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, message));
                         }
+
+                        //Run task later cuz some coins are given too late and are not added to the map
+                        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                            for (String  s : getList(p, Messages.GAME_END_PLAYER_REWARD_SUMMARY)){
+                                String message = s
+                                        .replace("{coinsEarned}", String.valueOf(getCoinsEarned(p.getUniqueId())))
+                                        .replace("{experienceEarned}", String.valueOf(getExperienceEarned(p.getUniqueId())))
+                                        .replace("{percentAchieved}", String.valueOf(Math.round(BedWars.getLevelSupport().getCurrentXp(p) / (double) LevelsConfig.getNextCost(BedWars.getLevelSupport().getPlayerLevel(p)) * 100)))
+                                        .replace("{progress}", String.valueOf(BedWars.getLevelSupport().getLongProgressBar(p)))
+                                        .replace("{level}", String.valueOf(BedWars.getLevelSupport().getPlayerLevel(p)))
+                                        .replace("{nextLevel}", String.valueOf((BedWars.getLevelSupport().getPlayerLevel(p) + 1)))
+                                        .replace("{currentXp}", String.valueOf(BedWars.getLevelSupport().getCurrentXp(p)))
+                                        .replace("{requiredXp}", String.valueOf(BedWars.getLevelSupport().getRequiredXp(p)));
+                                p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, message));
+                            }
+                        }, 11L);
                     }
                 }
                 changeStatus(GameState.restarting);
@@ -2647,5 +2672,21 @@ public class Arena implements IArena {
                 player.teleport(config.getConfigLoc("lobbyLoc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
             }
         }
+    }
+
+    public int getCoinsEarned(UUID uuid){
+        return coinsEarned.get(uuid);
+    }
+
+    public int getExperienceEarned(UUID uuid){
+        return experienceEarned.get(uuid);
+    }
+
+    public Map<UUID, Integer> getCoinsMap(){
+        return coinsEarned;
+    }
+
+    public Map<UUID, Integer> getExperienceMap(){
+        return experienceEarned;
     }
 }

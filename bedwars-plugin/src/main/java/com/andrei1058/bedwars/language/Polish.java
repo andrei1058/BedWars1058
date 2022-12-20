@@ -270,6 +270,20 @@ public class Polish extends Language{
                 "&6                       &lTOP 2 Zabojca &7- {secondName} - {secondKills}",
                 "&c                       &lTOP 3 Zabojca &7- {thirdName} - {thirdKills}", "",
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+        yml.addDefault(Messages.GAME_END_PLAYER_REWARD_SUMMARY, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
+                "&r             &f&lReward Summary",
+                "&r ",
+                "  &7You earned",
+                "   &f&l• &6{coinsEarned} Bed Wars Coins",
+                "&r ",
+                "&r                 &bBed Wars Experience",
+                "&r      &bLevel {level}                             Level {nextLevel}",
+                "&r     {progress}",
+                "&r                 &b{currentXp} &7/ &a{requiredXp} &7({percentAchieved}%)",
+                "&r ",
+                "&7You earned &b{experienceEarned} Bed Wars Experience",
+                "&r ",
+                "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
         yml.addDefault(Messages.GAME_END_TEAM_WON_CHAT, "{prefix}{TeamColor}{TeamName} &awygral gre!");
         yml.addDefault(Messages.NEXT_EVENT_BEDS_DESTROY, "&dZniszczenie lozek&f:");
         yml.addDefault(Messages.NEXT_EVENT_DIAMOND_UPGRADE_II, "&bDiament &cII&f:");

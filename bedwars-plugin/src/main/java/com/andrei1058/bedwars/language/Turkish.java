@@ -273,6 +273,20 @@ public class Turkish extends Language {
                 "&6                          &l2. Oyuncu &7- {secondName} - {secondKills} öldürme",
                 "&c                          &l3. Oyuncu &7- {thirdName} - {thirdKills} öldürme", "",
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+        yml.addDefault(Messages.GAME_END_PLAYER_REWARD_SUMMARY, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
+                "&r             &f&lReward Summary",
+                "&r ",
+                "  &7You earned",
+                "   &f&l• &6{coinsEarned} Bed Wars Coins",
+                "&r ",
+                "&r                 &bBed Wars Experience",
+                "&r      &bLevel {level}                             Level {nextLevel}",
+                "&r     {progress}",
+                "&r                 &b{currentXp} &7/ &a{requiredXp} &7({percentAchieved}%)",
+                "&r ",
+                "&7You earned &b{experienceEarned} Bed Wars Experience",
+                "&r ",
+                "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
         yml.addDefault(Messages.BED_HOLOGRAM_DEFEND, "&c&lYatağını savun!");
         yml.addDefault(Messages.BED_HOLOGRAM_DESTROYED, "&c&lYatağın kırıldı!");
         yml.addDefault(Messages.NPC_NAME_TEAM_UPGRADES, "&bTAKIM YÜKSELTMELERİ,&e&lSAĞ TIKLA");
