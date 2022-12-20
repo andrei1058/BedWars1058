@@ -37,7 +37,7 @@ public class Polish extends Language{
     public Polish() {
         super(BedWars.plugin, "pl");
         YamlConfiguration yml = getYml();
-        yml.options().header("Polish translation by RarstManPL#0616 and Creper132#7570");
+        yml.options().header("Polish translation by RarstManPL#0616 and Creper132#7570 Updated by Seriously Not Beluga#0082");
         yml.addDefault(Messages.PREFIX, "");
         yml.options().copyDefaults(true);
         yml.addDefault("name", "Polski");
@@ -123,7 +123,7 @@ public class Polish extends Language{
         yml.addDefault(Messages.COMMAND_COOLDOWN, "&cNie możesz tego zrobić! Poczekaj {seconds}!");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_NAME, "&8Teleporter");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME, "{vPrefix}{player}");
-        yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_LORE, Arrays.asList("&7Zycie: &f{health}%", "&7Jedzenie: &f{food}", "", "&7Left-click to spectate"));
+        yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_LORE, Arrays.asList("&7Zycie: &f{health}%", "&7Jedzenie: &f{food}", "", "&7Kliknij lewym by oglądać"));
         yml.addDefault(Messages.ARENA_SPECTATOR_LEAVE_ITEM_NAME, "&c&lPowroc do lobby");
         yml.addDefault(Messages.ARENA_SPECTATOR_LEAVE_ITEM_LORE, Collections.singletonList("&7Kliknij PPM aby wyjsc do lobby!"));
         yml.addDefault(Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_TITLE, "&aObserwujesz &7{player}");
@@ -163,7 +163,7 @@ public class Polish extends Language{
         yml.addDefault(Messages.ARENA_STATUS_START_PLAYER_TITLE, "&aSTART");
         yml.addDefault(Messages.ARENA_JOIN_DENIED_SELECTOR, "{prefix}&cAktualnie nie możesz dołączyć do tej areny, kliknij PPM aby oglądać arene");
         yml.addDefault(Messages.ARENA_SPECTATE_DENIED_SELECTOR, "{prefix}&cAktualnie nie możesz obserwować tej areny, kliknij LMP aby dołączyć");
-        yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_PROXY, "&cSorry but you must join an arena using BedWarsProxy. \n&eIf you want to setup an arena make sure to give yourself the bw.setup permission so you can join the server directly!");
+        yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_PROXY, "&cPrzykro nam, ale musisz dołączyć do areny używając BedWarsProxy. \n&eJeśli chcesz utworzyć arenę, upewnij się, że nadałeś sobie uprawnienia bw.setup, aby móc bezpośrednio dołączyć do serwera!");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIER, "&eTier &c{tier}");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND, "&b&lDiamentow");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD, "&a&lSzmaragdow");
@@ -204,8 +204,8 @@ public class Polish extends Language{
         yml.addDefault(Messages.FORMATTING_GENERATOR_TIER2, "II");
         yml.addDefault(Messages.FORMATTING_GENERATOR_TIER3, "III");
         yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_TEAM, "{TeamColor}[{TeamName}]");
-        yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_SHOUT, "&6[SHOUT]");
-        yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_SPECTATOR, "&7[SPECTATOR]");
+        yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_SHOUT, "&6[GLOBALNY]");
+        yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_SPECTATOR, "&7[DUCH]");
         yml.addDefault(Messages.MEANING_SHOUT, "okrzyk");
         yml.addDefault(Messages.MEANING_NOBODY, "Nikt");
         yml.addDefault(Messages.MEANING_FULL, "Full");
@@ -232,14 +232,14 @@ public class Polish extends Language{
         yml.addDefault(Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL, "{PlayerColor}{PlayerName} &7spadl do pustki. &b&lOSTATECZNE ZABOJSTWO!");
         yml.addDefault(Messages.PLAYER_DIE_KNOCKED_IN_VOID_REGULAR_KILL, "{PlayerColor}{PlayerName} &7zostal zepchniety do pustki przez {KillerColor}{KillerName}&7.");
         yml.addDefault(Messages.PLAYER_DIE_KNOCKED_IN_VOID_FINAL_KILL, "{PlayerColor}{PlayerName} &7zostal zepchniety do pustki przez {KillerColor}{KillerName}&7. &b&lOSTATECZNE ZABOJSTWO!");
-        yml.addDefault(Messages.PLAYER_DIE_KNOCKED_BY_REGULAR_KILL, "{PlayerColor}{PlayerName} &7was pushed by {KillerColor}{KillerName}&7.");
-        yml.addDefault(Messages.PLAYER_DIE_KNOCKED_BY_FINAL_KILL, "{PlayerColor}{PlayerName} &7was pushed by {KillerColor}{KillerName}&7. &b&lFINAL KILL!");
+        yml.addDefault(Messages.PLAYER_DIE_KNOCKED_BY_REGULAR_KILL, "{PlayerColor}{PlayerName} &7został popchnięty do pustki {KillerColor}{KillerName}&7.");
+        yml.addDefault(Messages.PLAYER_DIE_KNOCKED_BY_FINAL_KILL, "{PlayerColor}{PlayerName} &7został popchnięty do pustki {KillerColor}{KillerName}&7. &b&lOSTATECZNE ZABÓJSTWO!");
         yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITH_SOURCE_REGULAR_KILL, "{PlayerColor}{PlayerName} &7zostal zabity przez bombe gracza {KillerColor}{KillerName}&7.");
         yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITH_SOURCE_FINAL_KILL, "{PlayerColor}{PlayerName} &7zostal zabity przez bombe gracza {KillerColor}{KillerName}&7. &b&lOSTATECZNE ZABOJSTWO!");
         yml.addDefault(Messages.PLAYER_DIE_PVP_REGULAR_KILL, "{PlayerColor}{PlayerName} &7zostal zabity przez {KillerColor}{KillerName}&7.");
         yml.addDefault(Messages.PLAYER_DIE_PVP_FINAL_KILL, "{PlayerColor}{PlayerName} &7zostal zabity przez {KillerColor}{KillerName}&7. &b&lOSTATECZNE ZABOJSTWO!");
-        yml.addDefault(Messages.PLAYER_DIE_PVP_LOG_OUT_REGULAR, "{PlayerColor}{PlayerName} &7disconnected while fighting with {KillerColor}{KillerName}&7.");
-        yml.addDefault(Messages.PLAYER_DIE_PVP_LOG_OUT_FINAL, "{PlayerColor}{PlayerName} &7disconnected while fighting with {KillerColor}{KillerName}&7. &b&lFINAL KILL!");
+        yml.addDefault(Messages.PLAYER_DIE_PVP_LOG_OUT_REGULAR, "{PlayerColor}{PlayerName} &7wyszedł podczas walki z {KillerColor}{KillerName}&7.");
+        yml.addDefault(Messages.PLAYER_DIE_PVP_LOG_OUT_FINAL, "{PlayerColor}{PlayerName} &7wyszedł podczas walki z {KillerColor}{KillerName}&7. &b&lOSTATECZNE ZABÓJSTWO!");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_TITLE, "&cUMARLES");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_SUBTITLE, "&eOdrodzisz sie za &c{time} &esekund/y!");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_CHAT, "{prefix}&eOdrodzisz sie za &c{time} &esekund/y!");
@@ -248,12 +248,12 @@ public class Polish extends Language{
         yml.addDefault(Messages.PLAYER_HIT_BOW, "{prefix}{TeamColor}{PlayerName} &7posiada &c{amount} &7HP!");
         yml.addDefault(Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR, "{PlayerColor}{PlayerName} &7umarl.");
         yml.addDefault(Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL, "{PlayerColor}{PlayerName} &7umarl. &b&lOSTATECZNE ZABOJSTWO!");
-        yml.addDefault(Messages.PLAYER_DIE_SHOOT_REGULAR, "{PlayerColor}{PlayerName} &7was shoot by {KillerColor}{KillerName}&7!");
-        yml.addDefault(Messages.PLAYER_DIE_SHOOT_FINAL_KILL, "{PlayerColor}{PlayerName} &7was shoot by {KillerColor}{KillerName}&7! &b&lOSTATECZNE ZABOJSTWO!");
-        yml.addDefault(Messages.PLAYER_DIE_DEBUG_REGULAR, "{PlayerColor}{PlayerName} &7was killed by {KillerColor}{KillerTeamName} &7Pluskwa!");
-        yml.addDefault(Messages.PLAYER_DIE_DEBUG_FINAL_KILL, "{PlayerColor}{PlayerName} &7was killed by {KillerColor}{KillerTeamName} &7Pluskwa! &b&lOSTATECZNE ZABOJSTWO!");
-        yml.addDefault(Messages.PLAYER_DIE_IRON_GOLEM_REGULAR, "{PlayerColor}{PlayerName} &7was killed by {KillerColor}{KillerTeamName}'s &7Iron Golem!");
-        yml.addDefault(Messages.PLAYER_DIE_IRON_GOLEM_FINAL_KILL, "{PlayerColor}{PlayerName} &7was killed by {KillerColor}{KillerTeamName}'s &7Iron Golem! &b&lOSTATECZNE ZABOJSTWO!");
+        yml.addDefault(Messages.PLAYER_DIE_SHOOT_REGULAR, "{PlayerColor}{PlayerName} &7został zastrzelony {KillerColor}{KillerName}&7!");
+        yml.addDefault(Messages.PLAYER_DIE_SHOOT_FINAL_KILL, "{PlayerColor}{PlayerName} &7został zastrzelony {KillerColor}{KillerName}&7! &b&lOSTATECZNE ZABOJSTWO!");
+        yml.addDefault(Messages.PLAYER_DIE_DEBUG_REGULAR, "{PlayerColor}{PlayerName} &7został zabity przez pluskwe {KillerColor}{KillerTeamName}");
+        yml.addDefault(Messages.PLAYER_DIE_DEBUG_FINAL_KILL, "{PlayerColor}{PlayerName} &7został zabity przez pluskwe {KillerColor}{KillerTeamName} &b&lOSTATECZNE ZABOJSTWO!");
+        yml.addDefault(Messages.PLAYER_DIE_IRON_GOLEM_REGULAR, "{PlayerColor}{PlayerName} &7został zabity przez golema {KillerColor}{KillerTeamName}");
+        yml.addDefault(Messages.PLAYER_DIE_IRON_GOLEM_FINAL_KILL, "{PlayerColor}{PlayerName} &7został zabity przez golema {KillerColor}{KillerTeamName} &b&lOSTATECZNE ZABOJSTWO!");
         yml.addDefault(Messages.PLAYER_DIE_REWARD_DIAMOND, "{prefix}&b+{amount} {meaning}");
         yml.addDefault(Messages.PLAYER_DIE_REWARD_EMERALD, "{prefix}&a+{amount} {meaning}");
         yml.addDefault(Messages.PLAYER_DIE_REWARD_IRON, "{prefix}&f+{amount} {meaning}");
@@ -342,26 +342,26 @@ public class Polish extends Language{
         yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&bSKLEP Z PRZEDMIOTAMI,&e&lRIGHT CLICK");
 
         //SHOP
-        yml.addDefault(Messages.SHOP_INDEX_NAME, "&8Quick Buy");
-        yml.addDefault(Messages.SHOP_QUICK_ADD_NAME, "&8Adding to Quick Buy...");
+        yml.addDefault(Messages.SHOP_INDEX_NAME, "&8Szybkie kupowanie");
+        yml.addDefault(Messages.SHOP_QUICK_ADD_NAME, "&8Dodawanie do szybkiego kupowania");
         yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "{prefix}&cNie masz wymaganej ilosci {currency}! Potrzebujesz {amount} wiecej!");
         yml.addDefault(Messages.SHOP_NEW_PURCHASE, "{prefix}&aKupiles &6{item}");
         yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "{prefix}&cJuz to kupiles!");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "{TeamColor}&l{TeamName} &r{TeamColor}Pluskwa");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME, "{TeamColor}{despawn}s &8[ {TeamColor}{health}&8]");
-        yml.addDefault(Messages.SHOP_SEPARATOR_NAME, "&8⇧ Categories");
-        yml.addDefault(Messages.SHOP_SEPARATOR_LORE, Collections.singletonList("&8⇩ Items"));
-        yml.addDefault(Messages.SHOP_QUICK_BUY_NAME, "&bQuick Buy");
+        yml.addDefault(Messages.SHOP_SEPARATOR_NAME, "&8⇧ Kategorie");
+        yml.addDefault(Messages.SHOP_SEPARATOR_LORE, Collections.singletonList("&8⇩ Przedmioty"));
+        yml.addDefault(Messages.SHOP_QUICK_BUY_NAME, "&bSzybkie kupowanie");
         yml.addDefault(Messages.SHOP_QUICK_BUY_LORE, new ArrayList<>());
         yml.addDefault(Messages.SHOP_QUICK_EMPTY_NAME, "&cEmpty slot!");
-        yml.addDefault(Messages.SHOP_QUICK_EMPTY_LORE, Arrays.asList("&7This is a Quick Buy Slot!", "&bSneak Click &7any item in", "&7the shop to add it here."));
+        yml.addDefault(Messages.SHOP_QUICK_EMPTY_LORE, Arrays.asList("&7To jest szybkie kupowanie!", "&bKucjnij &7aby dodać"));
         yml.addDefault(Messages.SHOP_CAN_BUY_COLOR, "&a");
         yml.addDefault(Messages.SHOP_CANT_BUY_COLOR, "&c");
-        yml.addDefault(Messages.SHOP_LORE_STATUS_CAN_BUY, "&eClick to purchase!");
-        yml.addDefault(Messages.SHOP_LORE_STATUS_CANT_AFFORD, "&cYou don't have enough {currency}!");
-        yml.addDefault(Messages.SHOP_LORE_STATUS_MAXED, "&aMAXED!");
-        yml.addDefault(Messages.SHOP_LORE_QUICK_ADD, "&bSneak Click to add to Quick Buy");
-        yml.addDefault(Messages.SHOP_LORE_QUICK_REMOVE, "&bSneak Click to remove from Quick Buy!");
+        yml.addDefault(Messages.SHOP_LORE_STATUS_CAN_BUY, "&eKliknij aby kupić!");
+        yml.addDefault(Messages.SHOP_LORE_STATUS_CANT_AFFORD, "&cNie masz wystarczająco {currency}!");
+        yml.addDefault(Messages.SHOP_LORE_STATUS_MAXED, "&aMAX!");
+        yml.addDefault(Messages.SHOP_LORE_QUICK_ADD, "&bKucnij &7by dodać do szybkiego kupowania");
+        yml.addDefault(Messages.SHOP_LORE_QUICK_REMOVE, "&bKucnij &7by usunąć z szybkiego kupowania");
 
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "&8Bloki", "&aBloki", Collections.singletonList("&eKliknij aby przegladac!"));
@@ -465,9 +465,9 @@ public class Polish extends Language{
         addDefaultStatsMsg(yml, "last-play", "&6Ostatnia gra", "&f{lastPlay}");
         addDefaultStatsMsg(yml, "games-played", "&6Rozegrane gry", "&f{gamesPlayed}");
 
-        yml.addDefault(Messages.REJOIN_NO_ARENA, "{prefix}&cThere is no arena to rejoin!");
-        yml.addDefault(Messages.REJOIN_DENIED, "{prefix}&cYou can't rejoin the arena anymore. Game ended or bed destroyed.");
-        yml.addDefault(Messages.REJOIN_ALLOWED, "{prefix}&eJoining arena &a{arena}&e!");
+        yml.addDefault(Messages.REJOIN_NO_ARENA, "{prefix}&cBrak areny do rejoinu");
+        yml.addDefault(Messages.REJOIN_DENIED, "{prefix}&cNie możesz rejoinować!");
+        yml.addDefault(Messages.REJOIN_ALLOWED, "{prefix}&eDołączasz do &a{arena}&e!");
 
         yml.addDefault(Messages.MEANING_NO_TRAP, "No trap!");
         yml.addDefault(Messages.FORMAT_UPGRADE_TRAP_COST, "&7Cost: {currencyColor}{cost} {currency}");
