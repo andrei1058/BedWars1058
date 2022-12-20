@@ -5,7 +5,7 @@
     <parent>
         <artifactId>BedWars1058</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>22.3-SNAPSHOT</version>
+        <version>22.9-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>bedwars-plugin</artifactId>
@@ -60,7 +60,11 @@
         </repository>
         <repository>
             <id>andrei1058-releases</id>
-            <url>https://repo.andrei1058.com/releases/</url>
+            <url>https://repo.andrei1058.dev/releases/</url>
+        </repository>
+        <repository>
+            <id>citizens-repo</id>
+            <url>https://maven.citizensnpcs.co/repo</url>
         </repository>
     </repositories>
 
@@ -155,7 +159,12 @@
         </dependency>
         <dependency>
             <groupId>com.andrei1058.bedwars</groupId>
-            <artifactId>versionsupport_v1_18_R1</artifactId>
+            <artifactId>versionsupport_v1_18_R2</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.bedwars</groupId>
+            <artifactId>versionsupport_v1_19_R2</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -212,8 +221,44 @@
         <!--        Sidebar LIB-->
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
-            <artifactId>sidebar-api</artifactId>
-            <version>0.3.2-SNAPSHOT</version>
+            <artifactId>sidebar-base</artifactId>
+            <version>22.12</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.spigot.sidebar</groupId>
+            <artifactId>sidebar-eight</artifactId>
+            <version>22.12</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.spigot.sidebar</groupId>
+            <artifactId>sidebar-twelve</artifactId>
+            <version>22.12</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.spigot.sidebar</groupId>
+            <artifactId>sidebar-sixteen</artifactId>
+            <version>22.12</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.spigot.sidebar</groupId>
+            <artifactId>sidebar-seventeen</artifactId>
+            <version>22.12</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.spigot.sidebar</groupId>
+            <artifactId>sidebar-eighteen</artifactId>
+            <version>22.12</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.spigot.sidebar</groupId>
+            <artifactId>sidebar-nineteen</artifactId>
+            <version>22.12</version>
             <scope>compile</scope>
         </dependency>
         <!--        End of Sidebar LIB-->
