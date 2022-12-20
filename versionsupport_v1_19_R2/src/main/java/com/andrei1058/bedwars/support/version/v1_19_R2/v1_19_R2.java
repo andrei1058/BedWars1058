@@ -32,12 +32,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBase;
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.type.Bed;
+import org.bukkit.block.data.type.Ladder;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_19_R2.CraftServer;
@@ -789,5 +789,42 @@ public class v1_19_R2 extends VersionSupport {
         list.add(new Pair<>(EnumItemSlot.c, entityPlayer.c(EnumItemSlot.c)));
 
         return list;
+    }
+
+    @Override
+    public void placeTowerBlocks(@NotNull Block b, @NotNull IArena a, @NotNull TeamColor color, int x, int y, int z){
+        b.getRelative(x, y, z).setType(color.woolMaterial());
+        a.addPlacedBlock(b.getRelative(x, y, z));
+    }
+
+    @Override
+    public void placeLadder(@NotNull Block b, int x, int y, int z, @NotNull IArena a, int ladderData){
+        Block block = b.getRelative(x,y,z);  //ladder block
+        block.setType(Material.LADDER);
+        Ladder ladder = (Ladder) block.getBlockData();
+        a.addPlacedBlock(block);
+        switch (ladderData) {
+            case 2 -> {
+                ladder.setFacing(BlockFace.NORTH);
+                block.setBlockData(ladder);
+            }
+            case 3 -> {
+                ladder.setFacing(BlockFace.SOUTH);
+                block.setBlockData(ladder);
+            }
+            case 4 -> {
+                ladder.setFacing(BlockFace.WEST);
+                block.setBlockData(ladder);
+            }
+            case 5 -> {
+                ladder.setFacing(BlockFace.EAST);
+                block.setBlockData(ladder);
+            }
+        }
+    }
+
+    @Override
+    public void playVillagerEffect(@NotNull Player player, Location location){
+        player.spawnParticle(Particle.VILLAGER_HAPPY, location, 1);
     }
 }
