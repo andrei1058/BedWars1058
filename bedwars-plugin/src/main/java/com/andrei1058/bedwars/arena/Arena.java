@@ -1195,6 +1195,12 @@ public class Arena implements IArena {
         if (getRestartingTask() != null) getRestartingTask().cancel();
         if (getStartingTask() != null) getStartingTask().cancel();
         if (getPlayingTask() != null) getPlayingTask().cancel();
+        if (null != moneyperMinuteTask){
+            moneyperMinuteTask.cancel();
+        }
+        if (null != perMinuteTask) {
+            perMinuteTask.cancel();
+        }
         plugin.getLogger().log(Level.FINE, "Restarting arena: " + getArenaName());
         Bukkit.getPluginManager().callEvent(new ArenaRestartEvent(getArenaName(), getWorldName()));
         for (Player inWorld : getWorld().getPlayers()) {
@@ -1480,6 +1486,12 @@ public class Arena implements IArena {
                 restartingTask.cancel();
         }
         restartingTask = null;
+        if (null != moneyperMinuteTask){
+            moneyperMinuteTask.cancel();
+        }
+        if (null != perMinuteTask) {
+            perMinuteTask.cancel();
+        }
 
         players.forEach(c -> SidebarService.getInstance().giveSidebar(c, this, false));
 
@@ -1497,12 +1509,6 @@ public class Arena implements IArena {
             playingTask = new GamePlayingTask(this);
         } else if (status == GameState.restarting) {
             restartingTask = new GameRestartingTask(this);
-            if (perMinuteTask != null) {
-                perMinuteTask.cancel ();
-            }
-            if (moneyperMinuteTask != null) {
-                moneyperMinuteTask.cancel ();
-            }
         }
     }
 
