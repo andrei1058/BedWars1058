@@ -35,6 +35,7 @@ import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.AutoCreateTeams;
 import com.andrei1058.bedwars.configuration.Sounds;
+import com.andrei1058.bedwars.support.paper.PaperSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -285,7 +286,8 @@ public class BreakPlace implements Listener {
                                             p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_OWN_BED));
                                             e.setCancelled(true);
                                             if (e.getPlayer().getLocation().getBlock().getType().toString().contains("BED")) {
-                                                e.getPlayer().teleport(e.getPlayer().getLocation().add(0, 0.5, 0));
+                                                PaperSupport.teleport(e.getPlayer(), e.getPlayer().getLocation().add(0, 0.5, 0));
+                                               // e.getPlayer().teleport(e.getPlayer().getLocation().add(0, 0.5, 0));
                                             }
                                         } else {
                                             e.setCancelled(false);
