@@ -87,17 +87,6 @@ public class ItemDropPickListener {
         }
     }
 
-    // common
-    public static class GeneratorCollect implements Listener {
-        @EventHandler
-        //Prevent AFK players from picking items
-        public void onCollect(PlayerGeneratorCollectEvent e){
-            if (api.getAFKUtil().isPlayerAFK(e.getPlayer())){
-                e.setCancelled(true);
-            }
-        }
-    }
-
     /**
      * @return true if event should be cancelled
      */
@@ -144,7 +133,7 @@ public class ItemDropPickListener {
                         } else {
                             item.getItemStack().setItemMeta(itemMeta);
                         }
-                    }
+                    }else return true; //Cancel event if player is afk
                 }
             }
         }
