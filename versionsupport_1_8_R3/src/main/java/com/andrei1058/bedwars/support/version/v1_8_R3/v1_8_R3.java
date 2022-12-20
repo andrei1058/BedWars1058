@@ -750,4 +750,10 @@ public class v1_8_R3 extends VersionSupport {
         b.getRelative(x, y, z).setData((byte)ladderdata);
         a.addPlacedBlock(b.getRelative(x, y, z));
     }
+
+    @Override
+    public void playVillagerEffect(Player player, Location location){
+        PacketPlayOutWorldParticles pwp = new PacketPlayOutWorldParticles(EnumParticle.VILLAGER_HAPPY, true, (float) location.getX(), (float) location.getY(), (float) location.getZ(), (float) 0, (float) 0, (float) 0, (float) 0, 1);
+        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(pwp);
+    }
 }

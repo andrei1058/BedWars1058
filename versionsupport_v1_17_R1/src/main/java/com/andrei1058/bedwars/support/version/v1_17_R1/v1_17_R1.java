@@ -62,6 +62,7 @@ import net.minecraft.world.level.block.state.BlockBase;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -742,5 +743,10 @@ public class v1_17_R1 extends VersionSupport {
                 block.setBlockData(ladder);
             }
         }
+    }
+
+    @Override
+    public void playVillagerEffect(Player player, Location location){
+        player.spawnParticle(Particle.VILLAGER_HAPPY, location, 1);
     }
 }

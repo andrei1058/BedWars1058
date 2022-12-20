@@ -229,6 +229,10 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_SPOIL_TNT_PLAYERS = GENERAL_CONFIGURATION_PERFORMANCE_PATH + ".spoil-tnt-players";
 
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_PAPER_FEATURES = GENERAL_CONFIGURATION_PERFORMANCE_PATH + ".paper-features";
+
+    private static final String GENERAL_CONFIGURATION_HEAL_POOL = GENERAL_CONFIGURATION_PERFORMANCE_PATH+".heal-pool";
+    public static final String GENERAL_CONFIGURATION_HEAL_POOL_ENABLE = GENERAL_CONFIGURATION_HEAL_POOL+".enable";
+    public static final String GENERAL_CONFIGURATION_HEAL_POOL_SEEN_TEAM_ONLY = GENERAL_CONFIGURATION_HEAL_POOL_ENABLE+".seen-by-team-only";
     public static final String SHOP_SETTINGS_PATH = "shop-settings";
     public static final String SHOP_SPECIALS_PATH = "shop-specials";
     public static final String SHOP_QUICK_DEFAULTS_PATH = "quick-buy-defaults";

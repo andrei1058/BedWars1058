@@ -721,4 +721,9 @@ public class v1_12_R1 extends VersionSupport {
         b.getRelative(x, y, z).setData((byte)ladderdata);
         a.addPlacedBlock(b.getRelative(x, y, z));
     }
+
+    @Override
+    public void playVillagerEffect(Player player, Location location){
+        player.spawnParticle(Particle.VILLAGER_HAPPY, location, 1);
+    }
 }

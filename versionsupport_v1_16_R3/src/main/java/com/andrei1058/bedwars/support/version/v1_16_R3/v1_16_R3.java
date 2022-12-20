@@ -59,6 +59,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -710,5 +711,10 @@ public class v1_16_R3 extends VersionSupport {
                 ladder.setFacing(BlockFace.EAST);
                 block.setBlockData(ladder);
         }
+    }
+
+    @Override
+    public void playVillagerEffect(@NotNull Player player, Location location){
+        player.spawnParticle(org.bukkit.Particle.VILLAGER_HAPPY, location, 1);
     }
 }
