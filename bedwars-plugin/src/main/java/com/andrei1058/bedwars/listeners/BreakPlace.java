@@ -393,7 +393,8 @@ public class BreakPlace implements Listener {
                     int line = 0;
                     for (String string : BedWars.signs.getList("format")) {
                         e.setLine(line, string.replace("[on]", String.valueOf(a.getPlayers().size())).replace("[max]",
-                                String.valueOf(a.getMaxPlayers())).replace("[arena]", a.getDisplayName()).replace("[status]", a.getDisplayStatus(Language.getDefaultLanguage())));
+                                String.valueOf(a.getMaxPlayers())).replace("[arena]", a.getDisplayName()).replace("[status]", a.getDisplayStatus(Language.getDefaultLanguage()))
+                                .replace("[type]", String.valueOf(a.getMaxInTeam())));
                         line++;
                     }
                     b.update(true);
