@@ -27,7 +27,6 @@ import com.andrei1058.bedwars.api.events.player.PlayerBedBreakEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerReJoinEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerReSpawnEvent;
-import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -47,14 +46,9 @@ public class ScoreboardListener implements Listener {
         final IArena arena = Arena.getArenaByPlayer(player);
 
         int health = (int) Math.ceil((player.getHealth() - e.getFinalDamage()));
-
         if (arena == null) return;
 
-        for (BedWarsScoreboard scoreboard : BedWarsScoreboard.getScoreboards().values()) {
-            if (arena.equals(scoreboard.getArena())) {
-                scoreboard.getHandle().refreshHealth(player, health);
-            }
-        }
+        SidebarService.getInstance().refreshHealth(arena, player, health);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -68,22 +62,15 @@ public class ScoreboardListener implements Listener {
 
         int health = (int) Math.ceil(player.getHealth() + e.getAmount());
 
-        for (BedWarsScoreboard scoreboard : BedWarsScoreboard.getScoreboards().values()) {
-            if (arena.equals(scoreboard.getArena())) {
-                scoreboard.getHandle().refreshHealth(player, health);
-            }
-        }
+        SidebarService.getInstance().refreshHealth(arena, player, health);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onReSpawn(PlayerReSpawnEvent e) {
         if (e == null) return;
         final IArena arena = e.getArena();
-        for (BedWarsScoreboard scoreboard : BedWarsScoreboard.getScoreboards().values()) {
-            if (arena.equals(scoreboard.getArena())) {
-                scoreboard.getHandle().refreshHealth(e.getPlayer(), (int) Math.ceil(e.getPlayer().getHealth()));
-            }
-        }
+
+        SidebarService.getInstance().refreshHealth(arena, e.getPlayer(), (int) Math.ceil(e.getPlayer().getHealth()));
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -95,11 +82,7 @@ public class ScoreboardListener implements Listener {
         final Player player = e.getPlayer();
 
         // re-add player to scoreboard tab list
-        for (BedWarsScoreboard scoreboard : BedWarsScoreboard.getScoreboards().values()) {
-            if (arena.equals(scoreboard.getArena())) {
-                scoreboard.addToTabList(player, Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_PLAYING, Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_PLAYING);
-            }
-        }
+        SidebarService.getInstance().handleReJoin(arena, player);
     }
 
     @EventHandler
@@ -108,11 +91,7 @@ public class ScoreboardListener implements Listener {
         final IArena arena = e.getArena();
 
         // refresh placeholders in case placeholders refresh is disabled
-        BedWarsScoreboard.getScoreboards().values().forEach(bedWarsScoreboard -> {
-            if (arena.equals(bedWarsScoreboard.getArena())) {
-                bedWarsScoreboard.getHandle().refreshPlaceholders();
-            }
-        });
+        SidebarService.getInstance().refreshPlaceholders(arena);
     }
 
     @EventHandler
@@ -122,10 +101,6 @@ public class ScoreboardListener implements Listener {
         final IArena arena = e.getArena();
 
         // refresh placeholders in case placeholders refresh is disabled
-        BedWarsScoreboard.getScoreboards().values().forEach(bedWarsScoreboard -> {
-            if (arena.equals(bedWarsScoreboard.getArena())) {
-                bedWarsScoreboard.getHandle().refreshPlaceholders();
-            }
-        });
+        SidebarService.getInstance().refreshPlaceholders(arena);
     }
 }
