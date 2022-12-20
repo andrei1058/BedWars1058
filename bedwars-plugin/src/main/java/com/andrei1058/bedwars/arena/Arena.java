@@ -63,7 +63,7 @@ import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
 import com.andrei1058.bedwars.listeners.dropshandler.PlayerDrops;
 import com.andrei1058.bedwars.money.internal.MoneyPerMinuteTask;
 import com.andrei1058.bedwars.shop.ShopCache;
-import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
+import com.andrei1058.bedwars.sidebar.SidebarService;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.support.vault.WithEconomy;
@@ -546,7 +546,7 @@ public class Arena implements IArena {
             }
             p.teleport(getWaitingLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
 
-            BedWarsScoreboard.giveScoreboard(p, this, false);
+            SidebarService.getInstance().giveSidebar(p, this, false);
             sendPreGameCommandItems(p);
             for (PotionEffect pf : p.getActivePotionEffects()) {
                 p.removePotionEffect(pf.getType());
@@ -644,7 +644,7 @@ public class Arena implements IArena {
                 setArenaByPlayer(p, this);
             }
 
-            BedWarsScoreboard.giveScoreboard(p, this, false);
+            SidebarService.getInstance().giveSidebar(p, this, false);
             nms.setCollide(p, this, false);
 
             if (!playerBefore) {
@@ -885,11 +885,9 @@ public class Arena implements IArena {
         }
 
         if (getServerType() == ServerType.SHARED) {
-            BedWarsScoreboard sb = BedWarsScoreboard.getSBoard(p.getUniqueId());
-            if (sb != null) {
-                sb.remove();
-            }
+            SidebarService.getInstance().remove(p);
             this.sendToMainLobby(p);
+
         } else if (getServerType() == ServerType.BUNGEE) {
             Misc.moveToLobbyOrKick(p, this, true);
             return;
@@ -925,7 +923,7 @@ public class Arena implements IArena {
                         BedWars.nms.spigotHidePlayer(on, p);
                     }
                 }
-                if (!disconnect) BedWarsScoreboard.giveScoreboard(p, null, false);
+                if (!disconnect) SidebarService.getInstance().giveSidebar(p, null, false);
             }, 5L);
         }
 
@@ -1027,10 +1025,7 @@ public class Arena implements IArena {
         BedWars.getAPI().getAFKUtil().setPlayerAFK(p, false);
 
         if (getServerType() == ServerType.SHARED) {
-            BedWarsScoreboard sb = BedWarsScoreboard.getSBoard(p.getUniqueId());
-            if (sb != null) {
-                sb.remove();
-            }
+            SidebarService.getInstance().remove(p);
             this.sendToMainLobby(p);
         } else if (getServerType() == ServerType.MULTIARENA) {
             this.sendToMainLobby(p);
@@ -1069,7 +1064,7 @@ public class Arena implements IArena {
                         BedWars.nms.spigotHidePlayer(on, p);
                     }
                 }
-                if (!disconnect) BedWarsScoreboard.giveScoreboard(p, null, true);
+                if (!disconnect) SidebarService.getInstance().giveSidebar(p, null, false);
             });
         }
 
@@ -1166,7 +1161,7 @@ public class Arena implements IArena {
         reJoin.getBwt().reJoin(p, ev.getRespawnTime());
         reJoin.destroy(false);
 
-        BedWarsScoreboard.giveScoreboard(p, this, true);
+        SidebarService.getInstance().giveSidebar(p, this, true);
         return true;
     }
 
@@ -1491,7 +1486,6 @@ public class Arena implements IArena {
                 restartingTask.cancel();
         }
         restartingTask = null;
-
         if (null != moneyperMinuteTask){
             moneyperMinuteTask.cancel();
         }
@@ -1499,9 +1493,9 @@ public class Arena implements IArena {
             perMinuteTask.cancel();
         }
 
-        players.forEach(c -> BedWarsScoreboard.giveScoreboard(c, this, false));
+        players.forEach(c -> SidebarService.getInstance().giveSidebar(c, this, false));
 
-        spectators.forEach(c -> BedWarsScoreboard.giveScoreboard(c, this, false));
+        spectators.forEach(c -> SidebarService.getInstance().giveSidebar(c, this, false));
 
         if (status == GameState.starting) {
             startingTask = new GameStartingTask(this);
@@ -1597,7 +1591,8 @@ public class Arena implements IArena {
                 if (getPlayers() == null) continue;
                 s.setLine(line, string.replace("[on]", String.valueOf(getPlayers().size()))
                         .replace("[max]", String.valueOf(getMaxPlayers())).replace("[arena]", getDisplayName())
-                        .replace("[status]", getDisplayStatus(Language.getDefaultLanguage())));
+                        .replace("[status]", getDisplayStatus(Language.getDefaultLanguage()))
+                        .replace("[type]", String.valueOf(getMaxInTeam())));
                 line++;
             }
             try {
@@ -2169,12 +2164,12 @@ public class Arena implements IArena {
 
     @Override
     public void updateSpectatorCollideRule(Player p, boolean collide) {
-        if (!isSpectator(p)) return;
-        for (BedWarsScoreboard sb : BedWarsScoreboard.getScoreboards().values()) {
-            if (sb.getArena() == this) {
-                sb.updateSpectator(p, collide);
-            }
-        }
+//        if (!isSpectator(p)) return;
+//        for (BedWarsScoreboard sb : BedWarsScoreboard.getScoreboards().values()) {
+//            if (sb.getArena() == this) {
+//                sb.updateSpectator(p, collide);
+//            }
+//        }
     }
 
     /**

@@ -22,7 +22,7 @@ package com.andrei1058.bedwars.listeners.joinhandler;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
+import com.andrei1058.bedwars.sidebar.SidebarService;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -58,7 +58,7 @@ public class JoinListenerShared implements Listener {
 
         // Give scoreboard
         if (e.getPlayer().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
-            BedWarsScoreboard.giveScoreboard(e.getPlayer(), null, true);
+            SidebarService.getInstance().giveSidebar(e.getPlayer(), null, true);
         }
     }
 }
