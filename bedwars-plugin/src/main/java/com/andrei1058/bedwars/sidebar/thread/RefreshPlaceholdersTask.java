@@ -1,6 +1,6 @@
 /*
  * BedWars1058 - A bed wars mini-game.
- * Copyright (C) 2021 Andrei Dascălu
+ * Copyright (C) 2022 Andrei Dascălu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,15 +18,13 @@
  * Contact e-mail: andrew.dascalu@gmail.com
  */
 
-package com.andrei1058.bedwars.sidebar;
+package com.andrei1058.bedwars.sidebar.thread;
 
-public class SidebarPlaceholderRefresh implements Runnable {
+import com.andrei1058.bedwars.sidebar.SidebarService;
+
+public class RefreshPlaceholdersTask implements Runnable {
     @Override
     public void run() {
-        for (BedWarsScoreboard sb : BedWarsScoreboard.getScoreboards().values()){
-            sb.getHandle().refreshPlaceholders();
-            //TODO: move to their own task
-            //sb.getHandle().refreshHealthAnimation();
-        }
+        SidebarService.getInstance().refreshPlaceholders();
     }
 }

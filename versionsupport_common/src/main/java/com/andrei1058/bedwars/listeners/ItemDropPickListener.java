@@ -87,17 +87,6 @@ public class ItemDropPickListener {
         }
     }
 
-    // common
-    public static class GeneratorCollect implements Listener {
-        @EventHandler
-        //Prevent AFK players from picking items
-        public void onCollect(PlayerGeneratorCollectEvent e){
-            if (api.getAFKUtil().isPlayerAFK(e.getPlayer())){
-                e.setCancelled(true);
-            }
-        }
-    }
-
     /**
      * @return true if event should be cancelled
      */
@@ -136,13 +125,15 @@ public class ItemDropPickListener {
                     ItemMeta itemMeta = new ItemStack(material).getItemMeta();
 
                     //Call ore pick up event
-                    PlayerGeneratorCollectEvent event = new PlayerGeneratorCollectEvent((Player) player, item, a);
-                    Bukkit.getPluginManager().callEvent(event);
-                    if (event.isCancelled()) {
-                        return true;
-                    } else {
-                        item.getItemStack().setItemMeta(itemMeta);
-                    }
+                    if (!api.getAFKUtil().isPlayerAFK(((Player) player).getPlayer())){
+                        PlayerGeneratorCollectEvent event = new PlayerGeneratorCollectEvent((Player) player, item, a);
+                        Bukkit.getPluginManager().callEvent(event);
+                        if (event.isCancelled()) {
+                            return true;
+                        } else {
+                            item.getItemStack().setItemMeta(itemMeta);
+                        }
+                    }else return true; //Cancel event if player is afk
                 }
             }
         }
