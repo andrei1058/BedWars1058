@@ -233,6 +233,8 @@ public class ConfigPath {
     public static final String SHOP_SPECIALS_PATH = "shop-specials";
     public static final String SHOP_QUICK_DEFAULTS_PATH = "quick-buy-defaults";
 
+    public static final String SHOP_SPECIAL_TOWER_ENABLE = SHOP_SPECIALS_PATH + ".tower.enable";
+    public static final String SHOP_SPECIAL_TOWER_MATERIAL = SHOP_SPECIALS_PATH + ".tower.material";
     public static final String SHOP_SPECIAL_SILVERFISH_ENABLE = SHOP_SPECIALS_PATH + ".silverfish.enable";
     public static final String SHOP_SPECIAL_SILVERFISH_MATERIAL = SHOP_SPECIALS_PATH + ".silverfish.material";
     public static final String SHOP_SPECIAL_SILVERFISH_DATA = SHOP_SPECIALS_PATH + ".silverfish.data";

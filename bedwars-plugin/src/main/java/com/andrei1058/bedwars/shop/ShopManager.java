@@ -89,6 +89,9 @@ public class ShopManager extends ConfigManager {
         getYml().addDefault(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_DESPAWN, 240);
         getYml().addDefault(ConfigPath.SHOP_SPECIAL_IRON_GOLEM_SPEED, 0.25);
 
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_TOWER_ENABLE, true);
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_TOWER_MATERIAL, BedWars.getForCurrentVersion("CHEST", "CHEST", "CHEST"));
+
         if (isFirstTime()) {
             //quick buy defaults
             getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element1.path", "blocks-category.category-content.wool");

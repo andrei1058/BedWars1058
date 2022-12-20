@@ -691,18 +691,18 @@ public class v1_18_R2 extends VersionSupport {
     }
 
     @Override
-    public void placeTowerBlocks(Block b, IArena a, TeamColor color, int x, int y,int z){
+    public void placeTowerBlocks(@NotNull Block b, @NotNull IArena a, @NotNull TeamColor color, int x, int y, int z){
         b.getRelative(x, y, z).setType(color.woolMaterial());
         a.addPlacedBlock(b.getRelative(x, y, z));
     }
 
     @Override
-    public void placeLadder(Block b, int x, int y,int z, IArena a, int ladderdata){
+    public void placeLadder(@NotNull Block b, int x, int y, int z, @NotNull IArena a, int ladderData){
         Block block = b.getRelative(x,y,z);  //ladder block
         block.setType(Material.LADDER);
         Ladder ladder = (Ladder) block.getBlockData();
         a.addPlacedBlock(block);
-        switch (ladderdata) {
+        switch (ladderData) {
             case 2 -> {
                 ladder.setFacing(BlockFace.NORTH);
                 block.setBlockData(ladder);
