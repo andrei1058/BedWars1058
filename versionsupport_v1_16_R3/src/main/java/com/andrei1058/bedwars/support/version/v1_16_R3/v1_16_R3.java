@@ -59,6 +59,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -713,7 +714,7 @@ public class v1_16_R3 extends VersionSupport {
     }
 
     @Override
-    public void playVillagerEffect(Player player, Location location){
-        player.spawnParticle(Particle.VILLAGER_HAPPY, location, 1);
+    public void playVillagerEffect(@NotNull Player player, Location location){
+        player.spawnParticle(org.bukkit.Particle.VILLAGER_HAPPY, location, 1);
     }
 }
