@@ -260,7 +260,11 @@ public class CategoryContent implements ICategoryContent {
             String buyStatus;
 
             if (isPermanent() && shopCache.hasCachedItem(this) && shopCache.getCachedItem(this).getTier() == getContentTiers().size()) {
-                buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_MAXED);
+                if (!(nms.isArmor(i))){
+                    buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_MAXED);  //ARMOR
+                }else {
+                    buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_ARMOR);
+                }
             } else if (!canAfford) {
                 buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CANT_AFFORD).replace("{currency}", translatedCurrency);
             } else {

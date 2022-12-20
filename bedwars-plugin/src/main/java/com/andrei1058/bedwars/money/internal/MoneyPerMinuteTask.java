@@ -19,13 +19,17 @@ public class MoneyPerMinuteTask {
      * Create a new per minute money reward.
      */
     public MoneyPerMinuteTask(Arena arena) {
-        if (money < 1){
+        if (money < 1) {
             return;
         }
-        task = Bukkit.getScheduler().runTaskTimer( BedWars.plugin, () -> {
+        task = Bukkit.getScheduler().runTaskTimer(BedWars.plugin, () -> {
+            if (null == arena){
+                this.cancel();
+                return;
+            }
             for (Player p : arena.getPlayers()) {
-                    BedWars.getEconomy ().giveMoney ( p, money );
-                    p.sendMessage ( Language.getMsg ( p, Messages.MONEY_REWARD_PER_MINUTE ).replace ( "{money}", String.valueOf ( money ) ) );
+                BedWars.getEconomy().giveMoney(p, money);
+                p.sendMessage(Language.getMsg(p, Messages.MONEY_REWARD_PER_MINUTE).replace("{money}", String.valueOf(money)));
             }
         }, 60 * 20, 60 * 20);
     }

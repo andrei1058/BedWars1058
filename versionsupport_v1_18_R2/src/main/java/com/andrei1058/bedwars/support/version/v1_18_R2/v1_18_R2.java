@@ -18,7 +18,7 @@
  * Contact e-mail: andrew.dascalu@gmail.com
  */
 
-package com.andrei1058.bedwars.support.version.v1_18_R1;
+package com.andrei1058.bedwars.support.version.v1_18_R2;
 
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.shop.ShopHolo;
@@ -55,32 +55,37 @@ import net.minecraft.world.entity.EnumItemSlot;
 import net.minecraft.world.entity.item.EntityTNTPrimed;
 import net.minecraft.world.entity.projectile.EntityFireball;
 import net.minecraft.world.entity.projectile.IProjectile;
-import net.minecraft.world.item.*;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBase;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.type.Bed;
+import org.bukkit.block.data.type.Ladder;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.command.Command;
-import org.bukkit.craftbukkit.v1_18_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftFireball;
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftTNTPrimed;
-import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftFireball;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftTNTPrimed;
+import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.*;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -90,11 +95,11 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 @SuppressWarnings("unused")
-public class v1_18_R1 extends VersionSupport {
+public class v1_18_R2 extends VersionSupport {
 
     private static final UUID chatUUID = new UUID(0L, 0L);
 
-    public v1_18_R1(Plugin plugin, String name) {
+    public v1_18_R2(Plugin plugin, String name) {
         super(plugin, name);
         loadDefaultEffects();
     }
@@ -112,7 +117,7 @@ public class v1_18_R1 extends VersionSupport {
     @Override
     public String getTag(org.bukkit.inventory.ItemStack itemStack, String key) {
         ItemStack i = CraftItemStack.asNMSCopy(itemStack);
-        NBTTagCompound tag = i.s();
+        NBTTagCompound tag = i.t();
         return tag == null ? null : tag.e(key) ? tag.l(key) : null;
     }
 
@@ -176,7 +181,6 @@ public class v1_18_R1 extends VersionSupport {
         EntityLiving nmsEntityLiving = (((CraftLivingEntity) owner).getHandle());
         EntityTNTPrimed nmsTNT = (((CraftTNTPrimed) tnt).getHandle());
         try {
-            //noinspection JavaReflectionMemberAccess
             Field sourceField = EntityTNTPrimed.class.getDeclaredField("d");
             sourceField.setAccessible(true);
             sourceField.set(nmsTNT, nmsEntityLiving);
@@ -222,8 +226,8 @@ public class v1_18_R1 extends VersionSupport {
     @Override
     public boolean isProjectile(org.bukkit.inventory.ItemStack itemStack) {
         if (CraftItemStack.asNMSCopy(itemStack) == null) return false;
-        if (CraftItemStack.asNMSCopy(itemStack).E() == null) return false;
-        return CraftItemStack.asNMSCopy(itemStack).E() instanceof IProjectile;
+        if (CraftItemStack.asNMSCopy(itemStack).F() == null) return false;
+        return CraftItemStack.asNMSCopy(itemStack).F() instanceof IProjectile;
     }
 
     @Override
@@ -235,23 +239,12 @@ public class v1_18_R1 extends VersionSupport {
         return pm != null && pm.hasCustomEffects() && pm.hasCustomEffect(org.bukkit.potion.PotionEffectType.INVISIBILITY);
     }
 
-    @SuppressWarnings({"unchecked"})
     @Override
     public void registerEntities() {
-        //noinspection deprecation
-        Map<String, Type<?>> types = (Map<String, Type<?>>) DataConverterRegistry.a().getSchema(
-                DataFixUtils.makeKey(SharedConstants.b().getWorldVersion())
-        ).findChoiceType(DataConverterTypes.q).types();
-
-        types.put("minecraft:bwsilverfish", types.get("minecraft:silverfish"));
-        EntityTypes.Builder.a(Silverfish::new, EnumCreatureType.a).a("bwsilverfish");
-
-        types.put("minecraft:bwgolem", types.get("minecraft:iron_golem"));
-        EntityTypes.Builder.a(IGolem::new, EnumCreatureType.a).a("bwgolem");
     }
 
     @Override
-    public void spawnShop(Location loc, String name1, List<Player> players, IArena arena) {
+    public void spawnShop(@NotNull Location loc, String name1, List<Player> players, IArena arena) {
         Location l = loc.clone();
 
         if (l.getWorld() == null) return;
@@ -283,7 +276,7 @@ public class v1_18_R1 extends VersionSupport {
     @Override
     public double getDamage(org.bukkit.inventory.ItemStack i) {
         ItemStack nmsStack = CraftItemStack.asNMSCopy(i);
-        NBTTagCompound compound = (nmsStack.s() != null) ? nmsStack.s() : new NBTTagCompound();
+        NBTTagCompound compound = (nmsStack.t() != null) ? nmsStack.t() : new NBTTagCompound();
         return compound.k("generic.attackDamage");
     }
 
@@ -370,10 +363,10 @@ public class v1_18_R1 extends VersionSupport {
     @Override
     public void registerTntWhitelist() {
         try {
-            Field field = BlockBase.class.getDeclaredField("aI");
+            Field field = BlockBase.class.getDeclaredField("aH");
             field.setAccessible(true);
-            field.set(Blocks.eq, 12f);
-            field.set(Blocks.au, 300f);
+            field.set(Blocks.eq, 300f);
+            field.set(Blocks.bQ, 300f);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -400,7 +393,7 @@ public class v1_18_R1 extends VersionSupport {
     @Override
     public org.bukkit.inventory.ItemStack addCustomData(org.bukkit.inventory.ItemStack i, String data) {
         ItemStack itemStack = CraftItemStack.asNMSCopy(i);
-        NBTTagCompound tag = itemStack.s();
+        NBTTagCompound tag = itemStack.t();
         if (tag == null) {
             tag = new NBTTagCompound();
             itemStack.c(tag);
@@ -413,7 +406,7 @@ public class v1_18_R1 extends VersionSupport {
     @Override
     public org.bukkit.inventory.ItemStack setTag(org.bukkit.inventory.ItemStack itemStack, String key, String value) {
         ItemStack is = CraftItemStack.asNMSCopy(itemStack);
-        NBTTagCompound tag = is.s();
+        NBTTagCompound tag = is.t();
         if (tag == null) {
             tag = new NBTTagCompound();
             is.c(tag);
@@ -426,7 +419,7 @@ public class v1_18_R1 extends VersionSupport {
     @Override
     public boolean isCustomBedWarsItem(org.bukkit.inventory.ItemStack i) {
         ItemStack itemStack = CraftItemStack.asNMSCopy(i);
-        NBTTagCompound tag = itemStack.s();
+        NBTTagCompound tag = itemStack.t();
         if (tag == null) return false;
         return tag.e("BedWars1058");
     }
@@ -434,7 +427,7 @@ public class v1_18_R1 extends VersionSupport {
     @Override
     public String getCustomData(org.bukkit.inventory.ItemStack i) {
         ItemStack itemStack = CraftItemStack.asNMSCopy(i);
-        NBTTagCompound tag = itemStack.s();
+        NBTTagCompound tag = itemStack.t();
         if (tag == null) return "";
         return tag.l("BedWars1058");
     }
@@ -528,14 +521,14 @@ public class v1_18_R1 extends VersionSupport {
     @Override
     public String getShopUpgradeIdentifier(org.bukkit.inventory.ItemStack itemStack) {
         ItemStack i = CraftItemStack.asNMSCopy(itemStack);
-        NBTTagCompound tag = i.s();
+        NBTTagCompound tag = i.t();
         return tag == null ? "null" : tag.e("tierIdentifier") ? tag.l("tierIdentifier") : "null";
     }
 
     @Override
     public org.bukkit.inventory.ItemStack setShopUpgradeIdentifier(org.bukkit.inventory.ItemStack itemStack, String identifier) {
         ItemStack i = CraftItemStack.asNMSCopy(itemStack);
-        NBTTagCompound tag = i.s();
+        NBTTagCompound tag = i.t();
         if (tag == null) {
             tag = new NBTTagCompound();
             i.c(tag);
@@ -550,25 +543,14 @@ public class v1_18_R1 extends VersionSupport {
 
         if (copyTagFrom != null) {
             ItemStack i = CraftItemStack.asNMSCopy(head);
-            i.c(CraftItemStack.asNMSCopy(copyTagFrom).s());
+            i.c(CraftItemStack.asNMSCopy(copyTagFrom).t());
             head = CraftItemStack.asBukkitCopy(i);
         }
 
-//        SkullMeta headMeta = (SkullMeta) head.getItemMeta();
-//        FIXME: current hotfix will get rate limited! how the hell do we set head texture now?
-//        wtf is this: SkullOwner:{Id:[I;-1344581477,-1919271229,-1306015584,-647763423],Name:"andrei1058"}
-//        Field profileField;
-//        try {
-//            //noinspection ConstantConditions
-//            profileField = headMeta.getClass().getDeclaredField("profile");
-//            profileField.setAccessible(true);
-//            profileField.set(headMeta, ((CraftPlayer) player).getProfile());
-//        } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e1) {
-//            e1.printStackTrace();
-//        }
-//        assert headMeta != null;
-//        headMeta.setOwningPlayer(player);
-//        head.setItemMeta(headMeta);
+        ItemMeta meta = head.getItemMeta();
+        if (meta instanceof SkullMeta) {
+            ((SkullMeta) meta).setOwnerProfile(player.getPlayerProfile());
+        }
 
         return head;
     }
@@ -660,7 +642,7 @@ public class v1_18_R1 extends VersionSupport {
     @Override
     public String getMainLevel() {
         //noinspection deprecation
-        return ((DedicatedServer) MinecraftServer.getServer()).z.a().p;
+        return ((DedicatedServer) MinecraftServer.getServer()).y.a().p;
     }
 
     @Override
@@ -707,7 +689,38 @@ public class v1_18_R1 extends VersionSupport {
 
     @Override
     public void clearArrowsFromPlayerBody(Player player) {
-        ((CraftLivingEntity)player).getHandle().ai().b(new DataWatcherObject<>(12, DataWatcherRegistry.b),-1);
+    }
+
+    @Override
+    public void placeTowerBlocks(@NotNull Block b, @NotNull IArena a, @NotNull TeamColor color, int x, int y, int z){
+        b.getRelative(x, y, z).setType(color.woolMaterial());
+        a.addPlacedBlock(b.getRelative(x, y, z));
+    }
+
+    @Override
+    public void placeLadder(@NotNull Block b, int x, int y, int z, @NotNull IArena a, int ladderData){
+        Block block = b.getRelative(x,y,z);  //ladder block
+        block.setType(Material.LADDER);
+        Ladder ladder = (Ladder) block.getBlockData();
+        a.addPlacedBlock(block);
+        switch (ladderData) {
+            case 2 -> {
+                ladder.setFacing(BlockFace.NORTH);
+                block.setBlockData(ladder);
+            }
+            case 3 -> {
+                ladder.setFacing(BlockFace.SOUTH);
+                block.setBlockData(ladder);
+            }
+            case 4 -> {
+                ladder.setFacing(BlockFace.WEST);
+                block.setBlockData(ladder);
+            }
+            case 5 -> {
+                ladder.setFacing(BlockFace.EAST);
+                block.setBlockData(ladder);
+            }
+        }
     }
 
     @Override

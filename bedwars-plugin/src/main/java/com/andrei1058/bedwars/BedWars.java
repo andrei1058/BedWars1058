@@ -64,6 +64,10 @@ import com.andrei1058.bedwars.maprestore.internal.InternalAdapter;
 import com.andrei1058.bedwars.money.internal.MoneyListeners;
 import com.andrei1058.bedwars.shop.ShopManager;
 import com.andrei1058.bedwars.sidebar.*;
+import com.andrei1058.bedwars.sidebar.thread.RefreshTitleTask;
+import com.andrei1058.bedwars.sidebar.thread.RefreshPlaceholdersTask;
+import com.andrei1058.bedwars.sidebar.thread.RefreshLifeTask;
+import com.andrei1058.bedwars.sidebar.thread.RefreshTabListTask;
 import com.andrei1058.bedwars.stats.StatsManager;
 import com.andrei1058.bedwars.support.citizens.CitizensListener;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
@@ -115,6 +119,8 @@ public class BedWars extends JavaPlugin {
     public static BedWars plugin;
     public static VersionSupport nms;
 
+    public static boolean isPaper = false;
+
     private static Party party = new NoParty();
     private static Chat chat = new NoChat();
     protected static Level level;
@@ -143,6 +149,14 @@ public class BedWars extends JavaPlugin {
             this.getLogger().severe("https://gitlab.com/andrei1058/BedWars1058/wikis/compatibility");
             serverSoftwareSupport = false;
             return;
+        }
+
+        try{
+            Class.forName("com.destroystokyo.paper.PaperConfig");
+            isPaper = true;
+        } catch (ClassNotFoundException e) {
+            isPaper = false;
+            throw new RuntimeException(e);
         }
 
         plugin = this;
@@ -296,11 +310,11 @@ public class BedWars extends JavaPlugin {
 
         // Register events
         registerEvents(new EnderPearlLanded(), new QuitAndTeleportListener(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(),
-                new FireballListener(), new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener(), new LangListener(), new Warnings(this), new ChatAFK());
+                new FireballListener(), new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener(), new LangListener(), new Warnings(this), new ChatAFK(), new GameEndListener());
 
-    
-                if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_HEAL_POOL))  //heal pool
-                    registerEvents(new HealPoolListner());
+        if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_HEAL_POOL)) {
+            registerEvents(new HealPoolListner());
+        }
 
         if (getServerType() == ServerType.BUNGEE) {
             if (autoscale) {
@@ -544,6 +558,15 @@ public class BedWars extends JavaPlugin {
         // Initialize team upgrades
         com.andrei1058.bedwars.upgrades.UpgradesManager.init();
 
+        // Initialize sidebar manager
+        if (SidebarService.init()) {
+            this.getLogger().info("Initializing SidebarLib by andrei1058");
+        } else {
+            this.getLogger().severe("SidebarLib by andrei1058 does not support your server version");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
+
         int playerListRefreshInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_LIST_REFRESH);
         if (playerListRefreshInterval < 1) {
             Bukkit.getLogger().info("Scoreboard names list refresh is disabled. (Is set to " + playerListRefreshInterval + ").");
@@ -553,7 +576,7 @@ public class BedWars extends JavaPlugin {
                 Bukkit.getLogger().warning("It is not recommended to use a value under 20 ticks.");
                 Bukkit.getLogger().warning("If you expect performance issues please increase its timer.");
             }
-            Bukkit.getScheduler().runTaskTimer(this, new SidebarListRefresh(), 23L, playerListRefreshInterval);
+            Bukkit.getScheduler().runTaskTimer(this, new RefreshTabListTask(), 23L, playerListRefreshInterval);
         }
 
         int placeholdersRefreshInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL);
@@ -565,7 +588,7 @@ public class BedWars extends JavaPlugin {
                 Bukkit.getLogger().warning("It is not recommended to use a value under 20 ticks.");
                 Bukkit.getLogger().warning("If you expect performance issues please increase its timer.");
             }
-            Bukkit.getScheduler().runTaskTimer(this, new SidebarPlaceholderRefresh(), 28L, placeholdersRefreshInterval);
+            Bukkit.getScheduler().runTaskTimer(this, new RefreshPlaceholdersTask(), 28L, placeholdersRefreshInterval);
         }
 
         int titleRefreshInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_TITLE_REFRESH_INTERVAL);
@@ -576,7 +599,7 @@ public class BedWars extends JavaPlugin {
                 Bukkit.getLogger().warning("Scoreboard title refresh interval is set to: " + titleRefreshInterval);
                 Bukkit.getLogger().warning("If you expect performance issues please increase its timer.");
             }
-            Bukkit.getScheduler().runTaskTimerAsynchronously(this, new SidebarTitleRefresh(), 32L, titleRefreshInterval);
+            Bukkit.getScheduler().runTaskTimerAsynchronously(this, new RefreshTitleTask(), 32L, titleRefreshInterval);
         }
 
         int healthAnimationInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_REFRESH);
@@ -588,7 +611,7 @@ public class BedWars extends JavaPlugin {
                 Bukkit.getLogger().warning("It is not recommended to use a value under 20 ticks.");
                 Bukkit.getLogger().warning("If you expect performance issues please increase its timer.");
             }
-            Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new SidebarLifeRefresh(), 40L, healthAnimationInterval);
+            Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new RefreshLifeTask(), 40L, healthAnimationInterval);
         }
 
         registerEvents(new ScoreboardListener());
