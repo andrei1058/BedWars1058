@@ -38,7 +38,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Map;
-import java.util.UUID;
 
 import static com.andrei1058.bedwars.BedWars.nms;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;

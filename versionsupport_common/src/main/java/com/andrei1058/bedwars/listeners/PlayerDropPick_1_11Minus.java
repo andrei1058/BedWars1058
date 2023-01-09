@@ -101,6 +101,9 @@ public class PlayerDropPick_1_11Minus implements Listener {
                             e.getItem().getItemStack().setItemMeta(itemMeta);
                         }
                     }
+                    else {  //Cancel Event if play is afk
+                        e.setCancelled(true);
+                    }
                 }
             }
         }

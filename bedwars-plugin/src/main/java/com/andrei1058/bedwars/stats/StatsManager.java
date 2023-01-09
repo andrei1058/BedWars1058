@@ -22,6 +22,8 @@ package com.andrei1058.bedwars.stats;
 
 import com.andrei1058.bedwars.BedWars;
 import org.bukkit.Bukkit;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.UUID;
@@ -29,10 +31,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class StatsManager {
 
-    private Map<UUID, PlayerStats> stats;
+    private final Map<UUID, PlayerStats> stats = new ConcurrentHashMap<>();
 
     public StatsManager() {
-        stats = new ConcurrentHashMap<>();
         registerListeners();
     }
 
@@ -44,6 +45,7 @@ public class StatsManager {
         stats.put(uuid, playerStats);
     }
 
+    @NotNull
     public PlayerStats get(UUID uuid) {
         PlayerStats playerStats = stats.get(uuid);
         if (playerStats == null) {
@@ -52,6 +54,7 @@ public class StatsManager {
         return playerStats;
     }
 
+    @Nullable
     public PlayerStats getUnsafe(UUID uuid) {
         return stats.get(uuid);
     }

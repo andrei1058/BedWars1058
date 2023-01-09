@@ -23,7 +23,8 @@ package com.andrei1058.bedwars.listeners.joinhandler;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.ReJoin;
-import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
+import com.andrei1058.bedwars.sidebar.SidebarService;
+import com.andrei1058.bedwars.support.paper.PaperSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -31,7 +32,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 
 import static com.andrei1058.bedwars.BedWars.*;
 
@@ -82,13 +82,13 @@ public class JoinListenerMultiArena implements Listener {
         // Teleport to lobby location
         Location lobbyLocation = config.getConfigLoc("lobbyLoc");
         if (lobbyLocation != null && lobbyLocation.getWorld() != null) {
-            Bukkit.getScheduler().runTaskLater(plugin, () -> p.teleport(lobbyLocation, PlayerTeleportEvent.TeleportCause.PLUGIN), 2L);
+            PaperSupport.teleport(p, lobbyLocation);
         }
 
         // Send items
         Arena.sendLobbyCommandItems(p);
 
-        BedWarsScoreboard.giveScoreboard(p, null, true);
+        SidebarService.getInstance().giveSidebar(p, null, true);
 
         p.setHealthScale(p.getMaxHealth());
         p.setExp(0);

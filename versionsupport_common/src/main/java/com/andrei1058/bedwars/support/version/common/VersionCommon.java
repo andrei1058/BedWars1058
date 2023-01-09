@@ -65,7 +65,7 @@ public class VersionCommon {
             //}
 
             // common
-            registerListeners(versionSupport.getPlugin(), new ItemDropPickListener.GeneratorCollect(), new ShopItemRestoreListener.DefaultRestoreInvClose());
+            registerListeners(versionSupport.getPlugin(), new ShopItemRestoreListener.DefaultRestoreInvClose());
     }
 
     private void registerListeners(Plugin plugin, Listener... listener) {
