@@ -72,7 +72,20 @@ public class ConfigManager {
         yml.options().copyDefaults(true);
         this.name = name;
     }
-
+    public void convert(String oldPath, String newPath){
+        convert(oldPath, newPath, true);
+    }
+    public void convert(String oldPath, String newPath, boolean delete){
+        Object oldValue = getYml().get(oldPath);
+        if (oldValue != null){
+            if(newPath != null) {
+                getYml().set(newPath, oldValue);
+            }
+            if(delete) {
+                getYml().set(oldPath, null);
+            }
+        }
+    }
     /**
      * Reload configuration.
      */

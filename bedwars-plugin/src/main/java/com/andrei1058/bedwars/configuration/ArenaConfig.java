@@ -22,8 +22,11 @@ package com.andrei1058.bedwars.configuration;
 
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.util.PrimitiveUtil;
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.util.NumberConversions;
 
 import java.util.ArrayList;
 
@@ -63,27 +66,14 @@ public class ArenaConfig extends ConfigManager {
         rules.add("doFireTick:false");
         yml.addDefault(ConfigPath.ARENA_GAME_RULES, rules);
         yml.options().copyDefaults(true);
-        save();
 
         //convert old configuration
-        if (yml.get("spawnProtection") != null) {
-            set(ConfigPath.ARENA_SPAWN_PROTECTION, yml.getInt("spawnProtection"));
-            set("spawnProtection", null);
-        }
-        if (yml.get("shopProtection") != null) {
-            set(ConfigPath.ARENA_SHOP_PROTECTION, yml.getInt("shopProtection"));
-            set("shopProtection", null);
-        }
-        if (yml.get("upgradesProtection") != null) {
-            set(ConfigPath.ARENA_UPGRADES_PROTECTION, yml.getInt("upgradesProtection"));
-            set("upgradesProtection", null);
-        }
-        if (yml.get("islandRadius") != null) {
-            set(ConfigPath.ARENA_ISLAND_RADIUS, yml.getInt("islandRadius"));
-        }
-        if (yml.get("voidKill") != null){
-            set("voidKill", null);
-        }
-        set(ConfigPath.GENERAL_CONFIGURATION_ENABLE_GEN_SPLIT, null);
+        convert("spawnProtection", ConfigPath.ARENA_SPAWN_PROTECTION);
+        convert("shopProtection", ConfigPath.ARENA_SHOP_PROTECTION);
+        convert("upgradesProtection", ConfigPath.ARENA_UPGRADES_PROTECTION);
+        convert("islandRadius", ConfigPath.ARENA_ISLAND_RADIUS);
+        convert("voidKill", null);
+        yml.set(ConfigPath.GENERAL_CONFIGURATION_ENABLE_GEN_SPLIT, null);
+        save();
     }
 }

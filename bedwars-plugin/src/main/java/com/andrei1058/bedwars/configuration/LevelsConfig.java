@@ -22,6 +22,7 @@ package com.andrei1058.bedwars.configuration;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
+import com.andrei1058.bedwars.api.util.PrimitiveUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class LevelsConfig extends ConfigManager {
@@ -97,19 +98,20 @@ public class LevelsConfig extends ConfigManager {
     }
 
     public static int getNextCost(int level) {
-        if (levels.getYml().get("levels." + level + ".rankup-cost") != null) return levels.getYml().getInt("levels." + level + ".rankup-cost");
+        Object rankUpCost = levels.getYml().get("levels." + level + ".rankup-cost");
+        if (rankUpCost != null) return PrimitiveUtil.toInt(rankUpCost);
         for (String key : levels.getYml().getConfigurationSection("levels").getKeys(false)) {
             if (key.contains("-")) {
-                String[] nrs = key.split("-");
-                if (nrs.length != 2) continue;
-                int nr1, nr2;
+                String[] range = key.split("-");
+                if (range.length != 2) continue;
+                int from, to;
                 try {
-                    nr1 = Integer.parseInt(nrs[0]);
-                    nr2 = Integer.parseInt(nrs[1]);
-                } catch (Exception ex) {
+                    from = Integer.parseInt(range[0]);
+                    to = Integer.parseInt(range[1]);
+                }catch (Exception ex) {
                     continue;
                 }
-                if (nr1 <= level && level <= nr2) {
+                if (from <= level && level <= to) {
                     return levels.getYml().getInt("levels." + key + ".rankup-cost");
                 }
             }

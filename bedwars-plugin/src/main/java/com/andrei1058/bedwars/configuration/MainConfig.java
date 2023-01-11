@@ -28,12 +28,14 @@ import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Misc;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.andrei1058.bedwars.BedWars.getForCurrentVersion;
 
@@ -185,65 +187,35 @@ public class MainConfig extends ConfigManager {
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_EXPERIMENTAL_TEAM_ASSIGNER, true);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ENABLE_GEN_SPLIT, true);
         yml.options().copyDefaults(true);
-        save();
 
         //remove old config
         //Convert old configuration
 
         yml.set("formatChat", null);
         yml.set("globalChat", null);
-
-        if (yml.get("bungee-settings.lobby-servers") != null) {
-            List<String> sockets = new ArrayList<>(yml.getStringList("bungee-settings.lobby-servers"));
-            yml.set(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS, sockets);
-            yml.set("bungee-settings.lobby-servers", null);
-        }
-
-        if (yml.get("arenaGui.settings.showPlaying") != null) {
-            set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SHOW_PLAYING, yml.getBoolean("arenaGui.settings.showPlaying"));
-        }
-        if (yml.get("arenaGui.settings.size") != null) {
-            set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SIZE, yml.getInt("arenaGui.settings.size"));
-        }
-        if (yml.get("arenaGui.settings.useSlots") != null) {
-            set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_USE_SLOTS, yml.getString("arenaGui.settings.useSlots"));
-        }
-        if (getYml().get("arenaGui") != null) {
-            for (String path : getYml().getConfigurationSection("arenaGui").getKeys(false)) {
+        convert("bungee-settings.lobby-servers", ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS);
+        convert("arenaGui.settings.showPlaying", ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SHOW_PLAYING);
+        convert("arenaGui.settings.size", ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SIZE);
+        convert("arenaGui.settings.useSlots", ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_USE_SLOTS);
+        ConfigurationSection arenaGui = getYml().getConfigurationSection("arenaGui");
+        if (arenaGui != null) {
+            for (String path : arenaGui.getKeys(false)) {
                 if (path.equalsIgnoreCase("settings")) continue;
-                String new_path = path;
-                if ("skippedSlot".equals(path)) {
-                    new_path = "skipped-slot";
-                }
-                if (getYml().get("arenaGui." + path + ".itemStack") != null) {
-                    set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", new_path), getYml().getString("arenaGui." + path + ".itemStack"));
-                }
-                if (getYml().get("arenaGui." + path + ".data") != null) {
-                    set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA.replace("%path%", new_path), getYml().getInt("arenaGui." + path + ".data"));
-                }
-                if (getYml().get("arenaGui." + path + ".enchanted") != null) {
-                    set(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_ENCHANTED.replace("%path%", new_path), getYml().getBoolean("arenaGui." + path + ".enchanted"));
-                }
+                String new_path = "skippedSlot".equals(path) ? "skipped-slot" : path;
+                convert("arenaGui." + path + ".itemStack", ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_MATERIAL.replace("%path%", new_path), false);
+                convert("arenaGui." + path + ".data", ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_DATA.replace("%path%", new_path), false);
+                convert("arenaGui." + path + ".enchanted", ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_STATUS_ENCHANTED.replace("%path%", new_path), false);
             }
         }
+        yml.set("fireball.damage-multiplier", null);
+        yml.set("arenaGui", null);
 
-        if (getYml().get("fireball.damage-multiplier") != null) {
-            set("fireball.damage-multiplier", null);
-        }
-
-        set("arenaGui", null);
-
-        if (getYml().get("npcLoc") != null) {
-            set(ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE, getYml().getString("npcLoc"));
-        }
-        if (getYml().get("statsGUI.invSize") != null) {
-            set(ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE, getInt("statsGUI.invSize"));
-        }
-        if (getYml().get("disableCrafting") != null) {
-            set(ConfigPath.GENERAL_CONFIGURATION_DISABLE_CRAFTING, getString("disableCrafting"));
-        }
-        if (getYml().get("statsGUI") != null) {
-            for (String stats_path : getYml().getConfigurationSection("statsGUI").getKeys(false)) {
+        convert("npcLoc", ConfigPath.GENERAL_CONFIGURATION_NPC_LOC_STORAGE);
+        convert("statsGUI.invSize", ConfigPath.GENERAL_CONFIGURATION_STATS_GUI_SIZE);
+        convert("disableCrafting", ConfigPath.GENERAL_CONFIGURATION_DISABLE_CRAFTING);
+        ConfigurationSection statsGui = getYml().getConfigurationSection("statsGUI");
+        if (statsGui != null) {
+            for (String stats_path : statsGui.getKeys(false)) {
                 String new_path = stats_path;
                 switch (stats_path) {
                     case "gamesPlayed":
@@ -265,68 +237,50 @@ public class MainConfig extends ConfigManager {
                         new_path = "final-kills";
                         break;
                 }
-                if (getYml().get("statsGUI." + stats_path + ".itemStack") != null) {
-                    set(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_MATERIAL.replace("%path%", new_path), getYml().getString("statsGUI." + stats_path + ".itemStack"));
-                }
-                if (getYml().get("statsGUI." + stats_path + ".data") != null) {
-                    set(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_DATA.replace("%path%", new_path), getYml().getInt("statsGUI." + stats_path + ".data"));
-                }
-                if (getYml().get("statsGUI." + stats_path + ".slot") != null) {
-                    set(ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_SLOT.replace("%path%", new_path), getYml().getInt("statsGUI." + stats_path + ".slot"));
-                }
+                convert("statsGUI." + stats_path + ".itemStack", ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_MATERIAL.replace("%path%", new_path), false);
+                convert("statsGUI." + stats_path + ".data", ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_DATA.replace("%path%", new_path), false);
+                convert("statsGUI." + stats_path + ".slot", ConfigPath.GENERAL_CONFIGURATION_STATS_ITEMS_SLOT.replace("%path%", new_path), false);
             }
         }
-
-        if (yml.get("server-name") != null) {
-            set(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID, yml.get("server-name"));
-        }
-        if (yml.get("lobby-scoreboard") != null) {
-            set(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR, yml.getBoolean("lobby-scoreboard"));
-            set("lobby-scoreboard", null);
-        }
-        if (yml.get("game-scoreboard") != null) {
-            set(ConfigPath.SB_CONFIG_SIDEBAR_USE_GAME_SIDEBAR, yml.getBoolean("game-scoreboard"));
-            set("game-scoreboard", null);
-        }
-        if (yml.get("enable-party-cmd") != null) {
-            set(ConfigPath.GENERAL_ENABLE_PARTY_CMD, yml.getBoolean("enable-party-cmd"));
-            set("enable-party-cmd", null);
-        }
-        if (yml.get("allow-parties") != null) {
-            set(ConfigPath.GENERAL_CONFIGURATION_ALLOW_PARTIES, yml.getBoolean("allow-parties"));
-            set("allow-parties", null);
-        }
-        set("server-name", null);
         set("statsGUI", null);
-        set("startItems", null);
-        set("generators", null);
-        set("bedsDestroyCountdown", null);
-        set("dragonSpawnCountdown", null);
-        set("gameEndCountdown", null);
-        set("npcLoc", null);
-        set("blockedCmds", null);
-        set("lobbyScoreboard", null);
-        set("arenaGui.settings.startSlot", null);
-        set("arenaGui.settings.endSlot", null);
-        set("items", null);
-        set("start-items-per-arena", null);
-        set("safeMode", null);
-        set("disableCrafting", null);
-        set("performance-settings.disable-armor-packets", null);
-        set("performance-settings.disable-respawn-packets", null);
-
+        convert("server-name", ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID);
+        convert("lobby-scoreboard", ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR);
+        convert("game-scoreboard", ConfigPath.SB_CONFIG_SIDEBAR_USE_GAME_SIDEBAR);
+        convert("enable-party-cmd", ConfigPath.GENERAL_ENABLE_PARTY_CMD);
+        convert("allow-parties", ConfigPath.GENERAL_CONFIGURATION_ALLOW_PARTIES);
+        yml.set("startItems", null);
+        yml.set("generators", null);
+        yml.set("bedsDestroyCountdown", null);
+        yml.set("dragonSpawnCountdown", null);
+        yml.set("gameEndCountdown", null);
+        yml.set("npcLoc", null);
+        yml.set("blockedCmds", null);
+        yml.set("lobbyScoreboard", null);
+        yml.set("items", null);
+        yml.set("start-items-per-arena", null);
+        yml.set("safeMode", null);
+        yml.set("disableCrafting", null);
+        yml.set("performance-settings.disable-armor-packets", null);
+        yml.set("performance-settings.disable-respawn-packets", null);
+        save();
         //Finished old configuration conversion
 
         //set default server language
         String whatLang = "en";
+        String supposedLang = yml.getString("language");
         File[] langs = new File(plugin.getDataFolder(), "/Languages").listFiles();
+        List<String> disabledLangs = yml.getStringList(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES).stream().map(String::toLowerCase).collect(Collectors.toList());
         if (langs != null) {
             for (File f : langs) {
                 if (f.isFile()) {
-                    if (f.getName().contains("messages_") && f.getName().contains(".yml")) {
+                    if (f.getName().startsWith("messages_") && f.getName().endsWith(".yml")) {
                         String lang = f.getName().replace("messages_", "").replace(".yml", "");
-                        if (lang.equalsIgnoreCase(yml.getString("language"))) {
-                            whatLang = f.getName().replace("messages_", "").replace(".yml", "");
+                        if (lang.equalsIgnoreCase(supposedLang)) {
+                            whatLang = lang;
+                        }else{
+                            if(disabledLangs.contains(lang.toLowerCase())){
+                                continue;
+                            }
                         }
                         if (Language.getLang(lang) == null) new Language(BedWars.plugin, lang);
                     }
@@ -337,16 +291,6 @@ public class MainConfig extends ConfigManager {
 
         if (def == null) throw new IllegalStateException("Could not found default language: " + whatLang);
         Language.setDefaultLanguage(def);
-
-        //remove languages if disabled
-        //server language can t be disabled
-        for (String iso : yml.getStringList(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES)) {
-            Language l = Language.getLang(iso);
-            if (l != null) {
-                if (l != def) Language.getLanguages().remove(l);
-            }
-        }
-        //
 
         BedWars.setDebug(yml.getBoolean("debug"));
         new ConfigManager(plugin, "bukkit", Bukkit.getWorldContainer().getPath()).set("ticks-per.autosave", -1);
@@ -373,8 +317,8 @@ public class MainConfig extends ConfigManager {
     }
 
     public String getLobbyWorldName() {
-        if (getYml().get("lobbyLoc") == null) return "";
         String d = getYml().getString("lobbyLoc");
+        if (d == null) return "";
         String[] data = d.replace("[", "").replace("]", "").split(",");
         return data[data.length - 1];
     }
