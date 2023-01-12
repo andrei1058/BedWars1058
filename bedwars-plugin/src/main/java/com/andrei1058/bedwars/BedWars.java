@@ -698,6 +698,10 @@ public class BedWars extends JavaPlugin {
         switch (getServerVersion()) {
             case "v1_8_R3":
                 return v18;
+            case "v1_9_R1":
+            case "v1_9_R2":
+            case "v1_10_R1":
+            case "v1_11_R1":
             case "v1_12_R1":
                 return v12;
         }
