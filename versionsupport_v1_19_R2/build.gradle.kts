@@ -3,8 +3,8 @@ plugins {
 }
 
 dependencies {
-    providedCompile(project(":bedwars-api"))
-    providedCompile(project(":versionsupport-common"))
+    implementation(project(":bedwars-api"))
+    implementation(project(":versionsupport-common"))
     compileOnly("org.spigotmc:spigot:1.19.3-R0.1-SNAPSHOT")
 }
 
