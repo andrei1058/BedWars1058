@@ -156,7 +156,6 @@ public class BedWars extends JavaPlugin {
             isPaper = true;
         } catch (ClassNotFoundException e) {
             isPaper = false;
-            throw new RuntimeException(e);
         }
 
         plugin = this;
