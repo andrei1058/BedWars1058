@@ -563,11 +563,7 @@ public class BwSidebar {
         }
 
         // if tab formatting is disabled in restarting
-        if (arena.getStatus() == GameState.restarting && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_RESTARTING)) {
-            return false;
-        }
-
-        return true;
+        return arena.getStatus() != GameState.restarting || !config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_RESTARTING);
     }
 
     public void handleHealthIcon() {

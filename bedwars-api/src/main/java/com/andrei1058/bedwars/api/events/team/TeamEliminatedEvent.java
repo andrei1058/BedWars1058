@@ -14,7 +14,6 @@ public class TeamEliminatedEvent extends Event {
     /**
      * Called when all Team gets killed and Bed is broken during the game.
      *
-     *
      */
 
     public TeamEliminatedEvent(IArena arena, ITeam eliminated) {
