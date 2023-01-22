@@ -574,10 +574,10 @@ public class BwSidebar {
         if (null == handle) {
             return;
         }
+
         if (null == arena) {
             handle.hidePlayersHealth();
-        }
-        if (arena.getStatus() != GameState.playing) {
+        } else if (arena.getStatus() != GameState.playing) {
             handle.hidePlayersHealth();
         }
 
