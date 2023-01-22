@@ -24,6 +24,7 @@ package com.andrei1058.bedwars.configuration;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.NextEvent;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
+import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -83,6 +84,7 @@ public class Sounds {
         addDefSound("shop-auto-equip", BedWars.getForCurrentVersion("HORSE_ARMOR", "ITEM_ARMOR_EQUIP_GENERIC", "ITEM_ARMOR_EQUIP_GENERIC"));
         addDefSound("egg-bridge-block", BedWars.getForCurrentVersion("CHICKEN_EGG_POP", "ENTITY_CHICKEN_EGG", "ENTITY_CHICKEN_EGG"));
         addDefSound("ender-pearl-landed", BedWars.getForCurrentVersion("ENDERMAN_TELEPORT", "ENTITY_ENDERMEN_TELEPORT", "ENTITY_ENDERMAN_TELEPORT"));
+        addDefSound("pop-up-tower-build", BedWars.getForCurrentVersion("CHICKEN_EGG_POP", "ENTITY_CHICKEN_EGG","ENTITY_CHICKEN_EGG"));
         yml.options().copyDefaults(true);
 
         // remove old paths
@@ -141,5 +143,10 @@ public class Sounds {
         getSounds().getYml().addDefault(path + ".sound", value);
         getSounds().getYml().addDefault(path + ".volume", 1);
         getSounds().getYml().addDefault(path + ".pitch", 1);
+    }
+
+    public static  void playsoundArea(String path, Location location, float x, float y){
+        final Sound sound = getSound(path);
+        if (sound != null) location.getWorld().playSound(location, sound, x, y);
     }
 }

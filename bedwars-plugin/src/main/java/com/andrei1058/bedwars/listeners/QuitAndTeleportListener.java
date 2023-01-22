@@ -31,7 +31,7 @@ import com.andrei1058.bedwars.arena.LastHit;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.regular.CmdStats;
-import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
+import com.andrei1058.bedwars.sidebar.SidebarService;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -88,10 +88,7 @@ public class QuitAndTeleportListener implements Listener {
             ss.cancel();
         }
 
-        BedWarsScoreboard sb = BedWarsScoreboard.getSBoard(e.getPlayer().getUniqueId());
-        if (sb != null) {
-            sb.remove();
-        }
+        SidebarService.getInstance().remove(e.getPlayer());
 
         BedWarsTeam.reSpawnInvulnerability.remove(e.getPlayer().getUniqueId());
 
@@ -129,12 +126,9 @@ public class QuitAndTeleportListener implements Listener {
             if (BedWars.config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR)) {
                 //Bukkit.getScheduler().runTaskLater(plugin, ()-> {
                 if (e.getPlayer().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
-                    BedWarsScoreboard.giveScoreboard(e.getPlayer(), null, true);
+                    SidebarService.getInstance().giveSidebar(e.getPlayer(), null, true);
                 } else {
-                    BedWarsScoreboard sb = BedWarsScoreboard.getSBoard(e.getPlayer().getUniqueId());
-                    if (sb != null) {
-                        sb.remove();
-                    }
+                    SidebarService.getInstance().remove(e.getPlayer());
                 }
                 //}, 2L);
             }
