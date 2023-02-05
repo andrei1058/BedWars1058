@@ -57,6 +57,15 @@ public class SidebarService {
             }
         }
 
+        // if sidebar was null but still disabled for lobbies
+        if (!config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR) && null == arena) {
+            return;
+        }
+        // if sidebar was null but still disabled in game
+        if (!config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_GAME_SIDEBAR) && null != arena) {
+            return;
+        }
+
         // set sidebar lines based on game state or lobby
         List<String> lines = null;
         List<String> title;
