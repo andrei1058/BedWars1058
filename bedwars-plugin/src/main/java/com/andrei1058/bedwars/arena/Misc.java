@@ -69,7 +69,13 @@ public class Misc {
     public static void moveToLobbyOrKick(Player p, @Nullable IArena arena, boolean notAbandon) {
         if (getServerType() != ServerType.BUNGEE) {
             if (!p.getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
-                p.teleport(config.getConfigLoc("lobbyLoc"));
+                Location loc = config.getConfigLoc("lobbyLoc");
+                if (loc != null){ // Can happen when location is not set in config
+                    p.teleport(loc);
+                } else {
+                    forceKick(p, arena, notAbandon);
+                    return;
+                }
                 if (arena != null) {
                     if (arena.isSpectator(p)) {
                         arena.removeSpectator(p, false);
