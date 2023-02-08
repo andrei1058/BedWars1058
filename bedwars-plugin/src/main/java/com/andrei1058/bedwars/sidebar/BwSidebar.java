@@ -204,6 +204,9 @@ public class BwSidebar {
                 providers.add(new PlaceholderProvider("{finalDeaths}", () ->
                         String.valueOf(stats.getFinalDeaths()))
                 );
+                providers.add(new PlaceholderProvider("{wins}", () ->
+                        String.valueOf(stats.getWins()))
+                );
             }
         } else {
             providers.add(new PlaceholderProvider("{on}", () -> String.valueOf(arena.getPlayers().size())));
