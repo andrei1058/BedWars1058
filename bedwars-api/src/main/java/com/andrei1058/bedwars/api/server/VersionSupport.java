@@ -306,17 +306,17 @@ public abstract class VersionSupport {
     public abstract Material materialGoldenLeggings();
 
     /**
-     * Get gold  helmet material
+     * Get netherite  helmet material
      */
     public abstract Material materialNetheriteHelmet();
 
     /**
-     * Get gold chest plate
+     * Get netherite chest plate
      */
     public abstract Material materialNetheriteChestPlate();
 
     /**
-     * Get gold leggings
+     * Get netherite leggings
      */
     public abstract Material materialNetheriteLeggings();
 
