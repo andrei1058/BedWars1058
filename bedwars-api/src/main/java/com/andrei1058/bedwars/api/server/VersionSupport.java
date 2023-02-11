@@ -306,6 +306,21 @@ public abstract class VersionSupport {
     public abstract Material materialGoldenLeggings();
 
     /**
+     * Get gold  helmet material
+     */
+    public abstract Material materialNetheriteHelmet();
+
+    /**
+     * Get gold chest plate
+     */
+    public abstract Material materialNetheriteChestPlate();
+
+    /**
+     * Get gold leggings
+     */
+    public abstract Material materialNetheriteLeggings();
+
+    /**
      * Cake material
      */
     public abstract Material materialCake();
