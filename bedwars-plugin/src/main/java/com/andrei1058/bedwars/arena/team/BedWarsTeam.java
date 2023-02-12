@@ -342,7 +342,6 @@ public class BedWarsTeam implements ITeam {
         }
         PaperSupport.teleportC(p, getSpawn(), PlayerTeleportEvent.TeleportCause.PLUGIN);
         p.setVelocity(new Vector(0, 0, 0));
-        getArena().getRespawnSessions().remove(p);
         p.removePotionEffect(PotionEffectType.INVISIBILITY);
         nms.setCollide(p, arena, true);
         p.setAllowFlight(false);
@@ -350,6 +349,8 @@ public class BedWarsTeam implements ITeam {
         p.setHealth(20);
 
         Bukkit.getScheduler().runTaskLater(plugin, ()-> {
+            getArena().getRespawnSessions().remove(p); //Fixes https://github.com/andrei1058/BedWars1058/issues/669
+
             for (Player inGame : arena.getPlayers()){
                 if (inGame.equals(p)) continue;
                 BedWars.nms.spigotShowPlayer(p, inGame);
