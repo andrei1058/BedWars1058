@@ -173,11 +173,11 @@ public class BwSidebar {
         providers.add(new PlaceholderProvider("{player}", player::getDisplayName));
         providers.add(new PlaceholderProvider("{playerName}", player::getCustomName));
         providers.add(new PlaceholderProvider("{date}", () -> dateFormat.format(new Date(System.currentTimeMillis()))));
-
         PlayerLevel level = PlayerLevel.getLevelByPlayer(getPlayer().getUniqueId());
         if (null != level) {
             providers.add(new PlaceholderProvider("{progress}", level::getProgress));
-            providers.add(new PlaceholderProvider("{level}", () -> String.valueOf(level.getLevel())));
+            providers.add(new PlaceholderProvider("{level}", () -> String.valueOf(level.getLevelName())));
+            providers.add(new PlaceholderProvider("{levelUnformatted}", () -> String.valueOf(level.getLevel())));
             providers.add(new PlaceholderProvider("{currentXp}", level::getFormattedCurrentXp));
             providers.add(new PlaceholderProvider("{requiredXp}", level::getFormattedRequiredXp));
         }
