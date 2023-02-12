@@ -509,6 +509,21 @@ public class v1_17_R1 extends VersionSupport {
     }
 
     @Override
+    public org.bukkit.Material materialNetheriteHelmet() {
+        return Material.NETHERITE_HELMET;
+    }
+
+    @Override
+    public org.bukkit.Material materialNetheriteChestPlate() {
+        return Material.NETHERITE_CHESTPLATE;
+    }
+
+    @Override
+    public org.bukkit.Material materialNetheriteLeggings() {
+        return Material.NETHERITE_LEGGINGS;
+    }
+
+    @Override
     public org.bukkit.Material materialCake() {
         return org.bukkit.Material.CAKE;
     }

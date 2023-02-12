@@ -92,7 +92,7 @@ public class SidebarService {
         }
 
         // title is the first line from array
-        title = new ArrayList<>(Collections.singleton(lines.get(0)));
+        title = new ArrayList<>(Arrays.asList(lines.get(0).split(",")));
         if (lines.size() == 1) {
             lines = new ArrayList<>();
         }
