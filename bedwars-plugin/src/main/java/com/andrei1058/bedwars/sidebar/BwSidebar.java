@@ -8,6 +8,7 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
+import com.andrei1058.bedwars.api.sidebar.ISidebar;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.levels.internal.PlayerLevel;
 import com.andrei1058.bedwars.stats.PlayerStats;
@@ -27,7 +28,7 @@ import java.util.*;
 import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
-public class BwSidebar {
+public class BwSidebar implements ISidebar {
 
     private static final SidebarLine EMPTY_TITLE = new SidebarLine() {
         @Override
@@ -92,7 +93,7 @@ public class BwSidebar {
     }
 
     @SuppressWarnings("ConstantConditions")
-    private SidebarLine normalizeTitle(@Nullable List<String> titleArray) {
+    public SidebarLine normalizeTitle(@Nullable List<String> titleArray) {
         String[] aolo = new String[titleArray.size()];
         for (int x = 0; x < titleArray.size(); x++) {
             aolo[x] = titleArray.get(x);
@@ -103,7 +104,7 @@ public class BwSidebar {
     }
 
     @Contract(pure = true)
-    private @NotNull List<SidebarLine> normalizeLines(@NotNull List<String> lineArray) {
+    public @NotNull List<SidebarLine> normalizeLines(@NotNull List<String> lineArray) {
         List<SidebarLine> lines = new ArrayList<>();
 
         int teamCount = 0;
@@ -536,7 +537,7 @@ public class BwSidebar {
     /**
      * @return true if tab formatting is disabled for current sidebar/ arena stage
      */
-    private boolean isTabFormattingDisabled() {
+    public boolean isTabFormattingDisabled() {
         if (null == arena) {
 
             if (getServerType() == ServerType.SHARED) {
