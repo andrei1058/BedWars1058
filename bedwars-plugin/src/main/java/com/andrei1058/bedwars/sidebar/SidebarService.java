@@ -5,12 +5,14 @@ import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.events.sidebar.PlayerSidebarInitEvent;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.sidebar.ISidebar;
 import com.andrei1058.bedwars.api.sidebar.ISidebarService;
 import com.andrei1058.spigot.sidebar.SidebarManager;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -105,6 +107,12 @@ public class SidebarService implements ISidebarService {
         if (null == sidebar) {
             sidebar = new BwSidebar(player);
             newlyAdded = true;
+
+            PlayerSidebarInitEvent event = new PlayerSidebarInitEvent(player, sidebar);
+            Bukkit.getPluginManager().callEvent(event);
+            if (event.isCancelled()) {
+                return;
+            }
         }
         sidebar.setContent(title, lines, arena);
 
