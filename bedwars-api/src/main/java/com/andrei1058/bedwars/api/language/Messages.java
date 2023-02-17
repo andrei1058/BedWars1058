@@ -23,7 +23,6 @@ package com.andrei1058.bedwars.api.language;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 
 @SuppressWarnings("WeakerAccess")
-@Deprecated
 public class Messages {
 
     public static String PREFIX = "prefix";

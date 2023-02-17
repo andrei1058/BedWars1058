@@ -31,6 +31,7 @@ import com.andrei1058.bedwars.api.server.ISetupSession;
 import com.andrei1058.bedwars.api.server.RestoreAdapter;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.server.VersionSupport;
+import com.andrei1058.bedwars.api.sidebar.ISidebarService;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -493,4 +494,6 @@ public interface BedWars {
          */
         void givePlayerScoreboard(Player player, boolean delay);
     }
+
+    ISidebarService getScoreboardManager();
 }
