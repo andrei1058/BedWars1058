@@ -47,6 +47,8 @@ public class BwSidebar implements ISidebar {
     private final SimpleDateFormat nextEventDateFormat;
     private final HashMap<String, PlayerTab> tabList = new HashMap<>();
 
+    private final List<PlaceholderProvider> persistentProviders = new ArrayList<>();
+
 
     protected BwSidebar(Player player) {
         this.player = player;
@@ -69,6 +71,7 @@ public class BwSidebar implements ISidebar {
         List<SidebarLine> lines = this.normalizeLines(lineArray);
 
         List<PlaceholderProvider> placeholders = this.getPlaceholders();
+        placeholders.addAll(this.persistentProviders);
 
         // if it is the first time setting content we create the handle
         if (null == handle) {
@@ -571,6 +574,12 @@ public class BwSidebar implements ISidebar {
             return false;
         }
 
+        return true;
+    }
+
+    @Override
+    public boolean registerPersistentPlaceholder(PlaceholderProvider placeholderProvider) {
+        this.persistentProviders.add(placeholderProvider);
         return true;
     }
 

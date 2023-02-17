@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.api.sidebar;
 
 import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.spigot.sidebar.PlaceholderProvider;
 import com.andrei1058.spigot.sidebar.Sidebar;
 import com.andrei1058.spigot.sidebar.SidebarLine;
 import org.bukkit.entity.Player;
@@ -55,4 +56,9 @@ public interface ISidebar {
      * @return true if tab formatting is disabled for current sidebar/ arena stage
      */
     boolean isTabFormattingDisabled();
+
+    /**
+     * Register a placeholder that is not going to be removed trough game state changes.
+     */
+    boolean registerPersistentPlaceholder(PlaceholderProvider placeholderProvider);
 }
