@@ -61,7 +61,7 @@ public class InventoryListener implements Listener {
         if (shopCache == null) return;
 
         if(ShopIndex.getIndexViewers().contains(p.getUniqueId()) || ShopCategory.getCategoryViewers().contains(p.getUniqueId())) {
-            if(e.getClickedInventory().getType().equals(InventoryType.PLAYER)) {
+            if (e.getClickedInventory() != null && e.getClickedInventory().getType().equals(InventoryType.PLAYER)) {
                 e.setCancelled(true);
                 return;
             }

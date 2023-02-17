@@ -8,6 +8,8 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
+import com.andrei1058.bedwars.api.sidebar.ISidebar;
+import com.andrei1058.bedwars.api.sidebar.ISidebarService;
 import com.andrei1058.spigot.sidebar.SidebarManager;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +20,7 @@ import java.util.*;
 import static com.andrei1058.bedwars.BedWars.config;
 import static com.andrei1058.bedwars.api.language.Language.getScoreboard;
 
-public class SidebarService {
+public class SidebarService implements ISidebarService {
 
     private static SidebarService instance;
 
@@ -92,7 +94,7 @@ public class SidebarService {
         }
 
         // title is the first line from array
-        title = new ArrayList<>(Collections.singleton(lines.get(0)));
+        title = new ArrayList<>(Arrays.asList(lines.get(0).split(",")));
         if (lines.size() == 1) {
             lines = new ArrayList<>();
         }
@@ -163,6 +165,11 @@ public class SidebarService {
                 }
             }
         });
+    }
+
+    @Override
+    public @Nullable ISidebar getSidebar(@NotNull Player player) {
+        return this.sidebars.getOrDefault(player.getUniqueId(), null);
     }
 
     public void refreshHealth(IArena arena, Player player, int health) {

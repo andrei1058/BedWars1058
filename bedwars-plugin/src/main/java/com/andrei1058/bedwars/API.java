@@ -31,6 +31,7 @@ import com.andrei1058.bedwars.api.server.ISetupSession;
 import com.andrei1058.bedwars.api.server.RestoreAdapter;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.server.VersionSupport;
+import com.andrei1058.bedwars.api.sidebar.ISidebarService;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
@@ -434,5 +435,10 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
     @Override
     public boolean isShuttingDown() {
         return BedWars.isShuttingDown();
+    }
+
+    @Override
+    public ISidebarService getScoreboardManager() {
+        return SidebarService.getInstance();
     }
 }

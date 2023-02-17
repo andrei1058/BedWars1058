@@ -20,6 +20,10 @@
             <id>commons-repo</id>
             <url>https://repo.fusesource.com/nexus/content/repositories/releases-3rd-party/</url>
         </repository>
+        <repository>
+            <id>andrei-prod</id>
+            <url>https://repo.andrei1058.dev/releases</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -41,6 +45,12 @@
             <artifactId>spigot</artifactId>
             <version>1.16.5-R0.1-SNAPSHOT</version>
             <scope>compile</scope>
+        </dependency>
+        <!-- SIDEBAR LIB -->
+        <dependency>
+            <groupId>com.andrei1058.spigot.sidebar</groupId>
+            <artifactId>sidebar-base</artifactId>
+            <version>23.2</version>
         </dependency>
     </dependencies>
     <build>
