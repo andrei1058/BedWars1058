@@ -425,14 +425,14 @@ public class Spanish extends Language{
         addContentMessages(yml, "chainmail", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "{color}Armadura de malla permanente", Arrays.asList("&7Precio: {cost} {currency}",
                 "", "&7Pantalones y botas de malla", "&7que siempre spawnearas", "&7con ella.", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "iron-armor", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "{color}Armadura de hierro permanente", Arrays.asList("&7Precio: {cost} {currency}",
-                "", "&7Pantalones y botas de hierro", "&7que siempre spawnearas con ellas.", "", "{quick_buy}", "{buy_status}"));
+                "", "&7Pantalones y botas de hierro", "&7que siempre spawnearas con ellos.", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "diamond-armor", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "{color}Armadura de diamante permanente", Arrays.asList("&7Precio: {cost} {currency}",
-                "", "&7Pantalones y botas de diamante", "&7que siempre spawnearas con ellas", "", "{quick_buy}", "{buy_status}"));
+                "", "&7Pantalones y botas de diamante", "&7que siempre spawnearas con ellos", "", "{quick_buy}", "{buy_status}"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "&8Herramientas", "&aHerramientas", Collections.singletonList("&eClick para ver!"));
 
         addContentMessages(yml, "shears", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "{color}Tijeras permanentes", Arrays.asList("&7Precio: {cost} {currency}",
-                "", "&7Genial para deshacerse de la lana.", "&7Siempre spawnearas con ellas", "", "{quick_buy}", "{buy_status}"));
+                "", "&7Genial para deshacerse de la lana.", "&7Siempre spawnearas con ellos", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "pickaxe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "{color}Pico {tier}", Arrays.asList("&7Precio: {cost} {currency}", "&7Nivel: &e{tier}",
                 "", "&7Este es un item mejorable.", "&7Perderas un nivel cuando.", "&7mueras!", "", "&7Permanentemente", "&7reapareceras al menos con", "&7el nivel mas bajo", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "axe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "{color}Hacha {tier}", Arrays.asList("&7Precio: {cost} {currency}", "&7Tier: &e{tier}",
