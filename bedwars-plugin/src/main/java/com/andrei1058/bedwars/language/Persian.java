@@ -460,72 +460,39 @@ public class Persian extends Language {
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_UNLOCKED, "{color}BAZ");
         yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a{player} yek &6{upgradeName} &akharid");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-1"), "{color}Forge Iron");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "forge").replace("{tier}", "tier-1"),
-                Arrays.asList("&7Ertegha resource haei ke dar", "&7island shoma spawn mishan.", "", "{tierColor}Tier 1: +50% Resource Bishtar, &b{cost} {currency}",
-                        "&7Tier 2: +100% Resource Bishtar, &b8 Diamond",
-                        "&7Tier 3: Spawn shodan Emerald, &b12 Diamond",
-                        "&7Tier 4: +200% Resource Bishtar, &b16 Diamond", ""));
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "forge"),
+                Arrays.asList("&7Ertegha resource haei ke dar", "&7island shoma spawn mishan.", "", "{tier_1_color}Tier 1: +50% Resource Bishtar, &b{tier_1_cost} {tier_1_currency}",
+                        "{tier_2_color}Tier 2: +100% Resource Bishtar, &b{tier_2_cost} {tier_2_currency}",
+                        "{tier_3_color}Tier 3: Spawn shodan Emerald, &b{tier_3_cost} {tier_3_currency}",
+                        "{tier_4_color}Tier 4: +200% Resource Bishtar, &b{tier_4_cost} {tier_4_currency}", ""));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-2"), "{color}Forge Gold");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "forge").replace("{tier}", "tier-2"),
-                Arrays.asList("&7Ertegha resource haei ke dar", "&7island shoma spawn mishan.", "", "&aTier 1: +50% Resource Bishtar, &b{cost} {currency}",
-                        "{tierColor}Tier 2: +100% Resource Bishtar, &b8 Diamond",
-                        "&7Tier 3: Spawn shodan Emerald, &b12 Diamond",
-                        "&7Tier 4: +200% Resource Bishtar, &b16 Diamond", ""));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-3"), "{color}Forge Emerald");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "forge").replace("{tier}", "tier-3"),
-                Arrays.asList("&7Ertegha resource haei ke dar", "&7island shoma spawn mishan.", "", "&aTier 1: +50% Resource Bishtar, &b{cost} {currency}",
-                        "&aTier 2: +100% Resource Bishtar, &b8 Diamond",
-                        "{tierColor}Tier 3: Spawn shodan Emerald, &b12 Diamond",
-                        "&7Tier 4: +200% Resource Bishtar, &b16 Diamond", ""));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-4"), "{color}Forge Molten");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "forge").replace("{tier}", "tier-4"),
-                Arrays.asList("&7Ertegha resource haei ke dar", "&7island shoma spawn mishan.", "", "&aTier 1: +50% Resource Bishtar, &b{cost} {currency}",
-                        "&aTier 2: +100% Resource Bishtar, &b8 Diamond",
-                        "&aTier 3: Spawn shodan Emerald, &b12 Diamond",
-                        "{tierColor}Tier 4: +200% Resource Bishtar, &b16 Diamond", ""));
         yml.addDefault(Messages.UPGRADES_CATEGORY_ITEM_NAME_PATH + "traps", "&eKharid Tale");
         yml.addDefault(Messages.UPGRADES_CATEGORY_ITEM_LORE_PATH + "traps", Arrays.asList("&7Tale haye kharide shode", "&7dar saf samte rast gharar migiran.", "", "&eClick to browse!"));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "swords").replace("{tier}", "tier-1"), "{color}Sharpened Swords");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "swords").replace("{tier}", "tier-1"),
-                Arrays.asList("&7Team shoma daeman", "&7Sharpness I rooye hame sword va", "&7axe ha migiran!", "", "&7Gheimat: &b{cost} {currency}", ""));
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "swords"),
+                Arrays.asList("&7Team shoma daeman", "&7Sharpness I rooye hame sword va", "&7axe ha migiran!", "", "{tier_1_color}Gheimat: &b{tier_1_cost} {tier_1_currency}", ""));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-1"), "{color}Reinforced Armor I");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "armor").replace("{tier}", "tier-1"),
-                Arrays.asList("&7Team shoma daeman", "&7Protection rooye tamam armor ha migiran!", "", "{tierColor}Tier 1: Protection I, &b{cost} {currency}",
-                        "&7Tier 2: Protection II, &b10 Diamonds",
-                        "&7Tier 3: Protection III, &b20 Diamonds",
-                        "&7Tier 4: Protection IV, &b30 Diamonds", ""));
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "armor"),
+                Arrays.asList("&7Team shoma daeman", "&7Protection rooye tamam armor ha migiran!", "", "{tier_1_color}Tier 1: Protection I, &b{tier_1_cost} {tier_1_currency}",
+                        "{tier_2_color}Tier 2: Protection II, &b{tier_2_cost} {tier_2_currency}",
+                        "{tier_3_color}Tier 3: Protection III, &b{tier_3_cost} {tier_3_currency}",
+                        "{tier_4_color}Tier 4: Protection IV, &b{tier_4_cost} {tier_4_currency}", ""));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-2"), "{color}Reinforced Armor II");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "armor").replace("{tier}", "tier-2"),
-                Arrays.asList("&7Team shoma daeman", "&7Protection rooye tamam armor ha migiran!", "", "&aTier 1: Protection I, &b5 Diamond",
-                        "{tierColor}Tier 2: Protection II, &b{cost} {currency}",
-                        "&7Tier 3: Protection III, &b20 Diamond",
-                        "&7Tier 4: Protection IV, &b30 Diamond", ""));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-3"), "{color}Reinforced Armor III");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "armor").replace("{tier}", "tier-3"),
-                Arrays.asList("&7Team shoma daeman", "&7Protection rooye tamam armor ha migiran!", "", "&aTier 1: Protection I, &b5 Diamond",
-                        "&aTier 2: Protection II, &b10 Diamond",
-                        "{tierColor}Tier 3: Protection III, &b{cost} {currency}",
-                        "&7Tier 4: Protection IV, &b30 Diamond", ""));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-4"), "{color}Reinforced Armor IV");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "armor").replace("{tier}", "tier-4"),
-                Arrays.asList("&7Team shoma daeman", "&7Protection rooye tamam armor ha migiran!", "", "&aTier 1: Protection I, &b5 Diamond",
-                        "&aTier 2: Protection II, &b10 Diamond",
-                        "&aTier 3: Protection III, &b20 Diamond",
-                        "{tierColor}Tier 4: Protection IV, &b{cost} {currency}", ""));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "miner").replace("{tier}", "tier-1"), "{color}Maniac Miner I");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "miner").replace("{tier}", "tier-1"),
-                Arrays.asList("&7Tamam player haye team shoma", "&7daeman Haste migiran.", "", "{tierColor}Tier 1: Haste I, &b{cost} {currency}",
-                        "&7Tier 2: Haste II, &b6 Diamonds", ""));
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "miner"),
+                Arrays.asList("&7Tamam player haye team shoma", "&7daeman Haste migiran.", "", "{tier_1_color}Tier 1: Haste I, &b{tier_1_cost} {tier_1_currency}",
+                        "{tier_2_color}Tier 2: Haste II, &b{tier_2_cost} {tier_2_currency}", ""));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "miner").replace("{tier}", "tier-2"), "{color}Maniac Miner II");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "miner").replace("{tier}", "tier-2"),
-                Arrays.asList("&7Hame player haye team shoma", "&7daeman Haste migiran.", "", "&aTier 1: Haste I, &b4 Diamonds",
-                        "{tierColor}Tier 2: Haste II, &b{cost} {currency}", ""));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "heal-pool").replace("{tier}", "tier-1"), "{color}Heal Pool");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "heal-pool").replace("{tier}", "tier-1"),
-                Arrays.asList("&7Yek mantaghe regeneration", "&7atraf base shoma misaze!", "", "&7Gheimat: &b{cost} {currency}", ""));
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "heal-pool"),
+                Arrays.asList("&7Yek mantaghe regeneration", "&7atraf base shoma misaze!", "", "{tier_1_color}Gheimat: &b{tier_1_cost} {tier_1_currency}", ""));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "dragon").replace("{tier}", "tier-1"), "{color}Dragon Buff");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "dragon").replace("{tier}", "tier-1"),
-                Arrays.asList("&7Team shoma bejaye 1 dragon", "&72ta dragon migire!", "", "&7Gheimat: &b{cost} {currency}", ""));
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "dragon"),
+                Arrays.asList("&7Team shoma bejaye 1 dragon", "&72ta dragon migire!", "", "{tier_1_color}Gheimat: &b{tier_1_cost} {tier_1_currency}", ""));
         yml.addDefault(Messages.UPGRADES_SEPARATOR_ITEM_NAME_PATH + "glass", "&8⬆&7Ghabel Kharid");
         yml.addDefault(Messages.UPGRADES_SEPARATOR_ITEM_LORE_PATH + "glass", Collections.singletonList("&8⬇&7Safe Tale"));
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "first", "{color}Tale #1: {name}");
