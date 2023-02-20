@@ -47,6 +47,7 @@ public class BuyItem implements IBuyItem {
     private ItemStack itemStack;
     private boolean autoEquip = false;
     private boolean permanent = false;
+    private boolean unbreakable = false;
     private boolean loaded = false;
     private final String upgradeIdentifier;
 
@@ -155,7 +156,9 @@ public class BuyItem implements IBuyItem {
         }
         if (yml.get(upgradeIdentifier + "." + ConfigPath.SHOP_CATEGORY_CONTENT_IS_PERMANENT) != null) {
             permanent = yml.getBoolean(upgradeIdentifier + "." + ConfigPath.SHOP_CATEGORY_CONTENT_IS_PERMANENT);
-
+        }
+        if (yml.get(upgradeIdentifier + "." + ConfigPath.SHOP_CATEGORY_CONTENT_IS_UNBREAKABLE) != null) {
+            unbreakable = yml.getBoolean(upgradeIdentifier + "." + ConfigPath.SHOP_CATEGORY_CONTENT_IS_UNBREAKABLE);
         }
 
         loaded = true;
@@ -225,7 +228,7 @@ public class BuyItem implements IBuyItem {
             i = nms.colourItem(i, arena.getTeam(player));
             if (im != null) {
                 if (permanent) nms.setUnbreakable(im);
-
+                if (unbreakable) nms.setUnbreakable(im);
                 if (i.getType() == Material.BOW) {
                     if (permanent) nms.setUnbreakable(im);
                     for (TeamEnchant e : arena.getTeam(player).getBowsEnchantments()) {
