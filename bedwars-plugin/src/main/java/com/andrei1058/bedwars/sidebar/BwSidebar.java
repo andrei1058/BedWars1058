@@ -211,6 +211,9 @@ public class BwSidebar implements ISidebar {
                 providers.add(new PlaceholderProvider("{wins}", () ->
                         String.valueOf(stats.getWins()))
                 );
+                providers.add(new PlaceholderProvider("{losses}", () ->
+                        String.valueOf(stats.getLosses()))
+                );
             }
         } else {
             providers.add(new PlaceholderProvider("{on}", () -> String.valueOf(arena.getPlayers().size())));
