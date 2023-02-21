@@ -128,4 +128,13 @@ public class BuyCommand implements IBuyItem {
     public void setPermanent(boolean permanent) {
 
     }
+
+    @Override
+    public boolean isUnbreakable() {
+        return false;
+    }
+
+    @Override
+    public void setUnbreakable(boolean unbreakable) {
+    }
 }

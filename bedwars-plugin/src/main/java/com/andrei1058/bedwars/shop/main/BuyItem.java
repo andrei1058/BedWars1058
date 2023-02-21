@@ -298,4 +298,12 @@ public class BuyItem implements IBuyItem {
     public void setPermanent(boolean permanent) {
         this.permanent = permanent;
     }
+
+    public boolean isUnbreakable() {
+        return unbreakable;
+    }
+
+    public void setUnbreakable(boolean unbreakable) {
+        this.unbreakable = unbreakable;
+    }
 }
