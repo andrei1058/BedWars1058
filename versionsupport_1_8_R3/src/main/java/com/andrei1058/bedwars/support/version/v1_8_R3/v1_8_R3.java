@@ -545,6 +545,11 @@ public class v1_8_R3 extends VersionSupport {
      }
 
     @Override
+    public org.bukkit.Material materialElytra() {
+        return null; //Elytra is 1.9+
+    }
+
+    @Override
     public org.bukkit.Material materialCake() {
         return org.bukkit.Material.CAKE_BLOCK;
     }
