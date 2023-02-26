@@ -57,7 +57,7 @@ public class CategoryContent implements ICategoryContent {
     private String contentName;
     private String itemNamePath, itemLorePath;
     private String identifier;
-    private boolean permanent = false, downgradable = false;
+    private boolean permanent = false, downgradable = false, unbreakable = false;
     private byte weight = 0;
     private ShopCategory father;
 
@@ -97,6 +97,10 @@ public class CategoryContent implements ICategoryContent {
 
         if (yml.get(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_IS_DOWNGRADABLE) != null) {
             downgradable = yml.getBoolean(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_IS_DOWNGRADABLE);
+        }
+
+        if (yml.get(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_IS_UNBREAKABLE) != null) {
+            unbreakable = yml.getBoolean(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_IS_UNBREAKABLE);
         }
 
         if (yml.get(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_WEIGHT) != null) {

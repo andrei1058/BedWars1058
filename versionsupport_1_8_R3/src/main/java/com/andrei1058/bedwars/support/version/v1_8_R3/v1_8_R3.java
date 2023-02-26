@@ -530,6 +530,26 @@ public class v1_8_R3 extends VersionSupport {
     }
 
     @Override
+    public org.bukkit.Material materialNetheriteHelmet() {
+        return Material.DIAMOND_HELMET; //Netherite doesn't exist
+    }
+
+    @Override
+    public org.bukkit.Material materialNetheriteChestPlate() {
+        return Material.DIAMOND_CHESTPLATE; //Netherite doesn't exist
+    }
+
+    @Override
+    public org.bukkit.Material materialNetheriteLeggings() {
+        return Material.DIAMOND_LEGGINGS; //Netherite doesn't exist
+     }
+
+    @Override
+    public org.bukkit.Material materialElytra() {
+        return null; //Elytra is 1.9+
+    }
+
+    @Override
     public org.bukkit.Material materialCake() {
         return org.bukkit.Material.CAKE_BLOCK;
     }

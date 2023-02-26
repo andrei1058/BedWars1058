@@ -91,9 +91,26 @@ public class MenuUpgrade implements MenuContent, TeamUpgrade {
 
         List<String> lore = new ArrayList<>();
         String currencyMsg = UpgradesManager.getCurrencyMsg(player, ut);
-        for (String s : Language.getList(player, Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", this.getName().replace("upgrade-", "")).replace("{tier}", ut.getName()))){
-            lore.add(s.replace("{cost}", String.valueOf(ut.getCost())).replace("{currency}", currencyMsg).replace("{tierColor}",
-                    Language.getMsg(player, highest ? Messages.FORMAT_UPGRADE_TIER_UNLOCKED : Messages.FORMAT_UPGRADE_TIER_LOCKED)).replace("{color}", color));
+        for (String s : Language.getList(player, Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", this.getName().replace("upgrade-", "")))){
+            if (s.contains("{tier_")){
+                // Get tier number from placeholder
+                String result = s.replaceAll(".*_([0-9]+)_.*", "$1");
+
+                String tierColor = Messages.FORMAT_UPGRADE_TIER_LOCKED;
+                if (Integer.valueOf(result)-1 <= team.getTeamUpgradeTiers().getOrDefault(getName(), -1)) {
+                    tierColor = Messages.FORMAT_UPGRADE_TIER_UNLOCKED;
+                }
+
+                //get current tier. Note: placeholder number doesnt match array index.
+                UpgradeTier upgradeTier = tiers.get(Integer.valueOf(result)-1);
+
+                lore.add(s.replace("{tier_" + result + "_cost}", String.valueOf(upgradeTier.getCost()))
+                        .replace("{tier_" + result + "_currency}", currencyMsg)
+                        .replace("{tier_" + result + "_color}", Language.getMsg(player, tierColor)));
+
+            } else {
+                lore.add(s.replace("{color}", color));
+            }
         }
         if (highest){
             lore.add(Language.getMsg(player, Messages.UPGRADES_LORE_REPLACEMENT_UNLOCKED).replace("{color}", color));

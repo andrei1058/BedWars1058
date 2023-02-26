@@ -179,7 +179,8 @@ public class v1_19_R2 extends VersionSupport {
     public boolean isArmor(org.bukkit.inventory.ItemStack itemStack) {
         var i = getItem(itemStack);
         if (null == i) return false;
-        return i instanceof ItemArmor;
+        return i instanceof ItemArmor || i instanceof ItemElytra;
+
     }
 
     @Override
@@ -491,6 +492,26 @@ public class v1_19_R2 extends VersionSupport {
     @Override
     public org.bukkit.Material materialGoldenLeggings() {
         return org.bukkit.Material.GOLDEN_LEGGINGS;
+    }
+
+    @Override
+    public org.bukkit.Material materialNetheriteHelmet() {
+        return Material.NETHERITE_HELMET;
+    }
+
+    @Override
+    public org.bukkit.Material materialNetheriteChestPlate() {
+        return Material.NETHERITE_CHESTPLATE;
+    }
+
+    @Override
+    public org.bukkit.Material materialNetheriteLeggings() {
+        return Material.NETHERITE_LEGGINGS;
+    }
+
+    @Override
+    public org.bukkit.Material materialElytra() {
+        return Material.ELYTRA;
     }
 
     @Override
