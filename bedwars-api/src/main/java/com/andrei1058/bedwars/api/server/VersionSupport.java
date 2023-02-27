@@ -321,6 +321,11 @@ public abstract class VersionSupport {
     public abstract Material materialNetheriteLeggings();
 
     /**
+     * Get elytra - supports: 1.12.2+
+     */
+    public abstract Material materialElytra();
+
+    /**
      * Cake material
      */
     public abstract Material materialCake();

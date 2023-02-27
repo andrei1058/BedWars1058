@@ -36,6 +36,7 @@ public class Language extends ConfigManager {
 
     private final String iso;
     private String prefix = "";
+    private static String prefixStatic = "";
     private static final HashMap<UUID, Language> langByPlayer = new HashMap<>();
     private static final List<Language> languages = new ArrayList<>();
     private static Language defaultLanguage;
@@ -52,6 +53,9 @@ public class Language extends ConfigManager {
      */
     public void setPrefix(String prefix) {
         this.prefix = prefix;
+    }
+    public void setPrefixStatic(String prefix) {
+        this.prefixStatic = prefix;
     }
 
     /**
@@ -89,7 +93,7 @@ public class Language extends ConfigManager {
      */
     public static String getMsg(Player p, String path) {
         if (p == null) return getDefaultLanguage().m(path);
-        return langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage()).m(path);
+        return langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage()).m(path).replace("{prefix}", (prefixStatic == null? "":prefixStatic));
     }
 
     /**

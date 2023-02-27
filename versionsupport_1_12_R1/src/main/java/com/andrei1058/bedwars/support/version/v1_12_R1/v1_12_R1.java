@@ -175,7 +175,7 @@ public class v1_12_R1 extends VersionSupport {
     public boolean isArmor(org.bukkit.inventory.ItemStack itemStack) {
         if (CraftItemStack.asNMSCopy(itemStack) == null) return false;
         if (CraftItemStack.asNMSCopy(itemStack).getItem() == null) return false;
-        return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemArmor;
+        return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemArmor || CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemElytra;
     }
 
     @Override
@@ -506,6 +506,11 @@ public class v1_12_R1 extends VersionSupport {
     @Override
     public org.bukkit.Material materialNetheriteLeggings() {
         return Material.DIAMOND_LEGGINGS; //Netherite doesn't exist
+    }
+
+    @Override
+    public org.bukkit.Material materialElytra() {
+        return Material.ELYTRA;
     }
 
     @Override

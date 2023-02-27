@@ -37,8 +37,8 @@ public class BwSidebar implements ISidebar {
         }
     };
 
-    private static final String SPECTATOR_TAB = Base64.getEncoder().encodeToString("spectators".getBytes(StandardCharsets.UTF_8));
-    private static final String TEAM_PREFIX = "bw";
+    private static final String SPECTATOR_TAB = "spectators010101";
+    private static final String TEAM_PREFIX = "?_";
 
     private final Player player;
     private IArena arena;
@@ -46,6 +46,8 @@ public class BwSidebar implements ISidebar {
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat nextEventDateFormat;
     private final HashMap<String, PlayerTab> tabList = new HashMap<>();
+
+    private final List<PlaceholderProvider> persistentProviders = new ArrayList<>();
 
 
     protected BwSidebar(Player player) {
@@ -69,6 +71,7 @@ public class BwSidebar implements ISidebar {
         List<SidebarLine> lines = this.normalizeLines(lineArray);
 
         List<PlaceholderProvider> placeholders = this.getPlaceholders();
+        placeholders.addAll(this.persistentProviders);
 
         // if it is the first time setting content we create the handle
         if (null == handle) {
@@ -84,8 +87,8 @@ public class BwSidebar implements ISidebar {
                 handle.setTitle(title);
                 lines.forEach(l -> handle.addLine(l));
             }, 2L);
+            handlePlayerList();
         }
-        handlePlayerList();
     }
 
     public Player getPlayer() {
@@ -207,6 +210,9 @@ public class BwSidebar implements ISidebar {
                 );
                 providers.add(new PlaceholderProvider("{wins}", () ->
                         String.valueOf(stats.getWins()))
+                );
+                providers.add(new PlaceholderProvider("{losses}", () ->
+                        String.valueOf(stats.getLosses()))
                 );
             }
         } else {
@@ -369,9 +375,7 @@ public class BwSidebar implements ISidebar {
         }
 
         // unique tab list name
-        String tabListName = Base64.getEncoder().encodeToString(
-                player.getUniqueId().toString().getBytes(StandardCharsets.UTF_8)
-        );
+        String tabListName = player.getName();
         Language lang = Language.getPlayerLanguage(player);
 
         if (tabList.containsKey(tabListName)) {
@@ -440,8 +444,22 @@ public class BwSidebar implements ISidebar {
                         lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_STARTING)
                 );
             } else if (arena.getStatus() == GameState.restarting) {
-                prefix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_RESTARTING, player, null);
-                suffix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_RESTARTING, player, null);
+
+                ITeam team = arena.getTeam(player);
+                if (null == team) {
+                    team = arena.getExTeam(player.getUniqueId());
+                }
+
+                String displayName = null == team ? "" : team.getDisplayName(Language.getPlayerLanguage(this.player));
+
+                HashMap<String, String> replacements = new HashMap<>();
+                replacements.put("{team}", null == team ? "" : team.getColor().chat() + displayName);
+                replacements.put("{teamLetter}", null == team ? "" : team.getColor().chat() + (displayName.substring(0, 1)));
+                replacements.put("{teamColor}", null == team ? "" : team.getColor().chat().toString());
+
+
+                prefix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_RESTARTING, player, replacements);
+                suffix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_RESTARTING, player, replacements);
                 SidebarManager.getInstance().sendHeaderFooter(
                         player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_RESTARTING),
                         lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_RESTARTING)
@@ -463,7 +481,10 @@ public class BwSidebar implements ISidebar {
             throw new RuntimeException("Wtf dude");
         }
 
-        String tabName = Base64.getEncoder().encodeToString((TEAM_PREFIX + team.getName()).getBytes(StandardCharsets.UTF_8));
+        String tabName = TEAM_PREFIX+Base64.getEncoder().encodeToString((team.getName()).getBytes(StandardCharsets.UTF_8));
+        if (tabName.length() > 16) {
+            tabName = tabName.substring(0, 16);
+        }
 
         PlayerTab teamTab = tabList.get(tabName);
         if (null == teamTab) {
@@ -568,6 +589,12 @@ public class BwSidebar implements ISidebar {
 
         // if tab formatting is disabled in restarting
         return arena.getStatus() != GameState.restarting || !config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_RESTARTING);
+    }
+
+    @Override
+    public boolean registerPersistentPlaceholder(PlaceholderProvider placeholderProvider) {
+        this.persistentProviders.add(placeholderProvider);
+        return true;
     }
 
     public void handleHealthIcon() {
