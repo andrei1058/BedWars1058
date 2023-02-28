@@ -87,8 +87,8 @@ public class BwSidebar implements ISidebar {
                 handle.setTitle(title);
                 lines.forEach(l -> handle.addLine(l));
             }, 2L);
-            handlePlayerList();
         }
+        handlePlayerList();
     }
 
     public Player getPlayer() {
@@ -186,7 +186,7 @@ public class BwSidebar implements ISidebar {
             providers.add(new PlaceholderProvider("{requiredXp}", level::getFormattedRequiredXp));
         }
 
-        if (null == arena) {
+        if (noArena()) {
             providers.add(new PlaceholderProvider("{on}", () ->
                     String.valueOf(Bukkit.getOnlinePlayers().size()))
             );
@@ -559,7 +559,7 @@ public class BwSidebar implements ISidebar {
      * @return true if tab formatting is disabled for current sidebar/ arena stage
      */
     public boolean isTabFormattingDisabled() {
-        if (null == arena) {
+        if (noArena()) {
 
             if (getServerType() == ServerType.SHARED) {
                 if (config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_LOBBY) &&
@@ -606,7 +606,7 @@ public class BwSidebar implements ISidebar {
             return;
         }
 
-        if (null == arena) {
+        if (noArena()) {
             handle.hidePlayersHealth();
         } else if (arena.getStatus() != GameState.playing) {
             handle.hidePlayersHealth();
