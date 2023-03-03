@@ -512,6 +512,7 @@ public class Arena implements IArena {
             setArenaByPlayer(p, this);
 
             /* check if you can start the arena */
+            boolean isStatusChange = false;
             if (status == GameState.waiting) {
                 int teams = 0, teammates = 0;
                 for (Player on : getPlayers()) {
@@ -524,8 +525,10 @@ public class Arena implements IArena {
                 }
                 if (minPlayers <= players.size() && teams > 0 && players.size() != teammates / teams) {
                     changeStatus(GameState.starting);
+                    isStatusChange = true;
                 } else if (players.size() >= minPlayers && teams == 0) {
                     changeStatus(GameState.starting);
+                    isStatusChange = true;
                 }
             }
 
@@ -547,7 +550,9 @@ public class Arena implements IArena {
             }
             PaperSupport.teleportC(p, getWaitingLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
 
-            SidebarService.getInstance().giveSidebar(p, this, false);
+            if (!isStatusChange){
+                SidebarService.getInstance().giveSidebar(p, this, false);
+            }
             sendPreGameCommandItems(p);
             for (PotionEffect pf : p.getActivePotionEffects()) {
                 p.removePotionEffect(pf.getType());
