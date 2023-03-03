@@ -651,9 +651,9 @@ public class DamageDeathMove implements Listener {
                 }
             }
         } else {
-            if (e.getPlayer().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName()) && BedWars.getServerType() == ServerType.MULTIARENA) {
-                if (e.getTo().getY() < 0) {
-                    PaperSupport.teleport(e.getPlayer(), config.getConfigLoc("lobbyLoc"));
+            if (config.getBoolean(ConfigPath.LOBBY_VOID_TELEPORT_ENABLED) && e.getPlayer().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName()) && BedWars.getServerType() == ServerType.MULTIARENA) {
+                if (e.getTo().getY() < config.getInt(ConfigPath.LOBBY_VOID_TELEPORT_HEIGHT)) {
+                    PaperSupport.teleportC(e.getPlayer(), config.getConfigLoc("lobbyLoc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
                 }
             }
         }

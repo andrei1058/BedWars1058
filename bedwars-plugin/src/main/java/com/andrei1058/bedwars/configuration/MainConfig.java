@@ -185,6 +185,9 @@ public class MainConfig extends ConfigManager {
         yml.addDefault(ConfigPath.CENERAL_CONFIGURATION_ALLOWED_COMMANDS, Arrays.asList("shout", "bw", "leave"));
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_EXPERIMENTAL_TEAM_ASSIGNER, true);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ENABLE_GEN_SPLIT, true);
+
+        yml.addDefault(ConfigPath.LOBBY_VOID_TELEPORT_ENABLED, true);
+        yml.addDefault(ConfigPath.LOBBY_VOID_TELEPORT_HEIGHT, 0);
         yml.options().copyDefaults(true);
         save();
 
