@@ -77,7 +77,7 @@ public class ShopItemRestoreListener {
     }
 
     /**
-     * Remove the default swords/ bow if the picked item is more powerful.
+     * Remove the default swords if the picked item is more powerful.
      *
      * @return true to cancel the event
      */
@@ -92,18 +92,12 @@ public class ShopItemRestoreListener {
                 if (is == null) continue;
                 if (is.getType() == Material.AIR) continue;
                 if (!api.getVersionSupport().isCustomBedWarsItem(is)) continue;
-                if (!api.getVersionSupport().getCustomData(is).equalsIgnoreCase("DEFAULT_ITEM")) continue;
-
-                if (api.getVersionSupport().isSword(item.getItemStack())) {
-                    if (api.getVersionSupport().getDamage(item.getItemStack()) >= api.getVersionSupport().getDamage(is)) {
-                        ((Player) player).getInventory().remove(is);
-                        ((Player) player).updateInventory();
-                        return false;
-                    }
+                if (api.getVersionSupport().getCustomData(is).equalsIgnoreCase("DEFAULT_ITEM")) {
+                    ((Player) player).getInventory().remove(is);
+                    ((Player) player).updateInventory();
+                    return false; // function will only return false. default item should only be checked. access tools should be put in chests
                 }
             }
-            item.remove();
-            return true;
         }
         return false;
     }
