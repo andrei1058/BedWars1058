@@ -344,9 +344,8 @@ public class BwSidebar implements ISidebar {
             return;
         }
 
-        handleHealthIcon();
 
-        if (arena == null) {
+        if (noArena()) {
             // if tab formatting is enabled in lobby world
             if (config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_LOBBY) &&
                     !config.getLobbyWorldName().trim().isEmpty()) {
@@ -359,6 +358,8 @@ public class BwSidebar implements ISidebar {
             }
             return;
         }
+
+        handleHealthIcon();
 
         arena.getPlayers().forEach(playing -> giveUpdateTabFormat(playing, true));
         arena.getSpectators().forEach(spectating -> giveUpdateTabFormat(spectating, true));
@@ -570,7 +571,7 @@ public class BwSidebar implements ISidebar {
                 }
             }
 
-            return config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_LOBBY);
+            return !config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_LOBBY);
         }
         // if tab formatting is disabled in game
         if (arena.getStatus() == GameState.playing && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_PLAYING)) {
