@@ -17,6 +17,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -368,6 +369,7 @@ public class BwSidebar implements ISidebar {
     /**
      * Handle given player in sidebar owner tab list.
      * Will remove existing tab and give a new one based on game conditions list like spectator, team red, etc.
+     * Will handle invisibility potion as well.
      */
     public void giveUpdateTabFormat(@NotNull Player player, boolean skipStateCheck) {
         // if sidebar was not created
@@ -482,9 +484,28 @@ public class BwSidebar implements ISidebar {
             throw new RuntimeException("Wtf dude");
         }
 
-        String tabName = TEAM_PREFIX+Base64.getEncoder().encodeToString((team.getName()).getBytes(StandardCharsets.UTF_8));
-        if (tabName.length() > 16) {
-            tabName = tabName.substring(0, 16);
+        String tabName = this.getTabName(team);
+        String tabNameInvisible = tabName = tabName.substring(0, tabName.length() >= 16 ? 15 : tabName.length());
+        tabNameInvisible += "^!";
+
+        if (player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+            if (!team.isMember(getPlayer())) {
+                // remove player from its tab group (if team tab group)
+                PlayerTab teamTab = tabList.getOrDefault(tabName, null);
+                if (null != teamTab) {
+                    teamTab.remove(player);
+
+                    // create or get tab group for the invisible players in that team
+                    // set tab group name visibility to false
+                    // identifier for invisibility
+                    tabName = tabNameInvisible;
+                }
+            }
+        } else {
+            PlayerTab invTab = tabList.getOrDefault(tabNameInvisible, null);
+            if (null != invTab) {
+                invTab.remove(player);
+            }
         }
 
         PlayerTab teamTab = tabList.get(tabName);
@@ -501,14 +522,26 @@ public class BwSidebar implements ISidebar {
 
             teamTab = handle.playerTabCreate(tabName, null, prefix, suffix, PlayerTab.PushingRule.PUSH_OTHER_TEAMS);
             tabList.put(tabName, teamTab);
+            if (player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+                teamTab.setNameTagVisibility(PlayerTab.NameTagVisibility.NEVER);
+            }
         }
 
         teamTab.add(player);
 
+        // todo this should be outside. we are basically sending the player header and footer in sidebar holder's language
         SidebarManager.getInstance().sendHeaderFooter(
                 player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_PLAYING),
                 lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_PLAYING)
         );
+    }
+
+    private @NotNull String getTabName(@NotNull ITeam team) {
+        String tabName = TEAM_PREFIX + Base64.getEncoder().encodeToString((team.getName()).getBytes(StandardCharsets.UTF_8));
+        if (tabName.length() > 16) {
+            tabName = tabName.substring(0, 16);
+        }
+        return tabName;
     }
 
     @NotNull
@@ -647,17 +680,68 @@ public class BwSidebar implements ISidebar {
     /**
      * Hide player name tag on head when he drinks an invisibility potion.
      * This is required because not all clients hide it automatically.
+     *
      * @param toggle true when applied, false when expired.
      */
     public void handleInvisibilityPotion(@NotNull Player player, boolean toggle) {
-        if (toggle) {
-//            handle.remove(player);
-//            handle.playerListHideNameTag(player);
-            //todo the new sidebar does not provide a solution for invisibility potion?!!
-        } else {
+        if (null == arena) {
+            throw new RuntimeException("This can only be used when the player is in arena");
+        }
+        this.giveUpdateTabFormat(player, false);
+//        if (toggle) {
+//
+//            ITeam playerTeam = arena.getTeam(player);
+//
+//            // foreach enemy sidebar
+//            for (Player inGame : arena.getPlayers()) {
+//                if (playerTeam != null && !playerTeam.isMember(inGame)) {
+//                    ISidebar sidebar = SidebarService.getInstance().getSidebar(inGame);
+//                    if (sidebar instanceof BwSidebar) {
+//
+//                        // remove player from its tab group (if team tab group)
+//                        PlayerTab teamTab = ((BwSidebar) sidebar).tabList.getOrDefault(getTabName(playerTeam), null);
+//                        if (null != teamTab) {
+//                            teamTab.remove(player);
+//                            // create a new tab group for the invisible player
+//                            // set tab group name visibility to false
+//                            PlayerTab playerTab = sidebar.getHandle().playerTabCreate(player.getName(), null,
+//                                    new SidebarLine() {
+//                                        @Override
+//                                        public @NotNull String getLine() {
+//                                            return "";
+//                                        }
+//                                    },
+//                                    new SidebarLine() {
+//                                        @Override
+//                                        public @NotNull String getLine() {
+//                                            return "";
+//                                        }
+//                                    }, PlayerTab.PushingRule.NEVER
+//                            );
+//                            playerTab.setNameTagVisibility(PlayerTab.NameTagVisibility.NEVER);
+//                        } else {
+//                            // if player has personal tab list
+//                            PlayerTab personalTab = ((BwSidebar) sidebar).tabList.getOrDefault(playerTeam.getName(), null);
+//                            if (null != personalTab) {
+//                                personalTab.setNameTagVisibility(PlayerTab.NameTagVisibility.NEVER);
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//
+//
+////            handle.remove(player);
+////            handle.playerListHideNameTag(player);
+//            //todo the new sidebar does not provide a solution for invisibility potion?!!
+//        } else {
+            // foreach enemy sidebar
+            // get player tab group from enemy sidebar
+            // add player to tab group
+
 //            this.giveUpdateTabFormat(player, false);
 //            handle.playerListRestoreNameTag(player);
-        }
+//        }
     }
 
     public Sidebar getHandle() {
