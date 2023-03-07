@@ -298,17 +298,11 @@ public class v1_12_R1 extends VersionSupport {
 
     @Override
     public void hideArmor(Player victim, Player receiver) {
-        PacketPlayOutEntityEquipment hand1 = new PacketPlayOutEntityEquipment(victim.getEntityId(), EnumItemSlot.MAINHAND, new ItemStack(Item.getById(0)));
-        PacketPlayOutEntityEquipment hand2 = new PacketPlayOutEntityEquipment(victim.getEntityId(), EnumItemSlot.OFFHAND, new ItemStack(Item.getById(0)));
         PacketPlayOutEntityEquipment helmet = new PacketPlayOutEntityEquipment(victim.getEntityId(), EnumItemSlot.HEAD, new ItemStack(Item.getById(0)));
         PacketPlayOutEntityEquipment chest = new PacketPlayOutEntityEquipment(victim.getEntityId(), EnumItemSlot.CHEST, new ItemStack(Item.getById(0)));
         PacketPlayOutEntityEquipment pants = new PacketPlayOutEntityEquipment(victim.getEntityId(), EnumItemSlot.LEGS, new ItemStack(Item.getById(0)));
         PacketPlayOutEntityEquipment boots = new PacketPlayOutEntityEquipment(victim.getEntityId(), EnumItemSlot.FEET, new ItemStack(Item.getById(0)));
         EntityPlayer pc = ((CraftPlayer) receiver).getHandle();
-        if (victim != receiver) {
-            pc.playerConnection.sendPacket(hand1);
-            pc.playerConnection.sendPacket(hand2);
-        }
         pc.playerConnection.sendPacket(helmet);
         pc.playerConnection.sendPacket(chest);
         pc.playerConnection.sendPacket(pants);
@@ -317,17 +311,11 @@ public class v1_12_R1 extends VersionSupport {
 
     @Override
     public void showArmor(Player victim, Player receiver) {
-        PacketPlayOutEntityEquipment hand1 = new PacketPlayOutEntityEquipment(victim.getEntityId(), EnumItemSlot.MAINHAND, CraftItemStack.asNMSCopy(victim.getInventory().getItemInMainHand()));
-        PacketPlayOutEntityEquipment hand2 = new PacketPlayOutEntityEquipment(victim.getEntityId(), EnumItemSlot.OFFHAND, CraftItemStack.asNMSCopy(victim.getInventory().getItemInOffHand()));
         PacketPlayOutEntityEquipment helmet = new PacketPlayOutEntityEquipment(victim.getEntityId(), EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(victim.getInventory().getHelmet()));
         PacketPlayOutEntityEquipment chest = new PacketPlayOutEntityEquipment(victim.getEntityId(), EnumItemSlot.CHEST, CraftItemStack.asNMSCopy(victim.getInventory().getChestplate()));
         PacketPlayOutEntityEquipment pants = new PacketPlayOutEntityEquipment(victim.getEntityId(), EnumItemSlot.LEGS, CraftItemStack.asNMSCopy(victim.getInventory().getLeggings()));
         PacketPlayOutEntityEquipment boots = new PacketPlayOutEntityEquipment(victim.getEntityId(), EnumItemSlot.FEET, CraftItemStack.asNMSCopy(victim.getInventory().getBoots()));
         EntityPlayer pc = ((CraftPlayer) receiver).getHandle();
-        if (victim != receiver) {
-            pc.playerConnection.sendPacket(hand1);
-            pc.playerConnection.sendPacket(hand2);
-        }
         pc.playerConnection.sendPacket(helmet);
         pc.playerConnection.sendPacket(chest);
         pc.playerConnection.sendPacket(pants);
