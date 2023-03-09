@@ -47,7 +47,7 @@ public class ShoutCommand extends BukkitCommand {
         if (s instanceof ConsoleCommandSender) return true;
         Player p = (Player) s;
         IArena a = Arena.getArenaByPlayer(p);
-        if (a == null || a.isSpectator(p)) {
+        if (a == null || a.isSpectator(p) || a.getMaxInTeam() == 1) {
             p.sendMessage(Language.getMsg(p, Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
             return true;
         }
