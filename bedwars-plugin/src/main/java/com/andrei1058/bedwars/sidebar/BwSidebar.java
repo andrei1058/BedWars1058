@@ -403,10 +403,12 @@ public class BwSidebar implements ISidebar {
             tab.add(player);
             tabList.put(tabListName, tab);
 
-            SidebarManager.getInstance().sendHeaderFooter(
-                    player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_LOBBY),
-                    lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_LOBBY)
-            );
+            if(config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_HEADER_FOOTER)) {
+                SidebarManager.getInstance().sendHeaderFooter(
+                        player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_LOBBY),
+                        lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_LOBBY)
+                );
+            }
             return;
         }
 
@@ -421,10 +423,12 @@ public class BwSidebar implements ISidebar {
             }
             tab.add(player);
 
-            SidebarManager.getInstance().sendHeaderFooter(
-                    player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR),
-                    lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR)
-            );
+            if(config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_SPECTATOR_HEADER_FOOTER)) {
+                SidebarManager.getInstance().sendHeaderFooter(
+                        player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR),
+                        lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR)
+                );
+            }
             return;
         }
 
@@ -432,17 +436,23 @@ public class BwSidebar implements ISidebar {
             if (arena.getStatus() == GameState.waiting) {
                 prefix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_WAITING, player, null);
                 suffix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_WAITING, player, null);
-                SidebarManager.getInstance().sendHeaderFooter(
-                        player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_WAITING),
-                        lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_WAITING)
-                );
+
+                if(config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_WAITING_HEADER_FOOTER)) {
+                    SidebarManager.getInstance().sendHeaderFooter(
+                            player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_WAITING),
+                            lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_WAITING)
+                    );
+                }
             } else if (arena.getStatus() == GameState.starting) {
                 prefix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_STARTING, player, null);
                 suffix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_STARTING, player, null);
-                SidebarManager.getInstance().sendHeaderFooter(
-                        player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_STARTING),
-                        lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_STARTING)
-                );
+
+                if(config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_STARTING_HEADER_FOOTER)) {
+                    SidebarManager.getInstance().sendHeaderFooter(
+                            player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_STARTING),
+                            lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_STARTING)
+                    );
+                }
             } else if (arena.getStatus() == GameState.restarting) {
 
                 ITeam team = arena.getTeam(player);
@@ -460,10 +470,13 @@ public class BwSidebar implements ISidebar {
 
                 prefix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_RESTARTING, player, replacements);
                 suffix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_RESTARTING, player, replacements);
-                SidebarManager.getInstance().sendHeaderFooter(
-                        player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_RESTARTING),
-                        lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_RESTARTING)
-                );
+
+                if(config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_RESTARTING_HEADER_FOOTER)) {
+                    SidebarManager.getInstance().sendHeaderFooter(
+                            player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_RESTARTING),
+                            lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_RESTARTING)
+                    );
+                }
             } else {
                 throw new RuntimeException("Unhandled game status!");
             }
@@ -504,10 +517,12 @@ public class BwSidebar implements ISidebar {
 
         teamTab.add(player);
 
-        SidebarManager.getInstance().sendHeaderFooter(
-                player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_PLAYING),
-                lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_PLAYING)
-        );
+        if(config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_PLAYING_HEADER_FOOTER)) {
+            SidebarManager.getInstance().sendHeaderFooter(
+                    player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_PLAYING),
+                    lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_PLAYING)
+            );
+        }
     }
 
     @NotNull

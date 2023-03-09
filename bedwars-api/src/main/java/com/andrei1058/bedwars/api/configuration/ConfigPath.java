@@ -135,6 +135,13 @@ public class ConfigPath {
     public static final String SB_CONFIG_SIDEBAR_LIST_FORMAT_STARTING = "scoreboard-settings.player-list.format-starting-list";
     public static final String SB_CONFIG_SIDEBAR_LIST_FORMAT_PLAYING = "scoreboard-settings.player-list.format-playing-list";
     public static final String SB_CONFIG_SIDEBAR_LIST_FORMAT_RESTARTING = "scoreboard-settings.player-list.format-restarting-list";
+    public static final String SB_CONFIG_SIDEBAR_USE_LOBBY_HEADER_FOOTER = "scoreboard-settings.sidebar.enable-lobby-header-footer";
+    public static final String SB_CONFIG_SIDEBAR_USE_WAITING_HEADER_FOOTER = "scoreboard-settings.sidebar.enable-waiting-header-footer";
+    public static final String SB_CONFIG_SIDEBAR_USE_STARTING_HEADER_FOOTER = "scoreboard-settings.sidebar.enable-starting-header-footer";
+    public static final String SB_CONFIG_SIDEBAR_USE_PLAYING_HEADER_FOOTER = "scoreboard-settings.sidebar.enable-playing-header-footer";
+    public static final String SB_CONFIG_SIDEBAR_USE_RESTARTING_HEADER_FOOTER = "scoreboard-settings.sidebar.enable-restarting-header-footer";
+    public static final String SB_CONFIG_SIDEBAR_USE_SPECTATOR_HEADER_FOOTER = "scoreboard-settings.sidebar.enable-spectator-header-footer";
+
     public static final String SB_CONFIG_SIDEBAR_LIST_REFRESH = "scoreboard-settings.player-list.names-refresh-interval";
     public static final String SB_CONFIG_SIDEBAR_HEALTH_IN_TAB = "scoreboard-settings.health.display-in-tab";
     public static final String SB_CONFIG_SIDEBAR_HEALTH_REFRESH = "scoreboard-settings.health.animation-refresh-interval";

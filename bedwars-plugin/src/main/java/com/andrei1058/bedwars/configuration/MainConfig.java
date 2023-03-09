@@ -70,6 +70,12 @@ public class MainConfig extends ConfigManager {
         yml.addDefault(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_STARTING, false);
         yml.addDefault(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_PLAYING, true);
         yml.addDefault(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_RESTARTING, true);
+        yml.addDefault(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_HEADER_FOOTER, true);
+        yml.addDefault(ConfigPath.SB_CONFIG_SIDEBAR_USE_WAITING_HEADER_FOOTER, true);
+        yml.addDefault(ConfigPath.SB_CONFIG_SIDEBAR_USE_STARTING_HEADER_FOOTER, true);
+        yml.addDefault(ConfigPath.SB_CONFIG_SIDEBAR_USE_PLAYING_HEADER_FOOTER, true);
+        yml.addDefault(ConfigPath.SB_CONFIG_SIDEBAR_USE_RESTARTING_HEADER_FOOTER, true);
+        yml.addDefault(ConfigPath.SB_CONFIG_SIDEBAR_USE_SPECTATOR_HEADER_FOOTER, true);
         yml.addDefault(ConfigPath.SB_CONFIG_SIDEBAR_LIST_REFRESH, 1200);
         yml.addDefault(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_IN_TAB, true);
         yml.addDefault(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_REFRESH, 300);
