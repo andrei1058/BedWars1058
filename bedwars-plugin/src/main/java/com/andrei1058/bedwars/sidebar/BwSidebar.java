@@ -8,6 +8,7 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
+import com.andrei1058.bedwars.api.sidebar.ISidebar;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.levels.internal.PlayerLevel;
 import com.andrei1058.bedwars.stats.PlayerStats;
@@ -27,7 +28,7 @@ import java.util.*;
 import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
-public class BwSidebar {
+public class BwSidebar implements ISidebar {
 
     private static final SidebarLine EMPTY_TITLE = new SidebarLine() {
         @Override
@@ -36,8 +37,8 @@ public class BwSidebar {
         }
     };
 
-    private static final String SPECTATOR_TAB = Base64.getEncoder().encodeToString("spectators".getBytes(StandardCharsets.UTF_8));
-    private static final String TEAM_PREFIX = "bw";
+    private static final String SPECTATOR_TAB = "spectators010101";
+    private static final String TEAM_PREFIX = "?_";
 
     private final Player player;
     private IArena arena;
@@ -45,6 +46,8 @@ public class BwSidebar {
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat nextEventDateFormat;
     private final HashMap<String, PlayerTab> tabList = new HashMap<>();
+
+    private final List<PlaceholderProvider> persistentProviders = new ArrayList<>();
 
 
     protected BwSidebar(Player player) {
@@ -68,6 +71,7 @@ public class BwSidebar {
         List<SidebarLine> lines = this.normalizeLines(lineArray);
 
         List<PlaceholderProvider> placeholders = this.getPlaceholders();
+        placeholders.addAll(this.persistentProviders);
 
         // if it is the first time setting content we create the handle
         if (null == handle) {
@@ -83,8 +87,8 @@ public class BwSidebar {
                 handle.setTitle(title);
                 lines.forEach(l -> handle.addLine(l));
             }, 2L);
+            handlePlayerList();
         }
-        handlePlayerList();
     }
 
     public Player getPlayer() {
@@ -92,7 +96,7 @@ public class BwSidebar {
     }
 
     @SuppressWarnings("ConstantConditions")
-    private SidebarLine normalizeTitle(@Nullable List<String> titleArray) {
+    public SidebarLine normalizeTitle(@Nullable List<String> titleArray) {
         String[] aolo = new String[titleArray.size()];
         for (int x = 0; x < titleArray.size(); x++) {
             aolo[x] = titleArray.get(x);
@@ -103,7 +107,7 @@ public class BwSidebar {
     }
 
     @Contract(pure = true)
-    private @NotNull List<SidebarLine> normalizeLines(@NotNull List<String> lineArray) {
+    public @NotNull List<SidebarLine> normalizeLines(@NotNull List<String> lineArray) {
         List<SidebarLine> lines = new ArrayList<>();
 
         int teamCount = 0;
@@ -173,11 +177,11 @@ public class BwSidebar {
         providers.add(new PlaceholderProvider("{player}", player::getDisplayName));
         providers.add(new PlaceholderProvider("{playerName}", player::getCustomName));
         providers.add(new PlaceholderProvider("{date}", () -> dateFormat.format(new Date(System.currentTimeMillis()))));
-
         PlayerLevel level = PlayerLevel.getLevelByPlayer(getPlayer().getUniqueId());
         if (null != level) {
             providers.add(new PlaceholderProvider("{progress}", level::getProgress));
-            providers.add(new PlaceholderProvider("{level}", () -> String.valueOf(level.getLevel())));
+            providers.add(new PlaceholderProvider("{level}", () -> String.valueOf(level.getLevelName())));
+            providers.add(new PlaceholderProvider("{levelUnformatted}", () -> String.valueOf(level.getLevel())));
             providers.add(new PlaceholderProvider("{currentXp}", level::getFormattedCurrentXp));
             providers.add(new PlaceholderProvider("{requiredXp}", level::getFormattedRequiredXp));
         }
@@ -203,6 +207,12 @@ public class BwSidebar {
                 );
                 providers.add(new PlaceholderProvider("{finalDeaths}", () ->
                         String.valueOf(stats.getFinalDeaths()))
+                );
+                providers.add(new PlaceholderProvider("{wins}", () ->
+                        String.valueOf(stats.getWins()))
+                );
+                providers.add(new PlaceholderProvider("{losses}", () ->
+                        String.valueOf(stats.getLosses()))
                 );
             }
         } else {
@@ -365,9 +375,7 @@ public class BwSidebar {
         }
 
         // unique tab list name
-        String tabListName = Base64.getEncoder().encodeToString(
-                player.getUniqueId().toString().getBytes(StandardCharsets.UTF_8)
-        );
+        String tabListName = player.getName();
         Language lang = Language.getPlayerLanguage(player);
 
         if (tabList.containsKey(tabListName)) {
@@ -436,8 +444,22 @@ public class BwSidebar {
                         lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_STARTING)
                 );
             } else if (arena.getStatus() == GameState.restarting) {
-                prefix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_RESTARTING, player, null);
-                suffix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_RESTARTING, player, null);
+
+                ITeam team = arena.getTeam(player);
+                if (null == team) {
+                    team = arena.getExTeam(player.getUniqueId());
+                }
+
+                String displayName = null == team ? "" : team.getDisplayName(Language.getPlayerLanguage(this.player));
+
+                HashMap<String, String> replacements = new HashMap<>();
+                replacements.put("{team}", null == team ? "" : team.getColor().chat() + displayName);
+                replacements.put("{teamLetter}", null == team ? "" : team.getColor().chat() + (displayName.substring(0, 1)));
+                replacements.put("{teamColor}", null == team ? "" : team.getColor().chat().toString());
+
+
+                prefix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_RESTARTING, player, replacements);
+                suffix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_RESTARTING, player, replacements);
                 SidebarManager.getInstance().sendHeaderFooter(
                         player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_RESTARTING),
                         lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_RESTARTING)
@@ -459,7 +481,10 @@ public class BwSidebar {
             throw new RuntimeException("Wtf dude");
         }
 
-        String tabName = Base64.getEncoder().encodeToString((TEAM_PREFIX + team.getName()).getBytes(StandardCharsets.UTF_8));
+        String tabName = TEAM_PREFIX+Base64.getEncoder().encodeToString((team.getName()).getBytes(StandardCharsets.UTF_8));
+        if (tabName.length() > 16) {
+            tabName = tabName.substring(0, 16);
+        }
 
         PlayerTab teamTab = tabList.get(tabName);
         if (null == teamTab) {
@@ -533,7 +558,7 @@ public class BwSidebar {
     /**
      * @return true if tab formatting is disabled for current sidebar/ arena stage
      */
-    private boolean isTabFormattingDisabled() {
+    public boolean isTabFormattingDisabled() {
         if (null == arena) {
 
             if (getServerType() == ServerType.SHARED) {
@@ -570,14 +595,20 @@ public class BwSidebar {
         return true;
     }
 
+    @Override
+    public boolean registerPersistentPlaceholder(PlaceholderProvider placeholderProvider) {
+        this.persistentProviders.add(placeholderProvider);
+        return true;
+    }
+
     public void handleHealthIcon() {
         if (null == handle) {
             return;
         }
+
         if (null == arena) {
             handle.hidePlayersHealth();
-        }
-        if (arena.getStatus() != GameState.playing) {
+        } else if (arena.getStatus() != GameState.playing) {
             handle.hidePlayersHealth();
         }
 

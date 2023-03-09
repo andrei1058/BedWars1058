@@ -306,6 +306,26 @@ public abstract class VersionSupport {
     public abstract Material materialGoldenLeggings();
 
     /**
+     * Get netherite  helmet material
+     */
+    public abstract Material materialNetheriteHelmet();
+
+    /**
+     * Get netherite chest plate
+     */
+    public abstract Material materialNetheriteChestPlate();
+
+    /**
+     * Get netherite leggings
+     */
+    public abstract Material materialNetheriteLeggings();
+
+    /**
+     * Get elytra - supports: 1.12.2+
+     */
+    public abstract Material materialElytra();
+
+    /**
      * Cake material
      */
     public abstract Material materialCake();

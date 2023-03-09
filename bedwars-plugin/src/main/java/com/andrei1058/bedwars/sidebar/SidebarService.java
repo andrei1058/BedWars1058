@@ -5,10 +5,14 @@ import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.events.sidebar.PlayerSidebarInitEvent;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
+import com.andrei1058.bedwars.api.sidebar.ISidebar;
+import com.andrei1058.bedwars.api.sidebar.ISidebarService;
 import com.andrei1058.spigot.sidebar.SidebarManager;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,7 +22,7 @@ import java.util.*;
 import static com.andrei1058.bedwars.BedWars.config;
 import static com.andrei1058.bedwars.api.language.Language.getScoreboard;
 
-public class SidebarService {
+public class SidebarService implements ISidebarService {
 
     private static SidebarService instance;
 
@@ -57,6 +61,15 @@ public class SidebarService {
             }
         }
 
+        // if sidebar was null but still disabled for lobbies
+        if (!config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR) && null == arena) {
+            return;
+        }
+        // if sidebar was null but still disabled in game
+        if (!config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_GAME_SIDEBAR) && null != arena) {
+            return;
+        }
+
         // set sidebar lines based on game state or lobby
         List<String> lines = null;
         List<String> title;
@@ -83,7 +96,7 @@ public class SidebarService {
         }
 
         // title is the first line from array
-        title = new ArrayList<>(Collections.singleton(lines.get(0)));
+        title = new ArrayList<>(Arrays.asList(lines.get(0).split(",")));
         if (lines.size() == 1) {
             lines = new ArrayList<>();
         }
@@ -94,6 +107,12 @@ public class SidebarService {
         if (null == sidebar) {
             sidebar = new BwSidebar(player);
             newlyAdded = true;
+
+            PlayerSidebarInitEvent event = new PlayerSidebarInitEvent(player, sidebar);
+            Bukkit.getPluginManager().callEvent(event);
+            if (event.isCancelled()) {
+                return;
+            }
         }
         sidebar.setContent(title, lines, arena);
 
@@ -154,6 +173,11 @@ public class SidebarService {
                 }
             }
         });
+    }
+
+    @Override
+    public @Nullable ISidebar getSidebar(@NotNull Player player) {
+        return this.sidebars.getOrDefault(player.getUniqueId(), null);
     }
 
     public void refreshHealth(IArena arena, Player player, int health) {
