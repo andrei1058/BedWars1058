@@ -32,15 +32,15 @@ import java.util.Collections;
 
 import static com.andrei1058.bedwars.BedWars.mainCmd;
 
-public class English extends Language {
+public class Vietnam extends Language {
 
-    public English() {
-        super(BedWars.plugin, "en");
+    public Vietnam() {
+        super(BedWars.plugin, "vn");
 
         YamlConfiguration yml = getYml();
         yml.options().copyDefaults(true);
         yml.addDefault(Messages.PREFIX, "");
-        yml.addDefault("name", "English");
+        yml.addDefault("name", "Vietnam");
 
         // this must stay here
         // move message to new path
@@ -53,9 +53,9 @@ public class English extends Language {
             yml.set("player-die-knocked-final", null);
         }
 
-        yml.addDefault(Messages.COMMAND_NO_SHOUT_SOLO, "{prefix}&cYou can't use /shout in this mode.");
+        yml.addDefault(Messages.COMMAND_NO_SHOUT_SOLO, "{prefix}&cBạn không thể dùng /shout trong chế độ này.");
         yml.addDefault(Messages.COMMAND_MAIN, Arrays.asList("", "&2▪ &7/" + mainCmd + " stats", "&2▪ &7/" + mainCmd + " join &o<arena/group>", "&2▪ &7/" + mainCmd + " leave", "&2▪ &7/" + mainCmd + " lang", "&2▪ &7/" + mainCmd + " gui", "&2▪ &7/" + mainCmd + " start &3(vip)"));
-        yml.addDefault(Messages.COMMAND_LANG_LIST_HEADER, "{prefix} &2Available languages:");
+        yml.addDefault(Messages.COMMAND_LANG_LIST_HEADER, "{prefix} &2Nhung:");
         yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&a▪  &7{iso} - &f{name}");
         yml.addDefault(Messages.COMMAND_LANG_USAGE, "{prefix}&7Usage: /lang &f&o<iso>");
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_NOT_EXIST, "{prefix}&cThis language doesn't exist!");

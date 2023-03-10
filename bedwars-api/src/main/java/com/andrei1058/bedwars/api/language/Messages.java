@@ -43,6 +43,7 @@ public class Messages {
     public static String NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH = "next-event-sudden-death-chat";
 
     /** General commands reply */
+    public static String COMMAND_NO_SHOUT_SOLO = "cmd-no-shout-solo";
     public static String COMMAND_MAIN = "cmd-main-list";
     public static String COMMAND_LANG_LIST_HEADER = "cmd-lang-list-header";
     public static String COMMAND_LANG_LIST_FORMAT = "cmd-lang-list-format";

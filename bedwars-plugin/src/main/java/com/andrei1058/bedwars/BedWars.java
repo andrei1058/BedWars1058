@@ -188,7 +188,7 @@ public class BedWars extends JavaPlugin {
         this.getLogger().info("Loading support for paper/spigot: " + version);
 
         // Setup languages
-        new English();
+        new Vietnam();
         new Romanian();
         new Italian();
         new Polish();
