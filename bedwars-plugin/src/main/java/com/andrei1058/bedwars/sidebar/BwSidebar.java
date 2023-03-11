@@ -89,6 +89,7 @@ public class BwSidebar implements ISidebar {
                 lines.forEach(l -> handle.addLine(l));
             }, 2L);
             handlePlayerList();
+            setHeaderFooter();
         }
     }
 
@@ -383,7 +384,7 @@ public class BwSidebar implements ISidebar {
         if (tabList.containsKey(tabListName)) {
             handle.removeTab(tabListName);
             tabList.remove(tabListName);
-            SidebarManager.getInstance().sendHeaderFooter(player, "", "");
+            // SidebarManager.getInstance().sendHeaderFooter(player, "", "");
         }
 
         if (!skipStateCheck) {
@@ -404,11 +405,6 @@ public class BwSidebar implements ISidebar {
             );
             tab.add(player);
             tabList.put(tabListName, tab);
-
-            SidebarManager.getInstance().sendHeaderFooter(
-                    player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_LOBBY),
-                    lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_LOBBY)
-            );
             return;
         }
 
@@ -423,10 +419,6 @@ public class BwSidebar implements ISidebar {
             }
             tab.add(player);
 
-            SidebarManager.getInstance().sendHeaderFooter(
-                    player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR),
-                    lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR)
-            );
             return;
         }
 
@@ -434,17 +426,9 @@ public class BwSidebar implements ISidebar {
             if (arena.getStatus() == GameState.waiting) {
                 prefix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_WAITING, player, null);
                 suffix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_WAITING, player, null);
-                SidebarManager.getInstance().sendHeaderFooter(
-                        player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_WAITING),
-                        lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_WAITING)
-                );
             } else if (arena.getStatus() == GameState.starting) {
                 prefix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_STARTING, player, null);
                 suffix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_STARTING, player, null);
-                SidebarManager.getInstance().sendHeaderFooter(
-                        player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_STARTING),
-                        lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_STARTING)
-                );
             } else if (arena.getStatus() == GameState.restarting) {
 
                 ITeam team = arena.getTeam(player);
@@ -462,10 +446,6 @@ public class BwSidebar implements ISidebar {
 
                 prefix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_RESTARTING, player, replacements);
                 suffix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_RESTARTING, player, replacements);
-                SidebarManager.getInstance().sendHeaderFooter(
-                        player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_RESTARTING),
-                        lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_RESTARTING)
-                );
             } else {
                 throw new RuntimeException("Unhandled game status!");
             }
@@ -527,11 +507,56 @@ public class BwSidebar implements ISidebar {
         }
 
         teamTab.add(player);
+    }
 
-        // todo this should be outside. we are basically sending the player header and footer in sidebar holder's language
+    // Provide header and footer for current game state
+    private void setHeaderFooter() {
+        if (isTabFormattingDisabled()) {
+            return;
+        }
+        Language lang = Language.getPlayerLanguage(player);
+
+        if (noArena()) {
+            SidebarManager.getInstance().sendHeaderFooter(
+                    player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_LOBBY),
+                    lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_LOBBY)
+            );
+            return;
+        }
+        if (arena.isSpectator(player)) {
+            SidebarManager.getInstance().sendHeaderFooter(
+                    player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR),
+                    lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR)
+            );
+            return;
+        }
+
+
+        String headerPath = null;
+        String footerPath = null;
+
+        switch (arena.getStatus()) {
+            case waiting:
+                headerPath = Messages.FORMATTING_SIDEBAR_TAB_HEADER_WAITING;
+                footerPath = Messages.FORMATTING_SIDEBAR_TAB_FOOTER_WAITING;
+                break;
+            case starting:
+                headerPath = Messages.FORMATTING_SIDEBAR_TAB_HEADER_STARTING;
+                footerPath = Messages.FORMATTING_SIDEBAR_TAB_FOOTER_STARTING;
+                break;
+            case playing:
+                headerPath = Messages.FORMATTING_SIDEBAR_TAB_HEADER_PLAYING;
+                footerPath = Messages.FORMATTING_SIDEBAR_TAB_FOOTER_PLAYING;
+                break;
+            case restarting:
+                headerPath = Messages.FORMATTING_SIDEBAR_TAB_HEADER_RESTARTING;
+                footerPath = Messages.FORMATTING_SIDEBAR_TAB_FOOTER_RESTARTING;
+                break;
+        }
+
         SidebarManager.getInstance().sendHeaderFooter(
-                player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_PLAYING),
-                lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_PLAYING)
+                player, lang.m(headerPath),
+                lang.m(footerPath)
         );
     }
 
@@ -687,60 +712,6 @@ public class BwSidebar implements ISidebar {
             throw new RuntimeException("This can only be used when the player is in arena");
         }
         this.giveUpdateTabFormat(player, false);
-//        if (toggle) {
-//
-//            ITeam playerTeam = arena.getTeam(player);
-//
-//            // foreach enemy sidebar
-//            for (Player inGame : arena.getPlayers()) {
-//                if (playerTeam != null && !playerTeam.isMember(inGame)) {
-//                    ISidebar sidebar = SidebarService.getInstance().getSidebar(inGame);
-//                    if (sidebar instanceof BwSidebar) {
-//
-//                        // remove player from its tab group (if team tab group)
-//                        PlayerTab teamTab = ((BwSidebar) sidebar).tabList.getOrDefault(getTabName(playerTeam), null);
-//                        if (null != teamTab) {
-//                            teamTab.remove(player);
-//                            // create a new tab group for the invisible player
-//                            // set tab group name visibility to false
-//                            PlayerTab playerTab = sidebar.getHandle().playerTabCreate(player.getName(), null,
-//                                    new SidebarLine() {
-//                                        @Override
-//                                        public @NotNull String getLine() {
-//                                            return "";
-//                                        }
-//                                    },
-//                                    new SidebarLine() {
-//                                        @Override
-//                                        public @NotNull String getLine() {
-//                                            return "";
-//                                        }
-//                                    }, PlayerTab.PushingRule.NEVER
-//                            );
-//                            playerTab.setNameTagVisibility(PlayerTab.NameTagVisibility.NEVER);
-//                        } else {
-//                            // if player has personal tab list
-//                            PlayerTab personalTab = ((BwSidebar) sidebar).tabList.getOrDefault(playerTeam.getName(), null);
-//                            if (null != personalTab) {
-//                                personalTab.setNameTagVisibility(PlayerTab.NameTagVisibility.NEVER);
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//
-//
-////            handle.remove(player);
-////            handle.playerListHideNameTag(player);
-//            //todo the new sidebar does not provide a solution for invisibility potion?!!
-//        } else {
-            // foreach enemy sidebar
-            // get player tab group from enemy sidebar
-            // add player to tab group
-
-//            this.giveUpdateTabFormat(player, false);
-//            handle.playerListRestoreNameTag(player);
-//        }
     }
 
     public Sidebar getHandle() {
