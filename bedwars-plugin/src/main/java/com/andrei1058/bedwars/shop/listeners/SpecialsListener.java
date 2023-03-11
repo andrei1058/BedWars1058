@@ -24,7 +24,6 @@ import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
-import com.andrei1058.bedwars.api.events.player.PlayerBedBreakEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerBedBugSpawnEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerDreamDefenderSpawnEvent;
 import com.andrei1058.bedwars.arena.Arena;
