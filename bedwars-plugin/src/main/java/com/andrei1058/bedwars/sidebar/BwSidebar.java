@@ -379,7 +379,6 @@ public class BwSidebar implements ISidebar {
 
         // unique tab list name
         String tabListName = player.getName();
-        Language lang = Language.getPlayerLanguage(player);
 
         if (tabList.containsKey(tabListName)) {
             handle.removeTab(tabListName);
