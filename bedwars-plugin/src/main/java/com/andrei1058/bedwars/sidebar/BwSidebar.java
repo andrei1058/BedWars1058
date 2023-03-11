@@ -689,7 +689,9 @@ public class BwSidebar implements ISidebar {
             };
         }
 
-        handle.showPlayersHealth(line, config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_IN_TAB));
+        if (config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_IN_TAB)) {
+            handle.showPlayersHealth(line, false);
+        }
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (arena != null && handle != null) {
                 arena.getPlayers().forEach(player -> handle.setPlayerHealth(player, (int) Math.ceil(player.getHealth())));
