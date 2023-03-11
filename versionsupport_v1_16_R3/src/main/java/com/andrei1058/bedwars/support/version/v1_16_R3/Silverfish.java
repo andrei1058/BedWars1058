@@ -24,8 +24,6 @@ import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.support.version.common.VersionCommon;
 import net.minecraft.server.v1_16_R3.*;
-import net.minecraft.server.v1_16_R3.EntitySilverfish;
-import net.minecraft.server.v1_16_R3.EntityTypes;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;

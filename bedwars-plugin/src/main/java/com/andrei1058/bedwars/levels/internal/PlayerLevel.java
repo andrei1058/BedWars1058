@@ -27,7 +27,6 @@ import com.andrei1058.bedwars.configuration.LevelsConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
-import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
