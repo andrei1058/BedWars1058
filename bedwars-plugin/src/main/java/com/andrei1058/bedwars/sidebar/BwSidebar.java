@@ -88,9 +88,9 @@ public class BwSidebar implements ISidebar {
                 handle.setTitle(title);
                 lines.forEach(l -> handle.addLine(l));
             }, 2L);
-            handlePlayerList();
-            setHeaderFooter();
         }
+        handlePlayerList();
+        setHeaderFooter();
     }
 
     public Player getPlayer() {
@@ -336,17 +336,14 @@ public class BwSidebar implements ISidebar {
 
     private void handlePlayerList() {
         if (null != handle) {
-            tabList.forEach((k, v) -> {
-                String encodedName = Base64.getEncoder().encodeToString(k.getBytes(StandardCharsets.UTF_8));
-                handle.removeTab(encodedName);
-            });
+            tabList.forEach((k, v) -> handle.removeTab(k));
         }
+
+        handleHealthIcon();
 
         if (this.isTabFormattingDisabled()) {
             return;
         }
-
-        handleHealthIcon();
 
         if (arena == null) {
             // if tab formatting is enabled in lobby world
@@ -510,9 +507,9 @@ public class BwSidebar implements ISidebar {
 
     // Provide header and footer for current game state
     private void setHeaderFooter() {
-        if (isTabFormattingDisabled()) {
-            return;
-        }
+//        if (isTabFormattingDisabled()) {
+//            return;
+//        }
         Language lang = Language.getPlayerLanguage(player);
 
         if (noArena()) {
@@ -661,8 +658,10 @@ public class BwSidebar implements ISidebar {
 
         if (null == arena) {
             handle.hidePlayersHealth();
+            return;
         } else if (arena.getStatus() != GameState.playing) {
             handle.hidePlayersHealth();
+            return;
         }
 
         List<String> animation = Language.getList(player, Messages.FORMATTING_SCOREBOARD_HEALTH);
@@ -686,8 +685,9 @@ public class BwSidebar implements ISidebar {
         }
 
         if (config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_IN_TAB)) {
-            handle.showPlayersHealth(line, false);
+            handle.showPlayersHealth(line, true);
         }
+
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (arena != null && handle != null) {
                 arena.getPlayers().forEach(player -> handle.setPlayerHealth(player, (int) Math.ceil(player.getHealth())));
@@ -702,9 +702,9 @@ public class BwSidebar implements ISidebar {
      * Hide player name tag on head when he drinks an invisibility potion.
      * This is required because not all clients hide it automatically.
      *
-     * @param toggle true when applied, false when expired.
+     * @param _toggle true when applied, false when expired.
      */
-    public void handleInvisibilityPotion(@NotNull Player player, boolean toggle) {
+    public void handleInvisibilityPotion(@NotNull Player player, boolean _toggle) {
         if (null == arena) {
             throw new RuntimeException("This can only be used when the player is in arena");
         }
