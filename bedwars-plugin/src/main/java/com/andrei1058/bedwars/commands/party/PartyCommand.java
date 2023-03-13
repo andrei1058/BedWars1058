@@ -171,9 +171,9 @@ public class PartyCommand extends BukkitCommand {
                 }
                 getParty().promote(p, target1);
                 for (Player p1 : getParty().getMembers(p)) {
-                    if (p1.equals(p)) { //Message to say you successfully promoted player to Owner
+                    if (p1.equals(p)) {
                         p1.sendMessage(getMsg(p1, Messages.COMMAND_PARTY_PROMOTE_SUCCESS).replace("{player}", args[1]));
-                    } else if (p1.equals(target1)) {  //say you are now Party leader
+                    } else if (p1.equals(target1)) {
                         p1.sendMessage(getMsg(p1, Messages.COMMAND_PARTY_OWNER));
                     } else {
                         p1.sendMessage(getMsg(p1, Messages.COMMAND_PARTY_NEW_OWNER).replace("{player}", args[1]));
