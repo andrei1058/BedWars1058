@@ -180,6 +180,18 @@ public class PartyCommand extends BukkitCommand {
                     }
                 }
                 break;
+            case "info" :
+            case "list":
+                if (!getParty().hasParty(p)) {
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_GENERAL_DENIED_NOT_IN_PARTY));
+                    return true;
+                }
+                Player owner = getParty().getOwner(p);
+                p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INFO_OWNER).replace("{owner}", owner.getName()));
+                p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INFO_PLAYERS));
+                for (Player p1 : getParty().getMembers(owner)) {
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INFO_PLAYER).replace("{player}", p1.getName()));
+                }
             default:
                 sendPartyCmds(p);
                 break;

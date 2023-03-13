@@ -92,6 +92,9 @@ public class Messages {
     public static String COMMAND_PARTY_PROMOTE_SUCCESS = "cmd-party-promote-owner";
     public static String COMMAND_PARTY_OWNER = "cmd-party-owner";
     public static String COMMAND_PARTY_NEW_OWNER = "cmd-party-owner-changed";
+    public static String COMMAND_PARTY_INFO_OWNER = "cmd-party-info-owner";
+    public static String COMMAND_PARTY_INFO_PLAYERS = "cmd-party-info-players";
+    public static String COMMAND_PARTY_INFO_PLAYER = "cmd-party-info-player";
     public static String COMMAND_NOT_FOUND_OR_INSUFF_PERMS = "cmd-not-found";
     public static String COMMAND_FORCESTART_NOT_IN_GAME = "cmd-start-no-game";
     public static String COMMAND_FORCESTART_SUCCESS = "cmd-start";
