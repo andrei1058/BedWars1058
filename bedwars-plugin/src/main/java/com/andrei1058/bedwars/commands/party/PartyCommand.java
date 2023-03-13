@@ -156,6 +156,30 @@ public class PartyCommand extends BukkitCommand {
                 }
                 getParty().removePlayer(p, target);
                 break;
+            case "promote":
+                if (!getParty().hasParty(p)) {
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_GENERAL_DENIED_NOT_IN_PARTY));
+                    return true;
+                } else if (!getParty().isOwner(p)) {
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INSUFFICIENT_PERMISSIONS));
+                    return true;
+                }
+                Player target1 = Bukkit.getPlayer(args[1]);
+                if (!getParty().isMember(p, target1)) {
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_REMOVE_DENIED_TARGET_NOT_PARTY_MEMBER).replace("{player}", args[1]));
+                    return true;
+                }
+                getParty().promote(p, target1);
+                for (Player p1 : getParty().getMembers(p)) {
+                    if (p1.equals(p)) { //Message to say you successfully promoted player to Owner
+                        p1.sendMessage(getMsg(p1, Messages.COMMAND_PARTY_PROMOTE_SUCCESS).replace("{player}", args[1]));
+                    } else if (p1.equals(target1)) {  //say you are now Party leader
+                        p1.sendMessage(getMsg(p1, Messages.COMMAND_PARTY_OWNER));
+                    } else {
+                        p1.sendMessage(getMsg(p1, Messages.COMMAND_PARTY_NEW_OWNER).replace("{player}", args[1]));
+                    }
+                }
+                break;
             default:
                 sendPartyCmds(p);
                 break;
