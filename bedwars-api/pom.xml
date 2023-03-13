@@ -5,11 +5,11 @@
     <parent>
         <artifactId>BedWars1058</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>22.3-SNAPSHOT</version>
+        <version>22.9-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>bedwars-api</artifactId>
-    <version>${parent.version}</version>
+    <version>${project.parent.version}</version>
 
     <repositories>
         <repository>
@@ -19,6 +19,10 @@
         <repository>
             <id>commons-repo</id>
             <url>https://repo.fusesource.com/nexus/content/repositories/releases-3rd-party/</url>
+        </repository>
+        <repository>
+            <id>andrei-prod</id>
+            <url>https://repo.andrei1058.dev/releases</url>
         </repository>
     </repositories>
 
@@ -36,6 +40,18 @@
             <version>1.8.8-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>1.16.5-R0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- SIDEBAR LIB -->
+        <dependency>
+            <groupId>com.andrei1058.spigot.sidebar</groupId>
+            <artifactId>sidebar-base</artifactId>
+            <version>23.2</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -49,6 +65,14 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
                     <skip>false</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
                 </configuration>
             </plugin>
         </plugins>

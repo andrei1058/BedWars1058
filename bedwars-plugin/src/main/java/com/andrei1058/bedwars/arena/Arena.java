@@ -63,8 +63,9 @@ import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
 import com.andrei1058.bedwars.listeners.dropshandler.PlayerDrops;
 import com.andrei1058.bedwars.money.internal.MoneyPerMinuteTask;
 import com.andrei1058.bedwars.shop.ShopCache;
-import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
+import com.andrei1058.bedwars.sidebar.SidebarService;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
+import com.andrei1058.bedwars.support.paper.PaperSupport;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.support.vault.WithEconomy;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -544,9 +545,9 @@ public class Arena implements IArena {
                 new PlayerGoods(p, true);
                 playerLocation.put(p, p.getLocation());
             }
-            p.teleport(getWaitingLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+            PaperSupport.teleportC(p, getWaitingLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
 
-            BedWarsScoreboard.giveScoreboard(p, this, false);
+            SidebarService.getInstance().giveSidebar(p, this, false);
             sendPreGameCommandItems(p);
             for (PotionEffect pf : p.getActivePotionEffects()) {
                 p.removePotionEffect(pf.getType());
@@ -644,14 +645,14 @@ public class Arena implements IArena {
                 setArenaByPlayer(p, this);
             }
 
-            BedWarsScoreboard.giveScoreboard(p, this, false);
+            SidebarService.getInstance().giveSidebar(p, this, false);
             nms.setCollide(p, this, false);
 
             if (!playerBefore) {
                 if (staffTeleport == null) {
-                    p.teleport(getSpectatorLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                    PaperSupport.teleportC(p, getSpectatorLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                 } else {
-                    p.teleport(staffTeleport, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                    PaperSupport.teleportC(p, staffTeleport, PlayerTeleportEvent.TeleportCause.PLUGIN);
                 }
             }
 
@@ -685,12 +686,12 @@ public class Arena implements IArena {
 
                 if (!playerBefore) {
                     if (staffTeleport == null) {
-                        p.teleport(getSpectatorLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                        PaperSupport.teleportC(p, getSpectatorLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                     } else {
-                        p.teleport(staffTeleport);
+                        PaperSupport.teleport(p, staffTeleport);
                     }
                 } else {
-                    p.teleport(getSpectatorLocation());
+                    PaperSupport.teleport(p, getSpectatorLocation());
                 }
 
                 p.setAllowFlight(true);
@@ -885,11 +886,9 @@ public class Arena implements IArena {
         }
 
         if (getServerType() == ServerType.SHARED) {
-            BedWarsScoreboard sb = BedWarsScoreboard.getSBoard(p.getUniqueId());
-            if (sb != null) {
-                sb.remove();
-            }
+            SidebarService.getInstance().remove(p);
             this.sendToMainLobby(p);
+
         } else if (getServerType() == ServerType.BUNGEE) {
             Misc.moveToLobbyOrKick(p, this, true);
             return;
@@ -925,7 +924,7 @@ public class Arena implements IArena {
                         BedWars.nms.spigotHidePlayer(on, p);
                     }
                 }
-                if (!disconnect) BedWarsScoreboard.giveScoreboard(p, null, false);
+                if (!disconnect) SidebarService.getInstance().giveSidebar(p, null, false);
             }, 5L);
         }
 
@@ -1027,10 +1026,7 @@ public class Arena implements IArena {
         BedWars.getAPI().getAFKUtil().setPlayerAFK(p, false);
 
         if (getServerType() == ServerType.SHARED) {
-            BedWarsScoreboard sb = BedWarsScoreboard.getSBoard(p.getUniqueId());
-            if (sb != null) {
-                sb.remove();
-            }
+            SidebarService.getInstance().remove(p);
             this.sendToMainLobby(p);
         } else if (getServerType() == ServerType.MULTIARENA) {
             this.sendToMainLobby(p);
@@ -1069,7 +1065,7 @@ public class Arena implements IArena {
                         BedWars.nms.spigotHidePlayer(on, p);
                     }
                 }
-                if (!disconnect) BedWarsScoreboard.giveScoreboard(p, null, true);
+                if (!disconnect) SidebarService.getInstance().giveSidebar(p, null, false);
             });
         }
 
@@ -1151,8 +1147,7 @@ public class Arena implements IArena {
             //new PlayerGoods(p, true, true);
             playerLocation.put(p, p.getLocation());
         }
-
-        p.teleport(getSpectatorLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+        PaperSupport.teleportC(p, getSpectatorLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
         p.getInventory().clear();
 
         //restore items before re-spawning in team
@@ -1166,7 +1161,7 @@ public class Arena implements IArena {
         reJoin.getBwt().reJoin(p, ev.getRespawnTime());
         reJoin.destroy(false);
 
-        BedWarsScoreboard.giveScoreboard(p, this, true);
+        SidebarService.getInstance().giveSidebar(p, this, true);
         return true;
     }
 
@@ -1200,6 +1195,12 @@ public class Arena implements IArena {
         if (getRestartingTask() != null) getRestartingTask().cancel();
         if (getStartingTask() != null) getStartingTask().cancel();
         if (getPlayingTask() != null) getPlayingTask().cancel();
+        if (null != moneyperMinuteTask){
+            moneyperMinuteTask.cancel();
+        }
+        if (null != perMinuteTask) {
+            perMinuteTask.cancel();
+        }
         plugin.getLogger().log(Level.FINE, "Restarting arena: " + getArenaName());
         Bukkit.getPluginManager().callEvent(new ArenaRestartEvent(getArenaName(), getWorldName()));
         for (Player inWorld : getWorld().getPlayers()) {
@@ -1485,10 +1486,16 @@ public class Arena implements IArena {
                 restartingTask.cancel();
         }
         restartingTask = null;
+        if (null != moneyperMinuteTask){
+            moneyperMinuteTask.cancel();
+        }
+        if (null != perMinuteTask) {
+            perMinuteTask.cancel();
+        }
 
-        players.forEach(c -> BedWarsScoreboard.giveScoreboard(c, this, false));
+        players.forEach(c -> SidebarService.getInstance().giveSidebar(c, this, false));
 
-        spectators.forEach(c -> BedWarsScoreboard.giveScoreboard(c, this, false));
+        spectators.forEach(c -> SidebarService.getInstance().giveSidebar(c, this, false));
 
         if (status == GameState.starting) {
             startingTask = new GameStartingTask(this);
@@ -1502,12 +1509,6 @@ public class Arena implements IArena {
             playingTask = new GamePlayingTask(this);
         } else if (status == GameState.restarting) {
             restartingTask = new GameRestartingTask(this);
-            if (perMinuteTask != null) {
-                perMinuteTask.cancel ();
-            }
-            if (moneyperMinuteTask != null) {
-                moneyperMinuteTask.cancel ();
-            }
         }
     }
 
@@ -1590,7 +1591,8 @@ public class Arena implements IArena {
                 if (getPlayers() == null) continue;
                 s.setLine(line, string.replace("[on]", String.valueOf(getPlayers().size()))
                         .replace("[max]", String.valueOf(getMaxPlayers())).replace("[arena]", getDisplayName())
-                        .replace("[status]", getDisplayStatus(Language.getDefaultLanguage())));
+                        .replace("[status]", getDisplayStatus(Language.getDefaultLanguage()))
+                        .replace("[type]", String.valueOf(getMaxInTeam())));
                 line++;
             }
             try {
@@ -2162,12 +2164,12 @@ public class Arena implements IArena {
 
     @Override
     public void updateSpectatorCollideRule(Player p, boolean collide) {
-        if (!isSpectator(p)) return;
-        for (BedWarsScoreboard sb : BedWarsScoreboard.getScoreboards().values()) {
-            if (sb.getArena() == this) {
-                sb.updateSpectator(p, collide);
-            }
-        }
+//        if (!isSpectator(p)) return;
+//        for (BedWarsScoreboard sb : BedWarsScoreboard.getScoreboards().values()) {
+//            if (sb.getArena() == this) {
+//                sb.updateSpectator(p, collide);
+//            }
+//        }
     }
 
     /**
@@ -2231,7 +2233,7 @@ public class Arena implements IArena {
 
     public static List<IArena> getSorted(List<IArena> arenas) {
         List<IArena> sorted = new ArrayList<>(arenas);
-        sorted.sort(new Comparator<IArena>() {
+        sorted.sort(new Comparator<>() {
             @Override
             public int compare(IArena o1, IArena o2) {
                 if (o1.getStatus() == GameState.starting && o2.getStatus() == GameState.starting) {
@@ -2494,7 +2496,7 @@ public class Arena implements IArena {
                     if (playing.equals(player)) continue;
                     BedWars.nms.spigotHidePlayer(player, playing);
                 }
-                player.teleport(getReSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                PaperSupport.teleportC(player, getReSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                 player.setAllowFlight(true);
                 player.setFlying(true);
 
@@ -2510,8 +2512,7 @@ public class Arena implements IArena {
                     }
 
                     updateSpectatorCollideRule(player, false);
-                    player.teleport(getReSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
-                    //
+                    PaperSupport.teleportC(player, getReSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                 }, 10L);
             } else {
                 ITeam team = getTeam(player);
@@ -2638,17 +2639,17 @@ public class Arena implements IArena {
         if (BedWars.getServerType() == ServerType.SHARED) {
             Location loc = playerLocation.get(player);
             if (loc == null) {
-                player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                PaperSupport.teleportC(player, Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                 plugin.getLogger().log(Level.SEVERE, player.getName() + " was teleported to the main world because lobby location is not set!");
             } else {
                 player.teleport(loc, PlayerTeleportEvent.TeleportCause.PLUGIN);
             }
         } else if (BedWars.getServerType() == ServerType.MULTIARENA) {
             if (BedWars.getLobbyWorld().isEmpty()) {
-                player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                PaperSupport.teleportC(player, Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                 plugin.getLogger().log(Level.SEVERE, player.getName() + " was teleported to the main world because lobby location is not set!");
             } else {
-                player.teleport(config.getConfigLoc("lobbyLoc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                PaperSupport.teleportC(player, config.getConfigLoc("lobbyLoc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
             }
         }
     }

@@ -26,6 +26,7 @@ import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.configuration.Permissions;
+import com.andrei1058.bedwars.support.paper.PaperSupport;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -63,9 +64,9 @@ public class Save extends SubCommand {
         }
 
         if (Bukkit.getWorld(BedWars.getLobbyWorld()) != null) {
-            p.teleport(Bukkit.getWorld(BedWars.getLobbyWorld()).getSpawnLocation());
+            PaperSupport.teleport(p, Bukkit.getWorld(BedWars.getLobbyWorld()).getSpawnLocation());
         } else {
-            p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+            PaperSupport.teleport(p, Bukkit.getWorlds().get(0).getSpawnLocation());
         }
         ss.done();
         p.sendMessage(ss.getPrefix() + "Arena changes saved!");

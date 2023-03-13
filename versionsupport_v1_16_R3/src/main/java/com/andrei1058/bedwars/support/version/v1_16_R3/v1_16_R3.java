@@ -36,10 +36,12 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.server.v1_16_R3.*;
 import org.bukkit.Color;
 import org.bukkit.Location;
-import org.bukkit.Particle;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.type.Bed;
+import org.bukkit.block.data.type.Ladder;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_16_R3.CraftServer;
@@ -57,6 +59,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -164,7 +167,7 @@ public class v1_16_R3 extends VersionSupport {
     public boolean isArmor(org.bukkit.inventory.ItemStack itemStack) {
         if (CraftItemStack.asNMSCopy(itemStack) == null) return false;
         if (CraftItemStack.asNMSCopy(itemStack).getItem() == null) return false;
-        return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemArmor;
+        return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemArmor || CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemElytra;
     }
 
     @Override
@@ -479,6 +482,26 @@ public class v1_16_R3 extends VersionSupport {
     }
 
     @Override
+    public org.bukkit.Material materialNetheriteHelmet() {
+        return Material.NETHERITE_HELMET;
+    }
+
+    @Override
+    public org.bukkit.Material materialNetheriteChestPlate() {
+        return Material.NETHERITE_CHESTPLATE;
+    }
+
+    @Override
+    public org.bukkit.Material materialNetheriteLeggings() {
+        return Material.NETHERITE_LEGGINGS;
+    }
+
+    @Override
+    public org.bukkit.Material materialElytra() {
+        return Material.ELYTRA;
+    }
+
+    @Override
     public org.bukkit.Material materialCake() {
         return org.bukkit.Material.CAKE;
     }
@@ -677,5 +700,41 @@ public class v1_16_R3 extends VersionSupport {
     @Override
     public void clearArrowsFromPlayerBody(Player player) {
         ((CraftLivingEntity)player).getHandle().getDataWatcher().set(new DataWatcherObject<>(11, DataWatcherRegistry.b),-1);
+    }
+
+    @Override
+    public void placeTowerBlocks(Block b, IArena a, TeamColor color, int x, int y,int z){
+        b.getRelative(x, y, z).setType(color.woolMaterial());
+        a.addPlacedBlock(b.getRelative(x, y, z));
+    }
+
+    @Override
+    public void placeLadder(Block b, int x, int y,int z, IArena a, int ladderdata){
+        Block block = b.getRelative(x,y,z);  //ladder block
+        block.setType(Material.LADDER);
+        Ladder ladder = (Ladder) block.getBlockData();
+        a.addPlacedBlock(block);
+        switch (ladderdata){
+            case 2:
+                ladder.setFacing(BlockFace.NORTH);
+                block.setBlockData(ladder);
+                return;
+            case 3:
+                ladder.setFacing(BlockFace.SOUTH);
+                block.setBlockData(ladder);
+                return;
+            case 4:
+                ladder.setFacing(BlockFace.WEST);
+                block.setBlockData(ladder);
+                return;
+            case 5:
+                ladder.setFacing(BlockFace.EAST);
+                block.setBlockData(ladder);
+        }
+    }
+
+    @Override
+    public void playVillagerEffect(@NotNull Player player, Location location){
+        player.spawnParticle(org.bukkit.Particle.VILLAGER_HAPPY, location, 1);
     }
 }

@@ -24,7 +24,7 @@ import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.events.player.PlayerInvisibilityPotionEvent;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
+import com.andrei1058.bedwars.sidebar.SidebarService;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -32,9 +32,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 import static com.andrei1058.bedwars.BedWars.nms;
 import static com.andrei1058.bedwars.BedWars.plugin;
@@ -46,23 +45,11 @@ import static com.andrei1058.bedwars.BedWars.plugin;
 public class InvisibilityPotionListener implements Listener {
 
     @EventHandler
-    public void onPotion(PlayerInvisibilityPotionEvent e) {
+    public void onPotion(@NotNull PlayerInvisibilityPotionEvent e) {
         if (e.getTeam() == null) return;
-        if (e.getType() == PlayerInvisibilityPotionEvent.Type.ADDED) {
-            for (BedWarsScoreboard sb : BedWarsScoreboard.getScoreboards().values()) {
-                if (sb.getArena() == null) continue;
-                if (sb.getArena().equals(e.getArena())) {
-                    sb.invisibilityPotion(e.getTeam(), e.getPlayer(), true);
-                }
-            }
-        } else {
-            for (BedWarsScoreboard sb : BedWarsScoreboard.getScoreboards().values()) {
-                if (sb.getArena() == null) continue;
-                if (sb.getArena().equals(e.getArena())) {
-                    sb.invisibilityPotion(e.getTeam(), e.getPlayer(), false);
-                }
-            }
-        }
+        SidebarService.getInstance().handleInvisibility(
+                e.getTeam(), e.getPlayer(), e.getType() == PlayerInvisibilityPotionEvent.Type.ADDED
+        );
     }
 
     @EventHandler

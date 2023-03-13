@@ -34,7 +34,6 @@ public interface IContentTier {
 
     /**
      * Get tier currency.
-     *
      * {@link Material#AIR} for vault.
      */
     Material getCurrency();

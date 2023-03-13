@@ -22,6 +22,7 @@ package com.andrei1058.bedwars.commands;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.arena.SetupSession;
+import com.andrei1058.bedwars.support.paper.PaperSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -105,7 +106,7 @@ public class Misc {
         Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
             for (Location l : setupSession.getSkipAutoCreateGen()) {
                 Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
-                    p.teleport(l);
+                    PaperSupport.teleport(p, l);
                     Bukkit.dispatchCommand(p, command + (l.add(0, -1, 0).getBlock().getType() == Material.EMERALD_BLOCK ? "emerald" : "diamond"));
                 }, 20);
             }
@@ -142,9 +143,9 @@ public class Misc {
                 if (b.getX() == origin.getBlockX() && b.getY() == origin.getBlockY() && b.getZ() == origin.getBlockZ())
                     continue;
                 Location l = b.getLocation().clone().add(0, 1, 0);
-                for (Location location : locations) {
-                    if (setupSession.getConfig().compareArenaLoc(location, b.getLocation().add(0, 1, 0))) continue;
-                }
+                for (Location location : locations)
+                    setupSession.getConfig().compareArenaLoc(location, b.getLocation().add(0, 1, 0));
+
                 if (b.getType() == target) {
                     if (layout_z_minus == l.clone().add(0, 0, -1).getBlock().getType() &&
                             layout_z_plus == l.clone().add(0, 0, 1).getBlock().getType() &&

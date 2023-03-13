@@ -26,8 +26,6 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.events.player.PlayerBaseEnterEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerBaseLeaveEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerLeaveArenaEvent;
-import com.andrei1058.bedwars.api.events.upgrades.UpgradeBuyEvent;
-import com.andrei1058.bedwars.api.upgrades.EnemyBaseEnterTrap;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import org.bukkit.Bukkit;
@@ -109,22 +107,6 @@ public class BaseListener implements Listener {
             if (isOnABase.containsKey(p)) {
                 Bukkit.getPluginManager().callEvent(new PlayerBaseLeaveEvent(p, isOnABase.get(p)));
                 isOnABase.remove(p);
-            }
-        }
-    }
-
-    @EventHandler
-    public void onUpgradeBuy(UpgradeBuyEvent e){
-        // when a new trap is bought check for enemies on the island #646
-        if (e.getTeamUpgrade() instanceof EnemyBaseEnterTrap){
-            for (Player player : e.getTeam().getArena().getPlayers()){
-                if (e.getTeam().isMember(player)) continue;
-                if (e.getTeam().getArena().isReSpawning(player)) continue;
-                if (player.getLocation().distance(e.getTeam().getBed()) <= e.getTeam().getArena().getIslandRadius()){
-                    e.getTeam().getActiveTraps().get(0).trigger(e.getTeam(), player);
-                    e.getTeam().getActiveTraps().remove(0);
-                    return;
-                }
             }
         }
     }

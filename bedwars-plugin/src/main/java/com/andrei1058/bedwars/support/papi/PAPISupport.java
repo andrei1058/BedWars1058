@@ -28,6 +28,7 @@ import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.commands.shout.ShoutCommand;
+import com.andrei1058.bedwars.stats.PlayerStats;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -66,8 +67,9 @@ public class PAPISupport extends PlaceholderExpansion {
     }
 
     @Override
-    public String onPlaceholderRequest(Player player, String s) {
-        if (s == null) return null;
+    public String onPlaceholderRequest(Player player, @NotNull String s) {
+
+        /* Non-Player required placeholders */
 
         if (s.startsWith("arena_status_")) {
             IArena a = Arena.getArenaByName(s.replace("arena_status_", ""));
@@ -106,139 +108,144 @@ public class PAPISupport extends PlaceholderExpansion {
             return "-";
         }
 
+        /* Player required placeholders */
         if (player == null) return null;
-        String replay = "";
+
+        // stats placeholders
+        if(s.startsWith("stats_")) {
+            String targetedStat = s.replaceFirst("stats_", "");
+            if(targetedStat.isEmpty() || targetedStat.isBlank()) {
+                return null;
+            }
+            PlayerStats stats = BedWars.getStatsManager().getUnsafe(player.getUniqueId());
+            if(stats == null) {
+                return null;
+            }
+            switch (targetedStat) {
+                case "firstplay":
+                    Instant firstPlay = stats.getFirstPlay();
+                    return new SimpleDateFormat(getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(firstPlay != null ? Timestamp.from(firstPlay) : null);
+                case "lastplay":
+                    Instant lastPlay = stats.getLastPlay();
+                    return new SimpleDateFormat(getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(lastPlay != null ? Timestamp.from(lastPlay) : null);
+                case "total_kills":
+                    return String.valueOf(stats.getTotalKills());
+                case "kills":
+                    return String.valueOf(stats.getKills());
+                case "wins":
+                    return String.valueOf(stats.getWins());
+                case "finalkills":
+                    return String.valueOf(stats.getFinalKills());
+                case "deaths":
+                    return String.valueOf(stats.getDeaths());
+                case "losses":
+                    return String.valueOf(stats.getLosses());
+                case "finaldeaths":
+                    return String.valueOf(stats.getFinalDeaths());
+                case "bedsdestroyed":
+                    return String.valueOf(stats.getBedsDestroyed());
+                case "gamesplayed":
+                    return String.valueOf(stats.getGamesPlayed());
+            }
+        }
+
+        // other placeholders
+        String response = "";
         IArena a = Arena.getArenaByPlayer(player);
         switch (s) {
-            case "stats_firstplay":
-                Instant firstPlay = BedWars.getStatsManager().get(player.getUniqueId()).getFirstPlay();
-                replay = new SimpleDateFormat(getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(firstPlay != null ? Timestamp.from(firstPlay) : null);
-                break;
-            case "stats_lastplay":
-                Instant lastPlay = BedWars.getStatsManager().get(player.getUniqueId()).getLastPlay();
-                replay = new SimpleDateFormat(getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(lastPlay != null ? Timestamp.from(lastPlay) : null);
-                break;
-            case "stats_total_kills":
-                replay = String.valueOf(BedWars.getStatsManager().get(player.getUniqueId()).getTotalKills());
-                break;
-            case "stats_kills":
-                replay = String.valueOf(BedWars.getStatsManager().get(player.getUniqueId()).getKills());
-                break;
-            case "stats_wins":
-                replay = String.valueOf(BedWars.getStatsManager().get(player.getUniqueId()).getWins());
-                break;
-            case "stats_finalkills":
-                replay = String.valueOf(BedWars.getStatsManager().get(player.getUniqueId()).getFinalKills());
-                break;
-            case "stats_deaths":
-                replay = String.valueOf(BedWars.getStatsManager().get(player.getUniqueId()).getDeaths());
-                break;
-            case "stats_losses":
-                replay = String.valueOf(BedWars.getStatsManager().get(player.getUniqueId()).getLosses());
-                break;
-            case "stats_finaldeaths":
-                replay = String.valueOf(BedWars.getStatsManager().get(player.getUniqueId()).getFinalDeaths());
-                break;
-            case "stats_bedsdestroyed":
-                replay = String.valueOf(BedWars.getStatsManager().get(player.getUniqueId()).getBedsDestroyed());
-                break;
-            case "stats_gamesplayed":
-                replay = String.valueOf(BedWars.getStatsManager().get(player.getUniqueId()).getGamesPlayed());
-                break;
             case "current_online":
-                replay = String.valueOf(Arena.getArenaByPlayer().size());
+                response = String.valueOf(Arena.getArenaByPlayer().size());
                 break;
             case "current_arenas":
-                replay = String.valueOf(Arena.getArenas().size());
+                response = String.valueOf(Arena.getArenas().size());
                 break;
             case "current_playing":
                 if (a != null) {
-                    replay = String.valueOf(a.getPlayers().size());
+                    response = String.valueOf(a.getPlayers().size());
                 }
                 break;
             case "player_team_color":
                 if (a != null && a.isPlayer(player) && a.getStatus() == GameState.playing) {
                     ITeam team = a.getTeam(player);
                     if (team != null) {
-                        replay += String.valueOf(team.getColor().chat());
+                        response += String.valueOf(team.getColor().chat());
                     }
                 }
                 break;
             case "player_team":
                 if (a != null) {
                     if (ShoutCommand.isShout(player)) {
-                        replay += Language.getMsg(player, Messages.FORMAT_PAPI_PLAYER_TEAM_SHOUT);
+                        response += Language.getMsg(player, Messages.FORMAT_PAPI_PLAYER_TEAM_SHOUT);
                     }
                     if (a.isPlayer(player)) {
                         if (a.getStatus() == GameState.playing) {
                             ITeam bwt = a.getTeam(player);
                             if (bwt != null) {
-                                replay += Language.getMsg(player, Messages.FORMAT_PAPI_PLAYER_TEAM_TEAM).replace("{TeamName}",
+                                response += Language.getMsg(player, Messages.FORMAT_PAPI_PLAYER_TEAM_TEAM).replace("{TeamName}",
                                         bwt.getDisplayName(Language.getPlayerLanguage(player))).replace("{TeamColor}", String.valueOf(bwt.getColor().chat()));
                             }
                         }
                     } else {
-                        replay += Language.getMsg(player, Messages.FORMAT_PAPI_PLAYER_TEAM_SPECTATOR);
+                        response += Language.getMsg(player, Messages.FORMAT_PAPI_PLAYER_TEAM_SPECTATOR);
                     }
                 }
                 break;
             case "player_level":
-                replay = BedWars.getLevelSupport().getLevel(player);
+                response = BedWars.getLevelSupport().getLevel(player);
                 break;
             case "player_level_raw":
-                replay = String.valueOf(BedWars.getLevelSupport().getPlayerLevel(player));
+                response = String.valueOf(BedWars.getLevelSupport().getPlayerLevel(player));
                 break;
             case "player_progress":
-                replay = BedWars.getLevelSupport().getProgressBar(player);
+                response = BedWars.getLevelSupport().getProgressBar(player);
                 break;
             case "player_xp_formatted":
-                replay = BedWars.getLevelSupport().getCurrentXpFormatted(player);
+                response = BedWars.getLevelSupport().getCurrentXpFormatted(player);
                 break;
             case "player_xp":
-                replay = String.valueOf(BedWars.getLevelSupport().getCurrentXp(player));
+                response = String.valueOf(BedWars.getLevelSupport().getCurrentXp(player));
                 break;
             case "player_rerq_xp_formatted":
-                replay = BedWars.getLevelSupport().getRequiredXpFormatted(player);
+                response = BedWars.getLevelSupport().getRequiredXpFormatted(player);
                 break;
             case "player_rerq_xp":
-                replay = String.valueOf(BedWars.getLevelSupport().getRequiredXp(player));
+                response = String.valueOf(BedWars.getLevelSupport().getRequiredXp(player));
                 break;
             case "player_status":
                 if(a != null) {
                     switch (a.getStatus()) {
                         case waiting:
                         case starting:
-                            replay = "WAITING";
+                            response = "WAITING";
                             break;
                         case playing:
                             if(a.isPlayer(player)) {
-                                replay = "PLAYING";
+                                response = "PLAYING";
                             } else if(a.isSpectator(player)) {
-                                replay = "SPECTATING";
+                                response = "SPECTATING";
                             } else {
-                                replay = "IN_GAME_BUT_NOT"; // this shouldnt happen
+                                response = "IN_GAME_BUT_NOT"; // this shouldnt happen
                             }
                             break;
                         case restarting:
-                            replay = "RESTARTING";
+                            response = "RESTARTING";
                             break;
                     }
                 } else {
-                    replay = "NONE";
+                    response = "NONE";
                 }
                 break;
             case "current_arena_group":
                 if (a != null) {
-                    replay = a.getGroup();
+                    response = a.getGroup();
                 }
                 break;
             case "elapsed_time":
                 if (a != null) {
-                    replay = elapsedFormat.format(Instant.now().minusMillis(a.getStartTime().toEpochMilli()));
+                    response = elapsedFormat.format(Instant.now().minusMillis(a.getStartTime().toEpochMilli()));
                 }
                 break;
-
         }
-        return replay;
+        return response;
     }
 }

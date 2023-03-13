@@ -53,4 +53,8 @@ public interface IBuyItem {
     boolean isPermanent();
 
     void setPermanent(boolean permanent);
+
+    boolean isUnbreakable();
+
+    void setUnbreakable(boolean permanent);
 }

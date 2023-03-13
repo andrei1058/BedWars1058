@@ -36,9 +36,11 @@ public class Language extends ConfigManager {
 
     private final String iso;
     private String prefix = "";
+    private static String prefixStatic = "";
     private static final HashMap<UUID, Language> langByPlayer = new HashMap<>();
     private static final List<Language> languages = new ArrayList<>();
     private static Language defaultLanguage;
+    private String serverIp;
 
     public Language(Plugin plugin, String iso) {
         super(plugin, "messages_" + iso, plugin.getDataFolder().getPath() + "/Languages");
@@ -51,6 +53,9 @@ public class Language extends ConfigManager {
      */
     public void setPrefix(String prefix) {
         this.prefix = prefix;
+    }
+    public void setPrefixStatic(String prefix) {
+        this.prefixStatic = prefix;
     }
 
     /**
@@ -88,7 +93,7 @@ public class Language extends ConfigManager {
      */
     public static String getMsg(Player p, String path) {
         if (p == null) return getDefaultLanguage().m(path);
-        return langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage()).m(path);
+        return langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage()).m(path).replace("{prefix}", (prefixStatic == null? "":prefixStatic));
     }
 
     /**
@@ -136,7 +141,17 @@ public class Language extends ConfigManager {
             System.err.println("Missing message key " + path + " in language " + getIso());
             message = "MISSING_LANG";
         }
-        return ChatColor.translateAlternateColorCodes('&', message.replace("{prefix}", prefix));
+        if (null == serverIp) {
+            BedWars api = Bukkit.getServicesManager().getRegistration(BedWars.class).getProvider();
+            if (null != api.getConfigs().getMainConfig()) {
+                serverIp = api.getConfigs().getMainConfig().
+                        getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP);
+            }
+        }
+
+        return ChatColor.translateAlternateColorCodes('&', message.replace("{prefix}", (prefix == null? "":prefix))
+                .replace("{serverIp}", serverIp == null ? "" : serverIp)
+        );
     }
 
     /**

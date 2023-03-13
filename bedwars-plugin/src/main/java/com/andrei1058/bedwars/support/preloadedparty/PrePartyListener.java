@@ -26,6 +26,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 @Deprecated
+        (forRemoval = true, since = "23.1.1")
 public class PrePartyListener implements Listener {
 
     @EventHandler

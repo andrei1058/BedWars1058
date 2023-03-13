@@ -26,6 +26,7 @@ import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.NextEvent;
 import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
+import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerBedBreakEvent;
 import com.andrei1058.bedwars.api.language.Language;
@@ -35,7 +36,13 @@ import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.AutoCreateTeams;
 import com.andrei1058.bedwars.configuration.Sounds;
+import com.andrei1058.bedwars.support.paper.PaperSupport;
+import com.andrei1058.bedwars.popuptower.TowerEast;
+import com.andrei1058.bedwars.popuptower.TowerNorth;
+import com.andrei1058.bedwars.popuptower.TowerSouth;
+import com.andrei1058.bedwars.popuptower.TowerWest;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -131,7 +138,7 @@ public class BreakPlace implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            if(e.getItemInHand().getType().equals(nms.materialFireball()) && e.getBlockPlaced().getType().equals(Material.FIRE)) {
+            if (e.getItemInHand().getType().equals(nms.materialFireball()) && e.getBlockPlaced().getType().equals(Material.FIRE)) {
                 e.setCancelled(true);
             }
         }
@@ -179,6 +186,29 @@ public class BreakPlace implements Listener {
                 tnt.setFuseTicks(45);
                 nms.setSource(tnt, p);
                 return;
+            } else if (BedWars.shop.getBoolean(ConfigPath.SHOP_SPECIAL_TOWER_ENABLE)) {
+                if (e.getBlock().getType() == Material.valueOf(shop.getString(ConfigPath.SHOP_SPECIAL_TOWER_MATERIAL))) {
+
+                    e.setCancelled(true);
+                    Location loc = e.getBlock().getLocation();
+                    IArena a1 = Arena.getArenaByPlayer(p);
+                    TeamColor col = a1.getTeam(p).getColor();
+                    double rotation = (p.getLocation().getYaw() - 90.0F) % 360.0F;
+                    if (rotation < 0.0D) {
+                        rotation += 360.0D;
+                    }
+                    if (45.0D <= rotation && rotation < 135.0D) {
+                        new TowerSouth(loc, e.getBlockPlaced(), col, p);
+                    } else if (225.0D <= rotation && rotation < 315.0D) {
+                        new TowerNorth(loc, e.getBlockPlaced(), col, p);
+                    } else if (135.0D <= rotation && rotation < 225.0D) {
+                        new TowerWest(loc, e.getBlockPlaced(), col, p);
+                    } else if (0.0D <= rotation && rotation < 45.0D) {
+                        new TowerEast(loc, e.getBlockPlaced(), col, p);
+                    } else if (315.0D <= rotation && rotation < 360.0D) {
+                        new TowerEast(loc, e.getBlockPlaced(), col, p);
+                    }
+                }
             }
             return;
         }
@@ -267,7 +297,7 @@ public class BreakPlace implements Listener {
                     }
                     return;
                 case "FIRE":
-                    if(allowFireBreak) {
+                    if (allowFireBreak) {
                         e.setCancelled(false);
                         return;
                     }
@@ -285,7 +315,7 @@ public class BreakPlace implements Listener {
                                             p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_OWN_BED));
                                             e.setCancelled(true);
                                             if (e.getPlayer().getLocation().getBlock().getType().toString().contains("BED")) {
-                                                e.getPlayer().teleport(e.getPlayer().getLocation().add(0, 0.5, 0));
+                                                PaperSupport.teleport(e.getPlayer(), e.getPlayer().getLocation().add(0, 0.5, 0));
                                             }
                                         } else {
                                             e.setCancelled(false);
@@ -318,12 +348,14 @@ public class BreakPlace implements Listener {
                                                             .replace("{TeamColor}", t.getColor().chat().toString())
                                                             .replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(on)))
                                                             .replace("{PlayerColor}", a.getTeam(p).getColor().chat().toString())
-                                                            .replace("{PlayerName}", p.getDisplayName()));
+                                                            .replace("{PlayerName}", p.getDisplayName())
+                                                            .replace("{PlayerNameUnformatted}", p.getName()));
                                                 }
                                                 if (breakEvent.getTitle() != null && breakEvent.getSubTitle() != null) {
                                                     nms.sendTitle(on, breakEvent.getTitle().apply(on), breakEvent.getSubTitle().apply(on), 0, 40, 10);
                                                 }
-                                                if (t.isMember(on)) Sounds.playSound(ConfigPath.SOUNDS_BED_DESTROY_OWN, on);
+                                                if (t.isMember(on))
+                                                    Sounds.playSound(ConfigPath.SOUNDS_BED_DESTROY_OWN, on);
                                                 else Sounds.playSound(ConfigPath.SOUNDS_BED_DESTROY, on);
                                             }
                                         }
@@ -391,7 +423,8 @@ public class BreakPlace implements Listener {
                     int line = 0;
                     for (String string : BedWars.signs.getList("format")) {
                         e.setLine(line, string.replace("[on]", String.valueOf(a.getPlayers().size())).replace("[max]",
-                                String.valueOf(a.getMaxPlayers())).replace("[arena]", a.getDisplayName()).replace("[status]", a.getDisplayStatus(Language.getDefaultLanguage())));
+                                        String.valueOf(a.getMaxPlayers())).replace("[arena]", a.getDisplayName()).replace("[status]", a.getDisplayStatus(Language.getDefaultLanguage()))
+                                .replace("[type]", String.valueOf(a.getMaxInTeam())));
                         line++;
                     }
                     b.update(true);

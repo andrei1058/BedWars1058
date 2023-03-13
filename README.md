@@ -12,7 +12,7 @@ Once your bed is destroyed, you cannot respawn.
 This software runs on [Spigot](https://www.spigotmc.org/) and NMS.
 Spigot forks without compiled NMS code are not supported.
 Officially supported servers are [spigot](https://www.spigotmc.org/) and [paper](https://papermc.io/).
-It is recommended to use Java 11.
+It is required to use Java 11 or newer.
 
 The internal world restore system is based on zipping and unzipping maps which can become
 heavy if you are still making use of HDD in 2021, and you do not have a decent CPU, for a better
@@ -90,7 +90,7 @@ Players with bw.vip permission are able to join full arenas in starting phase. T
 
 ###### Party System:
 - we provide a basic and functional internal party system to play with your friends on the same team or arena.
-- we also support Parties by AlessioDP which could be a better solution if you are a large network.
+- we also support Parties by AlessioDP and Party and Friends by Simonsator which could be a better solution if you are a large network.
 
 ###### Anti AFK System:
 Inactive players for more than 45 seconds can't pick-up items from generators.
@@ -125,7 +125,7 @@ Chosen by hundreds of servers all around the world.
 
 # 3rd party libraries
 - [bStats](https://bstats.org/getting-started/include-metrics)
-- [Sidebar API](https://gitlab.com/andrei1058/sidebar)
+- [Sidebar API](https://github.com/andrei1058/SiderbarLib)
 - [Commons IO](https://mvnrepository.com/artifact/commons-io/commons-io)
 - [HikariCP](https://mvnrepository.com/artifact/com.zaxxer/HikariCP)
 - [SLF4J](http://www.slf4j.org/)

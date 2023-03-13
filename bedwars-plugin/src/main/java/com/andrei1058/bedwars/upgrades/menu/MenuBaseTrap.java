@@ -41,7 +41,6 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -282,6 +281,16 @@ public class MenuBaseTrap implements MenuContent, EnemyBaseEnterTrap, TeamUpgrad
         }
         Sounds.playSound(ConfigPath.SOUNDS_BOUGHT, player);
         team.getActiveTraps().add(this);
+        // when a new trap is bought check for enemies on the island #646
+        for (Player arenaPlayer : team.getArena().getPlayers()) {
+            if (team.isMember(arenaPlayer)) continue;
+            if (team.getArena().isReSpawning(arenaPlayer)) continue;
+            if (arenaPlayer.getLocation().distance(team.getBed()) <= team.getArena().getIslandRadius()) {
+                team.getActiveTraps().remove(0).trigger(team, arenaPlayer);
+                break;
+            }
+        }
+
         for (Player p1 : team.getMembers()) {
             p1.sendMessage(Language.getMsg(p1, Messages.UPGRADES_UPGRADE_BOUGHT_CHAT).replace("{playername}", player.getName()).replace("{player}", player.getDisplayName()).replace("{upgradeName}",
                     ChatColor.stripColor(Language.getMsg(p1, Messages.UPGRADES_BASE_TRAP_ITEM_NAME_PATH + getName().replace("base-trap-", "")).replace("{color}", ""))));
