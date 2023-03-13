@@ -192,6 +192,7 @@ public class PartyCommand extends BukkitCommand {
                 for (Player p1 : getParty().getMembers(owner)) {
                     p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INFO_PLAYER).replace("{player}", p1.getName()));
                 }
+                break;
             default:
                 sendPartyCmds(p);
                 break;
