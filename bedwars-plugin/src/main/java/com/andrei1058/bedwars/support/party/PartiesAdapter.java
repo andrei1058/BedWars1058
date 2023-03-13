@@ -30,6 +30,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PartiesAdapter implements Party {
 
@@ -172,6 +173,15 @@ public class PartiesAdapter implements Party {
                 }
             }
         }
+    }
+
+    @Override
+    public Player getOwner(Player member) {
+        return Bukkit.getPlayer(Objects.requireNonNull(api.getParty(member.getUniqueId())).getLeader());
+    }
+
+    @Override
+    public void promote(Player owner, Player target) {
     }
 
     @Override

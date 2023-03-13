@@ -78,6 +78,16 @@ public class NoParty implements Party {
     }
 
     @Override
+    public Player getOwner(Player member) {
+        return null;
+    }
+
+    @Override
+    public void promote(Player owner, Player target) {
+
+    }
+
+    @Override
     public boolean isInternal() {
         return false;
     }

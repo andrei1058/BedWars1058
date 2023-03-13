@@ -15,8 +15,7 @@ public class PAFBungeecordRedisApi implements Party {
     //Party and Friends Extended for BungeeCord Support by JT122406
 
     private PlayerParty getPAFParty(Player p) {
-        PAFPlayer pafPlayer = PAFPlayerManager.getInstance().getPlayer(p.getUniqueId());
-        return PartyManager.getInstance().getParty(pafPlayer);
+        return PartyManager.getInstance().getParty(PAFPlayerManager.getInstance().getPlayer(p.getUniqueId()));
     }
 
     @Override
@@ -78,6 +77,15 @@ public class PAFBungeecordRedisApi implements Party {
 
     @Override
     public void removePlayer(Player owner, Player target) {
+    }
+
+    @Override
+    public Player getOwner(Player member) {
+        return Bukkit.getPlayer(getPAFParty(member).getLeader().getUniqueId());
+    }
+
+    @Override
+    public void promote(Player owner, Player target) {
     }
 
     @Override
