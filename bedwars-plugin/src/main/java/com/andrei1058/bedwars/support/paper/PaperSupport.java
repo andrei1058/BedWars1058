@@ -1,7 +1,6 @@
 package com.andrei1058.bedwars.support.paper;
 
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
-import com.andrei1058.bedwars.configuration.MainConfig;
 import io.papermc.lib.PaperLib;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
