@@ -52,7 +52,7 @@ public class ShoutCommand extends BukkitCommand {
             return true;
         }
         // Check config and Arena's max team size
-        if (BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_ALLOW_SHOUT_SOLO) && a.getMaxInTeam() == 1){
+        if (!BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_ALLOW_SHOUT_SOLO) && a.getMaxInTeam() == 1){
             p.sendMessage(Language.getMsg(p, Messages.COMMAND_NO_SHOUT_SOLO));
             return true;
         }
