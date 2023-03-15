@@ -97,7 +97,7 @@ public class MainConfig extends ConfigManager {
 
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ALLOW_FIRE_EXTINGUISH, true);
 
-        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ALLOW_SHOUT_SOLO, false);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ALLOW_SHOUT_SOLO, true);
 
         //heal pool category
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_HEAL_POOL_ENABLE, true);
