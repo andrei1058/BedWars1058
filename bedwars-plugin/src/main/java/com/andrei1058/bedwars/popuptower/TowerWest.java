@@ -24,7 +24,7 @@ public class TowerWest {
             p.getInventory().setItemInHand(null);
         }
 
-        List<String> relloc = new ArrayList();
+        List<String> relloc = new ArrayList<>();
         relloc.add("-2, 0, 1");
         relloc.add("-1, 0, 2");
         relloc.add("0, 0, 2");

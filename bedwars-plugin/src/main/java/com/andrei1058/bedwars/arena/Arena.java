@@ -2241,7 +2241,7 @@ public class Arena implements IArena {
 
     public static List<IArena> getSorted(List<IArena> arenas) {
         List<IArena> sorted = new ArrayList<>(arenas);
-        sorted.sort(new Comparator<IArena>() {
+        sorted.sort(new Comparator<>() {
             @Override
             public int compare(IArena o1, IArena o2) {
                 if (o1.getStatus() == GameState.starting && o2.getStatus() == GameState.starting) {

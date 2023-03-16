@@ -131,7 +131,7 @@ public class ShopItemRestoreListener {
                 }
             }
 
-            if (!hasSword) return true;
+            return !hasSword;
         } else {
             boolean sword = false;
             for (ItemStack is : ((Player) player).getInventory()) {
