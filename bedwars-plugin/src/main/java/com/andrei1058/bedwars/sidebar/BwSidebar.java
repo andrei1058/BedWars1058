@@ -188,7 +188,7 @@ public class BwSidebar implements ISidebar {
             providers.add(new PlaceholderProvider("{requiredXp}", level::getFormattedRequiredXp));
         }
 
-        if (null == arena) {
+        if (noArena()) {
             providers.add(new PlaceholderProvider("{on}", () ->
                     String.valueOf(Bukkit.getOnlinePlayers().size()))
             );
@@ -345,7 +345,7 @@ public class BwSidebar implements ISidebar {
             return;
         }
 
-        if (arena == null) {
+        if (noArena()) {
             // if tab formatting is enabled in lobby world
             if (config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_LOBBY) &&
                     !config.getLobbyWorldName().trim().isEmpty()) {
@@ -358,6 +358,8 @@ public class BwSidebar implements ISidebar {
             }
             return;
         }
+
+        handleHealthIcon();
 
         arena.getPlayers().forEach(playing -> giveUpdateTabFormat(playing, true));
         arena.getSpectators().forEach(spectating -> giveUpdateTabFormat(spectating, true));
@@ -613,7 +615,7 @@ public class BwSidebar implements ISidebar {
      * @return true if tab formatting is disabled for current sidebar/ arena stage
      */
     public boolean isTabFormattingDisabled() {
-        if (null == arena) {
+        if (noArena()) {
 
             if (getServerType() == ServerType.SHARED) {
                 if (config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_LOBBY) &&
@@ -624,7 +626,7 @@ public class BwSidebar implements ISidebar {
                 }
             }
 
-            return config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_LOBBY);
+            return !config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_LOBBY);
         }
         // if tab formatting is disabled in game
         if (arena.getStatus() == GameState.playing && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_PLAYING)) {
@@ -656,7 +658,7 @@ public class BwSidebar implements ISidebar {
             return;
         }
 
-        if (null == arena) {
+        if (noArena()) {
             handle.hidePlayersHealth();
             return;
         } else if (arena.getStatus() != GameState.playing) {
