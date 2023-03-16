@@ -545,7 +545,7 @@ public class v1_18_R2 extends VersionSupport {
         if (meta instanceof SkullMeta) {
             ((SkullMeta) meta).setOwnerProfile(player.getPlayerProfile());
         }
-
+        head.setItemMeta(meta);
         return head;
     }
 

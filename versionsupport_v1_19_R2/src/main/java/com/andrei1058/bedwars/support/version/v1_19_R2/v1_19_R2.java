@@ -536,14 +536,14 @@ public class v1_19_R2 extends VersionSupport {
 
         if (copyTagFrom != null) {
             var tag = getTag(copyTagFrom);
-            return applyTag(head, tag);
+            head = applyTag(head, tag);
         }
 
         var meta = head.getItemMeta();
         if (meta instanceof SkullMeta) {
             ((SkullMeta) meta).setOwnerProfile(player.getPlayerProfile());
         }
-
+        head.setItemMeta(meta);
         return head;
     }
 
@@ -768,7 +768,8 @@ public class v1_19_R2 extends VersionSupport {
     }
 
     public ItemStack getNmsItemCopy(org.bukkit.inventory.ItemStack itemStack) {
-        var i = CraftItemStack.asNMSCopy(itemStack);
+        ItemStack i = CraftItemStack.asNMSCopy(itemStack);
+        getPlugin().getLogger().info("getNmsItemCopy(): itemStack: " + i);
         if (null == i) {
             throw new RuntimeException("Cannot convert given item to a NMS item");
         }
