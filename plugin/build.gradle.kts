@@ -1,8 +1,10 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
 
 plugins {
     id("com.andrei1058.bedwars.java-conventions")
     id("com.github.johnrengelman.shadow") version "8.1.0"
+    id("net.minecrell.plugin-yml.bukkit") version "0.5.3"
 }
 
 dependencies {
@@ -43,6 +45,29 @@ dependencies {
     compileOnly("net.milkbowl.vault:VaultAPI:1.7")
     compileOnly("org.spigotmc:spigot:1.8.8-R0.1-SNAPSHOT")
     compileOnly("me.clip:placeholderapi:2.11.2")
+}
+
+bukkit {
+    name = "BedWars1058"
+    main = "com.andrei1058.bedwars.BedWars"
+    apiVersion = "1.13"
+
+    author = "andrei1058"
+    description = "BedWars minigame by andrei1058"
+    version = "${project.version}"
+
+    load = BukkitPluginDescription.PluginLoadOrder.STARTUP
+    softDepend = listOf(
+        "Vault",
+        "PlaceholderAPI",
+        "Citizens",
+        "Parties",
+        "SlimeWorldManager",
+        "VipFeatures",
+        "Enhanced-SlimeWorldManager",
+        "PartyAndFriends",
+        "Spigot-Party-API-PAF",
+    )
 }
 
 tasks.withType<ShadowJar> {
