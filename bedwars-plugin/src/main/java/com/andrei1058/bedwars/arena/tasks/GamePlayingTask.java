@@ -35,6 +35,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Map;
@@ -240,12 +241,13 @@ public class GamePlayingTask implements Runnable, PlayingTask {
         if (!getArena().getShowTime().isEmpty()) {
             for (Map.Entry<Player, Integer> e : getArena().getShowTime().entrySet()) {
                 if (e.getValue() <= 0) {
-                    getArena().getShowTime().remove(e.getKey());
-                    Bukkit.getPluginManager().callEvent(new PlayerInvisibilityPotionEvent(PlayerInvisibilityPotionEvent.Type.REMOVED, getArena().getTeam(e.getKey()), e.getKey(), getArena()));
                     for (Player p : e.getKey().getWorld().getPlayers()) {
                         nms.showArmor(e.getKey(), p);
                         //nms.showPlayer(e.getKey(), p);
                     }
+                    e.getKey().removePotionEffect(PotionEffectType.INVISIBILITY);
+                    getArena().getShowTime().remove(e.getKey());
+                    Bukkit.getPluginManager().callEvent(new PlayerInvisibilityPotionEvent(PlayerInvisibilityPotionEvent.Type.REMOVED, getArena().getTeam(e.getKey()), e.getKey(), getArena()));
                 } else {
                     getArena().getShowTime().replace(e.getKey(), e.getValue() - 1);
                 }
