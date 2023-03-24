@@ -23,6 +23,7 @@ package com.andrei1058.bedwars.shop.defaultrestore;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -170,7 +171,7 @@ public class ShopItemRestoreListener {
 
             if (!sword) {
                 ITeam team = a.getTeam((Player) e.getPlayer());
-                if (team != null) {
+                if (team != null && !a.isReSpawning((Player) e.getPlayer())) {
                     team.defaultSword((Player) e.getPlayer(), true);
                 }
             }
