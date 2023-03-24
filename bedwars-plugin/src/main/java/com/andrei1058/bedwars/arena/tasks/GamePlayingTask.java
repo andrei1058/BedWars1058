@@ -141,12 +141,6 @@ public class GamePlayingTask implements Runnable, PlayingTask {
                         }
                     }
                     getArena().updateNextEvent();
-                    for (IGenerator o : arena.getOreGenerators()) {
-                        Location l = o.getLocation();
-                        for (int y = 0; y < 20; y++) {
-                            l.clone().subtract(0, y, 0).getBlock().setType(Material.AIR);
-                        }
-                    }
                     for (ITeam team : arena.getTeams()){
                         for (IGenerator o : team.getGenerators()) {
                             Location l = o.getLocation();
