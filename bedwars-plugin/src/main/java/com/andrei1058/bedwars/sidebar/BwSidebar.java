@@ -152,7 +152,7 @@ public class BwSidebar implements ISidebar {
 
             // General static placeholders
             line = line
-                    .replace("{server_ip}", BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
+                    .replace("{serverIp}", BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
                     .replace("{version}", plugin.getDescription().getVersion())
                     .replace("{server}", config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID))
                     .replace("{playername}", player.getName())
@@ -178,7 +178,11 @@ public class BwSidebar implements ISidebar {
 
         providers.add(new PlaceholderProvider("{player}", player::getDisplayName));
         providers.add(new PlaceholderProvider("{playerName}", player::getCustomName));
+        providers.add(new PlaceholderProvider("{money}", () -> String.valueOf(getEconomy().getMoney(player))));
         providers.add(new PlaceholderProvider("{date}", () -> dateFormat.format(new Date(System.currentTimeMillis()))));
+        providers.add(new PlaceholderProvider("{serverIp}", () -> BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP)));
+        providers.add(new PlaceholderProvider("{version}", () -> plugin.getDescription().getVersion()));
+        providers.add(new PlaceholderProvider("{server}", () -> config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID)));
         PlayerLevel level = PlayerLevel.getLevelByPlayer(getPlayer().getUniqueId());
         if (null != level) {
             providers.add(new PlaceholderProvider("{progress}", level::getProgress));
@@ -201,7 +205,7 @@ public class BwSidebar implements ISidebar {
                 providers.add(new PlaceholderProvider("{finalKills}", () ->
                         String.valueOf(stats.getFinalKills()))
                 );
-                providers.add(new PlaceholderProvider("{beds}", () ->
+                providers.add(new PlaceholderProvider("{bedsDestroyed}", () ->
                         String.valueOf(stats.getBedsDestroyed()))
                 );
                 providers.add(new PlaceholderProvider("{deaths}", () ->
@@ -516,19 +520,27 @@ public class BwSidebar implements ISidebar {
 //            return;
 //        }
         Language lang = Language.getPlayerLanguage(player);
-
+        List<PlaceholderProvider> placeholderProviders = getPlaceholders();
         if (noArena()) {
-            SidebarManager.getInstance().sendHeaderFooter(
-                    player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_LOBBY),
-                    lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_LOBBY)
-            );
+            String header = lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_LOBBY);
+            String footer = lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_LOBBY);
+            BedWars.debug("setHeaderFooter() header: " + header);
+            for (PlaceholderProvider placeholderProvider : placeholderProviders) {
+                header = header.replace(placeholderProvider.getPlaceholder(), placeholderProvider.getReplacement() == null ? "" : placeholderProvider.getReplacement());
+                footer = footer.replace(placeholderProvider.getPlaceholder(), placeholderProvider.getReplacement() == null ? "" : placeholderProvider.getReplacement());
+            }
+            BedWars.debug("setHeaderFooter() header: " + header);
+            SidebarManager.getInstance().sendHeaderFooter(player, header, footer);
             return;
         }
         if (arena.isSpectator(player)) {
-            SidebarManager.getInstance().sendHeaderFooter(
-                    player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR),
-                    lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR)
-            );
+            String header = lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR);
+            String footer = lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR);
+            for (PlaceholderProvider placeholderProvider : placeholderProviders) {
+                header = header.replace(placeholderProvider.getPlaceholder(), placeholderProvider.getReplacement() == null ? "" : placeholderProvider.getReplacement());
+                footer = footer.replace(placeholderProvider.getPlaceholder(), placeholderProvider.getReplacement() == null ? "" : placeholderProvider.getReplacement());
+            }
+            SidebarManager.getInstance().sendHeaderFooter(player, header, footer);
             return;
         }
 
@@ -555,10 +567,13 @@ public class BwSidebar implements ISidebar {
                 break;
         }
 
-        SidebarManager.getInstance().sendHeaderFooter(
-                player, lang.m(headerPath),
-                lang.m(footerPath)
-        );
+        String header = null;
+        String footer = null;
+        for (PlaceholderProvider placeholderProvider : placeholderProviders) {
+            if (null != headerPath) header = lang.m(headerPath).replace(placeholderProvider.getPlaceholder(), placeholderProvider.getReplacement() == null ? "" : placeholderProvider.getReplacement());
+            if (null != footerPath) footer = lang.m(footerPath).replace(placeholderProvider.getPlaceholder(), placeholderProvider.getReplacement() == null ? "" : placeholderProvider.getReplacement());
+        }
+        SidebarManager.getInstance().sendHeaderFooter(player, header, footer);
     }
 
     private @NotNull String getTabName(@NotNull ITeam team) {
