@@ -205,7 +205,7 @@ public class BwSidebar implements ISidebar {
                 providers.add(new PlaceholderProvider("{finalKills}", () ->
                         String.valueOf(stats.getFinalKills()))
                 );
-                providers.add(new PlaceholderProvider("{bedsDestroyed}", () ->
+                providers.add(new PlaceholderProvider("{beds}", () ->
                         String.valueOf(stats.getBedsDestroyed()))
                 );
                 providers.add(new PlaceholderProvider("{deaths}", () ->
@@ -520,27 +520,19 @@ public class BwSidebar implements ISidebar {
 //            return;
 //        }
         Language lang = Language.getPlayerLanguage(player);
-        List<PlaceholderProvider> placeholderProviders = getPlaceholders();
+
         if (noArena()) {
-            String header = lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_LOBBY);
-            String footer = lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_LOBBY);
-            BedWars.debug("setHeaderFooter() header: " + header);
-            for (PlaceholderProvider placeholderProvider : placeholderProviders) {
-                header = header.replace(placeholderProvider.getPlaceholder(), placeholderProvider.getReplacement() == null ? "" : placeholderProvider.getReplacement());
-                footer = footer.replace(placeholderProvider.getPlaceholder(), placeholderProvider.getReplacement() == null ? "" : placeholderProvider.getReplacement());
-            }
-            BedWars.debug("setHeaderFooter() header: " + header);
-            SidebarManager.getInstance().sendHeaderFooter(player, header, footer);
+            SidebarManager.getInstance().sendHeaderFooter(
+                    player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_LOBBY),
+                    lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_LOBBY)
+            );
             return;
         }
         if (arena.isSpectator(player)) {
-            String header = lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR);
-            String footer = lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR);
-            for (PlaceholderProvider placeholderProvider : placeholderProviders) {
-                header = header.replace(placeholderProvider.getPlaceholder(), placeholderProvider.getReplacement() == null ? "" : placeholderProvider.getReplacement());
-                footer = footer.replace(placeholderProvider.getPlaceholder(), placeholderProvider.getReplacement() == null ? "" : placeholderProvider.getReplacement());
-            }
-            SidebarManager.getInstance().sendHeaderFooter(player, header, footer);
+            SidebarManager.getInstance().sendHeaderFooter(
+                    player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR),
+                    lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR)
+            );
             return;
         }
 
@@ -567,13 +559,10 @@ public class BwSidebar implements ISidebar {
                 break;
         }
 
-        String header = null;
-        String footer = null;
-        for (PlaceholderProvider placeholderProvider : placeholderProviders) {
-            if (null != headerPath) header = lang.m(headerPath).replace(placeholderProvider.getPlaceholder(), placeholderProvider.getReplacement() == null ? "" : placeholderProvider.getReplacement());
-            if (null != footerPath) footer = lang.m(footerPath).replace(placeholderProvider.getPlaceholder(), placeholderProvider.getReplacement() == null ? "" : placeholderProvider.getReplacement());
-        }
-        SidebarManager.getInstance().sendHeaderFooter(player, header, footer);
+        SidebarManager.getInstance().sendHeaderFooter(
+                player, lang.m(headerPath),
+                lang.m(footerPath)
+        );
     }
 
     private @NotNull String getTabName(@NotNull ITeam team) {
