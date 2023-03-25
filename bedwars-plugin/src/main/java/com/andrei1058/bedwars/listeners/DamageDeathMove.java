@@ -265,6 +265,7 @@ public class DamageDeathMove implements Listener {
                             a.getShowTime().remove(p);
                             p.removePotionEffect(PotionEffectType.INVISIBILITY);
                             ITeam team = a.getTeam(p);
+                            p.sendMessage(getMsg(p, Messages.INTERACT_INVISIBILITY_REMOVED_DAMGE_TAKEN));
                             Bukkit.getPluginManager().callEvent(new PlayerInvisibilityPotionEvent(PlayerInvisibilityPotionEvent.Type.REMOVED, team, p, a));
                         });
                     }

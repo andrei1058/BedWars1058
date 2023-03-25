@@ -250,7 +250,8 @@ public class Messages {
     public static String INTERACT_BED_DESTROY_TITLE_ANNOUNCEMENT = "interact-bed-destroy-title";
     public static String INTERACT_BED_DESTROY_SUBTITLE_ANNOUNCEMENT = "interact-bed-destroy-subtitle";
     public static String INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM = "interact-bed-destroy-team";
-    public static String INTERACT_CHEST_CANT_OPEN_TEAM_ELIMINATED ="interact-cant-open-chest";
+    public static String INTERACT_CHEST_CANT_OPEN_TEAM_ELIMINATED = "interact-cant-open-chest";
+    public static String INTERACT_INVISIBILITY_REMOVED_DAMGE_TAKEN = "interact-invisibility-removed-damaged";
 
     /** PvP related */
     public static String PLAYER_DIE_RESPAWN_TITLE = "player-respawn-title";
