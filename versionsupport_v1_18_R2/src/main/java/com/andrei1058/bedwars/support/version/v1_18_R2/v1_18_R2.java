@@ -288,41 +288,25 @@ public class v1_18_R2 extends VersionSupport {
     @Override
     public void hideArmor(Player victim, Player receiver) {
         List<Pair<EnumItemSlot, ItemStack>> items = new ArrayList<>();
-        List<Pair<EnumItemSlot, ItemStack>> hands = new ArrayList<>();
-        hands.add(new Pair<>(EnumItemSlot.a, new ItemStack(Item.b(0))));
-        hands.add(new Pair<>(EnumItemSlot.b, new ItemStack(Item.b(0))));
 
         items.add(new Pair<>(EnumItemSlot.f, new ItemStack(Item.b(0))));
         items.add(new Pair<>(EnumItemSlot.e, new ItemStack(Item.b(0))));
         items.add(new Pair<>(EnumItemSlot.d, new ItemStack(Item.b(0))));
         items.add(new Pair<>(EnumItemSlot.c, new ItemStack(Item.b(0))));
         PacketPlayOutEntityEquipment packet1 = new PacketPlayOutEntityEquipment(victim.getEntityId(), items);
-        PacketPlayOutEntityEquipment packet2 = new PacketPlayOutEntityEquipment(victim.getEntityId(), hands);
         EntityPlayer pc = ((CraftPlayer) receiver).getHandle();
-        if (victim != receiver) {
-            pc.b.a(packet2);
-        }
         pc.b.a(packet1);
     }
 
     @Override
     public void showArmor(Player victim, Player receiver) {
         List<Pair<EnumItemSlot, ItemStack>> items = new ArrayList<>();
-        List<Pair<EnumItemSlot, ItemStack>> hands = new ArrayList<>();
-
-        hands.add(new Pair<>(EnumItemSlot.a, CraftItemStack.asNMSCopy(victim.getInventory().getItemInMainHand())));
-        hands.add(new Pair<>(EnumItemSlot.b, CraftItemStack.asNMSCopy(victim.getInventory().getItemInOffHand())));
-
         items.add(new Pair<>(EnumItemSlot.f, CraftItemStack.asNMSCopy(victim.getInventory().getHelmet())));
         items.add(new Pair<>(EnumItemSlot.e, CraftItemStack.asNMSCopy(victim.getInventory().getChestplate())));
         items.add(new Pair<>(EnumItemSlot.d, CraftItemStack.asNMSCopy(victim.getInventory().getLeggings())));
         items.add(new Pair<>(EnumItemSlot.c, CraftItemStack.asNMSCopy(victim.getInventory().getBoots())));
         PacketPlayOutEntityEquipment packet1 = new PacketPlayOutEntityEquipment(victim.getEntityId(), items);
-        PacketPlayOutEntityEquipment packet2 = new PacketPlayOutEntityEquipment(victim.getEntityId(), hands);
         EntityPlayer pc = ((CraftPlayer) receiver).getHandle();
-        if (victim != receiver) {
-            pc.b.a(packet2);
-        }
         pc.b.a(packet1);
     }
 
@@ -560,7 +544,7 @@ public class v1_18_R2 extends VersionSupport {
         if (meta instanceof SkullMeta) {
             ((SkullMeta) meta).setOwnerProfile(player.getPlayerProfile());
         }
-
+        head.setItemMeta(meta);
         return head;
     }
 
