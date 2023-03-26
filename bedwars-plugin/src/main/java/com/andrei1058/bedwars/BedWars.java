@@ -151,7 +151,7 @@ public class BedWars extends JavaPlugin {
             return;
         }
 
-        try{
+        try {
             Class.forName("com.destroystokyo.paper.PaperConfig");
             isPaper = true;
         } catch (ClassNotFoundException e) {
@@ -178,7 +178,8 @@ public class BedWars extends JavaPlugin {
         try {
             //noinspection unchecked
             nms = (VersionSupport) supp.getConstructor(Class.forName("org.bukkit.plugin.Plugin"), String.class).newInstance(this, version);
-        } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | ClassNotFoundException e) {
+        } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException |
+                 ClassNotFoundException e) {
             e.printStackTrace();
             serverSoftwareSupport = false;
             this.getLogger().severe("Could not load support for server version: " + version);
@@ -199,6 +200,8 @@ public class BedWars extends JavaPlugin {
         new Hindi();
         new Indonesia();
         new Portuguese();
+        new SimplifiedChinese();
+        new Turkish();
 
         config = new MainConfig(this, "config");
 
@@ -230,7 +233,8 @@ public class BedWars extends JavaPlugin {
                     api.setRestoreAdapter(new InternalAdapter(this));
                     this.getLogger().info("Failed to hook into Enhanced-SlimeWorldManager support! Using the internal reset adapter.");
                 }
-            } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
+            } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException |
+                     InvocationTargetException e) {
                 e.printStackTrace();
                 api.setRestoreAdapter(new InternalAdapter(this));
                 this.getLogger().info("Failed to hook into Enhanced-SlimeWorldManager support! Using the internal reset adapter.");
@@ -247,7 +251,8 @@ public class BedWars extends JavaPlugin {
                     api.setRestoreAdapter(new InternalAdapter(this));
                     this.getLogger().info("Failed to hook into SlimeWorldManager support! Using internal reset adapter.");
                 }
-            } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
+            } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException |
+                     InvocationTargetException e) {
                 e.printStackTrace();
                 api.setRestoreAdapter(new InternalAdapter(this));
                 this.getLogger().info("Failed to hook into SlimeWorldManager support! Using internal reset adapter.");
@@ -259,18 +264,12 @@ public class BedWars extends JavaPlugin {
         /* Register commands */
         nms.registerCommand(mainCmd, new MainCommand(mainCmd));
 
-        Bukkit.getScheduler().runTaskLater(this, () -> {
-            if (!nms.isBukkitCommandRegistered("shout")) {
-                nms.registerCommand("shout", new ShoutCommand("shout"));
-            }
-            nms.registerCommand("rejoin", new RejoinCommand("rejoin"));
-            if (!(nms.isBukkitCommandRegistered("leave") && getServerType() == ServerType.BUNGEE)) {
-                nms.registerCommand("leave", new LeaveCommand("leave"));
-            }
-            if (getServerType() != ServerType.BUNGEE && config.getBoolean(ConfigPath.GENERAL_ENABLE_PARTY_CMD)) {
-                nms.registerCommand("party", new PartyCommand("party"));
-            }
-        }, 20L);
+        // newer versions do not seem to like delayed registration of commands
+        if (nms.getVersion() >= 9) {
+            this.registerDelayedCommands();
+        } else {
+            Bukkit.getScheduler().runTaskLater(this, this::registerDelayedCommands, 20L);
+        }
 
         /* Setup plugin messaging channel */
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
@@ -344,22 +343,6 @@ public class BedWars extends JavaPlugin {
         registerEvents(new ChunkLoad());
 
         registerEvents(new InvisibilityPotionListener());
-
-        /* Deprecated versions */
-        switch (version) {
-            case "v1_9_R1":
-            case "v1_9_R2":
-            case "v1_10_R1":
-            case "v1_11_R1":
-            case "v1_13_R2":
-            case "v1_14_R1":
-            case "v1_15_R1":
-            case "v1_16_R1":
-            case "v1_16_R2":
-                Bukkit.getScheduler().runTaskLater(this,
-                        () -> System.out.println("\u001B[31m[WARN] BedWars1058 may drop support for this server version in the future.\nSee: https://wiki.andrei1058.dev/docs/BedWars1058/compatibility \u001B[0m"), 40L);
-                break;
-        }
 
         /* Load join signs. */
         loadArenasAndSigns();
@@ -467,14 +450,14 @@ public class BedWars extends JavaPlugin {
                 try {
                     //noinspection rawtypes
                     RegisteredServiceProvider rsp = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
-                   if(rsp != null) {
-                       WithChat.setChat((net.milkbowl.vault.chat.Chat) rsp.getProvider());
-                       plugin.getLogger().info("Hooked into vault chat support!");
-                       chat = new WithChat();
-                   } else {
-                       plugin.getLogger().info("Vault found, but no chat provider!");
-                       chat = new NoChat();
-                   }
+                    if (rsp != null) {
+                        WithChat.setChat((net.milkbowl.vault.chat.Chat) rsp.getProvider());
+                        plugin.getLogger().info("Hooked into vault chat support!");
+                        chat = new WithChat();
+                    } else {
+                        plugin.getLogger().info("Vault found, but no chat provider!");
+                        chat = new NoChat();
+                    }
                 } catch (Exception var2_2) {
                     chat = new NoChat();
                 }
@@ -623,6 +606,20 @@ public class BedWars extends JavaPlugin {
         SpoilPlayerTNTFeature.init();
     }
 
+    private void registerDelayedCommands() {
+        if (!nms.isBukkitCommandRegistered("shout")) {
+            nms.registerCommand("shout", new ShoutCommand("shout"));
+        }
+        nms.registerCommand("rejoin", new RejoinCommand("rejoin"));
+        if (!(nms.isBukkitCommandRegistered("leave") && getServerType() == ServerType.BUNGEE)) {
+            nms.registerCommand("leave", new LeaveCommand("leave"));
+        }
+        if (getServerType() != ServerType.BUNGEE && config.getBoolean(ConfigPath.GENERAL_ENABLE_PARTY_CMD)) {
+            Bukkit.getLogger().info("Registering /party command..");
+            nms.registerCommand("party", new PartyCommand("party"));
+        }
+    }
+
     public void onDisable() {
         shuttingDown = true;
         if (!serverSoftwareSupport) return;
@@ -699,10 +696,6 @@ public class BedWars extends JavaPlugin {
         switch (getServerVersion()) {
             case "v1_8_R3":
                 return v18;
-            case "v1_9_R1":
-            case "v1_9_R2":
-            case "v1_10_R1":
-            case "v1_11_R1":
             case "v1_12_R1":
                 return v12;
         }

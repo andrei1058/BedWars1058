@@ -312,4 +312,7 @@ public class ConfigPath {
     public static final String SHOP_PATH_CATEGORY_UTILITY = "utility-category";
 
     public static final String TEAM_NAME_PATH = "team-name-{arena}-{team}";
+
+    public static final String LOBBY_VOID_TELEPORT_ENABLED = "lobby-settings.void-tp";
+    public static final String LOBBY_VOID_TELEPORT_HEIGHT = "lobby-settings.void-height";
 }

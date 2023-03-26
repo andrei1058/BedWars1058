@@ -30,6 +30,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import static com.andrei1058.bedwars.BedWars.mainCmd;
 
@@ -97,10 +98,16 @@ public class Bangla extends Language {
         yml.addDefault(Messages.COMMAND_NOT_ALLOWED_IN_GAME, "{prefix}&cApni game e eti korte parben na.");
         yml.addDefault(Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS, "{prefix}&cCommand tir ostitto nei othoba apnar command use korar permission nei!");
         yml.addDefault(Messages.COMMAND_PARTY_HELP, Arrays.asList("&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
-                "&aParty Commands:", "&e/party help &7- &bPrints this help message", "&e/party invite <player> &7- &bPlayer tike party te invite kore",
+                "&aParty Commands:",
+                "&e/party help &7- &bPrints this help message",
+                "&e/party invite <player> &7- &bPlayer tike party te invite kore",
                 "&e/party leave &7- &bParty theke biday nen",
                 "&e/party remove <player> &7- &bParty theke player shoran",
-                "&e/party accept <player> &7- &bParty accept koren", "&e/party disband &7- &bParty disband koren"));
+                "&e/party info &7- &bShow party members and owner",
+                "&e/party promote <player> &7- &bTransfer party ownership",
+                "&e/party accept <player> &7- &bParty accept koren",
+                "&e/party disband &7- &bParty disband koren")
+        );
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_USAGE, "{prefix}&eUsage: &7/party invite <player>");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE, "{prefix}&7{player} &eonline nei!");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_SENT, "{prefix}&7{player} &e party invite dewa holo&6.");
@@ -119,6 +126,12 @@ public class Bangla extends Language {
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_USAGE, "{prefix}&7Usage: &e/party remove <player>");
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_SUCCESS, "{prefix}&7{player} &eke party theke shorano hoyeche,");
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_DENIED_TARGET_NOT_PARTY_MEMBER, "{prefix}&7{player} &eapnar party te nei!");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_SUCCESS, "{prefix}&eYou successfully promoted {player} to owner");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_OWNER, "{prefix}&eYou have been promoted to party owner");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_NEW_OWNER, "{prefix}&7 &e{player} has been promoted to owner");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n{prefix}&eParty owner: &7{owner}");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS,"{prefix}&eParty members:");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYER, "&7{player}");
         yml.addDefault(Messages.COMMAND_FORCESTART_NOT_IN_GAME, "§c▪ §7Apni khelchen na!");
         yml.addDefault(Messages.COMMAND_FORCESTART_SUCCESS, "§c▪ §7Countdown shongkhipto kora hoyeche!");
         yml.addDefault(Messages.COMMAND_FORCESTART_NO_PERM, "{prefix}&7Apni arena ti ke force start korte parben na.\n§7VIP Features grohon korte donate korun.");
@@ -185,11 +198,11 @@ public class Bangla extends Language {
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_RESTARTING, new ArrayList<>());
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_PLAYING, Arrays.asList("{teamColor}&l{teamLetter} &r{teamColor}", "{team} ", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}"));
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_PLAYING, new ArrayList<>());
-        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_STARTING, Arrays.asList("{vPrefix} "));
+        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_STARTING, List.of("{vPrefix} "));
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_STARTING, new ArrayList<>());
-        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_WAITING, Arrays.asList("{vPrefix} "));
+        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_WAITING, List.of("{vPrefix} "));
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_WAITING, new ArrayList<>());
-        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_LOBBY, Arrays.asList("{vPrefix} "));
+        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_LOBBY, List.of("{vPrefix} "));
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_LOBBY, new ArrayList<>());
 
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_DATE, "dd/MM/yy");
@@ -232,6 +245,7 @@ public class Bangla extends Language {
         yml.addDefault(Messages.INTERACT_BED_DESTROY_SUBTITLE_ANNOUNCEMENT, "&fApni ar respawn niben na!");
         yml.addDefault(Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM, "&f&lBED DESTRUCTION > {PlayerColor}{PlayerName} &7Apnar Bichana destroy korlen!");
         yml.addDefault(Messages.INTERACT_CHEST_CANT_OPEN_TEAM_ELIMINATED, "&cApni ei chest ti khulte parben na karon ei team ti eliminate hoini!");
+        yml.addDefault(Messages.INTERACT_INVISIBILITY_REMOVED_DAMGE_TAKEN, "&cApni ar invisible non karon apni damage niyechen!");
         yml.addDefault(Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL, "{PlayerColor}{PlayerName} &7void e pore gelen.");
         yml.addDefault(Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL, "{PlayerColor}{PlayerName} &7void e pore gelen. &b&lFINAL KILL!");
         yml.addDefault(Messages.PLAYER_DIE_KNOCKED_IN_VOID_REGULAR_KILL, "{KillerColor}{KillerName}&7 {PlayerColor}{PlayerName} &7ke void e falalen.");
@@ -337,20 +351,20 @@ public class Bangla extends Language {
         addDefaultStatsMsg(yml, "last-play", "&6Last Play", "&f{lastPlay}");
         addDefaultStatsMsg(yml, "games-played", "&6Games Played", "&f{gamesPlayed}");
 
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fMap: &a{map}", "", "&fPlayers: &a{on}/{max}", "", "&fWaiting...", "", "§fMode: &a{group}", "&fVersion: &7{version}", "", "&e{server_ip}"));
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fMap: &a{map}", "", "&fPlayers: &a{on}/{max}", "", "&fStarting in &a{time}s", "", "§fMode: &a{group}", "&fVersion: &7{version}", "", "&e{server_ip}"));
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{server_ip}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fMap: &a{map}", "", "&fPlayers: &a{on}/{max}", "", "&fWaiting...", "", "§fMode: &a{group}", "&fVersion: &7{version}", "", "&e{serverIp}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fMap: &a{map}", "", "&fPlayers: &a{on}/{max}", "", "&fStarting in &a{time}s", "", "§fMode: &a{group}", "&fVersion: &7{version}", "", "&e{serverIp}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{serverIp}"));
 
-        yml.addDefault("scoreboard.Doubles.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{server_ip}"));
+        yml.addDefault("scoreboard.Doubles.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{serverIp}"));
 
         yml.addDefault("scoreboard.3v3v3v3.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}",
-                "", "&fKills: &a{kills}", "&fFinal Kills: &a{finalKills}", "&fBeds Broken: &a{beds}", "", "&e{server_ip}"));
+                "", "&fKills: &a{kills}", "&fFinal Kills: &a{finalKills}", "&fBeds Broken: &a{beds}", "", "&e{serverIp}"));
 
         yml.addDefault("scoreboard.4v4v4v4.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}",
-                "", "&fKills: &a{kills}", "&fFinal Kills: &a{finalKills}", "&fBeds Broken: &a{beds}", "", "&e{server_ip}"));
+                "", "&fKills: &a{kills}", "&fFinal Kills: &a{finalKills}", "&fBeds Broken: &a{beds}", "", "&e{serverIp}"));
 
         yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars,&4&lB&6edWars,&6&lB&4e&6dWars,&6&lBe&4d&6Wars,&6&lBed&4W&6ars,&6&lBedW&4a&6rs,&6&lBedWa&4r&6s,&6&lBedWar&4s,&6&lBedWars", "&fYour Level: {level}", "", "&fProgress: &a{currentXp}&7/&b{requiredXp}", "{progress}", "", "&7{player}", "", "&fCoins: &a{money}"
-                , "", "&fTotal Wins: &a{wins}", "&fTotal Kills: &a{kills}", "", "&e{server_ip}"));
+                , "", "&fTotal Wins: &a{wins}", "&fTotal Kills: &a{kills}", "", "&e{serverIp}"));
 
         //
         yml.addDefault(Messages.SHOP_INDEX_NAME, "&8Quick Buy");

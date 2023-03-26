@@ -29,6 +29,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import static com.andrei1058.bedwars.BedWars.mainCmd;
 import static com.andrei1058.bedwars.api.language.Messages.*;
@@ -93,10 +94,16 @@ public class Italian extends Language {
         yml.addDefault(Messages.COMMAND_LEAVE_MSG, "{prefix}&7{player} &esi è disconnesso!");
 
         yml.addDefault(Messages.COMMAND_PARTY_HELP, Arrays.asList("&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
-                "&aComandi del party:", "&e/party help &7- &bStampa questa lista di comandi", "&e/party invite <player> &7- &bInvita il giocatore nel tuo party",
+                "&aComandi del party:",
+                "&e/party help &7- &bStampa questa lista di comandi",
+                "&e/party invite <player> &7- &bInvita il giocatore nel tuo party",
                 "&e/party leave &7- &bLascia il party attuale",
                 "&e/party remove <player> &7- &bRimuovi il giocatore dal party",
-                "&e/party accept <player> &7- &bAccetta un invito al party", "&e/party disband &7- &bScioglie il tuo party"));
+                "&e/party info &7- &bShow party members and owner",
+                "&e/party promote <player> &7- &bTransfer party ownership",
+                "&e/party accept <player> &7- &bAccetta un invito al party",
+                "&e/party disband &7- &bScioglie il tuo party")
+        );
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_USAGE, "{prefix}&eUtilizzo: &7/party invite <player>");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE, "{prefix}&7{player} &enon è online!");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_SENT, "{prefix}&eInvito inviato a &7{player}&6.");
@@ -114,6 +121,12 @@ public class Italian extends Language {
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_USAGE, "{prefix}&eUtilizzo: &e/party remove <player>");
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_SUCCESS, "{prefix}&7{player} &eè stato rimosso dal party.");
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_DENIED_TARGET_NOT_PARTY_MEMBER, "{prefix}&7{player} &enon è nel tuo party!");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_SUCCESS, "{prefix}&eHai promosso con successo {player} a proprietario");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_OWNER, "{prefix}&eSei stato promosso a proprietario del party");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_NEW_OWNER, "{prefix}&7 &e{player} è stato promosso a proprietario");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n{prefix}&eIl proprietario del party è: &7{owner}");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS,"{prefix}&eI membri del party sono:");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYER, "&7{player}");
         yml.addDefault(Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS, "{prefix}&cIl comando non è stato trovato o non hai abbastanza permessi!");
         yml.addDefault(Messages.COMMAND_FORCESTART_NOT_IN_GAME, "§c▪ §7Non sei in gioco!");
         yml.addDefault(Messages.COMMAND_FORCESTART_SUCCESS, "§c▪ §7Conto alla rovescia diminuito!");
@@ -185,11 +198,11 @@ public class Italian extends Language {
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_RESTARTING, new ArrayList<>());
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_PLAYING, Arrays.asList("{teamColor}&l{teamLetter} &r{teamColor}", "{team} ", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}"));
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_PLAYING, new ArrayList<>());
-        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_STARTING, Arrays.asList("{vPrefix} "));
+        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_STARTING, List.of("{vPrefix} "));
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_STARTING, new ArrayList<>());
-        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_WAITING, Arrays.asList("{vPrefix} "));
+        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_WAITING, List.of("{vPrefix} "));
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_WAITING, new ArrayList<>());
-        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_LOBBY, Arrays.asList("{vPrefix} "));
+        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_LOBBY, List.of("{vPrefix} "));
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_LOBBY, new ArrayList<>());
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_DATE, "dd/MM/yy");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TEAM_GENERIC, "{TeamColor}{TeamLetter}&f {TeamName}: {TeamStatus}");
@@ -229,6 +242,7 @@ public class Italian extends Language {
         yml.addDefault(Messages.INTERACT_BED_DESTROY_SUBTITLE_ANNOUNCEMENT, "&fNon verrai più respawnato!");
         yml.addDefault(Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM, "&f&lLETTO DISTRUTTO > &7Il tuo letto è stato distrutto da {PlayerColor}{PlayerName}&7!");
         yml.addDefault(Messages.INTERACT_CHEST_CANT_OPEN_TEAM_ELIMINATED, "&cNon puoi aprire questa cesta, perchè il team non è stato eliminato.");
+        yml.addDefault(Messages.INTERACT_INVISIBILITY_REMOVED_DAMGE_TAKEN, "&cNon sei più invisibile perchè hai preso danno!");
         yml.addDefault(Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL, "{PlayerColor}{PlayerName} &7è caduto nel vuoto.");
         yml.addDefault(Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL, "{PlayerColor}{PlayerName} &7è caduto nel vuoto. &b&lUCCISIONE FINALE!");
         yml.addDefault(Messages.PLAYER_DIE_KNOCKED_IN_VOID_REGULAR_KILL, "{PlayerColor}{PlayerName} &7è caduto nel vuoto con l'aiuto di {KillerColor}{KillerName}&7.");
@@ -324,21 +338,21 @@ public class Italian extends Language {
         addDefaultStatsMsg(yml, "last-play", "&6Ultima partita", "&f{lastPlay}");
         addDefaultStatsMsg(yml, "games-played", "&6Partite giocate", "&f{gamesPlayed}");
 
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fMappa: &a{map}", "", "&fGiocatori: &a{on}/{max}", "", "&fIn attesa...", "", "§fMode: &a{group}", "&fVersione: &7{version}", "", "&e{server_ip}"));
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fMappa: &a{map}", "", "&fGiocatori: &a{on}/{max}", "", "&fInizio in &a{time}s", "", "§fMode: &a{group}", "&fVersione: &7{version}", "", "&e{server_ip}"));
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{server_ip}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fMappa: &a{map}", "", "&fGiocatori: &a{on}/{max}", "", "&fIn attesa...", "", "§fMode: &a{group}", "&fVersione: &7{version}", "", "&e{serverIp}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fMappa: &a{map}", "", "&fGiocatori: &a{on}/{max}", "", "&fInizio in &a{time}s", "", "§fMode: &a{group}", "&fVersione: &7{version}", "", "&e{serverIp}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{serverIp}"));
 
-        yml.addDefault("scoreboard.Doubles.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{server_ip}"));
+        yml.addDefault("scoreboard.Doubles.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{serverIp}"));
 
         yml.addDefault("scoreboard.3v3v3v3.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}",
-                "", "&fUccisioni: &a{kills}", "&fUccisioni Finali: &a{finalKills}", "&fLetti Distrutti: &a{beds}", "", "&e{server_ip}"));
+                "", "&fUccisioni: &a{kills}", "&fUccisioni Finali: &a{finalKills}", "&fLetti Distrutti: &a{beds}", "", "&e{serverIp}"));
 
         yml.addDefault("scoreboard.4v4v4v4.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}",
-                "", "&fUccisioni: &a{kills}", "&fUccisioni Finali: &a{finalKills}", "&fLetti Distrutti: &a{beds}", "", "&e{server_ip}"));
+                "", "&fUccisioni: &a{kills}", "&fUccisioni Finali: &a{finalKills}", "&fLetti Distrutti: &a{beds}", "", "&e{serverIp}"));
 
 
         yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&fLivello: {level}", "", "&fProgresso: &a{currentXp}&7/&b{requiredXp}", "{progress}", "", "&7{player}", "", "&fSoldi: &a{money}"
-                , "", "&fVittorie: &a{wins}", "&fUccisioni: &a{kills}", "", "&e{server_ip}"));
+                , "", "&fVittorie: &a{wins}", "&fUccisioni: &a{kills}", "", "&e{serverIp}"));
         yml.addDefault(Messages.TEAM_ELIMINATED_CHAT, "\n&f&lTEAM ELIMINATO > Il team {TeamColor}{TeamName} &cè stato eliminato\n");
         yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&6+{xp} Esperienza BedWars ricevuta (Tempo di Gioco).");
         yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&6+{xp} Esperienza BedWars ricevuta (Vittoria).");

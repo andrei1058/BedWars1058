@@ -33,7 +33,6 @@ import java.util.List;
 
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
-@SuppressWarnings("WeakerAccess")
 public class Internal implements Party {
     private static List<Internal.Party> parites = new ArrayList<>();
 
@@ -150,6 +149,24 @@ public class Internal implements Party {
     }
 
     @Override
+    public Player getOwner(Player member) {
+        for (Internal.Party party: Internal.getParites()) {
+            if (party.members.contains(member)){
+                return party.owner;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void promote(@NotNull Player owner, @NotNull Player target) {
+        Party p = getParty(owner);
+        if (p != null) {
+            p.owner = target;
+        }
+    }
+
+    @Override
     public boolean isInternal() {
         return true;
     }
@@ -168,7 +185,7 @@ public class Internal implements Party {
         return Collections.unmodifiableList(parites);
     }
 
-    class Party {
+    static class Party {
 
         private List<Player> members = new ArrayList<>();
         private Player owner;

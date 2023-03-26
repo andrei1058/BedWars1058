@@ -54,8 +54,9 @@ public class Language extends ConfigManager {
     public void setPrefix(String prefix) {
         this.prefix = prefix;
     }
+
     public void setPrefixStatic(String prefix) {
-        this.prefixStatic = prefix;
+        prefixStatic = prefix;
     }
 
     /**
@@ -93,7 +94,7 @@ public class Language extends ConfigManager {
      */
     public static String getMsg(Player p, String path) {
         if (p == null) return getDefaultLanguage().m(path);
-        return langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage()).m(path).replace("{prefix}", (prefixStatic == null? "":prefixStatic));
+        return langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage()).m(path).replace("{prefix}", (prefixStatic == null ? "" : prefixStatic));
     }
 
     /**
@@ -149,8 +150,11 @@ public class Language extends ConfigManager {
             }
         }
 
-        return ChatColor.translateAlternateColorCodes('&', message.replace("{prefix}", (prefix == null? "":prefix))
+        return ChatColor.translateAlternateColorCodes('&', message
+                .replace("{prefix}", (prefix == null ? "" : prefix))
                 .replace("{serverIp}", serverIp == null ? "" : serverIp)
+                // deprecated
+                .replace("{server_ip}", serverIp == null ? "" : serverIp)
         );
     }
 

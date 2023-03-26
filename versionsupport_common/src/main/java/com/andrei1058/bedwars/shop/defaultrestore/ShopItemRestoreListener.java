@@ -23,6 +23,7 @@ package com.andrei1058.bedwars.shop.defaultrestore;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -77,7 +78,7 @@ public class ShopItemRestoreListener {
     }
 
     /**
-     * Remove the default swords/ bow if the picked item is more powerful.
+     * Remove the default swords if the picked item is more powerful.
      *
      * @return true to cancel the event
      */
@@ -92,18 +93,12 @@ public class ShopItemRestoreListener {
                 if (is == null) continue;
                 if (is.getType() == Material.AIR) continue;
                 if (!api.getVersionSupport().isCustomBedWarsItem(is)) continue;
-                if (!api.getVersionSupport().getCustomData(is).equalsIgnoreCase("DEFAULT_ITEM")) continue;
-
-                if (api.getVersionSupport().isSword(item.getItemStack())) {
-                    if (api.getVersionSupport().getDamage(item.getItemStack()) >= api.getVersionSupport().getDamage(is)) {
-                        ((Player) player).getInventory().remove(is);
-                        ((Player) player).updateInventory();
-                        return false;
-                    }
+                if (api.getVersionSupport().getCustomData(is).equalsIgnoreCase("DEFAULT_ITEM")) {
+                    ((Player) player).getInventory().remove(is);
+                    ((Player) player).updateInventory();
+                    return false; // function will only return false. default item should only be checked. access tools should be put in chests
                 }
             }
-            item.remove();
-            return true;
         }
         return false;
     }
@@ -137,7 +132,7 @@ public class ShopItemRestoreListener {
                 }
             }
 
-            if (!hasSword) return true;
+            return !hasSword;
         } else {
             boolean sword = false;
             for (ItemStack is : ((Player) player).getInventory()) {
@@ -176,7 +171,7 @@ public class ShopItemRestoreListener {
 
             if (!sword) {
                 ITeam team = a.getTeam((Player) e.getPlayer());
-                if (team != null) {
+                if (team != null && !a.isReSpawning((Player) e.getPlayer())) {
                     team.defaultSword((Player) e.getPlayer(), true);
                 }
             }

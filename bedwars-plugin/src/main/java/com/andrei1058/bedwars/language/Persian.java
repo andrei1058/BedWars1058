@@ -29,6 +29,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import static com.andrei1058.bedwars.BedWars.mainCmd;
 
@@ -55,18 +56,18 @@ public class Persian extends Language {
         }
 
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_LOBBY, "&6{serverIp}");
-        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_WAITING,"&a{serverIp}");
+        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_WAITING, "&a{serverIp}");
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_STARTING, "&6{serverIp}");
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_PLAYING, "&d{serverIp}");
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_RESTARTING, "&c{serverIp}");
-        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR,"&9{serverIp}");
+        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR, "&9{serverIp}");
 
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_LOBBY, "&6{serverIp}");
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_WAITING, "&a{serverIp}");
-        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_STARTING,"&6{serverIp}");
+        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_STARTING, "&6{serverIp}");
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_PLAYING, "&d{serverIp}");
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_RESTARTING, "&c{serverIp}");
-        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR,"&9{serverIp}");
+        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR, "&9{serverIp}");
 
         yml.addDefault(Messages.COMMAND_MAIN, Arrays.asList("", "&2▪ &7/" + mainCmd + " stats", "&2▪ &7/" + mainCmd + " join &o<arena/group>", "&2▪ &7/" + mainCmd + " leave", "&2▪ &7/" + mainCmd + " lang", "&2▪ &7/" + mainCmd + " gui", "&2▪ &7/" + mainCmd + " start &3(vip)"));
         yml.addDefault(Messages.COMMAND_LANG_LIST_HEADER, "{prefix} &2Zaban haye mojood:");
@@ -98,10 +99,16 @@ public class Persian extends Language {
         yml.addDefault(Messages.COMMAND_NOT_ALLOWED_IN_GAME, "{prefix}&cShoma nemitavanid inkar ra zamani ke dar game hastid anjam dahid.");
         yml.addDefault(Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS, "{prefix}&cCommand yaft nashod ya shoma dastresi lazem ro nadarid!");
         yml.addDefault(Messages.COMMAND_PARTY_HELP, Arrays.asList("&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
-                "&aDastoorat Party:", "&e/party help &7- &bPayam help (hamin payam) ra neshan midahad", "&e/party invite <player> &7- &bInvite dadan be player mored nazar",
+                "&aDastoorat Party:",
+                "&e/party help &7- &bPayam help (hamin payam) ra neshan midahad",
+                "&e/party invite <player> &7- &bInvite dadan be player mored nazar",
                 "&e/party leave &7- &bKharej shodan az party feli",
                 "&e/party remove <player> &7- &bHazf player az party",
-                "&e/party accept <player> &7- &bGhabool kardan yek invite", "&e/party disband &7- &bAz bein bordan party"));
+                "&e/party info &7- &bShow party members and owner",
+                "&e/party promote <player> &7- &bTransfer party ownership",
+                "&e/party accept <player> &7- &bGhabool kardan yek invite",
+                "&e/party disband &7- &bAz bein bordan party")
+        );
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_USAGE, "{prefix}&eRavesh Estefade: &7/party invite <player>");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE, "{prefix}&7{player} &eonline nist!");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_SENT, "{prefix}&eInvite be &7{player} &eersal shod&6.");
@@ -120,6 +127,12 @@ public class Persian extends Language {
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_USAGE, "{prefix}&7Ravesh Estefade: &e/party remove <player>");
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_SUCCESS, "{prefix}&7{player} &eaz party hazf shod,");
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_DENIED_TARGET_NOT_PARTY_MEMBER, "{prefix}&7{player} &edakhel party shoma nist!");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_SUCCESS, "{prefix}&eYou successfully promoted {player} to owner");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_OWNER, "{prefix}&eYou have been promoted to party owner");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_NEW_OWNER, "{prefix}&7 &e{player} has been promoted to owner");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n{prefix}&eOwner of the party is: &7{owner}");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS, "{prefix}&eParty members:");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYER, "&7{player}");
         yml.addDefault(Messages.COMMAND_FORCESTART_NOT_IN_GAME, "§c▪ §7Shoma bazi nemikonid!");
         yml.addDefault(Messages.COMMAND_FORCESTART_SUCCESS, "§c▪ §7Shomaresh makoos kootah shod!");
         yml.addDefault(Messages.COMMAND_FORCESTART_NO_PERM, "{prefix}&7Shoma nemitavanid in arena ro forcestart konid.\n§7Lotfan baraye daryaft ghabeliat haye vizhe server ro donate konid.");
@@ -185,11 +198,11 @@ public class Persian extends Language {
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_RESTARTING, new ArrayList<>());
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_PLAYING, Arrays.asList("{teamColor}&l{teamLetter} &r{teamColor}", "{team} ", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}"));
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_PLAYING, new ArrayList<>());
-        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_STARTING, Arrays.asList("{vPrefix} "));
+        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_STARTING, List.of("{vPrefix} "));
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_STARTING, new ArrayList<>());
-        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_WAITING, Arrays.asList("{vPrefix} "));
+        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_WAITING, List.of("{vPrefix} "));
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_WAITING, new ArrayList<>());
-        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_LOBBY, Arrays.asList("{vPrefix} "));
+        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_LOBBY, List.of("{vPrefix} "));
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_LOBBY, new ArrayList<>());
 
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_DATE, "dd/MM/yy");
@@ -232,6 +245,7 @@ public class Persian extends Language {
         yml.addDefault(Messages.INTERACT_BED_DESTROY_SUBTITLE_ANNOUNCEMENT, "&fShoma Digar Respawn Nakhahid Shod.");
         yml.addDefault(Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM, "&f&lBED AZ BEYN RAFT > &7Bed Shoma Tavasote {PlayerColor}{PlayerName} &7Az Beyn Raft");
         yml.addDefault(Messages.INTERACT_CHEST_CANT_OPEN_TEAM_ELIMINATED, "&cShoma Nemitavanid In Chest Ro Be Dalil Inke Player Haye Team Hanoz Namordan Baz Konid!");
+        yml.addDefault(Messages.INTERACT_INVISIBILITY_REMOVED_DAMGE_TAKEN, "&cYou are no longer invisible because you have taken damage!");
         yml.addDefault(Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL, "{PlayerColor}{PlayerName} &7Dakhel Void Oftad.");
         yml.addDefault(Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL, "{PlayerColor}{PlayerName} &7Dakhel Void Oftad. &b&lFINAL KILL!");
         yml.addDefault(Messages.PLAYER_DIE_KNOCKED_IN_VOID_REGULAR_KILL, "{PlayerColor}{PlayerName} &7Tavasote {KillerColor}{KillerName} &7Be Dakhel Void Part Shod.");
@@ -337,20 +351,20 @@ public class Persian extends Language {
         addDefaultStatsMsg(yml, "last-play", "&6Akharin Bazi Anjam Shode", "&f{lastPlay}");
         addDefaultStatsMsg(yml, "games-played", "&6Tedad Bazi Anjam Shode", "&f{gamesPlayed}");
 
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fMap: &a{map}", "", "&fPlayer Ha: &a{on}/{max}", "", "&fDar Entezar...", "", "§fNo: &a{group}", "&fVersion: &7{version}", "", "&e{server_ip}"));
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fMap: &a{map}", "", "&fPlayer Ha: &a{on}/{max}", "", "&fShoroo dar &a{time}s", "", "§fNo: &a{group}", "&fVersion: &7{version}", "", "&e{server_ip}"));
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{server_ip}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fMap: &a{map}", "", "&fPlayer Ha: &a{on}/{max}", "", "&fDar Entezar...", "", "§fNo: &a{group}", "&fVersion: &7{version}", "", "&e{serverIp}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fMap: &a{map}", "", "&fPlayer Ha: &a{on}/{max}", "", "&fShoroo dar &a{time}s", "", "§fNo: &a{group}", "&fVersion: &7{version}", "", "&e{serverIp}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{serverIp}"));
 
-        yml.addDefault("scoreboard.Doubles.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} dar &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{server_ip}"));
+        yml.addDefault("scoreboard.Doubles.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} dar &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{serverIp}"));
 
         yml.addDefault("scoreboard.3v3v3v3.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} dar &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}",
-                "", "&fKills: &a{kills}", "&fFinal Kills: &a{finalKills}", "&fBeds Broken: &a{beds}", "", "&e{server_ip}"));
+                "", "&fKills: &a{kills}", "&fFinal Kills: &a{finalKills}", "&fBeds Broken: &a{beds}", "", "&e{serverIp}"));
 
         yml.addDefault("scoreboard.4v4v4v4.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} dar &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}",
-                "", "&fKills: &a{kills}", "&fFinal Kills: &a{finalKills}", "&fBeds Broken: &a{beds}", "", "&e{server_ip}"));
+                "", "&fKills: &a{kills}", "&fFinal Kills: &a{finalKills}", "&fBeds Broken: &a{beds}", "", "&e{serverIp}"));
 
         yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars,&4&lB&6edWars,&6&lB&4e&6dWars,&6&lBe&4d&6Wars,&6&lBed&4W&6ars,&6&lBedW&4a&6rs,&6&lBedWa&4r&6s,&6&lBedWar&4s,&6&lBedWars", "&fLevel Shoma: {level}", "", "&fPishraft: &a{currentXp}&7/&b{requiredXp}", "{progress}", "", "&7{player}", "", "&fCoins: &a{money}"
-                , "", "&fMajmoo Win: &a{wins}", "&fMajmoo Kill: &a{kills}", "", "&e{server_ip}"));
+                , "", "&fMajmoo Win: &a{wins}", "&fMajmoo Kill: &a{kills}", "", "&e{serverIp}"));
 
         //
         yml.addDefault(Messages.SHOP_INDEX_NAME, "&8Kharid Sari");

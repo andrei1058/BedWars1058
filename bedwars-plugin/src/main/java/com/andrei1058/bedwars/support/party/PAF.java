@@ -6,6 +6,7 @@ import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +14,7 @@ import java.util.List;
 public class PAF implements Party {
     //Party and Friends for Spigot Support by JT122406
     private PlayerParty getPAFParty(Player p) {
-        OnlinePAFPlayer pafPlayer = PAFPlayerManager.getInstance().getPlayer(p);
-        return PartyManager.getInstance().getParty(pafPlayer);
+        return PartyManager.getInstance().getParty(PAFPlayerManager.getInstance().getPlayer(p));
     }
 
     @Override
@@ -64,8 +64,7 @@ public class PAF implements Party {
 
     @Override
     public void addMember(Player owner, Player member) {
-        OnlinePAFPlayer pafPlayer = PAFPlayerManager.getInstance().getPlayer(owner);
-        PlayerParty party = pafPlayer.getParty();
+        PlayerParty party = PAFPlayerManager.getInstance().getPlayer(owner).getParty();
         party.setPrivateState(false);
         party.addPlayer(PAFPlayerManager.getInstance().getPlayer(member));
         party.setPrivateState(true);
@@ -73,8 +72,7 @@ public class PAF implements Party {
 
     @Override
     public void removeFromParty(Player member) {
-        PlayerParty p = PAFPlayerManager.getInstance().getPlayer(member).getParty();
-        p.leaveParty(PAFPlayerManager.getInstance().getPlayer(member));
+        PAFPlayerManager.getInstance().getPlayer(member).getParty().leaveParty(PAFPlayerManager.getInstance().getPlayer(member));
     }
 
     @Override
@@ -92,8 +90,17 @@ public class PAF implements Party {
 
     @Override
     public void removePlayer(Player owner, Player target) {
-        PlayerParty p = getPAFParty(owner);
-        p.leaveParty(PAFPlayerManager.getInstance().getPlayer(target));
+        getPAFParty(owner).leaveParty(PAFPlayerManager.getInstance().getPlayer(target));
+    }
+
+    @Override
+    public Player getOwner(Player member) {
+        return getPAFParty(member).getLeader().getPlayer();
+    }
+
+    @Override
+    public void promote(@NotNull Player owner, @NotNull Player target) {
+        getPAFParty(owner).setLeader(PAFPlayerManager.getInstance().getPlayer(target));
     }
 
     @Override
