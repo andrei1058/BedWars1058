@@ -166,6 +166,7 @@ public class PartyCommand extends BukkitCommand {
                 }
                 if (args.length == 1){
                     this.sendPartyCmds(p);
+                    return true;
                 }
                 Player target1 = Bukkit.getPlayer(args[1]);
                 if (!getParty().isMember(p, target1)) {
