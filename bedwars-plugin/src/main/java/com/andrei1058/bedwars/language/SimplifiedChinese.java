@@ -238,6 +238,7 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.INTERACT_BED_DESTROY_SUBTITLE_ANNOUNCEMENT, "&f你不能再重生！");
         yml.addDefault(Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM, "&f&l床被破坏 > &7你的床被{PlayerColor}{PlayerName}&7破坏了！\n");
         yml.addDefault(Messages.INTERACT_CHEST_CANT_OPEN_TEAM_ELIMINATED, "&c此队伍还未被团灭，因此你不能打开该团队箱子！");
+        yml.addDefault(Messages.INTERACT_INVISIBILITY_REMOVED_DAMGE_TAKEN, "&c你因受到伤害而被迫退出隐身！");
         yml.addDefault(Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL, "{PlayerColor}{PlayerName}&7掉进了虚空。");
         yml.addDefault(Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL, "{PlayerColor}{PlayerName}&7掉进了虚空。 &b&l最终击杀！");
         yml.addDefault(Messages.PLAYER_DIE_KNOCKED_IN_VOID_REGULAR_KILL, "{PlayerColor}{PlayerName}&7被{KillerColor}{KillerName}&7丢进了虚空。");
@@ -343,21 +344,21 @@ public class SimplifiedChinese extends Language {
         addDefaultStatsMsg(yml, "last-play", "&6上次游玩", "&f{lastPlay}");
         addDefaultStatsMsg(yml, "games-played", "&6总游玩场数", "&f{gamesPlayed}");
 
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&l起床战争", "&7{date} &8{server}", "", "&f地图：&a{map}", "", "&f玩家数：&a{on}/{max}", "", "&f等待中...", "", "&f模式：&a{group}", "&f版本：&7{version}", "", "&e{server_ip}"));
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&l起床战争", "&7{date} &8{server}", "", "&f地图：&a{map}", "", "&f玩家数：&a{on}/{max}", "", "&f &a{time} &f秒后开始", "", "&f模式：&a{group}", "&f模式：&7{version}", "", "&e{server_ip}"));
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList("&e&l起床战争", "&7{date}", "", "&f{nextEvent} - &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{server_ip}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&l起床战争", "&7{date} &8{server}", "", "&f地图：&a{map}", "", "&f玩家数：&a{on}/{max}", "", "&f等待中...", "", "&f模式：&a{group}", "&f版本：&7{version}", "", "&e{serverIp}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&l起床战争", "&7{date} &8{server}", "", "&f地图：&a{map}", "", "&f玩家数：&a{on}/{max}", "", "&f &a{time} &f秒后开始", "", "&f模式：&a{group}", "&f模式：&7{version}", "", "&e{serverIp}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList("&e&l起床战争", "&7{date}", "", "&f{nextEvent} - &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{serverIp}"));
 
         yml.addDefault("scoreboard.Doubles.playing", Arrays.asList("&e&l起床战争", "&7{date}", "", "&f{nextEvent} - &a{time}", "",
-                "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{server_ip}"));
+                "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{serverIp}"));
 
         yml.addDefault("scoreboard.3v3v3v3.playing", Arrays.asList("&e&l起床战争", "&7{date}", "", "&f{nextEvent} - &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}",
-                "", "&f击杀：&a{kills}", "&f最终击杀：&a{finalKills}", "&f破坏床：&a{beds}", "", "&e{server_ip}"));
+                "", "&f击杀：&a{kills}", "&f最终击杀：&a{finalKills}", "&f破坏床：&a{beds}", "", "&e{serverIp}"));
 
         yml.addDefault("scoreboard.4v4v4v4.playing", Arrays.asList("&e&l起床战争", "&7{date}", "", "&f{nextEvent} - &a{time}", "", "{team}", "{team}", "{team}", "{team}",
-                "", "&f击杀：&a{kills}", "&f最终击杀：&a{finalKills}", "&f破坏床：&a{beds}", "", "&e{server_ip}"));
+                "", "&f击杀：&a{kills}", "&f最终击杀：&a{finalKills}", "&f破坏床：&a{beds}", "", "&e{serverIp}"));
 
         yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&l起床战争,&4&l起&6&l床战争,&6&l起&4&l床&6&l战争,&6&l起床&4&l战&6&l争,&6&l起床战&4&l争,&6&l起床战争",
-                "&f等级：{level}", "", "&f进度：&a{currentXp}&7/&b{requiredXp}", "{progress}", "", "&7{player}", "", "&f金币：&a{money}", "", "&f总胜场：&a{wins}", "&f总击杀：&a{kills}", "", "&e{server_ip}"));
+                "&f等级：{level}", "", "&f进度：&a{currentXp}&7/&b{requiredXp}", "{progress}", "", "&7{player}", "", "&f金币：&a{money}", "", "&f总胜场：&a{wins}", "&f总击杀：&a{kills}", "", "&e{serverIp}"));
 
         yml.addDefault(Messages.SHOP_INDEX_NAME, "&8快速购买");
         yml.addDefault(Messages.SHOP_QUICK_ADD_NAME, "&8添加到快速购买...");

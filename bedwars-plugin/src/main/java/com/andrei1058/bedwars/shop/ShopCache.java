@@ -213,7 +213,7 @@ public class ShopCache {
     public List<CachedItem> getCachedPermanents() {
         List<CachedItem> ci = new ArrayList<>();
         for (CachedItem c : cachedItems){
-            if (c.getCc().isPermanent() && !c.getCc().isDowngradable()){
+            if (c.getCc().isPermanent()){
                 ci.add(c);
             }
         }
