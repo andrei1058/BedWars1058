@@ -117,6 +117,8 @@ public class BwSidebar implements ISidebar {
         String genericTeamFormat = language.m(Messages.FORMATTING_SCOREBOARD_TEAM_GENERIC);
 
         for (String line : lineArray) {
+            // convert old placeholders
+            line = line.replace("{server_ip}", "{serverIp}");
 
             // generic team placeholder {team}
             if (arena != null) {
