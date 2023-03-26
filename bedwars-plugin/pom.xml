@@ -232,43 +232,43 @@
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-base</artifactId>
-            <version>23.2</version>
+            <version>23.3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-eight</artifactId>
-            <version>23.2</version>
+            <version>23.3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-twelve</artifactId>
-            <version>23.2</version>
+            <version>23.3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-sixteen</artifactId>
-            <version>23.2</version>
+            <version>23.3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-seventeen</artifactId>
-            <version>23.2</version>
+            <version>23.3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-eighteen</artifactId>
-            <version>23.2</version>
+            <version>23.3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-nineteen</artifactId>
-            <version>23.2</version>
+            <version>23.3</version>
             <scope>compile</scope>
         </dependency>
         <!--        End of Sidebar LIB-->
