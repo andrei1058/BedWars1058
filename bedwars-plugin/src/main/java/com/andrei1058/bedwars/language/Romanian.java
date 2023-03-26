@@ -113,11 +113,11 @@ public class Romanian extends Language {
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_USAGE, "{prefix}&7Folosire: &e/party remove <jucator>");
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_SUCCESS, "{prefix}&7{player} &ea fost scos din party.");
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_DENIED_TARGET_NOT_PARTY_MEMBER, "{prefix}&7{player} &enu este in acest party!");
-        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_SUCCESS, "{prefix}&7 &eAi promovat cu succes pe {player} ca proprietar");
-        yml.addDefault(Messages.COMMAND_PARTY_OWNER, "{prefix} &eAi fost promovat ca proprietar al petrecerii");
-        yml.addDefault(Messages.COMMAND_PARTY_NEW_OWNER, "{prefix}&7 &e{player} a fost promovat ca proprietar");
-        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "{prefix} &eProprietarul petrecerii este: &7{owner}");
-        yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS,"{prefix} &eMembrii petrecerii sunt : ");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_SUCCESS, "{prefix}&eAi promovat cu succes pe {player} ca proprietar");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_OWNER, "{prefix}&eAi fost promovat ca proprietar al petrecerii");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_NEW_OWNER, "{prefix}&7 &e{player} a fost promovat ca proprietar");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n{prefix}&eProprietarul petrecerii este: &7{owner}");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS,"{prefix}&eMembrii sunt:");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYER, "&7{player}");
         yml.addDefault(Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS, "{prefix}&cComanda nu a fost gasita sau nu ai permisiunea!");
         yml.addDefault(Messages.COMMAND_FORCESTART_NOT_IN_GAME, "§c▪ §7Nu esti in joc!");

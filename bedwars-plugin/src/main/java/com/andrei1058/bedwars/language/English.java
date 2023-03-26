@@ -84,10 +84,16 @@ public class English extends Language {
         yml.addDefault(Messages.COMMAND_NOT_ALLOWED_IN_GAME, "{prefix}&cYou can't do this during the game.");
         yml.addDefault(Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS, "{prefix}&cCommand not found or you don't have permission!");
         yml.addDefault(Messages.COMMAND_PARTY_HELP, Arrays.asList("&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
-                "&aParty Commands:", "&e/party help &7- &bPrints this help message", "&e/party invite <player> &7- &bInvites the player to your party",
+                "&aParty Commands:",
+                "&e/party help &7- &bPrints this help message",
+                "&e/party invite <player> &7- &bInvites the player to your party",
                 "&e/party leave &7- &bLeaves the current party",
                 "&e/party remove <player> &7- &bRemove the player from the party",
-                "&e/party accept <player> &7- &bAccept a party invite", "&e/party disband &7- &bDisbands the party"));
+                "&e/party info &7- &bShow party members and owner",
+                "&e/party promote <player> &7- &bTransfer party ownership",
+                "&e/party accept <player> &7- &bAccept a party invite",
+                "&e/party disband &7- &bDisbands the party")
+        );
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_USAGE, "{prefix}&eUsage: &7/party invite <player>");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE, "{prefix}&7{player} &eis not online!");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_SENT, "{prefix}&eInvite sent to &7{player}&6.");
@@ -106,11 +112,11 @@ public class English extends Language {
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_USAGE, "{prefix}&7Usage: &e/party remove <player>");
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_SUCCESS, "{prefix}&7{player} &ewas removed from the party,");
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_DENIED_TARGET_NOT_PARTY_MEMBER, "{prefix}&7{player} &eis not in your party!");
-        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_SUCCESS, "{prefix}&7 &eYou successfully promoted {player} to owner");
-        yml.addDefault(Messages.COMMAND_PARTY_OWNER, "{prefix} &eYou have been promoted to party owner");
-        yml.addDefault(Messages.COMMAND_PARTY_NEW_OWNER, "{prefix}&7 &e{player} has been promoted to owner");
-        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "{prefix} &eOwner of the party is: &7{owner}");
-        yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS,"{prefix} &eParty Members are : ");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_SUCCESS, "{prefix}&eYou successfully promoted {player} to owner");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_OWNER, "{prefix}&eYou have been promoted to party owner");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_NEW_OWNER, "{prefix}&7 &e{player} has been promoted to owner");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n{prefix}&eOwner of the party is: &7{owner}");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS, "{prefix}&eParty members:");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYER, "&7{player}");
         yml.addDefault(Messages.COMMAND_FORCESTART_NOT_IN_GAME, "§c▪ §7You're not playing!");
         yml.addDefault(Messages.COMMAND_FORCESTART_SUCCESS, "§c▪ §7Countdown shortened!");
@@ -185,18 +191,18 @@ public class English extends Language {
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_LOBBY, new ArrayList<>());
 
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_LOBBY, "&6{serverIp}\n");
-        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_WAITING,"&a{serverIp}\n");
+        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_WAITING, "&a{serverIp}\n");
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_STARTING, "&6{serverIp}\n");
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_PLAYING, "&d{serverIp}\n");
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_RESTARTING, "&c{serverIp}\n");
-        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR,"&9{serverIp}\n");
+        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR, "&9{serverIp}\n");
 
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_LOBBY, "\n&6{serverIp}");
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_WAITING, "\n&a{serverIp}");
-        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_STARTING,"\n&6{serverIp}");
+        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_STARTING, "\n&6{serverIp}");
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_PLAYING, "\n&d{serverIp}");
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_RESTARTING, "\n&c{serverIp}");
-        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR,"\n&9{serverIp}");
+        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR, "\n&9{serverIp}");
 
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_DATE, "dd/MM/yy");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TEAM_GENERIC, "{TeamColor}{TeamLetter}&f {TeamName}: {TeamStatus}");

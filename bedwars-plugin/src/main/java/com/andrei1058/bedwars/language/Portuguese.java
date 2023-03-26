@@ -119,11 +119,11 @@ public class Portuguese extends Language {
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_USAGE, "{prefix}&7Use: &e/party remove <player>");
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_SUCCESS, "{prefix}&7{player} &efoi removido da party.");
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_DENIED_TARGET_NOT_PARTY_MEMBER, "{prefix}&7{player} &enão está na sua party!");
-        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_SUCCESS, "{prefix}&7 &eVocê promoveu com sucesso {player} a dono");
-        yml.addDefault(Messages.COMMAND_PARTY_OWNER, "{prefix} &eVocê foi promovido a dono do grupo");
-        yml.addDefault(Messages.COMMAND_PARTY_NEW_OWNER, "{prefix}&7 &e{player} foi promovido a dono");
-        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "{prefix} &eO dono do grupo é: &7{owner}");
-        yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS,"{prefix} &eMembros do grupo são: ");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_SUCCESS, "{prefix}&eVocê promoveu com sucesso {player} a dono");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_OWNER, "{prefix}&eVocê foi promovido a dono do grupo");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_NEW_OWNER, "{prefix}&7 &e{player} foi promovido a dono");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n{prefix}&eO dono do grupo é: &7{owner}");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS,"{prefix}&eMembros do grupo são:");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYER, "&7{player}");
         yml.addDefault(Messages.COMMAND_FORCESTART_NOT_IN_GAME, "§c▪ §7Você não está jogando!");
         yml.addDefault(Messages.COMMAND_FORCESTART_SUCCESS, "§c▪ §7Contagem regressiva encurtada!");

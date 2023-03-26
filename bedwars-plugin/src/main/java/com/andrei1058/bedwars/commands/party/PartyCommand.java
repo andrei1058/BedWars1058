@@ -164,6 +164,9 @@ public class PartyCommand extends BukkitCommand {
                     p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INSUFFICIENT_PERMISSIONS));
                     return true;
                 }
+                if (args.length == 1){
+                    this.sendPartyCmds(p);
+                }
                 Player target1 = Bukkit.getPlayer(args[1]);
                 if (!getParty().isMember(p, target1)) {
                     p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_REMOVE_DENIED_TARGET_NOT_PARTY_MEMBER).replace("{player}", args[1]));
@@ -174,9 +177,9 @@ public class PartyCommand extends BukkitCommand {
                     if (p1.equals(p)) {
                         p1.sendMessage(getMsg(p1, Messages.COMMAND_PARTY_PROMOTE_SUCCESS).replace("{player}", args[1]));
                     } else if (p1.equals(target1)) {
-                        p1.sendMessage(getMsg(p1, Messages.COMMAND_PARTY_OWNER));
+                        p1.sendMessage(getMsg(p1, Messages.COMMAND_PARTY_PROMOTE_OWNER));
                     } else {
-                        p1.sendMessage(getMsg(p1, Messages.COMMAND_PARTY_NEW_OWNER).replace("{player}", args[1]));
+                        p1.sendMessage(getMsg(p1, Messages.COMMAND_PARTY_PROMOTE_NEW_OWNER).replace("{player}", args[1]));
                     }
                 }
                 break;

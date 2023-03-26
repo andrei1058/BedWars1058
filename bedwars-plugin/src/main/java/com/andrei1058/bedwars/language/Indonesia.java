@@ -119,11 +119,11 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_USAGE, "{prefix}&7Gunakan: &e/party remove <pemain>");
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_SUCCESS, "{prefix}&7{player} &etelah dikeluarkan dari party,");
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_DENIED_TARGET_NOT_PARTY_MEMBER, "{prefix}&7{player} &etidak ada di party!");
-        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_SUCCESS, "{prefix}&7 &eYou successfully promoted {player} to owner");
-        yml.addDefault(Messages.COMMAND_PARTY_OWNER, "{prefix} &eYou have been promoted to party owner");
-        yml.addDefault(Messages.COMMAND_PARTY_NEW_OWNER, "{prefix}&7 &e{player} has been promoted to owner");
-        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "{prefix} &eOwner of the party is: &7{owner}");
-        yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS,"{prefix} &eParty Members are : ");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_SUCCESS, "{prefix}&eYou successfully promoted {player} to owner");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_OWNER, "{prefix}&eYou have been promoted to party owner");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_NEW_OWNER, "{prefix}&7 &e{player} has been promoted to owner");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n{prefix}&eOwner of the party is: &7{owner}");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS,"{prefix}&eParty members:");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYER, "&7{player}");
         yml.addDefault(Messages.COMMAND_FORCESTART_NOT_IN_GAME, "§c▪ §7Kamu sedang tidak bermain!");
         yml.addDefault(Messages.COMMAND_FORCESTART_SUCCESS, "§c▪ §7Hitung mundur dipersingkat!");
