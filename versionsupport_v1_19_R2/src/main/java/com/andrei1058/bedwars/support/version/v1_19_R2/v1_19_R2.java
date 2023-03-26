@@ -769,6 +769,7 @@ public class v1_19_R2 extends VersionSupport {
 
     public ItemStack getNmsItemCopy(org.bukkit.inventory.ItemStack itemStack) {
         ItemStack i = CraftItemStack.asNMSCopy(itemStack);
+        getPlugin().getLogger().info("getNmsItemCopy(): itemStack: " + i);
         if (null == i) {
             throw new RuntimeException("Cannot convert given item to a NMS item");
         }
