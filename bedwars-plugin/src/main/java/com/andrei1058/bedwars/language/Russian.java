@@ -401,10 +401,16 @@ public class Russian extends Language{
 
         /* party commands */
         yml.addDefault(Messages.COMMAND_PARTY_HELP, Arrays.asList("&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
-                "&aКоманды группы:", "&e/party help &7- &bПоказывает все доступные команды", "&e/party invite <player> &7- &bПригласить игрока в вашу группу",
+                "&aКоманды группы:",
+                "&e/party help &7- &bПоказывает все доступные команды",
+                "&e/party invite <player> &7- &bПригласить игрока в вашу группу",
+                "&e/party info &7- &bShow party members and owner",
+                "&e/party promote <player> &7- &bTransfer party ownership",
                 "&e/party leave &7- &bВыйти из группы",
                 "&e/party remove <player> &7- &bВыгнать игрока из группы",
-                "&e/party accept <player> &7- &bПринять приглашение в группу", "&e/party disband &7- &bРасфирмировать текующую группу"));
+                "&e/party accept <player> &7- &bПринять приглашение в группу",
+                "&e/party disband &7- &bРасфирмировать текующую группу")
+        );
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_USAGE, "{prefix}&eИспользуйте: &7/party invite <player>");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE, "{prefix}&7{player} &eне онлайн!");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_SENT, "{prefix}&eПриглашение отправлено &7{player}&6.");
@@ -422,6 +428,12 @@ public class Russian extends Language{
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_USAGE, "{prefix}&7Используйте: &e/party remove <player>");
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_SUCCESS, "{prefix}&7{player} &eбыл удален из группы.");
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_DENIED_TARGET_NOT_PARTY_MEMBER, "{prefix}&7{player} &eis not in your party!");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_SUCCESS, "{prefix}&eВы успешно повысили {player} до владельца");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_OWNER, "{prefix}&eВы были повышены до владельца группы");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_NEW_OWNER, "{prefix}&7 &e{player} был повышен до владельца группы");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n{prefix}&eВладелец группы: &7{owner}");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS,"{prefix}&eУчастники группы:");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYER, "&7{player}");
         yml.addDefault(Messages.NEXT_EVENT_BEDS_DESTROY, "&cУничтожение кроватей");
         yml.addDefault(Messages.NEXT_EVENT_DIAMOND_UPGRADE_II, "&fАлмаз II");
         yml.addDefault(Messages.NEXT_EVENT_DIAMOND_UPGRADE_III, "&fАлмаз III");
