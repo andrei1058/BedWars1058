@@ -54,6 +54,9 @@ public class Language extends ConfigManager {
     public void setPrefix(String prefix) {
         this.prefix = prefix;
     }
+    public void setPrefixStatic(String prefix) {
+        this.prefixStatic = prefix;
+    }
 
     public void setPrefixStatic(String prefix) {
         prefixStatic = prefix;

@@ -88,6 +88,7 @@ public class BwSidebar implements ISidebar {
                 handle.setTitle(title);
                 lines.forEach(l -> handle.addLine(l));
             }, 2L);
+            handlePlayerList();
         }
         handlePlayerList();
         setHeaderFooter();
@@ -654,6 +655,12 @@ public class BwSidebar implements ISidebar {
 
         // if tab formatting is disabled in restarting
         return arena.getStatus() != GameState.restarting || !config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_RESTARTING);
+    }
+
+    @Override
+    public boolean registerPersistentPlaceholder(PlaceholderProvider placeholderProvider) {
+        this.persistentProviders.add(placeholderProvider);
+        return true;
     }
 
     @Override
