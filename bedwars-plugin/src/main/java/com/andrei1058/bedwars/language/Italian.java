@@ -94,10 +94,16 @@ public class Italian extends Language {
         yml.addDefault(Messages.COMMAND_LEAVE_MSG, "{prefix}&7{player} &esi è disconnesso!");
 
         yml.addDefault(Messages.COMMAND_PARTY_HELP, Arrays.asList("&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
-                "&aComandi del party:", "&e/party help &7- &bStampa questa lista di comandi", "&e/party invite <player> &7- &bInvita il giocatore nel tuo party",
+                "&aComandi del party:",
+                "&e/party help &7- &bStampa questa lista di comandi",
+                "&e/party invite <player> &7- &bInvita il giocatore nel tuo party",
                 "&e/party leave &7- &bLascia il party attuale",
                 "&e/party remove <player> &7- &bRimuovi il giocatore dal party",
-                "&e/party accept <player> &7- &bAccetta un invito al party", "&e/party disband &7- &bScioglie il tuo party"));
+                "&e/party info &7- &bShow party members and owner",
+                "&e/party promote <player> &7- &bTransfer party ownership",
+                "&e/party accept <player> &7- &bAccetta un invito al party",
+                "&e/party disband &7- &bScioglie il tuo party")
+        );
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_USAGE, "{prefix}&eUtilizzo: &7/party invite <player>");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE, "{prefix}&7{player} &enon è online!");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_SENT, "{prefix}&eInvito inviato a &7{player}&6.");

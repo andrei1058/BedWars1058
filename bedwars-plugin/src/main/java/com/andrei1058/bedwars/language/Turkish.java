@@ -99,10 +99,16 @@ public class Turkish extends Language {
         yml.addDefault(Messages.COMMAND_NOT_ALLOWED_IN_GAME, "{prefix}&cBu komutu oyun sırasında kullanamazsın!");
         yml.addDefault(Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS, "{prefix}&cBu komut bulunamadı veya yetkin yok!");
         yml.addDefault(Messages.COMMAND_PARTY_HELP, Arrays.asList("&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
-                "&aParti Komutları:", "&e/party help &7- &bBu mesajı yazdırır", "&e/party invite <player> &7- &bOyuncuyu partine davet eder",
+                "&aParti Komutları:",
+                "&e/party help &7- &bBu mesajı yazdırır",
+                "&e/party invite <player> &7- &bOyuncuyu partine davet eder",
                 "&e/party leave &7- &bPartiden ayrılır",
+                "&e/party info &7- &bShow party members and owner",
+                "&e/party promote <player> &7- &bTransfer party ownership",
                 "&e/party remove <player> &7- &bOyuncuyu partiden kovar",
-                "&e/party accept <player> &7- &bParti davetini kabul eder", "&e/party disband &7- &bPartiyi dağıtır"));
+                "&e/party accept <player> &7- &bParti davetini kabul eder",
+                "&e/party disband &7- &bPartiyi dağıtır")
+        );
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_USAGE, "{prefix}&eKullanım: &7/party invite <player>");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE, "{prefix}&7{player} &eoyunda değil!");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_SENT, "{prefix}&7{player}&6 adlı oyuncuya parti daveti gönderildi.");

@@ -84,10 +84,16 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.COMMAND_NOT_ALLOWED_IN_GAME, "{prefix}&c你在游戏中不可以这么做。");
         yml.addDefault(Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS, "{prefix}&c指令无效或你没有权限！");
         yml.addDefault(Messages.COMMAND_PARTY_HELP, Arrays.asList("&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
-                "&a队伍指令：", "&e/party help &7- &b查看该提示", "&e/party invite <玩家> &7- &b邀请一位玩家到你的队伍",
+                "&a队伍指令：",
+                "&e/party help &7- &b查看该提示",
+                "&e/party invite <玩家> &7- &b邀请一位玩家到你的队伍",
                 "&e/party leave &7- &b离开当前队伍",
+                "&e/party info &7- &bShow party members and owner",
+                "&e/party promote <player> &7- &bTransfer party ownership",
                 "&e/party remove <玩家> &7- &b将玩家移出队伍",
-                "&e/party accept <玩家> &7- &b接受队伍邀请", "&e/party disband &7- &bD解散队伍"));
+                "&e/party accept <玩家> &7- &b接受队伍邀请",
+                "&e/party disband &7- &bD解散队伍")
+        );
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_USAGE, "{prefix}&e用法：&7/party invite <玩家>");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE, "{prefix}&7{player}&e不在线！");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_SENT, "{prefix}&e已向&7{player}&e发送邀请&6。");

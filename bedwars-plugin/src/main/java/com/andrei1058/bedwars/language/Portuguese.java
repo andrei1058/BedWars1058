@@ -97,10 +97,16 @@ public class Portuguese extends Language {
         yml.addDefault(Messages.COMMAND_NOT_ALLOWED_IN_GAME, "{prefix}&cVocê não pode fazer isso durante o jogo.");
         yml.addDefault(Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS, "{prefix}&cComando não encontrado ou você não tem permissão!");
         yml.addDefault(Messages.COMMAND_PARTY_HELP, Arrays.asList("&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
-                "&aComandos da Party:", "&e/party help &7- &bIrá mostrar essa mensagem", "&e/party invite <player> &7- &bConvida o jogador para sua party",
+                "&aComandos da Party:",
+                "&e/party help &7- &bIrá mostrar essa mensagem",
+                "&e/party invite <player> &7- &bConvida o jogador para sua party",
                 "&e/party leave &7- &bSaia da sua party",
+                "&e/party info &7- &bShow party members and owner",
+                "&e/party promote <player> &7- &bTransfer party ownership",
                 "&e/party remove <player> &7- &bRemova o jogador da party",
-                "&e/party accept <player> &7- &bAceite um pedido de party", "&e/party disband &7- &bRecuse um pedido de party"));
+                "&e/party accept <player> &7- &bAceite um pedido de party",
+                "&e/party disband &7- &bRecuse um pedido de party")
+        );
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_USAGE, "{prefix}&eUse: &7/party invite <player>");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE, "{prefix}&7{player} &enão está online.");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_SENT, "{prefix}&ePedido enviado para &7{player}&6.");

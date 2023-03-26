@@ -97,10 +97,16 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.COMMAND_NOT_ALLOWED_IN_GAME, "{prefix}&cAnda tidak dapat melakukan ini selama pertandingan.");
         yml.addDefault(Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS, "{prefix}&cPerintah tidak ditemukan atau Anda tidak memiliki izin!");
         yml.addDefault(Messages.COMMAND_PARTY_HELP, Arrays.asList("&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
-                "&aPerintah Party:", "&e/party help &7- &bCetak pesan bantuan ini", "&e/party invite <player> &7- &bMengundang pemain ke party Anda",
+                "&aPerintah Party:",
+                "&e/party help &7- &bCetak pesan bantuan ini",
+                "&e/party invite <player> &7- &bMengundang pemain ke party Anda",
                 "&e/party leave &7- &bMeninggalkan party yang anda masuki",
+                "&e/party info &7- &bShow party members and owner",
+                "&e/party promote <player> &7- &bTransfer party ownership",
                 "&e/party remove <player> &7- &bKeluarkan pemain dari party",
-                "&e/party accept <player> &7- &bTerima undangan party", "&e/party disband &7- &bBubarkan party"));
+                "&e/party accept <player> &7- &bTerima undangan party",
+                "&e/party disband &7- &bBubarkan party")
+        );
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_USAGE, "{prefix}&eGunakan: &7/party invite <pemain>");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE, "{prefix}&7{player} &eis not online!");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_SENT, "{prefix}&eInvite sent to &7{player}&6.");

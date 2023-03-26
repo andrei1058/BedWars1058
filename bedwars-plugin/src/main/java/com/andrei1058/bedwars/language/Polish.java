@@ -93,10 +93,16 @@ public class Polish extends Language{
         yml.addDefault(Messages.COMMAND_JOIN_PLAYER_JOIN_MSG, "{prefix}&7{player} &edolaczyl do gry (&b{on}&e/&b{max}&e)!");
         yml.addDefault(Messages.COMMAND_LEAVE_MSG, "{prefix}&7{player} &eopuscil gre!");
         yml.addDefault(Messages.COMMAND_PARTY_HELP, Arrays.asList("&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
-                "&aParty Commands:", "&e/party help &7- &bPokazuje ta wiadomosc", "&e/party invite <player> &7- &bZaprasza gracza do twojego party",
+                "&aParty Commands:",
+                "&e/party help &7- &bPokazuje ta wiadomosc",
+                "&e/party invite <player> &7- &bZaprasza gracza do twojego party",
                 "&e/party leave &7- &bOpuszczasz obecne party",
+                "&e/party info &7- &bShow party members and owner",
+                "&e/party promote <player> &7- &bTransfer party ownership",
                 "&e/party remove <player> &7- &bWyrzuca gracza z twojego party",
-                "&e/party accept <player> &7- &bAkceptuje zaproszenie do party", "&e/party disband &7- &bRozwiazuje party"));
+                "&e/party accept <player> &7- &bAkceptuje zaproszenie do party",
+                "&e/party disband &7- &bRozwiazuje party")
+        );
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_USAGE, "{prefix}&eUzyj: &7/party invite <nick>");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE, "{prefix}&7{player} &ejest offline!");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_SENT, "{prefix}&eZaprosiles gracza &7{player}&6.");
