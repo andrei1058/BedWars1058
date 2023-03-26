@@ -175,6 +175,7 @@ public class English extends Language {
         yml.addDefault(Messages.FORMATTING_CHAT_SHOUT, "{level}{vPrefix}&6[SHOUT] {team} &7{player}&f{vSuffix}: {message}");
         yml.addDefault(Messages.FORMATTING_CHAT_TEAM, "{level}{vPrefix}&f{team}&7 {player}{vSuffix} {message}");
         yml.addDefault(Messages.FORMATTING_CHAT_SPECTATOR, "{level}{vPrefix}&7[SPECTATOR] {player}{vSuffix}: {message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_NO_SHOUT_SOLO, "{level}{vPrefix}&f{team}&7 {player}{vSuffix} {message}");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_HEALTH, Arrays.asList("&c❤", "&aHealth"));
         yml.addDefault(Messages.FORMATTING_SPECTATOR_TEAM, "SPECT");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_SPECTATOR, "&7");

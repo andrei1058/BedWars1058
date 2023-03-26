@@ -113,8 +113,15 @@ public class ChatFormatting implements Listener {
                     return;
                 }
                 e.setMessage(msg);
-                e.setFormat(parsePHolders(language.m(Messages.FORMATTING_CHAT_SHOUT), p, team));
-                return;
+
+                // Check if shouting should be formatted in solo or not
+                if (BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_ALLOW_SHOUT_SOLO)){
+                    e.setFormat(parsePHolders(language.m(Messages.FORMATTING_CHAT_SHOUT), p, team));
+                    return;
+                }else{
+                    e.setFormat(parsePHolders(language.m(Messages.FORMATTING_CHAT_NO_SHOUT_SOLO), p, team));
+                    return;
+                }
             }
 
             // player team chat

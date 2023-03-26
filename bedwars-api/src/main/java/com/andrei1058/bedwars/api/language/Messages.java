@@ -164,6 +164,7 @@ public class Messages {
     public static String FORMATTING_CHAT_SHOUT = "format-chat-global";
     public static String FORMATTING_CHAT_TEAM = "format-chat-team";
     public static String FORMATTING_CHAT_SPECTATOR = "format-chat-spectator";
+    public static String FORMATTING_CHAT_NO_SHOUT_SOLO = "format-chat-no-shout-solo";
     public static String FORMATTING_SCOREBOARD_DATE = "format-sb-date";
     public static String FORMATTING_SCOREBOARD_TEAM_GENERIC = "format-sb-team-generic";
     public static String FORMATTING_SCOREBOARD_HEALTH = "format-sb-health";

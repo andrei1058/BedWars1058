@@ -51,6 +51,7 @@ public class ShoutCommand extends BukkitCommand {
             p.sendMessage(Language.getMsg(p, Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
             return true;
         }
+
         StringBuilder sb = new StringBuilder();
         for (String ar : args) {
             sb.append(ar).append(" ");
