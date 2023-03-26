@@ -512,6 +512,7 @@ public class Arena implements IArena {
             setArenaByPlayer(p, this);
 
             /* check if you can start the arena */
+            boolean isStatusChange = false;
             if (status == GameState.waiting) {
                 int teams = 0, teammates = 0;
                 for (Player on : getPlayers()) {
@@ -524,8 +525,10 @@ public class Arena implements IArena {
                 }
                 if (minPlayers <= players.size() && teams > 0 && players.size() != teammates / teams) {
                     changeStatus(GameState.starting);
+                    isStatusChange = true;
                 } else if (players.size() >= minPlayers && teams == 0) {
                     changeStatus(GameState.starting);
+                    isStatusChange = true;
                 }
             }
 
@@ -547,7 +550,9 @@ public class Arena implements IArena {
             }
             PaperSupport.teleportC(p, getWaitingLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
 
-            SidebarService.getInstance().giveSidebar(p, this, false);
+            if (!isStatusChange){
+                SidebarService.getInstance().giveSidebar(p, this, false);
+            }
             sendPreGameCommandItems(p);
             for (PotionEffect pf : p.getActivePotionEffects()) {
                 p.removePotionEffect(pf.getType());
@@ -1453,6 +1458,9 @@ public class Arena implements IArena {
      * Change game status starting tasks.
      */
     public void changeStatus(GameState status) {
+        if (this.status != GameState.playing && status == GameState.playing) {
+            startTime = Instant.now();
+        }
         this.status = status;
         Bukkit.getPluginManager().callEvent(new GameStateChangeEvent(this, status, status));
         refreshSigns();
@@ -2233,7 +2241,7 @@ public class Arena implements IArena {
 
     public static List<IArena> getSorted(List<IArena> arenas) {
         List<IArena> sorted = new ArrayList<>(arenas);
-        sorted.sort(new Comparator<IArena>() {
+        sorted.sort(new Comparator<>() {
             @Override
             public int compare(IArena o1, IArena o2) {
                 if (o1.getStatus() == GameState.starting && o2.getStatus() == GameState.starting) {

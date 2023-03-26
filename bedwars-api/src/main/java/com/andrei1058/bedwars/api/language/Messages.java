@@ -89,6 +89,12 @@ public class Messages {
     public static String COMMAND_PARTY_REMOVE_USAGE = "cmd-party-remove-usage";
     public static String COMMAND_PARTY_REMOVE_SUCCESS = "cmd-party-remove";
     public static String COMMAND_PARTY_REMOVE_DENIED_TARGET_NOT_PARTY_MEMBER = "cmd-party-remove-not-in";
+    public static String COMMAND_PARTY_PROMOTE_SUCCESS = "cmd-party-promote-owner";
+    public static String COMMAND_PARTY_PROMOTE_OWNER = "cmd-party-owner";
+    public static String COMMAND_PARTY_PROMOTE_NEW_OWNER = "cmd-party-owner-changed";
+    public static String COMMAND_PARTY_INFO_OWNER = "cmd-party-info-owner";
+    public static String COMMAND_PARTY_INFO_PLAYERS = "cmd-party-info-players";
+    public static String COMMAND_PARTY_INFO_PLAYER = "cmd-party-info-player";
     public static String COMMAND_NOT_FOUND_OR_INSUFF_PERMS = "cmd-not-found";
     public static String COMMAND_FORCESTART_NOT_IN_GAME = "cmd-start-no-game";
     public static String COMMAND_FORCESTART_SUCCESS = "cmd-start";
@@ -250,7 +256,8 @@ public class Messages {
     public static String INTERACT_BED_DESTROY_TITLE_ANNOUNCEMENT = "interact-bed-destroy-title";
     public static String INTERACT_BED_DESTROY_SUBTITLE_ANNOUNCEMENT = "interact-bed-destroy-subtitle";
     public static String INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM = "interact-bed-destroy-team";
-    public static String INTERACT_CHEST_CANT_OPEN_TEAM_ELIMINATED ="interact-cant-open-chest";
+    public static String INTERACT_CHEST_CANT_OPEN_TEAM_ELIMINATED = "interact-cant-open-chest";
+    public static String INTERACT_INVISIBILITY_REMOVED_DAMGE_TAKEN = "interact-invisibility-removed-damaged";
 
     /** PvP related */
     public static String PLAYER_DIE_RESPAWN_TITLE = "player-respawn-title";

@@ -351,13 +351,11 @@ public class v1_8_R3 extends VersionSupport {
     @Override
     public void hideArmor(Player victim, Player receiver) {
         if (victim.equals(receiver)) return;
-        PacketPlayOutEntityEquipment hand = new PacketPlayOutEntityEquipment(victim.getEntityId(), 0, CraftItemStack.asNMSCopy(new ItemStack(org.bukkit.Material.AIR)));
         PacketPlayOutEntityEquipment helmet = new PacketPlayOutEntityEquipment(victim.getEntityId(), 1, CraftItemStack.asNMSCopy(new ItemStack(org.bukkit.Material.AIR)));
         PacketPlayOutEntityEquipment chest = new PacketPlayOutEntityEquipment(victim.getEntityId(), 2, CraftItemStack.asNMSCopy(new ItemStack(org.bukkit.Material.AIR)));
         PacketPlayOutEntityEquipment pants = new PacketPlayOutEntityEquipment(victim.getEntityId(), 3, CraftItemStack.asNMSCopy(new ItemStack(org.bukkit.Material.AIR)));
         PacketPlayOutEntityEquipment boots = new PacketPlayOutEntityEquipment(victim.getEntityId(), 4, CraftItemStack.asNMSCopy(new ItemStack(org.bukkit.Material.AIR)));
         PlayerConnection boundTo = ((CraftPlayer) receiver).getHandle().playerConnection;
-        boundTo.sendPacket(hand);
         boundTo.sendPacket(helmet);
         boundTo.sendPacket(chest);
         boundTo.sendPacket(pants);
@@ -368,15 +366,11 @@ public class v1_8_R3 extends VersionSupport {
     public void showArmor(Player victim, Player receiver) {
         if (victim.equals(receiver)) return;
         EntityPlayer entityPlayer = ((CraftPlayer) victim).getHandle();
-        PacketPlayOutEntityEquipment hand1 = new PacketPlayOutEntityEquipment(entityPlayer.getId(), 0, entityPlayer.inventory.getItemInHand());
         PacketPlayOutEntityEquipment helmet = new PacketPlayOutEntityEquipment(entityPlayer.getId(), 4, entityPlayer.inventory.getArmorContents()[3]);
         PacketPlayOutEntityEquipment chest = new PacketPlayOutEntityEquipment(entityPlayer.getId(), 3, entityPlayer.inventory.getArmorContents()[2]);
         PacketPlayOutEntityEquipment pants = new PacketPlayOutEntityEquipment(entityPlayer.getId(), 2, entityPlayer.inventory.getArmorContents()[1]);
         PacketPlayOutEntityEquipment boots = new PacketPlayOutEntityEquipment(entityPlayer.getId(), 1, entityPlayer.inventory.getArmorContents()[0]);
         EntityPlayer boundTo = ((CraftPlayer) receiver).getHandle();
-        if (victim != receiver) {
-            boundTo.playerConnection.sendPacket(hand1);
-        }
         boundTo.playerConnection.sendPacket(helmet);
         boundTo.playerConnection.sendPacket(chest);
         boundTo.playerConnection.sendPacket(pants);

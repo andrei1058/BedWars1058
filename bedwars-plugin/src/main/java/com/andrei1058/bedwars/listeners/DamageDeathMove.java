@@ -265,6 +265,7 @@ public class DamageDeathMove implements Listener {
                             a.getShowTime().remove(p);
                             p.removePotionEffect(PotionEffectType.INVISIBILITY);
                             ITeam team = a.getTeam(p);
+                            p.sendMessage(getMsg(p, Messages.INTERACT_INVISIBILITY_REMOVED_DAMGE_TAKEN));
                             Bukkit.getPluginManager().callEvent(new PlayerInvisibilityPotionEvent(PlayerInvisibilityPotionEvent.Type.REMOVED, team, p, a));
                         });
                     }
@@ -403,7 +404,6 @@ public class DamageDeathMove implements Listener {
                                     killersTeam = d.getTeam();
                                     message = d.getEntity().getType() == EntityType.IRON_GOLEM ? victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_IRON_GOLEM_FINAL_KILL : Messages.PLAYER_DIE_IRON_GOLEM_REGULAR : victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_DEBUG_FINAL_KILL : Messages.PLAYER_DIE_DEBUG_REGULAR;
                                     cause = victimsTeam.isBedDestroyed() ? d.getDeathFinalCause() : d.getDeathRegularCause();
-                                    killer = null;
                                 }
                             }
                         }
@@ -651,9 +651,9 @@ public class DamageDeathMove implements Listener {
                 }
             }
         } else {
-            if (e.getPlayer().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName()) && BedWars.getServerType() == ServerType.MULTIARENA) {
-                if (e.getTo().getY() < 0) {
-                    PaperSupport.teleport(e.getPlayer(), config.getConfigLoc("lobbyLoc"));
+            if (config.getBoolean(ConfigPath.LOBBY_VOID_TELEPORT_ENABLED) && e.getPlayer().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName()) && BedWars.getServerType() == ServerType.MULTIARENA) {
+                if (e.getTo().getY() < config.getInt(ConfigPath.LOBBY_VOID_TELEPORT_HEIGHT)) {
+                    PaperSupport.teleportC(e.getPlayer(), config.getConfigLoc("lobbyLoc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
                 }
             }
         }

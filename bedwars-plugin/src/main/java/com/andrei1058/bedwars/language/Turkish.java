@@ -29,6 +29,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import static com.andrei1058.bedwars.BedWars.mainCmd;
 
@@ -98,10 +99,16 @@ public class Turkish extends Language {
         yml.addDefault(Messages.COMMAND_NOT_ALLOWED_IN_GAME, "{prefix}&cBu komutu oyun sırasında kullanamazsın!");
         yml.addDefault(Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS, "{prefix}&cBu komut bulunamadı veya yetkin yok!");
         yml.addDefault(Messages.COMMAND_PARTY_HELP, Arrays.asList("&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
-                "&aParti Komutları:", "&e/party help &7- &bBu mesajı yazdırır", "&e/party invite <player> &7- &bOyuncuyu partine davet eder",
+                "&aParti Komutları:",
+                "&e/party help &7- &bBu mesajı yazdırır",
+                "&e/party invite <player> &7- &bOyuncuyu partine davet eder",
                 "&e/party leave &7- &bPartiden ayrılır",
+                "&e/party info &7- &bShow party members and owner",
+                "&e/party promote <player> &7- &bTransfer party ownership",
                 "&e/party remove <player> &7- &bOyuncuyu partiden kovar",
-                "&e/party accept <player> &7- &bParti davetini kabul eder", "&e/party disband &7- &bPartiyi dağıtır"));
+                "&e/party accept <player> &7- &bParti davetini kabul eder",
+                "&e/party disband &7- &bPartiyi dağıtır")
+        );
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_USAGE, "{prefix}&eKullanım: &7/party invite <player>");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE, "{prefix}&7{player} &eoyunda değil!");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_SENT, "{prefix}&7{player}&6 adlı oyuncuya parti daveti gönderildi.");
@@ -120,6 +127,12 @@ public class Turkish extends Language {
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_USAGE, "{prefix}&7Kullanım: &e/party remove <player>");
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_SUCCESS, "{prefix}&7{player} &eadlı oyuncu partiden kovuldu!");
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_DENIED_TARGET_NOT_PARTY_MEMBER, "{prefix}&7{player} &eadlı oyuncu parti üyesi değil!");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_SUCCESS, "{prefix}&e{player}'i sahibi yaptın!");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_OWNER, "{prefix}&eGrup sahibi sen oldun!");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_NEW_OWNER, "{prefix}&7 &e{player} artık grup sahibi!");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n{prefix}&eGrup sahibi: &7{owner}");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS,"{prefix}&eGrup üyeleri:");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYER, "&7{player}");
         yml.addDefault(Messages.COMMAND_FORCESTART_NOT_IN_GAME, "§c▪ §7Oyunda değilsin!");
         yml.addDefault(Messages.COMMAND_FORCESTART_SUCCESS, "§c▪ §7Geris sayım kısaltıldı!");
         yml.addDefault(Messages.COMMAND_FORCESTART_NO_PERM, "{prefix}&7Bu işlemi uygulamak için bağışçı olman lazım!");
@@ -185,11 +198,11 @@ public class Turkish extends Language {
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_RESTARTING, new ArrayList<>());
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_PLAYING, Arrays.asList("{teamColor}&l{teamLetter} &r{teamColor}", "{team} ", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}"));
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_PLAYING, new ArrayList<>());
-        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_STARTING, Arrays.asList("{vPrefix} "));
+        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_STARTING, List.of("{vPrefix} "));
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_STARTING, new ArrayList<>());
-        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_WAITING, Arrays.asList("{vPrefix} "));
+        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_WAITING, List.of("{vPrefix} "));
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_WAITING, new ArrayList<>());
-        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_LOBBY, Arrays.asList("{vPrefix} "));
+        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_LOBBY, List.of("{vPrefix} "));
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_LOBBY, new ArrayList<>());
 
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_DATE, "dd/MM/yyyy");
@@ -232,6 +245,7 @@ public class Turkish extends Language {
         yml.addDefault(Messages.INTERACT_BED_DESTROY_SUBTITLE_ANNOUNCEMENT, "&fArtık yeniden doğamayacaksın!");
         yml.addDefault(Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM, "&f&lBED DESTRUCTION > &7Yatağın {PlayerColor}{PlayerName}&7 tarafından yok edildi!");
         yml.addDefault(Messages.INTERACT_CHEST_CANT_OPEN_TEAM_ELIMINATED, "&cElenmemiş bir takımın sandığını açamazsın!");
+        yml.addDefault(Messages.INTERACT_INVISIBILITY_REMOVED_DAMGE_TAKEN, "&cYou are no longer invisible because you have taken damage!");
         yml.addDefault(Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL, "{PlayerColor}{PlayerName} &7boşluğa düştü.");
         yml.addDefault(Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL, "{PlayerColor}{PlayerName} &7boşluğa düştü. &b&lFINAL KILL!");
         yml.addDefault(Messages.PLAYER_DIE_KNOCKED_IN_VOID_REGULAR_KILL, "{PlayerColor}{PlayerName} &7 adlı oyuncu {KillerColor}{KillerName}&7 tarafından boşluğa atıldı.");
@@ -337,21 +351,21 @@ public class Turkish extends Language {
         addDefaultStatsMsg(yml, "last-play", "&6Son Oyun", "&f{lastPlay}");
         addDefaultStatsMsg(yml, "games-played", "&6Oynanan Oyun", "&f{gamesPlayed}");
 
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fHarita: &a{map}", "", "&fOyuncular: &a{on}/{max}", "", "&fBekleniyor...", "", "§fTür: &a{group}", "&fSürüm: &7{version}", "", "&e{server_ip}"));
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fHarita: &a{map}", "", "&fOyuncular: &a{on}/{max}", "", "&f&a{time}s sonra başlatılıyor", "", "§fTür: &a{group}", "&fSürüm: &7{version}", "", "&e{server_ip}"));
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList("&e&lBED WARS", "&7{date}", "", "&a{time} sonra &f{nextEvent}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{server_ip}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fHarita: &a{map}", "", "&fOyuncular: &a{on}/{max}", "", "&fBekleniyor...", "", "§fTür: &a{group}", "&fSürüm: &7{version}", "", "&e{serverIp}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fHarita: &a{map}", "", "&fOyuncular: &a{on}/{max}", "", "&f&a{time}s sonra başlatılıyor", "", "§fTür: &a{group}", "&fSürüm: &7{version}", "", "&e{serverIp}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList("&e&lBED WARS", "&7{date}", "", "&a{time} sonra &f{nextEvent}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{serverIp}"));
 
         yml.addDefault("scoreboard.Doubles.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&a{time} sonra &f{nextEvent}", "",
-                "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{server_ip}"));
+                "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{serverIp}"));
 
         yml.addDefault("scoreboard.3v3v3v3.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&a{time} sonra &f{nextEvent}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}",
-                "", "&fÖldürme: &a{kills}", "&fFinal Öldürme: &a{finalKills}", "&fYatak Kırma: &a{beds}", "", "&e{server_ip}"));
+                "", "&fÖldürme: &a{kills}", "&fFinal Öldürme: &a{finalKills}", "&fYatak Kırma: &a{beds}", "", "&e{serverIp}"));
 
         yml.addDefault("scoreboard.4v4v4v4.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&a{time} sonra &f{nextEvent}", "", "{team}", "{team}", "{team}", "{team}",
-                "", "&fÖldürme: &a{kills}", "&fFinal Öldürme: &a{finalKills}", "&fYatak Kırma: &a{beds}", "", "&e{server_ip}"));
+                "", "&fÖldürme: &a{kills}", "&fFinal Öldürme: &a{finalKills}", "&fYatak Kırma: &a{beds}", "", "&e{serverIp}"));
 
         yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars,&4&lB&6edWars,&6&lB&4e&6dWars,&6&lBe&4d&6Wars,&6&lBed&4W&6ars,&6&lBedW&4a&6rs,&6&lBedWa&4r&6s,&6&lBedWar&4s,&6&lBedWars", "&fSeviyen: {level}", "", "&fİlerleme: &a{currentXp}&7/&b{requiredXp}", "{progress}", "", "&7{player}", "", "&fPara: &a{money}"
-                , "", "&fGalibiyet: &a{wins}", "&fToplam Öldürme: &a{kills}", "", "&e{server_ip}"));
+                , "", "&fGalibiyet: &a{wins}", "&fToplam Öldürme: &a{kills}", "", "&e{serverIp}"));
 
         //
         yml.addDefault(Messages.SHOP_INDEX_NAME, "&8Hızlı Alım");

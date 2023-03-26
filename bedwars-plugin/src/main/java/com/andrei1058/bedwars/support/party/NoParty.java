@@ -22,6 +22,7 @@ package com.andrei1058.bedwars.support.party;
 
 import com.andrei1058.bedwars.api.party.Party;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +75,16 @@ public class NoParty implements Party {
 
     @Override
     public void removePlayer(Player owner, Player target) {
+
+    }
+
+    @Override
+    public Player getOwner(Player member) {
+        return null;
+    }
+
+    @Override
+    public void promote(@NotNull Player owner, @NotNull Player target) {
 
     }
 
