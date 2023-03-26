@@ -27,6 +27,7 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.party.Party;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -181,7 +182,7 @@ public class PartiesAdapter implements Party {
     }
 
     @Override
-    public void promote(Player owner, Player target) {
+    public void promote(@NotNull Player owner, @NotNull Player target) {
     }
 
     @Override

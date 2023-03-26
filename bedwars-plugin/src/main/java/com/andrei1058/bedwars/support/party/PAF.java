@@ -6,6 +6,7 @@ import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,7 +99,7 @@ public class PAF implements Party {
     }
 
     @Override
-    public void promote(Player owner, Player target) {
+    public void promote(@NotNull Player owner, @NotNull Player target) {
         getPAFParty(owner).setLeader(PAFPlayerManager.getInstance().getPlayer(target));
     }
 

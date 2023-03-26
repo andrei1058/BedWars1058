@@ -20,7 +20,9 @@
 
 package com.andrei1058.bedwars.api.party;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -46,9 +48,20 @@ public interface Party {
 
     void removePlayer(Player owner, Player target);
 
-    Player getOwner(Player member);
+    default Player getOwner(Player member) {
+        for (Player m: this.getMembers(member)) {
+            if (isOwner(m)) {
+                return m;
+            }
+        }
+        return null;
+    }
 
-    void promote(Player owner, Player target);
+    default void promote(@NotNull Player owner, @NotNull Player target) {
+        String msg = ChatColor.RED+"Not implemented! Contact an administrator";
+        owner.sendMessage(msg);
+        target.sendMessage(msg);
+    }
 
     boolean isInternal();
 }
