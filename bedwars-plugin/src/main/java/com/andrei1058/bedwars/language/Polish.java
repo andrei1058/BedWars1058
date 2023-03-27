@@ -38,7 +38,7 @@ public class Polish extends Language{
     public Polish() {
         super(BedWars.plugin, "pl");
         YamlConfiguration yml = getYml();
-        yml.options().header("Polish translation by RarstManPL#0616 and Creper132#7570 Updated by Seriously Not Beluga#0082");
+        yml.options().header("Polish translation by RarstManPL#0616 and Creper132 Updated by Seriously Not Beluga#0082");
         yml.addDefault(Messages.PREFIX, "");
         yml.options().copyDefaults(true);
         yml.addDefault("name", "Polski");
@@ -84,7 +84,7 @@ public class Polish extends Language{
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY, "{prefix}&aJezyk zostal zmieniony!");
         yml.addDefault(Messages.COMMAND_TP_PLAYER_NOT_FOUND, "{prefix}&cNie znaleziono gracza!");
         yml.addDefault(Messages.COMMAND_TP_NOT_IN_ARENA, "{prefix}&cTego gracza nie ma na arenie!");
-        yml.addDefault(Messages.COMMAND_TP_NOT_STARTED, "{prefix}&cArena na której jest ten gracza, jeszcze się nie rozpoczeła!");
+        yml.addDefault(Messages.COMMAND_TP_NOT_STARTED, "{prefix}&cArena na której jest ten gracz, jeszcze się nie rozpoczeła!");
         yml.addDefault(Messages.COMMAND_TP_USAGE, "{prefix}&cUzycie: /bw tp <gracz>");
         yml.addDefault(Messages.COMMAND_REJOIN_PLAYER_RECONNECTED, "{prefix}&7{player} &eponownie się połączył!");
         yml.addDefault(Messages.COMMAND_LANG_USAGE_DENIED, "{prefix}&cNie mozesz zmienic jezyka podczas gry.");
