@@ -170,6 +170,51 @@ public class BreakPlace implements Listener {
                 }
             }
 
+            for (ITeam t : a.getTeams()) {
+                if (t.getSpawn().distance(e.getBlockPlaced().getLocation()) <= a.getConfig().getInt(ConfigPath.ARENA_SPAWN_PROTECTION)) {
+                    e.setCancelled(true);
+                    p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                    return;
+                }
+                if (t.getShop().distance(e.getBlockPlaced().getLocation()) <= a.getConfig().getInt(ConfigPath.ARENA_SHOP_PROTECTION)) {
+                    e.setCancelled(true);
+                    p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                    return;
+                }
+                if (t.getTeamUpgrades().distance(e.getBlockPlaced().getLocation()) <= a.getConfig().getInt(ConfigPath.ARENA_UPGRADES_PROTECTION)) {
+                    e.setCancelled(true);
+                    p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                    return;
+                }
+                for (IGenerator o : t.getGenerators()) {
+                    if (o.getLocation().distance(e.getBlockPlaced().getLocation()) <= a.getConfig().getInt(ConfigPath.ARENA_GENERATOR_PROTECTION)) {
+                        e.setCancelled(true);
+                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                        return;
+                    }
+                }
+            }
+            for (IGenerator o : a.getOreGenerators()) {
+                if (o.getLocation().distance(e.getBlockPlaced().getLocation()) <= a.getConfig().getInt(ConfigPath.ARENA_GENERATOR_PROTECTION)) {
+                    e.setCancelled(true);
+                    p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                    return;
+                }
+            }
+
+            if (e.getBlockPlaced().getLocation().getBlockY() >= a.getConfig().getInt(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y)) {
+                e.setCancelled(true);
+                return;
+            }
+
+            for (Region r : a.getRegionsList()) {
+                if (r.isInRegion(e.getBlock().getLocation()) && r.isProtected()) {
+                    e.setCancelled(true);
+                    p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                    return;
+                }
+            }
+
             // prevent modifying wood if protected
             // issue #531
             if (e.getBlockPlaced().getType().toString().contains("STRIPPED_") && e.getBlock().getType().toString().contains("_WOOD")) {
