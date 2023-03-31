@@ -440,6 +440,10 @@ public interface BedWars {
      */
     VersionSupport getVersionSupport();
 
+    /**
+     * Get Support Placeholder API
+     * Replace papi placeholders with values
+     */
     SupportPAPI getSupportPapi();
 
     /**
