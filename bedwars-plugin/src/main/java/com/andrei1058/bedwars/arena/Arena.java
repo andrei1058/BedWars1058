@@ -500,7 +500,7 @@ public class Arena implements IArena {
             p.setHealth(20);
             for (Player on : players) {
                 on.sendMessage(
-                        getMsg(on, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG)
+                        getMsg(p, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG)
                             .replace("{vPrefix}", getChatSupport().getPrefix(p))
                             .replace("{vSuffix}", getChatSupport().getSuffix(p))
                             .replace("{playername}", p.getName())
@@ -878,7 +878,7 @@ public class Arena implements IArena {
         }
         for (Player on : getPlayers()) {
             on.sendMessage(
-                    getMsg(on, Messages.COMMAND_LEAVE_MSG)
+                    getMsg(p, Messages.COMMAND_LEAVE_MSG)
                             .replace("{vPrefix}", getChatSupport().getPrefix(p))
                             .replace("{vSuffix}", getChatSupport().getSuffix(p))
                             .replace("{playername}", p.getName())
@@ -887,7 +887,7 @@ public class Arena implements IArena {
             );
         }
         for (Player on : getSpectators()) {
-            on.sendMessage(getMsg(on, Messages.COMMAND_LEAVE_MSG).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()));
+            on.sendMessage(getMsg(p, Messages.COMMAND_LEAVE_MSG).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()));
         }
 
         if (getServerType() == ServerType.SHARED) {
