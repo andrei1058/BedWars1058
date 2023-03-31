@@ -90,7 +90,7 @@ public class Language extends ConfigManager {
     }
 
     /**
-     * Get message in player's language.
+     * Get message in player's language and apply Papi placeholders
      */
     public static String getMsg(Player p, String path) {
         if (p == null) return getDefaultLanguage().m(path);
