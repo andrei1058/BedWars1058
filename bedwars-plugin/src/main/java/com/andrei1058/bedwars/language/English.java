@@ -145,7 +145,8 @@ public class English extends Language {
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_CANCELLED_TITLE, " ");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_CANCELLED_SUB_TITLE, "&cWaiting for more players..");
         yml.addDefault(Messages.ARENA_STATUS_START_PLAYER_TITLE, "&aGO");
-        yml.addDefault(Messages.ARENA_STATUS_START_PLAYER_TUTORIAL, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
+        yml.addDefault(Messages.ARENA_STATUS_START_PLAYER_TUTORIAL, Arrays.asList(
+                "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
                 "&f                                   &lBedWars", "",
                 "&e&l    Protect your bed and destroy the enemy beds.",
                 "&e&l      Upgrade yourself and your team by collecting",
@@ -280,11 +281,16 @@ public class English extends Language {
         yml.addDefault(Messages.GAME_END_GAME_OVER_PLAYER_TITLE, "&c&lGAME OVER!");
         yml.addDefault(Messages.GAME_END_VICTORY_PLAYER_TITLE, "&6&lVICTORY!");
         yml.addDefault(Messages.GAME_END_TEAM_WON_CHAT, "{prefix}{TeamColor}{TeamName} &ahas won the game!");
-        yml.addDefault(Messages.GAME_END_TOP_PLAYER_CHAT, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
+        yml.addDefault(Messages.FORMATTING_EACH_WINNER, "{player}");
+        yml.addDefault(Messages.GAME_END_FIRST_KILLER, "{player}");
+        yml.addDefault(Messages.GAME_END_SECOND_KILLER, "{player}");
+        yml.addDefault(Messages.GAME_END_THIRD_KILLER, "{player}");
+        yml.addDefault(Messages.GAME_END_TOP_PLAYER_CHAT, Arrays.asList(
+                "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
                 "&f                                   &lBedWars", "", "{winnerFormat}", "", "",
-                "&e                          &l1st Killer &7- {firstName} - {firstKills}",
-                "&6                          &l2nd Killer &7- {secondName} - {secondKills}",
-                "&c                          &l3rd Killer &7- {thirdName} - {thirdKills}", "",
+                "&e                          &l1st Killer &7- {firstFormat} - {firstKills}",
+                "&6                          &l2nd Killer &7- {secondFormat} - {secondKills}",
+                "&c                          &l3rd Killer &7- {thirdFormat} - {thirdKills}", "",
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
         yml.addDefault(Messages.BED_HOLOGRAM_DEFEND, "&c&lDefend your bed!");
         yml.addDefault(Messages.BED_HOLOGRAM_DESTROYED, "&c&lYour bed was destroyed!");
