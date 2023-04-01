@@ -179,6 +179,11 @@
         </dependency>
         <dependency>
             <groupId>com.andrei1058.bedwars</groupId>
+            <artifactId>versionsupport_v1_19_R3</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.bedwars</groupId>
             <artifactId>versionsupport-common</artifactId>
             <version>${project.version}</version>
         </dependency>
