@@ -7,9 +7,8 @@ on:
 jobs:
   package:
     runs-on: ubuntu-latest
-    environment:
-      name: production
-      url: https://repo.andrei1058.com
+    outputs:
+      version: ${{ steps.bump.outputs.version }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -21,17 +20,16 @@ jobs:
       - name: Package with Maven
         run: |
           mvn clean package
-          mvn javadoc:javadoc
-
+          ls
       - name: Publish Artifact
         uses: actions/upload-artifact@v3
         with:
           name: bedwars-plugin
-          path: target/*.jar
+          path: bedwars-plugin/target/**.jar
           if-no-files-found: error
       - name: Set next version
         id: bump
-        uses: DatIsNiels/maven-version-bump-action@master
+        uses: nnichols/maven-version-bump-action@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
   release:
@@ -51,4 +49,5 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: "*.jar"
+          tag: ${{ needs.package.outputs.version }}
           generateReleaseNotes: true
