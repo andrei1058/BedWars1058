@@ -93,10 +93,11 @@ public class Language extends ConfigManager {
      * Get message in player's language and apply Papi placeholders
      */
     public static String getMsg(Player p, String path) {
-        if (p == null) return getDefaultLanguage().m(path);
+        if (p == null) return getDefaultLanguage().m(path
         BedWars api = Bukkit.getServicesManager().getRegistration(BedWars.class).getProvider();
         return ChatColor.translateAlternateColorCodes('&', api.getSupportPapi().replace(p, langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage()).m(path).replace("{prefix}", (prefixStatic == null ? "" : prefixStatic))));
 //        return langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage()).m(path).replace("{prefix}", (prefixStatic == null ? "" : prefixStatic));
+
     }
 
     /**
