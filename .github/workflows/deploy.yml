@@ -18,12 +18,12 @@ jobs:
       - name: Package with Maven
         run: |
           mvn clean package
-
+          ls
       - name: Publish Artifact
         uses: actions/upload-artifact@v3
         with:
           name: bedwars-plugin
-          path: target/*.jar
+          path: target/**.jar
           if-no-files-found: error
       - name: Set next version
         id: bump
