@@ -27,7 +27,7 @@ jobs:
           if-no-files-found: error
       - name: Set next version
         id: bump
-        uses: DatIsNiels/maven-version-bump-action@master
+        uses: nnichols/maven-version-bump-action@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
   release:
