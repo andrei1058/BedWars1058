@@ -180,6 +180,7 @@ public class BwSidebar implements ISidebar {
 
         providers.add(new PlaceholderProvider("{player}", player::getDisplayName));
         providers.add(new PlaceholderProvider("{playerName}", player::getCustomName));
+        providers.add(new PlaceholderProvider("{playerNameUnformatted}", player::getName));
         providers.add(new PlaceholderProvider("{money}", () -> String.valueOf(getEconomy().getMoney(player))));
         providers.add(new PlaceholderProvider("{date}", () -> dateFormat.format(new Date(System.currentTimeMillis()))));
         providers.add(new PlaceholderProvider("{serverIp}", () -> BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP)));

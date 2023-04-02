@@ -601,7 +601,7 @@ public class BedWarsTeam implements ITeam {
         for (Player p : getMembers()) {
             for (ItemStack i : p.getInventory().getContents()) {
                 if (i == null) continue;
-                if (nms.isSword(i)) {
+                if (nms.isSword(i) || nms.isAxe(i)) {
                     ItemMeta im = i.getItemMeta();
                     im.addEnchant(e, a, true);
                     i.setItemMeta(im);
