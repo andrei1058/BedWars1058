@@ -18,7 +18,6 @@ jobs:
       - name: Package with Maven
         run: |
           mvn clean package
-          mvn javadoc:javadoc
 
       - name: Publish Artifact
         uses: actions/upload-artifact@v3
