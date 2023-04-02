@@ -25,11 +25,12 @@ jobs:
           name: bedwars-plugin
           path: bedwars-plugin/target/**.jar
           if-no-files-found: error
-      - name: Set next version
-        id: bump
-        uses: nnichols/maven-version-bump-action@v3
+      - name: Bump version and push tag
+        uses: laputansoft/github-tag-action@v4.6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ steps.package-version.outputs.version }}
+
   release:
     runs-on: ubuntu-latest
     needs: [ package ]
