@@ -47,5 +47,5 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: "*.jar"
-          tag: 23.3.1-SNAPSHOT
+          tag: ${{ needs.package.outputs.bump.version }}
           generateReleaseNotes: true
