@@ -7,7 +7,7 @@
     <parent>
         <artifactId>BedWars1058</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>${revision}</version>
+        <version>23.3.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>resetadapter-slime</artifactId>
