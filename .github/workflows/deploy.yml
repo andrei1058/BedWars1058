@@ -23,7 +23,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: bedwars-plugin
-          path: target/**.jar
+          path: bedwars-plugin/target/**.jar
           if-no-files-found: error
       - name: Set next version
         id: bump
