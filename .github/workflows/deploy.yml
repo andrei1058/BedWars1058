@@ -30,6 +30,7 @@ jobs:
         uses: DatIsNiels/maven-version-bump-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          pom-path: pom.xml
   release:
     runs-on: ubuntu-latest
     needs: [ package ]
