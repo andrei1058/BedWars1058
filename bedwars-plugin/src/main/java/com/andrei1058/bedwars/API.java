@@ -26,6 +26,7 @@ import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.events.player.PlayerAfkEvent;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.SupportPAPI;
 import com.andrei1058.bedwars.api.party.Party;
 import com.andrei1058.bedwars.api.server.ISetupSession;
 import com.andrei1058.bedwars.api.server.RestoreAdapter;
@@ -366,6 +367,11 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
     @Override
     public VersionSupport getVersionSupport() {
         return BedWars.nms;
+    }
+
+    @Override
+    public SupportPAPI getSupportPapi() {
+        return com.andrei1058.bedwars.support.papi.SupportPAPI.getSupportPAPI();
     }
 
     @Override

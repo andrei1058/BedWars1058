@@ -25,6 +25,7 @@ import com.andrei1058.bedwars.api.arena.shop.IContentTier;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.language.Language;
+import com.andrei1058.bedwars.api.language.SupportPAPI;
 import com.andrei1058.bedwars.api.levels.Level;
 import com.andrei1058.bedwars.api.party.Party;
 import com.andrei1058.bedwars.api.server.ISetupSession;
@@ -438,6 +439,12 @@ public interface BedWars {
      * Get nms operations.
      */
     VersionSupport getVersionSupport();
+
+    /**
+     * Get Support Placeholder API
+     * Replace papi placeholders with values
+     */
+    SupportPAPI getSupportPapi();
 
     /**
      * Get server default language.
