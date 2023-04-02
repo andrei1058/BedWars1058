@@ -30,7 +30,6 @@ jobs:
         uses: nnichols/maven-version-bump-action@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-        run: echo "UPDATE_VERSION=${{steps.bump.outputs.version}}" >> $GITHUB_ENV
   release:
     runs-on: ubuntu-latest
     needs: [ package ]
@@ -48,5 +47,5 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: "*.jar"
-          tag: ${{ env.RELEASE_VERSION }}
+          tag: ${{ steps.bump.outputs.version }}
           generateReleaseNotes: true
