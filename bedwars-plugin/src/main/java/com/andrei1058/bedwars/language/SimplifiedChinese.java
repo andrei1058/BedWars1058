@@ -290,7 +290,6 @@ public class SimplifiedChinese extends Language {
                 "&e                          &l1st Killer &7- {firstFormat} - {firstKills}",
                 "&6                          &l2nd Killer &7- {secondFormat} - {secondKills}",
                 "&c                          &l3rd Killer &7- {thirdFormat} - {thirdKills}", "",
-
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
         yml.addDefault(Messages.BED_HOLOGRAM_DEFEND, "&c&l保护你的床！");
         yml.addDefault(Messages.BED_HOLOGRAM_DESTROYED, "&c&l你的床被破坏了！");
