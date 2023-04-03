@@ -48,10 +48,11 @@ jobs:
           name: bedwars-plugin
           path: target
       - name: List contents
-        run: ls
+        run: ls target/
       - name: Create release
-        uses: ncipollo/release-action@v1
+        uses: softprops/action-gh-release@v1
         with:
           artifacts: "*.jar"
-          tag: ${{ needs.package.outputs.version }}
-          generateReleaseNotes: true
+          tag_name: ${{ needs.package.outputs.version }}
+          generate_release_notes: true
+          repository: production
