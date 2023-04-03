@@ -40,8 +40,10 @@ jobs:
     permissions:
       contents: write
     steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: 'production'
       - name: Download the artifact
         uses: actions/download-artifact@v3
         with:
