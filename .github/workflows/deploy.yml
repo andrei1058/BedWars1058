@@ -11,7 +11,9 @@ jobs:
       version: ${{ steps.bump.outputs.version }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          ref: 'production'
       - name: Set up JDK 17.0.5
         uses: actions/setup-java@v2
         with:
@@ -38,13 +40,15 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+#      - name: Checkout code
+#        uses: actions/checkout@v3
       - name: Download the artifact
         uses: actions/download-artifact@v3
         with:
           name: bedwars-plugin
           path: target
+      - name: List contents
+        run: ls
       - name: Create release
         uses: ncipollo/release-action@v1
         with:
