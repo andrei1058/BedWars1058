@@ -52,7 +52,7 @@ jobs:
       - name: List contents
         run: |
           ls target/
-          echo "${{ GITHUB_REPOSITORY }}"
+          echo "${{ env.GITHUB_REPOSITORY }}"
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
