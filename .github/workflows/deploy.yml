@@ -52,7 +52,7 @@ jobs:
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
-          artifacts: "*.jar"
+          files: "target/bedwars-*.jar"
           tag_name: ${{ needs.package.outputs.version }}
           generate_release_notes: true
           repository: production
