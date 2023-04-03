@@ -48,7 +48,7 @@ jobs:
           name: bedwars-plugin
           path: target
       - name: List contents
-        run: ls
+        run: ls target/
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
