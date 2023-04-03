@@ -50,11 +50,12 @@ jobs:
           name: bedwars-plugin
           path: target
       - name: List contents
-        run: ls target/
+        run: |
+          ls target/
+          echo "${{ GITHUB_REPOSITORY }}"
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
-          files: "target/bedwars-*.jar"
           tag_name: ${{ needs.package.outputs.version }}
           generate_release_notes: true
-          repository: production
+          files: "target/bedwars-*"
