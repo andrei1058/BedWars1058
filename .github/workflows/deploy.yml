@@ -73,5 +73,5 @@ jobs:
           git fetch --unshallow
           git checkout production
           git pull
-          git merge --no-ff --no-verify master -m "Auto-merge production back to master"
+          git merge --no-ff --no-verify origin/master -m "Auto-merge production back to master"
           git push
