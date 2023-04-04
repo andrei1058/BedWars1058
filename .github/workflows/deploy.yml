@@ -57,7 +57,6 @@ jobs:
           generate_release_notes: true
           files: "target/bedwars-*"
   merge-master-back-to-dev:
-    if: github.event.pull_request.merged == true
     timeout-minutes: 2
     runs-on: ubuntu-latest
     steps:
