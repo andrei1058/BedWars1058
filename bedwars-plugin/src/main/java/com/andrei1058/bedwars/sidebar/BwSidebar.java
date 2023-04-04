@@ -519,9 +519,9 @@ public class BwSidebar implements ISidebar {
 
     // Provide header and footer for current game state
     private void setHeaderFooter() {
-//        if (isTabFormattingDisabled()) {
-//            return;
-//        }
+        if (isTabFormattingDisabled()) {
+            return;
+        }
         Language lang = Language.getPlayerLanguage(player);
 
         if (noArena()) {
