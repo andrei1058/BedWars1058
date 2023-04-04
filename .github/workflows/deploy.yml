@@ -71,7 +71,7 @@ jobs:
         uses: benjefferies/branch-protection-bot@1.0.7
         if: always()
         with:
-          access_token: ${{ secrets.ACCESS_TOKEN }}
+          access_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.event.repository.default_branch }}
       - name: Merge production -> master
         uses: devmasx/merge-branch@master
@@ -84,5 +84,5 @@ jobs:
         uses: benjefferies/branch-protection-bot@1.0.7
         if: always()  # Force to always run this step to ensure "include administrators" is always turned back on
         with:
-          access_token: ${{ secrets.ACCESS_TOKEN }}
+          access_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.event.repository.default_branch }}
