@@ -59,6 +59,8 @@ jobs:
   merge-master-back-to-dev:
     timeout-minutes: 2
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
