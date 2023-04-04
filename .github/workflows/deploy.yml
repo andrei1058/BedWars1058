@@ -56,3 +56,10 @@ jobs:
           tag_name: ${{ needs.package.outputs.version }}
           generate_release_notes: true
           files: "target/bedwars-*"
+      - name: Merge production -> master
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          target_branch: master
+          message: Merge production into master
+          github_token: ${{ secrets.GITHUB_TOKEN }}
