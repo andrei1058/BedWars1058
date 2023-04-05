@@ -67,14 +67,16 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: 'production'
-      - name: Unlock Master
-        uses: github/lock@v2.0.0
-        id: unlock
+      - name: Get existing branch protection
+        id: get_branch_protection
+        uses: octokit/request-action@v2.0.24
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          mode: unlock
-          environment: master
-          environment_targets: master
+          route: GET /repos/tomkeuper/BedWars1058/branches/Master/protection
+          mediaType: |
+            format: application/json
+        env:
+          # Uses a personal access token (PAT) from user with admin rights on repo
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
       - name: Set Git config
         run: |
           git config --local user.email "actions@github.com"
