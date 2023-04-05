@@ -73,7 +73,7 @@ jobs:
         with:
           ref: 'production'
       - name: Unlock Master Branch
-        id: get_branch_protection
+        id: disable_branch_protection
         uses: octokit/request-action@v2.1.0
         with:
           route: PUT /repos/tomkeuper/BedWars1058/branches/master/protection
@@ -95,7 +95,7 @@ jobs:
           git merge --no-ff production -m "Auto-merge production back to master"
           git push --force
       - name: Lock Master Branch
-        id: get_branch_protection
+        id: enable_branch_protection
         uses: octokit/request-action@v2.1.0
         with:
           route: PUT /repos/tomkeuper/BedWars1058/branches/master/protection
