@@ -71,7 +71,7 @@ jobs:
         uses: github/lock@v2.0.0
         id: lock
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           mode: lock
           environment: master
           environment_targets: master
