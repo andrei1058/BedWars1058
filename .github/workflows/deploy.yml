@@ -67,12 +67,12 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: 'production'
-      - name: deploy-lock
+      - name: Unlock Master
         uses: github/lock@v2.0.0
-        id: lock
+        id: unlock
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          mode: lock
+          mode: unlock
           environment: master
           environment_targets: master
       - name: Set Git config
