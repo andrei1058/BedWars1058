@@ -45,7 +45,7 @@ public class PartyCommand extends BukkitCommand {
     //owner, target
     private static HashMap<UUID, UUID> partySessionRequest = new HashMap<>();
 
-    public boolean isInvite(Player player, String[] args) {
+    private boolean isInvite(Player player, String[] args) {
         if (args.length == 1) {
             player.sendMessage(getMsg(player, Messages.COMMAND_PARTY_INVITE_USAGE));
             return true;
@@ -74,7 +74,7 @@ public class PartyCommand extends BukkitCommand {
         return false;
     }
 
-    public boolean isAccept(Player player, String[] args) {
+    private boolean isAccept(Player player, String[] args) {
         if (args.length < 2) {
             return true;
         }
@@ -109,7 +109,7 @@ public class PartyCommand extends BukkitCommand {
         return false;
     }
 
-    public boolean isLeave(Player player) {
+    private boolean isLeave(Player player) {
         if (!getParty().hasParty(player)) {
             player.sendMessage(getMsg(player, Messages.COMMAND_PARTY_GENERAL_DENIED_NOT_IN_PARTY));
             return true;
@@ -122,7 +122,7 @@ public class PartyCommand extends BukkitCommand {
         return false;
     }
 
-    public boolean isDisband(Player player) {
+    private boolean isDisband(Player player) {
         if (!getParty().hasParty(player)) {
             player.sendMessage(getMsg(player, Messages.COMMAND_PARTY_GENERAL_DENIED_NOT_IN_PARTY));
             return true;
@@ -135,7 +135,7 @@ public class PartyCommand extends BukkitCommand {
         return false;
     }
 
-    public  boolean isRemove(Player player, String[] args) {
+    private  boolean isRemove(Player player, String[] args) {
         if (args.length == 1) {
             player.sendMessage(getMsg(player, Messages.COMMAND_PARTY_REMOVE_USAGE));
             return true;
@@ -157,7 +157,7 @@ public class PartyCommand extends BukkitCommand {
         return false;
     }
 
-    public boolean isPromote(Player player, String[] args) {
+    private boolean isPromote(Player player, String[] args) {
         if (!getParty().hasParty(player)) {
             player.sendMessage(getMsg(player, Messages.COMMAND_PARTY_GENERAL_DENIED_NOT_IN_PARTY));
             return true;
@@ -187,7 +187,7 @@ public class PartyCommand extends BukkitCommand {
         return false;
     }
 
-    public boolean isInfoOrList(Player player) {
+    private boolean isInfoOrList(Player player) {
         if (!getParty().hasParty(player)) {
             player.sendMessage(getMsg(player, Messages.COMMAND_PARTY_GENERAL_DENIED_NOT_IN_PARTY));
             return true;
