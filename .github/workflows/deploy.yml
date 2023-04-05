@@ -71,7 +71,7 @@ jobs:
         id: get_branch_protection
         uses: octokit/request-action@v2.0.24
         with:
-          route: GET /repos/tomkeuper/BedWars1058/branches/Master/protection
+          route: GET /repos/tomkeuper/BedWars1058/branches/master/protection
           mediaType: |
             format: application/json
         env:
