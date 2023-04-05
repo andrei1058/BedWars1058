@@ -25,11 +25,11 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class SupportPAPI {
+public abstract class SupportPAPI implements com.andrei1058.bedwars.api.language.SupportPAPI {
 
     private static supp supportPAPI = new noPAPI();
 
-    public interface supp {
+    public interface supp extends com.andrei1058.bedwars.api.language.SupportPAPI {
         String replace(Player p, String s);
 
         List<String> replace(Player p, List<String> strings);

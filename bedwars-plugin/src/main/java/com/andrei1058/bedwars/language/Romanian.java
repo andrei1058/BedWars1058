@@ -274,11 +274,16 @@ public class Romanian extends Language {
         yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_FINAL_KILL, "{PlayerColor}{PlayerName} &a fost lovit de o bomba. &b&lUCIDERE FINALA!");
         yml.addDefault(Messages.GAME_END_GAME_OVER_PLAYER_TITLE, "&c&lJOC TERMINAT!");
         yml.addDefault(Messages.GAME_END_VICTORY_PLAYER_TITLE, "&6&lVICTORIE!");
-        yml.addDefault(Messages.GAME_END_TOP_PLAYER_CHAT, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
+        yml.addDefault(Messages.FORMATTING_EACH_WINNER, "{player}");
+        yml.addDefault(Messages.GAME_END_FIRST_KILLER, "{player}");
+        yml.addDefault(Messages.GAME_END_SECOND_KILLER, "{player}");
+        yml.addDefault(Messages.GAME_END_THIRD_KILLER, "{player}");
+        yml.addDefault(Messages.GAME_END_TOP_PLAYER_CHAT, Arrays.asList(
+                "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
                 "&f                                   &lBedWars", "", "{winnerFormat}", "", "",
-                "&e                      &lPrimul Ucigas &7- {firstName} - {firstKills}",
-                "&6                      &lAl 2-lea Ucigas &7- {secondName} - {secondKills}",
-                "&c                      &lAl 3-lea Ucigas &7- {thirdName} - {thirdKills}", "",
+                "&e                          &l1st Killer &7- {firstFormat} - {firstKills}",
+                "&6                          &l2nd Killer &7- {secondFormat} - {secondKills}",
+                "&c                          &l3rd Killer &7- {thirdFormat} - {thirdKills}", "",
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
         yml.addDefault(Messages.GAME_END_TEAM_WON_CHAT, "{prefix}{TeamColor}Echipa {TeamName} &aa castigat!");
         yml.addDefault(Messages.NPC_NAME_TEAM_UPGRADES, "&bTEAM UPGRADES,&e&lCLICK DREAPTA");

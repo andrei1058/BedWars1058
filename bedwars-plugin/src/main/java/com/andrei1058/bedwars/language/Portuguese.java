@@ -279,11 +279,16 @@ public class Portuguese extends Language {
         yml.addDefault(Messages.GAME_END_GAME_OVER_PLAYER_TITLE, "&c&lFIM DE JOGO!");
         yml.addDefault(Messages.GAME_END_VICTORY_PLAYER_TITLE, "&6&lVITÓRIA!");
         yml.addDefault(Messages.GAME_END_TEAM_WON_CHAT, "{prefix}{TeamColor}{TeamName} &aganhou o jogo!");
-        yml.addDefault(Messages.GAME_END_TOP_PLAYER_CHAT, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
+        yml.addDefault(Messages.FORMATTING_EACH_WINNER, "{player}");
+        yml.addDefault(Messages.GAME_END_FIRST_KILLER, "{player}");
+        yml.addDefault(Messages.GAME_END_SECOND_KILLER, "{player}");
+        yml.addDefault(Messages.GAME_END_THIRD_KILLER, "{player}");
+        yml.addDefault(Messages.GAME_END_TOP_PLAYER_CHAT, Arrays.asList(
+                "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
                 "&f                                   &lBedWars", "", "{winnerFormat}", "", "",
-                "&e                          &l1º Assassino &7- {firstName} - {firstKills}",
-                "&6                          &l2º Assassino &7- {secondName} - {secondKills}",
-                "&c                          &l3º Assassino &7- {thirdName} - {thirdKills}", "",
+                "&e                          &l1st Killer &7- {firstFormat} - {firstKills}",
+                "&6                          &l2nd Killer &7- {secondFormat} - {secondKills}",
+                "&c                          &l3rd Killer &7- {thirdFormat} - {thirdKills}", "",
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
         yml.addDefault(Messages.BED_HOLOGRAM_DEFEND, "&c&lDefenda sua cama!");
         yml.addDefault(Messages.BED_HOLOGRAM_DESTROYED, "&c&lSua cama foi destruída!");
