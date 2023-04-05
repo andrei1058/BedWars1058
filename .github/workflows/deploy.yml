@@ -73,8 +73,8 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           mode: lock
-          reason: rocket
           environment: master
+          environment_targets: master
       - name: Set Git config
         run: |
           git config --local user.email "actions@github.com"
