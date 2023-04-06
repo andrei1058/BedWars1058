@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.support.version.v1_19_R2.despawnable;
+package com.andrei1058.bedwars.support.version.v1_19_R3.despawnable;
 
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.server.VersionSupport;
@@ -12,7 +12,7 @@ import net.minecraft.world.entity.ai.goal.PathfinderGoalSelector;
 import net.minecraft.world.entity.ai.goal.target.PathfinderGoalNearestAttackableTarget;
 import net.minecraft.world.entity.player.EntityHuman;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_19_R2.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_19_R3.entity.CraftEntity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -31,16 +31,16 @@ public abstract class DespawnableProvider<T> {
     }
 
     protected PathfinderGoalSelector getTargetSelector(@NotNull EntityCreature entityLiving) {
-        return entityLiving.bT;
+        return entityLiving.bO;
     }
 
     protected PathfinderGoalSelector getGoalSelector(@NotNull EntityCreature entityLiving) {
-        return entityLiving.bS;
+        return entityLiving.bN;
     }
 
     protected void clearSelectors(@NotNull EntityCreature entityLiving) {
-        entityLiving.bS.b().clear();
-        entityLiving.bT.b().clear();
+        entityLiving.bO.b().clear();
+        entityLiving.bN.b().clear();
     }
 
     protected PathfinderGoal getTargetGoal(EntityInsentient entity, ITeam team, VersionSupport api) {
