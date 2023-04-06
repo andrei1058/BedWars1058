@@ -96,6 +96,7 @@ public class MenuTrapSlot implements MenuContent {
             for (String s : Language.getList(player, Messages.UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH + name.replace("trap-slot-", ""))) {
                 lore.add(s.replace("{cost}", String.valueOf(cost)).replace("{currency}", currency));
             }
+            lore.add("");
             for (String s : Language.getList(player, Messages.UPGRADES_TRAP_SLOT_ITEM_LORE2_PATH + name.replace("trap-slot-", ""))) {
                 lore.add(s.replace("{cost}", String.valueOf(cost)).replace("{currency}", currency));
             }
