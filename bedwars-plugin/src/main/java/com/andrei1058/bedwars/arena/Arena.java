@@ -500,7 +500,7 @@ public class Arena implements IArena {
             p.setHealth(20);
             for (Player on : players) {
                 on.sendMessage(
-                        getMsg(on, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG)
+                        getMsg(p, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG)
                             .replace("{vPrefix}", getChatSupport().getPrefix(p))
                             .replace("{vSuffix}", getChatSupport().getSuffix(p))
                             .replace("{playername}", p.getName())
@@ -878,7 +878,7 @@ public class Arena implements IArena {
         }
         for (Player on : getPlayers()) {
             on.sendMessage(
-                    getMsg(on, Messages.COMMAND_LEAVE_MSG)
+                    getMsg(p, Messages.COMMAND_LEAVE_MSG)
                             .replace("{vPrefix}", getChatSupport().getPrefix(p))
                             .replace("{vSuffix}", getChatSupport().getSuffix(p))
                             .replace("{playername}", p.getName())
@@ -887,7 +887,7 @@ public class Arena implements IArena {
             );
         }
         for (Player on : getSpectators()) {
-            on.sendMessage(getMsg(on, Messages.COMMAND_LEAVE_MSG).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()));
+            on.sendMessage(getMsg(p, Messages.COMMAND_LEAVE_MSG).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()));
         }
 
         if (getServerType() == ServerType.SHARED) {
@@ -1851,25 +1851,38 @@ public class Arena implements IArena {
                             p.getInventory().clear();
                         }
                     }
-                    String firstName = "";
-                    String secondName = "";
-                    String thirdName = "";
+
+                    Player firstPlayer = null;
+                    Player secondPlayer = null;
+                    Player thirdPlayer = null;
                     StringBuilder winners = new StringBuilder();
-                    //noinspection deprecation
-                    for (Player p : winner.getMembersCache()) {
+
+                    for(int i = 0; i < winner.getMembers().size(); i++){
+                        Player p = winner.getMembers().get(i);
+                        //Send winning title to the winner
                         if (p.getWorld().equals(getWorld())) {
                             nms.sendTitle(p, getMsg(p, Messages.GAME_END_VICTORY_PLAYER_TITLE), null, 0, 70, 20);
                         }
+                        //Build the winner format message
                         if (!winners.toString().contains(p.getDisplayName())) {
-                            winners.append(p.getDisplayName()).append(" ");
+                            if(winner.getSize() > 1 && i+1 != winner.getMembers().size()){
+                                winners.append(getMsg(p, Messages.FORMATTING_EACH_WINNER)
+                                        .replace("{vPrefix}", getChatSupport().getPrefix(p))
+                                        .replace("{vSuffix}", getChatSupport().getSuffix(p))
+                                        .replace("{playername}", p.getName())
+                                        .replace("{player}", p.getDisplayName())).append("§7, ");
+                            }else{
+                                winners.append(getMsg(p, Messages.FORMATTING_EACH_WINNER)
+                                        .replace("{vPrefix}", getChatSupport().getPrefix(p))
+                                        .replace("{vSuffix}", getChatSupport().getSuffix(p))
+                                        .replace("{playername}", p.getName())
+                                        .replace("{player}", p.getDisplayName()));
+                            }
                         }
                     }
-                    if (winners.toString().endsWith(" ")) {
-                        winners = new StringBuilder(winners.substring(0, winners.length() - 1));
-                    }
+
                     int first = 0, second = 0, third = 0;
                     if (!playerKills.isEmpty()) {
-
 
                         LinkedHashMap<String, Integer> reverseSortedMap = new LinkedHashMap<>();
 
@@ -1882,24 +1895,21 @@ public class Arena implements IArena {
                         int entry = 0;
                         for (Map.Entry<String, Integer> e : reverseSortedMap.entrySet()) {
                             if (entry == 0) {
-                                firstName = e.getKey();
                                 Player onlinePlayer = Bukkit.getPlayerExact(e.getKey());
                                 if (onlinePlayer != null) {
-                                    firstName = onlinePlayer.getDisplayName();
+                                    firstPlayer = onlinePlayer;
                                 }
                                 first = e.getValue();
                             } else if (entry == 1) {
-                                secondName = e.getKey();
                                 Player onlinePlayer = Bukkit.getPlayerExact(e.getKey());
                                 if (onlinePlayer != null) {
-                                    secondName = onlinePlayer.getDisplayName();
+                                    secondPlayer = onlinePlayer;
                                 }
                                 second = e.getValue();
                             } else if (entry == 2) {
-                                thirdName = e.getKey();
                                 Player onlinePlayer = Bukkit.getPlayerExact(e.getKey());
                                 if (onlinePlayer != null) {
-                                    thirdName = onlinePlayer.getDisplayName();
+                                    thirdPlayer = onlinePlayer;
                                 }
                                 third = e.getValue();
                                 break;
@@ -1908,15 +1918,32 @@ public class Arena implements IArena {
                         }
                     }
                     for (Player p : world.getPlayers()) {
-                        p.sendMessage(getMsg(p, Messages.GAME_END_TEAM_WON_CHAT).replace("{TeamColor}", winner.getColor().chat().toString())
+                        p.sendMessage(getMsg(p, Messages.GAME_END_TEAM_WON_CHAT)
+                                .replace("{TeamColor}", winner.getColor().chat().toString())
                                 .replace("{TeamName}", winner.getDisplayName(Language.getPlayerLanguage(p))));
+
                         if (!winner.getMembers().contains(p)) {
                             nms.sendTitle(p, getMsg(p, Messages.GAME_END_GAME_OVER_PLAYER_TITLE), null, 0, 70, 20);
                         }
+
                         for (String s : getList(p, Messages.GAME_END_TOP_PLAYER_CHAT)) {
-                            String message = s.replace("{firstName}", firstName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : firstName).replace("{firstKills}", String.valueOf(first))
-                                    .replace("{secondName}", secondName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : secondName).replace("{secondKills}", String.valueOf(second))
-                                    .replace("{thirdName}", thirdName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : thirdName).replace("{thirdKills}", String.valueOf(third))
+                            String message = s
+                                    .replace("{firstFormat}", firstPlayer == null ? getMsg(p, Messages.MEANING_NOBODY) : getMsg(firstPlayer, Messages.GAME_END_FIRST_KILLER))
+                                        .replace("{firstKills}", String.valueOf(first))
+                                        .replace("{vPrefix}", getChatSupport().getPrefix(firstPlayer))
+                                        .replace("{vSuffix}", getChatSupport().getSuffix(firstPlayer))
+                                        .replace("{playername}", Objects.requireNonNull(firstPlayer).getName())
+                                        .replace("{player}", firstPlayer.getDisplayName())
+                                    .replace("{secondFormat}", secondPlayer == null ? getMsg(p, Messages.MEANING_NOBODY) : getMsg(secondPlayer, Messages.GAME_END_SECOND_KILLER)).replace("{secondKills}", String.valueOf(second))
+                                        .replace("{vPrefix}", getChatSupport().getPrefix(secondPlayer))
+                                        .replace("{vSuffix}", getChatSupport().getSuffix(secondPlayer))
+                                        .replace("{playername}", Objects.requireNonNull(secondPlayer).getName())
+                                        .replace("{player}", secondPlayer.getDisplayName())
+                                    .replace("{thirdFormat}", thirdPlayer == null ? getMsg(p, Messages.MEANING_NOBODY) : getMsg(thirdPlayer, Messages.GAME_END_THIRD_KILLER)).replace("{thirdKills}", String.valueOf(third))
+                                        .replace("{vPrefix}", getChatSupport().getPrefix(thirdPlayer))
+                                        .replace("{vSuffix}", getChatSupport().getSuffix(thirdPlayer))
+                                        .replace("{playername}", Objects.requireNonNull(thirdPlayer).getName())
+                                        .replace("{player}", thirdPlayer.getDisplayName())
                                     .replace("{winnerFormat}", getMaxInTeam() > 1 ? getMsg(p, Messages.FORMATTING_TEAM_WINNER_FORMAT).replace("{members}", winners.toString()) : getMsg(p, Messages.FORMATTING_SOLO_WINNER_FORMAT).replace("{members}", winners.toString()))
                                     .replace("{TeamColor}", winner.getColor().chat().toString()).replace("{TeamName}", winner.getDisplayName(Language.getPlayerLanguage(p)));
                             p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, message));

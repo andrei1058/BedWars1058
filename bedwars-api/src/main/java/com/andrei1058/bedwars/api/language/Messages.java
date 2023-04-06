@@ -209,6 +209,7 @@ public class Messages {
     public static String FORMATTING_ACTION_BAR_TRACKING = "format-action-tracking";
     public static String FORMATTING_TEAM_WINNER_FORMAT = "format-winner-team";
     public static String FORMATTING_SOLO_WINNER_FORMAT = "format-winner-solo";
+    public static String FORMATTING_EACH_WINNER = "format-each-winner";
     //public static String FORMATTING_TAB_LIST = "format.tablist";
     public static String FORMATTING_GENERATOR_TIER1 = "format-tier1";
     public static String FORMATTING_GENERATOR_TIER2 = "format-tier2";
@@ -299,6 +300,9 @@ public class Messages {
     /** Misc */
     public static String GAME_END_GAME_OVER_PLAYER_TITLE = "game-end-game-over-title";
     public static String GAME_END_VICTORY_PLAYER_TITLE = "game-end-victory-title";
+    public static String GAME_END_FIRST_KILLER = "game-end-first-killer";
+    public static String GAME_END_SECOND_KILLER = "game-end-second-killer";
+    public static String GAME_END_THIRD_KILLER = "game-end-third-killer";
     public static String GAME_END_TOP_PLAYER_CHAT = "game-end-top-chat";
     public static String GAME_END_TEAM_WON_CHAT = "game-end-winner-team";
     public static String XP_REWARD_WIN = "xp-reward-game-win";

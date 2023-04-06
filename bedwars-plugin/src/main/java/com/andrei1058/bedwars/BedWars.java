@@ -118,6 +118,7 @@ public class BedWars extends JavaPlugin {
     public static StatsManager statsManager;
     public static BedWars plugin;
     public static VersionSupport nms;
+    public static SupportPAPI supportPAPI;
 
     public static boolean isPaper = false;
 
