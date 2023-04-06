@@ -1928,22 +1928,24 @@ public class Arena implements IArena {
 
                         for (String s : getList(p, Messages.GAME_END_TOP_PLAYER_CHAT)) {
                             String message = s
-                                    .replace("{firstFormat}", firstPlayer == null ? getMsg(p, Messages.MEANING_NOBODY) : getMsg(firstPlayer, Messages.GAME_END_FIRST_KILLER))
-                                        .replace("{firstKills}", String.valueOf(first))
-                                        .replace("{vPrefix}", getChatSupport().getPrefix(firstPlayer))
-                                        .replace("{vSuffix}", getChatSupport().getSuffix(firstPlayer))
-                                        .replace("{playername}", Objects.requireNonNull(firstPlayer).getName())
-                                        .replace("{player}", firstPlayer.getDisplayName())
-                                    .replace("{secondFormat}", secondPlayer == null ? getMsg(p, Messages.MEANING_NOBODY) : getMsg(secondPlayer, Messages.GAME_END_SECOND_KILLER)).replace("{secondKills}", String.valueOf(second))
-                                        .replace("{vPrefix}", getChatSupport().getPrefix(secondPlayer))
-                                        .replace("{vSuffix}", getChatSupport().getSuffix(secondPlayer))
-                                        .replace("{playername}", Objects.requireNonNull(secondPlayer).getName())
-                                        .replace("{player}", secondPlayer.getDisplayName())
-                                    .replace("{thirdFormat}", thirdPlayer == null ? getMsg(p, Messages.MEANING_NOBODY) : getMsg(thirdPlayer, Messages.GAME_END_THIRD_KILLER)).replace("{thirdKills}", String.valueOf(third))
-                                        .replace("{vPrefix}", getChatSupport().getPrefix(thirdPlayer))
-                                        .replace("{vSuffix}", getChatSupport().getSuffix(thirdPlayer))
-                                        .replace("{playername}", Objects.requireNonNull(thirdPlayer).getName())
-                                        .replace("{player}", thirdPlayer.getDisplayName())
+                                    .replace("{firstFormat}", firstPlayer == null ? getMsg(p, Messages.MEANING_NOBODY) : getMsg(firstPlayer, Messages.GAME_END_FIRST_KILLER)
+                                            .replace("{vPrefix}", getChatSupport().getPrefix(firstPlayer))
+                                            .replace("{vSuffix}", getChatSupport().getSuffix(firstPlayer))
+                                            .replace("{playername}", firstPlayer.getName())
+                                            .replace("{player}", firstPlayer.getDisplayName())).replace("{firstKills}", String.valueOf(first))
+
+                                    .replace("{secondFormat}", secondPlayer == null ? getMsg(p, Messages.MEANING_NOBODY) : getMsg(secondPlayer, Messages.GAME_END_SECOND_KILLER)
+                                            .replace("{vPrefix}", getChatSupport().getPrefix(secondPlayer))
+                                            .replace("{vSuffix}", getChatSupport().getSuffix(secondPlayer))
+                                            .replace("{playername}", secondPlayer.getName())
+                                            .replace("{player}", secondPlayer.getDisplayName())).replace("{secondKills}", String.valueOf(second))
+
+                                    .replace("{thirdFormat}", thirdPlayer == null ? getMsg(p, Messages.MEANING_NOBODY) : getMsg(thirdPlayer, Messages.GAME_END_THIRD_KILLER)
+                                            .replace("{vPrefix}", getChatSupport().getPrefix(thirdPlayer))
+                                            .replace("{vSuffix}", getChatSupport().getSuffix(thirdPlayer))
+                                            .replace("{playername}", thirdPlayer.getName())
+                                            .replace("{player}", thirdPlayer.getDisplayName())).replace("{thirdKills}", String.valueOf(third))
+
                                     .replace("{winnerFormat}", getMaxInTeam() > 1 ? getMsg(p, Messages.FORMATTING_TEAM_WINNER_FORMAT).replace("{members}", winners.toString()) : getMsg(p, Messages.FORMATTING_SOLO_WINNER_FORMAT).replace("{members}", winners.toString()))
                                     .replace("{TeamColor}", winner.getColor().chat().toString()).replace("{TeamName}", winner.getDisplayName(Language.getPlayerLanguage(p)));
                             p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, message));
