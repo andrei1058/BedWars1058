@@ -103,7 +103,14 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         new SetShop(this, "setShop");
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.SetUpgrade(this, "setUpgrade");
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.AddGenerator(this, "addGenerator");
+        new SetSpawnProtection(this, "setSpawnProtection");
+        new SetShopProtection(this, "setShopProtection");
+        new SetUpgradesProtection(this, "setUpgradesProtection");
+        new SetGeneratorProtection(this, "setGeneratorProtection");
+        new SetIslandRadius(this, "setIslandRadius");
         new RemoveGenerator(this, "removeGenerator");
+        new SetUseBedHologram(this, "setUseBedHologram");
+        new SetDisplayName(this, "setDisplayName");
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.SetType(this, "setType");
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.Save(this, "save");
         if (JoinNPC.isCitizensSupport() && BedWars.getServerType() != ServerType.BUNGEE) {
