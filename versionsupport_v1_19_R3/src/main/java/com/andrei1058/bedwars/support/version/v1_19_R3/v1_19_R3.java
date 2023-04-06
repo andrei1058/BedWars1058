@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.support.version.v1_19_R2;
+package com.andrei1058.bedwars.support.version.v1_19_R3;
 
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.shop.ShopHolo;
@@ -10,9 +10,9 @@ import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.VersionSupport;
 import com.andrei1058.bedwars.support.version.common.VersionCommon;
-import com.andrei1058.bedwars.support.version.v1_19_R2.despawnable.DespawnableAttributes;
-import com.andrei1058.bedwars.support.version.v1_19_R2.despawnable.DespawnableFactory;
-import com.andrei1058.bedwars.support.version.v1_19_R2.despawnable.DespawnableType;
+import com.andrei1058.bedwars.support.version.v1_19_R3.despawnable.DespawnableAttributes;
+import com.andrei1058.bedwars.support.version.v1_19_R3.despawnable.DespawnableFactory;
+import com.andrei1058.bedwars.support.version.v1_19_R3.despawnable.DespawnableType;
 import com.mojang.datafixers.util.Pair;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -22,14 +22,17 @@ import net.minecraft.network.protocol.game.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.level.EntityPlayer;
+import net.minecraft.world.damagesource.DamageScaling;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.EnumItemSlot;
 import net.minecraft.world.entity.item.EntityTNTPrimed;
 import net.minecraft.world.entity.projectile.EntityFireball;
 import net.minecraft.world.entity.projectile.IProjectile;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBase;
 import org.bukkit.*;
@@ -40,12 +43,12 @@ import org.bukkit.block.data.type.Bed;
 import org.bukkit.block.data.type.Ladder;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.command.Command;
-import org.bukkit.craftbukkit.v1_19_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_19_R2.entity.CraftFireball;
-import org.bukkit.craftbukkit.v1_19_R2.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_19_R2.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_19_R2.entity.CraftTNTPrimed;
-import org.bukkit.craftbukkit.v1_19_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_19_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_19_R3.entity.CraftFireball;
+import org.bukkit.craftbukkit.v1_19_R3.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_19_R3.entity.CraftTNTPrimed;
+import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
 import org.bukkit.entity.*;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -64,12 +67,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
-@SuppressWarnings("unused")
-public class v1_19_R2 extends VersionSupport {
+public class v1_19_R3 extends VersionSupport {
 
     private final DespawnableFactory despawnableFactory;
 
-    public v1_19_R2(Plugin plugin, String name) {
+    public v1_19_R3(Plugin plugin, String name) {
         super(plugin, name);
         loadDefaultEffects();
         this.despawnableFactory = new DespawnableFactory(this);
@@ -283,7 +285,7 @@ public class v1_19_R2 extends VersionSupport {
 
     @Override
     public void voidKill(Player p) {
-        getPlayer(p).a(DamageSource.m, 1000);
+        p.setHealth(0);
     }
 
     @Override
