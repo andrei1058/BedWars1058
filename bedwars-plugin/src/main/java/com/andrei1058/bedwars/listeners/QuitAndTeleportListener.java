@@ -88,6 +88,10 @@ public class QuitAndTeleportListener implements Listener {
             ss.cancel();
         }
 
+        if (SidebarService.getInstance() == null) {
+            return;
+        }
+        
         SidebarService.getInstance().remove(e.getPlayer());
 
         BedWarsTeam.reSpawnInvulnerability.remove(e.getPlayer().getUniqueId());
