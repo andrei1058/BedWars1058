@@ -311,9 +311,9 @@
                             <pattern>com.andrei1058.spigot.sidebarutils</pattern>
                             <shadedPattern>com.andrei1058.bedwars.libs.updater</shadedPattern>
                         </relocation>
-                            <relocation>
-                                <pattern>com.iridium.iridiumcolorapi</pattern>
-                                <shadedPattern>com.andrei1058.bedwars.libs.color</shadedPattern>
+                        <relocation>
+                            <pattern>com.iridium.iridiumcolorapi</pattern>
+                            <shadedPattern>com.andrei1058.bedwars.libs.color</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>io.papermc.lib</pattern>
