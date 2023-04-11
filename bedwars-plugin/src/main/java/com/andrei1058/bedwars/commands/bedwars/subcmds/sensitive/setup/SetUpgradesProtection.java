@@ -67,7 +67,7 @@ public class SetUpgradesProtection extends SubCommand {
      */
     @Override
     public List<String> getTabComplete() {
-        return Arrays.asList("180", "256");
+        return null;
     }
 
     @Override
