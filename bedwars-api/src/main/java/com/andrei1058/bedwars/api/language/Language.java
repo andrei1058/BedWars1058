@@ -97,8 +97,7 @@ public class Language extends ConfigManager {
         if (p == null) return getDefaultLanguage().m(path);
         BedWars api = Bukkit.getServicesManager().getRegistration(BedWars.class).getProvider();
 
-        return api.getConfigs().getMainConfig().getBoolean(ConfigPath.GENERAL_CHAT_ENABLE_RGB) ? IridiumColorAPI.process(api.getSupportPapi().replace(p, langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage()).m(path).replace("{prefix}", (prefixStatic == null ? "" : prefixStatic)))) :
-                ChatColor.translateAlternateColorCodes('&', api.getSupportPapi().replace(p, langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage()).m(path).replace("{prefix}", (prefixStatic == null ? "" : prefixStatic))));
+        return IridiumColorAPI.process(api.getSupportPapi().replace(p, langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage()).m(path).replace("{prefix}", (prefixStatic == null ? "" : prefixStatic))));
     }
 
     /**
