@@ -40,6 +40,7 @@ public class English extends Language {
 
         YamlConfiguration yml = getYml();
         yml.options().copyDefaults(true);
+        yml.options().header("RGB is supported with 3 methods: <SOLID:FF0080> -> Solid, <RAINBOW1></RAINBOW> -> Rainbow (number customizable) & <GRADIENT:2C08BA></GRADIENT:028A97> -> Gradient");
         yml.addDefault(Messages.PREFIX, "");
         yml.addDefault("name", "English");
 

@@ -24,6 +24,7 @@ import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerLangChangeEvent;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -95,8 +96,8 @@ public class Language extends ConfigManager {
     public static String getMsg(Player p, String path) {
         if (p == null) return getDefaultLanguage().m(path);
         BedWars api = Bukkit.getServicesManager().getRegistration(BedWars.class).getProvider();
-        return ChatColor.translateAlternateColorCodes('&', api.getSupportPapi().replace(p, langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage()).m(path).replace("{prefix}", (prefixStatic == null ? "" : prefixStatic))));
-//        return langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage()).m(path).replace("{prefix}", (prefixStatic == null ? "" : prefixStatic));
+
+        return IridiumColorAPI.process(api.getSupportPapi().replace(p, langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage()).m(path).replace("{prefix}", (prefixStatic == null ? "" : prefixStatic))));
     }
 
     /**
