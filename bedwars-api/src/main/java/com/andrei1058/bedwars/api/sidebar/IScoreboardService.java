@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * BedWars scoreboard manager.
  */
-public interface ISidebarService {
+public interface IScoreboardService {
 
     /**
      * Send player scoreboard based on conditions.
@@ -24,16 +24,6 @@ public interface ISidebarService {
      * Refresh title on all scoreboards.
      */
     void refreshTitles();
-
-    /**
-     * Refresh placeholders on all sidebars.
-     */
-    void refreshPlaceholders();
-
-    /**
-     * Refresh placeholders for sidebars in a given arena;
-     */
-    void refreshPlaceholders(IArena arena);
 
     /**
      * Refresh all tab-list header and footer strings for every sidebar.

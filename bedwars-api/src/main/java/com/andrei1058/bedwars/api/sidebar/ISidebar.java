@@ -1,9 +1,8 @@
 package com.andrei1058.bedwars.api.sidebar;
 
 import com.andrei1058.bedwars.api.arena.IArena;
-import com.andrei1058.spigot.sidebar.PlaceholderProvider;
-import com.andrei1058.spigot.sidebar.Sidebar;
-import com.andrei1058.spigot.sidebar.SidebarLine;
+import me.neznamy.tab.api.TabAPI;
+import me.neznamy.tab.api.TabPlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,7 +14,7 @@ public interface ISidebar {
     /**
      * Sidebar holder.
      */
-    Player getPlayer();
+    TabPlayer getTabPlayer();
 
     /**
      * Coincides with the arena where the player is on.
@@ -24,24 +23,15 @@ public interface ISidebar {
     IArena getArena();
 
     /**
-     * Get sidebar lib handle.
+     * Get tab api handle.
      */
-    Sidebar getHandle();
+    TabAPI getHandle();
 
     /**
      * Set sidebar content.
      */
-    void setContent(List<String> titleArray, List<String> lineArray, @Nullable IArena arena);
+    void setContent(String status, String title, List<String> lineArray);
 
-    /**
-     * Convert an animated string to an object.
-     */
-    SidebarLine normalizeTitle(@Nullable List<String> titleArray);
-
-    /**
-     * Convert string lines to string objects.
-     */
-    @NotNull List<SidebarLine> normalizeLines(@NotNull List<String> lineArray);
 
     /**
      * Will update tab prefix and suffix for the given player on current sidebar.
@@ -57,8 +47,5 @@ public interface ISidebar {
      */
     boolean isTabFormattingDisabled();
 
-    /**
-     * Register a placeholder that is not going to be removed trough game state changes.
-     */
-    boolean registerPersistentPlaceholder(PlaceholderProvider placeholderProvider);
+
 }

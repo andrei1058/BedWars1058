@@ -63,11 +63,13 @@ import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
 import com.andrei1058.bedwars.listeners.dropshandler.PlayerDrops;
 import com.andrei1058.bedwars.money.internal.MoneyPerMinuteTask;
 import com.andrei1058.bedwars.shop.ShopCache;
-import com.andrei1058.bedwars.sidebar.SidebarService;
+import com.andrei1058.bedwars.sidebar.BoardManager;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.support.paper.PaperSupport;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.support.vault.WithEconomy;
+import me.neznamy.tab.api.TabAPI;
+import me.neznamy.tab.api.placeholder.PlaceholderManager;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -405,6 +407,13 @@ public class Arena implements IArena {
         YamlConfiguration yaml = YamlConfiguration.loadConfiguration(new File("spigot.yml"));
         renderDistance = yaml.get("world-settings." + getWorldName() + ".entity-tracking-range.players") == null ?
                 yaml.getInt("world-settings.default.entity-tracking-range.players") : yaml.getInt("world-settings." + getWorldName() + ".entity-tracking-range.players");
+
+        // register arena placeholders
+        PlaceholderManager pm = TabAPI.getInstance().getPlaceholderManager();
+        for (int i = 1; i <= teams.size(); i++) {
+            int finalI = i;
+            pm.registerPlayerPlaceholder("%bw_team_"+ i +"%", 50, player -> getTeamPlaceholder((Player) player.getPlayer(), finalI));
+        }
     }
 
     /**
@@ -551,7 +560,7 @@ public class Arena implements IArena {
             PaperSupport.teleportC(p, getWaitingLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
 
             if (!isStatusChange){
-                SidebarService.getInstance().giveSidebar(p, this, false);
+                BoardManager.getInstance().giveSidebar(p, this, false);
             }
             sendPreGameCommandItems(p);
             for (PotionEffect pf : p.getActivePotionEffects()) {
@@ -650,7 +659,7 @@ public class Arena implements IArena {
                 setArenaByPlayer(p, this);
             }
 
-            SidebarService.getInstance().giveSidebar(p, this, false);
+            BoardManager.getInstance().giveSidebar(p, this, false);
             nms.setCollide(p, this, false);
 
             if (!playerBefore) {
@@ -891,7 +900,7 @@ public class Arena implements IArena {
         }
 
         if (getServerType() == ServerType.SHARED) {
-            SidebarService.getInstance().remove(p);
+            BoardManager.getInstance().remove(p);
             this.sendToMainLobby(p);
 
         } else if (getServerType() == ServerType.BUNGEE) {
@@ -929,7 +938,7 @@ public class Arena implements IArena {
                         BedWars.nms.spigotHidePlayer(on, p);
                     }
                 }
-                if (!disconnect) SidebarService.getInstance().giveSidebar(p, null, false);
+                if (!disconnect) BoardManager.getInstance().giveSidebar(p, null, false);
             }, 5L);
         }
 
@@ -1031,7 +1040,7 @@ public class Arena implements IArena {
         BedWars.getAPI().getAFKUtil().setPlayerAFK(p, false);
 
         if (getServerType() == ServerType.SHARED) {
-            SidebarService.getInstance().remove(p);
+            BoardManager.getInstance().remove(p);
             this.sendToMainLobby(p);
         } else if (getServerType() == ServerType.MULTIARENA) {
             this.sendToMainLobby(p);
@@ -1070,7 +1079,7 @@ public class Arena implements IArena {
                         BedWars.nms.spigotHidePlayer(on, p);
                     }
                 }
-                if (!disconnect) SidebarService.getInstance().giveSidebar(p, null, false);
+                if (!disconnect) BoardManager.getInstance().giveSidebar(p, null, false);
             });
         }
 
@@ -1166,7 +1175,7 @@ public class Arena implements IArena {
         reJoin.getBwt().reJoin(p, ev.getRespawnTime());
         reJoin.destroy(false);
 
-        SidebarService.getInstance().giveSidebar(p, this, true);
+        BoardManager.getInstance().giveSidebar(p, this, true);
         return true;
     }
 
@@ -1315,6 +1324,57 @@ public class Arena implements IArena {
     @Override
     public int getMaxPlayers() {
         return maxPlayers;
+    }
+
+    /**
+     * Get the Placeholder string for a given team
+     *
+     * @param player Target player for localization
+     * @param teamNumber number of team in array
+     * @return formatted placeholder string with status. Can be NULL if no arena is found
+     */
+    private String getTeamPlaceholder(Player player, int teamNumber){
+        Arena arena = (Arena) Arena.getArenaByPlayer(player);
+        if (arena == null) return null;
+        Language language = Language.getPlayerLanguage(player);
+        String genericTeamFormat = language.m(Messages.FORMATTING_SCOREBOARD_TEAM_GENERIC);
+        ITeam team = arena.getTeams().get(teamNumber-1);
+        String teamName = team.getDisplayName(language);
+        if (arena.getTeams().size() >= teamNumber) {
+            return genericTeamFormat
+                    .replace("{TeamLetter}", String.valueOf(teamName.length() != 0 ? teamName.charAt(0) : ""))
+                    .replace("{TeamColor}", team.getColor().chat().toString())
+                    .replace("{TeamName}", teamName)
+                    .replace("{TeamStatus}", getTeamStatus(team, player));
+        } else {
+            // skip line
+            return null;
+        }
+    }
+
+    /**
+     * Get the current status of a team. Alive/Dead/Num of players alive.
+     *
+     * @param currentTeam Target team to process
+     * @param player Target player for localization
+     * @return team status string
+     */
+    private String getTeamStatus(ITeam currentTeam, Player player){
+        String result;
+        if (currentTeam.isBedDestroyed()) {
+            if (currentTeam.getSize() > 0) {
+                result = getMsg(player, Messages.FORMATTING_SCOREBOARD_BED_DESTROYED)
+                        .replace("{remainingPlayers}", String.valueOf(currentTeam.getSize()));
+            } else {
+                result = getMsg(player, Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED);
+            }
+        } else {
+            result = getMsg(player, Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE);
+        }
+        if (currentTeam.isMember(player)) {
+            result += getMsg(player, Messages.FORMATTING_SCOREBOARD_YOUR_TEAM);
+        }
+        return result;
     }
 
     /**
@@ -1501,10 +1561,6 @@ public class Arena implements IArena {
             perMinuteTask.cancel();
         }
 
-        players.forEach(c -> SidebarService.getInstance().giveSidebar(c, this, false));
-
-        spectators.forEach(c -> SidebarService.getInstance().giveSidebar(c, this, false));
-
         if (status == GameState.starting) {
             startingTask = new GameStartingTask(this);
         } else if (status == GameState.playing) {
@@ -1518,6 +1574,11 @@ public class Arena implements IArena {
         } else if (status == GameState.restarting) {
             restartingTask = new GameRestartingTask(this);
         }
+
+        players.forEach(c -> BoardManager.getInstance().giveSidebar(c, this, false));
+
+        spectators.forEach(c -> BoardManager.getInstance().giveSidebar(c, this, false));
+
     }
 
     /**
