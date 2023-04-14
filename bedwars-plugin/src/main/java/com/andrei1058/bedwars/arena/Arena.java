@@ -69,6 +69,7 @@ import com.andrei1058.bedwars.support.paper.PaperSupport;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.support.vault.WithEconomy;
 import me.neznamy.tab.api.TabAPI;
+import me.neznamy.tab.api.event.player.PlayerLoadEvent;
 import me.neznamy.tab.api.placeholder.PlaceholderManager;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -560,7 +561,9 @@ public class Arena implements IArena {
             PaperSupport.teleportC(p, getWaitingLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
 
             if (!isStatusChange){
-                BoardManager.getInstance().giveSidebar(p, this, false);
+                if (Bukkit.getServer().getPluginManager().getPlugin("TAB")!= null)
+                    TabAPI.getInstance().getEventBus().register(PlayerLoadEvent.class,
+                            event -> BoardManager.getInstance().giveSidebar((Player) event.getPlayer().getPlayer(), this, false));
             }
             sendPreGameCommandItems(p);
             for (PotionEffect pf : p.getActivePotionEffects()) {
