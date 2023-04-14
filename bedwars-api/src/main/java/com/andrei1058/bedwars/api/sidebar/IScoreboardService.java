@@ -38,4 +38,9 @@ public interface IScoreboardService {
     @Nullable
     ISidebar getSidebar(@NotNull Player player);
 
+    /**
+     * @return true if tab formatting is disabled for current sidebar/ arena stage
+     */
+    boolean isTabFormattingDisabled(IArena arena);
+
 }

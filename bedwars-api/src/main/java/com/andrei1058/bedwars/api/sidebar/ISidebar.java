@@ -42,10 +42,4 @@ public interface ISidebar {
     void giveUpdateTabFormat(@NotNull Player player, boolean skipStateCheck);
 
 
-    /**
-     * @return true if tab formatting is disabled for current sidebar/ arena stage
-     */
-    boolean isTabFormattingDisabled();
-
-
 }

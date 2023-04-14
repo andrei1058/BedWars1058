@@ -20,7 +20,6 @@ import org.jetbrains.annotations.Nullable;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class Board implements ISidebar {
@@ -345,41 +344,7 @@ public class Board implements ISidebar {
 //        return new SidebarLineAnimated(lines);
 //    }
 
-    /**
-     * @return true if tab formatting is disabled for current sidebar/ arena stage
-     */
-    public boolean isTabFormattingDisabled() {
-        if (noArena()) {
 
-            if (getServerType() == ServerType.SHARED) {
-                if (config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_LOBBY) &&
-                        !config.getLobbyWorldName().trim().isEmpty()) {
-
-                    World lobby = Bukkit.getWorld(config.getLobbyWorldName());
-                    return null != lobby;
-                }
-            }
-
-            return !config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_LOBBY);
-        }
-        // if tab formatting is disabled in game
-        if (arena.getStatus() == GameState.playing && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_PLAYING)) {
-            return false;
-        }
-
-        // if tab formatting is disabled in starting
-        if (arena.getStatus() == GameState.starting && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_STARTING)) {
-            return false;
-        }
-
-        // if tab formatting is disabled in waiting
-        if (arena.getStatus() == GameState.waiting && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_WAITING)) {
-            return false;
-        }
-
-        // if tab formatting is disabled in restarting
-        return arena.getStatus() != GameState.restarting || !config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_RESTARTING);
-    }
 
 //    @Override
 //    public boolean registerPersistentPlaceholder(PlaceholderProvider placeholderProvider) {

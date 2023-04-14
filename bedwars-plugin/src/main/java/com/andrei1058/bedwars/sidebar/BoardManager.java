@@ -19,6 +19,7 @@ import me.neznamy.tab.api.placeholder.PlaceholderManager;
 import me.neznamy.tab.api.scoreboard.Scoreboard;
 import me.neznamy.tab.api.scoreboard.ScoreboardManager;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,6 +37,7 @@ public class BoardManager implements IScoreboardService {
 
     private static ScoreboardManager scoreboardManager;
     private static BoardManager instance;
+    private Integer rotationCount = 0;
 
 
     public static boolean init(){
@@ -99,6 +101,10 @@ public class BoardManager implements IScoreboardService {
 
     @Override
     public void giveSidebar(@NotNull Player player, @Nullable IArena arena, boolean delay) {
+        // if sidebar is disabled in lobby on shared mode
+        if (null == arena) if (!config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR)) return;
+        else if (!config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_GAME_SIDEBAR)) return;
+
 
         // set sidebar lines based on game state or lobby
         List<String> lines = null;
@@ -130,6 +136,8 @@ public class BoardManager implements IScoreboardService {
         TabPlayer tabPlayer = TabAPI.getInstance().getPlayer(player.getUniqueId());
 
         TabAPI.getInstance().getScoreboardManager().showScoreboard(tabPlayer, scoreboard);
+
+        setHeaderFooter(tabPlayer,arena);
     }
 
     @Override
@@ -219,6 +227,97 @@ public class BoardManager implements IScoreboardService {
         return arena.getPlayers().size();
     }
 
+    private void setHeaderFooter(TabPlayer player, IArena arena) {
+        if (isTabFormattingDisabled(arena)) {
+            return;
+        }
+        Language lang = Language.getPlayerLanguage((Player) player.getPlayer());
+
+        if (null == arena) {
+            TabAPI.getInstance().getHeaderFooterManager().setHeaderAndFooter(
+                    player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_LOBBY),
+                    lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_LOBBY)
+            );
+            return;
+        }
+        if (arena.isSpectator((Player) player.getPlayer())) {
+            TabAPI.getInstance().getHeaderFooterManager().setHeaderAndFooter(
+                    player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR),
+                    lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR)
+            );
+            return;
+        }
+
+
+        String headerPath = null;
+        String footerPath = null;
+
+        switch (arena.getStatus()) {
+            case waiting:
+                headerPath = Messages.FORMATTING_SIDEBAR_TAB_HEADER_WAITING;
+                footerPath = Messages.FORMATTING_SIDEBAR_TAB_FOOTER_WAITING;
+                break;
+            case starting:
+                headerPath = Messages.FORMATTING_SIDEBAR_TAB_HEADER_STARTING;
+                footerPath = Messages.FORMATTING_SIDEBAR_TAB_FOOTER_STARTING;
+                break;
+            case playing:
+                headerPath = Messages.FORMATTING_SIDEBAR_TAB_HEADER_PLAYING;
+                footerPath = Messages.FORMATTING_SIDEBAR_TAB_FOOTER_PLAYING;
+                break;
+            case restarting:
+                headerPath = Messages.FORMATTING_SIDEBAR_TAB_HEADER_RESTARTING;
+                footerPath = Messages.FORMATTING_SIDEBAR_TAB_FOOTER_RESTARTING;
+                break;
+        }
+
+        TabAPI.getInstance().getHeaderFooterManager().setHeaderAndFooter(
+                player, lang.m(headerPath),
+                lang.m(footerPath)
+        );
+    }
+
+    private void setTabPlayer(TabPlayer player, String prefix, String suffix){
+        TabAPI.getInstance().getTablistFormatManager().setPrefix(player, prefix);
+        TabAPI.getInstance().getTablistFormatManager().setSuffix(player, suffix);
+    }
+
+    /**
+     * @return true if tab formatting is disabled for current sidebar/ arena stage
+     */
+    @Override
+    public boolean isTabFormattingDisabled(IArena arena) {
+        if (null == arena) {
+
+            if (getServerType() == ServerType.SHARED) {
+                if (config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_LOBBY) &&
+                        !config.getLobbyWorldName().trim().isEmpty()) {
+
+                    World lobby = Bukkit.getWorld(config.getLobbyWorldName());
+                    return null != lobby;
+                }
+            }
+
+            return !config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_LOBBY);
+        }
+        // if tab formatting is disabled in game
+        if (arena.getStatus() == GameState.playing && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_PLAYING)) {
+            return false;
+        }
+
+        // if tab formatting is disabled in starting
+        if (arena.getStatus() == GameState.starting && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_STARTING)) {
+            return false;
+        }
+
+        // if tab formatting is disabled in waiting
+        if (arena.getStatus() == GameState.waiting && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_WAITING)) {
+            return false;
+        }
+
+        // if tab formatting is disabled in restarting
+        return arena.getStatus() != GameState.restarting || !config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_RESTARTING);
+    }
 
     @Override
     public void refreshTabList() {
