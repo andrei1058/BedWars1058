@@ -71,6 +71,7 @@ import com.andrei1058.bedwars.support.vault.WithEconomy;
 import me.neznamy.tab.api.TabAPI;
 import me.neznamy.tab.api.event.player.PlayerLoadEvent;
 import me.neznamy.tab.api.placeholder.PlaceholderManager;
+import me.neznamy.tab.api.placeholder.PlayerPlaceholder;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -1578,9 +1579,19 @@ public class Arena implements IArena {
             restartingTask = new GameRestartingTask(this);
         }
 
-        players.forEach(c -> BoardManager.getInstance().giveSidebar(c, this, false));
+        PlayerPlaceholder prefixPlaceholder = (PlayerPlaceholder) TabAPI.getInstance().getPlaceholderManager().getPlaceholder("%bw_prefix%");
+        PlayerPlaceholder suffixPlaceholder = (PlayerPlaceholder) TabAPI.getInstance().getPlaceholderManager().getPlaceholder("%bw_suffix%");
+        players.forEach(c -> {
+            BoardManager.getInstance().giveSidebar(c, this, false);
+            prefixPlaceholder.updateValue(TabAPI.getInstance().getPlayer(c.getUniqueId()), prefixPlaceholder.request(TabAPI.getInstance().getPlayer(c.getUniqueId())));
+            suffixPlaceholder.updateValue(TabAPI.getInstance().getPlayer(c.getUniqueId()), suffixPlaceholder.request(TabAPI.getInstance().getPlayer(c.getUniqueId())));
+        });
 
-        spectators.forEach(c -> BoardManager.getInstance().giveSidebar(c, this, false));
+        spectators.forEach(c -> {
+            BoardManager.getInstance().giveSidebar(c, this, false);
+            prefixPlaceholder.updateValue(TabAPI.getInstance().getPlayer(c.getUniqueId()), prefixPlaceholder.request(TabAPI.getInstance().getPlayer(c.getUniqueId())));
+            suffixPlaceholder.updateValue(TabAPI.getInstance().getPlayer(c.getUniqueId()), suffixPlaceholder.request(TabAPI.getInstance().getPlayer(c.getUniqueId())));
+        });
 
     }
 
