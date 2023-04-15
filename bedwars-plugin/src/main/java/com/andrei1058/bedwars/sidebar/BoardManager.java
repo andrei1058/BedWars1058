@@ -198,7 +198,9 @@ public class BoardManager implements IScoreboardService {
 
     @Override
     public void giveSidebar(@NotNull Player player, @Nullable IArena arena, boolean delay) {
-        BedWars.debug("giveSidebar() player: " + player.getDisplayName() + " arena: " + arena.getDisplayName());
+        String arenaDisplayname = "null";
+        if (null != arena) arenaDisplayname = arena.getDisplayName();
+        BedWars.debug("giveSidebar() player: " + player.getDisplayName() + " arena: " + arenaDisplayname);
         // if sidebar is disabled in lobby on shared mode
         if (null == arena) if (!config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR)) return;
         else if (!config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_GAME_SIDEBAR)) return;
