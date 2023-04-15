@@ -9,12 +9,12 @@ import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.sidebar.IScoreboardService;
-import com.andrei1058.bedwars.api.sidebar.ISidebar;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.levels.internal.PlayerLevel;
 import me.neznamy.tab.api.TabAPI;
 import me.neznamy.tab.api.TabConstants;
 import me.neznamy.tab.api.TabPlayer;
+import me.neznamy.tab.api.event.player.PlayerLoadEvent;
 import me.neznamy.tab.api.placeholder.PlaceholderManager;
 import me.neznamy.tab.api.scoreboard.Scoreboard;
 import me.neznamy.tab.api.scoreboard.ScoreboardManager;
@@ -29,15 +29,14 @@ import java.text.SimpleDateFormat;
 
 import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
-import static com.andrei1058.bedwars.api.language.Language.getScoreboard;
 
 public class BoardManager implements IScoreboardService {
 
     private final HashMap<String, Scoreboard> sidebars = new HashMap<>();
-
     private static ScoreboardManager scoreboardManager;
     private static BoardManager instance;
-    private Integer rotationCount = 0;
+    private final HashMap<TabPlayer, Integer> tabPlayersPrefix = new HashMap<>();
+    private final HashMap<TabPlayer, Integer> tabPlayersSuffix = new HashMap<>();
 
 
     public static boolean init(){
@@ -45,8 +44,17 @@ public class BoardManager implements IScoreboardService {
         if (null == instance) {
             instance = new BoardManager();
             instance.registerPlaceholders();
+            instance.registerLoadEvent();
         }
         return instance != null;
+    }
+
+    public static void registerLoadEvent(){
+        TabAPI.getInstance().getEventBus().register(PlayerLoadEvent.class,
+                event -> {
+                    IArena arena = Arena.getArenaByPlayer((Player) event.getPlayer().getPlayer());
+                    BoardManager.getInstance().giveSidebar((Player) event.getPlayer().getPlayer(), arena, false);
+                });
     }
 
     private SimpleDateFormat getDateFormat(Player player){
@@ -76,9 +84,9 @@ public class BoardManager implements IScoreboardService {
         pm.registerPlayerPlaceholder("%bw_level_unformatted%", 100, player -> PlayerLevel.getLevelByPlayer(player.getUniqueId()).getLevel());
         pm.registerPlayerPlaceholder("%bw_current_xp%", 100, player -> PlayerLevel.getLevelByPlayer(player.getUniqueId()).getFormattedCurrentXp());
         pm.registerPlayerPlaceholder("%bw_required_xp%", 100, player -> PlayerLevel.getLevelByPlayer(player.getUniqueId()).getFormattedRequiredXp());
-        pm.registerPlayerPlaceholder("%bw_map%", 100, player -> Arena.getArenaByPlayer((Player) player.getPlayer()).getDisplayName());
-        pm.registerPlayerPlaceholder("%bw_map_name%", 100, player -> Arena.getArenaByPlayer((Player) player.getPlayer()).getArenaName());
-        pm.registerPlayerPlaceholder("%bw_group%", 100, player -> Arena.getArenaByPlayer((Player) player.getPlayer()).getDisplayGroup((Player) player.getPlayer()));
+        pm.registerPlayerPlaceholder("%bw_map%", 100, player -> Arena.getArenaByPlayer((Player) player.getPlayer()) == null ? "" : Arena.getArenaByPlayer((Player) player.getPlayer()).getDisplayName());
+        pm.registerPlayerPlaceholder("%bw_map_name%", 100, player -> Arena.getArenaByPlayer((Player) player.getPlayer()) == null ? "" : Arena.getArenaByPlayer((Player) player.getPlayer()).getArenaName());
+        pm.registerPlayerPlaceholder("%bw_group%", 100, player -> Arena.getArenaByPlayer((Player) player.getPlayer()) == null ? "" : Arena.getArenaByPlayer((Player) player.getPlayer()).getDisplayGroup((Player) player.getPlayer()));
         pm.registerPlayerPlaceholder("%bw_kills%", 100, player -> BedWars.getStatsManager().get(player.getUniqueId()).getKills());
         pm.registerPlayerPlaceholder("%bw_final_kills%", 100, player -> BedWars.getStatsManager().get(player.getUniqueId()).getFinalKills());
         pm.registerPlayerPlaceholder("%bw_beds%", 100, player -> BedWars.getStatsManager().get(player.getUniqueId()).getBedsDestroyed());
@@ -89,9 +97,97 @@ public class BoardManager implements IScoreboardService {
         pm.registerPlayerPlaceholder("%bw_gamesPlayed%", 100, player -> BedWars.getStatsManager().get(player.getUniqueId()).getGamesPlayed());
         pm.registerPlayerPlaceholder("%bw_next_event%", 50, player -> getNextEventName((Player) player.getPlayer()));
         pm.registerPlayerPlaceholder("%bw_on%", 50, player -> getOnlinePlayers((Player) player.getPlayer()));
-        pm.registerPlayerPlaceholder("%bw_max%", 1000, player -> Arena.getArenaByPlayer((Player) player.getPlayer()).getMaxPlayers());
-        pm.registerPlayerPlaceholder("%bw_time%", 50, player -> getTime((Player) player.getPlayer()));
+        pm.registerPlayerPlaceholder("%bw_max%", 100, player -> Arena.getArenaByPlayer((Player) player.getPlayer()) == null ? "" : Arena.getArenaByPlayer((Player) player.getPlayer()).getMaxPlayers());
+        pm.registerPlayerPlaceholder("%bw_time%", 50, tabPlayer -> {
+            Player player = (Player) tabPlayer.getPlayer();
+            Arena arena = (Arena) Arena.getArenaByPlayer(player);
+            if (null == arena) return "";
+            if (arena.getStatus() == GameState.playing || arena.getStatus() == GameState.restarting) {
+                return getNextEventTime(arena, player);
+            } else if (arena.getStatus() == GameState.starting) {
+                if (arena.getStartingTask() != null) {
+                    return arena.getStartingTask().getCountdown();
+                }
+            }
+            return getNextEventDateFormat(player).format(new Date(System.currentTimeMillis()));
+        });
 //        pm.registerPlayerPlaceholder("%bw_%", 100, player -> );
+
+        pm.registerPlayerPlaceholder("%bw_team%", 100, tabPlayer -> {
+            Player player = (Player) tabPlayer.getPlayer();
+            IArena arena = Arena.getArenaByPlayer(player);
+            return null == arena ? "" : null == arena.getTeam(player) ? "" : arena.getTeam(player).getColor().chat() + arena.getTeam(player).getDisplayName(Language.getPlayerLanguage(player));
+        });
+        pm.registerPlayerPlaceholder("%bw_team_letter%", 100, tabPlayer -> {
+            Player player = (Player) tabPlayer.getPlayer();
+            IArena arena = Arena.getArenaByPlayer(player);
+            return null == arena ? "" : null == arena.getTeam(player) ? "" :  arena.getTeam(player).getColor().chat() + (arena.getTeam(player).getDisplayName(Language.getPlayerLanguage(player)).substring(0, 1));
+        });
+        pm.registerPlayerPlaceholder("%bw_team_color%", 100, tabPlayer -> {
+            Player player = (Player) tabPlayer.getPlayer();
+            IArena arena = Arena.getArenaByPlayer(player);
+            return null == arena ? "" : null == arena.getTeam(player) ? ""  : arena.getTeam(player).getColor().chat();
+        });
+
+        pm.registerPlayerPlaceholder("%bw_prefix%", 10000, tabPlayer -> {
+            Player player = (Player) tabPlayer.getPlayer();
+            IArena arena = Arena.getArenaByPlayer(player);
+            Integer i = tabPlayersPrefix.getOrDefault(tabPlayer,0);
+            List<String> fixList = Collections.singletonList("");
+            if (null == arena) {
+                fixList = Language.getList(player, Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_LOBBY);
+            } else if (arena.isSpectator(player)){
+                fixList = Language.getList(player, Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_SPECTATOR);//todo do not show spectators to in game players
+            } else if (arena.getStatus() == GameState.playing) {
+                fixList = Language.getList(player, Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_PLAYING);
+            } else if (arena.getStatus() == GameState.waiting) {
+                fixList = Language.getList(player, Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_WAITING);
+            } else if (arena.getStatus() == GameState.starting){
+                fixList = Language.getList(player, Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_STARTING);
+            }else if (arena.getStatus() == GameState.restarting) {
+                fixList = Language.getList(player, Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_RESTARTING);
+            } else {
+                BedWars.debug("Unhandled game state bw prefix");
+            }
+            String prefix = null;
+            if (!fixList.isEmpty()) prefix = fixList.get(i);
+            if (i+1 >= fixList.size()){
+                tabPlayersPrefix.put(tabPlayer,0);
+            } else {
+                tabPlayersPrefix.put(tabPlayer,i+1);
+            }
+            return null == prefix ? "" : prefix;
+        });
+
+        pm.registerPlayerPlaceholder("%bw_suffix%", 10000, tabPlayer -> {
+            Player player = (Player) tabPlayer.getPlayer();
+            IArena arena = Arena.getArenaByPlayer(player);
+            Integer i = tabPlayersSuffix.getOrDefault(tabPlayer,0);
+            List<String> fixList = Collections.singletonList("");
+            if (null == arena) {
+                fixList = Language.getList(player, Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_LOBBY);
+            } else if (arena.isSpectator(player)){
+                fixList = Language.getList(player, Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_SPECTATOR);//todo do not show spectators to in game players
+            } else if (arena.getStatus() == GameState.playing) {
+                fixList = Language.getList(player, Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_PLAYING);
+            } else if (arena.getStatus() == GameState.waiting) {
+                fixList = Language.getList(player, Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_WAITING);
+            } else if (arena.getStatus() == GameState.starting){
+                fixList = Language.getList(player, Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_STARTING);
+            }else if (arena.getStatus() == GameState.restarting) {
+                fixList = Language.getList(player, Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_RESTARTING);
+            } else {
+                BedWars.debug("Unhandled game state bw suffix");
+            }
+            String suffix = null;
+            if (!fixList.isEmpty()) suffix = fixList.get(i);
+            if (i+1 >= fixList.size()){
+                tabPlayersSuffix.put(tabPlayer,0);
+            } else {
+                tabPlayersSuffix.put(tabPlayer,i+1);
+            }
+            return null == suffix ? "" : suffix;
+        });
     }
 
 
@@ -101,6 +197,7 @@ public class BoardManager implements IScoreboardService {
 
     @Override
     public void giveSidebar(@NotNull Player player, @Nullable IArena arena, boolean delay) {
+        BedWars.debug("giveSidebar() player: " + player.getDisplayName() + " arena: " + arena.getDisplayName());
         // if sidebar is disabled in lobby on shared mode
         if (null == arena) if (!config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR)) return;
         else if (!config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_GAME_SIDEBAR)) return;
@@ -115,11 +212,11 @@ public class BoardManager implements IScoreboardService {
             }
         } else {
             if (arena.getStatus() == GameState.waiting) {
-                lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".waiting", Messages.SCOREBOARD_DEFAULT_WAITING);
+                lines = Language.getScoreboard(player, "scoreboard." + arena.getGroup() + ".waiting", Messages.SCOREBOARD_DEFAULT_WAITING);
             } else if (arena.getStatus() == GameState.starting) {
-                lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".starting", Messages.SCOREBOARD_DEFAULT_STARTING);
+                lines = Language.getScoreboard(player, "scoreboard." + arena.getGroup() + ".starting", Messages.SCOREBOARD_DEFAULT_STARTING);
             } else if (arena.getStatus() == GameState.playing || arena.getStatus() == GameState.restarting) {
-                lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING);
+                lines = Language.getScoreboard(player, "scoreboard." + arena.getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING);
             }
         }
 
@@ -130,14 +227,15 @@ public class BoardManager implements IScoreboardService {
         lines = lines.subList(1, lines.size());
         lines.replaceAll(s -> s.isEmpty() ? " " : s); // TAB doesn't display empty lines, we need to replace them with spaces
 
-        Board board = new Board(scoreboardManager, player, arena);
-
-        Scoreboard scoreboard = sidebars.getOrDefault(player.getUniqueId(), board.getScoreboard(title, lines));
+        Scoreboard scoreboard = sidebars.getOrDefault(player.getUniqueId(), getScoreboard(arena, title, lines));
         TabPlayer tabPlayer = TabAPI.getInstance().getPlayer(player.getUniqueId());
 
         TabAPI.getInstance().getScoreboardManager().showScoreboard(tabPlayer, scoreboard);
 
         setHeaderFooter(tabPlayer,arena);
+
+        TabAPI.getInstance().getTablistFormatManager().setPrefix(tabPlayer, "%bw_prefix%");
+        TabAPI.getInstance().getTablistFormatManager().setSuffix(tabPlayer, "%bw_suffix%");
     }
 
     @Override
@@ -145,10 +243,13 @@ public class BoardManager implements IScoreboardService {
 
     }
 
-    @Override
-    public void refreshTitles() {
-
+    public Scoreboard getScoreboard(IArena arena, String title, List<String> lineArray){ //todo create global during init
+        String status = "default";
+        if (arena != null) status = arena.getStatus().toString();
+        return scoreboardManager.createScoreboard(status, title, lineArray);
     }
+
+
     @NotNull
     private String getNextEventName(Player player) {
         IArena arena = Arena.getArenaByPlayer(player);
@@ -183,16 +284,18 @@ public class BoardManager implements IScoreboardService {
 
     private String getTime(Player player){
         Arena arena = (Arena) Arena.getArenaByPlayer(player);
+        BedWars.debug("Arena: " + arena.getStatus());
         if (arena.getStatus() == GameState.playing || arena.getStatus() == GameState.restarting) {
             return getNextEventTime(arena, player);
-        } else {
-            if (arena.getStatus() == GameState.starting) {
-                if (arena.getStartingTask() != null) {
-                    return String.valueOf(arena.getStartingTask().getCountdown() + 1);
-                }
+        } else if (arena.getStatus() == GameState.starting) {
+            if (arena.getStartingTask() != null) {
+                BedWars.debug("startingTask != null : " + arena.getStartingTask().getCountdown());
+                return String.valueOf(arena.getStartingTask().getCountdown());
+            } else {
+                BedWars.debug("startingTask == null");
             }
-            return getNextEventDateFormat(player).format(new Date(System.currentTimeMillis()));
         }
+        return getNextEventDateFormat(player).format(new Date(System.currentTimeMillis()));
     }
 
     @NotNull
@@ -248,7 +351,6 @@ public class BoardManager implements IScoreboardService {
             return;
         }
 
-
         String headerPath = null;
         String footerPath = null;
 
@@ -275,11 +377,6 @@ public class BoardManager implements IScoreboardService {
                 player, lang.m(headerPath),
                 lang.m(footerPath)
         );
-    }
-
-    private void setTabPlayer(TabPlayer player, String prefix, String suffix){
-        TabAPI.getInstance().getTablistFormatManager().setPrefix(player, prefix);
-        TabAPI.getInstance().getTablistFormatManager().setSuffix(player, suffix);
     }
 
     /**
@@ -319,18 +416,30 @@ public class BoardManager implements IScoreboardService {
         return arena.getStatus() != GameState.restarting || !config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_RESTARTING);
     }
 
-    @Override
-    public void refreshTabList() {
+//    @Override
+//    public void refreshTabList(TabPlayer player) {
+//        TabPlayer[] players = TabAPI.getInstance().getOnlinePlayers();
+//
+//            String prefix;
+//            String suffix;
+//
+//            IArena arena = Arena.getArenaByPlayer((Player) player.getPlayer());
+//
+//            if (null == arena) {
+//                List<String> prefixes = Language.getList((Player) player.getPlayer(), Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_LOBBY);
+//                List<String> suffixes = Language.getList((Player) player.getPlayer(), Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_LOBBY);
+//
+//                return;
+//            }
+//    }
 
-    }
-
-    @Override
-    public void refreshHealth() {
-
-    }
-
-    @Override
-    public @Nullable ISidebar getSidebar(@NotNull Player player) {
-        return null;
+    private String getNextItem(List<String> myList) {
+        Iterator<String> iterator = myList.iterator();
+        if (iterator.hasNext()) {
+            return iterator.next();
+        } else {
+            iterator = myList.iterator(); // Create a new iterator to start from the beginning
+            return iterator.next();
+        }
     }
 }

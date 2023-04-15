@@ -21,24 +21,6 @@ public interface IScoreboardService {
     void remove(@NotNull Player player);
 
     /**
-     * Refresh title on all scoreboards.
-     */
-    void refreshTitles();
-
-    /**
-     * Refresh all tab-list header and footer strings for every sidebar.
-     */
-    void refreshTabList();
-
-    /**
-     * Refresh player healths.
-     */
-    void refreshHealth();
-
-    @Nullable
-    ISidebar getSidebar(@NotNull Player player);
-
-    /**
      * @return true if tab formatting is disabled for current sidebar/ arena stage
      */
     boolean isTabFormattingDisabled(IArena arena);
