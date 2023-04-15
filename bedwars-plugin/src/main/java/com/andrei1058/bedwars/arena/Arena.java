@@ -535,10 +535,10 @@ public class Arena implements IArena {
                     }
                 }
                 if (minPlayers <= players.size() && teams > 0 && players.size() != teammates / teams) {
-                    changeStatus(GameState.starting);
+                    Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> changeStatus(GameState.starting), 10L);
                     isStatusChange = true;
                 } else if (players.size() >= minPlayers && teams == 0) {
-                    changeStatus(GameState.starting);
+                    Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> changeStatus(GameState.starting), 10L);
                     isStatusChange = true;
                 }
             }
@@ -561,11 +561,6 @@ public class Arena implements IArena {
             }
             PaperSupport.teleportC(p, getWaitingLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
 
-            if (!isStatusChange){
-                if (Bukkit.getServer().getPluginManager().getPlugin("TAB")!= null)
-                    TabAPI.getInstance().getEventBus().register(PlayerLoadEvent.class,
-                            event -> BoardManager.getInstance().giveSidebar((Player) event.getPlayer().getPlayer(), this, false));
-            }
             sendPreGameCommandItems(p);
             for (PotionEffect pf : p.getActivePotionEffects()) {
                 p.removePotionEffect(pf.getType());
