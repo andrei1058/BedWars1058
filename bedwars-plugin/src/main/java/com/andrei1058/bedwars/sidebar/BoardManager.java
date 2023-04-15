@@ -3,12 +3,12 @@ package com.andrei1058.bedwars.sidebar;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
-import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.sidebar.IScoreboardService;
+import com.andrei1058.bedwars.api.tasks.PlayingTask;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.levels.internal.PlayerLevel;
 import me.neznamy.tab.api.TabAPI;
@@ -106,7 +106,7 @@ public class BoardManager implements IScoreboardService {
                 return getNextEventTime(arena, player);
             } else if (arena.getStatus() == GameState.starting) {
                 if (arena.getStartingTask() != null) {
-                    return arena.getStartingTask().getCountdown();
+                    return arena.getStartingTask().getCountdown()+1;
                 }
             }
             return getNextEventDateFormat(player).format(new Date(System.currentTimeMillis()));
@@ -282,22 +282,6 @@ public class BoardManager implements IScoreboardService {
         return st;
     }
 
-    private String getTime(Player player){
-        Arena arena = (Arena) Arena.getArenaByPlayer(player);
-        BedWars.debug("Arena: " + arena.getStatus());
-        if (arena.getStatus() == GameState.playing || arena.getStatus() == GameState.restarting) {
-            return getNextEventTime(arena, player);
-        } else if (arena.getStatus() == GameState.starting) {
-            if (arena.getStartingTask() != null) {
-                BedWars.debug("startingTask != null : " + arena.getStartingTask().getCountdown());
-                return String.valueOf(arena.getStartingTask().getCountdown());
-            } else {
-                BedWars.debug("startingTask == null");
-            }
-        }
-        return getNextEventDateFormat(player).format(new Date(System.currentTimeMillis()));
-    }
-
     @NotNull
     private String getNextEventTime(Arena arena, Player player) {
         if (!(arena instanceof Arena)) return getNextEventDateFormat(player).format((0L));
@@ -312,7 +296,12 @@ public class BoardManager implements IScoreboardService {
                 time = (arena.upgradeDiamondsCount) * 1000L;
                 break;
             case GAME_END:
-                time = (arena.getPlayingTask().getGameEndCountdown()) * 1000L;
+                PlayingTask playingTask = arena.getPlayingTask();
+                if (null == playingTask) {
+                    time = 0;
+                    break;
+                }
+                time = (playingTask.getGameEndCountdown()) * 1000L;
                 break;
             case BEDS_DESTROY:
                 time = (arena.getPlayingTask().getBedsDestroyCountdown()) * 1000L;
@@ -321,7 +310,7 @@ public class BoardManager implements IScoreboardService {
                 time = (arena.getPlayingTask().getDragonSpawnCountdown()) * 1000L;
                 break;
         }
-        return time == 0 ? "0" : getNextEventDateFormat(player).format(new Date(time));
+        return getNextEventDateFormat(player).format(new Date(time));
     }
 
     private int getOnlinePlayers(Player player){

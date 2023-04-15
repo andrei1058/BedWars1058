@@ -614,6 +614,8 @@ public class Arena implements IArena {
             }
         }
 
+        //todo check if we still need to give a sidebar for multiarena and shared servertypes
+
         refreshSigns();
         JoinNPC.updateNPCs(getGroup());
         return true;
@@ -658,7 +660,7 @@ public class Arena implements IArena {
                 setArenaByPlayer(p, this);
             }
 
-            BoardManager.getInstance().giveSidebar(p, this, false);
+//            BoardManager.getInstance().giveSidebar(p, this, false);
             nms.setCollide(p, this, false);
 
             if (!playerBefore) {
