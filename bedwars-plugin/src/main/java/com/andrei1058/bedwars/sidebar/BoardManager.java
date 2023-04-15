@@ -53,6 +53,7 @@ public class BoardManager implements IScoreboardService {
         TabAPI.getInstance().getEventBus().register(PlayerLoadEvent.class,
                 event -> {
                     IArena arena = Arena.getArenaByPlayer((Player) event.getPlayer().getPlayer());
+                    if (BedWars.getServerType() == ServerType.SHARED && !((Player) event.getPlayer().getPlayer()).getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) return;
                     BoardManager.getInstance().giveSidebar((Player) event.getPlayer().getPlayer(), arena, false);
                 });
     }
