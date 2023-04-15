@@ -428,6 +428,10 @@ public class Arena implements IArena {
     public boolean addPlayer(Player p, boolean skipOwnerCheck) {
         if (p == null) return false;
         debug("Player added: " + p.getName() + " arena: " + getArenaName());
+
+//        Used to check if a sidebar must be given or not
+        boolean isStatusChange = false;
+
         /* used for base enter/leave event */
         isOnABase.remove(p);
         //
@@ -523,7 +527,6 @@ public class Arena implements IArena {
             setArenaByPlayer(p, this);
 
             /* check if you can start the arena */
-            boolean isStatusChange = false;
             if (status == GameState.waiting) {
                 int teams = 0, teammates = 0;
                 for (Player on : getPlayers()) {
@@ -613,8 +616,10 @@ public class Arena implements IArena {
                 }
             }
         }
-
-        //todo check if we still need to give a sidebar for multiarena and shared servertypes
+        if (!isStatusChange)
+            if (BedWars.getServerType() == ServerType.MULTIARENA || BedWars.getServerType() == ServerType.SHARED){
+                BoardManager.getInstance().giveSidebar(p,this, false);
+        }
 
         refreshSigns();
         JoinNPC.updateNPCs(getGroup());
