@@ -57,9 +57,9 @@ public class JoinListenerShared implements Listener {
         }, 14L);
 
         // Give scoreboard
-        if (e.getPlayer().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
-            BoardManager.getInstance().giveSidebar(e.getPlayer(), null, true);
-        }
+//        if (e.getPlayer().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
+//            BoardManager.getInstance().giveSidebar(e.getPlayer(), null, true);
+//        }
     }
 }
 
