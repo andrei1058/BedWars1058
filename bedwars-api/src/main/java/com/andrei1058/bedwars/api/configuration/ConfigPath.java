@@ -130,6 +130,7 @@ public class ConfigPath {
     public static final String SB_CONFIG_SIDEBAR_USE_GAME_SIDEBAR = "scoreboard-settings.sidebar.enable-game-sidebar";
     public static final String SB_CONFIG_SIDEBAR_TITLE_REFRESH_INTERVAL = "scoreboard-settings.sidebar.title-refresh-interval";
     public static final String SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL = "scoreboard-settings.sidebar.placeholders-refresh-interval";
+    public static final String SB_CONFIG_SIDEBAR_PREFIX_SUFFIX_REFRESH_INTERVAL = "scoreboard-settings.sidebar.prefix-suffix-refresh-interval";
     public static final String SB_CONFIG_SIDEBAR_LIST_FORMAT_LOBBY = "scoreboard-settings.player-list.format-lobby-list";
     public static final String SB_CONFIG_SIDEBAR_LIST_FORMAT_WAITING = "scoreboard-settings.player-list.format-waiting-list";
     public static final String SB_CONFIG_SIDEBAR_LIST_FORMAT_STARTING = "scoreboard-settings.player-list.format-starting-list";

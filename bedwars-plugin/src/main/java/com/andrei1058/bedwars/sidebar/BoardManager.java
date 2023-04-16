@@ -76,47 +76,47 @@ public class BoardManager implements IScoreboardService {
     private void registerPlaceholders(){
         BedWars.debug("Registering TAB placeholders...");
         PlaceholderManager pm = TabAPI.getInstance().getPlaceholderManager();
-        pm.registerPlayerPlaceholder("%bw_v_prefix%", 100, player -> getChatSupport().getPrefix((Player) player.getPlayer()));
-        pm.registerPlayerPlaceholder("%bw_v_suffix%", 100, player -> getChatSupport().getSuffix((Player) player.getPlayer()));
-        pm.registerPlayerPlaceholder("%bw_playername%", 100, player -> player.getName());
-        pm.registerPlayerPlaceholder("%bw_player%", 100, player -> ((Player) player.getPlayer()).getDisplayName());
-        pm.registerPlayerPlaceholder("%bw_money%", 100, player -> getEconomy().getMoney((Player) player.getPlayer()));
-        pm.registerServerPlaceholder("%bw_server_ip%", 100, () -> BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP));
-        pm.registerServerPlaceholder("%bw_version%", 100, () -> plugin.getDescription().getVersion());
-        pm.registerServerPlaceholder("%bw_server_id%", 100, () -> config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID));
-        pm.registerPlayerPlaceholder("%bw_date%", 100, player -> getDateFormat((Player) player.getPlayer()).format(new Date(System.currentTimeMillis())));
-        pm.registerPlayerPlaceholder("%bw_progress%", 100, player -> PlayerLevel.getLevelByPlayer(player.getUniqueId()).getProgress());
-        pm.registerPlayerPlaceholder("%bw_level%", 100, player -> PlayerLevel.getLevelByPlayer(player.getUniqueId()).getLevelName());
-        pm.registerPlayerPlaceholder("%bw_level_unformatted%", 100, player -> PlayerLevel.getLevelByPlayer(player.getUniqueId()).getLevel());
-        pm.registerPlayerPlaceholder("%bw_current_xp%", 100, player -> PlayerLevel.getLevelByPlayer(player.getUniqueId()).getFormattedCurrentXp());
-        pm.registerPlayerPlaceholder("%bw_required_xp%", 100, player -> PlayerLevel.getLevelByPlayer(player.getUniqueId()).getFormattedRequiredXp());
-        pm.registerPlayerPlaceholder("%bw_map%", 100, player -> Arena.getArenaByPlayer((Player) player.getPlayer()) == null ? "" : Arena.getArenaByPlayer((Player) player.getPlayer()).getDisplayName());
-        pm.registerPlayerPlaceholder("%bw_map_name%", 100, player -> Arena.getArenaByPlayer((Player) player.getPlayer()) == null ? "" : Arena.getArenaByPlayer((Player) player.getPlayer()).getArenaName());
-        pm.registerPlayerPlaceholder("%bw_group%", 100, player -> Arena.getArenaByPlayer((Player) player.getPlayer()) == null ? "" : Arena.getArenaByPlayer((Player) player.getPlayer()).getDisplayGroup((Player) player.getPlayer()));
-        pm.registerPlayerPlaceholder("%bw_kills%", 100, player -> {
+        pm.registerPlayerPlaceholder("%bw_v_prefix%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), player -> getChatSupport().getPrefix((Player) player.getPlayer()));
+        pm.registerPlayerPlaceholder("%bw_v_suffix%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), player -> getChatSupport().getSuffix((Player) player.getPlayer()));
+        pm.registerPlayerPlaceholder("%bw_playername%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), player -> player.getName());
+        pm.registerPlayerPlaceholder("%bw_player%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), player -> ((Player) player.getPlayer()).getDisplayName());
+        pm.registerPlayerPlaceholder("%bw_money%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), player -> getEconomy().getMoney((Player) player.getPlayer()));
+        pm.registerServerPlaceholder("%bw_server_ip%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), () -> BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP));
+        pm.registerServerPlaceholder("%bw_version%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), () -> plugin.getDescription().getVersion());
+        pm.registerServerPlaceholder("%bw_server_id%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), () -> config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID));
+        pm.registerPlayerPlaceholder("%bw_date%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), player -> getDateFormat((Player) player.getPlayer()).format(new Date(System.currentTimeMillis())));
+        pm.registerPlayerPlaceholder("%bw_progress%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), player -> PlayerLevel.getLevelByPlayer(player.getUniqueId()).getProgress());
+        pm.registerPlayerPlaceholder("%bw_level%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), player -> PlayerLevel.getLevelByPlayer(player.getUniqueId()).getLevelName());
+        pm.registerPlayerPlaceholder("%bw_level_unformatted%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), player -> PlayerLevel.getLevelByPlayer(player.getUniqueId()).getLevel());
+        pm.registerPlayerPlaceholder("%bw_current_xp%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), player -> PlayerLevel.getLevelByPlayer(player.getUniqueId()).getFormattedCurrentXp());
+        pm.registerPlayerPlaceholder("%bw_required_xp%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), player -> PlayerLevel.getLevelByPlayer(player.getUniqueId()).getFormattedRequiredXp());
+        pm.registerPlayerPlaceholder("%bw_map%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), player -> Arena.getArenaByPlayer((Player) player.getPlayer()) == null ? "" : Arena.getArenaByPlayer((Player) player.getPlayer()).getDisplayName());
+        pm.registerPlayerPlaceholder("%bw_map_name%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), player -> Arena.getArenaByPlayer((Player) player.getPlayer()) == null ? "" : Arena.getArenaByPlayer((Player) player.getPlayer()).getArenaName());
+        pm.registerPlayerPlaceholder("%bw_group%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), player -> Arena.getArenaByPlayer((Player) player.getPlayer()) == null ? "" : Arena.getArenaByPlayer((Player) player.getPlayer()).getDisplayGroup((Player) player.getPlayer()));
+        pm.registerPlayerPlaceholder("%bw_kills%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), player -> {
             if (null != Arena.getArenaByPlayer((Player) player.getPlayer())) return Arena.getArenaByPlayer((Player) player.getPlayer()).getPlayerKills((Player) player.getPlayer(), false);
             return BedWars.getStatsManager().get(player.getUniqueId()).getKills();
         });
-        pm.registerPlayerPlaceholder("%bw_final_kills%", 100, player -> {
+        pm.registerPlayerPlaceholder("%bw_final_kills%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), player -> {
             if (null != Arena.getArenaByPlayer((Player) player.getPlayer())) return Arena.getArenaByPlayer((Player) player.getPlayer()).getPlayerKills((Player) player.getPlayer(), true);
             return BedWars.getStatsManager().get(player.getUniqueId()).getKills();
         });
-        pm.registerPlayerPlaceholder("%bw_beds%", 100, player -> {
+        pm.registerPlayerPlaceholder("%bw_beds%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), player -> {
             if (null != Arena.getArenaByPlayer((Player) player.getPlayer())) return Arena.getArenaByPlayer((Player) player.getPlayer()).getPlayerBedsDestroyed((Player) player.getPlayer());
             return BedWars.getStatsManager().get(player.getUniqueId()).getBedsDestroyed();
         });
-        pm.registerPlayerPlaceholder("%bw_deaths%", 100, player -> {
+        pm.registerPlayerPlaceholder("%bw_deaths%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), player -> {
             if (null != Arena.getArenaByPlayer((Player) player.getPlayer())) return Arena.getArenaByPlayer((Player) player.getPlayer()).getPlayerDeaths((Player) player.getPlayer(), false);
             return BedWars.getStatsManager().get(player.getUniqueId()).getDeaths();
         });
-        pm.registerPlayerPlaceholder("%bw_final_deaths%", 100, player -> BedWars.getStatsManager().get(player.getUniqueId()).getFinalDeaths());
-        pm.registerPlayerPlaceholder("%bw_wins%", 100, player -> BedWars.getStatsManager().get(player.getUniqueId()).getWins());
-        pm.registerPlayerPlaceholder("%bw_losses%", 100, player -> BedWars.getStatsManager().get(player.getUniqueId()).getLosses());
-        pm.registerPlayerPlaceholder("%bw_games_played%", 100, player -> BedWars.getStatsManager().get(player.getUniqueId()).getGamesPlayed());
-        pm.registerPlayerPlaceholder("%bw_next_event%", 50, player -> getNextEventName((Player) player.getPlayer()));
-        pm.registerPlayerPlaceholder("%bw_on%", 50, player -> getOnlinePlayers((Player) player.getPlayer()));
-        pm.registerPlayerPlaceholder("%bw_max%", 100, player -> Arena.getArenaByPlayer((Player) player.getPlayer()) == null ? "" : Arena.getArenaByPlayer((Player) player.getPlayer()).getMaxPlayers());
-        pm.registerPlayerPlaceholder("%bw_time%", 50, tabPlayer -> {
+        pm.registerPlayerPlaceholder("%bw_final_deaths%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), player -> BedWars.getStatsManager().get(player.getUniqueId()).getFinalDeaths());
+        pm.registerPlayerPlaceholder("%bw_wins%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), player -> BedWars.getStatsManager().get(player.getUniqueId()).getWins());
+        pm.registerPlayerPlaceholder("%bw_losses%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), player -> BedWars.getStatsManager().get(player.getUniqueId()).getLosses());
+        pm.registerPlayerPlaceholder("%bw_games_played%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), player -> BedWars.getStatsManager().get(player.getUniqueId()).getGamesPlayed());
+        pm.registerPlayerPlaceholder("%bw_next_event%", 30, player -> getNextEventName((Player) player.getPlayer()));
+        pm.registerPlayerPlaceholder("%bw_on%", 30, player -> getOnlinePlayers((Player) player.getPlayer()));
+        pm.registerPlayerPlaceholder("%bw_max%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), player -> Arena.getArenaByPlayer((Player) player.getPlayer()) == null ? "" : Arena.getArenaByPlayer((Player) player.getPlayer()).getMaxPlayers());
+        pm.registerPlayerPlaceholder("%bw_time%", 30, tabPlayer -> {
             Player player = (Player) tabPlayer.getPlayer();
             Arena arena = (Arena) Arena.getArenaByPlayer(player);
             if (null == arena) return "";
@@ -130,23 +130,23 @@ public class BoardManager implements IScoreboardService {
             return getNextEventDateFormat(player).format(new Date(System.currentTimeMillis()));
         });
 
-        pm.registerPlayerPlaceholder("%bw_team%", 100, tabPlayer -> {
+        pm.registerPlayerPlaceholder("%bw_team%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), tabPlayer -> {
             Player player = (Player) tabPlayer.getPlayer();
             IArena arena = Arena.getArenaByPlayer(player);
             return null == arena ? "" : null == arena.getTeam(player) ? "" : arena.getTeam(player).getColor().chat() + arena.getTeam(player).getDisplayName(Language.getPlayerLanguage(player));
         });
-        pm.registerPlayerPlaceholder("%bw_team_letter%", 100, tabPlayer -> {
+        pm.registerPlayerPlaceholder("%bw_team_letter%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), tabPlayer -> {
             Player player = (Player) tabPlayer.getPlayer();
             IArena arena = Arena.getArenaByPlayer(player);
             return null == arena ? "" : null == arena.getTeam(player) ? "" :  arena.getTeam(player).getColor().chat() + (arena.getTeam(player).getDisplayName(Language.getPlayerLanguage(player)).substring(0, 1));
         });
-        pm.registerPlayerPlaceholder("%bw_team_color%", 100, tabPlayer -> {
+        pm.registerPlayerPlaceholder("%bw_team_color%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), tabPlayer -> {
             Player player = (Player) tabPlayer.getPlayer();
             IArena arena = Arena.getArenaByPlayer(player);
             return null == arena ? "" : null == arena.getTeam(player) ? ""  : arena.getTeam(player).getColor().chat();
         });
 
-        pm.registerPlayerPlaceholder("%bw_prefix%", 10000, tabPlayer -> {
+        pm.registerPlayerPlaceholder("%bw_prefix%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PREFIX_SUFFIX_REFRESH_INTERVAL), tabPlayer -> {
             Player player = (Player) tabPlayer.getPlayer();
             IArena arena = Arena.getArenaByPlayer(player);
             Integer i = tabPlayersPrefix.getOrDefault(tabPlayer,0);
@@ -176,7 +176,7 @@ public class BoardManager implements IScoreboardService {
             return null == prefix ? "" : prefix;
         });
 
-        pm.registerPlayerPlaceholder("%bw_suffix%", 10000, tabPlayer -> {
+        pm.registerPlayerPlaceholder("%bw_suffix%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PREFIX_SUFFIX_REFRESH_INTERVAL), tabPlayer -> {
             Player player = (Player) tabPlayer.getPlayer();
             IArena arena = Arena.getArenaByPlayer(player);
             Integer i = tabPlayersSuffix.getOrDefault(tabPlayer,0);
@@ -206,7 +206,7 @@ public class BoardManager implements IScoreboardService {
             return null == suffix ? "" : suffix;
         });
 
-        pm.registerPlayerPlaceholder("%bw_scoreboard_title%", 500, tabPlayer -> {
+        pm.registerPlayerPlaceholder("%bw_scoreboard_title%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_TITLE_REFRESH_INTERVAL), tabPlayer -> {
             Player player = (Player) tabPlayer.getPlayer();
             IArena arena = Arena.getArenaByPlayer(player);
             Integer i = tabPlayersTitle.getOrDefault(tabPlayer,0);
