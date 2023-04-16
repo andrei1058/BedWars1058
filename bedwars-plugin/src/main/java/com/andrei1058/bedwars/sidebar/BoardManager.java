@@ -37,6 +37,7 @@ public class BoardManager implements IScoreboardService {
     private static BoardManager instance;
     private final HashMap<TabPlayer, Integer> tabPlayersPrefix = new HashMap<>();
     private final HashMap<TabPlayer, Integer> tabPlayersSuffix = new HashMap<>();
+    private final HashMap<TabPlayer, Integer> tabPlayersTitle = new HashMap<>();
 
 
     public static boolean init(){
@@ -189,6 +190,39 @@ public class BoardManager implements IScoreboardService {
             }
             return null == suffix ? "" : suffix;
         });
+
+        pm.registerPlayerPlaceholder("%bw_scoreboard_title%", 500, tabPlayer -> {
+            Player player = (Player) tabPlayer.getPlayer();
+            IArena arena = Arena.getArenaByPlayer(player);
+            Integer i = tabPlayersTitle.getOrDefault(tabPlayer,0);
+            // set sidebar lines based on game state or lobby
+            List<String> lines = null;
+            String titleLine;
+            if (null == arena) {
+                if (BedWars.getServerType() != ServerType.SHARED) {
+                    lines = Language.getList(player, Messages.SCOREBOARD_LOBBY);
+                }
+            } else {
+                if (arena.getStatus() == GameState.waiting) {
+                    lines = Language.getScoreboard(player, "scoreboard." + arena.getGroup() + ".waiting", Messages.SCOREBOARD_DEFAULT_WAITING);
+                } else if (arena.getStatus() == GameState.starting) {
+                    lines = Language.getScoreboard(player, "scoreboard." + arena.getGroup() + ".starting", Messages.SCOREBOARD_DEFAULT_STARTING);
+                } else if (arena.getStatus() == GameState.playing || arena.getStatus() == GameState.restarting) {
+                    lines = Language.getScoreboard(player, "scoreboard." + arena.getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING);
+                }
+            }
+
+            titleLine = lines.get(0);
+            String[] titleArray = titleLine.split(",");
+
+            if (i+1 >= titleArray.length){
+                tabPlayersTitle.put(tabPlayer,0);
+            } else {
+                tabPlayersTitle.put(tabPlayer,i+1);
+            }
+            String title = titleArray[i];
+            return null ==  title? "" : title;
+        });
     }
 
 
@@ -223,14 +257,13 @@ public class BoardManager implements IScoreboardService {
             }
         }
 
-        title = lines.get(0);
         if (lines.size() == 1) {
             lines = new ArrayList<>();
         }
         lines = lines.subList(1, lines.size());
         lines.replaceAll(s -> s.isEmpty() ? " " : s); // TAB doesn't display empty lines, we need to replace them with spaces
 
-        Scoreboard scoreboard = sidebars.getOrDefault(player.getUniqueId(), getScoreboard(arena, title, lines));
+        Scoreboard scoreboard = sidebars.getOrDefault(player.getUniqueId(), getScoreboard(arena, "%bw_scoreboard_title%", lines));
         TabPlayer tabPlayer = TabAPI.getInstance().getPlayer(player.getUniqueId());
 
         TabAPI.getInstance().getScoreboardManager().showScoreboard(tabPlayer, scoreboard);
