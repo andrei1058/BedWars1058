@@ -154,7 +154,7 @@ public class BoardManager implements IScoreboardService {
             if (null == arena) {
                 fixList = Language.getList(player, Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_LOBBY);
             } else if (arena.isSpectator(player)){
-                fixList = Language.getList(player, Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_SPECTATOR);//todo do not show spectators to in game players
+                fixList = Language.getList(player, Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_SPECTATOR);
             } else if (arena.getStatus() == GameState.playing) {
                 fixList = Language.getList(player, Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_PLAYING);
             } else if (arena.getStatus() == GameState.waiting) {
@@ -184,7 +184,7 @@ public class BoardManager implements IScoreboardService {
             if (null == arena) {
                 fixList = Language.getList(player, Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_LOBBY);
             } else if (arena.isSpectator(player)){
-                fixList = Language.getList(player, Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_SPECTATOR);//todo do not show spectators to in game players
+                fixList = Language.getList(player, Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_SPECTATOR);
             } else if (arena.getStatus() == GameState.playing) {
                 fixList = Language.getList(player, Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_PLAYING);
             } else if (arena.getStatus() == GameState.waiting) {
