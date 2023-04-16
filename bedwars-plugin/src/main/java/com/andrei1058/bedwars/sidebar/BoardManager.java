@@ -113,10 +113,10 @@ public class BoardManager implements IScoreboardService {
         pm.registerPlayerPlaceholder("%bw_wins%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), player -> BedWars.getStatsManager().get(player.getUniqueId()).getWins());
         pm.registerPlayerPlaceholder("%bw_losses%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), player -> BedWars.getStatsManager().get(player.getUniqueId()).getLosses());
         pm.registerPlayerPlaceholder("%bw_games_played%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), player -> BedWars.getStatsManager().get(player.getUniqueId()).getGamesPlayed());
-        pm.registerPlayerPlaceholder("%bw_next_event%", 30, player -> getNextEventName((Player) player.getPlayer()));
-        pm.registerPlayerPlaceholder("%bw_on%", 30, player -> getOnlinePlayers((Player) player.getPlayer()));
+        pm.registerPlayerPlaceholder("%bw_next_event%", 100, player -> getNextEventName((Player) player.getPlayer()));
+        pm.registerPlayerPlaceholder("%bw_on%", 100, player -> getOnlinePlayers((Player) player.getPlayer()));
         pm.registerPlayerPlaceholder("%bw_max%", config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL), player -> Arena.getArenaByPlayer((Player) player.getPlayer()) == null ? "" : Arena.getArenaByPlayer((Player) player.getPlayer()).getMaxPlayers());
-        pm.registerPlayerPlaceholder("%bw_time%", 30, tabPlayer -> {
+        pm.registerPlayerPlaceholder("%bw_time%", 100, tabPlayer -> {
             Player player = (Player) tabPlayer.getPlayer();
             Arena arena = (Arena) Arena.getArenaByPlayer(player);
             if (null == arena) return "";
