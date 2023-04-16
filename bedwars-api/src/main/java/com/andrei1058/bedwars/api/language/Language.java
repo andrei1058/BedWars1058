@@ -95,8 +95,7 @@ public class Language extends ConfigManager {
     public static String getMsg(Player p, String path) {
         if (p == null) return getDefaultLanguage().m(path);
         BedWars api = Bukkit.getServicesManager().getRegistration(BedWars.class).getProvider();
-        return ChatColor.translateAlternateColorCodes('&', api.getSupportPapi().replace(p, langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage()).m(path).replace("{prefix}", (prefixStatic == null ? "" : prefixStatic))));
-//        return langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage()).m(path).replace("{prefix}", (prefixStatic == null ? "" : prefixStatic));
+        return ChatColor.translateAlternateColorCodes('&', api.getSupportPapi().replace(p, langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage()).m(path).replace("%bw_lang_prefix%", (prefixStatic == null ? "" : prefixStatic))));
     }
 
     /**
@@ -153,10 +152,8 @@ public class Language extends ConfigManager {
         }
 
         return ChatColor.translateAlternateColorCodes('&', message
-                .replace("{prefix}", (prefix == null ? "" : prefix))
-                .replace("{serverIp}", serverIp == null ? "" : serverIp)
-                // deprecated
-                .replace("{server_ip}", serverIp == null ? "" : serverIp)
+                .replace("%bw_lang_prefix%", (prefix == null ? "" : prefix))
+                .replace("%bw_server_ip%", serverIp == null ? "" : serverIp)
         );
     }
 
