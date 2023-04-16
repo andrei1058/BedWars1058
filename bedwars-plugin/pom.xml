@@ -271,14 +271,6 @@
                             <pattern>org.slf4j</pattern>
                             <shadedPattern>com.andrei1058.bedwars.libs.slf4j</shadedPattern>
                         </relocation>
-                        <relocation>
-                            <pattern>com.andrei1058.spigot.sidebar</pattern>
-                            <shadedPattern>com.andrei1058.bedwars.libs.sidebar</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>com.andrei1058.spigot.sidebarutils</pattern>
-                            <shadedPattern>com.andrei1058.bedwars.libs.updater</shadedPattern>
-                        </relocation>
                     </relocations>
                 </configuration>
                 <executions>
