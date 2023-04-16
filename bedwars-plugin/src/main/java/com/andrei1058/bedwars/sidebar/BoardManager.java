@@ -257,7 +257,6 @@ public class BoardManager implements IScoreboardService {
 
         // set sidebar lines based on game state or lobby
         List<String> lines = null;
-        String title;
         if (null == arena) {
             if (BedWars.getServerType() != ServerType.SHARED) {
                 lines = Language.getList(player, Messages.SCOREBOARD_LOBBY);
