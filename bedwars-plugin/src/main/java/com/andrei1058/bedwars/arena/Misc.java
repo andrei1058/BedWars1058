@@ -323,29 +323,32 @@ public class Misc {
     public static String replaceStatsPlaceholders(Player player, @NotNull String s, boolean papiReplacements) {
         PlayerStats stats = BedWars.getStatsManager().get(player.getUniqueId());
 
-        if (s.contains("{kills}"))
-            s = s.replace("{kills}", String.valueOf(stats.getKills()));
-        if (s.contains("{deaths}"))
-            s = s.replace("{deaths}", String.valueOf(stats.getDeaths()));
-        if (s.contains("{losses}"))
-            s = s.replace("{losses}", String.valueOf(stats.getLosses()));
-        if (s.contains("{wins}"))
-            s = s.replace("{wins}", String.valueOf(stats.getWins()));
-        if (s.contains("{finalKills}"))
-            s = s.replace("{finalKills}", String.valueOf(stats.getFinalKills()));
-        if (s.contains("{finalDeaths}"))
-            s = s.replace("{finalDeaths}", String.valueOf(stats.getFinalDeaths()));
-        if (s.contains("{bedsDestroyed}"))
-            s = s.replace("{bedsDestroyed}", String.valueOf(stats.getBedsDestroyed()));
-        if (s.contains("{gamesPlayed}"))
-            s = s.replace("{gamesPlayed}", String.valueOf(stats.getGamesPlayed()));
-        if (s.contains("{firstPlay}"))
-            s = s.replace("{firstPlay}", new SimpleDateFormat(getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(stats.getFirstPlay() != null ? Timestamp.from(stats.getFirstPlay()) : Timestamp.from(Instant.now())));
-        if (s.contains("{lastPlay}"))
-            s = s.replace("{lastPlay}", new SimpleDateFormat(getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(stats.getLastPlay() != null ? Timestamp.from(stats.getLastPlay()) : Timestamp.from(Instant.now())));
-        if (s.contains("{player}")) s = s.replace("{player}", player.getDisplayName());
-        if (s.contains("{playername")) s = s.replace("{playername}", player.getName());
-        if (s.contains("{prefix}")) s = s.replace("{prefix}", BedWars.getChatSupport().getPrefix(player));
+        if (s.contains("%bw_kills%"))
+            s = s.replace("%bw_kills%", String.valueOf(stats.getKills()));
+        if (s.contains("%bw_deaths%"))
+            s = s.replace("%bw_deaths%", String.valueOf(stats.getDeaths()));
+        if (s.contains("%bw_losses%"))
+            s = s.replace("%bw_losses%", String.valueOf(stats.getLosses()));
+        if (s.contains("%bw_wins%"))
+            s = s.replace("%bw_wins%", String.valueOf(stats.getWins()));
+        if (s.contains("%bw_final_kills%"))
+            s = s.replace("%bw_final_kills%", String.valueOf(stats.getFinalKills()));
+        if (s.contains("%bw_final_deaths%"))
+            s = s.replace("%bw_final_deaths%", String.valueOf(stats.getFinalDeaths()));
+        if (s.contains("%bw_beds%"))
+            s = s.replace("%bw_beds%", String.valueOf(stats.getBedsDestroyed()));
+        if (s.contains("%bw_games_played%"))
+            s = s.replace("%bw_games_played%", String.valueOf(stats.getGamesPlayed()));
+        if (s.contains("%bw_play_first%"))
+            s = s.replace("%bw_play_first%", new SimpleDateFormat(getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(stats.getFirstPlay() != null ? Timestamp.from(stats.getFirstPlay()) : Timestamp.from(Instant.now())));
+        if (s.contains("%bw_play_last%"))
+            s = s.replace("%bw_play_last%", new SimpleDateFormat(getMsg(player, Messages.FORMATTING_STATS_DATE_FORMAT)).format(stats.getLastPlay() != null ? Timestamp.from(stats.getLastPlay()) : Timestamp.from(Instant.now())));
+        if (s.contains("%bw_player%"))
+            s = s.replace("%bw_player%", player.getDisplayName());
+        if (s.contains("%bw_playername%"))
+            s = s.replace("%bw_playername%", player.getName());
+        if (s.contains("%bw_prefix%"))
+            s = s.replace("%bw_prefix%", BedWars.getChatSupport().getPrefix(player));
 
         return papiReplacements ? SupportPAPI.getSupportPAPI().replace(player, s) : s;
     }

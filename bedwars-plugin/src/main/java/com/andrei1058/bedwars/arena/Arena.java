@@ -516,12 +516,12 @@ public class Arena implements IArena {
             for (Player on : players) {
                 on.sendMessage(
                         getMsg(p, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG)
-                            .replace("{vPrefix}", getChatSupport().getPrefix(p))
-                            .replace("{vSuffix}", getChatSupport().getSuffix(p))
-                            .replace("{playername}", p.getName())
-                            .replace("{player}", p.getDisplayName())
-                            .replace("{on}", String.valueOf(getPlayers().size()))
-                            .replace("{max}", String.valueOf(getMaxPlayers()))
+                            .replace("%bw_v_prefix%", getChatSupport().getPrefix(p))
+                            .replace("%bw_v_suffix%", getChatSupport().getSuffix(p))
+                            .replace("%bw_playername%", p.getName())
+                            .replace("%bw_player%", p.getDisplayName())
+                            .replace("%bw_on%", String.valueOf(getPlayers().size()))
+                            .replace("%bw_max%", String.valueOf(getMaxPlayers()))
                 );
             }
             setArenaByPlayer(p, this);
@@ -839,11 +839,11 @@ public class Arena implements IArena {
                 if (team != null) {
                     if (!team.isBedDestroyed()) {
                         for (Player p2 : this.getPlayers()) {
-                            p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", team.getColor().chat().toString())
+                            p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("%bw_team_color%", team.getColor().chat().toString())
                                     .replace("{TeamName}", team.getDisplayName(Language.getPlayerLanguage(p2))));
                         }
                         for (Player p2 : this.getSpectators()) {
-                            p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", team.getColor().chat().toString())
+                            p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("%bw_team_color%", team.getColor().chat().toString())
                                     .replace("{TeamName}", team.getDisplayName(Language.getPlayerLanguage(p2))));
                         }
                     }
@@ -872,20 +872,20 @@ public class Arena implements IArena {
                     for (Player inGame : getPlayers()) {
                         Language lang = Language.getPlayerLanguage(inGame);
                         inGame.sendMessage(event.getMessage().apply(inGame)
-                                .replace("{PlayerTeamName}", team.getDisplayName(lang))
-                                .replace("{PlayerColor}", team.getColor().chat().toString()).replace("{PlayerName}", p.getDisplayName())
-                                .replace("{KillerColor}", killerTeam.getColor().chat().toString())
-                                .replace("{KillerName}", lastDamager.getDisplayName())
-                                .replace("{KillerTeamName}", killerTeam.getDisplayName(lang)));
+                                .replace("%bw_team_name%", team.getDisplayName(lang))
+                                .replace("%bw_player_color%", team.getColor().chat().toString()).replace("%bw_playername%", p.getDisplayName())
+                                .replace("%bw_killer_color%", killerTeam.getColor().chat().toString())
+                                .replace("%bw_killer_name%", lastDamager.getDisplayName())
+                                .replace("%bw_killer_team_name%", killerTeam.getDisplayName(lang)));
                     }
                     for (Player inGame : getSpectators()) {
                         Language lang = Language.getPlayerLanguage(inGame);
                         inGame.sendMessage(event.getMessage().apply(inGame)
-                                .replace("{PlayerTeamName}", team.getDisplayName(lang))
-                                .replace("{PlayerColor}", team.getColor().chat().toString()).replace("{PlayerName}", p.getDisplayName())
-                                .replace("{KillerColor}", killerTeam.getColor().chat().toString())
-                                .replace("{KillerName}", lastDamager.getDisplayName())
-                                .replace("{KillerTeamName}", killerTeam.getDisplayName(lang)));
+                                .replace("%bw_team_name%", team.getDisplayName(lang))
+                                .replace("%bw_player_color%", team.getColor().chat().toString()).replace("%bw_playername%", p.getDisplayName())
+                                .replace("%bw_killer_color%", killerTeam.getColor().chat().toString())
+                                .replace("%bw_killer_name%", lastDamager.getDisplayName())
+                                .replace("%bw_killer_team_name%", killerTeam.getDisplayName(lang)));
                     }
                     PlayerDrops.handlePlayerDrops(this, p, lastDamager, team, killerTeam, cause, new ArrayList<>(Arrays.asList(p.getInventory().getContents())));
                 }
@@ -894,15 +894,15 @@ public class Arena implements IArena {
         for (Player on : getPlayers()) {
             on.sendMessage(
                     getMsg(p, Messages.COMMAND_LEAVE_MSG)
-                            .replace("{vPrefix}", getChatSupport().getPrefix(p))
-                            .replace("{vSuffix}", getChatSupport().getSuffix(p))
-                            .replace("{playername}", p.getName())
-                            .replace("{player}", p.getDisplayName()
+                            .replace("%bw_v_prefix%", getChatSupport().getPrefix(p))
+                            .replace("%bw_v_suffix%", getChatSupport().getSuffix(p))
+                            .replace("%bw_playername%", p.getName())
+                            .replace("%bw_player%", p.getDisplayName()
                             )
             );
         }
         for (Player on : getSpectators()) {
-            on.sendMessage(getMsg(p, Messages.COMMAND_LEAVE_MSG).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()));
+            on.sendMessage(getMsg(p, Messages.COMMAND_LEAVE_MSG).replace("%bw_v_prefix%", getChatSupport().getPrefix(p)).replace("%bw_playername%", p.getName()).replace("%bw_player%", p.getDisplayName()));
         }
 
         if (getServerType() == ServerType.SHARED) {
@@ -1155,10 +1155,10 @@ public class Arena implements IArena {
         p.closeInventory();
         players.add(p);
         for (Player on : players) {
-            on.sendMessage(getMsg(on, Messages.COMMAND_REJOIN_PLAYER_RECONNECTED).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
+            on.sendMessage(getMsg(on, Messages.COMMAND_REJOIN_PLAYER_RECONNECTED).replace("%bw_playername%", p.getName()).replace("%bw_player%", p.getDisplayName()).replace("%bw_on%", String.valueOf(getPlayers().size())).replace("%bw_max%", String.valueOf(getMaxPlayers())));
         }
         for (Player on : spectators) {
-            on.sendMessage(getMsg(on, Messages.COMMAND_REJOIN_PLAYER_RECONNECTED).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
+            on.sendMessage(getMsg(on, Messages.COMMAND_REJOIN_PLAYER_RECONNECTED).replace("%bw_playername%", p.getName()).replace("%bw_player%", p.getDisplayName()).replace("%bw_on%", String.valueOf(getPlayers().size())).replace("%bw_max%", String.valueOf(getMaxPlayers())));
         }
         setArenaByPlayer(p, this);
         /* save player inventory etc */
@@ -1348,10 +1348,10 @@ public class Arena implements IArena {
         String teamName = team.getDisplayName(language);
         if (arena.getTeams().size() >= teamNumber) {
             return genericTeamFormat
-                    .replace("{TeamLetter}", String.valueOf(teamName.length() != 0 ? teamName.charAt(0) : ""))
-                    .replace("{TeamColor}", team.getColor().chat().toString())
-                    .replace("{TeamName}", teamName)
-                    .replace("{TeamStatus}", getTeamStatus(team, player));
+                    .replace("%bw_team_letter%", String.valueOf(teamName.length() != 0 ? teamName.charAt(0) : ""))
+                    .replace("%bw_team_color%", team.getColor().chat().toString())
+                    .replace("%bw_team_name%", teamName)
+                    .replace("%bw_team_status%", getTeamStatus(team, player));
         } else {
             // skip line
             return null;
@@ -1370,7 +1370,7 @@ public class Arena implements IArena {
         if (currentTeam.isBedDestroyed()) {
             if (currentTeam.getSize() > 0) {
                 result = getMsg(player, Messages.FORMATTING_SCOREBOARD_BED_DESTROYED)
-                        .replace("{remainingPlayers}", String.valueOf(currentTeam.getSize()));
+                        .replace("%bw_players_remaining%", String.valueOf(currentTeam.getSize()));
             } else {
                 result = getMsg(player, Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED);
             }
@@ -1944,16 +1944,16 @@ public class Arena implements IArena {
                         if (!winners.toString().contains(p.getDisplayName())) {
                             if(winner.getSize() > 1 && i+1 != winner.getMembers().size()){
                                 winners.append(getMsg(p, Messages.FORMATTING_EACH_WINNER)
-                                        .replace("{vPrefix}", getChatSupport().getPrefix(p))
-                                        .replace("{vSuffix}", getChatSupport().getSuffix(p))
-                                        .replace("{playername}", p.getName())
-                                        .replace("{player}", p.getDisplayName())).append("§7, ");
+                                        .replace("%bw_v_prefix%", getChatSupport().getPrefix(p))
+                                        .replace("%bw_v_suffix%", getChatSupport().getSuffix(p))
+                                        .replace("%bw_playername%", p.getName())
+                                        .replace("%bw_player%", p.getDisplayName())).append("§7, ");
                             }else{
                                 winners.append(getMsg(p, Messages.FORMATTING_EACH_WINNER)
-                                        .replace("{vPrefix}", getChatSupport().getPrefix(p))
-                                        .replace("{vSuffix}", getChatSupport().getSuffix(p))
-                                        .replace("{playername}", p.getName())
-                                        .replace("{player}", p.getDisplayName()));
+                                        .replace("%bw_v_prefix%", getChatSupport().getPrefix(p))
+                                        .replace("%bw_v_suffix%", getChatSupport().getSuffix(p))
+                                        .replace("%bw_playername%", p.getName())
+                                        .replace("%bw_player%", p.getDisplayName()));
                             }
                         }
                     }
@@ -1996,8 +1996,8 @@ public class Arena implements IArena {
                     }
                     for (Player p : world.getPlayers()) {
                         p.sendMessage(getMsg(p, Messages.GAME_END_TEAM_WON_CHAT)
-                                .replace("{TeamColor}", winner.getColor().chat().toString())
-                                .replace("{TeamName}", winner.getDisplayName(Language.getPlayerLanguage(p))));
+                                .replace("%bw_team_color%", winner.getColor().chat().toString())
+                                .replace("%bw_team_name%", winner.getDisplayName(Language.getPlayerLanguage(p))));
 
                         if (!winner.getMembers().contains(p)) {
                             nms.sendTitle(p, getMsg(p, Messages.GAME_END_GAME_OVER_PLAYER_TITLE), null, 0, 70, 20);
@@ -2005,26 +2005,26 @@ public class Arena implements IArena {
 
                         for (String s : getList(p, Messages.GAME_END_TOP_PLAYER_CHAT)) {
                             String message = s
-                                    .replace("{firstFormat}", firstPlayer == null ? getMsg(p, Messages.MEANING_NOBODY) : getMsg(firstPlayer, Messages.GAME_END_FIRST_KILLER)
-                                            .replace("{vPrefix}", getChatSupport().getPrefix(firstPlayer))
-                                            .replace("{vSuffix}", getChatSupport().getSuffix(firstPlayer))
-                                            .replace("{playername}", firstPlayer.getName())
-                                            .replace("{player}", firstPlayer.getDisplayName())).replace("{firstKills}", String.valueOf(first))
+                                    .replace("%bw_first_format%", firstPlayer == null ? getMsg(p, Messages.MEANING_NOBODY) : getMsg(firstPlayer, Messages.GAME_END_FIRST_KILLER)
+                                            .replace("%bw_v_prefix%", getChatSupport().getPrefix(firstPlayer))
+                                            .replace("%bw_v_suffix%", getChatSupport().getSuffix(firstPlayer))
+                                            .replace("%bw_playername%", firstPlayer.getName())
+                                            .replace("%bw_player%", firstPlayer.getDisplayName())).replace("%bw_first_kills%", String.valueOf(first))
 
-                                    .replace("{secondFormat}", secondPlayer == null ? getMsg(p, Messages.MEANING_NOBODY) : getMsg(secondPlayer, Messages.GAME_END_SECOND_KILLER)
-                                            .replace("{vPrefix}", getChatSupport().getPrefix(secondPlayer))
-                                            .replace("{vSuffix}", getChatSupport().getSuffix(secondPlayer))
-                                            .replace("{playername}", secondPlayer.getName())
-                                            .replace("{player}", secondPlayer.getDisplayName())).replace("{secondKills}", String.valueOf(second))
+                                    .replace("%bw_second_format%", secondPlayer == null ? getMsg(p, Messages.MEANING_NOBODY) : getMsg(secondPlayer, Messages.GAME_END_SECOND_KILLER)
+                                            .replace("%bw_v_prefix%", getChatSupport().getPrefix(secondPlayer))
+                                            .replace("%bw_v_suffix%", getChatSupport().getSuffix(secondPlayer))
+                                            .replace("%bw_playername%", secondPlayer.getName())
+                                            .replace("%bw_player%", secondPlayer.getDisplayName())).replace("%bw_second_kills%", String.valueOf(second))
 
-                                    .replace("{thirdFormat}", thirdPlayer == null ? getMsg(p, Messages.MEANING_NOBODY) : getMsg(thirdPlayer, Messages.GAME_END_THIRD_KILLER)
-                                            .replace("{vPrefix}", getChatSupport().getPrefix(thirdPlayer))
-                                            .replace("{vSuffix}", getChatSupport().getSuffix(thirdPlayer))
-                                            .replace("{playername}", thirdPlayer.getName())
-                                            .replace("{player}", thirdPlayer.getDisplayName())).replace("{thirdKills}", String.valueOf(third))
+                                    .replace("%bw_third_format%", thirdPlayer == null ? getMsg(p, Messages.MEANING_NOBODY) : getMsg(thirdPlayer, Messages.GAME_END_THIRD_KILLER)
+                                            .replace("%bw_v_prefix%", getChatSupport().getPrefix(thirdPlayer))
+                                            .replace("%bw_v_suffix%", getChatSupport().getSuffix(thirdPlayer))
+                                            .replace("%bw_playername%", thirdPlayer.getName())
+                                            .replace("%bw_player%", thirdPlayer.getDisplayName())).replace("%bw_third_kills%", String.valueOf(third))
 
-                                    .replace("{winnerFormat}", getMaxInTeam() > 1 ? getMsg(p, Messages.FORMATTING_TEAM_WINNER_FORMAT).replace("{members}", winners.toString()) : getMsg(p, Messages.FORMATTING_SOLO_WINNER_FORMAT).replace("{members}", winners.toString()))
-                                    .replace("{TeamColor}", winner.getColor().chat().toString()).replace("{TeamName}", winner.getDisplayName(Language.getPlayerLanguage(p)));
+                                    .replace("%bw_winner_format%", getMaxInTeam() > 1 ? getMsg(p, Messages.FORMATTING_TEAM_WINNER_FORMAT).replace("%bw_winner_members%", winners.toString()) : getMsg(p, Messages.FORMATTING_SOLO_WINNER_FORMAT).replace("%bw_winner_members%", winners.toString()))
+                                    .replace("%bw_team_color%", winner.getColor().chat().toString()).replace("%bw_team_name%", winner.getDisplayName(Language.getPlayerLanguage(p)));
                             p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, message));
                         }
                     }
