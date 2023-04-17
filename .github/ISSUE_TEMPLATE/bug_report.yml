@@ -1,0 +1,91 @@
+name: Bug Report
+description: Found a Bug regarding BedWars1058? Use this template to report it!
+labels:
+- "bug"
+body:
+- type: markdown
+  attributes:
+  value: |-
+      Thank you for taking your time and opening a Bug Report.
+      In order for us to process this Bug Report as fast and efficient as possible do we ask you to read the form carefully and provide any requested information.
+      Required fields are marked with an asterisk symbol (`*`)
+
+      Also, always make sure to use the latest Release from [Releases](https://github.com/tomkeuper/BedWars1058/releases) or the latest Development Build from our [Discord](https://discord.gg/kPaBGwhmjf) to make sure that your issue isn't already fixed.
+- type: checkboxes
+  attributes:
+  label: Make sure to check before creating a Bug Report
+  description: Please make sure to have completed the following checks.
+  options:
+  - label: The issue isn't already found on the Issue tracker.
+    required: true
+  - label: My issue is about **BedWars1058** and not any addon.
+    required: true
+  - label: The issue isn't already fixed in a Release or Development Build.
+    required: true
+  - label: I have checked all boxes without reading them.
+    required: false
+- type: dropdown
+  attributes:
+  label: "Type of problem"
+  description: |-
+    What kind of Bug do you encounter?
+    - `Gameplay Bug`: Some gameplay mechanic is not right.
+    - `Plugin/Server Incompatibility`: A general error occurred while the server was running
+    - `API Bug`: A method you use didn't work or has an unexpected result.
+  multiple: false
+  options:
+    - "Gameplay Bug"
+    - "Plugin/Server Incompatibility"
+    - "API Bug"
+  validations:
+  required: true
+- type: textarea
+  attributes:
+  label: "What happened?"
+  description: "What bug are you encountering? Try to explain it as detailed as possible."
+  placeholder: "A clear and concise description of what the bug is..."
+  validations:
+  required: true
+- type: textarea
+  attributes:
+  label: "Expected Behaviour"
+  description: "What behaviour did you expect from PlaceholderAPI?"
+  placeholder: "A clear and concise description of what you expected to happen..."
+  validations:
+  required: true
+- type: textarea
+  attributes:
+  label: "How to Reproduce"
+  description: |-
+    List the steps on how to reproduce this Bug.
+    Post any Code-examples in the `Additional Information` field below when you selected `API Bug`.
+  placeholder: |-
+    1. Go to '...'
+    2. Click on '....'
+    3. See error
+  validations:
+  required: true
+- type: input
+  id: "console"
+  attributes:
+  label: "Console Log"
+  description: |-
+    Get the latest content of your `latest.log` file an upload it to https://pastebin.com/
+    Take the generated URL and paste it into this field.
+  placeholder: "https://pastebin.com/"
+- type: input
+  id: "error"
+  attributes:
+  label: "Errors"
+  description: |-
+    Upload any errors you find to https://pastebin.com/ and post the link in the field below.
+  placeholder: "https://pastebin.com/"
+- type: textarea
+  attributes:
+  label: "Additional Info"
+  description: |-
+    Add any extra info you think is nessesary for this Bug report.
+    - If you selected `API Bug` will you need to include code-examples here to reproduce the issue.
+    - If you selected `Plugin/Server Incompatability` should you include extra Server info such as a Plugin List or Timings Report or info about the plugin.
+    - Server info like Version, software used (spigot, paper, carbon...) is also welcome.
+  placeholder: "Put any extra info you like to add into this field..."
