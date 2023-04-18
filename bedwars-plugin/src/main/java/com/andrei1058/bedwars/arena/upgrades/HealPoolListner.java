@@ -13,7 +13,7 @@ import org.bukkit.event.Listener;
 public class HealPoolListner implements Listener {
     @EventHandler
     public void onTeamUpgrade(UpgradeBuyEvent e){
-        if (e.getTeamUpgrade().getName().equalsIgnoreCase("upgrade-heal-pool")){
+        if (e.getTeamUpgrade().getName().contains("heal-pool")){
             IArena a = e.getArena();
             if (a == null) return;
             ITeam bwt = a.getTeam(e.getPlayer());
