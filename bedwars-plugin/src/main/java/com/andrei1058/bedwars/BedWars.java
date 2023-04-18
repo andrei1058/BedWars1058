@@ -222,6 +222,16 @@ public class BedWars extends JavaPlugin {
 
         nms.registerVersionListeners();
 
+        if (Bukkit.getPluginManager().getPlugin("Multiverse-Core") != null){
+            plugin.getLogger().warning("-=-=-=-=-=-=-=- Multiverse has been found! -=-=-=-=-=-=-=-");
+            plugin.getLogger().warning("");
+            plugin.getLogger().warning(" Unless properly configured, multiverse will cause issues!");
+            plugin.getLogger().warning("");
+            plugin.getLogger().warning("      Make sure that MV does NOT touch any BW maps.");
+            plugin.getLogger().warning("");
+            plugin.getLogger().warning("_________________________________________________________");
+        }
+
         if (Bukkit.getPluginManager().getPlugin("Enhanced-SlimeWorldManager") != null) {
             try {
                 //noinspection rawtypes
