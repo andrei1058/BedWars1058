@@ -126,11 +126,11 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_DEFAULT_ITEMS = "start-items-per-group";
 
     public static final String CENERAL_CONFIGURATION_ALLOWED_COMMANDS = "allowed-commands";
-    public static final String SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR = "scoreboard-settings.sidebar.enable-lobby-sidebar";
-    public static final String SB_CONFIG_SIDEBAR_USE_GAME_SIDEBAR = "scoreboard-settings.sidebar.enable-game-sidebar";
-    public static final String SB_CONFIG_SIDEBAR_TITLE_REFRESH_INTERVAL = "scoreboard-settings.sidebar.title-refresh-interval";
-    public static final String SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL = "scoreboard-settings.sidebar.placeholders-refresh-interval";
-    public static final String SB_CONFIG_SIDEBAR_PREFIX_SUFFIX_REFRESH_INTERVAL = "scoreboard-settings.sidebar.prefix-suffix-refresh-interval";
+    public static final String SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR = "scoreboard-settings.scoreboard.enable-lobby-scoreboard";
+    public static final String SB_CONFIG_SIDEBAR_USE_GAME_SIDEBAR = "scoreboard-settings.scoreboard.enable-game-scoreboard";
+    public static final String SB_CONFIG_SIDEBAR_TITLE_REFRESH_INTERVAL = "scoreboard-settings.scoreboard.title-refresh-interval";
+    public static final String SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL = "scoreboard-settings.scoreboard.placeholders-refresh-interval";
+    public static final String SB_CONFIG_SIDEBAR_PREFIX_SUFFIX_REFRESH_INTERVAL = "scoreboard-settings.scoreboard.prefix-suffix-refresh-interval";
     public static final String SB_CONFIG_SIDEBAR_LIST_FORMAT_LOBBY = "scoreboard-settings.player-list.format-lobby-list";
     public static final String SB_CONFIG_SIDEBAR_LIST_FORMAT_WAITING = "scoreboard-settings.player-list.format-waiting-list";
     public static final String SB_CONFIG_SIDEBAR_LIST_FORMAT_STARTING = "scoreboard-settings.player-list.format-starting-list";
