@@ -311,6 +311,9 @@ public class BoardManager implements IScoreboardService {
 
         TabAPI.getInstance().getTablistFormatManager().setPrefix(tabPlayer, "%bw_prefix%");
         TabAPI.getInstance().getTablistFormatManager().setSuffix(tabPlayer, "%bw_suffix%");
+
+        TabAPI.getInstance().getTeamManager().setPrefix(tabPlayer, "%bw_prefix%");
+        TabAPI.getInstance().getTeamManager().setSuffix(tabPlayer, "%bw_suffix%");
     }
 
     @Override
