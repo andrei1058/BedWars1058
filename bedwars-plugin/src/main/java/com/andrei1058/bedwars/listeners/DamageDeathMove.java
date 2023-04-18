@@ -446,26 +446,26 @@ public class DamageDeathMove implements Listener {
             for (Player on : a.getPlayers()) {
                 Language lang = Language.getPlayerLanguage(on);
                 on.sendMessage(playerKillEvent.getMessage().apply(on).
-                        replace("{PlayerColor}", victimsTeam.getColor().chat().toString())
-                        .replace("{PlayerName}", victim.getDisplayName())
-                        .replace("{PlayerNameUnformatted}", victim.getName())
-                        .replace("{PlayerTeamName}", victimsTeam.getDisplayName(lang))
-                        .replace("{KillerColor}", killersTeam == null ? "" : killersTeam.getColor().chat().toString())
-                        .replace("{KillerName}", killer == null ? "" : killer.getDisplayName())
-                        .replace("{KillerNameUnformatted}", killer == null ? "" : killer.getName())
-                        .replace("{KillerTeamName}", killersTeam == null ? "" : killersTeam.getDisplayName(lang)));
+                        replace("%bw_player_color%", victimsTeam.getColor().chat().toString())
+                        .replace("%bw_player%", victim.getDisplayName())
+                        .replace("%bw_playername%", victim.getName())
+                        .replace("%bw_team%", victimsTeam.getDisplayName(lang))
+                        .replace("%bw_killer_color%", killersTeam == null ? "" : killersTeam.getColor().chat().toString())
+                        .replace("%bw_killer_playername%", killer == null ? "" : killer.getDisplayName())
+                        .replace("%bw_killer_name%", killer == null ? "" : killer.getName())
+                        .replace("%bw_killer_team%", killersTeam == null ? "" : killersTeam.getDisplayName(lang)));
             }
             for (Player on : a.getSpectators()) {
                 Language lang = Language.getPlayerLanguage(on);
                 on.sendMessage(playerKillEvent.getMessage().apply(on).
-                        replace("{PlayerColor}", victimsTeam.getColor().chat().toString())
-                        .replace("{PlayerName}", victim.getDisplayName())
-                        .replace("{PlayerNameUnformatted}", victim.getName())
-                        .replace("{KillerColor}", killersTeam == null ? "" : killersTeam.getColor().chat().toString())
-                        .replace("{PlayerTeamName}", victimsTeam.getDisplayName(lang))
-                        .replace("{KillerName}", killer == null ? "" : killer.getDisplayName())
-                        .replace("{KillerNameUnformatted}", killer == null ? "" : killer.getName())
-                        .replace("{KillerTeamName}", killersTeam == null ? "" : killersTeam.getDisplayName(lang)));
+                        replace("%bw_player_color%", victimsTeam.getColor().chat().toString())
+                        .replace("%bw_player%", victim.getDisplayName())
+                        .replace("%bw_playername%", victim.getName())
+                        .replace("%bw_team%", victimsTeam.getDisplayName(lang))
+                        .replace("%bw_killer_color%", killersTeam == null ? "" : killersTeam.getColor().chat().toString())
+                        .replace("%bw_killer_playername%", killer == null ? "" : killer.getDisplayName())
+                        .replace("%bw_killer_name%", killer == null ? "" : killer.getName())
+                        .replace("%bw_killer_team%", killersTeam == null ? "" : killersTeam.getDisplayName(lang)));
             }
 
             // increase stats to killer
