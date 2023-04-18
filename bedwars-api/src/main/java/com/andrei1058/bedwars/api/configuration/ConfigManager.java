@@ -160,7 +160,7 @@ public class ConfigManager {
     }
 
     /**
-     * Set data to config
+     * Set and save data to config
      */
     public void set(String path, Object value) {
         yml.set(path, value);
