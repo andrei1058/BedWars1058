@@ -28,7 +28,7 @@ BedWars1058 will hook into it and do everything for you.
 - Download the latest release and it's dependency
 - Put it in the plugins folder
 - Restart the server
-- Navigate to TAB's config folder and enable scoreboard-teams
+- Navigate to TAB's config folder and enable scoreboard
 
 # Pre-made setups and community addons
 
