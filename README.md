@@ -19,6 +19,17 @@ heavy if you are still making use of HDD in 2021, and you do not have a decent C
 and faster restore system install [SlimeWorldManager](https://www.spigotmc.org/resources/slimeworldmanager.69974/) or [AdvancedWorldManager](https://www.spigotmc.org/resources/advanced-slimeworldmanager.87209/).
 BedWars1058 will hook into it and do everything for you.
 
+# Dependency
+- Java 11
+- Spigot forks with NMS
+- [TAB](https://builtbybit.com/resources/tab-free-trial.20631/) plugin
+
+# Basic Installation
+- Download the latest release and it's dependency
+- Put it in the plugins folder
+- Restart the server
+- Navigate to TAB's config folder and enable scoreboard
+
 # Pre-made setups and community addons
 
 You can find a list of pre-made setups and community addons [on the wiki](https://wiki.andrei1058.dev/docs/BedWars1058/addons)
@@ -115,14 +126,6 @@ If you get disconnected, or if you leave a game (configurable) you can re-join i
 ###### Season events:
 - Halloween special. It is enabled automatically based on your machine timezone and will provide cool effects.
 
-# Community servers
-Chosen by hundreds of servers all around the world.  
-[![Fear Games Logo](.github/assets/servers/fear_games.png)](https://feargames.it/)
-[![Gamster Logo](.github/assets/servers/gamster.png)](https://www.gamster.org/)  
-- mc.feargames.it
-- mc.gamster.org
-
-
 # 3rd party libraries
 - [bStats](https://bstats.org/getting-started/include-metrics)
 - [Sidebar API](https://github.com/andrei1058/SiderbarLib)
@@ -131,4 +134,4 @@ Chosen by hundreds of servers all around the world.
 - [SLF4J](http://www.slf4j.org/)
 
 # Contact
-[![Discord Server](https://discordapp.com/api/guilds/201345265821679617/widget.png?style=banner3)](https://discord.gg/XdJfN2X)
+[![Discord Server](https://discordapp.com/api/guilds/760851292826107926/widget.png?style=banner3)](https://discord.gg/4rWpxmPt77)
