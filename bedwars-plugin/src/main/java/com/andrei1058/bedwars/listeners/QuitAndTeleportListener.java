@@ -126,7 +126,7 @@ public class QuitAndTeleportListener implements Listener {
             if (BedWars.config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR)) {
                 //Bukkit.getScheduler().runTaskLater(plugin, ()-> {
                 if (e.getPlayer().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
-                    BoardManager.getInstance().giveSidebar(e.getPlayer(), null, true);
+                    BoardManager.getInstance().giveTabFeatures(e.getPlayer(), null, true);
                 } else {
                     BoardManager.getInstance().remove(e.getPlayer());
                 }
@@ -135,7 +135,7 @@ public class QuitAndTeleportListener implements Listener {
         } else if (BedWars.getServerType() == ServerType.MULTIARENA) {
             if (BedWars.config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR)) {
                 if (e.getPlayer().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
-                    BoardManager.getInstance().giveSidebar(e.getPlayer(), null, true);
+                    BoardManager.getInstance().giveTabFeatures(e.getPlayer(), null, true);
                 }
             }
         }

@@ -38,7 +38,7 @@ public class LangListener implements Listener {
         if (BedWars.config.getLobbyWorldName().equalsIgnoreCase(e.getPlayer().getWorld().getName())) {
             Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
                 Arena.sendLobbyCommandItems(e.getPlayer());
-                BoardManager.getInstance().giveSidebar(e.getPlayer(), Arena.getArenaByPlayer(e.getPlayer()), false);
+                BoardManager.getInstance().giveTabFeatures(e.getPlayer(), Arena.getArenaByPlayer(e.getPlayer()), false);
 
                 // save to db
                 Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, ()-> BedWars.getRemoteDatabase().setLanguage(e.getPlayer().getUniqueId(), e.getNewLang()));

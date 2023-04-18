@@ -13,7 +13,7 @@ public interface IScoreboardService {
     /**
      * Send player scoreboard based on conditions.
      */
-    void giveSidebar(@NotNull Player player, @Nullable IArena arena, boolean delay);
+    void giveTabFeatures(@NotNull Player player, @Nullable IArena arena, boolean delay);
 
     /**
      * Remove a player scoreboard.

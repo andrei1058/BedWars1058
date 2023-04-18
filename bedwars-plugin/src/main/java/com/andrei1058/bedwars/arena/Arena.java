@@ -69,7 +69,6 @@ import com.andrei1058.bedwars.support.paper.PaperSupport;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.support.vault.WithEconomy;
 import me.neznamy.tab.api.TabAPI;
-import me.neznamy.tab.api.event.player.PlayerLoadEvent;
 import me.neznamy.tab.api.placeholder.PlaceholderManager;
 import me.neznamy.tab.api.placeholder.PlayerPlaceholder;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -618,7 +617,7 @@ public class Arena implements IArena {
         }
         if (!isStatusChange)
             if (BedWars.getServerType() == ServerType.MULTIARENA || BedWars.getServerType() == ServerType.SHARED){
-                BoardManager.getInstance().giveSidebar(p,this, false);
+                BoardManager.getInstance().giveTabFeatures(p,this, false);
         }
 
         refreshSigns();
@@ -944,7 +943,7 @@ public class Arena implements IArena {
                         BedWars.nms.spigotHidePlayer(on, p);
                     }
                 }
-                if (!disconnect) BoardManager.getInstance().giveSidebar(p, null, false);
+                if (!disconnect) BoardManager.getInstance().giveTabFeatures(p, null, false);
             }, 5L);
         }
 
@@ -1085,7 +1084,7 @@ public class Arena implements IArena {
                         BedWars.nms.spigotHidePlayer(on, p);
                     }
                 }
-                if (!disconnect) BoardManager.getInstance().giveSidebar(p, null, false);
+                if (!disconnect) BoardManager.getInstance().giveTabFeatures(p, null, false);
             });
         }
 
@@ -1181,7 +1180,7 @@ public class Arena implements IArena {
         reJoin.getBwt().reJoin(p, ev.getRespawnTime());
         reJoin.destroy(false);
 
-        BoardManager.getInstance().giveSidebar(p, this, true);
+        BoardManager.getInstance().giveTabFeatures(p, this, true);
         return true;
     }
 
@@ -1584,13 +1583,13 @@ public class Arena implements IArena {
         PlayerPlaceholder prefixPlaceholder = (PlayerPlaceholder) TabAPI.getInstance().getPlaceholderManager().getPlaceholder("%bw_prefix%");
         PlayerPlaceholder suffixPlaceholder = (PlayerPlaceholder) TabAPI.getInstance().getPlaceholderManager().getPlaceholder("%bw_suffix%");
         players.forEach(c -> {
-            BoardManager.getInstance().giveSidebar(c, this, false);
+            BoardManager.getInstance().giveTabFeatures(c, this, false);
             prefixPlaceholder.updateValue(TabAPI.getInstance().getPlayer(c.getUniqueId()), prefixPlaceholder.request(TabAPI.getInstance().getPlayer(c.getUniqueId())));
             suffixPlaceholder.updateValue(TabAPI.getInstance().getPlayer(c.getUniqueId()), suffixPlaceholder.request(TabAPI.getInstance().getPlayer(c.getUniqueId())));
         });
 
         spectators.forEach(c -> {
-            BoardManager.getInstance().giveSidebar(c, this, false);
+            BoardManager.getInstance().giveTabFeatures(c, this, false);
             prefixPlaceholder.updateValue(TabAPI.getInstance().getPlayer(c.getUniqueId()), prefixPlaceholder.request(TabAPI.getInstance().getPlayer(c.getUniqueId())));
             suffixPlaceholder.updateValue(TabAPI.getInstance().getPlayer(c.getUniqueId()), suffixPlaceholder.request(TabAPI.getInstance().getPlayer(c.getUniqueId())));
         });

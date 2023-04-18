@@ -429,7 +429,7 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
 
         @Override
         public void givePlayerScoreboard(@NotNull Player player, boolean delay) {
-            BoardManager.getInstance().giveSidebar(player, Arena.getArenaByPlayer(player), delay);
+            BoardManager.getInstance().giveTabFeatures(player, Arena.getArenaByPlayer(player), delay);
         }
     };
 

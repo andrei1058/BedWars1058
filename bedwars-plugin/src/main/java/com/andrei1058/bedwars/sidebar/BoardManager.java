@@ -55,7 +55,7 @@ public class BoardManager implements IScoreboardService {
                 event -> {
                     IArena arena = Arena.getArenaByPlayer((Player) event.getPlayer().getPlayer());
                     if (BedWars.getServerType() == ServerType.SHARED && !((Player) event.getPlayer().getPlayer()).getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) return;
-                    BoardManager.getInstance().giveSidebar((Player) event.getPlayer().getPlayer(), arena, false);
+                    BoardManager.getInstance().giveTabFeatures((Player) event.getPlayer().getPlayer(), arena, false);
                 });
     }
 
@@ -271,7 +271,7 @@ public class BoardManager implements IScoreboardService {
     }
 
     @Override
-    public void giveSidebar(@NotNull Player player, @Nullable IArena arena, boolean delay) {
+    public void giveTabFeatures(@NotNull Player player, @Nullable IArena arena, boolean delay) {
         String arenaDisplayname = "null";
         if (null != arena) arenaDisplayname = arena.getDisplayName();
         BedWars.debug("giveSidebar() player: " + player.getDisplayName() + " arena: " + arenaDisplayname);
