@@ -189,12 +189,13 @@ public class BoardManager implements IScoreboardService {
                 BedWars.debug("Unhandled game state bw prefix");
             }
             String prefix = null;
-            if (!fixList.isEmpty()) prefix = fixList.get(i);
             if (i+1 >= fixList.size()){
                 tabPlayersPrefix.put(tabPlayer,0);
+                i = 0;
             } else {
                 tabPlayersPrefix.put(tabPlayer,i+1);
             }
+            if (!fixList.isEmpty()) prefix = fixList.get(i);
             return null == prefix ? "" : prefix;
         });
 
@@ -219,12 +220,13 @@ public class BoardManager implements IScoreboardService {
                 BedWars.debug("Unhandled game state bw suffix");
             }
             String suffix = null;
-            if (!fixList.isEmpty()) suffix = fixList.get(i);
             if (i+1 >= fixList.size()){
                 tabPlayersSuffix.put(tabPlayer,0);
+                i = 0;
             } else {
                 tabPlayersSuffix.put(tabPlayer,i+1);
             }
+            if (!fixList.isEmpty()) suffix = fixList.get(i);
             return null == suffix ? "" : suffix;
         });
 
@@ -254,6 +256,7 @@ public class BoardManager implements IScoreboardService {
 
             if (i+1 >= titleArray.length){
                 tabPlayersTitle.put(tabPlayer,0);
+                i = 0;
             } else {
                 tabPlayersTitle.put(tabPlayer,i+1);
             }
