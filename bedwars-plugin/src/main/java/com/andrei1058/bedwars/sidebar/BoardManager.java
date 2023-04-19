@@ -375,6 +375,7 @@ public class BoardManager implements IScoreboardService {
     private String getNextEventTime(Arena arena, Player player) {
         if (!(arena instanceof Arena)) return getNextEventDateFormat(player).format((0L));
         long time = 0L;
+        PlayingTask playingTask = arena.getPlayingTask();
         switch (arena.getNextEvent()) {
             case EMERALD_GENERATOR_TIER_II:
             case EMERALD_GENERATOR_TIER_III:
@@ -385,7 +386,6 @@ public class BoardManager implements IScoreboardService {
                 time = (arena.upgradeDiamondsCount) * 1000L;
                 break;
             case GAME_END:
-                PlayingTask playingTask = arena.getPlayingTask();
                 if (null == playingTask) {
                     time = 0;
                     break;
@@ -393,9 +393,17 @@ public class BoardManager implements IScoreboardService {
                 time = (playingTask.getGameEndCountdown()) * 1000L;
                 break;
             case BEDS_DESTROY:
+                if (null == playingTask) {
+                    time = 0;
+                    break;
+                }
                 time = (arena.getPlayingTask().getBedsDestroyCountdown()) * 1000L;
                 break;
             case ENDER_DRAGON:
+                if (null == playingTask) {
+                    time = 0;
+                    break;
+                }
                 time = (arena.getPlayingTask().getDragonSpawnCountdown()) * 1000L;
                 break;
         }
