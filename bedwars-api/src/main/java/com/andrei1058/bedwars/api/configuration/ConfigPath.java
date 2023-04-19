@@ -163,6 +163,7 @@ public class ConfigPath {
 
     public static final String ARENA_DISPLAY_NAME = "display-name";
     public static final String ARENA_CONFIGURATION_MAX_BUILD_Y = "max-build-y";
+    public static final String ARENA_CONFIGURATION_MIN_BUILD_Y = "min-build-y";
     public static final String ARENA_SPAWN_PROTECTION = "spawn-protection";
     public static final String ARENA_SHOP_PROTECTION = "shop-protection";
     public static final String ARENA_UPGRADES_PROTECTION = "upgrades-protection";

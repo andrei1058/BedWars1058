@@ -161,6 +161,10 @@ public class BreakPlace implements Listener {
                 e.setCancelled(true);
                 return;
             }
+            if (e.getBlockPlaced().getLocation().getBlockY() <= a.getConfig().getInt(ConfigPath.ARENA_CONFIGURATION_MIN_BUILD_Y)) {
+                e.setCancelled(true);
+                return;
+            }
 
             for (Region r : a.getRegionsList()) {
                 if (r.isInRegion(e.getBlock().getLocation()) && r.isProtected()) {
