@@ -842,11 +842,11 @@ public class Arena implements IArena {
                     if (!team.isBedDestroyed()) {
                         for (Player p2 : this.getPlayers()) {
                             p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("%bw_team_color%", team.getColor().chat().toString())
-                                    .replace("{TeamName}", team.getDisplayName(Language.getPlayerLanguage(p2))));
+                                    .replace("%bw_team_name%", team.getDisplayName(Language.getPlayerLanguage(p2))));
                         }
                         for (Player p2 : this.getSpectators()) {
                             p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("%bw_team_color%", team.getColor().chat().toString())
-                                    .replace("{TeamName}", team.getDisplayName(Language.getPlayerLanguage(p2))));
+                                    .replace("%bw_team_name%", team.getDisplayName(Language.getPlayerLanguage(p2))));
                         }
                     }
                 }

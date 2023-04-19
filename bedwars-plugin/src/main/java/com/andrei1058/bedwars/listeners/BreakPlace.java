@@ -345,11 +345,11 @@ public class BreakPlace implements Listener {
                                             for (Player on : a.getWorld().getPlayers()) {
                                                 if (breakEvent.getMessage() != null) {
                                                     on.sendMessage(breakEvent.getMessage().apply(on)
-                                                            .replace("{TeamColor}", t.getColor().chat().toString())
-                                                            .replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(on)))
-                                                            .replace("{PlayerColor}", a.getTeam(p).getColor().chat().toString())
-                                                            .replace("{PlayerName}", p.getDisplayName())
-                                                            .replace("{PlayerNameUnformatted}", p.getName()));
+                                                            .replace("%bw_team_color%", t.getColor().chat().toString())
+                                                            .replace("%bw_team_name%", t.getDisplayName(Language.getPlayerLanguage(on)))
+                                                            .replace("%bw_player_color%", a.getTeam(p).getColor().chat().toString())
+                                                            .replace("%bw_player%", p.getDisplayName())
+                                                            .replace("%bw_playername%", p.getName()));
                                                 }
                                                 if (breakEvent.getTitle() != null && breakEvent.getSubTitle() != null) {
                                                     nms.sendTitle(on, breakEvent.getTitle().apply(on), breakEvent.getSubTitle().apply(on), 0, 40, 10);
