@@ -31,8 +31,6 @@ import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class BoardManager implements IScoreboardService {
-
-    private final HashMap<String, Scoreboard> sidebars = new HashMap<>();
     private static ScoreboardManager scoreboardManager;
     private static BoardManager instance;
     private final HashMap<TabPlayer, Integer> tabPlayersPrefix = new HashMap<>();
@@ -46,17 +44,47 @@ public class BoardManager implements IScoreboardService {
             instance = new BoardManager();
             instance.registerPlaceholders();
             instance.registerLoadEvent();
+            instance.registerLobbyScoreboards();
         }
         return instance != null;
     }
 
-    public static void registerLoadEvent(){
+    public void registerLoadEvent(){
         TabAPI.getInstance().getEventBus().register(PlayerLoadEvent.class,
                 event -> {
                     IArena arena = Arena.getArenaByPlayer((Player) event.getPlayer().getPlayer());
                     if (BedWars.getServerType() == ServerType.SHARED && !((Player) event.getPlayer().getPlayer()).getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) return;
                     BoardManager.getInstance().giveTabFeatures((Player) event.getPlayer().getPlayer(), arena, false);
                 });
+    }
+
+    public void registerLobbyScoreboards(){
+        for (Language language : Language.getLanguages()){
+            List<String> lines = language.l(Messages.SCOREBOARD_LOBBY);
+            scoreboardManager.createScoreboard("bw_lobby_" + language.getIso(),"%bw_scoreboard_title%", lines);
+        }
+    }
+    public void registerArenaScoreboards(Arena arena){
+        //Technically it's possible to have per arena scoreboards. Future feature?
+        for (Language language: Language.getLanguages()){
+            List<String> waiting = getScoreboardLines(arena, language, "waiting", Messages.SCOREBOARD_DEFAULT_WAITING);
+            String scoreboardWaitingName = "bw_" + arena.getGroup() + "_waiting_" + language.getIso();
+            if (!scoreboardManager.getRegisteredScoreboards().containsKey(scoreboardWaitingName)) scoreboardManager.createScoreboard(scoreboardWaitingName,"%bw_scoreboard_title%", waiting.subList(1, waiting.size()));
+
+            List<String> starting = getScoreboardLines(arena, language, "starting", Messages.SCOREBOARD_DEFAULT_STARTING);
+            String scoreboardStartingName = "bw_" + arena.getGroup() + "_starting_" + language.getIso();
+            if (!scoreboardManager.getRegisteredScoreboards().containsKey(scoreboardStartingName)) scoreboardManager.createScoreboard(scoreboardStartingName,"%bw_scoreboard_title%", starting.subList(1, starting.size()));
+
+            List<String> playing = getScoreboardLines(arena, language, "playing", Messages.SCOREBOARD_DEFAULT_PLAYING);
+            String scoreboardPlayingName = "bw_" + arena.getGroup() + "_playing_" + language.getIso();
+            if (!scoreboardManager.getRegisteredScoreboards().containsKey(scoreboardPlayingName)) scoreboardManager.createScoreboard(scoreboardPlayingName,"%bw_scoreboard_title%", playing.subList(1, playing.size()));
+        }
+    }
+
+    private List<String> getScoreboardLines(Arena arena, Language language, String phase, String path){
+        List<String> lines = Language.getScoreboard(language, "scoreboard." + arena.getGroup() + "." + phase, path);
+        lines.replaceAll(s -> s.isEmpty() ? " " : s); // TAB doesn't display empty lines, we need to replace them with spaces
+        return lines;
     }
 
     private SimpleDateFormat getDateFormat(Player player){
@@ -275,37 +303,24 @@ public class BoardManager implements IScoreboardService {
         String arenaDisplayname = "null";
         if (null != arena) arenaDisplayname = arena.getDisplayName();
         BedWars.debug("giveSidebar() player: " + player.getDisplayName() + " arena: " + arenaDisplayname);
+
         // if sidebar is disabled in lobby on shared mode
-        if (null == arena) if (!config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR)) return;
+        if (null == arena){ if (!config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR)) return;}
         else if (!config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_GAME_SIDEBAR)) return;
 
-
+        String scoreboardName = "bw_lobby_" + Language.getPlayerLanguage(player).getIso();
         // set sidebar lines based on game state or lobby
-        List<String> lines = null;
-        if (null == arena) {
-            if (BedWars.getServerType() != ServerType.SHARED) {
-                lines = Language.getList(player, Messages.SCOREBOARD_LOBBY);
-            }
-        } else {
             if (arena.getStatus() == GameState.waiting) {
-                lines = Language.getScoreboard(player, "scoreboard." + arena.getGroup() + ".waiting", Messages.SCOREBOARD_DEFAULT_WAITING);
+                scoreboardName = "bw_" + arena.getGroup() + "_waiting_" + Language.getPlayerLanguage(player).getIso();
             } else if (arena.getStatus() == GameState.starting) {
-                lines = Language.getScoreboard(player, "scoreboard." + arena.getGroup() + ".starting", Messages.SCOREBOARD_DEFAULT_STARTING);
+                scoreboardName = "bw_" + arena.getGroup() + "_starting_" + Language.getPlayerLanguage(player).getIso();
             } else if (arena.getStatus() == GameState.playing || arena.getStatus() == GameState.restarting) {
-                lines = Language.getScoreboard(player, "scoreboard." + arena.getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING);
+                scoreboardName = "bw_" + arena.getGroup() + "_playing_" + Language.getPlayerLanguage(player).getIso();
             }
-        }
-
-        if (lines.size() == 1) {
-            lines = new ArrayList<>();
-        }
-        lines = lines.subList(1, lines.size());
-        lines.replaceAll(s -> s.isEmpty() ? " " : s); // TAB doesn't display empty lines, we need to replace them with spaces
-
-        Scoreboard scoreboard = sidebars.getOrDefault(player.getUniqueId(), getScoreboard(arena, "%bw_scoreboard_title%", lines));
         TabPlayer tabPlayer = TabAPI.getInstance().getPlayer(player.getUniqueId());
 
-        TabAPI.getInstance().getScoreboardManager().showScoreboard(tabPlayer, scoreboard);
+        Scoreboard scoreboard = scoreboardManager.getRegisteredScoreboards().get(scoreboardName);
+        scoreboardManager.showScoreboard(tabPlayer, scoreboard);
 
         setHeaderFooter(tabPlayer,arena);
 
@@ -318,15 +333,8 @@ public class BoardManager implements IScoreboardService {
 
     @Override
     public void remove(@NotNull Player player) {
-
+        scoreboardManager.resetScoreboard(TabAPI.getInstance().getPlayer(player.getUniqueId()));
     }
-
-    public Scoreboard getScoreboard(IArena arena, String title, List<String> lineArray){ //todo create global during init
-        String status = "default";
-        if (arena != null) status = arena.getStatus().toString();
-        return scoreboardManager.createScoreboard(status, title, lineArray);
-    }
-
 
     @NotNull
     private String getNextEventName(Player player) {
@@ -482,23 +490,6 @@ public class BoardManager implements IScoreboardService {
         // if tab formatting is disabled in restarting
         return arena.getStatus() != GameState.restarting || !config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_RESTARTING);
     }
-
-//    @Override
-//    public void refreshTabList(TabPlayer player) {
-//        TabPlayer[] players = TabAPI.getInstance().getOnlinePlayers();
-//
-//            String prefix;
-//            String suffix;
-//
-//            IArena arena = Arena.getArenaByPlayer((Player) player.getPlayer());
-//
-//            if (null == arena) {
-//                List<String> prefixes = Language.getList((Player) player.getPlayer(), Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_LOBBY);
-//                List<String> suffixes = Language.getList((Player) player.getPlayer(), Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_LOBBY);
-//
-//                return;
-//            }
-//    }
 
     private String getNextItem(List<String> myList) {
         Iterator<String> iterator = myList.iterator();

@@ -121,7 +121,7 @@ public class Arena implements IArena {
     public int upgradeDiamondsCount = 0, upgradeEmeraldsCount = 0;
     public boolean allowSpectate = true;
     private World world;
-    private String group = "Default", arenaName, worldName;
+    private String group = "Default", arenaName, worldName, scoreboardName;
     private List<ITeam> teams = new ArrayList<>();
     private LinkedList<org.bukkit.util.Vector> placed = new LinkedList<>();
     private List<String> nextEvents = new ArrayList<>();
@@ -415,6 +415,9 @@ public class Arena implements IArena {
             int finalI = i;
             pm.registerPlayerPlaceholder("%bw_team_"+ i +"%", 50, player -> getTeamPlaceholder((Player) player.getPlayer(), finalI));
         }
+
+        //register scoreboards
+        BoardManager.getInstance().registerArenaScoreboards(this);
     }
 
     /**
@@ -1245,6 +1248,14 @@ public class Arena implements IArena {
     @Override
     public int getMaxInTeam() {
         return maxInTeam;
+    }
+
+    /**
+     * Get the max number of teammates in a team
+     */
+    @Override
+    public String getScooreboardName() {
+        return scoreboardName;
     }
 
     /**
