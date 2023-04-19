@@ -61,7 +61,8 @@ public class BoardManager implements IScoreboardService {
     public void registerLobbyScoreboards(){
         for (Language language : Language.getLanguages()){
             List<String> lines = language.l(Messages.SCOREBOARD_LOBBY);
-            scoreboardManager.createScoreboard("bw_lobby_" + language.getIso(),"%bw_scoreboard_title%", lines);
+            lines.replaceAll(s -> s.isEmpty() ? " " : s); // TAB doesn't display empty lines, we need to replace them with spaces
+            scoreboardManager.createScoreboard("bw_lobby_" + language.getIso(),"%bw_scoreboard_title%", lines.subList(1, lines.size()));
         }
     }
     public void registerArenaScoreboards(Arena arena){
@@ -310,6 +311,7 @@ public class BoardManager implements IScoreboardService {
 
         String scoreboardName = "bw_lobby_" + Language.getPlayerLanguage(player).getIso();
         // set sidebar lines based on game state or lobby
+        if (null != arena){
             if (arena.getStatus() == GameState.waiting) {
                 scoreboardName = "bw_" + arena.getGroup() + "_waiting_" + Language.getPlayerLanguage(player).getIso();
             } else if (arena.getStatus() == GameState.starting) {
@@ -317,6 +319,7 @@ public class BoardManager implements IScoreboardService {
             } else if (arena.getStatus() == GameState.playing || arena.getStatus() == GameState.restarting) {
                 scoreboardName = "bw_" + arena.getGroup() + "_playing_" + Language.getPlayerLanguage(player).getIso();
             }
+        }
         TabPlayer tabPlayer = TabAPI.getInstance().getPlayer(player.getUniqueId());
 
         Scoreboard scoreboard = scoreboardManager.getRegisteredScoreboards().get(scoreboardName);
