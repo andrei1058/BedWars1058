@@ -13,6 +13,9 @@ import org.bukkit.entity.Player;
 public class NewPlaceBlock {
     public NewPlaceBlock(Block b, String xyz, TeamColor color, Player p, boolean ladder, int ladderdata) {
         IArena a = Arena.getArenaByPlayer(p);
+        if (a == null) {
+            return;
+        }
         int x = Integer.parseInt(xyz.split(", ")[0]);
         int y = Integer.parseInt(xyz.split(", ")[1]);
         int z = Integer.parseInt(xyz.split(", ")[2]);
