@@ -348,6 +348,7 @@ public class Messages {
     public static String UPGRADES_TRAP_CUSTOM_MSG = "upgrades-base-trap-msg-";
 
     public static String UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY = "upgrades-lore-insuff-money";
+    public static String UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_SPACE = "upgrades-lore-insuff-space";
     public static String UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY = "upgrades-lore-click-buy";
     public static String UPGRADES_LORE_REPLACEMENT_UNLOCKED = "upgrades-lore-unlocked";
     public static String UPGRADES_LORE_REPLACEMENT_LOCKED = "upgrades-lore-locked";
