@@ -215,7 +215,6 @@ public class Spanish extends Language {
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_RESTARTING, "&c{serverIp}");
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR, "&9{serverIp}");
 
-<<<<<<< HEAD
         yml.options().copyDefaults(true);
         yml.addDefault(Messages.COMMAND_MAIN, Arrays.asList("", "&2▪ &7/" + mainCmd + " stats", "&2▪ &7/" + mainCmd + " join &o<arena/grupo>", "&2▪ &7/" + mainCmd + " leave", "&2▪ &7/" + mainCmd + " lang", "&2▪ &7/" + mainCmd + " gui", "&2▪ &7/" + mainCmd + " start &3(vip)"));
         yml.addDefault(Messages.ARENA_JOIN_VIP_KICK, "{prefix}&cHas sido expulsado ya que un VIP se ha unido a la partida.\n&aConsidere hacer una donación para obtener más funciones. &7&o(click)");
@@ -308,15 +307,12 @@ public class Spanish extends Language {
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_WAITING, new ArrayList<>());
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_LOBBY, List.of("{vPrefix} "));
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_LOBBY, new ArrayList<>());
-=======
->>>>>>> 8c1939b93e1db78717984b7d00f792aedf6207c0
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_DATE, "dd/MM/yy");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TEAM_GENERIC, "{TeamColor}{TeamLetter}&f {TeamName}: {TeamStatus}");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED, "&c&l✘");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_BED_DESTROYED, "&a{remainingPlayers}");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE, "&a&l✓");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_NEXEVENT_TIMER, "mm:ss");
-<<<<<<< HEAD
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_YOUR_TEAM, "&7 TU'");
         yml.addDefault(Messages.FORMATTING_ACTION_BAR_TRACKING, "&fBuscando: {team} &f- Distancia: {distance}m");
         yml.addDefault(Messages.BED_HOLOGRAM_DEFEND, "&c&lDefiende tu cama!");
@@ -365,10 +361,8 @@ public class Spanish extends Language {
         //        "&f                                   &lReward Summary", "", "",
         //        "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
         yml.addDefault(Messages.GAME_END_TEAM_WON_CHAT, "{prefix}{TeamColor}{TeamName} &aha ganado el juego!");
-=======
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_YOUR_TEAM, "&7 TÚ");
         yml.addDefault(Messages.FORMATTING_ACTION_BAR_TRACKING, "&fSiguiendo a: {team} &f- Distancia: {distance}m");
->>>>>>> 8c1939b93e1db78717984b7d00f792aedf6207c0
         yml.addDefault(Messages.FORMATTING_TEAM_WINNER_FORMAT, "      {TeamColor}{TeamName} &7- {members}");
         yml.addDefault(Messages.FORMATTING_SOLO_WINNER_FORMAT, "                 {TeamColor}{TeamName} &7- {members}");
         yml.addDefault(Messages.FORMATTING_GENERATOR_TIER1, "I");
@@ -427,10 +421,8 @@ public class Spanish extends Language {
         yml.addDefault(Messages.PLAYER_DIE_REWARD_EMERALD, "{prefix}&a+{amount} {meaning}");
         yml.addDefault(Messages.PLAYER_DIE_REWARD_IRON, "{prefix}&f+{amount} {meaning}");
         yml.addDefault(Messages.PLAYER_DIE_REWARD_GOLD, "{prefix}&6+{amount} {meaning}");
-<<<<<<< HEAD
         yml.addDefault(Messages.ARENA_MAX_BUILD_LIMIT_REACHED, "&cMax build height limit reached!");
         yml.addDefault(Messages.ARENA_MIN_BUILD_LIMIT_REACHED, "&cMin build height limit reached!");
-=======
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_TITLE, "&cHAS MUERTO!");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_SUBTITLE, "&eReaparecerás en &c{time} &esegundo/s!");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_CHAT, "{prefix}&eReaparecerás en &c{time} &esegundo/s!");
@@ -477,7 +469,6 @@ public class Spanish extends Language {
         yml.addDefault(Messages.XP_REWARD_BED_DESTROY, "{prefix}&b+{xp} Experiencia de BedWars Recibida (Cama Destruida).");
         yml.addDefault(Messages.XP_REWARD_REGULAR_KILL, "{prefix}&b+{xp} Experiencia de BedWars Recibida (Asesinato Normal).");
         yml.addDefault(Messages.XP_REWARD_FINAL_KILL, "{prefix}&b+{xp} Experiencia de BedWars Recibida (Asesinato Final).");
->>>>>>> 8c1939b93e1db78717984b7d00f792aedf6207c0
 
         yml.addDefault(Messages.MONEY_REWARD_PER_MINUTE, "{prefix}&6+{money} Monedas (Tiempo de Juego).");
         yml.addDefault(Messages.MONEY_REWARD_WIN, "{prefix}&6+{money} Monedas (Partida Ganada).");
@@ -516,7 +507,6 @@ public class Spanish extends Language {
         addDefaultStatsMsg(yml, "last-play", "&6Ultima Partida", "&f{lastPlay}");
         addDefaultStatsMsg(yml, "games-played", "&6Juegos Jugados", "&f{gamesPlayed}");
 
-<<<<<<< HEAD
         yml.addDefault(Messages.MEANING_NEVER, "Nunca");
         yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&fTu nivel: {level}", "", "&fProgreso: &a{currentXp}&7/&b{requiredXp}", "{progress}", "", "&7{player}", "", "&fDinero: &a{money}"
                 , "", "&fVictorias totales: &a{wins}", "&fAsesinatos totales: &a{kills}", "", "&e{serverIp}"));
@@ -608,7 +598,6 @@ public class Spanish extends Language {
         yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "{prefix}&cNo tienes suficiente {currency}! Necesitas {amount} mas!");
         yml.addDefault(Messages.SHOP_NEW_PURCHASE, "{prefix}&aCompraste &6{item}");
         yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "{prefix}&cYa lo has comprado!");
-=======
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList(
                 "&f&lBED WARS",
                 "&7{date} &8{server}",
@@ -682,7 +671,6 @@ public class Spanish extends Language {
                 "&fCamas Rotas: &a{beds}",
                 "",
                 "&e{server_ip}"));
->>>>>>> 8c1939b93e1db78717984b7d00f792aedf6207c0
 
         yml.addDefault("scoreboard.4v4v4v4.playing", Arrays.asList(
                 "&e&lBED WARS",
@@ -709,14 +697,11 @@ public class Spanish extends Language {
         yml.addDefault(Messages.SHOP_QUICK_ADD_NAME, "&8Añadiendo a la compra rápida...");
         yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "{prefix}&cNo tienes suficiente/s {currency}! Necesitas {amount} more!");
         yml.addDefault(Messages.SHOP_NEW_PURCHASE, "{prefix}&aHas comprado &6{item}");
-<<<<<<< HEAD
         yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "{prefix}&cYa has comprado esto!");
 
         yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "{TeamColor}&l{TeamName} &r{TeamColor}Silverfish");
-=======
         yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "{prefix}&cYa has comprado eso!");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "{TeamColor}Silverfish &7del equipo {TeamColor}&l{TeamName}");
->>>>>>> 8c1939b93e1db78717984b7d00f792aedf6207c0
         yml.addDefault(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME, "{TeamColor}{despawn}s &8[ {TeamColor}{health}&8]");
         yml.addDefault(Messages.SHOP_SEPARATOR_NAME, "&8⇧ Categorías");
         yml.addDefault(Messages.SHOP_SEPARATOR_LORE, Collections.singletonList("&8⇩ Items"));
@@ -853,12 +838,10 @@ public class Spanish extends Language {
                         ""));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-1"), "{color}Armadura Reforzada I");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "armor"),
-<<<<<<< HEAD
                 Arrays.asList("&7Tu equipo recibira", "&7proteccion permanente!", "", "{tier_1_color}Nivel 1: Proteccion I, &b{tier_1_cost} {tier_1_currency}",
                         "{tier_2_color}Nivel 2: Proteccion II, &b{tier_2_cost} {tier_2_currency}s",
                         "{tier_3_color}Nivel 3: Proteccion III, &b{tier_3_cost} {tier_3_currency}",
                         "{tier_4_color}Nivel 4: Proteccion IV, &b{tier_4_cost} {tier_4_currency}", ""));
-=======
                 Arrays.asList(
                         "&7Tu equipo gana permanentemente",
                         "&7Protección en todas las piezas!",
@@ -868,8 +851,7 @@ public class Spanish extends Language {
                         "{tier_2_color}Nivel 2: Protección II, &b{tier_2_cost} {tier_2_currency}",
                         "{tier_3_color}Nivel 3: Protección III, &b{tier_3_cost} {tier_3_currency}",
                         "{tier_4_color}Nivel 4: Protección IV, &b{tier_4_cost} {tier_4_currency}",
-                        ""));
->>>>>>> 8c1939b93e1db78717984b7d00f792aedf6207c0
+                        "")
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-2"), "{color}Armadura Reforzada II");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-3"), "{color}Armadura Reforzada III");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-4"), "{color}Armadura Reforzada IV");
