@@ -88,7 +88,7 @@ public class CmdJoin extends SubCommand {
             }
             return true;
         }
-        s.sendMessage(getMsg(p, Messages.COMMAND_JOIN_GROUP_OR_ARENA_NOT_FOUND).replace("{name}", args[0]));
+        s.sendMessage(getMsg(p, Messages.COMMAND_JOIN_GROUP_OR_ARENA_NOT_FOUND).replace("%bw_name%", args[0]));
         return true;
     }
 

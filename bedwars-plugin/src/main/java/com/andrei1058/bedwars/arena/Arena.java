@@ -729,7 +729,7 @@ public class Arena implements IArena {
 
             leaving.remove(p);
 
-            p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_MSG).replace("{arena}", this.getDisplayName()));
+            p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_MSG).replace("%bw_arena%", this.getDisplayName()));
 
             /* update generator holograms for spectators */
             String iso = Language.getPlayerLanguage(p).getIso();

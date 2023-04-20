@@ -145,7 +145,7 @@ public class ReJoin {
     public boolean reJoin(Player player) {
 
         Sounds.playSound("rejoin-allowed", player);
-        player.sendMessage(Language.getMsg(player, Messages.REJOIN_ALLOWED).replace("{arena}", getArena().getDisplayName()));
+        player.sendMessage(Language.getMsg(player, Messages.REJOIN_ALLOWED).replace("%bw_arena%", getArena().getDisplayName()));
 
         if (player.getGameMode() != GameMode.SURVIVAL) {
             Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
