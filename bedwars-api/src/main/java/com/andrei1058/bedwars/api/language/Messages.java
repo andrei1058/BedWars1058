@@ -269,6 +269,7 @@ public class Messages {
     public static String PLAYER_DIE_RESPAWN_CHAT = "player-respawn-timer-chat";
     public static String PLAYER_DIE_RESPAWNED_TITLE = "player-respawned-title";
     public static String PLAYER_DIE_ELIMINATED_CHAT = "player-eliminated-chat";
+    public static String PLAYER_DIE_RESPAWNED_TEXT = "player-respawned-chat";
 
     public static String PLAYER_DIE_VOID_FALL_REGULAR_KILL = "player-die-void-regular";
     public static String PLAYER_DIE_VOID_FALL_FINAL_KILL =  "player-die-void-final";
