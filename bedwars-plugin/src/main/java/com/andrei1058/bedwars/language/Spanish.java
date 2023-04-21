@@ -966,7 +966,7 @@ public class Spanish extends Language {
         yml.addDefault(Messages.UPGRADES_TRAP_DEFAULT_SUBTITLE, "&fTu {trap} ha sido activada!");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_MSG + "3", "&c&lTrampa activada por &7&l{player} &c&ldel equipo {color}&l{team}&c&l!");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_TITLE + "3", "&c&lALARMA!!!");
-        yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_SUBTITLE + "3", "&fTrampa activada por el equipo {color}{team} &f!");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_ALREADY_CHAT, "&cYou already unlocked this upgrade!");
         setPrefixStatic(m(Messages.PREFIX));
         setPrefix(m(Messages.PREFIX));
         yml.options().copyDefaults(true);
