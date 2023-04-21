@@ -147,6 +147,9 @@ public class Messages {
     public static String ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE = "spectator-first-person-quit-title";
     public static String ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE = "spectator-first-person-quit-subtitle";
 
+    public static String ARENA_MAX_BUILD_LIMIT_REACHED = "build-max-height-limit-reached";
+    public static String ARENA_MIN_BUILD_LIMIT_REACHED = "build-min-height-limit-reached";
+
     /** Stats related */
     public static String PLAYER_STATS_GUI_PATH = "stats";
     public static String PLAYER_STATS_GUI_INV_NAME = PLAYER_STATS_GUI_PATH+"-inv-name";
@@ -266,6 +269,7 @@ public class Messages {
     public static String PLAYER_DIE_RESPAWN_CHAT = "player-respawn-timer-chat";
     public static String PLAYER_DIE_RESPAWNED_TITLE = "player-respawned-title";
     public static String PLAYER_DIE_ELIMINATED_CHAT = "player-eliminated-chat";
+    public static String PLAYER_DIE_RESPAWNED_TEXT = "player-respawned-chat";
 
     public static String PLAYER_DIE_VOID_FALL_REGULAR_KILL = "player-die-void-regular";
     public static String PLAYER_DIE_VOID_FALL_FINAL_KILL =  "player-die-void-final";
@@ -348,6 +352,7 @@ public class Messages {
     public static String UPGRADES_TRAP_CUSTOM_MSG = "upgrades-base-trap-msg-";
 
     public static String UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY = "upgrades-lore-insuff-money";
+    public static String UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_SPACE = "upgrades-lore-insuff-space";
     public static String UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY = "upgrades-lore-click-buy";
     public static String UPGRADES_LORE_REPLACEMENT_UNLOCKED = "upgrades-lore-unlocked";
     public static String UPGRADES_LORE_REPLACEMENT_LOCKED = "upgrades-lore-locked";

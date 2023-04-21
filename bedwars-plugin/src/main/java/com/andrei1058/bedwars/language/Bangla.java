@@ -277,6 +277,7 @@ public class Bangla extends Language {
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_CHAT, "{prefix}&eApni &c{time} &eseconds e respawn niben");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWNED_TITLE, "&aAPNI RESPAWN NILEN!");
         yml.addDefault(Messages.PLAYER_DIE_ELIMINATED_CHAT, "{prefix}&cApni eliminate hoye gelen!");
+        yml.addDefault(Messages.PLAYER_DIE_RESPAWNED_TEXT, "{prefix}&eYou will respawn in &c{time} &eseconds!");
         yml.addDefault(Messages.PLAYER_HIT_BOW, "{prefix}{TeamColor}{PlayerName} &7er &c{amount} &7HP &7royeche!");
         yml.addDefault(Messages.GAME_END_GAME_OVER_PLAYER_TITLE, "&c&lGAME SHES!");
         yml.addDefault(Messages.GAME_END_VICTORY_PLAYER_TITLE, "&6&lBIJOY!");
@@ -474,6 +475,7 @@ public class Bangla extends Language {
         yml.addDefault(Messages.FORMAT_UPGRADE_TIER_UNLOCKED, "&a");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY, "{color}Purchase korte click korun!");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY, "{color}Apnar kache porjapto {currency} ney");
+        yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_SPACE, "&eYou don't have enough inventory space to buy this item!");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_LOCKED, "&cLOCKED");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_UNLOCKED, "{color}UNLOCKED");
         yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a{player} &6{upgradeName} &akinlen.");
