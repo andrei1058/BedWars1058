@@ -201,7 +201,7 @@ public class CategoryContent implements ICategoryContent {
                 player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", displayItem.getItemMeta().getDisplayName()));
             }
         } else {
-            player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", ChatColor.stripColor(getMsg(player, itemNamePath))).replace("{color}", "").replace("{tier}", ""));
+            player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", ChatColor.stripColor(getMsg(player, itemNamePath))).replace("%bw_color%", "").replace("{tier}", ""));
         }
 
 
@@ -276,7 +276,7 @@ public class CategoryContent implements ICategoryContent {
             }
 
 
-            im.setDisplayName(getMsg(player, itemNamePath).replace("{color}", color).replace("{tier}", tier));
+            im.setDisplayName(getMsg(player, itemNamePath).replace("%bw_color%", color).replace("{tier}", tier));
 
             List<String> lore = new ArrayList<>();
             for (String s : Language.getList(player, itemLorePath)) {
@@ -291,7 +291,7 @@ public class CategoryContent implements ICategoryContent {
                         s = getMsg(player, Messages.SHOP_LORE_QUICK_ADD);
                     }
                 }
-                s = s.replace("{tier}", tier).replace("{color}", color).replace("%bw_cost%", cColor + String.valueOf(ct.getPrice()))
+                s = s.replace("{tier}", tier).replace("%bw_color%", color).replace("%bw_cost%", cColor + String.valueOf(ct.getPrice()))
                         .replace("%bw_currency%", cColor + translatedCurrency).replace("{buy_status}", buyStatus);
                 lore.add(s);
             }
