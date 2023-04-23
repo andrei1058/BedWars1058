@@ -70,11 +70,11 @@ public class Romanian extends Language {
         yml.addDefault(Messages.COMMAND_MAIN, Arrays.asList("", "&2▪ &7/" + mainCmd + " stats", "&2▪ &7/" + mainCmd + " join &o<arena/group>", "&2▪ &7/" + mainCmd + " leave", "&2▪ &7/" + mainCmd + " lang", "&2▪ &7/" + mainCmd + " gui", "&2▪ &7/" + mainCmd + " start &3(vip)"));
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_IS_FULL, "%bw_lang_prefix%&cArena este plina!\n&aAi putea lua in considerare donarea pentru mai multe facilitati. &7&o(click)");
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_IS_FULL_OF_VIPS, "%bw_lang_prefix%&cNe pare rau dar arena este plina.\n&cStim ca esti donator dar arena este deja plina cu persoane care au prioritate.");
-        yml.addDefault(Messages.COMMAND_JOIN_GROUP_OR_ARENA_NOT_FOUND, "%bw_lang_prefix%&cNu exista arene sau grupuri cu numele: {name}");
+        yml.addDefault(Messages.COMMAND_JOIN_GROUP_OR_ARENA_NOT_FOUND, "%bw_lang_prefix%&cNu exista arene sau grupuri cu numele: %bw_name%");
         yml.addDefault(Messages.COMMAND_JOIN_NO_EMPTY_FOUND, "%bw_lang_prefix%&cNu sunt arene disponibile momentan ;(");
         yml.addDefault(Messages.COMMAND_LEAVE_DENIED_NOT_IN_ARENA, "%bw_lang_prefix%&cNu esti intr-o arena!");
         yml.addDefault(Messages.COMMAND_LANG_LIST_HEADER, "%bw_lang_prefix% &2Limbi disponibile:");
-        yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&a▪  &7{iso} - &f{name}");
+        yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&a▪  &7{iso} - &f%bw_name%");
         yml.addDefault(Messages.COMMAND_LANG_USAGE, "%bw_lang_prefix%&7Foloseste: /lang &f&o<iso>");
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_NOT_EXIST, "%bw_lang_prefix%&cAceasta limba nu exista!");
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY, "%bw_lang_prefix%&aLimba a fost schimbata!");
@@ -131,7 +131,7 @@ public class Romanian extends Language {
         yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_MSG, "%bw_lang_prefix%§6Acum urmaresti meciul din §9{arena}§6.\n%bw_lang_prefix%§ePoti parasi arena folosind §c/leave§e.");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE, "%bw_lang_prefix%&7%bw_player% &eeste offline!");
         yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG, "&cSpectatorii nu sunt permisi in aceasta arena!");
-        yml.addDefault(Messages.COMMAND_COOLDOWN, "&cNu poti face asta inca! Mai asteapta {seconds} secunde!");
+        yml.addDefault(Messages.COMMAND_COOLDOWN, "&cNu poti face asta inca! Mai asteapta %bw_seconds% secunde!");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_NAME, "&8Teleportor");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME, "%bw_v_prefix%%bw_player%");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_LORE, Arrays.asList("&7Viata: &f%bw_player_health%%", "&7Hrana: &f%bw_player_food%", "", "&7Click-stanca pentru a urmari."));
@@ -146,8 +146,8 @@ public class Romanian extends Language {
         yml.addDefault(Messages.ARENA_RESTART_PLAYER_KICK, "%bw_lang_prefix%&eArena in care te aflai se reporneste.");
         yml.addDefault(Messages.ARENA_STATUS_PLAYING_NAME, "&cIn joc");
         yml.addDefault(Messages.ARENA_STATUS_RESTARTING_NAME, "&4Se reporneste");
-        yml.addDefault(Messages.ARENA_STATUS_WAITING_NAME, "&2In Asteptare §c{full}");
-        yml.addDefault(Messages.ARENA_STATUS_STARTING_NAME, "&6Porneste §c{full}");
+        yml.addDefault(Messages.ARENA_STATUS_WAITING_NAME, "&2In Asteptare §c%bw_full%");
+        yml.addDefault(Messages.ARENA_STATUS_STARTING_NAME, "&6Porneste §c%bw_full%");
         yml.addDefault(Messages.ARENA_GUI_INV_NAME, "&8Click pentru a intra");
         yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_NAME, "&a&l%bw_name%");
         yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_LORE, Arrays.asList("", "&7Status: %bw_arena_status%", "&7Jucatori: &f%bw_on%&7/&f%bw_max%", "&7Tip: &a%bw_group%", "", "&aClick-Stanga pentru a intra.", "&eClick-Dreapta pentru a vizona."));
@@ -155,7 +155,7 @@ public class Romanian extends Language {
         yml.addDefault(Messages.ARENA_GUI_SKIPPED_ITEM_LORE, Collections.emptyList());
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_CHAT, "%bw_lang_prefix%&eJocul incepe in &6%bw_time% &esecunde!");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_TITLE, " ");
-        yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE, "&a{second}");
+        yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE, "&a%bw_seconds%");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-5", "&e❺");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-4", "&e❹");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-3", "&c❸");
@@ -174,19 +174,19 @@ public class Romanian extends Language {
         yml.addDefault(Messages.ARENA_JOIN_DENIED_SELECTOR, "%bw_lang_prefix%&cNe pare rau dar nu poti intra chiar acum. Foloseste Click-Dreapta pentru a urmari!");
         yml.addDefault(Messages.ARENA_SPECTATE_DENIED_SELECTOR, "%bw_lang_prefix%&cNe pare rau dar nu poti urmari arena chiar acum. Foloseste Click-Dreapta pentru a juca!");
         yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_PROXY, "&cSorry but you must join an arena using BedWarsProxy. \n&eIf you want to setup an arena make sure to give yourself the bw.setup permission so you can join the server directly!");
-        yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIER, "&eTier &c{tier}");
+        yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIER, "&eTier &c%bw_tier%");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND, "&b&lDiamant");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD, "&a&lEmerald");
-        yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIMER, "&eSe spawneaza in &c{seconds} &esecunde");
-        yml.addDefault(Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT, "%bw_lang_prefix%&eGeneratoarele de {generatorType} &eau fost upgradate la nivelul &c{tier}");
+        yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIMER, "&eSe spawneaza in &c%bw_seconds% &esecunde");
+        yml.addDefault(Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT, "%bw_lang_prefix%&eGeneratoarele de %bw_generator_type% &eau fost upgradate la nivelul &c%bw_tier%");
         yml.addDefault(Messages.FORMATTING_GENERATOR_TIER1, "I");
         yml.addDefault(Messages.FORMATTING_GENERATOR_TIER2, "II");
         yml.addDefault(Messages.FORMATTING_GENERATOR_TIER3, "III");
-        yml.addDefault(Messages.FORMATTING_CHAT_LOBBY, "%bw_level%%bw_v_prefix%&7%bw_player%%bw_v_suffix%: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_WAITING, "%bw_level%%bw_v_prefix%&7%bw_player%%bw_v_suffix%: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_SHOUT, "%bw_level%%bw_v_prefix%&6[SHOUT] %bw_team_format% &7%bw_player%&f%bw_v_suffix%: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_TEAM, "%bw_level%%bw_v_prefix%&f%bw_team_format%&7 %bw_player%%bw_v_suffix%: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_SPECTATOR, "%bw_level%%bw_v_prefix%&7[SPECTATOR] %bw_player%%bw_v_suffix%: {message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_LOBBY, "%bw_level%%bw_v_prefix%&7%bw_player%%bw_v_suffix%: %bw_message%");
+        yml.addDefault(Messages.FORMATTING_CHAT_WAITING, "%bw_level%%bw_v_prefix%&7%bw_player%%bw_v_suffix%: %bw_message%");
+        yml.addDefault(Messages.FORMATTING_CHAT_SHOUT, "%bw_level%%bw_v_prefix%&6[SHOUT] %bw_team_format% &7%bw_player%&f%bw_v_suffix%: %bw_message%");
+        yml.addDefault(Messages.FORMATTING_CHAT_TEAM, "%bw_level%%bw_v_prefix%&f%bw_team_format%&7 %bw_player%%bw_v_suffix%: %bw_message%");
+        yml.addDefault(Messages.FORMATTING_CHAT_SPECTATOR, "%bw_level%%bw_v_prefix%&7[SPECTATOR] %bw_player%%bw_v_suffix%: %bw_message%");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_HEALTH, Arrays.asList("&c❤", "&aViață"));
         yml.addDefault(Messages.FORMATTING_SPECTATOR_TEAM, "SPECT");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_SPECTATOR, "&7");
@@ -265,10 +265,10 @@ public class Romanian extends Language {
         yml.addDefault(Messages.PLAYER_DIE_DEBUG_FINAL_KILL, "%bw_player_color%%bw_player% &7a fost ucis de %bw_killer_color%Sobolanul Echipei %bw_killer_team_name%! &b&lUCIDERE FINALA!");
         yml.addDefault(Messages.PLAYER_DIE_IRON_GOLEM_REGULAR, "%bw_player_color%%bw_player% &7a fost ucis de %bw_killer_color%Gardianul Echipei %bw_killer_team_name%!");
         yml.addDefault(Messages.PLAYER_DIE_IRON_GOLEM_FINAL_KILL, "%bw_player_color%%bw_player% &7a fost ucis de %bw_killer_color%Gardianul Echipei %bw_killer_team_name%! &b&lUCIDERE FINALA!");
-        yml.addDefault(Messages.PLAYER_DIE_REWARD_DIAMOND, "%bw_lang_prefix%&b+{amount} {meaning}");
-        yml.addDefault(Messages.PLAYER_DIE_REWARD_EMERALD, "%bw_lang_prefix%&a+{amount} {meaning}");
-        yml.addDefault(Messages.PLAYER_DIE_REWARD_IRON, "%bw_lang_prefix%&f+{amount} {meaning}");
-        yml.addDefault(Messages.PLAYER_DIE_REWARD_GOLD, "%bw_lang_prefix%&6+{amount} {meaning}");
+        yml.addDefault(Messages.PLAYER_DIE_REWARD_DIAMOND, "%bw_lang_prefix%&b+%bw_amount% %bw_meaning%");
+        yml.addDefault(Messages.PLAYER_DIE_REWARD_EMERALD, "%bw_lang_prefix%&a+%bw_amount% %bw_meaning%");
+        yml.addDefault(Messages.PLAYER_DIE_REWARD_IRON, "%bw_lang_prefix%&f+%bw_amount% %bw_meaning%");
+        yml.addDefault(Messages.PLAYER_DIE_REWARD_GOLD, "%bw_lang_prefix%&6+%bw_amount% %bw_meaning%");
         yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_REGULAR, "%bw_player_color%%bw_player% &7a fost lovit de o bomba.");
         yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_FINAL_KILL, "%bw_player_color%%bw_player% &a fost lovit de o bomba. &b&lUCIDERE FINALA!");
         yml.addDefault(Messages.GAME_END_GAME_OVER_PLAYER_TITLE, "&c&lJOC TERMINAT!");
@@ -375,7 +375,7 @@ public class Romanian extends Language {
         //shop
         yml.addDefault(Messages.SHOP_INDEX_NAME, "&8Cumpara Repede");
         yml.addDefault(Messages.SHOP_QUICK_ADD_NAME, "&8Adding to Quick Buy...");
-        yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "%bw_lang_prefix%&cNu ai destul %bw_currency%! Mai ai nevoide de {amount} de %bw_currency%!");
+        yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "%bw_lang_prefix%&cNu ai destul %bw_currency%! Mai ai nevoide de %bw_amount% de %bw_currency%!");
         yml.addDefault(Messages.SHOP_NEW_PURCHASE, "%bw_lang_prefix%&aAi cumparat &6{item}");
         yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "%bw_lang_prefix%&cAi cumparat deja asta!");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "%bw_team_color%&l%bw_team_name% &r%bw_team_color%Silverfish");
@@ -397,68 +397,68 @@ public class Romanian extends Language {
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "&8Blocuri", "&aBlocuri", Collections.singletonList("&eClick pentru a afișa!"));
         addContentMessages(yml, "wool", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Lana", Arrays.asList("&7Preț: &f%bw_cost% %bw_currency%", "", "&7Great for bridging across", "&7islands. Turns into your team's",
-                "&7color.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "clay", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Lut Întărit", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "&7Bloc esențial pentru a proteja patul.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "glass", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Sticlă Anti-Explozibil", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "&7Imună împotriva exploziilor.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "stone", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Piatră Din End", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "&7Bloc solid pentru a proteja patul.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "ladder", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Scară", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "&7Utilă pentru a salva pisicile blocate", "&7in copaci.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "obsidian", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Obsidian", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "&7Protecție extrema pentru pat.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "wood", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Lemn", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "&7Bloc solid pentru a-ți proteja patul.", "", "{quick_buy}", "{buy_status}"));
+                "&7color.", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "clay", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Lut Întărit", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "&7Bloc esențial pentru a proteja patul.", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "glass", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Sticlă Anti-Explozibil", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "&7Imună împotriva exploziilor.", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "stone", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Piatră Din End", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "&7Bloc solid pentru a proteja patul.", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "ladder", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Scară", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "&7Utilă pentru a salva pisicile blocate", "&7in copaci.", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "obsidian", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Obsidian", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "&7Protecție extrema pentru pat.", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "wood", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Lemn", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "&7Bloc solid pentru a-ți proteja patul.", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_MELEE, "&8Atac", "&aAtac", Collections.singletonList("&eClick pentru a afișa!"));
-        addContentMessages(yml, "stone-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Sabie De Piatră", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "iron-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Sabie De Fier", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "diamond-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Sabie De Diamant", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "stick", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Băț (Împingere I)", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "stone-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Sabie De Piatră", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "iron-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Sabie De Fier", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "diamond-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Sabie De Diamant", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "stick", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Băț (Împingere I)", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "&8Armură", "&aArmură", Collections.singletonList("&eClick pentru a afișa!"));
 
         addContentMessages(yml, "chainmail", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "%bw_color%Armură Permanentă De Zale", Arrays.asList("&7Preț: %bw_cost% %bw_currency%",
-                "", "&7Pantaloni și cizme de zale", "&7cu care te vei spawna mereu.", "", "{quick_buy}", "{buy_status}"));
+                "", "&7Pantaloni și cizme de zale", "&7cu care te vei spawna mereu.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "iron-armor", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "%bw_color%Armură Permanentă De Fier", Arrays.asList("&7Preț: %bw_cost% %bw_currency%",
-                "", "&7Pantaloni și cizme de fier", "&7cu care te vei spawna mereu.", "", "{quick_buy}", "{buy_status}"));
+                "", "&7Pantaloni și cizme de fier", "&7cu care te vei spawna mereu.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "diamond-armor", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "%bw_color%Armură Permanentă De Diamant", Arrays.asList("&7Preț: %bw_cost% %bw_currency%",
-                "", "&7Pantaloni și cizme de diamant", "&7cu care te vei spawna mereu.", "", "{quick_buy}", "{buy_status}"));
+                "", "&7Pantaloni și cizme de diamant", "&7cu care te vei spawna mereu.", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "&8Unelte", "&aUnelte", Collections.singletonList("&eClick pentru a afișa!"));
         addContentMessages(yml, "shears", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Foarfece Permanente", Arrays.asList("&7Preț: %bw_cost% %bw_currency%",
-                "", "&7Perfecte pentru a tăia lâna. Te vei", "&7spawna mereu cu ele in inventar.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "pickaxe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Târnăcop {tier}", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "&7Nivel: &e{tier}",
-                "", "&7Este un obiect upgradabil.", "&7Vei pierde cate un nivel atunci cand", "&7vei muri!", "", "&7Te vei respawna mereu", "&7cu cel putin primul nivel", "&7al acestui obiect.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "axe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Topor {tier}", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "&7Tier: &e{tier}",
-                "", "&7Este un obiect upgradabil.", "&7Vei pierde cate un nivel atunci cand", "&7vei muri!", "", "&7Te vei respawna mereu", "&7cu cel putin primul nivel", "&7al acestui obiect.", "", "{quick_buy}", "{buy_status}"));
+                "", "&7Perfecte pentru a tăia lâna. Te vei", "&7spawna mereu cu ele in inventar.", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "pickaxe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Târnăcop %bw_tier%", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "&7Nivel: &e%bw_tier%",
+                "", "&7Este un obiect upgradabil.", "&7Vei pierde cate un nivel atunci cand", "&7vei muri!", "", "&7Te vei respawna mereu", "&7cu cel putin primul nivel", "&7al acestui obiect.", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "axe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Topor %bw_tier%", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "&7Tier: &e%bw_tier%",
+                "", "&7Este un obiect upgradabil.", "&7Vei pierde cate un nivel atunci cand", "&7vei muri!", "", "&7Te vei respawna mereu", "&7cu cel putin primul nivel", "&7al acestui obiect.", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_RANGED, "&8Atac La Distanță", "&aAtac La Distanță", Collections.singletonList("&eClick pentru a afișa!"));
-        addContentMessages(yml, "arrow", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Sageți", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bow1", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Arc", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bow2", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Arc (Putere I)", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bow3", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Arc (Putere I, Împingere I)", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "arrow", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Sageți", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "bow1", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Arc", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "bow2", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Arc (Putere I)", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "bow3", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Arc (Putere I, Împingere I)", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "&8Poțiuni", "&aPotțiuni", Collections.singletonList("&eClick pentru a afișa!"));
-        addContentMessages(yml, "speed-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Viteză II (45 secunde)", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "jump-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Săritură V (45 secunde)", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "invisibility", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Invizibilitate (30 secunde)", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "speed-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Viteză II (45 secunde)", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "jump-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Săritură V (45 secunde)", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "invisibility", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Invizibilitate (30 secunde)", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "&8Utilaje", "&aUtilaje", Collections.singletonList("&eClick pentru a afișa!"));
-        addContentMessages(yml, "golden-apple", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Măr Auriu", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "&7Vindecător bine rotunjit.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "golden-apple", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Măr Auriu", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "&7Vindecător bine rotunjit.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "bedbug", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%BedBug", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "&7Spawnează un Silverfish acolo unde",
-                "&7aterizează bugărul de zăpadă, pentru a", "&7distrage inamicii. Trăiește 15 secunde.", "", "{quick_buy}", "{buy_status}"));
+                "&7aterizează bugărul de zăpadă, pentru a", "&7distrage inamicii. Trăiește 15 secunde.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "dream-defender", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Apărătorul Viselor", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "&7Un Iron Golem care te ajută să",
-                "&7îți protejezi baza. Trăiește 4 minute.", "", "{quick_buy}", "{buy_status}"));
+                "&7îți protejezi baza. Trăiește 4 minute.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "fireball", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Bilă De Foc", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "&7Click-dreapta pentru a lansa!",
-                "&7Împinge inamicii care merg pe", "&7poduri.", "", "{quick_buy}", "{buy_status}"));
+                "&7Împinge inamicii care merg pe", "&7poduri.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "tnt", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%TNT", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "&7Se aprinde instant, potrivit",
-                "&7pentru a exploda chestii!", "", "{quick_buy}", "{buy_status}"));
+                "&7pentru a exploda chestii!", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "ender-pearl", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Ender Pearl", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "&7Cel mai rapid mod pentru a invada",
-                "&7bazele inamice.", "", "{quick_buy}", "{buy_status}"));
+                "&7bazele inamice.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "water-bucket", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Găleată Cu Apă", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "&7Util pentru a incetini",
-                "&7inamicii. Te poate proteja și", "&7împotriva TNT-ilui.", "", "{quick_buy}", "{buy_status}"));
+                "&7inamicii. Te poate proteja și", "&7împotriva TNT-ilui.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "bridge-egg", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Bridge Egg", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "&7Acest ou creează un pod in",
-                "&7direcția in care este aruncat.", "", "{quick_buy}", "{buy_status}"));
+                "&7direcția in care este aruncat.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "magic-milk", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Lapte Magic", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "&7Evită capcanele timp de 60",
-                "&7de secunde după ce l-ai băut.", "", "{quick_buy}", "{buy_status}"));
+                "&7de secunde după ce l-ai băut.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "sponge", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Burete", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "&7Util pentru a absorbi apa.",
-                "", "{quick_buy}", "{buy_status}"));
+                "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY, "&aClick pentru a cumpara!");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY, "&cNu ai destul(e) %bw_currency%");
@@ -482,7 +482,6 @@ public class Romanian extends Language {
         yml.addDefault("upgrades.Default.miningFatigue.tier1.lore", Arrays.asList("&7Urmatorul inamic care va intra in", "&7baza ta va primi efectul de Oboseala", "&7pentru 10 secunde!", "", "&7Pret:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
         yml.addDefault("upgrades.Default.healPool.tier1.name", "&eHeal Pool");
         yml.addDefault("upgrades.Default.healPool.tier1.lore", Arrays.asList("&7Creeaza un camp de Regenerare", "&7a vietii in baza ta!", "", "&7Pret:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
-        yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a%bw_player% a cumparat &6{upgradeName}");
 
         yml.addDefault(Messages.MEANING_NO_TRAP, "No trap!");
         yml.addDefault(Messages.FORMAT_UPGRADE_TRAP_COST, "&7Cost: %bw_currency_color%%bw_cost% %bw_currency%");
@@ -495,52 +494,52 @@ public class Romanian extends Language {
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY, "%bw_color%You don't have enough %bw_currency%");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_LOCKED, "&cLOCKED");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_UNLOCKED, "%bw_color%UNLOCKED");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a%bw_player% purchased &6{upgradeName}");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-1"), "%bw_color%Iron Forge");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "forge"),
+        yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a%bw_player% purchased &6%bw_item%");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "forge").replace("%bw_tier%", "tier-1"), "%bw_color%Iron Forge");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("%bw_name%", "forge"),
                 Arrays.asList("&7Upgrade resource spawning on", "&7your island.", "", "{tier_1_color}Tier 1: +50% Resources, &b{tier_1_cost} {tier_1_currency}",
                         "{tier_2_color}Tier 2: +100% Resources, &b{tier_2_cost} {tier_2_currency}",
                         "{tier_3_color}Tier 3: Spawn emeralds, &b{tier_3_cost} {tier_3_currency}",
                         "{tier_4_color}Tier 4: +200% Resources, &b{tier_4_cost} {tier_4_currency}", ""));
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-2"), "%bw_color%Golden Forge");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-3"), "%bw_color%Emerald Forge");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-4"), "%bw_color%Molten Forge");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "forge").replace("%bw_tier%", "tier-2"), "%bw_color%Golden Forge");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "forge").replace("%bw_tier%", "tier-3"), "%bw_color%Emerald Forge");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "forge").replace("%bw_tier%", "tier-4"), "%bw_color%Molten Forge");
         yml.addDefault(Messages.UPGRADES_CATEGORY_ITEM_NAME_PATH + "traps", "&eBuy a trap");
         yml.addDefault(Messages.UPGRADES_CATEGORY_ITEM_LORE_PATH + "traps", Arrays.asList("&7Purchased traps will be", "&7queued on the right.", "", "&eClick to browse!"));
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "swords").replace("{tier}", "tier-1"), "%bw_color%Sharpened Swords");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "swords"),
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "swords").replace("%bw_tier%", "tier-1"), "%bw_color%Sharpened Swords");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("%bw_name%", "swords"),
                 Arrays.asList("&7Your team permanently gains", "&7Sharpness I on all swords and", "&7axes!", "", "{tier_1_color}Cost: &b{tier_1_cost} {tier_1_currency}", ""));
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-1"), "%bw_color%Reinforced Armor I");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "armor"),
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "armor").replace("%bw_tier%", "tier-1"), "%bw_color%Reinforced Armor I");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("%bw_name%", "armor"),
                 Arrays.asList("&7Your team permanently gains", "&7Protection on all armor pieces!", "", "{tier_1_color}Tier 1: Protection I, &b{tier_1_cost} {tier_1_currency}",
                         "{tier_2_color}Tier 2: Protection II, &b{tier_2_cost} {tier_2_currency}",
                         "{tier_3_color}Tier 3: Protection III, &b{tier_3_cost} {tier_3_currency}",
                         "{tier_4_color}Tier 4: Protection IV, &b{tier_4_cost} {tier_4_currency}", ""));
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-2"), "%bw_color%Reinforced Armor II");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-3"), "%bw_color%Reinforced Armor III");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-4"), "%bw_color%Reinforced Armor IV");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "miner").replace("{tier}", "tier-1"), "%bw_color%Maniac Miner I");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "miner"),
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "armor").replace("%bw_tier%", "tier-2"), "%bw_color%Reinforced Armor II");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "armor").replace("%bw_tier%", "tier-3"), "%bw_color%Reinforced Armor III");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "armor").replace("%bw_tier%", "tier-4"), "%bw_color%Reinforced Armor IV");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "miner").replace("%bw_tier%", "tier-1"), "%bw_color%Maniac Miner I");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("%bw_name%", "miner"),
                 Arrays.asList("&7All players on your team", "&7permanently gain Haste.", "", "{tier_1_color}Tier 1: Haste I, &b{tier_1_cost} {tier_1_currency}",
                         "{tier_2_color}Tier 2: Haste II, &b{tier_2_cost} {tier_2_currency}", ""));
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "miner").replace("{tier}", "tier-2"), "%bw_color%Maniac Miner II");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "heal-pool").replace("{tier}", "tier-1"), "%bw_color%Heal Pool");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "heal-pool"),
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "miner").replace("%bw_tier%", "tier-2"), "%bw_color%Maniac Miner II");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "heal-pool").replace("%bw_tier%", "tier-1"), "%bw_color%Heal Pool");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("%bw_name%", "heal-pool"),
                 Arrays.asList("&7Creates a Regeneration field", "&7around yor base!", "", "{tier_1_color}Cost: &b{tier_1_cost} {tier_1_currency}", ""));
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "dragon").replace("{tier}", "tier-1"), "%bw_color%Dragon Buff");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "dragon"),
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "dragon").replace("%bw_tier%", "tier-1"), "%bw_color%Dragon Buff");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("%bw_name%", "dragon"),
                 Arrays.asList("&7Your team will have 2 dragons", "&7instead of 1 during deathmatch!", "", "{tier_1_color}Cost: &b{tier_1_cost} {tier_1_currency}", ""));
         yml.addDefault(Messages.UPGRADES_SEPARATOR_ITEM_NAME_PATH + "glass", "&8⬆&7Purchasable");
         yml.addDefault(Messages.UPGRADES_SEPARATOR_ITEM_LORE_PATH + "glass", Collections.singletonList("&8⬇&7Traps Queue"));
-        yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "first", "%bw_color%Trap #1: {name}");
+        yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "first", "%bw_color%Trap #1: %bw_name%");
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH + "first", Arrays.asList("&7The first enemy to walk", "&7into your base will trigger", "&7this trap!"));
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE2_PATH + "first",
                 Arrays.asList("", "&7Purchasing a trap will", "&7queue it here. Its cost", "&7will scale based on the", "&7number of traps queued.", "", "&7Next trap: &b%bw_cost% %bw_currency%"));
-        yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "second", "%bw_color%Trap #2: {name}");
+        yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "second", "%bw_color%Trap #2: %bw_name%");
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH + "second", Arrays.asList("&7The second enemy to walk", "&7into your base will trigger", "&7this trap!"));
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE2_PATH + "second",
                 Arrays.asList("", "&7Purchasing a trap will", "&7queue it here. Its cost", "&7will scale based on the", "&7number of traps queued.", "", "&7Next trap: &b%bw_cost% %bw_currency%"));
-        yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "third", "%bw_color%Trap #3: {name}");
+        yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "third", "%bw_color%Trap #3: %bw_name%");
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH + "third", Arrays.asList("&7The third enemy to walk", "&7into your base will trigger", "&7this trap!"));
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE2_PATH + "third",
                 Arrays.asList("", "&7Purchasing a trap will", "&7queue it here. Its cost", "&7will scale based on the", "&7number of traps queued.", "", "&7Next trap: &b%bw_cost% %bw_currency%"));
@@ -556,9 +555,9 @@ public class Romanian extends Language {
         yml.addDefault(Messages.UPGRADES_SEPARATOR_ITEM_LORE_PATH + "back", Collections.singletonList("&7To Upgrades & Traps"));
         yml.addDefault(Messages.UPGRADES_CATEGORY_GUI_NAME_PATH + "traps", "&8Queue a trap");
         yml.addDefault(Messages.UPGRADES_TRAP_QUEUE_LIMIT, "&cTrap queue full!");
-        yml.addDefault(Messages.UPGRADES_TRAP_DEFAULT_MSG, "&c&l{trap} a fost activată!");
+        yml.addDefault(Messages.UPGRADES_TRAP_DEFAULT_MSG, "&c&l%bw_trap% a fost activată!");
         yml.addDefault(Messages.UPGRADES_TRAP_DEFAULT_TITLE, "&cCAPCANĂ ACTIVATĂ!");
-        yml.addDefault(Messages.UPGRADES_TRAP_DEFAULT_SUBTITLE, "&fCapcana {trap} a fost activată!");
+        yml.addDefault(Messages.UPGRADES_TRAP_DEFAULT_SUBTITLE, "&fCapcana %bw_trap% a fost activată!");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_MSG + "3", "&c&lAlarm trap set off by &7&l%bw_playername% &c&lfrom %bw_color%&l%bw_team% &c&lteam!");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_TITLE + "3", "&c&lALARM!!!");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_SUBTITLE + "3", "&fAlarm trap set off by %bw_color%%bw_team% &fteam!");

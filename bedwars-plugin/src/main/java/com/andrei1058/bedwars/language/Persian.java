@@ -71,13 +71,13 @@ public class Persian extends Language {
 
         yml.addDefault(Messages.COMMAND_MAIN, Arrays.asList("", "&2▪ &7/" + mainCmd + " stats", "&2▪ &7/" + mainCmd + " join &o<arena/group>", "&2▪ &7/" + mainCmd + " leave", "&2▪ &7/" + mainCmd + " lang", "&2▪ &7/" + mainCmd + " gui", "&2▪ &7/" + mainCmd + " start &3(vip)"));
         yml.addDefault(Messages.COMMAND_LANG_LIST_HEADER, "%bw_lang_prefix% &2Zaban haye mojood:");
-        yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&a▪  &7{iso} - &f{name}");
+        yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&a▪  &7{iso} - &f%bw_name%");
         yml.addDefault(Messages.COMMAND_LANG_USAGE, "%bw_lang_prefix%&7Ravesh Estefade: /lang &f&o<iso>");
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_NOT_EXIST, "%bw_lang_prefix%&cIn zaban vojood nadarad!");
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY, "%bw_lang_prefix%&aZaban taghir kard!");
         yml.addDefault(Messages.COMMAND_LANG_USAGE_DENIED, "%bw_lang_prefix%&cShoma nemitavanid hengami ke dar game hastid zaban ra agvaz konid.");
         yml.addDefault(Messages.COMMAND_JOIN_USAGE, "§a▪ §7Ravesh Estefade: /" + mainCmd + " join §o<arena/group>");
-        yml.addDefault(Messages.COMMAND_JOIN_GROUP_OR_ARENA_NOT_FOUND, "%bw_lang_prefix%&cHich arena ya arena group i be in nam vojood nadarad: {name}");
+        yml.addDefault(Messages.COMMAND_JOIN_GROUP_OR_ARENA_NOT_FOUND, "%bw_lang_prefix%&cHich arena ya arena group i be in nam vojood nadarad: %bw_name%");
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_IS_FULL, "%bw_lang_prefix%&cIn arena por shode!\n&aBaraye dashtan ghabeliat haye bishtar mitoonid ma ro donate konid. &7&o(click)");
         yml.addDefault(Messages.COMMAND_JOIN_NO_EMPTY_FOUND, "%bw_lang_prefix%&cHich arena i dar hale hazer khali nist ;(");
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_IS_FULL_OF_VIPS, "%bw_lang_prefix%&cMotasefane arena mored nazar por shode.\n&cMa midoonim ke shoma donor hastid ama in arena az ghabl ba staff/donor ha por shode.");
@@ -136,14 +136,14 @@ public class Persian extends Language {
         yml.addDefault(Messages.COMMAND_FORCESTART_NOT_IN_GAME, "§c▪ §7Shoma bazi nemikonid!");
         yml.addDefault(Messages.COMMAND_FORCESTART_SUCCESS, "§c▪ §7Shomaresh makoos kootah shod!");
         yml.addDefault(Messages.COMMAND_FORCESTART_NO_PERM, "%bw_lang_prefix%&7Shoma nemitavanid in arena ro forcestart konid.\n§7Lotfan baraye daryaft ghabeliat haye vizhe server ro donate konid.");
-        yml.addDefault(Messages.COMMAND_COOLDOWN, "&cShoma hanooz nemitoonid in kar ro anjam bedid! Lotfan {seconds} sanie sabr konid!");
+        yml.addDefault(Messages.COMMAND_COOLDOWN, "&cShoma hanooz nemitoonid in kar ro anjam bedid! Lotfan %bw_seconds% sanie sabr konid!");
         yml.addDefault(Messages.ARENA_JOIN_VIP_KICK, "%bw_lang_prefix%&cMotasefane shoma bedalil vorood yek donor be arena kick shodid.\n&aLotfan baraye daryaft ghabeliat haye vizhe server ro donate konid. &7&o(click)");
         yml.addDefault(Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT, "%bw_lang_prefix%§cPlayer ha baraye shoroo kafi nistand! Shomaresh makoos motevaghef shod!");
         yml.addDefault(Messages.ARENA_RESTART_PLAYER_KICK, "%bw_lang_prefix%&eArena i ke shoma dakhelesh budid dar hale rah andazi mojadad hast.");
         yml.addDefault(Messages.ARENA_STATUS_PLAYING_NAME, "&cDakhel Bazi");
         yml.addDefault(Messages.ARENA_STATUS_RESTARTING_NAME, "&4Darhal Restart");
-        yml.addDefault(Messages.ARENA_STATUS_WAITING_NAME, "&2Dar Entezar §c{full}");
-        yml.addDefault(Messages.ARENA_STATUS_STARTING_NAME, "&6Darhale Shoroo §c{full}");
+        yml.addDefault(Messages.ARENA_STATUS_WAITING_NAME, "&2Dar Entezar §c%bw_full%");
+        yml.addDefault(Messages.ARENA_STATUS_STARTING_NAME, "&6Darhale Shoroo §c%bw_full%");
         yml.addDefault(Messages.ARENA_GUI_INV_NAME, "&8Baraye vared shodan click konid");
         yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_NAME, "&a&l%bw_name%");
         yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_LORE, Arrays.asList("", "&7Halat: %bw_arena_status%", "&7Player Ha: &f%bw_on%&7/&f%bw_max%", "&7No: &a%bw_group%", "", "&aBaraye vared shodan Left-Click konid.", "&eBaraye spectate kardan Right-Click konid."));
@@ -151,7 +151,7 @@ public class Persian extends Language {
         yml.addDefault(Messages.ARENA_GUI_SKIPPED_ITEM_LORE, Collections.emptyList());
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_CHAT, "%bw_lang_prefix%&eBazi dar &6%bw_time% &esanie digar shoro khahad shod.");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_TITLE, " ");
-        yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE, "&a{second}");
+        yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE, "&a%bw_seconds%");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-5", "&e❺");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-4", "&e❹");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-3", "&c❸");
@@ -180,16 +180,16 @@ public class Persian extends Language {
         yml.addDefault(Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE, "&eDarhale khorooj az halat Spectator");
         yml.addDefault(Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE, "");
         yml.addDefault(Messages.ARENA_LEAVE_PARTY_DISBANDED, "%bw_lang_prefix%§cSaheb party az server kharej shod va party az bein raft!");
-        yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIER, "&eTier &c{tier}");
+        yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIER, "&eTier &c%bw_tier%");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND, "&b&lDiamond");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD, "&a&lEmerald");
-        yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIMER, "&eSpawn dar &c{seconds} &esanie");
-        yml.addDefault(Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT, "%bw_lang_prefix%{generatorType} Generator ha &eertegha peida kardand be Tier &c{tier}");
-        yml.addDefault(Messages.FORMATTING_CHAT_LOBBY, "%bw_level%%bw_v_prefix%&7%bw_player%%bw_v_suffix%: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_WAITING, "%bw_level%%bw_v_prefix%&7%bw_player%%bw_v_suffix%: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_SHOUT, "%bw_level%%bw_v_prefix%&6[SHOUT] %bw_team_format% &7%bw_player%&f%bw_v_suffix%: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_TEAM, "%bw_level%%bw_v_prefix%&f%bw_team_format%&7 %bw_player%%bw_v_suffix%: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_SPECTATOR, "%bw_level%%bw_v_prefix%&7[SPECTATOR] %bw_player%%bw_v_suffix%: {message}");
+        yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIMER, "&eSpawn dar &c%bw_seconds% &esanie");
+        yml.addDefault(Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT, "%bw_lang_prefix%%bw_generator_type% Generator ha &eertegha peida kardand be Tier &c%bw_tier%");
+        yml.addDefault(Messages.FORMATTING_CHAT_LOBBY, "%bw_level%%bw_v_prefix%&7%bw_player%%bw_v_suffix%: %bw_message%");
+        yml.addDefault(Messages.FORMATTING_CHAT_WAITING, "%bw_level%%bw_v_prefix%&7%bw_player%%bw_v_suffix%: %bw_message%");
+        yml.addDefault(Messages.FORMATTING_CHAT_SHOUT, "%bw_level%%bw_v_prefix%&6[SHOUT] %bw_team_format% &7%bw_player%&f%bw_v_suffix%: %bw_message%");
+        yml.addDefault(Messages.FORMATTING_CHAT_TEAM, "%bw_level%%bw_v_prefix%&f%bw_team_format%&7 %bw_player%%bw_v_suffix%: %bw_message%");
+        yml.addDefault(Messages.FORMATTING_CHAT_SPECTATOR, "%bw_level%%bw_v_prefix%&7[SPECTATOR] %bw_player%%bw_v_suffix%: %bw_message%");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_HEALTH, Arrays.asList("&c❤", "&aHealth"));
         yml.addDefault(Messages.FORMATTING_SPECTATOR_TEAM, "SPECT");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_SPECTATOR, "&7");
@@ -268,10 +268,10 @@ public class Persian extends Language {
         yml.addDefault(Messages.PLAYER_DIE_DEBUG_FINAL_KILL, "%bw_player_color%%bw_player% &7Tavasote BedBug %bw_killer_color%%bw_killer_team_name% &7Koshte Shod! &b&lFINAL KILL!");
         yml.addDefault(Messages.PLAYER_DIE_IRON_GOLEM_REGULAR, "%bw_player_color%%bw_player% &7Tavasote Iron Golem %bw_killer_color%%bw_killer_team_name% Koshte Shod!");
         yml.addDefault(Messages.PLAYER_DIE_IRON_GOLEM_FINAL_KILL, "%bw_player_color%%bw_player% &7Tavasote Iron Golem %bw_killer_color%%bw_killer_team_name% &7Koshte Shod! &b&lFINAL KILL!");
-        yml.addDefault(Messages.PLAYER_DIE_REWARD_DIAMOND, "%bw_lang_prefix%&b+{amount} {meaning}");
-        yml.addDefault(Messages.PLAYER_DIE_REWARD_EMERALD, "%bw_lang_prefix%&a+{amount} {meaning}");
-        yml.addDefault(Messages.PLAYER_DIE_REWARD_IRON, "%bw_lang_prefix%&f+{amount} {meaning}");
-        yml.addDefault(Messages.PLAYER_DIE_REWARD_GOLD, "%bw_lang_prefix%&6+{amount} {meaning}");
+        yml.addDefault(Messages.PLAYER_DIE_REWARD_DIAMOND, "%bw_lang_prefix%&b+%bw_amount% %bw_meaning%");
+        yml.addDefault(Messages.PLAYER_DIE_REWARD_EMERALD, "%bw_lang_prefix%&a+%bw_amount% %bw_meaning%");
+        yml.addDefault(Messages.PLAYER_DIE_REWARD_IRON, "%bw_lang_prefix%&f+%bw_amount% %bw_meaning%");
+        yml.addDefault(Messages.PLAYER_DIE_REWARD_GOLD, "%bw_lang_prefix%&6+%bw_amount% %bw_meaning%");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_TITLE, "&cSHOMA MORDID!");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_SUBTITLE, "&eShoma dar &c%bw_time% &esanie dige respawn mishid!");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_CHAT, "%bw_lang_prefix%&eShoma dar &c%bw_time% &esanie dige respawn mishid!");
@@ -376,7 +376,7 @@ public class Persian extends Language {
         //
         yml.addDefault(Messages.SHOP_INDEX_NAME, "&8Kharid Sari");
         yml.addDefault(Messages.SHOP_QUICK_ADD_NAME, "&8Adding to Quick Buy...");
-        yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "%bw_lang_prefix%&cShoma be andaze kafi %bw_currency% nadarid! Shoma {amount} ta bishtar mikhaid!");
+        yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "%bw_lang_prefix%&cShoma be andaze kafi %bw_currency% nadarid! Shoma %bw_amount% ta bishtar mikhaid!");
         yml.addDefault(Messages.SHOP_NEW_PURCHASE, "%bw_lang_prefix%&aShoma &6{item} &akharidid");
         yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "%bw_lang_prefix%&cShoma az ghabl in ro kharidid!");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "%bw_team_color%&l%bw_team_name% &r%bw_team_color%Silverfish");
@@ -399,73 +399,73 @@ public class Persian extends Language {
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "&8Block Ha", "&aBlock Ha", Collections.singletonList("&eBaraye moshahede Click konid!"));
 
         addContentMessages(yml, "wool", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Wool", Arrays.asList("&7Gheimat: &f%bw_cost% %bw_currency%", "", "&7Monaseb pol zadan be", "&7island ha. Be range teametoon",
-                "&7teametoon dar miad.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "clay", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Clay Mohkam", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "&7Block sade baraye defa kardan az bed.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "glass", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Glass Zedde Enfejar", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "&7Zedde enfejar.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "stone", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%End Stone", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "&7Block sade baraye defa kardan az bed.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "ladder", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Ladder", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "&7Baraye balaraftan va gir endakhtan enemy ha", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "obsidian", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Obsidian", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "&7Block ghodratmand baraye defa az bed.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "wood", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Wood", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "&7Block sade baraye defa kardan az bed", "", "{quick_buy}", "{buy_status}"));
+                "&7teametoon dar miad.", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "clay", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Clay Mohkam", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "&7Block sade baraye defa kardan az bed.", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "glass", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Glass Zedde Enfejar", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "&7Zedde enfejar.", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "stone", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%End Stone", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "&7Block sade baraye defa kardan az bed.", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "ladder", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Ladder", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "&7Baraye balaraftan va gir endakhtan enemy ha", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "obsidian", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Obsidian", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "&7Block ghodratmand baraye defa az bed.", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "wood", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Wood", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "&7Block sade baraye defa kardan az bed", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_MELEE, "&8Melee", "&aMelee", Collections.singletonList("&eBaraye Moshahede Click Konid!"));
 
-        addContentMessages(yml, "stone-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Stone Sword", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "iron-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Iron Sword", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "diamond-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Diamond Sword", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "stick", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Stick (KnockBack I)", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "stone-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Stone Sword", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "iron-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Iron Sword", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "diamond-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Diamond Sword", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "stick", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Stick (KnockBack I)", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "&8Armor", "&aArmor", Collections.singletonList("&eBaraye Moshahede Click Konid!"));
 
         addContentMessages(yml, "chainmail", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "%bw_color%Chainmail Armor Daemi", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%",
-                "", "&7Chainmail legging va boot ke", "&7hamishe ba oon ha spawn mishid", "", "{quick_buy}", "{buy_status}"));
+                "", "&7Chainmail legging va boot ke", "&7hamishe ba oon ha spawn mishid", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "iron-armor", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "%bw_color%Iron Armor Daemi", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%",
-                "", "&7Iron legging va boot ke", "&hamishe ba oon ha spawn mishid.", "", "{quick_buy}", "{buy_status}"));
+                "", "&7Iron legging va boot ke", "&hamishe ba oon ha spawn mishid.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "diamond-armor", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "%bw_color%Diamond Armor Daemi", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%",
-                "", "&7Diamond legging va boot ke", "&7hamishe ba oon ha spawn mishid.", "", "{quick_buy}", "{buy_status}"));
+                "", "&7Diamond legging va boot ke", "&7hamishe ba oon ha spawn mishid.", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "&8Tool Ha", "&aTool Ha", Collections.singletonList("&eBaraye Moshahede Click Konid!"));
 
         addContentMessages(yml, "shears", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Shears Daemi", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%",
-                "", "&7Monaseb kandan wool. Shoma", "&7hamishe ba in shears ha spawn mishid.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "pickaxe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Pickaxe {tier}", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "&7Tier: &e{tier}",
-                "", "&7In yek item ghabel erteghast.", "&7Hengam marg 1 Tier az dast", "&7midid!", "", "&7Shoma hamishe", "&7hadaghal ba paein tarin tier", "&7respawn mishid.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "axe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Axe {tier}", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "&7Tier: &e{tier}",
-                "", "&7In yek item ghabel erteghast.", "&7Hengam marg 1 Tier az dast", "&7midid!", "", "&7Shoma hamishe", "&7hadaghal ba paein tarin tier", "&7respawn mishid.", "", "{quick_buy}", "{buy_status}"));
+                "", "&7Monaseb kandan wool. Shoma", "&7hamishe ba in shears ha spawn mishid.", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "pickaxe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Pickaxe %bw_tier%", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "&7Tier: &e%bw_tier%",
+                "", "&7In yek item ghabel erteghast.", "&7Hengam marg 1 Tier az dast", "&7midid!", "", "&7Shoma hamishe", "&7hadaghal ba paein tarin tier", "&7respawn mishid.", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "axe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Axe %bw_tier%", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "&7Tier: &e%bw_tier%",
+                "", "&7In yek item ghabel erteghast.", "&7Hengam marg 1 Tier az dast", "&7midid!", "", "&7Shoma hamishe", "&7hadaghal ba paein tarin tier", "&7respawn mishid.", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_RANGED, "&8Ranged", "&aRanged", Collections.singletonList("&eBaraye Moshahede Click Konid!"));
 
-        addContentMessages(yml, "arrow", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Arrow", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bow1", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Bow", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bow2", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Bow (Power I)", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bow3", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Bow (Power I, Punch I)", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "arrow", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Arrow", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "bow1", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Bow", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "bow2", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Bow (Power I)", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "bow3", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Bow (Power I, Punch I)", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "&8Potion Ha", "&aPotion Ha", Collections.singletonList("&eBaraye Moshahede Click Konid!"));
 
-        addContentMessages(yml, "speed-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Speed II Potion (45 sanie)", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "jump-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Jump V Potion (45 sanie)", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "invisibility", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Invisibility Potion (30 sanie)", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "speed-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Speed II Potion (45 sanie)", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "jump-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Jump V Potion (45 sanie)", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "invisibility", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Invisibility Potion (30 sanie)", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "&8Utility", "&aUtility", Collections.singletonList("&eBaraye Moshahede Click Konid!"));
 
-        addContentMessages(yml, "golden-apple", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Golden Apple", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "&7Monaseb bala raftan HP.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "golden-apple", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Golden Apple", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "&7Monaseb bala raftan HP.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "bedbug", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%BedBug", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "&7Makani ke partab mishan silver fish",
-                "&7baraye part kardan havas team", "&7bemodat 15 sanie spawn mishan.", "", "{quick_buy}", "{buy_status}"));
+                "&7baraye part kardan havas team", "&7bemodat 15 sanie spawn mishan.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "dream-defender", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Dream Defender", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "&7Iron Golem be shoma dar hefazat az",
-                "&7basetoon bemodat 4 daghighe mishe.", "", "{quick_buy}", "{buy_status}"));
+                "&7basetoon bemodat 4 daghighe mishe.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "fireball", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Fireball", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "&7Partab ba Right-Click! Monaseb",
-                "&7part kardan enemy az rooye", "&7pol haei ke roosh rah miran", "", "{quick_buy}", "{buy_status}"));
+                "&7part kardan enemy az rooye", "&7pol haei ke roosh rah miran", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "tnt", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%TNT", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "&7Dar lahze roshan mishe, monaseb",
-                "&7monfajer kardan chizaye mokhtalef!", "", "{quick_buy}", "{buy_status}"));
+                "&7monfajer kardan chizaye mokhtalef!", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "ender-pearl", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Ender Pearl", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "&7Sari tarin ravesh baraye hamle",
-                "&7be base enemy ha.", "", "{quick_buy}", "{buy_status}"));
+                "&7be base enemy ha.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "water-bucket", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Water Bucket", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "&7Monaseb baraye dashtan yek forood",
-                "&7narm dar base enemy. Hamchenin mitoonid", "&7bahash ba TNT moghabele konid.", "", "{quick_buy}", "{buy_status}"));
+                "&7narm dar base enemy. Hamchenin mitoonid", "&7bahash ba TNT moghabele konid.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "bridge-egg", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Bridge Egg", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "&7In egg yek pol jadid",
-                "&7bad az partab shodan misaze.", "", "{quick_buy}", "{buy_status}"));
+                "&7bad az partab shodan misaze.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "magic-milk", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Magic Milk", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "&7Baraye 60 sanie bad az masraf",
-                "&7tale ha rooye shoma kar nemikonan.", "", "{quick_buy}", "{buy_status}"));
+                "&7tale ha rooye shoma kar nemikonan.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "sponge", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Sponge", Arrays.asList("&7Gheimat: %bw_cost% %bw_currency%", "", "&7Monaseb jam kardan ab.",
-                "", "{quick_buy}", "{buy_status}"));
+                "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         //
         yml.addDefault(Messages.MEANING_NO_TRAP, "Hich tale i nadarid!");
@@ -479,52 +479,52 @@ public class Persian extends Language {
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY, "%bw_color%Shoma be meghdar kafi %bw_currency% nadarid");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_LOCKED, "&cGHOFL");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_UNLOCKED, "%bw_color%BAZ");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a%bw_player% yek &6{upgradeName} &akharid");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-1"), "%bw_color%Forge Iron");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "forge"),
+        yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a%bw_player% yek &6%bw_item% &akharid");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "forge").replace("%bw_tier%", "tier-1"), "%bw_color%Forge Iron");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("%bw_name%", "forge"),
                 Arrays.asList("&7Ertegha resource haei ke dar", "&7island shoma spawn mishan.", "", "{tier_1_color}Tier 1: +50% Resource Bishtar, &b{tier_1_cost} {tier_1_currency}",
                         "{tier_2_color}Tier 2: +100% Resource Bishtar, &b{tier_2_cost} {tier_2_currency}",
                         "{tier_3_color}Tier 3: Spawn shodan Emerald, &b{tier_3_cost} {tier_3_currency}",
                         "{tier_4_color}Tier 4: +200% Resource Bishtar, &b{tier_4_cost} {tier_4_currency}", ""));
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-2"), "%bw_color%Forge Gold");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-3"), "%bw_color%Forge Emerald");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-4"), "%bw_color%Forge Molten");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "forge").replace("%bw_tier%", "tier-2"), "%bw_color%Forge Gold");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "forge").replace("%bw_tier%", "tier-3"), "%bw_color%Forge Emerald");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "forge").replace("%bw_tier%", "tier-4"), "%bw_color%Forge Molten");
         yml.addDefault(Messages.UPGRADES_CATEGORY_ITEM_NAME_PATH + "traps", "&eKharid Tale");
         yml.addDefault(Messages.UPGRADES_CATEGORY_ITEM_LORE_PATH + "traps", Arrays.asList("&7Tale haye kharide shode", "&7dar saf samte rast gharar migiran.", "", "&eClick to browse!"));
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "swords").replace("{tier}", "tier-1"), "%bw_color%Sharpened Swords");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "swords"),
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "swords").replace("%bw_tier%", "tier-1"), "%bw_color%Sharpened Swords");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("%bw_name%", "swords"),
                 Arrays.asList("&7Team shoma daeman", "&7Sharpness I rooye hame sword va", "&7axe ha migiran!", "", "{tier_1_color}Gheimat: &b{tier_1_cost} {tier_1_currency}", ""));
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-1"), "%bw_color%Reinforced Armor I");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "armor"),
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "armor").replace("%bw_tier%", "tier-1"), "%bw_color%Reinforced Armor I");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("%bw_name%", "armor"),
                 Arrays.asList("&7Team shoma daeman", "&7Protection rooye tamam armor ha migiran!", "", "{tier_1_color}Tier 1: Protection I, &b{tier_1_cost} {tier_1_currency}",
                         "{tier_2_color}Tier 2: Protection II, &b{tier_2_cost} {tier_2_currency}",
                         "{tier_3_color}Tier 3: Protection III, &b{tier_3_cost} {tier_3_currency}",
                         "{tier_4_color}Tier 4: Protection IV, &b{tier_4_cost} {tier_4_currency}", ""));
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-2"), "%bw_color%Reinforced Armor II");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-3"), "%bw_color%Reinforced Armor III");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-4"), "%bw_color%Reinforced Armor IV");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "miner").replace("{tier}", "tier-1"), "%bw_color%Maniac Miner I");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "miner"),
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "armor").replace("%bw_tier%", "tier-2"), "%bw_color%Reinforced Armor II");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "armor").replace("%bw_tier%", "tier-3"), "%bw_color%Reinforced Armor III");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "armor").replace("%bw_tier%", "tier-4"), "%bw_color%Reinforced Armor IV");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "miner").replace("%bw_tier%", "tier-1"), "%bw_color%Maniac Miner I");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("%bw_name%", "miner"),
                 Arrays.asList("&7Tamam player haye team shoma", "&7daeman Haste migiran.", "", "{tier_1_color}Tier 1: Haste I, &b{tier_1_cost} {tier_1_currency}",
                         "{tier_2_color}Tier 2: Haste II, &b{tier_2_cost} {tier_2_currency}", ""));
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "miner").replace("{tier}", "tier-2"), "%bw_color%Maniac Miner II");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "heal-pool").replace("{tier}", "tier-1"), "%bw_color%Heal Pool");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "heal-pool"),
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "miner").replace("%bw_tier%", "tier-2"), "%bw_color%Maniac Miner II");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "heal-pool").replace("%bw_tier%", "tier-1"), "%bw_color%Heal Pool");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("%bw_name%", "heal-pool"),
                 Arrays.asList("&7Yek mantaghe regeneration", "&7atraf base shoma misaze!", "", "{tier_1_color}Gheimat: &b{tier_1_cost} {tier_1_currency}", ""));
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "dragon").replace("{tier}", "tier-1"), "%bw_color%Dragon Buff");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "dragon"),
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "dragon").replace("%bw_tier%", "tier-1"), "%bw_color%Dragon Buff");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("%bw_name%", "dragon"),
                 Arrays.asList("&7Team shoma bejaye 1 dragon", "&72ta dragon migire!", "", "{tier_1_color}Gheimat: &b{tier_1_cost} {tier_1_currency}", ""));
         yml.addDefault(Messages.UPGRADES_SEPARATOR_ITEM_NAME_PATH + "glass", "&8⬆&7Ghabel Kharid");
         yml.addDefault(Messages.UPGRADES_SEPARATOR_ITEM_LORE_PATH + "glass", Collections.singletonList("&8⬇&7Safe Tale"));
-        yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "first", "%bw_color%Tale #1: {name}");
+        yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "first", "%bw_color%Tale #1: %bw_name%");
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH + "first", Arrays.asList("&7Avalin enemy ke vared", "&7base shoma beshe in", "&7tale faal mishe!"));
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE2_PATH + "first",
                 Arrays.asList("", "&7Bad az kharid yek tale dar saf", "&7inja gharar migire. Gheimat tale ha", "&7bar asase tedad tale haye mojood", "&7taghir peida mikone.", "", "&7Tale Badi: &b%bw_cost% %bw_currency%"));
-        yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "second", "%bw_color%Tale #2: {name}");
+        yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "second", "%bw_color%Tale #2: %bw_name%");
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH + "second", Arrays.asList("&7Dovomin enemy ke vared", "&7base shoma beshe in", "&7tale faal mishe!"));
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE2_PATH + "second",
                 Arrays.asList("", "&7Bad az kharid yek tale dar saf", "&7inja gharar migire. Gheimat tale ha", "&7bar asase tedad tale haye mojood", "&7taghir peida mikone.", "", "&7Tale Badi: &b%bw_cost% %bw_currency%"));
-        yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "third", "%bw_color%Tale #3: {name}");
+        yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "third", "%bw_color%Tale #3: %bw_name%");
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH + "third", Arrays.asList("&7Sevomin enemy ke vared", "&7base shoma beshe in", "&7tale faal mishe!"));
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE2_PATH + "third",
                 Arrays.asList("", "&7Bad az kharid yek tale dar saf", "&7inja gharar migire. Gheimat tale ha", "&7bar asase tedad tale haye mojood", "&7taghir peida mikone.", "", "&7Tale Badi: &b%bw_cost% %bw_currency%"));
@@ -540,9 +540,9 @@ public class Persian extends Language {
         yml.addDefault(Messages.UPGRADES_SEPARATOR_ITEM_LORE_PATH + "back", Collections.singletonList("&7To Upgrades & Traps"));
         yml.addDefault(Messages.UPGRADES_CATEGORY_GUI_NAME_PATH + "traps", "&8Dar saf gharar dadan Tale");
         yml.addDefault(Messages.UPGRADES_TRAP_QUEUE_LIMIT, "&cEmkan Kharid Tale Bishtar Ra Nadarid.");
-        yml.addDefault(Messages.UPGRADES_TRAP_DEFAULT_MSG, "&c&l{trap} khamoosh shod!");
+        yml.addDefault(Messages.UPGRADES_TRAP_DEFAULT_MSG, "&c&l%bw_trap% khamoosh shod!");
         yml.addDefault(Messages.UPGRADES_TRAP_DEFAULT_TITLE, "&cTALE FAAL SHOD!");
-        yml.addDefault(Messages.UPGRADES_TRAP_DEFAULT_SUBTITLE, "&f{trap} Shoma Faal Shod.");
+        yml.addDefault(Messages.UPGRADES_TRAP_DEFAULT_SUBTITLE, "&f%bw_trap% Shoma Faal Shod.");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_MSG + "3", "&c&lHoshdar Tale Tavasote &7&l%bw_player% &c&laz team %bw_color%&l%bw_team% &c&lGheyre Faal Shod!");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_TITLE + "3", "&c&lHOSHDAR!!!");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_SUBTITLE + "3", "&fAlarm Tale Tavasote Team %bw_color%%bw_team% &fGheyre Faal Shod!");

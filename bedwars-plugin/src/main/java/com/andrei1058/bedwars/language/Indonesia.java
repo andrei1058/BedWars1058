@@ -69,13 +69,13 @@ public class Indonesia extends Language {
 
         yml.addDefault(Messages.COMMAND_MAIN, Arrays.asList("", "&2▪ &7/" + mainCmd + " stats", "&2▪ &7/" + mainCmd + " join &o<arena/grup>", "&2▪ &7/" + mainCmd + " leave", "&2▪ &7/" + mainCmd + " lang", "&2▪ &7/" + mainCmd + " gui", "&2▪ &7/" + mainCmd + " start &3(vip)"));
         yml.addDefault(Messages.COMMAND_LANG_LIST_HEADER, "%bw_lang_prefix% &2Bahasa Tersedia:");
-        yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&a▪  &7{iso} - &f{name}");
+        yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&a▪  &7{iso} - &f%bw_name%");
         yml.addDefault(Messages.COMMAND_LANG_USAGE, "%bw_lang_prefix%&7Gunakan: /lang &f&o<bahasa>");
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_NOT_EXIST, "%bw_lang_prefix%&cBahasa ini tidak tersedia!");
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY, "%bw_lang_prefix%&aBahasa terganti!");
         yml.addDefault(Messages.COMMAND_LANG_USAGE_DENIED, "%bw_lang_prefix%&cAnda tidak bisa ganti bahasa saat dalam permainan.");
         yml.addDefault(Messages.COMMAND_JOIN_USAGE, "§a▪ §7Gunakan: /" + mainCmd + " join §o<arena/grup>");
-        yml.addDefault(Messages.COMMAND_JOIN_GROUP_OR_ARENA_NOT_FOUND, "%bw_lang_prefix%&cTidak ada arena atau group yang bernama: {name}");
+        yml.addDefault(Messages.COMMAND_JOIN_GROUP_OR_ARENA_NOT_FOUND, "%bw_lang_prefix%&cTidak ada arena atau group yang bernama: %bw_name%");
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_IS_FULL, "%bw_lang_prefix%&cArena tersebut penuh!\n&aSilakan pertimbangkan untuk menyumbang untuk lebih banyak fitur. &7&o(click)");
         yml.addDefault(Messages.COMMAND_JOIN_NO_EMPTY_FOUND, "%bw_lang_prefix%&cTidak ada arena yang tersedia untuk sekarang ;(");
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_IS_FULL_OF_VIPS, "%bw_lang_prefix%&cKami meminta maaf tapi arena sedang penuh.\n&cKami tahu Anda seorang donatur tetapi sebenarnya arena ini penuh dengan staf atau/dan donatur.");
@@ -133,14 +133,14 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.COMMAND_FORCESTART_NOT_IN_GAME, "§c▪ §7Kamu sedang tidak bermain!");
         yml.addDefault(Messages.COMMAND_FORCESTART_SUCCESS, "§c▪ §7Hitung mundur dipersingkat!");
         yml.addDefault(Messages.COMMAND_FORCESTART_NO_PERM, "%bw_lang_prefix%&7Anda tidak dapat memaksa memulai arena.\n§7Harap pertimbangkan untuk menyumbang untuk fitur VIP.");
-        yml.addDefault(Messages.COMMAND_COOLDOWN, "&cAnda belum bisa melakukannya! Tunggu {seconds} detik lagi!");
+        yml.addDefault(Messages.COMMAND_COOLDOWN, "&cAnda belum bisa melakukannya! Tunggu %bw_seconds% detik lagi!");
         yml.addDefault(Messages.ARENA_JOIN_VIP_KICK, "%bw_lang_prefix%&cMaaf, tapi Anda dikeluarkan karena donatur bergabung ke arena.\n&aHarap pertimbangkan untuk menyumbang untuk lebih banyak fitur. &7&o(click)");
         yml.addDefault(Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT, "%bw_lang_prefix%§cTidak ada cukup pemain! Hitung mundur dihentikan!");
         yml.addDefault(Messages.ARENA_RESTART_PLAYER_KICK, "%bw_lang_prefix%&eArena tempat Anda berada sedang dimulai ulang.");
         yml.addDefault(Messages.ARENA_STATUS_PLAYING_NAME, "&cBermain");
         yml.addDefault(Messages.ARENA_STATUS_RESTARTING_NAME, "&4Memulai Kembali");
-        yml.addDefault(Messages.ARENA_STATUS_WAITING_NAME, "&2Menunggu §c{full}");
-        yml.addDefault(Messages.ARENA_STATUS_STARTING_NAME, "&6Mulai §c{full}");
+        yml.addDefault(Messages.ARENA_STATUS_WAITING_NAME, "&2Menunggu §c%bw_full%");
+        yml.addDefault(Messages.ARENA_STATUS_STARTING_NAME, "&6Mulai §c%bw_full%");
         yml.addDefault(Messages.ARENA_GUI_INV_NAME, "&8Klik untuk bergabung!");
         yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_NAME, "&a&l%bw_name%");
         yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_LORE, Arrays.asList("", "&7Status: %bw_arena_status%", "&7Pemain: &f%bw_on%&7/&f%bw_max%", "&7Tipe: &a%bw_group%", "", "&aKlik Kiri untuk bergabung.", "&eKlik Kanan untuk menonton."));
@@ -148,7 +148,7 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.ARENA_GUI_SKIPPED_ITEM_LORE, Collections.emptyList());
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_CHAT, "%bw_lang_prefix%&ePermainan dimulai dalam &6%bw_time% &edetik!");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_TITLE, " ");
-        yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE, "&a{second}");
+        yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE, "&a%bw_seconds%");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-5", "&e❺");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-4", "&e❹");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-3", "&c❸");
@@ -177,16 +177,16 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE, "&eKeluar dari mode Penonton");
         yml.addDefault(Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE, "");
         yml.addDefault(Messages.ARENA_LEAVE_PARTY_DISBANDED, "%bw_lang_prefix%§cPemilik party telah pergi dan party itu dibubarkan!");
-        yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIER, "&eTingkat &c{tier}");
+        yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIER, "&eTingkat &c%bw_tier%");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND, "&b&lBerlian");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD, "&a&lZamrud");
-        yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIMER, "&eMuncul dalam &c{seconds} &edetik");
-        yml.addDefault(Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT, "%bw_lang_prefix%{generatorType} Generator &etelah ditingkatkan ke Tingkat &c{tier}");
-        yml.addDefault(Messages.FORMATTING_CHAT_LOBBY, "%bw_level%%bw_v_prefix%&7%bw_player%%bw_v_suffix%: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_WAITING, "%bw_level%%bw_v_prefix%&7%bw_player%%bw_v_suffix%: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_SHOUT, "%bw_level%%bw_v_prefix%&6[SHOUT] %bw_team_format% &7%bw_player%&f%bw_v_suffix%: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_TEAM, "%bw_level%%bw_v_prefix%&f%bw_team_format%&7 %bw_player%%bw_v_suffix%: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_SPECTATOR, "&7[PENONTON] %bw_level%%bw_v_prefix%%bw_player%%bw_v_suffix%: {message}");
+        yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIMER, "&eMuncul dalam &c%bw_seconds% &edetik");
+        yml.addDefault(Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT, "%bw_lang_prefix%%bw_generator_type% Generator &etelah ditingkatkan ke Tingkat &c%bw_tier%");
+        yml.addDefault(Messages.FORMATTING_CHAT_LOBBY, "%bw_level%%bw_v_prefix%&7%bw_player%%bw_v_suffix%: %bw_message%");
+        yml.addDefault(Messages.FORMATTING_CHAT_WAITING, "%bw_level%%bw_v_prefix%&7%bw_player%%bw_v_suffix%: %bw_message%");
+        yml.addDefault(Messages.FORMATTING_CHAT_SHOUT, "%bw_level%%bw_v_prefix%&6[SHOUT] %bw_team_format% &7%bw_player%&f%bw_v_suffix%: %bw_message%");
+        yml.addDefault(Messages.FORMATTING_CHAT_TEAM, "%bw_level%%bw_v_prefix%&f%bw_team_format%&7 %bw_player%%bw_v_suffix%: %bw_message%");
+        yml.addDefault(Messages.FORMATTING_CHAT_SPECTATOR, "&7[PENONTON] %bw_level%%bw_v_prefix%%bw_player%%bw_v_suffix%: %bw_message%");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_HEALTH, List.of("&c❤"));
         yml.addDefault(Messages.FORMATTING_SPECTATOR_TEAM, "PENONTON");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_SPECTATOR, "&7");
@@ -265,10 +265,10 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.PLAYER_DIE_DEBUG_FINAL_KILL, "%bw_player_color%%bw_player% &7dibunuh oleh %bw_killer_color%%bw_killer_team_name%'s &7BedBug! &b&lPEMBUNUHAN TERAKHIR!");
         yml.addDefault(Messages.PLAYER_DIE_IRON_GOLEM_REGULAR, "%bw_player_color%%bw_player% &7dibunuh oleh %bw_killer_color%Iron Golem si %bw_killer_team_name%!");
         yml.addDefault(Messages.PLAYER_DIE_IRON_GOLEM_FINAL_KILL, "%bw_player_color%%bw_player% &7dibunuh oleh %bw_killer_color%Iron Golem si %bw_killer_team_name%! &b&lPEMBUNUHAN TERAKHIR!");
-        yml.addDefault(Messages.PLAYER_DIE_REWARD_DIAMOND, "%bw_lang_prefix%&b+{amount} {meaning}");
-        yml.addDefault(Messages.PLAYER_DIE_REWARD_EMERALD, "%bw_lang_prefix%&a+{amount} {meaning}");
-        yml.addDefault(Messages.PLAYER_DIE_REWARD_IRON, "%bw_lang_prefix%&f+{amount} {meaning}");
-        yml.addDefault(Messages.PLAYER_DIE_REWARD_GOLD, "%bw_lang_prefix%&6+{amount} {meaning}");
+        yml.addDefault(Messages.PLAYER_DIE_REWARD_DIAMOND, "%bw_lang_prefix%&b+%bw_amount% %bw_meaning%");
+        yml.addDefault(Messages.PLAYER_DIE_REWARD_EMERALD, "%bw_lang_prefix%&a+%bw_amount% %bw_meaning%");
+        yml.addDefault(Messages.PLAYER_DIE_REWARD_IRON, "%bw_lang_prefix%&f+%bw_amount% %bw_meaning%");
+        yml.addDefault(Messages.PLAYER_DIE_REWARD_GOLD, "%bw_lang_prefix%&6+%bw_amount% %bw_meaning%");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_TITLE, "&cKAMU MATI!");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_SUBTITLE, "&eAnda akan muncul kembali dalam &c%bw_time% &edetik!");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_CHAT, "%bw_lang_prefix%&eAnda akan muncul kembali dalam &c%bw_time% &edetik!");
@@ -373,7 +373,7 @@ public class Indonesia extends Language {
         //
         yml.addDefault(Messages.SHOP_INDEX_NAME, "&8Quick Buy");
         yml.addDefault(Messages.SHOP_QUICK_ADD_NAME, "&8Adding to Quick Buy...");
-        yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "%bw_lang_prefix%&cKamu tidak mempunyai %bw_currency% yang cukup! Butuh {amount} lagi!");
+        yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "%bw_lang_prefix%&cKamu tidak mempunyai %bw_currency% yang cukup! Butuh %bw_amount% lagi!");
         yml.addDefault(Messages.SHOP_NEW_PURCHASE, "%bw_lang_prefix%&aKamu membeli &6{item}");
         yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "%bw_lang_prefix%&cKamu telah membeli itu!!");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "%bw_team_color%&l%bw_team_name% &r%bw_team_color%Silverfish");
@@ -396,73 +396,73 @@ public class Indonesia extends Language {
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "&8Blok", "&aBlok", Collections.singletonList("&eKlik untuk melihat!"));
 
         addContentMessages(yml, "wol", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Wol", Arrays.asList("&7Biaya: &f%bw_cost% %bw_currency%", "", "&7Bagus untuk menyebrang", "&7pulau. Berubah menjadi tim Anda",
-                "&7color.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "clay", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Hardened Clay", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "&7Blok dasar untuk mempertahankan kasur Anda", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "glass", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Kaca Anti Ledakan", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "&7Kebal terhadap ledakan", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "stone", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%End Stone", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "&7Blok keras untuk mempertahankan kasur Anda", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "ladder", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Tangga", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "&7Berguna untuk menyelamatkan kucing yang terjebak", "&7di pohon.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "obsidian", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Obsidian", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "&7Perlindungan ekstrim untuk kasur Anda", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "wood", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Kayu", Arrays.asList("&7Biaya: {cos} %bw_currency%", "", "&7Blok keras untuk mempertahankan kasur Anda", "", "{quick_buy}", "{buy_status}"));
+                "&7color.", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "clay", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Hardened Clay", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "&7Blok dasar untuk mempertahankan kasur Anda", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "glass", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Kaca Anti Ledakan", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "&7Kebal terhadap ledakan", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "stone", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%End Stone", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "&7Blok keras untuk mempertahankan kasur Anda", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "ladder", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Tangga", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "&7Berguna untuk menyelamatkan kucing yang terjebak", "&7di pohon.", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "obsidian", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Obsidian", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "&7Perlindungan ekstrim untuk kasur Anda", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "wood", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Kayu", Arrays.asList("&7Biaya: {cos} %bw_currency%", "", "&7Blok keras untuk mempertahankan kasur Anda", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_MELEE, "&8Senjata Jarak Dekat", "&aSenjata Jarak Dekat", Collections.singletonList("&eKlik untuk melihat!"));
 
-        addContentMessages(yml, "stone-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Stone Sword", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "iron-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Iron Sword", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "diamond-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Diamond Sword", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "stick", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Stik (Knockback I)", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "stone-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Stone Sword", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "iron-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Iron Sword", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "diamond-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Diamond Sword", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "stick", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Stik (Knockback I)", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "&8Armor", "&aArmor", Collections.singletonList("&eClick to view!"));
 
         addContentMessages(yml, "chainmail", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "%bw_color%Armor Chainmail Permanenr", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%",
-                "", "&7Celana dan sepatu chainmail yang dapat membuat", "&7kamu akan selalu muncul dengan ini", "", "{quick_buy}", "{buy_status}"));
+                "", "&7Celana dan sepatu chainmail yang dapat membuat", "&7kamu akan selalu muncul dengan ini", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "iron-armor", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "%bw_color%Armor Besi Permanen", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%",
-                "", "&7Celana dan sepatu besi yang dapat membuat", "&7kamu akan selalu muncul dengan ini.", "", "{quick_buy}", "{buy_status}"));
+                "", "&7Celana dan sepatu besi yang dapat membuat", "&7kamu akan selalu muncul dengan ini.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "diamond-armor", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "%bw_color%Armor Berlian Permanen", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%",
-                "", "&7Celana dan sepatu berlian yang dapat membuat", "&7kamu akan selalu naksir dengan ini.", "", "{quick_buy}", "{buy_status}"));
+                "", "&7Celana dan sepatu berlian yang dapat membuat", "&7kamu akan selalu naksir dengan ini.", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "&8Tools", "&aTools", Collections.singletonList("&eKlik untuk melihat!"));
 
         addContentMessages(yml, "shears", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Gunting Permanen", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%",
-                "", "&7Bagus untuk menyingkirkan wol. Kamu", "&7akan selalu muncul dengan gunting ini.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "pickaxe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Pickaxe {tier}", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "&7Tingkat: &e{tier}",
-                "", "&7Ini adalah item yang dapat diupgrade.", "&7Itu akan kehilangan 1 tingkat setelah.", "&7mati!", "", "&7Anda akan secara permanen", "&7respawn dengan setidaknya", "&7tingkat terendah.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "axe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Kapak {tier}", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "&7Tingkat: &e{tier}",
-                "", "&7Ini adalah item yang dapat diupgrade.", "&7Itu akan kehilangan 1 tingkat setelah.", "&7mati!", "", "&7Anda akan secara permanen", "&7respawn dengan setidaknya", "&7tingkat terendah.", "", "{quick_buy}", "{buy_status}"));
+                "", "&7Bagus untuk menyingkirkan wol. Kamu", "&7akan selalu muncul dengan gunting ini.", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "pickaxe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Pickaxe %bw_tier%", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "&7Tingkat: &e%bw_tier%",
+                "", "&7Ini adalah item yang dapat diupgrade.", "&7Itu akan kehilangan 1 tingkat setelah.", "&7mati!", "", "&7Anda akan secara permanen", "&7respawn dengan setidaknya", "&7tingkat terendah.", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "axe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Kapak %bw_tier%", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "&7Tingkat: &e%bw_tier%",
+                "", "&7Ini adalah item yang dapat diupgrade.", "&7Itu akan kehilangan 1 tingkat setelah.", "&7mati!", "", "&7Anda akan secara permanen", "&7respawn dengan setidaknya", "&7tingkat terendah.", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_RANGED, "&8Senjata Jarak Jauh", "&aSenjata Jarak Jauh", Collections.singletonList("&eKlik untuk melihat!"));
 
-        addContentMessages(yml, "arrow", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Anak Panah", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bow1", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Panah", Arrays.asList("&7Cost: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bow2", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Panah (Power I)", Arrays.asList("&7Cost: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bow3", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Panah (Power I, Punch I)", Arrays.asList("&7Cost: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "arrow", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Anak Panah", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "bow1", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Panah", Arrays.asList("&7Cost: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "bow2", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Panah (Power I)", Arrays.asList("&7Cost: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "bow3", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Panah (Power I, Punch I)", Arrays.asList("&7Cost: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "&8Ramuan", "&aRamuan", Collections.singletonList("&eKlik untuk melihat!"));
 
-        addContentMessages(yml, "speed-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Ramuan Kecepatan II (45 detik)", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "jump-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Ramuan Lompat V (45 detik)", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "invisibility", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Ramuan Tak Kasat Mata (30 detik)", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "speed-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Ramuan Kecepatan II (45 detik)", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "jump-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Ramuan Lompat V (45 detik)", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "invisibility", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Ramuan Tak Kasat Mata (30 detik)", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "&8Utilitas", "&aUtilitas", Collections.singletonList("&eKlik untuk melihat!"));
 
-        addContentMessages(yml, "golden-apple", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Apel Emas", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "&7Penyembuhan menyeluruh.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "golden-apple", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Apel Emas", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "&7Penyembuhan menyeluruh.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "bedbug", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Kutu Kasur", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "&7Memunculkan ikan gabus di mana",
-                "&7bola salju mendarat untuk mengalihkan perhatian", "&7musuh. Berlangsung 15 detik.", "", "{quick_buy}", "{buy_status}"));
+                "&7bola salju mendarat untuk mengalihkan perhatian", "&7musuh. Berlangsung 15 detik.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "dream-defender", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Pertahanan Impian", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "&7Iron Golem untuk membantu mempertahankan",
-                "&7base. Berlangsung 4 menit.", "", "{quick_buy}", "{buy_status}"));
+                "&7base. Berlangsung 4 menit.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "fireball", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Bola Api", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "&7Klik kanan untuk meluncurkan! Bagus untuk",
-                "&7memukul mundur musuh yang berjalan", "&7di jembatan tipis", "", "{quick_buy}", "{buy_status}"));
+                "&7memukul mundur musuh yang berjalan", "&7di jembatan tipis", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "tnt", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%TNT", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "&7Langsung menyala, cocok",
-                "&7untuk meledakkan sesuatu!", "", "{quick_buy}", "{buy_status}"));
+                "&7untuk meledakkan sesuatu!", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "ender-pearl", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Ender Pearl", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "&7Cara tercepat untuk menyerang base",
-                "&7musuh.", "", "{quick_buy}", "{buy_status}"));
+                "&7musuh.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "water-bucket", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Water Bucket", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "&7Bagus untuk memperlambat musuh.",
-                "&7Bisa juga melindungi", "&7dari serangan TNT.", "", "{quick_buy}", "{buy_status}"));
+                "&7Bisa juga melindungi", "&7dari serangan TNT.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "bridge-egg", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Telur Jembatan", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "&7Telur ini menciptakan jembatan di",
-                "&7percobaan setelah dilempar.", "", "{quick_buy}", "{buy_status}"));
+                "&7percobaan setelah dilempar.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "magic-milk", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Susu Ajaib", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "&7Hindari memicu jebakan untuk 60",
-                "&7detik setelah diminum.", "", "{quick_buy}", "{buy_status}"));
+                "&7detik setelah diminum.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "sponge", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Spons", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "&7Bagus untuk menyerap air.",
-                "", "{quick_buy}", "{buy_status}"));
+                "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         //
         yml.addDefault(Messages.MEANING_NO_TRAP, "Tidak ada Perangkap!");
@@ -476,52 +476,52 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY, "%bw_color%Anda tidak punya %bw_currency% yang cukup!");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_LOCKED, "&cTERKUNCI");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_UNLOCKED, "%bw_color%TERBUKA");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a%bw_player% membeli &6{upgradeName}");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-1"), "%bw_color%Iron Forge");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "forge"),
+        yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a%bw_player% membeli &6%bw_item%");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "forge").replace("%bw_tier%", "tier-1"), "%bw_color%Iron Forge");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("%bw_name%", "forge"),
                 Arrays.asList("&7Tingkatkan pemijahan sumber daya aktif", "&7di pulau mu.", "", "{tier_1_color}Tingkat 1: +50% Sumber Daya, &b{tier_1_cost} {tier_1_currency}",
                         "{tier_2_color}Tingkat 2: +100% Sumber Daya, &b{tier_2_cost} {tier_2_currency}",
                         "{tier_3_color}Tingkat 3: Spawn zamrud, &b{tier_3_cost} B{tier_3_currency}",
                         "{tier_4_color}Tingkat 4: +200% Sumber Daya, &b{tier_4_cost} {tier_4_currency}", ""));
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-2"), "%bw_color%Golden Forge");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-3"), "%bw_color%Emerald Forge");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-4"), "%bw_color%Molten Forge");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "forge").replace("%bw_tier%", "tier-2"), "%bw_color%Golden Forge");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "forge").replace("%bw_tier%", "tier-3"), "%bw_color%Emerald Forge");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "forge").replace("%bw_tier%", "tier-4"), "%bw_color%Molten Forge");
         yml.addDefault(Messages.UPGRADES_CATEGORY_ITEM_NAME_PATH + "traps", "&aBeli perangkap");
         yml.addDefault(Messages.UPGRADES_CATEGORY_ITEM_LORE_PATH + "traps", Arrays.asList("&7Perangkap yang dibeli akan menjadi", "&7antri di sebelah kanan.", "", "&eKlik untuk menelusuri!"));
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "swords").replace("{tier}", "tier-1"), "%bw_color%Pedang yang Diasah");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "swords"),
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "swords").replace("%bw_tier%", "tier-1"), "%bw_color%Pedang yang Diasah");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("%bw_name%", "swords"),
                 Arrays.asList("&7Tim Anda memperoleh keuntungan secara permanen", "&7Ketajaman I pada semua pedang dan", "&7kapak!", "", "{tier_1_color}Biaya: &b{tier_1_cost} {tier_1_currency}", ""));
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-1"), "%bw_color%Armor Bertulang I");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "armor"),
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "armor").replace("%bw_tier%", "tier-1"), "%bw_color%Armor Bertulang I");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("%bw_name%", "armor"),
                 Arrays.asList("&7Tim Anda memperoleh keuntungan secara permanen", "&7Perlindungan pada semua bagian armor!", "", "{tier_1_color}Tingkat 1: Perlindungan I, &b{tier_1_cost} {tier_1_currency}",
                         "{tier_2_color}Tingkat 2: Perlindungan II, &b{tier_2_cost} {tier_2_currency}",
                         "{tier_3_color}Tingkat 3: Perlindungan III, &b{tier_3_cost} {tier_3_currency}",
                         "{tier_4_color}Tingkat 4: Perlindungan IV, &b{tier_4_cost} {tier_4_currency}", ""));
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-2"), "%bw_color%Armor Bertulang II");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-3"), "%bw_color%Armor Bertulang III");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-4"), "%bw_color%Armor Bertulang IV");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "miner").replace("{tier}", "tier-1"), "%bw_color%Penambang Maniak I");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "miner"),
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "armor").replace("%bw_tier%", "tier-2"), "%bw_color%Armor Bertulang II");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "armor").replace("%bw_tier%", "tier-3"), "%bw_color%Armor Bertulang III");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "armor").replace("%bw_tier%", "tier-4"), "%bw_color%Armor Bertulang IV");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "miner").replace("%bw_tier%", "tier-1"), "%bw_color%Penambang Maniak I");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("%bw_name%", "miner"),
                 Arrays.asList("&7Semua pemain di tim Anda", "&7mendapatkan Haste secara permanen.", "", "{tier_1_color}Tingkat 1: Haste I, &b{tier_1_cost} {tier_1_currency}",
                         "{tier_2_color}Tingkat 2: Haste II, &b{tier_2_cost} {tier_2_currency}", ""));
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "miner").replace("{tier}", "tier-2"), "%bw_color%Penambang Maniak II");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "heal-pool").replace("{tier}", "tier-1"), "%bw_color%Kolam Penyembuhan");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "heal-pool"),
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "miner").replace("%bw_tier%", "tier-2"), "%bw_color%Penambang Maniak II");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "heal-pool").replace("%bw_tier%", "tier-1"), "%bw_color%Kolam Penyembuhan");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("%bw_name%", "heal-pool"),
                 Arrays.asList("&7Membuat bidang Regenerasi", "&7di sekitar base Anda!", "", "{tier_1_color}Biaya: &b{tier_1_cost} {tier_1_currency}", ""));
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "dragon").replace("{tier}", "tier-1"), "%bw_color%Dragon Buff");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "dragon"),
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "dragon").replace("%bw_tier%", "tier-1"), "%bw_color%Dragon Buff");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("%bw_name%", "dragon"),
                 Arrays.asList("&7Tim Anda akan memiliki 2 naga", "&7bukannya 1 selama deathmatch!", "", "{tier_1_color}Biaya: &b{tier_1_cost} {tier_1_currency}", ""));
         yml.addDefault(Messages.UPGRADES_SEPARATOR_ITEM_NAME_PATH + "glass", "&8⬆&7Dapat Dibeli");
         yml.addDefault(Messages.UPGRADES_SEPARATOR_ITEM_LORE_PATH + "glass", Collections.singletonList("&8⬇&7Antrian Perangkap"));
-        yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "first", "%bw_color%Perangkap #1: {name}");
+        yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "first", "%bw_color%Perangkap #1: %bw_name%");
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH + "first", Arrays.asList("&7Musuh pertama yang berjalan", "&7ke base Anda akan memicu", "&7perangkap ini!"));
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE2_PATH + "first",
                 Arrays.asList("", "&7Membeli perangkap akan", "&7antri disini. biayanya", "&7akan skala berdasarkan", "&7jumlah jebakan yang diantrekan.", "", "&7Perangkap Selanjutnya: &b%bw_cost% %bw_currency%"));
-        yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "second", "%bw_color%Perangkap #2: {name}");
+        yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "second", "%bw_color%Perangkap #2: %bw_name%");
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH + "second", Arrays.asList("&7Musuh kedua yang berjalan", "&7ke base Anda akan memicu", "&7perangkap ini!"));
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE2_PATH + "second",
                 Arrays.asList("", "&7Membeli perangkap akan", "&7antri disini. biayanya", "&7akan skala berdasarkan", "&7jumlah jebakan yang diantrekan.", "", "&7Perangkap Selanjutnya: &b%bw_cost% %bw_currency%"));
-        yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "third", "%bw_color%Perangkap #3: {name}");
+        yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "third", "%bw_color%Perangkap #3: %bw_name%");
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH + "third", Arrays.asList("&7Musuh ketiga yang berjalan", "&7ke base Anda akan memicu", "&7perangkap ini!"));
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE2_PATH + "third",
                 Arrays.asList("", "&7Membeli perangkap akan", "&7antri disini. biayanya", "&7akan skala berdasarkan", "&7jumlah jebakan yang diantrekan.", "", "&7Perangkap Selanjutnya: &b%bw_cost% %bw_currency%"));
@@ -537,9 +537,9 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.UPGRADES_SEPARATOR_ITEM_LORE_PATH + "back", Collections.singletonList("&7Ke Upgrades & Perangkap"));
         yml.addDefault(Messages.UPGRADES_CATEGORY_GUI_NAME_PATH + "traps", "&8Antrian Jebakan");
         yml.addDefault(Messages.UPGRADES_TRAP_QUEUE_LIMIT, "&cAntrian jebakan penuh!");
-        yml.addDefault(Messages.UPGRADES_TRAP_DEFAULT_MSG, "&c&l{trap} telah berangkat!");
+        yml.addDefault(Messages.UPGRADES_TRAP_DEFAULT_MSG, "&c&l%bw_trap% telah berangkat!");
         yml.addDefault(Messages.UPGRADES_TRAP_DEFAULT_TITLE, "&cPERANGKAP TERPICU!");
-        yml.addDefault(Messages.UPGRADES_TRAP_DEFAULT_SUBTITLE, "&fPerangkap {trap} telah terpicu!");
+        yml.addDefault(Messages.UPGRADES_TRAP_DEFAULT_SUBTITLE, "&fPerangkap %bw_trap% telah terpicu!");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_MSG + "3", "&c&lPerangkap alarm telah dipicu oleh &7&l%bw_player% &c&ldari tim %bw_color%&l%bw_team%!");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_TITLE + "3", "&c&lALARM!!!");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_SUBTITLE + "3", "&fPerangkap alarm telah dipicu oleh tim %bw_color%%bw_team%&f!");
