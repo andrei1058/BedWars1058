@@ -94,10 +94,10 @@ public class MenuTrapSlot implements MenuContent {
                 cost = cost + (team.getActiveTraps().size() * multiplier);
             }
             for (String s : Language.getList(player, Messages.UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH + name.replace("trap-slot-", ""))) {
-                lore.add(s.replace("{cost}", String.valueOf(cost)).replace("{currency}", currency));
+                lore.add(s.replace("%bw_cost%", String.valueOf(cost)).replace("%bw_currency%", currency));
             }
             for (String s : Language.getList(player, Messages.UPGRADES_TRAP_SLOT_ITEM_LORE2_PATH + name.replace("trap-slot-", ""))) {
-                lore.add(s.replace("{cost}", String.valueOf(cost)).replace("{currency}", currency));
+                lore.add(s.replace("%bw_cost%", String.valueOf(cost)).replace("%bw_currency%", currency));
             }
         } else {
             lore.addAll(Language.getList(player, ebe.getLoreMsgPath()));

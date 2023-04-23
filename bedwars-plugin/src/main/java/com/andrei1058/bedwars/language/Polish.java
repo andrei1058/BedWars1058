@@ -363,7 +363,7 @@ public class Polish extends Language{
         //SHOP
         yml.addDefault(Messages.SHOP_INDEX_NAME, "&8Szybkie kupowanie");
         yml.addDefault(Messages.SHOP_QUICK_ADD_NAME, "&8Dodawanie do szybkiego kupowania");
-        yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "%bw_lang_prefix%&cNie masz wymaganej ilosci {currency}! Potrzebujesz {amount} wiecej!");
+        yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "%bw_lang_prefix%&cNie masz wymaganej ilosci %bw_currency%! Potrzebujesz {amount} wiecej!");
         yml.addDefault(Messages.SHOP_NEW_PURCHASE, "%bw_lang_prefix%&aKupiles &6{item}");
         yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "%bw_lang_prefix%&cJuz to kupiles!");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "%bw_team_color%&l%bw_team_name% &r%bw_team_color%Pluskwa");
@@ -377,98 +377,98 @@ public class Polish extends Language{
         yml.addDefault(Messages.SHOP_CAN_BUY_COLOR, "&a");
         yml.addDefault(Messages.SHOP_CANT_BUY_COLOR, "&c");
         yml.addDefault(Messages.SHOP_LORE_STATUS_CAN_BUY, "&eKliknij aby kupić!");
-        yml.addDefault(Messages.SHOP_LORE_STATUS_CANT_AFFORD, "&cNie masz wystarczająco {currency}!");
+        yml.addDefault(Messages.SHOP_LORE_STATUS_CANT_AFFORD, "&cNie masz wystarczająco %bw_currency%!");
         yml.addDefault(Messages.SHOP_LORE_STATUS_MAXED, "&aMAX!");
         yml.addDefault(Messages.SHOP_LORE_QUICK_ADD, "&bKucnij &7by dodać do szybkiego kupowania");
         yml.addDefault(Messages.SHOP_LORE_QUICK_REMOVE, "&bKucnij &7by usunąć z szybkiego kupowania");
 
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "&8Bloki", "&aBloki", Collections.singletonList("&eKliknij aby przegladac!"));
-        addContentMessages(yml, "wool", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Welna", Arrays.asList("&7Koszt: &f{cost} {currency}", "", "&7Great for bridging across", "&7islands. Turns into your team's", "&7color.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "clay", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Utwardzona Glina", Arrays.asList("&7Koszt: {cost} {currency}", "", "&7Basic block to defend your bed.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "glass", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Wybucho-Odporne Szklo", Arrays.asList("&7Koszt: {cost} {currency}", "", "&7Immune to explosions.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "stone", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Kamien Kresu", Arrays.asList("&7Koszt: {cost} {currency}", "", "&7Solid block to defend your bed.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "ladder", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Drabina", Arrays.asList("&7Koszt: {cost} {currency}", "", "&7Useful to save cats stuck in", "&7trees.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "obsidian", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Obsydian", Arrays.asList("&7Koszt: {cost} {currency}", "", "&7Extreme protection for your bed.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "wood", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Debowe Deski", Arrays.asList("&7Koszt: {cost} {currency}", "", "&7Solid block to defend your bed", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "wool", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Welna", Arrays.asList("&7Koszt: &f%bw_cost% %bw_currency%", "", "&7Great for bridging across", "&7islands. Turns into your team's", "&7color.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "clay", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Utwardzona Glina", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "", "&7Basic block to defend your bed.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "glass", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Wybucho-Odporne Szklo", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "", "&7Immune to explosions.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "stone", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Kamien Kresu", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "", "&7Solid block to defend your bed.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "ladder", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Drabina", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "", "&7Useful to save cats stuck in", "&7trees.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "obsidian", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Obsydian", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "", "&7Extreme protection for your bed.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "wood", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Debowe Deski", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "", "&7Solid block to defend your bed", "", "{quick_buy}", "{buy_status}"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_MELEE, "&8Miecze", "&aMiecze", Collections.singletonList("&eKliknij aby przegladac!"));
-        addContentMessages(yml, "stone-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Kamienny Miecz", Arrays.asList("&7Koszt: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "iron-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Zelazny Miecz", Arrays.asList("&7Koszt: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "diamond-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Diamentowy Miecz", Arrays.asList("&7Koszt: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "stick", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Patyk (Odrzut I)", Arrays.asList("&7Koszt: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "stone-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Kamienny Miecz", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "iron-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Zelazny Miecz", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "diamond-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Diamentowy Miecz", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "stick", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Patyk (Odrzut I)", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "&8Zbroja", "&aZbroja", Collections.singletonList("&eKliknij aby przegladac!"));
-        addContentMessages(yml, "chainmail", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "%bw_color%Permanentna Klczuga", Arrays.asList("&7Koszt: {cost} {currency}",
+        addContentMessages(yml, "chainmail", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "%bw_color%Permanentna Klczuga", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%",
                 "", "&7Chainmail leggings and boots", "&7which you will always spawn", "&7with.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "iron-armor", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "%bw_color%Permanentna Zelazna Zbroja", Arrays.asList("&7Koszt: {cost} {currency}",
+        addContentMessages(yml, "iron-armor", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "%bw_color%Permanentna Zelazna Zbroja", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%",
                 "", "&7Iron leggings and boots which", "&7you will always spawn with.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "diamond-armor", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "%bw_color%Permanentna Diamentowa <broja", Arrays.asList("&7Koszt: {cost} {currency}",
+        addContentMessages(yml, "diamond-armor", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "%bw_color%Permanentna Diamentowa <broja", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%",
                 "", "&7Diamond leggings and boots which", "&7you will always crush with.", "", "{quick_buy}", "{buy_status}"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "&8Narzedzia", "&aNarzedzia", Collections.singletonList("&eKliknij aby przegladac!"));
-        addContentMessages(yml, "shears", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Permanent Nozyczki", Arrays.asList("&7Koszt: {cost} {currency}",
+        addContentMessages(yml, "shears", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Permanent Nozyczki", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%",
                 "", "&7Great to get rid of wool. You", "&7will always spawn with these shears.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "pickaxe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Kilof {tier}", Arrays.asList("&7Koszt: {cost} {currency}", "&7Tier: &e{tier}",
+        addContentMessages(yml, "pickaxe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Kilof {tier}", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "&7Tier: &e{tier}",
                 "", "&7This is an upgradable item.", "&7It will lose 1 tier upon.", "&7death!", "", "&7You will permanently", "&7respawn with at least the", "&7lowest tier.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "axe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Siekiera {tier}", Arrays.asList("&7Koszt: {cost} {currency}", "&7Tier: &e{tier}",
+        addContentMessages(yml, "axe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Siekiera {tier}", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "&7Tier: &e{tier}",
                 "", "&7This is an upgradable item.", "&7It will lose 1 tier upon.", "&7death!", "", "&7You will permanently", "&7respawn with at least the", "&7lowest tier.", "", "{quick_buy}", "{buy_status}"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_RANGED, "&8Luki", "&aLuki", Collections.singletonList("&eKliknij aby przegladac!"));
-        addContentMessages(yml, "arrow", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Strzaly", Arrays.asList("&7Koszt: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bow1", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Luk", Arrays.asList("&7Koszt: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bow2", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Luk (Moc I)", Arrays.asList("&7Koszt: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bow3", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Luk (Moc I, Uderzenie I)", Arrays.asList("&7Koszt: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "arrow", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Strzaly", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "bow1", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Luk", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "bow2", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Luk (Moc I)", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "bow3", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Luk (Moc I, Uderzenie I)", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "&8Mikstury", "&aMikstury", Collections.singletonList("&eKliknij aby przegladac!"));
-        addContentMessages(yml, "speed-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Szybkosc II (45 seconds)", Arrays.asList("&7Koszt: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "jump-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Zwiekszony skok V (45 seconds)", Arrays.asList("&7Koszt: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "invisibility", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Niewidzialnosc (30 seconds)", Arrays.asList("&7Koszt: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "speed-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Szybkosc II (45 seconds)", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "jump-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Zwiekszony skok V (45 seconds)", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "invisibility", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Niewidzialnosc (30 seconds)", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
 
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "&8Uzyteczne", "&aUzyteczne", Collections.singletonList("&eKliknij aby przegladac!"));
-        addContentMessages(yml, "golden-apple", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Zlote Jablko", Arrays.asList("&7Koszt: {cost} {currency}", "", "&7Well-rounded healing.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bedbug", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%BedBug", Arrays.asList("&7Koszt: {cost} {currency}", "", "&7Spawns silverfish where the",
+        addContentMessages(yml, "golden-apple", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Zlote Jablko", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "", "&7Well-rounded healing.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "bedbug", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%BedBug", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "", "&7Spawns silverfish where the",
                 "&7snowball lands to distract your", "&7enemies. Lasts 15 seconds.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "dream-defender", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Dream Defender", Arrays.asList("&7Koszt: {cost} {currency}", "", "&7Iron Golem to help defend your",
+        addContentMessages(yml, "dream-defender", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Dream Defender", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "", "&7Iron Golem to help defend your",
                 "&7base. Lasts 4 minutes.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "fireball", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Ognista Kula", Arrays.asList("&7Koszt: {cost} {currency}", "", "&7Right-click to launch! Great to",
+        addContentMessages(yml, "fireball", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Ognista Kula", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "", "&7Right-click to launch! Great to",
                 "&7knock back enemies walking on", "&7thin bridges", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "tnt", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%TNT", Arrays.asList("&7Koszt: {cost} {currency}", "", "&7Instantly ignites, appropriate",
+        addContentMessages(yml, "tnt", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%TNT", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "", "&7Instantly ignites, appropriate",
                 "&7to explode things!", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "ender-pearl", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Perla Kresu", Arrays.asList("&7Koszt: {cost} {currency}", "", "&7The quickest way to invade enemy",
+        addContentMessages(yml, "ender-pearl", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Perla Kresu", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "", "&7The quickest way to invade enemy",
                 "&7bases.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "water-bucket", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Water Bucket", Arrays.asList("&7Koszt: {cost} {currency}", "", "&7Great to slow down approaching",
+        addContentMessages(yml, "water-bucket", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Water Bucket", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "", "&7Great to slow down approaching",
                 "&7enemies. Can also protect", "&7against TNT.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bridge-egg", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Bridge Egg", Arrays.asList("&7Koszt: {cost} {currency}", "", "&7This egg creates a bridge in its",
+        addContentMessages(yml, "bridge-egg", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Bridge Egg", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "", "&7This egg creates a bridge in its",
                 "&7trial after being thrown.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "magic-milk", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Magic Milk", Arrays.asList("&7Koszt: {cost} {currency}", "", "&7Avoid triggering traps for 60",
+        addContentMessages(yml, "magic-milk", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Magic Milk", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "", "&7Avoid triggering traps for 60",
                 "&7seconds after consuming.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "sponge", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Sponge", Arrays.asList("&7Koszt: {cost} {currency}", "", "&7Great for soaking up water.",
+        addContentMessages(yml, "sponge", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Sponge", Arrays.asList("&7Koszt: %bw_cost% %bw_currency%", "", "&7Great for soaking up water.",
                 "", "{quick_buy}", "{buy_status}"));
 
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY, "&aKliknij aby kupic!");
-        yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY, "&cBrak odpowiedniej ilosci: &4{currency}");
+        yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY, "&cBrak odpowiedniej ilosci: &4%bw_currency%");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_LOCKED, "&cZABLOKOWANE");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_UNLOCKED, "&aODBLOKOWANE");
         yml.addDefault("upgrades.Default.generators.tier1.name", "&eZelazne Ulepszenie");
-        yml.addDefault("upgrades.Default.generators.tier1.lore", Arrays.asList("&7Zwieksza przyrost pojawiania sie", "&7Zelaza &7oraz &6Zlota &7o 50%.", "", "&7Koszt:&b {cost} {currency}", "", "{loreFooter}"));
+        yml.addDefault("upgrades.Default.generators.tier1.lore", Arrays.asList("&7Zwieksza przyrost pojawiania sie", "&7Zelaza &7oraz &6Zlota &7o 50%.", "", "&7Koszt:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
         yml.addDefault("upgrades.Default.generators.tier2.name", "&eZlote Ulepszenie");
-        yml.addDefault("upgrades.Default.generators.tier2.lore", Arrays.asList("&7Zwieksza przyrost pojawiania sie", "&7Zelaza &7oraz &6Zlota &7o 100%.", "", "&7Koszt:&b {cost} {currency}", "", "{loreFooter}"));
+        yml.addDefault("upgrades.Default.generators.tier2.lore", Arrays.asList("&7Zwieksza przyrost pojawiania sie", "&7Zelaza &7oraz &6Zlota &7o 100%.", "", "&7Koszt:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
         yml.addDefault("upgrades.Default.generators.tier3.name", "&eSzmaragdowe Ulepszenie");
-        yml.addDefault("upgrades.Default.generators.tier3.lore", Arrays.asList("&7Aktywuje pojawianie sie &2Szmaragdow", "&7w generatorze twojej druzyny.", "", "&7Koszt:&b {cost} {currency}", "", "{loreFooter}"));
+        yml.addDefault("upgrades.Default.generators.tier3.lore", Arrays.asList("&7Aktywuje pojawianie sie &2Szmaragdow", "&7w generatorze twojej druzyny.", "", "&7Koszt:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
         yml.addDefault("upgrades.Default.maniacMiner.tier1.name", "&eZwariowany Gornik");
-        yml.addDefault("upgrades.Default.maniacMiner.tier1.lore", Arrays.asList("&7Wszystkie osoby z twojej druzyny", "&7otrzymuja Pospiech I na czas rozgrywki", "", "&7Koszt:&b {cost} {currency}", "", "{loreFooter}"));
+        yml.addDefault("upgrades.Default.maniacMiner.tier1.lore", Arrays.asList("&7Wszystkie osoby z twojej druzyny", "&7otrzymuja Pospiech I na czas rozgrywki", "", "&7Koszt:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
         yml.addDefault("upgrades.Default.sharpSword.tier1.name", "&eOstry Miecz");
-        yml.addDefault("upgrades.Default.sharpSword.tier1.lore", Arrays.asList("&7Twoja druzyna otrzymuje Ostrosc I", "&7na wszystkich mieczach!", "", "&7Koszt:&b {cost} {currency}", "", "{loreFooter}"));
+        yml.addDefault("upgrades.Default.sharpSword.tier1.lore", Arrays.asList("&7Twoja druzyna otrzymuje Ostrosc I", "&7na wszystkich mieczach!", "", "&7Koszt:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
         yml.addDefault("upgrades.Default.reinforced.tier1.name", "&eWzmocniony Pancerz");
-        yml.addDefault("upgrades.Default.reinforced.tier1.lore", Arrays.asList("&7Twoja druzyna otrzymuje Ochrone I", "&7na kazdej czesci pancerza!", "", "&7Koszt:&b {cost} {currency}", "", "{loreFooter}"));
+        yml.addDefault("upgrades.Default.reinforced.tier1.lore", Arrays.asList("&7Twoja druzyna otrzymuje Ochrone I", "&7na kazdej czesci pancerza!", "", "&7Koszt:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
         yml.addDefault("upgrades.Default.trap.tier1.name", "&eTo jest pulapka!");
-        yml.addDefault("upgrades.Default.trap.tier1.lore", Arrays.asList("&7Pierwszy przeciwnik w twojej bazie", "&7otrzymuje oslepienie i spowolnienie!", "", "&7Koszt:&b {cost} {currency}", "", "{loreFooter}"));
+        yml.addDefault("upgrades.Default.trap.tier1.lore", Arrays.asList("&7Pierwszy przeciwnik w twojej bazie", "&7otrzymuje oslepienie i spowolnienie!", "", "&7Koszt:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
         yml.addDefault("upgrades.Default.miningFatigue.tier1.name", "&eWyczerpanie gornika");
-        yml.addDefault("upgrades.Default.miningFatigue.tier1.lore", Arrays.asList("&7Pierwszy przeciwnik w twojej bazie", "&7otrzyma wyczerpani na 10 sekund!", "", "&7Koszt:&b {cost} {currency}", "", "{loreFooter}"));
+        yml.addDefault("upgrades.Default.miningFatigue.tier1.lore", Arrays.asList("&7Pierwszy przeciwnik w twojej bazie", "&7otrzyma wyczerpani na 10 sekund!", "", "&7Koszt:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
         yml.addDefault("upgrades.Default.healPool.tier1.name", "&ePole Regeneracyjne");
-        yml.addDefault("upgrades.Default.healPool.tier1.lore", Arrays.asList("&7Tworzy Pole Regeneracyjne", "&7wokol twojej bazy!", "", "&7Koszt:&b {cost} {currency}", "", "{loreFooter}"));
+        yml.addDefault("upgrades.Default.healPool.tier1.lore", Arrays.asList("&7Tworzy Pole Regeneracyjne", "&7wokol twojej bazy!", "", "&7Koszt:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
         yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a%bw_player% kupil &6{upgradeName}");
 
 
@@ -489,14 +489,14 @@ public class Polish extends Language{
         yml.addDefault(Messages.REJOIN_ALLOWED, "%bw_lang_prefix%&eDołączasz do &a{arena}&e!");
 
         yml.addDefault(Messages.MEANING_NO_TRAP, "No trap!");
-        yml.addDefault(Messages.FORMAT_UPGRADE_TRAP_COST, "&7Cost: {currencyColor}{cost} {currency}");
+        yml.addDefault(Messages.FORMAT_UPGRADE_TRAP_COST, "&7Cost: %bw_currency_color%%bw_cost% %bw_currency%");
         yml.addDefault(Messages.FORMAT_UPGRADE_COLOR_CAN_AFFORD, "&e");
         yml.addDefault(Messages.FORMAT_UPGRADE_COLOR_CANT_AFFORD, "&c");
         yml.addDefault(Messages.FORMAT_UPGRADE_COLOR_UNLOCKED, "&a");
         yml.addDefault(Messages.FORMAT_UPGRADE_TIER_LOCKED, "&7");
         yml.addDefault(Messages.FORMAT_UPGRADE_TIER_UNLOCKED, "&a");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY, "%bw_color%Click to purchase!");
-        yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY, "%bw_color%You don't have enough {currency}");
+        yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY, "%bw_color%You don't have enough %bw_currency%");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_LOCKED, "&cLOCKED");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_UNLOCKED, "%bw_color%UNLOCKED");
         yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a%bw_player% purchased &6{upgradeName}");
@@ -539,15 +539,15 @@ public class Polish extends Language{
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "first", "%bw_color%Trap #1: {name}");
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH + "first", Arrays.asList("&7The first enemy to walk", "&7into your base will trigger", "&7this trap!"));
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE2_PATH + "first",
-                Arrays.asList("", "&7Purchasing a trap will", "&7queue it here. Its cost", "&7will scale based on the", "&7number of traps queued.", "", "&7Next trap: &b{cost} {currency}"));
+                Arrays.asList("", "&7Purchasing a trap will", "&7queue it here. Its cost", "&7will scale based on the", "&7number of traps queued.", "", "&7Next trap: &b%bw_cost% %bw_currency%"));
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "second", "%bw_color%Trap #2: {name}");
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH + "second", Arrays.asList("&7The second enemy to walk", "&7into your base will trigger", "&7this trap!"));
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE2_PATH + "second",
-                Arrays.asList("", "&7Purchasing a trap will", "&7queue it here. Its cost", "&7will scale based on the", "&7number of traps queued.", "", "&7Next trap: &b{cost} {currency}"));
+                Arrays.asList("", "&7Purchasing a trap will", "&7queue it here. Its cost", "&7will scale based on the", "&7number of traps queued.", "", "&7Next trap: &b%bw_cost% %bw_currency%"));
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "third", "%bw_color%Trap #3: {name}");
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH + "third", Arrays.asList("&7The third enemy to walk", "&7into your base will trigger", "&7this trap!"));
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE2_PATH + "third",
-                Arrays.asList("", "&7Purchasing a trap will", "&7queue it here. Its cost", "&7will scale based on the", "&7number of traps queued.", "", "&7Next trap: &b{cost} {currency}"));
+                Arrays.asList("", "&7Purchasing a trap will", "&7queue it here. Its cost", "&7will scale based on the", "&7number of traps queued.", "", "&7Next trap: &b%bw_cost% %bw_currency%"));
         yml.addDefault(Messages.UPGRADES_BASE_TRAP_ITEM_NAME_PATH + "1", "%bw_color%It's a trap!");
         yml.addDefault(Messages.UPGRADES_BASE_TRAP_ITEM_LORE_PATH + "1", Arrays.asList("&7Inflicts Blindness and Slowness", "&7for 5 seconds.", ""));
         yml.addDefault(Messages.UPGRADES_BASE_TRAP_ITEM_NAME_PATH + "2", "%bw_color%Counter-Offensive Trap");

@@ -117,7 +117,7 @@ public class MenuUpgrade implements MenuContent, TeamUpgrade {
         } else if (afford){
             lore.add(Language.getMsg(player, Messages.UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY).replace("{color}", color));
         } else {
-            lore.add(Language.getMsg(player, Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY).replace("{currency}", currencyMsg).replace("{color}", color));
+            lore.add(Language.getMsg(player, Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY).replace("%bw_currency%", currencyMsg).replace("{color}", color));
         }
         im.setLore(lore);
         im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
@@ -140,7 +140,7 @@ public class MenuUpgrade implements MenuContent, TeamUpgrade {
             if (money < ut.getCost()) {
                 Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, player);
                 player.sendMessage(Language.getMsg(player, Messages.SHOP_INSUFFICIENT_MONEY)
-                        .replace("{currency}", UpgradesManager.getCurrencyMsg(player, ut))
+                        .replace("%bw_currency%", UpgradesManager.getCurrencyMsg(player, ut))
                         .replace("{amount}", String.valueOf(ut.getCost() - money)));
                 player.closeInventory();
                 return;

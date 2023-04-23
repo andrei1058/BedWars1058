@@ -167,7 +167,7 @@ public class CategoryContent implements ICategoryContent {
         //check money
         int money = calculateMoney(player, ct.getCurrency());
         if (money < ct.getPrice()) {
-            player.sendMessage(getMsg(player, Messages.SHOP_INSUFFICIENT_MONEY).replace("{currency}", getMsg(player, getCurrencyMsgPath(ct))).
+            player.sendMessage(getMsg(player, Messages.SHOP_INSUFFICIENT_MONEY).replace("%bw_currency%", getMsg(player, getCurrencyMsgPath(ct))).
                     replace("{amount}", String.valueOf(ct.getPrice() - money)));
             Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, player);
             return;
@@ -270,7 +270,7 @@ public class CategoryContent implements ICategoryContent {
                     buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_ARMOR);
                 }
             } else if (!canAfford) {
-                buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CANT_AFFORD).replace("{currency}", translatedCurrency);
+                buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CANT_AFFORD).replace("%bw_currency%", translatedCurrency);
             } else {
                 buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CAN_BUY);
             }
@@ -291,8 +291,8 @@ public class CategoryContent implements ICategoryContent {
                         s = getMsg(player, Messages.SHOP_LORE_QUICK_ADD);
                     }
                 }
-                s = s.replace("{tier}", tier).replace("{color}", color).replace("{cost}", cColor + String.valueOf(ct.getPrice()))
-                        .replace("{currency}", cColor + translatedCurrency).replace("{buy_status}", buyStatus);
+                s = s.replace("{tier}", tier).replace("{color}", color).replace("%bw_cost%", cColor + String.valueOf(ct.getPrice()))
+                        .replace("%bw_currency%", cColor + translatedCurrency).replace("{buy_status}", buyStatus);
                 lore.add(s);
             }
 

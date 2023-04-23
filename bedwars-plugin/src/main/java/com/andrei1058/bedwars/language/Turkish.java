@@ -376,7 +376,7 @@ public class Turkish extends Language {
         //
         yml.addDefault(Messages.SHOP_INDEX_NAME, "&8Hızlı Alım");
         yml.addDefault(Messages.SHOP_QUICK_ADD_NAME, "&8Hızlı Alıma ekleniyor...");
-        yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "%bw_lang_prefix%&cYeteri kadar {currency} sahibi değilsin! {amount} tane daha bulmalısın!");
+        yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "%bw_lang_prefix%&cYeteri kadar %bw_currency% sahibi değilsin! {amount} tane daha bulmalısın!");
         yml.addDefault(Messages.SHOP_NEW_PURCHASE, "%bw_lang_prefix%&6{item} &asatın aldın");
         yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "%bw_lang_prefix%&cBunu zaten satın aldın!");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "%bw_team_color%&l%bw_team_name% &r%bw_team_color%Böcek");
@@ -390,7 +390,7 @@ public class Turkish extends Language {
         yml.addDefault(Messages.SHOP_CAN_BUY_COLOR, "&a");
         yml.addDefault(Messages.SHOP_CANT_BUY_COLOR, "&c");
         yml.addDefault(Messages.SHOP_LORE_STATUS_CAN_BUY, "&eSatın almak için tıkla!");
-        yml.addDefault(Messages.SHOP_LORE_STATUS_CANT_AFFORD, "&cYeteri kadar {currency} sahibi değilsin!");
+        yml.addDefault(Messages.SHOP_LORE_STATUS_CANT_AFFORD, "&cYeteri kadar %bw_currency% sahibi değilsin!");
         yml.addDefault(Messages.SHOP_LORE_STATUS_MAXED, "&aEN YÜKSEK SEVİYEDE!");
         yml.addDefault(Messages.SHOP_LORE_QUICK_ADD, "&bHızlı Alıma eklemek için eğilerek tıkla");
         yml.addDefault(Messages.SHOP_LORE_QUICK_REMOVE, "&bHızlı Alımdan kaldırmak için eğilerek tıkla");
@@ -398,85 +398,85 @@ public class Turkish extends Language {
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "&8Bloklar", "&aBloklar", Collections.singletonList("&eGörmek için tıkla!"));
 
-        addContentMessages(yml, "wool", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Yün", Arrays.asList("&7Ücret: &f{cost} {currency}", "", "&7Düşman adalara yol yapmak", "&7için ideal. Takımının",
+        addContentMessages(yml, "wool", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Yün", Arrays.asList("&7Ücret: &f%bw_cost% %bw_currency%", "", "&7Düşman adalara yol yapmak", "&7için ideal. Takımının",
                 "&7rengine bürünür.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "clay", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Kil", Arrays.asList("&7Ücret: {cost} {currency}", "", "&7Yatağını savunmak için harika.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "glass", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Cam", Arrays.asList("&7Ücret: {cost} {currency}", "", "&7Patlamaları etkisiz kılar.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "stone", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%End Taşı", Arrays.asList("&7Ücret: {cost} {currency}", "", "&7Sert bir savunma.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "ladder", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Merdiven", Arrays.asList("&7Ücret: {cost} {currency}", "", "&7Ağaçlarda mahsur kalan", "&7kedileri kurtarmak için süper", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "obsidian", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Obsidyen", Arrays.asList("&7Ücret: {cost} {currency}", "", "&7Rakiplerin senden nefret edecek!", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "wood", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Tahta", Arrays.asList("&7Ücret: {cost} {currency}", "", "&7Yatak savunması için ucuz bir çözüm.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "clay", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Kil", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "", "&7Yatağını savunmak için harika.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "glass", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Cam", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "", "&7Patlamaları etkisiz kılar.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "stone", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%End Taşı", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "", "&7Sert bir savunma.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "ladder", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Merdiven", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "", "&7Ağaçlarda mahsur kalan", "&7kedileri kurtarmak için süper", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "obsidian", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Obsidyen", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "", "&7Rakiplerin senden nefret edecek!", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "wood", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Tahta", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "", "&7Yatak savunması için ucuz bir çözüm.", "", "{quick_buy}", "{buy_status}"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_MELEE, "&8Yakın Saldırı", "&aYakın Saldırı", Collections.singletonList("&eGörmek için tıkla!"));
 
-        addContentMessages(yml, "stone-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Taş Kılıç", Arrays.asList("&7Ücret: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "iron-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Demir Kılıç", Arrays.asList("&7Ücret: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "diamond-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Elmas Kılıç", Arrays.asList("&7Ücret: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "stick", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Çubuk (Savurma I)", Arrays.asList("&7Ücret: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "stone-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Taş Kılıç", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "iron-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Demir Kılıç", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "diamond-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Elmas Kılıç", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "stick", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Çubuk (Savurma I)", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "&8Zırh", "&8Zırh", Collections.singletonList("&eGörmek için tıkla!"));
 
-        addContentMessages(yml, "chainmail", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "%bw_color%Zincir Zırh", Arrays.asList("&7Ücret: {cost} {currency}",
+        addContentMessages(yml, "chainmail", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "%bw_color%Zincir Zırh", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%",
                 "", "&7Ölünce kaybolmayan", "&7zincir pantolon ve ayakkabı", "", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "iron-armor", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "%bw_color%Demir Zırh", Arrays.asList("&7Ücret: {cost} {currency}",
+        addContentMessages(yml, "iron-armor", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "%bw_color%Demir Zırh", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%",
                 "", "&7Ölünce kaybolmayan", "&7demir pantolon ve ayakkabı", "", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "diamond-armor", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "%bw_color%Elmas Zırh", Arrays.asList("&7Ücret: {cost} {currency}",
+        addContentMessages(yml, "diamond-armor", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "%bw_color%Elmas Zırh", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%",
                 "", "&7Ölünce kaybolmayan", "&7elmas pantolon ve ayakkabı", "", "", "{quick_buy}", "{buy_status}"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "&8Alet", "&8Alet", Collections.singletonList("&eGörmek için tıkla!"));
 
-        addContentMessages(yml, "shears", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Makas", Arrays.asList("&7Ücret: {cost} {currency}",
+        addContentMessages(yml, "shears", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Makas", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%",
                 "", "&7Ölünce kaybolmayan bir makas. Yünlerden", "&7kurtulmak için dört dörtlük.", "", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "pickaxe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Kazma {tier}", Arrays.asList("&7Ücret: {cost} {currency}", "&7Seviye: &e{tier}",
+        addContentMessages(yml, "pickaxe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Kazma {tier}", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "&7Seviye: &e{tier}",
                 "", "&7Bu bir yükseltilebilir eşya.", "&7Her öldüğünde", "1 seviye düşer", "", "&7Bu eşya, ölsen bile", "&7en düşük seviyesi ile", "&7üstünde kalır.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "axe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Balta {tier}", Arrays.asList("&7Ücret: {cost} {currency}", "&7Seviye: &e{tier}",
+        addContentMessages(yml, "axe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Balta {tier}", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "&7Seviye: &e{tier}",
                 "", "&7Bu bir yükseltilebilir eşya.", "&7Her öldüğünde", "1 seviye düşer", "", "&7Bu eşya, ölsen bile", "&7en düşük seviyesi ile", "&7üstünde kalır.", "", "{quick_buy}", "{buy_status}"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_RANGED, "&8Uzun Mesafe", "&aUzun Mesafe", Collections.singletonList("&eGörmek için tıkla!"));
 
-        addContentMessages(yml, "arrow", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Ok", Arrays.asList("&7Ücret: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bow1", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Yay", Arrays.asList("&7Ücret: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bow2", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Yay (Güç I)", Arrays.asList("&7Ücret: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bow3", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Yay (Güç I, Yumruk I)", Arrays.asList("&7Ücret: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "arrow", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Ok", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "bow1", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Yay", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "bow2", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Yay (Güç I)", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "bow3", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Yay (Güç I, Yumruk I)", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "&8İksirler", "&8İksirler", Collections.singletonList("&eGörmek için tıkla!"));
 
-        addContentMessages(yml, "speed-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Hız II İksiri (45 saniye)", Arrays.asList("&7Ücret: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "jump-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Zıplama Desteği V İksiri (45 saniye)", Arrays.asList("&7Ücret: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "invisibility", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Görünmezlik İksiri (30 saniye)", Arrays.asList("&7Ücret: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "speed-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Hız II İksiri (45 saniye)", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "jump-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Zıplama Desteği V İksiri (45 saniye)", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "invisibility", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Görünmezlik İksiri (30 saniye)", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "&8Diğer", "&8Diğer", Collections.singletonList("&eGörmek için tıkla!"));
 
-        addContentMessages(yml, "golden-apple", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Altın Elma", Arrays.asList("&7Ücret: {cost} {currency}", "", "&7Well-rounded healing.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bedbug", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%BedBug", Arrays.asList("&7Ücret: {cost} {currency}", "", "&7Kartopunu attığın yerde",
+        addContentMessages(yml, "golden-apple", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Altın Elma", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "", "&7Well-rounded healing.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "bedbug", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%BedBug", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "", "&7Kartopunu attığın yerde",
                 "&7rakiplerin dikkatini dağıtmak için", "&7böcekler doğurur. 15 saniye sonra kaybolur.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "dream-defender", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Demir Golem", Arrays.asList("&7Ücret: {cost} {currency}", "", "&7Takımını savunmana yardım",
+        addContentMessages(yml, "dream-defender", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Demir Golem", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "", "&7Takımını savunmana yardım",
                 "&7eder. 4 dakika sonra kaybolur.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "fireball", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Ateş Topu", Arrays.asList("&7Ücret: {cost} {currency}", "", "&7Sağ tıklayarak ateşle! Rakiplerinin",
+        addContentMessages(yml, "fireball", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Ateş Topu", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "", "&7Sağ tıklayarak ateşle! Rakiplerinin",
                 "&7yürüdükleri köprüleri patlatmak", "&7için harika bir ürün!", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "tnt", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%TNT", Arrays.asList("&7Ücret: {cost} {currency}", "", "&7Direkt ateşlenir, diğer takımların",
+        addContentMessages(yml, "tnt", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%TNT", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "", "&7Direkt ateşlenir, diğer takımların",
                 "&7korumaları için iyi bir çözüm", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "ender-pearl", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Ender İncisi", Arrays.asList("&7Ücret: {cost} {currency}", "", "&7Diğer takımların adalarına",
+        addContentMessages(yml, "ender-pearl", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Ender İncisi", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "", "&7Diğer takımların adalarına",
                 "&7gitmenin en hızlı yolu.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "water-bucket", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Su Kovası", Arrays.asList("&7Ücret: {cost} {currency}", "", "&7Patlamaları etkisiz",
+        addContentMessages(yml, "water-bucket", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Su Kovası", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "", "&7Patlamaları etkisiz",
                 "&7bırakır.", "", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bridge-egg", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Köprü Yumurtası", Arrays.asList("&7Ücret: {cost} {currency}", "", "&7Atılan doğrultuda",
+        addContentMessages(yml, "bridge-egg", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Köprü Yumurtası", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "", "&7Atılan doğrultuda",
                 "&7bir köprü yapar.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "magic-milk", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Sihirli Süt", Arrays.asList("&7Ücret: {cost} {currency}", "", "&7İçildikten sonra 60 saniye",
+        addContentMessages(yml, "magic-milk", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Sihirli Süt", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "", "&7İçildikten sonra 60 saniye",
                 "&7boyunca düşman tuzaklarından korur.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "sponge", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Sünger", Arrays.asList("&7Ücret: {cost} {currency}", "", "&7Suyu yok etmenin basit bir yolu.",
+        addContentMessages(yml, "sponge", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Sünger", Arrays.asList("&7Ücret: %bw_cost% %bw_currency%", "", "&7Suyu yok etmenin basit bir yolu.",
                 "", "{quick_buy}", "{buy_status}"));
 
         //
         yml.addDefault(Messages.MEANING_NO_TRAP, "Tuzak yok!");
-        yml.addDefault(Messages.FORMAT_UPGRADE_TRAP_COST, "&7Ücret: {currencyColor}{cost} {currency}");
+        yml.addDefault(Messages.FORMAT_UPGRADE_TRAP_COST, "&7Ücret: %bw_currency_color%%bw_cost% %bw_currency%");
         yml.addDefault(Messages.FORMAT_UPGRADE_COLOR_CAN_AFFORD, "&e");
         yml.addDefault(Messages.FORMAT_UPGRADE_COLOR_CANT_AFFORD, "&c");
         yml.addDefault(Messages.FORMAT_UPGRADE_COLOR_UNLOCKED, "&a");
         yml.addDefault(Messages.FORMAT_UPGRADE_TIER_LOCKED, "&7");
         yml.addDefault(Messages.FORMAT_UPGRADE_TIER_UNLOCKED, "&a");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY, "%bw_color%Satın almak için tıkla!");
-        yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY, "%bw_color%Yeteri kadar {currency} yok!");
+        yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY, "%bw_color%Yeteri kadar %bw_currency% yok!");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_LOCKED, "&cKİLİTLENDİ");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_UNLOCKED, "%bw_color%KİLİT KALDIRILDI");
         yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a%bw_player% adlı oyuncu &6{upgradeName} satın aldı");
@@ -522,15 +522,15 @@ public class Turkish extends Language {
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "first", "%bw_color%Tuzak #1: {name}");
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH + "first", Arrays.asList("&7Adana giren ilk", "&7kişi bu tuzağı", "&7aktifleştirir!"));
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE2_PATH + "first",
-                Arrays.asList("", "&7Bu tuzağı satın almak,", "&7tuzağı sıraya ekler. Fiyat,", "&7adandaki tuzak sayısına", "&7göre belirlenir.", "", "&7Sıradaki tuzak: &b{cost} {currency}"));
+                Arrays.asList("", "&7Bu tuzağı satın almak,", "&7tuzağı sıraya ekler. Fiyat,", "&7adandaki tuzak sayısına", "&7göre belirlenir.", "", "&7Sıradaki tuzak: &b%bw_cost% %bw_currency%"));
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "second", "%bw_color%Tuzak #2: {name}");
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH + "second", Arrays.asList("&7Adana giren ikinci", "&7kişi bu tuzağı", "&7aktifleştirir!"));
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE2_PATH + "second",
-                Arrays.asList("", "&7Bu tuzağı satın almak,", "&7tuzağı sıraya ekler. Fiyat,", "&7adandaki tuzak sayısına", "&7göre belirlenir.", "", "&7Sıradaki tuzak: &b{cost} {currency}"));
+                Arrays.asList("", "&7Bu tuzağı satın almak,", "&7tuzağı sıraya ekler. Fiyat,", "&7adandaki tuzak sayısına", "&7göre belirlenir.", "", "&7Sıradaki tuzak: &b%bw_cost% %bw_currency%"));
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "third", "%bw_color%Tuzak #3: {name}");
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH + "third", Arrays.asList("&7Adana giren üçüncü", "&7kişi bu tuzağı", "&7aktifleştirir!"));
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE2_PATH + "third",
-                Arrays.asList("", "&7Bu tuzağı satın almak,", "&7tuzağı sıraya ekler. Fiyat,", "&7adandaki tuzak sayısına", "&7göre belirlenir.", "", "&7Sıradaki tuzak: &b{cost} {currency}"));
+                Arrays.asList("", "&7Bu tuzağı satın almak,", "&7tuzağı sıraya ekler. Fiyat,", "&7adandaki tuzak sayısına", "&7göre belirlenir.", "", "&7Sıradaki tuzak: &b%bw_cost% %bw_currency%"));
         yml.addDefault(Messages.UPGRADES_BASE_TRAP_ITEM_NAME_PATH + "1", "%bw_color%Bu bir tuzak!");
         yml.addDefault(Messages.UPGRADES_BASE_TRAP_ITEM_LORE_PATH + "1", Arrays.asList("&75 saniye boyunca Körlük ve", "&7Yavaşlık verir.", ""));
         yml.addDefault(Messages.UPGRADES_BASE_TRAP_ITEM_NAME_PATH + "2", "%bw_color%Karşı Saldırı Tuzağı");

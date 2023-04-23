@@ -209,13 +209,13 @@ public class MenuBaseTrap implements MenuContent, EnemyBaseEnterTrap, TeamUpgrad
 
             List<String> lore = Language.getList(player, Messages.UPGRADES_BASE_TRAP_ITEM_LORE_PATH + name.replace("base-trap-", ""));
             String currencyMsg = UpgradesManager.getCurrencyMsg(player, cost, currency);
-            lore.add(Language.getMsg(player, Messages.FORMAT_UPGRADE_TRAP_COST).replace("{cost}", String.valueOf(cost)).replace("{currency}", currencyMsg)
-                    .replace("{currencyColor}", String.valueOf(UpgradesManager.getCurrencyColor(currency))));
+            lore.add(Language.getMsg(player, Messages.FORMAT_UPGRADE_TRAP_COST).replace("%bw_cost%", String.valueOf(cost)).replace("%bw_player_food%", currencyMsg)
+                    .replace("%bw_currency_color%", String.valueOf(UpgradesManager.getCurrencyColor(currency))));
             lore.add("");
             if (afford) {
                 lore.add(Language.getMsg(player, Messages.UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY).replace("%bw_color%", color));
             } else {
-                lore.add(Language.getMsg(player, Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY).replace("{currency}", currencyMsg).replace("%bw_color%", color));
+                lore.add(Language.getMsg(player, Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY).replace("%bw_player_food%", currencyMsg).replace("%bw_color%", color));
             }
             im.setLore(lore);
             im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
@@ -264,7 +264,7 @@ public class MenuBaseTrap implements MenuContent, EnemyBaseEnterTrap, TeamUpgrad
         if (money < cost) {
             Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, player);
             player.sendMessage(Language.getMsg(player, Messages.SHOP_INSUFFICIENT_MONEY)
-                    .replace("{currency}", UpgradesManager.getCurrencyMsg(player, cost, currency))
+                    .replace("%bw_player_food%", UpgradesManager.getCurrencyMsg(player, cost, currency))
                     .replace("{amount}", String.valueOf(cost - money)));
             player.closeInventory();
             return;
