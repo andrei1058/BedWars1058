@@ -222,10 +222,10 @@ public class GamePlayingTask implements Runnable, PlayingTask {
                         e.getKey().setFlying(false);
                     }
                 } else {
-                    nms.sendTitle(e.getKey(), getMsg(e.getKey(), Messages.PLAYER_DIE_RESPAWN_TITLE).replace("{time}",
-                            String.valueOf(e.getValue())), getMsg(e.getKey(), Messages.PLAYER_DIE_RESPAWN_SUBTITLE).replace("{time}",
+                    nms.sendTitle(e.getKey(), getMsg(e.getKey(), Messages.PLAYER_DIE_RESPAWN_TITLE).replace("%bw_time%",
+                            String.valueOf(e.getValue())), getMsg(e.getKey(), Messages.PLAYER_DIE_RESPAWN_SUBTITLE).replace("%bw_time%",
                             String.valueOf(e.getValue())), 0, 30, 10);
-                    e.getKey().sendMessage(getMsg(e.getKey(), Messages.PLAYER_DIE_RESPAWN_CHAT).replace("{time}", String.valueOf(e.getValue())));
+                    e.getKey().sendMessage(getMsg(e.getKey(), Messages.PLAYER_DIE_RESPAWN_CHAT).replace("%bw_time%", String.valueOf(e.getValue())));
                     getArena().getRespawnSessions().replace(e.getKey(), e.getValue() - 1);
                 }
             }
