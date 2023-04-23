@@ -2512,6 +2512,16 @@ public class Arena implements IArena {
     }
 
     @Override
+    public void setAllowMapBreak(boolean value) {
+        getConfig().set(ConfigPath.ARENA_ALLOW_MAP_BREAK, value);
+    }
+
+    @Override
+    public boolean isMapBreakable() {
+        return getConfig().getBoolean(ConfigPath.ARENA_ALLOW_MAP_BREAK);
+    }
+
+    @Override
     public Location getWaitingLocation() {
         return waitingLocation;
     }

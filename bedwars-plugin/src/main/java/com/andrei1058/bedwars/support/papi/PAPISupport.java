@@ -245,9 +245,9 @@ public class PAPISupport extends PlaceholderExpansion {
                     if (null != startTime){
                         Duration time = Duration.ofMillis(Instant.now().minusMillis(startTime.toEpochMilli()).toEpochMilli());
                         if (time.toHours() == 0){
-                            response = String.format("%02d:%02d", time.toMinutes(), time.toSeconds());
+                            response = String.format("%02d:%02d", time.toMinutes() % 60, time.toSeconds() % 60);
                         } else {
-                            response = String.format("%02d:%02d:%02d", time.toHours(), time.toMinutes(), time.toSeconds());
+                            response = String.format("%02d:%02d:%02d", time.toHours(), time.toMinutes() % 60, time.toSeconds() % 60);
                         }
                     } else response = "";
                 }
