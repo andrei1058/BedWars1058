@@ -265,7 +265,7 @@ public class MenuBaseTrap implements MenuContent, EnemyBaseEnterTrap, TeamUpgrad
             Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, player);
             player.sendMessage(Language.getMsg(player, Messages.SHOP_INSUFFICIENT_MONEY)
                     .replace("%bw_currency%", UpgradesManager.getCurrencyMsg(player, cost, currency))
-                    .replace("{amount}", String.valueOf(cost - money)));
+                    .replace("%bw_amount%", String.valueOf(cost - money)));
             player.closeInventory();
             return;
         }

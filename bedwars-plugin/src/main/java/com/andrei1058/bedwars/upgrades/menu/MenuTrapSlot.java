@@ -73,7 +73,7 @@ public class MenuTrapSlot implements MenuContent {
         ItemMeta im = i.getItemMeta();
         if (im == null) return i;
         im.setDisplayName(Language.getMsg(player, Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + name.replace("trap-slot-", ""))
-                .replace("{name}", Language.getMsg(player, ebe == null ? Messages.MEANING_NO_TRAP : ebe.getNameMsgPath()))
+                .replace("%bw_name%", Language.getMsg(player, ebe == null ? Messages.MEANING_NO_TRAP : ebe.getNameMsgPath()))
                 .replace("%bw_color%", Language.getMsg(player, ebe == null ? Messages.FORMAT_UPGRADE_COLOR_CANT_AFFORD : Messages.FORMAT_UPGRADE_COLOR_UNLOCKED)));
         List<String> lore = new ArrayList<>();
         if (ebe == null) {

@@ -101,7 +101,7 @@ public class ChatFormatting implements Listener {
                 if (ShoutCommand.isShoutCooldown(p)) {
                     e.setCancelled(true);
                     p.sendMessage(language.m(Messages.COMMAND_COOLDOWN)
-                            .replace("{seconds}", String.valueOf(Math.round(ShoutCommand.getShoutCooldown(p))))
+                            .replace("%bw_seconds%", String.valueOf(Math.round(ShoutCommand.getShoutCooldown(p))))
                     );
                     return;
                 }
@@ -144,7 +144,7 @@ public class ChatFormatting implements Listener {
                     .replace("%bw_team_name%", team.getDisplayName(Language.getPlayerLanguage(player)).toUpperCase());
             content = content.replace("%bw_team_format%", teamFormat);
         }
-        return SupportPAPI.getSupportPAPI().replace(player, content).replace("{message}", "%2$s");
+        return SupportPAPI.getSupportPAPI().replace(player, content).replace("%bw_message%", "%2$s");
     }
 
     private static boolean isShouting(String msg, Language lang) {

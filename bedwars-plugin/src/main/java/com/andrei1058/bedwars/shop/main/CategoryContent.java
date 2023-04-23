@@ -168,7 +168,7 @@ public class CategoryContent implements ICategoryContent {
         int money = calculateMoney(player, ct.getCurrency());
         if (money < ct.getPrice()) {
             player.sendMessage(getMsg(player, Messages.SHOP_INSUFFICIENT_MONEY).replace("%bw_currency%", getMsg(player, getCurrencyMsgPath(ct))).
-                    replace("{amount}", String.valueOf(ct.getPrice() - money)));
+                    replace("%bw_amount%", String.valueOf(ct.getPrice() - money)));
             Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, player);
             return;
         }
@@ -198,10 +198,10 @@ public class CategoryContent implements ICategoryContent {
         if (itemNamePath == null || Language.getPlayerLanguage(player).getYml().get(itemNamePath) == null) {
             ItemStack displayItem = ct.getItemStack();
             if (displayItem.getItemMeta() != null && displayItem.getItemMeta().hasDisplayName()) {
-                player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", displayItem.getItemMeta().getDisplayName()));
+                player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("%bw_item%", displayItem.getItemMeta().getDisplayName()));
             }
         } else {
-            player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", ChatColor.stripColor(getMsg(player, itemNamePath))).replace("%bw_color%", "").replace("{tier}", ""));
+            player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("%bw_item%", ChatColor.stripColor(getMsg(player, itemNamePath))).replace("%bw_color%", "").replace("%bw_tier%", ""));
         }
 
 
@@ -276,11 +276,11 @@ public class CategoryContent implements ICategoryContent {
             }
 
 
-            im.setDisplayName(getMsg(player, itemNamePath).replace("%bw_color%", color).replace("{tier}", tier));
+            im.setDisplayName(getMsg(player, itemNamePath).replace("%bw_color%", color).replace("%bw_tier%", tier));
 
             List<String> lore = new ArrayList<>();
             for (String s : Language.getList(player, itemLorePath)) {
-                if (s.contains("{quick_buy}")) {
+                if (s.contains("%bw_quick_buy%")) {
                     if (hasQuick) {
                         if (ShopIndex.getIndexViewers().contains(player.getUniqueId())) {
                             s = getMsg(player, Messages.SHOP_LORE_QUICK_REMOVE);
@@ -291,8 +291,8 @@ public class CategoryContent implements ICategoryContent {
                         s = getMsg(player, Messages.SHOP_LORE_QUICK_ADD);
                     }
                 }
-                s = s.replace("{tier}", tier).replace("%bw_color%", color).replace("%bw_cost%", cColor + String.valueOf(ct.getPrice()))
-                        .replace("%bw_currency%", cColor + translatedCurrency).replace("{buy_status}", buyStatus);
+                s = s.replace("%bw_tier%", tier).replace("%bw_color%", color).replace("%bw_cost%", cColor + String.valueOf(ct.getPrice()))
+                        .replace("%bw_currency%", cColor + translatedCurrency).replace("%bw_buy_status%", buyStatus);
                 lore.add(s);
             }
 
