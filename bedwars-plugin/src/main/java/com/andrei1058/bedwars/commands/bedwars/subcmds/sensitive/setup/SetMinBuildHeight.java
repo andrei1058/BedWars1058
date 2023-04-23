@@ -8,6 +8,7 @@ import com.andrei1058.bedwars.configuration.Permissions;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+
 import java.util.List;
 
 import static com.andrei1058.bedwars.BedWars.mainCmd;
