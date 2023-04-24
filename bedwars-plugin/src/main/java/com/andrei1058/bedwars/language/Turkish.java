@@ -377,7 +377,7 @@ public class Turkish extends Language {
         yml.addDefault(Messages.SHOP_INDEX_NAME, "&8Hızlı Alım");
         yml.addDefault(Messages.SHOP_QUICK_ADD_NAME, "&8Hızlı Alıma ekleniyor...");
         yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "%bw_lang_prefix%&cYeteri kadar %bw_currency% sahibi değilsin! %bw_amount% tane daha bulmalısın!");
-        yml.addDefault(Messages.SHOP_NEW_PURCHASE, "%bw_lang_prefix%&6{item} &asatın aldın");
+        yml.addDefault(Messages.SHOP_NEW_PURCHASE, "%bw_lang_prefix%&6%bw_item% &asatın aldın");
         yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "%bw_lang_prefix%&cBunu zaten satın aldın!");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "%bw_team_color%&l%bw_team_name% &r%bw_team_color%Böcek");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME, "%bw_team_color%%bw_despawn_time%s &8[ %bw_team_color%%bw_health%&8]");

@@ -374,7 +374,7 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.SHOP_INDEX_NAME, "&8Quick Buy");
         yml.addDefault(Messages.SHOP_QUICK_ADD_NAME, "&8Adding to Quick Buy...");
         yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "%bw_lang_prefix%&cKamu tidak mempunyai %bw_currency% yang cukup! Butuh %bw_amount% lagi!");
-        yml.addDefault(Messages.SHOP_NEW_PURCHASE, "%bw_lang_prefix%&aKamu membeli &6{item}");
+        yml.addDefault(Messages.SHOP_NEW_PURCHASE, "%bw_lang_prefix%&aKamu membeli &6%bw_item%");
         yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "%bw_lang_prefix%&cKamu telah membeli itu!!");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "%bw_team_color%&l%bw_team_name% &r%bw_team_color%Silverfish");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME, "%bw_team_color%%bw_despawn_time%s &8[ %bw_team_color%%bw_health%&8]");
@@ -402,7 +402,7 @@ public class Indonesia extends Language {
         addContentMessages(yml, "stone", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%End Stone", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "&7Blok keras untuk mempertahankan kasur Anda", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "ladder", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Tangga", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "&7Berguna untuk menyelamatkan kucing yang terjebak", "&7di pohon.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "obsidian", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Obsidian", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "&7Perlindungan ekstrim untuk kasur Anda", "", "%bw_quick_buy%", "%bw_buy_status%"));
-        addContentMessages(yml, "wood", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Kayu", Arrays.asList("&7Biaya: {cos} %bw_currency%", "", "&7Blok keras untuk mempertahankan kasur Anda", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "wood", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Kayu", Arrays.asList("&7Biaya: %bw_cost% %bw_currency%", "", "&7Blok keras untuk mempertahankan kasur Anda", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_MELEE, "&8Senjata Jarak Dekat", "&aSenjata Jarak Dekat", Collections.singletonList("&eKlik untuk melihat!"));
 
