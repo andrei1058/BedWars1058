@@ -74,7 +74,7 @@ public class Romanian extends Language {
         yml.addDefault(Messages.COMMAND_JOIN_NO_EMPTY_FOUND, "%bw_lang_prefix%&cNu sunt arene disponibile momentan ;(");
         yml.addDefault(Messages.COMMAND_LEAVE_DENIED_NOT_IN_ARENA, "%bw_lang_prefix%&cNu esti intr-o arena!");
         yml.addDefault(Messages.COMMAND_LANG_LIST_HEADER, "%bw_lang_prefix% &2Limbi disponibile:");
-        yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&a▪  &7{iso} - &f%bw_name%");
+        yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&a▪  &7%bw_lang_iso% - &f%bw_name%");
         yml.addDefault(Messages.COMMAND_LANG_USAGE, "%bw_lang_prefix%&7Foloseste: /lang &f&o<iso>");
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_NOT_EXIST, "%bw_lang_prefix%&cAceasta limba nu exista!");
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY, "%bw_lang_prefix%&aLimba a fost schimbata!");
@@ -121,14 +121,14 @@ public class Romanian extends Language {
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_SUCCESS, "%bw_lang_prefix%&eAi promovat cu succes pe %bw_player% ca proprietar");
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_OWNER, "%bw_lang_prefix%&eAi fost promovat ca proprietar al petrecerii");
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_NEW_OWNER, "%bw_lang_prefix%&7 &e%bw_player% a fost promovat ca proprietar");
-        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n%bw_lang_prefix%&eProprietarul petrecerii este: &7{owner}");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n%bw_lang_prefix%&eProprietarul petrecerii este: &7%bw_party_owner%");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS,"%bw_lang_prefix%&eMembrii sunt:");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYER, "&7%bw_player%");
         yml.addDefault(Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS, "%bw_lang_prefix%&cComanda nu a fost gasita sau nu ai permisiunea!");
         yml.addDefault(Messages.COMMAND_FORCESTART_NOT_IN_GAME, "§c▪ §7Nu esti in joc!");
         yml.addDefault(Messages.COMMAND_FORCESTART_SUCCESS, "§c▪ §7Numaratoarea a fost redusa!");
         yml.addDefault(Messages.COMMAND_FORCESTART_NO_PERM, "%bw_lang_prefix%&7Nu poti forta arena sa inceapa.\n§7Ai putea lua in considerare donarea pentru mai multe facilitati.");
-        yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_MSG, "%bw_lang_prefix%§6Acum urmaresti meciul din §9{arena}§6.\n%bw_lang_prefix%§ePoti parasi arena folosind §c/leave§e.");
+        yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_MSG, "%bw_lang_prefix%§6Acum urmaresti meciul din §9%bw_arena%§6.\n%bw_lang_prefix%§ePoti parasi arena folosind §c/leave§e.");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE, "%bw_lang_prefix%&7%bw_player% &eeste offline!");
         yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG, "&cSpectatorii nu sunt permisi in aceasta arena!");
         yml.addDefault(Messages.COMMAND_COOLDOWN, "&cNu poti face asta inca! Mai asteapta %bw_seconds% secunde!");
@@ -326,7 +326,7 @@ public class Romanian extends Language {
 
         yml.addDefault(Messages.REJOIN_NO_ARENA, "%bw_lang_prefix%&cNu ai o arena pe care sa te reintorci!");
         yml.addDefault(Messages.REJOIN_DENIED, "%bw_lang_prefix%&cNu mai poti face asta. Jocul s-a terminat sau patul a fost distrus.");
-        yml.addDefault(Messages.REJOIN_ALLOWED, "%bw_lang_prefix%&eIntri pe arena &a{arena}&e!");
+        yml.addDefault(Messages.REJOIN_ALLOWED, "%bw_lang_prefix%&eIntri pe arena &a%bw_arena%&e!");
 
         /* save default Obiecte messages for stats gui */
         yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "&8Statisticile lui %bw_player%");

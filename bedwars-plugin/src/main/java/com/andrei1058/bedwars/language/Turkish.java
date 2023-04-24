@@ -71,7 +71,7 @@ public class Turkish extends Language {
 
         yml.addDefault(Messages.COMMAND_MAIN, Arrays.asList("", "&2▪ &7/" + mainCmd + " stats", "&2▪ &7/" + mainCmd + " join &o<harita/grup>", "&2▪ &7/" + mainCmd + " leave", "&2▪ &7/" + mainCmd + " lang", "&2▪ &7/" + mainCmd + " gui", "&2▪ &7/" + mainCmd + " start &3(vip)"));
         yml.addDefault(Messages.COMMAND_LANG_LIST_HEADER, "%bw_lang_prefix% &2Mevcut diller:");
-        yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&a▪  &7{iso} - &f%bw_name%");
+        yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&a▪  &7%bw_lang_iso% - &f%bw_name%");
         yml.addDefault(Messages.COMMAND_LANG_USAGE, "%bw_lang_prefix%&7Kullanım: /lang &f&o<iso>");
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_NOT_EXIST, "%bw_lang_prefix%&cBu dil bulunmuyor!");
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY, "%bw_lang_prefix%&aDil değiştirildi!");
@@ -84,7 +84,7 @@ public class Turkish extends Language {
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_PARTY_TOO_BIG, "%bw_lang_prefix%&cPartin bu harita bir takım olarak katılabilmek için çok büyük!");
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_NOT_PARTY_LEADER, "%bw_lang_prefix%&cSadece parti lideri harita seçebilir.");
         yml.addDefault(Messages.COMMAND_JOIN_PLAYER_JOIN_MSG, "%bw_lang_prefix%&7%bw_player% &ekatıldı (&b%bw_on%&e/&b%bw_max%&e)!");
-        yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_MSG, "%bw_lang_prefix%§6Şu anda §9{arena}§6 haritasını seyrediyorsun.\n%bw_lang_prefix%§eHaritadan ayrılmak için §c/leave§e komudunu kullanabilirsin.");
+        yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_MSG, "%bw_lang_prefix%§6Şu anda §9%bw_arena%§6 haritasını seyrediyorsun.\n%bw_lang_prefix%§eHaritadan ayrılmak için §c/leave§e komudunu kullanabilirsin.");
         yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG, "&cBu harita seyircilere kapalı!");
         yml.addDefault(Messages.COMMAND_TP_PLAYER_NOT_FOUND, "%bw_lang_prefix%&cOyuncu bulunamadı!");
         yml.addDefault(Messages.COMMAND_TP_NOT_IN_ARENA, "%bw_lang_prefix%&cBu oyuncu bir haritada değil!");
@@ -92,7 +92,7 @@ public class Turkish extends Language {
         yml.addDefault(Messages.COMMAND_TP_USAGE, "%bw_lang_prefix%&cKullanım: /bw tp <username>");
         yml.addDefault(Messages.REJOIN_NO_ARENA, "%bw_lang_prefix%&cYeniden katılabilmen için bir harita bulunmuyor.");
         yml.addDefault(Messages.REJOIN_DENIED, "%bw_lang_prefix%&cYeniden katılımazsın çünkü yataklar kırılmış ya da oyun bitmiş.");
-        yml.addDefault(Messages.REJOIN_ALLOWED, "%bw_lang_prefix%&a{arena}&e haritasına yeniden katılıyorsun!");
+        yml.addDefault(Messages.REJOIN_ALLOWED, "%bw_lang_prefix%&a%bw_arena%&e haritasına yeniden katılıyorsun!");
         yml.addDefault(Messages.COMMAND_REJOIN_PLAYER_RECONNECTED, "%bw_lang_prefix%&7%bw_player% &eyeniden katıldı!");
         yml.addDefault(Messages.COMMAND_LEAVE_DENIED_NOT_IN_ARENA, "%bw_lang_prefix%&cHaritada değilsin!");
         yml.addDefault(Messages.COMMAND_LEAVE_MSG, "%bw_lang_prefix%&7%bw_player% &eayrıldı!");
@@ -130,7 +130,7 @@ public class Turkish extends Language {
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_SUCCESS, "%bw_lang_prefix%&e%bw_player%'i sahibi yaptın!");
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_OWNER, "%bw_lang_prefix%&eGrup sahibi sen oldun!");
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_NEW_OWNER, "%bw_lang_prefix%&7 &e%bw_player% artık grup sahibi!");
-        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n%bw_lang_prefix%&eGrup sahibi: &7{owner}");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n%bw_lang_prefix%&eGrup sahibi: &7%bw_owner%");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS,"%bw_lang_prefix%&eGrup üyeleri:");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYER, "&7%bw_player%");
         yml.addDefault(Messages.COMMAND_FORCESTART_NOT_IN_GAME, "§c▪ §7Oyunda değilsin!");

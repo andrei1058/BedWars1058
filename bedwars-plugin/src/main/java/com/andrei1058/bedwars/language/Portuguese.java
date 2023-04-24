@@ -69,7 +69,7 @@ public class Portuguese extends Language {
 
         yml.addDefault(Messages.COMMAND_MAIN, Arrays.asList("", "&2▪ &7/" + mainCmd + " stats", "&2▪ &7/" + mainCmd + " join &o<arena/group>", "&2▪ &7/" + mainCmd + " leave", "&2▪ &7/" + mainCmd + " lang", "&2▪ &7/" + mainCmd + " gui", "&2▪ &7/" + mainCmd + " start &3(vip)"));
         yml.addDefault(Messages.COMMAND_LANG_LIST_HEADER, "%bw_lang_prefix% &2Idiomas disponíveis:");
-        yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&a▪  &7{iso} - &f%bw_name%");
+        yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&a▪  &7%bw_lang_iso% - &f%bw_name%");
         yml.addDefault(Messages.COMMAND_LANG_USAGE, "%bw_lang_prefix%&7Use: /lang &f&o<linguagem>");
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_NOT_EXIST, "%bw_lang_prefix%&cEsta linguagem não existe!");
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY, "%bw_lang_prefix%&aIdioma alterado!");
@@ -82,7 +82,7 @@ public class Portuguese extends Language {
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_PARTY_TOO_BIG, "%bw_lang_prefix%&cA sua party é muito grande para poder entrar na arena. :(");
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_NOT_PARTY_LEADER, "%bw_lang_prefix%&cApenas o líder da party pode escolher a arena.");
         yml.addDefault(Messages.COMMAND_JOIN_PLAYER_JOIN_MSG, "%bw_lang_prefix%&7%bw_player% &eentrou (&b%bw_on%&e/&b%bw_max%&e)!");
-        yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_MSG, "%bw_lang_prefix%§6Você agora está assistindo §9{arena}§6.\n%bw_lang_prefix%§eVocê pode sair da arena a qualquer momento com §c/leave§e.");
+        yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_MSG, "%bw_lang_prefix%§6Você agora está assistindo §9%bw_arena%§6.\n%bw_lang_prefix%§eVocê pode sair da arena a qualquer momento com §c/leave§e.");
         yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG, "&cEspectadores não são permitidos nesta arena!");
         yml.addDefault(Messages.COMMAND_TP_PLAYER_NOT_FOUND, "%bw_lang_prefix%&cJogador não encontrado!");
         yml.addDefault(Messages.COMMAND_TP_NOT_IN_ARENA, "%bw_lang_prefix%&cEste jogador não está em uma arena de bedwars!");
@@ -90,7 +90,7 @@ public class Portuguese extends Language {
         yml.addDefault(Messages.COMMAND_TP_USAGE, "%bw_lang_prefix%&cUse: /bw tp <player>");
         yml.addDefault(Messages.REJOIN_NO_ARENA, "%bw_lang_prefix%&cNão tem partidas para você se reconectar.");
         yml.addDefault(Messages.REJOIN_DENIED, "%bw_lang_prefix%&cVocê não pode mais se juntar à arena. Jogo terminou ou cama destruída.");
-        yml.addDefault(Messages.REJOIN_ALLOWED, "%bw_lang_prefix%&eEntrando na arena &a{arena}&e!");
+        yml.addDefault(Messages.REJOIN_ALLOWED, "%bw_lang_prefix%&eEntrando na arena &a%bw_arena%&e!");
         yml.addDefault(Messages.COMMAND_REJOIN_PLAYER_RECONNECTED, "%bw_lang_prefix%&7%bw_player% &ese reconectou!");
         yml.addDefault(Messages.COMMAND_LEAVE_DENIED_NOT_IN_ARENA, "%bw_lang_prefix%&cVocê não está em uma arena!");
         yml.addDefault(Messages.COMMAND_LEAVE_MSG, "%bw_lang_prefix%&7%bw_player% &esaiu!");
@@ -128,7 +128,7 @@ public class Portuguese extends Language {
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_SUCCESS, "%bw_lang_prefix%&eVocê promoveu com sucesso %bw_player% a dono");
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_OWNER, "%bw_lang_prefix%&eVocê foi promovido a dono do grupo");
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_NEW_OWNER, "%bw_lang_prefix%&7 &e%bw_player% foi promovido a dono");
-        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n%bw_lang_prefix%&eO dono do grupo é: &7{owner}");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n%bw_lang_prefix%&eO dono do grupo é: &7%bw_party_owner%");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS,"%bw_lang_prefix%&eMembros do grupo são:");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYER, "&7%bw_player%");
         yml.addDefault(Messages.COMMAND_FORCESTART_NOT_IN_GAME, "§c▪ §7Você não está jogando!");

@@ -78,7 +78,7 @@ public class Italian extends Language {
         yml.addDefault(Messages.COMMAND_JOIN_NO_EMPTY_FOUND, "%bw_lang_prefix%&cNon ci sono arene disponibili al momento ;(");
         yml.addDefault(Messages.COMMAND_LEAVE_DENIED_NOT_IN_ARENA, "%bw_lang_prefix%&cNon sei in gioco!");
         yml.addDefault(Messages.COMMAND_LANG_LIST_HEADER, "%bw_lang_prefix% &2Lingue disponibili:");
-        yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&a▪  &7{iso} - &f%bw_name%");
+        yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&a▪  &7%bw_lang_iso% - &f%bw_name%");
         yml.addDefault(Messages.COMMAND_LANG_USAGE, "%bw_lang_prefix%&7Utilizzo: /lang &f&o<iso>");
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_NOT_EXIST, "%bw_lang_prefix%&cQuesta lingua non esiste!");
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY, "%bw_lang_prefix%&aLingua modificata!");
@@ -124,14 +124,14 @@ public class Italian extends Language {
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_SUCCESS, "%bw_lang_prefix%&eHai promosso con successo %bw_player% a proprietario");
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_OWNER, "%bw_lang_prefix%&eSei stato promosso a proprietario del party");
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_NEW_OWNER, "%bw_lang_prefix%&7 &e%bw_player% è stato promosso a proprietario");
-        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n%bw_lang_prefix%&eIl proprietario del party è: &7{owner}");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n%bw_lang_prefix%&eIl proprietario del party è: &7%bw_party_owner%");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS,"%bw_lang_prefix%&eI membri del party sono:");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYER, "&7%bw_player%");
         yml.addDefault(Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS, "%bw_lang_prefix%&cIl comando non è stato trovato o non hai abbastanza permessi!");
         yml.addDefault(Messages.COMMAND_FORCESTART_NOT_IN_GAME, "§c▪ §7Non sei in gioco!");
         yml.addDefault(Messages.COMMAND_FORCESTART_SUCCESS, "§c▪ §7Conto alla rovescia diminuito!");
         yml.addDefault(Messages.COMMAND_FORCESTART_NO_PERM, "%bw_lang_prefix%&7Non puoi forzare l'inizio del gioco.\n§7Prendi in considerazione il fatto di donare per avere più cose.");
-        yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_MSG, "%bw_lang_prefix%§6Stai spectando l'arena §9{arena}§6.\n%bw_lang_prefix%§ePuoi uscire dall'arena in qualsiasi momento utilizzando §c/leave§e.");
+        yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_MSG, "%bw_lang_prefix%§6Stai spectando l'arena §9%bw_arena%§6.\n%bw_lang_prefix%§ePuoi uscire dall'arena in qualsiasi momento utilizzando §c/leave§e.");
         yml.addDefault(Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE, "%bw_lang_prefix%&7%bw_player% &eè offline!");
         yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG, "&cGli spettatori non sono ammessi in questa arena!");
         yml.addDefault(Messages.COMMAND_COOLDOWN, "&cAspetta %bw_seconds% scondi prima di usare ancora questo comando!");
@@ -328,7 +328,7 @@ public class Italian extends Language {
 
         yml.addDefault(Messages.REJOIN_NO_ARENA, "%bw_lang_prefix%&cNon c'è un'arena su cui ritornare!");
         yml.addDefault(Messages.REJOIN_DENIED, "%bw_lang_prefix%&cNon puoi tornare più. Partita finita o letto distrutto.");
-        yml.addDefault(Messages.REJOIN_ALLOWED, "%bw_lang_prefix%&eStai entrando sull'arena &a{arena}&e!");
+        yml.addDefault(Messages.REJOIN_ALLOWED, "%bw_lang_prefix%&eStai entrando sull'arena &a%bw_arena%&e!");
 
         /* save default items messages for stats gui */
         yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "&8Statistiche di %bw_player%");

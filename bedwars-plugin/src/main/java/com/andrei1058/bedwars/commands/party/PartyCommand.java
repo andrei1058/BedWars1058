@@ -191,7 +191,7 @@ public class PartyCommand extends BukkitCommand {
                     return true;
                 }
                 Player owner = getParty().getOwner(p);
-                p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INFO_OWNER).replace("{owner}", owner.getName()));
+                p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INFO_OWNER).replace("%bw_party_owner%", owner.getName()));
                 p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INFO_PLAYERS));
                 for (Player p1 : getParty().getMembers(owner)) {
                     p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INFO_PLAYER).replace("%bw_player%", p1.getName()));

@@ -71,7 +71,7 @@ public class Persian extends Language {
 
         yml.addDefault(Messages.COMMAND_MAIN, Arrays.asList("", "&2▪ &7/" + mainCmd + " stats", "&2▪ &7/" + mainCmd + " join &o<arena/group>", "&2▪ &7/" + mainCmd + " leave", "&2▪ &7/" + mainCmd + " lang", "&2▪ &7/" + mainCmd + " gui", "&2▪ &7/" + mainCmd + " start &3(vip)"));
         yml.addDefault(Messages.COMMAND_LANG_LIST_HEADER, "%bw_lang_prefix% &2Zaban haye mojood:");
-        yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&a▪  &7{iso} - &f%bw_name%");
+        yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&a▪  &7%bw_lang_iso% - &f%bw_name%");
         yml.addDefault(Messages.COMMAND_LANG_USAGE, "%bw_lang_prefix%&7Ravesh Estefade: /lang &f&o<iso>");
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_NOT_EXIST, "%bw_lang_prefix%&cIn zaban vojood nadarad!");
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY, "%bw_lang_prefix%&aZaban taghir kard!");
@@ -84,7 +84,7 @@ public class Persian extends Language {
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_PARTY_TOO_BIG, "%bw_lang_prefix%&cTedad afradi ke dar party shoma hastand monaseb in arena nist :(");
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_NOT_PARTY_LEADER, "%bw_lang_prefix%&cFaghat saheb party emkan entekhab arena dare.");
         yml.addDefault(Messages.COMMAND_JOIN_PLAYER_JOIN_MSG, "%bw_lang_prefix%&7%bw_player% &evared shod (&b%bw_on%&e/&b%bw_max%&e)!");
-        yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_MSG, "%bw_lang_prefix%§6Shoma darhale spectate kardan §9{arena} §6hastid.\n%bw_lang_prefix%§eBaraye kharej shodan az arena az §c/leave §eestefade konid.");
+        yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_MSG, "%bw_lang_prefix%§6Shoma darhale spectate kardan §9%bw_arena% §6hastid.\n%bw_lang_prefix%§eBaraye kharej shodan az arena az §c/leave §eestefade konid.");
         yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG, "&cEmkan vared shodan spectator be in arena vojood nadarad!");
         yml.addDefault(Messages.COMMAND_TP_PLAYER_NOT_FOUND, "%bw_lang_prefix%&cPlayer peida nashod!");
         yml.addDefault(Messages.COMMAND_TP_NOT_IN_ARENA, "%bw_lang_prefix%&cIn player dar yek arena bedwars nist!");
@@ -92,7 +92,7 @@ public class Persian extends Language {
         yml.addDefault(Messages.COMMAND_TP_USAGE, "%bw_lang_prefix%&cRavesh estefade: /bw tp <username>");
         yml.addDefault(Messages.REJOIN_NO_ARENA, "%bw_lang_prefix%&cArena baraye mojadadan vared shodan mojood nist!");
         yml.addDefault(Messages.REJOIN_DENIED, "%bw_lang_prefix%&cShoma dige nemitoonid mojadadan vared arena beshid. Bazi tamoom ya hazf shode.");
-        yml.addDefault(Messages.REJOIN_ALLOWED, "%bw_lang_prefix%&eDarhale vorood be arena &a{arena}&e!");
+        yml.addDefault(Messages.REJOIN_ALLOWED, "%bw_lang_prefix%&eDarhale vorood be arena &a%bw_arena%&e!");
         yml.addDefault(Messages.COMMAND_REJOIN_PLAYER_RECONNECTED, "%bw_lang_prefix%&7%bw_player% &emojadadan vared shod!");
         yml.addDefault(Messages.COMMAND_LEAVE_DENIED_NOT_IN_ARENA, "%bw_lang_prefix%&cShoma dar arena nistid!");
         yml.addDefault(Messages.COMMAND_LEAVE_MSG, "%bw_lang_prefix%&7%bw_player% &ekharej shod!");
@@ -130,7 +130,7 @@ public class Persian extends Language {
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_SUCCESS, "%bw_lang_prefix%&eYou successfully promoted %bw_player% to owner");
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_OWNER, "%bw_lang_prefix%&eYou have been promoted to party owner");
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_NEW_OWNER, "%bw_lang_prefix%&7 &e%bw_player% has been promoted to owner");
-        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n%bw_lang_prefix%&eOwner of the party is: &7{owner}");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n%bw_lang_prefix%&eOwner of the party is: &7%bw_party_owner%");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS, "%bw_lang_prefix%&eParty members:");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYER, "&7%bw_player%");
         yml.addDefault(Messages.COMMAND_FORCESTART_NOT_IN_GAME, "§c▪ §7Shoma bazi nemikonid!");
