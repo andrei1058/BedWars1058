@@ -1254,7 +1254,7 @@ public class Arena implements IArena {
      * Get the max number of teammates in a team
      */
     @Override
-    public String getScooreboardName() {
+    public String getScoreboardName() {
         return scoreboardName;
     }
 

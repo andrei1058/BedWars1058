@@ -141,7 +141,7 @@ public interface IArena {
     /**
      * Get registered scoreboard name.
      */
-    String getScooreboardName();
+    String getScoreboardName();
 
 
     /**
