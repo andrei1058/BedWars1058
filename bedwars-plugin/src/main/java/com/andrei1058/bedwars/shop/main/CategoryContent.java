@@ -181,6 +181,13 @@ public class CategoryContent implements ICategoryContent {
             return;
         }
 
+        //check inventory has space
+        if (player.getInventory().firstEmpty() == -1){
+            Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, player);
+            player.sendMessage(getMsg(player, Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_SPACE));
+            return;
+        }
+
         //take money
         takeMoney(player, ct.getCurrency(), ct.getPrice());
 

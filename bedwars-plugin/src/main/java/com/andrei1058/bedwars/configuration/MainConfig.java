@@ -46,12 +46,14 @@ public class MainConfig extends ConfigManager {
 
         yml.options().header(plugin.getDescription().getName() + " by andrei1058. https://www.spigotmc.org/members/39904/\n" +
                 "Documentation here: https://gitlab.com/andrei1058/BedWars1058/wikis/home\n");
+        yml.addDefault("timeZone", "Europe/Rome");
         yml.addDefault("serverType", "MULTIARENA");
         yml.addDefault("language", "en");
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES, Collections.singletonList("your language iso here"));
         yml.addDefault("storeLink", "https://www.spigotmc.org/resources/authors/39904/");
         yml.addDefault("lobbyServer", "hub");
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ENABLE_HALLOWEEN, true);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ENABLE_GENERATOR_REPLACE_AIR_SUDDEN, false);
         yml.addDefault(ConfigPath.GENERAL_CHAT_GLOBAL, yml.get("globalChat", false));
         yml.addDefault(ConfigPath.GENERAL_CHAT_FORMATTING, yml.get("formatChat", true));
         yml.addDefault("debug", false);
@@ -85,6 +87,7 @@ public class MainConfig extends ConfigManager {
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_SHORTENED, 5);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_RESTART, 15);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_RE_SPAWN_COUNTDOWN, 5);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_REJOIN_RE_SPAWN_COUNTDOWN, 10);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_BEDS_DESTROY_COUNTDOWN, 360);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DRAGON_SPAWN_COUNTDOWN, 600);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_GAME_END_COUNTDOWN, 120);

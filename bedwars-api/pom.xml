@@ -28,6 +28,10 @@
             <id>krypton</id>
             <url>https://repo.kryptonmc.org/releases</url>
         </repository>
+        <repository>
+            <id>iridiumdevelopment</id>
+            <url>https://nexus.iridiumdevelopment.net/repository/maven-releases/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -49,6 +53,11 @@
             <artifactId>spigot</artifactId>
             <version>1.16.5-R0.1-SNAPSHOT</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.iridium</groupId>
+            <artifactId>IridiumColorAPI</artifactId>
+            <version>1.0.6</version>
         </dependency>
         <!-- TAB -->
         <dependency>

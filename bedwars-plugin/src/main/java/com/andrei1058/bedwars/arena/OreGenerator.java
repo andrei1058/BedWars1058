@@ -41,7 +41,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -378,6 +377,7 @@ public class OreGenerator implements IGenerator {
 
     @Override
     public void disable() {
+        arena.getOreGenerators().remove(this);
         if (getOre().getType() == Material.EMERALD || getOre().getType() == Material.DIAMOND) {
             rotation.remove(this);
             for (IGenHolo a : armorStands.values()) {

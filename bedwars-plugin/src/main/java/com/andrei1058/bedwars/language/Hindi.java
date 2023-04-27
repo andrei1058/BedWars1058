@@ -270,11 +270,14 @@ public class Hindi extends Language {
         yml.addDefault(Messages.PLAYER_DIE_REWARD_EMERALD, "%bw_lang_prefix%&a+%bw_amount% %bw_meaning%");
         yml.addDefault(Messages.PLAYER_DIE_REWARD_IRON, "%bw_lang_prefix%&f+%bw_amount% %bw_meaning%");
         yml.addDefault(Messages.PLAYER_DIE_REWARD_GOLD, "%bw_lang_prefix%&6+%bw_amount% %bw_meaning%");
+        yml.addDefault(Messages.ARENA_MAX_BUILD_LIMIT_REACHED, "&cMax build height limit reached!");
+        yml.addDefault(Messages.ARENA_MIN_BUILD_LIMIT_REACHED, "&cMin build height limit reached!");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_TITLE, "&cAP MAR GAYE!");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_SUBTITLE, "&eAp &c%bw_time% &eseconds me respawn honge!");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_CHAT, "%bw_lang_prefix%&eAp &c%bw_time% &eseconds me respawn honge!");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWNED_TITLE, "&aAP RESPAWN HO GAYE!");
         yml.addDefault(Messages.PLAYER_DIE_ELIMINATED_CHAT, "%bw_lang_prefix%&cAp eliminate ho gaye!");
+        yml.addDefault(Messages.PLAYER_DIE_RESPAWNED_TEXT, "%bw_lang_prefix%&eYou will respawn in &c%bw_time% &eseconds!");
         yml.addDefault(Messages.PLAYER_HIT_BOW, "%bw_lang_prefix%%bw_player% &7Ka &c%bw_damage_amount% &7HP baki hai!");
         yml.addDefault(Messages.GAME_END_GAME_OVER_PLAYER_TITLE, "&c&lGAME KHATAM HO GAYA!");
         yml.addDefault(Messages.GAME_END_VICTORY_PLAYER_TITLE, "&6&lVIJAY!");
@@ -474,6 +477,7 @@ public class Hindi extends Language {
         yml.addDefault(Messages.FORMAT_UPGRADE_TIER_UNLOCKED, "&a");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY, "%bw_color%Purchase karne ke liye Click kare!");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY, "%bw_color%Apke paas paryaapt %bw_currency% nahi hai");
+        yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_SPACE, "&eYou don't have enough inventory space to buy this item!");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_LOCKED, "&cLOCKED");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_UNLOCKED, "%bw_color%UNLOCKED");
         yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a%bw_player% purchased &6%bw_upgrade_name%");
@@ -543,6 +547,7 @@ public class Hindi extends Language {
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_MSG + "3", "&c&lAlarm trap set off by &7&l%bw_playername% &c&lfrom %bw_color%&l%bw_team% &c&lteam!");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_TITLE + "3", "&c&lALARM!!!");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_SUBTITLE + "3", "&fAlarm trap set off by %bw_color%%bw_team% &fteam!");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_ALREADY_CHAT, "&cYou already unlocked this upgrade!");
         save();
         setPrefix(m(Messages.PREFIX));
         setPrefixStatic(m(Messages.PREFIX));

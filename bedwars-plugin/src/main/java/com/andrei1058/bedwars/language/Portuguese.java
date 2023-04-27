@@ -270,11 +270,14 @@ public class Portuguese extends Language {
         yml.addDefault(Messages.PLAYER_DIE_REWARD_EMERALD, "%bw_lang_prefix%&a+%bw_amount% %bw_meaning%");
         yml.addDefault(Messages.PLAYER_DIE_REWARD_IRON, "%bw_lang_prefix%&f+%bw_amount% %bw_meaning%");
         yml.addDefault(Messages.PLAYER_DIE_REWARD_GOLD, "%bw_lang_prefix%&6+%bw_amount% %bw_meaning%");
+        yml.addDefault(Messages.ARENA_MAX_BUILD_LIMIT_REACHED, "&cMax build height limit reached!");
+        yml.addDefault(Messages.ARENA_MIN_BUILD_LIMIT_REACHED, "&cMin build height limit reached!");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_TITLE, "&cVOCÊ MORREU!");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_SUBTITLE, "&eRenascendo em &c%bw_time% &esegundos.");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_CHAT, "%bw_lang_prefix%&eVocê irá renascer em &c%bw_time% &esegundos.");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWNED_TITLE, "&aRENASCIDO!");
         yml.addDefault(Messages.PLAYER_DIE_ELIMINATED_CHAT, "%bw_lang_prefix%&cVocê foi eliminado!");
+        yml.addDefault(Messages.PLAYER_DIE_RESPAWNED_TEXT, "%bw_lang_prefix%&eYou will respawn in &c%bw_time% &eseconds!");
         yml.addDefault(Messages.PLAYER_HIT_BOW, "%bw_lang_prefix%%bw_player% &7está com &c%bw_damage_amount% &7de vida!");
         yml.addDefault(Messages.GAME_END_GAME_OVER_PLAYER_TITLE, "&c&lFIM DE JOGO!");
         yml.addDefault(Messages.GAME_END_VICTORY_PLAYER_TITLE, "&6&lVITÓRIA!");
@@ -362,7 +365,7 @@ public class Portuguese extends Language {
         yml.addDefault("scoreboard.Doubles.playing", Arrays.asList("&e&lBED WARS", "&7%bw_date%", "", "&f%bw_next_event% em &a%bw_time%", "",
                 "%bw_team_1%", "%bw_team_2%", "%bw_team_3%", "%bw_team_4%", "%bw_team_5", "%bw_team_6%", "%bw_team_7%", "%bw_team_8%", "", "&e%bw_server_ip%"));
 
-        yml.addDefault("scoreboard.3v3v3v3.playing", Arrays.asList("&e&lBED WARS", "&7%bw_date%", "", "&f%bw_next_event% em &a%bw_time%", "", 
+        yml.addDefault("scoreboard.3v3v3v3.playing", Arrays.asList("&e&lBED WARS", "&7%bw_date%", "", "&f%bw_next_event% em &a%bw_time%", "",
                 "%bw_team_1%", "%bw_team_2%", "%bw_team_3%", "%bw_team_4%", "", "&fKills: &a%bw_kills%", "&fFinal Kills: &a%bw_final_kills%", "&fBeds Broken: &a%bw_beds%", "", "&e%bw_server_ip%"));
 
         yml.addDefault("scoreboard.4v4v4v4.playing", Arrays.asList("&e&lBED WARS", "&7%bw_date%", "", "&f%bw_next_event% em &a%bw_time%", "",
@@ -475,6 +478,7 @@ public class Portuguese extends Language {
         yml.addDefault(Messages.FORMAT_UPGRADE_TIER_UNLOCKED, "&a");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY, "%bw_color%Clique para comprar!");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY, "%bw_color%Você não tem o suficiente de %bw_currency%.");
+        yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_SPACE, "&eYou don't have enough inventory space to buy this item!");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_LOCKED, "&cBLOQUEADO");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_UNLOCKED, "%bw_color%DESBLOQUEADO");
         yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a%bw_player% compro &6%bw_item%");
@@ -544,6 +548,7 @@ public class Portuguese extends Language {
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_MSG + "3", "&c&lArmadilha de alarme acionada por &7&l%bw_playername% &c&ldo time %bw_color%&l%bw_team%&c&l!");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_TITLE + "3", "&c&lALARME!!!");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_SUBTITLE + "3", "&fAlarme acionado pelo time %bw_color%%bw_team%&f!");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_ALREADY_CHAT, "&cYou already unlocked this upgrade!");
         save();
         setPrefix(m(Messages.PREFIX));
         setPrefixStatic(m(Messages.PREFIX));

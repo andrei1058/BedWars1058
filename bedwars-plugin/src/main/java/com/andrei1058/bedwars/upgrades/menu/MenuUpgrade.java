@@ -132,6 +132,12 @@ public class MenuUpgrade implements MenuContent, TeamUpgrade {
         if (team.getTeamUpgradeTiers().containsKey(getName())) {
             tier = team.getTeamUpgradeTiers().get(getName());
         }
+        boolean highest = getTiers().size() == tier + 1 && team.getTeamUpgradeTiers().containsKey(getName());
+        if (highest) {
+            Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, player);
+            player.sendMessage(Language.getMsg(player, Messages.UPGRADES_UPGRADE_ALREADY_CHAT));
+            return;
+        }
         UpgradeTier ut;
         if (getTiers().size() - 1 > tier) {
             ut = getTiers().get(tier + 1);

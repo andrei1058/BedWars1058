@@ -468,6 +468,14 @@ public interface IArena {
      * Where spectators will spawn.
      */
     Location getSpectatorLocation();
+    /**
+     * Allows map break
+     */
+    void setAllowMapBreak(boolean value);
+    /**
+     * Checks if the map break is enabled
+     */
+    boolean isMapBreakable();
 
     /**
      * Location where to spawn at join (waiting/ starting).

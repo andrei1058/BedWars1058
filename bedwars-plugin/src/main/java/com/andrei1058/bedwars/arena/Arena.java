@@ -1142,7 +1142,7 @@ public class Arena implements IArena {
             reJoin.getTask().destroy();
         }
 
-        PlayerReJoinEvent ev = new PlayerReJoinEvent(p, this, BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_RE_SPAWN_COUNTDOWN));
+        PlayerReJoinEvent ev = new PlayerReJoinEvent(p, this, BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_REJOIN_RE_SPAWN_COUNTDOWN));
         Bukkit.getPluginManager().callEvent(ev);
         if (ev.isCancelled()) return false;
 
@@ -2596,6 +2596,16 @@ public class Arena implements IArena {
     @Override
     public Location getSpectatorLocation() {
         return spectatorLocation;
+    }
+
+    @Override
+    public void setAllowMapBreak(boolean value) {
+        getConfig().set(ConfigPath.ARENA_ALLOW_MAP_BREAK, value);
+    }
+
+    @Override
+    public boolean isMapBreakable() {
+        return getConfig().getBoolean(ConfigPath.ARENA_ALLOW_MAP_BREAK);
     }
 
     @Override

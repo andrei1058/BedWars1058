@@ -271,6 +271,14 @@
                             <pattern>org.slf4j</pattern>
                             <shadedPattern>com.andrei1058.bedwars.libs.slf4j</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>com.iridium.iridiumcolorapi</pattern>
+                            <shadedPattern>com.andrei1058.bedwars.libs.color</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>io.papermc.lib</pattern>
+                            <shadedPattern>com.andrei1058.bedwars.libs.paper</shadedPattern>
+                        </relocation>
                     </relocations>
                 </configuration>
                 <executions>

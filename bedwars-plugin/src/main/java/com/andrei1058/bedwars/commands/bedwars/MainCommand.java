@@ -97,13 +97,21 @@ public class MainCommand extends BukkitCommand implements ParentCommand {
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.WaitingPos(this, "waitingPos");
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.RemoveTeam(this, "removeTeam");
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.SetMaxInTeam(this, "setMaxInTeam");
-        new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.SetBuildHeight(this, "setMaxBuildHeight");
+        new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.SetMaxBuildHeight(this, "setMaxBuildHeight");
+        new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.SetMinBuildHeight(this, "setMinBuildHeight");
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.SetSpawn(this, "setSpawn");
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.SetBed(this, "setBed");
         new SetShop(this, "setShop");
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.SetUpgrade(this, "setUpgrade");
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.AddGenerator(this, "addGenerator");
+        new SetSpawnProtection(this, "setSpawnProtection");
+        new SetShopProtection(this, "setShopProtection");
+        new SetUpgradesProtection(this, "setUpgradesProtection");
+        new SetGeneratorProtection(this, "setGeneratorProtection");
+        new SetIslandRadius(this, "setIslandRadius");
         new RemoveGenerator(this, "removeGenerator");
+        new SetUseBedHologram(this, "setUseBedHologram");
+        new SetDisplayName(this, "setDisplayName");
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.SetType(this, "setType");
         new com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.setup.Save(this, "save");
         if (JoinNPC.isCitizensSupport() && BedWars.getServerType() != ServerType.BUNGEE) {

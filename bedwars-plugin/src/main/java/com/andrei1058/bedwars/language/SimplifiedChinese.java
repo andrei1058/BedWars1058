@@ -271,11 +271,14 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.PLAYER_DIE_REWARD_EMERALD, "%bw_lang_prefix%&a+%bw_amount%%bw_meaning%");
         yml.addDefault(Messages.PLAYER_DIE_REWARD_IRON, "%bw_lang_prefix%&f+%bw_amount%%bw_meaning%");
         yml.addDefault(Messages.PLAYER_DIE_REWARD_GOLD, "%bw_lang_prefix%&6+%bw_amount%%bw_meaning%");
+        yml.addDefault(Messages.ARENA_MAX_BUILD_LIMIT_REACHED, "&cMax build height limit reached!");
+        yml.addDefault(Messages.ARENA_MIN_BUILD_LIMIT_REACHED, "&cMin build height limit reached!");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_TITLE, "&c你死了！");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_SUBTITLE, "&e你将在 &a%bw_time% &e秒后重生！");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_CHAT, "%bw_lang_prefix%&e你将在 &a%bw_time% &e秒后重生！");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWNED_TITLE, "&a已重生！");
         yml.addDefault(Messages.PLAYER_DIE_ELIMINATED_CHAT, "%bw_lang_prefix%&c你已被淘汰！");
+        yml.addDefault(Messages.PLAYER_DIE_RESPAWNED_TEXT, "%bw_lang_prefix%&eYou will respawn in &c%bw_time% &eseconds!");
         yml.addDefault(Messages.PLAYER_HIT_BOW, "%bw_lang_prefix%%bw_player%&7还有 &e%bw_amount% &c生命值！");
         yml.addDefault(Messages.GAME_END_GAME_OVER_PLAYER_TITLE, "&c&l游戏结束！");
         yml.addDefault(Messages.GAME_END_VICTORY_PLAYER_TITLE, "&6&l胜利！");
@@ -366,7 +369,7 @@ public class SimplifiedChinese extends Language {
         yml.addDefault("scoreboard.3v3v3v3.playing", Arrays.asList("&e&l起床战争", "&7%bw_date%", "", "&f%bw_next_event% - &a%bw_time%", "",
                 "%bw_team_1%", "%bw_team_2%", "%bw_team_3%", "%bw_team_4%", "", "&f击杀：&a%bw_kills%", "&f最终击杀：&a%bw_final_kills%", "&f破坏床：&a%bw_beds%", "", "&e%bw_server_ip%"));
 
-        yml.addDefault("scoreboard.4v4v4v4.playing", Arrays.asList("&e&l起床战争", "&7%bw_date%", "", "&f%bw_next_event% - &a%bw_time%", "", 
+        yml.addDefault("scoreboard.4v4v4v4.playing", Arrays.asList("&e&l起床战争", "&7%bw_date%", "", "&f%bw_next_event% - &a%bw_time%", "",
                 "%bw_team_1%", "%bw_team_2%", "%bw_team_3%", "%bw_team_4%", "", "&f击杀：&a%bw_kills%", "&f最终击杀：&a%bw_final_kills%", "&f破坏床：&a%bw_beds%", "", "&e%bw_server_ip%"));
 
         yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&l起床战争,&4&l起&6&l床战争,&6&l起&4&l床&6&l战争,&6&l起床&4&l战&6&l争,&6&l起床战&4&l争,&6&l起床战争",
@@ -477,6 +480,7 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.FORMAT_UPGRADE_TIER_UNLOCKED, "&a");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY, "%bw_color%点击购买！");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY, "%bw_color%你没有足够的%bw_currency%！");
+        yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_SPACE, "&eYou don't have enough inventory space to buy this item!");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_LOCKED, "&c已锁定");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_UNLOCKED, "%bw_color%已解锁");
         yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a%bw_player%购买了&6%bw_upgrade_name%");
@@ -546,6 +550,7 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_MSG + "3", "&c&l报警陷阱被%bw_color%&l%bw_team%的&7&l%bw_playername%&c&l触发了！");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_TITLE + "3", "&c&l警报！！！");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_SUBTITLE + "3", "%bw_color%%bw_team%&f触发了陷阱！");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_ALREADY_CHAT, "&cYou already unlocked this upgrade!");
         save();
         setPrefix(m(Messages.PREFIX));
         setPrefixStatic(m(Messages.PREFIX));

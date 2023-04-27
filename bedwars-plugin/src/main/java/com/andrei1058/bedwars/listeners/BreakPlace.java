@@ -159,6 +159,12 @@ public class BreakPlace implements Listener {
             }
             if (e.getBlockPlaced().getLocation().getBlockY() >= a.getConfig().getInt(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y)) {
                 e.setCancelled(true);
+                e.getPlayer().sendMessage(getMsg(e.getPlayer(), Messages.ARENA_MAX_BUILD_LIMIT_REACHED));
+                return;
+            }
+            if (e.getBlockPlaced().getLocation().getBlockY() <= a.getConfig().getInt(ConfigPath.ARENA_CONFIGURATION_MIN_BUILD_Y)) {
+                e.setCancelled(true);
+                e.getPlayer().sendMessage(getMsg(e.getPlayer(), Messages.ARENA_MIN_BUILD_LIMIT_REACHED));
                 return;
             }
 
