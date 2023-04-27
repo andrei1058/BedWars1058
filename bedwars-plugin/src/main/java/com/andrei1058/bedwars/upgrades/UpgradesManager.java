@@ -69,7 +69,7 @@ public class UpgradesManager {
         //noinspection ResultOfMethodCallIgnored
         oldFile.delete();
 
-        upgrades = new UpgradesConfig("upgrades2", plugin.getDataFolder().getPath());
+        upgrades = new UpgradesConfig("upgrades", plugin.getDataFolder().getPath());
         String name;
         for (String index : upgrades.getYml().getConfigurationSection("").getKeys(false)) {
             name = index;
