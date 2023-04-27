@@ -113,11 +113,18 @@ public class BoardManager implements IScoreboardService {
             placeholderRefresh = 100;
         }
 
-        Integer prefixSuffixRefresh = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PREFIX_SUFFIX_REFRESH_INTERVAL);
-        if (prefixSuffixRefresh < 50) {
-            plugin.getLogger().warning("Prefix Suffix refresh interval is set to `" + prefixSuffixRefresh + "` but cannot be lower than 50! Overriding to 100 now...");
-            config.set(ConfigPath.SB_CONFIG_SIDEBAR_PREFIX_SUFFIX_REFRESH_INTERVAL, 100);
-            prefixSuffixRefresh = 100;
+        Integer PrefixRefresh = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PREFIX_REFRESH_INTERVAL);
+        if (PrefixRefresh < 50) {
+            plugin.getLogger().warning("Prefix Suffix refresh interval is set to `" + PrefixRefresh + "` but cannot be lower than 50! Overriding to 100 now...");
+            config.set(ConfigPath.SB_CONFIG_SIDEBAR_PREFIX_REFRESH_INTERVAL, 100);
+            PrefixRefresh = 100;
+        }
+
+        Integer SuffixRefresh = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_SUFFIX_REFRESH_INTERVAL);
+        if (SuffixRefresh < 50) {
+            plugin.getLogger().warning("Prefix Suffix refresh interval is set to `" + SuffixRefresh + "` but cannot be lower than 50! Overriding to 100 now...");
+            config.set(ConfigPath.SB_CONFIG_SIDEBAR_SUFFIX_REFRESH_INTERVAL, 100);
+            SuffixRefresh = 100;
         }
 
         Integer titleRefresh = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_TITLE_REFRESH_INTERVAL);
@@ -197,7 +204,7 @@ public class BoardManager implements IScoreboardService {
             return null == arena ? "" : null == arena.getTeam(player) ? ""  : arena.getTeam(player).getColor().chat();
         });
 
-        pm.registerPlayerPlaceholder("%bw_prefix%", prefixSuffixRefresh, tabPlayer -> {
+        pm.registerPlayerPlaceholder("%bw_prefix%", PrefixRefresh, tabPlayer -> {
             Player player = (Player) tabPlayer.getPlayer();
             IArena arena = Arena.getArenaByPlayer(player);
             Integer i = tabPlayersPrefix.getOrDefault(tabPlayer,0);
@@ -228,7 +235,7 @@ public class BoardManager implements IScoreboardService {
             return null == prefix ? "" : prefix;
         });
 
-        pm.registerPlayerPlaceholder("%bw_suffix%", prefixSuffixRefresh, tabPlayer -> {
+        pm.registerPlayerPlaceholder("%bw_suffix%", SuffixRefresh, tabPlayer -> {
             Player player = (Player) tabPlayer.getPlayer();
             IArena arena = Arena.getArenaByPlayer(player);
             Integer i = tabPlayersSuffix.getOrDefault(tabPlayer,0);
