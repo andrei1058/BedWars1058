@@ -553,7 +553,7 @@ public class BedWars extends JavaPlugin {
             }
         });
 
-        registerEvents(new ScoreboardListener()); //todo check if needed
+//        registerEvents(new ScoreboardListener()); #Disabled for now
 
         if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_ENABLE_HALLOWEEN)) {
             // Halloween Special

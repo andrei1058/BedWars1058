@@ -509,13 +509,8 @@ public class BoardManager implements IScoreboardService {
         return arena.getStatus() != GameState.restarting || !config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_RESTARTING);
     }
 
-    private String getNextItem(List<String> myList) {
-        Iterator<String> iterator = myList.iterator();
-        if (iterator.hasNext()) {
-            return iterator.next();
-        } else {
-            iterator = myList.iterator(); // Create a new iterator to start from the beginning
-            return iterator.next();
-        }
+    @Override
+    public @Nullable Scoreboard getScoreboard(@NotNull Player player) {
+        return scoreboardManager.getActiveScoreboard(TabAPI.getInstance().getPlayer(player.getUniqueId()));
     }
 }

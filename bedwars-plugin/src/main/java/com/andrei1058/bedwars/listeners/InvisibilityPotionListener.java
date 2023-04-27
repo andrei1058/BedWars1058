@@ -45,14 +45,6 @@ import static com.andrei1058.bedwars.BedWars.plugin;
 public class InvisibilityPotionListener implements Listener {
 
     @EventHandler
-    public void onPotion(@NotNull PlayerInvisibilityPotionEvent e) {
-        if (e.getTeam() == null) return;
-//        BoardManager.getInstance().handleInvisibility( //todo
-//                e.getTeam(), e.getPlayer(), e.getType() == PlayerInvisibilityPotionEvent.Type.ADDED
-//        );
-    }
-
-    @EventHandler
     public void onDrink(PlayerItemConsumeEvent e) {
         IArena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a == null) return;

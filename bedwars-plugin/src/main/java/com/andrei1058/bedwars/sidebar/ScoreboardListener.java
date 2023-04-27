@@ -36,6 +36,8 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 
 public class ScoreboardListener implements Listener {
+    // Leaving this here if needed for possible health integrations. (27/4/2023)
+    // Listener is not registered!
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDamage(EntityDamageEvent e) {

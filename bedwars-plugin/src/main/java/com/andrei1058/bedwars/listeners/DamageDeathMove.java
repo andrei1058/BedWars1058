@@ -101,19 +101,11 @@ public class DamageDeathMove implements Listener {
                     return;
                 }
 
-                // todo why did I set this to 1? disabled for now
-                /*if (e.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
-                    e.setDamage(1);
-                    return;
-                }*/
-                //if (e.getCause() == EntityDamageEvent.DamageCause.FALL) {
                 if (BedWarsTeam.reSpawnInvulnerability.containsKey(p.getUniqueId())) {
                     if (BedWarsTeam.reSpawnInvulnerability.get(p.getUniqueId()) > System.currentTimeMillis()) {
                         e.setCancelled(true);
                     } else BedWarsTeam.reSpawnInvulnerability.remove(p.getUniqueId());
                 }
-                //}
-
             }
         }
         if (BedWars.getServerType() == ServerType.MULTIARENA) {
@@ -123,7 +115,7 @@ public class DamageDeathMove implements Listener {
         }
     }
 
-    // show player health on bow hit
+    //Todo show player health on bow hit
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBowHit(EntityDamageByEntityEvent e) {
         if(e.isCancelled()) return;
