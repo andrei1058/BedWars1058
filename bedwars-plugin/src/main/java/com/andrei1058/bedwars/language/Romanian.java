@@ -281,7 +281,7 @@ public class Romanian extends Language {
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
                 "&f                                   &lBedWars", "", "%bw_winner_format%", "", "",
                 "&e                          &l1st Killer &7- %bw_first_format% - %bw_first_kills%",
-                "&6                          &l2nd Killer &7- %bw_second_format% - %bw_second_kills%}",
+                "&6                          &l2nd Killer &7- %bw_second_format% - %bw_second_kills%",
                 "&c                          &l3rd Killer &7- %bw_third_format% - %bw_third_kills%", "",
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
         yml.addDefault(Messages.GAME_END_TEAM_WON_CHAT, "%bw_lang_prefix%%bw_team_color%Echipa %bw_team_name% &aa castigat!");
@@ -465,23 +465,23 @@ public class Romanian extends Language {
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_LOCKED, "&cLBLOCAT");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_UNLOCKED, "&aDEBLOCAT");
         yml.addDefault("upgrades.Default.generators.tier1.name", "&eGenerator Fier");
-        yml.addDefault("upgrades.Default.generators.tier1.lore", Arrays.asList("&7Creste rata de spawnare a Fierului", "&7si a Aurului cu 50%..", "", "&7Pret:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
+        yml.addDefault("upgrades.Default.generators.tier1.lore", Arrays.asList("&7Creste rata de spawnare a Fierului", "&7si a Aurului cu 50%..", "", "&7Pret:&b %bw_cost% %bw_currency%", ""));
         yml.addDefault("upgrades.Default.generators.tier2.name", "&eGenerator Aur");
-        yml.addDefault("upgrades.Default.generators.tier2.lore", Arrays.asList("&7Creste rata de spawnare a Fierului", "&7si a Aurului cu 100%..", "", "&7Pret:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
+        yml.addDefault("upgrades.Default.generators.tier2.lore", Arrays.asList("&7Creste rata de spawnare a Fierului", "&7si a Aurului cu 100%..", "", "&7Pret:&b %bw_cost% %bw_currency%", ""));
         yml.addDefault("upgrades.Default.generators.tier3.name", "&eGenerator Emerald");
-        yml.addDefault("upgrades.Default.generators.tier3.lore", Arrays.asList("&7Activeaza generatorul de Emeralde", "&7in baza echipei tale.", "", "&7Pret:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
+        yml.addDefault("upgrades.Default.generators.tier3.lore", Arrays.asList("&7Activeaza generatorul de Emeralde", "&7in baza echipei tale.", "", "&7Pret:&b %bw_cost% %bw_currency%", ""));
         yml.addDefault("upgrades.Default.maniacMiner.tier1.name", "&eManiac Miner");
-        yml.addDefault("upgrades.Default.maniacMiner.tier1.lore", Arrays.asList("&7Toti jucatorii din echipa ta vor primi", "&7efectul Graba I permanent.", "", "&7Pret:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
+        yml.addDefault("upgrades.Default.maniacMiner.tier1.lore", Arrays.asList("&7Toti jucatorii din echipa ta vor primi", "&7efectul Graba I permanent.", "", "&7Pret:&b %bw_cost% %bw_currency%", ""));
         yml.addDefault("upgrades.Default.sharpSword.tier1.name", "&eSharpened Swords");
-        yml.addDefault("upgrades.Default.sharpSword.tier1.lore", Arrays.asList("&7Echipa ta va primi Sharpness I", "&7pe toate sabiile!", "", "&7Pret:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
+        yml.addDefault("upgrades.Default.sharpSword.tier1.lore", Arrays.asList("&7Echipa ta va primi Sharpness I", "&7pe toate sabiile!", "", "&7Pret:&b %bw_cost% %bw_currency%", ""));
         yml.addDefault("upgrades.Default.reinforced.tier1.name", "&eReinforced Armor");
-        yml.addDefault("upgrades.Default.reinforced.tier1.lore", Arrays.asList("&7Echipa ta va primi Protectie I", "&7pe toata armura!", "", "&7Pret:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
+        yml.addDefault("upgrades.Default.reinforced.tier1.lore", Arrays.asList("&7Echipa ta va primi Protectie I", "&7pe toata armura!", "", "&7Pret:&b %bw_cost% %bw_currency%", ""));
         yml.addDefault("upgrades.Default.trap.tier1.name", "&eEste o capcana!");
-        yml.addDefault("upgrades.Default.trap.tier1.lore", Arrays.asList("&7Urmatorul inamic care va intra in", "&7baza ta va primi efectul de Orbire ", "&7si de Incetinire!", "", "&7Pret:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
+        yml.addDefault("upgrades.Default.trap.tier1.lore", Arrays.asList("&7Urmatorul inamic care va intra in", "&7baza ta va primi efectul de Orbire ", "&7si de Incetinire!", "", "&7Pret:&b %bw_cost% %bw_currency%", ""));
         yml.addDefault("upgrades.Default.miningFatigue.tier1.name", "&eMiner Fatigue Trap");
-        yml.addDefault("upgrades.Default.miningFatigue.tier1.lore", Arrays.asList("&7Urmatorul inamic care va intra in", "&7baza ta va primi efectul de Oboseala", "&7pentru 10 secunde!", "", "&7Pret:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
+        yml.addDefault("upgrades.Default.miningFatigue.tier1.lore", Arrays.asList("&7Urmatorul inamic care va intra in", "&7baza ta va primi efectul de Oboseala", "&7pentru 10 secunde!", "", "&7Pret:&b %bw_cost% %bw_currency%", ""));
         yml.addDefault("upgrades.Default.healPool.tier1.name", "&eHeal Pool");
-        yml.addDefault("upgrades.Default.healPool.tier1.lore", Arrays.asList("&7Creeaza un camp de Regenerare", "&7a vietii in baza ta!", "", "&7Pret:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
+        yml.addDefault("upgrades.Default.healPool.tier1.lore", Arrays.asList("&7Creeaza un camp de Regenerare", "&7a vietii in baza ta!", "", "&7Pret:&b %bw_cost% %bw_currency%", ""));
 
         yml.addDefault(Messages.MEANING_NO_TRAP, "No trap!");
         yml.addDefault(Messages.FORMAT_UPGRADE_TRAP_COST, "&7Cost: %bw_currency_color%%bw_cost% %bw_currency%");
