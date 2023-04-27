@@ -106,28 +106,28 @@ public class BoardManager implements IScoreboardService {
         BedWars.debug("Registering TAB placeholders...");
         PlaceholderManager pm = TabAPI.getInstance().getPlaceholderManager();
 
-        Integer placeholderRefresh = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL);
+        int placeholderRefresh = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL);
         if (placeholderRefresh < 50) {
             plugin.getLogger().warning("Placeholder refresh interval is set to `" + placeholderRefresh + "` but cannot be lower than 50! Overriding to 100 now...");
             config.set(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL, 100);
             placeholderRefresh = 100;
         }
 
-        Integer PrefixRefresh = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PREFIX_REFRESH_INTERVAL);
+        int PrefixRefresh = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PREFIX_REFRESH_INTERVAL);
         if (PrefixRefresh < 50) {
             plugin.getLogger().warning("Prefix Suffix refresh interval is set to `" + PrefixRefresh + "` but cannot be lower than 50! Overriding to 100 now...");
             config.set(ConfigPath.SB_CONFIG_SIDEBAR_PREFIX_REFRESH_INTERVAL, 100);
             PrefixRefresh = 100;
         }
 
-        Integer SuffixRefresh = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_SUFFIX_REFRESH_INTERVAL);
+        int SuffixRefresh = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_SUFFIX_REFRESH_INTERVAL);
         if (SuffixRefresh < 50) {
             plugin.getLogger().warning("Prefix Suffix refresh interval is set to `" + SuffixRefresh + "` but cannot be lower than 50! Overriding to 100 now...");
             config.set(ConfigPath.SB_CONFIG_SIDEBAR_SUFFIX_REFRESH_INTERVAL, 100);
             SuffixRefresh = 100;
         }
 
-        Integer titleRefresh = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_TITLE_REFRESH_INTERVAL);
+        int titleRefresh = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_TITLE_REFRESH_INTERVAL);
         if (titleRefresh < 50) {
             plugin.getLogger().warning("Scoreboard title refresh interval is set to `" + titleRefresh + "` but cannot be lower than 50! Overriding to 100 now...");
             config.set(ConfigPath.SB_CONFIG_SIDEBAR_TITLE_REFRESH_INTERVAL, 100);
@@ -207,7 +207,7 @@ public class BoardManager implements IScoreboardService {
         pm.registerPlayerPlaceholder("%bw_prefix%", PrefixRefresh, tabPlayer -> {
             Player player = (Player) tabPlayer.getPlayer();
             IArena arena = Arena.getArenaByPlayer(player);
-            Integer i = tabPlayersPrefix.getOrDefault(tabPlayer,0);
+            int i = tabPlayersPrefix.getOrDefault(tabPlayer,0);
             List<String> fixList = Collections.singletonList("");
             if (null == arena) {
                 fixList = Language.getList(player, Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_LOBBY);
@@ -238,7 +238,7 @@ public class BoardManager implements IScoreboardService {
         pm.registerPlayerPlaceholder("%bw_suffix%", SuffixRefresh, tabPlayer -> {
             Player player = (Player) tabPlayer.getPlayer();
             IArena arena = Arena.getArenaByPlayer(player);
-            Integer i = tabPlayersSuffix.getOrDefault(tabPlayer,0);
+            int i = tabPlayersSuffix.getOrDefault(tabPlayer,0);
             List<String> fixList = Collections.singletonList("");
             if (null == arena) {
                 fixList = Language.getList(player, Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_LOBBY);
@@ -269,7 +269,7 @@ public class BoardManager implements IScoreboardService {
         pm.registerPlayerPlaceholder("%bw_scoreboard_title%", titleRefresh, tabPlayer -> {
             Player player = (Player) tabPlayer.getPlayer();
             IArena arena = Arena.getArenaByPlayer(player);
-            Integer i = tabPlayersTitle.getOrDefault(tabPlayer,0);
+            int i = tabPlayersTitle.getOrDefault(tabPlayer,0);
             // set sidebar lines based on game state or lobby
             List<String> lines = null;
             String titleLine;
