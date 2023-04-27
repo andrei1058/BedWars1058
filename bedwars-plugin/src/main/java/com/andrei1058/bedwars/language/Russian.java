@@ -83,11 +83,11 @@ public class Russian extends Language{
         yml.addDefault(Messages.COMMAND_LEAVE_DENIED_NOT_IN_ARENA, "%bw_lang_prefix%&cТы не на арене!");
         yml.addDefault(Messages.ARENA_GUI_INV_NAME, "&8Доступные арены");
         yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_NAME, "&a&l%bw_name%");
-        yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_LORE, Arrays.asList("", "&7Статус: {status}", "&7Игроков: &f%bw_on%&7/&f%bw_max%", "&7Тип: &a%bw_group%", "", "&aЛКМ для входа.", "&eПКМ для слежки."));
+        yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_LORE, Arrays.asList("", "&7Статус: %bw_team_status%", "&7Игроков: &f%bw_on%&7/&f%bw_max%", "&7Тип: &a%bw_group%", "", "&aЛКМ для входа.", "&eПКМ для слежки."));
         yml.addDefault(Messages.ARENA_GUI_SKIPPED_ITEM_NAME, "&r%bw_server_ip%");
         yml.addDefault(Messages.ARENA_GUI_SKIPPED_ITEM_LORE, Collections.emptyList());
         yml.addDefault(Messages.COMMAND_LANG_LIST_HEADER, "%bw_lang_prefix% &2Доступные языки:");
-        yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&a▪  &7{iso} - &f%bw_name%");
+        yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&a▪  &7%bw_lang_iso% - &f%bw_name%");
         yml.addDefault(Messages.COMMAND_LANG_USAGE, "%bw_lang_prefix%&7Используйте: /lang &f&o<iso>");
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_NOT_EXIST, "%bw_lang_prefix%&cЭтот язык не существует!");
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY, "%bw_lang_prefix%&aЯзык сменен!");
@@ -115,11 +115,11 @@ public class Russian extends Language{
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-1", "&c❶");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_CANCELLED_TITLE, " ");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_CANCELLED_SUB_TITLE, "&cОжидание игроков..");
-        yml.addDefault(Messages.FORMATTING_CHAT_LOBBY, "%bw_level%%bw_v_prefix%&7%bw_player%%bw_v_suffix%: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_WAITING, "%bw_level%%bw_v_prefix%&7%bw_player%%bw_v_suffix%: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_SHOUT, "%bw_level%%bw_v_prefix%&6[ВСЕМ] %bw_team% &7%bw_player%&f%bw_v_suffix%: {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_TEAM, "%bw_level%%bw_v_prefix%&f%bw_team%&7 %bw_player%%bw_v_suffix% {message}");
-        yml.addDefault(Messages.FORMATTING_CHAT_SPECTATOR, "%bw_level%%bw_v_prefix%&7[НАБЛЮДАТЕЛЬ] %bw_player%%bw_v_suffix%: {message}");
+        yml.addDefault(Messages.FORMATTING_CHAT_LOBBY, "%bw_level%%bw_v_prefix%&7%bw_player%%bw_v_suffix%: %bw_message%");
+        yml.addDefault(Messages.FORMATTING_CHAT_WAITING, "%bw_level%%bw_v_prefix%&7%bw_player%%bw_v_suffix%: %bw_message%");
+        yml.addDefault(Messages.FORMATTING_CHAT_SHOUT, "%bw_level%%bw_v_prefix%&6[ВСЕМ] %bw_team% &7%bw_player%&f%bw_v_suffix%: %bw_message%");
+        yml.addDefault(Messages.FORMATTING_CHAT_TEAM, "%bw_level%%bw_v_prefix%&f%bw_team%&7 %bw_player%%bw_v_suffix% %bw_message%");
+        yml.addDefault(Messages.FORMATTING_CHAT_SPECTATOR, "%bw_level%%bw_v_prefix%&7[НАБЛЮДАТЕЛЬ] %bw_player%%bw_v_suffix%: %bw_message%");
         yml.addDefault(Messages.ARENA_STATUS_START_PLAYER_TUTORIAL, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
                 "&f                                   &lBedWars", "",
                 "&e&l Защищайте свою кровать и уничтожайте кровати врагов.",
@@ -130,8 +130,8 @@ public class Russian extends Language{
         yml.addDefault(Messages.MEANING_SHOUT, "shout");
         yml.addDefault(Messages.ARENA_STATUS_START_PLAYER_TITLE, "&aПОГНАЛИ");
 
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&lBED WARS", "&7%bw_date% &8%bw_server_id%", "", "&fКарта: &a%bw_map%", "", "&fИгроков: &a%bw_on%/%bw_max%", "", "&fОжидание...", "", "§fТип: &a%bw_group%", "&fВерсия: &7{version}", "", "&e%bw_server_ip%"));
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&lBED WARS", "&7%bw_date% &8%bw_server_id%", "", "&fКарта: &a%bw_map%", "", "&fИгроков: &a%bw_on%/%bw_max%", "", "&fСтарт через &a%bw_time%s", "", "§fТип: &a%bw_group%", "&fВерсия: &7{version}", "", "&e%bw_server_ip%"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&lBED WARS", "&7%bw_date% &8%bw_server_id%", "", "&fКарта: &a%bw_map%", "", "&fИгроков: &a%bw_on%/%bw_max%", "", "&fОжидание...", "", "§fТип: &a%bw_group%", "&fВерсия: &7%bw_version%", "", "&e%bw_server_ip%"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&lBED WARS", "&7%bw_date% &8%bw_server_id%", "", "&fКарта: &a%bw_map%", "", "&fИгроков: &a%bw_on%/%bw_max%", "", "&fСтарт через &a%bw_time%s", "", "§fТип: &a%bw_group%", "&fВерсия: &7%bw_version%", "", "&e%bw_server_ip%"));
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList("&e&lBED WARS", "&7%bw_date%", "", "&f%bw_next_event% in &a%bw_time%", "", 
                 "%bw_team_1%", "%bw_team_2%", "%bw_team_3%", "%bw_team_4%", "%bw_team_5%", "%bw_team_6%", "%bw_team_7%", "%bw_team_8%", "", "&e%bw_server_ip%"));
 
@@ -139,18 +139,18 @@ public class Russian extends Language{
                 "%bw_team_1%", "%bw_team_2%", "%bw_team_3%", "%bw_team_4%", "%bw_team_5%", "%bw_team_6%", "%bw_team_7%", "%bw_team_8%", "", "&e%bw_server_ip%"));
 
         yml.addDefault("scoreboard.3v3v3v3.playing", Arrays.asList("&e&lBED WARS", "&7%bw_date%", "", "&f%bw_next_event% in &a%bw_time%", "", 
-                "%bw_team_1%", "%bw_team_2%", "%bw_team_3%", "%bw_team_4%", "", "&fУбийств: &a%bw_kills%", "&fФинальных убийств: &a%bw_final_kills%", "&fКроватей уничтожено: &a{beds}", "", "&e%bw_server_ip%"));
+                "%bw_team_1%", "%bw_team_2%", "%bw_team_3%", "%bw_team_4%", "", "&fУбийств: &a%bw_kills%", "&fФинальных убийств: &a%bw_final_kills%", "&fКроватей уничтожено: &a%bw_beds%", "", "&e%bw_server_ip%"));
 
         yml.addDefault("scoreboard.4v4v4v4.playing", Arrays.asList("&e&lBED WARS", "&7%bw_date%", "", "&f%bw_next_event% in &a%bw_time%", "", 
-                "%bw_team_1%", "%bw_team_2%", "%bw_team_3%", "%bw_team_4%", "", "&fУбийств: &a%bw_kills%", "&fФинальных убийств: &a%bw_final_kills%", "&fКроватей уничтожено: &a{beds}", "", "&e%bw_server_ip%"));
+                "%bw_team_1%", "%bw_team_2%", "%bw_team_3%", "%bw_team_4%", "", "&fУбийств: &a%bw_kills%", "&fФинальных убийств: &a%bw_final_kills%", "&fКроватей уничтожено: &a%bw_beds%", "", "&e%bw_server_ip%"));
 
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_HEALTH, Arrays.asList("&c❤", "&aЗдоровье"));
         yml.addDefault(Messages.FORMATTING_SPECTATOR_TEAM, "SPECT");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_SPECTATOR, "&7");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_SPECTATOR, "");
-        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_RESTARTING, Arrays.asList("%bw_team_color%&l{teamLetter} &r%bw_team_color%", "%bw_team% ", "%bw_v_prefix% %bw_team_color%"));
+        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_RESTARTING, Arrays.asList("%bw_team_color%&l%bw_team_letter% &r%bw_team_color%", "%bw_team% ", "%bw_v_prefix% %bw_team_color%"));
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_RESTARTING, new ArrayList<>());
-        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_PLAYING, Arrays.asList("%bw_team_color%&l{teamLetter} &r%bw_team_color%", "%bw_team% ", "%bw_v_prefix% %bw_team_color%&l{teamLetter} &r%bw_team_color%"));
+        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_PLAYING, Arrays.asList("%bw_team_color%&l%bw_team_letter% &r%bw_team_color%", "%bw_team% ", "%bw_v_prefix% %bw_team_color%&l%bw_team_letter% &r%bw_team_color%"));
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_PLAYING, new ArrayList<>());
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_STARTING, List.of("%bw_v_prefix% "));
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_STARTING, new ArrayList<>());
@@ -173,30 +173,30 @@ public class Russian extends Language{
         yml.addDefault(Messages.INTERACT_CANNOT_BREAK_BLOCK, "%bw_lang_prefix%&cВы можете ломать блоки только игроков!");
         yml.addDefault(Messages.INTERACT_CANNOT_BREAK_OWN_BED, "&cВы не можете разрушить свою кровать!");
         yml.addDefault(Messages.TEAM_ELIMINATED_CHAT, "\n&f&lУНИЧТОЖЕНИЕ КОММАНДЫ > %bw_team_color%%bw_team_name% команда &cбыла уничтожена!\n");
-        yml.addDefault(Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT, "\n&f&lУНИЧТОЖЕНИЕ КРОВАТИ > %bw_team_color%%bw_team_name% Кровать &7разушена игроком {PlayerColor}%bw_player%&7!\n");
+        yml.addDefault(Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT, "\n&f&lУНИЧТОЖЕНИЕ КРОВАТИ > %bw_team_color%%bw_team_name% Кровать &7разушена игроком %bw_player_color%%bw_player%&7!\n");
         yml.addDefault(Messages.INTERACT_BED_DESTROY_TITLE_ANNOUNCEMENT, "&cВАША КРОВАТЬ УНИЧТОЖЕНА!");
         yml.addDefault(Messages.INTERACT_BED_DESTROY_SUBTITLE_ANNOUNCEMENT, "&fВы больше не сможете возродиться!");
-        yml.addDefault(Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM, "&f&lУНИЧТОЖЕНИЕ КРОВАТИ > &7Ваша кровать разрушена игроком {PlayerColor}%bw_player%&7!");
+        yml.addDefault(Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM, "&f&lУНИЧТОЖЕНИЕ КРОВАТИ > &7Ваша кровать разрушена игроком %bw_player_color%%bw_player%&7!");
         yml.addDefault(Messages.INTERACT_INVISIBILITY_REMOVED_DAMGE_TAKEN, "&cYou are no longer invisible because you have taken damage!");
-        yml.addDefault(Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL, "{PlayerColor}%bw_player% &7упал.");
-        yml.addDefault(Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL, "{PlayerColor}%bw_player% &7упал. &b&lФИНАЛЬНОЕ УБИЙСТВО!");
-        yml.addDefault(Messages.PLAYER_DIE_KNOCKED_IN_VOID_REGULAR_KILL, "{PlayerColor}%bw_player% &7был скинут в бездну {KillerColor}{KillerName}&7.");
-        yml.addDefault(Messages.PLAYER_DIE_KNOCKED_IN_VOID_FINAL_KILL, "{PlayerColor}%bw_player% &7был скинут в бездну игроком {KillerColor}{KillerName}&7. &b&lФИНАЛЬНОЕ УБИЙСТВО!");
-        yml.addDefault(Messages.PLAYER_DIE_KNOCKED_BY_REGULAR_KILL, "{PlayerColor}%bw_player% &7был сбит игроком {KillerColor}{KillerName}&7.");
-        yml.addDefault(Messages.PLAYER_DIE_KNOCKED_BY_FINAL_KILL, "{PlayerColor}%bw_player% &7был сбит игроком {KillerColor}{KillerName}&7. &b&lФИНАЛЬНОЕ УБИЙСТВО!");
-        yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITH_SOURCE_REGULAR_KILL, "{PlayerColor}%bw_player% &7был поражен любимой бомбой игрока {KillerColor}{KillerName}&7.");
-        yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITH_SOURCE_FINAL_KILL, "{PlayerColor}%bw_player% &7был поражен любимой бомбой игрока {KillerColor}{KillerName}&7. &b&lФИНАЛЬНОЕ УБИЙСТВО!");
-        yml.addDefault(Messages.PLAYER_DIE_PVP_REGULAR_KILL, "{PlayerColor}%bw_player% &7был убит игроком {KillerColor}{KillerName}&7.");
-        yml.addDefault(Messages.PLAYER_DIE_PVP_FINAL_KILL, "{PlayerColor}%bw_player% &7был убит игроком {KillerColor}{KillerName}&7. &b&lФИНАЛЬНОЕ УБИЙСТВО!");
-        yml.addDefault(Messages.PLAYER_DIE_PVP_LOG_OUT_REGULAR, "{PlayerColor}%bw_player% &7откючился пока сражался с {KillerColor}{KillerName}&7.");
-        yml.addDefault(Messages.PLAYER_DIE_PVP_LOG_OUT_FINAL, "{PlayerColor}%bw_player% &7откючился пока сражался с {KillerColor}{KillerName}&7. &b&lФИНАЛЬНОЕ УБИЙСТВО!");
+        yml.addDefault(Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL, "%bw_player_color%%bw_player% &7упал.");
+        yml.addDefault(Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL, "%bw_player_color%%bw_player% &7упал. &b&lФИНАЛЬНОЕ УБИЙСТВО!");
+        yml.addDefault(Messages.PLAYER_DIE_KNOCKED_IN_VOID_REGULAR_KILL, "%bw_player_color%%bw_player% &7был скинут в бездну %bw_killer_color%%bw_killer_name%&7.");
+        yml.addDefault(Messages.PLAYER_DIE_KNOCKED_IN_VOID_FINAL_KILL, "%bw_player_color%%bw_player% &7был скинут в бездну игроком %bw_killer_color%%bw_killer_name%&7. &b&lФИНАЛЬНОЕ УБИЙСТВО!");
+        yml.addDefault(Messages.PLAYER_DIE_KNOCKED_BY_REGULAR_KILL, "%bw_player_color%%bw_player% &7был сбит игроком %bw_killer_color%%bw_killer_name%&7.");
+        yml.addDefault(Messages.PLAYER_DIE_KNOCKED_BY_FINAL_KILL, "%bw_player_color%%bw_player% &7был сбит игроком %bw_killer_color%%bw_killer_name%&7. &b&lФИНАЛЬНОЕ УБИЙСТВО!");
+        yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITH_SOURCE_REGULAR_KILL, "%bw_player_color%%bw_player% &7был поражен любимой бомбой игрока %bw_killer_color%%bw_killer_name%&7.");
+        yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITH_SOURCE_FINAL_KILL, "%bw_player_color%%bw_player% &7был поражен любимой бомбой игрока %bw_killer_color%%bw_killer_name%&7. &b&lФИНАЛЬНОЕ УБИЙСТВО!");
+        yml.addDefault(Messages.PLAYER_DIE_PVP_REGULAR_KILL, "%bw_player_color%%bw_player% &7был убит игроком %bw_killer_color%%bw_killer_name%&7.");
+        yml.addDefault(Messages.PLAYER_DIE_PVP_FINAL_KILL, "%bw_player_color%%bw_player% &7был убит игроком %bw_killer_color%%bw_killer_name%&7. &b&lФИНАЛЬНОЕ УБИЙСТВО!");
+        yml.addDefault(Messages.PLAYER_DIE_PVP_LOG_OUT_REGULAR, "%bw_player_color%%bw_player% &7откючился пока сражался с %bw_killer_color%%bw_killer_name%&7.");
+        yml.addDefault(Messages.PLAYER_DIE_PVP_LOG_OUT_FINAL, "%bw_player_color%%bw_player% &7откючился пока сражался с %bw_killer_color%%bw_killer_name%&7. &b&lФИНАЛЬНОЕ УБИЙСТВО!");
         yml.addDefault(Messages.BED_HOLOGRAM_DESTROYED, "&c&lВаша кровать сломана!");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_TITLE, "&cВЫ ПОГИБЛИ!");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_SUBTITLE, "&eВы возродитесь через &c%bw_time% &eсекунд!");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_CHAT, "%bw_lang_prefix%&eВы возродитесь через &c%bw_time% &eсекунд!");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWNED_TITLE, "&aВОЗРОЖДЕН!");
         yml.addDefault(Messages.PLAYER_DIE_ELIMINATED_CHAT, "%bw_lang_prefix%&cВы были устранены!");
-        yml.addDefault(Messages.PLAYER_HIT_BOW, "&7У %bw_lang_prefix%%bw_player% &7теперь &c{amount} &7HP!");
+        yml.addDefault(Messages.PLAYER_HIT_BOW, "&7У %bw_lang_prefix%%bw_player% &7теперь &c%bw_amount% &7HP!");
         yml.addDefault(Messages.GAME_END_GAME_OVER_PLAYER_TITLE, "&c&lИГРА ОКОНЧЕНА!");
         yml.addDefault(Messages.GAME_END_VICTORY_PLAYER_TITLE, "&6&lПОБЕДА!");
         yml.addDefault(Messages.FORMATTING_EACH_WINNER, "%bw_player%");
@@ -207,7 +207,7 @@ public class Russian extends Language{
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
                 "&f                                   &lBedWars", "", "%bw_winner_format%", "", "",
                 "&e                          &l1st Killer &7- %bw_first_format% - %bw_first_kills%",
-                "&6                          &l2nd Killer &7- %bw_second_format% - %bw_second_kills%}",
+                "&6                          &l2nd Killer &7- %bw_second_format% - %bw_second_kills%",
                 "&c                          &l3rd Killer &7- %bw_third_format% - %bw_third_kills%", "",
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
         yml.addDefault(Messages.GAME_END_TEAM_WON_CHAT, "%bw_lang_prefix%%bw_team_color%%bw_team_name% &aвыиграл игру!");
@@ -217,33 +217,33 @@ public class Russian extends Language{
         yml.addDefault(Messages.FORMATTING_GENERATOR_TIER1, "I");
         yml.addDefault(Messages.FORMATTING_GENERATOR_TIER2, "II");
         yml.addDefault(Messages.FORMATTING_GENERATOR_TIER3, "III");
-        yml.addDefault(Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT, "%bw_lang_prefix%{generatorType} Генератор &eбыл улучшен до уровня &c%bw_tier%");
+        yml.addDefault(Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT, "%bw_lang_prefix%%bw_generator_type% Генератор &eбыл улучшен до уровня &c%bw_tier%");
         yml.addDefault(Messages.NPC_NAME_TEAM_UPGRADES, "&bКОМАНДНЫЕ УЛУЧШЕНИЯ, &e&lПКМ");
         yml.addDefault(Messages.NPC_NAME_SOLO_UPGRADES, "&bСОЛО УЛУЧШЕНИЯ, &e&lПКМ");
         yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&bМАГАЗИН, &e&lПКМ");
         yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&bМАГАЗИН, &e&lПКМ");
-        yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "%bw_lang_prefix%&6+{xp} BedWars Опыта получено (Игровое время).");
-        yml.addDefault(Messages.XP_REWARD_WIN, "%bw_lang_prefix%&6+{xp} BedWars Опыта получено (Победа в игре).");
-        yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "%bw_lang_prefix%&6+{xp} BedWars Опыта получено (Поддержка команды).");
-        yml.addDefault(Messages.XP_REWARD_BED_DESTROY, "%bw_lang_prefix%&6+{xp} BedWars Опыта получено (Разрушение кровати).");
-        yml.addDefault(Messages.XP_REWARD_REGULAR_KILL, "%bw_lang_prefix%&6+{xp} BedWars Опыта получено (Убийство).");
-        yml.addDefault(Messages.XP_REWARD_FINAL_KILL, "%bw_lang_prefix%&6+{xp} BedWars Опыта получено (Финальное убийство).");
+        yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "%bw_lang_prefix%&6+%bw_xp% BedWars Опыта получено (Игровое время).");
+        yml.addDefault(Messages.XP_REWARD_WIN, "%bw_lang_prefix%&6+%bw_xp% BedWars Опыта получено (Победа в игре).");
+        yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "%bw_lang_prefix%&6+%bw_xp% BedWars Опыта получено (Поддержка команды).");
+        yml.addDefault(Messages.XP_REWARD_BED_DESTROY, "%bw_lang_prefix%&6+%bw_xp% BedWars Опыта получено (Разрушение кровати).");
+        yml.addDefault(Messages.XP_REWARD_REGULAR_KILL, "%bw_lang_prefix%&6+%bw_xp% BedWars Опыта получено (Убийство).");
+        yml.addDefault(Messages.XP_REWARD_FINAL_KILL, "%bw_lang_prefix%&6+%bw_xp% BedWars Опыта получено (Финальное убийство).");
 
-        yml.addDefault(Messages.MONEY_REWARD_PER_MINUTE, "%bw_lang_prefix%&6+{money} Монет (Игровое время).");
-        yml.addDefault(Messages.MONEY_REWARD_WIN, "%bw_lang_prefix%&6+{money} Монет (Победа в игре).");
-        yml.addDefault(Messages.MONEY_REWARD_PER_TEAMMATE, "%bw_lang_prefix%&6+{money} Монет (Поддержка команды).");
-        yml.addDefault(Messages.MONEY_REWARD_BED_DESTROYED, "%bw_lang_prefix%&6+{money} Монет (Разрушение кровати).");
-        yml.addDefault(Messages.MONEY_REWARD_FINAL_KILL, "%bw_lang_prefix%&6+{money} Монет (Финальное убийство).");
-        yml.addDefault(Messages.MONEY_REWARD_REGULAR_KILL, "%bw_lang_prefix%&6+{money} Монет (Убийство).");
+        yml.addDefault(Messages.MONEY_REWARD_PER_MINUTE, "%bw_lang_prefix%&6+%bw_money% Монет (Игровое время).");
+        yml.addDefault(Messages.MONEY_REWARD_WIN, "%bw_lang_prefix%&6+%bw_money% Монет (Победа в игре).");
+        yml.addDefault(Messages.MONEY_REWARD_PER_TEAMMATE, "%bw_lang_prefix%&6+%bw_money% Монет (Поддержка команды).");
+        yml.addDefault(Messages.MONEY_REWARD_BED_DESTROYED, "%bw_lang_prefix%&6+%bw_money% Монет (Разрушение кровати).");
+        yml.addDefault(Messages.MONEY_REWARD_FINAL_KILL, "%bw_lang_prefix%&6+%bw_money% Монет (Финальное убийство).");
+        yml.addDefault(Messages.MONEY_REWARD_REGULAR_KILL, "%bw_lang_prefix%&6+%bw_money% Монет (Убийство).");
 
         //SHOP
         yml.addDefault(Messages.SHOP_INDEX_NAME, "&8Быстрая покупка");
-        yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "%bw_lang_prefix%&cТебе нехватает %bw_currency%! Нужно еще {amount}!");
-        yml.addDefault(Messages.SHOP_NEW_PURCHASE, "%bw_lang_prefix%&aТы купил &6{item}");
+        yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "%bw_lang_prefix%&cТебе нехватает %bw_currency%! Нужно еще %bw_amount%!");
+        yml.addDefault(Messages.SHOP_NEW_PURCHASE, "%bw_lang_prefix%&aТы купил &6%bw_item%");
         yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "%bw_lang_prefix%&cТы уже купил это!");
         yml.addDefault(Messages.SHOP_QUICK_ADD_NAME, "&8Добавление в быструю покупку...");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "%bw_team_color%&l%bw_team_name% &r%bw_team_color%Silverfish");
-        yml.addDefault(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME, "%bw_team_color%{despawn}s &8[ %bw_team_color%%bw_health%&8]");
+        yml.addDefault(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME, "%bw_team_color%%bw_despawn_time%s &8[ %bw_team_color%%bw_health%&8]");
         yml.addDefault(Messages.SHOP_SEPARATOR_NAME, "&8⇧ Категории");
         yml.addDefault(Messages.SHOP_SEPARATOR_LORE, Collections.singletonList("&8⇩ Предметы"));
         yml.addDefault(Messages.SHOP_QUICK_BUY_NAME, "&bБыстрая покупка");
@@ -262,73 +262,73 @@ public class Russian extends Language{
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "&8Блоки", "&aБлоки", Collections.singletonList("&eНажмите для просмотра!"));
 
         addContentMessages(yml, "wool", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Шерсть", Arrays.asList("&7Цена: &f%bw_cost% %bw_currency%", "", "&7Great for bridging across", "&7islands. Turns into your team's",
-                "&7color.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "clay", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Глина", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "&7Стандартный блок для защиты кровати.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "glass", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Взрывоустойчивое стекло", Arrays.asList("&7Cost: %bw_cost% %bw_currency%", "", "&7Имеет имунитет к взрывам.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "stone", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Эндерняк", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "&7Солидный блок для защиты кровати.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "ladder", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Лестницы", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "&7Полезно когда кошки застревают", "&7на деревьях.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "obsidian", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Обсидиан", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "&7Лучший блок для защиты кровати.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "wood", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Дерево", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "&7Хороший блок для защиты кровати.", "", "{quick_buy}", "{buy_status}"));
+                "&7color.", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "clay", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Глина", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "&7Стандартный блок для защиты кровати.", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "glass", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Взрывоустойчивое стекло", Arrays.asList("&7Cost: %bw_cost% %bw_currency%", "", "&7Имеет имунитет к взрывам.", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "stone", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Эндерняк", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "&7Солидный блок для защиты кровати.", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "ladder", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Лестницы", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "&7Полезно когда кошки застревают", "&7на деревьях.", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "obsidian", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Обсидиан", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "&7Лучший блок для защиты кровати.", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "wood", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%Дерево", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "&7Хороший блок для защиты кровати.", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_MELEE, "&8Оружие", "&aОружие", Collections.singletonList("&eНажмите для просмотра!"));
 
-        addContentMessages(yml, "stone-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Каменный меч", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "iron-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Железный меч", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "diamond-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Алмазный меч", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "stick", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Палка (Отдача I)", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "stone-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Каменный меч", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "iron-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Железный меч", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "diamond-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Алмазный меч", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "stick", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%Палка (Отдача I)", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "&8Броня", "&aБроня", Collections.singletonList("&eНажмите для просмотра!"));
 
         addContentMessages(yml, "chainmail", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "%bw_color%Кольчужная броня", Arrays.asList("&7Цена: %bw_cost% %bw_currency%",
-                "", "&7Кольчужные штаны и сапоги", "&7Вы всегда будете появляться", "&7с ними при смерти.", "", "{quick_buy}", "{buy_status}"));
+                "", "&7Кольчужные штаны и сапоги", "&7Вы всегда будете появляться", "&7с ними при смерти.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "iron-armor", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "%bw_color%Железная броня", Arrays.asList("&7Цена: %bw_cost% %bw_currency%",
-                "", "&Железные штаны и сапоги", "&7Вы всегда будете появляться", "&7с ними при смерти.", "", "{quick_buy}", "{buy_status}"));
+                "", "&Железные штаны и сапоги", "&7Вы всегда будете появляться", "&7с ними при смерти.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "diamond-armor", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "%bw_color%Permanent Diamond Armor", Arrays.asList("&7Цена: %bw_cost% %bw_currency%",
-                "", "&7Алмазные штаны и сапоги", "&7Вы всегда будете появляться", "&7с ними при смерти.", "", "{quick_buy}", "{buy_status}"));
+                "", "&7Алмазные штаны и сапоги", "&7Вы всегда будете появляться", "&7с ними при смерти.", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "&8Инструменты", "&aИнструменты", Collections.singletonList("&eНажмите для просмотра!"));
 
         addContentMessages(yml, "shears", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Ножницы", Arrays.asList("&7Цена: %bw_cost% %bw_currency%",
-                "", "&7Отличный инструмент для ломания шерсти.", "&7Вы всегда будете появляться с ножницами.", "", "{quick_buy}", "{buy_status}"));
+                "", "&7Отличный инструмент для ломания шерсти.", "&7Вы всегда будете появляться с ножницами.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "pickaxe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Кирка %bw_tier%", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "&7Фаза: &e%bw_tier%",
-                "", "&7Это улучшаемый предмет.", "&7Если вы умрёте, то он.", "&7потеряет одну фазу!", "", "&7Если вы ухудшите свой", "&7предметы до последней фазы", "&7то вы всегда будете появляться с самой нижней фазой.", "", "{quick_buy}", "{buy_status}"));
+                "", "&7Это улучшаемый предмет.", "&7Если вы умрёте, то он.", "&7потеряет одну фазу!", "", "&7Если вы ухудшите свой", "&7предметы до последней фазы", "&7то вы всегда будете появляться с самой нижней фазой.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "axe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%Топор %bw_tier%", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "&7Фаза: &e%bw_tier%",
-                "", "&7Это улучшаемый предмет.", "&7Если вы умрёте, то он.", "&7потеряет одну фазу!", "", "&7Если вы ухудшите свой", "&7предметы до последней фазы", "&7то вы всегда будете появляться с самой нижней фазой.", "", "{quick_buy}", "{buy_status}"));
+                "", "&7Это улучшаемый предмет.", "&7Если вы умрёте, то он.", "&7потеряет одну фазу!", "", "&7Если вы ухудшите свой", "&7предметы до последней фазы", "&7то вы всегда будете появляться с самой нижней фазой.", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_RANGED, "&8Луки", "&aЛуки", Collections.singletonList("&eНажмите для просмотра!"));
 
-        addContentMessages(yml, "arrow", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Стрела", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bow1", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Лук", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bow2", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Лук (Сила I)", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bow3", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Лук (Сила  I, Отдача I)", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "arrow", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Стрела", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "bow1", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Лук", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "bow2", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Лук (Сила I)", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "bow3", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%Лук (Сила  I, Отдача I)", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "&8Зелья", "&aЗелья", Collections.singletonList("&eНажмите для просмотра!"));
 
-        addContentMessages(yml, "speed-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Зелье на Скорость II (45 секунд)", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "jump-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Зелье на Прыжок V (45 секунд)", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "invisibility", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Зелье невидимости (30 секунд)", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "speed-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Зелье на Скорость II (45 секунд)", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "jump-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Зелье на Прыжок V (45 секунд)", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "invisibility", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%Зелье невидимости (30 секунд)", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "&8Разное", "&aРазное", Collections.singletonList("&eНажмите для просмотра!"));
 
-        addContentMessages(yml, "golden-apple", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Золотое Яблоко", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "&7Хорошо восстанавливает здоровье.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "golden-apple", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Золотое Яблоко", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "&7Хорошо восстанавливает здоровье.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "bedbug", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Чешуйница", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "&7Спавнит чешуйниц при",
-                "&7бросания снежка.", "&7Может скинуть врагов, действует 15 секунд.", "", "{quick_buy}", "{buy_status}"));
+                "&7бросания снежка.", "&7Может скинуть врагов, действует 15 секунд.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "dream-defender", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Железный Голем", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "&7Железный голем для защиты вашей",
-                "&7базы. Действует 4 минуты.", "", "{quick_buy}", "{buy_status}"));
+                "&7базы. Действует 4 минуты.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "fireball", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Фаербол", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "&7Нажми ПКМ чтобы запустить!",
-                "&7Огненный заряд хорошенько поджарит", "&7мосты ваших противников!", "", "{quick_buy}", "{buy_status}"));
+                "&7Огненный заряд хорошенько поджарит", "&7мосты ваших противников!", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "tnt", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Динамит", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "&7Автоматически поджигаеться, при",
-                "&7размещении!", "", "{quick_buy}", "{buy_status}"));
+                "&7размещении!", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "ender-pearl", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Эндер-пёрл", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "&7Самый быстрый способ добраться",
-                "&7до базы вашего врага.", "", "{quick_buy}", "{buy_status}"));
+                "&7до базы вашего врага.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "water-bucket", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Ведро Воды", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "&7Отличный метод замедлить ваших",
-                "&7противников. Также может", "&7защитить от взрыва динамита.", "", "{quick_buy}", "{buy_status}"));
+                "&7противников. Также может", "&7защитить от взрыва динамита.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "bridge-egg", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Яйцо", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "&7Создаёт мост, по заданной",
-                "&7траектории после броска.", "", "{quick_buy}", "{buy_status}"));
+                "&7траектории после броска.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "magic-milk", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Магическое Молоко", Arrays.asList("&7Цена: %bw_cost% %bw_currency%", "", "&7Снимает эффекты всех ловушек,",
-                "&7поставленных на базу противника, в течении 60 секунд.", "", "{quick_buy}", "{buy_status}"));
+                "&7поставленных на базу противника, в течении 60 секунд.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "sponge", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Губка", Arrays.asList("&7Cost: %bw_cost% %bw_currency%", "", "&7Вжимает в себя воду.",
-                "", "{quick_buy}", "{buy_status}"));
+                "", "%bw_quick_buy%", "%bw_buy_status%"));
 
 
         yml.addDefault(Messages.MEANING_FULL, "Полный");
@@ -350,40 +350,40 @@ public class Russian extends Language{
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_LOCKED, "&cЗАБЛОКИРОВАНО");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_UNLOCKED, "&aРАЗБЛОКИРОВАНО");
         yml.addDefault("upgrades.Default.generators.tier1.name", "&eЖелезная кузница");
-        yml.addDefault("upgrades.Default.generators.tier1.lore", Arrays.asList("&7Увеличивает скорость спавна", "&7Железа и золота на 50%..", "", "&7Цена:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
+        yml.addDefault("upgrades.Default.generators.tier1.lore", Arrays.asList("&7Увеличивает скорость спавна", "&7Железа и золота на 50%..", "", "&7Цена:&b %bw_cost% %bw_currency%", ""));
         yml.addDefault("upgrades.Default.generators.tier2.name", "&eЗолотая кузница");
-        yml.addDefault("upgrades.Default.generators.tier2.lore", Arrays.asList("&7Увеличивает скорость спавна", "&7железа и золота на 100%..", "", "&7Цена:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
+        yml.addDefault("upgrades.Default.generators.tier2.lore", Arrays.asList("&7Увеличивает скорость спавна", "&7железа и золота на 100%..", "", "&7Цена:&b %bw_cost% %bw_currency%", ""));
         yml.addDefault("upgrades.Default.generators.tier3.name", "&eИзумрудная кузница");
-        yml.addDefault("upgrades.Default.generators.tier3.lore", Arrays.asList("&7Активирует заклинателя «Изумруд»", "&7В кузнице вашей команды.", "", "&7Цена:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
+        yml.addDefault("upgrades.Default.generators.tier3.lore", Arrays.asList("&7Активирует заклинателя «Изумруд»", "&7В кузнице вашей команды.", "", "&7Цена:&b %bw_cost% %bw_currency%", ""));
         yml.addDefault("upgrades.Default.maniacMiner.tier1.name", "&eМаньяк-майнер");
-        yml.addDefault("upgrades.Default.maniacMiner.tier1.lore", Arrays.asList("&7Все игроки вашей команды", "&7Навсегда получат ускорение I", "", "&7Цена:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
+        yml.addDefault("upgrades.Default.maniacMiner.tier1.lore", Arrays.asList("&7Все игроки вашей команды", "&7Навсегда получат ускорение I", "", "&7Цена:&b %bw_cost% %bw_currency%", ""));
         yml.addDefault("upgrades.Default.sharpSword.tier1.name", "&eЗаостренные мечи");
-        yml.addDefault("upgrades.Default.sharpSword.tier1.lore", Arrays.asList("&7Ваша команда получит Резкость I", "&7На всех мечах!", "", "&7Цена:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
+        yml.addDefault("upgrades.Default.sharpSword.tier1.lore", Arrays.asList("&7Ваша команда получит Резкость I", "&7На всех мечах!", "", "&7Цена:&b %bw_cost% %bw_currency%", ""));
         yml.addDefault("upgrades.Default.reinforced.tier1.name", "&eУкрепленная броня");
-        yml.addDefault("upgrades.Default.reinforced.tier1.lore", Arrays.asList("&7Ваша команда поолучит Защиту I", "&7На всей броне!", "", "&7Цена:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
+        yml.addDefault("upgrades.Default.reinforced.tier1.lore", Arrays.asList("&7Ваша команда поолучит Защиту I", "&7На всей броне!", "", "&7Цена:&b %bw_cost% %bw_currency%", ""));
         yml.addDefault("upgrades.Default.trap.tier1.name", "&eЭто ловушка!");
-        yml.addDefault("upgrades.Default.trap.tier1.lore", Arrays.asList("&7Враг, пытающийся зайти на вашу базу", "&7Получит слепоту", "&7и медлительность!", "", "&7Цена:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
+        yml.addDefault("upgrades.Default.trap.tier1.lore", Arrays.asList("&7Враг, пытающийся зайти на вашу базу", "&7Получит слепоту", "&7и медлительность!", "", "&7Цена:&b %bw_cost% %bw_currency%", ""));
         yml.addDefault("upgrades.Default.miningFatigue.tier1.name", "&eШахтерская усталостная ловушка");
-        yml.addDefault("upgrades.Default.miningFatigue.tier1.lore", Arrays.asList("&7Враг, пытающийся зайти на вашу базу", "&7В течении 10 секунд получит", "&7усталость!", "", "&7Цена:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
+        yml.addDefault("upgrades.Default.miningFatigue.tier1.lore", Arrays.asList("&7Враг, пытающийся зайти на вашу базу", "&7В течении 10 секунд получит", "&7усталость!", "", "&7Цена:&b %bw_cost% %bw_currency%", ""));
         yml.addDefault("upgrades.Default.healPool.tier1.name", "&eИсцеляющее поле");
-        yml.addDefault("upgrades.Default.healPool.tier1.lore", Arrays.asList("&7Создает поле регенирации", "&7вокруг вашей базы!", "", "&7Цена:&b %bw_cost% %bw_currency%", "", "{loreFooter}"));
-        yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a%bw_player% купил улучшение &6{upgradeName}");
+        yml.addDefault("upgrades.Default.healPool.tier1.lore", Arrays.asList("&7Создает поле регенирации", "&7вокруг вашей базы!", "", "&7Цена:&b %bw_cost% %bw_currency%", ""));
+        yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a%bw_player% купил улучшение &6%bw_upgrade_name%");
         yml.addDefault(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH, "▮ ");
-        yml.addDefault(Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR, "{PlayerColor}%bw_player% &7умер.");
-        yml.addDefault(Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL, "{PlayerColor}%bw_player% &7умер. &b&lФИНАЛЬНОЕ УБИЙСТВО!");
-        yml.addDefault(Messages.PLAYER_DIE_SHOOT_REGULAR, "{PlayerColor}%bw_player% &7был убит выстрелом игрока {KillerColor}{KillerName}&7!");
-        yml.addDefault(Messages.PLAYER_DIE_SHOOT_FINAL_KILL, "{PlayerColor}%bw_player% &7был убит выстрелом игрока {KillerColor}{KillerName}&7! &b&lФИНАЛЬНОЕ УБИЙСТВО!");
-        yml.addDefault(Messages.PLAYER_DIE_DEBUG_REGULAR, "{PlayerColor}%bw_player% &7был убит чешуйницей игрока {KillerColor}{KillerTeamName}!");
-        yml.addDefault(Messages.PLAYER_DIE_DEBUG_FINAL_KILL, "{PlayerColor}%bw_player% &7был убит Чешуйницей игрока {KillerColor}{KillerTeamName}! &b&lФИНАЛЬНОЕ УБИЙСТВО!");
-        yml.addDefault(Messages.PLAYER_DIE_IRON_GOLEM_REGULAR, "{PlayerColor}%bw_player% &7был убит Железным Големом игрока {KillerColor}{KillerTeamName}!");
-        yml.addDefault(Messages.PLAYER_DIE_IRON_GOLEM_FINAL_KILL, "{PlayerColor}%bw_player% &7был убит Железным Големом игрока {KillerColor}{KillerTeamName}! &b&lФИНАЛЬНОЕ УБИЙСТВО!");
-        yml.addDefault(Messages.PLAYER_DIE_REWARD_DIAMOND, "%bw_lang_prefix%&b+{amount} {meaning}");
-        yml.addDefault(Messages.PLAYER_DIE_REWARD_EMERALD, "%bw_lang_prefix%&a+{amount} {meaning}");
-        yml.addDefault(Messages.PLAYER_DIE_REWARD_IRON, "%bw_lang_prefix%&f+{amount} {meaning}");
-        yml.addDefault(Messages.PLAYER_DIE_REWARD_GOLD, "%bw_lang_prefix%&6+{amount} {meaning}");
+        yml.addDefault(Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR, "%bw_player_color%%bw_player% &7умер.");
+        yml.addDefault(Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL, "%bw_player_color%%bw_player% &7умер. &b&lФИНАЛЬНОЕ УБИЙСТВО!");
+        yml.addDefault(Messages.PLAYER_DIE_SHOOT_REGULAR, "%bw_player_color%%bw_player% &7был убит выстрелом игрока %bw_killer_color%%bw_killer_name%&7!");
+        yml.addDefault(Messages.PLAYER_DIE_SHOOT_FINAL_KILL, "%bw_player_color%%bw_player% &7был убит выстрелом игрока %bw_killer_color%%bw_killer_name%&7! &b&lФИНАЛЬНОЕ УБИЙСТВО!");
+        yml.addDefault(Messages.PLAYER_DIE_DEBUG_REGULAR, "%bw_player_color%%bw_player% &7был убит чешуйницей игрока %bw_killer_color%%bw_killer_team_name%!");
+        yml.addDefault(Messages.PLAYER_DIE_DEBUG_FINAL_KILL, "%bw_player_color%%bw_player% &7был убит Чешуйницей игрока %bw_killer_color%%bw_killer_team_name%! &b&lФИНАЛЬНОЕ УБИЙСТВО!");
+        yml.addDefault(Messages.PLAYER_DIE_IRON_GOLEM_REGULAR, "%bw_player_color%%bw_player% &7был убит Железным Големом игрока %bw_killer_color%%bw_killer_team_name%!");
+        yml.addDefault(Messages.PLAYER_DIE_IRON_GOLEM_FINAL_KILL, "%bw_player_color%%bw_player% &7был убит Железным Големом игрока %bw_killer_color%%bw_killer_team_name%! &b&lФИНАЛЬНОЕ УБИЙСТВО!");
+        yml.addDefault(Messages.PLAYER_DIE_REWARD_DIAMOND, "%bw_lang_prefix%&b+%bw_amount% %bw_meaning%");
+        yml.addDefault(Messages.PLAYER_DIE_REWARD_EMERALD, "%bw_lang_prefix%&a+%bw_amount% %bw_meaning%");
+        yml.addDefault(Messages.PLAYER_DIE_REWARD_IRON, "%bw_lang_prefix%&f+%bw_amount% %bw_meaning%");
+        yml.addDefault(Messages.PLAYER_DIE_REWARD_GOLD, "%bw_lang_prefix%&6+%bw_amount% %bw_meaning%");
 
-        yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_REGULAR, "{PlayerColor}%bw_player% &7был взорван бомбой.");
-        yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_FINAL_KILL, "{PlayerColor}%bw_player% &7был взорван бомбой. &b&lФИНАЛЬНОЕ УБИЙСТВО!");
+        yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_REGULAR, "%bw_player_color%%bw_player% &7был взорван бомбой.");
+        yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_FINAL_KILL, "%bw_player_color%%bw_player% &7был взорван бомбой. &b&lФИНАЛЬНОЕ УБИЙСТВО!");
         yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "&8Статистика игрока %bw_player%");
 
         /* save default items messages for stats gui */
@@ -400,7 +400,7 @@ public class Russian extends Language{
         yml.addDefault(Messages.FORMATTING_STATS_DATE_FORMAT, "yyyy/MM/dd HH:mm");
 
         yml.addDefault(Messages.MEANING_NEVER, "Никогда");
-        yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&fВаш уровень: %bw_level%", "", "&fПрогресс: &a{currentXp}&7/&b{requiredXp}", "{progress}", "", "&7%bw_player%", "", "&fМонет: &a{money}"
+        yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&fВаш уровень: %bw_level%", "", "&fПрогресс: &a%bw_current_xp%&7/&b%bw_required_xp%", "%bw_progress%", "", "&7%bw_player%", "", "&fМонет: &a%bw_money%"
                 , "", "&fВсего побед: &a%bw_wins%", "&fВсего убйиств: &a%bw_kills%", "", "&e%bw_server_ip%"));
 
         /* party commands */
@@ -435,7 +435,7 @@ public class Russian extends Language{
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_SUCCESS, "%bw_lang_prefix%&eВы успешно повысили %bw_player% до владельца");
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_OWNER, "%bw_lang_prefix%&eВы были повышены до владельца группы");
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_NEW_OWNER, "%bw_lang_prefix%&7 &e%bw_player% был повышен до владельца группы");
-        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n%bw_lang_prefix%&eВладелец группы: &7{owner}");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n%bw_lang_prefix%&eВладелец группы: &7%bw_party_owner%");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS,"%bw_lang_prefix%&eУчастники группы:");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYER, "&7%bw_player%");
         yml.addDefault(Messages.NEXT_EVENT_BEDS_DESTROY, "&cУничтожение кроватей");
@@ -450,7 +450,7 @@ public class Russian extends Language{
         yml.addDefault(Messages.NEXT_EVENT_CHAT_ANNOUNCE_BEDS_DESTROYED, "&c&lВсе кровати были уничтожены!");
         yml.addDefault(Messages.NEXT_EVENT_TITLE_ANNOUNCE_SUDDEN_DEATH, "&cСмерть");
         yml.addDefault(Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_SUDDEN_DEATH, "");
-        yml.addDefault(Messages.NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH, "&cСМЕРТЬ: &6&b{TeamDragons} %bw_team_color%%bw_team_name% Dragon!");
+        yml.addDefault(Messages.NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH, "&cСМЕРТЬ: &6&b%bw_dragons_amount% %bw_team_color%%bw_team_name% Dragon!");
         yml.addDefault(Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS, "%bw_lang_prefix%&cКоманда не найдена или у вас нет прав!");
         yml.addDefault(Messages.COMMAND_FORCESTART_NOT_IN_GAME, "§c▪ §7Вы не играете!");
         yml.addDefault(Messages.COMMAND_FORCESTART_SUCCESS, "§c▪ §7Обратный отсчет сокращен!");
@@ -502,7 +502,7 @@ public class Russian extends Language{
 
 
         yml.addDefault(Messages.MEANING_NO_TRAP, "Ловушки отсутствуют!");
-        yml.addDefault(Messages.FORMAT_UPGRADE_TRAP_COST, "&7Цена: {currencyColor}%bw_cost% %bw_currency%");
+        yml.addDefault(Messages.FORMAT_UPGRADE_TRAP_COST, "&7Цена: %bw_currency_color%%bw_cost% %bw_currency%");
         yml.addDefault(Messages.FORMAT_UPGRADE_COLOR_CAN_AFFORD, "&e");
         yml.addDefault(Messages.FORMAT_UPGRADE_COLOR_CANT_AFFORD, "&c");
         yml.addDefault(Messages.FORMAT_UPGRADE_COLOR_UNLOCKED, "&a");
@@ -512,7 +512,7 @@ public class Russian extends Language{
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY, "%bw_color%Тебе не хватает %bw_currency%");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_LOCKED, "&cЗАБЛОКИРОВАНО");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_UNLOCKED, "%bw_color%РАЗБЛОКИРОВАНО");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a%bw_player% купил &6{upgradeName}");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a%bw_player% купил &6%bw_upgrade_name%");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "forge").replace("%bw_tier%", "tier-1"), "%bw_color%Железная Печь");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("%bw_name%", "forge"),
                 Arrays.asList("&7Делает быстрее спавнер", "&7ресурсов вашего острова.", "", "{tier_1_color}Фаза 1: +50% К ресурсам, &b{tier_1_cost} {tier_1_currency}",

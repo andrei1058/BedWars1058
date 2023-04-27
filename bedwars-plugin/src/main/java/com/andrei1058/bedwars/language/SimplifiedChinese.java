@@ -56,7 +56,7 @@ public class SimplifiedChinese extends Language {
 
         yml.addDefault(Messages.COMMAND_MAIN, Arrays.asList("", "&2▪ &7/" + mainCmd + " stats", "&2▪ &7/" + mainCmd + " join &o<游戏/模式>", "&2▪ &7/" + mainCmd + " leave", "&2▪ &7/" + mainCmd + " lang", "&2▪ &7/" + mainCmd + " gui", "&2▪ &7/" + mainCmd + " start &3（赞助者）"));
         yml.addDefault(Messages.COMMAND_LANG_LIST_HEADER, "%bw_lang_prefix% &2可用的语言：");
-        yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&a▪  &7{iso} - &f%bw_name%");
+        yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&a▪  &7%bw_lang_iso% - &f%bw_name%");
         yml.addDefault(Messages.COMMAND_LANG_USAGE, "%bw_lang_prefix%&用法：/lang &f&o<iso>");
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_NOT_EXIST, "%bw_lang_prefix%&c该语言不存在！");
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY, "%bw_lang_prefix%&a语言已设置！");
@@ -115,7 +115,7 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_SUCCESS, "%bw_lang_prefix%&e你成功将 %bw_player% 提升为群主");
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_OWNER, "%bw_lang_prefix%&e你已被提升为群主");
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_NEW_OWNER, "%bw_lang_prefix%&7 &e%bw_player% 已被提升为群主");
-        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n%bw_lang_prefix%&e群主为: &7{owner}");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n%bw_lang_prefix%&e群主为: &7%bw_party_owner%");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS,"%bw_lang_prefix%&e群成员有：");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYER, "&7%bw_player%");
         yml.addDefault(Messages.COMMAND_FORCESTART_NOT_IN_GAME, "&c▪ &7你不在游戏中！");
@@ -131,10 +131,10 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.ARENA_STATUS_STARTING_NAME, "&6即将开始 &c%bw_full%");
         yml.addDefault(Messages.ARENA_GUI_INV_NAME, "&8点击加入");
         yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_NAME, "&a&l%bw_name%");
-        yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_LORE, Arrays.asList("", "&7状态：{status}", "&7玩家数：&f%bw_on%&7/&f%bw_max%", "&7模式：&a{group}", "", "&a点击进入", "&e右击观赛"));
+        yml.addDefault(Messages.ARENA_GUI_ARENA_CONTENT_LORE, Arrays.asList("", "&7状态：%bw_arena_status%", "&7玩家数：&f%bw_on%&7/&f%bw_max%", "&7模式：&a%bw_group%", "", "&a点击进入", "&e右击观赛"));
         yml.addDefault(Messages.ARENA_GUI_SKIPPED_ITEM_NAME, "&r%bw_server_ip%");
         yml.addDefault(Messages.ARENA_GUI_SKIPPED_ITEM_LORE, Collections.emptyList());
-        yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_CHAT, "%bw_lang_prefix%&e游戏将在 &6{time}&e 秒后开始！");
+        yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_CHAT, "%bw_lang_prefix%&e游戏将在 &6%bw_time%&e 秒后开始！");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_TITLE, " ");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE, "&a%bw_seconds%");
         yml.addDefault(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-5", "&e❺");
@@ -169,12 +169,12 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND, "&b&l钻石");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD, "&a&l绿宝石");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIMER, "&c%bw_seconds%&e 秒后生成");
-        yml.addDefault(Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT, "%bw_lang_prefix%{generatorType}资源点&e升级到&c%bw_tier%级。");
-        yml.addDefault(Messages.FORMATTING_CHAT_LOBBY, "{level}%bw_v_prefix%&7%bw_player%%bw_v_suffix%：%bw_message%");
-        yml.addDefault(Messages.FORMATTING_CHAT_WAITING, "{level}%bw_v_prefix%&7%bw_player%%bw_v_suffix%：%bw_message%");
-        yml.addDefault(Messages.FORMATTING_CHAT_SHOUT, "{level}%bw_v_prefix%&6[公屏] %bw_team% &7%bw_player%&f%bw_v_suffix%：%bw_message%");
-        yml.addDefault(Messages.FORMATTING_CHAT_TEAM, "{level}%bw_v_prefix%&f%bw_team%&7 %bw_player%%bw_v_suffix% %bw_message%");
-        yml.addDefault(Messages.FORMATTING_CHAT_SPECTATOR, "{level}%bw_v_prefix%&7[旁观者] %bw_player%%bw_v_suffix%：%bw_message%");
+        yml.addDefault(Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT, "%bw_lang_prefix%%bw_generator_type%资源点&e升级到&c%bw_tier%级。");
+        yml.addDefault(Messages.FORMATTING_CHAT_LOBBY, "%bw_level%%bw_v_prefix%&7%bw_player%%bw_v_suffix%：%bw_message%");
+        yml.addDefault(Messages.FORMATTING_CHAT_WAITING, "%bw_level%%bw_v_prefix%&7%bw_player%%bw_v_suffix%：%bw_message%");
+        yml.addDefault(Messages.FORMATTING_CHAT_SHOUT, "%bw_level%%bw_v_prefix%&6[公屏] %bw_team% &7%bw_player%&f%bw_v_suffix%：%bw_message%");
+        yml.addDefault(Messages.FORMATTING_CHAT_TEAM, "%bw_level%%bw_v_prefix%&f%bw_team%&7 %bw_player%%bw_v_suffix% %bw_message%");
+        yml.addDefault(Messages.FORMATTING_CHAT_SPECTATOR, "%bw_level%%bw_v_prefix%&7[旁观者] %bw_player%%bw_v_suffix%：%bw_message%");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_HEALTH, Arrays.asList("&c❤", "&a生命值"));
         yml.addDefault(Messages.FORMATTING_SPECTATOR_TEAM, "旁观者");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_SPECTATOR, "&7");
@@ -205,9 +205,9 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR, "\n&9%bw_server_ip%");
 
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_DATE, "yy/MM/dd");
-        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TEAM_GENERIC, "%bw_team_color%%bw_team_letter%&f %bw_team_name%：{TeamStatus}");
+        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TEAM_GENERIC, "%bw_team_color%%bw_team_letter%&f %bw_team_name%：%bw_team_status%");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED, "&c&l✘");
-        yml.addDefault(Messages.FORMATTING_SCOREBOARD_BED_DESTROYED, "&a{remainingPlayers}");
+        yml.addDefault(Messages.FORMATTING_SCOREBOARD_BED_DESTROYED, "&a%bw_players_remaining%");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE, "&a&l✓");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_NEXEVENT_TIMER, "mm:ss");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_YOUR_TEAM, "&7 你");
@@ -239,44 +239,44 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.INTERACT_CANNOT_PLACE_BLOCK, "%bw_lang_prefix%&c你不能在这里放置方块！");
         yml.addDefault(Messages.INTERACT_CANNOT_BREAK_BLOCK, "%bw_lang_prefix%&c你只能破坏由玩家放置的方块！");
         yml.addDefault(Messages.INTERACT_CANNOT_BREAK_OWN_BED, "&c你不能破坏自己的床！");
-        yml.addDefault(Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT, "\n&f&l床被破坏 > %bw_team_color%%bw_team_name%的床&7被{PlayerColor}%bw_player%&7破坏了！\n");
+        yml.addDefault(Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT, "\n&f&l床被破坏 > %bw_team_color%%bw_team_name%的床&7被%bw_player_color%%bw_player%&7破坏了！\n");
         yml.addDefault(Messages.INTERACT_BED_DESTROY_TITLE_ANNOUNCEMENT, "&c床被破坏！");
         yml.addDefault(Messages.INTERACT_BED_DESTROY_SUBTITLE_ANNOUNCEMENT, "&f你不能再重生！");
-        yml.addDefault(Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM, "&f&l床被破坏 > &7你的床被{PlayerColor}%bw_player%&7破坏了！\n");
+        yml.addDefault(Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM, "&f&l床被破坏 > &7你的床被%bw_player_color%%bw_player%&7破坏了！\n");
         yml.addDefault(Messages.INTERACT_CHEST_CANT_OPEN_TEAM_ELIMINATED, "&c此队伍还未被团灭，因此你不能打开该团队箱子！");
         yml.addDefault(Messages.INTERACT_INVISIBILITY_REMOVED_DAMGE_TAKEN, "&c你因受到伤害而被迫退出隐身！");
-        yml.addDefault(Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL, "{PlayerColor}%bw_player%&7掉进了虚空。");
-        yml.addDefault(Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL, "{PlayerColor}%bw_player%&7掉进了虚空。 &b&l最终击杀！");
-        yml.addDefault(Messages.PLAYER_DIE_KNOCKED_IN_VOID_REGULAR_KILL, "{PlayerColor}%bw_player%&7被{KillerColor}{KillerName}&7丢进了虚空。");
-        yml.addDefault(Messages.PLAYER_DIE_KNOCKED_IN_VOID_FINAL_KILL, "{PlayerColor}%bw_player%&7被{KillerColor}{KillerName}&7丢进了虚空。 &b&l最终击杀！");
-        yml.addDefault(Messages.PLAYER_DIE_PVP_LOG_OUT_REGULAR, "{PlayerColor}%bw_player%&7在与{KillerColor}{KillerName}&7战斗时断开连接。");
-        yml.addDefault(Messages.PLAYER_DIE_PVP_LOG_OUT_FINAL, "{PlayerColor}%bw_player%&7在与{KillerColor}{KillerName}&7战斗时断开连接。 &b&l最终击杀！");
-        yml.addDefault(Messages.PLAYER_DIE_KNOCKED_BY_REGULAR_KILL, "{PlayerColor}%bw_player%&7被{KillerColor}{KillerName}&7推下了悬崖。");
-        yml.addDefault(Messages.PLAYER_DIE_KNOCKED_BY_FINAL_KILL, "{PlayerColor}%bw_player%&7被{KillerColor}{KillerName}&7推下了悬崖。 &b&l最终击杀！");
-        yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITH_SOURCE_REGULAR_KILL, "{PlayerColor}%bw_player%&7被{KillerColor}{KillerName}&7炸死了。");
-        yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITH_SOURCE_FINAL_KILL, "{PlayerColor}%bw_player%&7被{KillerColor}{KillerName}&7炸死了。 &b&l最终击杀！");
-        yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_REGULAR, "{PlayerColor}%bw_player%&7爆炸了。");
-        yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_FINAL_KILL, "{PlayerColor}%bw_player%&7爆炸了。 &b&l最终击杀！");
-        yml.addDefault(Messages.PLAYER_DIE_PVP_REGULAR_KILL, "{PlayerColor}%bw_player%&7被{KillerColor}{KillerName}&7击杀。");
-        yml.addDefault(Messages.PLAYER_DIE_PVP_FINAL_KILL, "{PlayerColor}%bw_player%&7被{KillerColor}{KillerName}&7击杀。 &b&l最终击杀！");
-        yml.addDefault(Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR, "{PlayerColor}%bw_player%&7死了。");
-        yml.addDefault(Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL, "{PlayerColor}%bw_player%&7死了。 &b&l最终击杀！");
-        yml.addDefault(Messages.PLAYER_DIE_SHOOT_REGULAR, "{PlayerColor}%bw_player%&7被{KillerColor}{KillerName}&7射死了！");
-        yml.addDefault(Messages.PLAYER_DIE_SHOOT_FINAL_KILL, "{PlayerColor}%bw_player%&7被{KillerColor}{KillerName}&7射死了！ &b&l最终击杀！");
-        yml.addDefault(Messages.PLAYER_DIE_DEBUG_REGULAR, "{PlayerColor}%bw_player%&7被{KillerColor}{KillerTeamName}&7的蠹虫杀死了！");
-        yml.addDefault(Messages.PLAYER_DIE_DEBUG_FINAL_KILL, "{PlayerColor}%bw_player%&7被{KillerColor}{KillerTeamName}&7的蠹虫杀死了！ &b&l最终击杀！");
-        yml.addDefault(Messages.PLAYER_DIE_IRON_GOLEM_REGULAR, "{PlayerColor}%bw_player%&7被{KillerColor}{KillerTeamName}&7的铁傀儡杀死了！");
-        yml.addDefault(Messages.PLAYER_DIE_IRON_GOLEM_FINAL_KILL, "{PlayerColor}%bw_player%&7被{KillerColor}{KillerTeamName}&7的铁傀儡杀死了！ &b&l最终击杀！");
-        yml.addDefault(Messages.PLAYER_DIE_REWARD_DIAMOND, "%bw_lang_prefix%&b+{amount}{meaning}");
-        yml.addDefault(Messages.PLAYER_DIE_REWARD_EMERALD, "%bw_lang_prefix%&a+{amount}{meaning}");
-        yml.addDefault(Messages.PLAYER_DIE_REWARD_IRON, "%bw_lang_prefix%&f+{amount}{meaning}");
-        yml.addDefault(Messages.PLAYER_DIE_REWARD_GOLD, "%bw_lang_prefix%&6+{amount}{meaning}");
+        yml.addDefault(Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL, "%bw_player_color%%bw_player%&7掉进了虚空。");
+        yml.addDefault(Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL, "%bw_player_color%%bw_player%&7掉进了虚空。 &b&l最终击杀！");
+        yml.addDefault(Messages.PLAYER_DIE_KNOCKED_IN_VOID_REGULAR_KILL, "%bw_player_color%%bw_player%&7被%bw_killer_color%%bw_killer_name%&7丢进了虚空。");
+        yml.addDefault(Messages.PLAYER_DIE_KNOCKED_IN_VOID_FINAL_KILL, "%bw_player_color%%bw_player%&7被%bw_killer_color%%bw_killer_name%&7丢进了虚空。 &b&l最终击杀！");
+        yml.addDefault(Messages.PLAYER_DIE_PVP_LOG_OUT_REGULAR, "%bw_player_color%%bw_player%&7在与%bw_killer_color%%bw_killer_name%&7战斗时断开连接。");
+        yml.addDefault(Messages.PLAYER_DIE_PVP_LOG_OUT_FINAL, "%bw_player_color%%bw_player%&7在与%bw_killer_color%%bw_killer_name%&7战斗时断开连接。 &b&l最终击杀！");
+        yml.addDefault(Messages.PLAYER_DIE_KNOCKED_BY_REGULAR_KILL, "%bw_player_color%%bw_player%&7被%bw_killer_color%%bw_killer_name%&7推下了悬崖。");
+        yml.addDefault(Messages.PLAYER_DIE_KNOCKED_BY_FINAL_KILL, "%bw_player_color%%bw_player%&7被%bw_killer_color%%bw_killer_name%&7推下了悬崖。 &b&l最终击杀！");
+        yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITH_SOURCE_REGULAR_KILL, "%bw_player_color%%bw_player%&7被%bw_killer_color%%bw_killer_name%&7炸死了。");
+        yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITH_SOURCE_FINAL_KILL, "%bw_player_color%%bw_player%&7被%bw_killer_color%%bw_killer_name%&7炸死了。 &b&l最终击杀！");
+        yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_REGULAR, "%bw_player_color%%bw_player%&7爆炸了。");
+        yml.addDefault(Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_FINAL_KILL, "%bw_player_color%%bw_player%&7爆炸了。 &b&l最终击杀！");
+        yml.addDefault(Messages.PLAYER_DIE_PVP_REGULAR_KILL, "%bw_player_color%%bw_player%&7被%bw_killer_color%%bw_killer_name%&7击杀。");
+        yml.addDefault(Messages.PLAYER_DIE_PVP_FINAL_KILL, "%bw_player_color%%bw_player%&7被%bw_killer_color%%bw_killer_name%&7击杀。 &b&l最终击杀！");
+        yml.addDefault(Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR, "%bw_player_color%%bw_player%&7死了。");
+        yml.addDefault(Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL, "%bw_player_color%%bw_player%&7死了。 &b&l最终击杀！");
+        yml.addDefault(Messages.PLAYER_DIE_SHOOT_REGULAR, "%bw_player_color%%bw_player%&7被%bw_killer_color%%bw_killer_name%&7射死了！");
+        yml.addDefault(Messages.PLAYER_DIE_SHOOT_FINAL_KILL, "%bw_player_color%%bw_player%&7被%bw_killer_color%%bw_killer_name%&7射死了！ &b&l最终击杀！");
+        yml.addDefault(Messages.PLAYER_DIE_DEBUG_REGULAR, "%bw_player_color%%bw_player%&7被%bw_killer_color%%bw_killer_team_name%&7的蠹虫杀死了！");
+        yml.addDefault(Messages.PLAYER_DIE_DEBUG_FINAL_KILL, "%bw_player_color%%bw_player%&7被%bw_killer_color%%bw_killer_team_name%&7的蠹虫杀死了！ &b&l最终击杀！");
+        yml.addDefault(Messages.PLAYER_DIE_IRON_GOLEM_REGULAR, "%bw_player_color%%bw_player%&7被%bw_killer_color%%bw_killer_team_name%&7的铁傀儡杀死了！");
+        yml.addDefault(Messages.PLAYER_DIE_IRON_GOLEM_FINAL_KILL, "%bw_player_color%%bw_player%&7被%bw_killer_color%%bw_killer_team_name%&7的铁傀儡杀死了！ &b&l最终击杀！");
+        yml.addDefault(Messages.PLAYER_DIE_REWARD_DIAMOND, "%bw_lang_prefix%&b+%bw_amount%%bw_meaning%");
+        yml.addDefault(Messages.PLAYER_DIE_REWARD_EMERALD, "%bw_lang_prefix%&a+%bw_amount%%bw_meaning%");
+        yml.addDefault(Messages.PLAYER_DIE_REWARD_IRON, "%bw_lang_prefix%&f+%bw_amount%%bw_meaning%");
+        yml.addDefault(Messages.PLAYER_DIE_REWARD_GOLD, "%bw_lang_prefix%&6+%bw_amount%%bw_meaning%");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_TITLE, "&c你死了！");
-        yml.addDefault(Messages.PLAYER_DIE_RESPAWN_SUBTITLE, "&e你将在 &a{time} &e秒后重生！");
-        yml.addDefault(Messages.PLAYER_DIE_RESPAWN_CHAT, "%bw_lang_prefix%&e你将在 &a{time} &e秒后重生！");
+        yml.addDefault(Messages.PLAYER_DIE_RESPAWN_SUBTITLE, "&e你将在 &a%bw_time% &e秒后重生！");
+        yml.addDefault(Messages.PLAYER_DIE_RESPAWN_CHAT, "%bw_lang_prefix%&e你将在 &a%bw_time% &e秒后重生！");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWNED_TITLE, "&a已重生！");
         yml.addDefault(Messages.PLAYER_DIE_ELIMINATED_CHAT, "%bw_lang_prefix%&c你已被淘汰！");
-        yml.addDefault(Messages.PLAYER_HIT_BOW, "%bw_lang_prefix%%bw_player%&7还有 &e{amount} &c生命值！");
+        yml.addDefault(Messages.PLAYER_HIT_BOW, "%bw_lang_prefix%%bw_player%&7还有 &e%bw_amount% &c生命值！");
         yml.addDefault(Messages.GAME_END_GAME_OVER_PLAYER_TITLE, "&c&l游戏结束！");
         yml.addDefault(Messages.GAME_END_VICTORY_PLAYER_TITLE, "&6&l胜利！");
         yml.addDefault(Messages.GAME_END_TEAM_WON_CHAT, "%bw_lang_prefix%%bw_team_color%%bw_team_name%&a赢得了这场游戏！");
@@ -288,7 +288,7 @@ public class SimplifiedChinese extends Language {
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
                 "&f                                   &lBedWars", "", "%bw_winner_format%", "", "",
                 "&e                          &l1st Killer &7- %bw_first_format% - %bw_first_kills%",
-                "&6                          &l2nd Killer &7- %bw_second_format% - %bw_second_kills%}",
+                "&6                          &l2nd Killer &7- %bw_second_format% - %bw_second_kills%",
                 "&c                          &l3rd Killer &7- %bw_third_format% - %bw_third_kills%", "",
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
         yml.addDefault(Messages.BED_HOLOGRAM_DEFEND, "&c&l保护你的床！");
@@ -310,20 +310,20 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.NEXT_EVENT_CHAT_ANNOUNCE_BEDS_DESTROYED, "&c&l所有床已被破坏！");
         yml.addDefault(Messages.NEXT_EVENT_TITLE_ANNOUNCE_SUDDEN_DEATH, "&c绝杀模式");
         yml.addDefault(Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_SUDDEN_DEATH, "");
-        yml.addDefault(Messages.NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH, "&c绝杀模式：&6&b{TeamDragons} %bw_team_color%%bw_team_name%的龙！");
-        yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "%bw_lang_prefix%&6+{xp}起床战争经验(游戏时间)");
-        yml.addDefault(Messages.XP_REWARD_WIN, "%bw_lang_prefix%&6+{xp}起床战争经验(游戏胜利)");
-        yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "%bw_lang_prefix%&6+{xp}起床战争经验(团队协作)");
-        yml.addDefault(Messages.XP_REWARD_BED_DESTROY, "%bw_lang_prefix%&6+{xp}起床战争经验(破坏床)");
-        yml.addDefault(Messages.XP_REWARD_REGULAR_KILL, "%bw_lang_prefix%&6+{xp}起床战争经验(击杀)");
-        yml.addDefault(Messages.XP_REWARD_FINAL_KILL, "%bw_lang_prefix%&6+{xp}起床战争经验(最终击杀)");
+        yml.addDefault(Messages.NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH, "&c绝杀模式：&6&b%bw_dragons_amount% %bw_team_color%%bw_team_name%的龙！");
+        yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "%bw_lang_prefix%&6+%bw_xp%起床战争经验(游戏时间)");
+        yml.addDefault(Messages.XP_REWARD_WIN, "%bw_lang_prefix%&6+%bw_xp%起床战争经验(游戏胜利)");
+        yml.addDefault(Messages.XP_REWARD_PER_TEAMMATE, "%bw_lang_prefix%&6+%bw_xp%起床战争经验(团队协作)");
+        yml.addDefault(Messages.XP_REWARD_BED_DESTROY, "%bw_lang_prefix%&6+%bw_xp%起床战争经验(破坏床)");
+        yml.addDefault(Messages.XP_REWARD_REGULAR_KILL, "%bw_lang_prefix%&6+%bw_xp%起床战争经验(击杀)");
+        yml.addDefault(Messages.XP_REWARD_FINAL_KILL, "%bw_lang_prefix%&6+%bw_xp%起床战争经验(最终击杀)");
 
-        yml.addDefault(Messages.MONEY_REWARD_PER_MINUTE, "%bw_lang_prefix%&6+{money}金币(游戏时间)");
-        yml.addDefault(Messages.MONEY_REWARD_WIN, "%bw_lang_prefix%&6+{money}金币(游戏胜利)");
-        yml.addDefault(Messages.MONEY_REWARD_PER_TEAMMATE, "%bw_lang_prefix%&6+{money}金币(团队协作)");
-        yml.addDefault(Messages.MONEY_REWARD_BED_DESTROYED, "%bw_lang_prefix%&6+{money}金币(破坏床)");
-        yml.addDefault(Messages.MONEY_REWARD_FINAL_KILL, "%bw_lang_prefix%&6+{money}金币(最终击杀)");
-        yml.addDefault(Messages.MONEY_REWARD_REGULAR_KILL, "%bw_lang_prefix%&6+{money}金币(击杀)");
+        yml.addDefault(Messages.MONEY_REWARD_PER_MINUTE, "%bw_lang_prefix%&6+%bw_money%金币(游戏时间)");
+        yml.addDefault(Messages.MONEY_REWARD_WIN, "%bw_lang_prefix%&6+%bw_money%金币(游戏胜利)");
+        yml.addDefault(Messages.MONEY_REWARD_PER_TEAMMATE, "%bw_lang_prefix%&6+%bw_money%金币(团队协作)");
+        yml.addDefault(Messages.MONEY_REWARD_BED_DESTROYED, "%bw_lang_prefix%&6+%bw_money%金币(破坏床)");
+        yml.addDefault(Messages.MONEY_REWARD_FINAL_KILL, "%bw_lang_prefix%&6+%bw_money%金币(最终击杀)");
+        yml.addDefault(Messages.MONEY_REWARD_REGULAR_KILL, "%bw_lang_prefix%&6+%bw_money%金币(击杀)");
 
         /* Lobby Command Items */
         yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "stats"), "&e战绩");
@@ -355,30 +355,30 @@ public class SimplifiedChinese extends Language {
         addDefaultStatsMsg(yml, "last-play", "&6上次游玩", "&f%bw_play_last%");
         addDefaultStatsMsg(yml, "games-played", "&6总游玩场数", "&f%bw_games_played%");
 
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&l起床战争", "&7%bw_date% &8%bw_server_id%", "", "&f地图：&a%bw_map%", "", "&f玩家数：&a%bw_on%/%bw_max%", "", "&f等待中...", "", "&f模式：&a{group}", "&f版本：&7{version}", "", "&e%bw_server_ip%"));
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&l起床战争", "&7%bw_date% &8%bw_server_id%", "", "&f地图：&a%bw_map%", "", "&f玩家数：&a%bw_on%/%bw_max%", "", "&f &a{time} &f秒后开始", "", "&f模式：&a{group}", "&f模式：&7{version}", "", "&e%bw_server_ip%"));
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList("&e&l起床战争", "&7%bw_date%", "", "&f%bw_next_event% - &a{time}", "",
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&l起床战争", "&7%bw_date% &8%bw_server_id%", "", "&f地图：&a%bw_map%", "", "&f玩家数：&a%bw_on%/%bw_max%", "", "&f等待中...", "", "&f模式：&a%bw_group%", "&f版本：&7%bw_version%", "", "&e%bw_server_ip%"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&l起床战争", "&7%bw_date% &8%bw_server_id%", "", "&f地图：&a%bw_map%", "", "&f玩家数：&a%bw_on%/%bw_max%", "", "&f &a%bw_time% &f秒后开始", "", "&f模式：&a%bw_group%", "&f模式：&7%bw_version%", "", "&e%bw_server_ip%"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList("&e&l起床战争", "&7%bw_date%", "", "&f%bw_next_event% - &a%bw_time%", "",
                 "%bw_team_1%", "%bw_team_2%", "%bw_team_3%", "%bw_team_4%", "%bw_team_5%", "%bw_team_6%", "%bw_team_7%", "%bw_team_8%", "", "&e%bw_server_ip%"));
 
-        yml.addDefault("scoreboard.Doubles.playing", Arrays.asList("&e&l起床战争", "&7%bw_date%", "", "&f%bw_next_event% - &a{time}", "",
+        yml.addDefault("scoreboard.Doubles.playing", Arrays.asList("&e&l起床战争", "&7%bw_date%", "", "&f%bw_next_event% - &a%bw_time%", "",
                 "%bw_team_1%", "%bw_team_2%", "%bw_team_3%", "%bw_team_4%", "%bw_team_5%", "%bw_team_6%", "%bw_team_7%", "%bw_team_8%", "", "&e%bw_server_ip%"));
 
-        yml.addDefault("scoreboard.3v3v3v3.playing", Arrays.asList("&e&l起床战争", "&7%bw_date%", "", "&f%bw_next_event% - &a{time}", "",
-                "%bw_team_1%", "%bw_team_2%", "%bw_team_3%", "%bw_team_4%", "", "&f击杀：&a%bw_kills%", "&f最终击杀：&a%bw_final_kills%", "&f破坏床：&a{beds}", "", "&e%bw_server_ip%"));
+        yml.addDefault("scoreboard.3v3v3v3.playing", Arrays.asList("&e&l起床战争", "&7%bw_date%", "", "&f%bw_next_event% - &a%bw_time%", "",
+                "%bw_team_1%", "%bw_team_2%", "%bw_team_3%", "%bw_team_4%", "", "&f击杀：&a%bw_kills%", "&f最终击杀：&a%bw_final_kills%", "&f破坏床：&a%bw_beds%", "", "&e%bw_server_ip%"));
 
-        yml.addDefault("scoreboard.4v4v4v4.playing", Arrays.asList("&e&l起床战争", "&7%bw_date%", "", "&f%bw_next_event% - &a{time}", "", 
-                "%bw_team_1%", "%bw_team_2%", "%bw_team_3%", "%bw_team_4%", "", "&f击杀：&a%bw_kills%", "&f最终击杀：&a%bw_final_kills%", "&f破坏床：&a{beds}", "", "&e%bw_server_ip%"));
+        yml.addDefault("scoreboard.4v4v4v4.playing", Arrays.asList("&e&l起床战争", "&7%bw_date%", "", "&f%bw_next_event% - &a%bw_time%", "", 
+                "%bw_team_1%", "%bw_team_2%", "%bw_team_3%", "%bw_team_4%", "", "&f击杀：&a%bw_kills%", "&f最终击杀：&a%bw_final_kills%", "&f破坏床：&a%bw_beds%", "", "&e%bw_server_ip%"));
 
         yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&l起床战争,&4&l起&6&l床战争,&6&l起&4&l床&6&l战争,&6&l起床&4&l战&6&l争,&6&l起床战&4&l争,&6&l起床战争",
-                "&f等级：{level}", "", "&f进度：&a{currentXp}&7/&b{requiredXp}", "{progress}", "", "&7%bw_player%", "", "&f金币：&a{money}", "", "&f总胜场：&a%bw_wins%", "&f总击杀：&a%bw_kills%", "", "&e%bw_server_ip%"));
+                "&f等级：%bw_level%", "", "&f进度：&a%bw_current_xp%&7/&b%bw_required_xp%", "%bw_progress%", "", "&7%bw_player%", "", "&f金币：&a%bw_money%", "", "&f总胜场：&a%bw_wins%", "&f总击杀：&a%bw_kills%", "", "&e%bw_server_ip%"));
 
         yml.addDefault(Messages.SHOP_INDEX_NAME, "&8快速购买");
         yml.addDefault(Messages.SHOP_QUICK_ADD_NAME, "&8添加到快速购买...");
-        yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "%bw_lang_prefix%&c你没有足够的%bw_currency%！ 还需要 {amount} 个%bw_currency%！");
-        yml.addDefault(Messages.SHOP_NEW_PURCHASE, "%bw_lang_prefix%&a购买&6{item}");
+        yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "%bw_lang_prefix%&c你没有足够的%bw_currency%！ 还需要 %bw_amount% 个%bw_currency%！");
+        yml.addDefault(Messages.SHOP_NEW_PURCHASE, "%bw_lang_prefix%&a购买&6%bw_item%");
         yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "%bw_lang_prefix%&c你已经购买过了！");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "%bw_team_color%&l%bw_team_name% &r%bw_team_color%蠹虫");
-        yml.addDefault(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME, "%bw_team_color%{despawn}秒 &8[ %bw_team_color%%bw_health%&8]");
+        yml.addDefault(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME, "%bw_team_color%%bw_despawn_time%秒 &8[ %bw_team_color%%bw_health%&8]");
         yml.addDefault(Messages.SHOP_SEPARATOR_NAME, "&8⇧ 分类");
         yml.addDefault(Messages.SHOP_SEPARATOR_LORE, Collections.singletonList("&8⇩ 物品"));
         yml.addDefault(Messages.SHOP_QUICK_BUY_NAME, "&b快速购买");
@@ -398,78 +398,78 @@ public class SimplifiedChinese extends Language {
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "&8方块", "&a方块", Collections.singletonList("&e点击查看！"));
 
         addContentMessages(yml, "wool", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%羊毛", Arrays.asList("&7花费：&f%bw_cost% %bw_currency%", "", "&7很好的搭路工具",
-                "&7购买后将变为你队伍的颜色", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "clay", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%硬化粘土", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "&7保护床的基本方块。", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "glass", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%防爆玻璃", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "&7免疫爆炸。", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "stone", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%末地石", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "&7保护床的坚实方块。", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "ladder", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%梯子", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "&7爬树时很有用。", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "obsidian", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%黑曜石", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "&7对床的终极保护。", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "wood", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%原木", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "&7保护床的坚实方块。", "", "{quick_buy}", "{buy_status}"));
+                "&7购买后将变为你队伍的颜色", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "clay", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%硬化粘土", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "&7保护床的基本方块。", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "glass", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%防爆玻璃", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "&7免疫爆炸。", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "stone", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%末地石", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "&7保护床的坚实方块。", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "ladder", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%梯子", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "&7爬树时很有用。", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "obsidian", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%黑曜石", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "&7对床的终极保护。", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "wood", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "%bw_color%原木", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "&7保护床的坚实方块。", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_MELEE, "&8战斗", "&a战斗", Collections.singletonList("&e点击查看！"));
 
-        addContentMessages(yml, "stone-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%石剑", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "iron-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%铁剑", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "diamond-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%钻石剑", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "stick", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%木棍(击退 I)", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "stone-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%石剑", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "iron-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%铁剑", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "diamond-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%钻石剑", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "stick", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "%bw_color%木棍(击退 I)", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "&8盔甲", "&a盔甲", Collections.singletonList("&e点击查看！"));
 
         addContentMessages(yml, "chainmail", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "%bw_color%锁链护甲", Arrays.asList("&7花费：%bw_cost% %bw_currency%",
-                "", "&7锁链靴子和护腿", "&7死亡不掉落", "", "{quick_buy}", "{buy_status}"));
+                "", "&7锁链靴子和护腿", "&7死亡不掉落", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "iron-armor", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "%bw_color%铁护甲", Arrays.asList("&7花费：%bw_cost% %bw_currency%",
-                "", "&7铁靴子和护腿", "&7死亡不掉落", "", "{quick_buy}", "{buy_status}"));
+                "", "&7铁靴子和护腿", "&7死亡不掉落", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "diamond-armor", ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "%bw_color%钻石护甲", Arrays.asList("&7花费：%bw_cost% %bw_currency%",
-                "", "&7钻石靴子和护腿", "&7死亡不掉落", "", "{quick_buy}", "{buy_status}"));
+                "", "&7钻石靴子和护腿", "&7死亡不掉落", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "&8工具", "&a工具", Collections.singletonList("&e点击查看！"));
 
         addContentMessages(yml, "shears", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%剪刀", Arrays.asList("&7花费：%bw_cost% %bw_currency%",
-                "", "&7拆羊毛的利器", "&7死亡不掉落。", "", "{quick_buy}", "{buy_status}"));
+                "", "&7拆羊毛的利器", "&7死亡不掉落。", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "pickaxe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%镐%bw_tier%", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "&7等级：&e%bw_tier%",
-                "", "&7该工具可升级。", "&7每次死亡都会降一级。", "", "&7降到最低级为止", "", "{quick_buy}", "{buy_status}"));
+                "", "&7该工具可升级。", "&7每次死亡都会降一级。", "", "&7降到最低级为止", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "axe", ConfigPath.SHOP_PATH_CATEGORY_TOOLS, "%bw_color%斧%bw_tier%", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "&7等级：&e%bw_tier%",
-                "", "&7该工具可升级。", "&7每次死亡都会降一级。", "", "&7降到最低级为止", "", "{quick_buy}", "{buy_status}"));
+                "", "&7该工具可升级。", "&7每次死亡都会降一级。", "", "&7降到最低级为止", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_RANGED, "&8远程武器", "&a远程武器", Collections.singletonList("&e点击查看！"));
 
-        addContentMessages(yml, "arrow", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%箭", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bow1", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%弓", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bow2", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%弓（力量 I）", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bow3", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%弓（力量 I, 冲击 I）", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "arrow", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%箭", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "bow1", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%弓", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "bow2", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%弓（力量 I）", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "bow3", ConfigPath.SHOP_PATH_CATEGORY_RANGED, "%bw_color%弓（力量 I, 冲击 I）", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "&8药水", "&a药水", Collections.singletonList("&e点击查看！"));
 
-        addContentMessages(yml, "speed-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%速度 II 药水（45 秒）", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "jump-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%跳跃提升 V 药水（45 秒）", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "invisibility", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%隐身药水（30 秒）", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "speed-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%速度 II 药水（45 秒）", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "jump-potion", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%跳跃提升 V 药水（45 秒）", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "invisibility", ConfigPath.SHOP_PATH_CATEGORY_POTIONS, "%bw_color%隐身药水（30 秒）", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "&8实用工具", "&a实用工具", Collections.singletonList("&e点击查看！"));
 
-        addContentMessages(yml, "golden-apple", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%金苹果", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "&7均衡治疗", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "golden-apple", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%金苹果", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "&7均衡治疗", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "bedbug", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%蠹虫", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "",
-                "&7在雪球落下的地方召唤蠹虫", "&7来干扰敌人", "&7持续15秒。", "", "{quick_buy}", "{buy_status}"));
+                "&7在雪球落下的地方召唤蠹虫", "&7来干扰敌人", "&7持续15秒。", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "dream-defender", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%梦境守卫者", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "",
-                "&7召唤铁傀儡来保护基地", "&7持续 4 分钟", "", "{quick_buy}", "{buy_status}"));
+                "&7召唤铁傀儡来保护基地", "&7持续 4 分钟", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "fireball", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%火球", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "", "&7右键发射！",
-                "&7把在窄桥上的敌人打下去！", "", "{quick_buy}", "{buy_status}"));
+                "&7把在窄桥上的敌人打下去！", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "tnt", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%TNT", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "",
-                "&7立即点燃, 适合炸点东西", "", "{quick_buy}", "{buy_status}"));
+                "&7立即点燃, 适合炸点东西", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "ender-pearl", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%末影珍珠", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "",
-                "&7偷家最快的方式", "", "{quick_buy}", "{buy_status}"));
+                "&7偷家最快的方式", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "water-bucket", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%水桶", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "",
-                "&7减缓敌人的速度", "&7也可以防止 TNT 破坏方块", "", "{quick_buy}", "{buy_status}"));
+                "&7减缓敌人的速度", "&7也可以防止 TNT 破坏方块", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "bridge-egg", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%搭桥蛋", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "",
-                "&7丢出后在其轨迹形成一座桥", "", "{quick_buy}", "{buy_status}"));
+                "&7丢出后在其轨迹形成一座桥", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "magic-milk", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%魔法牛奶", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "",
-                "&7喝下后 60 秒内不会触发陷阱", "", "{quick_buy}", "{buy_status}"));
+                "&7喝下后 60 秒内不会触发陷阱", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "sponge", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%海绵", Arrays.asList("&7花费：%bw_cost% %bw_currency%", "",
-                "&7用来吸水不错", "", "{quick_buy}", "{buy_status}"));
+                "&7用来吸水不错", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "Compact Pop-up Tower", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%袖珍弹出塔", Arrays.asList("&花费: %bw_cost% %bw_currency%", "",
-                "&7放置一个袖珍弹出塔", "&7塔防！", "", "{quick_buy}", "{buy_status}"));
+                "&7放置一个袖珍弹出塔", "&7塔防！", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         yml.addDefault(Messages.MEANING_NO_TRAP, "无陷阱！");
-        yml.addDefault(Messages.FORMAT_UPGRADE_TRAP_COST, "&7花费：{currencyColor}%bw_cost% %bw_currency%");
+        yml.addDefault(Messages.FORMAT_UPGRADE_TRAP_COST, "&7花费：%bw_currency_color%%bw_cost% %bw_currency%");
         yml.addDefault(Messages.FORMAT_UPGRADE_COLOR_CAN_AFFORD, "&e");
         yml.addDefault(Messages.FORMAT_UPGRADE_COLOR_CANT_AFFORD, "&c");
         yml.addDefault(Messages.FORMAT_UPGRADE_COLOR_UNLOCKED, "&a");
@@ -479,7 +479,7 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY, "%bw_color%你没有足够的%bw_currency%！");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_LOCKED, "&c已锁定");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_UNLOCKED, "%bw_color%已解锁");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a%bw_player%购买了&6{upgradeName}");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a%bw_player%购买了&6%bw_upgrade_name%");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", "forge").replace("%bw_tier%", "tier-1"), "%bw_color%铁锭熔炉");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("%bw_name%", "forge"),
                 Arrays.asList("&7增加岛上资源的生成速度", "", "{tier_1_color}等级 1：+50% 生成速率, &b{tier_1_cost} {tier_1_currency}",

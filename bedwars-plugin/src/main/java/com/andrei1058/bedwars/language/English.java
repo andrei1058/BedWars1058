@@ -114,7 +114,7 @@ public class English extends Language {
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_SUCCESS, "%bw_lang_prefix%&eYou successfully promoted %bw_player% to owner");
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_OWNER, "%bw_lang_prefix%&eYou have been promoted to party owner");
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_NEW_OWNER, "%bw_lang_prefix%&7 &e%bw_player% has been promoted to owner");
-        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n%bw_lang_prefix%&eOwner of the party is: &7%%bw_party_owner%");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n%bw_lang_prefix%&eOwner of the party is: &7%bw_party_owner%");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS, "%bw_lang_prefix%&eParty members:");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYER, "&7%bw_player%");
         yml.addDefault(Messages.COMMAND_FORCESTART_NOT_IN_GAME, "&c▪ &7You're not playing!");
