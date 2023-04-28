@@ -522,7 +522,7 @@ public class BedWars extends JavaPlugin {
         MoneyConfig.init();
 
         // bStats metrics
-        Metrics metrics = new Metrics(this, 1885);
+        Metrics metrics = new Metrics(this, 18317);
         metrics.addCustomChart(new SimplePie("server_type", () -> getServerType().toString()));
         metrics.addCustomChart(new SimplePie("default_language", () -> Language.getDefaultLanguage().getIso()));
         metrics.addCustomChart(new SimplePie("auto_scale", () -> String.valueOf(autoscale)));
