@@ -68,7 +68,7 @@ public class DisableArena extends SubCommand {
             return true;
         }
         if (a.getStatus() == GameState.playing) {
-            p.sendMessage("§6 ▪ §7This arena can't be disabled during this game!");
+            p.sendMessage("§6 ▪ §7There is a game running on this Arena, please disable after the game!");
             return true;
         }
         p.sendMessage("§6 ▪ §7Disabling arena...");
