@@ -43,6 +43,11 @@ public interface IGenerator {
     void disable();
 
     /**
+     * Enable a generator and respawn the holograms.
+     */
+    void enable();
+
+    /**
      * Manage what to do when the generator upgrade is called from {@link com.andrei1058.bedwars.api.arena.IArena#updateNextEvent}
      */
     void upgrade();

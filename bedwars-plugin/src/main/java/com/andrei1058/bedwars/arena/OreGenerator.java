@@ -389,6 +389,12 @@ public class OreGenerator implements IGenerator {
     }
 
     @Override
+    public void enable() {
+        enableRotation();
+        disabled = false;
+    }
+
+    @Override
     public void updateHolograms(Player p, String iso) {
         for (IGenHolo h : armorStands.values()) {
             h.updateForPlayer(p, iso);
