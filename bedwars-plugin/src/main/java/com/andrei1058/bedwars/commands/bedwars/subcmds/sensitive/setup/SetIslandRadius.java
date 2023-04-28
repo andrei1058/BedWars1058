@@ -9,11 +9,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.andrei1058.bedwars.BedWars.mainCmd;
 
-public class SetMinBuildHeight extends SubCommand {
+public class SetIslandRadius extends SubCommand {
     /**
      * Create a sub-command for a bedWars command
      * Make sure you return true or it will say command not found
@@ -21,7 +22,7 @@ public class SetMinBuildHeight extends SubCommand {
      * @param parent parent command
      * @param name   sub-command name
      */
-    public SetMinBuildHeight(ParentCommand parent, String name) {
+    public SetIslandRadius(ParentCommand parent, String name) {
         super(parent, name);
         setArenaSetupCommand(true);
         setPermission(Permissions.PERMISSION_SETUP_ARENA);
@@ -47,16 +48,16 @@ public class SetMinBuildHeight extends SubCommand {
         }
 
         if (args.length == 0) {
-            p.sendMessage("§c▪ §7Usage: /" + mainCmd + " setMinBuildHeight <int>");
+            p.sendMessage("§c▪ §7Usage: /" + mainCmd + " setIslandRadius <int>");
         } else {
             try {
                 Integer.parseInt(args[0]);
             } catch (Exception ex) {
-                p.sendMessage("§c▪ §7Usage: /" + mainCmd + " setMinBuildHeight <int>");
+                p.sendMessage("§c▪ §7Usage: /" + mainCmd + " setIslandRadius <int>");
                 return true;
             }
-            ss.getConfig().set("min-build-y", Integer.valueOf(args[0]));
-            p.sendMessage("§6 ▪ §7Min build height Y set to §e" + args[0] + "§7!");
+            ss.getConfig().set("island-radius", Integer.valueOf(args[0]));
+            p.sendMessage("§6 ▪ §7Island radius set to §e" + args[0] + "§7!");
         }
         return true;
     }

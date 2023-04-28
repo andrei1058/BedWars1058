@@ -73,8 +73,8 @@ public class MenuTrapSlot implements MenuContent {
         ItemMeta im = i.getItemMeta();
         if (im == null) return i;
         im.setDisplayName(Language.getMsg(player, Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + name.replace("trap-slot-", ""))
-                .replace("{name}", Language.getMsg(player, ebe == null ? Messages.MEANING_NO_TRAP : ebe.getNameMsgPath()))
-                .replace("{color}", Language.getMsg(player, ebe == null ? Messages.FORMAT_UPGRADE_COLOR_CANT_AFFORD : Messages.FORMAT_UPGRADE_COLOR_UNLOCKED)));
+                .replace("%bw_name%", Language.getMsg(player, ebe == null ? Messages.MEANING_NO_TRAP : ebe.getNameMsgPath()))
+                .replace("%bw_color%", Language.getMsg(player, ebe == null ? Messages.FORMAT_UPGRADE_COLOR_CANT_AFFORD : Messages.FORMAT_UPGRADE_COLOR_UNLOCKED)));
         List<String> lore = new ArrayList<>();
         if (ebe == null) {
             int cost = UpgradesManager.getConfiguration().getInt(team.getArena().getArenaName().toLowerCase() + "-upgrades-settings.trap-start-price");
@@ -94,10 +94,10 @@ public class MenuTrapSlot implements MenuContent {
                 cost = cost + (team.getActiveTraps().size() * multiplier);
             }
             for (String s : Language.getList(player, Messages.UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH + name.replace("trap-slot-", ""))) {
-                lore.add(s.replace("{cost}", String.valueOf(cost)).replace("{currency}", currency));
+                lore.add(s.replace("%bw_cost%", String.valueOf(cost)).replace("%bw_currency%", currency));
             }
             for (String s : Language.getList(player, Messages.UPGRADES_TRAP_SLOT_ITEM_LORE2_PATH + name.replace("trap-slot-", ""))) {
-                lore.add(s.replace("{cost}", String.valueOf(cost)).replace("{currency}", currency));
+                lore.add(s.replace("%bw_cost%", String.valueOf(cost)).replace("%bw_currency%", currency));
             }
         } else {
             lore.addAll(Language.getList(player, ebe.getLoreMsgPath()));

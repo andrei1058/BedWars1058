@@ -13,7 +13,7 @@ import java.util.List;
 
 import static com.andrei1058.bedwars.BedWars.mainCmd;
 
-public class SetMinBuildHeight extends SubCommand {
+public class SetDisplayName extends SubCommand {
     /**
      * Create a sub-command for a bedWars command
      * Make sure you return true or it will say command not found
@@ -21,7 +21,7 @@ public class SetMinBuildHeight extends SubCommand {
      * @param parent parent command
      * @param name   sub-command name
      */
-    public SetMinBuildHeight(ParentCommand parent, String name) {
+    public SetDisplayName(ParentCommand parent, String name) {
         super(parent, name);
         setArenaSetupCommand(true);
         setPermission(Permissions.PERMISSION_SETUP_ARENA);
@@ -41,23 +41,17 @@ public class SetMinBuildHeight extends SubCommand {
         Player p = (Player) s;
         SetupSession ss = SetupSession.getSession(p.getUniqueId());
 
-        if (ss == null){
+        if (ss == null) {
             s.sendMessage("§c ▪ §7You're not in a setup session!");
             return true;
         }
 
         if (args.length == 0) {
-            p.sendMessage("§c▪ §7Usage: /" + mainCmd + " setMinBuildHeight <int>");
-        } else {
-            try {
-                Integer.parseInt(args[0]);
-            } catch (Exception ex) {
-                p.sendMessage("§c▪ §7Usage: /" + mainCmd + " setMinBuildHeight <int>");
-                return true;
-            }
-            ss.getConfig().set("min-build-y", Integer.valueOf(args[0]));
-            p.sendMessage("§6 ▪ §7Min build height Y set to §e" + args[0] + "§7!");
+            p.sendMessage("§c▪ §7Usage: /" + mainCmd + " setDisplayName <name>");
+            return true;
         }
+        ss.getConfig().set("display-name", args[0]);
+        p.sendMessage("§6 ▪ §7Display name set to §e" + args[0] + "§7!");
         return true;
     }
 

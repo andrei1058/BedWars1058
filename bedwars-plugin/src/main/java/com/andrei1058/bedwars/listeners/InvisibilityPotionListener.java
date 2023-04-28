@@ -24,7 +24,6 @@ import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.events.player.PlayerInvisibilityPotionEvent;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.sidebar.SidebarService;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -33,7 +32,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
-import org.jetbrains.annotations.NotNull;
 
 import static com.andrei1058.bedwars.BedWars.nms;
 import static com.andrei1058.bedwars.BedWars.plugin;
@@ -43,14 +41,6 @@ import static com.andrei1058.bedwars.BedWars.plugin;
  * potion or when the potion is gone. It is required because it is related to scoreboards.
  */
 public class InvisibilityPotionListener implements Listener {
-
-    @EventHandler
-    public void onPotion(@NotNull PlayerInvisibilityPotionEvent e) {
-        if (e.getTeam() == null) return;
-        SidebarService.getInstance().handleInvisibility(
-                e.getTeam(), e.getPlayer(), e.getType() == PlayerInvisibilityPotionEvent.Type.ADDED
-        );
-    }
 
     @EventHandler
     public void onDrink(PlayerItemConsumeEvent e) {

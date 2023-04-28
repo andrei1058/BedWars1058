@@ -23,7 +23,7 @@ package com.andrei1058.bedwars.listeners.joinhandler;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.ReJoin;
-import com.andrei1058.bedwars.sidebar.SidebarService;
+import com.andrei1058.bedwars.sidebar.BoardManager;
 import com.andrei1058.bedwars.support.paper.PaperSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -87,8 +87,6 @@ public class JoinListenerMultiArena implements Listener {
 
         // Send items
         Arena.sendLobbyCommandItems(p);
-
-        SidebarService.getInstance().giveSidebar(p, null, true);
 
         p.setHealthScale(p.getMaxHealth());
         p.setExp(0);

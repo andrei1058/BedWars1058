@@ -343,8 +343,8 @@ public class Messages {
     public static String UPGRADES_TRAP_SLOT_ITEM_NAME_PATH = "upgrades-trap-slot-item-name-";
     public static String UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH = "upgrades-trap-slot-item-lore1-";
     public static String UPGRADES_TRAP_SLOT_ITEM_LORE2_PATH = "upgrades-trap-slot-item-lore2-";
-    public static String UPGRADES_UPGRADE_TIER_ITEM_NAME = "upgrades-upgrade-name-{name}-{tier}";
-    public static String UPGRADES_UPGRADE_TIER_ITEM_LORE = "upgrades-upgrade-lore-{name}";
+    public static String UPGRADES_UPGRADE_TIER_ITEM_NAME = "upgrades-upgrade-name-%bw_name%-%bw_tier%";
+    public static String UPGRADES_UPGRADE_TIER_ITEM_LORE = "upgrades-upgrade-lore-%bw_name%";
     public static String UPGRADES_BASE_TRAP_ITEM_NAME_PATH = "upgrades-base-trap-name-";
     public static String UPGRADES_BASE_TRAP_ITEM_LORE_PATH = "upgrades-base-trap-lore-";
     public static String UPGRADES_TRAP_CUSTOM_TITLE = "upgrades-base-trap-title-";
@@ -357,6 +357,7 @@ public class Messages {
     public static String UPGRADES_LORE_REPLACEMENT_UNLOCKED = "upgrades-lore-unlocked";
     public static String UPGRADES_LORE_REPLACEMENT_LOCKED = "upgrades-lore-locked";
     public static String UPGRADES_UPGRADE_BOUGHT_CHAT = "upgrades-new-purchase";
+    public static String UPGRADES_UPGRADE_ALREADY_CHAT = "upgrades-already-purchase";
     public static String UPGRADES_TRAP_QUEUE_LIMIT = "upgrades-trap-queue-full";
     public static String UPGRADES_TRAP_DEFAULT_TITLE = "upgrades-trap-default-title";
     public static String UPGRADES_TRAP_DEFAULT_SUBTITLE = "upgrades-trap-default-subtitle";
