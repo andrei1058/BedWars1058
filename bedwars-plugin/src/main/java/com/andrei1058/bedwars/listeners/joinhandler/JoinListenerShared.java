@@ -55,11 +55,6 @@ public class JoinListenerShared implements Listener {
                 BedWars.nms.spigotHidePlayer(inArena, p);
             }
         }, 14L);
-
-        // Give scoreboard
-//        if (e.getPlayer().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
-//            BoardManager.getInstance().giveSidebar(e.getPlayer(), null, true);
-//        }
     }
 }
 

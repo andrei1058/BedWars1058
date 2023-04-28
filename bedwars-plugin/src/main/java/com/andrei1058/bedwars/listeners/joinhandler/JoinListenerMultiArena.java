@@ -88,8 +88,6 @@ public class JoinListenerMultiArena implements Listener {
         // Send items
         Arena.sendLobbyCommandItems(p);
 
-//        BoardManager.getInstance().giveSidebar(p, null, true);
-
         p.setHealthScale(p.getMaxHealth());
         p.setExp(0);
         p.setHealthScale(20);
