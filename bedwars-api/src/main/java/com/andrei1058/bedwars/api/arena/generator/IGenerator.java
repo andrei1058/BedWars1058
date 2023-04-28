@@ -38,7 +38,7 @@ public interface IGenerator {
     HashMap<String, IGenHolo> getLanguageHolograms();
 
     /**
-     * Disable a generator and destroy its data.
+     * Disable a generator and remove the holograms.
      */
     void disable();
 
