@@ -377,7 +377,6 @@ public class OreGenerator implements IGenerator {
 
     @Override
     public void disable() {
-        arena.getOreGenerators().remove(this);
         if (getOre().getType() == Material.EMERALD || getOre().getType() == Material.DIAMOND) {
             rotation.remove(this);
             for (IGenHolo a : armorStands.values()) {
