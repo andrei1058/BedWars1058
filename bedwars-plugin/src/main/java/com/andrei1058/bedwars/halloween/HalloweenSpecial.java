@@ -31,6 +31,8 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
+import static com.andrei1058.bedwars.BedWars.config;
+
 public class HalloweenSpecial {
 
     private static HalloweenSpecial INSTANCE;
@@ -62,7 +64,7 @@ public class HalloweenSpecial {
 
     protected static boolean checkAvailabilityDate() {
         // check date
-        ZoneId zone = ZoneId.of("Europe/Rome");
+        ZoneId zone = ZoneId.of(config.getString("timeZone"));
         Date date = new Date();
         LocalDate localDate = date.toInstant().atZone(zone).toLocalDate();
         int month = localDate.getMonthValue();

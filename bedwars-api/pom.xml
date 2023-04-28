@@ -24,6 +24,14 @@
             <id>andrei-prod</id>
             <url>https://repo.andrei1058.dev/releases</url>
         </repository>
+        <repository>
+            <id>krypton</id>
+            <url>https://repo.kryptonmc.org/releases</url>
+        </repository>
+        <repository>
+            <id>iridiumdevelopment</id>
+            <url>https://nexus.iridiumdevelopment.net/repository/maven-releases/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -46,11 +54,17 @@
             <version>1.16.5-R0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
-        <!-- SIDEBAR LIB -->
         <dependency>
-            <groupId>com.andrei1058.spigot.sidebar</groupId>
-            <artifactId>sidebar-base</artifactId>
-            <version>23.2</version>
+            <groupId>com.iridium</groupId>
+            <artifactId>IridiumColorAPI</artifactId>
+            <version>1.0.6</version>
+        </dependency>
+        <!-- TAB -->
+        <dependency>
+            <groupId>me.neznamy</groupId>
+            <artifactId>tab-api</artifactId>
+            <version>3.2.4</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
     <build>

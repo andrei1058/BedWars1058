@@ -23,6 +23,7 @@ package com.andrei1058.bedwars.arena.tasks;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.gameplay.EggBridgeBuildEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
@@ -77,6 +78,9 @@ public class EggBridgeTask implements Runnable {
     public void run() {
 
         Location loc = getProjectile().getLocation();
+        if (loc.getBlockY() >= getArena().getConfig().getInt(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y)) {
+            return;
+        }
 
         if (getProjectile().isDead()
                 || !arena.isPlayer(getPlayer())

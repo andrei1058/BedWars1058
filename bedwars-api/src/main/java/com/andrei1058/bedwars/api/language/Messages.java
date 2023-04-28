@@ -147,6 +147,9 @@ public class Messages {
     public static String ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE = "spectator-first-person-quit-title";
     public static String ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE = "spectator-first-person-quit-subtitle";
 
+    public static String ARENA_MAX_BUILD_LIMIT_REACHED = "build-max-height-limit-reached";
+    public static String ARENA_MIN_BUILD_LIMIT_REACHED = "build-min-height-limit-reached";
+
     /** Stats related */
     public static String PLAYER_STATS_GUI_PATH = "stats";
     public static String PLAYER_STATS_GUI_INV_NAME = PLAYER_STATS_GUI_PATH+"-inv-name";
@@ -266,6 +269,7 @@ public class Messages {
     public static String PLAYER_DIE_RESPAWN_CHAT = "player-respawn-timer-chat";
     public static String PLAYER_DIE_RESPAWNED_TITLE = "player-respawned-title";
     public static String PLAYER_DIE_ELIMINATED_CHAT = "player-eliminated-chat";
+    public static String PLAYER_DIE_RESPAWNED_TEXT = "player-respawned-chat";
 
     public static String PLAYER_DIE_VOID_FALL_REGULAR_KILL = "player-die-void-regular";
     public static String PLAYER_DIE_VOID_FALL_FINAL_KILL =  "player-die-void-final";
@@ -339,8 +343,8 @@ public class Messages {
     public static String UPGRADES_TRAP_SLOT_ITEM_NAME_PATH = "upgrades-trap-slot-item-name-";
     public static String UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH = "upgrades-trap-slot-item-lore1-";
     public static String UPGRADES_TRAP_SLOT_ITEM_LORE2_PATH = "upgrades-trap-slot-item-lore2-";
-    public static String UPGRADES_UPGRADE_TIER_ITEM_NAME = "upgrades-upgrade-name-{name}-{tier}";
-    public static String UPGRADES_UPGRADE_TIER_ITEM_LORE = "upgrades-upgrade-lore-{name}";
+    public static String UPGRADES_UPGRADE_TIER_ITEM_NAME = "upgrades-upgrade-name-%bw_name%-%bw_tier%";
+    public static String UPGRADES_UPGRADE_TIER_ITEM_LORE = "upgrades-upgrade-lore-%bw_name%";
     public static String UPGRADES_BASE_TRAP_ITEM_NAME_PATH = "upgrades-base-trap-name-";
     public static String UPGRADES_BASE_TRAP_ITEM_LORE_PATH = "upgrades-base-trap-lore-";
     public static String UPGRADES_TRAP_CUSTOM_TITLE = "upgrades-base-trap-title-";
@@ -348,10 +352,12 @@ public class Messages {
     public static String UPGRADES_TRAP_CUSTOM_MSG = "upgrades-base-trap-msg-";
 
     public static String UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY = "upgrades-lore-insuff-money";
+    public static String UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_SPACE = "upgrades-lore-insuff-space";
     public static String UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY = "upgrades-lore-click-buy";
     public static String UPGRADES_LORE_REPLACEMENT_UNLOCKED = "upgrades-lore-unlocked";
     public static String UPGRADES_LORE_REPLACEMENT_LOCKED = "upgrades-lore-locked";
     public static String UPGRADES_UPGRADE_BOUGHT_CHAT = "upgrades-new-purchase";
+    public static String UPGRADES_UPGRADE_ALREADY_CHAT = "upgrades-already-purchase";
     public static String UPGRADES_TRAP_QUEUE_LIMIT = "upgrades-trap-queue-full";
     public static String UPGRADES_TRAP_DEFAULT_TITLE = "upgrades-trap-default-title";
     public static String UPGRADES_TRAP_DEFAULT_SUBTITLE = "upgrades-trap-default-subtitle";

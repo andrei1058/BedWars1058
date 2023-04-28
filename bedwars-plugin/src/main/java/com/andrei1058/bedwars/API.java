@@ -32,12 +32,12 @@ import com.andrei1058.bedwars.api.server.ISetupSession;
 import com.andrei1058.bedwars.api.server.RestoreAdapter;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.server.VersionSupport;
-import com.andrei1058.bedwars.api.sidebar.ISidebarService;
+import com.andrei1058.bedwars.api.sidebar.IScoreboardService;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.shop.main.CategoryContent;
-import com.andrei1058.bedwars.sidebar.SidebarService;
+import com.andrei1058.bedwars.sidebar.BoardManager;
 import com.andrei1058.bedwars.stats.StatsAPI;
 import com.andrei1058.bedwars.upgrades.UpgradesManager;
 import org.bukkit.Bukkit;
@@ -424,12 +424,12 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
 
         @Override
         public void removePlayerScoreboard(Player player) {
-            SidebarService.getInstance().remove(player);
+            BoardManager.getInstance().remove(player);
         }
 
         @Override
         public void givePlayerScoreboard(@NotNull Player player, boolean delay) {
-            SidebarService.getInstance().giveSidebar(player, Arena.getArenaByPlayer(player), delay);
+            BoardManager.getInstance().giveTabFeatures(player, Arena.getArenaByPlayer(player), delay);
         }
     };
 
@@ -444,7 +444,7 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
     }
 
     @Override
-    public ISidebarService getScoreboardManager() {
-        return SidebarService.getInstance();
+    public IScoreboardService getScoreboardManager() {
+        return BoardManager.getInstance();
     }
 }

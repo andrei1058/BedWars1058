@@ -56,7 +56,7 @@ public class CmdLang extends SubCommand {
         if (args.length == 0) {
             p.sendMessage(getMsg(p, Messages.COMMAND_LANG_LIST_HEADER));
             for (Language l : Language.getLanguages()) {
-                p.sendMessage(getMsg(p, Messages.COMMAND_LANG_LIST_FORMAT).replace("{iso}", l.getIso()).replace("{name}", l.getLangName()));
+                p.sendMessage(getMsg(p, Messages.COMMAND_LANG_LIST_FORMAT).replace("%bw_lang_iso%", l.getIso()).replace("%bw_name%", l.getLangName()));
             }
             p.sendMessage(getMsg(p, Messages.COMMAND_LANG_USAGE));
             return true;
@@ -67,7 +67,7 @@ public class CmdLang extends SubCommand {
                 } else {
                     p.sendMessage(getMsg(p, Messages.COMMAND_LANG_LIST_HEADER));
                     for (Language l : Language.getLanguages()) {
-                        p.sendMessage(getMsg(p, Messages.COMMAND_LANG_LIST_FORMAT).replace("{iso}", l.getIso()).replace("{name}", l.getLangName()));
+                        p.sendMessage(getMsg(p, Messages.COMMAND_LANG_LIST_FORMAT).replace("%bw_lang_iso%", l.getIso()).replace("%bw_name%", l.getLangName()));
                     }
                     p.sendMessage(getMsg(p, Messages.COMMAND_LANG_USAGE));
                     return true;

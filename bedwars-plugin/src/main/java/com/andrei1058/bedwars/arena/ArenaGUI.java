@@ -106,13 +106,13 @@ public class ArenaGUI {
 
 
             ItemMeta im = i.getItemMeta();
-            im.setDisplayName(Language.getMsg(p, Messages.ARENA_GUI_ARENA_CONTENT_NAME).replace("{name}", arenas.get(arenaKey).getDisplayName()).replace("{map_name}", arenas.get(arenaKey).getArenaName()));
+            im.setDisplayName(Language.getMsg(p, Messages.ARENA_GUI_ARENA_CONTENT_NAME).replace("%bw_name%", arenas.get(arenaKey).getDisplayName()).replace("%bw_map_name%", arenas.get(arenaKey).getArenaName()));
             List<String> lore = new ArrayList<>();
             for (String s : Language.getList(p, Messages.ARENA_GUI_ARENA_CONTENT_LORE)) {
-                if (!(s.contains("{group}") && arenas.get(arenaKey).getGroup().equalsIgnoreCase("default"))) {
-                    lore.add(s.replace("{on}", String.valueOf(arena != null ? arena == arenas.get(arenaKey) ? players : arenas.get(arenaKey).getPlayers().size() : arenas.get(arenaKey).getPlayers().size())).replace("{max}",
-                            String.valueOf(arenas.get(arenaKey).getMaxPlayers())).replace("{status}", arenas.get(arenaKey).getDisplayStatus(Language.getPlayerLanguage(p)))
-                            .replace("{group}", arenas.get(arenaKey).getDisplayGroup(p)));
+                if (!(s.contains("%bw_group%") && arenas.get(arenaKey).getGroup().equalsIgnoreCase("default"))) {
+                    lore.add(s.replace("%bw_on%", String.valueOf(arena != null ? arena == arenas.get(arenaKey) ? players : arenas.get(arenaKey).getPlayers().size() : arenas.get(arenaKey).getPlayers().size())).replace("%bw_max%",
+                            String.valueOf(arenas.get(arenaKey).getMaxPlayers())).replace("%bw_arena_status%", arenas.get(arenaKey).getDisplayStatus(Language.getPlayerLanguage(p)))
+                            .replace("%bw_group%", arenas.get(arenaKey).getDisplayGroup(p)));
                 }
             }
             im.setLore(lore);
@@ -144,13 +144,13 @@ public class ArenaGUI {
             im.setDisplayName(ChatColor.translateAlternateColorCodes(
                     '&',
                     Language.getMsg(p, Messages.ARENA_GUI_SKIPPED_ITEM_NAME)
-                            .replaceAll("\\{serverIp}", BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
+                            .replaceAll("%bw_server_ip%", BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
             ));
             List<String> lore = new ArrayList<>();
             for(String s : Language.getList(p, Messages.ARENA_GUI_SKIPPED_ITEM_LORE)) {
                 lore.add(
                         s
-                                .replaceAll("\\{serverIp}", BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
+                                .replaceAll("%bw_server_ip%", BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
                 );
             }
             if(lore.size() > 0) {

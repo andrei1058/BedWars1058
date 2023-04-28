@@ -139,6 +139,12 @@ public interface IArena {
     int getMaxInTeam();
 
     /**
+     * Get registered scoreboard name.
+     */
+    String getScoreboardName();
+
+
+    /**
      * Get list of players in respawn screen.
      * Player is the actual player in re-spawn screen.
      * Integer is the remaining time.
@@ -462,6 +468,14 @@ public interface IArena {
      * Where spectators will spawn.
      */
     Location getSpectatorLocation();
+    /**
+     * Allows map break
+     */
+    void setAllowMapBreak(boolean value);
+    /**
+     * Checks if the map break is enabled
+     */
+    boolean isMapBreakable();
 
     /**
      * Location where to spawn at join (waiting/ starting).

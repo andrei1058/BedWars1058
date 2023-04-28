@@ -70,6 +70,11 @@
             <id>papermc</id>
             <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
+        <!-- TAB -->
+        <repository>
+            <id>krypton</id>
+            <url>https://repo.kryptonmc.org/releases</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -94,7 +99,7 @@
         <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
-            <version>3.0.1</version>
+            <version>3.0.2</version>
             <optional>true</optional>
         </dependency>
         <dependency>
@@ -228,50 +233,13 @@
             <optional>true</optional>
         </dependency>
 
-        <!--        Sidebar LIB-->
+        <!-- TAB -->
         <dependency>
-            <groupId>com.andrei1058.spigot.sidebar</groupId>
-            <artifactId>sidebar-base</artifactId>
-            <version>23.3</version>
-            <scope>compile</scope>
+            <groupId>me.neznamy</groupId>
+            <artifactId>tab-api</artifactId>
+            <version>3.2.4</version>
+            <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>com.andrei1058.spigot.sidebar</groupId>
-            <artifactId>sidebar-eight</artifactId>
-            <version>23.3</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.andrei1058.spigot.sidebar</groupId>
-            <artifactId>sidebar-twelve</artifactId>
-            <version>23.3</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.andrei1058.spigot.sidebar</groupId>
-            <artifactId>sidebar-sixteen</artifactId>
-            <version>23.3</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.andrei1058.spigot.sidebar</groupId>
-            <artifactId>sidebar-seventeen</artifactId>
-            <version>23.3</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.andrei1058.spigot.sidebar</groupId>
-            <artifactId>sidebar-eighteen</artifactId>
-            <version>23.3</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.andrei1058.spigot.sidebar</groupId>
-            <artifactId>sidebar-nineteen</artifactId>
-            <version>23.3</version>
-            <scope>compile</scope>
-        </dependency>
-        <!--        End of Sidebar LIB-->
     </dependencies>
 
     <build>
@@ -304,12 +272,12 @@
                             <shadedPattern>com.andrei1058.bedwars.libs.slf4j</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>com.andrei1058.spigot.sidebar</pattern>
-                            <shadedPattern>com.andrei1058.bedwars.libs.sidebar</shadedPattern>
+                            <pattern>com.iridium.iridiumcolorapi</pattern>
+                            <shadedPattern>com.andrei1058.bedwars.libs.color</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>com.andrei1058.spigot.sidebarutils</pattern>
-                            <shadedPattern>com.andrei1058.bedwars.libs.updater</shadedPattern>
+                            <pattern>io.papermc.lib</pattern>
+                            <shadedPattern>com.andrei1058.bedwars.libs.paper</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>

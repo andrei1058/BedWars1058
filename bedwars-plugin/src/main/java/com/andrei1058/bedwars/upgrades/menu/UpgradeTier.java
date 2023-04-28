@@ -50,8 +50,8 @@ public class UpgradeTier {
     public UpgradeTier(String parentName, String name, ItemStack displayItem, int cost, Material currency) {
         this.displayItem = BedWars.nms.addCustomData(displayItem, "MCONT_" + parentName);
         this.name = name;
-        Language.saveIfNotExists(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", parentName.replace("upgrade-", "")).replace("{tier}", name), "&cName not set");
-        Language.saveIfNotExists(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", parentName.replace("upgrade-", "")).replace("{tier}", name), Collections.singletonList("&cLore not set"));
+        Language.saveIfNotExists(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", parentName.replace("upgrade-", "")).replace("{tier}", name), "&cName not set");
+        Language.saveIfNotExists(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("%bw_name%", parentName.replace("upgrade-", "")).replace("{tier}", name), Collections.singletonList("&cLore not set"));
         this.cost = cost;
         this.currency = currency;
 

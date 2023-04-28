@@ -107,7 +107,7 @@ public class PumpkinContent extends CategoryContent {
         String buyStatus;
 
         if (!canAfford) {
-            buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CANT_AFFORD).replace("{currency}", translatedCurrency);
+            buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CANT_AFFORD).replace("%bw_currency%", translatedCurrency);
         } else {
             buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CAN_BUY);
         }
