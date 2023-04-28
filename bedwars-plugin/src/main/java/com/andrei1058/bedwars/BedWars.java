@@ -522,10 +522,10 @@ public class BedWars extends JavaPlugin {
         metrics.addCustomChart(new SimplePie("server_type", () -> getServerType().toString()));
         metrics.addCustomChart(new SimplePie("default_language", () -> Language.getDefaultLanguage().getIso()));
         metrics.addCustomChart(new SimplePie("auto_scale", () -> String.valueOf(autoscale)));
-        metrics.addCustomChart(new SimplePie("party_adapter", () -> party.getClass().getName()));
-        metrics.addCustomChart(new SimplePie("chat_adapter", () -> chat.getClass().getName()));
-        metrics.addCustomChart(new SimplePie("level_adapter", () -> getLevelSupport().getClass().getName()));
-        metrics.addCustomChart(new SimplePie("db_adapter", () -> getRemoteDatabase().getClass().getName()));
+        metrics.addCustomChart(new SimplePie("party_adapter", () -> party.getClass().getSimpleName()));
+        metrics.addCustomChart(new SimplePie("chat_adapter", () -> chat.getClass().getSimpleName()));
+        metrics.addCustomChart(new SimplePie("level_adapter", () -> getLevelSupport().getClass().getSimpleName()));
+        metrics.addCustomChart(new SimplePie("db_adapter", () -> getRemoteDatabase().getClass().getSimpleName()));
         metrics.addCustomChart(new SimplePie("map_adapter", () -> String.valueOf(getAPI().getRestoreAdapter().getOwner().getName())));
 
         if (Bukkit.getPluginManager().getPlugin("VipFeatures") != null) {
