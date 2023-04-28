@@ -139,6 +139,12 @@ public interface IArena {
     int getMaxInTeam();
 
     /**
+     * Get registered scoreboard name.
+     */
+    String getScoreboardName();
+
+
+    /**
      * Get list of players in respawn screen.
      * Player is the actual player in re-spawn screen.
      * Integer is the remaining time.

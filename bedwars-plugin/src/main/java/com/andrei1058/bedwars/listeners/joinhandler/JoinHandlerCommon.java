@@ -39,7 +39,7 @@ public class JoinHandlerCommon implements Listener {
     protected static void displayCustomerDetails(Player player) {
         if (player == null) return;
         //TODO IMPROVE, ADD MORE DETAILS
-        if (player.getName().equalsIgnoreCase("andrei1058") || player.getName().equalsIgnoreCase("andreea1058") || player.getName().equalsIgnoreCase("Dani3l_FTW")) {
+        if (player.getName().equalsIgnoreCase("MrCeasar")) {
             player.sendMessage("§8[§f" + BedWars.plugin.getName() + " v" + BedWars.plugin.getDescription().getVersion() + "§8]§7§m---------------------------");
             player.sendMessage("");
             player.sendMessage("§7User ID: §f%%__USER__%%");

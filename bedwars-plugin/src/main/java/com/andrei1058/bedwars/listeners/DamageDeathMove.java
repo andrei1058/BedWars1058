@@ -101,19 +101,11 @@ public class DamageDeathMove implements Listener {
                     return;
                 }
 
-                // todo why did I set this to 1? disabled for now
-                /*if (e.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
-                    e.setDamage(1);
-                    return;
-                }*/
-                //if (e.getCause() == EntityDamageEvent.DamageCause.FALL) {
                 if (BedWarsTeam.reSpawnInvulnerability.containsKey(p.getUniqueId())) {
                     if (BedWarsTeam.reSpawnInvulnerability.get(p.getUniqueId()) > System.currentTimeMillis()) {
                         e.setCancelled(true);
                     } else BedWarsTeam.reSpawnInvulnerability.remove(p.getUniqueId());
                 }
-                //}
-
             }
         }
         if (BedWars.getServerType() == ServerType.MULTIARENA) {
@@ -123,7 +115,7 @@ public class DamageDeathMove implements Listener {
         }
     }
 
-    // show player health on bow hit
+    //Todo show player health on bow hit
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBowHit(EntityDamageByEntityEvent e) {
         if(e.isCancelled()) return;
@@ -144,10 +136,9 @@ public class DamageDeathMove implements Listener {
         Language lang = Language.getPlayerLanguage(damager);
         if (lang.m(Messages.PLAYER_HIT_BOW).isEmpty()) return;
         String message = lang.m(Messages.PLAYER_HIT_BOW)
-                .replace("{amount}", new DecimalFormat("00.#").format(((Player) e.getEntity()).getHealth() - e.getFinalDamage()))
-                .replace("{TeamColor}", team.getColor().chat().toString())
-                .replace("{TeamName}", team.getDisplayName(lang))
-                .replace("{PlayerName}", ChatColor.stripColor(p.getDisplayName()));
+                .replace("%bw_damage_amount%", new DecimalFormat("00.#").format(((Player) e.getEntity()).getHealth() - e.getFinalDamage()))
+                .replace("%bw_player%", p.getDisplayName())
+                .replace("%bw_team%", team.getColor().chat() + team.getDisplayName(lang));
         damager.sendMessage(message);
     }
 
@@ -446,26 +437,26 @@ public class DamageDeathMove implements Listener {
             for (Player on : a.getPlayers()) {
                 Language lang = Language.getPlayerLanguage(on);
                 on.sendMessage(playerKillEvent.getMessage().apply(on).
-                        replace("{PlayerColor}", victimsTeam.getColor().chat().toString())
-                        .replace("{PlayerName}", victim.getDisplayName())
-                        .replace("{PlayerNameUnformatted}", victim.getName())
-                        .replace("{PlayerTeamName}", victimsTeam.getDisplayName(lang))
-                        .replace("{KillerColor}", killersTeam == null ? "" : killersTeam.getColor().chat().toString())
-                        .replace("{KillerName}", killer == null ? "" : killer.getDisplayName())
-                        .replace("{KillerNameUnformatted}", killer == null ? "" : killer.getName())
-                        .replace("{KillerTeamName}", killersTeam == null ? "" : killersTeam.getDisplayName(lang)));
+                        replace("%bw_player_color%", victimsTeam.getColor().chat().toString())
+                        .replace("%bw_player%", victim.getDisplayName())
+                        .replace("%bw_playername%", victim.getName())
+                        .replace("%bw_team%", victimsTeam.getDisplayName(lang))
+                        .replace("%bw_killer_color%", killersTeam == null ? "" : killersTeam.getColor().chat().toString())
+                        .replace("%bw_killer_playername%", killer == null ? "" : killer.getDisplayName())
+                        .replace("%bw_killer_name%", killer == null ? "" : killer.getName())
+                        .replace("%bw_killer_team%", killersTeam == null ? "" : killersTeam.getDisplayName(lang)));
             }
             for (Player on : a.getSpectators()) {
                 Language lang = Language.getPlayerLanguage(on);
                 on.sendMessage(playerKillEvent.getMessage().apply(on).
-                        replace("{PlayerColor}", victimsTeam.getColor().chat().toString())
-                        .replace("{PlayerName}", victim.getDisplayName())
-                        .replace("{PlayerNameUnformatted}", victim.getName())
-                        .replace("{KillerColor}", killersTeam == null ? "" : killersTeam.getColor().chat().toString())
-                        .replace("{PlayerTeamName}", victimsTeam.getDisplayName(lang))
-                        .replace("{KillerName}", killer == null ? "" : killer.getDisplayName())
-                        .replace("{KillerNameUnformatted}", killer == null ? "" : killer.getName())
-                        .replace("{KillerTeamName}", killersTeam == null ? "" : killersTeam.getDisplayName(lang)));
+                        replace("%bw_player_color%", victimsTeam.getColor().chat().toString())
+                        .replace("%bw_player%", victim.getDisplayName())
+                        .replace("%bw_playername%", victim.getName())
+                        .replace("%bw_team%", victimsTeam.getDisplayName(lang))
+                        .replace("%bw_killer_color%", killersTeam == null ? "" : killersTeam.getColor().chat().toString())
+                        .replace("%bw_killer_playername%", killer == null ? "" : killer.getDisplayName())
+                        .replace("%bw_killer_name%", killer == null ? "" : killer.getName())
+                        .replace("%bw_killer_team%", killersTeam == null ? "" : killersTeam.getDisplayName(lang)));
             }
 
             // increase stats to killer
@@ -543,7 +534,7 @@ public class DamageDeathMove implements Listener {
                 if (t.getMembers().isEmpty()) {
                     Bukkit.getPluginManager().callEvent(new TeamEliminatedEvent(a, t));
                     for (Player p : a.getWorld().getPlayers()) {
-                        p.sendMessage(getMsg(p, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", t.getColor().chat().toString()).replace("{TeamName}", t.getDisplayName(Language.getPlayerLanguage(p))));
+                        p.sendMessage(getMsg(p, Messages.TEAM_ELIMINATED_CHAT).replace("%bw_team_color%", t.getColor().chat().toString()).replace("%bw_team_name%", t.getDisplayName(Language.getPlayerLanguage(p))));
                     }
                     Bukkit.getScheduler().runTaskLater(plugin, a::checkWinner, 40L);
                 }

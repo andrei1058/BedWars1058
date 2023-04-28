@@ -36,6 +36,8 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 
 public class ScoreboardListener implements Listener {
+    // Leaving this here if needed for possible health integrations. (27/4/2023)
+    // Listener is not registered!
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDamage(EntityDamageEvent e) {
@@ -48,7 +50,7 @@ public class ScoreboardListener implements Listener {
         int health = (int) Math.ceil((player.getHealth() - e.getFinalDamage()));
         if (arena == null) return;
 
-        SidebarService.getInstance().refreshHealth(arena, player, health);
+//        SidebarService.getInstance().refreshHealth(arena, player, health);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -62,7 +64,7 @@ public class ScoreboardListener implements Listener {
 
         int health = (int) Math.ceil(player.getHealth() + e.getAmount());
 
-        SidebarService.getInstance().refreshHealth(arena, player, health);
+//        SidebarService.getInstance().refreshHealth(arena, player, health);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -70,7 +72,7 @@ public class ScoreboardListener implements Listener {
         if (e == null) return;
         final IArena arena = e.getArena();
 
-        SidebarService.getInstance().refreshHealth(arena, e.getPlayer(), (int) Math.ceil(e.getPlayer().getHealth()));
+//        SidebarService.getInstance().refreshHealth(arena, e.getPlayer(), (int) Math.ceil(e.getPlayer().getHealth()));
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -82,7 +84,7 @@ public class ScoreboardListener implements Listener {
         final Player player = e.getPlayer();
 
         // re-add player to scoreboard tab list
-        SidebarService.getInstance().handleReJoin(arena, player);
+//        SidebarService.getInstance().handleReJoin(arena, player);
     }
 
     @EventHandler
@@ -91,7 +93,7 @@ public class ScoreboardListener implements Listener {
         final IArena arena = e.getArena();
 
         // refresh placeholders in case placeholders refresh is disabled
-        SidebarService.getInstance().refreshPlaceholders(arena);
+//        SidebarService.getInstance().refreshPlaceholders(arena);
     }
 
     @EventHandler
@@ -101,6 +103,6 @@ public class ScoreboardListener implements Listener {
         final IArena arena = e.getArena();
 
         // refresh placeholders in case placeholders refresh is disabled
-        SidebarService.getInstance().refreshPlaceholders(arena);
+//        SidebarService.getInstance().refreshPlaceholders(arena);
     }
 }

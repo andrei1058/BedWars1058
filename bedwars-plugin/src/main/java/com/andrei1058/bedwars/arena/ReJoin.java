@@ -145,7 +145,7 @@ public class ReJoin {
     public boolean reJoin(Player player) {
 
         Sounds.playSound("rejoin-allowed", player);
-        player.sendMessage(Language.getMsg(player, Messages.REJOIN_ALLOWED).replace("{arena}", getArena().getDisplayName()));
+        player.sendMessage(Language.getMsg(player, Messages.REJOIN_ALLOWED).replace("%bw_arena%", getArena().getDisplayName()));
 
         if (player.getGameMode() != GameMode.SURVIVAL) {
             Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
@@ -172,12 +172,12 @@ public class ReJoin {
             bwt.setBedDestroyed(true);
             if (bwt != null) {
                 for (Player p2 : arena.getPlayers()) {
-                    p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", bwt.getColor().chat().toString())
-                            .replace("{TeamName}", bwt.getDisplayName(Language.getPlayerLanguage(p2))));
+                    p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("%bw_team_color%", bwt.getColor().chat().toString())
+                            .replace("%bw_team_name%", bwt.getDisplayName(Language.getPlayerLanguage(p2))));
                 }
                 for (Player p2 : arena.getSpectators()) {
-                    p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", bwt.getColor().chat().toString())
-                            .replace("{TeamName}", bwt.getDisplayName(Language.getPlayerLanguage(p2))));
+                    p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("%bw_team_color%", bwt.getColor().chat().toString())
+                            .replace("%bw_team_name%", bwt.getDisplayName(Language.getPlayerLanguage(p2))));
                 }
             }
             arena.checkWinner();

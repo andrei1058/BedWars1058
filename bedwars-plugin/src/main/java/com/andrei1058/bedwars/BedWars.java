@@ -64,10 +64,6 @@ import com.andrei1058.bedwars.maprestore.internal.InternalAdapter;
 import com.andrei1058.bedwars.money.internal.MoneyListeners;
 import com.andrei1058.bedwars.shop.ShopManager;
 import com.andrei1058.bedwars.sidebar.*;
-import com.andrei1058.bedwars.sidebar.thread.RefreshTitleTask;
-import com.andrei1058.bedwars.sidebar.thread.RefreshPlaceholdersTask;
-import com.andrei1058.bedwars.sidebar.thread.RefreshLifeTask;
-import com.andrei1058.bedwars.sidebar.thread.RefreshTabListTask;
 import com.andrei1058.bedwars.stats.StatsManager;
 import com.andrei1058.bedwars.support.citizens.CitizensListener;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
@@ -551,62 +547,22 @@ public class BedWars extends JavaPlugin {
         com.andrei1058.bedwars.upgrades.UpgradesManager.init();
 
         // Initialize sidebar manager
-        if (SidebarService.init()) {
-            this.getLogger().info("Initializing SidebarLib by andrei1058");
-        } else {
-            this.getLogger().severe("SidebarLib by andrei1058 does not support your server version");
-            Bukkit.getPluginManager().disablePlugin(this);
-            return;
-        }
-
-        int playerListRefreshInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_LIST_REFRESH);
-        if (playerListRefreshInterval < 1) {
-            Bukkit.getLogger().info("Scoreboard names list refresh is disabled. (Is set to " + playerListRefreshInterval + ").");
-        } else {
-            if (playerListRefreshInterval < 20) {
-                Bukkit.getLogger().warning("Scoreboard names list refresh interval is set to: " + playerListRefreshInterval);
-                Bukkit.getLogger().warning("It is not recommended to use a value under 20 ticks.");
-                Bukkit.getLogger().warning("If you expect performance issues please increase its timer.");
+        Bukkit.getScheduler().runTask(this, () -> {
+            if (Bukkit.getPluginManager().getPlugin("TAB") != null) {
+                getLogger().info("Hooked into TAB support!");
+                if (BoardManager.init()) {
+                    getLogger().info("TAB support has been loaded");
+                } else {
+                    this.getLogger().severe("Tab scoreboard is not enabled! please enable this in the tab configuration file!");
+                    Bukkit.getPluginManager().disablePlugin(this);
+                }
+            } else {
+                this.getLogger().severe("TAB by NEZNAMY could not be hooked!");
+                Bukkit.getPluginManager().disablePlugin(this);
             }
-            Bukkit.getScheduler().runTaskTimer(this, new RefreshTabListTask(), 23L, playerListRefreshInterval);
-        }
+        });
 
-        int placeholdersRefreshInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL);
-        if (placeholdersRefreshInterval < 1) {
-            Bukkit.getLogger().info("Scoreboard placeholders refresh is disabled. (Is set to " + placeholdersRefreshInterval + ").");
-        } else {
-            if (placeholdersRefreshInterval < 20) {
-                Bukkit.getLogger().warning("Scoreboard placeholders refresh interval is set to: " + placeholdersRefreshInterval);
-                Bukkit.getLogger().warning("It is not recommended to use a value under 20 ticks.");
-                Bukkit.getLogger().warning("If you expect performance issues please increase its timer.");
-            }
-            Bukkit.getScheduler().runTaskTimer(this, new RefreshPlaceholdersTask(), 28L, placeholdersRefreshInterval);
-        }
-
-        int titleRefreshInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_TITLE_REFRESH_INTERVAL);
-        if (titleRefreshInterval < 1) {
-            Bukkit.getLogger().info("Scoreboard title refresh is disabled. (Is set to " + titleRefreshInterval + ").");
-        } else {
-            if (titleRefreshInterval < 4) {
-                Bukkit.getLogger().warning("Scoreboard title refresh interval is set to: " + titleRefreshInterval);
-                Bukkit.getLogger().warning("If you expect performance issues please increase its timer.");
-            }
-            Bukkit.getScheduler().runTaskTimerAsynchronously(this, new RefreshTitleTask(), 32L, titleRefreshInterval);
-        }
-
-        int healthAnimationInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_REFRESH);
-        if (healthAnimationInterval < 1) {
-            Bukkit.getLogger().info("Scoreboard health animation refresh is disabled. (Is set to " + healthAnimationInterval + ").");
-        } else {
-            if (healthAnimationInterval < 20) {
-                Bukkit.getLogger().warning("Scoreboard health animation refresh interval is set to: " + healthAnimationInterval);
-                Bukkit.getLogger().warning("It is not recommended to use a value under 20 ticks.");
-                Bukkit.getLogger().warning("If you expect performance issues please increase its timer.");
-            }
-            Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new RefreshLifeTask(), 40L, healthAnimationInterval);
-        }
-
-        registerEvents(new ScoreboardListener());
+//        registerEvents(new ScoreboardListener()); #Disabled for now
 
         if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_ENABLE_HALLOWEEN)) {
             // Halloween Special

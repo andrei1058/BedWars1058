@@ -118,14 +118,14 @@ public class TeleporterGUI {
         ItemMeta im = i.getItemMeta();
         assert im != null;
         im.setDisplayName(getMsg(GUIholder, Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME)
-                .replace("{vPrefix}", BedWars.getChatSupport().getPrefix(targetPlayer))
-                .replace("{vSuffix}", BedWars.getChatSupport().getSuffix(targetPlayer))
-                .replace("{player}", targetPlayer.getDisplayName())
-                .replace("{playername}", targetPlayer.getName()));
+                .replace("%bw_v_prefix%", BedWars.getChatSupport().getPrefix(targetPlayer))
+                .replace("%bw_v_suffix%", BedWars.getChatSupport().getSuffix(targetPlayer))
+                .replace("%bw_player%", targetPlayer.getDisplayName())
+                .replace("%bw_playername%", targetPlayer.getName()));
         List<String> lore = new ArrayList<>();
         String health = String.valueOf((int)targetPlayer.getHealth() * 100 / targetPlayer.getHealthScale());
         for (String s : getList(GUIholder, Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_LORE)) {
-            lore.add(s.replace("{health}", health).replace("{food}", String.valueOf(targetPlayer.getFoodLevel())));
+            lore.add(s.replace("%bw_player_health%", health).replace("%bw_player_food%", String.valueOf(targetPlayer.getFoodLevel())));
         }
         im.setLore(lore);
         i.setItemMeta(im);
