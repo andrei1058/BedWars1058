@@ -382,15 +382,17 @@ public class OreGenerator implements IGenerator {
             for (IGenHolo a : armorStands.values()) {
                 a.destroy();
             }
+            item.remove();
+            armorStands.clear();
         }
-        item.remove();
-        armorStands.clear();
         disabled = true;
     }
 
     @Override
     public void enable() {
-        enableRotation();
+        if (getOre().getType() == Material.EMERALD || getOre().getType() == Material.DIAMOND) {
+            enableRotation();
+        }
         disabled = false;
     }
 
