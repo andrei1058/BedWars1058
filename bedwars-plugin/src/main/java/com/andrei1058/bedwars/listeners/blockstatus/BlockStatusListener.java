@@ -70,6 +70,8 @@ public class BlockStatusListener implements Listener {
                     path = ConfigPath.SIGNS_STATUS_BLOCK_RESTARTING_MATERIAL;
                     data = ConfigPath.SIGNS_STATUS_BLOCK_RESTARTING_DATA;
                     break;
+                default:
+                    throw new IllegalStateException("Unhandled game status!");
             }
             BedWars.nms.setJoinSignBackground(s.getState(), Material.valueOf(BedWars.signs.getString(path)));
             BedWars.nms.setJoinSignBackgroundBlockData(s.getState(), (byte) BedWars.signs.getInt(data));
