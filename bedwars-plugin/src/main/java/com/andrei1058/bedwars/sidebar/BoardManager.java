@@ -18,6 +18,7 @@ import me.neznamy.tab.api.event.player.PlayerLoadEvent;
 import me.neznamy.tab.api.placeholder.PlaceholderManager;
 import me.neznamy.tab.api.scoreboard.Scoreboard;
 import me.neznamy.tab.api.scoreboard.ScoreboardManager;
+import me.neznamy.tab.api.team.UnlimitedNametagManager;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -299,6 +300,19 @@ public class BoardManager implements IScoreboardService {
             String title = titleArray[i];
             return null ==  title? "" : title;
         });
+
+        pm.registerPlayerPlaceholder("%bw_tab_health%", SuffixRefresh, tabPlayer -> {
+            Player player = (Player) tabPlayer.getPlayer();
+            IArena arena = Arena.getArenaByPlayer(player);
+            // set sidebar lines based on game state or lobby
+            String line = null;
+            if (null != arena && null != arena.getStatus()) {
+                if (arena.getStatus() == GameState.playing || arena.getStatus() == GameState.restarting) {
+                    line = Language.getMsg((Player) tabPlayer.getPlayer(), Messages.FORMATTING_SCOREBOARD_HEALTH);
+                }
+            }
+            return null ==  line? "" : line;
+        });
     }
 
 
@@ -328,6 +342,12 @@ public class BoardManager implements IScoreboardService {
             }
         }
         TabPlayer tabPlayer = TabAPI.getInstance().getPlayer(player.getUniqueId());
+        if (config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_BELOW_NAME)){
+            if (TabAPI.getInstance().getTeamManager() instanceof UnlimitedNametagManager) {
+                UnlimitedNametagManager unm = (UnlimitedNametagManager) TabAPI.getInstance().getTeamManager();
+                unm.setLine(tabPlayer,"belowname", "%bw_tab_health%");
+            }
+        }
 
         Scoreboard scoreboard = scoreboardManager.getRegisteredScoreboards().get(scoreboardName);
         scoreboardManager.showScoreboard(tabPlayer, scoreboard);
