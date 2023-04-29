@@ -345,6 +345,7 @@ public class BoardManager implements IScoreboardService {
         if (config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_BELOW_NAME)){
             if (TabAPI.getInstance().getTeamManager() instanceof UnlimitedNametagManager) {
                 UnlimitedNametagManager unm = (UnlimitedNametagManager) TabAPI.getInstance().getTeamManager();
+                if (null == unm) Bukkit.getLogger().warning("Below name health is enabled in BedWars config but unlimited nametags is disabled in TAB config!");
                 unm.setLine(tabPlayer,"belowname", "%bw_tab_health%");
             }
         }
