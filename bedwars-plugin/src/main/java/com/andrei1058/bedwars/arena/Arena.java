@@ -875,7 +875,7 @@ public class Arena implements IArena {
                         Language lang = Language.getPlayerLanguage(inGame);
                         inGame.sendMessage(event.getMessage().apply(inGame)
                                 .replace("%bw_team_name%", team.getDisplayName(lang))
-                                .replace("%bw_player_color%", team.getColor().chat().toString()).replace("%bw_playername%", p.getDisplayName())
+                                .replace("%bw_player_color%", team.getColor().chat().toString()).replace("%bw_player%", p.getDisplayName()).replace("%bw_playername%", p.getName())
                                 .replace("%bw_killer_color%", killerTeam.getColor().chat().toString())
                                 .replace("%bw_killer_name%", lastDamager.getDisplayName())
                                 .replace("%bw_killer_team_name%", killerTeam.getDisplayName(lang)));
@@ -884,7 +884,7 @@ public class Arena implements IArena {
                         Language lang = Language.getPlayerLanguage(inGame);
                         inGame.sendMessage(event.getMessage().apply(inGame)
                                 .replace("%bw_team_name%", team.getDisplayName(lang))
-                                .replace("%bw_player_color%", team.getColor().chat().toString()).replace("%bw_playername%", p.getDisplayName())
+                                .replace("%bw_player_color%", team.getColor().chat().toString()).replace("%bw_player%", p.getDisplayName()).replace("%bw_playername%", p.getName())
                                 .replace("%bw_killer_color%", killerTeam.getColor().chat().toString())
                                 .replace("%bw_killer_name%", lastDamager.getDisplayName())
                                 .replace("%bw_killer_team_name%", killerTeam.getDisplayName(lang)));

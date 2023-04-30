@@ -547,7 +547,7 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.UPGRADES_TRAP_DEFAULT_MSG, "&c&l%bw_trap%被触发了！");
         yml.addDefault(Messages.UPGRADES_TRAP_DEFAULT_TITLE, "&c陷阱触发！");
         yml.addDefault(Messages.UPGRADES_TRAP_DEFAULT_SUBTITLE, "&f你队伍的%bw_trap%被触发了！");
-        yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_MSG + "3", "&c&l报警陷阱被%bw_color%&l%bw_team%的&7&l%bw_playername%&c&l触发了！");
+        yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_MSG + "3", "&c&l报警陷阱被%bw_color%&l%bw_team%的&7&l%bw_player%&c&l触发了！");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_TITLE + "3", "&c&l警报！！！");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_SUBTITLE + "3", "%bw_color%%bw_team%&f触发了陷阱！");
         yml.addDefault(Messages.UPGRADES_UPGRADE_ALREADY_CHAT, "&cYou already unlocked this upgrade!");
