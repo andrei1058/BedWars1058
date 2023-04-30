@@ -579,7 +579,7 @@ public class Russian extends Language{
         yml.addDefault(Messages.UPGRADES_TRAP_DEFAULT_MSG, "&c&lВаша %bw_trap% был(а) отключена!");
         yml.addDefault(Messages.UPGRADES_TRAP_DEFAULT_TITLE, "&cЛОВУШКА БЫЛА АКТИВИРОВАНА!");
         yml.addDefault(Messages.UPGRADES_TRAP_DEFAULT_SUBTITLE, "&fВаша %bw_trap% был(а) активирован(а)!");
-        yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_MSG + "3", "&c&lЛовушка была активирована игроком &7&l%bw_playername% &c&lиз %bw_color%&l%bw_team% &c&lкоманды!"); // set off = активирована? // Добавлено Matveev_: не ебу
+        yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_MSG + "3", "&c&lЛовушка была активирована игроком &7&l%bw_player% &c&lиз %bw_color%&l%bw_team% &c&lкоманды!"); // set off = активирована? // Добавлено Matveev_: не ебу
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_TITLE + "3", "&c&lВНИМАНИЕ!!!");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_SUBTITLE + "3", "&fЛовушка была активирована командой %bw_color%%bw_team% &f!");
         yml.addDefault(Messages.UPGRADES_UPGRADE_ALREADY_CHAT, "&cYou already unlocked this upgrade!");

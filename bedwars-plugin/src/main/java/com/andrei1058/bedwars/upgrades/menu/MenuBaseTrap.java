@@ -347,10 +347,10 @@ public class MenuBaseTrap implements MenuContent, EnemyBaseEnterTrap, TeamUpgrad
                 String trapName = ChatColor.stripColor(Language.getMsg(p, getNameMsgPath())).replace("%bw_color%", "");
                 String enemy = trapTeam.getArena().getTeam(player) == null ? "NULL" : trapTeam.getArena().getTeam(player).getDisplayName(Language.getPlayerLanguage(p));
                 p.sendMessage(Language.getMsg(p, Messages.UPGRADES_TRAP_CUSTOM_MSG + name2).replace("%bw_trap%", trapName)
-                        .replace("%bw_playername%", player.getName()).replace("%bw_team%", enemy).replace("%bw_color%", color));
+                        .replace("%bw_playername%", player.getName()).replace("%bw_player%", player.getDisplayName()).replace("%bw_team%", enemy).replace("%bw_color%", color));
                 BedWars.nms.sendTitle(p, Language.getMsg(p, Messages.UPGRADES_TRAP_CUSTOM_TITLE + name2)
                                 .replace("%bw_trap%", trapName).replace("%bw_playername%", player.getName()).replace("%bw_team%", enemy).replace("%bw_color%", color),
-                        Language.getMsg(p, Messages.UPGRADES_TRAP_CUSTOM_SUBTITLE + name2).replace("%bw_trap%", trapName).replace("%bw_playername%", player.getName())
+                        Language.getMsg(p, Messages.UPGRADES_TRAP_CUSTOM_SUBTITLE + name2).replace("%bw_trap%", trapName).replace("%bw_playername%", player.getName()).replace("%bw_player%", player.getDisplayName())
                                 .replace("%bw_team%", enemy).replace("%bw_color%", color), 15, 35, 10);
             }
         } else {
