@@ -1182,8 +1182,9 @@ public class Arena implements IArena {
 
         reJoin.getBwt().reJoin(p, ev.getRespawnTime());
         reJoin.destroy(false);
-
-        BoardManager.getInstance().giveTabFeatures(p, this, true);
+        Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
+            BoardManager.getInstance().giveTabFeatures(p, this, true);
+        }, 10L);//todo check if can be pulled out to listeners.
         return true;
     }
 

@@ -57,7 +57,7 @@ public class OreGenerator implements IGenerator {
     private GeneratorType type;
     private int rotate = 0, dropID = 0;
     private ITeam bwt;
-    boolean up = true;
+    boolean up = true, disabled = false;
 
     /**
      * Generator holograms per language <iso, holo></iso,>
@@ -145,7 +145,7 @@ public class OreGenerator implements IGenerator {
         if (arena.getStatus() != GameState.playing){
             return;
         }
-
+        if (disabled) return;
         if (lastSpawn == 0) {
             lastSpawn = delay;
 
@@ -382,8 +382,18 @@ public class OreGenerator implements IGenerator {
             for (IGenHolo a : armorStands.values()) {
                 a.destroy();
             }
+            item.remove();
+            armorStands.clear();
         }
-        armorStands.clear();
+        disabled = true;
+    }
+
+    @Override
+    public void enable() {
+        if (getOre().getType() == Material.EMERALD || getOre().getType() == Material.DIAMOND) {
+            enableRotation();
+        }
+        disabled = false;
     }
 
     @Override

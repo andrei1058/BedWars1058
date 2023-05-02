@@ -28,9 +28,10 @@ public class TeamSilverfish extends DespawnableProvider<Silverfish> {
     @Override
     String getDisplayName(@NotNull DespawnableAttributes attr, @NotNull ITeam team) {
         Language lang = Language.getDefaultLanguage();
-        return lang.m(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME).replace("{despawn}", String.valueOf(attr.despawnSeconds())
-                .replace("{health}", StringUtils.repeat(lang.m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH) + " ", 10))
-                .replace("{TeamColor}", team.getColor().chat().toString())
+        return lang.m(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME)
+                .replace("%bw_despawn_time%", String.valueOf(attr.despawnSeconds())
+                .replace("%bw_health%", StringUtils.repeat(lang.m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH) + " ", 10))
+                .replace("%bw_team_color%", team.getColor().chat().toString())
         );
     }
 

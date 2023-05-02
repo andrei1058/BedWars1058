@@ -105,9 +105,9 @@ public class IGolem extends EntityIronGolem {
         customEnt.getBukkitEntity().setPersistent(true);
         customEnt.getBukkitEntity().setCustomNameVisible(true);
         customEnt.getBukkitEntity().setCustomName(Language.getDefaultLanguage().m(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME)
-                .replace("{despawn}", String.valueOf(despawn)
-                        .replace("{health}", StringUtils.repeat(Language.getDefaultLanguage().m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH) + " ", 10))
-                        .replace("{TeamColor}", bedWarsTeam.getColor().chat().toString())));
+                .replace("%bw_despawn_time%", String.valueOf(despawn)
+                .replace("%bw_health%", StringUtils.repeat(Language.getDefaultLanguage().m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH) + " ", 10))
+                .replace("%bw_team_color%", bedWarsTeam.getColor().chat().toString())));
         return (LivingEntity) customEnt.getBukkitEntity();
     }
 
