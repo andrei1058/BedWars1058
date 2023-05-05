@@ -167,8 +167,8 @@ public class CategoryContent implements ICategoryContent {
         //check money
         int money = calculateMoney(player, ct.getCurrency());
         if (money < ct.getPrice()) {
-            player.sendMessage(getMsg(player, Messages.SHOP_INSUFFICIENT_MONEY).replace("{currency}", getMsg(player, getCurrencyMsgPath(ct))).
-                    replace("{amount}", String.valueOf(ct.getPrice() - money)));
+            player.sendMessage(getMsg(player, Messages.SHOP_INSUFFICIENT_MONEY).replace("%bw_currency%", getMsg(player, getCurrencyMsgPath(ct))).
+                    replace("%bw_amount%", String.valueOf(ct.getPrice() - money)));
             Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, player);
             return;
         }
@@ -178,6 +178,13 @@ public class CategoryContent implements ICategoryContent {
         Bukkit.getPluginManager().callEvent(event = new ShopBuyEvent(player, Arena.getArenaByPlayer(player), this));
 
         if (event.isCancelled()){
+            return;
+        }
+
+        //check inventory has space
+        if (player.getInventory().firstEmpty() == -1){
+            Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, player);
+            player.sendMessage(getMsg(player, Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_SPACE));
             return;
         }
 
@@ -198,10 +205,10 @@ public class CategoryContent implements ICategoryContent {
         if (itemNamePath == null || Language.getPlayerLanguage(player).getYml().get(itemNamePath) == null) {
             ItemStack displayItem = ct.getItemStack();
             if (displayItem.getItemMeta() != null && displayItem.getItemMeta().hasDisplayName()) {
-                player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", displayItem.getItemMeta().getDisplayName()));
+                player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("%bw_item%", displayItem.getItemMeta().getDisplayName()));
             }
         } else {
-            player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", ChatColor.stripColor(getMsg(player, itemNamePath))).replace("{color}", "").replace("{tier}", ""));
+            player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("%bw_item%", ChatColor.stripColor(getMsg(player, itemNamePath))).replace("%bw_color%", "").replace("%bw_tier%", ""));
         }
 
 
@@ -270,17 +277,17 @@ public class CategoryContent implements ICategoryContent {
                     buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_ARMOR);
                 }
             } else if (!canAfford) {
-                buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CANT_AFFORD).replace("{currency}", translatedCurrency);
+                buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CANT_AFFORD).replace("%bw_currency%", translatedCurrency);
             } else {
                 buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CAN_BUY);
             }
 
 
-            im.setDisplayName(getMsg(player, itemNamePath).replace("{color}", color).replace("{tier}", tier));
+            im.setDisplayName(getMsg(player, itemNamePath).replace("%bw_color%", color).replace("%bw_tier%", tier));
 
             List<String> lore = new ArrayList<>();
             for (String s : Language.getList(player, itemLorePath)) {
-                if (s.contains("{quick_buy}")) {
+                if (s.contains("%bw_quick_buy%")) {
                     if (hasQuick) {
                         if (ShopIndex.getIndexViewers().contains(player.getUniqueId())) {
                             s = getMsg(player, Messages.SHOP_LORE_QUICK_REMOVE);
@@ -291,8 +298,8 @@ public class CategoryContent implements ICategoryContent {
                         s = getMsg(player, Messages.SHOP_LORE_QUICK_ADD);
                     }
                 }
-                s = s.replace("{tier}", tier).replace("{color}", color).replace("{cost}", cColor + String.valueOf(ct.getPrice()))
-                        .replace("{currency}", cColor + translatedCurrency).replace("{buy_status}", buyStatus);
+                s = s.replace("%bw_tier%", tier).replace("%bw_color%", color).replace("%bw_cost%", cColor + String.valueOf(ct.getPrice()))
+                        .replace("%bw_currency%", cColor + translatedCurrency).replace("%bw_buy_status%", buyStatus);
                 lore.add(s);
             }
 

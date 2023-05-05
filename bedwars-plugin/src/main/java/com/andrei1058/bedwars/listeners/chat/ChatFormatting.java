@@ -101,7 +101,7 @@ public class ChatFormatting implements Listener {
                 if (ShoutCommand.isShoutCooldown(p)) {
                     e.setCancelled(true);
                     p.sendMessage(language.m(Messages.COMMAND_COOLDOWN)
-                            .replace("{seconds}", String.valueOf(Math.round(ShoutCommand.getShoutCooldown(p))))
+                            .replace("%bw_seconds%", String.valueOf(Math.round(ShoutCommand.getShoutCooldown(p))))
                     );
                     return;
                 }
@@ -133,18 +133,18 @@ public class ChatFormatting implements Listener {
 
     private static String parsePHolders(String content, Player player, @Nullable ITeam team) {
         content = content
-                .replace("{vPrefix}", getChatSupport().getPrefix(player))
-                .replace("{vSuffix}", getChatSupport().getSuffix(player))
-                .replace("{playername}", player.getName())
-                .replace("{level}", getLevelSupport().getLevel(player))
-                .replace("{player}", player.getDisplayName());
+                .replace("%bw_v_prefix%", getChatSupport().getPrefix(player))
+                .replace("%bw_v_suffix%", getChatSupport().getSuffix(player))
+                .replace("%bw_playername%", player.getName())
+                .replace("%bw_level%", getLevelSupport().getLevel(player))
+                .replace("%bw_player%", player.getDisplayName());
         if (team != null) {
             String teamFormat = getMsg(player, Messages.FORMAT_PAPI_PLAYER_TEAM_TEAM)
-                    .replace("{TeamColor}", team.getColor().chat() + "")
-                    .replace("{TeamName}", team.getDisplayName(Language.getPlayerLanguage(player)).toUpperCase());
-            content = content.replace("{team}", teamFormat);
+                    .replace("%bw_team_color%", team.getColor().chat() + "")
+                    .replace("%bw_team_name%", team.getDisplayName(Language.getPlayerLanguage(player)).toUpperCase());
+            content = content.replace("%bw_team_format%", teamFormat);
         }
-        return SupportPAPI.getSupportPAPI().replace(player, content).replace("{message}", "%2$s");
+        return SupportPAPI.getSupportPAPI().replace(player, content).replace("%bw_message%", "%2$s");
     }
 
     private static boolean isShouting(String msg, Language lang) {

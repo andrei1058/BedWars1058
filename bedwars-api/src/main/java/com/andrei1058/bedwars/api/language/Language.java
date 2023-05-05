@@ -24,6 +24,7 @@ import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerLangChangeEvent;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -60,10 +61,17 @@ public class Language extends ConfigManager {
     }
 
     /**
-     * Get scoreboard strings.
+     * Get scoreboard strings by player.
      */
     public static List<String> getScoreboard(Player p, String path, String alternative) {
         Language language = getPlayerLanguage(p);
+        return getScoreboard(language, path, alternative);
+    }
+
+    /**
+     * Get scoreboard strings by language.
+     */
+    public static List<String> getScoreboard(Language language, String path, String alternative) {
         if (language.exists(path)) {
             return language.l(path);
         } else {
@@ -82,6 +90,7 @@ public class Language extends ConfigManager {
         return language.l(alternative);
     }
 
+
     /**
      * Get language display name.
      */
@@ -95,8 +104,7 @@ public class Language extends ConfigManager {
     public static String getMsg(Player p, String path) {
         if (p == null) return getDefaultLanguage().m(path);
         BedWars api = Bukkit.getServicesManager().getRegistration(BedWars.class).getProvider();
-        return ChatColor.translateAlternateColorCodes('&', api.getSupportPapi().replace(p, langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage()).m(path).replace("{prefix}", (prefixStatic == null ? "" : prefixStatic))));
-//        return langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage()).m(path).replace("{prefix}", (prefixStatic == null ? "" : prefixStatic));
+        return IridiumColorAPI.process(api.getSupportPapi().replace(p, langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage()).m(path).replace("%bw_lang_prefix%", (prefixStatic == null ? "" : prefixStatic))));
     }
 
     /**
@@ -153,10 +161,8 @@ public class Language extends ConfigManager {
         }
 
         return ChatColor.translateAlternateColorCodes('&', message
-                .replace("{prefix}", (prefix == null ? "" : prefix))
-                .replace("{serverIp}", serverIp == null ? "" : serverIp)
-                // deprecated
-                .replace("{server_ip}", serverIp == null ? "" : serverIp)
+                .replace("%bw_lang_prefix%", (prefix == null ? "" : prefix))
+                .replace("%bw_server_ip%", serverIp == null ? "" : serverIp)
         );
     }
 
@@ -395,11 +401,11 @@ public class Language extends ConfigManager {
 
     public static String[] getCountDownTitle(Language playerLang, int second) {
         String[] result = new String[2];
-        result[0] = ChatColor.translateAlternateColorCodes('&', playerLang.getYml().get(Messages.ARENA_STATUS_START_COUNTDOWN_TITLE + "-" + second, playerLang.getString(Messages.ARENA_STATUS_START_COUNTDOWN_TITLE)).toString().replace("{second}", String.valueOf(second)));
+        result[0] = ChatColor.translateAlternateColorCodes('&', playerLang.getYml().get(Messages.ARENA_STATUS_START_COUNTDOWN_TITLE + "-" + second, playerLang.getString(Messages.ARENA_STATUS_START_COUNTDOWN_TITLE)).toString().replace("%bw_seconds%", String.valueOf(second)));
         if (result[0].isEmpty()) {
             result[0] = " ";
         }
-        result[1] = ChatColor.translateAlternateColorCodes('&', playerLang.getYml().get(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-" + second, playerLang.getString(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE)).toString().replace("{second}", String.valueOf(second)));
+        result[1] = ChatColor.translateAlternateColorCodes('&', playerLang.getYml().get(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE + "-" + second, playerLang.getString(Messages.ARENA_STATUS_START_COUNTDOWN_SUB_TITLE)).toString().replace("%bw_seconds%", String.valueOf(second)));
         if (result[1].isEmpty()) {
             result[1] = " ";
         }

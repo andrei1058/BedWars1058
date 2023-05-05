@@ -68,8 +68,8 @@ public class PartyCommand extends BukkitCommand {
                         p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INVITE_DENIED_CANNOT_INVITE_YOURSELF));
                         return true;
                     }
-                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INVITE_SENT).replace("{playername}", p.getName()).replace("{player}", args[1]));
-                    TextComponent tc = new TextComponent(getMsg(p, Messages.COMMAND_PARTY_INVITE_SENT_TARGET_RECEIVE_MSG).replace("{player}", p.getName()));
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INVITE_SENT).replace("%bw_playername%", p.getName()).replace("%bw_player%", args[1]));
+                    TextComponent tc = new TextComponent(getMsg(p, Messages.COMMAND_PARTY_INVITE_SENT_TARGET_RECEIVE_MSG).replace("%bw_player%", p.getName()));
                     tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party accept " + p.getName()));
                     Bukkit.getPlayer(args[1]).spigot().sendMessage(tc);
                     if (partySessionRequest.containsKey(p.getUniqueId())) {
@@ -78,7 +78,7 @@ public class PartyCommand extends BukkitCommand {
                         partySessionRequest.put(p.getUniqueId(), Bukkit.getPlayer(args[1]).getUniqueId());
                     }
                 } else {
-                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE).replace("{player}", args[1]));
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE).replace("%bw_player%", args[1]));
                 }
                 break;
             case "accept":
@@ -90,7 +90,7 @@ public class PartyCommand extends BukkitCommand {
                     return true;
                 }
                 if (Bukkit.getPlayer(args[1]) == null || !Bukkit.getPlayer(args[1]).isOnline()) {
-                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE).replace("{player}", args[1]));
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE).replace("%bw_player%", args[1]));
                     return true;
                 }
                 if (!partySessionRequest.containsKey(Bukkit.getPlayer(args[1]).getUniqueId())) {
@@ -102,12 +102,12 @@ public class PartyCommand extends BukkitCommand {
                     if (getParty().hasParty(Bukkit.getPlayer(args[1]))) {
                         getParty().addMember(Bukkit.getPlayer(args[1]), p);
                         for (Player on : getParty().getMembers(Bukkit.getPlayer(args[1]))) {
-                            on.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_SUCCESS).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()));
+                            on.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_SUCCESS).replace("%bw_playername%", p.getName()).replace("%bw_player%", p.getDisplayName()));
                         }
                     } else {
                         getParty().createParty(Bukkit.getPlayer(args[1]), p);
                         for (Player on : getParty().getMembers(Bukkit.getPlayer(args[1]))) {
-                            on.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_SUCCESS).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()));
+                            on.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_SUCCESS).replace("%bw_playername%", p.getName()).replace("%bw_player%", p.getDisplayName()));
                         }
                     }
                 } else {
@@ -147,11 +147,11 @@ public class PartyCommand extends BukkitCommand {
                 }
                 Player target = Bukkit.getPlayer(args[1]);
                 if (target == null) {
-                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_REMOVE_DENIED_TARGET_NOT_PARTY_MEMBER).replace("{player}", args[1]));
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_REMOVE_DENIED_TARGET_NOT_PARTY_MEMBER).replace("%bw_player%", args[1]));
                     return true;
                 }
                 if (!getParty().isMember(p, target)) {
-                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_REMOVE_DENIED_TARGET_NOT_PARTY_MEMBER).replace("{player}", args[1]));
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_REMOVE_DENIED_TARGET_NOT_PARTY_MEMBER).replace("%bw_player%", args[1]));
                     return true;
                 }
                 getParty().removePlayer(p, target);
@@ -170,17 +170,17 @@ public class PartyCommand extends BukkitCommand {
                 }
                 Player target1 = Bukkit.getPlayer(args[1]);
                 if (!getParty().isMember(p, target1)) {
-                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_REMOVE_DENIED_TARGET_NOT_PARTY_MEMBER).replace("{player}", args[1]));
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_REMOVE_DENIED_TARGET_NOT_PARTY_MEMBER).replace("%bw_player%", args[1]));
                     return true;
                 }
                 getParty().promote(p, target1);
                 for (Player p1 : getParty().getMembers(p)) {
                     if (p1.equals(p)) {
-                        p1.sendMessage(getMsg(p1, Messages.COMMAND_PARTY_PROMOTE_SUCCESS).replace("{player}", args[1]));
+                        p1.sendMessage(getMsg(p1, Messages.COMMAND_PARTY_PROMOTE_SUCCESS).replace("%bw_player%", args[1]));
                     } else if (p1.equals(target1)) {
                         p1.sendMessage(getMsg(p1, Messages.COMMAND_PARTY_PROMOTE_OWNER));
                     } else {
-                        p1.sendMessage(getMsg(p1, Messages.COMMAND_PARTY_PROMOTE_NEW_OWNER).replace("{player}", args[1]));
+                        p1.sendMessage(getMsg(p1, Messages.COMMAND_PARTY_PROMOTE_NEW_OWNER).replace("%bw_player%", args[1]));
                     }
                 }
                 break;
@@ -191,10 +191,10 @@ public class PartyCommand extends BukkitCommand {
                     return true;
                 }
                 Player owner = getParty().getOwner(p);
-                p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INFO_OWNER).replace("{owner}", owner.getName()));
+                p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INFO_OWNER).replace("%bw_party_owner%", owner.getName()));
                 p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INFO_PLAYERS));
                 for (Player p1 : getParty().getMembers(owner)) {
-                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INFO_PLAYER).replace("{player}", p1.getName()));
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INFO_PLAYER).replace("%bw_player%", p1.getName()));
                 }
                 break;
             default:

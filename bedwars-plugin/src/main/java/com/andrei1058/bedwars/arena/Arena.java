@@ -63,11 +63,14 @@ import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
 import com.andrei1058.bedwars.listeners.dropshandler.PlayerDrops;
 import com.andrei1058.bedwars.money.internal.MoneyPerMinuteTask;
 import com.andrei1058.bedwars.shop.ShopCache;
-import com.andrei1058.bedwars.sidebar.SidebarService;
+import com.andrei1058.bedwars.sidebar.BoardManager;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.support.paper.PaperSupport;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.support.vault.WithEconomy;
+import me.neznamy.tab.api.TabAPI;
+import me.neznamy.tab.api.placeholder.PlaceholderManager;
+import me.neznamy.tab.api.placeholder.PlayerPlaceholder;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -118,7 +121,7 @@ public class Arena implements IArena {
     public int upgradeDiamondsCount = 0, upgradeEmeraldsCount = 0;
     public boolean allowSpectate = true;
     private World world;
-    private String group = "Default", arenaName, worldName;
+    private String group = "Default", arenaName, worldName, scoreboardName;
     private List<ITeam> teams = new ArrayList<>();
     private LinkedList<org.bukkit.util.Vector> placed = new LinkedList<>();
     private List<String> nextEvents = new ArrayList<>();
@@ -405,6 +408,16 @@ public class Arena implements IArena {
         YamlConfiguration yaml = YamlConfiguration.loadConfiguration(new File("spigot.yml"));
         renderDistance = yaml.get("world-settings." + getWorldName() + ".entity-tracking-range.players") == null ?
                 yaml.getInt("world-settings.default.entity-tracking-range.players") : yaml.getInt("world-settings." + getWorldName() + ".entity-tracking-range.players");
+
+        // register arena placeholders
+        PlaceholderManager pm = TabAPI.getInstance().getPlaceholderManager();
+        for (int i = 1; i <= teams.size(); i++) {
+            int finalI = i;
+            pm.registerPlayerPlaceholder("%bw_team_"+ i +"%", 50, player -> getTeamPlaceholder((Player) player.getPlayer(), finalI));
+        }
+
+        //register scoreboards
+        BoardManager.getInstance().registerArenaScoreboards(this);
     }
 
     /**
@@ -417,6 +430,10 @@ public class Arena implements IArena {
     public boolean addPlayer(Player p, boolean skipOwnerCheck) {
         if (p == null) return false;
         debug("Player added: " + p.getName() + " arena: " + getArenaName());
+
+//        Used to check if a sidebar must be given or not
+        boolean isStatusChange = false;
+
         /* used for base enter/leave event */
         isOnABase.remove(p);
         //
@@ -501,18 +518,17 @@ public class Arena implements IArena {
             for (Player on : players) {
                 on.sendMessage(
                         getMsg(p, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG)
-                            .replace("{vPrefix}", getChatSupport().getPrefix(p))
-                            .replace("{vSuffix}", getChatSupport().getSuffix(p))
-                            .replace("{playername}", p.getName())
-                            .replace("{player}", p.getDisplayName())
-                            .replace("{on}", String.valueOf(getPlayers().size()))
-                            .replace("{max}", String.valueOf(getMaxPlayers()))
+                            .replace("%bw_v_prefix%", getChatSupport().getPrefix(p))
+                            .replace("%bw_v_suffix%", getChatSupport().getSuffix(p))
+                            .replace("%bw_playername%", p.getName())
+                            .replace("%bw_player%", p.getDisplayName())
+                            .replace("%bw_on%", String.valueOf(getPlayers().size()))
+                            .replace("%bw_max%", String.valueOf(getMaxPlayers()))
                 );
             }
             setArenaByPlayer(p, this);
 
             /* check if you can start the arena */
-            boolean isStatusChange = false;
             if (status == GameState.waiting) {
                 int teams = 0, teammates = 0;
                 for (Player on : getPlayers()) {
@@ -524,10 +540,10 @@ public class Arena implements IArena {
                     }
                 }
                 if (minPlayers <= players.size() && teams > 0 && players.size() != teammates / teams) {
-                    changeStatus(GameState.starting);
+                    Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> changeStatus(GameState.starting), 10L);
                     isStatusChange = true;
                 } else if (players.size() >= minPlayers && teams == 0) {
-                    changeStatus(GameState.starting);
+                    Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> changeStatus(GameState.starting), 10L);
                     isStatusChange = true;
                 }
             }
@@ -550,9 +566,6 @@ public class Arena implements IArena {
             }
             PaperSupport.teleportC(p, getWaitingLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
 
-            if (!isStatusChange){
-                SidebarService.getInstance().giveSidebar(p, this, false);
-            }
             sendPreGameCommandItems(p);
             for (PotionEffect pf : p.getActivePotionEffects()) {
                 p.removePotionEffect(pf.getType());
@@ -605,6 +618,10 @@ public class Arena implements IArena {
                 }
             }
         }
+        if (!isStatusChange)
+            if (BedWars.getServerType() == ServerType.MULTIARENA || BedWars.getServerType() == ServerType.SHARED){
+                BoardManager.getInstance().giveTabFeatures(p,this, false);
+        }
 
         refreshSigns();
         JoinNPC.updateNPCs(getGroup());
@@ -650,7 +667,7 @@ public class Arena implements IArena {
                 setArenaByPlayer(p, this);
             }
 
-            SidebarService.getInstance().giveSidebar(p, this, false);
+//            BoardManager.getInstance().giveSidebar(p, this, false);
             nms.setCollide(p, this, false);
 
             if (!playerBefore) {
@@ -712,7 +729,7 @@ public class Arena implements IArena {
 
             leaving.remove(p);
 
-            p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_MSG).replace("{arena}", this.getDisplayName()));
+            p.sendMessage(getMsg(p, Messages.COMMAND_JOIN_SPECTATOR_MSG).replace("%bw_arena%", this.getDisplayName()));
 
             /* update generator holograms for spectators */
             String iso = Language.getPlayerLanguage(p).getIso();
@@ -824,12 +841,12 @@ public class Arena implements IArena {
                 if (team != null) {
                     if (!team.isBedDestroyed()) {
                         for (Player p2 : this.getPlayers()) {
-                            p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", team.getColor().chat().toString())
-                                    .replace("{TeamName}", team.getDisplayName(Language.getPlayerLanguage(p2))));
+                            p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("%bw_team_color%", team.getColor().chat().toString())
+                                    .replace("%bw_team_name%", team.getDisplayName(Language.getPlayerLanguage(p2))));
                         }
                         for (Player p2 : this.getSpectators()) {
-                            p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("{TeamColor}", team.getColor().chat().toString())
-                                    .replace("{TeamName}", team.getDisplayName(Language.getPlayerLanguage(p2))));
+                            p2.sendMessage(getMsg(p2, Messages.TEAM_ELIMINATED_CHAT).replace("%bw_team_color%", team.getColor().chat().toString())
+                                    .replace("%bw_team_name%", team.getDisplayName(Language.getPlayerLanguage(p2))));
                         }
                     }
                 }
@@ -857,20 +874,20 @@ public class Arena implements IArena {
                     for (Player inGame : getPlayers()) {
                         Language lang = Language.getPlayerLanguage(inGame);
                         inGame.sendMessage(event.getMessage().apply(inGame)
-                                .replace("{PlayerTeamName}", team.getDisplayName(lang))
-                                .replace("{PlayerColor}", team.getColor().chat().toString()).replace("{PlayerName}", p.getDisplayName())
-                                .replace("{KillerColor}", killerTeam.getColor().chat().toString())
-                                .replace("{KillerName}", lastDamager.getDisplayName())
-                                .replace("{KillerTeamName}", killerTeam.getDisplayName(lang)));
+                                .replace("%bw_team_name%", team.getDisplayName(lang))
+                                .replace("%bw_player_color%", team.getColor().chat().toString()).replace("%bw_player%", p.getDisplayName()).replace("%bw_playername%", p.getName())
+                                .replace("%bw_killer_color%", killerTeam.getColor().chat().toString())
+                                .replace("%bw_killer_name%", lastDamager.getDisplayName())
+                                .replace("%bw_killer_team_name%", killerTeam.getDisplayName(lang)));
                     }
                     for (Player inGame : getSpectators()) {
                         Language lang = Language.getPlayerLanguage(inGame);
                         inGame.sendMessage(event.getMessage().apply(inGame)
-                                .replace("{PlayerTeamName}", team.getDisplayName(lang))
-                                .replace("{PlayerColor}", team.getColor().chat().toString()).replace("{PlayerName}", p.getDisplayName())
-                                .replace("{KillerColor}", killerTeam.getColor().chat().toString())
-                                .replace("{KillerName}", lastDamager.getDisplayName())
-                                .replace("{KillerTeamName}", killerTeam.getDisplayName(lang)));
+                                .replace("%bw_team_name%", team.getDisplayName(lang))
+                                .replace("%bw_player_color%", team.getColor().chat().toString()).replace("%bw_player%", p.getDisplayName()).replace("%bw_playername%", p.getName())
+                                .replace("%bw_killer_color%", killerTeam.getColor().chat().toString())
+                                .replace("%bw_killer_name%", lastDamager.getDisplayName())
+                                .replace("%bw_killer_team_name%", killerTeam.getDisplayName(lang)));
                     }
                     PlayerDrops.handlePlayerDrops(this, p, lastDamager, team, killerTeam, cause, new ArrayList<>(Arrays.asList(p.getInventory().getContents())));
                 }
@@ -879,19 +896,19 @@ public class Arena implements IArena {
         for (Player on : getPlayers()) {
             on.sendMessage(
                     getMsg(p, Messages.COMMAND_LEAVE_MSG)
-                            .replace("{vPrefix}", getChatSupport().getPrefix(p))
-                            .replace("{vSuffix}", getChatSupport().getSuffix(p))
-                            .replace("{playername}", p.getName())
-                            .replace("{player}", p.getDisplayName()
+                            .replace("%bw_v_prefix%", getChatSupport().getPrefix(p))
+                            .replace("%bw_v_suffix%", getChatSupport().getSuffix(p))
+                            .replace("%bw_playername%", p.getName())
+                            .replace("%bw_player%", p.getDisplayName()
                             )
             );
         }
         for (Player on : getSpectators()) {
-            on.sendMessage(getMsg(p, Messages.COMMAND_LEAVE_MSG).replace("{vPrefix}", getChatSupport().getPrefix(p)).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()));
+            on.sendMessage(getMsg(p, Messages.COMMAND_LEAVE_MSG).replace("%bw_v_prefix%", getChatSupport().getPrefix(p)).replace("%bw_playername%", p.getName()).replace("%bw_player%", p.getDisplayName()));
         }
 
         if (getServerType() == ServerType.SHARED) {
-            SidebarService.getInstance().remove(p);
+            BoardManager.getInstance().remove(p);
             this.sendToMainLobby(p);
 
         } else if (getServerType() == ServerType.BUNGEE) {
@@ -929,7 +946,7 @@ public class Arena implements IArena {
                         BedWars.nms.spigotHidePlayer(on, p);
                     }
                 }
-                if (!disconnect) SidebarService.getInstance().giveSidebar(p, null, false);
+                if (!disconnect) BoardManager.getInstance().giveTabFeatures(p, null, false);
             }, 5L);
         }
 
@@ -1031,7 +1048,7 @@ public class Arena implements IArena {
         BedWars.getAPI().getAFKUtil().setPlayerAFK(p, false);
 
         if (getServerType() == ServerType.SHARED) {
-            SidebarService.getInstance().remove(p);
+            BoardManager.getInstance().remove(p);
             this.sendToMainLobby(p);
         } else if (getServerType() == ServerType.MULTIARENA) {
             this.sendToMainLobby(p);
@@ -1070,7 +1087,7 @@ public class Arena implements IArena {
                         BedWars.nms.spigotHidePlayer(on, p);
                     }
                 }
-                if (!disconnect) SidebarService.getInstance().giveSidebar(p, null, false);
+                if (!disconnect) BoardManager.getInstance().giveTabFeatures(p, null, false);
             });
         }
 
@@ -1125,7 +1142,7 @@ public class Arena implements IArena {
             reJoin.getTask().destroy();
         }
 
-        PlayerReJoinEvent ev = new PlayerReJoinEvent(p, this, BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_RE_SPAWN_COUNTDOWN));
+        PlayerReJoinEvent ev = new PlayerReJoinEvent(p, this, BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_REJOIN_RE_SPAWN_COUNTDOWN));
         Bukkit.getPluginManager().callEvent(ev);
         if (ev.isCancelled()) return false;
 
@@ -1140,10 +1157,10 @@ public class Arena implements IArena {
         p.closeInventory();
         players.add(p);
         for (Player on : players) {
-            on.sendMessage(getMsg(on, Messages.COMMAND_REJOIN_PLAYER_RECONNECTED).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
+            on.sendMessage(getMsg(on, Messages.COMMAND_REJOIN_PLAYER_RECONNECTED).replace("%bw_playername%", p.getName()).replace("%bw_player%", p.getDisplayName()).replace("%bw_on%", String.valueOf(getPlayers().size())).replace("%bw_max%", String.valueOf(getMaxPlayers())));
         }
         for (Player on : spectators) {
-            on.sendMessage(getMsg(on, Messages.COMMAND_REJOIN_PLAYER_RECONNECTED).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()).replace("{on}", String.valueOf(getPlayers().size())).replace("{max}", String.valueOf(getMaxPlayers())));
+            on.sendMessage(getMsg(on, Messages.COMMAND_REJOIN_PLAYER_RECONNECTED).replace("%bw_playername%", p.getName()).replace("%bw_player%", p.getDisplayName()).replace("%bw_on%", String.valueOf(getPlayers().size())).replace("%bw_max%", String.valueOf(getMaxPlayers())));
         }
         setArenaByPlayer(p, this);
         /* save player inventory etc */
@@ -1165,8 +1182,9 @@ public class Arena implements IArena {
 
         reJoin.getBwt().reJoin(p, ev.getRespawnTime());
         reJoin.destroy(false);
-
-        SidebarService.getInstance().giveSidebar(p, this, true);
+        Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
+            BoardManager.getInstance().giveTabFeatures(p, this, true);
+        }, 10L);//todo check if can be pulled out to listeners.
         return true;
     }
 
@@ -1234,6 +1252,14 @@ public class Arena implements IArena {
     }
 
     /**
+     * Get the max number of teammates in a team
+     */
+    @Override
+    public String getScoreboardName() {
+        return scoreboardName;
+    }
+
+    /**
      * Get an arena by arena name
      *
      * @param arenaName arena name
@@ -1288,7 +1314,7 @@ public class Arena implements IArena {
                 s = lang.m(Messages.ARENA_STATUS_PLAYING_NAME);
                 break;
         }
-        return s.replace("{full}", this.getPlayers().size() == this.getMaxPlayers() ? lang.m(Messages.MEANING_FULL) : "");
+        return s.replace("%bw_full%", this.getPlayers().size() == this.getMaxPlayers() ? lang.m(Messages.MEANING_FULL) : "");
     }
 
     @Override
@@ -1315,6 +1341,57 @@ public class Arena implements IArena {
     @Override
     public int getMaxPlayers() {
         return maxPlayers;
+    }
+
+    /**
+     * Get the Placeholder string for a given team
+     *
+     * @param player Target player for localization
+     * @param teamNumber number of team in array
+     * @return formatted placeholder string with status. Can be NULL if no arena is found
+     */
+    private String getTeamPlaceholder(Player player, int teamNumber){
+        Arena arena = (Arena) Arena.getArenaByPlayer(player);
+        if (arena == null) return null;
+        Language language = Language.getPlayerLanguage(player);
+        String genericTeamFormat = language.m(Messages.FORMATTING_SCOREBOARD_TEAM_GENERIC);
+        ITeam team = arena.getTeams().get(teamNumber-1);
+        String teamName = team.getDisplayName(language);
+        if (arena.getTeams().size() >= teamNumber) {
+            return genericTeamFormat
+                    .replace("%bw_team_letter%", String.valueOf(teamName.length() != 0 ? teamName.charAt(0) : ""))
+                    .replace("%bw_team_color%", team.getColor().chat().toString())
+                    .replace("%bw_team_name%", teamName)
+                    .replace("%bw_team_status%", getTeamStatus(team, player));
+        } else {
+            // skip line
+            return null;
+        }
+    }
+
+    /**
+     * Get the current status of a team. Alive/Dead/Num of players alive.
+     *
+     * @param currentTeam Target team to process
+     * @param player Target player for localization
+     * @return team status string
+     */
+    private String getTeamStatus(ITeam currentTeam, Player player){
+        String result;
+        if (currentTeam.isBedDestroyed()) {
+            if (currentTeam.getSize() > 0) {
+                result = getMsg(player, Messages.FORMATTING_SCOREBOARD_BED_DESTROYED)
+                        .replace("%bw_players_remaining%", String.valueOf(currentTeam.getSize()));
+            } else {
+                result = getMsg(player, Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED);
+            }
+        } else {
+            result = getMsg(player, Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE);
+        }
+        if (currentTeam.isMember(player)) {
+            result += getMsg(player, Messages.FORMATTING_SCOREBOARD_YOUR_TEAM);
+        }
+        return result;
     }
 
     /**
@@ -1501,10 +1578,6 @@ public class Arena implements IArena {
             perMinuteTask.cancel();
         }
 
-        players.forEach(c -> SidebarService.getInstance().giveSidebar(c, this, false));
-
-        spectators.forEach(c -> SidebarService.getInstance().giveSidebar(c, this, false));
-
         if (status == GameState.starting) {
             startingTask = new GameStartingTask(this);
         } else if (status == GameState.playing) {
@@ -1518,6 +1591,21 @@ public class Arena implements IArena {
         } else if (status == GameState.restarting) {
             restartingTask = new GameRestartingTask(this);
         }
+
+        PlayerPlaceholder prefixPlaceholder = (PlayerPlaceholder) TabAPI.getInstance().getPlaceholderManager().getPlaceholder("%bw_prefix%");
+        PlayerPlaceholder suffixPlaceholder = (PlayerPlaceholder) TabAPI.getInstance().getPlaceholderManager().getPlaceholder("%bw_suffix%");
+        players.forEach(c -> {
+            BoardManager.getInstance().giveTabFeatures(c, this, false);
+            prefixPlaceholder.updateValue(TabAPI.getInstance().getPlayer(c.getUniqueId()), prefixPlaceholder.request(TabAPI.getInstance().getPlayer(c.getUniqueId())));
+            suffixPlaceholder.updateValue(TabAPI.getInstance().getPlayer(c.getUniqueId()), suffixPlaceholder.request(TabAPI.getInstance().getPlayer(c.getUniqueId())));
+        });
+
+        spectators.forEach(c -> {
+            BoardManager.getInstance().giveTabFeatures(c, this, false);
+            prefixPlaceholder.updateValue(TabAPI.getInstance().getPlayer(c.getUniqueId()), prefixPlaceholder.request(TabAPI.getInstance().getPlayer(c.getUniqueId())));
+            suffixPlaceholder.updateValue(TabAPI.getInstance().getPlayer(c.getUniqueId()), suffixPlaceholder.request(TabAPI.getInstance().getPlayer(c.getUniqueId())));
+        });
+
     }
 
     /**
@@ -1867,16 +1955,16 @@ public class Arena implements IArena {
                         if (!winners.toString().contains(p.getDisplayName())) {
                             if(winner.getSize() > 1 && i+1 != winner.getMembers().size()){
                                 winners.append(getMsg(p, Messages.FORMATTING_EACH_WINNER)
-                                        .replace("{vPrefix}", getChatSupport().getPrefix(p))
-                                        .replace("{vSuffix}", getChatSupport().getSuffix(p))
-                                        .replace("{playername}", p.getName())
-                                        .replace("{player}", p.getDisplayName())).append("§7, ");
+                                        .replace("%bw_v_prefix%", getChatSupport().getPrefix(p))
+                                        .replace("%bw_v_suffix%", getChatSupport().getSuffix(p))
+                                        .replace("%bw_playername%", p.getName())
+                                        .replace("%bw_player%", p.getDisplayName())).append("§7, ");
                             }else{
                                 winners.append(getMsg(p, Messages.FORMATTING_EACH_WINNER)
-                                        .replace("{vPrefix}", getChatSupport().getPrefix(p))
-                                        .replace("{vSuffix}", getChatSupport().getSuffix(p))
-                                        .replace("{playername}", p.getName())
-                                        .replace("{player}", p.getDisplayName()));
+                                        .replace("%bw_v_prefix%", getChatSupport().getPrefix(p))
+                                        .replace("%bw_v_suffix%", getChatSupport().getSuffix(p))
+                                        .replace("%bw_playername%", p.getName())
+                                        .replace("%bw_player%", p.getDisplayName()));
                             }
                         }
                     }
@@ -1919,8 +2007,8 @@ public class Arena implements IArena {
                     }
                     for (Player p : world.getPlayers()) {
                         p.sendMessage(getMsg(p, Messages.GAME_END_TEAM_WON_CHAT)
-                                .replace("{TeamColor}", winner.getColor().chat().toString())
-                                .replace("{TeamName}", winner.getDisplayName(Language.getPlayerLanguage(p))));
+                                .replace("%bw_team_color%", winner.getColor().chat().toString())
+                                .replace("%bw_team_name%", winner.getDisplayName(Language.getPlayerLanguage(p))));
 
                         if (!winner.getMembers().contains(p)) {
                             nms.sendTitle(p, getMsg(p, Messages.GAME_END_GAME_OVER_PLAYER_TITLE), null, 0, 70, 20);
@@ -1928,26 +2016,26 @@ public class Arena implements IArena {
 
                         for (String s : getList(p, Messages.GAME_END_TOP_PLAYER_CHAT)) {
                             String message = s
-                                    .replace("{firstFormat}", firstPlayer == null ? getMsg(p, Messages.MEANING_NOBODY) : getMsg(firstPlayer, Messages.GAME_END_FIRST_KILLER)
-                                            .replace("{vPrefix}", getChatSupport().getPrefix(firstPlayer))
-                                            .replace("{vSuffix}", getChatSupport().getSuffix(firstPlayer))
-                                            .replace("{playername}", firstPlayer.getName())
-                                            .replace("{player}", firstPlayer.getDisplayName())).replace("{firstKills}", String.valueOf(first))
+                                    .replace("%bw_first_format%", firstPlayer == null ? getMsg(p, Messages.MEANING_NOBODY) : getMsg(firstPlayer, Messages.GAME_END_FIRST_KILLER)
+                                            .replace("%bw_v_prefix%", getChatSupport().getPrefix(firstPlayer))
+                                            .replace("%bw_v_suffix%", getChatSupport().getSuffix(firstPlayer))
+                                            .replace("%bw_playername%", firstPlayer.getName())
+                                            .replace("%bw_player%", firstPlayer.getDisplayName())).replace("%bw_first_kills%", String.valueOf(first))
 
-                                    .replace("{secondFormat}", secondPlayer == null ? getMsg(p, Messages.MEANING_NOBODY) : getMsg(secondPlayer, Messages.GAME_END_SECOND_KILLER)
-                                            .replace("{vPrefix}", getChatSupport().getPrefix(secondPlayer))
-                                            .replace("{vSuffix}", getChatSupport().getSuffix(secondPlayer))
-                                            .replace("{playername}", secondPlayer.getName())
-                                            .replace("{player}", secondPlayer.getDisplayName())).replace("{secondKills}", String.valueOf(second))
+                                    .replace("%bw_second_format%", secondPlayer == null ? getMsg(p, Messages.MEANING_NOBODY) : getMsg(secondPlayer, Messages.GAME_END_SECOND_KILLER)
+                                            .replace("%bw_v_prefix%", getChatSupport().getPrefix(secondPlayer))
+                                            .replace("%bw_v_suffix%", getChatSupport().getSuffix(secondPlayer))
+                                            .replace("%bw_playername%", secondPlayer.getName())
+                                            .replace("%bw_player%", secondPlayer.getDisplayName())).replace("%bw_second_kills%", String.valueOf(second))
 
-                                    .replace("{thirdFormat}", thirdPlayer == null ? getMsg(p, Messages.MEANING_NOBODY) : getMsg(thirdPlayer, Messages.GAME_END_THIRD_KILLER)
-                                            .replace("{vPrefix}", getChatSupport().getPrefix(thirdPlayer))
-                                            .replace("{vSuffix}", getChatSupport().getSuffix(thirdPlayer))
-                                            .replace("{playername}", thirdPlayer.getName())
-                                            .replace("{player}", thirdPlayer.getDisplayName())).replace("{thirdKills}", String.valueOf(third))
+                                    .replace("%bw_third_format%", thirdPlayer == null ? getMsg(p, Messages.MEANING_NOBODY) : getMsg(thirdPlayer, Messages.GAME_END_THIRD_KILLER)
+                                            .replace("%bw_v_prefix%", getChatSupport().getPrefix(thirdPlayer))
+                                            .replace("%bw_v_suffix%", getChatSupport().getSuffix(thirdPlayer))
+                                            .replace("%bw_playername%", thirdPlayer.getName())
+                                            .replace("%bw_player%", thirdPlayer.getDisplayName())).replace("%bw_third_kills%", String.valueOf(third))
 
-                                    .replace("{winnerFormat}", getMaxInTeam() > 1 ? getMsg(p, Messages.FORMATTING_TEAM_WINNER_FORMAT).replace("{members}", winners.toString()) : getMsg(p, Messages.FORMATTING_SOLO_WINNER_FORMAT).replace("{members}", winners.toString()))
-                                    .replace("{TeamColor}", winner.getColor().chat().toString()).replace("{TeamName}", winner.getDisplayName(Language.getPlayerLanguage(p)));
+                                    .replace("%bw_winner_format%", getMaxInTeam() > 1 ? getMsg(p, Messages.FORMATTING_TEAM_WINNER_FORMAT).replace("%bw_winner_members%", winners.toString()) : getMsg(p, Messages.FORMATTING_SOLO_WINNER_FORMAT).replace("%bw_winner_members%", winners.toString()))
+                                    .replace("%bw_team_color%", winner.getColor().chat().toString()).replace("%bw_team_name%", winner.getDisplayName(Language.getPlayerLanguage(p)));
                             p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, message));
                         }
                     }
@@ -2354,12 +2442,12 @@ public class Arena implements IArena {
      */
     public void sendDiamondsUpgradeMessages() {
         for (Player p : getPlayers()) {
-            p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
-                    getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND)).replace("{tier}", getMsg(p, (diamondTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
+            p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("%bw_generator_type%",
+                    getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND)).replace("%bw_tier%", getMsg(p, (diamondTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
         }
         for (Player p : getSpectators()) {
-            p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
-                    getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND)).replace("{tier}", getMsg(p, (diamondTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
+            p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("%bw_generator_type%",
+                    getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND)).replace("%bw_tier%", getMsg(p, (diamondTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
         }
     }
 
@@ -2369,12 +2457,12 @@ public class Arena implements IArena {
      */
     public void sendEmeraldsUpgradeMessages() {
         for (Player p : getPlayers()) {
-            p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
-                    getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD)).replace("{tier}", getMsg(p, (emeraldTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
+            p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("%bw_generator_type%",
+                    getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD)).replace("%bw_tier%", getMsg(p, (emeraldTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
         }
         for (Player p : getSpectators()) {
-            p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("{generatorType}",
-                    getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD)).replace("{tier}", getMsg(p, (emeraldTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
+            p.sendMessage(getMsg(p, Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT).replace("%bw_generator_type%",
+                    getMsg(p, Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD)).replace("%bw_tier%", getMsg(p, (emeraldTier == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3))));
         }
     }
 
@@ -2509,6 +2597,16 @@ public class Arena implements IArena {
     @Override
     public Location getSpectatorLocation() {
         return spectatorLocation;
+    }
+
+    @Override
+    public void setAllowMapBreak(boolean value) {
+        getConfig().set(ConfigPath.ARENA_ALLOW_MAP_BREAK, value);
+    }
+
+    @Override
+    public boolean isMapBreakable() {
+        return getConfig().getBoolean(ConfigPath.ARENA_ALLOW_MAP_BREAK);
     }
 
     @Override

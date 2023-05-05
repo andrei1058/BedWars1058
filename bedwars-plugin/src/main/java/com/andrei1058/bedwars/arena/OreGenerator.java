@@ -41,7 +41,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -58,7 +57,7 @@ public class OreGenerator implements IGenerator {
     private GeneratorType type;
     private int rotate = 0, dropID = 0;
     private ITeam bwt;
-    boolean up = true;
+    boolean up = true, disabled = false;
 
     /**
      * Generator holograms per language <iso, holo></iso,>
@@ -110,7 +109,7 @@ public class OreGenerator implements IGenerator {
                 }
                 ore = new ItemStack(Material.DIAMOND);
                 for (IGenHolo e : armorStands.values()) {
-                    e.setTierName(Language.getLang(e.getIso()).m(Messages.GENERATOR_HOLOGRAM_TIER).replace("{tier}", Language.getLang(e.getIso())
+                    e.setTierName(Language.getLang(e.getIso()).m(Messages.GENERATOR_HOLOGRAM_TIER).replace("%bw_tier%", Language.getLang(e.getIso())
                             .m(upgradeStage == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3)));
                 }
                 break;
@@ -133,7 +132,7 @@ public class OreGenerator implements IGenerator {
                 }
                 ore = new ItemStack(Material.EMERALD);
                 for (IGenHolo e : armorStands.values()) {
-                    e.setTierName(Language.getLang(e.getIso()).m(Messages.GENERATOR_HOLOGRAM_TIER).replace("{tier}",
+                    e.setTierName(Language.getLang(e.getIso()).m(Messages.GENERATOR_HOLOGRAM_TIER).replace("%bw_tier%",
                             Language.getLang(e.getIso()).m(upgradeStage == 2 ? Messages.FORMATTING_GENERATOR_TIER2 : Messages.FORMATTING_GENERATOR_TIER3)));
                 }
                 break;
@@ -146,7 +145,7 @@ public class OreGenerator implements IGenerator {
         if (arena.getStatus() != GameState.playing){
             return;
         }
-
+        if (disabled) return;
         if (lastSpawn == 0) {
             lastSpawn = delay;
 
@@ -197,7 +196,7 @@ public class OreGenerator implements IGenerator {
         }
         lastSpawn--;
         for (IGenHolo e : armorStands.values()) {
-            e.setTimerName(Language.getLang(e.getIso()).m(Messages.GENERATOR_HOLOGRAM_TIMER).replace("{seconds}", String.valueOf(lastSpawn)));
+            e.setTimerName(Language.getLang(e.getIso()).m(Messages.GENERATOR_HOLOGRAM_TIMER).replace("%bw_seconds%", String.valueOf(lastSpawn)));
         }
     }
 
@@ -252,9 +251,9 @@ public class OreGenerator implements IGenerator {
         public HoloGram(String iso) {
             this.iso = iso;
             this.tier = createArmorStand(Language.getLang(iso).m(Messages.GENERATOR_HOLOGRAM_TIER)
-                    .replace("{tier}", Language.getLang(iso).m(Messages.FORMATTING_GENERATOR_TIER1)), location.clone().add(0, 3, 0));
+                    .replace("%bw_tier%", Language.getLang(iso).m(Messages.FORMATTING_GENERATOR_TIER1)), location.clone().add(0, 3, 0));
             this.timer = createArmorStand(Language.getLang(iso).m(Messages.GENERATOR_HOLOGRAM_TIMER)
-                    .replace("{seconds}", String.valueOf(lastSpawn)), location.clone().add(0, 2.4, 0));
+                    .replace("%bw_seconds%", String.valueOf(lastSpawn)), location.clone().add(0, 2.4, 0));
             this.name = createArmorStand(Language.getLang(iso).m(getOre().getType() == Material.DIAMOND ? Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND
                     : Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD), location.clone().add(0, 2.7, 0));
 
@@ -383,8 +382,18 @@ public class OreGenerator implements IGenerator {
             for (IGenHolo a : armorStands.values()) {
                 a.destroy();
             }
+            item.remove();
+            armorStands.clear();
         }
-        armorStands.clear();
+        disabled = true;
+    }
+
+    @Override
+    public void enable() {
+        if (getOre().getType() == Material.EMERALD || getOre().getType() == Material.DIAMOND) {
+            enableRotation();
+        }
+        disabled = false;
     }
 
     @Override

@@ -23,7 +23,9 @@ package com.andrei1058.bedwars.api.entity;
 import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
+import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 
@@ -74,12 +76,12 @@ public class Despawnable {
 
     private void setName() {
         int percentuale = (int) ((e.getHealth() * 100) / e.getMaxHealth() / 10);
-        String name = api.getDefaultLang().m(namePath).replace("{despawn}", String.valueOf(despawn)).replace("{health}",
+        String name = api.getDefaultLang().m(namePath).replace("%bw_despawn_time%", String.valueOf(despawn)).replace("%bw_health%",
                 new String(new char[percentuale]).replace("\0", api.getDefaultLang()
                         .m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH)) + new String(new char[10 - percentuale]).replace("\0", "§7" + api.getDefaultLang()
                         .m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH)));
         if (team != null) {
-            name = name.replace("{TeamColor}", team.getColor().chat().toString()).replace("{TeamName}", team.getDisplayName(api.getDefaultLang()));
+            name = name.replace("%bw_team_color%", team.getColor().chat().toString()).replace("%bw_team_name%", team.getDisplayName(api.getDefaultLang()));
         }
         e.setCustomName(name);
     }

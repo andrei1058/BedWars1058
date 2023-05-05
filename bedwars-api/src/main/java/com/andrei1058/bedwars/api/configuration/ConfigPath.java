@@ -71,6 +71,7 @@ public class ConfigPath {
 
     public static final String GENERAL_CONFIGURATION_ALLOW_FIRE_EXTINGUISH = "allow-fire-extinguish";
     public static final String GENERAL_CONFIGURATION_ENABLE_HALLOWEEN = "enable-halloween-feature";
+    public static final String GENERAL_CONFIGURATION_ENABLE_GENERATOR_REPLACE_AIR_SUDDEN = "enable-generator-replace-air-sudden-death";
 
     public static final String GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH = "lobby-items";
     public static final String GENERAL_CONFIGURATION_EXPERIMENTAL_TEAM_ASSIGNER = "use-experimental-team-assigner";
@@ -109,6 +110,7 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_START_COUNTDOWN_HALF = "countdowns.game-start-half-arena";
     public static final String GENERAL_CONFIGURATION_RESTART = "countdowns.game-restart";
     public static final String GENERAL_CONFIGURATION_RE_SPAWN_COUNTDOWN = "countdowns.player-re-spawn";
+    public static final String GENERAL_CONFIGURATION_REJOIN_RE_SPAWN_COUNTDOWN = "countdowns.player-rejoin-re-spawn";
     public static final String GENERAL_CONFIGURATION_BEDS_DESTROY_COUNTDOWN = "countdowns.next-event-beds-destroy";
     public static final String GENERAL_CONFIGURATION_DRAGON_SPAWN_COUNTDOWN = "countdowns.next-event-dragon-spawn";
     public static final String GENERAL_CONFIGURATION_GAME_END_COUNTDOWN = "countdowns.next-event-game-end";
@@ -126,10 +128,12 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_DEFAULT_ITEMS = "start-items-per-group";
 
     public static final String CENERAL_CONFIGURATION_ALLOWED_COMMANDS = "allowed-commands";
-    public static final String SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR = "scoreboard-settings.sidebar.enable-lobby-sidebar";
-    public static final String SB_CONFIG_SIDEBAR_USE_GAME_SIDEBAR = "scoreboard-settings.sidebar.enable-game-sidebar";
-    public static final String SB_CONFIG_SIDEBAR_TITLE_REFRESH_INTERVAL = "scoreboard-settings.sidebar.title-refresh-interval";
-    public static final String SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL = "scoreboard-settings.sidebar.placeholders-refresh-interval";
+    public static final String SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR = "scoreboard-settings.scoreboard.enable-lobby-scoreboard";
+    public static final String SB_CONFIG_SIDEBAR_USE_GAME_SIDEBAR = "scoreboard-settings.scoreboard.enable-game-scoreboard";
+    public static final String SB_CONFIG_SIDEBAR_TITLE_REFRESH_INTERVAL = "scoreboard-settings.scoreboard.title-refresh-interval";
+    public static final String SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL = "scoreboard-settings.scoreboard.placeholders-refresh-interval";
+    public static final String SB_CONFIG_SIDEBAR_PREFIX_REFRESH_INTERVAL = "scoreboard-settings.scoreboard.prefix-refresh-interval";
+    public static final String SB_CONFIG_SIDEBAR_SUFFIX_REFRESH_INTERVAL = "scoreboard-settings.scoreboard.suffix-refresh-interval";
     public static final String SB_CONFIG_SIDEBAR_LIST_FORMAT_LOBBY = "scoreboard-settings.player-list.format-lobby-list";
     public static final String SB_CONFIG_SIDEBAR_LIST_FORMAT_WAITING = "scoreboard-settings.player-list.format-waiting-list";
     public static final String SB_CONFIG_SIDEBAR_LIST_FORMAT_STARTING = "scoreboard-settings.player-list.format-starting-list";
@@ -137,7 +141,7 @@ public class ConfigPath {
     public static final String SB_CONFIG_SIDEBAR_LIST_FORMAT_RESTARTING = "scoreboard-settings.player-list.format-restarting-list";
     public static final String SB_CONFIG_SIDEBAR_LIST_REFRESH = "scoreboard-settings.player-list.names-refresh-interval";
     public static final String SB_CONFIG_SIDEBAR_HEALTH_IN_TAB = "scoreboard-settings.health.display-in-tab";
-    public static final String SB_CONFIG_SIDEBAR_HEALTH_REFRESH = "scoreboard-settings.health.animation-refresh-interval";
+    public static final String SB_CONFIG_SIDEBAR_HEALTH_BELOW_NAME = "scoreboard-settings.health.display-below-name";
     public static final String GENERAL_CONFIGURATION_DISABLED_LANGUAGES = "disabled-languages";
 
     public static final String GENERAL_CONFIGURATION_ARENA_SELECTOR_PATH = "arena-gui";
@@ -163,6 +167,7 @@ public class ConfigPath {
 
     public static final String ARENA_DISPLAY_NAME = "display-name";
     public static final String ARENA_CONFIGURATION_MAX_BUILD_Y = "max-build-y";
+    public static final String ARENA_CONFIGURATION_MIN_BUILD_Y = "min-build-y";
     public static final String ARENA_SPAWN_PROTECTION = "spawn-protection";
     public static final String ARENA_SHOP_PROTECTION = "shop-protection";
     public static final String ARENA_UPGRADES_PROTECTION = "upgrades-protection";

@@ -87,11 +87,11 @@ public class MenuUpgrade implements MenuContent, TeamUpgrade {
             color = Language.getMsg(player, Messages.FORMAT_UPGRADE_COLOR_UNLOCKED);
         }
 
-        im.setDisplayName(Language.getMsg(player, Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", this.getName().replace("upgrade-", "")).replace("{tier}", ut.getName())).replace("{color}", color));
+        im.setDisplayName(Language.getMsg(player, Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", this.getName().replace("upgrade-", "")).replace("%bw_tier%", ut.getName())).replace("%bw_color%", color));
 
         List<String> lore = new ArrayList<>();
         String currencyMsg = UpgradesManager.getCurrencyMsg(player, ut);
-        for (String s : Language.getList(player, Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", this.getName().replace("upgrade-", "")))){
+        for (String s : Language.getList(player, Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("%bw_name%", this.getName().replace("upgrade-", "")))){
             if (s.contains("{tier_")){
                 // Get tier number from placeholder
                 String result = s.replaceAll(".*_([0-9]+)_.*", "$1");
@@ -109,15 +109,15 @@ public class MenuUpgrade implements MenuContent, TeamUpgrade {
                         .replace("{tier_" + result + "_color}", Language.getMsg(player, tierColor)));
 
             } else {
-                lore.add(s.replace("{color}", color));
+                lore.add(s.replace("%bw_color%", color));
             }
         }
         if (highest){
-            lore.add(Language.getMsg(player, Messages.UPGRADES_LORE_REPLACEMENT_UNLOCKED).replace("{color}", color));
+            lore.add(Language.getMsg(player, Messages.UPGRADES_LORE_REPLACEMENT_UNLOCKED).replace("%bw_color%", color));
         } else if (afford){
-            lore.add(Language.getMsg(player, Messages.UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY).replace("{color}", color));
+            lore.add(Language.getMsg(player, Messages.UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY).replace("%bw_color%", color));
         } else {
-            lore.add(Language.getMsg(player, Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY).replace("{currency}", currencyMsg).replace("{color}", color));
+            lore.add(Language.getMsg(player, Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY).replace("%bw_currency%", currencyMsg).replace("%bw_color%", color));
         }
         im.setLore(lore);
         im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
@@ -132,6 +132,12 @@ public class MenuUpgrade implements MenuContent, TeamUpgrade {
         if (team.getTeamUpgradeTiers().containsKey(getName())) {
             tier = team.getTeamUpgradeTiers().get(getName());
         }
+        boolean highest = getTiers().size() == tier + 1 && team.getTeamUpgradeTiers().containsKey(getName());
+        if (highest) {
+            Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, player);
+            player.sendMessage(Language.getMsg(player, Messages.UPGRADES_UPGRADE_ALREADY_CHAT));
+            return;
+        }
         UpgradeTier ut;
         if (getTiers().size() - 1 > tier) {
             ut = getTiers().get(tier + 1);
@@ -140,8 +146,8 @@ public class MenuUpgrade implements MenuContent, TeamUpgrade {
             if (money < ut.getCost()) {
                 Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, player);
                 player.sendMessage(Language.getMsg(player, Messages.SHOP_INSUFFICIENT_MONEY)
-                        .replace("{currency}", UpgradesManager.getCurrencyMsg(player, ut))
-                        .replace("{amount}", String.valueOf(ut.getCost() - money)));
+                        .replace("%bw_currency%", UpgradesManager.getCurrencyMsg(player, ut))
+                        .replace("%bw_amount%", String.valueOf(ut.getCost() - money)));
                 player.closeInventory();
                 return;
             }
@@ -167,9 +173,9 @@ public class MenuUpgrade implements MenuContent, TeamUpgrade {
             }
 
             for (Player p1 : team.getMembers()) {
-                p1.sendMessage(Language.getMsg(p1, Messages.UPGRADES_UPGRADE_BOUGHT_CHAT).replace("{playername}", player.getName()).replace("{player}", player.getDisplayName()).replace("{upgradeName}",
-                        ChatColor.stripColor(Language.getMsg(p1, Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", getName()
-                                .replace("upgrade-", "")).replace("{tier}", ut.getName())))).replace("{color}", ""));
+                p1.sendMessage(Language.getMsg(p1, Messages.UPGRADES_UPGRADE_BOUGHT_CHAT).replace("%bw_player%", player.getName()).replace("%bw_playername%", player.getDisplayName()).replace("%bw_upgrade_name%",
+                        ChatColor.stripColor(Language.getMsg(p1, Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("%bw_name%", getName()
+                                .replace("upgrade-", "")).replace("%bw_tier%", ut.getName())))).replace("%bw_color%", ""));
             }
 
             ImmutableMap<Integer, MenuContent> menuContentBySlot = UpgradesManager.getMenuForArena(Arena.getArenaByPlayer(player)).getMenuContentBySlot();

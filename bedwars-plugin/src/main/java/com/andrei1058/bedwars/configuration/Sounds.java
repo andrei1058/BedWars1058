@@ -86,12 +86,6 @@ public class Sounds {
         addDefSound("ender-pearl-landed", BedWars.getForCurrentVersion("ENDERMAN_TELEPORT", "ENTITY_ENDERMEN_TELEPORT", "ENTITY_ENDERMAN_TELEPORT"));
         addDefSound("pop-up-tower-build", BedWars.getForCurrentVersion("CHICKEN_EGG_POP", "ENTITY_CHICKEN_EGG","ENTITY_CHICKEN_EGG"));
         yml.options().copyDefaults(true);
-
-        // remove old paths
-        yml.set("bought", null);
-        yml.set("insufficient-money", null);
-        yml.set("player-kill", null);
-        yml.set("countdown", null);
         sounds.save();
     }
 

@@ -128,23 +128,23 @@ public class PlayerDrops {
                     int amount = entry.getValue();
                     switch (entry.getKey()) {
                         case DIAMOND:
-                            msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_DIAMOND).replace("{meaning}", amount == 1 ?
+                            msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_DIAMOND).replace("%bw_meaning%", amount == 1 ?
                                     getMsg(killer, Messages.MEANING_DIAMOND_SINGULAR) : getMsg(killer, Messages.MEANING_DIAMOND_PLURAL));
                             break;
                         case EMERALD:
-                            msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_EMERALD).replace("{meaning}", amount == 1 ?
+                            msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_EMERALD).replace("%bw_meaning%", amount == 1 ?
                                     getMsg(killer, Messages.MEANING_EMERALD_SINGULAR) : getMsg(killer, Messages.MEANING_EMERALD_PLURAL));
                             break;
                         case IRON_INGOT:
-                            msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_IRON).replace("{meaning}", amount == 1 ?
+                            msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_IRON).replace("%bw_meaning%", amount == 1 ?
                                     getMsg(killer, Messages.MEANING_IRON_SINGULAR) : getMsg(killer, Messages.MEANING_IRON_PLURAL));
                             break;
                         case GOLD_INGOT:
-                            msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_GOLD).replace("{meaning}", amount == 1 ?
+                            msg = getMsg(killer, Messages.PLAYER_DIE_REWARD_GOLD).replace("%bw_meaning%", amount == 1 ?
                                     getMsg(killer, Messages.MEANING_GOLD_SINGULAR) : getMsg(killer, Messages.MEANING_GOLD_PLURAL));
                             break;
                     }
-                    killer.sendMessage(msg.replace("{amount}", String.valueOf(amount)));
+                    killer.sendMessage(msg.replace("%bw_amount%", String.valueOf(amount)));
                 }
                 materialDrops.clear();
             }
