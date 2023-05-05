@@ -110,7 +110,7 @@ public class UpgradesConfig extends ConfigManager {
             yml.addDefault("upgrade-dragon.tier-1.currency", "diamond");
             yml.addDefault("upgrade-dragon.tier-1.cost", 5);
             addDefaultDisplayItem("upgrade-dragon.tier-1", "DRAGON_EGG", 0, 1, false);
-            yml.addDefault("upgrade-dragon.tier-1.receive", Collections.singletonList("dragon: 1"));
+            yml.addDefault("upgrade-dragon.tier-1.receive", Collections.singletonList("dragon: 2"));
 
             addDefaultDisplayItem("category-traps", "LEATHER", 0, 1, false);
             yml.addDefault("category-traps.category-content", Arrays.asList("base-trap-1,10", "base-trap-2,11",
