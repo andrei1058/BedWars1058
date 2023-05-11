@@ -52,7 +52,8 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 public class OreGenerator implements IGenerator {
 
     private Location location;
-    private int delay = 1, upgradeStage = 1, lastSpawn, spawnLimit = 0, amount = 1;
+    private int upgradeStage = 1, spawnLimit = 0, amount = 1, speedMultiplier = 5;
+    private double delay = 1, lastSpawn;
     private IArena arena;
     private ItemStack ore;
     private GeneratorType type;
@@ -95,14 +96,14 @@ public class OreGenerator implements IGenerator {
                 upgradeStage++;
                 if (upgradeStage == 2) {
                     delay = BedWars.getGeneratorsCfg().getInt(BedWars.getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_DELAY) == null ?
-                            "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_II_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_DELAY);
+                            "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_II_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_DELAY) * speedMultiplier;
                     amount = BedWars.getGeneratorsCfg().getInt(BedWars.getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_AMOUNT) == null ?
                             "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_II_AMOUNT : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_AMOUNT);
                     spawnLimit = BedWars.getGeneratorsCfg().getInt(BedWars.getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_SPAWN_LIMIT) == null ?
                             "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_II_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_SPAWN_LIMIT);
                 } else if (upgradeStage == 3) {
                     delay = BedWars.getGeneratorsCfg().getInt(BedWars.getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY) == null ?
-                            "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY);
+                            "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_DELAY) * speedMultiplier;
                     amount = BedWars.getGeneratorsCfg().getInt(BedWars.getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_AMOUNT) == null ?
                             "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_III_AMOUNT : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_III_AMOUNT);
                     spawnLimit = BedWars.getGeneratorsCfg().getInt(BedWars.getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_II_SPAWN_LIMIT) == null ?
@@ -117,15 +118,15 @@ public class OreGenerator implements IGenerator {
             case EMERALD:
                 upgradeStage++;
                 if (upgradeStage == 2) {
-                    delay = BedWars.getGeneratorsCfg().getInt(BedWars.getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_DELAY) == null ?
-                            "Default." + ConfigPath.GENERATOR_EMERALD_TIER_II_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_DELAY);
+                    delay = BedWars.getGeneratorsCfg().getDouble(BedWars.getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_DELAY) == null ?
+                            "Default." + ConfigPath.GENERATOR_EMERALD_TIER_II_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_DELAY) * speedMultiplier;
                     amount = BedWars.getGeneratorsCfg().getInt(BedWars.getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_AMOUNT) == null ?
                             "Default." + ConfigPath.GENERATOR_EMERALD_TIER_II_AMOUNT : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_AMOUNT);
                     spawnLimit = BedWars.getGeneratorsCfg().getInt(BedWars.getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_SPAWN_LIMIT) == null ?
                             "Default." + ConfigPath.GENERATOR_EMERALD_TIER_II_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_SPAWN_LIMIT);
                 } else if (upgradeStage == 3) {
                     delay = BedWars.getGeneratorsCfg().getInt(BedWars.getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_DELAY) == null ?
-                            "Default." + ConfigPath.GENERATOR_EMERALD_TIER_III_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_DELAY);
+                            "Default." + ConfigPath.GENERATOR_EMERALD_TIER_III_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_DELAY) * speedMultiplier;
                     amount = BedWars.getGeneratorsCfg().getInt(BedWars.getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_AMOUNT) == null ?
                             "Default." + ConfigPath.GENERATOR_EMERALD_TIER_III_AMOUNT : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_III_AMOUNT);
                     spawnLimit = BedWars.getGeneratorsCfg().getInt(BedWars.getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_II_SPAWN_LIMIT) == null ?
@@ -152,8 +153,6 @@ public class OreGenerator implements IGenerator {
         if (lastSpawn == 0) {
             lastSpawn = delay;
 
-
-
             if (spawnLimit != 0) {
                 int oreCount = 0;
 
@@ -166,7 +165,6 @@ public class OreGenerator implements IGenerator {
                         if (oreCount >= spawnLimit) return;
                     }
                 }
-                lastSpawn = delay;
             }
 
             GeneratorDropEvent event;
@@ -209,7 +207,7 @@ public class OreGenerator implements IGenerator {
         }
         lastSpawn--;
         for (IGenHolo e : armorStands.values()) {
-            e.setTimerName(Language.getLang(e.getIso()).m(Messages.GENERATOR_HOLOGRAM_TIMER).replace("%bw_seconds%", String.valueOf(lastSpawn)));
+            e.setTimerName(Language.getLang(e.getIso()).m(Messages.GENERATOR_HOLOGRAM_TIMER).replace("%bw_seconds%", String.valueOf((int) Math.ceil(lastSpawn/speedMultiplier))));
         }
     }
 
@@ -369,7 +367,7 @@ public class OreGenerator implements IGenerator {
     }
 
     @Override
-    public void setDelay(int delay) {
+    public void setDelay(double delay) {
         this.delay = delay;
     }
 
@@ -449,8 +447,8 @@ public class OreGenerator implements IGenerator {
     private void loadDefaults() {
         switch (type) {
             case GOLD:
-                delay = BedWars.getGeneratorsCfg().getInt(BedWars.getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_DELAY) == null ?
-                        "Default." + ConfigPath.GENERATOR_GOLD_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_DELAY);
+                delay = BedWars.getGeneratorsCfg().getDouble(BedWars.getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_DELAY) == null ?
+                        "Default." + ConfigPath.GENERATOR_GOLD_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_DELAY) * speedMultiplier;
                 ore = new ItemStack(Material.GOLD_INGOT);
                 amount = BedWars.getGeneratorsCfg().getInt(BedWars.getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_AMOUNT) == null ?
                         "Default." + ConfigPath.GENERATOR_GOLD_AMOUNT : arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_AMOUNT);
@@ -458,8 +456,8 @@ public class OreGenerator implements IGenerator {
                         "Default." + ConfigPath.GENERATOR_GOLD_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_SPAWN_LIMIT);
                 break;
             case IRON:
-                delay = BedWars.getGeneratorsCfg().getInt(BedWars.getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_DELAY) == null ?
-                        "Default." + ConfigPath.GENERATOR_IRON_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_DELAY);
+                delay = BedWars.getGeneratorsCfg().getDouble(BedWars.getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_DELAY) == null ?
+                        "Default." + ConfigPath.GENERATOR_IRON_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_DELAY) * speedMultiplier;
                 amount = BedWars.getGeneratorsCfg().getInt(BedWars.getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_AMOUNT) == null ?
                         "Default." + ConfigPath.GENERATOR_IRON_AMOUNT : arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_AMOUNT);
                 ore = new ItemStack(Material.IRON_INGOT);
@@ -467,8 +465,8 @@ public class OreGenerator implements IGenerator {
                         "Default." + ConfigPath.GENERATOR_IRON_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_SPAWN_LIMIT);
                 break;
             case DIAMOND:
-                delay = BedWars.getGeneratorsCfg().getInt(BedWars.getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_I_DELAY) == null ?
-                        "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_I_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_I_DELAY);
+                delay = BedWars.getGeneratorsCfg().getDouble(BedWars.getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_I_DELAY) == null ?
+                        "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_I_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_I_DELAY) * speedMultiplier;
                 amount = BedWars.getGeneratorsCfg().getInt(BedWars.getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_I_AMOUNT) == null ?
                         "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_I_AMOUNT : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_I_AMOUNT);
                 spawnLimit = BedWars.getGeneratorsCfg().getInt(BedWars.getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_I_SPAWN_LIMIT) == null ?
@@ -476,8 +474,8 @@ public class OreGenerator implements IGenerator {
                 ore = new ItemStack(Material.DIAMOND);
                 break;
             case EMERALD:
-                delay = BedWars.getGeneratorsCfg().getInt(BedWars.getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_I_DELAY) == null ?
-                        "Default." + ConfigPath.GENERATOR_EMERALD_TIER_I_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_I_DELAY);
+                delay = BedWars.getGeneratorsCfg().getDouble(BedWars.getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_I_DELAY) == null ?
+                        "Default." + ConfigPath.GENERATOR_EMERALD_TIER_I_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_I_DELAY) * speedMultiplier;
                 amount = BedWars.getGeneratorsCfg().getInt(BedWars.getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_I_AMOUNT) == null ?
                         "Default." + ConfigPath.GENERATOR_EMERALD_TIER_I_AMOUNT : arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_I_AMOUNT);
                 spawnLimit = BedWars.getGeneratorsCfg().getInt(BedWars.getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_EMERALD_TIER_I_SPAWN_LIMIT) == null ?
@@ -515,12 +513,12 @@ public class OreGenerator implements IGenerator {
     }
 
     @Override
-    public int getDelay() {
+    public double getDelay() {
         return delay;
     }
 
     @Override
-    public int getNextSpawn() {
+    public double getNextSpawn() {
         return lastSpawn;
     }
 
@@ -530,7 +528,7 @@ public class OreGenerator implements IGenerator {
     }
 
     @Override
-    public void setNextSpawn(int nextSpawn) {
+    public void setNextSpawn(double nextSpawn) {
         this.lastSpawn = nextSpawn;
     }
 
