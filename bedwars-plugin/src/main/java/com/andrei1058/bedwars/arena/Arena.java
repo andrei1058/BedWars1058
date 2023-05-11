@@ -42,6 +42,7 @@ import com.andrei1058.bedwars.api.events.player.PlayerReJoinEvent;
 import com.andrei1058.bedwars.api.events.server.ArenaDisableEvent;
 import com.andrei1058.bedwars.api.events.server.ArenaEnableEvent;
 import com.andrei1058.bedwars.api.events.server.ArenaRestartEvent;
+import com.andrei1058.bedwars.api.events.server.ArenaSpectateEvent;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.region.Region;
@@ -636,6 +637,11 @@ public class Arena implements IArena {
      */
     public boolean addSpectator(@NotNull Player p, boolean playerBefore, Location staffTeleport) {
         if (allowSpectate || playerBefore || staffTeleport != null) {
+
+            ArenaSpectateEvent spectateEvent = new ArenaSpectateEvent(p, this);
+            Bukkit.getPluginManager().callEvent(spectateEvent);
+            if (spectateEvent.isCancelled()) return false;
+
             debug("Spectator added: " + p.getName() + " arena: " + getArenaName());
 
             if (!playerBefore) {
