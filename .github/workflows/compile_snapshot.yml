@@ -13,15 +13,19 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: development
-      url: https://repo.andrei1058.dev
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
       - name: Set up JDK 17.0.5
         uses: actions/setup-java@v2
         with:
           java-version: '17.0.5'
           distribution: 'adopt'
-      - name: Deploy snapshot with Maven
+      - name: Compiling snapshot with Maven
         run: |
-          mvn clean install
+          mvn clean compile

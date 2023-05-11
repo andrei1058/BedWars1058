@@ -4,10 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.andrei1058.bedwars</groupId>
-    <artifactId>BedWars1058</artifactId>
+    <groupId>com.tomkeuper.bedwars</groupId>
+    <artifactId>bedwars2023</artifactId>
     <packaging>pom</packaging>
-    <version>23.3.1-BETA2</version>
+    <version>1.0-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -84,14 +84,64 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.1.1</version>
                 <executions>
                     <execution>
-                        <id>deploy</id>
+                        <id>default-deploy</id>
                         <phase>deploy</phase>
                         <goals>
                             <goal>deploy</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <id>default-install</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>install</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>default-clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>enforce-maven</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>3.8</version>
+                                </requireMavenVersion>
+                            </rules>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -101,23 +151,32 @@
         <module>bedwars-plugin</module>
         <module>bedwars-api</module>
         <module>resetadapter_slime</module>
-        <module>versionsupport_1_8_R3</module>
-        <module>versionsupport_1_12_R1</module>
+        <module>versionsupport_1_8_r3</module>
+        <module>versionsupport_1_12_r1</module>
         <module>versionsupport_common</module>
-        <module>versionsupport_v1_16_R3</module>
-        <module>versionsupport_v1_17_R1</module>
-        <module>versionsupport_v1_18_R2</module>
-        <module>versionsupport_v1_19_R3</module>
+        <module>versionsupport_v1_16_r3</module>
+        <module>versionsupport_v1_17_r1</module>
+        <module>versionsupport_v1_18_r2</module>
+        <module>versionsupport_v1_19_r3</module>
     </modules>
 
     <distributionManagement>
         <repository>
-            <id>ftp-repo</id>
-            <url>ftp://andrei1058.dev/releases</url>
+            <id>bedwars-repo</id>
+            <name>BedWars Maven Repository</name>
+            <url>https://repo.tomkeuper.com/repository/bedwars-releases/</url>
         </repository>
         <snapshotRepository>
-            <id>ftp-repo</id>
-            <url>ftp://andrei1058.dev/snapshots</url>
+            <id>bedwars-repo</id>
+            <name>BedWars Snapshot Maven Repository</name>
+            <url>https://repo.tomkeuper.com/repository/bedwars-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
+
+    <scm>
+        <connection>scm:git:git://github.com/tomkeuper/BedWars2023.git</connection>
+        <developerConnection>scm:git:ssh://github.com/tomkeuper/BedWars2023.git</developerConnection>
+        <url>https://github.com/tomkeuper/BedWars2023/tree/master</url>
+    </scm>
+
 </project>

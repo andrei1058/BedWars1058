@@ -2,13 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
     <parent>
-        <artifactId>BedWars1058</artifactId>
-        <groupId>com.andrei1058.bedwars</groupId>
-        <version>23.3.1-BETA2</version>
+        <artifactId>bedwars2023</artifactId>
+        <groupId>com.tomkeuper.bedwars</groupId>
+        <version>1.0-SNAPSHOT</version>
     </parent>
+    <modelVersion>4.0.0</modelVersion>
 
     <artifactId>resetadapter-slime</artifactId>
     <version>${project.parent.version}</version>
@@ -26,9 +25,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.andrei1058.bedwars</groupId>
+            <groupId>com.tomkeuper.bedwars</groupId>
             <artifactId>bedwars-api</artifactId>
-            <version>${project.version}</version>
+            <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -49,6 +48,12 @@
         <plugins>
             <plugin>
                 <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-install-plugin</artifactId>
                 <configuration>
                     <skip>true</skip>
                 </configuration>

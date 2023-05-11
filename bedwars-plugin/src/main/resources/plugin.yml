@@ -1,9 +1,9 @@
-name: BedWars1058
+name: BedWars2023
 api-version: '1.13'
-version: ${project.version}
-author: andrei1058
-description: BedWars minigame by andrei1058
-main: com.andrei1058.bedwars.BedWars
+version: ${project.parent.version}
+author: Mr. Ceasar
+description: BedWars minigame by Tom Keuper forked from BedWars1058
+main: com.tomkeuper.bedwars.BedWars
 softdepend: [Vault,PlaceholderAPI,Citizens,Parties,SlimeWorldManager,VipFeatures,Enhanced-SlimeWorldManager,PartyAndFriends,Spigot-Party-API-PAF]
 depend: [TAB]
 load: STARTUP

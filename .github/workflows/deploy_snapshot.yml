@@ -1,22 +1,39 @@
-name: Deploy snapshot with Maven
+name: Deploy snapshot package to BedWars Repo
 
+#on: workflow_dispatch (required to be on default branch)
 on:
   push:
-    branches:
+    branches-ignore:
       - master
       - development
+      - production
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-  build:
+  publish:
+    name: Deploy to repo
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Set up JDK 17.0.5
+        with:
+          ref: 'api-fixes'
+      - name: Set up JDK 17.0.7
         uses: actions/setup-java@v2
         with:
-          java-version: '17.0.5'
+          java-version: '17.0.7'
           distribution: 'adopt'
-      - name: Deploy snapshot with Maven
-        run: |
-          mvn clean package
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+      - name: Deploy Package
+        env:
+          REPO_USER: ${{ secrets.REPO_USER }}
+          REPO_PASS: ${{ secrets.REPO_PASS }}
+        run: mvn --batch-mode -DskipTests clean deploy -s settings.xml

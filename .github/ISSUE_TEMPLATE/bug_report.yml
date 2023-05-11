@@ -1,5 +1,5 @@
 name: Bug Report
-description: Found a Bug regarding BedWars1058? Use this template to report it!
+description: Found a Bug regarding BedWars2023? Use this template to report it!
 labels:
 - "bug"
 body:
@@ -10,7 +10,7 @@ body:
       In order for us to process this Bug Report as fast and efficient as possible do we ask you to read the form carefully and provide any requested information.
       Required fields are marked with an asterisk symbol (`*`)
 
-      Also, always make sure to use the latest Release from [Releases](https://github.com/tomkeuper/BedWars1058/releases) or the latest Development Build from our [Discord](https://discord.gg/kPaBGwhmjf) to make sure that your issue isn't already fixed.
+      Also, always make sure to use the latest Release from [Releases](https://github.com/tomkeuper/BedWars2023/releases) or the latest Development Build from our [Discord](https://discord.gg/kPaBGwhmjf) to make sure that your issue isn't already fixed.
 - type: checkboxes
   attributes:
   label: Make sure to check before creating a Bug Report
@@ -18,7 +18,7 @@ body:
   options:
   - label: The issue isn't already found on the Issue tracker.
     required: true
-  - label: My issue is about **BedWars1058** and not any addon.
+  - label: My issue is about **BedWars2023** and not any addon.
     required: true
   - label: The issue isn't already fixed in a Release or Development Build.
     required: true
