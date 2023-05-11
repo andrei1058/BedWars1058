@@ -381,7 +381,7 @@ public class BreakPlace implements Listener {
                 }
             }
 
-            if (!a.getConfig().getBoolean(ConfigPath.ARENA_ALLOW_MAP_BREAK)) {
+            if (!a.isMapBreakable()) {
                 if (!a.isBlockPlaced(e.getBlock())) {
                     p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
                     e.setCancelled(true);

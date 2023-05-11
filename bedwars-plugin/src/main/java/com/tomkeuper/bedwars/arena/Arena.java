@@ -120,7 +120,7 @@ public class Arena implements IArena {
     private ArenaConfig cm;
     private int minPlayers = 2, maxPlayers = 10, maxInTeam = 1, islandRadius = 10;
     public int upgradeDiamondsCount = 0, upgradeEmeraldsCount = 0;
-    public boolean allowSpectate = true;
+    public boolean allowSpectate = true, allowMapBreak = false;
     private World world;
     private String group = "Default", arenaName, worldName, scoreboardName;
     private List<ITeam> teams = new ArrayList<>();
@@ -236,6 +236,7 @@ public class Arena implements IArena {
         maxPlayers = yml.getConfigurationSection("Team").getKeys(false).size() * maxInTeam;
         minPlayers = yml.getInt("minPlayers");
         allowSpectate = yml.getBoolean("allowSpectate");
+        allowMapBreak = yml.getBoolean("allow-map-break");
         islandRadius = yml.getInt(ConfigPath.ARENA_ISLAND_RADIUS);
         if (config.getYml().get("arenaGroups") != null) {
             if (config.getYml().getStringList("arenaGroups").contains(yml.getString("group"))) {
@@ -2590,12 +2591,12 @@ public class Arena implements IArena {
 
     @Override
     public void setAllowMapBreak(boolean value) {
-        getConfig().set(ConfigPath.ARENA_ALLOW_MAP_BREAK, value);
+        this.allowMapBreak = value;
     }
 
     @Override
     public boolean isMapBreakable() {
-        return getConfig().getBoolean(ConfigPath.ARENA_ALLOW_MAP_BREAK);
+        return allowMapBreak;
     }
 
     @Override
