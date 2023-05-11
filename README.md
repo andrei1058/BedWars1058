@@ -1,4 +1,4 @@
-[![Logo](./.github/assets/logo_open_source.png)](#)
+![Logo](https://github.com/tomkeuper/BedWars2023/assets/81072838/e36317fd-b9f0-4deb-9d4c-4152f66f29dd)
 
 [![Discord](https://discordapp.com/api/guilds/201345265821679617/widget.png?style=shield)](https://discord.gg/XdJfN2X) [![bStats](https://img.shields.io/bstats/servers/1885)](#)
 
