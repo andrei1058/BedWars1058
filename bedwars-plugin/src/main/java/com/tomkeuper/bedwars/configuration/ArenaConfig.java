@@ -65,26 +65,5 @@ public class ArenaConfig extends ConfigManager {
         yml.addDefault(ConfigPath.ARENA_GAME_RULES, rules);
         yml.options().copyDefaults(true);
         save();
-
-        //convert old configuration
-        if (yml.get("spawnProtection") != null) {
-            set(ConfigPath.ARENA_SPAWN_PROTECTION, yml.getInt("spawnProtection"));
-            set("spawnProtection", null);
-        }
-        if (yml.get("shopProtection") != null) {
-            set(ConfigPath.ARENA_SHOP_PROTECTION, yml.getInt("shopProtection"));
-            set("shopProtection", null);
-        }
-        if (yml.get("upgradesProtection") != null) {
-            set(ConfigPath.ARENA_UPGRADES_PROTECTION, yml.getInt("upgradesProtection"));
-            set("upgradesProtection", null);
-        }
-        if (yml.get("islandRadius") != null) {
-            set(ConfigPath.ARENA_ISLAND_RADIUS, yml.getInt("islandRadius"));
-        }
-        if (yml.get("voidKill") != null){
-            set("voidKill", null);
-        }
-        set(ConfigPath.GENERAL_CONFIGURATION_ENABLE_GEN_SPLIT, null);
     }
 }
