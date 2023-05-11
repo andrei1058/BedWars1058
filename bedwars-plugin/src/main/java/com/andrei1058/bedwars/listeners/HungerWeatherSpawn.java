@@ -23,6 +23,7 @@ package com.andrei1058.bedwars.listeners;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.Bukkit;
@@ -37,6 +38,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
 import static com.andrei1058.bedwars.BedWars.*;
+import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class HungerWeatherSpawn implements Listener {
 
@@ -122,6 +124,7 @@ public class HungerWeatherSpawn implements Listener {
                 nms.minusAmount(e.getPlayer(), e.getItem(), 1);
                 int task = Bukkit.getScheduler().runTaskLater(plugin, () -> {
                     Arena.magicMilk.remove(e.getPlayer().getUniqueId());
+                    e.getPlayer().sendMessage(getMsg(e.getPlayer(), Messages.INTERACT_MAGIC_MILK_REMOVED));
                     debug("PlayerItemConsumeEvent player " + e.getPlayer() + " was removed from magicMilk");
                 }, 20 * 30L).getTaskId();
                 Arena.magicMilk.put(e.getPlayer().getUniqueId(), task);
