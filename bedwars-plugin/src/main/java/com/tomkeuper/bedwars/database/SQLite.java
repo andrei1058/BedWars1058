@@ -46,11 +46,16 @@ public class SQLite implements Database {
                 BedWars.plugin.getLogger().severe("Could not create /Cache folder!");
             }
         }
-        File dataFolder = new File(folder.getPath() + "/shop.db");
+        File dataFolder = new File(folder.getPath() + "/player_data.db");
+
+        //TODO Remove check in V2.0
+        if (dataFolder.getPath().equals(folder.getPath() + "/shop.db")) {
+            dataFolder.renameTo(new File(folder.getPath() + "/player_data.db"));
+        }
         if (!dataFolder.exists()) {
             try {
                 if (!dataFolder.createNewFile()) {
-                    BedWars.plugin.getLogger().severe("Could not create /Cache/shop.db file!");
+                    BedWars.plugin.getLogger().severe("Could not create /Cache/player_data.db file!");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
