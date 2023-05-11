@@ -479,7 +479,7 @@ public class Spanish extends Language {
                 "&7segundos despues de consumirla.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "sponge", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Esponja", Arrays.asList("&7Precio: %bw_cost% %bw_currency%", "", "&7Genial para absorber agua.",
                 "", "%bw_quick_buy%", "%bw_buy_status%"));
-        addContentMessages(yml, "Compact Pop-up Tower", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Torre Compacta", Arrays.asList("&7Precio: %bw_cost% %bw_currency%", "", "&7Pon una torre compacta", "&7como defensa!", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "tower", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Torre Compacta", Arrays.asList("&7Precio: %bw_cost% %bw_currency%", "", "&7Pon una torre compacta", "&7como defensa!", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
 
 

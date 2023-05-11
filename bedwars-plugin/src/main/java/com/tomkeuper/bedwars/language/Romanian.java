@@ -462,6 +462,8 @@ public class Romanian extends Language {
                 "&7de secunde după ce l-ai băut.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "sponge", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Burete", Arrays.asList("&7Preț: %bw_cost% %bw_currency%", "", "&7Util pentru a absorbi apa.",
                 "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "tower", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Compact Pop-up Tower", Arrays.asList("&7Cost: %bw_cost% %bw_currency%", "", "&7Place a compact pop-up",
+                "&7tower defense!", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_CLICK_TO_BUY, "&aClick pentru a cumpara!");
         yml.addDefault(Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_MONEY, "&cNu ai destul(e) %bw_currency%");

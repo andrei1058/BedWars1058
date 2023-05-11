@@ -456,7 +456,7 @@ public class Italian extends Language {
         addContentMessages(yml, "bridge-egg", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Bridge Egg", Arrays.asList("&7Costo: %bw_cost% %bw_currency%", "", "&7Questo uovo crea un ponte in sua", "&7direzione dopo averlo lanciato.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "magic-milk", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Latte Magico", Arrays.asList("&7Costo: %bw_cost% %bw_currency%", "", "&7Evita le trappole per 60 secondi", "&7dopo averlo consumato.", "", "%bw_quick_buy%", "%bw_buy_status%"));
         addContentMessages(yml, "sponge", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Spugna", Arrays.asList("&7Costo: %bw_cost% %bw_currency%", "", "&7Utile per succhiare l'acqua :)).", "", "%bw_quick_buy%", "%bw_buy_status%"));
-        addContentMessages(yml, "Compact Pop-up Tower", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Torre Pop-up Compatta", Arrays.asList("&7Costo: %bw_cost% %bw_currency%", "", "&7Piazza una Torre Pop-up", "&7compatta per difenderti!", "", "%bw_quick_buy%", "%bw_buy_status%"));
+        addContentMessages(yml, "tower", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "%bw_color%Torre Pop-up Compatta", Arrays.asList("&7Costo: %bw_cost% %bw_currency%", "", "&7Piazza una Torre Pop-up", "&7compatta per difenderti!", "", "%bw_quick_buy%", "%bw_buy_status%"));
 
         yml.addDefault(Messages.MEANING_NO_TRAP, "Nessuna Trappola!");
         yml.addDefault(Messages.FORMAT_UPGRADE_TRAP_COST, "&7Costo: %bw_currency_color%%bw_cost% %bw_currency%");
