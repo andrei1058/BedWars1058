@@ -68,26 +68,28 @@ public class InvisibilityPotionListener implements Listener {
     public void onMove(PlayerMoveEvent e) {
         if (!footstepsEnabled) return;
         if (!this.invisiblePlayers.contains(e.getPlayer())) return;
-        else {
-            Player p = e.getPlayer();
-            if (p.isSneaking())
+
+        //TODO implement particles on higher version (issue: #112)
+        if (nms.getVersion() > 5) return; // check if higher than 1.12
+
+        Player p = e.getPlayer();
+        if (p.isSneaking())
+            return;
+        Location from = e.getFrom();
+        Location to = e.getTo();
+        if (from.getBlock() != to.getBlock()) {
+            if (!p.isOnGround())
                 return;
-            Location from = e.getFrom();
-            Location to = e.getTo();
-            if (from.getBlock() != to.getBlock()) {
-                if (!p.isOnGround())
-                    return;
-                Location loc = from.subtract(0.0D, 1.0D, 0.0D);
-                Block b = loc.getBlock();
-                if (this.cd == 3) {
-                    p.getWorld().playEffect(p.getLocation().add(0.0D, 0.01D, 0.4D), Effect.FOOTSTEP, 1);
-                    this.cd--;
-                } else if (this.cd <= 0) {
-                    p.getWorld().playEffect(p.getLocation().add(0.4D, 0.01D, 0.0D), Effect.FOOTSTEP, 1);
-                    this.cd = 6;
-                } else {
-                    this.cd--;
-                }
+            Location loc = from.subtract(0.0D, 1.0D, 0.0D);
+            Block b = loc.getBlock();
+            if (this.cd == 3) {
+                p.getWorld().playEffect(p.getLocation().add(0.0D, 0.01D, 0.4D), Effect.FOOTSTEP, 1);
+                this.cd--;
+            } else if (this.cd <= 0) {
+                p.getWorld().playEffect(p.getLocation().add(0.4D, 0.01D, 0.0D), Effect.FOOTSTEP, 1);
+                this.cd = 6;
+            } else {
+                this.cd--;
             }
         }
     }
