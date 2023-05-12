@@ -51,7 +51,7 @@ import static com.tomkeuper.bedwars.BedWars.plugin;
  */
 public class InvisibilityPotionListener implements Listener {
     private final List<Player> invisiblePlayers = new ArrayList<>();
-    private final boolean footstepsEnabled = BedWars.getAPI().getConfigs().getMainConfig().getBoolean(ConfigPath.GENERAL_CONFIGURATION_ENABLE_FOOTSTEPS_ON_INVISIBILITY);
+    private final boolean footstepsEnabled = BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_ENABLE_FOOTSTEPS_ON_INVISIBILITY);
     private int cd = 6;
 
     @EventHandler
