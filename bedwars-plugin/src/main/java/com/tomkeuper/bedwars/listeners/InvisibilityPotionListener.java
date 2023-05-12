@@ -20,8 +20,10 @@
 
 package com.tomkeuper.bedwars.listeners;
 
+import com.tomkeuper.bedwars.BedWars;
 import com.tomkeuper.bedwars.api.arena.IArena;
 import com.tomkeuper.bedwars.api.arena.team.ITeam;
+import com.tomkeuper.bedwars.api.configuration.ConfigPath;
 import com.tomkeuper.bedwars.api.events.player.PlayerInvisibilityPotionEvent;
 import com.tomkeuper.bedwars.arena.Arena;
 import org.bukkit.Bukkit;
@@ -49,10 +51,12 @@ import static com.tomkeuper.bedwars.BedWars.plugin;
  */
 public class InvisibilityPotionListener implements Listener {
     private final List<Player> invisiblePlayers = new ArrayList<>();
+    private final boolean footstepsEnabled = BedWars.getAPI().getConfigs().getMainConfig().getBoolean(ConfigPath.GENERAL_CONFIGURATION_ENABLE_FOOTSTEPS_ON_INVISIBILITY);
     private int cd = 6;
 
     @EventHandler
     public void onPotion(PlayerInvisibilityPotionEvent e) {
+        if (!footstepsEnabled) return;
         if (e.getType() == PlayerInvisibilityPotionEvent.Type.ADDED) {
             this.invisiblePlayers.add(e.getPlayer());
         } else if (e.getType() == PlayerInvisibilityPotionEvent.Type.REMOVED) {
@@ -62,6 +66,7 @@ public class InvisibilityPotionListener implements Listener {
 
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
+        if (!footstepsEnabled) return;
         if (!this.invisiblePlayers.contains(e.getPlayer())) return;
         else {
             Player p = e.getPlayer();
