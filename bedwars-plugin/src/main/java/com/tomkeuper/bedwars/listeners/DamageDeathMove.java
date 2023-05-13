@@ -441,7 +441,7 @@ public class DamageDeathMove implements Listener {
                         .replace("%bw_killer_color%", killersTeam == null ? "" : killersTeam.getColor().chat().toString())
                         .replace("%bw_killer_playername%", killer == null ? "" : killer.getDisplayName())
                         .replace("%bw_killer_name%", killer == null ? "" : killer.getName())
-                        .replace("%bw_killer_team%", killersTeam == null ? "" : killersTeam.getDisplayName(lang)));
+                        .replace("%bw_killer_team_name%", killersTeam == null ? "" : killersTeam.getDisplayName(lang)));
             }
             for (Player on : a.getSpectators()) {
                 Language lang = Language.getPlayerLanguage(on);
@@ -453,7 +453,7 @@ public class DamageDeathMove implements Listener {
                         .replace("%bw_killer_color%", killersTeam == null ? "" : killersTeam.getColor().chat().toString())
                         .replace("%bw_killer_playername%", killer == null ? "" : killer.getDisplayName())
                         .replace("%bw_killer_name%", killer == null ? "" : killer.getName())
-                        .replace("%bw_killer_team%", killersTeam == null ? "" : killersTeam.getDisplayName(lang)));
+                        .replace("%bw_killer_team_name%", killersTeam == null ? "" : killersTeam.getDisplayName(lang)));
             }
 
             // increase stats to killer
