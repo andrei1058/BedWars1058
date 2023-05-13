@@ -127,7 +127,7 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_NPC_LOC_STORAGE = "join-npc-locations";
     public static final String GENERAL_CONFIGURATION_DEFAULT_ITEMS = "start-items-per-group";
 
-    public static final String CENERAL_CONFIGURATION_ALLOWED_COMMANDS = "allowed-commands";
+    public static final String GENERAL_CONFIGURATION_ALLOWED_COMMANDS = "allowed-commands";
     public static final String SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR = "scoreboard-settings.scoreboard.enable-lobby-scoreboard";
     public static final String SB_CONFIG_SIDEBAR_USE_GAME_SIDEBAR = "scoreboard-settings.scoreboard.enable-game-scoreboard";
     public static final String SB_CONFIG_SIDEBAR_TITLE_REFRESH_INTERVAL = "scoreboard-settings.scoreboard.title-refresh-interval";
@@ -157,6 +157,7 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_DISABLE_BREWING_STAND = "inventories.disable-brewing-stand";
     public static final String GENERAL_CONFIGURATION_DISABLE_ANVIL = "inventories.disable-anvil";
     public static final String GENERAL_CONFIGURATION_MARK_LEAVE_AS_ABANDON = "mark-leave-as-abandon";
+    public static final String GENERAL_CONFIGURATION_ENABLE_FOOTSTEPS_ON_INVISIBILITY = "enable-footsteps-on-invisibility";
     public static final String GENERAL_CONFIGURATION_ENABLE_GEN_SPLIT = "enable-gen-split";
 
     public static final String GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP = "server-ip";
