@@ -1,6 +1,6 @@
 ![Logo](https://github.com/tomkeuper/BedWars2023/assets/81072838/e36317fd-b9f0-4deb-9d4c-4152f66f29dd)
 
-[![Discord](https://discordapp.com/api/guilds/201345265821679617/widget.png?style=shield)](https://discord.gg/XdJfN2X) [![bStats](https://img.shields.io/bstats/servers/1885)](#)
+[![Discord](https://discordapp.com/api/guilds/760851292826107926/widget.png?style=shield)](https://discord.gg/kPaBGwhmjf) [![bStats](https://img.shields.io/bstats/servers/18317)](#)
 
 As from November 1st 2021 BedWars1058 by Andrei Dascălu becomes open source under GNU GPL 3.0 license. If you are a developer I would really appreciate if you'd come with pull requests instead of making hundreds of forks. Let's make updates available for everyone!
 
@@ -128,10 +128,9 @@ If you get disconnected, or if you leave a game (configurable) you can re-join i
 
 # 3rd party libraries
 - [bStats](https://bstats.org/getting-started/include-metrics)
-- [Sidebar API](https://github.com/andrei1058/SiderbarLib)
 - [Commons IO](https://mvnrepository.com/artifact/commons-io/commons-io)
 - [HikariCP](https://mvnrepository.com/artifact/com.zaxxer/HikariCP)
 - [SLF4J](http://www.slf4j.org/)
 
 # Contact
-[![Discord Server](https://discordapp.com/api/guilds/760851292826107926/widget.png?style=banner3)](https://discord.gg/4rWpxmPt77)
+[![Discord Server](https://discordapp.com/api/guilds/760851292826107926/widget.png?style=banner3)](https://discord.gg/kPaBGwhmjf)

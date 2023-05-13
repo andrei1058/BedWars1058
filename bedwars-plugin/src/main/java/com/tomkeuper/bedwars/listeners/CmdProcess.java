@@ -53,7 +53,7 @@ public class CmdProcess implements Listener {
         String[] cmd = e.getMessage().replaceFirst("/", "").split(" ");
         if (cmd.length == 0) return;
         if (Arena.isInArena(p)) {
-            if (!BedWars.config.getList(ConfigPath.CENERAL_CONFIGURATION_ALLOWED_COMMANDS).contains(cmd[0])) {
+            if (!BedWars.config.getList(ConfigPath.GENERAL_CONFIGURATION_ALLOWED_COMMANDS).contains(cmd[0])) {
                 p.sendMessage(getMsg(p, Messages.COMMAND_NOT_ALLOWED_IN_GAME));
                 e.setCancelled(true);
             }
