@@ -108,6 +108,7 @@ public class Messages {
     public static String ARENA_RESTART_PLAYER_KICK = "arena-restart-kick";
     public static String ARENA_JOIN_DENIED_SELECTOR = "arena-join-denied-selector";
     public static String ARENA_JOIN_DENIED_NO_PROXY = "arena-join-denied-no-bwp";
+    public static String ARENA_JOIN_DENIED_NO_TIME = "arena-join-denied-no-time";
     public static String ARENA_SPECTATE_DENIED_SELECTOR = "arena-spectate-denied-selector";
     public static String ARENA_LEAVE_PARTY_DISBANDED = "arena-leave-party-disbanded";
 

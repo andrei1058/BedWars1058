@@ -167,6 +167,7 @@ public class Bangla extends Language {
         yml.addDefault(Messages.ARENA_JOIN_DENIED_SELECTOR, "%bw_lang_prefix%&cDukkhito kintu apni ei muhurte arenati te jog dite parben na. Spectate korar jonne Right-Click bebohar korun!");
         yml.addDefault(Messages.ARENA_SPECTATE_DENIED_SELECTOR, "%bw_lang_prefix%&cDukkhito kintu apni ei muhurte arenati ke spectate korte parben na. Jog dite Left-Click bebohar korun!");
         yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_PROXY, "&cDukkhiyo kintu apnake BedWarsProxy use kore ekti arena join korte hobe \n&eApni ekti arena setup korte chaile nijeke bw.setup permission er onumoti den jate apni shora shori server e jog dite paren!");
+        yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_TIME, "&cSorry but you joined while the game was already started.");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_NAME, "&8Teleporter");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME, "%bw_v_prefix%%bw_player%");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_LORE, Arrays.asList("&7Health: &f%bw_player_health%%", "&7Food: &f%bw_player_food%", "", "&7Spectate korte Left-Click korun"));

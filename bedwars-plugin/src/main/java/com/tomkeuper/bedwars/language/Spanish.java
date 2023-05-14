@@ -509,7 +509,7 @@ public class Spanish extends Language {
         yml.addDefault(Messages.ARENA_JOIN_DENIED_SELECTOR, "%bw_lang_prefix%&cLo lamentamos, pero no puedes ingresar a esta arena por el momento. Usa Click-Derecho para entrar en modo espectador!");
         yml.addDefault(Messages.ARENA_SPECTATE_DENIED_SELECTOR, "%bw_lang_prefix%&cLo lamentamos, pero no puedes espectar esta arena en este momento. Utiliza Click-Izquierdo para jugar!");
         yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_PROXY, "&cLo siento, pero debes unirte a una arena usando BedWarsProxy. \n&eSi desea configurar una arena, asegúrese de otorgarse el permiso bw.setup para que pueda unirse al servidor directamente!");
-
+        yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_TIME, "&cSorry but you joined while the game was already started.");
         yml.addDefault(Messages.REJOIN_NO_ARENA, "%bw_lang_prefix%&cNo hay arena a la cual unirse. Recuerda que sólo puedes ingresar a una 5 minutos después del comienzo de la partida!");
         yml.addDefault(Messages.REJOIN_DENIED, "%bw_lang_prefix%&cNo puedes unirte a esa partida. El juego ha terminado o tu cama ha sido destruida.");
         yml.addDefault(Messages.REJOIN_ALLOWED, "%bw_lang_prefix%&eHas ingresado nuevamente a &a%bw_arena%&e!");

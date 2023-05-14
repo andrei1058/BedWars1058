@@ -501,6 +501,7 @@ public class Russian extends Language{
         yml.addDefault(Messages.ARENA_JOIN_DENIED_SELECTOR, "%bw_lang_prefix%&cИзвините, но вы не можете пресоедениться к этой арене прямо сейчас. Используйте ПКМ для режима наблюдателей!");
         yml.addDefault(Messages.ARENA_SPECTATE_DENIED_SELECTOR, "%bw_lang_prefix%&cИзвините, но вы не можете наблюдать за этой ареной прямо сейчас. Используйте ЛКМ для входа в игру!");
         yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_PROXY, "&cИзвините, но вы должны подключиться к арене, используя BedWarsProxy!");
+        yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_TIME, "&cSorry but you joined while the game was already started.");
 
         yml.addDefault(Messages.REJOIN_NO_ARENA, "%bw_lang_prefix%&cАрен для перезахода не найдено!");
         yml.addDefault(Messages.REJOIN_DENIED, "%bw_lang_prefix%&cВы больше не можете перезайти. Игра окончена или ваша кровать была разрушена.");

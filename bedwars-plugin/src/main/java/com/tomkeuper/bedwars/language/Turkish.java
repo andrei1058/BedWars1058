@@ -168,6 +168,7 @@ public class Turkish extends Language {
         yml.addDefault(Messages.ARENA_JOIN_DENIED_SELECTOR, "%bw_lang_prefix%&cÜzgünüm ama bu haritaya şu anda katılamazsın. Seyirci olmak için sağ tıkla.");
         yml.addDefault(Messages.ARENA_SPECTATE_DENIED_SELECTOR, "%bw_lang_prefix%&cÜzgünüm ama bu haritayı şu anda seyredemezsin. Katılmak için sol tıkla.");
         yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_PROXY, "&cÜzgünüm ama BedWarsProxy kullanmalısın. \n&eEğer haritayı düzenlemek istiyorsan kendine bw.setup yetkisini vermeyi unutma!");
+        yml.addDefault(Messages.ARENA_JOIN_DENIED_NO_TIME, "&cSorry but you joined while the game was already started.");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_NAME, "&8Işınlayıcı");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME, "%bw_v_prefix%%bw_player%");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_LORE, Arrays.asList("&7Can: &f%bw_player_health%%", "&7Açlık: &f%bw_player_food%", "", "&7Seyretmek için sol tıkla"));

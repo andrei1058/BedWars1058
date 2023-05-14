@@ -572,7 +572,7 @@ public class Arena implements IArena {
             for (PotionEffect pf : p.getActivePotionEffects()) {
                 p.removePotionEffect(pf.getType());
             }
-        } else if (status == GameState.playing) {
+        } else if (status == GameState.playing || status == GameState.starting && (startingTask != null && startingTask.getCountdown() <= 1)) {
             addSpectator(p, false, null);
             /* stop code if status playing*/
             return false;
