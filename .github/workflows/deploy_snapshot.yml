@@ -3,10 +3,7 @@ name: Deploy snapshot package to BedWars Repo
 #on: workflow_dispatch (required to be on default branch)
 on:
   push:
-    branches-ignore:
-      - master
-      - development
-      - production
+    branches: [production]
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
