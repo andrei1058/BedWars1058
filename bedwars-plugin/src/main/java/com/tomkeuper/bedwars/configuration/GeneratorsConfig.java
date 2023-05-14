@@ -32,7 +32,7 @@ public class GeneratorsConfig extends ConfigManager {
 
         YamlConfiguration yml = getYml();
         yml.options().header(plugin.getDescription().getName() + " by andrei1058." +
-                "\ngenerators.yml Documentation: https://gitlab.com/andrei1058/BedWars1058/wikis/generators-configuration\n\nDelay's can incremented with steps of a quarter second (e.g. 1.25/1.5/1.75)\n");
+                "\ngenerators.yml Documentation: https://gitlab.com/andrei1058/BedWars1058/wikis/generators-configuration\n\nDelay's can be incremented with steps of a quarter second (e.g. 1.25/1.5/1.75)\n");
         yml.addDefault("Default." + ConfigPath.GENERATOR_IRON_DELAY, 2.0);
         yml.addDefault("Default." + ConfigPath.GENERATOR_IRON_AMOUNT, 2);
         yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_DELAY, 6.0);
