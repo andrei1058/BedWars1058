@@ -52,7 +52,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 public class OreGenerator implements IGenerator {
 
     private Location location;
-    private int upgradeStage = 1, spawnLimit = 0, amount = 1, speedMultiplier = 5;
+    private int upgradeStage = 1, spawnLimit = 0, amount = 1, speedMultiplier = 4;
     private double delay = 1, lastSpawn;
     private IArena arena;
     private ItemStack ore;
