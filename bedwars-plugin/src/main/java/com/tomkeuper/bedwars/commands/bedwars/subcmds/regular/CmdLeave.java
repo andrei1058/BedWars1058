@@ -79,7 +79,6 @@ public class CmdLeave extends SubCommand {
                 Misc.moveToLobbyOrKick(p, a, a != null && a.isSpectator(p.getUniqueId()));
             } else {
                 BukkitTask qt = leaving.get(p.getUniqueId());
-                BedWars.debug("qt: " + qt);
                 if (qt != null) {
                     update(p.getUniqueId());
                     qt.cancel();
