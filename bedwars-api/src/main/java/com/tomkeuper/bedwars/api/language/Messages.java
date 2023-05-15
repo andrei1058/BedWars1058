@@ -69,6 +69,8 @@ public class Messages {
     public static String REJOIN_ALLOWED = "cmd-rejoin-allowed";
     public static String COMMAND_REJOIN_PLAYER_RECONNECTED = "cmd-rejoin-player-reconnected";
     public static String COMMAND_LEAVE_MSG = "cmd-leave";
+    public static String COMMAND_LEAVE_STARTED = "leave-started";
+    public static String COMMAND_LEAVE_CANCELED = "leave-canceled";
     public static String COMMAND_NOT_ALLOWED_IN_GAME = "cmd-blocked-in-game";
     public static String COMMAND_LEAVE_DENIED_NOT_IN_ARENA = "cmd-not-in-arena";
     public static String COMMAND_PARTY_HELP = "cmd-party-help";

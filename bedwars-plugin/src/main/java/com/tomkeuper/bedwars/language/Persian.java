@@ -135,6 +135,8 @@ public class Persian extends Language {
         yml.addDefault(Messages.COMMAND_FORCESTART_SUCCESS, "§c▪ §7Shomaresh makoos kootah shod!");
         yml.addDefault(Messages.COMMAND_FORCESTART_NO_PERM, "%bw_lang_prefix%&7Shoma nemitavanid in arena ro forcestart konid.\n§7Lotfan baraye daryaft ghabeliat haye vizhe server ro donate konid.");
         yml.addDefault(Messages.COMMAND_COOLDOWN, "&cShoma hanooz nemitoonid in kar ro anjam bedid! Lotfan %bw_seconds% sanie sabr konid!");
+        yml.addDefault(Messages.COMMAND_LEAVE_STARTED, "&a&lTeleporting you to the lobby in %bw_leave_delay% seconds... Right-click again to cancel the teleport!");
+        yml.addDefault(Messages.COMMAND_LEAVE_CANCELED, "&c&lTeleport cancelled!");
         yml.addDefault(Messages.ARENA_JOIN_VIP_KICK, "%bw_lang_prefix%&cMotasefane shoma bedalil vorood yek donor be arena kick shodid.\n&aLotfan baraye daryaft ghabeliat haye vizhe server ro donate konid. &7&o(click)");
         yml.addDefault(Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT, "%bw_lang_prefix%§cPlayer ha baraye shoroo kafi nistand! Shomaresh makoos motevaghef shod!");
         yml.addDefault(Messages.ARENA_RESTART_PLAYER_KICK, "%bw_lang_prefix%&eArena i ke shoma dakhelesh budid dar hale rah andazi mojadad hast.");
