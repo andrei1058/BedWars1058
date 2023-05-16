@@ -20,6 +20,10 @@ import java.util.List;
 public class GenSplitFeature implements Listener {
     private static GenSplitFeature instance;
 
+    public GenSplitFeature() {
+        Bukkit.getPluginManager().registerEvents(this, BedWars.plugin);
+    }
+
     public static void init() {
         if (BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_GENERATOR_SPLIT)) {
             if (instance == null) {
