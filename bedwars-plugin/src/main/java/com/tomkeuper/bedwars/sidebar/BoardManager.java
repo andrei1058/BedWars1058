@@ -323,7 +323,7 @@ public class BoardManager implements IScoreboardService {
     public void giveTabFeatures(@NotNull Player player, @Nullable IArena arena, boolean delay) {
         String arenaDisplayname = "null";
         if (null != arena) arenaDisplayname = arena.getDisplayName();
-        BedWars.debug("giveSidebar() player: " + player.getDisplayName() + " arena: " + arenaDisplayname);
+        BedWars.debug("giveTabFeatures() player: " + player.getDisplayName() + " arena: " + arenaDisplayname);
 
         // if sidebar is disabled in lobby on shared mode
         if (null == arena){ if (!BedWars.config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR)) return;}
