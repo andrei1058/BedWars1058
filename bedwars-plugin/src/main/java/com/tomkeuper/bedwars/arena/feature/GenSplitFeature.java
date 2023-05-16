@@ -36,11 +36,9 @@ public class GenSplitFeature implements Listener {
     @EventHandler
     public void onIslandGenPickup(PlayerGeneratorCollectEvent e) {
         if (!e.isCancelled() && (e.getItemStack().getType() == Material.IRON_INGOT || e.getItemStack().getType() == Material.GOLD_INGOT)) {
-
             Location pl = e.getPlayer().getLocation();
             Player p = e.getPlayer();
             List<Entity> nearbyEntities = (List) pl.getWorld().getNearbyEntities(pl, 2.0, 2.0, 2.0);
-
             for (Entity entity : pl.getWorld().getEntities()) {
                 if (nearbyEntities.contains(entity) && entity instanceof Player) {
                     Player pickupPlayer = (Player) entity;
@@ -49,8 +47,7 @@ public class GenSplitFeature implements Listener {
                         ITeam rt = Arena.getArenaByPlayer(pickupPlayer).getTeam(pickupPlayer);
                         if (team == rt) {
                             ItemStack item = new ItemStack(e.getItemStack().getType(),e.getItemStack().getAmount());
-                            pickupPlayer.getInventory().addItem(item);
-                            pickupPlayer.playSound(pickupPlayer.getLocation(), Sound.valueOf(BedWars.getForCurrentVersion("ITEM_PICKUP", "ENTITY_ITEM_PICKUP", "ENTITY_ITEM_PICKUP")), 0.6f, 1.3f);
+                            if (!BedWars.getAPI().getAFKUtil().isPlayerAFK(pickupPlayer)) pickupPlayer.getInventory().addItem(item);
                         }
                     }
                 }
