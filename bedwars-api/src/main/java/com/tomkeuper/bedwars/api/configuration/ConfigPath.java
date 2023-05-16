@@ -158,7 +158,6 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_DISABLE_ANVIL = "inventories.disable-anvil";
     public static final String GENERAL_CONFIGURATION_MARK_LEAVE_AS_ABANDON = "mark-leave-as-abandon";
     public static final String GENERAL_CONFIGURATION_ENABLE_FOOTSTEPS_ON_INVISIBILITY = "enable-footsteps-on-invisibility";
-    public static final String GENERAL_CONFIGURATION_ENABLE_GEN_SPLIT = "enable-gen-split";
 
     public static final String GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP = "server-ip";
 
@@ -234,6 +233,7 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_PATH = "performance-settings";
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_ROTATE_GEN = GENERAL_CONFIGURATION_PERFORMANCE_PATH + ".rotate-generators";
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_SPOIL_TNT_PLAYERS = GENERAL_CONFIGURATION_PERFORMANCE_PATH + ".spoil-tnt-players";
+    public static final String GENERAL_CONFIGURATION_PERFORMANCE_GENERATOR_SPLIT = GENERAL_CONFIGURATION_PERFORMANCE_PATH + ".split-island-generator";
 
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_PAPER_FEATURES = GENERAL_CONFIGURATION_PERFORMANCE_PATH + ".paper-features";
 
