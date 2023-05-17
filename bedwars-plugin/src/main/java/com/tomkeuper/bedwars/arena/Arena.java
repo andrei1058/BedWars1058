@@ -1364,7 +1364,7 @@ public class Arena implements IArena {
         ITeam team;
         try {
             team = arena.getTeams().get(teamNumber-1);
-        } catch (NullPointerException ignored){
+        } catch (IndexOutOfBoundsException ignored){
             return null;
         }
         String teamName = team.getDisplayName(language);
