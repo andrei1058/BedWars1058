@@ -20,11 +20,11 @@
 
 package com.tomkeuper.bedwars.arena;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import com.tomkeuper.bedwars.BedWars;
 import com.tomkeuper.bedwars.api.arena.GameState;
 import com.tomkeuper.bedwars.api.arena.IArena;
-import com.tomkeuper.bedwars.api.arena.generator.IGenerator;
-import com.tomkeuper.bedwars.api.arena.team.ITeam;
 import com.tomkeuper.bedwars.api.configuration.ConfigPath;
 import com.tomkeuper.bedwars.api.exceptions.InvalidMaterialException;
 import com.tomkeuper.bedwars.api.language.Messages;
@@ -33,8 +33,6 @@ import com.tomkeuper.bedwars.api.server.ServerType;
 import com.tomkeuper.bedwars.configuration.Sounds;
 import com.tomkeuper.bedwars.stats.PlayerStats;
 import com.tomkeuper.bedwars.support.papi.SupportPAPI;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -389,18 +387,6 @@ public class Misc {
     public static boolean isBuildProtected(Location l, IArena a) {
         for (Region region : a.getRegionsList()){
             if (region.isInRegion(l)){
-                return true;
-            }
-        }
-        for (ITeam t : a.getTeams()) {
-            for (IGenerator o : t.getGenerators()) {
-                if (o.getLocation().distance(l) <= a.getConfig().getInt(ConfigPath.ARENA_GENERATOR_PROTECTION)) {
-                    return true;
-                }
-            }
-        }
-        for (IGenerator o : a.getOreGenerators()) {
-            if (o.getLocation().distance(l) <= a.getConfig().getInt(ConfigPath.ARENA_GENERATOR_PROTECTION)) {
                 return true;
             }
         }
