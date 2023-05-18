@@ -295,6 +295,9 @@ public class BedWarsTeam implements ITeam {
                     if (parm.length > 3) {
                         im.setDisplayName(ChatColor.translateAlternateColorCodes('&', parm[3]));
                     }
+                    for (TeamEnchant e : getSwordsEnchantments()) {
+                        im.addEnchant(e.getEnchantment(), e.getAmplifier(),true);
+                    }
                     nms.setUnbreakable(im);
                     i.setItemMeta(im);
 
