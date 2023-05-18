@@ -33,6 +33,7 @@ import com.tomkeuper.bedwars.arena.Arena;
 import com.tomkeuper.bedwars.arena.ArenaManager;
 import com.tomkeuper.bedwars.arena.VoidChunkGenerator;
 import com.tomkeuper.bedwars.arena.despawnables.TargetListener;
+import com.tomkeuper.bedwars.arena.feature.GenSplitFeature;
 import com.tomkeuper.bedwars.arena.feature.SpoilPlayerTNTFeature;
 import com.tomkeuper.bedwars.arena.spectator.SpectatorListeners;
 import com.tomkeuper.bedwars.arena.tasks.OneTick;
@@ -573,6 +574,7 @@ public class BedWars extends JavaPlugin {
         }
 
         SpoilPlayerTNTFeature.init();
+        GenSplitFeature.init();
     }
 
     private void registerDelayedCommands() {
