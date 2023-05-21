@@ -367,8 +367,6 @@ public class v1_12_R1 extends VersionSupport {
     @Override
     public void setCollide(Player p, IArena a, boolean value) {
         p.setCollidable(value);
-        if (a == null) return;
-        a.updateSpectatorCollideRule(p, value);
     }
 
     @Override
