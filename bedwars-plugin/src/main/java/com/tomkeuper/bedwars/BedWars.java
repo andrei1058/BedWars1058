@@ -291,7 +291,7 @@ public class BedWars extends JavaPlugin {
         }
 
         /* Check if CloudNet support is requested (replaces server-id name the CloudNet service ID) */
-        if (config.getLobbyWorldName().isEmpty() && serverType == ServerType.BUNGEE) {
+        if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_CLOUDNET_SUPPORT) && serverType == ServerType.BUNGEE) {
             plugin.getLogger().log(java.util.logging.Level.INFO, "CloudNet Service ID = " + Wrapper.getInstance().getServiceId().getName());
             config.set(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID, Wrapper.getInstance().getServiceId().getName());
         }
