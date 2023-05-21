@@ -152,6 +152,7 @@ public class Messages {
 
     public static String ARENA_MAX_BUILD_LIMIT_REACHED = "build-max-height-limit-reached";
     public static String ARENA_MIN_BUILD_LIMIT_REACHED = "build-min-height-limit-reached";
+    public static String ARENA_IN_GAME_ANNOUNCEMENT = "in-game-announcement";
 
     /** Stats related */
     public static String PLAYER_STATS_GUI_PATH = "stats";

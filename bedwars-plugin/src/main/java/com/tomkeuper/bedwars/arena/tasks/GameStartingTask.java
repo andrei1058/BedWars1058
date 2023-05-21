@@ -31,6 +31,7 @@ import com.tomkeuper.bedwars.api.configuration.ConfigPath;
 import com.tomkeuper.bedwars.api.language.Language;
 import com.tomkeuper.bedwars.api.language.Messages;
 import com.tomkeuper.bedwars.api.tasks.StartingTask;
+import com.tomkeuper.bedwars.arena.Announcement;
 import com.tomkeuper.bedwars.arena.Arena;
 import com.tomkeuper.bedwars.arena.team.BedWarsTeam;
 import com.tomkeuper.bedwars.arena.team.LegacyTeamAssigner;
@@ -42,6 +43,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 
+import static com.tomkeuper.bedwars.BedWars.config;
 import static com.tomkeuper.bedwars.api.language.Language.getList;
 import static com.tomkeuper.bedwars.api.language.Language.getMsg;
 
@@ -50,10 +52,12 @@ public class GameStartingTask implements Runnable, StartingTask {
     private int countdown;
     private final IArena arena;
     private final BukkitTask task;
+    private Announcement announcement;
 
     public GameStartingTask(Arena arena) {
         this.arena = arena;
-        countdown = BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_REGULAR);
+        this.announcement = new Announcement(arena);
+        countdown = config.getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_REGULAR);
         task = Bukkit.getScheduler().runTaskTimer(BedWars.plugin, this, 0, 20L);
     }
 
@@ -91,7 +95,7 @@ public class GameStartingTask implements Runnable, StartingTask {
     @Override
     public void run() {
         if (countdown == 0) {
-            if (BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_EXPERIMENTAL_TEAM_ASSIGNER)) {
+            if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_EXPERIMENTAL_TEAM_ASSIGNER)) {
                 getArena().getTeamAssigner().assignTeams(getArena());
             } else {
                 LegacyTeamAssigner.assignTeams(getArena());
@@ -173,6 +177,9 @@ public class GameStartingTask implements Runnable, StartingTask {
                 BedWars.nms.sendTitle(p, getMsg(p, Messages.ARENA_STATUS_START_PLAYER_TITLE), null, 0, 30, 10);
                 for (String tut : getList(p, Messages.ARENA_STATUS_START_PLAYER_TUTORIAL)) {
                     p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, tut));
+                }
+                if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_IN_GAME_ANNOUNCEMENT_ENABLE)) {
+                    announcement.loadMessages(p);
                 }
             }
         }
