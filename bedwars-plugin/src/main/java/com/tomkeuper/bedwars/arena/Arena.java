@@ -663,8 +663,6 @@ public class Arena implements IArena {
             spectators.add(p);
             players.remove(p);
 
-            updateSpectatorCollideRule(p, false);
-
             if (!playerBefore) {
                 /* save player inv etc if isn't saved yet*/
                 if (getServerType() != ServerType.BUNGEE) {
@@ -2282,16 +2280,6 @@ public class Arena implements IArena {
         return respawnSessions;
     }
 
-    @Override
-    public void updateSpectatorCollideRule(Player p, boolean collide) {
-//        if (!isSpectator(p)) return;
-//        for (BedWarsScoreboard sb : BedWarsScoreboard.getScoreboards().values()) {
-//            if (sb.getArena() == this) {
-//                sb.updateSpectator(p, collide);
-//            }
-//        }
-    }
-
     /**
      * Get invisibility for armor
      */
@@ -2641,7 +2629,6 @@ public class Arena implements IArena {
                         BedWars.nms.hideArmor(invisible, player);
                     }
 
-                    updateSpectatorCollideRule(player, false);
                     PaperSupport.teleportC(player, getReSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                 }, 10L);
             } else {
