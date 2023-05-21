@@ -82,6 +82,7 @@ import com.andrei1058.vipfeatures.api.IVipFeatures;
 import com.andrei1058.vipfeatures.api.MiniGameAlreadyRegistered;
 import com.tomkeuper.bedwars.database.MySQL;
 import com.tomkeuper.bedwars.upgrades.UpgradesManager;
+import de.dytanic.cloudnet.wrapper.Wrapper;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
@@ -287,6 +288,12 @@ public class BedWars extends JavaPlugin {
         /* Check if lobby location is set. Required for non Bungee servers */
         if (config.getLobbyWorldName().isEmpty() && serverType != ServerType.BUNGEE) {
             plugin.getLogger().log(java.util.logging.Level.WARNING, "Lobby location is not set!");
+        }
+
+        /* Check if CloudNet support is requested (replaces server-id name the CloudNet service ID) */
+        if (config.getLobbyWorldName().isEmpty() && serverType == ServerType.BUNGEE) {
+            plugin.getLogger().log(java.util.logging.Level.INFO, "CloudNet Service ID = " + Wrapper.getInstance().getServiceId().getName());
+            config.set(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID, Wrapper.getInstance().getServiceId().getName());
         }
 
         /* Load lobby world if not main level
