@@ -71,6 +71,9 @@ public class FireballListener implements Listener {
         }
         e.setCancelled(true);
         if (System.currentTimeMillis() - arena.getFireballCooldowns().getOrDefault(player.getUniqueId(), 0L) <= (fireballCooldown * 1000)) {
+            if (fireballCooldown == 0.0) {
+                return;
+            }
             player.sendMessage(Language.getMsg(player, Messages.ARENA_FIREBALL_COOLDOWN).replace("%bw_cooldown%", String.valueOf(fireballCooldown)));
             return;
         }
