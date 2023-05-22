@@ -75,6 +75,10 @@
             <id>krypton</id>
             <url>https://repo.kryptonmc.org/releases</url>
         </repository>
+        <repository>
+            <id>cloudnet-releases</id>
+            <url>https://repo.cloudnetservice.eu/repository/releases/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -238,6 +242,12 @@
             <groupId>me.neznamy</groupId>
             <artifactId>tab-api</artifactId>
             <version>3.2.4</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.dytanic.cloudnet</groupId>
+            <artifactId>cloudnet-wrapper-jvm</artifactId>
+            <version>3.4.5-RELEASE</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

@@ -46,6 +46,7 @@ public class GamePlayingTask implements Runnable, PlayingTask {
 
     private Arena arena;
     private BukkitTask task;
+    private OreGenTask oreGenTask;
     private int beds_destroy_countdown, dragon_spawn_countdown, game_end_countdown;
 
     public GamePlayingTask(Arena arena) {
@@ -54,6 +55,7 @@ public class GamePlayingTask implements Runnable, PlayingTask {
         this.dragon_spawn_countdown = BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_DRAGON_SPAWN_COUNTDOWN);
         this.game_end_countdown = BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_GAME_END_COUNTDOWN);
         this.task = Bukkit.getScheduler().runTaskTimer(BedWars.plugin, this, 0, 20L);
+        this.oreGenTask = new OreGenTask(arena);
     }
 
     public Arena getArena() {
@@ -190,10 +192,6 @@ public class GamePlayingTask implements Runnable, PlayingTask {
                 }
             }
 
-            // spawn items
-            for (IGenerator o : t.getGenerators()) {
-                o.spawn();
-            }
         }
 
         /* AFK SYSTEM FOR PLAYERS */
@@ -255,14 +253,12 @@ public class GamePlayingTask implements Runnable, PlayingTask {
             }
         }
 
-        /* SPAWN ITEMS */
-        for (IGenerator o : getArena().getOreGenerators()) {
-            o.spawn();
-        }
+
     }
 
     public void cancel() {
         task.cancel();
+        oreGenTask.cancel();
     }
 }
 

@@ -20,10 +20,12 @@
 
 package com.tomkeuper.bedwars.shop.defaultrestore;
 
+import com.tomkeuper.bedwars.api.BedWars;
 import com.tomkeuper.bedwars.api.arena.GameState;
 import com.tomkeuper.bedwars.api.arena.IArena;
 import com.tomkeuper.bedwars.api.arena.team.ITeam;
 import com.tomkeuper.bedwars.support.version.common.VersionCommon;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -93,7 +95,9 @@ public class ShopItemRestoreListener {
                 if (!VersionCommon.api.getVersionSupport().isCustomBedWarsItem(is)) continue;
                 if (VersionCommon.api.getVersionSupport().getCustomData(is).equalsIgnoreCase("DEFAULT_ITEM")) {
                     ((Player) player).getInventory().remove(is);
-                    ((Player) player).updateInventory();
+                    Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("BedWars2023"), () -> {
+                        ((Player) player).updateInventory();
+                    }, 1L);
                     return false; // function will only return false. default item should only be checked. access tools should be put in chests
                 }
             }

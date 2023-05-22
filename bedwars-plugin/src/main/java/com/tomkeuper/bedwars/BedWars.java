@@ -33,6 +33,7 @@ import com.tomkeuper.bedwars.arena.Arena;
 import com.tomkeuper.bedwars.arena.ArenaManager;
 import com.tomkeuper.bedwars.arena.VoidChunkGenerator;
 import com.tomkeuper.bedwars.arena.despawnables.TargetListener;
+import com.tomkeuper.bedwars.arena.feature.GenSplitFeature;
 import com.tomkeuper.bedwars.arena.feature.SpoilPlayerTNTFeature;
 import com.tomkeuper.bedwars.arena.spectator.SpectatorListeners;
 import com.tomkeuper.bedwars.arena.tasks.OneTick;
@@ -81,6 +82,7 @@ import com.andrei1058.vipfeatures.api.IVipFeatures;
 import com.andrei1058.vipfeatures.api.MiniGameAlreadyRegistered;
 import com.tomkeuper.bedwars.database.MySQL;
 import com.tomkeuper.bedwars.upgrades.UpgradesManager;
+import de.dytanic.cloudnet.wrapper.Wrapper;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
@@ -286,6 +288,12 @@ public class BedWars extends JavaPlugin {
         /* Check if lobby location is set. Required for non Bungee servers */
         if (config.getLobbyWorldName().isEmpty() && serverType != ServerType.BUNGEE) {
             plugin.getLogger().log(java.util.logging.Level.WARNING, "Lobby location is not set!");
+        }
+
+        /* Check if CloudNet support is requested (replaces server-id name the CloudNet service ID) */
+        if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_CLOUDNET_SUPPORT) && serverType == ServerType.BUNGEE) {
+            plugin.getLogger().log(java.util.logging.Level.INFO, "CloudNet Service ID = " + Wrapper.getInstance().getServiceId().getName());
+            config.set(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID, Wrapper.getInstance().getServiceId().getName());
         }
 
         /* Load lobby world if not main level
@@ -573,6 +581,7 @@ public class BedWars extends JavaPlugin {
         }
 
         SpoilPlayerTNTFeature.init();
+        GenSplitFeature.init();
     }
 
     private void registerDelayedCommands() {

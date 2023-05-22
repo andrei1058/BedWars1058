@@ -572,7 +572,7 @@ public class Arena implements IArena {
             for (PotionEffect pf : p.getActivePotionEffects()) {
                 p.removePotionEffect(pf.getType());
             }
-        } else if (status == GameState.playing) {
+        } else if (status == GameState.playing || status == GameState.starting && (startingTask != null && startingTask.getCountdown() <= 1)) {
             addSpectator(p, false, null);
             /* stop code if status playing*/
             return false;
@@ -662,8 +662,6 @@ public class Arena implements IArena {
             p.closeInventory();
             spectators.add(p);
             players.remove(p);
-
-            updateSpectatorCollideRule(p, false);
 
             if (!playerBefore) {
                 /* save player inv etc if isn't saved yet*/
@@ -1361,7 +1359,12 @@ public class Arena implements IArena {
         if (arena == null) return null;
         Language language = Language.getPlayerLanguage(player);
         String genericTeamFormat = language.m(Messages.FORMATTING_SCOREBOARD_TEAM_GENERIC);
-        ITeam team = arena.getTeams().get(teamNumber-1);
+        ITeam team;
+        try {
+            team = arena.getTeams().get(teamNumber-1);
+        } catch (IndexOutOfBoundsException ignored){
+            return null;
+        }
         String teamName = team.getDisplayName(language);
         if (arena.getTeams().size() >= teamNumber) {
             return genericTeamFormat
@@ -2277,16 +2280,6 @@ public class Arena implements IArena {
         return respawnSessions;
     }
 
-    @Override
-    public void updateSpectatorCollideRule(Player p, boolean collide) {
-//        if (!isSpectator(p)) return;
-//        for (BedWarsScoreboard sb : BedWarsScoreboard.getScoreboards().values()) {
-//            if (sb.getArena() == this) {
-//                sb.updateSpectator(p, collide);
-//            }
-//        }
-    }
-
     /**
      * Get invisibility for armor
      */
@@ -2636,7 +2629,6 @@ public class Arena implements IArena {
                         BedWars.nms.hideArmor(invisible, player);
                     }
 
-                    updateSpectatorCollideRule(player, false);
                     PaperSupport.teleportC(player, getReSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                 }, 10L);
             } else {

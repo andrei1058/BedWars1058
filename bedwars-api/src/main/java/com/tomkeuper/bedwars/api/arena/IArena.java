@@ -151,15 +151,6 @@ public interface IArena {
      */
     ConcurrentHashMap<Player, Integer> getRespawnSessions();
 
-
-    /**
-     * Disable spectator collisions.
-     *
-     * @param p - spectator.
-     *          Use false when the spectator got removed from the arena.
-     */
-    void updateSpectatorCollideRule(Player p, boolean collide);
-
     /**
      * This will attempt to upgrade the next event if it is the case.
      */

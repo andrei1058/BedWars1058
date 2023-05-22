@@ -68,6 +68,7 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVERS = "bungee-settings.lobby-sockets";
     public static final String GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID = "bungee-settings.server-id";
     public static final String GENERAL_CONFIGURATION_BUNGEE_OPTION_BWP_TIME_OUT = "bungee-settings.bwp-time-out";
+    public static final String GENERAL_CONFIGURATION_BUNGEE_OPTION_CLOUDNET_SUPPORT = "bungee-settings.server-id";
 
     public static final String GENERAL_CONFIGURATION_ALLOW_FIRE_EXTINGUISH = "allow-fire-extinguish";
     public static final String GENERAL_CONFIGURATION_ENABLE_HALLOWEEN = "enable-halloween-feature";
@@ -121,13 +122,18 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_ARENA_GROUPS = "arenaGroups";
     public static final String GENERAL_CONFIGURATION_REJOIN_TIME = "rejoin-time";
     public static final String GENERAL_CONFIGURATION_RE_SPAWN_INVULNERABILITY = "re-spawn-invulnerability";
+    public static final String GENERAL_CONFIGURATION_LEAVE_DELAY = "leave-delay-time";
+    public static final String GENERAL_CONFIGURATION_IN_GAME_ANNOUNCEMENT = "in-game-announcement";
+    public static final String GENERAL_CONFIGURATION_IN_GAME_ANNOUNCEMENT_ENABLE = GENERAL_CONFIGURATION_IN_GAME_ANNOUNCEMENT +".enable";
+
+    public static final String GENERAL_CONFIGURATION_IN_GAME_ANNOUNCEMENT_COOLDOW = GENERAL_CONFIGURATION_IN_GAME_ANNOUNCEMENT + ".cooldown";
 
     public static final String GENERAL_CONFIGURATION_SHOUT_COOLDOWN = "shout-cmd-cooldown";
 
     public static final String GENERAL_CONFIGURATION_NPC_LOC_STORAGE = "join-npc-locations";
     public static final String GENERAL_CONFIGURATION_DEFAULT_ITEMS = "start-items-per-group";
 
-    public static final String CENERAL_CONFIGURATION_ALLOWED_COMMANDS = "allowed-commands";
+    public static final String GENERAL_CONFIGURATION_ALLOWED_COMMANDS = "allowed-commands";
     public static final String SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR = "scoreboard-settings.scoreboard.enable-lobby-scoreboard";
     public static final String SB_CONFIG_SIDEBAR_USE_GAME_SIDEBAR = "scoreboard-settings.scoreboard.enable-game-scoreboard";
     public static final String SB_CONFIG_SIDEBAR_TITLE_REFRESH_INTERVAL = "scoreboard-settings.scoreboard.title-refresh-interval";
@@ -157,7 +163,7 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_DISABLE_BREWING_STAND = "inventories.disable-brewing-stand";
     public static final String GENERAL_CONFIGURATION_DISABLE_ANVIL = "inventories.disable-anvil";
     public static final String GENERAL_CONFIGURATION_MARK_LEAVE_AS_ABANDON = "mark-leave-as-abandon";
-    public static final String GENERAL_CONFIGURATION_ENABLE_GEN_SPLIT = "enable-gen-split";
+    public static final String GENERAL_CONFIGURATION_ENABLE_FOOTSTEPS_ON_INVISIBILITY = "enable-footsteps-on-invisibility";
 
     public static final String GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP = "server-ip";
 
@@ -233,6 +239,7 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_PATH = "performance-settings";
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_ROTATE_GEN = GENERAL_CONFIGURATION_PERFORMANCE_PATH + ".rotate-generators";
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_SPOIL_TNT_PLAYERS = GENERAL_CONFIGURATION_PERFORMANCE_PATH + ".spoil-tnt-players";
+    public static final String GENERAL_CONFIGURATION_PERFORMANCE_GENERATOR_SPLIT = GENERAL_CONFIGURATION_PERFORMANCE_PATH + ".split-island-generator";
 
     public static final String GENERAL_CONFIGURATION_PERFORMANCE_PAPER_FEATURES = GENERAL_CONFIGURATION_PERFORMANCE_PATH + ".paper-features";
 

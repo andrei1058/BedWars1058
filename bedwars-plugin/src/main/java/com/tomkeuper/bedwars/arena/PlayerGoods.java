@@ -105,6 +105,9 @@ class PlayerGoods {
             p.setHealthScale(20);
             p.setHealth(20);
             p.setFoodLevel(20);
+            for (PotionEffect potion: p.getActivePotionEffects()) {
+                p.removePotionEffect(potion.getType());
+            }
             p.getInventory().clear();
             p.getInventory().setArmorContents(null);
             if (!rejoin) {

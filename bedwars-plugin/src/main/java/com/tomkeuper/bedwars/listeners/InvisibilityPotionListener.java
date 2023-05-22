@@ -20,18 +20,27 @@
 
 package com.tomkeuper.bedwars.listeners;
 
+import com.tomkeuper.bedwars.BedWars;
 import com.tomkeuper.bedwars.api.arena.IArena;
 import com.tomkeuper.bedwars.api.arena.team.ITeam;
+import com.tomkeuper.bedwars.api.configuration.ConfigPath;
 import com.tomkeuper.bedwars.api.events.player.PlayerInvisibilityPotionEvent;
 import com.tomkeuper.bedwars.arena.Arena;
 import org.bukkit.Bukkit;
+import org.bukkit.Effect;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.tomkeuper.bedwars.BedWars.nms;
 import static com.tomkeuper.bedwars.BedWars.plugin;
@@ -41,6 +50,49 @@ import static com.tomkeuper.bedwars.BedWars.plugin;
  * potion or when the potion is gone. It is required because it is related to scoreboards.
  */
 public class InvisibilityPotionListener implements Listener {
+    private final List<Player> invisiblePlayers = new ArrayList<>();
+    private final boolean footstepsEnabled = BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_ENABLE_FOOTSTEPS_ON_INVISIBILITY);
+    private int cd = 6;
+
+    @EventHandler
+    public void onPotion(PlayerInvisibilityPotionEvent e) {
+        if (!footstepsEnabled) return;
+        if (e.getType() == PlayerInvisibilityPotionEvent.Type.ADDED) {
+            this.invisiblePlayers.add(e.getPlayer());
+        } else if (e.getType() == PlayerInvisibilityPotionEvent.Type.REMOVED) {
+            this.invisiblePlayers.remove(e.getPlayer());
+        }
+    }
+
+    @EventHandler
+    public void onMove(PlayerMoveEvent e) {
+        if (!footstepsEnabled) return;
+        if (!this.invisiblePlayers.contains(e.getPlayer())) return;
+
+        //TODO implement particles on higher version (issue: #112)
+        if (nms.getVersion() > 5) return; // check if higher than 1.12
+
+        Player p = e.getPlayer();
+        if (p.isSneaking())
+            return;
+        Location from = e.getFrom();
+        Location to = e.getTo();
+        if (from.getBlock() != to.getBlock()) {
+            if (!p.isOnGround())
+                return;
+            Location loc = from.subtract(0.0D, 1.0D, 0.0D);
+            Block b = loc.getBlock();
+            if (this.cd == 3) {
+                p.getWorld().playEffect(p.getLocation().add(0.0D, 0.01D, 0.4D), Effect.FOOTSTEP, 1);
+                this.cd--;
+            } else if (this.cd <= 0) {
+                p.getWorld().playEffect(p.getLocation().add(0.4D, 0.01D, 0.0D), Effect.FOOTSTEP, 1);
+                this.cd = 6;
+            } else {
+                this.cd--;
+            }
+        }
+    }
 
     @EventHandler
     public void onDrink(PlayerItemConsumeEvent e) {

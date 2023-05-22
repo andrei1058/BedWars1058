@@ -323,24 +323,28 @@ public class BoardManager implements IScoreboardService {
     public void giveTabFeatures(@NotNull Player player, @Nullable IArena arena, boolean delay) {
         String arenaDisplayname = "null";
         if (null != arena) arenaDisplayname = arena.getDisplayName();
-        BedWars.debug("giveSidebar() player: " + player.getDisplayName() + " arena: " + arenaDisplayname);
+        BedWars.debug("giveTabFeatures() player: " + player.getDisplayName() + " arena: " + arenaDisplayname);
 
         // if sidebar is disabled in lobby on shared mode
         if (null == arena){ if (!BedWars.config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR)) return;}
         else if (!BedWars.config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_GAME_SIDEBAR)) return;
+
+        TabPlayer tabPlayer = TabAPI.getInstance().getPlayer(player.getUniqueId());
 
         String scoreboardName = "bw_lobby_" + Language.getPlayerLanguage(player).getIso();
         // set sidebar lines based on game state or lobby
         if (null != arena){
             if (arena.getStatus() == GameState.waiting) {
                 scoreboardName = "bw_" + arena.getGroup() + "_waiting_" + Language.getPlayerLanguage(player).getIso();
+                tabPlayer.resetTemporaryGroup();
             } else if (arena.getStatus() == GameState.starting) {
                 scoreboardName = "bw_" + arena.getGroup() + "_starting_" + Language.getPlayerLanguage(player).getIso();
+                tabPlayer.resetTemporaryGroup();
             } else if (arena.getStatus() == GameState.playing || arena.getStatus() == GameState.restarting) {
                 scoreboardName = "bw_" + arena.getGroup() + "_playing_" + Language.getPlayerLanguage(player).getIso();
+                tabPlayer.setTemporaryGroup(arena.getTeam(player) != null ? arena.getTeam(player).getName() : "");
             }
         }
-        TabPlayer tabPlayer = TabAPI.getInstance().getPlayer(player.getUniqueId());
         if (BedWars.config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_BELOW_NAME)){
             if (TabAPI.getInstance().getTeamManager() instanceof UnlimitedNametagManager) {
                 UnlimitedNametagManager unm = (UnlimitedNametagManager) TabAPI.getInstance().getTeamManager();
