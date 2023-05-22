@@ -4,6 +4,8 @@ import com.tomkeuper.bedwars.BedWars;
 import com.tomkeuper.bedwars.api.arena.GameState;
 import com.tomkeuper.bedwars.api.arena.IArena;
 import com.tomkeuper.bedwars.api.configuration.ConfigPath;
+import com.tomkeuper.bedwars.api.language.Language;
+import com.tomkeuper.bedwars.api.language.Messages;
 import com.tomkeuper.bedwars.arena.Arena;
 import com.tomkeuper.bedwars.arena.LastHit;
 import org.bukkit.Location;
@@ -69,6 +71,7 @@ public class FireballListener implements Listener {
         }
         e.setCancelled(true);
         if (System.currentTimeMillis() - arena.getFireballCooldowns().getOrDefault(player.getUniqueId(), 0L) <= (fireballCooldown * 1000)) {
+            if (fireballCooldown >= 1.0) player.sendMessage(Language.getMsg(player, Messages.ARENA_FIREBALL_COOLDOWN).replace("%bw_cooldown%", String.valueOf(fireballCooldown)));
             return;
         }
         arena.getFireballCooldowns().put(player.getUniqueId(), System.currentTimeMillis());
