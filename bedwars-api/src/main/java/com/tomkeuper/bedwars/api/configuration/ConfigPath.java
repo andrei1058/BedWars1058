@@ -166,6 +166,7 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_ENABLE_FOOTSTEPS_ON_INVISIBILITY = "enable-footsteps-on-invisibility";
 
     public static final String GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP = "server-ip";
+    public static final String GENERAL_DISABLE_SHOUT_SOLO = "disable-shout-solo";
 
     private static final String GENERAL_CHAT = "chat-settings.";
     public static final String GENERAL_CHAT_FORMATTING = GENERAL_CHAT+"format";
