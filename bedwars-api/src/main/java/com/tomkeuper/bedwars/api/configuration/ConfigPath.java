@@ -72,6 +72,7 @@ public class ConfigPath {
 
     public static final String GENERAL_CONFIGURATION_ALLOW_FIRE_EXTINGUISH = "allow-fire-extinguish";
     public static final String GENERAL_CONFIGURATION_ENABLE_HALLOWEEN = "enable-halloween-feature";
+    public static final String GENERAL_CONFIGURATION_ENABLE_ANTI_DROP = "enable-anti-drop-feature";
     public static final String GENERAL_CONFIGURATION_ENABLE_GENERATOR_REPLACE_AIR_SUDDEN = "enable-generator-replace-air-sudden-death";
     public static final String GENERAL_CONFIGURATION_ENABLE_TEAMMATE_TRACKING_ACTION_BAR = "enable-teammate-tracking-action-bar";
 

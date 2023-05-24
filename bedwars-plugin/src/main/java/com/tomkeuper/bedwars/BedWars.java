@@ -57,6 +57,7 @@ import com.tomkeuper.bedwars.listeners.arenaselector.ArenaSelectorListener;
 import com.tomkeuper.bedwars.listeners.blockstatus.BlockStatusListener;
 import com.tomkeuper.bedwars.listeners.chat.ChatAFK;
 import com.tomkeuper.bedwars.listeners.chat.ChatFormatting;
+import com.tomkeuper.bedwars.arena.feature.AntiDropFeature;
 import com.tomkeuper.bedwars.listeners.joinhandler.*;
 import com.tomkeuper.bedwars.lobbysocket.ArenaSocket;
 import com.tomkeuper.bedwars.lobbysocket.LoadedUsersCleaner;
@@ -580,8 +581,10 @@ public class BedWars extends JavaPlugin {
             HalloweenSpecial.init();
         }
 
+        // Register features
         SpoilPlayerTNTFeature.init();
         GenSplitFeature.init();
+        AntiDropFeature.init();
     }
 
     private void registerDelayedCommands() {
