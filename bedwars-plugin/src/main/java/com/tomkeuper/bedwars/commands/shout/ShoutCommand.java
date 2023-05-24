@@ -47,16 +47,24 @@ public class ShoutCommand extends BukkitCommand {
         if (s instanceof ConsoleCommandSender) return true;
         Player p = (Player) s;
         IArena a = Arena.getArenaByPlayer(p);
+
         if (a == null || a.isSpectator(p)) {
             p.sendMessage(Language.getMsg(p, Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS));
             return true;
         }
+
+        // Prevent player from shouting if it is a solo mode
+        if(BedWars.config.getBoolean(ConfigPath.GENERAL_DISABLE_SHOUT_SOLO) && a.getMaxInTeam() == 1){
+            p.sendMessage(Language.getMsg(p, Messages.COMMAND_SHOUT_DISABLE_SOLO));
+            return true;
+        }
+
         StringBuilder sb = new StringBuilder();
         for (String ar : args) {
             sb.append(ar).append(" ");
         }
 
-        p.chat("!" + sb.toString());
+        p.chat("!" + sb);
         return false;
     }
 
