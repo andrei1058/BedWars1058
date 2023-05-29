@@ -154,9 +154,10 @@ public class SidebarService implements ISidebarService {
 
     public void refreshPlaceholders(IArena arena) {
         this.sidebars.forEach((k, v) -> {
-            if (v.getArena().equals(arena)) {
-                v.getHandle().refreshPlaceholders();
-            }
+            if (v.getArena() != null)
+                if (v.getArena().equals(arena)) {
+                    v.getHandle().refreshPlaceholders();
+                }
         });
     }
 
