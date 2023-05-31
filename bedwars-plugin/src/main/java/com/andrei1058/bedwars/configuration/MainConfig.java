@@ -33,6 +33,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputFilter;
 import java.util.*;
 
 import static com.andrei1058.bedwars.BedWars.getForCurrentVersion;
@@ -114,6 +115,10 @@ public class MainConfig extends ConfigManager {
         yml.addDefault(ConfigPath.GENERAL_FIREBALL_MAKE_FIRE, false);
         yml.addDefault(ConfigPath.GENERAL_FIREBALL_KNOCKBACK_HORIZONTAL, 1.0);
         yml.addDefault(ConfigPath.GENERAL_FIREBALL_KNOCKBACK_VERTICAL, 0.65);
+        yml.addDefault(ConfigPath.GENERAL_FIREBALL_DESTORY_BLOCKS_STATE, true);
+        yml.addDefault(ConfigPath.GENERAL_FIREBALL_DESTORY_BLOCKS_RADIUS, 3);
+        yml.addDefault(ConfigPath.GENERAL_FIREBALL_DESTORY_BLOCKS_ALLOW_DESTRUCTION, Collections.singletonList("WOOL"));
+        yml.addDefault(ConfigPath.GENERAL_FIREBALL_DESTORY_BLOCK_DESTORY_ORIGINAL_BLOCKS, false);
         yml.addDefault(ConfigPath.GENERAL_FIREBALL_COOLDOWN, 0.5);
         yml.addDefault(ConfigPath.GENERAL_FIREBALL_DAMAGE_SELF, 2.0);
         yml.addDefault(ConfigPath.GENERAL_FIREBALL_DAMAGE_ENEMY, 2.0);
