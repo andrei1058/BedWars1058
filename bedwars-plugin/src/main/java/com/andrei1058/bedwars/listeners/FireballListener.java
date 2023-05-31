@@ -1,15 +1,15 @@
 package com.andrei1058.bedwars.listeners;
 
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.arena.generator.IGenerator;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
-import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.LastHit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
@@ -25,7 +25,6 @@ import java.util.*;
 
 import static com.andrei1058.bedwars.BedWars.config;
 import static com.andrei1058.bedwars.BedWars.getAPI;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class FireballListener implements Listener {
 
@@ -41,6 +40,13 @@ public class FireballListener implements Listener {
     private final double fireballBlockFailureRadius;
     private final List<String> fireballBlocksThatAllowDestruction;
     private final boolean fireballDestroyOriginalBlocks;
+    private final boolean fireballGenerateExplosiveParticles;
+    private final boolean fireballReverseWhitelist;
+    private final boolean fireballSpawnProtection;
+    private final boolean fireballShopProtection;
+    private final boolean fireballUpgradesProtection;
+    private final boolean fireballGeneratorProtection;
+    private final Vector locSubtractedDifference = new Vector(0.5, 1.3, 0.5);
 
     public FireballListener() {
         this.fireballExplosionSize = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_EXPLOSION_SIZE);
@@ -49,8 +55,14 @@ public class FireballListener implements Listener {
         this.fireballVertical = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_KNOCKBACK_VERTICAL);
         this.fireballDestroyBlocks = config.getYml().getBoolean(ConfigPath.GENERAL_FIREBALL_DESTORY_BLOCKS_STATE);
         this.fireballBlockFailureRadius = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_DESTORY_BLOCKS_RADIUS);
+        this.fireballReverseWhitelist = config.getYml().getBoolean(ConfigPath.GENERAL_FIREBALL_DESTORY_BLOCKS_REVERSE_WHITELIST);
         this.fireballBlocksThatAllowDestruction = config.getYml().getStringList(ConfigPath.GENERAL_FIREBALL_DESTORY_BLOCKS_ALLOW_DESTRUCTION);
-        this.fireballDestroyOriginalBlocks = config.getYml().getBoolean(ConfigPath.GENERAL_FIREBALL_DESTORY_BLOCK_DESTORY_ORIGINAL_BLOCKS);
+        this.fireballDestroyOriginalBlocks = config.getYml().getBoolean(ConfigPath.GENERAL_FIREBALL_DESTORY_BLOCKS_DESTORY_ORIGINAL_BLOCKS);
+        this.fireballSpawnProtection = config.getYml().getBoolean(ConfigPath.GENERAL_FIREBALL_DESTORY_BLOCKS_SPAWN_PROTECTION);
+        this.fireballShopProtection = config.getYml().getBoolean(ConfigPath.GENERAL_FIREBALL_DESTORY_BLOCKS_SHOP_PROTECTION);
+        this.fireballUpgradesProtection = config.getYml().getBoolean(ConfigPath.GENERAL_FIREBALL_DESTORY_BLOCKS_UPGRADES_PROTECTION);
+        this.fireballGeneratorProtection = config.getYml().getBoolean(ConfigPath.GENERAL_FIREBALL_DESTORY_BLOCKS_GENERATOR_PROTECTION);
+        this.fireballGenerateExplosiveParticles = config.getYml().getBoolean(ConfigPath.GENERAL_FIREBALL_DESTORY_BLOCKS_GENERATE_EXPLOSIVE_PARTICLES);
 
         this.damageSelf = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_DAMAGE_SELF);
         this.damageEnemy = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_DAMAGE_ENEMY);
@@ -145,23 +157,72 @@ public class FireballListener implements Listener {
             Fireball fireball = (Fireball) e.getEntity();
             Location location = fireball.getLocation();
 
+            if (fireballGenerateExplosiveParticles)
+            {
+                BedWars.nms.playExplosiveParticles(player, location);
+            }
+
             for (int x = (int) -fireballBlockFailureRadius; x <= fireballBlockFailureRadius; x++) {
                 for (int y = (int) -fireballBlockFailureRadius; y <= fireballBlockFailureRadius; y++) {
                     for (int z = (int) -fireballBlockFailureRadius; z <= fireballBlockFailureRadius; z++) {
                         Location blockLoc = new Location(location.getWorld(),
                                 location.getBlockX() + x, location.getBlockY() + y, location.getBlockZ() + z);
 
-                        Block currentBlock = blockLoc.getBlock();
-
-                        if (fireballBlocksThatAllowDestruction.contains(currentBlock.getType().name()))
+                        if (blockLoc.distance(location) <= fireballBlockFailureRadius + 1)
                         {
-                            if (fireballDestroyOriginalBlocks)
-                            {
-                                currentBlock.breakNaturally();
+                            boolean currentBlockCanDestroyed = true;
+                            for (ITeam team : currentArena.getTeams()) {
+                                if (fireballSpawnProtection && blockLoc.distance(team.getSpawn().clone().subtract(locSubtractedDifference)) <= currentArena.getConfig().getInt(ConfigPath.ARENA_SPAWN_PROTECTION))
+                                {
+                                    currentBlockCanDestroyed = false;
+                                    break;
+                                }
+                                if (fireballShopProtection && blockLoc.distance(team.getShop().clone().subtract(locSubtractedDifference)) <= currentArena.getConfig().getInt(ConfigPath.ARENA_SHOP_PROTECTION))
+                                {
+                                    currentBlockCanDestroyed = false;
+                                    break;
+                                }
+                                if (fireballUpgradesProtection && blockLoc.distance(team.getTeamUpgrades().clone().subtract(locSubtractedDifference)) <= currentArena.getConfig().getInt(ConfigPath.ARENA_UPGRADES_PROTECTION))
+                                {
+                                    currentBlockCanDestroyed = false;
+                                    break;
+                                }
+                                if (fireballGeneratorProtection)
+                                {
+                                    for (IGenerator generator : team.getGenerators()) {
+                                        if (blockLoc.distance(generator.getLocation().clone().subtract(locSubtractedDifference)) <= currentArena.getConfig().getInt(ConfigPath.ARENA_GENERATOR_PROTECTION))
+                                        {
+                                            currentBlockCanDestroyed = false;
+                                            break;
+                                        }
+                                    }
+                                }
                             }
-                            else
+
+                            if (fireballGeneratorProtection)
                             {
-                                if (currentArena.isBlockPlaced(currentBlock)) {
+                                for (IGenerator generator : currentArena.getOreGenerators())
+                                {
+                                    if (blockLoc.distance(generator.getLocation().clone().subtract(locSubtractedDifference)) <= currentArena.getConfig().getInt(ConfigPath.ARENA_GENERATOR_PROTECTION))
+                                    {
+                                        currentBlockCanDestroyed = false;
+                                    }
+                                }
+                            }
+
+                            Block currentBlock = blockLoc.getBlock();
+
+                            boolean blockInProcessingList = fireballBlocksThatAllowDestruction.contains(currentBlock.getType().name());
+
+                            if ((!fireballReverseWhitelist && blockInProcessingList) || (fireballReverseWhitelist && !blockInProcessingList))
+                            {
+                                if (currentArena.isBlockPlaced(currentBlock) && !fireballDestroyOriginalBlocks)
+                                {
+                                    currentBlockCanDestroyed = false;
+                                }
+
+                                if (currentBlockCanDestroyed)
+                                {
                                     currentBlock.breakNaturally();
                                 }
                             }

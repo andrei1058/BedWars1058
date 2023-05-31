@@ -37,6 +37,7 @@ import net.minecraft.server.v1_16_R3.*;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -719,5 +720,11 @@ public class v1_16_R3 extends VersionSupport {
     @Override
     public void playVillagerEffect(@NotNull Player player, Location location){
         player.spawnParticle(org.bukkit.Particle.VILLAGER_HAPPY, location, 1);
+    }
+
+    @Override
+    public void playExplosiveParticles(Player player, Location location)
+    {
+        player.spawnParticle(Particle.EXPLOSION_LARGE, location, 1);
     }
 }
