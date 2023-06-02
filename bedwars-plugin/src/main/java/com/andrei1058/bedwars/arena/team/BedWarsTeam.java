@@ -39,6 +39,8 @@ import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.support.paper.PaperSupport;
 import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
@@ -98,6 +100,9 @@ public class BedWarsTeam implements ITeam {
     // Fall invulnerability when teammates respawn
     public static HashMap<UUID, Long> reSpawnInvulnerability = new HashMap<>();
 
+    // Record the boxes belonging to the player team
+    public List<Location> teamChest = new ArrayList<>();
+
     public BedWarsTeam(String name, TeamColor color, Location spawn, Location bed, Location shop, Location teamUpgrades, Arena arena) {
         if (arena == null) return;
         this.name = name;
@@ -118,6 +123,13 @@ public class BedWarsTeam implements ITeam {
 
     public int getSize() {
         return members.size();
+    }
+
+    /**
+     * Add chest to the team
+     */
+    public void addTeamChest(Location chestLoc) {
+        teamChest.add(chestLoc);
     }
 
     /**
@@ -599,22 +611,43 @@ public class BedWarsTeam implements ITeam {
     public void addSwordEnchantment(Enchantment e, int a) {
         getSwordsEnchantments().add(new Enchant(e, a));
         for (Player p : getMembers()) {
-            for (ItemStack i : p.getInventory().getContents()) {
-                if (i == null) continue;
-                if (nms.isSword(i)) {
-                    ItemMeta im = i.getItemMeta();
-                    im.addEnchant(e, a, true);
-                    i.setItemMeta(im);
+
+            List<ItemStack> needEnchantedItems = new ArrayList<>();
+
+            if (teamChest != null && !teamChest.isEmpty())
+            {
+                for (Location loc : teamChest)
+                {
+                    Chest chest = (Chest) arena.getWorld().getBlockAt(loc).getState();
+                    for (ItemStack item : chest.getBlockInventory())
+                    {
+                        if (item == null) continue;
+                        if (nms.isSword(item)) {
+                            needEnchantedItems.add(item);
+                        }
+                    }
                 }
             }
 
-            for (ItemStack i : p.getEnderChest().getContents()) {
-                if (i == null) continue;
-                if (nms.isSword(i)) {
-                    ItemMeta im = i.getItemMeta();
-                    im.addEnchant(e, a, true);
-                    i.setItemMeta(im);
+            for (ItemStack item : p.getInventory().getContents()) {
+                if (item == null) continue;
+                if (nms.isSword(item) || nms.isAxe(item)) {
+                    needEnchantedItems.add(item);
                 }
+            }
+
+            for (ItemStack item : p.getEnderChest().getContents()) {
+                if (item == null) continue;
+                if (nms.isSword(item)) {
+                    needEnchantedItems.add(item);
+                }
+            }
+
+            for (ItemStack enchantedItem : needEnchantedItems)
+            {
+                ItemMeta enchantedItemMeta = enchantedItem.getItemMeta();
+                enchantedItemMeta.addEnchant(e, a, true);
+                enchantedItem.setItemMeta(enchantedItemMeta);
             }
 
             p.updateInventory();

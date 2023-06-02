@@ -50,6 +50,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Openable;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 
 import static com.andrei1058.bedwars.BedWars.*;
@@ -112,6 +113,8 @@ public class Interact implements Listener {
     public void onInteract(PlayerInteractEvent e) {
         if (e == null) return;
         Player p = e.getPlayer();
+        IArena currentArena = Arena.getArenaByPlayer(p);
+        ITeam playerTeam = currentArena.getTeam(p);
         Arena.afkCheck.remove(p.getUniqueId());
         if (BedWars.getAPI().getAFKUtil().isPlayerAFK(e.getPlayer())) {
             BedWars.getAPI().getAFKUtil().setPlayerAFK(e.getPlayer(), false);
@@ -150,6 +153,7 @@ public class Interact implements Listener {
                     for (ITeam t : a.getTeams()) {
                         if (t.getSpawn().distance(e.getClickedBlock().getLocation()) <= isRad) {
                             owner = t;
+                            playerTeam.addTeamChest(b.getLocation());
                         }
                     }
                     if (owner != null) {

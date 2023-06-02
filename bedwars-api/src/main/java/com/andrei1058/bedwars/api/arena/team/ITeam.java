@@ -112,6 +112,8 @@ public interface ITeam {
      */
     int getSize();
 
+    void addTeamChest(Location chestLoc);
+
     /**
      * Add a new member to the team.
      * Be careful! This will cache players on this team until the game is finished
