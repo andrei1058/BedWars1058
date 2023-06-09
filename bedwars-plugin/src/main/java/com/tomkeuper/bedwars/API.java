@@ -39,6 +39,7 @@ import com.tomkeuper.bedwars.commands.bedwars.MainCommand;
 import com.tomkeuper.bedwars.shop.main.CategoryContent;
 import com.tomkeuper.bedwars.sidebar.BoardManager;
 import com.tomkeuper.bedwars.stats.StatsAPI;
+import com.tomkeuper.bedwars.support.vault.Economy;
 import com.tomkeuper.bedwars.upgrades.UpgradesManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -447,4 +448,48 @@ public class API implements com.tomkeuper.bedwars.api.BedWars {
     public IScoreboardService getScoreboardManager() {
         return BoardManager.getInstance();
     }
+
+    @Override
+    public EconomyUtil getEconomyUtil() {
+        return economyUtil;
+    }
+
+    private final EconomyUtil economyUtil = new EconomyUtil() {
+        @Override
+        public boolean isEconomy() {
+            return BedWars.getEconomy().isEconomy();
+        }
+
+        @Override
+        public double getMoney(Player p) {
+            return BedWars.getEconomy().getMoney(p);
+        }
+
+        @Override
+        public void giveMoney(Player p, double money) {
+            BedWars.getEconomy().giveMoney(p, money);
+        }
+
+        @Override
+        public void buyAction(Player p, double cost) {
+            BedWars.getEconomy().buyAction(p, cost);
+        }
+    };
+
+    @Override
+    public ChatUtil getChatUtil() {
+        return null;
+    }
+
+    private final ChatUtil chatUtil = new ChatUtil() {
+        @Override
+        public String getPrefix(Player p) {
+            return BedWars.getChatSupport().getPrefix(p);
+        }
+
+        @Override
+        public String getSuffix(Player p) {
+            return BedWars.getChatSupport().getSuffix(p);
+        }
+    };
 }

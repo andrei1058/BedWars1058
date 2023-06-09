@@ -503,4 +503,57 @@ public interface BedWars {
     }
 
     IScoreboardService getScoreboardManager();
+
+    /**
+     * Get economy methods
+     */
+    EconomyUtil getEconomyUtil();
+
+    interface EconomyUtil {
+
+        /**
+         * Check if economy is enabled
+         *
+         * */
+        boolean isEconomy();
+
+        /**
+         * Get player money balance
+         * @param p player from which to get the economy balance
+         */
+        double getMoney(Player p);
+
+        /**
+         * give to player money
+         * @param p player from which to get the economy balance
+         * @param money money amount to give
+         */
+        void giveMoney(Player p, double money);
+
+        /**
+         * Get player money from balance to buy an item shop
+         * @param p player from which to get the money
+         * @param cost money amount to take
+         */
+        void buyAction(Player p, double cost);
+    }
+
+    /**
+     * Get chat methods
+     */
+    ChatUtil getChatUtil();
+
+    interface ChatUtil {
+        /**
+         * Get Player prefix
+         * @param p player from which to take the prefix
+         */
+        String getPrefix(Player p);
+
+        /**
+         * Get Player suffix
+         * @param p player from which to take the suffix
+         */
+        String getSuffix(Player p);
+    }
 }
