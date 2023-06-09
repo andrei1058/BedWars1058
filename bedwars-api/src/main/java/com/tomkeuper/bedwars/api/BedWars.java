@@ -513,8 +513,7 @@ public interface BedWars {
 
         /**
          * Check if economy is enabled
-         *
-         * */
+         */
         boolean isEconomy();
 
         /**
