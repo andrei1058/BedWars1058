@@ -20,10 +20,14 @@
 
 package com.tomkeuper.bedwars.support.vault;
 
+import com.tomkeuper.bedwars.api.BedWars;
 import org.bukkit.entity.Player;
 
-public interface Chat {
+public interface Chat extends BedWars.ChatUtil {
 
+    @Override
     String getPrefix(Player p);
+
+    @Override
     String getSuffix(Player p);
 }
