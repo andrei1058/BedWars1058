@@ -478,7 +478,7 @@ public class API implements com.tomkeuper.bedwars.api.BedWars {
 
     @Override
     public ChatUtil getChatUtil() {
-        return null;
+        return chatUtil;
     }
 
     private final ChatUtil chatUtil = new ChatUtil() {
