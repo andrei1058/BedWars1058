@@ -84,6 +84,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -751,5 +752,12 @@ public class v1_17_R1 extends VersionSupport {
     @Override
     public void playVillagerEffect(Player player, Location location){
         player.spawnParticle(Particle.VILLAGER_HAPPY, location, 1);
+    }
+
+    @Override
+    public boolean isGlass(@NotNull Material type) {
+        return type.toString().endsWith("_STAINED_GLASS") ||
+                type.toString().endsWith("_STAINED_GLASS_PANE") ||
+                type == Material.GLASS;
     }
 }

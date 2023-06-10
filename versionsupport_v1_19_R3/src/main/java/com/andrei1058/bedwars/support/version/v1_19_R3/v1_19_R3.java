@@ -112,7 +112,7 @@ public class v1_19_R3 extends VersionSupport {
 
     @Override
     public void spawnIronGolem(Location loc, ITeam bedWarsTeam, double speed, double health, int despawn) {
-        var attr = new DespawnableAttributes(DespawnableType.IRON_GOLEM, speed, health,4, despawn);
+        var attr = new DespawnableAttributes(DespawnableType.IRON_GOLEM, speed, health, 4, despawn);
         var entity = despawnableFactory.spawn(attr, loc, bedWarsTeam);
         new Despawnable(
                 entity,
@@ -347,14 +347,18 @@ public class v1_19_R3 extends VersionSupport {
             // obsidian
             field.set(Blocks.ce, protection);
             // standard glass
-            field.set(Blocks.aH, protection);
+            field.set(Blocks.aP, protection);
 
             var coloredGlass = new net.minecraft.world.level.block.Block[]{
-                    Blocks.dU, Blocks.dV, Blocks.dW, Blocks.dX,
-                    Blocks.dY, Blocks.dZ, Blocks.dZ, Blocks.ea,
-                    Blocks.eb, Blocks.ec, Blocks.ed, Blocks.ee,
-                    Blocks.ef, Blocks.eg, Blocks.eh, Blocks.ei,
-                    Blocks.ej,
+                    Blocks.ei, Blocks.ej, Blocks.ek, Blocks.el,
+                    Blocks.em, Blocks.en, Blocks.eo, Blocks.ep,
+                    Blocks.eq, Blocks.er, Blocks.es, Blocks.et,
+                    Blocks.eu, Blocks.ev, Blocks.ew, Blocks.ex,
+                    Blocks.eY, Blocks.hy, Blocks.hz, Blocks.hA,
+                    Blocks.hB, Blocks.hC, Blocks.hD, Blocks.hE,
+                    Blocks.hF, Blocks.hG, Blocks.hH, Blocks.hI,
+                    Blocks.hJ, Blocks.hK, Blocks.hL, Blocks.hM,
+                    Blocks.hN, Blocks.qx
             };
 
             Arrays.stream(coloredGlass).forEach(
@@ -798,14 +802,14 @@ public class v1_19_R3 extends VersionSupport {
     }
 
     @Override
-    public void placeTowerBlocks(@NotNull Block b, @NotNull IArena a, @NotNull TeamColor color, int x, int y, int z){
+    public void placeTowerBlocks(@NotNull Block b, @NotNull IArena a, @NotNull TeamColor color, int x, int y, int z) {
         b.getRelative(x, y, z).setType(color.woolMaterial());
         a.addPlacedBlock(b.getRelative(x, y, z));
     }
 
     @Override
-    public void placeLadder(@NotNull Block b, int x, int y, int z, @NotNull IArena a, int ladderData){
-        Block block = b.getRelative(x,y,z);  //ladder block
+    public void placeLadder(@NotNull Block b, int x, int y, int z, @NotNull IArena a, int ladderData) {
+        Block block = b.getRelative(x, y, z);  //ladder block
         block.setType(Material.LADDER);
         Ladder ladder = (Ladder) block.getBlockData();
         a.addPlacedBlock(block);
@@ -830,7 +834,13 @@ public class v1_19_R3 extends VersionSupport {
     }
 
     @Override
-    public void playVillagerEffect(@NotNull Player player, Location location){
+    public void playVillagerEffect(@NotNull Player player, Location location) {
         player.spawnParticle(Particle.VILLAGER_HAPPY, location, 1);
+    }
+
+    @Override
+    public boolean isGlass(@NotNull Material type) {
+        return type.toString().contains("_STAINED_GLASS") ||
+                type == Material.GLASS || type == Material.TINTED_GLASS;
     }
 }

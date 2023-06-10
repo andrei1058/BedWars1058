@@ -62,6 +62,7 @@ import com.andrei1058.bedwars.lobbysocket.LoadedUsersCleaner;
 import com.andrei1058.bedwars.lobbysocket.SendTask;
 import com.andrei1058.bedwars.maprestore.internal.InternalAdapter;
 import com.andrei1058.bedwars.money.internal.MoneyListeners;
+import com.andrei1058.bedwars.patch.TntGlassFix;
 import com.andrei1058.bedwars.shop.ShopManager;
 import com.andrei1058.bedwars.sidebar.*;
 import com.andrei1058.bedwars.sidebar.thread.RefreshTitleTask;
@@ -307,8 +308,27 @@ public class BedWars extends JavaPlugin {
             }, 1L);
 
         // Register events
-        registerEvents(new EnderPearlLanded(), new QuitAndTeleportListener(), new BreakPlace(), new DamageDeathMove(), new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(),
-                new FireballListener(), new EggBridge(), new SpectatorListeners(), new BaseListener(), new TargetListener(), new LangListener(), new Warnings(this), new ChatAFK(), new GameEndListener());
+        registerEvents(
+                new EnderPearlLanded(),
+                new QuitAndTeleportListener(),
+                new BreakPlace(),
+                new DamageDeathMove(),
+                new Inventory(),
+                new Interact(),
+                new RefreshGUI(),
+                new HungerWeatherSpawn(),
+                new CmdProcess(),
+                new FireballListener(),
+                new EggBridge(),
+                new SpectatorListeners(),
+                new BaseListener(),
+                new TargetListener(),
+                new LangListener(),
+                new Warnings(this),
+                new ChatAFK(),
+                new GameEndListener(),
+                new TntGlassFix()
+        );
 
         if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_HEAL_POOL_ENABLE)) {
             registerEvents(new HealPoolListner());

@@ -770,4 +770,9 @@ public class v1_8_R3 extends VersionSupport {
         PacketPlayOutWorldParticles pwp = new PacketPlayOutWorldParticles(EnumParticle.VILLAGER_HAPPY, true, (float) location.getX(), (float) location.getY(), (float) location.getZ(), (float) 0, (float) 0, (float) 0, (float) 0, 1);
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(pwp);
     }
+
+    @Override
+    public boolean isGlass(Material type) {
+        return type == Material.STAINED_GLASS || type == Material.GLASS || type == Material.STAINED_GLASS_PANE;
+    }
 }

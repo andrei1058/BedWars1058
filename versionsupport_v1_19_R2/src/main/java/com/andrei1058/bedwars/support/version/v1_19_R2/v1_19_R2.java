@@ -831,4 +831,10 @@ public class v1_19_R2 extends VersionSupport {
     public void playVillagerEffect(@NotNull Player player, Location location){
         player.spawnParticle(Particle.VILLAGER_HAPPY, location, 1);
     }
+
+    @Override
+    public boolean isGlass(@NotNull Material type) {
+        return type.toString().contains("_STAINED_GLASS") ||
+                type == Material.GLASS || type == Material.TINTED_GLASS;
+    }
 }

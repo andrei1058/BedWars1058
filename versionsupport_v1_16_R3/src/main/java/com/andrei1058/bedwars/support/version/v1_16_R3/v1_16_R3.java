@@ -139,7 +139,7 @@ public class v1_16_R3 extends VersionSupport {
     @Override
     public void minusAmount(Player p, org.bukkit.inventory.ItemStack i, int amount) {
         if (i.getAmount() - amount <= 0) {
-            if(p.getInventory().getItemInOffHand().equals(i)) {
+            if (p.getInventory().getItemInOffHand().equals(i)) {
                 p.getInventory().setItemInOffHand(null);
             } else {
                 p.getInventory().removeItem(i);
@@ -682,22 +682,22 @@ public class v1_16_R3 extends VersionSupport {
 
     @Override
     public void clearArrowsFromPlayerBody(Player player) {
-        ((CraftLivingEntity)player).getHandle().getDataWatcher().set(new DataWatcherObject<>(11, DataWatcherRegistry.b),-1);
+        ((CraftLivingEntity) player).getHandle().getDataWatcher().set(new DataWatcherObject<>(11, DataWatcherRegistry.b), -1);
     }
 
     @Override
-    public void placeTowerBlocks(Block b, IArena a, TeamColor color, int x, int y,int z){
+    public void placeTowerBlocks(Block b, IArena a, TeamColor color, int x, int y, int z) {
         b.getRelative(x, y, z).setType(color.woolMaterial());
         a.addPlacedBlock(b.getRelative(x, y, z));
     }
 
     @Override
-    public void placeLadder(Block b, int x, int y,int z, IArena a, int ladderdata){
-        Block block = b.getRelative(x,y,z);  //ladder block
+    public void placeLadder(Block b, int x, int y, int z, IArena a, int ladderdata) {
+        Block block = b.getRelative(x, y, z);  //ladder block
         block.setType(Material.LADDER);
         Ladder ladder = (Ladder) block.getBlockData();
         a.addPlacedBlock(block);
-        switch (ladderdata){
+        switch (ladderdata) {
             case 2:
                 ladder.setFacing(BlockFace.NORTH);
                 block.setBlockData(ladder);
@@ -717,7 +717,14 @@ public class v1_16_R3 extends VersionSupport {
     }
 
     @Override
-    public void playVillagerEffect(@NotNull Player player, Location location){
+    public void playVillagerEffect(@NotNull Player player, Location location) {
         player.spawnParticle(org.bukkit.Particle.VILLAGER_HAPPY, location, 1);
+    }
+
+    @Override
+    public boolean isGlass(@NotNull Material type) {
+        return type.toString().endsWith("_STAINED_GLASS") ||
+                type.toString().endsWith("_STAINED_GLASS_PANE") ||
+                type == Material.GLASS;
     }
 }

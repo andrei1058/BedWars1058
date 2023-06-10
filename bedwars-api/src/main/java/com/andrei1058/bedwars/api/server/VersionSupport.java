@@ -463,4 +463,10 @@ public abstract class VersionSupport {
     public abstract void placeLadder(Block b, int x, int y, int z, IArena a, int ladderdata);
 
     public abstract void playVillagerEffect(Player player, Location location);
+
+    /**
+     * Check if given type is glass.
+     * @param type material
+     */
+    public abstract boolean isGlass(Material type) ;
 }
