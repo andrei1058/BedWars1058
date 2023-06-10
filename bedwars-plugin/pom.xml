@@ -237,43 +237,49 @@
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-base</artifactId>
-            <version>23.3</version>
+            <version>23.4</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
-            <artifactId>sidebar-eight</artifactId>
-            <version>23.3</version>
+            <artifactId>sidebar-v1_8_R3</artifactId>
+            <version>23.4</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
-            <artifactId>sidebar-twelve</artifactId>
-            <version>23.3</version>
+            <artifactId>sidebar-v1_12_R1</artifactId>
+            <version>23.4</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
-            <artifactId>sidebar-sixteen</artifactId>
-            <version>23.3</version>
+            <artifactId>sidebar-v1_16_R1</artifactId>
+            <version>23.4</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
-            <artifactId>sidebar-seventeen</artifactId>
-            <version>23.3</version>
+            <artifactId>sidebar-v1_17_R1</artifactId>
+            <version>23.4</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
-            <artifactId>sidebar-eighteen</artifactId>
-            <version>23.3</version>
+            <artifactId>sidebar-v1_18_R2</artifactId>
+            <version>23.4</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
-            <artifactId>sidebar-nineteen</artifactId>
-            <version>23.3</version>
+            <artifactId>sidebar-v1_19_R2</artifactId>
+            <version>23.4</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.spigot.sidebar</groupId>
+            <artifactId>sidebar-v1_19_R3</artifactId>
+            <version>23.4</version>
             <scope>compile</scope>
         </dependency>
         <!--        End of Sidebar LIB-->
