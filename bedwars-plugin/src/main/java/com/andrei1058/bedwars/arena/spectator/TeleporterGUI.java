@@ -77,8 +77,12 @@ public class TeleporterGUI {
         IArena arena = Arena.getArenaByPlayer(p);
         if (arena == null) return;
 
-        int playersNum = arena.getPlayers().size();
-        int size = (playersNum % 9) == 0 ? playersNum : ((int) Math.ceil(playersNum / 9.0)) * 9;
+        int playerCount = arena.getPlayers().size();
+        int size = (playerCount % 9) == 0 ? playerCount : ((int) Math.ceil(playerCount / 9.0)) * 9;
+
+        if (size > 54) {
+            size = 54;
+        }
 
         Inventory inv = Bukkit.createInventory(p, size, getMsg(p, Messages.ARENA_SPECTATOR_TELEPORTER_GUI_NAME));
         refreshInv(p, inv);
