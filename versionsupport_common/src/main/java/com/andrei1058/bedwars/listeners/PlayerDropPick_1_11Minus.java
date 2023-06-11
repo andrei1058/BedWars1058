@@ -49,7 +49,7 @@ public class PlayerDropPick_1_11Minus implements Listener {
     @SuppressWarnings("deprecation")
     @EventHandler
     public void onPickup(PlayerPickupItemEvent e) {
-        if (api.getServerType() != ServerType.BUNGEE) {
+        if (api.getServerType() == ServerType.MULTIARENA) {
             //noinspection ConstantConditions
             if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(api.getLobbyWorld())) {
                 e.setCancelled(true);
@@ -111,7 +111,7 @@ public class PlayerDropPick_1_11Minus implements Listener {
 
     @EventHandler
     public void onDrop(PlayerDropItemEvent e) {
-        if (api.getServerType() != ServerType.BUNGEE) {
+        if (api.getServerType() == ServerType.MULTIARENA) {
             //noinspection ConstantConditions
             if (e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(api.getLobbyWorld())) {
                 e.setCancelled(true);
