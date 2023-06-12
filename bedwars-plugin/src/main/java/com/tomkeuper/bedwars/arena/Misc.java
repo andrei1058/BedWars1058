@@ -103,7 +103,7 @@ public class Misc {
     private static void forceKick(Player p, @Nullable IArena arena, boolean notAbandon) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("Connect");
-        out.writeUTF(config.getYml().getString("lobbyServer"));
+        out.writeUTF(config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_LOBBY_SERVER));
         p.sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
         if (arena != null && !notAbandon && arena.getStatus() == GameState.playing) {
             if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_MARK_LEAVE_AS_ABANDON)) {
