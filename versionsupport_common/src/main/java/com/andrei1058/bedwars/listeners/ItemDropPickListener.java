@@ -92,7 +92,7 @@ public class ItemDropPickListener {
      */
     private static boolean managePickup(Item item, LivingEntity player) {
         if (!(player instanceof Player)) return false;
-        if (api.getServerType() != ServerType.BUNGEE) {
+        if (api.getServerType() == ServerType.MULTIARENA) {
             //noinspection ConstantConditions
             if (player.getLocation().getWorld().getName().equalsIgnoreCase(api.getLobbyWorld())) {
                 return true;
@@ -145,7 +145,7 @@ public class ItemDropPickListener {
      */
     private static boolean manageDrop(Entity player, Item item) {
         if (!(player instanceof Player)) return false;
-        if (api.getServerType() != ServerType.BUNGEE) {
+        if (api.getServerType() == ServerType.MULTIARENA) {
             //noinspection ConstantConditions
             if (player.getLocation().getWorld().getName().equalsIgnoreCase(api.getLobbyWorld())) {
                 return true;

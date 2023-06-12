@@ -94,7 +94,8 @@ public class CmdStart extends SubCommand {
 
         IArena a = Arena.getArenaByPlayer(p);
         if (a != null){
-            if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting){
+            GameState status = a.getStatus();
+            if (status == GameState.waiting || status == GameState.starting){
                 if (!a.isPlayer(p)) return false;
             } else {
                 return false;

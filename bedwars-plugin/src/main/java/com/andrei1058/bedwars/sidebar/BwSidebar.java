@@ -231,10 +231,11 @@ public class BwSidebar implements ISidebar {
             providers.add(new PlaceholderProvider("{max}", () -> String.valueOf(arena.getMaxPlayers())));
             providers.add(new PlaceholderProvider("{nextEvent}", this::getNextEventName));
             providers.add(new PlaceholderProvider("{time}", () -> {
-                if (this.arena.getStatus() == GameState.playing || this.arena.getStatus() == GameState.restarting) {
+                GameState status = this.arena.getStatus();
+                if (status == GameState.playing || status == GameState.restarting) {
                     return getNextEventTime();
                 } else {
-                    if (this.arena.getStatus() == GameState.starting) {
+                    if (status == GameState.starting) {
                         if (arena.getStartingTask() != null) {
                             return String.valueOf(arena.getStartingTask().getCountdown() + 1);
                         }
@@ -429,32 +430,36 @@ public class BwSidebar implements ISidebar {
             return;
         }
 
-        if (arena.getStatus() != GameState.playing) {
-            if (arena.getStatus() == GameState.waiting) {
-                prefix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_WAITING, player, null);
-                suffix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_WAITING, player, null);
-            } else if (arena.getStatus() == GameState.starting) {
-                prefix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_STARTING, player, null);
-                suffix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_STARTING, player, null);
-            } else if (arena.getStatus() == GameState.restarting) {
+        GameState status = arena.getStatus();
+        if (status != GameState.playing) {
+            switch (status) {
+                case waiting:
+                    prefix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_WAITING, player, null);
+                    suffix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_WAITING, player, null);
+                    break;
+                case starting:
+                    prefix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_STARTING, player, null);
+                    suffix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_STARTING, player, null);
+                    break;
+                case restarting:
+                    ITeam team = arena.getTeam(player);
+                    if (null == team) {
+                        team = arena.getExTeam(player.getUniqueId());
+                    }
 
-                ITeam team = arena.getTeam(player);
-                if (null == team) {
-                    team = arena.getExTeam(player.getUniqueId());
-                }
+                    String displayName = null == team ? "" : team.getDisplayName(Language.getPlayerLanguage(this.player));
 
-                String displayName = null == team ? "" : team.getDisplayName(Language.getPlayerLanguage(this.player));
-
-                HashMap<String, String> replacements = new HashMap<>();
-                replacements.put("{team}", null == team ? "" : team.getColor().chat() + displayName);
-                replacements.put("{teamLetter}", null == team ? "" : team.getColor().chat() + (displayName.substring(0, 1)));
-                replacements.put("{teamColor}", null == team ? "" : team.getColor().chat().toString());
+                    HashMap<String, String> replacements = new HashMap<>();
+                    replacements.put("{team}", null == team ? "" : team.getColor().chat() + displayName);
+                    replacements.put("{teamLetter}", null == team ? "" : team.getColor().chat() + (displayName.substring(0, 1)));
+                    replacements.put("{teamColor}", null == team ? "" : team.getColor().chat().toString());
 
 
-                prefix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_RESTARTING, player, replacements);
-                suffix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_RESTARTING, player, replacements);
-            } else {
-                throw new RuntimeException("Unhandled game status!");
+                    prefix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_RESTARTING, player, replacements);
+                    suffix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_RESTARTING, player, replacements);
+                    break;
+                default:
+                    throw new IllegalStateException("Unhandled game status!");
             }
             PlayerTab t = handle.playerTabCreate(tabListName, player, prefix, suffix, PlayerTab.PushingRule.NEVER);
             t.add(player);
@@ -559,6 +564,8 @@ public class BwSidebar implements ISidebar {
                 headerPath = Messages.FORMATTING_SIDEBAR_TAB_HEADER_RESTARTING;
                 footerPath = Messages.FORMATTING_SIDEBAR_TAB_FOOTER_RESTARTING;
                 break;
+            default:
+                throw new IllegalStateException("Unhandled arena status");
         }
 
         SidebarManager.getInstance().sendHeaderFooter(
@@ -637,23 +644,25 @@ public class BwSidebar implements ISidebar {
 
             return !config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_LOBBY);
         }
+        GameState status = arena.getStatus();
+
         // if tab formatting is disabled in game
-        if (arena.getStatus() == GameState.playing && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_PLAYING)) {
+        if (status == GameState.playing && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_PLAYING)) {
             return false;
         }
 
         // if tab formatting is disabled in starting
-        if (arena.getStatus() == GameState.starting && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_STARTING)) {
+        if (status == GameState.starting && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_STARTING)) {
             return false;
         }
 
         // if tab formatting is disabled in waiting
-        if (arena.getStatus() == GameState.waiting && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_WAITING)) {
+        if (status == GameState.waiting && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_WAITING)) {
             return false;
         }
 
         // if tab formatting is disabled in restarting
-        return arena.getStatus() != GameState.restarting || !config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_RESTARTING);
+        return status != GameState.restarting || !config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_RESTARTING);
     }
 
     @Override
