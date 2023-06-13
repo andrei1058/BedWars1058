@@ -517,6 +517,7 @@ public class BedWars extends JavaPlugin {
 
         /* Initialize shop */
         shop = new ShopManager();
+        shop.loadShop();
 
         //Leave this code at the end of the enable method
         for (Language l : Language.getLanguages()) {
