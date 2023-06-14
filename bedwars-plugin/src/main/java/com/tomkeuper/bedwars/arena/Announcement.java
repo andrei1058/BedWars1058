@@ -27,18 +27,16 @@ public class Announcement {
     }
 
     public void loadMessages(Player p) {
-        for (String announcement : Language.getList(p, Messages.ARENA_IN_GAME_ANNOUNCEMENT)) {
-            this.messages.add(announcement);
-        }
-        if (this.task != null) {
-            this.task.cancel();
-        }
+        this.messages.addAll(Language.getList(p, Messages.ARENA_IN_GAME_ANNOUNCEMENT));
         if (!this.messages.isEmpty()) {
             this.start();
         }
     }
 
     public void start() {
+        if (this.task != null) {
+            this.task.cancel();
+        }
         this.task = new BukkitRunnable() {
             int index = 0;
 
