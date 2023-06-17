@@ -506,9 +506,15 @@ public interface BedWars {
 
     IScoreboardService getScoreboardManager();
 
-    IEconomy getEconomy();
+    /**
+     * Get economy util.
+     */
+    IEconomy getEconomyUtil();
 
-    IChat getChat();
+    /**
+     * Get chat util.
+     */
+    IChat getChatUtil();
 
     /**
      * Change the economy interface.

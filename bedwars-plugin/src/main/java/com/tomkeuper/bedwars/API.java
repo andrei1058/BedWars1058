@@ -41,7 +41,6 @@ import com.tomkeuper.bedwars.commands.bedwars.MainCommand;
 import com.tomkeuper.bedwars.shop.main.CategoryContent;
 import com.tomkeuper.bedwars.sidebar.BoardManager;
 import com.tomkeuper.bedwars.stats.StatsAPI;
-import com.tomkeuper.bedwars.support.vault.Economy;
 import com.tomkeuper.bedwars.upgrades.UpgradesManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -452,12 +451,12 @@ public class API implements com.tomkeuper.bedwars.api.BedWars {
     }
 
     @Override
-    public IEconomy getEconomy() {
+    public IEconomy getEconomyUtil() {
         return BedWars.getEconomy();
     }
 
     @Override
-    public IChat getChat() {
+    public IChat getChatUtil() {
         return BedWars.getChatSupport();
     }
 
