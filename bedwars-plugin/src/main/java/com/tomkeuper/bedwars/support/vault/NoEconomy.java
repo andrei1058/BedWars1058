@@ -20,9 +20,10 @@
 
 package com.tomkeuper.bedwars.support.vault;
 
+import com.tomkeuper.bedwars.api.economy.IEconomy;
 import org.bukkit.entity.Player;
 
-public class NoEconomy implements Economy {
+public class NoEconomy implements IEconomy {
     @Override
     public boolean isEconomy() {
         return false;

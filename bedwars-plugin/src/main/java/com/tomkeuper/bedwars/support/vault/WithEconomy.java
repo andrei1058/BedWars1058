@@ -20,9 +20,10 @@
 
 package com.tomkeuper.bedwars.support.vault;
 
+import com.tomkeuper.bedwars.api.economy.IEconomy;
 import org.bukkit.entity.Player;
 
-public class WithEconomy implements Economy {
+public class WithEconomy implements IEconomy {
 
     private static net.milkbowl.vault.economy.Economy economy;
 

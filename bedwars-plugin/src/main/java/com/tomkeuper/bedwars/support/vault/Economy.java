@@ -20,21 +20,16 @@
 
 package com.tomkeuper.bedwars.support.vault;
 
-import com.tomkeuper.bedwars.api.BedWars;
 import org.bukkit.entity.Player;
 
-public interface Economy extends BedWars.EconomyUtil {
+public interface Economy {
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
 
-    @Override
     boolean isEconomy();
 
-    @Override
     double getMoney(Player p);
 
-    @Override
     void giveMoney(Player p, double money);
 
-    @Override
     void buyAction(Player p, double cost);
 }
