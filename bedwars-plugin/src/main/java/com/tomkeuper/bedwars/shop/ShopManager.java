@@ -44,7 +44,6 @@ public class ShopManager extends ConfigManager {
     public ShopManager() {
         super(BedWars.plugin, "shop", BedWars.plugin.getDataFolder().getPath());
         saveDefaults();
-        loadShop();
         registerListeners();
     }
 
@@ -384,7 +383,7 @@ public class ShopManager extends ConfigManager {
         save();
     }
 
-    private void loadShop() {
+    public void loadShop() {
         //Quick Buy Button
         ItemStack button = BedWars.nms.createItemStack(getYml().getString(ConfigPath.SHOP_SETTINGS_QUICK_BUY_BUTTON_MATERIAL),
                 getYml().getInt(ConfigPath.SHOP_SETTINGS_QUICK_BUY_BUTTON_AMOUNT), (short) getYml().getInt(ConfigPath.SHOP_SETTINGS_QUICK_BUY_BUTTON_DATA));

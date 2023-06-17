@@ -47,13 +47,11 @@ import com.tomkeuper.bedwars.api.language.Language;
 import com.tomkeuper.bedwars.api.language.Messages;
 import com.tomkeuper.bedwars.api.region.Region;
 import com.tomkeuper.bedwars.api.server.ServerType;
+import com.tomkeuper.bedwars.api.tasks.AnnouncementTask;
 import com.tomkeuper.bedwars.api.tasks.PlayingTask;
 import com.tomkeuper.bedwars.api.tasks.RestartingTask;
 import com.tomkeuper.bedwars.api.tasks.StartingTask;
-import com.tomkeuper.bedwars.arena.tasks.GamePlayingTask;
-import com.tomkeuper.bedwars.arena.tasks.GameRestartingTask;
-import com.tomkeuper.bedwars.arena.tasks.GameStartingTask;
-import com.tomkeuper.bedwars.arena.tasks.ReJoinTask;
+import com.tomkeuper.bedwars.arena.tasks.*;
 import com.tomkeuper.bedwars.arena.team.BedWarsTeam;
 import com.tomkeuper.bedwars.arena.team.TeamAssigner;
 import com.tomkeuper.bedwars.configuration.ArenaConfig;
@@ -107,7 +105,7 @@ public class Arena implements IArena {
     private static final HashMap<Player, IArena> arenaByPlayer = new HashMap<>();
     private static final HashMap<String, IArena> arenaByIdentifier = new HashMap<>();
     private static final LinkedList<IArena> arenas = new LinkedList<>();
-    private static int gamesBeforeRestart = config.getInt(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART);
+    private static int gamesBeforeRestart = config.getInt(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_GAMES_BEFORE_RESTART);
     public static HashMap<UUID, Integer> afkCheck = new HashMap<>();
     public static HashMap<UUID, Integer> magicMilk = new HashMap<>();
 
@@ -168,6 +166,8 @@ public class Arena implements IArena {
     private StartingTask startingTask = null;
     private PlayingTask playingTask = null;
     private RestartingTask restartingTask = null;
+
+    private AnnouncementTask announcementTask;
 
     /* ARENA GENERATORS */
     private List<IGenerator> oreGenerators = new ArrayList<>();
@@ -1222,6 +1222,7 @@ public class Arena implements IArena {
         if (getRestartingTask() != null) getRestartingTask().cancel();
         if (getStartingTask() != null) getStartingTask().cancel();
         if (getPlayingTask() != null) getPlayingTask().cancel();
+        if (getAnnouncementTask() != null) getAnnouncementTask().cancel();
         if (null != moneyperMinuteTask){
             moneyperMinuteTask.cancel();
         }
@@ -1597,6 +1598,9 @@ public class Arena implements IArena {
                 moneyperMinuteTask = new MoneyPerMinuteTask(this);
             }
             playingTask = new GamePlayingTask(this);
+            if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_IN_GAME_ANNOUNCEMENT_ENABLE)) {
+                announcementTask = new GameAnnouncementTask(this);
+            }
         } else if (status == GameState.restarting) {
             restartingTask = new GameRestartingTask(this);
         }
@@ -2309,6 +2313,14 @@ public class Arena implements IArena {
     }
 
     /**
+     * Get instance of the game announcement task.
+     */
+    @Override
+    public AnnouncementTask getAnnouncementTask() {
+        return announcementTask;
+    }
+
+    /**
      * Get arena ore generators Ore Generators.
      */
     public List<IGenerator> getOreGenerators() {
@@ -2670,7 +2682,7 @@ public class Arena implements IArena {
         }
 
         // check amount of active clones
-        return config.getInt(ConfigPath.GENERAL_CONFIGURATION_AUTO_SCALE_LIMIT) > activeClones;
+        return config.getInt(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_AUTO_SCALE_LIMIT) > activeClones;
     }
 
     @Override
