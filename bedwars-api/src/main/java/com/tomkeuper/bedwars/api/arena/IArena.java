@@ -26,6 +26,7 @@ import com.tomkeuper.bedwars.api.arena.team.ITeamAssigner;
 import com.tomkeuper.bedwars.api.configuration.ConfigManager;
 import com.tomkeuper.bedwars.api.language.Language;
 import com.tomkeuper.bedwars.api.region.Region;
+import com.tomkeuper.bedwars.api.tasks.AnnouncementTask;
 import com.tomkeuper.bedwars.api.tasks.PlayingTask;
 import com.tomkeuper.bedwars.api.tasks.RestartingTask;
 import com.tomkeuper.bedwars.api.tasks.StartingTask;
@@ -357,6 +358,8 @@ public interface IArena {
     PlayingTask getPlayingTask();
 
     RestartingTask getRestartingTask();
+
+    AnnouncementTask getAnnouncementTask();
 
     /**
      * Get Ore Generators.
