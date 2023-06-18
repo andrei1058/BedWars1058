@@ -31,6 +31,7 @@ public class PlayerXpGainEvent extends Event {
     private Player player;
     private int amount;
     private XpSource xpSource;
+    private boolean cancelled = false;
 
     /**
      * Called when a player receives new xp.
@@ -82,5 +83,19 @@ public class PlayerXpGainEvent extends Event {
 
     public static HandlerList getHandlerList() {
         return HANDLERS;
+    }
+
+    /**
+     * Check if event was cancelled
+     */
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    /**
+     * Cancel event
+     */
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
     }
 }

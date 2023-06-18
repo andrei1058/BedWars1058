@@ -175,7 +175,9 @@ public class PlayerLevel {
         this.currentXp += xp;
         upgradeLevel();
         updateProgressBar();
-        Bukkit.getPluginManager().callEvent(new PlayerXpGainEvent(Bukkit.getPlayer(uuid), xp, source));
+        PlayerXpGainEvent event = new PlayerXpGainEvent(Bukkit.getPlayer(uuid), xp, source);
+        Bukkit.getPluginManager().callEvent(event);
+        if(event.isCancelled()) return;
         modified = true;
     }
 
