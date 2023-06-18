@@ -62,7 +62,7 @@ public class InternalMenu implements UpgradesIndex {
         ITeam team = a.getTeam(player);
         if (team == null) return;
         if (!BedWars.getAPI().getArenaUtil().isPlaying(player)) return;
-        Inventory inv = Bukkit.createInventory(null, 45, Language.getMsg(player, Messages.UPGRADES_MENU_GUI_NAME_PATH + name));
+        Inventory inv = Bukkit.createInventory(null, UpgradesManager.getMenuSize(), Language.getMsg(player, Messages.UPGRADES_MENU_GUI_NAME_PATH + name));
         for (Map.Entry<Integer, MenuContent> entry : menuContentBySlot.entrySet()) {
             inv.setItem(entry.getKey(), entry.getValue().getDisplayItem(player, team));
         }

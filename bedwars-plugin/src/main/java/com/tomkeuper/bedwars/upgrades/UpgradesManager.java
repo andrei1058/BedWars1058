@@ -530,4 +530,12 @@ public class UpgradesManager {
     public static UpgradesConfig getConfiguration() {
         return upgrades;
     }
+
+    public static int getMenuSize() {
+        int size = getConfiguration().getInt("default-upgrades-settings.menu-size");
+        if((size < 0 || size > 54) && size % 9 != 0) {
+            size = 45;
+        }
+        return size;
+    }
 }
