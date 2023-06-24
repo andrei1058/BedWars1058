@@ -559,6 +559,7 @@ public abstract class VersionSupport {
         BiFunction<Location, Block, Boolean> actualCallback = (loc, block) -> {
             if (!arena.isBlockPlaced(block))
                 // the block is not placed by a player
+                // todo based on map protection policy (allow map break + protected regions)
                 return true;
 
             // If it's protected by glass then we should skip it!
