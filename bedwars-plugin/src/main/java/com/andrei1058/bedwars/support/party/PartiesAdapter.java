@@ -27,9 +27,11 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.party.Party;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PartiesAdapter implements Party {
 
@@ -172,6 +174,15 @@ public class PartiesAdapter implements Party {
                 }
             }
         }
+    }
+
+    @Override
+    public Player getOwner(Player member) {
+        return Bukkit.getPlayer(Objects.requireNonNull(api.getParty(member.getUniqueId())).getLeader());
+    }
+
+    @Override
+    public void promote(@NotNull Player owner, @NotNull Player target) {
     }
 
     @Override

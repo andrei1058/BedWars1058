@@ -31,17 +31,19 @@ import com.andrei1058.bedwars.api.server.ISetupSession;
 import com.andrei1058.bedwars.api.server.RestoreAdapter;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.server.VersionSupport;
+import com.andrei1058.bedwars.api.sidebar.ISidebarService;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.shop.main.CategoryContent;
-import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
+import com.andrei1058.bedwars.sidebar.SidebarService;
 import com.andrei1058.bedwars.stats.StatsAPI;
 import com.andrei1058.bedwars.upgrades.UpgradesManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.HashMap;
@@ -416,19 +418,12 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
 
         @Override
         public void removePlayerScoreboard(Player player) {
-            BedWarsScoreboard scoreboard = BedWarsScoreboard.getSBoard(player.getUniqueId());
-            if (null != scoreboard){
-                scoreboard.remove();
-            }
+            SidebarService.getInstance().remove(player);
         }
 
         @Override
-        public void givePlayerScoreboard(Player player, boolean delay) {
-            BedWarsScoreboard scoreboard = BedWarsScoreboard.getSBoard(player.getUniqueId());
-            if (null == scoreboard){
-                IArena arena = Arena.getArenaByPlayer(player);
-                BedWarsScoreboard.giveScoreboard(player, arena, delay);
-            }
+        public void givePlayerScoreboard(@NotNull Player player, boolean delay) {
+            SidebarService.getInstance().giveSidebar(player, Arena.getArenaByPlayer(player), delay);
         }
     };
 
@@ -440,5 +435,10 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
     @Override
     public boolean isShuttingDown() {
         return BedWars.isShuttingDown();
+    }
+
+    @Override
+    public ISidebarService getScoreboardManager() {
+        return SidebarService.getInstance();
     }
 }

@@ -47,6 +47,7 @@ public class BuyItem implements IBuyItem {
     private ItemStack itemStack;
     private boolean autoEquip = false;
     private boolean permanent = false;
+    private boolean unbreakable = false;
     private boolean loaded = false;
     private final String upgradeIdentifier;
 
@@ -155,7 +156,9 @@ public class BuyItem implements IBuyItem {
         }
         if (yml.get(upgradeIdentifier + "." + ConfigPath.SHOP_CATEGORY_CONTENT_IS_PERMANENT) != null) {
             permanent = yml.getBoolean(upgradeIdentifier + "." + ConfigPath.SHOP_CATEGORY_CONTENT_IS_PERMANENT);
-
+        }
+        if (yml.get(upgradeIdentifier + "." + ConfigPath.SHOP_CATEGORY_CONTENT_IS_UNBREAKABLE) != null) {
+            unbreakable = yml.getBoolean(upgradeIdentifier + "." + ConfigPath.SHOP_CATEGORY_CONTENT_IS_UNBREAKABLE);
         }
 
         loaded = true;
@@ -193,13 +196,13 @@ public class BuyItem implements IBuyItem {
                 i.setItemMeta(im);
             }
 
-            if (m == Material.LEATHER_HELMET || m == Material.CHAINMAIL_HELMET || m == Material.DIAMOND_HELMET || m == nms.materialGoldenHelmet() || m == Material.IRON_HELMET) {
+            if (m == Material.LEATHER_HELMET || m == Material.CHAINMAIL_HELMET || m == Material.IRON_HELMET || m == Material.DIAMOND_HELMET || m == nms.materialGoldenHelmet() || m == nms.materialNetheriteHelmet()) {
                 if (permanent) i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
                 player.getInventory().setHelmet(i);
-            } else if (m == Material.LEATHER_CHESTPLATE || m == Material.CHAINMAIL_CHESTPLATE || m == nms.materialGoldenChestPlate() || m == Material.DIAMOND_CHESTPLATE || m == Material.IRON_CHESTPLATE) {
+            } else if (m == Material.LEATHER_CHESTPLATE || m == Material.CHAINMAIL_CHESTPLATE || m == Material.IRON_CHESTPLATE || m == Material.DIAMOND_CHESTPLATE || m == nms.materialGoldenChestPlate() || m == nms.materialNetheriteChestPlate() || m == nms.materialElytra()) {
                 if (permanent) i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
                 player.getInventory().setChestplate(i);
-            } else if (m == Material.LEATHER_LEGGINGS || m == Material.CHAINMAIL_LEGGINGS || m == Material.DIAMOND_LEGGINGS || m == nms.materialGoldenLeggings() || m == Material.IRON_LEGGINGS) {
+            } else if (m == Material.LEATHER_LEGGINGS || m == Material.CHAINMAIL_LEGGINGS || m == Material.IRON_LEGGINGS  || m == Material.DIAMOND_LEGGINGS || m == nms.materialGoldenLeggings()|| m == nms.materialNetheriteLeggings()) {
                 if (permanent) i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
                 player.getInventory().setLeggings(i);
             } else {
@@ -225,7 +228,7 @@ public class BuyItem implements IBuyItem {
             i = nms.colourItem(i, arena.getTeam(player));
             if (im != null) {
                 if (permanent) nms.setUnbreakable(im);
-
+                if (unbreakable) nms.setUnbreakable(im);
                 if (i.getType() == Material.BOW) {
                     if (permanent) nms.setUnbreakable(im);
                     for (TeamEnchant e : arena.getTeam(player).getBowsEnchantments()) {
@@ -294,5 +297,13 @@ public class BuyItem implements IBuyItem {
 
     public void setPermanent(boolean permanent) {
         this.permanent = permanent;
+    }
+
+    public boolean isUnbreakable() {
+        return unbreakable;
+    }
+
+    public void setUnbreakable(boolean unbreakable) {
+        this.unbreakable = unbreakable;
     }
 }

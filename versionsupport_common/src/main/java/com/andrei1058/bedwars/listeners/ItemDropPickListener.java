@@ -87,23 +87,12 @@ public class ItemDropPickListener {
         }
     }
 
-    // common
-    public static class GeneratorCollect implements Listener {
-        @EventHandler
-        //Prevent AFK players from picking items
-        public void onCollect(PlayerGeneratorCollectEvent e){
-            if (api.getAFKUtil().isPlayerAFK(e.getPlayer())){
-                e.setCancelled(true);
-            }
-        }
-    }
-
     /**
      * @return true if event should be cancelled
      */
     private static boolean managePickup(Item item, LivingEntity player) {
         if (!(player instanceof Player)) return false;
-        if (api.getServerType() != ServerType.BUNGEE) {
+        if (api.getServerType() == ServerType.MULTIARENA) {
             //noinspection ConstantConditions
             if (player.getLocation().getWorld().getName().equalsIgnoreCase(api.getLobbyWorld())) {
                 return true;
@@ -136,13 +125,15 @@ public class ItemDropPickListener {
                     ItemMeta itemMeta = new ItemStack(material).getItemMeta();
 
                     //Call ore pick up event
-                    PlayerGeneratorCollectEvent event = new PlayerGeneratorCollectEvent((Player) player, item, a);
-                    Bukkit.getPluginManager().callEvent(event);
-                    if (event.isCancelled()) {
-                        return true;
-                    } else {
-                        item.getItemStack().setItemMeta(itemMeta);
-                    }
+                    if (!api.getAFKUtil().isPlayerAFK(((Player) player).getPlayer())){
+                        PlayerGeneratorCollectEvent event = new PlayerGeneratorCollectEvent((Player) player, item, a);
+                        Bukkit.getPluginManager().callEvent(event);
+                        if (event.isCancelled()) {
+                            return true;
+                        } else {
+                            item.getItemStack().setItemMeta(itemMeta);
+                        }
+                    }else return true; //Cancel event if player is afk
                 }
             }
         }
@@ -154,7 +145,7 @@ public class ItemDropPickListener {
      */
     private static boolean manageDrop(Entity player, Item item) {
         if (!(player instanceof Player)) return false;
-        if (api.getServerType() != ServerType.BUNGEE) {
+        if (api.getServerType() == ServerType.MULTIARENA) {
             //noinspection ConstantConditions
             if (player.getLocation().getWorld().getName().equalsIgnoreCase(api.getLobbyWorld())) {
                 return true;

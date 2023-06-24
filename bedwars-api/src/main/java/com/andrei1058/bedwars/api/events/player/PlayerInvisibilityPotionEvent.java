@@ -46,7 +46,7 @@ public class PlayerInvisibilityPotionEvent extends Event {
     }
 
 
-    public static enum Type {
+    public enum Type {
         ADDED, REMOVED
     }
 

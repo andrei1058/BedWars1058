@@ -5,12 +5,12 @@
     <parent>
         <artifactId>BedWars1058</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>22.3-SNAPSHOT</version>
+        <version>22.9-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>versionsupport-common</artifactId>
-    <version>${parent.version}</version>
+    <version>${project.parent.version}</version>
 
     <repositories>
         <repository>
@@ -23,7 +23,7 @@
         <dependency>
             <groupId>com.andrei1058.bedwars</groupId>
             <artifactId>bedwars-api</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

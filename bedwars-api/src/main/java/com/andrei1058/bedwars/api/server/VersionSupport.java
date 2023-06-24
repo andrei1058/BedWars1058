@@ -57,6 +57,8 @@ import java.util.function.BiFunction;
 public abstract class VersionSupport {
 
     private static String name2;
+    public static String PLUGIN_TAG_GENERIC_KEY = "BedWars1058";
+    public static String PLUGIN_TAG_TIER_KEY = "tierIdentifier";
 
     private Effect eggBridge;
     protected static Random random = new Random();
@@ -201,7 +203,7 @@ public abstract class VersionSupport {
                 // If a block is a glass
                 return true;
             }
-            
+
             if (arena != null && !arena.isBlockPlaced(nextBlock)) {
                 return true;
             }
@@ -380,6 +382,26 @@ public abstract class VersionSupport {
     public abstract Material materialGoldenLeggings();
 
     /**
+     * Get netherite  helmet material
+     */
+    public abstract Material materialNetheriteHelmet();
+
+    /**
+     * Get netherite chest plate
+     */
+    public abstract Material materialNetheriteChestPlate();
+
+    /**
+     * Get netherite leggings
+     */
+    public abstract Material materialNetheriteLeggings();
+
+    /**
+     * Get elytra - supports: 1.12.2+
+     */
+    public abstract Material materialElytra();
+
+    /**
      * Cake material
      */
     public abstract Material materialCake();
@@ -511,6 +533,12 @@ public abstract class VersionSupport {
     public abstract void playRedStoneDot(Player player);
 
     public abstract void clearArrowsFromPlayerBody(Player player);
+
+    public abstract void placeTowerBlocks(Block b, IArena a, TeamColor color, int x, int y,int z);
+
+    public abstract void placeLadder(Block b, int x, int y, int z, IArena a, int ladderdata);
+
+    public abstract void playVillagerEffect(Player player, Location location);
 
     /**
      * Calculates BrokenBlocks from an explosion source (with blast proof glass and world protection)

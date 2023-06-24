@@ -57,7 +57,7 @@ public class CategoryContent implements ICategoryContent {
     private String contentName;
     private String itemNamePath, itemLorePath;
     private String identifier;
-    private boolean permanent = false, downgradable = false;
+    private boolean permanent = false, downgradable = false, unbreakable = false;
     private byte weight = 0;
     private ShopCategory father;
 
@@ -97,6 +97,10 @@ public class CategoryContent implements ICategoryContent {
 
         if (yml.get(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_IS_DOWNGRADABLE) != null) {
             downgradable = yml.getBoolean(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_IS_DOWNGRADABLE);
+        }
+
+        if (yml.get(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_IS_UNBREAKABLE) != null) {
+            unbreakable = yml.getBoolean(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_IS_UNBREAKABLE);
         }
 
         if (yml.get(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_WEIGHT) != null) {
@@ -260,7 +264,11 @@ public class CategoryContent implements ICategoryContent {
             String buyStatus;
 
             if (isPermanent() && shopCache.hasCachedItem(this) && shopCache.getCachedItem(this).getTier() == getContentTiers().size()) {
-                buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_MAXED);
+                if (!(nms.isArmor(i))){
+                    buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_MAXED);  //ARMOR
+                }else {
+                    buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_ARMOR);
+                }
             } else if (!canAfford) {
                 buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CANT_AFFORD).replace("{currency}", translatedCurrency);
             } else {

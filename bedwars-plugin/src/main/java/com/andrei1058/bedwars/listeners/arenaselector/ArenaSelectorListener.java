@@ -63,21 +63,25 @@ public class ArenaSelectorListener implements Listener {
         String arenaName = data.split("=")[1];
         IArena arena = Arena.getArenaByName(arenaName);
         if (arena == null) return;
+        GameState status = arena.getStatus();
 
         if (event.getClick() == ClickType.LEFT) {
-            if ((arena.getStatus() == GameState.waiting || arena.getStatus() == GameState.starting) && arena.addPlayer(player, false)) {
+            if ((status == GameState.waiting || status == GameState.starting) && arena.addPlayer(player, false)) {
                 Sounds.playSound("join-allowed", player);
             } else {
                 Sounds.playSound("join-denied", player);
                 player.sendMessage(Language.getMsg(player, Messages.ARENA_JOIN_DENIED_SELECTOR));
             }
         } else if (event.getClick() == ClickType.RIGHT) {
-            if (arena.getStatus() == GameState.playing && arena.addSpectator(player, false, null)) {
+            if (status == GameState.playing && arena.addSpectator(player, false, null)) {
                 Sounds.playSound("spectate-allowed", player);
             } else {
                 player.sendMessage(Language.getMsg(player, Messages.ARENA_SPECTATE_DENIED_SELECTOR));
                 Sounds.playSound("spectate-denied", player);
             }
+        } else {
+            // Incorrect click
+            return;
         }
 
         player.closeInventory();

@@ -62,11 +62,10 @@ public class ShoutCommand extends BukkitCommand {
 
     public static void updateShout(Player player) {
         if (player.hasPermission("bw.shout.bypass")) return;
-        if (shoutCooldown.containsKey(player.getUniqueId())) {
-            shoutCooldown.replace(player.getUniqueId(), System.currentTimeMillis() + (BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_SHOUT_COOLDOWN) * 1000));
-        } else {
-            shoutCooldown.put(player.getUniqueId(), System.currentTimeMillis() + (BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_SHOUT_COOLDOWN) * 1000));
-        }
+        if (shoutCooldown.containsKey(player.getUniqueId()))
+            shoutCooldown.replace(player.getUniqueId(), System.currentTimeMillis() + (BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_SHOUT_COOLDOWN) * 1000L));
+        else
+            shoutCooldown.put(player.getUniqueId(), System.currentTimeMillis() + (BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_SHOUT_COOLDOWN) * 1000L));
     }
 
     public static boolean isShoutCooldown(Player player) {

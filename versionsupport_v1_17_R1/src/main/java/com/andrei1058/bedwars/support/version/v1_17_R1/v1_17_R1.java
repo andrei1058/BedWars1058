@@ -55,16 +55,20 @@ import net.minecraft.world.entity.EnumItemSlot;
 import net.minecraft.world.entity.item.EntityTNTPrimed;
 import net.minecraft.world.entity.projectile.EntityFireball;
 import net.minecraft.world.entity.projectile.IProjectile;
-import net.minecraft.world.item.*;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBase;
 import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.type.Bed;
+import org.bukkit.block.data.type.Ladder;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
@@ -73,7 +77,6 @@ import org.bukkit.craftbukkit.v1_17_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftTNTPrimed;
 import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.*;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -179,7 +182,7 @@ public class v1_17_R1 extends VersionSupport {
         EntityTNTPrimed nmsTNT = (((CraftTNTPrimed) tnt).getHandle());
         try {
             //noinspection JavaReflectionMemberAccess
-            Field sourceField = EntityTNTPrimed.class.getDeclaredField("source");
+            Field sourceField = EntityTNTPrimed.class.getDeclaredField("d");
             sourceField.setAccessible(true);
             sourceField.set(nmsTNT, nmsEntityLiving);
         } catch (Exception ex) {
@@ -191,7 +194,7 @@ public class v1_17_R1 extends VersionSupport {
     public boolean isArmor(org.bukkit.inventory.ItemStack itemStack) {
         if (CraftItemStack.asNMSCopy(itemStack) == null) return false;
         if (CraftItemStack.asNMSCopy(itemStack).getItem() == null) return false;
-        return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemArmor;
+        return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemArmor || CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemElytra;
     }
 
     @Override
@@ -308,41 +311,24 @@ public class v1_17_R1 extends VersionSupport {
     @Override
     public void hideArmor(Player victim, Player receiver) {
         List<Pair<EnumItemSlot, ItemStack>> items = new ArrayList<>();
-        List<Pair<EnumItemSlot, ItemStack>> hands = new ArrayList<>();
-        hands.add(new Pair<>(EnumItemSlot.a, new ItemStack(Item.getById(0))));
-        hands.add(new Pair<>(EnumItemSlot.b, new ItemStack(Item.getById(0))));
-
         items.add(new Pair<>(EnumItemSlot.f, new ItemStack(Item.getById(0))));
         items.add(new Pair<>(EnumItemSlot.e, new ItemStack(Item.getById(0))));
         items.add(new Pair<>(EnumItemSlot.d, new ItemStack(Item.getById(0))));
         items.add(new Pair<>(EnumItemSlot.c, new ItemStack(Item.getById(0))));
         PacketPlayOutEntityEquipment packet1 = new PacketPlayOutEntityEquipment(victim.getEntityId(), items);
-        PacketPlayOutEntityEquipment packet2 = new PacketPlayOutEntityEquipment(victim.getEntityId(), hands);
         EntityPlayer pc = ((CraftPlayer) receiver).getHandle();
-        if (victim != receiver) {
-            pc.b.sendPacket(packet2);
-        }
         pc.b.sendPacket(packet1);
     }
 
     @Override
     public void showArmor(Player victim, Player receiver) {
         List<Pair<EnumItemSlot, ItemStack>> items = new ArrayList<>();
-        List<Pair<EnumItemSlot, ItemStack>> hands = new ArrayList<>();
-
-        hands.add(new Pair<>(EnumItemSlot.a, CraftItemStack.asNMSCopy(victim.getInventory().getItemInMainHand())));
-        hands.add(new Pair<>(EnumItemSlot.b, CraftItemStack.asNMSCopy(victim.getInventory().getItemInOffHand())));
-
         items.add(new Pair<>(EnumItemSlot.f, CraftItemStack.asNMSCopy(victim.getInventory().getHelmet())));
         items.add(new Pair<>(EnumItemSlot.e, CraftItemStack.asNMSCopy(victim.getInventory().getChestplate())));
         items.add(new Pair<>(EnumItemSlot.d, CraftItemStack.asNMSCopy(victim.getInventory().getLeggings())));
         items.add(new Pair<>(EnumItemSlot.c, CraftItemStack.asNMSCopy(victim.getInventory().getBoots())));
         PacketPlayOutEntityEquipment packet1 = new PacketPlayOutEntityEquipment(victim.getEntityId(), items);
-        PacketPlayOutEntityEquipment packet2 = new PacketPlayOutEntityEquipment(victim.getEntityId(), hands);
         EntityPlayer pc = ((CraftPlayer) receiver).getHandle();
-        if (victim != receiver) {
-            pc.b.sendPacket(packet2);
-        }
         pc.b.sendPacket(packet1);
     }
 
@@ -505,6 +491,26 @@ public class v1_17_R1 extends VersionSupport {
     @Override
     public org.bukkit.Material materialGoldenLeggings() {
         return org.bukkit.Material.GOLDEN_LEGGINGS;
+    }
+
+    @Override
+    public org.bukkit.Material materialNetheriteHelmet() {
+        return Material.NETHERITE_HELMET;
+    }
+
+    @Override
+    public org.bukkit.Material materialNetheriteChestPlate() {
+        return Material.NETHERITE_CHESTPLATE;
+    }
+
+    @Override
+    public org.bukkit.Material materialNetheriteLeggings() {
+        return Material.NETHERITE_LEGGINGS;
+    }
+
+    @Override
+    public org.bukkit.Material materialElytra() {
+        return Material.ELYTRA;
     }
 
     @Override
@@ -710,6 +716,43 @@ public class v1_17_R1 extends VersionSupport {
     @Override
     public void clearArrowsFromPlayerBody(Player player) {
         ((CraftLivingEntity)player).getHandle().getDataWatcher().set(new DataWatcherObject<>(12, DataWatcherRegistry.b),-1);
+    }
+
+    @Override
+    public void placeTowerBlocks(Block b, IArena a, TeamColor color, int x, int y,int z){
+        b.getRelative(x, y, z).setType(color.woolMaterial());
+        a.addPlacedBlock(b.getRelative(x, y, z));
+    }
+
+    @Override
+    public void placeLadder(Block b, int x, int y,int z, IArena a, int ladderdata){
+        Block block = b.getRelative(x,y,z);  //ladder block
+        block.setType(Material.LADDER);
+        Ladder ladder = (Ladder) block.getBlockData();
+        a.addPlacedBlock(block);
+        switch (ladderdata) {
+            case 2 -> {
+                ladder.setFacing(BlockFace.NORTH);
+                block.setBlockData(ladder);
+            }
+            case 3 -> {
+                ladder.setFacing(BlockFace.SOUTH);
+                block.setBlockData(ladder);
+            }
+            case 4 -> {
+                ladder.setFacing(BlockFace.WEST);
+                block.setBlockData(ladder);
+            }
+            case 5 -> {
+                ladder.setFacing(BlockFace.EAST);
+                block.setBlockData(ladder);
+            }
+        }
+    }
+
+    @Override
+    public void playVillagerEffect(Player player, Location location){
+        player.spawnParticle(Particle.VILLAGER_HAPPY, location, 1);
     }
 
     @Override

@@ -35,6 +35,8 @@ import net.minecraft.server.v1_12_R1.Item;
 import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.block.Bed;
 import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
@@ -180,7 +182,7 @@ public class v1_12_R1 extends VersionSupport {
     public boolean isArmor(org.bukkit.inventory.ItemStack itemStack) {
         if (CraftItemStack.asNMSCopy(itemStack) == null) return false;
         if (CraftItemStack.asNMSCopy(itemStack).getItem() == null) return false;
-        return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemArmor;
+        return CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemArmor || CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemElytra;
     }
 
     @Override
@@ -303,17 +305,11 @@ public class v1_12_R1 extends VersionSupport {
 
     @Override
     public void hideArmor(Player victim, Player receiver) {
-        PacketPlayOutEntityEquipment hand1 = new PacketPlayOutEntityEquipment(victim.getEntityId(), EnumItemSlot.MAINHAND, new ItemStack(Item.getById(0)));
-        PacketPlayOutEntityEquipment hand2 = new PacketPlayOutEntityEquipment(victim.getEntityId(), EnumItemSlot.OFFHAND, new ItemStack(Item.getById(0)));
         PacketPlayOutEntityEquipment helmet = new PacketPlayOutEntityEquipment(victim.getEntityId(), EnumItemSlot.HEAD, new ItemStack(Item.getById(0)));
         PacketPlayOutEntityEquipment chest = new PacketPlayOutEntityEquipment(victim.getEntityId(), EnumItemSlot.CHEST, new ItemStack(Item.getById(0)));
         PacketPlayOutEntityEquipment pants = new PacketPlayOutEntityEquipment(victim.getEntityId(), EnumItemSlot.LEGS, new ItemStack(Item.getById(0)));
         PacketPlayOutEntityEquipment boots = new PacketPlayOutEntityEquipment(victim.getEntityId(), EnumItemSlot.FEET, new ItemStack(Item.getById(0)));
         EntityPlayer pc = ((CraftPlayer) receiver).getHandle();
-        if (victim != receiver) {
-            pc.playerConnection.sendPacket(hand1);
-            pc.playerConnection.sendPacket(hand2);
-        }
         pc.playerConnection.sendPacket(helmet);
         pc.playerConnection.sendPacket(chest);
         pc.playerConnection.sendPacket(pants);
@@ -322,17 +318,11 @@ public class v1_12_R1 extends VersionSupport {
 
     @Override
     public void showArmor(Player victim, Player receiver) {
-        PacketPlayOutEntityEquipment hand1 = new PacketPlayOutEntityEquipment(victim.getEntityId(), EnumItemSlot.MAINHAND, CraftItemStack.asNMSCopy(victim.getInventory().getItemInMainHand()));
-        PacketPlayOutEntityEquipment hand2 = new PacketPlayOutEntityEquipment(victim.getEntityId(), EnumItemSlot.OFFHAND, CraftItemStack.asNMSCopy(victim.getInventory().getItemInOffHand()));
         PacketPlayOutEntityEquipment helmet = new PacketPlayOutEntityEquipment(victim.getEntityId(), EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(victim.getInventory().getHelmet()));
         PacketPlayOutEntityEquipment chest = new PacketPlayOutEntityEquipment(victim.getEntityId(), EnumItemSlot.CHEST, CraftItemStack.asNMSCopy(victim.getInventory().getChestplate()));
         PacketPlayOutEntityEquipment pants = new PacketPlayOutEntityEquipment(victim.getEntityId(), EnumItemSlot.LEGS, CraftItemStack.asNMSCopy(victim.getInventory().getLeggings()));
         PacketPlayOutEntityEquipment boots = new PacketPlayOutEntityEquipment(victim.getEntityId(), EnumItemSlot.FEET, CraftItemStack.asNMSCopy(victim.getInventory().getBoots()));
         EntityPlayer pc = ((CraftPlayer) receiver).getHandle();
-        if (victim != receiver) {
-            pc.playerConnection.sendPacket(hand1);
-            pc.playerConnection.sendPacket(hand2);
-        }
         pc.playerConnection.sendPacket(helmet);
         pc.playerConnection.sendPacket(chest);
         pc.playerConnection.sendPacket(pants);
@@ -496,6 +486,26 @@ public class v1_12_R1 extends VersionSupport {
     @Override
     public org.bukkit.Material materialGoldenLeggings() {
         return org.bukkit.Material.GOLD_LEGGINGS;
+    }
+
+    @Override
+    public org.bukkit.Material materialNetheriteHelmet() {
+        return Material.DIAMOND_HELMET; //Netherite doesn't exist
+    }
+
+    @Override
+    public org.bukkit.Material materialNetheriteChestPlate() {
+        return Material.DIAMOND_CHESTPLATE; //Netherite doesn't exist
+    }
+
+    @Override
+    public org.bukkit.Material materialNetheriteLeggings() {
+        return Material.DIAMOND_LEGGINGS; //Netherite doesn't exist
+    }
+
+    @Override
+    public org.bukkit.Material materialElytra() {
+        return Material.ELYTRA;
     }
 
     @Override
@@ -711,6 +721,25 @@ public class v1_12_R1 extends VersionSupport {
     @Override
     public void clearArrowsFromPlayerBody(Player player) {
         ((CraftLivingEntity)player).getHandle().getDataWatcher().set(new DataWatcherObject<>(10, DataWatcherRegistry.b),-1);
+    }
+
+    @Override
+    public void placeTowerBlocks(org.bukkit.block.Block b, IArena a, TeamColor color, int x, int y, int z){
+        b.getRelative(x, y, z).setType(Material.WOOL);
+        setBlockTeamColor(b.getRelative(x, y, z), color);
+        a.addPlacedBlock(b.getRelative(x, y, z));
+    }
+
+    @Override
+    public void placeLadder(org.bukkit.block.Block b, int x, int y, int z, IArena a, int ladderdata){
+        b.getRelative(x, y, z).setType(Material.LADDER);
+        b.getRelative(x, y, z).setData((byte)ladderdata);
+        a.addPlacedBlock(b.getRelative(x, y, z));
+    }
+
+    @Override
+    public void playVillagerEffect(Player player, Location location){
+        player.spawnParticle(Particle.VILLAGER_HAPPY, location, 1);
     }
 
     @Override

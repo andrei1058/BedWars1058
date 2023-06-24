@@ -361,13 +361,11 @@ public class v1_8_R3 extends VersionSupport {
     @Override
     public void hideArmor(Player victim, Player receiver) {
         if (victim.equals(receiver)) return;
-        PacketPlayOutEntityEquipment hand = new PacketPlayOutEntityEquipment(victim.getEntityId(), 0, CraftItemStack.asNMSCopy(new ItemStack(org.bukkit.Material.AIR)));
         PacketPlayOutEntityEquipment helmet = new PacketPlayOutEntityEquipment(victim.getEntityId(), 1, CraftItemStack.asNMSCopy(new ItemStack(org.bukkit.Material.AIR)));
         PacketPlayOutEntityEquipment chest = new PacketPlayOutEntityEquipment(victim.getEntityId(), 2, CraftItemStack.asNMSCopy(new ItemStack(org.bukkit.Material.AIR)));
         PacketPlayOutEntityEquipment pants = new PacketPlayOutEntityEquipment(victim.getEntityId(), 3, CraftItemStack.asNMSCopy(new ItemStack(org.bukkit.Material.AIR)));
         PacketPlayOutEntityEquipment boots = new PacketPlayOutEntityEquipment(victim.getEntityId(), 4, CraftItemStack.asNMSCopy(new ItemStack(org.bukkit.Material.AIR)));
         PlayerConnection boundTo = ((CraftPlayer) receiver).getHandle().playerConnection;
-        boundTo.sendPacket(hand);
         boundTo.sendPacket(helmet);
         boundTo.sendPacket(chest);
         boundTo.sendPacket(pants);
@@ -378,15 +376,11 @@ public class v1_8_R3 extends VersionSupport {
     public void showArmor(Player victim, Player receiver) {
         if (victim.equals(receiver)) return;
         EntityPlayer entityPlayer = ((CraftPlayer) victim).getHandle();
-        PacketPlayOutEntityEquipment hand1 = new PacketPlayOutEntityEquipment(entityPlayer.getId(), 0, entityPlayer.inventory.getItemInHand());
         PacketPlayOutEntityEquipment helmet = new PacketPlayOutEntityEquipment(entityPlayer.getId(), 4, entityPlayer.inventory.getArmorContents()[3]);
         PacketPlayOutEntityEquipment chest = new PacketPlayOutEntityEquipment(entityPlayer.getId(), 3, entityPlayer.inventory.getArmorContents()[2]);
         PacketPlayOutEntityEquipment pants = new PacketPlayOutEntityEquipment(entityPlayer.getId(), 2, entityPlayer.inventory.getArmorContents()[1]);
         PacketPlayOutEntityEquipment boots = new PacketPlayOutEntityEquipment(entityPlayer.getId(), 1, entityPlayer.inventory.getArmorContents()[0]);
         EntityPlayer boundTo = ((CraftPlayer) receiver).getHandle();
-        if (victim != receiver) {
-            boundTo.playerConnection.sendPacket(hand1);
-        }
         boundTo.playerConnection.sendPacket(helmet);
         boundTo.playerConnection.sendPacket(chest);
         boundTo.playerConnection.sendPacket(pants);
@@ -537,6 +531,26 @@ public class v1_8_R3 extends VersionSupport {
     @Override
     public org.bukkit.Material materialGoldenLeggings() {
         return org.bukkit.Material.GOLD_LEGGINGS;
+    }
+
+    @Override
+    public org.bukkit.Material materialNetheriteHelmet() {
+        return Material.DIAMOND_HELMET; //Netherite doesn't exist
+    }
+
+    @Override
+    public org.bukkit.Material materialNetheriteChestPlate() {
+        return Material.DIAMOND_CHESTPLATE; //Netherite doesn't exist
+    }
+
+    @Override
+    public org.bukkit.Material materialNetheriteLeggings() {
+        return Material.DIAMOND_LEGGINGS; //Netherite doesn't exist
+     }
+
+    @Override
+    public org.bukkit.Material materialElytra() {
+        return null; //Elytra is 1.9+
     }
 
     @Override
@@ -745,6 +759,26 @@ public class v1_8_R3 extends VersionSupport {
     @Override
     public void clearArrowsFromPlayerBody(Player player) {
         ((CraftLivingEntity)player).getHandle().getDataWatcher().watch(9, (byte)-1);
+    }
+
+    @Override
+    public void placeTowerBlocks(org.bukkit.block.Block b, IArena a, TeamColor color, int x, int y, int z){
+        b.getRelative(x, y, z).setType(Material.WOOL);
+        setBlockTeamColor(b.getRelative(x, y, z), color);
+        a.addPlacedBlock(b.getRelative(x, y, z));
+    }
+
+    @Override
+    public void placeLadder(org.bukkit.block.Block b, int x, int y, int z, IArena a, int ladderdata){
+        b.getRelative(x, y, z).setType(Material.LADDER);
+        b.getRelative(x, y, z).setData((byte)ladderdata);
+        a.addPlacedBlock(b.getRelative(x, y, z));
+    }
+
+    @Override
+    public void playVillagerEffect(Player player, Location location){
+        PacketPlayOutWorldParticles pwp = new PacketPlayOutWorldParticles(EnumParticle.VILLAGER_HAPPY, true, (float) location.getX(), (float) location.getY(), (float) location.getZ(), (float) 0, (float) 0, (float) 0, (float) 0, 1);
+        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(pwp);
     }
 
     @Override

@@ -35,10 +35,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Map;
-import java.util.UUID;
 
 import static com.andrei1058.bedwars.BedWars.nms;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
@@ -142,12 +142,6 @@ public class GamePlayingTask implements Runnable, PlayingTask {
                         }
                     }
                     getArena().updateNextEvent();
-                    for (IGenerator o : arena.getOreGenerators()) {
-                        Location l = o.getLocation();
-                        for (int y = 0; y < 20; y++) {
-                            l.clone().subtract(0, y, 0).getBlock().setType(Material.AIR);
-                        }
-                    }
                     for (ITeam team : arena.getTeams()){
                         for (IGenerator o : team.getGenerators()) {
                             Location l = o.getLocation();
@@ -241,12 +235,13 @@ public class GamePlayingTask implements Runnable, PlayingTask {
         if (!getArena().getShowTime().isEmpty()) {
             for (Map.Entry<Player, Integer> e : getArena().getShowTime().entrySet()) {
                 if (e.getValue() <= 0) {
-                    getArena().getShowTime().remove(e.getKey());
-                    Bukkit.getPluginManager().callEvent(new PlayerInvisibilityPotionEvent(PlayerInvisibilityPotionEvent.Type.REMOVED, getArena().getTeam(e.getKey()), e.getKey(), getArena()));
                     for (Player p : e.getKey().getWorld().getPlayers()) {
                         nms.showArmor(e.getKey(), p);
                         //nms.showPlayer(e.getKey(), p);
                     }
+                    e.getKey().removePotionEffect(PotionEffectType.INVISIBILITY);
+                    getArena().getShowTime().remove(e.getKey());
+                    Bukkit.getPluginManager().callEvent(new PlayerInvisibilityPotionEvent(PlayerInvisibilityPotionEvent.Type.REMOVED, getArena().getTeam(e.getKey()), e.getKey(), getArena()));
                 } else {
                     getArena().getShowTime().replace(e.getKey(), e.getValue() - 1);
                 }

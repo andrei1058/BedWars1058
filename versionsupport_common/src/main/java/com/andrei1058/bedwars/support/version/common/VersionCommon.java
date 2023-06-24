@@ -24,6 +24,7 @@ import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.server.VersionSupport;
 import com.andrei1058.bedwars.listeners.Interact_1_13Plus;
 import com.andrei1058.bedwars.listeners.ItemDropPickListener;
+import com.andrei1058.bedwars.listeners.PlayerDropPick_1_11Minus;
 import com.andrei1058.bedwars.listeners.SwapItem;
 import com.andrei1058.bedwars.shop.defaultrestore.ShopItemRestoreListener;
 import org.bukkit.Bukkit;
@@ -44,7 +45,7 @@ public class VersionCommon {
             // 11 and older
             if (versionSupport.getVersion() < 5){
                 registerListeners(versionSupport.getPlugin() /*, new ItemDropPickListener.PlayerDrop()*/, new ItemDropPickListener.PlayerPickup()/*,
-                        new ShopItemRestoreListener.PlayerDrop()*/, new ShopItemRestoreListener.PlayerPickup());
+                        new ShopItemRestoreListener.PlayerDrop()*/, new ShopItemRestoreListener.PlayerPickup(), new PlayerDropPick_1_11Minus(api));
             }
 
             // 13 and newer
@@ -64,7 +65,7 @@ public class VersionCommon {
             //}
 
             // common
-            registerListeners(versionSupport.getPlugin(), new ItemDropPickListener.GeneratorCollect(), new ShopItemRestoreListener.DefaultRestoreInvClose());
+            registerListeners(versionSupport.getPlugin(), new ShopItemRestoreListener.DefaultRestoreInvClose());
     }
 
     private void registerListeners(Plugin plugin, Listener... listener) {

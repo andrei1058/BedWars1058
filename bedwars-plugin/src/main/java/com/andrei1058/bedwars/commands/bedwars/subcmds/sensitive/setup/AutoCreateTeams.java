@@ -134,7 +134,7 @@ public class AutoCreateTeams extends SubCommand {
                     p.sendMessage("§6§lNEW TEAMS FOUND:");
                     for (String tf : found) {
                         String name = TeamColor.enName(tf);
-                        p.sendMessage("§f ▪ " + TeamColor.getChatColor(name) + name);
+                        p.sendMessage("§f ▪ " + TeamColor.getChatColor(name) + name.replace("_", " "));
                     }
                     p.spigot().sendMessage(Misc.msgHoverClick("§6 ▪ §7§lClick here to create found teams.", "§fClick to create found teams!", "/" + getParent().getName() + " " + getSubCommandName(), ClickEvent.Action.RUN_COMMAND));
                 }
@@ -227,16 +227,7 @@ public class AutoCreateTeams extends SubCommand {
      * Check if server version is 1.13 or higher
      */
     public static boolean is13Higher() {
-        switch (BedWars.getServerVersion()) {
-            case "v1_8_R3":
-            case "v1_9_R1":
-            case "v1_9_R2":
-            case "v1_10_R1":
-            case "v1_11_R1":
-            case "v1_12_R1":
-                return false;
-        }
-        return true;
+        return !(BedWars.getServerVersion().equals("v1_8_R3") || BedWars.getServerVersion().equals("v1_12_R1"));
     }
 
     @Override

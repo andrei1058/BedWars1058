@@ -9,30 +9,24 @@ public class TeamEliminatedEvent extends Event {
     private static final HandlerList HANDLERS = new HandlerList();
 
     private final IArena arena;
-    private final ITeam eliminated;
+    private final ITeam team;
 
     /**
-     * Called when all Team gets killed and Bed is broken during the game.
-     *
-     *
+     * Called when all player on a team get killed and Bed is broken.
+     * @param arena the arena.
+     * @param team the eliminated team.
      */
 
-    public TeamEliminatedEvent(IArena arena, ITeam eliminated) {
+    public TeamEliminatedEvent(IArena arena, ITeam team) {
         this.arena = arena;
-        this.eliminated = eliminated;
+        this.team = team;
     }
 
-    public IArena getArena() {
-        return arena;
-    }
+    public IArena getArena() {return arena;}
 
-    public ITeam getTeam() {return eliminated;}
+    public ITeam getTeam() {return team;}
 
-    public HandlerList getHandlers() {
-        return HANDLERS;
-    }
+    public HandlerList getHandlers() {return HANDLERS;}
 
-    public static HandlerList getHandlerList() {
-        return HANDLERS;
-    }
+    public static HandlerList getHandlerList() {return HANDLERS;}
 }

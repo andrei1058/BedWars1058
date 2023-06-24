@@ -69,7 +69,17 @@ public class Misc {
     public static void moveToLobbyOrKick(Player p, @Nullable IArena arena, boolean notAbandon) {
         if (getServerType() != ServerType.BUNGEE) {
             if (!p.getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName())) {
-                p.teleport(config.getConfigLoc("lobbyLoc"));
+                Location loc = config.getConfigLoc("lobbyLoc");
+                if (loc != null){ // Can happen when location is not set in config
+                    try{
+                        p.teleport(loc);
+                    } catch (Exception ignored){
+                        Bukkit.getLogger().severe("Could not teleport player to lobby! Try setting the lobby again with /bw setLobby");
+                    }
+                } else {
+                    forceKick(p, arena, notAbandon);
+                    return;
+                }
                 if (arena != null) {
                     if (arena.isSpectator(p)) {
                         arena.removeSpectator(p, false);
