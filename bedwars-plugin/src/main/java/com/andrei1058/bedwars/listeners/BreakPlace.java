@@ -42,6 +42,7 @@ import com.andrei1058.bedwars.popuptower.TowerNorth;
 import com.andrei1058.bedwars.popuptower.TowerSouth;
 import com.andrei1058.bedwars.popuptower.TowerWest;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -538,10 +539,12 @@ public class BreakPlace implements Listener {
             if (a.getNextEvent() != NextEvent.GAME_END) {
                 List<Block> destroyed = e.blockList();
                 for (Block block : new ArrayList<>(destroyed)) {
+
+                    // todo This is protecting map blocks from explosion BUT
+                    // we have an option to allow map alterations during gameplay
+                    // and this code must check that option
                     if (!a.isBlockPlaced(block)) {
                         e.blockList().remove(block);
-                    } else if (AutoCreateTeams.is13Higher()) {
-                        if (block.getType().toString().contains("_GLASS")) e.blockList().remove(block);
                     }
                 }
             }
@@ -557,10 +560,12 @@ public class BreakPlace implements Listener {
             if (a.getNextEvent() != NextEvent.GAME_END) {
                 List<Block> destroyed = e.blockList();
                 for (Block block : new ArrayList<>(destroyed)) {
+
+                    // todo This is protecting map blocks from explosion BUT
+                    // we have an option to allow map alterations during gameplay
+                    // and this code must check that option
                     if (!a.isBlockPlaced(block)) {
                         e.blockList().remove(block);
-                    } else if (AutoCreateTeams.is13Higher()) {
-                        if (block.getType().toString().contains("_GLASS")) e.blockList().remove(block);
                     }
                 }
             }

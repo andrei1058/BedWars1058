@@ -1,11 +1,14 @@
 package com.andrei1058.bedwars.patch;
 
 import com.andrei1058.bedwars.BedWars;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.util.BlockIterator;
@@ -22,7 +25,7 @@ import java.util.List;
  */
 public class TntGlassFix implements Listener {
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlow(@NotNull EntityExplodeEvent e) {
         if (e.getEntity().getType() == EntityType.PRIMED_TNT ||
                 e.getEntity().getType() == EntityType.FIREBALL ||
@@ -31,6 +34,7 @@ public class TntGlassFix implements Listener {
 
             for (Block block :
                     destroyed) {
+                Bukkit.broadcastMessage("Processing Block: "+block.getLocation().toString());
                 boolean glass = false;
                 for (Block iterated : getBlocksFromLocToLoc(e.getEntity().getLocation(), block.getLocation())) {
                     if (BedWars.nms.isGlass(iterated.getType())) {
@@ -39,8 +43,22 @@ public class TntGlassFix implements Listener {
                     }
                 }
                 if (glass) {
+                    Bukkit.broadcastMessage(ChatColor.GREEN+"Protected by glass");
                     e.blockList().remove(block);
+                } else {
+                    Bukkit.broadcastMessage(ChatColor.RED+"Not protected by glass");
                 }
+                Bukkit.broadcastMessage(".....................");
+            }
+        }
+    }
+
+    // todo remove me in production
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onBlow2(@NotNull EntityExplodeEvent e) {
+        for (Block block : e.blockList()) {
+            if (block.getType().toString().contains("WOOL")) {
+                Bukkit.broadcastMessage(ChatColor.RED+"Exploded wool");
             }
         }
     }
