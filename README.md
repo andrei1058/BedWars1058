@@ -20,9 +20,9 @@ It is required to use **Java 11** or newer.
 The internal world restore system is based on zipping and unzipping maps which can become
 heavy if you are still making use of HDDs and you do not have a decent CPU, for a better
 and faster restore system we recommend using one of the following solutions:
-- [SlimeWorldManager](https://www.spigotmc.org/resources/slimeworldmanager.69974/) plug-in
-- [AdvancedWorldManager](https://www.spigotmc.org/resources/advanced-slimeworldmanager.87209/) plug-in
-- [AdvancedSlimePaper](https://github.com/InfernalSuite/AdvancedSlimePaper) server jar
+- [SlimeWorldManager](https://www.spigotmc.org/resources/slimeworldmanager.69974/) plug-in (v2.2.1 **only**)
+- [AdvancedWorldManager](https://www.spigotmc.org/resources/advanced-slimeworldmanager.87209/) plug-in (v2.8.0 **only**)
+- [AdvancedSlimePaper](https://github.com/InfernalSuite/AdvancedSlimePaper) server jar (**1.20 or newer**)
 
 BedWars1058 will hook into it and do everything for you, no additional configuration is needed.
 

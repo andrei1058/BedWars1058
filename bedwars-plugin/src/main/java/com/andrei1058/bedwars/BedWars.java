@@ -97,6 +97,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -221,44 +222,9 @@ public class BedWars extends JavaPlugin {
 
         nms.registerVersionListeners();
 
-        if (Bukkit.getPluginManager().getPlugin("Enhanced-SlimeWorldManager") != null) {
-            try {
-                //noinspection rawtypes
-                Constructor constructor = Class.forName("com.andrei1058.bedwars.arena.mapreset.eswm.ESlimeAdapter").getConstructor(Plugin.class);
-                try {
-                    api.setRestoreAdapter((RestoreAdapter) constructor.newInstance(this));
-                    this.getLogger().info("Hook into Enhanced-SlimeWorldManager support!");
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                    api.setRestoreAdapter(new InternalAdapter(this));
-                    this.getLogger().info("Failed to hook into Enhanced-SlimeWorldManager support! Using the internal reset adapter.");
-                }
-            } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException |
-                     InvocationTargetException e) {
-                e.printStackTrace();
-                api.setRestoreAdapter(new InternalAdapter(this));
-                this.getLogger().info("Failed to hook into Enhanced-SlimeWorldManager support! Using the internal reset adapter.");
-            }
-        } else if (checkSWM()) {
-            try {
-                //noinspection rawtypes
-                Constructor constructor = Class.forName("com.andrei1058.bedwars.arena.mapreset.slime.SlimeAdapter").getConstructor(Plugin.class);
-                try {
-                    api.setRestoreAdapter((RestoreAdapter) constructor.newInstance(this));
-                    this.getLogger().info("Hook into SlimeWorldManager support!");
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                    api.setRestoreAdapter(new InternalAdapter(this));
-                    this.getLogger().info("Failed to hook into SlimeWorldManager support! Using internal reset adapter.");
-                }
-            } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException |
-                     InvocationTargetException e) {
-                e.printStackTrace();
-                api.setRestoreAdapter(new InternalAdapter(this));
-                this.getLogger().info("Failed to hook into SlimeWorldManager support! Using internal reset adapter.");
-            }
-        } else {
+        if (!this.handleWorldAdapter()) {
             api.setRestoreAdapter(new InternalAdapter(this));
+            getLogger().info("Using internal world restore system.");
         }
 
         /* Register commands */
@@ -606,6 +572,54 @@ public class BedWars extends JavaPlugin {
         SpoilPlayerTNTFeature.init();
     }
 
+    /**
+     * Try loading custom adapter support.
+     * @return true when custom adapter was registered.
+     */
+    private boolean handleWorldAdapter() {
+        Plugin swmPlugin = Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
+
+        if (null == swmPlugin){
+            return false;
+        }
+        PluginDescriptionFile pluginDescription = swmPlugin.getDescription();
+        if (null == pluginDescription) {
+            return false;
+        }
+
+        String[] versionString = pluginDescription.getVersion().split("\\.");
+
+
+        try {
+            int major = Integer.parseInt(versionString[0]);
+            int minor = Integer.parseInt(versionString[1]);
+            int release = versionString.length > 3 ? Integer.parseInt(versionString[3]) : 0;
+
+            String adapterPath;
+            if (major == 2 && minor == 2 && release == 1) {
+                adapterPath = "com.andrei1058.bedwars.arena.mapreset.slime.SlimeAdapter";
+            } else if (major == 2 && minor == 8 && release == 0) {
+                adapterPath = "com.andrei1058.bedwars.arena.mapreset.slime.AdvancedSlimeAdapter";
+            } else if (major > 2 || major == 2 && minor >= 10) {
+                adapterPath = "com.andrei1058.bedwars.arena.mapreset.slime.SlimePaperAdapter";
+            } else {
+                return false;
+            }
+
+            Constructor<?> constructor = Class.forName(adapterPath).getConstructor(Plugin.class);
+            getLogger().info("Loading restore adapter: "+adapterPath+" ...");
+
+            RestoreAdapter candidate = (RestoreAdapter) constructor.newInstance(this);
+            api.setRestoreAdapter(candidate);
+            getLogger().info("Hook into "+candidate.getDisplayName()+" as restore adapter.");
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            this.getLogger().info("Something went wrong! Using internal reset adapter...");
+        }
+        return false;
+    }
+
     private void registerDelayedCommands() {
         if (!nms.isBukkitCommandRegistered("shout")) {
             nms.registerCommand("shout", new ShoutCommand("shout"));
@@ -782,41 +796,6 @@ public class BedWars extends JavaPlugin {
 
     public static com.andrei1058.bedwars.api.BedWars getAPI() {
         return api;
-    }
-
-    /**
-     * This is used to check if can hook in SlimeWorldManager support.
-     *
-     * @return true if can load swm support.
-     */
-    private boolean checkSWM() {
-        Plugin plugin = Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
-        if (plugin == null) return false;
-        switch (plugin.getDescription().getVersion()) {
-            case "2.2.0":
-            case "2.1.3":
-            case "2.1.2":
-            case "2.1.1":
-            case "2.1.0":
-            case "2.0.5":
-            case "2.0.4":
-            case "2.0.3":
-            case "2.0.2":
-            case "2.0.1":
-            case "2.0.0":
-            case "1.1.4":
-            case "1.1.3":
-            case "1.1.2":
-            case "1.1.1":
-            case "1.1.0":
-            case "1.0.2":
-            case "1.0.1":
-            case "1.0.0-BETA":
-                getLogger().warning("Could not hook into SlimeWorldManager support! You are running an unsupported version");
-                return false;
-            default:
-                return true;
-        }
     }
 
     public static boolean isShuttingDown() {
