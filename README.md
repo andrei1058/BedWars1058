@@ -128,7 +128,7 @@ Any help is appreciated, just give a quick look at [CONTRIBUTING.md](https://git
 If you are not a programmer you can help answering people in the [Issues](https://github.com/andrei1058/BedWars1058/issues) section or even [translate the plugin in your languae on Crowdin](https://crowdin.com/project/bedwars1058).
 
 ### Translation progress
-[![Translation Chart](https://badges.awesome-crowdin.com/translation-12780139-594479.png)]
+[Translation Chart](https://badges.awesome-crowdin.com/translation-12780139-594479.png)
 
 # 3rd party libraries
 - [bStats](https://bstats.org/getting-started/include-metrics)
@@ -139,3 +139,8 @@ If you are not a programmer you can help answering people in the [Issues](https:
 
 # Contact
 [![Discord Server](https://discordapp.com/api/guilds/201345265821679617/widget.png?style=banner3)](https://discord.gg/XdJfN2X)
+
+# Special Thanks To
+[<img src="https://user-images.githubusercontent.com/21148213/121807008-8ffc6700-cc52-11eb-96a7-2f6f260f8fda.png" alt="" width="150">](https://www.jetbrains.com)
+
+Jetbrains supports BedWars1058 with their [Open Source Licenses](https://www.jetbrains.com/opensource/).
