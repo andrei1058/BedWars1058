@@ -89,3 +89,18 @@ core team. |
 | `under-review` | Pull requests being reviewed by maintainers. |
 | `requires-changes` | Pull requests which need to be updated based on review comments and then reviewed again. |
 | `needs-testing` | Pull requests which need manual testing. |
+
+# How to add support for a new Minecraft version
+
+First give a look at the project structure above on this page, clone the versionsupport of 
+the latest supported version and then make sure to rename the package and class, plus update 
+the pom file with the new version name.
+
+At this point make sure to map the following aspects on the new NMS:
+- Pathfinders for goals and targets in `DespawnableProvider`
+- `PlayerConnection` used to send packets in `v1_nn_Rx` class
+- Glass and other modified blocks in `v1_nn_Rx#registerTntWhitelist`
+- NBTTags in `v1_nn_Rx` for Item, Entity and ItemStacks
+- eventually other functions that were not mapped yet by spigot
+
+For your update to go live, [SidebarLib](https://github.com/andrei1058/SidebarLib) needs to be updated to your new version as well.
