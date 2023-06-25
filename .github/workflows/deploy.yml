@@ -12,7 +12,7 @@ jobs:
       url: https://repo.andrei1058.com
     steps:
       - uses: actions/checkout@v2
-      - name: Set up JDK 17.0.5
+      - name: Set up JDK
         uses: actions/setup-java@v2
         with:
           java-version: '19.0.2+7'
