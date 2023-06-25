@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '20'
-          distribution: 'corretto'
+          distribution: 'adopt'
       - name: Deploy with Maven
         env:
           MVN_REPO_USER: ${{ secrets.MVN_REPO_USER }}
