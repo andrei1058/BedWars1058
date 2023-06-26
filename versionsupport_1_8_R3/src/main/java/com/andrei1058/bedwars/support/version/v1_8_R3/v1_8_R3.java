@@ -770,4 +770,11 @@ public class v1_8_R3 extends VersionSupport {
         PacketPlayOutWorldParticles pwp = new PacketPlayOutWorldParticles(EnumParticle.VILLAGER_HAPPY, true, (float) location.getX(), (float) location.getY(), (float) location.getZ(), (float) 0, (float) 0, (float) 0, (float) 0, 1);
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(pwp);
     }
+
+    @Override
+    public void playExplosiveParticles(Player player, Location location)
+    {
+        PacketPlayOutWorldParticles particlesPacket = new PacketPlayOutWorldParticles(EnumParticle.EXPLOSION_LARGE, true, (float) location.getX(), (float) location.getY(), (float) location.getZ(), 0, 0, 0, 3, 1);
+        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(particlesPacket);
+    }
 }

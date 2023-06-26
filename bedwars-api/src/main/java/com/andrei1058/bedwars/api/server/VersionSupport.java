@@ -463,4 +463,6 @@ public abstract class VersionSupport {
     public abstract void placeLadder(Block b, int x, int y, int z, IArena a, int ladderdata);
 
     public abstract void playVillagerEffect(Player player, Location location);
+
+    public abstract void playExplosiveParticles(Player player, Location location);
 }
