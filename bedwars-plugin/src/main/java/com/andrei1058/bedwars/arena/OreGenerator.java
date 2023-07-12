@@ -32,6 +32,7 @@ import com.andrei1058.bedwars.api.events.gameplay.GeneratorUpgradeEvent;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.region.Cuboid;
+import com.andrei1058.bedwars.api.region.Region;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -58,6 +59,7 @@ public class OreGenerator implements IGenerator {
     private GeneratorType type;
     private int rotate = 0, dropID = 0;
     private ITeam bwt;
+    private Region region;
     boolean up = true;
 
     /**
@@ -82,10 +84,11 @@ public class OreGenerator implements IGenerator {
         loadDefaults();
         BedWars.debug("Initializing new generator at: " + location + " - " + type + " - " + (bwt == null ? "NOTEAM" : bwt.getName()));
 
-        Cuboid c = new Cuboid(location, arena.getConfig().getInt(ConfigPath.ARENA_GENERATOR_PROTECTION), true);
-        c.setMaxY(c.getMaxY() + 5);
-        c.setMinY(c.getMinY() - 2);
+        Cuboid c = new Cuboid(location, arena.getConfig().getInt(ConfigPath.ARENA_GENERATOR_PROTECTION_RADIUS), true);
+        c.setMaxY(location.getBlockY() + arena.getConfig().getInt(ConfigPath.ARENA_GENERATOR_PROTECTION_MAX_Y));
+        c.setMinY(location.getBlockY() - arena.getConfig().getInt(ConfigPath.ARENA_GENERATOR_PROTECTION_MIN_Y));
         arena.getRegionsList().add(c);
+        this.region = c;
     }
 
     @Override
@@ -369,6 +372,11 @@ public class OreGenerator implements IGenerator {
     @Override
     public Location getLocation() {
         return location;
+    }
+
+    @Override
+    public Region getRegion() {
+        return region;
     }
 
     @Override

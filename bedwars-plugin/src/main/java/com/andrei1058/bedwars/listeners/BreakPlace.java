@@ -507,7 +507,7 @@ public class BreakPlace implements Listener {
                         return;
                     }
                     for (IGenerator o : t.getGenerators()) {
-                        if (o.getLocation().distance(e.getBlockClicked().getLocation()) <= a.getConfig().getInt(ConfigPath.ARENA_GENERATOR_PROTECTION)) {
+                        if (o.getRegion().isInRegion(e.getBlockClicked().getLocation())) {
                             e.setCancelled(true);
                             p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
                             return;
@@ -515,7 +515,7 @@ public class BreakPlace implements Listener {
                     }
                 }
                 for (IGenerator o : a.getOreGenerators()) {
-                    if (o.getLocation().distance(e.getBlockClicked().getLocation()) <= a.getConfig().getInt(ConfigPath.ARENA_GENERATOR_PROTECTION)) {
+                    if (o.getRegion().isInRegion(e.getBlockClicked().getLocation())) {
                         e.setCancelled(true);
                         p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
                         return;
