@@ -84,7 +84,8 @@ public class BaseListener implements Listener {
         boolean notOnBase = true;
         for (ITeam bwt : a.getTeams()) {
             /* BaseEnterEvent */
-            if (p.getLocation().distance(bwt.getBed()) <= a.getIslandRadius()) {
+            // Using the spawn location of the team as the trap detection center
+            if (p.getLocation().distance(bwt.getSpawn()) <= a.getIslandRadius()) {
                 notOnBase = false;
                 if (isOnABase.containsKey(p)) {
                     if (isOnABase.get(p) != bwt) {
@@ -123,10 +124,8 @@ public class BaseListener implements Listener {
         } else {
             // Trigger trap
             if (!team.getActiveTraps().isEmpty()) {
-                if (!team.isBedDestroyed()) {
-                    team.getActiveTraps().get(0).trigger(team, e.getPlayer());
-                    team.getActiveTraps().remove(0);
-                }
+                team.getActiveTraps().get(0).trigger(team, e.getPlayer());
+                team.getActiveTraps().remove(0);
             }
 
             /* Manage trap */
