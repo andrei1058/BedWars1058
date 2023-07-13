@@ -100,6 +100,8 @@ public class MainConfig extends ConfigManager {
         //heal pool category
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_HEAL_POOL_ENABLE, true);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_HEAL_POOL_SEEN_TEAM_ONLY, true);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_HEAL_POOL_PARTICLE_REFRESH_INTERVAL, 40);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_HEAL_POOL_PARTICLE_SPARSITY, 100);
 
         // tnt jump category
         yml.addDefault(ConfigPath.GENERAL_TNT_JUMP_BARYCENTER_IN_Y, 0.5);

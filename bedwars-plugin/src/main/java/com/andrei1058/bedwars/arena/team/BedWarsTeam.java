@@ -567,7 +567,8 @@ public class BedWarsTeam implements ITeam {
     public void addBaseEffect(PotionEffectType pef, int amp, int duration) {
         getBaseEffects().add(new PotionEffect(pef, duration, amp));
         for (Player p : new ArrayList<>(getMembers())) {
-            if (p.getLocation().distance(getBed()) <= getArena().getIslandRadius()) {
+            // Give team effects centered around the spawn
+            if (p.getLocation().distance(getSpawn()) <= getArena().getIslandRadius()) {
                 for (PotionEffect e : getBaseEffects()) {
                     p.addPotionEffect(e, true);
                 }

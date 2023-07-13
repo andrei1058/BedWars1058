@@ -42,7 +42,8 @@ public class HealPoolTask extends BukkitRunnable {
         this.maxZ = (teamspawn.getBlockZ() + radius);
         this.minZ = (teamspawn.getBlockZ() - radius);
         this.arena = bwt.getArena();
-        this.runTaskTimerAsynchronously(plugin, 0, 80L);
+        // N ticks refresh particle effects for cycles
+        this.runTaskTimerAsynchronously(plugin, 0, config.getInt(ConfigPath.GENERAL_CONFIGURATION_HEAL_POOL_PARTICLE_REFRESH_INTERVAL));
         healPoolTasks.add(this);
     }
 
@@ -59,7 +60,8 @@ public class HealPoolTask extends BukkitRunnable {
                 for (int z = minZ; z <= maxZ; z++) {
                     l = new Location(arena.getWorld(), x + .5, y + .5, z +.5);
                     if (l.getBlock().getType() != Material.AIR) continue;
-                    int chance = r.nextInt(9);
+                    // Randomly determine whether to generate particle effects
+                    int chance = r.nextInt(config.getInt(ConfigPath.GENERAL_CONFIGURATION_HEAL_POOL_PARTICLE_SPARSITY));
                     if (chance == 0) {
                         if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_HEAL_POOL_SEEN_TEAM_ONLY)) {
                             for (Player p : bwt.getMembers()) {
