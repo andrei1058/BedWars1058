@@ -1,6 +1,6 @@
 /*
  * BedWars1058 - A bed wars mini-game.
- * Copyright (C) 2021 Andrei Dascălu
+ * Copyright (C) 2023 Andrei Dascălu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,17 +34,20 @@ import com.flowpowered.nbt.CompoundTag;
 import com.flowpowered.nbt.IntTag;
 import com.flowpowered.nbt.stream.NBTInputStream;
 import com.flowpowered.nbt.stream.NBTOutputStream;
-import com.grinderwolf.swm.api.SlimePlugin;
-import com.grinderwolf.swm.api.exceptions.*;
-import com.grinderwolf.swm.api.loaders.SlimeLoader;
-import com.grinderwolf.swm.api.world.SlimeWorld;
-import com.grinderwolf.swm.api.world.properties.SlimeProperties;
-import com.grinderwolf.swm.api.world.properties.SlimePropertyMap;
+import com.infernalsuite.aswm.api.SlimePlugin;
+import com.infernalsuite.aswm.api.exceptions.*;
+import com.infernalsuite.aswm.api.loaders.SlimeLoader;
+import com.infernalsuite.aswm.api.world.SlimeWorld;
+import com.infernalsuite.aswm.api.world.properties.SlimeProperties;
+import com.infernalsuite.aswm.api.world.properties.SlimePropertyMap;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.event.world.WorldInitEvent;
+import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -53,19 +56,19 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 
-public class SlimeAdapter extends RestoreAdapter {
+public class SlimePaperAdapter extends RestoreAdapter {
 
     private final SlimePlugin slime;
     private final BedWars api;
 
-    public SlimeAdapter(Plugin plugin) {
+    public SlimePaperAdapter(Plugin plugin) {
         super(plugin);
         slime = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
-        api = Bukkit.getServer().getServicesManager().getRegistration(BedWars.class).getProvider();
+        api = Objects.requireNonNull(Bukkit.getServer().getServicesManager().getRegistration(BedWars.class)).getProvider();
     }
 
     @Override
-    public void onEnable(IArena a) {
+    public void onEnable(@NotNull IArena a) {
         if (api.getVersionSupport().getMainLevel().equalsIgnoreCase(a.getWorldName())) {
             if (!(api.getServerType() == ServerType.BUNGEE && api.getArenaUtil().getGamesBeforeRestart() == 1)) {
                 FileUtil.setMainLevel("ignore_main_level", api.getVersionSupport());
@@ -87,15 +90,11 @@ public class SlimeAdapter extends RestoreAdapter {
             SlimeLoader flat = slime.getLoader("file");
             String[] spawn = a.getConfig().getString("waiting.Loc").split(",");
 
-            SlimePropertyMap spm = new SlimePropertyMap();
-            spm.setString(SlimeProperties.WORLD_TYPE, "flat");
-            spm.setInt(SlimeProperties.SPAWN_X, (int) Double.parseDouble(spawn[0]));
-            spm.setInt(SlimeProperties.SPAWN_Y, (int) Double.parseDouble(spawn[1]));
-            spm.setInt(SlimeProperties.SPAWN_Z, (int) Double.parseDouble(spawn[2]));
-            spm.setBoolean(SlimeProperties.ALLOW_ANIMALS, false);
-            spm.setBoolean(SlimeProperties.ALLOW_MONSTERS, false);
-            spm.setString(SlimeProperties.DIFFICULTY, "easy");
-            spm.setBoolean(SlimeProperties.PVP, true);
+            SlimePropertyMap spm = getCreateProperties(
+                    (int) Double.parseDouble(spawn[0]),
+                    (int) Double.parseDouble(spawn[1]),
+                    (int) Double.parseDouble(spawn[2])
+            );
 
             try {
                 // Note that this method should be called asynchronously
@@ -106,16 +105,34 @@ public class SlimeAdapter extends RestoreAdapter {
 
                 // This method must be called synchronously
                 SlimeWorld finalWorld = world;
-                Bukkit.getScheduler().runTask(getOwner(), () -> slime.generateWorld(finalWorld));
-            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldInUseException ex) {
+                Bukkit.getScheduler().runTask(getOwner(), () -> {
+                    SlimeWorld loaded = slime.loadWorld(finalWorld);
+                    if (null == loaded) {
+                        api.getArenaUtil().removeFromEnableQueue(a);
+                        getOwner().getLogger().severe("Something wrong... removing arena " + a.getArenaName() + " from queue.");
+                        return;
+                    }
+                    World w = Bukkit.getWorld(loaded.getName());
+                    if (w == null) {
+                        api.getArenaUtil().removeFromEnableQueue(a);
+                        getOwner().getLogger().severe("Something wrong... removing arena " + a.getArenaName() + " from queue.");
+                        return;
+                    }
+                    Bukkit.getPluginManager().callEvent(new WorldInitEvent(w));
+                    Bukkit.getScheduler().runTask(getOwner(), () -> {
+                        Bukkit.getPluginManager().callEvent(new WorldLoadEvent(w));
+                    });
+                });
+            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException |
+                     WorldLockedException ex) {
                 api.getArenaUtil().removeFromEnableQueue(a);
                 ex.printStackTrace();
-            } catch (ConcurrentModificationException thisShouldNotHappenSWM){
+            } catch (ConcurrentModificationException thisShouldNotHappenSWM) {
                 // this should not happen since they say to use #load async
                 // https://github.com/Grinderwolf/Slime-World-Manager/blob/develop/.docs/api/load-world.md
                 thisShouldNotHappenSWM.printStackTrace();
                 api.getArenaUtil().removeFromEnableQueue(a);
-                getOwner().getLogger().severe("This is a SlimeWorldManager issue!");
+                getOwner().getLogger().severe("This is a AdvancedSlimePaper issue!");
                 getOwner().getLogger().severe("I've submitted a bug report: https://github.com/Grinderwolf/Slime-World-Manager/issues/174");
                 getOwner().getLogger().severe("Trying again to load arena: " + a.getArenaName());
 
@@ -154,7 +171,7 @@ public class SlimeAdapter extends RestoreAdapter {
 
     @Override
     public void onDisable(IArena a) {
-        if(api.isShuttingDown()) {
+        if (api.isShuttingDown()) {
             Bukkit.unloadWorld(a.getWorldName(), false);
             return;
         }
@@ -169,15 +186,11 @@ public class SlimeAdapter extends RestoreAdapter {
             if (s.getConfig().getYml().getString("waiting.Loc") != null) {
                 spawn = s.getConfig().getString("waiting.Loc").split(",");
             }
-            SlimePropertyMap spm = new SlimePropertyMap();
-            spm.setString(SlimeProperties.WORLD_TYPE, "flat");
-            spm.setInt(SlimeProperties.SPAWN_X, (int) Double.parseDouble(spawn[0]));
-            spm.setInt(SlimeProperties.SPAWN_Y, (int) Double.parseDouble(spawn[1]));
-            spm.setInt(SlimeProperties.SPAWN_Z, (int) Double.parseDouble(spawn[2]));
-            spm.setBoolean(SlimeProperties.ALLOW_ANIMALS, false);
-            spm.setBoolean(SlimeProperties.ALLOW_MONSTERS, false);
-            spm.setString(SlimeProperties.DIFFICULTY, "easy");
-            spm.setBoolean(SlimeProperties.PVP, true);
+            SlimePropertyMap spm = getCreateProperties(
+                    (int) Double.parseDouble(spawn[0]),
+                    (int) Double.parseDouble(spawn[1]),
+                    (int) Double.parseDouble(spawn[2])
+            );
 
             try {
 
@@ -203,10 +216,22 @@ public class SlimeAdapter extends RestoreAdapter {
                 SlimeWorld sw = world;
                 // This method must be called synchronously
                 Bukkit.getScheduler().runTask(getOwner(), () -> {
-                    slime.generateWorld(sw);
+                    if (null == sw) {
+                        return;
+                    }
+                    World w = Bukkit.getWorld(sw.getName());
+                    if (w == null) {
+                        return;
+                    }
+                    Bukkit.getPluginManager().callEvent(new WorldInitEvent(w));
+                    Bukkit.getScheduler().runTask(getOwner(), () -> {
+                        Bukkit.getPluginManager().callEvent(new WorldLoadEvent(w));
+                    });
                     s.teleportPlayer();
                 });
-            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldInUseException | WorldAlreadyExistsException | InvalidWorldException | WorldTooBigException | WorldLoadedException ex) {
+            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException |
+                     WorldAlreadyExistsException | InvalidWorldException | WorldTooBigException | WorldLoadedException |
+                     WorldLockedException ex) {
                 s.getPlayer().sendMessage(ChatColor.RED + "An error occurred! Please check console.");
                 ex.printStackTrace();
                 s.close();
@@ -216,7 +241,7 @@ public class SlimeAdapter extends RestoreAdapter {
 
     @Override
     public void onSetupSessionClose(ISetupSession s) {
-        Bukkit.getWorld(s.getWorldName()).save();
+        Objects.requireNonNull(Bukkit.getWorld(s.getWorldName())).save();
         Bukkit.getScheduler().runTask(getOwner(), () -> Bukkit.unloadWorld(s.getWorldName(), true));
     }
 
@@ -238,13 +263,13 @@ public class SlimeAdapter extends RestoreAdapter {
             for (int x = minX; x < maxX; x++) {
                 for (int y = minY; y < maxY; y++) {
                     for (int z = minZ; z < maxZ; z++) {
-                        loc1.getWorld().getBlockAt(x, y, z).setType(Material.AIR);
+                        Objects.requireNonNull(loc1.getWorld()).getBlockAt(x, y, z).setType(Material.AIR);
                     }
                 }
             }
 
             Bukkit.getScheduler().runTaskLater(getOwner(), () ->
-                    loc1.getWorld().getEntities().forEach(e -> {
+                    Objects.requireNonNull(loc1.getWorld()).getEntities().forEach(e -> {
                         if (e instanceof Item) e.remove();
                     }), 15L);
         });
@@ -274,21 +299,17 @@ public class SlimeAdapter extends RestoreAdapter {
     @Override
     public void cloneArena(String name1, String name2) {
         Bukkit.getScheduler().runTaskAsynchronously(getOwner(), () -> {
-            SlimePropertyMap spm = new SlimePropertyMap();
-            spm.setString(SlimeProperties.WORLD_TYPE, "flat");
-            spm.setInt(SlimeProperties.SPAWN_X, 0);
-            spm.setInt(SlimeProperties.SPAWN_Y, 118);
-            spm.setInt(SlimeProperties.SPAWN_Z, 0);
-            spm.setBoolean(SlimeProperties.ALLOW_ANIMALS, false);
-            spm.setBoolean(SlimeProperties.ALLOW_MONSTERS, false);
-            spm.setString(SlimeProperties.DIFFICULTY, "easy");
-            spm.setBoolean(SlimeProperties.PVP, true);
-
             try {
                 // Note that this method should be called asynchronously
-                SlimeWorld world = slime.loadWorld(slime.getLoader("file"), name1, true, spm);
+                SlimeWorld world = slime.loadWorld(
+                        slime.getLoader("file"),
+                        name1,
+                        true,
+                        getCreateProperties(0, 118, 0)
+                );
                 world.clone(name2, slime.getLoader("file"));
-            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldInUseException | WorldAlreadyExistsException ex) {
+            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException |
+                     WorldLockedException | WorldAlreadyExistsException ex) {
                 ex.printStackTrace();
             }
         });
@@ -364,15 +385,17 @@ public class SlimeAdapter extends RestoreAdapter {
 
     @Override
     public String getDisplayName() {
-        return "Slime World Manager by Grinderwolf";
+        return "Advanced Slime Paper by InfernalSuite";
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void convertWorld(String name, Player player) {
         SlimeLoader sl = slime.getLoader("file");
         try {
             getOwner().getLogger().log(Level.INFO, "Converting " + name + " to the Slime format.");
             slime.importWorld(new File(Bukkit.getWorldContainer(), name), name, sl);
-        } catch (WorldAlreadyExistsException | InvalidWorldException | WorldLoadedException | WorldTooBigException | IOException e) {
+        } catch (WorldAlreadyExistsException | InvalidWorldException | WorldLoadedException | WorldTooBigException |
+                 IOException e) {
             if (player != null) {
                 player.sendMessage(ChatColor.RED + "Could not convert " + name + " to the Slime format.");
                 player.sendMessage(ChatColor.RED + "Check the console for details.");
@@ -438,5 +461,18 @@ public class SlimeAdapter extends RestoreAdapter {
                 }
             }
         }
+    }
+
+    private @NotNull SlimePropertyMap getCreateProperties(int spawnX, int spawnY, int spawnZ) {
+        SlimePropertyMap spm = new SlimePropertyMap();
+        spm.setValue(SlimeProperties.WORLD_TYPE, "flat");
+        spm.setValue(SlimeProperties.SPAWN_X, spawnX);
+        spm.setValue(SlimeProperties.SPAWN_Y, spawnY);
+        spm.setValue(SlimeProperties.SPAWN_Z, spawnZ);
+        spm.setValue(SlimeProperties.ALLOW_ANIMALS, false);
+        spm.setValue(SlimeProperties.ALLOW_MONSTERS, false);
+        spm.setValue(SlimeProperties.DIFFICULTY, "easy");
+        spm.setValue(SlimeProperties.PVP, true);
+        return spm;
     }
 }
