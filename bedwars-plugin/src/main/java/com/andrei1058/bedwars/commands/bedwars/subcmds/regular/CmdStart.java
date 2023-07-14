@@ -76,8 +76,8 @@ public class CmdStart extends SubCommand {
                 return true;
             }
         }
-        if (a.getStartingTask().getCountdown() < BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_SHORTENED)) return true;
-        a.getStartingTask().setCountdown(BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_SHORTENED));
+        if (a.getStartingTask().getCountdown() < 5) return true;
+        a.getStartingTask().setCountdown(5);
         p.sendMessage(getMsg(p, Messages.COMMAND_FORCESTART_SUCCESS));
         return true;
     }
