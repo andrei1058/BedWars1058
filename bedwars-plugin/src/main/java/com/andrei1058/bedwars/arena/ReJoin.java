@@ -143,10 +143,6 @@ public class ReJoin {
      * Make a player re-join the arena
      */
     public boolean reJoin(Player player) {
-
-        Sounds.playSound("rejoin-allowed", player);
-        player.sendMessage(Language.getMsg(player, Messages.REJOIN_ALLOWED).replace("{arena}", getArena().getDisplayName()));
-
         if (player.getGameMode() != GameMode.SURVIVAL) {
             Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
                 player.setGameMode(GameMode.SURVIVAL);
