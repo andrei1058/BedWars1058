@@ -178,7 +178,7 @@ public class BedWarsTeam implements ITeam {
      * Rejoin a team
      */
     public void reJoin(@NotNull Player p) {
-        reJoin(p, BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_RE_SPAWN_COUNTDOWN));
+        reJoin(p, BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_REJOIN_RE_SPAWN_COUNTDOWN));
     }
 
     public void reJoin(@NotNull Player p, int respawnTime) {
