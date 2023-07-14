@@ -25,6 +25,7 @@ import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.SetupSession;
@@ -75,8 +76,8 @@ public class CmdStart extends SubCommand {
                 return true;
             }
         }
-        if (a.getStartingTask().getCountdown() < 5) return true;
-        a.getStartingTask().setCountdown(5);
+        if (a.getStartingTask().getCountdown() < BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_SHORTENED)) return true;
+        a.getStartingTask().setCountdown(BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_SHORTENED));
         p.sendMessage(getMsg(p, Messages.COMMAND_FORCESTART_SUCCESS));
         return true;
     }
