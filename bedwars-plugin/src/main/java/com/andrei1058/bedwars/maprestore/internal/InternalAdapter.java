@@ -322,6 +322,11 @@ public class InternalAdapter extends RestoreAdapter {
         });
     }
 
+    @Override
+    public String getDisplayName() {
+        return "Internal Restore Adapter";
+    }
+
     private void deleteWorldTrash(String world) {
         for (File f : new File[]{new File(Bukkit.getWorldContainer(), world + "/level.dat"),
                 new File(Bukkit.getWorldContainer(), world + "/level.dat_mcr"),

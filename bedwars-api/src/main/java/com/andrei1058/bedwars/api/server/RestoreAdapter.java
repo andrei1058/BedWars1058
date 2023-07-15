@@ -101,4 +101,6 @@ public abstract class RestoreAdapter {
      * Let them load on BedWars1058 main Thread so they will be converted before getting loaded.
      */
     public abstract void convertWorlds();
+
+    public abstract String getDisplayName();
 }

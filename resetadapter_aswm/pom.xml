@@ -10,17 +10,21 @@
         <version>23.6-SNAPSHOT</version>
     </parent>
 
-    <artifactId>resetadapter-slime</artifactId>
+    <artifactId>resetadapter-aswm</artifactId>
     <version>${project.parent.version}</version>
 
     <repositories>
         <repository>
-            <id>swm-repo</id>
+            <id>spigotmc-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
+            <id>flow-nbt</id>
             <url>https://repo.glaremasters.me/repository/concuncan/</url>
         </repository>
         <repository>
-            <id>spigotmc-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+            <id>legacy-aswm</id>
+            <url>https://repo.rapture.pw/repository/maven-snapshots/</url>
         </repository>
     </repositories>
 
@@ -42,6 +46,12 @@
             <artifactId>slimeworldmanager-api</artifactId>
             <version>2.2.1</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.flowpowered</groupId>
+            <artifactId>flow-nbt</artifactId>
+            <version>2.0.0</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
