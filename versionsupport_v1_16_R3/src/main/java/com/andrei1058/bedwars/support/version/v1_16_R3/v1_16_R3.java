@@ -57,7 +57,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
@@ -72,8 +71,6 @@ import java.util.logging.Level;
 public class v1_16_R3 extends VersionSupport {
 
     private static final UUID chatUUID = new UUID(0L, 0L);
-    private static final ExplosionDamageCalculator STATIC_DMG_CALC = new ExplosionDamageCalculator();
-
 
     public v1_16_R3(Plugin plugin, String name) {
         super(plugin, name);
