@@ -357,7 +357,7 @@ public class v1_19_R2 extends VersionSupport {
             Arrays.stream(coloredGlass).forEach(
                     glass -> {
                         try {
-                            field.set(glass, glass);
+                            field.set(glass, glassBlast);
                         } catch (IllegalAccessException e) {
                             throw new RuntimeException(e);
                         }
