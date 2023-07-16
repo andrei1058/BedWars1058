@@ -22,8 +22,6 @@ import net.minecraft.network.protocol.game.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.level.EntityPlayer;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.EnumItemSlot;
 import net.minecraft.world.entity.item.EntityTNTPrimed;
@@ -42,10 +40,7 @@ import org.bukkit.block.data.type.Ladder;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_19_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftFireball;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftTNTPrimed;
+import org.bukkit.craftbukkit.v1_19_R3.entity.*;
 import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
 import org.bukkit.entity.*;
 import org.bukkit.event.inventory.InventoryEvent;
@@ -60,9 +55,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 
 @SuppressWarnings("unused")
@@ -112,7 +105,7 @@ public class v1_19_R3 extends VersionSupport {
 
     @Override
     public void spawnIronGolem(Location loc, ITeam bedWarsTeam, double speed, double health, int despawn) {
-        var attr = new DespawnableAttributes(DespawnableType.IRON_GOLEM, speed, health,4, despawn);
+        var attr = new DespawnableAttributes(DespawnableType.IRON_GOLEM, speed, health, 4, despawn);
         var entity = despawnableFactory.spawn(attr, loc, bedWarsTeam);
         new Despawnable(
                 entity,
@@ -336,18 +329,18 @@ public class v1_19_R3 extends VersionSupport {
     }
 
     @Override
-    public void registerTntWhitelist() {
+    public void registerTntWhitelist(float endStoneBlast, float glassBlast) {
         try {
             var protection = 300f;
             // blast resistance
             Field field = BlockBase.class.getDeclaredField("aH");
             field.setAccessible(true);
             // end stone
-            field.set(Blocks.fj, protection);
+            field.set(Blocks.fj, endStoneBlast);
             // obsidian
-            field.set(Blocks.ce, protection);
+            field.set(Blocks.ce, glassBlast);
             // standard glass
-            field.set(Blocks.aH, protection);
+            field.set(Blocks.aH, glassBlast);
 
             var coloredGlass = new net.minecraft.world.level.block.Block[]{
                     Blocks.dU, Blocks.dV, Blocks.dW, Blocks.dX,
@@ -441,12 +434,6 @@ public class v1_19_R3 extends VersionSupport {
             i = new org.bukkit.inventory.ItemStack(org.bukkit.Material.BEDROCK);
         }
         return i;
-    }
-
-    @Override
-    public void teamCollideRule(@NotNull Team team) {
-        team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
-        team.setCanSeeFriendlyInvisibles(true);
     }
 
     @Override
@@ -798,14 +785,14 @@ public class v1_19_R3 extends VersionSupport {
     }
 
     @Override
-    public void placeTowerBlocks(@NotNull Block b, @NotNull IArena a, @NotNull TeamColor color, int x, int y, int z){
+    public void placeTowerBlocks(@NotNull Block b, @NotNull IArena a, @NotNull TeamColor color, int x, int y, int z) {
         b.getRelative(x, y, z).setType(color.woolMaterial());
         a.addPlacedBlock(b.getRelative(x, y, z));
     }
 
     @Override
-    public void placeLadder(@NotNull Block b, int x, int y, int z, @NotNull IArena a, int ladderData){
-        Block block = b.getRelative(x,y,z);  //ladder block
+    public void placeLadder(@NotNull Block b, int x, int y, int z, @NotNull IArena a, int ladderData) {
+        Block block = b.getRelative(x, y, z);  //ladder block
         block.setType(Material.LADDER);
         Ladder ladder = (Ladder) block.getBlockData();
         a.addPlacedBlock(block);
@@ -830,7 +817,8 @@ public class v1_19_R3 extends VersionSupport {
     }
 
     @Override
-    public void playVillagerEffect(@NotNull Player player, Location location){
+    public void playVillagerEffect(@NotNull Player player, Location location) {
         player.spawnParticle(Particle.VILLAGER_HAPPY, location, 1);
     }
+
 }

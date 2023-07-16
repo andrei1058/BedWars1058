@@ -453,7 +453,10 @@ public class BedWars extends JavaPlugin {
         }
 
         /* Protect glass walls from tnt explosion */
-        nms.registerTntWhitelist();
+        nms.registerTntWhitelist(
+                (float) config.getDouble(ConfigPath.GENERAL_TNT_PROTECTION_END_STONE_BLAST),
+                (float) config.getDouble(ConfigPath.GENERAL_TNT_PROTECTION_GLASS_BLAST)
+        );
 
         /* Prevent issues on reload */
         for (Player p : Bukkit.getOnlinePlayers()) {

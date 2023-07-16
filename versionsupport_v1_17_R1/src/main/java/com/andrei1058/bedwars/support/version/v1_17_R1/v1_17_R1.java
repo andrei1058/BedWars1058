@@ -179,7 +179,6 @@ public class v1_17_R1 extends VersionSupport {
         EntityLiving nmsEntityLiving = (((CraftLivingEntity) owner).getHandle());
         EntityTNTPrimed nmsTNT = (((CraftTNTPrimed) tnt).getHandle());
         try {
-            //noinspection JavaReflectionMemberAccess
             Field sourceField = EntityTNTPrimed.class.getDeclaredField("d");
             sourceField.setAccessible(true);
             sourceField.set(nmsTNT, nmsEntityLiving);
@@ -354,12 +353,34 @@ public class v1_17_R1 extends VersionSupport {
     }
 
     @Override
-    public void registerTntWhitelist() {
+    public void registerTntWhitelist(float endStoneBlast, float glassBlast) {
         try {
             Field field = BlockBase.class.getDeclaredField("aI");
             field.setAccessible(true);
-            field.set(Blocks.eq, 12f);
-            field.set(Blocks.au, 300f);
+
+            for (net.minecraft.world.level.block.Block glass : new net.minecraft.world.level.block.Block[]{
+                    Blocks.au,
+                    Blocks.dg,
+                    Blocks.dh,
+                    Blocks.di,
+                    Blocks.dj,
+                    Blocks.dk,
+                    Blocks.dl,
+                    Blocks.dm,
+                    Blocks.dn,
+                    Blocks.do_,
+                    Blocks.dp,
+                    Blocks.dq,
+                    Blocks.dr,
+                    Blocks.ds,
+                    Blocks.dt,
+                    Blocks.du,
+                    Blocks.dv,
+            }) {
+                field.set(glass, glassBlast);
+            }
+            field.set(Blocks.eq, endStoneBlast);
+
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -453,12 +474,6 @@ public class v1_17_R1 extends VersionSupport {
             i = new org.bukkit.inventory.ItemStack(org.bukkit.Material.BEDROCK);
         }
         return i;
-    }
-
-    @Override
-    public void teamCollideRule(Team team) {
-        team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
-        team.setCanSeeFriendlyInvisibles(true);
     }
 
     @Override
@@ -752,4 +767,5 @@ public class v1_17_R1 extends VersionSupport {
     public void playVillagerEffect(Player player, Location location){
         player.spawnParticle(Particle.VILLAGER_HAPPY, location, 1);
     }
+
 }

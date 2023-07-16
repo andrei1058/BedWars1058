@@ -346,13 +346,13 @@ public class v1_12_R1 extends VersionSupport {
     }
 
     @Override
-    public void registerTntWhitelist() {
+    public void registerTntWhitelist(float endStoneBlast, float glassBlast) {
         try {
             Field field = Block.class.getDeclaredField("durability");
             field.setAccessible(true);
-            field.set(Block.getByName("glass"), 300f);
-            field.set(Block.getByName("stained_glass"), 300f);
-            field.set(Block.getByName("end_stone"), 69f);
+            field.set(Block.getByName("glass"), glassBlast);
+            field.set(Block.getByName("stained_glass"), glassBlast);
+            field.set(Block.getByName("end_stone"), endStoneBlast);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -438,12 +438,6 @@ public class v1_12_R1 extends VersionSupport {
             i = new org.bukkit.inventory.ItemStack(org.bukkit.Material.BEDROCK);
         }
         return i;
-    }
-
-    @Override
-    public void teamCollideRule(Team team) {
-        team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
-        team.setCanSeeFriendlyInvisibles(true);
     }
 
     @Override
@@ -726,6 +720,7 @@ public class v1_12_R1 extends VersionSupport {
     @Override
     public void placeLadder(org.bukkit.block.Block b, int x, int y, int z, IArena a, int ladderdata){
         b.getRelative(x, y, z).setType(Material.LADDER);
+        //noinspection deprecation
         b.getRelative(x, y, z).setData((byte)ladderdata);
         a.addPlacedBlock(b.getRelative(x, y, z));
     }
@@ -734,4 +729,5 @@ public class v1_12_R1 extends VersionSupport {
     public void playVillagerEffect(Player player, Location location){
         player.spawnParticle(Particle.VILLAGER_HAPPY, location, 1);
     }
+
 }

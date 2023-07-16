@@ -25,9 +25,7 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.entity.Despawnable;
 import com.andrei1058.bedwars.api.exceptions.InvalidEffectException;
-import org.bukkit.Effect;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
@@ -39,12 +37,10 @@ import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class VersionSupport {
@@ -55,8 +51,8 @@ public abstract class VersionSupport {
 
     private Effect eggBridge;
 
-    private static ConcurrentHashMap<UUID, Despawnable> despawnables = new ConcurrentHashMap<>();
-    private Plugin plugin;
+    private static final ConcurrentHashMap<UUID, Despawnable> despawnables = new ConcurrentHashMap<>();
+    private final Plugin plugin;
 
     public VersionSupport(Plugin plugin, String versionName) {
         name2 = versionName;
@@ -138,6 +134,13 @@ public abstract class VersionSupport {
     public abstract boolean isInvisibilityPotion(ItemStack itemStack);
 
     /**
+     * Check if type is a Glass type material
+     */
+    public boolean isGlass(Material type) {
+        return type != Material.AIR && (type == Material.GLASS || type.toString().contains("_GLASS"));
+    }
+
+    /**
      * Register custom entities
      */
     public abstract void registerEntities();
@@ -205,9 +208,9 @@ public abstract class VersionSupport {
     public abstract void colorBed(ITeam team);
 
     /**
-     * Register tnt whitelist
+     * Modify block blast resistance.
      */
-    public abstract void registerTntWhitelist();
+    public abstract void registerTntWhitelist(float endStoneBlast, float glassBlast);
 
     /**
      * Egg bridge particles
@@ -245,8 +248,10 @@ public abstract class VersionSupport {
 
     /**
      * Get a custom item tag.
+     *
      * @return null if not present.
      */
+    @SuppressWarnings("unused")
     public abstract String getTag(ItemStack itemStack, String key);
 
     /**
@@ -265,8 +270,6 @@ public abstract class VersionSupport {
     public abstract ItemStack colourItem(ItemStack itemStack, ITeam bedWarsTeam);
 
     public abstract ItemStack createItemStack(String material, int amount, short data);
-
-    public abstract void teamCollideRule(Team team);
 
     /**
      * Check if is a player head

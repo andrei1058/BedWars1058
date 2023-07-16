@@ -34,6 +34,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Instant;
 import java.util.LinkedList;
@@ -494,4 +495,26 @@ public interface IArena {
     void setTeamAssigner(ITeamAssigner teamAssigner);
 
     List<Player> getLeavingPlayers();
+
+
+    /**
+     * Check if breaking map is allowed, otherwise only placed blocks are allowed.
+     * Some blocks like have a special protections, like blocks under shopkeepers, bed, ecc.
+     */
+    boolean isAllowMapBreak();
+
+    /**
+     * Toggle map block break rule.
+     */
+    void setAllowMapBreak(boolean allowMapBreak);
+
+    /**
+     * Check if there is a player bed at given location.
+     */
+    boolean isTeamBed(Location location);
+
+    /**
+     * Get owner team of a bed based on location.
+     */
+    @Nullable ITeam getBedsTeam(Location location);
 }

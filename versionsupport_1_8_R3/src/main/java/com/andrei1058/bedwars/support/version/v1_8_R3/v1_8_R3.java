@@ -191,6 +191,12 @@ public class v1_8_R3 extends VersionSupport {
     }
 
     @Override
+    public boolean isGlass(Material type) {
+        // Avoids string search
+        return type == Material.GLASS || type == Material.STAINED_GLASS;
+    }
+
+    @Override
     public void registerEntities() {
         registerEntity("Silverfish2", 60, Silverfish.class);
         registerEntity("IGolem", 99, IGolem.class);
@@ -388,7 +394,7 @@ public class v1_8_R3 extends VersionSupport {
     }
 
     @Override
-    public void registerTntWhitelist() {
+    public void registerTntWhitelist(float endStoneBlast, float glassBlast) {
         try {
             Field field = Block.class.getDeclaredField("durability");
             field.setAccessible(true);
@@ -481,11 +487,6 @@ public class v1_8_R3 extends VersionSupport {
             i = new org.bukkit.inventory.ItemStack(org.bukkit.Material.BEDROCK);
         }
         return i;
-    }
-
-    @Override
-    public void teamCollideRule(Team team) {
-
     }
 
     @Override
@@ -761,6 +762,7 @@ public class v1_8_R3 extends VersionSupport {
     @Override
     public void placeLadder(org.bukkit.block.Block b, int x, int y, int z, IArena a, int ladderdata){
         b.getRelative(x, y, z).setType(Material.LADDER);
+        //noinspection deprecation
         b.getRelative(x, y, z).setData((byte)ladderdata);
         a.addPlacedBlock(b.getRelative(x, y, z));
     }
@@ -770,4 +772,5 @@ public class v1_8_R3 extends VersionSupport {
         PacketPlayOutWorldParticles pwp = new PacketPlayOutWorldParticles(EnumParticle.VILLAGER_HAPPY, true, (float) location.getX(), (float) location.getY(), (float) location.getZ(), (float) 0, (float) 0, (float) 0, (float) 0, 1);
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(pwp);
     }
+
 }
