@@ -16,7 +16,6 @@ import com.andrei1058.bedwars.support.version.v1_20_R1.despawnable.DespawnableTy
 import com.mojang.datafixers.util.Pair;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.core.BlockPosition;
 import net.minecraft.core.particles.ParticleParamRedstone;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.protocol.Packet;
@@ -32,11 +31,8 @@ import net.minecraft.world.entity.projectile.EntityFireball;
 import net.minecraft.world.entity.projectile.IProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.Explosion;
-import net.minecraft.world.level.ExplosionDamageCalculator;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBase;
-import net.minecraft.world.level.block.state.IBlockData;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -46,7 +42,6 @@ import org.bukkit.block.data.type.Ladder;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_20_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_20_R1.entity.*;
 import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
 import org.bukkit.entity.*;
@@ -56,7 +51,6 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
-import org.bukkit.util.NumberConversions;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -64,7 +58,6 @@ import org.joml.Vector3f;
 
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.function.BiFunction;
 import java.util.logging.Level;
 
 @SuppressWarnings("unused")
@@ -443,12 +436,6 @@ public class v1_20_R1 extends VersionSupport {
             i = new org.bukkit.inventory.ItemStack(org.bukkit.Material.BEDROCK);
         }
         return i;
-    }
-
-    @Override
-    public void teamCollideRule(@NotNull Team team) {
-        team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
-        team.setCanSeeFriendlyInvisibles(true);
     }
 
     @Override
@@ -835,104 +822,6 @@ public class v1_20_R1 extends VersionSupport {
     @Override
     public void playVillagerEffect(@NotNull Player player, Location location) {
         player.spawnParticle(Particle.VILLAGER_HAPPY, location, 1);
-    }
-
-    @Override
-    public List<Block> calculateExplosionBlocks(IArena arena, Entity source, Location explosionLocation, float radius, boolean fire, BiFunction<Location, Block, Boolean> callback) {
-        HashSet<Block> blocks = new HashSet<>();
-        org.bukkit.World bukkitWorld = explosionLocation.getWorld();
-
-        net.minecraft.world.entity.Entity sourceEntity = null;
-        if (source != null) {
-            sourceEntity = ((CraftEntity) source).getHandle();
-
-        }
-
-        assert bukkitWorld != null;
-        net.minecraft.world.level.World world = ((CraftWorld) bukkitWorld).getHandle();
-
-        double locX = explosionLocation.getX();
-        double locY = explosionLocation.getY();
-
-        if (sourceEntity instanceof EntityTNTPrimed) {
-            locY += sourceEntity.dd() / 16.0F;
-        }
-
-        double locZ = explosionLocation.getZ();
-
-        Explosion explosion = new Explosion(world, sourceEntity, locX, locY, locZ, radius, fire, Explosion.Effect.c);
-        ExplosionDamageCalculator damageCalculator = new ExplosionDamageCalculator();
-
-
-        // Copied from Explosion#a() (The NMS implementation of https://minecraft.fandom.com/wiki/Explosion#Model_of_block_destruction)
-        int i;
-        int j;
-        for (int k = 0; k < 16; ++k) {
-            for (i = 0; i < 16; ++i) {
-                for (j = 0; j < 16; ++j) {
-                    if (k == 0 || k == 15 || i == 0 || i == 15 || j == 0 || j == 15) {
-                        double d0 = (float) k / 15.0F * 2.0F - 1.0F;
-                        double d1 = (float) i / 15.0F * 2.0F - 1.0F;
-                        double d2 = (float) j / 15.0F * 2.0F - 1.0F;
-                        double d3 = Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
-                        d0 /= d3;
-                        d1 /= d3;
-                        d2 /= d3;
-
-                        float f = radius * (0.7F + world.z.i() * 0.6F);
-                        double d4 = locX;
-                        double d5 = locY;
-                        double d6 = locZ;
-
-                        for (float f1 = 0.3F; f > 0.0F; f -= 0.22500001F) {
-                            BlockPosition blockposition = BlockPosition.a(d4, d5, d6);
-
-                            IBlockData iblockdata = world.a_(blockposition);
-                            if (!world.j(blockposition)) {
-                                break;
-                            }
-
-                            net.minecraft.world.level.material.Fluid fluid = world.b_(blockposition);
-                            Optional<Float> optional = damageCalculator.a(explosion, world, blockposition, iblockdata, fluid);
-
-                            if (optional.isPresent()) {
-                                f -= (optional.get() + 0.3F) * 0.3F;
-                            }
-
-                            if (f > 0.0F && damageCalculator.a(explosion, world, blockposition, iblockdata, f)) {
-                                org.bukkit.block.Block bukkitBlock = bukkitWorld.getBlockAt(
-                                        NumberConversions.floor(d4),
-                                        NumberConversions.floor(d5),
-                                        NumberConversions.floor(d6)
-                                );
-
-                                if (bukkitBlock.getType() != Material.AIR) {
-                                    boolean allow = !callback.apply(
-                                            explosionLocation,
-                                            bukkitBlock
-                                    );
-                                    if (allow) {
-                                        blocks.add(bukkitBlock);
-                                    }
-                                }
-                            }
-
-                            d4 += d0 * 0.30000001192092896;
-                            d5 += d1 * 0.30000001192092896;
-                            d6 += d2 * 0.30000001192092896;
-                        }
-                    }
-                }
-            }
-        }
-
-        blocks.forEach(block -> {
-            if (block.getType() == Material.BLACK_WOOL) {
-                Bukkit.broadcastMessage("IS WOOL");
-            }
-        });
-
-        return new ArrayList<>(blocks);
     }
 
     private void sendPacket(Player player, Packet<?> packet) {

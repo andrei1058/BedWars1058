@@ -25,7 +25,6 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.entity.Despawnable;
 import com.andrei1058.bedwars.api.exceptions.InvalidEffectException;
-import com.andrei1058.bedwars.api.util.BlockRay;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -38,16 +37,11 @@ import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scoreboard.Team;
-import org.bukkit.util.NumberConversions;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.BiFunction;
 
 public abstract class VersionSupport {
 
@@ -56,10 +50,9 @@ public abstract class VersionSupport {
     public static String PLUGIN_TAG_TIER_KEY = "tierIdentifier";
 
     private Effect eggBridge;
-    protected static Random random = new Random();
 
-    private static ConcurrentHashMap<UUID, Despawnable> despawnables = new ConcurrentHashMap<>();
-    private Plugin plugin;
+    private static final ConcurrentHashMap<UUID, Despawnable> despawnables = new ConcurrentHashMap<>();
+    private final Plugin plugin;
 
     public VersionSupport(Plugin plugin, String versionName) {
         name2 = versionName;
@@ -258,6 +251,7 @@ public abstract class VersionSupport {
      *
      * @return null if not present.
      */
+    @SuppressWarnings("unused")
     public abstract String getTag(ItemStack itemStack, String key);
 
     /**
@@ -276,8 +270,6 @@ public abstract class VersionSupport {
     public abstract ItemStack colourItem(ItemStack itemStack, ITeam bedWarsTeam);
 
     public abstract ItemStack createItemStack(String material, int amount, short data);
-
-    public abstract void teamCollideRule(Team team);
 
     /**
      * Check if is a player head
@@ -474,26 +466,4 @@ public abstract class VersionSupport {
     public abstract void placeLadder(Block b, int x, int y, int z, IArena a, int ladderdata);
 
     public abstract void playVillagerEffect(Player player, Location location);
-
-    /**
-     * Calculates BrokenBlocks from an explosion source.
-     * <p>
-     * The Callback takes Location of the explosion and current block and
-     * Must return a boolean indicating whether to skip this block in the explosion calculation
-     * <p>
-     * Note: The callback could get called for the same block multiple times.
-     *
-     * @param arena             arena instance.
-     * @param source            source of explosion, can be null.
-     * @param explosionLocation the location where the explosion should be calculated from.
-     * @param radius            radius of the explosion.
-     * @param fire              whether blocks are set on fire or not.
-     * @param callback          callback that indicates whether to skip the block.
-     * @return A Block list of blocks that should be destroyed from the explosion.
-     */
-    public abstract List<Block> calculateExplosionBlocks(IArena arena, Entity source, Location explosionLocation, float radius, boolean fire, BiFunction<Location, Block, Boolean> callback);
-
-    private static int normalizeInteger(int x) {
-        return Integer.compare(x, 0);
-    }
 }

@@ -59,7 +59,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBase;
-import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -91,7 +90,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.BiFunction;
 import java.util.logging.Level;
 
 @SuppressWarnings("unused")
@@ -181,7 +179,6 @@ public class v1_17_R1 extends VersionSupport {
         EntityLiving nmsEntityLiving = (((CraftLivingEntity) owner).getHandle());
         EntityTNTPrimed nmsTNT = (((CraftTNTPrimed) tnt).getHandle());
         try {
-            //noinspection JavaReflectionMemberAccess
             Field sourceField = EntityTNTPrimed.class.getDeclaredField("d");
             sourceField.setAccessible(true);
             sourceField.set(nmsTNT, nmsEntityLiving);
@@ -480,12 +477,6 @@ public class v1_17_R1 extends VersionSupport {
     }
 
     @Override
-    public void teamCollideRule(Team team) {
-        team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
-        team.setCanSeeFriendlyInvisibles(true);
-    }
-
-    @Override
     public org.bukkit.Material materialFireball() {
         return org.bukkit.Material.FIRE_CHARGE;
     }
@@ -777,8 +768,4 @@ public class v1_17_R1 extends VersionSupport {
         player.spawnParticle(Particle.VILLAGER_HAPPY, location, 1);
     }
 
-    @Override
-    public List<Block> calculateExplosionBlocks(IArena arena, Entity source, Location explosionLocation, float radius, boolean fire, BiFunction<Location, Block, Boolean> callback) {
-        throw new NotImplementedException("calculateExplosionBlocks is not implemented yet for v1_17_R1!");
-    }
 }
