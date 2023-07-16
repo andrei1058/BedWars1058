@@ -348,15 +348,15 @@ public class BedWarsTeam implements ITeam {
         p.setFlying(false);
         p.setHealth(20);
 
-        Bukkit.getScheduler().runTaskLater(plugin, ()-> {
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
             getArena().getRespawnSessions().remove(p); //Fixes https://github.com/andrei1058/BedWars1058/issues/669
 
-            for (Player inGame : arena.getPlayers()){
+            for (Player inGame : arena.getPlayers()) {
                 if (inGame.equals(p)) continue;
                 BedWars.nms.spigotShowPlayer(p, inGame);
                 BedWars.nms.spigotShowPlayer(inGame, p);
             }
-            for (Player spectator : arena.getSpectators()){
+            for (Player spectator : arena.getSpectators()) {
                 BedWars.nms.spigotShowPlayer(p, spectator);
             }
         }, 8L);
@@ -867,6 +867,18 @@ public class BedWarsTeam implements ITeam {
             return;
         }
         this.killDropsLoc = new Vector(loc.getBlockX() + 0.5, loc.getBlockY(), loc.getBlockZ() + 0.5);
+    }
+
+    @Override
+    public boolean isBed(@NotNull Location location) {
+        for (int x = location.getBlockX() - 1; x < location.getBlockX() + 1; x++) {
+            for (int z = location.getBlockZ() - 1; z < location.getBlockZ() + 1; z++) {
+                if (getBed().getBlockX() == x && getBed().getBlockY() == location.getBlockY() && getBed().getBlockZ() == z) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public void setKillDropsLocation(Location loc) {

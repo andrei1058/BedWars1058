@@ -398,7 +398,7 @@ public class v1_8_R3 extends VersionSupport {
     }
 
     @Override
-    public void registerTntWhitelist() {
+    public void registerTntWhitelist(float endStoneBlast, float glassBlast) {
         try {
             Field field = Block.class.getDeclaredField("durability");
             field.setAccessible(true);

@@ -26,9 +26,7 @@ import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.entity.Despawnable;
 import com.andrei1058.bedwars.api.exceptions.InvalidEffectException;
 import com.andrei1058.bedwars.api.util.BlockRay;
-import org.bukkit.Effect;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
@@ -41,17 +39,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.Team;
-import org.bukkit.util.BlockIterator;
 import org.bukkit.util.NumberConversions;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 
 public abstract class VersionSupport {
@@ -153,66 +148,6 @@ public abstract class VersionSupport {
     }
 
     /**
-     * Check if block is protected by blast-proof glass or an unbreakable block from a point of view
-     * <p>
-     * if pov is null, block is checked by {@link #isGlass(Material)} and {@link IArena#isBlockPlaced(Block)} instead.
-     * Otherwise, a ray tracing is performed to check whether there is any glass block or an unbreakable block.
-     * <p>
-     * If arena is null, then glass only be checked.
-     *
-     * @param arena Arena instance.
-     * @param pov   the point of view.
-     * @param block the block instance.
-     * @param step  how frequent to check the ray (0.25 - 0.5 recommended).
-     * @return whether there's unbreakable block between the pov and the block
-     */
-    public boolean isProtected(IArena arena, Location pov, Block block, double step) {
-        if (pov == null)
-            return isGlass(block.getType()) || (arena != null && !arena.isBlockPlaced(block));
-
-        // maybe remove this?
-        if (block.getType() == Material.AIR)
-            return false;
-
-        if (isGlass(block.getType()) || (arena != null && !arena.isBlockPlaced(block)))
-            return true;
-
-        int distance = NumberConversions.ceil(pov.distanceSquared(block.getLocation()));
-        if (distance == 0) {
-            return isGlass(block.getType()) || (arena != null && !arena.isBlockPlaced(block));
-        }
-
-        // Trace blocks from pov to the block location
-        final Location target = block.getLocation();
-        BlockRay ray;
-
-        try {
-            ray = new BlockRay(block.getWorld(), pov.toVector(), target.toVector(), step);
-        } catch (IllegalArgumentException ignored) {
-            return isGlass(block.getType()) || (arena != null && !arena.isBlockPlaced(block));
-        }
-
-        while (ray.hasNext()) {
-            Block nextBlock = ray.next();
-
-            if (nextBlock.getType() == Material.AIR) {
-                continue;
-            }
-
-            if (isGlass(nextBlock.getType())) {
-                // If a block is a glass
-                return true;
-            }
-
-            if (arena != null && !arena.isBlockPlaced(nextBlock)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Register custom entities
      */
     public abstract void registerEntities();
@@ -280,9 +215,9 @@ public abstract class VersionSupport {
     public abstract void colorBed(ITeam team);
 
     /**
-     * Register tnt whitelist
+     * Modify block blast resistance.
      */
-    public abstract void registerTntWhitelist();
+    public abstract void registerTntWhitelist(float endStoneBlast, float glassBlast);
 
     /**
      * Egg bridge particles
@@ -539,41 +474,6 @@ public abstract class VersionSupport {
     public abstract void placeLadder(Block b, int x, int y, int z, IArena a, int ladderdata);
 
     public abstract void playVillagerEffect(Player player, Location location);
-
-    /**
-     * Calculates BrokenBlocks from an explosion source (with blast proof glass and world protection)
-     * <p>
-     * See: {@link #calculateExplosionBlocks(IArena, Entity, Location, float, boolean, BiFunction)}
-     *
-     * @param arena             arena instance.
-     * @param source            source of explosion, can be null.
-     * @param explosionLocation the location where the explosion should be calculated from.
-     * @param radius            radius of the explosion.
-     * @param fire              whether blocks are set on fire or not.
-     * @return A Block list of blocks that should be destroyed from the explosion.
-     */
-    public List<Block> calculateExplosionBlocks(IArena arena, Entity source, Location explosionLocation, float radius, boolean fire) {
-        // Honestly I don't know if there's a performance gain or lost but there just in case :)
-        HashMap<Block, Boolean> functionCache = new HashMap<>();
-
-        BiFunction<Location, Block, Boolean> actualCallback = (loc, block) -> {
-            if (!arena.isBlockPlaced(block))
-                // the block is not placed by a player
-                // todo based on map protection policy (allow map break + protected regions)
-                return true;
-
-            // If it's protected by glass then we should skip it!
-            return isProtected(arena, loc, block, 0.3);
-        };
-
-        List<Block> result = calculateExplosionBlocks(
-                arena, source, explosionLocation, radius, fire, (loc, block) -> functionCache.computeIfAbsent(block, (b) -> actualCallback.apply(loc, b))
-        );
-
-        functionCache.clear();
-
-        return result;
-    }
 
     /**
      * Calculates BrokenBlocks from an explosion source.

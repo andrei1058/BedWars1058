@@ -208,6 +208,10 @@ public class ConfigManager {
         return yml.getInt(path);
     }
 
+    public double getDouble(String path) {
+        return yml.getDouble(path);
+    }
+
 
     /**
      * Get string at given path

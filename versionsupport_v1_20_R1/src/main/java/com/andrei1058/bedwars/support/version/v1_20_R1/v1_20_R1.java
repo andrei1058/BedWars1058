@@ -337,18 +337,17 @@ public class v1_20_R1 extends VersionSupport {
     }
 
     @Override
-    public void registerTntWhitelist() {
+    public void registerTntWhitelist(float endStoneBlast, float glassBlast) {
         try {
-            var protection = 300f;
             // blast resistance
             Field field = BlockBase.class.getDeclaredField("aF");
             field.setAccessible(true);
             // end stone
-            field.set(Blocks.fz, protection);
+            field.set(Blocks.fz, endStoneBlast);
             // obsidian
-            field.set(Blocks.co, protection);
+//            field.set(Blocks.co, glassBlast);
             // standard glass
-            field.set(Blocks.aQ, protection);
+            field.set(Blocks.aQ, glassBlast);
 
             var coloredGlass = new net.minecraft.world.level.block.Block[]{
                     Blocks.ej, Blocks.ek, Blocks.el, Blocks.em,
@@ -363,7 +362,7 @@ public class v1_20_R1 extends VersionSupport {
             Arrays.stream(coloredGlass).forEach(
                     glass -> {
                         try {
-                            field.set(glass, protection);
+                            field.set(glass, glassBlast);
                         } catch (IllegalAccessException e) {
                             throw new RuntimeException(e);
                         }
@@ -907,17 +906,15 @@ public class v1_20_R1 extends VersionSupport {
                                         NumberConversions.floor(d6)
                                 );
 
-                                // would be better to check if the block is air so we skip it here
-                                // but I have no idea where materials gone in 1.20
-//                                if (!iblockdata.d().toString().equals("AIR")){
-                                boolean allow = !callback.apply(
-                                        explosionLocation,
-                                        bukkitBlock
-                                );
-                                if (allow) {
-                                    blocks.add(bukkitBlock);
+                                if (bukkitBlock.getType() != Material.AIR) {
+                                    boolean allow = !callback.apply(
+                                            explosionLocation,
+                                            bukkitBlock
+                                    );
+                                    if (allow) {
+                                        blocks.add(bukkitBlock);
+                                    }
                                 }
-//                                }
                             }
 
                             d4 += d0 * 0.30000001192092896;
@@ -928,6 +925,12 @@ public class v1_20_R1 extends VersionSupport {
                 }
             }
         }
+
+        blocks.forEach(block -> {
+            if (block.getType() == Material.BLACK_WOOL) {
+                Bukkit.broadcastMessage("IS WOOL");
+            }
+        });
 
         return new ArrayList<>(blocks);
     }

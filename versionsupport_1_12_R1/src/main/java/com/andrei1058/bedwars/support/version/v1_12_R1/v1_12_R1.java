@@ -353,13 +353,13 @@ public class v1_12_R1 extends VersionSupport {
     }
 
     @Override
-    public void registerTntWhitelist() {
+    public void registerTntWhitelist(float endStoneBlast, float glassBlast) {
         try {
             Field field = Block.class.getDeclaredField("durability");
             field.setAccessible(true);
-            field.set(Block.getByName("glass"), 300f);
-            field.set(Block.getByName("stained_glass"), 300f);
-            field.set(Block.getByName("end_stone"), 69f);
+            field.set(Block.getByName("glass"), glassBlast);
+            field.set(Block.getByName("stained_glass"), glassBlast);
+            field.set(Block.getByName("end_stone"), endStoneBlast);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }

@@ -345,4 +345,17 @@ public interface ITeam {
      * @param location x,y,z.
      */
     void setKillDropsLocation(Vector location);
+
+    /**
+     * Check if bed is placed at given location.
+     * Or partial.
+     */
+    boolean isBed(Location location);
+
+    /**
+     * What happens when one of team beds is destroyed at given location.
+     */
+    default void onBedDestroy(Location location) {
+        throw new RuntimeException("Not implemented yet");
+    }
 }

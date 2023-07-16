@@ -336,18 +336,18 @@ public class v1_19_R3 extends VersionSupport {
     }
 
     @Override
-    public void registerTntWhitelist() {
+    public void registerTntWhitelist(float endStoneBlast, float glassBlast) {
         try {
             var protection = 300f;
             // blast resistance
             Field field = BlockBase.class.getDeclaredField("aH");
             field.setAccessible(true);
             // end stone
-            field.set(Blocks.fj, protection);
+            field.set(Blocks.fj, endStoneBlast);
             // obsidian
-            field.set(Blocks.ce, protection);
+            field.set(Blocks.ce, glassBlast);
             // standard glass
-            field.set(Blocks.aH, protection);
+            field.set(Blocks.aH, glassBlast);
 
             var coloredGlass = new net.minecraft.world.level.block.Block[]{
                     Blocks.dU, Blocks.dV, Blocks.dW, Blocks.dX,
@@ -868,20 +868,24 @@ public class v1_19_R3 extends VersionSupport {
             for (i = 0; i < 16; ++i) {
                 for (j = 0; j < 16; ++j) {
                     if (k == 0 || k == 15 || i == 0 || i == 15 || j == 0 || j == 15) {
-                        double d0 = (float)k / 15.0F * 2.0F - 1.0F;
-                        double d1 = (float)i / 15.0F * 2.0F - 1.0F;
-                        double d2 = (float)j / 15.0F * 2.0F - 1.0F;
+                        double d0 = (float) k / 15.0F * 2.0F - 1.0F;
+                        double d1 = (float) i / 15.0F * 2.0F - 1.0F;
+                        double d2 = (float) j / 15.0F * 2.0F - 1.0F;
                         double d3 = Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
                         d0 /= d3;
                         d1 /= d3;
                         d2 /= d3;
 
+                        // intensity
                         float f = radius * (0.7F + world.z.i() * 0.6F);
                         double d4 = locX;
                         double d5 = locY;
                         double d6 = locZ;
 
-                        for(float f1 = 0.3F; f > 0.0F; f -= 0.22500001F) {
+                        // attenuation
+                        float attenuation = 0.22500001F;
+                        float step = 0.3F;
+                        for (; f > 0.0F; f -= attenuation) {
                             BlockPosition blockposition = BlockPosition.a(d4, d5, d6);
 
                             IBlockData iblockdata = world.a_(blockposition);
@@ -890,6 +894,8 @@ public class v1_19_R3 extends VersionSupport {
                             }
 
                             net.minecraft.world.level.material.Fluid fluid = world.b_(blockposition);
+
+                            // blast resistance
                             Optional<Float> optional = damageCalculator.a(explosion, world, blockposition, iblockdata, fluid);
 
                             if (optional.isPresent()) {
@@ -903,7 +909,7 @@ public class v1_19_R3 extends VersionSupport {
                                         NumberConversions.floor(d6)
                                 );
 
-                                if (!iblockdata.d().toString().equals("AIR")){
+                                if (bukkitBlock.getType() != Material.AIR) {
                                     boolean allow = !callback.apply(
                                             explosionLocation,
                                             bukkitBlock

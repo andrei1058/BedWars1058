@@ -109,8 +109,14 @@ public class MainConfig extends ConfigManager {
         yml.addDefault(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_TEAMMATES, 5);
         yml.addDefault(ConfigPath.GENERAL_TNT_JUMP_DAMAGE_OTHERS, 10);
 
-        // explosion category
-        yml.addDefault(ConfigPath.GENERAL_EXPLOSION_SIZE, "auto");
+        // tnd block blast resistance
+        yml.addDefault(ConfigPath.GENERAL_TNT_PROTECTION_END_STONE_BLAST, 12f);
+        yml.addDefault(ConfigPath.GENERAL_TNT_PROTECTION_GLASS_BLAST, 300f);
+        yml.addDefault(ConfigPath.GENERAL_TNT_RAY_BLOCKED_BY_GLASS, true);
+
+        // tnt prime settings
+        yml.addDefault(ConfigPath.GENERAL_TNT_AUTO_IGNITE, true);
+        yml.addDefault(ConfigPath.GENERAL_TNT_FUSE_TICKS, 45);
 
         // fireball category
         yml.addDefault(ConfigPath.GENERAL_FIREBALL_EXPLOSION_SIZE, 3);
