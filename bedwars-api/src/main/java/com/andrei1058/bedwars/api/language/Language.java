@@ -136,7 +136,7 @@ public class Language extends ConfigManager {
     public void relocate(String from, String to) {
         Object fromData = getYml().get(from);
         if (null != fromData) {
-            this.getYml().set(to, getYml().get(from));
+            this.getYml().set(to, fromData);
             this.getYml().set(from, null);
         }
     }
