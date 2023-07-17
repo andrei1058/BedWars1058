@@ -403,8 +403,8 @@ public class BwSidebar implements ISidebar {
         SidebarLine suffix;
 
         if (noArena()) {
-            prefix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_LOBBY, player, null);
-            suffix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_LOBBY, player, null);
+            prefix = getTabText(Messages.FORMATTING_SB_TAB_LOBBY_PREFIX, player, null);
+            suffix = getTabText(Messages.FORMATTING_SB_TAB_LOBBY_SUFFIX, player, null);
 
             PlayerTab tab = handle.playerTabCreate(
                     tabListName, player, prefix, suffix, PlayerTab.PushingRule.NEVER
@@ -432,8 +432,8 @@ public class BwSidebar implements ISidebar {
         if (status != GameState.playing) {
             switch (status) {
                 case waiting:
-                    prefix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_WAITING, player, null);
-                    suffix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_WAITING, player, null);
+                    prefix = getTabText(Messages.FORMATTING_SB_TAB_WAITING_PREFIX, player, null);
+                    suffix = getTabText(Messages.FORMATTING_SB_TAB_WAITING_SUFFIX, player, null);
                     break;
                 case starting:
                     prefix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_STARTING, player, null);
@@ -528,9 +528,13 @@ public class BwSidebar implements ISidebar {
 
         if (noArena()) {
             SidebarManager.getInstance().sendHeaderFooter(
-                    player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_LOBBY),
-                    lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_LOBBY)
+                    player, lang.m(Messages.FORMATTING_SB_TAB_LOBBY_HEADER),
+                    lang.m(Messages.FORMATTING_SB_TAB_LOBBY_FOOTER)
             );
+//            SidebarManager.getInstance().sendHeaderFooter(
+//                    player, lang.l(Messages.FORMATTING_SB_TAB_LOBBY_HEADER),
+//                    lang.l(Messages.FORMATTING_SB_TAB_LOBBY_FOOTER)
+//            );
             return;
         }
         if (arena.isSpectator(player)) {
@@ -538,6 +542,10 @@ public class BwSidebar implements ISidebar {
                     player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR),
                     lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR)
             );
+//            SidebarManager.getInstance().sendHeaderFooter(
+//                    player, lang.l(Messages.FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR),
+//                    lang.l(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR)
+//            );
             return;
         }
 
@@ -547,8 +555,8 @@ public class BwSidebar implements ISidebar {
 
         switch (arena.getStatus()) {
             case waiting:
-                headerPath = Messages.FORMATTING_SIDEBAR_TAB_HEADER_WAITING;
-                footerPath = Messages.FORMATTING_SIDEBAR_TAB_FOOTER_WAITING;
+                headerPath = Messages.FORMATTING_SB_TAB_WAITING_HEADER;
+                footerPath = Messages.FORMATTING_SB_TAB_WAITING_FOOTER;
                 break;
             case starting:
                 headerPath = Messages.FORMATTING_SIDEBAR_TAB_HEADER_STARTING;

@@ -46,6 +46,17 @@ public class Language extends ConfigManager {
         super(plugin, "messages_" + iso, plugin.getDataFolder().getPath() + "/Languages");
         this.iso = iso;
         languages.add(this);
+
+        // conversion to new paths
+        relocate("format-sb-tab-header.lobby", Messages.FORMATTING_SB_TAB_LOBBY_HEADER);
+        relocate("format-sb-tab-footer.lobby", Messages.FORMATTING_SB_TAB_LOBBY_FOOTER);
+        relocate("format-sb-tab-prefix.lobby", Messages.FORMATTING_SB_TAB_LOBBY_PREFIX);
+        relocate("format-sb-tab-suffix.lobby", Messages.FORMATTING_SB_TAB_LOBBY_SUFFIX);
+
+        relocate("format-sb-tab-header.waiting", Messages.FORMATTING_SB_TAB_WAITING_HEADER);
+        relocate("format-sb-tab-footer.waiting", Messages.FORMATTING_SB_TAB_WAITING_FOOTER);
+        relocate("format-sb-tab-prefix.waiting", Messages.FORMATTING_SB_TAB_WAITING_PREFIX);
+        relocate("format-sb-tab-suffix.waiting", Messages.FORMATTING_SB_TAB_WAITING_SUFFIX);
     }
 
     /**
@@ -120,6 +131,14 @@ public class Language extends ConfigManager {
      */
     public static List<String> getList(Player p, String path) {
         return langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage()).l(path);
+    }
+
+    public void relocate(String from, String to) {
+        Object fromData = getYml().get(from);
+        if (null != fromData) {
+            this.getYml().set(to, getYml().get(from));
+            this.getYml().set(from, null);
+        }
     }
 
     /**
