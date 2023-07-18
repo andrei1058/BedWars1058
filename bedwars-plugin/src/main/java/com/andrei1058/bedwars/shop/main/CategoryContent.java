@@ -181,6 +181,12 @@ public class CategoryContent implements ICategoryContent {
             return;
         }
 
+        if (player.getInventory().firstEmpty() == -1) {
+            player.sendMessage(getMsg(player, Messages.SHOP_INSUFFICIENT_SPACE));
+            Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, player);
+            return;
+        }
+
         //take money
         takeMoney(player, ct.getCurrency(), ct.getPrice());
 

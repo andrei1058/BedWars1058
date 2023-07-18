@@ -357,6 +357,7 @@ public class Messages {
     public static String SHOP_UTILITY_NPC_SILVERFISH_NAME = "shop-utility-silverfish";
     public static String SHOP_UTILITY_NPC_IRON_GOLEM_NAME = "shop-utility-iron-golem";
     public static String SHOP_INSUFFICIENT_MONEY = "shop-insuff-money";
+    public static String SHOP_INSUFFICIENT_SPACE = "shop-insuff-space";
     public static String SHOP_ALREADY_BOUGHT = "shop-already-bought";
     public static final String SHOP_PATH = "shop-items-messages";
     public static final String SHOP_LORE_STATUS_CANT_AFFORD = "shop-lore-status-cant-afford";

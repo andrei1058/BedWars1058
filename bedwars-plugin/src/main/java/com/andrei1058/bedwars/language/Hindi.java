@@ -376,6 +376,7 @@ public class Hindi extends Language {
         yml.addDefault(Messages.SHOP_INDEX_NAME, "&8Quick Buy");
         yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "{prefix}&cApke paas paryaapt {currency} nahi hai! Apko aur {amount} jarurat hai!");
         yml.addDefault(Messages.SHOP_NEW_PURCHASE, "{prefix}&aApne &6{item} &akharida");
+        yml.addDefault(Messages.SHOP_INSUFFICIENT_SPACE, "&cYou don't have enough inventory space to buy this item!");
         yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "{prefix}&cAp ise pehle se khareed chuke hain!");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "{TeamColor}&l{TeamName} &r{TeamColor}Silverfish");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME, "{TeamColor}{despawn}s &8[ {TeamColor}{health}&8]");

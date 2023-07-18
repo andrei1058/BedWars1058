@@ -370,6 +370,7 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.SHOP_QUICK_ADD_NAME, "&8添加到快速购买...");
         yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "{prefix}&c你没有足够的{currency}！ 还需要 {amount} 个{currency}！");
         yml.addDefault(Messages.SHOP_NEW_PURCHASE, "{prefix}&a购买&6{item}");
+        yml.addDefault(Messages.SHOP_INSUFFICIENT_SPACE, "&cYou don't have enough inventory space to buy this item!");
         yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "{prefix}&c你已经购买过了！");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "{TeamColor}&l{TeamName} &r{TeamColor}蠹虫");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME, "{TeamColor}{despawn}秒 &8[ {TeamColor}{health}&8]");
