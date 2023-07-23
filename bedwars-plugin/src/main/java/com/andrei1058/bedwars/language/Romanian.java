@@ -43,28 +43,29 @@ public class Romanian extends Language {
 
         // this must stay here
         // move message to new path
-        if (yml.get("player-die-knocked-regular") != null && yml.get(Messages.PLAYER_DIE_KNOCKED_IN_VOID_REGULAR_KILL) == null){
+        if (yml.get("player-die-knocked-regular") != null && yml.get(Messages.PLAYER_DIE_KNOCKED_IN_VOID_REGULAR_KILL) == null) {
             yml.set(Messages.PLAYER_DIE_KNOCKED_IN_VOID_REGULAR_KILL, yml.getString("player-die-knocked-regular"));
             yml.set("player-die-knocked-regular", null);
         }
-        if (yml.get("player-die-knocked-final") != null && yml.get(Messages.PLAYER_DIE_KNOCKED_IN_VOID_FINAL_KILL) == null){
+        if (yml.get("player-die-knocked-final") != null && yml.get(Messages.PLAYER_DIE_KNOCKED_IN_VOID_FINAL_KILL) == null) {
             yml.set(Messages.PLAYER_DIE_KNOCKED_IN_VOID_FINAL_KILL, yml.getString("player-die-knocked-final"));
             yml.set("player-die-knocked-final", null);
         }
 
-        yml.addDefault(Messages.FORMATTING_SB_TAB_LOBBY_HEADER, List.of("","&6{serverIp}", ""));
-        yml.addDefault(Messages.FORMATTING_SB_TAB_LOBBY_FOOTER, List.of("","&6{serverIp}", "", "&fJoci alaturi de {online} jucatori", "Powered by BedWars1058"));
-        yml.addDefault(Messages.FORMATTING_SB_TAB_WAITING_HEADER,"&a{serverIp}");
+        yml.addDefault(Messages.FORMATTING_SB_TAB_LOBBY_HEADER, List.of("", "&a{serverIp}", ""));
+        yml.addDefault(Messages.FORMATTING_SB_TAB_LOBBY_FOOTER, List.of("", "&fJoci alaturi de {on} jucatori", "Powered by BedWars1058,&a{serverIp}", ""));
+        yml.addDefault(Messages.FORMATTING_SB_TAB_WAITING_HEADER, List.of("", "&a{serverIp}", ""));
+        yml.addDefault(Messages.FORMATTING_SB_TAB_WAITING_FOOTER, List.of("", "Se asteapta jucatori,Se asteapta jucatori.,Se asteapta jucatori.., Se asteapta Jucatori...", "&f{on}&a/&f{max}", "", "&a{serverIp}", "&fPowered by BedWars1058", ""));
+
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_STARTING, "&6{serverIp}");
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_PLAYING, "&d{serverIp}");
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_RESTARTING, "&c{serverIp}");
-        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR,"&9{serverIp}");
+        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR, "&9{serverIp}");
 
-        yml.addDefault(Messages.FORMATTING_SB_TAB_WAITING_FOOTER, "&a{serverIp}");
-        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_STARTING,"&6{serverIp}");
+        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_STARTING, "&6{serverIp}");
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_PLAYING, "&d{serverIp}");
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_RESTARTING, "&c{serverIp}");
-        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR,"&9{serverIp}");
+        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR, "&9{serverIp}");
 
         yml.options().copyDefaults(true);
         yml.addDefault(Messages.COMMAND_MAIN, Arrays.asList("", "&2▪ &7/" + mainCmd + " stats", "&2▪ &7/" + mainCmd + " join &o<arena/group>", "&2▪ &7/" + mainCmd + " leave", "&2▪ &7/" + mainCmd + " lang", "&2▪ &7/" + mainCmd + " gui", "&2▪ &7/" + mainCmd + " start &3(vip)"));
@@ -123,7 +124,7 @@ public class Romanian extends Language {
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_OWNER, "{prefix}&eAi fost promovat ca proprietar al petrecerii");
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_NEW_OWNER, "{prefix}&7 &e{player} a fost promovat ca proprietar");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n{prefix}&eProprietarul petrecerii este: &7{owner}");
-        yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS,"{prefix}&eMembrii sunt:");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS, "{prefix}&eMembrii sunt:");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYER, "&7{player}");
         yml.addDefault(Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS, "{prefix}&cComanda nu a fost gasita sau nu ai permisiunea!");
         yml.addDefault(Messages.COMMAND_FORCESTART_NOT_IN_GAME, "§c▪ §7Nu esti in joc!");
@@ -338,7 +339,7 @@ public class Romanian extends Language {
         addDefaultStatsMsg(yml, "games-played", "&6Partide Jucate", "&f{gamesPlayed}");
 
 
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fHarta: &a{map}", "", "&fJucatori: &a{on}/{max}", "", "&fIn asteptare...", "", "§fMod: &a{group}", "&fVersiune: &7{version}", "", "&e{serverIp}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fHarta: &a{map}", "", "&fJucatori: &a{on}/{max}", "", "&fIn asteptare,&fIn asteptare.,&fIn asteptare..,&fIn asteptare...", "", "§fMod: &a{group}", "&fVersiune: &7{version}", "", "&e{serverIp}"));
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fMap: &a{map}", "", "&fJucatori: &a{on}/{max}", "", "&fIncepe in &a{time}s", "", "§fMod: &a{group}", "&fVersiune: &7{version}", "", "&e{serverIp}"));
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{serverIp}"));
 

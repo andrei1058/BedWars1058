@@ -44,6 +44,7 @@ public class BwSidebar implements ISidebar {
     private final Player player;
     private IArena arena;
     private Sidebar handle;
+    private TabHeaderFooter headerFooter;
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat nextEventDateFormat;
     private final HashMap<String, PlayerTab> tabList = new HashMap<>();
@@ -88,7 +89,7 @@ public class BwSidebar implements ISidebar {
             }, 2L);
         }
         handlePlayerList();
-        setHeaderFooter();
+        assignTabHeaderFooter();
     }
 
     public Player getPlayer() {
@@ -97,18 +98,18 @@ public class BwSidebar implements ISidebar {
 
     @SuppressWarnings("ConstantConditions")
     public SidebarLine normalizeTitle(@Nullable List<String> titleArray) {
-        String[] aolo = new String[titleArray.size()];
+        String[] data = new String[titleArray.size()];
         for (int x = 0; x < titleArray.size(); x++) {
-            aolo[x] = titleArray.get(x);
+            data[x] = titleArray.get(x);
         }
         return null == titleArray || titleArray.isEmpty() ?
                 EMPTY_TITLE :
-                new SidebarLineAnimated(aolo);
+                new SidebarLineAnimated(data);
     }
 
     @Contract(pure = true)
-    public @NotNull List<SidebarLine> normalizeLines(@NotNull List<String> lineArray) {
-        List<SidebarLine> lines = new ArrayList<>();
+    public @NotNull LinkedList<SidebarLine> normalizeLines(@NotNull List<String> lineArray) {
+        LinkedList<SidebarLine> lines = new LinkedList<>();
 
         int teamCount = 0;
         Language language = Language.getPlayerLanguage(player);
@@ -155,28 +156,40 @@ public class BwSidebar implements ISidebar {
                     .replace("{serverIp}", BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
                     .replace("{version}", plugin.getDescription().getVersion())
                     .replace("{server}", config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID))
-                    .replace("{playername}", player.getName())
-                    .replace("{player}", player.getDisplayName())
-                    .replace("{money}", String.valueOf(getEconomy().getMoney(player)));
+//                    .replace("{playername}", player.getName())
+//                    .replace("{player}", player.getDisplayName())
+//                    .replace("{money}", String.valueOf(getEconomy().getMoney(player)))
+            ;
 
             // Add the line to the sidebar
             String finalTemp = line;
 
-            lines.add(new SidebarLine() {
-                @Override
-                public @NotNull String getLine() {
-                    return finalTemp;
-                }
-            });
+            String[] divided = finalTemp.split(",");
+
+            SidebarLine sidebarLine;
+
+            if (divided.length > 1) {
+                sidebarLine = normalizeTitle(Arrays.asList(divided));
+            } else {
+                sidebarLine = new SidebarLine() {
+                    @Override
+                    public @NotNull String getLine() {
+                        return finalTemp;
+                    }
+                };
+            }
+
+            lines.add(sidebarLine);
         }
         return lines;
     }
 
     @Contract(pure = true)
-    private @NotNull List<PlaceholderProvider> getPlaceholders() {
-        List<PlaceholderProvider> providers = new ArrayList<>();
+    private @NotNull LinkedList<PlaceholderProvider> getPlaceholders() {
+        LinkedList<PlaceholderProvider> providers = new LinkedList<>();
 
         providers.add(new PlaceholderProvider("{player}", player::getDisplayName));
+        providers.add(new PlaceholderProvider("{money}", () -> String.valueOf(getEconomy().getMoney(player))));
         providers.add(new PlaceholderProvider("{playerName}", player::getCustomName));
         providers.add(new PlaceholderProvider("{money}", () -> String.valueOf(getEconomy().getMoney(player))));
         providers.add(new PlaceholderProvider("{date}", () -> dateFormat.format(new Date(System.currentTimeMillis()))));
@@ -520,64 +533,65 @@ public class BwSidebar implements ISidebar {
     }
 
     // Provide header and footer for current game state
-    private void setHeaderFooter() {
-//        if (isTabFormattingDisabled()) {
-//            return;
-//        }
+    private void assignTabHeaderFooter() {
+        if (!config.getBoolean(ConfigPath.SB_CONFIG_TAB_HEADER_FOOTER_ENABLE)) {
+            return;
+        }
+
         Language lang = Language.getPlayerLanguage(player);
-
-        if (noArena()) {
-            SidebarManager.getInstance().sendHeaderFooter(
-                    player, lang.m(Messages.FORMATTING_SB_TAB_LOBBY_HEADER),
-                    lang.m(Messages.FORMATTING_SB_TAB_LOBBY_FOOTER)
-            );
-//            SidebarManager.getInstance().sendHeaderFooter(
-//                    player, lang.l(Messages.FORMATTING_SB_TAB_LOBBY_HEADER),
-//                    lang.l(Messages.FORMATTING_SB_TAB_LOBBY_FOOTER)
-//            );
-            return;
-        }
-        if (arena.isSpectator(player)) {
-            SidebarManager.getInstance().sendHeaderFooter(
-                    player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR),
-                    lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR)
-            );
-//            SidebarManager.getInstance().sendHeaderFooter(
-//                    player, lang.l(Messages.FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR),
-//                    lang.l(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR)
-//            );
-            return;
-        }
-
 
         String headerPath = null;
         String footerPath = null;
 
-        switch (arena.getStatus()) {
-            case waiting:
-                headerPath = Messages.FORMATTING_SB_TAB_WAITING_HEADER;
-                footerPath = Messages.FORMATTING_SB_TAB_WAITING_FOOTER;
-                break;
-            case starting:
-                headerPath = Messages.FORMATTING_SIDEBAR_TAB_HEADER_STARTING;
-                footerPath = Messages.FORMATTING_SIDEBAR_TAB_FOOTER_STARTING;
-                break;
-            case playing:
-                headerPath = Messages.FORMATTING_SIDEBAR_TAB_HEADER_PLAYING;
-                footerPath = Messages.FORMATTING_SIDEBAR_TAB_FOOTER_PLAYING;
-                break;
-            case restarting:
-                headerPath = Messages.FORMATTING_SIDEBAR_TAB_HEADER_RESTARTING;
-                footerPath = Messages.FORMATTING_SIDEBAR_TAB_FOOTER_RESTARTING;
-                break;
-            default:
-                throw new IllegalStateException("Unhandled arena status");
+        if (noArena()) {
+            if (getServerType() == ServerType.SHARED) {
+                this.headerFooter = null;
+                return;
+            }
+            headerPath = Messages.FORMATTING_SB_TAB_LOBBY_HEADER;
+            footerPath = Messages.FORMATTING_SB_TAB_LOBBY_FOOTER;
+        } else {
+            if (arena.isSpectator(player)) {
+                SidebarManager.getInstance().sendHeaderFooter(
+                        player, lang.m(Messages.FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR),
+                        lang.m(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR)
+                );
+//            SidebarManager.getInstance().sendHeaderFooter(
+//                    player, lang.l(Messages.FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR),
+//                    lang.l(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR)
+//            );
+                return;
+            }
+
+            switch (arena.getStatus()) {
+                case waiting:
+                    headerPath = Messages.FORMATTING_SB_TAB_WAITING_HEADER;
+                    footerPath = Messages.FORMATTING_SB_TAB_WAITING_FOOTER;
+                    break;
+                case starting:
+                    headerPath = Messages.FORMATTING_SIDEBAR_TAB_HEADER_STARTING;
+                    footerPath = Messages.FORMATTING_SIDEBAR_TAB_FOOTER_STARTING;
+                    break;
+                case playing:
+                    headerPath = Messages.FORMATTING_SIDEBAR_TAB_HEADER_PLAYING;
+                    footerPath = Messages.FORMATTING_SIDEBAR_TAB_FOOTER_PLAYING;
+                    break;
+                case restarting:
+                    headerPath = Messages.FORMATTING_SIDEBAR_TAB_HEADER_RESTARTING;
+                    footerPath = Messages.FORMATTING_SIDEBAR_TAB_FOOTER_RESTARTING;
+                    break;
+                default:
+                    throw new IllegalStateException("Unhandled arena status");
+            }
         }
 
-        SidebarManager.getInstance().sendHeaderFooter(
-                player, lang.m(headerPath),
-                lang.m(footerPath)
+        this.headerFooter = new TabHeaderFooter(
+                this.normalizeLines(lang.l(headerPath)),
+                this.normalizeLines(lang.l(footerPath)),
+                getPlaceholders()
         );
+
+        SidebarManager.getInstance().sendHeaderFooter(player, headerFooter);
     }
 
     private @NotNull String getTabName(@NotNull ITeam team) {
@@ -743,5 +757,14 @@ public class BwSidebar implements ISidebar {
 
     public IArena getArena() {
         return arena;
+    }
+
+    @Nullable
+    public TabHeaderFooter getHeaderFooter() {
+        return headerFooter;
+    }
+
+    public void setHeaderFooter(@Nullable TabHeaderFooter headerFooter) {
+        this.headerFooter = headerFooter;
     }
 }

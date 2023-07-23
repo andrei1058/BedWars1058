@@ -64,10 +64,7 @@ import com.andrei1058.bedwars.maprestore.internal.InternalAdapter;
 import com.andrei1058.bedwars.money.internal.MoneyListeners;
 import com.andrei1058.bedwars.shop.ShopManager;
 import com.andrei1058.bedwars.sidebar.*;
-import com.andrei1058.bedwars.sidebar.thread.RefreshTitleTask;
-import com.andrei1058.bedwars.sidebar.thread.RefreshPlaceholdersTask;
-import com.andrei1058.bedwars.sidebar.thread.RefreshLifeTask;
-import com.andrei1058.bedwars.sidebar.thread.RefreshTabListTask;
+import com.andrei1058.bedwars.sidebar.thread.*;
 import com.andrei1058.bedwars.stats.StatsManager;
 import com.andrei1058.bedwars.support.citizens.CitizensListener;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
@@ -394,7 +391,7 @@ public class BedWars extends JavaPlugin {
                     ArenaSocket.sendMessage(Arena.getArenas().get(0));
                 }
             }*/
-        }, 40L);
+        }, 5L);
 
         /* Save messages for stats gui items if custom items added, for each language */
         Language.setupCustomStatsMessages();
@@ -520,49 +517,61 @@ public class BedWars extends JavaPlugin {
 
         int playerListRefreshInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_LIST_REFRESH);
         if (playerListRefreshInterval < 1) {
-            Bukkit.getLogger().info("Scoreboard names list refresh is disabled. (Is set to " + playerListRefreshInterval + ").");
+            Bukkit.getLogger().info("Scoreboard names list refresh is disabled. (It is set to " + playerListRefreshInterval + ").");
         } else {
             if (playerListRefreshInterval < 20) {
                 Bukkit.getLogger().warning("Scoreboard names list refresh interval is set to: " + playerListRefreshInterval);
                 Bukkit.getLogger().warning("It is not recommended to use a value under 20 ticks.");
                 Bukkit.getLogger().warning("If you expect performance issues please increase its timer.");
             }
-            Bukkit.getScheduler().runTaskTimer(this, new RefreshTabListTask(), 23L, playerListRefreshInterval);
+            Bukkit.getScheduler().runTaskTimer(this, new RefreshPlayerListTask(), 1L, playerListRefreshInterval);
         }
 
         int placeholdersRefreshInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL);
         if (placeholdersRefreshInterval < 1) {
-            Bukkit.getLogger().info("Scoreboard placeholders refresh is disabled. (Is set to " + placeholdersRefreshInterval + ").");
+            Bukkit.getLogger().info("Scoreboard placeholders refresh is disabled. (It is set to " + placeholdersRefreshInterval + ").");
         } else {
             if (placeholdersRefreshInterval < 20) {
                 Bukkit.getLogger().warning("Scoreboard placeholders refresh interval is set to: " + placeholdersRefreshInterval);
                 Bukkit.getLogger().warning("It is not recommended to use a value under 20 ticks.");
                 Bukkit.getLogger().warning("If you expect performance issues please increase its timer.");
             }
-            Bukkit.getScheduler().runTaskTimer(this, new RefreshPlaceholdersTask(), 28L, placeholdersRefreshInterval);
+            Bukkit.getScheduler().runTaskTimer(this, new RefreshPlaceholdersTask(), 1L, placeholdersRefreshInterval);
         }
 
         int titleRefreshInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_TITLE_REFRESH_INTERVAL);
         if (titleRefreshInterval < 1) {
-            Bukkit.getLogger().info("Scoreboard title refresh is disabled. (Is set to " + titleRefreshInterval + ").");
+            Bukkit.getLogger().info("Scoreboard title refresh is disabled. (It is set to " + titleRefreshInterval + ").");
         } else {
             if (titleRefreshInterval < 4) {
                 Bukkit.getLogger().warning("Scoreboard title refresh interval is set to: " + titleRefreshInterval);
                 Bukkit.getLogger().warning("If you expect performance issues please increase its timer.");
             }
-            Bukkit.getScheduler().runTaskTimerAsynchronously(this, new RefreshTitleTask(), 32L, titleRefreshInterval);
+            Bukkit.getScheduler().runTaskTimerAsynchronously(this, new RefreshTitleTask(), 1L, titleRefreshInterval);
         }
 
         int healthAnimationInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_REFRESH);
         if (healthAnimationInterval < 1) {
-            Bukkit.getLogger().info("Scoreboard health animation refresh is disabled. (Is set to " + healthAnimationInterval + ").");
+            Bukkit.getLogger().info("Scoreboard health animation refresh is disabled. (It is set to " + healthAnimationInterval + ").");
         } else {
             if (healthAnimationInterval < 20) {
                 Bukkit.getLogger().warning("Scoreboard health animation refresh interval is set to: " + healthAnimationInterval);
                 Bukkit.getLogger().warning("It is not recommended to use a value under 20 ticks.");
                 Bukkit.getLogger().warning("If you expect performance issues please increase its timer.");
             }
-            Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new RefreshLifeTask(), 40L, healthAnimationInterval);
+            Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new RefreshLifeTask(), 1L, healthAnimationInterval);
+        }
+
+        int tabHeaderFooterRefreshInterval = config.getInt(ConfigPath.SB_CONFIG_TAB_HEADER_FOOTER_REFRESH_INTERVAL);
+        if (tabHeaderFooterRefreshInterval < 1 || !config.getBoolean(ConfigPath.SB_CONFIG_TAB_HEADER_FOOTER_ENABLE)) {
+            Bukkit.getLogger().info("Scoreboard Tab header-footer refresh is disabled.");
+        } else {
+            if (tabHeaderFooterRefreshInterval < 20) {
+                Bukkit.getLogger().warning("Scoreboard tab header-footer refresh interval is set to: " + tabHeaderFooterRefreshInterval);
+                Bukkit.getLogger().warning("It is not recommended to use a value under 20 ticks.");
+                Bukkit.getLogger().warning("If you expect performance issues please increase its timer.");
+            }
+            Bukkit.getScheduler().runTaskTimer(this, new RefreshTabHeaderFooterTask(), 1L, tabHeaderFooterRefreshInterval);
         }
 
         registerEvents(new ScoreboardListener());

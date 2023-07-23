@@ -165,6 +165,14 @@ public class SidebarService implements ISidebarService {
         this.sidebars.forEach((k, v) -> v.getHandle().playerTabRefreshAnimation());
     }
 
+    public void refreshTabHeaderFooter() {
+        this.sidebars.forEach((k, v) -> {
+            if (null != v && null != v.getHeaderFooter()) {
+                this.sidebarHandler.sendHeaderFooter(v.getPlayer(), v.getHeaderFooter());
+            }
+        });
+    }
+
     public void refreshHealth() {
         this.sidebars.forEach((k, v) -> {
             if (null != v.getArena()) {
