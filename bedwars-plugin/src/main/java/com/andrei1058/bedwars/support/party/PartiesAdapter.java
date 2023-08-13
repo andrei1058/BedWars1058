@@ -91,14 +91,17 @@ public class PartiesAdapter implements Party {
     public void createParty(Player owner, Player... members) {
         //party creation handled on bungee side
         if (!api.isBungeeCordEnabled()) {
-            boolean created = api.createParty(null, api.getPartyPlayer(owner.getUniqueId()));
-            if (created) {
-                com.alessiodp.parties.api.interfaces.Party party = api.getParty(owner.getUniqueId());
-                if (null != party) {
-                    for (Player player1 : members) {
-                        PartyPlayer partyPlayer = api.getPartyPlayer(player1.getUniqueId());
-                        if (null != partyPlayer) {
-                            party.addMember(partyPlayer);
+            PartyPlayer partyOwner = api.getPartyPlayer(owner.getUniqueId());
+            if (null != partyOwner  && !partyOwner.isInParty()) {
+                boolean created = api.createParty(null, partyOwner);
+                if (created && null != partyOwner.getPartyId()) {
+                    com.alessiodp.parties.api.interfaces.Party party = api.getParty(partyOwner.getPartyId());
+                    if (null != party) {
+                        for (Player player1 : members) {
+                            PartyPlayer partyPlayer = api.getPartyPlayer(player1.getUniqueId());
+                            if (null != partyPlayer  && !partyPlayer.isInParty()) {
+                                party.addMember(partyPlayer);
+                            }
                         }
                     }
                 }
@@ -178,7 +181,8 @@ public class PartiesAdapter implements Party {
 
     @Override
     public Player getOwner(Player member) {
-        return Bukkit.getPlayer(Objects.requireNonNull(api.getParty(member.getUniqueId())).getLeader());
+        PartyPlayer partyPlayer = api.getPartyPlayer(member.getUniqueId());
+        return Bukkit.getPlayer(Objects.requireNonNull(api.getParty(Objects.requireNonNull(partyPlayer).getPartyId())).getLeader());
     }
 
     @Override
