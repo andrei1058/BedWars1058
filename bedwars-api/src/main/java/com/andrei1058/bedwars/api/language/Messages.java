@@ -205,6 +205,16 @@ public class Messages {
     public static String FORMATTING_SB_TAB_WAITING_PREFIX = FORMATTING_SB_TAB_BASE+".waiting.player.prefix";
     public static String FORMATTING_SB_TAB_WAITING_SUFFIX = FORMATTING_SB_TAB_BASE+".waiting.player.suffix";
 
+    // TAB STARTING
+    // todo implement me
+    public static String FORMATTING_SB_TAB_STARTING_HEADER = FORMATTING_SB_TAB_BASE+".starting.player.header";
+    // todo implement me
+    public static String FORMATTING_SB_TAB_STARTING_FOOTER = FORMATTING_SB_TAB_BASE+".starting.player.footer";
+    // todo implement me
+    public static String FORMATTING_SB_TAB_STARTING_PREFIX = FORMATTING_SB_TAB_BASE+".starting.player.prefix";
+    // todo implement me
+    public static String FORMATTING_SB_TAB_STARTING_SUFFIX = FORMATTING_SB_TAB_BASE+".starting.player.suffix";
+
     // todo
     public static String FORMATTING_SB_TAB_WAITING_HEADER_SPEC = FORMATTING_SB_TAB_BASE+".waiting.spectator.header";
     public static String FORMATTING_SB_TAB_WAITING_FOOTER_SPEC = FORMATTING_SB_TAB_BASE+".waiting.spectator.footer";
@@ -212,15 +222,23 @@ public class Messages {
     public static String FORMATTING_SB_TAB_WAITING_SUFFIX_SPEC = FORMATTING_SB_TAB_BASE+".waiting.player.suffix";
     // todo end
 
+    @Deprecated(forRemoval = true)
     public static String FORMATTING_SIDEBAR_TAB_HEADER_STARTING = "format-sb-tab-header.starting";
+    @Deprecated(forRemoval = true)
     public static String FORMATTING_SIDEBAR_TAB_HEADER_PLAYING = "format-sb-tab-header.playing";
+    @Deprecated(forRemoval = true)
     public static String FORMATTING_SIDEBAR_TAB_HEADER_RESTARTING = "format-sb-tab-header.restarting";
+    @Deprecated(forRemoval = true)
     public static String FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR = "format-sb-tab-header.spectator";
-
+    @Deprecated(forRemoval = true)
     public static String FORMATTING_SIDEBAR_TAB_FOOTER_STARTING = "format-sb-tab-footer.starting";
+    @Deprecated(forRemoval = true)
     public static String FORMATTING_SIDEBAR_TAB_FOOTER_PLAYING = "format-sb-tab-footer.playing";
+    @Deprecated(forRemoval = true)
     public static String FORMATTING_SIDEBAR_TAB_FOOTER_RESTARTING = "format-sb-tab-footer.restarting";
+    @Deprecated(forRemoval = true)
     public static String FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR = "format-sb-tab-footer.spectator";
+
     @Deprecated
     public static String FORMATTING_SCOREBOARD_TAB_PREFIX_PRESTARTING = "format-sb-tab-prefix.restarting";
     public static String FORMATTING_SCOREBOARD_TAB_PREFIX_RESTARTING = "format-sb-tab-prefix.restarting";

@@ -57,14 +57,16 @@ public class Romanian extends Language {
         yml.addDefault(Messages.FORMATTING_SB_TAB_WAITING_HEADER, List.of("", "&a{serverIp}", ""));
         yml.addDefault(Messages.FORMATTING_SB_TAB_WAITING_FOOTER, List.of("", "Se asteapta jucatori,Se asteapta jucatori.,Se asteapta jucatori.., Se asteapta Jucatori...", "&f{on}&a/&f{max}", "", "&a{serverIp}", "&fPowered by BedWars1058", ""));
 
-        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_STARTING, "&6{serverIp}");
-        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_PLAYING, "&d{serverIp}");
-        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_RESTARTING, "&c{serverIp}");
+        yml.addDefault(Messages.FORMATTING_SB_TAB_STARTING_HEADER, List.of("", "&a{serverIp}", "&7{date}","&7Harta: &f{map} &7Mod: &f{group}" ,""));
+        yml.addDefault(Messages.FORMATTING_SB_TAB_STARTING_FOOTER, List.of("", "&fJocul incepe in &a{time} &fsecunde,&fJocul incepe in &a{time} &fsecunde.,&fJocul incepe in &a{time} &fsecunde..,&fJocul incepe in &a{time} &fsecunde..", "&f{on}&a/&f{max}", "", "&a{serverIp}", "&fPowered by BedWars1058", ""));
+        // todo implement me
+        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_PLAYING, List.of("", "&a{serverIp}", "&7{date}","&7Harta: &f{map} &7Mod: &f{group}", "", "{nextEvent} in {time}" ,""));
+        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_PLAYING, List.of("", "&fJoci in echipa {PlayerTeamColor}{PlayerTeamName}", "&a{serverIp}", "&fPowered by BedWars1058", ""));
+// todo implement me
+        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_RESTARTING, List.of("", "&a{serverIp}", "&7{date}","&7Harta: &f{map} &7Mod: &f{group}" ,""));
+        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_RESTARTING, List.of("", "&fAi fost in echipa {PlayerTeamColor}{PlayerTeamName}", "&fMultumim ca ai jucat la noi {player}!", "&a{serverIp}", "&fPowered by BedWars1058", ""));
+// todo implement me
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR, "&9{serverIp}");
-
-        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_STARTING, "&6{serverIp}");
-        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_PLAYING, "&d{serverIp}");
-        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_RESTARTING, "&c{serverIp}");
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR, "&9{serverIp}");
 
         yml.options().copyDefaults(true);
